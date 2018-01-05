@@ -25,53 +25,15 @@
     </scm>
 
     <dependencies>
+        <dependency>		
+            <groupId>net.ess3</groupId>
+            <artifactId>EssentialsX</artifactId>		
+            <version>${project.version}</version>		
+        </dependency>
         <dependency>
             <groupId>com.maxmind.geoip2</groupId>
             <artifactId>geoip2</artifactId>
             <version>2.10.0</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.apache.httpcomponents</groupId>
-                    <artifactId>httpclient</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>com.fasterxml.jackson.core</groupId>
-                    <artifactId>jackson-databind</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>junit</groupId>
-                    <artifactId>junit</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>com.github.tomakehurst</groupId>
-                    <artifactId>wiremock</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.skyscreamer</groupId>
-                    <artifactId>jsonassert</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.slf4j</groupId>
-                    <artifactId>slf4j-simple</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>com.fasterxml.jackson.jr</groupId>
-                    <artifactId>jackson-jr-objects</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>pl.pragmatists</groupId>
-                    <artifactId>JUnitParams</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>com.jcabi</groupId>
-                    <artifactId>jcabi-matchers</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-databind</artifactId>
-            <version>2.7.9.2</version>
         </dependency>
         <dependency>
             <groupId>javatar</groupId>
@@ -85,7 +47,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
-                <version>2.1</version>
+                <version>3.1.0</version>
                 <executions>
                     <execution>
                         <phase>package</phase>
@@ -94,6 +56,470 @@
                         </goals>
                     </execution>
                 </executions>
+                <configuration>
+                    <minimizeJar>true</minimizeJar>
+                    <artifactSet>
+                        <includes>
+                            <include>javatar:javatar</include>
+                            <include>com.maxmind.geoip2:geoip2</include>
+                            <include>com.maxmind.db:maxmind-db</include>
+                            <include>com.fasterxml.jackson.core:*</include>
+                        </includes>
+                    </artifactSet>
+                    <filters>
+                        <filter>
+                            <artifact>com.fasterxml.jackson.core:*</artifact>
+                            <includes>
+<include>com/fasterxml/jackson/databind/InjectableValues.class</include>
+<include>com/fasterxml/jackson/databind/JsonNode.class</include>
+<include>com/fasterxml/jackson/databind/JsonSerializable.class</include>
+<include>com/fasterxml/jackson/databind/node/.class</include>
+<include>com/fasterxml/jackson/databind/ObjectMapper.class</include>
+<include>com/fasterxml/jackson/databind/DeserializationContext.class</include>
+<include>com/fasterxml/jackson/databind/deser/DefaultDeserializationContext.class</include>
+<include>com/fasterxml/jackson/databind/DatabindContext.class</include>
+<include>com/fasterxml/jackson/databind/SerializerProvider.class</include>
+<include>com/fasterxml/jackson/databind/ser/DefaultSerializerProvider.class</include>
+<include>com/fasterxml/jackson/databind/introspect/VisibilityChecker.class</include>
+<include>com/fasterxml/jackson/databind/jsontype/TypeResolverBuilder.class</include>
+<include>com/fasterxml/jackson/databind/introspect/ClassIntrospector.class</include>
+<include>com/fasterxml/jackson/databind/introspect/BasicClassIntrospector.class</include>
+<include>com/fasterxml/jackson/core/TreeNode.class</include>
+<include>com/fasterxml/jackson/core/Versioned.class</include>
+<include>com/fasterxml/jackson/core/ObjectCodec.class</include>
+<include>com/fasterxml/jackson/core/TreeCodec.class</include>
+<include>com/fasterxml/jackson/core/JsonProcessingException.class</include>
+<include>com/fasterxml/jackson/databind/Module$SetupContext.class</include>
+<include>com/fasterxml/jackson/core/JsonParser.class</include>
+<include>com/fasterxml/jackson/core/base/ParserMinimalBase.class</include>
+<include>com/fasterxml/jackson/core/JsonGenerator.class</include>
+<include>com/fasterxml/jackson/databind/util/TokenBuffer.class</include>
+<include>com/fasterxml/jackson/core/io/SegmentedStringWriter.class</include>
+<include>com/fasterxml/jackson/databind/JsonMappingException.class</include>
+<include>com/fasterxml/jackson/core/util/ByteArrayBuilder.class</include>
+<include>com/fasterxml/jackson/databind/exc/MismatchedInputException.class</include>
+<include>com/fasterxml/jackson/core/JsonFactory.class</include>
+<include>com/fasterxml/jackson/databind/MappingJsonFactory.class</include>
+<include>com/fasterxml/jackson/databind/jsontype/SubtypeResolver.class</include>
+<include>com/fasterxml/jackson/databind/jsontype/impl/StdSubtypeResolver.class</include>
+<include>com/fasterxml/jackson/databind/deser/DeserializerFactory.class</include>
+<include>com/fasterxml/jackson/databind/deser/BeanDeserializerFactory.class</include>
+<include>com/fasterxml/jackson/databind/deser/BasicDeserializerFactory.class</include>
+<include>com/fasterxml/jackson/databind/ser/SerializerFactory.class</include>
+<include>com/fasterxml/jackson/databind/ser/BeanSerializerFactory.class</include>
+<include>com/fasterxml/jackson/databind/ser/BasicSerializerFactory.class</include>
+<include>com/fasterxml/jackson/databind/JavaType.class</include>
+<include>com/fasterxml/jackson/core/type/ResolvedType.class</include>
+<include>com/fasterxml/jackson/databind/type/SimpleType.class</include>
+<include>com/fasterxml/jackson/databind/type/TypeBase.class</include>
+<include>com/fasterxml/jackson/databind/AnnotationIntrospector.class</include>
+<include>com/fasterxml/jackson/databind/introspect/JacksonAnnotationIntrospector.class</include>
+<include>com/fasterxml/jackson/databind/util/StdDateFormat.class</include>
+<include>com/fasterxml/jackson/databind/type/TypeBindings.class</include>
+<include>com/fasterxml/jackson/databind/introspect/NopAnnotationIntrospector.class</include>
+<include>com/fasterxml/jackson/databind/introspect/AnnotationIntrospectorPair.class</include>
+<include>com/fasterxml/jackson/databind/introspect/Annotated.class</include>
+<include>com/fasterxml/jackson/databind/introspect/TypeResolutionContext.class</include>
+<include>com/fasterxml/jackson/databind/introspect/VirtualAnnotatedMember.class</include>
+<include>com/fasterxml/jackson/databind/introspect/BeanPropertyDefinition.class</include>
+<include>com/fasterxml/jackson/databind/util/Named.class</include>
+<include>com/fasterxml/jackson/databind/util/SimpleBeanPropertyDefinition.class</include>
+<include>com/fasterxml/jackson/databind/ser/BeanPropertyWriter.class</include>
+<include>com/fasterxml/jackson/databind/ser/PropertyWriter.class</include>
+<include>com/fasterxml/jackson/databind/introspect/ConcreteBeanPropertyBase.class</include>
+<include>com/fasterxml/jackson/databind/BeanProperty.class</include>
+<include>com/fasterxml/jackson/databind/ser/VirtualBeanPropertyWriter.class</include>
+<include>com/fasterxml/jackson/databind/ser/impl/AttributePropertyWriter.class</include>
+<include>com/fasterxml/jackson/databind/type/MapLikeType.class</include>
+<include>com/fasterxml/jackson/databind/annotation/JsonSerialize.class</include>
+<include>com/fasterxml/jackson/annotation/JsonView.class</include>
+<include>com/fasterxml/jackson/annotation/JsonFormat.class</include>
+<include>com/fasterxml/jackson/annotation/JsonTypeInfo.class</include>
+<include>com/fasterxml/jackson/annotation/JsonRawValue.class</include>
+<include>com/fasterxml/jackson/annotation/JsonUnwrapped.class</include>
+<include>com/fasterxml/jackson/annotation/JsonBackReference.class</include>
+<include>com/fasterxml/jackson/annotation/JsonManagedReference.class</include>
+<include>com/fasterxml/jackson/databind/annotation/JsonDeserialize.class</include>
+<include>com/fasterxml/jackson/annotation/JsonMerge.class</include>
+<include>com/fasterxml/jackson/databind/util/LRUMap.class</include>
+<include>com/fasterxml/jackson/databind/cfg/BaseSettings.class</include>
+<include>com/fasterxml/jackson/databind/type/TypeFactory.class</include>
+<include>com/fasterxml/jackson/databind/type/ReferenceType.class</include>
+<include>com/fasterxml/jackson/databind/type/MapType.class</include>
+<include>com/fasterxml/jackson/databind/type/CollectionType.class</include>
+<include>com/fasterxml/jackson/databind/type/CollectionLikeType.class</include>
+<include>com/fasterxml/jackson/databind/type/ResolvedRecursiveType.class</include>
+<include>com/fasterxml/jackson/databind/type/ArrayType.class</include>
+<include>com/fasterxml/jackson/databind/type/TypeParser.class</include>
+<include>com/fasterxml/jackson/core/Base64Variants.class</include>
+<include>com/fasterxml/jackson/core/Base64Variant.class</include>
+<include>com/fasterxml/jackson/core/SerializableString.class</include>
+<include>com/fasterxml/jackson/core/json/async/NonBlockingJsonParser.class</include>
+<include>com/fasterxml/jackson/core/async/ByteArrayFeeder.class</include>
+<include>com/fasterxml/jackson/core/async/NonBlockingInputFeeder.class</include>
+<include>com/fasterxml/jackson/core/base/ParserBase.class</include>
+<include>com/fasterxml/jackson/core/json/ReaderBasedJsonParser.class</include>
+<include>com/fasterxml/jackson/core/json/UTF8DataInputJsonParser.class</include>
+<include>com/fasterxml/jackson/core/json/WriterBasedJsonGenerator.class</include>
+<include>com/fasterxml/jackson/core/json/JsonGeneratorImpl.class</include>
+<include>com/fasterxml/jackson/core/base/GeneratorBase.class</include>
+<include>com/fasterxml/jackson/core/json/UTF8JsonGenerator.class</include>
+<include>com/fasterxml/jackson/core/io/UTF8Writer.class</include>
+<include>com/fasterxml/jackson/core/io/DataOutputAsStream.class</include>
+<include>com/fasterxml/jackson/core/util/DefaultPrettyPrinter.class</include>
+<include>com/fasterxml/jackson/core/PrettyPrinter.class</include>
+<include>com/fasterxml/jackson/core/util/Instantiatable.class</include>
+<include>com/fasterxml/jackson/core/io/SerializedString.class</include>
+<include>com/fasterxml/jackson/core/sym/CharsToNameCanonicalizer.class</include>
+<include>com/fasterxml/jackson/core/sym/ByteQuadsCanonicalizer.class</include>
+<include>com/fasterxml/jackson/databind/util/RootNameLookup.class</include>
+<include>com/fasterxml/jackson/databind/introspect/SimpleMixInResolver.class</include>
+<include>com/fasterxml/jackson/databind/BeanDescription.class</include>
+<include>com/fasterxml/jackson/databind/introspect/BasicBeanDescription.class</include>
+<include>com/fasterxml/jackson/databind/cfg/MapperConfig.class</include>
+<include>com/fasterxml/jackson/databind/DeserializationConfig.class</include>
+<include>com/fasterxml/jackson/databind/SerializationConfig.class</include>
+<include>com/fasterxml/jackson/databind/introspect/AnnotationCollector.class</include>
+<include>com/fasterxml/jackson/databind/util/Annotations.class</include>
+<include>com/fasterxml/jackson/databind/cfg/ConfigOverrides.class</include>
+<include>com/fasterxml/jackson/annotation/JsonInclude$Value.class</include>
+<include>com/fasterxml/jackson/annotation/JacksonAnnotationValue.class</include>
+<include>com/fasterxml/jackson/annotation/JsonInclude$Include.class</include>
+<include>com/fasterxml/jackson/annotation/JsonSetter$Value.class</include>
+<include>com/fasterxml/jackson/annotation/Nulls.class</include>
+<include>com/fasterxml/jackson/annotation/JsonAutoDetect$Visibility.class</include>
+<include>com/fasterxml/jackson/databind/cfg/ConfigOverride.class</include>
+<include>com/fasterxml/jackson/databind/MapperFeature.class</include>
+<include>com/fasterxml/jackson/databind/cfg/ConfigFeature.class</include>
+<include>com/fasterxml/jackson/core/util/DefaultIndenter.class</include>
+<include>com/fasterxml/jackson/core/util/Separators.class</include>
+<include>com/fasterxml/jackson/databind/cfg/ContextAttributes.class</include>
+<include>com/fasterxml/jackson/databind/SerializationFeature.class</include>
+<include>com/fasterxml/jackson/databind/DeserializationFeature.class</include>
+<include>com/fasterxml/jackson/databind/JsonSerializer.class</include>
+<include>com/fasterxml/jackson/databind/jsonFormatVisitors/JsonFormatVisitable.class</include>
+<include>com/fasterxml/jackson/databind/ser/impl/UnknownSerializer.class</include>
+<include>com/fasterxml/jackson/databind/ser/impl/TypeWrappedSerializer.class</include>
+<include>com/fasterxml/jackson/databind/ser/ContextualSerializer.class</include>
+<include>com/fasterxml/jackson/databind/ser/std/StdSerializer.class</include>
+<include>com/fasterxml/jackson/databind/jsonschema/SchemaAware.class</include>
+<include>com/fasterxml/jackson/databind/exc/InvalidDefinitionException.class</include>
+<include>com/fasterxml/jackson/databind/exc/InvalidTypeIdException.class</include>
+<include>com/fasterxml/jackson/databind/ser/std/NullSerializer.class</include>
+<include>com/fasterxml/jackson/databind/ser/impl/FailingSerializer.class</include>
+<include>com/fasterxml/jackson/databind/ser/std/StdDelegatingSerializer.class</include>
+<include>com/fasterxml/jackson/databind/ser/ResolvableSerializer.class</include>
+<include>com/fasterxml/jackson/databind/ser/SerializerCache.class</include>
+<include>com/fasterxml/jackson/databind/exc/UnrecognizedPropertyException.class</include>
+<include>com/fasterxml/jackson/databind/exc/PropertyBindingException.class</include>
+<include>com/fasterxml/jackson/databind/exc/InvalidFormatException.class</include>
+<include>com/fasterxml/jackson/databind/JsonDeserializer.class</include>
+<include>com/fasterxml/jackson/databind/deser/NullValueProvider.class</include>
+<include>com/fasterxml/jackson/databind/deser/impl/TypeWrappedDeserializer.class</include>
+<include>com/fasterxml/jackson/databind/deser/UnresolvedForwardReference.class</include>
+<include>com/fasterxml/jackson/databind/deser/std/EnumDeserializer.class</include>
+<include>com/fasterxml/jackson/databind/deser/ContextualDeserializer.class</include>
+<include>com/fasterxml/jackson/databind/deser/std/StdScalarDeserializer.class</include>
+<include>com/fasterxml/jackson/databind/deser/std/StdDeserializer.class</include>
+<include>com/fasterxml/jackson/databind/deser/std/AtomicReferenceDeserializer.class</include>
+<include>com/fasterxml/jackson/databind/deser/std/ReferenceTypeDeserializer.class</include>
+<include>com/fasterxml/jackson/databind/deser/std/StringArrayDeserializer.class</include>
+<include>com/fasterxml/jackson/databind/deser/std/ObjectArrayDeserializer.class</include>
+<include>com/fasterxml/jackson/databind/deser/std/ContainerDeserializerBase.class</include>
+<include>com/fasterxml/jackson/databind/deser/ValueInstantiator$Gettable.class</include>
+<include>com/fasterxml/jackson/databind/deser/std/EnumSetDeserializer.class</include>
+<include>com/fasterxml/jackson/databind/deser/AbstractDeserializer.class</include>
+<include>com/fasterxml/jackson/databind/deser/std/ArrayBlockingQueueDeserializer.class</include>
+<include>com/fasterxml/jackson/databind/deser/std/CollectionDeserializer.class</include>
+<include>com/fasterxml/jackson/databind/deser/std/StringCollectionDeserializer.class</include>
+<include>com/fasterxml/jackson/databind/deser/std/EnumMapDeserializer.class</include>
+<include>com/fasterxml/jackson/databind/deser/ResolvableDeserializer.class</include>
+<include>com/fasterxml/jackson/databind/deser/std/MapDeserializer.class</include>
+<include>com/fasterxml/jackson/databind/deser/std/UntypedObjectDeserializer.class</include>
+<include>com/fasterxml/jackson/databind/deser/std/StringDeserializer.class</include>
+<include>com/fasterxml/jackson/databind/deser/std/MapEntryDeserializer.class</include>
+<include>com/fasterxml/jackson/databind/deser/std/TokenBufferDeserializer.class</include>
+<include>com/fasterxml/jackson/databind/deser/ValueInstantiator.class</include>
+<include>com/fasterxml/jackson/databind/deser/std/JsonLocationInstantiator.class</include>
+<include>com/fasterxml/jackson/databind/deser/SettableBeanProperty.class</include>
+<include>com/fasterxml/jackson/databind/deser/CreatorProperty.class</include>
+<include>com/fasterxml/jackson/databind/deser/impl/MethodProperty.class</include>
+<include>com/fasterxml/jackson/databind/deser/impl/FieldProperty.class</include>
+<include>com/fasterxml/jackson/databind/deser/impl/SetterlessProperty.class</include>
+<include>com/fasterxml/jackson/databind/deser/impl/ErrorThrowingDeserializer.class</include>
+<include>com/fasterxml/jackson/annotation/ObjectIdGenerator.class</include>
+<include>com/fasterxml/jackson/databind/deser/impl/PropertyBasedObjectIdGenerator.class</include>
+<include>com/fasterxml/jackson/databind/deser/std/ThrowableDeserializer.class</include>
+<include>com/fasterxml/jackson/databind/deser/BeanDeserializer.class</include>
+<include>com/fasterxml/jackson/databind/deser/Deserializers.class</include>
+<include>com/fasterxml/jackson/databind/PropertyName.class</include>
+<include>com/fasterxml/jackson/databind/util/ClassUtil.class</include>
+<include>com/fasterxml/jackson/databind/cfg/DeserializerFactoryConfig.class</include>
+<include>com/fasterxml/jackson/databind/AbstractTypeResolver.class</include>
+<include>com/fasterxml/jackson/databind/deser/KeyDeserializers.class</include>
+<include>com/fasterxml/jackson/databind/deser/std/StdKeyDeserializers.class</include>
+<include>com/fasterxml/jackson/databind/KeyDeserializer.class</include>
+<include>com/fasterxml/jackson/databind/deser/std/StdKeyDeserializer.class</include>
+<include>com/fasterxml/jackson/databind/deser/DeserializerCache.class</include>
+<include>com/fasterxml/jackson/databind/deser/std/StdDelegatingDeserializer.class</include>
+<include>com/fasterxml/jackson/databind/ser/std/JsonValueSerializer.class</include>
+<include>com/fasterxml/jackson/databind/ser/std/SerializableSerializer.class</include>
+<include>com/fasterxml/jackson/databind/ser/std/CalendarSerializer.class</include>
+<include>com/fasterxml/jackson/databind/ser/std/DateTimeSerializerBase.class</include>
+<include>com/fasterxml/jackson/databind/ser/std/StdScalarSerializer.class</include>
+<include>com/fasterxml/jackson/databind/ser/std/DateSerializer.class</include>
+<include>com/fasterxml/jackson/databind/ser/std/ByteBufferSerializer.class</include>
+<include>com/fasterxml/jackson/databind/ser/std/InetAddressSerializer.class</include>
+<include>com/fasterxml/jackson/databind/ser/std/InetSocketAddressSerializer.class</include>
+<include>com/fasterxml/jackson/databind/ser/std/TimeZoneSerializer.class</include>
+<include>com/fasterxml/jackson/databind/ser/std/ToStringSerializer.class</include>
+<include>com/fasterxml/jackson/databind/ser/std/NumberSerializer.class</include>
+<include>com/fasterxml/jackson/databind/ser/ContainerSerializer.class</include>
+<include>com/fasterxml/jackson/databind/ser/std/CollectionSerializer.class</include>
+<include>com/fasterxml/jackson/databind/ser/std/AsArraySerializerBase.class</include>
+<include>com/fasterxml/jackson/databind/ser/impl/IndexedStringListSerializer.class</include>
+<include>com/fasterxml/jackson/databind/ser/std/StaticListSerializerBase.class</include>
+<include>com/fasterxml/jackson/databind/ser/impl/StringCollectionSerializer.class</include>
+<include>com/fasterxml/jackson/databind/ser/impl/IndexedListSerializer.class</include>
+<include>com/fasterxml/jackson/databind/ser/std/EnumSetSerializer.class</include>
+<include>com/fasterxml/jackson/databind/ser/std/MapSerializer.class</include>
+<include>com/fasterxml/jackson/databind/ser/impl/MapEntrySerializer.class</include>
+<include>com/fasterxml/jackson/databind/ser/impl/StringArraySerializer.class</include>
+<include>com/fasterxml/jackson/databind/ser/std/ArraySerializerBase.class</include>
+<include>com/fasterxml/jackson/databind/ser/std/ObjectArraySerializer.class</include>
+<include>com/fasterxml/jackson/databind/ser/std/ReferenceTypeSerializer.class</include>
+<include>com/fasterxml/jackson/databind/ser/impl/IteratorSerializer.class</include>
+<include>com/fasterxml/jackson/databind/ser/std/IterableSerializer.class</include>
+<include>com/fasterxml/jackson/databind/ser/std/EnumSerializer.class</include>
+<include>com/fasterxml/jackson/databind/ser/BeanSerializer.class</include>
+<include>com/fasterxml/jackson/databind/ser/std/BeanSerializerBase.class</include>
+<include>com/fasterxml/jackson/databind/ser/impl/PropertyBasedObjectIdGenerator.class</include>
+<include>com/fasterxml/jackson/databind/ser/std/StringSerializer.class</include>
+<include>com/fasterxml/jackson/databind/ser/std/BooleanSerializer.class</include>
+<include>com/fasterxml/jackson/databind/ser/std/StdJdkSerializers.class</include>
+<include>com/fasterxml/jackson/databind/ser/std/UUIDSerializer.class</include>
+<include>com/fasterxml/jackson/databind/ser/std/FileSerializer.class</include>
+<include>com/fasterxml/jackson/databind/ser/std/ClassSerializer.class</include>
+<include>com/fasterxml/jackson/databind/ser/std/TokenBufferSerializer.class</include>
+<include>com/fasterxml/jackson/databind/cfg/SerializerFactoryConfig.class</include>
+<include>com/fasterxml/jackson/databind/ser/Serializers.class</include>
+<include>com/fasterxml/jackson/core/type/TypeReference.class</include>
+<include>com/fasterxml/jackson/databind/JsonSerializable$Base.class</include>
+<include>com/fasterxml/jackson/databind/node/BooleanNode.class</include>
+<include>com/fasterxml/jackson/databind/node/ValueNode.class</include>
+<include>com/fasterxml/jackson/databind/node/BaseJsonNode.class</include>
+<include>com/fasterxml/jackson/databind/node/TextNode.class</include>
+<include>com/fasterxml/jackson/databind/node/DoubleNode.class</include>
+<include>com/fasterxml/jackson/databind/node/NumericNode.class</include>
+<include>com/fasterxml/jackson/databind/node/FloatNode.class</include>
+<include>com/fasterxml/jackson/databind/node/BinaryNode.class</include>
+<include>com/fasterxml/jackson/databind/node/IntNode.class</include>
+<include>com/fasterxml/jackson/databind/node/LongNode.class</include>
+<include>com/fasterxml/jackson/databind/node/BigIntegerNode.class</include>
+<include>com/fasterxml/jackson/databind/node/ArrayNode.class</include>
+<include>com/fasterxml/jackson/databind/node/ContainerNode.class</include>
+<include>com/fasterxml/jackson/databind/node/JsonNodeCreator.class</include>
+<include>com/fasterxml/jackson/databind/node/ObjectNode.class</include>
+<include>com/fasterxml/jackson/databind/node/NullNode.class</include>
+<include>com/fasterxml/jackson/databind/node/TreeTraversingParser.class</include>
+<include>com/fasterxml/jackson/databind/ser/DefaultSerializerProvider$Impl.class</include>
+<include>com/fasterxml/jackson/databind/deser/DefaultDeserializationContext$Impl.class</include>
+<include>com/fasterxml/jackson/databind/introspect/AnnotatedMember.class</include>
+<include>com/fasterxml/jackson/databind/introspect/AnnotatedClass.class</include>
+<include>com/fasterxml/jackson/databind/introspect/AnnotatedMethod.class</include>
+<include>com/fasterxml/jackson/databind/introspect/AnnotatedWithParams.class</include>
+<include>com/fasterxml/jackson/core/json/async/NonBlockingJsonParserBase.class</include>
+<include>com/fasterxml/jackson/core/JsonFactory$Feature.class</include>
+<include>com/fasterxml/jackson/core/JsonParser$Feature.class</include>
+<include>com/fasterxml/jackson/core/JsonGenerator$Feature.class</include>
+<include>com/fasterxml/jackson/core/util/DefaultPrettyPrinter$Indenter.class</include>
+<include>com/fasterxml/jackson/core/sym/CharsToNameCanonicalizer$TableInfo.class</include>
+<include>com/fasterxml/jackson/core/sym/CharsToNameCanonicalizer$Bucket.class</include>
+<include>com/fasterxml/jackson/core/sym/ByteQuadsCanonicalizer$TableInfo.class</include>
+<include>com/fasterxml/jackson/databind/introspect/ClassIntrospector$MixInResolver.class</include>
+<include>com/fasterxml/jackson/databind/cfg/MapperConfigBase.class</include>
+<include>com/fasterxml/jackson/databind/introspect/AnnotatedClassResolver.class</include>
+<include>com/fasterxml/jackson/databind/introspect/AnnotationCollector$EmptyCollector.class</include>
+<include>com/fasterxml/jackson/databind/introspect/AnnotationCollector$NoAnnotations.class</include>
+<include>com/fasterxml/jackson/databind/introspect/AnnotatedClass$Creators.class</include>
+<include>com/fasterxml/jackson/databind/introspect/AnnotatedParameter.class</include>
+<include>com/fasterxml/jackson/databind/introspect/VisibilityChecker$Std.class</include>
+<include>com/fasterxml/jackson/annotation/JsonFormat$Value.class</include>
+<include>com/fasterxml/jackson/annotation/JsonFormat$Shape.class</include>
+<include>com/fasterxml/jackson/annotation/JsonFormat$Features.class</include>
+<include>com/fasterxml/jackson/databind/cfg/ConfigOverride$Empty.class</include>
+<include>com/fasterxml/jackson/core/util/DefaultPrettyPrinter$FixedSpaceIndenter.class</include>
+<include>com/fasterxml/jackson/core/util/DefaultPrettyPrinter$NopIndenter.class</include>
+<include>com/fasterxml/jackson/databind/cfg/ContextAttributes$Impl.class</include>
+<include>com/fasterxml/jackson/databind/node/JsonNodeFactory.class</include>
+<include>com/fasterxml/jackson/databind/node/POJONode.class</include>
+<include>com/fasterxml/jackson/databind/node/ShortNode.class</include>
+<include>com/fasterxml/jackson/databind/node/DecimalNode.class</include>
+<include>com/fasterxml/jackson/databind/deser/ValueInstantiator$Base.class</include>
+<include>com/fasterxml/jackson/databind/introspect/AnnotatedConstructor.class</include>
+<include>com/fasterxml/jackson/annotation/ObjectIdGenerators$PropertyGenerator.class</include>
+<include>com/fasterxml/jackson/annotation/ObjectIdGenerators$Base.class</include>
+<include>com/fasterxml/jackson/databind/deser/BeanDeserializerBase.class</include>
+<include>com/fasterxml/jackson/databind/util/ClassUtil$Ctor.class</include>
+<include>com/fasterxml/jackson/databind/deser/BeanDeserializerModifier.class</include>
+<include>com/fasterxml/jackson/databind/deser/ValueInstantiators.class</include>
+<include>com/fasterxml/jackson/databind/deser/std/StdKeyDeserializer$StringCtorKeyDeserializer.class</include>
+<include>com/fasterxml/jackson/databind/deser/std/StdKeyDeserializer$StringFactoryKeyDeserializer.class</include>
+<include>com/fasterxml/jackson/databind/deser/std/StdKeyDeserializer$DelegatingKD.class</include>
+<include>com/fasterxml/jackson/databind/deser/std/StdKeyDeserializer$EnumKD.class</include>
+<include>com/fasterxml/jackson/databind/introspect/AnnotatedField.class</include>
+<include>com/fasterxml/jackson/databind/ser/std/NumberSerializers.class</include>
+<include>com/fasterxml/jackson/databind/ser/std/NumberSerializers$IntegerSerializer.class</include>
+<include>com/fasterxml/jackson/databind/ser/std/NumberSerializers$Base.class</include>
+<include>com/fasterxml/jackson/core/JsonParser$NumberType.class</include>
+<include>com/fasterxml/jackson/databind/ser/std/NumberSerializers$LongSerializer.class</include>
+<include>com/fasterxml/jackson/databind/ser/std/NumberSerializers$IntLikeSerializer.class</include>
+<include>com/fasterxml/jackson/databind/ser/std/NumberSerializers$ShortSerializer.class</include>
+<include>com/fasterxml/jackson/databind/ser/std/NumberSerializers$DoubleSerializer.class</include>
+<include>com/fasterxml/jackson/databind/ser/std/NumberSerializers$FloatSerializer.class</include>
+<include>com/fasterxml/jackson/databind/ser/std/BooleanSerializer$AsNumber.class</include>
+<include>com/fasterxml/jackson/databind/ser/std/StdJdkSerializers$AtomicBooleanSerializer.class</include>
+<include>com/fasterxml/jackson/databind/ser/std/StdJdkSerializers$AtomicIntegerSerializer.class</include>
+<include>com/fasterxml/jackson/databind/ser/std/StdJdkSerializers$AtomicLongSerializer.class</include>
+<include>com/fasterxml/jackson/databind/ser/BeanSerializerModifier.class</include>
+<include>com/fasterxml/jackson/databind/node/MissingNode.class</include>
+<include>com/fasterxml/jackson/databind/ObjectReader.class</include>
+<include>com/fasterxml/jackson/core/filter/FilteringParserDelegate.class</include>
+<include>com/fasterxml/jackson/core/util/JsonParserDelegate.class</include>
+<include>com/fasterxml/jackson/core/JsonParseException.class</include>
+<include>com/fasterxml/jackson/core/filter/TokenFilter.class</include>
+<include>com/fasterxml/jackson/core/filter/JsonPointerBasedFilter.class</include>
+<include>com/fasterxml/jackson/core/io/JsonEOFException.class</include>
+<include>com/fasterxml/jackson/core/JsonStreamContext.class</include>
+<include>com/fasterxml/jackson/databind/node/NodeCursor.class</include>
+<include>com/fasterxml/jackson/databind/node/NodeCursor$ArrayCursor.class</include>
+<include>com/fasterxml/jackson/databind/node/NodeCursor$ObjectCursor.class</include>
+<include>com/fasterxml/jackson/databind/node/NodeCursor$RootCursor.class</include>
+<include>com/fasterxml/jackson/databind/node/JsonNodeType.class</include>
+<include>com/fasterxml/jackson/core/JsonToken.class</include>
+<include>com/fasterxml/jackson/databind/type/ClassStack.class</include>
+<include>com/fasterxml/jackson/databind/introspect/AnnotationCollector$OneCollector.class</include>
+<include>com/fasterxml/jackson/databind/introspect/POJOPropertiesCollector.class</include>
+<include>com/fasterxml/jackson/annotation/JsonAutoDetect.class</include>
+<include>com/fasterxml/jackson/annotation/JsonIdentityInfo.class</include>
+<include>com/fasterxml/jackson/databind/util/ArrayIterator.class</include>
+<include>com/fasterxml/jackson/databind/ext/OptionalHandlerFactory.class</include>
+<include>com/fasterxml/jackson/databind/deser/std/JdkDeserializers.class</include>
+<include>com/fasterxml/jackson/databind/deser/std/FromStringDeserializer$Std.class</include>
+<include>com/fasterxml/jackson/databind/deser/std/FromStringDeserializer.class</include>
+<include>com/fasterxml/jackson/databind/deser/std/UUIDDeserializer.class</include>
+<include>com/fasterxml/jackson/databind/deser/std/StackTraceElementDeserializer.class</include>
+<include>com/fasterxml/jackson/databind/deser/std/AtomicBooleanDeserializer.class</include>
+<include>com/fasterxml/jackson/databind/deser/std/ByteBufferDeserializer.class</include>
+<include>com/fasterxml/jackson/databind/annotation/JsonTypeResolver.class</include>
+<include>com/fasterxml/jackson/databind/annotation/JsonValueInstantiator.class</include>
+<include>com/fasterxml/jackson/core/JsonLocation.class</include>
+<include>com/fasterxml/jackson/databind/deser/impl/CreatorCollector.class</include>
+<include>com/fasterxml/jackson/databind/deser/std/StdValueInstantiator.class</include>
+<include>com/fasterxml/jackson/databind/introspect/AnnotatedFieldCollector.class</include>
+<include>com/fasterxml/jackson/databind/introspect/CollectorBase.class</include>
+<include>com/fasterxml/jackson/databind/introspect/AnnotationMap.class</include>
+<include>com/fasterxml/jackson/databind/introspect/TypeResolutionContext$Basic.class</include>
+<include>com/fasterxml/jackson/databind/introspect/AnnotatedFieldCollector$FieldBuilder.class</include>
+<include>com/fasterxml/jackson/annotation/JsonValue.class</include>
+<include>com/fasterxml/jackson/annotation/JsonAnySetter.class</include>
+<include>com/fasterxml/jackson/annotation/JsonSetter.class</include>
+<include>com/fasterxml/jackson/annotation/JsonProperty.class</include>
+<include>com/fasterxml/jackson/annotation/JsonAutoDetect$1.class</include>
+<include>com/fasterxml/jackson/annotation/PropertyAccessor.class</include>
+<include>com/fasterxml/jackson/annotation/JsonIgnore.class</include>
+<include>com/fasterxml/jackson/databind/introspect/POJOPropertyBuilder.class</include>
+<include>com/fasterxml/jackson/databind/introspect/POJOPropertyBuilder$WithMember.class</include>
+<include>com/fasterxml/jackson/databind/AnnotationIntrospector$ReferenceProperty.class</include>
+<include>com/fasterxml/jackson/databind/AnnotationIntrospector$ReferenceProperty$Type.class</include>
+<include>com/fasterxml/jackson/core/util/InternCache.class</include>
+<include>com/fasterxml/jackson/databind/introspect/POJOPropertyBuilder$Linked.class</include>
+<include>com/fasterxml/jackson/databind/introspect/AnnotatedMethodCollector.class</include>
+<include>com/fasterxml/jackson/databind/introspect/MemberKey.class</include>
+<include>com/fasterxml/jackson/databind/introspect/AnnotatedMethodCollector$MethodBuilder.class</include>
+<include>com/fasterxml/jackson/databind/introspect/AnnotationCollector$NCollector.class</include>
+<include>com/fasterxml/jackson/annotation/JacksonAnnotationsInside.class</include>
+<include>com/fasterxml/jackson/annotation/JsonProperty$Access.class</include>
+<include>com/fasterxml/jackson/databind/introspect/AnnotatedMethodMap.class</include>
+<include>com/fasterxml/jackson/annotation/JsonAnyGetter.class</include>
+<include>com/fasterxml/jackson/annotation/JsonGetter.class</include>
+<include>com/fasterxml/jackson/databind/util/BeanUtil.class</include>
+<include>com/fasterxml/jackson/databind/introspect/AnnotatedCreatorCollector.class</include>
+<include>com/fasterxml/jackson/databind/type/TypeBindings$TypeParamStash.class</include>
+<include>com/fasterxml/jackson/databind/type/TypeBindings$AsKey.class</include>
+<include>com/fasterxml/jackson/annotation/JacksonInject.class</include>
+<include>com/fasterxml/jackson/annotation/OptBoolean.class</include>
+<include>com/fasterxml/jackson/databind/introspect/POJOPropertyBuilder$9.class</include>
+<include>com/fasterxml/jackson/databind/introspect/POJOPropertyBuilder$10.class</include>
+<include>com/fasterxml/jackson/databind/annotation/JsonNaming.class</include>
+<include>com/fasterxml/jackson/annotation/JsonPropertyOrder.class</include>
+<include>com/fasterxml/jackson/databind/introspect/POJOPropertyBuilder$MemberIterator.class</include>
+<include>com/fasterxml/jackson/annotation/JsonCreator.class</include>
+<include>com/fasterxml/jackson/annotation/JsonCreator$Mode.class</include>
+<include>com/fasterxml/jackson/databind/deser/impl/CreatorCandidate.class</include>
+<include>com/fasterxml/jackson/databind/deser/impl/CreatorCandidate$Param.class</include>
+<include>com/fasterxml/jackson/annotation/JacksonInject$Value.class</include>
+<include>com/fasterxml/jackson/annotation/JsonPropertyDescription.class</include>
+<include>com/fasterxml/jackson/databind/PropertyMetadata.class</include>
+<include>com/fasterxml/jackson/databind/BeanProperty$Std.class</include>
+<include>com/fasterxml/jackson/databind/deser/impl/FailingDeserializer.class</include>
+<include>com/fasterxml/jackson/databind/deser/impl/CreatorCollector$StdTypeConstructor.class</include>
+<include>com/fasterxml/jackson/databind/deser/BeanDeserializerBuilder.class</include>
+<include>com/fasterxml/jackson/databind/deser/impl/ObjectIdValueProperty.class</include>
+<include>com/fasterxml/jackson/databind/deser/BuilderBasedDeserializer.class</include>
+<include>com/fasterxml/jackson/annotation/JsonIgnoreProperties.class</include>
+<include>com/fasterxml/jackson/annotation/JsonIgnoreProperties$Value.class</include>
+<include>com/fasterxml/jackson/databind/introspect/POJOPropertyBuilder$4.class</include>
+<include>com/fasterxml/jackson/databind/introspect/POJOPropertyBuilder$5.class</include>
+<include>com/fasterxml/jackson/databind/introspect/POJOPropertyBuilder$6.class</include>
+<include>com/fasterxml/jackson/databind/introspect/POJOPropertyBuilder$7.class</include>
+<include>com/fasterxml/jackson/databind/deser/impl/NullsConstantProvider.class</include>
+<include>com/fasterxml/jackson/databind/util/AccessPattern.class</include>
+<include>com/fasterxml/jackson/databind/introspect/POJOPropertyBuilder$2.class</include>
+<include>com/fasterxml/jackson/databind/introspect/POJOPropertyBuilder$8.class</include>
+<include>com/fasterxml/jackson/databind/introspect/POJOPropertyBuilder$1.class</include>
+<include>com/fasterxml/jackson/annotation/JsonAlias.class</include>
+<include>com/fasterxml/jackson/databind/deser/impl/BeanPropertyMap.class</include>
+<include>com/fasterxml/jackson/databind/exc/IgnoredPropertyException.class</include>
+<include>com/fasterxml/jackson/databind/deser/impl/ManagedReferenceProperty.class</include>
+<include>com/fasterxml/jackson/databind/deser/SettableBeanProperty$Delegating.class</include>
+<include>com/fasterxml/jackson/databind/deser/impl/ObjectIdReferenceProperty.class</include>
+<include>com/fasterxml/jackson/databind/deser/impl/InnerClassProperty.class</include>
+<include>com/fasterxml/jackson/databind/deser/impl/MergingSettableBeanProperty.class</include>
+<include>com/fasterxml/jackson/databind/deser/impl/ReadableObjectId$Referring.class</include>
+<include>com/fasterxml/jackson/databind/deser/BeanDeserializer$BeanReferring.class</include>
+<include>com/fasterxml/jackson/databind/deser/impl/BeanAsArrayDeserializer.class</include>
+<include>com/fasterxml/jackson/databind/deser/std/NumberDeserializers.class</include>
+<include>com/fasterxml/jackson/databind/deser/std/NumberDeserializers$IntegerDeserializer.class</include>
+<include>com/fasterxml/jackson/databind/deser/std/NumberDeserializers$PrimitiveOrWrapperDeserializer.class</include>
+<include>com/fasterxml/jackson/databind/deser/std/NumberDeserializers$BooleanDeserializer.class</include>
+<include>com/fasterxml/jackson/databind/deser/std/NumberDeserializers$LongDeserializer.class</include>
+<include>com/fasterxml/jackson/databind/deser/std/NumberDeserializers$DoubleDeserializer.class</include>
+<include>com/fasterxml/jackson/databind/deser/std/NumberDeserializers$CharacterDeserializer.class</include>
+<include>com/fasterxml/jackson/databind/deser/std/NumberDeserializers$ByteDeserializer.class</include>
+<include>com/fasterxml/jackson/databind/deser/std/NumberDeserializers$ShortDeserializer.class</include>
+<include>com/fasterxml/jackson/databind/deser/std/NumberDeserializers$FloatDeserializer.class</include>
+<include>com/fasterxml/jackson/databind/deser/std/NumberDeserializers$NumberDeserializer.class</include>
+<include>com/fasterxml/jackson/databind/deser/std/NumberDeserializers$BigDecimalDeserializer.class</include>
+<include>com/fasterxml/jackson/databind/deser/std/NumberDeserializers$BigIntegerDeserializer.class</include>
+<include>com/fasterxml/jackson/databind/util/LinkedNode.class</include>
+<include>com/fasterxml/jackson/databind/deser/std/StdKeyDeserializer$StringKD.class</include>
+<include>com/fasterxml/jackson/databind/deser/ContextualKeyDeserializer.class</include>
+<include>com/fasterxml/jackson/databind/annotation/JacksonStdImpl.class</include>
+<include>com/fasterxml/jackson/databind/deser/impl/PropertyBasedCreator.class</include>
+<include>com/fasterxml/jackson/databind/deser/impl/PropertyBasedCreator$CaseInsensitiveMap.class</include>
+<include>com/fasterxml/jackson/annotation/JsonFormat$Feature.class</include>
+<include>com/fasterxml/jackson/databind/deser/std/FactoryBasedEnumDeserializer.class</include>
+<include>com/fasterxml/jackson/databind/util/EnumResolver.class</include>
+<include>com/fasterxml/jackson/annotation/JsonEnumDefaultValue.class</include>
+<include>com/fasterxml/jackson/databind/util/CompactStringObjectMap.class</include>
+<include>com/fasterxml/jackson/databind/deser/impl/PropertyValueBuffer.class</include>
+<include>com/fasterxml/jackson/databind/deser/impl/PropertyValue.class</include>
+<include>com/fasterxml/jackson/databind/deser/impl/PropertyValue$Map.class</include>
+<include>com/fasterxml/jackson/databind/deser/impl/PropertyValue$Regular.class</include>
+<include>com/fasterxml/jackson/databind/deser/impl/PropertyValue$Any.class</include>
+<include>com/fasterxml/jackson/databind/node/TreeTraversingParser$1.class</include></includes></filter></filters>
+                </configuration>
             </plugin>
         </plugins>
     </build>
