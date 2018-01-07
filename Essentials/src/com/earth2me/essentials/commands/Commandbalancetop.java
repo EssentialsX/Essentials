@@ -64,17 +64,12 @@ public class Commandbalancetop extends EssentialsCommand {
 
     }
 
-    private void outputCache(final CommandSource sender, String command, int page) {
+    private static void outputCache(final CommandSource sender, String command, int page) {
         final Calendar cal = Calendar.getInstance();
         cal.setTimeInMillis(cacheage);
         final DateFormat format = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT);
         sender.sendMessage(tl("balanceTop", format.format(cal.getTime())));
-
-        try {
-            new TextPager(cache).showPage(Integer.toString(page), null, "balancetop", sender);
-        } catch (Exception e) {
-            this.ess.showError(sender, e, this.getName());
-        }
+        new TextPager(cache).showPage(Integer.toString(page), null, "balancetop", sender);
     }
 
 

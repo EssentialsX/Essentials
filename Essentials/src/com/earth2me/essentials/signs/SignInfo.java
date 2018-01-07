@@ -9,6 +9,8 @@ import com.earth2me.essentials.textreader.TextInput;
 import com.earth2me.essentials.textreader.TextPager;
 import net.ess3.api.IEssentials;
 
+import java.io.IOException;
+
 
 public class SignInfo extends EssentialsSign {
     public SignInfo() {
@@ -37,7 +39,7 @@ public class SignInfo extends EssentialsSign {
             final TextPager pager = new TextPager(output);
             pager.showPage(chapter, page, null, player.getSource());
 
-        } catch (Exception ex) {
+        } catch (IOException ex) {
             throw new SignException(ex.getMessage(), ex);
         }
 

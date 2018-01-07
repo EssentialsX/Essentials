@@ -23,7 +23,7 @@ public class TextPager {
         this.onePage = onePage;
     }
 
-    public void showPage(final String pageStr, final String chapterPageStr, final String commandName, final CommandSource sender) throws Exception {
+    public void showPage(final String pageStr, final String chapterPageStr, final String commandName, final CommandSource sender) {
         List<String> lines = text.getLines();
         List<String> chapters = text.getChapters();
         Map<String, Integer> bookmarks = text.getBookmarks();
@@ -71,7 +71,8 @@ public class TextPager {
 
                 int pages = end / 9 + (end % 9 > 0 ? 1 : 0);
                 if (page > pages) {
-                    throw new Exception(tl("infoUnknownChapter"));
+                    sender.sendMessage(tl("infoUnknownChapter"));
+                    return;
                 }
                 if (!onePage && commandName != null) {
 
