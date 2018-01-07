@@ -41,6 +41,8 @@ public class SignInfo extends EssentialsSign {
 
         } catch (IOException ex) {
             throw new SignException(ex.getMessage(), ex);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
         charge.charge(player);
