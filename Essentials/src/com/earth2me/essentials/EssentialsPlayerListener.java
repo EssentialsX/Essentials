@@ -337,10 +337,11 @@ public class EssentialsPlayerListener implements Listener {
                     if (input != null && user.isAuthorized("essentials.motd")) {
                         final IText output = new KeywordReplacer(input, user.getSource(), ess);
                         final TextPager pager = new TextPager(output, true);
+
                         try {
                             pager.showPage("1", null, "motd", user.getSource());
                         } catch (Exception e) {
-                            e.printStackTrace();
+                            ess.showError(user.getSource(), e, "EssentialsPlayerListener.DelayMotdTask");
                         }
                     }
                 }
