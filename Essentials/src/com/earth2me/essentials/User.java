@@ -715,7 +715,10 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
                 }
             }
             setHidden(true);
-            ess.getVanishedPlayers().add(getName());
+            List<String> vanishedPlayers = ess.getVanishedPlayers();
+            if (!vanishedPlayers.contains(getName())) {
+                vanishedPlayers.add(getName());
+            }
             if (isAuthorized("essentials.vanish.effect")) {
                 this.getBase().addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, Integer.MAX_VALUE, 1, false));
             }
