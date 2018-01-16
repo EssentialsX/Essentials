@@ -32,6 +32,7 @@ public class KeywordReplacer implements IText {
     private final transient IEssentials ess;
     private final transient boolean includePrivate;
     private transient ExecuteTimer execTimer;
+    private final transient boolean replaceSpacesWithUnderscores;
     private final EnumMap<KeywordType, Object> keywordCache = new EnumMap<KeywordType, Object>(KeywordType.class);
 
     public KeywordReplacer(final IText input, final CommandSource sender, final IEssentials ess) {
@@ -39,6 +40,7 @@ public class KeywordReplacer implements IText {
         this.replaced = new ArrayList<String>(this.input.getLines().size());
         this.ess = ess;
         this.includePrivate = true;
+        this.replaceSpacesWithUnderscores = false;
         replaceKeywords(sender);
     }
 
@@ -47,6 +49,17 @@ public class KeywordReplacer implements IText {
         this.replaced = new ArrayList<String>(this.input.getLines().size());
         this.ess = ess;
         this.includePrivate = showPrivate;
+        this.replaceSpacesWithUnderscores = false;
+        replaceKeywords(sender);
+    }
+
+    public KeywordReplacer(final IText input, final CommandSource sender, final IEssentials ess, final boolean showPrivate,
+                           boolean replaceSpacesWithUnderscores) {
+        this.input = input;
+        this.replaced = new ArrayList<String>(this.input.getLines().size());
+        this.ess = ess;
+        this.includePrivate = showPrivate;
+        this.replaceSpacesWithUnderscores = replaceSpacesWithUnderscores;
         replaceKeywords(sender);
     }
 
@@ -264,6 +277,10 @@ public class KeywordReplacer implements IText {
                     default:
                         replacer = "N/A";
                         break;
+                }
+
+                if (this.replaceSpacesWithUnderscores) {
+                    replacer = replacer.replaceAll("\\s", "_");
                 }
 
                 //If this is just a regular keyword, lets throw it into the cache

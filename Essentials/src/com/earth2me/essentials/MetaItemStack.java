@@ -120,26 +120,6 @@ public class MetaItemStack {
     }
 
     public void parseStringMeta(final CommandSource sender, final boolean allowUnsafe, String[] string, int fromArg, final IEssentials ess) throws Exception {
-        // Make any entries after lore definition become the lore and not parsed.
-        {
-            int loreIndex = -1;
-            boolean dirty = false;
-            for (int i = 0; i < string.length; i++) {
-                String _str = string[i];
-                if (loreIndex == -1) {
-                    if (_str.matches("^lore" + splitPattern.pattern() + ".*")) {
-                        loreIndex = i;
-                    }
-                } else {
-                    string[loreIndex] += " " + string[i];
-                    string[i] = null;
-                    dirty = true;
-                }
-            }
-            if (dirty) {
-                string = (String[]) ArrayUtils.subarray(string, 0, loreIndex + 1);
-            }
-        }
         if (string[fromArg].startsWith("{") && hasMetaPermission(sender, "vanilla", false, true, ess)) {
             try {
                 stack = ess.getServer().getUnsafe().modifyItemStack(stack, Joiner.on(' ').join(Arrays.asList(string).subList(fromArg, string.length)));

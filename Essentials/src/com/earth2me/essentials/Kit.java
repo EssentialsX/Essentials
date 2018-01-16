@@ -185,7 +185,7 @@ public class Kit {
     public void expandItems(final User user, final List<String> items) throws Exception {
         try {
             IText input = new SimpleTextInput(items);
-            IText output = new KeywordReplacer(input, user.getSource(), ess);
+            IText output = new KeywordReplacer(input, user.getSource(), ess, true, true);
 
             boolean spew = false;
             final boolean allowUnsafe = ess.getSettings().allowUnsafeEnchantments();
