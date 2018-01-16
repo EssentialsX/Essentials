@@ -7,6 +7,9 @@ import com.earth2me.essentials.utils.FormatUtil;
 import com.earth2me.essentials.utils.NumberUtil;
 import com.google.common.base.Joiner;
 import net.ess3.api.IEssentials;
+import net.ess3.nms.refl.ReflUtil;
+
+import org.apache.commons.lang.ArrayUtils;
 import org.bukkit.Color;
 import org.bukkit.DyeColor;
 import org.bukkit.FireworkEffect;
@@ -370,9 +373,17 @@ public class MetaItemStack {
                 }
                 pmeta.addCustomEffect(pEffect, true);
                 stack.setItemMeta(pmeta);
-                Potion potion = Potion.fromItemStack(stack);
-                potion.setSplash(isSplashPotion);
-                potion.apply(stack);
+                if (ReflUtil.getNmsVersionObject().isHigherThanOrEqualTo(ReflUtil.V1_9_R1)) {
+                    if (isSplashPotion && stack.getType() != Material.SPLASH_POTION) {
+                        stack.setType(Material.SPLASH_POTION);
+                    } else if (!isSplashPotion && stack.getType() != Material.POTION) {
+                        stack.setType(Material.POTION);
+                    }
+                } else {
+                    Potion potion = Potion.fromItemStack(stack);
+                    potion.setSplash(isSplashPotion);
+                    potion.apply(stack);
+                }
                 resetPotionMeta();
             }
         }
