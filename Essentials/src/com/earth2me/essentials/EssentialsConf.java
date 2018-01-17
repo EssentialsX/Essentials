@@ -41,7 +41,6 @@ public class EssentialsConf extends YamlConfiguration {
     private static final ExecutorService EXECUTOR_SERVICE = Executors.newSingleThreadExecutor();
     private final AtomicInteger pendingDiskWrites = new AtomicInteger(0);
     private final AtomicBoolean transaction = new AtomicBoolean(false);
-    private boolean isFirstRun = false;
 
     public EssentialsConf(final File configFile) {
         super();
@@ -84,7 +83,6 @@ public class EssentialsConf extends YamlConfiguration {
         }
 
         if (!configFile.exists()) {
-            isFirstRun = true;
             if (legacyFileExists()) {
                 convertLegacyFile();
             } else if (altFileExists()) {
@@ -146,10 +144,6 @@ public class EssentialsConf extends YamlConfiguration {
             configFile.renameTo(broken);
             LOGGER.log(Level.SEVERE, "The file " + configFile.toString() + " is broken, it has been renamed to " + broken.toString(), ex.getCause());
         }
-    }
-
-    public boolean isFirstRun() {
-        return isFirstRun;
     }
 
     public boolean legacyFileExists() {
