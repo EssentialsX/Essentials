@@ -3,7 +3,6 @@ package com.earth2me.essentials;
 import com.earth2me.essentials.commands.IEssentialsCommand;
 import com.earth2me.essentials.signs.EssentialsSign;
 import com.earth2me.essentials.textreader.IText;
-
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.event.EventPriority;
@@ -22,11 +21,13 @@ public interface ISettings extends IConf {
 
     IText getAnnounceNewPlayerFormat();
 
-    boolean getAnnounceNewPlayers();
-
     String getNewPlayerKit();
 
+    boolean getAnnounceNewPlayers();
+
     String getBackupCommand();
+
+    ConfigurationSection getKitSection();
 
     long getBackupInterval();
 
@@ -57,14 +58,6 @@ public interface ISettings extends IConf {
     boolean getSocialSpyListenMutedPlayers();
 
     Set<String> getMuteCommands();
-
-    Map<String, Object> getKit(String name);
-
-    ConfigurationSection getKits();
-
-    void addKit(String name, List<String> lines, long delay);
-
-    boolean isSkippingUsedOneTimeKitsFromKitList();
 
     String getLocale();
 
@@ -243,7 +236,7 @@ public interface ISettings extends IConf {
     boolean isLastMessageReplyRecipient();
 
     BigDecimal getMinimumPayAmount();
-    
+
     long getLastMessageReplyRecipientTimeout();
 
     boolean isMilkBucketEasterEggEnabled();
@@ -255,13 +248,13 @@ public interface ISettings extends IConf {
     boolean isSpawnOnJoin();
 
     List<String> getSpawnOnJoinGroups();
-    
+
     boolean isUserInSpawnOnJoinGroup(IUser user);
 
     boolean isTeleportToCenterLocation();
 
     boolean isCommandCooldownsEnabled();
-    
+
     long getCommandCooldownMs(String label);
 
     Entry<Pattern, Long> getCommandCooldownEntry(String label);
@@ -273,11 +266,9 @@ public interface ISettings extends IConf {
     NumberFormat getCurrencyFormat();
 
     List<EssentialsSign> getUnprotectedSignNames();
-    
-    boolean isPastebinCreateKit();
-    
+
     boolean isAllowBulkBuySell();
-    
+
     boolean isAddingPrefixInPlayerlist();
 
     boolean isAddingSuffixInPlayerlist();

@@ -23,7 +23,7 @@ public class Commandkit extends EssentialsCommand {
     @Override
     public void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception {
         if (args.length < 1) {
-            final String kitList = Kit.listKits(ess, user);
+            final String kitList = ess.getKits().listKits(ess, user);
             user.sendMessage(kitList.length() > 0 ? tl("kits", kitList) : tl("noKits"));
             throw new NoChargeException();
         } else if (args.length > 1 && user.isAuthorized("essentials.kit.others")) {
@@ -39,7 +39,7 @@ public class Commandkit extends EssentialsCommand {
     @Override
     public void run(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception {
         if (args.length < 2) {
-            final String kitList = Kit.listKits(ess, null);
+            final String kitList = ess.getKits().listKits(ess, null);
             sender.sendMessage(kitList.length() > 0 ? tl("kits", kitList) : tl("noKits"));
             throw new NoChargeException();
         } else {
@@ -106,7 +106,7 @@ public class Commandkit extends EssentialsCommand {
         if (args.length == 1) {
             List<String> options = new ArrayList<>();
             // TODO: Move all of this to its own method
-            for (String kitName : ess.getSettings().getKits().getKeys(false)) {
+            for (String kitName : ess.getKits().getKits().getKeys(false)) {
                 if (!user.isAuthorized("essentials.kits." + kitName)) { // Only check perm, not time or money
                     continue;
                 }
@@ -123,7 +123,7 @@ public class Commandkit extends EssentialsCommand {
     @Override
     protected List<String> getTabCompleteOptions(final Server server, final CommandSource sender, final String commandLabel, final String[] args) {
         if (args.length == 1) {
-            return new ArrayList<>(ess.getSettings().getKits().getKeys(false)); // TODO: Move this to its own method
+            return new ArrayList<>(ess.getKits().getKits().getKeys(false)); // TODO: Move this to its own method
         } else if (args.length == 2) {
             return getPlayers(server, sender);
         } else {

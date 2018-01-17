@@ -7,7 +7,6 @@ import com.earth2me.essentials.textreader.IText;
 import com.earth2me.essentials.textreader.SimpleTextInput;
 import com.earth2me.essentials.utils.FormatUtil;
 import com.earth2me.essentials.utils.NumberUtil;
-
 import net.ess3.api.IEssentials;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.ConfigurationSection;
@@ -27,10 +26,10 @@ import java.util.*;
 import java.util.Map.Entry;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import static com.earth2me.essentials.I18n.tl;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
+
+import static com.earth2me.essentials.I18n.tl;
 
 
 public class Settings implements net.ess3.api.ISettings {
@@ -325,53 +324,6 @@ public class Settings implements net.ess3.api.ISettings {
         return config.getDouble("heal-cooldown", 0);
     }
 
-    private ConfigurationSection kits;
-
-    private ConfigurationSection _getKits() {
-        if (config.isConfigurationSection("kits")) {
-            final ConfigurationSection section = config.getConfigurationSection("kits");
-            final ConfigurationSection newSection = new MemoryConfiguration();
-            for (String kitItem : section.getKeys(false)) {
-                if (section.isConfigurationSection(kitItem)) {
-                    newSection.set(kitItem.toLowerCase(Locale.ENGLISH), section.getConfigurationSection(kitItem));
-                }
-            }
-            return newSection;
-        }
-        return null;
-    }
-
-    @Override
-    public ConfigurationSection getKits() {
-        return kits;
-    }
-
-    @Override
-    public Map<String, Object> getKit(String name) {
-        name = name.replace('.', '_').replace('/', '_');
-        if (getKits() != null) {
-            final ConfigurationSection kits = getKits();
-            if (kits.isConfigurationSection(name)) {
-                return kits.getConfigurationSection(name).getValues(true);
-            }
-        }
-        return null;
-    }
-
-    @Override
-    public void addKit(String name, List<String> lines, long delay) {
-        // Will overwrite but w/e
-        config.set("kits." + name + ".delay", delay);
-        config.set("kits." + name + ".items", lines);
-        kits = _getKits();
-        config.save();
-    }
-
-    @Override
-    public boolean isSkippingUsedOneTimeKitsFromKitList() {
-        return config.getBoolean("skip-used-one-time-kits-from-kit-list", false);
-    }
-
     private ChatColor operatorColor = null;
 
     @Override
@@ -471,6 +423,11 @@ public class Settings implements net.ess3.api.ISettings {
     }
 
     @Override
+    public ConfigurationSection getKitSection() {
+        return config.getConfigurationSection("kits");
+    }
+
+    @Override
     public String getNewbieSpawn() {
         return config.getString("newbies.spawnpoint", "default");
     }
@@ -516,7 +473,6 @@ public class Settings implements net.ess3.api.ISettings {
         itemSpawnBl = _getItemSpawnBlacklist();
         loginAttackDelay = _getLoginAttackDelay();
         signUsePerSecond = _getSignUsePerSecond();
-        kits = _getKits();
         chatFormats.clear();
         changeDisplayName = _changeDisplayName();
         disabledCommands = getDisabledCommands();
@@ -1173,23 +1129,28 @@ public class Settings implements net.ess3.api.ISettings {
         return config.getInt("max-user-cache-count", (int) count);
     }
 
-    @Override public boolean isLastMessageReplyRecipient() {
+    @Override
+    public boolean isLastMessageReplyRecipient() {
         return config.getBoolean("last-message-reply-recipient", false);
     }
 
-    @Override public BigDecimal getMinimumPayAmount() {
+    @Override
+    public BigDecimal getMinimumPayAmount() {
         return new BigDecimal(config.getString("minimum-pay-amount", "0.001"));
     }
 
-    @Override public long getLastMessageReplyRecipientTimeout() {
+    @Override
+    public long getLastMessageReplyRecipientTimeout() {
         return config.getLong("last-message-reply-recipient-timeout", 180);
     }
 
-    @Override public boolean isMilkBucketEasterEggEnabled() {
+    @Override
+    public boolean isMilkBucketEasterEggEnabled() {
         return config.getBoolean("milk-bucket-easter-egg", true);
     }
 
-    @Override public boolean isSendFlyEnableOnJoin() {
+    @Override
+    public boolean isSendFlyEnableOnJoin() {
         return config.getBoolean("send-fly-enable-on-join", true);
     }
 
@@ -1202,7 +1163,7 @@ public class Settings implements net.ess3.api.ISettings {
     public boolean isSpawnOnJoin() {
         return !this.spawnOnJoinGroups.isEmpty();
     }
-    
+
     private List<String> spawnOnJoinGroups;
 
     public List<String> _getSpawnOnJoinGroups() {
@@ -1241,7 +1202,7 @@ public class Settings implements net.ess3.api.ISettings {
     public boolean isTeleportToCenterLocation() {
         return config.getBoolean("teleport-to-center", true);
     }
-    
+
     private Map<Pattern, Long> commandCooldowns;
 
     private Map<Pattern, Long> _getCommandCooldowns() {
@@ -1268,10 +1229,10 @@ public class Settings implements net.ess3.api.ISettings {
                     cmdEntry = cmdEntry.substring(1);
                 }
                 String cmd = cmdEntry
-                    .replaceAll("\\*", ".*"); // Wildcards are accepted as asterisk * as known universally.
+                        .replaceAll("\\*", ".*"); // Wildcards are accepted as asterisk * as known universally.
                 pattern = Pattern.compile(cmd + "( .*)?"); // This matches arguments, if present, to "ignore" them from the feature.
             }
-            
+
             /* ================================
              * >> Process cooldown value
              * ================================ */
@@ -1403,11 +1364,6 @@ public class Settings implements net.ess3.api.ISettings {
             }
         }
         return newSigns;
-    }
-
-    @Override
-    public boolean isPastebinCreateKit() {
-        return config.getBoolean("pastebin-createkit", true);
     }
 
     @Override
