@@ -295,6 +295,16 @@ public class Settings implements net.ess3.api.ISettings {
         return ess.getKits().getKit(kit);
     }
 
+    @Override
+    public boolean isSkippingUsedOneTimeKitsFromKitList() {
+        return config.getBoolean("skip-used-one-time-kits-from-kit-list", false);
+    }
+
+    @Override
+    public boolean isPastebinCreateKit() {
+        return config.getBoolean("pastebin-createkit", true);
+    }
+
     private Set<String> muteCommands = new HashSet<String>();
 
     private Set<String> _getMuteCommands() {

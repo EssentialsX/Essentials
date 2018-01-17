@@ -14,7 +14,7 @@ import java.util.logging.Logger;
 import static com.earth2me.essentials.I18n.capitalCase;
 import static com.earth2me.essentials.I18n.tl;
 
-public class Kits implements IConf, IKitSettings {
+public class Kits implements IConf {
 
     private final Logger logger;
     private final IEssentials ess;
@@ -82,10 +82,17 @@ public class Kits implements IConf, IKitSettings {
         name = name.replace('.', '_').replace('/', '_');
         if (getKits() != null) {
             final ConfigurationSection kits = getKits();
-            if (kits.isConfigurationSection(name)) {
-                return kits.getConfigurationSection(name).getValues(true);
+            // For some reason, YAML doesn't sees keys as always lowercase even if they aren't defined like that.
+            // Workaround is to toLowercase when getting from the config, but showing normally elsewhere.
+            // ODDLY ENOUGH when you get the configuration section for ALL kits, it will return the proper
+            // case of each kit. But when you check for each kit's configuration section, it won't return the kit
+            // you just found if you don't toLowercase it.
+            if (kits.isConfigurationSection(name.toLowerCase())) {
+                return kits.getConfigurationSection(name.toLowerCase()).getValues(true);
+            } else {
             }
         }
+
         return null;
     }
 
@@ -95,16 +102,6 @@ public class Kits implements IConf, IKitSettings {
         config.set("kits." + name + ".items", lines);
         kits = _getKits();
         config.save();
-    }
-
-    @Override
-    public boolean isSkippingUsedOneTimeKitsFromKitList() {
-        return config.getBoolean("skip-used-one-time-kits-from-kit-list", false);
-    }
-
-    @Override
-    public boolean isPastebinCreateKit() {
-        return config.getBoolean("pastebin-createkit", true);
     }
 
     public String listKits(final net.ess3.api.IEssentials ess, final User user) throws Exception {
@@ -124,7 +121,7 @@ public class Kits implements IConf, IKitSettings {
 
                     Kit kit = new Kit(kitItem, ess);
                     double nextUse = kit.getNextUse(user);
-                    if (nextUse == -1 && ess.getKits().isSkippingUsedOneTimeKitsFromKitList()) {
+                    if (nextUse == -1 && ess.getSettings().isSkippingUsedOneTimeKitsFromKitList()) {
                         continue;
                     } else if (nextUse != 0) {
                         name = tl("kitDelay", name);

@@ -71,6 +71,10 @@ public interface ISettings extends IConf {
     @Deprecated
     Map<String, Object> getKit(String kit);
 
+    boolean isSkippingUsedOneTimeKitsFromKitList();
+
+    boolean isPastebinCreateKit();
+
     String getLocale();
 
     String getNewbieSpawn();

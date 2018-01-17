@@ -71,7 +71,7 @@ public class Commandcreatekit extends EssentialsCommand {
             }
         }
         // Some users might want to directly write to config knowing the consequences. *shrug*
-        if (!ess.getKits().isPastebinCreateKit()) {
+        if (!ess.getSettings().isPastebinCreateKit()) {
             ess.getKits().addKit(kitname, list, delay);
             user.sendMessage(tl("createdKit", kitname, list.size(), delay));
         } else {
