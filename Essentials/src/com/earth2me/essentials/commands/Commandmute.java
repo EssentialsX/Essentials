@@ -62,7 +62,6 @@ public class Commandmute extends EssentialsCommand {
 
                 user.setMuteReason(muteReason.isEmpty() ? null : muteReason);
                 user.setMuted(true);
-
             } else {
                 user.setMuted(!user.getMuted());
                 if (!user.getMuted()) {

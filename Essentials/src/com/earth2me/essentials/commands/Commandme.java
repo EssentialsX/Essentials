@@ -53,6 +53,8 @@ public class Commandme extends EssentialsCommand {
                 final Location playerLoc = onlineUser.getLocation();
                 if (playerLoc.getWorld() != world) {
                     abort = true;
+                } else if (onlineUser.isIgnoredPlayer(user)) {
+                    abort = true;
                 } else {
                     final double delta = playerLoc.distanceSquared(loc);
                     if (delta > radius) {
