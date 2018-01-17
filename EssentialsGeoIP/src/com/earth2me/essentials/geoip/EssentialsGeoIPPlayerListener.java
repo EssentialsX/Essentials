@@ -166,26 +166,29 @@ public class EssentialsGeoIPPlayerListener implements Listener, IConf {
             conn.connect();
             InputStream input = conn.getInputStream();
             OutputStream output = new FileOutputStream(databaseFile);
-            if (url.endsWith(".tar.gz")) {
-                // The new GeoIP2 uses tar.gz to pack the db file along with some other txt. So it makes things a bit complicated here.
-                String filename;
-                TarInputStream tarInputStream = new TarInputStream(new GZIPInputStream(input));
-                TarEntry entry;
-                while ((entry = (TarEntry) tarInputStream.getNextEntry()) != null) {
-                    if (!entry.isDirectory()) {
-                        filename = entry.getName();
-                        if (filename.substring(filename.length() - 5).equalsIgnoreCase(".mmdb")) {
-                            byte[] buffer = new byte[2048];
-                            int length = tarInputStream.read(buffer);
-                            while (length >= 0) {
-                                output.write(buffer, 0, length);
-                                length = tarInputStream.read(buffer);
+            byte[] buffer = new byte[2048];
+            if (url.endsWith(".gz")) {
+                input = new GZIPInputStream(input);
+                if (url.endsWith(".tar.gz")) {
+                    // The new GeoIP2 uses tar.gz to pack the db file along with some other txt. So it makes things a bit complicated here.
+                    String filename;
+                    TarInputStream tarInputStream = new TarInputStream(input);
+                    TarEntry entry;
+                    while ((entry = (TarEntry) tarInputStream.getNextEntry()) != null) {
+                        if (!entry.isDirectory()) {
+                            filename = entry.getName();
+                            if (filename.substring(filename.length() - 5).equalsIgnoreCase(".mmdb")) {
+                                input = tarInputStream;
+                                break;
                             }
-                            break;
                         }
                     }
                 }
-                tarInputStream.close();
+            }
+            int length = input.read(buffer);
+            while (length >= 0) {
+                output.write(buffer, 0, length);
+                length = input.read(buffer);
             }
             output.close();
             input.close();
