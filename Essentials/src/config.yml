@@ -277,6 +277,16 @@ player-commands:
   - worth
   - xmpp
 
+# When this option is enabled, one-time use kits (ie. delay < 0) will be
+# removed from the /kit list when a player can no longer use it
+skip-used-one-time-kits-from-kit-list: false
+
+# Determines the functionality of the /createkit command.
+# If this is true, /createkit will give the user a link with the kit code.
+# If this is false, /createkit will add the kit to the kits.yml config file directly.
+#
+pastebin-createkit: false
+
 # Essentials Sign Control
 # See http://wiki.ess3.net/wiki/Sign_Tutorial for instructions on how to use these.
 # To enable signs, remove # symbol. To disable all signs, comment/remove each sign.

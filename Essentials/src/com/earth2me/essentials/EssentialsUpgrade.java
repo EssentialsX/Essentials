@@ -12,6 +12,7 @@ import org.bukkit.BanList;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.bukkit.configuration.ConfigurationSection;
 
 import java.io.*;
 import java.math.BigInteger;
@@ -39,6 +40,34 @@ public class EssentialsUpgrade {
         }
         doneFile = new EssentialsConf(new File(ess.getDataFolder(), "upgrades-done.yml"));
         doneFile.load();
+    }
+
+    public void convertKits() {
+        Kits kits = ess.getKits();
+        EssentialsConf config = kits.getConfig();
+        if (doneFile.getBoolean("kitsyml", false)) {
+            return;
+        }
+
+        LOGGER.info("Attempting to convert old kits in config.yml to new kits.yml");
+
+        ConfigurationSection section = ess.getSettings().getKitSection();
+        if (section == null) {
+            LOGGER.info("No kits found to migrate.");
+            return;
+        }
+
+        Map<String, Object> legacyKits = ess.getSettings().getKitSection().getValues(true);
+
+        for (Map.Entry<String, Object> entry : legacyKits.entrySet()) {
+            LOGGER.info("Converting " + entry.getKey());
+            config.set("kits." + entry.getKey(), entry.getValue());
+        }
+
+        LOGGER.info("Done converting kits.");
+        config.save();
+        doneFile.setProperty("kits.yml", true);
+        doneFile.save();
     }
 
     private void moveMotdRulesToFile(String name) {

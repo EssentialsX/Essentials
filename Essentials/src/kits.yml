@@ -1,21 +1,6 @@
 # EssentialsX new Kit configuration.
 # If you don't have any kits defined in this file, the plugin will try to copy them from the config.yml
 
-
-
-# When this option is enabled, one-time use kits (ie. delay < 0) will be
-# removed from the /kit list when a player can no longer use it
-skip-used-one-time-kits-from-kit-list: false
-
-# Determines the functionality of the /createkit command.
-# If this is true, /createkit will give the user a link with the kit code.
-# If this is false, /createkit will add the kit to this config file directly.
-#
-# WARNING: If this is false, the comments in this file WILL be removed and it won't look the same as it does now.
-pastebin-createkit: true
-
-
-
 # Note: All items MUST be followed by a quantity!
 # All kit names should be lower case, and will be treated as lower in permissions/costs.
 # Syntax: - itemID[:DataValue/Durability] Amount [Enchantment:Level].. [itemmeta:value]...

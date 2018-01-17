@@ -31,30 +31,6 @@ public class Kits implements IConf {
         kits = _getKits();
     }
 
-    public void attemptConversion() {
-        if (!config.isFirstRun()) {
-            return;
-        }
-
-        logger.info("Attempting to convert old kits in config.yml to new kits.yml");
-
-        ConfigurationSection section = ess.getSettings().getKitSection();
-        if (section == null) {
-            logger.info("No kits found to migrate.");
-            return;
-        }
-
-        Map<String, Object> legacyKits = ess.getSettings().getKitSection().getValues(true);
-
-        for (Map.Entry<String, Object> entry : legacyKits.entrySet()) {
-            logger.info("Converting " + entry.getKey());
-            config.set("kits." + entry.getKey(), entry.getValue());
-        }
-
-        logger.info("Done converting kits.");
-        config.save();
-    }
-
     @Override
     public void reloadConfig() {
         kits = _getKits();
@@ -72,6 +48,10 @@ public class Kits implements IConf {
             return newSection;
         }
         return null;
+    }
+
+    public EssentialsConf getConfig() {
+        return config;
     }
 
     public ConfigurationSection getKits() {

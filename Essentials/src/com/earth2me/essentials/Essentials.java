@@ -197,7 +197,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
                 execTimer.mark("Init(Usermap)");
                 kits = new Kits(this);
                 confList.add(kits);
-                kits.attemptConversion();
+                upgrade.convertKits();
                 execTimer.mark("Kits");
                 upgrade.afterSettings();
                 execTimer.mark("Upgrade2");
