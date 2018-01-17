@@ -59,6 +59,18 @@ public interface ISettings extends IConf {
 
     Set<String> getMuteCommands();
 
+    /**
+     * @Deprecated in favor of {@link Kits#getKits()}
+     */
+    @Deprecated
+    ConfigurationSection getKits();
+
+    /**
+     * @Deprecated in favor of {@link Kits#getKit(String)}
+     */
+    @Deprecated
+    Map<String, Object> getKit(String kit);
+
     String getLocale();
 
     String getNewbieSpawn();

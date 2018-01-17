@@ -27,6 +27,8 @@ public class Kits implements IConf, IKitSettings {
         config = new EssentialsConf(new File(essentials.getDataFolder(), "kits.yml"));
         config.setTemplateName("/kits.yml");
         config.load();
+
+        kits = _getKits();
     }
 
     public void attemptConversion() {
@@ -41,8 +43,6 @@ public class Kits implements IConf, IKitSettings {
             logger.info("No kits found to migrate.");
             return;
         }
-
-        int count = 0;
 
         Map<String, Object> legacyKits = ess.getSettings().getKitSection().getValues(true);
 
