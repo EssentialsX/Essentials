@@ -7,6 +7,7 @@ import com.earth2me.essentials.textreader.IText;
 import com.earth2me.essentials.textreader.SimpleTextInput;
 import com.earth2me.essentials.utils.FormatUtil;
 import com.earth2me.essentials.utils.NumberUtil;
+
 import net.ess3.api.IEssentials;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.ConfigurationSection;
@@ -26,10 +27,10 @@ import java.util.*;
 import java.util.Map.Entry;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.regex.Pattern;
-import java.util.regex.PatternSyntaxException;
 
 import static com.earth2me.essentials.I18n.tl;
+import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
 
 
 public class Settings implements net.ess3.api.ISettings {
@@ -285,26 +286,6 @@ public class Settings implements net.ess3.api.ISettings {
         return config.getBoolean("socialspy-listen-muted-players", true);
     }
 
-    @Override
-    public ConfigurationSection getKits() {
-        return ess.getKits().getKits();
-    }
-
-    @Override
-    public Map<String, Object> getKit(String kit) {
-        return ess.getKits().getKit(kit);
-    }
-
-    @Override
-    public boolean isSkippingUsedOneTimeKitsFromKitList() {
-        return config.getBoolean("skip-used-one-time-kits-from-kit-list", false);
-    }
-
-    @Override
-    public boolean isPastebinCreateKit() {
-        return config.getBoolean("pastebin-createkit", true);
-    }
-
     private Set<String> muteCommands = new HashSet<String>();
 
     private Set<String> _getMuteCommands() {
@@ -342,6 +323,31 @@ public class Settings implements net.ess3.api.ISettings {
     @Override
     public double getHealCooldown() {
         return config.getDouble("heal-cooldown", 0);
+    }
+
+    @Override
+    public ConfigurationSection getKits() {
+        return ess.getKits().getKits();
+    }
+
+    @Override
+    public Map<String, Object> getKit(String name) {
+        return ess.getKits().getKit(name);
+    }
+
+    @Override
+    public void addKit(String name, List<String> lines, long delay) {
+        ess.getKits().addKit(name, lines, delay);
+    }
+
+    @Override
+    public ConfigurationSection getKitSection() {
+        return config.getConfigurationSection("kits");
+    }
+
+    @Override
+    public boolean isSkippingUsedOneTimeKitsFromKitList() {
+        return config.getBoolean("skip-used-one-time-kits-from-kit-list", false);
     }
 
     private ChatColor operatorColor = null;
@@ -440,11 +446,6 @@ public class Settings implements net.ess3.api.ISettings {
     @Override
     public String getNewPlayerKit() {
         return config.getString("newbies.kit", "");
-    }
-
-    @Override
-    public ConfigurationSection getKitSection() {
-        return config.getConfigurationSection("kits");
     }
 
     @Override
@@ -1149,28 +1150,23 @@ public class Settings implements net.ess3.api.ISettings {
         return config.getInt("max-user-cache-count", (int) count);
     }
 
-    @Override
-    public boolean isLastMessageReplyRecipient() {
+    @Override public boolean isLastMessageReplyRecipient() {
         return config.getBoolean("last-message-reply-recipient", false);
     }
 
-    @Override
-    public BigDecimal getMinimumPayAmount() {
+    @Override public BigDecimal getMinimumPayAmount() {
         return new BigDecimal(config.getString("minimum-pay-amount", "0.001"));
     }
 
-    @Override
-    public long getLastMessageReplyRecipientTimeout() {
+    @Override public long getLastMessageReplyRecipientTimeout() {
         return config.getLong("last-message-reply-recipient-timeout", 180);
     }
 
-    @Override
-    public boolean isMilkBucketEasterEggEnabled() {
+    @Override public boolean isMilkBucketEasterEggEnabled() {
         return config.getBoolean("milk-bucket-easter-egg", true);
     }
 
-    @Override
-    public boolean isSendFlyEnableOnJoin() {
+    @Override public boolean isSendFlyEnableOnJoin() {
         return config.getBoolean("send-fly-enable-on-join", true);
     }
 
@@ -1384,6 +1380,11 @@ public class Settings implements net.ess3.api.ISettings {
             }
         }
         return newSigns;
+    }
+
+    @Override
+    public boolean isPastebinCreateKit() {
+        return config.getBoolean("pastebin-createkit", true);
     }
 
     @Override

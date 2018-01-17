@@ -3,6 +3,7 @@ package com.earth2me.essentials;
 import com.earth2me.essentials.commands.IEssentialsCommand;
 import com.earth2me.essentials.signs.EssentialsSign;
 import com.earth2me.essentials.textreader.IText;
+
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.event.EventPriority;
@@ -21,13 +22,11 @@ public interface ISettings extends IConf {
 
     IText getAnnounceNewPlayerFormat();
 
-    String getNewPlayerKit();
-
     boolean getAnnounceNewPlayers();
 
-    String getBackupCommand();
+    String getNewPlayerKit();
 
-    ConfigurationSection getKitSection();
+    String getBackupCommand();
 
     long getBackupInterval();
 
@@ -71,9 +70,16 @@ public interface ISettings extends IConf {
     @Deprecated
     Map<String, Object> getKit(String kit);
 
-    boolean isSkippingUsedOneTimeKitsFromKitList();
+    /**
+     * @Deprecated in favor of {@link Kits#addKit(String, List, long)}}
+     */
+    @Deprecated
+    void addKit(String name, List<String> lines, long delay);
 
-    boolean isPastebinCreateKit();
+    @Deprecated
+    ConfigurationSection getKitSection();
+
+    boolean isSkippingUsedOneTimeKitsFromKitList();
 
     String getLocale();
 
@@ -282,6 +288,8 @@ public interface ISettings extends IConf {
     NumberFormat getCurrencyFormat();
 
     List<EssentialsSign> getUnprotectedSignNames();
+
+    boolean isPastebinCreateKit();
 
     boolean isAllowBulkBuySell();
 
