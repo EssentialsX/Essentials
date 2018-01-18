@@ -7,18 +7,15 @@ import com.earth2me.essentials.textreader.IText;
 import com.earth2me.essentials.textreader.KeywordReplacer;
 import com.earth2me.essentials.textreader.SimpleTextInput;
 import com.earth2me.essentials.utils.DateUtil;
-import com.earth2me.essentials.utils.NumberUtil;
 import net.ess3.api.IEssentials;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
 
 import java.math.BigDecimal;
 import java.util.*;
 import java.util.logging.Level;
 
-import static com.earth2me.essentials.I18n.capitalCase;
 import static com.earth2me.essentials.I18n.tl;
 
 
@@ -31,46 +28,12 @@ public class Kit {
     public Kit(final String kitName, final IEssentials ess) throws Exception {
         this.kitName = kitName;
         this.ess = ess;
-        this.kit = ess.getSettings().getKit(kitName);
+        this.kit = ess.getKits().getKit(kitName);
         this.charge = new Trade("kit-" + kitName, new Trade("kit-kit", ess), ess);
 
         if (kit == null) {
             throw new Exception(tl("kitNotFound"));
         }
-    }
-
-    //TODO: Convert this to use one of the new text classes?
-    public static String listKits(final IEssentials ess, final User user) throws Exception {
-        try {
-            final ConfigurationSection kits = ess.getSettings().getKits();
-            final StringBuilder list = new StringBuilder();
-            for (String kitItem : kits.getKeys(false)) {
-                if (user == null) {
-                    list.append(" ").append(capitalCase(kitItem));
-                } else if (user.isAuthorized("essentials.kits." + kitItem.toLowerCase(Locale.ENGLISH))) {
-                    String cost = "";
-                    String name = capitalCase(kitItem);
-                    BigDecimal costPrice = new Trade("kit-" + kitItem.toLowerCase(Locale.ENGLISH), ess).getCommandCost(user);
-                    if (costPrice.signum() > 0) {
-                        cost = tl("kitCost", NumberUtil.displayCurrency(costPrice, ess));
-                    }
-
-                    Kit kit = new Kit(kitItem, ess);
-                    double nextUse = kit.getNextUse(user);
-                    if (nextUse == -1 && ess.getSettings().isSkippingUsedOneTimeKitsFromKitList()) {
-                        continue;
-                    } else if (nextUse != 0) {
-                        name = tl("kitDelay", name);
-                    }
-
-                    list.append(" ").append(name).append(cost);
-                }
-            }
-            return list.toString().trim();
-        } catch (Exception ex) {
-            throw new Exception(tl("kitError"), ex);
-        }
-
     }
 
     public String getName() {
