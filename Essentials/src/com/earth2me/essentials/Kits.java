@@ -9,21 +9,16 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.logging.Logger;
 
 import static com.earth2me.essentials.I18n.capitalCase;
 import static com.earth2me.essentials.I18n.tl;
 
 public class Kits implements IConf {
 
-    private final Logger logger;
-    private final IEssentials ess;
     private final EssentialsConf config;
     private ConfigurationSection kits;
 
     public Kits(final IEssentials essentials) {
-        logger = essentials.getLogger();
-        ess = essentials;
         config = new EssentialsConf(new File(essentials.getDataFolder(), "kits.yml"));
         config.setTemplateName("/kits.yml");
         config.load();
