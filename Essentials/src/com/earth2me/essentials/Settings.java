@@ -1384,7 +1384,7 @@ public class Settings implements net.ess3.api.ISettings {
 
     @Override
     public boolean isPastebinCreateKit() {
-        return config.getBoolean("pastebin-createkit", true);
+        return config.getBoolean("pastebin-createkit", false);
     }
 
     @Override
