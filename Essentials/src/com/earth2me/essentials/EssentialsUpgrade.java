@@ -64,10 +64,10 @@ public class EssentialsUpgrade {
             config.set("kits." + entry.getKey(), entry.getValue());
         }
 
-        LOGGER.info("Done converting kits.");
         config.save();
-        doneFile.setProperty("kits.yml", true);
+        doneFile.setProperty("kitsyml", true);
         doneFile.save();
+        LOGGER.info("Done converting kits.");
     }
 
     private void moveMotdRulesToFile(String name) {
