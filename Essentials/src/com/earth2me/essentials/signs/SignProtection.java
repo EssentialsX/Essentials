@@ -26,7 +26,6 @@ public class SignProtection extends EssentialsSign {
     public SignProtection() {
         super("Protection");
         protectedBlocks.add(Material.CHEST);
-        protectedBlocks.add(Material.BURNING_FURNACE);
         protectedBlocks.add(Material.FURNACE);
         protectedBlocks.add(Material.DISPENSER);
     }
@@ -103,7 +102,7 @@ public class SignProtection extends EssentialsSign {
     }
 
     private SignProtectionState checkProtectionSign(final Block block, final User user, final String username) {
-        if (block.getType() == Material.SIGN_POST || block.getType() == Material.WALL_SIGN) {
+        if (block.getType() == Material.SIGN || block.getType() == Material.WALL_SIGN) {
             final BlockSign sign = new BlockSign(block);
             if (sign.getLine(0).equals(this.getSuccessName())) { // TODO call getSuccessName(IEssentials)
                 return checkProtectionSign(sign, user, username);
@@ -160,7 +159,7 @@ public class SignProtection extends EssentialsSign {
     public boolean isBlockProtected(final Block block) {
         final Block[] faces = getAdjacentBlocks(block);
         for (Block b : faces) {
-            if (b.getType() == Material.SIGN_POST || b.getType() == Material.WALL_SIGN) {
+            if (b.getType() == Material.SIGN || b.getType() == Material.WALL_SIGN) {
                 final Sign sign = (Sign) b.getState();
                 if (sign.getLine(0).equalsIgnoreCase("§1[Protection]")) {
                     return true;
@@ -170,7 +169,7 @@ public class SignProtection extends EssentialsSign {
                 final Block[] faceChest = getAdjacentBlocks(b);
 
                 for (Block a : faceChest) {
-                    if (a.getType() == Material.SIGN_POST || a.getType() == Material.WALL_SIGN) {
+                    if (a.getType() == Material.SIGN || a.getType() == Material.WALL_SIGN) {
                         final Sign sign = (Sign) a.getState();
                         if (sign.getLine(0).equalsIgnoreCase("§1[Protection]")) {
                             return true;

@@ -3,11 +3,13 @@ package com.earth2me.essentials.commands;
 import static com.earth2me.essentials.I18n.tl;
 
 import com.earth2me.essentials.CommandSource;
+import com.earth2me.essentials.ItemDb;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.craftbukkit.InventoryWorkaround;
 import com.earth2me.essentials.utils.NumberUtil;
 import com.earth2me.essentials.utils.StringUtil;
 
+import org.bukkit.Material;
 import org.bukkit.Server;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -85,6 +87,7 @@ public class Commandclearinventory extends EssentialsCommand {
         short data = -1;
         int type = -1;
         int amount = -1;
+        Material mat = null;
 
         if (args.length > (offset + 1) && NumberUtil.isInt(args[(offset + 1)])) {
             amount = Integer.parseInt(args[(offset + 1)]);
@@ -95,7 +98,8 @@ public class Commandclearinventory extends EssentialsCommand {
             } else if (!args[offset].equalsIgnoreCase("*")) {
                 final String[] split = args[offset].split(":");
                 final ItemStack item = ess.getItemDb().get(split[0]);
-                type = item.getTypeId();
+                type = ess.getItemDb().getLegacyId(item.getType());
+                mat = item.getType();
 
                 if (split.length > 1 && NumberUtil.isInt(split[1])) {
                     data = Short.parseShort(split[1]);
@@ -121,14 +125,14 @@ public class Commandclearinventory extends EssentialsCommand {
         } else {
             if (data == -1) // data -1 means that all subtypes will be cleared
             {
-                ItemStack stack = new ItemStack(type);
+                ItemStack stack = new ItemStack(mat);
                 if (showExtended) {
                     sender.sendMessage(tl("inventoryClearingAllStack", stack.getType().toString().toLowerCase(Locale.ENGLISH), player.getDisplayName()));
                 }
-                player.getInventory().clear(type, data);
+                player.getInventory().remove(mat);
             } else if (amount == -1) // amount -1 means all items will be cleared
             {
-                ItemStack stack = new ItemStack(type, BASE_AMOUNT, data);
+                ItemStack stack = new ItemStack(mat, BASE_AMOUNT, data);
                 ItemStack removedStack = player.getInventory().removeItem(stack).get(0);
                 final int removedAmount = (BASE_AMOUNT - removedStack.getAmount());
                 if (removedAmount > 0 || showExtended) {
@@ -138,7 +142,7 @@ public class Commandclearinventory extends EssentialsCommand {
                 if (amount < 0) {
                     amount = 1;
                 }
-                ItemStack stack = new ItemStack(type, amount, data);
+                ItemStack stack = new ItemStack(mat, amount, data);
                 if (player.getInventory().containsAtLeast(stack, amount)) {
                     sender.sendMessage(tl("inventoryClearingStack", amount, stack.getType().toString().toLowerCase(Locale.ENGLISH), player.getDisplayName()));
                     player.getInventory().removeItem(stack);

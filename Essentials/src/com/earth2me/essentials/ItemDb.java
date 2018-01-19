@@ -191,7 +191,7 @@ public class ItemDb implements IConf, net.ess3.api.IItemDb {
             } catch (IllegalArgumentException e) {
                 throw new Exception("Can't spawn entity ID " + metaData + " from mob spawners.");
             }
-        } else if (mat == Material.MONSTER_EGG) {
+        } else if (mat == Material.LEGACY_MONSTER_EGG) {
             EntityType type;
             try {
                 type = EntityType.fromId(metaData);
@@ -226,7 +226,7 @@ public class ItemDb implements IConf, net.ess3.api.IItemDb {
             }
         } else if (args[0].equalsIgnoreCase("blocks")) {
             for (ItemStack stack : user.getBase().getInventory().getContents()) {
-                if (stack == null || stack.getTypeId() > 255 || stack.getType() == Material.AIR) {
+                if (stack == null || stack.getType() == Material.AIR) {
                     continue;
                 }
                 is.add(stack.clone());
@@ -332,7 +332,8 @@ public class ItemDb implements IConf, net.ess3.api.IItemDb {
                     sb.append(e.getName().toLowerCase()).append(":").append(enchantmentStorageMeta.getStoredEnchantLevel(e)).append(" ");
                 }
                 break;
-            case FIREWORK:
+            case FIREWORK_ROCKET:
+            case FIREWORK_STAR:
                 // Everything from http://wiki.ess3.net/wiki/Item_Meta#Fireworks in that order.
                 FireworkMeta fireworkMeta = (FireworkMeta) is.getItemMeta();
                 if (fireworkMeta.hasEffects()) {
@@ -374,7 +375,8 @@ public class ItemDb implements IConf, net.ess3.api.IItemDb {
                     sb.append("splash:").append(potion.isSplash()).append(" ").append("effect:").append(e.getType().getName().toLowerCase()).append(" ").append("power:").append(e.getAmplifier()).append(" ").append("duration:").append(e.getDuration() / 20).append(" ");
                 }
                 break;
-            case SKULL_ITEM:
+            case SKELETON_SKULL:
+            case WITHER_SKELETON_SKULL:
                 // item stack with meta
                 SkullMeta skullMeta = (SkullMeta) is.getItemMeta();
                 if (skullMeta != null && skullMeta.hasOwner()) {
@@ -389,7 +391,22 @@ public class ItemDb implements IConf, net.ess3.api.IItemDb {
                 int rgb = leatherArmorMeta.getColor().asRGB();
                 sb.append("color:").append(rgb).append(" ");
                 break;
-            case BANNER:
+            case BLACK_BANNER:
+            case BLUE_BANNER:
+            case BROWN_BANNER:
+            case CYAN_BANNER:
+            case GRAY_BANNER:
+            case GREEN_BANNER:
+            case LIGHT_BLUE_BANNER:
+            case LIGHT_GRAY_BANNER:
+            case LIME_BANNER:
+            case MAGENTA_BANNER:
+            case ORANGE_BANNER:
+            case PINK_BANNER:
+            case PURPLE_BANNER:
+            case RED_BANNER:
+            case WHITE_BANNER:
+            case YELLOW_BANNER:
                 BannerMeta bannerMeta = (BannerMeta) is.getItemMeta();
                 if (bannerMeta != null) {
                     int basecolor = bannerMeta.getBaseColor().getColor().asRGB();

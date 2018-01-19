@@ -201,18 +201,8 @@ public class OfflinePlayer implements Player {
     }
 
     @Override
-    public Block getTargetBlock(HashSet<Byte> hs, int i) {
-        return null;
-    }
-
-    @Override
     public Block getTargetBlock(Set<Material> mat, int i) {
         return null;
-    }
-
-    @Override
-    public List<Block> getLastTwoTargetBlocks(HashSet<Byte> hs, int i) {
-        return Collections.emptyList();
     }
 
     @Override
@@ -481,10 +471,6 @@ public class OfflinePlayer implements Player {
     }
 
     @Override
-    public void sendBlockChange(Location lctn, int i, byte b) {
-    }
-
-    @Override
     public void setLastDamageCause(EntityDamageEvent ede) {
     }
 
@@ -743,7 +729,17 @@ public class OfflinePlayer implements Player {
     }
 
     @Override
+    public void hidePlayer(Plugin plugin, Player player) {
+
+    }
+
+    @Override
     public void showPlayer(Player player) {
+    }
+
+    @Override
+    public void showPlayer(Plugin plugin, Player player) {
+
     }
 
     @Override

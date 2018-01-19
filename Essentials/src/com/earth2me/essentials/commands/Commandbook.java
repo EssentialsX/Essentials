@@ -45,7 +45,7 @@ public class Commandbook extends EssentialsCommand {
                 }
             } else {
                 if (isAuthor(bmeta, player) || user.isAuthorized("essentials.book.others")) {
-                    ItemStack newItem = new ItemStack(Material.BOOK_AND_QUILL, item.getAmount());
+                    ItemStack newItem = new ItemStack(Material.WRITABLE_BOOK, item.getAmount());
                     newItem.setItemMeta(bmeta);
                     InventoryWorkaround.setItemInMainHand(user.getBase(), newItem);
                     user.sendMessage(tl("editBookContents"));
@@ -53,7 +53,7 @@ public class Commandbook extends EssentialsCommand {
                     throw new Exception(tl("denyBookEdit"));
                 }
             }
-        } else if (item.getType() == Material.BOOK_AND_QUILL) {
+        } else if (item.getType() == Material.WRITABLE_BOOK) {
             BookMeta bmeta = (BookMeta) item.getItemMeta();
             if (!user.isAuthorized("essentials.book.author")) {
                 bmeta.setAuthor(player);

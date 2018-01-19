@@ -79,7 +79,8 @@ public class SpawnEggRefl {
      */
     @SuppressWarnings("deprecation")
     public ItemStack toItemStack(int amount) throws Exception {
-        ItemStack item = new ItemStack(Material.MONSTER_EGG, amount);
+        // TODO: Get off of the deprecated LEGACY material.
+        ItemStack item = new ItemStack(Material.LEGACY_MONSTER_EGG, amount);
 
         Class<?> craftItemStackClass = ReflUtil.getOBCClass("inventory.CraftItemStack");
         Method asNMSCopyMethod = ReflUtil.getMethodCached(craftItemStackClass, "asNMSCopy", ItemStack.class);
@@ -122,7 +123,7 @@ public class SpawnEggRefl {
     public static SpawnEggRefl fromItemStack(ItemStack item) throws Exception {
         if (item == null)
             throw new IllegalArgumentException("Item cannot be null");
-        if (item.getType() != Material.MONSTER_EGG)
+        if (item.getType() != Material.LEGACY_MONSTER_EGG)
             throw new IllegalArgumentException("Item is not a monster egg");
 
         Class<?> NMSItemStackClass = ReflUtil.getNMSClass("ItemStack");

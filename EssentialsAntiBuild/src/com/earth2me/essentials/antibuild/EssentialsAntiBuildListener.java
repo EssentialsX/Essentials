@@ -67,7 +67,6 @@ public class EssentialsAntiBuildListener implements Listener {
     public void onBlockPlace(final BlockPlaceEvent event) {
         final User user = ess.getUser(event.getPlayer());
         final Block block = event.getBlockPlaced();
-        final int typeId = block.getTypeId();
         final Material type = block.getType();
 
         if (prot.getSettingBool(AntiBuildConfig.disable_build) && !user.canBuild() && !user.isAuthorized("essentials.build") && !metaPermCheck(user, "place", block)) {
@@ -95,7 +94,6 @@ public class EssentialsAntiBuildListener implements Listener {
     public void onBlockBreak(final BlockBreakEvent event) {
         final User user = ess.getUser(event.getPlayer());
         final Block block = event.getBlock();
-        final int typeId = block.getTypeId();
         final Material type = block.getType();
 
         if (prot.getSettingBool(AntiBuildConfig.disable_build) && !user.canBuild() && !user.isAuthorized("essentials.build") && !metaPermCheck(user, "break", block)) {

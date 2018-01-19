@@ -3,6 +3,7 @@ package com.earth2me.essentials.craftbukkit;
 import org.bukkit.*;
 import org.bukkit.block.Biome;
 import org.bukkit.block.Block;
+import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.*;
 import org.bukkit.generator.BlockPopulator;
 import org.bukkit.generator.ChunkGenerator;
@@ -35,16 +36,6 @@ public class FakeWorld implements World {
 
     @Override
     public Block getBlockAt(Location lctn) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public int getBlockTypeIdAt(int i, int i1, int i2) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public int getBlockTypeIdAt(Location lctn) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
@@ -164,11 +155,6 @@ public class FakeWorld implements World {
     }
 
     @Override
-    public boolean generateTree(Location lctn, TreeType tt, BlockChangeDelegate bcd) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
     public LightningStrike strikeLightning(Location lctn) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
@@ -200,6 +186,11 @@ public class FakeWorld implements World {
 
     @Override
     public Location getSpawnLocation() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public boolean setSpawnLocation(Location location) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
@@ -345,6 +336,11 @@ public class FakeWorld implements World {
 
     @Override
     public FallingBlock spawnFallingBlock(Location location, MaterialData materialData) throws IllegalArgumentException {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public FallingBlock spawnFallingBlock(Location location, BlockData blockData) throws IllegalArgumentException {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
@@ -580,11 +576,6 @@ public class FakeWorld implements World {
 
     @Override
     public FallingBlock spawnFallingBlock(Location location, Material material, byte data) throws IllegalArgumentException {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public FallingBlock spawnFallingBlock(Location location, int blockId, byte blockData) throws IllegalArgumentException {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
