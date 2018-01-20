@@ -1,13 +1,3 @@
-EssentialsX version (run `/essentials`): 
-
-Server software (run `/version`): 
-
-Server (`logs/latest.log`):
-
-EssentialsX config (`plugins/Essentials/config.yml`): 
-
-Details:
-
 <!--
 Don't put anything inside this block, as it won't be included in the issue.
 
@@ -26,4 +16,14 @@ You can ignore the template if suggesting a feature; otherwise, read on:
     include screenshots detailing the problem.
 5.  Include a description and any other details that may be helpful under
     "Details:".
--->
+6.  Delete this line and all above lines before posting your issue. -->
+
+EssentialsX version (run `/essentials`): 
+
+Server software (run `/version`): 
+
+Server (`logs/latest.log`):
+
+EssentialsX config (`plugins/Essentials/config.yml`): 
+
+Details:
