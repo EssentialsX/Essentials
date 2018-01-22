@@ -190,7 +190,7 @@ public class UserMap extends CacheLoader<String, User> implements IConf {
     }
 
     public Set<UUID> getAllUniqueUsers() {
-        return Collections.unmodifiableSet(keys.clone());
+        return Collections.unmodifiableSet(keys);
     }
 
     public int getUniqueUsers() {

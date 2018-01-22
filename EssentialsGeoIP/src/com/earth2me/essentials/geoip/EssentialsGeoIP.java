@@ -32,6 +32,6 @@ public class EssentialsGeoIP extends JavaPlugin {
         pm.registerEvents(playerListener, this);
 
 
-        getLogger().log(Level.INFO, "This product includes GeoLite data created by MaxMind, available from http://www.maxmind.com/.");
+        getLogger().log(Level.INFO, "This product includes GeoLite2 data created by MaxMind, available from http://www.maxmind.com/.");
     }
 }

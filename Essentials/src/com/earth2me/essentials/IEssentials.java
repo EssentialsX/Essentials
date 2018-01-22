@@ -19,7 +19,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
-
 public interface IEssentials extends Plugin {
     void addReloadListener(IConf listener);
 
@@ -61,6 +60,8 @@ public interface IEssentials extends Plugin {
     Worth getWorth();
 
     Backup getBackup();
+
+    Kits getKits();
 
     Methods getPaymentMethod();
 

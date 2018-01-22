@@ -465,7 +465,7 @@ commands:
     aliases: [etpohere]
   tppos:
     description: Teleport to coordinates.
-    usage: /<command> <x> <y> <z> [yaw] [pitch]
+    usage: /<command> <x> <y> <z> [yaw] [pitch] [world]
     aliases: [etppos]
   tptoggle:
     description: Blocks all forms of teleportation.
