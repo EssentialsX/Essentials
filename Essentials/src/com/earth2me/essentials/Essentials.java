@@ -106,6 +106,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
     private transient SpawnerProvider spawnerProvider;
     private transient SpawnEggProvider spawnEggProvider;
     private transient PotionMetaProvider potionMetaProvider;
+    private transient Kits kits;
 
     public Essentials() {
     }
@@ -150,6 +151,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
         confList = new ArrayList<>();
         jails = new Jails(this);
         registerListeners(server.getPluginManager());
+        kits = new Kits(this);
     }
 
     @Override
@@ -193,6 +195,10 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
                 userMap = new UserMap(this);
                 confList.add(userMap);
                 execTimer.mark("Init(Usermap)");
+                kits = new Kits(this);
+                confList.add(kits);
+                upgrade.convertKits();
+                execTimer.mark("Kits");
                 upgrade.afterSettings();
                 execTimer.mark("Upgrade2");
                 warps = new Warps(getServer(), this.getDataFolder());
@@ -583,6 +589,11 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
     @Override
     public Backup getBackup() {
         return backup;
+    }
+
+    @Override
+    public Kits getKits() {
+        return kits;
     }
 
     @Override

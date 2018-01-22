@@ -5,5 +5,5 @@ main: com.earth2me.essentials.geoip.EssentialsGeoIP
 version: ${project.version}-b${build.number}
 website: http://tiny.cc/EssentialsCommands
 description: Shows the country or city of a user on login and /whois.
-authors: [Zenexer, ementalo, Aelux, Brettflan, KimKandor, snowleo, ceulemans, Xeology]
+authors: [Zenexer, ementalo, Aelux, Brettflan, KimKandor, snowleo, ceulemans, Xeology, kjiang]
 depend: [Essentials]
