@@ -72,7 +72,7 @@ public class EssentialsGeoIPPlayerListener implements Listener, IConf {
                     String city;
                     String region;
                     String country;
-                    if (config.getBoolean("enable-locale", true)) {
+                    if (config.getBoolean("enable-locale")) {
                         // Get geolocation based on locale. If not avaliable in specific language, get the default one.
                         city = ((city=response.getCity().getNames().get(locale))!=null) ? city : response.getCity().getName();
                         region = ((region=response.getMostSpecificSubdivision().getNames().get(locale))!=null) ? region : response.getMostSpecificSubdivision().getName();
@@ -98,11 +98,9 @@ public class EssentialsGeoIPPlayerListener implements Listener, IConf {
                 // GeoIP2 API forced this when address not found in their DB. jar will not complied without this.
                 // TODO: Maybe, we can set a new custom msg about addr-not-found in messages.properties.
                 logger.log(Level.INFO, tl("cantReadGeoIpDB") + " " + ex.getLocalizedMessage());
-                //logger.log(Level.INFO, tl("cantReadGeoIpDB") + " " + ex.getMessage());
             } catch (IOException | GeoIp2Exception ex) {
                 // GeoIP2 API forced this when address not found in their DB. jar will not complied without this.
                 logger.log(Level.SEVERE, tl("cantReadGeoIpDB") + " " + ex.getLocalizedMessage());
-                //logger.log(Level.SEVERE, tl("cantReadGeoIpDB") + " " + ex.getMessage());
             }
         if (config.getBoolean("show-on-whois", true)) {
             u.setGeoLocation(sb.toString());
@@ -121,10 +119,20 @@ public class EssentialsGeoIPPlayerListener implements Listener, IConf {
     public final void reloadConfig() {
         config.load();
 
+        // detect and update the old config.yml. migrate from legacy GeoIP to GeoIP2.
+        if (!config.isSet("enable-locale")) {
+            config.set("database.download-url", "http://geolite.maxmind.com/download/geoip/database/GeoLite2-Country.tar.gz");
+            config.set("database.download-url-city", "http://geolite.maxmind.com/download/geoip/database/GeoLite2-City.tar.gz");
+            config.set("database.update.enable", true);
+            config.set("database.update.by-every-x-days", 30);
+            config.set("enable-locale", true);
+            config.save();
+        }
+
         if (config.getBoolean("database.show-cities", false)) {
-            databaseFile = new File(dataFolder, "Geo2-City.mmdb");
+            databaseFile = new File(dataFolder, "GeoIP2-City.mmdb");
         } else {
-            databaseFile = new File(dataFolder, "Geo2-Country.mmdb");
+            databaseFile = new File(dataFolder, "GeoIP2-Country.mmdb");
         }
         if (!databaseFile.exists()) {
             if (config.getBoolean("database.download-if-missing", true)) {
@@ -136,7 +144,7 @@ public class EssentialsGeoIPPlayerListener implements Listener, IConf {
         } else if (config.getBoolean("database.update.enable", true)) {
             // try to update expired mmdb files
             long diff = new Date().getTime() - databaseFile.lastModified();
-            if (diff/24/3600/1000>config.getLong("database.update.by-every-x-days")) {
+            if (diff/24/3600/1000>config.getLong("database.update.by-every-x-days", 30)) {
                 downloadDatabase();
             }
         }

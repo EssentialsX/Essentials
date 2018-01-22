@@ -25,10 +25,10 @@
     </scm>
 
     <dependencies>
-        <dependency>		
+        <dependency>
             <groupId>net.ess3</groupId>
-            <artifactId>EssentialsX</artifactId>		
-            <version>${project.version}</version>		
+            <artifactId>EssentialsX</artifactId>
+            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>com.maxmind.geoip2</groupId>
