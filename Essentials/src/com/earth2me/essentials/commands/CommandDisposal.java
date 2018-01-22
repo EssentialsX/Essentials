@@ -5,9 +5,9 @@ import org.bukkit.Server;
 
 import static com.earth2me.essentials.I18n.tl;
 
-public class CommandDisposal extends EssentialsCommand {
+public class Commanddisposal extends EssentialsCommand {
 
-    public CommandDisposal() {
+    public Commanddisposal() {
         super("disposal");
     }
 
