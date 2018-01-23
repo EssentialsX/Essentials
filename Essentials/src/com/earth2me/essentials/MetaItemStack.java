@@ -258,7 +258,7 @@ public class MetaItemStack {
 
     public void addItemFlags(final String string) throws Exception {
         String[] separate = splitPattern.split(string, 2);
-        if(separate.length != 2) {
+        if (separate.length != 2) {
             throw new Exception(tl("invalidItemFlagMeta", string));
         }
 
