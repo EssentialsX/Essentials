@@ -101,7 +101,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
     private transient I18n i18n;
     private transient Metrics metrics;
     private transient EssentialsTimer timer;
-    private final transient List<String> vanishedPlayers = new ArrayList<>();
+    private final transient Set<String> vanishedPlayers = new LinkedHashSet<>();
     private transient Method oldGetOnlinePlayers;
     private transient SpawnerProvider spawnerProvider;
     private transient SpawnEggProvider spawnEggProvider;
@@ -820,6 +820,13 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
 
     @Override
     public List<String> getVanishedPlayers() {
+        List<String> list = new ArrayList<>();
+        list.addAll(vanishedPlayers);
+        return list;
+    }
+
+    @Override
+    public Set<String> getVanishedPlayersSet() {
         return vanishedPlayers;
     }
 
