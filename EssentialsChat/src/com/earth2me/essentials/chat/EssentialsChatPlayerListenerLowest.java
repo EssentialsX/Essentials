@@ -44,8 +44,8 @@ public class EssentialsChatPlayerListenerLowest extends EssentialsChatPlayer {
         String world = user.getWorld().getName();
 
         Player player = user.getBase();
-        String prefix = ess.getPermissionsHandler().getPrefix(player);
-        String suffix = ess.getPermissionsHandler().getSuffix(player);
+        String prefix = FormatUtil.replaceFormat(ess.getPermissionsHandler().getPrefix(player));
+        String suffix = FormatUtil.replaceFormat(ess.getPermissionsHandler().getSuffix(player));
         Team team = player.getScoreboard().getPlayerTeam(player);
 
         String format = ess.getSettings().getChatFormat(group);
