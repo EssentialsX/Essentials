@@ -309,7 +309,7 @@ public class ItemDb implements IConf, net.ess3.api.IItemDb {
             }
 
             Set<ItemFlag> flags = meta.getItemFlags();
-            if (flags != null && meta.getItemFlags().size() > 0) {
+            if (flags != null && !flags.isEmpty()) {
                 sb.append("itemflags:");
                 boolean first = true;
                 for (ItemFlag flag : flags) {
