@@ -545,7 +545,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
     }
 
     public void updateActivity(final boolean broadcast) {
-        if (isAfk() && ess.getSettings().cancelAfkOnInteract()) {
+        if (isAfk()) {
             setAfk(false);
             if (broadcast && !isHidden()) {
                 setDisplayNick();

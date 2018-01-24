@@ -138,9 +138,11 @@ public class EssentialsPlayerListener implements Listener {
             }
             return;
         }
-        final Location afk = user.getAfkPosition();
-        if (afk == null || !event.getTo().getWorld().equals(afk.getWorld()) || afk.distanceSquared(event.getTo()) > 9) {
-            user.updateActivity(true);
+        if(ess.getSettings().cancelAfkOnMove()) {
+            final Location afk = user.getAfkPosition();
+            if (afk == null || !event.getTo().getWorld().equals(afk.getWorld()) || afk.distanceSquared(event.getTo()) > 9) {
+                user.updateActivity(true);
+            }
         }
     }
 
@@ -608,7 +610,9 @@ public class EssentialsPlayerListener implements Listener {
                 }
                 break;
         }
-        ess.getUser(event.getPlayer()).updateActivity(true);
+        if(ess.getSettings().cancelAfkOnInteract()) {
+            ess.getUser(event.getPlayer()).updateActivity(true);
+        }
     }
 
     // This method allows the /jump lock feature to work, allows teleporting while flying #EasterEgg
@@ -774,7 +778,9 @@ public class EssentialsPlayerListener implements Listener {
     @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
     public void onPlayerFishEvent(final PlayerFishEvent event) {
         final User user = ess.getUser(event.getPlayer());
-        user.updateActivity(true);
+        if(ess.getSettings().cancelAfkOnInteract()) {
+            user.updateActivity(true);
+        }
     }
     
     private final class PlayerListenerPre1_12 implements Listener {
