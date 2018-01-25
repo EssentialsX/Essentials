@@ -82,4 +82,8 @@ public class NumberUtil {
         }
         return true;
     }
+    
+    public static boolean isInt(double decimal) {
+    	return decimal - ((int)decimal) == 0;
+    }
 }

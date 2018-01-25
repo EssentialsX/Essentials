@@ -13,7 +13,6 @@ import java.util.*;
 
 import static com.earth2me.essentials.I18n.tl;
 
-import com.earth2me.essentials.Essentials;
 import com.earth2me.essentials.IEssentials;
 
 
@@ -274,76 +273,79 @@ public class LocationUtil {
     public static Location getSafeDestination(final IUser user, final Location loc) throws Exception {
         return getSafeDestination(null, user, loc);
     }
-
+    
     public static Location getSafeDestination(final IEssentials ess, final IUser user, final Location loc) throws Exception {
+    	return getSafeDestination(ess, user, loc, false);
+    }
+
+    public static Location getSafeDestination(final IEssentials ess, final IUser user, final Location loc, final boolean overrideCenter) throws Exception {
         if (user.getBase().isOnline() && loc.getWorld().equals(user.getBase().getWorld()) && (user.getBase().getGameMode() == GameMode.CREATIVE || user.isGodModeEnabled()) && user.getBase().getAllowFlight()) {
             if (shouldFly(loc)) {
                 user.getBase().setFlying(true);
             }
             // ess can be null if old deprecated method is calling it.
             System.out.println((ess == null) + " " + ess.getSettings().isTeleportToCenterLocation());
-            if (ess == null || ess.getSettings().isTeleportToCenterLocation()) {
+            if (ess == null || (ess.getSettings().isTeleportToCenterLocation() && !overrideCenter)) {
                 return getRoundedDestination(loc);
             } else {
                 return loc;
             }
         }
-        return getSafeDestination(loc);
+        return overrideCenter ? getSafeDestination(loc, false) : getSafeDestination(loc);
+    }
+    
+    public static Location getSafeDestination(final Location loc) throws Exception {
+    	return getSafeDestination(loc, true);
     }
 
-    public static Location getSafeDestination(final Location loc) throws Exception {
+    public static Location getSafeDestination(final Location loc, boolean center) throws Exception {
         if (loc == null || loc.getWorld() == null) {
             throw new Exception(tl("destinationNotSet"));
         }
+        final Location origLoc = loc.clone();
         final World world = loc.getWorld();
-        int x = loc.getBlockX();
-        int y = (int) Math.round(loc.getY());
-        int z = loc.getBlockZ();
-        final int origX = x;
-        final int origY = y;
-        final int origZ = z;
-        while (isBlockAboveAir(world, x, y, z)) {
-            y -= 1;
-            if (y < 0) {
-                y = origY;
+        loc.setY(Math.round(loc.getY()));
+        while (isBlockAboveAir(world, loc.getBlockX(), loc.getBlockY(), loc.getBlockZ())) {
+            if (loc.subtract(0, 1, 0).getY() < 0) {
+                loc.setY(origLoc.getY());
                 break;
             }
         }
-        if (isBlockUnsafe(world, x, y, z)) {
-            x = Math.round(loc.getX()) == origX ? x - 1 : x + 1;
-            z = Math.round(loc.getZ()) == origZ ? z - 1 : z + 1;
+        if (isBlockUnsafe(world, loc.getBlockX(), loc.getBlockY(), loc.getBlockZ())) {
+            loc.setX(Math.round(loc.getX()) == origLoc.getBlockX() ? loc.getBlockX() - 1 : loc.getBlockX() + 1);
+            loc.setZ(Math.round(loc.getZ()) == origLoc.getBlockZ() ? loc.getBlockZ() - 1 : loc.getBlockZ() + 1);
         }
         int i = 0;
-        while (isBlockUnsafe(world, x, y, z)) {
-            i++;
-            if (i >= VOLUME.length) {
-                x = origX;
-                y = origY + RADIUS;
-                z = origZ;
+        while (isBlockUnsafe(world, loc.getBlockX(), loc.getBlockY(), loc.getBlockZ())) {
+            if (++i >= VOLUME.length) {
+                loc.setX(origLoc.getX());
+                loc.setY(origLoc.getY() + RADIUS);
+                loc.setZ(origLoc.getZ());
                 break;
             }
-            x = origX + VOLUME[i].x;
-            y = origY + VOLUME[i].y;
-            z = origZ + VOLUME[i].z;
+            loc.setX(origLoc.getX() + VOLUME[i].x);
+            loc.setY(origLoc.getY() + VOLUME[i].y);
+            loc.setZ(origLoc.getZ() + VOLUME[i].z);
         }
-        while (isBlockUnsafe(world, x, y, z)) {
-            y += 1;
-            if (y >= world.getMaxHeight()) {
-                x += 1;
+        while (isBlockUnsafe(world, loc.getBlockX(), loc.getBlockY(), loc.getBlockZ())) {
+            if (loc.add(0, 1, 0).getY() >= world.getMaxHeight()) {
+                loc.add(1, 0, 0);
                 break;
             }
         }
-        while (isBlockUnsafe(world, x, y, z)) {
-            y -= 1;
-            if (y <= 1) {
-                x += 1;
-                y = world.getHighestBlockYAt(x, z);
-                if (x - 48 > loc.getBlockX()) {
+        while (isBlockUnsafe(world, loc.getBlockX(), loc.getBlockY(), loc.getBlockZ())) {
+            if (loc.subtract(0, 1, 0).getY() <= 1) {
+                loc.setY(world.getHighestBlockYAt(loc.add(1, 0, 0).getBlockX(), loc.getBlockZ()));
+                if (loc.getX() - 48 > origLoc.getX()) {
                     throw new Exception(tl("holeInFloor"));
                 }
             }
         }
-        return new Location(world, x + 0.5, y, z + 0.5, loc.getYaw(), loc.getPitch());
+        if(center) {
+        	loc.setX(loc.getX() + .5);
+        	loc.setZ(loc.getZ() + .5);
+        }
+        return loc;
     }
 
     public static boolean shouldFly(Location loc) {

@@ -105,16 +105,20 @@ public class Teleport implements net.ess3.api.ITeleport {
     }
 
     @Override
-    public void now(Player entity, boolean cooldown, TeleportCause cause) throws Exception {
+    public void now(Player targetEntity, boolean cooldown, TeleportCause cause) throws Exception {
         if (cooldown) {
             cooldown(false);
         }
-        final ITarget target = new PlayerTarget(entity);
+        final ITarget target = new PlayerTarget(targetEntity);
         now(teleportOwner, target, cause);
         teleportOwner.sendMessage(tl("teleporting", target.getLocation().getWorld().getName(), target.getLocation().getBlockX(), target.getLocation().getBlockY(), target.getLocation().getBlockZ()));
     }
-
+    
     protected void now(IUser teleportee, ITarget target, TeleportCause cause) throws Exception {
+    	now(teleportee, target, cause, false);
+    }
+
+    protected void now(IUser teleportee, ITarget target, TeleportCause cause, boolean overrideCenter) throws Exception {
         cancel(false);
         teleportee.setLastLocation();
         Location loc = target.getLocation();
@@ -124,7 +128,7 @@ public class Teleport implements net.ess3.api.ITeleport {
                 if (ess.getSettings().isForceDisableTeleportSafety()) {
                     teleportee.getBase().teleport(loc, cause);
                 } else {
-                    teleportee.getBase().teleport(LocationUtil.getSafeDestination(ess, teleportee, loc), cause);
+                    teleportee.getBase().teleport(LocationUtil.getSafeDestination(ess, teleportee, loc, overrideCenter), cause);
                 }
             } else {
                 throw new Exception(tl("unsafeTeleportDestination", loc.getWorld().getName(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ()));
@@ -133,7 +137,7 @@ public class Teleport implements net.ess3.api.ITeleport {
             if (ess.getSettings().isForceDisableTeleportSafety()) {
                 teleportee.getBase().teleport(loc, cause);
             } else {
-                if (ess.getSettings().isTeleportToCenterLocation()) {
+                if (ess.getSettings().isTeleportToCenterLocation() && !overrideCenter) {
                     loc = LocationUtil.getRoundedDestination(loc);
                 }
                 teleportee.getBase().teleport(loc, cause);
@@ -142,16 +146,20 @@ public class Teleport implements net.ess3.api.ITeleport {
     }
 
     //The teleportPlayer function is used when you want to normally teleportPlayer someone to a location or player.
-    //This method is nolonger used internally and will be removed.
+    //This method is no longer used internally and will be removed.
     @Deprecated
     @Override
     public void teleport(Location loc, Trade chargeFor) throws Exception {
-        teleport(loc, chargeFor, TeleportCause.PLUGIN);
+        teleport(loc, chargeFor, TeleportCause.PLUGIN, false);
+    }
+    
+    public void teleport(Location loc, Trade chargeFor, TeleportCause cause) throws Exception {
+        teleport(teleportOwner, new LocationTarget(loc), chargeFor, cause, false);
     }
 
     @Override
-    public void teleport(Location loc, Trade chargeFor, TeleportCause cause) throws Exception {
-        teleport(teleportOwner, new LocationTarget(loc), chargeFor, cause);
+    public void teleport(Location loc, Trade chargeFor, TeleportCause cause, boolean overrideCenter) throws Exception {
+        teleport(teleportOwner, new LocationTarget(loc), chargeFor, cause, overrideCenter);
     }
 
     //This is used when teleporting to a player
@@ -159,25 +167,25 @@ public class Teleport implements net.ess3.api.ITeleport {
     public void teleport(Player entity, Trade chargeFor, TeleportCause cause) throws Exception {
         ITarget target = new PlayerTarget(entity);
         teleportOwner.sendMessage(tl("teleportToPlayer", entity.getDisplayName()));
-        teleport(teleportOwner, target, chargeFor, cause);
+        teleport(teleportOwner, target, chargeFor, cause, false);
     }
 
     //This is used when teleporting to stored location
     @Override
     public void teleportPlayer(IUser teleportee, Location loc, Trade chargeFor, TeleportCause cause) throws Exception {
-        teleport(teleportee, new LocationTarget(loc), chargeFor, cause);
+        teleport(teleportee, new LocationTarget(loc), chargeFor, cause, false);
     }
 
     //This is used on /tphere
     @Override
     public void teleportPlayer(IUser teleportee, Player entity, Trade chargeFor, TeleportCause cause) throws Exception {
         ITarget target = new PlayerTarget(entity);
-        teleport(teleportee, target, chargeFor, cause);
+        teleport(teleportee, target, chargeFor, cause, false);
         teleportee.sendMessage(tl("teleporting", target.getLocation().getWorld().getName(), target.getLocation().getBlockX(), target.getLocation().getBlockY(), target.getLocation().getBlockZ()));
         teleportOwner.sendMessage(tl("teleporting", target.getLocation().getWorld().getName(), target.getLocation().getBlockX(), target.getLocation().getBlockY(), target.getLocation().getBlockZ()));
     }
 
-    private void teleport(IUser teleportee, ITarget target, Trade chargeFor, TeleportCause cause) throws Exception {
+    private void teleport(IUser teleportee, ITarget target, Trade chargeFor, TeleportCause cause, boolean overrideCenter) throws Exception {
         double delay = ess.getSettings().getTeleportDelay();
 
         Trade cashCharge = chargeFor;
@@ -195,7 +203,7 @@ public class Teleport implements net.ess3.api.ITeleport {
         cooldown(true);
         if (delay <= 0 || teleportOwner.isAuthorized("essentials.teleport.timer.bypass") || teleportee.isAuthorized("essentials.teleport.timer.bypass")) {
             cooldown(false);
-            now(teleportee, target, cause);
+            now(teleportee, target, cause, overrideCenter);
             if (cashCharge != null) {
                 cashCharge.charge(teleportOwner);
             }
@@ -252,7 +260,7 @@ public class Teleport implements net.ess3.api.ITeleport {
         if (!teleportee.equals(teleportOwner)) {
             teleportOwner.sendMessage(tl("warpingTo", warp, loc.getWorld().getName(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ()));
         }
-        teleport(teleportee, new LocationTarget(loc), chargeFor, cause);
+        teleport(teleportee, new LocationTarget(loc), chargeFor, cause, false);
     }
 
     //The back function is a wrapper used to teleportPlayer a player /back to their previous location.
@@ -261,7 +269,7 @@ public class Teleport implements net.ess3.api.ITeleport {
         tpType = TeleportType.BACK;
         final Location loc = teleportOwner.getLastLocation();
         teleportOwner.sendMessage(tl("backUsageMsg", loc.getWorld().getName(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ()));
-        teleport(teleportOwner, new LocationTarget(loc), chargeFor, TeleportCause.COMMAND);
+        teleport(teleportOwner, new LocationTarget(loc), chargeFor, TeleportCause.COMMAND, false);
     }
 
     //This function is used to throw a user back after a jail sentence

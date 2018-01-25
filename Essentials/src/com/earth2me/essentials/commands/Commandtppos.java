@@ -4,6 +4,7 @@ import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.FloatUtil;
+import com.earth2me.essentials.utils.NumberUtil;
 import com.google.common.collect.Lists;
 import org.bukkit.Location;
 import org.bukkit.Server;
@@ -55,7 +56,7 @@ public class Commandtppos extends EssentialsCommand {
         final Trade charge = new Trade(this.getName(), ess);
         charge.isAffordableFor(user);
         user.sendMessage(tl("teleporting", loc.getWorld().getName(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ()));
-        user.getTeleport().teleport(loc, charge, TeleportCause.COMMAND);
+        user.getTeleport().teleport(loc, charge, TeleportCause.COMMAND, !NumberUtil.isInt(x) || !NumberUtil.isInt(z));
         throw new NoChargeException();
     }
 
@@ -85,8 +86,7 @@ public class Commandtppos extends EssentialsCommand {
         }
         sender.sendMessage(tl("teleporting", loc.getWorld().getName(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ()));
         user.sendMessage(tl("teleporting", loc.getWorld().getName(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ()));
-        user.getTeleport().teleport(loc, null, TeleportCause.COMMAND);
-
+        user.getTeleport().teleport(loc, null, TeleportCause.COMMAND, !NumberUtil.isInt(x) || !NumberUtil.isInt(z));
     }
 
     @Override

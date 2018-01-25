@@ -36,13 +36,14 @@ public interface ITeleport {
     /**
      * Teleport a player to a specific location
      *
-     * @param loc       - Where should the player end up
-     * @param chargeFor - What the user will be charged if teleportPlayer is successful
-     * @param cause     - The reported teleportPlayer cause
+     * @param loc            - Where should the player end up
+     * @param chargeFor      - What the user will be charged if teleportPlayer is successful
+     * @param cause          - The reported teleportPlayer cause
+     * @param overrideCenter - Whether or not to ignore the Settings for teleport-to-center.
      *
      * @throws Exception
      */
-    void teleport(Location loc, Trade chargeFor, PlayerTeleportEvent.TeleportCause cause) throws Exception;
+    void teleport(Location loc, Trade chargeFor, PlayerTeleportEvent.TeleportCause cause, boolean overrideCenter) throws Exception;
 
     /**
      * Teleport a player to a specific player
