@@ -2,6 +2,7 @@ package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.User;
+import net.ess3.api.events.TPARequestEvent;
 import org.bukkit.Server;
 
 import java.util.Collections;
@@ -30,7 +31,7 @@ public class Commandtpaall extends EssentialsCommand {
     }
 
     private void teleportAAllPlayers(final Server server, final CommandSource sender, final User target) {
-        sender.sendMessage(tl("teleportAAll"));
+        sender.sendMessage(tl("teleportAAll")); // TODO Take a look at whether we want to send this message before the loop, due to the TPARequestEvent implementation
         for (User player : ess.getOnlineUsers()) {
             if (target == player) {
                 continue;
@@ -42,6 +43,12 @@ public class Commandtpaall extends EssentialsCommand {
                 continue;
             }
             try {
+                TPARequestEvent tpaEvent = new TPARequestEvent(sender, player, true);
+                ess.getServer().getPluginManager().callEvent(tpaEvent);
+                if(tpaEvent.isCancelled()) {
+                    sender.sendMessage(tl("teleportRequestCancelled", player.getDisplayName())); // TODO Get approval on cancel message
+                    continue;
+                }
                 player.requestTeleport(target, true);
                 player.sendMessage(tl("teleportHereRequest", target.getDisplayName()));
                 player.sendMessage(tl("typeTpaccept"));

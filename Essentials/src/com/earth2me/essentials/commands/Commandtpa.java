@@ -1,6 +1,7 @@
 package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.User;
+import net.ess3.api.events.TPARequestEvent;
 import org.bukkit.Server;
 
 import java.util.Collections;
@@ -32,11 +33,15 @@ public class Commandtpa extends EssentialsCommand {
         }
         // Don't let sender request teleport twice to the same player.
         if (user.getConfigUUID().equals(player.getTeleportRequest()) && player.hasOutstandingTeleportRequest() // Check timeout
-            && player.isTpRequestHere() == false) { // Make sure the last teleport request was actually tpa and not tpahere
+            && !player.isTpRequestHere()) { // Make sure the last teleport request was actually tpa and not tpahere
             throw new Exception(tl("requestSentAlready", player.getDisplayName()));
         }
-
         if (!player.isIgnoredPlayer(user)) {
+            TPARequestEvent tpaEvent = new TPARequestEvent(user.getSource(), player, false);
+            ess.getServer().getPluginManager().callEvent(tpaEvent);
+            if(tpaEvent.isCancelled()) {
+                throw new Exception(tl("teleportRequestCancelled", player.getDisplayName())); // TODO Get approval on cancel message
+            }
             player.requestTeleport(user, false);
             player.sendMessage(tl("teleportRequest", user.getDisplayName()));
             player.sendMessage(tl("typeTpaccept"));
