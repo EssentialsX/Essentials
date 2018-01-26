@@ -71,17 +71,17 @@ public class FormatUtil {
         if (user.isAuthorized(permBase + ".color")) {
             message = replaceColor(input, REPLACE_COLOR_PATTERN);
         } else {
-            message = stripColor(stripColor(input, REPLACE_COLOR_PATTERN), VANILLA_COLOR_PATTERN);
+            message = stripColor(input, VANILLA_COLOR_PATTERN);
         }
         if (user.isAuthorized(permBase + ".magic")) {
             message = replaceColor(message, REPLACE_MAGIC_PATTERN);
         } else {
-            message = stripColor(stripColor(message, REPLACE_MAGIC_PATTERN), VANILLA_MAGIC_PATTERN);
+            message = stripColor(message, VANILLA_MAGIC_PATTERN);
         }
         if (user.isAuthorized(permBase + ".format")) {
             message = replaceColor(message, REPLACE_FORMAT_PATTERN);
         } else {
-            message = stripColor(stripColor(message, REPLACE_FORMAT_PATTERN), VANILLA_FORMAT_PATTERN);
+            message = stripColor(message, VANILLA_FORMAT_PATTERN);
         }
         return message;
     }
