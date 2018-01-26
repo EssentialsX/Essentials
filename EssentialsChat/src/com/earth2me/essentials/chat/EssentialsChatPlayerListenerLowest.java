@@ -4,6 +4,7 @@ import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.FormatUtil;
 import net.ess3.api.IEssentials;
 import org.bukkit.Server;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
@@ -41,7 +42,11 @@ public class EssentialsChatPlayerListenerLowest extends EssentialsChatPlayer {
         event.setMessage(FormatUtil.formatMessage(user, "essentials.chat", event.getMessage()));
         String group = user.getGroup();
         String world = user.getWorld().getName();
-        Team team = user.getBase().getScoreboard().getPlayerTeam(user.getBase());
+
+        Player player = user.getBase();
+        String prefix = FormatUtil.replaceFormat(ess.getPermissionsHandler().getPrefix(player));
+        String suffix = FormatUtil.replaceFormat(ess.getPermissionsHandler().getSuffix(player));
+        Team team = player.getScoreboard().getPlayerTeam(player);
 
         String format = ess.getSettings().getChatFormat(group);
         format = format.replace("{0}", group);
@@ -50,6 +55,8 @@ public class EssentialsChatPlayerListenerLowest extends EssentialsChatPlayer {
         format = format.replace("{3}", team == null ? "" : team.getPrefix());
         format = format.replace("{4}", team == null ? "" : team.getSuffix());
         format = format.replace("{5}", team == null ? "" : team.getDisplayName());
+        format = format.replace("{6}", prefix);
+        format = format.replace("{7}", suffix);
         synchronized (format) {
             event.setFormat(format);
         }

@@ -25,15 +25,20 @@
     </scm>
 
     <dependencies>
-        <dependency>
+        <dependency>		
             <groupId>net.ess3</groupId>
-            <artifactId>EssentialsX</artifactId>
-            <version>${project.version}</version>
+            <artifactId>EssentialsX</artifactId>		
+            <version>${project.version}</version>		
         </dependency>
         <dependency>
-            <groupId>com.maxmind.geoip</groupId>
-            <artifactId>geoip-api</artifactId>
-            <version>1.2.11</version>
+            <groupId>com.maxmind.geoip2</groupId>
+            <artifactId>geoip2</artifactId>
+            <version>0.7.2</version>
+        </dependency>
+        <dependency>
+            <groupId>javatar</groupId>
+            <artifactId>javatar</artifactId>
+            <version>2.5</version>
         </dependency>
     </dependencies>
 
@@ -42,7 +47,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
-                <version>2.1</version>
+                <version>3.1.0</version>
                 <executions>
                     <execution>
                         <phase>package</phase>
@@ -52,9 +57,13 @@
                     </execution>
                 </executions>
                 <configuration>
+                    <minimizeJar>true</minimizeJar>
                     <artifactSet>
                         <includes>
-                            <include>com.maxmind.geoip:geoip-api</include>
+                            <include>javatar:javatar</include>
+                            <include>com.maxmind.geoip2:geoip2</include>
+                            <include>com.maxmind.db:maxmind-db</include>
+                            <include>com.fasterxml.jackson.core:*</include>
                         </includes>
                     </artifactSet>
                 </configuration>
