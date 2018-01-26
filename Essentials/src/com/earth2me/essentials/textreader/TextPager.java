@@ -71,7 +71,10 @@ public class TextPager {
 
                 int pages = end / 9 + (end % 9 > 0 ? 1 : 0);
                 if (page > pages) {
-                    sender.sendMessage(tl("infoUnknownChapter"));
+                    if (pages != 0) {
+                        sender.sendMessage(tl("infoUnknownChapter"));
+                    }
+
                     return;
                 }
                 if (!onePage && commandName != null) {
