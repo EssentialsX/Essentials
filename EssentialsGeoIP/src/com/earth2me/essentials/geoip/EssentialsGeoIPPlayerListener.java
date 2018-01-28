@@ -120,6 +120,11 @@ public class EssentialsGeoIPPlayerListener implements Listener, IConf {
             config.set("database.update.by-every-x-days", 30);
             config.set("enable-locale", true);
             config.save();
+            // delete old GeoIP.dat fiiles
+            File oldDatFile = new File(dataFolder, "GeoIP.dat");
+            File oldDatFileCity = new File(dataFolder, "GeoIP-City.dat");
+            oldDatFile.delete();
+            oldDatFileCity.delete();
         }
 
         if (config.getBoolean("database.show-cities", false)) {
