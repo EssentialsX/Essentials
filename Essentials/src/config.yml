@@ -516,6 +516,12 @@ allow-bulk-buy-sell: true
 # This has no effect if the MOTD command or permission are disabled.
 delay-motd: 0
 
+# A list of commands that should have their complementary confirm commands disabled by default.
+# This is empty by default, for the latest list of valid commands see the latest source config.yml.
+default-disabled-confirm-commands:
+#- pay
+#- clearinventory
+
 ############################################################
 # +------------------------------------------------------+ #
 # |                   EssentialsHome                     | #
