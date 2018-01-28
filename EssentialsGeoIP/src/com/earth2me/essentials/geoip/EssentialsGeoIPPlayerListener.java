@@ -23,6 +23,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.Date;
 import java.util.zip.GZIPInputStream;
+import java.util.Arrays;
+import java.util.List;
 import com.ice.tar.TarInputStream;
 import com.ice.tar.TarEntry;
 
@@ -62,46 +64,37 @@ public class EssentialsGeoIPPlayerListener implements Listener, IConf {
         }
         InetAddress address = player.getAddress().getAddress();
         StringBuilder sb = new StringBuilder();
-        String locale = ess.getI18n().getCurrentLocale().toString().replace('_', '-'); // get locale setting from Essentials
-            try {
-                if (config.getBoolean("database.show-cities", false)) {
-                    CityResponse response = mmreader.city(address);
-                    if (response == null) {
-                        return;
-                    }
-                    String city;
-                    String region;
-                    String country;
-                    if (config.getBoolean("enable-locale")) {
-                        // Get geolocation based on locale. If not avaliable in specific language, get the default one.
-                        city = ((city=response.getCity().getNames().get(locale))!=null) ? city : response.getCity().getName();
-                        region = ((region=response.getMostSpecificSubdivision().getNames().get(locale))!=null) ? region : response.getMostSpecificSubdivision().getName();
-                        country = ((country=response.getCountry().getNames().get(locale))!=null) ? country : response.getCountry().getName();
-                    } else {
-                        // Get geolocation regarding locale setting.
-                        city = response.getCity().getName();
-                        region = response.getMostSpecificSubdivision().getName();
-                        country = response.getCountry().getName();
-                    }
-                    if (city != null) {
-                        sb.append(city).append(", ");
-                    }
-                    if (region != null) {
-                        sb.append(region).append(", ");
-                    }
-                    sb.append(country);
-                } else {
-                    CountryResponse response = mmreader.country(address);
-                    sb.append(response.getCountry().getNames().get(locale));
+        try {
+            if (config.getBoolean("database.show-cities", false)) {
+                CityResponse response = mmreader.city(address);
+                if (response == null) {
+                    return;
                 }
-            } catch (AddressNotFoundException ex) {
-                // GeoIP2 API forced this when address not found in their DB. jar will not complied without this.
-                // TODO: Maybe, we can set a new custom msg about addr-not-found in messages.properties.
-                logger.log(Level.INFO, tl("cantReadGeoIpDB") + " " + ex.getLocalizedMessage());
-            } catch (IOException | GeoIp2Exception ex) {
-                // GeoIP2 API forced this when address not found in their DB. jar will not complied without this.
-                logger.log(Level.SEVERE, tl("cantReadGeoIpDB") + " " + ex.getLocalizedMessage());
+                String city;
+                String region;
+                String country;
+                city = response.getCity().getName();
+                region = response.getMostSpecificSubdivision().getName();
+                country = response.getCountry().getName();
+                if (city != null) {
+                    sb.append(city).append(", ");
+                }
+                if (region != null) {
+                    sb.append(region).append(", ");
+                }
+                sb.append(country);
+            } else {
+                CountryResponse response = mmreader.country(address);
+                sb.append(response.getCountry().getName());
             }
+        } catch (AddressNotFoundException ex) {
+            // GeoIP2 API forced this when address not found in their DB. jar will not complied without this.
+            // TODO: Maybe, we can set a new custom msg about addr-not-found in messages.properties.
+            logger.log(Level.INFO, tl("cantReadGeoIpDB") + " " + ex.getLocalizedMessage());
+        } catch (IOException | GeoIp2Exception ex) {
+            // GeoIP2 API forced this when address not found in their DB. jar will not complied without this.
+            logger.log(Level.SEVERE, tl("cantReadGeoIpDB") + " " + ex.getLocalizedMessage());
+        }
         if (config.getBoolean("show-on-whois", true)) {
             u.setGeoLocation(sb.toString());
         }
@@ -149,7 +142,14 @@ public class EssentialsGeoIPPlayerListener implements Listener, IConf {
             }
         }
         try {
-            mmreader = new DatabaseReader.Builder(databaseFile).build();
+            // locale setting
+            if (config.getBoolean("enable-locale")) {
+                // Get geolocation based on Essentials' locale. If the locale is not avaliable, use "en".
+                String locale = ess.getI18n().getCurrentLocale().toString().replace('_', '-');
+                mmreader = new DatabaseReader.Builder(databaseFile).locales(Arrays.asList(locale,"en")).build();
+            } else {
+                mmreader = new DatabaseReader.Builder(databaseFile).build();
+            }
         } catch (IOException ex) {
             logger.log(Level.SEVERE, tl("cantReadGeoIpDB"), ex);
         }
