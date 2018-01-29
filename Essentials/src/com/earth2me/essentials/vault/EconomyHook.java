@@ -1,11 +1,15 @@
 package com.earth2me.essentials.vault;
 
 import com.earth2me.essentials.Essentials;
+import com.earth2me.essentials.User;
+import com.earth2me.essentials.utils.NumberUtil;
 import net.ess3.api.IEssentials;
+import net.ess3.api.IUser;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.economy.EconomyResponse;
 import org.bukkit.OfflinePlayer;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 public class EconomyHook implements Economy {
@@ -16,6 +20,10 @@ public class EconomyHook implements Economy {
             ess = plugin;
             ess.getLogger().info("Hooked into Vault!");
         }
+    }
+
+    private OfflinePlayer getOfflineFromName(String name) {
+        return ess.getServer().getOfflinePlayer(name);
     }
 
     @Override
@@ -35,173 +43,154 @@ public class EconomyHook implements Economy {
 
     @Override
     public int fractionalDigits() {
-        return 0;
+        return -1;
     }
 
     @Override
-    public String format(double v) {
-        return null;
+    public String format(double amount) {
+        return NumberUtil.displayCurrency(BigDecimal.valueOf(amount), ess);
     }
 
     @Override
     public String currencyNamePlural() {
-        return null;
+        return ess.getSettings().getCurrencySymbol();
     }
 
     @Override
     public String currencyNameSingular() {
-        return null;
-    }
-
-    /**
-     * @param s
-     * @deprecated
-     */
-    @Override
-    public boolean hasAccount(String s) {
-        return false;
+        return ess.getSettings().getCurrencySymbol();
     }
 
     @Override
-    public boolean hasAccount(OfflinePlayer offlinePlayer) {
-        return false;
+    public boolean hasAccount(OfflinePlayer player) {
+        return ess.getUser(player.getUniqueId()) != null;
     }
 
-    /**
-     * @param s
-     * @param s1
-     * @deprecated
-     */
+    @Deprecated
     @Override
-    public boolean hasAccount(String s, String s1) {
-        return false;
+    public boolean hasAccount(String player) {
+        return hasAccount(getOfflineFromName(player));
     }
 
     @Override
-    public boolean hasAccount(OfflinePlayer offlinePlayer, String s) {
-        return false;
+    public boolean hasAccount(OfflinePlayer player, String world) {
+        return hasAccount(player);
     }
 
-    /**
-     * @param s
-     * @deprecated
-     */
+    @Deprecated
     @Override
-    public double getBalance(String s) {
-        return 0;
+    public boolean hasAccount(String player, String world) {
+        return hasAccount(player);
     }
 
     @Override
-    public double getBalance(OfflinePlayer offlinePlayer) {
-        return 0;
+    public double getBalance(OfflinePlayer player) {
+        return ess.getUser(player.getUniqueId()).getMoney().doubleValue();
     }
 
-    /**
-     * @param s
-     * @param s1
-     * @deprecated
-     */
+    @Deprecated
     @Override
-    public double getBalance(String s, String s1) {
-        return 0;
+    public double getBalance(String player) {
+        return getBalance(getOfflineFromName(player));
     }
 
     @Override
-    public double getBalance(OfflinePlayer offlinePlayer, String s) {
-        return 0;
-    }
-
-    /**
-     * @param s
-     * @param v
-     * @deprecated
-     */
-    @Override
-    public boolean has(String s, double v) {
-        return false;
+    public double getBalance(OfflinePlayer player, String world) {
+        return getBalance(player);
     }
 
     @Override
-    public boolean has(OfflinePlayer offlinePlayer, double v) {
-        return false;
-    }
-
-    /**
-     * @param s
-     * @param s1
-     * @param v
-     * @deprecated
-     */
-    @Override
-    public boolean has(String s, String s1, double v) {
-        return false;
+    public double getBalance(String player, String world) {
+        return getBalance(player);
     }
 
     @Override
-    public boolean has(OfflinePlayer offlinePlayer, String s, double v) {
-        return false;
+    public boolean has(OfflinePlayer player, double amount) {
+        return ess.getUser(player.getUniqueId()).canAfford(BigDecimal.valueOf(amount));
     }
 
-    /**
-     * @param s
-     * @param v
-     * @deprecated
-     */
+    @Deprecated
     @Override
-    public EconomyResponse withdrawPlayer(String s, double v) {
-        return null;
+    public boolean has(String player, double amount) {
+        return has(getOfflineFromName(player), amount);
     }
 
     @Override
-    public EconomyResponse withdrawPlayer(OfflinePlayer offlinePlayer, double v) {
-        return null;
+    public boolean has(OfflinePlayer player, String world, double amount) {
+        return has(player, amount);
     }
 
-    /**
-     * @param s
-     * @param s1
-     * @param v
-     * @deprecated
-     */
+    @Deprecated
     @Override
-    public EconomyResponse withdrawPlayer(String s, String s1, double v) {
-        return null;
+    public boolean has(String player, String world, double amount) {
+        return has(player, amount);
     }
 
     @Override
-    public EconomyResponse withdrawPlayer(OfflinePlayer offlinePlayer, String s, double v) {
-        return null;
+    public EconomyResponse withdrawPlayer(OfflinePlayer player, double amountDouble) {
+        final User user = ess.getUser(player.getUniqueId());
+
+        if (amountDouble < 0) {
+            return new EconomyResponse(0,
+                    user.getMoney().doubleValue(),
+                    EconomyResponse.ResponseType.FAILURE,
+                    "Cannot withdraw a negative amount.");
+        }
+
+        final BigDecimal amount = BigDecimal.valueOf(amountDouble);
+
+        if (user.canAfford(amount)) {
+            final BigDecimal bal = user.getMoney();
+            user.takeMoney(amount);
+            return new EconomyResponse(bal.subtract(user.getMoney()).doubleValue(),
+                    user.getMoney().doubleValue(),
+                    EconomyResponse.ResponseType.SUCCESS,
+                    null);
+        }
+
+        return new EconomyResponse(0,
+                user.getMoney().doubleValue(),
+                EconomyResponse.ResponseType.FAILURE,
+                "Could not afford withdrawal.");
     }
 
-    /**
-     * @param s
-     * @param v
-     * @deprecated
-     */
+    @Deprecated
     @Override
-    public EconomyResponse depositPlayer(String s, double v) {
-        return null;
+    public EconomyResponse withdrawPlayer(String player, double amount) {
+        return withdrawPlayer(getOfflineFromName(player), amount);
     }
 
     @Override
-    public EconomyResponse depositPlayer(OfflinePlayer offlinePlayer, double v) {
-        return null;
+    public EconomyResponse withdrawPlayer(OfflinePlayer player, String world, double amount) {
+        return withdrawPlayer(player, amount);
     }
 
-    /**
-     * @param s
-     * @param s1
-     * @param v
-     * @deprecated
-     */
+    @Deprecated
     @Override
-    public EconomyResponse depositPlayer(String s, String s1, double v) {
-        return null;
+    public EconomyResponse withdrawPlayer(String player, String world, double amount) {
+        return withdrawPlayer(player, amount);
     }
 
     @Override
-    public EconomyResponse depositPlayer(OfflinePlayer offlinePlayer, String s, double v) {
-        return null;
+    public EconomyResponse depositPlayer(OfflinePlayer player, double amount) {
+        return null; // TODO Make this do stuff
+    }
+
+    @Deprecated
+    @Override
+    public EconomyResponse depositPlayer(String player, double amount) {
+        return depositPlayer(getOfflineFromName(player), amount);
+    }
+
+    @Override
+    public EconomyResponse depositPlayer(OfflinePlayer player, String world, double amount) {
+        return depositPlayer(player, amount);
+    }
+
+    @Deprecated
+    @Override
+    public EconomyResponse depositPlayer(String player, String world, double amount) {
+        return depositPlayer(player, amount);
     }
 
     /**
@@ -211,7 +200,7 @@ public class EconomyHook implements Economy {
      */
     @Override
     public EconomyResponse createBank(String s, String s1) {
-        return null;
+        return null; // TODO Decide whether to implement banks via createNpc or not
     }
 
     @Override
