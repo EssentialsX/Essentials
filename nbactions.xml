@@ -6,8 +6,6 @@
         <goals>
             <goal>package</goal>
             <goal>dependency:copy</goal>
-
-
         </goals>
     </action>
     <action>
