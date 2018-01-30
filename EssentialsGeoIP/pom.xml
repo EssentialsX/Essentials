@@ -46,13 +46,9 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <minimizeJar>true</minimizeJar>
                     <artifactSet>
                         <includes>
-                            <include>javatar:javatar</include>
-                            <include>com.maxmind.geoip2:geoip2</include>
-                            <include>com.maxmind.db:maxmind-db</include>
-                            <include>com.fasterxml.jackson.core:*</include>
+                            <include>com.maxmind.geoip:geoip-api</include>
                         </includes>
                     </artifactSet>
                 </configuration>
