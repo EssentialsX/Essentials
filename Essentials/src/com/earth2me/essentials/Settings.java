@@ -84,6 +84,32 @@ public class Settings implements net.ess3.api.ISettings {
     public int getHomeLimit(final String set) {
         return config.getInt("sethome-multiple." + set, config.getInt("sethome-multiple.default", 3));
     }
+    
+    @Override
+    public Set<String> getTeleportDelays() {
+        final ConfigurationSection section = config.getConfigurationSection("teleport-delays");
+        return section == null ? null : section.getKeys(false);
+    }
+    
+    @Override
+    public double getTeleportDelay(final IUser user) {
+    	double delay = config.getDouble("teleport-delay", 0);
+
+        final Set<String> delayList = getTeleportDelays();
+        if (delayList != null) {
+            for (String set : delayList) {
+                if (user.isAuthorized("essentials.teleport.delay." + set) && (delay < getTeleportDelay(set))) {
+                    delay = getTeleportDelay(set);
+                }
+            }
+        }
+        return delay;
+    }
+    
+    @Override
+    public double getTeleportDelay(final String set) {
+        return config.getDouble("teleport-delays." + set, config.getDouble("teleport-delay", 0));
+    }
 
     private int chatRadius = 0;
 

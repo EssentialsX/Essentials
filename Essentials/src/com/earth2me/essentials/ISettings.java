@@ -302,4 +302,10 @@ public interface ISettings extends IConf {
     int getMotdDelay();
 
     boolean isDirectHatAllowed();
+
+	Set<String> getTeleportDelays();
+
+	double getTeleportDelay(IUser user);
+
+	double getTeleportDelay(String set);
 }

@@ -178,7 +178,7 @@ public class Teleport implements net.ess3.api.ITeleport {
     }
 
     private void teleport(IUser teleportee, ITarget target, Trade chargeFor, TeleportCause cause) throws Exception {
-        double delay = ess.getSettings().getTeleportDelay();
+        double delay = ess.getSettings().getTeleportDelay(teleportOwner);
 
         Trade cashCharge = chargeFor;
 
@@ -210,7 +210,7 @@ public class Teleport implements net.ess3.api.ITeleport {
     //The respawn function is a wrapper used to handle tp fallback, on /jail and /home
     @Override
     public void respawn(final Trade chargeFor, TeleportCause cause) throws Exception {
-        double delay = ess.getSettings().getTeleportDelay();
+        double delay = ess.getSettings().getTeleportDelay(teleportOwner);
         if (chargeFor != null) {
             chargeFor.isAffordableFor(teleportOwner);
         }
