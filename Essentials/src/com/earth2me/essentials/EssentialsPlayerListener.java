@@ -334,7 +334,7 @@ public class EssentialsPlayerListener implements Listener {
 
                     final IText input = tempInput;
 
-                    if (input != null && user.isAuthorized("essentials.motd")) {
+                    if (input != null && !input.getLines().isEmpty() && user.isAuthorized("essentials.motd")) {
                         final IText output = new KeywordReplacer(input, user.getSource(), ess);
                         final TextPager pager = new TextPager(output, true);
                         pager.showPage("1", null, "motd", user.getSource());
