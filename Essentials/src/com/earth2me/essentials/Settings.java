@@ -93,12 +93,12 @@ public class Settings implements net.ess3.api.ISettings {
     
     @Override
     public double getTeleportDelay(final IUser user) {
-    	double delay = config.getDouble("teleport-delay", 0);
+    	double delay = getTeleportDelay();
 
         final Set<String> delayList = getTeleportDelays();
         if (delayList != null) {
             for (String set : delayList) {
-                if (user.isAuthorized("essentials.teleport.delay." + set) && (delay < getTeleportDelay(set))) {
+                if (user.isAuthorized("essentials.teleport.delay." + set)) {
                     delay = getTeleportDelay(set);
                 }
             }
