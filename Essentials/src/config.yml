@@ -74,6 +74,13 @@ teleport-cooldown: 0
 # The delay, in seconds, before a user actually teleports. If the user moves or gets attacked in this timeframe, the teleport is cancelled.
 teleport-delay: 0
 
+# Adjust user teleport delay based on permission.
+# The default teleport delay will be the setting above.
+# Create teleport ranks below, and assign the permission: essentials.teleport.delay.<rank>
+teleport-delays:
+  vip: 5
+  staff: 3
+
 # The delay, in seconds, a player can't be attacked by other players after they have been teleported by a command.
 # This will also prevent the player attacking other players.
 teleport-invulnerability: 4
