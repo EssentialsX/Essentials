@@ -19,16 +19,16 @@
     </licenses>
 
     <dependencies>
-            <dependency>
-                <groupId>net.ess3</groupId>
-                <artifactId>EssentialsX</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.maxmind.geoip</groupId>
-                <artifactId>geoip-api</artifactId>
-                <version>1.2.11</version>
-            </dependency>
+        <dependency>
+            <groupId>net.ess3</groupId>
+            <artifactId>EssentialsX</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.maxmind.geoip</groupId>
+            <artifactId>geoip-api</artifactId>
+            <version>1.2.11</version>
+        </dependency>
     </dependencies>
 
     <build>
