@@ -303,9 +303,10 @@ public interface ISettings extends IConf {
 
     boolean isDirectHatAllowed();
 
-	Set<String> getTeleportDelays();
+	double getTeleportDelay(String set);
 
 	double getTeleportDelay(IUser user);
+	
+	Set<String> getTeleportDelays();
 
-	double getTeleportDelay(String set);
 }
