@@ -16,7 +16,6 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.regex.Pattern;
 
-
 public interface ISettings extends IConf {
     boolean areSignsDisabled();
 
@@ -303,10 +302,10 @@ public interface ISettings extends IConf {
 
     boolean isDirectHatAllowed();
 
-	double getTeleportDelay(String set);
+    double getTeleportDelay(String set);
 
-	double getTeleportDelay(IUser user);
-	
-	Set<String> getTeleportDelays();
+    double getTeleportDelay(IUser user);
+
+    Set<String> getTeleportDelays();
 
 }
