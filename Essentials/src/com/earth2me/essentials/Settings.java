@@ -93,7 +93,11 @@ public class Settings implements net.ess3.api.ISettings {
 
     @Override
     public double getTeleportDelay(final IUser user) {
+<<<<<<< HEAD
         double delay = getTeleportDelay();
+=======
+    	double delay = getTeleportDelay();
+>>>>>>> f57d5fdb1a9ae0f95e9265d78caaa0e5aa55e511
 
         final Set<String> delayList = getTeleportDelays();
         if (delayList != null) {
