@@ -113,12 +113,14 @@ public class Commandclearinventory extends EssentialsCommand {
                 sender.sendMessage(tl("inventoryClearingAllItems", player.getDisplayName()));
             }
             InventoryWorkaround.clearInventoryNoArmor(player.getInventory());
+            InventoryWorkaround.setItemInOffHand(player, null);
         } else if (type == -2) // type -2 represents double wildcard or all items and armor
         {
             if (showExtended) {
                 sender.sendMessage(tl("inventoryClearingAllArmor", player.getDisplayName()));
             }
             InventoryWorkaround.clearInventoryNoArmor(player.getInventory());
+            InventoryWorkaround.setItemInOffHand(player, null);
             player.getInventory().setArmorContents(null);
         } else {
             if (data == -1) // data -1 means that all subtypes will be cleared
