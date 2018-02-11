@@ -18,7 +18,7 @@ You can ignore the template if suggesting a feature; otherwise, read on:
     "Details:".
 6.  Delete this line and all above lines before posting your issue. -->
 
-EssentialsX version (run `/essentials`): 
+EssentialsX version (run `/essentials version`): 
 
 Server software (run `/version`): 
 
