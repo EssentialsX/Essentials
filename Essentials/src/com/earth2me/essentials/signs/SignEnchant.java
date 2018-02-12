@@ -24,24 +24,24 @@ public class SignEnchant extends EssentialsSign {
         try {
             stack = sign.getLine(1).equals("*") || sign.getLine(1).equalsIgnoreCase("any") ? null : getItemStack(sign.getLine(1), 1, ess);
         } catch (SignException e) {
-            sign.setLine(1, "§c<item|any>");
+            sign.setLine(1, ChatColor.translateAlternateColorCodes('&', ess.getSettings().getErrorSignColor("<item|any>")));
             throw e;
         }
         final String[] enchantLevel = sign.getLine(2).split(":");
         if (enchantLevel.length != 2) {
-            sign.setLine(2, "§c<enchant>");
+            sign.setLine(2, ChatColor.translateAlternateColorCodes('&', ess.getSettings().getErrorSignColor("<enchant>")));
             throw new SignException(tl("invalidSignLine", 3));
         }
         final Enchantment enchantment = Enchantments.getByName(enchantLevel[0]);
         if (enchantment == null) {
-            sign.setLine(2, "§c<enchant>");
+            sign.setLine(2, ChatColor.translateAlternateColorCodes('&', ess.getSettings().getErrorSignColor("<enchant>")));
             throw new SignException(tl("enchantmentNotFound"));
         }
         int level;
         try {
             level = Integer.parseInt(enchantLevel[1]);
         } catch (NumberFormatException ex) {
-            sign.setLine(2, "§c<enchant>");
+            sign.setLine(2, ChatColor.translateAlternateColorCodes('&', ess.getSettings().getErrorSignColor("<enchant>")));
             throw new SignException(ex.getMessage(), ex);
         }
         final boolean allowUnsafe = ess.getSettings().allowUnsafeEnchantments() && player.isAuthorized("essentials.enchantments.allowunsafe") && player.isAuthorized("essentials.signs.enchant.allowunsafe");
