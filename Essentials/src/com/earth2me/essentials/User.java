@@ -558,6 +558,18 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
         lastActivity = System.currentTimeMillis();
     }
 
+    public void updateActivityOnMove(final boolean broadcast) {
+        if(ess.getSettings().cancelAfkOnMove()) {
+            updateActivity(broadcast);
+        }
+    }
+
+    public void updateActivityOnInteract(final boolean broadcast) {
+        if(ess.getSettings().cancelAfkOnInteract()) {
+            updateActivity(broadcast);
+        }
+    }
+
     public void checkActivity() {
         // Graceful time before the first afk check call. 
         if (System.currentTimeMillis() - lastActivity <= 10000) {
