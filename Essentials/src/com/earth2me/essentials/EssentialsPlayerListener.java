@@ -233,11 +233,14 @@ public class EssentialsPlayerListener implements Listener {
                 user.setDisplayNick();
                 updateCompass(user);
 
-                if (!ess.getVanishedPlayersSet().isEmpty() && !user.isAuthorized("essentials.vanish.see")) {
-                    for (String p : ess.getVanishedPlayersSet()) {
+                if (!ess.getVanishedPlayersNew().isEmpty() && !user.isAuthorized("essentials.vanish.see")) {
+                    for (String p : ess.getVanishedPlayersNew()) {
                         Player toVanish = ess.getServer().getPlayerExact(p);
                         if (toVanish != null && toVanish.isOnline()) {
                             user.getBase().hidePlayer(toVanish);
+                            if (ess.getSettings().isDebug()) {
+                                ess.getLogger().info("Hiding vanished player: " + p);
+                            }
                         }
                     }
                 }
