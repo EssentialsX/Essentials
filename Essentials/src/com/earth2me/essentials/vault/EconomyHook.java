@@ -15,10 +15,10 @@ import java.util.List;
 public class EconomyHook implements Economy {
     private IEssentials ess = null;
 
-    public EconomyHook(Essentials plugin) {
+    public EconomyHook(IEssentials ess) {
         if (!ess.getSettings().isEcoDisabled()) {
-            ess = plugin;
-            ess.getLogger().info("Hooked into Vault!");
+            this.ess = ess;
+            this.ess.getLogger().info("Hooked into Vault!");
         }
     }
 

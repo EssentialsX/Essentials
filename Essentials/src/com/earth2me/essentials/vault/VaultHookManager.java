@@ -1,6 +1,7 @@
 package com.earth2me.essentials.vault;
 
 import com.earth2me.essentials.Essentials;
+import net.ess3.api.IEssentials;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.economy.plugins.Economy_Essentials;
 import org.bukkit.plugin.Plugin;
@@ -14,16 +15,31 @@ import org.bukkit.plugin.ServicesManager;
  */
 public class VaultHookManager {
 
+    IEssentials ess;
+
+    public VaultHookManager(IEssentials ess) {
+        this.ess = ess;
+
+        if (!ess.getSettings().isEcoDisabled() && ess.getSettings().useNewVaultHook()) {
+            hookEssXEco();
+
+            if (ess.getSettings().disableOldVaultHook()) {
+                unhookLegacy();
+            }
+        }
+    }
+
     /**
      * Deregister Vault's default legacy EssentialsEco hook.
      */
-    public boolean unhookLegacy(Essentials ess) {
+    public boolean unhookLegacy() {
         final Plugin vaultPlugin = ess.getServer().getPluginManager().getPlugin("Vault");
         final ServicesManager sm = ess.getServer().getServicesManager();
 
         for (RegisteredServiceProvider rsp : sm.getRegistrations(vaultPlugin)) {
             if (rsp.getProvider() instanceof Economy_Essentials) {
                 sm.unregister(rsp.getProvider());
+                ess.getLogger().info("Removed Vault's legacy EssentialsEco handler");
                 return true;
             }
         }
@@ -34,7 +50,8 @@ public class VaultHookManager {
     /**
      * Register EssentialsX's own Vault hook.
      */
-    public void hookEssXEco(Essentials ess) {
+    public void hookEssXEco() {
         ess.getServer().getServicesManager().register(Economy.class, new EconomyHook(ess), ess, ServicePriority.High);
+        ess.getLogger().info("Enabled UUID-friendly economy support for Vault!");
     }
 }

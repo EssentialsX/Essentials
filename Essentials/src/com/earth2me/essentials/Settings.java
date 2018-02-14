@@ -532,6 +532,7 @@ public class Settings implements net.ess3.api.ISettings {
         npcsInBalanceRanking = _isNpcsInBalanceRanking();
         currencyFormat = _getCurrencyFormat();
         unprotectedSigns = _getUnprotectedSign();
+        useNewVaultHook = _useNewVaultHook();
     }
 
     private List<Integer> itemSpawnBl = new ArrayList<Integer>();
@@ -1417,5 +1418,26 @@ public class Settings implements net.ess3.api.ISettings {
     @Override
     public boolean isDirectHatAllowed() {
         return config.getBoolean("allow-direct-hat", true);
+    }
+
+    private boolean useNewVaultHook = true;
+    private boolean disableOldVaultHook = true;
+
+    private boolean _useNewVaultHook() {
+        return config.getBoolean("use-new-vault-hook", true);
+    }
+
+    @Override
+    public boolean useNewVaultHook() {
+        return useNewVaultHook;
+    }
+
+    private boolean _disableOldVaultHook() {
+        return config.getBoolean("disable-old-vault-hook", true);
+    }
+
+    @Override
+    public boolean disableOldVaultHook() {
+        return disableOldVaultHook;
     }
 }
