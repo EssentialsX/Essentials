@@ -65,6 +65,7 @@ public class EssentialsUpgrade {
         }
 
         config.save();
+        config.load();
         doneFile.setProperty("kitsyml", true);
         doneFile.save();
         LOGGER.info("Done converting kits.");
