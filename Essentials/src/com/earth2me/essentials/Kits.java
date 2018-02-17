@@ -21,13 +21,13 @@ public class Kits implements IConf {
     public Kits(final IEssentials essentials) {
         config = new EssentialsConf(new File(essentials.getDataFolder(), "kits.yml"));
         config.setTemplateName("/kits.yml");
-        config.load();
 
-        kits = _getKits();
+        reloadConfig();
     }
 
     @Override
     public void reloadConfig() {
+        config.load();
         kits = _getKits();
     }
 
