@@ -1,11 +1,11 @@
-package com.earth2me.essentials;
+package com.neximation.essentials;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.fail;
 
-import com.earth2me.essentials.commands.IEssentialsCommand;
-import com.earth2me.essentials.commands.NoChargeException;
+import com.neximation.essentials.commands.IEssentialsCommand;
+import com.neximation.essentials.commands.NoChargeException;
 
 import org.bukkit.World.Environment;
 import org.bukkit.command.CommandSender;
@@ -46,7 +46,7 @@ public class MessagingTest {
 
         try {
             cmd = (IEssentialsCommand) Essentials.class.getClassLoader()
-                .loadClass("com.earth2me.essentials.commands.Command" + command).newInstance();
+                .loadClass("com.neximation.essentials.commands.Command" + command).newInstance();
             cmd.setEssentials(ess);
             cmd.run(server, user, command, null, args);
         } catch (NoChargeException ex) {
@@ -65,7 +65,7 @@ public class MessagingTest {
 
         try {
             cmd = (IEssentialsCommand) Essentials.class.getClassLoader()
-                .loadClass("com.earth2me.essentials.commands.Command" + command).newInstance();
+                .loadClass("com.neximation.essentials.commands.Command" + command).newInstance();
             cmd.setEssentials(ess);
             cmd.run(server, new CommandSource(sender), command, null, args);
         } catch (NoChargeException ex) {

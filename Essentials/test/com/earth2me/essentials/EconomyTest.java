@@ -1,9 +1,9 @@
-package com.earth2me.essentials;
+package com.neximation.essentials;
 
-import com.earth2me.essentials.api.NoLoanPermittedException;
-import com.earth2me.essentials.api.UserDoesNotExistException;
-import com.earth2me.essentials.commands.IEssentialsCommand;
-import com.earth2me.essentials.commands.NoChargeException;
+import com.neximation.essentials.api.NoLoanPermittedException;
+import com.neximation.essentials.api.UserDoesNotExistException;
+import com.neximation.essentials.commands.IEssentialsCommand;
+import com.neximation.essentials.commands.NoChargeException;
 
 import junit.framework.TestCase;
 import net.ess3.api.Economy;
@@ -113,7 +113,7 @@ public class EconomyTest extends TestCase {
 
         try {
             cmd = (IEssentialsCommand) Essentials.class.getClassLoader()
-                .loadClass("com.earth2me.essentials.commands.Command" + command).newInstance();
+                .loadClass("com.neximation.essentials.commands.Command" + command).newInstance();
             cmd.setEssentials(ess);
             cmd.run(server, user, command, null, args);
         } catch (NoChargeException ex) {
@@ -132,7 +132,7 @@ public class EconomyTest extends TestCase {
 
         try {
             cmd = (IEssentialsCommand) Essentials.class.getClassLoader()
-                .loadClass("com.earth2me.essentials.commands.Command" + command).newInstance();
+                .loadClass("com.neximation.essentials.commands.Command" + command).newInstance();
             cmd.setEssentials(ess);
             cmd.run(server, new CommandSource(sender), command, null, args);
         } catch (NoChargeException ex) {

@@ -1,6 +1,6 @@
 package net.ess3.api.events;
 
-import com.earth2me.essentials.signs.EssentialsSign;
+import com.neximation.essentials.signs.EssentialsSign;
 import net.ess3.api.IUser;
 
 

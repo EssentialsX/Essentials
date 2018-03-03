@@ -4,8 +4,8 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>net.ess3</groupId>
-    <artifactId>EssentialsXParent</artifactId>
-    <version>2.0.1</version>
+    <artifactId>NeximationEssentialsParent</artifactId>
+    <version>1.0.1</version>
 
     <packaging>pom</packaging>
 

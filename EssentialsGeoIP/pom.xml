@@ -6,10 +6,10 @@
     <parent>
         <groupId>net.ess3</groupId>
         <artifactId>EssentialsXParent</artifactId>
-        <version>2.0.1</version>
+        <version>1.0.1</version>
     </parent>
 
-    <artifactId>EssentialsXGeoIP</artifactId>
+    <artifactId>NeximationEssentialsGeoIP</artifactId>
 
     <licenses>
         <license>
@@ -27,7 +27,7 @@
     <dependencies>
         <dependency>
             <groupId>net.ess3</groupId>
-            <artifactId>EssentialsX</artifactId>
+            <artifactId>NeximationEssentials</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>

@@ -1,6 +1,6 @@
 # This determines the command prefix when there are conflicts (/name:home, /name:help, etc.)
 name: EssentialsChat
-main: com.earth2me.essentials.chat.EssentialsChat
+main: com.neximation.essentials.chat.EssentialsChat
 # Note to developers: This next line cannot change, or the automatic versioning system will break.
 version: ${project.version}-b${build.number}
 website: http://tiny.cc/EssentialsCommands

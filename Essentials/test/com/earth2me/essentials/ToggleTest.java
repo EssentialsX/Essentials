@@ -1,7 +1,7 @@
-package com.earth2me.essentials;
+package com.neximation.essentials;
 
-import com.earth2me.essentials.commands.IEssentialsCommand;
-import com.earth2me.essentials.commands.NoChargeException;
+import com.neximation.essentials.commands.IEssentialsCommand;
+import com.neximation.essentials.commands.NoChargeException;
 import junit.framework.TestCase;
 import org.bukkit.World.Environment;
 import org.bukkit.command.CommandSender;
@@ -36,7 +36,7 @@ public class ToggleTest extends TestCase {
         IEssentialsCommand cmd;
 
         try {
-            cmd = (IEssentialsCommand) Essentials.class.getClassLoader().loadClass("com.earth2me.essentials.commands.Command" + command).newInstance();
+            cmd = (IEssentialsCommand) Essentials.class.getClassLoader().loadClass("com.neximation.essentials.commands.Command" + command).newInstance();
             cmd.setEssentials(ess);
             cmd.run(server, user, command, null, args);
         } catch (NoChargeException ex) {
@@ -50,7 +50,7 @@ public class ToggleTest extends TestCase {
         CommandSender sender = server.getConsoleSender();
 
         try {
-            cmd = (IEssentialsCommand) Essentials.class.getClassLoader().loadClass("com.earth2me.essentials.commands.Command" + command).newInstance();
+            cmd = (IEssentialsCommand) Essentials.class.getClassLoader().loadClass("com.neximation.essentials.commands.Command" + command).newInstance();
             cmd.setEssentials(ess);
             cmd.run(server, new CommandSource(sender), command, null, args);
         } catch (NoChargeException ex) {

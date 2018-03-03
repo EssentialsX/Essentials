@@ -1,6 +1,6 @@
 # This determines the command prefix when there are conflicts (/name:home, /name:help, etc.)
 name: EssentialsGeoIP
-main: com.earth2me.essentials.geoip.EssentialsGeoIP
+main: com.neximation.essentials.geoip.EssentialsGeoIP
 # Note to developers: This next line cannot change, or the automatic versioning system will break.
 version: ${project.version}-b${build.number}
 website: http://tiny.cc/EssentialsCommands

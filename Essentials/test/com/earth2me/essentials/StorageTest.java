@@ -1,4 +1,4 @@
-package com.earth2me.essentials;
+package com.neximation.essentials;
 
 import junit.framework.TestCase;
 import org.bukkit.Location;
