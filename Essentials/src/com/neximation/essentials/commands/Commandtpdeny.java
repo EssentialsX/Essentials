@@ -1,0 +1,28 @@
+package com.neximation.essentials.commands;
+
+import com.neximation.essentials.User;
+import org.bukkit.Server;
+
+import static com.neximation.essentials.I18n.tl;
+
+
+public class Commandtpdeny extends EssentialsCommand {
+    public Commandtpdeny() {
+        super("tpdeny");
+    }
+
+    @Override
+    public void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception {
+        if (user.getTeleportRequest() == null) {
+            throw new Exception(tl("noPendingRequest"));
+        }
+        final User player = ess.getUser(user.getTeleportRequest());
+        if (player == null) {
+            throw new Exception(tl("noPendingRequest"));
+        }
+
+        user.sendMessage(tl("requestDenied"));
+        player.sendMessage(tl("requestDeniedFrom", user.getDisplayName()));
+        user.requestTeleport(null, false);
+    }
+}

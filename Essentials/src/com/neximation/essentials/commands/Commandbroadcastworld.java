@@ -1,0 +1,81 @@
+package com.neximation.essentials.commands;
+
+import static com.neximation.essentials.I18n.tl;
+
+import com.neximation.essentials.CommandSource;
+import com.neximation.essentials.User;
+import com.neximation.essentials.textreader.IText;
+import com.neximation.essentials.textreader.KeywordReplacer;
+import com.neximation.essentials.textreader.SimpleTextInput;
+import com.neximation.essentials.utils.FormatUtil;
+import com.google.common.collect.Lists;
+
+import org.bukkit.Server;
+import org.bukkit.World;
+import org.bukkit.entity.Player;
+
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+
+
+public class Commandbroadcastworld extends EssentialsCommand {
+
+    public Commandbroadcastworld() {
+        super("broadcastworld");
+    }
+
+    @Override
+    public void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception {
+        sendBroadcast(user.getWorld().getName(), user.getDisplayName(), getFinalArg(args, 0));
+    }
+
+    @Override
+    public void run(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception {
+        if (args.length < 2) {
+            throw new NotEnoughArgumentsException("world");
+        }
+        sendBroadcast(args[0], sender.getSender().getName(), getFinalArg(args, 1));
+    }
+
+    private void sendBroadcast(final String worldName, final String name, final String message) throws Exception {
+        World world = ess.getWorld(worldName);
+        if (world == null) {
+            throw new Exception(tl("invalidWorld"));
+        }
+        sendToWorld(world, tl("broadcast", FormatUtil.replaceFormat(message).replace("\\n", "\n"), name));
+    }
+
+    private void sendToWorld(World world, String message) {
+        IText broadcast = new SimpleTextInput(message);
+        final Collection<Player> players = ess.getOnlinePlayers();
+
+        for (Player player : players) {
+            if (player.getWorld().equals(world)) {
+                final User user = ess.getUser(player);
+                broadcast = new KeywordReplacer(broadcast, new CommandSource(player), ess, false);
+                for (String messageText : broadcast.getLines()) {
+                    user.sendMessage(messageText);
+                }
+            }
+        }
+    }
+
+    @Override
+    protected List<String> getTabCompleteOptions(Server server, User user, String commandLabel, String[] args) {
+        return Collections.emptyList(); // The argument is only for non-players
+    }
+
+    @Override
+    protected List<String> getTabCompleteOptions(Server server, CommandSource sender, String commandLabel, String[] args) {
+        if (args.length == 1) {
+            List<String> worlds = Lists.newArrayList();
+            for (World world : server.getWorlds()) {
+                worlds.add(world.getName());
+            }
+            return worlds;
+        } else {
+            return Collections.emptyList();
+        }
+    }
+}

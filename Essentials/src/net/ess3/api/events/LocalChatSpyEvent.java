@@ -8,7 +8,7 @@ import org.bukkit.event.HandlerList;
 import java.util.IllegalFormatException;
 import java.util.Set;
 
-import static com.earth2me.essentials.I18n.tl;
+import static com.neximation.essentials.I18n.tl;
 
 
 public class LocalChatSpyEvent extends Event implements Cancellable {

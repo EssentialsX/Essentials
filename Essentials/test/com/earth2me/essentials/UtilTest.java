@@ -1,7 +1,7 @@
-package com.earth2me.essentials;
+package com.neximation.essentials;
 
-import com.earth2me.essentials.utils.DateUtil;
-import com.earth2me.essentials.utils.LocationUtil;
+import com.neximation.essentials.utils.DateUtil;
+import com.neximation.essentials.utils.LocationUtil;
 import junit.framework.TestCase;
 import org.bukkit.World.Environment;
 import org.bukkit.plugin.InvalidDescriptionException;

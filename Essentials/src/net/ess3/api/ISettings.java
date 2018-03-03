@@ -1,6 +1,6 @@
 package net.ess3.api;
 
 
-public interface ISettings extends com.earth2me.essentials.ISettings {
+public interface ISettings extends com.neximation.essentials.ISettings {
 
 }

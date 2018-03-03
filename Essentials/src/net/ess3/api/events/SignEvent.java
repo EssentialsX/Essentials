@@ -1,7 +1,7 @@
 package net.ess3.api.events;
 
-import com.earth2me.essentials.signs.EssentialsSign;
-import com.earth2me.essentials.signs.EssentialsSign.ISign;
+import com.neximation.essentials.signs.EssentialsSign;
+import com.neximation.essentials.signs.EssentialsSign.ISign;
 import net.ess3.api.IUser;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;

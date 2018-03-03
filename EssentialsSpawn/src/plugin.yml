@@ -1,6 +1,6 @@
 # This determines the command prefix when there are conflicts (/name:home, /name:help, etc.)
 name: EssentialsSpawn
-main: com.earth2me.essentials.spawn.EssentialsSpawn
+main: com.neximation.essentials.spawn.EssentialsSpawn
 # Note to developers: This next line cannot change, or the automatic versioning system will break.
 version: ${project.version}-b${build.number}
 website: http://tiny.cc/EssentialsCommands

@@ -1,6 +1,6 @@
-package com.earth2me.essentials;
+package com.neximation.essentials;
 
-import com.earth2me.essentials.craftbukkit.FakeWorld;
+import com.neximation.essentials.craftbukkit.FakeWorld;
 import org.bukkit.*;
 import org.bukkit.Warning.WarningState;
 import org.bukkit.World.Environment;
