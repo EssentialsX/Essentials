@@ -20,12 +20,7 @@ import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
 
 import java.io.IOException;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 import static com.earth2me.essentials.I18n.tl;
 
@@ -37,6 +32,12 @@ public class Commandessentials extends EssentialsCommand {
 
     private transient int taskid;
     private final transient Map<Player, Block> noteBlocks = new HashMap<Player, Block>();
+
+    private final List<String> versionPlugins = Arrays.asList(
+            "Vault",
+            "LuckPerms",
+            "PermissionsEx"
+    );
 
     @Override
     public void run(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception {
@@ -316,23 +317,39 @@ public class Commandessentials extends EssentialsCommand {
         if (sender.isPlayer() && !ess.getUser(sender.getPlayer()).isAuthorized("essentials.version")) return;
 
         boolean isMismatched = false;
+        boolean isVaultInstalled = false;
         final PluginManager pm = server.getPluginManager();
-        sender.sendMessage("Server version: " + server.getBukkitVersion());
         final String essVer = pm.getPlugin("Essentials").getDescription().getVersion();
+
+        sender.sendMessage("Server version: " + server.getBukkitVersion());
         sender.sendMessage("EssentialsX version: " + essVer);
+
         for (Plugin plugin : pm.getPlugins()) {
             final PluginDescriptionFile desc = plugin.getDescription();
-            if (desc.getName().startsWith("Essentials")) {
-                String version = desc.getVersion();
+            String name = desc.getName();
+            String version = desc.getVersion();
+
+            if (name.startsWith("Essentials") && !name.equalsIgnoreCase("Essentials")) {
                 if (!version.equalsIgnoreCase(essVer)) {
                     version = "\u00a7c" + version;
                     isMismatched = true;
                 }
-                sender.sendMessage(desc.getName().replace("Essentials", "EssentialsX") + " version: " + version);
+                sender.sendMessage(name.replace("Essentials", "EssentialsX") + " version: " + version);
             }
+
+            if (versionPlugins.contains(name)) {
+                sender.sendMessage(name + " version: " + version);
+            }
+
+            if (name == "Vault") isVaultInstalled = true;
         }
+
         if (isMismatched) {
             sender.sendMessage("Version mismatch - make sure all EssentialsX plugins are the same version!");
+        }
+
+        if (!isVaultInstalled) {
+            sender.sendMessage("Vault is not installed - chat and permissions may not work.");
         }
     }
 
