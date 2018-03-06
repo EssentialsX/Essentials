@@ -321,7 +321,7 @@ public class Commandessentials extends EssentialsCommand {
         final PluginManager pm = server.getPluginManager();
         final String essVer = pm.getPlugin("Essentials").getDescription().getVersion();
 
-        sender.sendMessage("Server version: " + server.getBukkitVersion());
+        sender.sendMessage("Server version: " + server.getBukkitVersion() + " " + server.getVersion());
         sender.sendMessage("EssentialsX version: " + essVer);
 
         for (Plugin plugin : pm.getPlugins()) {
