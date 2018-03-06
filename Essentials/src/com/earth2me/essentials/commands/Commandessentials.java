@@ -313,7 +313,8 @@ public class Commandessentials extends EssentialsCommand {
     }
 
     private void run_version(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception {
-        if (!sender.isPlayer() && ess.getUserMap().getUser(sender.getPlayer().getName()).isAuthorized("essentials.version")) return;
+        if (sender.isPlayer() && !ess.getUser(sender.getPlayer()).isAuthorized("essentials.version")) return;
+
         boolean isMismatched = false;
         final PluginManager pm = server.getPluginManager();
         sender.sendMessage("Server version: " + server.getBukkitVersion());
