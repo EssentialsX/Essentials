@@ -341,7 +341,7 @@ public class Commandessentials extends EssentialsCommand {
                 sender.sendMessage(name + " version: " + version);
             }
 
-            if (name == "Vault") isVaultInstalled = true;
+            if (name.equals("Vault")) isVaultInstalled = true;
         }
 
         if (isMismatched) {
