@@ -345,7 +345,7 @@ public class Commandessentials extends EssentialsCommand {
         }
 
         if (isMismatched) {
-            sender.sendMessage("Version mismatch - make sure all EssentialsX plugins are the same version!");
+            sender.sendMessage(tl("versionMismatchAll"));
         }
 
         if (!isVaultInstalled) {
