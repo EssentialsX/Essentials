@@ -27,7 +27,7 @@ Otherwise, if you are reporting a bug, read on:
 
 ### Information
 
-EssentialsX version (run `/essversion`): 
+EssentialsX version (run `/ess version`): 
 
 Server software (run `/version`): 
 
