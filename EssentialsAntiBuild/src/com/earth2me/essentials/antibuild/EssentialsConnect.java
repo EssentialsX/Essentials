@@ -1,8 +1,7 @@
 package com.earth2me.essentials.antibuild;
 
-import com.earth2me.essentials.IConf;
-import com.earth2me.essentials.User;
 import net.ess3.api.IEssentials;
+
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
@@ -10,8 +9,10 @@ import org.bukkit.plugin.Plugin;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import static com.earth2me.essentials.I18n.tl;
+import com.earth2me.essentials.IConf;
+import com.earth2me.essentials.User;
 
+import static com.earth2me.essentials.I18n.tl;
 
 public class EssentialsConnect {
     private static final Logger LOGGER = Logger.getLogger("Minecraft");
@@ -29,8 +30,7 @@ public class EssentialsConnect {
         ess.addReloadListener(pr);
     }
 
-    public void onDisable() {
-    }
+    public void onDisable() {}
 
     public IEssentials getEssentials() {
         return ess;
