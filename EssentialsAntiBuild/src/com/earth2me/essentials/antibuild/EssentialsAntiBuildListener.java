@@ -1,7 +1,7 @@
 package com.earth2me.essentials.antibuild;
 
-import com.earth2me.essentials.User;
 import net.ess3.api.IEssentials;
+
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
@@ -21,8 +21,9 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.logging.Level;
 
-import static com.earth2me.essentials.I18n.tl;
+import com.earth2me.essentials.User;
 
+import static com.earth2me.essentials.I18n.tl;
 
 public class EssentialsAntiBuildListener implements Listener {
     final private transient IAntiBuild prot;
