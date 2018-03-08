@@ -1,6 +1,5 @@
 package com.earth2me.essentials.antibuild;
 
-
 public enum AntiBuildConfig {
     disable_build("protect.disable.build", true),
     disable_use("protect.disable.use", true),
