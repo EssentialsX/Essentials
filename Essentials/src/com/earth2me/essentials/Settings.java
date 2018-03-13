@@ -1338,11 +1338,7 @@ public class Settings implements net.ess3.api.ISettings {
         try {
             Field field = NumberUtil.class.getDeclaredField("PRETTY_FORMAT");
             field.setAccessible(true);
-            Field modifiersField = Field.class.getDeclaredField("modifiers");
-            modifiersField.setAccessible(true);
-            modifiersField.setInt(field, field.getModifiers() & ~Modifier.FINAL);
             field.set(null, currencyFormat);
-            modifiersField.setAccessible(false);
             field.setAccessible(false);
         } catch (NoSuchFieldException | IllegalAccessException e) {
             ess.getLogger().severe("Failed to apply custom currency format: " + e.getMessage());

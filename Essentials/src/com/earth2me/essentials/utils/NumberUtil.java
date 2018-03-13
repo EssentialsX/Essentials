@@ -13,12 +13,12 @@ import static com.earth2me.essentials.I18n.tl;
 
 
 public class NumberUtil {
-    static DecimalFormat twoDPlaces = new DecimalFormat("#,###.##");
-    static DecimalFormat currencyFormat = new DecimalFormat("#0.00", DecimalFormatSymbols.getInstance(Locale.US));
+    private static DecimalFormat twoDPlaces = new DecimalFormat("#,###.##");
+    private static DecimalFormat currencyFormat = new DecimalFormat("#0.00", DecimalFormatSymbols.getInstance(Locale.US));
     
     // This field is likely to be modified in com.earth2me.essentials.Settings when loading currency format.
     // This ensures that we can supply a constant formatting.
-    static final NumberFormat PRETTY_FORMAT = NumberFormat.getInstance(Locale.US);
+    private static NumberFormat PRETTY_FORMAT = NumberFormat.getInstance(Locale.US);
 
     static {
         twoDPlaces.setRoundingMode(RoundingMode.HALF_UP);
