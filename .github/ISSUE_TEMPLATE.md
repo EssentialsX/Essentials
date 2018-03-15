@@ -27,9 +27,10 @@ Otherwise, if you are reporting a bug, read on:
 
 ### Information
 
-EssentialsX version (run `/ess version`): 
+Full output of `/ess version`:
 
-Server software (run `/version`): 
+
+
 
 Server log (upload `logs/latest.log` to [Gist](https://gist.github.com/)):
 
