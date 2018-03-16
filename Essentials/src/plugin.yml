@@ -122,7 +122,7 @@ commands:
   essentials:
     description: Reloads essentials.
     usage: /<command>
-    aliases: [eessentials, ess, eess, essversion]
+    aliases: [eessentials, ess, eess]
   exp:
     description: Give, set or look at a players exp.
     usage: /<command> [show|set|give] [playername [amount]]
