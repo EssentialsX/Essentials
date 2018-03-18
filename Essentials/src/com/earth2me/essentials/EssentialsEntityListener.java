@@ -127,7 +127,7 @@ public class EssentialsEntityListener implements Listener {
         if (event.getCombuster() instanceof Arrow) {
             Arrow combuster = (Arrow) event.getCombuster();
             if (combuster.getShooter() instanceof Player) {
-                final User srcCombuster = ess.getUser(((Player) combuster.getShooter()).getUniqueId());
+                final User srcCombuster = ess.getUser(((Player) combuster.getShooter()).getName());
                 if (srcCombuster.isGodModeEnabled() && !srcCombuster.isAuthorized("essentials.god.pvp")) {
                     event.setCancelled(true);
                 }
