@@ -535,3 +535,8 @@ permissions:
       essentials.gamemode: true
       essentials.gamemode.others: true
       essentials.gamemode.all: true
+  essentials.seen.extra:
+    default: op
+    children:
+      essentials.seen.ip: true
+      essentials.seen.location: true
