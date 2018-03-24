@@ -7,7 +7,7 @@ import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
-public class EssentialsWarpEvent extends Event implements Cancellable {
+public class UserWarpEvent extends Event implements Cancellable {
     private static final HandlerList handlers = new HandlerList();
 
     private IUser user;
@@ -16,7 +16,7 @@ public class EssentialsWarpEvent extends Event implements Cancellable {
     private boolean cancelled = false;
 
 
-    public EssentialsWarpEvent(IUser user, String warp, Trade trade){
+    public UserWarpEvent(IUser user, String warp, Trade trade){
         this.user = user;
         this.warp = warp;
         this.trade = trade;
