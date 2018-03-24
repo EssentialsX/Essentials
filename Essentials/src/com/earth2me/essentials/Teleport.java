@@ -251,6 +251,7 @@ public class Teleport implements net.ess3.api.ITeleport {
     public void warp(IUser teleportee, String warp, Trade chargeFor, TeleportCause cause) throws Exception {
         EssentialsWarpEvent event = new EssentialsWarpEvent(teleportee, warp);
         Bukkit.getServer().getPluginManager().callEvent(event);
+
         if(event.isCancelled()){
             return;
         }
