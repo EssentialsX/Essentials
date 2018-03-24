@@ -249,7 +249,7 @@ public class Teleport implements net.ess3.api.ITeleport {
     //The warp function is a wrapper used to teleportPlayer a player to a /warp
     @Override
     public void warp(IUser teleportee, String warp, Trade chargeFor, TeleportCause cause) throws Exception {
-        EssentialsWarpEvent event = new EssentialsWarpEvent(teleportee, warp);
+        EssentialsWarpEvent event = new EssentialsWarpEvent(teleportee, warp, chargeFor);
         Bukkit.getServer().getPluginManager().callEvent(event);
 
         if(event.isCancelled()){

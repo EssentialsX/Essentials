@@ -1,5 +1,6 @@
 package net.ess3.api.events;
 
+import com.earth2me.essentials.Trade;
 import net.ess3.api.IUser;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
@@ -11,12 +12,14 @@ public class EssentialsWarpEvent extends Event implements Cancellable {
 
     private IUser user;
     private String warp;
+    private Trade trade;
     private boolean cancelled = false;
 
 
-    public EssentialsWarpEvent(IUser user, String warp){
+    public EssentialsWarpEvent(IUser user, String warp, Trade trade){
         this.user = user;
         this.warp = warp;
+        this.trade = trade;
     }
 
     public IUser getUser() {
@@ -25,6 +28,10 @@ public class EssentialsWarpEvent extends Event implements Cancellable {
 
     public String getWarp() {
         return warp;
+    }
+
+    public Trade getTrade() {
+        return trade;
     }
 
     @Override
