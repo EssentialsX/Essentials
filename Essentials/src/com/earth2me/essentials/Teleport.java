@@ -255,6 +255,7 @@ public class Teleport implements net.ess3.api.ITeleport {
         if(event.isCancelled()){
             return;
         }
+        warp = event.getWarp();
         Location loc = ess.getWarps().getWarp(warp);
         teleportee.sendMessage(tl("warpingTo", warp, loc.getWorld().getName(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ()));
         if (!teleportee.equals(teleportOwner)) {
