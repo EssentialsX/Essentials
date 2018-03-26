@@ -898,14 +898,14 @@ public abstract class UserData extends PlayerExtension implements IConf {
         save();
     }
 
-    private boolean confirmPay = false; // players deny pay confirmation by default
+    private Boolean confirmPay;
 
-    public boolean _getConfirmPay() {
-        return config.getBoolean("confirm-pay", false);
+    private Boolean _getConfirmPay() {
+        return (Boolean) config.get("confirm-pay");
     }
 
     public boolean isPromptingPayConfirm() {
-        return confirmPay;
+        return confirmPay != null ? confirmPay : ess.getSettings().isConfirmCommandEnabledByDefault("pay");
     }
 
     public void setPromptingPayConfirm(boolean prompt) {
@@ -914,14 +914,14 @@ public abstract class UserData extends PlayerExtension implements IConf {
         save();
     }
 
-    private boolean confirmClear = false; // players deny clear confirmation by default
+    private Boolean confirmClear;
 
-    public boolean _getConfirmClear() {
-        return config.getBoolean("confirm-clear", false);
+    private Boolean _getConfirmClear() {
+        return (Boolean) config.get("confirm-clear");
     }
 
     public boolean isPromptingClearConfirm() {
-        return confirmClear;
+        return confirmClear != null ? confirmClear : ess.getSettings().isConfirmCommandEnabledByDefault("clearinventory");
     }
 
     public void setPromptingClearConfirm(boolean prompt) {
