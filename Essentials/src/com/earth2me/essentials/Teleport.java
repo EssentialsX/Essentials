@@ -252,7 +252,7 @@ public class Teleport implements net.ess3.api.ITeleport {
         UserWarpEvent event = new UserWarpEvent(teleportee, warp, chargeFor);
         Bukkit.getServer().getPluginManager().callEvent(event);
 
-        if(event.isCancelled()){
+        if(event.isCancelled()) {
             return;
         }
         warp = event.getWarp();

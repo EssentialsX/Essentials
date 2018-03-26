@@ -34,7 +34,7 @@ public class UserWarpEvent extends Event implements Cancellable {
         return trade;
     }
 
-    public void setWarp(String warp){
+    public void setWarp(String warp) {
         this.warp = warp;
     }
 
