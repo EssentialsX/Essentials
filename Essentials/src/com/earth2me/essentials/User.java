@@ -545,7 +545,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
     }
 
     public void updateActivity(final boolean broadcast) {
-        if (isAfk() && ess.getSettings().cancelAfkOnInteract()) {
+        if (isAfk()) {
             setAfk(false);
             if (broadcast && !isHidden()) {
                 setDisplayNick();
@@ -556,6 +556,18 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
             }
         }
         lastActivity = System.currentTimeMillis();
+    }
+
+    public void updateActivityOnMove(final boolean broadcast) {
+        if(ess.getSettings().cancelAfkOnMove()) {
+            updateActivity(broadcast);
+        }
+    }
+
+    public void updateActivityOnInteract(final boolean broadcast) {
+        if(ess.getSettings().cancelAfkOnInteract()) {
+            updateActivity(broadcast);
+        }
     }
 
     public void checkActivity() {

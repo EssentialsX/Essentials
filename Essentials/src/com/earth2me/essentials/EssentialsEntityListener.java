@@ -47,7 +47,7 @@ public class EssentialsEntityListener implements Listener {
                     event.setCancelled(true);
                 }
             }
-            attacker.updateActivity(true);
+            attacker.updateActivityOnInteract(true);
         } else if (eAttack instanceof Projectile && eDefend instanceof Player) {
             final Projectile projectile = (Projectile) event.getDamager();
             //This should return a ProjectileSource on 1.7.3 beta +
@@ -55,7 +55,7 @@ public class EssentialsEntityListener implements Listener {
             if (shooter instanceof Player) {
                 final User attacker = ess.getUser((Player) shooter);
                 onPlayerVsPlayerDamage(event, (Player) eDefend, attacker);
-                attacker.updateActivity(true);
+                attacker.updateActivityOnInteract(true);
             }
         }
     }
@@ -194,7 +194,7 @@ public class EssentialsEntityListener implements Listener {
         if (event.getEntity() instanceof Player) {
             final User user = ess.getUser((Player) event.getEntity());
             if (user.isAfk()) {
-                user.updateActivity(true);
+                user.updateActivityOnInteract(true);
             }
         }
     }
