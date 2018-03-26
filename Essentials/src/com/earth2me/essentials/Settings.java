@@ -532,7 +532,7 @@ public class Settings implements net.ess3.api.ISettings {
         npcsInBalanceRanking = _isNpcsInBalanceRanking();
         currencyFormat = _getCurrencyFormat();
         unprotectedSigns = _getUnprotectedSign();
-        defaultDisabledConfirmCommands = _getDefaultDisabledConfirmCommands();
+        defaultEnabledConfirmCommands = _getDefaultEnabledConfirmCommands();
     }
 
     private List<Integer> itemSpawnBl = new ArrayList<Integer>();
@@ -1420,10 +1420,10 @@ public class Settings implements net.ess3.api.ISettings {
         return config.getBoolean("allow-direct-hat", true);
     }
 
-    private List<String> defaultDisabledConfirmCommands;
+    private List<String> defaultEnabledConfirmCommands;
 
-    private List<String> _getDefaultDisabledConfirmCommands() {
-        List<String> commands = config.getStringList("default-disabled-confirm-commands");
+    private List<String> _getDefaultEnabledConfirmCommands() {
+        List<String> commands = config.getStringList("default-enabled-confirm-commands");
         for (int i = 0; i < commands.size(); i++) {
             commands.set(i, commands.get(i).toLowerCase());
         }
@@ -1431,12 +1431,12 @@ public class Settings implements net.ess3.api.ISettings {
     }
 
     @Override
-    public List<String> getDefaultDisabledConfirmCommands() {
-        return defaultDisabledConfirmCommands;
+    public List<String> getDefaultEnabledConfirmCommands() {
+        return defaultEnabledConfirmCommands;
     }
     
     @Override
     public boolean isConfirmCommandEnabledByDefault(String commandName) {
-        return !getDefaultDisabledConfirmCommands().contains(commandName.toLowerCase());
+        return getDefaultEnabledConfirmCommands().contains(commandName.toLowerCase());
     }
 }

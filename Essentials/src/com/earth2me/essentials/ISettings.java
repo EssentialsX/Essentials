@@ -303,7 +303,7 @@ public interface ISettings extends IConf {
 
     boolean isDirectHatAllowed();
 
-    List<String> getDefaultDisabledConfirmCommands();
+    List<String> getDefaultEnabledConfirmCommands();
 
     boolean isConfirmCommandEnabledByDefault(String commandName);
 }
