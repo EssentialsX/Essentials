@@ -715,7 +715,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
                 }
             }
             setHidden(true);
-            ess.getVanishedPlayers().add(getName());
+            ess.getVanishedPlayersNew().add(getName());
             if (isAuthorized("essentials.vanish.effect")) {
                 this.getBase().addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, Integer.MAX_VALUE, 1, false));
             }
@@ -724,7 +724,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
                 p.showPlayer(getBase());
             }
             setHidden(false);
-            ess.getVanishedPlayers().remove(getName());
+            ess.getVanishedPlayersNew().remove(getName());
             if (isAuthorized("essentials.vanish.effect")) {
                 this.getBase().removePotionEffect(PotionEffectType.INVISIBILITY);
             }

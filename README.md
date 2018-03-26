@@ -2,7 +2,7 @@
 
 [![Downloads](https://i.imgur.com/MMc0PJY.png)](http://ci.ender.zone/job/EssentialsX/)
 
-[![Discord](https://imgur.com/MFRRBn4.png)](https://discord.gg/F7gexAQ)
+[![Discord](https://imgur.com/MFRRBn4.png)](https://discord.gg/casfFyh)
 
 This is a fork of Essentials called EssentialsX.
 

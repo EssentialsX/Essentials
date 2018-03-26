@@ -302,4 +302,8 @@ public interface ISettings extends IConf {
     int getMotdDelay();
 
     boolean isDirectHatAllowed();
+
+    List<String> getDefaultEnabledConfirmCommands();
+
+    boolean isConfirmCommandEnabledByDefault(String commandName);
 }

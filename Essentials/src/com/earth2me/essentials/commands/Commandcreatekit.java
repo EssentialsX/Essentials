@@ -2,9 +2,8 @@ package com.earth2me.essentials.commands;
 
 import com.google.common.base.Charsets;
 import com.google.common.io.CharStreams;
-import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
-import com.google.gson.stream.JsonWriter;
+import com.google.gson.JsonObject;
 
 import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.User;
@@ -24,12 +23,10 @@ import org.yaml.snakeyaml.representer.Representer;
 
 import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.io.StringWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -37,8 +34,8 @@ import static com.earth2me.essentials.I18n.tl;
 
 public class Commandcreatekit extends EssentialsCommand {
 
-    private static final String PASTE_URL = "https://api.github.com/gists";
-    private static final String SHORTENER_URL = "https://git.io";
+    private static final String PASTE_URL = "https://hastebin.com/";
+    private static final String PASTE_UPLOAD_URL = PASTE_URL + "documents";
     private static final Gson GSON = new Gson();
 
     private final ExecutorService executorService = Executors.newSingleThreadExecutor();
@@ -83,34 +80,22 @@ public class Commandcreatekit extends EssentialsCommand {
             String fileContents = "# Copy the kit code below into the kits section in your config.yml file\n";
             fileContents += yaml.dump(config.getValues(false));
 
-            gist(user.getSource(), kitname, delay, fileContents);
+            uploadPaste(user.getSource(), kitname, delay, fileContents);
         }
     }
 
-    /**
-     * SEE https://developer.github.com/v3/gists/#create-a-gist
-     */
-    private void gist(final CommandSource sender, final String kitName, final long delay, final String contents) {
+    private void uploadPaste(final CommandSource sender, final String kitName, final long delay, final String contents) {
         executorService.submit(new Runnable() {
             @Override
             public void run() {
                 try {
-                    HttpURLConnection connection = (HttpURLConnection) new URL(PASTE_URL).openConnection();
+                    HttpURLConnection connection = (HttpURLConnection) new URL(PASTE_UPLOAD_URL).openConnection();
                     connection.setRequestMethod("POST");
                     connection.setDoInput(true);
                     connection.setDoOutput(true);
+                    connection.setRequestProperty("User-Agent", "EssentialsX plugin");
                     try (OutputStream os = connection.getOutputStream()) {
-                        StringWriter sw = new StringWriter();
-                        new JsonWriter(sw).beginObject()
-                            .name("description").value(sender.getSender().getName() + ": /createkit " + kitName)
-                            .name("public").value(false)
-                            .name("files")
-                                .beginObject().name("kit.yml")
-                                    .beginObject().name("content").value(contents)
-                                    .endObject()
-                                .endObject()
-                            .endObject();
-                        os.write(sw.toString().getBytes());
+                        os.write(contents.getBytes(Charsets.UTF_8));
                     }
                     // Error
                     if (connection.getResponseCode() >= 400) {
@@ -120,25 +105,10 @@ public class Commandcreatekit extends EssentialsCommand {
                         return;
                     }
 
-                    // Read URl
-                    Map<String, String> map = GSON.fromJson(new InputStreamReader(connection.getInputStream(), Charsets.UTF_8),
-                        new TypeToken<Map<String, Object>>() {}.getType());
-                    String pasteUrl = map.get("html_url");
+                    // Read URL
+                    JsonObject object = GSON.fromJson(new InputStreamReader(connection.getInputStream(), Charsets.UTF_8), JsonObject.class);
+                    String pasteUrl = PASTE_URL + object.get("key").getAsString();
                     connection.disconnect();
-                    
-                    /* ================================
-                     * >> Shorten URL to fit in chat
-                     * ================================ */
-                    {
-                        connection = (HttpURLConnection) new URL(SHORTENER_URL).openConnection();
-                        connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
-                        connection.setDoOutput(true);
-                        pasteUrl = "url=" + pasteUrl;
-                        try (OutputStream os = connection.getOutputStream()) {
-                            os.write(pasteUrl.getBytes());
-                        }
-                        pasteUrl = connection.getHeaderField("Location");
-                    }
 
                     String separator = tl("createKitSeparator");
                     String delayFormat = "0";

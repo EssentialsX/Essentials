@@ -233,11 +233,14 @@ public class EssentialsPlayerListener implements Listener {
                 user.setDisplayNick();
                 updateCompass(user);
 
-                if (!ess.getVanishedPlayers().isEmpty() && !user.isAuthorized("essentials.vanish.see")) {
-                    for (String p : ess.getVanishedPlayers()) {
+                if (!ess.getVanishedPlayersNew().isEmpty() && !user.isAuthorized("essentials.vanish.see")) {
+                    for (String p : ess.getVanishedPlayersNew()) {
                         Player toVanish = ess.getServer().getPlayerExact(p);
                         if (toVanish != null && toVanish.isOnline()) {
                             user.getBase().hidePlayer(toVanish);
+                            if (ess.getSettings().isDebug()) {
+                                ess.getLogger().info("Hiding vanished player: " + p);
+                            }
                         }
                     }
                 }
@@ -334,7 +337,7 @@ public class EssentialsPlayerListener implements Listener {
 
                     final IText input = tempInput;
 
-                    if (input != null && user.isAuthorized("essentials.motd")) {
+                    if (input != null && !input.getLines().isEmpty() && user.isAuthorized("essentials.motd")) {
                         final IText output = new KeywordReplacer(input, user.getSource(), ess);
                         final TextPager pager = new TextPager(output, true);
                         pager.showPage("1", null, "motd", user.getSource());
