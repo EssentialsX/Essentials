@@ -6,7 +6,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
-
+/**
+ * Called when the player use the command /warp
+ */
 public class UserWarpEvent extends Event implements Cancellable {
     private static final HandlerList handlers = new HandlerList();
 
