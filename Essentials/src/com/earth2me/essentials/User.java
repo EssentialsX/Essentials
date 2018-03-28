@@ -575,7 +575,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
         }
     }
     public void updateActivityOnDisconnect(final boolean broadcast){
-        if(ess.getSettings().cancelAfkOnDisconnect) {
+        if(ess.getSettings().cancelAfkOnDisconnect()) {
             updateActivity(broadcast);
         }
     }
