@@ -566,6 +566,10 @@ allow-direct-hat: true
 
 # For more information, visit http://wiki.ess3.net/wiki/Essentials_Economy
 
+# Setting to true will completely disable eco operations for Essentials.
+# This might have weird effects and we recommend leaving this to false.
+#disable-eco: false
+
 # Defines the balance with which new players begin. Defaults to 0.
 starting-balance: 0
 
