@@ -493,6 +493,7 @@ public class Settings implements net.ess3.api.ISettings {
         cancelAfkOnChat = _cancelAfkOnChat();
         cancelAfkOnDisconnect = _cancelAfkOnDisconnect();
         afkBroadcastOnDisconnect = _afkMessageOnDisconnect();
+        afkBroadcastOnMutedChat = _afkBroadcastOnMutedChat();
         getFreezeAfkPlayers = _getFreezeAfkPlayers();
         afkListName = _getAfkListName();
         isAfkListName = !afkListName.equalsIgnoreCase("none");
@@ -894,9 +895,21 @@ public class Settings implements net.ess3.api.ISettings {
     private boolean afkBroadcastOnDisconnect() {
         return afkBroadcastOnDisconnect;
     }
+    
     private boolean _afkBroadcastOnDisconnect() {
         return config.getBoolean("broadcast-afk-on-disconnect", false);
     }
+    
+    private boolean afkBroadcastOnMutedChat();
+    
+    private boolean afkBroadcastOnMutedChat() {
+        return afkBroadcastOnMutedChat;
+    }
+    
+    private boolean _afkBroadcastOnMutedChat() {
+        return config.getBoolean("broadcast-afk-on-muted-player-chat", false);
+    }
+    
     private String afkListName;
     private boolean isAfkListName;
 
