@@ -490,6 +490,8 @@ public class Settings implements net.ess3.api.ISettings {
         registerBackInListener = _registerBackInListener();
         cancelAfkOnInteract = _cancelAfkOnInteract();
         cancelAfkOnMove = _cancelAfkOnMove();
+        cancelAfkOnChat = _cancelAfkOnChat();
+        cancelAfkOnDisconnect = _cancelAfkOnDisconnect();
         getFreezeAfkPlayers = _getFreezeAfkPlayers();
         afkListName = _getAfkListName();
         isAfkListName = !afkListName.equalsIgnoreCase("none");
