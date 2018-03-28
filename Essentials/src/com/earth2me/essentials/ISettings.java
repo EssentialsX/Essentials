@@ -186,6 +186,8 @@ public interface ISettings extends IConf {
     boolean cancelAfkOnChat();
     
     boolean afkBroadcastOnDisconnect();
+    
+    boolean afkBroadcastOnMutedChat();
 
     boolean isAfkListName();
 
