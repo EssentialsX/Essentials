@@ -78,7 +78,11 @@ public class EssentialsPlayerListener implements Listener {
     @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerChat(final AsyncPlayerChatEvent event) {
         final User user = ess.getUser(event.getPlayer());
-        if (user.isMuted()) {
+        if (!user.isMuted()) {
+            user.updateActivityOnChat(true);
+        } else if (user.isMuted()) {
+            if(ess.getSettings
+            user.updateActivityOnChat(false);
             event.setCancelled(true);
             user.sendMessage(tl("voiceSilenced"));
             LOGGER.info(tl("mutedUserSpeaks", user.getName(), event.getMessage()));
