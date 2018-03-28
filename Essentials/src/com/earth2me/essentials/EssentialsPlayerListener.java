@@ -81,8 +81,7 @@ public class EssentialsPlayerListener implements Listener {
         if (!user.isMuted()) {
             user.updateActivityOnChat(true);
         } else if (user.isMuted()) {
-            if(ess.getSettings
-            user.updateActivityOnChat(false);
+            user.updateActivityOnChat(ess.getSettings().afkBroadcastOnMutedChat());
             event.setCancelled(true);
             user.sendMessage(tl("voiceSilenced"));
             LOGGER.info(tl("mutedUserSpeaks", user.getName(), event.getMessage()));
