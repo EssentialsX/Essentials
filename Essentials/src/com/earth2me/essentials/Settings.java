@@ -492,6 +492,7 @@ public class Settings implements net.ess3.api.ISettings {
         cancelAfkOnMove = _cancelAfkOnMove();
         cancelAfkOnChat = _cancelAfkOnChat();
         cancelAfkOnDisconnect = _cancelAfkOnDisconnect();
+        afkBroadcastOnDisconnect = _afkMessageOnDisconnect();
         getFreezeAfkPlayers = _getFreezeAfkPlayers();
         afkListName = _getAfkListName();
         isAfkListName = !afkListName.equalsIgnoreCase("none");
