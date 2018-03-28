@@ -900,7 +900,7 @@ public class Settings implements net.ess3.api.ISettings {
         return config.getBoolean("broadcast-afk-on-disconnect", false);
     }
     
-    private boolean afkBroadcastOnMutedChat();
+    private boolean afkBroadcastOnMutedChat;
     
     private boolean afkBroadcastOnMutedChat() {
         return afkBroadcastOnMutedChat;
