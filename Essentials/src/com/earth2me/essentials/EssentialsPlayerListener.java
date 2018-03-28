@@ -147,14 +147,16 @@ public class EssentialsPlayerListener implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerQuit(final PlayerQuitEvent event) {
         final User user = ess.getUser(event.getPlayer());
-
+        if(user.isAfk) {
+            user.updateActivityOnDisconnect(false);
+        }
         if (ess.getSettings().allowSilentJoinQuit() && user.isAuthorized("essentials.silentquit")) {
             event.setQuitMessage(null);
         } else if (ess.getSettings().isCustomQuitMessage() && event.getQuitMessage() != null) {
             final Player player = event.getPlayer();
             event.setQuitMessage(ess.getSettings().getCustomQuitMessage().replace("{PLAYER}", player.getDisplayName()).replace("{USERNAME}", player.getName()));
         }
-
+        
         user.startTransaction();
         if (ess.getSettings().removeGodOnDisconnect() && user.isGodModeEnabled()) {
             user.setGodModeEnabled(false);
