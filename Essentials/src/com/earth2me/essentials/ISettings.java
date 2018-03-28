@@ -180,6 +180,12 @@ public interface ISettings extends IConf {
     boolean cancelAfkOnMove();
 
     boolean cancelAfkOnInteract();
+    
+    boolean cancelAfkOnDisconnect();
+    
+    boolean cancelAfkOnChat();
+    
+    boolean afkBroadcastOnDisconnect();
 
     boolean isAfkListName();
 
