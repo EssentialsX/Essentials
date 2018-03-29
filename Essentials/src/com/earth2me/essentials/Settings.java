@@ -853,13 +853,14 @@ public class Settings implements net.ess3.api.ISettings {
     public boolean cancelAfkOnMove() {
         return cancelAfkOnMove;
     }
-
+    
     private boolean _cancelAfkOnMove() {
         return config.getBoolean("cancel-afk-on-move", true);
     }
     
     private boolean cancelAfkOnDisconnect;
     
+    @Override
     private boolean cancelAfkOnDisconnect() {
         return cancelAfkOnDisconnect;
     }
@@ -870,7 +871,7 @@ public class Settings implements net.ess3.api.ISettings {
     
     private boolean cancelAfkOnChat;
     
-    
+    @Override
     private boolean cancelAfkOnChat() {
         return cancelAfkOnChat;
     }
@@ -892,6 +893,7 @@ public class Settings implements net.ess3.api.ISettings {
     
     private boolean afkBroadcastOnDisconnect;
     
+    @Override
     private boolean afkBroadcastOnDisconnect() {
         return afkBroadcastOnDisconnect;
     }
@@ -902,6 +904,7 @@ public class Settings implements net.ess3.api.ISettings {
     
     private boolean afkBroadcastOnMutedChat;
     
+    @Override
     private boolean afkBroadcastOnMutedChat() {
         return afkBroadcastOnMutedChat;
     }
