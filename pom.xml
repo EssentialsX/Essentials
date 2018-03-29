@@ -289,8 +289,8 @@
         <release.version>2.15.0</release.version>
 
         <!-- The plugins' build number -->
-        <build.number>${git.closest.tag.commit.count}</build.number>
+        <build.version>${git.closest.tag.commit.count}</build.version>
 
-        <full.version>${release.version}.${build.number}</full.version>
+        <full.version>${release.version}.${build.version}</full.version>
     </properties>
 </project>
