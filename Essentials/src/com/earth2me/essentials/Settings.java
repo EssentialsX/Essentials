@@ -861,7 +861,7 @@ public class Settings implements net.ess3.api.ISettings {
     private boolean cancelAfkOnDisconnect;
     
     @Override
-    private boolean cancelAfkOnDisconnect() {
+    public boolean cancelAfkOnDisconnect() {
         return cancelAfkOnDisconnect;
     }
     
@@ -872,7 +872,7 @@ public class Settings implements net.ess3.api.ISettings {
     private boolean cancelAfkOnChat;
     
     @Override
-    private boolean cancelAfkOnChat() {
+    public boolean cancelAfkOnChat() {
         return cancelAfkOnChat;
     }
     
@@ -894,7 +894,7 @@ public class Settings implements net.ess3.api.ISettings {
     private boolean afkBroadcastOnDisconnect;
     
     @Override
-    private boolean afkBroadcastOnDisconnect() {
+    public boolean afkBroadcastOnDisconnect() {
         return afkBroadcastOnDisconnect;
     }
     
@@ -905,7 +905,7 @@ public class Settings implements net.ess3.api.ISettings {
     private boolean afkBroadcastOnMutedChat;
     
     @Override
-    private boolean afkBroadcastOnMutedChat() {
+    public boolean afkBroadcastOnMutedChat() {
         return afkBroadcastOnMutedChat;
     }
     
