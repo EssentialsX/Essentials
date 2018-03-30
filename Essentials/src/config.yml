@@ -522,6 +522,13 @@ default-enabled-confirm-commands:
 #- pay
 #- clearinventory
 
+# Set the timeout, in seconds for players to accept a tpa before the request is cancelled.
+# Set to 0 for no timeout.
+tpa-accept-cancellation: 120
+
+# Allow players to set hats by clicking on their helmet slot.
+allow-direct-hat: true
+
 ############################################################
 # +------------------------------------------------------+ #
 # |                   EssentialsHome                     | #
@@ -551,12 +558,12 @@ sethome-multiple:
 # In this example someone with 'essentials.sethome.multiple' and 'essentials.sethome.multiple.vip' will have 5 homes.
 # Remember, they MUST have both permission nodes in order to be able to set multiple homes.
 
-# Set the timeout, in seconds for players to accept a tpa before the request is cancelled.
-# Set to 0 for no timeout.
-tpa-accept-cancellation: 120
-
-# Allow players to set hats by clicking on their helmet slot.
-allow-direct-hat: true
+# Controls whether players need the permission "essentials.home.compass" in order to point
+# the player's compass at their first home.
+#
+# Leaving this as false will retain Essentials' original behaviour, which is to always
+# change the compass' direction to point towards their first home.
+compass-towards-home-perm: false
 
 ############################################################
 # +------------------------------------------------------+ #
