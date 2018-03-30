@@ -490,6 +490,10 @@ public class Settings implements net.ess3.api.ISettings {
         registerBackInListener = _registerBackInListener();
         cancelAfkOnInteract = _cancelAfkOnInteract();
         cancelAfkOnMove = _cancelAfkOnMove();
+        cancelAfkOnChat = _cancelAfkOnChat();
+        cancelAfkOnDisconnect = _cancelAfkOnDisconnect();
+        afkBroadcastOnDisconnect = _afkMessageOnDisconnect();
+        afkBroadcastOnMutedChat = _afkBroadcastOnMutedChat();
         getFreezeAfkPlayers = _getFreezeAfkPlayers();
         afkListName = _getAfkListName();
         isAfkListName = !afkListName.equalsIgnoreCase("none");
@@ -849,11 +853,33 @@ public class Settings implements net.ess3.api.ISettings {
     public boolean cancelAfkOnMove() {
         return cancelAfkOnMove;
     }
-
+    
     private boolean _cancelAfkOnMove() {
         return config.getBoolean("cancel-afk-on-move", true);
     }
-
+    
+    private boolean cancelAfkOnDisconnect;
+    
+    @Override
+    public boolean cancelAfkOnDisconnect() {
+        return cancelAfkOnDisconnect;
+    }
+    
+    private boolean _cancelAfkOnDisconnect() {
+        return config.getBoolean("cancel-afk-on-disconnect", true);
+    }
+    
+    private boolean cancelAfkOnChat;
+    
+    @Override
+    public boolean cancelAfkOnChat() {
+        return cancelAfkOnChat;
+    }
+    
+    private boolean _cancelAfkOnChat() {
+        return config.getBoolean("cancel-afk-on-chat", true);
+    }
+    
     private boolean cancelAfkOnInteract;
 
     @Override
@@ -864,7 +890,29 @@ public class Settings implements net.ess3.api.ISettings {
     private boolean _cancelAfkOnInteract() {
         return config.getBoolean("cancel-afk-on-interact", true);
     }
-
+    
+    private boolean afkBroadcastOnDisconnect;
+    
+    @Override
+    public boolean afkBroadcastOnDisconnect() {
+        return afkBroadcastOnDisconnect;
+    }
+    
+    private boolean _afkBroadcastOnDisconnect() {
+        return config.getBoolean("broadcast-afk-on-disconnect", false);
+    }
+    
+    private boolean afkBroadcastOnMutedChat;
+    
+    @Override
+    public boolean afkBroadcastOnMutedChat() {
+        return afkBroadcastOnMutedChat;
+    }
+    
+    private boolean _afkBroadcastOnMutedChat() {
+        return config.getBoolean("broadcast-afk-on-muted-player-chat", false);
+    }
+    
     private String afkListName;
     private boolean isAfkListName;
 

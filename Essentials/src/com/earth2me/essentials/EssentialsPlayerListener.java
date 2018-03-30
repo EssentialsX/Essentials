@@ -78,7 +78,10 @@ public class EssentialsPlayerListener implements Listener {
     @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerChat(final AsyncPlayerChatEvent event) {
         final User user = ess.getUser(event.getPlayer());
-        if (user.isMuted()) {
+        if (!user.isMuted()) {
+            user.updateActivityOnChat(true);
+        } else if (user.isMuted()) {
+            user.updateActivityOnChat(ess.getSettings().afkBroadcastOnMutedChat());
             event.setCancelled(true);
             user.sendMessage(tl("voiceSilenced"));
             LOGGER.info(tl("mutedUserSpeaks", user.getName(), event.getMessage()));
@@ -147,14 +150,18 @@ public class EssentialsPlayerListener implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerQuit(final PlayerQuitEvent event) {
         final User user = ess.getUser(event.getPlayer());
-
+        
         if (ess.getSettings().allowSilentJoinQuit() && user.isAuthorized("essentials.silentquit")) {
+            user.updateActivityOnDisconnect(false);
             event.setQuitMessage(null);
         } else if (ess.getSettings().isCustomQuitMessage() && event.getQuitMessage() != null) {
+            user.updateActivityOnDisconnect(ess.getSettings().afkBroadcastOnDisconnect());
             final Player player = event.getPlayer();
             event.setQuitMessage(ess.getSettings().getCustomQuitMessage().replace("{PLAYER}", player.getDisplayName()).replace("{USERNAME}", player.getName()));
+        } else {
+            user.updateActivityOnDisconnect(ess.getSettings().afkBroadcastOnDisconnect());
         }
-
+        
         user.startTransaction();
         if (ess.getSettings().removeGodOnDisconnect() && user.isGodModeEnabled()) {
             user.setGodModeEnabled(false);
