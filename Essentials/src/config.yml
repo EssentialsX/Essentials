@@ -396,6 +396,23 @@ cancel-afk-on-interact: true
 # Disable this to reduce server lag.
 cancel-afk-on-move: true
 
+# This option, when set to true, if an afk person disconnects, it automatically will make the player
+# not afk.
+cancel-afk-on-disconnect: true
+
+# Cancels afk if the afk player chats.
+cancel-afk-on-chat: true
+
+# This option will tell the players when the afk players disconnect, but only if cancel-afk-on-disconnect
+# is true.
+# This option is automatically false because people would probably know that they are not afk.
+broadcast-afk-on-disconnect: false
+
+# This setting tells the players when an afk player chats, but it only works if cancel-afk-on-chat is
+# set to true.
+# This option is automatically false because again, it's really obvious.
+broadcast-afk-on-chat: false
+
 # Set the player's list name when they are AFK. This is none by default which specifies that Essentials 
 # should not interfere with the AFK player's list name.
 # You may use color codes, use {USERNAME} the player's name or {PLAYER} for the player's displayname.
