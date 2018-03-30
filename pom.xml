@@ -92,7 +92,7 @@
                         <phase>validate</phase>
                         <goals>
                             <goal>run</goal>
-                        </goals>
+                      </goals>
                     </execution>
                 </executions>
                 <dependencies>
@@ -292,5 +292,8 @@
         <build.version>${git.closest.tag.commit.count}</build.version>
 
         <full.version>${release.version}.${build.version}</full.version>
+        <build.number>${git.closest.tag.commit.count}</build.number>
+
+        <full.version>${release.version}.${build.number}</full.version>
     </properties>
 </project>
