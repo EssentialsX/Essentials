@@ -95,6 +95,7 @@ public interface IEssentials extends Plugin {
 
     EssentialsTimer getTimer();
 
+    @Deprecated
     List<String> getVanishedPlayers();
 
     Collection<Player> getOnlinePlayers();

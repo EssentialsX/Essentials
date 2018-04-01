@@ -99,7 +99,7 @@ public class EssentialsPlayerListener implements Listener {
             }
         }
 
-        user.updateActivity(true);
+        user.updateActivityOnInteract(true);
         user.setDisplayNick();
     }
 
@@ -124,8 +124,8 @@ public class EssentialsPlayerListener implements Listener {
             final Location from = event.getFrom();
             final Location origTo = event.getTo();
             final Location to = origTo.clone();
-            if (ess.getSettings().cancelAfkOnMove() && origTo.getY() >= from.getBlockY() + 1) {
-                user.updateActivity(true);
+            if (origTo.getY() >= from.getBlockY() + 1) {
+                user.updateActivityOnMove(true);
                 return;
             }
             to.setX(from.getX());
@@ -138,10 +138,10 @@ public class EssentialsPlayerListener implements Listener {
             }
             return;
         }
-        final Location afk = user.getAfkPosition();
-        if (afk == null || !event.getTo().getWorld().equals(afk.getWorld()) || afk.distanceSquared(event.getTo()) > 9) {
-            user.updateActivity(true);
-        }
+            final Location afk = user.getAfkPosition();
+            if (afk == null || !event.getTo().getWorld().equals(afk.getWorld()) || afk.distanceSquared(event.getTo()) > 9) {
+                user.updateActivityOnMove(true);
+            }
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
@@ -176,7 +176,7 @@ public class EssentialsPlayerListener implements Listener {
             }
         }
 
-        user.updateActivity(false);
+        user.updateActivityOnInteract(false);
         if (!user.isHidden()) {
             user.setLastLogout(System.currentTimeMillis());
         }
@@ -214,7 +214,7 @@ public class EssentialsPlayerListener implements Listener {
 
         final long currentTime = System.currentTimeMillis();
         dUser.checkMuteTimeout(currentTime);
-        dUser.updateActivity(false);
+        dUser.updateActivityOnInteract(false);
         dUser.stopTransaction();
 
         class DelayJoinTask implements Runnable {
@@ -233,11 +233,14 @@ public class EssentialsPlayerListener implements Listener {
                 user.setDisplayNick();
                 updateCompass(user);
 
-                if (!ess.getVanishedPlayers().isEmpty() && !user.isAuthorized("essentials.vanish.see")) {
-                    for (String p : ess.getVanishedPlayers()) {
+                if (!ess.getVanishedPlayersNew().isEmpty() && !user.isAuthorized("essentials.vanish.see")) {
+                    for (String p : ess.getVanishedPlayersNew()) {
                         Player toVanish = ess.getServer().getPlayerExact(p);
                         if (toVanish != null && toVanish.isOnline()) {
                             user.getBase().hidePlayer(toVanish);
+                            if (ess.getSettings().isDebug()) {
+                                ess.getLogger().info("Hiding vanished player: " + p);
+                            }
                         }
                     }
                 }
@@ -485,7 +488,7 @@ public class EssentialsPlayerListener implements Listener {
         }
         final User user = ess.getUser(player);
         if (update) {
-            user.updateActivity(broadcast);
+            user.updateActivityOnInteract(broadcast);
         }
 
         if (ess.getSettings().isCommandCooldownsEnabled() && pluginCommand != null
@@ -608,7 +611,7 @@ public class EssentialsPlayerListener implements Listener {
                 }
                 break;
         }
-        ess.getUser(event.getPlayer()).updateActivity(true);
+            ess.getUser(event.getPlayer()).updateActivityOnInteract(true);
     }
 
     // This method allows the /jump lock feature to work, allows teleporting while flying #EasterEgg
@@ -774,7 +777,7 @@ public class EssentialsPlayerListener implements Listener {
     @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
     public void onPlayerFishEvent(final PlayerFishEvent event) {
         final User user = ess.getUser(event.getPlayer());
-        user.updateActivity(true);
+            user.updateActivityOnInteract(true);
     }
     
     private final class PlayerListenerPre1_12 implements Listener {

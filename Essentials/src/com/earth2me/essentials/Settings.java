@@ -489,7 +489,7 @@ public class Settings implements net.ess3.api.ISettings {
         disableItemPickupWhileAfk = _getDisableItemPickupWhileAfk();
         registerBackInListener = _registerBackInListener();
         cancelAfkOnInteract = _cancelAfkOnInteract();
-        cancelAfkOnMove = _cancelAfkOnMove() && cancelAfkOnInteract;
+        cancelAfkOnMove = _cancelAfkOnMove();
         getFreezeAfkPlayers = _getFreezeAfkPlayers();
         afkListName = _getAfkListName();
         isAfkListName = !afkListName.equalsIgnoreCase("none");
@@ -532,6 +532,7 @@ public class Settings implements net.ess3.api.ISettings {
         npcsInBalanceRanking = _isNpcsInBalanceRanking();
         currencyFormat = _getCurrencyFormat();
         unprotectedSigns = _getUnprotectedSign();
+        defaultEnabledConfirmCommands = _getDefaultEnabledConfirmCommands();
     }
 
     private List<Integer> itemSpawnBl = new ArrayList<Integer>();
@@ -1417,5 +1418,25 @@ public class Settings implements net.ess3.api.ISettings {
     @Override
     public boolean isDirectHatAllowed() {
         return config.getBoolean("allow-direct-hat", true);
+    }
+
+    private List<String> defaultEnabledConfirmCommands;
+
+    private List<String> _getDefaultEnabledConfirmCommands() {
+        List<String> commands = config.getStringList("default-enabled-confirm-commands");
+        for (int i = 0; i < commands.size(); i++) {
+            commands.set(i, commands.get(i).toLowerCase());
+        }
+        return commands;
+    }
+
+    @Override
+    public List<String> getDefaultEnabledConfirmCommands() {
+        return defaultEnabledConfirmCommands;
+    }
+    
+    @Override
+    public boolean isConfirmCommandEnabledByDefault(String commandName) {
+        return getDefaultEnabledConfirmCommands().contains(commandName.toLowerCase());
     }
 }

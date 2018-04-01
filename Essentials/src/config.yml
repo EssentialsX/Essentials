@@ -13,7 +13,7 @@
 
 # If you have problems join the Essentials help support channel: http://tiny.cc/EssentialsChat
 
-# Version ${project.version}-b${build.number}
+# Version ${full.version}
 
 # KITS ARE NOW IN THE kits.yml FILE
 
@@ -515,6 +515,12 @@ allow-bulk-buy-sell: true
 # Delay for the MOTD display for players on join, in milliseconds.
 # This has no effect if the MOTD command or permission are disabled.
 delay-motd: 0
+
+# A list of commands that should have their complementary confirm commands enabled by default.
+# This is empty by default, for the latest list of valid commands see the latest source config.yml.
+default-enabled-confirm-commands:
+#- pay
+#- clearinventory
 
 ############################################################
 # +------------------------------------------------------+ #
