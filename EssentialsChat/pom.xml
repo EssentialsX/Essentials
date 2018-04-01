@@ -6,7 +6,7 @@
     <parent>
         <groupId>net.ess3</groupId>
         <artifactId>EssentialsXParent</artifactId>
-        <version>2.0.1</version>
+        <version>2.15.0</version>
     </parent>
 
     <artifactId>EssentialsXChat</artifactId>
@@ -18,12 +18,17 @@
         </license>
     </licenses>
 
+    <build>
+        <finalName>EssentialsXChat-${full.version}</finalName>
+    </build>
+
     <repositories>
         <repository>
             <id>placeholderapi</id>
             <url>http://repo.extendedclip.com/content/repositories/placeholderapi/</url>
         </repository>
     </repositories>
+
 
     <dependencies>
         <dependency>
