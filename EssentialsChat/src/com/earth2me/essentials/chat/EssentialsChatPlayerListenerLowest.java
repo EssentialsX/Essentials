@@ -2,7 +2,9 @@ package com.earth2me.essentials.chat;
 
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.FormatUtil;
+import me.clip.placeholderapi.PlaceholderAPI;
 import net.ess3.api.IEssentials;
+import org.bukkit.Bukkit;
 import org.bukkit.Server;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -57,6 +59,9 @@ public class EssentialsChatPlayerListenerLowest extends EssentialsChatPlayer {
         format = format.replace("{5}", team == null ? "" : team.getDisplayName());
         format = format.replace("{6}", prefix);
         format = format.replace("{7}", suffix);
+        if(Bukkit.getServer().getPluginManager().isPluginEnabled("PlaceholderAPI")){
+            format = PlaceholderAPI.setPlaceholders(event.getPlayer(), format);
+        }
         synchronized (format) {
             event.setFormat(format);
         }
