@@ -1,7 +1,10 @@
 package com.earth2me.essentials.utils;
 
+import me.clip.placeholderapi.PlaceholderAPI;
 import net.ess3.api.IUser;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.entity.Player;
 
 import java.util.regex.Pattern;
 
@@ -36,6 +39,21 @@ public class FormatUtil {
             return null;
         }
         return stripColor(input, REPLACE_ALL_PATTERN);
+    }
+
+    //Formatting PlaceholderAPI Placeholders, returns the original string if the plugin isn't enabled
+    //Seperate this from #getChatFormat() in ISettings due to the requirement of Player as an argurment
+    public static String placeholderAPIFormat(final IUser user, final String input){
+        if(input == null) {
+            return null;
+        }
+
+        Player player = user.getBase();
+        //Checking here instead, please tell me if there is a better way
+        if(Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {
+            return PlaceholderAPI.setPlaceholders(player, input);
+        }
+        return input;
     }
 
     //This is the general permission sensitive message format function, checks for urls.
