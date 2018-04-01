@@ -21,24 +21,12 @@
     <build>
         <finalName>EssentialsXChat-${full.version}</finalName>
     </build>
-    <repositories>
-        <repository>
-            <id>placeholderapi</id>
-            <url>http://repo.extendedclip.com/content/repositories/placeholderapi/</url>
-        </repository>
-    </repositories>
 
     <dependencies>
         <dependency>
             <groupId>net.ess3</groupId>
             <artifactId>EssentialsX</artifactId>
             <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>me.clip</groupId>
-            <artifactId>placeholderapi</artifactId>
-            <version>LATEST</version>
-            <scope>provided</scope>
         </dependency>
     </dependencies>
 </project>
