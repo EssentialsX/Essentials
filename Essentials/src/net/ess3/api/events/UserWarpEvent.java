@@ -32,6 +32,10 @@ public class UserWarpEvent extends Event implements Cancellable {
         return warp;
     }
 
+    /**
+     * Getting payment handling information
+     * @return The payment handling class
+     */
     public Trade getTrade() {
         return trade;
     }
