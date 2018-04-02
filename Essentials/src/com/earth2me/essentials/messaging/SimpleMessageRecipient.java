@@ -121,7 +121,7 @@ public class SimpleMessageRecipient implements IMessageRecipient {
         User user = getUser(this);
         boolean afk = false;
         if (user != null) {
-              if (sender instanceof IUser && !((IUser) sender).isAuthorized("essentials.msgtoggle.bypass")) { // Don't ignore senders with permission
+            if (sender instanceof IUser && !((IUser) sender).isAuthorized("essentials.msgtoggle.bypass")) { // Don't ignore console and senders with permission
                 return MessageResponse.MESSAGES_IGNORED;
             }
             afk = user.isAfk();
