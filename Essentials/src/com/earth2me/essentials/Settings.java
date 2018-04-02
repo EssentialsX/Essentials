@@ -1,24 +1,23 @@
 package com.earth2me.essentials;
 
-import com.earth2me.essentials.api.IItemDb;
 import com.earth2me.essentials.commands.IEssentialsCommand;
 import com.earth2me.essentials.signs.EssentialsSign;
 import com.earth2me.essentials.signs.Signs;
 import com.earth2me.essentials.textreader.IText;
 import com.earth2me.essentials.textreader.SimpleTextInput;
-import com.earth2me.essentials.utils.EnumUtil;
 import com.earth2me.essentials.utils.FormatUtil;
 import com.earth2me.essentials.utils.NumberUtil;
 
 import net.ess3.api.IEssentials;
 import org.bukkit.ChatColor;
-import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.MemoryConfiguration;
 import org.bukkit.event.EventPriority;
 import org.bukkit.inventory.ItemStack;
 
 import java.io.File;
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
@@ -38,6 +37,7 @@ public class Settings implements net.ess3.api.ISettings {
     private final transient EssentialsConf config;
     private static final Logger logger = Logger.getLogger("Essentials");
     private final transient IEssentials ess;
+    private boolean metricsEnabled = true;
 
     public Settings(IEssentials ess) {
         this.ess = ess;
@@ -432,9 +432,6 @@ public class Settings implements net.ess3.api.ISettings {
             mFormat = "§r".concat(mFormat);
             chatFormats.put(group, mFormat);
         }
-        if (isDebug()) {
-            ess.getLogger().info(String.format("Found format '%s' for group '%s'", mFormat, group));
-        }
         return mFormat;
     }
 
@@ -494,7 +491,6 @@ public class Settings implements net.ess3.api.ISettings {
         cancelAfkOnInteract = _cancelAfkOnInteract();
         cancelAfkOnMove = _cancelAfkOnMove();
         getFreezeAfkPlayers = _getFreezeAfkPlayers();
-        sleepIgnoresAfkPlayers = _sleepIgnoresAfkPlayers();
         afkListName = _getAfkListName();
         isAfkListName = !afkListName.equalsIgnoreCase("none");
         itemSpawnBl = _getItemSpawnBlacklist();
@@ -537,29 +533,20 @@ public class Settings implements net.ess3.api.ISettings {
         currencyFormat = _getCurrencyFormat();
         unprotectedSigns = _getUnprotectedSign();
         defaultEnabledConfirmCommands = _getDefaultEnabledConfirmCommands();
-        isCompassTowardsHomePerm = _isCompassTowardsHomePerm();
-        isAllowWorldInBroadcastworld = _isAllowWorldInBroadcastworld();
-        itemDbType = _getItemDbType();
-        forceEnableRecipe = _isForceEnableRecipe();
-        allowOldIdSigns = _allowOldIdSigns();
+        teleportBackWhenFreedFromJail = _isTeleportBackWhenFreedFromJail();
     }
 
-    void _lateLoadItemSpawnBlacklist() {
-        itemSpawnBl = _getItemSpawnBlacklist();
-    }
-
-    private List<Material> itemSpawnBl = new ArrayList<>();
+    private List<Integer> itemSpawnBl = new ArrayList<Integer>();
 
     @Override
-    public List<Material> itemSpawnBlacklist() {
+    public List<Integer> itemSpawnBlacklist() {
         return itemSpawnBl;
     }
 
-    private List<Material> _getItemSpawnBlacklist() {
-        final List<Material> epItemSpwn = new ArrayList<>();
-        final IItemDb itemDb = ess.getItemDb();
-        if (itemDb == null || !itemDb.isReady()) {
-            logger.log(Level.FINE, "Skipping item spawn blacklist read; item DB not yet loaded.");
+    private List<Integer> _getItemSpawnBlacklist() {
+        final List<Integer> epItemSpwn = new ArrayList<Integer>();
+        if (ess.getItemDb() == null) {
+            logger.log(Level.FINE, "Aborting ItemSpawnBL read, itemDB not yet loaded.");
             return epItemSpwn;
         }
         for (String itemName : config.getString("item-spawn-blacklist", "").split(",")) {
@@ -568,10 +555,10 @@ public class Settings implements net.ess3.api.ISettings {
                 continue;
             }
             try {
-                final ItemStack iStack = itemDb.get(itemName);
-                epItemSpwn.add(iStack.getType());
+                final ItemStack iStack = ess.getItemDb().get(itemName);
+                epItemSpwn.add(iStack.getTypeId());
             } catch (Exception ex) {
-                logger.log(Level.SEVERE, tl("unknownItemInList", itemName, "item-spawn-blacklist"), ex);
+                logger.log(Level.SEVERE, tl("unknownItemInList", itemName, "item-spawn-blacklist"));
             }
         }
         return epItemSpwn;
@@ -657,15 +644,8 @@ public class Settings implements net.ess3.api.ISettings {
 
     // #easteregg
     @Override
-    @Deprecated
     public boolean isTradeInStacks(int id) {
         return config.getBoolean("trade-in-stacks-" + id, false);
-    }
-
-    // #easteregg
-    @Override
-    public boolean isTradeInStacks(Material type) {
-        return config.getBoolean("trade-in-stacks." + type.toString().toLowerCase().replace("_", ""), false);
     }
 
     // #easteregg
@@ -686,27 +666,19 @@ public class Settings implements net.ess3.api.ISettings {
     }
 
     @Override
-    public List<Material> getProtectList(final String configName) {
-        final List<Material> list = new ArrayList<>();
+    public List<Integer> getProtectList(final String configName) {
+        final List<Integer> list = new ArrayList<Integer>();
         for (String itemName : config.getString(configName, "").split(",")) {
             itemName = itemName.trim();
             if (itemName.isEmpty()) {
                 continue;
             }
-
-            Material mat = EnumUtil.getMaterial(itemName.toUpperCase());
-            
-            if (mat == null) {
-                try {
-                    ItemStack itemStack = ess.getItemDb().get(itemName);
-                    mat = itemStack.getType();
-                } catch (Exception ignored) {}
-            }
-
-            if (mat == null) {
+            ItemStack itemStack;
+            try {
+                itemStack = ess.getItemDb().get(itemName);
+                list.add(itemStack.getTypeId());
+            } catch (Exception ex) {
                 logger.log(Level.SEVERE, tl("unknownItemInList", itemName, configName));
-            } else {
-                list.add(mat);
             }
         }
         return list;
@@ -892,17 +864,6 @@ public class Settings implements net.ess3.api.ISettings {
 
     private boolean _cancelAfkOnInteract() {
         return config.getBoolean("cancel-afk-on-interact", true);
-    }
-
-    private boolean sleepIgnoresAfkPlayers;
-
-    @Override
-    public boolean sleepIgnoresAfkPlayers() {
-        return sleepIgnoresAfkPlayers;
-    }
-
-    private boolean _sleepIgnoresAfkPlayers() {
-        return config.getBoolean("sleep-ignores-afk-players", true);
     }
 
     private String afkListName;
@@ -1131,11 +1092,6 @@ public class Settings implements net.ess3.api.ISettings {
         return config.getBoolean("ignore-colors-in-max-nick-length", false);
     }
 
-    @Override
-    public boolean hideDisplayNameInVanish() {
-        return config.getBoolean("hide-displayname-in-vanish", false);
-    }
-
     private boolean allowSilentJoin;
 
     public boolean _allowSilentJoinQuit() {
@@ -1337,12 +1293,7 @@ public class Settings implements net.ess3.api.ISettings {
         if (isCommandCooldownsEnabled()) {
             for (Entry<Pattern, Long> entry : this.commandCooldowns.entrySet()) {
                 // Check if label matches current pattern (command-cooldown in config)
-                boolean matches = entry.getKey().matcher(label).matches();
-                if (isDebug()) {
-                    ess.getLogger().info(String.format("Checking command '%s' against cooldown '%s': %s", label, entry.getKey(), matches));
-                }
-
-                if (matches) {
+                if (entry.getKey().matcher(label).matches()) {
                     return entry;
                 }
             }
@@ -1384,8 +1335,24 @@ public class Settings implements net.ess3.api.ISettings {
         DecimalFormat currencyFormat = new DecimalFormat(currencyFormatString, decimalFormatSymbols);
         currencyFormat.setRoundingMode(RoundingMode.FLOOR);
 
-        // Updates NumberUtil#PRETTY_FORMAT field so that all of Essentials can follow a single format.
-        NumberUtil.internalSetPrettyFormat(currencyFormat);
+        // Updates NumberUtil#PRETTY_FORMAT field so that all of Essentials
+        // can follow a single format.
+        try {
+            Field field = NumberUtil.class.getDeclaredField("PRETTY_FORMAT");
+            field.setAccessible(true);
+            Field modifiersField = Field.class.getDeclaredField("modifiers");
+            modifiersField.setAccessible(true);
+            modifiersField.setInt(field, field.getModifiers() & ~Modifier.FINAL);
+            field.set(null, currencyFormat);
+            modifiersField.setAccessible(false);
+            field.setAccessible(false);
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            ess.getLogger().severe("Failed to apply custom currency format: " + e.getMessage());
+            if (isDebug()) {
+                e.printStackTrace();
+            }
+        }
+
         return currencyFormat;
     }
 
@@ -1474,58 +1441,14 @@ public class Settings implements net.ess3.api.ISettings {
         return getDefaultEnabledConfirmCommands().contains(commandName.toLowerCase());
     }
 
-    private boolean isCompassTowardsHomePerm;
+    private boolean teleportBackWhenFreedFromJail;
 
-    private boolean _isCompassTowardsHomePerm() {
-        return config.getBoolean("compass-towards-home-perm", false);
+    private boolean _isTeleportBackWhenFreedFromJail() {
+        return config.getBoolean("teleport-back-when-freed-from-jail", true);
     }
 
     @Override
-    public boolean isCompassTowardsHomePerm() {
-        return isCompassTowardsHomePerm;
-    }
-
-    private boolean isAllowWorldInBroadcastworld;
-
-    private boolean _isAllowWorldInBroadcastworld() {
-        return config.getBoolean("allow-world-in-broadcastworld", false);
-    }
-
-    @Override
-    public boolean isAllowWorldInBroadcastworld() {
-        return isAllowWorldInBroadcastworld;
-    }
-
-    private String itemDbType; // #EasterEgg - admins can manually switch items provider if they want
-
-    private String _getItemDbType() {
-        return config.getString("item-db-type", "auto");
-    }
-
-    @Override
-    public String getItemDbType() {
-        return itemDbType;
-    }
-
-    private boolean forceEnableRecipe; // https://github.com/EssentialsX/Essentials/issues/1397
-
-    private boolean _isForceEnableRecipe() {
-        return config.getBoolean("force-enable-recipe", false);
-    }
-
-    @Override
-    public boolean isForceEnableRecipe() {
-        return forceEnableRecipe;
-    }
-
-    private boolean allowOldIdSigns;
-
-    private boolean _allowOldIdSigns() {
-        return config.getBoolean("allow-old-id-signs", false);
-    }
-
-    @Override
-    public boolean allowOldIdSigns() {
-        return allowOldIdSigns;
+    public boolean isTeleportBackWhenFreedFromJail() {
+        return teleportBackWhenFreedFromJail;
     }
 }
