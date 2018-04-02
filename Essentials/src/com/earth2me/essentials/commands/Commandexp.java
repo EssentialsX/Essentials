@@ -36,6 +36,18 @@ public class Commandexp extends EssentialsCommand {
             } else {
                 setExp(user.getSource(), user, args[1], true);
             }
+        } else if (args.length > 1 && args[0].equalsIgnoreCase("take") && user.isAuthorized("essentials.exp.take")) {
+            if (args.length == 3 && user.isAuthorized("essentials.exp.take.others")) {
+                expMatch(server, user.getSource(), args[1], "-" + args[2], true);
+            } else {
+                setExp(user.getSource(), user, "-" + args[1], true);
+            }        
+        } else if (args.length < 3 && args[0].equalsIgnoreCase("reset") && user.isAuthorized("essentials.exp.reset")) {
+            if (args.length == 2 && user.isAuthorized("essentials.exp.reset.others")) {
+                setTotalExperience(args[2], (int) 0);
+            } else {
+                setTotalExperience(user, (int) 0);
+            }
         } else if (args[0].equalsIgnoreCase("show")) {
             if (args.length >= 2 && user.isAuthorized("essentials.exp.others")) {
                 String match = args[1].trim();
