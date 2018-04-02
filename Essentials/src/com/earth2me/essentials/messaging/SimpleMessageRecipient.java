@@ -17,7 +17,7 @@ import java.lang.ref.WeakReference;
  *     <li>{@link IMessageRecipient#getReplyRecipient()}</li>
  *     <li>{@link IMessageRecipient#setReplyRecipient(IMessageRecipient)}</li>
  * </ul>
- * 
+ *
  * <b>The given {@code parent} must implement the following methods to prevent overflow:</b>
  * <ul>
  *     <li>{@link IMessageRecipient#sendMessage(String)}</li>
@@ -25,14 +25,14 @@ import java.lang.ref.WeakReference;
  *     <li>{@link IMessageRecipient#getDisplayName()}</li>
  *     <li>{@link IMessageRecipient#isReachable()}</li>
  * </ul>
- * 
+ *
  * The reply-recipient is wrapped in a {@link WeakReference}.
  */
 public class SimpleMessageRecipient implements IMessageRecipient {
 
     private final IEssentials ess;
     private final IMessageRecipient parent;
-    
+
     private long lastMessageMs;
     private WeakReference<IMessageRecipient> replyRecipient;
 
@@ -42,7 +42,7 @@ public class SimpleMessageRecipient implements IMessageRecipient {
         }
         return recipient instanceof User ? (User) recipient : null;
     }
-    
+
     public SimpleMessageRecipient(IEssentials ess, IMessageRecipient parent) {
         this.ess = ess;
         this.parent = parent;
@@ -117,13 +117,14 @@ public class SimpleMessageRecipient implements IMessageRecipient {
         if (!isReachable()) {
             return MessageResponse.UNREACHABLE;
         }
-        
+
         User user = getUser(this);
         boolean afk = false;
         if (user != null) {
-            if (user.isIgnoreMsg()
-                && !(sender instanceof Console)) { // Console must never be ignored.
+            if (user.isIgnoreMsg() && !(sender instanceof Console))  { // Console must never be ignored.
+              if (sender instanceof IUser && !((IUser) sender).isAuthorized("essentials.msgtoggle.bypass")) { // Ignore senders with permission
                 return MessageResponse.MESSAGES_IGNORED;
+              }
             }
             afk = user.isAfk();
             // Check whether this recipient ignores the sender, only if the sender is not the console.
@@ -138,7 +139,7 @@ public class SimpleMessageRecipient implements IMessageRecipient {
             // If this recipient doesn't have a reply recipient, initiate by setting the first
             // message sender to this recipient's replyRecipient.
             long timeout = ess.getSettings().getLastMessageReplyRecipientTimeout() * 1000;
-            if (getReplyRecipient() == null || !getReplyRecipient().isReachable() 
+            if (getReplyRecipient() == null || !getReplyRecipient().isReachable()
                 || System.currentTimeMillis() - this.lastMessageMs > timeout) {
                 setReplyRecipient(sender);
             }
