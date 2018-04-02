@@ -122,7 +122,7 @@ public class SimpleMessageRecipient implements IMessageRecipient {
         boolean afk = false;
         if (user != null) {
             if (user.isIgnoreMsg() && !(sender instanceof Console))  { // Console must never be ignored.
-              if (sender instanceof IUser && !((IUser) sender).isAuthorized("essentials.msgtoggle.bypass")) { // Ignore senders with permission
+              if (sender instanceof IUser && !((IUser) sender).isAuthorized("essentials.msgtoggle.bypass")) { // Don't ignore senders with permission
                 return MessageResponse.MESSAGES_IGNORED;
               }
             }
