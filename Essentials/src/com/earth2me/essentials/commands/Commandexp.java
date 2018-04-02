@@ -44,9 +44,9 @@ public class Commandexp extends EssentialsCommand {
             }        
         } else if (args.length < 3 && args[0].equalsIgnoreCase("reset") && user.isAuthorized("essentials.exp.reset")) {
             if (args.length == 2 && user.isAuthorized("essentials.exp.reset.others")) {
-                setTotalExperience(args[2], (int) "0");
+                setTotalExperience(args[2], "0");
             } else {
-                setTotalExperience(user, (int) "0");
+                setTotalExperience(user, "0");
             }
         } else if (args[0].equalsIgnoreCase("show")) {
             if (args.length >= 2 && user.isAuthorized("essentials.exp.others")) {
