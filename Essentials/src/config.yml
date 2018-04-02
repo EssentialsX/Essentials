@@ -522,6 +522,9 @@ default-enabled-confirm-commands:
 #- pay
 #- clearinventory
 
+# Whether or not to teleport a player back to their previous position after they have been freed from jail.
+teleport-back-when-freed-from-jail: true
+
 ############################################################
 # +------------------------------------------------------+ #
 # |                   EssentialsHome                     | #
