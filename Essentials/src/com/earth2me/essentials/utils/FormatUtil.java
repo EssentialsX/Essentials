@@ -49,10 +49,12 @@ public class FormatUtil {
 
     //Formatting PlaceholderAPI Placeholders, returns the original string if the plugin isn't enabled
     //Seperate this from #getChatFormat() in ISettings due to the requirement of Player as an argument
-    public static String placeholderAPIFormat(final Player player, final String input) {
+    public static String placeholderAPIFormat(final Player player, String input) {
         if (input == null) {
             return null;
         }
+
+        input = input.replaceAll("\\{|\\}", "%");
 
         if (papiEnabled == null) {
             papiEnabled = Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI");
