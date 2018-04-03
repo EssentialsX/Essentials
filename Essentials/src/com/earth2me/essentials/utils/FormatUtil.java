@@ -25,6 +25,8 @@ public class FormatUtil {
     static final transient Pattern URL_PATTERN = Pattern.compile("((?:(?:https?)://)?[\\w-_\\.]{2,})\\.([a-zA-Z]{2,3}(?:/\\S+)?)");
     public static final Pattern IPPATTERN = Pattern.compile("^([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\.([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\." + "([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\.([01]?\\d\\d?|2[0-4]\\d|25[0-5])$");
 
+    static Boolean papiEnabled = null;
+
     //This method is used to simply strip the native minecraft colour codes
     public static String stripFormat(final String input) {
         if (input == null) {
@@ -44,13 +46,18 @@ public class FormatUtil {
     //Formatting PlaceholderAPI Placeholders, returns the original string if the plugin isn't enabled
     //Seperate this from #getChatFormat() in ISettings due to the requirement of Player as an argurment
     public static String placeholderAPIFormat(final IUser user, final String input){
-        if(input == null) {
+        if (input == null) {
             return null;
         }
 
         Player player = user.getBase();
+
+        if (papiEnabled == null) {
+            papiEnabled = Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI");
+        }
+
         //Checking here instead, please tell me if there is a better way
-        if(Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {
+        if (papiEnabled) {
             return PlaceholderAPI.setPlaceholders(player, input);
         }
         return input;
