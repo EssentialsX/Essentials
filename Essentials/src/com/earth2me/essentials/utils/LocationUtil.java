@@ -13,7 +13,6 @@ import java.util.*;
 
 import static com.earth2me.essentials.I18n.tl;
 
-import com.earth2me.essentials.Essentials;
 import com.earth2me.essentials.IEssentials;
 
 
@@ -291,6 +290,7 @@ public class LocationUtil {
         return getSafeDestination(loc);
     }
 
+    @SuppressWarnings("deprecation")
     public static Location getSafeDestination(final Location loc) throws Exception {
         if (loc == null || loc.getWorld() == null) {
             throw new Exception(tl("destinationNotSet"));

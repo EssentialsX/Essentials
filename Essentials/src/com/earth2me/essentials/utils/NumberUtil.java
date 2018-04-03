@@ -54,6 +54,7 @@ public class NumberUtil {
         return str;
     }
 
+    @SuppressWarnings("deprecation")
     public static String displayCurrency(final BigDecimal value, final IEssentials ess) {
         String currency = formatAsPrettyCurrency(value);
         String sign = "";
@@ -64,6 +65,7 @@ public class NumberUtil {
         return sign + tl("currency", ess.getSettings().getCurrencySymbol(), currency);
     }
 
+    @SuppressWarnings("deprecation")
     public static String displayCurrencyExactly(final BigDecimal value, final IEssentials ess) {
         String currency = value.toPlainString();
         String sign = "";

@@ -18,6 +18,7 @@ public class BookPager {
         this.text = text;
     }
 
+    @SuppressWarnings("deprecation")
     public List<String> getPages(final String pageStr) throws Exception {
         List<String> lines = text.getLines();
         List<String> chapters = text.getChapters();
