@@ -1,6 +1,7 @@
 package com.earth2me.essentials;
 
 import net.ess3.api.IEssentials;
+import net.ess3.api.IUser;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -13,6 +14,10 @@ import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
+
+import com.earth2me.essentials.utils.FormatUtil;
+
+import org.bukkit.entity.Player;
 
 
 public class I18n implements net.ess3.api.II18n {
@@ -67,6 +72,17 @@ public class I18n implements net.ess3.api.II18n {
             Logger.getLogger("Essentials").log(Level.WARNING, String.format("Missing translation key \"%s\" in translation file %s", ex.getKey(), localeBundle.getLocale().toString()), ex);
             return defaultBundle.getString(string);
         }
+    }
+
+    public static String tl(final Object sender, final String string, final Object... objects) {
+        String formatted = string;
+        if (sender instanceof IUser) {
+            formatted = FormatUtil.placeholderAPIFormat((IUser) sender, string);
+        } else {
+            formatted = FormatUtil.placeholderAPIFormat((Player) null, string);
+        }
+
+        return tl(formatted, objects);
     }
 
     public static String tl(final String string, final Object... objects) {
