@@ -74,7 +74,8 @@ public class I18n implements net.ess3.api.II18n {
         }
     }
 
-    public static String tl(final Object sender, final String string, final Object... objects) {
+    @SuppressWarnings("deprecation")
+    public static String tlp(final Object sender, final String string, final Object... objects) {
         String formatted = string;
         if (sender instanceof IUser) {
             formatted = FormatUtil.placeholderAPIFormat((IUser) sender, string);
@@ -85,6 +86,7 @@ public class I18n implements net.ess3.api.II18n {
         return tl(formatted, objects);
     }
 
+    @Deprecated
     public static String tl(final String string, final Object... objects) {
         if (instance == null) {
             return "";
