@@ -43,14 +43,16 @@ public class FormatUtil {
         return stripColor(input, REPLACE_ALL_PATTERN);
     }
 
+    public static String placeholderAPIFormat(final IUser user, final String input) {
+        return placeholderAPIFormat(user.getBase(), input);
+    }
+
     //Formatting PlaceholderAPI Placeholders, returns the original string if the plugin isn't enabled
-    //Seperate this from #getChatFormat() in ISettings due to the requirement of Player as an argurment
-    public static String placeholderAPIFormat(final IUser user, final String input){
+    //Seperate this from #getChatFormat() in ISettings due to the requirement of Player as an argument
+    public static String placeholderAPIFormat(final Player player, final String input) {
         if (input == null) {
             return null;
         }
-
-        Player player = user.getBase();
 
         if (papiEnabled == null) {
             papiEnabled = Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI");
