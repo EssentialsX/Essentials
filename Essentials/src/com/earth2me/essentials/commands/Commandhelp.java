@@ -10,7 +10,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
-import static com.earth2me.essentials.I18n.tl;
+import static com.earth2me.essentials.I18n.tlp;
 
 
 public class Commandhelp extends EssentialsCommand {
@@ -48,7 +48,7 @@ public class Commandhelp extends EssentialsCommand {
 
     @Override
     protected void run(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception {
-        sender.sendMessage(tl("helpConsole"));
+        sender.sendMessage(tlp(sender, "helpConsole"));
     }
 
     @Override

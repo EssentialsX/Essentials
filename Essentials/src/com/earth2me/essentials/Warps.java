@@ -56,6 +56,7 @@ public class Warps implements IConf, net.ess3.api.IWarps {
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public void setWarp(String name, Location loc) throws Exception {
         String filename = StringUtil.sanitizeFileName(name);
         EssentialsConf conf = warpPoints.get(new StringIgnoreCase(name));
@@ -77,6 +78,7 @@ public class Warps implements IConf, net.ess3.api.IWarps {
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public void removeWarp(String name) throws Exception {
         EssentialsConf conf = warpPoints.get(new StringIgnoreCase(name));
         if (conf == null) {
@@ -89,6 +91,7 @@ public class Warps implements IConf, net.ess3.api.IWarps {
     }
 
     @Override
+    @SuppressWarnings("deprecation")
     public final void reloadConfig() {
         warpPoints.clear();
         File[] listOfFiles = warpsFolder.listFiles();

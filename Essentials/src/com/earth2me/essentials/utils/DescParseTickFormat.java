@@ -184,6 +184,7 @@ public final class DescParseTickFormat {
     }
 
     // ============================================
+    @SuppressWarnings("deprecation")
     public static String format(final long ticks) {
         return tl("timeFormat", format24(ticks), format12(ticks), formatTicks(ticks));
     }

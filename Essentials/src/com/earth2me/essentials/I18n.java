@@ -1,6 +1,7 @@
 package com.earth2me.essentials;
 
 import net.ess3.api.IEssentials;
+import net.ess3.api.IUser;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -13,6 +14,10 @@ import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
+
+import com.earth2me.essentials.utils.FormatUtil;
+
+import org.bukkit.entity.Player;
 
 
 public class I18n implements net.ess3.api.II18n {
@@ -69,6 +74,23 @@ public class I18n implements net.ess3.api.II18n {
         }
     }
 
+    @SuppressWarnings("deprecation")
+    public static String tlp(final Object target, final String string, final Object... objects) {
+        String formatted = string;
+        if (target instanceof IUser) {
+            formatted = FormatUtil.placeholderAPIFormat((IUser) target, string);
+        } else if (target instanceof Player) {
+            formatted = FormatUtil.placeholderAPIFormat((Player) target, string);
+        } else if (target instanceof CommandSource && ((CommandSource) target).getSender() instanceof Player) {
+            formatted = FormatUtil.placeholderAPIFormat((Player) ((CommandSource) target).getSender(), string);
+        } else {
+            formatted = FormatUtil.placeholderAPIFormat((Player) null, string);
+        }
+
+        return tl(formatted, objects);
+    }
+
+    @Deprecated
     public static String tl(final String string, final Object... objects) {
         if (instance == null) {
             return "";

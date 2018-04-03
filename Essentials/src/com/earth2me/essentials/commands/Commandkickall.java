@@ -5,7 +5,7 @@ import com.earth2me.essentials.utils.FormatUtil;
 import org.bukkit.Server;
 import org.bukkit.entity.Player;
 
-import static com.earth2me.essentials.I18n.tl;
+import static com.earth2me.essentials.I18n.tlp;
 
 
 public class Commandkickall extends EssentialsCommand {
@@ -15,14 +15,14 @@ public class Commandkickall extends EssentialsCommand {
 
     @Override
     public void run(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception {
-        String kickReason = args.length > 0 ? getFinalArg(args, 0) : tl("kickDefault");
-        kickReason = FormatUtil.replaceFormat(kickReason.replace("\\n", "\n").replace("|", "\n"));
 
         for (Player onlinePlayer : ess.getOnlinePlayers()) {
             if (!sender.isPlayer() || !onlinePlayer.getName().equalsIgnoreCase(sender.getPlayer().getName())) {
+                String kickReason = args.length > 0 ? getFinalArg(args, 0) : tlp(onlinePlayer, "kickDefault");
+                kickReason = FormatUtil.replaceFormat(kickReason.replace("\\n", "\n").replace("|", "\n"));
                 onlinePlayer.kickPlayer(kickReason);
             }
         }
-        sender.sendMessage(tl("kickedAll"));
+        sender.sendMessage(tlp(sender, "kickedAll"));
     }
 }

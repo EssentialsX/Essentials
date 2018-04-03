@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.UUID;
 import java.util.Collections;
 
-import static com.earth2me.essentials.I18n.tl;
+import static com.earth2me.essentials.I18n.tlp;
 
 
 public class Commandseen extends EssentialsCommand {
@@ -55,10 +55,10 @@ public class Commandseen extends EssentialsCommand {
                 seenIP(server, sender, args[0]);
                 return;
             } else if (ess.getServer().getBanList(BanList.Type.IP).isBanned(args[0])) {
-                sender.sendMessage(tl("isIpBanned", args[0]));
+                sender.sendMessage(tlp(sender, "isIpBanned", args[0]));
                 return;
             } else if (BanLookup.isBanned(ess, args[0])) {
-                sender.sendMessage(tl("whoisBanned", showBan ? BanLookup.getBanEntry(ess, args[0]).getReason() : tl("true")));
+                sender.sendMessage(tlp(sender, "whoisBanned", showBan ? BanLookup.getBanEntry(ess, args[0]).getReason() : tlp(sender, "true")));
                 return;
             }
             ess.getScheduler().runTaskAsynchronously(ess, new Runnable() {
@@ -99,7 +99,7 @@ public class Commandseen extends EssentialsCommand {
     private void seenOnline(final Server server, final CommandSource sender, final User user, final boolean showBan, final boolean showIp, final boolean showLocation) throws Exception {
 
         user.setDisplayNick();
-        sender.sendMessage(tl("seenOnline", user.getDisplayName(), DateUtil.formatDateDiff(user.getLastLogin())));
+        sender.sendMessage(tlp(sender, "seenOnline", user.getDisplayName(), DateUtil.formatDateDiff(user.getLastLogin())));
 
         if (ess.getSettings().isDebug()) {
             ess.getLogger().info("UUID: " + user.getBase().getUniqueId().toString());
@@ -107,33 +107,33 @@ public class Commandseen extends EssentialsCommand {
 
         List<String> history = ess.getUserMap().getUserHistory(user.getBase().getUniqueId());
         if (history != null && history.size() > 1) {
-            sender.sendMessage(tl("seenAccounts", StringUtil.joinListSkip(", ", user.getName(), history)));
+            sender.sendMessage(tlp(sender, "seenAccounts", StringUtil.joinListSkip(", ", user.getName(), history)));
         }
 
         if (user.isAfk()) {
-            sender.sendMessage(tl("whoisAFK", tl("true")));
+            sender.sendMessage(tlp(sender, "whoisAFK", tlp(sender, "true")));
         }
         if (user.isJailed()) {
-            sender.sendMessage(tl("whoisJail", (user.getJailTimeout() > 0 ? DateUtil.formatDateDiff(user.getJailTimeout()) : tl("true"))));
+            sender.sendMessage(tlp(sender, "whoisJail", (user.getJailTimeout() > 0 ? DateUtil.formatDateDiff(user.getJailTimeout()) : tlp(sender, "true"))));
         }
         if (user.isMuted()) {
-            sender.sendMessage(tl("whoisMuted", (user.getMuteTimeout() > 0 ? DateUtil.formatDateDiff(user.getMuteTimeout()) : tl("true"))));
+            sender.sendMessage(tlp(sender, "whoisMuted", (user.getMuteTimeout() > 0 ? DateUtil.formatDateDiff(user.getMuteTimeout()) : tlp(sender, "true"))));
         }
         final String location = user.getGeoLocation();
         if (location != null && (!(sender.isPlayer()) || ess.getUser(sender.getPlayer()).isAuthorized("essentials.geoip.show"))) {
-            sender.sendMessage(tl("whoisGeoLocation", location));
+            sender.sendMessage(tlp(sender, "whoisGeoLocation", location));
         }
         if (showIp) {
-            sender.sendMessage(tl("whoisIPAddress", user.getBase().getAddress().getAddress().toString()));
+            sender.sendMessage(tlp(sender, "whoisIPAddress", user.getBase().getAddress().getAddress().toString()));
         }
     }
 
     private void seenOffline(final Server server, final CommandSource sender, User user, final boolean showBan, final boolean showIp, final boolean showLocation) throws Exception {
         user.setDisplayNick();
         if (user.getLastLogout() > 0) {
-            sender.sendMessage(tl("seenOffline", user.getName(), DateUtil.formatDateDiff(user.getLastLogout())));
+            sender.sendMessage(tlp(sender, "seenOffline", user.getName(), DateUtil.formatDateDiff(user.getLastLogout())));
         } else {
-            sender.sendMessage(tl("userUnknown", user.getName()));
+            sender.sendMessage(tlp(sender, "userUnknown", user.getName()));
         }
 
         if (ess.getSettings().isDebug()) {
@@ -142,36 +142,36 @@ public class Commandseen extends EssentialsCommand {
 
         List<String> history = ess.getUserMap().getUserHistory(user.getBase().getUniqueId());
         if (history != null && history.size() > 1) {
-            sender.sendMessage(tl("seenAccounts", StringUtil.joinListSkip(", ", user.getName(), history)));
+            sender.sendMessage(tlp(sender, "seenAccounts", StringUtil.joinListSkip(", ", user.getName(), history)));
         }
 
         if (BanLookup.isBanned(ess, user)) {
             final BanEntry banEntry = BanLookup.getBanEntry(ess, user.getName());
-            final String reason = showBan ? banEntry.getReason() : tl("true");
-            sender.sendMessage(tl("whoisBanned", reason));
+            final String reason = showBan ? banEntry.getReason() : tlp(sender, "true");
+            sender.sendMessage(tlp(sender, "whoisBanned", reason));
             if (banEntry.getExpiration() != null) {
                 Date expiry = banEntry.getExpiration();
-                String expireString = tl("now");
+                String expireString = tlp(sender, "now");
                 if (expiry.after(new Date())) {
                     expireString = DateUtil.formatDateDiff(expiry.getTime());
                 }
-                sender.sendMessage(tl("whoisTempBanned", expireString));
+                sender.sendMessage(tlp(sender, "whoisTempBanned", expireString));
             }
         }
 
         final String location = user.getGeoLocation();
         if (location != null && (!(sender.isPlayer()) || ess.getUser(sender.getPlayer()).isAuthorized("essentials.geoip.show"))) {
-            sender.sendMessage(tl("whoisGeoLocation", location));
+            sender.sendMessage(tlp(sender, "whoisGeoLocation", location));
         }
         if (showIp) {
             if (!user.getLastLoginAddress().isEmpty()) {
-                sender.sendMessage(tl("whoisIPAddress", user.getLastLoginAddress()));
+                sender.sendMessage(tlp(sender, "whoisIPAddress", user.getLastLoginAddress()));
             }
         }
         if (showLocation) {
             final Location loc = user.getLogoutLocation();
             if (loc != null) {
-                sender.sendMessage(tl("whoisLocation", loc.getWorld().getName(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ()));
+                sender.sendMessage(tlp(sender, "whoisLocation", loc.getWorld().getName(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ()));
             }
         }
     }
@@ -180,10 +180,10 @@ public class Commandseen extends EssentialsCommand {
         final UserMap userMap = ess.getUserMap();
 
         if (ess.getServer().getBanList(BanList.Type.IP).isBanned(ipAddress)) {
-            sender.sendMessage(tl("isIpBanned", ipAddress));
+            sender.sendMessage(tlp(sender, "isIpBanned", ipAddress));
         }
 
-        sender.sendMessage(tl("runningPlayerMatch", ipAddress));
+        sender.sendMessage(tlp(sender, "runningPlayerMatch", ipAddress));
 
         ess.runTaskAsynchronously(new Runnable() {
             @Override
@@ -203,10 +203,10 @@ public class Commandseen extends EssentialsCommand {
                 }
 
                 if (matches.size() > 0) {
-                    sender.sendMessage(tl("matchingIPAddress"));
+                    sender.sendMessage(tlp(sender, "matchingIPAddress"));
                     sender.sendMessage(StringUtil.joinList(matches));
                 } else {
-                    sender.sendMessage(tl("noMatchingPlayers"));
+                    sender.sendMessage(tlp(sender, "noMatchingPlayers"));
                 }
 
             }

@@ -7,7 +7,7 @@ import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 
 import java.util.UUID;
 
-import static com.earth2me.essentials.I18n.tl;
+import static com.earth2me.essentials.I18n.tlp;
 
 
 public class TimedTeleport implements Runnable {
@@ -90,14 +90,14 @@ public class TimedTeleport implements Runnable {
                     try {
                         teleport.cooldown(false);
                     } catch (Exception ex) {
-                        teleportOwner.sendMessage(tl("cooldownWithMessage", ex.getMessage()));
+                        teleportOwner.sendMessage(tlp(teleportOwner, "cooldownWithMessage", ex.getMessage()));
                         if (teleportOwner != teleportUser) {
-                            teleportUser.sendMessage(tl("cooldownWithMessage", ex.getMessage()));
+                            teleportUser.sendMessage(tlp(teleportUser, "cooldownWithMessage", ex.getMessage()));
                         }
                     }
                     try {
                         cancelTimer(false);
-                        teleportUser.sendMessage(tl("teleportationCommencing"));
+                        teleportUser.sendMessage(tlp(teleportUser, "teleportationCommencing"));
 
                         try {
                             if (timer_chargeFor != null) {
@@ -131,9 +131,10 @@ public class TimedTeleport implements Runnable {
         try {
             ess.getServer().getScheduler().cancelTask(timer_task);
             if (notifyUser) {
-                teleportOwner.sendMessage(tl("pendingTeleportCancelled"));
+                teleportOwner.sendMessage(tlp(teleportOwner, "pendingTeleportCancelled"));
                 if (timer_teleportee != null && !timer_teleportee.equals(teleportOwner.getBase().getUniqueId())) {
-                    ess.getUser(timer_teleportee).sendMessage(tl("pendingTeleportCancelled"));
+                    IUser teleporteeUser = ess.getUser(timer_teleportee);
+                    teleporteeUser.sendMessage(tlp(teleporteeUser, "pendingTeleportCancelled"));
                 }
             }
         } finally {

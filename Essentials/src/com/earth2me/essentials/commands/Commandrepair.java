@@ -15,7 +15,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
-import static com.earth2me.essentials.I18n.tl;
+import static com.earth2me.essentials.I18n.tlp;
 
 
 public class Commandrepair extends EssentialsCommand {
@@ -40,11 +40,11 @@ public class Commandrepair extends EssentialsCommand {
     public void repairHand(User user) throws Exception {
         final ItemStack item = user.getBase().getItemInHand();
         if (item == null || item.getType().isBlock() || item.getDurability() == 0) {
-            throw new Exception(tl("repairInvalidType"));
+            throw new Exception(tlp(user, "repairInvalidType"));
         }
 
         if (!item.getEnchantments().isEmpty() && !ess.getSettings().getRepairEnchanted() && !user.isAuthorized("essentials.repair.enchanted")) {
-            throw new Exception(tl("repairEnchanted"));
+            throw new Exception(tlp(user, "repairEnchanted"));
         }
 
         final String itemName = item.getType().toString().toLowerCase(Locale.ENGLISH);
@@ -56,7 +56,7 @@ public class Commandrepair extends EssentialsCommand {
 
         charge.charge(user);
         user.getBase().updateInventory();
-        user.sendMessage(tl("repair", itemName.replace('_', ' ')));
+        user.sendMessage(tlp(user, "repair", itemName.replace('_', ' ')));
     }
 
     public void repairAll(User user) throws Exception {
@@ -69,20 +69,20 @@ public class Commandrepair extends EssentialsCommand {
 
         user.getBase().updateInventory();
         if (repaired.isEmpty()) {
-            throw new Exception(tl("repairNone"));
+            throw new Exception(tlp(user, "repairNone"));
         } else {
-            user.sendMessage(tl("repair", StringUtil.joinList(repaired)));
+            user.sendMessage(tlp(user, "repair", StringUtil.joinList(repaired)));
         }
     }
 
     private void repairItem(final ItemStack item) throws Exception {
         final Material material = Material.getMaterial(item.getTypeId());
         if (material.isBlock() || material.getMaxDurability() < 1) {
-            throw new Exception(tl("repairInvalidType"));
+            throw new Exception(tlp(null, "repairInvalidType"));
         }
 
         if (item.getDurability() == 0) {
-            throw new Exception(tl("repairAlreadyFixed"));
+            throw new Exception(tlp(null, "repairAlreadyFixed"));
         }
 
         item.setDurability((short) 0);

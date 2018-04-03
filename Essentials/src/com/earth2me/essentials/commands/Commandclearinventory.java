@@ -1,6 +1,6 @@
 package com.earth2me.essentials.commands;
 
-import static com.earth2me.essentials.I18n.tl;
+import static com.earth2me.essentials.I18n.tlp;
 
 import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.User;
@@ -55,7 +55,7 @@ public class Commandclearinventory extends EssentialsCommand {
         }
 
         if (allowAll && args.length > 0 && args[0].contentEquals("*")) {
-            sender.sendMessage(tl("inventoryClearingFromAll"));
+            sender.sendMessage(tlp(sender, "inventoryClearingFromAll"));
             offset = 1;
             players = ess.getOnlinePlayers();
         } else if (allowOthers && args.length > 0 && args[0].trim().length() > 2) {
@@ -73,7 +73,7 @@ public class Commandclearinventory extends EssentialsCommand {
         if (senderUser != null && senderUser.isPromptingClearConfirm()) {
             if (!formattedCommand.equals(previousClearCommand)) {
                 senderUser.setConfirmingClearCommand(formattedCommand);
-                senderUser.sendMessage(tl("confirmClear", formattedCommand));
+                senderUser.sendMessage(tlp(senderUser, "confirmClear", formattedCommand));
                 return;
             }
         }
@@ -110,14 +110,14 @@ public class Commandclearinventory extends EssentialsCommand {
         if (type == -1) // type -1 represents wildcard or all items
         {
             if (showExtended) {
-                sender.sendMessage(tl("inventoryClearingAllItems", player.getDisplayName()));
+                sender.sendMessage(tlp(sender, "inventoryClearingAllItems", player.getDisplayName()));
             }
             InventoryWorkaround.clearInventoryNoArmor(player.getInventory());
             InventoryWorkaround.setItemInOffHand(player, null);
         } else if (type == -2) // type -2 represents double wildcard or all items and armor
         {
             if (showExtended) {
-                sender.sendMessage(tl("inventoryClearingAllArmor", player.getDisplayName()));
+                sender.sendMessage(tlp(sender, "inventoryClearingAllArmor", player.getDisplayName()));
             }
             InventoryWorkaround.clearInventoryNoArmor(player.getInventory());
             InventoryWorkaround.setItemInOffHand(player, null);
@@ -127,7 +127,7 @@ public class Commandclearinventory extends EssentialsCommand {
             {
                 ItemStack stack = new ItemStack(type);
                 if (showExtended) {
-                    sender.sendMessage(tl("inventoryClearingAllStack", stack.getType().toString().toLowerCase(Locale.ENGLISH), player.getDisplayName()));
+                    sender.sendMessage(tlp(sender, "inventoryClearingAllStack", stack.getType().toString().toLowerCase(Locale.ENGLISH), player.getDisplayName()));
                 }
                 player.getInventory().clear(type, data);
             } else if (amount == -1) // amount -1 means all items will be cleared
@@ -136,7 +136,7 @@ public class Commandclearinventory extends EssentialsCommand {
                 ItemStack removedStack = player.getInventory().removeItem(stack).get(0);
                 final int removedAmount = (BASE_AMOUNT - removedStack.getAmount());
                 if (removedAmount > 0 || showExtended) {
-                    sender.sendMessage(tl("inventoryClearingStack", removedAmount, stack.getType().toString().toLowerCase(Locale.ENGLISH), player.getDisplayName()));
+                    sender.sendMessage(tlp(sender, "inventoryClearingStack", removedAmount, stack.getType().toString().toLowerCase(Locale.ENGLISH), player.getDisplayName()));
                 }
             } else {
                 if (amount < 0) {
@@ -144,11 +144,11 @@ public class Commandclearinventory extends EssentialsCommand {
                 }
                 ItemStack stack = new ItemStack(type, amount, data);
                 if (player.getInventory().containsAtLeast(stack, amount)) {
-                    sender.sendMessage(tl("inventoryClearingStack", amount, stack.getType().toString().toLowerCase(Locale.ENGLISH), player.getDisplayName()));
+                    sender.sendMessage(tlp(sender, "inventoryClearingStack", amount, stack.getType().toString().toLowerCase(Locale.ENGLISH), player.getDisplayName()));
                     player.getInventory().removeItem(stack);
                 } else {
                     if (showExtended) {
-                        sender.sendMessage(tl("inventoryClearFail", player.getDisplayName(), amount, stack.getType().toString().toLowerCase(Locale.ENGLISH)));
+                        sender.sendMessage(tlp(sender, "inventoryClearFail", player.getDisplayName(), amount, stack.getType().toString().toLowerCase(Locale.ENGLISH)));
                     }
                 }
             }

@@ -9,7 +9,7 @@ import java.io.File;
 import java.math.BigDecimal;
 import java.util.Locale;
 
-import static com.earth2me.essentials.I18n.tl;
+import static com.earth2me.essentials.I18n.tlp;
 
 
 public class Worth implements IConf {
@@ -69,7 +69,7 @@ public class Worth implements IConf {
 
     public int getAmount(IEssentials ess, User user, ItemStack is, String[] args, boolean isBulkSell) throws Exception {
         if (is == null || is.getType() == Material.AIR) {
-            throw new Exception(tl("itemSellAir"));
+            throw new Exception(tlp(user, "itemSellAir"));
         }
         int id = is.getTypeId();
         int amount = 0;
@@ -89,7 +89,7 @@ public class Worth implements IConf {
         boolean requireStack = ess.getSettings().isTradeInStacks(id);
 
         if (requireStack && !stack) {
-            throw new Exception(tl("itemMustBeStacked"));
+            throw new Exception(tlp(user, "itemMustBeStacked"));
         }
 
         int max = 0;
@@ -112,9 +112,9 @@ public class Worth implements IConf {
         }
         if (amount > max || amount < 1) {
             if (!isBulkSell) {
-                user.sendMessage(tl("itemNotEnough2"));
-                user.sendMessage(tl("itemNotEnough3"));
-                throw new Exception(tl("itemNotEnough1"));
+                user.sendMessage(tlp(user, "itemNotEnough2"));
+                user.sendMessage(tlp(user, "itemNotEnough3"));
+                throw new Exception(tlp(user, "itemNotEnough1"));
             } else {
                 return amount;
             }

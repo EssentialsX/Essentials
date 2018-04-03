@@ -7,7 +7,7 @@ import org.bukkit.Server;
 import java.util.Collections;
 import java.util.List;
 
-import static com.earth2me.essentials.I18n.tl;
+import static com.earth2me.essentials.I18n.tlp;
 
 
 public class Commandafk extends EssentialsCommand {
@@ -51,10 +51,10 @@ public class Commandafk extends EssentialsCommand {
     private void toggleAfk(User sender, User user, String message) throws Exception {
         if (message != null && sender != null) {
             if (sender.isMuted()) {
-                throw new Exception(tl("voiceSilenced"));
+                throw new Exception(tlp(sender, "voiceSilenced"));
             }
             if (!sender.isAuthorized("essentials.afk.message")) {
-                throw new Exception(tl("noPermToAFKMessage"));
+                throw new Exception(tlp(sender, "noPermToAFKMessage"));
             }
         }
         user.setDisplayNick();
@@ -62,16 +62,16 @@ public class Commandafk extends EssentialsCommand {
         if (!user.toggleAfk()) {
             //user.sendMessage(_("markedAsNotAway"));
             if (!user.isHidden()) {
-                msg = tl("userIsNotAway", user.getDisplayName());
+                msg = tlp(null, "userIsNotAway", user.getDisplayName());
             }
             user.updateActivity(false);
         } else {
             //user.sendMessage(_("markedAsAway"));
             if (!user.isHidden()) {
                 if (message != null) {
-                    msg = tl("userIsAwayWithMessage", user.getDisplayName(), message);
+                    msg = tlp(null, "userIsAwayWithMessage", user.getDisplayName(), message);
                 } else {
-                    msg = tl("userIsAway", user.getDisplayName());
+                    msg = tlp(null, "userIsAway", user.getDisplayName());
                 }
             }
             user.setAfkMessage(message);

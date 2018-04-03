@@ -30,6 +30,7 @@ import java.util.logging.Level;
 import java.util.regex.Pattern;
 
 import static com.earth2me.essentials.I18n.tl;
+import static com.earth2me.essentials.I18n.tlp;
 
 
 public class MetaItemStack {
@@ -476,7 +477,7 @@ public class MetaItemStack {
         final String enchantmentName = enchantment.getName().toLowerCase(Locale.ENGLISH);
 
         if (!hasMetaPermission(user, "enchantments." + enchantmentName, true, false)) {
-            throw new Exception(tl("enchantmentPerm", enchantmentName));
+            throw new Exception(tlp(user, "enchantmentPerm", enchantmentName));
         }
         return enchantment;
     }
@@ -550,7 +551,7 @@ public class MetaItemStack {
         if (graceful) {
             return false;
         } else {
-            throw new Exception(tl("noMetaPerm", metaPerm));
+            throw new Exception(tlp(user, "noMetaPerm", metaPerm));
         }
     }
 

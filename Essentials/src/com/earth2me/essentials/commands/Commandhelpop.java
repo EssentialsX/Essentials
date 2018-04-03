@@ -9,7 +9,7 @@ import org.bukkit.Server;
 import java.util.List;
 import java.util.logging.Level;
 
-import static com.earth2me.essentials.I18n.tl;
+import static com.earth2me.essentials.I18n.tlp;
 
 
 public class Commandhelpop extends EssentialsCommand {
@@ -35,7 +35,7 @@ public class Commandhelpop extends EssentialsCommand {
         if (args.length < 1) {
             throw new NotEnoughArgumentsException();
         }
-        final String message = tl("helpOp", from, FormatUtil.stripFormat(getFinalArg(args, 0)));
+        final String message = tlp(null, "helpOp", from, FormatUtil.stripFormat(getFinalArg(args, 0)));
         server.getLogger().log(Level.INFO, message);
         ess.broadcastMessage("essentials.helpop.receive", message);
         return message;

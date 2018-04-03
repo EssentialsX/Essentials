@@ -16,6 +16,7 @@ public class DateUtil {
         return timePattern.matcher(input).replaceFirst("").trim();
     }
 
+    @SuppressWarnings("deprecation")
     public static long parseDateDiff(String time, boolean future) throws Exception {
         Matcher m = timePattern.matcher(time);
         int years = 0;
@@ -61,6 +62,7 @@ public class DateUtil {
                 break;
             }
         }
+        
         if (!found) {
             throw new Exception(tl("illegalDate"));
         }
@@ -126,6 +128,7 @@ public class DateUtil {
         return DateUtil.formatDateDiff(now, c);
     }
 
+    @SuppressWarnings("deprecation")
     public static String formatDateDiff(Calendar fromDate, Calendar toDate) {
         boolean future = false;
         if (toDate.equals(fromDate)) {

@@ -10,7 +10,7 @@ import org.bukkit.TreeType;
 import java.util.Collections;
 import java.util.List;
 
-import static com.earth2me.essentials.I18n.tl;
+import static com.earth2me.essentials.I18n.tlp;
 
 
 public class Commandbigtree extends EssentialsCommand {
@@ -35,9 +35,9 @@ public class Commandbigtree extends EssentialsCommand {
         final Location safeLocation = LocationUtil.getSafeDestination(loc);
         final boolean success = user.getWorld().generateTree(safeLocation, tree);
         if (success) {
-            user.sendMessage(tl("bigTreeSuccess"));
+            user.sendMessage(tlp(user, "bigTreeSuccess"));
         } else {
-            throw new Exception(tl("bigTreeFailure"));
+            throw new Exception(tlp(user, "bigTreeFailure"));
         }
     }
 

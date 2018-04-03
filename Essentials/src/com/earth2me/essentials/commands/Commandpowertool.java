@@ -13,7 +13,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
-import static com.earth2me.essentials.I18n.tl;
+import static com.earth2me.essentials.I18n.tlp;
 
 
 public class Commandpowertool extends EssentialsCommand {
@@ -45,12 +45,12 @@ public class Commandpowertool extends EssentialsCommand {
         // check to see if this is a clear all command
         if (command != null && command.equalsIgnoreCase("d:")) {
             user.clearAllPowertools();
-            sender.sendMessage(tl("powerToolClearAll"));
+            sender.sendMessage(tlp(sender, "powerToolClearAll"));
             return;
         }
 
         if (itemStack == null || itemStack.getType() == Material.AIR) {
-            throw new Exception(tl("powerToolAir"));
+            throw new Exception(tlp(sender, "powerToolAir"));
         }
 
         final String itemName = itemStack.getType().toString().toLowerCase(Locale.ENGLISH).replaceAll("_", " ");
@@ -58,28 +58,28 @@ public class Commandpowertool extends EssentialsCommand {
         if (command != null && !command.isEmpty()) {
             if (command.equalsIgnoreCase("l:")) {
                 if (powertools == null || powertools.isEmpty()) {
-                    throw new Exception(tl("powerToolListEmpty", itemName));
+                    throw new Exception(tlp(sender, "powerToolListEmpty", itemName));
                 } else {
-                    sender.sendMessage(tl("powerToolList", StringUtil.joinList(powertools), itemName));
+                    sender.sendMessage(tlp(sender, "powerToolList", StringUtil.joinList(powertools), itemName));
                 }
                 throw new NoChargeException();
             }
             if (command.startsWith("r:")) {
                 command = command.substring(2);
                 if (!powertools.contains(command)) {
-                    throw new Exception(tl("powerToolNoSuchCommandAssigned", command, itemName));
+                    throw new Exception(tlp(sender, "powerToolNoSuchCommandAssigned", command, itemName));
                 }
 
                 powertools.remove(command);
-                sender.sendMessage(tl("powerToolRemove", command, itemName));
+                sender.sendMessage(tlp(sender, "powerToolRemove", command, itemName));
             } else {
                 if (command.startsWith("a:")) {
                     if (sender.isPlayer() && !ess.getUser(sender.getPlayer()).isAuthorized("essentials.powertool.append")) {
-                        throw new Exception(tl("noPerm", "essentials.powertool.append"));
+                        throw new Exception(tlp(sender, "noPerm", "essentials.powertool.append"));
                     }
                     command = command.substring(2);
                     if (powertools.contains(command)) {
-                        throw new Exception(tl("powerToolAlreadySet", command, itemName));
+                        throw new Exception(tlp(sender, "powerToolAlreadySet", command, itemName));
                     }
                 } else if (powertools != null && !powertools.isEmpty()) {
                     // Replace all commands with this one
@@ -89,18 +89,18 @@ public class Commandpowertool extends EssentialsCommand {
                 }
 
                 powertools.add(command);
-                sender.sendMessage(tl("powerToolAttach", StringUtil.joinList(powertools), itemName));
+                sender.sendMessage(tlp(sender, "powerToolAttach", StringUtil.joinList(powertools), itemName));
             }
         } else {
             if (powertools != null) {
                 powertools.clear();
             }
-            sender.sendMessage(tl("powerToolRemoveAll", itemName));
+            sender.sendMessage(tlp(sender, "powerToolRemoveAll", itemName));
         }
 
         if (!user.arePowerToolsEnabled()) {
             user.setPowerToolsEnabled(true);
-            user.sendMessage(tl("powerToolsEnabled"));
+            user.sendMessage(tlp(user, "powerToolsEnabled"));
         }
         user.setPowertool(itemStack, powertools);
     }

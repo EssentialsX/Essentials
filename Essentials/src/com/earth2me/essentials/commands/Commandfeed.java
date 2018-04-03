@@ -9,7 +9,7 @@ import org.bukkit.event.entity.FoodLevelChangeEvent;
 import java.util.Collections;
 import java.util.List;
 
-import static com.earth2me.essentials.I18n.tl;
+import static com.earth2me.essentials.I18n.tlp;
 
 
 public class Commandfeed extends EssentialsLoopCommand {
@@ -29,7 +29,7 @@ public class Commandfeed extends EssentialsLoopCommand {
         }
 
         feedPlayer(user.getBase());
-        user.sendMessage(tl("feed"));
+        user.sendMessage(tlp(user, "feed"));
     }
 
     @Override
@@ -45,7 +45,7 @@ public class Commandfeed extends EssentialsLoopCommand {
     protected void updatePlayer(final Server server, final CommandSource sender, final User player, final String[] args) throws PlayerExemptException {
         try {
             feedPlayer(player.getBase());
-            sender.sendMessage(tl("feedOther", player.getDisplayName()));
+            sender.sendMessage(tlp(sender, "feedOther", player.getDisplayName()));
         } catch (QuietAbortException e) {
             //Handle Quietly
         }

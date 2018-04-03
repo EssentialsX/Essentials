@@ -5,7 +5,7 @@ import org.bukkit.Server;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import static com.earth2me.essentials.I18n.tl;
+import static com.earth2me.essentials.I18n.tlp;
 
 
 public class Commanddeljail extends EssentialsCommand {
@@ -20,7 +20,7 @@ public class Commanddeljail extends EssentialsCommand {
         }
 
         ess.getJails().removeJail(args[0]);
-        sender.sendMessage(tl("deleteJail", args[0]));
+        sender.sendMessage(tlp(sender, "deleteJail", args[0]));
     }
 
     @Override

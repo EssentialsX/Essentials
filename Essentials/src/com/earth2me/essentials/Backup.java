@@ -10,7 +10,7 @@ import java.io.InputStreamReader;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import static com.earth2me.essentials.I18n.tl;
+import static com.earth2me.essentials.I18n.tlp;
 
 
 public class Backup implements Runnable {
@@ -73,7 +73,7 @@ public class Backup implements Runnable {
             active = false;
             return;
         }
-        LOGGER.log(Level.INFO, tl("backupStarted"));
+        LOGGER.log(Level.INFO, tlp(null, "backupStarted"));
         final CommandSender cs = server.getConsoleSender();
         server.dispatchCommand(cs, "save-all");
         server.dispatchCommand(cs, "save-off");
@@ -121,7 +121,7 @@ public class Backup implements Runnable {
                                 stopTask();
                             }
                             active = false;
-                            LOGGER.log(Level.INFO, tl("backupFinished"));
+                            LOGGER.log(Level.INFO, tlp(null, "backupFinished"));
                         }
                     }
                     ess.scheduleSyncDelayedTask(new BackupEnableSaveTask());

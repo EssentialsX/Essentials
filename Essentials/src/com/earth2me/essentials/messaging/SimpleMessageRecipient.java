@@ -1,6 +1,6 @@
 package com.earth2me.essentials.messaging;
 
-import static com.earth2me.essentials.I18n.tl;
+import static com.earth2me.essentials.I18n.tlp;
 
 import com.earth2me.essentials.Console;
 import com.earth2me.essentials.IEssentials;
@@ -66,10 +66,10 @@ public class SimpleMessageRecipient implements IMessageRecipient {
         MessageResponse messageResponse = recipient.onReceiveMessage(this.parent, message);
         switch (messageResponse) {
             case UNREACHABLE:
-                sendMessage(tl("recentlyForeverAlone", recipient.getDisplayName()));
+                sendMessage(tlp(getUser(recipient), "recentlyForeverAlone", recipient.getDisplayName()));
                 break;
             case MESSAGES_IGNORED:
-                sendMessage(tl("msgIgnore", recipient.getDisplayName()));
+                sendMessage(tlp(getUser(recipient), "msgIgnore", recipient.getDisplayName()));
                 break;
             case SENDER_IGNORED:
                 break;
@@ -77,12 +77,12 @@ public class SimpleMessageRecipient implements IMessageRecipient {
             case SUCCESS_BUT_AFK:
                 // Currently, only IUser can be afk, so we unsafely cast to get the afk message.
                 if (((IUser) recipient).getAfkMessage() != null) {
-                    sendMessage(tl("userAFKWithMessage", recipient.getDisplayName(), ((IUser) recipient).getAfkMessage()));
+                    sendMessage(tlp(getUser(recipient), "userAFKWithMessage", recipient.getDisplayName(), ((IUser) recipient).getAfkMessage()));
                 } else {
-                    sendMessage(tl("userAFK", recipient.getDisplayName()));
+                    sendMessage(tlp(getUser(recipient), "userAFK", recipient.getDisplayName()));
                 }
             default:
-                sendMessage(tl("msgFormat", tl("me"), recipient.getDisplayName(), message));
+                sendMessage(tlp(getUser(recipient), "msgFormat", tlp(getUser(recipient), "me"), recipient.getDisplayName(), message));
 
                 // Better Social Spy
                 User senderUser = getUser(this);
@@ -97,9 +97,9 @@ public class SimpleMessageRecipient implements IMessageRecipient {
                             && !onlineUser.equals(senderUser)
                             && !onlineUser.equals(recipient)) {
                             if (senderUser.isMuted() && ess.getSettings().getSocialSpyListenMutedPlayers()) {
-                                onlineUser.sendMessage(tl("socialMutedSpyPrefix") + tl("socialSpyMsgFormat", getDisplayName(), recipient.getDisplayName(), message));
+                                onlineUser.sendMessage(tlp(onlineUser, "socialMutedSpyPrefix") + tlp(onlineUser, "socialSpyMsgFormat", getDisplayName(), recipient.getDisplayName(), message));
                             } else {
-                                onlineUser.sendMessage(tl("socialSpyPrefix") + tl("socialSpyMsgFormat", getDisplayName(), recipient.getDisplayName(), message));
+                                onlineUser.sendMessage(tlp(onlineUser, "socialSpyPrefix") + tlp(onlineUser, "socialSpyMsgFormat", getDisplayName(), recipient.getDisplayName(), message));
                             }
                         }
                     }
@@ -132,7 +132,7 @@ public class SimpleMessageRecipient implements IMessageRecipient {
             }
         }
         // Display the formatted message to this recipient.
-        sendMessage(tl("msgFormat", sender.getDisplayName(), tl("me"), message));
+        sendMessage(tlp(user, "msgFormat", sender.getDisplayName(), tlp(user, "me"), message));
 
         if (ess.getSettings().isLastMessageReplyRecipient()) {
             // If this recipient doesn't have a reply recipient, initiate by setting the first

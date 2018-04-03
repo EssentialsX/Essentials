@@ -35,7 +35,7 @@ import java.util.WeakHashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import static com.earth2me.essentials.I18n.tl;
+import static com.earth2me.essentials.I18n.tlp;
 
 
 public class User extends UserData implements Comparable<User>, IMessageRecipient, net.ess3.api.IUser {
@@ -129,7 +129,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
             cooldownTime.add(Calendar.SECOND, (int) cooldown);
             cooldownTime.add(Calendar.MILLISECOND, (int) ((cooldown * 1000.0) % 1000.0));
             if (cooldownTime.after(now) && !isAuthorized("essentials.heal.cooldown.bypass")) {
-                throw new Exception(tl("timeBeforeHeal", DateUtil.formatDateDiff(cooldownTime.getTimeInMillis())));
+                throw new Exception(tlp(this, "timeBeforeHeal", DateUtil.formatDateDiff(cooldownTime.getTimeInMillis())));
             }
         }
         setLastHealTimestamp(now.getTimeInMillis());
@@ -146,25 +146,25 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
             return;
         }
         setMoney(getMoney().add(value));
-        sendMessage(tl("addedToAccount", NumberUtil.displayCurrency(value, ess)));
+        sendMessage(tlp(this, "addedToAccount", NumberUtil.displayCurrency(value, ess)));
         if (initiator != null) {
-            initiator.sendMessage(tl("addedToOthersAccount", NumberUtil.displayCurrency(value, ess), this.getDisplayName(), NumberUtil.displayCurrency(getMoney(), ess)));
+            initiator.sendMessage(tlp(this, "addedToOthersAccount", NumberUtil.displayCurrency(value, ess), this.getDisplayName(), NumberUtil.displayCurrency(getMoney(), ess)));
         }
     }
 
     @Override
     public void payUser(final User reciever, final BigDecimal value) throws Exception {
         if (value.compareTo(BigDecimal.ZERO) < 1) {
-            throw new Exception(tl("payMustBePositive"));
+            throw new Exception(tlp(this, "payMustBePositive"));
         }
 
         if (canAfford(value)) {
             setMoney(getMoney().subtract(value));
             reciever.setMoney(reciever.getMoney().add(value));
-            sendMessage(tl("moneySentTo", NumberUtil.displayCurrency(value, ess), reciever.getDisplayName()));
-            reciever.sendMessage(tl("moneyRecievedFrom", NumberUtil.displayCurrency(value, ess), getDisplayName()));
+            sendMessage(tlp(this, "moneySentTo", NumberUtil.displayCurrency(value, ess), reciever.getDisplayName()));
+            reciever.sendMessage(tlp(this, "moneyRecievedFrom", NumberUtil.displayCurrency(value, ess), getDisplayName()));
         } else {
-            throw new ChargeException(tl("notEnoughMoney", NumberUtil.displayCurrency(value, ess)));
+            throw new ChargeException(tlp(this, "notEnoughMoney", NumberUtil.displayCurrency(value, ess)));
         }
     }
 
@@ -183,9 +183,9 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
         } catch (MaxMoneyException ex) {
             ess.getLogger().log(Level.WARNING, "Invalid call to takeMoney, total balance can't be more than the max-money limit.", ex);
         }
-        sendMessage(tl("takenFromAccount", NumberUtil.displayCurrency(value, ess)));
+        sendMessage(tlp(this, "takenFromAccount", NumberUtil.displayCurrency(value, ess)));
         if (initiator != null) {
-            initiator.sendMessage(tl("takenFromOthersAccount", NumberUtil.displayCurrency(value, ess), this.getDisplayName(), NumberUtil.displayCurrency(getMoney(), ess)));
+            initiator.sendMessage(tlp(this, "takenFromOthersAccount", NumberUtil.displayCurrency(value, ess), this.getDisplayName(), NumberUtil.displayCurrency(getMoney(), ess)));
         }
     }
 
@@ -512,7 +512,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
             if (!event.isCancelled()) {
                 setJailTimeout(0);
                 setJailed(false);
-                sendMessage(tl("haveBeenReleased"));
+                sendMessage(tlp(this, "haveBeenReleased"));
                 setJail(null);
                 try {
                     getTeleport().back();
@@ -536,7 +536,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
             
             if (!event.isCancelled()) {
                 setMuteTimeout(0);
-                sendMessage(tl("canTalkAgain"));
+                sendMessage(tlp(this, "canTalkAgain"));
                 setMuted(false);
                 return true;
             }
@@ -549,7 +549,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
             setAfk(false);
             if (broadcast && !isHidden()) {
                 setDisplayNick();
-                final String msg = tl("userIsNotAway", getDisplayName());
+                final String msg = tlp(null, "userIsNotAway", getDisplayName());
                 if (!msg.isEmpty()) {
                     ess.broadcastMessage(this, msg);
                 }
@@ -581,14 +581,14 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
             && lastActivity > 0 && (lastActivity + (autoafkkick * 1000)) < System.currentTimeMillis()
             && !isAuthorized("essentials.kick.exempt")
             && !isAuthorized("essentials.afk.kickexempt")) {
-            final String kickReason = tl("autoAfkKickReason", autoafkkick / 60.0);
+            final String kickReason = tlp(this, "autoAfkKickReason", autoafkkick / 60.0);
             lastActivity = 0;
             this.getBase().kickPlayer(kickReason);
 
 
             for (User user : ess.getOnlineUsers()) {
                 if (user.isAuthorized("essentials.kick.notify")) {
-                    user.sendMessage(tl("playerKicked", Console.NAME, getName(), kickReason));
+                    user.sendMessage(tlp(user, "playerKicked", Console.NAME, getName(), kickReason));
                 }
             }
         }
@@ -597,7 +597,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
             setAfk(true);
             if (!isHidden()) {
                 setDisplayNick();
-                final String msg = tl("userIsAway", getDisplayName());
+                final String msg = tlp(null, "userIsAway", getDisplayName());
                 if (!msg.isEmpty()) {
                     ess.broadcastMessage(this, msg);
                 }
@@ -884,7 +884,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
         if (mails != null && !mails.isEmpty()) {
             int notifyPlayerOfMailCooldown = ess.getSettings().getNotifyPlayerOfMailCooldown() * 1000;
             if (System.currentTimeMillis() - lastNotifiedAboutMailsMs >= notifyPlayerOfMailCooldown) {
-                sendMessage(tl("youHaveNewMail", mails.size()));
+                sendMessage(tlp(this, "youHaveNewMail", mails.size()));
                 lastNotifiedAboutMailsMs = System.currentTimeMillis();
             }
         }

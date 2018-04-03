@@ -22,7 +22,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
-import static com.earth2me.essentials.I18n.tl;
+import static com.earth2me.essentials.I18n.tlp;
 
 import net.ess3.nms.refl.ReflUtil;
 
@@ -44,7 +44,7 @@ public class Commandpotion extends EssentialsCommand {
                     potionslist.add(entry.getKey());
                 }
             }
-            throw new NotEnoughArgumentsException(tl("potions", StringUtil.joinList(potionslist.toArray())));
+            throw new NotEnoughArgumentsException(tlp(user, "potions", StringUtil.joinList(potionslist.toArray())));
         }
         
         boolean holdingPotion = stack.getType() == Material.POTION;
@@ -72,14 +72,14 @@ public class Commandpotion extends EssentialsCommand {
                         pmeta = (PotionMeta) mStack.getItemStack().getItemMeta();
                         stack.setItemMeta(pmeta);
                     } else {
-                        user.sendMessage(tl("invalidPotion"));
+                        user.sendMessage(tlp(user, "invalidPotion"));
                         throw new NotEnoughArgumentsException();
                     }
                 }
             }
 
         } else {
-            throw new Exception(tl("holdPotion"));
+            throw new Exception(tlp(user, "holdPotion"));
         }
     }
 

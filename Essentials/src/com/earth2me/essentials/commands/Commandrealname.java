@@ -7,7 +7,7 @@ import org.bukkit.Server;
 
 import java.util.Locale;
 
-import static com.earth2me.essentials.I18n.tl;
+import static com.earth2me.essentials.I18n.tlp;
 
 
 public class Commandrealname extends EssentialsCommand {
@@ -31,7 +31,7 @@ public class Commandrealname extends EssentialsCommand {
             final String displayName = FormatUtil.stripFormat(u.getDisplayName()).toLowerCase(Locale.ENGLISH);
             if (displayName.contains(whois)) {
                 foundUser = true;
-                sender.sendMessage(u.getDisplayName() + " " + tl("is") + " " + u.getName());
+                sender.sendMessage(u.getDisplayName() + " " + tlp(sender, "is") + " " + u.getName());
             }
         }
         if (!foundUser) {

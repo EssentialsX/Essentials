@@ -1,6 +1,6 @@
 package com.earth2me.essentials.commands;
 
-import static com.earth2me.essentials.I18n.tl;
+import static com.earth2me.essentials.I18n.tlp;
 
 import com.earth2me.essentials.User;
 
@@ -22,9 +22,9 @@ public class Commandpayconfirmtoggle extends EssentialsCommand {
         }
         user.setPromptingPayConfirm(confirmingPay);
         if (confirmingPay) {
-            user.sendMessage(tl("payConfirmToggleOn"));
+            user.sendMessage(tlp(user, "payConfirmToggleOn"));
         } else {
-            user.sendMessage(tl("payConfirmToggleOff"));
+            user.sendMessage(tlp(user, "payConfirmToggleOff"));
         }
         user.getConfirmingPayments().clear(); // Clear any outstanding confirmations.
     }
