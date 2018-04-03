@@ -8,7 +8,7 @@ import org.bukkit.event.block.BlockBreakEvent;
 
 import java.util.Set;
 
-import static com.earth2me.essentials.I18n.tl;
+import static com.earth2me.essentials.I18n.tlp;
 
 
 public class Commandbreak extends EssentialsCommand {
@@ -27,7 +27,7 @@ public class Commandbreak extends EssentialsCommand {
             throw new NoChargeException();
         }
         if (block.getType() == Material.BEDROCK && !user.isAuthorized("essentials.break.bedrock")) {
-            throw new Exception(tl("noBreakBedrock"));
+            throw new Exception(tlp(user, "noBreakBedrock"));
         }
         //final List<ItemStack> list = (List<ItemStack>)block.getDrops();
         //final BlockBreakEvent event = new BlockBreakEvent(block, user.getBase(), list);

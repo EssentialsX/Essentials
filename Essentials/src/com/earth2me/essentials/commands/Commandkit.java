@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.logging.Level;
 
-import static com.earth2me.essentials.I18n.tl;
+import static com.earth2me.essentials.I18n.tlp;
 
 
 public class Commandkit extends EssentialsCommand {
@@ -24,7 +24,7 @@ public class Commandkit extends EssentialsCommand {
     public void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception {
         if (args.length < 1) {
             final String kitList = ess.getKits().listKits(ess, user);
-            user.sendMessage(kitList.length() > 0 ? tl("kits", kitList) : tl("noKits"));
+            user.sendMessage(kitList.length() > 0 ? tlp(user, "kits", kitList) : tlp(user, "noKits"));
             throw new NoChargeException();
         } else if (args.length > 1 && user.isAuthorized("essentials.kit.others")) {
             final User userTo = getPlayer(server, user, args, 1);
@@ -40,7 +40,7 @@ public class Commandkit extends EssentialsCommand {
     public void run(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception {
         if (args.length < 2) {
             final String kitList = ess.getKits().listKits(ess, null);
-            sender.sendMessage(kitList.length() > 0 ? tl("kits", kitList) : tl("noKits"));
+            sender.sendMessage(kitList.length() > 0 ? tlp(sender, "kits", kitList) : tlp(sender, "noKits"));
             throw new NoChargeException();
         } else {
             final User userTo = getPlayer(server, args, 1, true, false);
@@ -50,15 +50,15 @@ public class Commandkit extends EssentialsCommand {
                 final Kit kit = new Kit(kitName, ess);
                 kit.expandItems(userTo);
 
-                sender.sendMessage(tl("kitGiveTo", kitName, userTo.getDisplayName()));
-                userTo.sendMessage(tl("kitReceive", kitName));
+                sender.sendMessage(tlp(sender, "kitGiveTo", kitName, userTo.getDisplayName()));
+                userTo.sendMessage(tlp(userTo, "kitReceive", kitName));
             }
         }
     }
 
     private void giveKits(final User userTo, final User userFrom, final String kitNames) throws Exception {
         if (kitNames.isEmpty()) {
-            throw new Exception(tl("kitNotFound"));
+            throw new Exception(tlp(userFrom, "kitNotFound"));
         }
         String[] kitList = kitNames.split(",");
 
@@ -66,7 +66,7 @@ public class Commandkit extends EssentialsCommand {
 
         for (final String kitName : kitList) {
             if (kitName.isEmpty()) {
-                throw new Exception(tl("kitNotFound"));
+                throw new Exception(tlp(userFrom, "kitNotFound"));
             }
 
             Kit kit = new Kit(kitName, ess);
@@ -86,10 +86,10 @@ public class Commandkit extends EssentialsCommand {
                 kit.chargeUser(userTo);
 
                 if (!userFrom.equals(userTo)) {
-                    userFrom.sendMessage(tl("kitGiveTo", kit.getName(), userTo.getDisplayName()));
+                    userFrom.sendMessage(tlp(userFrom, "kitGiveTo", kit.getName(), userTo.getDisplayName()));
                 }
 
-                userTo.sendMessage(tl("kitReceive", kit.getName()));
+                userTo.sendMessage(tlp(userTo, "kitReceive", kit.getName()));
 
             } catch (NoChargeException ex) {
                 if (ess.getSettings().isDebug()) {

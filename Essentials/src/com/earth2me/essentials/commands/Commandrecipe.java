@@ -14,6 +14,7 @@ import java.util.Locale;
 import java.util.Map;
 
 import static com.earth2me.essentials.I18n.tl;
+import static com.earth2me.essentials.I18n.tlp;
 
 import net.ess3.nms.refl.ReflUtil;
 
@@ -43,21 +44,21 @@ public class Commandrecipe extends EssentialsCommand {
             if (NumberUtil.isInt(args[1])) {
                 recipeNo = Integer.parseInt(args[1]) - 1;
             } else {
-                throw new Exception(tl("invalidNumber"));
+                throw new Exception(tlp(sender, "invalidNumber"));
             }
         }
 
         final List<Recipe> recipesOfType = ess.getServer().getRecipesFor(itemType);
         if (recipesOfType.size() < 1) {
-            throw new Exception(tl("recipeNone", getMaterialName(itemType)));
+            throw new Exception(tlp(sender, "recipeNone", getMaterialName(itemType)));
         }
 
         if (recipeNo < 0 || recipeNo >= recipesOfType.size()) {
-            throw new Exception(tl("recipeBadIndex"));
+            throw new Exception(tlp(sender, "recipeBadIndex"));
         }
 
         final Recipe selectedRecipe = recipesOfType.get(recipeNo);
-        sender.sendMessage(tl("recipe", getMaterialName(itemType), recipeNo + 1, recipesOfType.size()));
+        sender.sendMessage(tlp(sender, "recipe", getMaterialName(itemType), recipeNo + 1, recipesOfType.size()));
 
         if (selectedRecipe instanceof FurnaceRecipe) {
             furnaceRecipe(sender, (FurnaceRecipe) selectedRecipe);
@@ -76,12 +77,12 @@ public class Commandrecipe extends EssentialsCommand {
         }
 
         if (recipesOfType.size() > 1 && args.length == 1) {
-            sender.sendMessage(tl("recipeMore", commandLabel, args[0], getMaterialName(itemType)));
+            sender.sendMessage(tlp(sender, "recipeMore", commandLabel, args[0], getMaterialName(itemType)));
         }
     }
 
     public void furnaceRecipe(final CommandSource sender, final FurnaceRecipe recipe) {
-        sender.sendMessage(tl("recipeFurnace", getMaterialName(recipe.getInput())));
+        sender.sendMessage(tlp(sender, "recipeFurnace", getMaterialName(recipe.getInput())));
     }
 
     public void shapedRecipe(final CommandSource sender, final ShapedRecipe recipe, final boolean showWindow) {
@@ -122,15 +123,15 @@ public class Commandrecipe extends EssentialsCommand {
                     materials[j][k] = item == null ? null : item.getType();
                 }
             }
-            sender.sendMessage(tl("recipeGrid", colorMap.get(materials[0][0]), colorMap.get(materials[0][1]), colorMap.get(materials[0][2])));
-            sender.sendMessage(tl("recipeGrid", colorMap.get(materials[1][0]), colorMap.get(materials[1][1]), colorMap.get(materials[1][2])));
-            sender.sendMessage(tl("recipeGrid", colorMap.get(materials[2][0]), colorMap.get(materials[2][1]), colorMap.get(materials[2][2])));
+            sender.sendMessage(tlp(sender, "recipeGrid", colorMap.get(materials[0][0]), colorMap.get(materials[0][1]), colorMap.get(materials[0][2])));
+            sender.sendMessage(tlp(sender, "recipeGrid", colorMap.get(materials[1][0]), colorMap.get(materials[1][1]), colorMap.get(materials[1][2])));
+            sender.sendMessage(tlp(sender, "recipeGrid", colorMap.get(materials[2][0]), colorMap.get(materials[2][1]), colorMap.get(materials[2][2])));
 
             StringBuilder s = new StringBuilder();
             for (Material items : colorMap.keySet().toArray(new Material[colorMap.size()])) {
-                s.append(tl("recipeGridItem", colorMap.get(items), getMaterialName(items)));
+                s.append(tlp(sender, "recipeGridItem", colorMap.get(items), getMaterialName(items)));
             }
-            sender.sendMessage(tl("recipeWhere", s.toString()));
+            sender.sendMessage(tlp(sender, "recipeWhere", s.toString()));
         }
     }
 
@@ -157,10 +158,11 @@ public class Commandrecipe extends EssentialsCommand {
                 }
                 s.append(" ");
             }
-            sender.sendMessage(tl("recipeShapeless", s.toString()));
+            sender.sendMessage(tlp(sender, "recipeShapeless", s.toString()));
         }
     }
 
+    @SuppressWarnings("deprecation")
     public String getMaterialName(final ItemStack stack) {
         if (stack == null) {
             return tl("recipeNothing");
@@ -168,6 +170,7 @@ public class Commandrecipe extends EssentialsCommand {
         return getMaterialName(stack.getType());
     }
 
+    @SuppressWarnings("deprecation")
     public String getMaterialName(final Material type) {
         if (type == null) {
             return tl("recipeNothing");

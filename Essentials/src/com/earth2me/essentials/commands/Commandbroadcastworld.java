@@ -38,6 +38,7 @@ public class Commandbroadcastworld extends EssentialsCommand {
         sendBroadcast(args[0], sender.getSender().getName(), getFinalArg(args, 1));
     }
 
+    @SuppressWarnings("deprecation")
     private void sendBroadcast(final String worldName, final String name, final String message) throws Exception {
         World world = ess.getWorld(worldName);
         if (world == null) {

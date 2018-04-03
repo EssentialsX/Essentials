@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import static com.earth2me.essentials.I18n.tl;
+import static com.earth2me.essentials.I18n.tlp;
 
 
 public class Commanddelwarp extends EssentialsCommand {
@@ -22,7 +22,7 @@ public class Commanddelwarp extends EssentialsCommand {
         }
 
         ess.getWarps().removeWarp(args[0]);
-        sender.sendMessage(tl("deleteWarp", args[0]));
+        sender.sendMessage(tlp(sender, "deleteWarp", args[0]));
     }
 
     @Override

@@ -23,6 +23,7 @@ public class Commandbroadcast extends EssentialsCommand {
         sendBroadcast(sender.getSender().getName(), args);
     }
 
+    @SuppressWarnings("deprecation")
     private void sendBroadcast(final String name, final String[] args) throws NotEnoughArgumentsException {
         if (args.length < 1) {
             throw new NotEnoughArgumentsException();

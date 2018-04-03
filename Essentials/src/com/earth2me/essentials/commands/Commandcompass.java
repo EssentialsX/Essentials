@@ -3,7 +3,7 @@ package com.earth2me.essentials.commands;
 import com.earth2me.essentials.User;
 import org.bukkit.Server;
 
-import static com.earth2me.essentials.I18n.tl;
+import static com.earth2me.essentials.I18n.tlp;
 
 
 public class Commandcompass extends EssentialsCommand {
@@ -34,6 +34,6 @@ public class Commandcompass extends EssentialsCommand {
         } else {
             dir = "N";
         }
-        user.sendMessage(tl("compassBearing", dir, bearing));
+        user.sendMessage(tlp(user, "compassBearing", dir, bearing));
     }
 }

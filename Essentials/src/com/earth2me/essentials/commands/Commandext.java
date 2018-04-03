@@ -8,7 +8,7 @@ import org.bukkit.entity.Player;
 import java.util.Collections;
 import java.util.List;
 
-import static com.earth2me.essentials.I18n.tl;
+import static com.earth2me.essentials.I18n.tlp;
 
 
 public class Commandext extends EssentialsLoopCommand {
@@ -29,7 +29,7 @@ public class Commandext extends EssentialsLoopCommand {
     public void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception {
         if (args.length < 1) {
             extPlayer(user.getBase());
-            user.sendMessage(tl("extinguish"));
+            user.sendMessage(tlp(user, "extinguish"));
             return;
         }
 
@@ -39,7 +39,7 @@ public class Commandext extends EssentialsLoopCommand {
     @Override
     protected void updatePlayer(final Server server, final CommandSource sender, final User player, final String[] args) {
         extPlayer(player.getBase());
-        sender.sendMessage(tl("extinguishOthers", player.getDisplayName()));
+        sender.sendMessage(tlp(sender, "extinguishOthers", player.getDisplayName()));
     }
 
     private void extPlayer(final Player player) {

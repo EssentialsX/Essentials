@@ -9,7 +9,7 @@ import org.bukkit.Server;
 
 import java.util.*;
 
-import static com.earth2me.essentials.I18n.tl;
+import static com.earth2me.essentials.I18n.tlp;
 
 
 public class Commandlist extends EssentialsCommand {
@@ -67,7 +67,7 @@ public class Commandlist extends EssentialsCommand {
                     outputUserList.addAll(matchedList);
                     int limit = Integer.parseInt(groupValue);
                     if (matchedList.size() > limit) {
-                        sender.sendMessage(PlayerList.outputFormat(oConfigGroup, tl("groupNumber", matchedList.size(), commandLabel, FormatUtil.stripFormat(configGroup))));
+                        sender.sendMessage(PlayerList.outputFormat(oConfigGroup, tlp(sender, "groupNumber", matchedList.size(), commandLabel, FormatUtil.stripFormat(configGroup))));
                     } else {
                         sender.sendMessage(PlayerList.outputFormat(oConfigGroup, PlayerList.listUsers(ess, outputUserList, ", ")));
                     }
@@ -107,7 +107,7 @@ public class Commandlist extends EssentialsCommand {
             String groupName = asterisk.isEmpty() ? users.get(0).getGroup() : onlineGroup;
 
             if (ess.getPermissionsHandler().getName().equals("ConfigPermissions")) {
-                groupName = tl("connectedPlayers");
+                groupName = tlp(sender, "connectedPlayers");
             }
             if (users == null || users.isEmpty()) {
                 continue;
