@@ -5,6 +5,7 @@ import com.earth2me.essentials.textreader.KeywordReplacer;
 import com.earth2me.essentials.textreader.TextInput;
 import com.earth2me.essentials.textreader.TextPager;
 import com.earth2me.essentials.utils.DateUtil;
+import com.earth2me.essentials.utils.FormatUtil;
 import com.earth2me.essentials.utils.LocationUtil;
 import net.ess3.api.IEssentials;
 import net.ess3.nms.refl.ReflUtil;
@@ -152,7 +153,11 @@ public class EssentialsPlayerListener implements Listener {
             event.setQuitMessage(null);
         } else if (ess.getSettings().isCustomQuitMessage() && event.getQuitMessage() != null) {
             final Player player = event.getPlayer();
-            event.setQuitMessage(ess.getSettings().getCustomQuitMessage().replace("{PLAYER}", player.getDisplayName()).replace("{USERNAME}", player.getName()));
+            String quitMessage = ess.getSettings().getCustomQuitMessage();
+            quitMessage.replace("{PLAYER}", player.getDisplayName())
+                    .replace("{USERNAME}", player.getName());
+            quitMessage = FormatUtil.placeholderAPIFormat(user, quitMessage);
+            event.setQuitMessage(quitMessage);
         }
 
         user.startTransaction();
