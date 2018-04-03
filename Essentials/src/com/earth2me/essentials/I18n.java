@@ -81,6 +81,8 @@ public class I18n implements net.ess3.api.II18n {
             formatted = FormatUtil.placeholderAPIFormat((IUser) target, string);
         } else if (target instanceof Player) {
             formatted = FormatUtil.placeholderAPIFormat((Player) target, string);
+        } else if (target instanceof CommandSource && ((CommandSource) target).getSender() instanceof Player) {
+            formatted = FormatUtil.placeholderAPIFormat((Player) ((CommandSource) target).getSender(), string);
         } else {
             formatted = FormatUtil.placeholderAPIFormat((Player) null, string);
         }
