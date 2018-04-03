@@ -15,7 +15,7 @@ import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
-import static com.earth2me.essentials.I18n.tl;
+import static com.earth2me.essentials.I18n.tlp;
 
 
 public class Teleport implements net.ess3.api.ITeleport {
@@ -61,7 +61,7 @@ public class Teleport implements net.ess3.api.ITeleport {
                 time.setTimeInMillis(lastTime);
                 time.add(Calendar.SECOND, (int) cooldown);
                 time.add(Calendar.MILLISECOND, (int) ((cooldown * 1000.0) % 1000.0));
-                throw new Exception(tl("timeBeforeTeleport", DateUtil.formatDateDiff(time.getTimeInMillis())));
+                throw new Exception(tlp(teleportOwner, "timeBeforeTeleport", DateUtil.formatDateDiff(time.getTimeInMillis())));
             }
         }
         // if justCheck is set, don't update lastTeleport; we're just checking
@@ -93,7 +93,7 @@ public class Teleport implements net.ess3.api.ITeleport {
         Calendar c = new GregorianCalendar();
         c.add(Calendar.SECOND, (int) delay);
         c.add(Calendar.MILLISECOND, (int) ((delay * 1000.0) % 1000.0));
-        user.sendMessage(tl("dontMoveMessage", DateUtil.formatDateDiff(c.getTimeInMillis())));
+        user.sendMessage(tlp(user, "dontMoveMessage", DateUtil.formatDateDiff(c.getTimeInMillis())));
     }
 
     //The now function is used when you want to skip tp delay when teleporting someone to a location or player.
@@ -113,7 +113,7 @@ public class Teleport implements net.ess3.api.ITeleport {
         }
         final ITarget target = new PlayerTarget(entity);
         now(teleportOwner, target, cause);
-        teleportOwner.sendMessage(tl("teleporting", target.getLocation().getWorld().getName(), target.getLocation().getBlockX(), target.getLocation().getBlockY(), target.getLocation().getBlockZ()));
+        teleportOwner.sendMessage(tlp(teleportOwner, "teleporting", target.getLocation().getWorld().getName(), target.getLocation().getBlockX(), target.getLocation().getBlockY(), target.getLocation().getBlockZ()));
     }
 
     protected void now(IUser teleportee, ITarget target, TeleportCause cause) throws Exception {
@@ -129,7 +129,7 @@ public class Teleport implements net.ess3.api.ITeleport {
                     teleportee.getBase().teleport(LocationUtil.getSafeDestination(ess, teleportee, loc), cause);
                 }
             } else {
-                throw new Exception(tl("unsafeTeleportDestination", loc.getWorld().getName(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ()));
+                throw new Exception(tlp(teleportOwner, "unsafeTeleportDestination", loc.getWorld().getName(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ()));
             }
         } else {
             if (ess.getSettings().isForceDisableTeleportSafety()) {
@@ -160,7 +160,7 @@ public class Teleport implements net.ess3.api.ITeleport {
     @Override
     public void teleport(Player entity, Trade chargeFor, TeleportCause cause) throws Exception {
         ITarget target = new PlayerTarget(entity);
-        teleportOwner.sendMessage(tl("teleportToPlayer", entity.getDisplayName()));
+        teleportOwner.sendMessage(tlp(teleportOwner, "teleportToPlayer", entity.getDisplayName()));
         teleport(teleportOwner, target, chargeFor, cause);
     }
 
@@ -175,8 +175,8 @@ public class Teleport implements net.ess3.api.ITeleport {
     public void teleportPlayer(IUser teleportee, Player entity, Trade chargeFor, TeleportCause cause) throws Exception {
         ITarget target = new PlayerTarget(entity);
         teleport(teleportee, target, chargeFor, cause);
-        teleportee.sendMessage(tl("teleporting", target.getLocation().getWorld().getName(), target.getLocation().getBlockX(), target.getLocation().getBlockY(), target.getLocation().getBlockZ()));
-        teleportOwner.sendMessage(tl("teleporting", target.getLocation().getWorld().getName(), target.getLocation().getBlockX(), target.getLocation().getBlockY(), target.getLocation().getBlockZ()));
+        teleportee.sendMessage(tlp(teleportee, "teleporting", target.getLocation().getWorld().getName(), target.getLocation().getBlockX(), target.getLocation().getBlockY(), target.getLocation().getBlockZ()));
+        teleportOwner.sendMessage(tlp(teleportOwner, "teleporting", target.getLocation().getWorld().getName(), target.getLocation().getBlockX(), target.getLocation().getBlockY(), target.getLocation().getBlockZ()));
     }
 
     private void teleport(IUser teleportee, ITarget target, Trade chargeFor, TeleportCause cause) throws Exception {
@@ -257,9 +257,9 @@ public class Teleport implements net.ess3.api.ITeleport {
         }
         warp = event.getWarp();
         Location loc = ess.getWarps().getWarp(warp);
-        teleportee.sendMessage(tl("warpingTo", warp, loc.getWorld().getName(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ()));
+        teleportee.sendMessage(tlp(teleportee, "warpingTo", warp, loc.getWorld().getName(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ()));
         if (!teleportee.equals(teleportOwner)) {
-            teleportOwner.sendMessage(tl("warpingTo", warp, loc.getWorld().getName(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ()));
+            teleportOwner.sendMessage(tlp(teleportOwner, "warpingTo", warp, loc.getWorld().getName(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ()));
         }
         teleport(teleportee, new LocationTarget(loc), chargeFor, cause);
     }
@@ -269,7 +269,7 @@ public class Teleport implements net.ess3.api.ITeleport {
     public void back(Trade chargeFor) throws Exception {
         tpType = TeleportType.BACK;
         final Location loc = teleportOwner.getLastLocation();
-        teleportOwner.sendMessage(tl("backUsageMsg", loc.getWorld().getName(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ()));
+        teleportOwner.sendMessage(tlp(teleportOwner, "backUsageMsg", loc.getWorld().getName(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ()));
         teleport(teleportOwner, new LocationTarget(loc), chargeFor, TeleportCause.COMMAND);
     }
 

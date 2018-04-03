@@ -17,7 +17,7 @@ import java.util.*;
 import java.util.Map.Entry;
 import java.util.regex.Pattern;
 
-import static com.earth2me.essentials.I18n.tl;
+import static com.earth2me.essentials.I18n.tlp;
 
 
 public abstract class UserData extends PlayerExtension implements IConf {
@@ -207,7 +207,7 @@ public abstract class UserData extends PlayerExtension implements IConf {
             config.removeProperty("homes." + search);
             config.save();
         } else {
-            throw new Exception(tl("invalidHome", search));
+            throw new Exception(tlp(null, "invalidHome", search));
         }
     }
 

@@ -23,6 +23,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static com.earth2me.essentials.I18n.tl;
+import static com.earth2me.essentials.I18n.tlp;
 
 
 public class ItemDb implements IConf, net.ess3.api.IItemDb {
@@ -232,7 +233,7 @@ public class ItemDb implements IConf, net.ess3.api.IItemDb {
         }
 
         if (is.isEmpty() || is.get(0).getType() == Material.AIR) {
-            throw new Exception(tl("itemSellAir"));
+            throw new Exception(tlp(user, "itemSellAir"));
         }
 
         return is;

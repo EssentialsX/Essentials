@@ -17,6 +17,7 @@ import java.util.*;
 import java.util.logging.Level;
 
 import static com.earth2me.essentials.I18n.tl;
+import static com.earth2me.essentials.I18n.tlp;
 
 
 public class Kit {
@@ -42,7 +43,7 @@ public class Kit {
 
     public void checkPerms(final User user) throws Exception {
         if (!user.isAuthorized("essentials.kits." + kitName)) {
-            throw new Exception(tl("noKitPermission", "essentials.kits." + kitName));
+            throw new Exception(tlp(user, "noKitPermission", "essentials.kits." + kitName));
         }
     }
 
@@ -52,10 +53,10 @@ public class Kit {
         if (nextUse == 0L) {
             return;
         } else if (nextUse < 0L) {
-            user.sendMessage(tl("kitOnce"));
+            user.sendMessage(tlp(user, "kitOnce"));
             throw new NoChargeException();
         } else {
-            user.sendMessage(tl("kitTimed", DateUtil.formatDateDiff(nextUse)));
+            user.sendMessage(tlp(user, "kitTimed", DateUtil.formatDateDiff(nextUse)));
             throw new NoChargeException();
         }
     }
@@ -85,7 +86,7 @@ public class Kit {
             // Make sure delay is valid
             delay = kit.containsKey("delay") ? ((Number) kit.get("delay")).doubleValue() : 0.0d;
         } catch (Exception e) {
-            throw new Exception(tl("kitError2"));
+            throw new Exception(tlp(user, "kitError2"));
         }
 
         // When was the last kit used?
@@ -203,12 +204,12 @@ public class Kit {
             }
             user.getBase().updateInventory();
             if (spew) {
-                user.sendMessage(tl("kitInvFull"));
+                user.sendMessage(tlp(user, "kitInvFull"));
             }
         } catch (Exception e) {
             user.getBase().updateInventory();
             ess.getLogger().log(Level.WARNING, e.getMessage());
-            throw new Exception(tl("kitError2"), e);
+            throw new Exception(tlp(user, "kitError2"), e);
         }
     }
 }
