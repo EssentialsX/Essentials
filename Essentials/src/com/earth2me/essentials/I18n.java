@@ -75,10 +75,12 @@ public class I18n implements net.ess3.api.II18n {
     }
 
     @SuppressWarnings("deprecation")
-    public static String tlp(final Object sender, final String string, final Object... objects) {
+    public static String tlp(final Object target, final String string, final Object... objects) {
         String formatted = string;
-        if (sender instanceof IUser) {
-            formatted = FormatUtil.placeholderAPIFormat((IUser) sender, string);
+        if (target instanceof IUser) {
+            formatted = FormatUtil.placeholderAPIFormat((IUser) target, string);
+        } else if (target instanceof Player) {
+            formatted = FormatUtil.placeholderAPIFormat((Player) target, string);
         } else {
             formatted = FormatUtil.placeholderAPIFormat((Player) null, string);
         }
