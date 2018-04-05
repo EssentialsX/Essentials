@@ -74,7 +74,7 @@ public class Warps implements IConf, net.ess3.api.IWarps {
         }
         conf.setProperty(null, loc);
         conf.setProperty("name", name);
-        if (user != null) conf.setProperty("lastowner", user.getuuid().toString());
+        if (user != null) conf.setProperty("lastowner", user.getBase().getUniqueId().toString());
         try {
             conf.saveWithError();
         } catch (IOException ex) {
