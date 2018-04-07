@@ -1,7 +1,9 @@
 package com.earth2me.essentials;
 
 import com.earth2me.essentials.register.payment.Methods;
+import com.earth2me.essentials.utils.FormatUtil;
 import net.ess3.api.IEssentials;
+import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -29,6 +31,10 @@ public class EssentialsPluginListener implements Listener, IConf {
         if (!Methods.hasMethod() && Methods.setMethod(ess.getServer().getPluginManager())) {
             ess.getLogger().log(Level.INFO, "Payment method found (" + Methods.getMethod().getLongName() + " version: " + ess.getPaymentMethod().getMethod().getVersion() + ")");
         }
+
+        if(!FormatUtil.papiEnabled && event.getPlugin().getName().equals("PlaceholderAPI")) {
+            FormatUtil.papiEnabled = true;
+        }
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
@@ -41,6 +47,10 @@ public class EssentialsPluginListener implements Listener, IConf {
         if (ess.getPaymentMethod() != null && Methods.hasMethod() && Methods.checkDisabled(event.getPlugin())) {
             Methods.reset();
             ess.getLogger().log(Level.INFO, "Payment method was disabled. No longer accepting payments.");
+        }
+
+        if(FormatUtil.papiEnabled && event.getPlugin().getName().equals("PlaceholderAPI")){
+            FormatUtil.papiEnabled = false;
         }
     }
 

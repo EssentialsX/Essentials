@@ -156,6 +156,7 @@ public class EssentialsPlayerListener implements Listener {
             String quitMessage = ess.getSettings().getCustomQuitMessage();
             quitMessage.replace("{PLAYER}", player.getDisplayName())
                     .replace("{USERNAME}", player.getName());
+            //Untested, should work tho
             quitMessage = FormatUtil.placeholderAPIFormat(user, quitMessage);
             event.setQuitMessage(quitMessage);
         }
@@ -261,6 +262,7 @@ public class EssentialsPlayerListener implements Listener {
                 } else if (message == null) {
                     //NOOP
                 } else if (ess.getSettings().isCustomJoinMessage()) {
+                    //Untested, should work tho
                     String msg = ess.getSettings().getCustomJoinMessage()
                         .replace("{PLAYER}", player.getDisplayName()).replace("{USERNAME}", player.getName())
                         .replace("{UNIQUE}", NumberFormat.getInstance().format(ess.getUserMap().getUniqueUsers()));
