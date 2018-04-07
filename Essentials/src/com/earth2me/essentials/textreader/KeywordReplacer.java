@@ -6,6 +6,7 @@ import com.earth2me.essentials.PlayerList;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.DateUtil;
 import com.earth2me.essentials.utils.DescParseTickFormat;
+import com.earth2me.essentials.utils.FormatUtil;
 import com.earth2me.essentials.utils.NumberUtil;
 import net.ess3.api.IEssentials;
 import org.bukkit.Location;
@@ -74,6 +75,7 @@ public class KeywordReplacer implements IText {
 
         for (int i = 0; i < input.getLines().size(); i++) {
             String line = input.getLines().get(i);
+            line = FormatUtil.placeholderAPIFormat(user, line);
             final Matcher matcher = KEYWORD.matcher(line);
 
             while (matcher.find()) {
