@@ -32,7 +32,7 @@ public class EssentialsPluginListener implements Listener, IConf {
             ess.getLogger().log(Level.INFO, "Payment method found (" + Methods.getMethod().getLongName() + " version: " + ess.getPaymentMethod().getMethod().getVersion() + ")");
         }
 
-        if(!FormatUtil.papiEnabled && event.getPlugin().getName().equals("PlaceholderAPI")) {
+        if((FormatUtil.papiEnabled == null || !FormatUtil.papiEnabled) && event.getPlugin().getName().equals("PlaceholderAPI")) {
             FormatUtil.papiEnabled = true;
         }
     }
@@ -49,7 +49,7 @@ public class EssentialsPluginListener implements Listener, IConf {
             ess.getLogger().log(Level.INFO, "Payment method was disabled. No longer accepting payments.");
         }
 
-        if(FormatUtil.papiEnabled && event.getPlugin().getName().equals("PlaceholderAPI")){
+        if(FormatUtil.papiEnabled != null && FormatUtil.papiEnabled && event.getPlugin().getName().equals("PlaceholderAPI")){
             FormatUtil.papiEnabled = false;
         }
     }

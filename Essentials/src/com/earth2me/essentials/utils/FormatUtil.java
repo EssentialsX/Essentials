@@ -26,7 +26,7 @@ public class FormatUtil {
     public static final Pattern IPPATTERN = Pattern.compile("^([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\.([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\." + "([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\.([01]?\\d\\d?|2[0-4]\\d|25[0-5])$");
 
     //If we are going to make this static, should we move it?
-    public static Boolean papiEnabled = false;
+    public static Boolean papiEnabled = null;
 
     //This method is used to simply strip the native minecraft colour codes
     public static String stripFormat(final String input) {
