@@ -59,7 +59,6 @@ public class Warps implements IConf, net.ess3.api.IWarps {
     public void setWarp(String name, Location loc) throws Exception {
         setWarp(null,name,loc);
     }
-    //this is possible pls?
     @Override
     public void setWarp(User user,String name, Location loc) throws Exception {
         String filename = StringUtil.sanitizeFileName(name);
@@ -81,7 +80,19 @@ public class Warps implements IConf, net.ess3.api.IWarps {
             throw new IOException(tl("invalidWarpName"));
         }
     }
-    //TODO need a getlastowner() function
+    @Override
+    public UUID getLastOwner(String warp) throws WarpNotFoundException, InvalidWorldException {
+        EssentialsConf conf = warpPoints.get(new StringIgnoreCase(warp));
+        if (conf == null) {
+            throw new WarpNotFoundException();
+        }
+        UUID uuid = null;
+        try {
+            uuid = UUID.fromString(conf.getString("lastowner"));
+        }
+        catch (Exception ex) {}
+        return uuid;
+    }
     @Override
     public void removeWarp(String name) throws Exception {
         EssentialsConf conf = warpPoints.get(new StringIgnoreCase(name));
