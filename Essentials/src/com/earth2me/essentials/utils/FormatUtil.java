@@ -25,7 +25,8 @@ public class FormatUtil {
     static final transient Pattern URL_PATTERN = Pattern.compile("((?:(?:https?)://)?[\\w-_\\.]{2,})\\.([a-zA-Z]{2,3}(?:/\\S+)?)");
     public static final Pattern IPPATTERN = Pattern.compile("^([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\.([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\." + "([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\.([01]?\\d\\d?|2[0-4]\\d|25[0-5])$");
 
-    static Boolean papiEnabled = null;
+    //If we are going to make this static, should we move it?
+    public static Boolean papiEnabled = null;
 
     //This method is used to simply strip the native minecraft colour codes
     public static String stripFormat(final String input) {
