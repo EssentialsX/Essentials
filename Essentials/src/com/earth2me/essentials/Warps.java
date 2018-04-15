@@ -57,10 +57,11 @@ public class Warps implements IConf, net.ess3.api.IWarps {
 
     @Override
     public void setWarp(String name, Location loc) throws Exception {
-        setWarp(null,name,loc);
+        setWarp(null, name, loc);
     }
+    
     @Override
-    public void setWarp(User user,String name, Location loc) throws Exception {
+    public void setWarp(User user, String name, Location loc) throws Exception {
         String filename = StringUtil.sanitizeFileName(name);
         EssentialsConf conf = warpPoints.get(new StringIgnoreCase(name));
         if (conf == null) {
@@ -80,6 +81,7 @@ public class Warps implements IConf, net.ess3.api.IWarps {
             throw new IOException(tl("invalidWarpName"));
         }
     }
+    
     @Override
     public UUID getLastOwner(String warp) throws WarpNotFoundException, InvalidWorldException {
         EssentialsConf conf = warpPoints.get(new StringIgnoreCase(warp));
@@ -93,6 +95,7 @@ public class Warps implements IConf, net.ess3.api.IWarps {
         catch (Exception ex) {}
         return uuid;
     }
+    
     @Override
     public void removeWarp(String name) throws Exception {
         EssentialsConf conf = warpPoints.get(new StringIgnoreCase(name));
