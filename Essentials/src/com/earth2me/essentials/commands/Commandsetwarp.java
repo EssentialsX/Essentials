@@ -36,7 +36,7 @@ public class Commandsetwarp extends EssentialsCommand {
         }
 
         if (warpLoc == null || user.isAuthorized("essentials.warp.overwrite." + StringUtil.safeString(args[0]))) {
-            warps.setWarp(user ,args[0], loc);
+            warps.setWarp(user, args[0], loc);
         } else {
             throw new Exception(tl("warpOverwrite"));
         }
