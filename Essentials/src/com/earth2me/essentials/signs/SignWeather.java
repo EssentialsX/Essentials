@@ -25,7 +25,7 @@ public class SignWeather extends EssentialsSign {
             sign.setLine(1, "§2Storm");
             return true;
         }
-        sign.setLine(1, "§c<sun|storm>");
+        sign.setLine(1, tl("weatherSignUsage"));
         throw new SignException(tl("onlySunStorm"));
     }
 
