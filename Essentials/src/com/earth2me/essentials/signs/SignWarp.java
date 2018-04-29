@@ -20,7 +20,7 @@ public class SignWarp extends EssentialsSign {
         final String warpName = sign.getLine(1);
 
         if (warpName.isEmpty()) {
-            sign.setLine(1, "§c<Warp name>");
+            sign.setLine(1, tl("warpSignUsage"));
             throw new SignException(tl("invalidSignLine", 1));
         } else {
             try {
