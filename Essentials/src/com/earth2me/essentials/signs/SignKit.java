@@ -24,7 +24,7 @@ public class SignKit extends EssentialsSign {
         final String kitName = sign.getLine(1).toLowerCase(Locale.ENGLISH).trim();
 
         if (kitName.isEmpty()) {
-            sign.setLine(1, "§dKit name!");
+            sign.setLine(1, tl("kitSignUsage"));
             return false;
         } else {
             try {
