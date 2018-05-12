@@ -27,6 +27,10 @@ public class Commandbigtree extends EssentialsCommand {
             tree = TreeType.BIG_TREE;
         } else if (args.length > 0 && args[0].equalsIgnoreCase("jungle")) {
             tree = TreeType.JUNGLE;
+        } else if (args.length > 0 && args[0].equalsIgnoreCase("acacia")) {
+            tree = TreeType.ACACIA;
+        } else if (args.length > 0 && args[0].equalsIgnoreCase("darkoak")) {
+            tree = TreeType.DARK_OAK;
         } else {
             throw new NotEnoughArgumentsException();
         }
@@ -44,7 +48,7 @@ public class Commandbigtree extends EssentialsCommand {
     @Override
     protected List<String> getTabCompleteOptions(Server server, User user, String commandLabel, String[] args) {
         if (args.length == 1) {
-            return Lists.newArrayList("redwood", "tree", "jungle");
+            return Lists.newArrayList("redwood", "tree", "jungle", "acacia", "darkoak");
         } else {
             return Collections.emptyList();
         }
