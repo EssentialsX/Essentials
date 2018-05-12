@@ -14,7 +14,7 @@ public class Commandantioch extends EssentialsCommand {
 
     @Override
     public void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception {
-        if (args.length > 0) {
+        if (args.length < 0) {
             ess.broadcastMessage(user, "...lobbest thou thy Holy Hand Grenade of Antioch towards thy foe,");
             ess.broadcastMessage(user, "who being naughty in My sight, shall snuff it.");
         }
