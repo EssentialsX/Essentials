@@ -18,6 +18,10 @@ public class Commandkickall extends EssentialsCommand {
         String kickReason = args.length > 0 ? getFinalArg(args, 0) : tl("kickDefault");
         kickReason = FormatUtil.replaceFormat(kickReason.replace("\\n", "\n").replace("|", "\n"));
 
+        if (ess.getOnlinePlayers().isEmpty()) {
+            throw new Exception(tl("serverEmpty"));
+        }
+
         for (Player onlinePlayer : ess.getOnlinePlayers()) {
             if (!sender.isPlayer() || !onlinePlayer.getName().equalsIgnoreCase(sender.getPlayer().getName())) {
                 onlinePlayer.kickPlayer(kickReason);
