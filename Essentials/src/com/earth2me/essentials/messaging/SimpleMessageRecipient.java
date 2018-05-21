@@ -82,7 +82,7 @@ public class SimpleMessageRecipient implements IMessageRecipient {
                     sendMessage(tl("userAFK", recipient.getDisplayName()));
                 }
             default:
-                sendMessage(tl("msgFormat", tl("me"), recipient.getDisplayName(), message));
+                sendMessage(tl("msgFormatOut", getDisplayName(), recipient.getDisplayName(), message));
 
                 // Better Social Spy
                 User senderUser = getUser(this);
@@ -132,7 +132,7 @@ public class SimpleMessageRecipient implements IMessageRecipient {
             }
         }
         // Display the formatted message to this recipient.
-        sendMessage(tl("msgFormat", sender.getDisplayName(), tl("me"), message));
+        sendMessage(tl("msgFormatIn", sender.getDisplayName(), getDisplayName(), message));
 
         if (ess.getSettings().isLastMessageReplyRecipient()) {
             // If this recipient doesn't have a reply recipient, initiate by setting the first
