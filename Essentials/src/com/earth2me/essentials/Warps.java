@@ -81,7 +81,7 @@ public class Warps implements IConf, net.ess3.api.IWarps {
     }
     
     @Override
-    public UUID getLastOwner(String warp) throws WarpNotFoundException, InvalidWorldException {
+    public UUID getLastOwner(String warp) throws WarpNotFoundException {
         EssentialsConf conf = warpPoints.get(new StringIgnoreCase(warp));
         if (conf == null) {
             throw new WarpNotFoundException();
