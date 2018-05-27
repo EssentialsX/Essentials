@@ -1,6 +1,6 @@
 package com.earth2me.essentials.sync;
 
-import net.ess3.api.IUser;
+import com.earth2me.essentials.UserData;
 
 /*
  * ISyncProviders are called when EssentialsX data is modified.
@@ -11,11 +11,11 @@ public interface ISyncProvider {
     /*
      * Add a mail message to the user's mailbox.
      */
-    public void addMail(IUser user, String message);
+    public void addMail(UserData user, String message);
     
     /*
      * Set the user's nickname.
      */
-    public void setNickname(IUser user, String nick);
+    public void setNickname(UserData user, String nick);
 
 }

@@ -226,9 +226,17 @@ public abstract class UserData extends PlayerExtension implements IConf {
     }
 
     public void setNickname(String nick) {
+        setNickname(nick, true);
+    }
+
+    public void setNickname(String nick, boolean propagate) {
         nickname = nick;
         config.setProperty("nickname", nick);
         config.save();
+
+        if (propagate) {
+            ess.getSyncProvider().setNickname(this, nick);
+        }
     }
 
     private List<Integer> unlimited;
@@ -416,8 +424,16 @@ public abstract class UserData extends PlayerExtension implements IConf {
     }
 
     public void addMail(String mail) {
+        addMail(mail, true);
+    }
+
+    public void addMail(String mail, boolean propagate) {
         mails.add(mail);
         setMails(mails);
+
+        if (propagate) {
+            ess.getSyncProvider().addMail(this, mail);
+        }
     }
 
     private boolean teleportEnabled;

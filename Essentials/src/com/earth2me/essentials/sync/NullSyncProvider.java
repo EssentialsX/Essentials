@@ -1,6 +1,6 @@
 package com.earth2me.essentials.sync;
 
-import net.ess3.api.IUser;
+import com.earth2me.essentials.UserData;
 
 /* 
  * Used in the case that no sync provider is configured.
@@ -8,9 +8,9 @@ import net.ess3.api.IUser;
 public class NullSyncProvider implements ISyncProvider {
 
 	@Override
-	public void setNickname(IUser user, String nick) {}
+	public void addMail(UserData user, String message) {}
 
 	@Override
-	public void addMail(IUser user, String message) {}
+	public void setNickname(UserData user, String nick) {}
 
 }
