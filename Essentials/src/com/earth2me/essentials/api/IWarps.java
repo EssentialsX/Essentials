@@ -55,6 +55,25 @@ public interface IWarps extends IConf {
     void setWarp(String name, Location loc) throws Exception;
 
     /**
+     * Set a warp
+     *
+     * @param user - User of warp
+     * @param name - Name of warp
+     * @param loc  - Location of warp
+     *
+     * @throws Exception
+     */
+    void setWarp(User user, String name, Location loc) throws Exception;
+      
+    /**
+     * Gets Lastowner UUID
+     *   
+     * @param name - Name of warp
+     *
+     * @throws WarpNotFoundException
+     */
+    UUID getLastOwner(String warp) throws WarpNotFoundException;
+    /**
      * Check to see if the file is empty
      *
      * @return
