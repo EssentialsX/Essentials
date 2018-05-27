@@ -18,6 +18,8 @@
 package com.earth2me.essentials;
 
 import com.earth2me.essentials.commands.*;
+import com.earth2me.essentials.sync.ISyncProvider;
+import com.earth2me.essentials.sync.NullSyncProvider;
 import com.earth2me.essentials.metrics.Metrics;
 import com.earth2me.essentials.perm.PermissionsHandler;
 import com.earth2me.essentials.register.payment.Methods;
@@ -107,6 +109,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
     private transient SpawnEggProvider spawnEggProvider;
     private transient PotionMetaProvider potionMetaProvider;
     private transient Kits kits;
+    private transient Map<String, ISyncProvider> syncProviders = new HashMap<>();
 
     public Essentials() {
     }
@@ -920,4 +923,20 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
             ess.reload();
         }
     }
+
+	@Override
+	public void addSyncProvider(String name, ISyncProvider provider) {
+        syncProviders.put(name, provider);
+	}
+
+	@Override
+	public ISyncProvider getSyncProvider() {
+        ISyncProvider provider = syncProviders.get(settings.getCurrentSyncProvider());
+
+        if (provider == null) {
+            provider = new NullSyncProvider();
+        }
+
+        return provider;
+	}
 }
