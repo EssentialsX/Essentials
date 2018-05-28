@@ -59,7 +59,7 @@ public class Warps implements IConf, net.ess3.api.IWarps {
     }
     
     @Override
-    public void setWarp(User user, String name, Location loc) throws Exception {
+    public void setWarp(IUser user, String name, Location loc) throws Exception {
         String filename = StringUtil.sanitizeFileName(name);
         EssentialsConf conf = warpPoints.get(new StringIgnoreCase(name));
         if (conf == null) {

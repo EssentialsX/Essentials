@@ -1,11 +1,13 @@
 package com.earth2me.essentials.api;
 
 import com.earth2me.essentials.IConf;
+import com.earth2me.essentials.IUser;
 import com.earth2me.essentials.commands.WarpNotFoundException;
 import org.bukkit.Location;
 
 import java.io.File;
 import java.util.Collection;
+import java.util.UUID;
 
 
 public interface IWarps extends IConf {
@@ -63,7 +65,7 @@ public interface IWarps extends IConf {
      *
      * @throws Exception
      */
-    void setWarp(User user, String name, Location loc) throws Exception;
+    void setWarp(IUser user, String name, Location loc) throws Exception;
       
     /**
      * Gets Lastowner UUID
