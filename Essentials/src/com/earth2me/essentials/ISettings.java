@@ -306,6 +306,4 @@ public interface ISettings extends IConf {
     List<String> getDefaultEnabledConfirmCommands();
 
     boolean isConfirmCommandEnabledByDefault(String commandName);
-
-    String getCurrentSyncProvider();
 }

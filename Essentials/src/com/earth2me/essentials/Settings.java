@@ -533,7 +533,6 @@ public class Settings implements net.ess3.api.ISettings {
         currencyFormat = _getCurrencyFormat();
         unprotectedSigns = _getUnprotectedSign();
         defaultEnabledConfirmCommands = _getDefaultEnabledConfirmCommands();
-        currentSyncProvider = _getCurrentSyncProvider();
     }
 
     private List<Integer> itemSpawnBl = new ArrayList<Integer>();
@@ -1440,15 +1439,4 @@ public class Settings implements net.ess3.api.ISettings {
     public boolean isConfirmCommandEnabledByDefault(String commandName) {
         return getDefaultEnabledConfirmCommands().contains(commandName.toLowerCase());
     }
-
-    private String currentSyncProvider;
-
-    private String _getCurrentSyncProvider() {
-        return config.getString("sync-provider");
-    }
-
-	@Override
-	public String getCurrentSyncProvider() {
-		return currentSyncProvider;
-	}
 }
