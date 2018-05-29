@@ -140,7 +140,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
         i18n.onEnable();
         i18n.updateLocale("en");
         Console.setInstance(this);
-        
+
         LOGGER.log(Level.INFO, tl("usingTempFolderForTesting"));
         LOGGER.log(Level.INFO, dataFolder.toString());
         settings = new Settings(this);
@@ -164,7 +164,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
             i18n = new I18n(this);
             i18n.onEnable();
             execTimer.mark("I18n1");
-
+            
             Console.setInstance(this);
 
             final PluginManager pm = getServer().getPluginManager();
