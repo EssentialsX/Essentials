@@ -16,4 +16,7 @@ public abstract class AbstractSyncProvider implements ISyncProvider {
 	@Override
 	public void setNickname(UserData user, String nick) {}
 
+	@Override
+	public void setTeleport(UserData user, boolean state) {}
+
 }

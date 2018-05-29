@@ -23,4 +23,11 @@ public interface ISyncProvider {
      */
     public void setNickname(UserData user, String nick);
 
+    /**
+     * Set the user's teleport toggle
+     *
+     * @param user The UserData of the user
+     * @param state The user's teleport toggle state
+     */
+    public void setTeleport(UserData user, boolean state);
 }

@@ -459,9 +459,17 @@ public abstract class UserData extends PlayerExtension implements IConf {
     }
 
     public void setTeleportEnabled(boolean set) {
+        setTeleportEnabled(set, true);
+    }
+
+    public void setTeleportEnabled(boolean set, boolean propagate) {
         teleportEnabled = set;
         config.setProperty("teleportenabled", set);
         config.save();
+
+        if (propagate) {
+            ess.getSyncProvider().setTeleport(this, set);
+        }
     }
 
     private List<String> ignoredPlayers;
