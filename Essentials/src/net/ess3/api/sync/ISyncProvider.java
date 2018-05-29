@@ -16,8 +16,8 @@ public interface ISyncProvider {
     /*
      * Clear the user's mailbox.
      */
-    public void clearMail(User user, String message);
-    
+    public void clearMail(User user);
+
     /*
      * Set the user's nickname.
      */

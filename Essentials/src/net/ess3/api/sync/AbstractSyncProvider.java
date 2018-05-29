@@ -1,6 +1,6 @@
 package net.ess3.api.sync;
 
-import com.earth2me.essentials.UserData;
+import com.earth2me.essentials.User;
 
 /* 
  * Abstract provider from which sync providers can be extended.
@@ -8,9 +8,15 @@ import com.earth2me.essentials.UserData;
 public abstract class AbstractSyncProvider implements ISyncProvider {
 
 	@Override
-	public void addMail(UserData user, String message) {}
+	public void addMail(User user, String message) {
+	}
 
 	@Override
-	public void setNickname(UserData user, String nick) {}
+	public void clearMail(User user) {
+	}
+
+	@Override
+	public void setNickname(User user, String nick) {
+	}
 
 }
