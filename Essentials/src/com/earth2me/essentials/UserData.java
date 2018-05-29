@@ -412,6 +412,18 @@ public abstract class UserData extends PlayerExtension implements IConf {
         return mails;
     }
 
+    public void clearMail() {
+        clearMail(true);
+    }
+
+    public void clearMail(boolean propagate) {
+        setMails(null);
+
+        if (propagate) {
+            ess.getSyncProvider().clearMail(this);
+        }
+    }
+
     public void setMails(List<String> mails) {
         if (mails == null) {
             config.removeProperty("mail");

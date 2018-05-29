@@ -87,7 +87,7 @@ public class Commandmail extends EssentialsCommand {
             return;
         }
         if (args.length >= 1 && "clear".equalsIgnoreCase(args[0])) {
-            user.setMails(null);
+            user.clearMail();
             user.sendMessage(tl("mailCleared"));
             return;
         }
