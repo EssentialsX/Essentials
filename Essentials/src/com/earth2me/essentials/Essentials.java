@@ -81,6 +81,7 @@ import java.util.logging.Logger;
 
 import static com.earth2me.essentials.I18n.tl;
 
+
 public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
     private static final Logger LOGGER = Logger.getLogger("Essentials");
     private transient ISettings settings;
@@ -110,8 +111,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
     }
 
     public Essentials(final Server server) {
-        super(new JavaPluginLoader(server),
-                new PluginDescriptionFile("Essentials", "", "com.earth2me.essentials.Essentials"), null, null);
+        super(new JavaPluginLoader(server), new PluginDescriptionFile("Essentials", "", "com.earth2me.essentials.Essentials"), null, null);
     }
 
     @SuppressWarnings("unused")
@@ -169,9 +169,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
 
             final PluginManager pm = getServer().getPluginManager();
             for (Plugin plugin : pm.getPlugins()) {
-                if (plugin.getDescription().getName().startsWith("Essentials")
-                        && !plugin.getDescription().getVersion().equals(this.getDescription().getVersion())
-                        && !plugin.getDescription().getName().equals("EssentialsAntiCheat")) {
+                if (plugin.getDescription().getName().startsWith("Essentials") && !plugin.getDescription().getVersion().equals(this.getDescription().getVersion()) && !plugin.getDescription().getName().equals("EssentialsAntiCheat")) {
                     getLogger().warning(tl("versionMismatch", plugin.getDescription().getName()));
                 }
             }
@@ -213,15 +211,22 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
                 jails = new Jails(this);
                 confList.add(jails);
                 spawnerProvider = new ProviderFactory<>(getLogger(),
-                        Arrays.asList(BlockMetaSpawnerProvider.class, v1_8_R2SpawnerProvider.class,
-                                v1_8_R1SpawnerProvider.class, LegacySpawnerProvider.class),
-                        "mob spawner").getProvider();
+                        Arrays.asList(
+                                BlockMetaSpawnerProvider.class,
+                                v1_8_R2SpawnerProvider.class,
+                                v1_8_R1SpawnerProvider.class,
+                                LegacySpawnerProvider.class
+                        ), "mob spawner").getProvider();
                 spawnEggProvider = new ProviderFactory<>(getLogger(),
-                        Arrays.asList(ReflSpawnEggProvider.class, LegacySpawnEggProvider.class), "spawn egg")
-                                .getProvider();
+                        Arrays.asList(
+                                ReflSpawnEggProvider.class,
+                                LegacySpawnEggProvider.class
+                        ), "spawn egg").getProvider();
                 potionMetaProvider = new ProviderFactory<>(getLogger(),
-                        Arrays.asList(BasePotionDataProvider.class, LegacyPotionMetaProvider.class), "potion meta")
-                                .getProvider();
+                        Arrays.asList(
+                                BasePotionDataProvider.class,
+                                LegacyPotionMetaProvider.class
+                        ), "potion meta").getProvider();
                 reload();
             } catch (YAMLException exception) {
                 if (pm.getPlugin("EssentialsUpdate") != null) {
@@ -268,8 +273,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
 
     @Override
     public void saveConfig() {
-        // We don't use any of the bukkit config writing, as this breaks our config file
-        // formatting.
+        // We don't use any of the bukkit config writing, as this breaks our config file formatting.
     }
 
     private void registerListeners(PluginManager pm) {
@@ -353,15 +357,14 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String commandLabel, String[] args) {
         return onTabCompleteEssentials(sender, command, commandLabel, args, Essentials.class.getClassLoader(),
-                "com.earth2me.essentials.commands.Command", "essentials.", null);
+            "com.earth2me.essentials.commands.Command", "essentials.", null);
     }
 
     @Override
-    public List<String> onTabCompleteEssentials(final CommandSender cSender, final Command command,
-            final String commandLabel, final String[] args, final ClassLoader classLoader, final String commandPath,
-            final String permissionPrefix, final IEssentialsModule module) {
-        if (!getSettings().isCommandOverridden(command.getName())
-                && (!commandLabel.startsWith("e") || commandLabel.equalsIgnoreCase(command.getName()))) {
+    public List<String> onTabCompleteEssentials(final CommandSender cSender, final Command command, final String commandLabel, final String[] args,
+                                                final ClassLoader classLoader, final String commandPath, final String permissionPrefix,
+                                                final IEssentialsModule module) {
+        if (!getSettings().isCommandOverridden(command.getName()) && (!commandLabel.startsWith("e") || commandLabel.equalsIgnoreCase(command.getName()))) {
             final PluginCommand pc = alternativeCommandsHandler.getAlternative(commandLabel);
             if (pc != null) {
                 try {
@@ -376,8 +379,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
         }
 
         try {
-            // Note: The tab completer is always a player, even when tab-completing in a
-            // command block
+            // Note: The tab completer is always a player, even when tab-completing in a command block
             User user = null;
             if (cSender instanceof Player) {
                 user = getUser((Player) cSender);
@@ -430,19 +432,14 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
     }
 
     @Override
-    public boolean onCommand(final CommandSender sender, final Command command, final String commandLabel,
-            final String[] args) {
-        return onCommandEssentials(sender, command, commandLabel, args, Essentials.class.getClassLoader(),
-                "com.earth2me.essentials.commands.Command", "essentials.", null);
+    public boolean onCommand(final CommandSender sender, final Command command, final String commandLabel, final String[] args) {
+        return onCommandEssentials(sender, command, commandLabel, args, Essentials.class.getClassLoader(), "com.earth2me.essentials.commands.Command", "essentials.", null);
     }
 
     @Override
-    public boolean onCommandEssentials(final CommandSender cSender, final Command command, final String commandLabel,
-            final String[] args, final ClassLoader classLoader, final String commandPath, final String permissionPrefix,
-            final IEssentialsModule module) {
+    public boolean onCommandEssentials(final CommandSender cSender, final Command command, final String commandLabel, final String[] args, final ClassLoader classLoader, final String commandPath, final String permissionPrefix, final IEssentialsModule module) {
         // Allow plugins to override the command via onCommand
-        if (!getSettings().isCommandOverridden(command.getName())
-                && (!commandLabel.startsWith("e") || commandLabel.equalsIgnoreCase(command.getName()))) {
+        if (!getSettings().isCommandOverridden(command.getName()) && (!commandLabel.startsWith("e") || commandLabel.equalsIgnoreCase(command.getName()))) {
             final PluginCommand pc = alternativeCommandsHandler.getAlternative(commandLabel);
             if (pc != null) {
                 alternativeCommandsHandler.executed(commandLabel, pc);
@@ -450,8 +447,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
                     return pc.execute(cSender, commandLabel, args);
                 } catch (final Exception ex) {
                     Bukkit.getLogger().log(Level.SEVERE, ex.getMessage(), ex);
-                    cSender.sendMessage(
-                            ChatColor.RED + "An internal error occurred while attempting to perform this command");
+                    cSender.sendMessage(ChatColor.RED + "An internal error occurred while attempting to perform this command");
                     return true;
                 }
             }
@@ -469,23 +465,19 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
             }
 
             if (bSenderBlock != null) {
-                Bukkit.getLogger().log(Level.INFO, "CommandBlock at {0},{1},{2} issued server command: /{3} {4}",
-                        new Object[] { bSenderBlock.getX(), bSenderBlock.getY(), bSenderBlock.getZ(), commandLabel,
-                                EssentialsCommand.getFinalArg(args, 0) });
+                Bukkit.getLogger().log(Level.INFO, "CommandBlock at {0},{1},{2} issued server command: /{3} {4}", new Object[]{bSenderBlock.getX(), bSenderBlock.getY(), bSenderBlock.getZ(), commandLabel, EssentialsCommand.getFinalArg(args, 0)});
             } else if (user == null) {
-                Bukkit.getLogger().log(Level.INFO, "{0} issued server command: /{1} {2}",
-                        new Object[] { cSender.getName(), commandLabel, EssentialsCommand.getFinalArg(args, 0) });
+                Bukkit.getLogger().log(Level.INFO, "{0} issued server command: /{1} {2}", new Object[]{cSender.getName(), commandLabel, EssentialsCommand.getFinalArg(args, 0)});
             }
 
             CommandSource sender = new CommandSource(cSender);
 
             // New mail notification
-            if (user != null && !getSettings().isCommandDisabled("mail") && !command.getName().equals("mail")
-                    && user.isAuthorized("essentials.mail")) {
+            if (user != null && !getSettings().isCommandDisabled("mail") && !command.getName().equals("mail") && user.isAuthorized("essentials.mail")) {
                 user.notifyOfMail();
             }
 
-            // Print version even if admin command is not available #easteregg
+            //Print version even if admin command is not available #easteregg
             if (commandLabel.equalsIgnoreCase("essversion")) {
                 sender.sendMessage("This server is running Essentials " + getDescription().getVersion());
                 return true;
@@ -516,8 +508,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
 
             if (user != null && user.isJailed() && !user.isAuthorized(cmd, "essentials.jail.allow.")) {
                 if (user.getJailTimeout() > 0) {
-                    user.sendMessage(
-                            tl("playerJailedFor", user.getName(), DateUtil.formatDateDiff(user.getJailTimeout())));
+                    user.sendMessage(tl("playerJailedFor", user.getName(), DateUtil.formatDateDiff(user.getJailTimeout())));
                 } else {
                     user.sendMessage(tl("jailMessage"));
                 }
@@ -637,25 +628,24 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
         return null;
     }
 
-    // This will return null if there is not a match.
+    //This will return null if there is not a match.
     @Override
     public User getUser(final String base) {
         return getOfflineUser(base);
     }
 
-    // This will return null if there is not a match.
+    //This will return null if there is not a match.
     @Override
     public User getUser(final UUID base) {
         return userMap.getUser(base);
     }
 
-    // This will return null if there is not a match.
+    //This will return null if there is not a match.
     @Override
     public User getOfflineUser(final String name) {
         final User user = userMap.getUser(name);
         if (user != null && user.getBase() instanceof OfflinePlayer) {
-            // This code should attempt to use the last known name of a user, if Bukkit
-            // returns name as null.
+            // This code should attempt to use the last known name of a user, if Bukkit returns name as null.
             final String lastName = user.getLastAccountName();
             if (lastName != null) {
                 ((OfflinePlayer) user.getBase()).setName(lastName);
@@ -666,7 +656,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
         return user;
     }
 
-    // This will create a new user if there is not a match.
+    //This will create a new user if there is not a match.
     @Override
     public User getUser(final Player base) {
         if (base == null) {
@@ -743,8 +733,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
         return broadcastMessage(null, permission, message, false);
     }
 
-    private int broadcastMessage(final IUser sender, final String permission, final String message,
-            final boolean keywords) {
+    private int broadcastMessage(final IUser sender, final String permission, final String message, final boolean keywords) {
         if (sender != null && sender.isHidden()) {
             return 0;
         }
@@ -755,8 +744,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
 
         for (Player player : players) {
             final User user = getUser(player);
-            if ((permission == null && (sender == null || !user.isIgnoredPlayer(sender)))
-                    || (permission != null && user.isAuthorized(permission))) {
+            if ((permission == null && (sender == null || !user.isIgnoredPlayer(sender))) || (permission != null && user.isAuthorized(permission))) {
                 if (keywords) {
                     broadcast = new KeywordReplacer(broadcast, new CommandSource(player), this, false);
                 }
@@ -847,9 +835,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
     @Override
     public Collection<Player> getOnlinePlayers() {
         try {
-            return (Collection<Player>) getServer().getOnlinePlayers(); // Needed for sanity here, the Bukkit API is a
-                                                                        // bit broken in the sense it only allows
-                                                                        // subclasses of Player to this list
+            return (Collection<Player>) getServer().getOnlinePlayers(); // Needed for sanity here, the Bukkit API is a bit broken in the sense it only allows subclasses of Player to this list
         } catch (NoSuchMethodError ex) {
             try {
                 return Arrays.asList((Player[]) oldGetOnlinePlayers.invoke(getServer()));
