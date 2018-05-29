@@ -38,4 +38,20 @@ public interface ISyncProvider {
      * @param state The user's teleport toggle state
      */
     public void setTeleport(UserData user, boolean state);
+
+    /**
+     * Set the user's mute status.
+     *
+     * @param user The UserData of the user
+     * @param state The user's mute status
+     */
+    public void setMuted(UserData user, boolean state);
+
+    /**
+     * Set the user's mute timeout.
+     *
+     * @param user The UserData of the user
+     * @param time The user's mute timeout
+     */
+    public void setMuteTimeout(UserData user, long time);
 }

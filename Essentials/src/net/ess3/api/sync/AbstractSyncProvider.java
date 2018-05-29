@@ -19,4 +19,10 @@ public abstract class AbstractSyncProvider implements ISyncProvider {
 	@Override
 	public void setTeleport(UserData user, boolean state) {}
 
+	@Override
+	public void setMuted(UserData user, boolean state) {}
+
+	@Override
+	public void setMuteTimeout(UserData user, long time) {}
+
 }

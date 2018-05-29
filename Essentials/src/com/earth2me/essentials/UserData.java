@@ -542,9 +542,17 @@ public abstract class UserData extends PlayerExtension implements IConf {
     }
 
     public void setMuted(boolean set) {
+        setMuted(set, true);
+    }
+
+    public void setMuted(boolean set, boolean propagate) {
         muted = set;
         config.setProperty("muted", set);
         config.save();
+
+        if (propagate) {
+            ess.getSyncProvider().setMuted(this, set);
+        }
     }
 
     private long muteTimeout;
@@ -558,9 +566,17 @@ public abstract class UserData extends PlayerExtension implements IConf {
     }
 
     public void setMuteTimeout(long time) {
+        setMuteTimeout(time, true);
+    }
+
+    public void setMuteTimeout(long time, boolean propagate) {
         muteTimeout = time;
         config.setProperty("timestamps.mute", time);
         config.save();
+
+        if (propagate) {
+            ess.getSyncProvider().setMuteTimeout(this, time);
+        }
     }
 
     private boolean jailed;
