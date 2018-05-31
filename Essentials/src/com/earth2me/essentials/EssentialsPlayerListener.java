@@ -308,6 +308,9 @@ public class EssentialsPlayerListener implements Listener {
                     user.setGodModeEnabled(false);
                     ess.getLogger().log(Level.INFO, "Set god mode to false for {0} because they had it enabled without permission.", user.getName());
                 }
+                
+                user.setConfirmingClearCommand(null);
+                user.getConfirmingPayments().clear();
 
                 user.stopTransaction();
             }
