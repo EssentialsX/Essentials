@@ -107,6 +107,10 @@ commands:
     description: Opens a portable disposal menu.
     usage: /<command>
     aliases: [edisposal,trash,etrash]
+  down:
+    description: Teleport to first available block below you at your current location.
+    usage: /<down>
+    aliases: [edown]
   eco:
     description: Manages the server economy.
     usage: /<command> <give|take|set|reset> <player> <amount>
@@ -419,10 +423,6 @@ commands:
     description: Teleport to the highest block at your current position.
     usage: /<command>
     aliases: [etop]
-  down:
-    description: Teleport to the highest block at your current position.
-    usage: /<down>
-    aliases: [edown]
   tp:
     description: Teleport to a player.
     usage: /<command> <player> [otherplayer]
