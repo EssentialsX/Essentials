@@ -419,6 +419,10 @@ commands:
     description: Teleport to the highest block at your current position.
     usage: /<command>
     aliases: [etop]
+  down:
+      description: Teleport to the highest block at your current position.
+      usage: /<down>
+      aliases: [edown]
   tp:
     description: Teleport to a player.
     usage: /<command> <player> [otherplayer]
