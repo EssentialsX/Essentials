@@ -21,14 +21,16 @@ public class Commanddown extends EssentialsCommand {
         final float pitch = user.getLocation().getPitch();
         final float yaw = user.getLocation().getYaw();
 
+        Location loc = user.getLocation();
         for (int y = user.getLocation().getBlockY() - 3; y > 0; y--) {
             if (!LocationUtil.isBlockUnsafe(user.getWorld(), topX, y, topZ)) {
-                Location loc = new Location(user.getWorld(), topX, y, topZ, yaw, pitch);
-                user.getTeleport().teleport(loc, new Trade(this.getName(), ess), PlayerTeleportEvent.TeleportCause.COMMAND);
-                user.sendMessage(tl("teleportDown", loc.getWorld().getName(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ()));
-                return;
+                loc = new Location(user.getWorld(), topX, y, topZ, yaw, pitch);
+                break;
             }
         }
+
+        user.getTeleport().teleport(loc, new Trade(this.getName(), ess), PlayerTeleportEvent.TeleportCause.COMMAND);
+        user.sendMessage(tl("teleportDown", loc.getWorld().getName(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ()));
 
     }
 }
