@@ -5,11 +5,15 @@ import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.NumberUtil;
 import net.ess3.api.IEssentials;
 import net.ess3.api.IUser;
+import net.ess3.api.MaxMoneyException;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.economy.EconomyResponse;
+import net.milkbowl.vault.economy.EconomyResponse.ResponseType;
+
 import org.bukkit.OfflinePlayer;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 public class EconomyProvider implements Economy {
@@ -24,6 +28,10 @@ public class EconomyProvider implements Economy {
 
     private OfflinePlayer getOfflineFromName(String name) {
         return ess.getServer().getOfflinePlayer(name);
+    }
+
+    private EconomyResponse getBankNotSupportedResponse() {
+        return new EconomyResponse(0, 0, ResponseType.NOT_IMPLEMENTED, "Bank accounts are not supported by EssentialsX Economy.");
     }
 
     @Override
@@ -133,7 +141,7 @@ public class EconomyProvider implements Economy {
         if (amountDouble < 0) {
             return new EconomyResponse(0,
                     user.getMoney().doubleValue(),
-                    EconomyResponse.ResponseType.FAILURE,
+                    ResponseType.FAILURE,
                     "Cannot withdraw a negative amount.");
         }
 
@@ -144,13 +152,13 @@ public class EconomyProvider implements Economy {
             user.takeMoney(amount);
             return new EconomyResponse(bal.subtract(user.getMoney()).doubleValue(),
                     user.getMoney().doubleValue(),
-                    EconomyResponse.ResponseType.SUCCESS,
+                    ResponseType.SUCCESS,
                     null);
         }
 
         return new EconomyResponse(0,
                 user.getMoney().doubleValue(),
-                EconomyResponse.ResponseType.FAILURE,
+                ResponseType.FAILURE,
                 "Could not afford withdrawal.");
     }
 
@@ -173,7 +181,25 @@ public class EconomyProvider implements Economy {
 
     @Override
     public EconomyResponse depositPlayer(OfflinePlayer player, double amount) {
-        return null; // TODO Make this do stuff
+        final User user = ess.getUser(player.getUniqueId());
+
+        if (amount < 0) {
+            return new EconomyResponse(0, 0, ResponseType.FAILURE, "Cannot desposit negative funds.");
+        }
+        
+        try {
+            final BigDecimal bal = user.getMoney();
+            user.giveMoney(new BigDecimal(amount));
+            return new EconomyResponse(user.getMoney().subtract(bal).doubleValue(),
+                    user.getMoney().doubleValue(),
+                    ResponseType.SUCCESS,
+                    null);
+		} catch (MaxMoneyException e) {
+            return new EconomyResponse(0,
+                user.getMoney().doubleValue(),
+                ResponseType.FAILURE,
+                "Could not deposit fund over maximum limit.");
+		}
     }
 
     @Deprecated
@@ -193,107 +219,84 @@ public class EconomyProvider implements Economy {
         return depositPlayer(player, amount);
     }
 
-    /**
-     * @param s
-     * @param s1
-     * @deprecated
-     */
     @Override
     public EconomyResponse createBank(String s, String s1) {
-        return null; // TODO Decide whether to implement banks via createNpc or not
+        return getBankNotSupportedResponse();
     }
 
     @Override
     public EconomyResponse createBank(String s, OfflinePlayer offlinePlayer) {
-        return null;
+        return getBankNotSupportedResponse();
     }
 
     @Override
     public EconomyResponse deleteBank(String s) {
-        return null;
+        return getBankNotSupportedResponse();
     }
 
     @Override
     public EconomyResponse bankBalance(String s) {
-        return null;
+        return getBankNotSupportedResponse();
     }
 
     @Override
     public EconomyResponse bankHas(String s, double v) {
-        return null;
+        return getBankNotSupportedResponse();
     }
 
     @Override
     public EconomyResponse bankWithdraw(String s, double v) {
-        return null;
+        return getBankNotSupportedResponse();
     }
 
     @Override
     public EconomyResponse bankDeposit(String s, double v) {
-        return null;
+        return getBankNotSupportedResponse();
     }
 
-    /**
-     * @param s
-     * @param s1
-     * @deprecated
-     */
     @Override
     public EconomyResponse isBankOwner(String s, String s1) {
-        return null;
+        return getBankNotSupportedResponse();
     }
 
     @Override
     public EconomyResponse isBankOwner(String s, OfflinePlayer offlinePlayer) {
-        return null;
+        return getBankNotSupportedResponse();
     }
 
-    /**
-     * @param s
-     * @param s1
-     * @deprecated
-     */
     @Override
     public EconomyResponse isBankMember(String s, String s1) {
-        return null;
+        return getBankNotSupportedResponse();
     }
 
     @Override
     public EconomyResponse isBankMember(String s, OfflinePlayer offlinePlayer) {
-        return null;
+        return getBankNotSupportedResponse();
     }
 
     @Override
     public List<String> getBanks() {
-        return null;
+        return new ArrayList<String>();
     }
 
-    /**
-     * @param s
-     * @deprecated
-     */
+    @Deprecated
     @Override
-    public boolean createPlayerAccount(String s) {
+    public boolean createPlayerAccount(String player) {
+        return createPlayerAccount(getOfflineFromName(player));
+    }
+
+    @Override
+    public boolean createPlayerAccount(OfflinePlayer player) {
         return false;
     }
 
     @Override
-    public boolean createPlayerAccount(OfflinePlayer offlinePlayer) {
-        return false;
-    }
-
-    /**
-     * @param s
-     * @param s1
-     * @deprecated
-     */
-    @Override
-    public boolean createPlayerAccount(String s, String s1) {
-        return false;
+    public boolean createPlayerAccount(String player, String world) {
+        return createPlayerAccount(getOfflineFromName(player), world);
     }
 
     @Override
-    public boolean createPlayerAccount(OfflinePlayer offlinePlayer, String s) {
-        return false;
+    public boolean createPlayerAccount(OfflinePlayer player, String world) {
+        return createPlayerAccount(player);
     }
 }
