@@ -1421,7 +1421,6 @@ public class Settings implements net.ess3.api.ISettings {
     }
 
     private boolean useNewVaultHook = true;
-    private boolean disableOldVaultHook = true;
 
     private boolean _useNewVaultHook() {
         return config.getBoolean("use-new-vault-hook", true);
@@ -1430,14 +1429,5 @@ public class Settings implements net.ess3.api.ISettings {
     @Override
     public boolean useNewVaultHook() {
         return useNewVaultHook;
-    }
-
-    private boolean _disableOldVaultHook() {
-        return config.getBoolean("disable-old-vault-hook", true);
-    }
-
-    @Override
-    public boolean disableOldVaultHook() {
-        return disableOldVaultHook;
     }
 }

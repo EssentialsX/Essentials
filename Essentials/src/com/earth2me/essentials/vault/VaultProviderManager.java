@@ -21,10 +21,7 @@ public class VaultProviderManager {
 
         if (!ess.getSettings().isEcoDisabled() && ess.getSettings().useNewVaultHook()) {
             registerNew();
-
-            if (ess.getSettings().disableOldVaultHook()) {
-                deregisterLegacy();
-            }
+            deregisterLegacy();
         }
     }
 
@@ -38,7 +35,7 @@ public class VaultProviderManager {
         for (RegisteredServiceProvider rsp : sm.getRegistrations(vaultPlugin)) {
             if (rsp.getProvider() instanceof Economy_Essentials) {
                 sm.unregister(rsp.getProvider());
-                ess.getLogger().info("Removed Vault's legacy EssentialsEco handler");
+                ess.getLogger().info("Removed Vault's legacy Economy_Essentials handler.");
                 return true;
             }
         }

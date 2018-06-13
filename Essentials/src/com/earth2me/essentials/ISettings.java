@@ -304,6 +304,4 @@ public interface ISettings extends IConf {
     boolean isDirectHatAllowed();
 
     boolean useNewVaultHook();
-
-    boolean disableOldVaultHook();
 }

@@ -614,12 +614,8 @@ minimum-pay-amount: 0.001
 
 # Whether to enable modern, UUID-friendly support for Vault or not.
 # If you are having issues with plugins utilising EssentialsX's economy, you may want to disable this.
+# This will replace Vault's built-in Essentials support with the upgraded EssentialsX support.
 use-new-vault-hook: true
-
-# Whether to disable Vault's legacy EssentialsEco hook or not.
-# This may be necessary to avoid conflicts with EssentialsX.
-# This will only work if use-new-vault-hook is enabled!
-disable-old-vault-hook: true
 
 ############################################################
 # +------------------------------------------------------+ #
