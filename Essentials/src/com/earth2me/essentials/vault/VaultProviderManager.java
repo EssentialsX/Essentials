@@ -47,7 +47,7 @@ public class VaultProviderManager {
      * Register EssentialsX's own Vault hook.
      */
     public void registerNew() {
-        ess.getServer().getServicesManager().register(Economy.class, new EconomyHook(ess), ess, ServicePriority.High);
+        ess.getServer().getServicesManager().register(Economy.class, new EconomyProvider(ess), ess, ServicePriority.Low);
         ess.getLogger().info("Enabled UUID-friendly economy support for Vault!");
     }
 }

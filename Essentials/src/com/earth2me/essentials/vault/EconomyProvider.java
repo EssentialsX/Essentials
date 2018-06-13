@@ -12,10 +12,10 @@ import org.bukkit.OfflinePlayer;
 import java.math.BigDecimal;
 import java.util.List;
 
-public class EconomyHook implements Economy {
+public class EconomyProvider implements Economy {
     private IEssentials ess = null;
 
-    public EconomyHook(IEssentials ess) {
+    public EconomyProvider(IEssentials ess) {
         if (!ess.getSettings().isEcoDisabled()) {
             this.ess = ess;
             this.ess.getLogger().info("Hooked into Vault!");
