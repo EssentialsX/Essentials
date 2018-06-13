@@ -1,4 +1,4 @@
-![](https://i.imgur.com/CP4SZpB.png)
+[![Spigot Page](https://i.imgur.com/CP4SZpB.png)](https://www.spigotmc.org/resources/essentialsx.9089/)
 
 [![Downloads](https://i.imgur.com/MMc0PJY.png)](http://ci.ender.zone/job/EssentialsX/)
 
