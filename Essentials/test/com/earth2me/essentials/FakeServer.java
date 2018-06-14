@@ -989,7 +989,7 @@ public class FakeServer implements Server {
 
         @Override
         public boolean isPluginEnabled(String name) {
-            throw new UnsupportedOperationException("Not supported yet.");
+            return name.equals("Essentials");
         }
 
         @Override
