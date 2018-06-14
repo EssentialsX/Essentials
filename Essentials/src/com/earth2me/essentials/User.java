@@ -784,6 +784,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
     @Override
     public void sendMessage(String message) {
         if (!message.isEmpty()) {
+            message = FormatUtil.placeholderAPIFormat(this, message);
             base.sendMessage(message);
         }
     }
