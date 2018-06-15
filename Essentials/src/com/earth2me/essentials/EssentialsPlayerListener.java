@@ -153,8 +153,8 @@ public class EssentialsPlayerListener implements Listener {
             event.setQuitMessage(null);
         } else if (ess.getSettings().isCustomQuitMessage() && event.getQuitMessage() != null) {
             final Player player = event.getPlayer();
-            String quitMessage = ess.getSettings().getCustomQuitMessage();
-            quitMessage.replace("{PLAYER}", player.getDisplayName())
+            String quitMessage = ess.getSettings().getCustomQuitMessage()
+                    .replace("{PLAYER}", player.getDisplayName())
                     .replace("{USERNAME}", player.getName());
             //Untested, should work tho
             quitMessage = FormatUtil.placeholderAPIFormat(user, quitMessage);
