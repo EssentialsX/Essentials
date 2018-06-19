@@ -6,7 +6,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
-public class Titles {
+public class Title {
 
 	@Deprecated
 	public static void sendTitle(Player player, Integer fadeIn, Integer stay, Integer fadeOut, String message) {
