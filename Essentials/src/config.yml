@@ -417,6 +417,9 @@ custom-join-message: "none"
 # You may use color codes, use {USERNAME} the player's name or {PLAYER} for the player's displayname.
 custom-quit-message: "none"
 
+# Send title & subtitle when changing game mode.
+enable-title-subtitle-when-changing-gamemode: false
+
 # Add worlds to this list, if you want to automatically disable god mode there.
 no-god-in-worlds:
 #  - world_nether

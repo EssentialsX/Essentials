@@ -1451,4 +1451,15 @@ public class Settings implements net.ess3.api.ISettings {
     public boolean isCompassTowardsHomePerm() {
         return isCompassTowardsHomePerm;
     }
+
+    private boolean isTitleSubTitle;
+
+    private boolean _isTitleSubTitle() {
+        return config.getBoolean("enable-title-subtitle-when-changing-gamemode", false);
+    }
+
+    @Override
+    public boolean isTitleSubTitle() {
+        return isTitleSubTitle;
+    }
 }
