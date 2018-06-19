@@ -67,6 +67,11 @@ public class Commandgamemode extends EssentialsCommand {
 
         user.getBase().setGameMode(gameMode);
         user.sendMessage(tl("gameMode", tl(user.getBase().getGameMode().toString().toLowerCase(Locale.ENGLISH)), user.getDisplayName()));
+        if (ess.getSettings().isTitleSubTitle()) {
+            // TODO: Configurable timer in config.
+            Title.sendTitle(user, 5, 5, 5, tl("gameModeChangedTitle"), tl(user.getBase().getGameMode().toString().toLowerCase(Locale.ENGLISH)), 
+                            "gameModeChangedSubTitle", tl(user.getBase().getGameMode().toString().toLowerCase(Locale.ENGLISH));
+         }
     }
 
     private void gamemodeOtherPlayers(final Server server, final CommandSource sender, final GameMode gameMode, final String name) throws NotEnoughArgumentsException, PlayerNotFoundException {
@@ -90,6 +95,11 @@ public class Commandgamemode extends EssentialsCommand {
             foundUser = true;
             player.getBase().setGameMode(gameMode);
             sender.sendMessage(tl("gameMode", tl(player.getBase().getGameMode().toString().toLowerCase(Locale.ENGLISH)), player.getDisplayName()));
+            if (ess.getSettings().isTitleSubTitle()) {
+                // TODO: Configurable timer in config.
+                Title.sendTitle(user, 5, 5, 5, tl("gameModeChangedTitle"), tl(user.getBase().getGameMode().toString().toLowerCase(Locale.ENGLISH)), 
+                                "gameModeChangedSubTitle", tl(user.getBase().getGameMode().toString().toLowerCase(Locale.ENGLISH));
+             }
         }
         if (!foundUser) {
             throw new PlayerNotFoundException();
