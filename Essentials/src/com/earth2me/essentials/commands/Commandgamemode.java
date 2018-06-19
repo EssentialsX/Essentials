@@ -70,7 +70,7 @@ public class Commandgamemode extends EssentialsCommand {
         if (ess.getSettings().isTitleSubTitle()) {
             // TODO: Configurable timer in config.
             Title.sendTitle(user, 5, 5, 5, tl("gameModeChangedTitle"), tl(user.getBase().getGameMode().toString().toLowerCase(Locale.ENGLISH)), 
-                            "gameModeChangedSubTitle", tl(user.getBase().getGameMode().toString().toLowerCase(Locale.ENGLISH));
+                            tl("gameModeChangedSubTitle"), tl(user.getBase().getGameMode().toString().toLowerCase(Locale.ENGLISH));
          }
     }
 
@@ -98,7 +98,7 @@ public class Commandgamemode extends EssentialsCommand {
             if (ess.getSettings().isTitleSubTitle()) {
                 // TODO: Configurable timer in config.
                 Title.sendTitle(user, 5, 5, 5, tl("gameModeChangedTitle"), tl(user.getBase().getGameMode().toString().toLowerCase(Locale.ENGLISH)), 
-                                "gameModeChangedSubTitle", tl(user.getBase().getGameMode().toString().toLowerCase(Locale.ENGLISH));
+                                tl("gameModeChangedSubTitle"), tl(user.getBase().getGameMode().toString().toLowerCase(Locale.ENGLISH));
              }
         }
         if (!foundUser) {
