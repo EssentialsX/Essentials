@@ -372,7 +372,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
                         return completer.onTabComplete(cSender, command, commandLabel, args);
                     }
                 } catch (final Exception ex) {
-                    Bukkit.getLogger().log(Level.SEVERE, ex.getMessage(), ex);
+                    getLogger().log(Level.SEVERE, ex.getMessage(), ex);
                 }
             }
         }
@@ -445,8 +445,8 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
                 try {
                     return pc.execute(cSender, commandLabel, args);
                 } catch (final Exception ex) {
-                    Bukkit.getLogger().log(Level.SEVERE, ex.getMessage(), ex);
-                    cSender.sendMessage(ChatColor.RED + "An internal error occurred while attempting to perform this command");
+                    getLogger().log(Level.SEVERE, ex.getMessage(), ex);
+                    cSender.sendMessage(tl("internalError"));
                     return true;
                 }
             }
@@ -464,9 +464,9 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
             }
 
             if (bSenderBlock != null) {
-                Bukkit.getLogger().log(Level.INFO, "CommandBlock at {0},{1},{2} issued server command: /{3} {4}", new Object[]{bSenderBlock.getX(), bSenderBlock.getY(), bSenderBlock.getZ(), commandLabel, EssentialsCommand.getFinalArg(args, 0)});
+                getLogger().log(Level.INFO, "CommandBlock at {0},{1},{2} issued server command: /{3} {4}", new Object[]{bSenderBlock.getX(), bSenderBlock.getY(), bSenderBlock.getZ(), commandLabel, EssentialsCommand.getFinalArg(args, 0)});
             } else if (user == null) {
-                Bukkit.getLogger().log(Level.INFO, "{0} issued server command: /{1} {2}", new Object[]{cSender.getName(), commandLabel, EssentialsCommand.getFinalArg(args, 0)});
+                getLogger().log(Level.INFO, "{0} issued server command: /{1} {2}", new Object[]{cSender.getName(), commandLabel, EssentialsCommand.getFinalArg(args, 0)});
             }
 
             CommandSource sender = new CommandSource(cSender);
