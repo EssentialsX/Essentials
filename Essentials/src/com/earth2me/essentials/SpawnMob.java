@@ -109,7 +109,8 @@ public class SpawnMob {
             for (int i = 0; i < mobCount; i++) {
                 spawnMob(ess, server, sender, target, sloc, parts, data);
             }
-            sender.sendMessage(mobCount * parts.size() + " " + mob.name.toLowerCase(Locale.ENGLISH) + mob.suffix + " " + tl("spawned"));
+            // TODO: Customizing spawned message
+            sender.sendMessage(tl(mobCount * parts.size() + " " + mob.name.toLowerCase(Locale.ENGLISH) + mob.suffix + " " + tl("spawned"));
         } catch (MobException e1) {
             throw new Exception(tl("unableToSpawnMob"), e1);
         } catch (NumberFormatException e2) {
@@ -200,7 +201,7 @@ public class SpawnMob {
                     invent.setLeggings(new ItemStack(Material.LEATHER_LEGGINGS, 1));
                     invent.setChestplate(new ItemStack(Material.LEATHER_CHESTPLATE, 1));
                     invent.setHelmet(new ItemStack(Material.LEATHER_HELMET, 1));
-                } else {
+                } else if (inputData.contains("iron")) {
                     invent.setBoots(new ItemStack(Material.IRON_BOOTS, 1));
                     invent.setLeggings(new ItemStack(Material.IRON_LEGGINGS, 1));
                     invent.setChestplate(new ItemStack(Material.IRON_CHESTPLATE, 1));
