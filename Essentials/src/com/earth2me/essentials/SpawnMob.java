@@ -109,7 +109,6 @@ public class SpawnMob {
             for (int i = 0; i < mobCount; i++) {
                 spawnMob(ess, server, sender, target, sloc, parts, data);
             }
-            // TODO: Customizing spawned message
             sender.sendMessage(tl(mobCount * parts.size() + " " + mob.name.toLowerCase(Locale.ENGLISH) + mob.suffix + " " + tl("spawned"));
         } catch (MobException e1) {
             throw new Exception(tl("unableToSpawnMob"), e1);
