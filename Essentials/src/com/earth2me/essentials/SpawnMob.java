@@ -109,7 +109,7 @@ public class SpawnMob {
             for (int i = 0; i < mobCount; i++) {
                 spawnMob(ess, server, sender, target, sloc, parts, data);
             }
-            sender.sendMessage(mobCount * parts.size() + " " + mob.name.toLowerCase(Locale.ENGLISH) + mob.suffix + " " + tl("spawned"));
+            sender.sendMessage(tl("spawned", mobCount * parts.size(), mob.name.toLowerCase(Locale.ENGLISH) + mob.suffix));
         } catch (MobException e1) {
             throw new Exception(tl("unableToSpawnMob"), e1);
         } catch (NumberFormatException e2) {
