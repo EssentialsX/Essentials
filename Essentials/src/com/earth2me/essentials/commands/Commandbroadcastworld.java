@@ -27,13 +27,16 @@ public class Commandbroadcastworld extends EssentialsCommand {
 
     @Override
     public void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception {
-        sendBroadcast(user.getWorld().getName(), user.getDisplayName(), getFinalArg(args, 0));
+        if (args.length < 2) {
+            throw new NotEnoughArgumentsException();
+        }
+        sendBroadcast(user.getWorld().getName(), user.getDisplayName(), getFinalArg(args, 1));
     }
 
     @Override
     public void run(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception {
         if (args.length < 2) {
-            throw new NotEnoughArgumentsException("world");
+            throw new NotEnoughArgumentsException();
         }
         sendBroadcast(args[0], sender.getSender().getName(), getFinalArg(args, 1));
     }
