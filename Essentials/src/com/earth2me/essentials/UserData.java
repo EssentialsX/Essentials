@@ -467,10 +467,11 @@ public abstract class UserData extends PlayerExtension implements IConf {
     }
 
     public void setIgnoredPlayer(IUser user, boolean set) {
+        final String entry = user.getName().toLowerCase(Locale.ENGLISH);
         if (set) {
-            ignoredPlayers.add(user.getName().toLowerCase(Locale.ENGLISH));
+            if (!ignoredPlayers.contains(entry)) ignoredPlayers.add(entry);
         } else {
-            ignoredPlayers.remove(user.getName().toLowerCase(Locale.ENGLISH));
+            ignoredPlayers.remove(entry);
         }
         setIgnoredPlayers(ignoredPlayers);
     }
