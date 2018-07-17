@@ -18,12 +18,6 @@
         </license>
     </licenses>
 
-    <scm>
-        <connection>scm:git:https://github.com/essentials/Essentials.git</connection>
-        <developerConnection>scm:git:https://github.com/essentials/Essentials.git</developerConnection>
-        <url>https://github.com/essentials/Essentials</url>
-    </scm>
-
     <dependencies>
         <dependency>
             <groupId>net.ess3</groupId>
@@ -42,7 +36,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
-                <version>2.1</version>
+                <version>3.1.0</version>
                 <executions>
                     <execution>
                         <phase>package</phase>
