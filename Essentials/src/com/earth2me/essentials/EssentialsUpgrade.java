@@ -29,7 +29,6 @@ import static com.earth2me.essentials.I18n.tl;
 
 
 public class EssentialsUpgrade {
-    private final static Logger LOGGER = Logger.getLogger("Essentials");
     private final transient IEssentials ess;
     private final transient EssentialsConf doneFile;
 
@@ -49,25 +48,25 @@ public class EssentialsUpgrade {
             return;
         }
 
-        LOGGER.info("Attempting to convert old kits in config.yml to new kits.yml");
+        ess.getLogger().info("Attempting to convert old kits in config.yml to new kits.yml");
 
         ConfigurationSection section = ess.getSettings().getKitSection();
         if (section == null) {
-            LOGGER.info("No kits found to migrate.");
+            ess.getLogger().info("No kits found to migrate.");
             return;
         }
 
         Map<String, Object> legacyKits = ess.getSettings().getKitSection().getValues(true);
 
         for (Map.Entry<String, Object> entry : legacyKits.entrySet()) {
-            LOGGER.info("Converting " + entry.getKey());
+            ess.getLogger().info("Converting " + entry.getKey());
             config.set("kits." + entry.getKey(), entry.getValue());
         }
 
         config.save();
         doneFile.setProperty("kitsyml", true);
         doneFile.save();
-        LOGGER.info("Done converting kits.");
+        ess.getLogger().info("Done converting kits.");
     }
 
     private void moveMotdRulesToFile(String name) {
@@ -100,7 +99,7 @@ public class EssentialsUpgrade {
             doneFile.setProperty("move" + name + "ToFile", true);
             doneFile.save();
         } catch (IOException e) {
-            LOGGER.log(Level.SEVERE, tl("upgradingFilesError"), e);
+            ess.getLogger().log(Level.SEVERE, tl("upgradingFilesError"), e);
         }
     }
 
@@ -177,7 +176,7 @@ public class EssentialsUpgrade {
                     config.forceSave();
                 }
             } catch (RuntimeException ex) {
-                LOGGER.log(Level.INFO, "File: " + file.toString());
+                ess.getLogger().log(Level.INFO, "File: " + file.toString());
                 throw ex;
             }
         }
@@ -235,7 +234,7 @@ public class EssentialsUpgrade {
                 }
 
             } catch (RuntimeException ex) {
-                LOGGER.log(Level.INFO, "File: " + file.toString());
+                ess.getLogger().log(Level.INFO, "File: " + file.toString());
                 throw ex;
             }
         }
@@ -264,15 +263,15 @@ public class EssentialsUpgrade {
             final File tmpFile = new File(listOfFile.getParentFile(), sanitizedFilename + ".tmp");
             final File newFile = new File(listOfFile.getParentFile(), sanitizedFilename);
             if (!listOfFile.renameTo(tmpFile)) {
-                LOGGER.log(Level.WARNING, tl("userdataMoveError", filename, sanitizedFilename));
+                ess.getLogger().log(Level.WARNING, tl("userdataMoveError", filename, sanitizedFilename));
                 continue;
             }
             if (newFile.exists()) {
-                LOGGER.log(Level.WARNING, tl("duplicatedUserdata", filename, sanitizedFilename));
+                ess.getLogger().log(Level.WARNING, tl("duplicatedUserdata", filename, sanitizedFilename));
                 continue;
             }
             if (!tmpFile.renameTo(newFile)) {
-                LOGGER.log(Level.WARNING, tl("userdataMoveBackError", sanitizedFilename, sanitizedFilename));
+                ess.getLogger().log(Level.WARNING, tl("userdataMoveBackError", sanitizedFilename, sanitizedFilename));
             }
         }
         doneFile.setProperty("sanitizeAllUserFilenames", true);
@@ -328,7 +327,7 @@ public class EssentialsUpgrade {
                 doneFile.setProperty("deleteOldItemsCsv", true);
                 doneFile.save();
             } catch (IOException ex) {
-                Bukkit.getLogger().log(Level.SEVERE, ex.getMessage(), ex);
+                ess.getLogger().log(Level.SEVERE, ex.getMessage(), ex);
             }
         }
     }
@@ -358,7 +357,7 @@ public class EssentialsUpgrade {
                     }
                 }
             } catch (Exception ex) {
-                Bukkit.getLogger().log(Level.SEVERE, ex.getMessage(), ex);
+                ess.getLogger().log(Level.SEVERE, ex.getMessage(), ex);
             }
         }
         doneFile.setProperty("updateSpawnsToNewSpawnsConfig", true);
@@ -390,7 +389,7 @@ public class EssentialsUpgrade {
                     }
                 }
             } catch (Exception ex) {
-                Bukkit.getLogger().log(Level.SEVERE, ex.getMessage(), ex);
+                ess.getLogger().log(Level.SEVERE, ex.getMessage(), ex);
             }
         }
         doneFile.setProperty("updateJailsToNewJailsConfig", true);

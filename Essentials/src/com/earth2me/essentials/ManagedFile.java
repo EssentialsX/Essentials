@@ -1,7 +1,6 @@
 package com.earth2me.essentials;
 
 import net.ess3.api.IEssentials;
-import org.bukkit.Bukkit;
 
 import java.io.*;
 import java.math.BigInteger;
@@ -30,7 +29,7 @@ public class ManagedFile {
                     throw new IOException("Could not delete file " + file.toString());
                 }
             } catch (IOException ex) {
-                Bukkit.getLogger().log(Level.SEVERE, ex.getMessage(), ex);
+                ess.getLogger().log(Level.SEVERE, ex.getMessage(), ex);
             }
         }
 
@@ -38,7 +37,7 @@ public class ManagedFile {
             try {
                 copyResourceAscii("/" + filename, file);
             } catch (IOException ex) {
-                Bukkit.getLogger().log(Level.SEVERE, tl("itemsCsvNotLoaded"), ex);
+                ess.getLogger().log(Level.SEVERE, tl("itemsCsvNotLoaded"), ex);
             }
         }
     }
@@ -117,7 +116,7 @@ public class ManagedFile {
                                 if (correct.equals(test)) {
                                     return true;
                                 } else {
-                                    Bukkit.getLogger().warning("File " + file.toString() + " has been modified by user and file version differs, please update the file manually.");
+                                    ess.getLogger().warning("File " + file.toString() + " has been modified by user and file version differs, please update the file manually.");
                                 }
                             } finally {
                                 digestStream.close();
@@ -160,7 +159,7 @@ public class ManagedFile {
                 reader.close();
             }
         } catch (IOException ex) {
-            Bukkit.getLogger().log(Level.SEVERE, ex.getMessage(), ex);
+            ess.getLogger().log(Level.SEVERE, ex.getMessage(), ex);
             return Collections.emptyList();
         }
     }
