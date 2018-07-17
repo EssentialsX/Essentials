@@ -26,8 +26,7 @@ public class PlayerList {
                 groupString.append(tl("listHiddenTag"));
             }
             user.setDisplayNick();
-            groupString.append(user.getDisplayName());
-            groupString.append("\u00a7f");
+            groupString.append(tl("listAfkHiddenTagFormat", user.getDisplayName()));
         }
         return groupString.toString();
     }
