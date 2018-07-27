@@ -462,9 +462,9 @@ public class EssentialsPlayerListener implements Listener {
                     for (User spyer : ess.getOnlineUsers()) {
                         if (spyer.isSocialSpyEnabled() && !player.equals(spyer.getBase())) {
                             if (user.isMuted() && ess.getSettings().getSocialSpyListenMutedPlayers()) {
-                                spyer.sendMessage(tl("socialSpyMutedPrefix", player.getDisplayName(), event.getMessage()));
+                                spyer.sendMessage(tl("socialSpyMutedPrefix") + player.getDisplayName() + ": " + event.getMessage());
                             } else {
-                                spyer.sendMessage(tl("socialSpyPrefix", player.getDisplayName(), event.getMessage()));
+                                spyer.sendMessage(tl("socialSpyPrefix") + player.getDisplayName() + ": " + event.getMessage());
                             }
                         }
                     }
