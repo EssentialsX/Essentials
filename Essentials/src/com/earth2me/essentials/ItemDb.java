@@ -184,7 +184,13 @@ public class ItemDb implements IConf, net.ess3.api.IItemDb {
             }
             retval = ess.getServer().getUnsafe().modifyItemStack(retval, nbt);
         }
-        if (mat == Material.MOB_SPAWNER) {
+        Material MOB_SPAWNER;
+        try {
+            MOB_SPAWNER = Material.SPAWNER;
+        } catch (Exception e) {
+            MOB_SPAWNER = Material.valueOf("MOB_SPAWNER");
+        }
+        if (mat == MOB_SPAWNER) {
             if (metaData == 0) metaData = EntityType.PIG.getTypeId();
             try {
                 retval = ess.getSpawnerProvider().setEntityType(retval, EntityType.fromId(metaData));

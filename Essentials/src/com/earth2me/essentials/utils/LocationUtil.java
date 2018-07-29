@@ -30,7 +30,10 @@ public class LocationUtil {
 
         TRANSPARENT_MATERIALS.addAll(HOLLOW_MATERIALS);
         TRANSPARENT_MATERIALS.add(Material.WATER);
-        TRANSPARENT_MATERIALS.add(Material.FLOWING_WATER);
+        try {
+            TRANSPARENT_MATERIALS.add(Material.valueOf("FLOWING_WATER"));
+        } catch (Exception ignored) { // 1.13 WATER uses Levelled
+        }
     }
 
     public static final int RADIUS = 3;
@@ -109,7 +112,6 @@ public class LocationUtil {
 
         switch (below.getType()) {
             case LAVA:
-            case FLOWING_LAVA:
             case FIRE:
             case BLACK_BED:
             case BLUE_BED:
@@ -129,8 +131,19 @@ public class LocationUtil {
             case YELLOW_BED:
                 return true;
         }
-
-        if (world.getBlockAt(x, y, z).getType() == Material.PORTAL) {
+        try {
+            if (below.getType() == Material.valueOf("FLOWING_LAVA")) {
+                return true;
+            }
+        } catch (Exception ignored) { // 1.13 LAVA uses Levelled
+        }
+        Material PORTAL;
+        try {
+            PORTAL = Material.NETHER_PORTAL;
+        } catch (Exception ignored) {
+            PORTAL = Material.valueOf("PORTAL");
+        }
+        if (world.getBlockAt(x, y, z).getType() == PORTAL) {
             return true;
         }
 

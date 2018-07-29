@@ -28,7 +28,13 @@ public class Commandspawner extends EssentialsCommand {
         }
 
         final Location target = LocationUtil.getTarget(user.getBase());
-        if (target == null || target.getBlock().getType() != Material.MOB_SPAWNER) {
+        Material MOB_SPAWNER;
+        try {
+            MOB_SPAWNER = Material.SPAWNER;
+        } catch (Exception e) {
+            MOB_SPAWNER = Material.valueOf("MOB_SPAWNER");
+        }
+        if (target == null || target.getBlock().getType() != MOB_SPAWNER) {
             throw new Exception(tl("mobSpawnTarget"));
         }
 

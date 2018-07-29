@@ -1,6 +1,8 @@
 package com.earth2me.essentials;
 
 import com.earth2me.essentials.utils.NumberUtil;
+
+import org.bukkit.NamespacedKey;
 import org.bukkit.enchantments.Enchantment;
 
 import java.util.HashMap;
@@ -200,11 +202,9 @@ public class Enchantments {
     }
 
     public static Enchantment getByName(String name) {
-        Enchantment enchantment;
-        if (NumberUtil.isInt(name)) {
-            enchantment = Enchantment.getById(Integer.parseInt(name));
-        } else {
-            enchantment = Enchantment.getByName(name.toUpperCase(Locale.ENGLISH));
+        Enchantment enchantment = Enchantment.getByKey(NamespacedKey.minecraft(name.toLowerCase()));
+        if (enchantment == null) {
+            enchantment = Enchantment.getByName(name.toUpperCase());
         }
         if (enchantment == null) {
             enchantment = ENCHANTMENTS.get(name.toLowerCase(Locale.ENGLISH));

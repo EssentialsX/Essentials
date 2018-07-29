@@ -9,6 +9,7 @@ import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.block.Block;
 import org.bukkit.block.PistonMoveReaction;
+import org.bukkit.block.data.BlockData;
 import org.bukkit.conversations.Conversation;
 import org.bukkit.conversations.ConversationAbandonedEvent;
 import org.bukkit.entity.*;
@@ -471,6 +472,11 @@ public class OfflinePlayer implements Player {
     }
 
     @Override
+    public void sendBlockChange(Location loc, BlockData block) {
+
+    }
+
+    @Override
     public void setLastDamageCause(EntityDamageEvent ede) {
     }
 
@@ -637,6 +643,31 @@ public class OfflinePlayer implements Player {
 
     @Override
     public void setPlayerListName(String name) {
+    }
+
+    @Override
+    public String getPlayerListHeader() {
+        return null;
+    }
+
+    @Override
+    public String getPlayerListFooter() {
+        return null;
+    }
+
+    @Override
+    public void setPlayerListHeader(String header) {
+
+    }
+
+    @Override
+    public void setPlayerListFooter(String footer) {
+
+    }
+
+    @Override
+    public void setPlayerListHeaderFooter(String header, String footer) {
+
     }
 
     @Override
@@ -1189,6 +1220,16 @@ public class OfflinePlayer implements Player {
 
     @Override
     public void setGliding(boolean b) {
+    }
+
+    @Override
+    public boolean isSwimming() {
+        return false;
+    }
+
+    @Override
+    public void setSwimming(boolean swimming) {
+
     }
 
     @Override

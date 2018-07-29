@@ -45,6 +45,7 @@ import java.io.UnsupportedEncodingException;
 import java.util.*;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
+import java.util.function.Consumer;
 import java.util.logging.Logger;
 
 
@@ -204,11 +205,6 @@ public class FakeServer implements Server {
 
             @Override
             public void cancelTasks(Plugin plugin) {
-                throw new UnsupportedOperationException("Not supported yet.");
-            }
-
-            @Override
-            public void cancelAllTasks() {
                 throw new UnsupportedOperationException("Not supported yet.");
             }
 
@@ -971,8 +967,23 @@ public class FakeServer implements Server {
     }
 
     @Override
-    public BlockData createData(Material material) {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public BlockData createBlockData(Material material) {
+        return null;
+    }
+
+    @Override
+    public BlockData createBlockData(Material material, Consumer<BlockData> consumer) {
+        return null;
+    }
+
+    @Override
+    public BlockData createBlockData(String data) throws IllegalArgumentException {
+        return null;
+    }
+
+    @Override
+    public BlockData createBlockData(Material material, String data) throws IllegalArgumentException {
+        return null;
     }
 
     @Override

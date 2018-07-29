@@ -155,6 +155,11 @@ public class FakeWorld implements World {
     }
 
     @Override
+    public boolean generateTree(Location loc, TreeType type, BlockChangeDelegate delegate) {
+        return false;
+    }
+
+    @Override
     public LightningStrike strikeLightning(Location lctn) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
