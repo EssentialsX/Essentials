@@ -11,6 +11,7 @@ import org.bukkit.Material;
 import org.bukkit.Server;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.PotionMeta;
+import org.bukkit.potion.PotionData;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
@@ -22,6 +23,8 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import static com.earth2me.essentials.I18n.tl;
+
+import net.ess3.nms.refl.ReflUtil;
 
 
 public class Commandpotion extends EssentialsCommand {
@@ -43,8 +46,12 @@ public class Commandpotion extends EssentialsCommand {
             }
             throw new NotEnoughArgumentsException(tl("potions", StringUtil.joinList(potionslist.toArray())));
         }
-
-        if (stack.getType() == Material.POTION) {
+        
+        boolean holdingPotion = stack.getType() == Material.POTION;
+        if (!holdingPotion && ReflUtil.getNmsVersionObject().isHigherThanOrEqualTo(ReflUtil.V1_9_R1)) {
+            holdingPotion = stack.getType() == Material.SPLASH_POTION || stack.getType() == Material.LINGERING_POTION;
+        }
+        if (holdingPotion) {
             PotionMeta pmeta = (PotionMeta) stack.getItemMeta();
             if (args.length > 0) {
                 if (args[0].equalsIgnoreCase("clear")) {

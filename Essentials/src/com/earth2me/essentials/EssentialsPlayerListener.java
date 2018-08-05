@@ -99,7 +99,7 @@ public class EssentialsPlayerListener implements Listener {
             }
         }
 
-        user.updateActivity(true);
+        user.updateActivityOnInteract(true);
         user.setDisplayNick();
     }
 
@@ -124,8 +124,8 @@ public class EssentialsPlayerListener implements Listener {
             final Location from = event.getFrom();
             final Location origTo = event.getTo();
             final Location to = origTo.clone();
-            if (ess.getSettings().cancelAfkOnMove() && origTo.getY() >= from.getBlockY() + 1) {
-                user.updateActivity(true);
+            if (origTo.getY() >= from.getBlockY() + 1) {
+                user.updateActivityOnMove(true);
                 return;
             }
             to.setX(from.getX());
@@ -138,10 +138,10 @@ public class EssentialsPlayerListener implements Listener {
             }
             return;
         }
-        final Location afk = user.getAfkPosition();
-        if (afk == null || !event.getTo().getWorld().equals(afk.getWorld()) || afk.distanceSquared(event.getTo()) > 9) {
-            user.updateActivity(true);
-        }
+            final Location afk = user.getAfkPosition();
+            if (afk == null || !event.getTo().getWorld().equals(afk.getWorld()) || afk.distanceSquared(event.getTo()) > 9) {
+                user.updateActivityOnMove(true);
+            }
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
@@ -176,7 +176,7 @@ public class EssentialsPlayerListener implements Listener {
             }
         }
 
-        user.updateActivity(false);
+        user.updateActivityOnInteract(false);
         if (!user.isHidden()) {
             user.setLastLogout(System.currentTimeMillis());
         }
@@ -214,7 +214,7 @@ public class EssentialsPlayerListener implements Listener {
 
         final long currentTime = System.currentTimeMillis();
         dUser.checkMuteTimeout(currentTime);
-        dUser.updateActivity(false);
+        dUser.updateActivityOnInteract(false);
         dUser.stopTransaction();
 
         class DelayJoinTask implements Runnable {
@@ -233,11 +233,14 @@ public class EssentialsPlayerListener implements Listener {
                 user.setDisplayNick();
                 updateCompass(user);
 
-                if (!ess.getVanishedPlayers().isEmpty() && !user.isAuthorized("essentials.vanish.see")) {
-                    for (String p : ess.getVanishedPlayers()) {
+                if (!ess.getVanishedPlayersNew().isEmpty() && !user.isAuthorized("essentials.vanish.see")) {
+                    for (String p : ess.getVanishedPlayersNew()) {
                         Player toVanish = ess.getServer().getPlayerExact(p);
                         if (toVanish != null && toVanish.isOnline()) {
                             user.getBase().hidePlayer(toVanish);
+                            if (ess.getSettings().isDebug()) {
+                                ess.getLogger().info("Hiding vanished player: " + p);
+                            }
                         }
                     }
                 }
@@ -305,6 +308,9 @@ public class EssentialsPlayerListener implements Listener {
                     user.setGodModeEnabled(false);
                     ess.getLogger().log(Level.INFO, "Set god mode to false for {0} because they had it enabled without permission.", user.getName());
                 }
+                
+                user.setConfirmingClearCommand(null);
+                user.getConfirmingPayments().clear();
 
                 user.stopTransaction();
             }
@@ -334,7 +340,7 @@ public class EssentialsPlayerListener implements Listener {
 
                     final IText input = tempInput;
 
-                    if (input != null && user.isAuthorized("essentials.motd")) {
+                    if (input != null && !input.getLines().isEmpty() && user.isAuthorized("essentials.motd")) {
                         final IText output = new KeywordReplacer(input, user.getSource(), ess);
                         final TextPager pager = new TextPager(output, true);
                         pager.showPage("1", null, "motd", user.getSource());
@@ -347,7 +353,10 @@ public class EssentialsPlayerListener implements Listener {
     }
 
     // Makes the compass item ingame always point to the first essentials home.  #EasterEgg
+    // EssentialsX: This can now optionally require a permission to enable, if set in the config.
     private void updateCompass(final User user) {
+        if (ess.getSettings().isCompassTowardsHomePerm() && !user.isAuthorized("essentials.home.compass")) return;
+
         Location loc = user.getHome(user.getLocation());
         if (loc == null) {
             loc = user.getBase().getBedSpawnLocation();
@@ -363,7 +372,13 @@ public class EssentialsPlayerListener implements Listener {
             case KICK_BANNED:
                 BanEntry banEntry = ess.getServer().getBanList(BanList.Type.NAME).getBanEntry(event.getPlayer().getName());
                 if (banEntry != null) {
-                    event.setKickMessage(tl("banJoin", banEntry.getReason()));
+                    Date banExpiry = banEntry.getExpiration();
+                    if (banExpiry != null) {
+                        String expiry = DateUtil.formatDateDiff(banExpiry.getTime());
+                        event.setKickMessage(tl("tempbanJoin", expiry, banEntry.getReason()));
+                    } else {
+                        event.setKickMessage(tl("banJoin", banEntry.getReason()));
+                    }
                 } else {
                     banEntry = ess.getServer().getBanList(BanList.Type.IP).getBanEntry(event.getAddress().getHostAddress());
                     if (banEntry != null) {
@@ -479,7 +494,7 @@ public class EssentialsPlayerListener implements Listener {
         }
         final User user = ess.getUser(player);
         if (update) {
-            user.updateActivity(broadcast);
+            user.updateActivityOnInteract(broadcast);
         }
 
         if (ess.getSettings().isCommandCooldownsEnabled() && pluginCommand != null
@@ -602,7 +617,7 @@ public class EssentialsPlayerListener implements Listener {
                 }
                 break;
         }
-        ess.getUser(event.getPlayer()).updateActivity(true);
+            ess.getUser(event.getPlayer()).updateActivityOnInteract(true);
     }
 
     // This method allows the /jump lock feature to work, allows teleporting while flying #EasterEgg
@@ -768,7 +783,7 @@ public class EssentialsPlayerListener implements Listener {
     @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
     public void onPlayerFishEvent(final PlayerFishEvent event) {
         final User user = ess.getUser(event.getPlayer());
-        user.updateActivity(true);
+            user.updateActivityOnInteract(true);
     }
     
     private final class PlayerListenerPre1_12 implements Listener {

@@ -59,11 +59,26 @@ public interface ISettings extends IConf {
 
     Set<String> getMuteCommands();
 
-    Map<String, Object> getKit(String name);
-
+    /**
+     * @Deprecated in favor of {@link Kits#getKits()}
+     */
+    @Deprecated
     ConfigurationSection getKits();
 
+    /**
+     * @Deprecated in favor of {@link Kits#getKit(String)}
+     */
+    @Deprecated
+    Map<String, Object> getKit(String kit);
+
+    /**
+     * @Deprecated in favor of {@link Kits#addKit(String, List, long)}}
+     */
+    @Deprecated
     void addKit(String name, List<String> lines, long delay);
+
+    @Deprecated
+    ConfigurationSection getKitSection();
 
     boolean isSkippingUsedOneTimeKitsFromKitList();
 
@@ -244,7 +259,7 @@ public interface ISettings extends IConf {
     boolean isLastMessageReplyRecipient();
 
     BigDecimal getMinimumPayAmount();
-    
+
     long getLastMessageReplyRecipientTimeout();
 
     boolean isMilkBucketEasterEggEnabled();
@@ -256,13 +271,13 @@ public interface ISettings extends IConf {
     boolean isSpawnOnJoin();
 
     List<String> getSpawnOnJoinGroups();
-    
+
     boolean isUserInSpawnOnJoinGroup(IUser user);
 
     boolean isTeleportToCenterLocation();
 
     boolean isCommandCooldownsEnabled();
-    
+
     long getCommandCooldownMs(String label);
 
     Entry<Pattern, Long> getCommandCooldownEntry(String label);
@@ -274,11 +289,11 @@ public interface ISettings extends IConf {
     NumberFormat getCurrencyFormat();
 
     List<EssentialsSign> getUnprotectedSignNames();
-    
+
     boolean isPastebinCreateKit();
-    
+
     boolean isAllowBulkBuySell();
-    
+
     boolean isAddingPrefixInPlayerlist();
 
     boolean isAddingSuffixInPlayerlist();
@@ -288,4 +303,10 @@ public interface ISettings extends IConf {
     int getMotdDelay();
 
     boolean isDirectHatAllowed();
+
+    List<String> getDefaultEnabledConfirmCommands();
+
+    boolean isConfirmCommandEnabledByDefault(String commandName);
+
+    boolean isCompassTowardsHomePerm();
 }

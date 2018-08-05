@@ -60,19 +60,19 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.world.WorldLoadEvent;
 import org.bukkit.event.world.WorldUnloadEvent;
+import org.bukkit.permissions.Permission;
+import org.bukkit.permissions.PermissionDefault;
 import org.bukkit.plugin.InvalidDescriptionException;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.plugin.java.JavaPluginLoader;
-import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitScheduler;
 import org.bukkit.scheduler.BukkitTask;
 import org.yaml.snakeyaml.error.YAMLException;
 
 import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -101,11 +101,12 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
     private transient I18n i18n;
     private transient Metrics metrics;
     private transient EssentialsTimer timer;
-    private final transient List<String> vanishedPlayers = new ArrayList<>();
+    private final transient Set<String> vanishedPlayers = new LinkedHashSet<>();
     private transient Method oldGetOnlinePlayers;
     private transient SpawnerProvider spawnerProvider;
     private transient SpawnEggProvider spawnEggProvider;
     private transient PotionMetaProvider potionMetaProvider;
+    private transient Kits kits;
 
     public Essentials() {
     }
@@ -150,6 +151,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
         confList = new ArrayList<>();
         jails = new Jails(this);
         registerListeners(server.getPluginManager());
+        kits = new Kits(this);
     }
 
     @Override
@@ -193,6 +195,10 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
                 userMap = new UserMap(this);
                 confList.add(userMap);
                 execTimer.mark("Init(Usermap)");
+                kits = new Kits(this);
+                confList.add(kits);
+                upgrade.convertKits();
+                execTimer.mark("Kits");
                 upgrade.afterSettings();
                 execTimer.mark("Upgrade2");
                 warps = new Warps(getServer(), this.getDataFolder());
@@ -241,6 +247,9 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
 
             Economy.setEss(this);
             execTimer.mark("RegHandler");
+
+            for (World w : Bukkit.getWorlds())
+                addDefaultBackPermissionsToWorld(w);
 
             metrics = new Metrics(this);
             if (!metrics.isOptOut()) {
@@ -586,6 +595,11 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
     }
 
     @Override
+    public Kits getKits() {
+        return kits;
+    }
+
+    @Override
     public Metrics getMetrics() {
         return metrics;
     }
@@ -809,6 +823,11 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
 
     @Override
     public List<String> getVanishedPlayers() {
+        return Collections.unmodifiableList(new ArrayList<>(vanishedPlayers));
+    }
+
+    @Override
+    public Collection<String> getVanishedPlayersNew() {
         return vanishedPlayers;
     }
 
@@ -853,6 +872,18 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
         return potionMetaProvider;
     }
 
+    private static void addDefaultBackPermissionsToWorld(World w) {
+        String permName = "essentials.back.into." + w.getName();
+
+        Permission p = Bukkit.getPluginManager().getPermission(permName);
+        if (p == null) {
+            p = new Permission(permName,
+                    "Allows access to /back when the destination location is within world " + w.getName(),
+                    PermissionDefault.TRUE);
+            Bukkit.getPluginManager().addPermission(p);
+        }
+    }
+
     private static class EssentialsWorldListener implements Listener, Runnable {
         private transient final IEssentials ess;
 
@@ -862,6 +893,8 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
 
         @EventHandler(priority = EventPriority.LOW)
         public void onWorldLoad(final WorldLoadEvent event) {
+            addDefaultBackPermissionsToWorld(event.getWorld());
+
             ess.getJails().onReload();
             ess.getWarps().reloadConfig();
             for (IConf iConf : ((Essentials) ess).confList) {

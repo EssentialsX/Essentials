@@ -45,13 +45,15 @@ public class Commandclearinventory extends EssentialsCommand {
         throws Exception {
         Collection<Player> players = new ArrayList<Player>();
         User senderUser = ess.getUser(sender.getPlayer());
-        // Clear previous command execution before potential errors to reset confirmation.
-        String previousClearCommand = senderUser.getConfirmingClearCommand();
-        senderUser.setConfirmingClearCommand(null);
+        String previousClearCommand = "";
+        
         int offset = 0;
 
         if (sender.isPlayer()) {
             players.add(sender.getPlayer());
+            // Clear previous command execution before potential errors to reset confirmation.
+            previousClearCommand = senderUser.getConfirmingClearCommand();
+            senderUser.setConfirmingClearCommand(null);
         }
 
         if (allowAll && args.length > 0 && args[0].contentEquals("*")) {
@@ -115,12 +117,14 @@ public class Commandclearinventory extends EssentialsCommand {
                 sender.sendMessage(tl("inventoryClearingAllItems", player.getDisplayName()));
             }
             InventoryWorkaround.clearInventoryNoArmor(player.getInventory());
+            InventoryWorkaround.setItemInOffHand(player, null);
         } else if (type == -2) // type -2 represents double wildcard or all items and armor
         {
             if (showExtended) {
                 sender.sendMessage(tl("inventoryClearingAllArmor", player.getDisplayName()));
             }
             InventoryWorkaround.clearInventoryNoArmor(player.getInventory());
+            InventoryWorkaround.setItemInOffHand(player, null);
             player.getInventory().setArmorContents(null);
         } else {
             if (data == -1) // data -1 means that all subtypes will be cleared

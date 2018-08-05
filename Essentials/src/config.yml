@@ -13,7 +13,9 @@
 
 # If you have problems join the Essentials help support channel: http://tiny.cc/EssentialsChat
 
-# Version ${project.version}-b${build.number}
+# Version ${full.version}
+
+# KITS ARE NOW IN THE kits.yml FILE
 
 ############################################################
 # +------------------------------------------------------+ #
@@ -279,42 +281,11 @@ player-commands:
 # removed from the /kit list when a player can no longer use it
 skip-used-one-time-kits-from-kit-list: false
 
-# Note: All items MUST be followed by a quantity!
-# All kit names should be lower case, and will be treated as lower in permissions/costs.
-# Syntax: - itemID[:DataValue/Durability] Amount [Enchantment:Level].. [itemmeta:value]...
-# For Item Meta information visit http://wiki.ess3.net/wiki/Item_Meta
-# 'delay' refers to the cooldown between how often you can use each kit, measured in seconds.
-# Set delay to -1 for a one time kit.
-# For more information, visit http://wiki.ess3.net/wiki/Kits
-kits:
-  tools:
-    delay: 10
-    items:
-      - 272 1
-      - 273 1
-      - 274 1
-      - 275 1
-  dtools:
-    delay: 600
-    items:
-      - 278 1 efficiency:1 durability:1 fortune:1 name:&4Gigadrill lore:The_drill_that_&npierces|the_heavens
-      - 277 1 digspeed:3 name:Dwarf lore:Diggy|Diggy|Hole
-      - 298 1 color:255,255,255 name:Top_Hat lore:Good_day,_Good_day
-      - 279:780 1
-  notch:
-    delay: 6000
-    items:
-      - 397:3 1 player:Notch
-  color:
-    delay: 6000
-    items:
-      - 387 1 title:&4Book_&9o_&6Colors author:KHobbits lore:Ingame_color_codes book:Colors
-  firework:
-    delay: 6000
-    items:
-      - 401 1 name:Angry_Creeper color:red fade:green type:creeper power:1
-      - 401 1 name:Starry_Night color:yellow,orange fade:blue type:star effect:trail,twinkle power:1
-      - 401 2 name:Solar_Wind color:yellow,orange fade:red shape:large effect:twinkle color:yellow,orange fade:red shape:ball effect:trail color:red,purple fade:pink shape:star effect:trail power:1
+# Determines the functionality of the /createkit command.
+# If this is true, /createkit will give the user a link with the kit code.
+# If this is false, /createkit will add the kit to the kits.yml config file directly.
+#
+pastebin-createkit: false
 
 # Essentials Sign Control
 # See http://wiki.ess3.net/wiki/Sign_Tutorial for instructions on how to use these.
@@ -428,7 +399,7 @@ cancel-afk-on-move: true
 # Set the player's list name when they are AFK. This is none by default which specifies that Essentials 
 # should not interfere with the AFK player's list name.
 # You may use color codes, use {USERNAME} the player's name or {PLAYER} for the player's displayname.
-afk-list-name: none
+afk-list-name: "none"
 
 # You can disable the death messages of Minecraft here.
 death-messages: true
@@ -537,13 +508,6 @@ command-cooldown-persistence: true
 # NPC balances can include features like factions from FactionsUUID plugin.
 npcs-in-balance-ranking: false
 
-# Determines the functionality of the /createkit command.
-# If this is true, /createkit will give the user a link with the kit code.
-# If this is false, /createkit will add the kit to this config file directly.
-#
-# WARNING: If this is false, the config comments WILL be removed and it won't look the same as it does now.
-pastebin-createkit: true
-
 # Allow bulk buying and selling signs when the player is sneaking.
 # This is useful when a sign sells or buys one item at a time and the player wants to sell a bunch at once.
 allow-bulk-buy-sell: true
@@ -551,6 +515,19 @@ allow-bulk-buy-sell: true
 # Delay for the MOTD display for players on join, in milliseconds.
 # This has no effect if the MOTD command or permission are disabled.
 delay-motd: 0
+
+# A list of commands that should have their complementary confirm commands enabled by default.
+# This is empty by default, for the latest list of valid commands see the latest source config.yml.
+default-enabled-confirm-commands:
+#- pay
+#- clearinventory
+
+# Set the timeout, in seconds for players to accept a tpa before the request is cancelled.
+# Set to 0 for no timeout.
+tpa-accept-cancellation: 120
+
+# Allow players to set hats by clicking on their helmet slot.
+allow-direct-hat: true
 
 ############################################################
 # +------------------------------------------------------+ #
@@ -581,12 +558,12 @@ sethome-multiple:
 # In this example someone with 'essentials.sethome.multiple' and 'essentials.sethome.multiple.vip' will have 5 homes.
 # Remember, they MUST have both permission nodes in order to be able to set multiple homes.
 
-# Set the timeout, in seconds for players to accept a tpa before the request is cancelled.
-# Set to 0 for no timeout.
-tpa-accept-cancellation: 120
-
-# Allow players to set hats by clicking on their helmet slot.
-allow-direct-hat: true
+# Controls whether players need the permission "essentials.home.compass" in order to point
+# the player's compass at their first home.
+#
+# Leaving this as false will retain Essentials' original behaviour, which is to always
+# change the compass' direction to point towards their first home.
+compass-towards-home-perm: false
 
 ############################################################
 # +------------------------------------------------------+ #
@@ -683,9 +660,11 @@ chat:
   # Chat formatting can be done in two ways, you can either define a standard format for all chat.
   # Or you can give a group specific chat format, to give some extra variation.
   # For more information of chat formatting, check out the wiki: http://wiki.ess3.net/wiki/Chat_Formatting
+  # For EssentialsX changes, take a look at the EssentialsX wiki: https://github.com/EssentialsX/Essentials/wiki
 
   format: '<{DISPLAYNAME}> {MESSAGE}'
   #format: '&7[{GROUP}]&r {DISPLAYNAME}&7:&r {MESSAGE}'
+  #format: '&7{PREFIX}&r {DISPLAYNAME}&r &7{SUFFIX}&r: {MESSAGE}'
 
   group-formats:
   #  Default: '{WORLDNAME} {DISPLAYNAME}&7:&r {MESSAGE}'

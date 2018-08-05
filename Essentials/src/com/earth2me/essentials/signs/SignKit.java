@@ -28,7 +28,7 @@ public class SignKit extends EssentialsSign {
             return false;
         } else {
             try {
-                ess.getSettings().getKit(kitName);
+                ess.getKits().getKit(kitName);
             } catch (Exception ex) {
                 throw new SignException(ex.getMessage(), ex);
             }

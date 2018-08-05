@@ -2,7 +2,7 @@
 name: Essentials
 main: com.earth2me.essentials.Essentials
 # Note to developers: This next line cannot change, or the automatic versioning system will break.
-version: ${project.version}-b${build.number}
+version: ${full.version}
 website: http://tiny.cc/EssentialsCommands
 description: Provides an essential, core set of commands for Bukkit.
 softdepend: [Vault]
@@ -104,6 +104,10 @@ commands:
     description: States current depth, relative to sea level.
     usage: /depth
     aliases: [edepth,height,eheight]
+  disposal:
+    description: Opens a portable disposal menu.
+    usage: /<command>
+    aliases: [edisposal,trash,etrash]
   eco:
     description: Manages the server economy.
     usage: /<command> <give|take|set|reset> <player> <amount>
@@ -462,7 +466,7 @@ commands:
     aliases: [etpohere]
   tppos:
     description: Teleport to coordinates.
-    usage: /<command> <x> <y> <z> [yaw] [pitch]
+    usage: /<command> <x> <y> <z> [yaw] [pitch] [world]
     aliases: [etppos]
   tptoggle:
     description: Blocks all forms of teleportation.
@@ -532,3 +536,8 @@ permissions:
       essentials.gamemode: true
       essentials.gamemode.others: true
       essentials.gamemode.all: true
+  essentials.seen.extra:
+    default: op
+    children:
+      essentials.seen.ip: true
+      essentials.seen.location: true

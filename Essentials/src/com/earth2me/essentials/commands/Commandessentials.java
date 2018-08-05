@@ -15,14 +15,12 @@ import org.bukkit.Server;
 import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.PluginDescriptionFile;
+import org.bukkit.plugin.PluginManager;
 
 import java.io.IOException;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 import static com.earth2me.essentials.I18n.tl;
 
@@ -34,6 +32,12 @@ public class Commandessentials extends EssentialsCommand {
 
     private transient int taskid;
     private final transient Map<Player, Block> noteBlocks = new HashMap<Player, Block>();
+
+    private final List<String> versionPlugins = Arrays.asList(
+            "Vault",
+            "LuckPerms",
+            "PermissionsEx"
+    );
 
     @Override
     public void run(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception {
@@ -55,6 +59,8 @@ public class Commandessentials extends EssentialsCommand {
             run_uuidconvert(server, sender, commandLabel, args);
         } else if (args[0].equalsIgnoreCase("uuidtest")) {
             run_uuidtest(server, sender, commandLabel, args);
+        } else if (args[0].equalsIgnoreCase("version")) {
+            run_version(server, sender, commandLabel, args);
         } else {
             run_reload(server, sender, commandLabel, args);
         }
@@ -307,6 +313,46 @@ public class Commandessentials extends EssentialsCommand {
         sender.sendMessage("Offline Mode UUID: " + offlineuuid.toString());
     }
 
+    private void run_version(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception {
+        if (sender.isPlayer() && !ess.getUser(sender.getPlayer()).isAuthorized("essentials.version")) return;
+
+        boolean isMismatched = false;
+        boolean isVaultInstalled = false;
+        final PluginManager pm = server.getPluginManager();
+        final String essVer = pm.getPlugin("Essentials").getDescription().getVersion();
+
+        sender.sendMessage("Server version: " + server.getBukkitVersion() + " " + server.getVersion());
+        sender.sendMessage("EssentialsX version: " + essVer);
+
+        for (Plugin plugin : pm.getPlugins()) {
+            final PluginDescriptionFile desc = plugin.getDescription();
+            String name = desc.getName();
+            String version = desc.getVersion();
+
+            if (name.startsWith("Essentials") && !name.equalsIgnoreCase("Essentials")) {
+                if (!version.equalsIgnoreCase(essVer)) {
+                    version = "\u00a7c" + version;
+                    isMismatched = true;
+                }
+                sender.sendMessage(name.replace("Essentials", "EssentialsX") + " version: " + version);
+            }
+
+            if (versionPlugins.contains(name)) {
+                sender.sendMessage(name + " version: " + version);
+            }
+
+            if (name.equals("Vault")) isVaultInstalled = true;
+        }
+
+        if (isMismatched) {
+            sender.sendMessage(tl("versionMismatchAll"));
+        }
+
+        if (!isVaultInstalled) {
+            sender.sendMessage("Vault is not installed - chat and permissions may not work.");
+        }
+    }
+
     @Override
     protected List<String> getTabCompleteOptions(final Server server, final CommandSource sender, final String commandLabel, final String[] args) {
         if (args.length == 1) {
@@ -320,6 +366,7 @@ public class Commandessentials extends EssentialsCommand {
             options.add("cleanup");
             //options.add("uuidconvert");
             //options.add("uuidtest");
+            options.add("version");
             return options;
         } else if (args[0].equalsIgnoreCase("debug")) {
             // No args
@@ -349,6 +396,8 @@ public class Commandessentials extends EssentialsCommand {
             if (args.length == 2) {
                 return getPlayers(server, sender);
             }
+        } else if (args[0].equalsIgnoreCase("version")) {
+            // No args
         } else {
             // No args
         }

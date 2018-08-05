@@ -6,7 +6,7 @@
     <parent>
         <groupId>net.ess3</groupId>
         <artifactId>EssentialsXParent</artifactId>
-        <version>2.0.1</version>
+        <version>2.15.0</version>
     </parent>
 
     <artifactId>EssentialsXGeoIP</artifactId>
@@ -25,13 +25,19 @@
             <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>com.maxmind.geoip</groupId>
-            <artifactId>geoip-api</artifactId>
-            <version>1.2.11</version>
+            <groupId>com.maxmind.geoip2</groupId>
+            <artifactId>geoip2</artifactId>
+            <version>0.7.2</version>
+        </dependency>
+        <dependency>
+            <groupId>javatar</groupId>
+            <artifactId>javatar</artifactId>
+            <version>2.5</version>
         </dependency>
     </dependencies>
 
     <build>
+        <finalName>EssentialsXGeoIP-${full.version}</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -46,9 +52,13 @@
                     </execution>
                 </executions>
                 <configuration>
+                    <minimizeJar>true</minimizeJar>
                     <artifactSet>
                         <includes>
-                            <include>com.maxmind.geoip:geoip-api</include>
+                            <include>javatar:javatar</include>
+                            <include>com.maxmind.geoip2:geoip2</include>
+                            <include>com.maxmind.db:maxmind-db</include>
+                            <include>com.fasterxml.jackson.core:*</include>
                         </includes>
                     </artifactSet>
                 </configuration>

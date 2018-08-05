@@ -15,6 +15,8 @@ import org.yaml.snakeyaml.constructor.CustomClassLoaderConstructor;
 import org.yaml.snakeyaml.introspector.PropertyUtils;
 import org.yaml.snakeyaml.nodes.*;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.Locale;
 
 
@@ -34,15 +36,35 @@ public class BukkitConstructor extends CustomClassLoaderConstructor {
 
 
     private class ConstructBukkitScalar extends ConstructScalar {
+
+        private Method constructScalarMethod = null;
+        
+        protected String constructScalarRefl(ScalarNode scalarNode) {
+            try {
+                if (constructScalarMethod == null) {
+                    constructScalarMethod = ConstructScalar.class.getMethod("constructScalar", ScalarNode.class);
+                }
+                return (String) constructScalarMethod.invoke(this, scalarNode);
+            } catch (NoSuchMethodException 
+                    | SecurityException 
+                    | IllegalAccessException 
+                    | IllegalArgumentException 
+                    | InvocationTargetException e) {
+                e.printStackTrace();
+			}
+            
+            return null;
+        }
+
         @Override
         public Object construct(final Node node) {
             if (node.getType().equals(Material.class)) {
-                final String val = (String) constructScalar((ScalarNode) node);
+                final String val = constructScalarRefl((ScalarNode) node);
                 return Material.matchMaterial(val);
             }
 
             if (node.getType().equals(MaterialData.class)) {
-                final String val = (String) constructScalar((ScalarNode) node);
+                final String val = constructScalarRefl((ScalarNode) node);
                 if (val.isEmpty()) {
                     return null;
                 }
@@ -63,7 +85,7 @@ public class BukkitConstructor extends CustomClassLoaderConstructor {
                 return new MaterialData(mat, data);
             }
             if (node.getType().equals(ItemStack.class)) {
-                final String val = (String) constructScalar((ScalarNode) node);
+                final String val = constructScalarRefl((ScalarNode) node);
                 if (val.isEmpty()) {
                     return null;
                 }
@@ -116,7 +138,7 @@ public class BukkitConstructor extends CustomClassLoaderConstructor {
                 return stack;
             }
             if (node.getType().equals(EnchantmentLevel.class)) {
-                final String val = (String) constructScalar((ScalarNode) node);
+                final String val = constructScalarRefl((ScalarNode) node);
                 if (val.isEmpty()) {
                     return null;
                 }

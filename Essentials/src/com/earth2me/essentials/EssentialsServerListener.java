@@ -25,15 +25,20 @@ public class EssentialsServerListener implements Listener {
 
     public EssentialsServerListener(final IEssentials ess) {
         this.ess = ess;
-        setSampleText = ReflUtil.getMethodCached(ServerListPingEvent.class, "setSampleText", List.class);
-        getSampleText = ReflUtil.getMethodCached(ServerListPingEvent.class, "getSampleText");
-        if (setSampleText != null && getSampleText != null) {
-            ess.getLogger().info("Using Paper 1.12+ ServerListPingEvent methods");
-            isPaperSample = true;
-        } else {
-            ess.getLogger().info("Using Spigot 1.7.10+ ServerListPingEvent iterator");
-            isPaperSample = false;
+
+        if (ReflUtil.getClassCached("com.destroystokyo.paper.event.server.PaperServerListPingEvent") == null) {
+            // This workaround is only necessary for older Paper builds
+            setSampleText = ReflUtil.getMethodCached(ServerListPingEvent.class, "setSampleText", List.class);
+            getSampleText = ReflUtil.getMethodCached(ServerListPingEvent.class, "getSampleText");
+            if (setSampleText != null && getSampleText != null) {
+                ess.getLogger().info("Using Paper 1.12+ ServerListPingEvent methods");
+                isPaperSample = true;
+                return;
+            }
         }
+
+        ess.getLogger().info("Using Spigot 1.7.10+ ServerListPingEvent iterator");
+        isPaperSample = false;
     }
 
     @EventHandler(priority = EventPriority.LOWEST)

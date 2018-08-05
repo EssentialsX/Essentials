@@ -1,11 +1,9 @@
 package com.earth2me.essentials;
 
 import com.earth2me.essentials.utils.NumberUtil;
-
-import net.ess3.nms.refl.ReflUtil;
-import net.ess3.nms.updatedmeta.BasePotionDataProvider;
 import com.earth2me.essentials.utils.StringUtil;
 import net.ess3.api.IEssentials;
+import net.ess3.nms.refl.ReflUtil;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
@@ -14,6 +12,7 @@ import org.bukkit.Material;
 import org.bukkit.block.Banner;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.EntityType;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.*;
 import org.bukkit.potion.Potion;
@@ -206,7 +205,7 @@ public class ItemDb implements IConf, net.ess3.api.IItemDb {
             }
             retval = ess.getSpawnEggProvider().createEggItem(type);
         } else if (mat.name().endsWith("POTION")
-            && ReflUtil.getNmsVersionObject().isLowerThan(ReflUtil.V1_11_R1)) { // Only apply this to pre-1.11 as items.csv might only work in 1.11
+                && ReflUtil.getNmsVersionObject().isLowerThan(ReflUtil.V1_11_R1)) { // Only apply this to pre-1.11 as items.csv might only work in 1.11
             retval = ess.getPotionMetaProvider().createPotionItem(mat, metaData);
         } else {
             retval.setDurability(metaData);
@@ -315,6 +314,19 @@ public class ItemDb implements IConf, net.ess3.api.IItemDb {
             if (meta.hasEnchants()) {
                 for (Enchantment e : meta.getEnchants().keySet()) {
                     sb.append(e.getName().toLowerCase()).append(":").append(meta.getEnchantLevel(e)).append(" ");
+                }
+            }
+
+            Set<ItemFlag> flags = meta.getItemFlags();
+            if (flags != null && !flags.isEmpty()) {
+                sb.append("itemflags:");
+                boolean first = true;
+                for (ItemFlag flag : flags) {
+                    if (!first) {
+                        sb.append(",");
+                    }
+                    sb.append(flag.name());
+                    first = false;
                 }
             }
         }

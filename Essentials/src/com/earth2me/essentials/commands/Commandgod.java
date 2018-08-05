@@ -30,7 +30,7 @@ public class Commandgod extends EssentialsToggleCommand {
         }
 
         final User controller = sender.isPlayer() ? ess.getUser(sender.getPlayer()) : null;
-        final GodStatusChangeEvent godEvent = new GodStatusChangeEvent(controller, user, enabled);
+        final GodStatusChangeEvent godEvent = new GodStatusChangeEvent(user, controller, enabled);
         ess.getServer().getPluginManager().callEvent(godEvent);
         if (!godEvent.isCancelled()) {
             user.setGodModeEnabled(enabled);

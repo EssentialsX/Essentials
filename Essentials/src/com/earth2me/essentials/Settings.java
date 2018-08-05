@@ -326,46 +326,24 @@ public class Settings implements net.ess3.api.ISettings {
         return config.getDouble("heal-cooldown", 0);
     }
 
-    private ConfigurationSection kits;
-
-    private ConfigurationSection _getKits() {
-        if (config.isConfigurationSection("kits")) {
-            final ConfigurationSection section = config.getConfigurationSection("kits");
-            final ConfigurationSection newSection = new MemoryConfiguration();
-            for (String kitItem : section.getKeys(false)) {
-                if (section.isConfigurationSection(kitItem)) {
-                    newSection.set(kitItem.toLowerCase(Locale.ENGLISH), section.getConfigurationSection(kitItem));
-                }
-            }
-            return newSection;
-        }
-        return null;
-    }
-
     @Override
     public ConfigurationSection getKits() {
-        return kits;
+        return ess.getKits().getKits();
     }
 
     @Override
     public Map<String, Object> getKit(String name) {
-        name = name.replace('.', '_').replace('/', '_');
-        if (getKits() != null) {
-            final ConfigurationSection kits = getKits();
-            if (kits.isConfigurationSection(name)) {
-                return kits.getConfigurationSection(name).getValues(true);
-            }
-        }
-        return null;
+        return ess.getKits().getKit(name);
     }
 
     @Override
     public void addKit(String name, List<String> lines, long delay) {
-        // Will overwrite but w/e
-        config.set("kits." + name + ".delay", delay);
-        config.set("kits." + name + ".items", lines);
-        kits = _getKits();
-        config.save();
+        ess.getKits().addKit(name, lines, delay);
+    }
+
+    @Override
+    public ConfigurationSection getKitSection() {
+        return config.getConfigurationSection("kits");
     }
 
     @Override
@@ -450,6 +428,8 @@ public class Settings implements net.ess3.api.ISettings {
             mFormat = mFormat.replace("{TEAMPREFIX}", "{3}");
             mFormat = mFormat.replace("{TEAMSUFFIX}", "{4}");
             mFormat = mFormat.replace("{TEAMNAME}", "{5}");
+            mFormat = mFormat.replace("{PREFIX}", "{6}");
+            mFormat = mFormat.replace("{SUFFIX}", "{7}");
             mFormat = "§r".concat(mFormat);
             chatFormats.put(group, mFormat);
         }
@@ -510,14 +490,13 @@ public class Settings implements net.ess3.api.ISettings {
         disableItemPickupWhileAfk = _getDisableItemPickupWhileAfk();
         registerBackInListener = _registerBackInListener();
         cancelAfkOnInteract = _cancelAfkOnInteract();
-        cancelAfkOnMove = _cancelAfkOnMove() && cancelAfkOnInteract;
+        cancelAfkOnMove = _cancelAfkOnMove();
         getFreezeAfkPlayers = _getFreezeAfkPlayers();
         afkListName = _getAfkListName();
         isAfkListName = !afkListName.equalsIgnoreCase("none");
         itemSpawnBl = _getItemSpawnBlacklist();
         loginAttackDelay = _getLoginAttackDelay();
         signUsePerSecond = _getSignUsePerSecond();
-        kits = _getKits();
         chatFormats.clear();
         changeDisplayName = _changeDisplayName();
         disabledCommands = getDisabledCommands();
@@ -554,6 +533,8 @@ public class Settings implements net.ess3.api.ISettings {
         npcsInBalanceRanking = _isNpcsInBalanceRanking();
         currencyFormat = _getCurrencyFormat();
         unprotectedSigns = _getUnprotectedSign();
+        defaultEnabledConfirmCommands = _getDefaultEnabledConfirmCommands();
+        isCompassTowardsHomePerm = _isCompassTowardsHomePerm();
     }
 
     private List<Material> itemSpawnBl = new ArrayList<Material>();
@@ -1203,7 +1184,7 @@ public class Settings implements net.ess3.api.ISettings {
     public boolean isSpawnOnJoin() {
         return !this.spawnOnJoinGroups.isEmpty();
     }
-    
+
     private List<String> spawnOnJoinGroups;
 
     public List<String> _getSpawnOnJoinGroups() {
@@ -1242,7 +1223,7 @@ public class Settings implements net.ess3.api.ISettings {
     public boolean isTeleportToCenterLocation() {
         return config.getBoolean("teleport-to-center", true);
     }
-    
+
     private Map<Pattern, Long> commandCooldowns;
 
     private Map<Pattern, Long> _getCommandCooldowns() {
@@ -1269,10 +1250,10 @@ public class Settings implements net.ess3.api.ISettings {
                     cmdEntry = cmdEntry.substring(1);
                 }
                 String cmd = cmdEntry
-                    .replaceAll("\\*", ".*"); // Wildcards are accepted as asterisk * as known universally.
+                        .replaceAll("\\*", ".*"); // Wildcards are accepted as asterisk * as known universally.
                 pattern = Pattern.compile(cmd + "( .*)?"); // This matches arguments, if present, to "ignore" them from the feature.
             }
-            
+
             /* ================================
              * >> Process cooldown value
              * ================================ */
@@ -1408,7 +1389,7 @@ public class Settings implements net.ess3.api.ISettings {
 
     @Override
     public boolean isPastebinCreateKit() {
-        return config.getBoolean("pastebin-createkit", true);
+        return config.getBoolean("pastebin-createkit", false);
     }
 
     @Override
@@ -1439,5 +1420,36 @@ public class Settings implements net.ess3.api.ISettings {
     @Override
     public boolean isDirectHatAllowed() {
         return config.getBoolean("allow-direct-hat", true);
+    }
+
+    private List<String> defaultEnabledConfirmCommands;
+
+    private List<String> _getDefaultEnabledConfirmCommands() {
+        List<String> commands = config.getStringList("default-enabled-confirm-commands");
+        for (int i = 0; i < commands.size(); i++) {
+            commands.set(i, commands.get(i).toLowerCase());
+        }
+        return commands;
+    }
+
+    @Override
+    public List<String> getDefaultEnabledConfirmCommands() {
+        return defaultEnabledConfirmCommands;
+    }
+    
+    @Override
+    public boolean isConfirmCommandEnabledByDefault(String commandName) {
+        return getDefaultEnabledConfirmCommands().contains(commandName.toLowerCase());
+    }
+
+    private boolean isCompassTowardsHomePerm;
+
+    private boolean _isCompassTowardsHomePerm() {
+        return config.getBoolean("compass-towards-home-perm", false);
+    }
+
+    @Override
+    public boolean isCompassTowardsHomePerm() {
+        return isCompassTowardsHomePerm;
     }
 }
