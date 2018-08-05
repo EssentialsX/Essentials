@@ -234,6 +234,15 @@ public class OfflinePlayer implements Player {
         return server;
     }
 
+    @Override
+    public boolean isPersistent() {
+        return false;
+    }
+
+    @Override
+    public void setPersistent(boolean persistent) {
+    }
+
     public Vector getMomentum() {
         return getVelocity();
     }
@@ -1230,6 +1239,11 @@ public class OfflinePlayer implements Player {
     @Override
     public void setSwimming(boolean swimming) {
 
+    }
+
+    @Override
+    public boolean isRiptiding() {
+        return false;
     }
 
     @Override
