@@ -46,34 +46,6 @@
 
     <dependencies>
         <dependency>
-            <groupId>BOSEconomy</groupId>
-            <artifactId>BOSEconomy</artifactId>
-            <version>v0.7.8.1</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/../lib/BOSEconomy.jar</systemPath>
-        </dependency>
-        <dependency>
-            <groupId>iConomy</groupId>
-            <artifactId>iConomy5</artifactId>
-            <version>5</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/../lib/iCo5.jar</systemPath>
-        </dependency>
-        <dependency>
-            <groupId>iConomy</groupId>
-            <artifactId>iConomy6</artifactId>
-            <version>6</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/../lib/iCo6.jar</systemPath>
-        </dependency>
-        <dependency>
-            <groupId>MultiCurrency</groupId>
-            <artifactId>MultiCurrency</artifactId>
-            <version>2.2</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/../lib/MultiCurrency.jar</systemPath>
-        </dependency>
-        <dependency>
             <groupId>net.milkbowl.vault</groupId>
             <artifactId>Vault</artifactId>
             <version>1.5.6</version>
