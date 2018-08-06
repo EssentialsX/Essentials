@@ -95,6 +95,18 @@ public enum MobData {
     BLUE_PARROT("blue", EntityType.PARROT, Parrot.Variant.BLUE, true),
     CYAN_PARROT("cyan", EntityType.PARROT, Parrot.Variant.CYAN, true),
     GRAY_PARROT("gray", EntityType.PARROT, Parrot.Variant.GRAY, true),
+    KOB_TROPICAL_FISH("kob", EntityType.TROPICAL_FISH, TropicalFish.Pattern.KOB, true),
+    SUNSTREAK_TROPICAL_FISH("sunstreak", EntityType.TROPICAL_FISH, TropicalFish.Pattern.SUNSTREAK, true),
+    SNOOPER_TROPICAL_FISH("snooper", EntityType.TROPICAL_FISH, TropicalFish.Pattern.SNOOPER, true),
+    DASHER_TROPICAL_FISH("dasher", EntityType.TROPICAL_FISH, TropicalFish.Pattern.DASHER, true),
+    BRINELY_TROPICAL_FISH("brinely", EntityType.TROPICAL_FISH, TropicalFish.Pattern.BRINELY, true),
+    SPOTTY_TROPICAL_FISH("spotty", EntityType.TROPICAL_FISH, TropicalFish.Pattern.SPOTTY, true),
+    FLOPPER_TROPICAL_FISH("flopper", EntityType.TROPICAL_FISH, TropicalFish.Pattern.FLOPPER, true),
+    STRIPEY_TROPICAL_FISH("stripey", EntityType.TROPICAL_FISH, TropicalFish.Pattern.STRIPEY, true),
+    GLITTER_TROPICAL_FISH("glitter", EntityType.TROPICAL_FISH, TropicalFish.Pattern.GLITTER, true),
+    BLOCKFISH_TROPICAL_FISH("blockfish", EntityType.TROPICAL_FISH, TropicalFish.Pattern.BLOCKFISH, true),
+    BETTY_TROPICAL_FISH("betty", EntityType.TROPICAL_FISH, TropicalFish.Pattern.BETTY, true),
+    CLAYFISH_TROPICAL_FISH("clayfish", EntityType.TROPICAL_FISH, TropicalFish.Pattern.CLAYFISH, true);
     ;
 
 
@@ -252,6 +264,8 @@ public enum MobData {
             }
         } else if (this.value instanceof Parrot.Variant) {
             ((Parrot) spawned).setVariant((Parrot.Variant) this.value);
+        } else if (this.value instanceof TropicalFish.Pattern) {
+            ((TropicalFish) spawned).setPattern((TropicalFish.Pattern) this.value);
         }
     }
 }
