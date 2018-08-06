@@ -75,6 +75,8 @@ public enum Mob {
     HUSK("Husk", Enemies.ENEMY, "HUSK"),
     ILLUSIONER("Illusioner", Enemies.ENEMY, "ILLUSIONER"),
     PARROT("Parrot", Enemies.NEUTRAL, "PARROT"),
+    TURTLE("Turtle", Enemies.NEURTAL, "TURTLE"),
+    PHANTOM("Phantom", Enemies.ENEMY, "PHANTOM"),
     ;
 
     public static final Logger logger = Logger.getLogger("Essentials");
