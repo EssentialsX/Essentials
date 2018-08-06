@@ -1529,4 +1529,13 @@ public class OfflinePlayer implements Player {
     public PistonMoveReaction getPistonMoveReaction() {
         return null;
     }
+
+    @Override
+    public void setPersistent(boolean b) {
+    }
+
+    @Override
+    public boolean isPersistent() {
+        return false;
+    }
 }
