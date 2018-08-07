@@ -28,6 +28,8 @@ public class LocationUtil {
             }
         }
 
+        HOLLOW_MATERIALS.add(Material.CAVE_AIR);
+
         TRANSPARENT_MATERIALS.addAll(HOLLOW_MATERIALS);
         TRANSPARENT_MATERIALS.add(Material.WATER);
         try {
