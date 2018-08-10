@@ -34,9 +34,12 @@ import com.google.common.collect.Iterables;
 import net.ess3.api.*;
 import net.ess3.api.IEssentials;
 import net.ess3.api.ISettings;
+import net.ess3.nms.ItemDbProvider;
 import net.ess3.nms.PotionMetaProvider;
 import net.ess3.nms.SpawnEggProvider;
 import net.ess3.nms.SpawnerProvider;
+import net.ess3.nms.flattened.FlatItemDbProvider;
+import net.ess3.nms.legacy.LegacyItemDbProvider;
 import net.ess3.nms.legacy.LegacyPotionMetaProvider;
 import net.ess3.nms.refl.ReflSpawnEggProvider;
 import net.ess3.nms.updatedmeta.BasePotionDataProvider;
@@ -103,6 +106,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
     private transient EssentialsTimer timer;
     private final transient Set<String> vanishedPlayers = new LinkedHashSet<>();
     private transient Method oldGetOnlinePlayers;
+    private transient ItemDbProvider itemDbProvider;
     private transient SpawnerProvider spawnerProvider;
     private transient SpawnEggProvider spawnEggProvider;
     private transient PotionMetaProvider potionMetaProvider;
@@ -211,6 +215,12 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
                 execTimer.mark("Init(Worth/ItemDB)");
                 jails = new Jails(this);
                 confList.add(jails);
+
+                itemDbProvider = new ProviderFactory<>(getLogger(),
+                        Arrays.asList(
+                                FlatItemDbProvider.class,
+                                LegacyItemDbProvider.class
+                        ), "item database").getProvider();
                 spawnerProvider = new ProviderFactory<>(getLogger(),
                         Arrays.asList(
                                 BlockMetaSpawnerProvider.class,
