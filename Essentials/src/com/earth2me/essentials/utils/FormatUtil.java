@@ -1,7 +1,10 @@
 package com.earth2me.essentials.utils;
 
+import me.clip.placeholderapi.PlaceholderAPI;
 import net.ess3.api.IUser;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.entity.Player;
 
 import java.util.regex.Pattern;
 
@@ -22,6 +25,9 @@ public class FormatUtil {
     static final transient Pattern URL_PATTERN = Pattern.compile("((?:(?:https?)://)?[\\w-_\\.]{2,})\\.([a-zA-Z]{2,3}(?:/\\S+)?)");
     public static final Pattern IPPATTERN = Pattern.compile("^([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\.([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\." + "([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\.([01]?\\d\\d?|2[0-4]\\d|25[0-5])$");
 
+    //If we are going to make this static, should we move it?
+    public static Boolean papiEnabled = null;
+
     //This method is used to simply strip the native minecraft colour codes
     public static String stripFormat(final String input) {
         if (input == null) {
@@ -36,6 +42,29 @@ public class FormatUtil {
             return null;
         }
         return stripColor(input, REPLACE_ALL_PATTERN);
+    }
+
+    public static String placeholderAPIFormat(final IUser user, final String input) {
+        return placeholderAPIFormat(user.getBase(), input);
+    }
+
+    //Formatting PlaceholderAPI Placeholders, returns the original string if the plugin isn't enabled
+    //Seperate this from #getChatFormat() in ISettings due to the requirement of Player as an argument
+    public static String placeholderAPIFormat(final Player player, String input) {
+        if (input == null) {
+            return null;
+        }
+
+        input = input.replaceAll("\\{|\\}", "%");
+        if(papiEnabled == null){
+            papiEnabled = Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI");
+        }
+
+        //Checking here instead, please tell me if there is a better way
+        if (papiEnabled) {
+            return PlaceholderAPI.setPlaceholders(player, input);
+        }
+        return input;
     }
 
     //This is the general permission sensitive message format function, checks for urls.
