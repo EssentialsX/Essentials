@@ -159,7 +159,7 @@ public class LegacyItemDbProvider extends ItemDbProvider {
         lines.stream()
                 .filter(line -> line.length() > 0 && !(line.charAt(0) == '#'))
                 .map(this::parseLine)
-                .filter(itemData -> itemData != null)
+                .filter(Objects::nonNull)
                 .forEach(this::addItem);
 
         for (List<String> nameList : names.values()) {
