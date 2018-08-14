@@ -11,6 +11,7 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.MaterialData;
 import org.bukkit.plugin.Plugin;
+import org.yaml.snakeyaml.constructor.BaseConstructor;
 import org.yaml.snakeyaml.constructor.CustomClassLoaderConstructor;
 import org.yaml.snakeyaml.introspector.PropertyUtils;
 import org.yaml.snakeyaml.nodes.*;
@@ -34,27 +35,27 @@ public class BukkitConstructor extends CustomClassLoaderConstructor {
         setPropertyUtils(propertyUtils);
     }
 
+    private Method constructScalarMethod = null;
+
+    protected String constructScalarRefl(ScalarNode scalarNode) {
+        try {
+            if (constructScalarMethod == null) {
+                constructScalarMethod = BaseConstructor.class.getDeclaredMethod("constructScalar", ScalarNode.class);
+            }
+            return (String) constructScalarMethod.invoke(this, scalarNode);
+        } catch (NoSuchMethodException
+                | SecurityException
+                | IllegalAccessException
+                | IllegalArgumentException
+                | InvocationTargetException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
 
     private class ConstructBukkitScalar extends ConstructScalar {
-
-        private Method constructScalarMethod = null;
-        
-        protected String constructScalarRefl(ScalarNode scalarNode) {
-            try {
-                if (constructScalarMethod == null) {
-                    constructScalarMethod = ConstructScalar.class.getMethod("constructScalar", ScalarNode.class);
-                }
-                return (String) constructScalarMethod.invoke(this, scalarNode);
-            } catch (NoSuchMethodException 
-                    | SecurityException 
-                    | IllegalAccessException 
-                    | IllegalArgumentException 
-                    | InvocationTargetException e) {
-                e.printStackTrace();
-			}
-            
-            return null;
-        }
 
         @Override
         public Object construct(final Node node) {
@@ -167,6 +168,7 @@ public class BukkitConstructor extends CustomClassLoaderConstructor {
     }
 
     private class ConstructBukkitMapping extends ConstructMapping {
+        
         @Override
         public Object construct(final Node node) {
             if (node.getType().equals(Location.class)) {
@@ -179,25 +181,25 @@ public class BukkitConstructor extends CustomClassLoaderConstructor {
                     return null;
                 }
                 for (NodeTuple nodeTuple : mnode.getValue()) {
-                    final String key = (String) constructScalar((ScalarNode) nodeTuple.getKeyNode());
+                    final String key = constructScalarRefl((ScalarNode) nodeTuple.getKeyNode());
                     final ScalarNode snode = (ScalarNode) nodeTuple.getValueNode();
                     if (key.equalsIgnoreCase("world")) {
-                        worldName = (String) constructScalar(snode);
+                        worldName = constructScalarRefl(snode);
                     }
                     if (key.equalsIgnoreCase("x")) {
-                        x = Double.parseDouble((String) constructScalar(snode));
+                        x = Double.parseDouble(constructScalarRefl(snode));
                     }
                     if (key.equalsIgnoreCase("y")) {
-                        y = Double.parseDouble((String) constructScalar(snode));
+                        y = Double.parseDouble(constructScalarRefl(snode));
                     }
                     if (key.equalsIgnoreCase("z")) {
-                        z = Double.parseDouble((String) constructScalar(snode));
+                        z = Double.parseDouble(constructScalarRefl(snode));
                     }
                     if (key.equalsIgnoreCase("yaw")) {
-                        yaw = Float.parseFloat((String) constructScalar(snode));
+                        yaw = Float.parseFloat(constructScalarRefl(snode));
                     }
                     if (key.equalsIgnoreCase("pitch")) {
-                        pitch = Float.parseFloat((String) constructScalar(snode));
+                        pitch = Float.parseFloat(constructScalarRefl(snode));
                     }
                 }
                 if (worldName == null || worldName.isEmpty()) {
