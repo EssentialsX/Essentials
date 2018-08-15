@@ -887,6 +887,11 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
         return potionMetaProvider;
     }
 
+    @Override
+    public ItemDbProvider getItemDbProvider() {
+        return itemDbProvider;
+    }
+
     private static void addDefaultBackPermissionsToWorld(World w) {
         String permName = "essentials.back.into." + w.getName();
 
