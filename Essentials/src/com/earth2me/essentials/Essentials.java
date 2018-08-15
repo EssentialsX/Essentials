@@ -39,7 +39,7 @@ import net.ess3.nms.PotionMetaProvider;
 import net.ess3.nms.SpawnEggProvider;
 import net.ess3.nms.SpawnerProvider;
 import net.ess3.nms.flattened.FlatItemDbProvider;
-import net.ess3.nms.legacy.LegacyItemDbProvider;
+import net.ess3.nms.ids.LegacyItemDbProvider;
 import net.ess3.nms.legacy.LegacyPotionMetaProvider;
 import net.ess3.nms.refl.ReflSpawnEggProvider;
 import net.ess3.nms.updatedmeta.BasePotionDataProvider;
