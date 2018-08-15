@@ -1,7 +1,6 @@
 package net.ess3.nms.flattened;
 
 import net.ess3.nms.SpawnEggProvider;
-import net.ess3.nms.refl.ReflUtil;
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
