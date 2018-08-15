@@ -238,6 +238,9 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
                                 BasePotionDataProvider.class,
                                 LegacyPotionMetaProvider.class
                         ), "potion meta").getProvider();
+                itemDbProvider.setSpawnerProvider(spawnerProvider);
+                itemDbProvider.setSpawnEggProvider(spawnEggProvider);
+                itemDbProvider.setPotionMetaProvider(potionMetaProvider);
                 reload();
             } catch (YAMLException exception) {
                 if (pm.getPlugin("EssentialsUpdate") != null) {
