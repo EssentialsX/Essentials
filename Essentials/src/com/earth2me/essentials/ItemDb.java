@@ -3,6 +3,7 @@ package com.earth2me.essentials;
 import com.earth2me.essentials.utils.NumberUtil;
 import com.earth2me.essentials.utils.StringUtil;
 import net.ess3.api.IEssentials;
+import net.ess3.nms.ItemDbProvider;
 import net.ess3.nms.refl.ReflUtil;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
@@ -29,6 +30,7 @@ import static com.earth2me.essentials.I18n.tl;
 public class ItemDb implements IConf, net.ess3.api.IItemDb {
     protected static final Logger LOGGER = Logger.getLogger("Essentials");
     private final transient IEssentials ess;
+    private final transient ItemDbProvider provider;
     private final transient Map<String, Integer> items = new HashMap<>();
     private final transient Map<ItemData, List<String>> names = new HashMap<>();
     private final transient Map<ItemData, String> primaryName = new HashMap<>();
@@ -41,6 +43,7 @@ public class ItemDb implements IConf, net.ess3.api.IItemDb {
 
     public ItemDb(final IEssentials ess) {
         this.ess = ess;
+        this.provider = ess.getItemDbProvider();
         file = new ManagedFile("items.csv", ess);
     }
 
@@ -130,88 +133,12 @@ public class ItemDb implements IConf, net.ess3.api.IItemDb {
 
     @Override
     public ItemStack get(final String id, final int quantity) throws Exception {
-        final ItemStack retval = get(id.toLowerCase(Locale.ENGLISH));
-        retval.setAmount(quantity);
-        return retval;
+        return provider.getStack(id, quantity);
     }
 
     @Override
     public ItemStack get(final String id) throws Exception {
-        int itemid = 0;
-        String itemname;
-        short metaData = 0;
-        Matcher parts = splitPattern.matcher(id);
-        if (parts.matches()) {
-            itemname = parts.group(2);
-            metaData = Short.parseShort(parts.group(3));
-        } else {
-            itemname = id;
-        }
-
-        if (NumberUtil.isInt(itemname)) {
-            itemid = Integer.parseInt(itemname);
-        } else if (NumberUtil.isInt(id)) {
-            itemid = Integer.parseInt(id);
-        } else {
-            itemname = itemname.toLowerCase(Locale.ENGLISH);
-        }
-
-        if (itemid < 1) {
-            if (items.containsKey(itemname)) {
-                itemid = items.get(itemname);
-                if (durabilities.containsKey(itemname) && metaData == 0) {
-                    metaData = durabilities.get(itemname);
-                }
-            }
-        }
-
-        if (itemid < 1) {
-            throw new Exception(tl("unknownItemName", itemname));
-        }
-
-        ItemData data = legacyIds.get(itemid);
-        if (data == null) {
-            throw new Exception(tl("unknownItemId", itemid));
-        }
-
-        Material mat = data.getMaterial();
-        ItemStack retval = new ItemStack(mat);
-        if (nbtData.containsKey(itemname)) {
-            String nbt = nbtData.get(itemname);
-            if (nbt.startsWith("*")) {
-                nbt = nbtData.get(nbt.substring(1));
-            }
-            retval = ess.getServer().getUnsafe().modifyItemStack(retval, nbt);
-        }
-        Material MOB_SPAWNER;
-        try {
-            MOB_SPAWNER = Material.SPAWNER;
-        } catch (Exception e) {
-            MOB_SPAWNER = Material.valueOf("MOB_SPAWNER");
-        }
-        if (mat == MOB_SPAWNER) {
-            if (metaData == 0) metaData = EntityType.PIG.getTypeId();
-            try {
-                retval = ess.getSpawnerProvider().setEntityType(retval, EntityType.fromId(metaData));
-            } catch (IllegalArgumentException e) {
-                throw new Exception("Can't spawn entity ID " + metaData + " from mob spawners.");
-            }
-        } else if (mat == Material.LEGACY_MONSTER_EGG) {
-            EntityType type;
-            try {
-                type = EntityType.fromId(metaData);
-            } catch (IllegalArgumentException e) {
-                throw new Exception("Can't spawn entity ID " + metaData + " from spawn eggs.");
-            }
-            retval = ess.getSpawnEggProvider().createEggItem(type);
-        } else if (mat.name().endsWith("POTION")
-                && ReflUtil.getNmsVersionObject().isLowerThan(ReflUtil.V1_11_R1)) { // Only apply this to pre-1.11 as items.csv might only work in 1.11
-            retval = ess.getPotionMetaProvider().createPotionItem(mat, metaData);
-        } else {
-            retval.setDurability(metaData);
-        }
-        retval.setAmount(mat.getMaxStackSize());
-        return retval;
+        return provider.getStack(id);
     }
 
     @Override
@@ -456,7 +383,7 @@ public class ItemDb implements IConf, net.ess3.api.IItemDb {
     @Override
     public Material getFromLegacyId(int id) {
         ItemData data = this.legacyIds.get(id);
-        if(data == null) {
+        if (data == null) {
             return null;
         }
 
