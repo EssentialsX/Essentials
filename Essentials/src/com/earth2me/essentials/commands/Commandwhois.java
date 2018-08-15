@@ -16,8 +16,17 @@ import static com.earth2me.essentials.I18n.tl;
 
 
 public class Commandwhois extends EssentialsCommand {
+    private Statistic playOneTick;
+
     public Commandwhois() {
         super("whois");
+        try {
+            // For some reason, in 1.13 PLAY_ONE_MINUTE = ticks played
+            // https://hub.spigotmc.org/stash/projects/SPIGOT/repos/bukkit/commits/b848d8ce633871b52115247b089029749c02f579
+            playOneTick = Statistic.valueOf("PLAY_ONE_MINUTE");
+        } catch (IllegalArgumentException e) {
+            playOneTick = Statistic.valueOf("PLAY_ONE_TICK");
+        }
     }
 
     @Override
@@ -36,7 +45,7 @@ public class Commandwhois extends EssentialsCommand {
         sender.sendMessage(tl("whoisHunger", user.getBase().getFoodLevel(), user.getBase().getSaturation()));
         sender.sendMessage(tl("whoisExp", SetExpFix.getTotalExperience(user.getBase()), user.getBase().getLevel()));
         sender.sendMessage(tl("whoisLocation", user.getLocation().getWorld().getName(), user.getLocation().getBlockX(), user.getLocation().getBlockY(), user.getLocation().getBlockZ()));
-        long playtimeMs = System.currentTimeMillis() - (user.getBase().getStatistic(Statistic.PLAY_ONE_MINUTE) * 60);
+        long playtimeMs = System.currentTimeMillis() - (user.getBase().getStatistic(playOneTick) * 50);
         sender.sendMessage(tl("whoisPlaytime", DateUtil.formatDateDiff(playtimeMs)));
         if (!ess.getSettings().isEcoDisabled()) {
             sender.sendMessage(tl("whoisMoney", NumberUtil.displayCurrency(user.getMoney(), ess)));

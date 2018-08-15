@@ -25,6 +25,7 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.generator.ChunkGenerator;
 import org.bukkit.help.HelpMap;
 import org.bukkit.inventory.*;
+import org.bukkit.loot.LootTable;
 import org.bukkit.map.MapView;
 import org.bukkit.permissions.Permissible;
 import org.bukkit.permissions.Permission;
@@ -1151,5 +1152,10 @@ public class FakeServer implements Server {
             throw new UnsupportedOperationException("Not supported yet.");
         }
     }
+
+	@Override
+	public LootTable getLootTable(NamespacedKey arg0) {
+        throw new UnsupportedOperationException("Not supported yet.");
+	}
 
 }

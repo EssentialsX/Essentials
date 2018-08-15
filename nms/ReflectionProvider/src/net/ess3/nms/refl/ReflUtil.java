@@ -23,6 +23,7 @@ public class ReflUtil {
     public static final NMSVersion V1_10_R1 = NMSVersion.fromString("v1_10_R1");
     public static final NMSVersion V1_11_R1 = NMSVersion.fromString("v1_11_R1");
     public static final NMSVersion V1_12_R1 = NMSVersion.fromString("v1_12_R1");
+    public static final NMSVersion V1_13_R1 = NMSVersion.fromString("v1_13_R1");
     private static NMSVersion nmsVersionObject;
     private static String nmsVersion;
 

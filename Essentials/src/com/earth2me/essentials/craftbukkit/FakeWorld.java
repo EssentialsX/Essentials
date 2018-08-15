@@ -708,4 +708,19 @@ public class FakeWorld implements World {
     public List<Entity> getNearbyEntities(Location loc, double x, double y, double z) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
+
+	@Override
+	public <T> T getGameRuleDefault(GameRule<T> arg0) {
+        throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	@Override
+	public <T> T getGameRuleValue(GameRule<T> arg0) {
+        throw new UnsupportedOperationException("Not supported yet.");
+	}
+
+	@Override
+	public <T> boolean setGameRule(GameRule<T> arg0, T arg1) {
+        throw new UnsupportedOperationException("Not supported yet.");
+	}
 }
