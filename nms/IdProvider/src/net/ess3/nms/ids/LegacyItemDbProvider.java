@@ -103,7 +103,7 @@ public class LegacyItemDbProvider extends ItemDbProvider {
                 throw new Exception("Can't spawn entity ID " + metaData + " from spawn eggs.");
             }
             retval = getSpawnEggProvider().createEggItem(type);
-        } else if (mat.name().endsWith("POTION")
+        } else if ((mat.name().endsWith("POTION") || mat.name().equals("TIPPED_ARROW"))
                 && ReflUtil.getNmsVersionObject().isLowerThan(ReflUtil.V1_11_R1)) { // Only apply this to pre-1.11 as items.csv might only work in 1.11
             retval = getPotionMetaProvider().createPotionItem(mat, metaData);
         } else {
