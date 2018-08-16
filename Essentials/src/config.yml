@@ -475,7 +475,7 @@ last-message-reply-recipient: true
 # Default is 180 (3 minutes)
 last-message-reply-recipient-timeout: 180
 
-# Toggles whether or not right clicking mobs with a milk bucket turns them into a baby.
+# Toggles whether or not clicking mobs with a milk bucket turns them into a baby.
 milk-bucket-easter-egg: true
 
 # Toggles whether or not the fly status message should be sent to players on join
