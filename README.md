@@ -1,6 +1,6 @@
 ![](https://i.imgur.com/CP4SZpB.png)
 
-[![Downloads](https://i.imgur.com/MMc0PJY.png)](http://ci.ender.zone/job/EssentialsX/)
+[![Downloads](https://i.imgur.com/MMc0PJY.png)](https://ci.ender.zone/job/EssentialsX-Experimental/)
 
 [![Discord](https://imgur.com/MFRRBn4.png)](https://discord.gg/casfFyh)
 
