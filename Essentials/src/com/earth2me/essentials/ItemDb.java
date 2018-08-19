@@ -176,16 +176,8 @@ public class ItemDb implements IConf, net.ess3.api.IItemDb {
 
     @Override
     public String names(ItemStack item) {
-        ItemData itemData = new ItemData(item.getType(), item.getDurability());
-        List<String> nameList = names.get(itemData);
-        if (nameList == null) {
-            itemData = new ItemData(item.getType(), (short) 0);
-            nameList = names.get(itemData);
-            if (nameList == null) {
-                return null;
-            }
-        }
-
+        List<String> nameList = provider.getNames(item);
+        
         if (nameList.size() > 15) {
             nameList = nameList.subList(0, 14);
         }
@@ -194,16 +186,7 @@ public class ItemDb implements IConf, net.ess3.api.IItemDb {
 
     @Override
     public String name(ItemStack item) {
-        ItemData itemData = new ItemData(item.getType(), item.getDurability());
-        String name = primaryName.get(itemData);
-        if (name == null) {
-            itemData = new ItemData(item.getType(), (short) 0);
-            name = primaryName.get(itemData);
-            if (name == null) {
-                return null;
-            }
-        }
-        return name;
+        return provider.getPrimaryName(item);
     }
 
     @Override
