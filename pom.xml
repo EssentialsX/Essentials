@@ -279,6 +279,7 @@
                     <include>*.yml</include>
                     <include>*.csv</include>
                     <include>*.txt</include>
+                    <include>*.json</include>
                 </includes>
                 <filtering>true</filtering>
             </resource>
