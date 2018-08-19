@@ -7,13 +7,12 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionType;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class FlatItemDbProvider extends ItemDbProvider {
     private static Gson gson = new Gson();
 
-    private final transient Map<String, ItemData> items = new HashMap<>();
-    private final transient Map<ItemData, Set<String>> aliases = new HashMap<>();
+    private final transient Map<String, ItemData> primaryNames = new HashMap<>();
+    private final transient Map<String, List<String>> names = new HashMap<>();
 
     @Override
     public Material resolve(String name) {
@@ -37,11 +36,26 @@ public class FlatItemDbProvider extends ItemDbProvider {
 
     @Override
     public String getPrimaryName(ItemStack item) {
+        ItemData itemData = new ItemData(null, item.getType(), null);
+
+        for (Map.Entry<String, ItemData> entry : primaryNames.entrySet()) {
+            if (entry.getValue().equals(itemData)) {
+                return entry.getKey();
+            }
+        }
+
         return null;
     }
 
     @Override
     public List<String> getNames(ItemStack item) {
+        String primaryName = getPrimaryName(item);
+
+        for (Map.Entry<String, List<String>> entry : names.entrySet()) {
+            if (entry.getKey().equals(primaryName)) {
+                return Collections.unmodifiableList(entry.getValue());
+            }
+        }
         return null;
     }
 
@@ -56,15 +70,11 @@ public class FlatItemDbProvider extends ItemDbProvider {
 
             if (element.isJsonObject()) {
                 ItemData data = gson.fromJson(element, ItemData.class);
-                items.put(key, data);
-                addAlias(data, key);
+                primaryNames.put(key, data);
             } else {
                 try {
-                    // TODO: finalise this - how do we handle aliases loading before actual materials?
-                    // Temporary Map<String, List<String>> that we copy over from once json parsed?
                     String target = element.getAsString();
-                    ItemData data = items.get(target);
-                    addAlias(data, target);
+                    addAlias(target, key);
                 } catch (Exception e) {
                     // TODO: log invalid entry
                 }
@@ -72,14 +82,14 @@ public class FlatItemDbProvider extends ItemDbProvider {
         }
     }
 
-    private void addAlias(ItemData data, String alias) {
-        Set<String> aliasList;
+    private void addAlias(String primaryName, String alias) {
+        List<String> aliasList;
 
-        if (aliases.containsKey(data)) {
-            aliasList = aliases.get(data);
+        if (names.containsKey(primaryName)) {
+            aliasList = names.get(primaryName);
         } else {
-            aliasList = new HashSet<>();
-            aliases.put(data, aliasList);
+            aliasList = new ArrayList<>();
+            names.put(primaryName, aliasList);
         }
 
         aliasList.add(alias);
@@ -95,11 +105,5 @@ public class FlatItemDbProvider extends ItemDbProvider {
     @Override
     public String getHumanName() {
         return "Post-1.13 item database provider";
-    }
-
-    private class MaterialData {
-        private Material material;
-        private PotionType potionEnum;
-        private String potionModifier;
     }
 }
