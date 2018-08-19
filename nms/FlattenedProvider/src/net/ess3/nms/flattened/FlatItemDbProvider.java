@@ -60,6 +60,11 @@ public class FlatItemDbProvider extends ItemDbProvider {
     }
 
     @Override
+    public Collection<String> listNames() {
+        return Collections.unmodifiableSet(primaryNames.keySet());
+    }
+
+    @Override
     public void rebuild(List<String> lines) {
         String json = String.join("\n", lines);
         JsonObject map = (new JsonParser()).parse(json).getAsJsonObject();

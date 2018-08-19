@@ -115,6 +115,11 @@ public class LegacyItemDbProvider extends ItemDbProvider {
     }
 
     @Override
+    public Collection<String> listNames() {
+        return primaryNames.values();
+    }
+
+    @Override
     public boolean supportsLegacyIds() {
         return true;
     }
