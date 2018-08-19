@@ -173,6 +173,7 @@
                                         <include>messages*.properties</include>
                                         <include>config.yml</include>
                                         <include>items.csv</include>
+                                        <include>items.json</include>
                                     </includes>
                                     <excludes>
                                         <exclude>plugin.yml</exclude>
