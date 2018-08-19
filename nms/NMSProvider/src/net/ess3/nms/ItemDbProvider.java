@@ -3,6 +3,7 @@ package net.ess3.nms;
 import net.ess3.providers.Provider;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.potion.PotionData;
 import org.bukkit.potion.PotionType;
 
 import java.io.BufferedReader;
@@ -249,13 +250,10 @@ public abstract class ItemDbProvider implements Provider {
             // TODO: generalise comparison
             return this.material == pairo.getMaterial() && this.itemData == pairo.getItemData() && this.nbt.equals(pairo.getNbt());
         }
-    }
 
-    public static class PotionData {
-        private PotionType bukkitType;
-        private String vanillaType;
-        private boolean isStrong;
-        private boolean isLong;
+        public PotionData getPotionData() {
+            return this.potionData;
+        }
     }
 
     protected static class LengthCompare implements java.util.Comparator<String> {

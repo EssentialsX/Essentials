@@ -7794,8 +7794,8 @@
         "potionData": {
             "vanillaType": "empty",
             "bukkitType": "empty",
-            "isStrong": false,
-            "isLong": false
+            "upgraded": false,
+            "extended": false
         }
     },
     "emptypot": "emptypotion",
@@ -7806,8 +7806,8 @@
         "potionData": {
             "vanillaType": "empty",
             "bukkitType": "empty",
-            "isStrong": false,
-            "isLong": false
+            "upgraded": false,
+            "extended": false
         }
     },
     "splemptypotion": "splashemptypotion",
@@ -7820,8 +7820,8 @@
         "potionData": {
             "vanillaType": "empty",
             "bukkitType": "empty",
-            "isStrong": false,
-            "isLong": false
+            "upgraded": false,
+            "extended": false
         }
     },
     "emptylingerpot": "lingerpotempty",
@@ -7842,8 +7842,8 @@
         "potionData": {
             "vanillaType": "empty",
             "bukkitType": "empty",
-            "isStrong": false,
-            "isLong": false
+            "upgraded": false,
+            "extended": false
         }
     },
     "emptyarrow": "arrowempty",
@@ -7852,8 +7852,8 @@
         "potionData": {
             "vanillaType": "water",
             "bukkitType": "water",
-            "isStrong": false,
-            "isLong": false
+            "upgraded": false,
+            "extended": false
         }
     },
     "waterpot": "waterpotion",
@@ -7864,8 +7864,8 @@
         "potionData": {
             "vanillaType": "water",
             "bukkitType": "water",
-            "isStrong": false,
-            "isLong": false
+            "upgraded": false,
+            "extended": false
         }
     },
     "splwaterpotion": "splashwaterpotion",
@@ -7878,8 +7878,8 @@
         "potionData": {
             "vanillaType": "water",
             "bukkitType": "water",
-            "isStrong": false,
-            "isLong": false
+            "upgraded": false,
+            "extended": false
         }
     },
     "waterlingerpot": "lingerpotwater",
@@ -7900,8 +7900,8 @@
         "potionData": {
             "vanillaType": "water",
             "bukkitType": "water",
-            "isStrong": false,
-            "isLong": false
+            "upgraded": false,
+            "extended": false
         }
     },
     "waterarrow": "arrowwater",
@@ -7910,8 +7910,8 @@
         "potionData": {
             "vanillaType": "mundane",
             "bukkitType": "mundane",
-            "isStrong": false,
-            "isLong": false
+            "upgraded": false,
+            "extended": false
         }
     },
     "mundanepot": "mundanepotion",
@@ -7922,8 +7922,8 @@
         "potionData": {
             "vanillaType": "mundane",
             "bukkitType": "mundane",
-            "isStrong": false,
-            "isLong": false
+            "upgraded": false,
+            "extended": false
         }
     },
     "splmundanepotion": "splashmundanepotion",
@@ -7936,8 +7936,8 @@
         "potionData": {
             "vanillaType": "mundane",
             "bukkitType": "mundane",
-            "isStrong": false,
-            "isLong": false
+            "upgraded": false,
+            "extended": false
         }
     },
     "mundanelingerpot": "lingerpotmundane",
@@ -7958,8 +7958,8 @@
         "potionData": {
             "vanillaType": "mundane",
             "bukkitType": "mundane",
-            "isStrong": false,
-            "isLong": false
+            "upgraded": false,
+            "extended": false
         }
     },
     "mundanearrow": "arrowmundane",
@@ -7968,8 +7968,8 @@
         "potionData": {
             "vanillaType": "thick",
             "bukkitType": "thick",
-            "isStrong": false,
-            "isLong": false
+            "upgraded": false,
+            "extended": false
         }
     },
     "thickpot": "thickpotion",
@@ -7980,8 +7980,8 @@
         "potionData": {
             "vanillaType": "thick",
             "bukkitType": "thick",
-            "isStrong": false,
-            "isLong": false
+            "upgraded": false,
+            "extended": false
         }
     },
     "splthickpotion": "splashthickpotion",
@@ -7994,8 +7994,8 @@
         "potionData": {
             "vanillaType": "thick",
             "bukkitType": "thick",
-            "isStrong": false,
-            "isLong": false
+            "upgraded": false,
+            "extended": false
         }
     },
     "thicklingerpot": "lingerpotthick",
@@ -8016,8 +8016,8 @@
         "potionData": {
             "vanillaType": "thick",
             "bukkitType": "thick",
-            "isStrong": false,
-            "isLong": false
+            "upgraded": false,
+            "extended": false
         }
     },
     "thickarrow": "arrowthick",
@@ -8026,8 +8026,8 @@
         "potionData": {
             "vanillaType": "awkward",
             "bukkitType": "awkward",
-            "isStrong": false,
-            "isLong": false
+            "upgraded": false,
+            "extended": false
         }
     },
     "awkwardpot": "awkwardpotion",
@@ -8038,8 +8038,8 @@
         "potionData": {
             "vanillaType": "awkward",
             "bukkitType": "awkward",
-            "isStrong": false,
-            "isLong": false
+            "upgraded": false,
+            "extended": false
         }
     },
     "splawkwardpotion": "splashawkwardpotion",
@@ -8052,8 +8052,8 @@
         "potionData": {
             "vanillaType": "awkward",
             "bukkitType": "awkward",
-            "isStrong": false,
-            "isLong": false
+            "upgraded": false,
+            "extended": false
         }
     },
     "awkwardlingerpot": "lingerpotawkward",
@@ -8074,8 +8074,8 @@
         "potionData": {
             "vanillaType": "awkward",
             "bukkitType": "awkward",
-            "isStrong": false,
-            "isLong": false
+            "upgraded": false,
+            "extended": false
         }
     },
     "awkwardarrow": "arrowawkward",
@@ -8084,8 +8084,8 @@
         "potionData": {
             "vanillaType": "night_vision",
             "bukkitType": "night_vision",
-            "isStrong": false,
-            "isLong": false
+            "upgraded": false,
+            "extended": false
         }
     },
     "nvpotion": "nightvisionpotion",
@@ -8120,8 +8120,8 @@
         "potionData": {
             "vanillaType": "night_vision",
             "bukkitType": "night_vision",
-            "isStrong": false,
-            "isLong": false
+            "upgraded": false,
+            "extended": false
         }
     },
     "splashnvpotion": "splashnightvisionpotion",
@@ -8170,8 +8170,8 @@
         "potionData": {
             "vanillaType": "night_vision",
             "bukkitType": "night_vision",
-            "isStrong": false,
-            "isLong": false
+            "upgraded": false,
+            "extended": false
         }
     },
     "lingerpotnv": "lingerpotnightvision",
@@ -8276,8 +8276,8 @@
         "potionData": {
             "vanillaType": "night_vision",
             "bukkitType": "night_vision",
-            "isStrong": false,
-            "isLong": false
+            "upgraded": false,
+            "extended": false
         }
     },
     "arrownv": "arrownightvision",
@@ -8298,8 +8298,8 @@
         "potionData": {
             "vanillaType": "long_night_vision",
             "bukkitType": "night_vision",
-            "isStrong": false,
-            "isLong": true
+            "upgraded": false,
+            "extended": true
         }
     },
     "nightvisionlongpotion": "nightvision2potion",
@@ -8446,8 +8446,8 @@
         "potionData": {
             "vanillaType": "long_night_vision",
             "bukkitType": "night_vision",
-            "isStrong": false,
-            "isLong": true
+            "upgraded": false,
+            "extended": true
         }
     },
     "splashnightvisionlongpotion": "splashnightvision2potion",
@@ -8664,8 +8664,8 @@
         "potionData": {
             "vanillaType": "long_night_vision",
             "bukkitType": "night_vision",
-            "isStrong": false,
-            "isLong": true
+            "upgraded": false,
+            "extended": true
         }
     },
     "lingerpotnightvisionlong": "lingerpotnightvision2",
@@ -9162,8 +9162,8 @@
         "potionData": {
             "vanillaType": "long_night_vision",
             "bukkitType": "night_vision",
-            "isStrong": false,
-            "isLong": true
+            "upgraded": false,
+            "extended": true
         }
     },
     "arrownightvisionlong": "arrownightvision2",
@@ -9240,8 +9240,8 @@
         "potionData": {
             "vanillaType": "invisibility",
             "bukkitType": "invisibility",
-            "isStrong": false,
-            "isLong": false
+            "upgraded": false,
+            "extended": false
         }
     },
     "invispotion": "invisibilitypotion",
@@ -9264,8 +9264,8 @@
         "potionData": {
             "vanillaType": "invisibility",
             "bukkitType": "invisibility",
-            "isStrong": false,
-            "isLong": false
+            "upgraded": false,
+            "extended": false
         }
     },
     "splashinvispotion": "splashinvisibilitypotion",
@@ -9296,8 +9296,8 @@
         "potionData": {
             "vanillaType": "invisibility",
             "bukkitType": "invisibility",
-            "isStrong": false,
-            "isLong": false
+            "upgraded": false,
+            "extended": false
         }
     },
     "lingerpotinvis": "lingerpotinvisibility",
@@ -9360,8 +9360,8 @@
         "potionData": {
             "vanillaType": "invisibility",
             "bukkitType": "invisibility",
-            "isStrong": false,
-            "isLong": false
+            "upgraded": false,
+            "extended": false
         }
     },
     "arrowinvis": "arrowinvisibility",
@@ -9376,8 +9376,8 @@
         "potionData": {
             "vanillaType": "long_invisibility",
             "bukkitType": "invisibility",
-            "isStrong": false,
-            "isLong": true
+            "upgraded": false,
+            "extended": true
         }
     },
     "invisibilitylongpotion": "invisibility2potion",
@@ -9464,8 +9464,8 @@
         "potionData": {
             "vanillaType": "long_invisibility",
             "bukkitType": "invisibility",
-            "isStrong": false,
-            "isLong": true
+            "upgraded": false,
+            "extended": true
         }
     },
     "splashinvisibilitylongpotion": "splashinvisibility2potion",
@@ -9592,8 +9592,8 @@
         "potionData": {
             "vanillaType": "long_invisibility",
             "bukkitType": "invisibility",
-            "isStrong": false,
-            "isLong": true
+            "upgraded": false,
+            "extended": true
         }
     },
     "lingerpotinvisibilitylong": "lingerpotinvisibility2",
@@ -9880,8 +9880,8 @@
         "potionData": {
             "vanillaType": "long_invisibility",
             "bukkitType": "invisibility",
-            "isStrong": false,
-            "isLong": true
+            "upgraded": false,
+            "extended": true
         }
     },
     "arrowinvisibilitylong": "arrowinvisibility2",
@@ -9928,8 +9928,8 @@
         "potionData": {
             "vanillaType": "leaping",
             "bukkitType": "leaping",
-            "isStrong": false,
-            "isLong": false
+            "upgraded": false,
+            "extended": false
         }
     },
     "leappotion": "leapingpotion",
@@ -9944,8 +9944,8 @@
         "potionData": {
             "vanillaType": "leaping",
             "bukkitType": "leaping",
-            "isStrong": false,
-            "isLong": false
+            "upgraded": false,
+            "extended": false
         }
     },
     "splashleappotion": "splashleapingpotion",
@@ -9964,8 +9964,8 @@
         "potionData": {
             "vanillaType": "leaping",
             "bukkitType": "leaping",
-            "isStrong": false,
-            "isLong": false
+            "upgraded": false,
+            "extended": false
         }
     },
     "lingerpotleap": "lingerpotleaping",
@@ -10000,8 +10000,8 @@
         "potionData": {
             "vanillaType": "leaping",
             "bukkitType": "leaping",
-            "isStrong": false,
-            "isLong": false
+            "upgraded": false,
+            "extended": false
         }
     },
     "arrowleap": "arrowleaping",
@@ -10012,8 +10012,8 @@
         "potionData": {
             "vanillaType": "strong_leaping",
             "bukkitType": "leaping",
-            "isStrong": true,
-            "isLong": false
+            "upgraded": true,
+            "extended": false
         }
     },
     "leapingstrongpotion": "leapingiipotion",
@@ -10044,8 +10044,8 @@
         "potionData": {
             "vanillaType": "strong_leaping",
             "bukkitType": "leaping",
-            "isStrong": true,
-            "isLong": false
+            "upgraded": true,
+            "extended": false
         }
     },
     "splashleapingstrongpotion": "splashleapingiipotion",
@@ -10088,8 +10088,8 @@
         "potionData": {
             "vanillaType": "strong_leaping",
             "bukkitType": "leaping",
-            "isStrong": true,
-            "isLong": false
+            "upgraded": true,
+            "extended": false
         }
     },
     "lingerpotleapingstrong": "lingerpotleapingii",
@@ -10180,8 +10180,8 @@
         "potionData": {
             "vanillaType": "strong_leaping",
             "bukkitType": "leaping",
-            "isStrong": true,
-            "isLong": false
+            "upgraded": true,
+            "extended": false
         }
     },
     "arrowleapingstrong": "arrowleapingii",
@@ -10200,8 +10200,8 @@
         "potionData": {
             "vanillaType": "long_leaping",
             "bukkitType": "leaping",
-            "isStrong": false,
-            "isLong": true
+            "upgraded": false,
+            "extended": true
         }
     },
     "leapinglongpotion": "leaping2potion",
@@ -10248,8 +10248,8 @@
         "potionData": {
             "vanillaType": "long_leaping",
             "bukkitType": "leaping",
-            "isStrong": false,
-            "isLong": true
+            "upgraded": false,
+            "extended": true
         }
     },
     "splashleapinglongpotion": "splashleaping2potion",
@@ -10316,8 +10316,8 @@
         "potionData": {
             "vanillaType": "long_leaping",
             "bukkitType": "leaping",
-            "isStrong": false,
-            "isLong": true
+            "upgraded": false,
+            "extended": true
         }
     },
     "lingerpotleapinglong": "lingerpotleaping2",
@@ -10464,8 +10464,8 @@
         "potionData": {
             "vanillaType": "long_leaping",
             "bukkitType": "leaping",
-            "isStrong": false,
-            "isLong": true
+            "upgraded": false,
+            "extended": true
         }
     },
     "arrowleapinglong": "arrowleaping2",
@@ -10492,8 +10492,8 @@
         "potionData": {
             "vanillaType": "fire_resistance",
             "bukkitType": "fire_resistance",
-            "isStrong": false,
-            "isLong": false
+            "upgraded": false,
+            "extended": false
         }
     },
     "firerespotion": "fireresistpotion",
@@ -10512,8 +10512,8 @@
         "potionData": {
             "vanillaType": "fire_resistance",
             "bukkitType": "fire_resistance",
-            "isStrong": false,
-            "isLong": false
+            "upgraded": false,
+            "extended": false
         }
     },
     "splashfirerespotion": "splashfireresistpotion",
@@ -10538,8 +10538,8 @@
         "potionData": {
             "vanillaType": "fire_resistance",
             "bukkitType": "fire_resistance",
-            "isStrong": false,
-            "isLong": false
+            "upgraded": false,
+            "extended": false
         }
     },
     "lingerpotfireres": "lingerpotfireresist",
@@ -10588,8 +10588,8 @@
         "potionData": {
             "vanillaType": "fire_resistance",
             "bukkitType": "fire_resistance",
-            "isStrong": false,
-            "isLong": false
+            "upgraded": false,
+            "extended": false
         }
     },
     "arrowfireres": "arrowfireresist",
@@ -10602,8 +10602,8 @@
         "potionData": {
             "vanillaType": "long_fire_resistance",
             "bukkitType": "fire_resistance",
-            "isStrong": false,
-            "isLong": true
+            "upgraded": false,
+            "extended": true
         }
     },
     "fireresistlongpotion": "fireresist2potion",
@@ -10670,8 +10670,8 @@
         "potionData": {
             "vanillaType": "long_fire_resistance",
             "bukkitType": "fire_resistance",
-            "isStrong": false,
-            "isLong": true
+            "upgraded": false,
+            "extended": true
         }
     },
     "splashfireresistlongpotion": "splashfireresist2potion",
@@ -10768,8 +10768,8 @@
         "potionData": {
             "vanillaType": "long_fire_resistance",
             "bukkitType": "fire_resistance",
-            "isStrong": false,
-            "isLong": true
+            "upgraded": false,
+            "extended": true
         }
     },
     "lingerpotfireresistlong": "lingerpotfireresist2",
@@ -10986,8 +10986,8 @@
         "potionData": {
             "vanillaType": "long_fire_resistance",
             "bukkitType": "fire_resistance",
-            "isStrong": false,
-            "isLong": true
+            "upgraded": false,
+            "extended": true
         }
     },
     "arrowfireresistlong": "arrowfireresist2",
@@ -11024,8 +11024,8 @@
         "potionData": {
             "vanillaType": "swiftness",
             "bukkitType": "swiftness",
-            "isStrong": false,
-            "isLong": false
+            "upgraded": false,
+            "extended": false
         }
     },
     "swiftpotion": "swiftnesspotion",
@@ -11044,8 +11044,8 @@
         "potionData": {
             "vanillaType": "swiftness",
             "bukkitType": "swiftness",
-            "isStrong": false,
-            "isLong": false
+            "upgraded": false,
+            "extended": false
         }
     },
     "splashswiftpotion": "splashswiftnesspotion",
@@ -11070,8 +11070,8 @@
         "potionData": {
             "vanillaType": "swiftness",
             "bukkitType": "swiftness",
-            "isStrong": false,
-            "isLong": false
+            "upgraded": false,
+            "extended": false
         }
     },
     "lingerpotswift": "lingerpotswiftness",
@@ -11120,8 +11120,8 @@
         "potionData": {
             "vanillaType": "swiftness",
             "bukkitType": "swiftness",
-            "isStrong": false,
-            "isLong": false
+            "upgraded": false,
+            "extended": false
         }
     },
     "arrowswift": "arrowswiftness",
@@ -11134,8 +11134,8 @@
         "potionData": {
             "vanillaType": "strong_swiftness",
             "bukkitType": "swiftness",
-            "isStrong": true,
-            "isLong": false
+            "upgraded": true,
+            "extended": false
         }
     },
     "swiftnessstrongpotion": "swiftnessiipotion",
@@ -11178,8 +11178,8 @@
         "potionData": {
             "vanillaType": "strong_swiftness",
             "bukkitType": "swiftness",
-            "isStrong": true,
-            "isLong": false
+            "upgraded": true,
+            "extended": false
         }
     },
     "splashswiftnessstrongpotion": "splashswiftnessiipotion",
@@ -11240,8 +11240,8 @@
         "potionData": {
             "vanillaType": "strong_swiftness",
             "bukkitType": "swiftness",
-            "isStrong": true,
-            "isLong": false
+            "upgraded": true,
+            "extended": false
         }
     },
     "lingerpotswiftnessstrong": "lingerpotswiftnessii",
@@ -11374,8 +11374,8 @@
         "potionData": {
             "vanillaType": "strong_swiftness",
             "bukkitType": "swiftness",
-            "isStrong": true,
-            "isLong": false
+            "upgraded": true,
+            "extended": false
         }
     },
     "arrowswiftnessstrong": "arrowswiftnessii",
@@ -11400,8 +11400,8 @@
         "potionData": {
             "vanillaType": "long_swiftness",
             "bukkitType": "swiftness",
-            "isStrong": false,
-            "isLong": true
+            "upgraded": false,
+            "extended": true
         }
     },
     "swiftnesslongpotion": "swiftness2potion",
@@ -11468,8 +11468,8 @@
         "potionData": {
             "vanillaType": "long_swiftness",
             "bukkitType": "swiftness",
-            "isStrong": false,
-            "isLong": true
+            "upgraded": false,
+            "extended": true
         }
     },
     "splashswiftnesslongpotion": "splashswiftness2potion",
@@ -11566,8 +11566,8 @@
         "potionData": {
             "vanillaType": "long_swiftness",
             "bukkitType": "swiftness",
-            "isStrong": false,
-            "isLong": true
+            "upgraded": false,
+            "extended": true
         }
     },
     "lingerpotswiftnesslong": "lingerpotswiftness2",
@@ -11784,8 +11784,8 @@
         "potionData": {
             "vanillaType": "long_swiftness",
             "bukkitType": "swiftness",
-            "isStrong": false,
-            "isLong": true
+            "upgraded": false,
+            "extended": true
         }
     },
     "arrowswiftnesslong": "arrowswiftness2",
@@ -11822,8 +11822,8 @@
         "potionData": {
             "vanillaType": "slowness",
             "bukkitType": "slowness",
-            "isStrong": false,
-            "isLong": false
+            "upgraded": false,
+            "extended": false
         }
     },
     "slowpotion": "slownesspotion",
@@ -11838,8 +11838,8 @@
         "potionData": {
             "vanillaType": "slowness",
             "bukkitType": "slowness",
-            "isStrong": false,
-            "isLong": false
+            "upgraded": false,
+            "extended": false
         }
     },
     "splashslowpotion": "splashslownesspotion",
@@ -11858,8 +11858,8 @@
         "potionData": {
             "vanillaType": "slowness",
             "bukkitType": "slowness",
-            "isStrong": false,
-            "isLong": false
+            "upgraded": false,
+            "extended": false
         }
     },
     "lingerpotslow": "lingerpotslowness",
@@ -11894,8 +11894,8 @@
         "potionData": {
             "vanillaType": "slowness",
             "bukkitType": "slowness",
-            "isStrong": false,
-            "isLong": false
+            "upgraded": false,
+            "extended": false
         }
     },
     "arrowslow": "arrowslowness",
@@ -11906,8 +11906,8 @@
         "potionData": {
             "vanillaType": "long_slowness",
             "bukkitType": "slowness",
-            "isStrong": false,
-            "isLong": true
+            "upgraded": false,
+            "extended": true
         }
     },
     "slownesslongpotion": "slowness2potion",
@@ -11954,8 +11954,8 @@
         "potionData": {
             "vanillaType": "long_slowness",
             "bukkitType": "slowness",
-            "isStrong": false,
-            "isLong": true
+            "upgraded": false,
+            "extended": true
         }
     },
     "splashslownesslongpotion": "splashslowness2potion",
@@ -12022,8 +12022,8 @@
         "potionData": {
             "vanillaType": "long_slowness",
             "bukkitType": "slowness",
-            "isStrong": false,
-            "isLong": true
+            "upgraded": false,
+            "extended": true
         }
     },
     "lingerpotslownesslong": "lingerpotslowness2",
@@ -12170,8 +12170,8 @@
         "potionData": {
             "vanillaType": "long_slowness",
             "bukkitType": "slowness",
-            "isStrong": false,
-            "isLong": true
+            "upgraded": false,
+            "extended": true
         }
     },
     "arrowslownesslong": "arrowslowness2",
@@ -12198,8 +12198,8 @@
         "potionData": {
             "vanillaType": "water_breathing",
             "bukkitType": "water_breathing",
-            "isStrong": false,
-            "isLong": false
+            "upgraded": false,
+            "extended": false
         }
     },
     "wbpotion": "waterbreathingpotion",
@@ -12226,8 +12226,8 @@
         "potionData": {
             "vanillaType": "water_breathing",
             "bukkitType": "water_breathing",
-            "isStrong": false,
-            "isLong": false
+            "upgraded": false,
+            "extended": false
         }
     },
     "splashwbpotion": "splashwaterbreathingpotion",
@@ -12264,8 +12264,8 @@
         "potionData": {
             "vanillaType": "water_breathing",
             "bukkitType": "water_breathing",
-            "isStrong": false,
-            "isLong": false
+            "upgraded": false,
+            "extended": false
         }
     },
     "lingerpotwb": "lingerpotwaterbreathing",
@@ -12342,8 +12342,8 @@
         "potionData": {
             "vanillaType": "water_breathing",
             "bukkitType": "water_breathing",
-            "isStrong": false,
-            "isLong": false
+            "upgraded": false,
+            "extended": false
         }
     },
     "arrowwb": "arrowwaterbreathing",
@@ -12360,8 +12360,8 @@
         "potionData": {
             "vanillaType": "long_water_breathing",
             "bukkitType": "water_breathing",
-            "isStrong": false,
-            "isLong": true
+            "upgraded": false,
+            "extended": true
         }
     },
     "waterbreathinglongpotion": "waterbreathing2potion",
@@ -12468,8 +12468,8 @@
         "potionData": {
             "vanillaType": "long_water_breathing",
             "bukkitType": "water_breathing",
-            "isStrong": false,
-            "isLong": true
+            "upgraded": false,
+            "extended": true
         }
     },
     "splashwaterbreathinglongpotion": "splashwaterbreathing2potion",
@@ -12626,8 +12626,8 @@
         "potionData": {
             "vanillaType": "long_water_breathing",
             "bukkitType": "water_breathing",
-            "isStrong": false,
-            "isLong": true
+            "upgraded": false,
+            "extended": true
         }
     },
     "lingerpotwaterbreathinglong": "lingerpotwaterbreathing2",
@@ -12984,8 +12984,8 @@
         "potionData": {
             "vanillaType": "long_water_breathing",
             "bukkitType": "water_breathing",
-            "isStrong": false,
-            "isLong": true
+            "upgraded": false,
+            "extended": true
         }
     },
     "arrowwaterbreathinglong": "arrowwaterbreathing2",
@@ -13042,8 +13042,8 @@
         "potionData": {
             "vanillaType": "healing",
             "bukkitType": "healing",
-            "isStrong": false,
-            "isLong": false
+            "upgraded": false,
+            "extended": false
         }
     },
     "healpotion": "healingpotion",
@@ -13066,8 +13066,8 @@
         "potionData": {
             "vanillaType": "healing",
             "bukkitType": "healing",
-            "isStrong": false,
-            "isLong": false
+            "upgraded": false,
+            "extended": false
         }
     },
     "splashhealpotion": "splashhealingpotion",
@@ -13098,8 +13098,8 @@
         "potionData": {
             "vanillaType": "healing",
             "bukkitType": "healing",
-            "isStrong": false,
-            "isLong": false
+            "upgraded": false,
+            "extended": false
         }
     },
     "lingerpotheal": "lingerpothealing",
@@ -13162,8 +13162,8 @@
         "potionData": {
             "vanillaType": "healing",
             "bukkitType": "healing",
-            "isStrong": false,
-            "isLong": false
+            "upgraded": false,
+            "extended": false
         }
     },
     "arrowheal": "arrowhealing",
@@ -13178,8 +13178,8 @@
         "potionData": {
             "vanillaType": "strong_healing",
             "bukkitType": "healing",
-            "isStrong": true,
-            "isLong": false
+            "upgraded": true,
+            "extended": false
         }
     },
     "healingstrongpotion": "healingiipotion",
@@ -13234,8 +13234,8 @@
         "potionData": {
             "vanillaType": "strong_healing",
             "bukkitType": "healing",
-            "isStrong": true,
-            "isLong": false
+            "upgraded": true,
+            "extended": false
         }
     },
     "splashhealingstrongpotion": "splashhealingiipotion",
@@ -13314,8 +13314,8 @@
         "potionData": {
             "vanillaType": "strong_healing",
             "bukkitType": "healing",
-            "isStrong": true,
-            "isLong": false
+            "upgraded": true,
+            "extended": false
         }
     },
     "lingerpothealingstrong": "lingerpothealingii",
@@ -13490,8 +13490,8 @@
         "potionData": {
             "vanillaType": "strong_healing",
             "bukkitType": "healing",
-            "isStrong": true,
-            "isLong": false
+            "upgraded": true,
+            "extended": false
         }
     },
     "arrowhealingstrong": "arrowhealingii",
@@ -13522,8 +13522,8 @@
         "potionData": {
             "vanillaType": "harming",
             "bukkitType": "harming",
-            "isStrong": false,
-            "isLong": false
+            "upgraded": false,
+            "extended": false
         }
     },
     "damagepotion": "harmingpotion",
@@ -13546,8 +13546,8 @@
         "potionData": {
             "vanillaType": "harming",
             "bukkitType": "harming",
-            "isStrong": false,
-            "isLong": false
+            "upgraded": false,
+            "extended": false
         }
     },
     "splashdamagepotion": "splashharmingpotion",
@@ -13578,8 +13578,8 @@
         "potionData": {
             "vanillaType": "harming",
             "bukkitType": "harming",
-            "isStrong": false,
-            "isLong": false
+            "upgraded": false,
+            "extended": false
         }
     },
     "lingerpotdamage": "lingerpotharming",
@@ -13642,8 +13642,8 @@
         "potionData": {
             "vanillaType": "harming",
             "bukkitType": "harming",
-            "isStrong": false,
-            "isLong": false
+            "upgraded": false,
+            "extended": false
         }
     },
     "arrowdamage": "arrowharming",
@@ -13658,8 +13658,8 @@
         "potionData": {
             "vanillaType": "strong_harming",
             "bukkitType": "harming",
-            "isStrong": true,
-            "isLong": false
+            "upgraded": true,
+            "extended": false
         }
     },
     "harmingstrongpotion": "harmingiipotion",
@@ -13714,8 +13714,8 @@
         "potionData": {
             "vanillaType": "strong_harming",
             "bukkitType": "harming",
-            "isStrong": true,
-            "isLong": false
+            "upgraded": true,
+            "extended": false
         }
     },
     "splashharmingstrongpotion": "splashharmingiipotion",
@@ -13794,8 +13794,8 @@
         "potionData": {
             "vanillaType": "strong_harming",
             "bukkitType": "harming",
-            "isStrong": true,
-            "isLong": false
+            "upgraded": true,
+            "extended": false
         }
     },
     "lingerpotharmingstrong": "lingerpotharmingii",
@@ -13970,8 +13970,8 @@
         "potionData": {
             "vanillaType": "strong_harming",
             "bukkitType": "harming",
-            "isStrong": true,
-            "isLong": false
+            "upgraded": true,
+            "extended": false
         }
     },
     "arrowharmingstrong": "arrowharmingii",
@@ -14002,8 +14002,8 @@
         "potionData": {
             "vanillaType": "poison",
             "bukkitType": "poison",
-            "isStrong": false,
-            "isLong": false
+            "upgraded": false,
+            "extended": false
         }
     },
     "acidpotion": "poisonpotion",
@@ -14022,8 +14022,8 @@
         "potionData": {
             "vanillaType": "poison",
             "bukkitType": "poison",
-            "isStrong": false,
-            "isLong": false
+            "upgraded": false,
+            "extended": false
         }
     },
     "splashacidpotion": "splashpoisonpotion",
@@ -14048,8 +14048,8 @@
         "potionData": {
             "vanillaType": "poison",
             "bukkitType": "poison",
-            "isStrong": false,
-            "isLong": false
+            "upgraded": false,
+            "extended": false
         }
     },
     "lingerpotacid": "lingerpotpoison",
@@ -14098,8 +14098,8 @@
         "potionData": {
             "vanillaType": "poison",
             "bukkitType": "poison",
-            "isStrong": false,
-            "isLong": false
+            "upgraded": false,
+            "extended": false
         }
     },
     "arrowacid": "arrowpoison",
@@ -14112,8 +14112,8 @@
         "potionData": {
             "vanillaType": "strong_poison",
             "bukkitType": "poison",
-            "isStrong": true,
-            "isLong": false
+            "upgraded": true,
+            "extended": false
         }
     },
     "poisonstrongpotion": "poisoniipotion",
@@ -14156,8 +14156,8 @@
         "potionData": {
             "vanillaType": "strong_poison",
             "bukkitType": "poison",
-            "isStrong": true,
-            "isLong": false
+            "upgraded": true,
+            "extended": false
         }
     },
     "splashpoisonstrongpotion": "splashpoisoniipotion",
@@ -14218,8 +14218,8 @@
         "potionData": {
             "vanillaType": "strong_poison",
             "bukkitType": "poison",
-            "isStrong": true,
-            "isLong": false
+            "upgraded": true,
+            "extended": false
         }
     },
     "lingerpotpoisonstrong": "lingerpotpoisonii",
@@ -14352,8 +14352,8 @@
         "potionData": {
             "vanillaType": "strong_poison",
             "bukkitType": "poison",
-            "isStrong": true,
-            "isLong": false
+            "upgraded": true,
+            "extended": false
         }
     },
     "arrowpoisonstrong": "arrowpoisonii",
@@ -14378,8 +14378,8 @@
         "potionData": {
             "vanillaType": "long_poison",
             "bukkitType": "poison",
-            "isStrong": false,
-            "isLong": true
+            "upgraded": false,
+            "extended": true
         }
     },
     "poisonlongpotion": "poison2potion",
@@ -14446,8 +14446,8 @@
         "potionData": {
             "vanillaType": "long_poison",
             "bukkitType": "poison",
-            "isStrong": false,
-            "isLong": true
+            "upgraded": false,
+            "extended": true
         }
     },
     "splashpoisonlongpotion": "splashpoison2potion",
@@ -14544,8 +14544,8 @@
         "potionData": {
             "vanillaType": "long_poison",
             "bukkitType": "poison",
-            "isStrong": false,
-            "isLong": true
+            "upgraded": false,
+            "extended": true
         }
     },
     "lingerpotpoisonlong": "lingerpotpoison2",
@@ -14762,8 +14762,8 @@
         "potionData": {
             "vanillaType": "long_poison",
             "bukkitType": "poison",
-            "isStrong": false,
-            "isLong": true
+            "upgraded": false,
+            "extended": true
         }
     },
     "arrowpoisonlong": "arrowpoison2",
@@ -14800,8 +14800,8 @@
         "potionData": {
             "vanillaType": "regeneration",
             "bukkitType": "regeneration",
-            "isStrong": false,
-            "isLong": false
+            "upgraded": false,
+            "extended": false
         }
     },
     "regeneratepotion": "regenerationpotion",
@@ -14820,8 +14820,8 @@
         "potionData": {
             "vanillaType": "regeneration",
             "bukkitType": "regeneration",
-            "isStrong": false,
-            "isLong": false
+            "upgraded": false,
+            "extended": false
         }
     },
     "splashregeneratepotion": "splashregenerationpotion",
@@ -14846,8 +14846,8 @@
         "potionData": {
             "vanillaType": "regeneration",
             "bukkitType": "regeneration",
-            "isStrong": false,
-            "isLong": false
+            "upgraded": false,
+            "extended": false
         }
     },
     "lingerpotregenerate": "lingerpotregeneration",
@@ -14896,8 +14896,8 @@
         "potionData": {
             "vanillaType": "regeneration",
             "bukkitType": "regeneration",
-            "isStrong": false,
-            "isLong": false
+            "upgraded": false,
+            "extended": false
         }
     },
     "arrowregenerate": "arrowregeneration",
@@ -14910,8 +14910,8 @@
         "potionData": {
             "vanillaType": "strong_regeneration",
             "bukkitType": "regeneration",
-            "isStrong": true,
-            "isLong": false
+            "upgraded": true,
+            "extended": false
         }
     },
     "regenerationstrongpotion": "regenerationiipotion",
@@ -14954,8 +14954,8 @@
         "potionData": {
             "vanillaType": "strong_regeneration",
             "bukkitType": "regeneration",
-            "isStrong": true,
-            "isLong": false
+            "upgraded": true,
+            "extended": false
         }
     },
     "splashregenerationstrongpotion": "splashregenerationiipotion",
@@ -15016,8 +15016,8 @@
         "potionData": {
             "vanillaType": "strong_regeneration",
             "bukkitType": "regeneration",
-            "isStrong": true,
-            "isLong": false
+            "upgraded": true,
+            "extended": false
         }
     },
     "lingerpotregenerationstrong": "lingerpotregenerationii",
@@ -15150,8 +15150,8 @@
         "potionData": {
             "vanillaType": "strong_regeneration",
             "bukkitType": "regeneration",
-            "isStrong": true,
-            "isLong": false
+            "upgraded": true,
+            "extended": false
         }
     },
     "arrowregenerationstrong": "arrowregenerationii",
@@ -15176,8 +15176,8 @@
         "potionData": {
             "vanillaType": "long_regeneration",
             "bukkitType": "regeneration",
-            "isStrong": false,
-            "isLong": true
+            "upgraded": false,
+            "extended": true
         }
     },
     "regenerationlongpotion": "regeneration2potion",
@@ -15244,8 +15244,8 @@
         "potionData": {
             "vanillaType": "long_regeneration",
             "bukkitType": "regeneration",
-            "isStrong": false,
-            "isLong": true
+            "upgraded": false,
+            "extended": true
         }
     },
     "splashregenerationlongpotion": "splashregeneration2potion",
@@ -15342,8 +15342,8 @@
         "potionData": {
             "vanillaType": "long_regeneration",
             "bukkitType": "regeneration",
-            "isStrong": false,
-            "isLong": true
+            "upgraded": false,
+            "extended": true
         }
     },
     "lingerpotregenerationlong": "lingerpotregeneration2",
@@ -15560,8 +15560,8 @@
         "potionData": {
             "vanillaType": "long_regeneration",
             "bukkitType": "regeneration",
-            "isStrong": false,
-            "isLong": true
+            "upgraded": false,
+            "extended": true
         }
     },
     "arrowregenerationlong": "arrowregeneration2",
@@ -15598,8 +15598,8 @@
         "potionData": {
             "vanillaType": "strength",
             "bukkitType": "strength",
-            "isStrong": false,
-            "isLong": false
+            "upgraded": false,
+            "extended": false
         }
     },
     "strongpotion": "strengthpotion",
@@ -15618,8 +15618,8 @@
         "potionData": {
             "vanillaType": "strength",
             "bukkitType": "strength",
-            "isStrong": false,
-            "isLong": false
+            "upgraded": false,
+            "extended": false
         }
     },
     "splashstrongpotion": "splashstrengthpotion",
@@ -15644,8 +15644,8 @@
         "potionData": {
             "vanillaType": "strength",
             "bukkitType": "strength",
-            "isStrong": false,
-            "isLong": false
+            "upgraded": false,
+            "extended": false
         }
     },
     "lingerpotstrong": "lingerpotstrength",
@@ -15694,8 +15694,8 @@
         "potionData": {
             "vanillaType": "strength",
             "bukkitType": "strength",
-            "isStrong": false,
-            "isLong": false
+            "upgraded": false,
+            "extended": false
         }
     },
     "arrowstrong": "arrowstrength",
@@ -15708,8 +15708,8 @@
         "potionData": {
             "vanillaType": "strong_strength",
             "bukkitType": "strength",
-            "isStrong": true,
-            "isLong": false
+            "upgraded": true,
+            "extended": false
         }
     },
     "strengthstrongpotion": "strengthiipotion",
@@ -15752,8 +15752,8 @@
         "potionData": {
             "vanillaType": "strong_strength",
             "bukkitType": "strength",
-            "isStrong": true,
-            "isLong": false
+            "upgraded": true,
+            "extended": false
         }
     },
     "splashstrengthstrongpotion": "splashstrengthiipotion",
@@ -15814,8 +15814,8 @@
         "potionData": {
             "vanillaType": "strong_strength",
             "bukkitType": "strength",
-            "isStrong": true,
-            "isLong": false
+            "upgraded": true,
+            "extended": false
         }
     },
     "lingerpotstrengthstrong": "lingerpotstrengthii",
@@ -15948,8 +15948,8 @@
         "potionData": {
             "vanillaType": "strong_strength",
             "bukkitType": "strength",
-            "isStrong": true,
-            "isLong": false
+            "upgraded": true,
+            "extended": false
         }
     },
     "arrowstrengthstrong": "arrowstrengthii",
@@ -15974,8 +15974,8 @@
         "potionData": {
             "vanillaType": "long_strength",
             "bukkitType": "strength",
-            "isStrong": false,
-            "isLong": true
+            "upgraded": false,
+            "extended": true
         }
     },
     "strengthlongpotion": "strength2potion",
@@ -16042,8 +16042,8 @@
         "potionData": {
             "vanillaType": "long_strength",
             "bukkitType": "strength",
-            "isStrong": false,
-            "isLong": true
+            "upgraded": false,
+            "extended": true
         }
     },
     "splashstrengthlongpotion": "splashstrength2potion",
@@ -16140,8 +16140,8 @@
         "potionData": {
             "vanillaType": "long_strength",
             "bukkitType": "strength",
-            "isStrong": false,
-            "isLong": true
+            "upgraded": false,
+            "extended": true
         }
     },
     "lingerpotstrengthlong": "lingerpotstrength2",
@@ -16358,8 +16358,8 @@
         "potionData": {
             "vanillaType": "long_strength",
             "bukkitType": "strength",
-            "isStrong": false,
-            "isLong": true
+            "upgraded": false,
+            "extended": true
         }
     },
     "arrowstrengthlong": "arrowstrength2",
@@ -16396,8 +16396,8 @@
         "potionData": {
             "vanillaType": "weakness",
             "bukkitType": "weakness",
-            "isStrong": false,
-            "isLong": false
+            "upgraded": false,
+            "extended": false
         }
     },
     "weakpotion": "weaknesspotion",
@@ -16416,8 +16416,8 @@
         "potionData": {
             "vanillaType": "weakness",
             "bukkitType": "weakness",
-            "isStrong": false,
-            "isLong": false
+            "upgraded": false,
+            "extended": false
         }
     },
     "splashweakpotion": "splashweaknesspotion",
@@ -16442,8 +16442,8 @@
         "potionData": {
             "vanillaType": "weakness",
             "bukkitType": "weakness",
-            "isStrong": false,
-            "isLong": false
+            "upgraded": false,
+            "extended": false
         }
     },
     "lingerpotweak": "lingerpotweakness",
@@ -16492,8 +16492,8 @@
         "potionData": {
             "vanillaType": "weakness",
             "bukkitType": "weakness",
-            "isStrong": false,
-            "isLong": false
+            "upgraded": false,
+            "extended": false
         }
     },
     "arrowweak": "arrowweakness",
@@ -16506,8 +16506,8 @@
         "potionData": {
             "vanillaType": "long_weakness",
             "bukkitType": "weakness",
-            "isStrong": false,
-            "isLong": true
+            "upgraded": false,
+            "extended": true
         }
     },
     "weaknesslongpotion": "weakness2potion",
@@ -16574,8 +16574,8 @@
         "potionData": {
             "vanillaType": "long_weakness",
             "bukkitType": "weakness",
-            "isStrong": false,
-            "isLong": true
+            "upgraded": false,
+            "extended": true
         }
     },
     "splashweaknesslongpotion": "splashweakness2potion",
@@ -16672,8 +16672,8 @@
         "potionData": {
             "vanillaType": "long_weakness",
             "bukkitType": "weakness",
-            "isStrong": false,
-            "isLong": true
+            "upgraded": false,
+            "extended": true
         }
     },
     "lingerpotweaknesslong": "lingerpotweakness2",
@@ -16890,8 +16890,8 @@
         "potionData": {
             "vanillaType": "long_weakness",
             "bukkitType": "weakness",
-            "isStrong": false,
-            "isLong": true
+            "upgraded": false,
+            "extended": true
         }
     },
     "arrowweaknesslong": "arrowweakness2",
@@ -16928,8 +16928,8 @@
         "potionData": {
             "vanillaType": "luck",
             "bukkitType": "luck",
-            "isStrong": false,
-            "isLong": false
+            "upgraded": false,
+            "extended": false
         }
     },
     "luckypotion": "luckpotion",
@@ -16944,8 +16944,8 @@
         "potionData": {
             "vanillaType": "luck",
             "bukkitType": "luck",
-            "isStrong": false,
-            "isLong": false
+            "upgraded": false,
+            "extended": false
         }
     },
     "splashluckypotion": "splashluckpotion",
@@ -16964,8 +16964,8 @@
         "potionData": {
             "vanillaType": "luck",
             "bukkitType": "luck",
-            "isStrong": false,
-            "isLong": false
+            "upgraded": false,
+            "extended": false
         }
     },
     "lingerpotlucky": "lingerpotluck",
@@ -17000,8 +17000,8 @@
         "potionData": {
             "vanillaType": "luck",
             "bukkitType": "luck",
-            "isStrong": false,
-            "isLong": false
+            "upgraded": false,
+            "extended": false
         }
     },
     "arrowlucky": "arrowluck",
@@ -17012,8 +17012,8 @@
         "potionData": {
             "vanillaType": "turtle_master",
             "bukkitType": "turtle_master",
-            "isStrong": false,
-            "isLong": false
+            "upgraded": false,
+            "extended": false
         }
     },
     "turtlepotion": "turtlemasterpotion",
@@ -17032,8 +17032,8 @@
         "potionData": {
             "vanillaType": "turtle_master",
             "bukkitType": "turtle_master",
-            "isStrong": false,
-            "isLong": false
+            "upgraded": false,
+            "extended": false
         }
     },
     "splashturtlepotion": "splashturtlemasterpotion",
@@ -17058,8 +17058,8 @@
         "potionData": {
             "vanillaType": "turtle_master",
             "bukkitType": "turtle_master",
-            "isStrong": false,
-            "isLong": false
+            "upgraded": false,
+            "extended": false
         }
     },
     "lingerpotturtle": "lingerpotturtlemaster",
@@ -17108,8 +17108,8 @@
         "potionData": {
             "vanillaType": "turtle_master",
             "bukkitType": "turtle_master",
-            "isStrong": false,
-            "isLong": false
+            "upgraded": false,
+            "extended": false
         }
     },
     "arrowturtle": "arrowturtlemaster",
@@ -17122,8 +17122,8 @@
         "potionData": {
             "vanillaType": "strong_turtle_master",
             "bukkitType": "turtle_master",
-            "isStrong": true,
-            "isLong": false
+            "upgraded": true,
+            "extended": false
         }
     },
     "turtlemasterstrongpotion": "turtlemasteriipotion",
@@ -17166,8 +17166,8 @@
         "potionData": {
             "vanillaType": "strong_turtle_master",
             "bukkitType": "turtle_master",
-            "isStrong": true,
-            "isLong": false
+            "upgraded": true,
+            "extended": false
         }
     },
     "splashturtlemasterstrongpotion": "splashturtlemasteriipotion",
@@ -17228,8 +17228,8 @@
         "potionData": {
             "vanillaType": "strong_turtle_master",
             "bukkitType": "turtle_master",
-            "isStrong": true,
-            "isLong": false
+            "upgraded": true,
+            "extended": false
         }
     },
     "lingerpotturtlemasterstrong": "lingerpotturtlemasterii",
@@ -17362,8 +17362,8 @@
         "potionData": {
             "vanillaType": "strong_turtle_master",
             "bukkitType": "turtle_master",
-            "isStrong": true,
-            "isLong": false
+            "upgraded": true,
+            "extended": false
         }
     },
     "arrowturtlemasterstrong": "arrowturtlemasterii",
@@ -17388,8 +17388,8 @@
         "potionData": {
             "vanillaType": "long_turtle_master",
             "bukkitType": "turtle_master",
-            "isStrong": false,
-            "isLong": true
+            "upgraded": false,
+            "extended": true
         }
     },
     "turtlemasterlongpotion": "turtlemaster2potion",
@@ -17456,8 +17456,8 @@
         "potionData": {
             "vanillaType": "long_turtle_master",
             "bukkitType": "turtle_master",
-            "isStrong": false,
-            "isLong": true
+            "upgraded": false,
+            "extended": true
         }
     },
     "splashturtlemasterlongpotion": "splashturtlemaster2potion",
@@ -17554,8 +17554,8 @@
         "potionData": {
             "vanillaType": "long_turtle_master",
             "bukkitType": "turtle_master",
-            "isStrong": false,
-            "isLong": true
+            "upgraded": false,
+            "extended": true
         }
     },
     "lingerpotturtlemasterlong": "lingerpotturtlemaster2",
@@ -17772,8 +17772,8 @@
         "potionData": {
             "vanillaType": "long_turtle_master",
             "bukkitType": "turtle_master",
-            "isStrong": false,
-            "isLong": true
+            "upgraded": false,
+            "extended": true
         }
     },
     "arrowturtlemasterlong": "arrowturtlemaster2",
@@ -17810,8 +17810,8 @@
         "potionData": {
             "vanillaType": "slow_falling",
             "bukkitType": "slow_falling",
-            "isStrong": false,
-            "isLong": false
+            "upgraded": false,
+            "extended": false
         }
     },
     "slowfallpotion": "slowfallingpotion",
@@ -17830,8 +17830,8 @@
         "potionData": {
             "vanillaType": "slow_falling",
             "bukkitType": "slow_falling",
-            "isStrong": false,
-            "isLong": false
+            "upgraded": false,
+            "extended": false
         }
     },
     "splashslowfallpotion": "splashslowfallingpotion",
@@ -17856,8 +17856,8 @@
         "potionData": {
             "vanillaType": "slow_falling",
             "bukkitType": "slow_falling",
-            "isStrong": false,
-            "isLong": false
+            "upgraded": false,
+            "extended": false
         }
     },
     "lingerpotslowfall": "lingerpotslowfalling",
@@ -17906,8 +17906,8 @@
         "potionData": {
             "vanillaType": "slow_falling",
             "bukkitType": "slow_falling",
-            "isStrong": false,
-            "isLong": false
+            "upgraded": false,
+            "extended": false
         }
     },
     "arrowslowfall": "arrowslowfalling",
@@ -17920,8 +17920,8 @@
         "potionData": {
             "vanillaType": "long_slow_falling",
             "bukkitType": "slow_falling",
-            "isStrong": false,
-            "isLong": true
+            "upgraded": false,
+            "extended": true
         }
     },
     "slowfallinglongpotion": "slowfalling2potion",
@@ -17988,8 +17988,8 @@
         "potionData": {
             "vanillaType": "long_slow_falling",
             "bukkitType": "slow_falling",
-            "isStrong": false,
-            "isLong": true
+            "upgraded": false,
+            "extended": true
         }
     },
     "splashslowfallinglongpotion": "splashslowfalling2potion",
@@ -18086,8 +18086,8 @@
         "potionData": {
             "vanillaType": "long_slow_falling",
             "bukkitType": "slow_falling",
-            "isStrong": false,
-            "isLong": true
+            "upgraded": false,
+            "extended": true
         }
     },
     "lingerpotslowfallinglong": "lingerpotslowfalling2",
@@ -18304,8 +18304,8 @@
         "potionData": {
             "vanillaType": "long_slow_falling",
             "bukkitType": "slow_falling",
-            "isStrong": false,
-            "isLong": true
+            "upgraded": false,
+            "extended": true
         }
     },
     "arrowslowfallinglong": "arrowslowfalling2",
