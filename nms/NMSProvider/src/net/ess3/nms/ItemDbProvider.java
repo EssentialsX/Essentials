@@ -8,6 +8,7 @@ import org.bukkit.potion.PotionType;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -16,6 +17,29 @@ public abstract class ItemDbProvider implements Provider {
     private SpawnerProvider spawnerProvider;
     private SpawnEggProvider spawnEggProvider;
     private PotionMetaProvider potionMetaProvider;
+
+    /**
+     * Rebuild the item database, using the given lines of a file.
+     *
+     * @param lines The lines of the file from which the database should be built.
+     */
+    public abstract void rebuild(List<String> lines);
+
+    /**
+     * Read a resource from the jar.
+     * Used to build the database before data from a ManagedFile is available.
+     *
+     * @param name The name of the resource to load.
+     * @return The lines of the resource.
+     */
+    protected List<String> loadResource(final String name) {
+        try (InputStreamReader isr = new InputStreamReader(ItemDbProvider.class.getResourceAsStream(name))) {
+            BufferedReader br = new BufferedReader(isr);
+            return br.lines().collect(Collectors.toList());
+        } catch (IOException e) {
+            return null;
+        }
+    }
 
     /**
      * Resolves a material name to its corresponding Material
@@ -65,13 +89,6 @@ public abstract class ItemDbProvider implements Provider {
     public abstract List<String> getNames(ItemStack item);
 
     /**
-     * Rebuild the item database, using the given lines of a file.
-     *
-     * @param lines The lines of the file from which the database should be built.
-     */
-    public abstract void rebuild(List<String> lines);
-
-    /**
      * Creates a stack of a given item by its name.
      *
      * @param name The material name to look up
@@ -95,20 +112,12 @@ public abstract class ItemDbProvider implements Provider {
     }
 
     /**
-     * Read a resource from the jar.
-     * Used to build the database before data from a ManagedFile is available.
+     * Get all registered primary names for materials.
+     * This does not include any additional aliases.
      *
-     * @param name The name of the resource to load.
-     * @return The lines of the resource.
+     * @return A collection of primary names
      */
-    protected List<String> loadResource(final String name) {
-        try (InputStreamReader isr = new InputStreamReader(ItemDbProvider.class.getResourceAsStream(name))) {
-            BufferedReader br = new BufferedReader(isr);
-            return br.lines().collect(Collectors.toList());
-        } catch (IOException e) {
-            return null;
-        }
-    }
+    public abstract Collection<String> listNames();
 
     @Override
     public boolean tryProvider() {
@@ -124,26 +133,50 @@ public abstract class ItemDbProvider implements Provider {
         }
     }
 
+    /**
+     * Get the current spawner provider.
+     *
+     * @return The current spawner provider
+     */
     protected SpawnerProvider getSpawnerProvider() {
         return spawnerProvider;
     }
 
+    /**
+     * Set the current spawner provider.
+     */
     public void setSpawnerProvider(SpawnerProvider spawnerProvider) {
         this.spawnerProvider = spawnerProvider;
     }
 
+    /**
+     * Get the current spawn egg provider.
+     *
+     * @return The current spawn egg provider
+     */
     protected SpawnEggProvider getSpawnEggProvider() {
         return spawnEggProvider;
     }
 
+    /**
+     * Set the current spawn egg provider.
+     */
     public void setSpawnEggProvider(SpawnEggProvider spawnEggProvider) {
         this.spawnEggProvider = spawnEggProvider;
     }
 
+    /**
+     * Get the current potion provider.
+     *
+     * @return The current potion provider
+     */
     protected PotionMetaProvider getPotionMetaProvider() {
         return potionMetaProvider;
     }
 
+    /**
+     * Set the current potion provider.
+     */
     public void setPotionMetaProvider(PotionMetaProvider potionMetaProvider) {
         this.potionMetaProvider = potionMetaProvider;
     }
@@ -213,6 +246,7 @@ public abstract class ItemDbProvider implements Provider {
                 return false;
             }
             ItemData pairo = (ItemData) o;
+            // TODO: generalise comparison
             return this.material == pairo.getMaterial() && this.itemData == pairo.getItemData() && this.nbt.equals(pairo.getNbt());
         }
     }
