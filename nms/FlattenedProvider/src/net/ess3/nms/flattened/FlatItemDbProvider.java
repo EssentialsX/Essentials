@@ -1,19 +1,19 @@
 package net.ess3.nms.flattened;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonParser;
+import com.google.gson.*;
 import net.ess3.nms.ItemDbProvider;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionType;
 
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class FlatItemDbProvider extends ItemDbProvider {
     private static Gson gson = new Gson();
 
+    private final transient Map<String, ItemData> items = new HashMap<>();
+    private final transient Map<ItemData, Set<String>> aliases = new HashMap<>();
 
     @Override
     public Material resolve(String name) {
@@ -47,12 +47,42 @@ public class FlatItemDbProvider extends ItemDbProvider {
 
     @Override
     public void rebuild(List<String> lines) {
-        String json = lines.stream().collect(Collectors.joining("\n"));
-        JsonArray jsonArray = (new JsonParser()).parse(json).getAsJsonArray();
-        jsonArray.forEach(element -> {
+        String json = String.join("\n", lines);
+        JsonObject map = (new JsonParser()).parse(json).getAsJsonObject();
+
+        for (Map.Entry<String, JsonElement> entry : map.entrySet()) {
+            String key = entry.getKey();
+            JsonElement element = entry.getValue();
+
             if (element.isJsonObject()) {
+                ItemData data = gson.fromJson(element, ItemData.class);
+                items.put(key, data);
+                addAlias(data, key);
+            } else {
+                try {
+                    // TODO: finalise this - how do we handle aliases loading before actual materials?
+                    // Temporary Map<String, List<String>> that we copy over from once json parsed?
+                    String target = element.getAsString();
+                    ItemData data = items.get(target);
+                    addAlias(data, target);
+                } catch (Exception e) {
+                    // TODO: log invalid entry
+                }
             }
-        });
+        }
+    }
+
+    private void addAlias(ItemData data, String alias) {
+        Set<String> aliasList;
+
+        if (aliases.containsKey(data)) {
+            aliasList = aliases.get(data);
+        } else {
+            aliasList = new HashSet<>();
+            aliases.put(data, aliasList);
+        }
+
+        aliasList.add(alias);
     }
 
     @Override
