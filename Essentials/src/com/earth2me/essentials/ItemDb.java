@@ -24,23 +24,28 @@ import static com.earth2me.essentials.I18n.tl;
 public class ItemDb implements IConf, net.ess3.api.IItemDb {
     protected static final Logger LOGGER = Logger.getLogger("Essentials");
     private final transient IEssentials ess;
-    private final transient ItemDbProvider provider;
+    private transient ItemDbProvider provider = null;
 
-    private final transient ManagedFile file;
+    private transient ManagedFile file = null;
 
     public ItemDb(final IEssentials ess) {
         this.ess = ess;
-        this.provider = ess.getItemDbProvider();
-
-        if (provider instanceof LegacyItemDbProvider) {
-            file = new ManagedFile("items.csv", ess);
-        } else {
-            file = new ManagedFile("items.json", ess);
-        }
     }
 
     @Override
     public void reloadConfig() {
+        if (provider == null) {
+            this.provider = ess.getItemDbProvider();
+        }
+
+        if (file == null) {
+            if (provider instanceof LegacyItemDbProvider) {
+                file = new ManagedFile("items.csv", ess);
+            } else {
+                file = new ManagedFile("items.json", ess);
+            }
+        }
+
         provider.rebuild(file.getLines());
     }
 
