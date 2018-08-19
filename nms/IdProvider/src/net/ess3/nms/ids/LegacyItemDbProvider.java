@@ -141,12 +141,31 @@ public class LegacyItemDbProvider extends ItemDbProvider {
 
     @Override
     public String getPrimaryName(ItemStack item) {
-        return null;
+        ItemData itemData = new ItemData(null, item.getType(), item.getTypeId(), item.getDurability(), null);
+        String name = primaryNames.get(itemData);
+        if (name == null) {
+            itemData = new ItemData(null, item.getType(), item.getTypeId(), (short) 0, null);
+            name = primaryNames.get(itemData);
+            if (name == null) {
+                return null;
+            }
+        }
+        return name;
     }
 
     @Override
     public List<String> getNames(ItemStack item) {
-        return null;
+        ItemData itemData = new ItemData(null, item.getType(), item.getTypeId(), item.getDurability(), null);
+        List<String> nameList = names.get(itemData);
+        if (nameList == null) {
+            itemData = new ItemData(null, item.getType(), item.getTypeId(), (short) 0, null);
+            nameList = names.get(itemData);
+            if (nameList == null) {
+                return null;
+            }
+        }
+
+        return nameList;
     }
 
     @Override
