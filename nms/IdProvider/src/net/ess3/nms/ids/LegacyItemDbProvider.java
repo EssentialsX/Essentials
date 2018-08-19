@@ -28,6 +28,7 @@ public class LegacyItemDbProvider extends ItemDbProvider {
 
     @Override
     public Material resolve(String name) {
+        // TODO: refactor getStack into here
         return null;
     }
 

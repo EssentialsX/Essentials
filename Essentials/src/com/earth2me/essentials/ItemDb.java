@@ -177,7 +177,7 @@ public class ItemDb implements IConf, net.ess3.api.IItemDb {
     @Override
     public String names(ItemStack item) {
         List<String> nameList = provider.getNames(item);
-        
+
         if (nameList.size() > 15) {
             nameList = nameList.subList(0, 14);
         }
