@@ -216,6 +216,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
                 execTimer.mark("Init(Worth/ItemDB)");
                 jails = new Jails(this);
                 confList.add(jails);
+                execTimer.mark("Init(Jails)");
 
                 itemDbProvider = new ProviderFactory<>(getLogger(),
                         Arrays.asList(
@@ -243,6 +244,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
                 itemDbProvider.setSpawnerProvider(spawnerProvider);
                 itemDbProvider.setSpawnEggProvider(spawnEggProvider);
                 itemDbProvider.setPotionMetaProvider(potionMetaProvider);
+                execTimer.mark("Init(Providers)");
                 reload();
             } catch (YAMLException exception) {
                 if (pm.getPlugin("EssentialsUpdate") != null) {
