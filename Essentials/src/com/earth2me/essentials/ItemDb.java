@@ -1,18 +1,14 @@
 package com.earth2me.essentials;
 
-import com.earth2me.essentials.utils.NumberUtil;
 import com.earth2me.essentials.utils.StringUtil;
 import net.ess3.api.IEssentials;
 import net.ess3.nms.ItemDbProvider;
-import net.ess3.nms.refl.ReflUtil;
-import org.apache.commons.lang.StringUtils;
-import org.bukkit.Bukkit;
+import net.ess3.nms.ids.LegacyItemDbProvider;
 import org.bukkit.Color;
 import org.bukkit.FireworkEffect;
 import org.bukkit.Material;
 import org.bukkit.block.Banner;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.*;
@@ -21,8 +17,6 @@ import org.bukkit.potion.PotionEffect;
 
 import java.util.*;
 import java.util.logging.Logger;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import static com.earth2me.essentials.I18n.tl;
 
@@ -31,104 +25,23 @@ public class ItemDb implements IConf, net.ess3.api.IItemDb {
     protected static final Logger LOGGER = Logger.getLogger("Essentials");
     private final transient IEssentials ess;
     private final transient ItemDbProvider provider;
-    private final transient Map<String, Integer> items = new HashMap<>();
-    private final transient Map<ItemData, List<String>> names = new HashMap<>();
-    private final transient Map<ItemData, String> primaryName = new HashMap<>();
-    private final transient Map<Integer, ItemData> legacyIds = new HashMap<>();
-    private final transient Map<String, Short> durabilities = new HashMap<>();
-    private final transient Map<String, String> nbtData = new HashMap<>();
+
     private final transient ManagedFile file;
-    private final transient Pattern splitPattern = Pattern.compile("((.*)[:+',;.](\\d+))");
-    private final transient Pattern csvSplitPattern = Pattern.compile("(\"([^\"]*)\"|[^,]*)(,|$)");
 
     public ItemDb(final IEssentials ess) {
         this.ess = ess;
         this.provider = ess.getItemDbProvider();
-        file = new ManagedFile("items.csv", ess);
+
+        if (provider instanceof LegacyItemDbProvider) {
+            file = new ManagedFile("items.csv", ess);
+        } else {
+            file = new ManagedFile("items.json", ess);
+        }
     }
 
     @Override
     public void reloadConfig() {
-        final List<String> lines = file.getLines();
-
-        if (lines.isEmpty()) {
-            return;
-        }
-
-        durabilities.clear();
-        items.clear();
-        names.clear();
-        primaryName.clear();
-
-        for (String line : lines) {
-            if (line.length() > 0 && line.charAt(0) == '#') {
-                continue;
-            }
-
-            String itemName = null;
-            int numeric = -1;
-            short data = 0;
-            String nbt = null;
-
-            int col = 0;
-            Matcher matcher = csvSplitPattern.matcher(line);
-            while (matcher.find()) {
-                String match = matcher.group(1);
-                if (StringUtils.stripToNull(match) == null) {
-                    continue;
-                }
-                match = StringUtils.strip(match.trim(), "\"");
-                switch (col) {
-                    case 0:
-                        itemName = match.toLowerCase(Locale.ENGLISH);
-                        break;
-                    case 1:
-                        numeric = Integer.parseInt(match);
-                        break;
-                    case 2:
-                        data = Short.parseShort(match);
-                        break;
-                    case 3:
-                        nbt = StringUtils.stripToNull(match);
-                        break;
-                    default:
-                        continue;
-                }
-                col++;
-            }
-            // Invalid row
-            if (itemName == null || numeric < 0) {
-                continue;
-            }
-
-            Material material = Material.matchMaterial(itemName);
-            if (material == null) {
-                LOGGER.warning(String.format("Failed to find material for %s", itemName));
-                continue;
-            }
-            durabilities.put(itemName, data);
-            items.put(itemName, numeric);
-            if (nbt != null) {
-                nbtData.put(itemName, nbt);
-            }
-
-            ItemData itemData = new ItemData(material, numeric, data);
-            if (names.containsKey(itemData)) {
-                List<String> nameList = names.get(itemData);
-                nameList.add(itemName);
-            } else {
-                List<String> nameList = new ArrayList<>();
-                nameList.add(itemName);
-                names.put(itemData, nameList);
-                primaryName.put(itemData, itemName);
-            }
-
-            legacyIds.put(numeric, itemData);
-        }
-
-        for (List<String> nameList : names.values()) {
-            Collections.sort(nameList, LengthCompare.INSTANCE);
-        }
+        provider.rebuild(file.getLines());
     }
 
     @Override
