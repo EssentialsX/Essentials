@@ -365,28 +365,17 @@ public class ItemDb implements IConf, net.ess3.api.IItemDb {
 
     @Override
     public Material getFromLegacyId(int id) {
-        ItemData data = this.legacyIds.get(id);
-        if (data == null) {
-            return null;
-        }
-
-        return data.getMaterial();
+        return provider.getFromLegacyId(id);
     }
 
     @Override
     public int getLegacyId(Material material) throws Exception {
-        for(Map.Entry<String, Integer> entry : items.entrySet()) {
-            if(material.name().toLowerCase(Locale.ENGLISH).equalsIgnoreCase(entry.getKey())) {
-                return entry.getValue();
-            }
-        }
-
-        throw new Exception("Itemid not found for material: " + material.name());
+        return provider.getLegacyId(material);
     }
 
     @Override
     public Collection<String> listNames() {
-        return primaryName.values();
+        return provider.listNames();
     }
 
     static class ItemData {
