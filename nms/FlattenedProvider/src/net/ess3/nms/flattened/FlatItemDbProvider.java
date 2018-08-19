@@ -4,6 +4,8 @@ import com.google.gson.*;
 import net.ess3.nms.ItemDbProvider;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.PotionMeta;
+import org.bukkit.potion.PotionData;
 import org.bukkit.potion.PotionType;
 
 import java.util.*;
@@ -16,7 +18,7 @@ public class FlatItemDbProvider extends ItemDbProvider {
 
     @Override
     public Material resolve(String name) {
-        return null;
+        return Objects.requireNonNull(getByName(name)).getMaterial();
     }
 
     @Override
@@ -60,8 +62,39 @@ public class FlatItemDbProvider extends ItemDbProvider {
     }
 
     @Override
+    public ItemStack getStack(String name) throws Exception {
+        ItemData data = Objects.requireNonNull(getByName(name));
+        PotionData potionData = data.getPotionData();
+        Material material = data.getMaterial();
+
+        ItemStack stack = new ItemStack(material);
+
+        if (potionData != null) {
+            PotionMeta meta = (PotionMeta) stack.getItemMeta();
+            meta.setBasePotionData(potionData);
+            stack.setItemMeta(meta);
+        }
+
+        return stack;
+    }
+
+    @Override
     public Collection<String> listNames() {
         return Collections.unmodifiableSet(primaryNames.keySet());
+    }
+
+    private ItemData getByName(String name) {
+        if (primaryNames.containsKey(name.toLowerCase())) {
+            return primaryNames.get(name);
+        } else {
+            for (Map.Entry<String, List<String>> entry : names.entrySet()) {
+                if (entry.getValue().contains(name.toLowerCase())) {
+                    return primaryNames.get(entry.getKey());
+                }
+            }
+        }
+
+        return null;
     }
 
     @Override
