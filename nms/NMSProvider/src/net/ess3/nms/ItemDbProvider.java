@@ -95,9 +95,7 @@ public abstract class ItemDbProvider implements Provider {
      * @param name The material name to look up
      * @return An ItemStack of size 1 of the given item
      */
-    public ItemStack getStack(String name) throws Exception {
-        return new ItemStack(resolve(name));
-    }
+    public abstract ItemStack getStack(String name) throws Exception;
 
     /**
      * Creates a stack with the given amount of a given item by its name.
