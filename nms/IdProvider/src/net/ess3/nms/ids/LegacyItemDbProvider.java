@@ -174,13 +174,15 @@ public class LegacyItemDbProvider extends ItemDbProvider {
         return nameList;
     }
 
-    @Override
-    public void rebuild(List<String> lines) {
+    private void resetDb() {
         durabilities.clear();
         items.clear();
         names.clear();
         primaryNames.clear();
+    }
 
+    @Override
+    public void addFrom(List<String> lines) {
         lines.stream()
                 .filter(line -> line.length() > 0 && !(line.charAt(0) == '#'))
                 .map(this::parseLine)
@@ -190,6 +192,12 @@ public class LegacyItemDbProvider extends ItemDbProvider {
         for (List<String> nameList : names.values()) {
             nameList.sort(LengthCompare.INSTANCE);
         }
+    }
+
+    @Override
+    public void rebuild(List<String> lines) {
+        resetDb();
+        addFrom(lines);
     }
 
     private ItemData parseLine(String line) {

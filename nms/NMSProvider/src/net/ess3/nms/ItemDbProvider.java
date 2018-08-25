@@ -20,9 +20,16 @@ public abstract class ItemDbProvider implements Provider {
     private PotionMetaProvider potionMetaProvider;
 
     /**
-     * Rebuild the item database, using the given lines of a file.
+     * Populate the item database using the given lines of data.
      *
-     * @param lines The lines of the file from which the database should be built.
+     * @param lines The lines of data from which the database should be populated
+     */
+    public abstract void addFrom(List<String> lines);
+
+    /**
+     * Reset the database and rebuild it from the given lines of data.
+     *
+     * @param lines The lines of the file from which the database should be built
      */
     public abstract void rebuild(List<String> lines);
 

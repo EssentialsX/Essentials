@@ -98,8 +98,13 @@ public class FlatItemDbProvider extends ItemDbProvider {
         return null;
     }
 
+    private void resetDb() {
+        primaryNames.clear();
+        names.clear();
+    }
+
     @Override
-    public void rebuild(List<String> lines) {
+    public void addFrom(List<String> lines) {
         String json = lines.stream()
                 .filter(line -> !line.startsWith("#"))
                 .collect(Collectors.joining("\n"));
@@ -122,6 +127,12 @@ public class FlatItemDbProvider extends ItemDbProvider {
                 }
             }
         }
+    }
+
+    @Override
+    public void rebuild(List<String> lines) {
+        resetDb();
+        addFrom(lines);
     }
 
     private void addAlias(String primaryName, String alias) {
