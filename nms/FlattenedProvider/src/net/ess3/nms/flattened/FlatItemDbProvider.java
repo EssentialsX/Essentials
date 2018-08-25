@@ -99,7 +99,10 @@ public class FlatItemDbProvider extends ItemDbProvider {
 
     @Override
     public void rebuild(List<String> lines) {
-        String json = String.join("\n", lines);
+        String json = lines.stream()
+                .filter(line -> !line.startsWith("#"))
+                .collect(Collectors.joining("\n"));
+
         JsonObject map = (new JsonParser()).parse(json).getAsJsonObject();
 
         for (Map.Entry<String, JsonElement> entry : map.entrySet()) {
