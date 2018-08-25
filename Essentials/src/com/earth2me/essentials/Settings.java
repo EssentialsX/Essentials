@@ -432,6 +432,9 @@ public class Settings implements net.ess3.api.ISettings {
             mFormat = "§r".concat(mFormat);
             chatFormats.put(group, mFormat);
         }
+        if (isDebug()) {
+            ess.getLogger().info(String.format("Found format '%s' for group '%s'", mFormat, group));
+        }
         return mFormat;
     }
 
