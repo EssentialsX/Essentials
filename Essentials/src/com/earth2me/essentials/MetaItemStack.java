@@ -164,7 +164,7 @@ public class MetaItemStack {
         try {
             // 1.8
             banner = Material.valueOf("BANNER");
-            
+
             // 1.9
             shield = Material.valueOf("SHIELD");
         } catch(IllegalArgumentException ignored){}
@@ -183,7 +183,7 @@ public class MetaItemStack {
             meta.setLore(lore);
             stack.setItemMeta(meta);
         } else if (split[0].equalsIgnoreCase("unbreakable") && hasMetaPermission(sender, "unbreakable", false, true, ess)) {
-            boolean value = split.length > 1 ? Boolean.valueOf(split[1]) : true; 
+            boolean value = split.length > 1 ? Boolean.valueOf(split[1]) : true;
             setUnbreakable(stack, value);
         } else if (split.length > 1 && (split[0].equalsIgnoreCase("player") || split[0].equalsIgnoreCase("owner")) && stack.getType() == Material.SKULL_ITEM && hasMetaPermission(sender, "head", false, true, ess)) {
             if (stack.getDurability() == 3) {
@@ -488,7 +488,7 @@ public class MetaItemStack {
             if (split.length < 2) {
                 throw new Exception(tl("invalidBanner", split[1]));
             }
-            
+
             PatternType patternType = null;
             try {
                 patternType = PatternType.valueOf(split[0]);
@@ -554,22 +554,36 @@ public class MetaItemStack {
         }
     }
 
+    private static int bukkitUnbreakableSupport = -1;
     private static Method spigotMethod;
     private static Method setUnbreakableMethod;
 
     private void setUnbreakable(ItemStack is, boolean unbreakable) {
         ItemMeta meta = is.getItemMeta();
         try {
-            if (spigotMethod == null) {
-                spigotMethod = meta.getClass().getDeclaredMethod("spigot");
-                spigotMethod.setAccessible(true);
+            if (bukkitUnbreakableSupport == -1) {
+                try {
+                    ItemMeta.class.getDeclaredMethod("setUnbreakable", boolean.class);
+                    bukkitUnbreakableSupport = 1;
+                } catch (NoSuchMethodException | SecurityException ex) {
+                    bukkitUnbreakableSupport = 0;
+                }
             }
-            Object itemStackSpigot = spigotMethod.invoke(meta);
-            if (setUnbreakableMethod == null) {
-                setUnbreakableMethod = itemStackSpigot.getClass().getDeclaredMethod("setUnbreakable", Boolean.TYPE);
-                setUnbreakableMethod.setAccessible(true);
+
+            if (bukkitUnbreakableSupport == 1) {
+                meta.setUnbreakable(unbreakable);
+            } else {
+                if (spigotMethod == null) {
+                    spigotMethod = meta.getClass().getDeclaredMethod("spigot");
+                    spigotMethod.setAccessible(true);
+                }
+                Object itemStackSpigot = spigotMethod.invoke(meta);
+                if (setUnbreakableMethod == null) {
+                    setUnbreakableMethod = itemStackSpigot.getClass().getDeclaredMethod("setUnbreakable", Boolean.TYPE);
+                    setUnbreakableMethod.setAccessible(true);
+                }
+                setUnbreakableMethod.invoke(itemStackSpigot, unbreakable);
             }
-            setUnbreakableMethod.invoke(itemStackSpigot, unbreakable);
             is.setItemMeta(meta);
         } catch (Throwable t) {
             t.printStackTrace();
