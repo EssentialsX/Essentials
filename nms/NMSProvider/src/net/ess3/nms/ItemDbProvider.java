@@ -124,8 +124,8 @@ public abstract class ItemDbProvider implements Provider {
             getStack("cstone");
             getStack("diorite");
             getStack("steelbar", 5);
-            getStack("aoepot");
-            getStack("skeletonegg", 12);
+            getStack("splbreathlevel2pot");
+            getStack("skeletonhorsespawnegg", 12);
             return true;
         } catch (Exception e) {
             return false;
