@@ -124,7 +124,7 @@ public class EssentialsEntityListener implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onEntityCombustByEntity(final EntityCombustByEntityEvent event) {
-        if (event.getCombuster() instanceof Arrow) {
+        if (event.getCombuster() instanceof Arrow && event.getEntity() instanceof Player) {
             Arrow combuster = (Arrow) event.getCombuster();
             if (combuster.getShooter() instanceof Player) {
                 final User srcCombuster = ess.getUser(((Player) combuster.getShooter()).getUniqueId());

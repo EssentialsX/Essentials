@@ -17,9 +17,17 @@ public class Commandback extends EssentialsCommand {
         if (user.getLastLocation() == null) {
             throw new Exception(tl("noLocationFound"));
         }
-        if (user.getWorld() != user.getLastLocation().getWorld() && ess.getSettings().isWorldTeleportPermissions() && !user.isAuthorized("essentials.worlds." + user.getLastLocation().getWorld().getName())) {
-            throw new Exception(tl("noPerm", "essentials.worlds." + user.getLastLocation().getWorld().getName()));
+
+        String lastWorldName = user.getLastLocation().getWorld().getName();
+
+        if (user.getWorld() != user.getLastLocation().getWorld() && ess.getSettings().isWorldTeleportPermissions() && !user.isAuthorized("essentials.worlds." + lastWorldName)) {
+            throw new Exception(tl("noPerm", "essentials.worlds." + lastWorldName));
         }
+
+        if (!user.isAuthorized("essentials.back.into." + lastWorldName)) {
+            throw new Exception(tl("noPerm", "essentials.back.into." + lastWorldName));
+        }
+
         final Trade charge = new Trade(this.getName(), ess);
         charge.isAffordableFor(user);
         user.getTeleport().back(charge);

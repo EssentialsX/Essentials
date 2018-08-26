@@ -152,7 +152,7 @@ public class EssentialsPlayerListener implements Listener {
             event.setQuitMessage(null);
         } else if (ess.getSettings().isCustomQuitMessage() && event.getQuitMessage() != null) {
             final Player player = event.getPlayer();
-            event.setQuitMessage(ess.getSettings().getCustomQuitMessage().replace("{PLAYER}", player.getDisplayName()).replace("{USERNAME}", player.getName()));
+            event.setQuitMessage(ess.getSettings().getCustomQuitMessage().replace("{PLAYER}", player.getDisplayName()).replace("{USERNAME}", player.getName()).replace("{ONLINE}", NumberFormat.getInstance().format(ess.getOnlinePlayers().size())));
         }
 
         user.startTransaction();
@@ -258,7 +258,8 @@ public class EssentialsPlayerListener implements Listener {
                 } else if (ess.getSettings().isCustomJoinMessage()) {
                     String msg = ess.getSettings().getCustomJoinMessage()
                         .replace("{PLAYER}", player.getDisplayName()).replace("{USERNAME}", player.getName())
-                        .replace("{UNIQUE}", NumberFormat.getInstance().format(ess.getUserMap().getUniqueUsers()));
+                        .replace("{UNIQUE}", NumberFormat.getInstance().format(ess.getUserMap().getUniqueUsers()))
+                        .replace("{ONLINE}", NumberFormat.getInstance().format(ess.getOnlinePlayers().size()));
                     ess.getServer().broadcastMessage(msg);
                 } else if (ess.getSettings().allowSilentJoinQuit()) {
                     ess.getServer().broadcastMessage(message);
@@ -308,6 +309,9 @@ public class EssentialsPlayerListener implements Listener {
                     user.setGodModeEnabled(false);
                     ess.getLogger().log(Level.INFO, "Set god mode to false for {0} because they had it enabled without permission.", user.getName());
                 }
+                
+                user.setConfirmingClearCommand(null);
+                user.getConfirmingPayments().clear();
 
                 user.stopTransaction();
             }
@@ -350,7 +354,10 @@ public class EssentialsPlayerListener implements Listener {
     }
 
     // Makes the compass item ingame always point to the first essentials home.  #EasterEgg
+    // EssentialsX: This can now optionally require a permission to enable, if set in the config.
     private void updateCompass(final User user) {
+        if (ess.getSettings().isCompassTowardsHomePerm() && !user.isAuthorized("essentials.home.compass")) return;
+
         Location loc = user.getHome(user.getLocation());
         if (loc == null) {
             loc = user.getBase().getBedSpawnLocation();

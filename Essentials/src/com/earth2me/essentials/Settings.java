@@ -533,6 +533,7 @@ public class Settings implements net.ess3.api.ISettings {
         currencyFormat = _getCurrencyFormat();
         unprotectedSigns = _getUnprotectedSign();
         defaultEnabledConfirmCommands = _getDefaultEnabledConfirmCommands();
+        isCompassTowardsHomePerm = _isCompassTowardsHomePerm();
     }
 
     private List<Integer> itemSpawnBl = new ArrayList<Integer>();
@@ -1438,5 +1439,16 @@ public class Settings implements net.ess3.api.ISettings {
     @Override
     public boolean isConfirmCommandEnabledByDefault(String commandName) {
         return getDefaultEnabledConfirmCommands().contains(commandName.toLowerCase());
+    }
+
+    private boolean isCompassTowardsHomePerm;
+
+    private boolean _isCompassTowardsHomePerm() {
+        return config.getBoolean("compass-towards-home-perm", false);
+    }
+
+    @Override
+    public boolean isCompassTowardsHomePerm() {
+        return isCompassTowardsHomePerm;
     }
 }
