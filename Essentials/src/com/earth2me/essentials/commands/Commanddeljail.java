@@ -19,6 +19,10 @@ public class Commanddeljail extends EssentialsCommand {
             throw new NotEnoughArgumentsException();
         }
 
+        if (ess.getJails().getJail(args[0]) == null) {
+            throw new Exception(tl("jailNotExist"));
+        }
+
         ess.getJails().removeJail(args[0]);
         sender.sendMessage(tl("deleteJail", args[0]));
     }

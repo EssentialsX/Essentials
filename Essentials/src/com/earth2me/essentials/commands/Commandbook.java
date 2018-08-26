@@ -19,7 +19,6 @@ public class Commandbook extends EssentialsCommand {
         super("book");
     }
 
-    //TODO: Translate this
     @Override
     public void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception {
         final ItemStack item = user.getItemInHand();
