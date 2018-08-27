@@ -529,6 +529,11 @@ tpa-accept-cancellation: 120
 # Allow players to set hats by clicking on their helmet slot.
 allow-direct-hat: true
 
+# Allow in-game players to specify a world when running /broadcastworld.
+# If false, running /broadcastworld in-game will always send a message to the player's current world.
+# This doesn't affect running the command from the console, where a world is always required.
+allow-world-in-broadcastworld: true
+
 ############################################################
 # +------------------------------------------------------+ #
 # |                   EssentialsHome                     | #

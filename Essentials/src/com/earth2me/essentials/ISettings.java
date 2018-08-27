@@ -308,4 +308,6 @@ public interface ISettings extends IConf {
     boolean isConfirmCommandEnabledByDefault(String commandName);
 
     boolean isCompassTowardsHomePerm();
+
+    boolean isAllowWorldInBroadcastworld();
 }
