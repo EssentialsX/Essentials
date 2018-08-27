@@ -128,8 +128,8 @@ public abstract class ItemDbProvider implements Provider {
     @Override
     public boolean tryProvider() {
         try {
-            getStack("cstone");
-            getStack("diorite");
+            getStack("cobblestone");
+            getStack("dstone");
             getStack("steelbar", 5);
             getStack("splbreathlevel2pot");
             getStack("skeletonhorsespawnegg", 12);
