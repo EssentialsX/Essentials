@@ -7813,7 +7813,7 @@
         "material": "POTION",
         "potionData": {
             "vanillaType": "empty",
-            "type": "empty",
+            "type": "EMPTY",
             "upgraded": false,
             "extended": false
         }
@@ -7825,7 +7825,7 @@
         "material": "SPLASH_POTION",
         "potionData": {
             "vanillaType": "empty",
-            "type": "empty",
+            "type": "EMPTY",
             "upgraded": false,
             "extended": false
         }
@@ -7839,7 +7839,7 @@
         "material": "LINGERING_POTION",
         "potionData": {
             "vanillaType": "empty",
-            "type": "empty",
+            "type": "EMPTY",
             "upgraded": false,
             "extended": false
         }
@@ -7861,7 +7861,7 @@
         "material": "TIPPED_ARROW",
         "potionData": {
             "vanillaType": "empty",
-            "type": "empty",
+            "type": "EMPTY",
             "upgraded": false,
             "extended": false
         }
@@ -7871,7 +7871,7 @@
         "material": "POTION",
         "potionData": {
             "vanillaType": "water",
-            "type": "water",
+            "type": "WATER",
             "upgraded": false,
             "extended": false
         }
@@ -7883,7 +7883,7 @@
         "material": "SPLASH_POTION",
         "potionData": {
             "vanillaType": "water",
-            "type": "water",
+            "type": "WATER",
             "upgraded": false,
             "extended": false
         }
@@ -7897,7 +7897,7 @@
         "material": "LINGERING_POTION",
         "potionData": {
             "vanillaType": "water",
-            "type": "water",
+            "type": "WATER",
             "upgraded": false,
             "extended": false
         }
@@ -7919,7 +7919,7 @@
         "material": "TIPPED_ARROW",
         "potionData": {
             "vanillaType": "water",
-            "type": "water",
+            "type": "WATER",
             "upgraded": false,
             "extended": false
         }
@@ -7929,7 +7929,7 @@
         "material": "POTION",
         "potionData": {
             "vanillaType": "mundane",
-            "type": "mundane",
+            "type": "MUNDANE",
             "upgraded": false,
             "extended": false
         }
@@ -7941,7 +7941,7 @@
         "material": "SPLASH_POTION",
         "potionData": {
             "vanillaType": "mundane",
-            "type": "mundane",
+            "type": "MUNDANE",
             "upgraded": false,
             "extended": false
         }
@@ -7955,7 +7955,7 @@
         "material": "LINGERING_POTION",
         "potionData": {
             "vanillaType": "mundane",
-            "type": "mundane",
+            "type": "MUNDANE",
             "upgraded": false,
             "extended": false
         }
@@ -7977,7 +7977,7 @@
         "material": "TIPPED_ARROW",
         "potionData": {
             "vanillaType": "mundane",
-            "type": "mundane",
+            "type": "MUNDANE",
             "upgraded": false,
             "extended": false
         }
@@ -7987,7 +7987,7 @@
         "material": "POTION",
         "potionData": {
             "vanillaType": "thick",
-            "type": "thick",
+            "type": "THICK",
             "upgraded": false,
             "extended": false
         }
@@ -7999,7 +7999,7 @@
         "material": "SPLASH_POTION",
         "potionData": {
             "vanillaType": "thick",
-            "type": "thick",
+            "type": "THICK",
             "upgraded": false,
             "extended": false
         }
@@ -8013,7 +8013,7 @@
         "material": "LINGERING_POTION",
         "potionData": {
             "vanillaType": "thick",
-            "type": "thick",
+            "type": "THICK",
             "upgraded": false,
             "extended": false
         }
@@ -8035,7 +8035,7 @@
         "material": "TIPPED_ARROW",
         "potionData": {
             "vanillaType": "thick",
-            "type": "thick",
+            "type": "THICK",
             "upgraded": false,
             "extended": false
         }
@@ -8045,7 +8045,7 @@
         "material": "POTION",
         "potionData": {
             "vanillaType": "awkward",
-            "type": "awkward",
+            "type": "AWKWARD",
             "upgraded": false,
             "extended": false
         }
@@ -8057,7 +8057,7 @@
         "material": "SPLASH_POTION",
         "potionData": {
             "vanillaType": "awkward",
-            "type": "awkward",
+            "type": "AWKWARD",
             "upgraded": false,
             "extended": false
         }
@@ -8071,7 +8071,7 @@
         "material": "LINGERING_POTION",
         "potionData": {
             "vanillaType": "awkward",
-            "type": "awkward",
+            "type": "AWKWARD",
             "upgraded": false,
             "extended": false
         }
@@ -8093,7 +8093,7 @@
         "material": "TIPPED_ARROW",
         "potionData": {
             "vanillaType": "awkward",
-            "type": "awkward",
+            "type": "AWKWARD",
             "upgraded": false,
             "extended": false
         }
@@ -8103,7 +8103,7 @@
         "material": "POTION",
         "potionData": {
             "vanillaType": "night_vision",
-            "type": "night_vision",
+            "type": "NIGHT_VISION",
             "upgraded": false,
             "extended": false
         }
@@ -8139,7 +8139,7 @@
         "material": "SPLASH_POTION",
         "potionData": {
             "vanillaType": "night_vision",
-            "type": "night_vision",
+            "type": "NIGHT_VISION",
             "upgraded": false,
             "extended": false
         }
@@ -8189,7 +8189,7 @@
         "material": "LINGERING_POTION",
         "potionData": {
             "vanillaType": "night_vision",
-            "type": "night_vision",
+            "type": "NIGHT_VISION",
             "upgraded": false,
             "extended": false
         }
@@ -8295,7 +8295,7 @@
         "material": "TIPPED_ARROW",
         "potionData": {
             "vanillaType": "night_vision",
-            "type": "night_vision",
+            "type": "NIGHT_VISION",
             "upgraded": false,
             "extended": false
         }
@@ -8317,7 +8317,7 @@
         "material": "POTION",
         "potionData": {
             "vanillaType": "long_night_vision",
-            "type": "night_vision",
+            "type": "NIGHT_VISION",
             "upgraded": false,
             "extended": true
         }
@@ -8465,7 +8465,7 @@
         "material": "SPLASH_POTION",
         "potionData": {
             "vanillaType": "long_night_vision",
-            "type": "night_vision",
+            "type": "NIGHT_VISION",
             "upgraded": false,
             "extended": true
         }
@@ -8683,7 +8683,7 @@
         "material": "LINGERING_POTION",
         "potionData": {
             "vanillaType": "long_night_vision",
-            "type": "night_vision",
+            "type": "NIGHT_VISION",
             "upgraded": false,
             "extended": true
         }
@@ -9181,7 +9181,7 @@
         "material": "TIPPED_ARROW",
         "potionData": {
             "vanillaType": "long_night_vision",
-            "type": "night_vision",
+            "type": "NIGHT_VISION",
             "upgraded": false,
             "extended": true
         }
@@ -9259,7 +9259,7 @@
         "material": "POTION",
         "potionData": {
             "vanillaType": "invisibility",
-            "type": "invisibility",
+            "type": "INVISIBILITY",
             "upgraded": false,
             "extended": false
         }
@@ -9283,7 +9283,7 @@
         "material": "SPLASH_POTION",
         "potionData": {
             "vanillaType": "invisibility",
-            "type": "invisibility",
+            "type": "INVISIBILITY",
             "upgraded": false,
             "extended": false
         }
@@ -9315,7 +9315,7 @@
         "material": "LINGERING_POTION",
         "potionData": {
             "vanillaType": "invisibility",
-            "type": "invisibility",
+            "type": "INVISIBILITY",
             "upgraded": false,
             "extended": false
         }
@@ -9379,7 +9379,7 @@
         "material": "TIPPED_ARROW",
         "potionData": {
             "vanillaType": "invisibility",
-            "type": "invisibility",
+            "type": "INVISIBILITY",
             "upgraded": false,
             "extended": false
         }
@@ -9395,7 +9395,7 @@
         "material": "POTION",
         "potionData": {
             "vanillaType": "long_invisibility",
-            "type": "invisibility",
+            "type": "INVISIBILITY",
             "upgraded": false,
             "extended": true
         }
@@ -9483,7 +9483,7 @@
         "material": "SPLASH_POTION",
         "potionData": {
             "vanillaType": "long_invisibility",
-            "type": "invisibility",
+            "type": "INVISIBILITY",
             "upgraded": false,
             "extended": true
         }
@@ -9611,7 +9611,7 @@
         "material": "LINGERING_POTION",
         "potionData": {
             "vanillaType": "long_invisibility",
-            "type": "invisibility",
+            "type": "INVISIBILITY",
             "upgraded": false,
             "extended": true
         }
@@ -9899,7 +9899,7 @@
         "material": "TIPPED_ARROW",
         "potionData": {
             "vanillaType": "long_invisibility",
-            "type": "invisibility",
+            "type": "INVISIBILITY",
             "upgraded": false,
             "extended": true
         }
@@ -9947,7 +9947,7 @@
         "material": "POTION",
         "potionData": {
             "vanillaType": "leaping",
-            "type": "leaping",
+            "type": "LEAPING",
             "upgraded": false,
             "extended": false
         }
@@ -9963,7 +9963,7 @@
         "material": "SPLASH_POTION",
         "potionData": {
             "vanillaType": "leaping",
-            "type": "leaping",
+            "type": "LEAPING",
             "upgraded": false,
             "extended": false
         }
@@ -9983,7 +9983,7 @@
         "material": "LINGERING_POTION",
         "potionData": {
             "vanillaType": "leaping",
-            "type": "leaping",
+            "type": "LEAPING",
             "upgraded": false,
             "extended": false
         }
@@ -10019,7 +10019,7 @@
         "material": "TIPPED_ARROW",
         "potionData": {
             "vanillaType": "leaping",
-            "type": "leaping",
+            "type": "LEAPING",
             "upgraded": false,
             "extended": false
         }
@@ -10031,7 +10031,7 @@
         "material": "POTION",
         "potionData": {
             "vanillaType": "strong_leaping",
-            "type": "leaping",
+            "type": "LEAPING",
             "upgraded": true,
             "extended": false
         }
@@ -10063,7 +10063,7 @@
         "material": "SPLASH_POTION",
         "potionData": {
             "vanillaType": "strong_leaping",
-            "type": "leaping",
+            "type": "LEAPING",
             "upgraded": true,
             "extended": false
         }
@@ -10107,7 +10107,7 @@
         "material": "LINGERING_POTION",
         "potionData": {
             "vanillaType": "strong_leaping",
-            "type": "leaping",
+            "type": "LEAPING",
             "upgraded": true,
             "extended": false
         }
@@ -10199,7 +10199,7 @@
         "material": "TIPPED_ARROW",
         "potionData": {
             "vanillaType": "strong_leaping",
-            "type": "leaping",
+            "type": "LEAPING",
             "upgraded": true,
             "extended": false
         }
@@ -10219,7 +10219,7 @@
         "material": "POTION",
         "potionData": {
             "vanillaType": "long_leaping",
-            "type": "leaping",
+            "type": "LEAPING",
             "upgraded": false,
             "extended": true
         }
@@ -10267,7 +10267,7 @@
         "material": "SPLASH_POTION",
         "potionData": {
             "vanillaType": "long_leaping",
-            "type": "leaping",
+            "type": "LEAPING",
             "upgraded": false,
             "extended": true
         }
@@ -10335,7 +10335,7 @@
         "material": "LINGERING_POTION",
         "potionData": {
             "vanillaType": "long_leaping",
-            "type": "leaping",
+            "type": "LEAPING",
             "upgraded": false,
             "extended": true
         }
@@ -10483,7 +10483,7 @@
         "material": "TIPPED_ARROW",
         "potionData": {
             "vanillaType": "long_leaping",
-            "type": "leaping",
+            "type": "LEAPING",
             "upgraded": false,
             "extended": true
         }
@@ -10511,7 +10511,7 @@
         "material": "POTION",
         "potionData": {
             "vanillaType": "fire_resistance",
-            "type": "fire_resistance",
+            "type": "FIRE_RESISTANCE",
             "upgraded": false,
             "extended": false
         }
@@ -10531,7 +10531,7 @@
         "material": "SPLASH_POTION",
         "potionData": {
             "vanillaType": "fire_resistance",
-            "type": "fire_resistance",
+            "type": "FIRE_RESISTANCE",
             "upgraded": false,
             "extended": false
         }
@@ -10557,7 +10557,7 @@
         "material": "LINGERING_POTION",
         "potionData": {
             "vanillaType": "fire_resistance",
-            "type": "fire_resistance",
+            "type": "FIRE_RESISTANCE",
             "upgraded": false,
             "extended": false
         }
@@ -10607,7 +10607,7 @@
         "material": "TIPPED_ARROW",
         "potionData": {
             "vanillaType": "fire_resistance",
-            "type": "fire_resistance",
+            "type": "FIRE_RESISTANCE",
             "upgraded": false,
             "extended": false
         }
@@ -10621,7 +10621,7 @@
         "material": "POTION",
         "potionData": {
             "vanillaType": "long_fire_resistance",
-            "type": "fire_resistance",
+            "type": "FIRE_RESISTANCE",
             "upgraded": false,
             "extended": true
         }
@@ -10689,7 +10689,7 @@
         "material": "SPLASH_POTION",
         "potionData": {
             "vanillaType": "long_fire_resistance",
-            "type": "fire_resistance",
+            "type": "FIRE_RESISTANCE",
             "upgraded": false,
             "extended": true
         }
@@ -10787,7 +10787,7 @@
         "material": "LINGERING_POTION",
         "potionData": {
             "vanillaType": "long_fire_resistance",
-            "type": "fire_resistance",
+            "type": "FIRE_RESISTANCE",
             "upgraded": false,
             "extended": true
         }
@@ -11005,7 +11005,7 @@
         "material": "TIPPED_ARROW",
         "potionData": {
             "vanillaType": "long_fire_resistance",
-            "type": "fire_resistance",
+            "type": "FIRE_RESISTANCE",
             "upgraded": false,
             "extended": true
         }
@@ -11043,7 +11043,7 @@
         "material": "POTION",
         "potionData": {
             "vanillaType": "swiftness",
-            "type": "swiftness",
+            "type": "SWIFTNESS",
             "upgraded": false,
             "extended": false
         }
@@ -11063,7 +11063,7 @@
         "material": "SPLASH_POTION",
         "potionData": {
             "vanillaType": "swiftness",
-            "type": "swiftness",
+            "type": "SWIFTNESS",
             "upgraded": false,
             "extended": false
         }
@@ -11089,7 +11089,7 @@
         "material": "LINGERING_POTION",
         "potionData": {
             "vanillaType": "swiftness",
-            "type": "swiftness",
+            "type": "SWIFTNESS",
             "upgraded": false,
             "extended": false
         }
@@ -11139,7 +11139,7 @@
         "material": "TIPPED_ARROW",
         "potionData": {
             "vanillaType": "swiftness",
-            "type": "swiftness",
+            "type": "SWIFTNESS",
             "upgraded": false,
             "extended": false
         }
@@ -11153,7 +11153,7 @@
         "material": "POTION",
         "potionData": {
             "vanillaType": "strong_swiftness",
-            "type": "swiftness",
+            "type": "SWIFTNESS",
             "upgraded": true,
             "extended": false
         }
@@ -11197,7 +11197,7 @@
         "material": "SPLASH_POTION",
         "potionData": {
             "vanillaType": "strong_swiftness",
-            "type": "swiftness",
+            "type": "SWIFTNESS",
             "upgraded": true,
             "extended": false
         }
@@ -11259,7 +11259,7 @@
         "material": "LINGERING_POTION",
         "potionData": {
             "vanillaType": "strong_swiftness",
-            "type": "swiftness",
+            "type": "SWIFTNESS",
             "upgraded": true,
             "extended": false
         }
@@ -11393,7 +11393,7 @@
         "material": "TIPPED_ARROW",
         "potionData": {
             "vanillaType": "strong_swiftness",
-            "type": "swiftness",
+            "type": "SWIFTNESS",
             "upgraded": true,
             "extended": false
         }
@@ -11419,7 +11419,7 @@
         "material": "POTION",
         "potionData": {
             "vanillaType": "long_swiftness",
-            "type": "swiftness",
+            "type": "SWIFTNESS",
             "upgraded": false,
             "extended": true
         }
@@ -11487,7 +11487,7 @@
         "material": "SPLASH_POTION",
         "potionData": {
             "vanillaType": "long_swiftness",
-            "type": "swiftness",
+            "type": "SWIFTNESS",
             "upgraded": false,
             "extended": true
         }
@@ -11585,7 +11585,7 @@
         "material": "LINGERING_POTION",
         "potionData": {
             "vanillaType": "long_swiftness",
-            "type": "swiftness",
+            "type": "SWIFTNESS",
             "upgraded": false,
             "extended": true
         }
@@ -11803,7 +11803,7 @@
         "material": "TIPPED_ARROW",
         "potionData": {
             "vanillaType": "long_swiftness",
-            "type": "swiftness",
+            "type": "SWIFTNESS",
             "upgraded": false,
             "extended": true
         }
@@ -11841,7 +11841,7 @@
         "material": "POTION",
         "potionData": {
             "vanillaType": "slowness",
-            "type": "slowness",
+            "type": "SLOWNESS",
             "upgraded": false,
             "extended": false
         }
@@ -11857,7 +11857,7 @@
         "material": "SPLASH_POTION",
         "potionData": {
             "vanillaType": "slowness",
-            "type": "slowness",
+            "type": "SLOWNESS",
             "upgraded": false,
             "extended": false
         }
@@ -11877,7 +11877,7 @@
         "material": "LINGERING_POTION",
         "potionData": {
             "vanillaType": "slowness",
-            "type": "slowness",
+            "type": "SLOWNESS",
             "upgraded": false,
             "extended": false
         }
@@ -11913,7 +11913,7 @@
         "material": "TIPPED_ARROW",
         "potionData": {
             "vanillaType": "slowness",
-            "type": "slowness",
+            "type": "SLOWNESS",
             "upgraded": false,
             "extended": false
         }
@@ -11925,7 +11925,7 @@
         "material": "POTION",
         "potionData": {
             "vanillaType": "long_slowness",
-            "type": "slowness",
+            "type": "SLOWNESS",
             "upgraded": false,
             "extended": true
         }
@@ -11973,7 +11973,7 @@
         "material": "SPLASH_POTION",
         "potionData": {
             "vanillaType": "long_slowness",
-            "type": "slowness",
+            "type": "SLOWNESS",
             "upgraded": false,
             "extended": true
         }
@@ -12041,7 +12041,7 @@
         "material": "LINGERING_POTION",
         "potionData": {
             "vanillaType": "long_slowness",
-            "type": "slowness",
+            "type": "SLOWNESS",
             "upgraded": false,
             "extended": true
         }
@@ -12189,7 +12189,7 @@
         "material": "TIPPED_ARROW",
         "potionData": {
             "vanillaType": "long_slowness",
-            "type": "slowness",
+            "type": "SLOWNESS",
             "upgraded": false,
             "extended": true
         }
@@ -12217,7 +12217,7 @@
         "material": "POTION",
         "potionData": {
             "vanillaType": "water_breathing",
-            "type": "water_breathing",
+            "type": "WATER_BREATHING",
             "upgraded": false,
             "extended": false
         }
@@ -12245,7 +12245,7 @@
         "material": "SPLASH_POTION",
         "potionData": {
             "vanillaType": "water_breathing",
-            "type": "water_breathing",
+            "type": "WATER_BREATHING",
             "upgraded": false,
             "extended": false
         }
@@ -12283,7 +12283,7 @@
         "material": "LINGERING_POTION",
         "potionData": {
             "vanillaType": "water_breathing",
-            "type": "water_breathing",
+            "type": "WATER_BREATHING",
             "upgraded": false,
             "extended": false
         }
@@ -12361,7 +12361,7 @@
         "material": "TIPPED_ARROW",
         "potionData": {
             "vanillaType": "water_breathing",
-            "type": "water_breathing",
+            "type": "WATER_BREATHING",
             "upgraded": false,
             "extended": false
         }
@@ -12379,7 +12379,7 @@
         "material": "POTION",
         "potionData": {
             "vanillaType": "long_water_breathing",
-            "type": "water_breathing",
+            "type": "WATER_BREATHING",
             "upgraded": false,
             "extended": true
         }
@@ -12487,7 +12487,7 @@
         "material": "SPLASH_POTION",
         "potionData": {
             "vanillaType": "long_water_breathing",
-            "type": "water_breathing",
+            "type": "WATER_BREATHING",
             "upgraded": false,
             "extended": true
         }
@@ -12645,7 +12645,7 @@
         "material": "LINGERING_POTION",
         "potionData": {
             "vanillaType": "long_water_breathing",
-            "type": "water_breathing",
+            "type": "WATER_BREATHING",
             "upgraded": false,
             "extended": true
         }
@@ -13003,7 +13003,7 @@
         "material": "TIPPED_ARROW",
         "potionData": {
             "vanillaType": "long_water_breathing",
-            "type": "water_breathing",
+            "type": "WATER_BREATHING",
             "upgraded": false,
             "extended": true
         }
@@ -13061,7 +13061,7 @@
         "material": "POTION",
         "potionData": {
             "vanillaType": "healing",
-            "type": "healing",
+            "type": "HEALING",
             "upgraded": false,
             "extended": false
         }
@@ -13085,7 +13085,7 @@
         "material": "SPLASH_POTION",
         "potionData": {
             "vanillaType": "healing",
-            "type": "healing",
+            "type": "HEALING",
             "upgraded": false,
             "extended": false
         }
@@ -13117,7 +13117,7 @@
         "material": "LINGERING_POTION",
         "potionData": {
             "vanillaType": "healing",
-            "type": "healing",
+            "type": "HEALING",
             "upgraded": false,
             "extended": false
         }
@@ -13181,7 +13181,7 @@
         "material": "TIPPED_ARROW",
         "potionData": {
             "vanillaType": "healing",
-            "type": "healing",
+            "type": "HEALING",
             "upgraded": false,
             "extended": false
         }
@@ -13197,7 +13197,7 @@
         "material": "POTION",
         "potionData": {
             "vanillaType": "strong_healing",
-            "type": "healing",
+            "type": "HEALING",
             "upgraded": true,
             "extended": false
         }
@@ -13253,7 +13253,7 @@
         "material": "SPLASH_POTION",
         "potionData": {
             "vanillaType": "strong_healing",
-            "type": "healing",
+            "type": "HEALING",
             "upgraded": true,
             "extended": false
         }
@@ -13333,7 +13333,7 @@
         "material": "LINGERING_POTION",
         "potionData": {
             "vanillaType": "strong_healing",
-            "type": "healing",
+            "type": "HEALING",
             "upgraded": true,
             "extended": false
         }
@@ -13509,7 +13509,7 @@
         "material": "TIPPED_ARROW",
         "potionData": {
             "vanillaType": "strong_healing",
-            "type": "healing",
+            "type": "HEALING",
             "upgraded": true,
             "extended": false
         }
@@ -13541,7 +13541,7 @@
         "material": "POTION",
         "potionData": {
             "vanillaType": "harming",
-            "type": "harming",
+            "type": "HARMING",
             "upgraded": false,
             "extended": false
         }
@@ -13565,7 +13565,7 @@
         "material": "SPLASH_POTION",
         "potionData": {
             "vanillaType": "harming",
-            "type": "harming",
+            "type": "HARMING",
             "upgraded": false,
             "extended": false
         }
@@ -13597,7 +13597,7 @@
         "material": "LINGERING_POTION",
         "potionData": {
             "vanillaType": "harming",
-            "type": "harming",
+            "type": "HARMING",
             "upgraded": false,
             "extended": false
         }
@@ -13661,7 +13661,7 @@
         "material": "TIPPED_ARROW",
         "potionData": {
             "vanillaType": "harming",
-            "type": "harming",
+            "type": "HARMING",
             "upgraded": false,
             "extended": false
         }
@@ -13677,7 +13677,7 @@
         "material": "POTION",
         "potionData": {
             "vanillaType": "strong_harming",
-            "type": "harming",
+            "type": "HARMING",
             "upgraded": true,
             "extended": false
         }
@@ -13733,7 +13733,7 @@
         "material": "SPLASH_POTION",
         "potionData": {
             "vanillaType": "strong_harming",
-            "type": "harming",
+            "type": "HARMING",
             "upgraded": true,
             "extended": false
         }
@@ -13813,7 +13813,7 @@
         "material": "LINGERING_POTION",
         "potionData": {
             "vanillaType": "strong_harming",
-            "type": "harming",
+            "type": "HARMING",
             "upgraded": true,
             "extended": false
         }
@@ -13989,7 +13989,7 @@
         "material": "TIPPED_ARROW",
         "potionData": {
             "vanillaType": "strong_harming",
-            "type": "harming",
+            "type": "HARMING",
             "upgraded": true,
             "extended": false
         }
@@ -14021,7 +14021,7 @@
         "material": "POTION",
         "potionData": {
             "vanillaType": "poison",
-            "type": "poison",
+            "type": "POISON",
             "upgraded": false,
             "extended": false
         }
@@ -14041,7 +14041,7 @@
         "material": "SPLASH_POTION",
         "potionData": {
             "vanillaType": "poison",
-            "type": "poison",
+            "type": "POISON",
             "upgraded": false,
             "extended": false
         }
@@ -14067,7 +14067,7 @@
         "material": "LINGERING_POTION",
         "potionData": {
             "vanillaType": "poison",
-            "type": "poison",
+            "type": "POISON",
             "upgraded": false,
             "extended": false
         }
@@ -14117,7 +14117,7 @@
         "material": "TIPPED_ARROW",
         "potionData": {
             "vanillaType": "poison",
-            "type": "poison",
+            "type": "POISON",
             "upgraded": false,
             "extended": false
         }
@@ -14131,7 +14131,7 @@
         "material": "POTION",
         "potionData": {
             "vanillaType": "strong_poison",
-            "type": "poison",
+            "type": "POISON",
             "upgraded": true,
             "extended": false
         }
@@ -14175,7 +14175,7 @@
         "material": "SPLASH_POTION",
         "potionData": {
             "vanillaType": "strong_poison",
-            "type": "poison",
+            "type": "POISON",
             "upgraded": true,
             "extended": false
         }
@@ -14237,7 +14237,7 @@
         "material": "LINGERING_POTION",
         "potionData": {
             "vanillaType": "strong_poison",
-            "type": "poison",
+            "type": "POISON",
             "upgraded": true,
             "extended": false
         }
@@ -14371,7 +14371,7 @@
         "material": "TIPPED_ARROW",
         "potionData": {
             "vanillaType": "strong_poison",
-            "type": "poison",
+            "type": "POISON",
             "upgraded": true,
             "extended": false
         }
@@ -14397,7 +14397,7 @@
         "material": "POTION",
         "potionData": {
             "vanillaType": "long_poison",
-            "type": "poison",
+            "type": "POISON",
             "upgraded": false,
             "extended": true
         }
@@ -14465,7 +14465,7 @@
         "material": "SPLASH_POTION",
         "potionData": {
             "vanillaType": "long_poison",
-            "type": "poison",
+            "type": "POISON",
             "upgraded": false,
             "extended": true
         }
@@ -14563,7 +14563,7 @@
         "material": "LINGERING_POTION",
         "potionData": {
             "vanillaType": "long_poison",
-            "type": "poison",
+            "type": "POISON",
             "upgraded": false,
             "extended": true
         }
@@ -14781,7 +14781,7 @@
         "material": "TIPPED_ARROW",
         "potionData": {
             "vanillaType": "long_poison",
-            "type": "poison",
+            "type": "POISON",
             "upgraded": false,
             "extended": true
         }
@@ -14819,7 +14819,7 @@
         "material": "POTION",
         "potionData": {
             "vanillaType": "regeneration",
-            "type": "regeneration",
+            "type": "REGENERATION",
             "upgraded": false,
             "extended": false
         }
@@ -14839,7 +14839,7 @@
         "material": "SPLASH_POTION",
         "potionData": {
             "vanillaType": "regeneration",
-            "type": "regeneration",
+            "type": "REGENERATION",
             "upgraded": false,
             "extended": false
         }
@@ -14865,7 +14865,7 @@
         "material": "LINGERING_POTION",
         "potionData": {
             "vanillaType": "regeneration",
-            "type": "regeneration",
+            "type": "REGENERATION",
             "upgraded": false,
             "extended": false
         }
@@ -14915,7 +14915,7 @@
         "material": "TIPPED_ARROW",
         "potionData": {
             "vanillaType": "regeneration",
-            "type": "regeneration",
+            "type": "REGENERATION",
             "upgraded": false,
             "extended": false
         }
@@ -14929,7 +14929,7 @@
         "material": "POTION",
         "potionData": {
             "vanillaType": "strong_regeneration",
-            "type": "regeneration",
+            "type": "REGENERATION",
             "upgraded": true,
             "extended": false
         }
@@ -14973,7 +14973,7 @@
         "material": "SPLASH_POTION",
         "potionData": {
             "vanillaType": "strong_regeneration",
-            "type": "regeneration",
+            "type": "REGENERATION",
             "upgraded": true,
             "extended": false
         }
@@ -15035,7 +15035,7 @@
         "material": "LINGERING_POTION",
         "potionData": {
             "vanillaType": "strong_regeneration",
-            "type": "regeneration",
+            "type": "REGENERATION",
             "upgraded": true,
             "extended": false
         }
@@ -15169,7 +15169,7 @@
         "material": "TIPPED_ARROW",
         "potionData": {
             "vanillaType": "strong_regeneration",
-            "type": "regeneration",
+            "type": "REGENERATION",
             "upgraded": true,
             "extended": false
         }
@@ -15195,7 +15195,7 @@
         "material": "POTION",
         "potionData": {
             "vanillaType": "long_regeneration",
-            "type": "regeneration",
+            "type": "REGENERATION",
             "upgraded": false,
             "extended": true
         }
@@ -15263,7 +15263,7 @@
         "material": "SPLASH_POTION",
         "potionData": {
             "vanillaType": "long_regeneration",
-            "type": "regeneration",
+            "type": "REGENERATION",
             "upgraded": false,
             "extended": true
         }
@@ -15361,7 +15361,7 @@
         "material": "LINGERING_POTION",
         "potionData": {
             "vanillaType": "long_regeneration",
-            "type": "regeneration",
+            "type": "REGENERATION",
             "upgraded": false,
             "extended": true
         }
@@ -15579,7 +15579,7 @@
         "material": "TIPPED_ARROW",
         "potionData": {
             "vanillaType": "long_regeneration",
-            "type": "regeneration",
+            "type": "REGENERATION",
             "upgraded": false,
             "extended": true
         }
@@ -15617,7 +15617,7 @@
         "material": "POTION",
         "potionData": {
             "vanillaType": "strength",
-            "type": "strength",
+            "type": "STRENGTH",
             "upgraded": false,
             "extended": false
         }
@@ -15637,7 +15637,7 @@
         "material": "SPLASH_POTION",
         "potionData": {
             "vanillaType": "strength",
-            "type": "strength",
+            "type": "STRENGTH",
             "upgraded": false,
             "extended": false
         }
@@ -15663,7 +15663,7 @@
         "material": "LINGERING_POTION",
         "potionData": {
             "vanillaType": "strength",
-            "type": "strength",
+            "type": "STRENGTH",
             "upgraded": false,
             "extended": false
         }
@@ -15713,7 +15713,7 @@
         "material": "TIPPED_ARROW",
         "potionData": {
             "vanillaType": "strength",
-            "type": "strength",
+            "type": "STRENGTH",
             "upgraded": false,
             "extended": false
         }
@@ -15727,7 +15727,7 @@
         "material": "POTION",
         "potionData": {
             "vanillaType": "strong_strength",
-            "type": "strength",
+            "type": "STRENGTH",
             "upgraded": true,
             "extended": false
         }
@@ -15771,7 +15771,7 @@
         "material": "SPLASH_POTION",
         "potionData": {
             "vanillaType": "strong_strength",
-            "type": "strength",
+            "type": "STRENGTH",
             "upgraded": true,
             "extended": false
         }
@@ -15833,7 +15833,7 @@
         "material": "LINGERING_POTION",
         "potionData": {
             "vanillaType": "strong_strength",
-            "type": "strength",
+            "type": "STRENGTH",
             "upgraded": true,
             "extended": false
         }
@@ -15967,7 +15967,7 @@
         "material": "TIPPED_ARROW",
         "potionData": {
             "vanillaType": "strong_strength",
-            "type": "strength",
+            "type": "STRENGTH",
             "upgraded": true,
             "extended": false
         }
@@ -15993,7 +15993,7 @@
         "material": "POTION",
         "potionData": {
             "vanillaType": "long_strength",
-            "type": "strength",
+            "type": "STRENGTH",
             "upgraded": false,
             "extended": true
         }
@@ -16061,7 +16061,7 @@
         "material": "SPLASH_POTION",
         "potionData": {
             "vanillaType": "long_strength",
-            "type": "strength",
+            "type": "STRENGTH",
             "upgraded": false,
             "extended": true
         }
@@ -16159,7 +16159,7 @@
         "material": "LINGERING_POTION",
         "potionData": {
             "vanillaType": "long_strength",
-            "type": "strength",
+            "type": "STRENGTH",
             "upgraded": false,
             "extended": true
         }
@@ -16377,7 +16377,7 @@
         "material": "TIPPED_ARROW",
         "potionData": {
             "vanillaType": "long_strength",
-            "type": "strength",
+            "type": "STRENGTH",
             "upgraded": false,
             "extended": true
         }
@@ -16415,7 +16415,7 @@
         "material": "POTION",
         "potionData": {
             "vanillaType": "weakness",
-            "type": "weakness",
+            "type": "WEAKNESS",
             "upgraded": false,
             "extended": false
         }
@@ -16435,7 +16435,7 @@
         "material": "SPLASH_POTION",
         "potionData": {
             "vanillaType": "weakness",
-            "type": "weakness",
+            "type": "WEAKNESS",
             "upgraded": false,
             "extended": false
         }
@@ -16461,7 +16461,7 @@
         "material": "LINGERING_POTION",
         "potionData": {
             "vanillaType": "weakness",
-            "type": "weakness",
+            "type": "WEAKNESS",
             "upgraded": false,
             "extended": false
         }
@@ -16511,7 +16511,7 @@
         "material": "TIPPED_ARROW",
         "potionData": {
             "vanillaType": "weakness",
-            "type": "weakness",
+            "type": "WEAKNESS",
             "upgraded": false,
             "extended": false
         }
@@ -16525,7 +16525,7 @@
         "material": "POTION",
         "potionData": {
             "vanillaType": "long_weakness",
-            "type": "weakness",
+            "type": "WEAKNESS",
             "upgraded": false,
             "extended": true
         }
@@ -16593,7 +16593,7 @@
         "material": "SPLASH_POTION",
         "potionData": {
             "vanillaType": "long_weakness",
-            "type": "weakness",
+            "type": "WEAKNESS",
             "upgraded": false,
             "extended": true
         }
@@ -16691,7 +16691,7 @@
         "material": "LINGERING_POTION",
         "potionData": {
             "vanillaType": "long_weakness",
-            "type": "weakness",
+            "type": "WEAKNESS",
             "upgraded": false,
             "extended": true
         }
@@ -16909,7 +16909,7 @@
         "material": "TIPPED_ARROW",
         "potionData": {
             "vanillaType": "long_weakness",
-            "type": "weakness",
+            "type": "WEAKNESS",
             "upgraded": false,
             "extended": true
         }
@@ -16947,7 +16947,7 @@
         "material": "POTION",
         "potionData": {
             "vanillaType": "luck",
-            "type": "luck",
+            "type": "LUCK",
             "upgraded": false,
             "extended": false
         }
@@ -16963,7 +16963,7 @@
         "material": "SPLASH_POTION",
         "potionData": {
             "vanillaType": "luck",
-            "type": "luck",
+            "type": "LUCK",
             "upgraded": false,
             "extended": false
         }
@@ -16983,7 +16983,7 @@
         "material": "LINGERING_POTION",
         "potionData": {
             "vanillaType": "luck",
-            "type": "luck",
+            "type": "LUCK",
             "upgraded": false,
             "extended": false
         }
@@ -17019,7 +17019,7 @@
         "material": "TIPPED_ARROW",
         "potionData": {
             "vanillaType": "luck",
-            "type": "luck",
+            "type": "LUCK",
             "upgraded": false,
             "extended": false
         }
@@ -17031,7 +17031,7 @@
         "material": "POTION",
         "potionData": {
             "vanillaType": "turtle_master",
-            "type": "turtle_master",
+            "type": "TURTLE_MASTER",
             "upgraded": false,
             "extended": false
         }
@@ -17051,7 +17051,7 @@
         "material": "SPLASH_POTION",
         "potionData": {
             "vanillaType": "turtle_master",
-            "type": "turtle_master",
+            "type": "TURTLE_MASTER",
             "upgraded": false,
             "extended": false
         }
@@ -17077,7 +17077,7 @@
         "material": "LINGERING_POTION",
         "potionData": {
             "vanillaType": "turtle_master",
-            "type": "turtle_master",
+            "type": "TURTLE_MASTER",
             "upgraded": false,
             "extended": false
         }
@@ -17127,7 +17127,7 @@
         "material": "TIPPED_ARROW",
         "potionData": {
             "vanillaType": "turtle_master",
-            "type": "turtle_master",
+            "type": "TURTLE_MASTER",
             "upgraded": false,
             "extended": false
         }
@@ -17141,7 +17141,7 @@
         "material": "POTION",
         "potionData": {
             "vanillaType": "strong_turtle_master",
-            "type": "turtle_master",
+            "type": "TURTLE_MASTER",
             "upgraded": true,
             "extended": false
         }
@@ -17185,7 +17185,7 @@
         "material": "SPLASH_POTION",
         "potionData": {
             "vanillaType": "strong_turtle_master",
-            "type": "turtle_master",
+            "type": "TURTLE_MASTER",
             "upgraded": true,
             "extended": false
         }
@@ -17247,7 +17247,7 @@
         "material": "LINGERING_POTION",
         "potionData": {
             "vanillaType": "strong_turtle_master",
-            "type": "turtle_master",
+            "type": "TURTLE_MASTER",
             "upgraded": true,
             "extended": false
         }
@@ -17381,7 +17381,7 @@
         "material": "TIPPED_ARROW",
         "potionData": {
             "vanillaType": "strong_turtle_master",
-            "type": "turtle_master",
+            "type": "TURTLE_MASTER",
             "upgraded": true,
             "extended": false
         }
@@ -17407,7 +17407,7 @@
         "material": "POTION",
         "potionData": {
             "vanillaType": "long_turtle_master",
-            "type": "turtle_master",
+            "type": "TURTLE_MASTER",
             "upgraded": false,
             "extended": true
         }
@@ -17475,7 +17475,7 @@
         "material": "SPLASH_POTION",
         "potionData": {
             "vanillaType": "long_turtle_master",
-            "type": "turtle_master",
+            "type": "TURTLE_MASTER",
             "upgraded": false,
             "extended": true
         }
@@ -17573,7 +17573,7 @@
         "material": "LINGERING_POTION",
         "potionData": {
             "vanillaType": "long_turtle_master",
-            "type": "turtle_master",
+            "type": "TURTLE_MASTER",
             "upgraded": false,
             "extended": true
         }
@@ -17791,7 +17791,7 @@
         "material": "TIPPED_ARROW",
         "potionData": {
             "vanillaType": "long_turtle_master",
-            "type": "turtle_master",
+            "type": "TURTLE_MASTER",
             "upgraded": false,
             "extended": true
         }
@@ -17829,7 +17829,7 @@
         "material": "POTION",
         "potionData": {
             "vanillaType": "slow_falling",
-            "type": "slow_falling",
+            "type": "SLOW_FALLING",
             "upgraded": false,
             "extended": false
         }
@@ -17849,7 +17849,7 @@
         "material": "SPLASH_POTION",
         "potionData": {
             "vanillaType": "slow_falling",
-            "type": "slow_falling",
+            "type": "SLOW_FALLING",
             "upgraded": false,
             "extended": false
         }
@@ -17875,7 +17875,7 @@
         "material": "LINGERING_POTION",
         "potionData": {
             "vanillaType": "slow_falling",
-            "type": "slow_falling",
+            "type": "SLOW_FALLING",
             "upgraded": false,
             "extended": false
         }
@@ -17925,7 +17925,7 @@
         "material": "TIPPED_ARROW",
         "potionData": {
             "vanillaType": "slow_falling",
-            "type": "slow_falling",
+            "type": "SLOW_FALLING",
             "upgraded": false,
             "extended": false
         }
@@ -17939,7 +17939,7 @@
         "material": "POTION",
         "potionData": {
             "vanillaType": "long_slow_falling",
-            "type": "slow_falling",
+            "type": "SLOW_FALLING",
             "upgraded": false,
             "extended": true
         }
@@ -18007,7 +18007,7 @@
         "material": "SPLASH_POTION",
         "potionData": {
             "vanillaType": "long_slow_falling",
-            "type": "slow_falling",
+            "type": "SLOW_FALLING",
             "upgraded": false,
             "extended": true
         }
@@ -18105,7 +18105,7 @@
         "material": "LINGERING_POTION",
         "potionData": {
             "vanillaType": "long_slow_falling",
-            "type": "slow_falling",
+            "type": "SLOW_FALLING",
             "upgraded": false,
             "extended": true
         }
@@ -18323,7 +18323,7 @@
         "material": "TIPPED_ARROW",
         "potionData": {
             "vanillaType": "long_slow_falling",
-            "type": "slow_falling",
+            "type": "SLOW_FALLING",
             "upgraded": false,
             "extended": true
         }
