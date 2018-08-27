@@ -183,8 +183,17 @@ public class FlatItemDbProvider extends ItemDbProvider {
                 return false;
             }
             ItemData pairo = (ItemData) o;
-            return this.material == pairo.getMaterial() &&
-                    (this.potionData == null && pairo.getPotionData() == null) || this.potionData.equals(pairo.getPotionData());
+            return this.material == pairo.getMaterial() && potionDataEquals(pairo);
+        }
+
+        private boolean potionDataEquals(ItemData o) {
+            if (this.potionData == null && o.getPotionData() == null) {
+                return true;
+            } else if (this.potionData != null && o.getPotionData() != null) {
+                return this.potionData.equals(o.getPotionData());
+            } else {
+                return false;
+            }
         }
     }
 }
