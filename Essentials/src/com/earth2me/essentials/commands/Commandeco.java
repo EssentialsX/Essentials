@@ -71,7 +71,7 @@ public class Commandeco extends EssentialsLoopCommand {
     private void take(BigDecimal amount, final User player, final CommandSource sender) throws ChargeException {
         BigDecimal money = player.getMoney();
         BigDecimal minBalance = ess.getSettings().getMinMoney();
-        if (money.subtract(amount).compareTo(minBalance) > 0) {
+        if (money.subtract(amount).compareTo(minBalance) >= 0) {
             player.takeMoney(amount, sender);
         } else if (sender == null) {
             try {

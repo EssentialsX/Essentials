@@ -138,10 +138,10 @@ public class EssentialsPlayerListener implements Listener {
             }
             return;
         }
-            final Location afk = user.getAfkPosition();
-            if (afk == null || !event.getTo().getWorld().equals(afk.getWorld()) || afk.distanceSquared(event.getTo()) > 9) {
-                user.updateActivityOnMove(true);
-            }
+        final Location afk = user.getAfkPosition();
+        if (afk == null || !event.getTo().getWorld().equals(afk.getWorld()) || afk.distanceSquared(event.getTo()) > 9) {
+            user.updateActivityOnMove(true);
+        }
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
@@ -464,8 +464,7 @@ public class EssentialsPlayerListener implements Listener {
                         if (spyer.isSocialSpyEnabled() && !player.equals(spyer.getBase())) {
                             if (user.isMuted() && ess.getSettings().getSocialSpyListenMutedPlayers()) {
                                 spyer.sendMessage(tl("socialSpyMutedPrefix") + player.getDisplayName() + ": " + event.getMessage());
-                            }
-                            else {
+                            } else {
                                 spyer.sendMessage(tl("socialSpyPrefix") + player.getDisplayName() + ": " + event.getMessage());
                             }
                         }
@@ -786,7 +785,7 @@ public class EssentialsPlayerListener implements Listener {
         final User user = ess.getUser(event.getPlayer());
             user.updateActivityOnInteract(true);
     }
-    
+
     private final class PlayerListenerPre1_12 implements Listener {
 
         @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
@@ -798,7 +797,7 @@ public class EssentialsPlayerListener implements Listener {
             }
         }
     }
-    
+
     private final class PlayerListener1_12 implements Listener {
 
         @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)

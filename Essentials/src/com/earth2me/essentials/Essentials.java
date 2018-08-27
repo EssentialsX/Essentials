@@ -446,7 +446,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
                     return pc.execute(cSender, commandLabel, args);
                 } catch (final Exception ex) {
                     Bukkit.getLogger().log(Level.SEVERE, ex.getMessage(), ex);
-                    cSender.sendMessage(ChatColor.RED + "An internal error occurred while attempting to perform this command");
+                    cSender.sendMessage(tl("internalError"));
                     return true;
                 }
             }
