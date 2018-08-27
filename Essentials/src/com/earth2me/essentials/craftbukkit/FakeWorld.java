@@ -596,12 +596,12 @@ public class FakeWorld implements World {
 
     @Override
     public void playSound(Location location, Sound sound, SoundCategory soundCategory, float v, float v1) {
-
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
     public void playSound(Location location, String s, SoundCategory soundCategory, float v, float v1) {
-
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
@@ -646,62 +646,72 @@ public class FakeWorld implements World {
 
     @Override
     public void spawnParticle(Particle particle, Location location, int i) {
-
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
     public void spawnParticle(Particle particle, double v, double v1, double v2, int i) {
-
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
     public <T> void spawnParticle(Particle particle, Location location, int i, T t) {
-
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
     public <T> void spawnParticle(Particle particle, double v, double v1, double v2, int i, T t) {
-
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
     public void spawnParticle(Particle particle, Location location, int i, double v, double v1, double v2) {
-
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
     public void spawnParticle(Particle particle, double v, double v1, double v2, int i, double v3, double v4, double v5) {
-
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
     public <T> void spawnParticle(Particle particle, Location location, int i, double v, double v1, double v2, T t) {
-
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
     public <T> void spawnParticle(Particle particle, double v, double v1, double v2, int i, double v3, double v4, double v5, T t) {
-
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
     public void spawnParticle(Particle particle, Location location, int i, double v, double v1, double v2, double v3) {
-
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
     public void spawnParticle(Particle particle, double v, double v1, double v2, int i, double v3, double v4, double v5, double v6) {
-
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
     public <T> void spawnParticle(Particle particle, Location location, int i, double v, double v1, double v2, double v3, T t) {
-
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
     public <T> void spawnParticle(Particle particle, double v, double v1, double v2, int i, double v3, double v4, double v5, double v6, T t) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
 
+    @Override
+    public <T> void spawnParticle(Particle particle, Location location, int i, double v, double v1, double v2, double v3, T t, boolean b) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public <T> void spawnParticle(Particle particle, double v, double v1, double v2, int i, double v3, double v4, double v5, double v6, T t, boolean b) {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
