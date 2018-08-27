@@ -47,6 +47,7 @@ public class ItemDb implements IConf, net.ess3.api.IItemDb {
         }
 
         provider.rebuild(file.getLines());
+        LOGGER.info(String.format("Loaded %s items.", provider.listNames().size()));
     }
 
     @Override
