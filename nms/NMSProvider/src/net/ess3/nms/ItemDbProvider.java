@@ -50,12 +50,12 @@ public abstract class ItemDbProvider implements Provider {
     }
 
     /**
-     * Resolves a material name to its corresponding Material
+     * Resolves a material name to the corresponding ItemData.
      *
-     * @param name The material name to look up
-     * @return The corresponding Material for the given name
+     * @param name The item name to look up
+     * @return The corresponding ItemData for the given name
      */
-    public abstract Material resolve(String name);
+    public abstract ItemData resolve(String name);
 
     /**
      * Whether the provider supports legacy ID values or not.

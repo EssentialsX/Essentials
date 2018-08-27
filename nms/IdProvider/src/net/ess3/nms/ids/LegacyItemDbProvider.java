@@ -24,7 +24,7 @@ public class LegacyItemDbProvider extends ItemDbProvider {
     private final transient Pattern csvSplitPattern = Pattern.compile("(\"([^\"]*)\"|[^,]*)(,|$)");
 
     @Override
-    public Material resolve(String name) {
+    public ItemData resolve(String name) {
         // TODO: refactor getStack into here
         return null;
     }

@@ -20,8 +20,8 @@ public class FlatItemDbProvider extends ItemDbProvider {
     private final transient Map<String, List<String>> names = new HashMap<>();
 
     @Override
-    public Material resolve(String name) {
-        return Objects.requireNonNull(getByName(name)).getMaterial();
+    public ItemData resolve(String name) {
+        return getByName(name);
     }
 
     @Override
