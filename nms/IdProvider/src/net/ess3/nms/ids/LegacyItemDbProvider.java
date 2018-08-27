@@ -1,13 +1,10 @@
 package net.ess3.nms.ids;
 
 import net.ess3.nms.ItemDbProvider;
-import net.ess3.nms.PotionMetaProvider;
-import net.ess3.nms.SpawnEggProvider;
 import net.ess3.nms.refl.ReflUtil;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.Server;
 import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
 
@@ -19,7 +16,7 @@ public class LegacyItemDbProvider extends ItemDbProvider {
     private final transient Map<String, Integer> items = new HashMap<>();
     private final transient Map<ItemData, List<String>> names = new HashMap<>();
     private final transient Map<ItemData, String> primaryNames = new HashMap<>();
-    private final transient Map<Integer, ItemData> legacyIds = new HashMap<>();
+    private final transient Map<Integer, LegacyItemData> legacyIds = new HashMap<>();
     private final transient Map<String, Short> durabilities = new HashMap<>();
     private final transient Map<String, String> nbtData = new HashMap<>();
 
@@ -147,10 +144,10 @@ public class LegacyItemDbProvider extends ItemDbProvider {
 
     @Override
     public String getPrimaryName(ItemStack item) {
-        ItemData itemData = new ItemData(null, item.getType(), item.getTypeId(), item.getDurability(), null);
+        ItemData itemData = new LegacyItemData(null, item.getType(), item.getTypeId(), item.getDurability(), null);
         String name = primaryNames.get(itemData);
         if (name == null) {
-            itemData = new ItemData(null, item.getType(), item.getTypeId(), (short) 0, null);
+            itemData = new LegacyItemData(null, item.getType(), item.getTypeId(), (short) 0, null);
             name = primaryNames.get(itemData);
             if (name == null) {
                 return null;
@@ -161,10 +158,10 @@ public class LegacyItemDbProvider extends ItemDbProvider {
 
     @Override
     public List<String> getNames(ItemStack item) {
-        ItemData itemData = new ItemData(null, item.getType(), item.getTypeId(), item.getDurability(), null);
+        ItemData itemData = new LegacyItemData(null, item.getType(), item.getTypeId(), item.getDurability(), null);
         List<String> nameList = names.get(itemData);
         if (nameList == null) {
-            itemData = new ItemData(null, item.getType(), item.getTypeId(), (short) 0, null);
+            itemData = new LegacyItemData(null, item.getType(), item.getTypeId(), (short) 0, null);
             nameList = names.get(itemData);
             if (nameList == null) {
                 return null;
@@ -200,7 +197,7 @@ public class LegacyItemDbProvider extends ItemDbProvider {
         addFrom(lines);
     }
 
-    private ItemData parseLine(String line) {
+    private LegacyItemData parseLine(String line) {
         String itemName = null;
         int numeric = -1;
         short data = 0;
@@ -242,10 +239,10 @@ public class LegacyItemDbProvider extends ItemDbProvider {
             return null;
         }
 
-        return new ItemData(itemName, material, numeric, data, nbt);
+        return new LegacyItemData(itemName, material, numeric, data, nbt);
     }
 
-    private void addItem(ItemData itemData) {
+    private void addItem(LegacyItemData itemData) {
         final String name = itemData.getItemName();
         final int numeric = itemData.getItemNo();
         final short data = itemData.getItemData();
@@ -289,6 +286,33 @@ public class LegacyItemDbProvider extends ItemDbProvider {
             return true;
         } catch (NumberFormatException e) {
             return false;
+        }
+    }
+
+    public static class LegacyItemData extends ItemData {
+        private LegacyItemData(String itemName, Material material, final int legacyId, final short itemData, String nbt) {
+            this.itemName = itemName;
+            this.material = material;
+            this.legacyId = legacyId;
+            this.itemData = itemData;
+            this.nbt = nbt;
+        }
+
+        @Override
+        public int hashCode() {
+            return (31 * legacyId) ^ itemData;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (o == null) {
+                return false;
+            }
+            if (!(o instanceof ItemData)) {
+                return false;
+            }
+            ItemData pairo = (ItemData) o;
+            return this.legacyId == pairo.getItemNo() && this.itemData == pairo.getItemData();
         }
     }
 }

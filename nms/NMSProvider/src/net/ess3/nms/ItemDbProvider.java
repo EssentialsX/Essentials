@@ -187,35 +187,13 @@ public abstract class ItemDbProvider implements Provider {
         this.potionMetaProvider = potionMetaProvider;
     }
 
-    public static class ItemData {
-        final private String itemName;
-        final private Material material;
-        private int legacyId;
-        private short itemData;
-        final private String nbt;
-        private PotionData potionData;
-
-        public ItemData(String itemName, Material material, String nbt) {
-            this.itemName = itemName;
-            this.material = material;
-            this.nbt = nbt;
-        }
-
-        public ItemData(String itemName, Material material, String nbt, PotionData potionData) {
-            this.itemName = itemName;
-            this.material = material;
-            this.nbt = nbt;
-            this.potionData = potionData;
-        }
-
-        @Deprecated
-        public ItemData(String itemName, Material material, final int legacyId, final short itemData, String nbt) {
-            this.itemName = itemName;
-            this.material = material;
-            this.legacyId = legacyId;
-            this.itemData = itemData;
-            this.nbt = nbt;
-        }
+    public abstract static class ItemData {
+        protected String itemName;
+        protected Material material;
+        protected int legacyId;
+        protected short itemData;
+        protected String nbt;
+        protected PotionData potionData;
 
         public String getItemName() {
             return itemName;
@@ -225,7 +203,6 @@ public abstract class ItemDbProvider implements Provider {
             return material;
         }
 
-        @Deprecated
         public int getItemNo() {
             return legacyId;
         }
@@ -236,11 +213,6 @@ public abstract class ItemDbProvider implements Provider {
 
         public String getNbt() {
             return nbt;
-        }
-
-        @Override
-        public int hashCode() {
-            return (31 * material.hashCode()) ^ itemData;
         }
 
         @Override

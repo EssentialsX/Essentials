@@ -1,12 +1,14 @@
 package net.ess3.nms.flattened;
 
-import com.google.gson.*;
+import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import net.ess3.nms.ItemDbProvider;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.potion.PotionData;
-import org.bukkit.potion.PotionType;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -14,7 +16,7 @@ import java.util.stream.Collectors;
 public class FlatItemDbProvider extends ItemDbProvider {
     private static Gson gson = new Gson();
 
-    private final transient Map<String, ItemData> primaryNames = new HashMap<>();
+    private final transient Map<String, FlatItemData> primaryNames = new HashMap<>();
     private final transient Map<String, List<String>> names = new HashMap<>();
 
     @Override
@@ -39,9 +41,9 @@ public class FlatItemDbProvider extends ItemDbProvider {
 
     @Override
     public String getPrimaryName(ItemStack item) {
-        ItemData itemData = new ItemData(null, item.getType(), null);
+        ItemData itemData = new FlatItemData(null, item.getType(), null);
 
-        for (Map.Entry<String, ItemData> entry : primaryNames.entrySet()) {
+        for (Map.Entry<String, FlatItemData> entry : primaryNames.entrySet()) {
             if (entry.getValue().equals(itemData)) {
                 return entry.getKey();
             }
@@ -116,7 +118,7 @@ public class FlatItemDbProvider extends ItemDbProvider {
             JsonElement element = entry.getValue();
 
             if (element.isJsonObject()) {
-                ItemData data = gson.fromJson(element, ItemData.class);
+                FlatItemData data = gson.fromJson(element, FlatItemData.class);
                 primaryNames.put(key, data);
             } else {
                 try {
@@ -158,5 +160,31 @@ public class FlatItemDbProvider extends ItemDbProvider {
     @Override
     public String getHumanName() {
         return "Post-1.13 item database provider";
+    }
+
+    public static class FlatItemData extends ItemData {
+        private FlatItemData(String itemName, Material material, PotionData potionData) {
+            this.itemName = itemName;
+            this.material = material;
+            this.potionData = potionData;
+        }
+
+        @Override
+        public int hashCode() {
+            return (31 * material.hashCode()) ^ potionData.hashCode();
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (o == null) {
+                return false;
+            }
+            if (!(o instanceof ItemData)) {
+                return false;
+            }
+            ItemData pairo = (ItemData) o;
+            return this.material == pairo.getMaterial() &&
+                    (this.potionData == null && pairo.getPotionData() == null) || this.potionData.equals(pairo.getPotionData());
+        }
     }
 }
