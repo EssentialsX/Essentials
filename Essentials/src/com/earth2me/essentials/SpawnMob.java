@@ -200,7 +200,7 @@ public class SpawnMob {
                     invent.setLeggings(new ItemStack(Material.LEATHER_LEGGINGS, 1));
                     invent.setChestplate(new ItemStack(Material.LEATHER_CHESTPLATE, 1));
                     invent.setHelmet(new ItemStack(Material.LEATHER_HELMET, 1));
-                } else {
+                } else if (inputData.contains("iron")) {
                     invent.setBoots(new ItemStack(Material.IRON_BOOTS, 1));
                     invent.setLeggings(new ItemStack(Material.IRON_LEGGINGS, 1));
                     invent.setChestplate(new ItemStack(Material.IRON_CHESTPLATE, 1));

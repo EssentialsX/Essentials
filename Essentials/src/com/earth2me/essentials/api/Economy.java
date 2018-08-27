@@ -78,7 +78,14 @@ public class Economy {
      */
     @Deprecated
     public static double getMoney(String name) throws UserDoesNotExistException {
-        return getMoneyExact(name).doubleValue();
+        BigDecimal exactAmount = getMoneyExact(name);
+        double amount = exactAmount.doubleValue();
+        if (new BigDecimal(amount).compareTo(exactAmount) > 0) {
+            // closest double is bigger than the exact amount
+            // -> get the previous double value to not return more money than the user has
+            amount = Math.nextAfter(amount, Double.NEGATIVE_INFINITY);
+        }
+        return amount;
     }
 
     public static BigDecimal getMoneyExact(String name) throws UserDoesNotExistException {

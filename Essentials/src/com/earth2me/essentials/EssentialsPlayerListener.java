@@ -138,10 +138,10 @@ public class EssentialsPlayerListener implements Listener {
             }
             return;
         }
-            final Location afk = user.getAfkPosition();
-            if (afk == null || !event.getTo().getWorld().equals(afk.getWorld()) || afk.distanceSquared(event.getTo()) > 9) {
-                user.updateActivityOnMove(true);
-            }
+        final Location afk = user.getAfkPosition();
+        if (afk == null || !event.getTo().getWorld().equals(afk.getWorld()) || afk.distanceSquared(event.getTo()) > 9) {
+            user.updateActivityOnMove(true);
+        }
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
@@ -152,7 +152,7 @@ public class EssentialsPlayerListener implements Listener {
             event.setQuitMessage(null);
         } else if (ess.getSettings().isCustomQuitMessage() && event.getQuitMessage() != null) {
             final Player player = event.getPlayer();
-            event.setQuitMessage(ess.getSettings().getCustomQuitMessage().replace("{PLAYER}", player.getDisplayName()).replace("{USERNAME}", player.getName()));
+            event.setQuitMessage(ess.getSettings().getCustomQuitMessage().replace("{PLAYER}", player.getDisplayName()).replace("{USERNAME}", player.getName()).replace("{ONLINE}", NumberFormat.getInstance().format(ess.getOnlinePlayers().size())));
         }
 
         user.startTransaction();
@@ -258,7 +258,8 @@ public class EssentialsPlayerListener implements Listener {
                 } else if (ess.getSettings().isCustomJoinMessage()) {
                     String msg = ess.getSettings().getCustomJoinMessage()
                         .replace("{PLAYER}", player.getDisplayName()).replace("{USERNAME}", player.getName())
-                        .replace("{UNIQUE}", NumberFormat.getInstance().format(ess.getUserMap().getUniqueUsers()));
+                        .replace("{UNIQUE}", NumberFormat.getInstance().format(ess.getUserMap().getUniqueUsers()))
+                        .replace("{ONLINE}", NumberFormat.getInstance().format(ess.getOnlinePlayers().size()));
                     ess.getServer().broadcastMessage(msg);
                 } else if (ess.getSettings().allowSilentJoinQuit()) {
                     ess.getServer().broadcastMessage(message);
@@ -463,8 +464,7 @@ public class EssentialsPlayerListener implements Listener {
                         if (spyer.isSocialSpyEnabled() && !player.equals(spyer.getBase())) {
                             if (user.isMuted() && ess.getSettings().getSocialSpyListenMutedPlayers()) {
                                 spyer.sendMessage(tl("socialSpyMutedPrefix") + player.getDisplayName() + ": " + event.getMessage());
-                            }
-                            else {
+                            } else {
                                 spyer.sendMessage(tl("socialSpyPrefix") + player.getDisplayName() + ": " + event.getMessage());
                             }
                         }
@@ -785,7 +785,7 @@ public class EssentialsPlayerListener implements Listener {
         final User user = ess.getUser(event.getPlayer());
             user.updateActivityOnInteract(true);
     }
-    
+
     private final class PlayerListenerPre1_12 implements Listener {
 
         @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
@@ -797,7 +797,7 @@ public class EssentialsPlayerListener implements Listener {
             }
         }
     }
-    
+
     private final class PlayerListener1_12 implements Listener {
 
         @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
