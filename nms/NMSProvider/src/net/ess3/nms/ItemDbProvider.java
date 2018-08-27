@@ -215,19 +215,6 @@ public abstract class ItemDbProvider implements Provider {
             return nbt;
         }
 
-        @Override
-        public boolean equals(Object o) {
-            if (o == null) {
-                return false;
-            }
-            if (!(o instanceof ItemData)) {
-                return false;
-            }
-            ItemData pairo = (ItemData) o;
-            // TODO: generalise comparison
-            return this.material == pairo.getMaterial() && this.itemData == pairo.getItemData() && this.nbt.equals(pairo.getNbt());
-        }
-
         public PotionData getPotionData() {
             return this.potionData;
         }
