@@ -592,14 +592,33 @@ public class EssentialsPlayerListener implements Listener {
     public void onPlayerInteract(final PlayerInteractEvent event) {
         switch (event.getAction()) {
             case RIGHT_CLICK_BLOCK:
-                if (!event.isCancelled() && event.getClickedBlock().getType() == Material.LEGACY_BED && ess.getSettings().getUpdateBedAtDaytime()) {
-                    User player = ess.getUser(event.getPlayer());
-                    if (player.isAuthorized("essentials.sethome.bed")) {
-                        player.getBase().setBedSpawnLocation(event.getClickedBlock().getLocation());
-                        player.sendMessage(tl("bedSet", player.getLocation().getWorld().getName(), player.getLocation().getBlockX(), player.getLocation().getBlockY(), player.getLocation().getBlockZ()));
-                    }
+                switch (event.getClickedBlock().getType()) {
+                    case BLACK_BED:
+                    case BLUE_BED:
+                    case BROWN_BED:
+                    case CYAN_BED:
+                    case GRAY_BED:
+                    case GREEN_BED:
+                    case LIGHT_BLUE_BED:
+                    case LIGHT_GRAY_BED:
+                    case LIME_BED:
+                    case MAGENTA_BED:
+                    case ORANGE_BED:
+                    case PINK_BED:
+                    case PURPLE_BED:
+                    case RED_BED:
+                    case WHITE_BED:
+                    case YELLOW_BED:
+                    case LEGACY_BED:
+                        if (!event.isCancelled() && ess.getSettings().getUpdateBedAtDaytime()) {
+                            User player = ess.getUser(event.getPlayer());
+                            if (player.isAuthorized("essentials.sethome.bed")) {
+                                player.getBase().setBedSpawnLocation(event.getClickedBlock().getLocation());
+                                player.sendMessage(tl("bedSet", player.getLocation().getWorld().getName(), player.getLocation().getBlockX(), player.getLocation().getBlockY(), player.getLocation().getBlockZ()));
+                            }
+                        }
+                        break;
                 }
-                break;
             case LEFT_CLICK_AIR:
                 if (event.getPlayer().isFlying()) {
                     final User user = ess.getUser(event.getPlayer());
