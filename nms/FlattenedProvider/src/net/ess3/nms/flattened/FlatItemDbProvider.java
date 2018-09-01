@@ -7,6 +7,7 @@ import com.google.gson.JsonParser;
 import net.ess3.nms.ItemDbProvider;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.potion.PotionData;
 
@@ -41,7 +42,7 @@ public class FlatItemDbProvider extends ItemDbProvider {
 
     @Override
     public String getPrimaryName(ItemStack item) {
-        ItemData itemData = new FlatItemData(null, item.getType(), null);
+        ItemData itemData = new FlatItemData(null, item.getType(), getPotionData(item));
 
         for (Map.Entry<String, FlatItemData> entry : primaryNames.entrySet()) {
             if (entry.getValue().equals(itemData)) {
@@ -49,6 +50,15 @@ public class FlatItemDbProvider extends ItemDbProvider {
             }
         }
 
+        return null;
+    }
+
+    private PotionData getPotionData(ItemStack item) {
+        ItemMeta meta = item.getItemMeta();
+        if (meta instanceof PotionMeta) {
+            return ((PotionMeta) meta).getBasePotionData();
+        }
+        
         return null;
     }
 
