@@ -4,6 +4,7 @@ import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.craftbukkit.SetExpFix;
 import com.earth2me.essentials.utils.DateUtil;
+import com.earth2me.essentials.utils.EnumUtil;
 import com.earth2me.essentials.utils.NumberUtil;
 import org.bukkit.Server;
 import org.bukkit.Statistic;
@@ -16,17 +17,13 @@ import static com.earth2me.essentials.I18n.tl;
 
 
 public class Commandwhois extends EssentialsCommand {
-    private Statistic playOneTick;
+    private final Statistic playOneTick;
 
     public Commandwhois() {
         super("whois");
-        try {
-            // For some reason, in 1.13 PLAY_ONE_MINUTE = ticks played
-            // https://hub.spigotmc.org/stash/projects/SPIGOT/repos/bukkit/commits/b848d8ce633871b52115247b089029749c02f579
-            playOneTick = Statistic.valueOf("PLAY_ONE_MINUTE");
-        } catch (IllegalArgumentException e) {
-            playOneTick = Statistic.valueOf("PLAY_ONE_TICK");
-        }
+        // For some reason, in 1.13 PLAY_ONE_MINUTE = ticks played
+        // https://hub.spigotmc.org/stash/projects/SPIGOT/repos/bukkit/commits/b848d8ce633871b52115247b089029749c02f579
+        playOneTick = EnumUtil.getStatistic("PLAY_ONE_MINUTE", "PLAY_ONE_TICK");
     }
 
     @Override

@@ -3,6 +3,7 @@ package com.earth2me.essentials.commands;
 import com.earth2me.essentials.Mob;
 import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.utils.EnumUtil;
 import com.earth2me.essentials.utils.LocationUtil;
 import com.earth2me.essentials.utils.NumberUtil;
 import com.earth2me.essentials.utils.StringUtil;
@@ -28,12 +29,8 @@ public class Commandspawner extends EssentialsCommand {
         }
 
         final Location target = LocationUtil.getTarget(user.getBase());
-        Material MOB_SPAWNER;
-        try {
-            MOB_SPAWNER = Material.SPAWNER;
-        } catch (Exception e) {
-            MOB_SPAWNER = Material.valueOf("MOB_SPAWNER");
-        }
+        Material MOB_SPAWNER = EnumUtil.getMaterial("SPAWNER", "MOB_SPAWNER");
+
         if (target == null || target.getBlock().getType() != MOB_SPAWNER) {
             throw new Exception(tl("mobSpawnTarget"));
         }

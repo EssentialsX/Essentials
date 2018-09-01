@@ -113,36 +113,22 @@ public class LocationUtil {
         switch (below.getType()) {
             case LAVA:
             case FIRE:
-            case BLACK_BED:
-            case BLUE_BED:
-            case BROWN_BED:
-            case CYAN_BED:
-            case GRAY_BED:
-            case GREEN_BED:
-            case LIGHT_BLUE_BED:
-            case LIGHT_GRAY_BED:
-            case LIME_BED:
-            case MAGENTA_BED:
-            case ORANGE_BED:
-            case PINK_BED:
-            case PURPLE_BED:
-            case RED_BED:
-            case WHITE_BED:
-            case YELLOW_BED:
                 return true;
         }
+
+        if (MaterialUtil.isBed(below.getType())) {
+            return true;
+        }
+
         try {
             if (below.getType() == Material.valueOf("FLOWING_LAVA")) {
                 return true;
             }
         } catch (Exception ignored) { // 1.13 LAVA uses Levelled
         }
-        Material PORTAL;
-        try {
-            PORTAL = Material.NETHER_PORTAL;
-        } catch (Exception ignored) {
-            PORTAL = Material.valueOf("PORTAL");
-        }
+
+        Material PORTAL = EnumUtil.getMaterial("NETHER_PORTAL", "PORTAL");
+
         if (world.getBlockAt(x, y, z).getType() == PORTAL) {
             return true;
         }

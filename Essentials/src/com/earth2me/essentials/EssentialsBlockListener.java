@@ -1,5 +1,6 @@
 package com.earth2me.essentials;
 
+import com.earth2me.essentials.utils.EnumUtil;
 import com.earth2me.essentials.utils.LocationUtil;
 import net.ess3.api.IEssentials;
 import org.bukkit.GameMode;
@@ -31,12 +32,7 @@ public class EssentialsBlockListener implements Listener {
         if (is == null) {
             return;
         }
-        Material MOB_SPAWNER;
-        try {
-            MOB_SPAWNER = Material.SPAWNER;
-        } catch (Exception e) {
-            MOB_SPAWNER = Material.valueOf("MOB_SPAWNER");
-        }
+        Material MOB_SPAWNER = EnumUtil.getMaterial("SPAWNER", "MOB_SPAWNER");
 
         if (is.getType() == MOB_SPAWNER && event.getItemInHand() != null && event.getPlayer() != null && event.getItemInHand().getType() == MOB_SPAWNER) {
             final BlockState blockState = event.getBlockPlaced().getState();
