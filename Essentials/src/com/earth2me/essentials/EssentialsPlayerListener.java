@@ -7,7 +7,6 @@ import com.earth2me.essentials.textreader.TextPager;
 import com.earth2me.essentials.utils.DateUtil;
 import com.earth2me.essentials.utils.LocationUtil;
 import net.ess3.api.IEssentials;
-import net.ess3.nms.refl.ReflUtil;
 
 import org.bukkit.BanEntry;
 import org.bukkit.BanList;
@@ -57,10 +56,10 @@ public class EssentialsPlayerListener implements Listener {
 
     public void registerEvents() {
         ess.getServer().getPluginManager().registerEvents(this, ess);
-        if (ReflUtil.getNmsVersionObject().isLowerThan(ReflUtil.V1_12_R1)) {
-            ess.getServer().getPluginManager().registerEvents(new PlayerListenerPre1_12(), ess);
-        } else {
+        if (isEntityPickupEvent()) {
             ess.getServer().getPluginManager().registerEvents(new PlayerListener1_12(), ess);
+        } else {
+            ess.getServer().getPluginManager().registerEvents(new PlayerListenerPre1_12(), ess);
         }
     }
 
@@ -784,6 +783,15 @@ public class EssentialsPlayerListener implements Listener {
     public void onPlayerFishEvent(final PlayerFishEvent event) {
         final User user = ess.getUser(event.getPlayer());
             user.updateActivityOnInteract(true);
+    }
+
+    private static boolean isEntityPickupEvent() {
+        try {
+            Class.forName("org.bukkit.event.entity.EntityPickupItemEvent");
+            return true;
+        } catch (ClassNotFoundException ignored) {
+            return false;
+        }
     }
 
     private final class PlayerListenerPre1_12 implements Listener {
