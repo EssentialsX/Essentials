@@ -13,11 +13,22 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class LegacyItemDbProvider extends ItemDbProvider {
+    // Maps all item names to legacy IDs
     private final transient Map<String, Integer> items = new HashMap<>();
+
+    // Maps item data to all known names for an item
     private final transient Map<ItemData, List<String>> names = new HashMap<>();
+
+    // Maps item data to the primary name for an item
     private final transient Map<ItemData, String> primaryNames = new HashMap<>();
+
+    // Maps legacy IDs to item data
     private final transient Map<Integer, LegacyItemData> legacyIds = new HashMap<>();
+
+    // Maps names for an item to durability/meta values
     private final transient Map<String, Short> durabilities = new HashMap<>();
+
+    // Maps names for an item to NBT data
     private final transient Map<String, String> nbtData = new HashMap<>();
 
     private final transient Pattern splitPattern = Pattern.compile("((.*)[:+',;.](\\d+))");
@@ -35,6 +46,7 @@ public class LegacyItemDbProvider extends ItemDbProvider {
         String itemname;
         short metaData = 0;
 
+        // If the user provided id:metadata, split it
         Matcher parts = splitPattern.matcher(name);
         if (parts.matches()) {
             itemname = parts.group(2);
@@ -43,6 +55,7 @@ public class LegacyItemDbProvider extends ItemDbProvider {
             itemname = name;
         }
 
+        // Check whether the user provided an ID
         if (isInt(itemname)) {
             itemid = Integer.parseInt(itemname);
         } else if (isInt(name)) {
