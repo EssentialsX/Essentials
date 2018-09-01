@@ -7813,7 +7813,7 @@
         "material": "POTION",
         "potionData": {
             "vanillaType": "empty",
-            "type": "EMPTY",
+            "type": "UNCRAFTABLE",
             "upgraded": false,
             "extended": false
         }
@@ -7825,7 +7825,7 @@
         "material": "SPLASH_POTION",
         "potionData": {
             "vanillaType": "empty",
-            "type": "EMPTY",
+            "type": "UNCRAFTABLE",
             "upgraded": false,
             "extended": false
         }
@@ -7839,7 +7839,7 @@
         "material": "LINGERING_POTION",
         "potionData": {
             "vanillaType": "empty",
-            "type": "EMPTY",
+            "type": "UNCRAFTABLE",
             "upgraded": false,
             "extended": false
         }
@@ -7861,7 +7861,7 @@
         "material": "TIPPED_ARROW",
         "potionData": {
             "vanillaType": "empty",
-            "type": "EMPTY",
+            "type": "UNCRAFTABLE",
             "upgraded": false,
             "extended": false
         }
