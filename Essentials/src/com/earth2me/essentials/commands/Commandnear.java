@@ -7,8 +7,12 @@ import org.bukkit.Location;
 import org.bukkit.Server;
 import org.bukkit.World;
 
+import javafx.util.Pair;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
+import java.util.PriorityQueue;
+import java.util.Queue;
 
 import static com.earth2me.essentials.I18n.tl;
 
@@ -83,6 +87,8 @@ public class Commandnear extends EssentialsCommand {
         final long radiusSquared = radius * radius;
         boolean showHidden = user.canInteractVanished();
 
+        Queue<Pair<User, Long>> playerDistances = new PriorityQueue<>(Comparator.comparingLong(Pair::getValue));
+
         for (User player : ess.getOnlineUsers()) {
             if (!player.equals(user) && (!player.isHidden(user.getBase()) || showHidden || user.getBase().canSee(player.getBase()))) {
                 final Location playerLoc = player.getLocation();
@@ -92,13 +98,19 @@ public class Commandnear extends EssentialsCommand {
 
                 final long delta = (long) playerLoc.distanceSquared(loc);
                 if (delta < radiusSquared) {
-                    if (output.length() > 0) {
-                        output.append(", ");
-                    }
-                    output.append(player.getDisplayName()).append("§f(§4").append((long) Math.sqrt(delta)).append("m§f)");
+                    playerDistances.offer(new Pair<>(player, delta));
                 }
             }
         }
+
+        while (!playerDistances.isEmpty()) {
+            if (output.length() > 0) {
+                output.append(", ");
+            }
+            Pair<User, Long> playerDistance = playerDistances.poll();
+            output.append(playerDistance.getKey().getDisplayName()).append("§f(§4").append((long) Math.sqrt(playerDistance.getValue())).append("m§f)");
+        }
+
         return output.length() > 1 ? output.toString() : tl("none");
     }
 
