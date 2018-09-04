@@ -7,9 +7,7 @@ import org.bukkit.Location;
 import org.bukkit.Server;
 import org.bukkit.World;
 
-import javafx.util.Pair;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.PriorityQueue;
 import java.util.Queue;
@@ -87,7 +85,7 @@ public class Commandnear extends EssentialsCommand {
         final long radiusSquared = radius * radius;
         boolean showHidden = user.canInteractVanished();
 
-        Queue<Pair<User, Long>> playerDistances = new PriorityQueue<>(Comparator.comparingLong(Pair::getValue));
+        Queue<User> nearbyPlayers = new PriorityQueue<>((o1, o2) -> (int) (o1.getLocation().distanceSquared(loc) - o2.getLocation().distanceSquared(loc)));
 
         for (User player : ess.getOnlineUsers()) {
             if (!player.equals(user) && (!player.isHidden(user.getBase()) || showHidden || user.getBase().canSee(player.getBase()))) {
@@ -98,17 +96,17 @@ public class Commandnear extends EssentialsCommand {
 
                 final long delta = (long) playerLoc.distanceSquared(loc);
                 if (delta < radiusSquared) {
-                    playerDistances.offer(new Pair<>(player, delta));
+                    nearbyPlayers.offer(player);
                 }
             }
         }
 
-        while (!playerDistances.isEmpty()) {
+        while (!nearbyPlayers.isEmpty()) {
             if (output.length() > 0) {
                 output.append(", ");
             }
-            Pair<User, Long> playerDistance = playerDistances.poll();
-            output.append(playerDistance.getKey().getDisplayName()).append("§f(§4").append((long) Math.sqrt(playerDistance.getValue())).append("m§f)");
+            User nearbyPlayer = nearbyPlayers.poll();
+            output.append(nearbyPlayer.getDisplayName()).append("§f(§4").append((long) Math.sqrt(nearbyPlayer.getLocation().distanceSquared(loc))).append("m§f)");
         }
 
         return output.length() > 1 ? output.toString() : tl("none");
