@@ -8,6 +8,7 @@ import org.bukkit.advancement.AdvancementProgress;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.block.PistonMoveReaction;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.conversations.Conversation;
@@ -144,6 +145,10 @@ public class OfflinePlayer implements Player {
     @Override
     public int getEntityId() {
         return -1;
+    }
+
+    public BlockFace getFacing() {
+        return null;
     }
 
     @Override
