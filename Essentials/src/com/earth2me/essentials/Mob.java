@@ -80,7 +80,7 @@ public enum Mob {
     COD("Cod", Enemies.NEUTRAL, "COD"),
     SALMON("Salmon", Enemies.NEUTRAL, "SALMON"),
     PUFFERFISH("Pufferfish", Enemies.NEUTRAL, "PUFFERFISH"),
-    TROPICAL_FISH("Tropical Fish", Enemies.NEUTRAL, "TROPICAL_FISH"),
+    TROPICAL_FISH("TropicalFish", Enemies.NEUTRAL, "TROPICAL_FISH"),
     DROWNED("Drowned", Enemies.ENEMY, "DROWNED"),
     DOLPHIN("Dolphin", Enemies.NEUTRAL, "DOLPHIN"),
     ;
