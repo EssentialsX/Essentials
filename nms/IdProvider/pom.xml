@@ -10,12 +10,17 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>ReflectionProvider</artifactId>
+    <artifactId>IdProvider</artifactId>
 
     <dependencies>
-         <dependency>
+        <dependency>
             <groupId>net.ess3</groupId>
             <artifactId>NMSProvider</artifactId>
+            <version>2.15.0</version>
+        </dependency>
+        <dependency>
+            <groupId>net.ess3</groupId>
+            <artifactId>ReflectionProvider</artifactId>
             <version>2.15.0</version>
         </dependency>
         <dependency>

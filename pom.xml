@@ -47,6 +47,8 @@
         <module>nms/1_8_R2Provider</module>
         <module>nms/LegacyProvider</module>
         <module>nms/ReflectionProvider</module>
+        <module>nms/IdProvider</module>
+        <module>nms/FlattenedProvider</module>
     </modules>
 
     <dependencies>
@@ -171,6 +173,7 @@
                                         <include>messages*.properties</include>
                                         <include>config.yml</include>
                                         <include>items.csv</include>
+                                        <include>items.json</include>
                                     </includes>
                                     <excludes>
                                         <exclude>plugin.yml</exclude>
@@ -276,6 +279,7 @@
                     <include>*.yml</include>
                     <include>*.csv</include>
                     <include>*.txt</include>
+                    <include>*.json</include>
                 </includes>
                 <filtering>true</filtering>
             </resource>

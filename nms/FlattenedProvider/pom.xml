@@ -10,18 +10,27 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>ReflectionProvider</artifactId>
+    <artifactId>FlattenedProvider</artifactId>
+
+    <repositories>
+        <repository>
+            <id>project.local</id>
+            <name>local repo</name>
+            <url>file:${project.basedir}/lib</url>
+        </repository>
+    </repositories>
 
     <dependencies>
-         <dependency>
+        <dependency>
+            <groupId>org.bukkit</groupId>
+            <artifactId>craftbukkit</artifactId>
+            <version>1.13-R0.1-SNAPSHOT</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
             <groupId>net.ess3</groupId>
             <artifactId>NMSProvider</artifactId>
             <version>2.15.0</version>
-        </dependency>
-        <dependency>
-            <groupId>org.bukkit</groupId>
-            <artifactId>bukkit</artifactId>
-            <version>1.12.2-R0.1-SNAPSHOT</version>
         </dependency>
     </dependencies>
 </project>
