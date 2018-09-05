@@ -188,6 +188,8 @@
     "allium": {
         "material": "ALLIUM"
     },
+    "magentaallium": "allium",
+    "magentaflower": "allium",
     "andesite": {
         "material": "ANDESITE"
     },
@@ -217,6 +219,10 @@
         "material": "AZURE_BLUET"
     },
     "azurebluet": "azure_bluet",
+    "whiteazurebluet": "azure_bluet",
+    "abluet": "azure_bluet",
+    "azureb": "azure_bluet",
+    "houstonia": "azure_bluet",
     "baked_potato": {
         "material": "BAKED_POTATO"
     },
@@ -735,11 +741,14 @@
     "bkglasspane": "black_stained_glass_pane",
     "bksglasspane": "black_stained_glass_pane",
     "bkstainedglasspane": "black_stained_glass_pane",
+    "bkgpane": "black_stained_glass_pane",
     "blaglasspane": "black_stained_glass_pane",
     "blasglasspane": "black_stained_glass_pane",
     "blastainedglasspane": "black_stained_glass_pane",
+    "blagpane": "black_stained_glass_pane",
     "blackglasspane": "black_stained_glass_pane",
     "blacksglasspane": "black_stained_glass_pane",
+    "blackgpane": "black_stained_glass_pane",
     "black_terracotta": {
         "material": "BLACK_TERRACOTTA"
     },
@@ -844,6 +853,13 @@
         "material": "BLUE_ORCHID"
     },
     "blueorchid": "blue_orchid",
+    "cyanorchid": "blue_orchid",
+    "lightblueorchid": "blue_orchid",
+    "lblueorchid": "blue_orchid",
+    "orchid": "blue_orchid",
+    "cyanflower": "blue_orchid",
+    "lightblueflower": "blue_orchid",
+    "lblueflower": "blue_orchid",
     "blue_shulker_box": {
         "material": "BLUE_SHULKER_BOX"
     },
@@ -867,8 +883,10 @@
     "bluglasspane": "blue_stained_glass_pane",
     "blusglasspane": "blue_stained_glass_pane",
     "blustainedglasspane": "blue_stained_glass_pane",
+    "blugpane": "blue_stained_glass_pane",
     "blueglasspane": "blue_stained_glass_pane",
     "bluesglasspane": "blue_stained_glass_pane",
+    "bluegpane": "blue_stained_glass_pane",
     "blue_terracotta": {
         "material": "BLUE_TERRACOTTA"
     },
@@ -1062,8 +1080,10 @@
     "broglasspane": "brown_stained_glass_pane",
     "brosglasspane": "brown_stained_glass_pane",
     "brostainedglasspane": "brown_stained_glass_pane",
+    "brogpane": "brown_stained_glass_pane",
     "brownglasspane": "brown_stained_glass_pane",
     "brownsglasspane": "brown_stained_glass_pane",
+    "browngpane": "brown_stained_glass_pane",
     "brown_terracotta": {
         "material": "BROWN_TERRACOTTA"
     },
@@ -1550,8 +1570,10 @@
     "cglasspane": "cyan_stained_glass_pane",
     "csglasspane": "cyan_stained_glass_pane",
     "cstainedglasspane": "cyan_stained_glass_pane",
+    "cgpane": "cyan_stained_glass_pane",
     "cyanglasspane": "cyan_stained_glass_pane",
     "cyansglasspane": "cyan_stained_glass_pane",
+    "cyangpane": "cyan_stained_glass_pane",
     "cyan_terracotta": {
         "material": "CYAN_TERRACOTTA"
     },
@@ -1590,6 +1612,11 @@
     "dandelion": {
         "material": "DANDELION"
     },
+    "yellowdandelion": "dandelion",
+    "ydandelion": "dandelion",
+    "yellowflower": "dandelion",
+    "yflower": "dandelion",
+    "flower": "dandelion",
     "dandelion_yellow": {
         "material": "DANDELION_YELLOW"
     },
@@ -1869,6 +1896,11 @@
         "material": "DEAD_BUSH"
     },
     "deadbush": "dead_bush",
+    "bush": "dead_bush",
+    "deadshrub": "dead_bush",
+    "dshrub": "dead_bush",
+    "dbush": "dead_bush",
+    "deadsapling": "dead_bush",
     "dead_fire_coral": {
         "material": "DEAD_FIRE_CORAL"
     },
@@ -2085,6 +2117,11 @@
         "material": "DRAGON_EGG"
     },
     "dragonegg": "dragon_egg",
+    "enderdragonegg": "dragon_egg",
+    "endegg": "dragon_egg",
+    "degg": "dragon_egg",
+    "bossegg": "dragon_egg",
+    "begg": "dragon_egg",
     "dragon_head": {
         "material": "DRAGON_HEAD"
     },
@@ -2118,6 +2155,14 @@
     "elytra": {
         "material": "ELYTRA"
     },
+    "hangglider": "elytra",
+    "glider": "elytra",
+    "wings": "elytra",
+    "wing": "elytra",
+    "playerwings": "elytra",
+    "playerwing": "elytra",
+    "pwings": "elytra",
+    "pwing": "elytra",
     "emerald": {
         "material": "EMERALD"
     },
@@ -2183,10 +2228,22 @@
         "material": "END_PORTAL"
     },
     "endportal": "end_portal",
+    "endergoo": "end_portal",
+    "enderportal": "end_portal",
+    "endgoo": "end_portal",
+    "eportal": "end_portal",
+    "egoo": "end_portal",
     "end_portal_frame": {
         "material": "END_PORTAL_FRAME"
     },
     "endportalframe": "end_portal_frame",
+    "endergooframe": "end_portal_frame",
+    "enderportalframe": "end_portal_frame",
+    "endgooframe": "end_portal_frame",
+    "eportalframe": "end_portal_frame",
+    "egooframe": "end_portal_frame",
+    "enderframe": "end_portal_frame",
+    "endframe": "end_portal_frame",
     "end_rod": {
         "material": "END_ROD"
     },
@@ -2195,6 +2252,11 @@
         "material": "END_STONE"
     },
     "endstone": "end_stone",
+    "enderstone": "end_stone",
+    "endrock": "end_stone",
+    "enderrock": "end_stone",
+    "erock": "end_stone",
+    "estone": "end_stone",
     "end_stone_bricks": {
         "material": "END_STONE_BRICKS"
     },
@@ -2649,29 +2711,38 @@
     "graglasspane": "gray_stained_glass_pane",
     "grasglasspane": "gray_stained_glass_pane",
     "grastainedglasspane": "gray_stained_glass_pane",
+    "gragpane": "gray_stained_glass_pane",
     "greyglasspane": "gray_stained_glass_pane",
     "greysglasspane": "gray_stained_glass_pane",
     "greystainedglasspane": "gray_stained_glass_pane",
+    "greygpane": "gray_stained_glass_pane",
     "grayglasspane": "gray_stained_glass_pane",
     "graysglasspane": "gray_stained_glass_pane",
+    "graygpane": "gray_stained_glass_pane",
     "dgraglasspane": "gray_stained_glass_pane",
     "dgrasglasspane": "gray_stained_glass_pane",
     "dgrastainedglasspane": "gray_stained_glass_pane",
+    "dgragpane": "gray_stained_glass_pane",
     "darkgraglasspane": "gray_stained_glass_pane",
     "darkgrasglasspane": "gray_stained_glass_pane",
     "darkgrastainedglasspane": "gray_stained_glass_pane",
+    "darkgragpane": "gray_stained_glass_pane",
     "dgreyglasspane": "gray_stained_glass_pane",
     "dgreysglasspane": "gray_stained_glass_pane",
     "dgreystainedglasspane": "gray_stained_glass_pane",
+    "dgreygpane": "gray_stained_glass_pane",
     "dgrayglasspane": "gray_stained_glass_pane",
     "dgraysglasspane": "gray_stained_glass_pane",
     "dgraystainedglasspane": "gray_stained_glass_pane",
+    "dgraygpane": "gray_stained_glass_pane",
     "darkgreyglasspane": "gray_stained_glass_pane",
     "darkgreysglasspane": "gray_stained_glass_pane",
     "darkgreystainedglasspane": "gray_stained_glass_pane",
+    "darkgreygpane": "gray_stained_glass_pane",
     "darkgrayglasspane": "gray_stained_glass_pane",
     "darkgraysglasspane": "gray_stained_glass_pane",
     "darkgraystainedglasspane": "gray_stained_glass_pane",
+    "darkgraygpane": "gray_stained_glass_pane",
     "gray_terracotta": {
         "material": "GRAY_TERRACOTTA"
     },
@@ -2913,20 +2984,26 @@
     "greglasspane": "green_stained_glass_pane",
     "gresglasspane": "green_stained_glass_pane",
     "grestainedglasspane": "green_stained_glass_pane",
+    "gregpane": "green_stained_glass_pane",
     "dgreglasspane": "green_stained_glass_pane",
     "dgresglasspane": "green_stained_glass_pane",
     "dgrestainedglasspane": "green_stained_glass_pane",
+    "dgregpane": "green_stained_glass_pane",
     "darkgreglasspane": "green_stained_glass_pane",
     "darkgresglasspane": "green_stained_glass_pane",
     "darkgrestainedglasspane": "green_stained_glass_pane",
+    "darkgregpane": "green_stained_glass_pane",
     "greenglasspane": "green_stained_glass_pane",
     "greensglasspane": "green_stained_glass_pane",
+    "greengpane": "green_stained_glass_pane",
     "dgreenglasspane": "green_stained_glass_pane",
     "dgreensglasspane": "green_stained_glass_pane",
     "dgreenstainedglasspane": "green_stained_glass_pane",
+    "dgreengpane": "green_stained_glass_pane",
     "darkgreenglasspane": "green_stained_glass_pane",
     "darkgreensglasspane": "green_stained_glass_pane",
     "darkgreenstainedglasspane": "green_stained_glass_pane",
+    "darkgreengpane": "green_stained_glass_pane",
     "green_terracotta": {
         "material": "GREEN_TERRACOTTA"
     },
@@ -3090,6 +3167,7 @@
     "iaxe": "iron_axe",
     "steelaxe": "iron_axe",
     "saxe": "stone_axe",
+    "staxe": "iron_axe",
     "iron_bars": {
         "material": "IRON_BARS"
     },
@@ -3105,6 +3183,8 @@
     "blocksteel": "iron_block",
     "sblock": "iron_block",
     "blocks": "iron_block",
+    "stblock": "iron_block",
+    "blockst": "iron_block",
     "iron_boots": {
         "material": "IRON_BOOTS"
     },
@@ -3116,6 +3196,8 @@
     "steelshoes": "iron_boots",
     "sboots": "iron_boots",
     "sshoes": "iron_boots",
+    "stboots": "iron_boots",
+    "stshoes": "iron_boots",
     "iron_chestplate": {
         "material": "IRON_CHESTPLATE"
     },
@@ -3139,6 +3221,11 @@
     "splate": "stone_pressure_plate",
     "sshirt": "iron_chestplate",
     "stunic": "iron_chestplate",
+    "stchestplate": "iron_chestplate",
+    "stplatebody": "iron_chestplate",
+    "stplate": "iron_chestplate",
+    "stshirt": "iron_chestplate",
+    "sttunic": "iron_chestplate",
     "iron_door": {
         "material": "IRON_DOOR"
     },
@@ -3162,6 +3249,10 @@
     "shelm": "iron_helmet",
     "shat": "iron_helmet",
     "scoif": "iron_helmet",
+    "sthelmet": "iron_helmet",
+    "sthelm": "iron_helmet",
+    "sthat": "iron_helmet",
+    "stcoif": "iron_helmet",
     "iron_hoe": {
         "material": "IRON_HOE"
     },
@@ -3169,6 +3260,7 @@
     "ihoe": "iron_hoe",
     "steelhoe": "iron_hoe",
     "shoe": "stone_hoe",
+    "sthoe": "iron_hoe",
     "iron_horse_armor": {
         "material": "IRON_HORSE_ARMOR"
     },
@@ -3194,6 +3286,12 @@
     "isteel": "iron_ingot",
     "singot": "iron_ingot",
     "sbar": "iron_ingot",
+    "stingot": "iron_ingot",
+    "stbar": "iron_ingot",
+    "sti": "iron_ingot",
+    "ingotst": "iron_ingot",
+    "barst": "iron_ingot",
+    "ist": "iron_ingot",
     "iron_leggings": {
         "material": "IRON_LEGGINGS"
     },
@@ -3209,6 +3307,9 @@
     "sleggings": "iron_leggings",
     "slegs": "iron_leggings",
     "spants": "iron_leggings",
+    "stleggings": "iron_leggings",
+    "stlegs": "iron_leggings",
+    "stpants": "iron_leggings",
     "iron_nugget": {
         "material": "IRON_NUGGET"
     },
@@ -3228,6 +3329,10 @@
     "osteel": "iron_ore",
     "sore": "iron_ore",
     "ores": "iron_ore",
+    "store": "iron_ore",
+    "sto": "iron_ore",
+    "orest": "iron_ore",
+    "ost": "iron_ore",
     "iron_pickaxe": {
         "material": "IRON_PICKAXE"
     },
@@ -3239,6 +3344,8 @@
     "steelpick": "iron_pickaxe",
     "spickaxe": "stone_pickaxe",
     "spick": "stone_pickaxe",
+    "stpickaxe": "iron_pickaxe",
+    "stpick": "iron_pickaxe",
     "iron_shovel": {
         "material": "IRON_SHOVEL"
     },
@@ -3250,6 +3357,8 @@
     "steelspade": "iron_shovel",
     "sshovel": "stone_shovel",
     "sspade": "stone_shovel",
+    "stshovel": "iron_shovel",
+    "stspade": "iron_shovel",
     "iron_sword": {
         "material": "IRON_SWORD"
     },
@@ -3257,6 +3366,7 @@
     "isword": "iron_sword",
     "steelsword": "iron_sword",
     "ssword": "stone_sword",
+    "stsword": "iron_sword",
     "iron_trapdoor": {
         "material": "IRON_TRAPDOOR"
     },
@@ -3779,17 +3889,22 @@
     "lbglasspane": "light_blue_stained_glass_pane",
     "lbsglasspane": "light_blue_stained_glass_pane",
     "lbstainedglasspane": "light_blue_stained_glass_pane",
+    "lbgpane": "light_blue_stained_glass_pane",
     "lbluglasspane": "light_blue_stained_glass_pane",
     "lblusglasspane": "light_blue_stained_glass_pane",
     "lblustainedglasspane": "light_blue_stained_glass_pane",
+    "lblugpane": "light_blue_stained_glass_pane",
     "lightbluglasspane": "light_blue_stained_glass_pane",
     "lightblusglasspane": "light_blue_stained_glass_pane",
     "lightblustainedglasspane": "light_blue_stained_glass_pane",
+    "lightblugpane": "light_blue_stained_glass_pane",
     "lblueglasspane": "light_blue_stained_glass_pane",
     "lbluesglasspane": "light_blue_stained_glass_pane",
     "lbluestainedglasspane": "light_blue_stained_glass_pane",
+    "lbluegpane": "light_blue_stained_glass_pane",
     "lightblueglasspane": "light_blue_stained_glass_pane",
     "lightbluesglasspane": "light_blue_stained_glass_pane",
+    "lightbluegpane": "light_blue_stained_glass_pane",
     "light_blue_terracotta": {
         "material": "LIGHT_BLUE_TERRACOTTA"
     },
@@ -4059,32 +4174,42 @@
     "lgglasspane": "light_gray_stained_glass_pane",
     "lgsglasspane": "light_gray_stained_glass_pane",
     "lgstainedglasspane": "light_gray_stained_glass_pane",
+    "lggpane": "light_gray_stained_glass_pane",
     "lgraglasspane": "light_gray_stained_glass_pane",
     "lgrasglasspane": "light_gray_stained_glass_pane",
     "lgrastainedglasspane": "light_gray_stained_glass_pane",
+    "lgragpane": "light_gray_stained_glass_pane",
     "lgreyglasspane": "light_gray_stained_glass_pane",
     "lgreysglasspane": "light_gray_stained_glass_pane",
     "lgreystainedglasspane": "light_gray_stained_glass_pane",
+    "lgreygpane": "light_gray_stained_glass_pane",
     "lgrayglasspane": "light_gray_stained_glass_pane",
     "lgraysglasspane": "light_gray_stained_glass_pane",
     "lgraystainedglasspane": "light_gray_stained_glass_pane",
+    "lgraygpane": "light_gray_stained_glass_pane",
     "lightgraglasspane": "light_gray_stained_glass_pane",
     "lightgrasglasspane": "light_gray_stained_glass_pane",
     "lightgrastainedglasspane": "light_gray_stained_glass_pane",
+    "lightgragpane": "light_gray_stained_glass_pane",
     "lightgreyglasspane": "light_gray_stained_glass_pane",
     "lightgreysglasspane": "light_gray_stained_glass_pane",
     "lightgreystainedglasspane": "light_gray_stained_glass_pane",
+    "lightgreygpane": "light_gray_stained_glass_pane",
     "lightgrayglasspane": "light_gray_stained_glass_pane",
     "lightgraysglasspane": "light_gray_stained_glass_pane",
+    "lightgraygpane": "light_gray_stained_glass_pane",
     "siglasspane": "light_gray_stained_glass_pane",
     "sisglasspane": "light_gray_stained_glass_pane",
     "sistainedglasspane": "light_gray_stained_glass_pane",
+    "sigpane": "light_gray_stained_glass_pane",
     "siaglasspane": "light_gray_stained_glass_pane",
     "siasglasspane": "light_gray_stained_glass_pane",
     "siastainedglasspane": "light_gray_stained_glass_pane",
+    "siagpane": "light_gray_stained_glass_pane",
     "silverglasspane": "light_gray_stained_glass_pane",
     "silversglasspane": "light_gray_stained_glass_pane",
     "silverstainedglasspane": "light_gray_stained_glass_pane",
+    "silvergpane": "light_gray_stained_glass_pane",
     "light_gray_terracotta": {
         "material": "LIGHT_GRAY_TERRACOTTA"
     },
@@ -4352,20 +4477,26 @@
     "lglasspane": "lime_stained_glass_pane",
     "lsglasspane": "lime_stained_glass_pane",
     "lstainedglasspane": "lime_stained_glass_pane",
+    "lgpane": "lime_stained_glass_pane",
     "limeglasspane": "lime_stained_glass_pane",
     "limesglasspane": "lime_stained_glass_pane",
+    "limegpane": "lime_stained_glass_pane",
     "lgreglasspane": "lime_stained_glass_pane",
     "lgresglasspane": "lime_stained_glass_pane",
     "lgrestainedglasspane": "lime_stained_glass_pane",
+    "lgregpane": "lime_stained_glass_pane",
     "lightgreglasspane": "lime_stained_glass_pane",
     "lightgresglasspane": "lime_stained_glass_pane",
     "lightgrestainedglasspane": "lime_stained_glass_pane",
+    "lightgregpane": "lime_stained_glass_pane",
     "lgreenglasspane": "lime_stained_glass_pane",
     "lgreensglasspane": "lime_stained_glass_pane",
     "lgreenstainedglasspane": "lime_stained_glass_pane",
+    "lgreengpane": "lime_stained_glass_pane",
     "lightgreenglasspane": "lime_stained_glass_pane",
     "lightgreensglasspane": "lime_stained_glass_pane",
     "lightgreenstainedglasspane": "lime_stained_glass_pane",
+    "lightgreengpane": "lime_stained_glass_pane",
     "lime_terracotta": {
         "material": "LIME_TERRACOTTA"
     },
@@ -4518,8 +4649,10 @@
     "mglasspane": "magenta_stained_glass_pane",
     "msglasspane": "magenta_stained_glass_pane",
     "mstainedglasspane": "magenta_stained_glass_pane",
+    "mgpane": "magenta_stained_glass_pane",
     "magentaglasspane": "magenta_stained_glass_pane",
     "magentasglasspane": "magenta_stained_glass_pane",
+    "magentagpane": "magenta_stained_glass_pane",
     "magenta_terracotta": {
         "material": "MAGENTA_TERRACOTTA"
     },
@@ -5808,8 +5941,10 @@
     "oglasspane": "orange_stained_glass_pane",
     "osglasspane": "orange_stained_glass_pane",
     "ostainedglasspane": "orange_stained_glass_pane",
+    "ogpane": "orange_stained_glass_pane",
     "orangeglasspane": "orange_stained_glass_pane",
     "orangesglasspane": "orange_stained_glass_pane",
+    "orangegpane": "orange_stained_glass_pane",
     "orange_terracotta": {
         "material": "ORANGE_TERRACOTTA"
     },
@@ -5831,6 +5966,9 @@
         "material": "ORANGE_TULIP"
     },
     "orangetulip": "orange_tulip",
+    "tuliporange": "orange_tulip",
+    "otulip": "orange_tulip",
+    "tulipo": "orange_tulip",
     "orange_wall_banner": {
         "material": "ORANGE_WALL_BANNER"
     },
@@ -5849,6 +5987,15 @@
         "material": "OXEYE_DAISY"
     },
     "oxeyedaisy": "oxeye_daisy",
+    "oxeye": "oxeye_daisy",
+    "daisy": "oxeye_daisy",
+    "daisyoxeye": "oxeye_daisy",
+    "moondaisy": "oxeye_daisy",
+    "daisymoon": "oxeye_daisy",
+    "lightgrayoxeye": "oxeye_daisy",
+    "lgrayoxeye": "oxeye_daisy",
+    "lightgreyoxeye": "oxeye_daisy",
+    "lgreyoxeye": "oxeye_daisy",
     "packed_ice": {
         "material": "PACKED_ICE"
     },
@@ -5951,8 +6098,10 @@
     "piglasspane": "pink_stained_glass_pane",
     "pisglasspane": "pink_stained_glass_pane",
     "pistainedglasspane": "pink_stained_glass_pane",
+    "pigpane": "pink_stained_glass_pane",
     "pinkglasspane": "pink_stained_glass_pane",
     "pinksglasspane": "pink_stained_glass_pane",
+    "pinkgpane": "pink_stained_glass_pane",
     "pink_terracotta": {
         "material": "PINK_TERRACOTTA"
     },
@@ -5974,6 +6123,9 @@
         "material": "PINK_TULIP"
     },
     "pinktulip": "pink_tulip",
+    "tulippink": "pink_tulip",
+    "ptulip": "pink_tulip",
+    "tulipp": "pink_tulip",
     "pink_wall_banner": {
         "material": "PINK_WALL_BANNER"
     },
@@ -6042,6 +6194,12 @@
     "poppy": {
         "material": "POPPY"
     },
+    "rose": "poppy",
+    "redrose": "poppy",
+    "rrose": "poppy",
+    "redflower": "poppy",
+    "rflower": "poppy",
+    "redpoppy": "poppy",
     "porkchop": {
         "material": "PORKCHOP"
     },
@@ -6321,8 +6479,10 @@
     "puglasspane": "purple_stained_glass_pane",
     "pusglasspane": "purple_stained_glass_pane",
     "pustainedglasspane": "purple_stained_glass_pane",
+    "pugpane": "purple_stained_glass_pane",
     "purpleglasspane": "purple_stained_glass_pane",
     "purplesglasspane": "purple_stained_glass_pane",
+    "purplegpane": "purple_stained_glass_pane",
     "purple_terracotta": {
         "material": "PURPLE_TERRACOTTA"
     },
@@ -6604,8 +6764,10 @@
     "rglasspane": "red_stained_glass_pane",
     "rsglasspane": "red_stained_glass_pane",
     "rstainedglasspane": "red_stained_glass_pane",
+    "rgpane": "red_stained_glass_pane",
     "redglasspane": "red_stained_glass_pane",
     "redsglasspane": "red_stained_glass_pane",
+    "redgpane": "red_stained_glass_pane",
     "red_terracotta": {
         "material": "RED_TERRACOTTA"
     },
@@ -6627,6 +6789,9 @@
         "material": "RED_TULIP"
     },
     "redtulip": "red_tulip",
+    "tulipred": "red_tulip",
+    "rtulip": "red_tulip",
+    "tulipr": "red_tulip",
     "red_wall_banner": {
         "material": "RED_WALL_BANNER"
     },
@@ -7371,6 +7536,14 @@
         "material": "TALL_GRASS"
     },
     "tallgrass": "tall_grass",
+    "longgrass": "tall_grass",
+    "wildgrass": "tall_grass",
+    "grasslong": "tall_grass",
+    "grasstall": "tall_grass",
+    "grasswild": "tall_grass",
+    "lgrass": "tall_grass",
+    "tgrass": "tall_grass",
+    "wgrass": "tall_grass",
     "tall_seagrass": {
         "material": "TALL_SEAGRASS"
     },
@@ -7574,11 +7747,14 @@
     "whitestainedglasspane": "white_stained_glass_pane",
     "sglasspane": "white_stained_glass_pane",
     "stainedglasspane": "white_stained_glass_pane",
+    "gpane": "white_stained_glass_pane",
     "wglasspane": "white_stained_glass_pane",
     "wsglasspane": "white_stained_glass_pane",
     "wstainedglasspane": "white_stained_glass_pane",
+    "wgpane": "white_stained_glass_pane",
     "whiteglasspane": "white_stained_glass_pane",
     "whitesglasspane": "white_stained_glass_pane",
+    "whitegpane": "white_stained_glass_pane",
     "white_terracotta": {
         "material": "WHITE_TERRACOTTA"
     },
@@ -7605,6 +7781,9 @@
         "material": "WHITE_TULIP"
     },
     "whitetulip": "white_tulip",
+    "tulipwhite": "white_tulip",
+    "wtulip": "white_tulip",
+    "tulipw": "white_tulip",
     "white_wall_banner": {
         "material": "WHITE_WALL_BANNER"
     },
@@ -7752,8 +7931,10 @@
     "yglasspane": "yellow_stained_glass_pane",
     "ysglasspane": "yellow_stained_glass_pane",
     "ystainedglasspane": "yellow_stained_glass_pane",
+    "ygpane": "yellow_stained_glass_pane",
     "yellowglasspane": "yellow_stained_glass_pane",
     "yellowsglasspane": "yellow_stained_glass_pane",
+    "yellowgpane": "yellow_stained_glass_pane",
     "yellow_terracotta": {
         "material": "YELLOW_TERRACOTTA"
     },
