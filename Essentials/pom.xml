@@ -24,7 +24,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>2.3.2</version>
+                <version>3.7.0</version>
                 <configuration>
                     <showDeprecation>false</showDeprecation>
                 </configuration>
@@ -32,7 +32,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
-                <version>1.4</version>
+                <version>3.1.0</version>
                 <executions>
                     <execution>
                         <phase>package</phase>
@@ -46,34 +46,6 @@
     </build>
 
     <dependencies>
-        <dependency>
-            <groupId>BOSEconomy</groupId>
-            <artifactId>BOSEconomy</artifactId>
-            <version>v0.7.8.1</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/../lib/BOSEconomy.jar</systemPath>
-        </dependency>
-        <dependency>
-            <groupId>iConomy</groupId>
-            <artifactId>iConomy5</artifactId>
-            <version>5</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/../lib/iCo5.jar</systemPath>
-        </dependency>
-        <dependency>
-            <groupId>iConomy</groupId>
-            <artifactId>iConomy6</artifactId>
-            <version>6</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/../lib/iCo6.jar</systemPath>
-        </dependency>
-        <dependency>
-            <groupId>MultiCurrency</groupId>
-            <artifactId>MultiCurrency</artifactId>
-            <version>2.2</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/../lib/MultiCurrency.jar</systemPath>
-        </dependency>
         <dependency>
             <groupId>net.milkbowl.vault</groupId>
             <artifactId>Vault</artifactId>
@@ -133,6 +105,18 @@
                     <artifactId>craftbukkit</artifactId>
                 </exclusion>
             </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>net.ess3</groupId>
+            <artifactId>IdProvider</artifactId>
+            <version>2.15.0</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>net.ess3</groupId>
+            <artifactId>FlattenedProvider</artifactId>
+            <version>2.15.0</version>
+            <scope>compile</scope>
         </dependency>
     </dependencies>
     <repositories>

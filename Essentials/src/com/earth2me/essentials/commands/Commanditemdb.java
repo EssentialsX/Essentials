@@ -21,9 +21,9 @@ public class Commanditemdb extends EssentialsCommand {
         ItemStack itemStack = null;
         boolean itemHeld = false;
         if (args.length < 1) {
-            if (sender.isPlayer()) {
+            if (sender.isPlayer() && sender.getPlayer() != null) {
                 itemHeld = true;
-                itemStack = sender.getPlayer().getItemInHand();
+                itemStack = sender.getPlayer().getInventory().getItemInMainHand();
             }
             if (itemStack == null) {
                 throw new NotEnoughArgumentsException();
@@ -31,7 +31,9 @@ public class Commanditemdb extends EssentialsCommand {
         } else {
             itemStack = ess.getItemDb().get(args[0]);
         }
-        sender.sendMessage(tl("itemType", itemStack.getType().toString(), itemStack.getTypeId() + ":" + Integer.toString(itemStack.getDurability())));
+
+        int itemId = ess.getItemDb().getLegacyId(itemStack.getType());
+        sender.sendMessage(tl("itemType", itemStack.getType().toString(), itemId + ":" + Integer.toString(itemStack.getDurability())));
 
         if (itemHeld && itemStack.getType() != Material.AIR) {
             int maxuses = itemStack.getType().getMaxDurability();

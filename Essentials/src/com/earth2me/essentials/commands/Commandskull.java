@@ -31,14 +31,14 @@ public class Commandskull extends EssentialsCommand {
             owner = user.getName();
         }
 
-        ItemStack itemSkull = user.getBase().getItemInHand();
+        ItemStack itemSkull = user.getBase().getInventory().getItemInMainHand();
         SkullMeta metaSkull = null;
         boolean spawn = false;
 
-        if (itemSkull != null && itemSkull.getType() == Material.SKULL_ITEM && itemSkull.getDurability() == 3) {
+        if (itemSkull != null && itemSkull.getType() == Material.LEGACY_SKULL_ITEM && itemSkull.getDurability() == 3) {
             metaSkull = (SkullMeta) itemSkull.getItemMeta();
         } else if (user.isAuthorized("essentials.skull.spawn")) {
-            itemSkull = new ItemStack(Material.SKULL_ITEM, 1, (byte) 3);
+            itemSkull = new ItemStack(Material.LEGACY_SKULL_ITEM, 1, (byte) 3);
             metaSkull = (SkullMeta) itemSkull.getItemMeta();
             spawn = true;
         } else {

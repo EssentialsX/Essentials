@@ -31,9 +31,10 @@ public class Commandgive extends EssentialsCommand {
         }
 
         ItemStack stack = ess.getItemDb().get(args[1]);
+        int itemId = ess.getItemDb().getLegacyId(stack.getType());
 
         final String itemname = stack.getType().toString().toLowerCase(Locale.ENGLISH).replace("_", "");
-        if (sender.isPlayer() && (ess.getSettings().permissionBasedItemSpawn() ? (!ess.getUser(sender.getPlayer()).isAuthorized("essentials.itemspawn.item-all") && !ess.getUser(sender.getPlayer()).isAuthorized("essentials.itemspawn.item-" + itemname) && !ess.getUser(sender.getPlayer()).isAuthorized("essentials.itemspawn.item-" + stack.getTypeId())) : (!ess.getUser(sender.getPlayer()).isAuthorized("essentials.itemspawn.exempt") && !ess.getUser(sender.getPlayer()).canSpawnItem(stack.getTypeId())))) {
+        if (sender.isPlayer() && (ess.getSettings().permissionBasedItemSpawn() ? (!ess.getUser(sender.getPlayer()).isAuthorized("essentials.itemspawn.item-all") && !ess.getUser(sender.getPlayer()).isAuthorized("essentials.itemspawn.item-" + itemname) && !ess.getUser(sender.getPlayer()).isAuthorized("essentials.itemspawn.item-" + itemId)) : (!ess.getUser(sender.getPlayer()).isAuthorized("essentials.itemspawn.exempt") && !ess.getUser(sender.getPlayer()).canSpawnItem(stack.getType())))) {
             throw new Exception(tl("cantSpawnItem", itemname));
         }
 

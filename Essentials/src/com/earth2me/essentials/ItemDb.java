@@ -1,17 +1,14 @@
 package com.earth2me.essentials;
 
-import com.earth2me.essentials.utils.NumberUtil;
 import com.earth2me.essentials.utils.StringUtil;
 import net.ess3.api.IEssentials;
-import net.ess3.nms.refl.ReflUtil;
-import org.apache.commons.lang.StringUtils;
-import org.bukkit.Bukkit;
+import net.ess3.nms.ItemDbProvider;
+import net.ess3.nms.ids.LegacyItemDbProvider;
 import org.bukkit.Color;
 import org.bukkit.FireworkEffect;
 import org.bukkit.Material;
 import org.bukkit.block.Banner;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.*;
@@ -19,190 +16,48 @@ import org.bukkit.potion.Potion;
 import org.bukkit.potion.PotionEffect;
 
 import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.logging.Logger;
 
 import static com.earth2me.essentials.I18n.tl;
 
 
 public class ItemDb implements IConf, net.ess3.api.IItemDb {
+    protected static final Logger LOGGER = Logger.getLogger("Essentials");
     private final transient IEssentials ess;
-    private final transient Map<String, Integer> items = new HashMap<>();
-    private final transient Map<ItemData, List<String>> names = new HashMap<>();
-    private final transient Map<ItemData, String> primaryName = new HashMap<>();
-    private final transient Map<String, Short> durabilities = new HashMap<>();
-    private final transient Map<String, String> nbtData = new HashMap<>();
-    private final transient ManagedFile file;
-    private final transient Pattern splitPattern = Pattern.compile("((.*)[:+',;.](\\d+))");
-    private final transient Pattern csvSplitPattern = Pattern.compile("(\"([^\"]*)\"|[^,]*)(,|$)");
+    private transient ItemDbProvider provider = null;
+
+    private transient ManagedFile file = null;
 
     public ItemDb(final IEssentials ess) {
         this.ess = ess;
-        file = new ManagedFile("items.csv", ess);
     }
 
     @Override
     public void reloadConfig() {
-        final List<String> lines = file.getLines();
-
-        if (lines.isEmpty()) {
-            return;
+        if (provider == null) {
+            this.provider = ess.getItemDbProvider();
         }
 
-        durabilities.clear();
-        items.clear();
-        names.clear();
-        primaryName.clear();
-
-        for (String line : lines) {
-            if (line.length() > 0 && line.charAt(0) == '#') {
-                continue;
-            }
-
-            String itemName = null;
-            int numeric = -1;
-            short data = 0;
-            String nbt = null;
-
-            int col = 0;
-            Matcher matcher = csvSplitPattern.matcher(line);
-            while (matcher.find()) {
-                String match = matcher.group(1);
-                if (StringUtils.stripToNull(match) == null) {
-                    continue;
-                }
-                match = StringUtils.strip(match.trim(), "\"");
-                switch (col) {
-                    case 0:
-                        itemName = match.toLowerCase(Locale.ENGLISH);
-                        break;
-                    case 1:
-                        numeric = Integer.parseInt(match);
-                        break;
-                    case 2:
-                        data = Short.parseShort(match);
-                        break;
-                    case 3:
-                        nbt = StringUtils.stripToNull(match);
-                        break;
-                    default:
-                        continue;
-                }
-                col++;
-            }
-            // Invalid row
-            if (itemName == null || numeric < 0) {
-                continue;
-            }
-            durabilities.put(itemName, data);
-            items.put(itemName, numeric);
-            if (nbt != null) {
-                nbtData.put(itemName, nbt);
-            }
-
-            ItemData itemData = new ItemData(numeric, data);
-            if (names.containsKey(itemData)) {
-                List<String> nameList = names.get(itemData);
-                nameList.add(itemName);
+        if (file == null) {
+            if (provider instanceof LegacyItemDbProvider) {
+                file = new ManagedFile("items.csv", ess);
             } else {
-                List<String> nameList = new ArrayList<>();
-                nameList.add(itemName);
-                names.put(itemData, nameList);
-                primaryName.put(itemData, itemName);
+                file = new ManagedFile("items.json", ess);
             }
         }
 
-        for (List<String> nameList : names.values()) {
-            Collections.sort(nameList, LengthCompare.INSTANCE);
-        }
+        provider.rebuild(file.getLines());
+        LOGGER.info(String.format("Loaded %s items.", provider.listNames().size()));
     }
 
     @Override
     public ItemStack get(final String id, final int quantity) throws Exception {
-        final ItemStack retval = get(id.toLowerCase(Locale.ENGLISH));
-        retval.setAmount(quantity);
-        return retval;
+        return provider.getStack(id, quantity);
     }
 
     @Override
     public ItemStack get(final String id) throws Exception {
-        int itemid = 0;
-        String itemname;
-        short metaData = 0;
-        Matcher parts = splitPattern.matcher(id);
-        if (parts.matches()) {
-            itemname = parts.group(2);
-            metaData = Short.parseShort(parts.group(3));
-        } else {
-            itemname = id;
-        }
-
-        if (NumberUtil.isInt(itemname)) {
-            itemid = Integer.parseInt(itemname);
-        } else if (NumberUtil.isInt(id)) {
-            itemid = Integer.parseInt(id);
-        } else {
-            itemname = itemname.toLowerCase(Locale.ENGLISH);
-        }
-
-        if (itemid < 1) {
-            if (items.containsKey(itemname)) {
-                itemid = items.get(itemname);
-                if (durabilities.containsKey(itemname) && metaData == 0) {
-                    metaData = durabilities.get(itemname);
-                }
-            } else if (Material.getMaterial(itemname.toUpperCase(Locale.ENGLISH)) != null) {
-                Material bMaterial = Material.getMaterial(itemname.toUpperCase(Locale.ENGLISH));
-                itemid = bMaterial.getId();
-            } else {
-                try {
-                    Material bMaterial = Bukkit.getUnsafe().getMaterialFromInternalName(itemname.toLowerCase(Locale.ENGLISH));
-                    itemid = bMaterial.getId();
-                } catch (Throwable throwable) {
-                    throw new Exception(tl("unknownItemName", itemname), throwable);
-                }
-            }
-        }
-
-        if (itemid < 1) {
-            throw new Exception(tl("unknownItemName", itemname));
-        }
-
-        final Material mat = Material.getMaterial(itemid);
-        if (mat == null) {
-            throw new Exception(tl("unknownItemId", itemid));
-        }
-        ItemStack retval = new ItemStack(mat);
-        if (nbtData.containsKey(itemname)) {
-            String nbt = nbtData.get(itemname);
-            if (nbt.startsWith("*")) {
-                nbt = nbtData.get(nbt.substring(1));
-            }
-            retval = ess.getServer().getUnsafe().modifyItemStack(retval, nbt);
-        }
-        if (mat == Material.MOB_SPAWNER) {
-            if (metaData == 0) metaData = EntityType.PIG.getTypeId();
-            try {
-                retval = ess.getSpawnerProvider().setEntityType(retval, EntityType.fromId(metaData));
-            } catch (IllegalArgumentException e) {
-                throw new Exception("Can't spawn entity ID " + metaData + " from mob spawners.");
-            }
-        } else if (mat == Material.MONSTER_EGG) {
-            EntityType type;
-            try {
-                type = EntityType.fromId(metaData);
-            } catch (IllegalArgumentException e) {
-                throw new Exception("Can't spawn entity ID " + metaData + " from spawn eggs.");
-            }
-            retval = ess.getSpawnEggProvider().createEggItem(type);
-        } else if (mat.name().endsWith("POTION")
-                && ReflUtil.getNmsVersionObject().isLowerThan(ReflUtil.V1_11_R1)) { // Only apply this to pre-1.11 as items.csv might only work in 1.11
-            retval = ess.getPotionMetaProvider().createPotionItem(mat, metaData);
-        } else {
-            retval.setDurability(metaData);
-        }
-        retval.setAmount(mat.getMaxStackSize());
-        return retval;
+        return provider.getStack(id);
     }
 
     @Override
@@ -222,7 +77,7 @@ public class ItemDb implements IConf, net.ess3.api.IItemDb {
             }
         } else if (args[0].equalsIgnoreCase("blocks")) {
             for (ItemStack stack : user.getBase().getInventory().getContents()) {
-                if (stack == null || stack.getTypeId() > 255 || stack.getType() == Material.AIR) {
+                if (stack == null || stack.getType() == Material.AIR) {
                     continue;
                 }
                 is.add(stack.clone());
@@ -240,15 +95,7 @@ public class ItemDb implements IConf, net.ess3.api.IItemDb {
 
     @Override
     public String names(ItemStack item) {
-        ItemData itemData = new ItemData(item.getTypeId(), item.getDurability());
-        List<String> nameList = names.get(itemData);
-        if (nameList == null) {
-            itemData = new ItemData(item.getTypeId(), (short) 0);
-            nameList = names.get(itemData);
-            if (nameList == null) {
-                return null;
-            }
-        }
+        List<String> nameList = provider.getNames(item);
 
         if (nameList.size() > 15) {
             nameList = nameList.subList(0, 14);
@@ -258,16 +105,7 @@ public class ItemDb implements IConf, net.ess3.api.IItemDb {
 
     @Override
     public String name(ItemStack item) {
-        ItemData itemData = new ItemData(item.getTypeId(), item.getDurability());
-        String name = primaryName.get(itemData);
-        if (name == null) {
-            itemData = new ItemData(item.getTypeId(), (short) 0);
-            name = primaryName.get(itemData);
-            if (name == null) {
-                return null;
-            }
-        }
-        return name;
+        return provider.getPrimaryName(item);
     }
 
     @Override
@@ -341,7 +179,8 @@ public class ItemDb implements IConf, net.ess3.api.IItemDb {
                     sb.append(e.getName().toLowerCase()).append(":").append(enchantmentStorageMeta.getStoredEnchantLevel(e)).append(" ");
                 }
                 break;
-            case FIREWORK:
+            case FIREWORK_ROCKET:
+            case FIREWORK_STAR:
                 // Everything from http://wiki.ess3.net/wiki/Item_Meta#Fireworks in that order.
                 FireworkMeta fireworkMeta = (FireworkMeta) is.getItemMeta();
                 if (fireworkMeta.hasEffects()) {
@@ -383,7 +222,8 @@ public class ItemDb implements IConf, net.ess3.api.IItemDb {
                     sb.append("splash:").append(potion.isSplash()).append(" ").append("effect:").append(e.getType().getName().toLowerCase()).append(" ").append("power:").append(e.getAmplifier()).append(" ").append("duration:").append(e.getDuration() / 20).append(" ");
                 }
                 break;
-            case SKULL_ITEM:
+            case SKELETON_SKULL:
+            case WITHER_SKELETON_SKULL:
                 // item stack with meta
                 SkullMeta skullMeta = (SkullMeta) is.getItemMeta();
                 if (skullMeta != null && skullMeta.hasOwner()) {
@@ -398,7 +238,22 @@ public class ItemDb implements IConf, net.ess3.api.IItemDb {
                 int rgb = leatherArmorMeta.getColor().asRGB();
                 sb.append("color:").append(rgb).append(" ");
                 break;
-            case BANNER:
+            case BLACK_BANNER:
+            case BLUE_BANNER:
+            case BROWN_BANNER:
+            case CYAN_BANNER:
+            case GRAY_BANNER:
+            case GREEN_BANNER:
+            case LIGHT_BLUE_BANNER:
+            case LIGHT_GRAY_BANNER:
+            case LIME_BANNER:
+            case MAGENTA_BANNER:
+            case ORANGE_BANNER:
+            case PINK_BANNER:
+            case PURPLE_BANNER:
+            case RED_BANNER:
+            case WHITE_BANNER:
+            case YELLOW_BANNER:
                 BannerMeta bannerMeta = (BannerMeta) is.getItemMeta();
                 if (bannerMeta != null) {
                     int basecolor = bannerMeta.getBaseColor().getColor().asRGB();
@@ -428,57 +283,17 @@ public class ItemDb implements IConf, net.ess3.api.IItemDb {
     }
 
     @Override
+    public Material getFromLegacyId(int id) {
+        return provider.getFromLegacyId(id);
+    }
+
+    @Override
+    public int getLegacyId(Material material) throws Exception {
+        return provider.getLegacyId(material);
+    }
+
+    @Override
     public Collection<String> listNames() {
-        return primaryName.values();
-    }
-
-    static class ItemData {
-        final private int itemNo;
-        final private short itemData;
-
-        ItemData(final int itemNo, final short itemData) {
-            this.itemNo = itemNo;
-            this.itemData = itemData;
-        }
-
-        public int getItemNo() {
-            return itemNo;
-        }
-
-        public short getItemData() {
-            return itemData;
-        }
-
-        @Override
-        public int hashCode() {
-            return (31 * itemNo) ^ itemData;
-        }
-
-        @Override
-        public boolean equals(Object o) {
-            if (o == null) {
-                return false;
-            }
-            if (!(o instanceof ItemData)) {
-                return false;
-            }
-            ItemData pairo = (ItemData) o;
-            return this.itemNo == pairo.getItemNo() && this.itemData == pairo.getItemData();
-        }
-    }
-
-
-    static class LengthCompare implements java.util.Comparator<String> {
-
-        private static final LengthCompare INSTANCE = new LengthCompare();
-
-        public LengthCompare() {
-            super();
-        }
-
-        @Override
-        public int compare(String s1, String s2) {
-            return s1.length() - s2.length();
-        }
+        return provider.listNames();
     }
 }
