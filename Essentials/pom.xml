@@ -106,18 +106,6 @@
                 </exclusion>
             </exclusions>
         </dependency>
-        <dependency>
-            <groupId>net.ess3</groupId>
-            <artifactId>IdProvider</artifactId>
-            <version>2.15.0</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>net.ess3</groupId>
-            <artifactId>FlattenedProvider</artifactId>
-            <version>2.15.0</version>
-            <scope>compile</scope>
-        </dependency>
     </dependencies>
     <repositories>
         <repository>
