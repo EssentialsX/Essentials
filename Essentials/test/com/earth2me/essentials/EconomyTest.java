@@ -3,105 +3,121 @@ package com.earth2me.essentials;
 import com.earth2me.essentials.api.NoLoanPermittedException;
 import com.earth2me.essentials.api.UserDoesNotExistException;
 import com.earth2me.essentials.commands.IEssentialsCommand;
-import com.earth2me.essentials.commands.NoChargeException;
-
-import junit.framework.TestCase;
 import net.ess3.api.Economy;
 import org.bukkit.World.Environment;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.InvalidDescriptionException;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 import java.io.IOException;
 
+import static java.math.BigDecimal.ZERO;
+import static java.math.BigDecimal.valueOf;
+import static org.junit.Assert.*;
 
-public class EconomyTest extends TestCase {
-    private final transient Essentials ess;
-    private static final String NPCNAME = "npc1";
+
+public class EconomyTest {
+    private static transient Essentials ess;
+    private static FakeServer server;
+    private static final String payMustBePositiveMessage = I18n.tl("payMustBePositive");
+
+    private static final String NPC = "npc1";
     private static final String PLAYERNAME = "testPlayer1";
     private static final String PLAYERNAME2 = "testPlayer2";
-    private final FakeServer server;
 
-    public EconomyTest(final String testName) {
-        super(testName);
-        this.server = new FakeServer();
+    @Rule
+    public ExpectedException expectedException = ExpectedException.none();
+
+    @BeforeClass
+    public static void setUpEnvironment() throws IOException, InvalidDescriptionException {
+        server = new FakeServer();
         server.createWorld("testWorld", Environment.NORMAL);
         ess = new Essentials(server);
-        try {
-            ess.setupForTesting(server);
-        } catch (InvalidDescriptionException ex) {
-            fail("InvalidDescriptionException");
-        } catch (IOException ex) {
-            fail("IOException");
-        }
+        ess.setupForTesting(server);
+    }
+
+    @Before
+    public void setUpDummyPlayers() throws Exception {
         server.addPlayer(new OfflinePlayer(PLAYERNAME, ess.getServer()));
         server.addPlayer(new OfflinePlayer(PLAYERNAME2, ess.getServer()));
     }
 
-    // only one big test, since we use static instances
     @Test
-    public void testEconomy() {
-        // test NPC
-        assertFalse("NPC does not exists", Economy.playerExists(NPCNAME));
-        assertTrue("Create NPC", Economy.createNPC(NPCNAME));
-        assertTrue("NPC exists", Economy.playerExists(NPCNAME));
-        assertNotNull("NPC can be accessed", ess.getOfflineUser(NPCNAME));
-        try {
-            Economy.removeNPC(NPCNAME);
-        } catch (UserDoesNotExistException ex) {
-            fail(ex.getMessage());
-        }
-        assertFalse("NPC can be removed", Economy.playerExists(NPCNAME));
+    public void resettingBalanceOfUnknownPlayer_shouldThrowException() throws UserDoesNotExistException, NoLoanPermittedException {
+        expectedException.expect(UserDoesNotExistException.class);
 
-        //test Math
-        try {
+        Economy.resetBalance("UnknownPlayer");
+    }
 
-            assertTrue("Player exists", Economy.playerExists(PLAYERNAME));
-            Economy.resetBalance(PLAYERNAME);
-            assertEquals("Player has no money", 0.0, Economy.getMoney(PLAYERNAME));
-            Economy.add(PLAYERNAME, 10.0);
-            assertEquals("Add money", 10.0, Economy.getMoney(PLAYERNAME));
-            Economy.subtract(PLAYERNAME, 5.0);
-            assertEquals("Subtract money", 5.0, Economy.getMoney(PLAYERNAME));
-            Economy.multiply(PLAYERNAME, 2.0);
-            assertEquals("Multiply money", 10.0, Economy.getMoney(PLAYERNAME));
-            Economy.divide(PLAYERNAME, 2.0);
-            assertEquals("Divide money", 5.0, Economy.getMoney(PLAYERNAME));
-            Economy.setMoney(PLAYERNAME, 10.0);
-            assertEquals("Set money", 10.0, Economy.getMoney(PLAYERNAME));
-        } catch (NoLoanPermittedException ex) {
-            fail(ex.getMessage());
-        } catch (UserDoesNotExistException ex) {
-            fail(ex.getMessage());
-        }
+    @Test
+    public void negativeAccountBalance_shouldThrowException() throws UserDoesNotExistException, NoLoanPermittedException {
+        expectedException.expect(NoLoanPermittedException.class);
 
-        //test Format
-        assertEquals("Format $1,000", "$1,000", Economy.format(1000.0));
-        assertEquals("Format $10", "$10", Economy.format(10.0));
-        assertEquals("Format $10.10", "$10.10", Economy.format(10.10));
-        assertEquals("Format $10.10", "$10.10", Economy.format(10.1000001));
-        assertEquals("Format $10.10", "$10.10", Economy.format(10.1099999));
+        assertTrue("Player exists", Economy.playerExists(PLAYERNAME));
+        Economy.resetBalance(PLAYERNAME);
 
+        assertEquals("Player should have zero balance after reset", ZERO, Economy.getMoneyExact(PLAYERNAME));
+        Economy.substract(PLAYERNAME, valueOf(5));
+    }
 
-        //test Exceptions
-        try {
-            assertTrue("Player exists", Economy.playerExists(PLAYERNAME));
-            Economy.resetBalance(PLAYERNAME);
-            assertEquals("Reset balance", 0.0, Economy.getMoney(PLAYERNAME));
-            Economy.subtract(PLAYERNAME, 5.0);
-            fail("Did not throw exception");
-        } catch (NoLoanPermittedException ex) {
-        } catch (UserDoesNotExistException ex) {
-            fail(ex.getMessage());
-        }
+    @Test
+    public void testFormat() {
+        assertEquals("$1,000", Economy.format(valueOf(1000.0)));
+        assertEquals("$10", Economy.format(valueOf(10.0)));
+        assertEquals("$10.10", Economy.format(valueOf(10.10)));
+        assertEquals("$10.10", Economy.format(valueOf(10.1000001)));
+        assertEquals("$10.10", Economy.format(valueOf(10.1099999)));
+    }
 
-        try {
-            Economy.resetBalance("UnknownPlayer");
-            fail("Did not throw exception");
-        } catch (NoLoanPermittedException ex) {
-            fail(ex.getMessage());
-        } catch (UserDoesNotExistException ex) {
-        }
+    @Test
+    public void testPlayerEconomy() throws UserDoesNotExistException, NoLoanPermittedException {
+        assertTrue("Player exists after creation", Economy.playerExists(PLAYERNAME));
+
+        Economy.resetBalance(PLAYERNAME);
+        assertEquals("Player has no money after creation", valueOf(0), Economy.getMoneyExact(PLAYERNAME));
+
+        Economy.add(PLAYERNAME, valueOf(10));
+        assertEquals("Player should have had money after addition", valueOf(10), Economy.getMoneyExact(PLAYERNAME));
+
+        Economy.substract(PLAYERNAME, valueOf(5));
+        assertEquals("Player should have had his money subtracted", valueOf(5), Economy.getMoneyExact(PLAYERNAME));
+
+        Economy.multiply(PLAYERNAME, valueOf(2));
+        assertEquals("Player should have had his money multiplied", valueOf(10), Economy.getMoneyExact(PLAYERNAME));
+
+        Economy.divide(PLAYERNAME, valueOf(2));
+        assertEquals("Player should have had his money divided", valueOf(5), Economy.getMoneyExact(PLAYERNAME));
+
+        Economy.setMoney(PLAYERNAME, valueOf(10));
+        assertEquals("Player should have had his money set", valueOf(10), Economy.getMoneyExact(PLAYERNAME));
+        assertTrue("Player should have less than 11$", Economy.hasLess(PLAYERNAME, valueOf(20)));
+        assertTrue("Player should have less than 9$", Economy.hasMore(PLAYERNAME, valueOf(9)));
+        assertTrue("Player should have enough money", Economy.hasEnough(PLAYERNAME, valueOf(5)));
+    }
+
+    @Test
+    public void testNPC() throws UserDoesNotExistException {
+        assertFalse("There should be no NPC before creating it", Economy.playerExists(NPC));
+        assertTrue("NPC creation should be possible", Economy.createNPC(NPC));
+        assertTrue("NPC exists after creation", Economy.playerExists(NPC));
+        assertNotNull("NPC can be accessed after creation", ess.getOfflineUser(NPC));
+        assertTrue(Economy.isNPC(NPC));
+
+        Economy.removeNPC(NPC);
+        assertFalse("NPC does not exist after deleting", Economy.playerExists(NPC));
+    }
+
+    @Test
+    public void whenPayingNegativeAmount_shouldThrowException() throws Exception {
+        expectedException.expect(Exception.class);
+        expectedException.expectMessage(payMustBePositiveMessage);
+
+        User user = ess.getUser(PLAYERNAME);
+        runCommand("pay", user, PLAYERNAME2 + " -123");
     }
 
     private void runCommand(String command, User user, String args) throws Exception {
@@ -111,14 +127,10 @@ public class EconomyTest extends TestCase {
     private void runCommand(String command, User user, String[] args) throws Exception {
         IEssentialsCommand cmd;
 
-        try {
-            cmd = (IEssentialsCommand) Essentials.class.getClassLoader()
+        cmd = (IEssentialsCommand) Essentials.class.getClassLoader()
                 .loadClass("com.earth2me.essentials.commands.Command" + command).newInstance();
-            cmd.setEssentials(ess);
-            cmd.run(server, user, command, null, args);
-        } catch (NoChargeException ex) {
-        }
-
+        cmd.setEssentials(ess);
+        cmd.run(server, user, command, null, args);
     }
 
     private void runConsoleCommand(String command, String args) throws Exception {
@@ -127,24 +139,11 @@ public class EconomyTest extends TestCase {
 
     private void runConsoleCommand(String command, String[] args) throws Exception {
         IEssentialsCommand cmd;
-
         CommandSender sender = server.getConsoleSender();
 
-        try {
-            cmd = (IEssentialsCommand) Essentials.class.getClassLoader()
+        cmd = (IEssentialsCommand) Essentials.class.getClassLoader()
                 .loadClass("com.earth2me.essentials.commands.Command" + command).newInstance();
-            cmd.setEssentials(ess);
-            cmd.run(server, new CommandSource(sender), command, null, args);
-        } catch (NoChargeException ex) {
-        }
-    }
-
-    public void testNegativePayCommand() throws Exception {
-        User user1 = ess.getUser(PLAYERNAME);
-        try {
-            runCommand("pay", user1, PLAYERNAME2 + " -123");
-        } catch (Exception e) {
-            assertEquals(I18n.tl("payMustBePositive"), e.getMessage());
-        }
+        cmd.setEssentials(ess);
+        cmd.run(server, new CommandSource(sender), command, null, args);
     }
 }
