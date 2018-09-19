@@ -105,7 +105,6 @@ public class EconomyTest {
         assertTrue("NPC creation should be possible", Economy.createNPC(NPC));
         assertTrue("NPC exists after creation", Economy.playerExists(NPC));
         assertNotNull("NPC can be accessed after creation", ess.getOfflineUser(NPC));
-        assertTrue(Economy.isNPC(NPC));
 
         Economy.removeNPC(NPC);
         assertFalse("NPC does not exist after deleting", Economy.playerExists(NPC));
