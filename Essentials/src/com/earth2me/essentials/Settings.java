@@ -1471,4 +1471,9 @@ public class Settings implements net.ess3.api.ISettings {
     public boolean isAllowWorldInBroadcastworld() {
         return isAllowWorldInBroadcastworld;
     }
+    
+    @Override
+    public boolean allowSellNamedItems() {
+    	return config.getBoolean("allow-sell-named-items");
+    }
 }

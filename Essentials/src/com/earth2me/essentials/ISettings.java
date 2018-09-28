@@ -310,4 +310,6 @@ public interface ISettings extends IConf {
     boolean isCompassTowardsHomePerm();
 
     boolean isAllowWorldInBroadcastworld();
+
+	boolean allowSellNamedItems();
 }

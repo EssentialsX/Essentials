@@ -39,8 +39,17 @@ public class Commandsell extends EssentialsCommand {
         int count = 0;
 
         boolean isBulk = is.size() > 1;
-
         for (ItemStack stack : is) {
+        	if (!ess.getSettings().allowSellNamedItems()) {
+        		if (stack.getItemMeta().hasDisplayName()) {
+        			if (!isBulk) {
+        				throw new Exception(tl("cannotSellNamedItem"));
+        			} else {
+        				user.sendMessage(tl("cannotSellThisNamedItem", stack.getItemMeta().getDisplayName()));
+        				continue;
+        			}
+        		}
+        	}
             try {
                 if (stack.getAmount() > 0) {
                     totalWorth = totalWorth.add(sellItem(user, stack, args, isBulk));
