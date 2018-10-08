@@ -4,10 +4,13 @@ import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.NumberUtil;
 import com.google.common.collect.Lists;
+
+import org.bukkit.ChatColor;
 import org.bukkit.Server;
 import org.bukkit.inventory.ItemStack;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
@@ -39,13 +42,15 @@ public class Commandsell extends EssentialsCommand {
         int count = 0;
 
         boolean isBulk = is.size() > 1;
+        List<ItemStack> notSold = new ArrayList<ItemStack>();
         for (ItemStack stack : is) {
         	if (!ess.getSettings().allowSellNamedItems()) {
         		if (stack.getItemMeta().hasDisplayName()) {
         			if (!isBulk) {
         				throw new Exception(tl("cannotSellNamedItem"));
         			} else {
-        				user.sendMessage(tl("cannotSellThisNamedItem", stack.getItemMeta().getDisplayName()));
+        				//user.sendMessage(tl("cannotSellThisNamedItem", stack.getItemMeta().getDisplayName()));
+        				notSold.add(stack);
         				continue;
         			}
         		}
@@ -66,6 +71,13 @@ public class Commandsell extends EssentialsCommand {
                     throw e;
                 }
             }
+        }
+        if (isBulk && !notSold.isEmpty()) {
+        	List<String> itemNames = new ArrayList<String>();
+        	for (ItemStack notSoldItem : notSold) {
+        		itemNames.add(notSoldItem.getItemMeta().getDisplayName());
+        	}
+        	user.sendMessage(tl("cannotSellTheseNamedItems", String.join(ChatColor.RESET + ", "  , itemNames)));
         }
         if (count != 1) {
             if (args[0].equalsIgnoreCase("blocks")) {

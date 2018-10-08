@@ -538,6 +538,7 @@ public class Settings implements net.ess3.api.ISettings {
         defaultEnabledConfirmCommands = _getDefaultEnabledConfirmCommands();
         isCompassTowardsHomePerm = _isCompassTowardsHomePerm();
         isAllowWorldInBroadcastworld = _isAllowWorldInBroadcastworld();
+        allowSellNamedItems = _allowSellNamedItems();
     }
 
     private List<Integer> itemSpawnBl = new ArrayList<Integer>();
@@ -1472,8 +1473,14 @@ public class Settings implements net.ess3.api.ISettings {
         return isAllowWorldInBroadcastworld;
     }
     
+    private boolean allowSellNamedItems;
+    
+    private boolean _allowSellNamedItems() {
+    	return config.getBoolean("allow-sell-named-items");
+    }
+    
     @Override
     public boolean allowSellNamedItems() {
-    	return config.getBoolean("allow-sell-named-items");
+    	return allowSellNamedItems;
     }
 }
