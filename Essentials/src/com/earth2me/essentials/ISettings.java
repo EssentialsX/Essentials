@@ -311,5 +311,5 @@ public interface ISettings extends IConf {
 
     boolean isAllowWorldInBroadcastworld();
 
-	boolean allowSellNamedItems();
+    boolean allowSellNamedItems();
 }
