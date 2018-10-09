@@ -49,7 +49,6 @@ public class Commandsell extends EssentialsCommand {
         			if (!isBulk) {
         				throw new Exception(tl("cannotSellNamedItem"));
         			} else {
-        				//user.sendMessage(tl("cannotSellThisNamedItem", stack.getItemMeta().getDisplayName()));
         				notSold.add(stack);
         				continue;
         			}
