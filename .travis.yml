@@ -1,0 +1,6 @@
+language: java
+
+branches:
+  only:
+  - 2.x
+  - 1.13
