@@ -1476,11 +1476,11 @@ public class Settings implements net.ess3.api.ISettings {
     private boolean allowSellNamedItems;
     
     private boolean _allowSellNamedItems() {
-    	return config.getBoolean("allow-sell-named-items");
+        return config.getBoolean("allow-sell-named-items");
     }
     
     @Override
     public boolean allowSellNamedItems() {
-    	return allowSellNamedItems;
+        return allowSellNamedItems;
     }
 }
