@@ -19,3 +19,4 @@ before_install:
   - java -jar BuildTools.jar --rev 1.9
   - java -jar BuildTools.jar --rev 1.9.4
   - java -jar BuildTools.jar --rev 1.13.1
+  - cd ..
