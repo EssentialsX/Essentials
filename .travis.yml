@@ -4,3 +4,18 @@ branches:
   only:
   - 2.x
   - 1.13
+  
+cache:
+  directories:
+  - .buildtools
+  - $HOME/.m2
+
+before_script:
+  - mkdir .buildtools
+  - cd buildtools
+  - wget -O BuildTools.jar https://hub.spigotmc.org/jenkins/job/BuildTools/lastSuccessfulBuild/artifact/target/BuildTools.jar
+  - java -jar BuildTools.jar --rev 1.8
+  - java -jar BuildTools.jar --rev 1.8.3
+  - java -jar BuildTools.jar --rev 1.9
+  - java -jar BuildTools.jar --rev 1.9.4
+  - java -jar BuildTools.jar --rev 1.13.1
