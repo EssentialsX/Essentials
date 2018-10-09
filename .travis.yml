@@ -11,7 +11,7 @@ cache:
   - $HOME/.m2
 
 before_install:
-  - mkdir .buildtools
+  - mkdir -p .buildtools
   - cd .buildtools
   - wget -O BuildTools.jar https://hub.spigotmc.org/jenkins/job/BuildTools/lastSuccessfulBuild/artifact/target/BuildTools.jar
   - java -jar BuildTools.jar --rev 1.8
