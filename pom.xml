@@ -47,7 +47,6 @@
         <module>nms/1_8_R2Provider</module>
         <module>nms/LegacyProvider</module>
         <module>nms/ReflectionProvider</module>
-        <module>nms/IdProvider</module>
         <module>nms/FlattenedProvider</module>
     </modules>
 

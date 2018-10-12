@@ -1,9 +1,11 @@
 package com.earth2me.essentials;
 
 import com.earth2me.essentials.utils.StringUtil;
+import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import net.ess3.api.IEssentials;
-import net.ess3.nms.ItemDbProvider;
-import net.ess3.nms.ids.LegacyItemDbProvider;
 import org.bukkit.Color;
 import org.bukkit.FireworkEffect;
 import org.bukkit.Material;
@@ -13,6 +15,7 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.*;
 import org.bukkit.potion.Potion;
+import org.bukkit.potion.PotionData;
 import org.bukkit.potion.PotionEffect;
 
 import java.util.*;
@@ -23,8 +26,16 @@ import static com.earth2me.essentials.I18n.tl;
 
 public class ItemDb implements IConf, net.ess3.api.IItemDb {
     protected static final Logger LOGGER = Logger.getLogger("Essentials");
-    private final transient IEssentials ess;
-    private transient ItemDbProvider provider = null;
+    private final transient IEssentials ess;private static Gson gson = new Gson();
+
+    // Maps primary name to ItemData
+    private final transient Map<String, ItemData> items = new HashMap<>();
+
+    // Maps alias to primary name
+    private final transient Map<String, String> itemAliases = new HashMap<>();
+
+    // Every known alias
+    private final transient Set<String> allAliases = new HashSet<>();
 
     private transient ManagedFile file = null;
 
@@ -34,30 +45,86 @@ public class ItemDb implements IConf, net.ess3.api.IItemDb {
 
     @Override
     public void reloadConfig() {
-        if (provider == null) {
-            this.provider = ess.getItemDbProvider();
+        if (file == null) {
+            new ManagedFile("items.json", ess);
         }
 
-        if (file == null) {
-            if (provider instanceof LegacyItemDbProvider) {
-                file = new ManagedFile("items.csv", ess);
+        this.rebuild();
+        LOGGER.info(String.format("Loaded %s items.", listNames().size()));
+    }
+
+    private void rebuild() {
+        this.reset();
+        this.loadJSON(String.join("\n", file.getLines()));
+    }
+
+    private void reset() {
+        items.clear();
+        itemAliases.clear();
+        allAliases.clear();
+    }
+
+    public void loadJSON(String source) {
+        JsonObject map = (new JsonParser()).parse(source).getAsJsonObject();
+
+        for (Map.Entry<String, JsonElement> entry : map.entrySet()) {
+            String key = entry.getKey();
+            JsonElement element = entry.getValue();
+            boolean valid = false;
+
+            if (element.isJsonObject()) {
+                ItemData data = gson.fromJson(element, ItemData.class);
+                items.put(key, data);
+                valid = true;
             } else {
-                file = new ManagedFile("items.json", ess);
+                try {
+                    String target = element.getAsString();
+                    itemAliases.put(key, target);
+                    valid = true;
+                } catch (Exception e) {
+                    // TODO: log invalid entry
+                }
+            }
+
+            if (valid) {
+                allAliases.add(key);
             }
         }
-
-        provider.rebuild(file.getLines());
-        LOGGER.info(String.format("Loaded %s items.", provider.listNames().size()));
     }
 
     @Override
     public ItemStack get(final String id, final int quantity) throws Exception {
-        return provider.getStack(id, quantity);
+        ItemStack is = get(id);
+        is.setAmount(quantity);
+        return is;
     }
 
     @Override
     public ItemStack get(final String id) throws Exception {
-        return provider.getStack(id);
+        ItemData data = Objects.requireNonNull(getByName(id));
+        PotionData potionData = data.getPotionData();
+        Material material = data.getMaterial();
+
+        ItemStack stack = new ItemStack(material);
+
+        if (potionData != null) {
+            PotionMeta meta = (PotionMeta) stack.getItemMeta();
+            meta.setBasePotionData(potionData);
+            stack.setItemMeta(meta);
+        }
+
+        return stack;
+    }
+
+    private ItemData getByName(String name) {
+        name = name.toLowerCase();
+        if (items.containsKey(name)) {
+            return items.get(name);
+        } else if (itemAliases.containsKey(name)) {
+            return items.get(itemAliases.get(name));
+        }
+
+        return null;
     }
 
     @Override
@@ -95,7 +162,7 @@ public class ItemDb implements IConf, net.ess3.api.IItemDb {
 
     @Override
     public String names(ItemStack item) {
-        List<String> nameList = provider.getNames(item);
+        List<String> nameList = nameList(item);
 
         if (nameList.size() > 15) {
             nameList = nameList.subList(0, 14);
@@ -104,8 +171,36 @@ public class ItemDb implements IConf, net.ess3.api.IItemDb {
     }
 
     @Override
+    public List<String> nameList(ItemStack item) {
+        List<String> names = new ArrayList<>();
+        String primaryName = name(item);
+        names.add(primaryName);
+
+        for (Map.Entry<String, String> entry : itemAliases.entrySet()) {
+            if (entry.getValue().equalsIgnoreCase(primaryName)) {
+                names.add(entry.getKey());
+            }
+        }
+
+        return names;
+    }
+
+    @Override
     public String name(ItemStack item) {
-        return provider.getPrimaryName(item);
+        Material type = item.getType();
+        PotionData potion = null;
+
+        if ((type.name().contains("POTION") || type.name().equals("TIPPED_ARROW")) && item.getItemMeta() instanceof PotionMeta) {
+            potion = ((PotionMeta) item.getItemMeta()).getBasePotionData();
+        }
+
+        for (Map.Entry<String, ItemData> entry : items.entrySet()) {
+            if (entry.getValue().getMaterial().equals(type) && entry.getValue().getPotionData().equals(potion)) {
+                return entry.getKey();
+            }
+        }
+
+        return null;
     }
 
     @Override
@@ -283,17 +378,64 @@ public class ItemDb implements IConf, net.ess3.api.IItemDb {
     }
 
     @Override
+    @Deprecated
     public Material getFromLegacyId(int id) {
-        return provider.getFromLegacyId(id);
+        throw new UnsupportedOperationException("Legacy IDs aren't supported on this version of EssentialsX.");
     }
 
     @Override
+    @Deprecated
     public int getLegacyId(Material material) throws Exception {
-        return provider.getLegacyId(material);
+        throw new UnsupportedOperationException("Legacy IDs aren't supported on this version of EssentialsX.");
     }
 
     @Override
     public Collection<String> listNames() {
-        return provider.listNames();
+        return Collections.unmodifiableSet(allAliases);
+    }
+
+    public static class ItemData {
+        private String itemName;
+        private Material material;
+        private PotionData potionData;
+
+        @Override
+        public int hashCode() {
+            return (31 * material.hashCode()) ^ potionData.hashCode();
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (o == null) {
+                return false;
+            }
+            if (!(o instanceof ItemData)) {
+                return false;
+            }
+            ItemData pairo = (ItemData) o;
+            return this.material == pairo.getMaterial() && potionDataEquals(pairo);
+        }
+
+        public String getItemName() {
+            return itemName;
+        }
+
+        public Material getMaterial() {
+            return material;
+        }
+
+        public PotionData getPotionData() {
+            return this.potionData;
+        }
+
+        private boolean potionDataEquals(ItemData o) {
+            if (this.potionData == null && o.getPotionData() == null) {
+                return true;
+            } else if (this.potionData != null && o.getPotionData() != null) {
+                return this.potionData.equals(o.getPotionData());
+            } else {
+                return false;
+            }
+        }
     }
 }
