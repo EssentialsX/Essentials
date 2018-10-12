@@ -23,17 +23,10 @@ public class Worth implements IConf {
 
     public BigDecimal getPrice(IEssentials essentials, ItemStack itemStack) {
         BigDecimal result;
-        int itemId;
-
-        try {
-            itemId = essentials.getItemDb().getLegacyId(itemStack.getType());
-        } catch (Exception e) {
-            return null;
-        }
 
         String itemname = itemStack.getType().toString().toLowerCase(Locale.ENGLISH).replace("_", "");
 
-        //First check for matches with item name
+        // Check for matches with item name
         result = config.getBigDecimal("worth." + itemname + "." + itemStack.getDurability(), BigDecimal.ONE.negate());
         if (result.signum() < 0) {
             final ConfigurationSection itemNameMatch = config.getConfigurationSection("worth." + itemname);
@@ -48,27 +41,6 @@ public class Worth implements IConf {
             result = config.getBigDecimal("worth." + itemname, BigDecimal.ONE.negate());
         }
 
-        //Now we should check for item ID
-        if (result.signum() < 0) {
-            result = config.getBigDecimal("worth." + itemId + "." + itemStack.getDurability(), BigDecimal.ONE.negate());
-        }
-        if (result.signum() < 0) {
-            final ConfigurationSection itemNumberMatch = config.getConfigurationSection("worth." + itemId);
-            if (itemNumberMatch != null && itemNumberMatch.getKeys(false).size() == 1) {
-                result = config.getBigDecimal("worth." + itemId + ".0", BigDecimal.ONE.negate());
-            }
-        }
-        if (result.signum() < 0) {
-            result = config.getBigDecimal("worth." + itemId + ".*", BigDecimal.ONE.negate());
-        }
-        if (result.signum() < 0) {
-            result = config.getBigDecimal("worth." + itemId, BigDecimal.ONE.negate());
-        }
-
-        //This is to match the old worth syntax
-        if (result.signum() < 0) {
-            result = config.getBigDecimal("worth-" + itemId, BigDecimal.ONE.negate());
-        }
         if (result.signum() < 0) {
             return null;
         }
