@@ -962,6 +962,26 @@ public class OfflinePlayer implements Player {
     }
 
     @Override
+    public boolean discoverRecipe(NamespacedKey recipe) {
+        return false;
+    }
+
+    @Override
+    public int discoverRecipes(Collection<NamespacedKey> recipes) {
+        return 0;
+    }
+
+    @Override
+    public boolean undiscoverRecipe(NamespacedKey recipe) {
+        return false;
+    }
+
+    @Override
+    public int undiscoverRecipes(Collection<NamespacedKey> recipes) {
+        return 0;
+    }
+
+    @Override
     public boolean hasLineOfSight(Entity entity) {
         return false;
     }
@@ -1535,7 +1555,12 @@ public class OfflinePlayer implements Player {
         return null;
     }
 
-	@Override
+    @Override
+    public BlockFace getFacing() {
+        return null;
+    }
+
+    @Override
 	public void updateCommands() {
 	}
 }
