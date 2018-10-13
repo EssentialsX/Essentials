@@ -46,7 +46,7 @@ public class ItemDb implements IConf, net.ess3.api.IItemDb {
     @Override
     public void reloadConfig() {
         if (file == null) {
-            new ManagedFile("items.json", ess);
+            file = new ManagedFile("items.json", ess);
         }
 
         this.rebuild();
