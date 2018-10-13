@@ -83,13 +83,13 @@ public class ItemDb implements IConf, net.ess3.api.IItemDb {
                     String target = element.getAsString();
                     itemAliases.put(key, target);
                     valid = true;
-                } catch (Exception e) {
-                    // TODO: log invalid entry
-                }
+                } catch (Exception ignored) {}
             }
 
             if (valid) {
                 allAliases.add(key);
+            } else {
+                LOGGER.warning(String.format("Failed to add item: \"%s\": %s", key, element.toString()));
             }
         }
     }
