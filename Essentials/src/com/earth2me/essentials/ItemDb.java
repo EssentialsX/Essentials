@@ -194,8 +194,10 @@ public class ItemDb implements IConf, net.ess3.api.IItemDb {
             potion = ((PotionMeta) item.getItemMeta()).getBasePotionData();
         }
 
+        ItemData data = new ItemData(type, potion);
+
         for (Map.Entry<String, ItemData> entry : items.entrySet()) {
-            if (entry.getValue().getMaterial().equals(type) && entry.getValue().getPotionData().equals(potion)) {
+            if (entry.getValue().equals(data)) {
                 return entry.getKey();
             }
         }
@@ -399,6 +401,11 @@ public class ItemDb implements IConf, net.ess3.api.IItemDb {
         private Material material;
         private PotionData potionData;
 
+        public ItemData(Material material, PotionData potionData) {
+            this.material = material;
+            this.potionData = potionData;
+        }
+
         @Override
         public int hashCode() {
             return (31 * material.hashCode()) ^ potionData.hashCode();
@@ -412,8 +419,8 @@ public class ItemDb implements IConf, net.ess3.api.IItemDb {
             if (!(o instanceof ItemData)) {
                 return false;
             }
-            ItemData pairo = (ItemData) o;
-            return this.material == pairo.getMaterial() && potionDataEquals(pairo);
+            ItemData that = (ItemData) o;
+            return this.material == that.getMaterial() && potionDataEquals(that);
         }
 
         public String getItemName() {
