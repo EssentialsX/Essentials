@@ -8,6 +8,7 @@ import org.bukkit.advancement.AdvancementProgress;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.block.PistonMoveReaction;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.conversations.Conversation;
@@ -957,6 +958,26 @@ public class OfflinePlayer implements Player {
     }
 
     @Override
+    public boolean discoverRecipe(NamespacedKey recipe) {
+        return false;
+    }
+
+    @Override
+    public int discoverRecipes(Collection<NamespacedKey> recipes) {
+        return 0;
+    }
+
+    @Override
+    public boolean undiscoverRecipe(NamespacedKey recipe) {
+        return false;
+    }
+
+    @Override
+    public int undiscoverRecipes(Collection<NamespacedKey> recipes) {
+        return 0;
+    }
+
+    @Override
     public boolean hasLineOfSight(Entity entity) {
         return false;
     }
@@ -1530,7 +1551,12 @@ public class OfflinePlayer implements Player {
         return null;
     }
 
-	@Override
+    @Override
+    public BlockFace getFacing() {
+        return null;
+    }
+
+    @Override
 	public void updateCommands() {
 	}
 }
