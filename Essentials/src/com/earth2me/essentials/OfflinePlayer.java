@@ -147,6 +147,10 @@ public class OfflinePlayer implements Player {
         return -1;
     }
 
+    public BlockFace getFacing() {
+        return null;
+    }
+
     @Override
     public boolean performCommand(String string) {
         return false;
