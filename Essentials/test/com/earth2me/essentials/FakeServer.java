@@ -444,6 +444,16 @@ public class FakeServer implements Server {
     }
 
     @Override
+    public ItemStack createExplorerMap(World world, Location location, StructureType structureType) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public ItemStack createExplorerMap(World world, Location location, StructureType structureType, int radius, boolean findUnexplored) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
     public boolean getAllowFlight() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
