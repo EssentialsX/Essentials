@@ -1556,11 +1556,6 @@ public class OfflinePlayer implements Player {
     }
 
     @Override
-    public BlockFace getFacing() {
-        return null;
-    }
-
-    @Override
 	public void updateCommands() {
 	}
 }
