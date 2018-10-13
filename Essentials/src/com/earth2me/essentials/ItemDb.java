@@ -101,7 +101,12 @@ public class ItemDb implements IConf, net.ess3.api.IItemDb {
 
     @Override
     public ItemStack get(final String id) throws Exception {
-        ItemData data = Objects.requireNonNull(getByName(id));
+        ItemData data = getByName(id);
+
+        if (data == null) {
+            throw new Exception(tl("unknownItemName", id));
+        }
+
         PotionData potionData = data.getPotionData();
         Material material = data.getMaterial();
 
