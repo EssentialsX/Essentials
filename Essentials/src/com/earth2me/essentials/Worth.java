@@ -1,6 +1,7 @@
 package com.earth2me.essentials;
 
 import com.earth2me.essentials.commands.NotEnoughArgumentsException;
+import com.earth2me.essentials.utils.EnumUtil;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
@@ -52,14 +53,6 @@ public class Worth implements IConf {
             throw new Exception(tl("itemSellAir"));
         }
 
-        int id;
-
-        try {
-            id = ess.getItemDb().getLegacyId(is.getType());
-        } catch (Exception e) {
-            return 0;
-        }
-
         int amount = 0;
 
         if (args.length > 1) {
@@ -74,7 +67,7 @@ public class Worth implements IConf {
         }
 
         boolean stack = args.length > 1 && args[1].endsWith("s");
-        boolean requireStack = ess.getSettings().isTradeInStacks(id);
+        boolean requireStack = ess.getSettings().isTradeInStacks(is.getType());
 
         if (requireStack && !stack) {
             throw new Exception(tl("itemMustBeStacked"));
@@ -118,15 +111,7 @@ public class Worth implements IConf {
             // Bukkit-bug: getDurability still contains the correct value, while getData().getData() is 0.
             config.setProperty("worth." + itemStack.getType().toString().toLowerCase(Locale.ENGLISH).replace("_", "") + "." + itemStack.getDurability(), price);
         }
-
-        int itemId;
-        try {
-            itemId = ess.getItemDb().getLegacyId(itemStack.getType());
-        } catch (Exception e) {
-            return;
-        }
-
-        config.removeProperty("worth-" + itemId);
+        
         config.save();
     }
 
