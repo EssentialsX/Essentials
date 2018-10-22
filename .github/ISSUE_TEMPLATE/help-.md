@@ -1,6 +1,6 @@
 ---
 name: Help!
-about: Ask for help with using the plugins
+about: Encountered a problem with EssentialsX? Not sure how to fix it?
 
 ---
 
@@ -11,7 +11,7 @@ Don't write inside the arrows as they will be hidden when you post your issue.
 Want faster support? Come join our Discord server to get help sooner:
 https://discord.gg/F7gexAQ
 
-If you're happy to wait (or were sent here), read on:
+If you're happy to wait (or you were sent here from Discord), read on:
 
 1.  Fill out the template.
       This will help us understand what problem you've encountered and help us
