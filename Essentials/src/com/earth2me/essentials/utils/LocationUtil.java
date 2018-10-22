@@ -181,7 +181,7 @@ public class LocationUtil {
     }
 
     static {
-        List<Vector3D> pos = new ArrayList<Vector3D>();
+        List<Vector3D> pos = new ArrayList<>();
         for (int x = -RADIUS; x <= RADIUS; x++) {
             for (int y = -RADIUS; y <= RADIUS; y++) {
                 for (int z = -RADIUS; z <= RADIUS; z++) {
