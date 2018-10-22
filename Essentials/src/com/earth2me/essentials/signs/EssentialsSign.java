@@ -25,7 +25,7 @@ import static com.earth2me.essentials.I18n.tl;
 
 
 public class EssentialsSign {
-    private static final Set<Material> EMPTY_SET = new HashSet<Material>();
+    private static final Set<Material> EMPTY_SET = new HashSet<>();
     protected static final BigDecimal MINTRANSACTION = new BigDecimal("0.01");
     protected transient final String signName;
 
