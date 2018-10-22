@@ -16,7 +16,7 @@ import static com.earth2me.essentials.I18n.tl;
 
 public class Warps implements IConf, net.ess3.api.IWarps {
     private static final Logger logger = Logger.getLogger("Essentials");
-    private final Map<StringIgnoreCase, EssentialsConf> warpPoints = new HashMap<StringIgnoreCase, EssentialsConf>();
+    private final Map<StringIgnoreCase, EssentialsConf> warpPoints = new HashMap<>();
     private final File warpsFolder;
     private final Server server;
 
@@ -36,7 +36,7 @@ public class Warps implements IConf, net.ess3.api.IWarps {
 
     @Override
     public Collection<String> getList() {
-        final List<String> keys = new ArrayList<String>();
+        final List<String> keys = new ArrayList<>();
         for (StringIgnoreCase stringIgnoreCase : warpPoints.keySet()) {
             keys.add(stringIgnoreCase.getString());
         }
