@@ -8,7 +8,7 @@ import java.util.*;
 
 
 public class BookInput implements IText {
-    private final static HashMap<String, SoftReference<BookInput>> cache = new HashMap<String, SoftReference<BookInput>>();
+    private final static HashMap<String, SoftReference<BookInput>> cache = new HashMap<>();
     private final transient List<String> lines;
     private final transient List<String> chapters;
     private final transient Map<String, Integer> bookmarks;
@@ -51,9 +51,9 @@ public class BookInput implements IText {
                 final SoftReference<BookInput> inputRef = cache.get(file.getName());
                 BookInput input;
                 if (inputRef == null || (input = inputRef.get()) == null || input.lastChange < lastChange) {
-                    lines = new ArrayList<String>();
-                    chapters = new ArrayList<String>();
-                    bookmarks = new HashMap<String, Integer>();
+                    lines = new ArrayList<>();
+                    chapters = new ArrayList<>();
+                    bookmarks = new HashMap<>();
                     cache.put(file.getName(), new SoftReference<BookInput>(this));
                     readFromfile = true;
                 } else {
