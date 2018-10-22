@@ -735,7 +735,7 @@ public abstract class UserData extends PlayerExtension implements IConf {
 
         if (config.isConfigurationSection("timestamps.kits")) {
             final ConfigurationSection section = config.getConfigurationSection("timestamps.kits");
-            final Map<String, Long> timestamps = new HashMap<String, Long>();
+            final Map<String, Long> timestamps = new HashMap<>();
             for (String command : section.getKeys(false)) {
                 if (section.isLong(command)) {
                     timestamps.put(command.toLowerCase(Locale.ENGLISH), section.getLong(command));
