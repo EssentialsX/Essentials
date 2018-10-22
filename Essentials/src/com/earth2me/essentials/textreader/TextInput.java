@@ -12,7 +12,7 @@ import java.util.*;
 
 
 public class TextInput implements IText {
-    private static final HashMap<String, SoftReference<TextInput>> cache = new HashMap<String, SoftReference<TextInput>>();
+    private static final HashMap<String, SoftReference<TextInput>> cache = new HashMap<>();
     private final transient List<String> lines;
     private final transient List<String> chapters;
     private final transient Map<String, Integer> bookmarks;
