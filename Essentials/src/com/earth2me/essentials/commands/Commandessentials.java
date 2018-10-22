@@ -31,7 +31,7 @@ public class Commandessentials extends EssentialsCommand {
     }
 
     private transient int taskid;
-    private final transient Map<Player, Block> noteBlocks = new HashMap<Player, Block>();
+    private final transient Map<Player, Block> noteBlocks = new HashMap<>();
 
     private final List<String> versionPlugins = Arrays.asList(
             "Vault",
