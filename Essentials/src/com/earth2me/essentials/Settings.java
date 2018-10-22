@@ -263,7 +263,7 @@ public class Settings implements net.ess3.api.ISettings {
     private Set<String> socialSpyCommands = new HashSet<>();
 
     private Set<String> _getSocialSpyCommands() {
-        Set<String> socialspyCommands = new HashSet<String>();
+        Set<String> socialspyCommands = new HashSet<>();
 
         if (config.isList("socialspy-commands")) {
             for (String c : config.getStringList("socialspy-commands")) {
@@ -289,7 +289,7 @@ public class Settings implements net.ess3.api.ISettings {
     private Set<String> muteCommands = new HashSet<>();
 
     private Set<String> _getMuteCommands() {
-        Set<String> muteCommands = new HashSet<String>();
+        Set<String> muteCommands = new HashSet<>();
         if (config.isList("mute-commands")) {
             for (String s : config.getStringList("mute-commands")) {
                 muteCommands.add(s.toLowerCase(Locale.ENGLISH));
