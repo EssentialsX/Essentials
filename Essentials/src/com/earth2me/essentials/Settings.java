@@ -172,7 +172,7 @@ public class Settings implements net.ess3.api.ISettings {
         return isCommandDisabled(cmd.getName());
     }
 
-    private Set<String> disabledCommands = new HashSet<String>();
+    private Set<String> disabledCommands = new HashSet<>();
 
     @Override
     public boolean isCommandDisabled(String label) {
@@ -180,7 +180,7 @@ public class Settings implements net.ess3.api.ISettings {
     }
 
     private Set<String> getDisabledCommands() {
-        Set<String> disCommands = new HashSet<String>();
+        Set<String> disCommands = new HashSet<>();
         for (String c : config.getStringList("disabled-commands")) {
             disCommands.add(c.toLowerCase(Locale.ENGLISH));
         }
@@ -260,7 +260,7 @@ public class Settings implements net.ess3.api.ISettings {
         return BigDecimal.ZERO;
     }
 
-    private Set<String> socialSpyCommands = new HashSet<String>();
+    private Set<String> socialSpyCommands = new HashSet<>();
 
     private Set<String> _getSocialSpyCommands() {
         Set<String> socialspyCommands = new HashSet<String>();
@@ -286,7 +286,7 @@ public class Settings implements net.ess3.api.ISettings {
         return config.getBoolean("socialspy-listen-muted-players", true);
     }
 
-    private Set<String> muteCommands = new HashSet<String>();
+    private Set<String> muteCommands = new HashSet<>();
 
     private Set<String> _getMuteCommands() {
         Set<String> muteCommands = new HashSet<String>();
@@ -471,7 +471,7 @@ public class Settings implements net.ess3.api.ISettings {
                 return values;
             }
         }
-        Map<String, Object> defaultMap = new HashMap<String, Object>();
+        Map<String, Object> defaultMap = new HashMap<>();
         if (config.getBoolean("sort-list-by-groups", false)) {
             defaultMap.put("ListByGroup", "ListByGroup");
         } else {
@@ -483,7 +483,7 @@ public class Settings implements net.ess3.api.ISettings {
     @Override
     public void reloadConfig() {
         config.load();
-        noGodWorlds = new HashSet<String>(config.getStringList("no-god-in-worlds"));
+        noGodWorlds = new HashSet<>(config.getStringList("no-god-in-worlds"));
         enabledSigns = _getEnabledSigns();
         teleportSafety = _isTeleportSafetyEnabled();
         forceDisableTeleportSafety = _isForceDisableTeleportSafety();
@@ -540,7 +540,7 @@ public class Settings implements net.ess3.api.ISettings {
         isAllowWorldInBroadcastworld = _isAllowWorldInBroadcastworld();
     }
 
-    private List<Integer> itemSpawnBl = new ArrayList<Integer>();
+    private List<Integer> itemSpawnBl = new ArrayList<>();
 
     @Override
     public List<Integer> itemSpawnBlacklist() {
@@ -548,7 +548,7 @@ public class Settings implements net.ess3.api.ISettings {
     }
 
     private List<Integer> _getItemSpawnBlacklist() {
-        final List<Integer> epItemSpwn = new ArrayList<Integer>();
+        final List<Integer> epItemSpwn = new ArrayList<>();
         if (ess.getItemDb() == null) {
             logger.log(Level.FINE, "Aborting ItemSpawnBL read, itemDB not yet loaded.");
             return epItemSpwn;
@@ -568,7 +568,7 @@ public class Settings implements net.ess3.api.ISettings {
         return epItemSpwn;
     }
 
-    private List<EssentialsSign> enabledSigns = new ArrayList<EssentialsSign>();
+    private List<EssentialsSign> enabledSigns = new ArrayList<>();
     private boolean signsEnabled = false;
 
     @Override
@@ -579,7 +579,7 @@ public class Settings implements net.ess3.api.ISettings {
     private List<EssentialsSign> _getEnabledSigns() {
         this.signsEnabled = false; // Ensure boolean resets on reload.
 
-        List<EssentialsSign> newSigns = new ArrayList<EssentialsSign>();
+        List<EssentialsSign> newSigns = new ArrayList<>();
 
         for (String signName : config.getStringList("enabledSigns")) {
             signName = signName.trim().toUpperCase(Locale.ENGLISH);
@@ -671,7 +671,7 @@ public class Settings implements net.ess3.api.ISettings {
 
     @Override
     public List<Integer> getProtectList(final String configName) {
-        final List<Integer> list = new ArrayList<Integer>();
+        final List<Integer> list = new ArrayList<>();
         for (String itemName : config.getString(configName, "").split(",")) {
             itemName = itemName.trim();
             if (itemName.isEmpty()) {
@@ -892,7 +892,7 @@ public class Settings implements net.ess3.api.ISettings {
         return config.getBoolean("death-messages", true);
     }
 
-    private Set<String> noGodWorlds = new HashSet<String>();
+    private Set<String> noGodWorlds = new HashSet<>();
 
     @Override
     public Set<String> getNoGodWorlds() {
