@@ -1,6 +1,7 @@
 package com.earth2me.essentials;
 
 import com.earth2me.essentials.commands.NotEnoughArgumentsException;
+import com.earth2me.essentials.utils.EnumUtil;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
@@ -23,17 +24,10 @@ public class Worth implements IConf {
 
     public BigDecimal getPrice(IEssentials essentials, ItemStack itemStack) {
         BigDecimal result;
-        int itemId;
-
-        try {
-            itemId = essentials.getItemDb().getLegacyId(itemStack.getType());
-        } catch (Exception e) {
-            return null;
-        }
 
         String itemname = itemStack.getType().toString().toLowerCase(Locale.ENGLISH).replace("_", "");
 
-        //First check for matches with item name
+        // Check for matches with item name
         result = config.getBigDecimal("worth." + itemname + "." + itemStack.getDurability(), BigDecimal.ONE.negate());
         if (result.signum() < 0) {
             final ConfigurationSection itemNameMatch = config.getConfigurationSection("worth." + itemname);
@@ -48,27 +42,6 @@ public class Worth implements IConf {
             result = config.getBigDecimal("worth." + itemname, BigDecimal.ONE.negate());
         }
 
-        //Now we should check for item ID
-        if (result.signum() < 0) {
-            result = config.getBigDecimal("worth." + itemId + "." + itemStack.getDurability(), BigDecimal.ONE.negate());
-        }
-        if (result.signum() < 0) {
-            final ConfigurationSection itemNumberMatch = config.getConfigurationSection("worth." + itemId);
-            if (itemNumberMatch != null && itemNumberMatch.getKeys(false).size() == 1) {
-                result = config.getBigDecimal("worth." + itemId + ".0", BigDecimal.ONE.negate());
-            }
-        }
-        if (result.signum() < 0) {
-            result = config.getBigDecimal("worth." + itemId + ".*", BigDecimal.ONE.negate());
-        }
-        if (result.signum() < 0) {
-            result = config.getBigDecimal("worth." + itemId, BigDecimal.ONE.negate());
-        }
-
-        //This is to match the old worth syntax
-        if (result.signum() < 0) {
-            result = config.getBigDecimal("worth-" + itemId, BigDecimal.ONE.negate());
-        }
         if (result.signum() < 0) {
             return null;
         }
@@ -78,14 +51,6 @@ public class Worth implements IConf {
     public int getAmount(IEssentials ess, User user, ItemStack is, String[] args, boolean isBulkSell) throws Exception {
         if (is == null || is.getType() == Material.AIR) {
             throw new Exception(tl("itemSellAir"));
-        }
-
-        int id;
-
-        try {
-            id = ess.getItemDb().getLegacyId(is.getType());
-        } catch (Exception e) {
-            return 0;
         }
 
         int amount = 0;
@@ -102,7 +67,7 @@ public class Worth implements IConf {
         }
 
         boolean stack = args.length > 1 && args[1].endsWith("s");
-        boolean requireStack = ess.getSettings().isTradeInStacks(id);
+        boolean requireStack = ess.getSettings().isTradeInStacks(is.getType());
 
         if (requireStack && !stack) {
             throw new Exception(tl("itemMustBeStacked"));
@@ -146,15 +111,7 @@ public class Worth implements IConf {
             // Bukkit-bug: getDurability still contains the correct value, while getData().getData() is 0.
             config.setProperty("worth." + itemStack.getType().toString().toLowerCase(Locale.ENGLISH).replace("_", "") + "." + itemStack.getDurability(), price);
         }
-
-        int itemId;
-        try {
-            itemId = ess.getItemDb().getLegacyId(itemStack.getType());
-        } catch (Exception e) {
-            return;
-        }
-
-        config.removeProperty("worth-" + itemId);
+        
         config.save();
     }
 

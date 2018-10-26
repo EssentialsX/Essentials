@@ -15,6 +15,8 @@ public interface IItemDb {
 
     String names(ItemStack item);
 
+    List<String> nameList(ItemStack item);
+
     String name(ItemStack item);
 
     List<ItemStack> getMatching(User user, String[] args) throws Exception;
@@ -23,7 +25,9 @@ public interface IItemDb {
 
     Collection<String> listNames();
 
+    @Deprecated
     Material getFromLegacyId(int id);
 
+    @Deprecated
     int getLegacyId(Material material) throws Exception;
 }

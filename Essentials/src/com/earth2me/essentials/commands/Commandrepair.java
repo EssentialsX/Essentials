@@ -47,10 +47,8 @@ public class Commandrepair extends EssentialsCommand {
             throw new Exception(tl("repairEnchanted"));
         }
 
-        int itemId = ess.getItemDb().getLegacyId(item.getType());
-
         final String itemName = item.getType().toString().toLowerCase(Locale.ENGLISH);
-        final Trade charge = new Trade("repair-" + itemName.replace('_', '-'), new Trade("repair-" + itemId, new Trade("repair-item", ess), ess), ess);
+        final Trade charge = new Trade("repair-" + itemName.replace('_', '-'), new Trade("repair-item", ess), ess);
 
         charge.isAffordableFor(user);
 
@@ -96,10 +94,8 @@ public class Commandrepair extends EssentialsCommand {
                 continue;
             }
 
-            int itemId = ess.getItemDb().getLegacyId(item.getType());
-
             final String itemName = item.getType().toString().toLowerCase(Locale.ENGLISH);
-            final Trade charge = new Trade("repair-" + itemName.replace('_', '-'), new Trade("repair-" + itemId, new Trade("repair-item", ess), ess), ess);
+            final Trade charge = new Trade("repair-" + itemName.replace('_', '-'), new Trade("repair-item", ess), ess);
             try {
                 charge.isAffordableFor(user);
             } catch (ChargeException ex) {
