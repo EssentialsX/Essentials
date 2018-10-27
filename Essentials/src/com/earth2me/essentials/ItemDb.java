@@ -20,6 +20,7 @@ import org.bukkit.potion.PotionEffect;
 
 import java.util.*;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 import static com.earth2me.essentials.I18n.tl;
 
@@ -57,7 +58,12 @@ public class ItemDb implements IConf, net.ess3.api.IItemDb {
 
     private void rebuild() {
         this.reset();
-        this.loadJSON(String.join("\n", file.getLines()));
+
+        String json = file.getLines().stream()
+                .filter(line -> !line.startsWith("#"))
+                .collect(Collectors.joining());
+        
+        this.loadJSON(String.join("\n", json));
     }
 
     private void reset() {
