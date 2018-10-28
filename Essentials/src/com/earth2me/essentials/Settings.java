@@ -10,6 +10,7 @@ import com.earth2me.essentials.utils.NumberUtil;
 
 import net.ess3.api.IEssentials;
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.MemoryConfiguration;
 import org.bukkit.event.EventPriority;
@@ -432,6 +433,9 @@ public class Settings implements net.ess3.api.ISettings {
             mFormat = "§r".concat(mFormat);
             chatFormats.put(group, mFormat);
         }
+        if (isDebug()) {
+            ess.getLogger().info(String.format("Found format '%s' for group '%s'", mFormat, group));
+        }
         return mFormat;
     }
 
@@ -534,17 +538,19 @@ public class Settings implements net.ess3.api.ISettings {
         unprotectedSigns = _getUnprotectedSign();
         defaultEnabledConfirmCommands = _getDefaultEnabledConfirmCommands();
         teleportBackWhenFreedFromJail = _isTeleportBackWhenFreedFromJail();
+        isCompassTowardsHomePerm = _isCompassTowardsHomePerm();
+        isAllowWorldInBroadcastworld = _isAllowWorldInBroadcastworld();
     }
 
-    private List<Integer> itemSpawnBl = new ArrayList<Integer>();
+    private List<Material> itemSpawnBl = new ArrayList<Material>();
 
     @Override
-    public List<Integer> itemSpawnBlacklist() {
+    public List<Material> itemSpawnBlacklist() {
         return itemSpawnBl;
     }
 
-    private List<Integer> _getItemSpawnBlacklist() {
-        final List<Integer> epItemSpwn = new ArrayList<Integer>();
+    private List<Material> _getItemSpawnBlacklist() {
+        final List<Material> epItemSpwn = new ArrayList<>();
         if (ess.getItemDb() == null) {
             logger.log(Level.FINE, "Aborting ItemSpawnBL read, itemDB not yet loaded.");
             return epItemSpwn;
@@ -556,7 +562,7 @@ public class Settings implements net.ess3.api.ISettings {
             }
             try {
                 final ItemStack iStack = ess.getItemDb().get(itemName);
-                epItemSpwn.add(iStack.getTypeId());
+                epItemSpwn.add(iStack.getType());
             } catch (Exception ex) {
                 logger.log(Level.SEVERE, tl("unknownItemInList", itemName, "item-spawn-blacklist"));
             }
@@ -644,8 +650,15 @@ public class Settings implements net.ess3.api.ISettings {
 
     // #easteregg
     @Override
+    @Deprecated
     public boolean isTradeInStacks(int id) {
         return config.getBoolean("trade-in-stacks-" + id, false);
+    }
+
+    // #easteregg
+    @Override
+    public boolean isTradeInStacks(Material type) {
+        return config.getBoolean("trade-in-stacks." + type.toString().toLowerCase().replace("_", ""), false);
     }
 
     // #easteregg
@@ -666,8 +679,8 @@ public class Settings implements net.ess3.api.ISettings {
     }
 
     @Override
-    public List<Integer> getProtectList(final String configName) {
-        final List<Integer> list = new ArrayList<Integer>();
+    public List<Material> getProtectList(final String configName) {
+        final List<Material> list = new ArrayList<>();
         for (String itemName : config.getString(configName, "").split(",")) {
             itemName = itemName.trim();
             if (itemName.isEmpty()) {
@@ -676,7 +689,7 @@ public class Settings implements net.ess3.api.ISettings {
             ItemStack itemStack;
             try {
                 itemStack = ess.getItemDb().get(itemName);
-                list.add(itemStack.getTypeId());
+                list.add(itemStack.getType());
             } catch (Exception ex) {
                 logger.log(Level.SEVERE, tl("unknownItemInList", itemName, configName));
             }
@@ -1293,7 +1306,12 @@ public class Settings implements net.ess3.api.ISettings {
         if (isCommandCooldownsEnabled()) {
             for (Entry<Pattern, Long> entry : this.commandCooldowns.entrySet()) {
                 // Check if label matches current pattern (command-cooldown in config)
-                if (entry.getKey().matcher(label).matches()) {
+                boolean matches = entry.getKey().matcher(label).matches();
+                if (isDebug()) {
+                    ess.getLogger().info(String.format("Checking command '%s' against cooldown '%s': %s", label, entry.getKey(), matches));
+                }
+
+                if (matches) {
                     return entry;
                 }
             }
@@ -1450,5 +1468,27 @@ public class Settings implements net.ess3.api.ISettings {
     @Override
     public boolean isTeleportBackWhenFreedFromJail() {
         return teleportBackWhenFreedFromJail;
+    }
+
+    private boolean isCompassTowardsHomePerm;
+
+    private boolean _isCompassTowardsHomePerm() {
+        return config.getBoolean("compass-towards-home-perm", false);
+    }
+
+    @Override
+    public boolean isCompassTowardsHomePerm() {
+        return isCompassTowardsHomePerm;
+    }
+
+    private boolean isAllowWorldInBroadcastworld;
+
+    private boolean _isAllowWorldInBroadcastworld() {
+        return config.getBoolean("allow-world-in-broadcastworld", false);
+    }
+
+    @Override
+    public boolean isAllowWorldInBroadcastworld() {
+        return isAllowWorldInBroadcastworld;
     }
 }

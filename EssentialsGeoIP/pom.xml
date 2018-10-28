@@ -18,12 +18,6 @@
         </license>
     </licenses>
 
-    <scm>
-        <connection>scm:git:https://github.com/essentials/Essentials.git</connection>
-        <developerConnection>scm:git:https://github.com/essentials/Essentials.git</developerConnection>
-        <url>https://github.com/essentials/Essentials</url>
-    </scm>
-
     <dependencies>
         <dependency>
             <groupId>net.ess3</groupId>

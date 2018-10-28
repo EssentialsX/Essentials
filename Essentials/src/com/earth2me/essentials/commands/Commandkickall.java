@@ -20,7 +20,9 @@ public class Commandkickall extends EssentialsCommand {
 
         for (Player onlinePlayer : ess.getOnlinePlayers()) {
             if (!sender.isPlayer() || !onlinePlayer.getName().equalsIgnoreCase(sender.getPlayer().getName())) {
-                onlinePlayer.kickPlayer(kickReason);
+                if (!ess.getUser(onlinePlayer).isAuthorized("essentials.kickall.exempt")) {
+                    onlinePlayer.kickPlayer(kickReason);
+                }
             }
         }
         sender.sendMessage(tl("kickedAll"));

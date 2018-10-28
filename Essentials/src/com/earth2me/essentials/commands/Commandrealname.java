@@ -31,7 +31,7 @@ public class Commandrealname extends EssentialsCommand {
             final String displayName = FormatUtil.stripFormat(u.getDisplayName()).toLowerCase(Locale.ENGLISH);
             if (displayName.contains(whois)) {
                 foundUser = true;
-                sender.sendMessage(u.getDisplayName() + " " + tl("is") + " " + u.getName());
+                sender.sendMessage(tl("realName", u.getDisplayName(), u.getName()));
             }
         }
         if (!foundUser) {

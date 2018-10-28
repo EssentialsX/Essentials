@@ -57,12 +57,12 @@ public class EssentialsProtectBlockListener implements Listener {
     public void onBlockFromTo(final BlockFromToEvent event) {
         final Block block = event.getBlock();
 
-        if (block.getType() == Material.WATER || block.getType() == Material.STATIONARY_WATER) {
+        if (block.getType() == Material.WATER || block.getType() == Material.WATER) {
             event.setCancelled(prot.getSettingBool(ProtectConfig.prevent_water_flow));
             return;
         }
 
-        if (block.getType() == Material.LAVA || block.getType() == Material.STATIONARY_LAVA) {
+        if (block.getType() == Material.LAVA || block.getType() == Material.LAVA) {
             event.setCancelled(prot.getSettingBool(ProtectConfig.prevent_lava_flow));
             return;
         }

@@ -5,6 +5,7 @@ import org.bukkit.*;
 import org.bukkit.Warning.WarningState;
 import org.bukkit.World.Environment;
 import org.bukkit.advancement.Advancement;
+import org.bukkit.block.data.BlockData;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarFlag;
 import org.bukkit.boss.BarStyle;
@@ -24,6 +25,7 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.generator.ChunkGenerator;
 import org.bukkit.help.HelpMap;
 import org.bukkit.inventory.*;
+import org.bukkit.loot.LootTable;
 import org.bukkit.map.MapView;
 import org.bukkit.permissions.Permissible;
 import org.bukkit.permissions.Permission;
@@ -44,6 +46,7 @@ import java.io.UnsupportedEncodingException;
 import java.util.*;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
+import java.util.function.Consumer;
 import java.util.logging.Logger;
 
 
@@ -203,11 +206,6 @@ public class FakeServer implements Server {
 
             @Override
             public void cancelTasks(Plugin plugin) {
-                throw new UnsupportedOperationException("Not supported yet.");
-            }
-
-            @Override
-            public void cancelAllTasks() {
                 throw new UnsupportedOperationException("Not supported yet.");
             }
 
@@ -442,6 +440,16 @@ public class FakeServer implements Server {
 
     @Override
     public MapView createMap(World world) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public ItemStack createExplorerMap(World world, Location location, StructureType structureType) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public ItemStack createExplorerMap(World world, Location location, StructureType structureType, int radius, boolean findUnexplored) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
@@ -969,6 +977,31 @@ public class FakeServer implements Server {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
+    @Override
+    public BlockData createBlockData(Material material) {
+        return null;
+    }
+
+    @Override
+    public BlockData createBlockData(Material material, Consumer<BlockData> consumer) {
+        return null;
+    }
+
+    @Override
+    public BlockData createBlockData(String data) throws IllegalArgumentException {
+        return null;
+    }
+
+    @Override
+    public BlockData createBlockData(Material material, String data) throws IllegalArgumentException {
+        return null;
+    }
+
+    @Override
+    public <T extends Keyed> Tag<T> getTag(String s, NamespacedKey namespacedKey, Class<T> aClass) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
     class FakePluginManager implements PluginManager {
         ArrayList<RegisteredListener> listeners = new ArrayList<RegisteredListener>();
 
@@ -1129,5 +1162,10 @@ public class FakeServer implements Server {
             throw new UnsupportedOperationException("Not supported yet.");
         }
     }
+
+	@Override
+	public LootTable getLootTable(NamespacedKey arg0) {
+        throw new UnsupportedOperationException("Not supported yet.");
+	}
 
 }

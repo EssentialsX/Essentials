@@ -37,17 +37,17 @@ import net.ess3.api.ISettings;
 import net.ess3.nms.PotionMetaProvider;
 import net.ess3.nms.SpawnEggProvider;
 import net.ess3.nms.SpawnerProvider;
+import net.ess3.nms.flattened.FlatSpawnEggProvider;
 import net.ess3.nms.legacy.LegacyPotionMetaProvider;
+import net.ess3.nms.legacy.LegacySpawnEggProvider;
+import net.ess3.nms.legacy.LegacySpawnerProvider;
 import net.ess3.nms.refl.ReflSpawnEggProvider;
 import net.ess3.nms.updatedmeta.BasePotionDataProvider;
 import net.ess3.nms.updatedmeta.BlockMetaSpawnerProvider;
-import net.ess3.nms.legacy.LegacySpawnEggProvider;
-import net.ess3.nms.legacy.LegacySpawnerProvider;
 import net.ess3.nms.v1_8_R1.v1_8_R1SpawnerProvider;
 import net.ess3.nms.v1_8_R2.v1_8_R2SpawnerProvider;
 import net.ess3.providers.ProviderFactory;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Server;
 import org.bukkit.World;
 import org.bukkit.block.Block;
@@ -60,6 +60,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.world.WorldLoadEvent;
 import org.bukkit.event.world.WorldUnloadEvent;
+import org.bukkit.permissions.Permission;
+import org.bukkit.permissions.PermissionDefault;
 import org.bukkit.plugin.InvalidDescriptionException;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginDescriptionFile;
@@ -209,6 +211,8 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
                 execTimer.mark("Init(Worth/ItemDB)");
                 jails = new Jails(this);
                 confList.add(jails);
+                execTimer.mark("Init(Jails)");
+
                 spawnerProvider = new ProviderFactory<>(getLogger(),
                         Arrays.asList(
                                 BlockMetaSpawnerProvider.class,
@@ -218,6 +222,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
                         ), "mob spawner").getProvider();
                 spawnEggProvider = new ProviderFactory<>(getLogger(),
                         Arrays.asList(
+                                FlatSpawnEggProvider.class,
                                 ReflSpawnEggProvider.class,
                                 LegacySpawnEggProvider.class
                         ), "spawn egg").getProvider();
@@ -226,6 +231,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
                                 BasePotionDataProvider.class,
                                 LegacyPotionMetaProvider.class
                         ), "potion meta").getProvider();
+                execTimer.mark("Init(Providers)");
                 reload();
             } catch (YAMLException exception) {
                 if (pm.getPlugin("EssentialsUpdate") != null) {
@@ -245,6 +251,9 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
 
             Economy.setEss(this);
             execTimer.mark("RegHandler");
+
+            for (World w : Bukkit.getWorlds())
+                addDefaultBackPermissionsToWorld(w);
 
             metrics = new Metrics(this);
             if (!metrics.isOptOut()) {
@@ -441,7 +450,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
                     return pc.execute(cSender, commandLabel, args);
                 } catch (final Exception ex) {
                     Bukkit.getLogger().log(Level.SEVERE, ex.getMessage(), ex);
-                    cSender.sendMessage(ChatColor.RED + "An internal error occurred while attempting to perform this command");
+                    cSender.sendMessage(tl("internalError"));
                     return true;
                 }
             }
@@ -867,6 +876,18 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
         return potionMetaProvider;
     }
 
+    private static void addDefaultBackPermissionsToWorld(World w) {
+        String permName = "essentials.back.into." + w.getName();
+
+        Permission p = Bukkit.getPluginManager().getPermission(permName);
+        if (p == null) {
+            p = new Permission(permName,
+                    "Allows access to /back when the destination location is within world " + w.getName(),
+                    PermissionDefault.TRUE);
+            Bukkit.getPluginManager().addPermission(p);
+        }
+    }
+
     private static class EssentialsWorldListener implements Listener, Runnable {
         private transient final IEssentials ess;
 
@@ -876,6 +897,8 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
 
         @EventHandler(priority = EventPriority.LOW)
         public void onWorldLoad(final WorldLoadEvent event) {
+            addDefaultBackPermissionsToWorld(event.getWorld());
+
             ess.getJails().onReload();
             ess.getWarps().reloadConfig();
             for (IConf iConf : ((Essentials) ess).confList) {

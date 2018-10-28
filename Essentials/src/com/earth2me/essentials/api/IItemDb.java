@@ -1,6 +1,7 @@
 package com.earth2me.essentials.api;
 
 import com.earth2me.essentials.User;
+import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.Collection;
@@ -14,6 +15,8 @@ public interface IItemDb {
 
     String names(ItemStack item);
 
+    List<String> nameList(ItemStack item);
+
     String name(ItemStack item);
 
     List<ItemStack> getMatching(User user, String[] args) throws Exception;
@@ -21,4 +24,10 @@ public interface IItemDb {
     String serialize(ItemStack is);
 
     Collection<String> listNames();
+
+    @Deprecated
+    Material getFromLegacyId(int id);
+
+    @Deprecated
+    int getLegacyId(Material material) throws Exception;
 }

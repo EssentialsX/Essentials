@@ -475,7 +475,7 @@ last-message-reply-recipient: true
 # Default is 180 (3 minutes)
 last-message-reply-recipient-timeout: 180
 
-# Toggles whether or not right clicking mobs with a milk bucket turns them into a baby.
+# Toggles whether or not clicking mobs with a milk bucket turns them into a baby.
 milk-bucket-easter-egg: true
 
 # Toggles whether or not the fly status message should be sent to players on join
@@ -525,6 +525,18 @@ default-enabled-confirm-commands:
 # Whether or not to teleport a player back to their previous position after they have been freed from jail.
 teleport-back-when-freed-from-jail: true
 
+# Set the timeout, in seconds for players to accept a tpa before the request is cancelled.
+# Set to 0 for no timeout.
+tpa-accept-cancellation: 120
+
+# Allow players to set hats by clicking on their helmet slot.
+allow-direct-hat: true
+
+# Allow in-game players to specify a world when running /broadcastworld.
+# If false, running /broadcastworld in-game will always send a message to the player's current world.
+# This doesn't affect running the command from the console, where a world is always required.
+allow-world-in-broadcastworld: true
+
 ############################################################
 # +------------------------------------------------------+ #
 # |                   EssentialsHome                     | #
@@ -554,12 +566,12 @@ sethome-multiple:
 # In this example someone with 'essentials.sethome.multiple' and 'essentials.sethome.multiple.vip' will have 5 homes.
 # Remember, they MUST have both permission nodes in order to be able to set multiple homes.
 
-# Set the timeout, in seconds for players to accept a tpa before the request is cancelled.
-# Set to 0 for no timeout.
-tpa-accept-cancellation: 120
-
-# Allow players to set hats by clicking on their helmet slot.
-allow-direct-hat: true
+# Controls whether players need the permission "essentials.home.compass" in order to point
+# the player's compass at their first home.
+#
+# Leaving this as false will retain Essentials' original behaviour, which is to always
+# change the compass' direction to point towards their first home.
+compass-towards-home-perm: false
 
 ############################################################
 # +------------------------------------------------------+ #

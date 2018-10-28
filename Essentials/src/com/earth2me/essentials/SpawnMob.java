@@ -191,16 +191,16 @@ public class SpawnMob {
                     invent.setChestplate(new ItemStack(Material.DIAMOND_CHESTPLATE, 1));
                     invent.setHelmet(new ItemStack(Material.DIAMOND_HELMET, 1));
                 } else if (inputData.contains("gold")) {
-                    invent.setBoots(new ItemStack(Material.GOLD_BOOTS, 1));
-                    invent.setLeggings(new ItemStack(Material.GOLD_LEGGINGS, 1));
-                    invent.setChestplate(new ItemStack(Material.GOLD_CHESTPLATE, 1));
-                    invent.setHelmet(new ItemStack(Material.GOLD_HELMET, 1));
+                    invent.setBoots(new ItemStack(Material.GOLDEN_BOOTS, 1));
+                    invent.setLeggings(new ItemStack(Material.GOLDEN_LEGGINGS, 1));
+                    invent.setChestplate(new ItemStack(Material.GOLDEN_CHESTPLATE, 1));
+                    invent.setHelmet(new ItemStack(Material.GOLDEN_HELMET, 1));
                 } else if (inputData.contains("leather")) {
                     invent.setBoots(new ItemStack(Material.LEATHER_BOOTS, 1));
                     invent.setLeggings(new ItemStack(Material.LEATHER_LEGGINGS, 1));
                     invent.setChestplate(new ItemStack(Material.LEATHER_CHESTPLATE, 1));
                     invent.setHelmet(new ItemStack(Material.LEATHER_HELMET, 1));
-                } else {
+                } else if (inputData.contains("iron")) {
                     invent.setBoots(new ItemStack(Material.IRON_BOOTS, 1));
                     invent.setLeggings(new ItemStack(Material.IRON_LEGGINGS, 1));
                     invent.setChestplate(new ItemStack(Material.IRON_CHESTPLATE, 1));
@@ -228,7 +228,7 @@ public class SpawnMob {
             InventoryWorkaround.setItemInMainHand(invent, new ItemStack(Material.BOW, 1));
             InventoryWorkaround.setItemInMainHandDropChance(invent, 0.1f);
 
-            invent.setBoots(new ItemStack(Material.GOLD_BOOTS, 1));
+            invent.setBoots(new ItemStack(Material.GOLDEN_BOOTS, 1));
             invent.setBootsDropChance(0.0f);
         }
 
@@ -237,10 +237,10 @@ public class SpawnMob {
             setVillager(zombie, false);
 
             final EntityEquipment invent = zombie.getEquipment();
-            InventoryWorkaround.setItemInMainHand(invent, new ItemStack(Material.GOLD_SWORD, 1));
+            InventoryWorkaround.setItemInMainHand(invent, new ItemStack(Material.GOLDEN_SWORD, 1));
             InventoryWorkaround.setItemInMainHandDropChance(invent, 0.1f);
 
-            invent.setBoots(new ItemStack(Material.GOLD_BOOTS, 1));
+            invent.setBoots(new ItemStack(Material.GOLDEN_BOOTS, 1));
             invent.setBootsDropChance(0.0f);
         }
 
@@ -249,7 +249,7 @@ public class SpawnMob {
             setVillager(zombie, false);
 
             final EntityEquipment invent = zombie.getEquipment();
-            invent.setBoots(new ItemStack(Material.GOLD_BOOTS, 1));
+            invent.setBoots(new ItemStack(Material.GOLDEN_BOOTS, 1));
             invent.setBootsDropChance(0.0f);
         }
 

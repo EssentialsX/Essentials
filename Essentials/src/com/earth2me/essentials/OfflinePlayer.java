@@ -8,7 +8,9 @@ import org.bukkit.advancement.AdvancementProgress;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.block.PistonMoveReaction;
+import org.bukkit.block.data.BlockData;
 import org.bukkit.conversations.Conversation;
 import org.bukkit.conversations.ConversationAbandonedEvent;
 import org.bukkit.entity.*;
@@ -145,6 +147,10 @@ public class OfflinePlayer implements Player {
         return -1;
     }
 
+    public BlockFace getFacing() {
+        return null;
+    }
+
     @Override
     public boolean performCommand(String string) {
         return false;
@@ -201,18 +207,8 @@ public class OfflinePlayer implements Player {
     }
 
     @Override
-    public Block getTargetBlock(HashSet<Byte> hs, int i) {
-        return null;
-    }
-
-    @Override
     public Block getTargetBlock(Set<Material> mat, int i) {
         return null;
-    }
-
-    @Override
-    public List<Block> getLastTwoTargetBlocks(HashSet<Byte> hs, int i) {
-        return Collections.emptyList();
     }
 
     @Override
@@ -241,6 +237,15 @@ public class OfflinePlayer implements Player {
     @Override
     public Server getServer() {
         return server;
+    }
+
+    @Override
+    public boolean isPersistent() {
+        return false;
+    }
+
+    @Override
+    public void setPersistent(boolean persistent) {
     }
 
     public Vector getMomentum() {
@@ -481,7 +486,8 @@ public class OfflinePlayer implements Player {
     }
 
     @Override
-    public void sendBlockChange(Location lctn, int i, byte b) {
+    public void sendBlockChange(Location loc, BlockData block) {
+
     }
 
     @Override
@@ -654,6 +660,31 @@ public class OfflinePlayer implements Player {
     }
 
     @Override
+    public String getPlayerListHeader() {
+        return null;
+    }
+
+    @Override
+    public String getPlayerListFooter() {
+        return null;
+    }
+
+    @Override
+    public void setPlayerListHeader(String header) {
+
+    }
+
+    @Override
+    public void setPlayerListFooter(String footer) {
+
+    }
+
+    @Override
+    public void setPlayerListHeaderFooter(String header, String footer) {
+
+    }
+
+    @Override
     public String getPlayerListName() {
         return name;
     }
@@ -743,7 +774,17 @@ public class OfflinePlayer implements Player {
     }
 
     @Override
+    public void hidePlayer(Plugin plugin, Player player) {
+
+    }
+
+    @Override
     public void showPlayer(Player player) {
+    }
+
+    @Override
+    public void showPlayer(Plugin plugin, Player player) {
+
     }
 
     @Override
@@ -917,6 +958,26 @@ public class OfflinePlayer implements Player {
 
     @Override
     public int getExpToLevel() {
+        return 0;
+    }
+
+    @Override
+    public boolean discoverRecipe(NamespacedKey recipe) {
+        return false;
+    }
+
+    @Override
+    public int discoverRecipes(Collection<NamespacedKey> recipes) {
+        return 0;
+    }
+
+    @Override
+    public boolean undiscoverRecipe(NamespacedKey recipe) {
+        return false;
+    }
+
+    @Override
+    public int undiscoverRecipes(Collection<NamespacedKey> recipes) {
         return 0;
     }
 
@@ -1193,6 +1254,21 @@ public class OfflinePlayer implements Player {
 
     @Override
     public void setGliding(boolean b) {
+    }
+
+    @Override
+    public boolean isSwimming() {
+        return false;
+    }
+
+    @Override
+    public void setSwimming(boolean swimming) {
+
+    }
+
+    @Override
+    public boolean isRiptiding() {
+        return false;
     }
 
     @Override
@@ -1478,4 +1554,8 @@ public class OfflinePlayer implements Player {
     public PistonMoveReaction getPistonMoveReaction() {
         return null;
     }
+
+    @Override
+	public void updateCommands() {
+	}
 }
