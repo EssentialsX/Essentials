@@ -16,23 +16,23 @@ public class Commandcompass extends EssentialsCommand {
         final int bearing = (int) (user.getLocation().getYaw() + 180 + 360) % 360;
         String dir;
         if (bearing < 23) {
-            dir = "N";
+            dir = tl("north");
         } else if (bearing < 68) {
-            dir = "NE";
+            dir = tl("northEast");
         } else if (bearing < 113) {
-            dir = "E";
+            dir = tl("east");
         } else if (bearing < 158) {
-            dir = "SE";
+            dir = tl("southEast");
         } else if (bearing < 203) {
-            dir = "S";
+            dir = tl("south");
         } else if (bearing < 248) {
-            dir = "SW";
+            dir = tl("southWest");
         } else if (bearing < 293) {
-            dir = "W";
+            dir = tl("west");
         } else if (bearing < 338) {
-            dir = "NW";
+            dir = tl("northWest");
         } else {
-            dir = "N";
+            dir = tl("north");
         }
         user.sendMessage(tl("compassBearing", dir, bearing));
     }
