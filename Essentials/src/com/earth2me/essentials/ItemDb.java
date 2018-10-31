@@ -119,6 +119,7 @@ public class ItemDb implements IConf, net.ess3.api.IItemDb {
         Material material = data.getMaterial();
 
         ItemStack stack = new ItemStack(material);
+        stack.setAmount(material.getMaxStackSize());
 
         if (potionData != null) {
             PotionMeta meta = (PotionMeta) stack.getItemMeta();
