@@ -24,7 +24,7 @@ public class Commandmore extends EssentialsCommand {
             throw new Exception(tl("fullStack"));
         }
         final String itemname = stack.getType().toString().toLowerCase(Locale.ENGLISH).replace("_", "");
-        if (ess.getSettings().permissionBasedItemSpawn() ? (!user.isAuthorized("essentials.itemspawn.item-all") && !user.isAuthorized("essentials.itemspawn.item-" + itemname) && !user.isAuthorized("essentials.itemspawn.item-" + stack.getTypeId())) : (!user.isAuthorized("essentials.itemspawn.exempt") && !user.canSpawnItem(stack.getTypeId()))) {
+        if (ess.getSettings().permissionBasedItemSpawn() ? (!user.isAuthorized("essentials.itemspawn.item-all") && !user.isAuthorized("essentials.itemspawn.item-" + itemname) && !user.isAuthorized("essentials.itemspawn.item-" + stack.getType())) : (!user.isAuthorized("essentials.itemspawn.exempt") && !user.canSpawnItem(stack.getType()))) {
             throw new Exception(tl("cantSpawnItem", itemname));
         }
         if (user.isAuthorized("essentials.oversizedstacks")) {

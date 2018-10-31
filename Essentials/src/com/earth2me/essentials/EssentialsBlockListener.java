@@ -32,7 +32,7 @@ public class EssentialsBlockListener implements Listener {
             return;
         }
 
-        if (is.getType() == Material.MOB_SPAWNER && event.getItemInHand() != null && event.getPlayer() != null && event.getItemInHand().getType() == Material.MOB_SPAWNER) {
+        if (is.getType() == Material.SPAWNER && event.getItemInHand() != null && event.getPlayer() != null && event.getItemInHand().getType() == Material.SPAWNER) {
             final BlockState blockState = event.getBlockPlaced().getState();
             if (blockState instanceof CreatureSpawner) {
                 final CreatureSpawner spawner = (CreatureSpawner) blockState;

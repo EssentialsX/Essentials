@@ -185,7 +185,7 @@ public class MetaItemStack {
         } else if (split[0].equalsIgnoreCase("unbreakable") && hasMetaPermission(sender, "unbreakable", false, true, ess)) {
             boolean value = split.length > 1 ? Boolean.valueOf(split[1]) : true;
             setUnbreakable(stack, value);
-        } else if (split.length > 1 && (split[0].equalsIgnoreCase("player") || split[0].equalsIgnoreCase("owner")) && stack.getType() == Material.SKULL_ITEM && hasMetaPermission(sender, "head", false, true, ess)) {
+        } else if (split.length > 1 && (split[0].equalsIgnoreCase("player") || split[0].equalsIgnoreCase("owner")) && stack.getType().name().endsWith("_SKULL") && hasMetaPermission(sender, "head", false, true, ess)) {
             if (stack.getDurability() == 3) {
                 final String owner = split[1];
                 final SkullMeta meta = (SkullMeta) stack.getItemMeta();
@@ -212,14 +212,14 @@ public class MetaItemStack {
             final BookMeta meta = (BookMeta) stack.getItemMeta();
             meta.setTitle(title);
             stack.setItemMeta(meta);
-        } else if (split.length > 1 && split[0].equalsIgnoreCase("power") && stack.getType() == Material.FIREWORK && hasMetaPermission(sender, "firework-power", false, true, ess)) {
+        } else if (split.length > 1 && split[0].equalsIgnoreCase("power") && stack.getType() == Material.FIREWORK_ROCKET && hasMetaPermission(sender, "firework-power", false, true, ess)) {
             final int power = NumberUtil.isInt(split[1]) ? Integer.parseInt(split[1]) : 0;
             final FireworkMeta meta = (FireworkMeta) stack.getItemMeta();
             meta.setPower(power > 3 ? 4 : power);
             stack.setItemMeta(meta);
         } else if (split.length > 1 && split[0].equalsIgnoreCase("itemflags") && hasMetaPermission(sender, "itemflags", false, true, ess)) {
             addItemFlags(string);
-        } else if (stack.getType() == Material.FIREWORK) {//WARNING - Meta for fireworks will be ignored after this point.
+        } else if (stack.getType() == Material.FIREWORK_ROCKET) {//WARNING - Meta for fireworks will be ignored after this point.
             addFireworkMeta(sender, false, string, ess);
         } else if (isPotion(stack.getType())) { //WARNING - Meta for potions will be ignored after this point.
             addPotionMeta(sender, false, string, ess);
@@ -281,7 +281,7 @@ public class MetaItemStack {
     }
 
     public void addFireworkMeta(final CommandSource sender, final boolean allowShortName, final String string, final IEssentials ess) throws Exception {
-        if (stack.getType() == Material.FIREWORK) {
+        if (stack.getType() == Material.FIREWORK_ROCKET) {
             final String[] split = splitPattern.split(string, 2);
             if (split.length < 2) {
                 return;
@@ -482,7 +482,7 @@ public class MetaItemStack {
     }
 
     public void addBannerMeta(final CommandSource sender, final boolean allowShortName, final String string, final IEssentials ess) throws Exception {
-        if (stack.getType() == Material.BANNER && string != null) {
+        if (stack.getType().name().endsWith("_BANNER") && string != null) {
             final String[] split = splitPattern.split(string, 2);
 
             if (split.length < 2) {

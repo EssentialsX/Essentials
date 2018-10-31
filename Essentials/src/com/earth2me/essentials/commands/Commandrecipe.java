@@ -64,11 +64,11 @@ public class Commandrecipe extends EssentialsCommand {
         } else if (selectedRecipe instanceof ShapedRecipe) {
             shapedRecipe(sender, (ShapedRecipe) selectedRecipe, sender.isPlayer());
         } else if (selectedRecipe instanceof ShapelessRecipe) {
-            if (recipesOfType.size() == 1 && itemType.getType() == Material.FIREWORK) {
+            if (recipesOfType.size() == 1 && itemType.getType() == Material.FIREWORK_ROCKET) {
                 ShapelessRecipe shapelessRecipe = new ShapelessRecipe(itemType);
-                shapelessRecipe.addIngredient(Material.SULPHUR);
+                shapelessRecipe.addIngredient(Material.GUNPOWDER);
                 shapelessRecipe.addIngredient(Material.PAPER);
-                shapelessRecipe.addIngredient(Material.FIREWORK_CHARGE);
+                shapelessRecipe.addIngredient(Material.FIREWORK_STAR);
                 shapelessRecipe(sender, shapelessRecipe, sender.isPlayer());
             } else {
                 shapelessRecipe(sender, (ShapelessRecipe) selectedRecipe, sender.isPlayer());

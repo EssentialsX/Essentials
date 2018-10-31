@@ -48,7 +48,7 @@ public class Commandrepair extends EssentialsCommand {
         }
 
         final String itemName = item.getType().toString().toLowerCase(Locale.ENGLISH);
-        final Trade charge = new Trade("repair-" + itemName.replace('_', '-'), new Trade("repair-" + item.getTypeId(), new Trade("repair-item", ess), ess), ess);
+        final Trade charge = new Trade("repair-" + itemName.replace('_', '-'), new Trade("repair-" + item.getType(), new Trade("repair-item", ess), ess), ess);
 
         charge.isAffordableFor(user);
 
@@ -76,7 +76,7 @@ public class Commandrepair extends EssentialsCommand {
     }
 
     private void repairItem(final ItemStack item) throws Exception {
-        final Material material = Material.getMaterial(item.getTypeId());
+        final Material material = item.getType();
         if (material.isBlock() || material.getMaxDurability() < 1) {
             throw new Exception(tl("repairInvalidType"));
         }
@@ -94,7 +94,7 @@ public class Commandrepair extends EssentialsCommand {
                 continue;
             }
             final String itemName = item.getType().toString().toLowerCase(Locale.ENGLISH);
-            final Trade charge = new Trade("repair-" + itemName.replace('_', '-'), new Trade("repair-" + item.getTypeId(), new Trade("repair-item", ess), ess), ess);
+            final Trade charge = new Trade("repair-" + itemName.replace('_', '-'), new Trade("repair-" + item.getType(), new Trade("repair-item", ess), ess), ess);
             try {
                 charge.isAffordableFor(user);
             } catch (ChargeException ex) {

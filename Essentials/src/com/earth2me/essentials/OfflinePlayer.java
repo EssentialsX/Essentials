@@ -8,7 +8,9 @@ import org.bukkit.advancement.AdvancementProgress;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.block.PistonMoveReaction;
+import org.bukkit.block.data.BlockData;
 import org.bukkit.conversations.Conversation;
 import org.bukkit.conversations.ConversationAbandonedEvent;
 import org.bukkit.entity.*;
@@ -25,6 +27,8 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scoreboard.Scoreboard;
+import org.bukkit.util.BoundingBox;
+import org.bukkit.util.RayTraceResult;
 import org.bukkit.util.Vector;
 
 import java.lang.reflect.InvocationTargetException;
@@ -55,6 +59,7 @@ public class OfflinePlayer implements Player {
         this.name = name;
     }
 
+    // TODO: Implement these methods
     @Override
     public void sendMessage(final String string) {
     }
@@ -201,23 +206,33 @@ public class OfflinePlayer implements Player {
     }
 
     @Override
-    public Block getTargetBlock(HashSet<Byte> hs, int i) {
-        return null;
-    }
-
-    @Override
     public Block getTargetBlock(Set<Material> mat, int i) {
         return null;
     }
 
     @Override
-    public List<Block> getLastTwoTargetBlocks(HashSet<Byte> hs, int i) {
+    public List<Block> getLastTwoTargetBlocks(Set<Material> mat, int i) {
         return Collections.emptyList();
     }
 
     @Override
-    public List<Block> getLastTwoTargetBlocks(Set<Material> mat, int i) {
-        return Collections.emptyList();
+    public Block getTargetBlockExact(int i) {
+        return null;
+    }
+
+    @Override
+    public Block getTargetBlockExact(int i, FluidCollisionMode fluidCollisionMode) {
+        return null;
+    }
+
+    @Override
+    public RayTraceResult rayTraceBlocks(double v) {
+        return null;
+    }
+
+    @Override
+    public RayTraceResult rayTraceBlocks(double v, FluidCollisionMode fluidCollisionMode) {
+        return null;
     }
 
     @Override
@@ -241,6 +256,16 @@ public class OfflinePlayer implements Player {
     @Override
     public Server getServer() {
         return server;
+    }
+
+    @Override
+    public boolean isPersistent() {
+        return false;
+    }
+
+    @Override
+    public void setPersistent(boolean b) {
+
     }
 
     public Vector getMomentum() {
@@ -481,7 +506,8 @@ public class OfflinePlayer implements Player {
     }
 
     @Override
-    public void sendBlockChange(Location lctn, int i, byte b) {
+    public void sendBlockChange(Location location, BlockData blockData) {
+
     }
 
     @Override
@@ -654,6 +680,31 @@ public class OfflinePlayer implements Player {
     }
 
     @Override
+    public String getPlayerListHeader() {
+        return null;
+    }
+
+    @Override
+    public String getPlayerListFooter() {
+        return null;
+    }
+
+    @Override
+    public void setPlayerListHeader(String s) {
+
+    }
+
+    @Override
+    public void setPlayerListFooter(String s) {
+
+    }
+
+    @Override
+    public void setPlayerListHeaderFooter(String s, String s1) {
+
+    }
+
+    @Override
     public String getPlayerListName() {
         return name;
     }
@@ -743,7 +794,17 @@ public class OfflinePlayer implements Player {
     }
 
     @Override
+    public void hidePlayer(Plugin plugin, Player player) {
+
+    }
+
+    @Override
     public void showPlayer(Player player) {
+    }
+
+    @Override
+    public void showPlayer(Plugin plugin, Player player) {
+
     }
 
     @Override
@@ -917,6 +978,26 @@ public class OfflinePlayer implements Player {
 
     @Override
     public int getExpToLevel() {
+        return 0;
+    }
+
+    @Override
+    public boolean discoverRecipe(NamespacedKey namespacedKey) {
+        return false;
+    }
+
+    @Override
+    public int discoverRecipes(Collection<NamespacedKey> collection) {
+        return 0;
+    }
+
+    @Override
+    public boolean undiscoverRecipe(NamespacedKey namespacedKey) {
+        return false;
+    }
+
+    @Override
+    public int undiscoverRecipes(Collection<NamespacedKey> collection) {
         return 0;
     }
 
@@ -1196,6 +1277,21 @@ public class OfflinePlayer implements Player {
     }
 
     @Override
+    public boolean isSwimming() {
+        return false;
+    }
+
+    @Override
+    public void setSwimming(boolean b) {
+
+    }
+
+    @Override
+    public boolean isRiptiding() {
+        return false;
+    }
+
+    @Override
     public void setAI(boolean b) {
     }
 
@@ -1418,6 +1514,11 @@ public class OfflinePlayer implements Player {
     }
 
     @Override
+    public void updateCommands() {
+
+    }
+
+    @Override
     public boolean hasCooldown(Material material) {
         return false;
     }
@@ -1460,6 +1561,11 @@ public class OfflinePlayer implements Player {
     }
 
     @Override
+    public BoundingBox getBoundingBox() {
+        return null;
+    }
+
+    @Override
     public List<Entity> getPassengers() {
         return null;
     }
@@ -1476,6 +1582,11 @@ public class OfflinePlayer implements Player {
 
     @Override
     public PistonMoveReaction getPistonMoveReaction() {
+        return null;
+    }
+
+    @Override
+    public BlockFace getFacing() {
         return null;
     }
 }

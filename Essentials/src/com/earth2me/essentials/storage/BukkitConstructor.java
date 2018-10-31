@@ -1,10 +1,7 @@
 package com.earth2me.essentials.storage;
 
 import com.earth2me.essentials.utils.NumberUtil;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.World;
+import org.bukkit.*;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.MaterialData;
@@ -59,13 +56,7 @@ public class BukkitConstructor extends CustomClassLoaderConstructor {
         public Object construct(final Node node) {
             if (node.getType().equals(Material.class)) {
                 final String val = constructScalarRefl((ScalarNode) node);
-                Material mat;
-                if (NumberUtil.isInt(val)) {
-                    final int typeId = Integer.parseInt(val);
-                    mat = Material.getMaterial(typeId);
-                } else {
-                    mat = Material.matchMaterial(val);
-                }
+                Material mat = Material.getMaterial(val);
                 return mat;
             }
             if (node.getType().equals(MaterialData.class)) {
@@ -77,13 +68,7 @@ public class BukkitConstructor extends CustomClassLoaderConstructor {
                 if (split.length == 0) {
                     return null;
                 }
-                Material mat;
-                if (NumberUtil.isInt(split[0])) {
-                    final int typeId = Integer.parseInt(split[0]);
-                    mat = Material.getMaterial(typeId);
-                } else {
-                    mat = Material.matchMaterial(split[0]);
-                }
+                Material mat = Material.getMaterial(split[0]);
                 if (mat == null) {
                     return null;
                 }
@@ -106,13 +91,7 @@ public class BukkitConstructor extends CustomClassLoaderConstructor {
                 if (split2.length == 0) {
                     return null;
                 }
-                Material mat;
-                if (NumberUtil.isInt(split2[0])) {
-                    final int typeId = Integer.parseInt(split2[0]);
-                    mat = Material.getMaterial(typeId);
-                } else {
-                    mat = Material.matchMaterial(split2[0]);
-                }
+                Material mat = Material.getMaterial(split2[0]);
                 if (mat == null) {
                     return null;
                 }
@@ -131,13 +110,7 @@ public class BukkitConstructor extends CustomClassLoaderConstructor {
                         if (split3.length < 1) {
                             continue;
                         }
-                        Enchantment enchantment;
-                        if (NumberUtil.isInt(split3[0])) {
-                            final int enchantId = Integer.parseInt(split3[0]);
-                            enchantment = Enchantment.getById(enchantId);
-                        } else {
-                            enchantment = Enchantment.getByName(split3[0].toUpperCase(Locale.ENGLISH));
-                        }
+                        Enchantment enchantment = Enchantment.getByName(split3[0].toUpperCase(Locale.ENGLISH));
                         if (enchantment == null) {
                             continue;
                         }
@@ -165,13 +138,7 @@ public class BukkitConstructor extends CustomClassLoaderConstructor {
                 if (split.length == 0) {
                     return null;
                 }
-                Enchantment enchant;
-                if (NumberUtil.isInt(split[0])) {
-                    final int typeId = Integer.parseInt(split[0]);
-                    enchant = Enchantment.getById(typeId);
-                } else {
-                    enchant = Enchantment.getByName(split[0].toUpperCase(Locale.ENGLISH));
-                }
+                Enchantment enchant = Enchantment.getByName(split[0].toUpperCase(Locale.ENGLISH));
                 if (enchant == null) {
                     return null;
                 }

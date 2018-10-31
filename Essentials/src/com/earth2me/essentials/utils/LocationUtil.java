@@ -25,117 +25,147 @@ public class LocationUtil {
     static {
         // Materials from Material.isTransparent()
         HOLLOW_MATERIALS.add(Material.AIR);
-        HOLLOW_MATERIALS.add(Material.SAPLING);
+        HOLLOW_MATERIALS.add(Material.OAK_SAPLING);
+        HOLLOW_MATERIALS.add(Material.SPRUCE_SAPLING);
+        HOLLOW_MATERIALS.add(Material.BIRCH_SAPLING);
+        HOLLOW_MATERIALS.add(Material.JUNGLE_SAPLING);
+        HOLLOW_MATERIALS.add(Material.ACACIA_SAPLING);
+        HOLLOW_MATERIALS.add(Material.DARK_OAK_SAPLING);
         HOLLOW_MATERIALS.add(Material.POWERED_RAIL);
         HOLLOW_MATERIALS.add(Material.DETECTOR_RAIL);
-        HOLLOW_MATERIALS.add(Material.LONG_GRASS);
+        HOLLOW_MATERIALS.add(Material.TALL_GRASS);
         HOLLOW_MATERIALS.add(Material.DEAD_BUSH);
-        HOLLOW_MATERIALS.add(Material.YELLOW_FLOWER);
-        HOLLOW_MATERIALS.add(Material.RED_ROSE);
+        HOLLOW_MATERIALS.add(Material.DANDELION);
+        HOLLOW_MATERIALS.add(Material.POPPY);
         HOLLOW_MATERIALS.add(Material.BROWN_MUSHROOM);
         HOLLOW_MATERIALS.add(Material.RED_MUSHROOM);
         HOLLOW_MATERIALS.add(Material.TORCH);
         HOLLOW_MATERIALS.add(Material.FIRE);
         HOLLOW_MATERIALS.add(Material.REDSTONE_WIRE);
-        HOLLOW_MATERIALS.add(Material.CROPS);
+        HOLLOW_MATERIALS.add(Material.WHEAT);
         HOLLOW_MATERIALS.add(Material.LADDER);
-        HOLLOW_MATERIALS.add(Material.RAILS);
+        HOLLOW_MATERIALS.add(Material.RAIL);
         HOLLOW_MATERIALS.add(Material.LEVER);
-        HOLLOW_MATERIALS.add(Material.REDSTONE_TORCH_OFF);
-        HOLLOW_MATERIALS.add(Material.REDSTONE_TORCH_ON);
+        HOLLOW_MATERIALS.add(Material.REDSTONE_TORCH);
         HOLLOW_MATERIALS.add(Material.STONE_BUTTON);
         HOLLOW_MATERIALS.add(Material.SNOW);
-        HOLLOW_MATERIALS.add(Material.SUGAR_CANE_BLOCK);
-        HOLLOW_MATERIALS.add(Material.PORTAL);
-        HOLLOW_MATERIALS.add(Material.DIODE_BLOCK_OFF);
-        HOLLOW_MATERIALS.add(Material.DIODE_BLOCK_ON);
+        HOLLOW_MATERIALS.add(Material.SUGAR_CANE);
+        HOLLOW_MATERIALS.add(Material.NETHER_PORTAL);
+        HOLLOW_MATERIALS.add(Material.REPEATER);
         HOLLOW_MATERIALS.add(Material.PUMPKIN_STEM);
         HOLLOW_MATERIALS.add(Material.MELON_STEM);
         HOLLOW_MATERIALS.add(Material.VINE);
-        HOLLOW_MATERIALS.add(Material.WATER_LILY);
-        HOLLOW_MATERIALS.add(Material.NETHER_WARTS);
-        HOLLOW_MATERIALS.add(Material.ENDER_PORTAL);
+        HOLLOW_MATERIALS.add(Material.LILY_PAD);
+        HOLLOW_MATERIALS.add(Material.NETHER_WART);
+        HOLLOW_MATERIALS.add(Material.END_PORTAL);
         HOLLOW_MATERIALS.add(Material.COCOA);
         HOLLOW_MATERIALS.add(Material.TRIPWIRE_HOOK);
         HOLLOW_MATERIALS.add(Material.TRIPWIRE);
         HOLLOW_MATERIALS.add(Material.FLOWER_POT);
         HOLLOW_MATERIALS.add(Material.CARROT);
         HOLLOW_MATERIALS.add(Material.POTATO);
-        HOLLOW_MATERIALS.add(Material.WOOD_BUTTON);
-        HOLLOW_MATERIALS.add(Material.SKULL);
-        HOLLOW_MATERIALS.add(Material.REDSTONE_COMPARATOR_OFF);
-        HOLLOW_MATERIALS.add(Material.REDSTONE_COMPARATOR_ON);
+        HOLLOW_MATERIALS.add(Material.OAK_BUTTON);
+        HOLLOW_MATERIALS.add(Material.SPRUCE_BUTTON);
+        HOLLOW_MATERIALS.add(Material.BIRCH_BUTTON);
+        HOLLOW_MATERIALS.add(Material.JUNGLE_BUTTON);
+        HOLLOW_MATERIALS.add(Material.ACACIA_BUTTON);
+        HOLLOW_MATERIALS.add(Material.DARK_OAK_BUTTON);
+        HOLLOW_MATERIALS.add(Material.SKELETON_SKULL);
+        HOLLOW_MATERIALS.add(Material.SKELETON_WALL_SKULL);
+        HOLLOW_MATERIALS.add(Material.WITHER_SKELETON_SKULL);
+        HOLLOW_MATERIALS.add(Material.WITHER_SKELETON_WALL_SKULL);
+        HOLLOW_MATERIALS.add(Material.ZOMBIE_HEAD);
+        HOLLOW_MATERIALS.add(Material.ZOMBIE_WALL_HEAD);
+        HOLLOW_MATERIALS.add(Material.PLAYER_HEAD);
+        HOLLOW_MATERIALS.add(Material.PLAYER_WALL_HEAD);
+        HOLLOW_MATERIALS.add(Material.CREEPER_HEAD);
+        HOLLOW_MATERIALS.add(Material.CREEPER_WALL_HEAD);
+        HOLLOW_MATERIALS.add(Material.DRAGON_HEAD);
+        HOLLOW_MATERIALS.add(Material.DRAGON_WALL_HEAD);
+        HOLLOW_MATERIALS.add(Material.COMPARATOR);
         HOLLOW_MATERIALS.add(Material.ACTIVATOR_RAIL);
-        HOLLOW_MATERIALS.add(Material.CARPET);
-        HOLLOW_MATERIALS.add(Material.DOUBLE_PLANT);
+        HOLLOW_MATERIALS.add(Material.WHITE_CARPET);
+        HOLLOW_MATERIALS.add(Material.ORANGE_CARPET);
+        HOLLOW_MATERIALS.add(Material.MAGENTA_CARPET);
+        HOLLOW_MATERIALS.add(Material.LIGHT_BLUE_CARPET);
+        HOLLOW_MATERIALS.add(Material.YELLOW_CARPET);
+        HOLLOW_MATERIALS.add(Material.LIME_CARPET);
+        HOLLOW_MATERIALS.add(Material.PINK_CARPET);
+        HOLLOW_MATERIALS.add(Material.GRAY_CARPET);
+        HOLLOW_MATERIALS.add(Material.LIGHT_GRAY_CARPET);
+        HOLLOW_MATERIALS.add(Material.CYAN_CARPET);
+        HOLLOW_MATERIALS.add(Material.PURPLE_CARPET);
+        HOLLOW_MATERIALS.add(Material.BLUE_CARPET);
+        HOLLOW_MATERIALS.add(Material.BROWN_CARPET);
+        HOLLOW_MATERIALS.add(Material.GREEN_CARPET);
+        HOLLOW_MATERIALS.add(Material.RED_CARPET);
+        HOLLOW_MATERIALS.add(Material.BLACK_CARPET);
+        HOLLOW_MATERIALS.add(Material.SUNFLOWER);
+        HOLLOW_MATERIALS.add(Material.LILAC);
+        HOLLOW_MATERIALS.add(Material.TALL_GRASS);
+        HOLLOW_MATERIALS.add(Material.LARGE_FERN);
+        HOLLOW_MATERIALS.add(Material.ROSE_BUSH);
+        HOLLOW_MATERIALS.add(Material.PEONY);
 
-        // Additional Materials added in by Essentials
-        HOLLOW_MATERIALS.add(Material.SEEDS);
-        HOLLOW_MATERIALS.add(Material.SIGN_POST);
-        HOLLOW_MATERIALS.add(Material.WOODEN_DOOR);
+                // Additional Materials added in by Essentials
+        HOLLOW_MATERIALS.add(Material.WHEAT_SEEDS);
+        HOLLOW_MATERIALS.add(Material.SIGN);
+        HOLLOW_MATERIALS.add(Material.OAK_DOOR);
+        HOLLOW_MATERIALS.add(Material.SPRUCE_DOOR);
+        HOLLOW_MATERIALS.add(Material.BIRCH_DOOR);
+        HOLLOW_MATERIALS.add(Material.JUNGLE_DOOR);
+        HOLLOW_MATERIALS.add(Material.ACACIA_DOOR);
+        HOLLOW_MATERIALS.add(Material.DARK_OAK_DOOR);
         HOLLOW_MATERIALS.add(Material.WALL_SIGN);
-        HOLLOW_MATERIALS.add(Material.STONE_PLATE);
-        HOLLOW_MATERIALS.add(Material.IRON_DOOR_BLOCK);
-        HOLLOW_MATERIALS.add(Material.WOOD_PLATE);
-        HOLLOW_MATERIALS.add(Material.FENCE_GATE);
+        HOLLOW_MATERIALS.add(Material.STONE_PRESSURE_PLATE);
+        HOLLOW_MATERIALS.add(Material.LIGHT_WEIGHTED_PRESSURE_PLATE);
+        HOLLOW_MATERIALS.add(Material.HEAVY_WEIGHTED_PRESSURE_PLATE);
+        HOLLOW_MATERIALS.add(Material.OAK_PRESSURE_PLATE);
+        HOLLOW_MATERIALS.add(Material.SPRUCE_PRESSURE_PLATE);
+        HOLLOW_MATERIALS.add(Material.BIRCH_PRESSURE_PLATE);
+        HOLLOW_MATERIALS.add(Material.JUNGLE_PRESSURE_PLATE);
+        HOLLOW_MATERIALS.add(Material.ACACIA_PRESSURE_PLATE);
+        HOLLOW_MATERIALS.add(Material.DARK_OAK_PRESSURE_PLATE);
+        HOLLOW_MATERIALS.add(Material.IRON_DOOR);
+        HOLLOW_MATERIALS.add(Material.OAK_FENCE_GATE);
+        HOLLOW_MATERIALS.add(Material.SPRUCE_FENCE_GATE);
+        HOLLOW_MATERIALS.add(Material.BIRCH_FENCE_GATE);
+        HOLLOW_MATERIALS.add(Material.JUNGLE_FENCE_GATE);
+        HOLLOW_MATERIALS.add(Material.ACACIA_FENCE_GATE);
+        HOLLOW_MATERIALS.add(Material.DARK_OAK_FENCE_GATE);
 
         TRANSPARENT_MATERIALS.addAll(HOLLOW_MATERIALS);
         TRANSPARENT_MATERIALS.add(Material.WATER);
-        TRANSPARENT_MATERIALS.add(Material.STATIONARY_WATER);
     }
 
     public static final int RADIUS = 3;
     public static final Vector3D[] VOLUME;
 
     public static ItemStack convertBlockToItem(final Block block) {
-        final ItemStack is = new ItemStack(block.getType(), 1, (short) 0, block.getData());
+        final ItemStack is = new ItemStack(block.getType());
         switch (is.getType()) {
-            case WOODEN_DOOR:
-                is.setType(Material.WOOD_DOOR);
-                is.setDurability((short) 0);
-                break;
-            case IRON_DOOR_BLOCK:
-                is.setType(Material.IRON_DOOR);
-                is.setDurability((short) 0);
-                break;
-            case SIGN_POST:
+            case SIGN:
             case WALL_SIGN:
                 is.setType(Material.SIGN);
                 is.setDurability((short) 0);
                 break;
-            case CROPS:
-                is.setType(Material.SEEDS);
-                is.setDurability((short) 0);
-                break;
-            case CAKE_BLOCK:
-                is.setType(Material.CAKE);
-                is.setDurability((short) 0);
-                break;
-            case BED_BLOCK:
-                is.setType(Material.BED);
+            case WHEAT:
+                is.setType(Material.WHEAT_SEEDS);
                 is.setDurability((short) 0);
                 break;
             case REDSTONE_WIRE:
                 is.setType(Material.REDSTONE);
                 is.setDurability((short) 0);
                 break;
-            case REDSTONE_TORCH_OFF:
-            case REDSTONE_TORCH_ON:
-                is.setType(Material.REDSTONE_TORCH_ON);
-                is.setDurability((short) 0);
-                break;
-            case DIODE_BLOCK_OFF:
-            case DIODE_BLOCK_ON:
-                is.setType(Material.DIODE);
-                is.setDurability((short) 0);
-                break;
-            case DOUBLE_STEP:
-                is.setType(Material.STEP);
-                break;
             case TORCH:
-            case RAILS:
+            case RAIL:
             case LADDER:
-            case WOOD_STAIRS:
+            case OAK_STAIRS:
+            case SPRUCE_STAIRS:
+            case BIRCH_STAIRS:
+            case JUNGLE_STAIRS:
+            case ACACIA_STAIRS:
+            case DARK_OAK_STAIRS:
             case COBBLESTONE_STAIRS:
             case LEVER:
             case STONE_BUTTON:
@@ -143,16 +173,38 @@ public class LocationUtil {
             case DISPENSER:
             case PUMPKIN:
             case JACK_O_LANTERN:
-            case WOOD_PLATE:
-            case STONE_PLATE:
-            case PISTON_STICKY_BASE:
-            case PISTON_BASE:
-            case IRON_FENCE:
-            case THIN_GLASS:
-            case TRAP_DOOR:
-            case FENCE:
-            case FENCE_GATE:
-            case NETHER_FENCE:
+            case OAK_PRESSURE_PLATE:
+            case SPRUCE_PRESSURE_PLATE:
+            case BIRCH_PRESSURE_PLATE:
+            case JUNGLE_PRESSURE_PLATE:
+            case ACACIA_PRESSURE_PLATE:
+            case DARK_OAK_PRESSURE_PLATE:
+            case STONE_PRESSURE_PLATE:
+            case LIGHT_WEIGHTED_PRESSURE_PLATE:
+            case HEAVY_WEIGHTED_PRESSURE_PLATE:
+            case STICKY_PISTON:
+            case PISTON:
+            case IRON_BARS:
+            case GLASS_PANE:
+            case OAK_TRAPDOOR:
+            case SPRUCE_TRAPDOOR:
+            case JUNGLE_TRAPDOOR:
+            case ACACIA_TRAPDOOR:
+            case DARK_OAK_TRAPDOOR:
+            case IRON_TRAPDOOR:
+            case OAK_FENCE:
+            case SPRUCE_FENCE:
+            case BIRCH_FENCE:
+            case JUNGLE_FENCE:
+            case ACACIA_FENCE:
+            case DARK_OAK_FENCE:
+            case OAK_FENCE_GATE:
+            case SPRUCE_FENCE_GATE:
+            case BIRCH_FENCE_GATE:
+            case JUNGLE_FENCE_GATE:
+            case ACACIA_FENCE_GATE:
+            case DARK_OAK_FENCE_GATE:
+            case NETHER_BRICK_FENCE:
                 is.setDurability((short) 0);
                 break;
             case FIRE:
@@ -204,9 +256,9 @@ public class LocationUtil {
         try {
             block = entity.getTargetBlock(TRANSPARENT_MATERIALS, 300);
         } catch (NoSuchMethodError e) {
-            HashSet<Byte> legacyTransparent = new HashSet<>(); // Bukkit API prevents declaring as Set<Byte>
+            HashSet<Material> legacyTransparent = new HashSet<>(); // Bukkit API prevents declaring as Set<Byte>
             for (Material m : TRANSPARENT_MATERIALS) {
-                legacyTransparent.add((byte) m.getId());
+                legacyTransparent.add(m);
             }
             block = entity.getTargetBlock(legacyTransparent, 300);
         }
@@ -243,16 +295,16 @@ public class LocationUtil {
 
     public static boolean isBlockDamaging(final World world, final int x, final int y, final int z) {
         final Block below = world.getBlockAt(x, y - 1, z);
-        if (below.getType() == Material.LAVA || below.getType() == Material.STATIONARY_LAVA) {
+        if (below.getType() == Material.LAVA || below.getType() == Material.LAVA) {
             return true;
         }
         if (below.getType() == Material.FIRE) {
             return true;
         }
-        if (below.getType() == Material.BED_BLOCK) {
+        if (below.getType().name().endsWith("_BED")) {
             return true;
         }
-        if (world.getBlockAt(x, y, z).getType() == Material.PORTAL) {
+        if (world.getBlockAt(x, y, z).getType() == Material.NETHER_PORTAL) {
             return true;
         }
         return (!HOLLOW_MATERIALS.contains(world.getBlockAt(x, y, z).getType())) || (!HOLLOW_MATERIALS.contains(world.getBlockAt(x, y + 1, z).getType()));

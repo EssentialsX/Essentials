@@ -202,7 +202,7 @@ public class Enchantments {
     public static Enchantment getByName(String name) {
         Enchantment enchantment;
         if (NumberUtil.isInt(name)) {
-            enchantment = Enchantment.getById(Integer.parseInt(name));
+            enchantment = Enchantment.getByName(name);
         } else {
             enchantment = Enchantment.getByName(name.toUpperCase(Locale.ENGLISH));
         }
