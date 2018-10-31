@@ -1,6 +1,5 @@
 #version: ${full.version}
 #If you change this file, it will not be automatically updated after the next release.
-#item,id,metadata
 ACACIA_BOAT
 ACACIA_BUTTON
 ACACIA_DOOR
