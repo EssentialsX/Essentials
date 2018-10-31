@@ -31,7 +31,7 @@ public abstract class SpawnerProvider implements Provider {
     public boolean tryProvider() {
         try {
             EntityType type = EntityType.CREEPER;
-            ItemStack is = setEntityType(new ItemStack(Material.MOB_SPAWNER), type);
+            ItemStack is = setEntityType(new ItemStack(Material.SPAWNER), type);
             EntityType readType = getEntityType(is);
             return type == readType;
         } catch (Throwable t) {
