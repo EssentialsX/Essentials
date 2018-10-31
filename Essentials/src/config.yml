@@ -817,20 +817,19 @@ protect:
     warn-on-build-disallow: true
 
   # For which block types would you like to be alerted?
-  # You can find a list of IDs in plugins/Essentials/items.csv after loading Essentials for the first time.
-  # 10 = lava :: 11 = still lava :: 46 = TNT :: 327 = lava bucket
+  # You can find a list of types in plugins/Essentials/items.csv after loading Essentials for the first time.
   alert:
-    on-placement: 10,11,46,327
-    on-use: 327
+    on-placement: lava, tnt, lava_bucket
+    on-use: lava_bucket
     on-break:
 
   blacklist:
 
     # Which blocks should people be prevented from placing?
-    placement: 10,11,46,327
+    placement: lava, tnt, lava_bucket
 
     # Which items should people be prevented from using?
-    usage: 327
+    usage: lava_bucket
 
     # Which blocks should people be prevented from breaking?
     break:
