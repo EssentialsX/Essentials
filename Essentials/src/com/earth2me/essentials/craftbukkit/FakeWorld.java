@@ -11,6 +11,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.MaterialData;
 import org.bukkit.metadata.MetadataValue;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.util.BoundingBox;
+import org.bukkit.util.RayTraceResult;
 import org.bukkit.util.Vector;
 
 import java.io.File;
@@ -18,6 +20,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
+import java.util.function.Predicate;
 
 
 public class FakeWorld implements World {
@@ -729,7 +732,62 @@ public class FakeWorld implements World {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
-	@Override
+    @Override
+    public Collection<Entity> getNearbyEntities(Location location, double v, double v1, double v2, Predicate<Entity> predicate) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public Collection<Entity> getNearbyEntities(BoundingBox boundingBox) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public Collection<Entity> getNearbyEntities(BoundingBox boundingBox, Predicate<Entity> predicate) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public RayTraceResult rayTraceEntities(Location location, Vector vector, double v) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public RayTraceResult rayTraceEntities(Location location, Vector vector, double v, double v1) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public RayTraceResult rayTraceEntities(Location location, Vector vector, double v, Predicate<Entity> predicate) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public RayTraceResult rayTraceEntities(Location location, Vector vector, double v, double v1, Predicate<Entity> predicate) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public RayTraceResult rayTraceBlocks(Location location, Vector vector, double v) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public RayTraceResult rayTraceBlocks(Location location, Vector vector, double v, FluidCollisionMode fluidCollisionMode) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public RayTraceResult rayTraceBlocks(Location location, Vector vector, double v, FluidCollisionMode fluidCollisionMode, boolean b) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public RayTraceResult rayTrace(Location location, Vector vector, double v, FluidCollisionMode fluidCollisionMode, boolean b, double v1, Predicate<Entity> predicate) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
 	public <T> T getGameRuleDefault(GameRule<T> arg0) {
         throw new UnsupportedOperationException("Not supported yet.");
 	}
