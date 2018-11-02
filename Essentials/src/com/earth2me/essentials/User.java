@@ -359,7 +359,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
     }
 
     public String getDisplayName() {
-        return super.getBase().getDisplayName() == null ? super.getBase().getName() : super.getBase().getDisplayName();
+        return super.getBase().getDisplayName() == null || isHidden() ? super.getBase().getName() : super.getBase().getDisplayName();
     }
 
     @Override
