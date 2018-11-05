@@ -1096,6 +1096,11 @@ public class Settings implements net.ess3.api.ISettings {
         return config.getBoolean("ignore-colors-in-max-nick-length", false);
     }
 
+    @Override
+    public boolean hideDisplayNameInVanish() {
+        return config.getBoolean("hide-displayname-in-vanish", true);
+    }
+
     private boolean allowSilentJoin;
 
     public boolean _allowSilentJoinQuit() {
