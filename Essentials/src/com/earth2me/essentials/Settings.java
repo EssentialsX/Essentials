@@ -1098,7 +1098,7 @@ public class Settings implements net.ess3.api.ISettings {
 
     @Override
     public boolean hideDisplayNameInVanish() {
-        return config.getBoolean("hide-displayname-in-vanish", true);
+        return config.getBoolean("hide-displayname-in-vanish", false);
     }
 
     private boolean allowSilentJoin;
