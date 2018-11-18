@@ -2,7 +2,7 @@
 name: Essentials
 main: com.earth2me.essentials.Essentials
 # Note to developers: This next line cannot change, or the automatic versioning system will break.
-version: ${full.version}
+version: 2.15.0.55
 website: http://tiny.cc/EssentialsCommands
 description: Provides an essential, core set of commands for Bukkit.
 softdepend: [Vault]
@@ -12,509 +12,636 @@ commands:
     description: Marks you as away-from-keyboard.
     usage: /<command> [player/message...]
     aliases: [eafk,away,eaway]
+    permission: essentials.afk
   antioch:
     description: 'A little surprise for operators.'
     usage: /<command> [message]
     aliases: [eantioch,grenade,egrenade,tnt,etnt]
+    permission: essentials.antioch
   back:
     description: Teleports you to your location prior to tp/spawn/warp.
     usage: /<command>
     aliases: [eback,return,ereturn]
+    permission: essentials.back
   backup:
     description: Runs the backup if configured.
     usage: /<command>
     aliases: [ebackup]
+    permission: essentials.backup
   balance:
     description: States the current balance of a player.
     usage: /<command> [player]
     aliases: [bal,ebal,ebalance,money,emoney]
+    permission: essentials.balance
   balancetop:
     description: Gets the top balance values.
     usage: /<command> <page>
     aliases: [ebalancetop,baltop,ebaltop]
+    permission: essentials.balancetop
   ban:
     description: Bans a player.
     usage: /<command> <player> [reason]
     aliases: [eban]
+    permission: essentials.ban
   banip:
     description: Bans an IP address.
     usage: /<command> <address>
     aliases: [ebanip]
+    permission: essentials.banip
   book:
     description: Allows reopening and editing of sealed books.
     usage: /<command> [title|author [name]]
     aliases: [ebook]
+    permission: essentials.book
   break:
     description: Breaks the block you are looking at.
     usage: /<command>
     aliases: [ebreak]
+    permission: essentials.break
   broadcast:
     description: Broadcasts a message to the entire server.
     usage: /<command> <msg>
     aliases: [bc,ebc,bcast,ebcast,ebroadcast,shout,eshout]
+    permission: essentials.broadcast
   broadcastworld:
     description: Broadcasts a message to a world.
     usage: /<command> <world> <msg>
     aliases: [bcw,ebcw,bcastw,ebcastw,ebroadcastworld,shoutworld,eshoutworld]
+    permission: essentials.broadcastworld
   bigtree:
     description: Spawn a big tree where you are looking.
     usage: /<command> <tree|redwood|jungle>
     aliases: [ebigtree,largetree,elargetree]
+    permission: essentials.bigtree
   burn:
     description: Set a player on fire.
     usage: /<command> <player> <seconds>
     aliases: [eburn]
+    permission: essentials.burn
   clearinventory:
     description: Clear all items in your inventory.
     usage: /<command> [player|*] [item[:<data>]|*|**] [amount]
     aliases: [ci,eci,clean,eclean,clear,eclear,clearinvent,eclearinvent,eclearinventory]
+    permission: essentials.clearinventory
   clearinventoryconfirmtoggle:
     description: Toggles whether you are prompted to confirm inventory clears.
     usage: /<command>
     aliases: [eclearinventoryconfirmtoggle, clearinventoryconfirmoff, eclearinventoryconfirmoff, clearconfirmoff, eclearconfirmoff, clearconfirmon, eclearconfirmon, clearconfirm, eclearconfirm]
+    permission: essentials.clearinventoryconfirmtoggle
   condense:
     description: Condenses items into a more compact blocks.
     usage: /<command> [<itemname>|<id>|hand|inventory]
     aliases: [econdense,compact,ecompact,blocks,eblocks,toblocks,etoblocks]
+    permission: essentials.condense
   compass:
     description: Describes your current bearing.
     usage: /<command>
     aliases: [ecompass,direction,edirection]
+    permission: essentials.compass
   createkit:
     description: Create a kit in game!
     usage: /<command> <kitname> <delay>
     aliases: [kitcreate,createk,kc,ck]
+    permission: essentials.createkit
   customtext:
     description: Allows you to create custom text commands.
     usage: /<alias> - Define in bukkit.yml
+    permission: essentials.customtext
   delhome:
     description: Removes a home.
     usage: /<command> [player:]<name>
     aliases: [edelhome,remhome,eremhome,rmhome,ermhome]
+    permission: essentials.delhome
   deljail:
     description: Removes a jail.
     usage: /<command> <jailname>
     aliases: [edeljail,remjail,eremjail,rmjail,ermjail]
+    permission: essentials.deljail
   delwarp:
     description: Deletes the specified warp.
     usage: /<command> <warp>
     aliases: [edelwarp,remwarp,eremwarp,rmwarp,ermwarp]
+    permission: essentials.delwarp
   depth:
     description: States current depth, relative to sea level.
     usage: /depth
     aliases: [edepth,height,eheight]
+    permission: essentials.depth
   disposal:
     description: Opens a portable disposal menu.
     usage: /<command>
     aliases: [edisposal,trash,etrash]
+    permission: essentials.disposal
   eco:
     description: Manages the server economy.
     usage: /<command> <give|take|set|reset> <player> <amount>
     aliases: [eeco,economy,eeconomy]
+    permission: essentials.eco
   enchant:
     description: Enchants the item the user is holding.
     usage: /<command> <enchantmentname> [level]
     aliases: [eenchant,enchantment,eenchantment]
+    permission: essentials.enchant
   enderchest:
     description: Lets you see inside an enderchest.
     usage: /<command> [player]
     aliases: [echest,eechest,eenderchest,endersee,eendersee,ec,eec]
+    permission: essentials.enderchest
   essentials:
     description: Reloads essentials.
     usage: /<command>
     aliases: [eessentials, ess, eess, essversion]
+    permission: essentials.essentials
   exp:
     description: Give, set or look at a players exp.
     usage: /<command> [show|set|give] [playername [amount]]
     aliases: [eexp,xp]
+    permission: essentials.exp
   ext:
     description: Extinguish players.
     usage: /<command> [player]
     aliases: [eext,extinguish,eextinguish]
+    permission: essentials.ext
   feed:
     description: Satisfy the hunger.
     usage: /<command> [player]
     aliases: [eat,eeat,efeed]
+    permission: essentials.feed
   fly:
     description: Take off, and soar!
     usage: /<command> [player] [on|off]
     aliases: [efly]
+    permission: essentials.fly
   fireball:
     description: Throw a fireball.
     usage: /<command> [small|skull]
     aliases: [efireball,fireentity,efireentity,fireskull,efireskull]
+    permission: essentials.fireball
   firework:
     description: Allows you to modify a stack of fireworks.
     usage: /<command> <<meta param>|power [amount]|clear|fire [amount]>
     aliases: [efirework]
+    permission: essentials.firework
   gamemode:
     description: Change player gamemode.
     usage: /<command> <survival|creative|adventure|spectator> [player]
     aliases: [adventure,eadventure,adventuremode,eadventuremode,creative,eecreative,creativemode,ecreativemode,egamemode,gm,egm,gma,egma,gmc,egmc,gms,egms,gmt,egmt,survival,esurvival,survivalmode,esurvivalmode,gmsp,sp,egmsp,spec,spectator]
+    permission: essentials.gamemode
   gc:
     description: Reports memory, uptime and tick info.
     usage: /<command> [all]
     aliases: [lag,elag,egc,mem,emem,memory,ememory,uptime,euptime,tps,etps,entities,eentities]
+    permission: essentials.gc
   getpos:
     description: Get your current coordinates or those of a player.
     usage: /<command> [player]
     aliases: [coords,egetpos,position,eposition,whereami,ewhereami,getlocation,egetlocation,getloc,egetloc]
+    permission: essentials.getpos
   give:
     description: Give a player an item.
     usage: /<command> <player> <item|numeric> [amount [itemmeta...]]
     aliases: [egive]
+    permission: essentials.give
   god:
     description: Enables your godly powers.
     usage: /<command> [player] [on|off]
     aliases: [egod,godmode,egodmode,tgm,etgm]
+    permission: essentials.god
   hat:
     description: Get some cool new headgear.
     usage: /<command> [remove]
     aliases: [ehat,head,ehead]
+    permission: essentials.hat
   heal:
     description: Heals you or the given player.
     usage: /<command> [player]
     aliases: [eheal]
+    permission: essentials.heal
   help:
     description: Views a list of available commands.
     usage: /<command> [search term] [page]
     aliases: [ehelp]
+    permission: essentials.help
   helpop:
     description: Message online admins.
     usage: /<command> <message>
     aliases: [ac,eac,amsg,eamsg,ehelpop]
+    permission: essentials.helpop
   home:
     description: Teleport to your home.
     usage: /<command> [player:][name]
     aliases: [ehome,homes,ehomes]
+    permission: essentials.home
   ignore:
     description: Ignore or unignore other players.
     usage: /<command> <player>
     aliases: [eignore,unignore,eunignore,delignore,edelignore,remignore,eremignore,rmignore,ermignore]
+    permission: essentials.ignore
   info:
     description: Shows information set by the server owner.
     usage: /<command> [chapter] [page]
     aliases: [about,eabout,ifo,eifo,einfo,inform,einform,news,enews]
+    permission: essentials.info
   invsee:
     description: See the inventory of other players.
     usage: /<command> <player>
     aliases: [einvsee]
+    permission: essentials.invsee
   item:
     description: Spawn an item.
     usage: /<command> <item|numeric> [amount [itemmeta...]]
     aliases: [i,eitem,ei]
+    permission: essentials.item
   itemdb:
     description: Searches for an item.
     usage: /<command> <item>
     aliases: [dura,edura,durability,edurability,eitemdb,itemno,eitemno]
+    permission: essentials.itemdb
   jails:
     description: List all jails.
     usage: /<command>
     aliases: [ejails]
+    permission: essentials.jails
   jump:
     description: Jumps to the nearest block in the line of sight.
     usage: /<command>
     aliases: [j,ej,ejump,jumpto,ejumpto]
+    permission: essentials.jump
   kick:
     description: Kicks a specified player with a reason.
     usage: /<command> <player> [reason]
     aliases: [ekick]
+    permission: essentials.kick
   kickall:
     description: Kicks all players off the server except the issuer.
     usage: /<command> [reason]
     aliases: [ekickall]
+    permission: essentials.kickall
   kill:
     description: Kills specified player.
     usage: /<command> <player>
     aliases: [ekill]
+    permission: essentials.kill
   kit:
     description: Obtains the specified kit or views all available kits.
     usage: /<command> [kit] [player]
     aliases: [ekit,kits,ekits]
+    permission: essentials.kit
   kittycannon:
     description: Throw an exploding kitten at your opponent.
     usage: /<command>
     aliases: [ekittycannon]
+    permission: essentials.kittycannon
   lightning:
     description: The power of Thor. Strike at cursor or player.
     usage: /<command> [player] [power]
     aliases: [elightning,shock,eshock,smite,esmite,strike,estrike,thor,ethor]
+    permission: essentials.lightning
   list:
     description: List all online players.
     usage: /<command> [group]
     aliases: [elist,online,eonline,playerlist,eplayerlist,plist,eplist,who,ewho]
+    permission: essentials.list
   mail:
     description: Manages inter-player, intra-server mail.
     usage: /<command> [read|clear|send [to] [message]|sendall [message]]
     aliases: [email,eemail,memo,ememo]
+    permission: essentials.mail
   me:
     description: Describes an action in the context of the player.
     usage: /<command> <description>
     aliases: [action,eaction,describe,edescribe,eme]
+    permission: essentials.me
   more:
     description: Fills the item stack in hand to maximum size.
     usage: /<command>
     aliases: [emore]
+    permission: essentials.more
   motd:
     description: Views the Message Of The Day.
     usage: /<command> [chapter] [page]
     aliases: [emotd]
+    permission: essentials.motd
   msg:
     description: Sends a private message to the specified player.
     usage: /<command> <to> <message>
     aliases: [w,m,t,pm,emsg,epm,tell,etell,whisper,ewhisper]
+    permission: essentials.msg
   msgtoggle:
     description: Blocks receiving all private messages.
     usage: /<command> [player] [on|off]
     aliases: [emsgtoggle]
+    permission: essentials.msgtoggle
   mute:
     description: Mutes or unmutes a player.
     usage: /<command> <player> [datediff]
     aliases: [emute,silence,esilence]
+    permission: essentials.mute
   near:
     description: Lists the players near by or around a player.
     usage: /<command> [playername] [radius]
     aliases: [enear,nearby,enearby]
+    permission: essentials.near
   nick:
     description: Change your nickname or that of another player.
     usage: /<command> [player] <nickname|off>
     aliases: [enick,nickname,enickname]
+    permission: essentials.nick
   nuke:
     description: May death rain upon them.
     usage: /<command> [player]
     aliases: [enuke]
+    permission: essentials.nuke
   pay:
     description: Pays another player from your balance.
     usage: /<command> <player> <amount>
     aliases: [epay]
+    permission: essentials.pay
   paytoggle:
     description: Toggles whether you are accepting payments.
     usage: /<command>
     aliases: [epaytoggle, payoff, epayoff, payon, epayon]
+    permission: essentials.paytoggle
   payconfirmtoggle:
     description: Toggles whether you are prompted to confirm payments.
     usage: /<command>
     aliases: [epayconfirmtoggle, payconfirmoff, epayconfirmoff, payconfirmon, epayconfirmon, payconfirm, epayconfirm]
+    permission: essentials.payconfirmtoggle
   ping:
     description: Pong!
     usage: /<command>
     aliases: [echo,eecho,eping,pong,epong]
+    permission: essentials.ping
   potion:
     description: Adds custom potion effects to a potion.
     usage: /<command> <clear|apply|effect:<effect> power:<power> duration:<duration>>
     aliases: [epotion,elixer,eelixer]
+    permission: essentials.potion.apply
   powertool:
     description: Assigns a command to the item in hand.
     usage: /<command> [l:|a:|r:|c:|d:][command] [arguments] - {player} can be replaced by name of a clicked player.
     aliases: [epowertool,pt,ept]
+    permission: essentials.powertool
   powertooltoggle:
     description: Enables or disables all current powertools.
     usage: /<command>
     aliases: [epowertooltoggle,ptt,eptt,pttoggle,epttoggle]
+    permission: essentials.powertooltoggle
   ptime:
     description: Adjust player's client time. Add @ prefix to fix.
     usage: /<command> [list|reset|day|night|dawn|17:30|4pm|4000ticks] [player|*]
     aliases: [playertime,eplayertime,eptime]
+    permission: essentials.ptime
   pweather:
     description: Adjust a player's weather
     usage: /<command> [list|reset|storm|sun|clear] [player|*]
     aliases: [playerweather,eplayerweather,epweather]
+    permission: essentials.pweather
   r:
     description: Quickly reply to the last player to message you.
     usage: /<command> <message>
     aliases: [er,reply,ereply]
+    permission: essentials.msg
   realname:
     description: Displays the username of a user based on nick.
     usage: /<command> <nickname>
     aliases: [erealname]
+    permission: essentials.realname
   recipe:
     description: Displays how to craft items.
     usage: /<command> <item> [number]
     aliases: [formula,eformula,method,emethod,erecipe,recipes,erecipes]
+    permission: essentials.recipe
   remove:
     description: Removes entities in your world.
     usage: /<command> <all|tamed|named|drops|arrows|boats|minecarts|xp|paintings|itemframes|endercrystals|monsters|animals|ambient|mobs|[mobType]> [radius|world]
     aliases: [eremove,butcher,ebutcher,killall,ekillall,mobkill,emobkill]
+    permission: essentials.remove
   repair:
     description: Repairs the durability of one or all items.
     usage: /<command> [hand|all]
     aliases: [fix,efix,erepair]
+    permission: essentials.repair
   rules:
     description: Views the server rules.
     usage: /<command> [chapter] [page]
     aliases: [erules]
+    permission: essentials.rules
   seen:
     description: Shows the last logout time of a player.
     usage: /<command> <playername>
     aliases: [eseen]
+    permission: essentials.seen
   sell:
     description: Sells the item currently in your hand.
     usage: /<command> <<itemname>|<id>|hand|inventory|blocks> [-][amount]
     aliases: [esell]
+    permission: essentials.sell
   sethome:
     description: Set your home to your current location.
     usage: /<command> [[player:]name]
     aliases: [esethome,createhome,ecreatehome]
+    permission: essentials.sethome
   setjail:
     description: Creates a jail where you specified named [jailname].
     usage: /<command> <jailname>
     aliases: [esetjail,createjail,ecreatejail]
+    permission: essentials.setjail
   setwarp:
     description: Creates a new warp.
     usage: /<command> <warp>
     aliases: [createwarp,ecreatewarp,esetwarp]
+    permission: essentials.setwarp
   setworth:
     description: Set the sell value of an item.
     usage: /<command> [itemname|id] <price>
     aliases: [esetworth]
+    permission: essentials.setworth
   showkit:
     description: Show contents of a kit.
     usage: /<command> <kitname>
     aliases: [kitpreview,preview,kitshow]
+    permission: essentials.showkit
   skull:
     description: Set the owner of a player skull
     usage: /<command> [owner]
     aliases: [eskull, playerskull, eplayerskull, head, ehead]
+    permission: essentials.skull
   socialspy:
     description: Toggles if you can see msg/mail commands in chat.
     usage: /<command> [player] [on|off]
     aliases: [esocialspy]
+    permission: essentials.socialspy
   spawner:
     description: Change the mob type of a spawner.
     usage: /<command> <mob> [delay]
     aliases: [changems,echangems,espawner,mobspawner,emobspawner]
+    permission: essentials.spawner
   spawnmob:
     description: Spawns a mob.
     usage: /<command> <mob>[:data][,<mount>[:data]] [amount] [player]
     aliases: [mob,emob,spawnentity,espawnentity,espawnmob]
+    permission: essentials.spawnmob
   speed:
     description: Change your speed limits.
     usage: /<command> [type] <speed> [player]
     aliases: [flyspeed,eflyspeed,fspeed,efspeed,espeed,walkspeed,ewalkspeed,wspeed,ewspeed]
+    permission: essentials.speed
   sudo:
     description: Make another user perform a command.
     usage: /<command> <player> <command [args]>
     aliases: [esudo]
+    permission: essentials.sudo
   suicide:
     description: Causes you to perish.
     usage: /<command>
     aliases: [esuicide]
+    permission: essentials.suicide
   tempban:
     description: Temporary ban a user.
     usage: /<command> <playername> <datediff> <reason>
     aliases: [etempban]
+    permission: essentials.tempban
   thunder:
     description: Enable/disable thunder.
     usage: /<command> <true/false> [duration]
     aliases: [ethunder]
+    permission: essentials.thunder
   time:
     description: Display/Change the world time. Defaults to current world.
     usage: /<command> [day|night|dawn|17:30|4pm|4000ticks] [worldname|all]
     aliases: [day,eday,night,enight,etime]
+    permission: essentials.time
   togglejail:
     description: Jails/Unjails a player, TPs them to the jail specified.
     usage: /<command> <player> <jailname> [datediff]
     aliases: [jail,ejail,tjail,etjail,etogglejail,unjail,eunjail]
+    permission: essentials.togglejail
   top:
     description: Teleport to the highest block at your current position.
     usage: /<command>
     aliases: [etop]
+    permission: essentials.top
   tp:
     description: Teleport to a player.
     usage: /<command> <player> [otherplayer]
     aliases: [tele,etele,teleport,eteleport,etp,tp2p,etp2p]
+    permission: essentials.tp
   tpa:
     description: Request to teleport to the specified player.
     usage: /<command> <player>
     aliases: [call,ecall,etpa,tpask,etpask]
+    permission: essentials.tpa
   tpaall:
     description: Requests all players online to teleport to you.
     usage: /<command> <player>
     aliases: [etpaall]
+    permission: essentials.tpaall
   tpaccept:
     description: Accepts a teleport request.
     usage: /<command> [otherplayer]
     aliases: [etpaccept,tpyes,etpyes]
+    permission: essentials.tpaccept
   tpahere:
     description: Request that the specified player teleport to you.
     usage: /<command> <player>
     aliases: [etpahere]
+    permission: essentials.tpahere
   tpall:
     description: Teleport all online players to another player.
     usage: /<command> <player>
     aliases: [etpall]
+    permission: essentials.tpall
   tpacancel:
     description: Cancel all outstanding teleport requests. Specify [player] to cancel requests with them.
     usage: /<command> [player]
     aliases: [etpacancel]
+    permission: essentials.tpacancel
   tpdeny:
     description: Reject a teleport request.
     usage: /<command>
     aliases: [etpdeny,tpno,etpno]
+    permission: essentials.tpdeny
   tphere:
     description: Teleport a player to you.
     usage: /<command> <player>
     aliases: [s,etphere]
+    permission: essentials.tphere
   tpo:
     description: Teleport override for tptoggle.
     usage: /<command> <player> [otherplayer]
     aliases: [etpo]
+    permission: essentials.tpo
   tpohere:
     description: Teleport here override for tptoggle.
     usage: /<command> <player>
     aliases: [etpohere]
+    permission: essentials.tpohere
   tppos:
     description: Teleport to coordinates.
     usage: /<command> <x> <y> <z> [yaw] [pitch] [world]
     aliases: [etppos]
+    permission: essentials.tppos
   tptoggle:
     description: Blocks all forms of teleportation.
     usage: /<command> [player] [on|off]
     aliases: [etptoggle]
+    permission: essentials.tptoggle
   tree:
     description: Spawn a tree where you are looking.
     usage: /<command> <tree|birch|redwood|redmushroom|brownmushroom|jungle|junglebush|swamp>
     aliases: [etree]
+    permission: essentials.tree
   unban:
     description: Unbans the specified player.
     usage: /<command> <player>
     aliases: [pardon,eunban,epardon]
+    permission: essentials.unban
   unbanip:
     description: Unbans the specified IP address.
     usage: /<command> <address>
     aliases: [eunbanip,pardonip,epardonip]
+    permission: essentials.unbanip
   unlimited:
     description: Allows the unlimited placing of items.
     usage: /<command> <list|item|clear> [player]
     aliases: [eunlimited,ul,unl,eul,eunl]
+    permission: essentials.unlimited
   vanish:
     description: Hide yourself from other players.
     usage: /<command> [player] [on|off]
     aliases: [v,ev,evanish]
+    permission: essentials.vanish
   warp:
     description: List all warps or warp to the specified location.
     usage: /<command> <pagenumber|warp> [player]
     aliases: [ewarp,warps,ewarps]
+    permission: essentials.warp
   weather:
     description: Sets the weather.
     usage: /<command> <storm/sun> [duration]
     aliases: [rain,erain,sky,esky,storm,estorm,sun,esun,eweather]
+    permission: essentials.weather
   whois:
     description: Determine the username behind a nickname.
     usage: /<command> <nickname>
     aliases: [ewhois]
+    permission: essentials.whois
   workbench:
     description: Opens up a workbench.
     usage: /<command>
     aliases: [craft,ecraft,wb,ewb,wbench,ewbench,eworkbench]
+    permission: essentials.workbench
   world:
     description: Switch between worlds.
     usage: /<command> [world]
     aliases: [eworld]
+    permission: essentials.world
   worth:
     description: Calculates the worth of items in hand or as specified.
     usage: /<command> <<itemname>|<id>|hand|inventory|blocks> [-][amount]
     aliases: [eprice,price,eworth]
+    permission: essentials.worth
 
 permissions:
   essentials.*:
