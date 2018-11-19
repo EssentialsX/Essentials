@@ -22,16 +22,16 @@ public class VersionUtil {
 
     private static final Set<BukkitVersion> supportedVersions = ImmutableSet.of(v1_8_8_R01, v1_9_4_R01, v1_10_2_R01, v1_11_2_R01, v1_12_2_R01, v1_13_2_R01);
 
-    public static final BukkitVersion getServerVersion() {
+    public static final BukkitVersion getServerBukkitVersion() {
         return BukkitVersion.fromString(Bukkit.getServer().getBukkitVersion());
     }
 
     public static final boolean isServerSupported() {
-        return supportedVersions.contains(getServerVersion());
+        return supportedVersions.contains(getServerBukkitVersion());
     }
 
     public static class BukkitVersion implements Comparable<BukkitVersion> {
-        private static final Pattern VERSION_PATTERN = Pattern.compile("^([0-9])\\.([0-9]+)\\.?([0-9]*)-R([0-9.]+)");
+        private static final Pattern VERSION_PATTERN = Pattern.compile("^(\\d+)\\.(\\d+)\\.?([0-9]*)-R([\\d.]+)(?:-SNAPSHOT)?");
 
         private final int major;
         private final int minor;
@@ -43,10 +43,10 @@ public class VersionUtil {
             Matcher matcher = VERSION_PATTERN.matcher(string);
             if (!matcher.matches()) {
                 if (!Bukkit.getName().equals("Essentials Fake Server")) {
-                    throw new IllegalArgumentException(string + " is not in valid version format. e.g. v1_10_R1");
+                    throw new IllegalArgumentException(string + " is not in valid version format. e.g. 1.8.8-R0.1");
                 }
                 matcher = VERSION_PATTERN.matcher(v1_8_8_R01.toString());
-                Preconditions.checkArgument(matcher.matches(), string + " is not in valid version format. e.g. v1_10_R1");
+                Preconditions.checkArgument(matcher.matches(), string + " is not in valid version format. e.g. 1.8.8-R0.1");
             }
             return new BukkitVersion(Integer.parseInt(matcher.group(1)), Integer.parseInt(matcher.group(2)), Integer.parseInt(matcher.group(3)), Double.parseDouble(matcher.group(4)));
         }
@@ -112,7 +112,7 @@ public class VersionUtil {
 
         @Override
         public String toString() {
-            return "v" + major + "_" + minor + "_" + patch + "_R" + revision;
+            return major + "+" + minor + "+" + patch + "-R" + revision;
         }
 
         @Override

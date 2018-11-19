@@ -937,7 +937,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
         } else if (setting.equalsIgnoreCase("csv")) {
             return new LegacyItemDb(this);
         } else {
-            VersionUtil.BukkitVersion version = VersionUtil.getServerVersion();
+            VersionUtil.BukkitVersion version = VersionUtil.getServerBukkitVersion();
 
             if (version.isHigherThanOrEqualTo(VersionUtil.v1_13_0_R01)) {
                 return new FlatItemDb(this);
