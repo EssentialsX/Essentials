@@ -12,6 +12,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.*;
+import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.hanging.HangingBreakByEntityEvent;
 import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
@@ -31,6 +32,21 @@ public class EssentialsAntiBuildListener implements Listener {
     public EssentialsAntiBuildListener(final IAntiBuild parent) {
         this.prot = parent;
         this.ess = prot.getEssentialsConnect().getEssentials();
+
+        if (isEntityPickupEvent()) {
+            ess.getServer().getPluginManager().registerEvents(new EntityPickupItemListener(), prot);
+        } else {
+            ess.getServer().getPluginManager().registerEvents(new PlayerPickupItemListener(), prot);
+        }
+    }
+
+    private static boolean isEntityPickupEvent() {
+        try {
+            Class.forName("org.bukkit.event.entity.EntityPickupItemEvent");
+            return true;
+        } catch (ClassNotFoundException ignored) {
+            return false;
+        }
     }
 
     private boolean metaPermCheck(final User user, final String action, final Block block) {
@@ -201,20 +217,6 @@ public class EssentialsAntiBuildListener implements Listener {
     }
 
     @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
-    public void onPlayerPickupItem(PlayerPickupItemEvent event) {
-
-        final User user = ess.getUser(event.getPlayer());
-        final ItemStack item = event.getItem().getItemStack();
-
-        if (prot.getSettingBool(AntiBuildConfig.disable_use) && !user.canBuild() && !user.isAuthorized("essentials.build")) {
-            if (!metaPermCheck(user, "pickup", item.getType())) {
-                event.setCancelled(true);
-                event.getItem().setPickupDelay(50);
-            }
-        }
-    }
-
-    @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
     public void onPlayerDropItem(final PlayerDropItemEvent event) {
 
         final User user = ess.getUser(event.getPlayer());
@@ -236,6 +238,39 @@ public class EssentialsAntiBuildListener implements Listener {
         final ItemStack item = event.getItem();
         if (prot.checkProtectionItems(AntiBuildConfig.blacklist_dispenser, item.getType())) {
             event.setCancelled(true);
+        }
+    }
+
+    private class EntityPickupItemListener implements Listener {
+        @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
+        public void onPlayerPickupItem(EntityPickupItemEvent event) {
+            if (!(event.getEntity() instanceof Player)) return;
+
+            final User user = ess.getUser((Player) event.getEntity());
+            final ItemStack item = event.getItem().getItemStack();
+
+            if (prot.getSettingBool(AntiBuildConfig.disable_use) && !user.canBuild() && !user.isAuthorized("essentials.build")) {
+                if (!metaPermCheck(user, "pickup", item.getType())) {
+                    event.setCancelled(true);
+                    event.getItem().setPickupDelay(50);
+                }
+            }
+        }
+    }
+
+    private class PlayerPickupItemListener implements Listener {
+        @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
+        public void onPlayerPickupItem(PlayerPickupItemEvent event) {
+
+            final User user = ess.getUser(event.getPlayer());
+            final ItemStack item = event.getItem().getItemStack();
+
+            if (prot.getSettingBool(AntiBuildConfig.disable_use) && !user.canBuild() && !user.isAuthorized("essentials.build")) {
+                if (!metaPermCheck(user, "pickup", item.getType())) {
+                    event.setCancelled(true);
+                    event.getItem().setPickupDelay(50);
+                }
+            }
         }
     }
 }
