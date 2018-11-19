@@ -1,144 +1,217 @@
-package com.earth2me.essentials;
+package com.earth2me.essentials.items;
 
+import com.earth2me.essentials.ManagedFile;
+import com.earth2me.essentials.User;
+import com.earth2me.essentials.utils.NumberUtil;
 import com.earth2me.essentials.utils.StringUtil;
-import com.google.gson.Gson;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import net.ess3.api.IEssentials;
+import net.ess3.nms.refl.ReflUtil;
+import org.apache.commons.lang.StringUtils;
 import org.bukkit.Color;
 import org.bukkit.FireworkEffect;
 import org.bukkit.Material;
 import org.bukkit.block.Banner;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.inventory.ItemFlag;
+import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.*;
 import org.bukkit.potion.Potion;
-import org.bukkit.potion.PotionData;
 import org.bukkit.potion.PotionEffect;
 
 import java.util.*;
 import java.util.logging.Logger;
-import java.util.stream.Collectors;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static com.earth2me.essentials.I18n.tl;
 
 
-public class ItemDb implements IConf, net.ess3.api.IItemDb {
+public class LegacyItemDb extends AbstractItemDb {
     protected static final Logger LOGGER = Logger.getLogger("Essentials");
     private final transient IEssentials ess;
+    private final transient Map<String, Integer> items = new HashMap<>();
+    private final transient Map<ItemData, List<String>> names = new HashMap<>();
+    private final transient Map<ItemData, String> primaryName = new HashMap<>();
+    private final transient Map<Integer, ItemData> legacyIds = new HashMap<>();
+    private final transient Map<String, Short> durabilities = new HashMap<>();
+    private final transient Map<String, String> nbtData = new HashMap<>();
+    private final transient ManagedFile file;
+    private final transient Pattern splitPattern = Pattern.compile("((.*)[:+',;.](\\d+))");
+    private final transient Pattern csvSplitPattern = Pattern.compile("(\"([^\"]*)\"|[^,]*)(,|$)");
 
-    private static Gson gson = new Gson();
-
-    // Maps primary name to ItemData
-    private final transient Map<String, ItemData> items = new HashMap<>();
-
-    // Maps alias to primary name
-    private final transient Map<String, String> itemAliases = new HashMap<>();
-
-    // Every known alias
-    private final transient Set<String> allAliases = new HashSet<>();
-
-    private transient ManagedFile file = null;
-
-    public ItemDb(final IEssentials ess) {
+    public LegacyItemDb(final IEssentials ess) {
         this.ess = ess;
+        file = new ManagedFile("items.csv", ess);
     }
 
     @Override
     public void reloadConfig() {
-        if (file == null) {
-            file = new ManagedFile("items.json", ess);
+        final List<String> lines = file.getLines();
+
+        if (lines.isEmpty()) {
+            return;
         }
 
-        this.rebuild();
-        LOGGER.info(String.format("Loaded %s items.", listNames().size()));
-    }
-
-    private void rebuild() {
-        this.reset();
-
-        String json = file.getLines().stream()
-                .filter(line -> !line.startsWith("#"))
-                .collect(Collectors.joining());
-        
-        this.loadJSON(String.join("\n", json));
-    }
-
-    private void reset() {
+        durabilities.clear();
         items.clear();
-        itemAliases.clear();
-        allAliases.clear();
-    }
+        names.clear();
+        primaryName.clear();
 
-    public void loadJSON(String source) {
-        JsonObject map = (new JsonParser()).parse(source).getAsJsonObject();
-
-        for (Map.Entry<String, JsonElement> entry : map.entrySet()) {
-            String key = entry.getKey();
-            JsonElement element = entry.getValue();
-            boolean valid = false;
-
-            if (element.isJsonObject()) {
-                ItemData data = gson.fromJson(element, ItemData.class);
-                items.put(key, data);
-                valid = true;
-            } else {
-                try {
-                    String target = element.getAsString();
-                    itemAliases.put(key, target);
-                    valid = true;
-                } catch (Exception ignored) {}
+        for (String line : lines) {
+            if (line.length() > 0 && line.charAt(0) == '#') {
+                continue;
             }
 
-            if (valid) {
-                allAliases.add(key);
-            } else {
-                LOGGER.warning(String.format("Failed to add item: \"%s\": %s", key, element.toString()));
+            String itemName = null;
+            int numeric = -1;
+            short data = 0;
+            String nbt = null;
+
+            int col = 0;
+            Matcher matcher = csvSplitPattern.matcher(line);
+            while (matcher.find()) {
+                String match = matcher.group(1);
+                if (StringUtils.stripToNull(match) == null) {
+                    continue;
+                }
+                match = StringUtils.strip(match.trim(), "\"");
+                switch (col) {
+                    case 0:
+                        itemName = match.toLowerCase(Locale.ENGLISH);
+                        break;
+                    case 1:
+                        numeric = Integer.parseInt(match);
+                        break;
+                    case 2:
+                        data = Short.parseShort(match);
+                        break;
+                    case 3:
+                        nbt = StringUtils.stripToNull(match);
+                        break;
+                    default:
+                        continue;
+                }
+                col++;
             }
+            // Invalid row
+            if (itemName == null || numeric < 0) {
+                continue;
+            }
+
+            Material material = Material.matchMaterial(itemName);
+            if (material == null) {
+                LOGGER.warning(String.format("Failed to find material for %s", itemName));
+                continue;
+            }
+            durabilities.put(itemName, data);
+            items.put(itemName, numeric);
+            if (nbt != null) {
+                nbtData.put(itemName, nbt);
+            }
+
+            ItemData itemData = new ItemData(material, numeric, data);
+            if (names.containsKey(itemData)) {
+                List<String> nameList = names.get(itemData);
+                nameList.add(itemName);
+            } else {
+                List<String> nameList = new ArrayList<>();
+                nameList.add(itemName);
+                names.put(itemData, nameList);
+                primaryName.put(itemData, itemName);
+            }
+
+            legacyIds.put(numeric, itemData);
+        }
+
+        for (List<String> nameList : names.values()) {
+            Collections.sort(nameList, LengthCompare.INSTANCE);
         }
     }
 
     @Override
     public ItemStack get(final String id, final int quantity) throws Exception {
-        ItemStack is = get(id);
-        is.setAmount(quantity);
-        return is;
+        final ItemStack retval = get(id.toLowerCase(Locale.ENGLISH));
+        retval.setAmount(quantity);
+        return retval;
     }
 
     @Override
     public ItemStack get(final String id) throws Exception {
-        ItemData data = getByName(id);
+        int itemid = 0;
+        String itemname;
+        short metaData = 0;
+        Matcher parts = splitPattern.matcher(id);
+        if (parts.matches()) {
+            itemname = parts.group(2);
+            metaData = Short.parseShort(parts.group(3));
+        } else {
+            itemname = id;
+        }
 
+        if (NumberUtil.isInt(itemname)) {
+            itemid = Integer.parseInt(itemname);
+        } else if (NumberUtil.isInt(id)) {
+            itemid = Integer.parseInt(id);
+        } else {
+            itemname = itemname.toLowerCase(Locale.ENGLISH);
+        }
+
+        if (itemid < 1) {
+            if (items.containsKey(itemname)) {
+                itemid = items.get(itemname);
+                if (durabilities.containsKey(itemname) && metaData == 0) {
+                    metaData = durabilities.get(itemname);
+                }
+            }
+        }
+
+        if (itemid < 1) {
+            throw new Exception(tl("unknownItemName", itemname));
+        }
+
+        ItemData data = legacyIds.get(itemid);
         if (data == null) {
-            throw new Exception(tl("unknownItemName", id));
+            throw new Exception(tl("unknownItemId", itemid));
         }
 
-        PotionData potionData = data.getPotionData();
-        Material material = data.getMaterial();
-
-        ItemStack stack = new ItemStack(material);
-        stack.setAmount(material.getMaxStackSize());
-
-        if (potionData != null) {
-            PotionMeta meta = (PotionMeta) stack.getItemMeta();
-            meta.setBasePotionData(potionData);
-            stack.setItemMeta(meta);
+        Material mat = data.getMaterial();
+        ItemStack retval = new ItemStack(mat);
+        if (nbtData.containsKey(itemname)) {
+            String nbt = nbtData.get(itemname);
+            if (nbt.startsWith("*")) {
+                nbt = nbtData.get(nbt.substring(1));
+            }
+            retval = ess.getServer().getUnsafe().modifyItemStack(retval, nbt);
         }
-
-        return stack;
-    }
-
-    private ItemData getByName(String name) {
-        name = name.toLowerCase();
-        if (items.containsKey(name)) {
-            return items.get(name);
-        } else if (itemAliases.containsKey(name)) {
-            return items.get(itemAliases.get(name));
+        Material MOB_SPAWNER;
+        try {
+            MOB_SPAWNER = Material.SPAWNER;
+        } catch (Exception e) {
+            MOB_SPAWNER = Material.valueOf("MOB_SPAWNER");
         }
-
-        return null;
+        if (mat == MOB_SPAWNER) {
+            if (metaData == 0) metaData = EntityType.PIG.getTypeId();
+            try {
+                retval = ess.getSpawnerProvider().setEntityType(retval, EntityType.fromId(metaData));
+            } catch (IllegalArgumentException e) {
+                throw new Exception("Can't spawn entity ID " + metaData + " from mob spawners.");
+            }
+        } else if (mat == Material.LEGACY_MONSTER_EGG) {
+            EntityType type;
+            try {
+                type = EntityType.fromId(metaData);
+            } catch (IllegalArgumentException e) {
+                throw new Exception("Can't spawn entity ID " + metaData + " from spawn eggs.");
+            }
+            retval = ess.getSpawnEggProvider().createEggItem(type);
+        } else if (mat.name().endsWith("POTION")
+                && ReflUtil.getNmsVersionObject().isLowerThan(ReflUtil.V1_11_R1)) { // Only apply this to pre-1.11 as items.csv might only work in 1.11
+            retval = ess.getPotionMetaProvider().createPotionItem(mat, metaData);
+        } else {
+            retval.setDurability(metaData);
+        }
+        retval.setAmount(mat.getMaxStackSize());
+        return retval;
     }
 
     @Override
@@ -186,37 +259,31 @@ public class ItemDb implements IConf, net.ess3.api.IItemDb {
 
     @Override
     public List<String> nameList(ItemStack item) {
-        List<String> names = new ArrayList<>();
-        String primaryName = name(item);
-        names.add(primaryName);
-
-        for (Map.Entry<String, String> entry : itemAliases.entrySet()) {
-            if (entry.getValue().equalsIgnoreCase(primaryName)) {
-                names.add(entry.getKey());
+        ItemData itemData = new ItemData(item.getType(), item.getDurability());
+        List<String> nameList = names.get(itemData);
+        if (nameList == null) {
+            itemData = new ItemData(item.getType(), (short) 0);
+            nameList = names.get(itemData);
+            if (nameList == null) {
+                return null;
             }
         }
 
-        return names;
+        return Collections.unmodifiableList(nameList);
     }
 
     @Override
     public String name(ItemStack item) {
-        Material type = item.getType();
-        PotionData potion = null;
-
-        if ((type.name().contains("POTION") || type.name().equals("TIPPED_ARROW")) && item.getItemMeta() instanceof PotionMeta) {
-            potion = ((PotionMeta) item.getItemMeta()).getBasePotionData();
-        }
-
-        ItemData data = new ItemData(type, potion);
-
-        for (Map.Entry<String, ItemData> entry : items.entrySet()) {
-            if (entry.getValue().equals(data)) {
-                return entry.getKey();
+        ItemData itemData = new ItemData(item.getType(), item.getDurability());
+        String name = primaryName.get(itemData);
+        if (name == null) {
+            itemData = new ItemData(item.getType(), (short) 0);
+            name = primaryName.get(itemData);
+            if (name == null) {
+                return null;
             }
         }
-
-        return null;
+        return name;
     }
 
     @Override
@@ -254,19 +321,6 @@ public class ItemDb implements IConf, net.ess3.api.IItemDb {
             if (meta.hasEnchants()) {
                 for (Enchantment e : meta.getEnchants().keySet()) {
                     sb.append(e.getName().toLowerCase()).append(":").append(meta.getEnchantLevel(e)).append(" ");
-                }
-            }
-
-            Set<ItemFlag> flags = meta.getItemFlags();
-            if (flags != null && !flags.isEmpty()) {
-                sb.append("itemflags:");
-                boolean first = true;
-                for (ItemFlag flag : flags) {
-                    if (!first) {
-                        sb.append(",");
-                    }
-                    sb.append(flag.name());
-                    first = false;
                 }
             }
         }
@@ -394,35 +448,64 @@ public class ItemDb implements IConf, net.ess3.api.IItemDb {
     }
 
     @Override
-    @Deprecated
     public Material getFromLegacyId(int id) {
-        throw new UnsupportedOperationException("Legacy IDs aren't supported on this version of EssentialsX.");
+        ItemData data = this.legacyIds.get(id);
+        if(data == null) {
+            return null;
+        }
+
+        return data.getMaterial();
     }
 
     @Override
-    @Deprecated
     public int getLegacyId(Material material) throws Exception {
-        throw new UnsupportedOperationException("Legacy IDs aren't supported on this version of EssentialsX.");
+        for(Map.Entry<String, Integer> entry : items.entrySet()) {
+            if(material.name().toLowerCase(Locale.ENGLISH).equalsIgnoreCase(entry.getKey())) {
+                return entry.getValue();
+            }
+        }
+
+        throw new Exception("Itemid not found for material: " + material.name());
     }
 
     @Override
     public Collection<String> listNames() {
-        return Collections.unmodifiableSet(allAliases);
+        return primaryName.values();
     }
 
-    public static class ItemData {
-        private String itemName;
-        private Material material;
-        private PotionData potionData;
+    static class ItemData {
+        final private Material material;
+        private int legacyId;
+        final private short itemData;
 
-        public ItemData(Material material, PotionData potionData) {
+        ItemData(Material material, short itemData) {
             this.material = material;
-            this.potionData = potionData;
+            this.itemData = itemData;
+        }
+
+        @Deprecated
+        ItemData(Material material, final int legacyId, final short itemData) {
+            this.material = material;
+            this.legacyId = legacyId;
+            this.itemData = itemData;
+        }
+
+        public Material getMaterial() {
+            return material;
+        }
+
+        @Deprecated
+        public int getItemNo() {
+            return legacyId;
+        }
+
+        public short getItemData() {
+            return itemData;
         }
 
         @Override
         public int hashCode() {
-            return (31 * material.hashCode()) ^ potionData.hashCode();
+            return (31 * material.hashCode()) ^ itemData;
         }
 
         @Override
@@ -433,30 +516,23 @@ public class ItemDb implements IConf, net.ess3.api.IItemDb {
             if (!(o instanceof ItemData)) {
                 return false;
             }
-            ItemData that = (ItemData) o;
-            return this.material == that.getMaterial() && potionDataEquals(that);
+            ItemData pairo = (ItemData) o;
+            return this.material == pairo.getMaterial() && this.itemData == pairo.getItemData();
+        }
+    }
+
+
+    static class LengthCompare implements java.util.Comparator<String> {
+
+        private static final LengthCompare INSTANCE = new LengthCompare();
+
+        public LengthCompare() {
+            super();
         }
 
-        public String getItemName() {
-            return itemName;
-        }
-
-        public Material getMaterial() {
-            return material;
-        }
-
-        public PotionData getPotionData() {
-            return this.potionData;
-        }
-
-        private boolean potionDataEquals(ItemData o) {
-            if (this.potionData == null && o.getPotionData() == null) {
-                return true;
-            } else if (this.potionData != null && o.getPotionData() != null) {
-                return this.potionData.equals(o.getPotionData());
-            } else {
-                return false;
-            }
+        @Override
+        public int compare(String s1, String s2) {
+            return s1.length() - s2.length();
         }
     }
 }

@@ -537,6 +537,7 @@ public class Settings implements net.ess3.api.ISettings {
         defaultEnabledConfirmCommands = _getDefaultEnabledConfirmCommands();
         isCompassTowardsHomePerm = _isCompassTowardsHomePerm();
         isAllowWorldInBroadcastworld = _isAllowWorldInBroadcastworld();
+        itemDbType = _getItemDbType();
     }
 
     private List<Material> itemSpawnBl = new ArrayList<Material>();
@@ -1460,5 +1461,16 @@ public class Settings implements net.ess3.api.ISettings {
     @Override
     public boolean isAllowWorldInBroadcastworld() {
         return isAllowWorldInBroadcastworld;
+    }
+
+    private String itemDbType;
+
+    private String _getItemDbType() {
+        return config.getString("item-db-type", "auto");
+    }
+
+    @Override
+    public String getItemDbType() {
+        return itemDbType;
     }
 }
