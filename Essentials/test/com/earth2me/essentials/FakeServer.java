@@ -6,10 +6,7 @@ import org.bukkit.Warning.WarningState;
 import org.bukkit.World.Environment;
 import org.bukkit.advancement.Advancement;
 import org.bukkit.block.data.BlockData;
-import org.bukkit.boss.BarColor;
-import org.bukkit.boss.BarFlag;
-import org.bukkit.boss.BarStyle;
-import org.bukkit.boss.BossBar;
+import org.bukkit.boss.*;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.command.PluginCommand;
@@ -918,6 +915,26 @@ public class FakeServer implements Server {
 
     @Override
     public BossBar createBossBar(String s, BarColor barColor, BarStyle barStyle, BarFlag... barFlags) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public KeyedBossBar createBossBar(NamespacedKey key, String title, BarColor color, BarStyle style, BarFlag... flags) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public Iterator<KeyedBossBar> getBossBars() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public KeyedBossBar getBossBar(NamespacedKey key) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public boolean removeBossBar(NamespacedKey key) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
