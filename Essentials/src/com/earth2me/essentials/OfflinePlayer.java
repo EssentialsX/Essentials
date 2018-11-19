@@ -27,6 +27,8 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scoreboard.Scoreboard;
+import org.bukkit.util.BoundingBox;
+import org.bukkit.util.RayTraceResult;
 import org.bukkit.util.Vector;
 
 import java.lang.reflect.InvocationTargetException;
@@ -214,6 +216,26 @@ public class OfflinePlayer implements Player {
     @Override
     public List<Block> getLastTwoTargetBlocks(Set<Material> mat, int i) {
         return Collections.emptyList();
+    }
+
+    @Override
+    public Block getTargetBlockExact(int maxDistance) {
+        return null;
+    }
+
+    @Override
+    public Block getTargetBlockExact(int maxDistance, FluidCollisionMode fluidCollisionMode) {
+        return null;
+    }
+
+    @Override
+    public RayTraceResult rayTraceBlocks(double maxDistance) {
+        return null;
+    }
+
+    @Override
+    public RayTraceResult rayTraceBlocks(double maxDistance, FluidCollisionMode fluidCollisionMode) {
+        return null;
     }
 
     @Override
@@ -1489,6 +1511,11 @@ public class OfflinePlayer implements Player {
     }
 
     @Override
+    public int getClientViewDistance() {
+        return 0;
+    }
+
+    @Override
     public String getLocale() {
         return null;
     }
@@ -1533,6 +1560,11 @@ public class OfflinePlayer implements Player {
     @Override
     public double getWidth() {
         return 0;
+    }
+
+    @Override
+    public BoundingBox getBoundingBox() {
+        return null;
     }
 
     @Override
