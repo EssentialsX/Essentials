@@ -942,7 +942,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
             if (version.isHigherThanOrEqualTo(VersionUtil.v1_13_0_R01)) {
                 return new FlatItemDb(this);
             } else {
-                return new FlatItemDb(this);
+                return new LegacyItemDb(this);
             }
         }
     }
