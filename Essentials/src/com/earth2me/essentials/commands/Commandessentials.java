@@ -64,8 +64,6 @@ public class Commandessentials extends EssentialsCommand {
             run_moo(server, sender, commandLabel, args);
         } else if (args[0].equalsIgnoreCase("reset")) {
             run_reset(server, sender, commandLabel, args);
-        } else if (args[0].equalsIgnoreCase("opt-out")) {
-            run_optout(server, sender, commandLabel, args);
         } else if (args[0].equalsIgnoreCase("cleanup")) {
             run_cleanup(server, sender, commandLabel, args);
         } else if (args[0].equalsIgnoreCase("uuidconvert")) {
@@ -204,19 +202,6 @@ public class Commandessentials extends EssentialsCommand {
                 sender.getSender().sendMessage(consoleMoo);
             }
         }
-    }
-
-    private void run_optout(final Server server, final CommandSource sender, final String command, final String args[]) {
-        final Metrics metrics = ess.getMetrics();
-
-        sender.sendMessage("Essentials collects simple metrics to highlight which features to concentrate work on in the future.");
-        if (metrics.isOptOut()) {
-            metrics.enable();
-        } else {
-            metrics.disable();
-        }
-        sender.sendMessage("Anonymous Metrics are now " + (metrics.isOptOut() ? "disabled" : "enabled") + " for EssentialsX until server restart.");
-        sender.sendMessage("To " + (metrics.isOptOut() ? "disable" : "enable") + " them for all plugins permanently, see the bStats config.");
     }
 
     private void run_cleanup(final Server server, final CommandSource sender, final String command, final String args[]) throws Exception {
@@ -394,7 +379,6 @@ public class Commandessentials extends EssentialsCommand {
             //options.add("nya");
             //options.add("moo");
             options.add("reset");
-            options.add("opt-out");
             options.add("cleanup");
             //options.add("uuidconvert");
             //options.add("uuidtest");
@@ -412,8 +396,6 @@ public class Commandessentials extends EssentialsCommand {
             if (args.length == 2) {
                 return getPlayers(server, sender);
             }
-        } else if (args[0].equalsIgnoreCase("opt-out")) {
-            // No args
         } else if (args[0].equalsIgnoreCase("cleanup")) {
             if (args.length == 2) {
                 return COMMON_DURATIONS;

@@ -264,7 +264,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
                 addDefaultBackPermissionsToWorld(w);
 
             metrics = new Metrics(this);
-            if (!metrics.isOptOut()) {
+            if (metrics.isEnabled()) {
                 getLogger().info("Starting Metrics. Opt-out using the global bStats config.");
             } else {
                 getLogger().info("Metrics disabled per bStats config.");
