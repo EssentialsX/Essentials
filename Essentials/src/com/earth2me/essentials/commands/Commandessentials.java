@@ -5,10 +5,7 @@ import com.earth2me.essentials.EssentialsUpgrade;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.UserMap;
 import com.earth2me.essentials.metrics.Metrics;
-import com.earth2me.essentials.utils.DateUtil;
-import com.earth2me.essentials.utils.FloatUtil;
-import com.earth2me.essentials.utils.NumberUtil;
-import com.earth2me.essentials.utils.VersionUtil;
+import com.earth2me.essentials.utils.*;
 import com.google.common.base.Charsets;
 import com.google.common.collect.Lists;
 import org.bukkit.Material;
@@ -187,12 +184,8 @@ public class Commandessentials extends EssentialsCommand {
     private final String[] playerMoo = new String[]{"            (__)", "            (oo)", "   /------\\/", "  /  |      | |", " *  /\\---/\\", "    ~~    ~~", "....\"Have you mooed today?\"..."};
 
     private void run_moo(final Server server, final CommandSource sender, final String command, final String args[]) {
-        Sound moo;
-        try {
-            moo = Sound.valueOf("COW_IDLE"); // pre-1.9
-        } catch (IllegalArgumentException e) {
-            moo = Sound.valueOf("ENTITY_COW_MILK"); // 1.9
-        }
+        Sound moo = EnumUtil.valueOf(Sound.class, "COW_IDLE", "ENTITY_COW_MILK");
+
         if (args.length == 2 && args[1].equals("moo")) {
             for (String s : consoleMoo) {
                 logger.info(s);
