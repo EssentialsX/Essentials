@@ -9,7 +9,6 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-//1.13.1-R0.1-SNAPSHOT
 public class VersionUtil {
 
     public static final BukkitVersion v1_8_8_R01 = BukkitVersion.fromString("1.8.8-R0.1-SNAPSHOT");
@@ -22,11 +21,11 @@ public class VersionUtil {
 
     private static final Set<BukkitVersion> supportedVersions = ImmutableSet.of(v1_8_8_R01, v1_9_4_R01, v1_10_2_R01, v1_11_2_R01, v1_12_2_R01, v1_13_2_R01);
 
-    public static final BukkitVersion getServerBukkitVersion() {
+    public static BukkitVersion getServerBukkitVersion() {
         return BukkitVersion.fromString(Bukkit.getServer().getBukkitVersion());
     }
 
-    public static final boolean isServerSupported() {
+    public static boolean isServerSupported() {
         return supportedVersions.contains(getServerBukkitVersion());
     }
 
@@ -45,7 +44,7 @@ public class VersionUtil {
                 if (!Bukkit.getName().equals("Essentials Fake Server")) {
                     throw new IllegalArgumentException(string + " is not in valid version format. e.g. 1.8.8-R0.1");
                 }
-                matcher = VERSION_PATTERN.matcher(v1_8_8_R01.toString());
+                matcher = VERSION_PATTERN.matcher(v1_13_2_R01.toString());
                 Preconditions.checkArgument(matcher.matches(), string + " is not in valid version format. e.g. 1.8.8-R0.1");
             }
             return new BukkitVersion(Integer.parseInt(matcher.group(1)), Integer.parseInt(matcher.group(2)), Integer.parseInt(matcher.group(3)), Double.parseDouble(matcher.group(4)));

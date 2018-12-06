@@ -8,6 +8,7 @@ import com.earth2me.essentials.metrics.Metrics;
 import com.earth2me.essentials.utils.DateUtil;
 import com.earth2me.essentials.utils.FloatUtil;
 import com.earth2me.essentials.utils.NumberUtil;
+import com.earth2me.essentials.utils.VersionUtil;
 import com.google.common.base.Charsets;
 import com.google.common.collect.Lists;
 import org.bukkit.Material;
@@ -36,7 +37,22 @@ public class Commandessentials extends EssentialsCommand {
     private final List<String> versionPlugins = Arrays.asList(
             "Vault",
             "LuckPerms",
-            "PermissionsEx"
+            "PermissionsEx",
+            "GroupManager"
+    );
+
+    private final List<String> officialPlugins = Arrays.asList(
+            "EssentialsAntiBuild",
+            "EssentialsChat",
+            "EssentialsGeoIP",
+            "EssentialsProtect",
+            "EssentialsSpawn",
+            "EssentialsXMPP"
+    );
+
+    private final List<String> warnPlugins = Arrays.asList(
+            "PermissionsEx",
+            "GroupManager"
     );
 
     @Override
@@ -318,11 +334,13 @@ public class Commandessentials extends EssentialsCommand {
 
         boolean isMismatched = false;
         boolean isVaultInstalled = false;
+        boolean isUnsupported = false;
+        final boolean isServerSupported = VersionUtil.isServerSupported();
         final PluginManager pm = server.getPluginManager();
         final String essVer = pm.getPlugin("Essentials").getDescription().getVersion();
 
-        sender.sendMessage("Server version: " + server.getBukkitVersion() + " " + server.getVersion());
-        sender.sendMessage("EssentialsX version: " + essVer);
+        sender.sendMessage(tl(isServerSupported ? "versionOutputFine" : "versionOutputWarn", "Server", server.getBukkitVersion() + " " + server.getVersion()));
+        sender.sendMessage(tl("versionOutputFine", "EssentialsX", essVer));
 
         for (Plugin plugin : pm.getPlugins()) {
             final PluginDescriptionFile desc = plugin.getDescription();
@@ -330,15 +348,28 @@ public class Commandessentials extends EssentialsCommand {
             String version = desc.getVersion();
 
             if (name.startsWith("Essentials") && !name.equalsIgnoreCase("Essentials")) {
-                if (!version.equalsIgnoreCase(essVer)) {
-                    version = "\u00a7c" + version;
-                    isMismatched = true;
+                if (officialPlugins.contains(name)) {
+                    name = name.replace("Essentials", "EssentialsX");
+
+                    if (!version.equalsIgnoreCase(essVer)) {
+                        isMismatched = true;
+                        sender.sendMessage(tl("versionOutputWarn", name, version));
+                    } else {
+                        sender.sendMessage(tl("versionOutputFine", name, version));
+                    }
+                } else {
+                    sender.sendMessage(tl("versionOutputUnsupported", name, version));
+                    isUnsupported = true;
                 }
-                sender.sendMessage(name.replace("Essentials", "EssentialsX") + " version: " + version);
             }
 
             if (versionPlugins.contains(name)) {
-                sender.sendMessage(name + " version: " + version);
+                if (warnPlugins.contains(name)) {
+                    sender.sendMessage(tl("versionOutputUnsupported", name, version));
+                    isUnsupported = true;
+                } else {
+                    sender.sendMessage(tl("versionOutputFine", name, version));
+                }
             }
 
             if (name.equals("Vault")) isVaultInstalled = true;
@@ -349,7 +380,15 @@ public class Commandessentials extends EssentialsCommand {
         }
 
         if (!isVaultInstalled) {
-            sender.sendMessage("Vault is not installed - chat and permissions may not work.");
+            sender.sendMessage(tl("versionOutputVaultMissing"));
+        }
+
+        if (isUnsupported) {
+            sender.sendMessage(tl("versionOutputUnsupportedPlugins"));
+        }
+
+        if (!VersionUtil.isServerSupported()) {
+            sender.sendMessage(tl("serverUnsupported"));
         }
     }
 
