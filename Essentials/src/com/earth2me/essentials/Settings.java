@@ -1463,7 +1463,7 @@ public class Settings implements net.ess3.api.ISettings {
         return isAllowWorldInBroadcastworld;
     }
 
-    private String itemDbType;
+    private String itemDbType; // #EasterEgg - admins can manually switch items provider if they want
 
     private String _getItemDbType() {
         return config.getString("item-db-type", "auto");
@@ -1472,5 +1472,16 @@ public class Settings implements net.ess3.api.ISettings {
     @Override
     public String getItemDbType() {
         return itemDbType;
+    }
+
+    private boolean forceEnableRecipe; // https://github.com/EssentialsX/Essentials/issues/1397
+
+    private boolean _isForceEnableRecipe() {
+        return config.getBoolean("force-enable-recipe", false);
+    }
+
+    @Override
+    public boolean isForceEnableRecipe() {
+        return false;
     }
 }

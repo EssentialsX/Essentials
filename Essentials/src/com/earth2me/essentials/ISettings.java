@@ -316,4 +316,6 @@ public interface ISettings extends IConf {
     boolean isAllowWorldInBroadcastworld();
 
     String getItemDbType();
+
+    boolean isForceEnableRecipe();
 }

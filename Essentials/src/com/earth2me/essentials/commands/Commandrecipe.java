@@ -3,6 +3,7 @@ package com.earth2me.essentials.commands;
 import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.NumberUtil;
+import com.earth2me.essentials.utils.VersionUtil;
 import org.bukkit.Material;
 import org.bukkit.Server;
 import org.bukkit.inventory.*;
@@ -24,8 +25,10 @@ public class Commandrecipe extends EssentialsCommand {
     }
     
     private void disableCommandForVersion1_12() throws Exception {
-        if (ReflUtil.getNmsVersionObject().equals(ReflUtil.V1_12_R1)) {
-            throw new Exception("/recipe is temporarily disabled. Please use the recipe book in your inventory.");
+        VersionUtil.BukkitVersion version = VersionUtil.getServerBukkitVersion();
+        if (version.isHigherThanOrEqualTo(VersionUtil.v1_12_0_R01)
+            && !ess.getSettings().isForceEnableRecipe()) {
+            throw new Exception("Please use the recipe book in your inventory.");
         }
     }
 
