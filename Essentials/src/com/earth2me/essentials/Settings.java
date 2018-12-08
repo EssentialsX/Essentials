@@ -538,6 +538,7 @@ public class Settings implements net.ess3.api.ISettings {
         isCompassTowardsHomePerm = _isCompassTowardsHomePerm();
         isAllowWorldInBroadcastworld = _isAllowWorldInBroadcastworld();
         itemDbType = _getItemDbType();
+        forceEnableRecipe = _isForceEnableRecipe();
     }
 
     private List<Material> itemSpawnBl = new ArrayList<Material>();
