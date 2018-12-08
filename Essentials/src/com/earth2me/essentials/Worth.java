@@ -1,7 +1,7 @@
 package com.earth2me.essentials;
 
 import com.earth2me.essentials.commands.NotEnoughArgumentsException;
-import com.earth2me.essentials.utils.EnumUtil;
+import com.earth2me.essentials.utils.VersionUtil;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
@@ -22,22 +22,36 @@ public class Worth implements IConf {
         config.load();
     }
 
-    public BigDecimal getPrice(IEssentials essentials, ItemStack itemStack) {
+    /**
+     * Get the value of an item stack from the config.
+     *
+     * @param ess       The Essentials instance.
+     * @param itemStack The item stack to look up in the config.
+     * @return The price from the config.
+     */
+    public BigDecimal getPrice(IEssentials ess, ItemStack itemStack) {
         BigDecimal result;
 
         String itemname = itemStack.getType().toString().toLowerCase(Locale.ENGLISH).replace("_", "");
 
-        // Check for matches with item name
+        // Check for matches with data value from stack
+        // Note that we always default to BigDecimal.ONE.negate(), equivalent to -1
         result = config.getBigDecimal("worth." + itemname + "." + itemStack.getDurability(), BigDecimal.ONE.negate());
+
+        // Check for matches with data value 0
         if (result.signum() < 0) {
             final ConfigurationSection itemNameMatch = config.getConfigurationSection("worth." + itemname);
             if (itemNameMatch != null && itemNameMatch.getKeys(false).size() == 1) {
                 result = config.getBigDecimal("worth." + itemname + ".0", BigDecimal.ONE.negate());
             }
         }
+
+        // Check for matches with data value wildcard
         if (result.signum() < 0) {
             result = config.getBigDecimal("worth." + itemname + ".*", BigDecimal.ONE.negate());
         }
+
+        // Check for matches with item name alone
         if (result.signum() < 0) {
             result = config.getBigDecimal("worth." + itemname, BigDecimal.ONE.negate());
         }
@@ -48,6 +62,17 @@ public class Worth implements IConf {
         return result;
     }
 
+    /**
+     * Get the amount of items to be sold from a player's inventory.
+     *
+     * @param ess        The Essentials instance.
+     * @param user       The user attempting to sell the item.
+     * @param is         A stack of the item to search the inventory for.
+     * @param args       The amount to try to sell.
+     * @param isBulkSell Whether or not to try and bulk sell all items.
+     * @return The amount of items to sell from the player's inventory.
+     * @throws Exception Thrown if trying to sell air or an invalid amount.
+     */
     public int getAmount(IEssentials ess, User user, ItemStack is, String[] args, boolean isBulkSell) throws Exception {
         if (is == null || is.getType() == Material.AIR) {
             throw new Exception(tl("itemSellAir"));
@@ -104,14 +129,23 @@ public class Worth implements IConf {
         return amount;
     }
 
+    /**
+     * Set the price of an item and save it to the config.
+     *
+     * @param ess       The Essentials instance.
+     * @param itemStack A stack of the item to save.
+     * @param price     The new price of the item.
+     */
     public void setPrice(IEssentials ess, ItemStack itemStack, double price) {
-        if (itemStack.getType().getData() == null) {
-            config.setProperty("worth." + itemStack.getType().toString().toLowerCase(Locale.ENGLISH).replace("_", ""), price);
-        } else {
+        String path = "worth." + itemStack.getType().toString().toLowerCase(Locale.ENGLISH).replace("_", "");
+
+        // Spigot 1.13+ throws an exception if a 1.13+ plugin even *attempts* to do set data.
+        if (VersionUtil.getServerBukkitVersion().isLowerThan(VersionUtil.v1_13_0_R01) && itemStack.getType().getData() == null) {
             // Bukkit-bug: getDurability still contains the correct value, while getData().getData() is 0.
-            config.setProperty("worth." + itemStack.getType().toString().toLowerCase(Locale.ENGLISH).replace("_", "") + "." + itemStack.getDurability(), price);
+            path = path + "." + itemStack.getDurability();
         }
-        
+
+        config.setProperty(path, price);
         config.save();
     }
 
