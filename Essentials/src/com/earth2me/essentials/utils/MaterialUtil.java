@@ -2,40 +2,91 @@ package com.earth2me.essentials.utils;
 
 import org.bukkit.Material;
 
-import java.util.HashSet;
 import java.util.Set;
-
-import static com.earth2me.essentials.utils.EnumUtil.getMaterial;
 
 public class MaterialUtil {
 
-    private static final Set<Material> BEDS = new HashSet<>();
+
+    private static final Set<Material> BEDS;
+    private static final Set<Material> BANNERS;
+    private static final Set<Material> FIREWORKS;
+    private static final Set<Material> LEGACY_SKULLS;
+    private static final Set<Material> LEATHER_ARMOR;
+    private static final Set<Material> MOB_HEADS;
+    // includes TIPPED_ARROW which also has potion effects
+    private static final Set<Material> PLAYER_HEADS;
+    private static final Set<Material> POTIONS;
 
     static {
-        // Adds WHITE_BED if 1.13+, otherwise BED
-        BEDS.add(getMaterial("WHITE_BED", "BED"));
 
-        // Don't keep looking up and adding BED if we're not on 1.13+
-        if (BEDS.add(getMaterial("ORANGE_BED", "BED"))) {
-            BEDS.add(getMaterial("MAGENTA_BED", "BED"));
-            BEDS.add(getMaterial("LIGHT_BLUE_BED", "BED"));
-            BEDS.add(getMaterial("YELLOW_BED", "BED"));
-            BEDS.add(getMaterial("LIME_BED", "BED"));
-            BEDS.add(getMaterial("PINK_BED", "BED"));
-            BEDS.add(getMaterial("GRAY_BED", "BED"));
-            BEDS.add(getMaterial("LIGHT_GRAY_BED", "BED"));
-            BEDS.add(getMaterial("CYAN_BED", "BED"));
-            BEDS.add(getMaterial("PURPLE_BED", "BED"));
-            BEDS.add(getMaterial("BLUE_BED", "BED"));
-            BEDS.add(getMaterial("BROWN_BED", "BED"));
-            BEDS.add(getMaterial("GREEN_BED", "BED"));
-            BEDS.add(getMaterial("RED_BED", "BED"));
-            BEDS.add(getMaterial("BLACK_BED", "BED"));
-        }
+        BEDS = EnumUtil.getAllMatching(Material.class, "BED", "WHITE_BED", "ORANGE_BED",
+            "MAGENTA_BED", "LIGHT_BLUE_BED", "YELLOW_BED", "LIME_BED", "PINK_BED", "GRAY_BED",
+            "LIGHT_GRAY_BED", "CYAN_BED", "PURPLE_BED", "BLUE_BED", "BROWN_BED", "GREEN_BED",
+            "RED_BED", "BLACK_BED");
+
+        BANNERS = EnumUtil.getAllMatching(Material.class, "BANNER", "WHITE_BANNER",
+            "ORANGE_BANNER", "MAGENTA_BANNER", "LIGHT_BLUE_BANNER", "YELLOW_BANNER", "LIME_BANNER",
+            "PINK_BANNER","GRAY_BANNER","LIGHT_GRAY_BANNER", "CYAN_BANNER", "PURPLE_BANNER",
+            "BLUE_BANNER", "BROWN_BANNER", "GREEN_BANNER", "RED_BANNER", "BLACK_BANNER");
+
+        FIREWORKS = EnumUtil.getAllMatching(Material.class, "FIREWORK", "FIREWORK_ROCKET",
+            "FIREWORK_CHARGE", "FIREWORK_STAR");
+
+        LEATHER_ARMOR = EnumUtil.getAllMatching(Material.class, "LEATHER_HELMET",
+            "LEATHER_CHESTPLATE", "LEATHER_LEGGINGS", "LEATHER_BOOTS");
+
+        LEGACY_SKULLS = EnumUtil.getAllMatching(Material.class,"SKULL", "SKULL_ITEM");
+
+        MOB_HEADS = EnumUtil.getAllMatching(Material.class, "SKELETON_SKULL",
+            "SKELETON_WALL_SKULL", "WITHER_SKELETON_SKULL", "WITHER_SKELETON_WALL_SKULL",
+            "CREEPER_HEAD", "CREEPER_WALL_HEAD", "ZOMBIE_HEAD", "ZOMBIE_WALL_HEAD", "DRAGON_HEAD"
+            , "DRAGON_WALL_HEAD");
+
+        PLAYER_HEADS = EnumUtil.getAllMatching(Material.class, "PLAYER_HEAD", "PLAYER_WALL_HEAD");
+
+        POTIONS = EnumUtil.getAllMatching(Material.class, "POTION", "SPLASH_POTION",
+            "LINGERING_POTION", "TIPPED_ARROW");
+
     }
 
     public static boolean isBed(Material material) {
         return BEDS.contains(material);
+    }
+
+    public static boolean isBanner(Material material) {
+        return BANNERS.contains(material);
+    }
+
+    public static boolean isFirework(Material material) {
+        return FIREWORKS.contains(material);
+    }
+
+    public static boolean isLeatherArmor(Material material) {
+        return LEATHER_ARMOR.contains(material);
+    }
+
+    public static boolean isMobHead(Material material, int durability) {
+        if (MOB_HEADS.contains(material)) {
+            return true;
+        }
+
+        return LEGACY_SKULLS.contains(material) && (durability < 0 || durability != 3);
+    }
+
+    public static boolean isPlayerHead(Material material, int durability) {
+        if (PLAYER_HEADS.contains(material)) {
+            return true;
+        }
+
+        return LEGACY_SKULLS.contains(material) && durability == 3;
+    }
+
+    public static boolean isPotion(Material material) {
+        return POTIONS.contains(material);
+    }
+
+    public static boolean isSkull(Material material) {
+        return isPlayerHead(material, -1) || isMobHead(material, -1);
     }
 
 }
