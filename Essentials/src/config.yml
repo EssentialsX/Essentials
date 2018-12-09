@@ -36,6 +36,10 @@ max-nick-length: 15
 # ie: "&6Notch" has 7 characters (2 are part of a color code), a length of 5 is used when this option is set to true
 ignore-colors-in-max-nick-length: false
 
+# When this option is enabled, display names for hidden users will not be shown. This prevents players from being
+# able to see that they are online while vanished.
+hide-displayname-in-vanish: true
+
 # Disable this if you have any other plugin, that modifies the displayname of a user.
 change-displayname: true
 

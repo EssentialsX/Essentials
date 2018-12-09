@@ -243,6 +243,8 @@ public interface ISettings extends IConf {
 
     boolean ignoreColorsInMaxLength();
 
+    boolean hideDisplayNameInVanish();
+
     int getMaxUserCacheCount();
 
     boolean allowSilentJoinQuit();
