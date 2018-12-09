@@ -538,7 +538,7 @@ public class Settings implements net.ess3.api.ISettings {
         isCompassTowardsHomePerm = _isCompassTowardsHomePerm();
         isAllowWorldInBroadcastworld = _isAllowWorldInBroadcastworld();
         itemDbType = _getItemDbType();
-        forceEnableRecipe = _isForceEnableRecipe();
+        forceEnableRecipe = config.getBoolean("force-enable-recipe", false);
     }
 
     private List<Material> itemSpawnBl = new ArrayList<Material>();
@@ -1482,12 +1482,8 @@ public class Settings implements net.ess3.api.ISettings {
 
     private boolean forceEnableRecipe; // https://github.com/EssentialsX/Essentials/issues/1397
 
-    private boolean _isForceEnableRecipe() {
-        return config.getBoolean("force-enable-recipe", false);
-    }
-
     @Override
     public boolean isForceEnableRecipe() {
-        return false;
+        return forceEnableRecipe;
     }
 }
