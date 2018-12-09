@@ -16,6 +16,9 @@ public class MaterialUtil {
     // includes TIPPED_ARROW which also has potion effects
     private static final Set<Material> PLAYER_HEADS;
     private static final Set<Material> POTIONS;
+    private static final Set<Material> SIGNS;
+
+    public static final Material SPAWNER = EnumUtil.getMaterial("MOB_SPAWNER", "SPAWNER");
 
     static {
 
@@ -47,6 +50,7 @@ public class MaterialUtil {
         POTIONS = EnumUtil.getAllMatching(Material.class, "POTION", "SPLASH_POTION",
             "LINGERING_POTION", "TIPPED_ARROW");
 
+        SIGNS = EnumUtil.getAllMatching(Material.class, "SIGN", "SIGN_POST", "WALL_SIGN");
     }
 
     public static boolean isBed(Material material) {
@@ -83,6 +87,10 @@ public class MaterialUtil {
 
     public static boolean isPotion(Material material) {
         return POTIONS.contains(material);
+    }
+
+    public static boolean isSign(Material material) {
+        return SIGNS.contains(material);
     }
 
     public static boolean isSkull(Material material) {
