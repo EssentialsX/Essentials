@@ -152,7 +152,12 @@ public class EssentialsPlayerListener implements Listener {
             event.setQuitMessage(null);
         } else if (ess.getSettings().isCustomQuitMessage() && event.getQuitMessage() != null) {
             final Player player = event.getPlayer();
-            event.setQuitMessage(ess.getSettings().getCustomQuitMessage().replace("{PLAYER}", player.getDisplayName()).replace("{USERNAME}", player.getName()).replace("{ONLINE}", NumberFormat.getInstance().format(ess.getOnlinePlayers().size())));
+            final String msg = ess.getSettings().getCustomQuitMessage()
+                    .replace("{PLAYER}", player.getDisplayName())
+                    .replace("{USERNAME}", player.getName())
+                    .replace("{ONLINE}", NumberFormat.getInstance().format(ess.getOnlinePlayers().size()));
+            
+            event.setQuitMessage(msg.isEmpty() ? null : msg);
         }
 
         user.startTransaction();
@@ -260,7 +265,9 @@ public class EssentialsPlayerListener implements Listener {
                         .replace("{PLAYER}", player.getDisplayName()).replace("{USERNAME}", player.getName())
                         .replace("{UNIQUE}", NumberFormat.getInstance().format(ess.getUserMap().getUniqueUsers()))
                         .replace("{ONLINE}", NumberFormat.getInstance().format(ess.getOnlinePlayers().size()));
-                    ess.getServer().broadcastMessage(msg);
+                    if (!msg.isEmpty()) {
+                        ess.getServer().broadcastMessage(msg);
+                    }
                 } else if (ess.getSettings().allowSilentJoinQuit()) {
                     ess.getServer().broadcastMessage(message);
                 }
