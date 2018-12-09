@@ -37,7 +37,6 @@ import static com.earth2me.essentials.I18n.tl;
 public class MetaItemStack {
     private static final Map<String, DyeColor> colorMap = new HashMap<>();
     private static final Map<String, FireworkEffect.Type> fireworkShape = new HashMap<>();
-    private static final Set<Material> banners = new HashSet<>();
 
     static {
         for (DyeColor color : DyeColor.values()) {
@@ -45,11 +44,6 @@ public class MetaItemStack {
         }
         for (FireworkEffect.Type type : FireworkEffect.Type.values()) {
             fireworkShape.put(type.name(), type);
-        }
-        for (Material mat : Material.values()) {
-            if (mat.name().contains("BANNER")) {
-                banners.add(mat);
-            }
         }
     }
 
@@ -163,7 +157,6 @@ public class MetaItemStack {
         }
 
         Material WRITTEN_BOOK = EnumUtil.getMaterial("WRITTEN_BOOK");
-        Material SHIELD = EnumUtil.getMaterial("SHIELD"); // 1.9
 
         if (split.length > 1 && split[0].equalsIgnoreCase("name") && hasMetaPermission(sender, "name", false, true, ess)) {
             final String displayName = FormatUtil.replaceFormat(split[1].replace('_', ' '));
@@ -221,8 +214,6 @@ public class MetaItemStack {
             addPotionMeta(sender, false, string, ess);
         } else if (MaterialUtil.isBanner(stack.getType())) {
             //WARNING - Meta for banners will be ignored after this point.
-            addBannerMeta(sender, false, string, ess);
-        } else if (SHIELD != null && stack.getType() == SHIELD) { //WARNING - Meta for shields will be ignored after this point.
             addBannerMeta(sender, false, string, ess);
         } else if (split.length > 1 && (split[0].equalsIgnoreCase("color") || split[0].equalsIgnoreCase("colour")) && MaterialUtil.isLeatherArmor(stack.getType())) {
             final String[] color = split[1].split("(\\||,)");
@@ -480,7 +471,7 @@ public class MetaItemStack {
     }
 
     public void addBannerMeta(final CommandSource sender, final boolean allowShortName, final String string, final IEssentials ess) throws Exception {
-        if (banners.contains(stack.getType()) && string != null) {
+        if (MaterialUtil.isBanner(stack.getType()) && !stack.getType().toString().equals("SHIELD") && string != null) {
             final String[] split = splitPattern.split(string, 2);
 
             if (split.length < 2) {
@@ -504,7 +495,7 @@ public class MetaItemStack {
             }
 
             stack.setItemMeta(meta);
-        } else if (stack.getType() == Material.SHIELD && string != null) {
+        } else if (stack.getType().toString().equals("SHIELD") && string != null) {
             final String[] split = splitPattern.split(string, 2);
 
             if (split.length < 2) {

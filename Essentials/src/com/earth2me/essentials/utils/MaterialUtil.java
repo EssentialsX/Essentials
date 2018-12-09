@@ -30,7 +30,7 @@ public class MaterialUtil {
         BANNERS = EnumUtil.getAllMatching(Material.class, "BANNER", "WHITE_BANNER",
             "ORANGE_BANNER", "MAGENTA_BANNER", "LIGHT_BLUE_BANNER", "YELLOW_BANNER", "LIME_BANNER",
             "PINK_BANNER","GRAY_BANNER","LIGHT_GRAY_BANNER", "CYAN_BANNER", "PURPLE_BANNER",
-            "BLUE_BANNER", "BROWN_BANNER", "GREEN_BANNER", "RED_BANNER", "BLACK_BANNER");
+            "BLUE_BANNER", "BROWN_BANNER", "GREEN_BANNER", "RED_BANNER", "BLACK_BANNER", "SHIELD");
 
         FIREWORKS = EnumUtil.getAllMatching(Material.class, "FIREWORK", "FIREWORK_ROCKET",
             "FIREWORK_CHARGE", "FIREWORK_STAR");
