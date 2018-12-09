@@ -102,7 +102,7 @@ public class VersionUtil {
             return major == that.major &&
                     minor == that.minor &&
                     patch == that.patch &&
-                    revision == that.patch;
+                    revision == that.revision;
         }
 
         @Override
@@ -112,7 +112,7 @@ public class VersionUtil {
 
         @Override
         public String toString() {
-            return major + "+" + minor + "+" + patch + "-R" + revision;
+            return major + "." + minor + "." + patch + "-R" + revision;
         }
 
         @Override
