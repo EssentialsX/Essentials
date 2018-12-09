@@ -8,7 +8,10 @@ import com.google.gson.JsonParser;
 import net.ess3.api.IEssentials;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.Damageable;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.PotionMeta;
+import org.bukkit.inventory.meta.Repairable;
 import org.bukkit.potion.PotionData;
 
 import java.util.*;
@@ -95,7 +98,9 @@ public class FlatItemDb extends AbstractItemDb {
 
     @Override
     public ItemStack get(final String id) throws Exception {
-        ItemData data = getByName(id);
+        final String[] split = id.split(":");
+
+        ItemData data = getByName(split[0]);
 
         if (data == null) {
             throw new Exception(tl("unknownItemName", id));
@@ -107,11 +112,21 @@ public class FlatItemDb extends AbstractItemDb {
         ItemStack stack = new ItemStack(material);
         stack.setAmount(material.getMaxStackSize());
 
-        if (potionData != null) {
-            PotionMeta meta = (PotionMeta) stack.getItemMeta();
-            meta.setBasePotionData(potionData);
-            stack.setItemMeta(meta);
+        ItemMeta meta = stack.getItemMeta();
+
+        if (potionData != null && meta instanceof PotionMeta) {
+            PotionMeta potionMeta = (PotionMeta) meta;
+            potionMeta.setBasePotionData(potionData);
         }
+
+        // For some reason, Damageable doesn't extend ItemMeta but CB implements them in the same
+        // class. As to why, your guess is as good as mine.
+        if (split.length > 1 && meta instanceof Damageable) {
+            Damageable damageMeta = (Damageable) meta;
+            damageMeta.setDamage(Integer.parseInt(split[1]));
+        }
+
+        stack.setItemMeta(meta);
 
         return stack;
     }
