@@ -199,6 +199,38 @@ public class Enchantments {
                 ALIASENCHANTMENTS.put("sweeping", sweeping);
             }
         } catch (IllegalArgumentException ignored) {}
+
+
+        try { // 1.13
+            Enchantment loyalty = Enchantment.getByName("LOYALTY");
+            if (loyalty != null) {
+                ENCHANTMENTS.put("loyalty", loyalty);
+                ALIASENCHANTMENTS.put("loyal", loyalty);
+                ALIASENCHANTMENTS.put("return", loyalty);
+            }
+            Enchantment impaling = Enchantment.getByName("IMPALING");
+            if (impaling != null) {
+                ENCHANTMENTS.put("impaling", impaling);
+                ALIASENCHANTMENTS.put("impale", impaling);
+                ALIASENCHANTMENTS.put("oceandamage", impaling);
+                ALIASENCHANTMENTS.put("oceandmg", impaling);
+            }
+            Enchantment riptide = Enchantment.getByName("RIPTIDE");
+            if (riptide != null) {
+                ENCHANTMENTS.put("riptide", riptide);
+                ALIASENCHANTMENTS.put("rip", riptide);
+                ALIASENCHANTMENTS.put("tide", riptide);
+                ALIASENCHANTMENTS.put("launch", riptide);
+            }
+            Enchantment channelling = Enchantment.getByName("CHANNELING");
+            if (channelling != null) {
+                ENCHANTMENTS.put("channelling", channelling);
+                ALIASENCHANTMENTS.put("chanelling", channelling);
+                ALIASENCHANTMENTS.put("channeling", channelling);
+                ALIASENCHANTMENTS.put("chaneling", channelling);
+                ALIASENCHANTMENTS.put("channel", channelling);
+            }
+        } catch (IllegalArgumentException ignored) {}
     }
 
     public static Enchantment getByName(String name) {
