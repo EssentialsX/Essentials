@@ -3,6 +3,7 @@ package com.earth2me.essentials.items;
 import com.earth2me.essentials.IConf;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.StringUtil;
+import com.earth2me.essentials.utils.VersionUtil;
 import org.bukkit.Color;
 import org.bukkit.FireworkEffect;
 import org.bukkit.Material;
@@ -22,13 +23,6 @@ import java.util.Set;
 import static com.earth2me.essentials.I18n.tl;
 
 public abstract class AbstractItemDb implements IConf, net.ess3.api.IItemDb {
-
-    @Override
-    public ItemStack get(final String id, final int quantity) throws Exception {
-        final ItemStack retval = get(id.toLowerCase(Locale.ENGLISH));
-        retval.setAmount(quantity);
-        return retval;
-    }
 
     @Override
     public List<ItemStack> getMatching(User user, String[] args) throws Exception {
@@ -64,19 +58,9 @@ public abstract class AbstractItemDb implements IConf, net.ess3.api.IItemDb {
     }
 
     @Override
-    public String names(ItemStack item) {
-        List<String> nameList = nameList(item);
-
-        if (nameList.size() > 15) {
-            nameList = nameList.subList(0, 14);
-        }
-        return StringUtil.joinList(", ", nameList);
-    }
-
-    @Override
     public String serialize(ItemStack is) {
         String mat = is.getType().name();
-        if (is.getData().getData() != 0) {
+        if (VersionUtil.getServerBukkitVersion().isLowerThanOrEqualTo(VersionUtil.v1_12_2_R01) && is.getData().getData() != 0) {
             mat = mat + ":" + is.getData().getData();
         }
         int quantity = is.getAmount();
@@ -163,7 +147,7 @@ public abstract class AbstractItemDb implements IConf, net.ess3.api.IItemDb {
                             sb.append(" ");
                         }
 
-                        sb.append("shape: ").append(effect.getType().name()).append(" ");
+                        sb.append("shape:").append(effect.getType().name()).append(" ");
                         if (effect.getFadeColors() != null && !effect.getFadeColors().isEmpty()) {
                             sb.append("fade:");
                             boolean first = true;
@@ -177,7 +161,7 @@ public abstract class AbstractItemDb implements IConf, net.ess3.api.IItemDb {
                             sb.append(" ");
                         }
                     }
-                    sb.append("power: ").append(fireworkMeta.getPower()).append(" ");
+                    sb.append("power:").append(fireworkMeta.getPower()).append(" ");
                 }
                 break;
             case POTION:

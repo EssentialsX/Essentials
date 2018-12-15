@@ -1,7 +1,11 @@
 package com.earth2me.essentials.utils;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.material.MaterialData;
 
+import java.util.EnumSet;
+import java.util.Optional;
 import java.util.Set;
 
 public class MaterialUtil {
@@ -97,4 +101,11 @@ public class MaterialUtil {
         return isPlayerHead(material, -1) || isMobHead(material, -1);
     }
 
+    public static Material convertFromLegacy(int id, byte damage) {
+        return EnumSet.allOf(Material.class).stream()
+            .filter(material -> material.getId() == id)
+            .findFirst()
+            .map(material -> Bukkit.getUnsafe().fromLegacy(new MaterialData(material, damage)))
+            .orElse(null);
+    }
 }

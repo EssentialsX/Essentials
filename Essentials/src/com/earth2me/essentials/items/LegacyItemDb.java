@@ -226,9 +226,9 @@ public class LegacyItemDb extends AbstractItemDb {
     }
 
     @Override
-    public Material getFromLegacyId(int id) {
+    public Material getFromLegacy(int id, short damage) {
         ItemData data = this.legacyIds.get(id);
-        if(data == null) {
+        if (data == null) {
             return null;
         }
 
