@@ -162,7 +162,7 @@ public class FlatItemDb extends AbstractItemDb {
         Material type = item.getType();
         PotionData potion = null;
 
-        if ((type.name().contains("POTION") || type.name().equals("TIPPED_ARROW")) && item.getItemMeta() instanceof PotionMeta) {
+        if (MaterialUtil.isPotion(type) && item.getItemMeta() instanceof PotionMeta) {
             potion = ((PotionMeta) item.getItemMeta()).getBasePotionData();
         }
 
@@ -195,7 +195,6 @@ public class FlatItemDb extends AbstractItemDb {
     }
 
     public static class ItemData {
-        private String itemName;
         private Material material;
         private PotionData potionData;
 
@@ -219,10 +218,6 @@ public class FlatItemDb extends AbstractItemDb {
             }
             ItemData that = (ItemData) o;
             return this.material == that.getMaterial() && potionDataEquals(that);
-        }
-
-        public String getItemName() {
-            return itemName;
         }
 
         public Material getMaterial() {
