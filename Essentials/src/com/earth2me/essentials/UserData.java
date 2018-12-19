@@ -446,6 +446,22 @@ public abstract class UserData extends PlayerExtension implements IConf {
         config.save();
     }
 
+    private boolean autoTeleportEnabled;
+
+    private boolean _getAutoTeleportEnabled() {
+        return config.getBoolean("autoteleportenabled", false);
+    }
+
+    public boolean isAutoTeleportEnabled() {
+        return autoTeleportEnabled;
+    }
+
+    public void setAutoTeleportEnabled(boolean set) {
+        autoTeleportEnabled = set;
+        config.setProperty("autoteleportenabled", set);
+        config.save();
+    }
+
     private List<String> ignoredPlayers;
 
     public List<String> _getIgnoredPlayers() {

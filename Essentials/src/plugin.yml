@@ -444,6 +444,10 @@ commands:
     description: Teleport all online players to another player.
     usage: /<command> <player>
     aliases: [etpall]
+  tpauto:
+    description: Automatically accept teleportation requests.
+    usage: /<command> <player>
+    aliases: [etpauto]
   tpacancel:
     description: Cancel all outstanding teleport requests. Specify [player] to cancel requests with them.
     usage: /<command> [player]
