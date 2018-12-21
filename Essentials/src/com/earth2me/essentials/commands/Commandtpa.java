@@ -38,7 +38,7 @@ public class Commandtpa extends EssentialsCommand {
             && player.isTpRequestHere() == false) { // Make sure the last teleport request was actually tpa and not tpahere
             throw new Exception(tl("requestSentAlready", player.getDisplayName()));
         }
-        if(player.isAutoTeleportEnabled() && !player.isIgnoredPlayer(user)) {
+        if (player.isAutoTeleportEnabled() && !player.isIgnoredPlayer(user)) {
             final Trade charge = new Trade(this.getName(), ess);
             Teleport teleport = user.getTeleport();
             teleport.setTpType(Teleport.TeleportType.TPA);

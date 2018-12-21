@@ -449,7 +449,7 @@ public abstract class UserData extends PlayerExtension implements IConf {
     private boolean autoTeleportEnabled;
 
     private boolean _getAutoTeleportEnabled() {
-        return config.getBoolean("autoteleportenabled", false);
+        return config.getBoolean("teleportauto", false);
     }
 
     public boolean isAutoTeleportEnabled() {
@@ -458,7 +458,7 @@ public abstract class UserData extends PlayerExtension implements IConf {
 
     public void setAutoTeleportEnabled(boolean set) {
         autoTeleportEnabled = set;
-        config.setProperty("autoteleportenabled", set);
+        config.setProperty("teleportauto", set);
         config.save();
     }
 
