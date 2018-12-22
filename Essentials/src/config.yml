@@ -36,6 +36,10 @@ max-nick-length: 15
 # ie: "&6Notch" has 7 characters (2 are part of a color code), a length of 5 is used when this option is set to true
 ignore-colors-in-max-nick-length: false
 
+# When this option is enabled, display names for hidden users will not be shown. This prevents players from being
+# able to see that they are online while vanished.
+hide-displayname-in-vanish: true
+
 # Disable this if you have any other plugin, that modifies the displayname of a user.
 change-displayname: true
 
@@ -817,20 +821,19 @@ protect:
     warn-on-build-disallow: true
 
   # For which block types would you like to be alerted?
-  # You can find a list of IDs in plugins/Essentials/items.csv after loading Essentials for the first time.
-  # 10 = lava :: 11 = still lava :: 46 = TNT :: 327 = lava bucket
+  # You can find a list of items at https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Material.html.
   alert:
-    on-placement: 10,11,46,327
-    on-use: 327
+    on-placement: LAVA,TNT,LAVA_BUCKET
+    on-use: LAVA_BUCKET
     on-break:
 
   blacklist:
 
     # Which blocks should people be prevented from placing?
-    placement: 10,11,46,327
+    placement: LAVA,TNT,LAVA_BUCKET
 
     # Which items should people be prevented from using?
-    usage: 327
+    usage: LAVA_BUCKET
 
     # Which blocks should people be prevented from breaking?
     break:

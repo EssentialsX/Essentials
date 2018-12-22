@@ -18,6 +18,7 @@ import net.ess3.nms.refl.ReflUtil;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import org.bukkit.inventory.ItemStack;
@@ -222,8 +223,8 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
     }
 
     @Override
-    public Boolean canSpawnItem(final int itemId) {
-        return !ess.getSettings().itemSpawnBlacklist().contains(itemId);
+    public Boolean canSpawnItem(final Material material) {
+        return !ess.getSettings().itemSpawnBlacklist().contains(material);
     }
 
     @Override
@@ -359,7 +360,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
     }
 
     public String getDisplayName() {
-        return super.getBase().getDisplayName() == null ? super.getBase().getName() : super.getBase().getDisplayName();
+        return super.getBase().getDisplayName() == null || (ess.getSettings().hideDisplayNameInVanish() && isHidden()) ? super.getBase().getName() : super.getBase().getDisplayName();
     }
 
     @Override

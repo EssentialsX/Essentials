@@ -213,7 +213,7 @@ public class EssentialsSign {
 
     protected static boolean checkIfBlockBreaksSigns(final Block block) {
         final Block sign = block.getRelative(BlockFace.UP);
-        if (sign.getType() == Material.SIGN_POST && isValidSign(new BlockSign(sign))) {
+        if (sign.getType() == Material.SIGN && isValidSign(new BlockSign(sign))) {
             return true;
         }
         final BlockFace[] directions = new BlockFace[]{BlockFace.NORTH, BlockFace.EAST, BlockFace.SOUTH, BlockFace.WEST};

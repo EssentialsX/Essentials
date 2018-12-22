@@ -22,7 +22,7 @@ import java.util.logging.Logger;
 public class SignBlockListener implements Listener {
     private static final Logger LOGGER = Logger.getLogger("Essentials");
     private static final Material WALL_SIGN = Material.WALL_SIGN;
-    private static final Material SIGN_POST = Material.SIGN_POST;
+    private static final Material SIGN_POST = Material.SIGN;
     private final transient IEssentials ess;
 
     public SignBlockListener(IEssentials ess) {

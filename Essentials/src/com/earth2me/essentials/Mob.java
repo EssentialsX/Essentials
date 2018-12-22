@@ -75,6 +75,14 @@ public enum Mob {
     HUSK("Husk", Enemies.ENEMY, "HUSK"),
     ILLUSIONER("Illusioner", Enemies.ENEMY, "ILLUSIONER"),
     PARROT("Parrot", Enemies.NEUTRAL, "PARROT"),
+    TURTLE("Turtle", Enemies.NEUTRAL, "TURTLE"),
+    PHANTOM("Phantom", Enemies.ENEMY, "PHANTOM"),
+    COD("Cod", Enemies.NEUTRAL, "COD"),
+    SALMON("Salmon", Enemies.NEUTRAL, "SALMON"),
+    PUFFERFISH("Pufferfish", Enemies.NEUTRAL, "PUFFERFISH"),
+    TROPICAL_FISH("TropicalFish", Enemies.NEUTRAL, "TROPICAL_FISH"),
+    DROWNED("Drowned", Enemies.ENEMY, "DROWNED"),
+    DOLPHIN("Dolphin", Enemies.NEUTRAL, "DOLPHIN"),
     ;
 
     public static final Logger logger = Logger.getLogger("Essentials");
