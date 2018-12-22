@@ -43,8 +43,8 @@ public class Commandfirework extends EssentialsCommand {
 
     @Override
     protected void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception {
-        final ItemStack stack = user.getBase().getItemInHand();
-        if (stack.getType() == Material.FIREWORK) {
+        final ItemStack stack = user.getBase().getInventory().getItemInMainHand();
+        if (stack.getType() == Material.FIREWORK_ROCKET || stack.getType() == Material.FIREWORK_STAR) {
             if (args.length > 0) {
                 if (args[0].equalsIgnoreCase("clear")) {
                     FireworkMeta fmeta = (FireworkMeta) stack.getItemMeta();

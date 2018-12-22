@@ -79,6 +79,7 @@ public class Commandafk extends EssentialsCommand {
         if (!msg.isEmpty()) {
             ess.broadcastMessage(user, msg);
         }
+        user.setDisplayNick(); // Set this again after toggling
     }
 
     @Override

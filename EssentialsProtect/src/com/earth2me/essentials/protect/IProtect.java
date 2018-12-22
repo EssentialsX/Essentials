@@ -1,5 +1,6 @@
 package com.earth2me.essentials.protect;
 
+import org.bukkit.Material;
 import org.bukkit.plugin.Plugin;
 
 import java.util.List;
@@ -17,5 +18,5 @@ public interface IProtect extends Plugin {
 
     Map<ProtectConfig, String> getSettingsString();
 
-    Map<ProtectConfig, List<Integer>> getSettingsList();
+    Map<ProtectConfig, List<Material>> getSettingsList();
 }
