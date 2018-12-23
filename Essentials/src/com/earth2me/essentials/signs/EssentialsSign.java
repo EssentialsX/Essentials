@@ -309,7 +309,7 @@ public class EssentialsSign {
             final int amount = getIntegerPositive(getSignText(sign, amountIndex));
             return new Trade(amount, ess);
         }
-        final ItemStack item = getItemStack(itemType, 1, ess);
+        final ItemStack item = getItemStack(itemType, 1, true, ess);
         final int amount = Math.min(getIntegerPositive(getSignText(sign, amountIndex)), item.getType().getMaxStackSize() * player.getBase().getInventory().getSize());
         if (item.getType() == Material.AIR || amount < 1) {
             throw new SignException(tl("moreThanZero"));
@@ -346,6 +346,17 @@ public class EssentialsSign {
     }
 
     protected final ItemStack getItemStack(final String itemName, final int quantity, final IEssentials ess) throws SignException {
+        return getItemStack(itemName, quantity, false, ess);
+    }
+
+    protected final ItemStack getItemStack(final String itemName, final int quantity, final boolean allowId, final IEssentials ess) throws SignException {
+        if (allowId && ess.getSettings().allowOldIdSigns()) {
+            final Material newMaterial = ess.getItemDb().getFromLegacy(itemName);
+            if (newMaterial != null) {
+                return new ItemStack(newMaterial, quantity);
+            }
+        }
+
         try {
             final ItemStack item = ess.getItemDb().get(itemName);
             item.setAmount(quantity);
@@ -420,7 +431,7 @@ public class EssentialsSign {
                 sign.setLine(index, quantity + " exp");
                 return new Trade(quantity, ess);
             } else {
-                final ItemStack stack = getItemStack(item, quantity, ess);
+                final ItemStack stack = getItemStack(item, quantity, true, ess);
                 sign.setLine(index, quantity + " " + item);
                 return new Trade(stack, ess);
             }

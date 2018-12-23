@@ -322,6 +322,11 @@ enabledSigns:
 # Lower numbers will reduce the possibility of lag, but may annoy players.
 sign-use-per-second: 4
 
+# Allow item IDs on pre-existing signs on 1.13 and above.
+# You cannot use item IDs on new signs, but this will allow players to interact with signs that
+# were placed before 1.13.
+allow-old-id-signs: false
+
 # List of sign names Essentials should not protect. This feature is especially useful when
 # another plugin provides a sign that EssentialsX provides, but Essentials overrides.
 # For example, if a plugin provides a [kit] sign, and you wish to use theirs instead of

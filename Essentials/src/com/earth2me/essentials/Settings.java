@@ -538,7 +538,8 @@ public class Settings implements net.ess3.api.ISettings {
         isCompassTowardsHomePerm = _isCompassTowardsHomePerm();
         isAllowWorldInBroadcastworld = _isAllowWorldInBroadcastworld();
         itemDbType = _getItemDbType();
-        forceEnableRecipe = config.getBoolean("force-enable-recipe", false);
+        forceEnableRecipe = _isForceEnableRecipe();
+        allowOldIdSigns = _allowOldIdSigns();
     }
 
     private List<Material> itemSpawnBl = new ArrayList<Material>();
@@ -1482,8 +1483,23 @@ public class Settings implements net.ess3.api.ISettings {
 
     private boolean forceEnableRecipe; // https://github.com/EssentialsX/Essentials/issues/1397
 
+    private boolean _isForceEnableRecipe() {
+        return config.getBoolean("force-enable-recipe", false);
+    }
+
     @Override
     public boolean isForceEnableRecipe() {
         return forceEnableRecipe;
+    }
+
+    private boolean allowOldIdSigns;
+
+    private boolean _allowOldIdSigns() {
+        return config.getBoolean("allow-old-id-signs", false);
+    }
+
+    @Override
+    public boolean allowOldIdSigns() {
+        return allowOldIdSigns;
     }
 }
