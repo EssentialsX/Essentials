@@ -1,6 +1,7 @@
 package com.earth2me.essentials.utils;
 
 import org.bukkit.Bukkit;
+import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.bukkit.material.MaterialData;
 
@@ -107,5 +108,15 @@ public class MaterialUtil {
             .findFirst()
             .map(material -> Bukkit.getUnsafe().fromLegacy(new MaterialData(material, damage)))
             .orElse(null);
+    }
+
+    public static DyeColor getColorOf(Material material) {
+        for (DyeColor color : DyeColor.values()) {
+            if (material.toString().contains(color.name())) {
+                return color;
+            }
+        }
+
+        return DyeColor.WHITE;
     }
 }
