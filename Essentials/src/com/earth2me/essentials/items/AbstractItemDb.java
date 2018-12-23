@@ -1,10 +1,13 @@
 package com.earth2me.essentials.items;
 
+import com.earth2me.essentials.Essentials;
 import com.earth2me.essentials.IConf;
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.utils.MaterialUtil;
 import com.earth2me.essentials.utils.StringUtil;
 import com.earth2me.essentials.utils.VersionUtil;
 import org.bukkit.Color;
+import org.bukkit.DyeColor;
 import org.bukkit.FireworkEffect;
 import org.bukkit.Material;
 import org.bukkit.block.Banner;
@@ -109,7 +112,9 @@ public abstract class AbstractItemDb implements IConf, net.ess3.api.IItemDb {
             }
         }
 
-        switch (is.getType()) {
+        final Material material = is.getType();
+
+        switch (material) {
             case WRITTEN_BOOK:
                 // Everything from http://wiki.ess3.net/wiki/Item_Meta#Books in that order.
                 // Interesting as I didn't see a way to do pages or chapters.
@@ -128,104 +133,93 @@ public abstract class AbstractItemDb implements IConf, net.ess3.api.IItemDb {
                     sb.append(e.getName().toLowerCase()).append(":").append(enchantmentStorageMeta.getStoredEnchantLevel(e)).append(" ");
                 }
                 break;
-            case FIREWORK_ROCKET:
-            case FIREWORK_STAR:
-                // Everything from http://wiki.ess3.net/wiki/Item_Meta#Fireworks in that order.
-                FireworkMeta fireworkMeta = (FireworkMeta) is.getItemMeta();
-                if (fireworkMeta.hasEffects()) {
-                    for (FireworkEffect effect : fireworkMeta.getEffects()) {
-                        if (effect.getColors() != null && !effect.getColors().isEmpty()) {
-                            sb.append("color:");
-                            boolean first = true;
-                            for (Color c : effect.getColors()) {
-                                if (!first) {
-                                    sb.append(","); // same thing as above.
-                                }
-                                sb.append(c.toString());
-                                first = false;
-                            }
-                            sb.append(" ");
-                        }
+        }
 
-                        sb.append("shape:").append(effect.getType().name()).append(" ");
-                        if (effect.getFadeColors() != null && !effect.getFadeColors().isEmpty()) {
-                            sb.append("fade:");
-                            boolean first = true;
-                            for (Color c : effect.getFadeColors()) {
-                                if (!first) {
-                                    sb.append(","); // same thing as above.
-                                }
-                                sb.append(c.toString());
-                                first = false;
+        if (MaterialUtil.isFirework(material)) {
+            // Everything from http://wiki.ess3.net/wiki/Item_Meta#Fireworks in that order.
+            FireworkMeta fireworkMeta = (FireworkMeta) is.getItemMeta();
+            if (fireworkMeta.hasEffects()) {
+                for (FireworkEffect effect : fireworkMeta.getEffects()) {
+                    if (effect.getColors() != null && !effect.getColors().isEmpty()) {
+                        sb.append("color:");
+                        boolean first = true;
+                        for (Color c : effect.getColors()) {
+                            if (!first) {
+                                sb.append(","); // same thing as above.
                             }
-                            sb.append(" ");
+                            sb.append(c.toString());
+                            first = false;
                         }
+                        sb.append(" ");
                     }
-                    sb.append("power:").append(fireworkMeta.getPower()).append(" ");
+
+                    sb.append("shape:").append(effect.getType().name()).append(" ");
+                    if (effect.getFadeColors() != null && !effect.getFadeColors().isEmpty()) {
+                        sb.append("fade:");
+                        boolean first = true;
+                        for (Color c : effect.getFadeColors()) {
+                            if (!first) {
+                                sb.append(","); // same thing as above.
+                            }
+                            sb.append(c.toString());
+                            first = false;
+                        }
+                        sb.append(" ");
+                    }
                 }
-                break;
-            case POTION:
-                Potion potion = Potion.fromItemStack(is);
-                for (PotionEffect e : potion.getEffects()) {
-                    // long but needs to be effect:speed power:2 duration:120 in that order.
-                    sb.append("splash:").append(potion.isSplash()).append(" ").append("effect:").append(e.getType().getName().toLowerCase()).append(" ").append("power:").append(e.getAmplifier()).append(" ").append("duration:").append(e.getDuration() / 20).append(" ");
+                sb.append("power:").append(fireworkMeta.getPower()).append(" ");
+            }
+        } else if (MaterialUtil.isPotion(material)) {
+            Potion potion = Potion.fromItemStack(is);
+            for (PotionEffect e : potion.getEffects()) {
+                // long but needs to be effect:speed power:2 duration:120 in that order.
+                sb.append("splash:").append(potion.isSplash()).append(" ").append("effect:").append(e.getType().getName().toLowerCase()).append(" ").append("power:").append(e.getAmplifier()).append(" ").append("duration:").append(e.getDuration() / 20).append(" ");
+            }
+        } else if (MaterialUtil.isPlayerHead(material, is.getData().getData())) {
+            // item stack with meta
+            SkullMeta skullMeta = (SkullMeta) is.getItemMeta();
+            if (skullMeta != null && skullMeta.hasOwner()) {
+                sb.append("player:").append(skullMeta.getOwner()).append(" ");
+            }
+        } else if (MaterialUtil.isBanner(material)) {
+            if (material.toString().contains("SHIELD")) {
+                // Hacky fix for accessing Shield meta - https://github.com/drtshock/Essentials/pull/745#issuecomment-234843795
+                BlockStateMeta shieldMeta = (BlockStateMeta) is.getItemMeta();
+                Banner shieldBannerMeta = (Banner) shieldMeta.getBlockState();
+                DyeColor baseDyeColor = shieldBannerMeta.getBaseColor();
+                if (baseDyeColor != null) {
+                    int basecolor = baseDyeColor.getColor().asRGB();
+                    sb.append("basecolor:").append(basecolor).append(" ");
                 }
-                break;
-            case SKELETON_SKULL:
-            case WITHER_SKELETON_SKULL:
-                // item stack with meta
-                SkullMeta skullMeta = (SkullMeta) is.getItemMeta();
-                if (skullMeta != null && skullMeta.hasOwner()) {
-                    sb.append("player:").append(skullMeta.getOwner()).append(" ");
+                for (org.bukkit.block.banner.Pattern p : shieldBannerMeta.getPatterns()) {
+                    String type = p.getPattern().getIdentifier();
+                    int color = p.getColor().getColor().asRGB();
+                    sb.append(type).append(",").append(color).append(" ");
                 }
-                break;
-            case LEATHER_HELMET:
-            case LEATHER_CHESTPLATE:
-            case LEATHER_LEGGINGS:
-            case LEATHER_BOOTS:
-                LeatherArmorMeta leatherArmorMeta = (LeatherArmorMeta) is.getItemMeta();
-                int rgb = leatherArmorMeta.getColor().asRGB();
-                sb.append("color:").append(rgb).append(" ");
-                break;
-            case BLACK_BANNER:
-            case BLUE_BANNER:
-            case BROWN_BANNER:
-            case CYAN_BANNER:
-            case GRAY_BANNER:
-            case GREEN_BANNER:
-            case LIGHT_BLUE_BANNER:
-            case LIGHT_GRAY_BANNER:
-            case LIME_BANNER:
-            case MAGENTA_BANNER:
-            case ORANGE_BANNER:
-            case PINK_BANNER:
-            case PURPLE_BANNER:
-            case RED_BANNER:
-            case WHITE_BANNER:
-            case YELLOW_BANNER:
+            } else {
                 BannerMeta bannerMeta = (BannerMeta) is.getItemMeta();
                 if (bannerMeta != null) {
-                    int basecolor = bannerMeta.getBaseColor().getColor().asRGB();
-                    sb.append("basecolor:").append(basecolor).append(" ");
+                    DyeColor baseDyeColor = bannerMeta.getBaseColor();
+                    if (baseDyeColor == null) {
+                        baseDyeColor = MaterialUtil.getColorOf(material);
+                    }
+                    if (baseDyeColor != null) {
+                        int basecolor = baseDyeColor
+                            .getColor()
+                            .asRGB();
+                        sb.append("basecolor:").append(basecolor).append(" ");
+                    }
                     for (org.bukkit.block.banner.Pattern p : bannerMeta.getPatterns()) {
                         String type = p.getPattern().getIdentifier();
                         int color = p.getColor().getColor().asRGB();
                         sb.append(type).append(",").append(color).append(" ");
                     }
                 }
-                break;
-            case SHIELD:
-                // Hacky fix for accessing Shield meta - https://github.com/drtshock/Essentials/pull/745#issuecomment-234843795
-                BlockStateMeta shieldMeta = (BlockStateMeta) is.getItemMeta();
-                Banner shieldBannerMeta = (Banner) shieldMeta.getBlockState();
-                int basecolor = shieldBannerMeta.getBaseColor().getColor().asRGB();
-                sb.append("basecolor:").append(basecolor).append(" ");
-                for (org.bukkit.block.banner.Pattern p : shieldBannerMeta.getPatterns()) {
-                    String type = p.getPattern().getIdentifier();
-                    int color = p.getColor().getColor().asRGB();
-                    sb.append(type).append(",").append(color).append(" ");
-                }
-                break;
+            }
+        } else if (MaterialUtil.isLeatherArmor(material)) {
+            LeatherArmorMeta leatherArmorMeta = (LeatherArmorMeta) is.getItemMeta();
+            int rgb = leatherArmorMeta.getColor().asRGB();
+            sb.append("color:").append(rgb).append(" ");
         }
 
         return sb.toString().trim().replaceAll("§", "&");
