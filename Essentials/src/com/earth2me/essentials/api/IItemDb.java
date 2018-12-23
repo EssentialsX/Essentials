@@ -85,7 +85,7 @@ public interface IItemDb {
      * Serialise an ItemStack into a format that can be decoded by
      * {@link #get(String) get} and
      * {@link com.earth2me.essentials.MetaItemStack#parseStringMeta(CommandSource, boolean, String[], int, IEssentials)} MetaItemStack#parseStringMeta}.
-     * Useful for encoding items for usage in kits.
+     * Used to encode items for kits.
      *
      * @param is Stack to serialise
      * @return Serialised stack
