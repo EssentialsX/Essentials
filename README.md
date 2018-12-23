@@ -16,7 +16,7 @@ The official upstream repository is at https://github.com/Essentials/Essentials.
 Why use EssentialsX?
 --------
 
-EssentialsX is an unofficial continuation of EssentialsX, updated to support modern Minecraft and Spigot versions. It provides several performance enhancements and fixes that are currently not available in Essentials and Spigot-Essentials. [For more details, see the wiki.](https://essentialsx.github.io/#/Improvements)
+EssentialsX is an unofficial continuation of Essentials, updated to support modern Minecraft and Spigot versions. It provides several performance enhancements and fixes that are currently not available in Essentials and Spigot-Essentials. [For more details, see the wiki.](https://essentialsx.github.io/#/Improvements)
 
 EssentialsX is almost a completely drop-in replacement for Essentials. However, it has different requirements:
 
