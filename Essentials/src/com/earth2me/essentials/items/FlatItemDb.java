@@ -98,7 +98,8 @@ public class FlatItemDb extends AbstractItemDb {
     }
 
     @Override
-    public ItemStack get(final String id) throws Exception {
+    public ItemStack get(String id) throws Exception {
+        id = id.toLowerCase();
         final String[] split = id.split(":");
 
         ItemData data = getByName(split[0]);
