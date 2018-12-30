@@ -181,6 +181,8 @@ public interface ISettings extends IConf {
 
     boolean cancelAfkOnInteract();
 
+    boolean bypassSleepWhenAfk();
+
     boolean isAfkListName();
 
     String getAfkListName();
