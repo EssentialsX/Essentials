@@ -727,6 +727,7 @@ public class EssentialsPlayerListener implements Listener {
         } else if (clickedInventory != null && clickedInventory.getType() == InventoryType.PLAYER) {
             if (ess.getSettings().isDirectHatAllowed() && event.getClick() == ClickType.LEFT && event.getSlot() == 39
                 && event.getCursor().getType() != Material.AIR && event.getCursor().getType().getMaxDurability() == 0
+                && !MaterialUtil.isSkull(event.getCursor().getType())
                 && ess.getUser(event.getWhoClicked()).isAuthorized("essentials.hat")) {
                 event.setCancelled(true);
                 final PlayerInventory inv = (PlayerInventory) clickedInventory;
