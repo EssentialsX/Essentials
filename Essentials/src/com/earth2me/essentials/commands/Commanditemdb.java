@@ -1,6 +1,7 @@
 package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.CommandSource;
+import com.earth2me.essentials.utils.VersionUtil;
 import org.bukkit.Material;
 import org.bukkit.Server;
 import org.bukkit.inventory.ItemStack;
@@ -33,6 +34,11 @@ public class Commanditemdb extends EssentialsCommand {
         }
 
         sender.sendMessage(tl("itemType", itemStack.getType().toString()));
+
+        if (VersionUtil.getServerBukkitVersion().isLowerThan(VersionUtil.v1_13_0_R01)) {
+            final String itemId = itemStack.getType().getId() + ":" + itemStack.getDurability();
+            sender.sendMessage(tl("itemId", itemId));
+        }
 
         if (itemHeld && itemStack.getType() != Material.AIR) {
             int maxuses = itemStack.getType().getMaxDurability();
