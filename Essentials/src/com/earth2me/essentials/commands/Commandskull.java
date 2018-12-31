@@ -2,6 +2,8 @@ package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.craftbukkit.InventoryWorkaround;
+import com.earth2me.essentials.utils.EnumUtil;
+import com.earth2me.essentials.utils.MaterialUtil;
 import com.google.common.collect.Lists;
 import org.bukkit.Material;
 import org.bukkit.Server;
@@ -14,6 +16,9 @@ import java.util.List;
 import static com.earth2me.essentials.I18n.tl;
 
 public class Commandskull extends EssentialsCommand {
+
+    private static final Material SKULL_ITEM = EnumUtil.getMaterial("PLAYER_HEAD", "SKULL_ITEM");
+
     public Commandskull() {
         super("skull");
     }
@@ -35,10 +40,10 @@ public class Commandskull extends EssentialsCommand {
         SkullMeta metaSkull = null;
         boolean spawn = false;
 
-        if (itemSkull != null && itemSkull.getType() == Material.LEGACY_SKULL_ITEM && itemSkull.getDurability() == 3) {
+        if (itemSkull != null && MaterialUtil.isPlayerHead(itemSkull.getType(), itemSkull.getDurability())) {
             metaSkull = (SkullMeta) itemSkull.getItemMeta();
         } else if (user.isAuthorized("essentials.skull.spawn")) {
-            itemSkull = new ItemStack(Material.LEGACY_SKULL_ITEM, 1, (byte) 3);
+            itemSkull = new ItemStack(SKULL_ITEM, 1, (byte) 3);
             metaSkull = (SkullMeta) itemSkull.getItemMeta();
             spawn = true;
         } else {

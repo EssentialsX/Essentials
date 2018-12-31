@@ -2,6 +2,7 @@ package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.utils.EnumUtil;
 import com.earth2me.essentials.utils.NumberUtil;
 import com.earth2me.essentials.utils.VersionUtil;
 import org.bukkit.Material;
@@ -20,6 +21,11 @@ import net.ess3.nms.refl.ReflUtil;
 
 
 public class Commandrecipe extends EssentialsCommand {
+
+    private static final Material FIREWORK_ROCKET = EnumUtil.getMaterial("FIREWORK_ROCKET", "FIREWORK");
+    private static final Material FIREWORK_STAR = EnumUtil.getMaterial("FIREWORK_STAR", "FIREWORK_CHARGE");
+    private static final Material GUNPOWDER = EnumUtil.getMaterial("GUNPOWDER", "SULPHUR");
+
     public Commandrecipe() {
         super("recipe");
     }
@@ -67,11 +73,11 @@ public class Commandrecipe extends EssentialsCommand {
         } else if (selectedRecipe instanceof ShapedRecipe) {
             shapedRecipe(sender, (ShapedRecipe) selectedRecipe, sender.isPlayer());
         } else if (selectedRecipe instanceof ShapelessRecipe) {
-            if (recipesOfType.size() == 1 && (itemType.getType() == Material.FIREWORK_ROCKET || itemType.getType() == Material.FIREWORK_STAR)) {
+            if (recipesOfType.size() == 1 && (itemType.getType() == FIREWORK_ROCKET)) {
                 ShapelessRecipe shapelessRecipe = new ShapelessRecipe(itemType);
-                shapelessRecipe.addIngredient(Material.LEGACY_SULPHUR);
+                shapelessRecipe.addIngredient(GUNPOWDER);
                 shapelessRecipe.addIngredient(Material.PAPER);
-                shapelessRecipe.addIngredient(Material.FIREWORK_ROCKET);
+                shapelessRecipe.addIngredient(FIREWORK_STAR);
                 shapelessRecipe(sender, shapelessRecipe, sender.isPlayer());
             } else {
                 shapelessRecipe(sender, (ShapelessRecipe) selectedRecipe, sender.isPlayer());
