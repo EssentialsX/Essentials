@@ -4,6 +4,7 @@ import com.earth2me.essentials.ChargeException;
 import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.StringUtil;
+import com.earth2me.essentials.utils.VersionUtil;
 import com.google.common.collect.Lists;
 import net.ess3.api.IUser;
 import org.bukkit.Material;
@@ -48,7 +49,7 @@ public class Commandrepair extends EssentialsCommand {
         }
 
         final String itemName = item.getType().toString().toLowerCase(Locale.ENGLISH);
-        final Trade charge = new Trade("repair-" + itemName.replace('_', '-'), new Trade("repair-item", ess), ess);
+        final Trade charge = getCharge(item.getType());
 
         charge.isAffordableFor(user);
 
@@ -95,7 +96,8 @@ public class Commandrepair extends EssentialsCommand {
             }
 
             final String itemName = item.getType().toString().toLowerCase(Locale.ENGLISH);
-            final Trade charge = new Trade("repair-" + itemName.replace('_', '-'), new Trade("repair-item", ess), ess);
+            final Trade charge = getCharge(item.getType());
+
             try {
                 charge.isAffordableFor(user);
             } catch (ChargeException ex) {
@@ -117,6 +119,16 @@ public class Commandrepair extends EssentialsCommand {
                 user.sendMessage(ex.getMessage());
             }
             repaired.add(itemName.replace('_', ' '));
+        }
+    }
+
+    private Trade getCharge(final Material material) {
+        final String itemName = material.toString().toLowerCase(Locale.ENGLISH);
+        if (VersionUtil.getServerBukkitVersion().isLowerThan(VersionUtil.v1_13_0_R01)) {
+            final int itemId = material.getId();
+            return new Trade("repair-" + itemName.replace('_', '-'), new Trade("repair-" + itemId, new Trade("repair-item", ess), ess), ess);
+        } else {
+            return new Trade("repair-" + itemName.replace('_', '-'), new Trade("repair-item", ess), ess);
         }
     }
 
