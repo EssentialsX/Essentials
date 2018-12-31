@@ -4,7 +4,6 @@ import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.EssentialsUpgrade;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.UserMap;
-import com.earth2me.essentials.metrics.Metrics;
 import com.earth2me.essentials.utils.*;
 import com.google.common.base.Charsets;
 import com.google.common.collect.Lists;
@@ -17,13 +16,15 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
 
-import java.io.IOException;
 import java.util.*;
 
 import static com.earth2me.essentials.I18n.tl;
 
 // This command has 4 undocumented behaviours #EasterEgg
 public class Commandessentials extends EssentialsCommand {
+
+    private final Sound NOTE_HARP = EnumUtil.valueOf(Sound.class, "BLOCK_NOTE_HARP", "NOTE_PIANO");
+
     public Commandessentials() {
         super("essentials");
     }
@@ -154,15 +155,9 @@ public class Commandessentials extends EssentialsCommand {
                 if (note == null || note.isEmpty()) {
                     return;
                 }
-                Sound noteHarp;
-                try {
-                    noteHarp = Sound.valueOf("NOTE_PIANO"); // pre-1.9, referenced internally as note.harp
-                } catch (IllegalArgumentException e) {
-                    noteHarp = Sound.valueOf("BLOCK_NOTE_HARP"); // 1.9
-                }
 
                 for (Player onlinePlayer : ess.getOnlinePlayers()) {
-                    onlinePlayer.playSound(onlinePlayer.getLocation(), noteHarp, 1, noteMap.get(note));
+                    onlinePlayer.playSound(onlinePlayer.getLocation(), NOTE_HARP, 1, noteMap.get(note));
                 }
             }
         }, 20, 2);
