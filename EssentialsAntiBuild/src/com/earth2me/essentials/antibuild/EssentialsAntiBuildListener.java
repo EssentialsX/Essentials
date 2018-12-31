@@ -1,6 +1,7 @@
 package com.earth2me.essentials.antibuild;
 
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.utils.VersionUtil;
 import net.ess3.api.IEssentials;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -56,11 +57,29 @@ public class EssentialsAntiBuildListener implements Listener {
             }
             return false;
         }
-        return metaPermCheck(user, action, block.getType());
+        return metaPermCheck(user, action, block.getType(), block.getData());
     }
 
     private boolean metaPermCheck(final User user, final String action, final Material material) {
         final String blockPerm = "essentials.build." + action + "." + material;
+        return user.isAuthorized(blockPerm);
+    }
+
+    private boolean metaPermCheck(final User user, final String action, final Material material, final short data) {
+        final String blockPerm = "essentials.build." + action + "." + material;
+        final String dataPerm = blockPerm + ":" + data;
+
+        if (VersionUtil.getServerBukkitVersion().isLowerThan(VersionUtil.v1_13_0_R01)) {
+            if (user.getBase().isPermissionSet(dataPerm)) {
+                return user.isAuthorized(dataPerm);
+            } else {
+                if (ess.getSettings().isDebug()) {
+                    ess.getLogger().log(Level.INFO, "DataValue perm on " + user.getName() + " is not directly set: " + dataPerm);
+                }
+            }
+        }
+
+
         return user.isAuthorized(blockPerm);
     }
 
@@ -181,7 +200,7 @@ public class EssentialsAntiBuildListener implements Listener {
         }
 
         if (prot.getSettingBool(AntiBuildConfig.disable_use) && !user.canBuild() && !user.isAuthorized("essentials.build")) {
-            if (event.hasItem() && !metaPermCheck(user, "interact", item.getType())) {
+            if (event.hasItem() && !metaPermCheck(user, "interact", item.getType(), item.getDurability())) {
                 event.setCancelled(true);
                 if (ess.getSettings().warnOnBuildDisallow()) {
                     user.sendMessage(tl("antiBuildUse", item.getType().toString()));
@@ -206,7 +225,7 @@ public class EssentialsAntiBuildListener implements Listener {
             final ItemStack item = event.getRecipe().getResult();
 
             if (prot.getSettingBool(AntiBuildConfig.disable_use) && !user.canBuild() && !user.isAuthorized("essentials.build")) {
-                if (!metaPermCheck(user, "craft", item.getType())) {
+                if (!metaPermCheck(user, "craft", item.getType(), item.getDurability())) {
                     event.setCancelled(true);
                     if (ess.getSettings().warnOnBuildDisallow()) {
                         user.sendMessage(tl("antiBuildCraft", item.getType().toString()));
@@ -223,7 +242,7 @@ public class EssentialsAntiBuildListener implements Listener {
         final ItemStack item = event.getItemDrop().getItemStack();
 
         if (prot.getSettingBool(AntiBuildConfig.disable_use) && !user.canBuild() && !user.isAuthorized("essentials.build")) {
-            if (!metaPermCheck(user, "drop", item.getType())) {
+            if (!metaPermCheck(user, "drop", item.getType(), item.getDurability())) {
                 event.setCancelled(true);
                 user.getBase().updateInventory();
                 if (ess.getSettings().warnOnBuildDisallow()) {
@@ -250,7 +269,7 @@ public class EssentialsAntiBuildListener implements Listener {
             final ItemStack item = event.getItem().getItemStack();
 
             if (prot.getSettingBool(AntiBuildConfig.disable_use) && !user.canBuild() && !user.isAuthorized("essentials.build")) {
-                if (!metaPermCheck(user, "pickup", item.getType())) {
+                if (!metaPermCheck(user, "pickup", item.getType(), item.getDurability())) {
                     event.setCancelled(true);
                     event.getItem().setPickupDelay(50);
                 }
@@ -266,7 +285,7 @@ public class EssentialsAntiBuildListener implements Listener {
             final ItemStack item = event.getItem().getItemStack();
 
             if (prot.getSettingBool(AntiBuildConfig.disable_use) && !user.canBuild() && !user.isAuthorized("essentials.build")) {
-                if (!metaPermCheck(user, "pickup", item.getType())) {
+                if (!metaPermCheck(user, "pickup", item.getType(), item.getDurability())) {
                     event.setCancelled(true);
                     event.getItem().setPickupDelay(50);
                 }
