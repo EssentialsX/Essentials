@@ -17,7 +17,4 @@ before_install:
   - rm -r work/
   - java -jar BuildTools.jar --rev 1.8
   - java -jar BuildTools.jar --rev 1.8.3
-  - java -jar BuildTools.jar --rev 1.9
-  - java -jar BuildTools.jar --rev 1.9.4
-  - java -jar BuildTools.jar --rev 1.13.1
   - cd ..
