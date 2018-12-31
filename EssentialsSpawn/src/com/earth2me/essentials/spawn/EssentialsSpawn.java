@@ -1,5 +1,6 @@
 package com.earth2me.essentials.spawn;
 
+import com.earth2me.essentials.metrics.Metrics;
 import net.ess3.api.IEssentials;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -25,6 +26,7 @@ public class EssentialsSpawn extends JavaPlugin implements IEssentialsSpawn {
     private static final Logger LOGGER = Bukkit.getLogger();
     private transient IEssentials ess;
     private transient SpawnStorage spawns;
+    private transient Metrics metrics = null;
 
     @Override
     public void onEnable() {
@@ -61,6 +63,10 @@ public class EssentialsSpawn extends JavaPlugin implements IEssentialsSpawn {
                     ((EssentialsSpawnPlayerListener) ll).onPlayerJoin((PlayerJoinEvent) event);
                 }
             }, this);
+        }
+
+        if (metrics == null) {
+            metrics = new Metrics(this);
         }
     }
 

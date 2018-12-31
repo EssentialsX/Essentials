@@ -1,5 +1,6 @@
 package com.earth2me.essentials.chat;
 
+import com.earth2me.essentials.metrics.Metrics;
 import net.ess3.api.IEssentials;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.plugin.PluginManager;
@@ -16,6 +17,7 @@ import static com.earth2me.essentials.I18n.tl;
 
 public class EssentialsChat extends JavaPlugin {
     private static final Logger LOGGER = Logger.getLogger("Minecraft");
+    private transient Metrics metrics = null;
 
     @Override
     public void onEnable() {
@@ -37,6 +39,10 @@ public class EssentialsChat extends JavaPlugin {
         pluginManager.registerEvents(playerListenerLowest, this);
         pluginManager.registerEvents(playerListenerNormal, this);
         pluginManager.registerEvents(playerListenerHighest, this);
+
+        if (metrics == null) {
+            metrics = new Metrics(this);
+        }
 
     }
 }
