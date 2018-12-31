@@ -1,6 +1,7 @@
 package com.earth2me.essentials.signs;
 
 import com.earth2me.essentials.*;
+import com.earth2me.essentials.utils.EnumUtil;
 import com.earth2me.essentials.utils.NumberUtil;
 import net.ess3.api.IEssentials;
 import net.ess3.api.MaxMoneyException;
@@ -25,6 +26,7 @@ import static com.earth2me.essentials.I18n.tl;
 
 
 public class EssentialsSign {
+    private static final Material SIGN_POST = EnumUtil.getMaterial("SIGN", "SIGN_POST");
     private static final Set<Material> EMPTY_SET = new HashSet<Material>();
     protected static final BigDecimal MINTRANSACTION = new BigDecimal("0.01");
     protected transient final String signName;
@@ -58,9 +60,7 @@ public class EssentialsSign {
                 sign.setLine(0, getSuccessName(ess));
             }
             return ret;
-        } catch (ChargeException ex) {
-            showError(ess, user.getSource(), ex, signName);
-        } catch (SignException ex) {
+        } catch (ChargeException | SignException ex) {
             showError(ess, user.getSource(), ex, signName);
         }
         // Return true, so the player sees the wrong sign.
@@ -115,9 +115,6 @@ public class EssentialsSign {
             }
 
             return onSignInteract(sign, user, getUsername(user), ess);
-        } catch (ChargeException ex) {
-            showError(ess, user.getSource(), ex, signName);
-            return false;
         } catch (Exception ex) {
             showError(ess, user.getSource(), ex, signName);
             return false;
@@ -161,9 +158,7 @@ public class EssentialsSign {
         User user = ess.getUser(player);
         try {
             return onBlockPlace(block, user, getUsername(user), ess);
-        } catch (ChargeException ex) {
-            showError(ess, user.getSource(), ex, signName);
-        } catch (SignException ex) {
+        } catch (ChargeException | SignException ex) {
             showError(ess, user.getSource(), ex, signName);
         }
         return false;
@@ -173,9 +168,7 @@ public class EssentialsSign {
         User user = ess.getUser(player);
         try {
             return onBlockInteract(block, user, getUsername(user), ess);
-        } catch (ChargeException ex) {
-            showError(ess, user.getSource(), ex, signName);
-        } catch (SignException ex) {
+        } catch (ChargeException | SignException ex) {
             showError(ess, user.getSource(), ex, signName);
         }
         return false;
@@ -213,7 +206,7 @@ public class EssentialsSign {
 
     protected static boolean checkIfBlockBreaksSigns(final Block block) {
         final Block sign = block.getRelative(BlockFace.UP);
-        if (sign.getType() == Material.SIGN && isValidSign(new BlockSign(sign))) {
+        if (sign.getType() == SIGN_POST && isValidSign(new BlockSign(sign))) {
             return true;
         }
         final BlockFace[] directions = new BlockFace[]{BlockFace.NORTH, BlockFace.EAST, BlockFace.SOUTH, BlockFace.WEST};
