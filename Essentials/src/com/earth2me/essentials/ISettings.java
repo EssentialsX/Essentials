@@ -181,7 +181,7 @@ public interface ISettings extends IConf {
 
     boolean cancelAfkOnInteract();
 
-    boolean bypassSleepWhenAfk();
+    boolean sleepIgnoresAfkPlayers();
 
     boolean isAfkListName();
 
