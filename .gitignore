@@ -39,6 +39,7 @@
 /jars
 /out
 .idea/
+.buildtools/
 *.iml
 *.classpath
 *.project
