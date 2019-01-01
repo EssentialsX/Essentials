@@ -5,7 +5,7 @@
 
     <groupId>net.ess3</groupId>
     <artifactId>EssentialsXParent</artifactId>
-    <version>2.15.0</version>
+    <version>2.16.0</version>
 
     <packaging>pom</packaging>
 
@@ -17,9 +17,9 @@
     </licenses>
 
     <scm>
-        <connection>scm:git:https://github.com/drtshock/Essentials.git</connection>
-        <developerConnection>scm:git:https://github.com/drtshock/Essentials.git</developerConnection>
-        <url>https://github.com/drtshock/Essentials</url>
+        <connection>scm:git:https://github.com/EssentialsX/Essentials.git</connection>
+        <developerConnection>scm:git:https://github.com/EssentialsX/Essentials.git</developerConnection>
+        <url>https://github.com/EssentialsX/Essentials</url>
     </scm>
 
     <repositories>
@@ -47,25 +47,26 @@
         <module>nms/1_8_R2Provider</module>
         <module>nms/LegacyProvider</module>
         <module>nms/ReflectionProvider</module>
+        <module>nms/FlattenedProvider</module>
     </modules>
 
     <dependencies>
         <dependency>
             <groupId>org.bukkit</groupId>
             <artifactId>bukkit</artifactId>
-            <version>1.12-R0.1-SNAPSHOT</version>
+            <version>1.13.2-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.11</version>
+            <version>4.12</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>1.12.2</version>
+            <version>1.18.4</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>
@@ -77,39 +78,16 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.1</version>
+                <version>3.7.0</version>
                 <configuration>
-                    <source>1.7</source>
-                    <target>1.7</target>
+                    <source>1.8</source>
+                    <target>1.8</target>
                 </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-antrun-plugin</artifactId>
-                <version>1.7</version>
-                <executions>
-                    <execution>
-                        <phase>validate</phase>
-                        <goals>
-                            <goal>run</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <dependencies>
-                    <dependency>
-                        <groupId>com.sun</groupId>
-                        <artifactId>tools</artifactId>
-                        <version>1.5.0</version>
-                        <scope>system</scope>
-                        <systemPath>${java.home}/../lib/tools.jar</systemPath>
-                    </dependency>
-                </dependencies>
-                <inherited>false</inherited>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-dependency-plugin</artifactId>
-                <version>2.8</version>
+                <version>3.0.2</version>
                 <configuration>
                     <outputDirectory>jars</outputDirectory>
                     <stripVersion>true</stripVersion>
@@ -155,7 +133,7 @@
             </plugin>
             <plugin>
                 <artifactId>maven-resources-plugin</artifactId>
-                <version>2.6</version>
+                <version>3.0.2</version>
                 <executions>
                     <execution>
                         <phase>package</phase>
@@ -171,6 +149,7 @@
                                         <include>messages*.properties</include>
                                         <include>config.yml</include>
                                         <include>items.csv</include>
+                                        <include>items.json</include>
                                     </includes>
                                     <excludes>
                                         <exclude>plugin.yml</exclude>
@@ -186,7 +165,7 @@
             <plugin>
                 <groupId>com.google.code.maven-replacer-plugin</groupId>
                 <artifactId>replacer</artifactId>
-                <version>1.5.2</version>
+                <version>1.5.3</version>
                 <executions>
                     <execution>
                         <phase>process-sources</phase>
@@ -232,12 +211,12 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
-                <version>2.9.1</version>
+                <version>3.0.0</version>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-deploy-plugin</artifactId>
-                <version>2.8.1</version>
+                <version>2.8.2</version>
                 <configuration>
                     <deployAtEnd>true</deployAtEnd>
                 </configuration>
@@ -276,6 +255,7 @@
                     <include>*.yml</include>
                     <include>*.csv</include>
                     <include>*.txt</include>
+                    <include>*.json</include>
                 </includes>
                 <filtering>true</filtering>
             </resource>
@@ -286,7 +266,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
         <!-- The plugins' release version -->
-        <release.version>2.15.0</release.version>
+        <release.version>2.16-pre4</release.version>
 
         <!-- The plugins' build number -->
         <build.version>${git.closest.tag.commit.count}</build.version>

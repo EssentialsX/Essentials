@@ -1,20 +1,10 @@
 language: java
 
-branches:
-  only:
-  - 2.x
-  - 1.13
-  
 cache:
   directories:
   - .buildtools
   - $HOME/.m2
 
 before_install:
-  - mkdir -p .buildtools
-  - cd .buildtools
-  - wget -O BuildTools.jar https://hub.spigotmc.org/jenkins/job/BuildTools/lastSuccessfulBuild/artifact/target/BuildTools.jar
-  - rm -r work/
-  - java -jar BuildTools.jar --rev 1.8
-  - java -jar BuildTools.jar --rev 1.8.3
-  - cd ..
+  - chmod +x scripts/buildtools.sh
+  - scripts/buildtools.sh

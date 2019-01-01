@@ -2,6 +2,7 @@ package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.craftbukkit.InventoryWorkaround;
+import com.earth2me.essentials.utils.EnumUtil;
 import com.google.common.collect.Lists;
 import org.bukkit.Material;
 import org.bukkit.Server;
@@ -15,6 +16,9 @@ import static com.earth2me.essentials.I18n.tl;
 
 
 public class Commandbook extends EssentialsCommand {
+
+    private static final Material WRITABLE_BOOK = EnumUtil.getMaterial("WRITABLE_BOOK", "BOOK_AND_QUILL");
+
     public Commandbook() {
         super("book");
     }
@@ -44,7 +48,7 @@ public class Commandbook extends EssentialsCommand {
                 }
             } else {
                 if (isAuthor(bmeta, player) || user.isAuthorized("essentials.book.others")) {
-                    ItemStack newItem = new ItemStack(Material.BOOK_AND_QUILL, item.getAmount());
+                    ItemStack newItem = new ItemStack(WRITABLE_BOOK, item.getAmount());
                     newItem.setItemMeta(bmeta);
                     InventoryWorkaround.setItemInMainHand(user.getBase(), newItem);
                     user.sendMessage(tl("editBookContents"));
@@ -52,7 +56,7 @@ public class Commandbook extends EssentialsCommand {
                     throw new Exception(tl("denyBookEdit"));
                 }
             }
-        } else if (item.getType() == Material.BOOK_AND_QUILL) {
+        } else if (item.getType() == WRITABLE_BOOK) {
             BookMeta bmeta = (BookMeta) item.getItemMeta();
             if (!user.isAuthorized("essentials.book.author")) {
                 bmeta.setAuthor(player);

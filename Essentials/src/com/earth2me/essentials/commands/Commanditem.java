@@ -25,12 +25,14 @@ public class Commanditem extends EssentialsCommand {
         if (args.length < 1) {
             throw new NotEnoughArgumentsException();
         }
+
         ItemStack stack = ess.getItemDb().get(args[0]);
 
         final String itemname = stack.getType().toString().toLowerCase(Locale.ENGLISH).replace("_", "");
-        if (ess.getSettings().permissionBasedItemSpawn() ? (!user.isAuthorized("essentials.itemspawn.item-all") && !user.isAuthorized("essentials.itemspawn.item-" + itemname) && !user.isAuthorized("essentials.itemspawn.item-" + stack.getTypeId())) : (!user.isAuthorized("essentials.itemspawn.exempt") && !user.canSpawnItem(stack.getTypeId()))) {
+        if (!user.canSpawnItem(stack.getType())) {
             throw new Exception(tl("cantSpawnItem", itemname));
         }
+
         try {
             if (args.length > 1 && Integer.parseInt(args[1]) > 0) {
                 stack.setAmount(Integer.parseInt(args[1]));

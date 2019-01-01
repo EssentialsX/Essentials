@@ -7,6 +7,7 @@ import net.ess3.api.IEssentials;
 import net.ess3.api.InvalidWorldException;
 import net.ess3.api.MaxMoneyException;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -231,26 +232,35 @@ public abstract class UserData extends PlayerExtension implements IConf {
         config.save();
     }
 
-    private List<Integer> unlimited;
+    private List<Material> unlimited;
 
-    private List<Integer> _getUnlimited() {
-        return config.getIntegerList("unlimited");
+    private List<Material> _getUnlimited() {
+        List<Material> retlist = new ArrayList<>();
+        List<String> configList = config.getStringList("unlimited");
+        for(String s : configList) {
+            Material mat = Material.matchMaterial(s);
+            if(mat != null) {
+                retlist.add(mat);
+            }
+        }
+
+        return retlist;
     }
 
-    public List<Integer> getUnlimited() {
+    public List<Material> getUnlimited() {
         return unlimited;
     }
 
     public boolean hasUnlimited(ItemStack stack) {
-        return unlimited.contains(stack.getTypeId());
+        return unlimited.contains(stack.getType());
     }
 
     public void setUnlimited(ItemStack stack, boolean state) {
-        if (unlimited.contains(stack.getTypeId())) {
-            unlimited.remove(Integer.valueOf(stack.getTypeId()));
+        if (unlimited.contains(stack.getType())) {
+            unlimited.remove(stack.getType());
         }
         if (state) {
-            unlimited.add(stack.getTypeId());
+            unlimited.add(stack.getType());
         }
         config.setProperty("unlimited", unlimited);
         config.save();
@@ -262,7 +272,7 @@ public abstract class UserData extends PlayerExtension implements IConf {
         if (config.isConfigurationSection("powertools")) {
             return config.getConfigurationSection("powertools").getValues(false);
         }
-        return new HashMap<String, Object>();
+        return new HashMap<>();
     }
 
     public void clearAllPowertools() {
@@ -273,19 +283,19 @@ public abstract class UserData extends PlayerExtension implements IConf {
 
     @SuppressWarnings("unchecked")
     public List<String> getPowertool(ItemStack stack) {
-        return (List<String>) powertools.get("" + stack.getTypeId());
+        return (List<String>) powertools.get(stack.getType().name().toLowerCase(Locale.ENGLISH));
     }
 
     @SuppressWarnings("unchecked")
-    public List<String> getPowertool(int id) {
-        return (List<String>) powertools.get("" + id);
+    public List<String> getPowertool(Material material) {
+        return (List<String>) powertools.get(material.name().toLowerCase(Locale.ENGLISH));
     }
 
     public void setPowertool(ItemStack stack, List<String> commandList) {
         if (commandList == null || commandList.isEmpty()) {
-            powertools.remove("" + stack.getTypeId());
+            powertools.remove(stack.getType().name().toLowerCase(Locale.ENGLISH));
         } else {
-            powertools.put("" + stack.getTypeId(), commandList);
+            powertools.put(stack.getType().name().toLowerCase(Locale.ENGLISH), commandList);
         }
         config.setProperty("powertools", powertools);
         config.save();

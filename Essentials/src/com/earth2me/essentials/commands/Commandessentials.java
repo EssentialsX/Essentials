@@ -4,10 +4,7 @@ import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.EssentialsUpgrade;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.UserMap;
-import com.earth2me.essentials.metrics.Metrics;
-import com.earth2me.essentials.utils.DateUtil;
-import com.earth2me.essentials.utils.FloatUtil;
-import com.earth2me.essentials.utils.NumberUtil;
+import com.earth2me.essentials.utils.*;
 import com.google.common.base.Charsets;
 import com.google.common.collect.Lists;
 import org.bukkit.Material;
@@ -19,13 +16,15 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
 
-import java.io.IOException;
 import java.util.*;
 
 import static com.earth2me.essentials.I18n.tl;
 
 // This command has 4 undocumented behaviours #EasterEgg
 public class Commandessentials extends EssentialsCommand {
+
+    private final Sound NOTE_HARP = EnumUtil.valueOf(Sound.class, "BLOCK_NOTE_HARP", "NOTE_PIANO");
+
     public Commandessentials() {
         super("essentials");
     }
@@ -36,7 +35,22 @@ public class Commandessentials extends EssentialsCommand {
     private final List<String> versionPlugins = Arrays.asList(
             "Vault",
             "LuckPerms",
-            "PermissionsEx"
+            "PermissionsEx",
+            "GroupManager"
+    );
+
+    private final List<String> officialPlugins = Arrays.asList(
+            "EssentialsAntiBuild",
+            "EssentialsChat",
+            "EssentialsGeoIP",
+            "EssentialsProtect",
+            "EssentialsSpawn",
+            "EssentialsXMPP"
+    );
+
+    private final List<String> warnPlugins = Arrays.asList(
+            "PermissionsEx",
+            "GroupManager"
     );
 
     @Override
@@ -51,8 +65,6 @@ public class Commandessentials extends EssentialsCommand {
             run_moo(server, sender, commandLabel, args);
         } else if (args[0].equalsIgnoreCase("reset")) {
             run_reset(server, sender, commandLabel, args);
-        } else if (args[0].equalsIgnoreCase("opt-out")) {
-            run_optout(server, sender, commandLabel, args);
         } else if (args[0].equalsIgnoreCase("cleanup")) {
             run_cleanup(server, sender, commandLabel, args);
         } else if (args[0].equalsIgnoreCase("uuidconvert")) {
@@ -143,15 +155,9 @@ public class Commandessentials extends EssentialsCommand {
                 if (note == null || note.isEmpty()) {
                     return;
                 }
-                Sound noteHarp;
-                try {
-                    noteHarp = Sound.valueOf("NOTE_PIANO"); // pre-1.9, referenced internally as note.harp
-                } catch (IllegalArgumentException e) {
-                    noteHarp = Sound.valueOf("BLOCK_NOTE_HARP"); // 1.9
-                }
 
                 for (Player onlinePlayer : ess.getOnlinePlayers()) {
-                    onlinePlayer.playSound(onlinePlayer.getLocation(), noteHarp, 1, noteMap.get(note));
+                    onlinePlayer.playSound(onlinePlayer.getLocation(), NOTE_HARP, 1, noteMap.get(note));
                 }
             }
         }, 20, 2);
@@ -171,12 +177,8 @@ public class Commandessentials extends EssentialsCommand {
     private final String[] playerMoo = new String[]{"            (__)", "            (oo)", "   /------\\/", "  /  |      | |", " *  /\\---/\\", "    ~~    ~~", "....\"Have you mooed today?\"..."};
 
     private void run_moo(final Server server, final CommandSource sender, final String command, final String args[]) {
-        Sound moo;
-        try {
-            moo = Sound.valueOf("COW_IDLE"); // pre-1.9
-        } catch (IllegalArgumentException e) {
-            moo = Sound.valueOf("ENTITY_COW_MILK"); // 1.9
-        }
+        Sound moo = EnumUtil.valueOf(Sound.class, "COW_IDLE", "ENTITY_COW_MILK");
+
         if (args.length == 2 && args[1].equals("moo")) {
             for (String s : consoleMoo) {
                 logger.info(s);
@@ -195,19 +197,6 @@ public class Commandessentials extends EssentialsCommand {
                 sender.getSender().sendMessage(consoleMoo);
             }
         }
-    }
-
-    private void run_optout(final Server server, final CommandSource sender, final String command, final String args[]) {
-        final Metrics metrics = ess.getMetrics();
-
-        sender.sendMessage("Essentials collects simple metrics to highlight which features to concentrate work on in the future.");
-        if (metrics.isOptOut()) {
-            metrics.enable();
-        } else {
-            metrics.disable();
-        }
-        sender.sendMessage("Anonymous Metrics are now " + (metrics.isOptOut() ? "disabled" : "enabled") + " for EssentialsX until server restart.");
-        sender.sendMessage("To " + (metrics.isOptOut() ? "disable" : "enable") + " them for all plugins permanently, see the bStats config.");
     }
 
     private void run_cleanup(final Server server, final CommandSource sender, final String command, final String args[]) throws Exception {
@@ -318,11 +307,13 @@ public class Commandessentials extends EssentialsCommand {
 
         boolean isMismatched = false;
         boolean isVaultInstalled = false;
+        boolean isUnsupported = false;
+        final boolean isServerSupported = VersionUtil.isServerSupported();
         final PluginManager pm = server.getPluginManager();
         final String essVer = pm.getPlugin("Essentials").getDescription().getVersion();
 
-        sender.sendMessage("Server version: " + server.getBukkitVersion() + " " + server.getVersion());
-        sender.sendMessage("EssentialsX version: " + essVer);
+        sender.sendMessage(tl(isServerSupported ? "versionOutputFine" : "versionOutputWarn", "Server", server.getBukkitVersion() + " " + server.getVersion()));
+        sender.sendMessage(tl("versionOutputFine", "EssentialsX", essVer));
 
         for (Plugin plugin : pm.getPlugins()) {
             final PluginDescriptionFile desc = plugin.getDescription();
@@ -330,15 +321,28 @@ public class Commandessentials extends EssentialsCommand {
             String version = desc.getVersion();
 
             if (name.startsWith("Essentials") && !name.equalsIgnoreCase("Essentials")) {
-                if (!version.equalsIgnoreCase(essVer)) {
-                    version = "\u00a7c" + version;
-                    isMismatched = true;
+                if (officialPlugins.contains(name)) {
+                    name = name.replace("Essentials", "EssentialsX");
+
+                    if (!version.equalsIgnoreCase(essVer)) {
+                        isMismatched = true;
+                        sender.sendMessage(tl("versionOutputWarn", name, version));
+                    } else {
+                        sender.sendMessage(tl("versionOutputFine", name, version));
+                    }
+                } else {
+                    sender.sendMessage(tl("versionOutputUnsupported", name, version));
+                    isUnsupported = true;
                 }
-                sender.sendMessage(name.replace("Essentials", "EssentialsX") + " version: " + version);
             }
 
             if (versionPlugins.contains(name)) {
-                sender.sendMessage(name + " version: " + version);
+                if (warnPlugins.contains(name)) {
+                    sender.sendMessage(tl("versionOutputUnsupported", name, version));
+                    isUnsupported = true;
+                } else {
+                    sender.sendMessage(tl("versionOutputFine", name, version));
+                }
             }
 
             if (name.equals("Vault")) isVaultInstalled = true;
@@ -349,7 +353,15 @@ public class Commandessentials extends EssentialsCommand {
         }
 
         if (!isVaultInstalled) {
-            sender.sendMessage("Vault is not installed - chat and permissions may not work.");
+            sender.sendMessage(tl("versionOutputVaultMissing"));
+        }
+
+        if (isUnsupported) {
+            sender.sendMessage(tl("versionOutputUnsupportedPlugins"));
+        }
+
+        if (!VersionUtil.isServerSupported()) {
+            sender.sendMessage(tl("serverUnsupported"));
         }
     }
 
@@ -362,7 +374,6 @@ public class Commandessentials extends EssentialsCommand {
             //options.add("nya");
             //options.add("moo");
             options.add("reset");
-            options.add("opt-out");
             options.add("cleanup");
             //options.add("uuidconvert");
             //options.add("uuidtest");
@@ -380,8 +391,6 @@ public class Commandessentials extends EssentialsCommand {
             if (args.length == 2) {
                 return getPlayers(server, sender);
             }
-        } else if (args[0].equalsIgnoreCase("opt-out")) {
-            // No args
         } else if (args[0].equalsIgnoreCase("cleanup")) {
             if (args.length == 2) {
                 return COMMON_DURATIONS;

@@ -39,6 +39,7 @@
 /jars
 /out
 .idea/
+.buildtools/
 *.iml
 *.classpath
 *.project
@@ -46,6 +47,7 @@
 target/
 dependency-reduced-pom.xml
 /Essentials/config.yml
+/Essentials/kits.yml
 /Essentials/userdata/testplayer1.yml
 /Essentials/usermap.csv
 /Essentials/userdata

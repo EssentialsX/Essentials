@@ -2,6 +2,7 @@ package com.earth2me.essentials;
 
 import com.earth2me.essentials.Mob.MobException;
 import com.earth2me.essentials.craftbukkit.InventoryWorkaround;
+import com.earth2me.essentials.utils.EnumUtil;
 import com.earth2me.essentials.utils.LocationUtil;
 import com.earth2me.essentials.utils.StringUtil;
 import net.ess3.api.IEssentials;
@@ -19,6 +20,13 @@ import static com.earth2me.essentials.I18n.tl;
 
 
 public class SpawnMob {
+
+    private static final Material GOLDEN_HELMET = EnumUtil.getMaterial("GOLDEN_HELMET", "GOLD_HELMET");
+    private static final Material GOLDEN_CHESTPLATE = EnumUtil.getMaterial("GOLDEN_CHESTPLATE", "GOLD_CHESTPLATE");
+    private static final Material GOLDEN_LEGGINGS = EnumUtil.getMaterial("GOLDEN_LEGGINGS", "GOLD_LEGGINGS");
+    private static final Material GOLDEN_BOOTS = EnumUtil.getMaterial("GOLDEN_BOOTS", "GOLD_BOOTS");
+    private static final Material GOLDEN_SWORD = EnumUtil.getMaterial("GOLDEN_SWORD", "GOLD_SWORD");
+
     public static String mobList(final User user) {
         final Set<String> mobList = Mob.getMobList();
         final Set<String> availableList = new HashSet<String>();
@@ -191,10 +199,10 @@ public class SpawnMob {
                     invent.setChestplate(new ItemStack(Material.DIAMOND_CHESTPLATE, 1));
                     invent.setHelmet(new ItemStack(Material.DIAMOND_HELMET, 1));
                 } else if (inputData.contains("gold")) {
-                    invent.setBoots(new ItemStack(Material.GOLD_BOOTS, 1));
-                    invent.setLeggings(new ItemStack(Material.GOLD_LEGGINGS, 1));
-                    invent.setChestplate(new ItemStack(Material.GOLD_CHESTPLATE, 1));
-                    invent.setHelmet(new ItemStack(Material.GOLD_HELMET, 1));
+                    invent.setBoots(new ItemStack(GOLDEN_BOOTS, 1));
+                    invent.setLeggings(new ItemStack(GOLDEN_LEGGINGS, 1));
+                    invent.setChestplate(new ItemStack(GOLDEN_CHESTPLATE, 1));
+                    invent.setHelmet(new ItemStack(GOLDEN_HELMET, 1));
                 } else if (inputData.contains("leather")) {
                     invent.setBoots(new ItemStack(Material.LEATHER_BOOTS, 1));
                     invent.setLeggings(new ItemStack(Material.LEATHER_LEGGINGS, 1));
@@ -228,7 +236,7 @@ public class SpawnMob {
             InventoryWorkaround.setItemInMainHand(invent, new ItemStack(Material.BOW, 1));
             InventoryWorkaround.setItemInMainHandDropChance(invent, 0.1f);
 
-            invent.setBoots(new ItemStack(Material.GOLD_BOOTS, 1));
+            invent.setBoots(new ItemStack(GOLDEN_BOOTS, 1));
             invent.setBootsDropChance(0.0f);
         }
 
@@ -237,10 +245,10 @@ public class SpawnMob {
             setVillager(zombie, false);
 
             final EntityEquipment invent = zombie.getEquipment();
-            InventoryWorkaround.setItemInMainHand(invent, new ItemStack(Material.GOLD_SWORD, 1));
+            InventoryWorkaround.setItemInMainHand(invent, new ItemStack(GOLDEN_SWORD, 1));
             InventoryWorkaround.setItemInMainHandDropChance(invent, 0.1f);
 
-            invent.setBoots(new ItemStack(Material.GOLD_BOOTS, 1));
+            invent.setBoots(new ItemStack(GOLDEN_BOOTS, 1));
             invent.setBootsDropChance(0.0f);
         }
 
@@ -249,7 +257,7 @@ public class SpawnMob {
             setVillager(zombie, false);
 
             final EntityEquipment invent = zombie.getEquipment();
-            invent.setBoots(new ItemStack(Material.GOLD_BOOTS, 1));
+            invent.setBoots(new ItemStack(GOLDEN_BOOTS, 1));
             invent.setBootsDropChance(0.0f);
         }
 

@@ -6,6 +6,7 @@ import com.earth2me.essentials.textreader.TextInput;
 import com.earth2me.essentials.textreader.TextPager;
 import com.earth2me.essentials.utils.DateUtil;
 import com.earth2me.essentials.utils.LocationUtil;
+import com.earth2me.essentials.utils.MaterialUtil;
 import net.ess3.api.IEssentials;
 
 import org.bukkit.BanEntry;
@@ -598,7 +599,7 @@ public class EssentialsPlayerListener implements Listener {
     public void onPlayerInteract(final PlayerInteractEvent event) {
         switch (event.getAction()) {
             case RIGHT_CLICK_BLOCK:
-                if (!event.isCancelled() && event.getClickedBlock().getType() == Material.BED_BLOCK && ess.getSettings().getUpdateBedAtDaytime()) {
+                if (!event.isCancelled() && MaterialUtil.isBed(event.getClickedBlock().getType()) && ess.getSettings().getUpdateBedAtDaytime()) {
                     User player = ess.getUser(event.getPlayer());
                     if (player.isAuthorized("essentials.sethome.bed")) {
                         player.getBase().setBedSpawnLocation(event.getClickedBlock().getLocation());
@@ -617,7 +618,7 @@ public class EssentialsPlayerListener implements Listener {
             case LEFT_CLICK_BLOCK:
                 if (event.getItem() != null && event.getItem().getType() != Material.AIR) {
                     final User user = ess.getUser(event.getPlayer());
-                    if (user.hasPowerTools() && user.arePowerToolsEnabled() && usePowertools(user, event.getItem().getTypeId())) {
+                    if (user.hasPowerTools() && user.arePowerToolsEnabled() && usePowertools(user, event.getItem().getType())) {
                         event.setCancelled(true);
                     }
                 }
@@ -651,8 +652,8 @@ public class EssentialsPlayerListener implements Listener {
         }
     }
 
-    private boolean usePowertools(final User user, final int id) {
-        final List<String> commandList = user.getPowertool(id);
+    private boolean usePowertools(final User user, final Material material) {
+        final List<String> commandList = user.getPowertool(material);
         if (commandList == null || commandList.isEmpty()) {
             return false;
         }

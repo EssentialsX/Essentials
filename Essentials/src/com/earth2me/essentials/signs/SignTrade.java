@@ -237,7 +237,7 @@ public class SignTrade extends EssentialsSign {
                 return new Trade((amountType == AmountType.COST ? stackamount : amount), ess);
             } else {
                 final int stackamount = getIntegerPositive(split[0]);
-                final ItemStack item = getItemStack(split[1], stackamount, ess);
+                final ItemStack item = getItemStack(split[1], stackamount, true, ess);
                 int amount = getInteger(split[2]);
                 if (amountType == AmountType.ROUNDED) {
                     amount -= amount % stackamount;
