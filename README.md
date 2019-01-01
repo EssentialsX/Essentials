@@ -41,15 +41,14 @@ Building
 --------
 
 EssentialsX builds against the Spigot/CraftBukkit server software for legacy support.
+
 To compile EssentialsX, you first need to run [BuildTools](https://www.spigotmc.org/wiki/buildtools).
-This can be done using the provided script at `scripts/buildtools.sh` which downloads and runs BuildTools automatically, or you can manually install the required versions with the following commands:
+This only needs to be done once. There are two ways to do this:
 
-```
-java -jar BuildTools.jar --rev 1.8
-java -jar BuildTools.jar --rev 1.8.3
-```
+* Use the provided script at `scripts/buildtools.sh` to automatically download and run BuildTools if needed.
+* Download and run BuildTools yourself for versions `1.8` and `1.8.3`.
 
-Then, to build with Maven, run the following command:
+Next, to build EssentialsX with Maven, run the following command:
 ```
 mvn clean install
 ```
