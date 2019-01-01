@@ -310,4 +310,12 @@ public interface ISettings extends IConf {
     boolean isCompassTowardsHomePerm();
 
     boolean isAllowWorldInBroadcastworld();
+
+    boolean isAllowedJailBlockBreak() ;
+
+    boolean isAllowedJailBlockDamage();
+
+    boolean isAllowedJailBlockPlace();
+
+    boolean isAllowedJailInteract();
 }

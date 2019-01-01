@@ -536,6 +536,27 @@ allow-world-in-broadcastworld: true
 
 ############################################################
 # +------------------------------------------------------+ #
+# |                   EssentialsJails                    | #
+# +------------------------------------------------------+ #
+############################################################
+
+# Please be careful with these settings. Allowing players to do certain stuff in their
+# jail might lead to them escaping!
+
+# If set to true players can break blocks in their jails.
+jail-allow-block-break: false
+
+# If set to true the player can damage blocks in their jail.
+jail-allow-block-damage: false
+
+# If set to true players can place blocks in their jail.
+jail-allow-block-place: false
+
+# If set to true players can interact with blocks and entities while in jail.
+jail-allow-interact: false
+
+############################################################
+# +------------------------------------------------------+ #
 # |                   EssentialsHome                     | #
 # +------------------------------------------------------+ #
 ############################################################
