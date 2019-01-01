@@ -159,7 +159,7 @@ public class EssentialsProtectEntityListener implements Listener {
         } else if (entity instanceof TNTPrimed && prot.getSettingBool(ProtectConfig.prevent_tnt_explosion)) {
             event.setCancelled(true);
 
-        } else if ((entity instanceof Fireball | entity instanceof SmallFireball) && prot.getSettingBool(ProtectConfig.prevent_fireball_explosion)) {
+        } else if (entity instanceof Fireball && prot.getSettingBool(ProtectConfig.prevent_fireball_explosion)) {
             event.setCancelled(true);
 
         } else if ((entity instanceof WitherSkull) && prot.getSettingBool(ProtectConfig.prevent_witherskull_explosion)) {
