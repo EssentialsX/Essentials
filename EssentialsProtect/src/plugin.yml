@@ -6,5 +6,5 @@ version: ${full.version}
 website: http://tiny.cc/EssentialsCommands
 description: Provides protection for various parts of the world.
 authors: [Zenexer, ementalo, Aelux, Brettflan, KimKandor, snowleo, ceulemans, Xeology, KHobbits]
-api-version: 1.13
 softdepend: [Essentials]
+api-version: 1.13

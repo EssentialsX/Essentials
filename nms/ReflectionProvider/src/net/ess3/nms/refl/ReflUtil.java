@@ -28,7 +28,7 @@ public class ReflUtil {
     private static NMSVersion nmsVersionObject;
     private static String nmsVersion;
 
-    public static String getNMSVersion() {
+    static String getNMSVersion() {
         if (nmsVersion == null) {
             String name = Bukkit.getServer().getClass().getName();
             String[] parts = name.split("\\.");
@@ -44,7 +44,7 @@ public class ReflUtil {
         return nmsVersionObject;
     }
 
-    public static Class<?> getNMSClass(String className) {
+    static Class<?> getNMSClass(String className) {
         return getClassCached("net.minecraft.server." + getNMSVersion() + "." + className);
     }
 
@@ -118,7 +118,7 @@ public class ReflUtil {
 
     private static Map<Class<?>, Constructor<?>> constructorCache = new HashMap<>();
 
-    public static Constructor<?> getConstructorCached(Class<?> clazz) {
+    static Constructor<?> getConstructorCached(Class<?> clazz) {
         if (constructorCache.containsKey(clazz)) {
             return constructorCache.get(clazz);
         }
@@ -154,7 +154,7 @@ public class ReflUtil {
         private final String name;
         private final Class<?>[] params;
 
-        public MethodParams(final String name, final Class<?>[] params) {
+        MethodParams(final String name, final Class<?>[] params) {
             this.name = name;
             this.params = params;
         }
@@ -202,7 +202,7 @@ public class ReflUtil {
     private static class ConstructorParams {
         private final Class<?>[] params;
 
-        public ConstructorParams(Class<?>[] params) {
+        ConstructorParams(Class<?>[] params) {
             this.params = params;
         }
 
@@ -252,7 +252,7 @@ public class ReflUtil {
             this.release = release;
         }
         
-        public boolean isHigherThan(NMSVersion o) {
+        boolean isHigherThan(NMSVersion o) {
             return compareTo(o) > 0;
         }
         
@@ -264,19 +264,19 @@ public class ReflUtil {
             return compareTo(o) < 0;
         }
         
-        public boolean isLowerThanOrEqualTo(NMSVersion o) {
+        boolean isLowerThanOrEqualTo(NMSVersion o) {
             return compareTo(o) <= 0;
         }
 
-        public int getMajor() {
+        int getMajor() {
             return major;
         }
 
-        public int getMinor() {
+        int getMinor() {
             return minor;
         }
 
-        public int getRelease() {
+        int getRelease() {
             return release;
         }
 
@@ -315,14 +315,8 @@ public class ReflUtil {
                     return -1;
                 } else if (minor > o.minor) {
                     return 1;
-                } else { // equal minor
-                    if (release < o.release) {
-                        return -1;
-                    } else if (release > o.release) {
-                        return 1;
-                    } else {
-                        return 0; // o is the same version as this.
-                    }
+                } else {
+                    return Integer.compare(release, o.release);
                 }
             }
         }

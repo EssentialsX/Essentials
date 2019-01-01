@@ -6,12 +6,10 @@ xmpp:
 #  port: 5222
 #  sasl-enabled: false
 
-debug: false
-
 op-users:
 #  - 'name@example.com'
 
-
+debug: false
 log-enabled: false
 # Level is minimum level that should be send: info, warning, severe
 log-level: warning

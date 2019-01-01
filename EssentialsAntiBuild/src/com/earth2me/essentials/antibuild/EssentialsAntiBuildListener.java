@@ -22,15 +22,18 @@ import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.logging.Level;
+import java.util.logging.Logger;
+
 
 import static com.earth2me.essentials.I18n.tl;
 
 
 public class EssentialsAntiBuildListener implements Listener {
+    private static final Logger logger = Logger.getLogger("EssentialsAntiBuild");
     final private transient IAntiBuild prot;
     final private transient IEssentials ess;
 
-    public EssentialsAntiBuildListener(final IAntiBuild parent) {
+    EssentialsAntiBuildListener(final IAntiBuild parent) {
         this.prot = parent;
         this.ess = prot.getEssentialsConnect().getEssentials();
 
@@ -53,14 +56,14 @@ public class EssentialsAntiBuildListener implements Listener {
     private boolean metaPermCheck(final User user, final String action, final Block block) {
         if (block == null) {
             if (ess.getSettings().isDebug()) {
-                ess.getLogger().log(Level.INFO, "AntiBuild permission check failed, invalid block.");
+                logger.log(Level.INFO, "AntiBuild permission check failed, invalid block.");
             }
             return false;
         }
         return metaPermCheck(user, action, block.getType(), block.getData());
     }
 
-    private boolean metaPermCheck(final User user, final String action, final Material material) {
+    public boolean metaPermCheck(final User user, final String action, final Material material) {
         final String blockPerm = "essentials.build." + action + "." + material;
         return user.isAuthorized(blockPerm);
     }
@@ -74,7 +77,7 @@ public class EssentialsAntiBuildListener implements Listener {
                 return user.isAuthorized(dataPerm);
             } else {
                 if (ess.getSettings().isDebug()) {
-                    ess.getLogger().log(Level.INFO, "DataValue perm on " + user.getName() + " is not directly set: " + dataPerm);
+                    logger.log(Level.INFO, "DataValue perm on " + user.getName() + " is not directly set: " + dataPerm);
                 }
             }
         }

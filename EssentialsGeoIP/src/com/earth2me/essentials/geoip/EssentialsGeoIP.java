@@ -10,12 +10,6 @@ import static com.earth2me.essentials.I18n.tl;
 
 
 public class EssentialsGeoIP extends JavaPlugin {
-    public EssentialsGeoIP() {
-    }
-
-    @Override
-    public void onDisable() {
-    }
 
     @Override
     public void onEnable() {
@@ -34,4 +28,5 @@ public class EssentialsGeoIP extends JavaPlugin {
 
         getLogger().log(Level.INFO, "This product includes GeoLite2 data created by MaxMind, available from http://www.maxmind.com/.");
     }
+
 }

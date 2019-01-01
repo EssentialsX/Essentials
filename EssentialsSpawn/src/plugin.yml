@@ -7,13 +7,14 @@ website: http://tiny.cc/EssentialsCommands
 description: Provides spawn control commands, utilizing Essentials.
 authors: [Zenexer, ementalo, Aelux, Brettflan, KimKandor, snowleo, ceulemans, Xeology, KHobbits]
 depend: [Essentials]
+api-version: 1.13
 commands:
   setspawn:
-    description: Set the spawnpoint to your current position.
+    description: Sets the spawn point to your current position.
     usage: /<command> <group>
     aliases: [esetspawn]
   spawn:
-    description: Teleport to the spawnpoint.
+    description: Teleports to the spawn point.
     usage: /<command> [player]
     aliases: [espawn]
 permissions:

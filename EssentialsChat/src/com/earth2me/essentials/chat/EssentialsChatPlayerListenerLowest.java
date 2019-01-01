@@ -15,7 +15,7 @@ import java.util.Map;
 
 
 public class EssentialsChatPlayerListenerLowest extends EssentialsChatPlayer {
-    public EssentialsChatPlayerListenerLowest(final Server server, final IEssentials ess, final Map<AsyncPlayerChatEvent, ChatStore> chatStorage) {
+    EssentialsChatPlayerListenerLowest(final Server server, final IEssentials ess, final Map<AsyncPlayerChatEvent, ChatStore> chatStorage) {
         super(server, ess, chatStorage);
     }
 
@@ -36,9 +36,7 @@ public class EssentialsChatPlayerListenerLowest extends EssentialsChatPlayer {
         final ChatStore chatStore = new ChatStore(ess, user, getChatType(event.getMessage()));
         setChatStore(event, chatStore);
 
-        /**
-         * This listener should apply the general chat formatting only...then return control back the event handler
-         */
+        // This listener should apply the general chat formatting only...then return control back the event handler
         event.setMessage(FormatUtil.formatMessage(user, "essentials.chat", event.getMessage()));
         String group = user.getGroup();
         String world = user.getWorld().getName();

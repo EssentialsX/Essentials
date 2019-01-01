@@ -11,11 +11,9 @@ import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 
 
 public class EssentialsProtect extends JavaPlugin implements IProtect {
-    private static final Logger LOGGER = Logger.getLogger("Minecraft");
     private final Map<ProtectConfig, Boolean> settingsBoolean = new EnumMap<>(ProtectConfig.class);
     private final Map<ProtectConfig, String> settingsString = new EnumMap<>(ProtectConfig.class);
     private final Map<ProtectConfig, List<Material>> settingsList = new EnumMap<>(ProtectConfig.class);
@@ -36,7 +34,7 @@ public class EssentialsProtect extends JavaPlugin implements IProtect {
     }
 
     private void initialize(final PluginManager pm, final Plugin essPlugin) {
-        LOGGER.log(Level.INFO, "Continuing to enable Protect.");
+        getLogger().log(Level.INFO, "Continuing to enable Protect.");
         ess = new EssentialsConnect(essPlugin, this);
 
         final EssentialsProtectBlockListener blockListener = new EssentialsProtectBlockListener(this);
@@ -55,14 +53,14 @@ public class EssentialsProtect extends JavaPlugin implements IProtect {
         for (Player player : getServer().getOnlinePlayers()) {
             player.sendMessage("Essentials Protect is in emergency mode. Check your log for errors.");
         }
-        LOGGER.log(Level.SEVERE, "Essentials not installed or failed to load. Essentials Protect is in emergency mode now.");
+        getLogger().log(Level.SEVERE, "Essentials not installed or failed to load. Essentials Protect is in emergency mode now.");
     }
 
     void disableEmergencyMode() {
         final PluginManager pm = this.getServer().getPluginManager();
         final Plugin essPlugin = pm.getPlugin("Essentials");
         if (essPlugin == null || !essPlugin.isEnabled()) {
-            LOGGER.log(Level.SEVERE, "Tried to disable emergency mode, but Essentials still isn't enabled!");
+            getLogger().log(Level.SEVERE, "Tried to disable emergency mode, but Essentials still isn't enabled!");
             return;
         }
 
@@ -71,7 +69,7 @@ public class EssentialsProtect extends JavaPlugin implements IProtect {
         for (Player player : getServer().getOnlinePlayers()) {
             player.sendMessage("Essentials Protect is no longer in emergency mode.");
         }
-        LOGGER.log(Level.SEVERE, "Essentials was loaded late! Essentials Protect is no longer in emergency mode.");
+        getLogger().log(Level.SEVERE, "Essentials was loaded late! Essentials Protect is no longer in emergency mode.");
 
         initialize(pm, essPlugin);
     }
