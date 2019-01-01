@@ -6,4 +6,5 @@ cache:
   - $HOME/.m2
 
 before_install:
+  - chmod +x scripts/buildtools.sh
   - scripts/buildtools.sh
