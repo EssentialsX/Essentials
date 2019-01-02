@@ -27,10 +27,30 @@ public class Commandmore extends EssentialsCommand {
         if (ess.getSettings().permissionBasedItemSpawn() ? (!user.isAuthorized("essentials.itemspawn.item-all") && !user.isAuthorized("essentials.itemspawn.item-" + itemname) && !user.isAuthorized("essentials.itemspawn.item-" + stack.getTypeId())) : (!user.isAuthorized("essentials.itemspawn.exempt") && !user.canSpawnItem(stack.getTypeId()))) {
             throw new Exception(tl("cantSpawnItem", itemname));
         }
-        if (user.isAuthorized("essentials.oversizedstacks")) {
-            stack.setAmount(ess.getSettings().getOversizedStackSize());
+        if (args.length > 1) {
+            int newAmount = stack.getAmount();
+
+            try {
+                newAmount += Integer.parseInt(ChatColor.stripColor(args[1]));
+            } catch(Exception e) {
+                throw new Exception(tl("numberRequired"));
+            }
+
+            if (!user.isAuthorized("essentials.oversizedstacks")) {
+                newAmount = stack.getMaxStackSize();
+            } else {
+                if (newAmount > ess.getSettings().getOversizedStackSize()) {
+                    newAmount = ess.getSettings.getOversizedStackSize();
+                }
+            }
+
+            stack.setAmount(newAmount);
         } else {
-            stack.setAmount(stack.getMaxStackSize());
+            if (user.isAuthorized("essentials.oversizedstacks")) {
+                stack.setAmount(ess.getSettings().getOversizedStackSize());
+            } else {
+                stack.setAmount(stack.getMaxStackSize());
+            }
         }
         user.getBase().updateInventory();
     }
