@@ -2,6 +2,7 @@ package com.earth2me.essentials;
 
 import com.earth2me.essentials.utils.DateUtil;
 import com.earth2me.essentials.utils.LocationUtil;
+import com.earth2me.essentials.utils.VersionUtil;
 import junit.framework.TestCase;
 import org.bukkit.World.Environment;
 import org.bukkit.plugin.InvalidDescriptionException;
@@ -189,5 +190,19 @@ public class UtilTest extends TestCase {
         a = new GregorianCalendar(2010, 9, 17, 23, 45, 45);
         b = new GregorianCalendar(2000, 3, 7, 10, 0, 0);
         assertEquals("10 years 6 months 10 days", DateUtil.formatDateDiff(a, b));
+    }
+
+    public void testVer() {
+        VersionUtil.BukkitVersion v;
+        v = VersionUtil.BukkitVersion.fromString("1.13.2-R0.1");
+        assertEquals(v.getMajor(), 1);
+        assertEquals(v.getMinor(), 13);
+        assertEquals(v.getPatch(), 2);
+        assertEquals(v.getRevision(), 0.1);
+        v = VersionUtil.BukkitVersion.fromString("1.9-R1.4");
+        assertEquals(v.getMajor(), 1);
+        assertEquals(v.getMinor(), 9);
+        assertEquals(v.getPatch(), 0);
+        assertEquals(v.getRevision(), 1.4);
     }
 }

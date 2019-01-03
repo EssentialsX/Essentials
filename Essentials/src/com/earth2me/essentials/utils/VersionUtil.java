@@ -49,7 +49,16 @@ public class VersionUtil {
                 matcher = VERSION_PATTERN.matcher(v1_13_2_R01.toString());
                 Preconditions.checkArgument(matcher.matches(), string + " is not in valid version format. e.g. 1.8.8-R0.1");
             }
-            return new BukkitVersion(Integer.parseInt(matcher.group(1)), Integer.parseInt(matcher.group(2)), Integer.parseInt(matcher.group(3)), Double.parseDouble(matcher.group(4)));
+
+            return from(matcher.group(1), matcher.group(2), matcher.group(3), matcher.group(4));
+        }
+
+        private static BukkitVersion from(String major, String minor, String patch, String revision) {
+            if (patch.isEmpty()) patch = "0";
+            return new BukkitVersion(Integer.parseInt(major),
+                Integer.parseInt(minor),
+                Integer.parseInt(patch),
+                Double.parseDouble(revision));
         }
 
         private BukkitVersion(int major, int minor, int patch, double revision) {
