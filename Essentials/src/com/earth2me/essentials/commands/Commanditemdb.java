@@ -24,7 +24,7 @@ public class Commanditemdb extends EssentialsCommand {
         if (args.length < 1) {
             if (sender.isPlayer() && sender.getPlayer() != null) {
                 itemHeld = true;
-                itemStack = sender.getPlayer().getInventory().getItemInMainHand();
+                itemStack = ess.getUser(sender.getPlayer()).getItemInHand();
             }
             if (itemStack == null) {
                 throw new NotEnoughArgumentsException();

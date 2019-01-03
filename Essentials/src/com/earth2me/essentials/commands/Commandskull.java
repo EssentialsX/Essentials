@@ -36,7 +36,7 @@ public class Commandskull extends EssentialsCommand {
             owner = user.getName();
         }
 
-        ItemStack itemSkull = user.getBase().getInventory().getItemInMainHand();
+        ItemStack itemSkull = user.getItemInHand();
         SkullMeta metaSkull = null;
         boolean spawn = false;
 

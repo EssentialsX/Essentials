@@ -16,7 +16,7 @@ public class Commandmore extends EssentialsCommand {
 
     @Override
     public void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception {
-        final ItemStack stack = user.getBase().getInventory().getItemInMainHand();
+        final ItemStack stack = user.getItemInHand();
         if (stack == null) {
             throw new Exception(tl("cantSpawnItem", "Air"));
         }
