@@ -1,5 +1,6 @@
 package com.earth2me.essentials.protect;
 
+import com.earth2me.essentials.utils.EnumUtil;
 import net.ess3.api.IEssentials;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -12,8 +13,14 @@ import org.bukkit.event.block.BlockFromToEvent;
 import org.bukkit.event.block.BlockIgniteEvent;
 import org.bukkit.event.world.PortalCreateEvent;
 
+import java.util.Set;
+
 
 public class EssentialsProtectBlockListener implements Listener {
+
+    private static final Set<Material> WATER_TYPES = EnumUtil.getAllMatching(Material.class, "WATER", "STATIONARY_WATER");
+    private static final Set<Material> LAVA_TYPES = EnumUtil.getAllMatching(Material.class, "LAVA", "STATIONARY_LAVA");
+
     final private IProtect prot;
     final private IEssentials ess;
 
@@ -57,12 +64,12 @@ public class EssentialsProtectBlockListener implements Listener {
     public void onBlockFromTo(final BlockFromToEvent event) {
         final Block block = event.getBlock();
 
-        if (block.getType() == Material.WATER || block.getType() == Material.STATIONARY_WATER) {
+        if (WATER_TYPES.contains(block.getType())) {
             event.setCancelled(prot.getSettingBool(ProtectConfig.prevent_water_flow));
             return;
         }
 
-        if (block.getType() == Material.LAVA || block.getType() == Material.STATIONARY_LAVA) {
+        if (LAVA_TYPES.contains(block.getType())) {
             event.setCancelled(prot.getSettingBool(ProtectConfig.prevent_lava_flow));
             return;
         }

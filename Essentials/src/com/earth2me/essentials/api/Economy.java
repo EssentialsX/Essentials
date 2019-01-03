@@ -185,7 +185,7 @@ public class Economy {
      * Divides the balance of a user by a value
      *
      * @param name  Name of the user
-     * @param value The balance is divided by this value
+     * @param amount The balance is divided by this value
      *
      * @throws UserDoesNotExistException If a user by that name does not exists
      * @throws NoLoanPermittedException  If the user is not allowed to have a negative balance
@@ -209,7 +209,7 @@ public class Economy {
      * Multiplies the balance of a user by a value
      *
      * @param name  Name of the user
-     * @param value The balance is multiplied by this value
+     * @param amount The balance is multiplied by this value
      *
      * @throws UserDoesNotExistException If a user by that name does not exists
      * @throws NoLoanPermittedException  If the user is not allowed to have a negative balance

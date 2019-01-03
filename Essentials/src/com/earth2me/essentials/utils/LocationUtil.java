@@ -1,5 +1,6 @@
 package com.earth2me.essentials.utils;
 
+import com.earth2me.essentials.IEssentials;
 import net.ess3.api.IUser;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -13,9 +14,6 @@ import java.util.*;
 
 import static com.earth2me.essentials.I18n.tl;
 
-import com.earth2me.essentials.Essentials;
-import com.earth2me.essentials.IEssentials;
-
 
 public class LocationUtil {
     // The player can stand inside these materials
@@ -24,147 +22,25 @@ public class LocationUtil {
 
     static {
         // Materials from Material.isTransparent()
-        HOLLOW_MATERIALS.add(Material.AIR);
-        HOLLOW_MATERIALS.add(Material.SAPLING);
-        HOLLOW_MATERIALS.add(Material.POWERED_RAIL);
-        HOLLOW_MATERIALS.add(Material.DETECTOR_RAIL);
-        HOLLOW_MATERIALS.add(Material.LONG_GRASS);
-        HOLLOW_MATERIALS.add(Material.DEAD_BUSH);
-        HOLLOW_MATERIALS.add(Material.YELLOW_FLOWER);
-        HOLLOW_MATERIALS.add(Material.RED_ROSE);
-        HOLLOW_MATERIALS.add(Material.BROWN_MUSHROOM);
-        HOLLOW_MATERIALS.add(Material.RED_MUSHROOM);
-        HOLLOW_MATERIALS.add(Material.TORCH);
-        HOLLOW_MATERIALS.add(Material.FIRE);
-        HOLLOW_MATERIALS.add(Material.REDSTONE_WIRE);
-        HOLLOW_MATERIALS.add(Material.CROPS);
-        HOLLOW_MATERIALS.add(Material.LADDER);
-        HOLLOW_MATERIALS.add(Material.RAILS);
-        HOLLOW_MATERIALS.add(Material.LEVER);
-        HOLLOW_MATERIALS.add(Material.REDSTONE_TORCH_OFF);
-        HOLLOW_MATERIALS.add(Material.REDSTONE_TORCH_ON);
-        HOLLOW_MATERIALS.add(Material.STONE_BUTTON);
-        HOLLOW_MATERIALS.add(Material.SNOW);
-        HOLLOW_MATERIALS.add(Material.SUGAR_CANE_BLOCK);
-        HOLLOW_MATERIALS.add(Material.PORTAL);
-        HOLLOW_MATERIALS.add(Material.DIODE_BLOCK_OFF);
-        HOLLOW_MATERIALS.add(Material.DIODE_BLOCK_ON);
-        HOLLOW_MATERIALS.add(Material.PUMPKIN_STEM);
-        HOLLOW_MATERIALS.add(Material.MELON_STEM);
-        HOLLOW_MATERIALS.add(Material.VINE);
-        HOLLOW_MATERIALS.add(Material.WATER_LILY);
-        HOLLOW_MATERIALS.add(Material.NETHER_WARTS);
-        HOLLOW_MATERIALS.add(Material.ENDER_PORTAL);
-        HOLLOW_MATERIALS.add(Material.COCOA);
-        HOLLOW_MATERIALS.add(Material.TRIPWIRE_HOOK);
-        HOLLOW_MATERIALS.add(Material.TRIPWIRE);
-        HOLLOW_MATERIALS.add(Material.FLOWER_POT);
-        HOLLOW_MATERIALS.add(Material.CARROT);
-        HOLLOW_MATERIALS.add(Material.POTATO);
-        HOLLOW_MATERIALS.add(Material.WOOD_BUTTON);
-        HOLLOW_MATERIALS.add(Material.SKULL);
-        HOLLOW_MATERIALS.add(Material.REDSTONE_COMPARATOR_OFF);
-        HOLLOW_MATERIALS.add(Material.REDSTONE_COMPARATOR_ON);
-        HOLLOW_MATERIALS.add(Material.ACTIVATOR_RAIL);
-        HOLLOW_MATERIALS.add(Material.CARPET);
-        HOLLOW_MATERIALS.add(Material.DOUBLE_PLANT);
-
-        // Additional Materials added in by Essentials
-        HOLLOW_MATERIALS.add(Material.SEEDS);
-        HOLLOW_MATERIALS.add(Material.SIGN_POST);
-        HOLLOW_MATERIALS.add(Material.WOODEN_DOOR);
-        HOLLOW_MATERIALS.add(Material.WALL_SIGN);
-        HOLLOW_MATERIALS.add(Material.STONE_PLATE);
-        HOLLOW_MATERIALS.add(Material.IRON_DOOR_BLOCK);
-        HOLLOW_MATERIALS.add(Material.WOOD_PLATE);
-        HOLLOW_MATERIALS.add(Material.FENCE_GATE);
+        for (Material mat : Material.values()) {
+            if (mat.isTransparent()) {
+                HOLLOW_MATERIALS.add(mat);
+            }
+        }
 
         TRANSPARENT_MATERIALS.addAll(HOLLOW_MATERIALS);
         TRANSPARENT_MATERIALS.add(Material.WATER);
-        TRANSPARENT_MATERIALS.add(Material.STATIONARY_WATER);
+        try {
+            TRANSPARENT_MATERIALS.add(Material.valueOf("FLOWING_WATER"));
+        } catch (Exception ignored) { // 1.13 WATER uses Levelled
+        }
     }
 
     public static final int RADIUS = 3;
     public static final Vector3D[] VOLUME;
 
     public static ItemStack convertBlockToItem(final Block block) {
-        final ItemStack is = new ItemStack(block.getType(), 1, (short) 0, block.getData());
-        switch (is.getType()) {
-            case WOODEN_DOOR:
-                is.setType(Material.WOOD_DOOR);
-                is.setDurability((short) 0);
-                break;
-            case IRON_DOOR_BLOCK:
-                is.setType(Material.IRON_DOOR);
-                is.setDurability((short) 0);
-                break;
-            case SIGN_POST:
-            case WALL_SIGN:
-                is.setType(Material.SIGN);
-                is.setDurability((short) 0);
-                break;
-            case CROPS:
-                is.setType(Material.SEEDS);
-                is.setDurability((short) 0);
-                break;
-            case CAKE_BLOCK:
-                is.setType(Material.CAKE);
-                is.setDurability((short) 0);
-                break;
-            case BED_BLOCK:
-                is.setType(Material.BED);
-                is.setDurability((short) 0);
-                break;
-            case REDSTONE_WIRE:
-                is.setType(Material.REDSTONE);
-                is.setDurability((short) 0);
-                break;
-            case REDSTONE_TORCH_OFF:
-            case REDSTONE_TORCH_ON:
-                is.setType(Material.REDSTONE_TORCH_ON);
-                is.setDurability((short) 0);
-                break;
-            case DIODE_BLOCK_OFF:
-            case DIODE_BLOCK_ON:
-                is.setType(Material.DIODE);
-                is.setDurability((short) 0);
-                break;
-            case DOUBLE_STEP:
-                is.setType(Material.STEP);
-                break;
-            case TORCH:
-            case RAILS:
-            case LADDER:
-            case WOOD_STAIRS:
-            case COBBLESTONE_STAIRS:
-            case LEVER:
-            case STONE_BUTTON:
-            case FURNACE:
-            case DISPENSER:
-            case PUMPKIN:
-            case JACK_O_LANTERN:
-            case WOOD_PLATE:
-            case STONE_PLATE:
-            case PISTON_STICKY_BASE:
-            case PISTON_BASE:
-            case IRON_FENCE:
-            case THIN_GLASS:
-            case TRAP_DOOR:
-            case FENCE:
-            case FENCE_GATE:
-            case NETHER_FENCE:
-                is.setDurability((short) 0);
-                break;
-            case FIRE:
-                return null;
-            case PUMPKIN_STEM:
-                is.setType(Material.PUMPKIN_SEEDS);
-                break;
-            case MELON_STEM:
-                is.setType(Material.MELON_SEEDS);
-                break;
-        }
-        return is;
+        return new ItemStack(block.getType(), 1);
     }
 
 
@@ -200,15 +76,11 @@ public class LocationUtil {
 
     @SuppressWarnings("deprecation")
     public static Location getTarget(final LivingEntity entity) throws Exception {
-        Block block;
+        Block block = null;
         try {
             block = entity.getTargetBlock(TRANSPARENT_MATERIALS, 300);
         } catch (NoSuchMethodError e) {
-            HashSet<Byte> legacyTransparent = new HashSet<>(); // Bukkit API prevents declaring as Set<Byte>
-            for (Material m : TRANSPARENT_MATERIALS) {
-                legacyTransparent.add((byte) m.getId());
-            }
-            block = entity.getTargetBlock(legacyTransparent, 300);
+            // failing now :(
         }
         if (block == null) {
             throw new Exception("Not targeting a block");
@@ -217,10 +89,7 @@ public class LocationUtil {
     }
 
     static boolean isBlockAboveAir(final World world, final int x, final int y, final int z) {
-        if (y > world.getMaxHeight()) {
-            return true;
-        }
-        return HOLLOW_MATERIALS.contains(world.getBlockAt(x, y - 1, z).getType());
+        return y > world.getMaxHeight() || HOLLOW_MATERIALS.contains(world.getBlockAt(x, y - 1, z).getType());
     }
 
     public static boolean isBlockUnsafeForUser(final IUser user, final World world, final int x, final int y, final int z) {
@@ -235,26 +104,35 @@ public class LocationUtil {
     }
 
     public static boolean isBlockUnsafe(final World world, final int x, final int y, final int z) {
-        if (isBlockDamaging(world, x, y, z)) {
-            return true;
-        }
-        return isBlockAboveAir(world, x, y, z);
+        return isBlockDamaging(world, x, y, z) || isBlockAboveAir(world, x, y, z);
     }
 
     public static boolean isBlockDamaging(final World world, final int x, final int y, final int z) {
         final Block below = world.getBlockAt(x, y - 1, z);
-        if (below.getType() == Material.LAVA || below.getType() == Material.STATIONARY_LAVA) {
+
+        switch (below.getType()) {
+            case LAVA:
+            case FIRE:
+                return true;
+        }
+
+        if (MaterialUtil.isBed(below.getType())) {
             return true;
         }
-        if (below.getType() == Material.FIRE) {
+
+        try {
+            if (below.getType() == Material.valueOf("FLOWING_LAVA")) {
+                return true;
+            }
+        } catch (Exception ignored) { // 1.13 LAVA uses Levelled
+        }
+
+        Material PORTAL = EnumUtil.getMaterial("NETHER_PORTAL", "PORTAL");
+
+        if (world.getBlockAt(x, y, z).getType() == PORTAL) {
             return true;
         }
-        if (below.getType() == Material.BED_BLOCK) {
-            return true;
-        }
-        if (world.getBlockAt(x, y, z).getType() == Material.PORTAL) {
-            return true;
-        }
+
         return (!HOLLOW_MATERIALS.contains(world.getBlockAt(x, y, z).getType())) || (!HOLLOW_MATERIALS.contains(world.getBlockAt(x, y + 1, z).getType()));
     }
 

@@ -42,11 +42,6 @@ public class Methods {
      * Implement all methods along with their respective name & class.
      */
     private static void _init() {
-        addMethod("iConomy", new com.earth2me.essentials.register.payment.methods.iCo6());
-        addMethod("iConomy", new com.earth2me.essentials.register.payment.methods.iCo5());
-        addMethod("BOSEconomy", new com.earth2me.essentials.register.payment.methods.BOSE7());
-        addMethod("Currency", new com.earth2me.essentials.register.payment.methods.MCUR());
-        Dependencies.add("MultiCurrency");
         addMethod("Vault", new com.earth2me.essentials.register.payment.methods.VaultEco());
     }
 

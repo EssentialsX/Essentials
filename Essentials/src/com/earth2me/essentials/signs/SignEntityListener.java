@@ -1,5 +1,6 @@
 package com.earth2me.essentials.signs;
 
+import com.earth2me.essentials.utils.EnumUtil;
 import net.ess3.api.IEssentials;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -11,6 +12,8 @@ import org.bukkit.event.entity.EntityExplodeEvent;
 
 
 public class SignEntityListener implements Listener {
+
+    private static final Material SIGN_POST = EnumUtil.getMaterial("SIGN", "SIGN_POST");
     private final transient IEssentials ess;
 
     public SignEntityListener(final IEssentials ess) {
@@ -25,7 +28,7 @@ public class SignEntityListener implements Listener {
         }
 
         for (Block block : event.blockList()) {
-            if (((block.getType() == Material.WALL_SIGN || block.getType() == Material.SIGN_POST) && EssentialsSign.isValidSign(ess, new EssentialsSign.BlockSign(block))) || EssentialsSign.checkIfBlockBreaksSigns(block)) {
+            if (((block.getType() == Material.WALL_SIGN || block.getType() == SIGN_POST) && EssentialsSign.isValidSign(ess, new EssentialsSign.BlockSign(block))) || EssentialsSign.checkIfBlockBreaksSigns(block)) {
                 event.setCancelled(true);
                 return;
             }
@@ -46,7 +49,7 @@ public class SignEntityListener implements Listener {
         }
 
         final Block block = event.getBlock();
-        if (((block.getType() == Material.WALL_SIGN || block.getType() == Material.SIGN_POST) && EssentialsSign.isValidSign(ess, new EssentialsSign.BlockSign(block))) || EssentialsSign.checkIfBlockBreaksSigns(block)) {
+        if (((block.getType() == Material.WALL_SIGN || block.getType() == SIGN_POST) && EssentialsSign.isValidSign(ess, new EssentialsSign.BlockSign(block))) || EssentialsSign.checkIfBlockBreaksSigns(block)) {
             event.setCancelled(true);
             return;
         }

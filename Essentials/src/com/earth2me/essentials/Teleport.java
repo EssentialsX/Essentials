@@ -4,6 +4,8 @@ import com.earth2me.essentials.utils.DateUtil;
 import com.earth2me.essentials.utils.LocationUtil;
 import net.ess3.api.IEssentials;
 import net.ess3.api.IUser;
+import net.ess3.api.events.UserWarpEvent;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerRespawnEvent;
@@ -247,6 +249,13 @@ public class Teleport implements net.ess3.api.ITeleport {
     //The warp function is a wrapper used to teleportPlayer a player to a /warp
     @Override
     public void warp(IUser teleportee, String warp, Trade chargeFor, TeleportCause cause) throws Exception {
+        UserWarpEvent event = new UserWarpEvent(teleportee, warp, chargeFor);
+        Bukkit.getServer().getPluginManager().callEvent(event);
+
+        if(event.isCancelled()) {
+            return;
+        }
+        warp = event.getWarp();
         Location loc = ess.getWarps().getWarp(warp);
         teleportee.sendMessage(tl("warpingTo", warp, loc.getWorld().getName(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ()));
         if (!teleportee.equals(teleportOwner)) {

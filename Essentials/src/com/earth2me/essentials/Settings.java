@@ -10,14 +10,13 @@ import com.earth2me.essentials.utils.NumberUtil;
 
 import net.ess3.api.IEssentials;
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.MemoryConfiguration;
 import org.bukkit.event.EventPriority;
 import org.bukkit.inventory.ItemStack;
 
 import java.io.File;
-import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
@@ -37,7 +36,6 @@ public class Settings implements net.ess3.api.ISettings {
     private final transient EssentialsConf config;
     private static final Logger logger = Logger.getLogger("Essentials");
     private final transient IEssentials ess;
-    private boolean metricsEnabled = true;
 
     public Settings(IEssentials ess) {
         this.ess = ess;
@@ -538,19 +536,22 @@ public class Settings implements net.ess3.api.ISettings {
         defaultEnabledConfirmCommands = _getDefaultEnabledConfirmCommands();
         isCompassTowardsHomePerm = _isCompassTowardsHomePerm();
         isAllowWorldInBroadcastworld = _isAllowWorldInBroadcastworld();
+        itemDbType = _getItemDbType();
+        forceEnableRecipe = _isForceEnableRecipe();
+        allowOldIdSigns = _allowOldIdSigns();
     }
 
-    private List<Integer> itemSpawnBl = new ArrayList<Integer>();
+    private List<Material> itemSpawnBl = new ArrayList<Material>();
 
     @Override
-    public List<Integer> itemSpawnBlacklist() {
+    public List<Material> itemSpawnBlacklist() {
         return itemSpawnBl;
     }
 
-    private List<Integer> _getItemSpawnBlacklist() {
-        final List<Integer> epItemSpwn = new ArrayList<Integer>();
+    private List<Material> _getItemSpawnBlacklist() {
+        final List<Material> epItemSpwn = new ArrayList<>();
         if (ess.getItemDb() == null) {
-            logger.log(Level.FINE, "Aborting ItemSpawnBL read, itemDB not yet loaded.");
+            logger.log(Level.FINE, "Skipping item spawn blacklist read; item DB not yet loaded.");
             return epItemSpwn;
         }
         for (String itemName : config.getString("item-spawn-blacklist", "").split(",")) {
@@ -560,9 +561,9 @@ public class Settings implements net.ess3.api.ISettings {
             }
             try {
                 final ItemStack iStack = ess.getItemDb().get(itemName);
-                epItemSpwn.add(iStack.getTypeId());
+                epItemSpwn.add(iStack.getType());
             } catch (Exception ex) {
-                logger.log(Level.SEVERE, tl("unknownItemInList", itemName, "item-spawn-blacklist"));
+                logger.log(Level.SEVERE, tl("unknownItemInList", itemName, "item-spawn-blacklist"), ex);
             }
         }
         return epItemSpwn;
@@ -648,8 +649,15 @@ public class Settings implements net.ess3.api.ISettings {
 
     // #easteregg
     @Override
+    @Deprecated
     public boolean isTradeInStacks(int id) {
         return config.getBoolean("trade-in-stacks-" + id, false);
+    }
+
+    // #easteregg
+    @Override
+    public boolean isTradeInStacks(Material type) {
+        return config.getBoolean("trade-in-stacks." + type.toString().toLowerCase().replace("_", ""), false);
     }
 
     // #easteregg
@@ -670,8 +678,8 @@ public class Settings implements net.ess3.api.ISettings {
     }
 
     @Override
-    public List<Integer> getProtectList(final String configName) {
-        final List<Integer> list = new ArrayList<Integer>();
+    public List<Material> getProtectList(final String configName) {
+        final List<Material> list = new ArrayList<>();
         for (String itemName : config.getString(configName, "").split(",")) {
             itemName = itemName.trim();
             if (itemName.isEmpty()) {
@@ -680,7 +688,7 @@ public class Settings implements net.ess3.api.ISettings {
             ItemStack itemStack;
             try {
                 itemStack = ess.getItemDb().get(itemName);
-                list.add(itemStack.getTypeId());
+                list.add(itemStack.getType());
             } catch (Exception ex) {
                 logger.log(Level.SEVERE, tl("unknownItemInList", itemName, configName));
             }
@@ -1096,6 +1104,11 @@ public class Settings implements net.ess3.api.ISettings {
         return config.getBoolean("ignore-colors-in-max-nick-length", false);
     }
 
+    @Override
+    public boolean hideDisplayNameInVanish() {
+        return config.getBoolean("hide-displayname-in-vanish", false);
+    }
+
     private boolean allowSilentJoin;
 
     public boolean _allowSilentJoinQuit() {
@@ -1344,24 +1357,8 @@ public class Settings implements net.ess3.api.ISettings {
         DecimalFormat currencyFormat = new DecimalFormat(currencyFormatString, decimalFormatSymbols);
         currencyFormat.setRoundingMode(RoundingMode.FLOOR);
 
-        // Updates NumberUtil#PRETTY_FORMAT field so that all of Essentials
-        // can follow a single format.
-        try {
-            Field field = NumberUtil.class.getDeclaredField("PRETTY_FORMAT");
-            field.setAccessible(true);
-            Field modifiersField = Field.class.getDeclaredField("modifiers");
-            modifiersField.setAccessible(true);
-            modifiersField.setInt(field, field.getModifiers() & ~Modifier.FINAL);
-            field.set(null, currencyFormat);
-            modifiersField.setAccessible(false);
-            field.setAccessible(false);
-        } catch (NoSuchFieldException | IllegalAccessException e) {
-            ess.getLogger().severe("Failed to apply custom currency format: " + e.getMessage());
-            if (isDebug()) {
-                e.printStackTrace();
-            }
-        }
-
+        // Updates NumberUtil#PRETTY_FORMAT field so that all of Essentials can follow a single format.
+        NumberUtil.internalSetPrettyFormat(currencyFormat);
         return currencyFormat;
     }
 
@@ -1470,5 +1467,38 @@ public class Settings implements net.ess3.api.ISettings {
     @Override
     public boolean isAllowWorldInBroadcastworld() {
         return isAllowWorldInBroadcastworld;
+    }
+
+    private String itemDbType; // #EasterEgg - admins can manually switch items provider if they want
+
+    private String _getItemDbType() {
+        return config.getString("item-db-type", "auto");
+    }
+
+    @Override
+    public String getItemDbType() {
+        return itemDbType;
+    }
+
+    private boolean forceEnableRecipe; // https://github.com/EssentialsX/Essentials/issues/1397
+
+    private boolean _isForceEnableRecipe() {
+        return config.getBoolean("force-enable-recipe", false);
+    }
+
+    @Override
+    public boolean isForceEnableRecipe() {
+        return forceEnableRecipe;
+    }
+
+    private boolean allowOldIdSigns;
+
+    private boolean _allowOldIdSigns() {
+        return config.getBoolean("allow-old-id-signs", false);
+    }
+
+    @Override
+    public boolean allowOldIdSigns() {
+        return allowOldIdSigns;
     }
 }
