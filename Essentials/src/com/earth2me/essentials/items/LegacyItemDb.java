@@ -90,18 +90,13 @@ public class LegacyItemDb extends AbstractItemDb {
                 continue;
             }
 
-            Material material = Material.matchMaterial(itemName);
-            if (material == null) {
-                LOGGER.warning(String.format("Failed to find material for %s", itemName));
-                continue;
-            }
             durabilities.put(itemName, data);
             items.put(itemName, numeric);
             if (nbt != null) {
                 nbtData.put(itemName, nbt);
             }
 
-            ItemData itemData = new ItemData(material, numeric, data);
+            ItemData itemData = new ItemData(numeric, data);
             if (names.containsKey(itemData)) {
                 List<String> nameList = names.get(itemData);
                 nameList.add(itemName);
@@ -161,7 +156,7 @@ public class LegacyItemDb extends AbstractItemDb {
             throw new Exception(tl("unknownItemId", itemid));
         }
 
-        Material mat = data.getMaterial();
+        Material mat = getFromLegacy(itemid, (byte) metaData);
         ItemStack retval = new ItemStack(mat);
         if (nbtData.containsKey(itemname)) {
             String nbt = nbtData.get(itemname);
@@ -198,10 +193,10 @@ public class LegacyItemDb extends AbstractItemDb {
 
     @Override
     public List<String> nameList(ItemStack item) {
-        ItemData itemData = new ItemData(item.getType(), item.getDurability());
+        ItemData itemData = new ItemData(item.getType().getId(), item.getDurability());
         List<String> nameList = names.get(itemData);
         if (nameList == null) {
-            itemData = new ItemData(item.getType(), (short) 0);
+            itemData = new ItemData(item.getType().getId(), (short) 0);
             nameList = names.get(itemData);
             if (nameList == null) {
                 return null;
@@ -213,26 +208,16 @@ public class LegacyItemDb extends AbstractItemDb {
 
     @Override
     public String name(ItemStack item) {
-        ItemData itemData = new ItemData(item.getType(), item.getDurability());
+        ItemData itemData = new ItemData(item.getType().getId(), item.getDurability());
         String name = primaryName.get(itemData);
         if (name == null) {
-            itemData = new ItemData(item.getType(), (short) 0);
+            itemData = new ItemData(item.getType().getId(), (short) 0);
             name = primaryName.get(itemData);
             if (name == null) {
                 return null;
             }
         }
         return name;
-    }
-
-    @Override
-    public Material getFromLegacy(final int id, final byte damage) {
-        ItemData data = this.legacyIds.get(id);
-        if (data == null) {
-            return null;
-        }
-
-        return data.getMaterial();
     }
 
     @Override
@@ -252,29 +237,16 @@ public class LegacyItemDb extends AbstractItemDb {
     }
 
     static class ItemData {
-        final private Material material;
-        private int legacyId;
+        private int itemNo;
         final private short itemData;
 
-        ItemData(Material material, short itemData) {
-            this.material = material;
+        ItemData(final int itemNo, final short itemData) {
+            this.itemNo = itemNo;
             this.itemData = itemData;
         }
 
-        @Deprecated
-        ItemData(Material material, final int legacyId, final short itemData) {
-            this.material = material;
-            this.legacyId = legacyId;
-            this.itemData = itemData;
-        }
-
-        public Material getMaterial() {
-            return material;
-        }
-
-        @Deprecated
         public int getItemNo() {
-            return legacyId;
+            return itemNo;
         }
 
         public short getItemData() {
@@ -283,7 +255,7 @@ public class LegacyItemDb extends AbstractItemDb {
 
         @Override
         public int hashCode() {
-            return (31 * material.hashCode()) ^ itemData;
+            return (31 * itemNo) ^ itemData;
         }
 
         @Override
@@ -295,7 +267,7 @@ public class LegacyItemDb extends AbstractItemDb {
                 return false;
             }
             ItemData pairo = (ItemData) o;
-            return this.material == pairo.getMaterial() && this.itemData == pairo.getItemData();
+            return this.itemNo == pairo.getItemNo() && this.itemData == pairo.getItemData();
         }
     }
 
