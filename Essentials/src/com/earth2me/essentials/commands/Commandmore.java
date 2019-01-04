@@ -38,7 +38,7 @@ public class Commandmore extends EssentialsCommand {
                 newAmount = stack.getMaxStackSize();
             } else {
                 if (newAmount > ess.getSettings().getOversizedStackSize()) {
-                    newAmount = ess.getSettings.getOversizedStackSize();
+                    newAmount = ess.getSettings().getOversizedStackSize();
                 }
             }
             stack.setAmount(newAmount);
