@@ -29,13 +29,11 @@ public class Commandmore extends EssentialsCommand {
         }
         if (args.length > 1) {
             int newAmount = stack.getAmount();
-
             try {
-                newAmount += Integer.parseInt(ChatColor.stripColor(args[1]));
-            } catch(Exception e) {
+                newAmount += Integer.parseInt(args[1]);
+            } catch(NumberFormatException e) {
                 throw new Exception(tl("numberRequired"));
             }
-
             if (!user.isAuthorized("essentials.oversizedstacks")) {
                 newAmount = stack.getMaxStackSize();
             } else {
@@ -43,7 +41,6 @@ public class Commandmore extends EssentialsCommand {
                     newAmount = ess.getSettings.getOversizedStackSize();
                 }
             }
-
             stack.setAmount(newAmount);
         } else {
             if (user.isAuthorized("essentials.oversizedstacks")) {
