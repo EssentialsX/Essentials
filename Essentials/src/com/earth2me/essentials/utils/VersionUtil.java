@@ -23,8 +23,13 @@ public class VersionUtil {
 
     private static final Set<BukkitVersion> supportedVersions = ImmutableSet.of(v1_8_8_R01, v1_9_4_R01, v1_10_2_R01, v1_11_2_R01, v1_12_2_R01, v1_13_2_R01);
 
+    private static BukkitVersion serverVersion = null;
+
     public static BukkitVersion getServerBukkitVersion() {
-        return BukkitVersion.fromString(Bukkit.getServer().getBukkitVersion());
+        if (serverVersion == null) {
+            serverVersion = BukkitVersion.fromString(Bukkit.getServer().getBukkitVersion());
+        }
+        return serverVersion;
     }
 
     public static boolean isServerSupported() {
