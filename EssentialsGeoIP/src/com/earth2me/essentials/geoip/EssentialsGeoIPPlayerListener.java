@@ -20,11 +20,10 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.Date;
+import java.util.logging.Logger;
 import java.util.zip.GZIPInputStream;
 import java.util.Arrays;
-import java.util.List;
 import com.ice.tar.TarInputStream;
 import com.ice.tar.TarEntry;
 
@@ -32,14 +31,14 @@ import static com.earth2me.essentials.I18n.tl;
 
 
 public class EssentialsGeoIPPlayerListener implements Listener, IConf {
-    DatabaseReader mmreader = null; // initialize maxmind geoip2 reader
-    private static final Logger logger = Logger.getLogger("Minecraft");
-    File databaseFile;
-    File dataFolder;
-    final EssentialsConf config;
+    private DatabaseReader mmreader = null; // initialize maxmind geoip2 reader
+    private static final Logger logger = Logger.getLogger("EssentialsGeoIP");
+    private File databaseFile;
+    private File dataFolder;
+    private final EssentialsConf config;
     private final transient IEssentials ess;
 
-    public EssentialsGeoIPPlayerListener(File dataFolder, IEssentials ess) {
+    EssentialsGeoIPPlayerListener(File dataFolder, IEssentials ess) {
         this.ess = ess;
         this.dataFolder = dataFolder;
         this.config = new EssentialsConf(new File(dataFolder, "config.yml"));
@@ -49,15 +48,10 @@ public class EssentialsGeoIPPlayerListener implements Listener, IConf {
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerJoin(final PlayerJoinEvent event) {
-        ess.runTaskAsynchronously(new Runnable() {
-            @Override
-            public void run() {
-                delayedJoin(event.getPlayer());
-            }
-        });
+        ess.runTaskAsynchronously(() -> delayedJoin(event.getPlayer()));
     }
 
-    public void delayedJoin(Player player) {
+    private void delayedJoin(Player player) {
         User u = ess.getUser(player);
         if (u.isAuthorized("essentials.geoip.hide") || player.getAddress() == null) {
             return;
@@ -114,8 +108,8 @@ public class EssentialsGeoIPPlayerListener implements Listener, IConf {
 
         // detect and update the old config.yml. migrate from legacy GeoIP to GeoIP2.
         if (!config.isSet("enable-locale")) {
-            config.set("database.download-url", "http://geolite.maxmind.com/download/geoip/database/GeoLite2-Country.tar.gz");
-            config.set("database.download-url-city", "http://geolite.maxmind.com/download/geoip/database/GeoLite2-City.tar.gz");
+            config.set("database.download-url", "https://geolite.maxmind.com/download/geoip/database/GeoLite2-Country.tar.gz");
+            config.set("database.download-url-city", "https://geolite.maxmind.com/download/geoip/database/GeoLite2-City.tar.gz");
             config.set("database.update.enable", true);
             config.set("database.update.by-every-x-days", 30);
             config.set("enable-locale", true);
@@ -187,7 +181,7 @@ public class EssentialsGeoIPPlayerListener implements Listener, IConf {
                     String filename;
                     TarInputStream tarInputStream = new TarInputStream(input);
                     TarEntry entry;
-                    while ((entry = (TarEntry) tarInputStream.getNextEntry()) != null) {
+                    while ((entry = tarInputStream.getNextEntry()) != null) {
                         if (!entry.isDirectory()) {
                             filename = entry.getName();
                             if (filename.substring(filename.length() - 5).equalsIgnoreCase(".mmdb")) {
@@ -207,7 +201,6 @@ public class EssentialsGeoIPPlayerListener implements Listener, IConf {
             input.close();
         } catch (MalformedURLException ex) {
             logger.log(Level.SEVERE, tl("geoIpUrlInvalid"), ex);
-            return;
         } catch (IOException ex) {
             logger.log(Level.SEVERE, tl("connectionFailed"), ex);
         }

@@ -10,7 +10,7 @@ import java.util.Map;
 
 
 public class EssentialsChatPlayerListenerHighest extends EssentialsChatPlayer {
-    public EssentialsChatPlayerListenerHighest(final Server server, final IEssentials ess, final Map<AsyncPlayerChatEvent, ChatStore> chatStorage) {
+    EssentialsChatPlayerListenerHighest(final Server server, final IEssentials ess, final Map<AsyncPlayerChatEvent, ChatStore> chatStorage) {
         super(server, ess, chatStorage);
     }
 
@@ -22,9 +22,7 @@ public class EssentialsChatPlayerListenerHighest extends EssentialsChatPlayer {
             return;
         }
 
-        /**
-         * This file should handle charging the user for the action before returning control back
-         */
+        // This file should handle charging the user for the action before returning control back
         charge(event, chatStore);
     }
 }

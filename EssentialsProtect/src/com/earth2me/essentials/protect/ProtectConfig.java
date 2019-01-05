@@ -49,19 +49,11 @@ public enum ProtectConfig {
     private final boolean isList;
     private final boolean isString;
 
-    private ProtectConfig(final String configName) {
-        this(configName, null, false, true, false);
-    }
-
-    private ProtectConfig(final String configName, final String defValueString) {
-        this(configName, defValueString, false, false, true);
-    }
-
-    private ProtectConfig(final String configName, final boolean defValueBoolean) {
+    ProtectConfig(final String configName, final boolean defValueBoolean) {
         this(configName, null, defValueBoolean, false, false);
     }
 
-    private ProtectConfig(final String configName, final String defValueString, final boolean defValueBoolean, final boolean isList, final boolean isString) {
+    ProtectConfig(final String configName, final String defValueString, final boolean defValueBoolean, final boolean isList, final boolean isString) {
         this.configName = configName;
         this.defValueString = defValueString;
         this.defValueBoolean = defValueBoolean;

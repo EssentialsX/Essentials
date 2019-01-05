@@ -5,7 +5,7 @@ import com.earth2me.essentials.User;
 import net.ess3.api.IEssentials;
 
 
-public class ChatStore {
+class ChatStore {
     private final User user;
     private final String type;
     private final Trade charge;
@@ -17,27 +17,27 @@ public class ChatStore {
         this.charge = new Trade(getLongType(), ess);
     }
 
-    public User getUser() {
+    User getUser() {
         return user;
     }
 
-    public Trade getCharge() {
+    Trade getCharge() {
         return charge;
     }
 
-    public String getType() {
+    String getType() {
         return type;
     }
 
-    public final String getLongType() {
+    final String getLongType() {
         return type.length() == 0 ? "chat" : "chat-" + type;
     }
 
-    public long getRadius() {
+    long getRadius() {
         return radius;
     }
 
-    public void setRadius(long radius) {
+    void setRadius(long radius) {
         this.radius = radius;
     }
 }

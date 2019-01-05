@@ -1,7 +1,7 @@
 package com.earth2me.essentials.protect;
 
 import com.earth2me.essentials.utils.EnumUtil;
-import net.ess3.api.IEssentials;
+
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -22,11 +22,9 @@ public class EssentialsProtectBlockListener implements Listener {
     private static final Set<Material> LAVA_TYPES = EnumUtil.getAllMatching(Material.class, "LAVA", "STATIONARY_LAVA");
 
     final private IProtect prot;
-    final private IEssentials ess;
 
-    public EssentialsProtectBlockListener(final IProtect parent) {
+    EssentialsProtectBlockListener(final IProtect parent) {
         this.prot = parent;
-        this.ess = prot.getEssentialsConnect().getEssentials();
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)

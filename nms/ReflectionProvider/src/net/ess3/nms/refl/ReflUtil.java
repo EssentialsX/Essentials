@@ -154,7 +154,7 @@ public class ReflUtil {
         private final String name;
         private final Class<?>[] params;
 
-        public MethodParams(final String name, final Class<?>[] params) {
+        MethodParams(final String name, final Class<?>[] params) {
             this.name = name;
             this.params = params;
         }
@@ -202,7 +202,7 @@ public class ReflUtil {
     private static class ConstructorParams {
         private final Class<?>[] params;
 
-        public ConstructorParams(Class<?>[] params) {
+        ConstructorParams(Class<?>[] params) {
             this.params = params;
         }
 
@@ -315,14 +315,8 @@ public class ReflUtil {
                     return -1;
                 } else if (minor > o.minor) {
                     return 1;
-                } else { // equal minor
-                    if (release < o.release) {
-                        return -1;
-                    } else if (release > o.release) {
-                        return 1;
-                    } else {
-                        return 0; // o is the same version as this.
-                    }
+                } else {
+                    return Integer.compare(release, o.release);
                 }
             }
         }

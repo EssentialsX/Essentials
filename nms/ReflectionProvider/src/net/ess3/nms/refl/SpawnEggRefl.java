@@ -1,4 +1,5 @@
-/*******************************************************************************
+/*
+ ******************************************************************************
  * This file is part of ASkyBlock.
  * <p>
  * ASkyBlock is free software: you can redistribute it and/or modify
@@ -13,10 +14,9 @@
  * <p>
  * You should have received a copy of the GNU General Public License
  * along with ASkyBlock.  If not, see <http://www.gnu.org/licenses/>.
- *******************************************************************************/
+ ******************************************************************************
+*/
 package net.ess3.nms.refl;
-
-import net.ess3.nms.refl.ReflUtil.NMSVersion;
 
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
@@ -33,7 +33,7 @@ import java.lang.reflect.Method;
 public class SpawnEggRefl {
     private EntityType type;
 
-    public SpawnEggRefl(EntityType type) {
+    SpawnEggRefl(EntityType type) {
         this.type = type;
     }
 
@@ -42,7 +42,7 @@ public class SpawnEggRefl {
      *
      * @return The entity type.
      */
-    public EntityType getSpawnedType() {
+    EntityType getSpawnedType() {
         return type;
     }
 
@@ -67,7 +67,7 @@ public class SpawnEggRefl {
      *
      * @return ItemStack
      */
-    public ItemStack toItemStack() throws Exception {
+    ItemStack toItemStack() throws Exception {
         return toItemStack(1);
     }
 
@@ -119,7 +119,7 @@ public class SpawnEggRefl {
      * @param item - ItemStack, quantity is disregarded
      * @return SpawnEgg
      */
-    public static SpawnEggRefl fromItemStack(ItemStack item) throws Exception {
+    static SpawnEggRefl fromItemStack(ItemStack item) throws Exception {
         if (item == null)
             throw new IllegalArgumentException("Item cannot be null");
         if (item.getType() != Material.MONSTER_EGG)

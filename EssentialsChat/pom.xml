@@ -11,13 +11,6 @@
 
     <artifactId>EssentialsXChat</artifactId>
 
-    <licenses>
-        <license>
-            <name>GPLv3</name>
-            <url>http://www.gnu.org/copyleft/gpl.html</url>
-        </license>
-    </licenses>
-
     <build>
         <finalName>EssentialsXChat-${full.version}</finalName>
     </build>

@@ -4,17 +4,17 @@ main: com.earth2me.essentials.xmpp.EssentialsXMPP
 # Note to developers: This next line cannot change, or the automatic versioning system will break.
 version: ${full.version}
 website: http://ess.khhq.net/wiki/XMPP
-description: Provides xmpp communication.
-authors:
-  - snowleo
+description: Provides XMPP communication.
+authors: [snowleo]
 depend: [Essentials]
+api-version: 1.13
 commands:
   setxmpp:
-    description: set your xmpp address
+    description: Sets your XMPP address.
     usage: /<command> <address>
   xmpp:
-    description: send a message to a player
+    description: Sends a message to a player.
     usage: /<command> <player> <message>
   xmppspy:
-    description: toggle xmpp spy for all messages
+    description: Toggles XMPP spy for all messages.
     usage: /<command> <player>

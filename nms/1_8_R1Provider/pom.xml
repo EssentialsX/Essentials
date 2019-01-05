@@ -12,14 +12,6 @@
 
     <artifactId>1_8_R1Provider</artifactId>
 
-    <repositories>
-        <repository>
-            <id>project.local</id>
-            <name>local repo</name>
-            <url>file:${project.basedir}/lib</url>
-        </repository>
-    </repositories>
-
     <dependencies>
         <dependency>
             <groupId>org.bukkit</groupId>

@@ -7,7 +7,6 @@ import com.earth2me.essentials.textreader.IText;
 import com.earth2me.essentials.textreader.KeywordReplacer;
 import com.earth2me.essentials.textreader.SimpleTextPager;
 import net.ess3.api.IEssentials;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
@@ -23,18 +22,18 @@ import java.util.logging.Logger;
 import static com.earth2me.essentials.I18n.tl;
 
 
-public class EssentialsSpawnPlayerListener implements Listener {
-    private static final Logger LOGGER = Bukkit.getLogger();
+class EssentialsSpawnPlayerListener implements Listener {
+    private static final Logger logger = Logger.getLogger("EssentialsSpawn");
     private final transient IEssentials ess;
     private final transient SpawnStorage spawns;
 
-    public EssentialsSpawnPlayerListener(final IEssentials ess, final SpawnStorage spawns) {
+    EssentialsSpawnPlayerListener(final IEssentials ess, final SpawnStorage spawns) {
         super();
         this.ess = ess;
         this.spawns = spawns;
     }
 
-    public void onPlayerRespawn(final PlayerRespawnEvent event) {
+    void onPlayerRespawn(final PlayerRespawnEvent event) {
         final User user = ess.getUser(event.getPlayer());
 
         if (user.isJailed() && user.getJail() != null && !user.getJail().isEmpty()) {
@@ -60,33 +59,25 @@ public class EssentialsSpawnPlayerListener implements Listener {
         }
     }
 
-    public void onPlayerJoin(final PlayerJoinEvent event) {
-        ess.runTaskAsynchronously(new Runnable() {
-            @Override
-            public void run() {
-                delayedJoin(event.getPlayer());
-            }
-        });
+    void onPlayerJoin(final PlayerJoinEvent event) {
+        ess.runTaskAsynchronously(() -> delayedJoin(event.getPlayer()));
     }
 
-    public void delayedJoin(final Player player) {
+    private void delayedJoin(final Player player) {
         if (player.hasPlayedBefore()) {
-            LOGGER.log(Level.FINE, "Old player join");
+            logger.log(Level.FINE, "Old player join");
             List<String> spawnOnJoinGroups = ess.getSettings().getSpawnOnJoinGroups();
             if (!spawnOnJoinGroups.isEmpty()) {
                 final User user = ess.getUser(player);
                 
                 if (ess.getSettings().isUserInSpawnOnJoinGroup(user) && !user.isAuthorized("essentials.spawn-on-join.exempt")) {
-                    ess.scheduleSyncDelayedTask(new Runnable() {
-                        @Override
-                        public void run() {
-                            Location spawn = spawns.getSpawn(user.getGroup());
-                            try {
-                                // We don't use user.getTeleport() because it stores last location, which is unwanted in this case.
-                                user.getBase().teleport(spawn, TeleportCause.PLUGIN);
-                            } catch (Exception e) {
-                                ess.showError(user.getSource(), e, "spawn-on-join");
-                            }
+                    ess.scheduleSyncDelayedTask(() -> {
+                        Location spawn = spawns.getSpawn(user.getGroup());
+                        try {
+                            // We don't use user.getTeleport() because it stores last location, which is unwanted in this case.
+                            user.getBase().teleport(spawn, TeleportCause.PLUGIN);
+                        } catch (Exception e) {
+                            ess.showError(user.getSource(), e, "spawn-on-join");
                         }
                     });
                 }
@@ -101,35 +92,32 @@ public class EssentialsSpawnPlayerListener implements Listener {
             ess.scheduleSyncDelayedTask(new NewPlayerTeleport(user), 1L);
         }
 
-        ess.scheduleSyncDelayedTask(new Runnable() {
-            @Override
-            public void run() {
-                if (!user.getBase().isOnline()) {
-                    return;
-                }
-
-                //This method allows for multiple line player announce messages using multiline yaml syntax #EasterEgg
-                if (ess.getSettings().getAnnounceNewPlayers()) {
-                    final IText output = new KeywordReplacer(ess.getSettings().getAnnounceNewPlayerFormat(), user.getSource(), ess);
-                    final SimpleTextPager pager = new SimpleTextPager(output);
-
-                    for (String line : pager.getLines()) {
-                        ess.broadcastMessage(user, line);
-                    }
-                }
-
-                final String kitName = ess.getSettings().getNewPlayerKit();
-                if (!kitName.isEmpty()) {
-                    try {
-                        final Kit kit = new Kit(kitName.toLowerCase(Locale.ENGLISH), ess);
-                        kit.expandItems(user);
-                    } catch (Exception ex) {
-                        LOGGER.log(Level.WARNING, ex.getMessage());
-                    }
-                }
-
-                LOGGER.log(Level.FINE, "New player join");
+        ess.scheduleSyncDelayedTask(() -> {
+            if (!user.getBase().isOnline()) {
+                return;
             }
+
+            //This method allows for multiple line player announce messages using multiline yaml syntax #EasterEgg
+            if (ess.getSettings().getAnnounceNewPlayers()) {
+                final IText output = new KeywordReplacer(ess.getSettings().getAnnounceNewPlayerFormat(), user.getSource(), ess);
+                final SimpleTextPager pager = new SimpleTextPager(output);
+
+                for (String line : pager.getLines()) {
+                    ess.broadcastMessage(user, line);
+                }
+            }
+
+            final String kitName = ess.getSettings().getNewPlayerKit();
+            if (!kitName.isEmpty()) {
+                try {
+                    final Kit kit = new Kit(kitName.toLowerCase(Locale.ENGLISH), ess);
+                    kit.expandItems(user);
+                } catch (Exception ex) {
+                    logger.log(Level.WARNING, ex.getMessage());
+                }
+            }
+
+            logger.log(Level.FINE, "New player join");
         }, 2L);
     }
 
@@ -137,7 +125,7 @@ public class EssentialsSpawnPlayerListener implements Listener {
     private class NewPlayerTeleport implements Runnable {
         private final transient User user;
 
-        public NewPlayerTeleport(final User user) {
+        NewPlayerTeleport(final User user) {
             this.user = user;
         }
 
@@ -153,7 +141,7 @@ public class EssentialsSpawnPlayerListener implements Listener {
                     user.getTeleport().now(spawn, false, TeleportCause.PLUGIN);
                 }
             } catch (Exception ex) {
-                Bukkit.getLogger().log(Level.WARNING, tl("teleportNewPlayerError"), ex);
+                logger.log(Level.WARNING, tl("teleportNewPlayerError"), ex);
             }
         }
     }

@@ -14,7 +14,7 @@ import org.bukkit.event.server.PluginEnableEvent;
 
 
 public class EmergencyListener implements Listener {
-    EssentialsProtect plugin;
+    private EssentialsProtect plugin;
 
     EmergencyListener(final EssentialsProtect essProtPlugin) {
         plugin = essProtPlugin;
