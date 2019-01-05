@@ -28,7 +28,7 @@ public class ReflUtil {
     private static NMSVersion nmsVersionObject;
     private static String nmsVersion;
 
-    static String getNMSVersion() {
+    public static String getNMSVersion() {
         if (nmsVersion == null) {
             String name = Bukkit.getServer().getClass().getName();
             String[] parts = name.split("\\.");
@@ -44,7 +44,7 @@ public class ReflUtil {
         return nmsVersionObject;
     }
 
-    static Class<?> getNMSClass(String className) {
+    public static Class<?> getNMSClass(String className) {
         return getClassCached("net.minecraft.server." + getNMSVersion() + "." + className);
     }
 
@@ -118,7 +118,7 @@ public class ReflUtil {
 
     private static Map<Class<?>, Constructor<?>> constructorCache = new HashMap<>();
 
-    static Constructor<?> getConstructorCached(Class<?> clazz) {
+    public static Constructor<?> getConstructorCached(Class<?> clazz) {
         if (constructorCache.containsKey(clazz)) {
             return constructorCache.get(clazz);
         }
@@ -252,7 +252,7 @@ public class ReflUtil {
             this.release = release;
         }
         
-        boolean isHigherThan(NMSVersion o) {
+        public boolean isHigherThan(NMSVersion o) {
             return compareTo(o) > 0;
         }
         
@@ -264,19 +264,19 @@ public class ReflUtil {
             return compareTo(o) < 0;
         }
         
-        boolean isLowerThanOrEqualTo(NMSVersion o) {
+        public boolean isLowerThanOrEqualTo(NMSVersion o) {
             return compareTo(o) <= 0;
         }
 
-        int getMajor() {
+        public int getMajor() {
             return major;
         }
 
-        int getMinor() {
+        public int getMinor() {
             return minor;
         }
 
-        int getRelease() {
+        public int getRelease() {
             return release;
         }
 
