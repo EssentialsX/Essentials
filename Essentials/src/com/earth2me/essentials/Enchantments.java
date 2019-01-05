@@ -234,7 +234,12 @@ public class Enchantments {
     }
 
     public static Enchantment getByName(String name) {
-        Enchantment enchantment = Enchantment.getByKey(NamespacedKey.minecraft(name.toLowerCase()));
+        Enchantment enchantment = null;
+        try {
+            // 1.13+ only
+            enchantment = Enchantment.getByKey(NamespacedKey.minecraft(name.toLowerCase()));
+        } catch (NoSuchMethodError ignored) {}
+
         if (enchantment == null) {
             enchantment = Enchantment.getByName(name.toUpperCase());
         }
