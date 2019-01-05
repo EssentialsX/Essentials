@@ -13,9 +13,9 @@ import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
+import java.util.stream.Collectors;
 
 import static com.earth2me.essentials.I18n.tl;
 
@@ -64,17 +64,8 @@ public class Commandwarp extends EssentialsCommand {
     //TODO: Use one of the new text classes, like /help ?
     private void warpList(final CommandSource sender, final String[] args, final IUser user) throws Exception {
         final IWarps warps = ess.getWarps();
-        final List<String> warpNameList = new ArrayList<>(warps.getList());
+        final List<String> warpNameList = getAvailableWarpsFor(user);
 
-        if (user != null) {
-            final Iterator<String> iterator = warpNameList.iterator();
-            while (iterator.hasNext()) {
-                final String warpName = iterator.next();
-                if (ess.getSettings().getPerWarpPermission() && !user.isAuthorized("essentials.warps." + warpName)) {
-                    iterator.remove();
-                }
-            }
-        }
         if (warpNameList.isEmpty()) {
             throw new Exception(tl("noWarpsDefined"));
         }
@@ -112,10 +103,20 @@ public class Commandwarp extends EssentialsCommand {
         owner.getTeleport().warp(user, name, charge, TeleportCause.COMMAND);
     }
 
+    private List<String> getAvailableWarpsFor(final IUser user) {
+        if (ess.getSettings().getPerWarpPermission() && user != null) {
+            return ess.getWarps().getList().stream()
+                .filter(warpName -> user.isAuthorized("essentials.warps." + warpName))
+                .collect(Collectors.toList());
+        }
+
+        return new ArrayList<>(ess.getWarps().getList());
+    }
+
     @Override
     protected List<String> getTabCompleteOptions(final Server server, final User user, final String commandLabel, final String[] args) {
         if (args.length == 1 && user.isAuthorized("essentials.warp.list")) {
-            return new ArrayList<>(ess.getWarps().getList());
+            return getAvailableWarpsFor(user);
         } else if (args.length == 2 && (user.isAuthorized("essentials.warp.otherplayers") || user.isAuthorized("essentials.warp.others"))) {
             //TODO: Remove 'otherplayers' permission.
             return getPlayers(server, user);
