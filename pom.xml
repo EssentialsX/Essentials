@@ -267,7 +267,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
         <!-- The plugins' release version -->
-        <release.version>2.16-pre4</release.version>
+        <release.version>2.16.0</release.version>
 
         <!-- The plugins' build number -->
         <build.version>${git.closest.tag.commit.count}</build.version>

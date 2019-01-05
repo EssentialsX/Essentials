@@ -12,6 +12,7 @@ import java.util.regex.Pattern;
 public class VersionUtil {
 
     public static final BukkitVersion v1_8_8_R01 = BukkitVersion.fromString("1.8.8-R0.1-SNAPSHOT");
+    public static final BukkitVersion v1_9_R01 = BukkitVersion.fromString("1.9-R0.1-SNAPSHOT");
     public static final BukkitVersion v1_9_4_R01 = BukkitVersion.fromString("1.9.4-R0.1-SNAPSHOT");
     public static final BukkitVersion v1_10_2_R01 = BukkitVersion.fromString("1.10.2-R0.1-SNAPSHOT");
     public static final BukkitVersion v1_11_2_R01 = BukkitVersion.fromString("1.11.2-R0.1-SNAPSHOT");
@@ -22,8 +23,13 @@ public class VersionUtil {
 
     private static final Set<BukkitVersion> supportedVersions = ImmutableSet.of(v1_8_8_R01, v1_9_4_R01, v1_10_2_R01, v1_11_2_R01, v1_12_2_R01, v1_13_2_R01);
 
+    private static BukkitVersion serverVersion = null;
+
     public static BukkitVersion getServerBukkitVersion() {
-        return BukkitVersion.fromString(Bukkit.getServer().getBukkitVersion());
+        if (serverVersion == null) {
+            serverVersion = BukkitVersion.fromString(Bukkit.getServer().getBukkitVersion());
+        }
+        return serverVersion;
     }
 
     public static boolean isServerSupported() {
@@ -48,7 +54,16 @@ public class VersionUtil {
                 matcher = VERSION_PATTERN.matcher(v1_13_2_R01.toString());
                 Preconditions.checkArgument(matcher.matches(), string + " is not in valid version format. e.g. 1.8.8-R0.1");
             }
-            return new BukkitVersion(Integer.parseInt(matcher.group(1)), Integer.parseInt(matcher.group(2)), Integer.parseInt(matcher.group(3)), Double.parseDouble(matcher.group(4)));
+
+            return from(matcher.group(1), matcher.group(2), matcher.group(3), matcher.group(4));
+        }
+
+        private static BukkitVersion from(String major, String minor, String patch, String revision) {
+            if (patch.isEmpty()) patch = "0";
+            return new BukkitVersion(Integer.parseInt(major),
+                Integer.parseInt(minor),
+                Integer.parseInt(patch),
+                Double.parseDouble(revision));
         }
 
         private BukkitVersion(int major, int minor, int patch, double revision) {

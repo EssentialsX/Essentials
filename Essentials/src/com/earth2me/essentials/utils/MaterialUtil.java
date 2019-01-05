@@ -103,11 +103,16 @@ public class MaterialUtil {
     }
 
     public static Material convertFromLegacy(int id, byte damage) {
-        return EnumSet.allOf(Material.class).stream()
-            .filter(material -> material.getId() == id)
-            .findFirst()
-            .map(material -> Bukkit.getUnsafe().fromLegacy(new MaterialData(material, damage)))
-            .orElse(null);
+        for (Material material : EnumSet.allOf(Material.class)) {
+            if (material.getId() == id) {
+                try {
+                    return Bukkit.getUnsafe().fromLegacy(new MaterialData(material, damage));
+                } catch (NoSuchMethodError error) {
+                    return material;
+                }
+            }
+        }
+        return null;
     }
 
     public static DyeColor getColorOf(Material material) {

@@ -24,7 +24,7 @@ public class Commanditemdb extends EssentialsCommand {
         if (args.length < 1) {
             if (sender.isPlayer() && sender.getPlayer() != null) {
                 itemHeld = true;
-                itemStack = sender.getPlayer().getInventory().getItemInMainHand();
+                itemStack = ess.getUser(sender.getPlayer()).getItemInHand();
             }
             if (itemStack == null) {
                 throw new NotEnoughArgumentsException();
@@ -33,10 +33,16 @@ public class Commanditemdb extends EssentialsCommand {
             itemStack = ess.getItemDb().get(args[0]);
         }
 
-        sender.sendMessage(tl("itemType", itemStack.getType().toString()));
+        String itemId = "none";
 
         if (VersionUtil.getServerBukkitVersion().isLowerThan(VersionUtil.v1_13_0_R01)) {
-            final String itemId = itemStack.getType().getId() + ":" + itemStack.getDurability();
+            itemId = itemStack.getType().getId() + ":" + itemStack.getDurability();
+        }
+
+        sender.sendMessage(tl("itemType", itemStack.getType().toString(), itemId));
+
+        // Don't send IDs twice
+        if (!tl("itemType").contains("{1}") && !itemId.equals("none")) {
             sender.sendMessage(tl("itemId", itemId));
         }
 

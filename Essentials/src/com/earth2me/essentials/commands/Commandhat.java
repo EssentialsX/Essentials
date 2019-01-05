@@ -33,8 +33,8 @@ public class Commandhat extends EssentialsCommand {
                 user.sendMessage(tl("hatRemoved"));
             }
         } else {
-            if (user.getBase().getInventory().getItemInMainHand().getType() != Material.AIR) {
-                final ItemStack hand = user.getBase().getInventory().getItemInMainHand();
+            final ItemStack hand = user.getItemInHand();
+            if (hand != null && hand.getType() != Material.AIR) {
                 if (hand.getType().getMaxDurability() == 0) {
                     final PlayerInventory inv = user.getBase().getInventory();
                     final ItemStack head = inv.getHelmet();

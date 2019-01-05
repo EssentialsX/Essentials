@@ -44,7 +44,7 @@ public class Commandfirework extends EssentialsCommand {
 
     @Override
     protected void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception {
-        final ItemStack stack = user.getBase().getInventory().getItemInMainHand();
+        final ItemStack stack = user.getItemInHand();
         if (MaterialUtil.isFirework(stack.getType())) {
             if (args.length > 0) {
                 if (args[0].equalsIgnoreCase("clear")) {
