@@ -318,4 +318,9 @@ public class XMPPManager extends Handler implements MessageListener, ChatManager
             chats.remove(address);
         }
     }
+
+    public boolean isConfigValid() {
+        final String server = config.getString("xmpp.server");
+        return server != null && server.equals("example.com");
+    }
 }
