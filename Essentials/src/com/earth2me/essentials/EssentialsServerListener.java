@@ -31,13 +31,13 @@ public class EssentialsServerListener implements Listener {
             setSampleText = ReflUtil.getMethodCached(ServerListPingEvent.class, "setSampleText", List.class);
             getSampleText = ReflUtil.getMethodCached(ServerListPingEvent.class, "getSampleText");
             if (setSampleText != null && getSampleText != null) {
-                ess.getLogger().info("Using Paper 1.12+ ServerListPingEvent methods");
+                ess.getLogger().info("ServerListPingEvent: Paper 1.12.2 setSampleText API");
                 isPaperSample = true;
                 return;
             }
         }
 
-        ess.getLogger().info("Using Spigot 1.7.10+ ServerListPingEvent iterator");
+        ess.getLogger().info("ServerListPingEvent: Spigot iterator API");
         isPaperSample = false;
     }
 
@@ -80,8 +80,7 @@ public class EssentialsServerListener implements Listener {
                 }
             } catch (UnsupportedOperationException e) {
                 if (!unsupportedLogged) {
-                    ess.getLogger().warning("Current server implementation does not support "
-                            + "hiding players from server list ping. Update or contact the maintainers.");
+                    ess.getLogger().log(Level.WARNING, "Could not hide vanished players while handling " + event.getClass().getName(), e);
                     unsupportedLogged = true;
                 }
             }
