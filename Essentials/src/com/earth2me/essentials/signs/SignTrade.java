@@ -26,8 +26,8 @@ public class SignTrade extends EssentialsSign {
     protected boolean onSignCreate(final ISign sign, final User player, final String username, final IEssentials ess) throws SignException, ChargeException {
         validateTrade(sign, 1, false, ess);
         validateTrade(sign, 2, true, ess);
-        final Trade trade = getTrade(sign, 2, AmountType.ROUNDED, true, ess);
-        final Trade charge = getTrade(sign, 1, AmountType.ROUNDED, false, ess);
+        final Trade trade = getTrade(sign, 2, AmountType.ROUNDED, true, true, ess);
+        final Trade charge = getTrade(sign, 1, AmountType.ROUNDED, false, true, ess);
         if (trade.getType() == charge.getType() && (trade.getType() != TradeType.ITEM || trade.getItemStack().isSimilar(charge.getItemStack()))) {
             throw new SignException("You cannot trade for the same item type.");
         }
@@ -44,7 +44,7 @@ public class SignTrade extends EssentialsSign {
             final Trade store = rechargeSign(sign, ess, player);
             Trade stored;
             try {
-                stored = getTrade(sign, 1, AmountType.TOTAL, true, ess);
+                stored = getTrade(sign, 1, AmountType.TOTAL, true, true, ess);
                 subtractAmount(sign, 1, stored, ess);
 
                 Map<Integer, ItemStack> withdraw = stored.pay(player, OverflowType.RETURN);
@@ -62,8 +62,8 @@ public class SignTrade extends EssentialsSign {
             }
             Trade.log("Sign", "Trade", "Deposit", username, store, username, null, sign.getBlock().getLocation(), ess);
         } else {
-            final Trade charge = getTrade(sign, 1, AmountType.COST, false, ess);
-            final Trade trade = getTrade(sign, 2, AmountType.COST, true, ess);
+            final Trade charge = getTrade(sign, 1, AmountType.COST, false, true, ess);
+            final Trade trade = getTrade(sign, 2, AmountType.COST, true, true, ess);
             charge.isAffordableFor(player);
             addAmount(sign, 1, charge, ess);
             subtractAmount(sign, 2, trade, ess);
@@ -80,7 +80,7 @@ public class SignTrade extends EssentialsSign {
     }
 
     private Trade rechargeSign(final ISign sign, final IEssentials ess, final User player) throws SignException, ChargeException {
-        final Trade trade = getTrade(sign, 2, AmountType.COST, false, ess);
+        final Trade trade = getTrade(sign, 2, AmountType.COST, false, true, ess);
         if (trade.getItemStack() != null && player.getBase().getItemInHand() != null && trade.getItemStack().getType() == player.getBase().getItemInHand().getType() && trade.getItemStack().getDurability() == player.getBase().getItemInHand().getDurability() && trade.getItemStack().getEnchantments().equals(player.getBase().getItemInHand().getEnchantments())) {
             int amount = player.getBase().getItemInHand().getAmount();
             amount -= amount % trade.getItemStack().getAmount();
@@ -106,8 +106,8 @@ public class SignTrade extends EssentialsSign {
 
         if (canBreak) {
             try {
-                final Trade stored1 = getTrade(sign, 1, AmountType.TOTAL, false, ess);
-                final Trade stored2 = getTrade(sign, 2, AmountType.TOTAL, false, ess);
+                final Trade stored1 = getTrade(sign, 1, AmountType.TOTAL, false, true, ess);
+                final Trade stored2 = getTrade(sign, 2, AmountType.TOTAL, false, true, ess);
 
                 if (!canCollect) {
                     Trade.log("Sign", "Trade", "Destroy", signOwner, stored2, username, stored1, sign.getBlock().getLocation(), ess);
@@ -206,6 +206,10 @@ public class SignTrade extends EssentialsSign {
     }
 
     protected final Trade getTrade(final ISign sign, final int index, final AmountType amountType, final boolean notEmpty, final IEssentials ess) throws SignException {
+        return getTrade(sign, index, amountType, notEmpty, false, ess);
+    }
+
+    protected final Trade getTrade(final ISign sign, final int index, final AmountType amountType, final boolean notEmpty, final boolean allowId, final IEssentials ess) throws SignException {
         final String line = sign.getLine(index).trim();
         if (line.isEmpty()) {
             throw new SignException("Empty line");
@@ -237,7 +241,7 @@ public class SignTrade extends EssentialsSign {
                 return new Trade((amountType == AmountType.COST ? stackamount : amount), ess);
             } else {
                 final int stackamount = getIntegerPositive(split[0]);
-                final ItemStack item = getItemStack(split[1], stackamount, true, ess);
+                final ItemStack item = getItemStack(split[1], stackamount, allowId, ess);
                 int amount = getInteger(split[2]);
                 if (amountType == AmountType.ROUNDED) {
                     amount -= amount % stackamount;

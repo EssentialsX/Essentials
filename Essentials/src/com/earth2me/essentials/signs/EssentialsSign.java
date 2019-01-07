@@ -297,12 +297,16 @@ public class EssentialsSign {
     }
 
     protected final Trade getTrade(final ISign sign, final int amountIndex, final int itemIndex, final User player, final IEssentials ess) throws SignException {
+        return getTrade(sign, amountIndex, itemIndex, player, false, ess);
+    }
+
+    protected final Trade getTrade(final ISign sign, final int amountIndex, final int itemIndex, final User player, final boolean allowId, final IEssentials ess) throws SignException {
         final String itemType = getSignText(sign, itemIndex);
         if (itemType.equalsIgnoreCase("exp") || itemType.equalsIgnoreCase("xp")) {
             final int amount = getIntegerPositive(getSignText(sign, amountIndex));
             return new Trade(amount, ess);
         }
-        final ItemStack item = getItemStack(itemType, 1, true, ess);
+        final ItemStack item = getItemStack(itemType, 1, allowId, ess);
         final int amount = Math.min(getIntegerPositive(getSignText(sign, amountIndex)), item.getType().getMaxStackSize() * player.getBase().getInventory().getSize());
         if (item.getType() == Material.AIR || amount < 1) {
             throw new SignException(tl("moreThanZero"));
@@ -402,6 +406,10 @@ public class EssentialsSign {
     }
 
     protected final Trade getTrade(final ISign sign, final int index, final int decrement, final IEssentials ess) throws SignException {
+        return getTrade(sign, index, decrement, false, ess);
+    }
+
+    protected final Trade getTrade(final ISign sign, final int index, final int decrement, final boolean allowId, final IEssentials ess) throws SignException {
         final String line = getSignText(sign, index);
         if (line.isEmpty()) {
             return new Trade(signName.toLowerCase(Locale.ENGLISH) + "sign", ess);
@@ -424,7 +432,7 @@ public class EssentialsSign {
                 sign.setLine(index, quantity + " exp");
                 return new Trade(quantity, ess);
             } else {
-                final ItemStack stack = getItemStack(item, quantity, true, ess);
+                final ItemStack stack = getItemStack(item, quantity, allowId, ess);
                 sign.setLine(index, quantity + " " + item);
                 return new Trade(stack, ess);
             }
