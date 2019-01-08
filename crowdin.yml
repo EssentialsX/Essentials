@@ -1,0 +1,3 @@
+files:
+  - source: Essentials/src/*.properties
+    translation: Essentials/src/messages_%two_letters_code%.properties
