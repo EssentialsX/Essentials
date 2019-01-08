@@ -3,26 +3,26 @@ files:
     translation: "/Essentials/src/messages_%locale_with_underscore%.properties"
     languages_mapping:
       locale_with_underscore:
-        cs_CZ: cs
-        da_DK: da
-        de_DE: de
-        el_GR: el
-        en_US: en
-        es_ES: es
-        fi_FI: fi
-        fr_FR: fr
-        hu_HU: hu
-        it_IT: it
-        ko_KR: ko
-        nl_NL: nl
-        no_NO: "no" # no is a YAML keyword
-        pl_PL: pl
-        pt_PT: pt
-        ro_RO: ro
-        ru_RU: ru
-        sr_SP: sr
-        sv_SE: sv
-        tr_TR: tr
-        uk_UA: uk
-        vi_VN: vi
-        zh_CN: zh
+        cs-CZ: cs
+        da-DK: da
+        de-DE: de
+        el-GR: el
+        en-US: en
+        es-ES: es
+        fi-FI: fi
+        fr-FR: fr
+        hu-HU: hu
+        it-IT: it
+        ko-KR: ko
+        nl-NL: nl
+        no-NO: "no" # no is a YAML keyword
+        pl-PL: pl
+        pt-PT: pt
+        ro-RO: ro
+        ru-RU: ru
+        sr-SP: sr
+        sv-SE: sv
+        tr-TR: tr
+        uk-UA: uk
+        vi-VN: vi
+        zh-CN: zh
