@@ -1,3 +1,8 @@
 files:
-  - source: Essentials/src/messages.properties
-    translation: Essentials/src/messages_%locale_with_underscore%.properties
+  - source: "/Essentials/src/messages.properties"
+    translation: "/Essentials/src/messages_%locale_with_underscore%.properties"
+    languages_mapping:
+      locale_with_underscore:
+        en_US: en
+        es_ES: es
+        zh_CN: zh
