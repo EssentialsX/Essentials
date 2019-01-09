@@ -95,16 +95,16 @@
     "acacia_sapling": {
         "material": "ACACIA_SAPLING"
     },
-    "acaciasapling": "acacia_sapling",
-    "acaciatreesapling": "acacia_sapling",
-    "acacialogsapling": "acacia_sapling",
-    "acaciatrunksapling": "acacia_sapling",
-    "acaciawoodsapling": "acacia_sapling",
-    "asapling": "acacia_sapling",
-    "atreesapling": "acacia_sapling",
-    "alogsapling": "acacia_sapling",
-    "atrunksapling": "acacia_sapling",
-    "awoodsapling": "acacia_sapling",
+    "acaciasapling": "potted_acacia_sapling",
+    "acaciatreesapling": "potted_acacia_sapling",
+    "acacialogsapling": "potted_acacia_sapling",
+    "acaciatrunksapling": "potted_acacia_sapling",
+    "acaciawoodsapling": "potted_acacia_sapling",
+    "asapling": "potted_acacia_sapling",
+    "atreesapling": "potted_acacia_sapling",
+    "alogsapling": "potted_acacia_sapling",
+    "atrunksapling": "potted_acacia_sapling",
+    "awoodsapling": "potted_acacia_sapling",
     "acacia_slab": {
         "material": "ACACIA_SLAB"
     },
@@ -220,6 +220,14 @@
     "arrow": {
         "material": "ARROW"
     },
+    "attached_melon_stem": {
+        "material": "ATTACHED_MELON_STEM"
+    },
+    "attachedmelonstem": "attached_melon_stem",
+    "attached_pumpkin_stem": {
+        "material": "ATTACHED_PUMPKIN_STEM"
+    },
+    "attachedpumpkinstem": "attached_pumpkin_stem",
     "azure_bluet": {
         "material": "AZURE_BLUET"
     },
@@ -247,6 +255,7 @@
     "beacon": {
         "material": "BEACON"
     },
+    "beaconblock": "beacon",
     "bedrock": {
         "material": "BEDROCK"
     },
@@ -280,6 +289,9 @@
     "beets": "beetroot",
     "beetplant": "beetroot",
     "beetcrop": "beetroot",
+    "beetroots": {
+        "material": "BEETROOTS"
+    },
     "beetroot_seeds": {
         "material": "BEETROOT_SEEDS"
     },
@@ -522,36 +534,36 @@
     "birch_sapling": {
         "material": "BIRCH_SAPLING"
     },
-    "birchsapling": "birch_sapling",
-    "birchtreesapling": "birch_sapling",
-    "birchlogsapling": "birch_sapling",
-    "birchtrunksapling": "birch_sapling",
-    "birchwoodsapling": "birch_sapling",
-    "bsapling": "birch_sapling",
-    "btreesapling": "birch_sapling",
-    "blogsapling": "birch_sapling",
-    "btrunksapling": "birch_sapling",
-    "bwoodsapling": "birch_sapling",
-    "lightsapling": "birch_sapling",
-    "lighttreesapling": "birch_sapling",
-    "lightlogsapling": "birch_sapling",
-    "lighttrunksapling": "birch_sapling",
-    "lightwoodsapling": "birch_sapling",
-    "lsapling": "birch_sapling",
-    "ltreesapling": "birch_sapling",
-    "llogsapling": "birch_sapling",
-    "ltrunksapling": "birch_sapling",
-    "lwoodsapling": "birch_sapling",
-    "whitesapling": "birch_sapling",
-    "whitetreesapling": "birch_sapling",
-    "whitelogsapling": "birch_sapling",
-    "whitetrunksapling": "birch_sapling",
-    "whitewoodsapling": "birch_sapling",
-    "wsapling": "birch_sapling",
-    "wtreesapling": "birch_sapling",
-    "wlogsapling": "birch_sapling",
-    "wtrunksapling": "birch_sapling",
-    "wwoodsapling": "birch_sapling",
+    "birchsapling": "potted_birch_sapling",
+    "birchtreesapling": "potted_birch_sapling",
+    "birchlogsapling": "potted_birch_sapling",
+    "birchtrunksapling": "potted_birch_sapling",
+    "birchwoodsapling": "potted_birch_sapling",
+    "bsapling": "potted_birch_sapling",
+    "btreesapling": "potted_birch_sapling",
+    "blogsapling": "potted_birch_sapling",
+    "btrunksapling": "potted_birch_sapling",
+    "bwoodsapling": "potted_birch_sapling",
+    "lightsapling": "potted_birch_sapling",
+    "lighttreesapling": "potted_birch_sapling",
+    "lightlogsapling": "potted_birch_sapling",
+    "lighttrunksapling": "potted_birch_sapling",
+    "lightwoodsapling": "potted_birch_sapling",
+    "lsapling": "potted_birch_sapling",
+    "ltreesapling": "potted_birch_sapling",
+    "llogsapling": "potted_birch_sapling",
+    "ltrunksapling": "potted_birch_sapling",
+    "lwoodsapling": "potted_birch_sapling",
+    "whitesapling": "potted_birch_sapling",
+    "whitetreesapling": "potted_birch_sapling",
+    "whitelogsapling": "potted_birch_sapling",
+    "whitetrunksapling": "potted_birch_sapling",
+    "whitewoodsapling": "potted_birch_sapling",
+    "wsapling": "potted_birch_sapling",
+    "wtreesapling": "potted_birch_sapling",
+    "wlogsapling": "potted_birch_sapling",
+    "wtrunksapling": "potted_birch_sapling",
+    "wwoodsapling": "potted_birch_sapling",
     "birch_slab": {
         "material": "BIRCH_SLAB"
     },
@@ -743,12 +755,12 @@
     "black_banner": {
         "material": "BLACK_BANNER"
     },
-    "blackbanner": "black_banner",
-    "bkstandingbanner": "black_banner",
-    "bkbanner": "black_banner",
-    "blastandingbanner": "black_banner",
-    "blabanner": "black_banner",
-    "blackstandingbanner": "black_banner",
+    "blackbanner": "black_wall_banner",
+    "bkstandingbanner": "black_wall_banner",
+    "bkbanner": "black_wall_banner",
+    "blastandingbanner": "black_wall_banner",
+    "blabanner": "black_wall_banner",
+    "blackstandingbanner": "black_wall_banner",
     "black_bed": {
         "material": "BLACK_BED"
     },
@@ -863,6 +875,10 @@
     "blackterra": "black_terracotta",
     "blacktcota": "black_terracotta",
     "blackterracota": "black_terracotta",
+    "black_wall_banner": {
+        "material": "BLACK_WALL_BANNER"
+    },
+    "blackwallbanner": "black_wall_banner",
     "black_wool": {
         "material": "BLACK_WOOL"
     },
@@ -895,10 +911,10 @@
     "blue_banner": {
         "material": "BLUE_BANNER"
     },
-    "bluebanner": "blue_banner",
-    "blustandingbanner": "blue_banner",
-    "blubanner": "blue_banner",
-    "bluestandingbanner": "blue_banner",
+    "bluebanner": "blue_wall_banner",
+    "blustandingbanner": "blue_wall_banner",
+    "blubanner": "blue_wall_banner",
+    "bluestandingbanner": "blue_wall_banner",
     "blue_bed": {
         "material": "BLUE_BED"
     },
@@ -999,6 +1015,10 @@
     "blueterra": "blue_terracotta",
     "bluetcota": "blue_terracotta",
     "blueterracota": "blue_terracotta",
+    "blue_wall_banner": {
+        "material": "BLUE_WALL_BANNER"
+    },
+    "bluewallbanner": "blue_wall_banner",
     "blue_wool": {
         "material": "BLUE_WOOL"
     },
@@ -1025,6 +1045,12 @@
     "bookshelf": {
         "material": "BOOKSHELF"
     },
+    "bshelf": "bookshelf",
+    "bookcase": "bookshelf",
+    "casebook": "bookshelf",
+    "shelfbook": "bookshelf",
+    "bookblock": "bookshelf",
+    "blockbook": "bookshelf",
     "bow": {
         "material": "BOW"
     },
@@ -1043,6 +1069,10 @@
         "material": "BRAIN_CORAL_FAN"
     },
     "braincoralfan": "brain_coral_fan",
+    "brain_coral_wall_fan": {
+        "material": "BRAIN_CORAL_WALL_FAN"
+    },
+    "braincoralwallfan": "brain_coral_wall_fan",
     "bread": {
         "material": "BREAD"
     },
@@ -1067,10 +1097,10 @@
     "brown_banner": {
         "material": "BROWN_BANNER"
     },
-    "brownbanner": "brown_banner",
-    "brostandingbanner": "brown_banner",
-    "brobanner": "brown_banner",
-    "brownstandingbanner": "brown_banner",
+    "brownbanner": "brown_wall_banner",
+    "brostandingbanner": "brown_wall_banner",
+    "brobanner": "brown_wall_banner",
+    "brownstandingbanner": "brown_wall_banner",
     "brown_bed": {
         "material": "BROWN_BED"
     },
@@ -1115,12 +1145,12 @@
     "brown_mushroom": {
         "material": "BROWN_MUSHROOM"
     },
-    "brownmushroom": "brown_mushroom",
-    "brownmush": "brown_mushroom",
-    "brownshroom": "brown_mushroom",
-    "bmushroom": "brown_mushroom",
-    "bmush": "brown_mushroom",
-    "bshroom": "brown_mushroom",
+    "brownmushroom": "potted_brown_mushroom",
+    "brownmush": "potted_brown_mushroom",
+    "brownshroom": "potted_brown_mushroom",
+    "bmushroom": "potted_brown_mushroom",
+    "bmush": "potted_brown_mushroom",
+    "bshroom": "potted_brown_mushroom",
     "brown_mushroom_block": {
         "material": "BROWN_MUSHROOM_BLOCK"
     },
@@ -1193,6 +1223,10 @@
     "brownterra": "brown_terracotta",
     "browntcota": "brown_terracotta",
     "brownterracota": "brown_terracotta",
+    "brown_wall_banner": {
+        "material": "BROWN_WALL_BANNER"
+    },
+    "brownwallbanner": "brown_wall_banner",
     "brown_wool": {
         "material": "BROWN_WOOL"
     },
@@ -1202,6 +1236,10 @@
     "brocotton": "brown_wool",
     "browncloth": "brown_wool",
     "browncotton": "brown_wool",
+    "bubble_column": {
+        "material": "BUBBLE_COLUMN"
+    },
+    "bubblecolumn": "bubble_column",
     "bubble_coral": {
         "material": "BUBBLE_CORAL"
     },
@@ -1214,6 +1252,10 @@
         "material": "BUBBLE_CORAL_FAN"
     },
     "bubblecoralfan": "bubble_coral_fan",
+    "bubble_coral_wall_fan": {
+        "material": "BUBBLE_CORAL_WALL_FAN"
+    },
+    "bubblecoralwallfan": "bubble_coral_wall_fan",
     "bucket": {
         "material": "BUCKET"
     },
@@ -1232,6 +1274,9 @@
     "carrot": {
         "material": "CARROT"
     },
+    "carrots": {
+        "material": "CARROTS"
+    },
     "carrot_on_a_stick": {
         "material": "CARROT_ON_A_STICK"
     },
@@ -1247,6 +1292,10 @@
     "cauldron": {
         "material": "CAULDRON"
     },
+    "cave_air": {
+        "material": "CAVE_AIR"
+    },
+    "caveair": "cave_air",
     "cave_spider_spawn_egg": {
         "material": "CAVE_SPIDER_SPAWN_EGG"
     },
@@ -1388,10 +1437,18 @@
         "material": "CHIPPED_ANVIL"
     },
     "chippedanvil": "chipped_anvil",
+    "slightlydamagedanvil": "chipped_anvil",
+    "slightdamageanvil": "chipped_anvil",
     "chiseled_quartz_block": {
         "material": "CHISELED_QUARTZ_BLOCK"
     },
     "chiseledquartzblock": "chiseled_quartz_block",
+    "chiselquartzblock": "chiseled_quartz_block",
+    "cquartzblock": "chiseled_quartz_block",
+    "cqblock": "chiseled_quartz_block",
+    "pillarquartzblock": "chiseled_quartz_block",
+    "pquartzblock": "chiseled_quartz_block",
+    "pqblock": "chiseled_quartz_block",
     "chiseled_red_sandstone": {
         "material": "CHISELED_RED_SANDSTONE"
     },
@@ -1433,16 +1490,24 @@
     "chiseledstonebb": "chiseled_stone_bricks",
     "chiseledsbrick": "chiseled_stone_bricks",
     "chiseledsbricks": "chiseled_stone_bricks",
+    "chiseledsbrickblock": "chiseled_stone_bricks",
+    "chiseledsbb": "chiseled_stone_bricks",
     "circlestonebrick": "chiseled_stone_bricks",
     "circlestonebrickblock": "chiseled_stone_bricks",
     "circlestonebb": "chiseled_stone_bricks",
     "circlesbrick": "chiseled_stone_bricks",
     "circlesbricks": "chiseled_stone_bricks",
+    "circlesbrickblock": "chiseled_stone_bricks",
+    "circlestonebricks": "chiseled_stone_bricks",
+    "circlesbb": "chiseled_stone_bricks",
     "cistonebrick": "chiseled_stone_bricks",
     "cistonebrickblock": "chiseled_stone_bricks",
     "cistonebb": "chiseled_stone_bricks",
     "cisbrick": "chiseled_stone_bricks",
     "cisbricks": "chiseled_stone_bricks",
+    "cisbrickblock": "chiseled_stone_bricks",
+    "cistonebricks": "chiseled_stone_bricks",
+    "cisbb": "chiseled_stone_bricks",
     "chorus_flower": {
         "material": "CHORUS_FLOWER"
     },
@@ -1451,6 +1516,9 @@
         "material": "CHORUS_FRUIT"
     },
     "chorusfruit": "chorus_fruit",
+    "chorus": "chorus_fruit",
+    "unpoppedchorus": "chorus_fruit",
+    "unpopchorus": "chorus_fruit",
     "chorus_plant": {
         "material": "CHORUS_PLANT"
     },
@@ -1513,6 +1581,17 @@
         "material": "COBBLESTONE_WALL"
     },
     "cobblestonewall": "cobblestone_wall",
+    "cobblewall": "cobblestone_wall",
+    "cstonewall": "cobblestone_wall",
+    "cswall": "cobblestone_wall",
+    "cwall": "cobblestone_wall",
+    "cobblestonefence": "cobblestone_wall",
+    "cobblefence": "cobblestone_wall",
+    "cstonefence": "cobblestone_wall",
+    "csfence": "cobblestone_wall",
+    "cfence": "cobblestone_wall",
+    "stonewall": "cobblestone_wall",
+    "swall": "cobblestone_wall",
     "cobweb": {
         "material": "COBWEB"
     },
@@ -1520,10 +1599,22 @@
     "sweb": "cobweb",
     "cweb": "cobweb",
     "web": "cobweb",
+    "cocoa": {
+        "material": "COCOA"
+    },
     "cocoa_beans": {
         "material": "COCOA_BEANS"
     },
     "cocoabeans": "cocoa_beans",
+    "cocoaplant": "cocoa_beans",
+    "cocoplant": "cocoa_beans",
+    "cplant": "cocoa_beans",
+    "cocoafruit": "cocoa_beans",
+    "cocofruit": "cocoa_beans",
+    "cfruit": "cocoa_beans",
+    "cocoapod": "cocoa_beans",
+    "cocopod": "cocoa_beans",
+    "cpod": "cocoa_beans",
     "cod": {
         "material": "COD"
     },
@@ -1554,6 +1645,11 @@
         "material": "COMMAND_BLOCK"
     },
     "commandblock": "command_block",
+    "blockcommand": "command_block",
+    "cmdblock": "command_block",
+    "blockcmd": "command_block",
+    "macroblock": "command_block",
+    "blockmacro": "command_block",
     "command_block_minecart": {
         "material": "COMMAND_BLOCK_MINECART"
     },
@@ -2006,21 +2102,32 @@
     "crackedstonebb": "cracked_stone_bricks",
     "crackedsbrick": "cracked_stone_bricks",
     "crackedsbricks": "cracked_stone_bricks",
+    "crackedsbrickblock": "cracked_stone_bricks",
+    "crackedsbb": "cracked_stone_bricks",
     "crackstonebrick": "cracked_stone_bricks",
     "crackstonebrickblock": "cracked_stone_bricks",
     "crackstonebb": "cracked_stone_bricks",
     "cracksbrick": "cracked_stone_bricks",
     "cracksbricks": "cracked_stone_bricks",
+    "cracksbrickblock": "cracked_stone_bricks",
+    "crackstonebricks": "cracked_stone_bricks",
+    "cracksbb": "cracked_stone_bricks",
     "crstonebrick": "cracked_stone_bricks",
     "crstonebrickblock": "cracked_stone_bricks",
     "crstonebb": "cracked_stone_bricks",
     "crsbrick": "cracked_stone_bricks",
     "crsbricks": "cracked_stone_bricks",
+    "crsbrickblock": "cracked_stone_bricks",
+    "crstonebricks": "cracked_stone_bricks",
+    "crsbb": "cracked_stone_bricks",
     "cstonebrick": "cracked_stone_bricks",
     "cstonebrickblock": "cracked_stone_bricks",
     "cstonebb": "cracked_stone_bricks",
     "csbrick": "cracked_stone_bricks",
     "csbricks": "cracked_stone_bricks",
+    "csbrickblock": "cracked_stone_bricks",
+    "cstonebricks": "cracked_stone_bricks",
+    "csbb": "cracked_stone_bricks",
     "crafting_table": {
         "material": "CRAFTING_TABLE"
     },
@@ -2037,18 +2144,18 @@
     "creeper_head": {
         "material": "CREEPER_HEAD"
     },
-    "creeperhead": "creeper_head",
-    "creeperskull": "creeper_head",
-    "headcreeper": "creeper_head",
-    "stevecreeper": "creeper_head",
-    "creepermask": "creeper_head",
-    "creeperheadmask": "creeper_head",
-    "crhead": "creeper_head",
-    "crskull": "creeper_head",
-    "headcr": "creeper_head",
-    "stevecr": "creeper_head",
-    "crmask": "creeper_head",
-    "crheadmask": "creeper_head",
+    "creeperhead": "creeper_wall_head",
+    "creeperskull": "creeper_wall_head",
+    "headcreeper": "creeper_wall_head",
+    "stevecreeper": "creeper_wall_head",
+    "creepermask": "creeper_wall_head",
+    "creeperheadmask": "creeper_wall_head",
+    "crhead": "creeper_wall_head",
+    "crskull": "creeper_wall_head",
+    "headcr": "creeper_wall_head",
+    "stevecr": "creeper_wall_head",
+    "crmask": "creeper_wall_head",
+    "crheadmask": "creeper_wall_head",
     "creeper_spawn_egg": {
         "material": "CREEPER_SPAWN_EGG"
     },
@@ -2064,6 +2171,10 @@
     "spawneggcr": "creeper_spawn_egg",
     "crspawn": "creeper_spawn_egg",
     "spawncr": "creeper_spawn_egg",
+    "creeper_wall_head": {
+        "material": "CREEPER_WALL_HEAD"
+    },
+    "creeperwallhead": "creeper_wall_head",
     "cut_red_sandstone": {
         "material": "CUT_RED_SANDSTONE"
     },
@@ -2083,10 +2194,10 @@
     "cyan_banner": {
         "material": "CYAN_BANNER"
     },
-    "cyanbanner": "cyan_banner",
-    "cstandingbanner": "cyan_banner",
-    "cbanner": "cyan_banner",
-    "cyanstandingbanner": "cyan_banner",
+    "cyanbanner": "cyan_wall_banner",
+    "cstandingbanner": "cyan_wall_banner",
+    "cbanner": "cyan_wall_banner",
+    "cyanstandingbanner": "cyan_wall_banner",
     "cyan_bed": {
         "material": "CYAN_BED"
     },
@@ -2176,6 +2287,10 @@
     "cyanterra": "cyan_terracotta",
     "cyantcota": "cyan_terracotta",
     "cyanterracota": "cyan_terracotta",
+    "cyan_wall_banner": {
+        "material": "CYAN_WALL_BANNER"
+    },
+    "cyanwallbanner": "cyan_wall_banner",
     "cyan_wool": {
         "material": "CYAN_WOOL"
     },
@@ -2189,6 +2304,7 @@
         "material": "DAMAGED_ANVIL"
     },
     "damagedanvil": "damaged_anvil",
+    "verydamagedanvil": "damaged_anvil",
     "dandelion": {
         "material": "DANDELION"
     },
@@ -2328,21 +2444,21 @@
     "dark_oak_sapling": {
         "material": "DARK_OAK_SAPLING"
     },
-    "darkoaksapling": "dark_oak_sapling",
-    "darkoaktreesapling": "dark_oak_sapling",
-    "darkoaklogsapling": "dark_oak_sapling",
-    "darkoaktrunksapling": "dark_oak_sapling",
-    "darkoakwoodsapling": "dark_oak_sapling",
-    "doaksapling": "dark_oak_sapling",
-    "doaktreesapling": "dark_oak_sapling",
-    "doaklogsapling": "dark_oak_sapling",
-    "doaktrunksapling": "dark_oak_sapling",
-    "doakwoodsapling": "dark_oak_sapling",
-    "dosapling": "dark_oak_sapling",
-    "dotreesapling": "dark_oak_sapling",
-    "dologsapling": "dark_oak_sapling",
-    "dotrunksapling": "dark_oak_sapling",
-    "dowoodsapling": "dark_oak_sapling",
+    "darkoaksapling": "potted_dark_oak_sapling",
+    "darkoaktreesapling": "potted_dark_oak_sapling",
+    "darkoaklogsapling": "potted_dark_oak_sapling",
+    "darkoaktrunksapling": "potted_dark_oak_sapling",
+    "darkoakwoodsapling": "potted_dark_oak_sapling",
+    "doaksapling": "potted_dark_oak_sapling",
+    "doaktreesapling": "potted_dark_oak_sapling",
+    "doaklogsapling": "potted_dark_oak_sapling",
+    "doaktrunksapling": "potted_dark_oak_sapling",
+    "doakwoodsapling": "potted_dark_oak_sapling",
+    "dosapling": "potted_dark_oak_sapling",
+    "dotreesapling": "potted_dark_oak_sapling",
+    "dologsapling": "potted_dark_oak_sapling",
+    "dotrunksapling": "potted_dark_oak_sapling",
+    "dowoodsapling": "potted_dark_oak_sapling",
     "dark_oak_slab": {
         "material": "DARK_OAK_SLAB"
     },
@@ -2460,6 +2576,14 @@
         "material": "DAYLIGHT_DETECTOR"
     },
     "daylightdetector": "daylight_detector",
+    "daylightsensor": "daylight_detector",
+    "daylightsense": "daylight_detector",
+    "lightsensor": "daylight_detector",
+    "lightsense": "daylight_detector",
+    "daysensor": "daylight_detector",
+    "daysense": "daylight_detector",
+    "timesensor": "daylight_detector",
+    "timesense": "daylight_detector",
     "dead_brain_coral": {
         "material": "DEAD_BRAIN_CORAL"
     },
@@ -2472,6 +2596,10 @@
         "material": "DEAD_BRAIN_CORAL_FAN"
     },
     "deadbraincoralfan": "dead_brain_coral_fan",
+    "dead_brain_coral_wall_fan": {
+        "material": "DEAD_BRAIN_CORAL_WALL_FAN"
+    },
+    "deadbraincoralwallfan": "dead_brain_coral_wall_fan",
     "dead_bubble_coral": {
         "material": "DEAD_BUBBLE_CORAL"
     },
@@ -2484,6 +2612,10 @@
         "material": "DEAD_BUBBLE_CORAL_FAN"
     },
     "deadbubblecoralfan": "dead_bubble_coral_fan",
+    "dead_bubble_coral_wall_fan": {
+        "material": "DEAD_BUBBLE_CORAL_WALL_FAN"
+    },
+    "deadbubblecoralwallfan": "dead_bubble_coral_wall_fan",
     "dead_bush": {
         "material": "DEAD_BUSH"
     },
@@ -2505,6 +2637,10 @@
         "material": "DEAD_FIRE_CORAL_FAN"
     },
     "deadfirecoralfan": "dead_fire_coral_fan",
+    "dead_fire_coral_wall_fan": {
+        "material": "DEAD_FIRE_CORAL_WALL_FAN"
+    },
+    "deadfirecoralwallfan": "dead_fire_coral_wall_fan",
     "dead_horn_coral": {
         "material": "DEAD_HORN_CORAL"
     },
@@ -2517,6 +2653,10 @@
         "material": "DEAD_HORN_CORAL_FAN"
     },
     "deadhorncoralfan": "dead_horn_coral_fan",
+    "dead_horn_coral_wall_fan": {
+        "material": "DEAD_HORN_CORAL_WALL_FAN"
+    },
+    "deadhorncoralwallfan": "dead_horn_coral_wall_fan",
     "dead_tube_coral": {
         "material": "DEAD_TUBE_CORAL"
     },
@@ -2529,6 +2669,10 @@
         "material": "DEAD_TUBE_CORAL_FAN"
     },
     "deadtubecoralfan": "dead_tube_coral_fan",
+    "dead_tube_coral_wall_fan": {
+        "material": "DEAD_TUBE_CORAL_WALL_FAN"
+    },
+    "deadtubecoralwallfan": "dead_tube_coral_wall_fan",
     "debug_stick": {
         "material": "DEBUG_STICK"
     },
@@ -2729,12 +2873,16 @@
     "dragon_head": {
         "material": "DRAGON_HEAD"
     },
-    "dragonhead": "dragon_head",
-    "dragonskull": "dragon_head",
-    "headdragon": "dragon_head",
-    "stevedragon": "dragon_head",
-    "dragonmask": "dragon_head",
-    "dragonheadmask": "dragon_head",
+    "dragonhead": "dragon_wall_head",
+    "dragonskull": "dragon_wall_head",
+    "headdragon": "dragon_wall_head",
+    "stevedragon": "dragon_wall_head",
+    "dragonmask": "dragon_wall_head",
+    "dragonheadmask": "dragon_wall_head",
+    "dragon_wall_head": {
+        "material": "DRAGON_WALL_HEAD"
+    },
+    "dragonwallhead": "dragon_wall_head",
     "dried_kelp": {
         "material": "DRIED_KELP"
     },
@@ -2813,10 +2961,30 @@
         "material": "ENCHANTED_GOLDEN_APPLE"
     },
     "enchantedgoldenapple": "enchanted_golden_apple",
+    "notchapple": "enchanted_golden_apple",
+    "godapple": "enchanted_golden_apple",
+    "enchgoldapple": "enchanted_golden_apple",
     "enchanting_table": {
         "material": "ENCHANTING_TABLE"
     },
     "enchantingtable": "enchanting_table",
+    "enchantmenttable": "enchanting_table",
+    "enchanttable": "enchanting_table",
+    "etable": "enchanting_table",
+    "magicaltable": "enchanting_table",
+    "magictable": "enchanting_table",
+    "mtable": "enchanting_table",
+    "enchantmentdesk": "enchanting_table",
+    "enchantingdesk": "enchanting_table",
+    "enchantdesk": "enchanting_table",
+    "edesk": "enchanting_table",
+    "magicaldesk": "enchanting_table",
+    "magicdesk": "enchanting_table",
+    "mdesk": "enchanting_table",
+    "booktable": "enchanting_table",
+    "bookdesk": "enchanting_table",
+    "btable": "enchanting_table",
+    "bdesk": "enchanting_table",
     "enderman_spawn_egg": {
         "material": "ENDERMAN_SPAWN_EGG"
     },
@@ -2839,6 +3007,14 @@
         "material": "ENDER_CHEST"
     },
     "enderchest": "ender_chest",
+    "endchest": "ender_chest",
+    "echest": "ender_chest",
+    "chestender": "ender_chest",
+    "chestend": "ender_chest",
+    "cheste": "ender_chest",
+    "endercontainer": "ender_chest",
+    "endcontainer": "ender_chest",
+    "econtainer": "ender_chest",
     "ender_eye": {
         "material": "ENDER_EYE"
     },
@@ -2851,6 +3027,19 @@
         "material": "END_CRYSTAL"
     },
     "endcrystal": "end_crystal",
+    "end_gateway": {
+        "material": "END_GATEWAY"
+    },
+    "endgateway": "end_gateway",
+    "end_portal": {
+        "material": "END_PORTAL"
+    },
+    "endportal": "end_portal",
+    "endergoo": "end_portal",
+    "enderportal": "end_portal",
+    "endgoo": "end_portal",
+    "eportal": "end_portal",
+    "egoo": "end_portal",
     "end_portal_frame": {
         "material": "END_PORTAL_FRAME"
     },
@@ -2889,6 +3078,9 @@
     "stonebb": "stone_bricks",
     "sbrick": "stone_bricks",
     "sbricks": "stone_bricks",
+    "sbrickblock": "stone_bricks",
+    "stonebricks": "stone_bricks",
+    "sbb": "stone_bricks",
     "evoker_spawn_egg": {
         "material": "EVOKER_SPAWN_EGG"
     },
@@ -2919,6 +3111,9 @@
         "material": "FILLED_MAP"
     },
     "filledmap": "filled_map",
+    "fire": {
+        "material": "FIRE"
+    },
     "firework_rocket": {
         "material": "FIREWORK_ROCKET"
     },
@@ -2943,6 +3138,10 @@
         "material": "FIRE_CORAL_FAN"
     },
     "firecoralfan": "fire_coral_fan",
+    "fire_coral_wall_fan": {
+        "material": "FIRE_CORAL_WALL_FAN"
+    },
+    "firecoralwallfan": "fire_coral_wall_fan",
     "fishing_rod": {
         "material": "FISHING_ROD"
     },
@@ -2958,6 +3157,10 @@
         "material": "FLOWER_POT"
     },
     "flowerpot": "flower_pot",
+    "frosted_ice": {
+        "material": "FROSTED_ICE"
+    },
+    "frostedice": "frosted_ice",
     "furnace": {
         "material": "FURNACE"
     },
@@ -3035,6 +3238,18 @@
     "glowstone": {
         "material": "GLOWSTONE"
     },
+    "glowingstoneblock": "glowstone",
+    "lightstoneblock": "glowstone",
+    "glowstoneblock": "glowstone",
+    "blockglowingstone": "glowstone",
+    "blocklightstone": "glowstone",
+    "blockglowstone": "glowstone",
+    "glowingstone": "glowstone",
+    "lightstone": "glowstone",
+    "glowingblock": "glowstone",
+    "lightblock": "glowstone",
+    "glowblock": "glowstone",
+    "lstone": "glowstone",
     "glowstone_dust": {
         "material": "GLOWSTONE_DUST"
     },
@@ -3043,6 +3258,9 @@
         "material": "GOLDEN_APPLE"
     },
     "goldenapple": "golden_apple",
+    "goldapple": "golden_apple",
+    "newgoldapple": "golden_apple",
+    "notnotchapple": "golden_apple",
     "golden_axe": {
         "material": "GOLDEN_AXE"
     },
@@ -3196,24 +3414,24 @@
     "gray_banner": {
         "material": "GRAY_BANNER"
     },
-    "graybanner": "gray_banner",
-    "grastandingbanner": "gray_banner",
-    "grabanner": "gray_banner",
-    "greystandingbanner": "gray_banner",
-    "greybanner": "gray_banner",
-    "graystandingbanner": "gray_banner",
-    "dgrastandingbanner": "gray_banner",
-    "dgrabanner": "gray_banner",
-    "darkgrastandingbanner": "gray_banner",
-    "darkgrabanner": "gray_banner",
-    "dgreystandingbanner": "gray_banner",
-    "dgreybanner": "gray_banner",
-    "dgraystandingbanner": "gray_banner",
-    "dgraybanner": "gray_banner",
-    "darkgreystandingbanner": "gray_banner",
-    "darkgreybanner": "gray_banner",
-    "darkgraystandingbanner": "gray_banner",
-    "darkgraybanner": "gray_banner",
+    "graybanner": "gray_wall_banner",
+    "grastandingbanner": "gray_wall_banner",
+    "grabanner": "gray_wall_banner",
+    "greystandingbanner": "gray_wall_banner",
+    "greybanner": "gray_wall_banner",
+    "graystandingbanner": "gray_wall_banner",
+    "dgrastandingbanner": "gray_wall_banner",
+    "dgrabanner": "gray_wall_banner",
+    "darkgrastandingbanner": "gray_wall_banner",
+    "darkgrabanner": "gray_wall_banner",
+    "dgreystandingbanner": "gray_wall_banner",
+    "dgreybanner": "gray_wall_banner",
+    "dgraystandingbanner": "gray_wall_banner",
+    "dgraybanner": "gray_wall_banner",
+    "darkgreystandingbanner": "gray_wall_banner",
+    "darkgreybanner": "gray_wall_banner",
+    "darkgraystandingbanner": "gray_wall_banner",
+    "darkgraybanner": "gray_wall_banner",
     "gray_bed": {
         "material": "GRAY_BED"
     },
@@ -3506,6 +3724,10 @@
     "darkgraytcota": "gray_terracotta",
     "darkgrayterracota": "gray_terracotta",
     "darkgrayterracotta": "gray_terracotta",
+    "gray_wall_banner": {
+        "material": "GRAY_WALL_BANNER"
+    },
+    "graywallbanner": "gray_wall_banner",
     "gray_wool": {
         "material": "GRAY_WOOL"
     },
@@ -3539,18 +3761,18 @@
     "green_banner": {
         "material": "GREEN_BANNER"
     },
-    "greenbanner": "green_banner",
-    "grestandingbanner": "green_banner",
-    "grebanner": "green_banner",
-    "dgrestandingbanner": "green_banner",
-    "dgrebanner": "green_banner",
-    "darkgrestandingbanner": "green_banner",
-    "darkgrebanner": "green_banner",
-    "greenstandingbanner": "green_banner",
-    "dgreenstandingbanner": "green_banner",
-    "dgreenbanner": "green_banner",
-    "darkgreenstandingbanner": "green_banner",
-    "darkgreenbanner": "green_banner",
+    "greenbanner": "green_wall_banner",
+    "grestandingbanner": "green_wall_banner",
+    "grebanner": "green_wall_banner",
+    "dgrestandingbanner": "green_wall_banner",
+    "dgrebanner": "green_wall_banner",
+    "darkgrestandingbanner": "green_wall_banner",
+    "darkgrebanner": "green_wall_banner",
+    "greenstandingbanner": "green_wall_banner",
+    "dgreenstandingbanner": "green_wall_banner",
+    "dgreenbanner": "green_wall_banner",
+    "darkgreenstandingbanner": "green_wall_banner",
+    "darkgreenbanner": "green_wall_banner",
     "green_bed": {
         "material": "GREEN_BED"
     },
@@ -3752,6 +3974,10 @@
     "darkgreentcota": "green_terracotta",
     "darkgreenterracota": "green_terracotta",
     "darkgreenterracotta": "green_terracotta",
+    "green_wall_banner": {
+        "material": "GREEN_WALL_BANNER"
+    },
+    "greenwallbanner": "green_wall_banner",
     "green_wool": {
         "material": "GREEN_WOOL"
     },
@@ -3804,6 +4030,14 @@
     "hopper": {
         "material": "HOPPER"
     },
+    "chestpuller": "hopper",
+    "chestpull": "hopper",
+    "cheststorer": "hopper",
+    "cheststore": "hopper",
+    "itempuller": "hopper",
+    "itempull": "hopper",
+    "itemstorer": "hopper",
+    "itemstore": "hopper",
     "hopper_minecart": {
         "material": "HOPPER_MINECART"
     },
@@ -3831,6 +4065,10 @@
         "material": "HORN_CORAL_FAN"
     },
     "horncoralfan": "horn_coral_fan",
+    "horn_coral_wall_fan": {
+        "material": "HORN_CORAL_WALL_FAN"
+    },
+    "horncoralwallfan": "horn_coral_wall_fan",
     "horse_spawn_egg": {
         "material": "HORSE_SPAWN_EGG"
     },
@@ -3865,121 +4103,216 @@
     "silverfishchiseledstonebb": "infested_chiseled_stone_bricks",
     "silverfishchiseledsbrick": "infested_chiseled_stone_bricks",
     "silverfishchiseledsbricks": "infested_chiseled_stone_bricks",
+    "silverfishchiseledsbrickblock": "infested_chiseled_stone_bricks",
+    "silverfishchiseledstonebricks": "infested_chiseled_stone_bricks",
+    "silverfishchiseledsbb": "infested_chiseled_stone_bricks",
     "silverfishcirclestonebrick": "infested_chiseled_stone_bricks",
     "silverfishcirclestonebrickblock": "infested_chiseled_stone_bricks",
     "silverfishcirclestonebb": "infested_chiseled_stone_bricks",
     "silverfishcirclesbrick": "infested_chiseled_stone_bricks",
     "silverfishcirclesbricks": "infested_chiseled_stone_bricks",
+    "silverfishcirclesbrickblock": "infested_chiseled_stone_bricks",
+    "silverfishcirclestonebricks": "infested_chiseled_stone_bricks",
+    "silverfishcirclesbb": "infested_chiseled_stone_bricks",
     "silverfishcistonebrick": "infested_chiseled_stone_bricks",
     "silverfishcistonebrickblock": "infested_chiseled_stone_bricks",
     "silverfishcistonebb": "infested_chiseled_stone_bricks",
     "silverfishcisbrick": "infested_chiseled_stone_bricks",
     "silverfishcisbricks": "infested_chiseled_stone_bricks",
+    "silverfishcisbrickblock": "infested_chiseled_stone_bricks",
+    "silverfishcistonebricks": "infested_chiseled_stone_bricks",
+    "silverfishcisbb": "infested_chiseled_stone_bricks",
     "sfishchiseledstonebrick": "infested_chiseled_stone_bricks",
     "sfishchiseledstonebrickblock": "infested_chiseled_stone_bricks",
     "sfishchiseledstonebb": "infested_chiseled_stone_bricks",
     "sfishchiseledsbrick": "infested_chiseled_stone_bricks",
     "sfishchiseledsbricks": "infested_chiseled_stone_bricks",
+    "sfishchiseledsbrickblock": "infested_chiseled_stone_bricks",
+    "sfishchiseledstonebricks": "infested_chiseled_stone_bricks",
+    "sfishchiseledsbb": "infested_chiseled_stone_bricks",
     "sfishcirclestonebrick": "infested_chiseled_stone_bricks",
     "sfishcirclestonebrickblock": "infested_chiseled_stone_bricks",
     "sfishcirclestonebb": "infested_chiseled_stone_bricks",
     "sfishcirclesbrick": "infested_chiseled_stone_bricks",
     "sfishcirclesbricks": "infested_chiseled_stone_bricks",
+    "sfishcirclesbrickblock": "infested_chiseled_stone_bricks",
+    "sfishcirclestonebricks": "infested_chiseled_stone_bricks",
+    "sfishcirclesbb": "infested_chiseled_stone_bricks",
     "sfishcistonebrick": "infested_chiseled_stone_bricks",
     "sfishcistonebrickblock": "infested_chiseled_stone_bricks",
     "sfishcistonebb": "infested_chiseled_stone_bricks",
     "sfishcisbrick": "infested_chiseled_stone_bricks",
     "sfishcisbricks": "infested_chiseled_stone_bricks",
+    "sfishcisbrickblock": "infested_chiseled_stone_bricks",
+    "sfishcistonebricks": "infested_chiseled_stone_bricks",
+    "sfishcisbb": "infested_chiseled_stone_bricks",
     "fishchiseledstonebrick": "infested_chiseled_stone_bricks",
     "fishchiseledstonebrickblock": "infested_chiseled_stone_bricks",
     "fishchiseledstonebb": "infested_chiseled_stone_bricks",
     "fishchiseledsbrick": "infested_chiseled_stone_bricks",
     "fishchiseledsbricks": "infested_chiseled_stone_bricks",
+    "fishchiseledsbrickblock": "infested_chiseled_stone_bricks",
+    "fishchiseledstonebricks": "infested_chiseled_stone_bricks",
+    "fishchiseledsbb": "infested_chiseled_stone_bricks",
     "fishcirclestonebrick": "infested_chiseled_stone_bricks",
     "fishcirclestonebrickblock": "infested_chiseled_stone_bricks",
     "fishcirclestonebb": "infested_chiseled_stone_bricks",
     "fishcirclesbrick": "infested_chiseled_stone_bricks",
     "fishcirclesbricks": "infested_chiseled_stone_bricks",
+    "fishcirclesbrickblock": "infested_chiseled_stone_bricks",
+    "fishcirclestonebricks": "infested_chiseled_stone_bricks",
+    "fishcirclesbb": "infested_chiseled_stone_bricks",
     "fishcistonebrick": "infested_chiseled_stone_bricks",
     "fishcistonebrickblock": "infested_chiseled_stone_bricks",
     "fishcistonebb": "infested_chiseled_stone_bricks",
     "fishcisbrick": "infested_chiseled_stone_bricks",
     "fishcisbricks": "infested_chiseled_stone_bricks",
+    "fishcisbrickblock": "infested_chiseled_stone_bricks",
+    "fishcistonebricks": "infested_chiseled_stone_bricks",
+    "fishcisbb": "infested_chiseled_stone_bricks",
     "infestedchiseledstonebrick": "infested_chiseled_stone_bricks",
     "infestedchiseledstonebrickblock": "infested_chiseled_stone_bricks",
     "infestedchiseledstonebb": "infested_chiseled_stone_bricks",
     "infestedchiseledsbrick": "infested_chiseled_stone_bricks",
     "infestedchiseledsbricks": "infested_chiseled_stone_bricks",
+    "infestedchiseledsbrickblock": "infested_chiseled_stone_bricks",
+    "infestedchiseledsbb": "infested_chiseled_stone_bricks",
     "infestedcirclestonebrick": "infested_chiseled_stone_bricks",
     "infestedcirclestonebrickblock": "infested_chiseled_stone_bricks",
     "infestedcirclestonebb": "infested_chiseled_stone_bricks",
     "infestedcirclesbrick": "infested_chiseled_stone_bricks",
     "infestedcirclesbricks": "infested_chiseled_stone_bricks",
+    "infestedcirclesbrickblock": "infested_chiseled_stone_bricks",
+    "infestedcirclestonebricks": "infested_chiseled_stone_bricks",
+    "infestedcirclesbb": "infested_chiseled_stone_bricks",
     "infestedcistonebrick": "infested_chiseled_stone_bricks",
     "infestedcistonebrickblock": "infested_chiseled_stone_bricks",
     "infestedcistonebb": "infested_chiseled_stone_bricks",
     "infestedcisbrick": "infested_chiseled_stone_bricks",
     "infestedcisbricks": "infested_chiseled_stone_bricks",
+    "infestedcisbrickblock": "infested_chiseled_stone_bricks",
+    "infestedcistonebricks": "infested_chiseled_stone_bricks",
+    "infestedcisbb": "infested_chiseled_stone_bricks",
     "monstereggchiseledstonebrick": "infested_chiseled_stone_bricks",
     "monstereggchiseledstonebrickblock": "infested_chiseled_stone_bricks",
     "monstereggchiseledstonebb": "infested_chiseled_stone_bricks",
     "monstereggchiseledsbrick": "infested_chiseled_stone_bricks",
     "monstereggchiseledsbricks": "infested_chiseled_stone_bricks",
+    "monstereggchiseledsbrickblock": "infested_chiseled_stone_bricks",
+    "monstereggchiseledstonebricks": "infested_chiseled_stone_bricks",
+    "monstereggchiseledsbb": "infested_chiseled_stone_bricks",
     "monstereggcirclestonebrick": "infested_chiseled_stone_bricks",
     "monstereggcirclestonebrickblock": "infested_chiseled_stone_bricks",
     "monstereggcirclestonebb": "infested_chiseled_stone_bricks",
     "monstereggcirclesbrick": "infested_chiseled_stone_bricks",
     "monstereggcirclesbricks": "infested_chiseled_stone_bricks",
+    "monstereggcirclesbrickblock": "infested_chiseled_stone_bricks",
+    "monstereggcirclestonebricks": "infested_chiseled_stone_bricks",
+    "monstereggcirclesbb": "infested_chiseled_stone_bricks",
     "monstereggcistonebrick": "infested_chiseled_stone_bricks",
     "monstereggcistonebrickblock": "infested_chiseled_stone_bricks",
     "monstereggcistonebb": "infested_chiseled_stone_bricks",
     "monstereggcisbrick": "infested_chiseled_stone_bricks",
     "monstereggcisbricks": "infested_chiseled_stone_bricks",
+    "monstereggcisbrickblock": "infested_chiseled_stone_bricks",
+    "monstereggcistonebricks": "infested_chiseled_stone_bricks",
+    "monstereggcisbb": "infested_chiseled_stone_bricks",
     "meggchiseledstonebrick": "infested_chiseled_stone_bricks",
     "meggchiseledstonebrickblock": "infested_chiseled_stone_bricks",
     "meggchiseledstonebb": "infested_chiseled_stone_bricks",
     "meggchiseledsbrick": "infested_chiseled_stone_bricks",
     "meggchiseledsbricks": "infested_chiseled_stone_bricks",
+    "meggchiseledsbrickblock": "infested_chiseled_stone_bricks",
+    "meggchiseledstonebricks": "infested_chiseled_stone_bricks",
+    "meggchiseledsbb": "infested_chiseled_stone_bricks",
     "meggcirclestonebrick": "infested_chiseled_stone_bricks",
     "meggcirclestonebrickblock": "infested_chiseled_stone_bricks",
     "meggcirclestonebb": "infested_chiseled_stone_bricks",
     "meggcirclesbrick": "infested_chiseled_stone_bricks",
     "meggcirclesbricks": "infested_chiseled_stone_bricks",
+    "meggcirclesbrickblock": "infested_chiseled_stone_bricks",
+    "meggcirclestonebricks": "infested_chiseled_stone_bricks",
+    "meggcirclesbb": "infested_chiseled_stone_bricks",
     "meggcistonebrick": "infested_chiseled_stone_bricks",
     "meggcistonebrickblock": "infested_chiseled_stone_bricks",
     "meggcistonebb": "infested_chiseled_stone_bricks",
     "meggcisbrick": "infested_chiseled_stone_bricks",
     "meggcisbricks": "infested_chiseled_stone_bricks",
+    "meggcisbrickblock": "infested_chiseled_stone_bricks",
+    "meggcistonebricks": "infested_chiseled_stone_bricks",
+    "meggcisbb": "infested_chiseled_stone_bricks",
     "trapchiseledstonebrick": "infested_chiseled_stone_bricks",
     "trapchiseledstonebrickblock": "infested_chiseled_stone_bricks",
     "trapchiseledstonebb": "infested_chiseled_stone_bricks",
     "trapchiseledsbrick": "infested_chiseled_stone_bricks",
     "trapchiseledsbricks": "infested_chiseled_stone_bricks",
+    "trapchiseledsbrickblock": "infested_chiseled_stone_bricks",
+    "trapchiseledstonebricks": "infested_chiseled_stone_bricks",
+    "trapchiseledsbb": "infested_chiseled_stone_bricks",
     "trapcirclestonebrick": "infested_chiseled_stone_bricks",
     "trapcirclestonebrickblock": "infested_chiseled_stone_bricks",
     "trapcirclestonebb": "infested_chiseled_stone_bricks",
     "trapcirclesbrick": "infested_chiseled_stone_bricks",
     "trapcirclesbricks": "infested_chiseled_stone_bricks",
+    "trapcirclesbrickblock": "infested_chiseled_stone_bricks",
+    "trapcirclestonebricks": "infested_chiseled_stone_bricks",
+    "trapcirclesbb": "infested_chiseled_stone_bricks",
     "trapcistonebrick": "infested_chiseled_stone_bricks",
     "trapcistonebrickblock": "infested_chiseled_stone_bricks",
     "trapcistonebb": "infested_chiseled_stone_bricks",
     "trapcisbrick": "infested_chiseled_stone_bricks",
     "trapcisbricks": "infested_chiseled_stone_bricks",
+    "trapcisbrickblock": "infested_chiseled_stone_bricks",
+    "trapcistonebricks": "infested_chiseled_stone_bricks",
+    "trapcisbb": "infested_chiseled_stone_bricks",
     "sfchiseledstonebrick": "infested_chiseled_stone_bricks",
     "sfchiseledstonebrickblock": "infested_chiseled_stone_bricks",
     "sfchiseledstonebb": "infested_chiseled_stone_bricks",
     "sfchiseledsbrick": "infested_chiseled_stone_bricks",
     "sfchiseledsbricks": "infested_chiseled_stone_bricks",
+    "sfchiseledsbrickblock": "infested_chiseled_stone_bricks",
+    "sfchiseledstonebricks": "infested_chiseled_stone_bricks",
+    "sfchiseledsbb": "infested_chiseled_stone_bricks",
     "sfcirclestonebrick": "infested_chiseled_stone_bricks",
     "sfcirclestonebrickblock": "infested_chiseled_stone_bricks",
     "sfcirclestonebb": "infested_chiseled_stone_bricks",
     "sfcirclesbrick": "infested_chiseled_stone_bricks",
     "sfcirclesbricks": "infested_chiseled_stone_bricks",
+    "sfcirclesbrickblock": "infested_chiseled_stone_bricks",
+    "sfcirclestonebricks": "infested_chiseled_stone_bricks",
+    "sfcirclesbb": "infested_chiseled_stone_bricks",
     "sfcistonebrick": "infested_chiseled_stone_bricks",
     "sfcistonebrickblock": "infested_chiseled_stone_bricks",
     "sfcistonebb": "infested_chiseled_stone_bricks",
     "sfcisbrick": "infested_chiseled_stone_bricks",
     "sfcisbricks": "infested_chiseled_stone_bricks",
+    "sfcisbrickblock": "infested_chiseled_stone_bricks",
+    "sfcistonebricks": "infested_chiseled_stone_bricks",
+    "sfcisbb": "infested_chiseled_stone_bricks",
+    "mechiseledstonebrick": "infested_chiseled_stone_bricks",
+    "mechiseledstonebrickblock": "infested_chiseled_stone_bricks",
+    "mechiseledstonebb": "infested_chiseled_stone_bricks",
+    "mechiseledsbrick": "infested_chiseled_stone_bricks",
+    "mechiseledsbricks": "infested_chiseled_stone_bricks",
+    "mechiseledsbrickblock": "infested_chiseled_stone_bricks",
+    "mechiseledstonebricks": "infested_chiseled_stone_bricks",
+    "mechiseledsbb": "infested_chiseled_stone_bricks",
+    "mecirclestonebrick": "infested_chiseled_stone_bricks",
+    "mecirclestonebrickblock": "infested_chiseled_stone_bricks",
+    "mecirclestonebb": "infested_chiseled_stone_bricks",
+    "mecirclesbrick": "infested_chiseled_stone_bricks",
+    "mecirclesbricks": "infested_chiseled_stone_bricks",
+    "mecirclesbrickblock": "infested_chiseled_stone_bricks",
+    "mecirclestonebricks": "infested_chiseled_stone_bricks",
+    "mecirclesbb": "infested_chiseled_stone_bricks",
+    "mecistonebrick": "infested_chiseled_stone_bricks",
+    "mecistonebrickblock": "infested_chiseled_stone_bricks",
+    "mecistonebb": "infested_chiseled_stone_bricks",
+    "mecisbrick": "infested_chiseled_stone_bricks",
+    "mecisbricks": "infested_chiseled_stone_bricks",
+    "mecisbrickblock": "infested_chiseled_stone_bricks",
+    "mecistonebricks": "infested_chiseled_stone_bricks",
+    "mecisbb": "infested_chiseled_stone_bricks",
     "infested_cobblestone": {
         "material": "INFESTED_COBBLESTONE"
     },
@@ -4007,6 +4340,9 @@
     "sfcobblestone": "infested_cobblestone",
     "sfcstone": "infested_cobblestone",
     "sfcobble": "infested_cobblestone",
+    "mecobblestone": "infested_cobblestone",
+    "mecstone": "infested_cobblestone",
+    "mecobble": "infested_cobblestone",
     "infested_cracked_stone_bricks": {
         "material": "INFESTED_CRACKED_STONE_BRICKS"
     },
@@ -4016,161 +4352,288 @@
     "silverfishcrackedstonebb": "infested_cracked_stone_bricks",
     "silverfishcrackedsbrick": "infested_cracked_stone_bricks",
     "silverfishcrackedsbricks": "infested_cracked_stone_bricks",
+    "silverfishcrackedsbrickblock": "infested_cracked_stone_bricks",
+    "silverfishcrackedstonebricks": "infested_cracked_stone_bricks",
+    "silverfishcrackedsbb": "infested_cracked_stone_bricks",
     "silverfishcrackstonebrick": "infested_cracked_stone_bricks",
     "silverfishcrackstonebrickblock": "infested_cracked_stone_bricks",
     "silverfishcrackstonebb": "infested_cracked_stone_bricks",
     "silverfishcracksbrick": "infested_cracked_stone_bricks",
     "silverfishcracksbricks": "infested_cracked_stone_bricks",
+    "silverfishcracksbrickblock": "infested_cracked_stone_bricks",
+    "silverfishcrackstonebricks": "infested_cracked_stone_bricks",
+    "silverfishcracksbb": "infested_cracked_stone_bricks",
     "silverfishcrstonebrick": "infested_cracked_stone_bricks",
     "silverfishcrstonebrickblock": "infested_cracked_stone_bricks",
     "silverfishcrstonebb": "infested_cracked_stone_bricks",
     "silverfishcrsbrick": "infested_cracked_stone_bricks",
     "silverfishcrsbricks": "infested_cracked_stone_bricks",
+    "silverfishcrsbrickblock": "infested_cracked_stone_bricks",
+    "silverfishcrstonebricks": "infested_cracked_stone_bricks",
+    "silverfishcrsbb": "infested_cracked_stone_bricks",
     "silverfishcstonebrick": "infested_cracked_stone_bricks",
     "silverfishcstonebrickblock": "infested_cracked_stone_bricks",
     "silverfishcstonebb": "infested_cracked_stone_bricks",
     "silverfishcsbrick": "infested_cracked_stone_bricks",
     "silverfishcsbricks": "infested_cracked_stone_bricks",
+    "silverfishcsbrickblock": "infested_cracked_stone_bricks",
+    "silverfishcstonebricks": "infested_cracked_stone_bricks",
+    "silverfishcsbb": "infested_cracked_stone_bricks",
     "sfishcrackedstonebrick": "infested_cracked_stone_bricks",
     "sfishcrackedstonebrickblock": "infested_cracked_stone_bricks",
     "sfishcrackedstonebb": "infested_cracked_stone_bricks",
     "sfishcrackedsbrick": "infested_cracked_stone_bricks",
     "sfishcrackedsbricks": "infested_cracked_stone_bricks",
+    "sfishcrackedsbrickblock": "infested_cracked_stone_bricks",
+    "sfishcrackedstonebricks": "infested_cracked_stone_bricks",
+    "sfishcrackedsbb": "infested_cracked_stone_bricks",
     "sfishcrackstonebrick": "infested_cracked_stone_bricks",
     "sfishcrackstonebrickblock": "infested_cracked_stone_bricks",
     "sfishcrackstonebb": "infested_cracked_stone_bricks",
     "sfishcracksbrick": "infested_cracked_stone_bricks",
     "sfishcracksbricks": "infested_cracked_stone_bricks",
+    "sfishcracksbrickblock": "infested_cracked_stone_bricks",
+    "sfishcrackstonebricks": "infested_cracked_stone_bricks",
+    "sfishcracksbb": "infested_cracked_stone_bricks",
     "sfishcrstonebrick": "infested_cracked_stone_bricks",
     "sfishcrstonebrickblock": "infested_cracked_stone_bricks",
     "sfishcrstonebb": "infested_cracked_stone_bricks",
     "sfishcrsbrick": "infested_cracked_stone_bricks",
     "sfishcrsbricks": "infested_cracked_stone_bricks",
+    "sfishcrsbrickblock": "infested_cracked_stone_bricks",
+    "sfishcrstonebricks": "infested_cracked_stone_bricks",
+    "sfishcrsbb": "infested_cracked_stone_bricks",
     "sfishcstonebrick": "infested_cracked_stone_bricks",
     "sfishcstonebrickblock": "infested_cracked_stone_bricks",
     "sfishcstonebb": "infested_cracked_stone_bricks",
     "sfishcsbrick": "infested_cracked_stone_bricks",
     "sfishcsbricks": "infested_cracked_stone_bricks",
+    "sfishcsbrickblock": "infested_cracked_stone_bricks",
+    "sfishcstonebricks": "infested_cracked_stone_bricks",
+    "sfishcsbb": "infested_cracked_stone_bricks",
     "fishcrackedstonebrick": "infested_cracked_stone_bricks",
     "fishcrackedstonebrickblock": "infested_cracked_stone_bricks",
     "fishcrackedstonebb": "infested_cracked_stone_bricks",
     "fishcrackedsbrick": "infested_cracked_stone_bricks",
     "fishcrackedsbricks": "infested_cracked_stone_bricks",
+    "fishcrackedsbrickblock": "infested_cracked_stone_bricks",
+    "fishcrackedstonebricks": "infested_cracked_stone_bricks",
+    "fishcrackedsbb": "infested_cracked_stone_bricks",
     "fishcrackstonebrick": "infested_cracked_stone_bricks",
     "fishcrackstonebrickblock": "infested_cracked_stone_bricks",
     "fishcrackstonebb": "infested_cracked_stone_bricks",
     "fishcracksbrick": "infested_cracked_stone_bricks",
     "fishcracksbricks": "infested_cracked_stone_bricks",
+    "fishcracksbrickblock": "infested_cracked_stone_bricks",
+    "fishcrackstonebricks": "infested_cracked_stone_bricks",
+    "fishcracksbb": "infested_cracked_stone_bricks",
     "fishcrstonebrick": "infested_cracked_stone_bricks",
     "fishcrstonebrickblock": "infested_cracked_stone_bricks",
     "fishcrstonebb": "infested_cracked_stone_bricks",
     "fishcrsbrick": "infested_cracked_stone_bricks",
     "fishcrsbricks": "infested_cracked_stone_bricks",
+    "fishcrsbrickblock": "infested_cracked_stone_bricks",
+    "fishcrstonebricks": "infested_cracked_stone_bricks",
+    "fishcrsbb": "infested_cracked_stone_bricks",
     "fishcstonebrick": "infested_cracked_stone_bricks",
     "fishcstonebrickblock": "infested_cracked_stone_bricks",
     "fishcstonebb": "infested_cracked_stone_bricks",
     "fishcsbrick": "infested_cracked_stone_bricks",
     "fishcsbricks": "infested_cracked_stone_bricks",
+    "fishcsbrickblock": "infested_cracked_stone_bricks",
+    "fishcstonebricks": "infested_cracked_stone_bricks",
+    "fishcsbb": "infested_cracked_stone_bricks",
     "infestedcrackedstonebrick": "infested_cracked_stone_bricks",
     "infestedcrackedstonebrickblock": "infested_cracked_stone_bricks",
     "infestedcrackedstonebb": "infested_cracked_stone_bricks",
     "infestedcrackedsbrick": "infested_cracked_stone_bricks",
     "infestedcrackedsbricks": "infested_cracked_stone_bricks",
+    "infestedcrackedsbrickblock": "infested_cracked_stone_bricks",
+    "infestedcrackedsbb": "infested_cracked_stone_bricks",
     "infestedcrackstonebrick": "infested_cracked_stone_bricks",
     "infestedcrackstonebrickblock": "infested_cracked_stone_bricks",
     "infestedcrackstonebb": "infested_cracked_stone_bricks",
     "infestedcracksbrick": "infested_cracked_stone_bricks",
     "infestedcracksbricks": "infested_cracked_stone_bricks",
+    "infestedcracksbrickblock": "infested_cracked_stone_bricks",
+    "infestedcrackstonebricks": "infested_cracked_stone_bricks",
+    "infestedcracksbb": "infested_cracked_stone_bricks",
     "infestedcrstonebrick": "infested_cracked_stone_bricks",
     "infestedcrstonebrickblock": "infested_cracked_stone_bricks",
     "infestedcrstonebb": "infested_cracked_stone_bricks",
     "infestedcrsbrick": "infested_cracked_stone_bricks",
     "infestedcrsbricks": "infested_cracked_stone_bricks",
+    "infestedcrsbrickblock": "infested_cracked_stone_bricks",
+    "infestedcrstonebricks": "infested_cracked_stone_bricks",
+    "infestedcrsbb": "infested_cracked_stone_bricks",
     "infestedcstonebrick": "infested_cracked_stone_bricks",
     "infestedcstonebrickblock": "infested_cracked_stone_bricks",
     "infestedcstonebb": "infested_cracked_stone_bricks",
     "infestedcsbrick": "infested_cracked_stone_bricks",
     "infestedcsbricks": "infested_cracked_stone_bricks",
+    "infestedcsbrickblock": "infested_cracked_stone_bricks",
+    "infestedcstonebricks": "infested_cracked_stone_bricks",
+    "infestedcsbb": "infested_cracked_stone_bricks",
     "monstereggcrackedstonebrick": "infested_cracked_stone_bricks",
     "monstereggcrackedstonebrickblock": "infested_cracked_stone_bricks",
     "monstereggcrackedstonebb": "infested_cracked_stone_bricks",
     "monstereggcrackedsbrick": "infested_cracked_stone_bricks",
     "monstereggcrackedsbricks": "infested_cracked_stone_bricks",
+    "monstereggcrackedsbrickblock": "infested_cracked_stone_bricks",
+    "monstereggcrackedstonebricks": "infested_cracked_stone_bricks",
+    "monstereggcrackedsbb": "infested_cracked_stone_bricks",
     "monstereggcrackstonebrick": "infested_cracked_stone_bricks",
     "monstereggcrackstonebrickblock": "infested_cracked_stone_bricks",
     "monstereggcrackstonebb": "infested_cracked_stone_bricks",
     "monstereggcracksbrick": "infested_cracked_stone_bricks",
     "monstereggcracksbricks": "infested_cracked_stone_bricks",
+    "monstereggcracksbrickblock": "infested_cracked_stone_bricks",
+    "monstereggcrackstonebricks": "infested_cracked_stone_bricks",
+    "monstereggcracksbb": "infested_cracked_stone_bricks",
     "monstereggcrstonebrick": "infested_cracked_stone_bricks",
     "monstereggcrstonebrickblock": "infested_cracked_stone_bricks",
     "monstereggcrstonebb": "infested_cracked_stone_bricks",
     "monstereggcrsbrick": "infested_cracked_stone_bricks",
     "monstereggcrsbricks": "infested_cracked_stone_bricks",
+    "monstereggcrsbrickblock": "infested_cracked_stone_bricks",
+    "monstereggcrstonebricks": "infested_cracked_stone_bricks",
+    "monstereggcrsbb": "infested_cracked_stone_bricks",
     "monstereggcstonebrick": "infested_cracked_stone_bricks",
     "monstereggcstonebrickblock": "infested_cracked_stone_bricks",
     "monstereggcstonebb": "infested_cracked_stone_bricks",
     "monstereggcsbrick": "infested_cracked_stone_bricks",
     "monstereggcsbricks": "infested_cracked_stone_bricks",
+    "monstereggcsbrickblock": "infested_cracked_stone_bricks",
+    "monstereggcstonebricks": "infested_cracked_stone_bricks",
+    "monstereggcsbb": "infested_cracked_stone_bricks",
     "meggcrackedstonebrick": "infested_cracked_stone_bricks",
     "meggcrackedstonebrickblock": "infested_cracked_stone_bricks",
     "meggcrackedstonebb": "infested_cracked_stone_bricks",
     "meggcrackedsbrick": "infested_cracked_stone_bricks",
     "meggcrackedsbricks": "infested_cracked_stone_bricks",
+    "meggcrackedsbrickblock": "infested_cracked_stone_bricks",
+    "meggcrackedstonebricks": "infested_cracked_stone_bricks",
+    "meggcrackedsbb": "infested_cracked_stone_bricks",
     "meggcrackstonebrick": "infested_cracked_stone_bricks",
     "meggcrackstonebrickblock": "infested_cracked_stone_bricks",
     "meggcrackstonebb": "infested_cracked_stone_bricks",
     "meggcracksbrick": "infested_cracked_stone_bricks",
     "meggcracksbricks": "infested_cracked_stone_bricks",
+    "meggcracksbrickblock": "infested_cracked_stone_bricks",
+    "meggcrackstonebricks": "infested_cracked_stone_bricks",
+    "meggcracksbb": "infested_cracked_stone_bricks",
     "meggcrstonebrick": "infested_cracked_stone_bricks",
     "meggcrstonebrickblock": "infested_cracked_stone_bricks",
     "meggcrstonebb": "infested_cracked_stone_bricks",
     "meggcrsbrick": "infested_cracked_stone_bricks",
     "meggcrsbricks": "infested_cracked_stone_bricks",
+    "meggcrsbrickblock": "infested_cracked_stone_bricks",
+    "meggcrstonebricks": "infested_cracked_stone_bricks",
+    "meggcrsbb": "infested_cracked_stone_bricks",
     "meggcstonebrick": "infested_cracked_stone_bricks",
     "meggcstonebrickblock": "infested_cracked_stone_bricks",
     "meggcstonebb": "infested_cracked_stone_bricks",
     "meggcsbrick": "infested_cracked_stone_bricks",
     "meggcsbricks": "infested_cracked_stone_bricks",
+    "meggcsbrickblock": "infested_cracked_stone_bricks",
+    "meggcstonebricks": "infested_cracked_stone_bricks",
+    "meggcsbb": "infested_cracked_stone_bricks",
     "trapcrackedstonebrick": "infested_cracked_stone_bricks",
     "trapcrackedstonebrickblock": "infested_cracked_stone_bricks",
     "trapcrackedstonebb": "infested_cracked_stone_bricks",
     "trapcrackedsbrick": "infested_cracked_stone_bricks",
     "trapcrackedsbricks": "infested_cracked_stone_bricks",
+    "trapcrackedsbrickblock": "infested_cracked_stone_bricks",
+    "trapcrackedstonebricks": "infested_cracked_stone_bricks",
+    "trapcrackedsbb": "infested_cracked_stone_bricks",
     "trapcrackstonebrick": "infested_cracked_stone_bricks",
     "trapcrackstonebrickblock": "infested_cracked_stone_bricks",
     "trapcrackstonebb": "infested_cracked_stone_bricks",
     "trapcracksbrick": "infested_cracked_stone_bricks",
     "trapcracksbricks": "infested_cracked_stone_bricks",
+    "trapcracksbrickblock": "infested_cracked_stone_bricks",
+    "trapcrackstonebricks": "infested_cracked_stone_bricks",
+    "trapcracksbb": "infested_cracked_stone_bricks",
     "trapcrstonebrick": "infested_cracked_stone_bricks",
     "trapcrstonebrickblock": "infested_cracked_stone_bricks",
     "trapcrstonebb": "infested_cracked_stone_bricks",
     "trapcrsbrick": "infested_cracked_stone_bricks",
     "trapcrsbricks": "infested_cracked_stone_bricks",
+    "trapcrsbrickblock": "infested_cracked_stone_bricks",
+    "trapcrstonebricks": "infested_cracked_stone_bricks",
+    "trapcrsbb": "infested_cracked_stone_bricks",
     "trapcstonebrick": "infested_cracked_stone_bricks",
     "trapcstonebrickblock": "infested_cracked_stone_bricks",
     "trapcstonebb": "infested_cracked_stone_bricks",
     "trapcsbrick": "infested_cracked_stone_bricks",
     "trapcsbricks": "infested_cracked_stone_bricks",
+    "trapcsbrickblock": "infested_cracked_stone_bricks",
+    "trapcstonebricks": "infested_cracked_stone_bricks",
+    "trapcsbb": "infested_cracked_stone_bricks",
     "sfcrackedstonebrick": "infested_cracked_stone_bricks",
     "sfcrackedstonebrickblock": "infested_cracked_stone_bricks",
     "sfcrackedstonebb": "infested_cracked_stone_bricks",
     "sfcrackedsbrick": "infested_cracked_stone_bricks",
     "sfcrackedsbricks": "infested_cracked_stone_bricks",
+    "sfcrackedsbrickblock": "infested_cracked_stone_bricks",
+    "sfcrackedstonebricks": "infested_cracked_stone_bricks",
+    "sfcrackedsbb": "infested_cracked_stone_bricks",
     "sfcrackstonebrick": "infested_cracked_stone_bricks",
     "sfcrackstonebrickblock": "infested_cracked_stone_bricks",
     "sfcrackstonebb": "infested_cracked_stone_bricks",
     "sfcracksbrick": "infested_cracked_stone_bricks",
     "sfcracksbricks": "infested_cracked_stone_bricks",
+    "sfcracksbrickblock": "infested_cracked_stone_bricks",
+    "sfcrackstonebricks": "infested_cracked_stone_bricks",
+    "sfcracksbb": "infested_cracked_stone_bricks",
     "sfcrstonebrick": "infested_cracked_stone_bricks",
     "sfcrstonebrickblock": "infested_cracked_stone_bricks",
     "sfcrstonebb": "infested_cracked_stone_bricks",
     "sfcrsbrick": "infested_cracked_stone_bricks",
     "sfcrsbricks": "infested_cracked_stone_bricks",
+    "sfcrsbrickblock": "infested_cracked_stone_bricks",
+    "sfcrstonebricks": "infested_cracked_stone_bricks",
+    "sfcrsbb": "infested_cracked_stone_bricks",
     "sfcstonebrick": "infested_cracked_stone_bricks",
     "sfcstonebrickblock": "infested_cracked_stone_bricks",
     "sfcstonebb": "infested_cracked_stone_bricks",
     "sfcsbrick": "infested_cracked_stone_bricks",
     "sfcsbricks": "infested_cracked_stone_bricks",
+    "sfcsbrickblock": "infested_cracked_stone_bricks",
+    "sfcstonebricks": "infested_cracked_stone_bricks",
+    "sfcsbb": "infested_cracked_stone_bricks",
+    "mecrackedstonebrick": "infested_cracked_stone_bricks",
+    "mecrackedstonebrickblock": "infested_cracked_stone_bricks",
+    "mecrackedstonebb": "infested_cracked_stone_bricks",
+    "mecrackedsbrick": "infested_cracked_stone_bricks",
+    "mecrackedsbricks": "infested_cracked_stone_bricks",
+    "mecrackedsbrickblock": "infested_cracked_stone_bricks",
+    "mecrackedstonebricks": "infested_cracked_stone_bricks",
+    "mecrackedsbb": "infested_cracked_stone_bricks",
+    "mecrackstonebrick": "infested_cracked_stone_bricks",
+    "mecrackstonebrickblock": "infested_cracked_stone_bricks",
+    "mecrackstonebb": "infested_cracked_stone_bricks",
+    "mecracksbrick": "infested_cracked_stone_bricks",
+    "mecracksbricks": "infested_cracked_stone_bricks",
+    "mecracksbrickblock": "infested_cracked_stone_bricks",
+    "mecrackstonebricks": "infested_cracked_stone_bricks",
+    "mecracksbb": "infested_cracked_stone_bricks",
+    "mecrstonebrick": "infested_cracked_stone_bricks",
+    "mecrstonebrickblock": "infested_cracked_stone_bricks",
+    "mecrstonebb": "infested_cracked_stone_bricks",
+    "mecrsbrick": "infested_cracked_stone_bricks",
+    "mecrsbricks": "infested_cracked_stone_bricks",
+    "mecrsbrickblock": "infested_cracked_stone_bricks",
+    "mecrstonebricks": "infested_cracked_stone_bricks",
+    "mecrsbb": "infested_cracked_stone_bricks",
+    "mecstonebrick": "infested_cracked_stone_bricks",
+    "mecstonebrickblock": "infested_cracked_stone_bricks",
+    "mecstonebb": "infested_cracked_stone_bricks",
+    "mecsbrick": "infested_cracked_stone_bricks",
+    "mecsbricks": "infested_cracked_stone_bricks",
+    "mecsbrickblock": "infested_cracked_stone_bricks",
+    "mecstonebricks": "infested_cracked_stone_bricks",
+    "mecsbb": "infested_cracked_stone_bricks",
     "infested_mossy_stone_bricks": {
         "material": "INFESTED_MOSSY_STONE_BRICKS"
     },
@@ -4180,121 +4643,216 @@
     "silverfishmossystonebb": "infested_mossy_stone_bricks",
     "silverfishmossysbrick": "infested_mossy_stone_bricks",
     "silverfishmossysbricks": "infested_mossy_stone_bricks",
+    "silverfishmossysbrickblock": "infested_mossy_stone_bricks",
+    "silverfishmossystonebricks": "infested_mossy_stone_bricks",
+    "silverfishmossysbb": "infested_mossy_stone_bricks",
     "silverfishmossstonebrick": "infested_mossy_stone_bricks",
     "silverfishmossstonebrickblock": "infested_mossy_stone_bricks",
     "silverfishmossstonebb": "infested_mossy_stone_bricks",
     "silverfishmosssbrick": "infested_mossy_stone_bricks",
     "silverfishmosssbricks": "infested_mossy_stone_bricks",
+    "silverfishmosssbrickblock": "infested_mossy_stone_bricks",
+    "silverfishmossstonebricks": "infested_mossy_stone_bricks",
+    "silverfishmosssbb": "infested_mossy_stone_bricks",
     "silverfishmstonebrick": "infested_mossy_stone_bricks",
     "silverfishmstonebrickblock": "infested_mossy_stone_bricks",
     "silverfishmstonebb": "infested_mossy_stone_bricks",
     "silverfishmsbrick": "infested_mossy_stone_bricks",
     "silverfishmsbricks": "infested_mossy_stone_bricks",
+    "silverfishmsbrickblock": "infested_mossy_stone_bricks",
+    "silverfishmstonebricks": "infested_mossy_stone_bricks",
+    "silverfishmsbb": "infested_mossy_stone_bricks",
     "sfishmossystonebrick": "infested_mossy_stone_bricks",
     "sfishmossystonebrickblock": "infested_mossy_stone_bricks",
     "sfishmossystonebb": "infested_mossy_stone_bricks",
     "sfishmossysbrick": "infested_mossy_stone_bricks",
     "sfishmossysbricks": "infested_mossy_stone_bricks",
+    "sfishmossysbrickblock": "infested_mossy_stone_bricks",
+    "sfishmossystonebricks": "infested_mossy_stone_bricks",
+    "sfishmossysbb": "infested_mossy_stone_bricks",
     "sfishmossstonebrick": "infested_mossy_stone_bricks",
     "sfishmossstonebrickblock": "infested_mossy_stone_bricks",
     "sfishmossstonebb": "infested_mossy_stone_bricks",
     "sfishmosssbrick": "infested_mossy_stone_bricks",
     "sfishmosssbricks": "infested_mossy_stone_bricks",
+    "sfishmosssbrickblock": "infested_mossy_stone_bricks",
+    "sfishmossstonebricks": "infested_mossy_stone_bricks",
+    "sfishmosssbb": "infested_mossy_stone_bricks",
     "sfishmstonebrick": "infested_mossy_stone_bricks",
     "sfishmstonebrickblock": "infested_mossy_stone_bricks",
     "sfishmstonebb": "infested_mossy_stone_bricks",
     "sfishmsbrick": "infested_mossy_stone_bricks",
     "sfishmsbricks": "infested_mossy_stone_bricks",
+    "sfishmsbrickblock": "infested_mossy_stone_bricks",
+    "sfishmstonebricks": "infested_mossy_stone_bricks",
+    "sfishmsbb": "infested_mossy_stone_bricks",
     "fishmossystonebrick": "infested_mossy_stone_bricks",
     "fishmossystonebrickblock": "infested_mossy_stone_bricks",
     "fishmossystonebb": "infested_mossy_stone_bricks",
     "fishmossysbrick": "infested_mossy_stone_bricks",
     "fishmossysbricks": "infested_mossy_stone_bricks",
+    "fishmossysbrickblock": "infested_mossy_stone_bricks",
+    "fishmossystonebricks": "infested_mossy_stone_bricks",
+    "fishmossysbb": "infested_mossy_stone_bricks",
     "fishmossstonebrick": "infested_mossy_stone_bricks",
     "fishmossstonebrickblock": "infested_mossy_stone_bricks",
     "fishmossstonebb": "infested_mossy_stone_bricks",
     "fishmosssbrick": "infested_mossy_stone_bricks",
     "fishmosssbricks": "infested_mossy_stone_bricks",
+    "fishmosssbrickblock": "infested_mossy_stone_bricks",
+    "fishmossstonebricks": "infested_mossy_stone_bricks",
+    "fishmosssbb": "infested_mossy_stone_bricks",
     "fishmstonebrick": "infested_mossy_stone_bricks",
     "fishmstonebrickblock": "infested_mossy_stone_bricks",
     "fishmstonebb": "infested_mossy_stone_bricks",
     "fishmsbrick": "infested_mossy_stone_bricks",
     "fishmsbricks": "infested_mossy_stone_bricks",
+    "fishmsbrickblock": "infested_mossy_stone_bricks",
+    "fishmstonebricks": "infested_mossy_stone_bricks",
+    "fishmsbb": "infested_mossy_stone_bricks",
     "infestedmossystonebrick": "infested_mossy_stone_bricks",
     "infestedmossystonebrickblock": "infested_mossy_stone_bricks",
     "infestedmossystonebb": "infested_mossy_stone_bricks",
     "infestedmossysbrick": "infested_mossy_stone_bricks",
     "infestedmossysbricks": "infested_mossy_stone_bricks",
+    "infestedmossysbrickblock": "infested_mossy_stone_bricks",
+    "infestedmossysbb": "infested_mossy_stone_bricks",
     "infestedmossstonebrick": "infested_mossy_stone_bricks",
     "infestedmossstonebrickblock": "infested_mossy_stone_bricks",
     "infestedmossstonebb": "infested_mossy_stone_bricks",
     "infestedmosssbrick": "infested_mossy_stone_bricks",
     "infestedmosssbricks": "infested_mossy_stone_bricks",
+    "infestedmosssbrickblock": "infested_mossy_stone_bricks",
+    "infestedmossstonebricks": "infested_mossy_stone_bricks",
+    "infestedmosssbb": "infested_mossy_stone_bricks",
     "infestedmstonebrick": "infested_mossy_stone_bricks",
     "infestedmstonebrickblock": "infested_mossy_stone_bricks",
     "infestedmstonebb": "infested_mossy_stone_bricks",
     "infestedmsbrick": "infested_mossy_stone_bricks",
     "infestedmsbricks": "infested_mossy_stone_bricks",
+    "infestedmsbrickblock": "infested_mossy_stone_bricks",
+    "infestedmstonebricks": "infested_mossy_stone_bricks",
+    "infestedmsbb": "infested_mossy_stone_bricks",
     "monstereggmossystonebrick": "infested_mossy_stone_bricks",
     "monstereggmossystonebrickblock": "infested_mossy_stone_bricks",
     "monstereggmossystonebb": "infested_mossy_stone_bricks",
     "monstereggmossysbrick": "infested_mossy_stone_bricks",
     "monstereggmossysbricks": "infested_mossy_stone_bricks",
+    "monstereggmossysbrickblock": "infested_mossy_stone_bricks",
+    "monstereggmossystonebricks": "infested_mossy_stone_bricks",
+    "monstereggmossysbb": "infested_mossy_stone_bricks",
     "monstereggmossstonebrick": "infested_mossy_stone_bricks",
     "monstereggmossstonebrickblock": "infested_mossy_stone_bricks",
     "monstereggmossstonebb": "infested_mossy_stone_bricks",
     "monstereggmosssbrick": "infested_mossy_stone_bricks",
     "monstereggmosssbricks": "infested_mossy_stone_bricks",
+    "monstereggmosssbrickblock": "infested_mossy_stone_bricks",
+    "monstereggmossstonebricks": "infested_mossy_stone_bricks",
+    "monstereggmosssbb": "infested_mossy_stone_bricks",
     "monstereggmstonebrick": "infested_mossy_stone_bricks",
     "monstereggmstonebrickblock": "infested_mossy_stone_bricks",
     "monstereggmstonebb": "infested_mossy_stone_bricks",
     "monstereggmsbrick": "infested_mossy_stone_bricks",
     "monstereggmsbricks": "infested_mossy_stone_bricks",
+    "monstereggmsbrickblock": "infested_mossy_stone_bricks",
+    "monstereggmstonebricks": "infested_mossy_stone_bricks",
+    "monstereggmsbb": "infested_mossy_stone_bricks",
     "meggmossystonebrick": "infested_mossy_stone_bricks",
     "meggmossystonebrickblock": "infested_mossy_stone_bricks",
     "meggmossystonebb": "infested_mossy_stone_bricks",
     "meggmossysbrick": "infested_mossy_stone_bricks",
     "meggmossysbricks": "infested_mossy_stone_bricks",
+    "meggmossysbrickblock": "infested_mossy_stone_bricks",
+    "meggmossystonebricks": "infested_mossy_stone_bricks",
+    "meggmossysbb": "infested_mossy_stone_bricks",
     "meggmossstonebrick": "infested_mossy_stone_bricks",
     "meggmossstonebrickblock": "infested_mossy_stone_bricks",
     "meggmossstonebb": "infested_mossy_stone_bricks",
     "meggmosssbrick": "infested_mossy_stone_bricks",
     "meggmosssbricks": "infested_mossy_stone_bricks",
+    "meggmosssbrickblock": "infested_mossy_stone_bricks",
+    "meggmossstonebricks": "infested_mossy_stone_bricks",
+    "meggmosssbb": "infested_mossy_stone_bricks",
     "meggmstonebrick": "infested_mossy_stone_bricks",
     "meggmstonebrickblock": "infested_mossy_stone_bricks",
     "meggmstonebb": "infested_mossy_stone_bricks",
     "meggmsbrick": "infested_mossy_stone_bricks",
     "meggmsbricks": "infested_mossy_stone_bricks",
+    "meggmsbrickblock": "infested_mossy_stone_bricks",
+    "meggmstonebricks": "infested_mossy_stone_bricks",
+    "meggmsbb": "infested_mossy_stone_bricks",
     "trapmossystonebrick": "infested_mossy_stone_bricks",
     "trapmossystonebrickblock": "infested_mossy_stone_bricks",
     "trapmossystonebb": "infested_mossy_stone_bricks",
     "trapmossysbrick": "infested_mossy_stone_bricks",
     "trapmossysbricks": "infested_mossy_stone_bricks",
+    "trapmossysbrickblock": "infested_mossy_stone_bricks",
+    "trapmossystonebricks": "infested_mossy_stone_bricks",
+    "trapmossysbb": "infested_mossy_stone_bricks",
     "trapmossstonebrick": "infested_mossy_stone_bricks",
     "trapmossstonebrickblock": "infested_mossy_stone_bricks",
     "trapmossstonebb": "infested_mossy_stone_bricks",
     "trapmosssbrick": "infested_mossy_stone_bricks",
     "trapmosssbricks": "infested_mossy_stone_bricks",
+    "trapmosssbrickblock": "infested_mossy_stone_bricks",
+    "trapmossstonebricks": "infested_mossy_stone_bricks",
+    "trapmosssbb": "infested_mossy_stone_bricks",
     "trapmstonebrick": "infested_mossy_stone_bricks",
     "trapmstonebrickblock": "infested_mossy_stone_bricks",
     "trapmstonebb": "infested_mossy_stone_bricks",
     "trapmsbrick": "infested_mossy_stone_bricks",
     "trapmsbricks": "infested_mossy_stone_bricks",
+    "trapmsbrickblock": "infested_mossy_stone_bricks",
+    "trapmstonebricks": "infested_mossy_stone_bricks",
+    "trapmsbb": "infested_mossy_stone_bricks",
     "sfmossystonebrick": "infested_mossy_stone_bricks",
     "sfmossystonebrickblock": "infested_mossy_stone_bricks",
     "sfmossystonebb": "infested_mossy_stone_bricks",
     "sfmossysbrick": "infested_mossy_stone_bricks",
     "sfmossysbricks": "infested_mossy_stone_bricks",
+    "sfmossysbrickblock": "infested_mossy_stone_bricks",
+    "sfmossystonebricks": "infested_mossy_stone_bricks",
+    "sfmossysbb": "infested_mossy_stone_bricks",
     "sfmossstonebrick": "infested_mossy_stone_bricks",
     "sfmossstonebrickblock": "infested_mossy_stone_bricks",
     "sfmossstonebb": "infested_mossy_stone_bricks",
     "sfmosssbrick": "infested_mossy_stone_bricks",
     "sfmosssbricks": "infested_mossy_stone_bricks",
+    "sfmosssbrickblock": "infested_mossy_stone_bricks",
+    "sfmossstonebricks": "infested_mossy_stone_bricks",
+    "sfmosssbb": "infested_mossy_stone_bricks",
     "sfmstonebrick": "infested_mossy_stone_bricks",
     "sfmstonebrickblock": "infested_mossy_stone_bricks",
     "sfmstonebb": "infested_mossy_stone_bricks",
     "sfmsbrick": "infested_mossy_stone_bricks",
     "sfmsbricks": "infested_mossy_stone_bricks",
+    "sfmsbrickblock": "infested_mossy_stone_bricks",
+    "sfmstonebricks": "infested_mossy_stone_bricks",
+    "sfmsbb": "infested_mossy_stone_bricks",
+    "memossystonebrick": "infested_mossy_stone_bricks",
+    "memossystonebrickblock": "infested_mossy_stone_bricks",
+    "memossystonebb": "infested_mossy_stone_bricks",
+    "memossysbrick": "infested_mossy_stone_bricks",
+    "memossysbricks": "infested_mossy_stone_bricks",
+    "memossysbrickblock": "infested_mossy_stone_bricks",
+    "memossystonebricks": "infested_mossy_stone_bricks",
+    "memossysbb": "infested_mossy_stone_bricks",
+    "memossstonebrick": "infested_mossy_stone_bricks",
+    "memossstonebrickblock": "infested_mossy_stone_bricks",
+    "memossstonebb": "infested_mossy_stone_bricks",
+    "memosssbrick": "infested_mossy_stone_bricks",
+    "memosssbricks": "infested_mossy_stone_bricks",
+    "memosssbrickblock": "infested_mossy_stone_bricks",
+    "memossstonebricks": "infested_mossy_stone_bricks",
+    "memosssbb": "infested_mossy_stone_bricks",
+    "memstonebrick": "infested_mossy_stone_bricks",
+    "memstonebrickblock": "infested_mossy_stone_bricks",
+    "memstonebb": "infested_mossy_stone_bricks",
+    "memsbrick": "infested_mossy_stone_bricks",
+    "memsbricks": "infested_mossy_stone_bricks",
+    "memsbrickblock": "infested_mossy_stone_bricks",
+    "memstonebricks": "infested_mossy_stone_bricks",
+    "memsbb": "infested_mossy_stone_bricks",
     "infested_stone": {
         "material": "INFESTED_STONE"
     },
@@ -4322,6 +4880,9 @@
     "sfstone": "infested_stone",
     "sfsmoothstone": "infested_stone",
     "sfsstone": "infested_stone",
+    "mestone": "infested_stone",
+    "mesmoothstone": "infested_stone",
+    "messtone": "infested_stone",
     "infested_stone_bricks": {
         "material": "INFESTED_STONE_BRICKS"
     },
@@ -4331,41 +4892,72 @@
     "silverfishstonebb": "infested_stone_bricks",
     "silverfishsbrick": "infested_stone_bricks",
     "silverfishsbricks": "infested_stone_bricks",
+    "silverfishsbrickblock": "infested_stone_bricks",
+    "silverfishstonebricks": "infested_stone_bricks",
+    "silverfishsbb": "infested_stone_bricks",
     "sfishstonebrick": "infested_stone_bricks",
     "sfishstonebrickblock": "infested_stone_bricks",
     "sfishstonebb": "infested_stone_bricks",
     "sfishsbrick": "infested_stone_bricks",
     "sfishsbricks": "infested_stone_bricks",
+    "sfishsbrickblock": "infested_stone_bricks",
+    "sfishstonebricks": "infested_stone_bricks",
+    "sfishsbb": "infested_stone_bricks",
     "fishstonebrick": "infested_stone_bricks",
     "fishstonebrickblock": "infested_stone_bricks",
     "fishstonebb": "infested_stone_bricks",
     "fishsbrick": "infested_stone_bricks",
     "fishsbricks": "infested_stone_bricks",
+    "fishsbrickblock": "infested_stone_bricks",
+    "fishstonebricks": "infested_stone_bricks",
+    "fishsbb": "infested_stone_bricks",
     "infestedstonebrick": "infested_stone_bricks",
     "infestedstonebrickblock": "infested_stone_bricks",
     "infestedstonebb": "infested_stone_bricks",
     "infestedsbrick": "infested_stone_bricks",
     "infestedsbricks": "infested_stone_bricks",
+    "infestedsbrickblock": "infested_stone_bricks",
+    "infestedsbb": "infested_stone_bricks",
     "monstereggstonebrick": "infested_stone_bricks",
     "monstereggstonebrickblock": "infested_stone_bricks",
     "monstereggstonebb": "infested_stone_bricks",
     "monstereggsbrick": "infested_stone_bricks",
     "monstereggsbricks": "infested_stone_bricks",
+    "monstereggsbrickblock": "infested_stone_bricks",
+    "monstereggstonebricks": "infested_stone_bricks",
+    "monstereggsbb": "infested_stone_bricks",
     "meggstonebrick": "infested_stone_bricks",
     "meggstonebrickblock": "infested_stone_bricks",
     "meggstonebb": "infested_stone_bricks",
     "meggsbrick": "infested_stone_bricks",
     "meggsbricks": "infested_stone_bricks",
+    "meggsbrickblock": "infested_stone_bricks",
+    "meggstonebricks": "infested_stone_bricks",
+    "meggsbb": "infested_stone_bricks",
     "trapstonebrick": "infested_stone_bricks",
     "trapstonebrickblock": "infested_stone_bricks",
     "trapstonebb": "infested_stone_bricks",
     "trapsbrick": "infested_stone_bricks",
     "trapsbricks": "infested_stone_bricks",
+    "trapsbrickblock": "infested_stone_bricks",
+    "trapstonebricks": "infested_stone_bricks",
+    "trapsbb": "infested_stone_bricks",
     "sfstonebrick": "infested_stone_bricks",
     "sfstonebrickblock": "infested_stone_bricks",
     "sfstonebb": "infested_stone_bricks",
     "sfsbrick": "infested_stone_bricks",
     "sfsbricks": "infested_stone_bricks",
+    "sfsbrickblock": "infested_stone_bricks",
+    "sfstonebricks": "infested_stone_bricks",
+    "sfsbb": "infested_stone_bricks",
+    "mestonebrick": "infested_stone_bricks",
+    "mestonebrickblock": "infested_stone_bricks",
+    "mestonebb": "infested_stone_bricks",
+    "mesbrick": "infested_stone_bricks",
+    "mesbricks": "infested_stone_bricks",
+    "mesbrickblock": "infested_stone_bricks",
+    "mestonebricks": "infested_stone_bricks",
+    "mesbb": "infested_stone_bricks",
     "ink_sac": {
         "material": "INK_SAC"
     },
@@ -4804,26 +5396,26 @@
     "jungle_sapling": {
         "material": "JUNGLE_SAPLING"
     },
-    "junglesapling": "jungle_sapling",
-    "jungletreesapling": "jungle_sapling",
-    "junglelogsapling": "jungle_sapling",
-    "jungletrunksapling": "jungle_sapling",
-    "junglewoodsapling": "jungle_sapling",
-    "jsapling": "jungle_sapling",
-    "jtreesapling": "jungle_sapling",
-    "jlogsapling": "jungle_sapling",
-    "jtrunksapling": "jungle_sapling",
-    "jwoodsapling": "jungle_sapling",
-    "forestsapling": "jungle_sapling",
-    "foresttreesapling": "jungle_sapling",
-    "forestlogsapling": "jungle_sapling",
-    "foresttrunksapling": "jungle_sapling",
-    "forestwoodsapling": "jungle_sapling",
-    "fsapling": "jungle_sapling",
-    "ftreesapling": "jungle_sapling",
-    "flogsapling": "jungle_sapling",
-    "ftrunksapling": "jungle_sapling",
-    "fwoodsapling": "jungle_sapling",
+    "junglesapling": "potted_jungle_sapling",
+    "jungletreesapling": "potted_jungle_sapling",
+    "junglelogsapling": "potted_jungle_sapling",
+    "jungletrunksapling": "potted_jungle_sapling",
+    "junglewoodsapling": "potted_jungle_sapling",
+    "jsapling": "potted_jungle_sapling",
+    "jtreesapling": "potted_jungle_sapling",
+    "jlogsapling": "potted_jungle_sapling",
+    "jtrunksapling": "potted_jungle_sapling",
+    "jwoodsapling": "potted_jungle_sapling",
+    "forestsapling": "potted_jungle_sapling",
+    "foresttreesapling": "potted_jungle_sapling",
+    "forestlogsapling": "potted_jungle_sapling",
+    "foresttrunksapling": "potted_jungle_sapling",
+    "forestwoodsapling": "potted_jungle_sapling",
+    "fsapling": "potted_jungle_sapling",
+    "ftreesapling": "potted_jungle_sapling",
+    "flogsapling": "potted_jungle_sapling",
+    "ftrunksapling": "potted_jungle_sapling",
+    "fwoodsapling": "potted_jungle_sapling",
     "jungle_slab": {
         "material": "JUNGLE_SLAB"
     },
@@ -4957,6 +5549,10 @@
     "kelp": {
         "material": "KELP"
     },
+    "kelp_plant": {
+        "material": "KELP_PLANT"
+    },
+    "kelpplant": "kelp_plant",
     "knowledge_book": {
         "material": "KNOWLEDGE_BOOK"
     },
@@ -4996,6 +5592,12 @@
         "material": "LARGE_FERN"
     },
     "largefern": "large_fern",
+    "lava": {
+        "material": "LAVA"
+    },
+    "stationarylava": "lava",
+    "stilllava": "lava",
+    "slava": "lava",
     "lava_bucket": {
         "material": "LAVA_BUCKET"
     },
@@ -5052,16 +5654,16 @@
     "light_blue_banner": {
         "material": "LIGHT_BLUE_BANNER"
     },
-    "lightbluebanner": "light_blue_banner",
-    "lbstandingbanner": "light_blue_banner",
-    "lbbanner": "light_blue_banner",
-    "lblustandingbanner": "light_blue_banner",
-    "lblubanner": "light_blue_banner",
-    "lightblustandingbanner": "light_blue_banner",
-    "lightblubanner": "light_blue_banner",
-    "lbluestandingbanner": "light_blue_banner",
-    "lbluebanner": "light_blue_banner",
-    "lightbluestandingbanner": "light_blue_banner",
+    "lightbluebanner": "light_blue_wall_banner",
+    "lbstandingbanner": "light_blue_wall_banner",
+    "lbbanner": "light_blue_wall_banner",
+    "lblustandingbanner": "light_blue_wall_banner",
+    "lblubanner": "light_blue_wall_banner",
+    "lightblustandingbanner": "light_blue_wall_banner",
+    "lightblubanner": "light_blue_wall_banner",
+    "lbluestandingbanner": "light_blue_wall_banner",
+    "lbluebanner": "light_blue_wall_banner",
+    "lightbluestandingbanner": "light_blue_wall_banner",
     "light_blue_bed": {
         "material": "LIGHT_BLUE_BED"
     },
@@ -5238,6 +5840,10 @@
     "lightblueterra": "light_blue_terracotta",
     "lightbluetcota": "light_blue_terracotta",
     "lightblueterracota": "light_blue_terracotta",
+    "light_blue_wall_banner": {
+        "material": "LIGHT_BLUE_WALL_BANNER"
+    },
+    "lightbluewallbanner": "light_blue_wall_banner",
     "light_blue_wool": {
         "material": "LIGHT_BLUE_WOOL"
     },
@@ -5259,26 +5865,26 @@
     "light_gray_banner": {
         "material": "LIGHT_GRAY_BANNER"
     },
-    "lightgraybanner": "light_gray_banner",
-    "lgstandingbanner": "light_gray_banner",
-    "lgbanner": "light_gray_banner",
-    "lgrastandingbanner": "light_gray_banner",
-    "lgrabanner": "light_gray_banner",
-    "lgreystandingbanner": "light_gray_banner",
-    "lgreybanner": "light_gray_banner",
-    "lgraystandingbanner": "light_gray_banner",
-    "lgraybanner": "light_gray_banner",
-    "lightgrastandingbanner": "light_gray_banner",
-    "lightgrabanner": "light_gray_banner",
-    "lightgreystandingbanner": "light_gray_banner",
-    "lightgreybanner": "light_gray_banner",
-    "lightgraystandingbanner": "light_gray_banner",
-    "sistandingbanner": "light_gray_banner",
-    "sibanner": "light_gray_banner",
-    "siastandingbanner": "light_gray_banner",
-    "siabanner": "light_gray_banner",
-    "silverstandingbanner": "light_gray_banner",
-    "silverbanner": "light_gray_banner",
+    "lightgraybanner": "light_gray_wall_banner",
+    "lgstandingbanner": "light_gray_wall_banner",
+    "lgbanner": "light_gray_wall_banner",
+    "lgrastandingbanner": "light_gray_wall_banner",
+    "lgrabanner": "light_gray_wall_banner",
+    "lgreystandingbanner": "light_gray_wall_banner",
+    "lgreybanner": "light_gray_wall_banner",
+    "lgraystandingbanner": "light_gray_wall_banner",
+    "lgraybanner": "light_gray_wall_banner",
+    "lightgrastandingbanner": "light_gray_wall_banner",
+    "lightgrabanner": "light_gray_wall_banner",
+    "lightgreystandingbanner": "light_gray_wall_banner",
+    "lightgreybanner": "light_gray_wall_banner",
+    "lightgraystandingbanner": "light_gray_wall_banner",
+    "sistandingbanner": "light_gray_wall_banner",
+    "sibanner": "light_gray_wall_banner",
+    "siastandingbanner": "light_gray_wall_banner",
+    "siabanner": "light_gray_wall_banner",
+    "silverstandingbanner": "light_gray_wall_banner",
+    "silverbanner": "light_gray_wall_banner",
     "light_gray_bed": {
         "material": "LIGHT_GRAY_BED"
     },
@@ -5600,6 +6206,10 @@
     "silvertcota": "light_gray_terracotta",
     "silverterracota": "light_gray_terracotta",
     "silverterracotta": "light_gray_terracotta",
+    "light_gray_wall_banner": {
+        "material": "LIGHT_GRAY_WALL_BANNER"
+    },
+    "lightgraywallbanner": "light_gray_wall_banner",
     "light_gray_wool": {
         "material": "LIGHT_GRAY_WOOL"
     },
@@ -5644,21 +6254,26 @@
         "material": "LILY_PAD"
     },
     "lilypad": "lily_pad",
+    "waterlily": "lily_pad",
+    "lily": "lily_pad",
+    "swamppad": "lily_pad",
+    "lpad": "lily_pad",
+    "wlily": "lily_pad",
     "lime_banner": {
         "material": "LIME_BANNER"
     },
-    "limebanner": "lime_banner",
-    "lstandingbanner": "lime_banner",
-    "lbanner": "lime_banner",
-    "limestandingbanner": "lime_banner",
-    "lgrestandingbanner": "lime_banner",
-    "lgrebanner": "lime_banner",
-    "lightgrestandingbanner": "lime_banner",
-    "lightgrebanner": "lime_banner",
-    "lgreenstandingbanner": "lime_banner",
-    "lgreenbanner": "lime_banner",
-    "lightgreenstandingbanner": "lime_banner",
-    "lightgreenbanner": "lime_banner",
+    "limebanner": "lime_wall_banner",
+    "lstandingbanner": "lime_wall_banner",
+    "lbanner": "lime_wall_banner",
+    "limestandingbanner": "lime_wall_banner",
+    "lgrestandingbanner": "lime_wall_banner",
+    "lgrebanner": "lime_wall_banner",
+    "lightgrestandingbanner": "lime_wall_banner",
+    "lightgrebanner": "lime_wall_banner",
+    "lgreenstandingbanner": "lime_wall_banner",
+    "lgreenbanner": "lime_wall_banner",
+    "lightgreenstandingbanner": "lime_wall_banner",
+    "lightgreenbanner": "lime_wall_banner",
     "lime_bed": {
         "material": "LIME_BED"
     },
@@ -5864,6 +6479,10 @@
     "lightgreentcota": "lime_terracotta",
     "lightgreenterracota": "lime_terracotta",
     "lightgreenterracotta": "lime_terracotta",
+    "lime_wall_banner": {
+        "material": "LIME_WALL_BANNER"
+    },
+    "limewallbanner": "lime_wall_banner",
     "lime_wool": {
         "material": "LIME_WOOL"
     },
@@ -5901,10 +6520,10 @@
     "magenta_banner": {
         "material": "MAGENTA_BANNER"
     },
-    "magentabanner": "magenta_banner",
-    "mstandingbanner": "magenta_banner",
-    "mbanner": "magenta_banner",
-    "magentastandingbanner": "magenta_banner",
+    "magentabanner": "magenta_wall_banner",
+    "mstandingbanner": "magenta_wall_banner",
+    "mbanner": "magenta_wall_banner",
+    "magentastandingbanner": "magenta_wall_banner",
     "magenta_bed": {
         "material": "MAGENTA_BED"
     },
@@ -5994,6 +6613,10 @@
     "magentaterra": "magenta_terracotta",
     "magentatcota": "magenta_terracotta",
     "magentaterracota": "magenta_terracotta",
+    "magenta_wall_banner": {
+        "material": "MAGENTA_WALL_BANNER"
+    },
+    "magentawallbanner": "magenta_wall_banner",
     "magenta_wool": {
         "material": "MAGENTA_WOOL"
     },
@@ -6058,6 +6681,10 @@
         "material": "MELON_SLICE"
     },
     "melonslice": "melon_slice",
+    "melon_stem": {
+        "material": "MELON_STEM"
+    },
+    "melonstem": "melon_stem",
     "milk_bucket": {
         "material": "MILK_BUCKET"
     },
@@ -6086,19 +6713,54 @@
     "mossy_cobblestone": {
         "material": "MOSSY_COBBLESTONE"
     },
-    "mossycobblestone": "mossy_cobblestone_wall",
-    "mossycstone": "mossy_cobblestone_wall",
-    "mossycobble": "mossy_cobblestone_wall",
-    "mosscobblestone": "mossy_cobblestone_wall",
-    "mosscstone": "mossy_cobblestone_wall",
-    "mosscobble": "mossy_cobblestone_wall",
-    "mcobblestone": "mossy_cobblestone_wall",
-    "mcstone": "mossy_cobblestone_wall",
-    "mcobble": "mossy_cobblestone_wall",
+    "mossycobblestone": "mossy_cobblestone",
+    "mossycstone": "mossy_cobblestone",
+    "mossycobble": "mossy_cobblestone",
+    "mosscobblestone": "mossy_cobblestone",
+    "mosscstone": "mossy_cobblestone",
+    "mosscobble": "mossy_cobblestone",
+    "mcobblestone": "mossy_cobblestone",
+    "mcstone": "mossy_cobblestone",
+    "mcobble": "mossy_cobblestone",
     "mossy_cobblestone_wall": {
         "material": "MOSSY_COBBLESTONE_WALL"
     },
     "mossycobblestonewall": "mossy_cobblestone_wall",
+    "mossycobblewall": "mossy_cobblestone_wall",
+    "mossycstonewall": "mossy_cobblestone_wall",
+    "mossycswall": "mossy_cobblestone_wall",
+    "mossycwall": "mossy_cobblestone_wall",
+    "mossycobblestonefence": "mossy_cobblestone_wall",
+    "mossycobblefence": "mossy_cobblestone_wall",
+    "mossycstonefence": "mossy_cobblestone_wall",
+    "mossycsfence": "mossy_cobblestone_wall",
+    "mossycfence": "mossy_cobblestone_wall",
+    "mossystonewall": "mossy_cobblestone_wall",
+    "mossyswall": "mossy_cobblestone_wall",
+    "mosscobblestonewall": "mossy_cobblestone_wall",
+    "mosscobblewall": "mossy_cobblestone_wall",
+    "mosscstonewall": "mossy_cobblestone_wall",
+    "mosscswall": "mossy_cobblestone_wall",
+    "mosscwall": "mossy_cobblestone_wall",
+    "mosscobblestonefence": "mossy_cobblestone_wall",
+    "mosscobblefence": "mossy_cobblestone_wall",
+    "mosscstonefence": "mossy_cobblestone_wall",
+    "mosscsfence": "mossy_cobblestone_wall",
+    "mosscfence": "mossy_cobblestone_wall",
+    "mossstonewall": "mossy_cobblestone_wall",
+    "mossswall": "mossy_cobblestone_wall",
+    "mcobblestonewall": "mossy_cobblestone_wall",
+    "mcobblewall": "mossy_cobblestone_wall",
+    "mcstonewall": "mossy_cobblestone_wall",
+    "mcswall": "mossy_cobblestone_wall",
+    "mcwall": "mossy_cobblestone_wall",
+    "mcobblestonefence": "mossy_cobblestone_wall",
+    "mcobblefence": "mossy_cobblestone_wall",
+    "mcstonefence": "mossy_cobblestone_wall",
+    "mcsfence": "mossy_cobblestone_wall",
+    "mcfence": "mossy_cobblestone_wall",
+    "mstonewall": "mossy_cobblestone_wall",
+    "mswall": "mossy_cobblestone_wall",
     "mossy_stone_bricks": {
         "material": "MOSSY_STONE_BRICKS"
     },
@@ -6108,16 +6770,28 @@
     "mossystonebb": "mossy_stone_bricks",
     "mossysbrick": "mossy_stone_bricks",
     "mossysbricks": "mossy_stone_bricks",
+    "mossysbrickblock": "mossy_stone_bricks",
+    "mossysbb": "mossy_stone_bricks",
     "mossstonebrick": "mossy_stone_bricks",
     "mossstonebrickblock": "mossy_stone_bricks",
     "mossstonebb": "mossy_stone_bricks",
     "mosssbrick": "mossy_stone_bricks",
     "mosssbricks": "mossy_stone_bricks",
+    "mosssbrickblock": "mossy_stone_bricks",
+    "mossstonebricks": "mossy_stone_bricks",
+    "mosssbb": "mossy_stone_bricks",
     "mstonebrick": "mossy_stone_bricks",
     "mstonebrickblock": "mossy_stone_bricks",
     "mstonebb": "mossy_stone_bricks",
     "msbrick": "mossy_stone_bricks",
     "msbricks": "mossy_stone_bricks",
+    "msbrickblock": "mossy_stone_bricks",
+    "mstonebricks": "mossy_stone_bricks",
+    "msbb": "mossy_stone_bricks",
+    "moving_piston": {
+        "material": "MOVING_PISTON"
+    },
+    "movingpiston": "moving_piston",
     "mule_spawn_egg": {
         "material": "MULE_SPAWN_EGG"
     },
@@ -6977,6 +7651,11 @@
     "mycelium": {
         "material": "MYCELIUM"
     },
+    "mycel": "mycelium",
+    "swampgrass": "mycelium",
+    "sgrass": "mycelium",
+    "mushroomgrass": "mycelium",
+    "mushgrass": "mycelium",
     "name_tag": {
         "material": "NAME_TAG"
     },
@@ -7008,10 +7687,69 @@
         "material": "NETHER_BRICK_STAIRS"
     },
     "netherbrickstairs": "nether_brick_stairs",
+    "nether_portal": {
+        "material": "NETHER_PORTAL"
+    },
+    "netherportal": "nether_portal",
     "nether_quartz_ore": {
         "material": "NETHER_QUARTZ_ORE"
     },
     "netherquartzore": "nether_quartz_ore",
+    "netherquartzo": "nether_quartz_ore",
+    "orenetherquartz": "nether_quartz_ore",
+    "onetherquartz": "nether_quartz_ore",
+    "hellquartzore": "nether_quartz_ore",
+    "hellquartzo": "nether_quartz_ore",
+    "orehellquartz": "nether_quartz_ore",
+    "ohellquartz": "nether_quartz_ore",
+    "deathquartzore": "nether_quartz_ore",
+    "deathquartzo": "nether_quartz_ore",
+    "oredeathquartz": "nether_quartz_ore",
+    "odeathquartz": "nether_quartz_ore",
+    "nquartzore": "nether_quartz_ore",
+    "nquartzo": "nether_quartz_ore",
+    "orenquartz": "nether_quartz_ore",
+    "onquartz": "nether_quartz_ore",
+    "hquartzore": "nether_quartz_ore",
+    "hquartzo": "nether_quartz_ore",
+    "orehquartz": "nether_quartz_ore",
+    "ohquartz": "nether_quartz_ore",
+    "dquartzore": "nether_quartz_ore",
+    "dquartzo": "nether_quartz_ore",
+    "oredquartz": "nether_quartz_ore",
+    "odquartz": "nether_quartz_ore",
+    "quartzore": "nether_quartz_ore",
+    "quartzo": "nether_quartz_ore",
+    "orequartz": "nether_quartz_ore",
+    "oquartz": "nether_quartz_ore",
+    "netherqore": "nether_quartz_ore",
+    "netherqo": "nether_quartz_ore",
+    "orenetherq": "nether_quartz_ore",
+    "onetherq": "nether_quartz_ore",
+    "hellqore": "nether_quartz_ore",
+    "hellqo": "nether_quartz_ore",
+    "orehellq": "nether_quartz_ore",
+    "ohellq": "nether_quartz_ore",
+    "deathqore": "nether_quartz_ore",
+    "deathqo": "nether_quartz_ore",
+    "oredeathq": "nether_quartz_ore",
+    "odeathq": "nether_quartz_ore",
+    "nqore": "nether_quartz_ore",
+    "nqo": "nether_quartz_ore",
+    "orenq": "nether_quartz_ore",
+    "onq": "nether_quartz_ore",
+    "hqore": "nether_quartz_ore",
+    "hqo": "nether_quartz_ore",
+    "orehq": "nether_quartz_ore",
+    "ohq": "nether_quartz_ore",
+    "dqore": "nether_quartz_ore",
+    "dqo": "nether_quartz_ore",
+    "oredq": "nether_quartz_ore",
+    "odq": "nether_quartz_ore",
+    "qore": "nether_quartz_ore",
+    "qo": "nether_quartz_ore",
+    "oreq": "nether_quartz_ore",
+    "oq": "nether_quartz_ore",
     "nether_star": {
         "material": "NETHER_STAR"
     },
@@ -7155,21 +7893,21 @@
     "oak_sapling": {
         "material": "OAK_SAPLING"
     },
-    "oaksapling": "oak_sapling",
-    "sapling": "oak_sapling",
-    "treesapling": "oak_sapling",
-    "logsapling": "oak_sapling",
-    "trunksapling": "oak_sapling",
-    "woodsapling": "oak_sapling",
-    "oaktreesapling": "oak_sapling",
-    "oaklogsapling": "oak_sapling",
-    "oaktrunksapling": "oak_sapling",
-    "oakwoodsapling": "oak_sapling",
-    "osapling": "oak_sapling",
-    "otreesapling": "oak_sapling",
-    "ologsapling": "oak_sapling",
-    "otrunksapling": "oak_sapling",
-    "owoodsapling": "oak_sapling",
+    "oaksapling": "potted_oak_sapling",
+    "sapling": "potted_oak_sapling",
+    "treesapling": "potted_oak_sapling",
+    "logsapling": "potted_oak_sapling",
+    "trunksapling": "potted_oak_sapling",
+    "woodsapling": "potted_oak_sapling",
+    "oaktreesapling": "potted_oak_sapling",
+    "oaklogsapling": "potted_oak_sapling",
+    "oaktrunksapling": "potted_oak_sapling",
+    "oakwoodsapling": "potted_oak_sapling",
+    "osapling": "potted_oak_sapling",
+    "otreesapling": "potted_oak_sapling",
+    "ologsapling": "potted_oak_sapling",
+    "otrunksapling": "potted_oak_sapling",
+    "owoodsapling": "potted_oak_sapling",
     "oak_slab": {
         "material": "OAK_SLAB"
     },
@@ -7274,6 +8012,8 @@
     "obsidian": {
         "material": "OBSIDIAN"
     },
+    "obsi": "obsidian",
+    "obby": "obsidian",
     "ocelot_spawn_egg": {
         "material": "OCELOT_SPAWN_EGG"
     },
@@ -7292,10 +8032,10 @@
     "orange_banner": {
         "material": "ORANGE_BANNER"
     },
-    "orangebanner": "orange_banner",
-    "ostandingbanner": "orange_banner",
-    "obanner": "orange_banner",
-    "orangestandingbanner": "orange_banner",
+    "orangebanner": "orange_wall_banner",
+    "ostandingbanner": "orange_wall_banner",
+    "obanner": "orange_wall_banner",
+    "orangestandingbanner": "orange_wall_banner",
     "orange_bed": {
         "material": "ORANGE_BED"
     },
@@ -7392,6 +8132,10 @@
     "tuliporange": "orange_tulip",
     "otulip": "orange_tulip",
     "tulipo": "orange_tulip",
+    "orange_wall_banner": {
+        "material": "ORANGE_WALL_BANNER"
+    },
+    "orangewallbanner": "orange_wall_banner",
     "orange_wool": {
         "material": "ORANGE_WOOL"
     },
@@ -7467,10 +8211,10 @@
     "pink_banner": {
         "material": "PINK_BANNER"
     },
-    "pinkbanner": "pink_banner",
-    "pistandingbanner": "pink_banner",
-    "pibanner": "pink_banner",
-    "pinkstandingbanner": "pink_banner",
+    "pinkbanner": "pink_wall_banner",
+    "pistandingbanner": "pink_wall_banner",
+    "pibanner": "pink_wall_banner",
+    "pinkstandingbanner": "pink_wall_banner",
     "pink_bed": {
         "material": "PINK_BED"
     },
@@ -7567,6 +8311,10 @@
     "tulippink": "pink_tulip",
     "ptulip": "pink_tulip",
     "tulipp": "pink_tulip",
+    "pink_wall_banner": {
+        "material": "PINK_WALL_BANNER"
+    },
+    "pinkwallbanner": "pink_wall_banner",
     "pink_wool": {
         "material": "PINK_WOOL"
     },
@@ -7579,38 +8327,46 @@
     "piston": {
         "material": "PISTON"
     },
+    "piston_head": {
+        "material": "PISTON_HEAD"
+    },
+    "pistonhead": "piston_head",
     "player_head": {
         "material": "PLAYER_HEAD"
     },
-    "playerhead": "player_head",
-    "head": "player_head",
-    "skull": "player_head",
-    "steve": "player_head",
-    "mask": "player_head",
-    "headmask": "player_head",
-    "playerskull": "player_head",
-    "headplayer": "player_head",
-    "steveplayer": "player_head",
-    "playermask": "player_head",
-    "playerheadmask": "player_head",
-    "phead": "player_head",
-    "pskull": "player_head",
-    "headp": "player_head",
-    "stevep": "player_head",
-    "pmask": "player_head",
-    "pheadmask": "player_head",
-    "stevehead": "player_head",
-    "steveskull": "player_head",
-    "headsteve": "player_head",
-    "stevesteve": "player_head",
-    "stevemask": "player_head",
-    "steveheadmask": "player_head",
-    "humanhead": "player_head",
-    "humanskull": "player_head",
-    "headhuman": "player_head",
-    "stevehuman": "player_head",
-    "humanmask": "player_head",
-    "humanheadmask": "player_head",
+    "playerhead": "player_wall_head",
+    "head": "player_wall_head",
+    "skull": "player_wall_head",
+    "steve": "player_wall_head",
+    "mask": "player_wall_head",
+    "headmask": "player_wall_head",
+    "playerskull": "player_wall_head",
+    "headplayer": "player_wall_head",
+    "steveplayer": "player_wall_head",
+    "playermask": "player_wall_head",
+    "playerheadmask": "player_wall_head",
+    "phead": "player_wall_head",
+    "pskull": "player_wall_head",
+    "headp": "player_wall_head",
+    "stevep": "player_wall_head",
+    "pmask": "player_wall_head",
+    "pheadmask": "player_wall_head",
+    "stevehead": "player_wall_head",
+    "steveskull": "player_wall_head",
+    "headsteve": "player_wall_head",
+    "stevesteve": "player_wall_head",
+    "stevemask": "player_wall_head",
+    "steveheadmask": "player_wall_head",
+    "humanhead": "player_wall_head",
+    "humanskull": "player_wall_head",
+    "headhuman": "player_wall_head",
+    "stevehuman": "player_wall_head",
+    "humanmask": "player_wall_head",
+    "humanheadmask": "player_wall_head",
+    "player_wall_head": {
+        "material": "PLAYER_WALL_HEAD"
+    },
+    "playerwallhead": "player_wall_head",
     "podzol": {
         "material": "PODZOL"
     },
@@ -7664,6 +8420,9 @@
         "material": "POPPED_CHORUS_FRUIT"
     },
     "poppedchorusfruit": "popped_chorus_fruit",
+    "pchorus": "popped_chorus_fruit",
+    "poppedchorus": "popped_chorus_fruit",
+    "popchorus": "popped_chorus_fruit",
     "poppy": {
         "material": "POPPY"
     },
@@ -7688,9 +8447,132 @@
     "potato": {
         "material": "POTATO"
     },
+    "potatoes": {
+        "material": "POTATOES"
+    },
     "potion": {
         "material": "POTION"
     },
+    "potted_acacia_sapling": {
+        "material": "POTTED_ACACIA_SAPLING"
+    },
+    "pottedacaciasapling": "potted_acacia_sapling",
+    "potted_allium": {
+        "material": "POTTED_ALLIUM"
+    },
+    "pottedallium": "potted_allium",
+    "potted_azure_bluet": {
+        "material": "POTTED_AZURE_BLUET"
+    },
+    "pottedazurebluet": "potted_azure_bluet",
+    "potted_birch_sapling": {
+        "material": "POTTED_BIRCH_SAPLING"
+    },
+    "pottedbirchsapling": "potted_birch_sapling",
+    "potted_blue_orchid": {
+        "material": "POTTED_BLUE_ORCHID"
+    },
+    "pottedblueorchid": "potted_blue_orchid",
+    "potted_brown_mushroom": {
+        "material": "POTTED_BROWN_MUSHROOM"
+    },
+    "pottedbrownmushroom": "potted_brown_mushroom",
+    "potted_cactus": {
+        "material": "POTTED_CACTUS"
+    },
+    "pottedcactus": "potted_cactus",
+    "potted_dandelion": {
+        "material": "POTTED_DANDELION"
+    },
+    "potteddandelion": "potted_dandelion",
+    "potted_dark_oak_sapling": {
+        "material": "POTTED_DARK_OAK_SAPLING"
+    },
+    "potteddarkoaksapling": "potted_dark_oak_sapling",
+    "potted_dead_bush": {
+        "material": "POTTED_DEAD_BUSH"
+    },
+    "potteddeadbush": "potted_dead_bush",
+    "potted_fern": {
+        "material": "POTTED_FERN"
+    },
+    "pottedfern": "potted_fern",
+    "potted_jungle_sapling": {
+        "material": "POTTED_JUNGLE_SAPLING"
+    },
+    "pottedjunglesapling": "potted_jungle_sapling",
+    "potted_oak_sapling": {
+        "material": "POTTED_OAK_SAPLING"
+    },
+    "pottedoaksapling": "potted_oak_sapling",
+    "potted_orange_tulip": {
+        "material": "POTTED_ORANGE_TULIP"
+    },
+    "pottedorangetulip": "potted_orange_tulip",
+    "potted_oxeye_daisy": {
+        "material": "POTTED_OXEYE_DAISY"
+    },
+    "pottedoxeyedaisy": "potted_oxeye_daisy",
+    "potted_pink_tulip": {
+        "material": "POTTED_PINK_TULIP"
+    },
+    "pottedpinktulip": "potted_pink_tulip",
+    "potted_poppy": {
+        "material": "POTTED_POPPY"
+    },
+    "pottedpoppy": "potted_poppy",
+    "potted_red_mushroom": {
+        "material": "POTTED_RED_MUSHROOM"
+    },
+    "pottedredmushroom": "potted_red_mushroom",
+    "redmushroom": "red_mushroom",
+    "redmush": "red_mushroom",
+    "redshroom": "red_mushroom",
+    "rmushroom": "red_mushroom",
+    "rmush": "red_mushroom",
+    "rshroom": "red_mushroom",
+    "potted_red_tulip": {
+        "material": "POTTED_RED_TULIP"
+    },
+    "pottedredtulip": "potted_red_tulip",
+    "potted_spruce_sapling": {
+        "material": "POTTED_SPRUCE_SAPLING"
+    },
+    "pottedsprucesapling": "potted_spruce_sapling",
+    "pinesapling": "spruce_sapling",
+    "pinetreesapling": "spruce_sapling",
+    "pinelogsapling": "spruce_sapling",
+    "pinetrunksapling": "spruce_sapling",
+    "pinewoodsapling": "spruce_sapling",
+    "psapling": "spruce_sapling",
+    "ptreesapling": "spruce_sapling",
+    "plogsapling": "spruce_sapling",
+    "ptrunksapling": "spruce_sapling",
+    "pwoodsapling": "spruce_sapling",
+    "darksapling": "spruce_sapling",
+    "darktreesapling": "spruce_sapling",
+    "darklogsapling": "spruce_sapling",
+    "darktrunksapling": "spruce_sapling",
+    "darkwoodsapling": "spruce_sapling",
+    "dsapling": "spruce_sapling",
+    "dtreesapling": "spruce_sapling",
+    "dlogsapling": "spruce_sapling",
+    "dtrunksapling": "spruce_sapling",
+    "dwoodsapling": "spruce_sapling",
+    "sprucesapling": "spruce_sapling",
+    "sprucetreesapling": "spruce_sapling",
+    "sprucelogsapling": "spruce_sapling",
+    "sprucetrunksapling": "spruce_sapling",
+    "sprucewoodsapling": "spruce_sapling",
+    "ssapling": "spruce_sapling",
+    "streesapling": "spruce_sapling",
+    "slogsapling": "spruce_sapling",
+    "strunksapling": "spruce_sapling",
+    "swoodsapling": "spruce_sapling",
+    "potted_white_tulip": {
+        "material": "POTTED_WHITE_TULIP"
+    },
+    "pottedwhitetulip": "potted_white_tulip",
     "powered_rail": {
         "material": "POWERED_RAIL"
     },
@@ -7811,13 +8693,17 @@
         "material": "PUMPKIN_SEEDS"
     },
     "pumpkinseeds": "pumpkin_seeds",
+    "pumpkin_stem": {
+        "material": "PUMPKIN_STEM"
+    },
+    "pumpkinstem": "pumpkin_stem",
     "purple_banner": {
         "material": "PURPLE_BANNER"
     },
-    "purplebanner": "purple_banner",
-    "pustandingbanner": "purple_banner",
-    "pubanner": "purple_banner",
-    "purplestandingbanner": "purple_banner",
+    "purplebanner": "purple_wall_banner",
+    "pustandingbanner": "purple_wall_banner",
+    "pubanner": "purple_wall_banner",
+    "purplestandingbanner": "purple_wall_banner",
     "purple_bed": {
         "material": "PURPLE_BED"
     },
@@ -7907,6 +8793,10 @@
     "purpleterra": "purple_terracotta",
     "purpletcota": "purple_terracotta",
     "purpleterracota": "purple_terracotta",
+    "purple_wall_banner": {
+        "material": "PURPLE_WALL_BANNER"
+    },
+    "purplewallbanner": "purple_wall_banner",
     "purple_wool": {
         "material": "PURPLE_WOOL"
     },
@@ -7939,6 +8829,9 @@
         "material": "QUARTZ_BLOCK"
     },
     "quartzblock": "quartz_block",
+    "netherquartzblock": "quartz_block",
+    "nqblock": "quartz_block",
+    "qblock": "quartz_block",
     "quartz_pillar": {
         "material": "QUARTZ_PILLAR"
     },
@@ -8059,13 +8952,21 @@
     "redstorch": "redstone_torch",
     "redtorch": "redstone_torch",
     "rstorch": "redstone_torch",
+    "redstone_wall_torch": {
+        "material": "REDSTONE_WALL_TORCH"
+    },
+    "redstonewalltorch": "redstone_wall_torch",
+    "redstone_wire": {
+        "material": "REDSTONE_WIRE"
+    },
+    "redstonewire": "redstone_wire",
     "red_banner": {
         "material": "RED_BANNER"
     },
-    "redbanner": "red_banner",
-    "rstandingbanner": "red_banner",
-    "rbanner": "red_banner",
-    "redstandingbanner": "red_banner",
+    "redbanner": "red_wall_banner",
+    "rstandingbanner": "red_wall_banner",
+    "rbanner": "red_wall_banner",
+    "redstandingbanner": "red_wall_banner",
     "red_bed": {
         "material": "RED_BED"
     },
@@ -8110,12 +9011,6 @@
     "red_mushroom": {
         "material": "RED_MUSHROOM"
     },
-    "redmushroom": "red_mushroom",
-    "redmush": "red_mushroom",
-    "redshroom": "red_mushroom",
-    "rmushroom": "red_mushroom",
-    "rmush": "red_mushroom",
-    "rshroom": "red_mushroom",
     "red_mushroom_block": {
         "material": "RED_MUSHROOM_BLOCK"
     },
@@ -8217,6 +9112,10 @@
     "tulipred": "red_tulip",
     "rtulip": "red_tulip",
     "tulipr": "red_tulip",
+    "red_wall_banner": {
+        "material": "RED_WALL_BANNER"
+    },
+    "redwallbanner": "red_wall_banner",
     "red_wool": {
         "material": "RED_WOOL"
     },
@@ -8390,18 +9289,18 @@
     "skeleton_skull": {
         "material": "SKELETON_SKULL"
     },
-    "skeletonskull": "skeleton_skull",
-    "skeletonhead": "skeleton_skull",
-    "headskeleton": "skeleton_skull",
-    "steveskeleton": "skeleton_skull",
-    "skeletonmask": "skeleton_skull",
-    "skeletonheadmask": "skeleton_skull",
-    "skhead": "skeleton_skull",
-    "skskull": "skeleton_skull",
-    "headsk": "skeleton_skull",
-    "stevesk": "skeleton_skull",
-    "skmask": "skeleton_skull",
-    "skheadmask": "skeleton_skull",
+    "skeletonskull": "skeleton_wall_skull",
+    "skeletonhead": "skeleton_wall_skull",
+    "headskeleton": "skeleton_wall_skull",
+    "steveskeleton": "skeleton_wall_skull",
+    "skeletonmask": "skeleton_wall_skull",
+    "skeletonheadmask": "skeleton_wall_skull",
+    "skhead": "skeleton_wall_skull",
+    "skskull": "skeleton_wall_skull",
+    "headsk": "skeleton_wall_skull",
+    "stevesk": "skeleton_wall_skull",
+    "skmask": "skeleton_wall_skull",
+    "skheadmask": "skeleton_wall_skull",
     "skeleton_spawn_egg": {
         "material": "SKELETON_SPAWN_EGG"
     },
@@ -8417,6 +9316,10 @@
     "spawneggsk": "skeleton_spawn_egg",
     "skspawn": "skeleton_spawn_egg",
     "spawnsk": "skeleton_spawn_egg",
+    "skeleton_wall_skull": {
+        "material": "SKELETON_WALL_SKULL"
+    },
+    "skeletonwallskull": "skeleton_wall_skull",
     "slime_ball": {
         "material": "SLIME_BALL"
     },
@@ -8709,36 +9612,6 @@
     "spruce_sapling": {
         "material": "SPRUCE_SAPLING"
     },
-    "sprucesapling": "spruce_sapling",
-    "pinesapling": "spruce_sapling",
-    "pinetreesapling": "spruce_sapling",
-    "pinelogsapling": "spruce_sapling",
-    "pinetrunksapling": "spruce_sapling",
-    "pinewoodsapling": "spruce_sapling",
-    "psapling": "spruce_sapling",
-    "ptreesapling": "spruce_sapling",
-    "plogsapling": "spruce_sapling",
-    "ptrunksapling": "spruce_sapling",
-    "pwoodsapling": "spruce_sapling",
-    "darksapling": "spruce_sapling",
-    "darktreesapling": "spruce_sapling",
-    "darklogsapling": "spruce_sapling",
-    "darktrunksapling": "spruce_sapling",
-    "darkwoodsapling": "spruce_sapling",
-    "dsapling": "spruce_sapling",
-    "dtreesapling": "spruce_sapling",
-    "dlogsapling": "spruce_sapling",
-    "dtrunksapling": "spruce_sapling",
-    "dwoodsapling": "spruce_sapling",
-    "sprucetreesapling": "spruce_sapling",
-    "sprucelogsapling": "spruce_sapling",
-    "sprucetrunksapling": "spruce_sapling",
-    "sprucewoodsapling": "spruce_sapling",
-    "ssapling": "spruce_sapling",
-    "streesapling": "spruce_sapling",
-    "slogsapling": "spruce_sapling",
-    "strunksapling": "spruce_sapling",
-    "swoodsapling": "spruce_sapling",
     "spruce_slab": {
         "material": "SPRUCE_SLAB"
     },
@@ -8968,7 +9841,6 @@
     "stone_bricks": {
         "material": "STONE_BRICKS"
     },
-    "stonebricks": "stone_bricks",
     "stone_brick_slab": {
         "material": "STONE_BRICK_SLAB"
     },
@@ -9469,6 +10341,10 @@
     "lgrass": "tall_grass",
     "tgrass": "tall_grass",
     "wgrass": "tall_grass",
+    "tall_seagrass": {
+        "material": "TALL_SEAGRASS"
+    },
+    "tallseagrass": "tall_seagrass",
     "terracotta": {
         "material": "TERRACOTTA"
     },
@@ -9479,6 +10355,14 @@
     "tnt": {
         "material": "TNT"
     },
+    "tntblock": "tnt",
+    "blocktnt": "tnt",
+    "bombblock": "tnt",
+    "blockbomb": "tnt",
+    "dynamiteblock": "tnt",
+    "blockdynamite": "tnt",
+    "bomb": "tnt",
+    "dynamite": "tnt",
     "tnt_minecart": {
         "material": "TNT_MINECART"
     },
@@ -9509,6 +10393,8 @@
     "torch": {
         "material": "TORCH"
     },
+    "burningstick": "torch",
+    "burnstick": "torch",
     "totem_of_undying": {
         "material": "TOTEM_OF_UNDYING"
     },
@@ -9518,13 +10404,22 @@
         "material": "TRAPPED_CHEST"
     },
     "trappedchest": "trapped_chest",
+    "trapchest": "trapped_chest",
+    "chesttrapped": "trapped_chest",
+    "chesttrap": "trapped_chest",
     "trident": {
         "material": "TRIDENT"
+    },
+    "tripwire": {
+        "material": "TRIPWIRE"
     },
     "tripwire_hook": {
         "material": "TRIPWIRE_HOOK"
     },
     "tripwirehook": "tripwire_hook",
+    "trip": "tripwire_hook",
+    "tripwirelever": "tripwire_hook",
+    "triphook": "tripwire_hook",
     "tropical_fish": {
         "material": "TROPICAL_FISH"
     },
@@ -9617,6 +10512,10 @@
         "material": "TUBE_CORAL_FAN"
     },
     "tubecoralfan": "tube_coral_fan",
+    "tube_coral_wall_fan": {
+        "material": "TUBE_CORAL_WALL_FAN"
+    },
+    "tubecoralwallfan": "tube_coral_wall_fan",
     "turtle_egg": {
         "material": "TURTLE_EGG"
     },
@@ -9682,6 +10581,24 @@
     "vineg": "vine",
     "gvines": "vine",
     "gvine": "vine",
+    "void_air": {
+        "material": "VOID_AIR"
+    },
+    "voidair": "void_air",
+    "wall_sign": {
+        "material": "WALL_SIGN"
+    },
+    "wallsign": "wall_sign",
+    "wall_torch": {
+        "material": "WALL_TORCH"
+    },
+    "walltorch": "wall_torch",
+    "water": {
+        "material": "WATER"
+    },
+    "stationarywater": "water",
+    "stillwater": "water",
+    "swater": "water",
     "water_bucket": {
         "material": "WATER_BUCKET"
     },
@@ -9700,12 +10617,12 @@
     "white_banner": {
         "material": "WHITE_BANNER"
     },
-    "whitebanner": "white_banner",
-    "standingbanner": "white_banner",
-    "banner": "white_banner",
-    "wstandingbanner": "white_banner",
-    "wbanner": "white_banner",
-    "whitestandingbanner": "white_banner",
+    "whitebanner": "white_wall_banner",
+    "standingbanner": "white_wall_banner",
+    "banner": "white_wall_banner",
+    "wstandingbanner": "white_wall_banner",
+    "wbanner": "white_wall_banner",
+    "whitestandingbanner": "white_wall_banner",
     "white_bed": {
         "material": "WHITE_BED"
     },
@@ -9821,6 +10738,10 @@
     "tulipwhite": "white_tulip",
     "wtulip": "white_tulip",
     "tulipw": "white_tulip",
+    "white_wall_banner": {
+        "material": "WHITE_WALL_BANNER"
+    },
+    "whitewallbanner": "white_wall_banner",
     "white_wool": {
         "material": "WHITE_WOOL"
     },
@@ -9845,36 +10766,36 @@
     "wither_skeleton_skull": {
         "material": "WITHER_SKELETON_SKULL"
     },
-    "witherskeletonskull": "wither_skeleton_skull",
-    "witherskeletonhead": "wither_skeleton_skull",
-    "headwitherskeleton": "wither_skeleton_skull",
-    "stevewitherskeleton": "wither_skeleton_skull",
-    "witherskeletonmask": "wither_skeleton_skull",
-    "witherskeletonheadmask": "wither_skeleton_skull",
-    "wskeletonhead": "wither_skeleton_skull",
-    "wskeletonskull": "wither_skeleton_skull",
-    "headwskeleton": "wither_skeleton_skull",
-    "stevewskeleton": "wither_skeleton_skull",
-    "wskeletonmask": "wither_skeleton_skull",
-    "wskeletonheadmask": "wither_skeleton_skull",
-    "witherskhead": "wither_skeleton_skull",
-    "witherskskull": "wither_skeleton_skull",
-    "headwithersk": "wither_skeleton_skull",
-    "stevewithersk": "wither_skeleton_skull",
-    "witherskmask": "wither_skeleton_skull",
-    "witherskheadmask": "wither_skeleton_skull",
-    "wskhead": "wither_skeleton_skull",
-    "wskskull": "wither_skeleton_skull",
-    "headwsk": "wither_skeleton_skull",
-    "stevewsk": "wither_skeleton_skull",
-    "wskmask": "wither_skeleton_skull",
-    "wskheadmask": "wither_skeleton_skull",
-    "witherhead": "wither_skeleton_skull",
-    "witherskull": "wither_skeleton_skull",
-    "headwither": "wither_skeleton_skull",
-    "stevewither": "wither_skeleton_skull",
-    "withermask": "wither_skeleton_skull",
-    "witherheadmask": "wither_skeleton_skull",
+    "witherskeletonskull": "wither_skeleton_wall_skull",
+    "witherskeletonhead": "wither_skeleton_wall_skull",
+    "headwitherskeleton": "wither_skeleton_wall_skull",
+    "stevewitherskeleton": "wither_skeleton_wall_skull",
+    "witherskeletonmask": "wither_skeleton_wall_skull",
+    "witherskeletonheadmask": "wither_skeleton_wall_skull",
+    "wskeletonhead": "wither_skeleton_wall_skull",
+    "wskeletonskull": "wither_skeleton_wall_skull",
+    "headwskeleton": "wither_skeleton_wall_skull",
+    "stevewskeleton": "wither_skeleton_wall_skull",
+    "wskeletonmask": "wither_skeleton_wall_skull",
+    "wskeletonheadmask": "wither_skeleton_wall_skull",
+    "witherskhead": "wither_skeleton_wall_skull",
+    "witherskskull": "wither_skeleton_wall_skull",
+    "headwithersk": "wither_skeleton_wall_skull",
+    "stevewithersk": "wither_skeleton_wall_skull",
+    "witherskmask": "wither_skeleton_wall_skull",
+    "witherskheadmask": "wither_skeleton_wall_skull",
+    "wskhead": "wither_skeleton_wall_skull",
+    "wskskull": "wither_skeleton_wall_skull",
+    "headwsk": "wither_skeleton_wall_skull",
+    "stevewsk": "wither_skeleton_wall_skull",
+    "wskmask": "wither_skeleton_wall_skull",
+    "wskheadmask": "wither_skeleton_wall_skull",
+    "witherhead": "wither_skeleton_wall_skull",
+    "witherskull": "wither_skeleton_wall_skull",
+    "headwither": "wither_skeleton_wall_skull",
+    "stevewither": "wither_skeleton_wall_skull",
+    "withermask": "wither_skeleton_wall_skull",
+    "witherheadmask": "wither_skeleton_wall_skull",
     "wither_skeleton_spawn_egg": {
         "material": "WITHER_SKELETON_SPAWN_EGG"
     },
@@ -9908,6 +10829,10 @@
     "spawneggwither": "wither_skeleton_spawn_egg",
     "witherspawn": "wither_skeleton_spawn_egg",
     "spawnwither": "wither_skeleton_spawn_egg",
+    "wither_skeleton_wall_skull": {
+        "material": "WITHER_SKELETON_WALL_SKULL"
+    },
+    "witherskeletonwallskull": "wither_skeleton_wall_skull",
     "wolf_spawn_egg": {
         "material": "WOLF_SPAWN_EGG"
     },
@@ -9964,10 +10889,10 @@
     "yellow_banner": {
         "material": "YELLOW_BANNER"
     },
-    "yellowbanner": "yellow_banner",
-    "ystandingbanner": "yellow_banner",
-    "ybanner": "yellow_banner",
-    "yellowstandingbanner": "yellow_banner",
+    "yellowbanner": "yellow_wall_banner",
+    "ystandingbanner": "yellow_wall_banner",
+    "ybanner": "yellow_wall_banner",
+    "yellowstandingbanner": "yellow_wall_banner",
     "yellow_bed": {
         "material": "YELLOW_BED"
     },
@@ -10053,6 +10978,10 @@
     "yellowterra": "yellow_terracotta",
     "yellowtcota": "yellow_terracotta",
     "yellowterracota": "yellow_terracotta",
+    "yellow_wall_banner": {
+        "material": "YELLOW_WALL_BANNER"
+    },
+    "yellowwallbanner": "yellow_wall_banner",
     "yellow_wool": {
         "material": "YELLOW_WOOL"
     },
@@ -10065,12 +10994,12 @@
     "zombie_head": {
         "material": "ZOMBIE_HEAD"
     },
-    "zombiehead": "zombie_head",
-    "zombieskull": "zombie_head",
-    "headzombie": "zombie_head",
-    "stevezombie": "zombie_head",
-    "zombiemask": "zombie_head",
-    "zombieheadmask": "zombie_head",
+    "zombiehead": "zombie_wall_head",
+    "zombieskull": "zombie_wall_head",
+    "headzombie": "zombie_wall_head",
+    "stevezombie": "zombie_wall_head",
+    "zombiemask": "zombie_wall_head",
+    "zombieheadmask": "zombie_wall_head",
     "zombie_horse_spawn_egg": {
         "material": "ZOMBIE_HORSE_SPAWN_EGG"
     },
@@ -10203,6 +11132,10 @@
     "spawneggdvill": "zombie_villager_spawn_egg",
     "dvillspawn": "zombie_villager_spawn_egg",
     "spawndvill": "zombie_villager_spawn_egg",
+    "zombie_wall_head": {
+        "material": "ZOMBIE_WALL_HEAD"
+    },
+    "zombiewallhead": "zombie_wall_head",
     "emptypotion": {
         "material": "POTION",
         "potionData": {
