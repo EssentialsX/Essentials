@@ -1,0 +1,44 @@
+package com.earth2me.essentials.commands;
+
+import com.earth2me.essentials.User;
+import org.bukkit.Server;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
+import java.util.Locale;
+import static com.earth2me.essentials.I18n.tl;
+
+public class Commandrename extends EssentialsCommand {
+    public Commandrename() {
+        super("rename");
+    }
+
+
+    @Override
+    public void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception {
+        if (args.length < 1 || !user.isAuthorized("essentials.rename")) {
+            rename(user, args[0]);
+        } else {
+            throw new NotEnoughArgumentsException();
+        }
+    }
+
+    public void rename(User user, String arg) throws Exception {
+        final ItemStack item = user.getItemInHand();
+        if (item == null) {
+            throw new Exception(tl("renameInvalidType"));
+        }
+
+        final String itemName = item.getType().toString().toLowerCase(Locale.ENGLISH);
+
+        renameItem(item, arg);
+
+        user.getBase().updateInventory();
+        user.sendMessage(tl("rename", itemName.replace('_', ' ')));
+    }
+
+    private void renameItem(final ItemStack item, String arg) {
+        ItemMeta newMeta = item.getItemMeta();
+        newMeta.setDisplayName(arg);
+        item.setItemMeta(newMeta);
+    }
+}
