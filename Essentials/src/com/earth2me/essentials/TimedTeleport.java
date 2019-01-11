@@ -104,9 +104,9 @@ public class TimedTeleport implements Runnable {
                                 timer_chargeFor.isAffordableFor(teleportOwner);
                             }
                             if (timer_respawn) {
-                                teleport.respawnNow(teleportUser, timer_cause);
+                                teleport.respawnNow(teleportUser);
                             } else {
-                                teleport.now(teleportUser, timer_teleportTarget, timer_cause);
+                                teleport.now(teleportUser, timer_teleportTarget);
                             }
                             if (timer_chargeFor != null) {
                                 timer_chargeFor.charge(teleportOwner);

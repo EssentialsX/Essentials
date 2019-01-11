@@ -1,6 +1,7 @@
 package com.earth2me.essentials.utils;
 
 import com.earth2me.essentials.IEssentials;
+import io.papermc.lib.PaperLib;
 import net.ess3.api.IUser;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -17,7 +18,7 @@ import static com.earth2me.essentials.I18n.tl;
 
 public class LocationUtil {
     // The player can stand inside these materials
-    public static final Set<Material> HOLLOW_MATERIALS = new HashSet<>();
+    private static final Set<Material> HOLLOW_MATERIALS = new HashSet<>();
     private static final Set<Material> TRANSPARENT_MATERIALS = new HashSet<>();
 
     static {
@@ -32,8 +33,7 @@ public class LocationUtil {
         TRANSPARENT_MATERIALS.add(Material.WATER);
         try {
             TRANSPARENT_MATERIALS.add(Material.valueOf("FLOWING_WATER"));
-        } catch (Exception ignored) { // 1.13 WATER uses Levelled
-        }
+        } catch (Exception ignored) {} // 1.13 WATER uses Levelled
     }
 
     public static final int RADIUS = 3;
@@ -49,7 +49,7 @@ public class LocationUtil {
         public int y;
         public int z;
 
-        public Vector3D(int x, int y, int z) {
+        Vector3D(int x, int y, int z) {
             this.x = x;
             this.y = y;
             this.z = z;
@@ -57,7 +57,7 @@ public class LocationUtil {
     }
 
     static {
-        List<Vector3D> pos = new ArrayList<Vector3D>();
+        List<Vector3D> pos = new ArrayList<>();
         for (int x = -RADIUS; x <= RADIUS; x++) {
             for (int y = -RADIUS; y <= RADIUS; y++) {
                 for (int z = -RADIUS; z <= RADIUS; z++) {
@@ -65,16 +65,10 @@ public class LocationUtil {
                 }
             }
         }
-        Collections.sort(pos, new Comparator<Vector3D>() {
-            @Override
-            public int compare(Vector3D a, Vector3D b) {
-                return (a.x * a.x + a.y * a.y + a.z * a.z) - (b.x * b.x + b.y * b.y + b.z * b.z);
-            }
-        });
+        pos.sort(Comparator.comparingInt(a -> (a.x * a.x + a.y * a.y + a.z * a.z)));
         VOLUME = pos.toArray(new Vector3D[0]);
     }
 
-    @SuppressWarnings("deprecation")
     public static Location getTarget(final LivingEntity entity) throws Exception {
         Block block = null;
         try {
@@ -88,7 +82,8 @@ public class LocationUtil {
         return block.getLocation();
     }
 
-    static boolean isBlockAboveAir(final World world, final int x, final int y, final int z) {
+    private static boolean isBlockAboveAir(final World world, final int x, final int y, final int z) {
+        PaperLib.getChunkAtAsync(world, x, z); // Get the chunk first so it can be loaded async
         return y > world.getMaxHeight() || HOLLOW_MATERIALS.contains(world.getBlockAt(x, y - 1, z).getType());
     }
 
@@ -103,11 +98,12 @@ public class LocationUtil {
         return isBlockAboveAir(world, x, y, z);
     }
 
-    public static boolean isBlockUnsafe(final World world, final int x, final int y, final int z) {
+    private static boolean isBlockUnsafe(final World world, final int x, final int y, final int z) {
         return isBlockDamaging(world, x, y, z) || isBlockAboveAir(world, x, y, z);
     }
 
     public static boolean isBlockDamaging(final World world, final int x, final int y, final int z) {
+        PaperLib.getChunkAtAsync(world, x, z); // Get the chunk first so it can be loaded async
         final Block below = world.getBlockAt(x, y - 1, z);
 
         switch (below.getType()) {
@@ -159,7 +155,6 @@ public class LocationUtil {
                 user.getBase().setFlying(true);
             }
             // ess can be null if old deprecated method is calling it.
-            System.out.println((ess == null) + " " + ess.getSettings().isTeleportToCenterLocation());
             if (ess == null || ess.getSettings().isTeleportToCenterLocation()) {
                 return getRoundedDestination(loc);
             } else {
