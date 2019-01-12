@@ -111,6 +111,8 @@ public class FlatItemDb extends AbstractItemDb {
 
         Material material = data.getMaterial();
 
+        if (!material.isItem()) throw new Exception(tl("unableToSpawnItem", id));
+
         ItemStack stack = new ItemStack(material);
         stack.setAmount(material.getMaxStackSize());
 
