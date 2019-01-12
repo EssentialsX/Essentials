@@ -153,4 +153,11 @@ public interface IItemDb {
     default Material getFromLegacy(final int id, final byte damage) {
         return MaterialUtil.convertFromLegacy(id, damage);
     }
+
+    /**
+     * Check whether the item database is loaded and ready for use.
+     *
+     * @return Whether items have finished loading
+     */
+    boolean isReady();
 }

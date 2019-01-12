@@ -59,9 +59,12 @@ public class FlatItemDb extends AbstractItemDb {
             .collect(Collectors.joining());
 
         this.loadJSON(String.join("\n", json));
+
+        ready = true;
     }
 
     private void reset() {
+        ready = false;
         items.clear();
         itemAliases.clear();
         allAliases.clear();

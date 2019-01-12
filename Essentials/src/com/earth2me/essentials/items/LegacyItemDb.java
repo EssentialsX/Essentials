@@ -44,6 +44,7 @@ public class LegacyItemDb extends AbstractItemDb {
             return;
         }
 
+        ready = false;
         durabilities.clear();
         items.clear();
         names.clear();
@@ -115,6 +116,8 @@ public class LegacyItemDb extends AbstractItemDb {
         }
 
         LOGGER.info(String.format("Loaded %s items from items.csv.", listNames().size()));
+
+        ready = true;
     }
 
     @Override
