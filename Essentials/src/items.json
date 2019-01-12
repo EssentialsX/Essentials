@@ -95,16 +95,16 @@
     "acacia_sapling": {
         "material": "ACACIA_SAPLING"
     },
-    "acaciasapling": "potted_acacia_sapling",
-    "acaciatreesapling": "potted_acacia_sapling",
-    "acacialogsapling": "potted_acacia_sapling",
-    "acaciatrunksapling": "potted_acacia_sapling",
-    "acaciawoodsapling": "potted_acacia_sapling",
-    "asapling": "potted_acacia_sapling",
-    "atreesapling": "potted_acacia_sapling",
-    "alogsapling": "potted_acacia_sapling",
-    "atrunksapling": "potted_acacia_sapling",
-    "awoodsapling": "potted_acacia_sapling",
+    "acaciasapling": "acacia_sapling",
+    "acaciatreesapling": "acacia_sapling",
+    "acacialogsapling": "acacia_sapling",
+    "acaciatrunksapling": "acacia_sapling",
+    "acaciawoodsapling": "acacia_sapling",
+    "asapling": "acacia_sapling",
+    "atreesapling": "acacia_sapling",
+    "alogsapling": "acacia_sapling",
+    "atrunksapling": "acacia_sapling",
+    "awoodsapling": "acacia_sapling",
     "acacia_slab": {
         "material": "ACACIA_SLAB"
     },
@@ -221,11 +221,13 @@
         "material": "ARROW"
     },
     "attached_melon_stem": {
-        "material": "ATTACHED_MELON_STEM"
+        "material": "ATTACHED_MELON_STEM",
+        "unspawnable": true
     },
     "attachedmelonstem": "attached_melon_stem",
     "attached_pumpkin_stem": {
-        "material": "ATTACHED_PUMPKIN_STEM"
+        "material": "ATTACHED_PUMPKIN_STEM",
+        "unspawnable": true
     },
     "attachedpumpkinstem": "attached_pumpkin_stem",
     "azure_bluet": {
@@ -290,7 +292,8 @@
     "beetplant": "beetroot",
     "beetcrop": "beetroot",
     "beetroots": {
-        "material": "BEETROOTS"
+        "material": "BEETROOTS",
+        "unspawnable": true
     },
     "beetroot_seeds": {
         "material": "BEETROOT_SEEDS"
@@ -534,36 +537,36 @@
     "birch_sapling": {
         "material": "BIRCH_SAPLING"
     },
-    "birchsapling": "potted_birch_sapling",
-    "birchtreesapling": "potted_birch_sapling",
-    "birchlogsapling": "potted_birch_sapling",
-    "birchtrunksapling": "potted_birch_sapling",
-    "birchwoodsapling": "potted_birch_sapling",
-    "bsapling": "potted_birch_sapling",
-    "btreesapling": "potted_birch_sapling",
-    "blogsapling": "potted_birch_sapling",
-    "btrunksapling": "potted_birch_sapling",
-    "bwoodsapling": "potted_birch_sapling",
-    "lightsapling": "potted_birch_sapling",
-    "lighttreesapling": "potted_birch_sapling",
-    "lightlogsapling": "potted_birch_sapling",
-    "lighttrunksapling": "potted_birch_sapling",
-    "lightwoodsapling": "potted_birch_sapling",
-    "lsapling": "potted_birch_sapling",
-    "ltreesapling": "potted_birch_sapling",
-    "llogsapling": "potted_birch_sapling",
-    "ltrunksapling": "potted_birch_sapling",
-    "lwoodsapling": "potted_birch_sapling",
-    "whitesapling": "potted_birch_sapling",
-    "whitetreesapling": "potted_birch_sapling",
-    "whitelogsapling": "potted_birch_sapling",
-    "whitetrunksapling": "potted_birch_sapling",
-    "whitewoodsapling": "potted_birch_sapling",
-    "wsapling": "potted_birch_sapling",
-    "wtreesapling": "potted_birch_sapling",
-    "wlogsapling": "potted_birch_sapling",
-    "wtrunksapling": "potted_birch_sapling",
-    "wwoodsapling": "potted_birch_sapling",
+    "birchsapling": "birch_sapling",
+    "birchtreesapling": "birch_sapling",
+    "birchlogsapling": "birch_sapling",
+    "birchtrunksapling": "birch_sapling",
+    "birchwoodsapling": "birch_sapling",
+    "bsapling": "birch_sapling",
+    "btreesapling": "birch_sapling",
+    "blogsapling": "birch_sapling",
+    "btrunksapling": "birch_sapling",
+    "bwoodsapling": "birch_sapling",
+    "lightsapling": "birch_sapling",
+    "lighttreesapling": "birch_sapling",
+    "lightlogsapling": "birch_sapling",
+    "lighttrunksapling": "birch_sapling",
+    "lightwoodsapling": "birch_sapling",
+    "lsapling": "birch_sapling",
+    "ltreesapling": "birch_sapling",
+    "llogsapling": "birch_sapling",
+    "ltrunksapling": "birch_sapling",
+    "lwoodsapling": "birch_sapling",
+    "whitesapling": "birch_sapling",
+    "whitetreesapling": "birch_sapling",
+    "whitelogsapling": "birch_sapling",
+    "whitetrunksapling": "birch_sapling",
+    "whitewoodsapling": "birch_sapling",
+    "wsapling": "birch_sapling",
+    "wtreesapling": "birch_sapling",
+    "wlogsapling": "birch_sapling",
+    "wtrunksapling": "birch_sapling",
+    "wwoodsapling": "birch_sapling",
     "birch_slab": {
         "material": "BIRCH_SLAB"
     },
@@ -755,12 +758,12 @@
     "black_banner": {
         "material": "BLACK_BANNER"
     },
-    "blackbanner": "black_wall_banner",
-    "bkstandingbanner": "black_wall_banner",
-    "bkbanner": "black_wall_banner",
-    "blastandingbanner": "black_wall_banner",
-    "blabanner": "black_wall_banner",
-    "blackstandingbanner": "black_wall_banner",
+    "blackbanner": "black_banner",
+    "bkstandingbanner": "black_banner",
+    "bkbanner": "black_banner",
+    "blastandingbanner": "black_banner",
+    "blabanner": "black_banner",
+    "blackstandingbanner": "black_banner",
     "black_bed": {
         "material": "BLACK_BED"
     },
@@ -876,7 +879,8 @@
     "blacktcota": "black_terracotta",
     "blackterracota": "black_terracotta",
     "black_wall_banner": {
-        "material": "BLACK_WALL_BANNER"
+        "material": "BLACK_WALL_BANNER",
+        "unspawnable": true
     },
     "blackwallbanner": "black_wall_banner",
     "black_wool": {
@@ -911,10 +915,10 @@
     "blue_banner": {
         "material": "BLUE_BANNER"
     },
-    "bluebanner": "blue_wall_banner",
-    "blustandingbanner": "blue_wall_banner",
-    "blubanner": "blue_wall_banner",
-    "bluestandingbanner": "blue_wall_banner",
+    "bluebanner": "blue_banner",
+    "blustandingbanner": "blue_banner",
+    "blubanner": "blue_banner",
+    "bluestandingbanner": "blue_banner",
     "blue_bed": {
         "material": "BLUE_BED"
     },
@@ -1016,7 +1020,8 @@
     "bluetcota": "blue_terracotta",
     "blueterracota": "blue_terracotta",
     "blue_wall_banner": {
-        "material": "BLUE_WALL_BANNER"
+        "material": "BLUE_WALL_BANNER",
+        "unspawnable": true
     },
     "bluewallbanner": "blue_wall_banner",
     "blue_wool": {
@@ -1070,7 +1075,8 @@
     },
     "braincoralfan": "brain_coral_fan",
     "brain_coral_wall_fan": {
-        "material": "BRAIN_CORAL_WALL_FAN"
+        "material": "BRAIN_CORAL_WALL_FAN",
+        "unspawnable": true
     },
     "braincoralwallfan": "brain_coral_wall_fan",
     "bread": {
@@ -1097,10 +1103,10 @@
     "brown_banner": {
         "material": "BROWN_BANNER"
     },
-    "brownbanner": "brown_wall_banner",
-    "brostandingbanner": "brown_wall_banner",
-    "brobanner": "brown_wall_banner",
-    "brownstandingbanner": "brown_wall_banner",
+    "brownbanner": "brown_banner",
+    "brostandingbanner": "brown_banner",
+    "brobanner": "brown_banner",
+    "brownstandingbanner": "brown_banner",
     "brown_bed": {
         "material": "BROWN_BED"
     },
@@ -1145,12 +1151,12 @@
     "brown_mushroom": {
         "material": "BROWN_MUSHROOM"
     },
-    "brownmushroom": "potted_brown_mushroom",
-    "brownmush": "potted_brown_mushroom",
-    "brownshroom": "potted_brown_mushroom",
-    "bmushroom": "potted_brown_mushroom",
-    "bmush": "potted_brown_mushroom",
-    "bshroom": "potted_brown_mushroom",
+    "brownmushroom": "brown_mushroom",
+    "brownmush": "brown_mushroom",
+    "brownshroom": "brown_mushroom",
+    "bmushroom": "brown_mushroom",
+    "bmush": "brown_mushroom",
+    "bshroom": "brown_mushroom",
     "brown_mushroom_block": {
         "material": "BROWN_MUSHROOM_BLOCK"
     },
@@ -1224,7 +1230,8 @@
     "browntcota": "brown_terracotta",
     "brownterracota": "brown_terracotta",
     "brown_wall_banner": {
-        "material": "BROWN_WALL_BANNER"
+        "material": "BROWN_WALL_BANNER",
+        "unspawnable": true
     },
     "brownwallbanner": "brown_wall_banner",
     "brown_wool": {
@@ -1237,7 +1244,8 @@
     "browncloth": "brown_wool",
     "browncotton": "brown_wool",
     "bubble_column": {
-        "material": "BUBBLE_COLUMN"
+        "material": "BUBBLE_COLUMN",
+        "unspawnable": true
     },
     "bubblecolumn": "bubble_column",
     "bubble_coral": {
@@ -1253,7 +1261,8 @@
     },
     "bubblecoralfan": "bubble_coral_fan",
     "bubble_coral_wall_fan": {
-        "material": "BUBBLE_CORAL_WALL_FAN"
+        "material": "BUBBLE_CORAL_WALL_FAN",
+        "unspawnable": true
     },
     "bubblecoralwallfan": "bubble_coral_wall_fan",
     "bucket": {
@@ -1275,7 +1284,8 @@
         "material": "CARROT"
     },
     "carrots": {
-        "material": "CARROTS"
+        "material": "CARROTS",
+        "unspawnable": true
     },
     "carrot_on_a_stick": {
         "material": "CARROT_ON_A_STICK"
@@ -1293,7 +1303,8 @@
         "material": "CAULDRON"
     },
     "cave_air": {
-        "material": "CAVE_AIR"
+        "material": "CAVE_AIR",
+        "unspawnable": true
     },
     "caveair": "cave_air",
     "cave_spider_spawn_egg": {
@@ -1600,7 +1611,8 @@
     "cweb": "cobweb",
     "web": "cobweb",
     "cocoa": {
-        "material": "COCOA"
+        "material": "COCOA",
+        "unspawnable": true
     },
     "cocoa_beans": {
         "material": "COCOA_BEANS"
@@ -2144,18 +2156,18 @@
     "creeper_head": {
         "material": "CREEPER_HEAD"
     },
-    "creeperhead": "creeper_wall_head",
-    "creeperskull": "creeper_wall_head",
-    "headcreeper": "creeper_wall_head",
-    "stevecreeper": "creeper_wall_head",
-    "creepermask": "creeper_wall_head",
-    "creeperheadmask": "creeper_wall_head",
-    "crhead": "creeper_wall_head",
-    "crskull": "creeper_wall_head",
-    "headcr": "creeper_wall_head",
-    "stevecr": "creeper_wall_head",
-    "crmask": "creeper_wall_head",
-    "crheadmask": "creeper_wall_head",
+    "creeperhead": "creeper_head",
+    "creeperskull": "creeper_head",
+    "headcreeper": "creeper_head",
+    "stevecreeper": "creeper_head",
+    "creepermask": "creeper_head",
+    "creeperheadmask": "creeper_head",
+    "crhead": "creeper_head",
+    "crskull": "creeper_head",
+    "headcr": "creeper_head",
+    "stevecr": "creeper_head",
+    "crmask": "creeper_head",
+    "crheadmask": "creeper_head",
     "creeper_spawn_egg": {
         "material": "CREEPER_SPAWN_EGG"
     },
@@ -2172,7 +2184,8 @@
     "crspawn": "creeper_spawn_egg",
     "spawncr": "creeper_spawn_egg",
     "creeper_wall_head": {
-        "material": "CREEPER_WALL_HEAD"
+        "material": "CREEPER_WALL_HEAD",
+        "unspawnable": true
     },
     "creeperwallhead": "creeper_wall_head",
     "cut_red_sandstone": {
@@ -2194,10 +2207,10 @@
     "cyan_banner": {
         "material": "CYAN_BANNER"
     },
-    "cyanbanner": "cyan_wall_banner",
-    "cstandingbanner": "cyan_wall_banner",
-    "cbanner": "cyan_wall_banner",
-    "cyanstandingbanner": "cyan_wall_banner",
+    "cyanbanner": "cyan_banner",
+    "cstandingbanner": "cyan_banner",
+    "cbanner": "cyan_banner",
+    "cyanstandingbanner": "cyan_banner",
     "cyan_bed": {
         "material": "CYAN_BED"
     },
@@ -2288,7 +2301,8 @@
     "cyantcota": "cyan_terracotta",
     "cyanterracota": "cyan_terracotta",
     "cyan_wall_banner": {
-        "material": "CYAN_WALL_BANNER"
+        "material": "CYAN_WALL_BANNER",
+        "unspawnable": true
     },
     "cyanwallbanner": "cyan_wall_banner",
     "cyan_wool": {
@@ -2444,21 +2458,21 @@
     "dark_oak_sapling": {
         "material": "DARK_OAK_SAPLING"
     },
-    "darkoaksapling": "potted_dark_oak_sapling",
-    "darkoaktreesapling": "potted_dark_oak_sapling",
-    "darkoaklogsapling": "potted_dark_oak_sapling",
-    "darkoaktrunksapling": "potted_dark_oak_sapling",
-    "darkoakwoodsapling": "potted_dark_oak_sapling",
-    "doaksapling": "potted_dark_oak_sapling",
-    "doaktreesapling": "potted_dark_oak_sapling",
-    "doaklogsapling": "potted_dark_oak_sapling",
-    "doaktrunksapling": "potted_dark_oak_sapling",
-    "doakwoodsapling": "potted_dark_oak_sapling",
-    "dosapling": "potted_dark_oak_sapling",
-    "dotreesapling": "potted_dark_oak_sapling",
-    "dologsapling": "potted_dark_oak_sapling",
-    "dotrunksapling": "potted_dark_oak_sapling",
-    "dowoodsapling": "potted_dark_oak_sapling",
+    "darkoaksapling": "dark_oak_sapling",
+    "darkoaktreesapling": "dark_oak_sapling",
+    "darkoaklogsapling": "dark_oak_sapling",
+    "darkoaktrunksapling": "dark_oak_sapling",
+    "darkoakwoodsapling": "dark_oak_sapling",
+    "doaksapling": "dark_oak_sapling",
+    "doaktreesapling": "dark_oak_sapling",
+    "doaklogsapling": "dark_oak_sapling",
+    "doaktrunksapling": "dark_oak_sapling",
+    "doakwoodsapling": "dark_oak_sapling",
+    "dosapling": "dark_oak_sapling",
+    "dotreesapling": "dark_oak_sapling",
+    "dologsapling": "dark_oak_sapling",
+    "dotrunksapling": "dark_oak_sapling",
+    "dowoodsapling": "dark_oak_sapling",
     "dark_oak_slab": {
         "material": "DARK_OAK_SLAB"
     },
@@ -2597,7 +2611,8 @@
     },
     "deadbraincoralfan": "dead_brain_coral_fan",
     "dead_brain_coral_wall_fan": {
-        "material": "DEAD_BRAIN_CORAL_WALL_FAN"
+        "material": "DEAD_BRAIN_CORAL_WALL_FAN",
+        "unspawnable": true
     },
     "deadbraincoralwallfan": "dead_brain_coral_wall_fan",
     "dead_bubble_coral": {
@@ -2613,7 +2628,8 @@
     },
     "deadbubblecoralfan": "dead_bubble_coral_fan",
     "dead_bubble_coral_wall_fan": {
-        "material": "DEAD_BUBBLE_CORAL_WALL_FAN"
+        "material": "DEAD_BUBBLE_CORAL_WALL_FAN",
+        "unspawnable": true
     },
     "deadbubblecoralwallfan": "dead_bubble_coral_wall_fan",
     "dead_bush": {
@@ -2638,7 +2654,8 @@
     },
     "deadfirecoralfan": "dead_fire_coral_fan",
     "dead_fire_coral_wall_fan": {
-        "material": "DEAD_FIRE_CORAL_WALL_FAN"
+        "material": "DEAD_FIRE_CORAL_WALL_FAN",
+        "unspawnable": true
     },
     "deadfirecoralwallfan": "dead_fire_coral_wall_fan",
     "dead_horn_coral": {
@@ -2654,7 +2671,8 @@
     },
     "deadhorncoralfan": "dead_horn_coral_fan",
     "dead_horn_coral_wall_fan": {
-        "material": "DEAD_HORN_CORAL_WALL_FAN"
+        "material": "DEAD_HORN_CORAL_WALL_FAN",
+        "unspawnable": true
     },
     "deadhorncoralwallfan": "dead_horn_coral_wall_fan",
     "dead_tube_coral": {
@@ -2670,7 +2688,8 @@
     },
     "deadtubecoralfan": "dead_tube_coral_fan",
     "dead_tube_coral_wall_fan": {
-        "material": "DEAD_TUBE_CORAL_WALL_FAN"
+        "material": "DEAD_TUBE_CORAL_WALL_FAN",
+        "unspawnable": true
     },
     "deadtubecoralwallfan": "dead_tube_coral_wall_fan",
     "debug_stick": {
@@ -2873,14 +2892,15 @@
     "dragon_head": {
         "material": "DRAGON_HEAD"
     },
-    "dragonhead": "dragon_wall_head",
-    "dragonskull": "dragon_wall_head",
-    "headdragon": "dragon_wall_head",
-    "stevedragon": "dragon_wall_head",
-    "dragonmask": "dragon_wall_head",
-    "dragonheadmask": "dragon_wall_head",
+    "dragonhead": "dragon_head",
+    "dragonskull": "dragon_head",
+    "headdragon": "dragon_head",
+    "stevedragon": "dragon_head",
+    "dragonmask": "dragon_head",
+    "dragonheadmask": "dragon_head",
     "dragon_wall_head": {
-        "material": "DRAGON_WALL_HEAD"
+        "material": "DRAGON_WALL_HEAD",
+        "unspawnable": true
     },
     "dragonwallhead": "dragon_wall_head",
     "dried_kelp": {
@@ -3028,11 +3048,13 @@
     },
     "endcrystal": "end_crystal",
     "end_gateway": {
-        "material": "END_GATEWAY"
+        "material": "END_GATEWAY",
+        "unspawnable": true
     },
     "endgateway": "end_gateway",
     "end_portal": {
-        "material": "END_PORTAL"
+        "material": "END_PORTAL",
+        "unspawnable": true
     },
     "endportal": "end_portal",
     "endergoo": "end_portal",
@@ -3112,7 +3134,8 @@
     },
     "filledmap": "filled_map",
     "fire": {
-        "material": "FIRE"
+        "material": "FIRE",
+        "unspawnable": true
     },
     "firework_rocket": {
         "material": "FIREWORK_ROCKET"
@@ -3139,7 +3162,8 @@
     },
     "firecoralfan": "fire_coral_fan",
     "fire_coral_wall_fan": {
-        "material": "FIRE_CORAL_WALL_FAN"
+        "material": "FIRE_CORAL_WALL_FAN",
+        "unspawnable": true
     },
     "firecoralwallfan": "fire_coral_wall_fan",
     "fishing_rod": {
@@ -3158,7 +3182,8 @@
     },
     "flowerpot": "flower_pot",
     "frosted_ice": {
-        "material": "FROSTED_ICE"
+        "material": "FROSTED_ICE",
+        "unspawnable": true
     },
     "frostedice": "frosted_ice",
     "furnace": {
@@ -3414,24 +3439,24 @@
     "gray_banner": {
         "material": "GRAY_BANNER"
     },
-    "graybanner": "gray_wall_banner",
-    "grastandingbanner": "gray_wall_banner",
-    "grabanner": "gray_wall_banner",
-    "greystandingbanner": "gray_wall_banner",
-    "greybanner": "gray_wall_banner",
-    "graystandingbanner": "gray_wall_banner",
-    "dgrastandingbanner": "gray_wall_banner",
-    "dgrabanner": "gray_wall_banner",
-    "darkgrastandingbanner": "gray_wall_banner",
-    "darkgrabanner": "gray_wall_banner",
-    "dgreystandingbanner": "gray_wall_banner",
-    "dgreybanner": "gray_wall_banner",
-    "dgraystandingbanner": "gray_wall_banner",
-    "dgraybanner": "gray_wall_banner",
-    "darkgreystandingbanner": "gray_wall_banner",
-    "darkgreybanner": "gray_wall_banner",
-    "darkgraystandingbanner": "gray_wall_banner",
-    "darkgraybanner": "gray_wall_banner",
+    "graybanner": "gray_banner",
+    "grastandingbanner": "gray_banner",
+    "grabanner": "gray_banner",
+    "greystandingbanner": "gray_banner",
+    "greybanner": "gray_banner",
+    "graystandingbanner": "gray_banner",
+    "dgrastandingbanner": "gray_banner",
+    "dgrabanner": "gray_banner",
+    "darkgrastandingbanner": "gray_banner",
+    "darkgrabanner": "gray_banner",
+    "dgreystandingbanner": "gray_banner",
+    "dgreybanner": "gray_banner",
+    "dgraystandingbanner": "gray_banner",
+    "dgraybanner": "gray_banner",
+    "darkgreystandingbanner": "gray_banner",
+    "darkgreybanner": "gray_banner",
+    "darkgraystandingbanner": "gray_banner",
+    "darkgraybanner": "gray_banner",
     "gray_bed": {
         "material": "GRAY_BED"
     },
@@ -3725,7 +3750,8 @@
     "darkgrayterracota": "gray_terracotta",
     "darkgrayterracotta": "gray_terracotta",
     "gray_wall_banner": {
-        "material": "GRAY_WALL_BANNER"
+        "material": "GRAY_WALL_BANNER",
+        "unspawnable": true
     },
     "graywallbanner": "gray_wall_banner",
     "gray_wool": {
@@ -3761,18 +3787,18 @@
     "green_banner": {
         "material": "GREEN_BANNER"
     },
-    "greenbanner": "green_wall_banner",
-    "grestandingbanner": "green_wall_banner",
-    "grebanner": "green_wall_banner",
-    "dgrestandingbanner": "green_wall_banner",
-    "dgrebanner": "green_wall_banner",
-    "darkgrestandingbanner": "green_wall_banner",
-    "darkgrebanner": "green_wall_banner",
-    "greenstandingbanner": "green_wall_banner",
-    "dgreenstandingbanner": "green_wall_banner",
-    "dgreenbanner": "green_wall_banner",
-    "darkgreenstandingbanner": "green_wall_banner",
-    "darkgreenbanner": "green_wall_banner",
+    "greenbanner": "green_banner",
+    "grestandingbanner": "green_banner",
+    "grebanner": "green_banner",
+    "dgrestandingbanner": "green_banner",
+    "dgrebanner": "green_banner",
+    "darkgrestandingbanner": "green_banner",
+    "darkgrebanner": "green_banner",
+    "greenstandingbanner": "green_banner",
+    "dgreenstandingbanner": "green_banner",
+    "dgreenbanner": "green_banner",
+    "darkgreenstandingbanner": "green_banner",
+    "darkgreenbanner": "green_banner",
     "green_bed": {
         "material": "GREEN_BED"
     },
@@ -3975,7 +4001,8 @@
     "darkgreenterracota": "green_terracotta",
     "darkgreenterracotta": "green_terracotta",
     "green_wall_banner": {
-        "material": "GREEN_WALL_BANNER"
+        "material": "GREEN_WALL_BANNER",
+        "unspawnable": true
     },
     "greenwallbanner": "green_wall_banner",
     "green_wool": {
@@ -4066,7 +4093,8 @@
     },
     "horncoralfan": "horn_coral_fan",
     "horn_coral_wall_fan": {
-        "material": "HORN_CORAL_WALL_FAN"
+        "material": "HORN_CORAL_WALL_FAN",
+        "unspawnable": true
     },
     "horncoralwallfan": "horn_coral_wall_fan",
     "horse_spawn_egg": {
@@ -5396,26 +5424,26 @@
     "jungle_sapling": {
         "material": "JUNGLE_SAPLING"
     },
-    "junglesapling": "potted_jungle_sapling",
-    "jungletreesapling": "potted_jungle_sapling",
-    "junglelogsapling": "potted_jungle_sapling",
-    "jungletrunksapling": "potted_jungle_sapling",
-    "junglewoodsapling": "potted_jungle_sapling",
-    "jsapling": "potted_jungle_sapling",
-    "jtreesapling": "potted_jungle_sapling",
-    "jlogsapling": "potted_jungle_sapling",
-    "jtrunksapling": "potted_jungle_sapling",
-    "jwoodsapling": "potted_jungle_sapling",
-    "forestsapling": "potted_jungle_sapling",
-    "foresttreesapling": "potted_jungle_sapling",
-    "forestlogsapling": "potted_jungle_sapling",
-    "foresttrunksapling": "potted_jungle_sapling",
-    "forestwoodsapling": "potted_jungle_sapling",
-    "fsapling": "potted_jungle_sapling",
-    "ftreesapling": "potted_jungle_sapling",
-    "flogsapling": "potted_jungle_sapling",
-    "ftrunksapling": "potted_jungle_sapling",
-    "fwoodsapling": "potted_jungle_sapling",
+    "junglesapling": "jungle_sapling",
+    "jungletreesapling": "jungle_sapling",
+    "junglelogsapling": "jungle_sapling",
+    "jungletrunksapling": "jungle_sapling",
+    "junglewoodsapling": "jungle_sapling",
+    "jsapling": "jungle_sapling",
+    "jtreesapling": "jungle_sapling",
+    "jlogsapling": "jungle_sapling",
+    "jtrunksapling": "jungle_sapling",
+    "jwoodsapling": "jungle_sapling",
+    "forestsapling": "jungle_sapling",
+    "foresttreesapling": "jungle_sapling",
+    "forestlogsapling": "jungle_sapling",
+    "foresttrunksapling": "jungle_sapling",
+    "forestwoodsapling": "jungle_sapling",
+    "fsapling": "jungle_sapling",
+    "ftreesapling": "jungle_sapling",
+    "flogsapling": "jungle_sapling",
+    "ftrunksapling": "jungle_sapling",
+    "fwoodsapling": "jungle_sapling",
     "jungle_slab": {
         "material": "JUNGLE_SLAB"
     },
@@ -5550,7 +5578,8 @@
         "material": "KELP"
     },
     "kelp_plant": {
-        "material": "KELP_PLANT"
+        "material": "KELP_PLANT",
+        "unspawnable": true
     },
     "kelpplant": "kelp_plant",
     "knowledge_book": {
@@ -5593,7 +5622,8 @@
     },
     "largefern": "large_fern",
     "lava": {
-        "material": "LAVA"
+        "material": "LAVA",
+        "unspawnable": true
     },
     "stationarylava": "lava",
     "stilllava": "lava",
@@ -5654,16 +5684,16 @@
     "light_blue_banner": {
         "material": "LIGHT_BLUE_BANNER"
     },
-    "lightbluebanner": "light_blue_wall_banner",
-    "lbstandingbanner": "light_blue_wall_banner",
-    "lbbanner": "light_blue_wall_banner",
-    "lblustandingbanner": "light_blue_wall_banner",
-    "lblubanner": "light_blue_wall_banner",
-    "lightblustandingbanner": "light_blue_wall_banner",
-    "lightblubanner": "light_blue_wall_banner",
-    "lbluestandingbanner": "light_blue_wall_banner",
-    "lbluebanner": "light_blue_wall_banner",
-    "lightbluestandingbanner": "light_blue_wall_banner",
+    "lightbluebanner": "light_blue_banner",
+    "lbstandingbanner": "light_blue_banner",
+    "lbbanner": "light_blue_banner",
+    "lblustandingbanner": "light_blue_banner",
+    "lblubanner": "light_blue_banner",
+    "lightblustandingbanner": "light_blue_banner",
+    "lightblubanner": "light_blue_banner",
+    "lbluestandingbanner": "light_blue_banner",
+    "lbluebanner": "light_blue_banner",
+    "lightbluestandingbanner": "light_blue_banner",
     "light_blue_bed": {
         "material": "LIGHT_BLUE_BED"
     },
@@ -5841,7 +5871,8 @@
     "lightbluetcota": "light_blue_terracotta",
     "lightblueterracota": "light_blue_terracotta",
     "light_blue_wall_banner": {
-        "material": "LIGHT_BLUE_WALL_BANNER"
+        "material": "LIGHT_BLUE_WALL_BANNER",
+        "unspawnable": true
     },
     "lightbluewallbanner": "light_blue_wall_banner",
     "light_blue_wool": {
@@ -5865,26 +5896,26 @@
     "light_gray_banner": {
         "material": "LIGHT_GRAY_BANNER"
     },
-    "lightgraybanner": "light_gray_wall_banner",
-    "lgstandingbanner": "light_gray_wall_banner",
-    "lgbanner": "light_gray_wall_banner",
-    "lgrastandingbanner": "light_gray_wall_banner",
-    "lgrabanner": "light_gray_wall_banner",
-    "lgreystandingbanner": "light_gray_wall_banner",
-    "lgreybanner": "light_gray_wall_banner",
-    "lgraystandingbanner": "light_gray_wall_banner",
-    "lgraybanner": "light_gray_wall_banner",
-    "lightgrastandingbanner": "light_gray_wall_banner",
-    "lightgrabanner": "light_gray_wall_banner",
-    "lightgreystandingbanner": "light_gray_wall_banner",
-    "lightgreybanner": "light_gray_wall_banner",
-    "lightgraystandingbanner": "light_gray_wall_banner",
-    "sistandingbanner": "light_gray_wall_banner",
-    "sibanner": "light_gray_wall_banner",
-    "siastandingbanner": "light_gray_wall_banner",
-    "siabanner": "light_gray_wall_banner",
-    "silverstandingbanner": "light_gray_wall_banner",
-    "silverbanner": "light_gray_wall_banner",
+    "lightgraybanner": "light_gray_banner",
+    "lgstandingbanner": "light_gray_banner",
+    "lgbanner": "light_gray_banner",
+    "lgrastandingbanner": "light_gray_banner",
+    "lgrabanner": "light_gray_banner",
+    "lgreystandingbanner": "light_gray_banner",
+    "lgreybanner": "light_gray_banner",
+    "lgraystandingbanner": "light_gray_banner",
+    "lgraybanner": "light_gray_banner",
+    "lightgrastandingbanner": "light_gray_banner",
+    "lightgrabanner": "light_gray_banner",
+    "lightgreystandingbanner": "light_gray_banner",
+    "lightgreybanner": "light_gray_banner",
+    "lightgraystandingbanner": "light_gray_banner",
+    "sistandingbanner": "light_gray_banner",
+    "sibanner": "light_gray_banner",
+    "siastandingbanner": "light_gray_banner",
+    "siabanner": "light_gray_banner",
+    "silverstandingbanner": "light_gray_banner",
+    "silverbanner": "light_gray_banner",
     "light_gray_bed": {
         "material": "LIGHT_GRAY_BED"
     },
@@ -6207,7 +6238,8 @@
     "silverterracota": "light_gray_terracotta",
     "silverterracotta": "light_gray_terracotta",
     "light_gray_wall_banner": {
-        "material": "LIGHT_GRAY_WALL_BANNER"
+        "material": "LIGHT_GRAY_WALL_BANNER",
+        "unspawnable": true
     },
     "lightgraywallbanner": "light_gray_wall_banner",
     "light_gray_wool": {
@@ -6262,18 +6294,18 @@
     "lime_banner": {
         "material": "LIME_BANNER"
     },
-    "limebanner": "lime_wall_banner",
-    "lstandingbanner": "lime_wall_banner",
-    "lbanner": "lime_wall_banner",
-    "limestandingbanner": "lime_wall_banner",
-    "lgrestandingbanner": "lime_wall_banner",
-    "lgrebanner": "lime_wall_banner",
-    "lightgrestandingbanner": "lime_wall_banner",
-    "lightgrebanner": "lime_wall_banner",
-    "lgreenstandingbanner": "lime_wall_banner",
-    "lgreenbanner": "lime_wall_banner",
-    "lightgreenstandingbanner": "lime_wall_banner",
-    "lightgreenbanner": "lime_wall_banner",
+    "limebanner": "lime_banner",
+    "lstandingbanner": "lime_banner",
+    "lbanner": "lime_banner",
+    "limestandingbanner": "lime_banner",
+    "lgrestandingbanner": "lime_banner",
+    "lgrebanner": "lime_banner",
+    "lightgrestandingbanner": "lime_banner",
+    "lightgrebanner": "lime_banner",
+    "lgreenstandingbanner": "lime_banner",
+    "lgreenbanner": "lime_banner",
+    "lightgreenstandingbanner": "lime_banner",
+    "lightgreenbanner": "lime_banner",
     "lime_bed": {
         "material": "LIME_BED"
     },
@@ -6480,7 +6512,8 @@
     "lightgreenterracota": "lime_terracotta",
     "lightgreenterracotta": "lime_terracotta",
     "lime_wall_banner": {
-        "material": "LIME_WALL_BANNER"
+        "material": "LIME_WALL_BANNER",
+        "unspawnable": true
     },
     "limewallbanner": "lime_wall_banner",
     "lime_wool": {
@@ -6520,10 +6553,10 @@
     "magenta_banner": {
         "material": "MAGENTA_BANNER"
     },
-    "magentabanner": "magenta_wall_banner",
-    "mstandingbanner": "magenta_wall_banner",
-    "mbanner": "magenta_wall_banner",
-    "magentastandingbanner": "magenta_wall_banner",
+    "magentabanner": "magenta_banner",
+    "mstandingbanner": "magenta_banner",
+    "mbanner": "magenta_banner",
+    "magentastandingbanner": "magenta_banner",
     "magenta_bed": {
         "material": "MAGENTA_BED"
     },
@@ -6614,7 +6647,8 @@
     "magentatcota": "magenta_terracotta",
     "magentaterracota": "magenta_terracotta",
     "magenta_wall_banner": {
-        "material": "MAGENTA_WALL_BANNER"
+        "material": "MAGENTA_WALL_BANNER",
+        "unspawnable": true
     },
     "magentawallbanner": "magenta_wall_banner",
     "magenta_wool": {
@@ -6682,7 +6716,8 @@
     },
     "melonslice": "melon_slice",
     "melon_stem": {
-        "material": "MELON_STEM"
+        "material": "MELON_STEM",
+        "unspawnable": true
     },
     "melonstem": "melon_stem",
     "milk_bucket": {
@@ -6789,7 +6824,8 @@
     "mstonebricks": "mossy_stone_bricks",
     "msbb": "mossy_stone_bricks",
     "moving_piston": {
-        "material": "MOVING_PISTON"
+        "material": "MOVING_PISTON",
+        "unspawnable": true
     },
     "movingpiston": "moving_piston",
     "mule_spawn_egg": {
@@ -7688,7 +7724,8 @@
     },
     "netherbrickstairs": "nether_brick_stairs",
     "nether_portal": {
-        "material": "NETHER_PORTAL"
+        "material": "NETHER_PORTAL",
+        "unspawnable": true
     },
     "netherportal": "nether_portal",
     "nether_quartz_ore": {
@@ -7893,21 +7930,21 @@
     "oak_sapling": {
         "material": "OAK_SAPLING"
     },
-    "oaksapling": "potted_oak_sapling",
-    "sapling": "potted_oak_sapling",
-    "treesapling": "potted_oak_sapling",
-    "logsapling": "potted_oak_sapling",
-    "trunksapling": "potted_oak_sapling",
-    "woodsapling": "potted_oak_sapling",
-    "oaktreesapling": "potted_oak_sapling",
-    "oaklogsapling": "potted_oak_sapling",
-    "oaktrunksapling": "potted_oak_sapling",
-    "oakwoodsapling": "potted_oak_sapling",
-    "osapling": "potted_oak_sapling",
-    "otreesapling": "potted_oak_sapling",
-    "ologsapling": "potted_oak_sapling",
-    "otrunksapling": "potted_oak_sapling",
-    "owoodsapling": "potted_oak_sapling",
+    "oaksapling": "oak_sapling",
+    "sapling": "oak_sapling",
+    "treesapling": "oak_sapling",
+    "logsapling": "oak_sapling",
+    "trunksapling": "oak_sapling",
+    "woodsapling": "oak_sapling",
+    "oaktreesapling": "oak_sapling",
+    "oaklogsapling": "oak_sapling",
+    "oaktrunksapling": "oak_sapling",
+    "oakwoodsapling": "oak_sapling",
+    "osapling": "oak_sapling",
+    "otreesapling": "oak_sapling",
+    "ologsapling": "oak_sapling",
+    "otrunksapling": "oak_sapling",
+    "owoodsapling": "oak_sapling",
     "oak_slab": {
         "material": "OAK_SLAB"
     },
@@ -8032,10 +8069,10 @@
     "orange_banner": {
         "material": "ORANGE_BANNER"
     },
-    "orangebanner": "orange_wall_banner",
-    "ostandingbanner": "orange_wall_banner",
-    "obanner": "orange_wall_banner",
-    "orangestandingbanner": "orange_wall_banner",
+    "orangebanner": "orange_banner",
+    "ostandingbanner": "orange_banner",
+    "obanner": "orange_banner",
+    "orangestandingbanner": "orange_banner",
     "orange_bed": {
         "material": "ORANGE_BED"
     },
@@ -8133,7 +8170,8 @@
     "otulip": "orange_tulip",
     "tulipo": "orange_tulip",
     "orange_wall_banner": {
-        "material": "ORANGE_WALL_BANNER"
+        "material": "ORANGE_WALL_BANNER",
+        "unspawnable": true
     },
     "orangewallbanner": "orange_wall_banner",
     "orange_wool": {
@@ -8211,10 +8249,10 @@
     "pink_banner": {
         "material": "PINK_BANNER"
     },
-    "pinkbanner": "pink_wall_banner",
-    "pistandingbanner": "pink_wall_banner",
-    "pibanner": "pink_wall_banner",
-    "pinkstandingbanner": "pink_wall_banner",
+    "pinkbanner": "pink_banner",
+    "pistandingbanner": "pink_banner",
+    "pibanner": "pink_banner",
+    "pinkstandingbanner": "pink_banner",
     "pink_bed": {
         "material": "PINK_BED"
     },
@@ -8312,7 +8350,8 @@
     "ptulip": "pink_tulip",
     "tulipp": "pink_tulip",
     "pink_wall_banner": {
-        "material": "PINK_WALL_BANNER"
+        "material": "PINK_WALL_BANNER",
+        "unspawnable": true
     },
     "pinkwallbanner": "pink_wall_banner",
     "pink_wool": {
@@ -8328,43 +8367,45 @@
         "material": "PISTON"
     },
     "piston_head": {
-        "material": "PISTON_HEAD"
+        "material": "PISTON_HEAD",
+        "unspawnable": true
     },
     "pistonhead": "piston_head",
     "player_head": {
         "material": "PLAYER_HEAD"
     },
-    "playerhead": "player_wall_head",
-    "head": "player_wall_head",
-    "skull": "player_wall_head",
-    "steve": "player_wall_head",
-    "mask": "player_wall_head",
-    "headmask": "player_wall_head",
-    "playerskull": "player_wall_head",
-    "headplayer": "player_wall_head",
-    "steveplayer": "player_wall_head",
-    "playermask": "player_wall_head",
-    "playerheadmask": "player_wall_head",
-    "phead": "player_wall_head",
-    "pskull": "player_wall_head",
-    "headp": "player_wall_head",
-    "stevep": "player_wall_head",
-    "pmask": "player_wall_head",
-    "pheadmask": "player_wall_head",
-    "stevehead": "player_wall_head",
-    "steveskull": "player_wall_head",
-    "headsteve": "player_wall_head",
-    "stevesteve": "player_wall_head",
-    "stevemask": "player_wall_head",
-    "steveheadmask": "player_wall_head",
-    "humanhead": "player_wall_head",
-    "humanskull": "player_wall_head",
-    "headhuman": "player_wall_head",
-    "stevehuman": "player_wall_head",
-    "humanmask": "player_wall_head",
-    "humanheadmask": "player_wall_head",
+    "playerhead": "player_head",
+    "head": "player_head",
+    "skull": "player_head",
+    "steve": "player_head",
+    "mask": "player_head",
+    "headmask": "player_head",
+    "playerskull": "player_head",
+    "headplayer": "player_head",
+    "steveplayer": "player_head",
+    "playermask": "player_head",
+    "playerheadmask": "player_head",
+    "phead": "player_head",
+    "pskull": "player_head",
+    "headp": "player_head",
+    "stevep": "player_head",
+    "pmask": "player_head",
+    "pheadmask": "player_head",
+    "stevehead": "player_head",
+    "steveskull": "player_head",
+    "headsteve": "player_head",
+    "stevesteve": "player_head",
+    "stevemask": "player_head",
+    "steveheadmask": "player_head",
+    "humanhead": "player_head",
+    "humanskull": "player_head",
+    "headhuman": "player_head",
+    "stevehuman": "player_head",
+    "humanmask": "player_head",
+    "humanheadmask": "player_head",
     "player_wall_head": {
-        "material": "PLAYER_WALL_HEAD"
+        "material": "PLAYER_WALL_HEAD",
+        "unspawnable": true
     },
     "playerwallhead": "player_wall_head",
     "podzol": {
@@ -8448,129 +8489,115 @@
         "material": "POTATO"
     },
     "potatoes": {
-        "material": "POTATOES"
+        "material": "POTATOES",
+        "unspawnable": true
     },
     "potion": {
         "material": "POTION"
     },
     "potted_acacia_sapling": {
-        "material": "POTTED_ACACIA_SAPLING"
+        "material": "POTTED_ACACIA_SAPLING",
+        "unspawnable": true
     },
     "pottedacaciasapling": "potted_acacia_sapling",
     "potted_allium": {
-        "material": "POTTED_ALLIUM"
+        "material": "POTTED_ALLIUM",
+        "unspawnable": true
     },
     "pottedallium": "potted_allium",
     "potted_azure_bluet": {
-        "material": "POTTED_AZURE_BLUET"
+        "material": "POTTED_AZURE_BLUET",
+        "unspawnable": true
     },
     "pottedazurebluet": "potted_azure_bluet",
     "potted_birch_sapling": {
-        "material": "POTTED_BIRCH_SAPLING"
+        "material": "POTTED_BIRCH_SAPLING",
+        "unspawnable": true
     },
     "pottedbirchsapling": "potted_birch_sapling",
     "potted_blue_orchid": {
-        "material": "POTTED_BLUE_ORCHID"
+        "material": "POTTED_BLUE_ORCHID",
+        "unspawnable": true
     },
     "pottedblueorchid": "potted_blue_orchid",
     "potted_brown_mushroom": {
-        "material": "POTTED_BROWN_MUSHROOM"
+        "material": "POTTED_BROWN_MUSHROOM",
+        "unspawnable": true
     },
     "pottedbrownmushroom": "potted_brown_mushroom",
     "potted_cactus": {
-        "material": "POTTED_CACTUS"
+        "material": "POTTED_CACTUS",
+        "unspawnable": true
     },
     "pottedcactus": "potted_cactus",
     "potted_dandelion": {
-        "material": "POTTED_DANDELION"
+        "material": "POTTED_DANDELION",
+        "unspawnable": true
     },
     "potteddandelion": "potted_dandelion",
     "potted_dark_oak_sapling": {
-        "material": "POTTED_DARK_OAK_SAPLING"
+        "material": "POTTED_DARK_OAK_SAPLING",
+        "unspawnable": true
     },
     "potteddarkoaksapling": "potted_dark_oak_sapling",
     "potted_dead_bush": {
-        "material": "POTTED_DEAD_BUSH"
+        "material": "POTTED_DEAD_BUSH",
+        "unspawnable": true
     },
     "potteddeadbush": "potted_dead_bush",
     "potted_fern": {
-        "material": "POTTED_FERN"
+        "material": "POTTED_FERN",
+        "unspawnable": true
     },
     "pottedfern": "potted_fern",
     "potted_jungle_sapling": {
-        "material": "POTTED_JUNGLE_SAPLING"
+        "material": "POTTED_JUNGLE_SAPLING",
+        "unspawnable": true
     },
     "pottedjunglesapling": "potted_jungle_sapling",
     "potted_oak_sapling": {
-        "material": "POTTED_OAK_SAPLING"
+        "material": "POTTED_OAK_SAPLING",
+        "unspawnable": true
     },
     "pottedoaksapling": "potted_oak_sapling",
     "potted_orange_tulip": {
-        "material": "POTTED_ORANGE_TULIP"
+        "material": "POTTED_ORANGE_TULIP",
+        "unspawnable": true
     },
     "pottedorangetulip": "potted_orange_tulip",
     "potted_oxeye_daisy": {
-        "material": "POTTED_OXEYE_DAISY"
+        "material": "POTTED_OXEYE_DAISY",
+        "unspawnable": true
     },
     "pottedoxeyedaisy": "potted_oxeye_daisy",
     "potted_pink_tulip": {
-        "material": "POTTED_PINK_TULIP"
+        "material": "POTTED_PINK_TULIP",
+        "unspawnable": true
     },
     "pottedpinktulip": "potted_pink_tulip",
     "potted_poppy": {
-        "material": "POTTED_POPPY"
+        "material": "POTTED_POPPY",
+        "unspawnable": true
     },
     "pottedpoppy": "potted_poppy",
     "potted_red_mushroom": {
-        "material": "POTTED_RED_MUSHROOM"
+        "material": "POTTED_RED_MUSHROOM",
+        "unspawnable": true
     },
     "pottedredmushroom": "potted_red_mushroom",
-    "redmushroom": "red_mushroom",
-    "redmush": "red_mushroom",
-    "redshroom": "red_mushroom",
-    "rmushroom": "red_mushroom",
-    "rmush": "red_mushroom",
-    "rshroom": "red_mushroom",
     "potted_red_tulip": {
-        "material": "POTTED_RED_TULIP"
+        "material": "POTTED_RED_TULIP",
+        "unspawnable": true
     },
     "pottedredtulip": "potted_red_tulip",
     "potted_spruce_sapling": {
-        "material": "POTTED_SPRUCE_SAPLING"
+        "material": "POTTED_SPRUCE_SAPLING",
+        "unspawnable": true
     },
     "pottedsprucesapling": "potted_spruce_sapling",
-    "pinesapling": "spruce_sapling",
-    "pinetreesapling": "spruce_sapling",
-    "pinelogsapling": "spruce_sapling",
-    "pinetrunksapling": "spruce_sapling",
-    "pinewoodsapling": "spruce_sapling",
-    "psapling": "spruce_sapling",
-    "ptreesapling": "spruce_sapling",
-    "plogsapling": "spruce_sapling",
-    "ptrunksapling": "spruce_sapling",
-    "pwoodsapling": "spruce_sapling",
-    "darksapling": "spruce_sapling",
-    "darktreesapling": "spruce_sapling",
-    "darklogsapling": "spruce_sapling",
-    "darktrunksapling": "spruce_sapling",
-    "darkwoodsapling": "spruce_sapling",
-    "dsapling": "spruce_sapling",
-    "dtreesapling": "spruce_sapling",
-    "dlogsapling": "spruce_sapling",
-    "dtrunksapling": "spruce_sapling",
-    "dwoodsapling": "spruce_sapling",
-    "sprucesapling": "spruce_sapling",
-    "sprucetreesapling": "spruce_sapling",
-    "sprucelogsapling": "spruce_sapling",
-    "sprucetrunksapling": "spruce_sapling",
-    "sprucewoodsapling": "spruce_sapling",
-    "ssapling": "spruce_sapling",
-    "streesapling": "spruce_sapling",
-    "slogsapling": "spruce_sapling",
-    "strunksapling": "spruce_sapling",
-    "swoodsapling": "spruce_sapling",
     "potted_white_tulip": {
-        "material": "POTTED_WHITE_TULIP"
+        "material": "POTTED_WHITE_TULIP",
+        "unspawnable": true
     },
     "pottedwhitetulip": "potted_white_tulip",
     "powered_rail": {
@@ -8694,16 +8721,17 @@
     },
     "pumpkinseeds": "pumpkin_seeds",
     "pumpkin_stem": {
-        "material": "PUMPKIN_STEM"
+        "material": "PUMPKIN_STEM",
+        "unspawnable": true
     },
     "pumpkinstem": "pumpkin_stem",
     "purple_banner": {
         "material": "PURPLE_BANNER"
     },
-    "purplebanner": "purple_wall_banner",
-    "pustandingbanner": "purple_wall_banner",
-    "pubanner": "purple_wall_banner",
-    "purplestandingbanner": "purple_wall_banner",
+    "purplebanner": "purple_banner",
+    "pustandingbanner": "purple_banner",
+    "pubanner": "purple_banner",
+    "purplestandingbanner": "purple_banner",
     "purple_bed": {
         "material": "PURPLE_BED"
     },
@@ -8794,7 +8822,8 @@
     "purpletcota": "purple_terracotta",
     "purpleterracota": "purple_terracotta",
     "purple_wall_banner": {
-        "material": "PURPLE_WALL_BANNER"
+        "material": "PURPLE_WALL_BANNER",
+        "unspawnable": true
     },
     "purplewallbanner": "purple_wall_banner",
     "purple_wool": {
@@ -8953,20 +8982,22 @@
     "redtorch": "redstone_torch",
     "rstorch": "redstone_torch",
     "redstone_wall_torch": {
-        "material": "REDSTONE_WALL_TORCH"
+        "material": "REDSTONE_WALL_TORCH",
+        "unspawnable": true
     },
     "redstonewalltorch": "redstone_wall_torch",
     "redstone_wire": {
-        "material": "REDSTONE_WIRE"
+        "material": "REDSTONE_WIRE",
+        "unspawnable": true
     },
     "redstonewire": "redstone_wire",
     "red_banner": {
         "material": "RED_BANNER"
     },
-    "redbanner": "red_wall_banner",
-    "rstandingbanner": "red_wall_banner",
-    "rbanner": "red_wall_banner",
-    "redstandingbanner": "red_wall_banner",
+    "redbanner": "red_banner",
+    "rstandingbanner": "red_banner",
+    "rbanner": "red_banner",
+    "redstandingbanner": "red_banner",
     "red_bed": {
         "material": "RED_BED"
     },
@@ -9011,6 +9042,12 @@
     "red_mushroom": {
         "material": "RED_MUSHROOM"
     },
+    "redmushroom": "red_mushroom",
+    "redmush": "red_mushroom",
+    "redshroom": "red_mushroom",
+    "rmushroom": "red_mushroom",
+    "rmush": "red_mushroom",
+    "rshroom": "red_mushroom",
     "red_mushroom_block": {
         "material": "RED_MUSHROOM_BLOCK"
     },
@@ -9113,7 +9150,8 @@
     "rtulip": "red_tulip",
     "tulipr": "red_tulip",
     "red_wall_banner": {
-        "material": "RED_WALL_BANNER"
+        "material": "RED_WALL_BANNER",
+        "unspawnable": true
     },
     "redwallbanner": "red_wall_banner",
     "red_wool": {
@@ -9289,18 +9327,18 @@
     "skeleton_skull": {
         "material": "SKELETON_SKULL"
     },
-    "skeletonskull": "skeleton_wall_skull",
-    "skeletonhead": "skeleton_wall_skull",
-    "headskeleton": "skeleton_wall_skull",
-    "steveskeleton": "skeleton_wall_skull",
-    "skeletonmask": "skeleton_wall_skull",
-    "skeletonheadmask": "skeleton_wall_skull",
-    "skhead": "skeleton_wall_skull",
-    "skskull": "skeleton_wall_skull",
-    "headsk": "skeleton_wall_skull",
-    "stevesk": "skeleton_wall_skull",
-    "skmask": "skeleton_wall_skull",
-    "skheadmask": "skeleton_wall_skull",
+    "skeletonskull": "skeleton_skull",
+    "skeletonhead": "skeleton_skull",
+    "headskeleton": "skeleton_skull",
+    "steveskeleton": "skeleton_skull",
+    "skeletonmask": "skeleton_skull",
+    "skeletonheadmask": "skeleton_skull",
+    "skhead": "skeleton_skull",
+    "skskull": "skeleton_skull",
+    "headsk": "skeleton_skull",
+    "stevesk": "skeleton_skull",
+    "skmask": "skeleton_skull",
+    "skheadmask": "skeleton_skull",
     "skeleton_spawn_egg": {
         "material": "SKELETON_SPAWN_EGG"
     },
@@ -9317,7 +9355,8 @@
     "skspawn": "skeleton_spawn_egg",
     "spawnsk": "skeleton_spawn_egg",
     "skeleton_wall_skull": {
-        "material": "SKELETON_WALL_SKULL"
+        "material": "SKELETON_WALL_SKULL",
+        "unspawnable": true
     },
     "skeletonwallskull": "skeleton_wall_skull",
     "slime_ball": {
@@ -9612,6 +9651,36 @@
     "spruce_sapling": {
         "material": "SPRUCE_SAPLING"
     },
+    "sprucesapling": "spruce_sapling",
+    "pinesapling": "spruce_sapling",
+    "pinetreesapling": "spruce_sapling",
+    "pinelogsapling": "spruce_sapling",
+    "pinetrunksapling": "spruce_sapling",
+    "pinewoodsapling": "spruce_sapling",
+    "psapling": "spruce_sapling",
+    "ptreesapling": "spruce_sapling",
+    "plogsapling": "spruce_sapling",
+    "ptrunksapling": "spruce_sapling",
+    "pwoodsapling": "spruce_sapling",
+    "darksapling": "spruce_sapling",
+    "darktreesapling": "spruce_sapling",
+    "darklogsapling": "spruce_sapling",
+    "darktrunksapling": "spruce_sapling",
+    "darkwoodsapling": "spruce_sapling",
+    "dsapling": "spruce_sapling",
+    "dtreesapling": "spruce_sapling",
+    "dlogsapling": "spruce_sapling",
+    "dtrunksapling": "spruce_sapling",
+    "dwoodsapling": "spruce_sapling",
+    "sprucetreesapling": "spruce_sapling",
+    "sprucelogsapling": "spruce_sapling",
+    "sprucetrunksapling": "spruce_sapling",
+    "sprucewoodsapling": "spruce_sapling",
+    "ssapling": "spruce_sapling",
+    "streesapling": "spruce_sapling",
+    "slogsapling": "spruce_sapling",
+    "strunksapling": "spruce_sapling",
+    "swoodsapling": "spruce_sapling",
     "spruce_slab": {
         "material": "SPRUCE_SLAB"
     },
@@ -10342,7 +10411,8 @@
     "tgrass": "tall_grass",
     "wgrass": "tall_grass",
     "tall_seagrass": {
-        "material": "TALL_SEAGRASS"
+        "material": "TALL_SEAGRASS",
+        "unspawnable": true
     },
     "tallseagrass": "tall_seagrass",
     "terracotta": {
@@ -10411,7 +10481,8 @@
         "material": "TRIDENT"
     },
     "tripwire": {
-        "material": "TRIPWIRE"
+        "material": "TRIPWIRE",
+        "unspawnable": true
     },
     "tripwire_hook": {
         "material": "TRIPWIRE_HOOK"
@@ -10513,7 +10584,8 @@
     },
     "tubecoralfan": "tube_coral_fan",
     "tube_coral_wall_fan": {
-        "material": "TUBE_CORAL_WALL_FAN"
+        "material": "TUBE_CORAL_WALL_FAN",
+        "unspawnable": true
     },
     "tubecoralwallfan": "tube_coral_wall_fan",
     "turtle_egg": {
@@ -10582,19 +10654,23 @@
     "gvines": "vine",
     "gvine": "vine",
     "void_air": {
-        "material": "VOID_AIR"
+        "material": "VOID_AIR",
+        "unspawnable": true
     },
     "voidair": "void_air",
     "wall_sign": {
-        "material": "WALL_SIGN"
+        "material": "WALL_SIGN",
+        "unspawnable": true
     },
     "wallsign": "wall_sign",
     "wall_torch": {
-        "material": "WALL_TORCH"
+        "material": "WALL_TORCH",
+        "unspawnable": true
     },
     "walltorch": "wall_torch",
     "water": {
-        "material": "WATER"
+        "material": "WATER",
+        "unspawnable": true
     },
     "stationarywater": "water",
     "stillwater": "water",
@@ -10617,12 +10693,12 @@
     "white_banner": {
         "material": "WHITE_BANNER"
     },
-    "whitebanner": "white_wall_banner",
-    "standingbanner": "white_wall_banner",
-    "banner": "white_wall_banner",
-    "wstandingbanner": "white_wall_banner",
-    "wbanner": "white_wall_banner",
-    "whitestandingbanner": "white_wall_banner",
+    "whitebanner": "white_banner",
+    "standingbanner": "white_banner",
+    "banner": "white_banner",
+    "wstandingbanner": "white_banner",
+    "wbanner": "white_banner",
+    "whitestandingbanner": "white_banner",
     "white_bed": {
         "material": "WHITE_BED"
     },
@@ -10739,7 +10815,8 @@
     "wtulip": "white_tulip",
     "tulipw": "white_tulip",
     "white_wall_banner": {
-        "material": "WHITE_WALL_BANNER"
+        "material": "WHITE_WALL_BANNER",
+        "unspawnable": true
     },
     "whitewallbanner": "white_wall_banner",
     "white_wool": {
@@ -10766,36 +10843,36 @@
     "wither_skeleton_skull": {
         "material": "WITHER_SKELETON_SKULL"
     },
-    "witherskeletonskull": "wither_skeleton_wall_skull",
-    "witherskeletonhead": "wither_skeleton_wall_skull",
-    "headwitherskeleton": "wither_skeleton_wall_skull",
-    "stevewitherskeleton": "wither_skeleton_wall_skull",
-    "witherskeletonmask": "wither_skeleton_wall_skull",
-    "witherskeletonheadmask": "wither_skeleton_wall_skull",
-    "wskeletonhead": "wither_skeleton_wall_skull",
-    "wskeletonskull": "wither_skeleton_wall_skull",
-    "headwskeleton": "wither_skeleton_wall_skull",
-    "stevewskeleton": "wither_skeleton_wall_skull",
-    "wskeletonmask": "wither_skeleton_wall_skull",
-    "wskeletonheadmask": "wither_skeleton_wall_skull",
-    "witherskhead": "wither_skeleton_wall_skull",
-    "witherskskull": "wither_skeleton_wall_skull",
-    "headwithersk": "wither_skeleton_wall_skull",
-    "stevewithersk": "wither_skeleton_wall_skull",
-    "witherskmask": "wither_skeleton_wall_skull",
-    "witherskheadmask": "wither_skeleton_wall_skull",
-    "wskhead": "wither_skeleton_wall_skull",
-    "wskskull": "wither_skeleton_wall_skull",
-    "headwsk": "wither_skeleton_wall_skull",
-    "stevewsk": "wither_skeleton_wall_skull",
-    "wskmask": "wither_skeleton_wall_skull",
-    "wskheadmask": "wither_skeleton_wall_skull",
-    "witherhead": "wither_skeleton_wall_skull",
-    "witherskull": "wither_skeleton_wall_skull",
-    "headwither": "wither_skeleton_wall_skull",
-    "stevewither": "wither_skeleton_wall_skull",
-    "withermask": "wither_skeleton_wall_skull",
-    "witherheadmask": "wither_skeleton_wall_skull",
+    "witherskeletonskull": "wither_skeleton_skull",
+    "witherskeletonhead": "wither_skeleton_skull",
+    "headwitherskeleton": "wither_skeleton_skull",
+    "stevewitherskeleton": "wither_skeleton_skull",
+    "witherskeletonmask": "wither_skeleton_skull",
+    "witherskeletonheadmask": "wither_skeleton_skull",
+    "wskeletonhead": "wither_skeleton_skull",
+    "wskeletonskull": "wither_skeleton_skull",
+    "headwskeleton": "wither_skeleton_skull",
+    "stevewskeleton": "wither_skeleton_skull",
+    "wskeletonmask": "wither_skeleton_skull",
+    "wskeletonheadmask": "wither_skeleton_skull",
+    "witherskhead": "wither_skeleton_skull",
+    "witherskskull": "wither_skeleton_skull",
+    "headwithersk": "wither_skeleton_skull",
+    "stevewithersk": "wither_skeleton_skull",
+    "witherskmask": "wither_skeleton_skull",
+    "witherskheadmask": "wither_skeleton_skull",
+    "wskhead": "wither_skeleton_skull",
+    "wskskull": "wither_skeleton_skull",
+    "headwsk": "wither_skeleton_skull",
+    "stevewsk": "wither_skeleton_skull",
+    "wskmask": "wither_skeleton_skull",
+    "wskheadmask": "wither_skeleton_skull",
+    "witherhead": "wither_skeleton_skull",
+    "witherskull": "wither_skeleton_skull",
+    "headwither": "wither_skeleton_skull",
+    "stevewither": "wither_skeleton_skull",
+    "withermask": "wither_skeleton_skull",
+    "witherheadmask": "wither_skeleton_skull",
     "wither_skeleton_spawn_egg": {
         "material": "WITHER_SKELETON_SPAWN_EGG"
     },
@@ -10830,7 +10907,8 @@
     "witherspawn": "wither_skeleton_spawn_egg",
     "spawnwither": "wither_skeleton_spawn_egg",
     "wither_skeleton_wall_skull": {
-        "material": "WITHER_SKELETON_WALL_SKULL"
+        "material": "WITHER_SKELETON_WALL_SKULL",
+        "unspawnable": true
     },
     "witherskeletonwallskull": "wither_skeleton_wall_skull",
     "wolf_spawn_egg": {
@@ -10889,10 +10967,10 @@
     "yellow_banner": {
         "material": "YELLOW_BANNER"
     },
-    "yellowbanner": "yellow_wall_banner",
-    "ystandingbanner": "yellow_wall_banner",
-    "ybanner": "yellow_wall_banner",
-    "yellowstandingbanner": "yellow_wall_banner",
+    "yellowbanner": "yellow_banner",
+    "ystandingbanner": "yellow_banner",
+    "ybanner": "yellow_banner",
+    "yellowstandingbanner": "yellow_banner",
     "yellow_bed": {
         "material": "YELLOW_BED"
     },
@@ -10979,7 +11057,8 @@
     "yellowtcota": "yellow_terracotta",
     "yellowterracota": "yellow_terracotta",
     "yellow_wall_banner": {
-        "material": "YELLOW_WALL_BANNER"
+        "material": "YELLOW_WALL_BANNER",
+        "unspawnable": true
     },
     "yellowwallbanner": "yellow_wall_banner",
     "yellow_wool": {
@@ -10994,12 +11073,12 @@
     "zombie_head": {
         "material": "ZOMBIE_HEAD"
     },
-    "zombiehead": "zombie_wall_head",
-    "zombieskull": "zombie_wall_head",
-    "headzombie": "zombie_wall_head",
-    "stevezombie": "zombie_wall_head",
-    "zombiemask": "zombie_wall_head",
-    "zombieheadmask": "zombie_wall_head",
+    "zombiehead": "zombie_head",
+    "zombieskull": "zombie_head",
+    "headzombie": "zombie_head",
+    "stevezombie": "zombie_head",
+    "zombiemask": "zombie_head",
+    "zombieheadmask": "zombie_head",
     "zombie_horse_spawn_egg": {
         "material": "ZOMBIE_HORSE_SPAWN_EGG"
     },
@@ -11133,7 +11212,8 @@
     "dvillspawn": "zombie_villager_spawn_egg",
     "spawndvill": "zombie_villager_spawn_egg",
     "zombie_wall_head": {
-        "material": "ZOMBIE_WALL_HEAD"
+        "material": "ZOMBIE_WALL_HEAD",
+        "unspawnable": true
     },
     "zombiewallhead": "zombie_wall_head",
     "emptypotion": {
