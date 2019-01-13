@@ -7,7 +7,6 @@ import com.earth2me.essentials.textreader.TextPager;
 import com.earth2me.essentials.utils.DateUtil;
 import com.earth2me.essentials.utils.LocationUtil;
 import com.earth2me.essentials.utils.MaterialUtil;
-import io.papermc.lib.PaperLib;
 import net.ess3.api.IEssentials;
 
 import org.bukkit.BanEntry;
@@ -643,7 +642,7 @@ public class EssentialsPlayerListener implements Listener {
                     while (LocationUtil.isBlockDamaging(loc.getWorld(), loc.getBlockX(), loc.getBlockY() - 1, loc.getBlockZ())) {
                         loc.setY(loc.getY() + 1d);
                     }
-                    PaperLib.teleportAsync(user.getBase(), loc);
+                    user.getBase().teleport(loc, TeleportCause.PLUGIN);
                 }
             }
             ess.scheduleSyncDelayedTask(new DelayedClickJumpTask());
