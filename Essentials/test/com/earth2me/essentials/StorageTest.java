@@ -1,19 +1,19 @@
 package com.earth2me.essentials;
 
-import junit.framework.TestCase;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.World.Environment;
 import org.bukkit.plugin.InvalidDescriptionException;
+import org.junit.Assert;
 import org.junit.Test;
 
 import java.io.IOException;
 
 
-public class StorageTest extends TestCase {
-    Essentials ess;
-    FakeServer server;
-    World world;
+public class StorageTest {
+    private Essentials ess;
+    private FakeServer server;
+    private World world;
 
     public StorageTest() {
         server = new FakeServer();
@@ -22,9 +22,9 @@ public class StorageTest extends TestCase {
         try {
             ess.setupForTesting(server);
         } catch (InvalidDescriptionException ex) {
-            fail("InvalidDescriptionException");
+            Assert.fail("InvalidDescriptionException");
         } catch (IOException ex) {
-            fail("IOException");
+            Assert.fail("IOException");
         }
     }
 

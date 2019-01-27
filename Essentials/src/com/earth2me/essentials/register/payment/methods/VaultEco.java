@@ -109,9 +109,7 @@ public class VaultEco implements Method {
         try {
             RegisteredServiceProvider<Economy> ecoPlugin = plugin.getServer().getServicesManager().getRegistration(net.milkbowl.vault.economy.Economy.class);
             return plugin instanceof Vault && ecoPlugin != null && !ecoPlugin.getProvider().getName().equals("Essentials Economy");
-        } catch (LinkageError e) {
-            return false;
-        } catch (Exception e) {
+        } catch (LinkageError | Exception e) {
             return false;
         }
     }
@@ -130,7 +128,7 @@ public class VaultEco implements Method {
         private final String name;
         private final Economy economy;
 
-        public VaultAccount(String name, Economy economy) {
+        VaultAccount(String name, Economy economy) {
             this.name = name;
             this.economy = economy;
         }

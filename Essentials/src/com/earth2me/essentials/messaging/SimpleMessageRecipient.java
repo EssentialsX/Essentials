@@ -2,7 +2,6 @@ package com.earth2me.essentials.messaging;
 
 import static com.earth2me.essentials.I18n.tl;
 
-import com.earth2me.essentials.Console;
 import com.earth2me.essentials.IEssentials;
 import com.earth2me.essentials.IUser;
 import com.earth2me.essentials.User;

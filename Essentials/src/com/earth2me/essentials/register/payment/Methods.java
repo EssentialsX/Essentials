@@ -22,7 +22,7 @@ import java.util.Set;
  *      preferred: "iConomy"
  * </pre></blockquote>
  *
- * @author: Nijikokun <nijikokun@shortmail.com> (@nijikokun) @copyright: Copyright (C) 2011 @license: AOL license
+ * @author Nijikokun <nijikokun@shortmail.com> (@nijikokun) @copyright: Copyright (C) 2011 @license: AOL license
  * <http://aol.nexua.org>
  */
 public class Methods {
@@ -30,9 +30,9 @@ public class Methods {
     private static boolean self = false;
     private static Method Method = null;
     private static String preferred = "";
-    private static final Set<Method> Methods = new HashSet<Method>();
-    private static final Set<String> Dependencies = new HashSet<String>();
-    private static final Set<Method> Attachables = new HashSet<Method>();
+    private static final Set<Method> Methods = new HashSet<>();
+    private static final Set<String> Dependencies = new HashSet<>();
+    private static final Set<Method> Attachables = new HashSet<>();
 
     static {
         _init();
@@ -79,7 +79,7 @@ public class Methods {
      *
      * @return <code>Set<String></code> - Array of payment methods that are loaded.
      *
-     * @see #setMethod(org.bukkit.plugin.Plugin)
+     * @see #setMethod(PluginManager)
      */
     public static Set<String> getDependencies() {
         return Dependencies;
@@ -114,8 +114,8 @@ public class Methods {
      *
      * @return <code>boolean</code>
      *
-     * @see #setMethod(org.bukkit.plugin.Plugin)
-     * @see #checkDisabled(org.bukkit.plugin.Plugin)
+     * @see #setMethod(PluginManager)
+     * @see #checkDisabled(Plugin)
      */
     public static boolean hasMethod() {
         return (Method != null);
@@ -124,7 +124,7 @@ public class Methods {
     /**
      * Checks Plugin Class against a multitude of checks to verify it's usability as a payment method.
      *
-     * @param <code>PluginManager</code> the plugin manager for the server
+     * @param manager the plugin manager for the server
      *
      * @return <code>boolean</code> True on success, False on failure.
      */
@@ -140,7 +140,7 @@ public class Methods {
 
         int count = 0;
         boolean match = false;
-        Plugin plugin = null;
+        Plugin plugin;
 
         for (String name : getDependencies()) {
             if (hasMethod()) {
