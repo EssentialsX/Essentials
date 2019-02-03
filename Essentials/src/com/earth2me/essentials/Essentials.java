@@ -196,27 +196,34 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
                 final EssentialsUpgrade upgrade = new EssentialsUpgrade(this);
                 upgrade.beforeSettings();
                 execTimer.mark("Upgrade");
+
                 confList = new ArrayList<>();
                 settings = new Settings(this);
                 confList.add(settings);
                 execTimer.mark("Settings");
+
                 userMap = new UserMap(this);
                 confList.add(userMap);
                 execTimer.mark("Init(Usermap)");
+
                 kits = new Kits(this);
                 confList.add(kits);
                 upgrade.convertKits();
                 execTimer.mark("Kits");
+
                 upgrade.afterSettings();
                 execTimer.mark("Upgrade2");
+
                 warps = new Warps(getServer(), this.getDataFolder());
                 confList.add(warps);
                 execTimer.mark("Init(Spawn/Warp)");
+
                 worth = new Worth(this.getDataFolder());
                 confList.add(worth);
                 itemDb = getItemDbFromConfig();
                 confList.add(itemDb);
                 execTimer.mark("Init(Worth/ItemDB)");
+
                 jails = new Jails(this);
                 confList.add(jails);
                 execTimer.mark("Init(Jails)");
@@ -241,6 +248,10 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
                         ), "potion meta").getProvider();
                 execTimer.mark("Init(Providers)");
                 reload();
+
+                // The item spawn blacklist is loaded with all other settings, before the item
+                // DB, but it depends on the item DB, so we need to reload it again here:
+                ((Settings) settings)._lateLoadItemSpawnBlacklist();
             } catch (YAMLException exception) {
                 if (pm.getPlugin("EssentialsUpdate") != null) {
                     LOGGER.log(Level.SEVERE, tl("essentialsHelp2"));

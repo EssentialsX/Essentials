@@ -59,9 +59,12 @@ public class FlatItemDb extends AbstractItemDb {
             .collect(Collectors.joining());
 
         this.loadJSON(String.join("\n", json));
+
+        ready = true;
     }
 
     private void reset() {
+        ready = false;
         items.clear();
         itemAliases.clear();
         allAliases.clear();
@@ -107,6 +110,8 @@ public class FlatItemDb extends AbstractItemDb {
         }
 
         Material material = data.getMaterial();
+
+        if (!material.isItem()) throw new Exception(tl("unableToSpawnItem", id));
 
         ItemStack stack = new ItemStack(material);
         stack.setAmount(material.getMaxStackSize());

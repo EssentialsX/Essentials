@@ -1,5 +1,6 @@
 package com.earth2me.essentials;
 
+import com.earth2me.essentials.api.IItemDb;
 import com.earth2me.essentials.commands.IEssentialsCommand;
 import com.earth2me.essentials.signs.EssentialsSign;
 import com.earth2me.essentials.signs.Signs;
@@ -541,7 +542,11 @@ public class Settings implements net.ess3.api.ISettings {
         allowOldIdSigns = _allowOldIdSigns();
     }
 
-    private List<Material> itemSpawnBl = new ArrayList<Material>();
+    void _lateLoadItemSpawnBlacklist() {
+        itemSpawnBl = _getItemSpawnBlacklist();
+    }
+
+    private List<Material> itemSpawnBl = new ArrayList<>();
 
     @Override
     public List<Material> itemSpawnBlacklist() {
@@ -550,7 +555,8 @@ public class Settings implements net.ess3.api.ISettings {
 
     private List<Material> _getItemSpawnBlacklist() {
         final List<Material> epItemSpwn = new ArrayList<>();
-        if (ess.getItemDb() == null) {
+        final IItemDb itemDb = ess.getItemDb();
+        if (itemDb == null || !itemDb.isReady()) {
             logger.log(Level.FINE, "Skipping item spawn blacklist read; item DB not yet loaded.");
             return epItemSpwn;
         }
@@ -560,7 +566,7 @@ public class Settings implements net.ess3.api.ISettings {
                 continue;
             }
             try {
-                final ItemStack iStack = ess.getItemDb().get(itemName);
+                final ItemStack iStack = itemDb.get(itemName);
                 epItemSpwn.add(iStack.getType());
             } catch (Exception ex) {
                 logger.log(Level.SEVERE, tl("unknownItemInList", itemName, "item-spawn-blacklist"), ex);

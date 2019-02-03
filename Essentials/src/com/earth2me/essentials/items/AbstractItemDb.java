@@ -27,6 +27,8 @@ import static com.earth2me.essentials.I18n.tl;
 
 public abstract class AbstractItemDb implements IConf, net.ess3.api.IItemDb {
 
+    protected boolean ready = false;
+
     @Override
     public List<ItemStack> getMatching(User user, String[] args) throws Exception {
         List<ItemStack> is = new ArrayList<>();
@@ -223,5 +225,10 @@ public abstract class AbstractItemDb implements IConf, net.ess3.api.IItemDb {
         }
 
         return sb.toString().trim().replaceAll("§", "&");
+    }
+
+    @Override
+    public boolean isReady() {
+        return ready;
     }
 }

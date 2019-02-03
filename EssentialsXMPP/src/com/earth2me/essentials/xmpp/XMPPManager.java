@@ -316,6 +316,6 @@ public class XMPPManager extends Handler implements MessageListener, ChatManager
 
     public boolean isConfigValid() {
         final String server = config.getString("xmpp.server");
-        return server != null && server.equals("example.com");
+        return server != null && !server.equals("example.com");
     }
 }
