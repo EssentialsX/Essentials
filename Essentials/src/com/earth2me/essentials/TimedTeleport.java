@@ -16,9 +16,9 @@ public class TimedTeleport implements Runnable {
     private final IEssentials ess;
     private final Teleport teleport;
     private final UUID timer_teleportee;
-    private int timer_task = -1;
-    private final long timer_started;    // time this task was initiated
-    private final long timer_delay;        // how long to delay the teleportPlayer
+    private int timer_task;
+    private final long timer_started; // time this task was initiated
+    private final long timer_delay; // how long to delay the teleportPlayer
     private double timer_health;
     // note that I initially stored a clone of the location for reference, but...
     // when comparing locations, I got incorrect mismatches (rounding errors, looked like)
@@ -32,8 +32,7 @@ public class TimedTeleport implements Runnable {
     private final Trade timer_chargeFor;
     private final TeleportCause timer_cause;
 
-    public TimedTeleport(IUser user, IEssentials ess, Teleport teleport, long delay, IUser teleportUser, ITarget target, Trade chargeFor, TeleportCause cause, boolean respawn) {
-
+    TimedTeleport(IUser user, IEssentials ess, Teleport teleport, long delay, IUser teleportUser, ITarget target, Trade chargeFor, TeleportCause cause, boolean respawn) {
         this.teleportOwner = user;
         this.ess = ess;
         this.teleport = teleport;
@@ -106,13 +105,12 @@ public class TimedTeleport implements Runnable {
                             if (timer_respawn) {
                                 teleport.respawnNow(teleportUser, timer_cause);
                             } else {
-                                teleport.now(teleportUser, timer_teleportTarget, timer_cause);
+                                teleport.now(teleportUser, timer_teleportTarget);
                             }
                             if (timer_chargeFor != null) {
                                 timer_chargeFor.charge(teleportOwner);
                             }
-                        } catch (Exception ex) {
-                        }
+                        } catch (Exception ignored) {}
 
                     } catch (Exception ex) {
                         ess.showError(teleportOwner.getSource(), ex, "\\ teleport");
@@ -124,7 +122,7 @@ public class TimedTeleport implements Runnable {
     }
 
     //If we need to cancelTimer a pending teleportPlayer call this method
-    public void cancelTimer(boolean notifyUser) {
+    void cancelTimer(boolean notifyUser) {
         if (timer_task == -1) {
             return;
         }

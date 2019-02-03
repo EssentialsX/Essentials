@@ -1216,4 +1216,9 @@ public class FakeServer implements Server {
         throw new UnsupportedOperationException("Not supported yet.");
 	}
 
+    @Override
+    public List<Entity> selectEntities(CommandSender commandSender, String s) throws IllegalArgumentException {
+        return null;
+    }
+
 }
