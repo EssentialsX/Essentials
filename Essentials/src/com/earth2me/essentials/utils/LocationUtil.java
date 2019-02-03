@@ -80,7 +80,7 @@ public class LocationUtil {
         return block.getLocation();
     }
 
-    private static boolean isBlockAboveAir(final World world, final int x, final int y, final int z) {
+    public static boolean isBlockAboveAir(final World world, final int x, final int y, final int z) {
         PaperLib.getChunkAtAsync(world, x, z); // Get the chunk first so it can be loaded async
         return y > world.getMaxHeight() || HOLLOW_MATERIALS.contains(world.getBlockAt(x, y - 1, z).getType());
     }
@@ -96,7 +96,7 @@ public class LocationUtil {
         return isBlockAboveAir(world, x, y, z);
     }
 
-    private static boolean isBlockUnsafe(final World world, final int x, final int y, final int z) {
+    public static boolean isBlockUnsafe(final World world, final int x, final int y, final int z) {
         return isBlockDamaging(world, x, y, z) || isBlockAboveAir(world, x, y, z);
     }
 
