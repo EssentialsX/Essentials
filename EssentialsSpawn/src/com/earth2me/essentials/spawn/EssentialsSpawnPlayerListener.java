@@ -75,7 +75,7 @@ class EssentialsSpawnPlayerListener implements Listener {
                     ess.scheduleSyncDelayedTask(() -> {
                         Location spawn = spawns.getSpawn(user.getGroup());
                         try {
-                            PaperLib.teleportAsync(user.getBase(), spawn);
+                            PaperLib.teleportAsync(user.getBase(), spawn, TeleportCause.PLUGIN);
                         } catch (Exception e) {
                             ess.showError(user.getSource(), e, "spawn-on-join");
                         }

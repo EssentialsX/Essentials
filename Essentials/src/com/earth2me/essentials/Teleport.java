@@ -105,7 +105,7 @@ public class Teleport implements ITeleport {
             cooldown(false);
         }
         final ITarget target = new LocationTarget(loc);
-        now(teleportOwner, target);
+        now(teleportOwner, target, cause);
     }
 
     @Override
@@ -114,11 +114,11 @@ public class Teleport implements ITeleport {
             cooldown(false);
         }
         final ITarget target = new PlayerTarget(entity);
-        now(teleportOwner, target);
+        now(teleportOwner, target, cause);
         teleportOwner.sendMessage(tl("teleporting", target.getLocation().getWorld().getName(), target.getLocation().getBlockX(), target.getLocation().getBlockY(), target.getLocation().getBlockZ()));
     }
 
-    protected void now(IUser teleportee, ITarget target) throws Exception {
+    protected void now(IUser teleportee, ITarget target, TeleportCause cause) throws Exception {
         cancel(false);
         teleportee.setLastLocation();
         Location loc = target.getLocation();
@@ -126,21 +126,21 @@ public class Teleport implements ITeleport {
         if (LocationUtil.isBlockUnsafeForUser(teleportee, loc.getWorld(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ())) {
             if (ess.getSettings().isTeleportSafetyEnabled()) {
                 if (ess.getSettings().isForceDisableTeleportSafety()) {
-                    PaperLib.teleportAsync(teleportee.getBase(), loc);
+                    PaperLib.teleportAsync(teleportee.getBase(), loc, cause);
                 } else {
-                    PaperLib.teleportAsync(teleportee.getBase(), LocationUtil.getSafeDestination(ess, teleportee, loc));
+                    PaperLib.teleportAsync(teleportee.getBase(), LocationUtil.getSafeDestination(ess, teleportee, loc), cause);
                 }
             } else {
                 throw new Exception(tl("unsafeTeleportDestination", loc.getWorld().getName(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ()));
             }
         } else {
             if (ess.getSettings().isForceDisableTeleportSafety()) {
-                PaperLib.teleportAsync(teleportee.getBase(), loc);
+                PaperLib.teleportAsync(teleportee.getBase(), loc, cause);
             } else {
                 if (ess.getSettings().isTeleportToCenterLocation()) {
                     loc = LocationUtil.getRoundedDestination(loc);
                 }
-                PaperLib.teleportAsync(teleportee.getBase(), loc);
+                PaperLib.teleportAsync(teleportee.getBase(), loc, cause);
             }
         }
     }
@@ -199,7 +199,7 @@ public class Teleport implements ITeleport {
         cooldown(true);
         if (delay <= 0 || teleportOwner.isAuthorized("essentials.teleport.timer.bypass") || teleportee.isAuthorized("essentials.teleport.timer.bypass")) {
             cooldown(false);
-            now(teleportee, target);
+            now(teleportee, target, cause);
             if (cashCharge != null) {
                 cashCharge.charge(teleportOwner);
             }
@@ -237,14 +237,14 @@ public class Teleport implements ITeleport {
         final Player player = teleportee.getBase();
         Location bed = player.getBedSpawnLocation();
         if (bed != null) {
-            now(teleportee, new LocationTarget(bed));
+            now(teleportee, new LocationTarget(bed), cause);
         } else {
             if (ess.getSettings().isDebug()) {
                 ess.getLogger().info("Could not find bed spawn, forcing respawn event.");
             }
             final PlayerRespawnEvent pre = new PlayerRespawnEvent(player, player.getWorld().getSpawnLocation(), false);
             ess.getServer().getPluginManager().callEvent(pre);
-            now(teleportee, new LocationTarget(pre.getRespawnLocation()));
+            now(teleportee, new LocationTarget(pre.getRespawnLocation()), cause);
         }
     }
 
@@ -278,7 +278,7 @@ public class Teleport implements ITeleport {
     //This function is used to throw a user back after a jail sentence
     @Override
     public void back() throws Exception {
-        now(teleportOwner, new LocationTarget(teleportOwner.getLastLocation()));
+        now(teleportOwner, new LocationTarget(teleportOwner.getLastLocation()), TeleportCause.COMMAND);
     }
 
     public void setTpType(TeleportType tpType) {

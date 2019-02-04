@@ -105,7 +105,7 @@ public class TimedTeleport implements Runnable {
                             if (timer_respawn) {
                                 teleport.respawnNow(teleportUser, timer_cause);
                             } else {
-                                teleport.now(teleportUser, timer_teleportTarget);
+                                teleport.now(teleportUser, timer_teleportTarget, timer_cause);
                             }
                             if (timer_chargeFor != null) {
                                 timer_chargeFor.charge(teleportOwner);
