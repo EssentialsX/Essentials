@@ -64,7 +64,7 @@ public abstract class AbstractItemDb implements IConf, net.ess3.api.IItemDb {
 
     @Override
     public String serialize(ItemStack is) {
-        String mat = is.getType().name();
+        String mat = name(is);
         if (VersionUtil.getServerBukkitVersion().isLowerThanOrEqualTo(VersionUtil.v1_12_2_R01) && is.getData().getData() != 0) {
             mat = mat + ":" + is.getData().getData();
         }
