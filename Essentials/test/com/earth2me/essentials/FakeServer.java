@@ -445,6 +445,11 @@ public class FakeServer implements Server {
     }
 
     @Override
+    public MapView getMap(int id) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
     public int getViewDistance() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
@@ -456,11 +461,6 @@ public class FakeServer implements Server {
 
     @Override
     public boolean hasWhitelist() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public MapView getMap(short s) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
@@ -1050,6 +1050,11 @@ public class FakeServer implements Server {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
+    @Override
+    public <T extends Keyed> Iterable<Tag<T>> getTags(String registry, Class<T> clazz) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
     class FakePluginManager implements PluginManager {
         ArrayList<RegisteredListener> listeners = new ArrayList<>();
 
@@ -1211,14 +1216,14 @@ public class FakeServer implements Server {
         }
     }
 
-	@Override
-	public LootTable getLootTable(NamespacedKey arg0) {
+	  @Override
+	  public LootTable getLootTable(NamespacedKey arg0) {
         throw new UnsupportedOperationException("Not supported yet.");
-	}
+	  }
 
     @Override
-    public List<Entity> selectEntities(CommandSender commandSender, String s) throws IllegalArgumentException {
-        return null;
+    public List<Entity> selectEntities(CommandSender sender, String selector) throws IllegalArgumentException {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
 }
