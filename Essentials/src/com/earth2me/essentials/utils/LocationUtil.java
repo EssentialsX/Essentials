@@ -1,7 +1,6 @@
 package com.earth2me.essentials.utils;
 
 import com.earth2me.essentials.IEssentials;
-import io.papermc.lib.PaperLib;
 import net.ess3.api.IUser;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -81,7 +80,6 @@ public class LocationUtil {
     }
 
     public static boolean isBlockAboveAir(final World world, final int x, final int y, final int z) {
-        PaperLib.getChunkAtAsync(world, x, z); // Get the chunk first so it can be loaded async
         return y > world.getMaxHeight() || HOLLOW_MATERIALS.contains(world.getBlockAt(x, y - 1, z).getType());
     }
 
@@ -101,7 +99,6 @@ public class LocationUtil {
     }
 
     public static boolean isBlockDamaging(final World world, final int x, final int y, final int z) {
-        PaperLib.getChunkAtAsync(world, x, z); // Get the chunk first so it can be loaded async
         final Block below = world.getBlockAt(x, y - 1, z);
 
         switch (below.getType()) {
