@@ -444,11 +444,6 @@ public class FakeServer implements Server {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    @Override
-    public MapView getMap(short i) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
     public MapView getMap(int id) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
