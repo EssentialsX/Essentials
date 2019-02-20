@@ -151,6 +151,13 @@ public class LegacyItemDb extends AbstractItemDb {
         }
 
         if (itemid < 1) {
+            Material matFromName = EnumUtil.getMaterial(itemname.toUpperCase());
+            if (matFromName != null) {
+                itemid = matFromName.getId();
+            }
+        }
+
+        if (itemid < 1) {
             throw new Exception(tl("unknownItemName", itemname));
         }
 
