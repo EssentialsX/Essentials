@@ -36,6 +36,12 @@
                 </executions>
                 <configuration>
                     <createDependencyReducedPom>false</createDependencyReducedPom>
+                    <relocations>
+                        <relocation>
+                            <pattern>io.papermc.lib</pattern>
+                            <shadedPattern>com.earth2me.essentials.paperlib</shadedPattern>
+                        </relocation>
+                    </relocations>
                 </configuration>
             </plugin>
         </plugins>
@@ -47,6 +53,12 @@
             <artifactId>VaultAPI</artifactId>
             <version>1.7</version>
             <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.papermc</groupId>
+            <artifactId>paperlib</artifactId>
+            <version>1.0.2</version>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>net.ess3</groupId>
@@ -95,12 +107,6 @@
             <artifactId>ReflectionProvider</artifactId>
             <version>2.16.0</version>
             <scope>compile</scope>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.bukkit</groupId>
-                    <artifactId>craftbukkit</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
         <dependency>
             <groupId>net.ess3</groupId>

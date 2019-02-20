@@ -2,7 +2,9 @@ package com.earth2me.essentials;
 
 import com.earth2me.essentials.utils.DateUtil;
 import com.earth2me.essentials.utils.LocationUtil;
+import io.papermc.lib.PaperLib;
 import net.ess3.api.IEssentials;
+import net.ess3.api.ITeleport;
 import net.ess3.api.IUser;
 import net.ess3.api.events.UserWarpEvent;
 import org.bukkit.Bukkit;
@@ -18,7 +20,7 @@ import java.util.GregorianCalendar;
 import static com.earth2me.essentials.I18n.tl;
 
 
-public class Teleport implements net.ess3.api.ITeleport {
+public class Teleport implements ITeleport {
     private final IUser teleportOwner;
     private final IEssentials ess;
     private TimedTeleport timedTeleport;
@@ -49,7 +51,7 @@ public class Teleport implements net.ess3.api.ITeleport {
             final long earliestLong = earliestTime.getTimeInMillis();
 
             // When was the last teleportPlayer used?
-            final Long lastTime = teleportOwner.getLastTeleportTimestamp();
+            final long lastTime = teleportOwner.getLastTeleportTimestamp();
 
             if (lastTime > time.getTimeInMillis()) {
                 // This is to make sure time didn't get messed up on last teleportPlayer use.
@@ -124,21 +126,21 @@ public class Teleport implements net.ess3.api.ITeleport {
         if (LocationUtil.isBlockUnsafeForUser(teleportee, loc.getWorld(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ())) {
             if (ess.getSettings().isTeleportSafetyEnabled()) {
                 if (ess.getSettings().isForceDisableTeleportSafety()) {
-                    teleportee.getBase().teleport(loc, cause);
+                    PaperLib.teleportAsync(teleportee.getBase(), loc, cause);
                 } else {
-                    teleportee.getBase().teleport(LocationUtil.getSafeDestination(ess, teleportee, loc), cause);
+                    PaperLib.teleportAsync(teleportee.getBase(), LocationUtil.getSafeDestination(ess, teleportee, loc), cause);
                 }
             } else {
                 throw new Exception(tl("unsafeTeleportDestination", loc.getWorld().getName(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ()));
             }
         } else {
             if (ess.getSettings().isForceDisableTeleportSafety()) {
-                teleportee.getBase().teleport(loc, cause);
+                PaperLib.teleportAsync(teleportee.getBase(), loc, cause);
             } else {
                 if (ess.getSettings().isTeleportToCenterLocation()) {
                     loc = LocationUtil.getRoundedDestination(loc);
                 }
-                teleportee.getBase().teleport(loc, cause);
+                PaperLib.teleportAsync(teleportee.getBase(), loc, cause);
             }
         }
     }
@@ -231,7 +233,7 @@ public class Teleport implements net.ess3.api.ITeleport {
         initTimer((long) (delay * 1000.0), teleportOwner, null, chargeFor, cause, true);
     }
 
-    protected void respawnNow(IUser teleportee, TeleportCause cause) throws Exception {
+    void respawnNow(IUser teleportee, TeleportCause cause) throws Exception {
         final Player player = teleportee.getBase();
         Location bed = player.getBedSpawnLocation();
         if (bed != null) {

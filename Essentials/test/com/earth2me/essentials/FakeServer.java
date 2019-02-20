@@ -445,6 +445,10 @@ public class FakeServer implements Server {
     }
 
     @Override
+    public MapView getMap(short i) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
     public MapView getMap(int id) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
@@ -1050,7 +1054,6 @@ public class FakeServer implements Server {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    @Override
     public <T extends Keyed> Iterable<Tag<T>> getTags(String registry, Class<T> clazz) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
@@ -1216,10 +1219,10 @@ public class FakeServer implements Server {
         }
     }
 
-	@Override
+    @Override
 	public LootTable getLootTable(NamespacedKey arg0) {
         throw new UnsupportedOperationException("Not supported yet.");
-	}
+    }
 
     @Override
     public List<Entity> selectEntities(CommandSender sender, String selector) throws IllegalArgumentException {
