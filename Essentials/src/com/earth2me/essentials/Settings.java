@@ -6,6 +6,7 @@ import com.earth2me.essentials.signs.EssentialsSign;
 import com.earth2me.essentials.signs.Signs;
 import com.earth2me.essentials.textreader.IText;
 import com.earth2me.essentials.textreader.SimpleTextInput;
+import com.earth2me.essentials.utils.EnumUtil;
 import com.earth2me.essentials.utils.FormatUtil;
 import com.earth2me.essentials.utils.NumberUtil;
 
@@ -691,12 +692,20 @@ public class Settings implements net.ess3.api.ISettings {
             if (itemName.isEmpty()) {
                 continue;
             }
-            ItemStack itemStack;
-            try {
-                itemStack = ess.getItemDb().get(itemName);
-                list.add(itemStack.getType());
-            } catch (Exception ex) {
+
+            Material mat = EnumUtil.getMaterial(itemName.toUpperCase());
+            
+            if (mat == null) {
+                try {
+                    ItemStack itemStack = ess.getItemDb().get(itemName);
+                    mat = itemStack.getType();
+                } catch (Exception ignored) {}
+            }
+
+            if (mat == null) {
                 logger.log(Level.SEVERE, tl("unknownItemInList", itemName, configName));
+            } else {
+                list.add(mat);
             }
         }
         return list;

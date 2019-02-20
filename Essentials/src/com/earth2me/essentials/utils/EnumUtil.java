@@ -12,7 +12,7 @@ public class EnumUtil {
 
     /**
      * Returns the field matching the first provided enum name that exists within the given
-     * enum class.
+     * enum class. If no field is found, this method returns null.
      *
      * @param enumClass The class to search through
      * @param names The names of the fields to search for
