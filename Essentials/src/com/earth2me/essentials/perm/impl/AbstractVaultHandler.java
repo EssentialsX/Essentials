@@ -13,7 +13,7 @@ public abstract class AbstractVaultHandler extends SuperpermsHandler {
     protected static Permission perms = null;
     protected static Chat chat = null;
 
-    public boolean setupProviders() {
+    private boolean setupProviders() {
         try {
             Class.forName("net.milkbowl.vault.permission.Permission");
             Class.forName("net.milkbowl.vault.chat.Chat");
@@ -65,7 +65,7 @@ public abstract class AbstractVaultHandler extends SuperpermsHandler {
         }
     }
 
-    protected boolean canLoad() {
+    boolean canLoad() {
         if (Bukkit.getPluginManager().getPlugin("Vault") == null) return false;
         try {
             return setupProviders();

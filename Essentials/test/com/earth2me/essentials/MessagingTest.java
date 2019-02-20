@@ -49,8 +49,7 @@ public class MessagingTest {
                 .loadClass("com.earth2me.essentials.commands.Command" + command).newInstance();
             cmd.setEssentials(ess);
             cmd.run(server, user, command, null, args);
-        } catch (NoChargeException ex) {
-        }
+        } catch (NoChargeException ignored) {}
 
     }
 
@@ -68,8 +67,7 @@ public class MessagingTest {
                 .loadClass("com.earth2me.essentials.commands.Command" + command).newInstance();
             cmd.setEssentials(ess);
             cmd.run(server, new CommandSource(sender), command, null, args);
-        } catch (NoChargeException ex) {
-        }
+        } catch (NoChargeException ignored) {}
     }
 
     @Test(expected = Exception.class) // I really don't like this, but see note below about console reply

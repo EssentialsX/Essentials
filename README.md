@@ -55,6 +55,11 @@ mvn clean install
 
 Each module's jar can be found in `target/` inside each module's directory.
 
+Using EssentialsX in your plugin
+--------------------------------
+
+Writing a plugin and want to support EssentialsX? We have a Maven repository at https://ci.ender.zone/plugin/repository/everything/, and the EssentialsX artifact is `net.ess3:EssentialsX:2.16.0`. More information at the [wiki](https://github.com/EssentialsX/Essentials/wiki/Common-Issues#how-do-i-add-essentialsx-as-a-dependency).
+
 
 Contributing
 ------------
