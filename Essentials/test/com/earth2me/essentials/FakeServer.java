@@ -500,7 +500,12 @@ public class FakeServer implements Server {
 
     @Override
     public Player getPlayerExact(String string) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        for (Player player : players) {
+            if (player.getName().equals(string)) {
+                return player;
+            }
+        }
+        return null;
     }
 
     @Override

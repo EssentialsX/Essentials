@@ -8,6 +8,7 @@ import com.earth2me.essentials.utils.StringUtil;
 import com.google.common.base.Charsets;
 import net.ess3.api.IEssentials;
 import net.ess3.api.MaxMoneyException;
+import org.bukkit.entity.Player;
 
 import java.io.File;
 import java.math.BigDecimal;
@@ -68,7 +69,10 @@ public class Economy {
         User user = ess.getUser(name);
         if (user == null) {
             // Attempt lookup using UUID - this prevents issues using the economy during player join
-            user = ess.getUser(ess.getServer().getPlayerExact(name).getUniqueId());
+            Player player = ess.getServer().getPlayerExact(name);
+            if (player != null) {
+                user = ess.getUser(player.getUniqueId());
+            }
         }
 
         return user;
