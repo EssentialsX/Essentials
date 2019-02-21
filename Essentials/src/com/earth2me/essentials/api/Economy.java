@@ -18,7 +18,7 @@ import java.util.logging.Logger;
 
 
 /**
- * Instead of using this api directly, we recommend to use the register plugin: http://bit.ly/RegisterMethod
+ * You should use Vault instead of directly using this class.
  */
 public class Economy {
     public Economy() {
@@ -64,7 +64,14 @@ public class Economy {
         if (name == null) {
             throw new RuntimeException("Economy username cannot be null");
         }
-        return ess.getUser(name);
+
+        User user = ess.getUser(name);
+        if (user == null) {
+            // Attempt lookup using UUID - this prevents issues using the economy during player join
+            user = ess.getUser(ess.getServer().getPlayerExact(name).getUniqueId());
+        }
+
+        return user;
     }
 
     /**
