@@ -8,6 +8,7 @@ import com.earth2me.essentials.utils.StringUtil;
 import com.google.common.base.Charsets;
 import net.ess3.api.IEssentials;
 import net.ess3.api.MaxMoneyException;
+import org.bukkit.entity.Player;
 
 import java.io.File;
 import java.math.BigDecimal;
@@ -18,7 +19,7 @@ import java.util.logging.Logger;
 
 
 /**
- * Instead of using this api directly, we recommend to use the register plugin: http://bit.ly/RegisterMethod
+ * You should use Vault instead of directly using this class.
  */
 public class Economy {
     public Economy() {
@@ -64,7 +65,24 @@ public class Economy {
         if (name == null) {
             throw new RuntimeException("Economy username cannot be null");
         }
-        return ess.getUser(name);
+
+        User user = ess.getUser(name);
+        if (user == null) {
+            /*
+                Attempt lookup using UUID - this prevents balance resets when accessing economy
+                via Vault during player join.
+                See: https://github.com/EssentialsX/Essentials/issues/2400
+            */
+            Player player = ess.getServer().getPlayerExact(name);
+            if (player != null) {
+                user = ess.getUser(player.getUniqueId());
+                if (user != null) {
+                    logger.info(String.format("[Economy] Found player %s by UUID %s but not by their actual name - they may have changed their username", name, player.getUniqueId().toString()));
+                }
+            }
+        }
+
+        return user;
     }
 
     /**
