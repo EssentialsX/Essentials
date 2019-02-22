@@ -68,10 +68,17 @@ public class Economy {
 
         User user = ess.getUser(name);
         if (user == null) {
-            // Attempt lookup using UUID - this prevents issues using the economy during player join
+            /*
+                Attempt lookup using UUID - this prevents balance resets when accessing economy
+                via Vault during player join.
+                See: https://github.com/EssentialsX/Essentials/issues/2400
+            */
             Player player = ess.getServer().getPlayerExact(name);
             if (player != null) {
                 user = ess.getUser(player.getUniqueId());
+                if (user != null) {
+                    logger.info(String.format("[Economy] Found player %s by UUID %s but not by their actual name - they may have changed their username", name, player.getUniqueId().toString()));
+                }
             }
         }
 
