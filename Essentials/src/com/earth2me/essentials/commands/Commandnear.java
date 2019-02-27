@@ -106,7 +106,7 @@ public class Commandnear extends EssentialsCommand {
                 output.append(", ");
             }
             User nearbyPlayer = nearbyPlayers.poll();
-            output.append(nearbyPlayer.getDisplayName()).append("§f(§4").append((long) Math.sqrt(nearbyPlayer.getLocation().distanceSquared(loc))).append("m§f)");
+            output.append(nearbyPlayer.getDisplayName()).append("§f(§4").append((long) nearbyPlayer.getLocation().distance(loc)).append("m§f)");
         }
 
         return output.length() > 1 ? output.toString() : tl("none");
