@@ -12,7 +12,7 @@
     <artifactId>EssentialsXDiscord</artifactId>
 
     <build>
-        <finalName>EssentialsXXMPP-${full.version}</finalName>
+        <finalName>EssentialsXDiscord-${full.version}</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
