@@ -33,15 +33,23 @@ public class BukkitListener implements Listener {
         this.settings = settings;
     }
 
+    private void sendMessage(MessageType type, String message) {
+        sendMessage(type.getConfigName(), message);
+    }
+
+    private void sendMessage(String type, String message) {
+        settings.getChannelDefinitions(type).parallelStream()
+            .map(def -> api.getTextChannelById(def.getChannelId()))
+            .filter(Optional::isPresent)
+            .map(Optional::get)
+            .forEach(channel -> channel.sendMessage(message));
+    }
+
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onChat(AsyncPlayerChatEvent event) {
         Player player = event.getPlayer();
         String message = event.getMessage();
-        settings.getChannelDefinitions("chat").parallelStream()
-            .map(def -> api.getTextChannelById(def.getChannelId()))
-            .filter(Optional::isPresent)
-            .map(Optional::get)
-            .forEach(channel -> channel.sendMessage(player.getDisplayName() + ": " + message));
+        sendMessage("chat", player.getDisplayName() + ": " + message);
         // TODO: actually use formatting from channel definition
     }
 }

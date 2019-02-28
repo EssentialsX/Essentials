@@ -34,6 +34,7 @@ public class EssentialsDiscord extends JavaPlugin implements IEssentialsModule {
         }
 
         settings = new DiscordSettings(ess, this);
+        ess.addReloadListener(settings);
 
         getLogger().log(Level.INFO, "Attempting to login with the token provided...");
         try {
