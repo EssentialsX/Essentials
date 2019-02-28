@@ -16,4 +16,7 @@ token: ""
 # The ID of your server.
 server-id: ""
 
+# The channel to log messages to
+channel-id: ""
+
 # TODO: plan out how we intend to map Discord channels to game chat
