@@ -1,6 +1,5 @@
 package com.earth2me.essentials.discord;
 
-import com.earth2me.essentials.IConf;
 import com.earth2me.essentials.IEssentialsModule;
 import com.earth2me.essentials.metrics.Metrics;
 import net.ess3.api.IEssentials;
@@ -11,7 +10,7 @@ import java.util.logging.Level;
 
 import static com.earth2me.essentials.I18n.tl;
 
-public class EssentialsDiscord extends JavaPlugin implements IEssentialsModule, IConf {
+public class EssentialsDiscord extends JavaPlugin implements IEssentialsModule {
 
     private transient Metrics metrics = null;
 
