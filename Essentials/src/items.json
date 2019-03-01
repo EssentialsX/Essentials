@@ -1,3 +1,4 @@
+#version: ${full.version}
 {
     "acacia_boat": {
         "material": "ACACIA_BOAT"
