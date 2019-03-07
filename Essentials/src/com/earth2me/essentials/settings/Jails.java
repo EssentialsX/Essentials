@@ -11,7 +11,7 @@ import java.util.Objects;
 
 public class Jails implements StorageObject {
     @MapValueType(Location.class)
-    private Map<String, Location> jails = new HashMap<String, Location>();
+    private Map<String, Location> jails = new HashMap<>();
 
     public Map<String, Location> getJails() {
         return jails;
