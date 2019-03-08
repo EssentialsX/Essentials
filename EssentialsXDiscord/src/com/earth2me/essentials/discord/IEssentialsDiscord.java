@@ -10,6 +10,8 @@ public interface IEssentialsDiscord {
 
     CompletableFuture<Void> sendPlayerMessage(MessageType type, Player player);
 
+    CompletableFuture<Void> sendStatusMessage(MessageType type, Player controller, Player affected, String message);
+
     CompletableFuture<Void> sendFormattedMessage(MessageType type, Map<String, Object> tokenMap);
 
     CompletableFuture<Void> sendRawMessage(MessageType type, String message);

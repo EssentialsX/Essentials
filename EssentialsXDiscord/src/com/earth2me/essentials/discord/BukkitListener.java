@@ -72,16 +72,15 @@ public class BukkitListener implements Listener {
         Player player = event.getAffected().getBase();
         if (event.getValue()) {
             plugin.sendRawMessage(MessageType.PLAYER_MUTE, player.getName() + " has been muted on the server.");
+            plugin.sendStatusMessage(MessageType.PLAYER_MUTE, event.getController().getBase(), event.getAffected().getBase(), null);
         }
-        // TODO: format controller/affected messages
+        // TODO: mute reasons, once #1557 is merged
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onKick(PlayerKickEvent event) {
-        Player player = event.getPlayer();
-        plugin.sendRawMessage(MessageType.PLAYER_KICK, player.getName() + " has been kicked from the server.");
+        plugin.sendStatusMessage(MessageType.PLAYER_KICK, null, event.getPlayer(), event.getReason());
         // TODO: ban message
-        // TODO: format controller/affected messages
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)

@@ -75,6 +75,7 @@ public class EssentialsDiscord extends JavaPlugin implements IEssentialsModule, 
         Map<String, Object> tokenMap = new HashMap<>();
         tokenMap.put("player", player);
         tokenMap.put("message", message);
+        tokenMap.put("msg", message);
 
         return sendFormattedMessage(type, tokenMap);
     }
@@ -82,6 +83,17 @@ public class EssentialsDiscord extends JavaPlugin implements IEssentialsModule, 
     public CompletableFuture<Void> sendPlayerMessage(MessageType type, Player player) {
         Map<String, Object> tokenMap = new HashMap<>();
         tokenMap.put("player", player);
+
+        return sendFormattedMessage(type, tokenMap);
+    }
+
+    public CompletableFuture<Void> sendStatusMessage(MessageType type, Player controller, Player affected, String message) {
+        Map<String, Object> tokenMap = new HashMap<>();
+        tokenMap.put("player", affected);
+        tokenMap.put("target", affected);
+        tokenMap.put("affected", affected);
+        tokenMap.put("by", controller);
+        tokenMap.put("controller", controller);
 
         return sendFormattedMessage(type, tokenMap);
     }
