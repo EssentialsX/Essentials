@@ -11,7 +11,7 @@ public enum MessageType {
     HELPOP("helpop", true, false),
     BROADCAST("broadcast"),
     PLAYER_JOIN("join"),
-    PLAYER_LEAVE("leave"),
+    PLAYER_QUIT("quit"),
     PLAYER_DEATH("death"),
     PLAYER_ADVANCEMENT("advancement"),
     PLAYER_MUTE("mute"),
