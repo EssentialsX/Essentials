@@ -17,9 +17,9 @@ public enum MessageType {
     PLAYER_MUTE("mute"),
     PLAYER_KICK("kick"),
     PLAYER_BAN("ban"),
+    PLAYER_AWAY("afk"),
     CONSOLE_LOG("console", false, true),
-    OTHER("other")
-    ;
+    OTHER("other");
 
     private final String configName;
     private final boolean canWebhook;
