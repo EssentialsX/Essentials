@@ -51,9 +51,14 @@ public class EssentialsDiscord extends JavaPlugin implements IEssentialsModule {
             return;
         }
 
+        // Register Bukkit Event Listeners
         final BukkitListener bukkitListener = new BukkitListener(ess, api, settings);
         pm.registerEvents(bukkitListener, this);
 
+        // Add the listener for the Discord Server to MC Chat
+        api.addMessageCreateListener(new DiscordListener(api));
+
+        // Check if Metrics are null, and if not, enable them.
         if (metrics == null) {
             metrics = new Metrics(this);
         }
