@@ -86,6 +86,6 @@ public class BukkitListener implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onAfkChange(AfkStatusChangeEvent event) {
-        plugin.sendChatMessage(MessageType.PLAYER_AWAY, event.getAffected().getBase(), event.);
+        plugin.sendChatMessage(MessageType.PLAYER_AWAY, event.getAffected().getBase(), event.getMessage());
     }
 }
