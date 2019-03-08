@@ -494,6 +494,7 @@ public class Settings implements net.ess3.api.ISettings {
         cancelAfkOnInteract = _cancelAfkOnInteract();
         cancelAfkOnMove = _cancelAfkOnMove();
         getFreezeAfkPlayers = _getFreezeAfkPlayers();
+        sleepIgnoresAfkPlayers = _sleepIgnoresAfkPlayers();
         afkListName = _getAfkListName();
         isAfkListName = !afkListName.equalsIgnoreCase("none");
         itemSpawnBl = _getItemSpawnBlacklist();
@@ -891,6 +892,17 @@ public class Settings implements net.ess3.api.ISettings {
 
     private boolean _cancelAfkOnInteract() {
         return config.getBoolean("cancel-afk-on-interact", true);
+    }
+
+    private boolean sleepIgnoresAfkPlayers;
+
+    @Override
+    public boolean sleepIgnoresAfkPlayers() {
+        return sleepIgnoresAfkPlayers;
+    }
+
+    private boolean _sleepIgnoresAfkPlayers() {
+        return config.getBoolean("sleep-ignores-afk-players", true);
     }
 
     private String afkListName;

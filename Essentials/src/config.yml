@@ -405,6 +405,11 @@ cancel-afk-on-interact: true
 # Disable this to reduce server lag.
 cancel-afk-on-move: true
 
+# Should AFK players be ignored when other players are trying to sleep?
+# When this setting is false, players won't be able to skip the night if some players are AFK.
+# Users with the permission node essentials.sleepingignored will always be ignored.
+sleep-ignores-afk-players: true
+
 # Set the player's list name when they are AFK. This is none by default which specifies that Essentials 
 # should not interfere with the AFK player's list name.
 # You may use color codes, use {USERNAME} the player's name or {PLAYER} for the player's displayname.
