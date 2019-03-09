@@ -93,6 +93,7 @@ public abstract class UserData extends PlayerExtension implements IConf {
         acceptingPay = _getAcceptingPay();
         confirmPay = _getConfirmPay();
         confirmClear = _getConfirmClear();
+        lastMessageReplyRecipient = _getLastMessageReplyRecipient();
     }
 
     private BigDecimal money;
@@ -952,6 +953,22 @@ public abstract class UserData extends PlayerExtension implements IConf {
     public void setPromptingClearConfirm(boolean prompt) {
         this.confirmClear = prompt;
         config.setProperty("confirm-clear", prompt);
+        save();
+    }
+
+    private boolean lastMessageReplyRecipient;
+
+    private boolean _getLastMessageReplyRecipient() {
+        return config.getBoolean("last-message-reply-recipient", ess.getSettings().isLastMessageReplyRecipient());
+    }
+
+    public boolean isLastMessageReplyRecipient() {
+        return this.lastMessageReplyRecipient;
+    }
+
+    public void setLastMessageReplyRecipient(boolean enabled) {
+        this.lastMessageReplyRecipient = enabled;
+        config.setProperty("last-message-reply-recipient", enabled);
         save();
     }
 
