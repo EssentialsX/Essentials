@@ -211,6 +211,39 @@ public class Teleport implements ITeleport {
         initTimer((long) (delay * 1000.0), teleportee, target, cashCharge, cause, false);
     }
 
+    private void teleportOther(IUser teleporter, IUser teleportee, ITarget target, Trade chargeFor, TeleportCause cause) throws Exception {
+        double delay = ess.getSettings().getTeleportDelay();
+
+        Trade cashCharge = chargeFor;
+
+        if (teleporter != null && chargeFor != null) {
+            chargeFor.isAffordableFor(teleporter);
+
+            //This code is to make sure that commandcosts are checked in the initial world, and not in the resulting world.
+            if (!chargeFor.getCommandCost(teleporter).equals(BigDecimal.ZERO)) {
+                //By converting a command cost to a regular cost, the command cost permission isn't checked when executing the charge after teleport.
+                cashCharge = new Trade(chargeFor.getCommandCost(teleporter), ess);
+            }
+        }
+
+        cooldown(true);
+        if (delay <= 0 || teleporter == null
+                || teleporter.isAuthorized("essentials.teleport.timer.bypass")
+                || teleportOwner.isAuthorized("essentials.teleport.timer.bypass")
+                || teleportee.isAuthorized("essentials.teleport.timer.bypass")) {
+            cooldown(false);
+            now(teleportee, target, cause);
+            if (teleporter != null && cashCharge != null) {
+                cashCharge.charge(teleporter);
+            }
+            return;
+        }
+
+        cancel(false);
+        warnUser(teleportee, delay);
+        initTimer((long) (delay * 1000.0), teleportee, target, cashCharge, cause, false);
+    }
+
     //The respawn function is a wrapper used to handle tp fallback, on /jail and /home
     @Override
     public void respawn(final Trade chargeFor, TeleportCause cause) throws Exception {
@@ -269,10 +302,16 @@ public class Teleport implements ITeleport {
     //The back function is a wrapper used to teleportPlayer a player /back to their previous location.
     @Override
     public void back(Trade chargeFor) throws Exception {
+        back(teleportOwner, chargeFor);
+    }
+
+    //This function is a wrapper over the other back function for cases where another player performs back for them
+    @Override
+    public void back(IUser teleporter, Trade chargeFor) throws Exception {
         tpType = TeleportType.BACK;
         final Location loc = teleportOwner.getLastLocation();
         teleportOwner.sendMessage(tl("backUsageMsg", loc.getWorld().getName(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ()));
-        teleport(teleportOwner, new LocationTarget(loc), chargeFor, TeleportCause.COMMAND);
+        teleportOther(teleporter, teleportOwner, new LocationTarget(loc), chargeFor, TeleportCause.COMMAND);
     }
 
     //This function is used to throw a user back after a jail sentence
