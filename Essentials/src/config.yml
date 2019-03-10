@@ -480,7 +480,7 @@ mails-per-minute: 1000
 # Set to -1 to disable, and essentials.tempban.unlimited can be used to override.
 max-tempban-time: -1
 
-# Changes the default /reply functionality.
+# Changes the default /reply functionality. This can be changed on a per-player basis using /rtoggle.
 # If true, /r goes to the person you messaged last, otherwise the first person that messaged you.
 # If false, /r goes to the last person that messaged you.
 last-message-reply-recipient: true
