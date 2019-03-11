@@ -18,7 +18,6 @@ import static com.earth2me.essentials.I18n.tl;
 public class LocationUtil {
     // The player can stand inside these materials
     private static final Set<Material> HOLLOW_MATERIALS = new HashSet<>();
-    private static final Set<Material> TRANSPARENT_MATERIALS = new HashSet<>();
 
     static {
         // Materials from Material.isTransparent()
@@ -28,10 +27,9 @@ public class LocationUtil {
             }
         }
 
-        TRANSPARENT_MATERIALS.addAll(HOLLOW_MATERIALS);
-        TRANSPARENT_MATERIALS.add(Material.WATER);
+        HOLLOW_MATERIALS.add(Material.WATER);
         try {
-            TRANSPARENT_MATERIALS.add(Material.valueOf("FLOWING_WATER"));
+            HOLLOW_MATERIALS.add(Material.valueOf("FLOWING_WATER"));
         } catch (Exception ignored) {} // 1.13 WATER uses Levelled
     }
 
@@ -71,7 +69,7 @@ public class LocationUtil {
     public static Location getTarget(final LivingEntity entity) throws Exception {
         Block block = null;
         try {
-            block = entity.getTargetBlock(TRANSPARENT_MATERIALS, 300);
+            block = entity.getTargetBlock(HOLLOW_MATERIALS, 300);
         } catch (NoSuchMethodError ignored) {} // failing now :(
         if (block == null) {
             throw new Exception("Not targeting a block");
