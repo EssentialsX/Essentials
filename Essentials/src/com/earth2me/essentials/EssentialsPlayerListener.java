@@ -183,7 +183,7 @@ public class EssentialsPlayerListener implements Listener {
             }
         }
 
-        user.updateActivityOnInteract(false);
+        user.updateActivity(false);
         if (!user.isHidden()) {
             user.setLastLogout(System.currentTimeMillis());
         }
