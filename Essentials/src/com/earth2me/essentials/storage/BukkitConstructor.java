@@ -1,18 +1,23 @@
 package com.earth2me.essentials.storage;
 
+import com.earth2me.essentials.Enchantments;
 import com.earth2me.essentials.utils.NumberUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.World;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.MaterialData;
 import org.bukkit.plugin.Plugin;
+import org.yaml.snakeyaml.constructor.BaseConstructor;
 import org.yaml.snakeyaml.constructor.CustomClassLoaderConstructor;
 import org.yaml.snakeyaml.introspector.PropertyUtils;
 import org.yaml.snakeyaml.nodes.*;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.Locale;
 
 
@@ -30,23 +35,37 @@ public class BukkitConstructor extends CustomClassLoaderConstructor {
         setPropertyUtils(propertyUtils);
     }
 
+    private Method constructScalarMethod = null;
+
+    protected String constructScalarRefl(ScalarNode scalarNode) {
+        try {
+            if (constructScalarMethod == null) {
+                constructScalarMethod = BaseConstructor.class.getDeclaredMethod("constructScalar", ScalarNode.class);
+            }
+            return (String) constructScalarMethod.invoke(this, scalarNode);
+        } catch (NoSuchMethodException
+                | SecurityException
+                | IllegalAccessException
+                | IllegalArgumentException
+                | InvocationTargetException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
 
     private class ConstructBukkitScalar extends ConstructScalar {
+
         @Override
         public Object construct(final Node node) {
             if (node.getType().equals(Material.class)) {
-                final String val = (String) constructScalar((ScalarNode) node);
-                Material mat;
-                if (NumberUtil.isInt(val)) {
-                    final int typeId = Integer.parseInt(val);
-                    mat = Material.getMaterial(typeId);
-                } else {
-                    mat = Material.matchMaterial(val);
-                }
-                return mat;
+                final String val = constructScalarRefl((ScalarNode) node);
+                return Material.matchMaterial(val);
             }
+
             if (node.getType().equals(MaterialData.class)) {
-                final String val = (String) constructScalar((ScalarNode) node);
+                final String val = constructScalarRefl((ScalarNode) node);
                 if (val.isEmpty()) {
                     return null;
                 }
@@ -54,13 +73,9 @@ public class BukkitConstructor extends CustomClassLoaderConstructor {
                 if (split.length == 0) {
                     return null;
                 }
-                Material mat;
-                if (NumberUtil.isInt(split[0])) {
-                    final int typeId = Integer.parseInt(split[0]);
-                    mat = Material.getMaterial(typeId);
-                } else {
-                    mat = Material.matchMaterial(split[0]);
-                }
+
+                Material mat = Material.matchMaterial(split[0]);
+
                 if (mat == null) {
                     return null;
                 }
@@ -71,7 +86,7 @@ public class BukkitConstructor extends CustomClassLoaderConstructor {
                 return new MaterialData(mat, data);
             }
             if (node.getType().equals(ItemStack.class)) {
-                final String val = (String) constructScalar((ScalarNode) node);
+                final String val = constructScalarRefl((ScalarNode) node);
                 if (val.isEmpty()) {
                     return null;
                 }
@@ -83,13 +98,9 @@ public class BukkitConstructor extends CustomClassLoaderConstructor {
                 if (split2.length == 0) {
                     return null;
                 }
-                Material mat;
-                if (NumberUtil.isInt(split2[0])) {
-                    final int typeId = Integer.parseInt(split2[0]);
-                    mat = Material.getMaterial(typeId);
-                } else {
-                    mat = Material.matchMaterial(split2[0]);
-                }
+
+                Material mat = Material.matchMaterial(split2[0]);
+
                 if (mat == null) {
                     return null;
                 }
@@ -108,13 +119,7 @@ public class BukkitConstructor extends CustomClassLoaderConstructor {
                         if (split3.length < 1) {
                             continue;
                         }
-                        Enchantment enchantment;
-                        if (NumberUtil.isInt(split3[0])) {
-                            final int enchantId = Integer.parseInt(split3[0]);
-                            enchantment = Enchantment.getById(enchantId);
-                        } else {
-                            enchantment = Enchantment.getByName(split3[0].toUpperCase(Locale.ENGLISH));
-                        }
+                        Enchantment enchantment = Enchantments.getByName(split3[0]);
                         if (enchantment == null) {
                             continue;
                         }
@@ -134,7 +139,7 @@ public class BukkitConstructor extends CustomClassLoaderConstructor {
                 return stack;
             }
             if (node.getType().equals(EnchantmentLevel.class)) {
-                final String val = (String) constructScalar((ScalarNode) node);
+                final String val = constructScalarRefl((ScalarNode) node);
                 if (val.isEmpty()) {
                     return null;
                 }
@@ -142,13 +147,7 @@ public class BukkitConstructor extends CustomClassLoaderConstructor {
                 if (split.length == 0) {
                     return null;
                 }
-                Enchantment enchant;
-                if (NumberUtil.isInt(split[0])) {
-                    final int typeId = Integer.parseInt(split[0]);
-                    enchant = Enchantment.getById(typeId);
-                } else {
-                    enchant = Enchantment.getByName(split[0].toUpperCase(Locale.ENGLISH));
-                }
+                Enchantment enchant = Enchantments.getByName(split[0]);
                 if (enchant == null) {
                     return null;
                 }
@@ -169,6 +168,7 @@ public class BukkitConstructor extends CustomClassLoaderConstructor {
     }
 
     private class ConstructBukkitMapping extends ConstructMapping {
+        
         @Override
         public Object construct(final Node node) {
             if (node.getType().equals(Location.class)) {
@@ -181,25 +181,25 @@ public class BukkitConstructor extends CustomClassLoaderConstructor {
                     return null;
                 }
                 for (NodeTuple nodeTuple : mnode.getValue()) {
-                    final String key = (String) constructScalar((ScalarNode) nodeTuple.getKeyNode());
+                    final String key = constructScalarRefl((ScalarNode) nodeTuple.getKeyNode());
                     final ScalarNode snode = (ScalarNode) nodeTuple.getValueNode();
                     if (key.equalsIgnoreCase("world")) {
-                        worldName = (String) constructScalar(snode);
+                        worldName = constructScalarRefl(snode);
                     }
                     if (key.equalsIgnoreCase("x")) {
-                        x = Double.parseDouble((String) constructScalar(snode));
+                        x = Double.parseDouble(constructScalarRefl(snode));
                     }
                     if (key.equalsIgnoreCase("y")) {
-                        y = Double.parseDouble((String) constructScalar(snode));
+                        y = Double.parseDouble(constructScalarRefl(snode));
                     }
                     if (key.equalsIgnoreCase("z")) {
-                        z = Double.parseDouble((String) constructScalar(snode));
+                        z = Double.parseDouble(constructScalarRefl(snode));
                     }
                     if (key.equalsIgnoreCase("yaw")) {
-                        yaw = Float.parseFloat((String) constructScalar(snode));
+                        yaw = Float.parseFloat(constructScalarRefl(snode));
                     }
                     if (key.equalsIgnoreCase("pitch")) {
-                        pitch = Float.parseFloat((String) constructScalar(snode));
+                        pitch = Float.parseFloat(constructScalarRefl(snode));
                     }
                 }
                 if (worldName == null || worldName.isEmpty()) {

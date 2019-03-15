@@ -46,7 +46,7 @@ public class Commandenchant extends EssentialsCommand {
             throw new NotEnoughArgumentsException(tl("enchantments", StringUtil.joinList(enchantmentslist.toArray())));
         }
 
-        int level = -1;
+        int level = 1;
         if (args.length > 1) {
             try {
                 level = Integer.parseInt(args[1]);

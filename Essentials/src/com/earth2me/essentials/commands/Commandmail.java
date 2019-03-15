@@ -56,8 +56,7 @@ public class Commandmail extends EssentialsCommand {
                 throw new Exception(tl("playerNeverOnServer", args[1]));
             }
 
-            String mail = tl("mailFormat", user.getName(), StringUtil.sanitizeString(FormatUtil.stripFormat(getFinalArg(args, 2))));
-            mail = FormatUtil.formatMessage(user, "essentials.mail", mail);
+            String mail = tl("mailFormat", user.getName(), FormatUtil.formatMessage(user, "essentials.mail", StringUtil.sanitizeString(FormatUtil.stripFormat(getFinalArg(args, 2)))));
             if (mail.length() > 1000) {
                 throw new Exception(tl("mailTooLong"));
             }
@@ -82,7 +81,8 @@ public class Commandmail extends EssentialsCommand {
             if (!user.isAuthorized("essentials.mail.sendall")) {
                 throw new Exception(tl("noPerm", "essentials.mail.sendall"));
             }
-            ess.runTaskAsynchronously(new SendAll(tl("mailFormat", user.getName(), FormatUtil.stripFormat(getFinalArg(args, 1)))));
+            ess.runTaskAsynchronously(new SendAll(tl("mailFormat", user.getName(),
+                    FormatUtil.formatMessage(user, "essentials.mail", StringUtil.sanitizeString(FormatUtil.stripFormat(getFinalArg(args, 1)))))));
             user.sendMessage(tl("mailSent"));
             return;
         }
@@ -105,11 +105,11 @@ public class Commandmail extends EssentialsCommand {
             if (u == null) {
                 throw new Exception(tl("playerNeverOnServer", args[1]));
             }
-            u.addMail(tl("mailFormat", "Server", getFinalArg(args, 2)));
+            u.addMail(tl("mailFormat", "Server", FormatUtil.replaceFormat(getFinalArg(args, 2))));
             sender.sendMessage(tl("mailSent"));
             return;
         } else if (args.length >= 2 && "sendall".equalsIgnoreCase(args[0])) {
-            ess.runTaskAsynchronously(new SendAll(tl("mailFormat", "Server", getFinalArg(args, 1))));
+            ess.runTaskAsynchronously(new SendAll(tl("mailFormat", "Server", FormatUtil.replaceFormat(getFinalArg(args, 1)))));
             sender.sendMessage(tl("mailSent"));
             return;
         } else if (args.length >= 2) {
@@ -118,7 +118,7 @@ public class Commandmail extends EssentialsCommand {
             if (u == null) {
                 throw new Exception(tl("playerNeverOnServer", args[0]));
             }
-            u.addMail(tl("mailFormat", "Server", getFinalArg(args, 1)));
+            u.addMail(tl("mailFormat", "Server", FormatUtil.replaceFormat(getFinalArg(args, 1))));
             sender.sendMessage(tl("mailSent"));
             return;
         }

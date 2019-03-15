@@ -2,6 +2,7 @@ package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.MetaItemStack;
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.utils.MaterialUtil;
 import com.earth2me.essentials.utils.NumberUtil;
 import com.google.common.collect.Lists;
 import org.bukkit.DyeColor;
@@ -43,8 +44,8 @@ public class Commandfirework extends EssentialsCommand {
 
     @Override
     protected void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception {
-        final ItemStack stack = user.getBase().getItemInHand();
-        if (stack.getType() == Material.FIREWORK) {
+        final ItemStack stack = user.getItemInHand();
+        if (MaterialUtil.isFirework(stack.getType())) {
             if (args.length > 0) {
                 if (args[0].equalsIgnoreCase("clear")) {
                     FireworkMeta fmeta = (FireworkMeta) stack.getItemMeta();

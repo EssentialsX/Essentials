@@ -54,6 +54,8 @@ public class SignGameMode extends EssentialsSign {
             player.setGameMode(GameMode.CREATIVE);
         } else if (mode.contains("advent") || mode.equalsIgnoreCase("2")) {
             player.setGameMode(GameMode.ADVENTURE);
+        } else if (mode.contains("spec") || mode.equalsIgnoreCase("3")) {
+            player.setGameMode(GameMode.SPECTATOR);
         } else {
             throw new SignException(tl("invalidSignLine", 2));
         }

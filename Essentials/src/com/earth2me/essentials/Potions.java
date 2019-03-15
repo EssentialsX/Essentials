@@ -11,8 +11,8 @@ import java.util.Set;
 
 
 public class Potions {
-    private static final Map<String, PotionEffectType> POTIONS = new HashMap<String, PotionEffectType>();
-    private static final Map<String, PotionEffectType> ALIASPOTIONS = new HashMap<String, PotionEffectType>();
+    private static final Map<String, PotionEffectType> POTIONS = new HashMap<>();
+    private static final Map<String, PotionEffectType> ALIASPOTIONS = new HashMap<>();
 
     static {
 

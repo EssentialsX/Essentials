@@ -13,14 +13,14 @@ import java.util.logging.Logger;
 import static com.earth2me.essentials.I18n.tl;
 
 
-public class EssentialsConnect {
-    private static final Logger LOGGER = Logger.getLogger("Minecraft");
+class EssentialsConnect {
+    private static final Logger logger = Logger.getLogger("EssentialsAntiBuild");
     private final transient IEssentials ess;
     private final transient IAntiBuild protect;
 
-    public EssentialsConnect(Plugin essPlugin, Plugin essProtect) {
+    EssentialsConnect(Plugin essPlugin, Plugin essProtect) {
         if (!essProtect.getDescription().getVersion().equals(essPlugin.getDescription().getVersion())) {
-            LOGGER.log(Level.WARNING, tl("versionMismatchAll"));
+            logger.log(Level.WARNING, tl("versionMismatchAll"));
         }
         ess = (IEssentials) essPlugin;
         protect = (IAntiBuild) essProtect;
@@ -29,17 +29,14 @@ public class EssentialsConnect {
         ess.addReloadListener(pr);
     }
 
-    public void onDisable() {
-    }
-
-    public IEssentials getEssentials() {
+    IEssentials getEssentials() {
         return ess;
     }
 
-    public void alert(final User user, final String item, final String type) {
+    void alert(final User user, final String item, final String type) {
         final Location loc = user.getLocation();
         final String warnMessage = tl("alertFormat", user.getName(), type, item, loc.getWorld().getName() + "," + loc.getBlockX() + "," + loc.getBlockY() + "," + loc.getBlockZ());
-        LOGGER.log(Level.WARNING, warnMessage);
+        logger.log(Level.WARNING, warnMessage);
         for (Player p : ess.getServer().getOnlinePlayers()) {
             final User alertUser = ess.getUser(p);
             if (alertUser.isAuthorized("essentials.protect.alerts")) {
@@ -47,7 +44,6 @@ public class EssentialsConnect {
             }
         }
     }
-
 
     private class AntiBuildReloader implements IConf {
         @Override
