@@ -184,5 +184,9 @@ public interface IUser {
     
     void setPromptingClearConfirm(boolean prompt);
 
+    boolean isLastMessageReplyRecipient();
+
+    void setLastMessageReplyRecipient(boolean enabled);
+
     Map<User, BigDecimal> getConfirmingPayments();
 }

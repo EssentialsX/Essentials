@@ -19,7 +19,7 @@ commands:
     aliases: [eantioch,grenade,egrenade,tnt,etnt]
   back:
     description: Teleports you to your location prior to tp/spawn/warp.
-    usage: /<command>
+    usage: /<command> [player]
     aliases: [eback,return,ereturn]
   backup:
     description: Runs the backup if configured.
@@ -270,7 +270,7 @@ commands:
     aliases: [emsgtoggle]
   mute:
     description: Mutes or unmutes a player.
-    usage: /<command> <player> [datediff]
+    usage: /<command> <player> [datediff] [reason]
     aliases: [emute,silence,esilence]
   near:
     description: Lists the players near by or around a player.
@@ -324,6 +324,10 @@ commands:
     description: Quickly reply to the last player to message you.
     usage: /<command> <message>
     aliases: [er,reply,ereply]
+  rtoggle:
+    description: Change whether the recipient of the reply is last recipient or last sender
+    usage: /<command> [player] [on|off]
+    aliases: [ertoggle, replytoggle, ereplytoggle]
   realname:
     description: Displays the username of a user based on nick.
     usage: /<command> <nickname>
