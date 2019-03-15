@@ -41,7 +41,7 @@ public class Commandmute extends EssentialsCommand {
             }
         }
         
-        final boolean willMute = (args.length > 1) ? true : !user.getMuted();
+        final boolean willMute = (args.length > 1) || !user.getMuted();
         final User controller = sender.isPlayer() ? ess.getUser(sender.getPlayer()) : null;
         final MuteStatusChangeEvent event = new MuteStatusChangeEvent(user, controller, willMute);
         ess.getServer().getPluginManager().callEvent(event);
