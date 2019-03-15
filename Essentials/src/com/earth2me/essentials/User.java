@@ -546,6 +546,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
                 setMuteTimeout(0);
                 sendMessage(tl("canTalkAgain"));
                 setMuted(false);
+                setMuteReason(null);
                 return true;
             }
         }
