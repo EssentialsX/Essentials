@@ -45,7 +45,7 @@ public class Commandtpaall extends EssentialsCommand {
             try {
                 TPARequestEvent tpaEvent = new TPARequestEvent(sender, player, true);
                 ess.getServer().getPluginManager().callEvent(tpaEvent);
-                if(tpaEvent.isCancelled()) {
+                if (tpaEvent.isCancelled()) {
                     sender.sendMessage(tl("teleportRequestCancelled", player.getDisplayName())); // TODO Get approval on cancel message
                     continue;
                 }

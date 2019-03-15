@@ -39,7 +39,7 @@ public class Commandtpahere extends EssentialsCommand {
         if (!player.isIgnoredPlayer(user)) {
             TPARequestEvent tpaEvent = new TPARequestEvent(user.getSource(), player, true);
             ess.getServer().getPluginManager().callEvent(tpaEvent);
-            if(tpaEvent.isCancelled()) {
+            if (tpaEvent.isCancelled()) {
                 throw new Exception(tl("teleportRequestCancelled", player.getDisplayName())); // TODO Get approval on cancel message
             }
             player.requestTeleport(user, true);
