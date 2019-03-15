@@ -19,7 +19,7 @@ commands:
     aliases: [eantioch,grenade,egrenade,tnt,etnt]
   back:
     description: Teleports you to your location prior to tp/spawn/warp.
-    usage: /<command>
+    usage: /<command> [player]
     aliases: [eback,return,ereturn]
   backup:
     description: Runs the backup if configured.
