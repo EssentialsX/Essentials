@@ -1,6 +1,7 @@
 package com.earth2me.essentials.xmpp;
 
 import com.earth2me.essentials.IEssentials;
+import com.earth2me.essentials.metrics.Metrics;
 import net.ess3.api.IUser;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -11,19 +12,18 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.util.List;
 import java.util.Locale;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import static com.earth2me.essentials.I18n.tl;
 
 
 public class EssentialsXMPP extends JavaPlugin implements IEssentialsXMPP {
-    private static final Logger LOGGER = Logger.getLogger("Minecraft");
     private static EssentialsXMPP instance = null;
     private transient UserManager users;
     private transient XMPPManager xmpp;
     private transient IEssentials ess;
+    private transient Metrics metrics = null;
 
-    public static IEssentialsXMPP getInstance() {
+    static IEssentialsXMPP getInstance() {
         return instance;
     }
 
@@ -34,7 +34,7 @@ public class EssentialsXMPP extends JavaPlugin implements IEssentialsXMPP {
         final PluginManager pluginManager = getServer().getPluginManager();
         ess = (IEssentials) pluginManager.getPlugin("Essentials");
         if (!this.getDescription().getVersion().equals(ess.getDescription().getVersion())) {
-            LOGGER.log(Level.WARNING, tl("versionMismatchAll"));
+            getLogger().log(Level.WARNING, tl("versionMismatchAll"));
         }
         if (!ess.isEnabled()) {
             this.setEnabled(false);
@@ -49,6 +49,11 @@ public class EssentialsXMPP extends JavaPlugin implements IEssentialsXMPP {
 
         ess.addReloadListener(users);
         ess.addReloadListener(xmpp);
+
+        if (metrics == null) {
+            metrics = new Metrics(this);
+            metrics.addCustomChart(new Metrics.SimplePie("config-valid", () -> xmpp.isConfigValid() ? "yes" : "no"));
+        }
     }
 
     @Override
@@ -104,10 +109,8 @@ public class EssentialsXMPP extends JavaPlugin implements IEssentialsXMPP {
         return instance.xmpp.sendMessage(address, message);
     }
 
-    // @Override
-    public static boolean updatePresence() {
+    static void updatePresence() {
         instance.xmpp.updatePresence();
-        return true;
     }
 
     @Override
@@ -124,9 +127,7 @@ public class EssentialsXMPP extends JavaPlugin implements IEssentialsXMPP {
                     sendMessage(address, message);
                 }
             }
-        } catch (Exception ex) {
-            // Ignore exceptions
-        }
+        } catch (Exception ignored) {}
     }
 
     @Override

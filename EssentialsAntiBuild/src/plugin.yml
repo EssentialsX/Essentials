@@ -2,8 +2,9 @@
 name: EssentialsAntiBuild
 main: com.earth2me.essentials.antibuild.EssentialsAntiBuild
 # Note to developers: This next line cannot change, or the automatic versioning system will break.
-version: ${project.version}-b${build.number}
+version: ${full.version}
 website: http://tiny.cc/EssentialsCommands
 description: Provides build protection.
 authors: [Zenexer, ementalo, Aelux, Brettflan, KimKandor, snowleo, ceulemans, Xeology, KHobbits, Iaccidentally]
 depend: [Essentials]
+api-version: 1.13

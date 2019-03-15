@@ -13,7 +13,7 @@
 
 # If you have problems join the Essentials help support channel: http://tiny.cc/EssentialsChat
 
-# Version ${project.version}-b${build.number}
+# Version ${full.version}
 
 # KITS ARE NOW IN THE kits.yml FILE
 
@@ -35,6 +35,10 @@ max-nick-length: 15
 # When this option is enabled, nickname length checking will exclude color codes in player names.
 # ie: "&6Notch" has 7 characters (2 are part of a color code), a length of 5 is used when this option is set to true
 ignore-colors-in-max-nick-length: false
+
+# When this option is enabled, display names for hidden users will not be shown. This prevents players from being
+# able to see that they are online while vanished.
+hide-displayname-in-vanish: true
 
 # Disable this if you have any other plugin, that modifies the displayname of a user.
 change-displayname: true
@@ -318,6 +322,11 @@ enabledSigns:
 # Lower numbers will reduce the possibility of lag, but may annoy players.
 sign-use-per-second: 4
 
+# Allow item IDs on pre-existing signs on 1.13 and above.
+# You cannot use item IDs on new signs, but this will allow players to interact with signs that
+# were placed before 1.13.
+allow-old-id-signs: false
+
 # List of sign names Essentials should not protect. This feature is especially useful when
 # another plugin provides a sign that EssentialsX provides, but Essentials overrides.
 # For example, if a plugin provides a [kit] sign, and you wish to use theirs instead of
@@ -395,6 +404,11 @@ cancel-afk-on-interact: true
 # Player will be removed from AFK on chat/command regardless of this setting.
 # Disable this to reduce server lag.
 cancel-afk-on-move: true
+
+# Should AFK players be ignored when other players are trying to sleep?
+# When this setting is false, players won't be able to skip the night if some players are AFK.
+# Users with the permission node essentials.sleepingignored will always be ignored.
+sleep-ignores-afk-players: true
 
 # Set the player's list name when they are AFK. This is none by default which specifies that Essentials 
 # should not interfere with the AFK player's list name.
@@ -475,7 +489,7 @@ last-message-reply-recipient: true
 # Default is 180 (3 minutes)
 last-message-reply-recipient-timeout: 180
 
-# Toggles whether or not right clicking mobs with a milk bucket turns them into a baby.
+# Toggles whether or not clicking mobs with a milk bucket turns them into a baby.
 milk-bucket-easter-egg: true
 
 # Toggles whether or not the fly status message should be sent to players on join
@@ -522,6 +536,18 @@ default-enabled-confirm-commands:
 #- pay
 #- clearinventory
 
+# Set the timeout, in seconds for players to accept a tpa before the request is cancelled.
+# Set to 0 for no timeout.
+tpa-accept-cancellation: 120
+
+# Allow players to set hats by clicking on their helmet slot.
+allow-direct-hat: true
+
+# Allow in-game players to specify a world when running /broadcastworld.
+# If false, running /broadcastworld in-game will always send a message to the player's current world.
+# This doesn't affect running the command from the console, where a world is always required.
+allow-world-in-broadcastworld: true
+
 ############################################################
 # +------------------------------------------------------+ #
 # |                   EssentialsHome                     | #
@@ -551,12 +577,12 @@ sethome-multiple:
 # In this example someone with 'essentials.sethome.multiple' and 'essentials.sethome.multiple.vip' will have 5 homes.
 # Remember, they MUST have both permission nodes in order to be able to set multiple homes.
 
-# Set the timeout, in seconds for players to accept a tpa before the request is cancelled.
-# Set to 0 for no timeout.
-tpa-accept-cancellation: 120
-
-# Allow players to set hats by clicking on their helmet slot.
-allow-direct-hat: true
+# Controls whether players need the permission "essentials.home.compass" in order to point
+# the player's compass at their first home.
+#
+# Leaving this as false will retain Essentials' original behaviour, which is to always
+# change the compass' direction to point towards their first home.
+compass-towards-home-perm: false
 
 ############################################################
 # +------------------------------------------------------+ #
@@ -805,20 +831,19 @@ protect:
     warn-on-build-disallow: true
 
   # For which block types would you like to be alerted?
-  # You can find a list of IDs in plugins/Essentials/items.csv after loading Essentials for the first time.
-  # 10 = lava :: 11 = still lava :: 46 = TNT :: 327 = lava bucket
+  # You can find a list of items at https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Material.html.
   alert:
-    on-placement: 10,11,46,327
-    on-use: 327
+    on-placement: LAVA,TNT,LAVA_BUCKET
+    on-use: LAVA_BUCKET
     on-break:
 
   blacklist:
 
     # Which blocks should people be prevented from placing?
-    placement: 10,11,46,327
+    placement: LAVA,TNT,LAVA_BUCKET
 
     # Which items should people be prevented from using?
-    usage: 327
+    usage: LAVA_BUCKET
 
     # Which blocks should people be prevented from breaking?
     break:

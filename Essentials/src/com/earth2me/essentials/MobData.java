@@ -1,6 +1,7 @@
 package com.earth2me.essentials;
 
 import com.earth2me.essentials.craftbukkit.InventoryWorkaround;
+import com.earth2me.essentials.utils.EnumUtil;
 import com.earth2me.essentials.utils.StringUtil;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
@@ -53,9 +54,9 @@ public enum MobData {
     BAY_HORSE("bay", EntityType.HORSE, Horse.Color.BROWN, true),
     BROWN_HORSE("brown", EntityType.HORSE, Horse.Color.BROWN, false),
     SADDLE_HORSE("saddle", EntityType.HORSE, Data.HORSESADDLE, true),
-    GOLD_ARMOR_HORSE("goldarmor", EntityType.HORSE, Material.GOLD_BARDING, true),
-    DIAMOND_ARMOR_HORSE("diamondarmor", EntityType.HORSE, Material.DIAMOND_BARDING, true),
-    ARMOR_HORSE("armor", EntityType.HORSE, Material.IRON_BARDING, true),
+    GOLD_ARMOR_HORSE("goldarmor", EntityType.HORSE, EnumUtil.getMaterial("GOLDEN_HORSE_ARMOR", "GOLD_BARDING"), true),
+    DIAMOND_ARMOR_HORSE("diamondarmor", EntityType.HORSE, EnumUtil.getMaterial("DIAMOND_HORSE_ARMOR", "DIAMOND_BARDING"), true),
+    ARMOR_HORSE("armor", EntityType.HORSE, EnumUtil.getMaterial("IRON_HORSE_ARMOR", "IRON_BARDING"), true),
     SIAMESE_CAT("siamese", EntityType.OCELOT, Ocelot.Type.SIAMESE_CAT, true),
     WHITE_CAT("white", EntityType.OCELOT, Ocelot.Type.SIAMESE_CAT, false),
     RED_CAT("red", EntityType.OCELOT, Ocelot.Type.RED_CAT, true),
@@ -66,12 +67,12 @@ public enum MobData {
     BABY_ZOMBIE("baby", EntityType.ZOMBIE.getEntityClass(), Data.BABYZOMBIE, true),
     ADULT_ZOMBIE("adult", EntityType.ZOMBIE.getEntityClass(), Data.ADULTZOMBIE, true),
     DIAMOND_SWORD_ZOMBIE("diamondsword", EntityType.ZOMBIE.getEntityClass(), Material.DIAMOND_SWORD, true),
-    GOLD_SWORD_ZOMBIE("goldsword", EntityType.ZOMBIE.getEntityClass(), Material.GOLD_SWORD, true),
+    GOLD_SWORD_ZOMBIE("goldsword", EntityType.ZOMBIE.getEntityClass(), EnumUtil.getMaterial("GOLDEN_SWORD", "GOLD_SWORD"), true),
     IRON_SWORD_ZOMBIE("ironsword", EntityType.ZOMBIE.getEntityClass(), Material.IRON_SWORD, true),
     STONE_SWORD_ZOMBIE("stonesword", EntityType.ZOMBIE.getEntityClass(), Material.STONE_SWORD, false),
     SWORD_ZOMBIE("sword", EntityType.ZOMBIE.getEntityClass(), Material.STONE_SWORD, true),
     DIAMOND_SWORD_SKELETON("diamondsword", EntityType.SKELETON, Material.DIAMOND_SWORD, true),
-    GOLD_SWORD_SKELETON("goldsword", EntityType.SKELETON, Material.GOLD_SWORD, true),
+    GOLD_SWORD_SKELETON("goldsword", EntityType.SKELETON, EnumUtil.getMaterial("GOLDEN_SWORD", "GOLD_SWORD"), true),
     IRON_SWORD_SKELETON("ironsword", EntityType.SKELETON, Material.IRON_SWORD, true),
     STONE_SWORD_SKELETON("stonesword", EntityType.SKELETON, Material.STONE_SWORD, false),
     SWORD_SKELETON("sword", EntityType.SKELETON, Material.STONE_SWORD, true),
@@ -95,6 +96,18 @@ public enum MobData {
     BLUE_PARROT("blue", EntityType.PARROT, Parrot.Variant.BLUE, true),
     CYAN_PARROT("cyan", EntityType.PARROT, Parrot.Variant.CYAN, true),
     GRAY_PARROT("gray", EntityType.PARROT, Parrot.Variant.GRAY, true),
+    KOB_TROPICAL_FISH("kob", EntityType.TROPICAL_FISH, TropicalFish.Pattern.KOB, true),
+    SUNSTREAK_TROPICAL_FISH("sunstreak", EntityType.TROPICAL_FISH, TropicalFish.Pattern.SUNSTREAK, true),
+    SNOOPER_TROPICAL_FISH("snooper", EntityType.TROPICAL_FISH, TropicalFish.Pattern.SNOOPER, true),
+    DASHER_TROPICAL_FISH("dasher", EntityType.TROPICAL_FISH, TropicalFish.Pattern.DASHER, true),
+    BRINELY_TROPICAL_FISH("brinely", EntityType.TROPICAL_FISH, TropicalFish.Pattern.BRINELY, true),
+    SPOTTY_TROPICAL_FISH("spotty", EntityType.TROPICAL_FISH, TropicalFish.Pattern.SPOTTY, true),
+    FLOPPER_TROPICAL_FISH("flopper", EntityType.TROPICAL_FISH, TropicalFish.Pattern.FLOPPER, true),
+    STRIPEY_TROPICAL_FISH("stripey", EntityType.TROPICAL_FISH, TropicalFish.Pattern.STRIPEY, true),
+    GLITTER_TROPICAL_FISH("glitter", EntityType.TROPICAL_FISH, TropicalFish.Pattern.GLITTER, true),
+    BLOCKFISH_TROPICAL_FISH("blockfish", EntityType.TROPICAL_FISH, TropicalFish.Pattern.BLOCKFISH, true),
+    BETTY_TROPICAL_FISH("betty", EntityType.TROPICAL_FISH, TropicalFish.Pattern.BETTY, true),
+    CLAYFISH_TROPICAL_FISH("clayfish", EntityType.TROPICAL_FISH, TropicalFish.Pattern.CLAYFISH, true);
     ;
 
 
@@ -252,6 +265,8 @@ public enum MobData {
             }
         } else if (this.value instanceof Parrot.Variant) {
             ((Parrot) spawned).setVariant((Parrot.Variant) this.value);
+        } else if (this.value instanceof TropicalFish.Pattern) {
+            ((TropicalFish) spawned).setPattern((TropicalFish.Pattern) this.value);
         }
     }
 }

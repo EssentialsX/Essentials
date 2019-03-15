@@ -2,6 +2,7 @@ package com.earth2me.essentials.signs;
 
 import com.earth2me.essentials.I18n;
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.utils.EnumUtil;
 import com.earth2me.essentials.utils.FormatUtil;
 import net.ess3.api.IEssentials;
 import net.ess3.api.MaxMoneyException;
@@ -22,7 +23,7 @@ import java.util.logging.Logger;
 public class SignBlockListener implements Listener {
     private static final Logger LOGGER = Logger.getLogger("Essentials");
     private static final Material WALL_SIGN = Material.WALL_SIGN;
-    private static final Material SIGN_POST = Material.SIGN_POST;
+    private static final Material SIGN_POST = EnumUtil.getMaterial("SIGN", "SIGN_POST");
     private final transient IEssentials ess;
 
     public SignBlockListener(IEssentials ess) {

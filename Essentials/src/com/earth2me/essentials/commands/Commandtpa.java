@@ -1,8 +1,11 @@
 package com.earth2me.essentials.commands;
 
+import com.earth2me.essentials.Teleport;
+import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.User;
 import net.ess3.api.events.TPARequestEvent;
 import org.bukkit.Server;
+import org.bukkit.event.player.PlayerTeleportEvent;
 
 import java.util.Collections;
 import java.util.List;
@@ -36,6 +39,16 @@ public class Commandtpa extends EssentialsCommand {
             && !player.isTpRequestHere()) { // Make sure the last teleport request was actually tpa and not tpahere
             throw new Exception(tl("requestSentAlready", player.getDisplayName()));
         }
+        if (player.isAutoTeleportEnabled() && !player.isIgnoredPlayer(user)) {
+            final Trade charge = new Trade(this.getName(), ess);
+            Teleport teleport = user.getTeleport();
+            teleport.setTpType(Teleport.TeleportType.TPA);
+            teleport.teleport(player.getBase(), charge, PlayerTeleportEvent.TeleportCause.COMMAND);
+            player.sendMessage(tl("requestAcceptedAuto", user.getDisplayName()));
+            user.sendMessage(tl("requestAcceptedFromAuto", player.getDisplayName()));
+            return;
+        }
+
         if (!player.isIgnoredPlayer(user)) {
             TPARequestEvent tpaEvent = new TPARequestEvent(user.getSource(), player, false);
             ess.getServer().getPluginManager().callEvent(tpaEvent);

@@ -14,7 +14,7 @@ import java.util.Map;
 
 
 public class SpawnStorage extends AsyncStorageObjectHolder<Spawns> implements IEssentialsModule {
-    public SpawnStorage(final IEssentials ess) {
+    SpawnStorage(final IEssentials ess) {
         super(ess, Spawns.class);
         reloadConfig();
     }
@@ -25,18 +25,16 @@ public class SpawnStorage extends AsyncStorageObjectHolder<Spawns> implements IE
     }
 
     @Override
-    public void finishRead() {
-    }
+    public void finishRead() { }
 
     @Override
-    public void finishWrite() {
-    }
+    public void finishWrite() { }
 
-    public void setSpawn(final Location loc, final String group) {
+    void setSpawn(final Location loc, final String group) {
         acquireWriteLock();
         try {
             if (getData().getSpawns() == null) {
-                getData().setSpawns(new HashMap<String, Location>());
+                getData().setSpawns(new HashMap<>());
             }
             getData().getSpawns().put(group.toLowerCase(Locale.ENGLISH), loc);
         } finally {
@@ -48,7 +46,7 @@ public class SpawnStorage extends AsyncStorageObjectHolder<Spawns> implements IE
         }
     }
 
-    public Location getSpawn(final String group) {
+    Location getSpawn(final String group) {
         acquireReadLock();
         try {
             if (getData().getSpawns() == null || group == null) {
