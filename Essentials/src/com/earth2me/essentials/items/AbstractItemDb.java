@@ -102,7 +102,7 @@ public abstract class AbstractItemDb implements IConf, net.ess3.api.IItemDb {
         return null;
     }
 
-    protected Collection<String> getResolverNames() {
+    Collection<String> getResolverNames() {
         return resolverMap.values().stream()
             .map(ItemResolver::getNames)
             .flatMap(Collection::stream)
