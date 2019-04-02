@@ -18,6 +18,7 @@ import org.bukkit.potion.PotionEffect;
 
 import java.util.*;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import static com.earth2me.essentials.I18n.tl;
 
@@ -26,20 +27,20 @@ public abstract class AbstractItemDb implements IConf, net.ess3.api.IItemDb {
     protected final IEssentials ess;
     protected boolean ready = false;
 
-    private Map<PluginKey, Function<String, ItemStack>> resolverMap = new HashMap<>();
+    private Map<PluginKey, ItemResolver> resolverMap = new HashMap<>();
 
     AbstractItemDb(IEssentials ess) {
         this.ess = ess;
     }
 
     @Override
-    public void registerResolver(Plugin plugin, String name, Function<String, ItemStack> function) throws Exception {
+    public void registerResolver(Plugin plugin, String name, ItemResolver resolver) throws Exception {
         PluginKey key = PluginKey.fromKey(plugin, name);
         if (resolverMap.containsKey(key)) {
             throw new Exception("Tried to add a duplicate resolver with name " + key.toString());
         }
 
-        resolverMap.put(key, function);
+        resolverMap.put(key, resolver);
     }
 
     @Override
@@ -58,13 +59,13 @@ public abstract class AbstractItemDb implements IConf, net.ess3.api.IItemDb {
     }
 
     @Override
-    public Map<PluginKey, Function<String, ItemStack>> getResolvers() {
+    public Map<PluginKey, ItemResolver> getResolvers() {
         return new HashMap<>(resolverMap);
     }
 
     @Override
-    public Map<PluginKey, Function<String, ItemStack>> getResolvers(Plugin plugin) {
-        Map<PluginKey, Function<String, ItemStack>> matchingResolvers = new HashMap<>();
+    public Map<PluginKey, ItemResolver> getResolvers(Plugin plugin) {
+        Map<PluginKey, ItemResolver> matchingResolvers = new HashMap<>();
         for (PluginKey key : resolverMap.keySet()) {
             if (key.getPlugin().equals(plugin)) {
                 matchingResolvers.put(key, resolverMap.get(key));
@@ -75,7 +76,7 @@ public abstract class AbstractItemDb implements IConf, net.ess3.api.IItemDb {
     }
 
     @Override
-    public Function<String, ItemStack> getResolver(Plugin plugin, String name) {
+    public ItemResolver getResolver(Plugin plugin, String name) {
         return resolverMap.get(PluginKey.fromKey(plugin, name));
     }
 
@@ -84,8 +85,7 @@ public abstract class AbstractItemDb implements IConf, net.ess3.api.IItemDb {
         return get(id, true);
     }
 
-    @Override
-    public ItemStack tryResolvers(String id) {
+    ItemStack tryResolvers(String id) {
         for (PluginKey key : resolverMap.keySet()) {
             if (ess.getSettings().isDebug()) {
                 ess.getLogger().info(String.format("Trying resolver '%s' for item '%s'...", key, id));
@@ -100,6 +100,13 @@ public abstract class AbstractItemDb implements IConf, net.ess3.api.IItemDb {
         }
 
         return null;
+    }
+
+    protected Collection<String> getResolverNames() {
+        return resolverMap.values().stream()
+            .map(ItemResolver::getNames)
+            .flatMap(Collection::stream)
+            .collect(Collectors.toList());
     }
 
     @Override

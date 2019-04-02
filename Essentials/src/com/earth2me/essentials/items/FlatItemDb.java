@@ -211,7 +211,9 @@ public class FlatItemDb extends AbstractItemDb {
 
     @Override
     public Collection<String> listNames() {
-        return Collections.unmodifiableSet(allAliases);
+        Set<String> names = new HashSet<>(allAliases);
+        names.addAll(getResolverNames());
+        return names;
     }
 
     public static class ItemData {
