@@ -842,8 +842,10 @@ public class EssentialsPlayerListener implements Listener {
 
             event.getCommands().removeIf(str -> shouldHideFromUser(str, user));
 
-            removedCmds.removeAll(event.getCommands());
-            ess.getLogger().info("Removed commands: " + removedCmds.toString());
+            if (ess.getSettings().isDebug()) {
+                removedCmds.removeAll(event.getCommands());
+                ess.getLogger().info("Removed commands: " + removedCmds.toString());
+            }
         }
 
         /**
