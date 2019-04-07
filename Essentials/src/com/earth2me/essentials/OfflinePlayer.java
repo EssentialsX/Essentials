@@ -133,15 +133,24 @@ public class OfflinePlayer implements Player {
         return world;
     }
 
+    @Override
+    public void setRotation(float yaw, float pitch) {
+        location.setYaw(yaw);
+        location.setPitch(pitch);
+    }
+
     public void setLocation(Location loc) {
         location = loc;
         world = loc.getWorld();
     }
 
     public void teleportTo(Location lctn) {
+        location = lctn;
+        world = location.getWorld();
     }
 
     public void teleportTo(Entity entity) {
+        teleportTo(entity.getLocation());
     }
 
     @Override
