@@ -3,25 +3,35 @@ files:
     translation: "/Essentials/src/messages_%locale_with_underscore%.properties"
     languages_mapping:
       locale_with_underscore: # right side is xx[_YY] of messages_xx[_YY].properties, left is language code from https://support.crowdin.com/api/language-codes/
+        bg: bg
+        bs: bs
         cs: cs
         da: da
         de: de
         el: el
         en-US: en
         es-ES: es
+        et: et
+        eu: eu
         fi: fi
         fr: fr
+        he: he
+        hr: hr
         hu: hu
         it: it
+        ja: ja
         ko: ko
+        lt: lt
         nl: nl
         "no": "no" # no is a YAML keyword
         pl: pl
         pt-PT: pt
         ro: ro
         ru: ru
+        sk: sk
         sr: sr
         sv-SE: sv
+        th: th
         tr: tr
         uk: uk
         vi: vi
