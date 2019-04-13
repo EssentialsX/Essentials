@@ -20,14 +20,12 @@ public class Kits implements IConf {
 
     public Kits(final IEssentials essentials) {
         // Check if kit command has in the list and not creates a new kits file
-        if (essentials.getSettings().isCommandDisabled("kit")) {
-            return;
+        if (!essentials.getSettings().isCommandDisabled("kit")) {
+            config = new EssentialsConf(new File(essentials.getDataFolder(), "kits.yml"));
+            config.setTemplateName("/kits.yml");
+
+            reloadConfig();
         }
-
-        config = new EssentialsConf(new File(essentials.getDataFolder(), "kits.yml"));
-        config.setTemplateName("/kits.yml");
-
-        reloadConfig();
     }
 
     @Override
