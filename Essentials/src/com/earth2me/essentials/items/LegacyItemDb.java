@@ -20,7 +20,6 @@ import static com.earth2me.essentials.I18n.tl;
 
 public class LegacyItemDb extends AbstractItemDb {
     protected static final Logger LOGGER = Logger.getLogger("Essentials");
-    private final transient IEssentials ess;
     private final transient Map<String, Integer> items = new HashMap<>();
     private final transient Map<ItemData, List<String>> names = new HashMap<>();
     private final transient Map<ItemData, String> primaryName = new HashMap<>();
@@ -32,7 +31,7 @@ public class LegacyItemDb extends AbstractItemDb {
     private final transient Pattern csvSplitPattern = Pattern.compile("(\"([^\"]*)\"|[^,]*)(,|$)");
 
     public LegacyItemDb(final IEssentials ess) {
-        this.ess = ess;
+        super(ess);
         file = new ManagedFile("items.csv", ess);
     }
 
@@ -121,7 +120,14 @@ public class LegacyItemDb extends AbstractItemDb {
     }
 
     @Override
-    public ItemStack get(final String id) throws Exception {
+    public ItemStack get(final String id, final boolean useResolvers) throws Exception {
+        if (useResolvers) {
+            ItemStack resolved = tryResolvers(id);
+            if (resolved != null) {
+                return resolved;
+            }
+        }
+
         int itemid = 0;
         String itemname;
         short metaData = 0;
@@ -243,7 +249,9 @@ public class LegacyItemDb extends AbstractItemDb {
 
     @Override
     public Collection<String> listNames() {
-        return primaryName.values();
+        Collection<String> values = primaryName.values();
+        values.addAll(getResolverNames());
+        return values;
     }
 
     static class ItemData {
