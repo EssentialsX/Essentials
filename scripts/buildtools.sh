@@ -16,7 +16,13 @@ ensure_buildtools() {
 
 run_buildtools() {
     ensure_buildtools
-    java -jar BuildTools.jar --rev $1
+    # Check if env var isnt empty, then run with xmx flag
+    if [ ! -z "$BUILDTOOLS_XMX" ]; then
+        echo "BUILDTOOLS_XMX Environment variable found. Running BuildTools with -Xmx$BUILDTOOLS_XMX"
+        java -Xmx$BUILDTOOLS_XMX -jar BuildTools.jar --rev $1
+    else
+        java -jar BuildTools.jar --rev $1
+    fi
     if [ $? -ne 0 ]; then
         echo "Running BuildTools for CB $1 failed! Aborting."
         popd
