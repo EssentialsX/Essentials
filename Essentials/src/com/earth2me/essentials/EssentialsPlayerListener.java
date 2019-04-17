@@ -221,7 +221,7 @@ public class EssentialsPlayerListener implements Listener {
 
         final long currentTime = System.currentTimeMillis();
         dUser.checkMuteTimeout(currentTime);
-        dUser.updateActivityOnInteract(false);
+        dUser.updateActivity(false);
         dUser.stopTransaction();
 
         class DelayJoinTask implements Runnable {
