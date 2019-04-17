@@ -33,6 +33,9 @@ public interface IItemDb {
     /**
      * Create a stack from the given name with the maximum stack size for that material.
      *
+     * Note that this will always check against resolver functions from other plugins as well.
+     * To avoid this behaviour, use net.ess3.api.IItemDb#get(String name, boolean useResolvers).
+     *
      * @param name Item name to look up in the database
      * @return The requested item stack with the maximum stack size
      * @throws Exception if the item stack cannot be created
