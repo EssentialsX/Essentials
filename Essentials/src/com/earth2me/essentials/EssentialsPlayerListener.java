@@ -670,7 +670,7 @@ public class EssentialsPlayerListener implements Listener {
                 class PowerToolUseTask implements Runnable {
                     @Override
                     public void run() {
-                        user.getServer().dispatchCommand(user.getBase(), command);
+                        user.getBase().chat("/" + command);
                         LOGGER.log(Level.INFO, String.format("[PT] %s issued server command: /%s", user.getName(), command));
                     }
                 }

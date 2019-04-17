@@ -92,7 +92,7 @@ public class EssentialsEntityListener implements Listener {
                     class PowerToolInteractTask implements Runnable {
                         @Override
                         public void run() {
-                            attacker.getServer().dispatchCommand(attacker.getBase(), command);
+                            attacker.getBase().chat("/" + command);
                             LOGGER.log(Level.INFO, String.format("[PT] %s issued server command: /%s", attacker.getName(), command));
                         }
                     }
