@@ -95,6 +95,7 @@ public class Commandhome extends EssentialsCommand {
             throw new Exception(tl("noPerm", "essentials.worlds." + loc.getWorld().getName()));
         }
         user.getTeleport().teleport(loc, charge, TeleportCause.COMMAND);
+        user.sendMessage(tl("teleportHome", home));
     }
 
     @Override
