@@ -32,7 +32,7 @@ public class Commandmail extends EssentialsCommand {
             final List<String> mail = user.getMails();
             if (mail.isEmpty()) {
                 user.sendMessage(tl("noMail"));
-                throw new NoChargeException();
+                return;
             }
 
             IText input = new SimpleTextInput(mail);
@@ -89,7 +89,7 @@ public class Commandmail extends EssentialsCommand {
         if (args.length >= 1 && "clear".equalsIgnoreCase(args[0])) {
             if (user.getMails() == null || user.getMails().isEmpty()) {
                 user.sendMessage(tl("noMail"));
-                throw new NoChargeException();
+                return;
             }
 
             user.setMails(null);
