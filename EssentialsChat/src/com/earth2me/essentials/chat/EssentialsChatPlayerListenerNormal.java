@@ -18,7 +18,7 @@ import static com.earth2me.essentials.I18n.tl;
 
 
 public class EssentialsChatPlayerListenerNormal extends EssentialsChatPlayer {
-    public EssentialsChatPlayerListenerNormal(final Server server, final IEssentials ess, final Map<AsyncPlayerChatEvent, ChatStore> chatStorage) {
+    EssentialsChatPlayerListenerNormal(final Server server, final IEssentials ess, final Map<AsyncPlayerChatEvent, ChatStore> chatStorage) {
         super(server, ess, chatStorage);
     }
 
@@ -29,10 +29,7 @@ public class EssentialsChatPlayerListenerNormal extends EssentialsChatPlayer {
             return;
         }
 
-        /**
-         * This file should handle detection of the local chat features... if local chat is enabled, we need to handle
-         * it here
-         */
+        // This file should handle detection of the local chat features; if local chat is enabled, we need to handle it here
         long radius = ess.getSettings().getChatRadius();
         if (radius < 1) {
             return;
@@ -66,13 +63,13 @@ public class EssentialsChatPlayerListenerNormal extends EssentialsChatPlayer {
         }
 
         Set<Player> outList = event.getRecipients();
-        Set<Player> spyList = new HashSet<Player>();
+        Set<Player> spyList = new HashSet<>();
 
         try {
             outList.add(event.getPlayer());
         } catch (UnsupportedOperationException ex) {
             if (ess.getSettings().isDebug()) {
-                ess.getLogger().log(Level.INFO, "Plugin triggered custom chat event, local chat handling aborted.", ex);
+                logger.log(Level.INFO, "Plugin triggered custom chat event, local chat handling aborted.", ex);
             }
             return;
         }

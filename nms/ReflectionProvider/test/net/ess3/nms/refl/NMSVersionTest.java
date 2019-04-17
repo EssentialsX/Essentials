@@ -8,7 +8,7 @@ import org.junit.Test;
 public class NMSVersionTest {
 
     @Test
-    public void testMajor() throws Exception {
+    public void testMajor() {
         NMSVersion v2_9_R1 = NMSVersion.fromString("v2_9_R1");
 
         Assert.assertEquals(2, v2_9_R1.getMajor());
@@ -22,7 +22,7 @@ public class NMSVersionTest {
     }
 
     @Test
-    public void testMinor() throws Exception {
+    public void testMinor() {
         NMSVersion v1_10_R1 = NMSVersion.fromString("v1_10_R1");
 
         Assert.assertEquals(1, v1_10_R1.getMajor());
@@ -36,7 +36,7 @@ public class NMSVersionTest {
     }
 
     @Test
-    public void testRelease() throws Exception {
+    public void testRelease() {
         NMSVersion v1_9_R2 = NMSVersion.fromString("v1_9_R2");
 
         Assert.assertEquals(1, v1_9_R2.getMajor());

@@ -20,9 +20,10 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.Date;
+import java.util.logging.Logger;
 import java.util.zip.GZIPInputStream;
+import java.util.Arrays;
 import com.ice.tar.TarInputStream;
 import com.ice.tar.TarEntry;
 
@@ -30,14 +31,14 @@ import static com.earth2me.essentials.I18n.tl;
 
 
 public class EssentialsGeoIPPlayerListener implements Listener, IConf {
-    DatabaseReader mmreader = null; // initialize maxmind geoip2 reader
-    private static final Logger logger = Logger.getLogger("Minecraft");
-    File databaseFile;
-    File dataFolder;
-    final EssentialsConf config;
+    private DatabaseReader mmreader = null; // initialize maxmind geoip2 reader
+    private static final Logger logger = Logger.getLogger("EssentialsGeoIP");
+    private File databaseFile;
+    private File dataFolder;
+    private final EssentialsConf config;
     private final transient IEssentials ess;
 
-    public EssentialsGeoIPPlayerListener(File dataFolder, IEssentials ess) {
+    EssentialsGeoIPPlayerListener(File dataFolder, IEssentials ess) {
         this.ess = ess;
         this.dataFolder = dataFolder;
         this.config = new EssentialsConf(new File(dataFolder, "config.yml"));
@@ -47,61 +48,47 @@ public class EssentialsGeoIPPlayerListener implements Listener, IConf {
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerJoin(final PlayerJoinEvent event) {
-        ess.runTaskAsynchronously(new Runnable() {
-            @Override
-            public void run() {
-                delayedJoin(event.getPlayer());
-            }
-        });
+        ess.runTaskAsynchronously(() -> delayedJoin(event.getPlayer()));
     }
 
-    public void delayedJoin(Player player) {
+    private void delayedJoin(Player player) {
         User u = ess.getUser(player);
         if (u.isAuthorized("essentials.geoip.hide") || player.getAddress() == null) {
             return;
         }
         InetAddress address = player.getAddress().getAddress();
         StringBuilder sb = new StringBuilder();
-        String locale = ess.getI18n().getCurrentLocale().toString().replace('_', '-'); // get locale setting from Essentials
-            try {
-                if (config.getBoolean("database.show-cities", false)) {
-                    CityResponse response = mmreader.city(address);
-                    if (response == null) {
-                        return;
-                    }
-                    String city;
-                    String region;
-                    String country;
-                    if (config.getBoolean("enable-locale")) {
-                        // Get geolocation based on locale. If not avaliable in specific language, get the default one.
-                        city = ((city=response.getCity().getNames().get(locale))!=null) ? city : response.getCity().getName();
-                        region = ((region=response.getMostSpecificSubdivision().getNames().get(locale))!=null) ? region : response.getMostSpecificSubdivision().getName();
-                        country = ((country=response.getCountry().getNames().get(locale))!=null) ? country : response.getCountry().getName();
-                    } else {
-                        // Get geolocation regarding locale setting.
-                        city = response.getCity().getName();
-                        region = response.getMostSpecificSubdivision().getName();
-                        country = response.getCountry().getName();
-                    }
-                    if (city != null) {
-                        sb.append(city).append(", ");
-                    }
-                    if (region != null) {
-                        sb.append(region).append(", ");
-                    }
-                    sb.append(country);
-                } else {
-                    CountryResponse response = mmreader.country(address);
-                    sb.append(response.getCountry().getNames().get(locale));
+        try {
+            if (config.getBoolean("database.show-cities", false)) {
+                CityResponse response = mmreader.city(address);
+                if (response == null) {
+                    return;
                 }
-            } catch (AddressNotFoundException ex) {
-                // GeoIP2 API forced this when address not found in their DB. jar will not complied without this.
-                // TODO: Maybe, we can set a new custom msg about addr-not-found in messages.properties.
-                logger.log(Level.INFO, tl("cantReadGeoIpDB") + " " + ex.getLocalizedMessage());
-            } catch (IOException | GeoIp2Exception ex) {
-                // GeoIP2 API forced this when address not found in their DB. jar will not complied without this.
-                logger.log(Level.SEVERE, tl("cantReadGeoIpDB") + " " + ex.getLocalizedMessage());
+                String city;
+                String region;
+                String country;
+                city = response.getCity().getName();
+                region = response.getMostSpecificSubdivision().getName();
+                country = response.getCountry().getName();
+                if (city != null) {
+                    sb.append(city).append(", ");
+                }
+                if (region != null) {
+                    sb.append(region).append(", ");
+                }
+                sb.append(country);
+            } else {
+                CountryResponse response = mmreader.country(address);
+                sb.append(response.getCountry().getName());
             }
+        } catch (AddressNotFoundException ex) {
+            // GeoIP2 API forced this when address not found in their DB. jar will not complied without this.
+            // TODO: Maybe, we can set a new custom msg about addr-not-found in messages.properties.
+            logger.log(Level.INFO, tl("cantReadGeoIpDB") + " " + ex.getLocalizedMessage());
+        } catch (IOException | GeoIp2Exception ex) {
+            // GeoIP2 API forced this when address not found in their DB. jar will not complied without this.
+            logger.log(Level.SEVERE, tl("cantReadGeoIpDB") + " " + ex.getLocalizedMessage());
+        }
         if (config.getBoolean("show-on-whois", true)) {
             u.setGeoLocation(sb.toString());
         }
@@ -121,12 +108,17 @@ public class EssentialsGeoIPPlayerListener implements Listener, IConf {
 
         // detect and update the old config.yml. migrate from legacy GeoIP to GeoIP2.
         if (!config.isSet("enable-locale")) {
-            config.set("database.download-url", "http://geolite.maxmind.com/download/geoip/database/GeoLite2-Country.tar.gz");
-            config.set("database.download-url-city", "http://geolite.maxmind.com/download/geoip/database/GeoLite2-City.tar.gz");
+            config.set("database.download-url", "https://geolite.maxmind.com/download/geoip/database/GeoLite2-Country.tar.gz");
+            config.set("database.download-url-city", "https://geolite.maxmind.com/download/geoip/database/GeoLite2-City.tar.gz");
             config.set("database.update.enable", true);
             config.set("database.update.by-every-x-days", 30);
             config.set("enable-locale", true);
             config.save();
+            // delete old GeoIP.dat fiiles
+            File oldDatFile = new File(dataFolder, "GeoIP.dat");
+            File oldDatFileCity = new File(dataFolder, "GeoIP-City.dat");
+            oldDatFile.delete();
+            oldDatFileCity.delete();
         }
 
         if (config.getBoolean("database.show-cities", false)) {
@@ -149,7 +141,14 @@ public class EssentialsGeoIPPlayerListener implements Listener, IConf {
             }
         }
         try {
-            mmreader = new DatabaseReader.Builder(databaseFile).build();
+            // locale setting
+            if (config.getBoolean("enable-locale")) {
+                // Get geolocation based on Essentials' locale. If the locale is not avaliable, use "en".
+                String locale = ess.getI18n().getCurrentLocale().toString().replace('_', '-');
+                mmreader = new DatabaseReader.Builder(databaseFile).locales(Arrays.asList(locale,"en")).build();
+            } else {
+                mmreader = new DatabaseReader.Builder(databaseFile).build();
+            }
         } catch (IOException ex) {
             logger.log(Level.SEVERE, tl("cantReadGeoIpDB"), ex);
         }
@@ -182,7 +181,7 @@ public class EssentialsGeoIPPlayerListener implements Listener, IConf {
                     String filename;
                     TarInputStream tarInputStream = new TarInputStream(input);
                     TarEntry entry;
-                    while ((entry = (TarEntry) tarInputStream.getNextEntry()) != null) {
+                    while ((entry = tarInputStream.getNextEntry()) != null) {
                         if (!entry.isDirectory()) {
                             filename = entry.getName();
                             if (filename.substring(filename.length() - 5).equalsIgnoreCase(".mmdb")) {
@@ -202,7 +201,6 @@ public class EssentialsGeoIPPlayerListener implements Listener, IConf {
             input.close();
         } catch (MalformedURLException ex) {
             logger.log(Level.SEVERE, tl("geoIpUrlInvalid"), ex);
-            return;
         } catch (IOException ex) {
             logger.log(Level.SEVERE, tl("connectionFailed"), ex);
         }

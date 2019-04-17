@@ -10,14 +10,14 @@ import java.util.logging.Logger;
 import static com.earth2me.essentials.I18n.tl;
 
 
-public class EssentialsConnect {
-    private static final Logger LOGGER = Logger.getLogger("Minecraft");
+class EssentialsConnect {
+    private static final Logger logger = Logger.getLogger("EssentialsProtect");
     private final IEssentials ess;
     private final IProtect protect;
 
-    public EssentialsConnect(Plugin essPlugin, Plugin essProtect) {
+    EssentialsConnect(Plugin essPlugin, Plugin essProtect) {
         if (!essProtect.getDescription().getVersion().equals(essPlugin.getDescription().getVersion())) {
-            LOGGER.log(Level.WARNING, tl("versionMismatchAll"));
+            logger.log(Level.WARNING, tl("versionMismatchAll"));
         }
         ess = (IEssentials) essPlugin;
         protect = (IProtect) essProtect;
@@ -26,7 +26,7 @@ public class EssentialsConnect {
         ess.addReloadListener(pr);
     }
 
-    public IEssentials getEssentials() {
+    IEssentials getEssentials() {
         return ess;
     }
 

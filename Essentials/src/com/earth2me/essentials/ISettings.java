@@ -5,6 +5,7 @@ import com.earth2me.essentials.signs.EssentialsSign;
 import com.earth2me.essentials.textreader.IText;
 
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.event.EventPriority;
 
@@ -94,7 +95,7 @@ public interface ISettings extends IConf {
 
     int getProtectCreeperMaxHeight();
 
-    List<Integer> getProtectList(final String configName);
+    List<Material> getProtectList(final String configName);
 
     boolean getProtectPreventSpawn(final String creatureName);
 
@@ -132,9 +133,12 @@ public interface ISettings extends IConf {
 
     boolean isEcoDisabled();
 
+    @Deprecated
     boolean isTradeInStacks(int id);
 
-    List<Integer> itemSpawnBlacklist();
+    boolean isTradeInStacks(Material type);
+
+    List<Material> itemSpawnBlacklist();
 
     List<EssentialsSign> enabledSigns();
 
@@ -179,6 +183,8 @@ public interface ISettings extends IConf {
     boolean cancelAfkOnMove();
 
     boolean cancelAfkOnInteract();
+
+    boolean sleepIgnoresAfkPlayers();
 
     boolean isAfkListName();
 
@@ -237,6 +243,8 @@ public interface ISettings extends IConf {
     int getMaxNickLength();
 
     boolean ignoreColorsInMaxLength();
+
+    boolean hideDisplayNameInVanish();
 
     int getMaxUserCacheCount();
 
@@ -308,4 +316,17 @@ public interface ISettings extends IConf {
 
     Set<String> getTeleportDelays();
 
+    List<String> getDefaultEnabledConfirmCommands();
+
+    boolean isConfirmCommandEnabledByDefault(String commandName);
+
+    boolean isCompassTowardsHomePerm();
+
+    boolean isAllowWorldInBroadcastworld();
+
+    String getItemDbType();
+
+    boolean isForceEnableRecipe();
+
+    boolean allowOldIdSigns();
 }

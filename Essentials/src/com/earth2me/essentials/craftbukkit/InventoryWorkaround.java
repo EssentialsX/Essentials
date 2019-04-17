@@ -239,4 +239,17 @@ public final class InventoryWorkaround {
             }
         }
     }
+
+    @SuppressWarnings("deprecation")
+    public static void setItemInOffHand(Player p, ItemStack item) {
+        // This assumes that all builds that support a main hand also support an off hand.
+        if (hasMainHandSupport == null || hasMainHandSupport) {
+            try {
+                p.getInventory().setItemInOffHand(item);
+                hasMainHandSupport = true;
+            } catch (Throwable e) {
+                hasMainHandSupport = false;
+            }
+        }
+    }
 }

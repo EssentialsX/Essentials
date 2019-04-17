@@ -20,7 +20,7 @@ public class EssentialsProtectEntityListener implements Listener {
     private final IProtect prot;
     private final IEssentials ess;
 
-    public EssentialsProtectEntityListener(final IProtect prot) {
+    EssentialsProtectEntityListener(final IProtect prot) {
         this.prot = prot;
         this.ess = prot.getEssentialsConnect().getEssentials();
     }
@@ -159,7 +159,7 @@ public class EssentialsProtectEntityListener implements Listener {
         } else if (entity instanceof TNTPrimed && prot.getSettingBool(ProtectConfig.prevent_tnt_explosion)) {
             event.setCancelled(true);
 
-        } else if ((entity instanceof Fireball || entity instanceof SmallFireball) && prot.getSettingBool(ProtectConfig.prevent_fireball_explosion)) {
+        } else if (entity instanceof Fireball && prot.getSettingBool(ProtectConfig.prevent_fireball_explosion)) {
             event.setCancelled(true);
 
         } else if ((entity instanceof WitherSkull) && prot.getSettingBool(ProtectConfig.prevent_witherskull_explosion)) {
@@ -180,7 +180,7 @@ public class EssentialsProtectEntityListener implements Listener {
             return;
         }
         final String creatureName = creature.toString().toLowerCase(Locale.ENGLISH);
-        if (creatureName == null || creatureName.isEmpty()) {
+        if (creatureName.isEmpty()) {
             return;
         }
         if (ess.getSettings().getProtectPreventSpawn(creatureName)) {
@@ -194,7 +194,7 @@ public class EssentialsProtectEntityListener implements Listener {
             return;
         }
         final User user = ess.getUser((Player) event.getTarget());
-        if ((event.getReason() == TargetReason.CLOSEST_PLAYER || event.getReason() == TargetReason.TARGET_ATTACKED_ENTITY || event.getReason() == TargetReason.PIG_ZOMBIE_TARGET || event.getReason() == TargetReason.RANDOM_TARGET || event.getReason() == TargetReason.DEFEND_VILLAGE || event.getReason() == TargetReason.TARGET_ATTACKED_OWNER || event.getReason() == TargetReason.OWNER_ATTACKED_TARGET) && prot.getSettingBool(ProtectConfig.prevent_entitytarget) && !user.isAuthorized("essentials.protect.entitytarget.bypass")) {
+        if ((event.getReason() == TargetReason.CLOSEST_PLAYER || event.getReason() == TargetReason.TARGET_ATTACKED_ENTITY || event.getReason() == TargetReason.TARGET_ATTACKED_NEARBY_ENTITY || event.getReason() == TargetReason.RANDOM_TARGET || event.getReason() == TargetReason.DEFEND_VILLAGE || event.getReason() == TargetReason.TARGET_ATTACKED_OWNER || event.getReason() == TargetReason.OWNER_ATTACKED_TARGET) && prot.getSettingBool(ProtectConfig.prevent_entitytarget) && !user.isAuthorized("essentials.protect.entitytarget.bypass")) {
             event.setCancelled(true);
         }
     }

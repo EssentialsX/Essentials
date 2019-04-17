@@ -2,11 +2,12 @@
 name: Essentials
 main: com.earth2me.essentials.Essentials
 # Note to developers: This next line cannot change, or the automatic versioning system will break.
-version: ${project.version}-b${build.number}
+version: ${full.version}
 website: http://tiny.cc/EssentialsCommands
 description: Provides an essential, core set of commands for Bukkit.
 softdepend: [Vault]
 authors: [Zenexer, ementalo, Aelux, Brettflan, KimKandor, snowleo, ceulemans, Xeology, KHobbits, md_5, Iaccidentally, drtshock, vemacs, SupaHam, md678685]
+api-version: 1.13
 commands:
   afk:
     description: Marks you as away-from-keyboard.
@@ -18,7 +19,7 @@ commands:
     aliases: [eantioch,grenade,egrenade,tnt,etnt]
   back:
     description: Teleports you to your location prior to tp/spawn/warp.
-    usage: /<command>
+    usage: /<command> [player]
     aliases: [eback,return,ereturn]
   backup:
     description: Runs the backup if configured.
@@ -269,7 +270,7 @@ commands:
     aliases: [emsgtoggle]
   mute:
     description: Mutes or unmutes a player.
-    usage: /<command> <player> [datediff]
+    usage: /<command> <player> [datediff] [reason]
     aliases: [emute,silence,esilence]
   near:
     description: Lists the players near by or around a player.
@@ -323,6 +324,10 @@ commands:
     description: Quickly reply to the last player to message you.
     usage: /<command> <message>
     aliases: [er,reply,ereply]
+  rtoggle:
+    description: Change whether the recipient of the reply is last recipient or last sender
+    usage: /<command> [player] [on|off]
+    aliases: [ertoggle, replytoggle, ereplytoggle]
   realname:
     description: Displays the username of a user based on nick.
     usage: /<command> <nickname>
@@ -443,6 +448,10 @@ commands:
     description: Teleport all online players to another player.
     usage: /<command> <player>
     aliases: [etpall]
+  tpauto:
+    description: Automatically accept teleportation requests.
+    usage: /<command> <player>
+    aliases: [etpauto]
   tpacancel:
     description: Cancel all outstanding teleport requests. Specify [player] to cancel requests with them.
     usage: /<command> [player]
@@ -535,3 +544,8 @@ permissions:
       essentials.gamemode: true
       essentials.gamemode.others: true
       essentials.gamemode.all: true
+  essentials.seen.extra:
+    default: op
+    children:
+      essentials.seen.ip: true
+      essentials.seen.location: true
