@@ -538,6 +538,9 @@ default-enabled-confirm-commands:
 #- pay
 #- clearinventory
 
+# Whether or not to teleport a player back to their previous position after they have been freed from jail.
+teleport-back-when-freed-from-jail: true
+
 # Set the timeout, in seconds for players to accept a tpa before the request is cancelled.
 # Set to 0 for no timeout.
 tpa-accept-cancellation: 120

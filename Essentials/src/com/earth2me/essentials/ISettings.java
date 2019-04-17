@@ -315,6 +315,8 @@ public interface ISettings extends IConf {
 
     boolean isConfirmCommandEnabledByDefault(String commandName);
 
+    boolean isTeleportBackWhenFreedFromJail();
+
     boolean isCompassTowardsHomePerm();
 
     boolean isAllowWorldInBroadcastworld();
