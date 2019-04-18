@@ -537,6 +537,7 @@ public class Settings implements net.ess3.api.ISettings {
         currencyFormat = _getCurrencyFormat();
         unprotectedSigns = _getUnprotectedSign();
         defaultEnabledConfirmCommands = _getDefaultEnabledConfirmCommands();
+        teleportBackWhenFreedFromJail = _isTeleportBackWhenFreedFromJail();
         isCompassTowardsHomePerm = _isCompassTowardsHomePerm();
         isAllowWorldInBroadcastworld = _isAllowWorldInBroadcastworld();
         itemDbType = _getItemDbType();
@@ -1472,6 +1473,17 @@ public class Settings implements net.ess3.api.ISettings {
     @Override
     public boolean isConfirmCommandEnabledByDefault(String commandName) {
         return getDefaultEnabledConfirmCommands().contains(commandName.toLowerCase());
+    }
+
+    private boolean teleportBackWhenFreedFromJail;
+
+    private boolean _isTeleportBackWhenFreedFromJail() {
+        return config.getBoolean("teleport-back-when-freed-from-jail", true);
+    }
+
+    @Override
+    public boolean isTeleportBackWhenFreedFromJail() {
+        return teleportBackWhenFreedFromJail;
     }
 
     private boolean isCompassTowardsHomePerm;

@@ -9,13 +9,7 @@ import com.earth2me.essentials.utils.LocationUtil;
 import com.earth2me.essentials.utils.MaterialUtil;
 import io.papermc.lib.PaperLib;
 import net.ess3.api.IEssentials;
-
-import org.bukkit.BanEntry;
-import org.bukkit.BanList;
-import org.bukkit.GameMode;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.World;
+import org.bukkit.*;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
@@ -36,11 +30,7 @@ import org.bukkit.inventory.PlayerInventory;
 
 import java.io.IOException;
 import java.text.NumberFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Locale;
+import java.util.*;
 import java.util.Map.Entry;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -59,10 +49,15 @@ public class EssentialsPlayerListener implements Listener {
 
     public void registerEvents() {
         ess.getServer().getPluginManager().registerEvents(this, ess);
+
         if (isEntityPickupEvent()) {
-            ess.getServer().getPluginManager().registerEvents(new PlayerListener1_12(), ess);
+            ess.getServer().getPluginManager().registerEvents(new PickupListener1_12(), ess);
         } else {
-            ess.getServer().getPluginManager().registerEvents(new PlayerListenerPre1_12(), ess);
+            ess.getServer().getPluginManager().registerEvents(new PickupListenerPre1_12(), ess);
+        }
+
+        if (isCommandSendEvent()) {
+            ess.getServer().getPluginManager().registerEvents(new CommandSendListener(), ess);
         }
     }
 
@@ -185,7 +180,7 @@ public class EssentialsPlayerListener implements Listener {
             }
         }
 
-        user.updateActivityOnInteract(false);
+        user.updateActivity(false);
         if (!user.isHidden()) {
             user.setLastLogout(System.currentTimeMillis());
         }
@@ -223,7 +218,7 @@ public class EssentialsPlayerListener implements Listener {
 
         final long currentTime = System.currentTimeMillis();
         dUser.checkMuteTimeout(currentTime);
-        dUser.updateActivityOnInteract(false);
+        dUser.updateActivity(false);
         dUser.stopTransaction();
 
         class DelayJoinTask implements Runnable {
@@ -675,7 +670,7 @@ public class EssentialsPlayerListener implements Listener {
                 class PowerToolUseTask implements Runnable {
                     @Override
                     public void run() {
-                        user.getServer().dispatchCommand(user.getBase(), command);
+                        user.getBase().chat("/" + command);
                         LOGGER.log(Level.INFO, String.format("[PT] %s issued server command: /%s", user.getName(), command));
                     }
                 }
@@ -807,8 +802,16 @@ public class EssentialsPlayerListener implements Listener {
         }
     }
 
-    private final class PlayerListenerPre1_12 implements Listener {
+    private static boolean isCommandSendEvent() {
+        try {
+            Class.forName("org.bukkit.event.player.PlayerCommandSendEvent");
+            return true;
+        } catch (ClassNotFoundException ignored) {
+            return false;
+        }
+    }
 
+    private final class PickupListenerPre1_12 implements Listener {
         @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
         public void onPlayerPickupItem(final org.bukkit.event.player.PlayerPickupItemEvent event) {
             if (ess.getSettings().getDisableItemPickupWhileAfk()) {
@@ -819,8 +822,7 @@ public class EssentialsPlayerListener implements Listener {
         }
     }
 
-    private final class PlayerListener1_12 implements Listener {
-
+    private final class PickupListener1_12 implements Listener {
         @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
         public void onPlayerPickupItem(final org.bukkit.event.entity.EntityPickupItemEvent event) {
             if (ess.getSettings().getDisableItemPickupWhileAfk() && event.getEntity() instanceof Player) {
@@ -828,6 +830,38 @@ public class EssentialsPlayerListener implements Listener {
                     event.setCancelled(true);
                 }
             }
+        }
+    }
+
+    private final class CommandSendListener implements Listener {
+        @EventHandler(priority = EventPriority.NORMAL)
+        public void onCommandSend(final PlayerCommandSendEvent event) {
+            User user = ess.getUser(event.getPlayer());
+
+            ArrayList<String> removedCmds = new ArrayList<>(event.getCommands());
+
+            event.getCommands().removeIf(str -> shouldHideFromUser(str, user));
+
+            if (ess.getSettings().isDebug()) {
+                removedCmds.removeAll(event.getCommands());
+                ess.getLogger().info("Removed commands: " + removedCmds.toString());
+            }
+        }
+
+        /**
+         * Returns true if all of the following are true:
+         *   - The command is a plugin command
+         *   - The plugin command is from Essentials
+         *   - There is no known alternative OR the alternative is overridden by Essentials
+         *   - The user is not allowed to perform the given Essentials command
+         */
+        private boolean shouldHideFromUser(String commandLabel, User user) {
+            PluginCommand command = ess.getServer().getPluginCommand(commandLabel);
+
+            return command != null
+                && command.getPlugin().getName().equals("Essentials")
+                && (ess.getSettings().isCommandOverridden(commandLabel) || (ess.getAlternativeCommandsHandler().getAlternative(commandLabel) == null))
+                && !user.isAuthorized("essentials." + command.getName());
         }
     }
 }

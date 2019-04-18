@@ -1,33 +1,113 @@
 package com.earth2me.essentials.items;
 
-import com.earth2me.essentials.Essentials;
 import com.earth2me.essentials.IConf;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.MaterialUtil;
-import com.earth2me.essentials.utils.StringUtil;
 import com.earth2me.essentials.utils.VersionUtil;
-import org.bukkit.Color;
-import org.bukkit.DyeColor;
-import org.bukkit.FireworkEffect;
-import org.bukkit.Material;
+import net.ess3.api.IEssentials;
+import net.ess3.api.PluginKey;
+import org.bukkit.*;
 import org.bukkit.block.Banner;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.*;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.potion.Potion;
 import org.bukkit.potion.PotionEffect;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-import java.util.Set;
+import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import static com.earth2me.essentials.I18n.tl;
 
 public abstract class AbstractItemDb implements IConf, net.ess3.api.IItemDb {
 
+    protected final IEssentials ess;
     protected boolean ready = false;
+
+    private Map<PluginKey, ItemResolver> resolverMap = new HashMap<>();
+
+    AbstractItemDb(IEssentials ess) {
+        this.ess = ess;
+    }
+
+    @Override
+    public void registerResolver(Plugin plugin, String name, ItemResolver resolver) throws Exception {
+        PluginKey key = PluginKey.fromKey(plugin, name);
+        if (resolverMap.containsKey(key)) {
+            throw new Exception("Tried to add a duplicate resolver with name " + key.toString());
+        }
+
+        resolverMap.put(key, resolver);
+    }
+
+    @Override
+    public void unregisterResolver(Plugin plugin, String name) throws Exception {
+        PluginKey key = PluginKey.fromKey(plugin, name);
+        if (!resolverMap.containsKey(key)) {
+            throw new Exception("Tried to remove nonexistent resolver with name " + key.toString());
+        }
+
+        resolverMap.remove(key);
+    }
+
+    @Override
+    public boolean isResolverPresent(Plugin plugin, String name) {
+        return resolverMap.containsKey(PluginKey.fromKey(plugin, name));
+    }
+
+    @Override
+    public Map<PluginKey, ItemResolver> getResolvers() {
+        return new HashMap<>(resolverMap);
+    }
+
+    @Override
+    public Map<PluginKey, ItemResolver> getResolvers(Plugin plugin) {
+        Map<PluginKey, ItemResolver> matchingResolvers = new HashMap<>();
+        for (PluginKey key : resolverMap.keySet()) {
+            if (key.getPlugin().equals(plugin)) {
+                matchingResolvers.put(key, resolverMap.get(key));
+            }
+        }
+
+        return matchingResolvers;
+    }
+
+    @Override
+    public ItemResolver getResolver(Plugin plugin, String name) {
+        return resolverMap.get(PluginKey.fromKey(plugin, name));
+    }
+
+    @Override
+    public ItemStack get(String id) throws Exception {
+        return get(id, true);
+    }
+
+    ItemStack tryResolvers(String id) {
+        for (PluginKey key : resolverMap.keySet()) {
+            if (ess.getSettings().isDebug()) {
+                ess.getLogger().info(String.format("Trying resolver '%s' for item '%s'...", key, id));
+            }
+
+            Function<String, ItemStack> resolver = resolverMap.get(key);
+            ItemStack stack = resolver.apply(id);
+
+            if (stack != null) {
+                return stack;
+            }
+        }
+
+        return null;
+    }
+
+    Collection<String> getResolverNames() {
+        return resolverMap.values().stream()
+            .map(ItemResolver::getNames)
+            .flatMap(Collection::stream)
+            .collect(Collectors.toList());
+    }
 
     @Override
     public List<ItemStack> getMatching(User user, String[] args) throws Exception {

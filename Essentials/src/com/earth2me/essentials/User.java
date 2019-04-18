@@ -522,12 +522,14 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
                 setJailed(false);
                 sendMessage(tl("haveBeenReleased"));
                 setJail(null);
-                try {
-                    getTeleport().back();
-                } catch (Exception ex) {
+                if (ess.getSettings().isTeleportBackWhenFreedFromJail()) {
                     try {
-                        getTeleport().respawn(null, TeleportCause.PLUGIN);
-                    } catch (Exception ex1) {
+                        getTeleport().back();
+                    } catch (Exception ex) {
+                        try {
+                            getTeleport().respawn(null, TeleportCause.PLUGIN);
+                        } catch (Exception ex1) {
+                        }
                     }
                 }
                 return true;
