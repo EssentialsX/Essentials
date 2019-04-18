@@ -180,7 +180,7 @@ public class EssentialsPlayerListener implements Listener {
             }
         }
 
-        user.updateActivityOnInteract(false);
+        user.updateActivity(false);
         if (!user.isHidden()) {
             user.setLastLogout(System.currentTimeMillis());
         }
@@ -218,7 +218,7 @@ public class EssentialsPlayerListener implements Listener {
 
         final long currentTime = System.currentTimeMillis();
         dUser.checkMuteTimeout(currentTime);
-        dUser.updateActivityOnInteract(false);
+        dUser.updateActivity(false);
         dUser.stopTransaction();
 
         class DelayJoinTask implements Runnable {
