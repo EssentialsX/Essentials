@@ -3,6 +3,8 @@ package com.earth2me.essentials.signs;
 import com.earth2me.essentials.User;
 import net.ess3.api.IEssentials;
 
+import static com.earth2me.essentials.I18n.tl;
+
 
 public class SignDisposal extends EssentialsSign {
     public SignDisposal() {
