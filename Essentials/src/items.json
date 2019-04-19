@@ -556,7 +556,6 @@
     "lpressureplate": "birch_pressure_plate",
     "lpressplate": "birch_pressure_plate",
     "lpplate": "birch_pressure_plate",
-    "lplate": "leather_chestplate",
     "whitepressureplate": "birch_pressure_plate",
     "whitepressplate": "birch_pressure_plate",
     "whitepplate": "birch_pressure_plate",
@@ -2857,7 +2856,7 @@
     "diamondtunic": "diamond_chestplate",
     "dchestplate": "diamond_chestplate",
     "dplatebody": "diamond_chestplate",
-    "dplate": "spruce_pressure_plate",
+    "dplate": "diamond_chestplate",
     "dshirt": "diamond_chestplate",
     "dtunic": "diamond_chestplate",
     "diamond_helmet": {
@@ -5161,7 +5160,6 @@
     "steeltunic": "iron_chestplate",
     "schestplate": "iron_chestplate",
     "splatebody": "iron_chestplate",
-    "splate": "stone_pressure_plate",
     "sshirt": "iron_chestplate",
     "stunic": "iron_chestplate",
     "stchestplate": "iron_chestplate",
@@ -5761,6 +5759,7 @@
     "leathertunic": "leather_chestplate",
     "lchestplate": "leather_chestplate",
     "lplatebody": "leather_chestplate",
+    "lplate": "leather_chestplate",
     "lshirt": "leather_chestplate",
     "ltunic": "leather_chestplate",
     "leather_helmet": {
@@ -7998,6 +7997,7 @@
         "material": "OAK_LOG"
     },
     "oaklog": "oak_log",
+    "": "oak_log",
     "log": "oak_log",
     "trunk": "oak_log",
     "tree": "oak_log",
@@ -9911,9 +9911,6 @@
     "sprucepressplate": "spruce_pressure_plate",
     "sprucepplate": "spruce_pressure_plate",
     "spruceplate": "spruce_pressure_plate",
-    "spressureplate": "stone_pressure_plate",
-    "spressplate": "stone_pressure_plate",
-    "spplate": "stone_pressure_plate",
     "spruce_sapling": {
         "material": "SPRUCE_SAPLING"
     },
@@ -10244,6 +10241,10 @@
     "stonepressplate": "stone_pressure_plate",
     "stonepplate": "stone_pressure_plate",
     "stoneplate": "stone_pressure_plate",
+    "spressureplate": "stone_pressure_plate",
+    "spressplate": "stone_pressure_plate",
+    "spplate": "stone_pressure_plate",
+    "splate": "stone_pressure_plate",
     "smoothstonepressueplate": "stone_pressure_plate",
     "smoothstonepressplate": "stone_pressure_plate",
     "smoothstonepplate": "stone_pressure_plate",
@@ -10252,7 +10253,6 @@
     "sstonepressplate": "stone_pressure_plate",
     "sstonepplate": "stone_pressure_plate",
     "sstoneplate": "stone_pressure_plate",
-    "smoothstonepressureplate": "stone_pressure_plate",
     "stone_shovel": {
         "material": "STONE_SHOVEL"
     },
