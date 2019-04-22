@@ -982,26 +982,6 @@ public class Settings implements net.ess3.api.ISettings {
         return config.getBoolean("disable-item-pickup-while-afk", false);
     }
 
-    @Override
-    public boolean isAllowedJailBlockBreak() {
-        return config.getBoolean("jail.allow-block-break");
-    }
-
-    @Override
-    public boolean isAllowedJailBlockDamage() {
-        return config.getBoolean("jail.allow-block-damage");
-    }
-
-    @Override
-    public boolean isAllowedJailBlockPlace() {
-        return config.getBoolean("jail.allow-block-place");
-    }
-
-    @Override
-    public boolean isAllowedJailInteract() {
-        return config.getBoolean("jail.allow-interact");
-    }
-
     private EventPriority getPriority(String priority) {
         if ("none".equals(priority)) {
             return null;

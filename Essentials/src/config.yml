@@ -811,27 +811,6 @@ protect:
       thunder: false
       lightning: false
 
-############################################################
-# +------------------------------------------------------+ #
-# |                   Essentials Jails                   | #
-# +------------------------------------------------------+ #
-############################################################
-
-# If you aren't careful with these settings, you may allow a player to do something in their jail
-# that would lead to their escape.
-
-jail:
-  # Should jailed players be allowed to break blocks in their jail?
-  allow-block-break: false
-
-  # Should jailed players be allowed to damage blocks in their jail?
-  allow-block-damage: false
-
-  # Should jailed players be allowed to place blocks in their jail?
-  allow-block-place: false
-
-  # Should jailed players be allowed to interact with blocks in their jail?
-  allow-interact: false
 
 ############################################################
 # +------------------------------------------------------+ #

@@ -317,14 +317,6 @@ public interface ISettings extends IConf {
 
     boolean isTeleportBackWhenFreedFromJail();
 
-    boolean isAllowedJailBlockBreak() ;
-
-    boolean isAllowedJailBlockDamage();
-
-    boolean isAllowedJailBlockPlace();
-
-    boolean isAllowedJailInteract();
-
     boolean isCompassTowardsHomePerm();
 
     boolean isAllowWorldInBroadcastworld();
