@@ -15,10 +15,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 
 import java.io.*;
-import java.net.InetAddress;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLConnection;
+import java.net.*;
 import java.util.logging.Level;
 import java.util.Date;
 import java.util.logging.Logger;
@@ -58,6 +55,8 @@ public class EssentialsGeoIPPlayerListener implements Listener, IConf {
         }
         InetAddress address = player.getAddress().getAddress();
         StringBuilder sb = new StringBuilder();
+
+
         try {
             if (config.getBoolean("database.show-cities", false)) {
                 CityResponse response = mmreader.city(address);
@@ -82,6 +81,16 @@ public class EssentialsGeoIPPlayerListener implements Listener, IConf {
                 sb.append(response.getCountry().getName());
             }
         } catch (AddressNotFoundException ex) {
+
+            if (checkIfLocal(address)) {
+                for (Player online : player.getServer().getOnlinePlayers()) {
+                    User user = ess.getUser(online);
+                    if (user.isAuthorized("essentials.geoip.show")) {
+                        user.sendMessage(tl("geoipCantFind", u.getDisplayName()));
+                    }
+                }
+                return;
+            }
             // GeoIP2 API forced this when address not found in their DB. jar will not complied without this.
             // TODO: Maybe, we can set a new custom msg about addr-not-found in messages.properties.
             logger.log(Level.INFO, tl("cantReadGeoIpDB") + " " + ex.getLocalizedMessage());
@@ -203,6 +212,19 @@ public class EssentialsGeoIPPlayerListener implements Listener, IConf {
             logger.log(Level.SEVERE, tl("geoIpUrlInvalid"), ex);
         } catch (IOException ex) {
             logger.log(Level.SEVERE, tl("connectionFailed"), ex);
+        }
+    }
+
+    private boolean checkIfLocal(InetAddress address) {
+        if (address.isAnyLocalAddress() || address.isLoopbackAddress()) {
+            return true;
+        }
+
+        // Double checks if address is defined on any interface
+        try {
+            return NetworkInterface.getByInetAddress(address) != null;
+        } catch (SocketException e) {
+            return false;
         }
     }
 }
