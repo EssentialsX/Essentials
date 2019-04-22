@@ -4,7 +4,7 @@ package com.earth2me.essentials.protect;
 public enum ProtectConfig {
     disable_contactdmg("protect.disable.contactdmg", false),
     disable_lavadmg("protect.disable.lavadmg", false),
-    disable_lavaitemdmg("protect.disable.lavaitemdmg", false),
+    disable_lavaitemdmg("protect.disable.lava-itemdamage", false),
     disable_pvp("protect.disable.pvp", false),
     disable_projectiles("protect.disable.projectiles", false),
     disable_fall("protect.disable.fall", false),
