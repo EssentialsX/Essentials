@@ -709,6 +709,7 @@ protect:
   # General physics/behavior modifications.
   prevent:
     lava-flow: false
+    lava-itemdamage: false
     water-flow: false
     water-bucket-flow: false
     fire-spread: true
@@ -718,18 +719,23 @@ protect:
     portal-creation: false
     tnt-explosion: false
     tnt-playerdamage: false
+    tnt-itemdamage: false
     tnt-minecart-explosion: false
     tnt-minecart-playerdamage: false
+    tnt-minecart-itemdamage: false
     fireball-explosion: false
     fireball-fire: false
     fireball-playerdamage: false
+    fireball-itemdamage: false
     witherskull-explosion: false
     witherskull-playerdamage: false
+    witherskull-itemdamage: false
     wither-spawnexplosion: false
     wither-blockreplace: false
     creeper-explosion: false
     creeper-playerdamage: false
     creeper-blockdamage: false
+    creeper-itemdamage: false
     enderdragon-blockdamage: true
     enderman-pickup: false
     villager-death: false
