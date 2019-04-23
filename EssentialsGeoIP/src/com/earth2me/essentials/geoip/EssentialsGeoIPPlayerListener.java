@@ -86,7 +86,7 @@ public class EssentialsGeoIPPlayerListener implements Listener, IConf {
                 for (Player online : player.getServer().getOnlinePlayers()) {
                     User user = ess.getUser(online);
                     if (user.isAuthorized("essentials.geoip.show")) {
-                        user.sendMessage(tl("geoipCantFind", u.getDisplayName()));
+                        user.sendTl("geoipCantFind", u.getDisplayName());
                     }
                 }
                 return;
@@ -105,7 +105,7 @@ public class EssentialsGeoIPPlayerListener implements Listener, IConf {
             for (Player onlinePlayer : player.getServer().getOnlinePlayers()) {
                 User user = ess.getUser(onlinePlayer);
                 if (user.isAuthorized("essentials.geoip.show")) {
-                    user.sendMessage(tl("geoipJoinFormat", u.getDisplayName(), sb.toString()));
+                    user.sendTl("geoipJoinFormat", u.getDisplayName(), sb.toString());
                 }
             }
         }

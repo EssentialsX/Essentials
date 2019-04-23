@@ -1,5 +1,8 @@
 package com.earth2me.essentials.utils;
 
+import com.earth2me.essentials.CommandSource;
+import org.bukkit.Bukkit;
+
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.regex.Matcher;
@@ -120,23 +123,47 @@ public class DateUtil {
     }
 
     public static String formatDateDiff(long date) {
+        return formatDateDiff(new CommandSource(Bukkit.getConsoleSender()), date);
+    }
+
+    public static String formatDateDiff(CommandSource sender, long date) {
         Calendar c = new GregorianCalendar();
         c.setTimeInMillis(date);
         Calendar now = new GregorianCalendar();
-        return DateUtil.formatDateDiff(now, c);
+        return DateUtil.formatDateDiff(sender, now, c);
     }
 
+    /**
+     * @deprecated Use {@link #formatDateDiff(CommandSource, Calendar, Calendar)}
+     */
+    @Deprecated
     public static String formatDateDiff(Calendar fromDate, Calendar toDate) {
+        return formatDateDiff(new CommandSource(Bukkit.getConsoleSender()), fromDate, toDate);
+    }
+
+    public static String formatDateDiff(CommandSource sender, Calendar fromDate, Calendar toDate) {
         boolean future = false;
         if (toDate.equals(fromDate)) {
-            return tl("now");
+            return sender.tl("now");
         }
         if (toDate.after(fromDate)) {
             future = true;
         }
         StringBuilder sb = new StringBuilder();
         int[] types = new int[]{Calendar.YEAR, Calendar.MONTH, Calendar.DAY_OF_MONTH, Calendar.HOUR_OF_DAY, Calendar.MINUTE, Calendar.SECOND};
-        String[] names = new String[]{tl("year"), tl("years"), tl("month"), tl("months"), tl("day"), tl("days"), tl("hour"), tl("hours"), tl("minute"), tl("minutes"), tl("second"), tl("seconds")};
+        String[] names = new String[]{
+            sender.tl("year"),
+            sender.tl("years"),
+            sender.tl("month"),
+            sender.tl("months"),
+            sender.tl("day"),
+            sender.tl("days"),
+            sender.tl("hour"),
+            sender.tl("hours"),
+            sender.tl("minute"),
+            sender.tl("minutes"),
+            sender.tl("second"),
+            sender.tl("seconds")};
         int accuracy = 0;
         for (int i = 0; i < types.length; i++) {
             if (accuracy > 2) {
@@ -149,7 +176,7 @@ public class DateUtil {
             }
         }
         if (sb.length() == 0) {
-            return tl("now");
+            return sender.tl("now");
         }
         return sb.toString().trim();
     }

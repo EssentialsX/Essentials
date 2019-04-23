@@ -24,7 +24,11 @@ public class Commanddelkit extends EssentialsCommand {
     public void run(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception {
         if (args.length < 1) {
             final String kitList = ess.getKits().listKits(ess, null);
-            sender.sendMessage(kitList.length() > 0 ? tl("kits", kitList) : tl("noKits"));
+            if (kitList.length() > 0) {
+                sender.sendTl("kits", kitList);
+            } else {
+                sender.sendTl("noKits");
+            }
             throw new NoChargeException();
         } else {
             final String kitName = args[0];
@@ -35,7 +39,7 @@ public class Commanddelkit extends EssentialsCommand {
             }
 
             ess.getKits().removeKit(kitName);
-            sender.sendMessage(tl("deleteKit", kit));
+            sender.sendTl("deleteKit", kit);
         }
     }
 }

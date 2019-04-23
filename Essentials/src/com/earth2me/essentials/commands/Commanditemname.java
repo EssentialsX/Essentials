@@ -25,7 +25,7 @@ public class Commanditemname extends EssentialsCommand {
     protected void run(Server server, User user, String commandLabel, String[] args) throws Exception {
         ItemStack item = user.getBase().getItemInHand();
         if (item.getType().name().contains("AIR")) {
-            user.sendMessage(tl("itemnameInvalidItem", item.getType().toString().toLowerCase(Locale.ENGLISH).replace('_', ' ')));
+            user.sendTl("itemnameInvalidItem", item.getType().toString().toLowerCase(Locale.ENGLISH).replace('_', ' '));
             return;
         }
 
@@ -35,6 +35,11 @@ public class Commanditemname extends EssentialsCommand {
         ItemMeta im = item.getItemMeta();
         im.setDisplayName(name);
         item.setItemMeta(im);
-        user.sendMessage(name == null ? tl("itemnameClear") : tl("itemnameSuccess", name));
+
+        if (name == null) {
+            user.sendTl("itemnameClear");
+        } else {
+            user.sendTl("itemnameSuccess", name);
+        }
     }
 }

@@ -19,8 +19,6 @@ import org.bukkit.scheduler.BukkitRunnable;
 import java.util.*;
 import java.util.function.Supplier;
 
-import static com.earth2me.essentials.I18n.tl;
-
 // This command has 4 undocumented behaviours #EasterEgg
 public class Commandessentials extends EssentialsCommand {
 
@@ -135,7 +133,7 @@ public class Commandessentials extends EssentialsCommand {
             disabledCommands.append(entry.getKey()).append(" => ").append(entry.getValue());
         }
         if (disabledCommands.length() > 0) {
-            sender.sendMessage(tl("blockList"));
+            sender.sendTl("blockList");
             sender.sendMessage(disabledCommands.toString());
         } else {
             sender.sendMessage(tl("blockListEmpty"));
@@ -161,7 +159,7 @@ public class Commandessentials extends EssentialsCommand {
     // Reloads all reloadable configs.
     private void runReload(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception {
         ess.reload();
-        sender.sendMessage(tl("essentialsReload", ess.getDescription().getVersion()));
+        sender.sendTl("essentialsReload", ess.getDescription().getVersion());
     }
 
     // Pop tarts.
@@ -205,7 +203,7 @@ public class Commandessentials extends EssentialsCommand {
             throw new Exception("/<command> cleanup <days> [money] [homes]");
         }
 
-        sender.sendMessage(tl("cleaning"));
+        sender.sendTl("cleaning");
 
         final long daysArg = Long.parseLong(args[1]);
         final double moneyArg = args.length >= 3 ? FloatUtil.parseDouble(args[2].replaceAll("[^0-9\\.]", "")) : 0;
@@ -247,7 +245,7 @@ public class Commandessentials extends EssentialsCommand {
 
                 user.reset();
             }
-            sender.sendMessage(tl("cleaned"));
+            sender.sendTl("cleaned");
         });
 
     }
@@ -311,8 +309,8 @@ public class Commandessentials extends EssentialsCommand {
         final PluginManager pm = server.getPluginManager();
         final String essVer = pm.getPlugin("Essentials").getDescription().getVersion();
 
-        sender.sendMessage(tl(isServerSupported ? "versionOutputFine" : "versionOutputWarn", "Server", server.getBukkitVersion() + " " + server.getVersion()));
-        sender.sendMessage(tl("versionOutputFine", "EssentialsX", essVer));
+        sender.sendTl(isServerSupported ? "versionOutputFine" : "versionOutputWarn", "Server", server.getBukkitVersion() + " " + server.getVersion());
+        sender.sendTl("versionOutputFine", "EssentialsX", essVer);
 
         for (Plugin plugin : pm.getPlugins()) {
             final PluginDescriptionFile desc = plugin.getDescription();
@@ -325,22 +323,22 @@ public class Commandessentials extends EssentialsCommand {
 
                     if (!version.equalsIgnoreCase(essVer)) {
                         isMismatched = true;
-                        sender.sendMessage(tl("versionOutputWarn", name, version));
+                        sender.sendTl("versionOutputWarn", name, version);
                     } else {
-                        sender.sendMessage(tl("versionOutputFine", name, version));
+                        sender.sendTl("versionOutputFine", name, version);
                     }
                 } else {
-                    sender.sendMessage(tl("versionOutputUnsupported", name, version));
+                    sender.sendTl("versionOutputUnsupported", name, version);
                     isUnsupported = true;
                 }
             }
 
             if (versionPlugins.contains(name)) {
                 if (warnPlugins.contains(name)) {
-                    sender.sendMessage(tl("versionOutputUnsupported", name, version));
+                    sender.sendTl("versionOutputUnsupported", name, version);
                     isUnsupported = true;
                 } else {
-                    sender.sendMessage(tl("versionOutputFine", name, version));
+                    sender.sendTl("versionOutputFine", name, version);
                 }
             }
 
@@ -348,19 +346,19 @@ public class Commandessentials extends EssentialsCommand {
         }
 
         if (isMismatched) {
-            sender.sendMessage(tl("versionMismatchAll"));
+            sender.sendTl("versionMismatchAll");
         }
 
         if (!isVaultInstalled) {
-            sender.sendMessage(tl("versionOutputVaultMissing"));
+            sender.sendTl("versionOutputVaultMissing");
         }
 
         if (isUnsupported) {
-            sender.sendMessage(tl("versionOutputUnsupportedPlugins"));
+            sender.sendTl("versionOutputUnsupportedPlugins");
         }
 
         if (!VersionUtil.isServerSupported()) {
-            sender.sendMessage(tl("serverUnsupported"));
+            sender.sendTl("serverUnsupported");
         }
     }
 

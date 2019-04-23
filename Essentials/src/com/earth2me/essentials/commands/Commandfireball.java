@@ -56,7 +56,7 @@ public class Commandfireball extends EssentialsCommand {
         }
 
         if (!user.isAuthorized("essentials.fireball." + type)) {
-            throw new Exception(tl("noPerm", "essentials.fireball." + type));
+            throw new Exception(user.tl("noPerm", "essentials.fireball." + type));
         }
 
         final Vector direction = user.getBase().getEyeLocation().getDirection().multiply(speed);

@@ -10,8 +10,6 @@ import org.bukkit.event.player.PlayerTeleportEvent;
 import java.util.Collections;
 import java.util.List;
 
-import static com.earth2me.essentials.I18n.tl;
-
 
 public class Commandtpa extends EssentialsCommand {
     public Commandtpa() {
@@ -29,23 +27,23 @@ public class Commandtpa extends EssentialsCommand {
             throw new NotEnoughArgumentsException();
         }
         if (!player.isTeleportEnabled()) {
-            throw new Exception(tl("teleportDisabled", player.getDisplayName()));
+            throw new Exception(user.tl("teleportDisabled", player.getDisplayName()));
         }
         if (user.getWorld() != player.getWorld() && ess.getSettings().isWorldTeleportPermissions() && !user.isAuthorized("essentials.worlds." + player.getWorld().getName())) {
-            throw new Exception(tl("noPerm", "essentials.worlds." + player.getWorld().getName()));
+            throw new Exception(user.tl("noPerm", "essentials.worlds." + player.getWorld().getName()));
         }
         // Don't let sender request teleport twice to the same player.
         if (user.getConfigUUID().equals(player.getTeleportRequest()) && player.hasOutstandingTeleportRequest() // Check timeout
             && !player.isTpRequestHere()) { // Make sure the last teleport request was actually tpa and not tpahere
-            throw new Exception(tl("requestSentAlready", player.getDisplayName()));
+            throw new Exception(user.tl("requestSentAlready", player.getDisplayName()));
         }
         if (player.isAutoTeleportEnabled() && !player.isIgnoredPlayer(user)) {
             final Trade charge = new Trade(this.getName(), ess);
             Teleport teleport = user.getTeleport();
             teleport.setTpType(Teleport.TeleportType.TPA);
             teleport.teleport(player.getBase(), charge, PlayerTeleportEvent.TeleportCause.COMMAND);
-            player.sendMessage(tl("requestAcceptedAuto", user.getDisplayName()));
-            user.sendMessage(tl("requestAcceptedFromAuto", player.getDisplayName()));
+            player.sendTl("requestAcceptedAuto", user.getDisplayName());
+            user.sendTl("requestAcceptedFromAuto", player.getDisplayName());
             return;
         }
 
@@ -56,16 +54,16 @@ public class Commandtpa extends EssentialsCommand {
                 throw new Exception(tl("teleportRequestCancelled", player.getDisplayName()));
             }
             player.requestTeleport(user, false);
-            player.sendMessage(tl("teleportRequest", user.getDisplayName()));
-            player.sendMessage(tl("typeTpaccept"));
-            player.sendMessage(tl("typeTpdeny"));
+            player.sendTl("teleportRequest", user.getDisplayName());
+            player.sendTl("typeTpaccept");
+            player.sendTl("typeTpdeny");
             if (ess.getSettings().getTpaAcceptCancellation() != 0) {
-                player.sendMessage(tl("teleportRequestTimeoutInfo", ess.getSettings().getTpaAcceptCancellation()));
+                player.sendTl("teleportRequestTimeoutInfo", ess.getSettings().getTpaAcceptCancellation());
             }
         }
-        user.sendMessage(tl("requestSent", player.getDisplayName()));
+        user.sendTl("requestSent", player.getDisplayName());
         if (user.isAuthorized("essentials.tpacancel")) {
-            user.sendMessage(tl("typeTpacancel"));
+            user.sendTl("typeTpacancel");
         }
     }
 

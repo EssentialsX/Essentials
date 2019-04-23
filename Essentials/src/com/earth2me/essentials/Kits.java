@@ -97,7 +97,7 @@ public class Kits implements IConf {
                     String name = capitalCase(kitItem);
                     BigDecimal costPrice = new Trade("kit-" + kitItem.toLowerCase(Locale.ENGLISH), ess).getCommandCost(user);
                     if (costPrice.signum() > 0) {
-                        cost = tl("kitCost", NumberUtil.displayCurrency(costPrice, ess));
+                        cost = user.tl( "kitCost", NumberUtil.displayCurrency(costPrice, ess));
                     }
 
                     Kit kit = new Kit(kitItem, ess);
@@ -105,7 +105,7 @@ public class Kits implements IConf {
                     if (nextUse == -1 && ess.getSettings().isSkippingUsedOneTimeKitsFromKitList()) {
                         continue;
                     } else if (nextUse != 0) {
-                        name = tl("kitDelay", name);
+                        name = user.tl( "kitDelay", name);
                     }
 
                     list.append(" ").append(name).append(cost);
@@ -113,7 +113,7 @@ public class Kits implements IConf {
             }
             return list.toString().trim();
         } catch (Exception ex) {
-            throw new Exception(tl("kitError"), ex);
+            throw new Exception(user.tl( "kitError"), ex);
         }
 
     }
