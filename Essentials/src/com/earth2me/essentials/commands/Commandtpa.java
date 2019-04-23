@@ -58,7 +58,9 @@ public class Commandtpa extends EssentialsCommand {
             }
         }
         user.sendMessage(tl("requestSent", player.getDisplayName()));
-        user.sendMessage(tl("typeTpacancel"));
+        if (user.isAuthorized("essentials.tpacancel")) {
+            user.sendMessage(tl("typeTpacancel"));
+        }
     }
 
     @Override
