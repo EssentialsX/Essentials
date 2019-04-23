@@ -779,6 +779,9 @@ public class Settings implements net.ess3.api.ISettings {
         return config.getBoolean("remove-god-on-disconnect", false);
     }
 
+    @Override
+    public boolean removeDropsWhileGod() { return config.getBoolean("remove-mob-loot-while-god", false); }
+
     private boolean changeDisplayName = true;
 
     private boolean _changeDisplayName() {

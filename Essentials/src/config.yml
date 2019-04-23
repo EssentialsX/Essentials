@@ -374,6 +374,9 @@ debug: false
 # Turn off god mode when people leave the server.
 remove-god-on-disconnect: false
 
+# Prevent players in god mode to get hostile mob drops
+remove-mob-loot-while-god: false
+
 # Auto-AFK
 # After this timeout in seconds, the user will be set as AFK.
 # This feature requires the player to have essentials.afk.auto node.

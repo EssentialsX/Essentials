@@ -161,6 +161,8 @@ public interface ISettings extends IConf {
 
     boolean removeGodOnDisconnect();
 
+    boolean removeDropsWhileGod();
+
     boolean changeDisplayName();
 
     boolean changePlayerListName();

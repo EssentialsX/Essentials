@@ -200,6 +200,21 @@ public class EssentialsEntityListener implements Listener {
     }
 
     @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
+    public void onMobDeath(EntityDeathEvent event) {
+        if (event.getEntity() instanceof Monster) {
+            if (event.getEntity().getKiller() != null) {
+                final User user = ess.getUser(event.getEntity().getKiller());
+                if (user.isGodModeEnabled()) {
+                    if (ess.getSettings().removeDropsWhileGod()) {
+                        event.getDrops().clear();
+                        event.setDroppedExp(0);
+                    }
+                }
+            }
+        }
+    }
+
+    @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
     public void onEntityTarget(EntityTargetEvent event) {
         if (event.getTarget() instanceof Player) {
             final User user = ess.getUser((Player) event.getTarget());
