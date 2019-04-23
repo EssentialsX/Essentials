@@ -134,6 +134,8 @@ public interface ISettings extends IConf {
 
     boolean isEcoDisabled();
 
+    boolean getIgnoreNearIfSpectator();
+
     @Deprecated
     boolean isTradeInStacks(int id);
 

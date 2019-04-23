@@ -3,6 +3,7 @@ package com.earth2me.essentials.commands;
 import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.User;
 import com.google.common.collect.Lists;
+import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Server;
 import org.bukkit.World;
@@ -96,7 +97,15 @@ public class Commandnear extends EssentialsCommand {
 
                 final long delta = (long) playerLoc.distanceSquared(loc);
                 if (delta < radiusSquared) {
-                    nearbyPlayers.offer(player);
+                    if (!player.isAuthorized("essentials.near.exempt")) {
+                        if (ess.getSettings().getIgnoreNearIfSpectator()) {
+                            if (player.getBase().getGameMode() != GameMode.SPECTATOR) {
+                                nearbyPlayers.offer(player);
+                            }
+                        } else {
+                            nearbyPlayers.offer(player);
+                        }
+                    }
                 }
             }
         }

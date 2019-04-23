@@ -101,6 +101,9 @@ public class Settings implements net.ess3.api.ISettings {
         return config.getInt("near-radius", 200);
     }
 
+    @Override
+    public boolean getIgnoreNearIfSpectator() { return config.getBoolean("ignore-near-if-spectator", false); }
+
     // #easteregg
     private char chatShout = '!';
 
