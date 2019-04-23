@@ -206,8 +206,10 @@ public class EssentialsEntityListener implements Listener {
                 final User user = ess.getUser(event.getEntity().getKiller());
                 if (user.isGodModeEnabled()) {
                     if (ess.getSettings().removeDropsWhileGod()) {
-                        event.getDrops().clear();
-                        event.setDroppedExp(0);
+                        if (!user.isAuthorized("essentials.god.loot")) {
+                            event.getDrops().clear();
+                            event.setDroppedExp(0);
+                        }
                     }
                 }
             }
