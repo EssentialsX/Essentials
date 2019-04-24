@@ -3,6 +3,7 @@ package com.earth2me.essentials.utils;
 import org.bukkit.Bukkit;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
+import org.bukkit.Registry;
 import org.bukkit.material.MaterialData;
 
 import java.util.EnumSet;
@@ -21,7 +22,8 @@ public class MaterialUtil {
     // includes TIPPED_ARROW which also has potion effects
     private static final Set<Material> PLAYER_HEADS;
     private static final Set<Material> POTIONS;
-    private static final Set<Material> SIGNS;
+    private static final Set<Material> SIGN_POSTS;
+    private static final Set<Material> WALL_SIGNS;
 
     public static final Material SPAWNER = EnumUtil.getMaterial("MOB_SPAWNER", "SPAWNER");
 
@@ -55,7 +57,14 @@ public class MaterialUtil {
         POTIONS = EnumUtil.getAllMatching(Material.class, "POTION", "SPLASH_POTION",
             "LINGERING_POTION", "TIPPED_ARROW");
 
-        SIGNS = EnumUtil.getAllMatching(Material.class, "SIGN", "SIGN_POST", "WALL_SIGN");
+        SIGN_POSTS = EnumUtil.getAllMatching(Material.class, "SIGN", "SIGN_POST",
+            "ACACIA_SIGN", "BIRCH_SIGN",
+            "DARK_OAK_SIGN", "JUNGLE_SIGN",
+            "OAK_SIGN", "SPRUCE_SIGN");
+
+        WALL_SIGNS = EnumUtil.getAllMatching(Material.class, "WALL_SIGN",
+            "ACACIA_WALL_SIGN", "BIRCH_WALL_SIGN", "DARK_OAK_WALL_SIGN", "JUNGLE_WALL_SIGN",
+            "OAK_WALL_SIGN", "SPRUCE_WALL_SIGN");
     }
 
     public static boolean isBed(Material material) {
@@ -94,8 +103,16 @@ public class MaterialUtil {
         return POTIONS.contains(material);
     }
 
+    public static boolean isSignPost(Material material) {
+        return SIGN_POSTS.contains(material);
+    }
+
+    public static boolean isWallSign(Material material) {
+        return WALL_SIGNS.contains(material);
+    }
+
     public static boolean isSign(Material material) {
-        return SIGNS.contains(material);
+        return isSignPost(material) || isWallSign(material);
     }
 
     public static boolean isSkull(Material material) {
@@ -108,7 +125,7 @@ public class MaterialUtil {
                 try {
                     return Bukkit.getUnsafe().fromLegacy(new MaterialData(material, damage));
                 } catch (NoSuchMethodError error) {
-                    return material;
+                    return null;
                 }
             }
         }
