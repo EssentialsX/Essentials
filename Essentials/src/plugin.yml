@@ -284,6 +284,10 @@ commands:
     description: May death rain upon them.
     usage: /<command> [player]
     aliases: [enuke]
+  offlinetp:
+    description: Teleport to a player's last known logout location
+    usage: /<command> <player>
+    aliases: [otp, offlinetp, tpoff, tpoffline]
   pay:
     description: Pays another player from your balance.
     usage: /<command> <player> <amount>
