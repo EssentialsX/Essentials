@@ -63,31 +63,34 @@ public class EssentialsProtectBlockListener implements Listener {
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-    public void onEntityDamagebyEntity(EntityDamageByEntityEvent event) {
+    public void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
         if (event.getEntity() instanceof Item) {
-            if (event.getCause() == EntityDamageEvent.DamageCause.ENTITY_EXPLOSION && event.getDamager() instanceof TNTPrimed) {
-                event.setCancelled(prot.getSettingBool(ProtectConfig.prevent_tnt_itemdmg));
-            }
-
-            if (event.getCause() == EntityDamageEvent.DamageCause.ENTITY_EXPLOSION && event.getDamager() instanceof Creeper) {
-                event.setCancelled(prot.getSettingBool(ProtectConfig.prevent_creeper_itemdmg));
-            }
-
-            if (event.getCause() == EntityDamageEvent.DamageCause.ENTITY_EXPLOSION && event.getDamager() instanceof ExplosiveMinecart) {
-                event.setCancelled(prot.getSettingBool(ProtectConfig.prevent_tntminecart_itemdmg));
-            }
-
-            if (event.getCause() == EntityDamageEvent.DamageCause.ENTITY_EXPLOSION && event.getDamager() instanceof WitherSkull) {
-                event.setCancelled(prot.getSettingBool(ProtectConfig.prevent_witherskull_itemdmg));
-            }
-
-            if (event.getCause() == EntityDamageEvent.DamageCause.ENTITY_EXPLOSION && event.getDamager() instanceof Fireball) {
-                event.setCancelled(prot.getSettingBool(ProtectConfig.prevent_fireball_itemdmg));
-            }
 
             if (event.getCause() == EntityDamageEvent.DamageCause.FIRE
                     || event.getCause() == EntityDamageEvent.DamageCause.FIRE_TICK || event.getCause() == EntityDamageEvent.DamageCause.LAVA) {
                 event.setCancelled(prot.getSettingBool(ProtectConfig.disable_lavaitemdmg));
+            }
+
+            if (event.getCause()== EntityDamageEvent.DamageCause.ENTITY_EXPLOSION) {
+                if (event.getDamager() instanceof TNTPrimed) {
+                    event.setCancelled(prot.getSettingBool(ProtectConfig.prevent_tnt_itemdmg));
+                }
+
+                if (event.getDamager() instanceof Creeper) {
+                    event.setCancelled(prot.getSettingBool(ProtectConfig.prevent_creeper_itemdmg));
+                }
+
+                if (event.getDamager() instanceof ExplosiveMinecart) {
+                    event.setCancelled(prot.getSettingBool(ProtectConfig.prevent_tntminecart_itemdmg));
+                }
+
+                if (event.getDamager() instanceof WitherSkull) {
+                    event.setCancelled(prot.getSettingBool(ProtectConfig.prevent_witherskull_itemdmg));
+                }
+
+                if (event.getDamager() instanceof Fireball) {
+                    event.setCancelled(prot.getSettingBool(ProtectConfig.prevent_fireball_itemdmg));
+                }
             }
         }
     }
