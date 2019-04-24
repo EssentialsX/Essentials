@@ -722,7 +722,7 @@ protect:
     tnt-itemdamage: true
     tnt-minecart-explosion: false
     tnt-minecart-playerdamage: false
-    tnt-minecraft-itemdamage: false
+    tnt-minecart-itemdamage: false
     fireball-explosion: false
     fireball-fire: false
     fireball-playerdamage: false
