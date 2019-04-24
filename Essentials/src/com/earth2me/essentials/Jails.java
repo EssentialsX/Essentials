@@ -160,7 +160,7 @@ public class Jails extends AsyncStorageObjectHolder<com.earth2me.essentials.sett
         @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
         public void onJailBlockBreak(final BlockBreakEvent event) {
             final User user = ess.getUser(event.getPlayer());
-            if (user.isJailed()) {
+            if (user.isJailed() && !user.isAuthorized("essentials.jail.allow-break")) {
                 event.setCancelled(true);
             }
         }
@@ -168,7 +168,7 @@ public class Jails extends AsyncStorageObjectHolder<com.earth2me.essentials.sett
         @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
         public void onJailBlockPlace(final BlockPlaceEvent event) {
             final User user = ess.getUser(event.getPlayer());
-            if (user.isJailed()) {
+            if (user.isJailed() && !user.isAuthorized("essentials.jail.allow-place")) {
                 event.setCancelled(true);
             }
         }
@@ -176,7 +176,7 @@ public class Jails extends AsyncStorageObjectHolder<com.earth2me.essentials.sett
         @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
         public void onJailBlockDamage(final BlockDamageEvent event) {
             final User user = ess.getUser(event.getPlayer());
-            if (user.isJailed()) {
+            if (user.isJailed() && !user.isAuthorized("essentials.jail.allow-block-damage")) {
                 event.setCancelled(true);
             }
         }
@@ -198,7 +198,7 @@ public class Jails extends AsyncStorageObjectHolder<com.earth2me.essentials.sett
         @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
         public void onJailPlayerInteract(final PlayerInteractEvent event) {
             final User user = ess.getUser(event.getPlayer());
-            if (user.isJailed()) {
+            if (user.isJailed() && !user.isAuthorized("essentials.jail.allow-interact")) {
                 event.setCancelled(true);
             }
         }
