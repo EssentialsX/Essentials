@@ -57,3 +57,5 @@ if [ $is_183 -ne 0 ]; then
 else
     echo "CraftBukkit 1.8.3 installed; skipping BuildTools..."
 fi
+
+popd
