@@ -10,7 +10,11 @@ is_installed() {
 ensure_buildtools() {
     if [ ! -f "BuildTools.jar" ]; then
         echo "Downloading BuildTools..."
-        wget -O BuildTools.jar https://hub.spigotmc.org/jenkins/job/BuildTools/lastSuccessfulBuild/artifact/target/BuildTools.jar
+        if [[ "$OSTYPE" == "darwin"* ]]; then
+            curl https://hub.spigotmc.org/jenkins/job/BuildTools/lastSuccessfulBuild/artifact/target/BuildTools.jar -o BuildTools.jar
+        else
+            wget -O BuildTools.jar https://hub.spigotmc.org/jenkins/job/BuildTools/lastSuccessfulBuild/artifact/target/BuildTools.jar
+        fi
     fi
 }
 
@@ -53,5 +57,3 @@ if [ $is_183 -ne 0 ]; then
 else
     echo "CraftBukkit 1.8.3 installed; skipping BuildTools..."
 fi
-
-popd
