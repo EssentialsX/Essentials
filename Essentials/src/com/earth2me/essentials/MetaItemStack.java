@@ -210,11 +210,7 @@ public class MetaItemStack {
             addItemFlags(string);
         } else if (MaterialUtil.isFirework(stack.getType())) {
             //WARNING - Meta for fireworks will be ignored after this point.
-        } else if (MaterialUtil.isFirework(stack.getType())) {
-            //WARNING - Meta for fireworks will be ignored after this point.
             addFireworkMeta(sender, false, string, ess);
-        } else if (MaterialUtil.isPotion(stack.getType())) {
-            //WARNING - Meta for potions will be ignored after this point.
         } else if (MaterialUtil.isPotion(stack.getType())) {
             //WARNING - Meta for potions will be ignored after this point.
             addPotionMeta(sender, false, string, ess);
