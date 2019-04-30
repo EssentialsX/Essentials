@@ -10,7 +10,11 @@ is_installed() {
 ensure_buildtools() {
     if [ ! -f "BuildTools.jar" ]; then
         echo "Downloading BuildTools..."
-        wget -O BuildTools.jar https://hub.spigotmc.org/jenkins/job/BuildTools/lastSuccessfulBuild/artifact/target/BuildTools.jar
+        if [[ "$OSTYPE" == "darwin"* ]]; then
+            curl https://hub.spigotmc.org/jenkins/job/BuildTools/lastSuccessfulBuild/artifact/target/BuildTools.jar -o BuildTools.jar
+        else
+            wget -O BuildTools.jar https://hub.spigotmc.org/jenkins/job/BuildTools/lastSuccessfulBuild/artifact/target/BuildTools.jar
+        fi
     fi
 }
 
