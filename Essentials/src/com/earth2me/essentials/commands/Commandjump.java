@@ -4,6 +4,7 @@ import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.LocationUtil;
 import com.google.common.collect.Lists;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Server;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
@@ -46,7 +47,12 @@ public class Commandjump extends EssentialsCommand {
 
         final Trade charge = new Trade(this.getName(), ess);
         charge.isAffordableFor(user);
-        user.getTeleport().teleport(loc, charge, TeleportCause.COMMAND);
+        // If the user is allowed to jump outside of the vanilla world boundary
+        if(Bukkit.getWorld(user.getWorld().getUID()).getWorldBorder().isInside(loc) || user.isAuthorized("essentials.jump.pastWorldBorder")) {
+            user.getTeleport().teleport(loc, charge, TeleportCause.COMMAND);
+        }else {
+            user.sendMessage("You can not jump outside of the world border");
+        }
         throw new NoChargeException();
     }
 
