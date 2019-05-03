@@ -39,7 +39,7 @@ public class VersionUtil {
     }
 
     public static class BukkitVersion implements Comparable<BukkitVersion> {
-        private static final Pattern VERSION_PATTERN = Pattern.compile("^(\\d+)\\.(\\d+)\\.?([0-9]*)-R([\\d.]+)(?:-SNAPSHOT)?");
+        private static final Pattern VERSION_PATTERN = Pattern.compile("^(\\d+)\\.(\\d+)\\.?([0-9]*)(?:-pre(\\d+))?(?:-R([\\d.]+))?(?:-SNAPSHOT)?");
 
         private final int major;
         private final int minor;
@@ -58,13 +58,13 @@ public class VersionUtil {
                 Preconditions.checkArgument(matcher.matches(), string + " is not in valid version format. e.g. 1.8.8-R0.1");
             }
 
-            return from(matcher.group(1), matcher.group(2), matcher.group(3), matcher.group(4), matcher.group(5));
+            return from(matcher.group(1), matcher.group(2), matcher.group(3), matcher.group(5), matcher.group(4));
         }
 
         private static BukkitVersion from(String major, String minor, String patch, String revision, String prerelease) {
             if (patch.isEmpty()) patch = "0";
-            if (revision.isEmpty()) revision = "0";
-            if (prerelease.isEmpty()) prerelease = "-1";
+            if (revision == null || revision.isEmpty()) revision = "0";
+            if (prerelease == null || prerelease.isEmpty()) prerelease = "-1";
             return new BukkitVersion(Integer.parseInt(major),
                 Integer.parseInt(minor),
                 Integer.parseInt(patch),

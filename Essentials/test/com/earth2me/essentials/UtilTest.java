@@ -208,7 +208,7 @@ public class UtilTest extends TestCase {
         assertEquals(v.getMajor(), 1);
         assertEquals(v.getMinor(), 14);
         assertEquals(v.getPatch(), 0);
-        assertEquals(v.getRevision(), 0);
+        assertEquals(v.getRevision(), 0.0);
         assertEquals(v.getPrerelease(), 5);
         v = VersionUtil.BukkitVersion.fromString("1.13.2-pre1-R0.1"); // not real
         assertEquals(v.getMajor(), 1);
