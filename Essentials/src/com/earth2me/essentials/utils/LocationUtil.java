@@ -16,11 +16,18 @@ import static com.earth2me.essentials.I18n.tl;
 
 
 public class LocationUtil {
+    // Water types used for TRANSPARENT_MATERIALS and is-water-safe config option
+    private static final EnumSet<Material> WATER_TYPES = EnumSet.of(Material.WATER);
+
     // The player can stand inside these materials
     private static final Set<Material> HOLLOW_MATERIALS = new HashSet<>();
     private static final Set<Material> TRANSPARENT_MATERIALS = new HashSet<>();
 
     static {
+        try {
+            WATER_TYPES.add(Material.valueOf("FLOWING_WATER"));
+        } catch (Exception ignored) {} // 1.13 WATER uses Levelled
+
         // Materials from Material.isTransparent()
         for (Material mat : Material.values()) {
             if (mat.isTransparent()) {
@@ -29,10 +36,15 @@ public class LocationUtil {
         }
 
         TRANSPARENT_MATERIALS.addAll(HOLLOW_MATERIALS);
-        TRANSPARENT_MATERIALS.add(Material.WATER);
-        try {
-            TRANSPARENT_MATERIALS.add(Material.valueOf("FLOWING_WATER"));
-        } catch (Exception ignored) {} // 1.13 WATER uses Levelled
+        TRANSPARENT_MATERIALS.addAll(WATER_TYPES);
+    }
+
+    public static void setIsWaterSafe(boolean isWaterSafe) {
+        if (isWaterSafe) {
+            HOLLOW_MATERIALS.addAll(WATER_TYPES);
+        } else {
+            HOLLOW_MATERIALS.removeAll(WATER_TYPES);
+        }
     }
 
     public static final int RADIUS = 3;
