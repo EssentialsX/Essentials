@@ -48,10 +48,10 @@ public class Commandjump extends EssentialsCommand {
         final Trade charge = new Trade(this.getName(), ess);
         charge.isAffordableFor(user);
         // If the user is allowed to jump outside of the vanilla world boundary
-        if(Bukkit.getWorld(user.getWorld().getUID()).getWorldBorder().isInside(loc) || user.isAuthorized("essentials.jump.pastWorldBorder")) {
+        if (Bukkit.getWorld(user.getWorld().getUID()).getWorldBorder().isInside(loc) || user.isAuthorized("essentials.jump.border")) {
             user.getTeleport().teleport(loc, charge, TeleportCause.COMMAND);
-        }else {
-            user.sendMessage("You can not jump outside of the world border");
+        } else {
+            user.sendMessage(tl("jumpBorder", user.getName()));
         }
         throw new NoChargeException();
     }
