@@ -17,17 +17,14 @@ import static com.earth2me.essentials.I18n.tl;
 
 public class LocationUtil {
     // Water types used for TRANSPARENT_MATERIALS and is-water-safe config option
-    private static final EnumSet<Material> WATER_TYPES = EnumSet.of(Material.WATER);
+    private static final Set<Material> WATER_TYPES =
+            EnumUtil.getAllMatching(Material.class, "WATER", "FLOWING_WATER");
 
     // The player can stand inside these materials
     private static final Set<Material> HOLLOW_MATERIALS = new HashSet<>();
     private static final Set<Material> TRANSPARENT_MATERIALS = new HashSet<>();
 
     static {
-        try {
-            WATER_TYPES.add(Material.valueOf("FLOWING_WATER"));
-        } catch (Exception ignored) {} // 1.13 WATER uses Levelled
-
         // Materials from Material.isTransparent()
         for (Material mat : Material.values()) {
             if (mat.isTransparent()) {

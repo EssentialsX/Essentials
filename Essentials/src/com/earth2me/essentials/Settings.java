@@ -1554,10 +1554,10 @@ public class Settings implements net.ess3.api.ISettings {
     private boolean isWaterSafe;
 
     private boolean _isWaterSafe() {
-        boolean isWaterSafe = config.getBoolean("is-water-safe", false);
-        LocationUtil.setIsWaterSafe(isWaterSafe);
+        boolean _isWaterSafe = config.getBoolean("is-water-safe", false);
+        LocationUtil.setIsWaterSafe(_isWaterSafe);
 
-        return isWaterSafe;
+        return _isWaterSafe;
     }
 
     @Override
