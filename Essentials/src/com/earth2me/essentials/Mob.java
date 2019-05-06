@@ -3,8 +3,7 @@ package com.earth2me.essentials;
 import org.bukkit.Location;
 import org.bukkit.Server;
 import org.bukkit.World;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
+import org.bukkit.entity.*;
 
 import java.util.*;
 import java.util.logging.Level;
@@ -83,6 +82,13 @@ public enum Mob {
     TROPICAL_FISH("TropicalFish", Enemies.NEUTRAL, "TROPICAL_FISH"),
     DROWNED("Drowned", Enemies.ENEMY, "DROWNED"),
     DOLPHIN("Dolphin", Enemies.NEUTRAL, "DOLPHIN"),
+    CAT("Cat", Enemies.FRIENDLY, EntityType.CAT),
+    FOX("Fox", Enemies.FRIENDLY, EntityType.FOX),
+    PANDA("Panda", Enemies.NEUTRAL, EntityType.PANDA),
+    PILLAGER("Pillager", Enemies.ENEMY, EntityType.PILLAGER),
+    RAVAGER("Ravager", Enemies.ENEMY, EntityType.RAVAGER),
+    TRADER_LLAMA("TraderLlama", Enemies.FRIENDLY, EntityType.TRADER_LLAMA),
+    WANDERING_TRADER("WanderingTrader", Enemies.FRIENDLY, EntityType.WANDERING_TRADER)
     ;
 
     public static final Logger logger = Logger.getLogger("Essentials");
