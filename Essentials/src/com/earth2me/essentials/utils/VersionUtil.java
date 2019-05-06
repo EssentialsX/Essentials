@@ -20,10 +20,9 @@ public class VersionUtil {
     public static final BukkitVersion v1_12_2_R01 = BukkitVersion.fromString("1.12.2-R0.1-SNAPSHOT");
     public static final BukkitVersion v1_13_0_R01 = BukkitVersion.fromString("1.13.0-R0.1-SNAPSHOT");
     public static final BukkitVersion v1_13_2_R01 = BukkitVersion.fromString("1.13.2-R0.1-SNAPSHOT");
-    // TODO: update to 1.14 release
-    public static final BukkitVersion v1_14_PRE5 = BukkitVersion.fromString("1.14-pre5-SNAPSHOT");
+    public static final BukkitVersion v1_14_R01 = BukkitVersion.fromString("1.14-R0.1-SNAPSHOT");
 
-    private static final Set<BukkitVersion> supportedVersions = ImmutableSet.of(v1_8_8_R01, v1_9_4_R01, v1_10_2_R01, v1_11_2_R01, v1_12_2_R01, v1_13_2_R01);
+    private static final Set<BukkitVersion> supportedVersions = ImmutableSet.of(v1_8_8_R01, v1_9_4_R01, v1_10_2_R01, v1_11_2_R01, v1_12_2_R01, v1_13_2_R01,  v1_14_R01);
 
     private static BukkitVersion serverVersion = null;
 
@@ -43,7 +42,6 @@ public class VersionUtil {
 
         private final int major;
         private final int minor;
-        private final int prerelease;
         private final int patch;
         private final double revision;
 
@@ -54,30 +52,26 @@ public class VersionUtil {
                 if (!Bukkit.getName().equals("Essentials Fake Server")) {
                     throw new IllegalArgumentException(string + " is not in valid version format. e.g. 1.8.8-R0.1");
                 }
-                matcher = VERSION_PATTERN.matcher(v1_13_2_R01.toString());
+                matcher = VERSION_PATTERN.matcher(v1_14_R01.toString());
                 Preconditions.checkArgument(matcher.matches(), string + " is not in valid version format. e.g. 1.8.8-R0.1");
             }
 
-            return from(matcher.group(1), matcher.group(2), matcher.group(3), matcher.group(4), matcher.group(5));
+            return from(matcher.group(1), matcher.group(2), matcher.group(3), matcher.group(4));
         }
 
-        private static BukkitVersion from(String major, String minor, String patch, String revision, String prerelease) {
+        private static BukkitVersion from(String major, String minor, String patch, String revision) {
             if (patch.isEmpty()) patch = "0";
-            if (revision.isEmpty()) revision = "0";
-            if (prerelease.isEmpty()) prerelease = "-1";
             return new BukkitVersion(Integer.parseInt(major),
                 Integer.parseInt(minor),
                 Integer.parseInt(patch),
-                Double.parseDouble(revision),
-                Integer.parseInt(prerelease));
+                Double.parseDouble(revision));
         }
 
-        private BukkitVersion(int major, int minor, int patch, double revision, int prerelease) {
+        private BukkitVersion(int major, int minor, int patch, double revision) {
             this.major = major;
             this.minor = minor;
             this.patch = patch;
             this.revision = revision;
-            this.prerelease = prerelease;
         }
 
         public boolean isHigherThan(BukkitVersion o) {
@@ -112,10 +106,6 @@ public class VersionUtil {
             return revision;
         }
 
-        public int getPrerelease() {
-            return prerelease;
-        }
-
         @Override
         public boolean equals(Object o) {
             if (this == o) {
@@ -126,27 +116,19 @@ public class VersionUtil {
             }
             BukkitVersion that = (BukkitVersion) o;
             return major == that.major &&
-                    minor == that.minor &&
-                    patch == that.patch &&
-                    revision == that.revision &&
-                    prerelease == that.prerelease;
+                minor == that.minor &&
+                patch == that.patch &&
+                revision == that.revision;
         }
 
         @Override
         public int hashCode() {
-            return Objects.hashCode(major, minor, patch, revision, prerelease);
+            return Objects.hashCode(major, minor, patch, revision);
         }
 
         @Override
         public String toString() {
-            StringBuilder sb = new StringBuilder(major + "." + minor);
-            if (patch != 0) {
-                sb.append(".").append(patch);
-            }
-            if (prerelease != -1) {
-                sb.append("-pre").append(prerelease);
-            }
-            return sb.append("-R").append(revision).toString();
+            return major + "." + minor + "." + patch + "-R" + revision;
         }
 
         @Override
@@ -166,13 +148,7 @@ public class VersionUtil {
                     } else if (patch > o.patch) {
                         return 1;
                     } else { // equal patch
-                        if (prerelease < o.prerelease) {
-                            return -1;
-                        } else if (prerelease > o.prerelease) {
-                            return 1;
-                        } else { // equal prerelease
-                            return Double.compare(revision, o.revision);
-                        }
+                        return Double.compare(revision, o.revision);
                     }
                 }
             }
