@@ -9522,9 +9522,30 @@
     "spawneggshulk": "shulker_spawn_egg",
     "shulkspawn": "shulker_spawn_egg",
     "spawnshulk": "shulker_spawn_egg",
-    "sign": {
-        "material": "SIGN"
+    "oak_sign": {
+        "material": "OAK_SIGN"
     },
+    "oaksign": "oak_sign",
+    "acacia_sign": {
+        "material": "ACACIA_SIGN"
+    },
+    "acaciasign": "acacia_sign",
+    "birch_sign": {
+        "material": "BIRCH_SIGN"
+    },
+    "birchsign": "birch_sign",
+    "dark_oak_sign": {
+        "material": "DARK_OAK_SIGN"
+    },
+    "darkoaksign": "dark_oak_sign",
+    "jungle_sign": {
+        "material": "JUNGLE_SIGN"
+    },
+    "junglesign": "jungle_sign",
+    "spruce_sign": {
+        "material": "SPRUCE_SIGN"
+    },
+    "sprucesign": "spruce_sign",
     "silverfish_spawn_egg": {
         "material": "SILVERFISH_SPAWN_EGG"
     },
@@ -10948,11 +10969,39 @@
         "unspawnable": true
     },
     "voidair": "void_air",
-    "wall_sign": {
-        "material": "WALL_SIGN",
+    "oak_wall_sign": {
+        "material": "OAK_WALL_SIGN",
         "unspawnable": true
     },
-    "wallsign": "wall_sign",
+    "oakwallsign": "oak_wall_sign",
+    "acacia_wall_sign": {
+        "material": "ACACIA_WALL_SIGN",
+        "unspawnable": true
+    },
+    "acaciawallsign": "acacia_wall_sign",
+    "birch_wall_sign": {
+        "material": "BIRCH_WALL_SIGN",
+        "unspawnable": true
+    },
+    "birchwallsign": "birch_wall_sign",
+    "dark_oak_wall_sign": {
+        "material": "DARK_OAK_WALL_SIGN",
+        "unspawnable": true
+    },
+    "darkoakwallsign": "dark_oak_wall_sign",
+    "jungle_wall_sign": {
+        "material": "JUNGLE_WALL_SIGN",
+        "unspawnable": true
+    },
+    "junglewallsign": "jungle_wall_sign",
+    "spruce_wall_sign": {
+        "material": "SPRUCE_WALL_SIGN",
+        "unspawnable": true
+    },
+    "sprucewallsign": "spruce_wall_sign",
+    "silverfish_spawn_egg": {
+        "material": "SILVERFISH_SPAWN_EGG"
+    },
     "wall_torch": {
         "material": "WALL_TORCH",
         "unspawnable": true
@@ -23027,5 +23076,99 @@
     "eccomspawner": "dolphinmobspawner",
     "eccomcage": "dolphinmobspawner",
     "eccospawner": "dolphinmobspawner",
-    "eccocage": "dolphinmobspawner"
+    "eccocage": "dolphinmobspawner",
+    "flower_banner_pattern" : {
+        "material": "FLOWER_BANNER_PATTERN"
+    },
+    "creeper_banner_pattern" : {
+        "material": "CREEPER_BANNER_PATTERN"
+    },
+    "creeperbannerpattern": "creeper_banner_pattern",
+    "skull_banner_pattern" : {
+        "material": "SKULL_BANNER_PATTERN"
+    },
+    "skullbannerpattern": "skull_banner_pattern",
+    "mojang_banner_pattern": {
+        "material": "MOJANG_BANNER_PATTERN"
+    },
+    "mojangbannerpattern": "mojang_banner_pattern",
+    "globe_banner_pattern": {
+        "material": "GLOBE_BANNER_PATTERN"
+    },
+    "globebannerpattern": "globe_banner_pattern",
+    "crossbow": {
+        "material": "CROSSBOW"
+    },
+    "blue_dye": {
+        "material": "BLUE_DYE"
+    },
+    "bluedye": "blue_dye",
+    "brown_dye": {
+        "material": "BROWN_DYE"
+    },
+    "browndye": "brown_dye",
+    "black_dye": {
+        "material": "BLACK_DYE"
+    },
+    "blackdye": "black_dye",
+    "white_dye": {
+        "material": "WHITE_DYE"
+    },
+    "whitedye": "white_dye",
+    "leather_horse_armor": {
+        "material": "LEATHER_HORSE_ARMOR"
+    },
+    "leatherhorsearmor": "leather_horse_armor",
+    "lhorsearmor": "leather_horse_armor",
+    "cat_spawn_egg": {
+        "material": "CAT_SPAWN_EGG"
+    },
+    "catspawnegg": "cat_spawn_egg",
+    "categg": "cat_spawn_egg",
+    "eggcat": "cat_spawn_egg",
+    "fox_spawn_egg": {
+        "material": "FOX_SPAWN_EGG"
+    },
+    "foxspawnegg": "fox_spawn_egg",
+    "foxegg": "fox_spawn_egg",
+    "eggfox": "fox_spawn_egg",
+    "panda_spawn_egg": {
+        "material": "PANDA_SPAWN_EGG"
+    },
+    "pandaspawnegg": "panda_spawn_egg",
+    "pandaegg": "panda_spawn_egg",
+    "eggpanda": "panda_spawn_egg",
+    "pillager_spawn_egg": {
+        "material": "PILLAGER_SPAWN_EGG"
+    },
+    "pillagerspawnegg": "pillager_spawn_egg",
+    "pillageregg": "pillager_spawn_egg",
+    "eggpillager": "pillager_spawn_egg",
+    "ravager_spawn_egg": {
+        "material": "RAVAGER_SPAWN_EGG"
+    },
+    "ravagerspawnegg": "ravager_spawn_egg",
+    "ravageregg": "ravager_spawn_egg",
+    "eggravager": "ravager_spawn_egg",
+    "trader_llama_spawn_egg": {
+        "material": "TRADER_LLAMA_SPAWN_EGG"
+    },
+    "traderllamaspawnegg": "trader_llama_spawn_egg",
+    "traderllamaegg": "trader_llama_spawn_egg",
+    "eggtraderllama": "trader_llama_spawn_egg",
+    "wandering_trader_spawn_egg": {
+        "material": "WANDERING_TRADER_SPAWN_EGG"
+    },
+    "wanderingtraderspawnegg": "wandering_trader_spawn_egg",
+    "wanderingtraderegg": "wandering_trader_spawn_egg",
+    "eggwanderingtrader": "wandering_trader_spawn_egg",
+    "suspicious_stew": {
+        "material": "SUSPICIOUS_STEW"
+    },
+    "suspiciousstew": "suspicious_stew",
+    "sweet_berries": {
+        "material": "SWEET_BERRIES"
+    },
+    "sweetberries": "sweet_berries",
+    "berries": "sweet_berries"
 }
