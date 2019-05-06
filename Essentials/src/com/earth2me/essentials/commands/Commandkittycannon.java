@@ -4,7 +4,7 @@ import com.earth2me.essentials.Mob;
 import com.earth2me.essentials.User;
 import org.bukkit.Location;
 import org.bukkit.Server;
-import org.bukkit.entity.Ocelot;
+import org.bukkit.entity.Cat;
 
 import java.util.Random;
 
@@ -18,13 +18,13 @@ public class Commandkittycannon extends EssentialsCommand {
 
     @Override
     protected void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception {
-        final Mob cat = Mob.OCELOT;
-        final Ocelot ocelot = (Ocelot) cat.spawn(user.getWorld(), server, user.getBase().getEyeLocation());
+        final Mob cat = Mob.CAT;
+        final Cat ocelot = (Cat) cat.spawn(user.getWorld(), server, user.getBase().getEyeLocation());
         if (ocelot == null) {
             return;
         }
-        final int i = random.nextInt(Ocelot.Type.values().length);
-        ocelot.setCatType(Ocelot.Type.values()[i]);
+        final int i = random.nextInt(Cat.Type.values().length);
+        ocelot.setCatType(Cat.Type.values()[i]);
         ocelot.setTamed(true);
         ocelot.setBaby();
         ocelot.setVelocity(user.getBase().getEyeLocation().getDirection().multiply(2));
