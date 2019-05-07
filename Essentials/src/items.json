@@ -23170,5 +23170,79 @@
         "material": "SWEET_BERRIES"
     },
     "sweetberries": "sweet_berries",
-    "berries": "sweet_berries"
+    "berries": "sweet_berries",
+    "bamboo": {
+        "material": "BAMBOO"
+    },
+    "bamboo_sapling": {
+        "material": "BAMBOO_SAPLING"
+    },
+    "bamboosapling": "bamboo_sapling",
+    "barrel": {
+        "material": "BARREL"
+    },
+    "bell": {
+        "material": "BELL"
+    },
+    "blast_furnace": {
+        "material": "BLAST_FURNACE"
+    },
+    "blastfurnace": "blast_furnace",
+    "campfire": {
+        "material": "CAMPFIRE"
+    },
+    "cartography_table": {
+        "material": "CARTOGRAPHY_TABLE"
+    },
+    "cartographytable": "cartography_table",
+    "composter": {
+        "material": "COMPOSTER"
+    },
+    "fletching_table": {
+        "material": "FLETCHING_TABLE"
+    },
+    "fletchingtable": "fletching_table",
+    "cornflower": {
+        "material": "CORNFLOWER"
+    },
+    "lily_of_the_valley": {
+        "material": "LILY_OF_THE_VALLEY"
+    },
+    "lilyofthevalley": "lily_of_the_valley",
+    "wither_rose": {
+        "material": "WITHER_ROSE"
+    },
+    "witherrose": "wither_rose",
+    "grindstone": {
+        "material": "GRINDSTONE"
+    },
+    "jigsaw": {
+        "material": "JIGSAW"
+    },
+    "lantern": {
+        "material": "LANTERN"
+    },
+    "lectern": {
+        "material": "LECTERN"
+    },
+    "loom": {
+        "material": "LOOM"
+    },
+    "scaffolding": {
+        "material": "SCAFFOLDING"
+    },
+    "smithing_table": {
+        "material": "SMITHING_TABLE"
+    },
+    "smithingtable": "smithing_table",
+    "smoker": {
+        "material": "SMOKER"
+    },
+    "sweet_berry_bush": {
+        "material": "SWEET_BERRY_BUSH"
+    },
+    "sweetberrybush": "sweet_berry_bush",
+    "stonecutter": {
+        "material": "STONECUTTER"
+    }
 }
