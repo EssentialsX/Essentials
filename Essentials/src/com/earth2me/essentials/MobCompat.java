@@ -25,12 +25,12 @@ public class MobCompat {
         RED("RED", "RED_CAT"),
         TABBY("TABBY", "RED_CAT"),
         TUXEDO("BLACK", "BLACK_CAT"),
-        BRITISH_SHORTHAIR("BRITISH_SHORTHAIR", null),
-        CALICO("CALICO", null),
-        PERSIAN("PERSIAN", null),
-        RAGDOLL("RAGDOLL", null),
-        JELLIE("JELLIE", null),
-        BLACK("ALL_BLACK", "BLACK"),
+        BRITISH_SHORTHAIR("BRITISH_SHORTHAIR", "SIAMESE_CAT"),
+        CALICO("CALICO", "RED_CAT"),
+        PERSIAN("PERSIAN", "RED_CAT"),
+        RAGDOLL("RAGDOLL", "SIAMESE_CAT"),
+        JELLIE("JELLIE", "SIAMESE_CAT"),
+        BLACK("ALL_BLACK", "BLACK_CAT"),
         ;
 
         private final String catTypeName;
