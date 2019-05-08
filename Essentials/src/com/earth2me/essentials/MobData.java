@@ -58,19 +58,26 @@ public enum MobData {
     GOLD_ARMOR_HORSE("goldarmor", EntityType.HORSE, EnumUtil.getMaterial("GOLDEN_HORSE_ARMOR", "GOLD_BARDING"), true),
     DIAMOND_ARMOR_HORSE("diamondarmor", EntityType.HORSE, EnumUtil.getMaterial("DIAMOND_HORSE_ARMOR", "DIAMOND_BARDING"), true),
     ARMOR_HORSE("armor", EntityType.HORSE, EnumUtil.getMaterial("IRON_HORSE_ARMOR", "IRON_BARDING"), true),
-    SIAMESE_CAT("siamese", EntityType.CAT, Cat.Type.SIAMESE, true),
-    WHITE_CAT("white", EntityType.CAT, Cat.Type.WHITE, true),
-    RED_CAT("red", EntityType.CAT, Cat.Type.RED, true),
-    ORANGE_CAT("orange", EntityType.CAT, Cat.Type.RED, false),
-    TABBY_CAT("tabby", EntityType.CAT, Cat.Type.TABBY, false),
-    BLACK_CAT("black", EntityType.CAT, Cat.Type.BLACK, true),
+    SIAMESE_CAT("siamese", EntityType.OCELOT, Ocelot.Type.SIAMESE_CAT, true),
+    WHITE_CAT("white", EntityType.OCELOT, Ocelot.Type.SIAMESE_CAT, false),
+    RED_CAT("red", EntityType.OCELOT, Ocelot.Type.RED_CAT, true),
+    ORANGE_CAT("orange", EntityType.OCELOT, Ocelot.Type.RED_CAT, false),
+    TABBY_CAT("tabby", EntityType.OCELOT, Ocelot.Type.RED_CAT, false),
+    BLACK_CAT("black", EntityType.OCELOT, Ocelot.Type.BLACK_CAT, true),
+    TUXEDO_CAT("tuxedo", EntityType.OCELOT, Ocelot.Type.BLACK_CAT, false),
+    NEW_SIAMESE_CAT("siamese", EntityType.CAT, Cat.Type.SIAMESE, true),
+    NEW_WHITE_CAT("white", EntityType.CAT, Cat.Type.WHITE, true),
+    NEW_RED_CAT("red", EntityType.CAT, Cat.Type.RED, true),
+    NEW_ORANGE_CAT("orange", EntityType.CAT, Cat.Type.RED, false),
+    NEW_TABBY_CAT("tabby", EntityType.CAT, Cat.Type.TABBY, false),
+    NEW_BLACK_CAT("black", EntityType.CAT, Cat.Type.BLACK, true),
     BRITISH_SHORTHAIR_CAT("britishshorthair", EntityType.CAT, Cat.Type.BRITISH_SHORTHAIR, true),
     CALICO_CAT("calico", EntityType.CAT, Cat.Type.CALICO, true),
     PERSIAN_CAT("persian", EntityType.CAT, Cat.Type.PERSIAN, true),
     RAGDOLL_CAT("ragdoll", EntityType.CAT, Cat.Type.RAGDOLL, true),
     JELLIE_CAT("jellie", EntityType.CAT, Cat.Type.JELLIE, true),
     ALL_BLACK_CAT("allblack", EntityType.CAT, Cat.Type.ALL_BLACK, true),
-    TUXEDO_CAT("tuxedo", EntityType.CAT, Cat.Type.BLACK, false),
+    NEW_TUXEDO_CAT("tuxedo", EntityType.CAT, Cat.Type.BLACK, false),
     BABY_ZOMBIE("baby", EntityType.ZOMBIE.getEntityClass(), Data.BABYZOMBIE, true),
     ADULT_ZOMBIE("adult", EntityType.ZOMBIE.getEntityClass(), Data.ADULTZOMBIE, true),
     DIAMOND_SWORD_ZOMBIE("diamondsword", EntityType.ZOMBIE.getEntityClass(), Material.DIAMOND_SWORD, true),
@@ -281,6 +288,8 @@ public enum MobData {
             ((Horse) spawned).setStyle((Horse.Style) this.value);
         } else if (this.value instanceof Cat.Type) {
             ((Cat) spawned).setCatType((Cat.Type) this.value);
+        } else if (this.value instanceof Ocelot.Type) {
+            ((Ocelot) spawned).setCatType((Ocelot.Type) this.value);
         } else if (this.value instanceof Villager.Profession) {
             ((Villager) spawned).setProfession((Villager.Profession) this.value);
         } else if (this.value instanceof Material) {
