@@ -23,6 +23,7 @@ import org.bukkit.metadata.MetadataValue;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionAttachment;
 import org.bukkit.permissions.PermissionAttachmentInfo;
+import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -159,6 +160,11 @@ public class OfflinePlayer implements Player {
     }
 
     public BlockFace getFacing() {
+        return null;
+    }
+
+    @Override
+    public Pose getPose() {
         return null;
     }
 
@@ -1614,4 +1620,9 @@ public class OfflinePlayer implements Player {
     @Override
 	public void updateCommands() {
 	}
+
+    @Override
+    public PersistentDataContainer getPersistentDataContainer() {
+        return null;
+    }
 }
