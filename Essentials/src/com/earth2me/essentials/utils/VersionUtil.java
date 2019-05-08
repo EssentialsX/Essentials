@@ -20,10 +20,9 @@ public class VersionUtil {
     public static final BukkitVersion v1_12_2_R01 = BukkitVersion.fromString("1.12.2-R0.1-SNAPSHOT");
     public static final BukkitVersion v1_13_0_R01 = BukkitVersion.fromString("1.13.0-R0.1-SNAPSHOT");
     public static final BukkitVersion v1_13_2_R01 = BukkitVersion.fromString("1.13.2-R0.1-SNAPSHOT");
-    // TODO: update to 1.14 release
-    public static final BukkitVersion v1_14_PRE5 = BukkitVersion.fromString("1.14-pre5-SNAPSHOT");
+    public static final BukkitVersion v1_14_R01 = BukkitVersion.fromString("1.14-R0.1-SNAPSHOT");
 
-    private static final Set<BukkitVersion> supportedVersions = ImmutableSet.of(v1_8_8_R01, v1_9_4_R01, v1_10_2_R01, v1_11_2_R01, v1_12_2_R01, v1_13_2_R01);
+    private static final Set<BukkitVersion> supportedVersions = ImmutableSet.of(v1_8_8_R01, v1_9_4_R01, v1_10_2_R01, v1_11_2_R01, v1_12_2_R01, v1_13_2_R01,  v1_14_R01);
 
     private static BukkitVersion serverVersion = null;
 
@@ -39,7 +38,7 @@ public class VersionUtil {
     }
 
     public static class BukkitVersion implements Comparable<BukkitVersion> {
-        private static final Pattern VERSION_PATTERN = Pattern.compile("^(\\d+)\\.(\\d+)\\.?([0-9]*)-R([\\d.]+)(?:-SNAPSHOT)?");
+        private static final Pattern VERSION_PATTERN = Pattern.compile("^(\\d+)\\.(\\d+)\\.?([0-9]*)?-(?:pre(\\d))?-?R?([\\d.]+)?(?:-SNAPSHOT)?");
 
         private final int major;
         private final int minor;
@@ -54,17 +53,17 @@ public class VersionUtil {
                 if (!Bukkit.getName().equals("Essentials Fake Server")) {
                     throw new IllegalArgumentException(string + " is not in valid version format. e.g. 1.8.8-R0.1");
                 }
-                matcher = VERSION_PATTERN.matcher(v1_13_2_R01.toString());
+                matcher = VERSION_PATTERN.matcher(v1_14_R01.toString());
                 Preconditions.checkArgument(matcher.matches(), string + " is not in valid version format. e.g. 1.8.8-R0.1");
             }
 
-            return from(matcher.group(1), matcher.group(2), matcher.group(3), matcher.group(4), matcher.group(5));
+            return from(matcher.group(1), matcher.group(2), matcher.group(3), matcher.groupCount() < 5 ? "" : matcher.group(5), matcher.group(4));
         }
 
         private static BukkitVersion from(String major, String minor, String patch, String revision, String prerelease) {
-            if (patch.isEmpty()) patch = "0";
-            if (revision.isEmpty()) revision = "0";
-            if (prerelease.isEmpty()) prerelease = "-1";
+            if (patch == null || patch.isEmpty()) patch = "0";
+            if (revision == null || revision.isEmpty()) revision = "0";
+            if (prerelease == null || prerelease.isEmpty()) prerelease = "-1";
             return new BukkitVersion(Integer.parseInt(major),
                 Integer.parseInt(minor),
                 Integer.parseInt(patch),
@@ -126,10 +125,10 @@ public class VersionUtil {
             }
             BukkitVersion that = (BukkitVersion) o;
             return major == that.major &&
-                    minor == that.minor &&
-                    patch == that.patch &&
-                    revision == that.revision &&
-                    prerelease == that.prerelease;
+                minor == that.minor &&
+                patch == that.patch &&
+                revision == that.revision &&
+                prerelease == that.prerelease;
         }
 
         @Override
