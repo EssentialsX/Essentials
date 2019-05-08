@@ -92,16 +92,6 @@ public class FakeServer implements Server {
     }
 
     @Override
-    public String getServerName() {
-        return "Test Server";
-    }
-
-    @Override
-    public String getServerId() {
-        return "Test Server";
-    }
-
-    @Override
     public int broadcastMessage(String string) {
         int i = 0;
         for (Player player : players) {
