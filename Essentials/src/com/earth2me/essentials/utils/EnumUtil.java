@@ -2,6 +2,7 @@ package com.earth2me.essentials.utils;
 
 import org.bukkit.Material;
 import org.bukkit.Statistic;
+import org.bukkit.entity.EntityType;
 
 import java.lang.reflect.Field;
 import java.util.HashSet;
@@ -78,4 +79,7 @@ public class EnumUtil {
         return valueOf(Statistic.class, names);
     }
 
+    public static EntityType getEntityType(String... names) {
+        return valueOf(EntityType.class, names);
+    }
 }

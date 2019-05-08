@@ -17,8 +17,10 @@ import static com.earth2me.essentials.I18n.tl;
 
 
 public enum MobData {
+
     BABY_AGEABLE("baby", Ageable.class, Data.BABY, true),
     ADULT_AGEABLE("adult", Ageable.class, Data.ADULT, true),
+    BABY_CAT("kitten", MobCompat.CAT, Data.BABY, false),
     BABY_PIG("piglet", EntityType.PIG, Data.BABY, false),
     BABY_WOLF("puppy", EntityType.WOLF, Data.BABY, false),
     BABY_CHICKEN("chick", EntityType.CHICKEN, Data.BABY, false),
@@ -57,13 +59,19 @@ public enum MobData {
     GOLD_ARMOR_HORSE("goldarmor", EntityType.HORSE, EnumUtil.getMaterial("GOLDEN_HORSE_ARMOR", "GOLD_BARDING"), true),
     DIAMOND_ARMOR_HORSE("diamondarmor", EntityType.HORSE, EnumUtil.getMaterial("DIAMOND_HORSE_ARMOR", "DIAMOND_BARDING"), true),
     ARMOR_HORSE("armor", EntityType.HORSE, EnumUtil.getMaterial("IRON_HORSE_ARMOR", "IRON_BARDING"), true),
-    SIAMESE_CAT("siamese", EntityType.OCELOT, Ocelot.Type.SIAMESE_CAT, true),
-    WHITE_CAT("white", EntityType.OCELOT, Ocelot.Type.SIAMESE_CAT, false),
-    RED_CAT("red", EntityType.OCELOT, Ocelot.Type.RED_CAT, true),
-    ORANGE_CAT("orange", EntityType.OCELOT, Ocelot.Type.RED_CAT, false),
-    TABBY_CAT("tabby", EntityType.OCELOT, Ocelot.Type.RED_CAT, false),
-    BLACK_CAT("black", EntityType.OCELOT, Ocelot.Type.BLACK_CAT, true),
-    TUXEDO_CAT("tuxedo", EntityType.OCELOT, Ocelot.Type.BLACK_CAT, false),
+    SIAMESE_CAT("siamese", MobCompat.CAT, MobCompat.CatType.SIAMESE, true),
+    WHITE_CAT("white", MobCompat.CAT, MobCompat.CatType.WHITE, false),
+    RED_CAT("red", MobCompat.CAT, MobCompat.CatType.RED, true),
+    ORANGE_CAT("orange", MobCompat.CAT, MobCompat.CatType.RED, false),
+    TABBY_CAT("tabby", MobCompat.CAT, MobCompat.CatType.TABBY, true),
+    BLACK_CAT("black", MobCompat.CAT, MobCompat.CatType.BLACK, true),
+    TUXEDO_CAT("tuxedo", MobCompat.CAT, MobCompat.CatType.TUXEDO, true),
+    BRITISH_SHORTHAIR_CAT("britishshorthair", EntityType.CAT, MobCompat.CatType.BRITISH_SHORTHAIR, true),
+    CALICO_CAT("calico", EntityType.CAT, MobCompat.CatType.CALICO, true),
+    PERSIAN_CAT("persian", EntityType.CAT, MobCompat.CatType.PERSIAN, true),
+    RAGDOLL_CAT("ragdoll", EntityType.CAT, MobCompat.CatType.RAGDOLL, true),
+    JELLIE_CAT("jellie", EntityType.CAT, MobCompat.CatType.JELLIE, true),
+    ALL_BLACK_CAT("allblack", EntityType.CAT, MobCompat.CatType.BLACK, true),
     BABY_ZOMBIE("baby", EntityType.ZOMBIE.getEntityClass(), Data.BABYZOMBIE, true),
     ADULT_ZOMBIE("adult", EntityType.ZOMBIE.getEntityClass(), Data.ADULTZOMBIE, true),
     DIAMOND_SWORD_ZOMBIE("diamondsword", EntityType.ZOMBIE.getEntityClass(), Material.DIAMOND_SWORD, true),
@@ -83,12 +91,21 @@ public enum MobData {
     SADDLE_PIG("saddle", EntityType.PIG, Data.PIGSADDLE, true),
     ANGRY_WOLF("angry", EntityType.WOLF, Data.ANGRY, true),
     RABID_WOLF("rabid", EntityType.WOLF, Data.ANGRY, false),
-    FARMER_VILLAGER("farmer", EntityType.VILLAGER, Villager.Profession.FARMER, true),
-    LIBRARIAN_VILLAGER("librarian", EntityType.VILLAGER, Villager.Profession.LIBRARIAN, true),
-    PRIEST_VILLAGER("priest", EntityType.VILLAGER, Villager.Profession.PRIEST, true),
-    FATHER_VILLAGER("father", EntityType.VILLAGER, Villager.Profession.PRIEST, false),
-    SMITH_VILLAGER("smith", EntityType.VILLAGER, Villager.Profession.BLACKSMITH, true),
+    VILLAGER("villager", EntityType.VILLAGER, Villager.Profession.NONE, true),
+    ARMORER_VILLAGER("armorer", EntityType.VILLAGER, Villager.Profession.ARMORER, true),
     BUTCHER_VILLAGER("butcher", EntityType.VILLAGER, Villager.Profession.BUTCHER, true),
+    CARTOGRAPHER_VILLAGER("cartographer", EntityType.VILLAGER, Villager.Profession.CARTOGRAPHER, true),
+    CLERIC_VILLAGER("cleric", EntityType.VILLAGER, Villager.Profession.CLERIC, true),
+    FARMER_VILLAGER("farmer", EntityType.VILLAGER, Villager.Profession.FARMER, true),
+    FISHERMAN_VILLAGER("fisherman", EntityType.VILLAGER, Villager.Profession.FISHERMAN, true),
+    FLETCHER_VILLAGER("fletcher", EntityType.VILLAGER, Villager.Profession.FLETCHER, true),
+    LEATHERWORKER_VILLAGER("leatherworker", EntityType.VILLAGER, Villager.Profession.LEATHERWORKER, true),
+    LIBRARIAN_VILLAGER("librarian", EntityType.VILLAGER, Villager.Profession.LIBRARIAN, true),
+    MASON_VILLAGER("mason", EntityType.VILLAGER, Villager.Profession.MASON, true),
+    NITWIT_VILLAGER("nitwit", EntityType.VILLAGER, Villager.Profession.NITWIT, true),
+    SHEPHERD_VILLAGER("shepherd", EntityType.VILLAGER, Villager.Profession.SHEPHERD, true),
+    TOOLSMITH_VILLAGER("toolsmith", EntityType.VILLAGER, Villager.Profession.TOOLSMITH, true),
+    WEAPONSMITH("weaponsmith", EntityType.VILLAGER, Villager.Profession.WEAPONSMITH, true),
     SIZE_SLIME("", "<1-100>", EntityType.SLIME.getEntityClass(), Data.SIZE, true),
     NUM_EXPERIENCE_ORB("", "<1-2000000000>", EntityType.EXPERIENCE_ORB, Data.EXP, true),
     RED_PARROT("red", EntityType.PARROT, Parrot.Variant.RED, true),
@@ -107,7 +124,20 @@ public enum MobData {
     GLITTER_TROPICAL_FISH("glitter", EntityType.TROPICAL_FISH, TropicalFish.Pattern.GLITTER, true),
     BLOCKFISH_TROPICAL_FISH("blockfish", EntityType.TROPICAL_FISH, TropicalFish.Pattern.BLOCKFISH, true),
     BETTY_TROPICAL_FISH("betty", EntityType.TROPICAL_FISH, TropicalFish.Pattern.BETTY, true),
-    CLAYFISH_TROPICAL_FISH("clayfish", EntityType.TROPICAL_FISH, TropicalFish.Pattern.CLAYFISH, true);
+    CLAYFISH_TROPICAL_FISH("clayfish", EntityType.TROPICAL_FISH, TropicalFish.Pattern.CLAYFISH, true),
+    BABY_FOX("baby", EntityType.FOX, Data.BABY, false),
+    BROWN_MUSHROOM_COW("brown", EntityType.MUSHROOM_COW, MushroomCow.Variant.BROWN, true),
+    RED_MUSHROOM_COW("red", EntityType.MUSHROOM_COW, MushroomCow.Variant.RED, true),
+    AGGRESSIVE_PANDA("aggressive", EntityType.PANDA, Panda.Gene.AGGRESSIVE, true),
+    LAZY_PANDA("lazy", EntityType.PANDA, Panda.Gene.LAZY, true),
+    WORRIED_PANDA("worried", EntityType.PANDA, Panda.Gene.WORRIED, true),
+    PLAYFUL_PANDA("playful", EntityType.PANDA, Panda.Gene.PLAYFUL, true),
+    BROWN_PANDA("brown", EntityType.PANDA, Panda.Gene.BROWN, true),
+    WEAK_PANDA("weak", EntityType.PANDA, Panda.Gene.WEAK, true),
+    CREAMY_TRADER_LLAMA("creamy", EntityType.TRADER_LLAMA, TraderLlama.Color.CREAMY, true),
+    WHITE_TRADER_LLAMA("white", EntityType.TRADER_LLAMA, TraderLlama.Color.WHITE, true),
+    BROWN_TRADER_LLAMA("brown", EntityType.TRADER_LLAMA, TraderLlama.Color.BROWN, true),
+    GRAY_TRADER_LLAMA("gray", EntityType.TRADER_LLAMA, TraderLlama.Color.GRAY, true)
     ;
 
 
@@ -126,6 +156,8 @@ public enum MobData {
         EXP,
         SIZE
     }
+
+
 
     public static final Logger logger = Logger.getLogger("Essentials");
 
@@ -250,8 +282,8 @@ public enum MobData {
             ((Horse) spawned).setColor((Horse.Color) this.value);
         } else if (this.value instanceof Horse.Style) {
             ((Horse) spawned).setStyle((Horse.Style) this.value);
-        } else if (this.value instanceof Ocelot.Type) {
-            ((Ocelot) spawned).setCatType((Ocelot.Type) this.value);
+        } else if (this.value instanceof MobCompat.CatType) {
+            MobCompat.setCatType(spawned, (MobCompat.CatType) this.value);
         } else if (this.value instanceof Villager.Profession) {
             ((Villager) spawned).setProfession((Villager.Profession) this.value);
         } else if (this.value instanceof Material) {
@@ -263,10 +295,16 @@ public enum MobData {
                 InventoryWorkaround.setItemInMainHand(invent, new ItemStack((Material) this.value, 1));
                 InventoryWorkaround.setItemInMainHandDropChance(invent, 0.1f);
             }
-        } else if (this.value instanceof Parrot.Variant) {
+        } else if (this.value instanceof Parrot.Variant) { // TODO: MobCompat
             ((Parrot) spawned).setVariant((Parrot.Variant) this.value);
-        } else if (this.value instanceof TropicalFish.Pattern) {
+        } else if (this.value instanceof TropicalFish.Pattern) { // TODO: MobCompat
             ((TropicalFish) spawned).setPattern((TropicalFish.Pattern) this.value);
+        } else if (this.value instanceof MushroomCow.Variant) { // TODO: MobCompat
+            ((MushroomCow) spawned).setVariant((MushroomCow.Variant) this.value);
+        } else if (this.value instanceof Panda.Gene) { // TODO: MobCompat
+            ((Panda) spawned).setMainGene((Panda.Gene) this.value);
+        } else if (this.value instanceof TraderLlama.Color) { // TODO: MobCompat
+            ((TraderLlama) spawned).setColor((TraderLlama.Color) this.value);
         }
     }
 }
