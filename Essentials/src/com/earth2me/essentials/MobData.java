@@ -125,7 +125,6 @@ public enum MobData {
     BLOCKFISH_TROPICAL_FISH("blockfish", EntityType.TROPICAL_FISH, TropicalFish.Pattern.BLOCKFISH, true),
     BETTY_TROPICAL_FISH("betty", EntityType.TROPICAL_FISH, TropicalFish.Pattern.BETTY, true),
     CLAYFISH_TROPICAL_FISH("clayfish", EntityType.TROPICAL_FISH, TropicalFish.Pattern.CLAYFISH, true),
-    BABY_FOX("baby", EntityType.FOX, Data.BABY, false),
     BROWN_MUSHROOM_COW("brown", EntityType.MUSHROOM_COW, MushroomCow.Variant.BROWN, true),
     RED_MUSHROOM_COW("red", EntityType.MUSHROOM_COW, MushroomCow.Variant.RED, true),
     AGGRESSIVE_PANDA("aggressive", EntityType.PANDA, Panda.Gene.AGGRESSIVE, true),
