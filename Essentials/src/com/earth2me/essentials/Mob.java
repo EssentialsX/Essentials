@@ -77,14 +77,14 @@ public enum Mob {
     PARROT("Parrot", Enemies.NEUTRAL, "PARROT"),
     TURTLE("Turtle", Enemies.NEUTRAL, "TURTLE"),
     PHANTOM("Phantom", Enemies.ENEMY, "PHANTOM"),
-    COD("Cod", Enemies.NEUTRAL, "COD"),
-    SALMON("Salmon", Enemies.NEUTRAL, "SALMON"),
-    PUFFERFISH("Pufferfish", Enemies.NEUTRAL, "PUFFERFISH"),
-    TROPICAL_FISH("TropicalFish", Enemies.NEUTRAL, "TROPICAL_FISH"),
+    COD("Cod", Enemies.NEUTRAL, "", "COD"),
+    SALMON("Salmon", Enemies.NEUTRAL, "", "SALMON"),
+    PUFFERFISH("Pufferfish", Enemies.NEUTRAL, "", "PUFFERFISH"),
+    TROPICAL_FISH("TropicalFish", Enemies.NEUTRAL, "", "TROPICAL_FISH"),
     DROWNED("Drowned", Enemies.ENEMY, "DROWNED"),
     DOLPHIN("Dolphin", Enemies.NEUTRAL, "DOLPHIN"),
     CAT("Cat", Enemies.FRIENDLY, "CAT"),
-    FOX("Fox", Enemies.FRIENDLY, "FOX"),
+    FOX("Fox", Enemies.FRIENDLY, "es", "FOX"),
     PANDA("Panda", Enemies.NEUTRAL, "PANDA"),
     PILLAGER("Pillager", Enemies.ENEMY, "PILLAGER"),
     RAVAGER("Ravager", Enemies.ENEMY, "RAVAGER"),
@@ -107,7 +107,14 @@ public enum Mob {
         this.bukkitType = type;
     }
 
-    Mob(String n, Enemies en, String... typeName) {
+    Mob(String n, Enemies en, String s, String typeName) {
+        this.suffix = s;
+        this.name = n;
+        this.type = en;
+        bukkitType = EnumUtil.getEntityType(typeName);
+    }
+
+    Mob(String n, Enemies en, String typeName) {
         this.name = n;
         this.type = en;
         bukkitType = EnumUtil.getEntityType(typeName);
