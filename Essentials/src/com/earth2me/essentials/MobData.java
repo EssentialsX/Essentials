@@ -106,7 +106,13 @@ public enum MobData {
     SHEPHERD_VILLAGER("shepherd", EntityType.VILLAGER, MobCompat.VillagerProfession.SHEPHERD, true),
     TOOLSMITH_VILLAGER("toolsmith", EntityType.VILLAGER, MobCompat.VillagerProfession.TOOLSMITH, true),
     WEAPONSMITH_VILLAGER("weaponsmith", EntityType.VILLAGER, MobCompat.VillagerProfession.WEAPONSMITH, true),
-    // TODO: VillagerTypes
+    DESERT_VILLAGER("desert", EntityType.VILLAGER, MobCompat.VillagerType.DESERT, true),
+    JUNGLE_VILLAGER("jungle", EntityType.VILLAGER, MobCompat.VillagerType.JUNGLE, true),
+    PLAINS_VILLAGER("plains", EntityType.VILLAGER, MobCompat.VillagerType.PLAINS, true),
+    SAVANNA_VILLAGER("savanna", EntityType.VILLAGER, MobCompat.VillagerType.SAVANNA, true),
+    SNOWY_VILLAGER("snowy", EntityType.VILLAGER, MobCompat.VillagerType.SNOWY, true),
+    SWAMP_VILLAGER("swamp", EntityType.VILLAGER, MobCompat.VillagerType.SWAMP, true),
+    TAIGA_VILLAGER("taiga", EntityType.VILLAGER, MobCompat.VillagerType.TAIGA, true),
     SIZE_SLIME("", "<1-100>", EntityType.SLIME.getEntityClass(), Data.SIZE, true),
     NUM_EXPERIENCE_ORB("", "<1-2000000000>", EntityType.EXPERIENCE_ORB, Data.EXP, true),
     RED_PARROT("red", EntityType.PARROT, Parrot.Variant.RED, true),
@@ -284,8 +290,10 @@ public enum MobData {
             ((Horse) spawned).setStyle((Horse.Style) this.value);
         } else if (this.value instanceof MobCompat.CatType) {
             MobCompat.setCatType(spawned, (MobCompat.CatType) this.value);
-        } else if (this.value instanceof Villager.Profession) {
-            ((Villager) spawned).setProfession((Villager.Profession) this.value);
+        } else if (this.value instanceof MobCompat.VillagerProfession) {
+            MobCompat.setVillagerProfession(spawned, (MobCompat.VillagerProfession) this.value);
+        } else if (this.value instanceof MobCompat.VillagerType) {
+            MobCompat.setVillagerType(spawned, (MobCompat.VillagerType) this.value);
         } else if (this.value instanceof Material) {
             if (this.type.equals(EntityType.HORSE)) {
                 ((Horse) spawned).setTamed(true);
