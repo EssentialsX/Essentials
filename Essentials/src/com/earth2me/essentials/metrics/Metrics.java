@@ -190,7 +190,7 @@ public class Metrics {
     public JsonObject getPluginData() {
         JsonObject data = new JsonObject();
 
-        String pluginName = plugin.getDescription().getName();
+        String pluginName = plugin.getDescription().getName().replace("Essentials", "EssentialsX");
         String pluginVersion = plugin.getDescription().getVersion();
 
         data.addProperty("pluginName", pluginName); // Append the name of the plugin
