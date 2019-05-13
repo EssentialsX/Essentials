@@ -1,4 +1,4 @@
-package org.bstats.bukkit;
+package com.earth2me.essentials.metrics;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
