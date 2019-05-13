@@ -73,22 +73,19 @@ public class Teleport implements ITeleport {
     }
 
     private boolean cooldownApplies() {
-        boolean applies = true;
         String globalBypassPerm = "essentials.teleport.cooldown.bypass";
         switch (tpType) {
             case NORMAL:
-                applies = !teleportOwner.isAuthorized(globalBypassPerm);
-                break;
+                return !teleportOwner.isAuthorized(globalBypassPerm);
             case BACK:
-                applies = !(teleportOwner.isAuthorized(globalBypassPerm) &&
+                return !(teleportOwner.isAuthorized(globalBypassPerm) &&
                         teleportOwner.isAuthorized("essentials.teleport.cooldown.bypass.back"));
-                break;
             case TPA:
-                applies = !(teleportOwner.isAuthorized(globalBypassPerm) &&
+                return !(teleportOwner.isAuthorized(globalBypassPerm) &&
                         teleportOwner.isAuthorized("essentials.teleport.cooldown.bypass.tpa"));
-                break;
+            default:
+                return true;
         }
-        return applies;
     }
 
     private void warnUser(final IUser user, final double delay) {
