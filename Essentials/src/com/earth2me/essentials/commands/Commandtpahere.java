@@ -1,5 +1,6 @@
 package com.earth2me.essentials.commands;
 
+import com.earth2me.essentials.Teleport;
 import com.earth2me.essentials.User;
 import org.bukkit.Server;
 
@@ -32,9 +33,22 @@ public class Commandtpahere extends EssentialsCommand {
         }
         // Don't let sender request teleport twice to the same player.
         if (user.getConfigUUID().equals(player.getTeleportRequest()) && player.hasOutstandingTeleportRequest() // Check timeout
-            && player.isTpRequestHere() == true) { // Make sure the last teleport request was actually tpahere and not tpa
+            && player.isTpRequestHere()) { // Make sure the last teleport request was actually tpahere and not tpa
             throw new Exception(tl("requestSentAlready", player.getDisplayName()));
         }
+
+        final Teleport teleport = player.getTeleport();
+        teleport.setTpType(Teleport.TeleportType.TPA);
+
+        // See if the target is on cooldown.
+        try {
+            teleport.cooldown(true);
+        } catch (Exception ignored) {
+            // The target is on cooldown
+            user.sendMessage(tl("requestDeniedCooldown", player.getDisplayName()));
+            return;
+        }
+
         if (!player.isIgnoredPlayer(user)) {
             player.requestTeleport(user, true);
             player.sendMessage(tl("teleportHereRequest", user.getDisplayName()));

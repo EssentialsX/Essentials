@@ -35,13 +35,24 @@ public class Commandtpa extends EssentialsCommand {
         }
         // Don't let sender request teleport twice to the same player.
         if (user.getConfigUUID().equals(player.getTeleportRequest()) && player.hasOutstandingTeleportRequest() // Check timeout
-            && player.isTpRequestHere() == false) { // Make sure the last teleport request was actually tpa and not tpahere
+            && !player.isTpRequestHere()) { // Make sure the last teleport request was actually tpa and not tpahere
             throw new Exception(tl("requestSentAlready", player.getDisplayName()));
         }
+
+        final Teleport teleport = player.getTeleport();
+        teleport.setTpType(Teleport.TeleportType.TPA);
+
+        // See if the target is on cooldown.
+        try {
+            teleport.cooldown(true);
+        } catch (Exception ignored) {
+            // The target is on cooldown
+            user.sendMessage(tl("requestDeniedCooldown", player.getDisplayName()));
+            return;
+        }
+
         if (player.isAutoTeleportEnabled() && !player.isIgnoredPlayer(user)) {
             final Trade charge = new Trade(this.getName(), ess);
-            Teleport teleport = user.getTeleport();
-            teleport.setTpType(Teleport.TeleportType.TPA);
             teleport.teleport(player.getBase(), charge, PlayerTeleportEvent.TeleportCause.COMMAND);
             player.sendMessage(tl("requestAcceptedAuto", user.getDisplayName()));
             user.sendMessage(tl("requestAcceptedFromAuto", player.getDisplayName()));
