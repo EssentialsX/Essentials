@@ -72,6 +72,18 @@ public class Teleport implements ITeleport {
         }
     }
 
+    private void border(Location loc, IUser teleportee) throws Exception {
+        // TODO: review: should we check if the world is null? I mean I kind of assume a location always has a world.
+        if (!loc.getWorld().getWorldBorder().isInside(loc)
+                && !teleportee.isAuthorized("essentials.teleport.border")) {
+            if (teleportOwner != teleportee) { // I think this will check if you are using #teleportOther()?
+                throw new Exception(tl("teleportBorderOther", teleportee.getName()));
+            } else {
+                throw new Exception(tl("teleportBorder"));
+            }
+        }
+    }
+
     private boolean cooldownApplies() {
         boolean applies = true;
         String globalBypassPerm = "essentials.teleport.cooldown.bypass";
@@ -122,6 +134,8 @@ public class Teleport implements ITeleport {
         cancel(false);
         teleportee.setLastLocation();
         Location loc = target.getLocation();
+
+        border(loc, teleportee);
 
         if (LocationUtil.isBlockUnsafeForUser(teleportee, loc.getWorld(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ())) {
             if (ess.getSettings().isTeleportSafetyEnabled()) {
