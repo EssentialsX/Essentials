@@ -183,6 +183,13 @@ socialspy-commands:
 # If so, they will be differentiated from those sent by normal players.
 socialspy-listen-muted-players: true
 
+# These settings listen for when a player changes worlds.
+# When a player switches worlds, would you like their speed / flight to be kept enabled?
+# If you use an external speed / flight plugin, these are recommended to be set to false.
+
+world-change-fly-reset: true
+world-change-speed-reset: true
+
 # Mute Commands
 # These commands will be disabled when a player is muted.
 # Use '*' to disable every command.
