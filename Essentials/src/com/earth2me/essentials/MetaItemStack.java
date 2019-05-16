@@ -488,7 +488,7 @@ public class MetaItemStack {
                 baseColor = ColorUtil.getDyeColor(split[1]);
             } else {
                 try {
-                    PatternType type = PatternType.valueOf(split[0]);
+                    PatternType type = PatternType.valueOf(split[0].toUpperCase());
                     DyeColor color = ColorUtil.getDyeColor(split[1]);
                     pattern = new org.bukkit.block.banner.Pattern(color, type);
                 } catch (IllegalArgumentException ignored) {}
@@ -498,24 +498,24 @@ public class MetaItemStack {
                 // Hacky fix for accessing Shield meta - https://github.com/drtshock/Essentials/pull/745#issuecomment-234843795
                 BlockStateMeta meta = (BlockStateMeta) stack.getItemMeta();
                 Banner banner = (Banner) meta.getBlockState();
+
                 if (baseColor != null) {
                     banner.setBaseColor(baseColor);
                 } else if (pattern != null) {
                     banner.addPattern(pattern);
                 }
-
                 banner.update();
+
                 meta.setBlockState(banner);
                 stack.setItemMeta(meta);
             } else {
-                final BannerMeta meta = (BannerMeta) stack.getItemMeta();
                 if (baseColor != null) {
-                    meta.setBaseColor(baseColor);
+                    stack.setType(Material.valueOf(baseColor.name() + "_BANNER"));
                 } else if (pattern != null) {
+                    final BannerMeta meta = (BannerMeta) stack.getItemMeta();
                     meta.addPattern(pattern);
+                    stack.setItemMeta(meta);
                 }
-
-                stack.setItemMeta(meta);
             }
         }
     }
