@@ -183,11 +183,16 @@ socialspy-commands:
 # If so, they will be differentiated from those sent by normal players.
 socialspy-listen-muted-players: true
 
-# These settings listen for when a player changes worlds.
-# When a player switches worlds, would you like their speed / flight to be kept enabled?
-# If you use an external speed / flight plugin, these are recommended to be set to false.
+# The following settings listen for when a player changes worlds.
+# If you use another plugin to control speed and flight, you should change these to false.
 
+# When a player changes world, should EssentialsX reset their flight?
+# This will disable flight if the player does not have essentials.fly.
 world-change-fly-reset: true
+
+# When a player changes world, should we reset their speed according to their permissions?
+# This resets the player's speed to the default if they don't have essentials.speed.
+# If the player doesn't have essentials.speed. bypass, this resets their speed to the maximum specified above.
 world-change-speed-reset: true
 
 # Mute Commands
