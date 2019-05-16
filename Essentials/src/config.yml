@@ -192,7 +192,7 @@ world-change-fly-reset: true
 
 # When a player changes world, should we reset their speed according to their permissions?
 # This resets the player's speed to the default if they don't have essentials.speed.
-# If the player doesn't have essentials.speed. bypass, this resets their speed to the maximum specified above.
+# If the player doesn't have essentials.speed.bypass, this resets their speed to the maximum specified above.
 world-change-speed-reset: true
 
 # Mute Commands
