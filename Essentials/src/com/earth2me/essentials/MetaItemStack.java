@@ -3,10 +3,7 @@ package com.earth2me.essentials;
 import com.earth2me.essentials.textreader.BookInput;
 import com.earth2me.essentials.textreader.BookPager;
 import com.earth2me.essentials.textreader.IText;
-import com.earth2me.essentials.utils.EnumUtil;
-import com.earth2me.essentials.utils.FormatUtil;
-import com.earth2me.essentials.utils.MaterialUtil;
-import com.earth2me.essentials.utils.NumberUtil;
+import com.earth2me.essentials.utils.*;
 import com.google.common.base.Joiner;
 import net.ess3.api.IEssentials;
 import net.ess3.nms.refl.ReflUtil;
@@ -477,57 +474,49 @@ public class MetaItemStack {
     }
 
     public void addBannerMeta(final CommandSource sender, final boolean allowShortName, final String string, final IEssentials ess) throws Exception {
-        if (MaterialUtil.isBanner(stack.getType()) && !stack.getType().toString().equals("SHIELD") && string != null) {
+        if (MaterialUtil.isBanner(stack.getType()) && string != null) {
             final String[] split = splitPattern.split(string, 2);
 
             if (split.length < 2) {
-                throw new Exception(tl("invalidBanner", split[1]));
+                throw new Exception(tl("invalidBanner", string));
             }
 
-            PatternType patternType = null;
-            try {
-                patternType = PatternType.valueOf(split[0]);
-            } catch (Exception ignored ) {}
+            DyeColor baseColor = null;
+            org.bukkit.block.banner.Pattern pattern = null;
 
-            final BannerMeta meta = (BannerMeta) stack.getItemMeta();
             if (split[0].equalsIgnoreCase("basecolor")) {
-                Color color = Color.fromRGB(Integer.valueOf(split[1]));
-                meta.setBaseColor(DyeColor.getByColor(color));
-            } else if (patternType != null) {
-                PatternType type = PatternType.valueOf(split[0]);
-                DyeColor color = DyeColor.getByColor(Color.fromRGB(Integer.valueOf(split[1])));
-                org.bukkit.block.banner.Pattern pattern = new org.bukkit.block.banner.Pattern(color, type);
-                meta.addPattern(pattern);
+                baseColor = ColorUtil.getDyeColor(split[1]);
+            } else {
+                try {
+                    PatternType type = PatternType.valueOf(split[0]);
+                    DyeColor color = ColorUtil.getDyeColor(split[1]);
+                    pattern = new org.bukkit.block.banner.Pattern(color, type);
+                } catch (IllegalArgumentException ignored) {}
             }
 
-            stack.setItemMeta(meta);
-        } else if (stack.getType().toString().equals("SHIELD") && string != null) {
-            final String[] split = splitPattern.split(string, 2);
+            if (stack.getType().toString().equals("SHIELD")) {
+                // Hacky fix for accessing Shield meta - https://github.com/drtshock/Essentials/pull/745#issuecomment-234843795
+                BlockStateMeta meta = (BlockStateMeta) stack.getItemMeta();
+                Banner banner = (Banner) meta.getBlockState();
+                if (baseColor != null) {
+                    banner.setBaseColor(baseColor);
+                } else if (pattern != null) {
+                    banner.addPattern(pattern);
+                }
 
-            if (split.length < 2) {
-                throw new Exception(tl("invalidBanner", split[1]));
+                banner.update();
+                meta.setBlockState(banner);
+                stack.setItemMeta(meta);
+            } else {
+                final BannerMeta meta = (BannerMeta) stack.getItemMeta();
+                if (baseColor != null) {
+                    meta.setBaseColor(baseColor);
+                } else if (pattern != null) {
+                    meta.addPattern(pattern);
+                }
+
+                stack.setItemMeta(meta);
             }
-
-            PatternType patternType = null;
-            try {
-                patternType = PatternType.valueOf(split[0]);
-            } catch (Exception ignored ) {}
-
-            // Hacky fix for accessing Shield meta - https://github.com/drtshock/Essentials/pull/745#issuecomment-234843795
-            BlockStateMeta meta = (BlockStateMeta) stack.getItemMeta();
-            Banner banner = (Banner) meta.getBlockState();
-            if (split[0].equalsIgnoreCase("basecolor")) {
-                Color color = Color.fromRGB(Integer.valueOf(split[1]));
-                banner.setBaseColor(DyeColor.getByColor(color));
-            } else if (patternType != null) {
-                PatternType type = PatternType.valueOf(split[0]);
-                DyeColor color = DyeColor.getByColor(Color.fromRGB(Integer.valueOf(split[1])));
-                org.bukkit.block.banner.Pattern pattern = new org.bukkit.block.banner.Pattern(color, type);
-                banner.addPattern(pattern);
-            }
-            banner.update();
-            meta.setBlockState(banner);
-            stack.setItemMeta(meta);
         }
     }
 
