@@ -10,9 +10,19 @@ import org.bukkit.entity.Villager;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
+import static com.earth2me.essentials.utils.EnumUtil.getEntityType;
+
 public class MobCompat {
 
-    public static final EntityType CAT = EnumUtil.getEntityType("CAT", "OCELOT");
+    // Constants for mobs added in later versions
+    public static final EntityType LLAMA = getEntityType("LLAMA");
+    public static final EntityType PARROT = getEntityType("PARROT");
+    public static final EntityType TROPICAL_FISH = getEntityType("TROPICAL_FISH");
+    public static final EntityType PANDA = getEntityType("PANDA");
+    public static final EntityType TRADER_LLAMA = getEntityType("TRADER_LLAMA");
+
+    // Constants for mobs that have changed since earlier versions
+    public static final EntityType CAT = getEntityType("CAT", "OCELOT");
 
     public enum CatType {
         // These are (loosely) Mojang names for the cats

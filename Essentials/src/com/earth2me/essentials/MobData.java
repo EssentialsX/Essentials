@@ -115,45 +115,45 @@ public enum MobData {
     TAIGA_VILLAGER("taiga", EntityType.VILLAGER, "villagertype:TAIGA", true),
     SIZE_SLIME("", "<1-100>", EntityType.SLIME.getEntityClass(), Data.SIZE, true),
     NUM_EXPERIENCE_ORB("", "<1-2000000000>", EntityType.EXPERIENCE_ORB, Data.EXP, true),
-    RED_PARROT("red", EntityType.PARROT, "parrot:RED", true),
-    GREEN_PARROT("green", EntityType.PARROT, "parrot:GREEN", true),
-    BLUE_PARROT("blue", EntityType.PARROT, "parrot:BLUE", true),
-    CYAN_PARROT("cyan", EntityType.PARROT, "parrot:CYAN", true),
-    GRAY_PARROT("gray", EntityType.PARROT, "parrot:GRAY", true),
-    KOB_TROPICAL_FISH("kob", EntityType.TROPICAL_FISH, "tropicalfish:KOB", true),
-    SUNSTREAK_TROPICAL_FISH("sunstreak", EntityType.TROPICAL_FISH, "tropicalfish:SUNSTREAK", true),
-    SNOOPER_TROPICAL_FISH("snooper", EntityType.TROPICAL_FISH, "tropicalfish:SNOOPER", true),
-    DASHER_TROPICAL_FISH("dasher", EntityType.TROPICAL_FISH, "tropicalfish:DASHER", true),
-    BRINELY_TROPICAL_FISH("brinely", EntityType.TROPICAL_FISH, "tropicalfish:BRINELY", true),
-    SPOTTY_TROPICAL_FISH("spotty", EntityType.TROPICAL_FISH, "tropicalfish:SPOTTY", true),
-    FLOPPER_TROPICAL_FISH("flopper", EntityType.TROPICAL_FISH, "tropicalfish:FLOPPER", true),
-    STRIPEY_TROPICAL_FISH("stripey", EntityType.TROPICAL_FISH, "tropicalfish:STRIPEY", true),
-    GLITTER_TROPICAL_FISH("glitter", EntityType.TROPICAL_FISH, "tropicalfish:GLITTER", true),
-    BLOCKFISH_TROPICAL_FISH("blockfish", EntityType.TROPICAL_FISH, "tropicalfish:BLOCKFISH", true),
-    BETTY_TROPICAL_FISH("betty", EntityType.TROPICAL_FISH, "tropicalfish:BETTY", true),
-    CLAYFISH_TROPICAL_FISH("clayfish", EntityType.TROPICAL_FISH, "tropicalfish:CLAYFISH", true),
+    RED_PARROT("red", MobCompat.PARROT, "parrot:RED", true),
+    GREEN_PARROT("green", MobCompat.PARROT, "parrot:GREEN", true),
+    BLUE_PARROT("blue", MobCompat.PARROT, "parrot:BLUE", true),
+    CYAN_PARROT("cyan", MobCompat.PARROT, "parrot:CYAN", true),
+    GRAY_PARROT("gray", MobCompat.PARROT, "parrot:GRAY", true),
+    KOB_TROPICAL_FISH("kob", MobCompat.TROPICAL_FISH, "tropicalfish:KOB", true),
+    SUNSTREAK_TROPICAL_FISH("sunstreak", MobCompat.TROPICAL_FISH, "tropicalfish:SUNSTREAK", true),
+    SNOOPER_TROPICAL_FISH("snooper", MobCompat.TROPICAL_FISH, "tropicalfish:SNOOPER", true),
+    DASHER_TROPICAL_FISH("dasher", MobCompat.TROPICAL_FISH, "tropicalfish:DASHER", true),
+    BRINELY_TROPICAL_FISH("brinely", MobCompat.TROPICAL_FISH, "tropicalfish:BRINELY", true),
+    SPOTTY_TROPICAL_FISH("spotty", MobCompat.TROPICAL_FISH, "tropicalfish:SPOTTY", true),
+    FLOPPER_TROPICAL_FISH("flopper", MobCompat.TROPICAL_FISH, "tropicalfish:FLOPPER", true),
+    STRIPEY_TROPICAL_FISH("stripey", MobCompat.TROPICAL_FISH, "tropicalfish:STRIPEY", true),
+    GLITTER_TROPICAL_FISH("glitter", MobCompat.TROPICAL_FISH, "tropicalfish:GLITTER", true),
+    BLOCKFISH_TROPICAL_FISH("blockfish", MobCompat.TROPICAL_FISH, "tropicalfish:BLOCKFISH", true),
+    BETTY_TROPICAL_FISH("betty", MobCompat.TROPICAL_FISH, "tropicalfish:BETTY", true),
+    CLAYFISH_TROPICAL_FISH("clayfish", MobCompat.TROPICAL_FISH, "tropicalfish:CLAYFISH", true),
     BROWN_MUSHROOM_COW("brown", EntityType.MUSHROOM_COW, "mooshroom:BROWN", true),
     RED_MUSHROOM_COW("red", EntityType.MUSHROOM_COW, "mooshroom:RED", true),
-    AGGRESSIVE_PANDA_MAIN("aggressive", EntityType.PANDA, "pandamain:AGGRESSIVE", true),
-    LAZY_PANDA_MAIN("lazy", EntityType.PANDA, "pandamain:LAZY", true),
-    WORRIED_PANDA_MAIN("worried", EntityType.PANDA, "pandamain:WORRIED", true),
-    PLAYFUL_PANDA_MAIN("playful", EntityType.PANDA, "pandamain:PLAYFUL", true),
-    BROWN_PANDA_MAIN("brown", EntityType.PANDA, "pandamain:BROWN", true),
-    WEAK_PANDA_MAIN("weak", EntityType.PANDA, "pandamain:WEAK", true),
-    AGGRESSIVE_PANDA_HIDDEN("aggressive_hidden", EntityType.PANDA, "pandahidden:AGGRESSIVE", true),
-    LAZY_PANDA_HIDDEN("lazy_hidden", EntityType.PANDA, "pandahidden:LAZY", true),
-    WORRIED_PANDA_HIDDEN("worried_hidden", EntityType.PANDA, "pandahidden:WORRIED", true),
-    PLAYFUL_PANDA_HIDDEN("playful_hidden", EntityType.PANDA, "pandahidden:PLAYFUL", true),
-    BROWN_PANDA_HIDDEN("brown_hidden", EntityType.PANDA, "pandahidden:BROWN", true),
-    WEAK_PANDA_HIDDEN("weak_hidden", EntityType.PANDA, "pandahidden:WEAK", true),
-    CREAMY_LLAMA("creamy", EntityType.LLAMA, "llama:CREAMY", true),
-    WHITE_LLAMA("white", EntityType.LLAMA, "llama:WHITE", true),
-    BROWN_LLAMA("brown", EntityType.LLAMA, "llama:BROWN", true),
-    GRAY_LLAMA("gray", EntityType.LLAMA, "llama:GRAY", true),
-    CREAMY_TRADER_LLAMA("creamy", EntityType.TRADER_LLAMA, "llama:CREAMY", true),
-    WHITE_TRADER_LLAMA("white", EntityType.TRADER_LLAMA, "llama:WHITE", true),
-    BROWN_TRADER_LLAMA("brown", EntityType.TRADER_LLAMA, "llama:BROWN", true),
-    GRAY_TRADER_LLAMA("gray", EntityType.TRADER_LLAMA, "llama:GRAY", true)
+    AGGRESSIVE_PANDA_MAIN("aggressive", MobCompat.PANDA, "pandamain:AGGRESSIVE", true),
+    LAZY_PANDA_MAIN("lazy", MobCompat.PANDA, "pandamain:LAZY", true),
+    WORRIED_PANDA_MAIN("worried", MobCompat.PANDA, "pandamain:WORRIED", true),
+    PLAYFUL_PANDA_MAIN("playful", MobCompat.PANDA, "pandamain:PLAYFUL", true),
+    BROWN_PANDA_MAIN("brown", MobCompat.PANDA, "pandamain:BROWN", true),
+    WEAK_PANDA_MAIN("weak", MobCompat.PANDA, "pandamain:WEAK", true),
+    AGGRESSIVE_PANDA_HIDDEN("aggressive_hidden", MobCompat.PANDA, "pandahidden:AGGRESSIVE", true),
+    LAZY_PANDA_HIDDEN("lazy_hidden", MobCompat.PANDA, "pandahidden:LAZY", true),
+    WORRIED_PANDA_HIDDEN("worried_hidden", MobCompat.PANDA, "pandahidden:WORRIED", true),
+    PLAYFUL_PANDA_HIDDEN("playful_hidden", MobCompat.PANDA, "pandahidden:PLAYFUL", true),
+    BROWN_PANDA_HIDDEN("brown_hidden", MobCompat.PANDA, "pandahidden:BROWN", true),
+    WEAK_PANDA_HIDDEN("weak_hidden", MobCompat.PANDA, "pandahidden:WEAK", true),
+    CREAMY_LLAMA("creamy", MobCompat.LLAMA, "llama:CREAMY", true),
+    WHITE_LLAMA("white", MobCompat.LLAMA, "llama:WHITE", true),
+    BROWN_LLAMA("brown", MobCompat.LLAMA, "llama:BROWN", true),
+    GRAY_LLAMA("gray", MobCompat.LLAMA, "llama:GRAY", true),
+    CREAMY_TRADER_LLAMA("creamy", MobCompat.TRADER_LLAMA, "llama:CREAMY", true),
+    WHITE_TRADER_LLAMA("white", MobCompat.TRADER_LLAMA, "llama:WHITE", true),
+    BROWN_TRADER_LLAMA("brown", MobCompat.TRADER_LLAMA, "llama:BROWN", true),
+    GRAY_TRADER_LLAMA("gray", MobCompat.TRADER_LLAMA, "llama:GRAY", true)
     ;
 
 
@@ -205,9 +205,11 @@ public enum MobData {
     public static LinkedHashMap<String, MobData> getPossibleData(final Entity spawned, boolean publicOnly) {
         LinkedHashMap<String, MobData> mobList = new LinkedHashMap<String, MobData>();
         for (MobData data : MobData.values()) {
-            if (data.type instanceof EntityType && spawned.getType().equals(data.type) && ((publicOnly && data.isPublic) || !publicOnly)) {
+            if (data.type == null || (publicOnly && !data.isPublic)) continue;
+            
+            if (data.type instanceof EntityType && spawned.getType().equals(data.type)) {
                 mobList.put(data.nickname.toLowerCase(Locale.ENGLISH), data);
-            } else if (data.type instanceof Class && ((Class) data.type).isAssignableFrom(spawned.getClass()) && ((publicOnly && data.isPublic) || !publicOnly)) {
+            } else if (data.type instanceof Class && ((Class) data.type).isAssignableFrom(spawned.getClass())) {
                 mobList.put(data.nickname.toLowerCase(Locale.ENGLISH), data);
             }
         }
