@@ -27,6 +27,7 @@ import java.util.logging.Level;
 import java.util.regex.Pattern;
 
 import static com.earth2me.essentials.I18n.tl;
+import static com.earth2me.essentials.utils.VersionUtil.v1_13_0_R01;
 
 
 public class MetaItemStack {
@@ -501,7 +502,7 @@ public class MetaItemStack {
                 if (baseColor != null) {
                     banner.setBaseColor(baseColor);
                 } else if (pattern != null) {
-                    if (VersionUtil.getServerBukkitVersion().isHigherThanOrEqualTo(VersionUtil.BukkitVersion.fromString("1.13.0-R0.1-SNAPSHOT"))) {
+                    if (VersionUtil.getServerBukkitVersion().isHigherThanOrEqualTo(v1_13_0_R01)) {
                         return; // Avoid applying patterns on 1.13 till we have found a fix (avoids errors)
                     }
                     banner.addPattern(pattern);
