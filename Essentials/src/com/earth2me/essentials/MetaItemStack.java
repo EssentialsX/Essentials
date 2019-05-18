@@ -7,8 +7,6 @@ import com.earth2me.essentials.utils.*;
 import com.google.common.base.Joiner;
 import net.ess3.api.IEssentials;
 import net.ess3.nms.refl.ReflUtil;
-
-import org.apache.commons.lang.ArrayUtils;
 import org.bukkit.Color;
 import org.bukkit.DyeColor;
 import org.bukkit.FireworkEffect;
@@ -198,7 +196,7 @@ public class MetaItemStack {
             final BookMeta meta = (BookMeta) stack.getItemMeta();
             meta.setTitle(title);
             stack.setItemMeta(meta);
-        } else if (split.length > 1 && split[0].equalsIgnoreCase("power") && (MaterialUtil.isFirework(stack.getType()))&& hasMetaPermission(sender, "firework-power", false, true, ess)) {
+        } else if (split.length > 1 && split[0].equalsIgnoreCase("power") && (MaterialUtil.isFirework(stack.getType())) && hasMetaPermission(sender, "firework-power", false, true, ess)) {
             final int power = NumberUtil.isInt(split[1]) ? Integer.parseInt(split[1]) : 0;
             final FireworkMeta meta = (FireworkMeta) stack.getItemMeta();
             meta.setPower(power > 3 ? 4 : power);
@@ -226,9 +224,9 @@ public class MetaItemStack {
                 String input = color[0];
                 if (input.startsWith("#")) { // Hex
                     meta.setColor(Color.fromRGB(
-                        Integer.valueOf(input.substring(1, 3), 16),
-                        Integer.valueOf(input.substring(3, 5), 16),
-                        Integer.valueOf(input.substring(5, 7), 16)));
+                            Integer.valueOf(input.substring(1, 3), 16),
+                            Integer.valueOf(input.substring(3, 5), 16),
+                            Integer.valueOf(input.substring(5, 7), 16)));
                 } else { // Int
                     meta.setColor(Color.fromRGB(Integer.parseInt(input)));
                 }
@@ -273,7 +271,7 @@ public class MetaItemStack {
     }
 
     public void addFireworkMeta(final CommandSource sender, final boolean allowShortName, final String string, final IEssentials ess) throws Exception {
-    if (MaterialUtil.isFirework(stack.getType())) {
+        if (MaterialUtil.isFirework(stack.getType())) {
             final String[] split = splitPattern.split(string, 2);
             if (split.length < 2) {
                 return;
@@ -491,7 +489,8 @@ public class MetaItemStack {
                     PatternType type = PatternType.valueOf(split[0].toUpperCase());
                     DyeColor color = ColorUtil.getDyeColor(split[1]);
                     pattern = new org.bukkit.block.banner.Pattern(color, type);
-                } catch (IllegalArgumentException ignored) {}
+                } catch (IllegalArgumentException ignored) {
+                }
             }
 
             if (stack.getType().toString().equals("SHIELD")) {
@@ -502,6 +501,9 @@ public class MetaItemStack {
                 if (baseColor != null) {
                     banner.setBaseColor(baseColor);
                 } else if (pattern != null) {
+                    if (VersionUtil.getServerBukkitVersion().isHigherThanOrEqualTo(VersionUtil.BukkitVersion.fromString("1.13.0-R0.1-SNAPSHOT"))) {
+                        return; // Avoid applying patterns on 1.13 till we have found a fix (avoids errors)
+                    }
                     banner.addPattern(pattern);
                 }
                 banner.update();
