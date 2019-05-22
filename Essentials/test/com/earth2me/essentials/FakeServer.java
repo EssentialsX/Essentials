@@ -874,7 +874,7 @@ public class FakeServer implements Server {
 
     @Override
     public boolean isPrimaryThread() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return true; // Can be set to true or false, just needs to return for AFK status test to pass.
     }
 
     @Override
