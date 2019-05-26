@@ -3,6 +3,7 @@ package net.ess3.api.events;
 import com.earth2me.essentials.signs.EssentialsSign;
 import com.earth2me.essentials.signs.EssentialsSign.ISign;
 import net.ess3.api.IUser;
+import org.bukkit.Bukkit;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
@@ -19,7 +20,7 @@ public class SignEvent extends Event implements Cancellable {
     IUser user;
 
     public SignEvent(final ISign sign, final EssentialsSign essSign, final IUser user) {
-        super();
+        super(!Bukkit.getServer().isPrimaryThread());
         this.sign = sign;
         this.essSign = essSign;
         this.user = user;

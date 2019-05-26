@@ -6,6 +6,6 @@ import org.bukkit.Bukkit;
 
 public class AfkStatusChangeEvent extends StatusChangeEvent {
     public AfkStatusChangeEvent(IUser affected, boolean value) {
-        super(!Bukkit.getServer().isPrimaryThread(), affected, affected, value);
+        super(affected, affected, value);
     }
 }
