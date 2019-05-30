@@ -92,7 +92,7 @@ public class EssentialsEntityListener implements Listener {
                     class PowerToolInteractTask implements Runnable {
                         @Override
                         public void run() {
-                            attacker.getServer().dispatchCommand(attacker.getBase(), command);
+                            attacker.getBase().chat("/" + command);
                             LOGGER.log(Level.INFO, String.format("[PT] %s issued server command: /%s", attacker.getName(), command));
                         }
                     }
@@ -156,6 +156,14 @@ public class EssentialsEntityListener implements Listener {
         if (user.isAuthorized("essentials.keepxp")) {
             event.setKeepLevel(true);
             event.setDroppedExp(0);
+        }
+    }
+
+    @EventHandler(priority = EventPriority.LOW)
+    public void onPlayerDeathInvEvent(final PlayerDeathEvent event) {
+        final User user = ess.getUser(event.getEntity());
+        if (user.isAuthorized("essentials.keepinv")) {
+            event.setKeepInventory(true);
         }
     }
 

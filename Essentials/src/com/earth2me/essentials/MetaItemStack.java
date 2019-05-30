@@ -208,13 +208,19 @@ public class MetaItemStack {
             stack.setItemMeta(meta);
         } else if (split.length > 1 && split[0].equalsIgnoreCase("itemflags") && hasMetaPermission(sender, "itemflags", false, true, ess)) {
             addItemFlags(string);
-        } else if (MaterialUtil.isFirework(stack.getType())) {//WARNING - Meta for fireworks will be ignored after this point.
+        } else if (MaterialUtil.isFirework(stack.getType())) {
+            //WARNING - Meta for fireworks will be ignored after this point.
             addFireworkMeta(sender, false, string, ess);
-        } else if (MaterialUtil.isPotion(stack.getType())) { //WARNING - Meta for potions will be ignored after this point.
+        } else if (MaterialUtil.isPotion(stack.getType())) {
+            //WARNING - Meta for potions will be ignored after this point.
             addPotionMeta(sender, false, string, ess);
         } else if (MaterialUtil.isBanner(stack.getType())) {
-            //WARNING - Meta for banners will be ignored after this point.
-            addBannerMeta(sender, false, string, ess);
+            if (stack.getType().toString().equals("SHIELD") && Enchantments.getByName(split[0]) != null) {
+                parseEnchantmentStrings(sender, allowUnsafe, split, ess);
+            } else {
+                //WARNING - Meta for banners will be ignored after this point.
+                addBannerMeta(sender, false, string, ess);
+            }
         } else if (split.length > 1 && (split[0].equalsIgnoreCase("color") || split[0].equalsIgnoreCase("colour")) && MaterialUtil.isLeatherArmor(stack.getType())) {
             final String[] color = split[1].split("(\\||,)");
             if (color.length == 1 && (NumberUtil.isInt(color[0]) || color[0].startsWith("#"))) {
