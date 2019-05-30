@@ -4,6 +4,7 @@ import com.earth2me.essentials.commands.IEssentialsCommand;
 import net.ess3.api.ITeleport;
 import net.ess3.api.MaxMoneyException;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
 import java.math.BigDecimal;
@@ -37,7 +38,7 @@ public interface IUser {
 
     boolean canAfford(BigDecimal value);
 
-    Boolean canSpawnItem(final int itemId);
+    Boolean canSpawnItem(final Material material);
 
     void setLastLocation();
 
@@ -180,6 +181,14 @@ public interface IUser {
     boolean isPromptingPayConfirm();
     
     void setPromptingPayConfirm(boolean prompt);
+    
+    boolean isPromptingClearConfirm();
+    
+    void setPromptingClearConfirm(boolean prompt);
+
+    boolean isLastMessageReplyRecipient();
+
+    void setLastMessageReplyRecipient(boolean enabled);
 
     Map<User, BigDecimal> getConfirmingPayments();
 }

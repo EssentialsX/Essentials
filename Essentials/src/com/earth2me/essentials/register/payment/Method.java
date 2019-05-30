@@ -5,10 +5,10 @@ import org.bukkit.plugin.Plugin;
 
 /**
  * Interface to be implemented by a payment method.
+ * Copyright (C) 2011
+ * AOL license <http://aol.nexua.org>
  *
  * @author Nijikokun <nijikokun@shortmail.com> (@nijikokun)
- * @copyright Copyright (C) 2011
- * @license AOL license <http://aol.nexua.org>
  */
 public interface Method {
     /**

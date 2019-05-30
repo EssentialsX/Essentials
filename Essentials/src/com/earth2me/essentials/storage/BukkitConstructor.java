@@ -1,25 +1,24 @@
 package com.earth2me.essentials.storage;
 
+import com.earth2me.essentials.Enchantments;
 import com.earth2me.essentials.utils.NumberUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.World;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.MaterialData;
 import org.bukkit.plugin.Plugin;
-import org.yaml.snakeyaml.TypeDescription;
-import org.yaml.snakeyaml.constructor.Constructor;
+import org.yaml.snakeyaml.constructor.BaseConstructor;
 import org.yaml.snakeyaml.constructor.CustomClassLoaderConstructor;
-import org.yaml.snakeyaml.error.YAMLException;
-import org.yaml.snakeyaml.introspector.Property;
+import org.yaml.snakeyaml.introspector.PropertyUtils;
 import org.yaml.snakeyaml.nodes.*;
 
-import java.lang.reflect.Field;
-import java.util.List;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.Locale;
-import java.util.Map;
 
 
 public class BukkitConstructor extends CustomClassLoaderConstructor {
@@ -30,25 +29,43 @@ public class BukkitConstructor extends CustomClassLoaderConstructor {
         this.plugin = plugin;
         yamlClassConstructors.put(NodeId.scalar, new ConstructBukkitScalar());
         yamlClassConstructors.put(NodeId.mapping, new ConstructBukkitMapping());
+
+        PropertyUtils propertyUtils = getPropertyUtils();
+        propertyUtils.setSkipMissingProperties(true);
+        setPropertyUtils(propertyUtils);
+    }
+
+    private Method constructScalarMethod = null;
+
+    protected String constructScalarRefl(ScalarNode scalarNode) {
+        try {
+            if (constructScalarMethod == null) {
+                constructScalarMethod = BaseConstructor.class.getDeclaredMethod("constructScalar", ScalarNode.class);
+            }
+            return (String) constructScalarMethod.invoke(this, scalarNode);
+        } catch (NoSuchMethodException
+                | SecurityException
+                | IllegalAccessException
+                | IllegalArgumentException
+                | InvocationTargetException e) {
+            e.printStackTrace();
+        }
+
+        return null;
     }
 
 
     private class ConstructBukkitScalar extends ConstructScalar {
+
         @Override
         public Object construct(final Node node) {
             if (node.getType().equals(Material.class)) {
-                final String val = (String) constructScalar((ScalarNode) node);
-                Material mat;
-                if (NumberUtil.isInt(val)) {
-                    final int typeId = Integer.parseInt(val);
-                    mat = Material.getMaterial(typeId);
-                } else {
-                    mat = Material.matchMaterial(val);
-                }
-                return mat;
+                final String val = constructScalarRefl((ScalarNode) node);
+                return Material.matchMaterial(val);
             }
+
             if (node.getType().equals(MaterialData.class)) {
-                final String val = (String) constructScalar((ScalarNode) node);
+                final String val = constructScalarRefl((ScalarNode) node);
                 if (val.isEmpty()) {
                     return null;
                 }
@@ -56,13 +73,9 @@ public class BukkitConstructor extends CustomClassLoaderConstructor {
                 if (split.length == 0) {
                     return null;
                 }
-                Material mat;
-                if (NumberUtil.isInt(split[0])) {
-                    final int typeId = Integer.parseInt(split[0]);
-                    mat = Material.getMaterial(typeId);
-                } else {
-                    mat = Material.matchMaterial(split[0]);
-                }
+
+                Material mat = Material.matchMaterial(split[0]);
+
                 if (mat == null) {
                     return null;
                 }
@@ -73,7 +86,7 @@ public class BukkitConstructor extends CustomClassLoaderConstructor {
                 return new MaterialData(mat, data);
             }
             if (node.getType().equals(ItemStack.class)) {
-                final String val = (String) constructScalar((ScalarNode) node);
+                final String val = constructScalarRefl((ScalarNode) node);
                 if (val.isEmpty()) {
                     return null;
                 }
@@ -85,13 +98,9 @@ public class BukkitConstructor extends CustomClassLoaderConstructor {
                 if (split2.length == 0) {
                     return null;
                 }
-                Material mat;
-                if (NumberUtil.isInt(split2[0])) {
-                    final int typeId = Integer.parseInt(split2[0]);
-                    mat = Material.getMaterial(typeId);
-                } else {
-                    mat = Material.matchMaterial(split2[0]);
-                }
+
+                Material mat = Material.matchMaterial(split2[0]);
+
                 if (mat == null) {
                     return null;
                 }
@@ -110,13 +119,7 @@ public class BukkitConstructor extends CustomClassLoaderConstructor {
                         if (split3.length < 1) {
                             continue;
                         }
-                        Enchantment enchantment;
-                        if (NumberUtil.isInt(split3[0])) {
-                            final int enchantId = Integer.parseInt(split3[0]);
-                            enchantment = Enchantment.getById(enchantId);
-                        } else {
-                            enchantment = Enchantment.getByName(split3[0].toUpperCase(Locale.ENGLISH));
-                        }
+                        Enchantment enchantment = Enchantments.getByName(split3[0]);
                         if (enchantment == null) {
                             continue;
                         }
@@ -136,7 +139,7 @@ public class BukkitConstructor extends CustomClassLoaderConstructor {
                 return stack;
             }
             if (node.getType().equals(EnchantmentLevel.class)) {
-                final String val = (String) constructScalar((ScalarNode) node);
+                final String val = constructScalarRefl((ScalarNode) node);
                 if (val.isEmpty()) {
                     return null;
                 }
@@ -144,13 +147,7 @@ public class BukkitConstructor extends CustomClassLoaderConstructor {
                 if (split.length == 0) {
                     return null;
                 }
-                Enchantment enchant;
-                if (NumberUtil.isInt(split[0])) {
-                    final int typeId = Integer.parseInt(split[0]);
-                    enchant = Enchantment.getById(typeId);
-                } else {
-                    enchant = Enchantment.getByName(split[0].toUpperCase(Locale.ENGLISH));
-                }
+                Enchantment enchant = Enchantments.getByName(split[0]);
                 if (enchant == null) {
                     return null;
                 }
@@ -170,8 +167,8 @@ public class BukkitConstructor extends CustomClassLoaderConstructor {
         }
     }
 
-
     private class ConstructBukkitMapping extends ConstructMapping {
+        
         @Override
         public Object construct(final Node node) {
             if (node.getType().equals(Location.class)) {
@@ -184,25 +181,25 @@ public class BukkitConstructor extends CustomClassLoaderConstructor {
                     return null;
                 }
                 for (NodeTuple nodeTuple : mnode.getValue()) {
-                    final String key = (String) constructScalar((ScalarNode) nodeTuple.getKeyNode());
+                    final String key = constructScalarRefl((ScalarNode) nodeTuple.getKeyNode());
                     final ScalarNode snode = (ScalarNode) nodeTuple.getValueNode();
                     if (key.equalsIgnoreCase("world")) {
-                        worldName = (String) constructScalar(snode);
+                        worldName = constructScalarRefl(snode);
                     }
                     if (key.equalsIgnoreCase("x")) {
-                        x = Double.parseDouble((String) constructScalar(snode));
+                        x = Double.parseDouble(constructScalarRefl(snode));
                     }
                     if (key.equalsIgnoreCase("y")) {
-                        y = Double.parseDouble((String) constructScalar(snode));
+                        y = Double.parseDouble(constructScalarRefl(snode));
                     }
                     if (key.equalsIgnoreCase("z")) {
-                        z = Double.parseDouble((String) constructScalar(snode));
+                        z = Double.parseDouble(constructScalarRefl(snode));
                     }
                     if (key.equalsIgnoreCase("yaw")) {
-                        yaw = Float.parseFloat((String) constructScalar(snode));
+                        yaw = Float.parseFloat(constructScalarRefl(snode));
                     }
                     if (key.equalsIgnoreCase("pitch")) {
-                        pitch = Float.parseFloat((String) constructScalar(snode));
+                        pitch = Float.parseFloat(constructScalarRefl(snode));
                     }
                 }
                 if (worldName == null || worldName.isEmpty()) {
@@ -215,103 +212,6 @@ public class BukkitConstructor extends CustomClassLoaderConstructor {
                 return new Location(world, x, y, z, yaw, pitch);
             }
             return super.construct(node);
-        }
-
-        @Override
-        protected Object constructJavaBean2ndStep(final MappingNode node, final Object object) {
-            Map<Class<? extends Object>, TypeDescription> typeDefinitions;
-            try {
-                final Field typeDefField = Constructor.class.getDeclaredField("typeDefinitions");
-                typeDefField.setAccessible(true);
-                typeDefinitions = (Map<Class<? extends Object>, TypeDescription>) typeDefField.get(BukkitConstructor.this);
-                if (typeDefinitions == null) {
-                    throw new NullPointerException();
-                }
-            } catch (Exception ex) {
-                throw new YAMLException(ex);
-            }
-            flattenMapping(node);
-            final Class<? extends Object> beanType = node.getType();
-            final List<NodeTuple> nodeValue = node.getValue();
-            for (NodeTuple tuple : nodeValue) {
-                ScalarNode keyNode;
-                if (tuple.getKeyNode() instanceof ScalarNode) {
-                    // key must be scalar
-                    keyNode = (ScalarNode) tuple.getKeyNode();
-                } else {
-                    throw new YAMLException("Keys must be scalars but found: " + tuple.getKeyNode());
-                }
-                final Node valueNode = tuple.getValueNode();
-                // keys can only be Strings
-                keyNode.setType(String.class);
-                final String key = (String) constructObject(keyNode);
-                try {
-                    Property property;
-                    try {
-                        property = getProperty(beanType, key);
-                    } catch (YAMLException e) {
-                        continue;
-                    }
-                    valueNode.setType(property.getType());
-                    final TypeDescription memberDescription = typeDefinitions.get(beanType);
-                    boolean typeDetected = false;
-                    if (memberDescription != null) {
-                        switch (valueNode.getNodeId()) {
-                            case sequence:
-                                final SequenceNode snode = (SequenceNode) valueNode;
-                                final Class<? extends Object> memberType = memberDescription.getListPropertyType(key);
-                                if (memberType != null) {
-                                    snode.setListType(memberType);
-                                    typeDetected = true;
-                                } else if (property.getType().isArray()) {
-                                    snode.setListType(property.getType().getComponentType());
-                                    typeDetected = true;
-                                }
-                                break;
-                            case mapping:
-                                final MappingNode mnode = (MappingNode) valueNode;
-                                final Class<? extends Object> keyType = memberDescription.getMapKeyType(key);
-                                if (keyType != null) {
-                                    mnode.setTypes(keyType, memberDescription.getMapValueType(key));
-                                    typeDetected = true;
-                                }
-                                break;
-                        }
-                    }
-                    if (!typeDetected && valueNode.getNodeId() != NodeId.scalar) {
-                        // only if there is no explicit TypeDescription
-                        final Class<?>[] arguments = property.getActualTypeArguments();
-                        if (arguments != null) {
-                            // type safe (generic) collection may contain the
-                            // proper class
-                            if (valueNode.getNodeId() == NodeId.sequence) {
-                                final Class<?> t = arguments[0];
-                                final SequenceNode snode = (SequenceNode) valueNode;
-                                snode.setListType(t);
-                            } else if (valueNode.getTag().equals(Tag.SET)) {
-                                final Class<?> t = arguments[0];
-                                final MappingNode mnode = (MappingNode) valueNode;
-                                mnode.setOnlyKeyType(t);
-                                mnode.setUseClassConstructor(true);
-                            } else if (property.getType().isAssignableFrom(Map.class)) {
-                                final Class<?> ketType = arguments[0];
-                                final Class<?> valueType = arguments[1];
-                                final MappingNode mnode = (MappingNode) valueNode;
-                                mnode.setTypes(ketType, valueType);
-                                mnode.setUseClassConstructor(true);
-                            } else {
-                                // the type for collection entries cannot be
-                                // detected
-                            }
-                        }
-                    }
-                    final Object value = constructObject(valueNode);
-                    property.set(object, value);
-                } catch (Exception e) {
-                    throw new YAMLException("Cannot create property=" + key + " for JavaBean=" + object + "; " + e.getMessage(), e);
-                }
-            }
-            return object;
         }
     }
 }

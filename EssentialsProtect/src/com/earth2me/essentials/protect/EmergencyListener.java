@@ -10,9 +10,16 @@ import org.bukkit.event.block.BlockIgniteEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.server.PluginEnableEvent;
 
 
 public class EmergencyListener implements Listener {
+    private EssentialsProtect plugin;
+
+    EmergencyListener(final EssentialsProtect essProtPlugin) {
+        plugin = essProtPlugin;
+    }
+
     @EventHandler(priority = EventPriority.LOW)
     public void onBlockBurn(final BlockBurnEvent event) {
         event.setCancelled(true);
@@ -46,5 +53,12 @@ public class EmergencyListener implements Listener {
     @EventHandler(priority = EventPriority.LOW)
     public void onEntityDamage(final EntityDamageEvent event) {
         event.setCancelled(true);
+    }
+
+    @EventHandler
+    public void onPluginEnabled(final PluginEnableEvent event) {
+        if (event.getPlugin().getName().equals("Essentials")) {
+            plugin.disableEmergencyMode();
+        }
     }
 }

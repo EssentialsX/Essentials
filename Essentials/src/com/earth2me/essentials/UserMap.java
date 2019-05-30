@@ -123,7 +123,7 @@ public class UserMap extends CacheLoader<String, User> implements IConf {
         if (uuid != null) {
             keys.add(uuid);
             if (name != null && name.length() > 0) {
-                final String keyName = StringUtil.safeString(name);
+                final String keyName = ess.getSettings().isSafeUsermap() ? StringUtil.safeString(name) : name;
                 if (!names.containsKey(keyName)) {
                     names.put(keyName, uuid);
                     uuidMap.writeUUIDMap();
@@ -190,7 +190,7 @@ public class UserMap extends CacheLoader<String, User> implements IConf {
     }
 
     public Set<UUID> getAllUniqueUsers() {
-        return Collections.unmodifiableSet(keys.clone());
+        return Collections.unmodifiableSet(keys);
     }
 
     public int getUniqueUsers() {

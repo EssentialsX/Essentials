@@ -6,6 +6,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.MaterialData;
 import org.bukkit.material.SpawnEgg;
 
+@SuppressWarnings("deprecation")
 public class LegacySpawnEggProvider extends SpawnEggProvider {
     @Override
     public ItemStack createEggItem(EntityType type) throws IllegalArgumentException {
@@ -13,7 +14,6 @@ public class LegacySpawnEggProvider extends SpawnEggProvider {
     }
 
     @Override
-    @SuppressWarnings("deprecation")
     public EntityType getSpawnedType(ItemStack eggItem) throws IllegalArgumentException {
         MaterialData data = eggItem.getData();
         if (data instanceof SpawnEgg) {

@@ -93,7 +93,7 @@ public class I18n implements net.ess3.api.II18n {
             }
             messageFormatCache.put(format, messageFormat);
         }
-        return messageFormat.format(objects);
+        return messageFormat.format(objects).replace(' ', ' '); // replace nbsp with a space
     }
 
     public void updateLocale(final String loc) {

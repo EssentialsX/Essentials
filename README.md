@@ -1,65 +1,77 @@
-![](https://i.imgur.com/CP4SZpB.png)
+[![EssentialsX](https://i.imgur.com/CP4SZpB.png)](https://essentialsx.github.io)
 
-[![Downloads](https://i.imgur.com/MMc0PJY.png)](https://ci.drtshock.net/job/EssentialsX)
+[<img alt="Jenkins" src="https://img.shields.io/badge/-Download_from_Jenkins-D24939.svg?logo=jenkins&style=flat-square&logoColor=white" height=32>](http://ci.ender.zone/job/EssentialsX/)
+
+[<img alt="Discord" src="https://img.shields.io/badge/-Chat_on_Discord-7289DA.svg?logo=discord&style=flat-square&logoColor=white" height=32>](https://discord.gg/casfFyh)
+
+[<img alt="Patreon" src="https://img.shields.io/badge/-Support_on_Patreon-F96854.svg?logo=patreon&style=flat-square&logoColor=white" height=32>](https://www.patreon.com/essentialsx)
 
 This is a fork of Essentials called EssentialsX.
 
 If you are using this, do **NOT** ask Essentials for support.
 
-The official upstream repository is at https://github.com/Essentials/Essentials
+The official upstream repository is at https://github.com/Essentials/Essentials.
 
-Why you should use it
+
+Why use EssentialsX?
 --------
 
-EssentialsX provides several performance enhancements and fixes that are currently not available in Essentials and Spigot-Essentials, most notably mob spawner support for 1.8+ servers and buy/trade sign support for 1.9+ servers. It also retains compatibility for Minecraft 1.7.10. [See the wiki for details.](https://github.com/drtshock/Essentials/wiki)
+EssentialsX is an unofficial continuation of Essentials, updated to support modern Minecraft and Spigot versions. It provides several performance enhancements and fixes that are currently not available in Essentials and Spigot-Essentials. [For more details, see the wiki.](https://essentialsx.github.io/#/Improvements)
 
 EssentialsX is almost a completely drop-in replacement for Essentials. However, it has different requirements:
 
-* **EssentialsX requires [Vault](http://dev.bukkit.org/bukkit-plugins/vault/) to enable chat prefix/suffixes and group support if you have a supported permissions plugin.**
+* **EssentialsX requires [Vault](http://dev.bukkit.org/bukkit-plugins/vault/) to enable chat prefix/suffixes and group support if you have a supported permissions plugin.** We recommend using [LuckPerms](https://luckperms.github.io).
 
-* **If you have an unsupported permissions plugin but still wish to use wildcards, enable `use-bukkit-permissions` in the configuration. Otherwise, the plugin will fall back to config-based permissions.**
+* **If you have an unsupported permissions plugin but still wish to use wildcards, enable `use-bukkit-permissions` in the configuration.** Otherwise, the plugin will fall back to config-based permissions.
 
-* **EssentialsX requires Java 7 or higher.**
+* **EssentialsX requires Java 8 or higher.** On older versions, the plugin may not work properly.
+
+* **EssentialsX supports Minecraft versions 1.8.8, 1.9.4, 1.10.2, 1.11.2, 1.12.2 and 1.13.2.**
+
+
+Support
+-------
+
+Need help with using EssentialsX? Join the [MOSS Discord community](https://discord.gg/casfFyh) to ask for help and discuss EssentialsX.
+
+If you need to report a bug or want to suggest a new feature, you can [open an issue on GitHub](https://github.com/EssentialsX/Essentials/issues/new/choose).
+
 
 Building
 --------
 
-Because EssentialsX builds against the Spigot/CraftBukkit server software for legacy support, you need to run Spigot's BuildTools for several versions in order to get it to compile.
+EssentialsX builds against the Spigot/CraftBukkit server software for legacy support.
 
-```
-java -jar BuildTools.jar --rev 1.8
-java -jar BuildTools.jar --rev 1.8.3
-java -jar BuildTools.jar --rev 1.9
-java -jar BuildTools.jar --rev 1.9.4
-```
+To compile EssentialsX, you first need to run [BuildTools](https://www.spigotmc.org/wiki/buildtools).
+This only needs to be done once. There are two ways to do this:
 
-Then, to build with Maven, use the command
+* Use the provided script at `scripts/buildtools.sh` to automatically download and run BuildTools if needed.
+* Download and run BuildTools yourself for versions `1.8` and `1.8.3`.
+
+Next, to build EssentialsX with Maven, run the following command:
 ```
 mvn clean install
 ```
 
-Jar files can then be found in the /target folder for each module.
+Each module's jar can be found in `target/` inside each module's directory.
+
+Using EssentialsX in your plugin
+--------------------------------
+
+Writing a plugin and want to support EssentialsX? We have a Maven repository at https://ci.ender.zone/plugin/repository/everything/, and the EssentialsX artifact is `net.ess3:EssentialsX:2.16.1`. More information at the [wiki](https://github.com/EssentialsX/Essentials/wiki/Common-Issues#how-do-i-add-essentialsx-as-a-dependency).
 
 
-Commit Guidelines
------------------
+Contributing
+------------
 
-Commits should fall into one of 3 areas:
+Want to help improve EssentialsX? There are numerous ways you can contribute to the project.
 
-- `[Feature]`: Commits which are features should start with `[Feature]` and followed by a quick summary on the top line, followed by some extra details in the commit body.
+If you'd like to make a financial contribution to the project, you can join our [Patreon](https://www.patreon.com/essentialsx/).
+If you can't make a donation, don't worry! There's lots of other ways to contribute:
 
-- `[Fix]`: Commits which fix bugs, or minor improvements to existing features should start with `[Fix]` and followed by a quick summary on the top line, followed by some extra details in the commit body.
-
-- Commits which fix bugs caused by previous commits (since last release), or otherwise make no functionality changes, should have no prefix.  These will not be added to the project change log.
-
-
-Other Info
------------------
-
-This is an unofficial fork of Essentials. It will be consistently updated and maintained with the latest Minecraft and Spigot versions.
-
-Support
------------------
-[Issue Tracker](https://github.com/drtshock/Essentials/issues)
-
-[Live Support](http://webchat.esper.net/?channels=drtshock&prompt=1) available business hours (GMT -5)
+* Do you run a server? Take a look at our ["help wanted" issues](https://github.com/EssentialsX/Essentials/issues?q=is%3Aissue+is%3Aopen+sort%3Aupdated-desc+label%3A%22help+wanted%22),
+  where you can find issues that need extra testing and investigation. You can also join the [MOSS Discord community](https://discord.gg/casfFyh)
+  and provide support to others.
+* Do you speak multiple languages? If so, we always welcome pull requests to our [language files](https://essentialsx.github.io/#/Locale).
+* If you're a developer, you could look through our ["open to PR" issues](https://github.com/EssentialsX/Essentials/issues?q=is%3Aissue+is%3Aopen+sort%3Aupdated-desc+label%3A%22status%3A+open+to+PR%22).
+  We're always happy to receive bug fixes and feature additions as pull requests.

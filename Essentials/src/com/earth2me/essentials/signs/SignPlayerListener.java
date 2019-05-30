@@ -1,5 +1,6 @@
 package com.earth2me.essentials.signs;
 
+import com.earth2me.essentials.utils.MaterialUtil;
 import net.ess3.api.IEssentials;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -54,7 +55,7 @@ public class SignPlayerListener implements Listener {
         }
 
         final Material mat = block.getType();
-        if (mat == Material.SIGN_POST || mat == Material.WALL_SIGN) {
+        if (MaterialUtil.isSign(mat)) {
             final String csign = ((Sign) block.getState()).getLine(0);
             for (EssentialsSign sign : ess.getSettings().enabledSigns()) {
                 if (csign.equalsIgnoreCase(sign.getSuccessName(ess))) {

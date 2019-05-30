@@ -111,6 +111,19 @@ public interface ITeleport {
     void back(Trade chargeFor) throws Exception;
 
     /**
+     * Teleport wrapper used to handle /back teleports that
+     * are executed by a different player with this
+     * instance of teleport as a target.
+     *
+     * @param teleporter - The user performing the /back command.
+     *                   This value may be {@code null} to indicate console.
+     * @param chargeFor - What the {@code teleporter} will be charged if teleportPlayer is successful
+     *
+     * @throws Exception
+     */
+    void back(IUser teleporter, Trade chargeFor) throws Exception;
+
+    /**
      * Teleport wrapper used to handle throwing user home after a jail sentence
      *
      * @throws Exception

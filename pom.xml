@@ -5,7 +5,7 @@
 
     <groupId>net.ess3</groupId>
     <artifactId>EssentialsXParent</artifactId>
-    <version>2.0.1</version>
+    <version>2.16.1</version>
 
     <packaging>pom</packaging>
 
@@ -17,19 +17,23 @@
     </licenses>
 
     <scm>
-        <connection>scm:git:https://github.com/drtshock/Essentials.git</connection>
-        <developerConnection>scm:git:https://github.com/drtshock/Essentials.git</developerConnection>
-        <url>https://github.com/drtshock/Essentials</url>
+        <connection>scm:git:https://github.com/EssentialsX/Essentials.git</connection>
+        <developerConnection>scm:git:https://github.com/EssentialsX/Essentials.git</developerConnection>
+        <url>https://github.com/EssentialsX/Essentials</url>
     </scm>
 
     <repositories>
         <repository>
             <id>ess-repo</id>
-            <url>https://ci.drtshock.net/plugin/repository/everything/</url>
+            <url>https://ci.ender.zone/plugin/repository/everything/</url>
         </repository>
         <repository>
-            <id>bukkit-repo</id>
+            <id>spigot-repo</id>
             <url>https://hub.spigotmc.org/nexus/content/groups/public/</url>
+        </repository>
+        <repository>
+            <id>paper-repo</id>
+            <url>https://papermc.io/repo/repository/maven-public/</url>
         </repository>
     </repositories>
 
@@ -47,13 +51,14 @@
         <module>nms/1_8_R2Provider</module>
         <module>nms/LegacyProvider</module>
         <module>nms/ReflectionProvider</module>
+        <module>nms/FlattenedProvider</module>
     </modules>
 
     <dependencies>
         <dependency>
             <groupId>org.bukkit</groupId>
             <artifactId>bukkit</artifactId>
-            <version>1.12-R0.1-SNAPSHOT</version>
+            <version>1.13.2-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -68,54 +73,26 @@
             <version>2.8.47</version>
             <scope>test</scope>
         </dependency>
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <version>1.12.2</version>
-            <scope>provided</scope>
-        </dependency>
     </dependencies>
 
     <build>
+        <defaultGoal>clean install</defaultGoal>
         <sourceDirectory>src</sourceDirectory>
         <testSourceDirectory>test</testSourceDirectory>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.1</version>
+                <version>3.8.0</version>
                 <configuration>
-                    <source>1.7</source>
-                    <target>1.7</target>
+                    <source>1.8</source>
+                    <target>1.8</target>
                 </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-antrun-plugin</artifactId>
-                <version>1.7</version>
-                <executions>
-                    <execution>
-                        <phase>validate</phase>
-                        <goals>
-                            <goal>run</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <dependencies>
-                    <dependency>
-                        <groupId>com.sun</groupId>
-                        <artifactId>tools</artifactId>
-                        <version>1.5.0</version>
-                        <scope>system</scope>
-                        <systemPath>${java.home}/../lib/tools.jar</systemPath>
-                    </dependency>
-                </dependencies>
-                <inherited>false</inherited>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-dependency-plugin</artifactId>
-                <version>2.8</version>
+                <version>3.1.1</version>
                 <configuration>
                     <outputDirectory>jars</outputDirectory>
                     <stripVersion>true</stripVersion>
@@ -161,7 +138,7 @@
             </plugin>
             <plugin>
                 <artifactId>maven-resources-plugin</artifactId>
-                <version>2.6</version>
+                <version>3.1.0</version>
                 <executions>
                     <execution>
                         <phase>package</phase>
@@ -177,6 +154,7 @@
                                         <include>messages*.properties</include>
                                         <include>config.yml</include>
                                         <include>items.csv</include>
+                                        <include>items.json</include>
                                     </includes>
                                     <excludes>
                                         <exclude>plugin.yml</exclude>
@@ -192,7 +170,7 @@
             <plugin>
                 <groupId>com.google.code.maven-replacer-plugin</groupId>
                 <artifactId>replacer</artifactId>
-                <version>1.5.2</version>
+                <version>1.5.3</version>
                 <executions>
                     <execution>
                         <phase>process-sources</phase>
@@ -206,19 +184,11 @@
                     <replacements>
                         <replacement>
                             <token>TeamCity</token>
-                            <value>${build.number}</value>
-                        </replacement>
-                        <replacement>
-                            <token>GMBuildVer</token>
-                            <value>${GMVer}</value>
+                            <value>${full.version}</value>
                         </replacement>
                         <replacement>
                             <token>$${build.number}</token>
-                            <value>${build.number}</value>
-                        </replacement>
-                        <replacement>
-                            <token>$${GMVer}</token>
-                            <value>${GMVer}</value>
+                            <value>${full.version}</value>
                         </replacement>
                     </replacements>
                 </configuration>
@@ -227,7 +197,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-clean-plugin</artifactId>
-                <version>2.5</version>
+                <version>3.1.0</version>
                 <configuration>
                     <filesets>
                         <fileset>
@@ -246,15 +216,61 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
-                <version>2.9.1</version>
+                <version>3.0.1</version>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-deploy-plugin</artifactId>
-                <version>2.8.1</version>
+                <version>2.8.2</version>
                 <configuration>
                     <deployAtEnd>true</deployAtEnd>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>pl.project13.maven</groupId>
+                <artifactId>git-commit-id-plugin</artifactId>
+                <version>2.2.5</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>revision</goal>
+                        </goals>
+                    </execution>
+                </executions>
+
+                <configuration>
+                    <skipPoms>false</skipPoms>
+
+                    <runOnlyOnce>true</runOnlyOnce>
+                    <injectAllReactorProjects>true</injectAllReactorProjects>
+                    <failOnNoGitDirectory>false</failOnNoGitDirectory>
+
+                    <gitDescribe>
+                        <tags>true</tags>
+                    </gitDescribe>
+                </configuration>
+
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>native2ascii-maven-plugin</artifactId>
+                <version>2.0.1</version>
+                <executions>
+                    <execution>
+                        <id>utf8-to-latin1</id>
+                        <goals>
+                            <goal>inplace</goal>
+                        </goals>
+                        <phase>process-resources</phase>
+                        <configuration>
+                            <dir>${project.build.outputDirectory}</dir>
+                            <encoding>${project.build.sourceEncoding}</encoding>
+                            <includes>
+                                <include>**/*.properties</include>
+                            </includes>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
         <resources>
@@ -265,6 +281,7 @@
                     <include>*.yml</include>
                     <include>*.csv</include>
                     <include>*.txt</include>
+                    <include>*.json</include>
                 </includes>
                 <filtering>true</filtering>
             </resource>
@@ -272,8 +289,14 @@
     </build>
 
     <properties>
-        <build.number>SNAPSHOT</build.number>
-        <GMVer>GMBuildVer</GMVer>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+        <!-- The plugins' release version -->
+        <release.version>2.16.1</release.version>
+
+        <!-- The plugins' build number -->
+        <build.version>${git.closest.tag.commit.count}</build.version>
+
+        <full.version>${release.version}.${build.version}</full.version>
     </properties>
 </project>

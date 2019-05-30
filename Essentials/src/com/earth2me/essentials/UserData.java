@@ -7,6 +7,7 @@ import net.ess3.api.IEssentials;
 import net.ess3.api.InvalidWorldException;
 import net.ess3.api.MaxMoneyException;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -73,6 +74,7 @@ public abstract class UserData extends PlayerExtension implements IConf {
         godmode = _getGodModeEnabled();
         muted = _getMuted();
         muteTimeout = _getMuteTimeout();
+        muteReason = _getMuteReason();
         jailed = _getJailed();
         jailTimeout = _getJailTimeout();
         lastLogin = _getLastLogin();
@@ -91,6 +93,8 @@ public abstract class UserData extends PlayerExtension implements IConf {
         commandCooldowns = _getCommandCooldowns();
         acceptingPay = _getAcceptingPay();
         confirmPay = _getConfirmPay();
+        confirmClear = _getConfirmClear();
+        lastMessageReplyRecipient = _getLastMessageReplyRecipient();
     }
 
     private BigDecimal money;
@@ -99,7 +103,7 @@ public abstract class UserData extends PlayerExtension implements IConf {
         BigDecimal result = ess.getSettings().getStartingBalance();
         BigDecimal maxMoney = ess.getSettings().getMaxMoney();
         BigDecimal minMoney = ess.getSettings().getMinMoney();
-        
+
         // NPC banks are not actual player banks, as such they do not have player starting balance.
         if (isNPC()) {
             result = BigDecimal.ZERO;
@@ -230,26 +234,35 @@ public abstract class UserData extends PlayerExtension implements IConf {
         config.save();
     }
 
-    private List<Integer> unlimited;
+    private List<Material> unlimited;
 
-    private List<Integer> _getUnlimited() {
-        return config.getIntegerList("unlimited");
+    private List<Material> _getUnlimited() {
+        List<Material> retlist = new ArrayList<>();
+        List<String> configList = config.getStringList("unlimited");
+        for(String s : configList) {
+            Material mat = Material.matchMaterial(s);
+            if(mat != null) {
+                retlist.add(mat);
+            }
+        }
+
+        return retlist;
     }
 
-    public List<Integer> getUnlimited() {
+    public List<Material> getUnlimited() {
         return unlimited;
     }
 
     public boolean hasUnlimited(ItemStack stack) {
-        return unlimited.contains(stack.getTypeId());
+        return unlimited.contains(stack.getType());
     }
 
     public void setUnlimited(ItemStack stack, boolean state) {
-        if (unlimited.contains(stack.getTypeId())) {
-            unlimited.remove(Integer.valueOf(stack.getTypeId()));
+        if (unlimited.contains(stack.getType())) {
+            unlimited.remove(stack.getType());
         }
         if (state) {
-            unlimited.add(stack.getTypeId());
+            unlimited.add(stack.getType());
         }
         config.setProperty("unlimited", unlimited);
         config.save();
@@ -261,7 +274,7 @@ public abstract class UserData extends PlayerExtension implements IConf {
         if (config.isConfigurationSection("powertools")) {
             return config.getConfigurationSection("powertools").getValues(false);
         }
-        return new HashMap<String, Object>();
+        return new HashMap<>();
     }
 
     public void clearAllPowertools() {
@@ -272,19 +285,19 @@ public abstract class UserData extends PlayerExtension implements IConf {
 
     @SuppressWarnings("unchecked")
     public List<String> getPowertool(ItemStack stack) {
-        return (List<String>) powertools.get("" + stack.getTypeId());
+        return (List<String>) powertools.get(stack.getType().name().toLowerCase(Locale.ENGLISH));
     }
 
     @SuppressWarnings("unchecked")
-    public List<String> getPowertool(int id) {
-        return (List<String>) powertools.get("" + id);
+    public List<String> getPowertool(Material material) {
+        return (List<String>) powertools.get(material.name().toLowerCase(Locale.ENGLISH));
     }
 
     public void setPowertool(ItemStack stack, List<String> commandList) {
         if (commandList == null || commandList.isEmpty()) {
-            powertools.remove("" + stack.getTypeId());
+            powertools.remove(stack.getType().name().toLowerCase(Locale.ENGLISH));
         } else {
-            powertools.put("" + stack.getTypeId(), commandList);
+            powertools.put(stack.getType().name().toLowerCase(Locale.ENGLISH), commandList);
         }
         config.setProperty("powertools", powertools);
         config.save();
@@ -435,6 +448,22 @@ public abstract class UserData extends PlayerExtension implements IConf {
         config.save();
     }
 
+    private boolean autoTeleportEnabled;
+
+    private boolean _getAutoTeleportEnabled() {
+        return config.getBoolean("teleportauto", false);
+    }
+
+    public boolean isAutoTeleportEnabled() {
+        return autoTeleportEnabled;
+    }
+
+    public void setAutoTeleportEnabled(boolean set) {
+        autoTeleportEnabled = set;
+        config.setProperty("teleportauto", set);
+        config.save();
+    }
+
     private List<String> ignoredPlayers;
 
     public List<String> _getIgnoredPlayers() {
@@ -466,10 +495,11 @@ public abstract class UserData extends PlayerExtension implements IConf {
     }
 
     public void setIgnoredPlayer(IUser user, boolean set) {
+        final String entry = user.getName().toLowerCase(Locale.ENGLISH);
         if (set) {
-            ignoredPlayers.add(user.getName().toLowerCase(Locale.ENGLISH));
+            if (!ignoredPlayers.contains(entry)) ignoredPlayers.add(entry);
         } else {
-            ignoredPlayers.remove(user.getName().toLowerCase(Locale.ENGLISH));
+            ignoredPlayers.remove(entry);
         }
         setIgnoredPlayers(ignoredPlayers);
     }
@@ -491,6 +521,7 @@ public abstract class UserData extends PlayerExtension implements IConf {
     }
 
     private boolean muted;
+    private String muteReason;
 
     public boolean _getMuted() {
         return config.getBoolean("muted", false);
@@ -508,6 +539,29 @@ public abstract class UserData extends PlayerExtension implements IConf {
         muted = set;
         config.setProperty("muted", set);
         config.save();
+    }
+
+    public String _getMuteReason() {
+        return config.getString("muteReason");
+    }
+
+    public String getMuteReason() {
+        return muteReason;
+    }
+
+    public void setMuteReason(String reason) {
+        if (reason == null) {
+            config.removeProperty("muteReason");
+            muteReason = null;
+        } else {
+            muteReason = reason;
+            config.setProperty("muteReason", reason);
+        }
+        config.save();
+    }
+
+    public boolean hasMuteReason(){
+        return muteReason != null;
     }
 
     private long muteTimeout;
@@ -805,7 +859,7 @@ public abstract class UserData extends PlayerExtension implements IConf {
         if (!config.isConfigurationSection("timestamps.command-cooldowns")) {
             return null;
         }
-        
+
         // See saveCommandCooldowns() for deserialization explanation
         List<Map<?, ?>> section = config.getMapList("timestamps.command-cooldowns");
         HashMap<Pattern, Long> result = new HashMap<>();
@@ -844,19 +898,19 @@ public abstract class UserData extends PlayerExtension implements IConf {
             saveCommandCooldowns();
         }
     }
-    
+
     public boolean clearCommandCooldown(Pattern pattern) {
         if (this.commandCooldowns == null) {
             return false; // false for no modification
         }
-        
+
         if(this.commandCooldowns.remove(pattern) != null) {
             saveCommandCooldowns();
             return true;
         }
         return false;
     }
-    
+
     private void saveCommandCooldowns() {
         // Serialization explanation:
         //
@@ -897,19 +951,51 @@ public abstract class UserData extends PlayerExtension implements IConf {
         save();
     }
 
-    private boolean confirmPay = true; // players accept pay by default
+    private Boolean confirmPay;
 
-    public boolean _getConfirmPay() {
-        return config.getBoolean("confirm-pay", true);
+    private Boolean _getConfirmPay() {
+        return (Boolean) config.get("confirm-pay");
     }
 
     public boolean isPromptingPayConfirm() {
-        return confirmPay;
+        return confirmPay != null ? confirmPay : ess.getSettings().isConfirmCommandEnabledByDefault("pay");
     }
 
     public void setPromptingPayConfirm(boolean prompt) {
         this.confirmPay = prompt;
         config.setProperty("confirm-pay", prompt);
+        save();
+    }
+
+    private Boolean confirmClear;
+
+    private Boolean _getConfirmClear() {
+        return (Boolean) config.get("confirm-clear");
+    }
+
+    public boolean isPromptingClearConfirm() {
+        return confirmClear != null ? confirmClear : ess.getSettings().isConfirmCommandEnabledByDefault("clearinventory");
+    }
+
+    public void setPromptingClearConfirm(boolean prompt) {
+        this.confirmClear = prompt;
+        config.setProperty("confirm-clear", prompt);
+        save();
+    }
+
+    private boolean lastMessageReplyRecipient;
+
+    private boolean _getLastMessageReplyRecipient() {
+        return config.getBoolean("last-message-reply-recipient", ess.getSettings().isLastMessageReplyRecipient());
+    }
+
+    public boolean isLastMessageReplyRecipient() {
+        return this.lastMessageReplyRecipient;
+    }
+
+    public void setLastMessageReplyRecipient(boolean enabled) {
+        this.lastMessageReplyRecipient = enabled;
+        config.setProperty("last-message-reply-recipient", enabled);
         save();
     }
 

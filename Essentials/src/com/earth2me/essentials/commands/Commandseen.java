@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
+import java.util.Collections;
 
 import static com.earth2me.essentials.I18n.tl;
 
@@ -27,16 +28,16 @@ public class Commandseen extends EssentialsCommand {
 
     @Override
     protected void run(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception {
-        seen(server, sender, commandLabel, args, true, true, true);
+        seen(server, sender, commandLabel, args, true, true, true, true);
     }
 
     @Override
     protected void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception {
-        seen(server, user.getSource(), commandLabel, args, user.isAuthorized("essentials.seen.banreason"), user.isAuthorized("essentials.seen.extra"), user.isAuthorized("essentials.seen.ipsearch"));
+        seen(server, user.getSource(), commandLabel, args, user.isAuthorized("essentials.seen.banreason"), user.isAuthorized("essentials.seen.ip"), user.isAuthorized("essentials.seen.location"), user.isAuthorized("essentials.seen.ipsearch"));
     }
 
     protected void seen(final Server server, final CommandSource sender, final String commandLabel, final String[] args,
-                        final boolean showBan, final boolean extra, final boolean ipLookup) throws Exception {
+                        final boolean showBan, final boolean showIp, final boolean showLocation, final boolean ipLookup) throws Exception {
         if (args.length < 1) {
             throw new NotEnoughArgumentsException();
         }
@@ -79,23 +80,23 @@ public class Commandseen extends EssentialsCommand {
                     if (user == null) {
                         throw new PlayerNotFoundException();
                     }
-                    showSeenMessage(server, sender, user, showBan, extra);
+                    showSeenMessage(server, sender, user, showBan, showIp, showLocation);
                 }
             });
         } else {
-            showSeenMessage(server, sender, player, showBan, extra);
+            showSeenMessage(server, sender, player, showBan, showIp, showLocation);
         }
     }
 
-    private void showSeenMessage(Server server, CommandSource sender, User player, boolean showBan, boolean extra)  throws Exception {
+    private void showSeenMessage(Server server, CommandSource sender, User player, boolean showBan, boolean showIp, boolean showLocation)  throws Exception {
         if (player.getBase().isOnline() && canInteractWith(sender, player)) {
-            seenOnline(server, sender, player, showBan, extra);
+            seenOnline(server, sender, player, showBan, showIp, showLocation);
         } else {
-            seenOffline(server, sender, player, showBan, extra);
+            seenOffline(server, sender, player, showBan, showIp, showLocation);
         }
     }
 
-    private void seenOnline(final Server server, final CommandSource sender, final User user, final boolean showBan, final boolean extra) throws Exception {
+    private void seenOnline(final Server server, final CommandSource sender, final User user, final boolean showBan, final boolean showIp, final boolean showLocation) throws Exception {
 
         user.setDisplayNick();
         sender.sendMessage(tl("seenOnline", user.getDisplayName(), DateUtil.formatDateDiff(user.getLastLogin())));
@@ -116,18 +117,23 @@ public class Commandseen extends EssentialsCommand {
             sender.sendMessage(tl("whoisJail", (user.getJailTimeout() > 0 ? DateUtil.formatDateDiff(user.getJailTimeout()) : tl("true"))));
         }
         if (user.isMuted()) {
-            sender.sendMessage(tl("whoisMuted", (user.getMuteTimeout() > 0 ? DateUtil.formatDateDiff(user.getMuteTimeout()) : tl("true"))));
+            long muteTimeout = user.getMuteTimeout();
+            if (!user.hasMuteReason()) {
+                sender.sendMessage(tl("whoisMuted", (muteTimeout > 0 ? DateUtil.formatDateDiff(muteTimeout) : tl("true"))));
+            } else {
+                sender.sendMessage(tl("whoisMutedReason", (muteTimeout > 0 ? DateUtil.formatDateDiff(muteTimeout) : tl("true")), user.getMuteReason()));
+            }
         }
         final String location = user.getGeoLocation();
         if (location != null && (!(sender.isPlayer()) || ess.getUser(sender.getPlayer()).isAuthorized("essentials.geoip.show"))) {
             sender.sendMessage(tl("whoisGeoLocation", location));
         }
-        if (extra) {
+        if (showIp) {
             sender.sendMessage(tl("whoisIPAddress", user.getBase().getAddress().getAddress().toString()));
         }
     }
 
-    private void seenOffline(final Server server, final CommandSource sender, User user, final boolean showBan, final boolean extra) throws Exception {
+    private void seenOffline(final Server server, final CommandSource sender, User user, final boolean showBan, final boolean showIp, final boolean showLocation) throws Exception {
         user.setDisplayNick();
         if (user.getLastLogout() > 0) {
             sender.sendMessage(tl("seenOffline", user.getName(), DateUtil.formatDateDiff(user.getLastLogout())));
@@ -158,14 +164,25 @@ public class Commandseen extends EssentialsCommand {
             }
         }
 
+        if (user.isMuted()) {
+            long muteTimeout = user.getMuteTimeout();
+            if (!user.hasMuteReason()) {
+                sender.sendMessage(tl("whoisMuted", (muteTimeout > 0 ? DateUtil.formatDateDiff(muteTimeout) : tl("true"))));
+            } else {
+                sender.sendMessage(tl("whoisMutedReason", (muteTimeout > 0 ? DateUtil.formatDateDiff(muteTimeout) : tl("true")), user.getMuteReason()));
+            }
+        }
+
         final String location = user.getGeoLocation();
         if (location != null && (!(sender.isPlayer()) || ess.getUser(sender.getPlayer()).isAuthorized("essentials.geoip.show"))) {
             sender.sendMessage(tl("whoisGeoLocation", location));
         }
-        if (extra) {
+        if (showIp) {
             if (!user.getLastLoginAddress().isEmpty()) {
                 sender.sendMessage(tl("whoisIPAddress", user.getLastLoginAddress()));
             }
+        }
+        if (showLocation) {
             final Location loc = user.getLogoutLocation();
             if (loc != null) {
                 sender.sendMessage(tl("whoisLocation", loc.getWorld().getName(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ()));
@@ -209,5 +226,14 @@ public class Commandseen extends EssentialsCommand {
             }
         });
 
+    }
+
+    @Override
+    protected List<String> getTabCompleteOptions(Server server, CommandSource sender, String commandLabel, String[] args) {
+        if (args.length == 1) {
+            return getPlayers(server, sender);
+        } else {
+            return Collections.emptyList();
+        }
     }
 }

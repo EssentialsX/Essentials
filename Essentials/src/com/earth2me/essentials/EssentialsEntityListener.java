@@ -47,7 +47,7 @@ public class EssentialsEntityListener implements Listener {
                     event.setCancelled(true);
                 }
             }
-            attacker.updateActivity(true);
+            attacker.updateActivityOnInteract(true);
         } else if (eAttack instanceof Projectile && eDefend instanceof Player) {
             final Projectile projectile = (Projectile) event.getDamager();
             //This should return a ProjectileSource on 1.7.3 beta +
@@ -55,7 +55,7 @@ public class EssentialsEntityListener implements Listener {
             if (shooter instanceof Player) {
                 final User attacker = ess.getUser((Player) shooter);
                 onPlayerVsPlayerDamage(event, (Player) eDefend, attacker);
-                attacker.updateActivity(true);
+                attacker.updateActivityOnInteract(true);
             }
         }
     }
@@ -77,7 +77,9 @@ public class EssentialsEntityListener implements Listener {
             event.setCancelled(true);
         }
 
-        onPlayerVsPlayerPowertool(event, defender, attacker);
+        if (attacker.arePowerToolsEnabled()) {
+            onPlayerVsPlayerPowertool(event, defender, attacker);
+        }
     }
 
     private void onPlayerVsPlayerPowertool(final EntityDamageByEntityEvent event, final Player defender, final User attacker) {
@@ -90,7 +92,7 @@ public class EssentialsEntityListener implements Listener {
                     class PowerToolInteractTask implements Runnable {
                         @Override
                         public void run() {
-                            attacker.getServer().dispatchCommand(attacker.getBase(), command);
+                            attacker.getBase().chat("/" + command);
                             LOGGER.log(Level.INFO, String.format("[PT] %s issued server command: /%s", attacker.getName(), command));
                         }
                     }
@@ -120,6 +122,22 @@ public class EssentialsEntityListener implements Listener {
         }
     }
 
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void onEntityCombustByEntity(final EntityCombustByEntityEvent event) {
+        if (event.getCombuster() instanceof Arrow && event.getEntity() instanceof Player) {
+            Arrow combuster = (Arrow) event.getCombuster();
+            if (combuster.getShooter() instanceof Player) {
+                final User srcCombuster = ess.getUser(((Player) combuster.getShooter()).getUniqueId());
+                if (srcCombuster.isGodModeEnabled() && !srcCombuster.isAuthorized("essentials.god.pvp")) {
+                    event.setCancelled(true);
+                }
+                if (srcCombuster.isHidden() && !srcCombuster.isAuthorized("essentials.vanish.pvp")) {
+                    event.setCancelled(true);
+                }
+            }
+        }
+    }
+
     @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerDeathEvent(final PlayerDeathEvent event) {
         final User user = ess.getUser(event.getEntity());
@@ -138,6 +156,14 @@ public class EssentialsEntityListener implements Listener {
         if (user.isAuthorized("essentials.keepxp")) {
             event.setKeepLevel(true);
             event.setDroppedExp(0);
+        }
+    }
+
+    @EventHandler(priority = EventPriority.LOW)
+    public void onPlayerDeathInvEvent(final PlayerDeathEvent event) {
+        final User user = ess.getUser(event.getEntity());
+        if (user.isAuthorized("essentials.keepinv")) {
+            event.setKeepInventory(true);
         }
     }
 
@@ -176,7 +202,17 @@ public class EssentialsEntityListener implements Listener {
         if (event.getEntity() instanceof Player) {
             final User user = ess.getUser((Player) event.getEntity());
             if (user.isAfk()) {
-                user.updateActivity(true);
+                user.updateActivityOnInteract(true);
+            }
+        }
+    }
+
+    @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
+    public void onEntityTarget(EntityTargetEvent event) {
+        if (event.getTarget() instanceof Player) {
+            final User user = ess.getUser((Player) event.getTarget());
+            if (user.isVanished()) {
+                event.setCancelled(true);
             }
         }
     }

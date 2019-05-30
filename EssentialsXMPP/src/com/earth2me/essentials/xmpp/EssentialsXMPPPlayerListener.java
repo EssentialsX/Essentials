@@ -25,12 +25,7 @@ class EssentialsXMPPPlayerListener implements Listener {
     public void onPlayerJoin(final PlayerJoinEvent event) {
         final User user = ess.getUser(event.getPlayer());
 
-        Bukkit.getScheduler().scheduleSyncDelayedTask(ess, new Runnable() {
-            @Override
-            public void run() {
-                EssentialsXMPP.updatePresence();
-            }
-        });
+        Bukkit.getScheduler().scheduleSyncDelayedTask(ess, EssentialsXMPP::updatePresence);
 
         sendMessageToSpyUsers("Player " + user.getDisplayName() + " joined the game");
     }
@@ -45,12 +40,7 @@ class EssentialsXMPPPlayerListener implements Listener {
     public void onPlayerQuit(final PlayerQuitEvent event) {
         final User user = ess.getUser(event.getPlayer());
 
-        Bukkit.getScheduler().scheduleSyncDelayedTask(ess, new Runnable() {
-            @Override
-            public void run() {
-                EssentialsXMPP.updatePresence();
-            }
-        });
+        Bukkit.getScheduler().scheduleSyncDelayedTask(ess, EssentialsXMPP::updatePresence);
 
 
         sendMessageToSpyUsers("Player " + user.getDisplayName() + " left the game");
@@ -61,17 +51,9 @@ class EssentialsXMPPPlayerListener implements Listener {
             List<String> users = EssentialsXMPP.getInstance().getSpyUsers();
             synchronized (users) {
                 for (final String address : users) {
-                    Bukkit.getScheduler().scheduleSyncDelayedTask(ess, new Runnable() {
-                        @Override
-                        public void run() {
-                            EssentialsXMPP.getInstance().sendMessage(address, message);
-                        }
-                    });
-
+                    Bukkit.getScheduler().scheduleSyncDelayedTask(ess, () -> EssentialsXMPP.getInstance().sendMessage(address, message));
                 }
             }
-        } catch (Exception ex) {
-            // Ignore exceptions
-        }
+        } catch (Exception ignored) {}
     }
 }

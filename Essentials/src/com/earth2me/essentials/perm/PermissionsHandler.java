@@ -13,7 +13,7 @@ public class PermissionsHandler implements IPermissionsHandler {
     private transient IPermissionsHandler handler = null;
     private transient String defaultGroup = "default";
     private final transient Essentials ess;
-    private transient boolean useSuperperms = false;
+    private transient boolean useSuperperms;
 
     private Class<?> lastHandler = null;
 
@@ -97,10 +97,7 @@ public class PermissionsHandler implements IPermissionsHandler {
     public void checkPermissions() {
         // load and assign a handler
         List<Class<? extends SuperpermsHandler>> providerClazz = Arrays.asList(
-                BPermissions2Handler.class,
                 PermissionsExHandler.class,
-                PrivilegesHandler.class,
-                SimplyPermsHandler.class,
                 GenericVaultHandler.class,
                 SuperpermsHandler.class
         );
@@ -163,7 +160,4 @@ public class PermissionsHandler implements IPermissionsHandler {
         }
     }
 
-    private void checkPermLag(long start) {
-        checkPermLag(start, "not defined");
-    }
 }

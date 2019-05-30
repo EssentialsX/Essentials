@@ -4,6 +4,7 @@ import net.ess3.nms.PotionMetaProvider;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
+@SuppressWarnings("deprecation")
 public class LegacyPotionMetaProvider extends PotionMetaProvider {
     @Override
     public ItemStack createPotionItem(Material initial, int effectId) {
