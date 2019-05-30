@@ -281,6 +281,12 @@ player-commands:
   - worth
   - xmpp
 
+# Use this option to force superperms-based permissions handler regardless of detected installed perms plugin.
+# This is useful if you want superperms-based permissions (with wildcards) for custom permissions plugins.
+# If you wish to use EssentialsX's built-in permissions using the `player-commands` section above, set this to false.
+# Default is true.
+use-bukkit-permissions: true
+
 # When this option is enabled, one-time use kits (ie. delay < 0) will be
 # removed from the /kit list when a player can no longer use it
 skip-used-one-time-kits-from-kit-list: false
@@ -553,6 +559,10 @@ allow-direct-hat: true
 # This doesn't affect running the command from the console, where a world is always required.
 allow-world-in-broadcastworld: true
 
+# Should the usermap try to sanitise usernames before saving them?
+# You should only change this to false if you use Minecraft China.
+safe-usermap-names: true
+
 ############################################################
 # +------------------------------------------------------+ #
 # |                   EssentialsHome                     | #
@@ -626,12 +636,6 @@ min-money: -10000
 
 # Enable this to log all interactions with trade/buy/sell signs and sell command.
 economy-log-enabled: false
-
-# Use this option to force superperms-based permissions handler regardless of detected installed perms plugin.
-# This is useful if you want superperms-based permissions (with wildcards) for custom permissions plugins.
-# If you wish to use EssentialsX' built-in permissions using the `player-commands` section above, set this to false.
-# Default is true. 
-use-bukkit-permissions: true
 
 # Minimum acceptable amount to be used in /pay.
 minimum-pay-amount: 0.001
