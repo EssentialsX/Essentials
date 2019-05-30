@@ -210,7 +210,7 @@ commands:
     aliases: [dura,edura,durability,edurability,eitemdb,itemno,eitemno]
   itemname:
     description: Names an item.
-    usage: /<command> <name>
+    usage: /<command> [name]
     aliases: [iname, einame, eitemname, itemrename, irename, eitemrename, eirename]
   jails:
     description: List all jails.

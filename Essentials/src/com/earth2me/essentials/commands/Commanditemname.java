@@ -7,6 +7,7 @@ import com.earth2me.essentials.I18n;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.FormatUtil;
 
+import com.earth2me.essentials.utils.MaterialUtil;
 import org.bukkit.Material;
 import org.bukkit.Server;
 import org.bukkit.inventory.ItemStack;
@@ -23,14 +24,17 @@ public class Commanditemname extends EssentialsCommand {
     @Override
     protected void run(Server server, User user, String commandLabel, String[] args) throws Exception {
         ItemStack item = user.getBase().getItemInHand();
-        if (item.getType() != Material.AIR) {
-            String name = FormatUtil.formatString(user, "essentials.itemname", getFinalArg(args, 0));
-            ItemMeta im = item.getItemMeta();
-            im.setDisplayName(name);
-            item.setItemMeta(im);
-            user.sendMessage(tl("itemnameSuccess", name));
+        if (item.getType().name().contains("AIR")) {
+            user.sendMessage(tl("itemnameInvalidItem", item.getType().toString().toLowerCase(Locale.ENGLISH).replace('_', ' ')));
             return;
         }
-        user.sendMessage(tl("itemnameInvalidItem", item.getType().toString().toLowerCase(Locale.ENGLISH).replace('_', ' ')));
+
+        String name = FormatUtil.formatString(user, "essentials.itemname", getFinalArg(args, 0)).trim();
+        if (name.isEmpty()) name = null;
+
+        ItemMeta im = item.getItemMeta();
+        im.setDisplayName(name);
+        item.setItemMeta(im);
+        user.sendMessage(name == null ? tl("itemnameClear") : tl("itemnameSuccess", name));
     }
 }
