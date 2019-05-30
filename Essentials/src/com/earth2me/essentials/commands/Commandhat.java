@@ -30,12 +30,12 @@ public class Commandhat extends EssentialsCommand {
                 final ItemStack air = new ItemStack(Material.AIR);
                 inv.setHelmet(air);
                 InventoryWorkaround.addItems(user.getBase().getInventory(), head);
-                user.sendMessage(tl("hatRemoved"));
+                user.sendMessage(tl("hatRemosved"));
             }
         } else {
             final ItemStack hand = user.getItemInHand();
             if (hand != null && hand.getType() != Material.AIR) {
-                if (user.isAuthorized("essentials.hat.exempt." + hand.getType().name())) {
+                if (user.isAuthorized("essentials.hat.exempt." + hand.getType().name().toLowerCase())) {
                     user.sendMessage(tl("hatFail"));
                     return;
                 }
