@@ -1,6 +1,7 @@
 package com.earth2me.essentials.items;
 
 import com.earth2me.essentials.ManagedFile;
+import com.earth2me.essentials.utils.EnumUtil;
 import com.earth2me.essentials.utils.MaterialUtil;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
@@ -70,7 +71,7 @@ public class FlatItemDb extends AbstractItemDb {
         allAliases.clear();
     }
 
-    public void loadJSON(String source) {
+    private void loadJSON(String source) {
         JsonObject map = (new JsonParser()).parse(source).getAsJsonObject();
 
         for (Map.Entry<String, JsonElement> entry : map.entrySet()) {
@@ -191,11 +192,11 @@ public class FlatItemDb extends AbstractItemDb {
 
     @Override
     @Deprecated
-    public int getLegacyId(Material material) throws Exception {
+    public int getLegacyId(Material material) {
         throw new UnsupportedOperationException("Legacy IDs aren't supported on this version.");
     }
 
-    public ItemData lookup(ItemStack item) {
+    private ItemData lookup(ItemStack item) {
         Material type = item.getType();
 
         if (MaterialUtil.isPotion(type) && item.getItemMeta() instanceof PotionMeta) {
@@ -217,20 +218,21 @@ public class FlatItemDb extends AbstractItemDb {
     }
 
     public static class ItemData {
-        private final Material material;
+        private Material material;
+        private String[] fallbacks = null;
         private PotionData potionData = null;
         private EntityType entity = null;
 
-        public ItemData(Material material) {
+        ItemData(Material material) {
             this.material = material;
         }
 
-        public ItemData(Material material, PotionData potionData) {
+        ItemData(Material material, PotionData potionData) {
             this.material = material;
             this.potionData = potionData;
         }
 
-        public ItemData(Material material, EntityType entity) {
+        ItemData(Material material, EntityType entity) {
             this.material = material;
             this.entity = entity;
         }
@@ -249,10 +251,15 @@ public class FlatItemDb extends AbstractItemDb {
                 return false;
             }
             ItemData that = (ItemData) o;
-            return this.material == that.getMaterial() && potionDataEquals(that) && entityEquals(that);
+            return this.getMaterial() == that.getMaterial() && potionDataEquals(that) && entityEquals(that);
         }
 
         public Material getMaterial() {
+            if (material == null && fallbacks != null) {
+                material = EnumUtil.getMaterial(fallbacks);
+                fallbacks = null; // If fallback fails, don't keep trying to look up fallbacks
+            }
+
             return material;
         }
 
