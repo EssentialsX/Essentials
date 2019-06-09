@@ -4,15 +4,11 @@ import com.earth2me.essentials.signs.EssentialsSign;
 import com.earth2me.essentials.signs.EssentialsSign.ISign;
 import net.ess3.api.IUser;
 import org.bukkit.event.Cancellable;
-import org.bukkit.event.Event;
-import org.bukkit.event.HandlerList;
-
 
 /**
  * This handles common boilerplate for other SignEvent
  */
-public class SignEvent extends Event implements Cancellable {
-    private static final HandlerList handlers = new HandlerList();
+public class SignEvent extends BaseEvent implements Cancellable {
     private boolean cancelled = false;
     ISign sign;
     EssentialsSign essSign;
@@ -35,15 +31,6 @@ public class SignEvent extends Event implements Cancellable {
 
     public IUser getUser() {
         return user;
-    }
-
-    @Override
-    public HandlerList getHandlers() {
-        return handlers;
-    }
-
-    public static HandlerList getHandlerList() {
-        return handlers;
     }
 
     @Override
