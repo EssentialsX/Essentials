@@ -97,6 +97,11 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
         return result;
     }
 
+    @Override
+    public boolean isPermissionSet(final String node) {
+        return isPermSetCheck(node);
+    }
+
     private boolean isAuthorizedCheck(final String node) {
 
         if (base instanceof OfflinePlayer) {
@@ -105,6 +110,24 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
 
         try {
             return ess.getPermissionsHandler().hasPermission(base, node);
+        } catch (Exception ex) {
+            if (ess.getSettings().isDebug()) {
+                ess.getLogger().log(Level.SEVERE, "Permission System Error: " + ess.getPermissionsHandler().getName() + " returned: " + ex.getMessage(), ex);
+            } else {
+                ess.getLogger().log(Level.SEVERE, "Permission System Error: " + ess.getPermissionsHandler().getName() + " returned: " + ex.getMessage());
+            }
+
+            return false;
+        }
+    }
+
+    private boolean isPermSetCheck(final String node) {
+        if (base instanceof OfflinePlayer) {
+            return false;
+        }
+
+        try {
+            return ess.getPermissionsHandler().isPermissionSet(base, node);
         } catch (Exception ex) {
             if (ess.getSettings().isDebug()) {
                 ess.getLogger().log(Level.SEVERE, "Permission System Error: " + ess.getPermissionsHandler().getName() + " returned: " + ex.getMessage(), ex);

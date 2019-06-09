@@ -63,6 +63,11 @@ public class PermissionsHandler implements IPermissionsHandler {
     }
 
     @Override
+    public boolean isPermissionSet(final Player base, final String node) {
+        return handler.isPermissionSet(base, node);
+    }
+
+    @Override
     public String getPrefix(final Player base) {
         final long start = System.nanoTime();
         String prefix = handler.getPrefix(base);

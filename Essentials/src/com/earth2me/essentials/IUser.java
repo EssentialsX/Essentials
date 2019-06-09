@@ -22,6 +22,8 @@ public interface IUser {
 
     boolean isAuthorized(IEssentialsCommand cmd, String permissionPrefix);
 
+    boolean isPermissionSet(String node);
+
     void healCooldown() throws Exception;
 
     void giveMoney(BigDecimal value) throws MaxMoneyException;
