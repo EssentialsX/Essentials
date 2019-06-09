@@ -1633,6 +1633,10 @@ public class OfflinePlayer implements Player {
 	}
 
     @Override
+    public void openBook(ItemStack book) {
+    }
+
+    @Override
     public PersistentDataContainer getPersistentDataContainer() {
         return null;
     }
