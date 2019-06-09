@@ -124,7 +124,7 @@ public class Teleport implements ITeleport {
         teleportee.setLastLocation();
         Location loc = target.getLocation();
 
-        UserTeleportEvent event = new UserTeleportEvent(teleportee, target, cause);
+        UserTeleportEvent event = new UserTeleportEvent(teleportee, cause);
         Bukkit.getServer().getPluginManager().callEvent(event);
         if (event.isCancelled()) {
             return;
