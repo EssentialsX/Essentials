@@ -114,10 +114,7 @@
   "atrunksapling": "acacia_sapling",
   "awoodsapling": "acacia_sapling",
   "acacia_sign": {
-    "material": "ACACIA_SIGN",
-    "fallbacks": [
-      "SIGN"
-    ]
+    "material": "ACACIA_SIGN"
   },
   "acaciasign": "acacia_sign",
   "acacia_slab": {
@@ -215,11 +212,17 @@
   "trails": "activator_rail",
   "trail": "activator_rail",
   "ttrack": "activator_rail",
-  "air": "air",
-  "allium": "allium",
+  "air": {
+    "material": "AIR"
+  },
+  "allium": {
+    "material": "ALLIUM"
+  },
   "magentaallium": "allium",
   "magentaflower": "allium",
-  "andesite": "andesite",
+  "andesite": {
+    "material": "ANDESITE"
+  },
   "astone": "andesite",
   "andesite_slab": {
     "material": "ANDESITE_SLAB"
@@ -233,13 +236,19 @@
     "material": "ANDESITE_WALL"
   },
   "andesitewall": "andesite_wall",
-  "anvil": "anvil",
-  "apple": "apple",
+  "anvil": {
+    "material": "ANVIL"
+  },
+  "apple": {
+    "material": "APPLE"
+  },
   "armor_stand": {
     "material": "ARMOR_STAND"
   },
   "armorstand": "armor_stand",
-  "arrow": "arrow",
+  "arrow": {
+    "material": "ARROW"
+  },
   "attached_melon_stem": {
     "material": "ATTACHED_MELON_STEM",
     "unspawnable": true
@@ -262,14 +271,20 @@
     "material": "BAKED_POTATO"
   },
   "bakedpotato": "baked_potato",
-  "bamboo": "bamboo",
+  "bamboo": {
+    "material": "BAMBOO"
+  },
   "bamboo_sapling": {
     "material": "BAMBOO_SAPLING",
     "unspawnable": true
   },
   "bamboosapling": "bamboo_sapling",
-  "barrel": "barrel",
-  "barrier": "barrier",
+  "barrel": {
+    "material": "BARREL"
+  },
+  "barrier": {
+    "material": "BARRIER"
+  },
   "bat_spawn_egg": {
     "material": "BAT_SPAWN_EGG"
   },
@@ -279,15 +294,21 @@
   "spawneggbat": "bat_spawn_egg",
   "batspawn": "bat_spawn_egg",
   "spawnbat": "bat_spawn_egg",
-  "beacon": "beacon",
+  "beacon": {
+    "material": "BEACON"
+  },
   "beaconblock": "beacon",
-  "bedrock": "bedrock",
+  "bedrock": {
+    "material": "BEDROCK"
+  },
   "oprock": "bedrock",
   "opblock": "bedrock",
   "adminblock": "bedrock",
   "adminrock": "bedrock",
   "adminium": "bedrock",
-  "beef": "beef",
+  "beef": {
+    "material": "BEEF"
+  },
   "rawbeef": "beef",
   "rawsteak": "beef",
   "rawcowmeat": "beef",
@@ -302,7 +323,9 @@
   "plaincowmeat": "beef",
   "steak": "beef",
   "cowmeat": "beef",
-  "beetroot": "beetroot",
+  "beetroot": {
+    "material": "BEETROOT"
+  },
   "broot": "beetroot",
   "beet": "beetroot",
   "beets": "beetroot",
@@ -334,7 +357,9 @@
   "beetplantsoup": "beetroot_soup",
   "beetcropsoup": "beetroot_soup",
   "redsoup": "beetroot_soup",
-  "bell": "bell",
+  "bell": {
+    "material": "BELL"
+  },
   "birch_boat": {
     "material": "BIRCH_BOAT"
   },
@@ -608,10 +633,7 @@
   "wtrunksapling": "birch_sapling",
   "wwoodsapling": "birch_sapling",
   "birch_sign": {
-    "material": "BIRCH_SIGN",
-    "fallbacks": [
-      "SIGN"
-    ]
+    "material": "BIRCH_SIGN"
   },
   "birchsign": "birch_sign",
   "birch_slab": {
@@ -856,11 +878,7 @@
   "blackcdust": "black_concrete_powder",
   "blackcp": "black_concrete_powder",
   "black_dye": {
-    "material": "BLACK_DYE",
-    "fallbacks": [
-      "INK_SAC",
-      "INK_SACK"
-    ]
+    "material": "BLACK_DYE"
   },
   "blackdye": "black_dye",
   "black_glazed_terracotta": {
@@ -1014,10 +1032,7 @@
   "bluecdust": "blue_concrete_powder",
   "bluecp": "blue_concrete_powder",
   "blue_dye": {
-    "material": "BLUE_DYE",
-    "fallbacks": [
-      "LAPIS_LAZULI"
-    ]
+    "material": "BLUE_DYE"
   },
   "bluedye": "blue_dye",
   "blue_glazed_terracotta": {
@@ -1104,7 +1119,9 @@
   "blucotton": "blue_wool",
   "bluecloth": "blue_wool",
   "bluecotton": "blue_wool",
-  "bone": "bone",
+  "bone": {
+    "material": "BONE"
+  },
   "bone_block": {
     "material": "BONE_BLOCK"
   },
@@ -1113,16 +1130,24 @@
     "material": "BONE_MEAL"
   },
   "bonemeal": "bone_meal",
-  "book": "book",
-  "bookshelf": "bookshelf",
+  "book": {
+    "material": "BOOK"
+  },
+  "bookshelf": {
+    "material": "BOOKSHELF"
+  },
   "bshelf": "bookshelf",
   "bookcase": "bookshelf",
   "casebook": "bookshelf",
   "shelfbook": "bookshelf",
   "bookblock": "bookshelf",
   "blockbook": "bookshelf",
-  "bow": "bow",
-  "bowl": "bowl",
+  "bow": {
+    "material": "BOW"
+  },
+  "bowl": {
+    "material": "BOWL"
+  },
   "brain_coral": {
     "material": "BRAIN_CORAL"
   },
@@ -1140,13 +1165,19 @@
     "unspawnable": true
   },
   "braincoralwallfan": "brain_coral_wall_fan",
-  "bread": "bread",
+  "bread": {
+    "material": "BREAD"
+  },
   "brewing_stand": {
     "material": "BREWING_STAND"
   },
   "brewingstand": "brewing_stand",
-  "brick": "brick",
-  "bricks": "bricks",
+  "brick": {
+    "material": "BRICK"
+  },
+  "bricks": {
+    "material": "BRICKS"
+  },
   "brick_slab": {
     "material": "BRICK_SLAB"
   },
@@ -1197,10 +1228,7 @@
   "browncdust": "brown_concrete_powder",
   "browncp": "brown_concrete_powder",
   "brown_dye": {
-    "material": "BROWN_DYE",
-    "fallbacks": [
-      "COCOA_BEANS"
-    ]
+    "material": "BROWN_DYE"
   },
   "browndye": "brown_dye",
   "brown_glazed_terracotta": {
@@ -1331,13 +1359,23 @@
     "unspawnable": true
   },
   "bubblecoralwallfan": "bubble_coral_wall_fan",
-  "bucket": "bucket",
-  "cactus": "cactus",
+  "bucket": {
+    "material": "BUCKET"
+  },
+  "cactus": {
+    "material": "CACTUS"
+  },
   "cactuses": "cactus",
   "cacti": "cactus",
-  "cake": "cake",
-  "campfire": "campfire",
-  "carrot": "carrot",
+  "cake": {
+    "material": "CAKE"
+  },
+  "campfire": {
+    "material": "CAMPFIRE"
+  },
+  "carrot": {
+    "material": "CARROT"
+  },
   "carrots": {
     "material": "CARROTS",
     "unspawnable": true
@@ -1362,7 +1400,9 @@
     "material": "CAT_SPAWN_EGG"
   },
   "catspawnegg": "cat_spawn_egg",
-  "cauldron": "cauldron",
+  "cauldron": {
+    "material": "CAULDRON"
+  },
   "cave_air": {
     "material": "CAVE_AIR",
     "unspawnable": true
@@ -1463,8 +1503,12 @@
     "material": "CHAIN_COMMAND_BLOCK"
   },
   "chaincommandblock": "chain_command_block",
-  "charcoal": "charcoal",
-  "chest": "chest",
+  "charcoal": {
+    "material": "CHARCOAL"
+  },
+  "chest": {
+    "material": "CHEST"
+  },
   "container": "chest",
   "chest_minecart": {
     "material": "CHEST_MINECART"
@@ -1485,7 +1529,9 @@
   "cmcart": "chest_minecart",
   "cmc": "chest_minecart",
   "ccart": "chest_minecart",
-  "chicken": "chicken",
+  "chicken": {
+    "material": "CHICKEN"
+  },
   "rawchicken": "chicken",
   "rachicken": "chicken",
   "uncookedchicken": "chicken",
@@ -1605,13 +1651,19 @@
     "material": "CHORUS_PLANT"
   },
   "chorusplant": "chorus_plant",
-  "clay": "clay",
+  "clay": {
+    "material": "CLAY"
+  },
   "clay_ball": {
     "material": "CLAY_BALL"
   },
   "clayball": "clay_ball",
-  "clock": "clock",
-  "coal": "coal",
+  "clock": {
+    "material": "CLOCK"
+  },
+  "coal": {
+    "material": "COAL"
+  },
   "coal_block": {
     "material": "COAL_BLOCK"
   },
@@ -1640,7 +1692,9 @@
   "grasslessland": "coarse_dirt",
   "coarseland": "coarse_dirt",
   "coarseearth": "coarse_dirt",
-  "cobblestone": "cobblestone",
+  "cobblestone": {
+    "material": "COBBLESTONE"
+  },
   "cstone": "cobblestone",
   "cobble": "cobblestone",
   "cobblestone_slab": {
@@ -1679,7 +1733,9 @@
   "cfence": "cobblestone_wall",
   "stonewall": "cobblestone_wall",
   "swall": "cobblestone_wall",
-  "cobweb": "cobweb",
+  "cobweb": {
+    "material": "COBWEB"
+  },
   "spiderweb": "cobweb",
   "sweb": "cobweb",
   "cweb": "cobweb",
@@ -1701,7 +1757,9 @@
   "cocoapod": "cocoa_beans",
   "cocopod": "cocoa_beans",
   "cpod": "cocoa_beans",
-  "cod": "cod",
+  "cod": {
+    "material": "COD"
+  },
   "rawfish": "cod",
   "rawcod": "cod",
   "rafish": "cod",
@@ -1761,10 +1819,18 @@
   "commandblockmcart": "command_block_minecart",
   "commandblockmc": "command_block_minecart",
   "commandblockcart": "command_block_minecart",
-  "comparator": "comparator",
-  "compass": "compass",
-  "composter": "composter",
-  "conduit": "conduit",
+  "comparator": {
+    "material": "COMPARATOR"
+  },
+  "compass": {
+    "material": "COMPASS"
+  },
+  "composter": {
+    "material": "COMPOSTER"
+  },
+  "conduit": {
+    "material": "CONDUIT"
+  },
   "cooked_beef": {
     "material": "COOKED_BEEF"
   },
@@ -2160,8 +2226,12 @@
   "rofishs": "cooked_salmon",
   "bbqfishs": "cooked_salmon",
   "toastedfishs": "cooked_salmon",
-  "cookie": "cookie",
-  "cornflower": "cornflower",
+  "cookie": {
+    "material": "COOKIE"
+  },
+  "cornflower": {
+    "material": "CORNFLOWER"
+  },
   "cow_spawn_egg": {
     "material": "COW_SPAWN_EGG"
   },
@@ -2258,7 +2328,9 @@
     "unspawnable": true
   },
   "creeperwallhead": "creeper_wall_head",
-  "crossbow": "crossbow",
+  "crossbow": {
+    "material": "CROSSBOW"
+  },
   "cut_red_sandstone": {
     "material": "CUT_RED_SANDSTONE"
   },
@@ -2403,7 +2475,9 @@
   },
   "damagedanvil": "damaged_anvil",
   "verydamagedanvil": "damaged_anvil",
-  "dandelion": "dandelion",
+  "dandelion": {
+    "material": "DANDELION"
+  },
   "yellowdandelion": "dandelion",
   "ydandelion": "dandelion",
   "yellowflower": "dandelion",
@@ -2563,10 +2637,7 @@
   "dotrunksapling": "dark_oak_sapling",
   "dowoodsapling": "dark_oak_sapling",
   "dark_oak_sign": {
-    "material": "DARK_OAK_SIGN",
-    "fallbacks": [
-      "SIGN"
-    ]
+    "material": "DARK_OAK_SIGN"
   },
   "darkoaksign": "dark_oak_sign",
   "dark_oak_slab": {
@@ -2840,7 +2911,9 @@
   "drails": "detector_rail",
   "drail": "detector_rail",
   "dtrack": "detector_rail",
-  "diamond": "diamond",
+  "diamond": {
+    "material": "DIAMOND"
+  },
   "diamond_axe": {
     "material": "DIAMOND_AXE"
   },
@@ -2966,7 +3039,9 @@
   "diamondsword": "diamond_sword",
   "crystalsword": "diamond_sword",
   "dsword": "diamond_sword",
-  "diorite": "diorite",
+  "diorite": {
+    "material": "DIORITE"
+  },
   "dstone": "diorite",
   "diorite_slab": {
     "material": "DIORITE_SLAB"
@@ -2980,10 +3055,14 @@
     "material": "DIORITE_WALL"
   },
   "dioritewall": "diorite_wall",
-  "dirt": "dirt",
+  "dirt": {
+    "material": "DIRT"
+  },
   "earth": "dirt",
   "land": "dirt",
-  "dispenser": "dispenser",
+  "dispenser": {
+    "material": "DISPENSER"
+  },
   "dispense": "dispenser",
   "dolphin_spawn_egg": {
     "material": "DOLPHIN_SPAWN_EGG"
@@ -3044,7 +3123,9 @@
     "material": "DRIED_KELP_BLOCK"
   },
   "driedkelpblock": "dried_kelp_block",
-  "dropper": "dropper",
+  "dropper": {
+    "material": "DROPPER"
+  },
   "drowned_spawn_egg": {
     "material": "DROWNED_SPAWN_EGG"
   },
@@ -3054,7 +3135,9 @@
   "spawneggdrowned": "drowned_spawn_egg",
   "drownedspawn": "drowned_spawn_egg",
   "spawndrowned": "drowned_spawn_egg",
-  "egg": "egg",
+  "egg": {
+    "material": "EGG"
+  },
   "elder_guardian_spawn_egg": {
     "material": "ELDER_GUARDIAN_SPAWN_EGG"
   },
@@ -3070,7 +3153,9 @@
   "spawneggeguardian": "elder_guardian_spawn_egg",
   "eguardianspawn": "elder_guardian_spawn_egg",
   "spawneguardian": "elder_guardian_spawn_egg",
-  "elytra": "elytra",
+  "elytra": {
+    "material": "ELYTRA"
+  },
   "hangglider": "elytra",
   "glider": "elytra",
   "wings": "elytra",
@@ -3079,7 +3164,9 @@
   "playerwing": "elytra",
   "pwings": "elytra",
   "pwing": "elytra",
-  "emerald": "emerald",
+  "emerald": {
+    "material": "EMERALD"
+  },
   "emerald_block": {
     "material": "EMERALD_BLOCK"
   },
@@ -3255,13 +3342,19 @@
     "material": "EXPERIENCE_BOTTLE"
   },
   "experiencebottle": "experience_bottle",
-  "farmland": "farmland",
-  "feather": "feather",
+  "farmland": {
+    "material": "FARMLAND"
+  },
+  "feather": {
+    "material": "FEATHER"
+  },
   "fermented_spider_eye": {
     "material": "FERMENTED_SPIDER_EYE"
   },
   "fermentedspidereye": "fermented_spider_eye",
-  "fern": "fern",
+  "fern": {
+    "material": "FERN"
+  },
   "filled_map": {
     "material": "FILLED_MAP"
   },
@@ -3307,7 +3400,9 @@
     "material": "FLETCHING_TABLE"
   },
   "fletchingtable": "fletching_table",
-  "flint": "flint",
+  "flint": {
+    "material": "FLINT"
+  },
   "flint_and_steel": {
     "material": "FLINT_AND_STEEL"
   },
@@ -3329,7 +3424,9 @@
     "unspawnable": true
   },
   "frostedice": "frosted_ice",
-  "furnace": "furnace",
+  "furnace": {
+    "material": "FURNACE"
+  },
   "furnace_minecart": {
     "material": "FURNACE_MINECART"
   },
@@ -3374,7 +3471,9 @@
     "material": "GHAST_TEAR"
   },
   "ghasttear": "ghast_tear",
-  "glass": "glass",
+  "glass": {
+    "material": "GLASS"
+  },
   "blockglass": "glass",
   "glassblock": "glass",
   "glass_bottle": {
@@ -3403,7 +3502,9 @@
     "material": "GLOBE_BANNER_PATTERN"
   },
   "globebannerpattern": "globe_banner_pattern",
-  "glowstone": "glowstone",
+  "glowstone": {
+    "material": "GLOWSTONE"
+  },
   "glowingstoneblock": "glowstone",
   "lightstoneblock": "glowstone",
   "glowstoneblock": "glowstone",
@@ -3556,7 +3657,9 @@
   "go": "gold_ore",
   "oreg": "gold_ore",
   "og": "gold_ore",
-  "granite": "granite",
+  "granite": {
+    "material": "GRANITE"
+  },
   "gstone": "granite",
   "granite_slab": {
     "material": "GRANITE_SLAB"
@@ -3570,7 +3673,9 @@
     "material": "GRANITE_WALL"
   },
   "granitewall": "granite_wall",
-  "grass": "grass",
+  "grass": {
+    "material": "GRASS"
+  },
   "grass_block": {
     "material": "GRASS_BLOCK"
   },
@@ -3582,7 +3687,9 @@
     "material": "GRASS_PATH"
   },
   "grasspath": "grass_path",
-  "gravel": "gravel",
+  "gravel": {
+    "material": "GRAVEL"
+  },
   "gray_banner": {
     "material": "GRAY_BANNER"
   },
@@ -4013,10 +4120,7 @@
   "darkgreencdust": "green_concrete_powder",
   "darkgreencp": "green_concrete_powder",
   "green_dye": {
-    "material": "GREEN_DYE",
-    "fallbacks": [
-      "CACTUS_GREEN"
-    ]
+    "material": "GREEN_DYE"
   },
   "greendye": "green_dye",
   "green_glazed_terracotta": {
@@ -4180,7 +4284,9 @@
   "darkgreenwool": "green_wool",
   "darkgreencloth": "green_wool",
   "darkgreencotton": "green_wool",
-  "grindstone": "grindstone",
+  "grindstone": {
+    "material": "GRINDSTONE"
+  },
   "guardian_spawn_egg": {
     "material": "GUARDIAN_SPAWN_EGG"
   },
@@ -4190,7 +4296,9 @@
   "spawneggguardian": "guardian_spawn_egg",
   "guardianspawn": "guardian_spawn_egg",
   "spawnguardian": "guardian_spawn_egg",
-  "gunpowder": "gunpowder",
+  "gunpowder": {
+    "material": "GUNPOWDER"
+  },
   "hay_block": {
     "material": "HAY_BLOCK"
   },
@@ -4207,7 +4315,9 @@
     "material": "HEAVY_WEIGHTED_PRESSURE_PLATE"
   },
   "heavyweightedpressureplate": "heavy_weighted_pressure_plate",
-  "hopper": "hopper",
+  "hopper": {
+    "material": "HOPPER"
+  },
   "chestpuller": "hopper",
   "chestpull": "hopper",
   "cheststorer": "hopper",
@@ -4266,7 +4376,9 @@
   "spawnegghusk": "husk_spawn_egg",
   "huskspawn": "husk_spawn_egg",
   "spawnhusk": "husk_spawn_egg",
-  "ice": "ice",
+  "ice": {
+    "material": "ICE"
+  },
   "frozenwater": "ice",
   "waterfrozen": "ice",
   "freezewater": "ice",
@@ -5410,8 +5522,12 @@
   "glowpumpkin": "jack_o_lantern",
   "gpumpkin": "jack_o_lantern",
   "lpumpkin": "jack_o_lantern",
-  "jigsaw": "jigsaw",
-  "jukebox": "jukebox",
+  "jigsaw": {
+    "material": "JIGSAW"
+  },
+  "jukebox": {
+    "material": "JUKEBOX"
+  },
   "jbox": "jukebox",
   "jungle_boat": {
     "material": "JUNGLE_BOAT"
@@ -5607,10 +5723,7 @@
   "ftrunksapling": "jungle_sapling",
   "fwoodsapling": "jungle_sapling",
   "jungle_sign": {
-    "material": "JUNGLE_SIGN",
-    "fallbacks": [
-      "SIGN"
-    ]
+    "material": "JUNGLE_SIGN"
   },
   "junglesign": "jungle_sign",
   "jungle_slab": {
@@ -5748,7 +5861,9 @@
   "flogall": "jungle_wood",
   "ftrunkall": "jungle_wood",
   "ftreeall": "jungle_wood",
-  "kelp": "kelp",
+  "kelp": {
+    "material": "KELP"
+  },
   "kelp_plant": {
     "material": "KELP_PLANT",
     "unspawnable": true
@@ -5758,8 +5873,12 @@
     "material": "KNOWLEDGE_BOOK"
   },
   "knowledgebook": "knowledge_book",
-  "ladder": "ladder",
-  "lantern": "lantern",
+  "ladder": {
+    "material": "LADDER"
+  },
+  "lantern": {
+    "material": "LANTERN"
+  },
   "lapis_block": {
     "material": "LAPIS_BLOCK"
   },
@@ -5803,8 +5922,12 @@
     "material": "LAVA_BUCKET"
   },
   "lavabucket": "lava_bucket",
-  "lead": "lead",
-  "leather": "leather",
+  "lead": {
+    "material": "LEAD"
+  },
+  "leather": {
+    "material": "LEATHER"
+  },
   "leather_boots": {
     "material": "LEATHER_BOOTS"
   },
@@ -5854,8 +5977,12 @@
   "lleggings": "leather_leggings",
   "llegs": "leather_leggings",
   "lpants": "leather_leggings",
-  "lectern": "lectern",
-  "lever": "lever",
+  "lectern": {
+    "material": "LECTERN"
+  },
+  "lever": {
+    "material": "LEVER"
+  },
   "light_blue_banner": {
     "material": "LIGHT_BLUE_BANNER"
   },
@@ -6454,7 +6581,9 @@
     "material": "LIGHT_WEIGHTED_PRESSURE_PLATE"
   },
   "lightweightedpressureplate": "light_weighted_pressure_plate",
-  "lilac": "lilac",
+  "lilac": {
+    "material": "LILAC"
+  },
   "lily_of_the_valley": {
     "material": "LILY_OF_THE_VALLEY"
   },
@@ -6727,7 +6856,9 @@
   "spawneggllama": "trader_llama_spawn_egg",
   "llamaspawn": "trader_llama_spawn_egg",
   "spawnllama": "trader_llama_spawn_egg",
-  "loom": "loom",
+  "loom": {
+    "material": "LOOM"
+  },
   "magenta_banner": {
     "material": "MAGENTA_BANNER"
   },
@@ -6873,8 +7004,12 @@
   "spawneggmagmaslime": "magma_cube_spawn_egg",
   "magmaslimespawn": "magma_cube_spawn_egg",
   "spawnmagmaslime": "magma_cube_spawn_egg",
-  "map": "map",
-  "melon": "melon",
+  "map": {
+    "material": "MAP"
+  },
+  "melon": {
+    "material": "MELON"
+  },
   "watermelon": "melon",
   "greenmelon": "melon",
   "melongreen": "melon",
@@ -6898,7 +7033,9 @@
     "material": "MILK_BUCKET"
   },
   "milkbucket": "milk_bucket",
-  "minecart": "minecart",
+  "minecart": {
+    "material": "MINECART"
+  },
   "mcart": "minecart",
   "mc": "minecart",
   "cart": "minecart",
@@ -7883,7 +8020,9 @@
   "dgrcd": "music_disc_ward",
   "cd10": "music_disc_ward",
   "10cd": "music_disc_ward",
-  "mutton": "mutton",
+  "mutton": {
+    "material": "MUTTON"
+  },
   "rawmutton": "mutton",
   "rawsheepmeat": "mutton",
   "ramutton": "mutton",
@@ -7893,7 +8032,9 @@
   "plainmutton": "mutton",
   "plainsheepmeat": "mutton",
   "sheepmeat": "mutton",
-  "mycelium": "mycelium",
+  "mycelium": {
+    "material": "MYCELIUM"
+  },
   "mycel": "mycelium",
   "swampgrass": "mycelium",
   "sgrass": "mycelium",
@@ -7907,7 +8048,9 @@
     "material": "NAUTILUS_SHELL"
   },
   "nautilusshell": "nautilus_shell",
-  "netherrack": "netherrack",
+  "netherrack": {
+    "material": "NETHERRACK"
+  },
   "nether_brick": {
     "material": "NETHER_BRICK"
   },
@@ -8166,10 +8309,7 @@
   "otrunksapling": "oak_sapling",
   "owoodsapling": "oak_sapling",
   "oak_sign": {
-    "material": "OAK_SIGN",
-    "fallbacks": [
-      "SIGN"
-    ]
+    "material": "OAK_SIGN"
   },
   "oaksign": "oak_sign",
   "oak_slab": {
@@ -8275,8 +8415,12 @@
   "ologall": "oak_wood",
   "otrunkall": "oak_wood",
   "otreeall": "oak_wood",
-  "observer": "observer",
-  "obsidian": "obsidian",
+  "observer": {
+    "material": "OBSERVER"
+  },
+  "obsidian": {
+    "material": "OBSIDIAN"
+  },
   "obsi": "obsidian",
   "obby": "obsidian",
   "ocelot_spawn_egg": {
@@ -8427,12 +8571,16 @@
     "material": "PACKED_ICE"
   },
   "packedice": "packed_ice",
-  "painting": "painting",
+  "painting": {
+    "material": "PAINTING"
+  },
   "panda_spawn_egg": {
     "material": "PANDA_SPAWN_EGG"
   },
   "pandaspawnegg": "panda_spawn_egg",
-  "paper": "paper",
+  "paper": {
+    "material": "PAPER"
+  },
   "parrot_spawn_egg": {
     "material": "PARROT_SPAWN_EGG"
   },
@@ -8442,7 +8590,9 @@
   "spawneggparrot": "parrot_spawn_egg",
   "parrotspawn": "parrot_spawn_egg",
   "spawnparrot": "parrot_spawn_egg",
-  "peony": "peony",
+  "peony": {
+    "material": "PEONY"
+  },
   "petrified_oak_slab": {
     "material": "PETRIFIED_OAK_SLAB"
   },
@@ -8592,7 +8742,9 @@
   "picotton": "pink_wool",
   "pinkcloth": "pink_wool",
   "pinkcotton": "pink_wool",
-  "piston": "piston",
+  "piston": {
+    "material": "PISTON"
+  },
   "piston_head": {
     "material": "PISTON_HEAD",
     "unspawnable": true
@@ -8635,7 +8787,9 @@
     "unspawnable": true
   },
   "playerwallhead": "player_wall_head",
-  "podzol": "podzol",
+  "podzol": {
+    "material": "PODZOL"
+  },
   "poisonous_potato": {
     "material": "POISONOUS_POTATO"
   },
@@ -8713,14 +8867,18 @@
   "pchorus": "popped_chorus_fruit",
   "poppedchorus": "popped_chorus_fruit",
   "popchorus": "popped_chorus_fruit",
-  "poppy": "poppy",
+  "poppy": {
+    "material": "POPPY"
+  },
   "rose": "poppy",
   "redrose": "poppy",
   "rrose": "poppy",
   "redflower": "poppy",
   "rflower": "poppy",
   "redpoppy": "poppy",
-  "porkchop": "porkchop",
+  "porkchop": {
+    "material": "PORKCHOP"
+  },
   "rawpork": "porkchop",
   "rawporkchop": "porkchop",
   "rapork": "porkchop",
@@ -8730,12 +8888,16 @@
   "plainpork": "porkchop",
   "plainporkchop": "porkchop",
   "pork": "porkchop",
-  "potato": "potato",
+  "potato": {
+    "material": "POTATO"
+  },
   "potatoes": {
     "material": "POTATOES",
     "unspawnable": true
   },
-  "potion": "potion",
+  "potion": {
+    "material": "POTION"
+  },
   "potted_acacia_sapling": {
     "material": "POTTED_ACACIA_SAPLING",
     "unspawnable": true
@@ -8882,7 +9044,9 @@
   "brails": "powered_rail",
   "brail": "powered_rail",
   "btrack": "powered_rail",
-  "prismarine": "prismarine",
+  "prismarine": {
+    "material": "PRISMARINE"
+  },
   "prismarine_bricks": {
     "material": "PRISMARINE_BRICKS"
   },
@@ -8989,7 +9153,9 @@
     "material": "PRISMARINE_WALL"
   },
   "prismarinewall": "prismarine_wall",
-  "pufferfish": "pufferfish",
+  "pufferfish": {
+    "material": "PUFFERFISH"
+  },
   "rawpufferfish": "pufferfish",
   "rawpufffish": "pufferfish",
   "rawfishpuff": "pufferfish",
@@ -9044,7 +9210,9 @@
   "spawneggpfish": "pufferfish_spawn_egg",
   "pfishspawn": "pufferfish_spawn_egg",
   "spawnpfish": "pufferfish_spawn_egg",
-  "pumpkin": "pumpkin",
+  "pumpkin": {
+    "material": "PUMPKIN"
+  },
   "pumpkin_pie": {
     "material": "PUMPKIN_PIE"
   },
@@ -9184,7 +9352,9 @@
     "material": "PURPUR_STAIRS"
   },
   "purpurstairs": "purpur_stairs",
-  "quartz": "quartz",
+  "quartz": {
+    "material": "QUARTZ"
+  },
   "quartz_block": {
     "material": "QUARTZ_BLOCK"
   },
@@ -9204,7 +9374,9 @@
     "material": "QUARTZ_STAIRS"
   },
   "quartzstairs": "quartz_stairs",
-  "rabbit": "rabbit",
+  "rabbit": {
+    "material": "RABBIT"
+  },
   "rawrabbit": "rabbit",
   "rawhare": "rabbit",
   "rawhasenpfeffer": "rabbit",
@@ -9240,7 +9412,9 @@
     "material": "RABBIT_STEW"
   },
   "rabbitstew": "rabbit_stew",
-  "rail": "rail",
+  "rail": {
+    "material": "RAIL"
+  },
   "rails": "rail",
   "track": "rail",
   "minecartrails": "rail",
@@ -9256,7 +9430,9 @@
     "material": "RAVAGER_SPAWN_EGG"
   },
   "ravagerspawnegg": "ravager_spawn_egg",
-  "redstone": "redstone",
+  "redstone": {
+    "material": "REDSTONE"
+  },
   "redstone_block": {
     "material": "REDSTONE_BLOCK"
   },
@@ -9358,10 +9534,7 @@
   "redcdust": "red_concrete_powder",
   "redcp": "red_concrete_powder",
   "red_dye": {
-    "material": "RED_DYE",
-    "fallbacks": [
-      "ROSE_RED"
-    ]
+    "material": "RED_DYE"
   },
   "reddye": "red_dye",
   "red_glazed_terracotta": {
@@ -9536,7 +9709,9 @@
   "rcotton": "red_wool",
   "redcloth": "red_wool",
   "redcotton": "red_wool",
-  "repeater": "repeater",
+  "repeater": {
+    "material": "REPEATER"
+  },
   "repeating_command_block": {
     "material": "REPEATING_COMMAND_BLOCK"
   },
@@ -9549,8 +9724,12 @@
     "material": "ROTTEN_FLESH"
   },
   "rottenflesh": "rotten_flesh",
-  "saddle": "saddle",
-  "salmon": "salmon",
+  "saddle": {
+    "material": "SADDLE"
+  },
+  "salmon": {
+    "material": "SALMON"
+  },
   "rawsalmon": "salmon",
   "rawsalmonfish": "salmon",
   "rawsfish": "salmon",
@@ -9584,8 +9763,12 @@
   "spawneggsalmon": "salmon_spawn_egg",
   "salmonspawn": "salmon_spawn_egg",
   "spawnsalmon": "salmon_spawn_egg",
-  "sand": "sand",
-  "sandstone": "sandstone",
+  "sand": {
+    "material": "SAND"
+  },
+  "sandstone": {
+    "material": "SANDSTONE"
+  },
   "sastone": "sandstone",
   "sandst": "sandstone",
   "sandstone_slab": {
@@ -9613,9 +9796,15 @@
     "material": "SANDSTONE_WALL"
   },
   "sandstonewall": "sandstone_wall",
-  "scaffolding": "scaffolding",
-  "scute": "scute",
-  "seagrass": "seagrass",
+  "scaffolding": {
+    "material": "SCAFFOLDING"
+  },
+  "scute": {
+    "material": "SCUTE"
+  },
+  "seagrass": {
+    "material": "SEAGRASS"
+  },
   "sea_lantern": {
     "material": "SEA_LANTERN"
   },
@@ -9624,7 +9813,9 @@
     "material": "SEA_PICKLE"
   },
   "seapickle": "sea_pickle",
-  "shears": "shears",
+  "shears": {
+    "material": "SHEARS"
+  },
   "sheep_spawn_egg": {
     "material": "SHEEP_SPAWN_EGG"
   },
@@ -9634,7 +9825,9 @@
   "spawneggsheep": "sheep_spawn_egg",
   "sheepspawn": "sheep_spawn_egg",
   "spawnsheep": "sheep_spawn_egg",
-  "shield": "shield",
+  "shield": {
+    "material": "SHIELD"
+  },
   "handshield": "shield",
   "woodshield": "shield",
   "woodenshield": "shield",
@@ -9751,7 +9944,9 @@
     "material": "SMITHING_TABLE"
   },
   "smithingtable": "smithing_table",
-  "smoker": "smoker",
+  "smoker": {
+    "material": "SMOKER"
+  },
   "smooth_quartz": {
     "material": "SMOOTH_QUARTZ"
   },
@@ -9808,8 +10003,12 @@
   "smooth_stone_slab": {
     "material": "SMOOTH_STONE_SLAB"
   },
-  "snow": "snow",
-  "snowball": "snowball",
+  "snow": {
+    "material": "SNOW"
+  },
+  "snowball": {
+    "material": "SNOWBALL"
+  },
   "snow_block": {
     "material": "SNOW_BLOCK"
   },
@@ -9818,7 +10017,9 @@
     "material": "SOUL_SAND"
   },
   "soulsand": "soul_sand",
-  "spawner": "spawner",
+  "spawner": {
+    "material": "SPAWNER"
+  },
   "spectral_arrow": {
     "material": "SPECTRAL_ARROW"
   },
@@ -9840,7 +10041,9 @@
     "material": "SPLASH_POTION"
   },
   "splashpotion": "splash_potion",
-  "sponge": "sponge",
+  "sponge": {
+    "material": "SPONGE"
+  },
   "spruce_boat": {
     "material": "SPRUCE_BOAT"
   },
@@ -10109,10 +10312,7 @@
   "strunksapling": "spruce_sapling",
   "swoodsapling": "spruce_sapling",
   "spruce_sign": {
-    "material": "SPRUCE_SIGN",
-    "fallbacks": [
-      "SIGN"
-    ]
+    "material": "SPRUCE_SIGN"
   },
   "sprucesign": "spruce_sign",
   "spruce_slab": {
@@ -10316,7 +10516,9 @@
   "spawneggsquid": "squid_spawn_egg",
   "squidspawn": "squid_spawn_egg",
   "spawnsquid": "squid_spawn_egg",
-  "stick": "stick",
+  "stick": {
+    "material": "STICK"
+  },
   "sticky_piston": {
     "material": "STICKY_PISTON"
   },
@@ -10336,10 +10538,14 @@
   "pistons": "sticky_piston",
   "pistonsbase": "sticky_piston",
   "spistonbase": "sticky_piston",
-  "stone": "stone",
+  "stone": {
+    "material": "STONE"
+  },
   "sstone": "stone",
   "rock": "stone",
-  "stonecutter": "stonecutter",
+  "stonecutter": {
+    "material": "STONECUTTER"
+  },
   "cutstone": "stonecutter",
   "cutsmoothstone": "stonecutter",
   "cutsstone": "stonecutter",
@@ -10451,7 +10657,9 @@
   "spawneggstray": "stray_spawn_egg",
   "strayspawn": "stray_spawn_egg",
   "spawnstray": "stray_spawn_egg",
-  "string": "string",
+  "string": {
+    "material": "STRING"
+  },
   "stripped_acacia_log": {
     "material": "STRIPPED_ACACIA_LOG"
   },
@@ -10844,12 +11052,16 @@
     "material": "STRUCTURE_VOID"
   },
   "structurevoid": "structure_void",
-  "sugar": "sugar",
+  "sugar": {
+    "material": "SUGAR"
+  },
   "sugar_cane": {
     "material": "SUGAR_CANE"
   },
   "sugarcane": "sugar_cane",
-  "sunflower": "sunflower",
+  "sunflower": {
+    "material": "SUNFLOWER"
+  },
   "suspicious_stew": {
     "material": "SUSPICIOUS_STEW"
   },
@@ -10880,12 +11092,16 @@
     "unspawnable": true
   },
   "tallseagrass": "tall_seagrass",
-  "terracotta": "terracotta",
+  "terracotta": {
+    "material": "TERRACOTTA"
+  },
   "tipped_arrow": {
     "material": "TIPPED_ARROW"
   },
   "tippedarrow": "tipped_arrow",
-  "tnt": "tnt",
+  "tnt": {
+    "material": "TNT"
+  },
   "tntblock": "tnt",
   "blocktnt": "tnt",
   "bombblock": "tnt",
@@ -10921,7 +11137,9 @@
   "bmcart": "tnt_minecart",
   "bmc": "tnt_minecart",
   "bcart": "tnt_minecart",
-  "torch": "torch",
+  "torch": {
+    "material": "TORCH"
+  },
   "burningstick": "torch",
   "burnstick": "torch",
   "totem_of_undying": {
@@ -10940,7 +11158,9 @@
   "trapchest": "trapped_chest",
   "chesttrapped": "trapped_chest",
   "chesttrap": "trapped_chest",
-  "trident": "trident",
+  "trident": {
+    "material": "TRIDENT"
+  },
   "tripwire": {
     "material": "TRIPWIRE",
     "unspawnable": true
@@ -11098,7 +11318,9 @@
   "spawneggvin": "vindicator_spawn_egg",
   "vinspawn": "vindicator_spawn_egg",
   "spawnvin": "vindicator_spawn_egg",
-  "vine": "vine",
+  "vine": {
+    "material": "VINE"
+  },
   "vines": "vine",
   "greenvines": "vine",
   "greenvine": "vine",
@@ -11141,7 +11363,9 @@
     "material": "WET_SPONGE"
   },
   "wetsponge": "wet_sponge",
-  "wheat": "wheat",
+  "wheat": {
+    "material": "WHEAT"
+  },
   "wheat_seeds": {
     "material": "WHEAT_SEEDS"
   },
@@ -11195,10 +11419,7 @@
   "whitecdust": "white_concrete_powder",
   "whitecp": "white_concrete_powder",
   "white_dye": {
-    "material": "WHITE_DYE",
-    "fallbacks": [
-      "BONE_MEAL"
-    ]
+    "material": "WHITE_DYE"
   },
   "whitedye": "white_dye",
   "white_glazed_terracotta": {
@@ -11469,10 +11690,7 @@
   "yellowcdust": "yellow_concrete_powder",
   "yellowcp": "yellow_concrete_powder",
   "yellow_dye": {
-    "material": "YELLOW_DYE",
-    "fallbacks": [
-      "DANDELION_YELLOW"
-    ]
+    "material": "YELLOW_DYE"
   },
   "yellowdye": "yellow_dye",
   "yellow_glazed_terracotta": {
