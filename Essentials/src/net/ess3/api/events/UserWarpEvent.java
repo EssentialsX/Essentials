@@ -4,19 +4,16 @@ import com.earth2me.essentials.Trade;
 import net.ess3.api.IUser;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
-import org.bukkit.event.Event;
-import org.bukkit.event.HandlerList;
+
 /**
  * Called when the player use the command /warp
  */
-public class UserWarpEvent extends Event implements Cancellable {
-    private static final HandlerList handlers = new HandlerList();
+public class UserWarpEvent extends BaseEvent implements Cancellable {
 
     private IUser user;
     private String warp;
     private Trade trade;
     private boolean cancelled = false;
-
 
     public UserWarpEvent(IUser user, String warp, Trade trade){
         this.user = user;
@@ -52,14 +49,5 @@ public class UserWarpEvent extends Event implements Cancellable {
     @Override
     public void setCancelled(boolean b) {
         cancelled = b;
-    }
-
-    @Override
-    public HandlerList getHandlers() {
-        return handlers;
-    }
-
-    public static HandlerList getHandlerList() {
-        return handlers;
     }
 }
