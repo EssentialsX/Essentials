@@ -3,14 +3,10 @@ package net.ess3.api.events;
 import com.google.common.base.Preconditions;
 
 import org.bukkit.entity.Player;
-import org.bukkit.event.Event;
-import org.bukkit.event.HandlerList;
 
 import java.math.BigDecimal;
 
-
-public class UserBalanceUpdateEvent extends Event {
-    private static final HandlerList handlers = new HandlerList();
+public class UserBalanceUpdateEvent extends BaseEvent {
     private final Player player;
     private final BigDecimal originalBalance;
     private BigDecimal balance;
@@ -19,15 +15,6 @@ public class UserBalanceUpdateEvent extends Event {
         this.player = player;
         this.originalBalance = originalBalance;
         this.balance = balance;
-    }
-
-    @Override
-    public HandlerList getHandlers() {
-        return handlers;
-    }
-
-    public static HandlerList getHandlerList() {
-        return handlers;
     }
 
     public Player getPlayer() {
