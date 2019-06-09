@@ -11,8 +11,7 @@ import java.util.Set;
 import static com.earth2me.essentials.I18n.tl;
 
 
-public class LocalChatSpyEvent extends Event implements Cancellable {
-    private static final HandlerList handlers = new HandlerList();
+public class LocalChatSpyEvent extends BaseEvent implements Cancellable {
     private boolean cancelled = false;
     private String message;
     private String format;
@@ -103,14 +102,5 @@ public class LocalChatSpyEvent extends Event implements Cancellable {
     @Override
     public void setCancelled(boolean cancel) {
         this.cancelled = cancel;
-    }
-
-    @Override
-    public HandlerList getHandlers() {
-        return handlers;
-    }
-
-    public static HandlerList getHandlerList() {
-        return handlers;
     }
 }
