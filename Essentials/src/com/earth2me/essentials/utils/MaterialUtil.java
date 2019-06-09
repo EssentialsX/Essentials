@@ -3,7 +3,6 @@ package com.earth2me.essentials.utils;
 import org.bukkit.Bukkit;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
-import org.bukkit.Registry;
 import org.bukkit.material.MaterialData;
 
 import java.util.EnumSet;
