@@ -328,4 +328,6 @@ public interface ISettings extends IConf {
     boolean allowOldIdSigns();
 
     boolean isSafeUsermap();
+
+    boolean doCommandBlockCommandLogging();
 }

@@ -544,6 +544,7 @@ public class Settings implements net.ess3.api.ISettings {
         forceEnableRecipe = _isForceEnableRecipe();
         allowOldIdSigns = _allowOldIdSigns();
         isSafeUsermap = _isSafeUsermap();
+        doCommandBlockCommandLogging = _doCommandBlockCommandLogging();
     }
 
     void _lateLoadItemSpawnBlacklist() {
@@ -1551,5 +1552,16 @@ public class Settings implements net.ess3.api.ISettings {
     @Override
     public boolean isSafeUsermap() {
         return isSafeUsermap;
+    }
+
+    private boolean doCommandBlockCommandLogging;
+
+    private boolean _doCommandBlockCommandLogging() {
+        return config.getBoolean("log-command-block-commands", true);
+    }
+
+    @Override
+    public boolean doCommandBlockCommandLogging() {
+        return doCommandBlockCommandLogging;
     }
 }
