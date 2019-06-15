@@ -329,5 +329,5 @@ public interface ISettings extends IConf {
 
     boolean isSafeUsermap();
 
-    boolean doCommandBlockCommandLogging();
+    boolean logCommandBlockCommands();
 }
