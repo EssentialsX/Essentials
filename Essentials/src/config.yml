@@ -421,6 +421,10 @@ sleep-ignores-afk-players: true
 # You may use color codes, use {USERNAME} the player's name or {PLAYER} for the player's displayname.
 afk-list-name: "none"
 
+# When a player types /afk, should the AFK message be sent to
+# everyone on the server, or just to the player?
+broadcast-afk-message: true
+
 # You can disable the death messages of Minecraft here.
 death-messages: true
 

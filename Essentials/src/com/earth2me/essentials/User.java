@@ -585,7 +585,11 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
                 setDisplayNick();
                 final String msg = tl("userIsNotAway", getDisplayName());
                 if (!msg.isEmpty()) {
-                    ess.broadcastMessage(this, msg);
+                    if (ess.getSettings().broadcastAfkMessage()) {
+                        ess.broadcastMessage(this, msg);
+                    } else {
+                        this.sendMessage(msg);
+                    }
                 }
             }
         }
