@@ -17,7 +17,11 @@
  */
 package com.earth2me.essentials;
 
-import com.earth2me.essentials.commands.*;
+import com.earth2me.essentials.commands.EssentialsCommand;
+import com.earth2me.essentials.commands.IEssentialsCommand;
+import com.earth2me.essentials.commands.NoChargeException;
+import com.earth2me.essentials.commands.NotEnoughArgumentsException;
+import com.earth2me.essentials.commands.QuietAbortException;
 import com.earth2me.essentials.items.AbstractItemDb;
 import com.earth2me.essentials.items.FlatItemDb;
 import com.earth2me.essentials.items.LegacyItemDb;
@@ -35,8 +39,10 @@ import com.earth2me.essentials.utils.VersionUtil;
 import com.google.common.base.Function;
 import com.google.common.base.Throwables;
 import com.google.common.collect.Iterables;
-import net.ess3.api.*;
+import net.ess3.api.Economy;
 import net.ess3.api.IEssentials;
+import net.ess3.api.IItemDb;
+import net.ess3.api.IJails;
 import net.ess3.api.ISettings;
 import net.ess3.nms.PotionMetaProvider;
 import net.ess3.nms.SpawnEggProvider;
@@ -55,7 +61,11 @@ import org.bukkit.Bukkit;
 import org.bukkit.Server;
 import org.bukkit.World;
 import org.bukkit.block.Block;
-import org.bukkit.command.*;
+import org.bukkit.command.BlockCommandSender;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
+import org.bukkit.command.PluginCommand;
+import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -80,7 +90,14 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -181,6 +198,10 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
                 if (plugin.getDescription().getName().startsWith("Essentials") && !plugin.getDescription().getVersion().equals(this.getDescription().getVersion()) && !plugin.getDescription().getName().equals("EssentialsAntiCheat")) {
                     getLogger().warning(tl("versionMismatch", plugin.getDescription().getName()));
                 }
+            }
+
+            if(pm.isPluginEnabled("Reserve")) {
+                Reserve_Essentials.register(this);
             }
 
             for (Method method : Server.class.getDeclaredMethods()) {
