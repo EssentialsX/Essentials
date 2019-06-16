@@ -14,6 +14,7 @@ import org.bukkit.block.data.BlockData;
 import org.bukkit.conversations.Conversation;
 import org.bukkit.conversations.ConversationAbandonedEvent;
 import org.bukkit.entity.*;
+import org.bukkit.entity.memory.MemoryKey;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import org.bukkit.inventory.*;
@@ -23,6 +24,7 @@ import org.bukkit.metadata.MetadataValue;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionAttachment;
 import org.bukkit.permissions.PermissionAttachmentInfo;
+import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -159,6 +161,11 @@ public class OfflinePlayer implements Player {
     }
 
     public BlockFace getFacing() {
+        return null;
+    }
+
+    @Override
+    public Pose getPose() {
         return null;
     }
 
@@ -1336,6 +1343,16 @@ public class OfflinePlayer implements Player {
     }
 
     @Override
+    public <T> T getMemory(MemoryKey<T> memoryKey) {
+        return null;
+    }
+
+    @Override
+    public <T> void setMemory(MemoryKey<T> memoryKey, T t) {
+
+    }
+
+    @Override
     public <T extends Projectile> T launchProjectile(Class<? extends T> type, Vector vector) {
         return null;
     }
@@ -1614,4 +1631,13 @@ public class OfflinePlayer implements Player {
     @Override
 	public void updateCommands() {
 	}
+
+    @Override
+    public void openBook(ItemStack book) {
+    }
+
+    @Override
+    public PersistentDataContainer getPersistentDataContainer() {
+        return null;
+    }
 }

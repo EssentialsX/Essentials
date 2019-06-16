@@ -231,6 +231,26 @@ public class Enchantments {
             }
         } catch (IllegalArgumentException ignored) {}
 
+
+        try { // 1.14
+            Enchantment multishot = Enchantment.getByName("MULTISHOT");
+            if (multishot != null) {
+                ENCHANTMENTS.put("multishot", multishot);
+                ALIASENCHANTMENTS.put("tripleshot", multishot);
+            }
+            Enchantment quickCharge = Enchantment.getByName("QUICK_CHARGE");
+            if (quickCharge != null) {
+                ENCHANTMENTS.put("quickcharge", quickCharge);
+                ALIASENCHANTMENTS.put("quickdraw", quickCharge);
+                ALIASENCHANTMENTS.put("fastcharge", quickCharge);
+                ALIASENCHANTMENTS.put("fastdraw", quickCharge);
+            }
+            Enchantment piercing = Enchantment.getByName("PIERCING");
+            if (piercing != null) {
+                ENCHANTMENTS.put("piercing", piercing);
+            }
+        } catch (IllegalArgumentException ignored) {}
+
         try {
             Class<?> namespacedKeyClass = Class.forName("org.bukkit.NamespacedKey");
             Class<?> enchantmentClass = Class.forName("org.bukkit.enchantments.Enchantment");

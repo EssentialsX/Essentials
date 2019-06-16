@@ -4,6 +4,7 @@ import com.earth2me.essentials.I18n;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.EnumUtil;
 import com.earth2me.essentials.utils.FormatUtil;
+import com.earth2me.essentials.utils.MaterialUtil;
 import net.ess3.api.IEssentials;
 import net.ess3.api.MaxMoneyException;
 import org.bukkit.ChatColor;
@@ -22,8 +23,6 @@ import java.util.logging.Logger;
 
 public class SignBlockListener implements Listener {
     private static final Logger LOGGER = Logger.getLogger("Essentials");
-    private static final Material WALL_SIGN = Material.WALL_SIGN;
-    private static final Material SIGN_POST = EnumUtil.getMaterial("SIGN", "SIGN_POST");
     private final transient IEssentials ess;
 
     public SignBlockListener(IEssentials ess) {
@@ -55,7 +54,7 @@ public class SignBlockListener implements Listener {
         }
 
         final Material mat = block.getType();
-        if (mat == SIGN_POST || mat == WALL_SIGN) {
+        if (MaterialUtil.isSign(mat)) {
             final Sign csign = (Sign) block.getState();
 
             for (EssentialsSign sign : ess.getSettings().enabledSigns()) {
@@ -143,12 +142,12 @@ public class SignBlockListener implements Listener {
         }
 
         final Block against = event.getBlockAgainst();
-        if ((against.getType() == WALL_SIGN || against.getType() == SIGN_POST) && EssentialsSign.isValidSign(ess, new EssentialsSign.BlockSign(against))) {
+        if (MaterialUtil.isSign(against.getType()) && EssentialsSign.isValidSign(ess, new EssentialsSign.BlockSign(against))) {
             event.setCancelled(true);
             return;
         }
         final Block block = event.getBlock();
-        if (block.getType() == WALL_SIGN || block.getType() == SIGN_POST) {
+        if (MaterialUtil.isSign(block.getType())) {
             return;
         }
         for (EssentialsSign sign : ess.getSettings().enabledSigns()) {
@@ -167,7 +166,7 @@ public class SignBlockListener implements Listener {
         }
 
         final Block block = event.getBlock();
-        if (((block.getType() == WALL_SIGN || block.getType() == SIGN_POST) && EssentialsSign.isValidSign(ess, new EssentialsSign.BlockSign(block))) || EssentialsSign.checkIfBlockBreaksSigns(block)) {
+        if ((MaterialUtil.isSign(block.getType()) && EssentialsSign.isValidSign(ess, new EssentialsSign.BlockSign(block))) || EssentialsSign.checkIfBlockBreaksSigns(block)) {
             event.setCancelled(true);
             return;
         }
@@ -187,7 +186,7 @@ public class SignBlockListener implements Listener {
         }
 
         final Block block = event.getBlock();
-        if (((block.getType() == WALL_SIGN || block.getType() == SIGN_POST) && EssentialsSign.isValidSign(ess, new EssentialsSign.BlockSign(block))) || EssentialsSign.checkIfBlockBreaksSigns(block)) {
+        if ((MaterialUtil.isSign(block.getType()) && EssentialsSign.isValidSign(ess, new EssentialsSign.BlockSign(block))) || EssentialsSign.checkIfBlockBreaksSigns(block)) {
             event.setCancelled(true);
             return;
         }
@@ -207,7 +206,7 @@ public class SignBlockListener implements Listener {
         }
 
         for (Block block : event.getBlocks()) {
-            if (((block.getType() == WALL_SIGN || block.getType() == SIGN_POST) && EssentialsSign.isValidSign(ess, new EssentialsSign.BlockSign(block))) || EssentialsSign.checkIfBlockBreaksSigns(block)) {
+            if ((MaterialUtil.isSign(block.getType()) && EssentialsSign.isValidSign(ess, new EssentialsSign.BlockSign(block))) || EssentialsSign.checkIfBlockBreaksSigns(block)) {
                 event.setCancelled(true);
                 return;
             }
@@ -232,7 +231,7 @@ public class SignBlockListener implements Listener {
             final Block[] affectedBlocks = new Block[]{pistonBaseBlock, pistonBaseBlock.getRelative(event.getDirection()), event.getRetractLocation().getBlock()};
 
             for (Block block : affectedBlocks) {
-                if (((block.getType() == WALL_SIGN || block.getType() == SIGN_POST) && EssentialsSign.isValidSign(ess, new EssentialsSign.BlockSign(block))) || EssentialsSign.checkIfBlockBreaksSigns(block)) {
+                if ((MaterialUtil.isSign(block.getType()) && EssentialsSign.isValidSign(ess, new EssentialsSign.BlockSign(block))) || EssentialsSign.checkIfBlockBreaksSigns(block)) {
                     event.setCancelled(true);
                     return;
                 }

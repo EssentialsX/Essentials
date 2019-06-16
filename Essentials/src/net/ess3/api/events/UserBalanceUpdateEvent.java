@@ -2,6 +2,7 @@ package net.ess3.api.events;
 
 import com.google.common.base.Preconditions;
 
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
@@ -16,6 +17,7 @@ public class UserBalanceUpdateEvent extends Event {
     private BigDecimal balance;
 
     public UserBalanceUpdateEvent(Player player, BigDecimal originalBalance, BigDecimal balance) {
+        super(!Bukkit.getServer().isPrimaryThread());
         this.player = player;
         this.originalBalance = originalBalance;
         this.balance = balance;
