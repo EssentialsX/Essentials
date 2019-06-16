@@ -135,6 +135,10 @@ public class Commandcondense extends EssentialsCommand {
 
         if (recipe instanceof ShapedRecipe) {
             ShapedRecipe sRecipe = (ShapedRecipe) recipe;
+            if (sRecipe.getShape().length != sRecipe.getShape()[0].length()) {
+                // Only accept square recipes
+                return null;
+            }
             inputList = sRecipe.getIngredientMap().values();
         } else if (recipe instanceof ShapelessRecipe) {
             ShapelessRecipe slRecipe = (ShapelessRecipe) recipe;
