@@ -42,6 +42,7 @@ public class Methods {
      * Implement all methods along with their respective name & class.
      */
     private static void _init() {
+        addMethod("Reserve", new com.earth2me.essentials.register.payment.methods.ReserveEco());
         addMethod("Vault", new com.earth2me.essentials.register.payment.methods.VaultEco());
     }
 
