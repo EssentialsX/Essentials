@@ -751,11 +751,16 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
     }
 
     @Override
+    public int broadcastMessage(final IUser sender, final String message, final IUser... exclude) {
+        return broadcastMessage(sender, null, message, false, exclude);
+    }
+
+    @Override
     public int broadcastMessage(final String permission, final String message) {
         return broadcastMessage(null, permission, message, false);
     }
 
-    private int broadcastMessage(final IUser sender, final String permission, final String message, final boolean keywords) {
+    private int broadcastMessage(final IUser sender, final String permission, final String message, final boolean keywords, final IUser... exclude) {
         if (sender != null && sender.isHidden()) {
             return 0;
         }
@@ -767,6 +772,9 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
         for (Player player : players) {
             final User user = getUser(player);
             if ((permission == null && (sender == null || !user.isIgnoredPlayer(sender))) || (permission != null && user.isAuthorized(permission))) {
+                if (exclude.length > 0 && Arrays.asList(exclude).contains(user)) {
+                    continue;
+                }
                 if (keywords) {
                     broadcast = new KeywordReplacer(broadcast, new CommandSource(player), this, false);
                 }
