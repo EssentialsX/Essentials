@@ -639,8 +639,15 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
             if (!isHidden()) {
                 setDisplayNick();
                 final String msg = tl("userIsAway", getDisplayName());
+                final String selfmsg = tl("userIsAwaySelf");
                 if (!msg.isEmpty()) {
-                    ess.broadcastMessage(this, msg);
+                    if (ess.getSettings().broadcastAfkMessage()) {
+                        // exclude user from recieving general AFK announcement in favor of personal message
+                        ess.broadcastMessage(this, msg, this);
+                        this.sendMessage(selfmsg);
+                    } else {
+                        this.sendMessage(selfmsg);
+                    }
                 }
             }
         }
