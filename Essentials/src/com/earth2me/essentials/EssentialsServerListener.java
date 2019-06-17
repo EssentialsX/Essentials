@@ -18,7 +18,8 @@ import java.util.logging.Level;
 
 public class EssentialsServerListener implements Listener {
     private static List<String> ignoredSLPECallers = Arrays.asList(
-        ".LegacyPingHandler.channelRead(" // CB responding to pings from pre-Netty clients
+        ".LegacyPingHandler.channelRead(", // CB responding to pings from pre-Netty clients
+        "de.dytanic.cloudnet.bridge.BukkitBootstrap" // CloudNet v2 doing... something
     );
 
     private final transient IEssentials ess;

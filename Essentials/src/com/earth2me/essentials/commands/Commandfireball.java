@@ -34,6 +34,10 @@ public class Commandfireball extends EssentialsCommand {
                 type = ThrownExpBottle.class;
             } else if (args[0].equalsIgnoreCase("large")) {
                 type = LargeFireball.class;
+            } else if (args[0].equalsIgnoreCase("splashpotion")) {
+                type = SplashPotion.class;
+            } else if (args[0].equalsIgnoreCase("lingeringpotion")) {
+                type = LingeringPotion.class;
             }
         }
         final Vector direction = user.getBase().getEyeLocation().getDirection().multiply(speed);
@@ -45,7 +49,7 @@ public class Commandfireball extends EssentialsCommand {
     @Override
     protected List<String> getTabCompleteOptions(final Server server, final User user, final String commandLabel, final String[] args) {
         if (args.length == 1) {
-            return Lists.newArrayList("small", "arrow", "skull", "egg", "snowball", "expbottle", "large");
+            return Lists.newArrayList("small", "arrow", "skull", "egg", "snowball", "expbottle", "large", "splashpotion", "lingeringpotion");
         } else {
             return Collections.emptyList();
         }

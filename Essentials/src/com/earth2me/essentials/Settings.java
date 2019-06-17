@@ -553,6 +553,7 @@ public class Settings implements net.ess3.api.ISettings {
         forceEnableRecipe = _isForceEnableRecipe();
         allowOldIdSigns = _allowOldIdSigns();
         isWaterSafe = _isWaterSafe();
+        isSafeUsermap = _isSafeUsermap();
     }
 
     void _lateLoadItemSpawnBlacklist() {
@@ -1563,5 +1564,16 @@ public class Settings implements net.ess3.api.ISettings {
     @Override
     public boolean isWaterSafe() {
         return isWaterSafe;
+    }
+    
+    private boolean isSafeUsermap;
+
+    private boolean _isSafeUsermap() {
+        return config.getBoolean("safe-usermap-names", true);
+    }
+
+    @Override
+    public boolean isSafeUsermap() {
+        return isSafeUsermap;
     }
 }

@@ -1,7 +1,7 @@
 package com.earth2me.essentials.signs;
 
 import com.earth2me.essentials.*;
-import com.earth2me.essentials.utils.EnumUtil;
+import com.earth2me.essentials.utils.MaterialUtil;
 import com.earth2me.essentials.utils.NumberUtil;
 import net.ess3.api.IEssentials;
 import net.ess3.api.MaxMoneyException;
@@ -13,6 +13,7 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.Sign;
+import org.bukkit.block.data.type.WallSign;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.SignChangeEvent;
 import org.bukkit.inventory.ItemStack;
@@ -26,7 +27,6 @@ import static com.earth2me.essentials.I18n.tl;
 
 
 public class EssentialsSign {
-    private static final Material SIGN_POST = EnumUtil.getMaterial("SIGN", "SIGN_POST");
     private static final Set<Material> EMPTY_SET = new HashSet<Material>();
     protected static final BigDecimal MINTRANSACTION = new BigDecimal("0.01");
     protected transient final String signName;
@@ -206,16 +206,15 @@ public class EssentialsSign {
 
     protected static boolean checkIfBlockBreaksSigns(final Block block) {
         final Block sign = block.getRelative(BlockFace.UP);
-        if (sign.getType() == SIGN_POST && isValidSign(new BlockSign(sign))) {
+        if (MaterialUtil.isSignPost(sign.getType()) && isValidSign(new BlockSign(sign))) {
             return true;
         }
         final BlockFace[] directions = new BlockFace[]{BlockFace.NORTH, BlockFace.EAST, BlockFace.SOUTH, BlockFace.WEST};
         for (BlockFace blockFace : directions) {
-            final Block signblock = block.getRelative(blockFace);
-            if (signblock.getType() == Material.WALL_SIGN) {
+            final Block signBlock = block.getRelative(blockFace);
+            if (MaterialUtil.isWallSign(signBlock.getType())) {
                 try {
-                    final org.bukkit.material.Sign signMat = (org.bukkit.material.Sign) signblock.getState().getData();
-                    if (signMat != null && signMat.getFacing() == blockFace && isValidSign(new BlockSign(signblock))) {
+                    if (getWallSignFacing(signBlock) == blockFace && isValidSign(new BlockSign(signBlock))) {
                         return true;
                     }
                 } catch (NullPointerException ex) {
@@ -443,6 +442,16 @@ public class EssentialsSign {
 
     private void showError(final IEssentials ess, final CommandSource sender, final Throwable exception, final String signName) {
         ess.showError(sender, exception, "\\ sign: " + signName);
+    }
+
+    private static BlockFace getWallSignFacing(Block block) {
+        try {
+            final WallSign signData = (WallSign) block.getState().getBlockData();
+            return signData.getFacing();
+        } catch (NoClassDefFoundError e) {
+            final org.bukkit.material.Sign signMat = (org.bukkit.material.Sign) block.getState().getData();
+            return signMat.getFacing();
+        }
     }
 
 

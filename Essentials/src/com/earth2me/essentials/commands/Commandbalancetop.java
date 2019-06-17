@@ -102,11 +102,13 @@ public class Commandbalancetop extends EssentialsCommand {
                                     // Don't list NPCs in output
                                     continue;
                                 }
-                                final BigDecimal userMoney = user.getMoney();
-                                user.updateMoneyCache(userMoney);
-                                totalMoney = totalMoney.add(userMoney);
-                                final String name = user.isHidden() ? user.getName() : user.getDisplayName();
-                                balances.put(name, userMoney);
+                                if (!user.isAuthorized("essentials.balancetop.exclude")) {
+                                    final BigDecimal userMoney = user.getMoney();
+                                    user.updateMoneyCache(userMoney);
+                                    totalMoney = totalMoney.add(userMoney);
+                                    final String name = user.isHidden() ? user.getName() : user.getDisplayName();
+                                    balances.put(name, userMoney);
+                                }
                             }
                         }
                     }

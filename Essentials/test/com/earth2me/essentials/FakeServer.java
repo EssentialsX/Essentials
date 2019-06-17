@@ -92,16 +92,6 @@ public class FakeServer implements Server {
     }
 
     @Override
-    public String getServerName() {
-        return "Test Server";
-    }
-
-    @Override
-    public String getServerId() {
-        return "Test Server";
-    }
-
-    @Override
     public int broadcastMessage(String string) {
         int i = 0;
         for (Player player : players) {
@@ -884,7 +874,7 @@ public class FakeServer implements Server {
 
     @Override
     public boolean isPrimaryThread() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return true; // Can be set to true or false, just needs to return for AFK status test to pass.
     }
 
     @Override

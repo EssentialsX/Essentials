@@ -112,7 +112,7 @@ public class FakeWorld implements World {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    @Override
+    //@Override
     public boolean unloadChunk(int i, int i1, boolean bln, boolean bln1) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
@@ -122,7 +122,7 @@ public class FakeWorld implements World {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    @Override
+    //@Override
     public boolean unloadChunkRequest(int i, int i1, boolean bln) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
@@ -168,7 +168,7 @@ public class FakeWorld implements World {
     }
 
     @Override
-    public <T extends Arrow> T spawnArrow(Location location, Vector vector, float v, float v1, Class<T> aClass) {
+    public <T extends AbstractArrow> T spawnArrow(Location location, Vector direction, float speed, float spread, Class<T> clazz) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 

@@ -23,7 +23,7 @@ import static com.earth2me.essentials.I18n.tl;
 // This command has 4 undocumented behaviours #EasterEgg
 public class Commandessentials extends EssentialsCommand {
 
-    private final Sound NOTE_HARP = EnumUtil.valueOf(Sound.class, "BLOCK_NOTE_HARP", "NOTE_PIANO");
+    private final Sound NOTE_HARP = EnumUtil.valueOf(Sound.class, "BLOCK_NOTE_BLOCK_HARP", "BLOCK_NOTE_HARP", "NOTE_PIANO");
 
     public Commandessentials() {
         super("essentials");

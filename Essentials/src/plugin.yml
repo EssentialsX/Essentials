@@ -59,7 +59,7 @@ commands:
     aliases: [bcw,ebcw,bcastw,ebcastw,ebroadcastworld,shoutworld,eshoutworld]
   bigtree:
     description: Spawn a big tree where you are looking.
-    usage: /<command> <tree|redwood|jungle>
+    usage: /<command> <tree|redwood|jungle|darkoak>
     aliases: [ebigtree,largetree,elargetree]
   burn:
     description: Set a player on fire.
@@ -208,6 +208,10 @@ commands:
     description: Searches for an item.
     usage: /<command> <item>
     aliases: [dura,edura,durability,edurability,eitemdb,itemno,eitemno]
+  itemname:
+    description: Names an item.
+    usage: /<command> [name]
+    aliases: [iname, einame, eitemname, itemrename, irename, eitemrename, eirename]
   jails:
     description: List all jails.
     usage: /<command>
@@ -549,3 +553,6 @@ permissions:
     children:
       essentials.seen.ip: true
       essentials.seen.location: true
+  essentials.keepinv:
+    default: false
+    description: Controls whether players keep their inventory on death.
