@@ -559,6 +559,11 @@ allow-direct-hat: true
 # This doesn't affect running the command from the console, where a world is always required.
 allow-world-in-broadcastworld: true
 
+# Consider water blocks as "safe," therefore allowing players to teleport
+# using commands such as /home or /spawn to a location that is occupied
+# by water blocks
+is-water-safe: false
+
 # Should the usermap try to sanitise usernames before saving them?
 # You should only change this to false if you use Minecraft China.
 safe-usermap-names: true

@@ -8,8 +8,8 @@ import com.earth2me.essentials.textreader.IText;
 import com.earth2me.essentials.textreader.SimpleTextInput;
 import com.earth2me.essentials.utils.EnumUtil;
 import com.earth2me.essentials.utils.FormatUtil;
+import com.earth2me.essentials.utils.LocationUtil;
 import com.earth2me.essentials.utils.NumberUtil;
-
 import net.ess3.api.IEssentials;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -24,14 +24,23 @@ import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import static com.earth2me.essentials.I18n.tl;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
+
+import static com.earth2me.essentials.I18n.tl;
 
 
 public class Settings implements net.ess3.api.ISettings {
@@ -543,6 +552,7 @@ public class Settings implements net.ess3.api.ISettings {
         itemDbType = _getItemDbType();
         forceEnableRecipe = _isForceEnableRecipe();
         allowOldIdSigns = _allowOldIdSigns();
+        isWaterSafe = _isWaterSafe();
         isSafeUsermap = _isSafeUsermap();
     }
 
@@ -1542,6 +1552,20 @@ public class Settings implements net.ess3.api.ISettings {
         return allowOldIdSigns;
     }
 
+    private boolean isWaterSafe;
+
+    private boolean _isWaterSafe() {
+        boolean _isWaterSafe = config.getBoolean("is-water-safe", false);
+        LocationUtil.setIsWaterSafe(_isWaterSafe);
+
+        return _isWaterSafe;
+    }
+
+    @Override
+    public boolean isWaterSafe() {
+        return isWaterSafe;
+    }
+    
     private boolean isSafeUsermap;
 
     private boolean _isSafeUsermap() {
