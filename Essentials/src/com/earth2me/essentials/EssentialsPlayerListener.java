@@ -596,6 +596,8 @@ public class EssentialsPlayerListener implements Listener {
 
     @EventHandler(priority = EventPriority.NORMAL)
     public void onPlayerInteract(final PlayerInteractEvent event) {
+        boolean updateActivity = true;
+
         switch (event.getAction()) {
             case RIGHT_CLICK_BLOCK:
                 if (!event.isCancelled() && MaterialUtil.isBed(event.getClickedBlock().getType()) && ess.getSettings().getUpdateBedAtDaytime()) {
@@ -622,8 +624,14 @@ public class EssentialsPlayerListener implements Listener {
                     }
                 }
                 break;
+            case PHYSICAL:
+                updateActivity = false;
+                break;
         }
+
+        if (updateActivity) {
             ess.getUser(event.getPlayer()).updateActivityOnInteract(true);
+        }
     }
 
     // This method allows the /jump lock feature to work, allows teleporting while flying #EasterEgg
