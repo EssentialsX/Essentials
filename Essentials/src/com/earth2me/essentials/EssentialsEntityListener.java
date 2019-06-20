@@ -18,16 +18,32 @@ import java.util.regex.Pattern;
 import static com.earth2me.essentials.I18n.tl;
 
 
+/**
+ * <p>EssentialsEntityListener class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public class EssentialsEntityListener implements Listener {
     private static final Logger LOGGER = Logger.getLogger("Essentials");
     private static final transient Pattern powertoolPlayer = Pattern.compile("\\{player\\}");
     private final IEssentials ess;
 
+    /**
+     * <p>Constructor for EssentialsEntityListener.</p>
+     *
+     * @param ess a {@link net.ess3.api.IEssentials} object.
+     */
     public EssentialsEntityListener(IEssentials ess) {
         this.ess = ess;
     }
 
     // This method does something undocumented reguarding certain bucket types #EasterEgg
+    /**
+     * <p>onEntityDamage.</p>
+     *
+     * @param event a {@link org.bukkit.event.entity.EntityDamageByEntityEvent} object.
+     */
     @EventHandler(priority = EventPriority.LOW)
     public void onEntityDamage(final EntityDamageByEntityEvent event) {
         final Entity eAttack = event.getDamager();
@@ -105,6 +121,11 @@ public class EssentialsEntityListener implements Listener {
         }
     }
 
+    /**
+     * <p>onEntityDamage.</p>
+     *
+     * @param event a {@link org.bukkit.event.entity.EntityDamageEvent} object.
+     */
     @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
     public void onEntityDamage(final EntityDamageEvent event) {
         if (event.getEntity() instanceof Player && ess.getUser((Player) event.getEntity()).isGodModeEnabled()) {
@@ -115,6 +136,11 @@ public class EssentialsEntityListener implements Listener {
         }
     }
 
+    /**
+     * <p>onEntityCombust.</p>
+     *
+     * @param event a {@link org.bukkit.event.entity.EntityCombustEvent} object.
+     */
     @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
     public void onEntityCombust(final EntityCombustEvent event) {
         if (event.getEntity() instanceof Player && ess.getUser((Player) event.getEntity()).isGodModeEnabled()) {
@@ -122,6 +148,11 @@ public class EssentialsEntityListener implements Listener {
         }
     }
 
+    /**
+     * <p>onEntityCombustByEntity.</p>
+     *
+     * @param event a {@link org.bukkit.event.entity.EntityCombustByEntityEvent} object.
+     */
     @EventHandler(priority = EventPriority.MONITOR)
     public void onEntityCombustByEntity(final EntityCombustByEntityEvent event) {
         if (event.getCombuster() instanceof Arrow && event.getEntity() instanceof Player) {
@@ -138,6 +169,11 @@ public class EssentialsEntityListener implements Listener {
         }
     }
 
+    /**
+     * <p>onPlayerDeathEvent.</p>
+     *
+     * @param event a {@link org.bukkit.event.entity.PlayerDeathEvent} object.
+     */
     @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerDeathEvent(final PlayerDeathEvent event) {
         final User user = ess.getUser(event.getEntity());
@@ -150,6 +186,11 @@ public class EssentialsEntityListener implements Listener {
         }
     }
 
+    /**
+     * <p>onPlayerDeathExpEvent.</p>
+     *
+     * @param event a {@link org.bukkit.event.entity.PlayerDeathEvent} object.
+     */
     @EventHandler(priority = EventPriority.LOW)
     public void onPlayerDeathExpEvent(final PlayerDeathEvent event) {
         final User user = ess.getUser(event.getEntity());
@@ -159,6 +200,11 @@ public class EssentialsEntityListener implements Listener {
         }
     }
 
+    /**
+     * <p>onPlayerDeathInvEvent.</p>
+     *
+     * @param event a {@link org.bukkit.event.entity.PlayerDeathEvent} object.
+     */
     @EventHandler(priority = EventPriority.LOW)
     public void onPlayerDeathInvEvent(final PlayerDeathEvent event) {
         final User user = ess.getUser(event.getEntity());
@@ -167,6 +213,11 @@ public class EssentialsEntityListener implements Listener {
         }
     }
 
+    /**
+     * <p>onFoodLevelChange.</p>
+     *
+     * @param event a {@link org.bukkit.event.entity.FoodLevelChangeEvent} object.
+     */
     @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
     public void onFoodLevelChange(final FoodLevelChangeEvent event) {
         if (event.getEntity() instanceof Player) {
@@ -181,6 +232,11 @@ public class EssentialsEntityListener implements Listener {
         }
     }
 
+    /**
+     * <p>onEntityRegainHealth.</p>
+     *
+     * @param event a {@link org.bukkit.event.entity.EntityRegainHealthEvent} object.
+     */
     @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
     public void onEntityRegainHealth(final EntityRegainHealthEvent event) {
         if (event.getRegainReason() == RegainReason.SATIATED && event.getEntity() instanceof Player && ess.getUser((Player) event.getEntity()).isAfk() && ess.getSettings().getFreezeAfkPlayers()) {
@@ -188,6 +244,11 @@ public class EssentialsEntityListener implements Listener {
         }
     }
 
+    /**
+     * <p>onPotionSplashEvent.</p>
+     *
+     * @param event a {@link org.bukkit.event.entity.PotionSplashEvent} object.
+     */
     @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
     public void onPotionSplashEvent(final PotionSplashEvent event) {
         for (LivingEntity entity : event.getAffectedEntities()) {
@@ -197,6 +258,11 @@ public class EssentialsEntityListener implements Listener {
         }
     }
 
+    /**
+     * <p>onEntityShootBow.</p>
+     *
+     * @param event a {@link org.bukkit.event.entity.EntityShootBowEvent} object.
+     */
     @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
     public void onEntityShootBow(EntityShootBowEvent event) {
         if (event.getEntity() instanceof Player) {
@@ -207,6 +273,11 @@ public class EssentialsEntityListener implements Listener {
         }
     }
 
+    /**
+     * <p>onEntityTarget.</p>
+     *
+     * @param event a {@link org.bukkit.event.entity.EntityTargetEvent} object.
+     */
     @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
     public void onEntityTarget(EntityTargetEvent event) {
         if (event.getTarget() instanceof Player) {

@@ -13,6 +13,12 @@ import java.util.logging.Level;
 import java.util.regex.Pattern;
 
 
+/**
+ * <p>UUIDMap class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public class UUIDMap {
     private final transient net.ess3.api.IEssentials ess;
     private File userList;
@@ -24,6 +30,11 @@ public class UUIDMap {
 
     private static boolean loading = false;
 
+    /**
+     * <p>Constructor for UUIDMap.</p>
+     *
+     * @param ess a {@link net.ess3.api.IEssentials} object.
+     */
     public UUIDMap(final net.ess3.api.IEssentials ess) {
         this.ess = ess;
         userList = new File(ess.getDataFolder(), "usermap.csv");
@@ -43,6 +54,12 @@ public class UUIDMap {
         writeScheduler.scheduleWithFixedDelay(writeTaskRunnable, 5, 5, TimeUnit.SECONDS);
     }
 
+    /**
+     * <p>loadAllUsers.</p>
+     *
+     * @param names a {@link java.util.concurrent.ConcurrentSkipListMap} object.
+     * @param history a {@link java.util.concurrent.ConcurrentSkipListMap} object.
+     */
     public void loadAllUsers(final ConcurrentSkipListMap<String, UUID> names, final ConcurrentSkipListMap<UUID, ArrayList<String>> history) {
         try {
             if (!userList.exists()) {
@@ -92,10 +109,16 @@ public class UUIDMap {
         }
     }
 
+    /**
+     * <p>writeUUIDMap.</p>
+     */
     public void writeUUIDMap() {
         pendingWrite = true;
     }
 
+    /**
+     * <p>forceWriteUUIDMap.</p>
+     */
     public void forceWriteUUIDMap() {
         if (ess.getSettings().isDebug()) {
             ess.getLogger().log(Level.INFO, "Forcing usermap write to disk");
@@ -104,6 +127,9 @@ public class UUIDMap {
         writeTaskRunnable.run();
     }
 
+    /**
+     * <p>shutdown.</p>
+     */
     public void shutdown() {
         writeScheduler.submit(writeTaskRunnable);
         writeScheduler.shutdown();

@@ -13,13 +13,23 @@ import org.bukkit.entity.Tameable;
 import java.util.Random;
 
 // This command is not documented on the wiki #EasterEgg
+/**
+ * <p>Commandkittycannon class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public class Commandkittycannon extends EssentialsCommand {
     private static final Random random = new Random();
 
+    /**
+     * <p>Constructor for Commandkittycannon.</p>
+     */
     public Commandkittycannon() {
         super("kittycannon");
     }
 
+    /** {@inheritDoc} */
     @Override
     protected void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception {
         final Entity ocelot = Mob.CAT.getType() == null ? spawnOcelot(user.getWorld(), server, user) : spawnCat(user.getWorld(), server, user);

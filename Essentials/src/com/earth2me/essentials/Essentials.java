@@ -87,6 +87,12 @@ import java.util.logging.Logger;
 import static com.earth2me.essentials.I18n.tl;
 
 
+/**
+ * <p>Essentials class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
     private static final Logger LOGGER = Logger.getLogger("Essentials");
     private transient ISettings settings;
@@ -112,13 +118,24 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
     private transient PotionMetaProvider potionMetaProvider;
     private transient Kits kits;
 
+    /**
+     * <p>Constructor for Essentials.</p>
+     */
     public Essentials() {
     }
 
+    /**
+     * <p>Constructor for Essentials.</p>
+     *
+     * @param server a {@link org.bukkit.Server} object.
+     */
     public Essentials(final Server server) {
         super(new JavaPluginLoader(server), new PluginDescriptionFile("Essentials", "", "com.earth2me.essentials.Essentials"), null, null);
     }
 
+    /**
+     * <p>forceLoadClasses.</p>
+     */
     @SuppressWarnings("unused")
     public void forceLoadClasses() {
         try {
@@ -128,11 +145,19 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
         }
     }
 
+    /** {@inheritDoc} */
     @Override
     public ISettings getSettings() {
         return settings;
     }
 
+    /**
+     * <p>setupForTesting.</p>
+     *
+     * @param server a {@link org.bukkit.Server} object.
+     * @throws java.io.IOException if any.
+     * @throws org.bukkit.plugin.InvalidDescriptionException if any.
+     */
     public void setupForTesting(final Server server) throws IOException, InvalidDescriptionException {
         final File dataFolder = File.createTempFile("essentialstest", "");
         if (!dataFolder.delete()) {
@@ -158,6 +183,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
         kits = new Kits(this);
     }
 
+    /** {@inheritDoc} */
     @Override
     public void onEnable() {
         try {
@@ -293,6 +319,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
         }
     }
 
+    /** {@inheritDoc} */
     @Override
     public void saveConfig() {
         // We don't use any of the bukkit config writing, as this breaks our config file formatting.
@@ -338,6 +365,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
         jails.resetListener();
     }
 
+    /** {@inheritDoc} */
     @Override
     public void onDisable() {
         for (User user : getOnlineUsers()) {
@@ -361,6 +389,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
         HandlerList.unregisterAll(this);
     }
 
+    /** {@inheritDoc} */
     @Override
     public void reload() {
         Trade.closeLog();
@@ -376,12 +405,14 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
         registerListeners(pm);
     }
 
+    /** {@inheritDoc} */
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String commandLabel, String[] args) {
         return onTabCompleteEssentials(sender, command, commandLabel, args, Essentials.class.getClassLoader(),
             "com.earth2me.essentials.commands.Command", "essentials.", null);
     }
 
+    /** {@inheritDoc} */
     @Override
     public List<String> onTabCompleteEssentials(final CommandSender cSender, final Command command, final String commandLabel, final String[] args,
                                                 final ClassLoader classLoader, final String commandPath, final String permissionPrefix,
@@ -453,11 +484,13 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
         }
     }
 
+    /** {@inheritDoc} */
     @Override
     public boolean onCommand(final CommandSender sender, final Command command, final String commandLabel, final String[] args) {
         return onCommandEssentials(sender, command, commandLabel, args, Essentials.class.getClassLoader(), "com.earth2me.essentials.commands.Command", "essentials.", null);
     }
 
+    /** {@inheritDoc} */
     @Override
     public boolean onCommandEssentials(final CommandSender cSender, final Command command, final String commandLabel, final String[] args, final ClassLoader classLoader, final String commandPath, final String permissionPrefix, final IEssentialsModule module) {
         // Allow plugins to override the command via onCommand
@@ -569,6 +602,9 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
         }
     }
 
+    /**
+     * <p>cleanupOpenInventories.</p>
+     */
     public void cleanupOpenInventories() {
         for (User user : getOnlineUsers()) {
             if (user.isRecipeSee()) {
@@ -584,6 +620,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
         }
     }
 
+    /** {@inheritDoc} */
     @Override
     public void showError(final CommandSource sender, final Throwable exception, final String commandLabel) {
         sender.sendMessage(tl("errorWithMessage", exception.getMessage()));
@@ -592,46 +629,55 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
         }
     }
 
+    /** {@inheritDoc} */
     @Override
     public BukkitScheduler getScheduler() {
         return this.getServer().getScheduler();
     }
 
+    /** {@inheritDoc} */
     @Override
     public IJails getJails() {
         return jails;
     }
 
+    /** {@inheritDoc} */
     @Override
     public Warps getWarps() {
         return warps;
     }
 
+    /** {@inheritDoc} */
     @Override
     public Worth getWorth() {
         return worth;
     }
 
+    /** {@inheritDoc} */
     @Override
     public Backup getBackup() {
         return backup;
     }
 
+    /** {@inheritDoc} */
     @Override
     public Kits getKits() {
         return kits;
     }
 
+    /** {@inheritDoc} */
     @Override
     public Metrics getMetrics() {
         return metrics;
     }
 
+    /** {@inheritDoc} */
     @Override
     public void setMetrics(Metrics metrics) {
         this.metrics = metrics;
     }
 
+    /** {@inheritDoc} */
     @Deprecated
     @Override
     public User getUser(final Object base) {
@@ -651,18 +697,21 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
     }
 
     //This will return null if there is not a match.
+    /** {@inheritDoc} */
     @Override
     public User getUser(final String base) {
         return getOfflineUser(base);
     }
 
     //This will return null if there is not a match.
+    /** {@inheritDoc} */
     @Override
     public User getUser(final UUID base) {
         return userMap.getUser(base);
     }
 
     //This will return null if there is not a match.
+    /** {@inheritDoc} */
     @Override
     public User getOfflineUser(final String name) {
         final User user = userMap.getUser(name);
@@ -679,6 +728,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
     }
 
     //This will create a new user if there is not a match.
+    /** {@inheritDoc} */
     @Override
     public User getUser(final Player base) {
         if (base == null) {
@@ -719,6 +769,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
         this.setEnabled(false);
     }
 
+    /** {@inheritDoc} */
     @Override
     public World getWorld(final String name) {
         if (name.matches("[0-9]+")) {
@@ -730,26 +781,31 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
         return getServer().getWorld(name);
     }
 
+    /** {@inheritDoc} */
     @Override
     public void addReloadListener(final IConf listener) {
         confList.add(listener);
     }
 
+    /** {@inheritDoc} */
     @Override
     public Methods getPaymentMethod() {
         return paymentMethod;
     }
 
+    /** {@inheritDoc} */
     @Override
     public int broadcastMessage(final String message) {
         return broadcastMessage(null, null, message, true);
     }
 
+    /** {@inheritDoc} */
     @Override
     public int broadcastMessage(final IUser sender, final String message) {
         return broadcastMessage(sender, null, message, false);
     }
 
+    /** {@inheritDoc} */
     @Override
     public int broadcastMessage(final String permission, final String message) {
         return broadcastMessage(null, permission, message, false);
@@ -779,81 +835,97 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
         return players.size();
     }
 
+    /** {@inheritDoc} */
     @Override
     public BukkitTask runTaskAsynchronously(final Runnable run) {
         return this.getScheduler().runTaskAsynchronously(this, run);
     }
 
+    /** {@inheritDoc} */
     @Override
     public BukkitTask runTaskLaterAsynchronously(final Runnable run, final long delay) {
         return this.getScheduler().runTaskLaterAsynchronously(this, run, delay);
     }
 
+    /** {@inheritDoc} */
     @Override
     public BukkitTask runTaskTimerAsynchronously(final Runnable run, final long delay, final long period) {
         return this.getScheduler().runTaskTimerAsynchronously(this, run, delay, period);
     }
 
+    /** {@inheritDoc} */
     @Override
     public int scheduleSyncDelayedTask(final Runnable run) {
         return this.getScheduler().scheduleSyncDelayedTask(this, run);
     }
 
+    /** {@inheritDoc} */
     @Override
     public int scheduleSyncDelayedTask(final Runnable run, final long delay) {
         return this.getScheduler().scheduleSyncDelayedTask(this, run, delay);
     }
 
+    /** {@inheritDoc} */
     @Override
     public int scheduleSyncRepeatingTask(final Runnable run, final long delay, final long period) {
         return this.getScheduler().scheduleSyncRepeatingTask(this, run, delay, period);
     }
 
+    /** {@inheritDoc} */
     @Override
     public TNTExplodeListener getTNTListener() {
         return tntListener;
     }
 
+    /** {@inheritDoc} */
     @Override
     public PermissionsHandler getPermissionsHandler() {
         return permissionsHandler;
     }
 
+    /** {@inheritDoc} */
     @Override
     public AlternativeCommandsHandler getAlternativeCommandsHandler() {
         return alternativeCommandsHandler;
     }
 
+    /** {@inheritDoc} */
     @Override
     public IItemDb getItemDb() {
         return itemDb;
     }
 
+    /** {@inheritDoc} */
     @Override
     public UserMap getUserMap() {
         return userMap;
     }
 
+    /** {@inheritDoc} */
     @Override
     public I18n getI18n() {
         return i18n;
     }
 
+    /** {@inheritDoc} */
     @Override
     public EssentialsTimer getTimer() {
         return timer;
     }
 
+    /** {@inheritDoc} */
     @Override
     public List<String> getVanishedPlayers() {
         return Collections.unmodifiableList(new ArrayList<>(vanishedPlayers));
     }
 
+    /** {@inheritDoc} */
     @Override
     public Collection<String> getVanishedPlayersNew() {
         return vanishedPlayers;
     }
 
+    /** {@inheritDoc} */
     @Override
     public Collection<Player> getOnlinePlayers() {
         try {
@@ -869,6 +941,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
         }
     }
 
+    /** {@inheritDoc} */
     @Override
     public Iterable<User> getOnlineUsers() {
         return Iterables.transform(getOnlinePlayers(), new Function<Player, User>() {
@@ -880,16 +953,19 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
         });
     }
 
+    /** {@inheritDoc} */
     @Override
     public SpawnerProvider getSpawnerProvider() {
         return spawnerProvider;
     }
 
+    /** {@inheritDoc} */
     @Override
     public SpawnEggProvider getSpawnEggProvider() {
         return spawnEggProvider;
     }
 
+    /** {@inheritDoc} */
     @Override
     public PotionMetaProvider getPotionMetaProvider() {
         return potionMetaProvider;

@@ -7,6 +7,12 @@ import java.util.*;
 import java.util.logging.Level;
 
 
+/**
+ * <p>EssentialsTimer class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public class EssentialsTimer implements Runnable {
     private final transient IEssentials ess;
     private final transient Set<UUID> onlineUsers = new HashSet<>(); // Field is necessary for hidden users
@@ -22,6 +28,7 @@ public class EssentialsTimer implements Runnable {
         history.add(20d);
     }
 
+    /** {@inheritDoc} */
     @Override
     public void run() {
         final long startTime = System.nanoTime();
@@ -94,6 +101,11 @@ public class EssentialsTimer implements Runnable {
         }
     }
 
+    /**
+     * <p>getAverageTPS.</p>
+     *
+     * @return a double.
+     */
     public double getAverageTPS() {
         double avg = 0;
         for (Double f : history) {

@@ -12,11 +12,21 @@ import java.util.*;
 import static com.earth2me.essentials.I18n.tl;
 
 
+/**
+ * <p>Commandlist class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public class Commandlist extends EssentialsCommand {
+    /**
+     * <p>Constructor for Commandlist.</p>
+     */
     public Commandlist() {
         super("list");
     }
 
+    /** {@inheritDoc} */
     @Override
     public void run(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception {
         boolean showHidden = true;
@@ -117,6 +127,7 @@ public class Commandlist extends EssentialsCommand {
         }
     }
 
+    /** {@inheritDoc} */
     @Override
     protected List<String> getTabCompleteOptions(final Server server, final CommandSource sender, final String commandLabel, final String[] args) {
         if (args.length == 1) {

@@ -12,11 +12,21 @@ import org.bukkit.inventory.ItemStack;
 import java.math.BigDecimal;
 
 
+/**
+ * <p>SignSell class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public class SignSell extends EssentialsSign {
+    /**
+     * <p>Constructor for SignSell.</p>
+     */
     public SignSell() {
         super("Sell");
     }
 
+    /** {@inheritDoc} */
     @Override
     protected boolean onSignCreate(final ISign sign, final User player, final String username, final IEssentials ess) throws SignException {
         validateTrade(sign, 1, 2, player, ess);
@@ -24,6 +34,7 @@ public class SignSell extends EssentialsSign {
         return true;
     }
 
+    /** {@inheritDoc} */
     @Override
     protected boolean onSignInteract(final ISign sign, final User player, final String username, final IEssentials ess) throws SignException, ChargeException, MaxMoneyException {
         Trade charge = getTrade(sign, 1, 2, player, ess);

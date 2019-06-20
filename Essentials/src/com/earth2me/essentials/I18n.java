@@ -15,6 +15,12 @@ import java.util.logging.Logger;
 import java.util.regex.Pattern;
 
 
+/**
+ * <p>I18n class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public class I18n implements net.ess3.api.II18n {
     private static I18n instance;
     private static final String MESSAGES = "messages";
@@ -36,6 +42,11 @@ public class I18n implements net.ess3.api.II18n {
         }
     };
 
+    /**
+     * <p>Constructor for I18n.</p>
+     *
+     * @param ess a {@link net.ess3.api.IEssentials} object.
+     */
     public I18n(final IEssentials ess) {
         this.ess = ess;
         defaultBundle = ResourceBundle.getBundle(MESSAGES, Locale.ENGLISH);
@@ -43,14 +54,21 @@ public class I18n implements net.ess3.api.II18n {
         customBundle = NULL_BUNDLE;
     }
 
+    /**
+     * <p>onEnable.</p>
+     */
     public void onEnable() {
         instance = this;
     }
 
+    /**
+     * <p>onDisable.</p>
+     */
     public void onDisable() {
         instance = null;
     }
 
+    /** {@inheritDoc} */
     @Override
     public Locale getCurrentLocale() {
         return currentLocale;
@@ -69,6 +87,13 @@ public class I18n implements net.ess3.api.II18n {
         }
     }
 
+    /**
+     * <p>tl.</p>
+     *
+     * @param string a {@link java.lang.String} object.
+     * @param objects a {@link java.lang.Object} object.
+     * @return a {@link java.lang.String} object.
+     */
     public static String tl(final String string, final Object... objects) {
         if (instance == null) {
             return "";
@@ -80,6 +105,13 @@ public class I18n implements net.ess3.api.II18n {
         }
     }
 
+    /**
+     * <p>format.</p>
+     *
+     * @param string a {@link java.lang.String} object.
+     * @param objects a {@link java.lang.Object} object.
+     * @return a {@link java.lang.String} object.
+     */
     public String format(final String string, final Object... objects) {
         String format = translate(string);
         MessageFormat messageFormat = messageFormatCache.get(format);
@@ -96,6 +128,11 @@ public class I18n implements net.ess3.api.II18n {
         return messageFormat.format(objects).replace(' ', ' '); // replace nbsp with a space
     }
 
+    /**
+     * <p>updateLocale.</p>
+     *
+     * @param loc a {@link java.lang.String} object.
+     */
     public void updateLocale(final String loc) {
         if (loc != null && !loc.isEmpty()) {
             final String[] parts = loc.split("[_\\.]");
@@ -126,6 +163,12 @@ public class I18n implements net.ess3.api.II18n {
         }
     }
 
+    /**
+     * <p>capitalCase.</p>
+     *
+     * @param input a {@link java.lang.String} object.
+     * @return a {@link java.lang.String} object.
+     */
     public static String capitalCase(final String input) {
         return input == null || input.length() == 0 ? input : input.toUpperCase(Locale.ENGLISH).charAt(0) + input.toLowerCase(Locale.ENGLISH).substring(1);
     }

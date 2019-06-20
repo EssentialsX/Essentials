@@ -21,14 +21,30 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 
+/**
+ * <p>SignBlockListener class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public class SignBlockListener implements Listener {
     private static final Logger LOGGER = Logger.getLogger("Essentials");
     private final transient IEssentials ess;
 
+    /**
+     * <p>Constructor for SignBlockListener.</p>
+     *
+     * @param ess a {@link net.ess3.api.IEssentials} object.
+     */
     public SignBlockListener(IEssentials ess) {
         this.ess = ess;
     }
 
+    /**
+     * <p>onSignBlockBreak.</p>
+     *
+     * @param event a {@link org.bukkit.event.block.BlockBreakEvent} object.
+     */
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onSignBlockBreak(final BlockBreakEvent event) {
         if (ess.getSettings().areSignsDisabled()) {
@@ -44,6 +60,14 @@ public class SignBlockListener implements Listener {
         }
     }
 
+    /**
+     * <p>protectSignsAndBlocks.</p>
+     *
+     * @param block a {@link org.bukkit.block.Block} object.
+     * @param player a {@link org.bukkit.entity.Player} object.
+     * @return a boolean.
+     * @throws net.ess3.api.MaxMoneyException if any.
+     */
     public boolean protectSignsAndBlocks(final Block block, final Player player) throws MaxMoneyException {
         // prevent any signs be broken by destroying the block they are attached to
         if (EssentialsSign.checkIfBlockBreaksSigns(block)) {
@@ -73,6 +97,11 @@ public class SignBlockListener implements Listener {
         return false;
     }
 
+    /**
+     * <p>onSignSignChange2.</p>
+     *
+     * @param event a {@link org.bukkit.event.block.SignChangeEvent} object.
+     */
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     public void onSignSignChange2(final SignChangeEvent event) {
         if (ess.getSettings().areSignsDisabled()) {
@@ -115,6 +144,11 @@ public class SignBlockListener implements Listener {
         }
     }
 
+    /**
+     * <p>onSignSignChange.</p>
+     *
+     * @param event a {@link org.bukkit.event.block.SignChangeEvent} object.
+     */
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onSignSignChange(final SignChangeEvent event) {
         if (ess.getSettings().areSignsDisabled()) {
@@ -134,6 +168,11 @@ public class SignBlockListener implements Listener {
         }
     }
 
+    /**
+     * <p>onSignBlockPlace.</p>
+     *
+     * @param event a {@link org.bukkit.event.block.BlockPlaceEvent} object.
+     */
     @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
     public void onSignBlockPlace(final BlockPlaceEvent event) {
         if (ess.getSettings().areSignsDisabled()) {
@@ -158,6 +197,11 @@ public class SignBlockListener implements Listener {
         }
     }
 
+    /**
+     * <p>onSignBlockBurn.</p>
+     *
+     * @param event a {@link org.bukkit.event.block.BlockBurnEvent} object.
+     */
     @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
     public void onSignBlockBurn(final BlockBurnEvent event) {
         if (ess.getSettings().areSignsDisabled()) {
@@ -178,6 +222,11 @@ public class SignBlockListener implements Listener {
         }
     }
 
+    /**
+     * <p>onSignBlockIgnite.</p>
+     *
+     * @param event a {@link org.bukkit.event.block.BlockIgniteEvent} object.
+     */
     @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
     public void onSignBlockIgnite(final BlockIgniteEvent event) {
         if (ess.getSettings().areSignsDisabled()) {
@@ -198,6 +247,11 @@ public class SignBlockListener implements Listener {
         }
     }
 
+    /**
+     * <p>onSignBlockPistonExtend.</p>
+     *
+     * @param event a {@link org.bukkit.event.block.BlockPistonExtendEvent} object.
+     */
     @EventHandler(priority = EventPriority.LOW)
     public void onSignBlockPistonExtend(final BlockPistonExtendEvent event) {
         if (ess.getSettings().areSignsDisabled()) {
@@ -219,6 +273,11 @@ public class SignBlockListener implements Listener {
         }
     }
 
+    /**
+     * <p>onSignBlockPistonRetract.</p>
+     *
+     * @param event a {@link org.bukkit.event.block.BlockPistonRetractEvent} object.
+     */
     @EventHandler(priority = EventPriority.LOW)
     public void onSignBlockPistonRetract(final BlockPistonRetractEvent event) {
         if (ess.getSettings().areSignsDisabled()) {

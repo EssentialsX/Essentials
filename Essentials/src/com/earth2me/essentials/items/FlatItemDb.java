@@ -23,7 +23,14 @@ import java.util.stream.Collectors;
 import static com.earth2me.essentials.I18n.tl;
 
 
+/**
+ * <p>FlatItemDb class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public class FlatItemDb extends AbstractItemDb {
+    /** Constant <code>LOGGER</code> */
     protected static final Logger LOGGER = Logger.getLogger("Essentials");
     private static Gson gson = new Gson();
 
@@ -38,10 +45,16 @@ public class FlatItemDb extends AbstractItemDb {
 
     private transient ManagedFile file = null;
 
+    /**
+     * <p>Constructor for FlatItemDb.</p>
+     *
+     * @param ess a {@link net.ess3.api.IEssentials} object.
+     */
     public FlatItemDb(final IEssentials ess) {
         super(ess);
     }
 
+    /** {@inheritDoc} */
     @Override
     public void reloadConfig() {
         if (file == null) {
@@ -99,6 +112,7 @@ public class FlatItemDb extends AbstractItemDb {
         }
     }
 
+    /** {@inheritDoc} */
     @Override
     public ItemStack get(String id, boolean useResolvers) throws Exception {
         if (useResolvers) {
@@ -162,6 +176,7 @@ public class FlatItemDb extends AbstractItemDb {
         return null;
     }
 
+    /** {@inheritDoc} */
     @Override
     public List<String> nameList(ItemStack item) {
         List<String> names = new ArrayList<>();
@@ -177,6 +192,7 @@ public class FlatItemDb extends AbstractItemDb {
         return names;
     }
 
+    /** {@inheritDoc} */
     @Override
     public String name(ItemStack item) {
         ItemData data = lookup(item);
@@ -190,6 +206,7 @@ public class FlatItemDb extends AbstractItemDb {
         return null;
     }
 
+    /** {@inheritDoc} */
     @Override
     @Deprecated
     public int getLegacyId(Material material) {
@@ -210,6 +227,7 @@ public class FlatItemDb extends AbstractItemDb {
         }
     }
 
+    /** {@inheritDoc} */
     @Override
     public Collection<String> listNames() {
         Set<String> names = new HashSet<>(allAliases);

@@ -7,6 +7,12 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerTeleportEvent;
 
 
+/**
+ * <p>ITeleport interface.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public interface ITeleport {
     /**
      * Used to skip teleportPlayer delay when teleporting someone to a location or player.
@@ -14,8 +20,7 @@ public interface ITeleport {
      * @param loc      - Where should the player end up
      * @param cooldown - If cooldown should be enforced
      * @param cause    - The reported teleportPlayer cause
-     *
-     * @throws Exception
+     * @throws java.lang.Exception if any.
      */
     void now(Location loc, boolean cooldown, PlayerTeleportEvent.TeleportCause cause) throws Exception;
 
@@ -25,11 +30,17 @@ public interface ITeleport {
      * @param entity   - Where should the player end up
      * @param cooldown - If cooldown should be enforced
      * @param cause    - The reported teleportPlayer cause
-     *
-     * @throws Exception
+     * @throws java.lang.Exception if any.
      */
     void now(Player entity, boolean cooldown, PlayerTeleportEvent.TeleportCause cause) throws Exception;
 
+    /**
+     * <p>teleport.</p>
+     *
+     * @param loc a {@link org.bukkit.Location} object.
+     * @param chargeFor a {@link com.earth2me.essentials.Trade} object.
+     * @throws java.lang.Exception if any.
+     */
     @Deprecated
     void teleport(Location loc, Trade chargeFor) throws Exception;
 
@@ -39,8 +50,7 @@ public interface ITeleport {
      * @param loc       - Where should the player end up
      * @param chargeFor - What the user will be charged if teleportPlayer is successful
      * @param cause     - The reported teleportPlayer cause
-     *
-     * @throws Exception
+     * @throws java.lang.Exception if any.
      */
     void teleport(Location loc, Trade chargeFor, PlayerTeleportEvent.TeleportCause cause) throws Exception;
 
@@ -50,8 +60,7 @@ public interface ITeleport {
      * @param entity    - Where should the player end up
      * @param chargeFor - What the user will be charged if teleportPlayer is successful
      * @param cause     - The reported teleportPlayer cause
-     *
-     * @throws Exception
+     * @throws java.lang.Exception if any.
      */
     void teleport(Player entity, Trade chargeFor, PlayerTeleportEvent.TeleportCause cause) throws Exception;
 
@@ -62,8 +71,7 @@ public interface ITeleport {
      * @param loc       - Where should the player end up
      * @param chargeFor - What the user will be charged if teleportPlayer is successful
      * @param cause     - The reported teleportPlayer cause
-     *
-     * @throws Exception
+     * @throws java.lang.Exception if any.
      */
     void teleportPlayer(IUser otherUser, Location loc, Trade chargeFor, PlayerTeleportEvent.TeleportCause cause) throws Exception;
 
@@ -74,8 +82,7 @@ public interface ITeleport {
      * @param entity    - Where should the player end up
      * @param chargeFor - What the user will be charged if teleportPlayer is successful
      * @param cause     - The reported teleportPlayer cause
-     *
-     * @throws Exception
+     * @throws java.lang.Exception if any.
      */
     void teleportPlayer(IUser otherUser, Player entity, Trade chargeFor, PlayerTeleportEvent.TeleportCause cause) throws Exception;
 
@@ -84,8 +91,7 @@ public interface ITeleport {
      *
      * @param chargeFor - What the user will be charged if teleportPlayer is successful
      * @param cause     - The reported teleportPlayer cause
-     *
-     * @throws Exception
+     * @throws java.lang.Exception if any.
      */
     void respawn(final Trade chargeFor, PlayerTeleportEvent.TeleportCause cause) throws Exception;
 
@@ -96,8 +102,7 @@ public interface ITeleport {
      * @param warp      - The name of the warp the user will be teleported too.
      * @param chargeFor - What the user will be charged if teleportPlayer is successful
      * @param cause     - The reported teleportPlayer cause
-     *
-     * @throws Exception
+     * @throws java.lang.Exception if any.
      */
     void warp(IUser otherUser, String warp, Trade chargeFor, PlayerTeleportEvent.TeleportCause cause) throws Exception;
 
@@ -105,8 +110,7 @@ public interface ITeleport {
      * Teleport wrapper used to handle /back teleports
      *
      * @param chargeFor - What the user will be charged if teleportPlayer is successful
-     *
-     * @throws Exception
+     * @throws java.lang.Exception if any.
      */
     void back(Trade chargeFor) throws Exception;
 
@@ -118,15 +122,14 @@ public interface ITeleport {
      * @param teleporter - The user performing the /back command.
      *                   This value may be {@code null} to indicate console.
      * @param chargeFor - What the {@code teleporter} will be charged if teleportPlayer is successful
-     *
-     * @throws Exception
+     * @throws java.lang.Exception if any.
      */
     void back(IUser teleporter, Trade chargeFor) throws Exception;
 
     /**
      * Teleport wrapper used to handle throwing user home after a jail sentence
      *
-     * @throws Exception
+     * @throws java.lang.Exception if the operation failed.
      */
     void back() throws Exception;
 

@@ -7,27 +7,49 @@ import java.util.List;
 import java.util.Locale;
 
 
+/**
+ * <p>ExecuteTimer class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public class ExecuteTimer {
     private final transient List<ExecuteRecord> times;
     private final transient DecimalFormat decimalFormat = new DecimalFormat("#0.000", DecimalFormatSymbols.getInstance(Locale.US));
 
 
+    /**
+     * <p>Constructor for ExecuteTimer.</p>
+     */
     public ExecuteTimer() {
         times = new ArrayList<ExecuteRecord>();
     }
 
+    /**
+     * <p>start.</p>
+     */
     public void start() {
         times.clear();
         mark("start");
 
     }
 
+    /**
+     * <p>mark.</p>
+     *
+     * @param label a {@link java.lang.String} object.
+     */
     public void mark(final String label) {
         if (!times.isEmpty() || "start".equals(label)) {
             times.add(new ExecuteRecord(label, System.nanoTime()));
         }
     }
 
+    /**
+     * <p>end.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
     public String end() {
         final StringBuilder output = new StringBuilder();
         output.append("execution time: ");

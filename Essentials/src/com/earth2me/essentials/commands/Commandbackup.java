@@ -7,11 +7,21 @@ import org.bukkit.Server;
 import static com.earth2me.essentials.I18n.tl;
 
 
+/**
+ * <p>Commandbackup class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public class Commandbackup extends EssentialsCommand {
+    /**
+     * <p>Constructor for Commandbackup.</p>
+     */
     public Commandbackup() {
         super("backup");
     }
 
+    /** {@inheritDoc} */
     @Override
     protected void run(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception {
         final Backup backup = ess.getBackup();

@@ -19,12 +19,22 @@ import java.util.Collections;
 import java.util.List;
 
 
+/**
+ * <p>Commandbroadcastworld class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public class Commandbroadcastworld extends EssentialsCommand {
 
+    /**
+     * <p>Constructor for Commandbroadcastworld.</p>
+     */
     public Commandbroadcastworld() {
         super("broadcastworld");
     }
 
+    /** {@inheritDoc} */
     @Override
     public void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception {
         World world = user.getWorld();
@@ -48,6 +58,7 @@ public class Commandbroadcastworld extends EssentialsCommand {
         sendBroadcast(world.getName(), user.getDisplayName(), message);
     }
 
+    /** {@inheritDoc} */
     @Override
     public void run(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception {
         if (args.length < 2) {
@@ -82,6 +93,7 @@ public class Commandbroadcastworld extends EssentialsCommand {
         }
     }
 
+    /** {@inheritDoc} */
     @Override
     protected List<String> getTabCompleteOptions(Server server, User user, String commandLabel, String[] args) {
         if (args.length == 1 && ess.getSettings().isAllowWorldInBroadcastworld()) {
@@ -95,6 +107,7 @@ public class Commandbroadcastworld extends EssentialsCommand {
         }
     }
 
+    /** {@inheritDoc} */
     @Override
     protected List<String> getTabCompleteOptions(Server server, CommandSource sender, String commandLabel, String[] args) {
         if (args.length == 1) {

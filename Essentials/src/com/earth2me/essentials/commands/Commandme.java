@@ -16,11 +16,21 @@ import java.util.Set;
 import static com.earth2me.essentials.I18n.tl;
 
 
+/**
+ * <p>Commandme class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public class Commandme extends EssentialsCommand {
+    /**
+     * <p>Constructor for Commandme.</p>
+     */
     public Commandme() {
         super("me");
     }
 
+    /** {@inheritDoc} */
     @Override
     public void run(Server server, User user, String commandLabel, String[] args) throws Exception {
         if (user.isMuted()) {
@@ -82,6 +92,7 @@ public class Commandme extends EssentialsCommand {
         }
     }
 
+    /** {@inheritDoc} */
     @Override
     public void run(Server server, CommandSource sender, String commandLabel, String[] args) throws Exception {
         if (args.length < 1) {
@@ -94,6 +105,7 @@ public class Commandme extends EssentialsCommand {
         ess.getServer().broadcastMessage(tl("action", "@", message));
     }
 
+    /** {@inheritDoc} */
     @Override
     protected List<String> getTabCompleteOptions(Server server, CommandSource sender, String commandLabel, String[] args) {
         return null;  // It's a chat message, use the default chat handler

@@ -17,11 +17,21 @@ import java.util.Map;
 import static com.earth2me.essentials.I18n.tl;
 
 //TODO: TL exceptions
+/**
+ * <p>SignTrade class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public class SignTrade extends EssentialsSign {
+    /**
+     * <p>Constructor for SignTrade.</p>
+     */
     public SignTrade() {
         super("Trade");
     }
 
+    /** {@inheritDoc} */
     @Override
     protected boolean onSignCreate(final ISign sign, final User player, final String username, final IEssentials ess) throws SignException, ChargeException {
         validateTrade(sign, 1, false, ess);
@@ -38,6 +48,7 @@ public class SignTrade extends EssentialsSign {
         return true;
     }
 
+    /** {@inheritDoc} */
     @Override
     protected boolean onSignInteract(final ISign sign, final User player, final String username, final IEssentials ess) throws SignException, ChargeException, MaxMoneyException {
         if (sign.getLine(3).substring(2).equalsIgnoreCase(username)) {
@@ -96,6 +107,7 @@ public class SignTrade extends EssentialsSign {
         return null;
     }
 
+    /** {@inheritDoc} */
     @Override
     protected boolean onSignBreak(final ISign sign, final User player, final String username, final IEssentials ess) throws SignException, MaxMoneyException {
         final String signOwner = sign.getLine(3);
@@ -141,6 +153,15 @@ public class SignTrade extends EssentialsSign {
         }
     }
 
+    /**
+     * <p>validateTrade.</p>
+     *
+     * @param sign a ISign object.
+     * @param index a int.
+     * @param amountNeeded a boolean.
+     * @param ess a {@link net.ess3.api.IEssentials} object.
+     * @throws com.earth2me.essentials.signs.SignException if any.
+     */
     protected final void validateTrade(final ISign sign, final int index, final boolean amountNeeded, final IEssentials ess) throws SignException {
         final String line = sign.getLine(index).trim();
         if (line.isEmpty()) {
@@ -205,10 +226,12 @@ public class SignTrade extends EssentialsSign {
         throw new SignException(tl("invalidSignLine", index + 1));
     }
 
+    /** {@inheritDoc} */
     protected final Trade getTrade(final ISign sign, final int index, final AmountType amountType, final boolean notEmpty, final IEssentials ess) throws SignException {
         return getTrade(sign, index, amountType, notEmpty, false, ess);
     }
 
+    /** {@inheritDoc} */
     protected final Trade getTrade(final ISign sign, final int index, final AmountType amountType, final boolean notEmpty, final boolean allowId, final IEssentials ess) throws SignException {
         final String line = sign.getLine(index).trim();
         if (line.isEmpty()) {
@@ -256,6 +279,15 @@ public class SignTrade extends EssentialsSign {
         throw new SignException(tl("invalidSignLine", index + 1));
     }
 
+    /**
+     * <p>subtractAmount.</p>
+     *
+     * @param sign a ISign object.
+     * @param index a int.
+     * @param trade a {@link com.earth2me.essentials.Trade} object.
+     * @param ess a {@link net.ess3.api.IEssentials} object.
+     * @throws com.earth2me.essentials.signs.SignException if any.
+     */
     protected final void subtractAmount(final ISign sign, final int index, final Trade trade, final IEssentials ess) throws SignException {
         final BigDecimal money = trade.getMoney();
         if (money != null) {
@@ -271,6 +303,15 @@ public class SignTrade extends EssentialsSign {
         }
     }
 
+    /**
+     * <p>addAmount.</p>
+     *
+     * @param sign a ISign object.
+     * @param index a int.
+     * @param trade a {@link com.earth2me.essentials.Trade} object.
+     * @param ess a {@link net.ess3.api.IEssentials} object.
+     * @throws com.earth2me.essentials.signs.SignException if any.
+     */
     protected final void addAmount(final ISign sign, final int index, final Trade trade, final IEssentials ess) throws SignException {
         final BigDecimal money = trade.getMoney();
         if (money != null) {

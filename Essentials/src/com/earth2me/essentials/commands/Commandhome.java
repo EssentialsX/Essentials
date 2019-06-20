@@ -15,12 +15,22 @@ import java.util.Locale;
 import static com.earth2me.essentials.I18n.tl;
 
 
+/**
+ * <p>Commandhome class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public class Commandhome extends EssentialsCommand {
+    /**
+     * <p>Constructor for Commandhome.</p>
+     */
     public Commandhome() {
         super("home");
     }
 
     // This method contains an undocumented translation parameters #EasterEgg
+    /** {@inheritDoc} */
     @Override
     public void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception {
         final Trade charge = new Trade(this.getName(), ess);
@@ -98,6 +108,7 @@ public class Commandhome extends EssentialsCommand {
         user.sendMessage(tl("teleportHome", home));
     }
 
+    /** {@inheritDoc} */
     @Override
     protected List<String> getTabCompleteOptions(final Server server, final User user, final String commandLabel, final String[] args) {
         boolean canVisitOthers = user.isAuthorized("essentials.home.others");

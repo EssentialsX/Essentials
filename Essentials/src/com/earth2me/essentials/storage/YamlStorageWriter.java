@@ -20,15 +20,27 @@ import java.util.logging.Logger;
 import java.util.regex.Pattern;
 
 
+/**
+ * <p>YamlStorageWriter class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public class YamlStorageWriter implements IStorageWriter {
     private transient static final Pattern NON_WORD_PATTERN = Pattern.compile("\\W");
     private transient static final Yaml YAML = new Yaml();
     private transient final PrintWriter writer;
 
+    /**
+     * <p>Constructor for YamlStorageWriter.</p>
+     *
+     * @param writer a {@link java.io.PrintWriter} object.
+     */
     public YamlStorageWriter(final PrintWriter writer) {
         this.writer = writer;
     }
 
+    /** {@inheritDoc} */
     @Override
     public void save(final StorageObject object) {
         try {

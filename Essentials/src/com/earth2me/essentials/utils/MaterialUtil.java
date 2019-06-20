@@ -9,6 +9,12 @@ import java.util.EnumSet;
 import java.util.Optional;
 import java.util.Set;
 
+/**
+ * <p>MaterialUtil class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public class MaterialUtil {
 
 
@@ -24,6 +30,7 @@ public class MaterialUtil {
     private static final Set<Material> SIGN_POSTS;
     private static final Set<Material> WALL_SIGNS;
 
+    /** Constant <code>SPAWNER</code> */
     public static final Material SPAWNER = EnumUtil.getMaterial("MOB_SPAWNER", "SPAWNER");
 
     static {
@@ -66,22 +73,53 @@ public class MaterialUtil {
             "OAK_WALL_SIGN", "SPRUCE_WALL_SIGN");
     }
 
+    /**
+     * <p>isBed.</p>
+     *
+     * @param material a {@link org.bukkit.Material} object.
+     * @return a boolean.
+     */
     public static boolean isBed(Material material) {
         return BEDS.contains(material);
     }
 
+    /**
+     * <p>isBanner.</p>
+     *
+     * @param material a {@link org.bukkit.Material} object.
+     * @return a boolean.
+     */
     public static boolean isBanner(Material material) {
         return BANNERS.contains(material);
     }
 
+    /**
+     * <p>isFirework.</p>
+     *
+     * @param material a {@link org.bukkit.Material} object.
+     * @return a boolean.
+     */
     public static boolean isFirework(Material material) {
         return FIREWORKS.contains(material);
     }
 
+    /**
+     * <p>isLeatherArmor.</p>
+     *
+     * @param material a {@link org.bukkit.Material} object.
+     * @return a boolean.
+     */
     public static boolean isLeatherArmor(Material material) {
         return LEATHER_ARMOR.contains(material);
     }
 
+    /**
+     * <p>isMobHead.</p>
+     *
+     * @param material a {@link org.bukkit.Material} object.
+     * @param durability a int.
+     * @return a boolean.
+     */
     public static boolean isMobHead(Material material, int durability) {
         if (MOB_HEADS.contains(material)) {
             return true;
@@ -90,6 +128,13 @@ public class MaterialUtil {
         return LEGACY_SKULLS.contains(material) && (durability < 0 || durability != 3);
     }
 
+    /**
+     * <p>isPlayerHead.</p>
+     *
+     * @param material a {@link org.bukkit.Material} object.
+     * @param durability a int.
+     * @return a boolean.
+     */
     public static boolean isPlayerHead(Material material, int durability) {
         if (PLAYER_HEADS.contains(material)) {
             return true;
@@ -98,26 +143,63 @@ public class MaterialUtil {
         return LEGACY_SKULLS.contains(material) && durability == 3;
     }
 
+    /**
+     * <p>isPotion.</p>
+     *
+     * @param material a {@link org.bukkit.Material} object.
+     * @return a boolean.
+     */
     public static boolean isPotion(Material material) {
         return POTIONS.contains(material);
     }
 
+    /**
+     * <p>isSignPost.</p>
+     *
+     * @param material a {@link org.bukkit.Material} object.
+     * @return a boolean.
+     */
     public static boolean isSignPost(Material material) {
         return SIGN_POSTS.contains(material);
     }
 
+    /**
+     * <p>isWallSign.</p>
+     *
+     * @param material a {@link org.bukkit.Material} object.
+     * @return a boolean.
+     */
     public static boolean isWallSign(Material material) {
         return WALL_SIGNS.contains(material);
     }
 
+    /**
+     * <p>isSign.</p>
+     *
+     * @param material a {@link org.bukkit.Material} object.
+     * @return a boolean.
+     */
     public static boolean isSign(Material material) {
         return isSignPost(material) || isWallSign(material);
     }
 
+    /**
+     * <p>isSkull.</p>
+     *
+     * @param material a {@link org.bukkit.Material} object.
+     * @return a boolean.
+     */
     public static boolean isSkull(Material material) {
         return isPlayerHead(material, -1) || isMobHead(material, -1);
     }
 
+    /**
+     * <p>convertFromLegacy.</p>
+     *
+     * @param id a int.
+     * @param damage a byte.
+     * @return a {@link org.bukkit.Material} object.
+     */
     public static Material convertFromLegacy(int id, byte damage) {
         for (Material material : EnumSet.allOf(Material.class)) {
             if (material.getId() == id) {
@@ -131,6 +213,12 @@ public class MaterialUtil {
         return null;
     }
 
+    /**
+     * <p>getColorOf.</p>
+     *
+     * @param material a {@link org.bukkit.Material} object.
+     * @return a {@link org.bukkit.DyeColor} object.
+     */
     public static DyeColor getColorOf(Material material) {
         for (DyeColor color : DyeColor.values()) {
             if (material.toString().contains(color.name())) {

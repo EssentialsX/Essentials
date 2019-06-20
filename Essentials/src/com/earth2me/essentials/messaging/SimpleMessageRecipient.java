@@ -9,23 +9,26 @@ import java.lang.ref.WeakReference;
 import static com.earth2me.essentials.I18n.tl;
 
 /**
- * Represents a simple reusable implementation of {@link IMessageRecipient}. This class provides functionality for the following methods:
+ * Represents a simple reusable implementation of {@link com.earth2me.essentials.messaging.IMessageRecipient}. This class provides functionality for the following methods:
  * <ul>
- *     <li>{@link IMessageRecipient#sendMessage(IMessageRecipient, String)}</li>
- *     <li>{@link IMessageRecipient#onReceiveMessage(IMessageRecipient, String)}</li>
- *     <li>{@link IMessageRecipient#getReplyRecipient()}</li>
- *     <li>{@link IMessageRecipient#setReplyRecipient(IMessageRecipient)}</li>
+ *     <li>{@link com.earth2me.essentials.messaging.IMessageRecipient#sendMessage(IMessageRecipient, String)}</li>
+ *     <li>{@link com.earth2me.essentials.messaging.IMessageRecipient#onReceiveMessage(IMessageRecipient, String)}</li>
+ *     <li>{@link com.earth2me.essentials.messaging.IMessageRecipient#getReplyRecipient()}</li>
+ *     <li>{@link com.earth2me.essentials.messaging.IMessageRecipient#setReplyRecipient(IMessageRecipient)}</li>
  * </ul>
  *
  * <b>The given {@code parent} must implement the following methods to prevent overflow:</b>
  * <ul>
- *     <li>{@link IMessageRecipient#sendMessage(String)}</li>
- *     <li>{@link IMessageRecipient#getName()}</li>
- *     <li>{@link IMessageRecipient#getDisplayName()}</li>
- *     <li>{@link IMessageRecipient#isReachable()}</li>
+ *     <li>{@link com.earth2me.essentials.messaging.IMessageRecipient#sendMessage(String)}</li>
+ *     <li>{@link com.earth2me.essentials.messaging.IMessageRecipient#getName()}</li>
+ *     <li>{@link com.earth2me.essentials.messaging.IMessageRecipient#getDisplayName()}</li>
+ *     <li>{@link com.earth2me.essentials.messaging.IMessageRecipient#isReachable()}</li>
  * </ul>
  *
- * The reply-recipient is wrapped in a {@link WeakReference}.
+ * The reply-recipient is wrapped in a {@link java.lang.ref.WeakReference}.
+ *
+ * @author LoopyD
+ * @version $Id: $Id
  */
 public class SimpleMessageRecipient implements IMessageRecipient {
 
@@ -35,6 +38,12 @@ public class SimpleMessageRecipient implements IMessageRecipient {
     private long lastMessageMs;
     private WeakReference<IMessageRecipient> replyRecipient;
 
+    /**
+     * <p>getUser.</p>
+     *
+     * @param recipient a {@link com.earth2me.essentials.messaging.IMessageRecipient} object.
+     * @return a {@link com.earth2me.essentials.User} object.
+     */
     protected static User getUser(IMessageRecipient recipient) {
         if (recipient instanceof SimpleMessageRecipient) {
             return ((SimpleMessageRecipient) recipient).parent instanceof User ? (User) ((SimpleMessageRecipient) recipient).parent : null;
@@ -42,25 +51,35 @@ public class SimpleMessageRecipient implements IMessageRecipient {
         return recipient instanceof User ? (User) recipient : null;
     }
 
+    /**
+     * <p>Constructor for SimpleMessageRecipient.</p>
+     *
+     * @param ess a {@link com.earth2me.essentials.IEssentials} object.
+     * @param parent a {@link com.earth2me.essentials.messaging.IMessageRecipient} object.
+     */
     public SimpleMessageRecipient(IEssentials ess, IMessageRecipient parent) {
         this.ess = ess;
         this.parent = parent;
     }
 
+    /** {@inheritDoc} */
     @Override
     public void sendMessage(String message) {
         this.parent.sendMessage(message);
     }
 
+    /** {@inheritDoc} */
     @Override
     public String getName() {
         return this.parent.getName();
     }
 
+    /** {@inheritDoc} */
     @Override public String getDisplayName() {
         return this.parent.getDisplayName();
     }
 
+    /** {@inheritDoc} */
     @Override public MessageResponse sendMessage(IMessageRecipient recipient, String message) {
         MessageResponse messageResponse = recipient.onReceiveMessage(this.parent, message);
         switch (messageResponse) {
@@ -111,6 +130,7 @@ public class SimpleMessageRecipient implements IMessageRecipient {
         return messageResponse;
     }
 
+    /** {@inheritDoc} */
     @Override
     public MessageResponse onReceiveMessage(IMessageRecipient sender, String message) {
         if (!isReachable()) {
@@ -149,13 +169,14 @@ public class SimpleMessageRecipient implements IMessageRecipient {
         return afk ? MessageResponse.SUCCESS_BUT_AFK : MessageResponse.SUCCESS;
     }
 
+    /** {@inheritDoc} */
     @Override public boolean isReachable() {
         return this.parent.isReachable();
     }
 
     /**
      * {@inheritDoc}
-     * <p />
+     *
      * <b>This {@link com.earth2me.essentials.messaging.SimpleMessageRecipient} implementation stores the a weak reference to the recipient.</b>
      */
     @Override
@@ -165,7 +186,7 @@ public class SimpleMessageRecipient implements IMessageRecipient {
 
     /**
      * {@inheritDoc}
-     * <p />
+     *
      * <b>This {@link com.earth2me.essentials.messaging.SimpleMessageRecipient} implementation stores the a weak reference to the recipient.</b>
      */
     @Override

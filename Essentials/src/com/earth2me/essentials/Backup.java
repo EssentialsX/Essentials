@@ -13,6 +13,12 @@ import java.util.logging.Logger;
 import static com.earth2me.essentials.I18n.tl;
 
 
+/**
+ * <p>Backup class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public class Backup implements Runnable {
     private static final Logger LOGGER = Logger.getLogger("Essentials");
     private transient final Server server;
@@ -21,6 +27,11 @@ public class Backup implements Runnable {
     private transient int taskId = -1;
     private transient boolean active = false;
 
+    /**
+     * <p>Constructor for Backup.</p>
+     *
+     * @param ess a {@link net.ess3.api.IEssentials} object.
+     */
     public Backup(final IEssentials ess) {
         this.ess = ess;
         server = ess.getServer();
@@ -34,10 +45,16 @@ public class Backup implements Runnable {
         }
     }
 
+    /**
+     * <p>onPlayerJoin.</p>
+     */
     public void onPlayerJoin() {
         startTask();
     }
 
+    /**
+     * <p>stopTask.</p>
+     */
     public synchronized void stopTask() {
         running = false;
         if (taskId != -1) {
@@ -57,6 +74,7 @@ public class Backup implements Runnable {
         }
     }
 
+    /** {@inheritDoc} */
     @Override
     public void run() {
         if (active) {

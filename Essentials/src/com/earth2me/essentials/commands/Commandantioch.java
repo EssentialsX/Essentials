@@ -7,11 +7,21 @@ import org.bukkit.Server;
 import org.bukkit.entity.TNTPrimed;
 
 // This command has a in theme message that only shows if you supply a parameter #EasterEgg
+/**
+ * <p>Commandantioch class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public class Commandantioch extends EssentialsCommand {
+    /**
+     * <p>Constructor for Commandantioch.</p>
+     */
     public Commandantioch() {
         super("antioch");
     }
 
+    /** {@inheritDoc} */
     @Override
     public void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception {
         if (args.length > 0) {

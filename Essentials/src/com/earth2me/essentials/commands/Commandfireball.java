@@ -9,11 +9,21 @@ import org.bukkit.util.Vector;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * <p>Commandfireball class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public class Commandfireball extends EssentialsCommand {
+    /**
+     * <p>Constructor for Commandfireball.</p>
+     */
     public Commandfireball() {
         super("fireball");
     }
 
+    /** {@inheritDoc} */
     @Override
     protected void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception {
         Class<? extends Entity> type = Fireball.class;
@@ -46,6 +56,7 @@ public class Commandfireball extends EssentialsCommand {
         projectile.setVelocity(direction);
     }
 
+    /** {@inheritDoc} */
     @Override
     protected List<String> getTabCompleteOptions(final Server server, final User user, final String commandLabel, final String[] args) {
         if (args.length == 1) {

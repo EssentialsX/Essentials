@@ -15,11 +15,21 @@ import java.util.logging.Level;
 import static com.earth2me.essentials.I18n.tl;
 
 
+/**
+ * <p>Commandban class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public class Commandban extends EssentialsCommand {
+    /**
+     * <p>Constructor for Commandban.</p>
+     */
     public Commandban() {
         super("ban");
     }
 
+    /** {@inheritDoc} */
     @Override
     public void run(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception {
         boolean nomatch = false;
@@ -65,6 +75,7 @@ public class Commandban extends EssentialsCommand {
         ess.broadcastMessage("essentials.ban.notify", tl("playerBanned", senderName, user.getName(), banReason));
     }
 
+    /** {@inheritDoc} */
     @Override
     protected List<String> getTabCompleteOptions(Server server, CommandSource sender, String commandLabel, String[] args) {
         if (args.length == 1) {

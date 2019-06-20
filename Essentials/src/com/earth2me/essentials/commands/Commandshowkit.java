@@ -11,12 +11,22 @@ import java.util.Locale;
 
 import static com.earth2me.essentials.I18n.tl;
 
+/**
+ * <p>Commandshowkit class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public class Commandshowkit extends EssentialsCommand {
 
+    /**
+     * <p>Constructor for Commandshowkit.</p>
+     */
     public Commandshowkit() {
         super("showkit");
     }
 
+    /** {@inheritDoc} */
     @Override
     public void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception {
         if (args.length != 1) {
@@ -33,6 +43,7 @@ public class Commandshowkit extends EssentialsCommand {
         }
     }
 
+    /** {@inheritDoc} */
     @Override
     protected List<String> getTabCompleteOptions(final Server server, final User user, final String commandLabel, final String[] args) {
         if (args.length == 1) {

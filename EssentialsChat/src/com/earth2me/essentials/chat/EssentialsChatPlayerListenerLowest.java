@@ -14,11 +14,18 @@ import java.util.Locale;
 import java.util.Map;
 
 
+/**
+ * <p>EssentialsChatPlayerListenerLowest class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public class EssentialsChatPlayerListenerLowest extends EssentialsChatPlayer {
     EssentialsChatPlayerListenerLowest(final Server server, final IEssentials ess, final Map<AsyncPlayerChatEvent, ChatStore> chatStorage) {
         super(server, ess, chatStorage);
     }
 
+    /** {@inheritDoc} */
     @EventHandler(priority = EventPriority.LOWEST)
     @Override
     public void onPlayerChat(final AsyncPlayerChatEvent event) {

@@ -7,6 +7,12 @@ import java.io.File;
 import java.util.*;
 
 
+/**
+ * <p>UserManager class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public class UserManager implements IConf {
     private final transient EssentialsConf users;
     private final transient List<String> spyusers = Collections.synchronizedList(new ArrayList<>());
@@ -58,6 +64,7 @@ public class UserManager implements IConf {
         reloadConfig();
     }
 
+    /** {@inheritDoc} */
     @Override
     public final void reloadConfig() {
         users.load();

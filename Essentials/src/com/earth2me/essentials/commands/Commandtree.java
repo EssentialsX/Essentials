@@ -13,11 +13,21 @@ import java.util.Locale;
 
 import static com.earth2me.essentials.I18n.tl;
 
+/**
+ * <p>Commandtree class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public class Commandtree extends EssentialsCommand {
+    /**
+     * <p>Constructor for Commandtree.</p>
+     */
     public Commandtree() {
         super("tree");
     }
 
+    /** {@inheritDoc} */
     @Override
     public void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception {
         TreeType tree = null;
@@ -52,6 +62,7 @@ public class Commandtree extends EssentialsCommand {
         }
     }
 
+    /** {@inheritDoc} */
     @Override
     protected List<String> getTabCompleteOptions(Server server, User user, String commandLabel, String[] args) {
         if (args.length == 1) {

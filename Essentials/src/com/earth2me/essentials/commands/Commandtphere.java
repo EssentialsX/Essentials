@@ -11,11 +11,21 @@ import java.util.List;
 import static com.earth2me.essentials.I18n.tl;
 
 
+/**
+ * <p>Commandtphere class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public class Commandtphere extends EssentialsCommand {
+    /**
+     * <p>Constructor for Commandtphere.</p>
+     */
     public Commandtphere() {
         super("tphere");
     }
 
+    /** {@inheritDoc} */
     @Override
     public void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception {
         final User player = getPlayer(server, user, args, 0);
@@ -29,6 +39,7 @@ public class Commandtphere extends EssentialsCommand {
         throw new NoChargeException();
     }
 
+    /** {@inheritDoc} */
     @Override
     protected List<String> getTabCompleteOptions(Server server, User user, String commandLabel, String[] args) {
         if (args.length == 1) {

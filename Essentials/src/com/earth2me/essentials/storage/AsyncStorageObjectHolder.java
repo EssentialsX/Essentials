@@ -10,12 +10,24 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.logging.Level;
 
 
+/**
+ * <p>Abstract AsyncStorageObjectHolder class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public abstract class AsyncStorageObjectHolder<T extends StorageObject> implements IConf, IStorageObjectHolder<T>, IReload {
     private transient T data;
     private final transient ReentrantReadWriteLock rwl = new ReentrantReadWriteLock();
     private final transient Class<T> clazz;
     protected final transient IEssentials ess;
 
+    /**
+     * <p>Constructor for AsyncStorageObjectHolder.</p>
+     *
+     * @param ess a {@link net.ess3.api.IEssentials} object.
+     * @param clazz a {@link java.lang.Class} object.
+     */
     public AsyncStorageObjectHolder(final IEssentials ess, final Class<T> clazz) {
         this.ess = ess;
         this.clazz = clazz;
@@ -28,16 +40,19 @@ public abstract class AsyncStorageObjectHolder<T extends StorageObject> implemen
         }
     }
 
+    /** {@inheritDoc} */
     @Override
     public T getData() {
         return data;
     }
 
+    /** {@inheritDoc} */
     @Override
     public void acquireReadLock() {
         rwl.readLock().lock();
     }
 
+    /** {@inheritDoc} */
     @Override
     public void acquireWriteLock() {
         while (rwl.getReadHoldCount() > 0) {
@@ -47,11 +62,13 @@ public abstract class AsyncStorageObjectHolder<T extends StorageObject> implemen
         rwl.readLock().lock();
     }
 
+    /** {@inheritDoc} */
     @Override
     public void close() {
         unlock();
     }
 
+    /** {@inheritDoc} */
     @Override
     public void unlock() {
         if (rwl.isWriteLockedByCurrentThread()) {
@@ -63,20 +80,33 @@ public abstract class AsyncStorageObjectHolder<T extends StorageObject> implemen
         }
     }
 
+    /** {@inheritDoc} */
     @Override
     public void reloadConfig() {
         new StorageObjectDataReader();
     }
 
+    /** {@inheritDoc} */
     @Override
     public void onReload() {
         new StorageObjectDataReader();
     }
 
+    /**
+     * <p>finishRead.</p>
+     */
     public abstract void finishRead();
 
+    /**
+     * <p>finishWrite.</p>
+     */
     public abstract void finishWrite();
 
+    /**
+     * <p>getStorageFile.</p>
+     *
+     * @return a {@link java.io.File} object.
+     */
     public abstract File getStorageFile();
 
 

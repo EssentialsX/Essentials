@@ -20,6 +20,12 @@ import java.util.GregorianCalendar;
 import static com.earth2me.essentials.I18n.tl;
 
 
+/**
+ * <p>Teleport class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public class Teleport implements ITeleport {
     private final IUser teleportOwner;
     private final IEssentials ess;
@@ -27,6 +33,12 @@ public class Teleport implements ITeleport {
 
     private TeleportType tpType;
 
+    /**
+     * <p>Constructor for Teleport.</p>
+     *
+     * @param user a {@link net.ess3.api.IUser} object.
+     * @param ess a {@link net.ess3.api.IEssentials} object.
+     */
     public Teleport(IUser user, IEssentials ess) {
         this.teleportOwner = user;
         this.ess = ess;
@@ -39,6 +51,12 @@ public class Teleport implements ITeleport {
         NORMAL
     }
 
+    /**
+     * <p>cooldown.</p>
+     *
+     * @param check a boolean.
+     * @throws java.lang.Exception if any.
+     */
     public void cooldown(boolean check) throws Exception {
         final Calendar time = new GregorianCalendar();
         if (teleportOwner.getLastTeleportTimestamp() > 0) {
@@ -99,6 +117,7 @@ public class Teleport implements ITeleport {
     }
 
     //The now function is used when you want to skip tp delay when teleporting someone to a location or player.
+    /** {@inheritDoc} */
     @Override
     public void now(Location loc, boolean cooldown, TeleportCause cause) throws Exception {
         if (cooldown) {
@@ -108,6 +127,7 @@ public class Teleport implements ITeleport {
         now(teleportOwner, target, cause);
     }
 
+    /** {@inheritDoc} */
     @Override
     public void now(Player entity, boolean cooldown, TeleportCause cause) throws Exception {
         if (cooldown) {
@@ -118,6 +138,14 @@ public class Teleport implements ITeleport {
         teleportOwner.sendMessage(tl("teleporting", target.getLocation().getWorld().getName(), target.getLocation().getBlockX(), target.getLocation().getBlockY(), target.getLocation().getBlockZ()));
     }
 
+    /**
+     * <p>now.</p>
+     *
+     * @param teleportee a {@link net.ess3.api.IUser} object.
+     * @param target a {@link com.earth2me.essentials.ITarget} object.
+     * @param cause a {@link org.bukkit.event.player.PlayerTeleportEvent.TeleportCause} object.
+     * @throws java.lang.Exception if any.
+     */
     protected void now(IUser teleportee, ITarget target, TeleportCause cause) throws Exception {
         cancel(false);
         teleportee.setLastLocation();
@@ -147,18 +175,21 @@ public class Teleport implements ITeleport {
 
     //The teleportPlayer function is used when you want to normally teleportPlayer someone to a location or player.
     //This method is nolonger used internally and will be removed.
+    /** {@inheritDoc} */
     @Deprecated
     @Override
     public void teleport(Location loc, Trade chargeFor) throws Exception {
         teleport(loc, chargeFor, TeleportCause.PLUGIN);
     }
 
+    /** {@inheritDoc} */
     @Override
     public void teleport(Location loc, Trade chargeFor, TeleportCause cause) throws Exception {
         teleport(teleportOwner, new LocationTarget(loc), chargeFor, cause);
     }
 
     //This is used when teleporting to a player
+    /** {@inheritDoc} */
     @Override
     public void teleport(Player entity, Trade chargeFor, TeleportCause cause) throws Exception {
         ITarget target = new PlayerTarget(entity);
@@ -167,12 +198,14 @@ public class Teleport implements ITeleport {
     }
 
     //This is used when teleporting to stored location
+    /** {@inheritDoc} */
     @Override
     public void teleportPlayer(IUser teleportee, Location loc, Trade chargeFor, TeleportCause cause) throws Exception {
         teleport(teleportee, new LocationTarget(loc), chargeFor, cause);
     }
 
     //This is used on /tphere
+    /** {@inheritDoc} */
     @Override
     public void teleportPlayer(IUser teleportee, Player entity, Trade chargeFor, TeleportCause cause) throws Exception {
         ITarget target = new PlayerTarget(entity);
@@ -245,6 +278,7 @@ public class Teleport implements ITeleport {
     }
 
     //The respawn function is a wrapper used to handle tp fallback, on /jail and /home
+    /** {@inheritDoc} */
     @Override
     public void respawn(final Trade chargeFor, TeleportCause cause) throws Exception {
         double delay = ess.getSettings().getTeleportDelay();
@@ -282,6 +316,7 @@ public class Teleport implements ITeleport {
     }
 
     //The warp function is a wrapper used to teleportPlayer a player to a /warp
+    /** {@inheritDoc} */
     @Override
     public void warp(IUser teleportee, String warp, Trade chargeFor, TeleportCause cause) throws Exception {
         UserWarpEvent event = new UserWarpEvent(teleportee, warp, chargeFor);
@@ -300,12 +335,14 @@ public class Teleport implements ITeleport {
     }
 
     //The back function is a wrapper used to teleportPlayer a player /back to their previous location.
+    /** {@inheritDoc} */
     @Override
     public void back(Trade chargeFor) throws Exception {
         back(teleportOwner, chargeFor);
     }
 
     //This function is a wrapper over the other back function for cases where another player performs back for them
+    /** {@inheritDoc} */
     @Override
     public void back(IUser teleporter, Trade chargeFor) throws Exception {
         tpType = TeleportType.BACK;
@@ -315,11 +352,17 @@ public class Teleport implements ITeleport {
     }
 
     //This function is used to throw a user back after a jail sentence
+    /** {@inheritDoc} */
     @Override
     public void back() throws Exception {
         now(teleportOwner, new LocationTarget(teleportOwner.getLastLocation()), TeleportCause.COMMAND);
     }
 
+    /**
+     * <p>Setter for the field <code>tpType</code>.</p>
+     *
+     * @param tpType a {@link com.earth2me.essentials.Teleport.TeleportType} object.
+     */
     public void setTpType(TeleportType tpType) {
         this.tpType = tpType;
     }

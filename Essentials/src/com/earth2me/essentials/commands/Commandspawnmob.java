@@ -12,11 +12,21 @@ import java.util.List;
 import static com.earth2me.essentials.I18n.tl;
 
 
+/**
+ * <p>Commandspawnmob class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public class Commandspawnmob extends EssentialsCommand {
+    /**
+     * <p>Constructor for Commandspawnmob.</p>
+     */
     public Commandspawnmob() {
         super("spawnmob");
     }
 
+    /** {@inheritDoc} */
     @Override
     public void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception {
         if (args.length < 1) {
@@ -45,6 +55,7 @@ public class Commandspawnmob extends EssentialsCommand {
         SpawnMob.spawnmob(ess, server, user, mobParts, mobData, mobCount);
     }
 
+    /** {@inheritDoc} */
     @Override
     public void run(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception {
         if (args.length < 3) {

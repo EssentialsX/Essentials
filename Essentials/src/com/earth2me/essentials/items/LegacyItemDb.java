@@ -18,7 +18,14 @@ import java.util.regex.Pattern;
 import static com.earth2me.essentials.I18n.tl;
 
 
+/**
+ * <p>LegacyItemDb class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public class LegacyItemDb extends AbstractItemDb {
+    /** Constant <code>LOGGER</code> */
     protected static final Logger LOGGER = Logger.getLogger("Essentials");
     private final transient Map<String, Integer> items = new HashMap<>();
     private final transient Map<ItemData, List<String>> names = new HashMap<>();
@@ -30,11 +37,17 @@ public class LegacyItemDb extends AbstractItemDb {
     private final transient Pattern splitPattern = Pattern.compile("((.*)[:+',;.](\\d+))");
     private final transient Pattern csvSplitPattern = Pattern.compile("(\"([^\"]*)\"|[^,]*)(,|$)");
 
+    /**
+     * <p>Constructor for LegacyItemDb.</p>
+     *
+     * @param ess a {@link net.ess3.api.IEssentials} object.
+     */
     public LegacyItemDb(final IEssentials ess) {
         super(ess);
         file = new ManagedFile("items.csv", ess);
     }
 
+    /** {@inheritDoc} */
     @Override
     public void reloadConfig() {
         final List<String> lines = file.getLines();
@@ -119,6 +132,7 @@ public class LegacyItemDb extends AbstractItemDb {
         ready = true;
     }
 
+    /** {@inheritDoc} */
     @Override
     public ItemStack get(final String id, final boolean useResolvers) throws Exception {
         if (useResolvers) {
@@ -207,6 +221,7 @@ public class LegacyItemDb extends AbstractItemDb {
         return retval;
     }
 
+    /** {@inheritDoc} */
     @Override
     public List<String> nameList(ItemStack item) {
         ItemData itemData = new ItemData(item.getType().getId(), item.getDurability());
@@ -222,6 +237,7 @@ public class LegacyItemDb extends AbstractItemDb {
         return Collections.unmodifiableList(nameList);
     }
 
+    /** {@inheritDoc} */
     @Override
     public String name(ItemStack item) {
         ItemData itemData = new ItemData(item.getType().getId(), item.getDurability());
@@ -236,6 +252,7 @@ public class LegacyItemDb extends AbstractItemDb {
         return name;
     }
 
+    /** {@inheritDoc} */
     @Override
     public int getLegacyId(Material material) throws Exception {
         for(Map.Entry<String, Integer> entry : items.entrySet()) {
@@ -247,6 +264,7 @@ public class LegacyItemDb extends AbstractItemDb {
         throw new Exception("Itemid not found for material: " + material.name());
     }
 
+    /** {@inheritDoc} */
     @Override
     public Collection<String> listNames() {
         Collection<String> values = primaryName.values();

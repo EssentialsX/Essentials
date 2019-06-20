@@ -10,18 +10,29 @@ import net.ess3.api.IEssentials;
 import org.bukkit.Server;
 
 
+/**
+ * <p>Commandtpacancel class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public class Commandtpacancel extends EssentialsCommand {
 
+    /**
+     * <p>Constructor for Commandtpacancel.</p>
+     */
     public Commandtpacancel() {
         super("tpacancel");
     }
 
     /**
-     * Cancel {@link User}'s tp request if its {@code requester} is equal to the given {@code requester}.
+     * Cancel {@link com.earth2me.essentials.User}'s tp request if its {@code requester} is equal to the given {@code requester}.
+     *
      * @param ess ess instance
      * @param user user holding tp request
      * @param requester tp requester
      * @return whether tp was cancelled
+     * @throws java.lang.Exception if any.
      */
     public static boolean cancelTeleportRequest(IEssentials ess, User user, User requester) throws Exception {
         if (user.getTeleportRequest() != null) {
@@ -34,6 +45,7 @@ public class Commandtpacancel extends EssentialsCommand {
         return false;
     }
 
+    /** {@inheritDoc} */
     @Override
     public void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception {
         if (args.length == 0) {

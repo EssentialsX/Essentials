@@ -22,6 +22,12 @@ import java.util.stream.Collectors;
 
 import static com.earth2me.essentials.I18n.tl;
 
+/**
+ * <p>Abstract AbstractItemDb class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public abstract class AbstractItemDb implements IConf, net.ess3.api.IItemDb {
 
     protected final IEssentials ess;
@@ -33,6 +39,7 @@ public abstract class AbstractItemDb implements IConf, net.ess3.api.IItemDb {
         this.ess = ess;
     }
 
+    /** {@inheritDoc} */
     @Override
     public void registerResolver(Plugin plugin, String name, ItemResolver resolver) throws Exception {
         PluginKey key = PluginKey.fromKey(plugin, name);
@@ -43,6 +50,7 @@ public abstract class AbstractItemDb implements IConf, net.ess3.api.IItemDb {
         resolverMap.put(key, resolver);
     }
 
+    /** {@inheritDoc} */
     @Override
     public void unregisterResolver(Plugin plugin, String name) throws Exception {
         PluginKey key = PluginKey.fromKey(plugin, name);
@@ -53,16 +61,19 @@ public abstract class AbstractItemDb implements IConf, net.ess3.api.IItemDb {
         resolverMap.remove(key);
     }
 
+    /** {@inheritDoc} */
     @Override
     public boolean isResolverPresent(Plugin plugin, String name) {
         return resolverMap.containsKey(PluginKey.fromKey(plugin, name));
     }
 
+    /** {@inheritDoc} */
     @Override
     public Map<PluginKey, ItemResolver> getResolvers() {
         return new HashMap<>(resolverMap);
     }
 
+    /** {@inheritDoc} */
     @Override
     public Map<PluginKey, ItemResolver> getResolvers(Plugin plugin) {
         Map<PluginKey, ItemResolver> matchingResolvers = new HashMap<>();
@@ -75,11 +86,13 @@ public abstract class AbstractItemDb implements IConf, net.ess3.api.IItemDb {
         return matchingResolvers;
     }
 
+    /** {@inheritDoc} */
     @Override
     public ItemResolver getResolver(Plugin plugin, String name) {
         return resolverMap.get(PluginKey.fromKey(plugin, name));
     }
 
+    /** {@inheritDoc} */
     @Override
     public ItemStack get(String id) throws Exception {
         return get(id, true);
@@ -109,6 +122,7 @@ public abstract class AbstractItemDb implements IConf, net.ess3.api.IItemDb {
             .collect(Collectors.toList());
     }
 
+    /** {@inheritDoc} */
     @Override
     public List<ItemStack> getMatching(User user, String[] args) throws Exception {
         List<ItemStack> is = new ArrayList<>();
@@ -142,6 +156,7 @@ public abstract class AbstractItemDb implements IConf, net.ess3.api.IItemDb {
         return is;
     }
 
+    /** {@inheritDoc} */
     @Override
     public String serialize(ItemStack is) {
         String mat = name(is);
@@ -307,6 +322,7 @@ public abstract class AbstractItemDb implements IConf, net.ess3.api.IItemDb {
         return sb.toString().trim().replaceAll("§", "&");
     }
 
+    /** {@inheritDoc} */
     @Override
     public boolean isReady() {
         return ready;

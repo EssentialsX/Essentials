@@ -9,11 +9,21 @@ import org.bukkit.entity.Player;
 import java.util.List;
 
 
+/**
+ * <p>Commandxmppspy class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public class Commandxmppspy extends EssentialsCommand {
+    /**
+     * <p>Constructor for Commandxmppspy.</p>
+     */
     public Commandxmppspy() {
         super("xmppspy");
     }
 
+    /** {@inheritDoc} */
     @Override
     protected void run(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws NotEnoughArgumentsException {
         if (args.length < 1) {

@@ -11,11 +11,21 @@ import java.util.Locale;
 import static com.earth2me.essentials.I18n.tl;
 
 
+/**
+ * <p>Commandsudo class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public class Commandsudo extends EssentialsLoopCommand {
+    /**
+     * <p>Constructor for Commandsudo.</p>
+     */
     public Commandsudo() {
         super("sudo");
     }
 
+    /** {@inheritDoc} */
     @Override
     public void run(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception {
         if (args.length < 2) {
@@ -34,6 +44,7 @@ public class Commandsudo extends EssentialsLoopCommand {
         loopOnlinePlayers(server, sender, multiple, multiple, args[0], new String[]{command});
     }
 
+    /** {@inheritDoc} */
     @Override
     protected void updatePlayer(final Server server, final CommandSource sender, final User user, String[] args) throws NotEnoughArgumentsException, PlayerExemptException, ChargeException, MaxMoneyException {
         if (user.getName().equals(sender.getSender().getName())) {

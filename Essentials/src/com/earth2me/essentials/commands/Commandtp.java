@@ -14,11 +14,21 @@ import java.util.List;
 import static com.earth2me.essentials.I18n.tl;
 
 
+/**
+ * <p>Commandtp class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public class Commandtp extends EssentialsCommand {
+    /**
+     * <p>Constructor for Commandtp.</p>
+     */
     public Commandtp() {
         super("tp");
     }
 
+    /** {@inheritDoc} */
     @Override
     public void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception {
         switch (args.length) {
@@ -95,6 +105,7 @@ public class Commandtp extends EssentialsCommand {
         }
     }
 
+    /** {@inheritDoc} */
     @Override
     public void run(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception {
         if (args.length < 2) {
@@ -122,6 +133,7 @@ public class Commandtp extends EssentialsCommand {
         }
     }
 
+    /** {@inheritDoc} */
     @Override
     protected List<String> getTabCompleteOptions(Server server, User user, String commandLabel, String[] args) {
         // Don't handle coords
@@ -132,6 +144,7 @@ public class Commandtp extends EssentialsCommand {
         }
     }
 
+    /** {@inheritDoc} */
     @Override
     protected List<String> getTabCompleteOptions(Server server, CommandSource sender, String commandLabel, String[] args) {
         // Don't handle coords

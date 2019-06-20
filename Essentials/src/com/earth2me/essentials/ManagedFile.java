@@ -17,10 +17,22 @@ import java.util.logging.Level;
 import static com.earth2me.essentials.I18n.tl;
 
 
+/**
+ * <p>ManagedFile class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public class ManagedFile {
     private static final int BUFFERSIZE = 1024 * 8;
     private final transient File file;
 
+    /**
+     * <p>Constructor for ManagedFile.</p>
+     *
+     * @param filename a {@link java.lang.String} object.
+     * @param ess a {@link net.ess3.api.IEssentials} object.
+     */
     public ManagedFile(final String filename, final IEssentials ess) {
         file = new File(ess.getDataFolder(), filename);
 
@@ -43,6 +55,13 @@ public class ManagedFile {
         }
     }
 
+    /**
+     * <p>copyResourceAscii.</p>
+     *
+     * @param resourceName a {@link java.lang.String} object.
+     * @param file a {@link java.io.File} object.
+     * @throws java.io.IOException if any.
+     */
     public static void copyResourceAscii(final String resourceName, final File file) throws IOException {
         final InputStreamReader reader = new InputStreamReader(ManagedFile.class.getResourceAsStream(resourceName));
         try {
@@ -77,6 +96,14 @@ public class ManagedFile {
         }
     }
 
+    /**
+     * <p>checkForVersion.</p>
+     *
+     * @param file a {@link java.io.File} object.
+     * @param version a {@link java.lang.String} object.
+     * @return a boolean.
+     * @throws java.io.IOException if any.
+     */
     public static boolean checkForVersion(final File file, final String version) throws IOException {
         if (file.length() < 33) {
             return false;
@@ -134,6 +161,12 @@ public class ManagedFile {
         return false;
     }
 
+    /**
+     * <p>getDigest.</p>
+     *
+     * @return a {@link java.security.MessageDigest} object.
+     * @throws java.io.IOException if any.
+     */
     public static MessageDigest getDigest() throws IOException {
         try {
             return MessageDigest.getInstance("MD5");
@@ -142,6 +175,11 @@ public class ManagedFile {
         }
     }
 
+    /**
+     * <p>getLines.</p>
+     *
+     * @return a {@link java.util.List} object.
+     */
     public List<String> getLines() {
         try {
             final BufferedReader reader = new BufferedReader(new FileReader(file));

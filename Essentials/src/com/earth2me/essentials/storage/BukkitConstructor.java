@@ -21,9 +21,21 @@ import java.lang.reflect.Method;
 import java.util.Locale;
 
 
+/**
+ * <p>BukkitConstructor class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public class BukkitConstructor extends CustomClassLoaderConstructor {
     private final transient Plugin plugin;
 
+    /**
+     * <p>Constructor for BukkitConstructor.</p>
+     *
+     * @param clazz a {@link java.lang.Class} object.
+     * @param plugin a {@link org.bukkit.plugin.Plugin} object.
+     */
     public BukkitConstructor(final Class clazz, final Plugin plugin) {
         super(clazz, plugin.getClass().getClassLoader());
         this.plugin = plugin;
@@ -37,6 +49,12 @@ public class BukkitConstructor extends CustomClassLoaderConstructor {
 
     private Method constructScalarMethod = null;
 
+    /**
+     * <p>constructScalarRefl.</p>
+     *
+     * @param scalarNode a {@link org.yaml.snakeyaml.nodes.ScalarNode} object.
+     * @return a {@link java.lang.String} object.
+     */
     protected String constructScalarRefl(ScalarNode scalarNode) {
         try {
             if (constructScalarMethod == null) {

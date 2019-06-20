@@ -11,12 +11,22 @@ import java.util.Set;
 import static com.earth2me.essentials.I18n.tl;
 
 
+/**
+ * <p>Commandbreak class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public class Commandbreak extends EssentialsCommand {
+    /**
+     * <p>Constructor for Commandbreak.</p>
+     */
     public Commandbreak() {
         super("break");
     }
 
     //TODO: Switch to use util class
+    /** {@inheritDoc} */
     @Override
     public void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception {
         final Block block = user.getBase().getTargetBlock((Set<Material>) null, 20);

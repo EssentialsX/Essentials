@@ -12,11 +12,21 @@ import java.util.List;
 import static com.earth2me.essentials.I18n.tl;
 
 
+/**
+ * <p>Commandfeed class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public class Commandfeed extends EssentialsLoopCommand {
+    /**
+     * <p>Constructor for Commandfeed.</p>
+     */
     public Commandfeed() {
         super("feed");
     }
 
+    /** {@inheritDoc} */
     @Override
     protected void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception {
         if (!user.isAuthorized("essentials.feed.cooldown.bypass")) {
@@ -32,6 +42,7 @@ public class Commandfeed extends EssentialsLoopCommand {
         user.sendMessage(tl("feed"));
     }
 
+    /** {@inheritDoc} */
     @Override
     protected void run(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception {
         if (args.length < 1) {
@@ -41,6 +52,7 @@ public class Commandfeed extends EssentialsLoopCommand {
         loopOnlinePlayers(server, sender, true, true, args[0], null);
     }
 
+    /** {@inheritDoc} */
     @Override
     protected void updatePlayer(final Server server, final CommandSource sender, final User player, final String[] args) throws PlayerExemptException {
         try {
@@ -65,6 +77,7 @@ public class Commandfeed extends EssentialsLoopCommand {
         player.setExhaustion(0F);
     }
 
+    /** {@inheritDoc} */
     @Override
     protected List<String> getTabCompleteOptions(Server server, User user, String commandLabel, String[] args) {
         if (args.length == 1 && user.isAuthorized("essentials.feed.others")) {
@@ -74,6 +87,7 @@ public class Commandfeed extends EssentialsLoopCommand {
         }
     }
 
+    /** {@inheritDoc} */
     @Override
     protected List<String> getTabCompleteOptions(Server server, CommandSource sender, String commandLabel, String[] args) {
         if (args.length == 1) {

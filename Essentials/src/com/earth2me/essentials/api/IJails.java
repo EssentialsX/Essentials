@@ -6,15 +6,19 @@ import org.bukkit.Location;
 import java.util.Collection;
 
 
+/**
+ * <p>IJails interface.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public interface IJails extends IReload {
     /**
      * Gets the location of the jail with the given name
      *
      * @param jailName The name of the jail
-     *
      * @return the location of the jail
-     *
-     * @throws Exception if the jail does not exist
+     * @throws java.lang.Exception if the jail does not exist
      */
     Location getJail(String jailName) throws Exception;
 
@@ -22,8 +26,7 @@ public interface IJails extends IReload {
      * Gets a list of jails by names
      *
      * @return a list of jails, if there are none the list will be empty
-     *
-     * @throws Exception
+     * @throws java.lang.Exception if the jail does not exist
      */
     Collection<String> getList() throws Exception;
 
@@ -38,8 +41,7 @@ public interface IJails extends IReload {
      * Remove the jail with the given name
      *
      * @param jail the jail to remove
-     *
-     * @throws Exception if the jail does not exist
+     * @throws java.lang.Exception if the jail does not exist
      */
     void removeJail(String jail) throws Exception;
 
@@ -48,8 +50,7 @@ public interface IJails extends IReload {
      *
      * @param user the user to send to jail
      * @param jail the jail to send the user to
-     *
-     * @throws Exception if the user is offline or jail does not exist
+     * @throws java.lang.Exception if the user is offline or jail does not exist
      */
     void sendToJail(IUser user, String jail) throws Exception;
 
@@ -58,8 +59,7 @@ public interface IJails extends IReload {
      *
      * @param jailName the name of the jail being set
      * @param loc      the location of the jail being set
-     *
-     * @throws Exception
+     * @throws java.lang.Exception if the jail does not exist
      */
     void setJail(String jailName, Location loc) throws Exception;
 }

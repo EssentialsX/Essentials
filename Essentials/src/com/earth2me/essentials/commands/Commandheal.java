@@ -14,11 +14,21 @@ import java.util.List;
 import static com.earth2me.essentials.I18n.tl;
 
 
+/**
+ * <p>Commandheal class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public class Commandheal extends EssentialsLoopCommand {
+    /**
+     * <p>Constructor for Commandheal.</p>
+     */
     public Commandheal() {
         super("heal");
     }
 
+    /** {@inheritDoc} */
     @Override
     public void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception {
         if (!user.isAuthorized("essentials.heal.cooldown.bypass")) {
@@ -33,6 +43,7 @@ public class Commandheal extends EssentialsLoopCommand {
         healPlayer(user);
     }
 
+    /** {@inheritDoc} */
     @Override
     public void run(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception {
         if (args.length < 1) {
@@ -42,6 +53,7 @@ public class Commandheal extends EssentialsLoopCommand {
         loopOnlinePlayers(server, sender, true, true, args[0], null);
     }
 
+    /** {@inheritDoc} */
     @Override
     protected void updatePlayer(final Server server, final CommandSource sender, final User player, final String[] args) throws PlayerExemptException {
         try {
@@ -80,6 +92,7 @@ public class Commandheal extends EssentialsLoopCommand {
         }
     }
 
+    /** {@inheritDoc} */
     @Override
     protected List<String> getTabCompleteOptions(Server server, User user, String commandLabel, String[] args) {
         if (args.length == 1 && user.isAuthorized("essentials.heal.others")) {
@@ -89,6 +102,7 @@ public class Commandheal extends EssentialsLoopCommand {
         }
     }
 
+    /** {@inheritDoc} */
     @Override
     protected List<String> getTabCompleteOptions(Server server, CommandSource sender, String commandLabel, String[] args) {
         if (args.length == 1) {

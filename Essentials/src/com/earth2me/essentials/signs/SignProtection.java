@@ -21,6 +21,12 @@ import java.util.*;
 import static com.earth2me.essentials.I18n.tl;
 
 
+/**
+ * <p>SignProtection class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 @Deprecated // This sign will be removed soon
 public class SignProtection extends EssentialsSign {
     private final transient Set<Material> protectedBlocks = EnumUtil.getAllMatching(Material.class,
@@ -29,10 +35,14 @@ public class SignProtection extends EssentialsSign {
         "BURNING_FURNACE",
         "DISPENSER");
 
+    /**
+     * <p>Constructor for SignProtection.</p>
+     */
     public SignProtection() {
         super("Protection");
     }
 
+    /** {@inheritDoc} */
     @Override
     protected boolean onSignCreate(final ISign sign, final User player, final String username, final IEssentials ess) throws SignException, ChargeException {
         sign.setLine(3, "§4" + username);
@@ -47,12 +57,20 @@ public class SignProtection extends EssentialsSign {
         return false;
     }
 
+    /** {@inheritDoc} */
     @Override
     protected boolean onSignBreak(final ISign sign, final User player, final String username, final IEssentials ess) throws SignException {
         final SignProtectionState state = checkProtectionSign(sign, player, username);
         return state == SignProtectionState.OWNER;
     }
 
+    /**
+     * <p>hasAdjacentBlock.</p>
+     *
+     * @param block a {@link org.bukkit.block.Block} object.
+     * @param ignoredBlocks a {@link org.bukkit.block.Block} object.
+     * @return a boolean.
+     */
     public boolean hasAdjacentBlock(final Block block, final Block... ignoredBlocks) {
         final Block[] faces = getAdjacentBlocks(block);
         for (Block b : faces) {
@@ -139,6 +157,15 @@ public class SignProtection extends EssentialsSign {
         return new Block[]{block.getRelative(BlockFace.NORTH), block.getRelative(BlockFace.SOUTH), block.getRelative(BlockFace.EAST), block.getRelative(BlockFace.WEST), block.getRelative(BlockFace.DOWN), block.getRelative(BlockFace.UP)};
     }
 
+    /**
+     * <p>isBlockProtected.</p>
+     *
+     * @param block a {@link org.bukkit.block.Block} object.
+     * @param user a {@link com.earth2me.essentials.User} object.
+     * @param username a {@link java.lang.String} object.
+     * @param secure a boolean.
+     * @return a {@link com.earth2me.essentials.signs.SignProtection.SignProtectionState} object.
+     */
     public SignProtectionState isBlockProtected(final Block block, final User user, final String username, boolean secure) {
         final Map<Location, SignProtectionState> signs = getConnectedSigns(block, user, username, secure);
         SignProtectionState retstate = SignProtectionState.NOSIGN;
@@ -159,6 +186,12 @@ public class SignProtection extends EssentialsSign {
         return retstate;
     }
 
+    /**
+     * <p>isBlockProtected.</p>
+     *
+     * @param block a {@link org.bukkit.block.Block} object.
+     * @return a boolean.
+     */
     public boolean isBlockProtected(final Block block) {
         final Block[] faces = getAdjacentBlocks(block);
         for (Block b : faces) {
@@ -184,16 +217,19 @@ public class SignProtection extends EssentialsSign {
         return false;
     }
 
+    /** {@inheritDoc} */
     @Override
     public Set<Material> getBlocks() {
         return protectedBlocks;
     }
 
+    /** {@inheritDoc} */
     @Override
     public boolean areHeavyEventRequired() {
         return true;
     }
 
+    /** {@inheritDoc} */
     @Override
     protected boolean onBlockPlace(final Block block, final User player, final String username, final IEssentials ess) throws SignException {
         for (Block adjBlock : getAdjacentBlocks(block)) {
@@ -208,6 +244,7 @@ public class SignProtection extends EssentialsSign {
 
     }
 
+    /** {@inheritDoc} */
     @Override
     protected boolean onBlockInteract(final Block block, final User player, final String username, final IEssentials ess) throws SignException {
         final SignProtectionState state = isBlockProtected(block, player, username, false);
@@ -225,6 +262,7 @@ public class SignProtection extends EssentialsSign {
         return false;
     }
 
+    /** {@inheritDoc} */
     @Override
     protected boolean onBlockBreak(final Block block, final User player, final String username, final IEssentials ess) throws SignException, MaxMoneyException {
         final SignProtectionState state = isBlockProtected(block, player, username, false);
@@ -244,6 +282,7 @@ public class SignProtection extends EssentialsSign {
         return false;
     }
 
+    /** {@inheritDoc} */
     @Override
     public boolean onBlockBreak(final Block block, final IEssentials ess) {
         final SignProtectionState state = isBlockProtected(block, null, null, false);
@@ -251,6 +290,7 @@ public class SignProtection extends EssentialsSign {
         return state == SignProtectionState.NOSIGN;
     }
 
+    /** {@inheritDoc} */
     @Override
     public boolean onBlockExplode(final Block block, final IEssentials ess) {
         final SignProtectionState state = isBlockProtected(block, null, null, false);
@@ -258,6 +298,7 @@ public class SignProtection extends EssentialsSign {
         return state == SignProtectionState.NOSIGN;
     }
 
+    /** {@inheritDoc} */
     @Override
     public boolean onBlockBurn(final Block block, final IEssentials ess) {
         final SignProtectionState state = isBlockProtected(block, null, null, false);
@@ -265,6 +306,7 @@ public class SignProtection extends EssentialsSign {
         return state == SignProtectionState.NOSIGN;
     }
 
+    /** {@inheritDoc} */
     @Override
     public boolean onBlockIgnite(final Block block, final IEssentials ess) {
         final SignProtectionState state = isBlockProtected(block, null, null, false);
@@ -272,6 +314,7 @@ public class SignProtection extends EssentialsSign {
         return state == SignProtectionState.NOSIGN;
     }
 
+    /** {@inheritDoc} */
     @Override
     public boolean onBlockPush(final Block block, final IEssentials ess) {
         final SignProtectionState state = isBlockProtected(block, null, null, false);

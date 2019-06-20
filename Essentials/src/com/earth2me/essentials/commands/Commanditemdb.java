@@ -12,11 +12,21 @@ import java.util.List;
 import static com.earth2me.essentials.I18n.tl;
 
 
+/**
+ * <p>Commanditemdb class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public class Commanditemdb extends EssentialsCommand {
+    /**
+     * <p>Constructor for Commanditemdb.</p>
+     */
     public Commanditemdb() {
         super("itemdb");
     }
 
+    /** {@inheritDoc} */
     @Override
     protected void run(Server server, CommandSource sender, String commandLabel, String[] args) throws Exception {
         ItemStack itemStack = null;
@@ -59,6 +69,7 @@ public class Commanditemdb extends EssentialsCommand {
         }
     }
 
+    /** {@inheritDoc} */
     @Override
     protected List<String> getTabCompleteOptions(Server server, CommandSource sender, String commandLabel, String[] args) {
         if (args.length == 1) {

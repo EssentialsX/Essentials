@@ -32,6 +32,12 @@ import java.util.concurrent.Executors;
 
 import static com.earth2me.essentials.I18n.tl;
 
+/**
+ * <p>Commandcreatekit class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public class Commandcreatekit extends EssentialsCommand {
 
     private static final String PASTE_URL = "https://hastebin.com/";
@@ -43,6 +49,9 @@ public class Commandcreatekit extends EssentialsCommand {
     private final Representer yamlRepresenter = new YamlRepresenter();
     private final YamlConstructor yamlConstructor = new YamlConstructor();
 
+    /**
+     * <p>Constructor for Commandcreatekit.</p>
+     */
     public Commandcreatekit() {
         super("createkit");
         yamlOptions.setDefaultFlowStyle(FlowStyle.BLOCK);
@@ -50,6 +59,7 @@ public class Commandcreatekit extends EssentialsCommand {
     }
 
     // /createkit <name> <delay>
+    /** {@inheritDoc} */
     @Override
     public void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception {
         if (args.length != 2) {

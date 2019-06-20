@@ -12,12 +12,22 @@ import org.bukkit.Server;
 
 import java.util.List;
 
+/**
+ * <p>Commandmsg class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public class Commandmsg extends EssentialsLoopCommand {
 
+    /**
+     * <p>Constructor for Commandmsg.</p>
+     */
     public Commandmsg() {
         super("msg");
     }
 
+    /** {@inheritDoc} */
     @Override
     public void run(Server server, CommandSource sender, String commandLabel, String[] args) throws Exception {
         if (args.length < 2 || args[0].trim().length() < 2 || args[1].trim().isEmpty()) {
@@ -48,12 +58,14 @@ public class Commandmsg extends EssentialsLoopCommand {
         loopOnlinePlayers(server, sender, canWildcard, canWildcard, args[0], new String[]{message});
     }
 
+    /** {@inheritDoc} */
     @Override
     protected void updatePlayer(final Server server, final CommandSource sender, final User messageReceiver, final String[] args) {
         IMessageRecipient messageSender = sender.isPlayer() ? ess.getUser(sender.getPlayer()) : Console.getInstance();
         messageSender.sendMessage(messageReceiver, args[0]); // args[0] is the message.
     }
 
+    /** {@inheritDoc} */
     @Override
     protected List<String> getTabCompleteOptions(Server server, CommandSource sender, String commandLabel, String[] args) {
         if (args.length == 1) {

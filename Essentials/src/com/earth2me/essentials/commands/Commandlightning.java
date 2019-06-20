@@ -15,13 +15,23 @@ import java.util.Set;
 import static com.earth2me.essentials.I18n.tl;
 
 
+/**
+ * <p>Commandlightning class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public class Commandlightning extends EssentialsLoopCommand {
     int power = 5;
 
+    /**
+     * <p>Constructor for Commandlightning.</p>
+     */
     public Commandlightning() {
         super("lightning");
     }
 
+    /** {@inheritDoc} */
     @Override
     public void run(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception {
         User user;
@@ -42,6 +52,7 @@ public class Commandlightning extends EssentialsLoopCommand {
         loopOnlinePlayers(server, sender, true, true, args[0], null);
     }
 
+    /** {@inheritDoc} */
     @Override
     protected void updatePlayer(final Server server, final CommandSource sender, final User matchUser, final String[] args) {
         sender.sendMessage(tl("lightningUse", matchUser.getDisplayName()));
@@ -55,6 +66,7 @@ public class Commandlightning extends EssentialsLoopCommand {
         }
     }
 
+    /** {@inheritDoc} */
     @Override
     protected List<String> getTabCompleteOptions(final Server server, final User user, final String commandLabel, final String[] args) {
         if (!user.isAuthorized("essentials.lightning.others")) {
@@ -64,6 +76,7 @@ public class Commandlightning extends EssentialsLoopCommand {
             return super.getTabCompleteOptions(server, user, commandLabel, args);
         }
     }
+    /** {@inheritDoc} */
     @Override
     protected List<String> getTabCompleteOptions(final Server server, final CommandSource sender, final String commandLabel, final String[] args) {
         if (args.length == 1) {

@@ -19,11 +19,21 @@ import java.util.Map;
 import static com.earth2me.essentials.I18n.tl;
 
 
+/**
+ * <p>Commandgive class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public class Commandgive extends EssentialsCommand {
+    /**
+     * <p>Constructor for Commandgive.</p>
+     */
     public Commandgive() {
         super("give");
     }
 
+    /** {@inheritDoc} */
     @Override
     public void run(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception {
         if (args.length < 2) {
@@ -103,6 +113,7 @@ public class Commandgive extends EssentialsCommand {
         giveTo.getBase().updateInventory();
     }
 
+    /** {@inheritDoc} */
     @Override
     protected List<String> getTabCompleteOptions(final Server server, final CommandSource sender, final String commandLabel, final String[] args) {
         if (args.length == 1) {

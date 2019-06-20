@@ -9,11 +9,21 @@ import org.bukkit.inventory.ItemStack;
 import static com.earth2me.essentials.I18n.tl;
 
 
+/**
+ * <p>Commandsetworth class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public class Commandsetworth extends EssentialsCommand {
+    /**
+     * <p>Constructor for Commandsetworth.</p>
+     */
     public Commandsetworth() {
         super("setworth");
     }
 
+    /** {@inheritDoc} */
     @Override
     public void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception {
         if (args.length < 1) {
@@ -35,6 +45,7 @@ public class Commandsetworth extends EssentialsCommand {
         user.sendMessage(tl("worthSet"));
     }
 
+    /** {@inheritDoc} */
     @Override
     public void run(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception {
         if (args.length < 2) {

@@ -10,11 +10,21 @@ import java.util.List;
 import static com.earth2me.essentials.I18n.tl;
 
 
+/**
+ * <p>Commandafk class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public class Commandafk extends EssentialsCommand {
+    /**
+     * <p>Constructor for Commandafk.</p>
+     */
     public Commandafk() {
         super("afk");
     }
 
+    /** {@inheritDoc} */
     @Override
     public void run(Server server, User user, String commandLabel, String[] args) throws Exception {
         if (args.length > 0 && user.isAuthorized("essentials.afk.others")) {
@@ -37,6 +47,7 @@ public class Commandafk extends EssentialsCommand {
         }
     }
 
+    /** {@inheritDoc} */
     @Override
     public void run(Server server, CommandSource sender, String commandLabel, String[] args) throws Exception {
         if (args.length > 0) {
@@ -82,6 +93,7 @@ public class Commandafk extends EssentialsCommand {
         user.setDisplayNick(); // Set this again after toggling
     }
 
+    /** {@inheritDoc} */
     @Override
     protected List<String> getTabCompleteOptions(Server server, User user, String commandLabel, String[] args) {
         if (args.length == 1 && user.isAuthorized("essentials.afk.others")) {
@@ -91,6 +103,7 @@ public class Commandafk extends EssentialsCommand {
         }
     }
 
+    /** {@inheritDoc} */
     @Override
     protected List<String> getTabCompleteOptions(Server server, CommandSource sender, String commandLabel, String[] args) {
         if (args.length == 1) {

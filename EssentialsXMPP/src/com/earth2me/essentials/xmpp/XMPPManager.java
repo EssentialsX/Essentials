@@ -17,6 +17,12 @@ import java.util.*;
 import java.util.logging.*;
 
 
+/**
+ * <p>XMPPManager class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public class XMPPManager extends Handler implements MessageListener, ChatManagerListener, IConf {
     private static final Logger logger = Logger.getLogger("EssentialsXMPP");
     private static final SimpleFormatter formatter = new SimpleFormatter();
@@ -63,6 +69,7 @@ public class XMPPManager extends Handler implements MessageListener, ChatManager
         return false;
     }
 
+    /** {@inheritDoc} */
     @Override
     public void processMessage(final Chat chat, final Message msg) {
         // Normally we should log the error message
@@ -151,6 +158,7 @@ public class XMPPManager extends Handler implements MessageListener, ChatManager
         }
     }
 
+    /** {@inheritDoc} */
     @Override
     public void chatCreated(final Chat chat, final boolean createdLocally) {
         if (!createdLocally) {
@@ -162,6 +170,7 @@ public class XMPPManager extends Handler implements MessageListener, ChatManager
         }
     }
 
+    /** {@inheritDoc} */
     @Override
     public final void reloadConfig() {
         logger.removeHandler(this);
@@ -187,6 +196,7 @@ public class XMPPManager extends Handler implements MessageListener, ChatManager
         }
     }
 
+    /** {@inheritDoc} */
     @Override
     public void publish(final LogRecord logRecord) {
         try {
@@ -204,11 +214,13 @@ public class XMPPManager extends Handler implements MessageListener, ChatManager
         }
     }
 
+    /** {@inheritDoc} */
     @Override
     public void flush() {
         // Ignore this
     }
 
+    /** {@inheritDoc} */
     @Override
     public void close() throws SecurityException {
         // Ignore this
@@ -314,6 +326,11 @@ public class XMPPManager extends Handler implements MessageListener, ChatManager
         }
     }
 
+    /**
+     * <p>isConfigValid.</p>
+     *
+     * @return a boolean.
+     */
     public boolean isConfigValid() {
         final String server = config.getString("xmpp.server");
         return server != null && !server.equals("example.com");

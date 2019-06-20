@@ -11,11 +11,21 @@ import org.bukkit.Server;
 import static com.earth2me.essentials.I18n.tl;
 
 
+/**
+ * <p>Commandsetwarp class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public class Commandsetwarp extends EssentialsCommand {
+    /**
+     * <p>Constructor for Commandsetwarp.</p>
+     */
     public Commandsetwarp() {
         super("setwarp");
     }
 
+    /** {@inheritDoc} */
     @Override
     public void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception {
         if (args.length < 1) {

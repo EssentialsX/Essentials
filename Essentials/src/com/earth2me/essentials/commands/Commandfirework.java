@@ -36,12 +36,22 @@ import static com.earth2me.essentials.I18n.tl;
 //4: Possible Shapes:              star, ball, large, creeper, burst
 //4: Possible Effects              trail, twinkle
 
+/**
+ * <p>Commandfirework class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public class Commandfirework extends EssentialsCommand {
 
+    /**
+     * <p>Constructor for Commandfirework.</p>
+     */
     public Commandfirework() {
         super("firework");
     }
 
+    /** {@inheritDoc} */
     @Override
     protected void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception {
         final ItemStack stack = user.getItemInHand();
@@ -120,6 +130,7 @@ public class Commandfirework extends EssentialsCommand {
         }
     }
 
+    /** {@inheritDoc} */
     @Override
     protected List<String> getTabCompleteOptions(Server server, User user, String commandLabel, String[] args) {
         // Note: this enforces an order of color fade shape effect, which the actual command doesn't have.  But that's fine. 

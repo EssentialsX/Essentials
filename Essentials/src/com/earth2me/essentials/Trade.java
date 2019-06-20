@@ -24,6 +24,12 @@ import java.util.logging.Logger;
 import static com.earth2me.essentials.I18n.tl;
 
 
+/**
+ * <p>Trade class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public class Trade {
     private final transient String command;
     private final transient Trade fallbackTrade;
@@ -46,27 +52,64 @@ public class Trade {
         RETURN
     }
 
+    /**
+     * <p>Constructor for Trade.</p>
+     *
+     * @param command a {@link java.lang.String} object.
+     * @param ess a {@link net.ess3.api.IEssentials} object.
+     */
     public Trade(final String command, final IEssentials ess) {
         this(command, null, null, null, null, ess);
     }
 
+    /**
+     * <p>Constructor for Trade.</p>
+     *
+     * @param command a {@link java.lang.String} object.
+     * @param fallback a {@link com.earth2me.essentials.Trade} object.
+     * @param ess a {@link net.ess3.api.IEssentials} object.
+     */
     public Trade(final String command, final Trade fallback, final IEssentials ess) {
         this(command, fallback, null, null, null, ess);
     }
 
     @Deprecated
+    /**
+     * <p>Constructor for Trade.</p>
+     *
+     * @param money a double.
+     * @param ess a {@link com.earth2me.essentials.IEssentials} object.
+     */
     public Trade(final double money, final com.earth2me.essentials.IEssentials ess) {
         this(null, null, BigDecimal.valueOf(money), null, null, (IEssentials) ess);
     }
 
+    /**
+     * <p>Constructor for Trade.</p>
+     *
+     * @param money a {@link java.math.BigDecimal} object.
+     * @param ess a {@link net.ess3.api.IEssentials} object.
+     */
     public Trade(final BigDecimal money, final IEssentials ess) {
         this(null, null, money, null, null, ess);
     }
 
+    /**
+     * <p>Constructor for Trade.</p>
+     *
+     * @param items a {@link org.bukkit.inventory.ItemStack} object.
+     * @param ess a {@link net.ess3.api.IEssentials} object.
+     */
     public Trade(final ItemStack items, final IEssentials ess) {
         this(null, null, null, items, null, ess);
     }
 
+    /**
+     * <p>Constructor for Trade.</p>
+     *
+     * @param exp a int.
+     * @param ess a {@link net.ess3.api.IEssentials} object.
+     */
     public Trade(final int exp, final IEssentials ess) {
         this(null, null, null, null, exp, ess);
     }
@@ -80,6 +123,12 @@ public class Trade {
         this.ess = ess;
     }
 
+    /**
+     * <p>isAffordableFor.</p>
+     *
+     * @param user a {@link net.ess3.api.IUser} object.
+     * @throws com.earth2me.essentials.ChargeException if any.
+     */
     public void isAffordableFor(final IUser user) throws ChargeException {
 
         if (ess.getSettings().isDebug()) {
@@ -104,10 +153,25 @@ public class Trade {
         }
     }
 
+    /**
+     * <p>pay.</p>
+     *
+     * @param user a {@link net.ess3.api.IUser} object.
+     * @return a boolean.
+     * @throws net.ess3.api.MaxMoneyException if any.
+     */
     public boolean pay(final IUser user) throws MaxMoneyException {
         return pay(user, OverflowType.ABORT) == null;
     }
 
+    /**
+     * <p>pay.</p>
+     *
+     * @param user a {@link net.ess3.api.IUser} object.
+     * @param type a {@link com.earth2me.essentials.Trade.OverflowType} object.
+     * @return a {@link java.util.Map} object.
+     * @throws net.ess3.api.MaxMoneyException if any.
+     */
     public Map<Integer, ItemStack> pay(final IUser user, final OverflowType type) throws MaxMoneyException {
         if (getMoney() != null && getMoney().signum() > 0) {
             if (ess.getSettings().isDebug()) {
@@ -174,6 +238,12 @@ public class Trade {
         return null;
     }
 
+    /**
+     * <p>charge.</p>
+     *
+     * @param user a {@link net.ess3.api.IUser} object.
+     * @throws com.earth2me.essentials.ChargeException if any.
+     */
     public void charge(final IUser user) throws ChargeException {
         if (ess.getSettings().isDebug()) {
             ess.getLogger().log(Level.INFO, "attempting to charge user " + user.getName());
@@ -219,18 +289,38 @@ public class Trade {
         }
     }
 
+    /**
+     * <p>Getter for the field <code>money</code>.</p>
+     *
+     * @return a {@link java.math.BigDecimal} object.
+     */
     public BigDecimal getMoney() {
         return money;
     }
 
+    /**
+     * <p>Getter for the field <code>itemStack</code>.</p>
+     *
+     * @return a {@link org.bukkit.inventory.ItemStack} object.
+     */
     public ItemStack getItemStack() {
         return itemStack;
     }
 
+    /**
+     * <p>getExperience.</p>
+     *
+     * @return a {@link java.lang.Integer} object.
+     */
     public Integer getExperience() {
         return exp;
     }
 
+    /**
+     * <p>getType.</p>
+     *
+     * @return a {@link com.earth2me.essentials.Trade.TradeType} object.
+     */
     public TradeType getType() {
         if (getExperience() != null) {
             return TradeType.EXP;
@@ -243,6 +333,12 @@ public class Trade {
         return TradeType.MONEY;
     }
 
+    /**
+     * <p>getCommandCost.</p>
+     *
+     * @param user a {@link net.ess3.api.IUser} object.
+     * @return a {@link java.math.BigDecimal} object.
+     */
     public BigDecimal getCommandCost(final IUser user) {
         BigDecimal cost = BigDecimal.ZERO;
         if (command != null && !command.isEmpty()) {
@@ -263,6 +359,19 @@ public class Trade {
 
     private static FileWriter fw = null;
 
+    /**
+     * <p>log.</p>
+     *
+     * @param type a {@link java.lang.String} object.
+     * @param subtype a {@link java.lang.String} object.
+     * @param event a {@link java.lang.String} object.
+     * @param sender a {@link java.lang.String} object.
+     * @param charge a {@link com.earth2me.essentials.Trade} object.
+     * @param receiver a {@link java.lang.String} object.
+     * @param pay a {@link com.earth2me.essentials.Trade} object.
+     * @param loc a {@link org.bukkit.Location} object.
+     * @param ess a {@link net.ess3.api.IEssentials} object.
+     */
     public static void log(String type, String subtype, String event, String sender, Trade charge, String receiver, Trade pay, Location loc, IEssentials ess) {
         //isEcoLogUpdateEnabled() - This refers to log entries with no location, ie API updates #EasterEgg
         //isEcoLogEnabled() - This refers to log entries with with location, ie /pay /sell and eco signs.
@@ -346,6 +455,9 @@ public class Trade {
         }
     }
 
+    /**
+     * <p>closeLog.</p>
+     */
     public static void closeLog() {
         if (fw != null) {
             try {

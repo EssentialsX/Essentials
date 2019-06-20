@@ -8,6 +8,12 @@ import java.lang.reflect.Field;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * <p>EnumUtil class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public class EnumUtil {
 
 
@@ -17,7 +23,7 @@ public class EnumUtil {
      *
      * @param enumClass The class to search through
      * @param names The names of the fields to search for
-     * @param <T> The enum to search through
+     * @param <T> The Enum class type.
      * @return The first matching enum field
      */
     public static <T extends Enum> T valueOf(Class<T> enumClass, String... names) {
@@ -40,7 +46,7 @@ public class EnumUtil {
      *
      * @param enumClass The class to search through
      * @param names The names of the fields to search for
-     * @param <T> The enum to search through
+     * @param <T> The Enum class type.
      * @return All matching enum fields
      */
     public static <T extends Enum> Set<T> getAllMatching(Class<T> enumClass, String... names) {
@@ -79,6 +85,12 @@ public class EnumUtil {
         return valueOf(Statistic.class, names);
     }
 
+    /**
+     * <p>getEntityType.</p>
+     *
+     * @param names a {@link java.lang.String} object.
+     * @return a {@link org.bukkit.entity.EntityType} object.
+     */
     public static EntityType getEntityType(String... names) {
         return valueOf(EntityType.class, names);
     }

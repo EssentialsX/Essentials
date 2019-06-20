@@ -13,11 +13,21 @@ import java.util.logging.Level;
 import static com.earth2me.essentials.I18n.tl;
 
 
+/**
+ * <p>Commandkick class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public class Commandkick extends EssentialsCommand {
+    /**
+     * <p>Constructor for Commandkick.</p>
+     */
     public Commandkick() {
         super("kick");
     }
 
+    /** {@inheritDoc} */
     @Override
     public void run(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception {
         if (args.length < 1) {
@@ -46,6 +56,7 @@ public class Commandkick extends EssentialsCommand {
         ess.broadcastMessage("essentials.kick.notify", tl("playerKicked", senderName, target.getName(), kickReason));
     }
 
+    /** {@inheritDoc} */
     @Override
     protected List<String> getTabCompleteOptions(Server server, CommandSource sender, String commandLabel, String[] args) {
         if (args.length == 1) {

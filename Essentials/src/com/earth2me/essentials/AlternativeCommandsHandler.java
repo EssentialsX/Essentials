@@ -11,12 +11,23 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 
+/**
+ * <p>AlternativeCommandsHandler class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public class AlternativeCommandsHandler {
     private static final Logger LOGGER = Logger.getLogger("Essentials");
     private final transient Map<String, List<PluginCommand>> altcommands = new HashMap<>();
     private final transient Map<String, String> disabledList = new HashMap<>();
     private final transient IEssentials ess;
 
+    /**
+     * <p>Constructor for AlternativeCommandsHandler.</p>
+     *
+     * @param ess a {@link net.ess3.api.IEssentials} object.
+     */
     public AlternativeCommandsHandler(final IEssentials ess) {
         this.ess = ess;
         for (Plugin plugin : ess.getServer().getPluginManager().getPlugins()) {
@@ -26,6 +37,11 @@ public class AlternativeCommandsHandler {
         }
     }
 
+    /**
+     * <p>addPlugin.</p>
+     *
+     * @param plugin a {@link org.bukkit.plugin.Plugin} object.
+     */
     public final void addPlugin(final Plugin plugin) {
         if (plugin.getDescription().getMain().contains("com.earth2me.essentials")) {
             return;
@@ -64,6 +80,11 @@ public class AlternativeCommandsHandler {
         }
     }
 
+    /**
+     * <p>removePlugin.</p>
+     *
+     * @param plugin a {@link org.bukkit.plugin.Plugin} object.
+     */
     public void removePlugin(final Plugin plugin) {
         final Iterator<Map.Entry<String, List<PluginCommand>>> iterator = altcommands.entrySet().iterator();
         while (iterator.hasNext()) {
@@ -81,6 +102,12 @@ public class AlternativeCommandsHandler {
         }
     }
 
+    /**
+     * <p>getAlternative.</p>
+     *
+     * @param label a {@link java.lang.String} object.
+     * @return a {@link org.bukkit.command.PluginCommand} object.
+     */
     public PluginCommand getAlternative(final String label) {
         final List<PluginCommand> commands = altcommands.get(label);
         if (commands == null || commands.isEmpty()) {
@@ -99,6 +126,12 @@ public class AlternativeCommandsHandler {
         return commands.get(0);
     }
 
+    /**
+     * <p>executed.</p>
+     *
+     * @param label a {@link java.lang.String} object.
+     * @param pc a {@link org.bukkit.command.PluginCommand} object.
+     */
     public void executed(final String label, final PluginCommand pc) {
         final String altString = pc.getPlugin().getName() + ":" + pc.getLabel();
         if (ess.getSettings().isDebug()) {
@@ -107,6 +140,11 @@ public class AlternativeCommandsHandler {
         disabledList.put(label, altString);
     }
 
+    /**
+     * <p>disabledCommands.</p>
+     *
+     * @return a {@link java.util.Map} object.
+     */
     public Map<String, String> disabledCommands() {
         return disabledList;
     }

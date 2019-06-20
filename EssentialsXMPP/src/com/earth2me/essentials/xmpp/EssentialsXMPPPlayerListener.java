@@ -21,6 +21,11 @@ class EssentialsXMPPPlayerListener implements Listener {
         this.ess = ess;
     }
 
+    /**
+     * <p>onPlayerJoin.</p>
+     *
+     * @param event a {@link org.bukkit.event.player.PlayerJoinEvent} object.
+     */
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerJoin(final PlayerJoinEvent event) {
         final User user = ess.getUser(event.getPlayer());
@@ -30,12 +35,22 @@ class EssentialsXMPPPlayerListener implements Listener {
         sendMessageToSpyUsers("Player " + user.getDisplayName() + " joined the game");
     }
 
+    /**
+     * <p>onPlayerChat.</p>
+     *
+     * @param event a {@link org.bukkit.event.player.AsyncPlayerChatEvent} object.
+     */
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerChat(final AsyncPlayerChatEvent event) {
         final User user = ess.getUser(event.getPlayer());
         sendMessageToSpyUsers(String.format(event.getFormat(), user.getDisplayName(), event.getMessage()));
     }
 
+    /**
+     * <p>onPlayerQuit.</p>
+     *
+     * @param event a {@link org.bukkit.event.player.PlayerQuitEvent} object.
+     */
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerQuit(final PlayerQuitEvent event) {
         final User user = ess.getUser(event.getPlayer());

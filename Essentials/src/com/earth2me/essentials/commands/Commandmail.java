@@ -17,15 +17,25 @@ import java.util.UUID;
 import static com.earth2me.essentials.I18n.tl;
 
 
+/**
+ * <p>Commandmail class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public class Commandmail extends EssentialsCommand {
     private static int mailsPerMinute = 0;
     private static long timestamp = 0;
 
+    /**
+     * <p>Constructor for Commandmail.</p>
+     */
     public Commandmail() {
         super("mail");
     }
 
     //TODO: Tidy this up / TL these errors.
+    /** {@inheritDoc} */
     @Override
     public void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception {
         if (args.length >= 1 && "read".equalsIgnoreCase(args[0])) {
@@ -99,6 +109,7 @@ public class Commandmail extends EssentialsCommand {
         throw new NotEnoughArgumentsException();
     }
 
+    /** {@inheritDoc} */
     @Override
     protected void run(Server server, CommandSource sender, String commandLabel, String[] args) throws Exception {
         if (args.length >= 1 && "read".equalsIgnoreCase(args[0])) {
@@ -149,6 +160,7 @@ public class Commandmail extends EssentialsCommand {
         }
     }
 
+    /** {@inheritDoc} */
     @Override
     protected List<String> getTabCompleteOptions(final Server server, final User user, final String commandLabel, final String[] args) {
         if (args.length == 1) {
@@ -181,6 +193,7 @@ public class Commandmail extends EssentialsCommand {
         }
     }
 
+    /** {@inheritDoc} */
     @Override
     protected List<String> getTabCompleteOptions(final Server server, final CommandSource sender, final String commandLabel, final String[] args) {
         if (args.length == 1) {

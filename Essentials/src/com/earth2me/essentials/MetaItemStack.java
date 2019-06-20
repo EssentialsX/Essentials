@@ -34,6 +34,12 @@ import java.util.regex.Pattern;
 import static com.earth2me.essentials.I18n.tl;
 
 
+/**
+ * <p>MetaItemStack class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public class MetaItemStack {
     private static final Map<String, DyeColor> colorMap = new HashMap<>();
     private static final Map<String, FireworkEffect.Type> fireworkShape = new HashMap<>();
@@ -61,30 +67,65 @@ public class MetaItemStack {
     private int power = 1;
     private int duration = 120;
 
+    /**
+     * <p>Constructor for MetaItemStack.</p>
+     *
+     * @param stack a {@link org.bukkit.inventory.ItemStack} object.
+     */
     public MetaItemStack(final ItemStack stack) {
         this.stack = stack.clone();
     }
 
+    /**
+     * <p>getItemStack.</p>
+     *
+     * @return a {@link org.bukkit.inventory.ItemStack} object.
+     */
     public ItemStack getItemStack() {
         return stack;
     }
 
+    /**
+     * <p>isValidFirework.</p>
+     *
+     * @return a boolean.
+     */
     public boolean isValidFirework() {
         return validFirework;
     }
 
+    /**
+     * <p>isValidPotion.</p>
+     *
+     * @return a boolean.
+     */
     public boolean isValidPotion() {
         return validPotionEffect && validPotionDuration && validPotionPower;
     }
 
+    /**
+     * <p>getFireworkBuilder.</p>
+     *
+     * @return a {@link org.bukkit.FireworkEffect.Builder} object.
+     */
     public FireworkEffect.Builder getFireworkBuilder() {
         return builder;
     }
 
+    /**
+     * <p>getPotionEffect.</p>
+     *
+     * @return a {@link org.bukkit.potion.PotionEffect} object.
+     */
     public PotionEffect getPotionEffect() {
         return pEffect;
     }
 
+    /**
+     * <p>completePotion.</p>
+     *
+     * @return a boolean.
+     */
     public boolean completePotion() {
         return completePotion;
     }
@@ -99,6 +140,12 @@ public class MetaItemStack {
         completePotion = true;
     }
 
+    /**
+     * <p>canSpawn.</p>
+     *
+     * @param ess a {@link net.ess3.api.IEssentials} object.
+     * @return a boolean.
+     */
     public boolean canSpawn(final IEssentials ess) {
         try {
             ess.getServer().getUnsafe().modifyItemStack(stack.clone(), "{}");
@@ -118,6 +165,16 @@ public class MetaItemStack {
         }
     }
 
+    /**
+     * <p>parseStringMeta.</p>
+     *
+     * @param sender a {@link com.earth2me.essentials.CommandSource} object.
+     * @param allowUnsafe a boolean.
+     * @param string an array of {@link java.lang.String} objects.
+     * @param fromArg a int.
+     * @param ess a {@link net.ess3.api.IEssentials} object.
+     * @throws java.lang.Exception if any.
+     */
     public void parseStringMeta(final CommandSource sender, final boolean allowUnsafe, String[] string, int fromArg, final IEssentials ess) throws Exception {
         if (string[fromArg].startsWith("{") && hasMetaPermission(sender, "vanilla", false, true, ess)) {
             try {
@@ -150,6 +207,15 @@ public class MetaItemStack {
         }
     }
 
+    /**
+     * <p>addStringMeta.</p>
+     *
+     * @param sender a {@link com.earth2me.essentials.CommandSource} object.
+     * @param allowUnsafe a boolean.
+     * @param string a {@link java.lang.String} object.
+     * @param ess a {@link net.ess3.api.IEssentials} object.
+     * @throws java.lang.Exception if any.
+     */
     public void addStringMeta(final CommandSource sender, final boolean allowUnsafe, final String string, final IEssentials ess) throws Exception {
         final String[] split = splitPattern.split(string, 2);
         if (split.length < 1) {
@@ -251,6 +317,12 @@ public class MetaItemStack {
         }
     }
 
+    /**
+     * <p>addItemFlags.</p>
+     *
+     * @param string a {@link java.lang.String} object.
+     * @throws java.lang.Exception if any.
+     */
     public void addItemFlags(final String string) throws Exception {
         String[] separate = splitPattern.split(string, 2);
         if (separate.length != 2) {
@@ -275,6 +347,15 @@ public class MetaItemStack {
         stack.setItemMeta(meta);
     }
 
+    /**
+     * <p>addFireworkMeta.</p>
+     *
+     * @param sender a {@link com.earth2me.essentials.CommandSource} object.
+     * @param allowShortName a boolean.
+     * @param string a {@link java.lang.String} object.
+     * @param ess a {@link net.ess3.api.IEssentials} object.
+     * @throws java.lang.Exception if any.
+     */
     public void addFireworkMeta(final CommandSource sender, final boolean allowShortName, final String string, final IEssentials ess) throws Exception {
     if (MaterialUtil.isFirework(stack.getType())) {
             final String[] split = splitPattern.split(string, 2);
@@ -347,6 +428,15 @@ public class MetaItemStack {
         }
     }
 
+    /**
+     * <p>addPotionMeta.</p>
+     *
+     * @param sender a {@link com.earth2me.essentials.CommandSource} object.
+     * @param allowShortName a boolean.
+     * @param string a {@link java.lang.String} object.
+     * @param ess a {@link net.ess3.api.IEssentials} object.
+     * @throws java.lang.Exception if any.
+     */
     public void addPotionMeta(final CommandSource sender, final boolean allowShortName, final String string, final IEssentials ess) throws Exception {
         if (MaterialUtil.isPotion(stack.getType())) {
             final String[] split = splitPattern.split(string, 2);
@@ -432,6 +522,15 @@ public class MetaItemStack {
         addEnchantment(sender, allowUnsafe, enchantment, level);
     }
 
+    /**
+     * <p>addEnchantment.</p>
+     *
+     * @param sender a {@link com.earth2me.essentials.CommandSource} object.
+     * @param allowUnsafe a boolean.
+     * @param enchantment a {@link org.bukkit.enchantments.Enchantment} object.
+     * @param level a int.
+     * @throws java.lang.Exception if any.
+     */
     public void addEnchantment(final CommandSource sender, final boolean allowUnsafe, final Enchantment enchantment, final int level) throws Exception {
         if (enchantment == null) {
             throw new Exception(tl("enchantmentNotFound"));
@@ -462,6 +561,14 @@ public class MetaItemStack {
         }
     }
 
+    /**
+     * <p>getEnchantment.</p>
+     *
+     * @param user a {@link com.earth2me.essentials.User} object.
+     * @param name a {@link java.lang.String} object.
+     * @return a {@link org.bukkit.enchantments.Enchantment} object.
+     * @throws java.lang.Exception if any.
+     */
     public Enchantment getEnchantment(final User user, final String name) throws Exception {
         final Enchantment enchantment = Enchantments.getByName(name);
         if (enchantment == null) {
@@ -476,6 +583,15 @@ public class MetaItemStack {
         return enchantment;
     }
 
+    /**
+     * <p>addBannerMeta.</p>
+     *
+     * @param sender a {@link com.earth2me.essentials.CommandSource} object.
+     * @param allowShortName a boolean.
+     * @param string a {@link java.lang.String} object.
+     * @param ess a {@link net.ess3.api.IEssentials} object.
+     * @throws java.lang.Exception if any.
+     */
     public void addBannerMeta(final CommandSource sender, final boolean allowShortName, final String string, final IEssentials ess) throws Exception {
         if (MaterialUtil.isBanner(stack.getType()) && !stack.getType().toString().equals("SHIELD") && string != null) {
             final String[] split = splitPattern.split(string, 2);

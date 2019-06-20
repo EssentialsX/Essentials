@@ -10,11 +10,21 @@ import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import static com.earth2me.essentials.I18n.tl;
 
 
+/**
+ * <p>Commandtop class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public class Commandtop extends EssentialsCommand {
+    /**
+     * <p>Constructor for Commandtop.</p>
+     */
     public Commandtop() {
         super("top");
     }
 
+    /** {@inheritDoc} */
     @Override
     public void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception {
         final int topX = user.getLocation().getBlockX();

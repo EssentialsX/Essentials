@@ -17,17 +17,28 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 import static com.earth2me.essentials.I18n.tl;
 
 
+/**
+ * <p>Commandbalancetop class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public class Commandbalancetop extends EssentialsCommand {
+    /**
+     * <p>Constructor for Commandbalancetop.</p>
+     */
     public Commandbalancetop() {
         super("balancetop");
     }
 
     private static final int CACHETIME = 2 * 60 * 1000;
+    /** Constant <code>MINUSERS=50</code> */
     public static final int MINUSERS = 50;
     private static final SimpleTextInput cache = new SimpleTextInput();
     private static long cacheage = 0;
     private static final ReentrantReadWriteLock lock = new ReentrantReadWriteLock();
 
+    /** {@inheritDoc} */
     @Override
     protected void run(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception {
         int page = 0;
@@ -165,6 +176,7 @@ public class Commandbalancetop extends EssentialsCommand {
         }
     }
 
+    /** {@inheritDoc} */
     @Override
     protected List<String> getTabCompleteOptions(Server server, CommandSource sender, String commandLabel, String[] args) {
         if (args.length == 1) {

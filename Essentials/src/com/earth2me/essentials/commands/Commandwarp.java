@@ -20,13 +20,23 @@ import java.util.stream.Collectors;
 import static com.earth2me.essentials.I18n.tl;
 
 
+/**
+ * <p>Commandwarp class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public class Commandwarp extends EssentialsCommand {
     private static final int WARPS_PER_PAGE = 20;
 
+    /**
+     * <p>Constructor for Commandwarp.</p>
+     */
     public Commandwarp() {
         super("warp");
     }
 
+    /** {@inheritDoc} */
     @Override
     public void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception {
         if (args.length == 0 || args[0].matches("[0-9]+")) {
@@ -49,6 +59,7 @@ public class Commandwarp extends EssentialsCommand {
         }
     }
 
+    /** {@inheritDoc} */
     @Override
     public void run(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception {
         if (args.length < 2 || NumberUtil.isInt(args[0])) {
@@ -113,6 +124,7 @@ public class Commandwarp extends EssentialsCommand {
         return new ArrayList<>(ess.getWarps().getList());
     }
 
+    /** {@inheritDoc} */
     @Override
     protected List<String> getTabCompleteOptions(final Server server, final User user, final String commandLabel, final String[] args) {
         if (args.length == 1 && user.isAuthorized("essentials.warp.list")) {
@@ -125,6 +137,7 @@ public class Commandwarp extends EssentialsCommand {
         }
     }
 
+    /** {@inheritDoc} */
     @Override
     protected List<String> getTabCompleteOptions(final Server server, final CommandSource sender, final String commandLabel, final String[] args) {
         if (args.length == 1) {

@@ -12,11 +12,21 @@ import java.util.Locale;
 import static com.earth2me.essentials.I18n.tl;
 
 
+/**
+ * <p>SignKit class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public class SignKit extends EssentialsSign {
+    /**
+     * <p>Constructor for SignKit.</p>
+     */
     public SignKit() {
         super("Kit");
     }
 
+    /** {@inheritDoc} */
     @Override
     protected boolean onSignCreate(final ISign sign, final User player, final String username, final IEssentials ess) throws SignException {
         validateTrade(sign, 3, ess);
@@ -40,6 +50,7 @@ public class SignKit extends EssentialsSign {
         }
     }
 
+    /** {@inheritDoc} */
     @Override
     protected boolean onSignInteract(final ISign sign, final User player, final String username, final IEssentials ess) throws SignException, ChargeException {
         final String kitName = sign.getLine(1).toLowerCase(Locale.ENGLISH).trim();

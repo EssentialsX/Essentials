@@ -15,6 +15,12 @@ import static com.earth2me.essentials.I18n.tl;
 
 // Suffixes can be appended on the end of a mob name to make it plural
 // Entities without a suffix, will default to 's'
+/**
+ * <p>Mob class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public enum Mob {
     CHICKEN("Chicken", Enemies.FRIENDLY, EntityType.CHICKEN),
     COW("Cow", Enemies.FRIENDLY, EntityType.COW),
@@ -92,6 +98,7 @@ public enum Mob {
     WANDERING_TRADER("WanderingTrader", Enemies.FRIENDLY, "WANDERING_TRADER")
     ;
 
+    /** Constant <code>logger</code> */
     public static final Logger logger = Logger.getLogger("Essentials");
 
     Mob(String n, Enemies en, String s, EntityType type) {
@@ -136,10 +143,24 @@ public enum Mob {
         }
     }
 
+    /**
+     * <p>getMobList.</p>
+     *
+     * @return a {@link java.util.Set} object.
+     */
     public static Set<String> getMobList() {
         return Collections.unmodifiableSet(hashMap.keySet());
     }
 
+    /**
+     * <p>spawn.</p>
+     *
+     * @param world a {@link org.bukkit.World} object.
+     * @param server a {@link org.bukkit.Server} object.
+     * @param loc a {@link org.bukkit.Location} object.
+     * @return a {@link org.bukkit.entity.Entity} object.
+     * @throws com.earth2me.essentials.Mob.MobException if any.
+     */
     public Entity spawn(final World world, final Server server, final Location loc) throws MobException {
         final Entity entity = world.spawn(loc, this.bukkitType.getEntityClass());
         if (entity == null) {
@@ -159,6 +180,9 @@ public enum Mob {
             this.type = type;
         }
 
+        /**
+         * <p>Getter for the field <code>type</code>.</p>
+         */
         final protected String type;
     }
 
@@ -166,10 +190,22 @@ public enum Mob {
         return bukkitType;
     }
 
+    /**
+     * <p>fromName.</p>
+     *
+     * @param name a {@link java.lang.String} object.
+     * @return a {@link com.earth2me.essentials.Mob} object.
+     */
     public static Mob fromName(final String name) {
         return hashMap.get(name.toLowerCase(Locale.ENGLISH));
     }
 
+    /**
+     * <p>fromBukkitType.</p>
+     *
+     * @param type a {@link org.bukkit.entity.EntityType} object.
+     * @return a {@link com.earth2me.essentials.Mob} object.
+     */
     public static Mob fromBukkitType(final EntityType type) {
         return bukkitMap.get(type);
     }

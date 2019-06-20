@@ -15,11 +15,21 @@ import java.util.Queue;
 import static com.earth2me.essentials.I18n.tl;
 
 
+/**
+ * <p>Commandnear class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public class Commandnear extends EssentialsCommand {
+    /**
+     * <p>Constructor for Commandnear.</p>
+     */
     public Commandnear() {
         super("near");
     }
 
+    /** {@inheritDoc} */
     @Override
     protected void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception {
         long maxRadius = ess.getSettings().getNearRadius();
@@ -62,6 +72,7 @@ public class Commandnear extends EssentialsCommand {
         user.sendMessage(tl("nearbyPlayers", getLocal(server, otherUser, radius)));
     }
 
+    /** {@inheritDoc} */
     @Override
     protected void run(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception {
         if (args.length == 0) {
@@ -112,6 +123,7 @@ public class Commandnear extends EssentialsCommand {
         return output.length() > 1 ? output.toString() : tl("none");
     }
 
+    /** {@inheritDoc} */
     @Override
     protected List<String> getTabCompleteOptions(Server server, User user, String commandLabel, String[] args) {
         if (user.isAuthorized("essentials.near.others")) {
@@ -131,6 +143,7 @@ public class Commandnear extends EssentialsCommand {
         }
     }
 
+    /** {@inheritDoc} */
     @Override
     protected List<String> getTabCompleteOptions(Server server, CommandSource sender, String commandLabel, String[] args) {
         if (args.length == 1) {

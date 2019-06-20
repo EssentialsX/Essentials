@@ -21,21 +21,45 @@ import java.util.Collections;
 import static com.earth2me.essentials.I18n.tl;
 
 
+/**
+ * <p>Commandseen class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public class Commandseen extends EssentialsCommand {
+    /**
+     * <p>Constructor for Commandseen.</p>
+     */
     public Commandseen() {
         super("seen");
     }
 
+    /** {@inheritDoc} */
     @Override
     protected void run(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception {
         seen(server, sender, commandLabel, args, true, true, true, true);
     }
 
+    /** {@inheritDoc} */
     @Override
     protected void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception {
         seen(server, user.getSource(), commandLabel, args, user.isAuthorized("essentials.seen.banreason"), user.isAuthorized("essentials.seen.ip"), user.isAuthorized("essentials.seen.location"), user.isAuthorized("essentials.seen.ipsearch"));
     }
 
+    /**
+     * <p>seen.</p>
+     *
+     * @param server a {@link org.bukkit.Server} object.
+     * @param sender a {@link com.earth2me.essentials.CommandSource} object.
+     * @param commandLabel a {@link java.lang.String} object.
+     * @param args an array of {@link java.lang.String} objects.
+     * @param showBan a boolean.
+     * @param showIp a boolean.
+     * @param showLocation a boolean.
+     * @param ipLookup a boolean.
+     * @throws java.lang.Exception if any.
+     */
     protected void seen(final Server server, final CommandSource sender, final String commandLabel, final String[] args,
                         final boolean showBan, final boolean showIp, final boolean showLocation, final boolean ipLookup) throws Exception {
         if (args.length < 1) {
@@ -228,6 +252,7 @@ public class Commandseen extends EssentialsCommand {
 
     }
 
+    /** {@inheritDoc} */
     @Override
     protected List<String> getTabCompleteOptions(Server server, CommandSource sender, String commandLabel, String[] args) {
         if (args.length == 1) {

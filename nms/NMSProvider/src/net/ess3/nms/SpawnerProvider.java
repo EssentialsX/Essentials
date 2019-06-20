@@ -10,6 +10,12 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.Map;
 
+/**
+ * <p>Abstract SpawnerProvider class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public abstract class SpawnerProvider implements Provider {
     private Map<EntityType, String> entityToDisplayName = ImmutableMap.<EntityType, String>builder()
             .put(EntityType.CAVE_SPIDER, "Cave Spider")
@@ -24,9 +30,25 @@ public abstract class SpawnerProvider implements Provider {
             .put(EntityType.HORSE, "Horse")
             .build();
 
+    /**
+     * <p>setEntityType.</p>
+     *
+     * @param is a {@link org.bukkit.inventory.ItemStack} object.
+     * @param type a {@link org.bukkit.entity.EntityType} object.
+     * @return a {@link org.bukkit.inventory.ItemStack} object.
+     * @throws java.lang.IllegalArgumentException if any.
+     */
     public abstract ItemStack setEntityType(ItemStack is, EntityType type) throws IllegalArgumentException;
+    /**
+     * <p>getEntityType.</p>
+     *
+     * @param is a {@link org.bukkit.inventory.ItemStack} object.
+     * @return a {@link org.bukkit.entity.EntityType} object.
+     * @throws java.lang.IllegalArgumentException if any.
+     */
     public abstract EntityType getEntityType(ItemStack is) throws IllegalArgumentException;
 
+    /** {@inheritDoc} */
     @Override
     public boolean tryProvider() {
         try {
@@ -45,6 +67,13 @@ public abstract class SpawnerProvider implements Provider {
         }
     }
 
+    /**
+     * <p>setDisplayName.</p>
+     *
+     * @param is a {@link org.bukkit.inventory.ItemStack} object.
+     * @param type a {@link org.bukkit.entity.EntityType} object.
+     * @return a {@link org.bukkit.inventory.ItemStack} object.
+     */
     @SuppressWarnings("deprecation")
     protected ItemStack setDisplayName(ItemStack is, EntityType type) {
         ItemMeta meta = is.getItemMeta();

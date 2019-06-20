@@ -16,6 +16,12 @@ import org.bukkit.event.world.PortalCreateEvent;
 import java.util.Set;
 
 
+/**
+ * <p>EssentialsProtectBlockListener class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public class EssentialsProtectBlockListener implements Listener {
 
     private static final Set<Material> WATER_TYPES = EnumUtil.getAllMatching(Material.class, "WATER", "STATIONARY_WATER");
@@ -27,6 +33,11 @@ public class EssentialsProtectBlockListener implements Listener {
         this.prot = parent;
     }
 
+    /**
+     * <p>onBlockIgnite.</p>
+     *
+     * @param event a {@link org.bukkit.event.block.BlockIgniteEvent} object.
+     */
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onBlockIgnite(BlockIgniteEvent event) {
         if (event.getBlock().getType() == Material.OBSIDIAN || event.getBlock().getRelative(BlockFace.DOWN).getType() == Material.OBSIDIAN) {
@@ -58,6 +69,11 @@ public class EssentialsProtectBlockListener implements Listener {
         }
     }
 
+    /**
+     * <p>onBlockFromTo.</p>
+     *
+     * @param event a {@link org.bukkit.event.block.BlockFromToEvent} object.
+     */
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onBlockFromTo(final BlockFromToEvent event) {
         final Block block = event.getBlock();
@@ -77,6 +93,11 @@ public class EssentialsProtectBlockListener implements Listener {
         }
     }
 
+    /**
+     * <p>onBlockBurn.</p>
+     *
+     * @param event a {@link org.bukkit.event.block.BlockBurnEvent} object.
+     */
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onBlockBurn(final BlockBurnEvent event) {
         if (prot.getSettingBool(ProtectConfig.prevent_fire_spread)) {
@@ -84,6 +105,11 @@ public class EssentialsProtectBlockListener implements Listener {
         }
     }
 
+    /**
+     * <p>onPortalLight.</p>
+     *
+     * @param event a {@link org.bukkit.event.world.PortalCreateEvent} object.
+     */
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onPortalLight(PortalCreateEvent event) {
         if (event.getReason() == PortalCreateEvent.CreateReason.FIRE) {

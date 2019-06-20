@@ -35,6 +35,12 @@ import java.util.logging.Logger;
 import static com.earth2me.essentials.I18n.tl;
 
 
+/**
+ * <p>User class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public class User extends UserData implements Comparable<User>, IMessageRecipient, net.ess3.api.IUser {
     private static final Logger logger = Logger.getLogger("Essentials");
     private IMessageRecipient messageRecipient;
@@ -61,6 +67,12 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
     private String confirmingClearCommand;
     private long lastNotifiedAboutMailsMs;
 
+    /**
+     * <p>Constructor for User.</p>
+     *
+     * @param base a {@link org.bukkit.entity.Player} object.
+     * @param ess a {@link net.ess3.api.IEssentials} object.
+     */
     public User(final Player base, final IEssentials ess) {
         super(base, ess);
         teleport = new Teleport(this, ess);
@@ -78,16 +90,19 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
         return this;
     }
 
+    /** {@inheritDoc} */
     @Override
     public boolean isAuthorized(final IEssentialsCommand cmd) {
         return isAuthorized(cmd, "essentials.");
     }
 
+    /** {@inheritDoc} */
     @Override
     public boolean isAuthorized(final IEssentialsCommand cmd, final String permissionPrefix) {
         return isAuthorized(permissionPrefix + (cmd.getName().equals("r") ? "msg" : cmd.getName()));
     }
 
+    /** {@inheritDoc} */
     @Override
     public boolean isAuthorized(final String node) {
         final boolean result = isAuthorizedCheck(node);
@@ -97,6 +112,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
         return result;
     }
 
+    /** {@inheritDoc} */
     @Override
     public boolean isPermissionSet(final String node) {
         return isPermSetCheck(node);
@@ -139,6 +155,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
         }
     }
 
+    /** {@inheritDoc} */
     @Override
     public void healCooldown() throws Exception {
         final Calendar now = new GregorianCalendar();
@@ -155,11 +172,13 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
         setLastHealTimestamp(now.getTimeInMillis());
     }
 
+    /** {@inheritDoc} */
     @Override
     public void giveMoney(final BigDecimal value) throws MaxMoneyException {
         giveMoney(value, null);
     }
 
+    /** {@inheritDoc} */
     @Override
     public void giveMoney(final BigDecimal value, final CommandSource initiator) throws MaxMoneyException {
         if (value.signum() == 0) {
@@ -172,6 +191,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
         }
     }
 
+    /** {@inheritDoc} */
     @Override
     public void payUser(final User reciever, final BigDecimal value) throws Exception {
         if (value.compareTo(BigDecimal.ZERO) < 1) {
@@ -188,11 +208,13 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
         }
     }
 
+    /** {@inheritDoc} */
     @Override
     public void takeMoney(final BigDecimal value) {
         takeMoney(value, null);
     }
 
+    /** {@inheritDoc} */
     @Override
     public void takeMoney(final BigDecimal value, final CommandSource initiator) {
         if (value.signum() == 0) {
@@ -209,11 +231,19 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
         }
     }
 
+    /** {@inheritDoc} */
     @Override
     public boolean canAfford(final BigDecimal cost) {
         return canAfford(cost, true);
     }
 
+    /**
+     * <p>canAfford.</p>
+     *
+     * @param cost a {@link java.math.BigDecimal} object.
+     * @param permcheck a boolean.
+     * @return a boolean.
+     */
     public boolean canAfford(final BigDecimal cost, final boolean permcheck) {
         if (cost.signum() <= 0) {
             return true;
@@ -225,6 +255,9 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
         return (remainingBalance.signum() >= 0);
     }
 
+    /**
+     * <p>dispose.</p>
+     */
     public void dispose() {
         ess.runTaskAsynchronously(new Runnable() {
             @Override
@@ -241,6 +274,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
         cleanup();
     }
 
+    /** {@inheritDoc} */
     @Override
     public Boolean canSpawnItem(final Material material) {
         if (ess.getSettings().permissionBasedItemSpawn()) {
@@ -257,16 +291,19 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
         return isAuthorized("essentials.itemspawn.exempt") || !ess.getSettings().itemSpawnBlacklist().contains(material);
     }
 
+    /** {@inheritDoc} */
     @Override
     public void setLastLocation() {
         setLastLocation(this.getLocation());
     }
 
+    /** {@inheritDoc} */
     @Override
     public void setLogoutLocation() {
         setLogoutLocation(this.getLocation());
     }
 
+    /** {@inheritDoc} */
     @Override
     public void requestTeleport(final User player, final boolean here) {
         teleportRequestTime = System.currentTimeMillis();
@@ -279,6 +316,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
         }
     }
 
+    /** {@inheritDoc} */
     @Override
     public boolean hasOutstandingTeleportRequest() {
         if (getTeleportRequest() != null) { // Player has outstanding teleport request.
@@ -297,22 +335,51 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
         return false;
     }
 
+    /**
+     * <p>getTeleportRequest.</p>
+     *
+     * @return a {@link java.util.UUID} object.
+     */
     public UUID getTeleportRequest() {
         return teleportRequester;
     }
 
+    /**
+     * <p>isTpRequestHere.</p>
+     *
+     * @return a boolean.
+     */
     public boolean isTpRequestHere() {
         return teleportRequestHere;
     }
 
+    /**
+     * <p>getTpRequestLocation.</p>
+     *
+     * @return a {@link org.bukkit.Location} object.
+     */
     public Location getTpRequestLocation() {
         return teleportLocation;
     }
 
+    /**
+     * <p>getNick.</p>
+     *
+     * @param longnick a boolean.
+     * @return a {@link java.lang.String} object.
+     */
     public String getNick(final boolean longnick) {
         return getNick(longnick, true, true);
     }
 
+    /**
+     * <p>getNick.</p>
+     *
+     * @param longnick a boolean.
+     * @param withPrefix a boolean.
+     * @param withSuffix a boolean.
+     * @return a {@link java.lang.String} object.
+     */
     public String getNick(final boolean longnick, final boolean withPrefix, final boolean withSuffix) {
         final StringBuilder prefix = new StringBuilder();
         String nickname;
@@ -368,6 +435,9 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
         return output;
     }
 
+    /**
+     * <p>setDisplayNick.</p>
+     */
     public void setDisplayNick() {
         if (base.isOnline() && ess.getSettings().changeDisplayName()) {
             this.getBase().setDisplayName(getNick(true));
@@ -389,23 +459,40 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
         }
     }
 
+    /**
+     * <p>getDisplayName.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
     public String getDisplayName() {
         return super.getBase().getDisplayName() == null || (ess.getSettings().hideDisplayNameInVanish() && isHidden()) ? super.getBase().getName() : super.getBase().getDisplayName();
     }
 
+    /** {@inheritDoc} */
     @Override
     public Teleport getTeleport() {
         return teleport;
     }
 
+    /**
+     * <p>Getter for the field <code>lastOnlineActivity</code>.</p>
+     *
+     * @return a long.
+     */
     public long getLastOnlineActivity() {
         return lastOnlineActivity;
     }
 
+    /**
+     * <p>Setter for the field <code>lastOnlineActivity</code>.</p>
+     *
+     * @param timestamp a long.
+     */
     public void setLastOnlineActivity(final long timestamp) {
         lastOnlineActivity = timestamp;
     }
 
+    /** {@inheritDoc} */
     @Override
     public BigDecimal getMoney() {
         final long start = System.nanoTime();
@@ -438,6 +525,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
         return super.getMoney();
     }
 
+    /** {@inheritDoc} */
     @Override
     public void setMoney(final BigDecimal value) throws MaxMoneyException {
         if (ess.getSettings().isEcoDisabled()) {
@@ -467,6 +555,11 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
         Trade.log("Update", "Set", "API", getName(), new Trade(newBalance, ess), null, null, null, ess);
     }
 
+    /**
+     * <p>updateMoneyCache.</p>
+     *
+     * @param value a {@link java.math.BigDecimal} object.
+     */
     public void updateMoneyCache(final BigDecimal value) {
         if (ess.getSettings().isEcoDisabled()) {
             return;
@@ -480,6 +573,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
         }
     }
 
+    /** {@inheritDoc} */
     @Override
     public void setAfk(final boolean set) {
         final AfkStatusChangeEvent afkEvent = new AfkStatusChangeEvent(this, set);
@@ -512,20 +606,33 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
         }
     }
 
+    /**
+     * <p>toggleAfk.</p>
+     *
+     * @return a boolean.
+     */
     public boolean toggleAfk() {
         setAfk(!isAfk());
         return isAfk();
     }
 
+    /** {@inheritDoc} */
     @Override
     public boolean isHidden() {
         return hidden;
     }
 
+    /**
+     * <p>isHidden.</p>
+     *
+     * @param player a {@link org.bukkit.entity.Player} object.
+     * @return a boolean.
+     */
     public boolean isHidden(final Player player) {
         return hidden || !player.canSee(getBase());
     }
 
+    /** {@inheritDoc} */
     @Override
     public void setHidden(final boolean hidden) {
         this.hidden = hidden;
@@ -535,6 +642,12 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
     }
 
     //Returns true if status expired during this check
+    /**
+     * <p>checkJailTimeout.</p>
+     *
+     * @param currentTime a long.
+     * @return a boolean.
+     */
     public boolean checkJailTimeout(final long currentTime) {
         if (getJailTimeout() > 0 && getJailTimeout() < currentTime && isJailed()) {
             final JailStatusChangeEvent event = new JailStatusChangeEvent(this, null, false);
@@ -562,6 +675,12 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
     }
 
     //Returns true if status expired during this check
+    /**
+     * <p>checkMuteTimeout.</p>
+     *
+     * @param currentTime a long.
+     * @return a boolean.
+     */
     public boolean checkMuteTimeout(final long currentTime) {
         if (getMuteTimeout() > 0 && getMuteTimeout() < currentTime && isMuted()) {
             final MuteStatusChangeEvent event = new MuteStatusChangeEvent(this, null, false);
@@ -578,6 +697,11 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
         return false;
     }
 
+    /**
+     * <p>updateActivity.</p>
+     *
+     * @param broadcast a boolean.
+     */
     public void updateActivity(final boolean broadcast) {
         if (isAfk()) {
             setAfk(false);
@@ -592,18 +716,31 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
         lastActivity = System.currentTimeMillis();
     }
 
+    /**
+     * <p>updateActivityOnMove.</p>
+     *
+     * @param broadcast a boolean.
+     */
     public void updateActivityOnMove(final boolean broadcast) {
         if(ess.getSettings().cancelAfkOnMove()) {
             updateActivity(broadcast);
         }
     }
 
+    /**
+     * <p>updateActivityOnInteract.</p>
+     *
+     * @param broadcast a boolean.
+     */
     public void updateActivityOnInteract(final boolean broadcast) {
         if(ess.getSettings().cancelAfkOnInteract()) {
             updateActivity(broadcast);
         }
     }
 
+    /**
+     * <p>checkActivity.</p>
+     */
     public void checkActivity() {
         // Graceful time before the first afk check call. 
         if (System.currentTimeMillis() - lastActivity <= 10000) {
@@ -639,10 +776,16 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
         }
     }
 
+    /**
+     * <p>Getter for the field <code>afkPosition</code>.</p>
+     *
+     * @return a {@link org.bukkit.Location} object.
+     */
     public Location getAfkPosition() {
         return afkPosition;
     }
 
+    /** {@inheritDoc} */
     @Override
     public boolean isGodModeEnabled() {
         if (super.isGodModeEnabled()) {
@@ -662,10 +805,16 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
         return false;
     }
 
+    /**
+     * <p>isGodModeEnabledRaw.</p>
+     *
+     * @return a boolean.
+     */
     public boolean isGodModeEnabledRaw() {
         return super.isGodModeEnabled();
     }
 
+    /** {@inheritDoc} */
     @Override
     public String getGroup() {
         final String result = ess.getPermissionsHandler().getGroup(base);
@@ -675,6 +824,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
         return result;
     }
 
+    /** {@inheritDoc} */
     @Override
     public boolean inGroup(final String group) {
         final boolean result = ess.getPermissionsHandler().inGroup(base, group);
@@ -684,6 +834,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
         return result;
     }
 
+    /** {@inheritDoc} */
     @Override
     public boolean canBuild() {
         if (this.getBase().isOp()) {
@@ -692,26 +843,52 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
         return ess.getPermissionsHandler().canBuild(base, getGroup());
     }
 
+    /**
+     * <p>Getter for the field <code>teleportRequestTime</code>.</p>
+     *
+     * @return a long.
+     */
     public long getTeleportRequestTime() {
         return teleportRequestTime;
     }
 
+    /**
+     * <p>isInvSee.</p>
+     *
+     * @return a boolean.
+     */
     public boolean isInvSee() {
         return invSee;
     }
 
+    /**
+     * <p>Setter for the field <code>invSee</code>.</p>
+     *
+     * @param set a boolean.
+     */
     public void setInvSee(final boolean set) {
         invSee = set;
     }
 
+    /**
+     * <p>isEnderSee.</p>
+     *
+     * @return a boolean.
+     */
     public boolean isEnderSee() {
         return enderSee;
     }
 
+    /**
+     * <p>Setter for the field <code>enderSee</code>.</p>
+     *
+     * @param set a boolean.
+     */
     public void setEnderSee(final boolean set) {
         enderSee = set;
     }
 
+    /** {@inheritDoc} */
     @Override
     public void enableInvulnerabilityAfterTeleport() {
         final long time = ess.getSettings().getTeleportInvulnerability();
@@ -720,6 +897,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
         }
     }
 
+    /** {@inheritDoc} */
     @Override
     public void resetInvulnerabilityAfterTeleport() {
         if (teleportInvulnerabilityTimestamp != 0 && teleportInvulnerabilityTimestamp < System.currentTimeMillis()) {
@@ -727,30 +905,40 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
         }
     }
 
+    /** {@inheritDoc} */
     @Override
     public boolean hasInvulnerabilityAfterTeleport() {
         return teleportInvulnerabilityTimestamp != 0 && teleportInvulnerabilityTimestamp >= System.currentTimeMillis();
     }
 
+    /**
+     * <p>canInteractVanished.</p>
+     *
+     * @return a boolean.
+     */
     public boolean canInteractVanished() {
         return isAuthorized("essentials.vanish.interact");
     }
 
+    /** {@inheritDoc} */
     @Override
     public boolean isIgnoreMsg() {
         return ignoreMsg;
     }
 
+    /** {@inheritDoc} */
     @Override
     public void setIgnoreMsg(boolean ignoreMsg) {
         this.ignoreMsg = ignoreMsg;
     }
 
+    /** {@inheritDoc} */
     @Override
     public boolean isVanished() {
         return vanished;
     }
 
+    /** {@inheritDoc} */
     @Override
     public void setVanished(final boolean set) {
         vanished = set;
@@ -777,6 +965,11 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
         }
     }
 
+    /**
+     * <p>checkSignThrottle.</p>
+     *
+     * @return a boolean.
+     */
     public boolean checkSignThrottle() {
         if (isSignThrottled()) {
             return true;
@@ -785,36 +978,66 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
         return false;
     }
 
+    /**
+     * <p>isSignThrottled.</p>
+     *
+     * @return a boolean.
+     */
     public boolean isSignThrottled() {
         final long minTime = lastThrottledAction + (1000 / ess.getSettings().getSignUsePerSecond());
         return (System.currentTimeMillis() < minTime);
     }
 
+    /**
+     * <p>updateThrottle.</p>
+     */
     public void updateThrottle() {
         lastThrottledAction = System.currentTimeMillis();
     }
 
+    /**
+     * <p>isFlyClickJump.</p>
+     *
+     * @return a boolean.
+     */
     public boolean isFlyClickJump() {
         return rightClickJump;
     }
 
+    /**
+     * <p>Setter for the field <code>rightClickJump</code>.</p>
+     *
+     * @param rightClickJump a boolean.
+     */
     public void setRightClickJump(boolean rightClickJump) {
         this.rightClickJump = rightClickJump;
     }
 
+    /** {@inheritDoc} */
     @Override
     public boolean isIgnoreExempt() {
         return this.isAuthorized("essentials.chat.ignoreexempt");
     }
 
+    /**
+     * <p>isRecipeSee.</p>
+     *
+     * @return a boolean.
+     */
     public boolean isRecipeSee() {
         return recipeSee;
     }
 
+    /**
+     * <p>Setter for the field <code>recipeSee</code>.</p>
+     *
+     * @param recipeSee a boolean.
+     */
     public void setRecipeSee(boolean recipeSee) {
         this.recipeSee = recipeSee;
     }
 
+    /** {@inheritDoc} */
     @Override
     public void sendMessage(String message) {
         if (!message.isEmpty()) {
@@ -822,11 +1045,13 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
         }
     }
 
+    /** {@inheritDoc} */
     @Override
     public int compareTo(final User other) {
         return FormatUtil.stripFormat(getDisplayName()).compareToIgnoreCase(FormatUtil.stripFormat(other.getDisplayName()));
     }
 
+    /** {@inheritDoc} */
     @Override
     public boolean equals(final Object object) {
         if (!(object instanceof User)) {
@@ -836,46 +1061,56 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
 
     }
 
+    /** {@inheritDoc} */
     @Override
     public int hashCode() {
         return this.getName().hashCode();
     }
 
+    /** {@inheritDoc} */
     @Override
     public CommandSource getSource() {
         return new CommandSource(getBase());
     }
 
+    /** {@inheritDoc} */
     @Override
     public String getName() {
         return this.getBase().getName();
     }
     
+    /** {@inheritDoc} */
     @Override public boolean isReachable() {
         return getBase().isOnline();
     }
 
+    /** {@inheritDoc} */
     @Override public MessageResponse sendMessage(IMessageRecipient recipient, String message) {
         return this.messageRecipient.sendMessage(recipient, message);
     }
 
+    /** {@inheritDoc} */
     @Override public MessageResponse onReceiveMessage(IMessageRecipient sender, String message) {
         return this.messageRecipient.onReceiveMessage(sender, message);
     }
 
+    /** {@inheritDoc} */
     @Override public IMessageRecipient getReplyRecipient() {
         return this.messageRecipient.getReplyRecipient();
     }
 
+    /** {@inheritDoc} */
     @Override public void setReplyRecipient(IMessageRecipient recipient) {
         this.messageRecipient.setReplyRecipient(recipient);
     }
 
+    /** {@inheritDoc} */
     @Override
     public String getAfkMessage() {
         return this.afkMessage;
     }
 
+    /** {@inheritDoc} */
     @Override
     public void setAfkMessage(String message) {
         if (isAfk()) {
@@ -883,26 +1118,40 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
         }
     }
 
+    /** {@inheritDoc} */
     @Override
     public long getAfkSince() {
         return afkSince;
     }
 
+    /** {@inheritDoc} */
     @Override
     public Map<User, BigDecimal> getConfirmingPayments() {
         return confirmingPayments;
     }
 
+    /**
+     * <p>Getter for the field <code>confirmingClearCommand</code>.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
     public String getConfirmingClearCommand() {
         return confirmingClearCommand;
     }
     
+    /**
+     * <p>Setter for the field <code>confirmingClearCommand</code>.</p>
+     *
+     * @param command a {@link java.lang.String} object.
+     */
     public void setConfirmingClearCommand(String command) {
         this.confirmingClearCommand = command;
     }
 
     /**
-     * Returns the {@link ItemStack} in the main hand or off-hand. If the main hand is empty then the offhand item is returned - also nullable.
+     * Returns the {@link org.bukkit.inventory.ItemStack} in the main hand or off-hand. If the main hand is empty then the offhand item is returned - also nullable.
+     *
+     * @return a {@link org.bukkit.inventory.ItemStack} object.
      */
     public ItemStack getItemInHand() {
         if (VersionUtil.getServerBukkitVersion().isLowerThan(VersionUtil.v1_9_R01)) {
@@ -913,6 +1162,9 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
         }
     }
     
+    /**
+     * <p>notifyOfMail.</p>
+     */
     public void notifyOfMail() {
         List<String> mails = getMails();
         if (mails != null && !mails.isEmpty()) {

@@ -1,6 +1,12 @@
 package com.earth2me.essentials.protect;
 
 
+/**
+ * <p>ProtectConfig class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public enum ProtectConfig {
     disable_contactdmg("protect.disable.contactdmg", false),
     disable_lavadmg("protect.disable.lavadmg", false),
@@ -62,6 +68,8 @@ public enum ProtectConfig {
     }
 
     /**
+     * <p>Getter for the field <code>configName</code>.</p>
+     *
      * @return the configName
      */
     public String getConfigName() {
@@ -69,6 +77,8 @@ public enum ProtectConfig {
     }
 
     /**
+     * <p>getDefaultValueString.</p>
+     *
      * @return the default value String
      */
     public String getDefaultValueString() {
@@ -76,16 +86,28 @@ public enum ProtectConfig {
     }
 
     /**
+     * <p>getDefaultValueBoolean.</p>
+     *
      * @return the default value boolean
      */
     public boolean getDefaultValueBoolean() {
         return defValueBoolean;
     }
 
+    /**
+     * <p>isString.</p>
+     *
+     * @return a boolean.
+     */
     public boolean isString() {
         return isString;
     }
 
+    /**
+     * <p>isList.</p>
+     *
+     * @return a boolean.
+     */
     public boolean isList() {
         return isList;
     }

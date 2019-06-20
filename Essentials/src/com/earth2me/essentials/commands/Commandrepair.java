@@ -19,11 +19,21 @@ import java.util.Locale;
 import static com.earth2me.essentials.I18n.tl;
 
 
+/**
+ * <p>Commandrepair class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public class Commandrepair extends EssentialsCommand {
+    /**
+     * <p>Constructor for Commandrepair.</p>
+     */
     public Commandrepair() {
         super("repair");
     }
 
+    /** {@inheritDoc} */
     @Override
     public void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception {
         if (args.length < 1 || args[0].equalsIgnoreCase("hand") || !user.isAuthorized("essentials.repair.all")) {
@@ -38,6 +48,12 @@ public class Commandrepair extends EssentialsCommand {
         }
     }
 
+    /**
+     * <p>repairHand.</p>
+     *
+     * @param user a {@link com.earth2me.essentials.User} object.
+     * @throws java.lang.Exception if any.
+     */
     public void repairHand(User user) throws Exception {
         final ItemStack item = user.getItemInHand();
         if (item == null || item.getType().isBlock() || item.getDurability() == 0) {
@@ -60,6 +76,12 @@ public class Commandrepair extends EssentialsCommand {
         user.sendMessage(tl("repair", itemName.replace('_', ' ')));
     }
 
+    /**
+     * <p>repairAll.</p>
+     *
+     * @param user a {@link com.earth2me.essentials.User} object.
+     * @throws java.lang.Exception if any.
+     */
     public void repairAll(User user) throws Exception {
         final List<String> repaired = new ArrayList<>();
         repairItems(user.getBase().getInventory().getContents(), user, repaired);
@@ -132,6 +154,7 @@ public class Commandrepair extends EssentialsCommand {
         }
     }
 
+    /** {@inheritDoc} */
     @Override
     protected List<String> getTabCompleteOptions(Server server, User user, String commandLabel, String[] args) {
         if (args.length == 1) {

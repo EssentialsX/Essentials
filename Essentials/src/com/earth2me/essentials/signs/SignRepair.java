@@ -10,11 +10,21 @@ import net.ess3.api.IEssentials;
 import static com.earth2me.essentials.I18n.tl;
 
 
+/**
+ * <p>SignRepair class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public class SignRepair extends EssentialsSign {
+    /**
+     * <p>Constructor for SignRepair.</p>
+     */
     public SignRepair() {
         super("Repair");
     }
 
+    /** {@inheritDoc} */
     @Override
     protected boolean onSignCreate(final ISign sign, final User player, final String username, final IEssentials ess) throws SignException {
         final String repairTarget = sign.getLine(1);
@@ -28,6 +38,7 @@ public class SignRepair extends EssentialsSign {
         return true;
     }
 
+    /** {@inheritDoc} */
     @Override
     protected boolean onSignInteract(final ISign sign, final User player, final String username, final IEssentials ess) throws SignException, ChargeException {
         final Trade charge = getTrade(sign, 2, ess);

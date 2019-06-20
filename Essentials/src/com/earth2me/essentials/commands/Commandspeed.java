@@ -12,11 +12,21 @@ import java.util.List;
 import static com.earth2me.essentials.I18n.tl;
 
 
+/**
+ * <p>Commandspeed class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public class Commandspeed extends EssentialsCommand {
+    /**
+     * <p>Constructor for Commandspeed.</p>
+     */
     public Commandspeed() {
         super("speed");
     }
 
+    /** {@inheritDoc} */
     @Override
     protected void run(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception {
         if (args.length < 2) {
@@ -27,6 +37,7 @@ public class Commandspeed extends EssentialsCommand {
         speedOtherPlayers(server, sender, isFly, true, speed, args[2]);
     }
 
+    /** {@inheritDoc} */
     @Override
     protected void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception {
         if (args.length < 1) {
@@ -136,6 +147,7 @@ public class Commandspeed extends EssentialsCommand {
         }
     }
 
+    /** {@inheritDoc} */
     @Override
     protected List<String> getTabCompleteOptions(Server server, User user, String commandLabel, String[] args) {
         if (args.length == 3 && user.isAuthorized("essentials.speed.others")) {
@@ -145,6 +157,7 @@ public class Commandspeed extends EssentialsCommand {
         }
     }
 
+    /** {@inheritDoc} */
     @Override
     protected List<String> getTabCompleteOptions(Server server, CommandSource sender, String commandLabel, String[] args) {
         if (args.length == 3) {

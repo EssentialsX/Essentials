@@ -2,6 +2,9 @@ package com.earth2me.essentials.messaging;
 
 /**
  * Represents an interface for message recipients.
+ *
+ * @author LoopyD
+ * @version $Id: $Id
  */
 public interface IMessageRecipient {
 
@@ -13,29 +16,27 @@ public interface IMessageRecipient {
     void sendMessage(String message);
 
     /**
-     * This method is called when this {@link IMessageRecipient} is sending a message to another {@link IMessageRecipient}.
-     * <br />
-     * The {@link MessageResponse} that is returned is used to determine what exactly should happen in the {@link #sendMessage(IMessageRecipient,
+     * This method is called when this {@link com.earth2me.essentials.messaging.IMessageRecipient} is sending a message to another {@link com.earth2me.essentials.messaging.IMessageRecipient}.
+     *
+     * The {@link com.earth2me.essentials.messaging.IMessageRecipient.MessageResponse} that is returned is used to determine what exactly should happen in the {@link #sendMessage(IMessageRecipient,
      * String)} implementation by the {@code sender}.
      *
      * @param recipient recipient to receive the {@code message}
      * @param message message to send
-     *
      * @return the response of the message
      */
     MessageResponse sendMessage(IMessageRecipient recipient, String message);
 
     /**
-     * This method is called when this recipient is receiving a message from another {@link IMessageRecipient}.
-     * <br />
-     * The {@link MessageResponse} that is returned is used to determine what exactly should happen in the {@link #sendMessage(IMessageRecipient,
+     * This method is called when this recipient is receiving a message from another {@link com.earth2me.essentials.messaging.IMessageRecipient}.
+     *
+     * The {@link com.earth2me.essentials.messaging.IMessageRecipient.MessageResponse} that is returned is used to determine what exactly should happen in the {@link #sendMessage(IMessageRecipient,
      * String)} implementation by the {@code sender}.
-     * <p />
+     *
      * <b>This method should only be called by {@link #sendMessage(IMessageRecipient, String)}.</b>
      *
      * @param sender sender of the {@code message}
      * @param message message being received
-     *
      * @return the response of the message
      */
     MessageResponse onReceiveMessage(IMessageRecipient sender, String message);
@@ -44,7 +45,6 @@ public interface IMessageRecipient {
      * Returns the name of this recipient. This name is typically used internally to identify this recipient.
      *
      * @return name of this recipient
-     *
      * @see #getDisplayName()
      */
     String getName();
@@ -64,14 +64,14 @@ public interface IMessageRecipient {
     boolean isReachable();
 
     /**
-     * Returns the {@link IMessageRecipient} this recipient should send replies to.
+     * Returns the {@link com.earth2me.essentials.messaging.IMessageRecipient} this recipient should send replies to.
      *
      * @return message recipient
      */
     IMessageRecipient getReplyRecipient();
 
     /**
-     * Sets the {@link IMessageRecipient} this recipient should send replies to.
+     * Sets the {@link com.earth2me.essentials.messaging.IMessageRecipient} this recipient should send replies to.
      *
      * @param recipient message recipient to set
      */

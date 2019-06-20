@@ -12,12 +12,22 @@ import java.util.List;
 import static com.earth2me.essentials.I18n.tl;
 
 
+/**
+ * <p>Commandweather class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public class Commandweather extends EssentialsCommand {
+    /**
+     * <p>Constructor for Commandweather.</p>
+     */
     public Commandweather() {
         super("weather");
     }
 
     //TODO: Remove duplication
+    /** {@inheritDoc} */
     @Override
     public void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception {
         final boolean isStorm;
@@ -44,6 +54,7 @@ public class Commandweather extends EssentialsCommand {
         }
     }
 
+    /** {@inheritDoc} */
     @Override
     protected void run(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception {
         if (args.length < 2) //running from console means inserting a world arg before other args
@@ -67,6 +78,7 @@ public class Commandweather extends EssentialsCommand {
         }
     }
 
+    /** {@inheritDoc} */
     @Override
     protected List<String> getTabCompleteOptions(Server server, User user, String commandLabel, String[] args) {
         if (args.length == 1) {
@@ -78,6 +90,7 @@ public class Commandweather extends EssentialsCommand {
         }
     }
 
+    /** {@inheritDoc} */
     @Override
     protected List<String> getTabCompleteOptions(Server server, CommandSource sender, String commandLabel, String[] args) {
         if (args.length == 1) {

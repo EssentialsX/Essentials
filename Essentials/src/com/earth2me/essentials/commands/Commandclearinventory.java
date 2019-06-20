@@ -16,8 +16,17 @@ import org.bukkit.inventory.ItemStack;
 import java.util.*;
 
 
+/**
+ * <p>Commandclearinventory class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public class Commandclearinventory extends EssentialsCommand {
 
+    /**
+     * <p>Constructor for Commandclearinventory.</p>
+     */
     public Commandclearinventory() {
         super("clearinventory");
     }
@@ -25,12 +34,14 @@ public class Commandclearinventory extends EssentialsCommand {
     private static final int BASE_AMOUNT = 100000;
     private static final int EXTENDED_CAP = 8;
 
+    /** {@inheritDoc} */
     @Override
     public void run(Server server, User user, String commandLabel, String[] args) throws Exception {
         parseCommand(server, user.getSource(), commandLabel, args, user.isAuthorized("essentials.clearinventory.others"),
             user.isAuthorized("essentials.clearinventory.all") || user.isAuthorized("essentials.clearinventory.multiple"));
     }
 
+    /** {@inheritDoc} */
     @Override
     protected void run(Server server, CommandSource sender, String commandLabel, String[] args) throws Exception {
         parseCommand(server, sender, commandLabel, args, true, true);
@@ -80,6 +91,16 @@ public class Commandclearinventory extends EssentialsCommand {
         }
     }
 
+    /**
+     * <p>clearHandler.</p>
+     *
+     * @param sender a {@link com.earth2me.essentials.CommandSource} object.
+     * @param player a {@link org.bukkit.entity.Player} object.
+     * @param args an array of {@link java.lang.String} objects.
+     * @param offset a int.
+     * @param showExtended a boolean.
+     * @throws java.lang.Exception if any.
+     */
     protected void clearHandler(CommandSource sender, Player player, String[] args, int offset, boolean showExtended) throws Exception {
         short data = -1;
         int type = -1;
@@ -148,6 +169,7 @@ public class Commandclearinventory extends EssentialsCommand {
         }
     }
 
+    /** {@inheritDoc} */
     @Override
     protected List<String> getTabCompleteOptions(Server server, User user, String commandLabel, String[] args) {
         if (user.isAuthorized("essentials.clearinventory.others")) {
@@ -178,6 +200,7 @@ public class Commandclearinventory extends EssentialsCommand {
         }
     }
 
+    /** {@inheritDoc} */
     @Override
     protected List<String> getTabCompleteOptions(Server server, CommandSource sender, String commandLabel, String[] args) {
         if (args.length == 1) {

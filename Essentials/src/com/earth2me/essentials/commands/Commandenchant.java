@@ -22,12 +22,22 @@ import java.util.TreeSet;
 import static com.earth2me.essentials.I18n.tl;
 
 
+/**
+ * <p>Commandenchant class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public class Commandenchant extends EssentialsCommand {
+    /**
+     * <p>Constructor for Commandenchant.</p>
+     */
     public Commandenchant() {
         super("enchant");
     }
 
     //TODO: Implement charge costs: final Trade charge = new Trade("enchant-" + enchantmentName, ess);
+    /** {@inheritDoc} */
     @Override
     protected void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception {
         final ItemStack stack = user.getItemInHand();
@@ -71,6 +81,7 @@ public class Commandenchant extends EssentialsCommand {
         }
     }
 
+    /** {@inheritDoc} */
     @Override
     protected List<String> getTabCompleteOptions(final Server server, final User user, final String commandLabel, final String[] args) {
         if (args.length == 1) {

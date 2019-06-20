@@ -12,16 +12,28 @@ import java.lang.reflect.Method;
 
 import static com.earth2me.essentials.utils.EnumUtil.getEntityType;
 
+/**
+ * <p>MobCompat class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public class MobCompat {
 
     // Constants for mobs added in later versions
+    /** Constant <code>LLAMA</code> */
     public static final EntityType LLAMA = getEntityType("LLAMA");
+    /** Constant <code>PARROT</code> */
     public static final EntityType PARROT = getEntityType("PARROT");
+    /** Constant <code>TROPICAL_FISH</code> */
     public static final EntityType TROPICAL_FISH = getEntityType("TROPICAL_FISH");
+    /** Constant <code>PANDA</code> */
     public static final EntityType PANDA = getEntityType("PANDA");
+    /** Constant <code>TRADER_LLAMA</code> */
     public static final EntityType TRADER_LLAMA = getEntityType("TRADER_LLAMA");
 
     // Constants for mobs that have changed since earlier versions
+    /** Constant <code>CAT</code> */
     public static final EntityType CAT = getEntityType("CAT", "OCELOT");
 
     public enum CatType {
@@ -97,6 +109,12 @@ public class MobCompat {
         return (catClass != null && catTypeClass != null && catSetTypeMethod != null);
     }
 
+    /**
+     * <p>setCatType.</p>
+     *
+     * @param entity a {@link org.bukkit.entity.Entity} object.
+     * @param type a {@link com.earth2me.essentials.MobCompat.CatType} object.
+     */
     public static void setCatType(final Entity entity, final CatType type) {
         if (isNewCat()) {
             try {
@@ -117,6 +135,12 @@ public class MobCompat {
         return (villagerCareerClass != null && villagerSetCareerMethod != null);
     }
 
+    /**
+     * <p>setVillagerProfession.</p>
+     *
+     * @param entity a {@link org.bukkit.entity.Entity} object.
+     * @param profession a {@link com.earth2me.essentials.MobCompat.VillagerProfession} object.
+     */
     public static void setVillagerProfession(final Entity entity, final VillagerProfession profession) {
         if (!isCareerVillager()) {
             ((Villager) entity).setProfession(profession.asEnum());
@@ -131,6 +155,12 @@ public class MobCompat {
     }
 
     // Only 1.14+ villagers have biome variants
+    /**
+     * <p>setVillagerType.</p>
+     *
+     * @param entity a {@link org.bukkit.entity.Entity} object.
+     * @param type a {@link java.lang.String} object.
+     */
     public static void setVillagerType(final Entity entity, final String type) {
         Class typeEnum = ReflUtil.getClassCached("org.bukkit.entity.Villager.Type");
         if (typeEnum == null) return;
@@ -144,6 +174,12 @@ public class MobCompat {
     }
 
     // Llamas only exist in 1.11+
+    /**
+     * <p>setLlamaColor.</p>
+     *
+     * @param entity a {@link org.bukkit.entity.Entity} object.
+     * @param color a {@link java.lang.String} object.
+     */
     public static void setLlamaColor(final Entity entity, final String color) {
         Class llamaClass = ReflUtil.getClassCached("org.bukkit.entity.Llama");
         if (llamaClass == null) return;
@@ -159,6 +195,12 @@ public class MobCompat {
     }
 
     // Parrots only exist in 1.12+
+    /**
+     * <p>setParrotVariant.</p>
+     *
+     * @param entity a {@link org.bukkit.entity.Entity} object.
+     * @param variant a {@link java.lang.String} object.
+     */
     public static void setParrotVariant(final Entity entity, final String variant) {
         Class parrotClass = ReflUtil.getClassCached("org.bukkit.entity.Parrot");
         if (parrotClass == null) return;
@@ -173,6 +215,12 @@ public class MobCompat {
     }
 
     // Tropical fish only exist in 1.13+
+    /**
+     * <p>setTropicalFishPattern.</p>
+     *
+     * @param entity a {@link org.bukkit.entity.Entity} object.
+     * @param pattern a {@link java.lang.String} object.
+     */
     public static void setTropicalFishPattern(final Entity entity, final String pattern) {
         Class tropicalFishClass = ReflUtil.getClassCached("org.bukkit.entity.TropicalFish");
         if (tropicalFishClass == null) return;
@@ -187,6 +235,12 @@ public class MobCompat {
     }
 
     // Mushroom cow variant API only exists in 1.14+
+    /**
+     * <p>setMooshroomVariant.</p>
+     *
+     * @param entity a {@link org.bukkit.entity.Entity} object.
+     * @param variant a {@link java.lang.String} object.
+     */
     public static void setMooshroomVariant(final Entity entity, final String variant) {
         Class mushroomCowClass = ReflUtil.getClassCached("org.bukkit.entity.MushroomCow");
         Class variantEnum = ReflUtil.getClassCached("org.bukkit.entity.MushroomCow.Variant");
@@ -201,6 +255,13 @@ public class MobCompat {
     }
 
     // Pandas only exists in 1.14+
+    /**
+     * <p>setPandaGene.</p>
+     *
+     * @param entity a {@link org.bukkit.entity.Entity} object.
+     * @param gene a {@link java.lang.String} object.
+     * @param mainGene a boolean.
+     */
     public static void setPandaGene(final Entity entity, final String gene, final boolean mainGene) {
         Class pandaClass = ReflUtil.getClassCached("org.bukkit.entity.Panda");
         if (pandaClass == null) return;

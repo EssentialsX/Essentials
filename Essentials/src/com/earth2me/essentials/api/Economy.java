@@ -20,17 +20,26 @@ import java.util.logging.Logger;
 
 /**
  * You should use Vault instead of directly using this class.
+ *
+ * @author LoopyD
+ * @version $Id: $Id
  */
 public class Economy {
+    /**
+     * <p>Constructor for Economy.</p>
+     */
     public Economy() {
     }
 
     private static final Logger logger = Logger.getLogger("Essentials");
     private static IEssentials ess;
     private static final String noCallBeforeLoad = "Essentials API is called before Essentials is loaded.";
+    /** Constant <code>MATH_CONTEXT</code> */
     public static final MathContext MATH_CONTEXT = MathContext.DECIMAL128;
 
     /**
+     * <p>Setter for the field <code>ess</code>.</p>
+     *
      * @param aEss the ess to set
      */
     public static void setEss(IEssentials aEss) {
@@ -89,10 +98,8 @@ public class Economy {
      * Returns the balance of a user
      *
      * @param name Name of the user
-     *
      * @return balance
-     *
-     * @throws UserDoesNotExistException
+     * @throws com.earth2me.essentials.api.UserDoesNotExistException if the user does not exist.
      */
     @Deprecated
     public static double getMoney(String name) throws UserDoesNotExistException {
@@ -106,6 +113,13 @@ public class Economy {
         return amount;
     }
 
+    /**
+     * <p>getMoneyExact.</p>
+     *
+     * @param name a {@link java.lang.String} object.
+     * @return a {@link java.math.BigDecimal} object.
+     * @throws com.earth2me.essentials.api.UserDoesNotExistException if the user does not exist.
+     */
     public static BigDecimal getMoneyExact(String name) throws UserDoesNotExistException {
         User user = getUserByName(name);
         if (user == null) {
@@ -119,9 +133,8 @@ public class Economy {
      *
      * @param name    Name of the user
      * @param balance The balance you want to set
-     *
-     * @throws UserDoesNotExistException If a user by that name does not exists
-     * @throws NoLoanPermittedException  If the user is not allowed to have a negative balance
+     * @throws com.earth2me.essentials.api.UserDoesNotExistException if a user by that name does not exist.
+     * @throws com.earth2me.essentials.api.NoLoanPermittedException if the user is not allowed to have a negative balance.
      */
     @Deprecated
     public static void setMoney(String name, double balance) throws UserDoesNotExistException, NoLoanPermittedException {
@@ -132,6 +145,14 @@ public class Economy {
         }
     }
 
+    /**
+     * <p>setMoney.</p>
+     *
+     * @param name a {@link java.lang.String} object.
+     * @param balance a {@link java.math.BigDecimal} object.
+     * @throws com.earth2me.essentials.api.UserDoesNotExistException if a user by that name does not exist.
+     * @throws com.earth2me.essentials.api.NoLoanPermittedException if the user is not allowed to have a negative balance.
+     */
     public static void setMoney(String name, BigDecimal balance) throws UserDoesNotExistException, NoLoanPermittedException {
         User user = getUserByName(name);
         if (user == null) {
@@ -156,9 +177,8 @@ public class Economy {
      *
      * @param name   Name of the user
      * @param amount The money you want to add
-     *
-     * @throws UserDoesNotExistException If a user by that name does not exists
-     * @throws NoLoanPermittedException  If the user is not allowed to have a negative balance
+     * @throws com.earth2me.essentials.api.UserDoesNotExistException if a user by that name does not exists.
+     * @throws com.earth2me.essentials.api.NoLoanPermittedException if the user is not allowed to have a negative balance.
      */
     @Deprecated
     public static void add(String name, double amount) throws UserDoesNotExistException, NoLoanPermittedException {
@@ -169,6 +189,15 @@ public class Economy {
         }
     }
 
+    /**
+     * <p>add.</p>
+     *
+     * @param name a {@link java.lang.String} object.
+     * @param amount a {@link java.math.BigDecimal} object.
+     * @throws com.earth2me.essentials.api.UserDoesNotExistException if any user by that name does not exist.
+     * @throws com.earth2me.essentials.api.NoLoanPermittedException if the user is not allowed to have a negative balance.
+     * @throws java.lang.ArithmeticException if any.
+     */
     public static void add(String name, BigDecimal amount) throws UserDoesNotExistException, NoLoanPermittedException, ArithmeticException {
         BigDecimal result = getMoneyExact(name).add(amount, MATH_CONTEXT);
         setMoney(name, result);
@@ -180,9 +209,8 @@ public class Economy {
      *
      * @param name   Name of the user
      * @param amount The money you want to substract
-     *
-     * @throws UserDoesNotExistException If a user by that name does not exists
-     * @throws NoLoanPermittedException  If the user is not allowed to have a negative balance
+     * @throws com.earth2me.essentials.api.UserDoesNotExistException if a user by that name does not exist.
+     * @throws com.earth2me.essentials.api.NoLoanPermittedException if the user is not allowed to have a negative balance.
      */
     @Deprecated
     public static void subtract(String name, double amount) throws UserDoesNotExistException, NoLoanPermittedException {
@@ -193,6 +221,15 @@ public class Economy {
         }
     }
 
+    /**
+     * <p>substract.</p>
+     *
+     * @param name a {@link java.lang.String} object.
+     * @param amount a {@link java.math.BigDecimal} object.
+     * @throws com.earth2me.essentials.api.UserDoesNotExistException if a user by that name does not exist.
+     * @throws com.earth2me.essentials.api.NoLoanPermittedException if the user is not allowed to have a negative balance.
+     * @throws java.lang.ArithmeticException if any.
+     */
     public static void substract(String name, BigDecimal amount) throws UserDoesNotExistException, NoLoanPermittedException, ArithmeticException {
         BigDecimal result = getMoneyExact(name).subtract(amount, MATH_CONTEXT);
         setMoney(name, result);
@@ -204,9 +241,8 @@ public class Economy {
      *
      * @param name  Name of the user
      * @param amount The balance is divided by this value
-     *
-     * @throws UserDoesNotExistException If a user by that name does not exists
-     * @throws NoLoanPermittedException  If the user is not allowed to have a negative balance
+     * @throws com.earth2me.essentials.api.UserDoesNotExistException if a user by that name does not exists.
+     * @throws com.earth2me.essentials.api.NoLoanPermittedException if the user is not allowed to have a negative balance.
      */
     @Deprecated
     public static void divide(String name, double amount) throws UserDoesNotExistException, NoLoanPermittedException {
@@ -217,6 +253,15 @@ public class Economy {
         }
     }
 
+    /**
+     * <p>divide.</p>
+     *
+     * @param name a {@link java.lang.String} object.
+     * @param amount a {@link java.math.BigDecimal} object.
+     * @throws com.earth2me.essentials.api.UserDoesNotExistException if a user by that name does not exist.
+     * @throws com.earth2me.essentials.api.NoLoanPermittedException if the user is not allowed to have a negative balance.
+     * @throws java.lang.ArithmeticException if any.
+     */
     public static void divide(String name, BigDecimal amount) throws UserDoesNotExistException, NoLoanPermittedException, ArithmeticException {
         BigDecimal result = getMoneyExact(name).divide(amount, MATH_CONTEXT);
         setMoney(name, result);
@@ -228,9 +273,8 @@ public class Economy {
      *
      * @param name  Name of the user
      * @param amount The balance is multiplied by this value
-     *
-     * @throws UserDoesNotExistException If a user by that name does not exists
-     * @throws NoLoanPermittedException  If the user is not allowed to have a negative balance
+     * @throws com.earth2me.essentials.api.UserDoesNotExistException if a user by that name does not exists
+     * @throws com.earth2me.essentials.api.NoLoanPermittedException if the user is not allowed to have a negative balance.
      */
     @Deprecated
     public static void multiply(String name, double amount) throws UserDoesNotExistException, NoLoanPermittedException {
@@ -241,6 +285,15 @@ public class Economy {
         }
     }
 
+    /**
+     * <p>multiply.</p>
+     *
+     * @param name a {@link java.lang.String} object.
+     * @param amount a {@link java.math.BigDecimal} object.
+     * @throws com.earth2me.essentials.api.UserDoesNotExistException if a user by that name does not exist.
+     * @throws com.earth2me.essentials.api.NoLoanPermittedException if the user is not allowed to have a negative balance.
+     * @throws java.lang.ArithmeticException if any.
+     */
     public static void multiply(String name, BigDecimal amount) throws UserDoesNotExistException, NoLoanPermittedException, ArithmeticException {
         BigDecimal result = getMoneyExact(name).multiply(amount, MATH_CONTEXT);
         setMoney(name, result);
@@ -251,9 +304,8 @@ public class Economy {
      * Resets the balance of a user to the starting balance
      *
      * @param name Name of the user
-     *
-     * @throws UserDoesNotExistException If a user by that name does not exists
-     * @throws NoLoanPermittedException  If the user is not allowed to have a negative balance
+     * @throws com.earth2me.essentials.api.UserDoesNotExistException if a user by that name does not exist.
+     * @throws com.earth2me.essentials.api.NoLoanPermittedException if the user is not allowed to have a negative balance.
      */
     public static void resetBalance(String name) throws UserDoesNotExistException, NoLoanPermittedException {
         if (ess == null) {
@@ -264,12 +316,12 @@ public class Economy {
     }
 
     /**
+     * <p>hasEnough.</p>
+     *
      * @param name   Name of the user
-     * @param amount The amount of money the user should have
-     *
-     * @return true, if the user has more or an equal amount of money
-     *
-     * @throws UserDoesNotExistException If a user by that name does not exists
+     * @param amount The amount of money the user should have.
+     * @throws com.earth2me.essentials.api.UserDoesNotExistException if a user by that name does not exist.
+     * @return a boolean.
      */
     @Deprecated
     public static boolean hasEnough(String name, double amount) throws UserDoesNotExistException {
@@ -281,17 +333,26 @@ public class Economy {
         }
     }
 
+    /**
+     * <p>hasEnough.</p>
+     *
+     * @param name a {@link java.lang.String} object.
+     * @param amount a {@link java.math.BigDecimal} object.
+     * @return a boolean.
+     * @throws com.earth2me.essentials.api.UserDoesNotExistException if a user by that name does not exist.
+     * @throws java.lang.ArithmeticException if any.
+     */
     public static boolean hasEnough(String name, BigDecimal amount) throws UserDoesNotExistException, ArithmeticException {
         return amount.compareTo(getMoneyExact(name)) <= 0;
     }
 
     /**
+     * <p>hasMore.</p>
+     *
      * @param name   Name of the user
-     * @param amount The amount of money the user should have
-     *
-     * @return true, if the user has more money
-     *
-     * @throws UserDoesNotExistException If a user by that name does not exists
+     * @param amount The amount of money the user should have.
+     * @throws com.earth2me.essentials.api.UserDoesNotExistException If a user by that name does not exist.
+     * @return a boolean.
      */
     @Deprecated
     public static boolean hasMore(String name, double amount) throws UserDoesNotExistException {
@@ -303,17 +364,26 @@ public class Economy {
         }
     }
 
+    /**
+     * <p>hasMore.</p>
+     *
+     * @param name a {@link java.lang.String} object.
+     * @param amount a {@link java.math.BigDecimal} object.
+     * @return a boolean.
+     * @throws com.earth2me.essentials.api.UserDoesNotExistException if a user by that name does not exist.
+     * @throws java.lang.ArithmeticException if any.
+     */
     public static boolean hasMore(String name, BigDecimal amount) throws UserDoesNotExistException, ArithmeticException {
         return amount.compareTo(getMoneyExact(name)) < 0;
     }
 
     /**
+     * <p>hasLess.</p>
+     *
      * @param name   Name of the user
      * @param amount The amount of money the user should not have
-     *
-     * @return true, if the user has less money
-     *
-     * @throws UserDoesNotExistException If a user by that name does not exists
+     * @throws com.earth2me.essentials.api.UserDoesNotExistException If a user by that name does not exists
+     * @return a boolean.
      */
     @Deprecated
     public static boolean hasLess(String name, double amount) throws UserDoesNotExistException {
@@ -325,6 +395,15 @@ public class Economy {
         }
     }
 
+    /**
+     * <p>hasLess.</p>
+     *
+     * @param name a {@link java.lang.String} object.
+     * @param amount a {@link java.math.BigDecimal} object.
+     * @return a boolean.
+     * @throws com.earth2me.essentials.api.UserDoesNotExistException if a user by that name does not exist.
+     * @throws java.lang.ArithmeticException if any.
+     */
     public static boolean hasLess(String name, BigDecimal amount) throws UserDoesNotExistException, ArithmeticException {
         return amount.compareTo(getMoneyExact(name)) > 0;
     }
@@ -333,10 +412,8 @@ public class Economy {
      * Test if the user has a negative balance
      *
      * @param name Name of the user
-     *
-     * @return true, if the user has a negative balance
-     *
-     * @throws UserDoesNotExistException If a user by that name does not exists
+     * @throws com.earth2me.essentials.api.UserDoesNotExistException if a user by that name does not exist.
+     * @return a boolean.
      */
     public static boolean isNegative(String name) throws UserDoesNotExistException {
         return getMoneyExact(name).signum() < 0;
@@ -346,7 +423,6 @@ public class Economy {
      * Formats the amount of money like all other Essentials functions. Example: $100000 or $12345.67
      *
      * @param amount The amount of money
-     *
      * @return Formatted money
      */
     @Deprecated
@@ -359,6 +435,12 @@ public class Economy {
         }
     }
 
+    /**
+     * <p>format.</p>
+     *
+     * @param amount a {@link java.math.BigDecimal} object.
+     * @return a {@link java.lang.String} object.
+     */
     public static String format(BigDecimal amount) {
         if (ess == null) {
             throw new RuntimeException(noCallBeforeLoad);
@@ -370,8 +452,7 @@ public class Economy {
      * Test if a player exists to avoid the UserDoesNotExistException
      *
      * @param name Name of the user
-     *
-     * @return true, if the user exists
+     * @return a boolean.
      */
     public static boolean playerExists(String name) {
         return getUserByName(name) != null;
@@ -381,10 +462,8 @@ public class Economy {
      * Test if a player is a npc
      *
      * @param name Name of the player
-     *
-     * @return true, if it's a npc
-     *
-     * @throws UserDoesNotExistException
+     * @throws com.earth2me.essentials.api.UserDoesNotExistException if the user with the specified name does not exist.
+     * @return a boolean.
      */
     public static boolean isNPC(String name) throws UserDoesNotExistException {
         User user = getUserByName(name);
@@ -398,8 +477,7 @@ public class Economy {
      * Creates dummy files for a npc, if there is no player yet with that name.
      *
      * @param name Name of the player
-     *
-     * @return true, if a new npc was created
+     * @return a boolean.
      */
     public static boolean createNPC(String name) {
         User user = getUserByName(name);
@@ -414,8 +492,7 @@ public class Economy {
      * Deletes a user, if it is marked as npc.
      *
      * @param name Name of the player
-     *
-     * @throws UserDoesNotExistException
+     * @throws com.earth2me.essentials.api.UserDoesNotExistException if there is no player found with that name.
      */
     public static void removeNPC(String name) throws UserDoesNotExistException {
         User user = getUserByName(name);

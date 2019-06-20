@@ -9,11 +9,21 @@ import java.util.Locale;
 import static com.earth2me.essentials.I18n.tl;
 
 
+/**
+ * <p>Commandmore class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public class Commandmore extends EssentialsCommand {
+    /**
+     * <p>Constructor for Commandmore.</p>
+     */
     public Commandmore() {
         super("more");
     }
 
+    /** {@inheritDoc} */
     @Override
     public void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception {
         final ItemStack stack = user.getItemInHand();

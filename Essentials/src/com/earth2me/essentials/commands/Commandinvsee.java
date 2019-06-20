@@ -7,12 +7,22 @@ import org.bukkit.inventory.Inventory;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * <p>Commandinvsee class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public class Commandinvsee extends EssentialsCommand {
+    /**
+     * <p>Constructor for Commandinvsee.</p>
+     */
     public Commandinvsee() {
         super("invsee");
     }
 
     //This method has a hidden param, which if given will display the equip slots. #easteregg
+    /** {@inheritDoc} */
     @Override
     protected void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception {
         if (args.length < 1) {
@@ -33,6 +43,7 @@ public class Commandinvsee extends EssentialsCommand {
         user.setInvSee(true);
     }
 
+    /** {@inheritDoc} */
     @Override
     protected List<String> getTabCompleteOptions(Server server, User user, String commandLabel, String[] args) {
         if (args.length == 1) {

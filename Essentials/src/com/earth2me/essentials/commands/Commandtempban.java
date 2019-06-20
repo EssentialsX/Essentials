@@ -16,11 +16,21 @@ import java.util.logging.Level;
 import static com.earth2me.essentials.I18n.tl;
 
 
+/**
+ * <p>Commandtempban class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public class Commandtempban extends EssentialsCommand {
+    /**
+     * <p>Constructor for Commandtempban.</p>
+     */
     public Commandtempban() {
         super("tempban");
     }
 
+    /** {@inheritDoc} */
     @Override
     public void run(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception {
         if (args.length < 2) {
@@ -64,6 +74,7 @@ public class Commandtempban extends EssentialsCommand {
         ess.broadcastMessage("essentials.ban.notify", message);
     }
 
+    /** {@inheritDoc} */
     @Override
     protected List<String> getTabCompleteOptions(Server server, CommandSource sender, String commandLabel, String[] args) {
         if (args.length == 1) {

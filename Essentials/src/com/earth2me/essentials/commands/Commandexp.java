@@ -15,11 +15,21 @@ import java.util.Locale;
 import static com.earth2me.essentials.I18n.tl;
 
 
+/**
+ * <p>Commandexp class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public class Commandexp extends EssentialsCommand {
+    /**
+     * <p>Constructor for Commandexp.</p>
+     */
     public Commandexp() {
         super("exp");
     }
 
+    /** {@inheritDoc} */
     @Override
     public void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception {
         if (args.length == 0) {
@@ -71,6 +81,7 @@ public class Commandexp extends EssentialsCommand {
         }
     }
 
+    /** {@inheritDoc} */
     @Override
     public void run(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception {
         if (args.length < 1) {
@@ -161,6 +172,7 @@ public class Commandexp extends EssentialsCommand {
         sender.sendMessage(tl("expSet", target.getDisplayName(), amount));
     }
 
+    /** {@inheritDoc} */
     @Override
     protected List<String> getTabCompleteOptions(final Server server, final User user, final String commandLabel, final String[] args) {
         if (args.length == 1) {
@@ -198,6 +210,7 @@ public class Commandexp extends EssentialsCommand {
         }
     }
 
+    /** {@inheritDoc} */
     @Override
     protected List<String> getTabCompleteOptions(final Server server, final CommandSource sender, final String commandLabel, final String[] args) {
         if (args.length == 1) {

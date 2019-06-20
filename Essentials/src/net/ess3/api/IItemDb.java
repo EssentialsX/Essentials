@@ -8,6 +8,12 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.function.Function;
 
+/**
+ * <p>IItemDb interface.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public interface IItemDb extends com.earth2me.essentials.api.IItemDb {
 
     /**
@@ -17,7 +23,7 @@ public interface IItemDb extends com.earth2me.essentials.api.IItemDb {
      * @param name The name of the resolver
      * @param resolver The resolver accepting a String and returning an ItemStack, or null if
      *                 none was found
-     * @throws Exception If a resolver with a conflicting name is found
+     * @throws java.lang.Exception If a resolver with a conflicting name is found
      */
     void registerResolver(Plugin plugin, String name, ItemResolver resolver) throws Exception;
 
@@ -26,7 +32,7 @@ public interface IItemDb extends com.earth2me.essentials.api.IItemDb {
      *
      * @param plugin The owning plugin
      * @param name The name of the resolver
-     * @throws Exception If no matching resolver was found
+     * @throws java.lang.Exception If no matching resolver was found
      */
     void unregisterResolver(Plugin plugin, String name) throws Exception;
 
@@ -70,7 +76,7 @@ public interface IItemDb extends com.earth2me.essentials.api.IItemDb {
      * @param useResolvers Whether to call other plugins' resolver functions before looking the
      *                     item up in the database
      * @return The requested item stack with the maximum stack size
-     * @throws Exception if the item stack cannot be created
+     * @throws java.lang.Exception if the item stack cannot be created
      */
     ItemStack get(String name, boolean useResolvers) throws Exception;
 

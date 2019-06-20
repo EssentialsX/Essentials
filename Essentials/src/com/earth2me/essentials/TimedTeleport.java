@@ -10,6 +10,12 @@ import java.util.UUID;
 import static com.earth2me.essentials.I18n.tl;
 
 
+/**
+ * <p>TimedTeleport class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public class TimedTeleport implements Runnable {
     private static final double MOVE_CONSTANT = 0.3;
     private final IUser teleportOwner;
@@ -52,6 +58,7 @@ public class TimedTeleport implements Runnable {
         timer_task = ess.runTaskTimerAsynchronously(this, 20, 20).getTaskId();
     }
 
+    /** {@inheritDoc} */
     @Override
     public void run() {
 

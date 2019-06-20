@@ -29,6 +29,7 @@ import java.lang.reflect.Method;
  * Represents a spawn egg that can be used to spawn mobs.
  *
  * @author tastybento
+ * @version $Id: $Id
  */
 public class SpawnEggRefl {
     private EntityType type;
@@ -57,6 +58,7 @@ public class SpawnEggRefl {
         }
     }
 
+    /** {@inheritDoc} */
     @Override
     public String toString() {
         return "SPAWN EGG{" + getSpawnedType() + "}";
@@ -66,6 +68,7 @@ public class SpawnEggRefl {
      * Get an ItemStack of one spawn egg
      *
      * @return ItemStack
+     * @throws Exception if any.
      */
     ItemStack toItemStack() throws Exception {
         return toItemStack(1);
@@ -74,8 +77,9 @@ public class SpawnEggRefl {
     /**
      * Get an itemstack of spawn eggs
      *
-     * @param amount
+     * @param amount a int.
      * @return ItemStack of spawn eggs
+     * @throws java.lang.Exception if any.
      */
     @SuppressWarnings("deprecation")
     public ItemStack toItemStack(int amount) throws Exception {
@@ -118,6 +122,7 @@ public class SpawnEggRefl {
      *
      * @param item - ItemStack, quantity is disregarded
      * @return SpawnEgg
+     * @throws Exception if any.
      */
     static SpawnEggRefl fromItemStack(ItemStack item) throws Exception {
         if (item == null)

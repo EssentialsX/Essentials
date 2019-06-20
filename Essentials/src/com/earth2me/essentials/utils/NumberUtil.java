@@ -11,6 +11,12 @@ import java.util.Locale;
 
 import static com.earth2me.essentials.I18n.tl;
 
+/**
+ * <p>NumberUtil class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public class NumberUtil {
 
     private static DecimalFormat twoDPlaces = new DecimalFormat("#,###.##");
@@ -31,18 +37,42 @@ public class NumberUtil {
     }
 
     // this method should only be called by Essentials
+    /**
+     * <p>internalSetPrettyFormat.</p>
+     *
+     * @param prettyFormat a {@link java.text.NumberFormat} object.
+     */
     public static void internalSetPrettyFormat(NumberFormat prettyFormat) {
         PRETTY_FORMAT = prettyFormat;
     }
 
+    /**
+     * <p>shortCurrency.</p>
+     *
+     * @param value a {@link java.math.BigDecimal} object.
+     * @param ess a {@link net.ess3.api.IEssentials} object.
+     * @return a {@link java.lang.String} object.
+     */
     public static String shortCurrency(final BigDecimal value, final IEssentials ess) {
         return ess.getSettings().getCurrencySymbol() + formatAsCurrency(value);
     }
 
+    /**
+     * <p>formatDouble.</p>
+     *
+     * @param value a double.
+     * @return a {@link java.lang.String} object.
+     */
     public static String formatDouble(final double value) {
         return twoDPlaces.format(value);
     }
 
+    /**
+     * <p>formatAsCurrency.</p>
+     *
+     * @param value a {@link java.math.BigDecimal} object.
+     * @return a {@link java.lang.String} object.
+     */
     public static String formatAsCurrency(final BigDecimal value) {
         String str = currencyFormat.format(value);
         if (str.endsWith(".00")) {
@@ -51,6 +81,12 @@ public class NumberUtil {
         return str;
     }
 
+    /**
+     * <p>formatAsPrettyCurrency.</p>
+     *
+     * @param value a {@link java.math.BigDecimal} object.
+     * @return a {@link java.lang.String} object.
+     */
     public static String formatAsPrettyCurrency(BigDecimal value) {
         String str = PRETTY_FORMAT.format(value);
         if (str.endsWith(".00")) {
@@ -59,6 +95,13 @@ public class NumberUtil {
         return str;
     }
 
+    /**
+     * <p>displayCurrency.</p>
+     *
+     * @param value a {@link java.math.BigDecimal} object.
+     * @param ess a {@link net.ess3.api.IEssentials} object.
+     * @return a {@link java.lang.String} object.
+     */
     public static String displayCurrency(final BigDecimal value, final IEssentials ess) {
         String currency = formatAsPrettyCurrency(value);
         String sign = "";
@@ -69,6 +112,13 @@ public class NumberUtil {
         return sign + tl("currency", ess.getSettings().getCurrencySymbol(), currency);
     }
 
+    /**
+     * <p>displayCurrencyExactly.</p>
+     *
+     * @param value a {@link java.math.BigDecimal} object.
+     * @param ess a {@link net.ess3.api.IEssentials} object.
+     * @return a {@link java.lang.String} object.
+     */
     public static String displayCurrencyExactly(final BigDecimal value, final IEssentials ess) {
         String currency = value.toPlainString();
         String sign = "";
@@ -79,6 +129,12 @@ public class NumberUtil {
         return sign + tl("currency", ess.getSettings().getCurrencySymbol(), currency);
     }
 
+    /**
+     * <p>isInt.</p>
+     *
+     * @param sInt a {@link java.lang.String} object.
+     * @return a boolean.
+     */
     public static boolean isInt(final String sInt) {
         try {
             Integer.parseInt(sInt);

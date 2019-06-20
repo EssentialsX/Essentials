@@ -7,11 +7,21 @@ import com.earth2me.essentials.commands.NotEnoughArgumentsException;
 import org.bukkit.Server;
 
 
+/**
+ * <p>Commandxmpp class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public class Commandxmpp extends EssentialsCommand {
+    /**
+     * <p>Constructor for Commandxmpp.</p>
+     */
     public Commandxmpp() {
         super("xmpp");
     }
 
+    /** {@inheritDoc} */
     @Override
     protected void run(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws NotEnoughArgumentsException {
         if (args.length < 2) {

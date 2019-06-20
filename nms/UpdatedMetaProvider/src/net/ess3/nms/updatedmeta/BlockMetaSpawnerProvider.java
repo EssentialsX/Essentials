@@ -7,7 +7,14 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BlockStateMeta;
 
+/**
+ * <p>BlockMetaSpawnerProvider class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public class BlockMetaSpawnerProvider extends SpawnerProvider {
+    /** {@inheritDoc} */
     @Override
     public ItemStack setEntityType(ItemStack is, EntityType type) {
         BlockStateMeta bsm = (BlockStateMeta) is.getItemMeta();
@@ -18,6 +25,7 @@ public class BlockMetaSpawnerProvider extends SpawnerProvider {
         return setDisplayName(is, type);
     }
 
+    /** {@inheritDoc} */
     @Override
     public EntityType getEntityType(ItemStack is) {
         BlockStateMeta bsm = (BlockStateMeta) is.getItemMeta();
@@ -25,6 +33,7 @@ public class BlockMetaSpawnerProvider extends SpawnerProvider {
         return bs.getSpawnedType();
     }
 
+    /** {@inheritDoc} */
     @Override
     public String getHumanName() {
         return "1.8.3+ BlockStateMeta provider";

@@ -12,11 +12,21 @@ import java.util.Locale;
 import static com.earth2me.essentials.I18n.tl;
 
 
+/**
+ * <p>SignGameMode class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public class SignGameMode extends EssentialsSign {
+    /**
+     * <p>Constructor for SignGameMode.</p>
+     */
     public SignGameMode() {
         super("GameMode");
     }
 
+    /** {@inheritDoc} */
     @Override
     protected boolean onSignCreate(final ISign sign, final User player, final String username, final IEssentials ess) throws SignException {
         final String gamemode = sign.getLine(1);
@@ -29,6 +39,7 @@ public class SignGameMode extends EssentialsSign {
         return true;
     }
 
+    /** {@inheritDoc} */
     @Override
     protected boolean onSignInteract(final ISign sign, final User player, final String username, final IEssentials ess) throws SignException, ChargeException {
         final Trade charge = getTrade(sign, 2, ess);

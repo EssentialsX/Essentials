@@ -15,11 +15,21 @@ import java.util.List;
 import static com.earth2me.essentials.I18n.tl;
 
 
+/**
+ * <p>Commandnuke class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public class Commandnuke extends EssentialsCommand {
+    /**
+     * <p>Constructor for Commandnuke.</p>
+     */
     public Commandnuke() {
         super("nuke");
     }
 
+    /** {@inheritDoc} */
     @Override
     protected void run(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws NoSuchFieldException, NotEnoughArgumentsException {
         Collection<Player> targets;
@@ -50,6 +60,7 @@ public class Commandnuke extends EssentialsCommand {
         }
     }
 
+    /** {@inheritDoc} */
     @Override
     protected List<String> getTabCompleteOptions(Server server, CommandSource sender, String commandLabel, String[] args) {
         if (args.length == 1) {

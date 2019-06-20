@@ -11,13 +11,29 @@ import org.bukkit.event.server.PluginEnableEvent;
 import java.util.logging.Level;
 
 
+/**
+ * <p>EssentialsPluginListener class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public class EssentialsPluginListener implements Listener, IConf {
     private final transient IEssentials ess;
 
+    /**
+     * <p>Constructor for EssentialsPluginListener.</p>
+     *
+     * @param ess a {@link net.ess3.api.IEssentials} object.
+     */
     public EssentialsPluginListener(final IEssentials ess) {
         this.ess = ess;
     }
 
+    /**
+     * <p>onPluginEnable.</p>
+     *
+     * @param event a {@link org.bukkit.event.server.PluginEnableEvent} object.
+     */
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPluginEnable(final PluginEnableEvent event) {
         if (event.getPlugin().getName().equals("EssentialsChat")) {
@@ -31,6 +47,11 @@ public class EssentialsPluginListener implements Listener, IConf {
         }
     }
 
+    /**
+     * <p>onPluginDisable.</p>
+     *
+     * @param event a {@link org.bukkit.event.server.PluginDisableEvent} object.
+     */
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPluginDisable(final PluginDisableEvent event) {
         if (event.getPlugin().getName().equals("EssentialsChat")) {
@@ -44,6 +65,7 @@ public class EssentialsPluginListener implements Listener, IConf {
         }
     }
 
+    /** {@inheritDoc} */
     @Override
     public void reloadConfig() {
     }

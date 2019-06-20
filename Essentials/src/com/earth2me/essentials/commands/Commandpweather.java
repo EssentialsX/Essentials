@@ -13,8 +13,16 @@ import java.util.*;
 import static com.earth2me.essentials.I18n.tl;
 
 
+/**
+ * <p>Commandpweather class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public class Commandpweather extends EssentialsCommand {
+    /** Constant <code>getAliases</code> */
     public static final Set<String> getAliases = new HashSet<>();
+    /** Constant <code>weatherAliases</code> */
     public static final Map<String, WeatherType> weatherAliases = new HashMap<>();
 
     static {
@@ -28,10 +36,14 @@ public class Commandpweather extends EssentialsCommand {
         weatherAliases.put("thunder", WeatherType.DOWNFALL);
     }
 
+    /**
+     * <p>Constructor for Commandpweather.</p>
+     */
     public Commandpweather() {
         super("pweather");
     }
 
+    /** {@inheritDoc} */
     @Override
     public void run(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception {
         // Which Players(s) / Users(s) are we interested in?
@@ -64,6 +76,8 @@ public class Commandpweather extends EssentialsCommand {
 
     /**
      * Used to get the time and inform
+     * @param sender the CommandSource object where the call was made from.
+     * @param users A Collection of Users to inform.
      */
     private void getUsersWeather(final CommandSource sender, final Collection<User> users) {
         if (users.size() > 1) {
@@ -81,6 +95,10 @@ public class Commandpweather extends EssentialsCommand {
 
     /**
      * Used to set the time and inform of the change
+     * @param sender the CommandSource object where the call was made from.
+     * @param users A Collection of Users to inform.
+     * @param weatherType Weather type to filter by.
+     * @throws Exception if any.
      */
     private void setUsersWeather(final CommandSource sender, final Collection<User> users, final String weatherType) throws Exception {
 
@@ -113,6 +131,11 @@ public class Commandpweather extends EssentialsCommand {
 
     /**
      * Used to parse an argument of the type "users(s) selector"
+     * @param server The server object to check from.
+     * @param sender The CommandSource object where the call was made from.
+     * @param selector A string selector used as a filter.
+     * @return A Set of Users.
+     * @throws Exception if any.
      */
     private Set<User> getUsers(final Server server, final CommandSource sender, final String selector) throws Exception {
         final Set<User> users = new TreeSet<>(new UserNameComparator());
@@ -153,6 +176,7 @@ public class Commandpweather extends EssentialsCommand {
         return users;
     }
 
+    /** {@inheritDoc} */
     @Override
     protected List<String> getTabCompleteOptions(Server server, User user, String commandLabel, String[] args) {
         if (args.length == 1) {

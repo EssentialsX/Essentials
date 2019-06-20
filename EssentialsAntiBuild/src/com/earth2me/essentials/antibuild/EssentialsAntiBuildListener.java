@@ -28,6 +28,12 @@ import java.util.logging.Logger;
 import static com.earth2me.essentials.I18n.tl;
 
 
+/**
+ * <p>EssentialsAntiBuildListener class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public class EssentialsAntiBuildListener implements Listener {
     private static final Logger logger = Logger.getLogger("EssentialsAntiBuild");
     final private transient IAntiBuild prot;
@@ -63,6 +69,14 @@ public class EssentialsAntiBuildListener implements Listener {
         return metaPermCheck(user, action, block.getType(), block.getData());
     }
 
+    /**
+     * <p>metaPermCheck.</p>
+     *
+     * @param user a {@link com.earth2me.essentials.User} object.
+     * @param action a {@link java.lang.String} object.
+     * @param material a {@link org.bukkit.Material} object.
+     * @return a boolean.
+     */
     public boolean metaPermCheck(final User user, final String action, final Material material) {
         final String blockPerm = "essentials.build." + action + "." + material;
         return user.isAuthorized(blockPerm);
@@ -86,6 +100,11 @@ public class EssentialsAntiBuildListener implements Listener {
         return user.isAuthorized(blockPerm);
     }
 
+    /**
+     * <p>onBlockPlace.</p>
+     *
+     * @param event a {@link org.bukkit.event.block.BlockPlaceEvent} object.
+     */
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onBlockPlace(final BlockPlaceEvent event) {
         final User user = ess.getUser(event.getPlayer());
@@ -113,6 +132,11 @@ public class EssentialsAntiBuildListener implements Listener {
         }
     }
 
+    /**
+     * <p>onBlockBreak.</p>
+     *
+     * @param event a {@link org.bukkit.event.block.BlockBreakEvent} object.
+     */
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onBlockBreak(final BlockBreakEvent event) {
         final User user = ess.getUser(event.getPlayer());
@@ -140,6 +164,11 @@ public class EssentialsAntiBuildListener implements Listener {
         }
     }
 
+    /**
+     * <p>onHangingBreak.</p>
+     *
+     * @param event a {@link org.bukkit.event.hanging.HangingBreakByEntityEvent} object.
+     */
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onHangingBreak(final HangingBreakByEntityEvent event) {
         final Entity entity = event.getRemover();
@@ -163,6 +192,11 @@ public class EssentialsAntiBuildListener implements Listener {
         }
     }
 
+    /**
+     * <p>onBlockPistonExtend.</p>
+     *
+     * @param event a {@link org.bukkit.event.block.BlockPistonExtendEvent} object.
+     */
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onBlockPistonExtend(final BlockPistonExtendEvent event) {
         for (Block block : event.getBlocks()) {
@@ -173,6 +207,11 @@ public class EssentialsAntiBuildListener implements Listener {
         }
     }
 
+    /**
+     * <p>onBlockPistonRetract.</p>
+     *
+     * @param event a {@link org.bukkit.event.block.BlockPistonRetractEvent} object.
+     */
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onBlockPistonRetract(final BlockPistonRetractEvent event) {
         if (!event.isSticky()) {
@@ -184,6 +223,11 @@ public class EssentialsAntiBuildListener implements Listener {
         }
     }
 
+    /**
+     * <p>onPlayerInteract.</p>
+     *
+     * @param event a {@link org.bukkit.event.player.PlayerInteractEvent} object.
+     */
     @EventHandler(priority = EventPriority.LOW)
     public void onPlayerInteract(final PlayerInteractEvent event) {
         // Do not return if cancelled, because the interact event has 2 cancelled states.
@@ -219,6 +263,11 @@ public class EssentialsAntiBuildListener implements Listener {
         }
     }
 
+    /**
+     * <p>onCraftItemEvent.</p>
+     *
+     * @param event a {@link org.bukkit.event.inventory.CraftItemEvent} object.
+     */
     @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
     public void onCraftItemEvent(final CraftItemEvent event) {
         HumanEntity entity = event.getWhoClicked();
@@ -238,6 +287,11 @@ public class EssentialsAntiBuildListener implements Listener {
         }
     }
 
+    /**
+     * <p>onPlayerDropItem.</p>
+     *
+     * @param event a {@link org.bukkit.event.player.PlayerDropItemEvent} object.
+     */
     @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
     public void onPlayerDropItem(final PlayerDropItemEvent event) {
 
@@ -255,6 +309,11 @@ public class EssentialsAntiBuildListener implements Listener {
         }
     }
 
+    /**
+     * <p>onBlockDispense.</p>
+     *
+     * @param event a {@link org.bukkit.event.block.BlockDispenseEvent} object.
+     */
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onBlockDispense(final BlockDispenseEvent event) {
         final ItemStack item = event.getItem();

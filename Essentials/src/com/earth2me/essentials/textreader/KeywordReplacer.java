@@ -24,6 +24,12 @@ import java.util.regex.Pattern;
 import static com.earth2me.essentials.I18n.tl;
 
 
+/**
+ * <p>KeywordReplacer class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public class KeywordReplacer implements IText {
     private static final Pattern KEYWORD = Pattern.compile("\\{([^\\{\\}]+)\\}");
     private static final Pattern KEYWORDSPLIT = Pattern.compile("\\:");
@@ -35,6 +41,13 @@ public class KeywordReplacer implements IText {
     private final transient boolean replaceSpacesWithUnderscores;
     private final EnumMap<KeywordType, Object> keywordCache = new EnumMap<KeywordType, Object>(KeywordType.class);
 
+    /**
+     * <p>Constructor for KeywordReplacer.</p>
+     *
+     * @param input a {@link com.earth2me.essentials.textreader.IText} object.
+     * @param sender a {@link com.earth2me.essentials.CommandSource} object.
+     * @param ess a {@link net.ess3.api.IEssentials} object.
+     */
     public KeywordReplacer(final IText input, final CommandSource sender, final IEssentials ess) {
         this.input = input;
         this.replaced = new ArrayList<String>(this.input.getLines().size());
@@ -44,6 +57,14 @@ public class KeywordReplacer implements IText {
         replaceKeywords(sender);
     }
 
+    /**
+     * <p>Constructor for KeywordReplacer.</p>
+     *
+     * @param input a {@link com.earth2me.essentials.textreader.IText} object.
+     * @param sender a {@link com.earth2me.essentials.CommandSource} object.
+     * @param ess a {@link net.ess3.api.IEssentials} object.
+     * @param showPrivate a boolean.
+     */
     public KeywordReplacer(final IText input, final CommandSource sender, final IEssentials ess, final boolean showPrivate) {
         this.input = input;
         this.replaced = new ArrayList<String>(this.input.getLines().size());
@@ -53,6 +74,15 @@ public class KeywordReplacer implements IText {
         replaceKeywords(sender);
     }
 
+    /**
+     * <p>Constructor for KeywordReplacer.</p>
+     *
+     * @param input a {@link com.earth2me.essentials.textreader.IText} object.
+     * @param sender a {@link com.earth2me.essentials.CommandSource} object.
+     * @param ess a {@link net.ess3.api.IEssentials} object.
+     * @param showPrivate a boolean.
+     * @param replaceSpacesWithUnderscores a boolean.
+     */
     public KeywordReplacer(final IText input, final CommandSource sender, final IEssentials ess, final boolean showPrivate,
                            boolean replaceSpacesWithUnderscores) {
         this.input = input;
@@ -296,16 +326,19 @@ public class KeywordReplacer implements IText {
         return line;
     }
 
+    /** {@inheritDoc} */
     @Override
     public List<String> getLines() {
         return replaced;
     }
 
+    /** {@inheritDoc} */
     @Override
     public List<String> getChapters() {
         return input.getChapters();
     }
 
+    /** {@inheritDoc} */
     @Override
     public Map<String, Integer> getBookmarks() {
         return input.getBookmarks();

@@ -9,6 +9,12 @@ import java.util.Collections;
 import java.util.List;
 import java.util.logging.Level;
 
+/**
+ * <p>PermissionsHandler class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public class PermissionsHandler implements IPermissionsHandler {
     private transient IPermissionsHandler handler = null;
     private transient String defaultGroup = "default";
@@ -17,11 +23,18 @@ public class PermissionsHandler implements IPermissionsHandler {
 
     private Class<?> lastHandler = null;
 
+    /**
+     * <p>Constructor for PermissionsHandler.</p>
+     *
+     * @param plugin a {@link com.earth2me.essentials.Essentials} object.
+     * @param useSuperperms a boolean.
+     */
     public PermissionsHandler(final Essentials plugin, final boolean useSuperperms) {
         this.ess = plugin;
         this.useSuperperms = useSuperperms;
     }
 
+    /** {@inheritDoc} */
     @Override
     public String getGroup(final Player base) {
         final long start = System.nanoTime();
@@ -33,6 +46,7 @@ public class PermissionsHandler implements IPermissionsHandler {
         return group;
     }
 
+    /** {@inheritDoc} */
     @Override
     public List<String> getGroups(final Player base) {
         final long start = System.nanoTime();
@@ -44,11 +58,13 @@ public class PermissionsHandler implements IPermissionsHandler {
         return Collections.unmodifiableList(groups);
     }
 
+    /** {@inheritDoc} */
     @Override
     public boolean canBuild(final Player base, final String group) {
         return handler.canBuild(base, group);
     }
 
+    /** {@inheritDoc} */
     @Override
     public boolean inGroup(final Player base, final String group) {
         final long start = System.nanoTime();
@@ -57,16 +73,19 @@ public class PermissionsHandler implements IPermissionsHandler {
         return result;
     }
 
+    /** {@inheritDoc} */
     @Override
     public boolean hasPermission(final Player base, final String node) {
         return handler.hasPermission(base, node);
     }
 
+    /** {@inheritDoc} */
     @Override
     public boolean isPermissionSet(final Player base, final String node) {
         return handler.isPermissionSet(base, node);
     }
 
+    /** {@inheritDoc} */
     @Override
     public String getPrefix(final Player base) {
         final long start = System.nanoTime();
@@ -78,6 +97,7 @@ public class PermissionsHandler implements IPermissionsHandler {
         return prefix;
     }
 
+    /** {@inheritDoc} */
     @Override
     public String getSuffix(final Player base) {
         final long start = System.nanoTime();
@@ -89,11 +109,15 @@ public class PermissionsHandler implements IPermissionsHandler {
         return suffix;
     }
 
+    /** {@inheritDoc} */
     @Override
     public boolean tryProvider() {
         return true;
     }
 
+    /**
+     * <p>checkPermissions.</p>
+     */
     public void checkPermissions() {
         // load and assign a handler
         List<Class<? extends SuperpermsHandler>> providerClazz = Arrays.asList(
@@ -145,10 +169,20 @@ public class PermissionsHandler implements IPermissionsHandler {
         }
     }
 
+    /**
+     * <p>Setter for the field <code>useSuperperms</code>.</p>
+     *
+     * @param useSuperperms a boolean.
+     */
     public void setUseSuperperms(final boolean useSuperperms) {
         this.useSuperperms = useSuperperms;
     }
 
+    /**
+     * <p>getName.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
     public String getName() {
         return handler.getClass().getSimpleName().replace("Provider", "");
     }

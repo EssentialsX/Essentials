@@ -15,6 +15,12 @@ import java.util.*;
 import static com.earth2me.essentials.I18n.tl;
 
 
+/**
+ * <p>LocationUtil class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public class LocationUtil {
     // Water types used for TRANSPARENT_MATERIALS and is-water-safe config option
     private static final Set<Material> WATER_TYPES =
@@ -36,6 +42,11 @@ public class LocationUtil {
         TRANSPARENT_MATERIALS.addAll(WATER_TYPES);
     }
 
+    /**
+     * <p>setIsWaterSafe.</p>
+     *
+     * @param isWaterSafe a boolean.
+     */
     public static void setIsWaterSafe(boolean isWaterSafe) {
         if (isWaterSafe) {
             HOLLOW_MATERIALS.addAll(WATER_TYPES);
@@ -44,9 +55,17 @@ public class LocationUtil {
         }
     }
 
+    /** Constant <code>RADIUS=3</code> */
     public static final int RADIUS = 3;
+    /** Constant <code>VOLUME</code> */
     public static final Vector3D[] VOLUME;
 
+    /**
+     * <p>convertBlockToItem.</p>
+     *
+     * @param block a {@link org.bukkit.block.Block} object.
+     * @return a {@link org.bukkit.inventory.ItemStack} object.
+     */
     public static ItemStack convertBlockToItem(final Block block) {
         return new ItemStack(block.getType(), 1);
     }
@@ -77,6 +96,13 @@ public class LocationUtil {
         VOLUME = pos.toArray(new Vector3D[0]);
     }
 
+    /**
+     * <p>getTarget.</p>
+     *
+     * @param entity a {@link org.bukkit.entity.LivingEntity} object.
+     * @return a {@link org.bukkit.Location} object.
+     * @throws java.lang.Exception if any.
+     */
     public static Location getTarget(final LivingEntity entity) throws Exception {
         Block block = null;
         try {
@@ -88,10 +114,29 @@ public class LocationUtil {
         return block.getLocation();
     }
 
+    /**
+     * <p>isBlockAboveAir.</p>
+     *
+     * @param world a {@link org.bukkit.World} object.
+     * @param x a int.
+     * @param y a int.
+     * @param z a int.
+     * @return a boolean.
+     */
     public static boolean isBlockAboveAir(final World world, final int x, final int y, final int z) {
         return y > world.getMaxHeight() || HOLLOW_MATERIALS.contains(world.getBlockAt(x, y - 1, z).getType());
     }
 
+    /**
+     * <p>isBlockUnsafeForUser.</p>
+     *
+     * @param user a {@link net.ess3.api.IUser} object.
+     * @param world a {@link org.bukkit.World} object.
+     * @param x a int.
+     * @param y a int.
+     * @param z a int.
+     * @return a boolean.
+     */
     public static boolean isBlockUnsafeForUser(final IUser user, final World world, final int x, final int y, final int z) {
         if (user.getBase().isOnline() && world.equals(user.getBase().getWorld()) && (user.getBase().getGameMode() == GameMode.CREATIVE || user.getBase().getGameMode() == GameMode.SPECTATOR || user.isGodModeEnabled()) && user.getBase().getAllowFlight()) {
             return false;
@@ -103,10 +148,28 @@ public class LocationUtil {
         return isBlockAboveAir(world, x, y, z);
     }
 
+    /**
+     * <p>isBlockUnsafe.</p>
+     *
+     * @param world a {@link org.bukkit.World} object.
+     * @param x a int.
+     * @param y a int.
+     * @param z a int.
+     * @return a boolean.
+     */
     public static boolean isBlockUnsafe(final World world, final int x, final int y, final int z) {
         return isBlockDamaging(world, x, y, z) || isBlockAboveAir(world, x, y, z);
     }
 
+    /**
+     * <p>isBlockDamaging.</p>
+     *
+     * @param world a {@link org.bukkit.World} object.
+     * @param x a int.
+     * @param y a int.
+     * @param z a int.
+     * @return a boolean.
+     */
     public static boolean isBlockDamaging(final World world, final int x, final int y, final int z) {
         final Block below = world.getBlockAt(x, y - 1, z);
 
@@ -136,6 +199,12 @@ public class LocationUtil {
     }
 
     // Not needed if using getSafeDestination(loc)
+    /**
+     * <p>getRoundedDestination.</p>
+     *
+     * @param loc a {@link org.bukkit.Location} object.
+     * @return a {@link org.bukkit.Location} object.
+     */
     public static Location getRoundedDestination(final Location loc) {
         final World world = loc.getWorld();
         int x = loc.getBlockX();
@@ -145,13 +214,28 @@ public class LocationUtil {
     }
 
     /**
+     * <p>getSafeDestination.</p>
+     *
      * @deprecated Use {@link #getSafeDestination(IEssentials, IUser, Location)}
+     * @param user a {@link net.ess3.api.IUser} object.
+     * @param loc a {@link org.bukkit.Location} object.
+     * @return a {@link org.bukkit.Location} object.
+     * @throws java.lang.Exception if any.
      */
     @Deprecated
     public static Location getSafeDestination(final IUser user, final Location loc) throws Exception {
         return getSafeDestination(null, user, loc);
     }
 
+    /**
+     * <p>getSafeDestination.</p>
+     *
+     * @param ess a {@link com.earth2me.essentials.IEssentials} object.
+     * @param user a {@link net.ess3.api.IUser} object.
+     * @param loc a {@link org.bukkit.Location} object.
+     * @return a {@link org.bukkit.Location} object.
+     * @throws java.lang.Exception if any.
+     */
     public static Location getSafeDestination(final IEssentials ess, final IUser user, final Location loc) throws Exception {
         if (user.getBase().isOnline() && loc.getWorld().equals(user.getBase().getWorld()) && (user.getBase().getGameMode() == GameMode.CREATIVE || user.isGodModeEnabled()) && user.getBase().getAllowFlight()) {
             if (shouldFly(loc)) {
@@ -167,6 +251,13 @@ public class LocationUtil {
         return getSafeDestination(loc);
     }
 
+    /**
+     * <p>getSafeDestination.</p>
+     *
+     * @param loc a {@link org.bukkit.Location} object.
+     * @return a {@link org.bukkit.Location} object.
+     * @throws java.lang.Exception if any.
+     */
     public static Location getSafeDestination(final Location loc) throws Exception {
         if (loc == null || loc.getWorld() == null) {
             throw new Exception(tl("destinationNotSet"));
@@ -222,6 +313,12 @@ public class LocationUtil {
         return new Location(world, x + 0.5, y, z + 0.5, loc.getYaw(), loc.getPitch());
     }
 
+    /**
+     * <p>shouldFly.</p>
+     *
+     * @param loc a {@link org.bukkit.Location} object.
+     * @return a boolean.
+     */
     public static boolean shouldFly(Location loc) {
         final World world = loc.getWorld();
         final int x = loc.getBlockX();

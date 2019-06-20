@@ -8,16 +8,34 @@ import java.util.Map;
 import static com.earth2me.essentials.I18n.tl;
 
 
+/**
+ * <p>BookPager class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public class BookPager {
     private final transient IText text;
     final double pageMax = 254;
     final double charMax = 18.5;
     final int lineMax = 12;
 
+    /**
+     * <p>Constructor for BookPager.</p>
+     *
+     * @param text a {@link com.earth2me.essentials.textreader.IText} object.
+     */
     public BookPager(final IText text) {
         this.text = text;
     }
 
+    /**
+     * <p>getPages.</p>
+     *
+     * @param pageStr a {@link java.lang.String} object.
+     * @return a {@link java.util.List} object.
+     * @throws java.lang.Exception if any.
+     */
     public List<String> getPages(final String pageStr) throws Exception {
         List<String> lines = text.getLines();
         List<String> chapters = text.getChapters();

@@ -14,6 +14,12 @@ import java.util.Map;
 import java.util.logging.Level;
 
 
+/**
+ * <p>EssentialsProtect class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public class EssentialsProtect extends JavaPlugin implements IProtect {
     private final Map<ProtectConfig, Boolean> settingsBoolean = new EnumMap<>(ProtectConfig.class);
     private final Map<ProtectConfig, String> settingsString = new EnumMap<>(ProtectConfig.class);
@@ -23,6 +29,7 @@ public class EssentialsProtect extends JavaPlugin implements IProtect {
 
     private final EmergencyListener emListener = new EmergencyListener(this);
 
+    /** {@inheritDoc} */
     @Override
     public void onEnable() {
         final PluginManager pm = this.getServer().getPluginManager();
@@ -80,32 +87,38 @@ public class EssentialsProtect extends JavaPlugin implements IProtect {
         initialize(pm, essPlugin);
     }
 
+    /** {@inheritDoc} */
     @Override
     public EssentialsConnect getEssentialsConnect() {
         return ess;
     }
 
+    /** {@inheritDoc} */
     @Override
     public Map<ProtectConfig, Boolean> getSettingsBoolean() {
         return settingsBoolean;
     }
 
+    /** {@inheritDoc} */
     @Override
     public Map<ProtectConfig, String> getSettingsString() {
         return settingsString;
     }
 
+    /** {@inheritDoc} */
     @Override
     public Map<ProtectConfig, List<Material>> getSettingsList() {
         return settingsList;
     }
 
+    /** {@inheritDoc} */
     @Override
     public boolean getSettingBool(final ProtectConfig protectConfig) {
         final Boolean bool = settingsBoolean.get(protectConfig);
         return bool == null ? protectConfig.getDefaultValueBoolean() : bool;
     }
 
+    /** {@inheritDoc} */
     @Override
     public String getSettingString(final ProtectConfig protectConfig) {
         final String str = settingsString.get(protectConfig);

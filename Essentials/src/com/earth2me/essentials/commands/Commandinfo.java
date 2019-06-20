@@ -8,11 +8,21 @@ import com.earth2me.essentials.textreader.TextPager;
 import org.bukkit.Server;
 
 
+/**
+ * <p>Commandinfo class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public class Commandinfo extends EssentialsCommand {
+    /**
+     * <p>Constructor for Commandinfo.</p>
+     */
     public Commandinfo() {
         super("info");
     }
 
+    /** {@inheritDoc} */
     @Override
     protected void run(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception {
         if (sender.isPlayer()) {

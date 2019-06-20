@@ -29,32 +29,58 @@ import java.util.logging.Logger;
 import static com.earth2me.essentials.I18n.tl;
 
 
+/**
+ * <p>Abstract EssentialsCommand class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public abstract class EssentialsCommand implements IEssentialsCommand {
     private final transient String name;
     protected transient IEssentials ess;
     protected transient IEssentialsModule module;
+    /** Constant <code>logger</code> */
     protected static final Logger logger = Logger.getLogger("Essentials");
 
+    /**
+     * <p>Constructor for EssentialsCommand.</p>
+     *
+     * @param name a {@link java.lang.String} object.
+     */
     protected EssentialsCommand(final String name) {
         this.name = name;
     }
 
+    /** {@inheritDoc} */
     @Override
     public void setEssentials(final IEssentials ess) {
         this.ess = ess;
     }
 
+    /** {@inheritDoc} */
     @Override
     public void setEssentialsModule(final IEssentialsModule module) {
         this.module = module;
     }
 
+    /** {@inheritDoc} */
     @Override
     public String getName() {
         return name;
     }
 
     // Get online players - only show vanished if source has permission
+    /**
+     * <p>getPlayer.</p>
+     *
+     * @param server a {@link org.bukkit.Server} object.
+     * @param sender a {@link com.earth2me.essentials.CommandSource} object.
+     * @param args an array of {@link java.lang.String} objects.
+     * @param pos a int.
+     * @return a {@link com.earth2me.essentials.User} object.
+     * @throws com.earth2me.essentials.commands.PlayerNotFoundException if any.
+     * @throws com.earth2me.essentials.commands.NotEnoughArgumentsException if any.
+     */
     protected User getPlayer(final Server server, final CommandSource sender, final String[] args, final int pos) throws PlayerNotFoundException, NotEnoughArgumentsException {
         if (sender.isPlayer()) {
             User user = ess.getUser(sender.getPlayer());
@@ -64,6 +90,16 @@ public abstract class EssentialsCommand implements IEssentialsCommand {
     }
 
     // Get online players - only show vanished if source has permission
+    /**
+     * <p>getPlayer.</p>
+     *
+     * @param server a {@link org.bukkit.Server} object.
+     * @param sender a {@link com.earth2me.essentials.CommandSource} object.
+     * @param searchTerm a {@link java.lang.String} object.
+     * @return a {@link com.earth2me.essentials.User} object.
+     * @throws com.earth2me.essentials.commands.PlayerNotFoundException if any.
+     * @throws com.earth2me.essentials.commands.NotEnoughArgumentsException if any.
+     */
     protected User getPlayer(final Server server, final CommandSource sender, final String searchTerm) throws PlayerNotFoundException, NotEnoughArgumentsException {
         if (sender.isPlayer()) {
             User user = ess.getUser(sender.getPlayer());
@@ -73,11 +109,34 @@ public abstract class EssentialsCommand implements IEssentialsCommand {
     }
 
     // Get online players - only show vanished if source has permission
+    /**
+     * <p>getPlayer.</p>
+     *
+     * @param server a {@link org.bukkit.Server} object.
+     * @param user a {@link com.earth2me.essentials.User} object.
+     * @param args an array of {@link java.lang.String} objects.
+     * @param pos a int.
+     * @return a {@link com.earth2me.essentials.User} object.
+     * @throws com.earth2me.essentials.commands.PlayerNotFoundException if any.
+     * @throws com.earth2me.essentials.commands.NotEnoughArgumentsException if any.
+     */
     protected User getPlayer(final Server server, final User user, final String[] args, final int pos) throws PlayerNotFoundException, NotEnoughArgumentsException {
         return getPlayer(server, user, args, pos, user.canInteractVanished(), false);
     }
 
     // Get online or offline players, this method allows for raw access
+    /**
+     * <p>getPlayer.</p>
+     *
+     * @param server a {@link org.bukkit.Server} object.
+     * @param args an array of {@link java.lang.String} objects.
+     * @param pos a int.
+     * @param getHidden a boolean.
+     * @param getOffline a boolean.
+     * @return a {@link com.earth2me.essentials.User} object.
+     * @throws com.earth2me.essentials.commands.PlayerNotFoundException if any.
+     * @throws com.earth2me.essentials.commands.NotEnoughArgumentsException if any.
+     */
     protected User getPlayer(final Server server, final String[] args, final int pos, boolean getHidden, final boolean getOffline) throws PlayerNotFoundException, NotEnoughArgumentsException {
         return getPlayer(server, null, args, pos, getHidden, getOffline);
     }
@@ -93,6 +152,16 @@ public abstract class EssentialsCommand implements IEssentialsCommand {
     }
 
     // Get online or offline players, this method allows for raw access
+    /**
+     * <p>getPlayer.</p>
+     *
+     * @param server a {@link org.bukkit.Server} object.
+     * @param searchTerm a {@link java.lang.String} object.
+     * @param getHidden a boolean.
+     * @param getOffline a boolean.
+     * @return a {@link com.earth2me.essentials.User} object.
+     * @throws com.earth2me.essentials.commands.PlayerNotFoundException if any.
+     */
     protected User getPlayer(final Server server, final String searchTerm, boolean getHidden, final boolean getOffline) throws PlayerNotFoundException {
         return getPlayer(server, null, searchTerm, getHidden, getOffline);
     }
@@ -154,6 +223,7 @@ public abstract class EssentialsCommand implements IEssentialsCommand {
         throw new PlayerNotFoundException();
     }
 
+    /** {@inheritDoc} */
     @Override
     public final void run(final Server server, final User user, final String commandLabel, final Command cmd, final String[] args) throws Exception {
         final Trade charge = new Trade(this.getName(), ess);
@@ -162,19 +232,39 @@ public abstract class EssentialsCommand implements IEssentialsCommand {
         charge.charge(user);
     }
 
+    /**
+     * <p>run.</p>
+     *
+     * @param server a {@link org.bukkit.Server} object.
+     * @param user a {@link com.earth2me.essentials.User} object.
+     * @param commandLabel a {@link java.lang.String} object.
+     * @param args an array of {@link java.lang.String} objects.
+     * @throws java.lang.Exception if any.
+     */
     protected void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception {
         run(server, user.getSource(), commandLabel, args);
     }
 
+    /** {@inheritDoc} */
     @Override
     public final void run(final Server server, final CommandSource sender, final String commandLabel, final Command cmd, final String[] args) throws Exception {
         run(server, sender, commandLabel, args);
     }
 
+    /**
+     * <p>run.</p>
+     *
+     * @param server a {@link org.bukkit.Server} object.
+     * @param sender a {@link com.earth2me.essentials.CommandSource} object.
+     * @param commandLabel a {@link java.lang.String} object.
+     * @param args an array of {@link java.lang.String} objects.
+     * @throws java.lang.Exception if any.
+     */
     protected void run(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception {
         throw new Exception(tl("onlyPlayers", commandLabel));
     }
 
+    /** {@inheritDoc} */
     @Override
     public final List<String> tabComplete(final Server server, final User user, final String commandLabel, final Command cmd, final String[] args) {
         if (args.length == 0) {
@@ -189,10 +279,20 @@ public abstract class EssentialsCommand implements IEssentialsCommand {
     }
 
     // Doesn't need to do any starts-with checks
+    /**
+     * <p>getTabCompleteOptions.</p>
+     *
+     * @param server a {@link org.bukkit.Server} object.
+     * @param user a {@link com.earth2me.essentials.User} object.
+     * @param commandLabel a {@link java.lang.String} object.
+     * @param args an array of {@link java.lang.String} objects.
+     * @return a {@link java.util.List} object.
+     */
     protected List<String> getTabCompleteOptions(final Server server, final User user, final String commandLabel, final String[] args) {
         return getTabCompleteOptions(server, user.getSource(), commandLabel, args);
     }
 
+    /** {@inheritDoc} */
     @Override
     public final List<String> tabComplete(final Server server, final CommandSource sender, final String commandLabel, final Command cmd, final String[] args) {
         if (args.length == 0) {
@@ -207,11 +307,27 @@ public abstract class EssentialsCommand implements IEssentialsCommand {
     }
 
     // Doesn't need to do any starts-with checks
+    /**
+     * <p>getTabCompleteOptions.</p>
+     *
+     * @param server a {@link org.bukkit.Server} object.
+     * @param sender a {@link com.earth2me.essentials.CommandSource} object.
+     * @param commandLabel a {@link java.lang.String} object.
+     * @param args an array of {@link java.lang.String} objects.
+     * @return a {@link java.util.List} object.
+     */
     protected List<String> getTabCompleteOptions(final Server server, final CommandSource sender, final String commandLabel, final String[] args) {
         // No tab completion results
         return getPlayers(server, sender);
     }
 
+    /**
+     * <p>getFinalArg.</p>
+     *
+     * @param args an array of {@link java.lang.String} objects.
+     * @param start a int.
+     * @return a {@link java.lang.String} object.
+     */
     public static String getFinalArg(final String[] args, final int start) {
         final StringBuilder bldr = new StringBuilder();
         for (int i = start; i < args.length; i++) {
@@ -250,6 +366,10 @@ public abstract class EssentialsCommand implements IEssentialsCommand {
     /**
      * Gets a list of all player names that can be seen with by the given CommandSource,
      * for tab completion.
+     *
+     * @param server a {@link org.bukkit.Server} object.
+     * @param interactor a {@link com.earth2me.essentials.CommandSource} object.
+     * @return a {@link java.util.List} object.
      */
     protected List<String> getPlayers(final Server server, final CommandSource interactor) {
         List<String> players = Lists.newArrayList();
@@ -264,6 +384,10 @@ public abstract class EssentialsCommand implements IEssentialsCommand {
     /**
      * Gets a list of all player names that can be seen with by the given User,
      * for tab completion.
+     *
+     * @param server a {@link org.bukkit.Server} object.
+     * @param interactor a {@link com.earth2me.essentials.User} object.
+     * @return a {@link java.util.List} object.
      */
     protected List<String> getPlayers(final Server server, final User interactor) {
         List<String> players = Lists.newArrayList();
@@ -277,6 +401,8 @@ public abstract class EssentialsCommand implements IEssentialsCommand {
 
     /**
      * Returns a list of all online groups.
+     *
+     * @return a {@link java.util.List} object.
      */
     protected List<String> getGroups() {
         // TODO: A better way to do this
@@ -286,6 +412,8 @@ public abstract class EssentialsCommand implements IEssentialsCommand {
     /**
      * Gets a list of tab-completable items that start with the given name.
      * Due to the number of items, this may not return the entire list.
+     *
+     * @return a {@link java.util.List} object.
      */
     protected List<String> getItems() {
         return new ArrayList<>(ess.getItemDb().listNames());
@@ -293,6 +421,9 @@ public abstract class EssentialsCommand implements IEssentialsCommand {
 
     /**
      * Gets a list of tab-completable items usable for "getMatching".
+     *
+     * @param arg a {@link java.lang.String} object.
+     * @return a {@link java.util.List} object.
      */
     protected List<String> getMatchingItems(String arg) {
         List<String> items = Lists.newArrayList("hand", "inventory", "blocks");
@@ -307,6 +438,9 @@ public abstract class EssentialsCommand implements IEssentialsCommand {
      * Lists all commands.
      *
      * TODO: Use the real commandmap to do this automatically.
+     *
+     * @param server a {@link org.bukkit.Server} object.
+     * @return a {@link java.util.List} object.
      */
     protected final List<String> getCommands(Server server) {
         List<String> commands = Lists.newArrayList();
@@ -322,6 +456,13 @@ public abstract class EssentialsCommand implements IEssentialsCommand {
 
     /**
      * Attempts to tab-complete a command or its arguments.
+     *
+     * @param sender a {@link com.earth2me.essentials.CommandSource} object.
+     * @param server a {@link org.bukkit.Server} object.
+     * @param label a {@link java.lang.String} object.
+     * @param args an array of {@link java.lang.String} objects.
+     * @param index a int.
+     * @return a {@link java.util.List} object.
      */
     protected final List<String> tabCompleteCommand(CommandSource sender, Server server, String label, String[] args, int index) {
         // TODO: Pass this to the real commandmap

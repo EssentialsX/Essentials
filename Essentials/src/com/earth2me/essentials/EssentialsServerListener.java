@@ -16,6 +16,12 @@ import java.util.List;
 import java.util.logging.Level;
 
 
+/**
+ * <p>EssentialsServerListener class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public class EssentialsServerListener implements Listener {
     private static List<String> ignoredSLPECallers = Arrays.asList(
         ".LegacyPingHandler.channelRead(", // CB responding to pings from pre-Netty clients
@@ -29,6 +35,11 @@ public class EssentialsServerListener implements Listener {
     private Method setSampleText;
     private Method getSampleText;
 
+    /**
+     * <p>Constructor for EssentialsServerListener.</p>
+     *
+     * @param ess a {@link net.ess3.api.IEssentials} object.
+     */
     public EssentialsServerListener(final IEssentials ess) {
         this.ess = ess;
 
@@ -47,6 +58,12 @@ public class EssentialsServerListener implements Listener {
         isPaperSample = false;
     }
 
+    /**
+     * <p>onServerListPing.</p>
+     *
+     * @param event a {@link org.bukkit.event.server.ServerListPingEvent} object.
+     * @throws java.lang.Exception if any.
+     */
     @EventHandler(priority = EventPriority.LOWEST)
     public void onServerListPing(final ServerListPingEvent event) throws Exception {
         if (isPaperSample) {

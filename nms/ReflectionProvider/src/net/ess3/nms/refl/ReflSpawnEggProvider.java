@@ -4,7 +4,14 @@ import net.ess3.nms.SpawnEggProvider;
 import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
 
+/**
+ * <p>ReflSpawnEggProvider class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public class ReflSpawnEggProvider extends SpawnEggProvider {
+    /** {@inheritDoc} */
     @Override
     public ItemStack createEggItem(EntityType type) throws IllegalArgumentException {
         if (ReflUtil.getNMSVersion().startsWith("v1_8_R")) {
@@ -17,6 +24,7 @@ public class ReflSpawnEggProvider extends SpawnEggProvider {
         }
     }
 
+    /** {@inheritDoc} */
     @Override
     public EntityType getSpawnedType(ItemStack eggItem) throws IllegalArgumentException {
         if (ReflUtil.getNMSVersion().startsWith("v1_8_R")) {
@@ -29,6 +37,7 @@ public class ReflSpawnEggProvider extends SpawnEggProvider {
         }
     }
 
+    /** {@inheritDoc} */
     @Override
     public String getHumanName() {
         return "Reflection based provider";

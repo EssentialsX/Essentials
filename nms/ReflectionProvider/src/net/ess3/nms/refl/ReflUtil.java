@@ -15,19 +15,39 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * <p>ReflUtil class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public class ReflUtil {
+    /** Constant <code>V1_8_R1</code> */
     public static final NMSVersion V1_8_R1 = NMSVersion.fromString("v1_8_R1");
+    /** Constant <code>V1_8_R2</code> */
     public static final NMSVersion V1_8_R2 = NMSVersion.fromString("v1_8_R2");
+    /** Constant <code>V1_8_R3</code> */
     public static final NMSVersion V1_8_R3 = NMSVersion.fromString("v1_8_R3");
+    /** Constant <code>V1_9_R1</code> */
     public static final NMSVersion V1_9_R1 = NMSVersion.fromString("v1_9_R1");
+    /** Constant <code>V1_10_R1</code> */
     public static final NMSVersion V1_10_R1 = NMSVersion.fromString("v1_10_R1");
+    /** Constant <code>V1_11_R1</code> */
     public static final NMSVersion V1_11_R1 = NMSVersion.fromString("v1_11_R1");
+    /** Constant <code>V1_12_R1</code> */
     public static final NMSVersion V1_12_R1 = NMSVersion.fromString("v1_12_R1");
+    /** Constant <code>V1_13_R1</code> */
     public static final NMSVersion V1_13_R1 = NMSVersion.fromString("v1_13_R1");
+    /** Constant <code>V1_13_R2</code> */
     public static final NMSVersion V1_13_R2 = NMSVersion.fromString("v1_13_R2");
     private static NMSVersion nmsVersionObject;
     private static String nmsVersion;
 
+    /**
+     * <p>getNMSVersion.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
     public static String getNMSVersion() {
         if (nmsVersion == null) {
             String name = Bukkit.getServer().getClass().getName();
@@ -37,6 +57,11 @@ public class ReflUtil {
         return nmsVersion;
     }
     
+    /**
+     * <p>Getter for the field <code>nmsVersionObject</code>.</p>
+     *
+     * @return a {@link net.ess3.nms.refl.ReflUtil.NMSVersion} object.
+     */
     public static NMSVersion getNmsVersionObject() {
         if (nmsVersionObject == null) {
             nmsVersionObject = NMSVersion.fromString(getNMSVersion());
@@ -44,16 +69,34 @@ public class ReflUtil {
         return nmsVersionObject;
     }
 
+    /**
+     * <p>getNMSClass.</p>
+     *
+     * @param className a {@link java.lang.String} object.
+     * @return a {@link java.lang.Class} object.
+     */
     public static Class<?> getNMSClass(String className) {
         return getClassCached("net.minecraft.server." + getNMSVersion() + "." + className);
     }
 
+    /**
+     * <p>getOBCClass.</p>
+     *
+     * @param className a {@link java.lang.String} object.
+     * @return a {@link java.lang.Class} object.
+     */
     public static Class<?> getOBCClass(String className) {
         return getClassCached("org.bukkit.craftbukkit." + getNMSVersion() + "." + className);
     }
 
     private static Map<String, Class<?>> classCache = new HashMap<>();
 
+    /**
+     * <p>getClassCached.</p>
+     *
+     * @param className a {@link java.lang.String} object.
+     * @return a {@link java.lang.Class} object.
+     */
     public static Class<?> getClassCached(String className) {
         if (classCache.containsKey(className)) {
             return classCache.get(className);
@@ -69,6 +112,13 @@ public class ReflUtil {
 
     private static Table<Class<?>, String, Method> methodCache = HashBasedTable.create();
 
+    /**
+     * <p>getMethodCached.</p>
+     *
+     * @param clazz a {@link java.lang.Class} object.
+     * @param methodName a {@link java.lang.String} object.
+     * @return a {@link java.lang.reflect.Method} object.
+     */
     public static Method getMethodCached(Class<?> clazz, String methodName) {
         if (methodCache.contains(clazz, methodName)) {
             return methodCache.get(clazz, methodName);
@@ -85,6 +135,14 @@ public class ReflUtil {
 
     private static Table<Class<?>, MethodParams, Method> methodParamCache = HashBasedTable.create();
 
+    /**
+     * <p>getMethodCached.</p>
+     *
+     * @param clazz a {@link java.lang.Class} object.
+     * @param methodName a {@link java.lang.String} object.
+     * @param params a {@link java.lang.Class} object.
+     * @return a {@link java.lang.reflect.Method} object.
+     */
     public static Method getMethodCached(Class<?> clazz, String methodName, Class<?>... params) {
         MethodParams methodParams = new MethodParams(methodName, params);
         if (methodParamCache.contains(clazz, methodParams)) {
@@ -102,6 +160,13 @@ public class ReflUtil {
 
     private static Table<Class<?>, String, Field> fieldCache = HashBasedTable.create();
 
+    /**
+     * <p>getFieldCached.</p>
+     *
+     * @param clazz a {@link java.lang.Class} object.
+     * @param fieldName a {@link java.lang.String} object.
+     * @return a {@link java.lang.reflect.Field} object.
+     */
     public static Field getFieldCached(Class<?> clazz, String fieldName) {
         if (fieldCache.contains(clazz, fieldName)) {
             return fieldCache.get(clazz, fieldName);
@@ -118,6 +183,12 @@ public class ReflUtil {
 
     private static Map<Class<?>, Constructor<?>> constructorCache = new HashMap<>();
 
+    /**
+     * <p>getConstructorCached.</p>
+     *
+     * @param clazz a {@link java.lang.Class} object.
+     * @return a {@link java.lang.reflect.Constructor} object.
+     */
     public static Constructor<?> getConstructorCached(Class<?> clazz) {
         if (constructorCache.containsKey(clazz)) {
             return constructorCache.get(clazz);
@@ -134,6 +205,13 @@ public class ReflUtil {
 
     private static Table<Class<?>, ConstructorParams, Constructor<?>> constructorParamCache = HashBasedTable.create();
 
+    /**
+     * <p>getConstructorCached.</p>
+     *
+     * @param clazz a {@link java.lang.Class} object.
+     * @param params a {@link java.lang.Class} object.
+     * @return a {@link java.lang.reflect.Constructor} object.
+     */
     public static Constructor<?> getConstructorCached(Class<?> clazz, Class<?>... params) {
         ConstructorParams constructorParams = new ConstructorParams(params);
         if (constructorParamCache.contains(clazz, constructorParams)) {

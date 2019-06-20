@@ -11,22 +11,37 @@ import java.util.UUID;
 import java.util.logging.Level;
 
 
+/**
+ * <p>EssentialsUserConf class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public class EssentialsUserConf extends EssentialsConf {
     public final String username;
     public final UUID uuid;
 
+    /**
+     * <p>Constructor for EssentialsUserConf.</p>
+     *
+     * @param username a {@link java.lang.String} object.
+     * @param uuid a {@link java.util.UUID} object.
+     * @param configFile a {@link java.io.File} object.
+     */
     public EssentialsUserConf(final String username, final UUID uuid, final File configFile) {
         super(configFile);
         this.username = username;
         this.uuid = uuid;
     }
 
+    /** {@inheritDoc} */
     @Override
     public boolean legacyFileExists() {
         final File file = new File(configFile.getParentFile(), username + ".yml");
         return file.exists();
     }
 
+    /** {@inheritDoc} */
     @Override
     public void convertLegacyFile() {
         final File file = new File(configFile.getParentFile(), username + ".yml");
@@ -44,6 +59,7 @@ public class EssentialsUserConf extends EssentialsConf {
         return new File(configFile.getParentFile(), fn.toString() + ".yml");
     }
 
+    /** {@inheritDoc} */
     @Override
     public boolean altFileExists() {
         if (username.equals(username.toLowerCase())) {
@@ -52,6 +68,7 @@ public class EssentialsUserConf extends EssentialsConf {
         return getAltFile().exists();
     }
 
+    /** {@inheritDoc} */
     @Override
     public void convertAltFile() {
         try {

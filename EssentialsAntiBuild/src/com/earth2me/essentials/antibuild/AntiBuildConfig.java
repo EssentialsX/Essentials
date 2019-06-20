@@ -1,6 +1,12 @@
 package com.earth2me.essentials.antibuild;
 
 
+/**
+ * <p>AntiBuildConfig class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public enum AntiBuildConfig {
     disable_build("protect.disable.build", true),
     disable_use("protect.disable.use", true),
@@ -35,6 +41,8 @@ public enum AntiBuildConfig {
     }
 
     /**
+     * <p>Getter for the field <code>configName</code>.</p>
+     *
      * @return the configName
      */
     public String getConfigName() {
@@ -42,6 +50,8 @@ public enum AntiBuildConfig {
     }
 
     /**
+     * <p>getDefaultValueString.</p>
+     *
      * @return the default value String
      */
     public String getDefaultValueString() {
@@ -49,16 +59,28 @@ public enum AntiBuildConfig {
     }
 
     /**
+     * <p>getDefaultValueBoolean.</p>
+     *
      * @return the default value boolean
      */
     public boolean getDefaultValueBoolean() {
         return defValueBoolean;
     }
 
+    /**
+     * <p>isString.</p>
+     *
+     * @return a boolean.
+     */
     public boolean isString() {
         return isString;
     }
 
+    /**
+     * <p>isList.</p>
+     *
+     * @return a boolean.
+     */
     public boolean isList() {
         return isList;
     }

@@ -20,6 +20,12 @@ import java.util.concurrent.ExecutionException;
 import java.util.regex.Pattern;
 
 
+/**
+ * <p>UserMap class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public class UserMap extends CacheLoader<String, User> implements IConf {
     private final transient IEssentials ess;
     private final transient ConcurrentSkipListSet<UUID> keys = new ConcurrentSkipListSet<>();
@@ -30,6 +36,11 @@ public class UserMap extends CacheLoader<String, User> implements IConf {
     private final transient Cache<String, User> users;
     private static boolean legacy = false;
 
+    /**
+     * <p>Constructor for UserMap.</p>
+     *
+     * @param ess a {@link net.ess3.api.IEssentials} object.
+     */
     public UserMap(final IEssentials ess) {
         super();
         this.ess = ess;
@@ -80,10 +91,22 @@ public class UserMap extends CacheLoader<String, User> implements IConf {
         });
     }
 
+    /**
+     * <p>userExists.</p>
+     *
+     * @param uuid a {@link java.util.UUID} object.
+     * @return a boolean.
+     */
     public boolean userExists(final UUID uuid) {
         return keys.contains(uuid);
     }
 
+    /**
+     * <p>getUser.</p>
+     *
+     * @param name a {@link java.lang.String} object.
+     * @return a {@link com.earth2me.essentials.User} object.
+     */
     public User getUser(final String name) {
         try {
             final String sanitizedName = StringUtil.safeString(name);
@@ -105,6 +128,12 @@ public class UserMap extends CacheLoader<String, User> implements IConf {
         }
     }
 
+    /**
+     * <p>getUser.</p>
+     *
+     * @param uuid a {@link java.util.UUID} object.
+     * @return a {@link com.earth2me.essentials.User} object.
+     */
     public User getUser(final UUID uuid) {
         try {
             if (!legacy) {
@@ -119,6 +148,13 @@ public class UserMap extends CacheLoader<String, User> implements IConf {
         }
     }
 
+    /**
+     * <p>trackUUID.</p>
+     *
+     * @param uuid a {@link java.util.UUID} object.
+     * @param name a {@link java.lang.String} object.
+     * @param replace a boolean.
+     */
     public void trackUUID(final UUID uuid, final String name, boolean replace) {
         if (uuid != null) {
             keys.add(uuid);
@@ -142,6 +178,7 @@ public class UserMap extends CacheLoader<String, User> implements IConf {
         }
     }
 
+    /** {@inheritDoc} */
     @Override
     public User load(final String stringUUID) throws Exception {
         UUID uuid = UUID.fromString(stringUUID);
@@ -165,16 +202,25 @@ public class UserMap extends CacheLoader<String, User> implements IConf {
         throw new Exception("User not found!");
     }
 
+    /** {@inheritDoc} */
     @Override
     public void reloadConfig() {
         getUUIDMap().forceWriteUUIDMap();
         loadAllUsersAsync(ess);
     }
 
+    /**
+     * <p>invalidateAll.</p>
+     */
     public void invalidateAll() {
         users.invalidateAll();
     }
 
+    /**
+     * <p>removeUser.</p>
+     *
+     * @param name a {@link java.lang.String} object.
+     */
     public void removeUser(final String name) {
         if (names == null) {
             ess.getLogger().warning("Name collection is null, cannot remove user.");
@@ -189,26 +235,57 @@ public class UserMap extends CacheLoader<String, User> implements IConf {
         names.remove(StringUtil.safeString(name));
     }
 
+    /**
+     * <p>getAllUniqueUsers.</p>
+     *
+     * @return a {@link java.util.Set} object.
+     */
     public Set<UUID> getAllUniqueUsers() {
         return Collections.unmodifiableSet(keys);
     }
 
+    /**
+     * <p>getUniqueUsers.</p>
+     *
+     * @return a int.
+     */
     public int getUniqueUsers() {
         return keys.size();
     }
 
+    /**
+     * <p>Getter for the field <code>names</code>.</p>
+     *
+     * @return a {@link java.util.concurrent.ConcurrentSkipListMap} object.
+     */
     protected ConcurrentSkipListMap<String, UUID> getNames() {
         return names;
     }
 
+    /**
+     * <p>Getter for the field <code>history</code>.</p>
+     *
+     * @return a {@link java.util.concurrent.ConcurrentSkipListMap} object.
+     */
     protected ConcurrentSkipListMap<UUID, ArrayList<String>> getHistory() {
         return history;
     }
 
+    /**
+     * <p>getUserHistory.</p>
+     *
+     * @param uuid a {@link java.util.UUID} object.
+     * @return a {@link java.util.List} object.
+     */
     public List<String> getUserHistory(final UUID uuid) {
         return history.get(uuid);
     }
 
+    /**
+     * <p>getUUIDMap.</p>
+     *
+     * @return a {@link com.earth2me.essentials.UUIDMap} object.
+     */
     public UUIDMap getUUIDMap() {
         return uuidMap;
     }
@@ -218,6 +295,12 @@ public class UserMap extends CacheLoader<String, User> implements IConf {
         return new File(userFolder, uuid.toString() + ".yml");
     }
 
+    /**
+     * <p>getUserFileFromString.</p>
+     *
+     * @param name a {@link java.lang.String} object.
+     * @return a {@link java.io.File} object.
+     */
     public File getUserFileFromString(final String name) {
         final File userFolder = new File(ess.getDataFolder(), "userdata");
         return new File(userFolder, StringUtil.sanitizeFileName(name) + ".yml");
@@ -237,6 +320,12 @@ public class UserMap extends CacheLoader<String, User> implements IConf {
 
     private final Pattern validUserPattern = Pattern.compile("^[a-zA-Z0-9_]{2,16}$");
 
+    /**
+     * <p>getUserFromBukkit.</p>
+     *
+     * @param name a {@link java.lang.String} object.
+     * @return a {@link com.earth2me.essentials.User} object.
+     */
     @SuppressWarnings("deprecation")
     public User getUserFromBukkit(String name) {
         name = StringUtil.safeString(name);

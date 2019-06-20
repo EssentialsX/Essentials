@@ -27,6 +27,12 @@ import com.ice.tar.TarEntry;
 import static com.earth2me.essentials.I18n.tl;
 
 
+/**
+ * <p>EssentialsGeoIPPlayerListener class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public class EssentialsGeoIPPlayerListener implements Listener, IConf {
     private DatabaseReader mmreader = null; // initialize maxmind geoip2 reader
     private static final Logger logger = Logger.getLogger("EssentialsGeoIP");
@@ -43,6 +49,11 @@ public class EssentialsGeoIPPlayerListener implements Listener, IConf {
         reloadConfig();
     }
 
+    /**
+     * <p>onPlayerJoin.</p>
+     *
+     * @param event a {@link org.bukkit.event.player.PlayerJoinEvent} object.
+     */
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerJoin(final PlayerJoinEvent event) {
         ess.runTaskAsynchronously(() -> delayedJoin(event.getPlayer()));
@@ -111,6 +122,7 @@ public class EssentialsGeoIPPlayerListener implements Listener, IConf {
         }
     }
 
+    /** {@inheritDoc} */
     @Override
     public final void reloadConfig() {
         config.load();

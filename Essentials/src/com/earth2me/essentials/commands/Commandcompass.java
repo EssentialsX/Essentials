@@ -6,11 +6,21 @@ import org.bukkit.Server;
 import static com.earth2me.essentials.I18n.tl;
 
 
+/**
+ * <p>Commandcompass class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public class Commandcompass extends EssentialsCommand {
+    /**
+     * <p>Constructor for Commandcompass.</p>
+     */
     public Commandcompass() {
         super("compass");
     }
 
+    /** {@inheritDoc} */
     @Override
     public void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception {
         final int bearing = (int) (user.getLocation().getYaw() + 180 + 360) % 360;

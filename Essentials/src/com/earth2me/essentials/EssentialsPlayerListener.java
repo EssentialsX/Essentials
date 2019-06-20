@@ -39,14 +39,28 @@ import java.util.regex.Pattern;
 import static com.earth2me.essentials.I18n.tl;
 
 
+/**
+ * <p>EssentialsPlayerListener class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public class EssentialsPlayerListener implements Listener {
     private static final Logger LOGGER = Logger.getLogger("Essentials");
     private final transient IEssentials ess;
 
+    /**
+     * <p>Constructor for EssentialsPlayerListener.</p>
+     *
+     * @param parent a {@link net.ess3.api.IEssentials} object.
+     */
     public EssentialsPlayerListener(final IEssentials parent) {
         this.ess = parent;
     }
 
+    /**
+     * <p>registerEvents.</p>
+     */
     public void registerEvents() {
         ess.getServer().getPluginManager().registerEvents(this, ess);
 
@@ -61,6 +75,11 @@ public class EssentialsPlayerListener implements Listener {
         }
     }
 
+    /**
+     * <p>onPlayerRespawn.</p>
+     *
+     * @param event a {@link org.bukkit.event.player.PlayerRespawnEvent} object.
+     */
     @EventHandler(priority = EventPriority.NORMAL)
     public void onPlayerRespawn(final PlayerRespawnEvent event) {
         final User user = ess.getUser(event.getPlayer());
@@ -72,6 +91,11 @@ public class EssentialsPlayerListener implements Listener {
         }
     }
 
+    /**
+     * <p>onPlayerChat.</p>
+     *
+     * @param event a {@link org.bukkit.event.player.AsyncPlayerChatEvent} object.
+     */
     @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerChat(final AsyncPlayerChatEvent event) {
         final User user = ess.getUser(event.getPlayer());
@@ -102,6 +126,11 @@ public class EssentialsPlayerListener implements Listener {
         user.setDisplayNick();
     }
 
+    /**
+     * <p>onPlayerMove.</p>
+     *
+     * @param event a {@link org.bukkit.event.player.PlayerMoveEvent} object.
+     */
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void onPlayerMove(final PlayerMoveEvent event) {
         if (event.getFrom().getBlockX() == event.getTo().getBlockX() && event.getFrom().getBlockZ() == event.getTo().getBlockZ() && event.getFrom().getBlockY() == event.getTo().getBlockY()) {
@@ -143,6 +172,11 @@ public class EssentialsPlayerListener implements Listener {
         }
     }
 
+    /**
+     * <p>onPlayerQuit.</p>
+     *
+     * @param event a {@link org.bukkit.event.player.PlayerQuitEvent} object.
+     */
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerQuit(final PlayerQuitEvent event) {
         final User user = ess.getUser(event.getPlayer());
@@ -189,6 +223,11 @@ public class EssentialsPlayerListener implements Listener {
         user.dispose();
     }
 
+    /**
+     * <p>onPlayerJoin.</p>
+     *
+     * @param event a {@link org.bukkit.event.player.PlayerJoinEvent} object.
+     */
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerJoin(final PlayerJoinEvent event) {
         final String joinMessage = event.getJoinMessage();
@@ -203,6 +242,12 @@ public class EssentialsPlayerListener implements Listener {
         }
     }
 
+    /**
+     * <p>delayedJoin.</p>
+     *
+     * @param player a {@link org.bukkit.entity.Player} object.
+     * @param message a {@link java.lang.String} object.
+     */
     public void delayedJoin(final Player player, final String message) {
         if (!player.isOnline()) {
             return;
@@ -373,6 +418,11 @@ public class EssentialsPlayerListener implements Listener {
         }
     }
 
+    /**
+     * <p>onPlayerLoginBanned.</p>
+     *
+     * @param event a {@link org.bukkit.event.player.PlayerLoginEvent} object.
+     */
     @EventHandler(priority = EventPriority.LOW)
     public void onPlayerLoginBanned(final PlayerLoginEvent event) {
         switch (event.getResult()) {
@@ -398,6 +448,11 @@ public class EssentialsPlayerListener implements Listener {
         }
     }
 
+    /**
+     * <p>onPlayerLogin.</p>
+     *
+     * @param event a {@link org.bukkit.event.player.PlayerLoginEvent} object.
+     */
     @EventHandler(priority = EventPriority.HIGH)
     public void onPlayerLogin(final PlayerLoginEvent event) {
         switch (event.getResult()) {
@@ -414,6 +469,11 @@ public class EssentialsPlayerListener implements Listener {
         }
     }
 
+    /**
+     * <p>onPlayerTeleport.</p>
+     *
+     * @param event a {@link org.bukkit.event.player.PlayerTeleportEvent} object.
+     */
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void onPlayerTeleport(final PlayerTeleportEvent event) {
         final boolean backListener = ess.getSettings().registerBackInListener();
@@ -430,6 +490,11 @@ public class EssentialsPlayerListener implements Listener {
         }
     }
 
+    /**
+     * <p>onPlayerEggThrow.</p>
+     *
+     * @param event a {@link org.bukkit.event.player.PlayerEggThrowEvent} object.
+     */
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void onPlayerEggThrow(final PlayerEggThrowEvent event) {
         final User user = ess.getUser(event.getPlayer());
@@ -440,6 +505,11 @@ public class EssentialsPlayerListener implements Listener {
         }
     }
 
+    /**
+     * <p>onPlayerBucketEmpty.</p>
+     *
+     * @param event a {@link org.bukkit.event.player.PlayerBucketEmptyEvent} object.
+     */
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void onPlayerBucketEmpty(final PlayerBucketEmptyEvent event) {
         final User user = ess.getUser(event.getPlayer());
@@ -454,6 +524,11 @@ public class EssentialsPlayerListener implements Listener {
         }
     }
 
+    /**
+     * <p>onPlayerCommandPreprocess.</p>
+     *
+     * @param event a {@link org.bukkit.event.player.PlayerCommandPreprocessEvent} object.
+     */
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onPlayerCommandPreprocess(final PlayerCommandPreprocessEvent event) {
         final Player player = event.getPlayer();
@@ -546,6 +621,11 @@ public class EssentialsPlayerListener implements Listener {
         }
     }
 
+    /**
+     * <p>onPlayerChangedWorldFlyReset.</p>
+     *
+     * @param event a {@link org.bukkit.event.player.PlayerChangedWorldEvent} object.
+     */
     @EventHandler(priority = EventPriority.NORMAL)
     public void onPlayerChangedWorldFlyReset(final PlayerChangedWorldEvent event) {
         final User user = ess.getUser(event.getPlayer());
@@ -574,6 +654,11 @@ public class EssentialsPlayerListener implements Listener {
         }
     }
 
+    /**
+     * <p>onPlayerChangedWorld.</p>
+     *
+     * @param event a {@link org.bukkit.event.player.PlayerChangedWorldEvent} object.
+     */
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerChangedWorld(final PlayerChangedWorldEvent event) {
         final User user = ess.getUser(event.getPlayer());
@@ -594,6 +679,11 @@ public class EssentialsPlayerListener implements Listener {
         }
     }
 
+    /**
+     * <p>onPlayerInteract.</p>
+     *
+     * @param event a {@link org.bukkit.event.player.PlayerInteractEvent} object.
+     */
     @EventHandler(priority = EventPriority.NORMAL)
     public void onPlayerInteract(final PlayerInteractEvent event) {
         boolean updateActivity = true;
@@ -689,6 +779,11 @@ public class EssentialsPlayerListener implements Listener {
         return used;
     }
 
+    /**
+     * <p>onInventoryClickEvent.</p>
+     *
+     * @param event a {@link org.bukkit.event.inventory.InventoryClickEvent} object.
+     */
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     public void onInventoryClickEvent(final InventoryClickEvent event) {
         Player refreshPlayer = null;
@@ -755,6 +850,11 @@ public class EssentialsPlayerListener implements Listener {
         }
     }
 
+    /**
+     * <p>onInventoryCloseEvent.</p>
+     *
+     * @param event a {@link org.bukkit.event.inventory.InventoryCloseEvent} object.
+     */
     @EventHandler(priority = EventPriority.MONITOR)
     public void onInventoryCloseEvent(final InventoryCloseEvent event) {
         Player refreshPlayer = null;
@@ -795,6 +895,11 @@ public class EssentialsPlayerListener implements Listener {
         }
     }
 
+    /**
+     * <p>onPlayerFishEvent.</p>
+     *
+     * @param event a {@link org.bukkit.event.player.PlayerFishEvent} object.
+     */
     @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
     public void onPlayerFishEvent(final PlayerFishEvent event) {
         final User user = ess.getUser(event.getPlayer());
@@ -862,6 +967,9 @@ public class EssentialsPlayerListener implements Listener {
          *   - The plugin command is from Essentials
          *   - There is no known alternative OR the alternative is overridden by Essentials
          *   - The user is not allowed to perform the given Essentials command
+         * @param user The user to set hide the command for.
+         * @param commandLabel The commandLabel to change.
+         * @return boolean True if all of the above conditions are met.
          */
         private boolean shouldHideFromUser(String commandLabel, User user) {
             PluginCommand command = ess.getServer().getPluginCommand(commandLabel);

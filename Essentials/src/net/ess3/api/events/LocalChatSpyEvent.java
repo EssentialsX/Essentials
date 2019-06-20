@@ -11,6 +11,12 @@ import java.util.Set;
 import static com.earth2me.essentials.I18n.tl;
 
 
+/**
+ * <p>LocalChatSpyEvent class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public class LocalChatSpyEvent extends Event implements Cancellable {
     private static final HandlerList handlers = new HandlerList();
     private boolean cancelled = false;
@@ -19,6 +25,15 @@ public class LocalChatSpyEvent extends Event implements Cancellable {
     private Player player;
     private final Set<Player> recipients;
 
+    /**
+     * <p>Constructor for LocalChatSpyEvent.</p>
+     *
+     * @param async a boolean.
+     * @param who a {@link org.bukkit.entity.Player} object.
+     * @param format a {@link java.lang.String} object.
+     * @param message a {@link java.lang.String} object.
+     * @param players a {@link java.util.Set} object.
+     */
     public LocalChatSpyEvent(final boolean async, final Player who, final String format, final String message, final Set<Player> players) {
         super(async);
         this.format = tl("chatTypeLocal").concat(tl("chatTypeSpy")).concat(format);
@@ -47,9 +62,9 @@ public class LocalChatSpyEvent extends Event implements Cancellable {
 
     /**
      * Gets the format to use to display this chat message. When this event finishes execution, the first format
-     * parameter is the {@link Player#getDisplayName()} and the second parameter is {@link #getMessage()}
+     * parameter is the {@link org.bukkit.entity.Player#getDisplayName()} and the second parameter is {@link #getMessage()}
      *
-     * @return {@link String#format(String, Object...)} compatible format string
+     * @return {@link java.lang.String#format(String, Object...)} compatible format string
      */
     public String getFormat() {
         return format;
@@ -57,12 +72,11 @@ public class LocalChatSpyEvent extends Event implements Cancellable {
 
     /**
      * Sets the format to use to display this chat message. When this event finishes execution, the first format
-     * parameter is the {@link Player#getDisplayName()} and the second parameter is {@link #getMessage()}
+     * parameter is the {@link org.bukkit.entity.Player#getDisplayName()} and the second parameter is {@link #getMessage()}
      *
-     * @param format {@link String#format(String, Object...)} compatible format string
-     *
-     * @throws IllegalFormatException if the underlying API throws the exception
-     * @throws NullPointerException   if format is null
+     * @param format {@link java.lang.String#format(String, Object...)} compatible format string
+     * @throws java.util.IllegalFormatException if the underlying API throws the exception
+     * @throws java.lang.NullPointerException   if format is null
      * @see String#format(String, Object...)
      */
     public void setFormat(final String format) throws IllegalFormatException, NullPointerException {
@@ -95,21 +109,29 @@ public class LocalChatSpyEvent extends Event implements Cancellable {
         return player;
     }
 
+    /** {@inheritDoc} */
     @Override
     public boolean isCancelled() {
         return cancelled;
     }
 
+    /** {@inheritDoc} */
     @Override
     public void setCancelled(boolean cancel) {
         this.cancelled = cancel;
     }
 
+    /** {@inheritDoc} */
     @Override
     public HandlerList getHandlers() {
         return handlers;
     }
 
+    /**
+     * <p>getHandlerList.</p>
+     *
+     * @return a {@link org.bukkit.event.HandlerList} object.
+     */
     public static HandlerList getHandlerList() {
         return handlers;
     }

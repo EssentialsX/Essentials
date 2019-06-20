@@ -14,11 +14,21 @@ import java.util.List;
 import static com.earth2me.essentials.I18n.tl;
 
 
+/**
+ * <p>Commandback class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public class Commandback extends EssentialsCommand {
+    /**
+     * <p>Constructor for Commandback.</p>
+     */
     public Commandback() {
         super("back");
     }
 
+    /** {@inheritDoc} */
     @Override
     protected void run(Server server, User user, String commandLabel, String[] args) throws Exception {
         CommandSource sender = user.getSource();
@@ -30,6 +40,7 @@ public class Commandback extends EssentialsCommand {
         teleportBack(sender, user);
     }
 
+    /** {@inheritDoc} */
     @Override
     protected void run(Server server, CommandSource sender, String commandLabel, String[] args) throws Exception {
         if (args.length < 1) {
@@ -90,6 +101,7 @@ public class Commandback extends EssentialsCommand {
         throw new NoChargeException();
     }
 
+    /** {@inheritDoc} */
     @Override
     protected List<String> getTabCompleteOptions(Server server, User user, String commandLabel, String[] args) {
         if (user.isAuthorized("essentials.back.others") && args.length == 1) {

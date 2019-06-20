@@ -14,12 +14,24 @@ import java.util.logging.Logger;
 import static com.earth2me.essentials.I18n.tl;
 
 
+/**
+ * <p>Warps class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public class Warps implements IConf, net.ess3.api.IWarps {
     private static final Logger logger = Logger.getLogger("Essentials");
     private final Map<StringIgnoreCase, EssentialsConf> warpPoints = new HashMap<StringIgnoreCase, EssentialsConf>();
     private final File warpsFolder;
     private final Server server;
 
+    /**
+     * <p>Constructor for Warps.</p>
+     *
+     * @param server a {@link org.bukkit.Server} object.
+     * @param dataFolder a {@link java.io.File} object.
+     */
     public Warps(Server server, File dataFolder) {
         this.server = server;
         warpsFolder = new File(dataFolder, "warps");
@@ -29,11 +41,13 @@ public class Warps implements IConf, net.ess3.api.IWarps {
         reloadConfig();
     }
 
+    /** {@inheritDoc} */
     @Override
     public boolean isEmpty() {
         return warpPoints.isEmpty();
     }
 
+    /** {@inheritDoc} */
     @Override
     public Collection<String> getList() {
         final List<String> keys = new ArrayList<String>();
@@ -44,6 +58,7 @@ public class Warps implements IConf, net.ess3.api.IWarps {
         return keys;
     }
 
+    /** {@inheritDoc} */
     @Override
     public Location getWarp(String warp) throws WarpNotFoundException, InvalidWorldException {
         EssentialsConf conf = warpPoints.get(new StringIgnoreCase(warp));
@@ -53,11 +68,13 @@ public class Warps implements IConf, net.ess3.api.IWarps {
         return conf.getLocation(null, server);
     }
 
+    /** {@inheritDoc} */
     @Override
     public void setWarp(String name, Location loc) throws Exception {
         setWarp(null, name, loc);
     }
     
+    /** {@inheritDoc} */
     @Override
     public void setWarp(IUser user, String name, Location loc) throws Exception {
         String filename = StringUtil.sanitizeFileName(name);
@@ -80,6 +97,7 @@ public class Warps implements IConf, net.ess3.api.IWarps {
         }
     }
     
+    /** {@inheritDoc} */
     @Override
     public UUID getLastOwner(String warp) throws WarpNotFoundException {
         EssentialsConf conf = warpPoints.get(new StringIgnoreCase(warp));
@@ -94,6 +112,7 @@ public class Warps implements IConf, net.ess3.api.IWarps {
         return uuid;
     }
     
+    /** {@inheritDoc} */
     @Override
     public void removeWarp(String name) throws Exception {
         EssentialsConf conf = warpPoints.get(new StringIgnoreCase(name));
@@ -106,6 +125,7 @@ public class Warps implements IConf, net.ess3.api.IWarps {
         warpPoints.remove(new StringIgnoreCase(name));
     }
 
+    /** {@inheritDoc} */
     @Override
     public final void reloadConfig() {
         warpPoints.clear();
@@ -130,11 +150,13 @@ public class Warps implements IConf, net.ess3.api.IWarps {
     }
 
     //This is here for future 3.x api support. Not implemented here becasue storage is handled differently
+    /** {@inheritDoc} */
     @Override
     public File getWarpFile(String name) throws InvalidNameException {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
+    /** {@inheritDoc} */
     @Override
     public int getCount() {
         return getList().size();

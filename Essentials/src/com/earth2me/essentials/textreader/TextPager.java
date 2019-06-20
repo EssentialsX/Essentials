@@ -10,19 +10,44 @@ import java.util.Map;
 import static com.earth2me.essentials.I18n.tl;
 
 
+/**
+ * <p>TextPager class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public class TextPager {
     private final transient IText text;
     private final transient boolean onePage;
 
+    /**
+     * <p>Constructor for TextPager.</p>
+     *
+     * @param text a {@link com.earth2me.essentials.textreader.IText} object.
+     */
     public TextPager(final IText text) {
         this(text, false);
     }
 
+    /**
+     * <p>Constructor for TextPager.</p>
+     *
+     * @param text a {@link com.earth2me.essentials.textreader.IText} object.
+     * @param onePage a boolean.
+     */
     public TextPager(final IText text, final boolean onePage) {
         this.text = text;
         this.onePage = onePage;
     }
 
+    /**
+     * <p>showPage.</p>
+     *
+     * @param pageStr a {@link java.lang.String} object.
+     * @param chapterPageStr a {@link java.lang.String} object.
+     * @param commandName a {@link java.lang.String} object.
+     * @param sender a {@link com.earth2me.essentials.CommandSource} object.
+     */
     public void showPage(final String pageStr, final String chapterPageStr, final String commandName, final CommandSource sender) {
         List<String> lines = text.getLines();
         List<String> chapters = text.getChapters();

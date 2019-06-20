@@ -9,11 +9,21 @@ import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import static com.earth2me.essentials.I18n.tl;
 
 
+/**
+ * <p>SignWarp class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public class SignWarp extends EssentialsSign {
+    /**
+     * <p>Constructor for SignWarp.</p>
+     */
     public SignWarp() {
         super("Warp");
     }
 
+    /** {@inheritDoc} */
     @Override
     protected boolean onSignCreate(final ISign sign, final User player, final String username, final IEssentials ess) throws SignException {
         validateTrade(sign, 3, ess);
@@ -36,6 +46,7 @@ public class SignWarp extends EssentialsSign {
         }
     }
 
+    /** {@inheritDoc} */
     @Override
     protected boolean onSignInteract(final ISign sign, final User player, final String username, final IEssentials ess) throws SignException, ChargeException {
         final String warpName = sign.getLine(1);

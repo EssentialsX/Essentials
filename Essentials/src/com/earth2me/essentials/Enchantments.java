@@ -10,6 +10,12 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 
+/**
+ * <p>Enchantments class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public class Enchantments {
     private static final Map<String, Enchantment> ENCHANTMENTS = new HashMap<String, Enchantment>();
     private static final Map<String, Enchantment> ALIASENCHANTMENTS = new HashMap<String, Enchantment>();
@@ -261,6 +267,12 @@ public class Enchantments {
         }
     }
 
+    /**
+     * <p>getByName.</p>
+     *
+     * @param name a {@link java.lang.String} object.
+     * @return a {@link org.bukkit.enchantments.Enchantment} object.
+     */
     public static Enchantment getByName(String name) {
         Enchantment enchantment = null;
         if (isFlat) { // 1.13+ only
@@ -279,10 +291,20 @@ public class Enchantments {
         return enchantment;
     }
 
+    /**
+     * <p>entrySet.</p>
+     *
+     * @return a {@link java.util.Set} object.
+     */
     public static Set<Entry<String, Enchantment>> entrySet() {
         return ENCHANTMENTS.entrySet();
     }
 
+    /**
+     * <p>keySet.</p>
+     *
+     * @return a {@link java.util.Set} object.
+     */
     public static Set<String> keySet() {
         return ENCHANTMENTS.keySet();
     }

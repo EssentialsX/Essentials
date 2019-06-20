@@ -17,11 +17,18 @@ import java.util.logging.Level;
 import static com.earth2me.essentials.I18n.tl;
 
 
+/**
+ * <p>EssentialsChatPlayerListenerNormal class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public class EssentialsChatPlayerListenerNormal extends EssentialsChatPlayer {
     EssentialsChatPlayerListenerNormal(final Server server, final IEssentials ess, final Map<AsyncPlayerChatEvent, ChatStore> chatStorage) {
         super(server, ess, chatStorage);
     }
 
+    /** {@inheritDoc} */
     @EventHandler(priority = EventPriority.NORMAL)
     @Override
     public void onPlayerChat(final AsyncPlayerChatEvent event) {

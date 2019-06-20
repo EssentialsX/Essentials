@@ -14,11 +14,21 @@ import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import static com.earth2me.essentials.I18n.tl;
 
 
+/**
+ * <p>Commandspawn class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public class Commandspawn extends EssentialsCommand {
+    /**
+     * <p>Constructor for Commandspawn.</p>
+     */
     public Commandspawn() {
         super("spawn");
     }
 
+    /** {@inheritDoc} */
     @Override
     public void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception {
         final Trade charge = new Trade(this.getName(), ess);
@@ -35,6 +45,7 @@ public class Commandspawn extends EssentialsCommand {
         throw new NoChargeException();
     }
 
+    /** {@inheritDoc} */
     @Override
     protected void run(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception {
         if (args.length < 1) {

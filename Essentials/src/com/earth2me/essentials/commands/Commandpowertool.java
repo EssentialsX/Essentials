@@ -16,11 +16,21 @@ import java.util.Locale;
 import static com.earth2me.essentials.I18n.tl;
 
 
+/**
+ * <p>Commandpowertool class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public class Commandpowertool extends EssentialsCommand {
+    /**
+     * <p>Constructor for Commandpowertool.</p>
+     */
     public Commandpowertool() {
         super("powertool");
     }
 
+    /** {@inheritDoc} */
     @Override
     protected void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception {
         final String command = getFinalArg(args, 0);
@@ -28,6 +38,7 @@ public class Commandpowertool extends EssentialsCommand {
         powertool(server, user.getSource(), user, commandLabel, itemStack, command);
     }
 
+    /** {@inheritDoc} */
     @Override
     protected void run(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception {
         if (args.length < 3) //running from console means inserting a player and item before the standard syntax
@@ -41,6 +52,17 @@ public class Commandpowertool extends EssentialsCommand {
         powertool(server, sender, user, commandLabel, itemStack, command);
     }
 
+    /**
+     * <p>powertool.</p>
+     *
+     * @param server a {@link org.bukkit.Server} object.
+     * @param sender a {@link com.earth2me.essentials.CommandSource} object.
+     * @param user a {@link com.earth2me.essentials.User} object.
+     * @param commandLabel a {@link java.lang.String} object.
+     * @param itemStack a {@link org.bukkit.inventory.ItemStack} object.
+     * @param command a {@link java.lang.String} object.
+     * @throws java.lang.Exception if any.
+     */
     protected void powertool(final Server server, final CommandSource sender, final User user, final String commandLabel, final ItemStack itemStack, String command) throws Exception {
         // check to see if this is a clear all command
         if (command != null && command.equalsIgnoreCase("d:")) {
@@ -105,6 +127,7 @@ public class Commandpowertool extends EssentialsCommand {
         user.setPowertool(itemStack, powertools);
     }
 
+    /** {@inheritDoc} */
     @Override
     protected List<String> getTabCompleteOptions(Server server, User user, String commandLabel, String[] args) {
         if (args.length == 1) {
@@ -131,6 +154,7 @@ public class Commandpowertool extends EssentialsCommand {
         }
     }
 
+    /** {@inheritDoc} */
     @Override
     protected List<String> getTabCompleteOptions(Server server, CommandSource sender, String commandLabel, String[] args) {
         if (args.length == 1) {

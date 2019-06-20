@@ -13,9 +13,20 @@ import java.util.Locale;
 import static com.earth2me.essentials.I18n.tl;
 
 
+/**
+ * <p>Worth class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public class Worth implements IConf {
     private final EssentialsConf config;
 
+    /**
+     * <p>Constructor for Worth.</p>
+     *
+     * @param dataFolder a {@link java.io.File} object.
+     */
     public Worth(File dataFolder) {
         config = new EssentialsConf(new File(dataFolder, "worth.yml"));
         config.setTemplateName("/worth.yml");
@@ -68,10 +79,11 @@ public class Worth implements IConf {
      * @param ess        The Essentials instance.
      * @param user       The user attempting to sell the item.
      * @param is         A stack of the item to search the inventory for.
+     * @param isBulkSell Whether or not to try and bulk sell all items.
      * @param args       The amount to try to sell.
      * @param isBulkSell Whether or not to try and bulk sell all items.
      * @return The amount of items to sell from the player's inventory.
-     * @throws Exception Thrown if trying to sell air or an invalid amount.
+     * @throws java.lang.Exception Thrown if trying to sell air or an invalid amount.
      */
     public int getAmount(IEssentials ess, User user, ItemStack is, String[] args, boolean isBulkSell) throws Exception {
         if (is == null || is.getType() == Material.AIR) {
@@ -149,6 +161,7 @@ public class Worth implements IConf {
         config.save();
     }
 
+    /** {@inheritDoc} */
     @Override
     public void reloadConfig() {
         config.load();

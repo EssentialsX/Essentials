@@ -6,11 +6,21 @@ import org.bukkit.Server;
 import static com.earth2me.essentials.I18n.tl;
 
 
+/**
+ * <p>Commandtpdeny class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public class Commandtpdeny extends EssentialsCommand {
+    /**
+     * <p>Constructor for Commandtpdeny.</p>
+     */
     public Commandtpdeny() {
         super("tpdeny");
     }
 
+    /** {@inheritDoc} */
     @Override
     public void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception {
         if (user.getTeleportRequest() == null) {

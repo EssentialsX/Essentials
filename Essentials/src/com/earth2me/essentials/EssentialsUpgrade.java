@@ -28,6 +28,12 @@ import java.util.regex.Pattern;
 import static com.earth2me.essentials.I18n.tl;
 
 
+/**
+ * <p>EssentialsUpgrade class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public class EssentialsUpgrade {
     private final static Logger LOGGER = Logger.getLogger("Essentials");
     private final transient IEssentials ess;
@@ -42,6 +48,9 @@ public class EssentialsUpgrade {
         doneFile.load();
     }
 
+    /**
+     * <p>convertKits.</p>
+     */
     public void convertKits() {
         Kits kits = ess.getKits();
         EssentialsConf config = kits.getConfig();
@@ -288,6 +297,13 @@ public class EssentialsUpgrade {
         return null;
     }
 
+    /**
+     * <p>getFakeLocation.</p>
+     *
+     * @param config a {@link com.earth2me.essentials.EssentialsConf} object.
+     * @param path a {@link java.lang.String} object.
+     * @return a {@link org.bukkit.Location} object.
+     */
     public Location getFakeLocation(EssentialsConf config, String path) {
         String worldName = config.getString((path != null ? path + "." : "") + "world");
         if (worldName == null || worldName.isEmpty()) {
@@ -459,6 +475,12 @@ public class EssentialsUpgrade {
         doneFile.save();
     }
 
+    /**
+     * <p>uuidFileConvert.</p>
+     *
+     * @param ess a {@link net.ess3.api.IEssentials} object.
+     * @param ignoreUFCache a {@link java.lang.Boolean} object.
+     */
     public static void uuidFileConvert(IEssentials ess, Boolean ignoreUFCache) {
         ess.getLogger().info("Starting Essentials UUID userdata conversion");
 
@@ -542,6 +564,9 @@ public class EssentialsUpgrade {
         ess.getLogger().info("To rerun the conversion type /essentials uuidconvert");
     }
 
+    /**
+     * <p>banFormatChange.</p>
+     */
     public void banFormatChange() {
         if (doneFile.getBoolean("banFormatChange", false)) {
             return;
@@ -699,6 +724,9 @@ public class EssentialsUpgrade {
         ess.getLogger().info("Completed usermap repair.");
     }
 
+    /**
+     * <p>beforeSettings.</p>
+     */
     public void beforeSettings() {
         if (!ess.getDataFolder().exists()) {
             ess.getDataFolder().mkdirs();
@@ -707,6 +735,9 @@ public class EssentialsUpgrade {
         moveMotdRulesToFile("rules");
     }
 
+    /**
+     * <p>afterSettings.</p>
+     */
     public void afterSettings() {
         sanitizeAllUserFilenames();
         updateUsersPowerToolsFormat();

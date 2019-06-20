@@ -11,11 +11,21 @@ import java.util.Locale;
 import static com.earth2me.essentials.I18n.tl;
 
 
+/**
+ * <p>Commandunlimited class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public class Commandunlimited extends EssentialsCommand {
+    /**
+     * <p>Constructor for Commandunlimited.</p>
+     */
     public Commandunlimited() {
         super("unlimited");
     }
 
+    /** {@inheritDoc} */
     @Override
     public void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception {
         if (args.length < 1) {

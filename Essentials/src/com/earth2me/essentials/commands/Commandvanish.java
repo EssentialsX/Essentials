@@ -9,16 +9,27 @@ import static com.earth2me.essentials.I18n.tl;
 import net.ess3.api.events.VanishStatusChangeEvent;
 
 
+/**
+ * <p>Commandvanish class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public class Commandvanish extends EssentialsToggleCommand {
+    /**
+     * <p>Constructor for Commandvanish.</p>
+     */
     public Commandvanish() {
         super("vanish", "essentials.vanish.others");
     }
 
+    /** {@inheritDoc} */
     @Override
     protected void run(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception {
         toggleOtherPlayers(server, sender, args);
     }
 
+    /** {@inheritDoc} */
     @Override
     protected void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception {
         handleToggleWithArgs(server, user, args);

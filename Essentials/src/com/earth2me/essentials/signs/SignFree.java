@@ -11,11 +11,21 @@ import org.bukkit.inventory.meta.ItemMeta;
 import static com.earth2me.essentials.I18n.tl;
 
 
+/**
+ * <p>SignFree class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public class SignFree extends EssentialsSign {
+    /**
+     * <p>Constructor for SignFree.</p>
+     */
     public SignFree() {
         super("Free");
     }
 
+    /** {@inheritDoc} */
     @Override
     protected boolean onSignCreate(final ISign sign, final User player, final String username, final IEssentials ess) throws SignException {
         try {
@@ -29,6 +39,7 @@ public class SignFree extends EssentialsSign {
         return true;
     }
 
+    /** {@inheritDoc} */
     @Override
     protected boolean onSignInteract(final ISign sign, final User player, final String username, final IEssentials ess) throws SignException {
         ItemStack itemStack = getItemStack(sign.getLine(1), 1, ess);

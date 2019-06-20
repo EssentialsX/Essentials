@@ -6,16 +6,27 @@ import org.bukkit.Server;
 
 import static com.earth2me.essentials.I18n.tl;
 
+/**
+ * <p>Commandrtoggle class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public class Commandrtoggle extends EssentialsToggleCommand {
+    /**
+     * <p>Constructor for Commandrtoggle.</p>
+     */
     public Commandrtoggle() {
         super("rtoggle", "essentials.rtoggle.others");
     }
 
+    /** {@inheritDoc} */
     @Override
     public void run(Server server, User user, String commandLabel, String[] args) throws Exception {
         handleToggleWithArgs(server, user, args);
     }
 
+    /** {@inheritDoc} */
     @Override
     public void run(Server server, CommandSource sender, String commandLabel, String[] args) throws Exception {
         toggleOtherPlayers(server, sender, args);

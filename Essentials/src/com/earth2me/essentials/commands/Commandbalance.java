@@ -12,11 +12,21 @@ import java.util.List;
 import static com.earth2me.essentials.I18n.tl;
 
 
+/**
+ * <p>Commandbalance class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public class Commandbalance extends EssentialsCommand {
+    /**
+     * <p>Constructor for Commandbalance.</p>
+     */
     public Commandbalance() {
         super("balance");
     }
 
+    /** {@inheritDoc} */
     @Override
     protected void run(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception {
         if (args.length < 1) {
@@ -27,6 +37,7 @@ public class Commandbalance extends EssentialsCommand {
         sender.sendMessage(tl("balanceOther", target.isHidden() ? target.getName() : target.getDisplayName(), NumberUtil.displayCurrency(target.getMoney(), ess)));
     }
 
+    /** {@inheritDoc} */
     @Override
     public void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception {
         if (args.length == 1 && user.isAuthorized("essentials.balance.others")) {
@@ -41,6 +52,7 @@ public class Commandbalance extends EssentialsCommand {
         }
     }
 
+    /** {@inheritDoc} */
     @Override
     protected List<String> getTabCompleteOptions(Server server, User user, String commandLabel, String[] args) {
         if (args.length == 1 && user.isAuthorized("essentials.balance.others")) {
@@ -50,6 +62,7 @@ public class Commandbalance extends EssentialsCommand {
         }
     }
 
+    /** {@inheritDoc} */
     @Override
     protected List<String> getTabCompleteOptions(Server server, CommandSource sender, String commandLabel, String[] args) {
         if (args.length == 1) {

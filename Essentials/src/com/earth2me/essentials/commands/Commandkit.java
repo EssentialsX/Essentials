@@ -15,11 +15,21 @@ import java.util.logging.Level;
 import static com.earth2me.essentials.I18n.tl;
 
 
+/**
+ * <p>Commandkit class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public class Commandkit extends EssentialsCommand {
+    /**
+     * <p>Constructor for Commandkit.</p>
+     */
     public Commandkit() {
         super("kit");
     }
 
+    /** {@inheritDoc} */
     @Override
     public void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception {
         if (args.length < 1) {
@@ -36,6 +46,7 @@ public class Commandkit extends EssentialsCommand {
         }
     }
 
+    /** {@inheritDoc} */
     @Override
     public void run(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception {
         if (args.length < 2) {
@@ -101,6 +112,7 @@ public class Commandkit extends EssentialsCommand {
         }
     }
 
+    /** {@inheritDoc} */
     @Override
     protected List<String> getTabCompleteOptions(final Server server, final User user, final String commandLabel, final String[] args) {
         if (args.length == 1) {
@@ -120,6 +132,7 @@ public class Commandkit extends EssentialsCommand {
         }
     }
 
+    /** {@inheritDoc} */
     @Override
     protected List<String> getTabCompleteOptions(final Server server, final CommandSource sender, final String commandLabel, final String[] args) {
         if (args.length == 1) {

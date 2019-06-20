@@ -13,11 +13,21 @@ import java.util.Locale;
 import static com.earth2me.essentials.I18n.tl;
 
 
+/**
+ * <p>SignEnchant class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public class SignEnchant extends EssentialsSign {
+    /**
+     * <p>Constructor for SignEnchant.</p>
+     */
     public SignEnchant() {
         super("Enchant");
     }
 
+    /** {@inheritDoc} */
     @Override
     protected boolean onSignCreate(final ISign sign, final User player, final String username, final IEssentials ess) throws SignException, ChargeException {
         final ItemStack stack;
@@ -64,6 +74,7 @@ public class SignEnchant extends EssentialsSign {
         return true;
     }
 
+    /** {@inheritDoc} */
     @Override
     protected boolean onSignInteract(ISign sign, User player, String username, IEssentials ess) throws SignException, ChargeException {
         final ItemStack search = sign.getLine(1).equals("*") || sign.getLine(1).equalsIgnoreCase("any") ? null : getItemStack(sign.getLine(1), 1, ess);

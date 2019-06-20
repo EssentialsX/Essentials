@@ -12,11 +12,21 @@ import java.util.List;
 import static com.earth2me.essentials.I18n.tl;
 
 
+/**
+ * <p>Commandkill class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public class Commandkill extends EssentialsLoopCommand {
+    /**
+     * <p>Constructor for Commandkill.</p>
+     */
     public Commandkill() {
         super("kill");
     }
 
+    /** {@inheritDoc} */
     @Override
     public void run(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception {
         if (args.length < 1) {
@@ -26,6 +36,7 @@ public class Commandkill extends EssentialsLoopCommand {
         loopOnlinePlayers(server, sender, true, true, args[0], null);
     }
 
+    /** {@inheritDoc} */
     @Override
     protected void updatePlayer(final Server server, final CommandSource sender, final User user, final String[] args) throws PlayerExemptException {
         final Player matchPlayer = user.getBase();
@@ -47,6 +58,7 @@ public class Commandkill extends EssentialsLoopCommand {
         sender.sendMessage(tl("kill", matchPlayer.getDisplayName()));
     }
 
+    /** {@inheritDoc} */
     @Override
     protected List<String> getTabCompleteOptions(Server server, CommandSource sender, String commandLabel, String[] args) {
         if (args.length == 1) {

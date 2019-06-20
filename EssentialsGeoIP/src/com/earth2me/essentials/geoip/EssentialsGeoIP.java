@@ -10,10 +10,17 @@ import java.util.logging.Level;
 import static com.earth2me.essentials.I18n.tl;
 
 
+/**
+ * <p>EssentialsGeoIP class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public class EssentialsGeoIP extends JavaPlugin {
   
     private transient Metrics metrics = null;
 
+    /** {@inheritDoc} */
     @Override
     public void onEnable() {
         final PluginManager pm = getServer().getPluginManager();

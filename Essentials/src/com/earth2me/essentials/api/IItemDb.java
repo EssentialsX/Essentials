@@ -14,6 +14,12 @@ import java.util.List;
 import java.util.Locale;
 
 
+/**
+ * <p>IItemDb interface.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public interface IItemDb {
 
     /**
@@ -22,7 +28,7 @@ public interface IItemDb {
      * @param name Item name to look up in the database
      * @param quantity Quantity of the item stack
      * @return The requested item stack
-     * @throws Exception if the item stack cannot be created
+     * @throws java.lang.Exception if the item stack cannot be created
      */
     default ItemStack get(final String name, final int quantity) throws Exception {
         final ItemStack stack = get(name.toLowerCase(Locale.ENGLISH));
@@ -38,7 +44,7 @@ public interface IItemDb {
      *
      * @param name Item name to look up in the database
      * @return The requested item stack with the maximum stack size
-     * @throws Exception if the item stack cannot be created
+     * @throws java.lang.Exception if the item stack cannot be created
      */
     ItemStack get(final String name) throws Exception;
 
@@ -80,7 +86,7 @@ public interface IItemDb {
      * @param args Either an item name, or one of the following:
      *             hand (default), inventory/invent/all, blocks
      * @return A List of all matching ItemStacks
-     * @throws Exception if the given args are invalid or no blocks are found
+     * @throws java.lang.Exception if the given args are invalid or no blocks are found
      */
     List<ItemStack> getMatching(User user, String[] args) throws Exception;
 
@@ -119,7 +125,7 @@ public interface IItemDb {
      *
      * @param material Material to look up
      * @return Legacy ID of given material
-     * @throws Exception if the ID cannot be looked up
+     * @throws java.lang.Exception if the ID cannot be looked up
      * @deprecated Item IDs are no longer supported.
      */
     @Deprecated
@@ -130,7 +136,7 @@ public interface IItemDb {
      * item IDs to modern names.
      *
      * @param item Legacy ID in colon syntax.
-     * @return
+     * @return a {@link org.bukkit.Material} object.
      */
     default Material getFromLegacy(String item) {
         final String[] split = item.split(":");

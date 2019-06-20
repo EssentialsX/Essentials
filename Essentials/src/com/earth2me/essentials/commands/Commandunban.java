@@ -12,11 +12,21 @@ import java.util.logging.Level;
 import static com.earth2me.essentials.I18n.tl;
 
 
+/**
+ * <p>Commandunban class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public class Commandunban extends EssentialsCommand {
+    /**
+     * <p>Constructor for Commandunban.</p>
+     */
     public Commandunban() {
         super("unban");
     }
 
+    /** {@inheritDoc} */
     @Override
     public void run(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception {
         if (args.length < 1) {

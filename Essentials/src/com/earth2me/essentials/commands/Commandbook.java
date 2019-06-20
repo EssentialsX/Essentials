@@ -15,14 +15,24 @@ import java.util.List;
 import static com.earth2me.essentials.I18n.tl;
 
 
+/**
+ * <p>Commandbook class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public class Commandbook extends EssentialsCommand {
 
     private static final Material WRITABLE_BOOK = EnumUtil.getMaterial("WRITABLE_BOOK", "BOOK_AND_QUILL");
 
+    /**
+     * <p>Constructor for Commandbook.</p>
+     */
     public Commandbook() {
         super("book");
     }
 
+    /** {@inheritDoc} */
     @Override
     public void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception {
         final ItemStack item = user.getItemInHand();
@@ -75,6 +85,7 @@ public class Commandbook extends EssentialsCommand {
         return author != null && author.equalsIgnoreCase(player);
     }
 
+    /** {@inheritDoc} */
     @Override
     protected List<String> getTabCompleteOptions(Server server, User user, String commandLabel, String[] args) {
         // Right now, we aren't testing what's held in the player's hand - we could, but it's not necessarily worth it

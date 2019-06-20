@@ -13,11 +13,21 @@ import java.util.logging.Level;
 import static com.earth2me.essentials.I18n.tl;
 
 
+/**
+ * <p>Commandmute class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public class Commandmute extends EssentialsCommand {
+    /**
+     * <p>Constructor for Commandmute.</p>
+     */
     public Commandmute() {
         super("mute");
     }
 
+    /** {@inheritDoc} */
     @Override
     public void run(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception {
         boolean nomatch = false;
@@ -116,6 +126,7 @@ public class Commandmute extends EssentialsCommand {
         }
     }
 
+    /** {@inheritDoc} */
     @Override
     protected List<String> getTabCompleteOptions(Server server, CommandSource sender, String commandLabel, String[] args) {
         if (args.length == 1) {

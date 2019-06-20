@@ -6,7 +6,14 @@ import org.bukkit.craftbukkit.v1_8_R1.inventory.CraftItemStack;
 import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
 
+/**
+ * <p>v1_8_R1SpawnerProvider class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public class v1_8_R1SpawnerProvider extends SpawnerProvider {
+    /** {@inheritDoc} */
     @Override
     public ItemStack setEntityType(ItemStack is, EntityType type) {
         net.minecraft.server.v1_8_R1.ItemStack itemStack;
@@ -26,6 +33,7 @@ public class v1_8_R1SpawnerProvider extends SpawnerProvider {
         return setDisplayName(bukkitItemStack, type);
     }
 
+    /** {@inheritDoc} */
     @Override
     public EntityType getEntityType(ItemStack is) {
         net.minecraft.server.v1_8_R1.ItemStack itemStack;
@@ -39,6 +47,7 @@ public class v1_8_R1SpawnerProvider extends SpawnerProvider {
         return EntityType.fromName(name);
     }
 
+    /** {@inheritDoc} */
     @Override
     public String getHumanName() {
         return "CraftBukkit 1.8 NMS-based provider";

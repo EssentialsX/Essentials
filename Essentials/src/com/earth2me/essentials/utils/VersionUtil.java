@@ -9,25 +9,48 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * <p>VersionUtil class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public class VersionUtil {
 
+    /** Constant <code>v1_8_8_R01</code> */
     public static final BukkitVersion v1_8_8_R01 = BukkitVersion.fromString("1.8.8-R0.1-SNAPSHOT");
+    /** Constant <code>v1_9_R01</code> */
     public static final BukkitVersion v1_9_R01 = BukkitVersion.fromString("1.9-R0.1-SNAPSHOT");
+    /** Constant <code>v1_9_4_R01</code> */
     public static final BukkitVersion v1_9_4_R01 = BukkitVersion.fromString("1.9.4-R0.1-SNAPSHOT");
+    /** Constant <code>v1_10_2_R01</code> */
     public static final BukkitVersion v1_10_2_R01 = BukkitVersion.fromString("1.10.2-R0.1-SNAPSHOT");
+    /** Constant <code>v1_11_2_R01</code> */
     public static final BukkitVersion v1_11_2_R01 = BukkitVersion.fromString("1.11.2-R0.1-SNAPSHOT");
+    /** Constant <code>v1_12_0_R01</code> */
     public static final BukkitVersion v1_12_0_R01 = BukkitVersion.fromString("1.12.0-R0.1-SNAPSHOT");
+    /** Constant <code>v1_12_2_R01</code> */
     public static final BukkitVersion v1_12_2_R01 = BukkitVersion.fromString("1.12.2-R0.1-SNAPSHOT");
+    /** Constant <code>v1_13_0_R01</code> */
     public static final BukkitVersion v1_13_0_R01 = BukkitVersion.fromString("1.13.0-R0.1-SNAPSHOT");
+    /** Constant <code>v1_13_2_R01</code> */
     public static final BukkitVersion v1_13_2_R01 = BukkitVersion.fromString("1.13.2-R0.1-SNAPSHOT");
+    /** Constant <code>v1_14_R01</code> */
     public static final BukkitVersion v1_14_R01 = BukkitVersion.fromString("1.14-R0.1-SNAPSHOT");
+    /** Constant <code>v1_14_1_R01</code> */
     public static final BukkitVersion v1_14_1_R01 = BukkitVersion.fromString("1.14.1-R0.1-SNAPSHOT");
+    /** Constant <code>v1_14_2_R01</code> */
     public static final BukkitVersion v1_14_2_R01 = BukkitVersion.fromString("1.14.2-R0.1-SNAPSHOT");
 
     private static final Set<BukkitVersion> supportedVersions = ImmutableSet.of(v1_8_8_R01, v1_9_4_R01, v1_10_2_R01, v1_11_2_R01, v1_12_2_R01, v1_13_2_R01, v1_14_2_R01);
 
     private static BukkitVersion serverVersion = null;
 
+    /**
+     * <p>getServerBukkitVersion.</p>
+     *
+     * @return a {@link com.earth2me.essentials.utils.VersionUtil.BukkitVersion} object.
+     */
     public static BukkitVersion getServerBukkitVersion() {
         if (serverVersion == null) {
             serverVersion = BukkitVersion.fromString(Bukkit.getServer().getBukkitVersion());
@@ -35,6 +58,11 @@ public class VersionUtil {
         return serverVersion;
     }
 
+    /**
+     * <p>isServerSupported.</p>
+     *
+     * @return a boolean.
+     */
     public static boolean isServerSupported() {
         return supportedVersions.contains(getServerBukkitVersion());
     }

@@ -16,11 +16,21 @@ import java.util.logging.Level;
 import static com.earth2me.essentials.I18n.tl;
 
 
+/**
+ * <p>Commandsell class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public class Commandsell extends EssentialsCommand {
+    /**
+     * <p>Constructor for Commandsell.</p>
+     */
     public Commandsell() {
         super("sell");
     }
 
+    /** {@inheritDoc} */
     @Override
     public void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception {
         BigDecimal totalWorth = BigDecimal.ZERO;
@@ -100,6 +110,7 @@ public class Commandsell extends EssentialsCommand {
         return result;
     }
 
+    /** {@inheritDoc} */
     @Override
     protected List<String> getTabCompleteOptions(Server server, User user, String commandLabel, String[] args) {
         if (args.length == 1) {

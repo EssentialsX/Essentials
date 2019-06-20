@@ -14,10 +14,17 @@ import java.util.logging.Level;
 import static com.earth2me.essentials.I18n.tl;
 
 
+/**
+ * <p>EssentialsChat class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public class EssentialsChat extends JavaPlugin {
 
     private transient Metrics metrics = null;
 
+    /** {@inheritDoc} */
     @Override
     public void onEnable() {
         final PluginManager pluginManager = getServer().getPluginManager();

@@ -21,10 +21,19 @@ import java.util.*;
 import static com.earth2me.essentials.I18n.tl;
 
 // This command has 4 undocumented behaviours #EasterEgg
+/**
+ * <p>Commandessentials class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public class Commandessentials extends EssentialsCommand {
 
     private final Sound NOTE_HARP = EnumUtil.valueOf(Sound.class, "BLOCK_NOTE_BLOCK_HARP", "BLOCK_NOTE_HARP", "NOTE_PIANO");
 
+    /**
+     * <p>Constructor for Commandessentials.</p>
+     */
     public Commandessentials() {
         super("essentials");
     }
@@ -53,6 +62,7 @@ public class Commandessentials extends EssentialsCommand {
             "GroupManager"
     );
 
+    /** {@inheritDoc} */
     @Override
     public void run(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception {
         if (args.length == 0) {
@@ -365,6 +375,7 @@ public class Commandessentials extends EssentialsCommand {
         }
     }
 
+    /** {@inheritDoc} */
     @Override
     protected List<String> getTabCompleteOptions(final Server server, final CommandSource sender, final String commandLabel, final String[] args) {
         if (args.length == 1) {

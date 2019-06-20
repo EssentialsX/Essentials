@@ -7,16 +7,27 @@ import net.ess3.api.events.FlyStatusChangeEvent;
 
 import static com.earth2me.essentials.I18n.tl;
 
+/**
+ * <p>Commandfly class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public class Commandfly extends EssentialsToggleCommand {
+    /**
+     * <p>Constructor for Commandfly.</p>
+     */
     public Commandfly() {
         super("fly", "essentials.fly.others");
     }
 
+    /** {@inheritDoc} */
     @Override
     protected void run(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception {
         toggleOtherPlayers(server, sender, args);
     }
 
+    /** {@inheritDoc} */
     @Override
     protected void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception {
         handleToggleWithArgs(server, user, args);

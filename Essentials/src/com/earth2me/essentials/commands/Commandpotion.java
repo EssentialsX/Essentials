@@ -27,11 +27,21 @@ import static com.earth2me.essentials.I18n.tl;
 import net.ess3.nms.refl.ReflUtil;
 
 
+/**
+ * <p>Commandpotion class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public class Commandpotion extends EssentialsCommand {
+    /**
+     * <p>Constructor for Commandpotion.</p>
+     */
     public Commandpotion() {
         super("potion");
     }
 
+    /** {@inheritDoc} */
     @Override
     protected void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception {
         final ItemStack stack = user.getItemInHand();
@@ -83,6 +93,7 @@ public class Commandpotion extends EssentialsCommand {
         }
     }
 
+    /** {@inheritDoc} */
     @Override
     protected List<String> getTabCompleteOptions(Server server, User user, String commandLabel, String[] args) {
         // Note: this enforces an order of effect power duration splash, which the actual command doesn't have.  But that's fine. 

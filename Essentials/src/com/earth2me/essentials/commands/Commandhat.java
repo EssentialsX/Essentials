@@ -14,11 +14,21 @@ import java.util.List;
 import static com.earth2me.essentials.I18n.tl;
 
 
+/**
+ * <p>Commandhat class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public class Commandhat extends EssentialsCommand {
+    /**
+     * <p>Constructor for Commandhat.</p>
+     */
     public Commandhat() {
         super("hat");
     }
 
+    /** {@inheritDoc} */
     @Override
     protected void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception {
         if (args.length > 0 && (args[0].contains("rem") || args[0].contains("off") || args[0].equalsIgnoreCase("0"))) {
@@ -50,6 +60,7 @@ public class Commandhat extends EssentialsCommand {
         }
     }
 
+    /** {@inheritDoc} */
     @Override
     protected List<String> getTabCompleteOptions(final Server server, final User user, final String commandLabel, final String[] args) {
         if (args.length == 1) {

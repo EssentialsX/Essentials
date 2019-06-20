@@ -16,11 +16,18 @@ import java.util.logging.Level;
 import static com.earth2me.essentials.I18n.tl;
 
 
+/**
+ * <p>EssentialsSpawn class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public class EssentialsSpawn extends JavaPlugin implements IEssentialsSpawn {
     private transient IEssentials ess;
     private transient SpawnStorage spawns;
     private transient Metrics metrics = null;
 
+    /** {@inheritDoc} */
     @Override
     public void onEnable() {
         final PluginManager pluginManager = getServer().getPluginManager();
@@ -55,15 +62,18 @@ public class EssentialsSpawn extends JavaPlugin implements IEssentialsSpawn {
         }
     }
 
+    /** {@inheritDoc} */
     @Override
     public void onDisable() {
     }
 
+    /** {@inheritDoc} */
     @Override
     public boolean onCommand(final CommandSender sender, final Command command, final String commandLabel, final String[] args) {
         return ess.onCommandEssentials(sender, command, commandLabel, args, EssentialsSpawn.class.getClassLoader(), "com.earth2me.essentials.spawn.Command", "essentials.", spawns);
     }
 
+    /** {@inheritDoc} */
     @Override
     public void setSpawn(Location loc, String group) {
         if (group == null) {
@@ -72,6 +82,7 @@ public class EssentialsSpawn extends JavaPlugin implements IEssentialsSpawn {
         spawns.setSpawn(loc, group);
     }
 
+    /** {@inheritDoc} */
     @Override
     public Location getSpawn(String group) {
         if (group == null) {

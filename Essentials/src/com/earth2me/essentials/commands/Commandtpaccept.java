@@ -10,11 +10,21 @@ import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import static com.earth2me.essentials.I18n.tl;
 
 
+/**
+ * <p>Commandtpaccept class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public class Commandtpaccept extends EssentialsCommand {
+    /**
+     * <p>Constructor for Commandtpaccept.</p>
+     */
     public Commandtpaccept() {
         super("tpaccept");
     }
 
+    /** {@inheritDoc} */
     @Override
     public void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception {
         final User requester;

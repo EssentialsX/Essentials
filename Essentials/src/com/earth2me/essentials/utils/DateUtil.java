@@ -8,14 +8,34 @@ import java.util.regex.Pattern;
 import static com.earth2me.essentials.I18n.tl;
 
 
+/**
+ * <p>DateUtil class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public class DateUtil {
     private static Pattern timePattern = Pattern.compile("(?:([0-9]+)\\s*y[a-z]*[,\\s]*)?" + "(?:([0-9]+)\\s*mo[a-z]*[,\\s]*)?" + "(?:([0-9]+)\\s*w[a-z]*[,\\s]*)?" + "(?:([0-9]+)\\s*d[a-z]*[,\\s]*)?" + "(?:([0-9]+)\\s*h[a-z]*[,\\s]*)?" + "(?:([0-9]+)\\s*m[a-z]*[,\\s]*)?" + "(?:([0-9]+)\\s*(?:s[a-z]*)?)?", Pattern.CASE_INSENSITIVE);
     private static final int maxYears = 100000;
 
+    /**
+     * <p>removeTimePattern.</p>
+     *
+     * @param input a {@link java.lang.String} object.
+     * @return a {@link java.lang.String} object.
+     */
     public static String removeTimePattern(String input) {
         return timePattern.matcher(input).replaceFirst("").trim();
     }
 
+    /**
+     * <p>parseDateDiff.</p>
+     *
+     * @param time a {@link java.lang.String} object.
+     * @param future a boolean.
+     * @return a long.
+     * @throws java.lang.Exception if any.
+     */
     public static long parseDateDiff(String time, boolean future) throws Exception {
         Matcher m = timePattern.matcher(time);
         int years = 0;
@@ -119,6 +139,12 @@ public class DateUtil {
         return diff;
     }
 
+    /**
+     * <p>formatDateDiff.</p>
+     *
+     * @param date a long.
+     * @return a {@link java.lang.String} object.
+     */
     public static String formatDateDiff(long date) {
         Calendar c = new GregorianCalendar();
         c.setTimeInMillis(date);
@@ -126,6 +152,13 @@ public class DateUtil {
         return DateUtil.formatDateDiff(now, c);
     }
 
+    /**
+     * <p>formatDateDiff.</p>
+     *
+     * @param fromDate a {@link java.util.Calendar} object.
+     * @param toDate a {@link java.util.Calendar} object.
+     * @return a {@link java.lang.String} object.
+     */
     public static String formatDateDiff(Calendar fromDate, Calendar toDate) {
         boolean future = false;
         if (toDate.equals(fromDate)) {

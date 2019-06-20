@@ -13,11 +13,21 @@ import java.util.List;
 import static com.earth2me.essentials.I18n.tl;
 
 
+/**
+ * <p>Commandtpa class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public class Commandtpa extends EssentialsCommand {
+    /**
+     * <p>Constructor for Commandtpa.</p>
+     */
     public Commandtpa() {
         super("tpa");
     }
 
+    /** {@inheritDoc} */
     @Override
     public void run(Server server, User user, String commandLabel, String[] args) throws Exception {
         if (args.length < 1) {
@@ -69,6 +79,7 @@ public class Commandtpa extends EssentialsCommand {
         }
     }
 
+    /** {@inheritDoc} */
     @Override
     protected List<String> getTabCompleteOptions(Server server, User user, String commandLabel, String[] args) {
         if (args.length == 1) {

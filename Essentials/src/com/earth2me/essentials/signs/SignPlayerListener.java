@@ -16,9 +16,20 @@ import java.util.Set;
 import java.util.logging.Level;
 
 
+/**
+ * <p>SignPlayerListener class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public class SignPlayerListener implements Listener {
     private final transient IEssentials ess;
 
+    /**
+     * <p>Constructor for SignPlayerListener.</p>
+     *
+     * @param ess a {@link net.ess3.api.IEssentials} object.
+     */
     public SignPlayerListener(final IEssentials ess) {
         this.ess = ess;
     }
@@ -27,6 +38,11 @@ public class SignPlayerListener implements Listener {
     //Right clicking signs with a block in hand, can now fire cancelled events.
     //This is because when the block place is cancelled (for example not enough space for the block to be placed),
     //the event will be marked as cancelled, thus preventing 30% of sign purchases.
+    /**
+     * <p>onSignPlayerInteract.</p>
+     *
+     * @param event a {@link org.bukkit.event.player.PlayerInteractEvent} object.
+     */
     @EventHandler(priority = EventPriority.LOW)
     public void onSignPlayerInteract(final PlayerInteractEvent event) {
         if (ess.getSettings().areSignsDisabled()) {

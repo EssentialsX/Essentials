@@ -15,12 +15,22 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.Locale;
 
+/**
+ * <p>Commanditemname class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public class Commanditemname extends EssentialsCommand {
     
+    /**
+     * <p>Constructor for Commanditemname.</p>
+     */
     public Commanditemname() {
         super("itemname");
     }
 
+    /** {@inheritDoc} */
     @Override
     protected void run(Server server, User user, String commandLabel, String[] args) throws Exception {
         ItemStack item = user.getBase().getItemInHand();

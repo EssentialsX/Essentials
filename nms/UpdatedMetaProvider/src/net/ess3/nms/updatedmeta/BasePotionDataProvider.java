@@ -10,6 +10,12 @@ import org.bukkit.potion.PotionType;
 
 import java.util.Map;
 
+/**
+ * <p>BasePotionDataProvider class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public class BasePotionDataProvider extends PotionMetaProvider {
     private static Map<Integer, PotionType> damageValueToType = ImmutableMap.<Integer, PotionType>builder()
             .put(1, PotionType.REGEN)
@@ -28,6 +34,7 @@ public class BasePotionDataProvider extends PotionMetaProvider {
             .put(14, PotionType.INVISIBILITY)
             .build();
 
+    /** {@inheritDoc} */
     @Override
     public ItemStack createPotionItem(Material initial, int effectId) throws IllegalArgumentException {
         ItemStack potion = new ItemStack(initial, 1);
@@ -66,6 +73,7 @@ public class BasePotionDataProvider extends PotionMetaProvider {
         return (n >> k) & 1;
     }
 
+    /** {@inheritDoc} */
     @Override
     public String getHumanName() {
         return "1.9+ BasePotionData provider";

@@ -10,20 +10,21 @@ import java.util.Set;
 /**
  * The <code>Methods</code> initializes Methods that utilize the Method interface based on a "first come, first served"
  * basis.
- * <p/>
+ *
  * Allowing you to check whether a payment method exists or not.
- * <p/>
+ *
  * Methods also allows you to set a preferred method of payment before it captures payment plugins in the initialization
  * process.
- * <p/>
+ *
  * in
  * <code>bukkit.yml</code>: <blockquote><pre>
  *  economy:
  *      preferred: "iConomy"
  * </pre></blockquote>
  *
- * @author Nijikokun <nijikokun@shortmail.com> (@nijikokun) @copyright: Copyright (C) 2011 @license: AOL license
- * <http://aol.nexua.org>
+ * @author Nijikokun &lt;<a href="nijikokun@shortmail.com">nijikokun@shortmail.com</a>&gt; (@nijikokun) @copyright: Copyright (C) 2011 @license: AOL license
+ * &lt;<a href="http://aol.nexua.org">http://aol.nexua.org</a>&gt;
+ * @version $Id: $Id
  */
 public class Methods {
     private static String version = null;
@@ -39,7 +40,7 @@ public class Methods {
     }
 
     /**
-     * Implement all methods along with their respective name & class.
+     * Implement all methods along with their respective name and class.
      */
     private static void _init() {
         addMethod("Vault", new com.earth2me.essentials.register.payment.methods.VaultEco());
@@ -77,8 +78,7 @@ public class Methods {
     /**
      * Returns an array of payment method names that have been loaded through the <code>_init</code> method.
      *
-     * @return <code>Set<String></code> - Array of payment methods that are loaded.
-     *
+     * @return <code>Set&lt;String&gt;</code> - Array of payment methods that are loaded.
      * @see #setMethod(PluginManager)
      */
     public static Set<String> getDependencies() {
@@ -90,7 +90,6 @@ public class Methods {
      * payments and other various economic activity.
      *
      * @param plugin Plugin data from bukkit, Internal Class file.
-     *
      * @return Method <em>or</em> Null
      */
     public static Method createMethod(Plugin plugin) {
@@ -113,7 +112,8 @@ public class Methods {
      * Verifies if Register has set a payment method for usage yet.
      *
      * @return <code>boolean</code>
-     *
+     * @see #setMethod(PluginManager)
+     * @see #checkDisabled(Plugin)
      * @see #setMethod(PluginManager)
      * @see #checkDisabled(Plugin)
      */
@@ -125,7 +125,6 @@ public class Methods {
      * Checks Plugin Class against a multitude of checks to verify it's usability as a payment method.
      *
      * @param manager the plugin manager for the server
-     *
      * @return <code>boolean</code> True on success, False on failure.
      */
     public static boolean setMethod(PluginManager manager) {
@@ -204,6 +203,7 @@ public class Methods {
      * Sets the preferred economy
      *
      * @return <code>boolean</code>
+     * @param check a {@link java.lang.String} object.
      */
     public static boolean setPreferred(String check) {
         if (getDependencies().contains(check)) {
@@ -228,7 +228,6 @@ public class Methods {
      * Register.
      *
      * @param method Plugin data from bukkit, Internal Class file.
-     *
      * @return <code>boolean</code>
      */
     public static boolean checkDisabled(Plugin method) {

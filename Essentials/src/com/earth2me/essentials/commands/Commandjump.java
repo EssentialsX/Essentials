@@ -14,11 +14,21 @@ import java.util.List;
 import static com.earth2me.essentials.I18n.tl;
 
 // This method contains an undocumented sub command #EasterEgg
+/**
+ * <p>Commandjump class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public class Commandjump extends EssentialsCommand {
+    /**
+     * <p>Constructor for Commandjump.</p>
+     */
     public Commandjump() {
         super("jump");
     }
 
+    /** {@inheritDoc} */
     @Override
     public void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception {
         if (args.length > 0 && args[0].contains("lock") && user.isAuthorized("essentials.jump.lock")) {
@@ -50,6 +60,7 @@ public class Commandjump extends EssentialsCommand {
         throw new NoChargeException();
     }
 
+    /** {@inheritDoc} */
     @Override
     protected List<String> getTabCompleteOptions(Server server, User user, String commandLabel, String[] args) {
         if (args.length == 1 && user.isAuthorized("essentials.jump.lock")) {

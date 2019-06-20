@@ -3,9 +3,21 @@ package com.earth2me.essentials.craftbukkit;
 import org.bukkit.entity.Player;
 
 
+/**
+ * <p>SetExpFix class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public class SetExpFix {
     //This method is used to update both the recorded total experience and displayed total experience.
     //We reset both types to prevent issues.
+    /**
+     * <p>setTotalExperience.</p>
+     *
+     * @param player a {@link org.bukkit.entity.Player} object.
+     * @param exp a int.
+     */
     public static void setTotalExperience(final Player player, final int exp) {
         if (exp < 0) {
             throw new IllegalArgumentException("Experience is negative!");
@@ -37,6 +49,12 @@ public class SetExpFix {
     }
 
     //new Exp Math from 1.8
+    /**
+     * <p>getExpAtLevel.</p>
+     *
+     * @param level a int.
+     * @return a int.
+     */
     public static int getExpAtLevel(final int level) {
         if (level <= 15) {
             return (2 * level) + 7;
@@ -48,6 +66,12 @@ public class SetExpFix {
 
     }
 
+    /**
+     * <p>getExpToLevel.</p>
+     *
+     * @param level a int.
+     * @return a int.
+     */
     public static int getExpToLevel(final int level) {
         int currentLevel = 0;
         int exp = 0;
@@ -64,6 +88,12 @@ public class SetExpFix {
 
     //This method is required because the bukkit player.getTotalExperience() method, shows exp that has been 'spent'.
     //Without this people would be able to use exp and then still sell it.
+    /**
+     * <p>getTotalExperience.</p>
+     *
+     * @param player a {@link org.bukkit.entity.Player} object.
+     * @return a int.
+     */
     public static int getTotalExperience(final Player player) {
         int exp = (int) Math.round(getExpAtLevel(player) * player.getExp());
         int currentLevel = player.getLevel();
@@ -78,6 +108,12 @@ public class SetExpFix {
         return exp;
     }
 
+    /**
+     * <p>getExpUntilNextLevel.</p>
+     *
+     * @param player a {@link org.bukkit.entity.Player} object.
+     * @return a int.
+     */
     public static int getExpUntilNextLevel(final Player player) {
         int exp = (int) Math.round(getExpAtLevel(player) * player.getExp());
         int nextLevel = player.getLevel();

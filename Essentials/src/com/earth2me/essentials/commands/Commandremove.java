@@ -19,11 +19,21 @@ import static com.earth2me.essentials.I18n.tl;
 
 // This could be rewritten in a simpler form if we made a mapping of all Entity names to their types (which would also provide possible mod support)
 
+/**
+ * <p>Commandremove class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public class Commandremove extends EssentialsCommand {
+    /**
+     * <p>Constructor for Commandremove.</p>
+     */
     public Commandremove() {
         super("remove");
     }
 
+    /** {@inheritDoc} */
     @Override
     protected void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception {
         World world = user.getWorld();
@@ -47,6 +57,7 @@ public class Commandremove extends EssentialsCommand {
 
     }
 
+    /** {@inheritDoc} */
     @Override
     protected void run(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception {
         if (args.length < 2) {
@@ -245,6 +256,7 @@ public class Commandremove extends EssentialsCommand {
         sender.sendMessage(tl("removed", removed));
     }
 
+    /** {@inheritDoc} */
     @Override
     protected List<String> getTabCompleteOptions(Server server, CommandSource sender, String commandLabel, String[] args) {
         if (args.length == 1) {

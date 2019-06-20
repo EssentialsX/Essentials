@@ -11,11 +11,21 @@ import java.util.List;
 import static com.earth2me.essentials.I18n.tl;
 
 
+/**
+ * <p>Commandext class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public class Commandext extends EssentialsLoopCommand {
+    /**
+     * <p>Constructor for Commandext.</p>
+     */
     public Commandext() {
         super("ext");
     }
 
+    /** {@inheritDoc} */
     @Override
     protected void run(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception {
         if (args.length < 1) {
@@ -25,6 +35,7 @@ public class Commandext extends EssentialsLoopCommand {
         loopOnlinePlayers(server, sender, true, true, args[0], null);
     }
 
+    /** {@inheritDoc} */
     @Override
     public void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception {
         if (args.length < 1) {
@@ -36,6 +47,7 @@ public class Commandext extends EssentialsLoopCommand {
         loopOnlinePlayers(server, user.getSource(), true, true, args[0], null);
     }
 
+    /** {@inheritDoc} */
     @Override
     protected void updatePlayer(final Server server, final CommandSource sender, final User player, final String[] args) {
         extPlayer(player.getBase());
@@ -46,6 +58,7 @@ public class Commandext extends EssentialsLoopCommand {
         player.setFireTicks(0);
     }
 
+    /** {@inheritDoc} */
     @Override
     protected List<String> getTabCompleteOptions(Server server, CommandSource sender, String commandLabel, String[] args) {
         if (args.length == 1) {

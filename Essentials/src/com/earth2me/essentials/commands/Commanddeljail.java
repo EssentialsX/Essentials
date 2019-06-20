@@ -8,11 +8,21 @@ import java.util.List;
 import static com.earth2me.essentials.I18n.tl;
 
 
+/**
+ * <p>Commanddeljail class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public class Commanddeljail extends EssentialsCommand {
+    /**
+     * <p>Constructor for Commanddeljail.</p>
+     */
     public Commanddeljail() {
         super("deljail");
     }
 
+    /** {@inheritDoc} */
     @Override
     protected void run(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception {
         if (args.length < 1) {
@@ -27,6 +37,7 @@ public class Commanddeljail extends EssentialsCommand {
         sender.sendMessage(tl("deleteJail", args[0]));
     }
 
+    /** {@inheritDoc} */
     @Override
     protected List<String> getTabCompleteOptions(final Server server, final CommandSource sender, final String commandLabel, final String[] args) {
         if (args.length == 1) {

@@ -18,14 +18,24 @@ import java.util.List;
 import static com.earth2me.essentials.I18n.tl;
 
 
+/**
+ * <p>Commandpay class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public class Commandpay extends EssentialsLoopCommand {
     BigDecimal amount;
     boolean informToConfirm;
 
+    /**
+     * <p>Constructor for Commandpay.</p>
+     */
     public Commandpay() {
         super("pay");
     }
 
+    /** {@inheritDoc} */
     @Override
     public void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception {
         informToConfirm = false;
@@ -54,6 +64,7 @@ public class Commandpay extends EssentialsLoopCommand {
         }
     }
 
+    /** {@inheritDoc} */
     @Override
     protected void updatePlayer(final Server server, final CommandSource sender, final User player, final String[] args) throws ChargeException {
         User user = ess.getUser(sender.getPlayer());
@@ -88,6 +99,7 @@ public class Commandpay extends EssentialsLoopCommand {
         }
     }
 
+    /** {@inheritDoc} */
     @Override
     protected List<String> getTabCompleteOptions(Server server, CommandSource sender, String commandLabel, String[] args) {
         if (args.length == 1) {

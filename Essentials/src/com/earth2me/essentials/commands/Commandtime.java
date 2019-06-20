@@ -13,11 +13,21 @@ import java.util.*;
 import static com.earth2me.essentials.I18n.tl;
 
 
+/**
+ * <p>Commandtime class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public class Commandtime extends EssentialsCommand {
+    /**
+     * <p>Constructor for Commandtime.</p>
+     */
     public Commandtime() {
         super("time");
     }
 
+    /** {@inheritDoc} */
     @Override
     public void run(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception {
         boolean add = false;
@@ -71,6 +81,8 @@ public class Commandtime extends EssentialsCommand {
 
     /**
      * Used to get the time and inform
+     * @param sender The CommandSource where the request originated from.
+     * @param worlds A Collection of Worlds objects to look through.
      */
     private void getWorldsTime(final CommandSource sender, final Collection<World> worlds) {
         if (worlds.size() == 1) {
@@ -86,6 +98,11 @@ public class Commandtime extends EssentialsCommand {
 
     /**
      * Used to set the time and inform of the change
+     * @param sender The CommandSource object where the request originated from
+     * @param worlds A Collection of Worlds objects to look through.
+     * @param ticks What to set the world time to in each of the worlds.
+     * @param add An addition modifier to the world time.
+     * @throws Exception if any.
      */
     private void setWorldsTime(final CommandSource sender, final Collection<World> worlds, final long ticks, final boolean add) throws Exception {
         User user = ess.getUser(sender.getPlayer());
@@ -118,6 +135,11 @@ public class Commandtime extends EssentialsCommand {
 
     /**
      * Used to parse an argument of the type "world(s) selector"
+     * @param server The server object to work on.
+     * @param sender The CommandSource object where the call was made from.
+     * @param selector A selector used as a filter.
+     * @return A Set of World objects.
+     * @throws Exception if any.
      */
     private Set<World> getWorlds(final Server server, final CommandSource sender, final String selector) throws Exception {
         final Set<World> worlds = new TreeSet<>(new WorldNameComparator());
@@ -164,6 +186,7 @@ public class Commandtime extends EssentialsCommand {
         return world.getName().toLowerCase().replaceAll("\\s+", "_");
     }
 
+    /** {@inheritDoc} */
     @Override
     protected List<String> getTabCompleteOptions(Server server, CommandSource sender, String commandLabel, String[] args) {
         final User user = ess.getUser(sender.getPlayer());
@@ -185,6 +208,7 @@ public class Commandtime extends EssentialsCommand {
                 }
             }
             if (user == null || user.isAuthorized("essentials.time.world.all")) {
+                /** {@inheritDoc} */
                 worlds.add("*");
             }
             return worlds;

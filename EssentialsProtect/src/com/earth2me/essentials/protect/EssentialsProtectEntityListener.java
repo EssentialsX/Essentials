@@ -16,6 +16,12 @@ import org.bukkit.event.hanging.HangingBreakEvent;
 import java.util.Locale;
 
 
+/**
+ * <p>EssentialsProtectEntityListener class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public class EssentialsProtectEntityListener implements Listener {
     private final IProtect prot;
     private final IEssentials ess;
@@ -25,6 +31,11 @@ public class EssentialsProtectEntityListener implements Listener {
         this.ess = prot.getEssentialsConnect().getEssentials();
     }
 
+    /**
+     * <p>onEntityDamage.</p>
+     *
+     * @param event a {@link org.bukkit.event.entity.EntityDamageEvent} object.
+     */
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onEntityDamage(final EntityDamageEvent event) {
         final Entity target = event.getEntity();
@@ -135,6 +146,11 @@ public class EssentialsProtectEntityListener implements Listener {
         return (user.isAuthorized("essentials.protect.damage.".concat(type)) && !user.isAuthorized("essentials.protect.damage.disable"));
     }
 
+    /**
+     * <p>onEntityExplode.</p>
+     *
+     * @param event a {@link org.bukkit.event.entity.EntityExplodeEvent} object.
+     */
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onEntityExplode(final EntityExplodeEvent event) {
         if (event.getEntity() == null) {
@@ -170,6 +186,11 @@ public class EssentialsProtectEntityListener implements Listener {
 
     }
 
+    /**
+     * <p>onCreatureSpawn.</p>
+     *
+     * @param event a {@link org.bukkit.event.entity.CreatureSpawnEvent} object.
+     */
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onCreatureSpawn(final CreatureSpawnEvent event) {
         if (event.getEntity() instanceof Player) {
@@ -188,6 +209,11 @@ public class EssentialsProtectEntityListener implements Listener {
         }
     }
 
+    /**
+     * <p>onEntityTarget.</p>
+     *
+     * @param event a {@link org.bukkit.event.entity.EntityTargetEvent} object.
+     */
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onEntityTarget(final EntityTargetEvent event) {
         if (!(event.getTarget() instanceof Player)) {
@@ -199,6 +225,11 @@ public class EssentialsProtectEntityListener implements Listener {
         }
     }
 
+    /**
+     * <p>onExplosionPrime.</p>
+     *
+     * @param event a {@link org.bukkit.event.entity.ExplosionPrimeEvent} object.
+     */
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onExplosionPrime(ExplosionPrimeEvent event) {
         if ((event.getEntity() instanceof Fireball || event.getEntity() instanceof SmallFireball) && prot.getSettingBool(ProtectConfig.prevent_fireball_fire)) {
@@ -206,6 +237,11 @@ public class EssentialsProtectEntityListener implements Listener {
         }
     }
 
+    /**
+     * <p>onEntityChangeBlock.</p>
+     *
+     * @param event a {@link org.bukkit.event.entity.EntityChangeBlockEvent} object.
+     */
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onEntityChangeBlock(EntityChangeBlockEvent event) {
         if (event.getEntityType() == EntityType.ENDERMAN && prot.getSettingBool(ProtectConfig.prevent_enderman_pickup)) {
@@ -217,6 +253,11 @@ public class EssentialsProtectEntityListener implements Listener {
         }
     }
 
+    /**
+     * <p>onPaintingBreak.</p>
+     *
+     * @param event a {@link org.bukkit.event.hanging.HangingBreakByEntityEvent} object.
+     */
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onPaintingBreak(HangingBreakByEntityEvent event) {
         if ((event.getCause() == HangingBreakEvent.RemoveCause.ENTITY) && ((event.getRemover() instanceof Creeper) && prot.getSettingBool(ProtectConfig.prevent_creeper_explosion) || (((event.getRemover() instanceof Fireball) || (event.getRemover() instanceof SmallFireball)) && prot.getSettingBool(ProtectConfig.prevent_fireball_explosion)) || ((event.getRemover() instanceof TNTPrimed) && prot.getSettingBool(ProtectConfig.prevent_tnt_explosion)) || ((event.getRemover() instanceof WitherSkull) && prot.getSettingBool(ProtectConfig.prevent_witherskull_explosion)))) {

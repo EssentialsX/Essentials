@@ -15,11 +15,21 @@ import java.util.Locale;
 import static com.earth2me.essentials.I18n.tl;
 
 
+/**
+ * <p>Commandnick class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public class Commandnick extends EssentialsLoopCommand {
+    /**
+     * <p>Constructor for Commandnick.</p>
+     */
     public Commandnick() {
         super("nick");
     }
 
+    /** {@inheritDoc} */
     @Override
     public void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception {
         if (args.length < 1) {
@@ -39,6 +49,7 @@ public class Commandnick extends EssentialsLoopCommand {
         }
     }
 
+    /** {@inheritDoc} */
     @Override
     public void run(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception {
         if (args.length < 2) {
@@ -52,6 +63,7 @@ public class Commandnick extends EssentialsLoopCommand {
         sender.sendMessage(tl("nickChanged"));
     }
 
+    /** {@inheritDoc} */
     @Override
     protected void updatePlayer(final Server server, final CommandSource sender, final User target, final String[] args) throws NotEnoughArgumentsException {
         final String nick = args[0];
@@ -115,6 +127,7 @@ public class Commandnick extends EssentialsLoopCommand {
         }
     }
 
+    /** {@inheritDoc} */
     @Override
     protected List<String> getTabCompleteOptions(final Server server, final User user, final String commandLabel, final String[] args) {
         if (args.length == 1 && user.isAuthorized("essentials.nick.others")) {
@@ -124,6 +137,7 @@ public class Commandnick extends EssentialsLoopCommand {
         }
     }
 
+    /** {@inheritDoc} */
     @Override
     protected List<String> getTabCompleteOptions(final Server server, final CommandSource sender, final String commandLabel, final String[] args) {
         if (args.length == 1) {

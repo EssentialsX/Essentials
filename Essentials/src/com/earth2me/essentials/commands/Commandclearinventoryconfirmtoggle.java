@@ -6,12 +6,22 @@ import com.earth2me.essentials.User;
 
 import org.bukkit.Server;
 
+/**
+ * <p>Commandclearinventoryconfirmtoggle class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public class Commandclearinventoryconfirmtoggle extends EssentialsCommand {
 
+    /**
+     * <p>Constructor for Commandclearinventoryconfirmtoggle.</p>
+     */
     public Commandclearinventoryconfirmtoggle() {
         super("clearinventoryconfirmtoggle");
     }
 
+    /** {@inheritDoc} */
     @Override
     public void run(Server server, User user, String commandLabel, String[] args) throws Exception {
         boolean confirmingClear = !user.isPromptingClearConfirm();

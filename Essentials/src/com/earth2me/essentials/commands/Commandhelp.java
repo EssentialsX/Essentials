@@ -13,11 +13,21 @@ import java.util.Locale;
 import static com.earth2me.essentials.I18n.tl;
 
 
+/**
+ * <p>Commandhelp class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public class Commandhelp extends EssentialsCommand {
+    /**
+     * <p>Constructor for Commandhelp.</p>
+     */
     public Commandhelp() {
         super("help");
     }
 
+    /** {@inheritDoc} */
     @Override
     protected void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception {
         IText output;
@@ -46,11 +56,13 @@ public class Commandhelp extends EssentialsCommand {
         pager.showPage(pageStr, chapterPageStr, command, user.getSource());
     }
 
+    /** {@inheritDoc} */
     @Override
     protected void run(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception {
         sender.sendMessage(tl("helpConsole"));
     }
 
+    /** {@inheritDoc} */
     @Override
     protected List<String> getTabCompleteOptions(Server server, CommandSource sender, String commandLabel, String[] args) {
         if (args.length == 1) {

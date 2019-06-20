@@ -8,11 +8,21 @@ import org.bukkit.entity.Player;
 import static com.earth2me.essentials.I18n.tl;
 
 
+/**
+ * <p>Commandkickall class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public class Commandkickall extends EssentialsCommand {
+    /**
+     * <p>Constructor for Commandkickall.</p>
+     */
     public Commandkickall() {
         super("kickall");
     }
 
+    /** {@inheritDoc} */
     @Override
     public void run(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception {
         String kickReason = args.length > 0 ? getFinalArg(args, 0) : tl("kickDefault");

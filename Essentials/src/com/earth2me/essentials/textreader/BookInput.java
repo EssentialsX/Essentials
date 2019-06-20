@@ -7,6 +7,12 @@ import java.lang.ref.SoftReference;
 import java.util.*;
 
 
+/**
+ * <p>BookInput class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public class BookInput implements IText {
     private final static HashMap<String, SoftReference<BookInput>> cache = new HashMap<String, SoftReference<BookInput>>();
     private final transient List<String> lines;
@@ -14,6 +20,14 @@ public class BookInput implements IText {
     private final transient Map<String, Integer> bookmarks;
     private final transient long lastChange;
 
+    /**
+     * <p>Constructor for BookInput.</p>
+     *
+     * @param filename a {@link java.lang.String} object.
+     * @param createFile a boolean.
+     * @param ess a {@link net.ess3.api.IEssentials} object.
+     * @throws java.io.IOException if any.
+     */
     public BookInput(final String filename, final boolean createFile, final IEssentials ess) throws IOException {
 
         File file = null;
@@ -88,16 +102,19 @@ public class BookInput implements IText {
         }
     }
 
+    /** {@inheritDoc} */
     @Override
     public List<String> getLines() {
         return lines;
     }
 
+    /** {@inheritDoc} */
     @Override
     public List<String> getChapters() {
         return chapters;
     }
 
+    /** {@inheritDoc} */
     @Override
     public Map<String, Integer> getBookmarks() {
         return bookmarks;

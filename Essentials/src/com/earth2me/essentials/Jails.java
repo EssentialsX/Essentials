@@ -31,10 +31,21 @@ import java.util.logging.Logger;
 import static com.earth2me.essentials.I18n.tl;
 
 
+/**
+ * <p>Jails class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public class Jails extends AsyncStorageObjectHolder<com.earth2me.essentials.settings.Jails> implements net.ess3.api.IJails {
     private static final transient Logger LOGGER = Bukkit.getLogger();
     private static transient boolean enabled = false;
 
+    /**
+     * <p>Constructor for Jails.</p>
+     *
+     * @param ess a {@link net.ess3.api.IEssentials} object.
+     */
     public Jails(final IEssentials ess) {
         super(ess, com.earth2me.essentials.settings.Jails.class);
         reloadConfig();
@@ -50,21 +61,27 @@ public class Jails extends AsyncStorageObjectHolder<com.earth2me.essentials.sett
         }
     }
 
+    /** {@inheritDoc} */
     @Override
     public File getStorageFile() {
         return new File(ess.getDataFolder(), "jail.yml");
     }
 
+    /** {@inheritDoc} */
     @Override
     public void finishRead() {
         checkRegister();
     }
 
+    /** {@inheritDoc} */
     @Override
     public void finishWrite() {
         checkRegister();
     }
 
+    /**
+     * <p>resetListener.</p>
+     */
     public void resetListener() {
         enabled = false;
         checkRegister();
@@ -76,6 +93,7 @@ public class Jails extends AsyncStorageObjectHolder<com.earth2me.essentials.sett
         }
     }
 
+    /** {@inheritDoc} */
     @Override
     public Location getJail(final String jailName) throws Exception {
         acquireReadLock();
@@ -93,6 +111,7 @@ public class Jails extends AsyncStorageObjectHolder<com.earth2me.essentials.sett
         }
     }
 
+    /** {@inheritDoc} */
     @Override
     public Collection<String> getList() throws Exception {
         acquireReadLock();
@@ -106,6 +125,7 @@ public class Jails extends AsyncStorageObjectHolder<com.earth2me.essentials.sett
         }
     }
 
+    /** {@inheritDoc} */
     @Override
     public void removeJail(final String jail) throws Exception {
         acquireWriteLock();
@@ -119,6 +139,7 @@ public class Jails extends AsyncStorageObjectHolder<com.earth2me.essentials.sett
         }
     }
 
+    /** {@inheritDoc} */
     @Override
     public void sendToJail(final IUser user, final String jail) throws Exception {
         acquireReadLock();
@@ -133,6 +154,7 @@ public class Jails extends AsyncStorageObjectHolder<com.earth2me.essentials.sett
         }
     }
 
+    /** {@inheritDoc} */
     @Override
     public void setJail(final String jailName, final Location loc) throws Exception {
         acquireWriteLock();
@@ -146,6 +168,7 @@ public class Jails extends AsyncStorageObjectHolder<com.earth2me.essentials.sett
         }
     }
 
+    /** {@inheritDoc} */
     @Override
     public int getCount() {
         try {

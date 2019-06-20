@@ -14,6 +14,12 @@ import java.util.*;
 import static com.earth2me.essentials.I18n.tl;
 
 
+/**
+ * <p>Commandptime class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public class Commandptime extends EssentialsCommand {
     private static final Set<String> getAliases = new HashSet<>();
 
@@ -24,10 +30,14 @@ public class Commandptime extends EssentialsCommand {
         getAliases.add("display");
     }
 
+    /**
+     * <p>Constructor for Commandptime.</p>
+     */
     public Commandptime() {
         super("ptime");
     }
 
+    /** {@inheritDoc} */
     @Override
     public void run(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception {
         // Which Players(s) / Users(s) are we interested in?
@@ -78,6 +88,8 @@ public class Commandptime extends EssentialsCommand {
 
     /**
      * Used to get the time and inform
+     * @param sender the CommandSource object where the call was made from.
+     * @param users a Collection of users to inform.
      */
     private void getUsersTime(final CommandSource sender, final Collection<User> users) {
         if (users.size() > 1) {
@@ -100,6 +112,10 @@ public class Commandptime extends EssentialsCommand {
 
     /**
      * Used to set the time and inform of the change
+     * @param sender a CommandSource object where the call was made from.
+     * @param users A Collection of Users to inform.
+     * @param ticks The ticks that the users' times should be set to.
+     * @param relative Relative or absolute tick values.
      */
     private void setUsersTime(final CommandSource sender, final Collection<User> users, final Long ticks, Boolean relative) {
         // Update the time
@@ -146,6 +162,11 @@ public class Commandptime extends EssentialsCommand {
 
     /**
      * Used to parse an argument of the type "users(s) selector"
+     * @param server The Server object to look through.
+     * @param sender A CommandSource object where the call was made form.
+     * @param selector A string selector used as a filter.
+     * @return A Set of Users.
+     * @throws Exception if any.
      */
     private Set<User> getUsers(final Server server, final CommandSource sender, final String selector) throws Exception {
         final Set<User> users = new TreeSet<>(new UserNameComparator());
@@ -186,11 +207,13 @@ public class Commandptime extends EssentialsCommand {
         return users;
     }
 
+    /** {@inheritDoc} */
     @Override
     protected List<String> getTabCompleteOptions(Server server, CommandSource sender, String commandLabel, String[] args) {
         final User user = ess.getUser(sender.getPlayer());
 
         if (args.length == 1) {
+            /** {@inheritDoc} */
             return Lists.newArrayList("get", "reset", "sunrise", "day", "morning", "noon", "afternoon", "sunset", "night", "midnight");
         } else if (args.length == 2 && (getAliases.contains(args[0]) || user == null || user.isAuthorized("essentials.ptime.others"))) {
             return getPlayers(server, sender);

@@ -15,14 +15,24 @@ import java.util.List;
 
 import static com.earth2me.essentials.I18n.tl;
 
+/**
+ * <p>Commandskull class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public class Commandskull extends EssentialsCommand {
 
     private static final Material SKULL_ITEM = EnumUtil.getMaterial("PLAYER_HEAD", "SKULL_ITEM");
 
+    /**
+     * <p>Constructor for Commandskull.</p>
+     */
     public Commandskull() {
         super("skull");
     }
 
+    /** {@inheritDoc} */
     @Override
     protected void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception {
         String owner;
@@ -67,6 +77,7 @@ public class Commandskull extends EssentialsCommand {
         }
     }
 
+    /** {@inheritDoc} */
     @Override
     protected List<String> getTabCompleteOptions(Server server, User user, String commandLabel, String[] args) {
         if (args.length == 1) {

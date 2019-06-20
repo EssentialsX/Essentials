@@ -26,15 +26,34 @@ import java.util.Set;
 import static com.earth2me.essentials.I18n.tl;
 
 
+/**
+ * <p>EssentialsSign class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public class EssentialsSign {
     private static final Set<Material> EMPTY_SET = new HashSet<Material>();
+    /** Constant <code>MINTRANSACTION</code> */
     protected static final BigDecimal MINTRANSACTION = new BigDecimal("0.01");
     protected transient final String signName;
 
+    /**
+     * <p>Constructor for EssentialsSign.</p>
+     *
+     * @param signName a {@link java.lang.String} object.
+     */
     public EssentialsSign(final String signName) {
         this.signName = signName;
     }
 
+    /**
+     * <p>onSignCreate.</p>
+     *
+     * @param event a {@link org.bukkit.event.block.SignChangeEvent} object.
+     * @param ess a {@link net.ess3.api.IEssentials} object.
+     * @return a boolean.
+     */
     protected final boolean onSignCreate(final SignChangeEvent event, final IEssentials ess) {
         final ISign sign = new EventSign(event);
         final User user = ess.getUser(event.getPlayer());
@@ -67,6 +86,12 @@ public class EssentialsSign {
         return true;
     }
 
+    /**
+     * <p>getSuccessName.</p>
+     *
+     * @param ess a {@link net.ess3.api.IEssentials} object.
+     * @return a {@link java.lang.String} object.
+     */
     public String getSuccessName(IEssentials ess) {
         String successName = getSuccessName();
         if (successName == null) {
@@ -75,6 +100,11 @@ public class EssentialsSign {
         return successName;
     }
 
+    /**
+     * <p>getSuccessName.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
     public String getSuccessName() {
         String successName = tl("signFormatSuccess", this.signName);
         if (successName.isEmpty() || !successName.contains(this.signName)) {
@@ -85,18 +115,42 @@ public class EssentialsSign {
         return successName;
     }
 
+    /**
+     * <p>getTemplateName.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
     public String getTemplateName() {
         return tl("signFormatTemplate", this.signName);
     }
 
+    /**
+     * <p>getName.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
     public String getName() {
         return this.signName;
     }
 
+    /**
+     * <p>getUsername.</p>
+     *
+     * @param user a {@link com.earth2me.essentials.User} object.
+     * @return a {@link java.lang.String} object.
+     */
     public String getUsername(final User user) {
         return user.getName().substring(0, user.getName().length() > 13 ? 13 : user.getName().length());
     }
 
+    /**
+     * <p>onSignInteract.</p>
+     *
+     * @param block a {@link org.bukkit.block.Block} object.
+     * @param player a {@link org.bukkit.entity.Player} object.
+     * @param ess a {@link net.ess3.api.IEssentials} object.
+     * @return a boolean.
+     */
     protected final boolean onSignInteract(final Block block, final Player player, final IEssentials ess) {
         final ISign sign = new BlockSign(block);
         final User user = ess.getUser(player);
@@ -121,6 +175,15 @@ public class EssentialsSign {
         }
     }
 
+    /**
+     * <p>onSignBreak.</p>
+     *
+     * @param block a {@link org.bukkit.block.Block} object.
+     * @param player a {@link org.bukkit.entity.Player} object.
+     * @param ess a {@link net.ess3.api.IEssentials} object.
+     * @return a boolean.
+     * @throws net.ess3.api.MaxMoneyException if any.
+     */
     protected final boolean onSignBreak(final Block block, final Player player, final IEssentials ess) throws MaxMoneyException {
         final ISign sign = new BlockSign(block);
         final User user = ess.getUser(player);
@@ -142,18 +205,60 @@ public class EssentialsSign {
         }
     }
 
+    /**
+     * <p>onSignCreate.</p>
+     *
+     * @param sign a {@link com.earth2me.essentials.signs.EssentialsSign.ISign} object.
+     * @param player a {@link com.earth2me.essentials.User} object.
+     * @param username a {@link java.lang.String} object.
+     * @param ess a {@link net.ess3.api.IEssentials} object.
+     * @return a boolean.
+     * @throws com.earth2me.essentials.signs.SignException if any.
+     * @throws com.earth2me.essentials.ChargeException if any.
+     */
     protected boolean onSignCreate(final ISign sign, final User player, final String username, final IEssentials ess) throws SignException, ChargeException {
         return true;
     }
 
+    /**
+     * <p>onSignInteract.</p>
+     *
+     * @param sign a {@link com.earth2me.essentials.signs.EssentialsSign.ISign} object.
+     * @param player a {@link com.earth2me.essentials.User} object.
+     * @param username a {@link java.lang.String} object.
+     * @param ess a {@link net.ess3.api.IEssentials} object.
+     * @return a boolean.
+     * @throws com.earth2me.essentials.signs.SignException if any.
+     * @throws com.earth2me.essentials.ChargeException if any.
+     * @throws net.ess3.api.MaxMoneyException if any.
+     */
     protected boolean onSignInteract(final ISign sign, final User player, final String username, final IEssentials ess) throws SignException, ChargeException, MaxMoneyException {
         return true;
     }
 
+    /**
+     * <p>onSignBreak.</p>
+     *
+     * @param sign a {@link com.earth2me.essentials.signs.EssentialsSign.ISign} object.
+     * @param player a {@link com.earth2me.essentials.User} object.
+     * @param username a {@link java.lang.String} object.
+     * @param ess a {@link net.ess3.api.IEssentials} object.
+     * @return a boolean.
+     * @throws com.earth2me.essentials.signs.SignException if any.
+     * @throws net.ess3.api.MaxMoneyException if any.
+     */
     protected boolean onSignBreak(final ISign sign, final User player, final String username, final IEssentials ess) throws SignException, MaxMoneyException {
         return true;
     }
 
+    /**
+     * <p>onBlockPlace.</p>
+     *
+     * @param block a {@link org.bukkit.block.Block} object.
+     * @param player a {@link org.bukkit.entity.Player} object.
+     * @param ess a {@link net.ess3.api.IEssentials} object.
+     * @return a boolean.
+     */
     protected final boolean onBlockPlace(final Block block, final Player player, final IEssentials ess) {
         User user = ess.getUser(player);
         try {
@@ -164,6 +269,14 @@ public class EssentialsSign {
         return false;
     }
 
+    /**
+     * <p>onBlockInteract.</p>
+     *
+     * @param block a {@link org.bukkit.block.Block} object.
+     * @param player a {@link org.bukkit.entity.Player} object.
+     * @param ess a {@link net.ess3.api.IEssentials} object.
+     * @return a boolean.
+     */
     protected final boolean onBlockInteract(final Block block, final Player player, final IEssentials ess) {
         User user = ess.getUser(player);
         try {
@@ -174,6 +287,15 @@ public class EssentialsSign {
         return false;
     }
 
+    /**
+     * <p>onBlockBreak.</p>
+     *
+     * @param block a {@link org.bukkit.block.Block} object.
+     * @param player a {@link org.bukkit.entity.Player} object.
+     * @param ess a {@link net.ess3.api.IEssentials} object.
+     * @return a boolean.
+     * @throws net.ess3.api.MaxMoneyException if any.
+     */
     protected final boolean onBlockBreak(final Block block, final Player player, final IEssentials ess) throws MaxMoneyException {
         User user = ess.getUser(player);
         try {
@@ -184,26 +306,67 @@ public class EssentialsSign {
         return false;
     }
 
+    /**
+     * <p>onBlockBreak.</p>
+     *
+     * @param block a {@link org.bukkit.block.Block} object.
+     * @param ess a {@link net.ess3.api.IEssentials} object.
+     * @return a boolean.
+     */
     protected boolean onBlockBreak(final Block block, final IEssentials ess) {
         return true;
     }
 
+    /**
+     * <p>onBlockExplode.</p>
+     *
+     * @param block a {@link org.bukkit.block.Block} object.
+     * @param ess a {@link net.ess3.api.IEssentials} object.
+     * @return a boolean.
+     */
     protected boolean onBlockExplode(final Block block, final IEssentials ess) {
         return true;
     }
 
+    /**
+     * <p>onBlockBurn.</p>
+     *
+     * @param block a {@link org.bukkit.block.Block} object.
+     * @param ess a {@link net.ess3.api.IEssentials} object.
+     * @return a boolean.
+     */
     protected boolean onBlockBurn(final Block block, final IEssentials ess) {
         return true;
     }
 
+    /**
+     * <p>onBlockIgnite.</p>
+     *
+     * @param block a {@link org.bukkit.block.Block} object.
+     * @param ess a {@link net.ess3.api.IEssentials} object.
+     * @return a boolean.
+     */
     protected boolean onBlockIgnite(final Block block, final IEssentials ess) {
         return true;
     }
 
+    /**
+     * <p>onBlockPush.</p>
+     *
+     * @param block a {@link org.bukkit.block.Block} object.
+     * @param ess a {@link net.ess3.api.IEssentials} object.
+     * @return a boolean.
+     */
     protected boolean onBlockPush(final Block block, final IEssentials ess) {
         return true;
     }
 
+    /**
+     * <p>checkIfBlockBreaksSigns.</p>
+     *
+     * @param block a {@link org.bukkit.block.Block} object.
+     * @return a boolean.
+     */
     protected static boolean checkIfBlockBreaksSigns(final Block block) {
         final Block sign = block.getRelative(BlockFace.UP);
         if (MaterialUtil.isSignPost(sign.getType()) && isValidSign(new BlockSign(sign))) {
@@ -226,11 +389,24 @@ public class EssentialsSign {
     }
 
     /** @deprecated, use {@link #isValidSign(IEssentials, ISign)} if possible */
+    /**
+     * <p>isValidSign.</p>
+     *
+     * @param sign a {@link com.earth2me.essentials.signs.EssentialsSign.ISign} object.
+     * @return a boolean.
+     */
     @Deprecated
     public static boolean isValidSign(final ISign sign) {
         return sign.getLine(0).matches("§1\\[.*\\]");
     }
 
+    /**
+     * <p>isValidSign.</p>
+     *
+     * @param ess a {@link net.ess3.api.IEssentials} object.
+     * @param sign a {@link com.earth2me.essentials.signs.EssentialsSign.ISign} object.
+     * @return a boolean.
+     */
     public static boolean isValidSign(final IEssentials ess, final ISign sign) {
         if (!sign.getLine(0).matches("§1\\[.*\\]"))
             return false;
@@ -245,22 +421,65 @@ public class EssentialsSign {
         return false;
     }
 
+    /**
+     * <p>onBlockPlace.</p>
+     *
+     * @param block a {@link org.bukkit.block.Block} object.
+     * @param player a {@link com.earth2me.essentials.User} object.
+     * @param username a {@link java.lang.String} object.
+     * @param ess a {@link net.ess3.api.IEssentials} object.
+     * @return a boolean.
+     * @throws com.earth2me.essentials.signs.SignException if any.
+     * @throws com.earth2me.essentials.ChargeException if any.
+     */
     protected boolean onBlockPlace(final Block block, final User player, final String username, final IEssentials ess) throws SignException, ChargeException {
         return true;
     }
 
+    /**
+     * <p>onBlockInteract.</p>
+     *
+     * @param block a {@link org.bukkit.block.Block} object.
+     * @param player a {@link com.earth2me.essentials.User} object.
+     * @param username a {@link java.lang.String} object.
+     * @param ess a {@link net.ess3.api.IEssentials} object.
+     * @return a boolean.
+     * @throws com.earth2me.essentials.signs.SignException if any.
+     * @throws com.earth2me.essentials.ChargeException if any.
+     */
     protected boolean onBlockInteract(final Block block, final User player, final String username, final IEssentials ess) throws SignException, ChargeException {
         return true;
     }
 
+    /**
+     * <p>onBlockBreak.</p>
+     *
+     * @param block a {@link org.bukkit.block.Block} object.
+     * @param player a {@link com.earth2me.essentials.User} object.
+     * @param username a {@link java.lang.String} object.
+     * @param ess a {@link net.ess3.api.IEssentials} object.
+     * @return a boolean.
+     * @throws com.earth2me.essentials.signs.SignException if any.
+     * @throws net.ess3.api.MaxMoneyException if any.
+     */
     protected boolean onBlockBreak(final Block block, final User player, final String username, final IEssentials ess) throws SignException, MaxMoneyException {
         return true;
     }
 
+    /**
+     * <p>getBlocks.</p>
+     *
+     * @return a {@link java.util.Set} object.
+     */
     public Set<Material> getBlocks() {
         return EMPTY_SET;
     }
 
+    /**
+     * <p>areHeavyEventRequired.</p>
+     *
+     * @return a boolean.
+     */
     public boolean areHeavyEventRequired() {
         return false;
     }
@@ -269,6 +488,14 @@ public class EssentialsSign {
         return sign.getLine(lineNumber).trim();
     }
 
+    /**
+     * <p>validateTrade.</p>
+     *
+     * @param sign a {@link com.earth2me.essentials.signs.EssentialsSign.ISign} object.
+     * @param index a int.
+     * @param ess a {@link net.ess3.api.IEssentials} object.
+     * @throws com.earth2me.essentials.signs.SignException if any.
+     */
     protected final void validateTrade(final ISign sign, final int index, final IEssentials ess) throws SignException {
         final String line = getSignText(sign, index);
         if (line.isEmpty()) {
@@ -281,6 +508,16 @@ public class EssentialsSign {
         }
     }
 
+    /**
+     * <p>validateTrade.</p>
+     *
+     * @param sign a {@link com.earth2me.essentials.signs.EssentialsSign.ISign} object.
+     * @param amountIndex a int.
+     * @param itemIndex a int.
+     * @param player a {@link com.earth2me.essentials.User} object.
+     * @param ess a {@link net.ess3.api.IEssentials} object.
+     * @throws com.earth2me.essentials.signs.SignException if any.
+     */
     protected final void validateTrade(final ISign sign, final int amountIndex, final int itemIndex, final User player, final IEssentials ess) throws SignException {
         final String itemType = getSignText(sign, itemIndex);
         if (itemType.equalsIgnoreCase("exp") || itemType.equalsIgnoreCase("xp")) {
@@ -295,10 +532,33 @@ public class EssentialsSign {
         sign.setLine(itemIndex, itemType);
     }
 
+    /**
+     * <p>getTrade.</p>
+     *
+     * @param sign a {@link com.earth2me.essentials.signs.EssentialsSign.ISign} object.
+     * @param amountIndex a int.
+     * @param itemIndex a int.
+     * @param player a {@link com.earth2me.essentials.User} object.
+     * @param ess a {@link net.ess3.api.IEssentials} object.
+     * @return a {@link com.earth2me.essentials.Trade} object.
+     * @throws com.earth2me.essentials.signs.SignException if any.
+     */
     protected final Trade getTrade(final ISign sign, final int amountIndex, final int itemIndex, final User player, final IEssentials ess) throws SignException {
         return getTrade(sign, amountIndex, itemIndex, player, false, ess);
     }
 
+    /**
+     * <p>getTrade.</p>
+     *
+     * @param sign a {@link com.earth2me.essentials.signs.EssentialsSign.ISign} object.
+     * @param amountIndex a int.
+     * @param itemIndex a int.
+     * @param player a {@link com.earth2me.essentials.User} object.
+     * @param allowId a boolean.
+     * @param ess a {@link net.ess3.api.IEssentials} object.
+     * @return a {@link com.earth2me.essentials.Trade} object.
+     * @throws com.earth2me.essentials.signs.SignException if any.
+     */
     protected final Trade getTrade(final ISign sign, final int amountIndex, final int itemIndex, final User player, final boolean allowId, final IEssentials ess) throws SignException {
         final String itemType = getSignText(sign, itemIndex);
         if (itemType.equalsIgnoreCase("exp") || itemType.equalsIgnoreCase("xp")) {
@@ -314,6 +574,13 @@ public class EssentialsSign {
         return new Trade(item, ess);
     }
 
+    /**
+     * <p>validateInteger.</p>
+     *
+     * @param sign a {@link com.earth2me.essentials.signs.EssentialsSign.ISign} object.
+     * @param index a int.
+     * @throws com.earth2me.essentials.signs.SignException if any.
+     */
     protected final void validateInteger(final ISign sign, final int index) throws SignException {
         final String line = getSignText(sign, index);
         if (line.isEmpty()) {
@@ -323,6 +590,13 @@ public class EssentialsSign {
         sign.setLine(index, Integer.toString(quantity));
     }
 
+    /**
+     * <p>getIntegerPositive.</p>
+     *
+     * @param line a {@link java.lang.String} object.
+     * @return a int.
+     * @throws com.earth2me.essentials.signs.SignException if any.
+     */
     protected final int getIntegerPositive(final String line) throws SignException {
         final int quantity = getInteger(line);
         if (quantity < 1) {
@@ -331,6 +605,13 @@ public class EssentialsSign {
         return quantity;
     }
 
+    /**
+     * <p>getInteger.</p>
+     *
+     * @param line a {@link java.lang.String} object.
+     * @return a int.
+     * @throws com.earth2me.essentials.signs.SignException if any.
+     */
     protected final int getInteger(final String line) throws SignException {
         try {
             final int quantity = Integer.parseInt(line);
@@ -341,10 +622,29 @@ public class EssentialsSign {
         }
     }
 
+    /**
+     * <p>getItemStack.</p>
+     *
+     * @param itemName a {@link java.lang.String} object.
+     * @param quantity a int.
+     * @param ess a {@link net.ess3.api.IEssentials} object.
+     * @return a {@link org.bukkit.inventory.ItemStack} object.
+     * @throws com.earth2me.essentials.signs.SignException if any.
+     */
     protected final ItemStack getItemStack(final String itemName, final int quantity, final IEssentials ess) throws SignException {
         return getItemStack(itemName, quantity, false, ess);
     }
 
+    /**
+     * <p>getItemStack.</p>
+     *
+     * @param itemName a {@link java.lang.String} object.
+     * @param quantity a int.
+     * @param allowId a boolean.
+     * @param ess a {@link net.ess3.api.IEssentials} object.
+     * @return a {@link org.bukkit.inventory.ItemStack} object.
+     * @throws com.earth2me.essentials.signs.SignException if any.
+     */
     protected final ItemStack getItemStack(final String itemName, final int quantity, final boolean allowId, final IEssentials ess) throws SignException {
         if (allowId && ess.getSettings().allowOldIdSigns()) {
             final Material newMaterial = ess.getItemDb().getFromLegacy(itemName);
@@ -362,6 +662,15 @@ public class EssentialsSign {
         }
     }
 
+    /**
+     * <p>getItemMeta.</p>
+     *
+     * @param item a {@link org.bukkit.inventory.ItemStack} object.
+     * @param meta a {@link java.lang.String} object.
+     * @param ess a {@link net.ess3.api.IEssentials} object.
+     * @return a {@link org.bukkit.inventory.ItemStack} object.
+     * @throws com.earth2me.essentials.signs.SignException if any.
+     */
     protected final ItemStack getItemMeta(final ItemStack item, final String meta, final IEssentials ess) throws SignException {
         ItemStack stack = item;
         try {
@@ -377,11 +686,25 @@ public class EssentialsSign {
         return stack;
     }
 
+    /**
+     * <p>getMoney.</p>
+     *
+     * @param line a {@link java.lang.String} object.
+     * @return a {@link java.math.BigDecimal} object.
+     * @throws com.earth2me.essentials.signs.SignException if any.
+     */
     protected final BigDecimal getMoney(final String line) throws SignException {
         final boolean isMoney = line.matches("^[^0-9-\\.][\\.0-9]+$");
         return isMoney ? getBigDecimalPositive(line.substring(1)) : null;
     }
 
+    /**
+     * <p>getBigDecimalPositive.</p>
+     *
+     * @param line a {@link java.lang.String} object.
+     * @return a {@link java.math.BigDecimal} object.
+     * @throws com.earth2me.essentials.signs.SignException if any.
+     */
     protected final BigDecimal getBigDecimalPositive(final String line) throws SignException {
         final BigDecimal quantity = getBigDecimal(line);
         if (quantity.compareTo(MINTRANSACTION) < 0) {
@@ -390,6 +713,13 @@ public class EssentialsSign {
         return quantity;
     }
 
+    /**
+     * <p>getBigDecimal.</p>
+     *
+     * @param line a {@link java.lang.String} object.
+     * @return a {@link java.math.BigDecimal} object.
+     * @throws com.earth2me.essentials.signs.SignException if any.
+     */
     protected final BigDecimal getBigDecimal(final String line) throws SignException {
         try {
             return new BigDecimal(line);
@@ -400,14 +730,44 @@ public class EssentialsSign {
         }
     }
 
+    /**
+     * <p>getTrade.</p>
+     *
+     * @param sign a {@link com.earth2me.essentials.signs.EssentialsSign.ISign} object.
+     * @param index a int.
+     * @param ess a {@link net.ess3.api.IEssentials} object.
+     * @return a {@link com.earth2me.essentials.Trade} object.
+     * @throws com.earth2me.essentials.signs.SignException if any.
+     */
     protected final Trade getTrade(final ISign sign, final int index, final IEssentials ess) throws SignException {
         return getTrade(sign, index, 1, ess);
     }
 
+    /**
+     * <p>getTrade.</p>
+     *
+     * @param sign a {@link com.earth2me.essentials.signs.EssentialsSign.ISign} object.
+     * @param index a int.
+     * @param decrement a int.
+     * @param ess a {@link net.ess3.api.IEssentials} object.
+     * @return a {@link com.earth2me.essentials.Trade} object.
+     * @throws com.earth2me.essentials.signs.SignException if any.
+     */
     protected final Trade getTrade(final ISign sign, final int index, final int decrement, final IEssentials ess) throws SignException {
         return getTrade(sign, index, decrement, false, ess);
     }
 
+    /**
+     * <p>getTrade.</p>
+     *
+     * @param sign a {@link com.earth2me.essentials.signs.EssentialsSign.ISign} object.
+     * @param index a int.
+     * @param decrement a int.
+     * @param allowId a boolean.
+     * @param ess a {@link net.ess3.api.IEssentials} object.
+     * @return a {@link com.earth2me.essentials.Trade} object.
+     * @throws com.earth2me.essentials.signs.SignException if any.
+     */
     protected final Trade getTrade(final ISign sign, final int index, final int decrement, final boolean allowId, final IEssentials ess) throws SignException {
         final String line = getSignText(sign, index);
         if (line.isEmpty()) {

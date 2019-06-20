@@ -20,12 +20,21 @@ import static com.earth2me.essentials.I18n.tl;
 import net.ess3.nms.refl.ReflUtil;
 
 
+/**
+ * <p>Commandrecipe class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public class Commandrecipe extends EssentialsCommand {
 
     private static final Material FIREWORK_ROCKET = EnumUtil.getMaterial("FIREWORK_ROCKET", "FIREWORK");
     private static final Material FIREWORK_STAR = EnumUtil.getMaterial("FIREWORK_STAR", "FIREWORK_CHARGE");
     private static final Material GUNPOWDER = EnumUtil.getMaterial("GUNPOWDER", "SULPHUR");
 
+    /**
+     * <p>Constructor for Commandrecipe.</p>
+     */
     public Commandrecipe() {
         super("recipe");
     }
@@ -38,6 +47,7 @@ public class Commandrecipe extends EssentialsCommand {
         }
     }
 
+    /** {@inheritDoc} */
     @Override
     public void run(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception {
         disableCommandForVersion1_12();
@@ -89,10 +99,23 @@ public class Commandrecipe extends EssentialsCommand {
         }
     }
 
+    /**
+     * <p>furnaceRecipe.</p>
+     *
+     * @param sender a {@link com.earth2me.essentials.CommandSource} object.
+     * @param recipe a {@link org.bukkit.inventory.FurnaceRecipe} object.
+     */
     public void furnaceRecipe(final CommandSource sender, final FurnaceRecipe recipe) {
         sender.sendMessage(tl("recipeFurnace", getMaterialName(recipe.getInput())));
     }
 
+    /**
+     * <p>shapedRecipe.</p>
+     *
+     * @param sender a {@link com.earth2me.essentials.CommandSource} object.
+     * @param recipe a {@link org.bukkit.inventory.ShapedRecipe} object.
+     * @param showWindow a boolean.
+     */
     public void shapedRecipe(final CommandSource sender, final ShapedRecipe recipe, final boolean showWindow) {
         final Map<Character, ItemStack> recipeMap = recipe.getIngredientMap();
 
@@ -143,6 +166,13 @@ public class Commandrecipe extends EssentialsCommand {
         }
     }
 
+    /**
+     * <p>shapelessRecipe.</p>
+     *
+     * @param sender a {@link com.earth2me.essentials.CommandSource} object.
+     * @param recipe a {@link org.bukkit.inventory.ShapelessRecipe} object.
+     * @param showWindow a boolean.
+     */
     public void shapelessRecipe(final CommandSource sender, final ShapelessRecipe recipe, final boolean showWindow) {
         final List<ItemStack> ingredients = recipe.getIngredientList();
         if (showWindow) {
@@ -170,6 +200,12 @@ public class Commandrecipe extends EssentialsCommand {
         }
     }
 
+    /**
+     * <p>getMaterialName.</p>
+     *
+     * @param stack a {@link org.bukkit.inventory.ItemStack} object.
+     * @return a {@link java.lang.String} object.
+     */
     public String getMaterialName(final ItemStack stack) {
         if (stack == null) {
             return tl("recipeNothing");
@@ -177,6 +213,12 @@ public class Commandrecipe extends EssentialsCommand {
         return getMaterialName(stack.getType());
     }
 
+    /**
+     * <p>getMaterialName.</p>
+     *
+     * @param type a {@link org.bukkit.Material} object.
+     * @return a {@link java.lang.String} object.
+     */
     public String getMaterialName(final Material type) {
         if (type == null) {
             return tl("recipeNothing");
@@ -184,6 +226,7 @@ public class Commandrecipe extends EssentialsCommand {
         return type.toString().replace("_", " ").toLowerCase(Locale.ENGLISH);
     }
 
+    /** {@inheritDoc} */
     @Override
     protected List<String> getTabCompleteOptions(final Server server, final CommandSource sender, final String commandLabel, final String[] args) {
         if (args.length == 1) {

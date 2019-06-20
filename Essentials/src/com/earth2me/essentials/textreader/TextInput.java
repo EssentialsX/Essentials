@@ -11,6 +11,12 @@ import java.lang.ref.SoftReference;
 import java.util.*;
 
 
+/**
+ * <p>TextInput class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public class TextInput implements IText {
     private static final HashMap<String, SoftReference<TextInput>> cache = new HashMap<String, SoftReference<TextInput>>();
     private final transient List<String> lines;
@@ -18,6 +24,15 @@ public class TextInput implements IText {
     private final transient Map<String, Integer> bookmarks;
     private final transient long lastChange;
 
+    /**
+     * <p>Constructor for TextInput.</p>
+     *
+     * @param sender a {@link com.earth2me.essentials.CommandSource} object.
+     * @param filename a {@link java.lang.String} object.
+     * @param createFile a boolean.
+     * @param ess a {@link net.ess3.api.IEssentials} object.
+     * @throws java.io.IOException if any.
+     */
     public TextInput(final CommandSource sender, final String filename, final boolean createFile, final IEssentials ess) throws IOException {
 
         File file = null;
@@ -99,16 +114,19 @@ public class TextInput implements IText {
         }
     }
 
+    /** {@inheritDoc} */
     @Override
     public List<String> getLines() {
         return lines;
     }
 
+    /** {@inheritDoc} */
     @Override
     public List<String> getChapters() {
         return chapters;
     }
 
+    /** {@inheritDoc} */
     @Override
     public Map<String, Integer> getBookmarks() {
         return bookmarks;

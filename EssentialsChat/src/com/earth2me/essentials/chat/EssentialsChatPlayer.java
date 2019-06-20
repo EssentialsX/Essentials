@@ -12,6 +12,12 @@ import java.util.Map;
 import java.util.logging.Logger;
 
 
+/**
+ * <p>Abstract EssentialsChatPlayer class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public abstract class EssentialsChatPlayer implements Listener {
     static final Logger logger = Logger.getLogger("EssentialsChat");
     transient IEssentials ess;
@@ -24,6 +30,11 @@ public abstract class EssentialsChatPlayer implements Listener {
         this.chatStorage = chatStorage;
     }
 
+    /**
+     * <p>onPlayerChat.</p>
+     *
+     * @param event a {@link org.bukkit.event.player.AsyncPlayerChatEvent} object.
+     */
     public abstract void onPlayerChat(final AsyncPlayerChatEvent event);
 
     boolean isAborted(final AsyncPlayerChatEvent event) {

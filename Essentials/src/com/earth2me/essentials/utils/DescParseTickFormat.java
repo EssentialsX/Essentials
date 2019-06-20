@@ -9,21 +9,29 @@ import static com.earth2me.essentials.I18n.tl;
 /**
  * This utility class is used for converting between the ingame time in ticks to ingame time as a friendly string. Note
  * that the time is INGAME.
- * <p/>
+ *
  * http://www.minecraftwiki.net/wiki/Day/night_cycle
  *
  * @author Olof Larsson
+ * @version $Id: $Id
  */
 public final class DescParseTickFormat {
     // ============================================
     // First some information vars. TODO: Should this be in a config file?
     // --------------------------------------------
+    /** Constant <code>nameToTicks</code> */
     public static final Map<String, Integer> nameToTicks = new LinkedHashMap<String, Integer>();
+    /** Constant <code>resetAliases</code> */
     public static final Set<String> resetAliases = new HashSet<String>();
+    /** Constant <code>ticksAtMidnight=18000</code> */
     public static final int ticksAtMidnight = 18000;
+    /** Constant <code>ticksPerDay=24000</code> */
     public static final int ticksPerDay = 24000;
+    /** Constant <code>ticksPerHour=1000</code> */
     public static final int ticksPerHour = 1000;
+    /** Constant <code>ticksPerMinute=1000d / 60d</code> */
     public static final double ticksPerMinute = 1000d / 60d;
+    /** Constant <code>ticksPerSecond=1000d / 60d / 60d</code> */
     public static final double ticksPerSecond = 1000d / 60d / 60d;
     private static final SimpleDateFormat SDFTwentyFour = new SimpleDateFormat("HH:mm", Locale.ENGLISH);
     private static final SimpleDateFormat SDFTwelve = new SimpleDateFormat("h:mm aa", Locale.ENGLISH);
@@ -61,6 +69,13 @@ public final class DescParseTickFormat {
     }
 
     // ============================================
+    /**
+     * <p>parse.</p>
+     *
+     * @param desc a {@link java.lang.String} object.
+     * @return a long.
+     * @throws java.lang.NumberFormatException if any.
+     */
     public static long parse(String desc) throws NumberFormatException {
         // Only look at alphanumeric and lowercase and : for 24:00
         desc = desc.toLowerCase(Locale.ENGLISH).replaceAll("[^A-Za-z0-9:]", "");
@@ -93,6 +108,13 @@ public final class DescParseTickFormat {
         throw new NumberFormatException();
     }
 
+    /**
+     * <p>parseTicks.</p>
+     *
+     * @param desc a {@link java.lang.String} object.
+     * @return a long.
+     * @throws java.lang.NumberFormatException if any.
+     */
     public static long parseTicks(String desc) throws NumberFormatException {
         if (!desc.matches("^[0-9]+ti?c?k?s?$")) {
             throw new NumberFormatException();
@@ -103,6 +125,13 @@ public final class DescParseTickFormat {
         return Long.parseLong(desc) % 24000;
     }
 
+    /**
+     * <p>parse24.</p>
+     *
+     * @param desc a {@link java.lang.String} object.
+     * @return a long.
+     * @throws java.lang.NumberFormatException if any.
+     */
     public static long parse24(String desc) throws NumberFormatException {
         if (!desc.matches("^[0-9]{2}[^0-9]?[0-9]{2}$")) {
             throw new NumberFormatException();
@@ -120,6 +149,13 @@ public final class DescParseTickFormat {
         return hoursMinutesToTicks(hours, minutes);
     }
 
+    /**
+     * <p>parse12.</p>
+     *
+     * @param desc a {@link java.lang.String} object.
+     * @return a long.
+     * @throws java.lang.NumberFormatException if any.
+     */
     public static long parse12(String desc) throws NumberFormatException {
         if (!desc.matches("^[0-9]{1,2}([^0-9]?[0-9]{2})?(pm|am)$")) {
             throw new NumberFormatException();
@@ -160,6 +196,13 @@ public final class DescParseTickFormat {
         return hoursMinutesToTicks(hours, minutes);
     }
 
+    /**
+     * <p>hoursMinutesToTicks.</p>
+     *
+     * @param hours a int.
+     * @param minutes a int.
+     * @return a long.
+     */
     public static long hoursMinutesToTicks(final int hours, final int minutes) {
         long ret = ticksAtMidnight;
         ret += (hours) * ticksPerHour;
@@ -170,6 +213,13 @@ public final class DescParseTickFormat {
         return ret;
     }
 
+    /**
+     * <p>parseAlias.</p>
+     *
+     * @param desc a {@link java.lang.String} object.
+     * @return a long.
+     * @throws java.lang.NumberFormatException if any.
+     */
     public static long parseAlias(final String desc) throws NumberFormatException {
         final Integer ret = nameToTicks.get(desc);
         if (ret == null) {
@@ -179,36 +229,79 @@ public final class DescParseTickFormat {
         return ret;
     }
 
+    /**
+     * <p>meansReset.</p>
+     *
+     * @param desc a {@link java.lang.String} object.
+     * @return a boolean.
+     */
     public static boolean meansReset(final String desc) {
         return resetAliases.contains(desc);
     }
 
     // ============================================
+    /**
+     * <p>format.</p>
+     *
+     * @param ticks a long.
+     * @return a {@link java.lang.String} object.
+     */
     public static String format(final long ticks) {
         return tl("timeFormat", format24(ticks), format12(ticks), formatTicks(ticks));
     }
 
+    /**
+     * <p>formatTicks.</p>
+     *
+     * @param ticks a long.
+     * @return a {@link java.lang.String} object.
+     */
     public static String formatTicks(final long ticks) {
         return (ticks % ticksPerDay) + "ticks";
     }
 
+    /**
+     * <p>format24.</p>
+     *
+     * @param ticks a long.
+     * @return a {@link java.lang.String} object.
+     */
     public static String format24(final long ticks) {
         synchronized (SDFTwentyFour) {
             return formatDateFormat(ticks, SDFTwentyFour);
         }
     }
 
+    /**
+     * <p>format12.</p>
+     *
+     * @param ticks a long.
+     * @return a {@link java.lang.String} object.
+     */
     public static String format12(final long ticks) {
         synchronized (SDFTwelve) {
             return formatDateFormat(ticks, SDFTwelve);
         }
     }
 
+    /**
+     * <p>formatDateFormat.</p>
+     *
+     * @param ticks a long.
+     * @param format a {@link java.text.SimpleDateFormat} object.
+     * @return a {@link java.lang.String} object.
+     */
     public static String formatDateFormat(final long ticks, final SimpleDateFormat format) {
         final Date date = ticksToDate(ticks);
         return format.format(date);
     }
 
+    /**
+     * <p>ticksToDate.</p>
+     *
+     * @param ticks a long.
+     * @return a {@link java.util.Date} object.
+     */
     public static Date ticksToDate(long ticks) {
         // Assume the server time starts at 0. It would start on a day.
         // But we will simulate that the server started with 0 at midnight.

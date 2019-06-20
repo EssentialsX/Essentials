@@ -19,6 +19,12 @@ import java.util.*;
 import static com.earth2me.essentials.I18n.tl;
 
 
+/**
+ * <p>SpawnMob class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public class SpawnMob {
 
     private static final Material GOLDEN_HELMET = EnumUtil.getMaterial("GOLDEN_HELMET", "GOLD_HELMET");
@@ -27,6 +33,12 @@ public class SpawnMob {
     private static final Material GOLDEN_BOOTS = EnumUtil.getMaterial("GOLDEN_BOOTS", "GOLD_BOOTS");
     private static final Material GOLDEN_SWORD = EnumUtil.getMaterial("GOLDEN_SWORD", "GOLD_SWORD");
 
+    /**
+     * <p>mobList.</p>
+     *
+     * @param user a {@link com.earth2me.essentials.User} object.
+     * @return a {@link java.lang.String} object.
+     */
     public static String mobList(final User user) {
         final Set<String> mobList = Mob.getMobList();
         final Set<String> availableList = new HashSet<String>();
@@ -41,6 +53,12 @@ public class SpawnMob {
         return StringUtil.joinList(availableList);
     }
 
+    /**
+     * <p>mobParts.</p>
+     *
+     * @param mobString a {@link java.lang.String} object.
+     * @return a {@link java.util.List} object.
+     */
     public static List<String> mobParts(final String mobString) {
         String[] mobParts = mobString.split(",");
 
@@ -53,6 +71,12 @@ public class SpawnMob {
         return mobs;
     }
 
+    /**
+     * <p>mobData.</p>
+     *
+     * @param mobString a {@link java.lang.String} object.
+     * @return a {@link java.util.List} object.
+     */
     public static List<String> mobData(final String mobString) {
         String[] mobParts = mobString.split(",");
 
@@ -75,6 +99,17 @@ public class SpawnMob {
     }
 
     // This method spawns a mob where the user is looking, owned by user
+    /**
+     * <p>spawnmob.</p>
+     *
+     * @param ess a {@link net.ess3.api.IEssentials} object.
+     * @param server a {@link org.bukkit.Server} object.
+     * @param user a {@link com.earth2me.essentials.User} object.
+     * @param parts a {@link java.util.List} object.
+     * @param data a {@link java.util.List} object.
+     * @param mobCount a int.
+     * @throws java.lang.Exception if any.
+     */
     public static void spawnmob(final IEssentials ess, final Server server, final User user, final List<String> parts, final List<String> data, int mobCount) throws Exception {
         final Block block = LocationUtil.getTarget(user.getBase()).getBlock();
         if (block == null) {
@@ -84,11 +119,36 @@ public class SpawnMob {
     }
 
     // This method spawns a mob at target, owned by target
+    /**
+     * <p>spawnmob.</p>
+     *
+     * @param ess a {@link net.ess3.api.IEssentials} object.
+     * @param server a {@link org.bukkit.Server} object.
+     * @param sender a {@link com.earth2me.essentials.CommandSource} object.
+     * @param target a {@link com.earth2me.essentials.User} object.
+     * @param parts a {@link java.util.List} object.
+     * @param data a {@link java.util.List} object.
+     * @param mobCount a int.
+     * @throws java.lang.Exception if any.
+     */
     public static void spawnmob(final IEssentials ess, final Server server, final CommandSource sender, final User target, final List<String> parts, final List<String> data, int mobCount) throws Exception {
         spawnmob(ess, server, sender, target, target.getLocation(), parts, data, mobCount);
     }
 
     // This method spawns a mob at loc, owned by target
+    /**
+     * <p>spawnmob.</p>
+     *
+     * @param ess a {@link net.ess3.api.IEssentials} object.
+     * @param server a {@link org.bukkit.Server} object.
+     * @param sender a {@link com.earth2me.essentials.CommandSource} object.
+     * @param target a {@link com.earth2me.essentials.User} object.
+     * @param loc a {@link org.bukkit.Location} object.
+     * @param parts a {@link java.util.List} object.
+     * @param data a {@link java.util.List} object.
+     * @param mobCount a int.
+     * @throws java.lang.Exception if any.
+     */
     public static void spawnmob(final IEssentials ess, final Server server, final CommandSource sender, final User target, final Location loc, final List<String> parts, final List<String> data, int mobCount) throws Exception {
         final Location sloc = LocationUtil.getSafeDestination(loc);
 

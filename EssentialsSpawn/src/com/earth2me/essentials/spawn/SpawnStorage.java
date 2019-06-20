@@ -13,20 +13,29 @@ import java.util.Locale;
 import java.util.Map;
 
 
+/**
+ * <p>SpawnStorage class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public class SpawnStorage extends AsyncStorageObjectHolder<Spawns> implements IEssentialsModule {
     SpawnStorage(final IEssentials ess) {
         super(ess, Spawns.class);
         reloadConfig();
     }
 
+    /** {@inheritDoc} */
     @Override
     public File getStorageFile() {
         return new File(ess.getDataFolder(), "spawn.yml");
     }
 
+    /** {@inheritDoc} */
     @Override
     public void finishRead() { }
 
+    /** {@inheritDoc} */
     @Override
     public void finishWrite() { }
 

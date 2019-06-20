@@ -7,11 +7,21 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import static com.earth2me.essentials.I18n.tl;
 
 
+/**
+ * <p>Commandsuicide class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public class Commandsuicide extends EssentialsCommand {
+    /**
+     * <p>Constructor for Commandsuicide.</p>
+     */
     public Commandsuicide() {
         super("suicide");
     }
 
+    /** {@inheritDoc} */
     @Override
     public void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception {
         EntityDamageEvent ede = new EntityDamageEvent(user.getBase(), EntityDamageEvent.DamageCause.SUICIDE, Short.MAX_VALUE);

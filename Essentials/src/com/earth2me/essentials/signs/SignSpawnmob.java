@@ -9,11 +9,21 @@ import net.ess3.api.IEssentials;
 import java.util.List;
 
 
+/**
+ * <p>SignSpawnmob class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public class SignSpawnmob extends EssentialsSign {
+    /**
+     * <p>Constructor for SignSpawnmob.</p>
+     */
     public SignSpawnmob() {
         super("Spawnmob");
     }
 
+    /** {@inheritDoc} */
     @Override
     protected boolean onSignCreate(ISign sign, User player, String username, IEssentials ess) throws SignException, ChargeException {
         validateInteger(sign, 1);
@@ -21,6 +31,7 @@ public class SignSpawnmob extends EssentialsSign {
         return true;
     }
 
+    /** {@inheritDoc} */
     @Override
     protected boolean onSignInteract(ISign sign, User player, String username, IEssentials ess) throws SignException, ChargeException {
         final Trade charge = getTrade(sign, 3, ess);

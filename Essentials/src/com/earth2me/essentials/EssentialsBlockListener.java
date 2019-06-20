@@ -18,13 +18,29 @@ import org.bukkit.inventory.ItemStack;
 import java.util.Locale;
 
 
+/**
+ * <p>EssentialsBlockListener class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public class EssentialsBlockListener implements Listener {
     private final transient IEssentials ess;
 
+    /**
+     * <p>Constructor for EssentialsBlockListener.</p>
+     *
+     * @param ess a {@link net.ess3.api.IEssentials} object.
+     */
     public EssentialsBlockListener(final IEssentials ess) {
         this.ess = ess;
     }
 
+    /**
+     * <p>onBlockPlace.</p>
+     *
+     * @param event a {@link org.bukkit.event.block.BlockPlaceEvent} object.
+     */
     @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
     public void onBlockPlace(final BlockPlaceEvent event) {
         // Do not rely on getItemInHand();

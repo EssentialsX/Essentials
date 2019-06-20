@@ -6,12 +6,22 @@ import com.earth2me.essentials.User;
 
 import org.bukkit.Server;
 
+/**
+ * <p>Commandpayconfirmtoggle class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public class Commandpayconfirmtoggle extends EssentialsCommand {
 
+    /**
+     * <p>Constructor for Commandpayconfirmtoggle.</p>
+     */
     public Commandpayconfirmtoggle() {
         super("payconfirmtoggle");
     }
 
+    /** {@inheritDoc} */
     @Override
     public void run(Server server, User user, String commandLabel, String[] args) throws Exception {
         boolean confirmingPay = !user.isPromptingPayConfirm();

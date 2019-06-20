@@ -10,11 +10,24 @@ import java.io.IOException;
 import java.util.logging.Level;
 
 
+/**
+ * <p>Abstract AbstractDelayedYamlFileReader class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public abstract class AbstractDelayedYamlFileReader<T extends StorageObject> implements Runnable {
     private final transient File file;
     private final transient Class<T> clazz;
     protected final transient IEssentials plugin;
 
+    /**
+     * <p>Constructor for AbstractDelayedYamlFileReader.</p>
+     *
+     * @param ess a {@link net.ess3.api.IEssentials} object.
+     * @param file a {@link java.io.File} object.
+     * @param clazz a {@link java.lang.Class} object.
+     */
     public AbstractDelayedYamlFileReader(final IEssentials ess, final File file, final Class<T> clazz) {
         this.file = file;
         this.clazz = clazz;
@@ -22,8 +35,12 @@ public abstract class AbstractDelayedYamlFileReader<T extends StorageObject> imp
         ess.runTaskAsynchronously(this);
     }
 
+    /**
+     * <p>onStart.</p>
+     */
     public abstract void onStart();
 
+    /** {@inheritDoc} */
     @Override
     public void run() {
         onStart();
@@ -51,7 +68,15 @@ public abstract class AbstractDelayedYamlFileReader<T extends StorageObject> imp
         }
     }
 
+    /**
+     * <p>onSuccess.</p>
+     *
+     * @param object a T object.
+     */
     public abstract void onSuccess(T object);
 
+    /**
+     * <p>onException.</p>
+     */
     public abstract void onException();
 }

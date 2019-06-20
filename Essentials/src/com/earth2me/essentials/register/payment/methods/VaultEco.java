@@ -6,15 +6,23 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.RegisteredServiceProvider;
 
 
+/**
+ * <p>VaultEco class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public class VaultEco implements Method {
     private Plugin vault;
     private Economy economy;
 
+    /** {@inheritDoc} */
     @Override
     public Plugin getPlugin() {
         return this.vault;
     }
 
+    /** {@inheritDoc} */
     @Override
     public boolean createAccount(String name, Double amount) {
         if (hasAccount(name)) {
@@ -24,60 +32,82 @@ public class VaultEco implements Method {
         return false;
     }
 
+    /** {@inheritDoc} */
     @Override
     public String getName() {
         return this.vault.getDescription().getName();
     }
 
+    /**
+     * <p>Getter for the field <code>economy</code>.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
     public String getEconomy() {
         return economy == null ? "NoEco" : economy.getName();
     }
 
+    /** {@inheritDoc} */
     @Override
     public String getLongName() {
         return getName().concat(" - Economy: ").concat(getEconomy());
     }
 
+    /** {@inheritDoc} */
     @Override
     public String getVersion() {
         return this.vault.getDescription().getVersion();
     }
 
+    /** {@inheritDoc} */
     @Override
     public int fractionalDigits() {
         return 0;
     }
 
+    /** {@inheritDoc} */
     @Override
     public String format(double amount) {
         return this.economy.format(amount);
     }
 
+    /** {@inheritDoc} */
     @Override
     public boolean hasBanks() {
         return this.economy.hasBankSupport();
     }
 
+    /** {@inheritDoc} */
     @Override
     public boolean hasBank(String bank) {
         return this.economy.getBanks().contains(bank);
     }
 
+    /** {@inheritDoc} */
     @Override
     public boolean hasAccount(String name) {
         return this.economy.hasAccount(name);
     }
 
+    /** {@inheritDoc} */
     @Override
     public boolean hasBankAccount(String bank, String name) {
         return this.economy.isBankOwner(bank, name).transactionSuccess() || this.economy.isBankMember(bank, name).transactionSuccess();
     }
 
+    /** {@inheritDoc} */
     @Override
     public boolean createAccount(String name) {
         return this.economy.createBank(name, "").transactionSuccess();
     }
 
+    /**
+     * <p>createAccount.</p>
+     *
+     * @param name a {@link java.lang.String} object.
+     * @param balance a double.
+     * @return a boolean.
+     */
     public boolean createAccount(String name, double balance) {
         if (!this.economy.createBank(name, "").transactionSuccess()) {
             return false;
@@ -85,6 +115,7 @@ public class VaultEco implements Method {
         return this.economy.bankDeposit(name, balance).transactionSuccess();
     }
 
+    /** {@inheritDoc} */
     @Override
     public MethodAccount getAccount(String name) {
         if (!hasAccount(name)) {
@@ -94,6 +125,7 @@ public class VaultEco implements Method {
         return new VaultAccount(name, this.economy);
     }
 
+    /** {@inheritDoc} */
     @Override
     public MethodBankAccount getBankAccount(String bank, String name) {
         if (!hasBankAccount(bank, name)) {
@@ -103,6 +135,7 @@ public class VaultEco implements Method {
         return new VaultBankAccount(bank, economy);
     }
 
+    /** {@inheritDoc} */
     @Override
     public boolean isCompatible(Plugin plugin) {
         try {
@@ -113,6 +146,7 @@ public class VaultEco implements Method {
         }
     }
 
+    /** {@inheritDoc} */
     @Override
     public void setPlugin(Plugin plugin) {
         this.vault = plugin;

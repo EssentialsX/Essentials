@@ -6,11 +6,21 @@ import org.bukkit.Server;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * <p>Commandenderchest class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public class Commandenderchest extends EssentialsCommand {
+    /**
+     * <p>Constructor for Commandenderchest.</p>
+     */
     public Commandenderchest() {
         super("enderchest");
     }
 
+    /** {@inheritDoc} */
     @Override
     protected void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception {
         if (args.length > 0 && user.isAuthorized("essentials.enderchest.others")) {
@@ -26,6 +36,7 @@ public class Commandenderchest extends EssentialsCommand {
 
     }
 
+    /** {@inheritDoc} */
     @Override
     protected List<String> getTabCompleteOptions(Server server, User user, String commandLabel, String[] args) {
         if (args.length == 1 && user.isAuthorized("essentials.enderchest.others")) {

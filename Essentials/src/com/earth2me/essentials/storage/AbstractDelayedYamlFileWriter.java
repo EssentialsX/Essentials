@@ -9,16 +9,34 @@ import java.io.PrintWriter;
 import java.util.logging.Level;
 
 
+/**
+ * <p>Abstract AbstractDelayedYamlFileWriter class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public abstract class AbstractDelayedYamlFileWriter implements Runnable {
     private final transient File file;
 
+    /**
+     * <p>Constructor for AbstractDelayedYamlFileWriter.</p>
+     *
+     * @param ess a {@link net.ess3.api.IEssentials} object.
+     * @param file a {@link java.io.File} object.
+     */
     public AbstractDelayedYamlFileWriter(IEssentials ess, File file) {
         this.file = file;
         ess.runTaskAsynchronously(this);
     }
 
+    /**
+     * <p>getObject.</p>
+     *
+     * @return a {@link com.earth2me.essentials.storage.StorageObject} object.
+     */
     public abstract StorageObject getObject();
 
+    /** {@inheritDoc} */
     @Override
     public void run() {
         PrintWriter pw = null;
@@ -41,5 +59,8 @@ public abstract class AbstractDelayedYamlFileWriter implements Runnable {
 
     }
 
+    /**
+     * <p>onFinish.</p>
+     */
     public abstract void onFinish();
 }

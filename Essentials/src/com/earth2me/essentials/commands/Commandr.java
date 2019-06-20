@@ -10,11 +10,21 @@ import org.bukkit.Server;
 import static com.earth2me.essentials.I18n.tl;
 
 
+/**
+ * <p>Commandr class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public class Commandr extends EssentialsCommand {
+    /**
+     * <p>Constructor for Commandr.</p>
+     */
     public Commandr() {
         super("r");
     }
 
+    /** {@inheritDoc} */
     @Override
     public void run(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception {
         if (args.length < 1) {

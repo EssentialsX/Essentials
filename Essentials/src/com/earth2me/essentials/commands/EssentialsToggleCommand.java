@@ -10,14 +10,34 @@ import java.util.Collections;
 import java.util.List;
 
 
+/**
+ * <p>Abstract EssentialsToggleCommand class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public abstract class EssentialsToggleCommand extends EssentialsCommand {
     String othersPermission;
 
+    /**
+     * <p>Constructor for EssentialsToggleCommand.</p>
+     *
+     * @param command a {@link java.lang.String} object.
+     * @param othersPermission a {@link java.lang.String} object.
+     */
     public EssentialsToggleCommand(String command, String othersPermission) {
         super(command);
         this.othersPermission = othersPermission;
     }
 
+    /**
+     * <p>handleToggleWithArgs.</p>
+     *
+     * @param server a {@link org.bukkit.Server} object.
+     * @param user a {@link com.earth2me.essentials.User} object.
+     * @param args an array of {@link java.lang.String} objects.
+     * @throws java.lang.Exception if any.
+     */
     protected void handleToggleWithArgs(Server server, User user, String[] args) throws Exception {
         if (args.length == 1) {
             Boolean toggle = matchToggleArgument(args[0]);
@@ -33,6 +53,12 @@ public abstract class EssentialsToggleCommand extends EssentialsCommand {
         }
     }
 
+    /**
+     * <p>matchToggleArgument.</p>
+     *
+     * @param arg a {@link java.lang.String} object.
+     * @return a {@link java.lang.Boolean} object.
+     */
     protected Boolean matchToggleArgument(final String arg) {
         if (arg.equalsIgnoreCase("on") || arg.startsWith("ena") || arg.equalsIgnoreCase("1")) {
             return true;
@@ -42,6 +68,15 @@ public abstract class EssentialsToggleCommand extends EssentialsCommand {
         return null;
     }
 
+    /**
+     * <p>toggleOtherPlayers.</p>
+     *
+     * @param server a {@link org.bukkit.Server} object.
+     * @param sender a {@link com.earth2me.essentials.CommandSource} object.
+     * @param args an array of {@link java.lang.String} objects.
+     * @throws com.earth2me.essentials.commands.PlayerNotFoundException if any.
+     * @throws com.earth2me.essentials.commands.NotEnoughArgumentsException if any.
+     */
     protected void toggleOtherPlayers(final Server server, final CommandSource sender, final String[] args) throws PlayerNotFoundException, NotEnoughArgumentsException {
         if (args.length < 1 || args[0].trim().length() < 2) {
             throw new PlayerNotFoundException();
@@ -75,6 +110,7 @@ public abstract class EssentialsToggleCommand extends EssentialsCommand {
     // Make sure when implementing this method that all 3 Boolean states are handled, 'null' should toggle the existing state.
     abstract void togglePlayer(CommandSource sender, User user, Boolean enabled) throws NotEnoughArgumentsException;
 
+    /** {@inheritDoc} */
     @Override
     protected List<String> getTabCompleteOptions(final Server server, final User user, final String commandLabel, final String[] args) {
         if (args.length == 1) {
@@ -90,6 +126,7 @@ public abstract class EssentialsToggleCommand extends EssentialsCommand {
         }
     }
 
+    /** {@inheritDoc} */
     @Override
     protected List<String> getTabCompleteOptions(final Server server, final CommandSource sender, final String commandLabel, final String[] args) {
         if (args.length == 1) {

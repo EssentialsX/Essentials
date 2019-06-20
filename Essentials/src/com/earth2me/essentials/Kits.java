@@ -13,11 +13,22 @@ import java.util.Map;
 import static com.earth2me.essentials.I18n.capitalCase;
 import static com.earth2me.essentials.I18n.tl;
 
+/**
+ * <p>Kits class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public class Kits implements IConf {
 
     private final EssentialsConf config;
     private ConfigurationSection kits;
 
+    /**
+     * <p>Constructor for Kits.</p>
+     *
+     * @param essentials a {@link com.earth2me.essentials.IEssentials} object.
+     */
     public Kits(final IEssentials essentials) {
         config = new EssentialsConf(new File(essentials.getDataFolder(), "kits.yml"));
         config.setTemplateName("/kits.yml");
@@ -25,6 +36,7 @@ public class Kits implements IConf {
         reloadConfig();
     }
 
+    /** {@inheritDoc} */
     @Override
     public void reloadConfig() {
         config.load();
@@ -45,14 +57,30 @@ public class Kits implements IConf {
         return null;
     }
 
+    /**
+     * <p>Getter for the field <code>config</code>.</p>
+     *
+     * @return a {@link com.earth2me.essentials.EssentialsConf} object.
+     */
     public EssentialsConf getConfig() {
         return config;
     }
 
+    /**
+     * <p>Getter for the field <code>kits</code>.</p>
+     *
+     * @return a {@link org.bukkit.configuration.ConfigurationSection} object.
+     */
     public ConfigurationSection getKits() {
         return kits;
     }
 
+    /**
+     * <p>getKit.</p>
+     *
+     * @param name a {@link java.lang.String} object.
+     * @return a {@link java.util.Map} object.
+     */
     public Map<String, Object> getKit(String name) {
         name = name.replace('.', '_').replace('/', '_');
         if (getKits() != null) {
@@ -71,6 +99,13 @@ public class Kits implements IConf {
         return null;
     }
 
+    /**
+     * <p>addKit.</p>
+     *
+     * @param name a {@link java.lang.String} object.
+     * @param lines a {@link java.util.List} object.
+     * @param delay a long.
+     */
     public void addKit(String name, List<String> lines, long delay) {
         // Will overwrite but w/e
         config.set("kits." + name + ".delay", delay);
@@ -79,6 +114,14 @@ public class Kits implements IConf {
         config.save();
     }
 
+    /**
+     * <p>listKits.</p>
+     *
+     * @param ess a {@link net.ess3.api.IEssentials} object.
+     * @param user a {@link com.earth2me.essentials.User} object.
+     * @return a {@link java.lang.String} object.
+     * @throws java.lang.Exception if any.
+     */
     public String listKits(final net.ess3.api.IEssentials ess, final User user) throws Exception {
         try {
             final ConfigurationSection kits = config.getConfigurationSection("kits");

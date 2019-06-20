@@ -10,6 +10,12 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 
+/**
+ * <p>FormatUtil class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public class FormatUtil {
     private static final Set<ChatColor> COLORS = EnumSet.of(ChatColor.BLACK, ChatColor.DARK_BLUE, ChatColor.DARK_GREEN, ChatColor.DARK_AQUA, ChatColor.DARK_RED, ChatColor.DARK_PURPLE, ChatColor.GOLD, ChatColor.GRAY, ChatColor.DARK_GRAY, ChatColor.BLUE, ChatColor.GREEN, ChatColor.AQUA, ChatColor.RED, ChatColor.LIGHT_PURPLE, ChatColor.YELLOW, ChatColor.WHITE);
     private static final Set<ChatColor> FORMATS = EnumSet.of(ChatColor.BOLD, ChatColor.STRIKETHROUGH, ChatColor.UNDERLINE, ChatColor.ITALIC, ChatColor.RESET);
@@ -22,9 +28,16 @@ public class FormatUtil {
     //Used to prepare xmpp output
     private static final Pattern LOGCOLOR_PATTERN = Pattern.compile("\\x1B\\[([0-9]{1,2}(;[0-9]{1,2})?)?[m|K]");
     private static final Pattern URL_PATTERN = Pattern.compile("((?:(?:https?)://)?[\\w-_\\.]{2,})\\.([a-zA-Z]{2,3}(?:/\\S+)?)");
+    /** Constant <code>IPPATTERN</code> */
     public static final Pattern IPPATTERN = Pattern.compile("^([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\.([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\." + "([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\.([01]?\\d\\d?|2[0-4]\\d|25[0-5])$");
 
     //This method is used to simply strip the native minecraft colour codes
+    /**
+     * <p>stripFormat.</p>
+     *
+     * @param input a {@link java.lang.String} object.
+     * @return a {@link java.lang.String} object.
+     */
     public static String stripFormat(final String input) {
         if (input == null) {
             return null;
@@ -33,6 +46,12 @@ public class FormatUtil {
     }
 
     //This method is used to simply strip the & convention colour codes
+    /**
+     * <p>stripEssentialsFormat.</p>
+     *
+     * @param input a {@link java.lang.String} object.
+     * @return a {@link java.lang.String} object.
+     */
     public static String stripEssentialsFormat(final String input) {
         if (input == null) {
             return null;
@@ -41,6 +60,14 @@ public class FormatUtil {
     }
 
     //This is the general permission sensitive message format function, checks for urls.
+    /**
+     * <p>formatMessage.</p>
+     *
+     * @param user a {@link net.ess3.api.IUser} object.
+     * @param permBase a {@link java.lang.String} object.
+     * @param input a {@link java.lang.String} object.
+     * @return a {@link java.lang.String} object.
+     */
     public static String formatMessage(final IUser user, final String permBase, final String input) {
         if (input == null) {
             return null;
@@ -53,6 +80,12 @@ public class FormatUtil {
     }
 
     //This method is used to simply replace the ess colour codes with minecraft ones, ie &c
+    /**
+     * <p>replaceFormat.</p>
+     *
+     * @param input a {@link java.lang.String} object.
+     * @return a {@link java.lang.String} object.
+     */
     public static String replaceFormat(final String input) {
         if (input == null) {
             return null;
@@ -100,6 +133,14 @@ public class FormatUtil {
     }
 
     //This is the general permission sensitive message format function, does not touch urls.
+    /**
+     * <p>formatString.</p>
+     *
+     * @param user a {@link net.ess3.api.IUser} object.
+     * @param permBase a {@link java.lang.String} object.
+     * @param message a {@link java.lang.String} object.
+     * @return a {@link java.lang.String} object.
+     */
     public static String formatString(final IUser user, final String permBase, String message) {
         if (message == null) {
             return null;
@@ -143,6 +184,12 @@ public class FormatUtil {
         return message;
     }
 
+    /**
+     * <p>stripLogColorFormat.</p>
+     *
+     * @param input a {@link java.lang.String} object.
+     * @return a {@link java.lang.String} object.
+     */
     public static String stripLogColorFormat(final String input) {
         if (input == null) {
             return null;
@@ -154,6 +201,12 @@ public class FormatUtil {
         return pattern.matcher(input).replaceAll("");
     }
 
+    /**
+     * <p>lastCode.</p>
+     *
+     * @param input a {@link java.lang.String} object.
+     * @return a {@link java.lang.String} object.
+     */
     public static String lastCode(final String input) {
         int pos = input.lastIndexOf('\u00a7');
         if (pos == -1 || (pos + 1) == input.length()) {
@@ -173,6 +226,12 @@ public class FormatUtil {
         return text;
     }
 
+    /**
+     * <p>validIP.</p>
+     *
+     * @param ipAddress a {@link java.lang.String} object.
+     * @return a boolean.
+     */
     public static boolean validIP(String ipAddress) {
         return IPPATTERN.matcher(ipAddress).matches();
     }

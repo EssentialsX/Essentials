@@ -9,11 +9,21 @@ import com.earth2me.essentials.utils.NumberUtil;
 import org.bukkit.Server;
 
 
+/**
+ * <p>Commandcustomtext class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public class Commandcustomtext extends EssentialsCommand {
+    /**
+     * <p>Constructor for Commandcustomtext.</p>
+     */
     public Commandcustomtext() {
         super("customtext");
     }
 
+    /** {@inheritDoc} */
     @Override
     protected void run(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception {
         if (sender.isPlayer()) {

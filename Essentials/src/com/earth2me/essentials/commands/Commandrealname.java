@@ -10,11 +10,21 @@ import java.util.Locale;
 import static com.earth2me.essentials.I18n.tl;
 
 
+/**
+ * <p>Commandrealname class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public class Commandrealname extends EssentialsCommand {
+    /**
+     * <p>Constructor for Commandrealname.</p>
+     */
     public Commandrealname() {
         super("realname");
     }
 
+    /** {@inheritDoc} */
     @Override
     protected void run(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception {
         if (args.length < 1) {

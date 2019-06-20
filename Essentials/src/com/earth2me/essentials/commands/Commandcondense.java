@@ -17,13 +17,23 @@ import java.util.*;
 import static com.earth2me.essentials.I18n.tl;
 
 
+/**
+ * <p>Commandcondense class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public class Commandcondense extends EssentialsCommand {
+    /**
+     * <p>Constructor for Commandcondense.</p>
+     */
     public Commandcondense() {
         super("condense");
     }
 
     private Map<ItemStack, SimpleRecipe> condenseList = new HashMap<>();
 
+    /** {@inheritDoc} */
     @Override
     public void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception {
         List<ItemStack> is = new ArrayList<>();
@@ -190,6 +200,7 @@ public class Commandcondense extends EssentialsCommand {
         }
     }
 
+    /** {@inheritDoc} */
     @Override
     protected List<String> getTabCompleteOptions(Server server, User user, String commandLabel, String[] args) {
         if (args.length == 1) {

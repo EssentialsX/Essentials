@@ -12,11 +12,21 @@ import java.util.Locale;
 import static com.earth2me.essentials.I18n.tl;
 
 
+/**
+ * <p>Commanddelhome class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public class Commanddelhome extends EssentialsCommand {
+    /**
+     * <p>Constructor for Commanddelhome.</p>
+     */
     public Commanddelhome() {
         super("delhome");
     }
 
+    /** {@inheritDoc} */
     @Override
     public void run(final Server server, final CommandSource sender, final String commandLabel, String[] args) throws Exception {
         if (args.length < 1) {
@@ -52,6 +62,7 @@ public class Commanddelhome extends EssentialsCommand {
         sender.sendMessage(tl("deleteHome", name));
     }
 
+    /** {@inheritDoc} */
     @Override
     protected List<String> getTabCompleteOptions(final Server server, final CommandSource sender, final String commandLabel, final String[] args) {
         User user = ess.getUser(sender.getPlayer());

@@ -16,6 +16,12 @@ import java.util.Map;
  * This class can be removed when https://github.com/Bukkit/CraftBukkit/pull/193 is accepted to CraftBukkit
  */
 
+/**
+ * <p>InventoryWorkaround class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public final class InventoryWorkaround {
     private InventoryWorkaround() {
     }
@@ -45,6 +51,11 @@ public final class InventoryWorkaround {
     }
 
     // Clears inventory without clearing armor
+    /**
+     * <p>clearInventoryNoArmor.</p>
+     *
+     * @param inventory a {@link org.bukkit.inventory.PlayerInventory} object.
+     */
     public static void clearInventoryNoArmor(PlayerInventory inventory) {
         if (isCombinedInventory(inventory)) {
             for (int i = 0; i < USABLE_PLAYER_INV_SIZE; i++) {
@@ -63,6 +74,13 @@ public final class InventoryWorkaround {
 
     // Returns what it couldn't store
     // This will will abort if it couldn't store all items
+    /**
+     * <p>addAllItems.</p>
+     *
+     * @param inventory a {@link org.bukkit.inventory.Inventory} object.
+     * @param items a {@link org.bukkit.inventory.ItemStack} object.
+     * @return a {@link java.util.Map} object.
+     */
     public static Map<Integer, ItemStack> addAllItems(final Inventory inventory, final ItemStack... items) {
         ItemStack[] contents = inventory.getContents();
 
@@ -82,12 +100,27 @@ public final class InventoryWorkaround {
     }
 
     // Returns what it couldn't store
+    /**
+     * <p>addItems.</p>
+     *
+     * @param inventory a {@link org.bukkit.inventory.Inventory} object.
+     * @param items a {@link org.bukkit.inventory.ItemStack} object.
+     * @return a {@link java.util.Map} object.
+     */
     public static Map<Integer, ItemStack> addItems(final Inventory inventory, final ItemStack... items) {
         return addOversizedItems(inventory, 0, items);
     }
 
     // Returns what it couldn't store
     // Set oversizedStack to below normal stack size to disable oversized stacks
+    /**
+     * <p>addOversizedItems.</p>
+     *
+     * @param inventory a {@link org.bukkit.inventory.Inventory} object.
+     * @param oversizedStacks a int.
+     * @param items a {@link org.bukkit.inventory.ItemStack} object.
+     * @return a {@link java.util.Map} object.
+     */
     public static Map<Integer, ItemStack> addOversizedItems(final Inventory inventory, final int oversizedStacks, final ItemStack... items) {
         if (isCombinedInventory(inventory)) {
             Inventory fakeInventory = makeTruncatedPlayerInventory((PlayerInventory) inventory);
@@ -183,6 +216,12 @@ public final class InventoryWorkaround {
     // Hot-ish code so cache
     private static Boolean hasMainHandSupport = null;
 
+    /**
+     * <p>setItemInMainHand.</p>
+     *
+     * @param p a {@link org.bukkit.entity.Player} object.
+     * @param item a {@link org.bukkit.inventory.ItemStack} object.
+     */
     @SuppressWarnings("deprecation")
     public static void setItemInMainHand(Player p, ItemStack item) {
         if (hasMainHandSupport == null) {
@@ -202,6 +241,12 @@ public final class InventoryWorkaround {
         }
     }
 
+    /**
+     * <p>setItemInMainHand.</p>
+     *
+     * @param invent a {@link org.bukkit.inventory.EntityEquipment} object.
+     * @param item a {@link org.bukkit.inventory.ItemStack} object.
+     */
     @SuppressWarnings("deprecation")
     public static void setItemInMainHand(EntityEquipment invent, ItemStack item) {
         if (hasMainHandSupport == null) {
@@ -221,6 +266,12 @@ public final class InventoryWorkaround {
         }
     }
 
+    /**
+     * <p>setItemInMainHandDropChance.</p>
+     *
+     * @param invent a {@link org.bukkit.inventory.EntityEquipment} object.
+     * @param chance a float.
+     */
     @SuppressWarnings("deprecation")
     public static void setItemInMainHandDropChance(EntityEquipment invent, float chance) {
         if (hasMainHandSupport == null) {
@@ -240,6 +291,12 @@ public final class InventoryWorkaround {
         }
     }
 
+    /**
+     * <p>setItemInOffHand.</p>
+     *
+     * @param p a {@link org.bukkit.entity.Player} object.
+     * @param item a {@link org.bukkit.inventory.ItemStack} object.
+     */
     @SuppressWarnings("deprecation")
     public static void setItemInOffHand(Player p, ItemStack item) {
         // This assumes that all builds that support a main hand also support an off hand.

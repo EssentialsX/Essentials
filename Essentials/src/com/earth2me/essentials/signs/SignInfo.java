@@ -12,17 +12,28 @@ import net.ess3.api.IEssentials;
 import java.io.IOException;
 
 
+/**
+ * <p>SignInfo class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public class SignInfo extends EssentialsSign {
+    /**
+     * <p>Constructor for SignInfo.</p>
+     */
     public SignInfo() {
         super("Info");
     }
 
+    /** {@inheritDoc} */
     @Override
     protected boolean onSignCreate(final ISign sign, final User player, final String username, final IEssentials ess) throws SignException {
         validateTrade(sign, 3, ess);
         return true;
     }
 
+    /** {@inheritDoc} */
     @Override
     protected boolean onSignInteract(final ISign sign, final User player, final String username, final IEssentials ess) throws SignException, ChargeException {
         final Trade charge = getTrade(sign, 3, ess);

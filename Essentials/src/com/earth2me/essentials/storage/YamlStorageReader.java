@@ -11,17 +11,30 @@ import java.util.*;
 import java.util.concurrent.locks.ReentrantLock;
 
 
+/**
+ * <p>YamlStorageReader class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public class YamlStorageReader implements IStorageReader {
     private transient static final Map<Class, Yaml> PREPARED_YAMLS = Collections.synchronizedMap(new HashMap<Class, Yaml>());
     private transient static final Map<Class, ReentrantLock> LOCKS = new HashMap<Class, ReentrantLock>();
     private transient final Reader reader;
     private transient final Plugin plugin;
 
+    /**
+     * <p>Constructor for YamlStorageReader.</p>
+     *
+     * @param reader a {@link java.io.Reader} object.
+     * @param plugin a {@link org.bukkit.plugin.Plugin} object.
+     */
     public YamlStorageReader(final Reader reader, final Plugin plugin) {
         this.reader = reader;
         this.plugin = plugin;
     }
 
+    /** {@inheritDoc} */
     @Override
     public <T extends StorageObject> T load(final Class<? extends T> clazz) throws ObjectLoadException {
         Yaml yaml = PREPARED_YAMLS.get(clazz);

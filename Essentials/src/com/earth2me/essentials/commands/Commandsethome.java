@@ -11,11 +11,21 @@ import java.util.Locale;
 import static com.earth2me.essentials.I18n.tl;
 
 
+/**
+ * <p>Commandsethome class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public class Commandsethome extends EssentialsCommand {
+    /**
+     * <p>Constructor for Commandsethome.</p>
+     */
     public Commandsethome() {
         super("sethome");
     }
 
+    /** {@inheritDoc} */
     @Override
     public void run(final Server server, final User user, final String commandLabel, String[] args) throws Exception {
         User usersHome = user;

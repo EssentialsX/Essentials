@@ -6,21 +6,23 @@ import org.bukkit.plugin.Plugin;
 /**
  * Interface to be implemented by a payment method.
  * Copyright (C) 2011
- * AOL license <http://aol.nexua.org>
+ * AOL license &lt;<a href="http://aol.nexua.org">http://aol.nexua.org</a>&gt;
  *
- * @author Nijikokun <nijikokun@shortmail.com> (@nijikokun)
- */
+ * @author Nijikokun &lt;<a href="mailto:nijikokun@shortmail.com">nijikokun@shortmail.com</a>&gt; (@nijikokun)
+        * @version $Id: $Id
+        */
 public interface Method {
     /**
      * Encodes the Plugin into an Object disguised as the Plugin. If you want the original Plugin Class you must cast it
      * to the correct Plugin, to do so you have to verify the name and or version then cast.
-     * <p/>
+     *
      * <pre>
      *  if(method.getName().equalsIgnoreCase("iConomy"))
      *   iConomy plugin = ((iConomy)method.getPlugin());</pre>
      *
      * @return <code>Object</code>
-     *
+     * @see #getName()
+     * @see #getVersion()
      * @see #getName()
      * @see #getVersion()
      */
@@ -58,7 +60,6 @@ public interface Method {
      * Formats amounts into this payment methods style of currency display.
      *
      * @param amount Double
-     *
      * @return <code>String</code> - Formatted Currency Display.
      */
     String format(double amount);
@@ -74,9 +75,7 @@ public interface Method {
      * Determines the existence of a bank via name.
      *
      * @param bank Bank name
-     *
      * @return <code>boolean</code>
-     *
      * @see #hasBanks
      */
     boolean hasBank(String bank);
@@ -85,7 +84,6 @@ public interface Method {
      * Determines the existence of an account via name.
      *
      * @param name Account name
-     *
      * @return <code>boolean</code>
      */
     boolean hasAccount(String name);
@@ -95,7 +93,6 @@ public interface Method {
      *
      * @param bank Bank name
      * @param name Account name
-     *
      * @return <code>boolean</code>
      */
     boolean hasBankAccount(String bank, String name);
@@ -104,7 +101,6 @@ public interface Method {
      * Forces an account creation
      *
      * @param name Account name
-     *
      * @return <code>boolean</code>
      */
     boolean createAccount(String name);
@@ -114,7 +110,6 @@ public interface Method {
      *
      * @param name    Account name
      * @param balance Initial account balance
-     *
      * @return <code>boolean</code>
      */
     boolean createAccount(String name, Double balance);
@@ -123,7 +118,6 @@ public interface Method {
      * Returns a <code>MethodAccount</code> class for an account <code>name</code>.
      *
      * @param name Account name
-     *
      * @return <code>MethodAccount</code> <em>or</em>  <code>Null</code>
      */
     MethodAccount getAccount(String name);
@@ -133,7 +127,6 @@ public interface Method {
      *
      * @param bank Bank name
      * @param name Account name
-     *
      * @return <code>MethodBankAccount</code> <em>or</em>  <code>Null</code>
      */
     MethodBankAccount getBankAccount(String bank, String name);
@@ -142,7 +135,6 @@ public interface Method {
      * Checks to verify the compatibility between this Method and a plugin. Internal usage only, for the most part.
      *
      * @param plugin Plugin
-     *
      * @return <code>boolean</code>
      */
     boolean isCompatible(Plugin plugin);

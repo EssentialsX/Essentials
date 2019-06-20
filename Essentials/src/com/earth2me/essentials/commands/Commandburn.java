@@ -10,11 +10,21 @@ import java.util.List;
 import static com.earth2me.essentials.I18n.tl;
 
 
+/**
+ * <p>Commandburn class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public class Commandburn extends EssentialsCommand {
+    /**
+     * <p>Constructor for Commandburn.</p>
+     */
     public Commandburn() {
         super("burn");
     }
 
+    /** {@inheritDoc} */
     @Override
     protected void run(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception {
         if (args.length < 2) {
@@ -30,6 +40,7 @@ public class Commandburn extends EssentialsCommand {
         sender.sendMessage(tl("burnMsg", user.getDisplayName(), Integer.parseInt(args[1])));
     }
 
+    /** {@inheritDoc} */
     @Override
     protected List<String> getTabCompleteOptions(Server server, CommandSource sender, String commandLabel, String[] args) {
         if (args.length == 1) {

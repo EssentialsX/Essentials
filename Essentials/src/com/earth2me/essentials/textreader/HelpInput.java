@@ -13,6 +13,12 @@ import java.util.logging.Logger;
 import static com.earth2me.essentials.I18n.tl;
 
 
+/**
+ * <p>HelpInput class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public class HelpInput implements IText {
     private static final String DESCRIPTION = "description";
     private static final String PERMISSION = "permission";
@@ -22,6 +28,14 @@ public class HelpInput implements IText {
     private final transient List<String> chapters = new ArrayList<String>();
     private final transient Map<String, Integer> bookmarks = new HashMap<String, Integer>();
 
+    /**
+     * <p>Constructor for HelpInput.</p>
+     *
+     * @param user a {@link com.earth2me.essentials.User} object.
+     * @param match a {@link java.lang.String} object.
+     * @param ess a {@link net.ess3.api.IEssentials} object.
+     * @throws java.io.IOException if any.
+     */
     public HelpInput(final User user, final String match, final IEssentials ess) throws IOException {
         boolean reported = false;
         final List<String> newLines = new ArrayList<String>();
@@ -112,16 +126,19 @@ public class HelpInput implements IText {
         lines.addAll(newLines);
     }
 
+    /** {@inheritDoc} */
     @Override
     public List<String> getLines() {
         return lines;
     }
 
+    /** {@inheritDoc} */
     @Override
     public List<String> getChapters() {
         return chapters;
     }
 
+    /** {@inheritDoc} */
     @Override
     public Map<String, Integer> getBookmarks() {
         return bookmarks;

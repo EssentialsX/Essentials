@@ -16,14 +16,24 @@ import java.util.Locale;
 import static com.earth2me.essentials.I18n.tl;
 
 
+/**
+ * <p>Commandeco class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public class Commandeco extends EssentialsLoopCommand {
     Commandeco.EcoCommands cmd;
     BigDecimal amount;
 
+    /**
+     * <p>Constructor for Commandeco.</p>
+     */
     public Commandeco() {
         super("eco");
     }
 
+    /** {@inheritDoc} */
     @Override
     public void run(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception {
         if (args.length < 2) {
@@ -50,6 +60,7 @@ public class Commandeco extends EssentialsLoopCommand {
         }
     }
 
+    /** {@inheritDoc} */
     @Override
     protected void updatePlayer(final Server server, final CommandSource sender, final User player, final String[] args) throws NotEnoughArgumentsException, ChargeException, MaxMoneyException {
         switch (cmd) {
@@ -102,6 +113,7 @@ public class Commandeco extends EssentialsLoopCommand {
         GIVE, TAKE, SET, RESET
     }
 
+    /** {@inheritDoc} */
     @Override
     protected List<String> getTabCompleteOptions(Server server, final CommandSource sender, String commandLabel, String[] args) {
         if (args.length == 1) {

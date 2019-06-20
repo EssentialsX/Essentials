@@ -10,6 +10,12 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 
+/**
+ * <p>Potions class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public class Potions {
     private static final Map<String, PotionEffectType> POTIONS = new HashMap<>();
     private static final Map<String, PotionEffectType> ALIASPOTIONS = new HashMap<>();
@@ -127,6 +133,12 @@ public class Potions {
         } catch (Throwable ignored) {}
     }
 
+    /**
+     * <p>getByName.</p>
+     *
+     * @param name a {@link java.lang.String} object.
+     * @return a {@link org.bukkit.potion.PotionEffectType} object.
+     */
     public static PotionEffectType getByName(String name) {
         PotionEffectType peffect;
         if (NumberUtil.isInt(name)) {
@@ -143,6 +155,11 @@ public class Potions {
         return peffect;
     }
 
+    /**
+     * <p>entrySet.</p>
+     *
+     * @return a {@link java.util.Set} object.
+     */
     public static Set<Entry<String, PotionEffectType>> entrySet() {
         return POTIONS.entrySet();
     }

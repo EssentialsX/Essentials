@@ -19,12 +19,25 @@ import java.util.logging.Level;
 import static com.earth2me.essentials.I18n.tl;
 
 
+/**
+ * <p>Kit class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public class Kit {
     final IEssentials ess;
     final String kitName;
     final Map<String, Object> kit;
     final Trade charge;
 
+    /**
+     * <p>Constructor for Kit.</p>
+     *
+     * @param kitName a {@link java.lang.String} object.
+     * @param ess a {@link net.ess3.api.IEssentials} object.
+     * @throws java.lang.Exception if any.
+     */
     public Kit(final String kitName, final IEssentials ess) throws Exception {
         this.kitName = kitName;
         this.ess = ess;
@@ -36,16 +49,33 @@ public class Kit {
         }
     }
 
+    /**
+     * <p>getName.</p>
+     *
+     * @return a {@link java.lang.String} object.
+     */
     public String getName() {
         return kitName;
     }
 
+    /**
+     * <p>checkPerms.</p>
+     *
+     * @param user a {@link com.earth2me.essentials.User} object.
+     * @throws java.lang.Exception if any.
+     */
     public void checkPerms(final User user) throws Exception {
         if (!user.isAuthorized("essentials.kits." + kitName)) {
             throw new Exception(tl("noKitPermission", "essentials.kits." + kitName));
         }
     }
 
+    /**
+     * <p>checkDelay.</p>
+     *
+     * @param user a {@link com.earth2me.essentials.User} object.
+     * @throws java.lang.Exception if any.
+     */
     public void checkDelay(final User user) throws Exception {
         long nextUse = getNextUse(user);
 
@@ -60,19 +90,44 @@ public class Kit {
         }
     }
 
+    /**
+     * <p>checkAffordable.</p>
+     *
+     * @param user a {@link com.earth2me.essentials.User} object.
+     * @throws java.lang.Exception if any.
+     */
     public void checkAffordable(final User user) throws Exception {
         charge.isAffordableFor(user);
     }
 
+    /**
+     * <p>setTime.</p>
+     *
+     * @param user a {@link com.earth2me.essentials.User} object.
+     * @throws java.lang.Exception if any.
+     */
     public void setTime(final User user) throws Exception {
         final Calendar time = new GregorianCalendar();
         user.setKitTimestamp(kitName, time.getTimeInMillis());
     }
 
+    /**
+     * <p>chargeUser.</p>
+     *
+     * @param user a {@link com.earth2me.essentials.User} object.
+     * @throws java.lang.Exception if any.
+     */
     public void chargeUser(final User user) throws Exception {
         charge.charge(user);
     }
 
+    /**
+     * <p>getNextUse.</p>
+     *
+     * @param user a {@link com.earth2me.essentials.User} object.
+     * @return a long.
+     * @throws java.lang.Exception if any.
+     */
     public long getNextUse(final User user) throws Exception {
         if (user.isAuthorized("essentials.kit.exemptdelay")) {
             return 0L;
@@ -112,11 +167,24 @@ public class Kit {
         }
     }
 
+    /**
+     * <p>getItems.</p>
+     *
+     * @param user a {@link com.earth2me.essentials.User} object.
+     * @return a {@link java.util.List} object.
+     * @throws java.lang.Exception if any.
+     */
     @Deprecated
     public List<String> getItems(final User user) throws Exception {
         return getItems();
     }
 
+    /**
+     * <p>getItems.</p>
+     *
+     * @return a {@link java.util.List} object.
+     * @throws java.lang.Exception if any.
+     */
     public List<String> getItems() throws Exception {
         if (kit == null) {
             throw new Exception(tl("kitNotFound"));
@@ -141,10 +209,23 @@ public class Kit {
         }
     }
 
+    /**
+     * <p>expandItems.</p>
+     *
+     * @param user a {@link com.earth2me.essentials.User} object.
+     * @throws java.lang.Exception if any.
+     */
     public void expandItems(final User user) throws Exception {
         expandItems(user, getItems(user));
     }
 
+    /**
+     * <p>expandItems.</p>
+     *
+     * @param user a {@link com.earth2me.essentials.User} object.
+     * @param items a {@link java.util.List} object.
+     * @throws java.lang.Exception if any.
+     */
     public void expandItems(final User user, final List<String> items) throws Exception {
         try {
             IText input = new SimpleTextInput(items);

@@ -16,11 +16,21 @@ import java.util.List;
 import static com.earth2me.essentials.I18n.tl;
 
 
+/**
+ * <p>Commandtppos class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public class Commandtppos extends EssentialsCommand {
+    /**
+     * <p>Constructor for Commandtppos.</p>
+     */
     public Commandtppos() {
         super("tppos");
     }
 
+    /** {@inheritDoc} */
     @Override
     public void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception {
         if (args.length < 3) {
@@ -59,6 +69,7 @@ public class Commandtppos extends EssentialsCommand {
         throw new NoChargeException();
     }
 
+    /** {@inheritDoc} */
     @Override
     public void run(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception {
         if (args.length < 4) {
@@ -89,6 +100,7 @@ public class Commandtppos extends EssentialsCommand {
 
     }
 
+    /** {@inheritDoc} */
     @Override
     protected List<String> getTabCompleteOptions(Server server, User user, String commandLabel, String[] args) {
         if (args.length == 1 || args.length == 2 || args.length == 3) {
@@ -106,6 +118,7 @@ public class Commandtppos extends EssentialsCommand {
         }
     }
 
+    /** {@inheritDoc} */
     @Override
     protected List<String> getTabCompleteOptions(Server server, CommandSource sender, String commandLabel, String[] args) {
         if (args.length == 1) {

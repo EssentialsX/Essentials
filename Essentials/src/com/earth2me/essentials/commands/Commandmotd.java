@@ -8,11 +8,21 @@ import com.earth2me.essentials.textreader.TextPager;
 import org.bukkit.Server;
 
 
+/**
+ * <p>Commandmotd class.</p>
+ *
+ * @author LoopyD
+ * @version $Id: $Id
+ */
 public class Commandmotd extends EssentialsCommand {
+    /**
+     * <p>Constructor for Commandmotd.</p>
+     */
     public Commandmotd() {
         super("motd");
     }
 
+    /** {@inheritDoc} */
     @Override
     public void run(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception {
         if (sender.isPlayer()) {
