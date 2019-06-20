@@ -201,7 +201,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
             }
 
             if(pm.isPluginEnabled("Reserve")) {
-                Reserve_Essentials.register(this);
+                ReserveEssentials.register(this);
             }
 
             for (Method method : Server.class.getDeclaredMethods()) {
