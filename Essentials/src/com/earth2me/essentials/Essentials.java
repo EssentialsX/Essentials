@@ -83,6 +83,8 @@ import java.lang.reflect.Method;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static com.earth2me.essentials.I18n.tl;
 
@@ -768,11 +770,12 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
         IText broadcast = new SimpleTextInput(message);
 
         final Collection<Player> players = getOnlinePlayers();
+        final Set<IUser> excluded = new HashSet<>(Arrays.asList(exclude));
 
         for (Player player : players) {
             final User user = getUser(player);
             if ((permission == null && (sender == null || !user.isIgnoredPlayer(sender))) || (permission != null && user.isAuthorized(permission))) {
-                if (exclude.length > 0 && Arrays.asList(exclude).contains(user)) {
+                if (excluded.contains(user)) {
                     continue;
                 }
                 if (keywords) {
