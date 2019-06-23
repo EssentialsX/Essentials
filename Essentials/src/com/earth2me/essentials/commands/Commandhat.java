@@ -35,7 +35,7 @@ public class Commandhat extends EssentialsCommand {
         } else {
             final ItemStack hand = user.getItemInHand();
             if (hand != null && hand.getType() != Material.AIR) {
-                if (user.isAuthorized("essentials.hat.exempt." + hand.getType().name().toLowerCase())) {
+                if (user.isAuthorized("essentials.hat.prevent-type." + hand.getType().name().toLowerCase())) {
                     user.sendMessage(tl("hatFail"));
                     return;
                 }
