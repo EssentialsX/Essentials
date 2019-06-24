@@ -3,8 +3,12 @@ package com.earth2me.essentials.utils;
 import org.bukkit.Bukkit;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.MaterialData;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.EnumSet;
 import java.util.Optional;
 import java.util.Set;
@@ -124,10 +128,16 @@ public class MaterialUtil {
                 try {
                     return Bukkit.getUnsafe().fromLegacy(new MaterialData(material, damage));
                 } catch (NoSuchMethodError error) {
-                    return null;
+                    break;
                 }
             }
         }
+
+        try {
+            Method getMaterialFromId = Material.class.getDeclaredMethod("getMaterial", int.class);
+            return (Material) getMaterialFromId.invoke(null, id);
+        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException ignored) {}
+
         return null;
     }
 
