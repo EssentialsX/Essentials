@@ -216,5 +216,11 @@ public class UtilTest extends TestCase {
         assertEquals(v.getPatch(), 2);
         assertEquals(v.getRevision(), 0.1);
         assertEquals(v.getPrerelease(), 1);
+        v = VersionUtil.BukkitVersion.fromString("1.14.3-SNAPSHOT");
+        assertEquals(v.getMajor(), 1);
+        assertEquals(v.getMinor(), 14);
+        assertEquals(v.getPatch(), 3);
+        assertEquals(v.getRevision(), 0.0);
+        assertEquals(v.getPrerelease(), -1);
     }
 }
