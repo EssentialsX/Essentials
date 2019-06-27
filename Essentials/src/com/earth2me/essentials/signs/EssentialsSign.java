@@ -448,7 +448,7 @@ public class EssentialsSign {
         try {
             final WallSign signData = (WallSign) block.getState().getBlockData();
             return signData.getFacing();
-        } catch (NoClassDefFoundError e) {
+        } catch (NoClassDefFoundError | NoSuchMethodError e) {
             final org.bukkit.material.Sign signMat = (org.bukkit.material.Sign) block.getState().getData();
             return signMat.getFacing();
         }
