@@ -240,6 +240,10 @@ commands:
     description: Throw an exploding kitten at your opponent.
     usage: /<command>
     aliases: [ekittycannon]
+  kitreset:
+    description: Reset the cooldown of a kit for a player.
+    usage: /<command> [player] [kit]
+    aliases: [kr, ekr]
   lightning:
     description: The power of Thor. Strike at cursor or player.
     usage: /<command> [player] [power]

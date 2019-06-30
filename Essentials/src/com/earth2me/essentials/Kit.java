@@ -69,6 +69,10 @@ public class Kit {
         user.setKitTimestamp(kitName, time.getTimeInMillis());
     }
 
+    public void resetTime(final User user) throws Exception {
+        user.setKitTimestamp(kitName, 0);
+    }
+
     public void chargeUser(final User user) throws Exception {
         charge.charge(user);
     }
