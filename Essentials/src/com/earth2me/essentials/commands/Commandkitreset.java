@@ -23,6 +23,7 @@ public class Commandkitreset extends EssentialsCommand {
             final Kit kit = new Kit(args[1], ess);
             kit.resetTime(userTo);
             user.sendMessage(tl("kitReset", userTo.getDisplayName(), kit.getName()));
+            userTo.sendMessage(tl("kitResetPlayer", kit.getName()));
         }
     }
 
@@ -32,6 +33,7 @@ public class Commandkitreset extends EssentialsCommand {
         final Kit kit = new Kit(args[1], ess);
         kit.resetTime(userTo);
         sender.sendMessage(tl("kitReset", userTo.getDisplayName(), kit.getName()));
+        userTo.sendMessage(tl("kitResetPlayer", kit.getName()));
     }
 
     @Override
