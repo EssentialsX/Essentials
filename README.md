@@ -29,6 +29,25 @@ EssentialsX is almost a completely drop-in replacement for Essentials. However, 
 * **EssentialsX supports Minecraft versions 1.8.8, 1.9.4, 1.10.2, 1.11.2, 1.12.2, 1.13.2 and 1.14.3.**
 
 
+What is/was Essentials?
+--------
+
+Essentials is a Minecraft plugin that provides a number of "essential" features and commands to help with managing Minecraft servers.  Most new commands can be permissions-restricted to only certain users or groups.  
+
+**The Essentials plugin ceased development after Minecraft 1.7, and no further releases were made for newer Minecraft editions.**  Hence, EssentialsX.
+
+Some of the features provided by Essentials include:
+
+* Player made homes, and server warps.
+* Player kits and first join kits
+* Easy player to player teleports, including teleport requests.
+* Full chat and nickname customisation
+* Full moderator control, with feature such as muting, jailing and temp banning
+* Economy support, including shop signs and command costs
+* Full permission based build control, with the ability to block certain items
+* Core world protection, allowing you to block explosions, fire spread, and other catastrophes
+
+
 Support
 -------
 
