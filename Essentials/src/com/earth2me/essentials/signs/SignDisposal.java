@@ -18,6 +18,7 @@ public class SignDisposal extends EssentialsSign {
         if (!sign.getLine(3).isEmpty()) {
             Trade charge = getTrade(sign, 3, ess);
             charge.isAffordableFor(player);
+            charge.charge(player);
         }
 
         StringBuilder titleBuilder = new StringBuilder();
