@@ -21,10 +21,8 @@ public class SignDisposal extends EssentialsSign {
         }
 
         StringBuilder titleBuilder = new StringBuilder();
-
         titleBuilder.append(sign.getLine(1));
         titleBuilder.append(sign.getLine(2));
-
         if (titleBuilder.length() == 0) {
             titleBuilder.append(tl("disposal"));
         }
