@@ -8,6 +8,7 @@ import com.earth2me.essentials.utils.StringUtil;
 import com.google.common.collect.Lists;
 import org.bukkit.Server;
 
+import java.util.Collections;
 import java.util.List;
 
 import static com.earth2me.essentials.I18n.tl;
