@@ -59,4 +59,13 @@ public class Commandspawnmob extends EssentialsCommand {
         final User target = getPlayer(ess.getServer(), args, 2, true, false);
         SpawnMob.spawnmob(ess, server, sender, target, mobParts, mobData, mobCount);
     }
+
+    @Override
+    protected List<String> getTabCompleteOptions(Server server, User user, String commandLabel, String[] args) {
+        if (args.length == 1) {
+            return java.util.Arrays.asList(Mob.getMobList());
+        } else {
+            return Collections.emptyList();
+        }
+    }
 }
