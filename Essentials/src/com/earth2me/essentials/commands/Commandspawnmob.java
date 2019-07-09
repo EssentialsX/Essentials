@@ -5,6 +5,7 @@ import com.earth2me.essentials.Mob;
 import com.earth2me.essentials.SpawnMob;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.StringUtil;
+import com.google.common.collect.Lists;
 import org.bukkit.Server;
 
 import java.util.List;
@@ -63,7 +64,7 @@ public class Commandspawnmob extends EssentialsCommand {
     @Override
     protected List<String> getTabCompleteOptions(Server server, User user, String commandLabel, String[] args) {
         if (args.length == 1) {
-            return java.util.Arrays.asList(Mob.getMobList());
+            return Lists.newArrayList(Mob.getMobList());
         } else {
             return Collections.emptyList();
         }
