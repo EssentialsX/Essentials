@@ -23,9 +23,8 @@ public class Warps implements IConf, net.ess3.api.IWarps {
     public Warps(Server server, File dataFolder) {
         this.server = server;
         warpsFolder = new File(dataFolder, "warps");
-        if (!warpsFolder.exists()) {
-            warpsFolder.mkdirs();
-        }
+        warpsFolder.mkdirs();
+
         reloadConfig();
     }
 
