@@ -18,6 +18,7 @@ import org.bukkit.util.Vector;
 import java.io.File;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 import java.util.function.Predicate;
@@ -149,6 +150,31 @@ public class FakeWorld implements World {
 
     @Override
     public Collection<Chunk> getForceLoadedChunks() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public boolean addPluginChunkTicket(int i, int i1, Plugin plugin) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public boolean removePluginChunkTicket(int i, int i1, Plugin plugin) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public void removePluginChunkTickets(Plugin plugin) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public Collection<Plugin> getPluginChunkTickets(int i, int i1) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public Map<Plugin, Collection<Chunk>> getPluginChunkTickets() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
