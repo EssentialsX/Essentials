@@ -24,8 +24,9 @@ public class VersionUtil {
     public static final BukkitVersion v1_14_1_R01 = BukkitVersion.fromString("1.14.1-R0.1-SNAPSHOT");
     public static final BukkitVersion v1_14_2_R01 = BukkitVersion.fromString("1.14.2-R0.1-SNAPSHOT");
     public static final BukkitVersion v1_14_3_R01 = BukkitVersion.fromString("1.14.3-R0.1-SNAPSHOT");
+    public static final BukkitVersion v1_14_4_R01 = BukkitVersion.fromString("1.14.4-R0.1-SNAPSHOT");
 
-    private static final Set<BukkitVersion> supportedVersions = ImmutableSet.of(v1_8_8_R01, v1_9_4_R01, v1_10_2_R01, v1_11_2_R01, v1_12_2_R01, v1_13_2_R01, v1_14_3_R01);
+    private static final Set<BukkitVersion> supportedVersions = ImmutableSet.of(v1_8_8_R01, v1_9_4_R01, v1_10_2_R01, v1_11_2_R01, v1_12_2_R01, v1_13_2_R01, v1_14_4_R01);
 
     private static BukkitVersion serverVersion = null;
 
