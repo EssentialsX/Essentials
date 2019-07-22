@@ -83,8 +83,6 @@ import java.lang.reflect.Method;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static com.earth2me.essentials.I18n.tl;
 
@@ -744,25 +742,25 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
 
     @Override
     public int broadcastMessage(final String message) {
-        return broadcastMessage(null, null, message, true);
+        return broadcastMessage(null, null, message, true, Collections.emptySet());
     }
 
     @Override
     public int broadcastMessage(final IUser sender, final String message) {
-        return broadcastMessage(sender, null, message, false);
+        return broadcastMessage(sender, null, message, false, Collections.emptySet());
     }
 
     @Override
-    public int broadcastMessage(final IUser sender, final String message, final IUser... exclude) {
-        return broadcastMessage(sender, null, message, false, exclude);
+    public int broadcastMessage(final IUser sender, final String message, final Set<IUser> excluded) {
+        return broadcastMessage(sender, null, message, false, excluded);
     }
 
     @Override
     public int broadcastMessage(final String permission, final String message) {
-        return broadcastMessage(null, permission, message, false);
+        return broadcastMessage(null, permission, message, false, Collections.emptySet());
     }
 
-    private int broadcastMessage(final IUser sender, final String permission, final String message, final boolean keywords, final IUser... exclude) {
+    private int broadcastMessage(final IUser sender, final String permission, final String message, final boolean keywords, final Set<IUser> excluded) {
         if (sender != null && sender.isHidden()) {
             return 0;
         }
@@ -770,8 +768,6 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
         IText broadcast = new SimpleTextInput(message);
 
         final Collection<Player> players = getOnlinePlayers();
-        final Set<IUser> excluded = new HashSet<>(Arrays.asList(exclude));
-
         for (Player player : players) {
             final User user = getUser(player);
             if ((permission == null && (sender == null || !user.isIgnoredPlayer(sender))) || (permission != null && user.isAuthorized(permission))) {

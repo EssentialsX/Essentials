@@ -17,6 +17,7 @@ import org.bukkit.scheduler.BukkitTask;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 public interface IEssentials extends Plugin {
@@ -47,7 +48,7 @@ public interface IEssentials extends Plugin {
 
     int broadcastMessage(IUser sender, String message);
 
-    int broadcastMessage(IUser sender, String message, IUser... exclude);
+    int broadcastMessage(IUser sender, String message, Set<IUser> excluded);
 
     int broadcastMessage(String permission, String message);
 
