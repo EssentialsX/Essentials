@@ -164,6 +164,7 @@ public class EssentialsEntityListener implements Listener {
         final User user = ess.getUser(event.getEntity());
         if (user.isAuthorized("essentials.keepinv")) {
             event.setKeepInventory(true);
+            event.getDrops().clear();
         }
     }
 
