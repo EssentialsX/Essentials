@@ -192,12 +192,8 @@ public class EssentialsPlayerListener implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerJoin(final PlayerJoinEvent event) {
         final String joinMessage = event.getJoinMessage();
-        ess.runTaskAsynchronously(new Runnable() {
-            @Override
-            public void run() {
-                delayedJoin(event.getPlayer(), joinMessage);
-            }
-        });
+        ess.runTaskAsynchronously(() -> delayedJoin(event.getPlayer(), joinMessage));
+
         if (ess.getSettings().allowSilentJoinQuit() || ess.getSettings().isCustomJoinMessage()) {
             event.setJoinMessage(null);
         }
@@ -445,12 +441,7 @@ public class EssentialsPlayerListener implements Listener {
         final User user = ess.getUser(event.getPlayer());
         if (user.hasUnlimited(new ItemStack(event.getBucket()))) {
             event.getItemStack().setType(event.getBucket());
-            ess.scheduleSyncDelayedTask(new Runnable() {
-                @Override
-                public void run() {
-                    user.getBase().updateInventory();
-                }
-            });
+            ess.scheduleSyncDelayedTask(user.getBase()::updateInventory);
         }
     }
 
@@ -627,6 +618,8 @@ public class EssentialsPlayerListener implements Listener {
             case PHYSICAL:
                 updateActivity = false;
                 break;
+            default:
+                break;
         }
 
         if (updateActivity) {
@@ -746,12 +739,7 @@ public class EssentialsPlayerListener implements Listener {
 
         if (refreshPlayer != null) {
             final Player player = refreshPlayer;
-            ess.scheduleSyncDelayedTask(new Runnable() {
-                @Override
-                public void run() {
-                    player.updateInventory();
-                }
-            }, 1);
+            ess.scheduleSyncDelayedTask(player::updateInventory, 1);
         }
     }
 
@@ -786,19 +774,14 @@ public class EssentialsPlayerListener implements Listener {
 
         if (refreshPlayer != null) {
             final Player player = refreshPlayer;
-            ess.scheduleSyncDelayedTask(new Runnable() {
-                @Override
-                public void run() {
-                    player.updateInventory();
-                }
-            }, 1);
+            ess.scheduleSyncDelayedTask(player::updateInventory, 1);
         }
     }
 
     @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
     public void onPlayerFishEvent(final PlayerFishEvent event) {
         final User user = ess.getUser(event.getPlayer());
-            user.updateActivityOnInteract(true);
+        user.updateActivityOnInteract(true);
     }
 
     private static boolean isEntityPickupEvent() {
