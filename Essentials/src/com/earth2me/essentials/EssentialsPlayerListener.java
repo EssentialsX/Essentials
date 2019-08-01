@@ -867,7 +867,7 @@ public class EssentialsPlayerListener implements Listener {
             PluginCommand command = ess.getServer().getPluginCommand(commandLabel);
 
             return command != null
-                && command.getPlugin().getName().equals("Essentials")
+                && command.getPlugin() == ess
                 && (ess.getSettings().isCommandOverridden(commandLabel) || (ess.getAlternativeCommandsHandler().getAlternative(commandLabel) == null))
                 && !user.isAuthorized(command.getName().equals("r") ? "essentials.msg" : "essentials." + command.getName());
         }
