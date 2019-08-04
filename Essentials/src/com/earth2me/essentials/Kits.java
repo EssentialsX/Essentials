@@ -79,6 +79,11 @@ public class Kits implements IConf {
         config.save();
     }
 
+    public void removeKit(String name) {
+        config.set("kits." + name, null);
+        config.save();
+    }
+
     public String listKits(final net.ess3.api.IEssentials ess, final User user) throws Exception {
         try {
             final ConfigurationSection kits = config.getConfigurationSection("kits");
