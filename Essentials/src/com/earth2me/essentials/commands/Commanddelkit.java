@@ -20,6 +20,8 @@ public class Commanddelkit extends EssentialsCommand {
         if (!ess.getSettings().isPastebinCreateKit()) {
             ess.getKits().removeKit(kitname);
             user.sendMessage(tl("deletedKit", kitname));
+        } else {
+            user.sendMessage("You have tried to remove the kit from pastebin.com which is not very easy.");
         }
     }
 }
