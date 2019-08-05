@@ -24,7 +24,7 @@ public class Commanddelkit extends EssentialsCommand {
         String kitname = args[0];
         if (!ess.getSettings().isPastebinCreateKit()) {
             ess.getKits().removeKit(kitname);
-            user.sendMessage(tl("deletedKit", kitname));
+            user.sendMessage(tl("deleteKit", kitname));
         } else {
             user.sendMessage(tl("pastebinDeleteKit"));
         }
