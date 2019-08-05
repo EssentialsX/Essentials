@@ -34,7 +34,7 @@ public class Commanddelkit extends EssentialsCommand {
     protected List<String> getTabCompleteOptions(Server server, User user, String commandLabel, String[] args) {
         if (args.length == 1) {
             try {
-                return new ArrayList<>(ess.getKits().getKeys(false));
+                return new ArrayList<>(ess.getKits().getKits().getKeys(false));
             } catch (Exception e) {
                 return Collections.emptyList();
             }
