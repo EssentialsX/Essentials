@@ -554,6 +554,7 @@ public class Settings implements net.ess3.api.ISettings {
         allowOldIdSigns = _allowOldIdSigns();
         isWaterSafe = _isWaterSafe();
         isSafeUsermap = _isSafeUsermap();
+        logCommandBlockCommands = _logCommandBlockCommands();
     }
 
     void _lateLoadItemSpawnBlacklist() {
@@ -1575,5 +1576,16 @@ public class Settings implements net.ess3.api.ISettings {
     @Override
     public boolean isSafeUsermap() {
         return isSafeUsermap;
+    }
+
+    private boolean logCommandBlockCommands;
+
+    private boolean _logCommandBlockCommands() {
+        return config.getBoolean("log-command-block-commands", true);
+    }
+
+    @Override
+    public boolean logCommandBlockCommands() {
+        return logCommandBlockCommands;
     }
 }
