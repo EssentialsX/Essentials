@@ -63,6 +63,15 @@ public abstract class EssentialsCommand implements IEssentialsCommand {
         return getPlayer(server, args, pos, true, false);
     }
 
+    // Get online or offline players - only show vanished if source has permission
+    protected User getPlayer(final Server server, final CommandSource sender, final String[] args, final int pos, boolean getOffline) throws PlayerNotFoundException, NotEnoughArgumentsException {
+        if (sender.isPlayer()) {
+            User user = ess.getUser(sender.getPlayer());
+            return getPlayer(server, user, args, pos, getOffline);
+        }
+        return getPlayer(server, args, pos, true, getOffline);
+    }
+
     // Get online players - only show vanished if source has permission
     protected User getPlayer(final Server server, final CommandSource sender, final String searchTerm) throws PlayerNotFoundException, NotEnoughArgumentsException {
         if (sender.isPlayer()) {
@@ -75,6 +84,11 @@ public abstract class EssentialsCommand implements IEssentialsCommand {
     // Get online players - only show vanished if source has permission
     protected User getPlayer(final Server server, final User user, final String[] args, final int pos) throws PlayerNotFoundException, NotEnoughArgumentsException {
         return getPlayer(server, user, args, pos, user.canInteractVanished(), false);
+    }
+
+    // Get online or offline players - only show vanished if source has permission
+    protected User getPlayer(final Server server, final User user, final String[] args, final int pos, boolean getOffline) throws PlayerNotFoundException, NotEnoughArgumentsException {
+        return getPlayer(server, user, args, pos, user.canInteractVanished(), getOffline);
     }
 
     // Get online or offline players, this method allows for raw access

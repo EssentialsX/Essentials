@@ -31,29 +31,43 @@ public class Commandwhois extends EssentialsCommand {
             throw new NotEnoughArgumentsException();
         }
 
-        User user = getPlayer(server, sender, args, 0);
+        User user = getPlayer(server, sender, args, 0, true);
 
         sender.sendMessage(tl("whoisTop", user.getName()));
         user.setDisplayNick();
         sender.sendMessage(tl("whoisNick", user.getDisplayName()));
         sender.sendMessage(tl("whoisUuid", user.getBase().getUniqueId().toString()));
-        sender.sendMessage(tl("whoisHealth", user.getBase().getHealth()));
-        sender.sendMessage(tl("whoisHunger", user.getBase().getFoodLevel(), user.getBase().getSaturation()));
-        sender.sendMessage(tl("whoisExp", SetExpFix.getTotalExperience(user.getBase()), user.getBase().getLevel()));
-        sender.sendMessage(tl("whoisLocation", user.getLocation().getWorld().getName(), user.getLocation().getBlockX(), user.getLocation().getBlockY(), user.getLocation().getBlockZ()));
-        long playtimeMs = System.currentTimeMillis() - (user.getBase().getStatistic(PLAY_ONE_TICK) * 50);
-        sender.sendMessage(tl("whoisPlaytime", DateUtil.formatDateDiff(playtimeMs)));
+        //Inaccessible data of offline players is hidden
+        if (user.isReachable()) {
+            sender.sendMessage(tl("whoisOnline", tl("true")));
+            sender.sendMessage(tl("whoisHealth", user.getBase().getHealth()));
+            sender.sendMessage(tl("whoisHunger", user.getBase().getFoodLevel(), user.getBase().getSaturation()));
+            sender.sendMessage(tl("whoisExp", SetExpFix.getTotalExperience(user.getBase()), user.getBase().getLevel()));
+            sender.sendMessage(tl("whoisLocation", user.getLocation().getWorld().getName(), user.getLocation().getBlockX(), user.getLocation().getBlockY(), user.getLocation().getBlockZ()));
+            long playtimeMs = System.currentTimeMillis() - (user.getBase().getStatistic(PLAY_ONE_TICK) * 50);
+            sender.sendMessage(tl("whoisPlaytime", DateUtil.formatDateDiff(playtimeMs)));
+        } else {
+            sender.sendMessage(tl("whoisOfflineSince", tl("false"), DateUtil.formatDateDiff(user.getLastLogout())));
+            sender.sendMessage(tl("whoisLocation", user.getLogoutLocation().getWorld().getName(), user.getLogoutLocation().getBlockX(), user.getLogoutLocation().getBlockY(), user.getLogoutLocation().getBlockZ()));
+        }
+
         if (!ess.getSettings().isEcoDisabled()) {
             sender.sendMessage(tl("whoisMoney", NumberUtil.displayCurrency(user.getMoney(), ess)));
         }
-        if (!sender.isPlayer() || ess.getUser(sender.getPlayer()).isAuthorized("essentials.whois.ip")) {
-            sender.sendMessage(tl("whoisIPAddress", user.getBase().getAddress().getAddress().toString()));
+        if (!sender.isPlayer() || (ess.getUser(sender.getPlayer()).isAuthorized("essentials.whois.ip"))) {
+            if (user.isReachable()) {
+                sender.sendMessage(tl("whoisIPAddress", user.getBase().getAddress().getAddress().toString()));
+            } else {
+                sender.sendMessage(tl("whoisIPAddress", user.getLastLoginAddress()));
+            }
         }
         final String location = user.getGeoLocation();
         if (location != null && (!sender.isPlayer() || ess.getUser(sender.getPlayer()).isAuthorized("essentials.geoip.show"))) {
             sender.sendMessage(tl("whoisGeoLocation", location));
         }
-        sender.sendMessage(tl("whoisGamemode", tl(user.getBase().getGameMode().toString().toLowerCase(Locale.ENGLISH))));
+        if (user.isReachable()) {
+            sender.sendMessage(tl("whoisGamemode", tl(user.getBase().getGameMode().toString().toLowerCase(Locale.ENGLISH))));
+        }
         sender.sendMessage(tl("whoisGod", (user.isGodModeEnabled() ? tl("true") : tl("false"))));
         sender.sendMessage(tl("whoisOp", (user.getBase().isOp() ? tl("true") : tl("false"))));
         sender.sendMessage(tl("whoisFly", user.getBase().getAllowFlight() ? tl("true") : tl("false"), user.getBase().isFlying() ? tl("flying") : tl("notFlying")));
