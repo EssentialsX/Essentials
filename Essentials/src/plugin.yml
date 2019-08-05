@@ -96,6 +96,10 @@ commands:
     description: Removes a jail.
     usage: /<command> <jailname>
     aliases: [edeljail,remjail,eremjail,rmjail,ermjail]
+  delkit:
+    description: Deletes the specified kit.
+    usage: /<command> <kit>
+    aliases: [edelkit,remkit,eremkit,rmkit,ermkit]
   delwarp:
     description: Deletes the specified warp.
     usage: /<command> <warp>
