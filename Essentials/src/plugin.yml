@@ -100,10 +100,10 @@ commands:
     description: Deletes the specified warp.
     usage: /<command> <warp>
     aliases: [edelwarp,remwarp,eremwarp,rmwarp,ermwarp]
-  deletekit:
+  delkit:
     description: Deletes the specified kit.
     usage: /<command> <kit>
-    aliases: [edelkit,delkit,remkitp,eremkit,rmkit,ermkit]
+    aliases: [edelkit,delkit,remkit,eremkit,rmkit,ermkit]
   depth:
     description: States current depth, relative to sea level.
     usage: /depth
