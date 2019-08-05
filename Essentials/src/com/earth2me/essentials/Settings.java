@@ -555,6 +555,7 @@ public class Settings implements net.ess3.api.ISettings {
         isWaterSafe = _isWaterSafe();
         isSafeUsermap = _isSafeUsermap();
         logCommandBlockCommands = _logCommandBlockCommands();
+        blackListedNickNames = _getBlackListedNickNames();
     }
 
     void _lateLoadItemSpawnBlacklist() {
@@ -1587,5 +1588,16 @@ public class Settings implements net.ess3.api.ISettings {
     @Override
     public boolean logCommandBlockCommands() {
         return logCommandBlockCommands;
+    }
+
+    private List<String> blackListedNickNames;
+
+    private List<String> _getBlackListedNickNames() {
+        return config.getStringList("blacklist-nicknames");
+    }
+
+    @Override
+    public List<String> getBlackListedNickNames() {
+        return blackListedNickNames;
     }
 }
