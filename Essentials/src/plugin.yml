@@ -103,7 +103,7 @@ commands:
   delkit:
     description: Deletes the specified kit.
     usage: /<command> <kit>
-    aliases: [edelkit,delkit,remkit,eremkit,rmkit,ermkit]
+    aliases: [edelkit,remkit,eremkit,rmkit,ermkit]
   depth:
     description: States current depth, relative to sea level.
     usage: /depth
