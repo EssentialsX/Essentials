@@ -83,8 +83,15 @@ public class Commandnick extends EssentialsLoopCommand {
             throw new Exception(tl("nickNamesAlpha"));
         } else if (user != null && (user.isAuthorized("essentials.nick.changecolors") && !user.isAuthorized("essentials.nick.changecolors.bypass")) && !FormatUtil.stripFormat(newNick).equals(user.getName())) {
             throw new Exception(tl("nickNamesOnlyColorChanges"));
+        } else if (user != null && !user.isAuthorized("essentials.nick.blacklist.bypass") && isNickBanned(newNick)) {
+            throw new Exception(tl("nickNameBlacklist", nick));
         }
         return newNick;
+    }
+
+    private boolean isNickBanned(String newNick) {
+        return ess.getSettings().getNickBlacklist().stream()
+            .anyMatch(entry -> entry.test(newNick));
     }
 
     private int getNickLength(final String nick) {

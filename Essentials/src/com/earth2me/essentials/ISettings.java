@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.function.Predicate;
 import java.util.regex.Pattern;
 
 
@@ -332,4 +333,6 @@ public interface ISettings extends IConf {
     boolean isSafeUsermap();
 
     boolean logCommandBlockCommands();
+
+    Set<Predicate<String>> getNickBlacklist();
 }
