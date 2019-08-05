@@ -4,6 +4,9 @@ import com.earth2me.essentials.User;
 
 import org.bukkit.Server;
 
+import java.util.ArrayList;
+import java.util.Collections;
+
 import static com.earth2me.essentials.I18n.tl;
 
 public class Commanddelkit extends EssentialsCommand {
@@ -23,7 +26,20 @@ public class Commanddelkit extends EssentialsCommand {
             ess.getKits().removeKit(kitname);
             user.sendMessage(tl("deletedKit", kitname));
         } else {
-            user.sendMessage("You have tried to remove the kit from pastebin.com which is not very easy.");
+            user.sendMessage(tl("pastebinDeleteKit"));
+        }
+    }
+
+    @Override
+    protected List<String> getTabCompleteOptions(Server server, User user, String commandLabel, String[] args) {
+        if (args.length == 1) {
+            try {
+                return new ArrayList<>(ess.getKits().getKeys(false));
+            } catch (Exception e) {
+                return Collections.emptyList();
+            }
+        } else {
+            return Collections.emptyList();
         }
     }
 }
