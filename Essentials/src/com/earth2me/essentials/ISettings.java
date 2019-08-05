@@ -330,4 +330,6 @@ public interface ISettings extends IConf {
     boolean isWaterSafe();
   
     boolean isSafeUsermap();
+
+    boolean logCommandBlockCommands();
 }
