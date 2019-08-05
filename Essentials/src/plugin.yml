@@ -99,7 +99,7 @@ commands:
   delkit:
     description: Deletes the specified kit.
     usage: /<command> <kit>
-    aliases: [edelkit,remkit,eremkit,rmkit,ermkit]
+    aliases: [edelkit,remkit,eremkit,rmkit,ermkit,deletekit,edeletekit]
   delwarp:
     description: Deletes the specified warp.
     usage: /<command> <warp>
