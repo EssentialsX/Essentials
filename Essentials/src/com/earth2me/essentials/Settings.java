@@ -557,6 +557,7 @@ public class Settings implements net.ess3.api.ISettings {
         isSafeUsermap = _isSafeUsermap();
         logCommandBlockCommands = _logCommandBlockCommands();
         nickBlacklist = _getNickBlacklist();
+        maxProjectileSpeed = _getMaxProjectileSpeed();
     }
 
     void _lateLoadItemSpawnBlacklist() {
@@ -1610,5 +1611,16 @@ public class Settings implements net.ess3.api.ISettings {
     @Override
     public Set<Predicate<String>> getNickBlacklist() {
         return nickBlacklist;
+    }
+
+    private double maxProjectileSpeed;
+
+    private double _getMaxProjectileSpeed() {
+        return config.getDouble("max-projectile-speed", 8);
+    }
+
+    @Override
+    public double getMaxProjectileSpeed() {
+        return maxProjectileSpeed;
     }
 }

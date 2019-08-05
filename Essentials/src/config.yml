@@ -614,6 +614,9 @@ sethome-multiple:
 # change the compass' direction to point towards their first home.
 compass-towards-home-perm: false
 
+# Set the maximum speed for projectiles spawned with /fireball.
+max-projectile-speed: 8
+
 ############################################################
 # +------------------------------------------------------+ #
 # |                    EssentialsEco                     | #
