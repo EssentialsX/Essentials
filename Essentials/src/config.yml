@@ -32,6 +32,10 @@ nickname-prefix: '~'
 # The maximum length allowed in nicknames. The nickname prefix is included in this.
 max-nick-length: 15
 
+# What needs to be prevented in the nickname is to prevent players from using it.
+blacklist-nicknames:
+#- nickName
+
 # When this option is enabled, nickname length checking will exclude color codes in player names.
 # ie: "&6Notch" has 7 characters (2 are part of a color code), a length of 5 is used when this option is set to true
 ignore-colors-in-max-nick-length: false
