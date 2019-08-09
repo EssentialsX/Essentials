@@ -2,12 +2,11 @@ package com.earth2me.essentials;
 
 import net.ess3.api.IEssentials;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.InputStream;
+import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLConnection;
+import java.nio.charset.StandardCharsets;
 import java.text.MessageFormat;
 import java.util.*;
 import java.util.logging.Level;
@@ -38,7 +37,7 @@ public class I18n implements net.ess3.api.II18n {
 
     public I18n(final IEssentials ess) {
         this.ess = ess;
-        defaultBundle = ResourceBundle.getBundle(MESSAGES, Locale.ENGLISH);
+        defaultBundle = ResourceBundle.getBundle(MESSAGES, Locale.ENGLISH, new UTF8PropertiesControl());
         localeBundle = defaultBundle;
     }
 
@@ -62,10 +61,10 @@ public class I18n implements net.ess3.api.II18n {
 
         ResourceBundle bundle;
         try {
-            bundle = ResourceBundle.getBundle(MESSAGES, locale, new FileResClassLoader(I18n.class.getClassLoader(), ess));
+            bundle = ResourceBundle.getBundle(MESSAGES, locale, new FileResClassLoader(I18n.class.getClassLoader(), ess), new UTF8PropertiesControl());
         } catch (MissingResourceException ex) {
             try {
-                bundle = ResourceBundle.getBundle(MESSAGES, locale);
+                bundle = ResourceBundle.getBundle(MESSAGES, locale, new UTF8PropertiesControl());
             } catch (MissingResourceException ex2) {
                 bundle = NULL_BUNDLE;
             }
@@ -130,11 +129,11 @@ public class I18n implements net.ess3.api.II18n {
             currentLocale = getLocale(loc);
         }
         ResourceBundle.clearCache();
-        messageFormatCache = new HashMap<String, MessageFormat>();
+        messageFormatCache = new HashMap<>();
         Logger.getLogger("Essentials").log(Level.INFO, String.format("Using locale %s", currentLocale.toString()));
 
         try {
-            localeBundle = ResourceBundle.getBundle(MESSAGES, currentLocale);
+            localeBundle = ResourceBundle.getBundle(MESSAGES, currentLocale, new UTF8PropertiesControl());
         } catch (MissingResourceException ex) {
             localeBundle = NULL_BUNDLE;
         }
@@ -163,7 +162,9 @@ public class I18n implements net.ess3.api.II18n {
         return input == null || input.length() == 0 ? input : input.toUpperCase(Locale.ENGLISH).charAt(0) + input.toLowerCase(Locale.ENGLISH).substring(1);
     }
 
-
+    /**
+     * Attempts to load properties files from the plugin directory before falling back to the jar.
+     */
     private static class FileResClassLoader extends ClassLoader {
         private final transient File dataFolder;
 
@@ -178,8 +179,7 @@ public class I18n implements net.ess3.api.II18n {
             if (file.exists()) {
                 try {
                     return file.toURI().toURL();
-                } catch (MalformedURLException ex) {
-                }
+                } catch (MalformedURLException ignored) {}
             }
             return null;
         }
@@ -190,10 +190,43 @@ public class I18n implements net.ess3.api.II18n {
             if (file.exists()) {
                 try {
                     return new FileInputStream(file);
-                } catch (FileNotFoundException ex) {
-                }
+                } catch (FileNotFoundException ignored) {}
             }
             return null;
+        }
+    }
+
+    /**
+     * Reads .properties files as UTF-8 instead of ISO-8859-1, which is the default on Java 8/below.
+     * Java 9 fixes this by defaulting to UTF-8 for .properties files.
+     */
+    private static class UTF8PropertiesControl extends ResourceBundle.Control {
+        public ResourceBundle newBundle(String baseName, Locale locale, String format, ClassLoader loader, boolean reload) throws IOException {
+            String bundleName = toBundleName(baseName, locale);
+            String resourceName = toResourceName(bundleName, "properties");
+            ResourceBundle bundle = null;
+            InputStream stream = null;
+            if (reload) {
+                URL url = loader.getResource(resourceName);
+                if (url != null) {
+                    URLConnection connection = url.openConnection();
+                    if (connection != null) {
+                        connection.setUseCaches(false);
+                        stream = connection.getInputStream();
+                    }
+                }
+            } else {
+                stream = loader.getResourceAsStream(resourceName);
+            }
+            if (stream != null) {
+                try {
+                    // use UTF-8 here, this is the important bit
+                    bundle = new PropertyResourceBundle(new InputStreamReader(stream, StandardCharsets.UTF_8));
+                } finally {
+                    stream.close();
+                }
+            }
+            return bundle;
         }
     }
 }
