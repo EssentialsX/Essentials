@@ -7,7 +7,9 @@ import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.DateUtil;
 import com.earth2me.essentials.utils.DescParseTickFormat;
 import com.earth2me.essentials.utils.NumberUtil;
+import me.clip.placeholderapi.PlaceholderAPI;
 import net.ess3.api.IEssentials;
+import net.ess3.api.IUser;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -33,6 +35,7 @@ public class KeywordReplacer implements IText {
     private transient ExecuteTimer execTimer;
     private final transient boolean replaceSpacesWithUnderscores;
     private final EnumMap<KeywordType, Object> keywordCache = new EnumMap<KeywordType, Object>(KeywordType.class);
+    private static Boolean isPAPIAvailable;
 
     public KeywordReplacer(final IText input, final CommandSource sender, final IEssentials ess) {
         this.input = input;
@@ -73,14 +76,19 @@ public class KeywordReplacer implements IText {
 
         for (int i = 0; i < input.getLines().size(); i++) {
             String line = input.getLines().get(i);
-            final Matcher matcher = KEYWORD.matcher(line);
 
+            // Replace in-built keywords
+            final Matcher matcher = KEYWORD.matcher(line);
             while (matcher.find()) {
                 final String fullMatch = matcher.group(0);
                 final String keywordMatch = matcher.group(1);
                 final String[] matchTokens = KEYWORDSPLIT.split(keywordMatch);
                 line = replaceLine(line, fullMatch, matchTokens, user);
             }
+
+            // Replace PlaceholderAPI placeholders if applicable
+            line = replacePAPI(ess, sender, line);
+
             replaced.add(line);
         }
 
@@ -290,7 +298,18 @@ public class KeywordReplacer implements IText {
             }
 
             line = line.replace(fullMatch, replacer);
-        } catch (IllegalArgumentException ex) {
+        } catch (IllegalArgumentException ignored) {}
+
+        return line;
+    }
+
+    private static String replacePAPI(final IEssentials ess, CommandSource source, String line) {
+        if (isPAPIAvailable == null) {
+            isPAPIAvailable = ess.getServer().getPluginManager().isPluginEnabled("PlaceholderAPI");
+        }
+
+        if (isPAPIAvailable && source.isPlayer()) {
+            line = PlaceholderAPI.setPlaceholders(source.getPlayer(), line);
         }
 
         return line;
