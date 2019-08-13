@@ -625,10 +625,11 @@ public class EssentialsPlayerListener implements Listener {
                 }
                 break;
             case PHYSICAL:  			
-			       if(event.getItem().getType().toString().contains("pressure_plate")) {
-                       if(user.isVanished()){
-                           event.setCancelled(true);
-		    	}}
+                if(event.getItem().getType().toString().contains("pressure_plate")) {
+	           final User user = ess.getUser(event.getPlayer());
+                 if(user.isVanished()){
+                    event.setCancelled(true);
+		}}
                 updateActivity = false;
                 break;
         }
