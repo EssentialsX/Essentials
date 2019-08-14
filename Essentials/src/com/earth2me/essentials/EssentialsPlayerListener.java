@@ -164,6 +164,7 @@ public class EssentialsPlayerListener implements Listener {
             user.setGodModeEnabled(false);
         }
         if (user.isVanished()) {
+	    user.setVanished(false);
         }
         user.setLogoutLocation();
         if (user.isRecipeSee()) {
