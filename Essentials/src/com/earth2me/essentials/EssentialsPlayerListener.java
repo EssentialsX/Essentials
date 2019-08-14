@@ -164,7 +164,6 @@ public class EssentialsPlayerListener implements Listener {
             user.setGodModeEnabled(false);
         }
         if (user.isVanished()) {
-            user.setVanished(false);
         }
         user.setLogoutLocation();
         if (user.isRecipeSee()) {
@@ -625,11 +624,12 @@ public class EssentialsPlayerListener implements Listener {
                 }
                 break;
             case PHYSICAL:  			
-                if(event.getItem().getType().toString().contains("pressure_plate")) {
+                if(event.getClickedBlock().getType().toString().contains("PRESSURE_PLATE")) {
 	           final User user = ess.getUser(event.getPlayer());
-                 if(user.isVanished()){
-                    event.setCancelled(true);
-		}}
+                    if(user.isVanished()){
+                        event.setCancelled(true);
+		    }
+		}
                 updateActivity = false;
                 break;
         }
