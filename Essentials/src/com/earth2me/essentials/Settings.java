@@ -57,6 +57,12 @@ public class Settings implements net.ess3.api.ISettings {
     }
 
     @Override
+    public boolean errorWhenNoHome() {
+        return config.getBoolean("error-when-no-home", false);
+
+    }
+
+    @Override
     public boolean getRespawnAtHome() {
         return config.getBoolean("respawn-at-home", false);
     }
