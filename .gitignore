@@ -16,3 +16,5 @@
 # Build files
 target/
 jars/
+bin/
+.buildtools/
