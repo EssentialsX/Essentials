@@ -614,6 +614,10 @@ sethome-multiple:
 # change the compass' direction to point towards their first home.
 compass-towards-home-perm: false
 
+# Should Essentials display an error when the user tries to run /home without having a set home?
+# If false, Essentials will send the user to their respawn location.
+error-when-no-home: false
+
 # Set the maximum speed for projectiles spawned with /fireball.
 max-projectile-speed: 8
 

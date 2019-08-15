@@ -105,6 +105,8 @@ public interface ISettings extends IConf {
 
     boolean getRespawnAtHome();
 
+    boolean getErrorWhenNoHome();
+
     Set getMultipleHomes();
 
     int getHomeLimit(String set);

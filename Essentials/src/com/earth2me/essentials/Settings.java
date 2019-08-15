@@ -67,6 +67,11 @@ public class Settings implements net.ess3.api.ISettings {
     }
 
     @Override
+    public boolean getErrorWhenNoHome() {
+        return config.getBoolean("error-when-no-home", false);
+    }
+
+    @Override
     public Set<String> getMultipleHomes() {
         final ConfigurationSection section = config.getConfigurationSection("sethome-multiple");
         return section == null ? null : section.getKeys(false);

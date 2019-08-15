@@ -1,5 +1,6 @@
 package com.earth2me.essentials.commands;
 
+import com.earth2me.essentials.EssentialsConf;
 import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.StringUtil;
@@ -7,6 +8,7 @@ import org.bukkit.Location;
 import org.bukkit.Server;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -53,7 +55,11 @@ public class Commandhome extends EssentialsCommand {
             Location bed = player.getBase().getBedSpawnLocation();
             final List<String> homes = player.getHomes();
             if (homes.isEmpty() && player.equals(user)) {
-                user.getTeleport().respawn(charge, TeleportCause.COMMAND);
+                if (!ess.getSettings().getErrorWhenNoHome()) {
+                    user.getTeleport().respawn(charge, TeleportCause.COMMAND);
+                } else {
+                    throw new Exception(tl("noHomeSetUser"));
+                }
             } else if (homes.isEmpty()) {
                 throw new Exception(tl("noHomeSetPlayer"));
             } else if (homes.size() == 1 && player.equals(user)) {
