@@ -17,4 +17,5 @@
 target/
 jars/
 
+# Buildtools files
 .buildtools/
