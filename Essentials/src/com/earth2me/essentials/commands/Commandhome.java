@@ -54,7 +54,7 @@ public class Commandhome extends EssentialsCommand {
             final List<String> homes = player.getHomes();
             if (homes.isEmpty() && player.equals(user)) {
                 if (ess.getSettings().errorWhenNoHome()) {
-                    throw new Exception(tl("error-when-no-home"));
+                    throw new Exception(tl("noHomeSetUser"));
                 } else {
                     user.getTeleport().respawn(charge, TeleportCause.COMMAND);
                 }
