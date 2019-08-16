@@ -59,7 +59,7 @@ public class Commandban extends EssentialsCommand {
 
         // Just clears the player inventory, enderchest, reseting player time
         // clear homes, set money to 0 and reset invulnerability after tp
-        if (ess.getSettings().isClearPlayerData()) {
+        if (ess.getSettings().clearPlayerDataOnBan()) {
             user.getBase().clearInventory();
             user.getBase().getEnderChest().clear();
             user.getBase().resetPlayerTime();
