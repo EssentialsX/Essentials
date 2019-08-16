@@ -81,7 +81,7 @@ public class Commandafk extends EssentialsCommand {
         if (!msg.isEmpty()) {
             if (ess.getSettings().broadcastAfkMessage()) {
                 // exclude user from recieving general AFK announcement in favor of personal message
-                ess.broadcastMessage(user, msg, user);
+                ess.broadcastMessage(user, msg, Collections.singleton(user));
                 user.sendMessage(selfmsg);
             } else {
                 user.sendMessage(selfmsg);

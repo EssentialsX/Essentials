@@ -588,7 +588,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
                 if (!msg.isEmpty()) {
                     if (ess.getSettings().broadcastAfkMessage()) {
                         // exclude user from recieving general AFK announcement in favor of personal message
-                        ess.broadcastMessage(this, msg, this);
+                        ess.broadcastMessage(this, msg, Collections.singleton(this));
                         this.sendMessage(selfmsg);
                     } else {
                         this.sendMessage(selfmsg);
@@ -643,7 +643,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
                 if (!msg.isEmpty()) {
                     if (ess.getSettings().broadcastAfkMessage()) {
                         // exclude user from recieving general AFK announcement in favor of personal message
-                        ess.broadcastMessage(this, msg, this);
+                        ess.broadcastMessage(this, msg, Collections.singleton(this));
                         this.sendMessage(selfmsg);
                     } else {
                         this.sendMessage(selfmsg);
