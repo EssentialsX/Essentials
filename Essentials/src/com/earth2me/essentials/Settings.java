@@ -558,6 +558,7 @@ public class Settings implements net.ess3.api.ISettings {
         logCommandBlockCommands = _logCommandBlockCommands();
         nickBlacklist = _getNickBlacklist();
         maxProjectileSpeed = _getMaxProjectileSpeed();
+        clearPlayerDataOnBan = _clearPlayerDataOnBan();
     }
 
     void _lateLoadItemSpawnBlacklist() {
@@ -1622,5 +1623,16 @@ public class Settings implements net.ess3.api.ISettings {
     @Override
     public double getMaxProjectileSpeed() {
         return maxProjectileSpeed;
+    }
+
+    private boolean clearPlayerDataOnBan;
+
+    private boolean _clearPlayerDataOnBan() {
+        return config.getBoolean("clear-player-data-on-ban", false);
+    }
+
+    @Override
+    public boolean clearPlayerDataOnBan() {
+        return clearPlayerDataOnBan;
     }
 }
