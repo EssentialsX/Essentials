@@ -56,20 +56,21 @@ public class Commandbanip extends EssentialsCommand {
         ess.getServer().getBanList(BanList.Type.IP).addBan(ipAddress, banReason, null, senderName);
         server.getLogger().log(Level.INFO, tl("playerBanIpAddress", senderName, ipAddress, banReason));
 
-        // Just clears the player inventory, enderchest, reseting player time
-        // clear homes, set money to 0 and reset invulnerability after tp
-        if (ess.getSettings().clearPlayerDataOnBan()) {
-            user.getBase().clearInventory();
-            user.getBase().getEnderChest().clear();
-            user.getBase().resetPlayerTime();
-            user.getHomes().clear();
-            user.setMoney(new java.math.BigDecimal(0));
-            user.resetInvulnerabilityAfterTeleport();
-        }
-
         for (Player player : ess.getServer().getOnlinePlayers()) {
             if (player.getAddress().getAddress().getHostAddress().equalsIgnoreCase(ipAddress)) {
                 player.kickPlayer(banDisplay);
+
+                User base = ess.getUser(player);
+                // Just clears the player inventory, enderchest, reseting player time
+                // clear homes, set money to 0 and reset invulnerability after tp
+                if (ess.getSettings().clearPlayerDataOnBan()) {
+                    base.clearInventory();
+                    base.getEnderChest().clear();
+                    base.resetPlayerTime();
+                    base.getHomes().clear();
+                    base.setMoney(new java.math.BigDecimal(0));
+                    base.resetInvulnerabilityAfterTeleport();
+                }
             }
         }
 
