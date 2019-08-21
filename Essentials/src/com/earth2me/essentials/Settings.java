@@ -1623,4 +1623,9 @@ public class Settings implements net.ess3.api.ISettings {
     public double getMaxProjectileSpeed() {
         return maxProjectileSpeed;
     }
+
+    @Override
+    public boolean isSpawnIfNoHome() {
+        return config.getBoolean("spawn-if-no-home", false);
+    }
 }
