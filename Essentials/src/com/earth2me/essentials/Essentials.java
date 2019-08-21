@@ -228,6 +228,8 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
                 confList.add(jails);
                 execTimer.mark("Init(Jails)");
 
+                Console.setName(settings.getConsoleName());
+
                 spawnerProvider = new ProviderFactory<>(getLogger(),
                         Arrays.asList(
                                 BlockMetaSpawnerProvider.class,

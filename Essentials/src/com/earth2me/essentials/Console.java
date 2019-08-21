@@ -8,7 +8,7 @@ import org.bukkit.command.CommandSender;
 
 
 public final class Console implements IMessageRecipient {
-    public static final String NAME = "Console";
+    public static  String NAME = "Console";
     private static Console instance; // Set in essentials
     
     private final IEssentials ess;
@@ -45,6 +45,10 @@ public final class Console implements IMessageRecipient {
 
     @Override public String getDisplayName() {
         return Console.NAME;
+    }
+
+    public static void setName(String name) {
+        Console.NAME = name;
     }
 
     @Override public void sendMessage(String message) {

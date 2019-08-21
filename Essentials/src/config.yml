@@ -49,6 +49,9 @@ hide-displayname-in-vanish: true
 # Disable this if you have any other plugin, that modifies the displayname of a user.
 change-displayname: true
 
+# Would you like to set a custom display name for the console? (Used when messaging players, etc)
+console-name: "Console"
+
 # When this option is enabled, the (tab) player list will be updated with the displayname.
 # The value of change-displayname (above) has to be true.
 #change-playerlist: true
