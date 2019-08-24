@@ -7,6 +7,7 @@ import com.earth2me.essentials.utils.EnumUtil;
 import com.earth2me.essentials.utils.FormatUtil;
 import com.earth2me.essentials.utils.MaterialUtil;
 import com.earth2me.essentials.utils.NumberUtil;
+import com.earth2me.essentials.utils.VersionUtil;
 import com.google.common.base.Joiner;
 import net.ess3.api.IEssentials;
 import net.ess3.nms.refl.ReflUtil;
@@ -178,7 +179,10 @@ public class MetaItemStack {
             if (MaterialUtil.isPlayerHead(stack.getType(), stack.getDurability())) {
                 final String owner = split[1];
                 final SkullMeta meta = (SkullMeta) stack.getItemMeta();
-                meta.setOwningPlayer(ess.getServer().getOfflinePlayer(owner));
+                if (!VersionUtil.getServerBukkitVersion().isLowerThan(VersionUtil.v1_12_2_R01))
+                    meta.setOwningPlayer(ess.getServer().getOfflinePlayer(owner));
+                else
+                    meta.setOwner(owner);
                 stack.setItemMeta(meta);
             } else {
                 throw new Exception(tl("onlyPlayerSkulls"));
