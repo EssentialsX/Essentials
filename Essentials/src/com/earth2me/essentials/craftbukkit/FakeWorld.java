@@ -769,6 +769,16 @@ public class FakeWorld implements World {
     }
 
     @Override
+    public Raid locateNearestRaid(Location location, int radius) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public List<Raid> getRaids() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
     public List<Entity> getNearbyEntities(Location loc, double x, double y, double z) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
