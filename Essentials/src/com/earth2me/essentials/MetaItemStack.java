@@ -589,6 +589,7 @@ public class MetaItemStack {
         if (useNewSkullMethod) {
             try {
                 meta.setOwningPlayer(ess.getServer().getOfflinePlayer(owner));
+                stack.setItemMeta(meta);
                 return;
             } catch (NoSuchMethodError e) {
                 useNewSkullMethod = false;
