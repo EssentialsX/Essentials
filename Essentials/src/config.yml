@@ -435,6 +435,10 @@ death-messages: true
 # In addition, people with essentials.silentjoin.vanish will be vanished on join.
 allow-silent-join-quit: false
 
+# Would you like to send a join / leave message when a player goes into vanish?
+# This can be useful when watching hackers
+fake-message-vanish: false
+
 # You can set a custom join message here, set to "none" to disable.
 # You may use color codes, use {USERNAME} the player's name or {PLAYER} for the player's displayname.
 custom-join-message: "none"

@@ -7,6 +7,9 @@ import org.bukkit.Server;
 import static com.earth2me.essentials.I18n.tl;
 
 import net.ess3.api.events.VanishStatusChangeEvent;
+import org.bukkit.entity.Player;
+
+import java.text.NumberFormat;
 
 
 public class Commandvanish extends EssentialsToggleCommand {
@@ -45,6 +48,24 @@ public class Commandvanish extends EssentialsToggleCommand {
         }
         if (!sender.isPlayer() || !sender.getPlayer().equals(user.getBase())) {
             sender.sendMessage(tl("vanish", user.getDisplayName(), enabled ? tl("enabled") : tl("disabled")));
+        }
+
+        // Check if the setting is enabled
+        if (ess.getSettings().isFakeMessageOnVanish()) {
+            final Player player = user.getBase();
+            String msg;
+            if (enabled) {
+                msg = ess.getSettings().getCustomQuitMessage()
+                        .replace("{PLAYER}", player.getDisplayName())
+                        .replace("{USERNAME}", player.getName())
+                        .replace("{ONLINE}", NumberFormat.getInstance().format(ess.getOnlinePlayers().size()));
+            } else {
+                msg = ess.getSettings().getCustomJoinMessage()
+                        .replace("{PLAYER}", player.getDisplayName()).replace("{USERNAME}", player.getName())
+                        .replace("{UNIQUE}", NumberFormat.getInstance().format(ess.getUserMap().getUniqueUsers()))
+                        .replace("{ONLINE}", NumberFormat.getInstance().format(ess.getOnlinePlayers().size()));
+            }
+            ess.getServer().broadcastMessage(msg);
         }
     }
 }
