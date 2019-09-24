@@ -111,6 +111,15 @@ public class OfflinePlayer implements Player {
     }
 
     @Override
+    public double getAbsorptionAmount() {
+        return 0;
+    }
+
+    @Override
+    public void setAbsorptionAmount(double v) {
+    }
+
+    @Override
     public boolean isInsideVehicle() {
         return false;
     }
