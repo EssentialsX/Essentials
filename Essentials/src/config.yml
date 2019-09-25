@@ -215,6 +215,7 @@ player-commands:
   - balance.others
   - balancetop
   - build
+  - buy
   - chat.color
   - chat.format
   - chat.shout

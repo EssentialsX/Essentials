@@ -65,6 +65,9 @@ commands:
     description: Set a player on fire.
     usage: /<command> <player> <seconds>
     aliases: [eburn]
+  buy:
+    description: Buy the specified item.
+    usage: /<command> <<itemname>|<id>> [-][amount]
   clearinventory:
     description: Clear all items in your inventory.
     usage: /<command> [player|*] [item[:<data>]|*|**] [amount]
