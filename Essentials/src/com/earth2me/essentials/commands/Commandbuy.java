@@ -42,6 +42,10 @@ public class Commandbuy extends EssentialsCommand {
         BigDecimal worthSingleItem = ess.getWorth().getPrice(ess, is);
         BigDecimal worth = worthSingleItem.multiply(BigDecimal.valueOf(amountToGive));
         
+        if (worth == null) {
+            throw new Exception(tl("itemCannotBeSold"));
+        }
+        
         if (worth.compareTo(user.getMoney()) == -1) {
         	boolean isDropItemsIfFull = ess.getSettings().isDropItemsIfFull();
         	BigDecimal leftoverValue = BigDecimal.ZERO;
@@ -60,10 +64,10 @@ public class Commandbuy extends EssentialsCommand {
                 }
             } else {
             	for (ItemStack item : leftovers.values()) {
-            		leftoverValue.add(worthSingleItem.multiply(BigDecimal.valueOf(item.getAmount())));
-            		
-            		user.sendMessage("Not enough inventory space. Refunding $<amount>.");
+            		leftoverValue = leftoverValue.add(worthSingleItem.multiply(BigDecimal.valueOf(item.getAmount())));
                 }
+            	
+            	user.sendMessage("Not enough inventory space. Refunding $<amount>.");
             }
 
         	user.takeMoney(worth.subtract(leftoverValue));
