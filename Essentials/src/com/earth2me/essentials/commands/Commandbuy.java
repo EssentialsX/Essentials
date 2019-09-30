@@ -39,7 +39,7 @@ public class Commandbuy extends EssentialsCommand {
         
         ItemStack is = ess.getItemDb().get(args[0]);
         is.setAmount(amountToGive);
-        BigDecimal worthSingleItem = ess.getWorth().getPrice(ess, is);
+        BigDecimal worthSingleItem = ess.getWorth().getBuyPrice(ess, is);
         BigDecimal worth = worthSingleItem.multiply(BigDecimal.valueOf(amountToGive));
         
         if (worth == null) {
@@ -62,7 +62,7 @@ public class Commandbuy extends EssentialsCommand {
         			World w = user.getWorld();
                     w.dropItemNaturally(user.getLocation(), item);
                 }
-            } else {
+            } else if(!leftovers.values().isEmpty()) {
             	for (ItemStack item : leftovers.values()) {
             		leftoverValue = leftoverValue.add(worthSingleItem.multiply(BigDecimal.valueOf(item.getAmount())));
                 }

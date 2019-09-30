@@ -184,3 +184,10 @@ worth:
   ironboots: 22.0
   step: 1.5
   sugar: 10.0
+
+# Override prices from the section above for buying and selling specifically.
+buy:
+  diamond: 2000
+
+sell:
+  diamond: 20

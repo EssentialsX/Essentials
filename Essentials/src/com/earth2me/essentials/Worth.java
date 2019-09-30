@@ -63,6 +63,86 @@ public class Worth implements IConf {
     }
 
     /**
+     * Get the value of an item stack from the config for buying.
+     *
+     * @param ess       The Essentials instance.
+     * @param itemStack The item stack to look up in the config.
+     * @return The price from the config.
+     */
+    public BigDecimal getBuyPrice(IEssentials ess, ItemStack itemStack) {
+        BigDecimal result;
+
+        String itemname = itemStack.getType().toString().toLowerCase(Locale.ENGLISH).replace("_", "");
+
+        // Check for matches with data value from stack
+        // Note that we always default to BigDecimal.ONE.negate(), equivalent to -1
+        result = config.getBigDecimal("buy." + itemname + "." + itemStack.getDurability(), BigDecimal.ONE.negate());
+
+        // Check for matches with data value 0
+        if (result.signum() < 0) {
+            final ConfigurationSection itemNameMatch = config.getConfigurationSection("buy." + itemname);
+            if (itemNameMatch != null && itemNameMatch.getKeys(false).size() == 1) {
+                result = config.getBigDecimal("buy." + itemname + ".0", BigDecimal.ONE.negate());
+            }
+        }
+
+        // Check for matches with data value wildcard
+        if (result.signum() < 0) {
+            result = config.getBigDecimal("buy." + itemname + ".*", BigDecimal.ONE.negate());
+        }
+
+        // Check for matches with item name alone
+        if (result.signum() < 0) {
+            result = config.getBigDecimal("buy." + itemname, BigDecimal.ONE.negate());
+        }
+
+        if (result.signum() < 0) {
+            return getPrice(ess, itemStack);
+        }
+        return result;
+    }
+
+    /**
+     * Get the value of an item stack from the config for selling.
+     *
+     * @param ess       The Essentials instance.
+     * @param itemStack The item stack to look up in the config.
+     * @return The price from the config.
+     */
+    public BigDecimal getSellPrice(IEssentials ess, ItemStack itemStack) {
+    	BigDecimal result;
+
+        String itemname = itemStack.getType().toString().toLowerCase(Locale.ENGLISH).replace("_", "");
+
+        // Check for matches with data value from stack
+        // Note that we always default to BigDecimal.ONE.negate(), equivalent to -1
+        result = config.getBigDecimal("sell." + itemname + "." + itemStack.getDurability(), BigDecimal.ONE.negate());
+
+        // Check for matches with data value 0
+        if (result.signum() < 0) {
+            final ConfigurationSection itemNameMatch = config.getConfigurationSection("sell." + itemname);
+            if (itemNameMatch != null && itemNameMatch.getKeys(false).size() == 1) {
+                result = config.getBigDecimal("sell." + itemname + ".0", BigDecimal.ONE.negate());
+            }
+        }
+
+        // Check for matches with data value wildcard
+        if (result.signum() < 0) {
+            result = config.getBigDecimal("sell." + itemname + ".*", BigDecimal.ONE.negate());
+        }
+
+        // Check for matches with item name alone
+        if (result.signum() < 0) {
+            result = config.getBigDecimal("sell." + itemname, BigDecimal.ONE.negate());
+        }
+
+        if (result.signum() < 0) {
+        	return getPrice(ess, itemStack);
+        }
+        return result;
+    }
+    
+    /**
      * Get the amount of items to be sold from a player's inventory.
      *
      * @param ess        The Essentials instance.
