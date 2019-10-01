@@ -24,7 +24,7 @@ jobs:
       run: mvn package --file pom.xml
     - name: Copy artifacts
       run: mkdir -p ./out/ && cp -t ./out/ **/target/Essentials*.jar
-    - uses: actions/upload-artifact
+    - uses: actions/upload-artifact@master
       with:
         name: Plugins
         path: out/
