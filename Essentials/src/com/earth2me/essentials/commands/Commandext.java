@@ -33,7 +33,12 @@ public class Commandext extends EssentialsLoopCommand {
             return;
         }
 
-        loopOnlinePlayers(server, user.getSource(), true, true, args[0], null);
+        if (user.isAuthorized("essentials.ext.others")) {
+            loopOnlinePlayers(server, user.getSource(), true, true, args[0], null);
+        } else {
+            throw new Exception(tl("denyExtOthers"));
+        }
+
     }
 
     @Override
