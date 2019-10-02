@@ -34,6 +34,6 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
-        mkdir ~/.m2
+        mkdir -p ~/.m2
         echo "<settings><servers><server><id>github</id><username>EssentialsX</username><password>${GITHUB_TOKEN}</password></server></servers></settings>" > ~/.m2/settings.xml
         mvn deploy
