@@ -15,6 +15,14 @@
             <url>http://www.gnu.org/copyleft/gpl.html</url>
         </license>
     </licenses>
+    
+    <distributionManagement>
+        <repository>
+            <id>github</id>
+            <name>GitHub EssentialsX Apache Maven Packages</name>
+            <url>https://maven.pkg.github.com/EssentialsX/Essentials</url>
+        </repository>
+    </distributionManagement>
 
     <scm>
         <connection>scm:git:https://github.com/EssentialsX/Essentials.git</connection>
