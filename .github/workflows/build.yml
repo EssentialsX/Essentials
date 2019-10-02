@@ -28,5 +28,9 @@ jobs:
       run: mkdir -p ./out/ && cp -t ./out/ **/target/Essentials*.jar
     - uses: actions/upload-artifact@master
       with:
-        name: Plugins
+        name: Plugin jars
         path: out/
+    - name: Upload to GitHub repo
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: mvn deploy -Dregistry=https://maven.pkg.github.com/EssentialsX -Dtoken=GITHUB_TOKEN
