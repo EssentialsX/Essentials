@@ -238,6 +238,8 @@ public interface ISettings extends IConf {
 
     void setEssentialsChatActive(boolean b);
 
+    long getMaxMute();
+
     long getMaxTempban();
 
     Map<String, Object> getListGroupConfig();
