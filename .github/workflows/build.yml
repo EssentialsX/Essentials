@@ -33,4 +33,7 @@ jobs:
     - name: Upload to GitHub repo
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      run: mvn deploy -Dregistry=https://maven.pkg.github.com/EssentialsX -Dtoken=GITHUB_TOKEN
+      run: |
+        mkdir ~/.m2
+        echo "<settings><servers><server><id>github</id><username>EssentialsX</username><password>${GITHUB_TOKEN}</password></server></servers></settings>" > ~/.m2/settings.xml
+        mvn deploy
