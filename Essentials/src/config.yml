@@ -789,6 +789,7 @@ protect:
       bat: false
       witch: false
       horse: false
+      phantom: false
 
   # Maximum height the creeper should explode. -1 allows them to explode everywhere.
   # Set prevent.creeper-explosion to true, if you want to disable creeper explosions.
