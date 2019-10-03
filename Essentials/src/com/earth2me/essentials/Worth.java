@@ -27,33 +27,33 @@ public class Worth implements IConf {
      *
      * @param ess       The Essentials instance.
      * @param itemStack The item stack to look up in the config.
+     * @param key       The key to look under in the config
      * @return The price from the config.
      */
-    public BigDecimal getPrice(IEssentials ess, ItemStack itemStack) {
-        BigDecimal result;
-
+    public BigDecimal getPrice(IEssentials ess, ItemStack itemStack, String key) {
+    	BigDecimal negativeOne = BigDecimal.ONE.negate();
         String itemname = itemStack.getType().toString().toLowerCase(Locale.ENGLISH).replace("_", "");
 
         // Check for matches with data value from stack
         // Note that we always default to BigDecimal.ONE.negate(), equivalent to -1
-        result = config.getBigDecimal("worth." + itemname + "." + itemStack.getDurability(), BigDecimal.ONE.negate());
+        BigDecimal result = config.getBigDecimal(key + "." + itemname + "." + itemStack.getDurability(), negativeOne);
 
         // Check for matches with data value 0
         if (result.signum() < 0) {
-            final ConfigurationSection itemNameMatch = config.getConfigurationSection("worth." + itemname);
+            final ConfigurationSection itemNameMatch = config.getConfigurationSection(key + "." + itemname);
             if (itemNameMatch != null && itemNameMatch.getKeys(false).size() == 1) {
-                result = config.getBigDecimal("worth." + itemname + ".0", BigDecimal.ONE.negate());
+                result = config.getBigDecimal(key + "." + itemname + ".0", negativeOne);
             }
         }
 
         // Check for matches with data value wildcard
         if (result.signum() < 0) {
-            result = config.getBigDecimal("worth." + itemname + ".*", BigDecimal.ONE.negate());
+            result = config.getBigDecimal(key + "." + itemname + ".*", negativeOne);
         }
 
         // Check for matches with item name alone
         if (result.signum() < 0) {
-            result = config.getBigDecimal("worth." + itemname, BigDecimal.ONE.negate());
+            result = config.getBigDecimal(key + "." + itemname, negativeOne);
         }
 
         if (result.signum() < 0) {
@@ -63,81 +63,46 @@ public class Worth implements IConf {
     }
 
     /**
-     * Get the value of an item stack from the config for buying.
+     * Get the value of an item stack from the worth array in worth.yml.
+     *
+     * @param ess       The Essentials instance.
+     * @param itemStack The item stack to look up in the config.
+     * @return The price from the config.
+     */
+    public BigDecimal getWorthPrice(IEssentials ess, ItemStack itemStack) {
+    	return getPrice(ess, itemStack, "worth");
+    }
+    
+    /**
+     * Get the value of an item stack from the buy array in worth.yml.
+     * Falls back to worth section if the item is not found in the buy section.
      *
      * @param ess       The Essentials instance.
      * @param itemStack The item stack to look up in the config.
      * @return The price from the config.
      */
     public BigDecimal getBuyPrice(IEssentials ess, ItemStack itemStack) {
-        BigDecimal result;
-
-        String itemname = itemStack.getType().toString().toLowerCase(Locale.ENGLISH).replace("_", "");
-
-        // Check for matches with data value from stack
-        // Note that we always default to BigDecimal.ONE.negate(), equivalent to -1
-        result = config.getBigDecimal("buy." + itemname + "." + itemStack.getDurability(), BigDecimal.ONE.negate());
-
-        // Check for matches with data value 0
-        if (result.signum() < 0) {
-            final ConfigurationSection itemNameMatch = config.getConfigurationSection("buy." + itemname);
-            if (itemNameMatch != null && itemNameMatch.getKeys(false).size() == 1) {
-                result = config.getBigDecimal("buy." + itemname + ".0", BigDecimal.ONE.negate());
-            }
-        }
-
-        // Check for matches with data value wildcard
-        if (result.signum() < 0) {
-            result = config.getBigDecimal("buy." + itemname + ".*", BigDecimal.ONE.negate());
-        }
-
-        // Check for matches with item name alone
-        if (result.signum() < 0) {
-            result = config.getBigDecimal("buy." + itemname, BigDecimal.ONE.negate());
-        }
+        BigDecimal result = getPrice(ess, itemStack, "buy");
 
         if (result.signum() < 0) {
-            return getPrice(ess, itemStack);
+            return getWorthPrice(ess, itemStack);
         }
         return result;
     }
 
     /**
-     * Get the value of an item stack from the config for selling.
+     * Get the value of an item stack from the sell array in worth.yml.
+     * Falls back to worth section if the item is not found in the buy section.
      *
      * @param ess       The Essentials instance.
      * @param itemStack The item stack to look up in the config.
      * @return The price from the config.
      */
     public BigDecimal getSellPrice(IEssentials ess, ItemStack itemStack) {
-    	BigDecimal result;
-
-        String itemname = itemStack.getType().toString().toLowerCase(Locale.ENGLISH).replace("_", "");
-
-        // Check for matches with data value from stack
-        // Note that we always default to BigDecimal.ONE.negate(), equivalent to -1
-        result = config.getBigDecimal("sell." + itemname + "." + itemStack.getDurability(), BigDecimal.ONE.negate());
-
-        // Check for matches with data value 0
-        if (result.signum() < 0) {
-            final ConfigurationSection itemNameMatch = config.getConfigurationSection("sell." + itemname);
-            if (itemNameMatch != null && itemNameMatch.getKeys(false).size() == 1) {
-                result = config.getBigDecimal("sell." + itemname + ".0", BigDecimal.ONE.negate());
-            }
-        }
-
-        // Check for matches with data value wildcard
-        if (result.signum() < 0) {
-            result = config.getBigDecimal("sell." + itemname + ".*", BigDecimal.ONE.negate());
-        }
-
-        // Check for matches with item name alone
-        if (result.signum() < 0) {
-            result = config.getBigDecimal("sell." + itemname, BigDecimal.ONE.negate());
-        }
+    	BigDecimal result = getPrice(ess, itemStack, "sell");
 
         if (result.signum() < 0) {
-        	return getPrice(ess, itemStack);
+        	return getWorthPrice(ess, itemStack);
         }
         return result;
     }
