@@ -30,10 +30,3 @@ jobs:
       with:
         name: Plugin jars
         path: out/
-    - name: Upload to GitHub repo
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      run: |
-        mkdir -p ~/.m2
-        echo "<settings><servers><server><id>github</id><username>EssentialsX</username><password>${GITHUB_TOKEN}</password></server></servers></settings>" > ~/.m2/settings.xml
-        mvn deploy
