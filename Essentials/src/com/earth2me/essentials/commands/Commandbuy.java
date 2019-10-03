@@ -27,11 +27,19 @@ public class Commandbuy extends EssentialsCommand {
 
     @Override
     public void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception {
-        if (args.length < 2 || !NumberUtil.isInt(args[1])) {
+        if (args.length < 1) {
             throw new NotEnoughArgumentsException();
         }
 
-        int amountToGive = NumberUtils.toInt(args[1]);
+        int amountToGive;
+        
+        if (args[1] != null && NumberUtil.isInt(args[1])) {
+        	amountToGive = NumberUtils.toInt(args[1]);
+        } else if (args[1] == null) {
+        	amountToGive = 1;
+        } else {
+        	throw new Exception("The second argument must be an integer.");
+        }
         
         if (amountToGive <= 0) {
         	throw new Exception("You cannot buy 0 items.");
