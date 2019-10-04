@@ -332,6 +332,8 @@ public interface ISettings extends IConf {
   
     boolean isSafeUsermap();
 
+    boolean isExtOthersSeparate();
+
     boolean logCommandBlockCommands();
 
     Set<Predicate<String>> getNickBlacklist();

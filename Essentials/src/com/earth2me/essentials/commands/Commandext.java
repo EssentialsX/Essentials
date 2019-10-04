@@ -1,6 +1,7 @@
 package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.CommandSource;
+import com.earth2me.essentials.Settings;
 import com.earth2me.essentials.User;
 import org.bukkit.Server;
 import org.bukkit.entity.Player;
@@ -33,7 +34,7 @@ public class Commandext extends EssentialsLoopCommand {
             return;
         }
 
-        if (user.isAuthorized("essentials.ext.others")) {
+        if (user.isAuthorized("essentials.ext.others") || !ess.getSettings().isExtOthersSeparate()) {
             loopOnlinePlayers(server, user.getSource(), true, true, args[0], null);
         } else {
             throw new Exception(tl("denyExtOthers"));

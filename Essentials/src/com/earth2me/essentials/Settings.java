@@ -556,6 +556,7 @@ public class Settings implements net.ess3.api.ISettings {
         allowOldIdSigns = _allowOldIdSigns();
         isWaterSafe = _isWaterSafe();
         isSafeUsermap = _isSafeUsermap();
+        isExtOthersSeparate = _isExtOthersSeparate();
         logCommandBlockCommands = _logCommandBlockCommands();
         nickBlacklist = _getNickBlacklist();
         maxProjectileSpeed = _getMaxProjectileSpeed();
@@ -1581,6 +1582,13 @@ public class Settings implements net.ess3.api.ISettings {
     public boolean isSafeUsermap() {
         return isSafeUsermap;
     }
+
+    private boolean isExtOthersSeparate;
+
+    private boolean _isExtOthersSeparate() { return config.getBoolean("ext-others-separate", false); }
+
+    @Override
+    public boolean isExtOthersSeparate() { return isExtOthersSeparate; }
 
     private boolean logCommandBlockCommands;
 

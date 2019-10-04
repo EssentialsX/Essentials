@@ -574,6 +574,11 @@ is-water-safe: false
 # You should only change this to false if you use Minecraft China.
 safe-usermap-names: true
 
+# Should essentials.ext be a separate oermission from essentials.ext.others?
+# If false, those with essentials.ext can also extinguish others with explicitly having essentials.ext.others.
+# If true, players need essentials.ext.others to extinguish other players.
+ext-others-separate: false
+
 # Should Essentials output logs when a command block executes a command?
 # Example: CommandBlock at <x>,<y>,<z> issued server command: /<command>
 log-command-block-commands: true
