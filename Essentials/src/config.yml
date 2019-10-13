@@ -708,9 +708,9 @@ chat:
   # For more information of chat formatting, check out the wiki: http://wiki.ess3.net/wiki/Chat_Formatting
   # For EssentialsX changes, take a look at the EssentialsX wiki: https://github.com/EssentialsX/Essentials/wiki
 
-  format: '<{DISPLAYNAME}> {MESSAGE}'
+  format:'&7[{GROUP}]&f {DISPLAYNAME} {MESSAGE}'
   #format: '&7[{GROUP}]&r {DISPLAYNAME}&7:&r {MESSAGE}'
-  #format: '&7{PREFIX}&r {DISPLAYNAME}&r &7{SUFFIX}&r: {MESSAGE}'
+  
 
   group-formats:
   #  Default: '{WORLDNAME} {DISPLAYNAME}&7:&r {MESSAGE}'
