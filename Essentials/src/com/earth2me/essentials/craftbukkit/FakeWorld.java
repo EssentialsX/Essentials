@@ -377,6 +377,21 @@ public class FakeWorld implements World {
     public boolean createExplosion(Location lctn, float f, boolean bln) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
+    
+    @Override
+    public boolean createExplosion(double d, double d1, double d2, float f, boolean bln, boolean bln1, Entity entity) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public boolean createExplosion(Location lctn, float f, boolean bln, boolean bln1) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public boolean createExplosion(Location lctn, float f, boolean bln, boolean bln1, Entity entity) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 
     @Override
     public <T extends Entity> T spawn(Location lctn, Class<T> type) throws IllegalArgumentException {
