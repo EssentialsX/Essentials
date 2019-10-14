@@ -920,7 +920,7 @@ spawn-join-listener-priority: high
 # When users die, should they respawn at their first home or bed, instead of the spawnpoint?
 respawn-at-home: false
 
-# If no home is set, would you like to send the player to spawn?
+# If no home is set, would you like to send the player to spawn? (Only applies to /home)
 spawn-if-no-home: false
 
 # Teleport all joining players to the spawnpoint
