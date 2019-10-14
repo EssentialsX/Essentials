@@ -44,10 +44,16 @@ public class Commandmute extends EssentialsCommand {
 
         long muteTimestamp = 0;
         String time;
+        String muteReason = "";
 
         if (args.length > 1) {
             time = args[1];
-            muteTimestamp = DateUtil.parseDateDiff(time, true);
+            try {
+                muteTimestamp = DateUtil.parseDateDiff(time, true);
+                muteReason = getFinalArg(args, 2);
+            } catch (Exception e) {
+                muteReason = getFinalArg(args, 1);
+            }
             final long maxMuteLength = ess.getSettings().getMaxMute() * 1000;
             if (maxMuteLength > 0 && ((muteTimestamp - GregorianCalendar.getInstance().getTimeInMillis()) > maxMuteLength) && sender.isPlayer() && !(ess.getUser(sender.getPlayer()).isAuthorized("essentials.mute.unlimited"))) {
                 sender.sendMessage(tl("oversizedMute"));
@@ -62,13 +68,6 @@ public class Commandmute extends EssentialsCommand {
         
         if (!event.isCancelled()) {
             if (args.length > 1) {
-                String muteReason;
-                try {
-                    muteReason = getFinalArg(args, 2);
-                } catch (Exception e) {
-                    muteReason = getFinalArg(args, 1);
-                }
-
                 user.setMuteReason(muteReason.isEmpty() ? null : muteReason);
                 user.setMuted(true);
             } else {
