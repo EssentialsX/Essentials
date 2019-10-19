@@ -921,7 +921,7 @@ spawn-join-listener-priority: high
 respawn-at-home: false
 
 # If no home is set, would you like to send the player to spawn? (Only applies to /home)
-spawn-if-no-home: false
+spawn-if-no-home: true
 
 # Teleport all joining players to the spawnpoint
 spawn-on-join: false
