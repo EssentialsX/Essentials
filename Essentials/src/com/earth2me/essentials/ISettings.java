@@ -337,4 +337,6 @@ public interface ISettings extends IConf {
     Set<Predicate<String>> getNickBlacklist();
 
     double getMaxProjectileSpeed();
+
+    boolean isSpawnIfNoHome();
 }

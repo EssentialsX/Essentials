@@ -920,6 +920,9 @@ spawn-join-listener-priority: high
 # When users die, should they respawn at their first home or bed, instead of the spawnpoint?
 respawn-at-home: false
 
+# If no home is set, would you like to send the player to spawn? (Only applies to /home)
+spawn-if-no-home: true
+
 # Teleport all joining players to the spawnpoint
 spawn-on-join: false
 # The following value of `guests` states that all players in group `guests` will be teleported to spawn when joining.
