@@ -5,18 +5,25 @@ import com.earth2me.essentials.utils.VersionUtil;
 import net.ess3.api.IEssentials;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.entity.ArmorStand;
+import org.bukkit.entity.EnderCrystal;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.HumanEntity;
+import org.bukkit.entity.ItemFrame;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.*;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.hanging.HangingBreakByEntityEvent;
 import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
+import org.bukkit.event.player.PlayerInteractAtEntityEvent;
+import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.inventory.ItemStack;
@@ -160,6 +167,110 @@ public class EssentialsAntiBuildListener implements Listener {
                     event.setCancelled(true);
                 }
             }
+        }
+    }
+
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    public void onItemFrameInteract(final PlayerInteractEntityEvent event) {
+        final User user = ess.getUser(event.getPlayer());
+
+        if (!(event.getRightClicked() instanceof ItemFrame)) {
+            return;
+        }
+
+        if (prot.getSettingBool(AntiBuildConfig.disable_build) && !user.canBuild() && !user.isAuthorized("essentials.build") && !metaPermCheck(user, "place", Material.ITEM_FRAME)) {
+            if (ess.getSettings().warnOnBuildDisallow()) {
+                user.sendMessage(tl("antiBuildPlace", Material.ITEM_FRAME.toString()));
+            }
+            event.setCancelled(true);
+            return;
+        }
+
+        if (prot.checkProtectionItems(AntiBuildConfig.blacklist_placement, Material.ITEM_FRAME) && !user.isAuthorized("essentials.protect.exemptplacement")) {
+            if (ess.getSettings().warnOnBuildDisallow()) {
+                user.sendMessage(tl("antiBuildPlace", Material.ITEM_FRAME.toString()));
+            }
+            event.setCancelled(true);
+            return;
+        }
+
+        if (prot.checkProtectionItems(AntiBuildConfig.alert_on_placement, Material.ITEM_FRAME) && !user.isAuthorized("essentials.protect.alerts.notrigger")) {
+            prot.getEssentialsConnect().alert(user, Material.ITEM_FRAME.toString(), tl("alertPlaced"));
+        }
+    }
+
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    public void onArmorStandInteract(final PlayerInteractAtEntityEvent event) {
+        final User user = ess.getUser(event.getPlayer());
+
+        if (!(event.getRightClicked() instanceof ArmorStand)) {
+            return;
+        }
+
+        if (prot.getSettingBool(AntiBuildConfig.disable_build) && !user.canBuild() && !user.isAuthorized("essentials.build") && !metaPermCheck(user, "place", Material.ARMOR_STAND)) {
+            if (ess.getSettings().warnOnBuildDisallow()) {
+                user.sendMessage(tl("antiBuildPlace", Material.ARMOR_STAND.toString()));
+            }
+            event.setCancelled(true);
+            return;
+        }
+
+        if (prot.checkProtectionItems(AntiBuildConfig.blacklist_placement, Material.ARMOR_STAND) && !user.isAuthorized("essentials.protect.exemptplacement")) {
+            if (ess.getSettings().warnOnBuildDisallow()) {
+                user.sendMessage(tl("antiBuildPlace", Material.ARMOR_STAND.toString()));
+            }
+            event.setCancelled(true);
+            return;
+        }
+
+        if (prot.checkProtectionItems(AntiBuildConfig.alert_on_placement, Material.ARMOR_STAND) && !user.isAuthorized("essentials.protect.alerts.notrigger")) {
+            prot.getEssentialsConnect().alert(user, Material.ARMOR_STAND.toString(), tl("alertPlaced"));
+        }
+    }
+
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    public void onBlockEntityDamage(final EntityDamageByEntityEvent event) {
+        Player player = null;
+
+        if (event.getDamager() instanceof Player) {
+            player = (Player) event.getDamager();
+        } else if (event.getDamager() instanceof Projectile && ((Projectile)event.getDamager()).getShooter() instanceof Player) {
+            player = (Player) ((Projectile)event.getDamager()).getShooter();
+        } else {
+            return;
+        }
+
+        final User user = ess.getUser(player);
+        Material type = null;
+
+        if (event.getEntity() instanceof ItemFrame) {
+            type = Material.ITEM_FRAME;
+        } else if (event.getEntity() instanceof ArmorStand) {
+            type = Material.ARMOR_STAND;
+        } else if (event.getEntity() instanceof EnderCrystal) {
+            type = Material.END_CRYSTAL;
+        } else {
+            return;
+        }
+
+        if (prot.getSettingBool(AntiBuildConfig.disable_build) && !user.canBuild() && !user.isAuthorized("essentials.build") && !metaPermCheck(user, "break", type)) {
+            if (ess.getSettings().warnOnBuildDisallow()) {
+                user.sendMessage(tl("antiBuildBreak", type.toString()));
+            }
+            event.setCancelled(true);
+            return;
+        }
+
+        if (prot.checkProtectionItems(AntiBuildConfig.blacklist_break, type) && !user.isAuthorized("essentials.protect.exemptbreak")) {
+            if (ess.getSettings().warnOnBuildDisallow()) {
+                user.sendMessage(tl("antiBuildBreak", type.toString()));
+            }
+            event.setCancelled(true);
+            return;
+        }
+
+        if (prot.checkProtectionItems(AntiBuildConfig.alert_on_break, type) && !user.isAuthorized("essentials.protect.alerts.notrigger")) {
+            prot.getEssentialsConnect().alert(user, type.toString(), tl("alertBroke"));
         }
     }
 
