@@ -43,7 +43,8 @@ public enum ProtectConfig {
     prevent_enderdragon_blockdmg("protect.prevent.enderdragon-blockdamage", true),
     prevent_entitytarget("protect.prevent.entitytarget", false),
     enderdragon_fakeexplosions("protect.enderdragon-fakeexplosions", false),
-    prevent_zombie_door_break("protect.prevent.zombie-door-break", false);
+    prevent_zombie_door_break("protect.prevent.zombie-door-break", false),
+    prevent_ravager_thief("protect.prevent.ravager-thief", false);
     private final String configName;
     private final String defValueString;
     private final boolean defValueBoolean;

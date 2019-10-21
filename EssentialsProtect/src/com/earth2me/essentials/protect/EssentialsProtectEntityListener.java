@@ -215,6 +215,9 @@ public class EssentialsProtectEntityListener implements Listener {
         if (event.getEntityType() == EntityType.WITHER && prot.getSettingBool(ProtectConfig.prevent_wither_blockreplace)) {
             event.setCancelled(true);
         }
+        if (event.getEntityType() == EntityType.RAVAGER && prot.getSettingBool(ProtectConfig.prevent_ravager_thief)) {
+            event.setCancelled(true);
+        }
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)

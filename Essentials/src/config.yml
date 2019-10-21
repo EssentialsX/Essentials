@@ -759,6 +759,7 @@ protect:
     # permission essentials.protect.entitytarget.bypass disables this.
     entitytarget: false
     zombie-door-break: false
+    ravager-thief: false
     # Prevent the spawning of creatures.
     spawn:
       creeper: false
