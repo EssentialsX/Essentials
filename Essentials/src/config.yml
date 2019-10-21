@@ -758,8 +758,11 @@ protect:
     # Monsters won't follow players.
     # permission essentials.protect.entitytarget.bypass disables this.
     entitytarget: false
+    # Prevents zombies from breaking down doors
     zombie-door-break: false
+    # Prevents Ravagers from stealing blocks
     ravager-thief: false
+    # Prevents sheep from turning grass to dirt
     sheep-eat-grass: false
     # Prevent the spawning of creatures.
     spawn:
