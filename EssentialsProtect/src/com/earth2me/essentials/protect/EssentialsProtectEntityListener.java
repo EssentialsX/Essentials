@@ -223,4 +223,11 @@ public class EssentialsProtectEntityListener implements Listener {
             event.setCancelled(true);
         }
     }
+
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    public void onDoorBreak(EntityBreakDoorEvent event) {
+        if (event.getEntityType() == EntityType.ZOMBIE && prot.getSettingBool(ProtectConfig.prevent_zombie_door_break)) {
+            event.setCancelled(true);
+        }
+    }
 }

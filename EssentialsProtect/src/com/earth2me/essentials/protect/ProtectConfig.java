@@ -42,7 +42,8 @@ public enum ProtectConfig {
     prevent_villager_death("protect.prevent.villager-death", false),
     prevent_enderdragon_blockdmg("protect.prevent.enderdragon-blockdamage", true),
     prevent_entitytarget("protect.prevent.entitytarget", false),
-    enderdragon_fakeexplosions("protect.enderdragon-fakeexplosions", false);
+    enderdragon_fakeexplosions("protect.enderdragon-fakeexplosions", false),
+    prevent_zombie_door_break("protect.prevent.zombie-door-break", false);
     private final String configName;
     private final String defValueString;
     private final boolean defValueBoolean;
