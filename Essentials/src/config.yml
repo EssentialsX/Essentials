@@ -760,6 +760,7 @@ protect:
     entitytarget: false
     zombie-door-break: false
     ravager-thief: false
+    sheep-eat-grass: false
     # Prevent the spawning of creatures.
     spawn:
       creeper: false
