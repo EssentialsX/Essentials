@@ -2,7 +2,6 @@ package com.earth2me.essentials.protect;
 
 import com.earth2me.essentials.User;
 import net.ess3.api.IEssentials;
-import org.bukkit.Difficulty;
 import org.bukkit.entity.*;
 import org.bukkit.entity.minecart.ExplosiveMinecart;
 import org.bukkit.event.EventHandler;
@@ -30,6 +29,11 @@ public class EssentialsProtectEntityListener implements Listener {
     public void onEntityDamage(final EntityDamageEvent event) {
         final Entity target = event.getEntity();
 
+        if (target instanceof Villager && prot.getSettingBool(ProtectConfig.prevent_villager_death)) {
+            event.setCancelled(true);
+            return;
+        }
+
         User user = null;
         if (target instanceof Player) {
             user = ess.getUser((Player) target);
@@ -55,11 +59,6 @@ public class EssentialsProtectEntityListener implements Listener {
         if (event instanceof EntityDamageByEntityEvent) {
             final EntityDamageByEntityEvent edEvent = (EntityDamageByEntityEvent) event;
             final Entity eAttack = edEvent.getDamager();
-
-            if (target instanceof Villager && prot.getSettingBool(ProtectConfig.prevent_villager_death)) {
-                event.setCancelled(true);
-                return;
-            }
 
             User attacker = null;
             if (eAttack instanceof Player) {
