@@ -56,6 +56,11 @@ public class EssentialsProtectEntityListener implements Listener {
             final EntityDamageByEntityEvent edEvent = (EntityDamageByEntityEvent) event;
             final Entity eAttack = edEvent.getDamager();
 
+            if (target instanceof Villager && prot.getSettingBool(ProtectConfig.prevent_villager_death)) {
+                event.setCancelled(true);
+                return;
+            }
+
             User attacker = null;
             if (eAttack instanceof Player) {
                 attacker = ess.getUser((Player) eAttack);
