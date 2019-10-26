@@ -2,6 +2,7 @@ package com.earth2me.essentials.protect;
 
 import com.earth2me.essentials.User;
 import net.ess3.api.IEssentials;
+import org.bukkit.Difficulty;
 import org.bukkit.entity.*;
 import org.bukkit.entity.minecart.ExplosiveMinecart;
 import org.bukkit.event.EventHandler;
@@ -28,11 +29,6 @@ public class EssentialsProtectEntityListener implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onEntityDamage(final EntityDamageEvent event) {
         final Entity target = event.getEntity();
-
-        if (target instanceof Villager && prot.getSettingBool(ProtectConfig.prevent_villager_death)) {
-            event.setCancelled(true);
-            return;
-        }
 
         User user = null;
         if (target instanceof Player) {
@@ -168,6 +164,29 @@ public class EssentialsProtectEntityListener implements Listener {
             event.setCancelled(true);
         }
 
+    }
+
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    public void onEntityTransform(final EntityTransformEvent event) {
+        final Entity entity = event.getEntity();
+        final EntityTransformEvent.TransformReason reason = event.getTransformReason();
+        if (reason == EntityTransformEvent.TransformReason.INFECTION && prot.getSettingBool(ProtectConfig.prevent_villager_infection)) {
+            event.setCancelled(true);
+        } else if (reason == EntityTransformEvent.TransformReason.CURED && prot.getSettingBool(ProtectConfig.prevent_villager_cure)) {
+            event.setCancelled(true);
+        } else if (reason == EntityTransformEvent.TransformReason.LIGHTNING) {
+            if (entity instanceof Villager && prot.getSettingBool(ProtectConfig.prevent_villager_to_witch)) {
+                event.setCancelled(true);
+            } else if (entity instanceof Pig && prot.getSettingBool(ProtectConfig.prevent_pig_transformation)) {
+                event.setCancelled(true);
+            } else if (entity instanceof Creeper && prot.getSettingBool(ProtectConfig.prevent_creeper_charge)) {
+                event.setCancelled(true);
+            } else if (entity instanceof MushroomCow && prot.getSettingBool(ProtectConfig.prevent_mooshroom_switching)) {
+                event.setCancelled(true);
+            }
+        } else if (reason == EntityTransformEvent.TransformReason.DROWNED && prot.getSettingBool(ProtectConfig.prevent_zombie_drowning)) {
+            event.setCancelled(true);
+        }
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)

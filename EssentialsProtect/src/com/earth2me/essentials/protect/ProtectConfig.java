@@ -42,7 +42,14 @@ public enum ProtectConfig {
     prevent_villager_death("protect.prevent.villager-death", false),
     prevent_enderdragon_blockdmg("protect.prevent.enderdragon-blockdamage", true),
     prevent_entitytarget("protect.prevent.entitytarget", false),
-    enderdragon_fakeexplosions("protect.enderdragon-fakeexplosions", false);
+    enderdragon_fakeexplosions("protect.enderdragon-fakeexplosions", false),
+    prevent_creeper_charge("protect.prevent.transformation.creeper-charge", false),
+    prevent_villager_infection("protect.prevent.transformation.villager-infection", false),
+    prevent_villager_cure("protect.prevent.transformation.villager-cure", false),
+    prevent_villager_to_witch("protect.prevent.transformation.villager-to-witch", false),
+    prevent_pig_transformation("protect.prevent.transformation.pig-transformation", false),
+    prevent_zombie_drowning("protect.prevent.transformation.zombie-drowning", false),
+    prevent_mooshroom_switching("protect.prevent.transformation.mooshroom-switching", false);
     private final String configName;
     private final String defValueString;
     private final boolean defValueBoolean;

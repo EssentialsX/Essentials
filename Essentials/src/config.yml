@@ -758,6 +758,16 @@ protect:
     # Monsters won't follow players.
     # permission essentials.protect.entitytarget.bypass disables this.
     entitytarget: false
+    # Prevent certain transformations.
+    transformation:
+      creeper-charge: false
+      villager-infection: false
+      villager-cure: false
+      villager-to-witch: false
+      pig-transformation: false
+      zombie-drowning: false
+      # Prevent brown and red mooshrooms switch on lightning strike
+      mooshroom-switching: false
     # Prevent the spawning of creatures.
     spawn:
       creeper: false
