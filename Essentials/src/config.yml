@@ -760,14 +760,6 @@ protect:
     entitytarget: false
     # Prevent certain transformations.
     transformation:
-      creeper-charge: false
-      villager-infection: false
-      villager-cure: false
-      villager-to-witch: false
-      pig-transformation: false
-      zombie-drowning: false
-      # Prevent brown and red mooshrooms switch on lightning strike
-    transformation:
       # Prevent creepers becoming charged when struck by lightning.
       creeper-charge: false
       # Prevent villagers becoming zombie villagers.
