@@ -767,6 +767,20 @@ protect:
       pig-transformation: false
       zombie-drowning: false
       # Prevent brown and red mooshrooms switch on lightning strike
+    transformation:
+      # Prevent creepers becoming charged when struck by lightning.
+      creeper-charge: false
+      # Prevent villagers becoming zombie villagers.
+      villager-infection: false
+      # Prevent zombie villagers being cured.
+      villager-cure: false
+      # Prevent villagers becoming witches when struck by lightning.
+      villager-to-witch: false
+      # Prevent pigs becoming zombie pigmen when struck by lightning.
+      pig-transformation: false
+      # Prevent zombies turning into drowneds.
+      zombie-drowning: false
+      # Prevent mooshrooms changing colour when struck by lightning.
       mooshroom-switching: false
     # Prevent the spawning of creatures.
     spawn:
