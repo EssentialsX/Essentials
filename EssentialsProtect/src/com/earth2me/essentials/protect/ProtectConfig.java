@@ -43,13 +43,13 @@ public enum ProtectConfig {
     prevent_enderdragon_blockdmg("protect.prevent.enderdragon-blockdamage", true),
     prevent_entitytarget("protect.prevent.entitytarget", false),
     enderdragon_fakeexplosions("protect.enderdragon-fakeexplosions", false),
-    prevent_creeper_charge("protect.prevent.transformation.creeper-charge", false),
-    prevent_villager_infection("protect.prevent.transformation.villager-infection", false),
-    prevent_villager_cure("protect.prevent.transformation.villager-cure", false),
-    prevent_villager_to_witch("protect.prevent.transformation.villager-to-witch", false),
-    prevent_pig_transformation("protect.prevent.transformation.pig-transformation", false),
-    prevent_zombie_drowning("protect.prevent.transformation.zombie-drowning", false),
-    prevent_mooshroom_switching("protect.prevent.transformation.mooshroom-switching", false);
+    prevent_creeper_charge("protect.prevent.transformation.charged-creeper", false),
+    prevent_villager_infection("protect.prevent.transformation.zombie-villager", false),
+    prevent_villager_cure("protect.prevent.transformation.villager", false),
+    prevent_villager_to_witch("protect.prevent.transformation.witch", false),
+    prevent_pig_transformation("protect.prevent.transformation.zombie-pigman", false),
+    prevent_zombie_drowning("protect.prevent.transformation.drowned", false),
+    prevent_mooshroom_switching("protect.prevent.transformation.mooshroom", false);
     private final String configName;
     private final String defValueString;
     private final boolean defValueBoolean;

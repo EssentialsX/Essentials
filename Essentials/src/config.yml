@@ -761,19 +761,19 @@ protect:
     # Prevent certain transformations.
     transformation:
       # Prevent creepers becoming charged when struck by lightning.
-      creeper-charge: false
+      charged-creeper: false
       # Prevent villagers becoming zombie villagers.
-      villager-infection: false
+      zombie-villager: false
       # Prevent zombie villagers being cured.
-      villager-cure: false
+      villager: false
       # Prevent villagers becoming witches when struck by lightning.
-      villager-to-witch: false
+      witch: false
       # Prevent pigs becoming zombie pigmen when struck by lightning.
-      pig-transformation: false
+      zombie-pigman: false
       # Prevent zombies turning into drowneds, and husks turning into zombies.
-      zombie-drowning: false
+      drowned: false
       # Prevent mooshrooms changing colour when struck by lightning.
-      mooshroom-switching: false
+      mooshroom: false
     # Prevent the spawning of creatures.
     spawn:
       creeper: false
