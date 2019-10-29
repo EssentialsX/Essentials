@@ -770,7 +770,7 @@ protect:
       villager-to-witch: false
       # Prevent pigs becoming zombie pigmen when struck by lightning.
       pig-transformation: false
-      # Prevent zombies turning into drowneds.
+      # Prevent zombies turning into drowneds, and husks turning into zombies.
       zombie-drowning: false
       # Prevent mooshrooms changing colour when struck by lightning.
       mooshroom-switching: false
