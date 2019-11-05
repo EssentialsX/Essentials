@@ -41,19 +41,28 @@ public class Commandsethome extends EssentialsCommand {
                 }
             }
         }
+
         if (checkHomeLimit(user, usersHome, name)) {
             name = "home";
         }
         if ("bed".equals(name) || NumberUtil.isInt(name)) {
             throw new NoSuchFieldException(tl("invalidHomeName"));
         }
+        for (String h : usersHome.getHomes()) {
+            if (h.equalsIgnoreCase(name)) {
+                
+            }
+        }
 
-        if (!ess.getSettings().isTeleportSafetyEnabled() && LocationUtil.isBlockUnsafeForUser(usersHome, location.getWorld(), location.getBlockX(), location.getBlockY(), location.getBlockZ())) {
-            throw new Exception(tl("unsafeTeleportDestination", location.getWorld().getName(), location.getBlockX(), location.getBlockY(), location.getBlockZ()));
+        if (!ess.getSettings().isTeleportSafetyEnabled() && LocationUtil.isBlockUnsafeForUser(usersHome,
+                   location.getWorld(), location.getBlockX(), location.getBlockY(), location.getBlockZ())) {
+            throw new Exception(tl("unsafeTeleportDestination", location.getWorld().getName(),
+                                   location.getBlockX(), location.getBlockY(), location.getBlockZ()));
         }
 
         usersHome.setHome(name, location);
-        user.sendMessage(tl("homeSet", user.getLocation().getWorld().getName(), user.getLocation().getBlockX(), user.getLocation().getBlockY(), user.getLocation().getBlockZ(), name));
+        user.sendMessage(tl("homeSet", user.getLocation().getWorld().getName(), user.getLocation().getBlockX(),
+                            user.getLocation().getBlockY(), user.getLocation().getBlockZ(), name));
 
     }
 
