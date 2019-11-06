@@ -49,20 +49,22 @@ public class Commandsethome extends EssentialsCommand {
         if ("bed".equals(name) || NumberUtil.isInt(name)) {
             throw new NoSuchFieldException(tl("invalidHomeName"));
         }
-        String uuid = user.getBase().getUniqueId().toString();
-        for (String h : usersHome.getHomes()) {
-            if (h.equalsIgnoreCase(name)) {
-                if (!confirmSetHome.contains(uuid)) {
-                    confirmSetHome.add(uuid);
+        if (ess.getSettings().isSetSameHomeByConfirm()) {
+            String uuid = user.getBase().getUniqueId().toString();
+            for (String h : usersHome.getHomes()) {
+                if (h.equalsIgnoreCase(name)) {
+                    if (!confirmSetHome.contains(uuid)) {
+                        confirmSetHome.add(uuid);
 
-                    int time = (20 * 10);
-                    ess.getServer().getScheduler().runTaskLater(ess, () -> confirmSetHome.remove(uuid), time);
-                    user.sendMessage(tl("confirmForSameHomeSetting", time));
-                    return;
+                        int time = (20 * 10);
+                        ess.getServer().getScheduler().runTaskLater(ess, () -> confirmSetHome.remove(uuid), time);
+                        user.sendMessage(tl("confirmForSameHomeSetting", time));
+                        return;
+                    }
+
+                    confirmSetHome.remove(uuid);
+                    break;
                 }
-
-                confirmSetHome.remove(uuid);
-                break;
             }
         }
 
