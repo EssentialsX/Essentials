@@ -559,6 +559,7 @@ public class Settings implements net.ess3.api.ISettings {
         logCommandBlockCommands = _logCommandBlockCommands();
         nickBlacklist = _getNickBlacklist();
         maxProjectileSpeed = _getMaxProjectileSpeed();
+        confirmForSameHomeSet = _getConfirmForSameHomeSet();
     }
 
     void _lateLoadItemSpawnBlacklist() {
@@ -1628,5 +1629,16 @@ public class Settings implements net.ess3.api.ISettings {
     @Override
     public boolean isSpawnIfNoHome() {
         return config.getBoolean("spawn-if-no-home", true);
+    }
+
+    private boolean confirmForSameHomeSet;
+
+    private boolean _getConfirmForSameHomeSet() {
+        return confirmForSameHomeSet;
+    }
+
+    @Override
+    public boolean isSetSameHomeByConfirm() {
+        return config.getBoolean("confirm-overwrite-same-home", false);
     }
 }

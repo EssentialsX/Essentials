@@ -3,6 +3,7 @@ package com.earth2me.essentials.commands;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.LocationUtil;
 import com.earth2me.essentials.utils.NumberUtil;
+
 import org.bukkit.Location;
 import org.bukkit.Server;
 
@@ -48,9 +49,20 @@ public class Commandsethome extends EssentialsCommand {
         if ("bed".equals(name) || NumberUtil.isInt(name)) {
             throw new NoSuchFieldException(tl("invalidHomeName"));
         }
+        String uuid = user.getBase().getUniqueId().toString();
         for (String h : usersHome.getHomes()) {
             if (h.equalsIgnoreCase(name)) {
-                
+                if (!confirmSetHome.contains(uuid)) {
+                    confirmSetHome.add(uuid);
+
+                    int time = (20 * 10);
+                    ess.getServer().getScheduler().runTaskLater(ess, () -> confirmSetHome.remove(uuid), time);
+                    user.sendMessage(tl("confirmForSameHomeSetting", time));
+                    return;
+                }
+
+                confirmSetHome.remove(uuid);
+                break;
             }
         }
 

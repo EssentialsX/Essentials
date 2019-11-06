@@ -339,4 +339,6 @@ public interface ISettings extends IConf {
     double getMaxProjectileSpeed();
 
     boolean isSpawnIfNoHome();
+
+    boolean isSetSameHomeByConfirm();
 }

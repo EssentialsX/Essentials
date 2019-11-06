@@ -34,6 +34,7 @@ public abstract class EssentialsCommand implements IEssentialsCommand {
     protected transient IEssentials ess;
     protected transient IEssentialsModule module;
     protected static final Logger logger = Logger.getLogger("Essentials");
+    protected static List<String> confirmSetHome = new ArrayList<>();
 
     protected EssentialsCommand(final String name) {
         this.name = name;
