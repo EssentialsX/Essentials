@@ -7,10 +7,10 @@ import org.bukkit.event.player.PlayerTeleportEvent;
 
 import static com.earth2me.essentials.I18n.tl;
 
-public class Commandofflinetp extends EssentialsCommand {
+public class Commandtpoffline extends EssentialsCommand {
 
-    public Commandofflinetp() {
-        super("offlinetp");
+    public Commandtpoffline() {
+        super("tpoffline");
     }
 
     @Override

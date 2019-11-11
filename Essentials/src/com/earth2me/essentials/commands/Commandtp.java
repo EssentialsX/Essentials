@@ -34,7 +34,7 @@ public class Commandtp extends EssentialsCommand {
                     throw new Exception(tl("teleportDisabled", player.getDisplayName()));
                 }
 
-                if (!player.getBase().isOnline() && user.isAuthorized("essentials.offlinetp")) {
+                if (!player.getBase().isOnline() && user.isAuthorized("essentials.tpoffline")) {
                     throw new Exception(tl("teleportOffline", player.getDisplayName()));
                 }
 
