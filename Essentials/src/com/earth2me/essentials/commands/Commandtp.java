@@ -28,7 +28,7 @@ public class Commandtp extends EssentialsCommand {
                 throw new NotEnoughArgumentsException();
 
             case 1:
-                final User player = getPlayer(server, user, args, 0, true, true);
+                final User player = getPlayer(server, user, args, 0, false, true);
 
                 if (!player.isTeleportEnabled()) {
                     throw new Exception(tl("teleportDisabled", player.getDisplayName()));
