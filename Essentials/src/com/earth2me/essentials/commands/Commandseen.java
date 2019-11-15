@@ -28,7 +28,7 @@ public class Commandseen extends EssentialsCommand {
 
     @Override
     protected void run(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception {
-        seen(server, sender, commandLabel, args, true, true, true, true);
+        seen(server, sender, commandLabel, args, sender.getSender().hasPermission("essentials.seen.banreason"), sender.getSender().hasPermission("essentials.seen.ip"), sender.getSender().hasPermission("essentials.seen.location"), sender.getSender().hasPermission("essentials.seen.ipsearch"));
     }
 
     @Override
