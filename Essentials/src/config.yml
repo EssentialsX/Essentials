@@ -617,8 +617,13 @@ compass-towards-home-perm: false
 # Set the maximum speed for projectiles spawned with /fireball.
 max-projectile-speed: 8
 
-# Allows players to overwrite an existing home with a confirmation /sethome command.
-confirm-overwrite-same-home: false
+# Same home overwriting confirmation
+same-home-overwrite:
+  # Allows players to overwrite an existing home with a confirmation /sethome command.
+  enable-confirmation: false
+
+  # The confirmation time in seconds.
+  confirm-time: 10
 
 ############################################################
 # +------------------------------------------------------+ #

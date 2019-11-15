@@ -560,6 +560,7 @@ public class Settings implements net.ess3.api.ISettings {
         nickBlacklist = _getNickBlacklist();
         maxProjectileSpeed = _getMaxProjectileSpeed();
         confirmForSameHomeSet = _getConfirmForSameHomeSet();
+        homeOverwriteConfirmTime = _getHomeOverwriteConfirmTime();
     }
 
     void _lateLoadItemSpawnBlacklist() {
@@ -1639,6 +1640,17 @@ public class Settings implements net.ess3.api.ISettings {
 
     @Override
     public boolean isSetSameHomeByConfirm() {
-        return config.getBoolean("confirm-overwrite-same-home", false);
+        return config.getBoolean("same-home-overwrite.enable-confirmation", false);
+    }
+
+    private int homeOverwriteConfirmTime;
+
+    private int _getHomeOverwriteConfirmTime() {
+        return homeOverwriteConfirmTime;
+    }
+
+    @Override
+    public int getHomeOverwriteConfirmTime() {
+        return config.getInt("same-home-overwrite.confirm-time", 10);
     }
 }

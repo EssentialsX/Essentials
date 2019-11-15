@@ -8,6 +8,7 @@ import org.bukkit.Location;
 import org.bukkit.Server;
 
 import java.util.Locale;
+import java.util.UUID;
 
 import static com.earth2me.essentials.I18n.tl;
 
@@ -50,13 +51,13 @@ public class Commandsethome extends EssentialsCommand {
             throw new NoSuchFieldException(tl("invalidHomeName"));
         }
         if (ess.getSettings().isSetSameHomeByConfirm()) {
-            String uuid = user.getBase().getUniqueId().toString();
+            UUID uuid = user.getBase().getUniqueId();
             for (String h : usersHome.getHomes()) {
                 if (h.equalsIgnoreCase(name)) {
                     if (!confirmSetHome.contains(uuid)) {
                         confirmSetHome.add(uuid);
 
-                        int time = (20 * 10);
+                        int time = (20 * ess.getSettings().getHomeOverwriteConfirmTime());
                         ess.getServer().getScheduler().runTaskLater(ess, () -> confirmSetHome.remove(uuid), time);
                         user.sendMessage(tl("confirmForSameHomeSetting", time));
                         return;
