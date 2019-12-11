@@ -437,19 +437,6 @@ public class OfflinePlayer implements Player {
     }
 
     @Override
-    public void awardAchievement(Achievement a) {
-    }
-
-    @Override
-    public void removeAchievement(Achievement achievement) {
-    }
-
-    @Override
-    public boolean hasAchievement(Achievement achievement) {
-        return false;
-    }
-
-    @Override
     public void incrementStatistic(Statistic ststc) {
     }
 
