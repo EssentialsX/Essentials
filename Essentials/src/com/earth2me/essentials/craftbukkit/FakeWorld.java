@@ -454,12 +454,27 @@ public class FakeWorld implements World {
     }
 
     @Override
+    public Biome getBiome(int i, int i1, int i2) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
     public double getTemperature(int i, int i1) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
+    public double getTemperature(int i, int i1, int i2) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
     public double getHumidity(int i, int i1) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public double getHumidity(int i, int i1, int i2) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
@@ -600,6 +615,11 @@ public class FakeWorld implements World {
 
     @Override
     public void setBiome(int arg0, int arg1, Biome arg2) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public void setBiome(int i, int i1, int i2, Biome biome) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
