@@ -857,7 +857,7 @@ public abstract class UserData extends PlayerExtension implements IConf {
     private Map<Pattern, Long> commandCooldowns;
 
     private Map<Pattern, Long> _getCommandCooldowns() {
-        if (!config.isConfigurationSection("timestamps.command-cooldowns")) {
+        if (!config.contains("timestamps.command-cooldowns")) {
             return null;
         }
 
