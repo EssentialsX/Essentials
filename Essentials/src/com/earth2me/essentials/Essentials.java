@@ -19,6 +19,7 @@ package com.earth2me.essentials;
 
 import com.earth2me.essentials.commands.*;
 import com.earth2me.essentials.items.AbstractItemDb;
+import com.earth2me.essentials.items.CustomItemResolver;
 import com.earth2me.essentials.items.FlatItemDb;
 import com.earth2me.essentials.items.LegacyItemDb;
 import com.earth2me.essentials.metrics.Metrics;
@@ -32,12 +33,18 @@ import com.earth2me.essentials.textreader.KeywordReplacer;
 import com.earth2me.essentials.textreader.SimpleTextInput;
 import com.earth2me.essentials.utils.DateUtil;
 import com.earth2me.essentials.utils.VersionUtil;
-import com.google.common.base.Function;
 import com.google.common.base.Throwables;
-import com.google.common.collect.Iterables;
-import net.ess3.api.*;
+import java.io.File;
+import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.util.stream.Collectors;
 import net.ess3.api.IEssentials;
 import net.ess3.api.ISettings;
+import net.ess3.api.*;
 import net.ess3.nms.PotionMetaProvider;
 import net.ess3.nms.SpawnEggProvider;
 import net.ess3.nms.SpawnerProvider;
@@ -76,14 +83,6 @@ import org.bukkit.scheduler.BukkitScheduler;
 import org.bukkit.scheduler.BukkitTask;
 import org.yaml.snakeyaml.error.YAMLException;
 
-import java.io.File;
-import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 import static com.earth2me.essentials.I18n.tl;
 
 
@@ -97,6 +96,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
     private transient List<IConf> confList;
     private transient Backup backup;
     private transient AbstractItemDb itemDb;
+    private transient CustomItemResolver customItemResolver;
     private transient final Methods paymentMethod = new Methods();
     private transient PermissionsHandler permissionsHandler;
     private transient AlternativeCommandsHandler alternativeCommandsHandler;
@@ -216,13 +216,25 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
 
                 warps = new Warps(getServer(), this.getDataFolder());
                 confList.add(warps);
-                execTimer.mark("Init(Spawn/Warp)");
+                execTimer.mark("Init(Warp)");
 
                 worth = new Worth(this.getDataFolder());
                 confList.add(worth);
+                execTimer.mark("Init(Worth)");
+
                 itemDb = getItemDbFromConfig();
                 confList.add(itemDb);
-                execTimer.mark("Init(Worth/ItemDB)");
+                execTimer.mark("Init(ItemDB)");
+
+                customItemResolver = new CustomItemResolver(this);
+                try {
+                    itemDb.registerResolver(this, "custom_items", customItemResolver);
+                    confList.add(customItemResolver);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    customItemResolver = null;
+                }
+                execTimer.mark("Init(CustomItemResolver)");
 
                 jails = new Jails(this);
                 confList.add(jails);
@@ -873,13 +885,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
 
     @Override
     public Iterable<User> getOnlineUsers() {
-        return Iterables.transform(getOnlinePlayers(), new Function<Player, User>() {
-
-            @Override
-            public User apply(Player player) {
-                return getUser(player);
-            }
-        });
+        return getOnlinePlayers().stream().map(this::getUser).collect(Collectors.toList());
     }
 
     @Override
@@ -895,6 +901,11 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
     @Override
     public PotionMetaProvider getPotionMetaProvider() {
         return potionMetaProvider;
+    }
+
+    @Override
+    public CustomItemResolver getCustomItemResolver() {
+        return customItemResolver;
     }
 
     private static void addDefaultBackPermissionsToWorld(World w) {
