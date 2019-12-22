@@ -21,11 +21,7 @@ public class VersionUtil {
     public static final BukkitVersion v1_13_0_R01 = BukkitVersion.fromString("1.13.0-R0.1-SNAPSHOT");
     public static final BukkitVersion v1_13_2_R01 = BukkitVersion.fromString("1.13.2-R0.1-SNAPSHOT");
     public static final BukkitVersion v1_14_R01 = BukkitVersion.fromString("1.14-R0.1-SNAPSHOT");
-    public static final BukkitVersion v1_14_1_R01 = BukkitVersion.fromString("1.14.1-R0.1-SNAPSHOT");
-    public static final BukkitVersion v1_14_2_R01 = BukkitVersion.fromString("1.14.2-R0.1-SNAPSHOT");
-    public static final BukkitVersion v1_14_3_R01 = BukkitVersion.fromString("1.14.3-R0.1-SNAPSHOT");
     public static final BukkitVersion v1_14_4_R01 = BukkitVersion.fromString("1.14.4-R0.1-SNAPSHOT");
-    public static final BukkitVersion v1_15_R01 = BukkitVersion.fromString("1.15-R0.1-SNAPSHOT");
     public static final BukkitVersion v1_15_1_R01 = BukkitVersion.fromString("1.15.1-R0.1-SNAPSHOT");
 
     private static final Set<BukkitVersion> supportedVersions = ImmutableSet.of(v1_8_8_R01, v1_9_4_R01, v1_10_2_R01, v1_11_2_R01, v1_12_2_R01, v1_13_2_R01, v1_14_4_R01, v1_15_1_R01);
