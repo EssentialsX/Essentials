@@ -13,7 +13,7 @@ import org.bukkit.inventory.ItemStack;
 public class CustomItemResolver implements IItemDb.ItemResolver, IConf {
     private final EssentialsConf config;
     private final Essentials ess;
-    private final HashMap<String, String> customItems = new HashMap<>();
+    private final HashMap<String, String> map = new HashMap<>();
 
     public CustomItemResolver(Essentials ess) {
         config = new EssentialsConf(new File(ess.getDataFolder(), "custom_items.yml"));
@@ -23,7 +23,7 @@ public class CustomItemResolver implements IItemDb.ItemResolver, IConf {
 
     @Override
     public ItemStack apply(String item) {
-        if (customItems.containsKey(item)) {
+        if (map.containsKey(item)) {
             try {
                 return ess.getItemDb().get(item);
             } catch (Exception ignored) {}
@@ -34,12 +34,12 @@ public class CustomItemResolver implements IItemDb.ItemResolver, IConf {
 
     @Override
     public Collection<String> getNames() {
-        return customItems.keySet();
+        return map.keySet();
     }
 
     @Override
     public void reloadConfig() {
-        customItems.clear();
+        map.clear();
         config.load();
 
         ConfigurationSection section = config.getConfigurationSection("aliases");
@@ -53,9 +53,29 @@ public class CustomItemResolver implements IItemDb.ItemResolver, IConf {
             String target = section.getString(alias);
 
             if (target != null && !section.contains(target) && existsInItemDb(target)) {
-                customItems.put(alias, target);
+                map.put(alias, target);
             }
         }
+    }
+
+    public void setAlias(String alias, String target) {
+        if (map.containsKey(alias) && map.get(alias).equalsIgnoreCase(target)) {
+            return;
+        }
+
+        map.put(alias, target);
+        save();
+    }
+
+    public void removeAlias(String alias) {
+        if (map.remove(alias) != null) {
+            save();
+        }
+    }
+
+    private void save() {
+        config.setProperty("aliases", map);
+        config.save();
     }
 
     private boolean existsInItemDb(String item) {
