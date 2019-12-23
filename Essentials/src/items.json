@@ -473,8 +473,25 @@
   "bee_spawn_egg": {
     "material": "BEE_SPAWN_EGG"
   },
+  "beeegg": "bee_spawn_egg",
+  "beespawn": "bee_spawn_egg",
   "beespawnegg": "bee_spawn_egg",
+  "eggbee": "bee_spawn_egg",
   "minecraft:bee_spawn_egg": "bee_spawn_egg",
+  "spawnbee": "bee_spawn_egg",
+  "spawneggbee": "bee_spawn_egg",
+  "bee_spawner": {
+    "entity": "BEE",
+    "material": "SPAWNER"
+  },
+  "beecage": "bee_spawner",
+  "beemcage": "bee_spawner",
+  "beemobcage": "bee_spawner",
+  "beemobspawner": "bee_spawner",
+  "beemonstercage": "bee_spawner",
+  "beemonsterspawner": "bee_spawner",
+  "beemspawner": "bee_spawner",
+  "beespawner": "bee_spawner",
   "beef": {
     "material": "BEEF"
   },
