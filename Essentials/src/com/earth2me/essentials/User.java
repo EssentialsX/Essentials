@@ -162,10 +162,14 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
 
     @Override
     public void giveMoney(final BigDecimal value, final CommandSource initiator) throws MaxMoneyException {
+        giveMoney(value, initiator, UserBalanceUpdateEvent.Cause.UNKNOWN);
+    }
+
+    public void giveMoney(final BigDecimal value, final CommandSource initiator, UserBalanceUpdateEvent.Cause cause) throws MaxMoneyException {
         if (value.signum() == 0) {
             return;
         }
-        setMoney(getMoney().add(value));
+        setMoney(getMoney().add(value), cause);
         sendMessage(tl("addedToAccount", NumberUtil.displayCurrency(value, ess)));
         if (initiator != null) {
             initiator.sendMessage(tl("addedToOthersAccount", NumberUtil.displayCurrency(value, ess), this.getDisplayName(), NumberUtil.displayCurrency(getMoney(), ess)));
@@ -174,6 +178,10 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
 
     @Override
     public void payUser(final User reciever, final BigDecimal value) throws Exception {
+        payUser(reciever, value, UserBalanceUpdateEvent.Cause.UNKNOWN);
+    }
+
+    public void payUser(final User reciever, final BigDecimal value, UserBalanceUpdateEvent.Cause cause) throws Exception {
         if (value.compareTo(BigDecimal.ZERO) < 1) {
             throw new Exception(tl("payMustBePositive"));
         }
@@ -195,11 +203,15 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
 
     @Override
     public void takeMoney(final BigDecimal value, final CommandSource initiator) {
+        takeMoney(value, initiator, UserBalanceUpdateEvent.Cause.UNKNOWN);
+    }
+
+    public void takeMoney(final BigDecimal value, final CommandSource initiator, UserBalanceUpdateEvent.Cause cause) {
         if (value.signum() == 0) {
             return;
         }
         try {
-            setMoney(getMoney().subtract(value));
+            setMoney(getMoney().subtract(value), cause);
         } catch (MaxMoneyException ex) {
             ess.getLogger().log(Level.WARNING, "Invalid call to takeMoney, total balance can't be more than the max-money limit.", ex);
         }
@@ -440,6 +452,10 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
 
     @Override
     public void setMoney(final BigDecimal value) throws MaxMoneyException {
+        setMoney(value, UserBalanceUpdateEvent.Cause.UNKNOWN);
+    }
+
+    public void setMoney(final BigDecimal value, UserBalanceUpdateEvent.Cause cause) throws MaxMoneyException {
         if (ess.getSettings().isEcoDisabled()) {
             if (ess.getSettings().isDebug()) {
                 ess.getLogger().info("Internal economy functions disabled, aborting balance change.");
@@ -447,11 +463,11 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
             return;
         }
         final BigDecimal oldBalance = _getMoney();
-        
-        UserBalanceUpdateEvent updateEvent = new UserBalanceUpdateEvent(this.getBase(), oldBalance, value);
+
+        UserBalanceUpdateEvent updateEvent = new UserBalanceUpdateEvent(this.getBase(), oldBalance, value, cause);
         ess.getServer().getPluginManager().callEvent(updateEvent);
         BigDecimal newBalance = updateEvent.getNewBalance();
-        
+
         if (Methods.hasMethod()) {
             try {
                 final Method method = Methods.getMethod();

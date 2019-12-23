@@ -15,12 +15,19 @@ public class UserBalanceUpdateEvent extends Event {
     private final Player player;
     private final BigDecimal originalBalance;
     private BigDecimal balance;
+    private Cause cause;
 
+    @Deprecated
     public UserBalanceUpdateEvent(Player player, BigDecimal originalBalance, BigDecimal balance) {
+        this(player, originalBalance, balance, Cause.UNKNOWN);
+    }
+
+    public UserBalanceUpdateEvent(Player player, BigDecimal originalBalance, BigDecimal balance, Cause cause) {
         super(!Bukkit.getServer().isPrimaryThread());
         this.player = player;
         this.originalBalance = originalBalance;
         this.balance = balance;
+        this.cause = cause;
     }
 
     @Override
@@ -47,5 +54,18 @@ public class UserBalanceUpdateEvent extends Event {
 
     public BigDecimal getOldBalance() {
         return originalBalance;
+    }
+
+    public Cause getCause() {
+        return cause;
+    }
+
+    public enum Cause {
+        COMMAND_ECO,
+        COMMAND_PAY,
+        COMMAND_SELL,
+        API,
+        SPECIAL, // Reserved for API usage
+        UNKNOWN
     }
 }
