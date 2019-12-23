@@ -758,6 +758,22 @@ protect:
     # Monsters won't follow players.
     # permission essentials.protect.entitytarget.bypass disables this.
     entitytarget: false
+    # Prevent certain transformations.
+    transformation:
+      # Prevent creepers becoming charged when struck by lightning.
+      charged-creeper: false
+      # Prevent villagers becoming zombie villagers.
+      zombie-villager: false
+      # Prevent zombie villagers being cured.
+      villager: false
+      # Prevent villagers becoming witches when struck by lightning.
+      witch: false
+      # Prevent pigs becoming zombie pigmen when struck by lightning.
+      zombie-pigman: false
+      # Prevent zombies turning into drowneds, and husks turning into zombies.
+      drowned: false
+      # Prevent mooshrooms changing colour when struck by lightning.
+      mooshroom: false
     # Prevent the spawning of creatures.
     spawn:
       creeper: false
