@@ -18,7 +18,7 @@ public class CustomItemResolver implements IItemDb.ItemResolver, IConf {
     public CustomItemResolver(Essentials ess) {
         config = new EssentialsConf(new File(ess.getDataFolder(), "custom_items.yml"));
         this.ess = ess;
-        config.setTemplateName("custom_items.yml");
+        config.setTemplateName("/custom_items.yml");
     }
 
     @Override
