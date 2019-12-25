@@ -8,6 +8,9 @@ import com.earth2me.essentials.textreader.KeywordReplacer;
 import com.earth2me.essentials.textreader.SimpleTextPager;
 import io.papermc.lib.PaperLib;
 import net.ess3.api.IEssentials;
+import net.ess3.api.events.NewPlayerJoinEvent;
+import org.bukkit.Bukkit;
+
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
@@ -87,7 +90,11 @@ class EssentialsSpawnPlayerListener implements Listener {
         }
 
         final User user = ess.getUser(player);
-
+        
+        //call the new event, we can use this like to send global msg to bungeecord :P
+        NewPlayerJoinEvent npj = new NewPlayerJoinEvent(player);
+		Bukkit.getServer().getPluginManager().callEvent(npj);
+		/******************************************************/
         if (!"none".equalsIgnoreCase(ess.getSettings().getNewbieSpawn())) {
             ess.scheduleSyncDelayedTask(new NewPlayerTeleport(user), 1L);
         }
