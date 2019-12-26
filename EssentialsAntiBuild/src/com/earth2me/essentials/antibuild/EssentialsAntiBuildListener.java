@@ -96,7 +96,7 @@ public class EssentialsAntiBuildListener implements Listener {
 
         if (prot.getSettingBool(AntiBuildConfig.disable_build) && !user.canBuild() && !metaPermCheck(user, "place", block)) {
             if (ess.getSettings().warnOnBuildDisallow()) {
-                user.sendMessage(tl("antiBuildPlace", type.toString()));
+                user.sendMessage(tl("antiBuildPlace", EssentialsAntiBuild.getNameForType(type)));
             }
             event.setCancelled(true);
             return;
@@ -104,14 +104,14 @@ public class EssentialsAntiBuildListener implements Listener {
 
         if (prot.checkProtectionItems(AntiBuildConfig.blacklist_placement, type) && !user.isAuthorized("essentials.protect.exemptplacement")) {
             if (ess.getSettings().warnOnBuildDisallow()) {
-                user.sendMessage(tl("antiBuildPlace", type.toString()));
+                user.sendMessage(tl("antiBuildPlace", EssentialsAntiBuild.getNameForType(type)));
             }
             event.setCancelled(true);
             return;
         }
 
         if (prot.checkProtectionItems(AntiBuildConfig.alert_on_placement, type) && !user.isAuthorized("essentials.protect.alerts.notrigger")) {
-            prot.getEssentialsConnect().alert(user, type.toString(), tl("alertPlaced"));
+            prot.getEssentialsConnect().alert(user, EssentialsAntiBuild.getNameForType(type), tl("alertPlaced"));
         }
     }
 
@@ -123,7 +123,7 @@ public class EssentialsAntiBuildListener implements Listener {
 
         if (prot.getSettingBool(AntiBuildConfig.disable_build) && !user.canBuild() && !metaPermCheck(user, "break", block)) {
             if (ess.getSettings().warnOnBuildDisallow()) {
-                user.sendMessage(tl("antiBuildBreak", type.toString()));
+                user.sendMessage(tl("antiBuildBreak", EssentialsAntiBuild.getNameForType(type)));
             }
             event.setCancelled(true);
             return;
@@ -131,14 +131,14 @@ public class EssentialsAntiBuildListener implements Listener {
 
         if (prot.checkProtectionItems(AntiBuildConfig.blacklist_break, type) && !user.isAuthorized("essentials.protect.exemptbreak")) {
             if (ess.getSettings().warnOnBuildDisallow()) {
-                user.sendMessage(tl("antiBuildBreak", type.toString()));
+                user.sendMessage(tl("antiBuildBreak", EssentialsAntiBuild.getNameForType(type)));
             }
             event.setCancelled(true);
             return;
         }
 
         if (prot.checkProtectionItems(AntiBuildConfig.alert_on_break, type) && !user.isAuthorized("essentials.protect.alerts.notrigger")) {
-            prot.getEssentialsConnect().alert(user, type.toString(), tl("alertBroke"));
+            prot.getEssentialsConnect().alert(user, EssentialsAntiBuild.getNameForType(type), tl("alertBroke"));
         }
     }
 
