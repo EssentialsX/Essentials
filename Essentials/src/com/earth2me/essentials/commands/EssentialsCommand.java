@@ -20,9 +20,11 @@ import org.bukkit.util.StringUtil;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 import java.util.logging.Logger;
 
@@ -34,7 +36,7 @@ public abstract class EssentialsCommand implements IEssentialsCommand {
     protected transient IEssentials ess;
     protected transient IEssentialsModule module;
     protected static final Logger logger = Logger.getLogger("Essentials");
-    protected static List<UUID> confirmSetHome = new ArrayList<>();
+    protected static Set<User> confirmSetHome = new HashSet<>();
 
     protected EssentialsCommand(final String name) {
         this.name = name;
