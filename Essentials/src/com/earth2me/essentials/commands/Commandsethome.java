@@ -56,7 +56,7 @@ public class Commandsethome extends EssentialsCommand {
                     if (confirmSetHome.add(user)) {
                         int time = (20 * ess.getSettings().getHomeOverwriteConfirmTime());
                         ess.getServer().getScheduler().runTaskLater(ess, () -> confirmSetHome.remove(user), time);
-                        user.sendMessage(tl("confirmForSameHomeSetting", time, h));
+                        user.sendMessage(tl("confirmForSameHomeSetting", h, time));
                         return;
                     }
 
