@@ -66,6 +66,8 @@ public class Commandeco extends EssentialsLoopCommand {
             case SET:
                 set(amount, player, sender);
                 break;
+            default:
+                break;
         }
     }
 

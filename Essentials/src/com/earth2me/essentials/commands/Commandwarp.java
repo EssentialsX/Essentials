@@ -3,7 +3,6 @@ package com.earth2me.essentials.commands;
 import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.User;
-import com.earth2me.essentials.api.IWarps;
 import com.earth2me.essentials.utils.NumberUtil;
 import com.earth2me.essentials.utils.StringUtil;
 import net.ess3.api.IUser;
@@ -63,7 +62,6 @@ public class Commandwarp extends EssentialsCommand {
 
     //TODO: Use one of the new text classes, like /help ?
     private void warpList(final CommandSource sender, final String[] args, final IUser user) throws Exception {
-        final IWarps warps = ess.getWarps();
         final List<String> warpNameList = getAvailableWarpsFor(user);
 
         if (warpNameList.isEmpty()) {

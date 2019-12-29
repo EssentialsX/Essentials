@@ -24,10 +24,9 @@ public class Commandlightning extends EssentialsLoopCommand {
 
     @Override
     public void run(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception {
-        User user;
         if (sender.isPlayer()) {
-            user = ess.getUser(sender.getPlayer());
-            if ((args.length < 1 || user != null && !user.isAuthorized("essentials.lightning.others"))) {
+            User user = ess.getUser(sender.getPlayer());
+            if ((args.length < 1 || !user.isAuthorized("essentials.lightning.others"))) {
                 user.getWorld().strikeLightning(user.getBase().getTargetBlock((Set<Material>) null, 600).getLocation());
                 return;
             }
