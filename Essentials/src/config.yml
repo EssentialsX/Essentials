@@ -430,6 +430,9 @@ afk-list-name: "none"
 # You can disable the death messages of Minecraft here.
 death-messages: true
 
+# Would you like to tell the player the coords they were at when they died?
+send-coords-on-death: false
+
 # Should players with permissions be able to join and part silently?
 # You can control this with essentials.silentjoin and essentials.silentquit permissions if it is enabled.
 # In addition, people with essentials.silentjoin.vanish will be vanished on join.
