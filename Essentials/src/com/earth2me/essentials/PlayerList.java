@@ -40,7 +40,7 @@ public class PlayerList {
         for (User onlinePlayer : ess.getOnlineUsers()) {
             if (onlinePlayer.isHidden() || (user != null && !user.getBase().canSee(onlinePlayer.getBase()))) {
                 playerHidden++;
-                if (showHidden || user.getBase().canSee(onlinePlayer.getBase())) {
+                if (showHidden || user != null && user.getBase().canSee(onlinePlayer.getBase())) {
                     hiddenCount++;
                 }
             }
@@ -56,7 +56,6 @@ public class PlayerList {
 
     // Build the basic player list, divided by groups.
     public static Map<String, List<User>> getPlayerLists(final IEssentials ess, final User sender, final boolean showHidden) {
-        Server server = ess.getServer();
         final Map<String, List<User>> playerList = new HashMap<String, List<User>>();
         for (User onlineUser : ess.getOnlineUsers()) {
             if ((sender == null && !showHidden && onlineUser.isHidden()) || (sender != null && !showHidden && !sender.getBase().canSee(onlineUser.getBase()))) {

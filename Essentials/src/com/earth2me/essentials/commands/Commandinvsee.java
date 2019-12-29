@@ -37,11 +37,10 @@ public class Commandinvsee extends EssentialsCommand {
     protected List<String> getTabCompleteOptions(Server server, User user, String commandLabel, String[] args) {
         if (args.length == 1) {
             return getPlayers(server, user);
-        } else {
-            //if (args.length == 2) {
-            //    return Lists.newArrayList("equipped");
-            //}
-            return Collections.emptyList();
         }
+        //if (args.length == 2) {
+        //    return Lists.newArrayList("equipped");
+        //}
+        return Collections.emptyList();
     }
 }

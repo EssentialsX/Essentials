@@ -122,13 +122,11 @@ public class Commandnear extends EssentialsCommand {
             } else {
                 return Collections.emptyList();
             }
-        } else {
-            if (args.length == 1) {
-                return Lists.newArrayList(Integer.toString(ess.getSettings().getNearRadius()));
-            } else {
-                return Collections.emptyList();
-            }
         }
+        if (args.length == 1) {
+            return Lists.newArrayList(Integer.toString(ess.getSettings().getNearRadius()));
+        }
+        return Collections.emptyList();
     }
 
     @Override

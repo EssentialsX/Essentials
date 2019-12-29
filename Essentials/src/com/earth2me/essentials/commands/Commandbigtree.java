@@ -47,8 +47,7 @@ public class Commandbigtree extends EssentialsCommand {
     protected List<String> getTabCompleteOptions(Server server, User user, String commandLabel, String[] args) {
         if (args.length == 1) {
             return Lists.newArrayList("redwood", "tree", "jungle", "darkoak");
-        } else {
-            return Collections.emptyList();
         }
+        return Collections.emptyList();
     }
 }

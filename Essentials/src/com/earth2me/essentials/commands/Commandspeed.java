@@ -130,27 +130,24 @@ public class Commandspeed extends EssentialsCommand {
 
         if (userSpeed < 1f) {
             return defaultSpeed * userSpeed;
-        } else {
-            float ratio = ((userSpeed - 1) / 9) * (maxSpeed - defaultSpeed);
-            return ratio + defaultSpeed;
         }
+        float ratio = ((userSpeed - 1) / 9) * (maxSpeed - defaultSpeed);
+        return ratio + defaultSpeed;
     }
 
     @Override
     protected List<String> getTabCompleteOptions(Server server, User user, String commandLabel, String[] args) {
         if (args.length == 3 && user.isAuthorized("essentials.speed.others")) {
             return getPlayers(server, user);
-        } else {
-            return Collections.emptyList();
         }
+        return Collections.emptyList();
     }
 
     @Override
     protected List<String> getTabCompleteOptions(Server server, CommandSource sender, String commandLabel, String[] args) {
         if (args.length == 3) {
             return getPlayers(server, sender);
-        } else {
-            return Collections.emptyList();
         }
+        return Collections.emptyList();
     }
 }

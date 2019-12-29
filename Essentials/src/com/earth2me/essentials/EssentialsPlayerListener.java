@@ -494,8 +494,12 @@ public class EssentialsPlayerListener implements Listener {
             switch (pluginCommand.getName()) {
                 case "afk":
                     update = false;
+                    break;
                 case "vanish":
                     broadcast = false;
+                    break;
+                default:
+                    break;
             }
         }
         final User user = ess.getUser(player);
@@ -616,6 +620,7 @@ public class EssentialsPlayerListener implements Listener {
                         break;
                     }
                 }
+                break;
             case LEFT_CLICK_BLOCK:
                 if (event.getItem() != null && event.getItem().getType() != Material.AIR) {
                     final User user = ess.getUser(event.getPlayer());
@@ -626,6 +631,8 @@ public class EssentialsPlayerListener implements Listener {
                 break;
             case PHYSICAL:
                 updateActivity = false;
+                break;
+            default:
                 break;
         }
 

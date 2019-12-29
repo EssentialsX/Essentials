@@ -167,13 +167,12 @@ public class Commandmail extends EssentialsCommand {
             int pages = mail.size() / 9 + (mail.size() % 9 > 0 ? 1 : 0);
             if (pages == 0) {
                 return Lists.newArrayList("0");
-            } else {
-                List<String> options = Lists.newArrayList("1");
-                if (pages > 1) {
-                    options.add(String.valueOf(pages));
-                }
-                return options;
             }
+            List<String> options = Lists.newArrayList("1");
+            if (pages > 1) {
+                options.add(String.valueOf(pages));
+            }
+            return options;
         } else if ((args.length > 2 && args[0].equalsIgnoreCase("send") && user.isAuthorized("essentials.mail.send")) || (args.length > 1 && args[0].equalsIgnoreCase("sendall") && user.isAuthorized("essentials.mail.sendall"))) {
             return null; // Use vanilla handler
         } else {

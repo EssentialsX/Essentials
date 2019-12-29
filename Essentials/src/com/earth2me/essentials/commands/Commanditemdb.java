@@ -63,8 +63,7 @@ public class Commanditemdb extends EssentialsCommand {
     protected List<String> getTabCompleteOptions(Server server, CommandSource sender, String commandLabel, String[] args) {
         if (args.length == 1) {
             return getItems();
-        } else {
-            return Collections.emptyList();
         }
+        return Collections.emptyList();
     }
 }

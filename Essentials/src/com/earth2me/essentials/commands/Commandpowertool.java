@@ -59,9 +59,8 @@ public class Commandpowertool extends EssentialsCommand {
             if (command.equalsIgnoreCase("l:")) {
                 if (powertools == null || powertools.isEmpty()) {
                     throw new Exception(tl("powerToolListEmpty", itemName));
-                } else {
-                    sender.sendMessage(tl("powerToolList", StringUtil.joinList(powertools), itemName));
                 }
+                sender.sendMessage(tl("powerToolList", StringUtil.joinList(powertools), itemName));
                 throw new NoChargeException();
             }
             if (command.startsWith("r:")) {

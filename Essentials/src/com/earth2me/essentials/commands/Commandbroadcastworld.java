@@ -90,9 +90,8 @@ public class Commandbroadcastworld extends EssentialsCommand {
                 worlds.add(world.getName());
             }
             return worlds;
-        } else {
-            return Collections.emptyList();
         }
+        return Collections.emptyList();
     }
 
     @Override
@@ -103,8 +102,7 @@ public class Commandbroadcastworld extends EssentialsCommand {
                 worlds.add(world.getName());
             }
             return worlds;
-        } else {
-            return Collections.emptyList();
         }
+        return Collections.emptyList();
     }
 }

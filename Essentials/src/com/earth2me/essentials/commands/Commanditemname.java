@@ -2,13 +2,9 @@ package com.earth2me.essentials.commands;
 
 import static com.earth2me.essentials.I18n.tl;
 
-import com.earth2me.essentials.CommandSource;
-import com.earth2me.essentials.I18n;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.FormatUtil;
 
-import com.earth2me.essentials.utils.MaterialUtil;
-import org.bukkit.Material;
 import org.bukkit.Server;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;

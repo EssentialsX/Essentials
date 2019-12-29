@@ -136,9 +136,9 @@ public class SignTrade extends EssentialsSign {
                 throw e;
             }
             return false;
-        } else {
-            return false;
         }
+
+        return false;
     }
 
     protected final void validateTrade(final ISign sign, final int index, final boolean amountNeeded, final IEssentials ess) throws SignException {
@@ -239,19 +239,18 @@ public class SignTrade extends EssentialsSign {
                     throw new SignException(tl("tradeSignEmpty"));
                 }
                 return new Trade((amountType == AmountType.COST ? stackamount : amount), ess);
-            } else {
-                final int stackamount = getIntegerPositive(split[0]);
-                final ItemStack item = getItemStack(split[1], stackamount, allowId, ess);
-                int amount = getInteger(split[2]);
-                if (amountType == AmountType.ROUNDED) {
-                    amount -= amount % stackamount;
-                }
-                if (notEmpty && (amount < 1 || stackamount < 1 || item.getType() == Material.AIR || amount < stackamount)) {
-                    throw new SignException(tl("tradeSignEmpty"));
-                }
-                item.setAmount(amountType == AmountType.COST ? stackamount : amount);
-                return new Trade(item, ess);
             }
+            final int stackamount = getIntegerPositive(split[0]);
+            final ItemStack item = getItemStack(split[1], stackamount, allowId, ess);
+            int amount = getInteger(split[2]);
+            if (amountType == AmountType.ROUNDED) {
+                amount -= amount % stackamount;
+            }
+            if (notEmpty && (amount < 1 || stackamount < 1 || item.getType() == Material.AIR || amount < stackamount)) {
+                throw new SignException(tl("tradeSignEmpty"));
+            }
+            item.setAmount(amountType == AmountType.COST ? stackamount : amount);
+            return new Trade(item, ess);
         }
         throw new SignException(tl("invalidSignLine", index + 1));
     }
@@ -338,16 +337,15 @@ public class SignTrade extends EssentialsSign {
                 }
                 sign.setLine(index, newline);
                 return;
-            } else {
-                final int stackamount = getIntegerPositive(split[0]);
-                getItemStack(split[1], stackamount, ess);
-                final String newline = stackamount + " " + split[1] + ":" + (value.intValueExact());
-                if (newline.length() > 15) {
-                    throw new SignException("This sign is full: Line too long!");
-                }
-                sign.setLine(index, newline);
-                return;
             }
+            final int stackamount = getIntegerPositive(split[0]);
+            getItemStack(split[1], stackamount, ess);
+            final String newline = stackamount + " " + split[1] + ":" + (value.intValueExact());
+            if (newline.length() > 15) {
+                throw new SignException("This sign is full: Line too long!");
+            }
+            sign.setLine(index, newline);
+            return;
         }
         throw new SignException(tl("invalidSignLine", index + 1));
     }

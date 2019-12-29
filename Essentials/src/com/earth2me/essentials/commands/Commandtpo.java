@@ -51,8 +51,7 @@ public class Commandtpo extends EssentialsCommand {
         // Don't handle coords
         if (args.length == 1 || (args.length == 2 && user.isAuthorized("essentials.tp.others"))) {
             return getPlayers(server, user);
-        } else {
-            return Collections.emptyList();
         }
+        return Collections.emptyList();
     }
 }

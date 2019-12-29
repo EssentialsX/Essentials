@@ -7,7 +7,6 @@ import org.bukkit.Location;
 import org.bukkit.Server;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
@@ -44,9 +43,8 @@ public class Commandhome extends EssentialsCommand {
                 if (bed != null) {
                     user.getTeleport().teleport(bed, charge, TeleportCause.COMMAND);
                     throw new NoChargeException();
-                } else {
-                    throw new Exception(tl("bedMissing"));
                 }
+                throw new Exception(tl("bedMissing"));
             }
             goHome(user, player, homeName.toLowerCase(Locale.ENGLISH), charge);
         } catch (NotEnoughArgumentsException e) {
@@ -109,13 +107,12 @@ public class Commandhome extends EssentialsCommand {
         if (args.length == 1) {
             if (canVisitOthers) {
                 return getPlayers(server, user);
-            } else {
-                List<String> homes = user.getHomes();
-                if (user.isAuthorized("essentials.home.bed")) {
-                    homes.add("bed");
-                }
-                return homes;
             }
+            List<String> homes = user.getHomes();
+            if (user.isAuthorized("essentials.home.bed")) {
+                homes.add("bed");
+            }
+            return homes;
         } else if (args.length == 2 && canVisitOthers) {
             try {
                 User otherUser = getPlayer(server, args, 0, true, true);

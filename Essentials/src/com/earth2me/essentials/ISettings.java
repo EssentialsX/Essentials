@@ -105,7 +105,7 @@ public interface ISettings extends IConf {
 
     boolean getRespawnAtHome();
 
-    Set getMultipleHomes();
+    Set<?> getMultipleHomes();
 
     int getHomeLimit(String set);
 
@@ -339,4 +339,8 @@ public interface ISettings extends IConf {
     double getMaxProjectileSpeed();
 
     boolean isSpawnIfNoHome();
+
+    boolean isSetSameHomeByConfirm();
+
+    int getHomeOverwriteConfirmTime();
 }

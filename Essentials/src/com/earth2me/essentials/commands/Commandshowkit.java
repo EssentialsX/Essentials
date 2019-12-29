@@ -37,8 +37,7 @@ public class Commandshowkit extends EssentialsCommand {
     protected List<String> getTabCompleteOptions(final Server server, final User user, final String commandLabel, final String[] args) {
         if (args.length == 1) {
             return new ArrayList<>(ess.getKits().getKits().getKeys(false)); // TODO: Move this to its own method
-        } else {
-            return Collections.emptyList();
         }
+        return Collections.emptyList();
     }
 }

@@ -7,7 +7,6 @@ import com.earth2me.essentials.utils.DateUtil;
 import org.bukkit.BanList;
 import org.bukkit.Server;
 
-import java.util.Collections;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -68,9 +67,8 @@ public class Commandtempban extends EssentialsCommand {
     protected List<String> getTabCompleteOptions(Server server, CommandSource sender, String commandLabel, String[] args) {
         if (args.length == 1) {
             return getPlayers(server, sender);
-        } else {
-            // Note: following args are both date diffs _and_ messages; ideally we'd mix with the vanilla handler
-            return COMMON_DATE_DIFFS;
         }
+        // Note: following args are both date diffs _and_ messages; ideally we'd mix with the vanilla handler
+        return COMMON_DATE_DIFFS;
     }
 }

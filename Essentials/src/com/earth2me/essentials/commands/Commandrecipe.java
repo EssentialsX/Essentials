@@ -17,8 +17,6 @@ import java.util.Map;
 
 import static com.earth2me.essentials.I18n.tl;
 
-import net.ess3.nms.refl.ReflUtil;
-
 
 public class Commandrecipe extends EssentialsCommand {
 
@@ -188,8 +186,7 @@ public class Commandrecipe extends EssentialsCommand {
     protected List<String> getTabCompleteOptions(final Server server, final CommandSource sender, final String commandLabel, final String[] args) {
         if (args.length == 1) {
             return getItems();
-        } else {
-            return Collections.emptyList();
         }
+        return Collections.emptyList();
     }
 }

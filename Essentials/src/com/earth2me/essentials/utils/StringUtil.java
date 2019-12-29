@@ -38,7 +38,7 @@ public class StringUtil {
             }
 
             if (each instanceof Collection) {
-                buf.append(joinList(seperator, ((Collection) each).toArray()));
+                buf.append(joinList(seperator, ((Collection<?>) each).toArray()));
             } else {
                 try {
                     buf.append(each.toString());
@@ -62,7 +62,7 @@ public class StringUtil {
             }
 
             if (each instanceof Collection) {
-                buf.append(joinListSkip(seperator, skip, ((Collection) each).toArray()));
+                buf.append(joinListSkip(seperator, skip, ((Collection<?>) each).toArray()));
             } else {
                 try {
                     buf.append(each.toString());

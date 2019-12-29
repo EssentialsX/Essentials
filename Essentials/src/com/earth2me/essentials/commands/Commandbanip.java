@@ -70,8 +70,7 @@ public class Commandbanip extends EssentialsCommand {
         if (args.length == 1) {
             // TODO: Also list IP addresses?
             return getPlayers(server, sender);
-        } else {
-            return Collections.emptyList();
         }
+        return Collections.emptyList();
     }
 }

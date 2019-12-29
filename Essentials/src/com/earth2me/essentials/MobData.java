@@ -209,7 +209,7 @@ public enum MobData {
             
             if (data.type instanceof EntityType && spawned.getType().equals(data.type)) {
                 mobList.put(data.nickname.toLowerCase(Locale.ENGLISH), data);
-            } else if (data.type instanceof Class && ((Class) data.type).isAssignableFrom(spawned.getClass())) {
+            } else if (data.type instanceof Class && ((Class<?>) data.type).isAssignableFrom(spawned.getClass())) {
                 mobList.put(data.nickname.toLowerCase(Locale.ENGLISH), data);
             }
         }
@@ -336,6 +336,8 @@ public enum MobData {
                     break;
                 case "villagertype":
                     MobCompat.setVillagerType(spawned, split[1]);
+                    break;
+                default:
                     break;
             }
         } else {

@@ -539,9 +539,9 @@ public class MetaItemStack {
 
         if (graceful) {
             return false;
-        } else {
-            throw new Exception(tl("noMetaPerm", metaPerm));
         }
+
+        throw new Exception(tl("noMetaPerm", metaPerm));
     }
 
     private static int bukkitUnbreakableSupport = -1;

@@ -14,9 +14,9 @@ import java.util.logging.Logger;
 import static com.earth2me.essentials.I18n.tl;
 
 
-public class Warps implements IConf, net.ess3.api.IWarps {
+public class Warps implements net.ess3.api.IWarps {
     private static final Logger logger = Logger.getLogger("Essentials");
-    private final Map<StringIgnoreCase, EssentialsConf> warpPoints = new HashMap<StringIgnoreCase, EssentialsConf>();
+    private final Map<StringIgnoreCase, EssentialsConf> warpPoints = new HashMap<>();
     private final File warpsFolder;
     private final Server server;
 

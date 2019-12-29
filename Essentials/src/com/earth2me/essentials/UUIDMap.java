@@ -66,21 +66,20 @@ public class UUIDMap {
                     final String line = reader.readLine();
                     if (line == null) {
                         break;
-                    } else {
-                        final String[] values = splitPattern.split(line);
-                        if (values.length == 2) {
-                            final String name = values[0];
-                            final UUID uuid = UUID.fromString(values[1]);
-                            names.put(name, uuid);
-                            if (!history.containsKey(uuid)) {
-                                final ArrayList<String> list = new ArrayList<>();
+                    }
+                    final String[] values = splitPattern.split(line);
+                    if (values.length == 2) {
+                        final String name = values[0];
+                        final UUID uuid = UUID.fromString(values[1]);
+                        names.put(name, uuid);
+                        if (!history.containsKey(uuid)) {
+                            final ArrayList<String> list = new ArrayList<>();
+                            list.add(name);
+                            history.put(uuid, list);
+                        } else {
+                            final ArrayList<String> list = history.get(uuid);
+                            if (!list.contains(name)) {
                                 list.add(name);
-                                history.put(uuid, list);
-                            } else {
-                                final ArrayList<String> list = history.get(uuid);
-                                if (!list.contains(name)) {
-                                    list.add(name);
-                                }
                             }
                         }
                     }

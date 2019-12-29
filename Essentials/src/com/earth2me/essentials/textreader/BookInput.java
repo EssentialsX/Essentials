@@ -8,7 +8,7 @@ import java.util.*;
 
 
 public class BookInput implements IText {
-    private final static HashMap<String, SoftReference<BookInput>> cache = new HashMap<String, SoftReference<BookInput>>();
+    private final static HashMap<String, SoftReference<BookInput>> cache = new HashMap<>();
     private final transient List<String> lines;
     private final transient List<String> chapters;
     private final transient Map<String, Integer> bookmarks;
@@ -44,46 +44,45 @@ public class BookInput implements IText {
             chapters = Collections.emptyList();
             bookmarks = Collections.emptyMap();
             throw new FileNotFoundException("Could not create " + filename + ".txt");
-        } else {
-            lastChange = file.lastModified();
-            boolean readFromfile;
-            synchronized (cache) {
-                final SoftReference<BookInput> inputRef = cache.get(file.getName());
-                BookInput input;
-                if (inputRef == null || (input = inputRef.get()) == null || input.lastChange < lastChange) {
-                    lines = new ArrayList<String>();
-                    chapters = new ArrayList<String>();
-                    bookmarks = new HashMap<String, Integer>();
-                    cache.put(file.getName(), new SoftReference<BookInput>(this));
-                    readFromfile = true;
-                } else {
-                    lines = Collections.unmodifiableList(input.getLines());
-                    chapters = Collections.unmodifiableList(input.getChapters());
-                    bookmarks = Collections.unmodifiableMap(input.getBookmarks());
-                    readFromfile = false;
-                }
+        }
+        lastChange = file.lastModified();
+        boolean readFromfile;
+        synchronized (cache) {
+            final SoftReference<BookInput> inputRef = cache.get(file.getName());
+            BookInput input;
+            if (inputRef == null || (input = inputRef.get()) == null || input.lastChange < lastChange) {
+                lines = new ArrayList<String>();
+                chapters = new ArrayList<String>();
+                bookmarks = new HashMap<String, Integer>();
+                cache.put(file.getName(), new SoftReference<BookInput>(this));
+                readFromfile = true;
+            } else {
+                lines = Collections.unmodifiableList(input.getLines());
+                chapters = Collections.unmodifiableList(input.getChapters());
+                bookmarks = Collections.unmodifiableMap(input.getBookmarks());
+                readFromfile = false;
             }
-            if (readFromfile) {
-                final Reader reader = new InputStreamReader(new FileInputStream(file), "utf-8");
-                final BufferedReader bufferedReader = new BufferedReader(reader);
-                try {
-                    int lineNumber = 0;
-                    while (bufferedReader.ready()) {
-                        final String line = bufferedReader.readLine();
-                        if (line == null) {
-                            break;
-                        }
-                        if (line.length() > 0 && line.charAt(0) == '#') {
-                            bookmarks.put(line.substring(1).toLowerCase(Locale.ENGLISH).replaceAll("&[0-9a-fk]", ""), lineNumber);
-                            chapters.add(line.substring(1).replace('&', '§').replace("§§", "&"));
-                        }
-                        lines.add(line.replace('&', '§').replace("§§", "&"));
-                        lineNumber++;
+        }
+        if (readFromfile) {
+            final Reader reader = new InputStreamReader(new FileInputStream(file), "utf-8");
+            final BufferedReader bufferedReader = new BufferedReader(reader);
+            try {
+                int lineNumber = 0;
+                while (bufferedReader.ready()) {
+                    final String line = bufferedReader.readLine();
+                    if (line == null) {
+                        break;
                     }
-                } finally {
-                    reader.close();
-                    bufferedReader.close();
+                    if (line.length() > 0 && line.charAt(0) == '#') {
+                        bookmarks.put(line.substring(1).toLowerCase(Locale.ENGLISH).replaceAll("&[0-9a-fk]", ""), lineNumber);
+                        chapters.add(line.substring(1).replace('&', '§').replace("§§", "&"));
+                    }
+                    lines.add(line.replace('&', '§').replace("§§", "&"));
+                    lineNumber++;
                 }
+            } finally {
+                reader.close();
+                bufferedReader.close();
             }
         }
     }

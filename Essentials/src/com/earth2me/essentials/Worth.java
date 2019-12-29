@@ -121,9 +121,9 @@ public class Worth implements IConf {
                 user.sendMessage(tl("itemNotEnough2"));
                 user.sendMessage(tl("itemNotEnough3"));
                 throw new Exception(tl("itemNotEnough1"));
-            } else {
-                return amount;
             }
+
+            return amount;
         }
 
         return amount;

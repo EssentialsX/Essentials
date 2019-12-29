@@ -173,8 +173,7 @@ public class Commandbalancetop extends EssentialsCommand {
                 options.add("force");
             }
             return options;
-        } else {
-            return Collections.emptyList();
         }
+        return Collections.emptyList();
     }
 }

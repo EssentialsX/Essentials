@@ -23,23 +23,22 @@ public class Commandtree extends EssentialsCommand {
         TreeType tree = null;
         if (args.length < 1) {
             throw new NotEnoughArgumentsException();
-        } else {
-            for (TreeType type : TreeType.values()) {
-                if (type.name().replace("_", "").equalsIgnoreCase(args[0])) {
-                    tree = type;
-                    break;
-                }
-            }
-            if (args[0].equalsIgnoreCase("jungle")) {
-                tree = TreeType.SMALL_JUNGLE;
-            } else if (args[0].equalsIgnoreCase("acacia")) {
-                tree = TreeType.ACACIA;
-            } else if (args[0].equalsIgnoreCase("birch")) {
-                tree = TreeType.BIRCH;
-            }
-            if (tree == null) {
-                throw new NotEnoughArgumentsException();
-            }
+        }
+        for (TreeType type : TreeType.values()) {
+            if (type.name().replace("_", "").equalsIgnoreCase(args[0])) {
+                tree = type;
+                break;
+             }
+        }
+        if (args[0].equalsIgnoreCase("jungle")) {
+            tree = TreeType.SMALL_JUNGLE;
+        } else if (args[0].equalsIgnoreCase("acacia")) {
+            tree = TreeType.ACACIA;
+        } else if (args[0].equalsIgnoreCase("birch")) {
+            tree = TreeType.BIRCH;
+        }
+        if (tree == null) {
+            throw new NotEnoughArgumentsException();
         }
 
         final Location loc = LocationUtil.getTarget(user.getBase());
@@ -60,8 +59,7 @@ public class Commandtree extends EssentialsCommand {
                 options.add(type.name().toLowerCase(Locale.ENGLISH).replace("_", ""));
             }
             return options;
-        } else {
-            return Collections.emptyList();
         }
+        return Collections.emptyList();
     }
 }

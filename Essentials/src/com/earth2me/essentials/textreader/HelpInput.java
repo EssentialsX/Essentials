@@ -5,7 +5,6 @@ import net.ess3.api.IEssentials;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginDescriptionFile;
 
-import java.io.IOException;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -22,7 +21,7 @@ public class HelpInput implements IText {
     private final transient List<String> chapters = new ArrayList<String>();
     private final transient Map<String, Integer> bookmarks = new HashMap<String, Integer>();
 
-    public HelpInput(final User user, final String match, final IEssentials ess) throws IOException {
+    public HelpInput(final User user, final String match, final IEssentials ess) {
         boolean reported = false;
         final List<String> newLines = new ArrayList<String>();
         String pluginName = "";

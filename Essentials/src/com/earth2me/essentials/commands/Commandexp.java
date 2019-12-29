@@ -183,9 +183,8 @@ public class Commandexp extends EssentialsCommand {
                 String levellessArg = args[1].toLowerCase(Locale.ENGLISH).replace("l", "");
                 if (NumberUtil.isInt(levellessArg)) {
                     return Lists.newArrayList(levellessArg, args[1] + "l");
-                } else {
-                    return Collections.emptyList();
                 }
+                return Collections.emptyList();
             } else if (args[0].equalsIgnoreCase("show") && user.isAuthorized("essentials.exp.others")) {
                 return getPlayers(server, user);
             } else {
@@ -208,12 +207,11 @@ public class Commandexp extends EssentialsCommand {
                 String levellessArg = args[1].toLowerCase(Locale.ENGLISH).replace("l", "");
                 if (NumberUtil.isInt(levellessArg)) {
                     return Lists.newArrayList(levellessArg, args[1] + "l");
-                } else {
-                    return Collections.emptyList();
                 }
-            } else { // even without 'show'
-                return getPlayers(server, sender);
+                return Collections.emptyList();
             }
+            // even without 'show'
+            return getPlayers(server, sender);
         } else if (args.length == 3 && (args[0].equalsIgnoreCase("set") || args[0].equalsIgnoreCase("give"))) {
             return getPlayers(server, sender);
         } else {

@@ -71,9 +71,8 @@ public class Commandrepair extends EssentialsCommand {
         user.getBase().updateInventory();
         if (repaired.isEmpty()) {
             throw new Exception(tl("repairNone"));
-        } else {
-            user.sendMessage(tl("repair", StringUtil.joinList(repaired)));
         }
+        user.sendMessage(tl("repair", StringUtil.joinList(repaired)));
     }
 
     private void repairItem(final ItemStack item) throws Exception {
@@ -127,9 +126,8 @@ public class Commandrepair extends EssentialsCommand {
         if (VersionUtil.getServerBukkitVersion().isLowerThan(VersionUtil.v1_13_0_R01)) {
             final int itemId = material.getId();
             return new Trade("repair-" + itemName.replace('_', '-'), new Trade("repair-" + itemId, new Trade("repair-item", ess), ess), ess);
-        } else {
-            return new Trade("repair-" + itemName.replace('_', '-'), new Trade("repair-item", ess), ess);
         }
+        return new Trade("repair-" + itemName.replace('_', '-'), new Trade("repair-item", ess), ess);
     }
 
     @Override
@@ -140,8 +138,7 @@ public class Commandrepair extends EssentialsCommand {
                 options.add("all");
             }
             return options;
-        } else {
-            return Collections.emptyList();
         }
+        return Collections.emptyList();
     }
 }

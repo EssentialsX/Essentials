@@ -35,8 +35,7 @@ public class Commanddeljail extends EssentialsCommand {
             } catch (Exception e) {
                 return Collections.emptyList();
             }
-        } else {
-            return Collections.emptyList();
         }
+        return Collections.emptyList();
     }
 }

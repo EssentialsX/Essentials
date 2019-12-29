@@ -60,10 +60,10 @@ public class Commandlightning extends EssentialsLoopCommand {
         if (!user.isAuthorized("essentials.lightning.others")) {
             // Can't use any params, including power
             return Collections.emptyList();
-        } else {
-            return super.getTabCompleteOptions(server, user, commandLabel, args);
         }
+        return super.getTabCompleteOptions(server, user, commandLabel, args);
     }
+
     @Override
     protected List<String> getTabCompleteOptions(final Server server, final CommandSource sender, final String commandLabel, final String[] args) {
         if (args.length == 1) {

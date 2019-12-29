@@ -125,7 +125,7 @@ public class Kit {
             final List<String> itemList = new ArrayList<String>();
             final Object kitItems = kit.get("items");
             if (kitItems instanceof List) {
-                for (Object item : (List) kitItems) {
+                for (Object item : (List<?>) kitItems) {
                     if (item instanceof String) {
                         itemList.add(item.toString());
                         continue;

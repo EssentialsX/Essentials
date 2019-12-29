@@ -20,7 +20,7 @@ public class EnumUtil {
      * @param <T> The enum to search through
      * @return The first matching enum field
      */
-    public static <T extends Enum> T valueOf(Class<T> enumClass, String... names) {
+    public static <T extends Enum<?>> T valueOf(Class<T> enumClass, String... names) {
         for (String name : names) {
             try {
                 Field enumField = enumClass.getDeclaredField(name);
@@ -43,7 +43,7 @@ public class EnumUtil {
      * @param <T> The enum to search through
      * @return All matching enum fields
      */
-    public static <T extends Enum> Set<T> getAllMatching(Class<T> enumClass, String... names) {
+    public static <T extends Enum<?>> Set<T> getAllMatching(Class<T> enumClass, String... names) {
         Set<T> set = new HashSet<>();
 
         for (String name : names) {

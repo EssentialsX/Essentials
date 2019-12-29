@@ -58,8 +58,7 @@ public class Commandhat extends EssentialsCommand {
     protected List<String> getTabCompleteOptions(final Server server, final User user, final String commandLabel, final String[] args) {
         if (args.length == 1) {
             return Lists.newArrayList("remove", "wear"); // "wear" isn't real
-        } else {
-            return Collections.emptyList();
         }
+        return Collections.emptyList();
     }
 }

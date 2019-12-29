@@ -35,8 +35,7 @@ public class Commandbreak extends EssentialsCommand {
         server.getPluginManager().callEvent(event);
         if (event.isCancelled()) {
             throw new NoChargeException();
-        } else {
-            block.setType(Material.AIR);
         }
+        block.setType(Material.AIR);
     }
 }

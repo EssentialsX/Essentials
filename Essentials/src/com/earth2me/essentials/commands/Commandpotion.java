@@ -1,7 +1,5 @@
 package com.earth2me.essentials.commands;
 
-import org.bukkit.DyeColor;
-
 import com.google.common.collect.Lists;
 import com.earth2me.essentials.MetaItemStack;
 import com.earth2me.essentials.Potions;
@@ -11,7 +9,6 @@ import org.bukkit.Material;
 import org.bukkit.Server;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.PotionMeta;
-import org.bukkit.potion.PotionData;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 

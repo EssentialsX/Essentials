@@ -162,6 +162,9 @@ public class Trade {
                         if (ess.getSettings().isDebug()) {
                             ess.getLogger().log(Level.INFO, "paying " + user.getName() + " partial itemstack " + getItemStack().toString() + " and dropping overflow " + leftOver.get(0).toString());
                         }
+                        break;
+                    default:
+                        break;
                 }
             } else if (ess.getSettings().isDebug()) {
                 ess.getLogger().log(Level.INFO, "paying " + user.getName() + " itemstack " + getItemStack().toString());

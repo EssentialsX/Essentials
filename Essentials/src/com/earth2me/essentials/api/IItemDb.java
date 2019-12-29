@@ -55,7 +55,7 @@ public interface IItemDb {
             nameList = nameList.subList(0, 14);
         }
         return StringUtil.joinList(", ", nameList);
-    };
+    }
 
     /**
      * Get a List of all aliases for the given item stack.

@@ -114,6 +114,8 @@ public class LocationUtil {
             case LAVA:
             case FIRE:
                 return true;
+            default:
+                break;
         }
 
         if (MaterialUtil.isBed(below.getType())) {
@@ -160,9 +162,8 @@ public class LocationUtil {
             // ess can be null if old deprecated method is calling it.
             if (ess == null || ess.getSettings().isTeleportToCenterLocation()) {
                 return getRoundedDestination(loc);
-            } else {
-                return loc;
             }
+            return loc;
         }
         return getSafeDestination(loc);
     }

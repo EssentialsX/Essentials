@@ -696,7 +696,6 @@ public abstract class UserData extends PlayerExtension implements IConf {
         config.save();
     }
 
-    private boolean newplayer;
     private String geolocation;
 
     private String _getGeoLocation() {
@@ -827,7 +826,7 @@ public abstract class UserData extends PlayerExtension implements IConf {
         final String prefix = "info.";
         node = prefix + node;
         if (object instanceof Map) {
-            config.setProperty(node, (Map) object);
+            config.setProperty(node, (Map<?, ?>) object);
         } else if (object instanceof List) {
             config.setProperty(node, (List<String>) object);
         } else if (object instanceof Location) {

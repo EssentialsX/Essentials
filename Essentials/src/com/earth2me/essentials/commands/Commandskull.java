@@ -72,12 +72,10 @@ public class Commandskull extends EssentialsCommand {
         if (args.length == 1) {
             if (user.isAuthorized("essentials.skull.others")) {
                 return getPlayers(server, user);
-            } else {
-                return Lists.newArrayList(user.getName());
             }
-        } else {
-            return Collections.emptyList();
+            return Lists.newArrayList(user.getName());
         }
+        return Collections.emptyList();
     }
 
 }

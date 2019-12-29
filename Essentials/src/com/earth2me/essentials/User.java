@@ -298,13 +298,15 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
             if (timeout != 0) {
                 if ((System.currentTimeMillis() - getTeleportRequestTime()) / 1000 <= timeout) { // Player has outstanding request
                     return true;
-                } else { // outstanding request expired.
-                    requestTeleport(null, false);
-                    return false;
                 }
-            } else { // outstanding request does not expire
-                return true;
+
+                // outstanding request expired.
+                requestTeleport(null, false);
+                return false;
             }
+
+            // outstanding request does not expire
+            return true;
         }
         return false;
     }
@@ -401,6 +403,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
         }
     }
 
+    @Override
     public String getDisplayName() {
         return super.getBase().getDisplayName() == null || (ess.getSettings().hideDisplayNameInVanish() && isHidden()) ? super.getBase().getName() : super.getBase().getDisplayName();
     }
@@ -708,6 +711,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
         return ess.getPermissionsHandler().canBuild(base, getGroup());
     }
 
+    @Override
     public long getTeleportRequestTime() {
         return teleportRequestTime;
     }
@@ -923,12 +927,12 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
     public ItemStack getItemInHand() {
         if (VersionUtil.getServerBukkitVersion().isLowerThan(VersionUtil.v1_9_R01)) {
             return getBase().getInventory().getItemInHand();
-        } else {
-            PlayerInventory inventory = getBase().getInventory();
-            return inventory.getItemInMainHand() != null ? inventory.getItemInMainHand() : inventory.getItemInOffHand();
         }
+
+        PlayerInventory inventory = getBase().getInventory();
+        return inventory.getItemInMainHand() != null ? inventory.getItemInMainHand() : inventory.getItemInOffHand();
     }
-    
+
     public void notifyOfMail() {
         List<String> mails = getMails();
         if (mails != null && !mails.isEmpty()) {

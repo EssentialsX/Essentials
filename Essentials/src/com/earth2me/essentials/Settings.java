@@ -559,6 +559,8 @@ public class Settings implements net.ess3.api.ISettings {
         logCommandBlockCommands = _logCommandBlockCommands();
         nickBlacklist = _getNickBlacklist();
         maxProjectileSpeed = _getMaxProjectileSpeed();
+        confirmForSameHomeSet = _getConfirmForSameHomeSet();
+        homeOverwriteConfirmTime = _getHomeOverwriteConfirmTime();
     }
 
     void _lateLoadItemSpawnBlacklist() {
@@ -1259,9 +1261,9 @@ public class Settings implements net.ess3.api.ISettings {
             // Take whatever the value is, convert to string and add it to a list as a single value.
             String val = config.get("spawn-on-join").toString();
             return !val.isEmpty() ? Collections.singletonList(val) : def;
-        } else {
-            return def;
         }
+
+        return def;
     }
 
     @Override
@@ -1628,5 +1630,27 @@ public class Settings implements net.ess3.api.ISettings {
     @Override
     public boolean isSpawnIfNoHome() {
         return config.getBoolean("spawn-if-no-home", true);
+    }
+
+    private boolean confirmForSameHomeSet;
+
+    private boolean _getConfirmForSameHomeSet() {
+        return confirmForSameHomeSet;
+    }
+
+    @Override
+    public boolean isSetSameHomeByConfirm() {
+        return config.getBoolean("same-home-overwrite.enable-confirmation", false);
+    }
+
+    private int homeOverwriteConfirmTime;
+
+    private int _getHomeOverwriteConfirmTime() {
+        return homeOverwriteConfirmTime;
+    }
+
+    @Override
+    public int getHomeOverwriteConfirmTime() {
+        return config.getInt("same-home-overwrite.confirm-time", 10);
     }
 }

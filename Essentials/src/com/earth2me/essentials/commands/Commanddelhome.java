@@ -4,7 +4,6 @@ import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.User;
 import org.bukkit.Server;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
@@ -60,9 +59,9 @@ public class Commanddelhome extends EssentialsCommand {
         if (args.length == 1) {
             if (canDelOthers) {
                 return getPlayers(server, sender);
-            } else {
-                return user.getHomes();
             }
+
+            return user != null ? user.getHomes() : Collections.emptyList();
         } else if (args.length == 2 && canDelOthers) {
             try {
                 user = getPlayer(server, args, 0, true, true);

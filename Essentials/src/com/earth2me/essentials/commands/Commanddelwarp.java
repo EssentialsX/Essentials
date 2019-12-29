@@ -29,8 +29,7 @@ public class Commanddelwarp extends EssentialsCommand {
     protected List<String> getTabCompleteOptions(final Server server, final CommandSource sender, final String commandLabel, final String[] args) {
         if (args.length == 1) {
             return new ArrayList<>(ess.getWarps().getList());
-        } else {
-            return Collections.emptyList();
         }
+        return Collections.emptyList();
     }
 }

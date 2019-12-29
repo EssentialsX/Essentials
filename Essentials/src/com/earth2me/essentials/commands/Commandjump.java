@@ -55,8 +55,7 @@ public class Commandjump extends EssentialsCommand {
         if (args.length == 1 && user.isAuthorized("essentials.jump.lock")) {
             // XXX these actually do the same thing
             return Lists.newArrayList("lock", "unlock");
-        } else {
-            return Collections.emptyList();
         }
+        return Collections.emptyList();
     }
 }

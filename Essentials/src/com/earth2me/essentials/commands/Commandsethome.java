@@ -3,6 +3,7 @@ package com.earth2me.essentials.commands;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.LocationUtil;
 import com.earth2me.essentials.utils.NumberUtil;
+
 import org.bukkit.Location;
 import org.bukkit.Server;
 
@@ -41,19 +42,43 @@ public class Commandsethome extends EssentialsCommand {
                 }
             }
         }
+
         if (checkHomeLimit(user, usersHome, name)) {
             name = "home";
         }
         if ("bed".equals(name) || NumberUtil.isInt(name)) {
             throw new NoSuchFieldException(tl("invalidHomeName"));
         }
+        if (ess.getSettings().isSetSameHomeByConfirm()) {
+            for (String h : usersHome.getHomes()) {
+                if (h.equals(name)) {
+                    if (!confirmSetHome.containsKey(user)) {
+                        confirmSetHome.put(user, h);
 
-        if (!ess.getSettings().isTeleportSafetyEnabled() && LocationUtil.isBlockUnsafeForUser(usersHome, location.getWorld(), location.getBlockX(), location.getBlockY(), location.getBlockZ())) {
-            throw new Exception(tl("unsafeTeleportDestination", location.getWorld().getName(), location.getBlockX(), location.getBlockY(), location.getBlockZ()));
+                        int time = (20 * ess.getSettings().getHomeOverwriteConfirmTime());
+                        ess.getServer().getScheduler().runTaskLater(ess, () -> confirmSetHome.remove(user), time);
+                        user.sendMessage(tl("confirmForSameHomeSetting", h, time));
+                        return;
+                    } else if (!h.equals(confirmSetHome.get(user))) {
+                        user.sendMessage("Confirmation canceled because you entered the wrong home name.");
+                        return;
+                    }
+
+                    confirmSetHome.remove(user);
+                    break;
+                }
+            }
+        }
+
+        if (!ess.getSettings().isTeleportSafetyEnabled() && LocationUtil.isBlockUnsafeForUser(usersHome,
+                   location.getWorld(), location.getBlockX(), location.getBlockY(), location.getBlockZ())) {
+            throw new Exception(tl("unsafeTeleportDestination", location.getWorld().getName(),
+                                   location.getBlockX(), location.getBlockY(), location.getBlockZ()));
         }
 
         usersHome.setHome(name, location);
-        user.sendMessage(tl("homeSet", user.getLocation().getWorld().getName(), user.getLocation().getBlockX(), user.getLocation().getBlockY(), user.getLocation().getBlockZ(), name));
+        user.sendMessage(tl("homeSet", user.getLocation().getWorld().getName(), user.getLocation().getBlockX(),
+                            user.getLocation().getBlockY(), user.getLocation().getBlockZ(), name));
 
     }
 

@@ -194,9 +194,8 @@ public class Commandcondense extends EssentialsCommand {
     protected List<String> getTabCompleteOptions(Server server, User user, String commandLabel, String[] args) {
         if (args.length == 1) {
             return getMatchingItems(args[0]);
-        } else {
-            return Collections.emptyList();
         }
+        return Collections.emptyList();
     }
 
     private static class SimpleRecipeComparator implements Comparator<SimpleRecipe> {

@@ -81,8 +81,7 @@ public class Commandworld extends EssentialsCommand {
                 worlds.add(world.getName());
             }
             return worlds;
-        } else {
-            return Collections.emptyList();
         }
+        return Collections.emptyList();
     }
 }

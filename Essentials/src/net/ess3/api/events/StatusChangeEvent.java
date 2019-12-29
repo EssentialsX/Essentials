@@ -2,13 +2,12 @@ package net.ess3.api.events;
 
 import net.ess3.api.IUser;
 import org.bukkit.Bukkit;
-import org.bukkit.event.Cancellable;
 
 
 /**
  * This handles common boilerplate for other StatusChangeEvents
  */
-public class StatusChangeEvent extends StateChangeEvent implements Cancellable {
+public class StatusChangeEvent extends StateChangeEvent {
     private boolean newValue;
 
     public StatusChangeEvent(IUser affected, IUser controller, boolean value) {

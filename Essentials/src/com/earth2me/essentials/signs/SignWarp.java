@@ -22,18 +22,17 @@ public class SignWarp extends EssentialsSign {
         if (warpName.isEmpty()) {
             sign.setLine(1, "§c<Warp name>");
             throw new SignException(tl("invalidSignLine", 1));
-        } else {
-            try {
-                ess.getWarps().getWarp(warpName);
-            } catch (Exception ex) {
-                throw new SignException(ex.getMessage(), ex);
-            }
-            final String group = sign.getLine(2);
-            if ("Everyone".equalsIgnoreCase(group) || "Everybody".equalsIgnoreCase(group)) {
-                sign.setLine(2, "§2Everyone");
-            }
-            return true;
         }
+        try {
+            ess.getWarps().getWarp(warpName);
+        } catch (Exception ex) {
+            throw new SignException(ex.getMessage(), ex);
+        }
+        final String group = sign.getLine(2);
+        if ("Everyone".equalsIgnoreCase(group) || "Everybody".equalsIgnoreCase(group)) {
+            sign.setLine(2, "§2Everyone");
+        }
+        return true;
     }
 
     @Override

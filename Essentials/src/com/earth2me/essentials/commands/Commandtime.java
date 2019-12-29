@@ -171,9 +171,8 @@ public class Commandtime extends EssentialsCommand {
         if (args.length == 1) {
             if (user == null || user.isAuthorized("essentials.time.set")) {
                 return Lists.newArrayList("set", "add");
-            } else {
-                return Collections.emptyList();
             }
+            return Collections.emptyList();
         } else if (args.length == 2 && args[0].equalsIgnoreCase("set")) {
             return Lists.newArrayList("sunrise", "day", "morning", "noon", "afternoon", "sunset", "night", "midnight");
             // TODO: handle tab completion for add

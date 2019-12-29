@@ -121,8 +121,7 @@ public class Commandlist extends EssentialsCommand {
     protected List<String> getTabCompleteOptions(final Server server, final CommandSource sender, final String commandLabel, final String[] args) {
         if (args.length == 1) {
             return getGroups();
-        } else {
-            return Collections.emptyList();
         }
+        return Collections.emptyList();
     }
 }

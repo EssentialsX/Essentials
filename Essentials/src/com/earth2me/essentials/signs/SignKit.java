@@ -26,18 +26,17 @@ public class SignKit extends EssentialsSign {
         if (kitName.isEmpty()) {
             sign.setLine(1, "§dKit name!");
             return false;
-        } else {
-            try {
-                ess.getKits().getKit(kitName);
-            } catch (Exception ex) {
-                throw new SignException(ex.getMessage(), ex);
-            }
-            final String group = sign.getLine(2);
-            if ("Everyone".equalsIgnoreCase(group) || "Everybody".equalsIgnoreCase(group)) {
-                sign.setLine(2, "§2Everyone");
-            }
-            return true;
         }
+        try {
+            ess.getKits().getKit(kitName);
+        } catch (Exception ex) {
+            throw new SignException(ex.getMessage(), ex);
+        }
+        final String group = sign.getLine(2);
+        if ("Everyone".equalsIgnoreCase(group) || "Everybody".equalsIgnoreCase(group)) {
+            sign.setLine(2, "§2Everyone");
+        }
+        return true;
     }
 
     @Override
@@ -61,12 +60,10 @@ public class SignKit extends EssentialsSign {
                 throw new SignException(ex.getMessage(), ex);
             }
             return true;
-        } else {
-            if (group.isEmpty()) {
-                throw new SignException(tl("noKitPermission", "essentials.kits." + kitName));
-            } else {
-                throw new SignException(tl("noKitGroup", group));
-            }
         }
+        if (group.isEmpty()) {
+            throw new SignException(tl("noKitPermission", "essentials.kits." + kitName));
+        }
+        throw new SignException(tl("noKitGroup", group));
     }
 }

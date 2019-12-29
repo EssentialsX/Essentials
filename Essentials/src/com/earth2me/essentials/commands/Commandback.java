@@ -94,8 +94,7 @@ public class Commandback extends EssentialsCommand {
     protected List<String> getTabCompleteOptions(Server server, User user, String commandLabel, String[] args) {
         if (user.isAuthorized("essentials.back.others") && args.length == 1) {
             return getPlayers(server, user);
-        } else {
-            return Collections.emptyList();
         }
+        return Collections.emptyList();
     }
 }

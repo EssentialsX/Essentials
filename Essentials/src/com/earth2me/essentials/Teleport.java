@@ -87,6 +87,8 @@ public class Teleport implements ITeleport {
                 applies = !(teleportOwner.isAuthorized(globalBypassPerm) &&
                         teleportOwner.isAuthorized("essentials.teleport.cooldown.bypass.tpa"));
                 break;
+            default:
+                break;
         }
         return applies;
     }

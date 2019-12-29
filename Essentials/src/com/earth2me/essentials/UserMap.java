@@ -109,9 +109,8 @@ public class UserMap extends CacheLoader<String, User> implements IConf {
         try {
             if (!legacy) {
                 return ((LoadingCache<String, User>) users).get(uuid.toString());
-            } else {
-                return legacyCacheGet(uuid);
             }
+            return legacyCacheGet(uuid);
         } catch (ExecutionException ex) {
             return null;
         } catch (UncheckedExecutionException ex) {
@@ -260,10 +259,9 @@ public class UserMap extends CacheLoader<String, User> implements IConf {
         // This is how Bukkit generates fake UUIDs
         if (UUID.nameUUIDFromBytes(("OfflinePlayer:" + name).getBytes(Charsets.UTF_8)).equals(uuid)) {
             return null;
-        } else {
-            names.put(name, uuid);
-            return getUser(uuid);
         }
+        names.put(name, uuid);
+        return getUser(uuid);
     }
 
     private static Method getLegacy;
@@ -286,7 +284,7 @@ public class UserMap extends CacheLoader<String, User> implements IConf {
         }
     }
 
-    private void legacyMaximumSize(CacheBuilder builder, int maxCount) {
+    private void legacyMaximumSize(CacheBuilder<?, ?> builder, int maxCount) {
         try {
             Method maxSizeLegacy = builder.getClass().getDeclaredMethod("maximumSize", Integer.TYPE);
             maxSizeLegacy.setAccessible(true);
@@ -297,7 +295,7 @@ public class UserMap extends CacheLoader<String, User> implements IConf {
     }
 
     @SuppressWarnings("unchecked")
-    private Cache<String, User> legacyBuild(CacheBuilder builder) {
+    private Cache<String, User> legacyBuild(CacheBuilder<?, ?> builder) {
         Method build = null;
         for (Method method : builder.getClass().getDeclaredMethods()) {
             if (method.getName().equals("build")) {

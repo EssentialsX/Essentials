@@ -145,18 +145,17 @@ public final class InventoryWorkaround {
                         // No space at all!
                         leftover.put(i, item);
                         break;
+                    }
+                    // More than a single stack!
+                    if (item.getAmount() > maxAmount) {
+                        final ItemStack stack = item.clone();
+                        stack.setAmount(maxAmount);
+                        inventory.setItem(firstFree, stack);
+                        item.setAmount(item.getAmount() - maxAmount);
                     } else {
-                        // More than a single stack!
-                        if (item.getAmount() > maxAmount) {
-                            final ItemStack stack = item.clone();
-                            stack.setAmount(maxAmount);
-                            inventory.setItem(firstFree, stack);
-                            item.setAmount(item.getAmount() - maxAmount);
-                        } else {
-                            // Just store it
-                            inventory.setItem(firstFree, item);
-                            break;
-                        }
+                        // Just store it
+                        inventory.setItem(firstFree, item);
+                        break;
                     }
                 } else {
                     // So, apparently it might only partially fit, well lets do just that
@@ -240,7 +239,6 @@ public final class InventoryWorkaround {
         }
     }
 
-    @SuppressWarnings("deprecation")
     public static void setItemInOffHand(Player p, ItemStack item) {
         // This assumes that all builds that support a main hand also support an off hand.
         if (hasMainHandSupport == null || hasMainHandSupport) {

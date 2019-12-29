@@ -80,6 +80,7 @@ public class SimpleMessageRecipient implements IMessageRecipient {
                 } else {
                     sendMessage(tl("userAFK", recipient.getDisplayName()));
                 }
+            break;
             default:
                 sendMessage(tl("msgFormat", tl("me"), recipient.getDisplayName(), message));
 

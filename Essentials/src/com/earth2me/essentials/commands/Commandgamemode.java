@@ -150,9 +150,8 @@ public class Commandgamemode extends EssentialsCommand {
         if (args.length == 1) {
             if (user.isAuthorized("essentials.gamemode.others") && isDirectGamemodeCommand) {
                 return getPlayers(server, user);
-            } else {
-                return STANDARD_OPTIONS;
             }
+            return STANDARD_OPTIONS;
         } else if (args.length == 2 && user.isAuthorized("essentials.gamemode.others") && !isDirectGamemodeCommand) {
             return getPlayers(server, user);
         } else {

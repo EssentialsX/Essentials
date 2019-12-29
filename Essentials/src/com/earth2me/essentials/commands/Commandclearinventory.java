@@ -166,16 +166,14 @@ public class Commandclearinventory extends EssentialsCommand {
             } else {
                 return Collections.emptyList();
             }
-        } else {
-            if (args.length == 1) {
-                List<String> items = new ArrayList<>(getItems());
-                items.add("*");
-                items.add("**");
-                return items;
-            } else {
-                return Collections.emptyList();
-            }
         }
+        if (args.length == 1) {
+            List<String> items = new ArrayList<>(getItems());
+            items.add("*");
+            items.add("**");
+            return items;
+        }
+        return Collections.emptyList();
     }
 
     @Override

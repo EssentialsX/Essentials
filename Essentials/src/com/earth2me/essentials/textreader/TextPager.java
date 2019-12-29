@@ -49,51 +49,49 @@ public class TextPager {
                 }
                 sender.sendMessage(sb.toString());
                 return;
-            } else {
-                int page = 1;
-                try {
-                    page = Integer.parseInt(pageStr);
-                } catch (NumberFormatException ex) {
-                    page = 1;
-                }
-                if (page < 1) {
-                    page = 1;
-                }
+            }
+            int page = 1;
+            try {
+                page = Integer.parseInt(pageStr);
+            } catch (NumberFormatException ex) {
+                page = 1;
+            }
+            if (page < 1) {
+                page = 1;
+            }
 
-                int start = onePage ? 0 : (page - 1) * 9;
-                int end;
-                for (end = 0; end < lines.size(); end++) {
-                    String line = lines.get(end);
-                    if (line.startsWith("#")) {
-                        break;
-                    }
+            int start = onePage ? 0 : (page - 1) * 9;
+            int end;
+            for (end = 0; end < lines.size(); end++) {
+                String line = lines.get(end);
+                if (line.startsWith("#")) {
+                    break;
                 }
+            }
 
-                int pages = end / 9 + (end % 9 > 0 ? 1 : 0);
-                if (page > pages) {
-                    sender.sendMessage(tl("infoUnknownChapter"));
-                    return;
-                }
-                if (!onePage && commandName != null) {
-
-                    StringBuilder content = new StringBuilder();
-                    final String[] title = commandName.split(" ", 2);
-                    if (title.length > 1) {
-                        content.append(I18n.capitalCase(title[0])).append(": ");
-                        content.append(title[1]);
-                    } else {
-                        content.append(I18n.capitalCase(commandName));
-                    }
-                    sender.sendMessage(tl("infoPages", page, pages, content));
-                }
-                for (int i = start; i < end && i < start + (onePage ? 20 : 9); i++) {
-                    sender.sendMessage("§r" + lines.get(i));
-                }
-                if (!onePage && page < pages && commandName != null) {
-                    sender.sendMessage(tl("readNextPage", commandName, page + 1));
-                }
+            int pages = end / 9 + (end % 9 > 0 ? 1 : 0);
+            if (page > pages) {
+                sender.sendMessage(tl("infoUnknownChapter"));
                 return;
             }
+            if (!onePage && commandName != null) {
+                StringBuilder content = new StringBuilder();
+                final String[] title = commandName.split(" ", 2);
+                if (title.length > 1) {
+                    content.append(I18n.capitalCase(title[0])).append(": ");
+                    content.append(title[1]);
+                } else {
+                    content.append(I18n.capitalCase(commandName));
+                }
+                sender.sendMessage(tl("infoPages", page, pages, content));
+            }
+            for (int i = start; i < end && i < start + (onePage ? 20 : 9); i++) {
+                sender.sendMessage("§r" + lines.get(i));
+            }
+            if (!onePage && page < pages && commandName != null) {
+                sender.sendMessage(tl("readNextPage", commandName, page + 1));
+            }
+            return;
         }
 
         //If we have a chapter, check to see if we have a page number

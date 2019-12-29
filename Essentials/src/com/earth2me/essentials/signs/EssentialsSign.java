@@ -435,9 +435,9 @@ public class EssentialsSign {
                 sign.setLine(index, quantity + " " + item);
                 return new Trade(stack, ess);
             }
-        } else {
-            return new Trade(money, ess);
         }
+
+        return new Trade(money, ess);
     }
 
     private void showError(final IEssentials ess, final CommandSource sender, final Throwable exception, final String signName) {

@@ -80,9 +80,8 @@ public abstract class EssentialsToggleCommand extends EssentialsCommand {
         if (args.length == 1) {
             if (user.isAuthorized(othersPermission)) {
                 return getPlayers(server, user);
-            } else {
-                return Lists.newArrayList("enable", "disable");
             }
+            return Lists.newArrayList("enable", "disable");
         } else if (args.length == 2 && user.isAuthorized(othersPermission)) {
             return Lists.newArrayList("enable", "disable");
         } else {

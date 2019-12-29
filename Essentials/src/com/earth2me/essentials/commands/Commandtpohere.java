@@ -36,8 +36,7 @@ public class Commandtpohere extends EssentialsCommand {
     protected List<String> getTabCompleteOptions(Server server, User user, String commandLabel, String[] args) {
         if (args.length == 1) {
             return getPlayers(server, user);
-        } else {
-            return Collections.emptyList();
         }
+        return Collections.emptyList();
     }
 }

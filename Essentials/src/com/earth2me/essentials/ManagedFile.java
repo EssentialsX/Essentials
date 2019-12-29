@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.logging.Level;
-import java.util.stream.Collectors;
 import net.ess3.api.IEssentials;
 import org.bukkit.Bukkit;
 
@@ -116,9 +115,9 @@ public class ManagedFile {
                                 final BigInteger test = new BigInteger(1, digest.digest());
                                 if (correct.equals(test)) {
                                     return true;
-                                } else {
-                                    Bukkit.getLogger().warning("File " + file.toString() + " has been modified by user and file version differs, please update the file manually.");
                                 }
+
+                                Bukkit.getLogger().warning("File " + file.toString() + " has been modified by user and file version differs, please update the file manually.");
                             } finally {
                                 digestStream.close();
                             }
@@ -151,9 +150,8 @@ public class ManagedFile {
                     final String line = reader.readLine();
                     if (line == null) {
                         break;
-                    } else {
-                        lines.add(line);
                     }
+                    lines.add(line);
                 } while (true);
                 return lines;
             } finally {

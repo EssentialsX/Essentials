@@ -55,8 +55,7 @@ public class Commandhelp extends EssentialsCommand {
     protected List<String> getTabCompleteOptions(Server server, CommandSource sender, String commandLabel, String[] args) {
         if (args.length == 1) {
             return getCommands(server);
-        } else {
-            return Collections.emptyList();
         }
+        return Collections.emptyList();
     }
 }

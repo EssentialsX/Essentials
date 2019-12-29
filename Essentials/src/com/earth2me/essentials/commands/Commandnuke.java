@@ -26,7 +26,7 @@ public class Commandnuke extends EssentialsCommand {
         if (args.length > 0) {
             targets = new ArrayList<>();
             int pos = 0;
-            for (String arg : args) {
+            for (int i = 0; i < args.length; i++) {
                 targets.add(getPlayer(server, sender, args, pos).getBase());
                 pos++;
             }
@@ -44,7 +44,7 @@ public class Commandnuke extends EssentialsCommand {
             for (int x = -10; x <= 10; x += 5) {
                 for (int z = -10; z <= 10; z += 5) {
                     final Location tntloc = new Location(world, loc.getBlockX() + x, world.getHighestBlockYAt(loc) + 64, loc.getBlockZ() + z);
-                    final TNTPrimed tnt = world.spawn(tntloc, TNTPrimed.class);
+                    world.spawn(tntloc, TNTPrimed.class);
                 }
             }
         }
@@ -54,8 +54,7 @@ public class Commandnuke extends EssentialsCommand {
     protected List<String> getTabCompleteOptions(Server server, CommandSource sender, String commandLabel, String[] args) {
         if (args.length == 1) {
             return getPlayers(server, sender);
-        } else {
-            return Collections.emptyList();
         }
+        return Collections.emptyList();
     }
 }

@@ -154,7 +154,9 @@ public class SpawnMob {
                     changeMobData(sender, mMob.getType(), spawnedMount, data.get(next).toLowerCase(Locale.ENGLISH), target);
                 }
 
-                spawnedMob.setPassenger(spawnedMount);
+                if (spawnedMob != null) {
+                    spawnedMob.setPassenger(spawnedMount);
+                }
 
                 spawnedMob = spawnedMount;
             }

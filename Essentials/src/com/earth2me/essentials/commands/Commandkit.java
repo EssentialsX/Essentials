@@ -42,17 +42,16 @@ public class Commandkit extends EssentialsCommand {
             final String kitList = ess.getKits().listKits(ess, null);
             sender.sendMessage(kitList.length() > 0 ? tl("kits", kitList) : tl("noKits"));
             throw new NoChargeException();
-        } else {
-            final User userTo = getPlayer(server, args, 1, true, false);
-            final String[] kits = args[0].toLowerCase(Locale.ENGLISH).split(",");
+        }
+        final User userTo = getPlayer(server, args, 1, true, false);
+        final String[] kits = args[0].toLowerCase(Locale.ENGLISH).split(",");
 
-            for (final String kitName : kits) {
-                final Kit kit = new Kit(kitName, ess);
-                kit.expandItems(userTo);
+        for (final String kitName : kits) {
+            final Kit kit = new Kit(kitName, ess);
+            kit.expandItems(userTo);
 
-                sender.sendMessage(tl("kitGiveTo", kitName, userTo.getDisplayName()));
-                userTo.sendMessage(tl("kitReceive", kitName));
-            }
+            sender.sendMessage(tl("kitGiveTo", kitName, userTo.getDisplayName()));
+            userTo.sendMessage(tl("kitReceive", kitName));
         }
     }
 
