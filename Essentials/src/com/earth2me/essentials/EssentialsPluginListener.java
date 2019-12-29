@@ -27,7 +27,6 @@ public class EssentialsPluginListener implements Listener, IConf {
         ess.getPermissionsHandler().checkPermissions();
         ess.getAlternativeCommandsHandler().addPlugin(event.getPlugin());
         if (!Methods.hasMethod() && Methods.setMethod(ess.getServer().getPluginManager())) {
-            ess.getPaymentMethod();
             ess.getLogger().log(Level.INFO, "Payment method found (" + Methods.getMethod().getLongName() + " version: " + Methods.getMethod().getVersion() + ")");
         }
     }
