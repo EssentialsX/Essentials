@@ -8,7 +8,6 @@ import org.bukkit.Location;
 import org.bukkit.Server;
 
 import java.util.Locale;
-import java.util.UUID;
 
 import static com.earth2me.essentials.I18n.tl;
 
@@ -53,10 +52,15 @@ public class Commandsethome extends EssentialsCommand {
         if (ess.getSettings().isSetSameHomeByConfirm()) {
             for (String h : usersHome.getHomes()) {
                 if (h.equals(name)) {
-                    if (confirmSetHome.add(user)) {
+                    if (!confirmSetHome.containsKey(user)) {
+                        confirmSetHome.put(user, h);
+
                         int time = (20 * ess.getSettings().getHomeOverwriteConfirmTime());
                         ess.getServer().getScheduler().runTaskLater(ess, () -> confirmSetHome.remove(user), time);
                         user.sendMessage(tl("confirmForSameHomeSetting", h, time));
+                        return;
+                    } else if (!h.equals(confirmSetHome.get(user))) {
+                        user.sendMessage("Confirmation canceled because you entered the wrong home name.");
                         return;
                     }
 
