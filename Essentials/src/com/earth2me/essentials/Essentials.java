@@ -119,7 +119,6 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
         super(new JavaPluginLoader(server), new PluginDescriptionFile("Essentials", "", "com.earth2me.essentials.Essentials"), null, null);
     }
 
-    @SuppressWarnings("unused")
     public void forceLoadClasses() {
         try {
             Class.forName(OfflinePlayer.class.getName());
@@ -450,9 +449,9 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
             try {
                 if (user == null) {
                     return cmd.tabComplete(getServer(), sender, commandLabel, command, args);
-                } else {
-                    return cmd.tabComplete(getServer(), user, commandLabel, command, args);
                 }
+
+                return cmd.tabComplete(getServer(), user, commandLabel, command, args);
             } catch (Exception ex) {
                 showError(sender, ex, commandLabel);
                 // Tab completion shouldn't fail
@@ -969,9 +968,9 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
 
             if (version.isHigherThanOrEqualTo(VersionUtil.v1_13_0_R01)) {
                 return new FlatItemDb(this);
-            } else {
-                return new LegacyItemDb(this);
             }
+
+            return new LegacyItemDb(this);
         }
     }
 }
