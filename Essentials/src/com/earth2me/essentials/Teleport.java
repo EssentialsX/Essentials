@@ -121,14 +121,15 @@ public class Teleport implements ITeleport {
 
     protected void now(IUser teleportee, ITarget target, TeleportCause cause) throws Exception {
         cancel(false);
-        teleportee.setLastLocation();
         Location loc = target.getLocation();
 
-        UserTeleportEvent event = new UserTeleportEvent(teleportee, cause);
+        UserTeleportEvent event = new UserTeleportEvent(teleportee, cause, loc);
         Bukkit.getServer().getPluginManager().callEvent(event);
         if (event.isCancelled()) {
             return;
         }
+
+        teleportee.setLastLocation();
 
         if (LocationUtil.isBlockUnsafeForUser(teleportee, loc.getWorld(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ())) {
             if (ess.getSettings().isTeleportSafetyEnabled()) {
