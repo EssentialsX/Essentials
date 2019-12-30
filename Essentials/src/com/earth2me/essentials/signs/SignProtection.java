@@ -75,7 +75,7 @@ public class SignProtection extends EssentialsSign {
                 final Block sign = entry.getKey().getBlock();
                 if (!hasAdjacentBlock(sign, block)) {
                     block.setType(Material.AIR);
-                    final Trade trade = new Trade(new ItemStack(Material.SIGN, 1), ess);
+                    final Trade trade = new Trade(new ItemStack(sign.getType(), 1), ess);
                     trade.pay(player, OverflowType.DROP);
                 }
             }

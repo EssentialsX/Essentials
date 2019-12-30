@@ -26,7 +26,7 @@ EssentialsX is almost a completely drop-in replacement for Essentials. However, 
 
 * **EssentialsX requires Java 8 or higher.** On older versions, the plugin may not work properly.
 
-* **EssentialsX supports Minecraft versions 1.8.8, 1.9.4, 1.10.2, 1.11.2, 1.12.2 and 1.13.2.**
+* **EssentialsX supports Minecraft versions 1.8.8, 1.9.4, 1.10.2, 1.11.2, 1.12.2, 1.13.2 and 1.14.4.**
 
 
 Support
@@ -58,7 +58,7 @@ Each module's jar can be found in `target/` inside each module's directory.
 Using EssentialsX in your plugin
 --------------------------------
 
-Writing a plugin and want to support EssentialsX? We have a Maven repository at https://ci.ender.zone/plugin/repository/everything/, and the EssentialsX artifact is `net.ess3:EssentialsX:2.16.1`. More information at the [wiki](https://github.com/EssentialsX/Essentials/wiki/Common-Issues#how-do-i-add-essentialsx-as-a-dependency).
+Writing a plugin and want to support EssentialsX? We have a Maven repository at https://ci.ender.zone/plugin/repository/everything/, and the EssentialsX artifact is `net.ess3:EssentialsX:2.17.0`. More information at the [wiki](https://github.com/EssentialsX/Essentials/wiki/Common-Issues#how-do-i-add-essentialsx-as-a-dependency).
 
 
 Contributing

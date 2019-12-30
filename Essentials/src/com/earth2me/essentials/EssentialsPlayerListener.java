@@ -596,6 +596,8 @@ public class EssentialsPlayerListener implements Listener {
 
     @EventHandler(priority = EventPriority.NORMAL)
     public void onPlayerInteract(final PlayerInteractEvent event) {
+        boolean updateActivity = true;
+
         switch (event.getAction()) {
             case RIGHT_CLICK_BLOCK:
                 if (!event.isCancelled() && MaterialUtil.isBed(event.getClickedBlock().getType()) && ess.getSettings().getUpdateBedAtDaytime()) {
@@ -622,8 +624,14 @@ public class EssentialsPlayerListener implements Listener {
                     }
                 }
                 break;
+            case PHYSICAL:
+                updateActivity = false;
+                break;
         }
+
+        if (updateActivity) {
             ess.getUser(event.getPlayer()).updateActivityOnInteract(true);
+        }
     }
 
     // This method allows the /jump lock feature to work, allows teleporting while flying #EasterEgg
@@ -727,7 +735,7 @@ public class EssentialsPlayerListener implements Listener {
             if (ess.getSettings().isDirectHatAllowed() && event.getClick() == ClickType.LEFT && event.getSlot() == 39
                 && event.getCursor().getType() != Material.AIR && event.getCursor().getType().getMaxDurability() == 0
                 && !MaterialUtil.isSkull(event.getCursor().getType())
-                && ess.getUser(event.getWhoClicked()).isAuthorized("essentials.hat")) {
+                && ess.getUser(event.getWhoClicked()).isAuthorized("essentials.hat") && !ess.getUser(event.getWhoClicked()).isAuthorized("essentials.hat.prevent-type." + event.getCursor().getType().name().toLowerCase())) {
                 event.setCancelled(true);
                 final PlayerInventory inv = (PlayerInventory) clickedInventory;
                 final ItemStack head = inv.getHelmet();
@@ -859,9 +867,9 @@ public class EssentialsPlayerListener implements Listener {
             PluginCommand command = ess.getServer().getPluginCommand(commandLabel);
 
             return command != null
-                && command.getPlugin().getName().equals("Essentials")
+                && command.getPlugin() == ess
                 && (ess.getSettings().isCommandOverridden(commandLabel) || (ess.getAlternativeCommandsHandler().getAlternative(commandLabel) == null))
-                && !user.isAuthorized("essentials." + command.getName());
+                && !user.isAuthorized(command.getName().equals("r") ? "essentials.msg" : "essentials." + command.getName());
         }
     }
 }

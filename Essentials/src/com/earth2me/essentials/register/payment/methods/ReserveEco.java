@@ -19,7 +19,7 @@ public class ReserveEco implements Method {
      * version then cast.
      * <p/>
      * <pre>
-     *    if(method.getName().equalsIgnoreCase("iConomy"))
+     *    if (method.getName().equalsIgnoreCase("iConomy"))
      *     iConomy plugin = ((iConomy)method.getPlugin());</pre>
      *
      * @return <code>Object</code>
@@ -74,7 +74,7 @@ public class ReserveEco implements Method {
      */
     @Override
     public int fractionalDigits() {
-        return 0;
+        return -1;
     }
 
     /**
@@ -172,7 +172,7 @@ public class ReserveEco implements Method {
      */
     @Override
     public MethodAccount getAccount(String name) {
-        if(!hasAccount(name)) return null;
+        if (!hasAccount(name)) return null;
         return new ReserveAccount(name, economy);
     }
 
@@ -200,7 +200,7 @@ public class ReserveEco implements Method {
     @Override
     public boolean isCompatible(Plugin plugin) {
         try {
-            EconomyAPI economyAPI = ((Reserve)plugin).economy();
+            EconomyAPI economyAPI = ((Reserve) plugin).economy();
             return plugin.getName().equals("Reserve") && economyAPI != null && !economyAPI.name().equals("Essentials Economy");
         } catch (LinkageError | Exception e) {
             return false;
@@ -216,8 +216,8 @@ public class ReserveEco implements Method {
     public void setPlugin(Plugin plugin) {
         this.plugin = plugin;
 
-        if(((Reserve)plugin).economyProvided()) {
-            this.economy = ((Reserve)plugin).economy();
+        if (((Reserve) plugin).economyProvided()) {
+            this.economy = ((Reserve) plugin).economy();
         }
     }
 

@@ -18,6 +18,7 @@ import org.bukkit.util.Vector;
 import java.io.File;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 import java.util.function.Predicate;
@@ -112,7 +113,7 @@ public class FakeWorld implements World {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    @Override
+    //@Override
     public boolean unloadChunk(int i, int i1, boolean bln, boolean bln1) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
@@ -122,7 +123,7 @@ public class FakeWorld implements World {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    @Override
+    //@Override
     public boolean unloadChunkRequest(int i, int i1, boolean bln) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
@@ -153,6 +154,31 @@ public class FakeWorld implements World {
     }
 
     @Override
+    public boolean addPluginChunkTicket(int i, int i1, Plugin plugin) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public boolean removePluginChunkTicket(int i, int i1, Plugin plugin) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public void removePluginChunkTickets(Plugin plugin) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public Collection<Plugin> getPluginChunkTickets(int i, int i1) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public Map<Plugin, Collection<Chunk>> getPluginChunkTickets() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
     public Item dropItem(Location lctn, ItemStack is) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
@@ -168,7 +194,7 @@ public class FakeWorld implements World {
     }
 
     @Override
-    public <T extends Arrow> T spawnArrow(Location location, Vector vector, float v, float v1, Class<T> aClass) {
+    public <T extends AbstractArrow> T spawnArrow(Location location, Vector direction, float speed, float spread, Class<T> clazz) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
