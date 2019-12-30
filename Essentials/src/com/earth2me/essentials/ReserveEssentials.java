@@ -135,7 +135,7 @@ public class ReserveEssentials implements EconomyAPI {
      */
     @Override
     public CompletableFuture<Boolean> asyncHasCurrency(String name) {
-        return CompletableFuture.supplyAsync(()->hasCurrency(name)); //Always return true here as Essentials only supports one currency.
+        return CompletableFuture.supplyAsync(() -> hasCurrency(name)); //Always return true here as Essentials only supports one currency.
     }
 
     /**
@@ -146,7 +146,7 @@ public class ReserveEssentials implements EconomyAPI {
      */
     @Override
     public CompletableFuture<Boolean> asyncHasCurrency(String name, String world) {
-        return CompletableFuture.supplyAsync(()->hasCurrency(name, world)); //Always return true here as Essentials only supports one currency.
+        return CompletableFuture.supplyAsync(() -> hasCurrency(name, world)); //Always return true here as Essentials only supports one currency.
     }
 
     /**
@@ -176,7 +176,7 @@ public class ReserveEssentials implements EconomyAPI {
      */
     @Override
     public CompletableFuture<Boolean> asyncHasAccount(String identifier) {
-        return CompletableFuture.supplyAsync(()->Economy.playerExists(identifier));
+        return CompletableFuture.supplyAsync(() -> Economy.playerExists(identifier));
     }
 
     /**
@@ -186,7 +186,7 @@ public class ReserveEssentials implements EconomyAPI {
      */
     @Override
     public CompletableFuture<Boolean> asyncHasAccount(UUID identifier) {
-        return CompletableFuture.supplyAsync(()->Economy.playerExists(getName(identifier)));
+        return CompletableFuture.supplyAsync(() -> Economy.playerExists(getName(identifier)));
     }
 
     /**
@@ -218,7 +218,7 @@ public class ReserveEssentials implements EconomyAPI {
      */
     @Override
     public CompletableFuture<Boolean> asyncCreateAccount(String identifier) {
-        return CompletableFuture.supplyAsync(()->{
+        return CompletableFuture.supplyAsync(() -> {
             if(hasAccount(identifier)) return false;
             return Economy.createNPC(identifier);
         });
@@ -231,7 +231,7 @@ public class ReserveEssentials implements EconomyAPI {
      */
     @Override
     public CompletableFuture<Boolean> asyncCreateAccount(UUID identifier) {
-        return CompletableFuture.supplyAsync(()->{
+        return CompletableFuture.supplyAsync(() -> {
             if(hasAccount(identifier)) return false;
             return Economy.createNPC(getName(identifier));
         });
@@ -274,7 +274,7 @@ public class ReserveEssentials implements EconomyAPI {
      */
     @Override
     public CompletableFuture<Boolean> asyncDeleteAccount(String identifier) {
-        return CompletableFuture.supplyAsync(()->{
+        return CompletableFuture.supplyAsync(() -> {
             try {
                 Economy.resetBalance(identifier);
             } catch(UserDoesNotExistException | NoLoanPermittedException ignore) {
@@ -291,7 +291,7 @@ public class ReserveEssentials implements EconomyAPI {
      */
     @Override
     public CompletableFuture<Boolean> asyncDeleteAccount(UUID identifier) {
-        return CompletableFuture.supplyAsync(()->{
+        return CompletableFuture.supplyAsync(() -> {
             try {
                 Economy.resetBalance(getName(identifier));
             } catch(UserDoesNotExistException | NoLoanPermittedException ignore) {
@@ -397,7 +397,7 @@ public class ReserveEssentials implements EconomyAPI {
      */
     @Override
     public CompletableFuture<Boolean> asyncCanWithdraw(String identifier, String accessor) {
-        return CompletableFuture.supplyAsync(()->false);
+        return CompletableFuture.supplyAsync(() -> false);
     }
 
     /**
@@ -408,7 +408,7 @@ public class ReserveEssentials implements EconomyAPI {
      */
     @Override
     public CompletableFuture<Boolean> asyncCanWithdraw(String identifier, UUID accessor) {
-        return CompletableFuture.supplyAsync(()->false);
+        return CompletableFuture.supplyAsync(() -> false);
     }
 
     /**
@@ -419,7 +419,7 @@ public class ReserveEssentials implements EconomyAPI {
      */
     @Override
     public CompletableFuture<Boolean> asyncCanWithdraw(UUID identifier, String accessor) {
-        return CompletableFuture.supplyAsync(()->false);
+        return CompletableFuture.supplyAsync(() -> false);
     }
 
     /**
@@ -430,7 +430,7 @@ public class ReserveEssentials implements EconomyAPI {
      */
     @Override
     public CompletableFuture<Boolean> asyncCanWithdraw(UUID identifier, UUID accessor) {
-        return CompletableFuture.supplyAsync(()->false);
+        return CompletableFuture.supplyAsync(() -> false);
     }
 
     /**
@@ -485,7 +485,7 @@ public class ReserveEssentials implements EconomyAPI {
      */
     @Override
     public CompletableFuture<Boolean> asyncCanDeposit(String identifier, String accessor) {
-        return CompletableFuture.supplyAsync(()->false);
+        return CompletableFuture.supplyAsync(() -> false);
     }
 
     /**
@@ -496,7 +496,7 @@ public class ReserveEssentials implements EconomyAPI {
      */
     @Override
     public CompletableFuture<Boolean> asyncCanDeposit(String identifier, UUID accessor) {
-        return CompletableFuture.supplyAsync(()->false);
+        return CompletableFuture.supplyAsync(() -> false);
     }
 
     /**
@@ -507,7 +507,7 @@ public class ReserveEssentials implements EconomyAPI {
      */
     @Override
     public CompletableFuture<Boolean> asyncCanDeposit(UUID identifier, String accessor) {
-        return CompletableFuture.supplyAsync(()->false);
+        return CompletableFuture.supplyAsync(() -> false);
     }
 
     /**
@@ -518,7 +518,7 @@ public class ReserveEssentials implements EconomyAPI {
      */
     @Override
     public CompletableFuture<Boolean> asyncCanDeposit(UUID identifier, UUID accessor) {
-        return CompletableFuture.supplyAsync(()->false);
+        return CompletableFuture.supplyAsync(() -> false);
     }
 
     /**
@@ -604,7 +604,7 @@ public class ReserveEssentials implements EconomyAPI {
      */
     @Override
     public CompletableFuture<BigDecimal> asyncGetHoldings(String identifier) {
-        return CompletableFuture.supplyAsync(()->getHoldings(identifier));
+        return CompletableFuture.supplyAsync(() -> getHoldings(identifier));
     }
 
     /**
@@ -614,7 +614,7 @@ public class ReserveEssentials implements EconomyAPI {
      */
     @Override
     public CompletableFuture<BigDecimal> asyncGetHoldings(UUID identifier) {
-        return CompletableFuture.supplyAsync(()->getHoldings(identifier));
+        return CompletableFuture.supplyAsync(() -> getHoldings(identifier));
     }
 
     /**
@@ -625,7 +625,7 @@ public class ReserveEssentials implements EconomyAPI {
      */
     @Override
     public CompletableFuture<BigDecimal> asyncGetHoldings(String identifier, String world) {
-        return CompletableFuture.supplyAsync(()->getHoldings(identifier));
+        return CompletableFuture.supplyAsync(() -> getHoldings(identifier));
     }
 
     /**
@@ -636,7 +636,7 @@ public class ReserveEssentials implements EconomyAPI {
      */
     @Override
     public CompletableFuture<BigDecimal> asyncGetHoldings(UUID identifier, String world) {
-        return CompletableFuture.supplyAsync(()->getHoldings(identifier));
+        return CompletableFuture.supplyAsync(() -> getHoldings(identifier));
     }
 
     /**
@@ -648,7 +648,7 @@ public class ReserveEssentials implements EconomyAPI {
      */
     @Override
     public CompletableFuture<BigDecimal> asyncGetHoldings(String identifier, String world, String currency) {
-        return CompletableFuture.supplyAsync(()->getHoldings(identifier));
+        return CompletableFuture.supplyAsync(() -> getHoldings(identifier));
     }
 
     /**
@@ -660,7 +660,7 @@ public class ReserveEssentials implements EconomyAPI {
      */
     @Override
     public CompletableFuture<BigDecimal> asyncGetHoldings(UUID identifier, String world, String currency) {
-        return CompletableFuture.supplyAsync(()->getHoldings(identifier));
+        return CompletableFuture.supplyAsync(() -> getHoldings(identifier));
     }
 
     /**
@@ -751,7 +751,7 @@ public class ReserveEssentials implements EconomyAPI {
      */
     @Override
     public CompletableFuture<Boolean> asyncHasHoldings(String identifier, BigDecimal amount) {
-        return CompletableFuture.supplyAsync(()->hasHoldings(identifier, amount));
+        return CompletableFuture.supplyAsync(() -> hasHoldings(identifier, amount));
     }
 
     /**
@@ -762,7 +762,7 @@ public class ReserveEssentials implements EconomyAPI {
      */
     @Override
     public CompletableFuture<Boolean> asyncHasHoldings(UUID identifier, BigDecimal amount) {
-        return CompletableFuture.supplyAsync(()->hasHoldings(identifier, amount));
+        return CompletableFuture.supplyAsync(() -> hasHoldings(identifier, amount));
     }
 
     /**
@@ -774,7 +774,7 @@ public class ReserveEssentials implements EconomyAPI {
      */
     @Override
     public CompletableFuture<Boolean> asyncHasHoldings(String identifier, BigDecimal amount, String world) {
-        return CompletableFuture.supplyAsync(()->hasHoldings(identifier, amount));
+        return CompletableFuture.supplyAsync(() -> hasHoldings(identifier, amount));
     }
 
     /**
@@ -786,7 +786,7 @@ public class ReserveEssentials implements EconomyAPI {
      */
     @Override
     public CompletableFuture<Boolean> asyncHasHoldings(UUID identifier, BigDecimal amount, String world) {
-        return CompletableFuture.supplyAsync(()->hasHoldings(identifier, amount));
+        return CompletableFuture.supplyAsync(() -> hasHoldings(identifier, amount));
     }
 
     /**
@@ -799,7 +799,7 @@ public class ReserveEssentials implements EconomyAPI {
      */
     @Override
     public CompletableFuture<Boolean> asyncHasHoldings(String identifier, BigDecimal amount, String world, String currency) {
-        return CompletableFuture.supplyAsync(()->hasHoldings(identifier, amount));
+        return CompletableFuture.supplyAsync(() -> hasHoldings(identifier, amount));
     }
 
     /**
@@ -812,7 +812,7 @@ public class ReserveEssentials implements EconomyAPI {
      */
     @Override
     public CompletableFuture<Boolean> asyncHasHoldings(UUID identifier, BigDecimal amount, String world, String currency) {
-        return CompletableFuture.supplyAsync(()->hasHoldings(identifier, amount));
+        return CompletableFuture.supplyAsync(() -> hasHoldings(identifier, amount));
     }
 
     /**
@@ -907,7 +907,7 @@ public class ReserveEssentials implements EconomyAPI {
      */
     @Override
     public CompletableFuture<Boolean> asyncSetHoldings(String identifier, BigDecimal amount) {
-        return CompletableFuture.supplyAsync(()->setHoldings(identifier, amount));
+        return CompletableFuture.supplyAsync(() -> setHoldings(identifier, amount));
     }
 
     /**
@@ -918,7 +918,7 @@ public class ReserveEssentials implements EconomyAPI {
      */
     @Override
     public CompletableFuture<Boolean> asyncSetHoldings(UUID identifier, BigDecimal amount) {
-        return CompletableFuture.supplyAsync(()->setHoldings(identifier, amount));
+        return CompletableFuture.supplyAsync(() -> setHoldings(identifier, amount));
     }
 
     /**
@@ -930,7 +930,7 @@ public class ReserveEssentials implements EconomyAPI {
      */
     @Override
     public CompletableFuture<Boolean> asyncSetHoldings(String identifier, BigDecimal amount, String world) {
-        return CompletableFuture.supplyAsync(()->setHoldings(identifier, amount));
+        return CompletableFuture.supplyAsync(() -> setHoldings(identifier, amount));
     }
 
     /**
@@ -942,7 +942,7 @@ public class ReserveEssentials implements EconomyAPI {
      */
     @Override
     public CompletableFuture<Boolean> asyncSetHoldings(UUID identifier, BigDecimal amount, String world) {
-        return CompletableFuture.supplyAsync(()->setHoldings(identifier, amount));
+        return CompletableFuture.supplyAsync(() -> setHoldings(identifier, amount));
     }
 
     /**
@@ -955,7 +955,7 @@ public class ReserveEssentials implements EconomyAPI {
      */
     @Override
     public CompletableFuture<Boolean> asyncSetHoldings(String identifier, BigDecimal amount, String world, String currency) {
-        return CompletableFuture.supplyAsync(()->setHoldings(identifier, amount));
+        return CompletableFuture.supplyAsync(() -> setHoldings(identifier, amount));
     }
 
     /**
@@ -968,7 +968,7 @@ public class ReserveEssentials implements EconomyAPI {
      */
     @Override
     public CompletableFuture<Boolean> asyncSetHoldings(UUID identifier, BigDecimal amount, String world, String currency) {
-        return CompletableFuture.supplyAsync(()->setHoldings(identifier, amount));
+        return CompletableFuture.supplyAsync(() -> setHoldings(identifier, amount));
     }
 
     /**
@@ -1058,7 +1058,7 @@ public class ReserveEssentials implements EconomyAPI {
      */
     @Override
     public CompletableFuture<Boolean> asyncAddHoldings(String identifier, BigDecimal amount) {
-        return CompletableFuture.supplyAsync(()->addHoldings(identifier, amount));
+        return CompletableFuture.supplyAsync(() -> addHoldings(identifier, amount));
     }
 
     /**
@@ -1069,7 +1069,7 @@ public class ReserveEssentials implements EconomyAPI {
      */
     @Override
     public CompletableFuture<Boolean> asyncAddHoldings(UUID identifier, BigDecimal amount) {
-        return CompletableFuture.supplyAsync(()->addHoldings(identifier, amount));
+        return CompletableFuture.supplyAsync(() -> addHoldings(identifier, amount));
     }
 
     /**
@@ -1081,7 +1081,7 @@ public class ReserveEssentials implements EconomyAPI {
      */
     @Override
     public CompletableFuture<Boolean> asyncAddHoldings(String identifier, BigDecimal amount, String world) {
-        return CompletableFuture.supplyAsync(()->addHoldings(identifier, amount));
+        return CompletableFuture.supplyAsync(() -> addHoldings(identifier, amount));
     }
 
     /**
@@ -1093,7 +1093,7 @@ public class ReserveEssentials implements EconomyAPI {
      */
     @Override
     public CompletableFuture<Boolean> asyncAddHoldings(UUID identifier, BigDecimal amount, String world) {
-        return CompletableFuture.supplyAsync(()->addHoldings(identifier, amount));
+        return CompletableFuture.supplyAsync(() -> addHoldings(identifier, amount));
     }
 
     /**
@@ -1106,7 +1106,7 @@ public class ReserveEssentials implements EconomyAPI {
      */
     @Override
     public CompletableFuture<Boolean> asyncAddHoldings(String identifier, BigDecimal amount, String world, String currency) {
-        return CompletableFuture.supplyAsync(()->addHoldings(identifier, amount));
+        return CompletableFuture.supplyAsync(() -> addHoldings(identifier, amount));
     }
 
     /**
@@ -1119,7 +1119,7 @@ public class ReserveEssentials implements EconomyAPI {
      */
     @Override
     public CompletableFuture<Boolean> asyncAddHoldings(UUID identifier, BigDecimal amount, String world, String currency) {
-        return CompletableFuture.supplyAsync(()->addHoldings(identifier, amount));
+        return CompletableFuture.supplyAsync(() -> addHoldings(identifier, amount));
     }
 
     /**
@@ -1209,7 +1209,7 @@ public class ReserveEssentials implements EconomyAPI {
      */
     @Override
     public CompletableFuture<Boolean> asyncCanAddHoldings(String identifier, BigDecimal amount) {
-        return CompletableFuture.supplyAsync(()->canAddHoldings(identifier, amount));
+        return CompletableFuture.supplyAsync(() -> canAddHoldings(identifier, amount));
     }
 
     /**
@@ -1221,7 +1221,7 @@ public class ReserveEssentials implements EconomyAPI {
      */
     @Override
     public CompletableFuture<Boolean> asyncCanAddHoldings(UUID identifier, BigDecimal amount) {
-        return CompletableFuture.supplyAsync(()->canAddHoldings(identifier, amount));
+        return CompletableFuture.supplyAsync(() -> canAddHoldings(identifier, amount));
     }
 
     /**
@@ -1234,7 +1234,7 @@ public class ReserveEssentials implements EconomyAPI {
      */
     @Override
     public CompletableFuture<Boolean> asyncCanAddHoldings(String identifier, BigDecimal amount, String world) {
-        return CompletableFuture.supplyAsync(()->canAddHoldings(identifier, amount));
+        return CompletableFuture.supplyAsync(() -> canAddHoldings(identifier, amount));
     }
 
     /**
@@ -1247,7 +1247,7 @@ public class ReserveEssentials implements EconomyAPI {
      */
     @Override
     public CompletableFuture<Boolean> asyncCanAddHoldings(UUID identifier, BigDecimal amount, String world) {
-        return CompletableFuture.supplyAsync(()->canAddHoldings(identifier, amount));
+        return CompletableFuture.supplyAsync(() -> canAddHoldings(identifier, amount));
     }
 
     /**
@@ -1261,7 +1261,7 @@ public class ReserveEssentials implements EconomyAPI {
      */
     @Override
     public CompletableFuture<Boolean> asyncCanAddHoldings(String identifier, BigDecimal amount, String world, String currency) {
-        return CompletableFuture.supplyAsync(()->canAddHoldings(identifier, amount));
+        return CompletableFuture.supplyAsync(() -> canAddHoldings(identifier, amount));
     }
 
     /**
@@ -1275,7 +1275,7 @@ public class ReserveEssentials implements EconomyAPI {
      */
     @Override
     public CompletableFuture<Boolean> asyncCanAddHoldings(UUID identifier, BigDecimal amount, String world, String currency) {
-        return CompletableFuture.supplyAsync(()->canAddHoldings(identifier, amount));
+        return CompletableFuture.supplyAsync(() -> canAddHoldings(identifier, amount));
     }
 
     /**
@@ -1365,7 +1365,7 @@ public class ReserveEssentials implements EconomyAPI {
      */
     @Override
     public CompletableFuture<Boolean> asyncRemoveHoldings(String identifier, BigDecimal amount) {
-        return CompletableFuture.supplyAsync(()->removeHoldings(identifier, amount));
+        return CompletableFuture.supplyAsync(() -> removeHoldings(identifier, amount));
     }
 
     /**
@@ -1376,7 +1376,7 @@ public class ReserveEssentials implements EconomyAPI {
      */
     @Override
     public CompletableFuture<Boolean> asyncRemoveHoldings(UUID identifier, BigDecimal amount) {
-        return CompletableFuture.supplyAsync(()->removeHoldings(identifier, amount));
+        return CompletableFuture.supplyAsync(() -> removeHoldings(identifier, amount));
     }
 
     /**
@@ -1388,7 +1388,7 @@ public class ReserveEssentials implements EconomyAPI {
      */
     @Override
     public CompletableFuture<Boolean> asyncRemoveHoldings(String identifier, BigDecimal amount, String world) {
-        return CompletableFuture.supplyAsync(()->removeHoldings(identifier, amount));
+        return CompletableFuture.supplyAsync(() -> removeHoldings(identifier, amount));
     }
 
     /**
@@ -1400,7 +1400,7 @@ public class ReserveEssentials implements EconomyAPI {
      */
     @Override
     public CompletableFuture<Boolean> asyncRemoveHoldings(UUID identifier, BigDecimal amount, String world) {
-        return CompletableFuture.supplyAsync(()->removeHoldings(identifier, amount));
+        return CompletableFuture.supplyAsync(() -> removeHoldings(identifier, amount));
     }
 
     /**
@@ -1413,7 +1413,7 @@ public class ReserveEssentials implements EconomyAPI {
      */
     @Override
     public CompletableFuture<Boolean> asyncRemoveHoldings(String identifier, BigDecimal amount, String world, String currency) {
-        return CompletableFuture.supplyAsync(()->removeHoldings(identifier, amount));
+        return CompletableFuture.supplyAsync(() -> removeHoldings(identifier, amount));
     }
 
     /**
@@ -1426,7 +1426,7 @@ public class ReserveEssentials implements EconomyAPI {
      */
     @Override
     public CompletableFuture<Boolean> asyncRemoveHoldings(UUID identifier, BigDecimal amount, String world, String currency) {
-        return CompletableFuture.supplyAsync(()->removeHoldings(identifier, amount));
+        return CompletableFuture.supplyAsync(() -> removeHoldings(identifier, amount));
     }
 
     /**
@@ -1516,7 +1516,7 @@ public class ReserveEssentials implements EconomyAPI {
      */
     @Override
     public CompletableFuture<Boolean> asyncCanRemoveHoldings(String identifier, BigDecimal amount) {
-        return CompletableFuture.supplyAsync(()->canRemoveHoldings(identifier, amount));
+        return CompletableFuture.supplyAsync(() -> canRemoveHoldings(identifier, amount));
     }
 
     /**
@@ -1528,7 +1528,7 @@ public class ReserveEssentials implements EconomyAPI {
      */
     @Override
     public CompletableFuture<Boolean> asyncCanRemoveHoldings(UUID identifier, BigDecimal amount) {
-        return CompletableFuture.supplyAsync(()->canRemoveHoldings(identifier, amount));
+        return CompletableFuture.supplyAsync(() -> canRemoveHoldings(identifier, amount));
     }
 
     /**
@@ -1541,7 +1541,7 @@ public class ReserveEssentials implements EconomyAPI {
      */
     @Override
     public CompletableFuture<Boolean> asyncCanRemoveHoldings(String identifier, BigDecimal amount, String world) {
-        return CompletableFuture.supplyAsync(()->canRemoveHoldings(identifier, amount));
+        return CompletableFuture.supplyAsync(() -> canRemoveHoldings(identifier, amount));
     }
 
     /**
@@ -1554,7 +1554,7 @@ public class ReserveEssentials implements EconomyAPI {
      */
     @Override
     public CompletableFuture<Boolean> asyncCanRemoveHoldings(UUID identifier, BigDecimal amount, String world) {
-        return CompletableFuture.supplyAsync(()->canRemoveHoldings(identifier, amount));
+        return CompletableFuture.supplyAsync(() -> canRemoveHoldings(identifier, amount));
     }
 
     /**
@@ -1568,7 +1568,7 @@ public class ReserveEssentials implements EconomyAPI {
      */
     @Override
     public CompletableFuture<Boolean> asyncCanRemoveHoldings(String identifier, BigDecimal amount, String world, String currency) {
-        return CompletableFuture.supplyAsync(()->canRemoveHoldings(identifier, amount));
+        return CompletableFuture.supplyAsync(() -> canRemoveHoldings(identifier, amount));
     }
 
     /**
@@ -1582,7 +1582,7 @@ public class ReserveEssentials implements EconomyAPI {
      */
     @Override
     public CompletableFuture<Boolean> asyncCanRemoveHoldings(UUID identifier, BigDecimal amount, String world, String currency) {
-        return CompletableFuture.supplyAsync(()->canRemoveHoldings(identifier, amount));
+        return CompletableFuture.supplyAsync(() -> canRemoveHoldings(identifier, amount));
     }
 
     /**
@@ -1596,7 +1596,7 @@ public class ReserveEssentials implements EconomyAPI {
      */
     @Override
     public CompletableFuture<Boolean> asyncTransferHoldings(String fromIdentifier, String toIdentifier, BigDecimal amount) {
-        return CompletableFuture.supplyAsync(()->transferHoldings(fromIdentifier, toIdentifier, amount));
+        return CompletableFuture.supplyAsync(() -> transferHoldings(fromIdentifier, toIdentifier, amount));
     }
 
     /**
@@ -1609,7 +1609,7 @@ public class ReserveEssentials implements EconomyAPI {
      */
     @Override
     public CompletableFuture<Boolean> asyncTransferHoldings(String fromIdentifier, String toIdentifier, BigDecimal amount, String world) {
-        return CompletableFuture.supplyAsync(()->transferHoldings(fromIdentifier, toIdentifier, amount, world));
+        return CompletableFuture.supplyAsync(() -> transferHoldings(fromIdentifier, toIdentifier, amount, world));
     }
 
     /**
@@ -1623,7 +1623,7 @@ public class ReserveEssentials implements EconomyAPI {
      */
     @Override
     public CompletableFuture<Boolean> asyncTransferHoldings(String fromIdentifier, String toIdentifier, BigDecimal amount, String world, String currency) {
-        return CompletableFuture.supplyAsync(()->transferHoldings(fromIdentifier, toIdentifier, amount, world, currency));
+        return CompletableFuture.supplyAsync(() -> transferHoldings(fromIdentifier, toIdentifier, amount, world, currency));
     }
 
     /**
@@ -1635,7 +1635,7 @@ public class ReserveEssentials implements EconomyAPI {
      */
     @Override
     public CompletableFuture<Boolean> asyncTransferHoldings(UUID fromIdentifier, UUID toIdentifier, BigDecimal amount) {
-        return CompletableFuture.supplyAsync(()->transferHoldings(fromIdentifier, toIdentifier, amount));
+        return CompletableFuture.supplyAsync(() -> transferHoldings(fromIdentifier, toIdentifier, amount));
     }
 
     /**
@@ -1648,7 +1648,7 @@ public class ReserveEssentials implements EconomyAPI {
      */
     @Override
     public CompletableFuture<Boolean> asyncTransferHoldings(UUID fromIdentifier, UUID toIdentifier, BigDecimal amount, String world) {
-        return CompletableFuture.supplyAsync(()->transferHoldings(fromIdentifier, toIdentifier, amount, world));
+        return CompletableFuture.supplyAsync(() -> transferHoldings(fromIdentifier, toIdentifier, amount, world));
     }
 
     /**
@@ -1662,7 +1662,7 @@ public class ReserveEssentials implements EconomyAPI {
      */
     @Override
     public CompletableFuture<Boolean> asyncTransferHoldings(UUID fromIdentifier, UUID toIdentifier, BigDecimal amount, String world, String currency) {
-        return CompletableFuture.supplyAsync(()->transferHoldings(fromIdentifier, toIdentifier, amount, world, currency));
+        return CompletableFuture.supplyAsync(() -> transferHoldings(fromIdentifier, toIdentifier, amount, world, currency));
     }
 
     /**
@@ -1675,7 +1675,7 @@ public class ReserveEssentials implements EconomyAPI {
      */
     @Override
     public CompletableFuture<Boolean> asyncCanTransferHoldings(String fromIdentifier, String toIdentifier, BigDecimal amount) {
-        return CompletableFuture.supplyAsync(()->canTransferHoldings(fromIdentifier, toIdentifier, amount));
+        return CompletableFuture.supplyAsync(() -> canTransferHoldings(fromIdentifier, toIdentifier, amount));
     }
 
     /**
@@ -1689,7 +1689,7 @@ public class ReserveEssentials implements EconomyAPI {
      */
     @Override
     public CompletableFuture<Boolean> asyncCanTransferHoldings(String fromIdentifier, String toIdentifier, BigDecimal amount, String world) {
-        return CompletableFuture.supplyAsync(()->canTransferHoldings(fromIdentifier, toIdentifier, amount, world));
+        return CompletableFuture.supplyAsync(() -> canTransferHoldings(fromIdentifier, toIdentifier, amount, world));
     }
 
     /**
@@ -1704,7 +1704,7 @@ public class ReserveEssentials implements EconomyAPI {
      */
     @Override
     public CompletableFuture<Boolean> asyncCanTransferHoldings(String fromIdentifier, String toIdentifier, BigDecimal amount, String world, String currency) {
-        return CompletableFuture.supplyAsync(()->canTransferHoldings(fromIdentifier, toIdentifier, amount, world, currency));
+        return CompletableFuture.supplyAsync(() -> canTransferHoldings(fromIdentifier, toIdentifier, amount, world, currency));
     }
 
     /**
@@ -1717,7 +1717,7 @@ public class ReserveEssentials implements EconomyAPI {
      */
     @Override
     public CompletableFuture<Boolean> asyncCanTransferHoldings(UUID fromIdentifier, UUID toIdentifier, BigDecimal amount) {
-        return CompletableFuture.supplyAsync(()->canTransferHoldings(fromIdentifier, toIdentifier, amount));
+        return CompletableFuture.supplyAsync(() -> canTransferHoldings(fromIdentifier, toIdentifier, amount));
     }
 
     /**
@@ -1734,7 +1734,7 @@ public class ReserveEssentials implements EconomyAPI {
      */
     @Override
     public CompletableFuture<Boolean> asyncCanTransferHoldings(UUID fromIdentifier, UUID toIdentifier, BigDecimal amount, String world) {
-        return CompletableFuture.supplyAsync(()->canTransferHoldings(fromIdentifier, toIdentifier, amount, world));
+        return CompletableFuture.supplyAsync(() -> canTransferHoldings(fromIdentifier, toIdentifier, amount, world));
     }
 
     /**
@@ -1752,7 +1752,7 @@ public class ReserveEssentials implements EconomyAPI {
      */
     @Override
     public CompletableFuture<Boolean> asyncCanTransferHoldings(UUID fromIdentifier, UUID toIdentifier, BigDecimal amount, String world, String currency) {
-        return CompletableFuture.supplyAsync(()->canTransferHoldings(fromIdentifier, toIdentifier, amount, world, currency));
+        return CompletableFuture.supplyAsync(() -> canTransferHoldings(fromIdentifier, toIdentifier, amount, world, currency));
     }
 
     /**
@@ -1813,7 +1813,7 @@ public class ReserveEssentials implements EconomyAPI {
      */
     @Override
     public CompletableFuture<Boolean> asyncPurgeAccounts() {
-        return CompletableFuture.supplyAsync(()->false);
+        return CompletableFuture.supplyAsync(() -> false);
     }
 
     /**
@@ -1823,6 +1823,6 @@ public class ReserveEssentials implements EconomyAPI {
      */
     @Override
     public CompletableFuture<Boolean> asyncPurgeAccountsUnder(BigDecimal amount) {
-        return CompletableFuture.supplyAsync(()->false);
+        return CompletableFuture.supplyAsync(() -> false);
     }
 }
