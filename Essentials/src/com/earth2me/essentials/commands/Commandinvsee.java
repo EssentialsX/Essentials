@@ -38,9 +38,7 @@ public class Commandinvsee extends EssentialsCommand {
         if (args.length == 1) {
             return getPlayers(server, user);
         }
-        //if (args.length == 2) {
-        //    return Lists.newArrayList("equipped");
-        //}
+
         return Collections.emptyList();
     }
 }

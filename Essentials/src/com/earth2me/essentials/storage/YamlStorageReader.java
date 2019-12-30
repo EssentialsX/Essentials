@@ -13,7 +13,7 @@ import java.util.concurrent.locks.ReentrantLock;
 
 public class YamlStorageReader implements IStorageReader {
     private transient static final Map<Class, Yaml> PREPARED_YAMLS = Collections.synchronizedMap(new HashMap<Class, Yaml>());
-    private transient static final Map<Class, ReentrantLock> LOCKS = new HashMap<Class, ReentrantLock>();
+    private transient static final Map<Class, ReentrantLock> LOCKS = new HashMap<>();
     private transient final Reader reader;
     private transient final Plugin plugin;
 
@@ -54,7 +54,7 @@ public class YamlStorageReader implements IStorageReader {
 
     private Constructor prepareConstructor(final Class<?> clazz) {
         final Constructor constructor = new BukkitConstructor(clazz, plugin);
-        final Set<Class> classes = new HashSet<Class>();
+        final Set<Class> classes = new HashSet<>();
 
         prepareConstructor(constructor, classes, clazz);
         return constructor;

@@ -61,7 +61,7 @@ public class Commanddelhome extends EssentialsCommand {
                 return getPlayers(server, sender);
             }
 
-            return user != null ? user.getHomes() : Collections.emptyList();
+            return user.getHomes();
         } else if (args.length == 2 && canDelOthers) {
             try {
                 user = getPlayer(server, args, 0, true, true);
