@@ -17,13 +17,13 @@ public class HelpInput implements IText {
     private static final String PERMISSION = "permission";
     private static final String PERMISSIONS = "permissions";
     private static final Logger logger = Logger.getLogger("Essentials");
-    private final transient List<String> lines = new ArrayList<String>();
-    private final transient List<String> chapters = new ArrayList<String>();
-    private final transient Map<String, Integer> bookmarks = new HashMap<String, Integer>();
+    private final transient List<String> lines = new ArrayList<>();
+    private final transient List<String> chapters = new ArrayList<>();
+    private final transient Map<String, Integer> bookmarks = new HashMap<>();
 
     public HelpInput(final User user, final String match, final IEssentials ess) {
         boolean reported = false;
-        final List<String> newLines = new ArrayList<String>();
+        final List<String> newLines = new ArrayList<>();
         String pluginName = "";
         String pluginNameLow = "";
         if (!match.equalsIgnoreCase("")) {
@@ -32,7 +32,7 @@ public class HelpInput implements IText {
 
         for (Plugin p : ess.getServer().getPluginManager().getPlugins()) {
             try {
-                final List<String> pluginLines = new ArrayList<String>();
+                final List<String> pluginLines = new ArrayList<>();
                 final PluginDescriptionFile desc = p.getDescription();
                 final Map<String, Map<String, Object>> cmds = desc.getCommands();
                 pluginName = p.getDescription().getName();

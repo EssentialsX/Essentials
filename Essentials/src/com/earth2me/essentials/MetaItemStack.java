@@ -161,7 +161,7 @@ public class MetaItemStack {
             meta.setDisplayName(displayName);
             stack.setItemMeta(meta);
         } else if (split.length > 1 && (split[0].equalsIgnoreCase("lore") || split[0].equalsIgnoreCase("desc")) && hasMetaPermission(sender, "lore", false, true, ess)) {
-            final List<String> lore = new ArrayList<String>();
+            final List<String> lore = new ArrayList<>();
             for (String line : split[1].split("[^\\\\](\\|)")) {
                 lore.add(FormatUtil.replaceFormat(line.replace('_', ' ')));
             }
@@ -292,7 +292,7 @@ public class MetaItemStack {
                     builder = FireworkEffect.builder();
                 }
 
-                List<Color> primaryColors = new ArrayList<Color>();
+                List<Color> primaryColors = new ArrayList<>();
                 String[] colors = split[1].split(",");
                 for (String color : colors) {
                     if (colorMap.containsKey(color.toUpperCase())) {
@@ -315,7 +315,7 @@ public class MetaItemStack {
                     builder.with(finalEffect);
                 }
             } else if (split[0].equalsIgnoreCase("fade") || (allowShortName && split[0].equalsIgnoreCase("f"))) {
-                List<Color> fadeColors = new ArrayList<Color>();
+                List<Color> fadeColors = new ArrayList<>();
                 String[] colors = split[1].split(",");
                 for (String color : colors) {
                     if (colorMap.containsKey(color.toUpperCase())) {

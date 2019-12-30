@@ -203,7 +203,7 @@ public enum MobData {
     private String matched;
 
     public static LinkedHashMap<String, MobData> getPossibleData(final Entity spawned, boolean publicOnly) {
-        LinkedHashMap<String, MobData> mobList = new LinkedHashMap<String, MobData>();
+        LinkedHashMap<String, MobData> mobList = new LinkedHashMap<>();
         for (MobData data : MobData.values()) {
             if (data.type == null || (publicOnly && !data.isPublic)) continue;
             
@@ -218,7 +218,7 @@ public enum MobData {
     }
 
     public static List<String> getValidHelp(final Entity spawned) {
-        List<String> output = new ArrayList<String>();
+        List<String> output = new ArrayList<>();
         LinkedHashMap<String, MobData> posData = getPossibleData(spawned, true);
 
         for (MobData data : posData.values()) {
