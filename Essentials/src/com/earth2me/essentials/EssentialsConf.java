@@ -127,9 +127,9 @@ public class EssentialsConf extends YamlConfiguration {
                     result = decoder.decode(buffer, data, true);
                     if (result.isError()) {
                         throw new InvalidConfigurationException("Invalid Characters in file " + configFile.getAbsolutePath());
-                    } else {
-                        decoder.flush(data);
                     }
+
+                    decoder.flush(data);
                 } else {
                     decoder.flush(data);
                 }
@@ -392,11 +392,11 @@ public class EssentialsConf extends YamlConfiguration {
         set(path, map);
     }
 
-    public void setProperty(String path, List object) {
+    public void setProperty(String path, List<?> object) {
         set(path, new ArrayList(object));
     }
 
-    public void setProperty(String path, Map object) {
+    public void setProperty(String path, Map<?, ?> object) {
         set(path, new LinkedHashMap(object));
     }
 

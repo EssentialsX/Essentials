@@ -21,7 +21,7 @@ public class BookPager {
     public List<String> getPages(final String pageStr) throws Exception {
         List<String> lines = text.getLines();
         List<String> chapters = text.getChapters();
-        List<String> pageLines = new ArrayList<>();
+        List<String> pageLines = new ArrayList<String>();
         Map<String, Integer> bookmarks = text.getBookmarks();
 
         //This checks to see if we have the chapter in the index
@@ -39,7 +39,7 @@ public class BookPager {
             }
         }
 
-        List<String> pages = new ArrayList<>();
+        List<String> pages = new ArrayList<String>();
         double pageLength = 0;
 
         for (int lineNo = chapterstart; lineNo < chapterend; lineNo += 1) {

@@ -122,7 +122,7 @@ public class Kit {
             throw new Exception(tl("kitNotFound"));
         }
         try {
-            final List<String> itemList = new ArrayList<>();
+            final List<String> itemList = new ArrayList<String>();
             final Object kitItems = kit.get("items");
             if (kitItems instanceof List) {
                 for (Object item : (List<?>) kitItems) {

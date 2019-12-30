@@ -38,7 +38,7 @@ public class Commandclearinventory extends EssentialsCommand {
 
     private void parseCommand(Server server, CommandSource sender, String commandLabel, String[] args, boolean allowOthers, boolean allowAll)
         throws Exception {
-        Collection<Player> players = new ArrayList<>();
+        Collection<Player> players = new ArrayList<Player>();
         User senderUser = ess.getUser(sender.getPlayer());
         String previousClearCommand = "";
         

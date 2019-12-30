@@ -145,7 +145,7 @@ public class ManagedFile {
         try {
             final BufferedReader reader = new BufferedReader(new FileReader(file));
             try {
-                final List<String> lines = new ArrayList<>();
+                final List<String> lines = new ArrayList<String>();
                 do {
                     final String line = reader.readLine();
                     if (line == null) {

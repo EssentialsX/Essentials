@@ -88,7 +88,7 @@ public class Commandbalancetop extends EssentialsCommand {
             try {
                 if (force || cacheage <= System.currentTimeMillis() - CACHETIME) {
                     cache.getLines().clear();
-                    final Map<String, BigDecimal> balances = new HashMap<>();
+                    final Map<String, BigDecimal> balances = new HashMap<String, BigDecimal>();
                     BigDecimal totalMoney = BigDecimal.ZERO;
                     if (ess.getSettings().isEcoDisabled()) {
                         if (ess.getSettings().isDebug()) {

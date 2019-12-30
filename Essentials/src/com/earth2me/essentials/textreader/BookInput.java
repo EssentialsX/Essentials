@@ -51,9 +51,9 @@ public class BookInput implements IText {
             final SoftReference<BookInput> inputRef = cache.get(file.getName());
             BookInput input;
             if (inputRef == null || (input = inputRef.get()) == null || input.lastChange < lastChange) {
-                lines = new ArrayList<>();
-                chapters = new ArrayList<>();
-                bookmarks = new HashMap<>();
+                lines = new ArrayList<String>();
+                chapters = new ArrayList<String>();
+                bookmarks = new HashMap<String, Integer>();
                 cache.put(file.getName(), new SoftReference<BookInput>(this));
                 readFromfile = true;
             } else {

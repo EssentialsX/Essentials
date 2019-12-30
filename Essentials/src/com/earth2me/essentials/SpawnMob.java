@@ -29,7 +29,7 @@ public class SpawnMob {
 
     public static String mobList(final User user) {
         final Set<String> mobList = Mob.getMobList();
-        final Set<String> availableList = new HashSet<>();
+        final Set<String> availableList = new HashSet<String>();
         for (String mob : mobList) {
             if (user.isAuthorized("essentials.spawnmob." + mob.toLowerCase(Locale.ENGLISH))) {
                 availableList.add(mob);
@@ -44,7 +44,7 @@ public class SpawnMob {
     public static List<String> mobParts(final String mobString) {
         String[] mobParts = mobString.split(",");
 
-        List<String> mobs = new ArrayList<>();
+        List<String> mobs = new ArrayList<String>();
 
         for (String mobPart : mobParts) {
             String[] mobDatas = mobPart.split(":");
@@ -56,7 +56,7 @@ public class SpawnMob {
     public static List<String> mobData(final String mobString) {
         String[] mobParts = mobString.split(",");
 
-        List<String> mobData = new ArrayList<>();
+        List<String> mobData = new ArrayList<String>();
 
         for (String mobPart : mobParts) {
             String[] mobDatas = mobPart.split(":");
@@ -154,7 +154,9 @@ public class SpawnMob {
                     changeMobData(sender, mMob.getType(), spawnedMount, data.get(next).toLowerCase(Locale.ENGLISH), target);
                 }
 
-                spawnedMob.setPassenger(spawnedMount);
+                if (spawnedMob != null) {
+                    spawnedMob.setPassenger(spawnedMount);
+                }
 
                 spawnedMob = spawnedMount;
             }

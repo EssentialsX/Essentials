@@ -12,7 +12,7 @@ import java.util.*;
 
 
 public class TextInput implements IText {
-    private static final HashMap<String, SoftReference<TextInput>> cache = new HashMap<>();
+    private static final HashMap<String, SoftReference<TextInput>> cache = new HashMap<String, SoftReference<TextInput>>();
     private final transient List<String> lines;
     private final transient List<String> chapters;
     private final transient Map<String, Integer> bookmarks;
@@ -38,9 +38,9 @@ public class TextInput implements IText {
                 final SoftReference<TextInput> inputRef = cache.get(file.getName());
                 TextInput input;
                 if (inputRef == null || (input = inputRef.get()) == null || input.lastChange < lastChange) {
-                    lines = new ArrayList<>();
-                    chapters = new ArrayList<>();
-                    bookmarks = new HashMap<>();
+                    lines = new ArrayList<String>();
+                    chapters = new ArrayList<String>();
+                    bookmarks = new HashMap<String, Integer>();
                     cache.put(file.getName(), new SoftReference<TextInput>(this));
                     readFromfile = true;
                 } else {

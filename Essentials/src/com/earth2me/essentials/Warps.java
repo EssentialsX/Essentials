@@ -36,7 +36,7 @@ public class Warps implements net.ess3.api.IWarps {
 
     @Override
     public Collection<String> getList() {
-        final List<String> keys = new ArrayList<>();
+        final List<String> keys = new ArrayList<String>();
         for (StringIgnoreCase stringIgnoreCase : warpPoints.keySet()) {
             keys.add(stringIgnoreCase.getString());
         }

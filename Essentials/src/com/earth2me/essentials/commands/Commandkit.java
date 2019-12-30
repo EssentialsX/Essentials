@@ -61,7 +61,7 @@ public class Commandkit extends EssentialsCommand {
         }
         String[] kitList = kitNames.split(",");
 
-        List<Kit> kits = new ArrayList<>();
+        List<Kit> kits = new ArrayList<Kit>();
 
         for (final String kitName : kitList) {
             if (kitName.isEmpty()) {
