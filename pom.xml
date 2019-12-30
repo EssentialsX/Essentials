@@ -24,10 +24,6 @@
 
     <repositories>
         <repository>
-            <id>reserve-repo</id>
-            <url>https://dl.bintray.com/theneweconomy/java/</url>
-        </repository>
-        <repository>
             <id>ess-repo</id>
             <url>https://ci.ender.zone/plugin/repository/everything/</url>
         </repository>
@@ -38,6 +34,10 @@
         <repository>
             <id>paper-repo</id>
             <url>https://papermc.io/repo/repository/maven-public/</url>
+        </repository>
+        <repository>
+            <id>reserve-repo</id>
+            <url>https://dl.bintray.com/theneweconomy/java/</url>
         </repository>
     </repositories>
 

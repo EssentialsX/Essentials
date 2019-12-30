@@ -12,7 +12,6 @@ import org.bukkit.World;
 import java.math.BigDecimal;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
-import java.util.function.Supplier;
 
 /**
  * @author creatorfromhell <daniel.viddy@gmail.com>
@@ -136,7 +135,7 @@ public class ReserveEssentials implements EconomyAPI {
      */
     @Override
     public CompletableFuture<Boolean> asyncHasCurrency(String name) {
-        return CompletableFuture.supplyAsync(()->true); //Always return true here as Essentials only supports one currency.
+        return CompletableFuture.supplyAsync(()->hasCurrency(name)); //Always return true here as Essentials only supports one currency.
     }
 
     /**
@@ -147,13 +146,13 @@ public class ReserveEssentials implements EconomyAPI {
      */
     @Override
     public CompletableFuture<Boolean> asyncHasCurrency(String name, String world) {
-        return CompletableFuture.supplyAsync(()->true); //Always return true here as Essentials only supports one currency.
+        return CompletableFuture.supplyAsync(()->hasCurrency(name, world)); //Always return true here as Essentials only supports one currency.
     }
 
     /**
      * Checks to see if an account exists for this identifier. This method should be used for non-player accounts.
      * @param identifier The identifier of the account.
-     * @return True if an account exists for this player, else false.
+     * @return True if an account exists for this identifier, else false.
      */
     @Override
     public boolean hasAccount(String identifier) {
@@ -163,7 +162,7 @@ public class ReserveEssentials implements EconomyAPI {
     /**
      * Checks to see if an account exists for this identifier. This method should be used for player accounts.
      * @param identifier The {@link UUID} of the account.
-     * @return True if an account exists for this player, else false.
+     * @return True if an account exists for this identifier, else false.
      */
     @Override
     public boolean hasAccount(UUID identifier) {
@@ -173,43 +172,21 @@ public class ReserveEssentials implements EconomyAPI {
     /**
      * Checks to see if an account exists for this identifier. This method should be used for non-player accounts.
      * @param identifier The identifier of the account.
-     * @return True if an account exists for this player, else false.
+     * @return True if an account exists for this identifier, else false.
      */
     @Override
     public CompletableFuture<Boolean> asyncHasAccount(String identifier) {
-        return CompletableFuture.supplyAsync(new Supplier<Boolean>() {
-
-            /**
-             * Gets a result.
-             *
-             * @return a result
-             */
-            @Override
-            public Boolean get() {
-                return Economy.playerExists(identifier);
-            }
-        });
+        return CompletableFuture.supplyAsync(()->Economy.playerExists(identifier));
     }
 
     /**
      * Checks to see if an account exists for this identifier. This method should be used for player accounts.
      * @param identifier The {@link UUID} of the account.
-     * @return True if an account exists for this player, else false.
+     * @return True if an account exists for this identifier, else false.
      */
     @Override
     public CompletableFuture<Boolean> asyncHasAccount(UUID identifier) {
-        return CompletableFuture.supplyAsync(new Supplier<Boolean>() {
-
-            /**
-             * Gets a result.
-             *
-             * @return a result
-             */
-            @Override
-            public Boolean get() {
-                return Economy.playerExists(getName(identifier));
-            }
-        });
+        return CompletableFuture.supplyAsync(()->Economy.playerExists(getName(identifier)));
     }
 
     /**
@@ -332,7 +309,7 @@ public class ReserveEssentials implements EconomyAPI {
      */
     @Override
     public boolean isAccessor(String identifier, String accessor) {
-        return false;
+        return identifier.equalsIgnoreCase(accessor);
     }
 
     /**
@@ -343,7 +320,7 @@ public class ReserveEssentials implements EconomyAPI {
      */
     @Override
     public boolean isAccessor(String identifier, UUID accessor) {
-        return false;
+        return isAccessor(identifier, getName(accessor));
     }
 
     /**
@@ -354,7 +331,7 @@ public class ReserveEssentials implements EconomyAPI {
      */
     @Override
     public boolean isAccessor(UUID identifier, String accessor) {
-        return false;
+        return isAccessor(getName(identifier), accessor);
     }
 
     /**
@@ -365,7 +342,7 @@ public class ReserveEssentials implements EconomyAPI {
      */
     @Override
     public boolean isAccessor(UUID identifier, UUID accessor) {
-        return false;
+        return isAccessor(getName(identifier), getName(accessor));
     }
 
     /**
@@ -846,7 +823,7 @@ public class ReserveEssentials implements EconomyAPI {
      */
     @Override
     public boolean setHoldings(String identifier, BigDecimal amount) {
-        if(!hasAccount(identifier)) return false;
+        if(!hasAccount(identifier) && !createAccount(identifier)) return false;
         try {
             Economy.setMoney(identifier, amount);
             return true;
@@ -863,7 +840,7 @@ public class ReserveEssentials implements EconomyAPI {
      */
     @Override
     public boolean setHoldings(UUID identifier, BigDecimal amount) {
-        if(!hasAccount(identifier)) return false;
+        if(!hasAccount(identifier) && !createAccount(identifier)) return false;
         try {
             Economy.setMoney(getName(identifier), amount);
             return true;
@@ -1020,14 +997,7 @@ public class ReserveEssentials implements EconomyAPI {
      */
     @Override
     public boolean addHoldings(UUID identifier, BigDecimal amount) {
-        if(getHoldings(identifier).add(amount).compareTo(plugin.getSettings().getMaxMoney()) <= 0) {
-            try {
-                Economy.add(getName(identifier), amount);
-            } catch(UserDoesNotExistException | NoLoanPermittedException ignore) {
-                return false;
-            }
-        }
-        return false;
+        return addHoldings(getName(identifier), amount);
     }
 
     /**
@@ -1334,14 +1304,7 @@ public class ReserveEssentials implements EconomyAPI {
      */
     @Override
     public boolean removeHoldings(UUID identifier, BigDecimal amount) {
-        if(getHoldings(identifier).subtract(amount).compareTo(plugin.getSettings().getMinMoney()) >= 0) {
-            try {
-                Economy.substract(getName(identifier), amount);
-            } catch(UserDoesNotExistException | NoLoanPermittedException ignore) {
-                return false;
-            }
-        }
-        return false;
+        return removeHoldings(getName(identifier), amount);
     }
 
     /**
