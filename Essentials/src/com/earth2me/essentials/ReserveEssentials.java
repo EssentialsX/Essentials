@@ -20,15 +20,15 @@ import static com.earth2me.essentials.I18n.tl;
  */
 public class ReserveEssentials implements EconomyAPI {
 
-    private Essentials plugin;
+    private final Essentials ess;
 
     public ReserveEssentials(Essentials plugin) {
-        this.plugin = plugin;
+        this.ess = plugin;
     }
 
     public static void register(Essentials plugin) {
         //Check to see if there is an economy provider already registered, if so Essentials will take the back seat.
-        if(!((Reserve)Bukkit.getServer().getPluginManager().getPlugin("Reserve")).economyProvided()) {
+        if (!((Reserve)Bukkit.getServer().getPluginManager().getPlugin("Reserve")).economyProvided()) {
             Reserve.instance().registerProvider(new ReserveEssentials(plugin));
         }
     }
@@ -38,7 +38,7 @@ public class ReserveEssentials implements EconomyAPI {
      */
     @Override
     public String name() {
-        return "Essentials Economy";
+        return "EssentialsX";
     }
 
     /**
@@ -51,7 +51,7 @@ public class ReserveEssentials implements EconomyAPI {
 
     //This is our method to convert UUID -> username for use with Essentials' create account methods.
     private String getName(UUID identifier) {
-        final User user = plugin.getUser(identifier);
+        final User user = ess.getUser(identifier);
         return ((user == null)? identifier.toString() : user.getName());
     }
 
@@ -198,7 +198,7 @@ public class ReserveEssentials implements EconomyAPI {
      */
     @Override
     public boolean createAccount(String identifier) {
-        if(hasAccount(identifier)) return false;
+        if (hasAccount(identifier)) return false;
         return Economy.createNPC(identifier);
     }
 
@@ -209,7 +209,7 @@ public class ReserveEssentials implements EconomyAPI {
      */
     @Override
     public boolean createAccount(UUID identifier) {
-        if(hasAccount(identifier)) return false;
+        if (hasAccount(identifier)) return false;
         return Economy.createNPC(getName(identifier));
     }
 
@@ -221,7 +221,7 @@ public class ReserveEssentials implements EconomyAPI {
     @Override
     public CompletableFuture<Boolean> asyncCreateAccount(String identifier) {
         return CompletableFuture.supplyAsync(() -> {
-            if(hasAccount(identifier)) return false;
+            if (hasAccount(identifier)) return false;
             return Economy.createNPC(identifier);
         });
     }
@@ -234,7 +234,7 @@ public class ReserveEssentials implements EconomyAPI {
     @Override
     public CompletableFuture<Boolean> asyncCreateAccount(UUID identifier) {
         return CompletableFuture.supplyAsync(() -> {
-            if(hasAccount(identifier)) return false;
+            if (hasAccount(identifier)) return false;
             return Economy.createNPC(getName(identifier));
         });
     }
@@ -248,7 +248,7 @@ public class ReserveEssentials implements EconomyAPI {
     public boolean deleteAccount(String identifier) {
         try {
             Economy.resetBalance(identifier);
-        } catch(UserDoesNotExistException | NoLoanPermittedException ignore) {
+        } catch (UserDoesNotExistException | NoLoanPermittedException ignore) {
             return false;
         }
         return true;
@@ -263,7 +263,7 @@ public class ReserveEssentials implements EconomyAPI {
     public boolean deleteAccount(UUID identifier) {
         try {
             Economy.resetBalance(getName(identifier));
-        } catch(UserDoesNotExistException | NoLoanPermittedException ignore) {
+        } catch (UserDoesNotExistException | NoLoanPermittedException ignore) {
             return false;
         }
         return true;
@@ -279,7 +279,7 @@ public class ReserveEssentials implements EconomyAPI {
         return CompletableFuture.supplyAsync(() -> {
             try {
                 Economy.resetBalance(identifier);
-            } catch(UserDoesNotExistException | NoLoanPermittedException ignore) {
+            } catch (UserDoesNotExistException | NoLoanPermittedException ignore) {
                 return false;
             }
             return true;
@@ -296,7 +296,7 @@ public class ReserveEssentials implements EconomyAPI {
         return CompletableFuture.supplyAsync(() -> {
             try {
                 Economy.resetBalance(getName(identifier));
-            } catch(UserDoesNotExistException | NoLoanPermittedException ignore) {
+            } catch (UserDoesNotExistException | NoLoanPermittedException ignore) {
                 return false;
             }
             return true;
@@ -530,12 +530,12 @@ public class ReserveEssentials implements EconomyAPI {
      */
     @Override
     public BigDecimal getHoldings(String identifier) {
-        if(hasAccount(identifier)) {
+        if (hasAccount(identifier)) {
             try {
                 return Economy.getMoneyExact(identifier);
-            } catch(UserDoesNotExistException ignore) { }
+            } catch (UserDoesNotExistException ignore) { }
         }
-        return plugin.getSettings().getStartingBalance();
+        return ess.getSettings().getStartingBalance();
     }
 
     /**
@@ -545,12 +545,12 @@ public class ReserveEssentials implements EconomyAPI {
      */
     @Override
     public BigDecimal getHoldings(UUID identifier) {
-        if(hasAccount(identifier)) {
+        if (hasAccount(identifier)) {
             try {
                 return Economy.getMoneyExact(getName(identifier));
-            } catch(UserDoesNotExistException ignore) { }
+            } catch (UserDoesNotExistException ignore) { }
         }
-        return plugin.getSettings().getStartingBalance();
+        return ess.getSettings().getStartingBalance();
     }
 
     /**
@@ -675,7 +675,7 @@ public class ReserveEssentials implements EconomyAPI {
     public boolean hasHoldings(String identifier, BigDecimal amount) {
         try {
             return hasAccount(identifier) && Economy.hasEnough(identifier, amount);
-        } catch(UserDoesNotExistException ignore) {
+        } catch (UserDoesNotExistException ignore) {
             return false;
         }
     }
@@ -690,7 +690,7 @@ public class ReserveEssentials implements EconomyAPI {
     public boolean hasHoldings(UUID identifier, BigDecimal amount) {
         try {
             return hasAccount(identifier) && Economy.hasEnough(getName(identifier), amount);
-        } catch(UserDoesNotExistException ignore) {
+        } catch (UserDoesNotExistException ignore) {
             return false;
         }
     }
@@ -825,11 +825,11 @@ public class ReserveEssentials implements EconomyAPI {
      */
     @Override
     public boolean setHoldings(String identifier, BigDecimal amount) {
-        if(!hasAccount(identifier) && !createAccount(identifier)) return false;
+        if (!hasAccount(identifier) && !createAccount(identifier)) return false;
         try {
             Economy.setMoney(identifier, amount);
             return true;
-        } catch(UserDoesNotExistException | NoLoanPermittedException ignore) {
+        } catch (UserDoesNotExistException | NoLoanPermittedException ignore) {
             return false;
         }
     }
@@ -842,11 +842,11 @@ public class ReserveEssentials implements EconomyAPI {
      */
     @Override
     public boolean setHoldings(UUID identifier, BigDecimal amount) {
-        if(!hasAccount(identifier) && !createAccount(identifier)) return false;
+        if (!hasAccount(identifier) && !createAccount(identifier)) return false;
         try {
             Economy.setMoney(getName(identifier), amount);
             return true;
-        } catch(UserDoesNotExistException | NoLoanPermittedException ignore) {
+        } catch (UserDoesNotExistException | NoLoanPermittedException ignore) {
             return false;
         }
     }
@@ -981,10 +981,10 @@ public class ReserveEssentials implements EconomyAPI {
      */
     @Override
     public boolean addHoldings(String identifier, BigDecimal amount) {
-        if(getHoldings(identifier).add(amount).compareTo(plugin.getSettings().getMaxMoney()) <= 0) {
+        if (getHoldings(identifier).add(amount).compareTo(ess.getSettings().getMaxMoney()) <= 0) {
             try {
                 Economy.add(identifier, amount);
-            } catch(UserDoesNotExistException | NoLoanPermittedException ignore) {
+            } catch (UserDoesNotExistException | NoLoanPermittedException ignore) {
                 return false;
             }
         }
@@ -1133,7 +1133,7 @@ public class ReserveEssentials implements EconomyAPI {
      */
     @Override
     public boolean canAddHoldings(String identifier, BigDecimal amount) {
-        return hasAccount(identifier) && getHoldings(identifier).add(amount).compareTo(plugin.getSettings().getMaxMoney()) <= 0;
+        return hasAccount(identifier) && getHoldings(identifier).add(amount).compareTo(ess.getSettings().getMaxMoney()) <= 0;
     }
 
     /**
@@ -1145,7 +1145,7 @@ public class ReserveEssentials implements EconomyAPI {
      */
     @Override
     public boolean canAddHoldings(UUID identifier, BigDecimal amount) {
-        return hasAccount(identifier) && getHoldings(identifier).add(amount).compareTo(plugin.getSettings().getMaxMoney()) <= 0;
+        return hasAccount(identifier) && getHoldings(identifier).add(amount).compareTo(ess.getSettings().getMaxMoney()) <= 0;
     }
 
     /**
@@ -1288,10 +1288,10 @@ public class ReserveEssentials implements EconomyAPI {
      */
     @Override
     public boolean removeHoldings(String identifier, BigDecimal amount) {
-        if(getHoldings(identifier).subtract(amount).compareTo(plugin.getSettings().getMinMoney()) >= 0) {
+        if (getHoldings(identifier).subtract(amount).compareTo(ess.getSettings().getMinMoney()) >= 0) {
             try {
                 Economy.substract(identifier, amount);
-            } catch(UserDoesNotExistException | NoLoanPermittedException ignore) {
+            } catch (UserDoesNotExistException | NoLoanPermittedException ignore) {
                 return false;
             }
         }
@@ -1440,7 +1440,7 @@ public class ReserveEssentials implements EconomyAPI {
      */
     @Override
     public boolean canRemoveHoldings(String identifier, BigDecimal amount) {
-        return hasAccount(identifier) && getHoldings(identifier).subtract(amount).compareTo(plugin.getSettings().getMinMoney()) >= 0;
+        return hasAccount(identifier) && getHoldings(identifier).subtract(amount).compareTo(ess.getSettings().getMinMoney()) >= 0;
     }
 
     /**
@@ -1452,7 +1452,7 @@ public class ReserveEssentials implements EconomyAPI {
      */
     @Override
     public boolean canRemoveHoldings(UUID identifier, BigDecimal amount) {
-        return hasAccount(identifier) && getHoldings(identifier).subtract(amount).compareTo(plugin.getSettings().getMinMoney()) >= 0;
+        return hasAccount(identifier) && getHoldings(identifier).subtract(amount).compareTo(ess.getSettings().getMinMoney()) >= 0;
     }
 
     /**
