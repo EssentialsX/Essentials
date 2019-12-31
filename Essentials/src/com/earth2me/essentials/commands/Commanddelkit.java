@@ -21,8 +21,6 @@ public class Commanddelkit extends EssentialsCommand {
         final String kitName = args[0];
         final Kit kit = new Kit(kitName, ess);
 
-        }
-
         ess.getKits().removeKit(kitName);
         sender.sendMessage(tl("deleteKit", kit));
     }
