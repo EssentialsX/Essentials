@@ -116,7 +116,7 @@ public class ReserveEssentials implements EconomyAPI {
      */
     @Override
     public boolean hasCurrency(String name) {
-        return name.equalsIgnoreCase(tl("moneySingular")); //Always return true here as Essentials only supports one currency.
+        return name.equalsIgnoreCase(tl("moneySingular"));
     }
 
     /**
@@ -127,7 +127,7 @@ public class ReserveEssentials implements EconomyAPI {
      */
     @Override
     public boolean hasCurrency(String name, String world) {
-        return name.equalsIgnoreCase(tl("moneySingular")); //Always return true here as Essentials only supports one currency.
+        return name.equalsIgnoreCase(tl("moneySingular"));
     }
 
     /**
@@ -137,7 +137,7 @@ public class ReserveEssentials implements EconomyAPI {
      */
     @Override
     public CompletableFuture<Boolean> asyncHasCurrency(String name) {
-        return CompletableFuture.supplyAsync(() -> hasCurrency(name)); //Always return true here as Essentials only supports one currency.
+        return CompletableFuture.supplyAsync(() -> hasCurrency(name));
     }
 
     /**
@@ -148,7 +148,7 @@ public class ReserveEssentials implements EconomyAPI {
      */
     @Override
     public CompletableFuture<Boolean> asyncHasCurrency(String name, String world) {
-        return CompletableFuture.supplyAsync(() -> hasCurrency(name, world)); //Always return true here as Essentials only supports one currency.
+        return CompletableFuture.supplyAsync(() -> hasCurrency(name, world));
     }
 
     /**
