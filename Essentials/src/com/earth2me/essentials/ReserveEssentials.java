@@ -13,6 +13,8 @@ import java.math.BigDecimal;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
+import static com.earth2me.essentials.I18n.tl;
+
 /**
  * @author creatorfromhell <daniel.viddy@gmail.com>
  */
@@ -75,7 +77,7 @@ public class ReserveEssentials implements EconomyAPI {
      */
     @Override
     public String currencyDefaultPlural() {
-        return "Dollars";
+        return tl("moneyPlural");
     }
 
     /**
@@ -84,7 +86,7 @@ public class ReserveEssentials implements EconomyAPI {
      */
     @Override
     public String currencyDefaultSingular() {
-        return "Dollar";
+        return tl("moneySingular");
     }
 
     /**
@@ -94,7 +96,7 @@ public class ReserveEssentials implements EconomyAPI {
      */
     @Override
     public String currencyDefaultPlural(String world) {
-        return "Dollars";
+        return tl("moneyPlural");
     }
 
     /**
@@ -104,7 +106,7 @@ public class ReserveEssentials implements EconomyAPI {
      */
     @Override
     public String currencyDefaultSingular(String world) {
-        return "Dollar";
+        return tl("moneySingular");
     }
 
     /**
@@ -114,7 +116,7 @@ public class ReserveEssentials implements EconomyAPI {
      */
     @Override
     public boolean hasCurrency(String name) {
-        return true; //Always return true here as Essentials only supports one currency.
+        return name.equalsIgnoreCase(tl("moneySingular")); //Always return true here as Essentials only supports one currency.
     }
 
     /**
@@ -125,7 +127,7 @@ public class ReserveEssentials implements EconomyAPI {
      */
     @Override
     public boolean hasCurrency(String name, String world) {
-        return true; //Always return true here as Essentials only supports one currency.
+        return name.equalsIgnoreCase(tl("moneySingular")); //Always return true here as Essentials only supports one currency.
     }
 
     /**
@@ -309,7 +311,7 @@ public class ReserveEssentials implements EconomyAPI {
      */
     @Override
     public boolean isAccessor(String identifier, String accessor) {
-        return identifier.equalsIgnoreCase(accessor);
+        return identifier.equals(accessor);
     }
 
     /**
