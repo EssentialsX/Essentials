@@ -57,11 +57,7 @@ public class Commanddelhome extends EssentialsCommand {
         boolean canDelOthers = (user == null || user.isAuthorized("essentials.delhome.others"));
 
         if (args.length == 1) {
-            if (canDelOthers) {
-                return getPlayers(server, sender);
-            }
-
-            return user.getHomes();
+            return canDelOthers ? getPlayers(server, sender) : user.getHomes();
         } else if (args.length == 2 && canDelOthers) {
             try {
                 user = getPlayer(server, args, 0, true, true);
