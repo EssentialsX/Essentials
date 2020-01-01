@@ -14,5 +14,7 @@
 /Essentials/usermap.csv
 
 # Build files
-target/
+scripts/.buildtools/
+.gradle/
 jars/
+build/

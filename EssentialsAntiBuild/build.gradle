@@ -1,0 +1,4 @@
+dependencies {
+    compileOnly project(':env:Bukkit')
+    compileOnly project(':Essentials')
+}

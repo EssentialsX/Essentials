@@ -1,0 +1,19 @@
+rootProject.name = "EssentialsX"
+
+include ':env:Bukkit'
+
+include ':nms:1_8_R1Provider'
+include ':nms:1_8_R2Provider'
+include ':nms:FlattenedProvider'
+include ':nms:LegacyProvider'
+include ':nms:NMSProvider'
+include ':nms:ReflectionProvider'
+include ':nms:UpdatedMetaProvider'
+
+include ':Essentials'
+include ':EssentialsAntiBuild'
+include ':EssentialsChat'
+include ':EssentialsGeoIP'
+include ':EssentialsProtect'
+include ':EssentialsSpawn'
+include ':EssentialsXMPP'

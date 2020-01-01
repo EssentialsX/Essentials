@@ -1,0 +1,20 @@
+apply from: '../shadow.gradle'
+
+dependencies {
+    compileOnly project(':env:Bukkit')
+
+    compileOnly 'com.github.milkbowl:VaultAPI:1.7'
+
+    implementation 'io.papermc:paperlib:1.0.2'
+
+    implementation project(':nms:1_8_R1Provider')
+    implementation project(':nms:1_8_R2Provider')
+    implementation project(':nms:LegacyProvider')
+    implementation project(':nms:ReflectionProvider')
+    implementation project(':nms:FlattenedProvider')
+    implementation project(':nms:UpdatedMetaProvider')
+}
+
+shadowJar {
+    relocate 'io.papermc.lib', 'com.earth2me.essentials.paperlib'
+}

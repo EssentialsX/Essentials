@@ -1,0 +1,7 @@
+apply from: '../shadow.gradle'
+
+dependencies {
+    compileOnly project(':env:Bukkit')
+    compileOnly project(':Essentials')
+    implementation 'org.igniterealtime.smack:smack:3.2.1'
+}

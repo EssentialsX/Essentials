@@ -1,0 +1,9 @@
+apply plugin: 'com.github.johnrengelman.shadow'
+
+artifacts {
+    tasks.shadowJar.outputs.files.each {
+        archives(it) {
+            builtBy shadowJar
+        }
+    }
+}

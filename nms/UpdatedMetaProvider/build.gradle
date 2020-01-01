@@ -1,0 +1,4 @@
+dependencies {
+    api project(':nms:NMSProvider')
+    compileOnly project(':env:Bukkit')
+}

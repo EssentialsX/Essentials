@@ -1,0 +1,12 @@
+apply from: '../shadow.gradle'
+
+dependencies {
+    compileOnly project(':env:Bukkit')
+    compileOnly project(':Essentials')
+    implementation 'com.maxmind.geoip2:geoip2:2.12.0'
+    implementation 'javatar:javatar:2.5'
+}
+
+shadowJar {
+    minimize()
+}

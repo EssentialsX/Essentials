@@ -17,11 +17,18 @@ jobs:
     steps:
     - name: Checkout Git repo
       uses: actions/checkout@v1
+    - name: Restore Gradle Cache
+      uses: actions/cache@v1
+      with:
+        path: ~/.gradle/caches
+        key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
+        restore-keys: |
+          ${{ runner.os }}-gradle-
     - name: Restore Maven cache
       uses: actions/cache@v1
       with:
         path: ~/.m2/repository
-        key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+        key: ${{ runner.os }}-maven-${{ hashFiles('**.gradle') }}
         restore-keys: |
           ${{ runner.os }}-maven-
     - name: Set up JDK 1.8
@@ -31,10 +38,10 @@ jobs:
     - name: Run BuildTools
       if: steps.cache.outputs.cache-hit != 'true'
       run: chmod +x scripts/buildtools.sh && ./scripts/buildtools.sh
-    - name: Build with Maven
-      run: mvn package --file pom.xml
+    - name: Build with Gradle
+      run: ./gradlew build
     - name: Copy artifacts
-      run: mkdir -p ./out/ && cp -t ./out/ **/target/Essentials*.jar
+      run: mkdir -p ./out/ && cp -t ./out/ **/build/libs/Essentials*.jar
     - uses: actions/upload-artifact@master
       with:
         name: Plugin jars

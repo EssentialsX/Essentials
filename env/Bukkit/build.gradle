@@ -1,0 +1,3 @@
+dependencies {
+    api 'org.bukkit:bukkit:1.15.1-R0.1-SNAPSHOT'
+}

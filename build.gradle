@@ -1,0 +1,86 @@
+import org.apache.tools.ant.filters.ReplaceTokens
+
+plugins {
+    id 'org.ajoberstar.grgit' version '4.0.1'
+}
+
+ext {
+    GIT_COMMIT = grgit.head().abbreviatedId
+}
+
+allprojects {
+    group 'net.ess3'
+    version "2.17.1"
+}
+
+subprojects {
+    buildscript {
+        repositories {
+            jcenter()
+        }
+        dependencies {
+            // for projects which use paperlib which require shadowing
+            classpath 'com.github.jengelman.gradle.plugins:shadow:5.2.0'
+        }
+    }
+
+    apply plugin: 'java'
+    apply plugin: 'java-library'
+
+    sourceCompatibility = 1.8
+
+    repositories {
+        mavenLocal()
+        maven {
+            url 'https://ci.ender.zone/plugin/repository/everything/'
+        }
+        maven {
+            url 'https://hub.spigotmc.org/nexus/content/groups/public/'
+        }
+        maven {
+            url 'https://papermc.io/repo/repository/maven-public/'
+        }
+        maven {
+            url 'https://jitpack.io'
+        }
+    }
+
+    dependencies {
+        testImplementation 'junit:junit:4.12'
+        testImplementation 'org.mockito:mockito-core:3.2.0'
+    }
+
+    processResources {
+        filter(ReplaceTokens, beginToken: '${',
+                endToken: '}', tokens: ["full.version": "${version}-${GIT_COMMIT}".toString()])
+    }
+}
+
+def outputTasks = {
+    [":Essentials:shadowJar", ":EssentialsAntiBuild:jar", ":EssentialsChat:jar",
+     ":EssentialsGeoIP:shadowJar", ":EssentialsProtect:jar", ":EssentialsSpawn:shadowJar",
+     ":EssentialsXMPP:shadowJar"].stream().map({ tasks.findByPath(it) })
+}
+
+task copyToJars(type: Copy) {
+    from(project(":Essentials").sourceSets.main.output.resourcesDir) {
+        exclude 'plugin.yml'
+    }
+    outputTasks().forEach {
+        from(it.outputs.files)
+    }
+
+    rename '(.*)-all.jar', '$1.jar'
+
+    into file('jars')
+}
+
+copyToJars.dependsOn tasks.findByPath(":Essentials:processResources")
+outputTasks().forEach { copyToJars.dependsOn it }
+
+task build() {}
+build.dependsOn copyToJars
+
+task clean() {
+    delete file('jars')
+}

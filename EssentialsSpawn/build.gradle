@@ -1,0 +1,12 @@
+apply from: '../shadow.gradle'
+
+dependencies {
+    compileOnly project(':env:Bukkit')
+    compileOnly project(':Essentials')
+
+    implementation 'io.papermc:paperlib:1.0.2'
+}
+
+shadowJar {
+    relocate 'io.papermc.lib', 'com.earth2me.essentials.paperlib'
+}
