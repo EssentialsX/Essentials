@@ -11,9 +11,7 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
-
     steps:
     - name: Checkout Git repo
       uses: actions/checkout@v1
@@ -39,7 +37,7 @@ jobs:
       if: steps.cache.outputs.cache-hit != 'true'
       run: chmod +x scripts/buildtools.sh && ./scripts/buildtools.sh
     - name: Build with Gradle
-      run: ./gradlew build
+      run: ./gradlew clean build
     - name: Copy artifacts
       run: mkdir -p ./out/ && cp -t ./out/ jars/*.jar
     - uses: actions/upload-artifact@master
