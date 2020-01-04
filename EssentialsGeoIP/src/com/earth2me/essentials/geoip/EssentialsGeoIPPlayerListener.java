@@ -175,6 +175,13 @@ public class EssentialsGeoIPPlayerListener implements Listener, IConf {
                 logger.log(Level.SEVERE, tl("geoIpUrlEmpty"));
                 return;
             }
+            String licenseKey = config.getString("database.license-key", "");
+            if (licenseKey == null || licenseKey.isEmpty()) {
+                logger.log(Level.SEVERE, tl("geoIpLicenseMissing"));
+                return;
+            } else {
+                url = url.replace("{LICENSEKEY}", licenseKey);
+            }
             logger.log(Level.INFO, tl("downloadingGeoIp"));
             URL downloadUrl = new URL(url);
             URLConnection conn = downloadUrl.openConnection();
@@ -183,9 +190,9 @@ public class EssentialsGeoIPPlayerListener implements Listener, IConf {
             InputStream input = conn.getInputStream();
             OutputStream output = new FileOutputStream(databaseFile);
             byte[] buffer = new byte[2048];
-            if (url.endsWith(".gz")) {
+            if (url.contains("gz")) {
                 input = new GZIPInputStream(input);
-                if (url.endsWith(".tar.gz")) {
+                if (url.contains("tar.gz")) {
                     // The new GeoIP2 uses tar.gz to pack the db file along with some other txt. So it makes things a bit complicated here.
                     String filename;
                     TarInputStream tarInputStream = new TarInputStream(input);
