@@ -179,9 +179,8 @@ public class EssentialsGeoIPPlayerListener implements Listener, IConf {
             if (licenseKey == null || licenseKey.isEmpty()) {
                 logger.log(Level.SEVERE, tl("geoIpLicenseMissing"));
                 return;
-            } else {
-                url = url.replace("{LICENSEKEY}", licenseKey);
             }
+            url = url.replace("{LICENSEKEY}", licenseKey);
             logger.log(Level.INFO, tl("downloadingGeoIp"));
             URL downloadUrl = new URL(url);
             URLConnection conn = downloadUrl.openConnection();
