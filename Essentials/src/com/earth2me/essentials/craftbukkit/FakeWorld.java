@@ -554,6 +554,16 @@ public class FakeWorld implements World {
     }
 
     @Override
+    public boolean isHardcore() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public void setHardcore(boolean hardcore) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
     public long getTicksPerAnimalSpawns() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
