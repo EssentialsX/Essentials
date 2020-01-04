@@ -48,12 +48,18 @@ This only needs to be done once. There are two ways to do this:
 * Use the provided script at `scripts/buildtools.sh` to automatically download and run BuildTools if needed.
 * Download and run BuildTools yourself for versions `1.8` and `1.8.3`.
 
-Next, to build EssentialsX with Maven, run the following command:
+Next, build EssentialsX with Gradle. EssentialsX utilizes Gradle Wrapper. On MacOS & Linux, EssentialsX can be built using the following command:
 ```
-mvn clean install
+./gradlew build
 ```
 
-Each module's jar can be found in `target/` inside each module's directory.
+On Windows, use the batch based Gradle Wrapper:
+
+```
+./gradlew.bat build
+```
+
+Each module's jar can be found in `build/libs` inside each module's directory. Each jar is also copied to `jars/`.
 
 Using EssentialsX in your plugin
 --------------------------------
