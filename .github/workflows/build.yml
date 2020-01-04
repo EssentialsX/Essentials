@@ -41,7 +41,7 @@ jobs:
     - name: Build with Gradle
       run: ./gradlew build
     - name: Copy artifacts
-      run: mkdir -p ./out/ && cp -t ./out/ **/build/libs/Essentials*.jar
+      run: mkdir -p ./out/ && cp -t ./out/ jars/*.jar
     - uses: actions/upload-artifact@master
       with:
         name: Plugin jars

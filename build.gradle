@@ -4,8 +4,21 @@ plugins {
     id 'org.ajoberstar.grgit' version '4.0.1'
 }
 
+def commitsSinceLastTag() {
+    def tags = grgit.tag.list().stream().map({it.commit}).toList()
+    def commit = grgit.head()
+    def depth = 0;
+    while (true) {
+        if (tags.contains(commit))
+            return depth
+        depth++;
+        commit = grgit.resolve.toCommit(commit.parentIds.get(0))
+    }
+}
+
 ext {
     GIT_COMMIT = grgit.head().abbreviatedId
+    GIT_DEPTH = commitsSinceLastTag()
 }
 
 allprojects {
@@ -52,7 +65,7 @@ subprojects {
 
     processResources {
         filter(ReplaceTokens, beginToken: '${',
-                endToken: '}', tokens: ["full.version": "${version}-${GIT_COMMIT}".toString()])
+                endToken: '}', tokens: ["full.version": "${version}.${GIT_DEPTH}".toString()])
     }
 }
 
