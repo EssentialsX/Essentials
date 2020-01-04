@@ -37,7 +37,7 @@ jobs:
       if: steps.cache.outputs.cache-hit != 'true'
       run: chmod +x scripts/buildtools.sh && ./scripts/buildtools.sh
     - name: Build with Gradle
-      run: ./gradlew clean build
+      run: ./gradlew build
     - name: Copy artifacts
       run: mkdir -p ./out/ && cp -t ./out/ jars/*.jar
     - uses: actions/upload-artifact@master
