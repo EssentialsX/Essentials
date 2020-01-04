@@ -117,8 +117,9 @@ public class EssentialsGeoIPPlayerListener implements Listener, IConf {
 
         // detect and update the old config.yml. migrate from legacy GeoIP to GeoIP2.
         if (!config.isSet("enable-locale")) {
-            config.set("database.download-url", "https://geolite.maxmind.com/download/geoip/database/GeoLite2-Country.tar.gz");
-            config.set("database.download-url-city", "https://geolite.maxmind.com/download/geoip/database/GeoLite2-City.tar.gz");
+            config.set("database.download-url", "https://download.maxmind.com/app/geoip_download?edition_id=GeoLite2-Country&license_key={LICENSEKEY}&suffix=tar.gz");
+            config.set("database.download-url-city", "https://download.maxmind.com/app/geoip_download?edition_id=GeoLite2-City&license_key={LICENSEKEY}&suffix=tar.gz");
+            config.set("database.license-key", "");
             config.set("database.update.enable", true);
             config.set("database.update.by-every-x-days", 30);
             config.set("enable-locale", true);
