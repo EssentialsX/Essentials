@@ -67,6 +67,7 @@ subprojects {
         filter(ReplaceTokens, beginToken: '${',
                 endToken: '}', tokens: ["full.version": "${version}.${GIT_DEPTH}".toString()])
     }
+    jar.archiveVersion.set("${this.version}.${GIT_DEPTH}".toString())
 }
 
 def outputTasks = {
