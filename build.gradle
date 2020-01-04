@@ -67,10 +67,17 @@ subprojects {
         filter(ReplaceTokens, beginToken: '${',
                 endToken: '}', tokens: ["full.version": "${version}.${GIT_DEPTH}".toString()])
     }
-    jar.archiveVersion.set("${this.version}.${GIT_DEPTH}".toString())
+
+    tasks.withType(JavaCompile) {
+        options.encoding = 'UTF-8'
+    }
+
+    tasks.withType(Jar) {
+        archiveVersion.set("${this.version}.${GIT_DEPTH}".toString())
+    }
 }
 
-def outputTasks = {
+def outputTasks() {
     [":Essentials:shadowJar", ":EssentialsAntiBuild:jar", ":EssentialsChat:jar",
      ":EssentialsGeoIP:shadowJar", ":EssentialsProtect:jar", ":EssentialsSpawn:shadowJar",
      ":EssentialsXMPP:shadowJar"].stream().map({ tasks.findByPath(it) })
