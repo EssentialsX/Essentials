@@ -38,29 +38,39 @@ public class Commandtogglejail extends EssentialsCommand {
                     return;
                 }
             }
+
             final User controller = sender.isPlayer() ? ess.getUser(sender.getPlayer()) : null;
             final JailStatusChangeEvent event = new JailStatusChangeEvent(player, controller, true);
             ess.getServer().getPluginManager().callEvent(event);
 
             if (!event.isCancelled()) {
+                final String jailName = args[1];
+                if (sender.isPlayer() && !ess.getUser(sender.getPlayer()).isAuthorized("essentials.togglejail." + jailName)) {
+                    throw new Exception(tl("noPerm", "essentials.togglejail." + jailName));
+                }
+
                 if (player.getBase().isOnline()) {
-                    ess.getJails().sendToJail(player, args[1]);
+                    ess.getJails().sendToJail(player, jailName);
                 } else {
                     // Check if jail exists
-                    ess.getJails().getJail(args[1]);
+                    ess.getJails().getJail(jailName);
                 }
+
                 player.setJailed(true);
                 player.sendMessage(tl("userJailed"));
                 player.setJail(null);
-                player.setJail(args[1]);
+                player.setJail(jailName);
                 long timeDiff = 0;
+
                 if (args.length > 2) {
                     final String time = getFinalArg(args, 2);
                     timeDiff = DateUtil.parseDateDiff(time, true);
                     player.setJailTimeout(timeDiff);
                 }
+
                 sender.sendMessage((timeDiff > 0 ? tl("playerJailedFor", player.getName(), DateUtil.formatDateDiff(timeDiff)) : tl("playerJailed", player.getName())));
             }
+
             return;
         }
 
@@ -81,6 +91,7 @@ public class Commandtogglejail extends EssentialsCommand {
             if (!player.isJailed()) {
                 throw new NotEnoughArgumentsException();
             }
+
             final User controller = sender.isPlayer() ? ess.getUser(sender.getPlayer()) : null;
             final JailStatusChangeEvent event = new JailStatusChangeEvent(player, controller, false);
             ess.getServer().getPluginManager().callEvent(event);
