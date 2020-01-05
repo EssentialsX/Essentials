@@ -78,14 +78,12 @@ public class Commandafk extends EssentialsCommand {
             }
             user.setAfkMessage(message);
         }
-        if (!msg.isEmpty()) {
-            if (ess.getSettings().broadcastAfkMessage()) {
-                // exclude user from recieving general AFK announcement in favor of personal message
-                ess.broadcastMessage(user, msg, Collections.singleton(user));
-                user.sendMessage(selfmsg);
-            } else {
-                user.sendMessage(selfmsg);
-            }
+        if (!msg.isEmpty() && ess.getSettings().broadcastAfkMessage()) {
+            // exclude user from receiving general AFK announcement in favor of personal message
+            ess.broadcastMessage(user, msg, Collections.singleton(user));
+        }
+        if (!selfmsg.isEmpty()) {
+            user.sendMessage(selfmsg);
         }
         user.setDisplayNick(); // Set this again after toggling
     }

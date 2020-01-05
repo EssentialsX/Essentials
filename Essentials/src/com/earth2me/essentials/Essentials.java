@@ -751,7 +751,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
     }
 
     @Override
-    public int broadcastMessage(final IUser sender, final String message, final Set<IUser> excluded) {
+    public int broadcastMessage(final IUser sender, final String message, final Collection<IUser> excluded) {
         return broadcastMessage(sender, null, message, false, excluded);
     }
 
@@ -760,7 +760,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
         return broadcastMessage(null, permission, message, false, Collections.emptySet());
     }
 
-    private int broadcastMessage(final IUser sender, final String permission, final String message, final boolean keywords, final Set<IUser> excluded) {
+    private int broadcastMessage(final IUser sender, final String permission, final String message, final boolean keywords, final Collection<IUser> excluded) {
         if (sender != null && sender.isHidden()) {
             return 0;
         }
