@@ -163,7 +163,7 @@ public class Kit {
                 if (kitItem.startsWith("/")) {
                     String command = kitItem.substring(1);
                     String name = user.getName();
-                    command = command.replace("{player}", name);
+                    command = command.replace("{player}", name).replace("{PLAYER}", name);
                     Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command);
                     continue;
                 }
