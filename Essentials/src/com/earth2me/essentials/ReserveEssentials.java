@@ -510,7 +510,7 @@ public class ReserveEssentials implements EconomyAPI {
     @Override
     public EconomyResponse setHoldingsDetail(String identifier, BigDecimal amount) {
         if (!hasAccount(identifier)) return AccountResponse.DOESNT_EXIST;
-        if (!createAccount(identifier)) return AccountResponse.CREATION_FAILED;
+        if (!hasAccount(identifier) && !createAccount(identifier)) return AccountResponse.CREATION_FAILED;
         try {
             Economy.setMoney(identifier, amount);
             return GeneralResponse.SUCCESS;
@@ -591,7 +591,7 @@ public class ReserveEssentials implements EconomyAPI {
     @Override
     public EconomyResponse addHoldingsDetail(String identifier, BigDecimal amount) {
         if (!hasAccount(identifier)) return AccountResponse.DOESNT_EXIST;
-        if (!createAccount(identifier)) return AccountResponse.CREATION_FAILED;
+        if (!hasAccount(identifier) && !createAccount(identifier)) return AccountResponse.CREATION_FAILED;
         if (getHoldings(identifier).add(amount).compareTo(ess.getSettings().getMaxMoney()) > 0)
             return HoldingsResponse.MAX_HOLDINGS;
 
@@ -676,7 +676,7 @@ public class ReserveEssentials implements EconomyAPI {
     @Override
     public EconomyResponse canAddHoldingsDetail(String identifier, BigDecimal amount) {
         if (!hasAccount(identifier)) return AccountResponse.DOESNT_EXIST;
-        if (!createAccount(identifier)) return AccountResponse.CREATION_FAILED;
+        if (!hasAccount(identifier) && !createAccount(identifier)) return AccountResponse.CREATION_FAILED;
         if (getHoldings(identifier).add(amount).compareTo(ess.getSettings().getMaxMoney()) > 0)
             return HoldingsResponse.MAX_HOLDINGS;
         return GeneralResponse.SUCCESS;
@@ -758,7 +758,7 @@ public class ReserveEssentials implements EconomyAPI {
     @Override
     public EconomyResponse removeHoldingsDetail(String identifier, BigDecimal amount) {
         if (!hasAccount(identifier)) return AccountResponse.DOESNT_EXIST;
-        if (!createAccount(identifier)) return AccountResponse.CREATION_FAILED;
+        if (!hasAccount(identifier) && !createAccount(identifier)) return AccountResponse.CREATION_FAILED;
         if (getHoldings(identifier).subtract(amount).compareTo(ess.getSettings().getMinMoney()) < 0)
             return HoldingsResponse.MIN_HOLDINGS;
 
@@ -843,7 +843,7 @@ public class ReserveEssentials implements EconomyAPI {
     @Override
     public EconomyResponse canRemoveHoldingsDetail(String identifier, BigDecimal amount) {
         if (!hasAccount(identifier)) return AccountResponse.DOESNT_EXIST;
-        if (!createAccount(identifier)) return AccountResponse.CREATION_FAILED;
+        if (!hasAccount(identifier) && !createAccount(identifier)) return AccountResponse.CREATION_FAILED;
         if (getHoldings(identifier).subtract(amount).compareTo(ess.getSettings().getMinMoney()) < 0)
             return HoldingsResponse.MIN_HOLDINGS;
         return GeneralResponse.SUCCESS;
