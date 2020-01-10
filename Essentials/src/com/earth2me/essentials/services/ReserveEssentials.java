@@ -33,7 +33,7 @@ public class ReserveEssentials implements EconomyAPI {
 
     public static void register(Essentials plugin) {
         //Check to see if there is an economy provider already registered, if so Essentials will take the back seat.
-        if (!((Reserve)Bukkit.getServer().getPluginManager().getPlugin("Reserve")).economyProvided()) {
+        if (!((Reserve) Bukkit.getServer().getPluginManager().getPlugin("Reserve")).economyProvided()) {
             Reserve.instance().registerProvider(new ReserveEssentials(plugin));
         }
     }
@@ -51,13 +51,13 @@ public class ReserveEssentials implements EconomyAPI {
      */
     @Override
     public String version() {
-        return "0.1.4.3";
+        return "0.1.4.6";
     }
 
     //This is our method to convert UUID -> username for use with Essentials' create account methods.
     private String getName(UUID identifier) {
         final User user = ess.getUser(identifier);
-        return ((user == null)? identifier.toString() : user.getName());
+        return ((user == null) ? identifier.toString() : user.getName());
     }
 
     /**
