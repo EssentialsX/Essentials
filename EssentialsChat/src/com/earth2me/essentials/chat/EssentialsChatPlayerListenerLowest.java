@@ -55,6 +55,7 @@ public class EssentialsChatPlayerListenerLowest extends EssentialsChatPlayer {
         format = format.replace("{5}", team == null ? "" : team.getDisplayName());
         format = format.replace("{6}", prefix);
         format = format.replace("{7}", suffix);
+        format = format.replace("{8}", player.getName());
         synchronized (format) {
             event.setFormat(format);
         }
