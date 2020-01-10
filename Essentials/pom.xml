@@ -51,7 +51,7 @@
         <dependency>
             <groupId>net.tnemc</groupId>
             <artifactId>Reserve</artifactId>
-            <version>0.1.4.5</version>
+            <version>0.1.4.6</version>
             <scope>provided</scope>
         </dependency>
         <dependency>

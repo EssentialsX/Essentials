@@ -8,37 +8,33 @@ import net.ess3.api.Economy;
 import net.tnemc.core.Reserve;
 import net.tnemc.core.economy.EconomyAPI;
 import net.tnemc.core.economy.currency.Currency;
+import net.tnemc.core.economy.response.AccountResponse;
+import net.tnemc.core.economy.response.EconomyResponse;
+import net.tnemc.core.economy.response.GeneralResponse;
+import net.tnemc.core.economy.response.HoldingsResponse;
+import org.bukkit.Bukkit;
 import org.bukkit.World;
 
 import java.math.BigDecimal;
 import java.util.UUID;
-import java.util.concurrent.CompletableFuture;
-import java.util.function.Supplier;
+
+import static com.earth2me.essentials.I18n.tl;
 
 /**
- * Reserve economy provider implementation for EssentialsX.
- * @author creatorfromhell
+ * @author creatorfromhell <daniel.viddy@gmail.com>
  */
 public class ReserveEssentials implements EconomyAPI {
 
     private final Essentials ess;
 
-    private ReserveEssentials(Essentials ess) {
-        this.ess = ess;
+    public ReserveEssentials(Essentials plugin) {
+        this.ess = plugin;
     }
 
-    /**
-     * Register the provider if no other economy is available.
-     *
-     * @param ess The Essentials plugin instance
-     */
-    public static void register(Essentials ess) {
-        Reserve reserve = Reserve.instance();
-
-        // Check to see if there is an economy provider already registered.
-        // If so, the existing provider should take priority
-        if (!reserve.economyProvided()) {
-            Reserve.instance().registerProvider(new ReserveEssentials(ess));
+    public static void register(Essentials plugin) {
+        //Check to see if there is an economy provider already registered, if so Essentials will take the back seat.
+        if (!((Reserve)Bukkit.getServer().getPluginManager().getPlugin("Reserve")).economyProvided()) {
+            Reserve.instance().registerProvider(new ReserveEssentials(plugin));
         }
     }
 
@@ -47,7 +43,7 @@ public class ReserveEssentials implements EconomyAPI {
      */
     @Override
     public String name() {
-        return "Essentials Economy";
+        return "EssentialsX";
     }
 
     /**
@@ -55,13 +51,13 @@ public class ReserveEssentials implements EconomyAPI {
      */
     @Override
     public String version() {
-        return "0.1.2.0";
+        return "0.1.4.3";
     }
 
     //This is our method to convert UUID -> username for use with Essentials' create account methods.
     private String getName(UUID identifier) {
         final User user = ess.getUser(identifier);
-        return user == null ? identifier.toString() : user.getName();
+        return ((user == null)? identifier.toString() : user.getName());
     }
 
     /**
@@ -86,7 +82,7 @@ public class ReserveEssentials implements EconomyAPI {
      */
     @Override
     public String currencyDefaultPlural() {
-        return "Dollars";
+        return tl("moneyPlural");
     }
 
     /**
@@ -95,7 +91,7 @@ public class ReserveEssentials implements EconomyAPI {
      */
     @Override
     public String currencyDefaultSingular() {
-        return "Dollar";
+        return tl("moneySingular");
     }
 
     /**
@@ -105,7 +101,7 @@ public class ReserveEssentials implements EconomyAPI {
      */
     @Override
     public String currencyDefaultPlural(String world) {
-        return "Dollars";
+        return tl("moneyPlural");
     }
 
     /**
@@ -115,7 +111,7 @@ public class ReserveEssentials implements EconomyAPI {
      */
     @Override
     public String currencyDefaultSingular(String world) {
-        return "Dollar";
+        return tl("moneySingular");
     }
 
     /**
@@ -125,7 +121,7 @@ public class ReserveEssentials implements EconomyAPI {
      */
     @Override
     public boolean hasCurrency(String name) {
-        return true; //Always return true here as Essentials only supports one currency.
+        return name.equalsIgnoreCase(tl("moneySingular"));
     }
 
     /**
@@ -136,90 +132,30 @@ public class ReserveEssentials implements EconomyAPI {
      */
     @Override
     public boolean hasCurrency(String name, String world) {
-        return true; //Always return true here as Essentials only supports one currency.
-    }
-
-    /**
-     * Checks to see if a {@link Currency} exists with this name.
-     * @param name The name of the {@link Currency} to search for.
-     * @return True if the currency exists, else false.
-     */
-    @Override
-    public CompletableFuture<Boolean> asyncHasCurrency(String name) {
-        return CompletableFuture.supplyAsync(() -> true); //Always return true here as Essentials only supports one currency.
-    }
-
-    /**
-     * Checks to see if a {@link Currency} exists with this name.
-     * @param name The name of the {@link Currency} to search for.
-     * @param world The name of the {@link World} to check for this {@link Currency} in.
-     * @return True if the currency exists, else false.
-     */
-    @Override
-    public CompletableFuture<Boolean> asyncHasCurrency(String name, String world) {
-        return CompletableFuture.supplyAsync(() -> true); //Always return true here as Essentials only supports one currency.
+        return name.equalsIgnoreCase(tl("moneySingular"));
     }
 
     /**
      * Checks to see if an account exists for this identifier. This method should be used for non-player accounts.
      * @param identifier The identifier of the account.
-     * @return True if an account exists for this player, else false.
+     * @return True if an account exists for this identifier, else false.
      */
     @Override
-    public boolean hasAccount(String identifier) {
-        return Economy.playerExists(identifier);
+    public EconomyResponse hasAccountDetail(String identifier) {
+        if (Economy.playerExists(identifier)) {
+            return GeneralResponse.SUCCESS;
+        }
+        return AccountResponse.DOESNT_EXIST;
     }
 
     /**
      * Checks to see if an account exists for this identifier. This method should be used for player accounts.
      * @param identifier The {@link UUID} of the account.
-     * @return True if an account exists for this player, else false.
+     * @return True if an account exists for this identifier, else false.
      */
     @Override
-    public boolean hasAccount(UUID identifier) {
-        return Economy.playerExists(getName(identifier));
-    }
-
-    /**
-     * Checks to see if an account exists for this identifier. This method should be used for non-player accounts.
-     * @param identifier The identifier of the account.
-     * @return True if an account exists for this player, else false.
-     */
-    @Override
-    public CompletableFuture<Boolean> asyncHasAccount(String identifier) {
-        return CompletableFuture.supplyAsync(new Supplier<Boolean>() {
-
-            /**
-             * Gets a result.
-             *
-             * @return a result
-             */
-            @Override
-            public Boolean get() {
-                return Economy.playerExists(identifier);
-            }
-        });
-    }
-
-    /**
-     * Checks to see if an account exists for this identifier. This method should be used for player accounts.
-     * @param identifier The {@link UUID} of the account.
-     * @return True if an account exists for this player, else false.
-     */
-    @Override
-    public CompletableFuture<Boolean> asyncHasAccount(UUID identifier) {
-        return CompletableFuture.supplyAsync(new Supplier<Boolean>() {
-
-            /**
-             * Gets a result.
-             *
-             * @return a result
-             */
-            @Override
-            public Boolean get() {
-                return Economy.playerExists(getName(identifier));
-            }
-        });
+    public EconomyResponse hasAccountDetail(UUID identifier) {
+        return hasAccountDetail(getName(identifier));
     }
 
     /**
@@ -228,9 +164,12 @@ public class ReserveEssentials implements EconomyAPI {
      * @return True if an account was created, else false.
      */
     @Override
-    public boolean createAccount(String identifier) {
-        if (hasAccount(identifier)) return false;
-        return Economy.createNPC(identifier);
+    public EconomyResponse createAccountDetail(String identifier) {
+        if (hasAccount(identifier)) return AccountResponse.ALREADY_EXISTS;
+        if (Economy.createNPC(identifier)) {
+            return AccountResponse.CREATED;
+        }
+        return GeneralResponse.FAILED;
     }
 
     /**
@@ -239,35 +178,8 @@ public class ReserveEssentials implements EconomyAPI {
      * @return True if an account was created, else false.
      */
     @Override
-    public boolean createAccount(UUID identifier) {
-        if (hasAccount(identifier)) return false;
-        return Economy.createNPC(getName(identifier));
-    }
-
-    /**
-     * Attempts to create an account for this identifier. This method should be used for non-player accounts.
-     * @param identifier The identifier of the account.
-     * @return True if an account was created, else false.
-     */
-    @Override
-    public CompletableFuture<Boolean> asyncCreateAccount(String identifier) {
-        return CompletableFuture.supplyAsync(() -> {
-            if (hasAccount(identifier)) return false;
-            return Economy.createNPC(identifier);
-        });
-    }
-
-    /**
-     * Attempts to create an account for this identifier. This method should be used for player accounts.
-     * @param identifier The {@link UUID} of the account.
-     * @return True if an account was created, else false.
-     */
-    @Override
-    public CompletableFuture<Boolean> asyncCreateAccount(UUID identifier) {
-        return CompletableFuture.supplyAsync(() -> {
-            if (hasAccount(identifier)) return false;
-            return Economy.createNPC(getName(identifier));
-        });
+    public EconomyResponse createAccountDetail(UUID identifier) {
+        return createAccountDetail(getName(identifier));
     }
 
     /**
@@ -276,13 +188,15 @@ public class ReserveEssentials implements EconomyAPI {
      * @return True if an account was deleted, else false.
      */
     @Override
-    public boolean deleteAccount(String identifier) {
+    public EconomyResponse deleteAccountDetail(String identifier) {
         try {
             Economy.resetBalance(identifier);
-        } catch(UserDoesNotExistException | NoLoanPermittedException ignore) {
-            return false;
+        } catch (UserDoesNotExistException ignore) {
+            return AccountResponse.DOESNT_EXIST;
+        } catch (NoLoanPermittedException ignore) {
+            return GeneralResponse.FAILED;
         }
-        return true;
+        return GeneralResponse.SUCCESS;
     }
 
     /**
@@ -291,47 +205,8 @@ public class ReserveEssentials implements EconomyAPI {
      * @return True if an account was deleted, else false.
      */
     @Override
-    public boolean deleteAccount(UUID identifier) {
-        try {
-            Economy.resetBalance(getName(identifier));
-        } catch(UserDoesNotExistException | NoLoanPermittedException ignore) {
-            return false;
-        }
-        return true;
-    }
-
-    /**
-     * Attempts to delete an account for this identifier. This method should be used for non-player accounts.
-     * @param identifier The identifier of the account.
-     * @return True if an account was deleted, else false.
-     */
-    @Override
-    public CompletableFuture<Boolean> asyncDeleteAccount(String identifier) {
-        return CompletableFuture.supplyAsync(() -> {
-            try {
-                Economy.resetBalance(identifier);
-            } catch(UserDoesNotExistException | NoLoanPermittedException ignore) {
-                return false;
-            }
-            return true;
-        });
-    }
-
-    /**
-     * Attempts to delete an account for this identifier. This method should be used for player accounts.
-     * @param identifier The {@link UUID} of the account.
-     * @return True if an account was deleted, else false.
-     */
-    @Override
-    public CompletableFuture<Boolean> asyncDeleteAccount(UUID identifier) {
-        return CompletableFuture.supplyAsync(() -> {
-            try {
-                Economy.resetBalance(getName(identifier));
-            } catch(UserDoesNotExistException | NoLoanPermittedException ignore) {
-                return false;
-            }
-            return true;
-        });
+    public EconomyResponse deleteAccountDetail(UUID identifier) {
+        return deleteAccountDetail(getName(identifier));
     }
 
     /**
@@ -342,7 +217,7 @@ public class ReserveEssentials implements EconomyAPI {
      */
     @Override
     public boolean isAccessor(String identifier, String accessor) {
-        return false;
+        return identifier.equals(accessor);
     }
 
     /**
@@ -353,7 +228,7 @@ public class ReserveEssentials implements EconomyAPI {
      */
     @Override
     public boolean isAccessor(String identifier, UUID accessor) {
-        return false;
+        return isAccessor(identifier, getName(accessor));
     }
 
     /**
@@ -364,7 +239,7 @@ public class ReserveEssentials implements EconomyAPI {
      */
     @Override
     public boolean isAccessor(UUID identifier, String accessor) {
-        return false;
+        return isAccessor(getName(identifier), accessor);
     }
 
     /**
@@ -375,183 +250,101 @@ public class ReserveEssentials implements EconomyAPI {
      */
     @Override
     public boolean isAccessor(UUID identifier, UUID accessor) {
-        return false;
+        return isAccessor(getName(identifier), getName(accessor));
     }
 
     /**
      * Determines whether or not a player is able to withdraw holdings from this account.
      * @param identifier The identifier of the account that is associated with this call.
      * @param accessor The identifier of the user attempting to access this account.
-     * @return Whether or not the player is able to withdraw holdings from this account.
+     * @return The {@link EconomyResponse} for this action.
      */
     @Override
-    public boolean canWithdraw(String identifier, String accessor) {
-        return false;
+    public EconomyResponse canWithdrawDetail(String identifier, String accessor) {
+        if (identifier.equals(accessor)) {
+            return GeneralResponse.SUCCESS;
+        }
+        return GeneralResponse.FAILED;
     }
 
     /**
      * Determines whether or not a player is able to withdraw holdings from this account.
      * @param identifier The identifier of the account that is associated with this call.
      * @param accessor The identifier of the user attempting to access this account.
-     * @return Whether or not the player is able to withdraw holdings from this account.
+     * @return The {@link EconomyResponse} for this action.
      */
     @Override
-    public boolean canWithdraw(String identifier, UUID accessor) {
-        return false;
+    public EconomyResponse canWithdrawDetail(String identifier, UUID accessor) {
+        return canWithdrawDetail(identifier, getName(accessor));
     }
 
     /**
      * Determines whether or not a player is able to withdraw holdings from this account.
      * @param identifier The identifier of the account that is associated with this call.
      * @param accessor The identifier of the user attempting to access this account.
-     * @return Whether or not the player is able to withdraw holdings from this account.
+     * @return The {@link EconomyResponse} for this action.
      */
     @Override
-    public boolean canWithdraw(UUID identifier, String accessor) {
-        return false;
+    public EconomyResponse canWithdrawDetail(UUID identifier, String accessor) {
+        return canWithdrawDetail(getName(identifier), accessor);
     }
 
     /**
      * Determines whether or not a player is able to withdraw holdings from this account.
      * @param identifier The identifier of the account that is associated with this call.
      * @param accessor The identifier of the user attempting to access this account.
-     * @return Whether or not the player is able to withdraw holdings from this account.
+     * @return The {@link EconomyResponse} for this action.
      */
     @Override
-    public boolean canWithdraw(UUID identifier, UUID accessor) {
-        return false;
-    }
-
-    /**
-     * Determines whether or not a player is able to withdraw holdings from this account.
-     * @param identifier The identifier of the account that is associated with this call.
-     * @param accessor The identifier of the user attempting to access this account.
-     * @return Whether or not the player is able to withdraw holdings from this account.
-     */
-    @Override
-    public CompletableFuture<Boolean> asyncCanWithdraw(String identifier, String accessor) {
-        return CompletableFuture.supplyAsync(() -> false);
-    }
-
-    /**
-     * Determines whether or not a player is able to withdraw holdings from this account.
-     * @param identifier The identifier of the account that is associated with this call.
-     * @param accessor The identifier of the user attempting to access this account.
-     * @return Whether or not the player is able to withdraw holdings from this account.
-     */
-    @Override
-    public CompletableFuture<Boolean> asyncCanWithdraw(String identifier, UUID accessor) {
-        return CompletableFuture.supplyAsync(() -> false);
-    }
-
-    /**
-     * Determines whether or not a player is able to withdraw holdings from this account.
-     * @param identifier The identifier of the account that is associated with this call.
-     * @param accessor The identifier of the user attempting to access this account.
-     * @return Whether or not the player is able to withdraw holdings from this account.
-     */
-    @Override
-    public CompletableFuture<Boolean> asyncCanWithdraw(UUID identifier, String accessor) {
-        return CompletableFuture.supplyAsync(() -> false);
-    }
-
-    /**
-     * Determines whether or not a player is able to withdraw holdings from this account.
-     * @param identifier The identifier of the account that is associated with this call.
-     * @param accessor The identifier of the user attempting to access this account.
-     * @return Whether or not the player is able to withdraw holdings from this account.
-     */
-    @Override
-    public CompletableFuture<Boolean> asyncCanWithdraw(UUID identifier, UUID accessor) {
-        return CompletableFuture.supplyAsync(() -> false);
+    public EconomyResponse canWithdrawDetail(UUID identifier, UUID accessor) {
+        return canWithdrawDetail(getName(identifier), getName(accessor));
     }
 
     /**
      * Determines whether or not a player is able to deposit holdings into this account.
      * @param identifier The identifier of the account that is associated with this call.
      * @param accessor The identifier of the user attempting to access this account.
-     * @return Whether or not the player is able to deposit holdings into this account.
+     * @return The {@link EconomyResponse} for this action.
      */
     @Override
-    public boolean canDeposit(String identifier, String accessor) {
-        return false;
+    public EconomyResponse canDepositDetail(String identifier, String accessor) {
+        if (identifier.equals(accessor)) {
+            return GeneralResponse.SUCCESS;
+        }
+        return GeneralResponse.FAILED;
     }
 
     /**
      * Determines whether or not a player is able to deposit holdings into this account.
      * @param identifier The identifier of the account that is associated with this call.
      * @param accessor The identifier of the user attempting to access this account.
-     * @return Whether or not the player is able to deposit holdings into this account.
+     * @return The {@link EconomyResponse} for this action.
      */
     @Override
-    public boolean canDeposit(String identifier, UUID accessor) {
-        return false;
+    public EconomyResponse canDepositDetail(String identifier, UUID accessor) {
+        return canDepositDetail(identifier, getName(accessor));
     }
 
     /**
      * Determines whether or not a player is able to deposit holdings into this account.
      * @param identifier The identifier of the account that is associated with this call.
      * @param accessor The identifier of the user attempting to access this account.
-     * @return Whether or not the player is able to deposit holdings into this account.
+     * @return The {@link EconomyResponse} for this action.
      */
     @Override
-    public boolean canDeposit(UUID identifier, String accessor) {
-        return false;
+    public EconomyResponse canDepositDetail(UUID identifier, String accessor) {
+        return canDepositDetail(getName(identifier), accessor);
     }
 
     /**
      * Determines whether or not a player is able to deposit holdings into this account.
      * @param identifier The identifier of the account that is associated with this call.
      * @param accessor The identifier of the user attempting to access this account.
-     * @return Whether or not the player is able to deposit holdings into this account.
+     * @return The {@link EconomyResponse} for this action.
      */
     @Override
-    public boolean canDeposit(UUID identifier, UUID accessor) {
-        return false;
-    }
-
-    /**
-     * Determines whether or not a player is able to deposit holdings into this account.
-     * @param identifier The identifier of the account that is associated with this call.
-     * @param accessor The identifier of the user attempting to access this account.
-     * @return Whether or not the player is able to deposit holdings into this account.
-     */
-    @Override
-    public CompletableFuture<Boolean> asyncCanDeposit(String identifier, String accessor) {
-        return CompletableFuture.supplyAsync(() -> false);
-    }
-
-    /**
-     * Determines whether or not a player is able to deposit holdings into this account.
-     * @param identifier The identifier of the account that is associated with this call.
-     * @param accessor The identifier of the user attempting to access this account.
-     * @return Whether or not the player is able to deposit holdings into this account.
-     */
-    @Override
-    public CompletableFuture<Boolean> asyncCanDeposit(String identifier, UUID accessor) {
-        return CompletableFuture.supplyAsync(() -> false);
-    }
-
-    /**
-     * Determines whether or not a player is able to deposit holdings into this account.
-     * @param identifier The identifier of the account that is associated with this call.
-     * @param accessor The identifier of the user attempting to access this account.
-     * @return Whether or not the player is able to deposit holdings into this account.
-     */
-    @Override
-    public CompletableFuture<Boolean> asyncCanDeposit(UUID identifier, String accessor) {
-        return CompletableFuture.supplyAsync(() -> false);
-    }
-
-    /**
-     * Determines whether or not a player is able to deposit holdings into this account.
-     * @param identifier The identifier of the account that is associated with this call.
-     * @param accessor The identifier of the user attempting to access this account.
-     * @return Whether or not the player is able to deposit holdings into this account.
-     */
-    @Override
-    public CompletableFuture<Boolean> asyncCanDeposit(UUID identifier, UUID accessor) {
-        return CompletableFuture.supplyAsync(() -> false);
+    public EconomyResponse canDepositDetail(UUID identifier, UUID accessor) {
+        return canDepositDetail(getName(identifier), getName(accessor));
     }
 
     /**
@@ -564,7 +357,7 @@ public class ReserveEssentials implements EconomyAPI {
         if (hasAccount(identifier)) {
             try {
                 return Economy.getMoneyExact(identifier);
-            } catch(UserDoesNotExistException ignore) { }
+            } catch (UserDoesNotExistException ignore) { }
         }
         return ess.getSettings().getStartingBalance();
     }
@@ -579,7 +372,7 @@ public class ReserveEssentials implements EconomyAPI {
         if (hasAccount(identifier)) {
             try {
                 return Economy.getMoneyExact(getName(identifier));
-            } catch(UserDoesNotExistException ignore) { }
+            } catch (UserDoesNotExistException ignore) { }
         }
         return ess.getSettings().getStartingBalance();
     }
@@ -631,72 +424,6 @@ public class ReserveEssentials implements EconomyAPI {
     }
 
     /**
-     * Used to get the balance of an account.
-     * @param identifier The identifier of the account that is associated with this call.
-     * @return The balance of the account.
-     */
-    @Override
-    public CompletableFuture<BigDecimal> asyncGetHoldings(String identifier) {
-        return CompletableFuture.supplyAsync(() -> getHoldings(identifier));
-    }
-
-    /**
-     * Used to get the balance of an account.
-     * @param identifier The identifier of the account that is associated with this call.
-     * @return The balance of the account.
-     */
-    @Override
-    public CompletableFuture<BigDecimal> asyncGetHoldings(UUID identifier) {
-        return CompletableFuture.supplyAsync(() -> getHoldings(identifier));
-    }
-
-    /**
-     * Used to get the balance of an account.
-     * @param identifier The identifier of the account that is associated with this call.
-     * @param world The name of the {@link World} associated with the balance.
-     * @return The balance of the account.
-     */
-    @Override
-    public CompletableFuture<BigDecimal> asyncGetHoldings(String identifier, String world) {
-        return CompletableFuture.supplyAsync(() -> getHoldings(identifier));
-    }
-
-    /**
-     * Used to get the balance of an account.
-     * @param identifier The identifier of the account that is associated with this call.
-     * @param world The name of the {@link World} associated with the balance.
-     * @return The balance of the account.
-     */
-    @Override
-    public CompletableFuture<BigDecimal> asyncGetHoldings(UUID identifier, String world) {
-        return CompletableFuture.supplyAsync(() -> getHoldings(identifier));
-    }
-
-    /**
-     * Used to get the balance of an account.
-     * @param identifier The identifier of the account that is associated with this call.
-     * @param world The name of the {@link World} associated with the balance.
-     * @param currency The {@link Currency} associated with the balance.
-     * @return The balance of the account.
-     */
-    @Override
-    public CompletableFuture<BigDecimal> asyncGetHoldings(String identifier, String world, String currency) {
-        return CompletableFuture.supplyAsync(() -> getHoldings(identifier));
-    }
-
-    /**
-     * Used to get the balance of an account.
-     * @param identifier The identifier of the account that is associated with this call.
-     * @param world The name of the {@link World} associated with the balance.
-     * @param currency The {@link Currency} associated with the balance.
-     * @return The balance of the account.
-     */
-    @Override
-    public CompletableFuture<BigDecimal> asyncGetHoldings(UUID identifier, String world, String currency) {
-        return CompletableFuture.supplyAsync(() -> getHoldings(identifier));
-    }
-
-    /**
      * Used to determine if an account has at least an amount of funds.
      * @param identifier The identifier of the account that is associated with this call.
      * @param amount The amount you wish to use for this check.
@@ -706,7 +433,7 @@ public class ReserveEssentials implements EconomyAPI {
     public boolean hasHoldings(String identifier, BigDecimal amount) {
         try {
             return hasAccount(identifier) && Economy.hasEnough(identifier, amount);
-        } catch(UserDoesNotExistException ignore) {
+        } catch (UserDoesNotExistException ignore) {
             return false;
         }
     }
@@ -721,7 +448,7 @@ public class ReserveEssentials implements EconomyAPI {
     public boolean hasHoldings(UUID identifier, BigDecimal amount) {
         try {
             return hasAccount(identifier) && Economy.hasEnough(getName(identifier), amount);
-        } catch(UserDoesNotExistException ignore) {
+        } catch (UserDoesNotExistException ignore) {
             return false;
         }
     }
@@ -777,581 +504,281 @@ public class ReserveEssentials implements EconomyAPI {
     }
 
     /**
-     * Used to determine if an account has at least an amount of funds.
+     * Used to set the funds to an account.
      * @param identifier The identifier of the account that is associated with this call.
-     * @param amount The amount you wish to use for this check.
-     * @return True if the account has at least the specified amount of funds, otherwise false.
+     * @param amount The amount you wish to set this accounts's funds to.
+     * @return The {@link EconomyResponse} for this action.
      */
     @Override
-    public CompletableFuture<Boolean> asyncHasHoldings(String identifier, BigDecimal amount) {
-        return CompletableFuture.supplyAsync(() -> hasHoldings(identifier, amount));
-    }
-
-    /**
-     * Used to determine if an account has at least an amount of funds.
-     * @param identifier The identifier of the account that is associated with this call.
-     * @param amount The amount you wish to use for this check.
-     * @return True if the account has at least the specified amount of funds, otherwise false.
-     */
-    @Override
-    public CompletableFuture<Boolean> asyncHasHoldings(UUID identifier, BigDecimal amount) {
-        return CompletableFuture.supplyAsync(() -> hasHoldings(identifier, amount));
-    }
-
-    /**
-     * Used to determine if an account has at least an amount of funds.
-     * @param identifier The identifier of the account that is associated with this call.
-     * @param amount The amount you wish to use for this check.
-     * @param world The name of the {@link World} associated with the amount.
-     * @return True if the account has at least the specified amount of funds, otherwise false.
-     */
-    @Override
-    public CompletableFuture<Boolean> asyncHasHoldings(String identifier, BigDecimal amount, String world) {
-        return CompletableFuture.supplyAsync(() -> hasHoldings(identifier, amount));
-    }
-
-    /**
-     * Used to determine if an account has at least an amount of funds.
-     * @param identifier The identifier of the account that is associated with this call.
-     * @param amount The amount you wish to use for this check.
-     * @param world The name of the {@link World} associated with the amount.
-     * @return True if the account has at least the specified amount of funds, otherwise false.
-     */
-    @Override
-    public CompletableFuture<Boolean> asyncHasHoldings(UUID identifier, BigDecimal amount, String world) {
-        return CompletableFuture.supplyAsync(() -> hasHoldings(identifier, amount));
-    }
-
-    /**
-     * Used to determine if an account has at least an amount of funds.
-     * @param identifier The identifier of the account that is associated with this call.
-     * @param amount The amount you wish to use for this check.
-     * @param world The name of the {@link World} associated with the amount.
-     * @param currency The {@link Currency} associated with the balance.
-     * @return True if the account has at least the specified amount of funds, otherwise false.
-     */
-    @Override
-    public CompletableFuture<Boolean> asyncHasHoldings(String identifier, BigDecimal amount, String world, String currency) {
-        return CompletableFuture.supplyAsync(() -> hasHoldings(identifier, amount));
-    }
-
-    /**
-     * Used to determine if an account has at least an amount of funds.
-     * @param identifier The identifier of the account that is associated with this call.
-     * @param amount The amount you wish to use for this check.
-     * @param world The name of the {@link World} associated with the amount.
-     * @param currency The {@link Currency} associated with the balance.
-     * @return True if the account has at least the specified amount of funds, otherwise false.
-     */
-    @Override
-    public CompletableFuture<Boolean> asyncHasHoldings(UUID identifier, BigDecimal amount, String world, String currency) {
-        return CompletableFuture.supplyAsync(() -> hasHoldings(identifier, amount));
-    }
-
-    /**
-     * Used to set funds to an account.
-     * @param identifier The identifier of the account that is associated with this call.
-     * @param amount The amount you wish to set from this account.
-     * @return True if the funds were set for the account, otherwise false.
-     */
-    @Override
-    public boolean setHoldings(String identifier, BigDecimal amount) {
-        if (!hasAccount(identifier)) return false;
+    public EconomyResponse setHoldingsDetail(String identifier, BigDecimal amount) {
+        if (!hasAccount(identifier) && !createAccount(identifier)) return AccountResponse.CREATION_FAILED;
         try {
             Economy.setMoney(identifier, amount);
-            return true;
-        } catch(UserDoesNotExistException | NoLoanPermittedException ignore) {
-            return false;
+            return GeneralResponse.SUCCESS;
+        } catch (UserDoesNotExistException ignore) {
+            return AccountResponse.DOESNT_EXIST;
+        } catch (NoLoanPermittedException ignore) {
+            return GeneralResponse.FAILED;
         }
     }
 
     /**
-     * Used to set funds to an account.
+     * Used to set the funds to an account.
      * @param identifier The identifier of the account that is associated with this call.
-     * @param amount The amount you wish to set from this account.
-     * @return True if the funds were set for the account, otherwise false.
+     * @param amount The amount you wish to set this accounts's funds to.
+     * @return The {@link EconomyResponse} for this action.
      */
     @Override
-    public boolean setHoldings(UUID identifier, BigDecimal amount) {
-        if (!hasAccount(identifier)) return false;
+    public EconomyResponse setHoldingsDetail(UUID identifier, BigDecimal amount) {
+        return setHoldingsDetail(getName(identifier), amount);
+    }
+
+    /**
+     * Used to set the funds to an account.
+     * @param identifier The identifier of the account that is associated with this call.
+     * @param amount The amount you wish to set this accounts's funds to.
+     * @param world The name of the {@link World} associated with the amount.
+     * @return The {@link EconomyResponse} for this action.
+     */
+    @Override
+    public EconomyResponse setHoldingsDetail(String identifier, BigDecimal amount, String world) {
+        return setHoldingsDetail(identifier, amount);
+    }
+
+    /**
+     * Used to set the funds to an account.
+     * @param identifier The identifier of the account that is associated with this call.
+     * @param amount The amount you wish to set this accounts's funds to.
+     * @param world The name of the {@link World} associated with the amount.
+     * @return The {@link EconomyResponse} for this action.
+     */
+    @Override
+    public EconomyResponse setHoldingsDetail(UUID identifier, BigDecimal amount, String world) {
+        return setHoldingsDetail(identifier, amount);
+    }
+
+    /**
+     * Used to set the funds to an account.
+     * @param identifier The identifier of the account that is associated with this call.
+     * @param amount The amount you wish to set this accounts's funds to.
+     * @param world The name of the {@link World} associated with the amount.
+     * @param currency The {@link Currency} associated with the balance.
+     * @return The {@link EconomyResponse} for this action.
+     */
+    @Override
+    public EconomyResponse setHoldingsDetail(String identifier, BigDecimal amount, String world, String currency) {
+        return setHoldingsDetail(identifier, amount);
+    }
+
+    /**
+     * Used to set the funds to an account.
+     * @param identifier The identifier of the account that is associated with this call.
+     * @param amount The amount you wish to set this accounts's funds to.
+     * @param world The name of the {@link World} associated with the amount.
+     * @param currency The {@link Currency} associated with the balance.
+     * @return The {@link EconomyResponse} for this action.
+     */
+    @Override
+    public EconomyResponse setHoldingsDetail(UUID identifier, BigDecimal amount, String world, String currency) {
+        return setHoldingsDetail(identifier, amount);
+    }
+
+    /**
+     * Used to add funds to an account.
+     * @param identifier The identifier of the account that is associated with this call.
+     * @param amount The amount you wish to add to this account.
+     * @return The {@link EconomyResponse} for this action.
+     */
+    @Override
+    public EconomyResponse addHoldingsDetail(String identifier, BigDecimal amount) {
+        if (!hasAccount(identifier) && !createAccount(identifier)) return AccountResponse.CREATION_FAILED;
+        if (getHoldings(identifier).add(amount).compareTo(ess.getSettings().getMaxMoney()) > 0)
+            return HoldingsResponse.MAX_HOLDINGS;
+
         try {
-            Economy.setMoney(getName(identifier), amount);
-            return true;
-        } catch(UserDoesNotExistException | NoLoanPermittedException ignore) {
-            return false;
+            Economy.add(identifier, amount);
+            return GeneralResponse.SUCCESS;
+        } catch (UserDoesNotExistException ignore) {
+            return AccountResponse.DOESNT_EXIST;
+        } catch (NoLoanPermittedException ignore) {
+            return GeneralResponse.FAILED;
         }
     }
 
     /**
-     * Used to set funds to an account.
+     * Used to add funds to an account.
      * @param identifier The identifier of the account that is associated with this call.
-     * @param amount The amount you wish to set from this account.
-     * @param world The name of the {@link World} associated with the amount.
-     * @return True if the funds were set for the account, otherwise false.
+     * @param amount The amount you wish to add to this account.
+     * @return The {@link EconomyResponse} for this action.
      */
     @Override
-    public boolean setHoldings(String identifier, BigDecimal amount, String world) {
-        return setHoldings(identifier, amount);
-    }
-
-    /**
-     * Used to set funds to an account.
-     * @param identifier The identifier of the account that is associated with this call.
-     * @param amount The amount you wish to set from this account.
-     * @param world The name of the {@link World} associated with the amount.
-     * @return True if the funds were set for the account, otherwise false.
-     */
-    @Override
-    public boolean setHoldings(UUID identifier, BigDecimal amount, String world) {
-        return setHoldings(identifier, amount);
-    }
-
-    /**
-     * Used to set funds to an account.
-     * @param identifier The identifier of the account that is associated with this call.
-     * @param amount The amount you wish to set from this account.
-     * @param world The name of the {@link World} associated with the amount.
-     * @param currency The {@link Currency} associated with the balance.
-     * @return True if the funds were set for the account, otherwise false.
-     */
-    @Override
-    public boolean setHoldings(String identifier, BigDecimal amount, String world, String currency) {
-        return setHoldings(identifier, amount);
-    }
-
-    /**
-     * Used to set funds to an account.
-     * @param identifier The identifier of the account that is associated with this call.
-     * @param amount The amount you wish to set from this account.
-     * @param world The name of the {@link World} associated with the amount.
-     * @param currency The {@link Currency} associated with the balance.
-     * @return True if the funds were set for the account, otherwise false.
-     */
-    @Override
-    public boolean setHoldings(UUID identifier, BigDecimal amount, String world, String currency) {
-        return setHoldings(identifier, amount);
-    }
-
-    /**
-     * Used to set funds to an account.
-     * @param identifier The identifier of the account that is associated with this call.
-     * @param amount The amount you wish to set from this account.
-     * @return True if the funds were set for the account, otherwise false.
-     */
-    @Override
-    public CompletableFuture<Boolean> asyncSetHoldings(String identifier, BigDecimal amount) {
-        return CompletableFuture.supplyAsync(() -> setHoldings(identifier, amount));
-    }
-
-    /**
-     * Used to set funds to an account.
-     * @param identifier The identifier of the account that is associated with this call.
-     * @param amount The amount you wish to set from this account.
-     * @return True if the funds were set for the account, otherwise false.
-     */
-    @Override
-    public CompletableFuture<Boolean> asyncSetHoldings(UUID identifier, BigDecimal amount) {
-        return CompletableFuture.supplyAsync(() -> setHoldings(identifier, amount));
-    }
-
-    /**
-     * Used to set funds to an account.
-     * @param identifier The identifier of the account that is associated with this call.
-     * @param amount The amount you wish to set from this account.
-     * @param world The name of the {@link World} associated with the amount.
-     * @return True if the funds were set for the account, otherwise false.
-     */
-    @Override
-    public CompletableFuture<Boolean> asyncSetHoldings(String identifier, BigDecimal amount, String world) {
-        return CompletableFuture.supplyAsync(() -> setHoldings(identifier, amount));
-    }
-
-    /**
-     * Used to set funds to an account.
-     * @param identifier The identifier of the account that is associated with this call.
-     * @param amount The amount you wish to set from this account.
-     * @param world The name of the {@link World} associated with the amount.
-     * @return True if the funds were set for the account, otherwise false.
-     */
-    @Override
-    public CompletableFuture<Boolean> asyncSetHoldings(UUID identifier, BigDecimal amount, String world) {
-        return CompletableFuture.supplyAsync(() -> setHoldings(identifier, amount));
-    }
-
-    /**
-     * Used to set funds to an account.
-     * @param identifier The identifier of the account that is associated with this call.
-     * @param amount The amount you wish to set from this account.
-     * @param world The name of the {@link World} associated with the amount.
-     * @param currency The {@link Currency} associated with the balance.
-     * @return True if the funds were set for the account, otherwise false.
-     */
-    @Override
-    public CompletableFuture<Boolean> asyncSetHoldings(String identifier, BigDecimal amount, String world, String currency) {
-        return CompletableFuture.supplyAsync(() -> setHoldings(identifier, amount));
-    }
-
-    /**
-     * Used to set funds to an account.
-     * @param identifier The identifier of the account that is associated with this call.
-     * @param amount The amount you wish to set from this account.
-     * @param world The name of the {@link World} associated with the amount.
-     * @param currency The {@link Currency} associated with the balance.
-     * @return True if the funds were set for the account, otherwise false.
-     */
-    @Override
-    public CompletableFuture<Boolean> asyncSetHoldings(UUID identifier, BigDecimal amount, String world, String currency) {
-        return CompletableFuture.supplyAsync(() -> setHoldings(identifier, amount));
+    public EconomyResponse addHoldingsDetail(UUID identifier, BigDecimal amount) {
+        return addHoldingsDetail(getName(identifier), amount);
     }
 
     /**
      * Used to add funds to an account.
      * @param identifier The identifier of the account that is associated with this call.
-     * @param amount The amount you wish to add from this account.
-     * @return True if the funds were added to the account, otherwise false.
+     * @param amount The amount you wish to add to this account.
+     * @param world The name of the {@link World} associated with the amount.
+     * @return The {@link EconomyResponse} for this action.
      */
     @Override
-    public boolean addHoldings(String identifier, BigDecimal amount) {
-        if (getHoldings(identifier).add(amount).compareTo(ess.getSettings().getMaxMoney()) <= 0) {
-            try {
-                Economy.add(identifier, amount);
-            } catch(UserDoesNotExistException | NoLoanPermittedException ignore) {
-                return false;
-            }
+    public EconomyResponse addHoldingsDetail(String identifier, BigDecimal amount, String world) {
+        return addHoldingsDetail(identifier, amount);
+    }
+
+    /**
+     * Used to add funds to an account.
+     * @param identifier The identifier of the account that is associated with this call.
+     * @param amount The amount you wish to add to this account.
+     * @param world The name of the {@link World} associated with the amount.
+     * @return The {@link EconomyResponse} for this action.
+     */
+    @Override
+    public EconomyResponse addHoldingsDetail(UUID identifier, BigDecimal amount, String world) {
+        return addHoldingsDetail(identifier, amount);
+    }
+
+    /**
+     * Used to add funds to an account.
+     * @param identifier The identifier of the account that is associated with this call.
+     * @param amount The amount you wish to add to this account.
+     * @param world The name of the {@link World} associated with the amount.
+     * @param currency The {@link Currency} associated with the balance.
+     * @return The {@link EconomyResponse} for this action.
+     */
+    @Override
+    public EconomyResponse addHoldingsDetail(String identifier, BigDecimal amount, String world, String currency) {
+        return addHoldingsDetail(identifier, amount);
+    }
+
+    /**
+     * Used to add funds to an account.
+     * @param identifier The identifier of the account that is associated with this call.
+     * @param amount The amount you wish to add to this account.
+     * @param world The name of the {@link World} associated with the amount.
+     * @param currency The {@link Currency} associated with the balance.
+     * @return The {@link EconomyResponse} for this action.
+     */
+    @Override
+    public EconomyResponse addHoldingsDetail(UUID identifier, BigDecimal amount, String world, String currency) {
+        return addHoldingsDetail(identifier, amount);
+    }
+
+    /**
+     * Used to determine if a call to the corresponding addHoldings method would be successful. This method does not
+     * affect an account's funds.
+     * @param identifier The identifier of the account that is associated with this call.
+     * @param amount The amount you wish to add to this account.
+     * @return The {@link EconomyResponse} for this action.
+     */
+    @Override
+    public EconomyResponse canAddHoldingsDetail(String identifier, BigDecimal amount) {
+        if (!hasAccount(identifier) && !createAccount(identifier)) return AccountResponse.CREATION_FAILED;
+        if (getHoldings(identifier).add(amount).compareTo(ess.getSettings().getMaxMoney()) > 0)
+            return HoldingsResponse.MAX_HOLDINGS;
+        return GeneralResponse.SUCCESS;
+    }
+
+    /**
+     * Used to determine if a call to the corresponding addHoldings method would be successful. This method does not
+     * affect an account's funds.
+     * @param identifier The identifier of the account that is associated with this call.
+     * @param amount The amount you wish to add to this account.
+     * @return The {@link EconomyResponse} for this action.
+     */
+    @Override
+    public EconomyResponse canAddHoldingsDetail(UUID identifier, BigDecimal amount) {
+        return canAddHoldingsDetail(getName(identifier), amount);
+    }
+
+    /**
+     * Used to determine if a call to the corresponding addHoldings method would be successful. This method does not
+     * affect an account's funds.
+     * @param identifier The identifier of the account that is associated with this call.
+     * @param amount The amount you wish to add to this account.
+     * @param world The name of the {@link World} associated with the amount.
+     * @return The {@link EconomyResponse} for this action.
+     */
+    @Override
+    public EconomyResponse canAddHoldingsDetail(String identifier, BigDecimal amount, String world) {
+        return canAddHoldingsDetail(identifier, amount);
+    }
+
+    /**
+     * Used to determine if a call to the corresponding addHoldings method would be successful. This method does not
+     * affect an account's funds.
+     * @param identifier The identifier of the account that is associated with this call.
+     * @param amount The amount you wish to add to this account.
+     * @param world The name of the {@link World} associated with the amount.
+     * @return The {@link EconomyResponse} for this action.
+     */
+    @Override
+    public EconomyResponse canAddHoldingsDetail(UUID identifier, BigDecimal amount, String world) {
+        return canAddHoldingsDetail(identifier, amount);
+    }
+
+    /**
+     * Used to determine if a call to the corresponding addHoldings method would be successful. This method does not
+     * affect an account's funds.
+     * @param identifier The identifier of the account that is associated with this call.
+     * @param amount The amount you wish to add to this account.
+     * @param world The name of the {@link World} associated with the amount.
+     * @param currency The {@link Currency} associated with the balance.
+     * @return The {@link EconomyResponse} for this action.
+     */
+    @Override
+    public EconomyResponse canAddHoldingsDetail(String identifier, BigDecimal amount, String world, String currency) {
+        return canAddHoldingsDetail(identifier, amount);
+    }
+
+    /**
+     * Used to determine if a call to the corresponding addHoldings method would be successful. This method does not
+     * affect an account's funds.
+     * @param identifier The identifier of the account that is associated with this call.
+     * @param amount The amount you wish to add to this account.
+     * @param world The name of the {@link World} associated with the amount.
+     * @param currency The {@link Currency} associated with the balance.
+     * @return The {@link EconomyResponse} for this action.
+     */
+    @Override
+    public EconomyResponse canAddHoldingsDetail(UUID identifier, BigDecimal amount, String world, String currency) {
+        return canAddHoldingsDetail(identifier, amount);
+    }
+
+
+    /**
+     * Used to remove funds from an account.
+     * @param identifier The identifier of the account that is associated with this call.
+     * @param amount The amount you wish to remove from this account.
+     * @return The {@link EconomyResponse} for this action.
+     */
+    @Override
+    public EconomyResponse removeHoldingsDetail(String identifier, BigDecimal amount) {
+        if (!hasAccount(identifier) && !createAccount(identifier)) return AccountResponse.CREATION_FAILED;
+        if (getHoldings(identifier).subtract(amount).compareTo(ess.getSettings().getMinMoney()) < 0)
+            return HoldingsResponse.MIN_HOLDINGS;
+
+        try {
+            Economy.substract(identifier, amount);
+            return GeneralResponse.SUCCESS;
+        } catch (UserDoesNotExistException ignore) {
+            return AccountResponse.DOESNT_EXIST;
+        } catch (NoLoanPermittedException ignore) {
+            return GeneralResponse.FAILED;
         }
-        return false;
-    }
-
-    /**
-     * Used to add funds to an account.
-     * @param identifier The identifier of the account that is associated with this call.
-     * @param amount The amount you wish to add from this account.
-     * @return True if the funds were added to the account, otherwise false.
-     */
-    @Override
-    public boolean addHoldings(UUID identifier, BigDecimal amount) {
-        if (getHoldings(identifier).add(amount).compareTo(ess.getSettings().getMaxMoney()) <= 0) {
-            try {
-                Economy.add(getName(identifier), amount);
-            } catch(UserDoesNotExistException | NoLoanPermittedException ignore) {
-                return false;
-            }
-        }
-        return false;
-    }
-
-    /**
-     * Used to add funds to an account.
-     * @param identifier The identifier of the account that is associated with this call.
-     * @param amount The amount you wish to add from this account.
-     * @param world The name of the {@link World} associated with the amount.
-     * @return True if the funds were added to the account, otherwise false.
-     */
-    @Override
-    public boolean addHoldings(String identifier, BigDecimal amount, String world) {
-        return addHoldings(identifier, amount);
-    }
-
-    /**
-     * Used to add funds to an account.
-     * @param identifier The identifier of the account that is associated with this call.
-     * @param amount The amount you wish to add from this account.
-     * @param world The name of the {@link World} associated with the amount.
-     * @return True if the funds were added to the account, otherwise false.
-     */
-    @Override
-    public boolean addHoldings(UUID identifier, BigDecimal amount, String world) {
-        return addHoldings(identifier, amount);
-    }
-
-    /**
-     * Used to add funds to an account.
-     * @param identifier The identifier of the account that is associated with this call.
-     * @param amount The amount you wish to add from this account.
-     * @param world The name of the {@link World} associated with the amount.
-     * @param currency The {@link Currency} associated with the balance.
-     * @return True if the funds were added to the account, otherwise false.
-     */
-    @Override
-    public boolean addHoldings(String identifier, BigDecimal amount, String world, String currency) {
-        return addHoldings(identifier, amount);
-    }
-
-    /**
-     * Used to add funds to an account.
-     * @param identifier The identifier of the account that is associated with this call.
-     * @param amount The amount you wish to add from this account.
-     * @param world The name of the {@link World} associated with the amount.
-     * @param currency The {@link Currency} associated with the balance.
-     * @return True if the funds were added to the account, otherwise false.
-     */
-    @Override
-    public boolean addHoldings(UUID identifier, BigDecimal amount, String world, String currency) {
-        return addHoldings(identifier, amount);
-    }
-
-    /**
-     * Used to add funds to an account.
-     * @param identifier The identifier of the account that is associated with this call.
-     * @param amount The amount you wish to add from this account.
-     * @return True if the funds were added to the account, otherwise false.
-     */
-    @Override
-    public CompletableFuture<Boolean> asyncAddHoldings(String identifier, BigDecimal amount) {
-        return CompletableFuture.supplyAsync(() -> addHoldings(identifier, amount));
-    }
-
-    /**
-     * Used to add funds to an account.
-     * @param identifier The identifier of the account that is associated with this call.
-     * @param amount The amount you wish to add from this account.
-     * @return True if the funds were added to the account, otherwise false.
-     */
-    @Override
-    public CompletableFuture<Boolean> asyncAddHoldings(UUID identifier, BigDecimal amount) {
-        return CompletableFuture.supplyAsync(() -> addHoldings(identifier, amount));
-    }
-
-    /**
-     * Used to add funds to an account.
-     * @param identifier The identifier of the account that is associated with this call.
-     * @param amount The amount you wish to add from this account.
-     * @param world The name of the {@link World} associated with the amount.
-     * @return True if the funds were added to the account, otherwise false.
-     */
-    @Override
-    public CompletableFuture<Boolean> asyncAddHoldings(String identifier, BigDecimal amount, String world) {
-        return CompletableFuture.supplyAsync(() -> addHoldings(identifier, amount));
-    }
-
-    /**
-     * Used to add funds to an account.
-     * @param identifier The identifier of the account that is associated with this call.
-     * @param amount The amount you wish to add from this account.
-     * @param world The name of the {@link World} associated with the amount.
-     * @return True if the funds were added to the account, otherwise false.
-     */
-    @Override
-    public CompletableFuture<Boolean> asyncAddHoldings(UUID identifier, BigDecimal amount, String world) {
-        return CompletableFuture.supplyAsync(() -> addHoldings(identifier, amount));
-    }
-
-    /**
-     * Used to add funds to an account.
-     * @param identifier The identifier of the account that is associated with this call.
-     * @param amount The amount you wish to add from this account.
-     * @param world The name of the {@link World} associated with the amount.
-     * @param currency The {@link Currency} associated with the balance.
-     * @return True if the funds were added to the account, otherwise false.
-     */
-    @Override
-    public CompletableFuture<Boolean> asyncAddHoldings(String identifier, BigDecimal amount, String world, String currency) {
-        return CompletableFuture.supplyAsync(() -> addHoldings(identifier, amount));
-    }
-
-    /**
-     * Used to add funds to an account.
-     * @param identifier The identifier of the account that is associated with this call.
-     * @param amount The amount you wish to add from this account.
-     * @param world The name of the {@link World} associated with the amount.
-     * @param currency The {@link Currency} associated with the balance.
-     * @return True if the funds were added to the account, otherwise false.
-     */
-    @Override
-    public CompletableFuture<Boolean> asyncAddHoldings(UUID identifier, BigDecimal amount, String world, String currency) {
-        return CompletableFuture.supplyAsync(() -> addHoldings(identifier, amount));
-    }
-
-    /**
-     * Used to determine if a call to the corresponding addHoldings method would be successful. This method does not
-     * affect an account's funds.
-     * @param identifier The identifier of the account that is associated with this call.
-     * @param amount The amount you wish to add to this account.
-     * @return hasAccount(identifier) if a call to the corresponding addHoldings method would return hasAccount(identifier), otherwise false.
-     */
-    @Override
-    public boolean canAddHoldings(String identifier, BigDecimal amount) {
-        return hasAccount(identifier) && getHoldings(identifier).add(amount).compareTo(ess.getSettings().getMaxMoney()) <= 0;
-    }
-
-    /**
-     * Used to determine if a call to the corresponding addHoldings method would be successful. This method does not
-     * affect an account's funds.
-     * @param identifier The identifier of the account that is associated with this call.
-     * @param amount The amount you wish to add to this account.
-     * @return hasAccount(identifier) if a call to the corresponding addHoldings method would return hasAccount(identifier), otherwise false.
-     */
-    @Override
-    public boolean canAddHoldings(UUID identifier, BigDecimal amount) {
-        return hasAccount(identifier) && getHoldings(identifier).add(amount).compareTo(ess.getSettings().getMaxMoney()) <= 0;
-    }
-
-    /**
-     * Used to determine if a call to the corresponding addHoldings method would be successful. This method does not
-     * affect an account's funds.
-     * @param identifier The identifier of the account that is associated with this call.
-     * @param amount The amount you wish to add to this account.
-     * @param world The name of the {@link World} associated with the amount.
-     * @return hasAccount(identifier) if a call to the corresponding addHoldings method would return hasAccount(identifier), otherwise false.
-     */
-    @Override
-    public boolean canAddHoldings(String identifier, BigDecimal amount, String world) {
-        return canAddHoldings(identifier, amount);
-    }
-
-    /**
-     * Used to determine if a call to the corresponding addHoldings method would be successful. This method does not
-     * affect an account's funds.
-     * @param identifier The identifier of the account that is associated with this call.
-     * @param amount The amount you wish to add to this account.
-     * @param world The name of the {@link World} associated with the amount.
-     * @return canAddHoldings(identifier, amount) if a call to the corresponding addHoldings method would return canAddHoldings(identifier, amount), otherwise false.
-     */
-    @Override
-    public boolean canAddHoldings(UUID identifier, BigDecimal amount, String world) {
-        return canAddHoldings(identifier, amount);
-    }
-
-    /**
-     * Used to determine if a call to the corresponding addHoldings method would be successful. This method does not
-     * affect an account's funds.
-     * @param identifier The identifier of the account that is associated with this call.
-     * @param amount The amount you wish to add to this account.
-     * @param world The name of the {@link World} associated with the amount.
-     * @param currency The {@link Currency} associated with the balance.
-     * @return canAddHoldings(identifier, amount) if a call to the corresponding addHoldings method would return canAddHoldings(identifier, amount), otherwise false.
-     */
-    @Override
-    public boolean canAddHoldings(String identifier, BigDecimal amount, String world, String currency) {
-        return canAddHoldings(identifier, amount);
-    }
-
-    /**
-     * Used to determine if a call to the corresponding addHoldings method would be successful. This method does not
-     * affect an account's funds.
-     * @param identifier The identifier of the account that is associated with this call.
-     * @param amount The amount you wish to add to this account.
-     * @param world The name of the {@link World} associated with the amount.
-     * @param currency The {@link Currency} associated with the balance.
-     * @return canAddHoldings(identifier, amount) if a call to the corresponding addHoldings method would return canAddHoldings(identifier, amount), otherwise false.
-     */
-    @Override
-    public boolean canAddHoldings(UUID identifier, BigDecimal amount, String world, String currency) {
-        return canAddHoldings(identifier, amount);
-    }
-
-    /**
-     * Used to determine if a call to the corresponding addHoldings method would be successful. This method does not
-     * affect an account's funds.
-     * @param identifier The identifier of the account that is associated with this call.
-     * @param amount The amount you wish to add to this account.
-     * @return canAddHoldings(identifier, amount) if a call to the corresponding addHoldings method would return canAddHoldings(identifier, amount), otherwise false.
-     */
-    @Override
-    public CompletableFuture<Boolean> asyncCanAddHoldings(String identifier, BigDecimal amount) {
-        return CompletableFuture.supplyAsync(() -> canAddHoldings(identifier, amount));
-    }
-
-    /**
-     * Used to determine if a call to the corresponding addHoldings method would be successful. This method does not
-     * affect an account's funds.
-     * @param identifier The identifier of the account that is associated with this call.
-     * @param amount The amount you wish to add to this account.
-     * @return canAddHoldings(identifier, amount) if a call to the corresponding addHoldings method would return canAddHoldings(identifier, amount), otherwise false.
-     */
-    @Override
-    public CompletableFuture<Boolean> asyncCanAddHoldings(UUID identifier, BigDecimal amount) {
-        return CompletableFuture.supplyAsync(() -> canAddHoldings(identifier, amount));
-    }
-
-    /**
-     * Used to determine if a call to the corresponding addHoldings method would be successful. This method does not
-     * affect an account's funds.
-     * @param identifier The identifier of the account that is associated with this call.
-     * @param amount The amount you wish to add to this account.
-     * @param world The name of the {@link World} associated with the amount.
-     * @return canAddHoldings(identifier, amount) if a call to the corresponding addHoldings method would return canAddHoldings(identifier, amount), otherwise false.
-     */
-    @Override
-    public CompletableFuture<Boolean> asyncCanAddHoldings(String identifier, BigDecimal amount, String world) {
-        return CompletableFuture.supplyAsync(() -> canAddHoldings(identifier, amount));
-    }
-
-    /**
-     * Used to determine if a call to the corresponding addHoldings method would be successful. This method does not
-     * affect an account's funds.
-     * @param identifier The identifier of the account that is associated with this call.
-     * @param amount The amount you wish to add to this account.
-     * @param world The name of the {@link World} associated with the amount.
-     * @return canAddHoldings(identifier, amount) if a call to the corresponding addHoldings method would return canAddHoldings(identifier, amount), otherwise false.
-     */
-    @Override
-    public CompletableFuture<Boolean> asyncCanAddHoldings(UUID identifier, BigDecimal amount, String world) {
-        return CompletableFuture.supplyAsync(() -> canAddHoldings(identifier, amount));
-    }
-
-    /**
-     * Used to determine if a call to the corresponding addHoldings method would be successful. This method does not
-     * affect an account's funds.
-     * @param identifier The identifier of the account that is associated with this call.
-     * @param amount The amount you wish to add to this account.
-     * @param world The name of the {@link World} associated with the amount.
-     * @param currency The {@link Currency} associated with the balance.
-     * @return canAddHoldings(identifier, amount) if a call to the corresponding addHoldings method would return canAddHoldings(identifier, amount), otherwise false.
-     */
-    @Override
-    public CompletableFuture<Boolean> asyncCanAddHoldings(String identifier, BigDecimal amount, String world, String currency) {
-        return CompletableFuture.supplyAsync(() -> canAddHoldings(identifier, amount));
-    }
-
-    /**
-     * Used to determine if a call to the corresponding addHoldings method would be successful. This method does not
-     * affect an account's funds.
-     * @param identifier The identifier of the account that is associated with this call.
-     * @param amount The amount you wish to add to this account.
-     * @param world The name of the {@link World} associated with the amount.
-     * @param currency The {@link Currency} associated with the balance.
-     * @return canAddHoldings(identifier, amount) if a call to the corresponding addHoldings method would return canAddHoldings(identifier, amount), otherwise false.
-     */
-    @Override
-    public CompletableFuture<Boolean> asyncCanAddHoldings(UUID identifier, BigDecimal amount, String world, String currency) {
-        return CompletableFuture.supplyAsync(() -> canAddHoldings(identifier, amount));
     }
 
     /**
      * Used to remove funds from an account.
      * @param identifier The identifier of the account that is associated with this call.
      * @param amount The amount you wish to remove from this account.
-     * @return True if the funds were removed from the account, otherwise false.
+     * @return The {@link EconomyResponse} for this action.
      */
     @Override
-    public boolean removeHoldings(String identifier, BigDecimal amount) {
-        if (getHoldings(identifier).subtract(amount).compareTo(ess.getSettings().getMinMoney()) >= 0) {
-            try {
-                Economy.substract(identifier, amount);
-            } catch(UserDoesNotExistException | NoLoanPermittedException ignore) {
-                return false;
-            }
-        }
-        return false;
-    }
-
-    /**
-     * Used to remove funds from an account.
-     * @param identifier The identifier of the account that is associated with this call.
-     * @param amount The amount you wish to remove from this account.
-     * @return True if the funds were removed from the account, otherwise false.
-     */
-    @Override
-    public boolean removeHoldings(UUID identifier, BigDecimal amount) {
-        if (getHoldings(identifier).subtract(amount).compareTo(ess.getSettings().getMinMoney()) >= 0) {
-            try {
-                Economy.substract(getName(identifier), amount);
-            } catch(UserDoesNotExistException | NoLoanPermittedException ignore) {
-                return false;
-            }
-        }
-        return false;
+    public EconomyResponse removeHoldingsDetail(UUID identifier, BigDecimal amount) {
+        return removeHoldingsDetail(getName(identifier), amount);
     }
 
     /**
@@ -1359,11 +786,11 @@ public class ReserveEssentials implements EconomyAPI {
      * @param identifier The identifier of the account that is associated with this call.
      * @param amount The amount you wish to remove from this account.
      * @param world The name of the {@link World} associated with the amount.
-     * @return True if the funds were removed from the account, otherwise false.
+     * @return The {@link EconomyResponse} for this action.
      */
     @Override
-    public boolean removeHoldings(String identifier, BigDecimal amount, String world) {
-        return removeHoldings(identifier, amount);
+    public EconomyResponse removeHoldingsDetail(String identifier, BigDecimal amount, String world) {
+        return removeHoldingsDetail(identifier, amount);
     }
 
     /**
@@ -1371,11 +798,11 @@ public class ReserveEssentials implements EconomyAPI {
      * @param identifier The identifier of the account that is associated with this call.
      * @param amount The amount you wish to remove from this account.
      * @param world The name of the {@link World} associated with the amount.
-     * @return True if the funds were removed from the account, otherwise false.
+     * @return The {@link EconomyResponse} for this action.
      */
     @Override
-    public boolean removeHoldings(UUID identifier, BigDecimal amount, String world) {
-        return removeHoldings(identifier, amount);
+    public EconomyResponse removeHoldingsDetail(UUID identifier, BigDecimal amount, String world) {
+        return removeHoldingsDetail(identifier, amount);
     }
 
     /**
@@ -1384,11 +811,11 @@ public class ReserveEssentials implements EconomyAPI {
      * @param amount The amount you wish to remove from this account.
      * @param world The name of the {@link World} associated with the amount.
      * @param currency The {@link Currency} associated with the balance.
-     * @return True if the funds were removed from the account, otherwise false.
+     * @return The {@link EconomyResponse} for this action.
      */
     @Override
-    public boolean removeHoldings(String identifier, BigDecimal amount, String world, String currency) {
-        return removeHoldings(identifier, amount);
+    public EconomyResponse removeHoldingsDetail(String identifier, BigDecimal amount, String world, String currency) {
+        return removeHoldingsDetail(identifier, amount);
     }
 
     /**
@@ -1397,83 +824,11 @@ public class ReserveEssentials implements EconomyAPI {
      * @param amount The amount you wish to remove from this account.
      * @param world The name of the {@link World} associated with the amount.
      * @param currency The {@link Currency} associated with the balance.
-     * @return True if the funds were removed from the account, otherwise false.
+     * @return The {@link EconomyResponse} for this action.
      */
     @Override
-    public boolean removeHoldings(UUID identifier, BigDecimal amount, String world, String currency) {
-        return removeHoldings(identifier, amount);
-    }
-
-    /**
-     * Used to remove funds from an account.
-     * @param identifier The identifier of the account that is associated with this call.
-     * @param amount The amount you wish to remove from this account.
-     * @return True if the funds were removed from the account, otherwise false.
-     */
-    @Override
-    public CompletableFuture<Boolean> asyncRemoveHoldings(String identifier, BigDecimal amount) {
-        return CompletableFuture.supplyAsync(() -> removeHoldings(identifier, amount));
-    }
-
-    /**
-     * Used to remove funds from an account.
-     * @param identifier The identifier of the account that is associated with this call.
-     * @param amount The amount you wish to remove from this account.
-     * @return True if the funds were removed from the account, otherwise false.
-     */
-    @Override
-    public CompletableFuture<Boolean> asyncRemoveHoldings(UUID identifier, BigDecimal amount) {
-        return CompletableFuture.supplyAsync(() -> removeHoldings(identifier, amount));
-    }
-
-    /**
-     * Used to remove funds from an account.
-     * @param identifier The identifier of the account that is associated with this call.
-     * @param amount The amount you wish to remove from this account.
-     * @param world The name of the {@link World} associated with the amount.
-     * @return True if the funds were removed from the account, otherwise false.
-     */
-    @Override
-    public CompletableFuture<Boolean> asyncRemoveHoldings(String identifier, BigDecimal amount, String world) {
-        return CompletableFuture.supplyAsync(() -> removeHoldings(identifier, amount));
-    }
-
-    /**
-     * Used to remove funds from an account.
-     * @param identifier The identifier of the account that is associated with this call.
-     * @param amount The amount you wish to remove from this account.
-     * @param world The name of the {@link World} associated with the amount.
-     * @return True if the funds were removed from the account, otherwise false.
-     */
-    @Override
-    public CompletableFuture<Boolean> asyncRemoveHoldings(UUID identifier, BigDecimal amount, String world) {
-        return CompletableFuture.supplyAsync(() -> removeHoldings(identifier, amount));
-    }
-
-    /**
-     * Used to remove funds from an account.
-     * @param identifier The identifier of the account that is associated with this call.
-     * @param amount The amount you wish to remove from this account.
-     * @param world The name of the {@link World} associated with the amount.
-     * @param currency The {@link Currency} associated with the balance.
-     * @return True if the funds were removed from the account, otherwise false.
-     */
-    @Override
-    public CompletableFuture<Boolean> asyncRemoveHoldings(String identifier, BigDecimal amount, String world, String currency) {
-        return CompletableFuture.supplyAsync(() -> removeHoldings(identifier, amount));
-    }
-
-    /**
-     * Used to remove funds from an account.
-     * @param identifier The identifier of the account that is associated with this call.
-     * @param amount The amount you wish to remove from this account.
-     * @param world The name of the {@link World} associated with the amount.
-     * @param currency The {@link Currency} associated with the balance.
-     * @return True if the funds were removed from the account, otherwise false.
-     */
-    @Override
-    public CompletableFuture<Boolean> asyncRemoveHoldings(UUID identifier, BigDecimal amount, String world, String currency) {
-        return CompletableFuture.supplyAsync(() -> removeHoldings(identifier, amount));
+    public EconomyResponse removeHoldingsDetail(UUID identifier, BigDecimal amount, String world, String currency) {
+        return removeHoldingsDetail(identifier, amount);
     }
 
     /**
@@ -1481,11 +836,14 @@ public class ReserveEssentials implements EconomyAPI {
      * affect an account's funds.
      * @param identifier The identifier of the account that is associated with this call.
      * @param amount The amount you wish to remove from this account.
-     * @return True if a call to the corresponding removeHoldings method would return true, otherwise false.
+     * @return The {@link EconomyResponse} that would be returned with the corresponding removeHoldingsDetail method.
      */
     @Override
-    public boolean canRemoveHoldings(String identifier, BigDecimal amount) {
-        return hasAccount(identifier) && getHoldings(identifier).subtract(amount).compareTo(ess.getSettings().getMinMoney()) >= 0;
+    public EconomyResponse canRemoveHoldingsDetail(String identifier, BigDecimal amount) {
+        if (!hasAccount(identifier) && !createAccount(identifier)) return AccountResponse.CREATION_FAILED;
+        if (getHoldings(identifier).subtract(amount).compareTo(ess.getSettings().getMinMoney()) < 0)
+            return HoldingsResponse.MIN_HOLDINGS;
+        return GeneralResponse.SUCCESS;
     }
 
     /**
@@ -1493,11 +851,11 @@ public class ReserveEssentials implements EconomyAPI {
      * affect an account's funds.
      * @param identifier The identifier of the account that is associated with this call.
      * @param amount The amount you wish to remove from this account.
-     * @return True if a call to the corresponding removeHoldings method would return true, otherwise false.
+     * @return The {@link EconomyResponse} that would be returned with the corresponding removeHoldingsDetail method.
      */
     @Override
-    public boolean canRemoveHoldings(UUID identifier, BigDecimal amount) {
-        return hasAccount(identifier) && getHoldings(identifier).subtract(amount).compareTo(ess.getSettings().getMinMoney()) >= 0;
+    public EconomyResponse canRemoveHoldingsDetail(UUID identifier, BigDecimal amount) {
+        return canRemoveHoldingsDetail(getName(identifier), amount);
     }
 
     /**
@@ -1506,11 +864,11 @@ public class ReserveEssentials implements EconomyAPI {
      * @param identifier The identifier of the account that is associated with this call.
      * @param amount The amount you wish to remove from this account.
      * @param world The name of the {@link World} associated with the amount.
-     * @return True if a call to the corresponding removeHoldings method would return true, otherwise false.
+     * @return The {@link EconomyResponse} that would be returned with the corresponding removeHoldingsDetail method.
      */
     @Override
-    public boolean canRemoveHoldings(String identifier, BigDecimal amount, String world) {
-        return canRemoveHoldings(identifier, amount);
+    public EconomyResponse canRemoveHoldingsDetail(String identifier, BigDecimal amount, String world) {
+        return canRemoveHoldingsDetail(identifier, amount);
     }
 
     /**
@@ -1519,11 +877,11 @@ public class ReserveEssentials implements EconomyAPI {
      * @param identifier The identifier of the account that is associated with this call.
      * @param amount The amount you wish to remove from this account.
      * @param world The name of the {@link World} associated with the amount.
-     * @return True if a call to the corresponding removeHoldings method would return true, otherwise false.
+     * @return The {@link EconomyResponse} that would be returned with the corresponding removeHoldingsDetail method.
      */
     @Override
-    public boolean canRemoveHoldings(UUID identifier, BigDecimal amount, String world) {
-        return canRemoveHoldings(identifier, amount);
+    public EconomyResponse canRemoveHoldingsDetail(UUID identifier, BigDecimal amount, String world) {
+        return canRemoveHoldingsDetail(identifier, amount);
     }
 
     /**
@@ -1533,11 +891,11 @@ public class ReserveEssentials implements EconomyAPI {
      * @param amount The amount you wish to remove from this account.
      * @param world The name of the {@link World} associated with the amount.
      * @param currency The {@link Currency} associated with the balance.
-     * @return True if a call to the corresponding removeHoldings method would return true, otherwise false.
+     * @return The {@link EconomyResponse} that would be returned with the corresponding removeHoldingsDetail method.
      */
     @Override
-    public boolean canRemoveHoldings(String identifier, BigDecimal amount, String world, String currency) {
-        return canRemoveHoldings(identifier, amount);
+    public EconomyResponse canRemoveHoldingsDetail(String identifier, BigDecimal amount, String world, String currency) {
+        return canRemoveHoldingsDetail(identifier, amount);
     }
 
     /**
@@ -1547,259 +905,11 @@ public class ReserveEssentials implements EconomyAPI {
      * @param amount The amount you wish to remove from this account.
      * @param world The name of the {@link World} associated with the amount.
      * @param currency The {@link Currency} associated with the balance.
-     * @return True if a call to the corresponding removeHoldings method would return true, otherwise false.
+     * @return The {@link EconomyResponse} that would be returned with the corresponding removeHoldingsDetail method.
      */
     @Override
-    public boolean canRemoveHoldings(UUID identifier, BigDecimal amount, String world, String currency) {
-        return canRemoveHoldings(identifier, amount);
-    }
-
-    /**
-     * Used to determine if a call to the corresponding removeHoldings method would be successful. This method does not
-     * affect an account's funds.
-     * @param identifier The identifier of the account that is associated with this call.
-     * @param amount The amount you wish to remove from this account.
-     * @return True if a call to the corresponding removeHoldings method would return true, otherwise false.
-     */
-    @Override
-    public CompletableFuture<Boolean> asyncCanRemoveHoldings(String identifier, BigDecimal amount) {
-        return CompletableFuture.supplyAsync(() -> canRemoveHoldings(identifier, amount));
-    }
-
-    /**
-     * Used to determine if a call to the corresponding removeHoldings method would be successful. This method does not
-     * affect an account's funds.
-     * @param identifier The identifier of the account that is associated with this call.
-     * @param amount The amount you wish to remove from this account.
-     * @return True if a call to the corresponding removeHoldings method would return true, otherwise false.
-     */
-    @Override
-    public CompletableFuture<Boolean> asyncCanRemoveHoldings(UUID identifier, BigDecimal amount) {
-        return CompletableFuture.supplyAsync(() -> canRemoveHoldings(identifier, amount));
-    }
-
-    /**
-     * Used to determine if a call to the corresponding removeHoldings method would be successful. This method does not
-     * affect an account's funds.
-     * @param identifier The identifier of the account that is associated with this call.
-     * @param amount The amount you wish to remove from this account.
-     * @param world The name of the {@link World} associated with the amount.
-     * @return True if a call to the corresponding removeHoldings method would return true, otherwise false.
-     */
-    @Override
-    public CompletableFuture<Boolean> asyncCanRemoveHoldings(String identifier, BigDecimal amount, String world) {
-        return CompletableFuture.supplyAsync(() -> canRemoveHoldings(identifier, amount));
-    }
-
-    /**
-     * Used to determine if a call to the corresponding removeHoldings method would be successful. This method does not
-     * affect an account's funds.
-     * @param identifier The identifier of the account that is associated with this call.
-     * @param amount The amount you wish to remove from this account.
-     * @param world The name of the {@link World} associated with the amount.
-     * @return True if a call to the corresponding removeHoldings method would return true, otherwise false.
-     */
-    @Override
-    public CompletableFuture<Boolean> asyncCanRemoveHoldings(UUID identifier, BigDecimal amount, String world) {
-        return CompletableFuture.supplyAsync(() -> canRemoveHoldings(identifier, amount));
-    }
-
-    /**
-     * Used to determine if a call to the corresponding removeHoldings method would be successful. This method does not
-     * affect an account's funds.
-     * @param identifier The identifier of the account that is associated with this call.
-     * @param amount The amount you wish to remove from this account.
-     * @param world The name of the {@link World} associated with the amount.
-     * @param currency The {@link Currency} associated with the balance.
-     * @return True if a call to the corresponding removeHoldings method would return true, otherwise false.
-     */
-    @Override
-    public CompletableFuture<Boolean> asyncCanRemoveHoldings(String identifier, BigDecimal amount, String world, String currency) {
-        return CompletableFuture.supplyAsync(() -> canRemoveHoldings(identifier, amount));
-    }
-
-    /**
-     * Used to determine if a call to the corresponding removeHoldings method would be successful. This method does not
-     * affect an account's funds.
-     * @param identifier The identifier of the account that is associated with this call.
-     * @param amount The amount you wish to remove from this account.
-     * @param world The name of the {@link World} associated with the amount.
-     * @param currency The {@link Currency} associated with the balance.
-     * @return True if a call to the corresponding removeHoldings method would return true, otherwise false.
-     */
-    @Override
-    public CompletableFuture<Boolean> asyncCanRemoveHoldings(UUID identifier, BigDecimal amount, String world, String currency) {
-        return CompletableFuture.supplyAsync(() -> canRemoveHoldings(identifier, amount));
-    }
-
-    /**
-     * Used to transfer funds from one account to another.
-     *
-     * @param fromIdentifier The identifier of the account that the holdings will be coming from.
-     * @param toIdentifier The identifier of the account that the holdings will be going to.
-     * @param amount The amount you wish to remove from this account.
-     *
-     * @return True if the funds were transferred.
-     */
-    @Override
-    public CompletableFuture<Boolean> asyncTransferHoldings(String fromIdentifier, String toIdentifier, BigDecimal amount) {
-        return CompletableFuture.supplyAsync(() -> transferHoldings(fromIdentifier, toIdentifier, amount));
-    }
-
-    /**
-     * Used to transfer funds from one account to another.
-     * @param fromIdentifier The identifier of the account that the holdings will be coming from.
-     * @param toIdentifier The identifier of the account that the holdings will be going to.
-     * @param amount The amount you wish to remove from this account.
-     * @param world The name of the {@link World} associated with the amount.
-     * @return True if the funds were transferred.
-     */
-    @Override
-    public CompletableFuture<Boolean> asyncTransferHoldings(String fromIdentifier, String toIdentifier, BigDecimal amount, String world) {
-        return CompletableFuture.supplyAsync(() -> transferHoldings(fromIdentifier, toIdentifier, amount, world));
-    }
-
-    /**
-     * Used to transfer funds from one account to another.
-     * @param fromIdentifier The identifier of the account that the holdings will be coming from.
-     * @param toIdentifier The identifier of the account that the holdings will be going to.
-     * @param amount The amount you wish to remove from this account.
-     * @param world The name of the {@link World} associated with the amount.
-     * @param currency The {@link Currency} associated with the balance.
-     * @return True if the funds were transferred.
-     */
-    @Override
-    public CompletableFuture<Boolean> asyncTransferHoldings(String fromIdentifier, String toIdentifier, BigDecimal amount, String world, String currency) {
-        return CompletableFuture.supplyAsync(() -> transferHoldings(fromIdentifier, toIdentifier, amount, world, currency));
-    }
-
-    /**
-     * Used to transfer funds from one account to another.
-     * @param fromIdentifier The identifier of the account that the holdings will be coming from.
-     * @param toIdentifier The identifier of the account that the holdings will be going to.
-     * @param amount The amount you wish to remove from this account.
-     * @return True if the funds were transferred.
-     */
-    @Override
-    public CompletableFuture<Boolean> asyncTransferHoldings(UUID fromIdentifier, UUID toIdentifier, BigDecimal amount) {
-        return CompletableFuture.supplyAsync(() -> transferHoldings(fromIdentifier, toIdentifier, amount));
-    }
-
-    /**
-     * Used to transfer funds from one account to another.
-     * @param fromIdentifier The identifier of the account that the holdings will be coming from.
-     * @param toIdentifier The identifier of the account that the holdings will be going to.
-     * @param amount The amount you wish to remove from this account.
-     * @param world The name of the {@link World} associated with the amount.
-     * @return True if the funds were transferred.
-     */
-    @Override
-    public CompletableFuture<Boolean> asyncTransferHoldings(UUID fromIdentifier, UUID toIdentifier, BigDecimal amount, String world) {
-        return CompletableFuture.supplyAsync(() -> transferHoldings(fromIdentifier, toIdentifier, amount, world));
-    }
-
-    /**
-     * Used to transfer funds from one account to another.
-     * @param fromIdentifier The identifier of the account that the holdings will be coming from.
-     * @param toIdentifier The identifier of the account that the holdings will be going to.
-     * @param amount The amount you wish to remove from this account.
-     * @param world The name of the {@link World} associated with the amount.
-     * @param currency The {@link Currency} associated with the balance.
-     * @return True if the funds were transferred.
-     */
-    @Override
-    public CompletableFuture<Boolean> asyncTransferHoldings(UUID fromIdentifier, UUID toIdentifier, BigDecimal amount, String world, String currency) {
-        return CompletableFuture.supplyAsync(() -> transferHoldings(fromIdentifier, toIdentifier, amount, world, currency));
-    }
-
-    /**
-     * Used to determine if a call to the corresponding transferHoldings method would be successful. This method does not
-     * affect an account's funds.
-     * @param fromIdentifier The identifier of the account that the holdings will be coming from.
-     * @param toIdentifier The identifier of the account that the holdings will be going to.
-     * @param amount The amount you wish to remove from this account.
-     * @return True if a call to the corresponding transferHoldings method would return true, otherwise false.
-     */
-    @Override
-    public CompletableFuture<Boolean> asyncCanTransferHoldings(String fromIdentifier, String toIdentifier, BigDecimal amount) {
-        return CompletableFuture.supplyAsync(() -> canTransferHoldings(fromIdentifier, toIdentifier, amount));
-    }
-
-    /**
-     * Used to determine if a call to the corresponding transferHoldings method would be successful. This method does not
-     * affect an account's funds.
-     * @param fromIdentifier The identifier of the account that the holdings will be coming from.
-     * @param toIdentifier The identifier of the account that the holdings will be going to.
-     * @param amount The amount you wish to remove from this account.
-     * @param world The name of the {@link World} associated with the amount.
-     * @return True if a call to the corresponding transferHoldings method would return true, otherwise false.
-     */
-    @Override
-    public CompletableFuture<Boolean> asyncCanTransferHoldings(String fromIdentifier, String toIdentifier, BigDecimal amount, String world) {
-        return CompletableFuture.supplyAsync(() -> canTransferHoldings(fromIdentifier, toIdentifier, amount, world));
-    }
-
-    /**
-     * Used to determine if a call to the corresponding transferHoldings method would be successful. This method does not
-     * affect an account's funds.
-     * @param fromIdentifier The identifier of the account that the holdings will be coming from.
-     * @param toIdentifier The identifier of the account that the holdings will be going to.
-     * @param amount The amount you wish to remove from this account.
-     * @param world The name of the {@link World} associated with the amount.
-     * @param currency The {@link Currency} associated with the balance.
-     * @return True if a call to the corresponding transferHoldings method would return true, otherwise false.
-     */
-    @Override
-    public CompletableFuture<Boolean> asyncCanTransferHoldings(String fromIdentifier, String toIdentifier, BigDecimal amount, String world, String currency) {
-        return CompletableFuture.supplyAsync(() -> canTransferHoldings(fromIdentifier, toIdentifier, amount, world, currency));
-    }
-
-    /**
-     * Used to determine if a call to the corresponding transferHoldings method would be successful. This method does not
-     * affect an account's funds.
-     * @param fromIdentifier The identifier of the account that the holdings will be coming from.
-     * @param toIdentifier The identifier of the account that the holdings will be going to.
-     * @param amount The amount you wish to remove from this account.
-     * @return True if a call to the corresponding transferHoldings method would return true, otherwise false.
-     */
-    @Override
-    public CompletableFuture<Boolean> asyncCanTransferHoldings(UUID fromIdentifier, UUID toIdentifier, BigDecimal amount) {
-        return CompletableFuture.supplyAsync(() -> canTransferHoldings(fromIdentifier, toIdentifier, amount));
-    }
-
-    /**
-     * Used to determine if a call to the corresponding transferHoldings method would be successful.
-     * This method does not affect an account's funds.
-     *
-     * @param fromIdentifier The identifier of the account that the holdings will be coming from.
-     * @param toIdentifier The identifier of the account that the holdings will be going to.
-     * @param amount The amount you wish to remove from this account.
-     * @param world The name of the {@link World} associated with the amount.
-     *
-     * @return True if a call to the corresponding transferHoldings method would return true,
-     *   otherwise false.
-     */
-    @Override
-    public CompletableFuture<Boolean> asyncCanTransferHoldings(UUID fromIdentifier, UUID toIdentifier, BigDecimal amount, String world) {
-        return CompletableFuture.supplyAsync(() -> canTransferHoldings(fromIdentifier, toIdentifier, amount, world));
-    }
-
-    /**
-     * Used to determine if a call to the corresponding transferHoldings method would be successful.
-     * This method does not affect an account's funds.
-     *
-     * @param fromIdentifier The identifier of the account that the holdings will be coming from.
-     * @param toIdentifier The identifier of the account that the holdings will be going to.
-     * @param amount The amount you wish to remove from this account.
-     * @param world The name of the {@link World} associated with the amount.
-     * @param currency The {@link Currency} associated with the balance.
-     *
-     * @return True if a call to the corresponding transferHoldings method would return true,
-     *   otherwise false.
-     */
-    @Override
-    public CompletableFuture<Boolean> asyncCanTransferHoldings(UUID fromIdentifier, UUID toIdentifier, BigDecimal amount, String world, String currency) {
-        return CompletableFuture.supplyAsync(() -> canTransferHoldings(fromIdentifier, toIdentifier, amount, world, currency));
+    public EconomyResponse canRemoveHoldingsDetail(UUID identifier, BigDecimal amount, String world, String currency) {
+        return canRemoveHoldingsDetail(identifier, amount);
     }
 
     /**
@@ -1852,24 +962,5 @@ public class ReserveEssentials implements EconomyAPI {
     @Override
     public boolean purgeAccountsUnder(BigDecimal amount) {
         return false;
-    }
-
-    /**
-     * Purges the database of accounts with the default balance.
-     * @return True if the purge was completed successfully.
-     */
-    @Override
-    public CompletableFuture<Boolean> asyncPurgeAccounts() {
-        return CompletableFuture.supplyAsync(() -> false);
-    }
-
-    /**
-     * Purges the database of accounts with a balance under the specified one.
-     * @param amount The amount that an account's balance has to be under in order to be removed.
-     * @return True if the purge was completed successfully.
-     */
-    @Override
-    public CompletableFuture<Boolean> asyncPurgeAccountsUnder(BigDecimal amount) {
-        return CompletableFuture.supplyAsync(() -> false);
     }
 }
