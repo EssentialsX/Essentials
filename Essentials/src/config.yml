@@ -32,6 +32,12 @@ nickname-prefix: '~'
 # The maximum length allowed in nicknames. The nickname prefix is included in this.
 max-nick-length: 15
 
+# A list of phrases that cannot be used in nicknames. You can include regular expressions here.
+# Users with essentials.nick.blacklist.bypass will be able to bypass this filter.
+nick-blacklist:
+#- Notch
+#- '^Dinnerbone'
+
 # When this option is enabled, nickname length checking will exclude color codes in player names.
 # ie: "&6Notch" has 7 characters (2 are part of a color code), a length of 5 is used when this option is set to true
 ignore-colors-in-max-nick-length: false
@@ -608,6 +614,9 @@ sethome-multiple:
 # change the compass' direction to point towards their first home.
 compass-towards-home-perm: false
 
+# Set the maximum speed for projectiles spawned with /fireball.
+max-projectile-speed: 8
+
 ############################################################
 # +------------------------------------------------------+ #
 # |                    EssentialsEco                     | #
@@ -749,6 +758,22 @@ protect:
     # Monsters won't follow players.
     # permission essentials.protect.entitytarget.bypass disables this.
     entitytarget: false
+    # Prevent certain transformations.
+    transformation:
+      # Prevent creepers becoming charged when struck by lightning.
+      charged-creeper: false
+      # Prevent villagers becoming zombie villagers.
+      zombie-villager: false
+      # Prevent zombie villagers being cured.
+      villager: false
+      # Prevent villagers becoming witches when struck by lightning.
+      witch: false
+      # Prevent pigs becoming zombie pigmen when struck by lightning.
+      zombie-pigman: false
+      # Prevent zombies turning into drowneds, and husks turning into zombies.
+      drowned: false
+      # Prevent mooshrooms changing colour when struck by lightning.
+      mooshroom: false
     # Prevent the spawning of creatures.
     spawn:
       creeper: false
@@ -780,6 +805,7 @@ protect:
       bat: false
       witch: false
       horse: false
+      phantom: false
 
   # Maximum height the creeper should explode. -1 allows them to explode everywhere.
   # Set prevent.creeper-explosion to true, if you want to disable creeper explosions.
@@ -910,6 +936,9 @@ spawn-join-listener-priority: high
 
 # When users die, should they respawn at their first home or bed, instead of the spawnpoint?
 respawn-at-home: false
+
+# If no home is set, would you like to send the player to spawn? (Only applies to /home)
+spawn-if-no-home: true
 
 # Teleport all joining players to the spawnpoint
 spawn-on-join: false

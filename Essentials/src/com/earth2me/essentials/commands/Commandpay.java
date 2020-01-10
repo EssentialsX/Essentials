@@ -9,6 +9,7 @@ import com.earth2me.essentials.utils.StringUtil;
 
 import com.google.common.collect.Lists;
 import net.ess3.api.MaxMoneyException;
+import net.ess3.api.events.UserBalanceUpdateEvent;
 import org.bukkit.Server;
 
 import java.math.BigDecimal;
@@ -73,7 +74,7 @@ public class Commandpay extends EssentialsLoopCommand {
                 user.getConfirmingPayments().put(player, amount);
                 return;
             }
-            user.payUser(player, amount);
+            user.payUser(player, amount, UserBalanceUpdateEvent.Cause.COMMAND_PAY);
             user.getConfirmingPayments().remove(player);
             Trade.log("Command", "Pay", "Player", user.getName(), new Trade(amount, ess), player.getName(), new Trade(amount, ess), user.getLocation(), ess);
         } catch (MaxMoneyException ex) {

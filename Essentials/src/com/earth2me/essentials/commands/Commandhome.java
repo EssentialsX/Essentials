@@ -53,7 +53,11 @@ public class Commandhome extends EssentialsCommand {
             Location bed = player.getBase().getBedSpawnLocation();
             final List<String> homes = player.getHomes();
             if (homes.isEmpty() && player.equals(user)) {
-                user.getTeleport().respawn(charge, TeleportCause.COMMAND);
+                if (ess.getSettings().isSpawnIfNoHome()) {
+                    user.getTeleport().respawn(charge, TeleportCause.COMMAND);
+                } else {
+                    throw new Exception(tl("noHomeSetPlayer"));
+                }
             } else if (homes.isEmpty()) {
                 throw new Exception(tl("noHomeSetPlayer"));
             } else if (homes.size() == 1 && player.equals(user)) {

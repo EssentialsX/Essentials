@@ -24,10 +24,6 @@ public class Commandafk extends EssentialsCommand {
                 afkUser = getPlayer(server, user, args, 0);
                 message = args.length > 1 ? getFinalArg(args, 1) : null;
             } catch (PlayerNotFoundException e) {
-                // If only one arg is passed, assume the command executor is targeting another player.
-                if (args.length == 1) {
-                    throw e;
-                }
                 message = getFinalArg(args, 0);
             }
             toggleAfk(user, afkUser, message);

@@ -25,12 +25,7 @@ public class Backup implements Runnable {
         this.ess = ess;
         server = ess.getServer();
         if (!ess.getOnlinePlayers().isEmpty()) {
-            ess.runTaskAsynchronously(new Runnable() {
-                @Override
-                public void run() {
-                    startTask();
-                }
-            });
+            ess.runTaskAsynchronously(this::startTask);
         }
     }
 

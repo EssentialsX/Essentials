@@ -47,10 +47,11 @@ public class Commandfireball extends EssentialsCommand {
         if (args.length > 1) {
             try {
                 speed = FloatUtil.parseDouble(args[1]);
+                speed = Double.max(0, Double.min(speed, ess.getSettings().getMaxProjectileSpeed()));
             } catch (Exception ignored) {}
         }
 
-        if (args.length > 2 && args[2].equalsIgnoreCase("ride")) {
+        if (args.length > 2 && args[2].equalsIgnoreCase("ride") && user.isAuthorized("essentials.fireball.ride")) {
             ride = true;
         }
 

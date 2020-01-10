@@ -6,6 +6,7 @@ import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.NumberUtil;
 import com.google.common.collect.Lists;
 import net.ess3.api.MaxMoneyException;
+import net.ess3.api.events.UserBalanceUpdateEvent;
 import org.bukkit.Server;
 
 import java.math.BigDecimal;
@@ -54,7 +55,7 @@ public class Commandeco extends EssentialsLoopCommand {
     protected void updatePlayer(final Server server, final CommandSource sender, final User player, final String[] args) throws NotEnoughArgumentsException, ChargeException, MaxMoneyException {
         switch (cmd) {
             case GIVE:
-                player.giveMoney(amount, sender);
+                player.giveMoney(amount, sender, UserBalanceUpdateEvent.Cause.COMMAND_ECO);
                 break;
 
             case TAKE:
@@ -72,10 +73,10 @@ public class Commandeco extends EssentialsLoopCommand {
         BigDecimal money = player.getMoney();
         BigDecimal minBalance = ess.getSettings().getMinMoney();
         if (money.subtract(amount).compareTo(minBalance) >= 0) {
-            player.takeMoney(amount, sender);
+            player.takeMoney(amount, sender, UserBalanceUpdateEvent.Cause.COMMAND_ECO);
         } else if (sender == null) {
             try {
-                player.setMoney(minBalance);
+                player.setMoney(minBalance, UserBalanceUpdateEvent.Cause.COMMAND_ECO);
             } catch (MaxMoneyException ex) {
                 // Take shouldn't be able to throw a max money exception
             }
@@ -90,7 +91,7 @@ public class Commandeco extends EssentialsLoopCommand {
         BigDecimal maxBalance = ess.getSettings().getMaxMoney();
         boolean underMinimum = (amount.compareTo(minBalance) < 0);
         boolean aboveMax = (amount.compareTo(maxBalance) > 0);
-        player.setMoney(underMinimum ? minBalance : aboveMax ? maxBalance : amount);
+        player.setMoney(underMinimum ? minBalance : aboveMax ? maxBalance : amount, UserBalanceUpdateEvent.Cause.COMMAND_ECO);
         player.sendMessage(tl("setBal", NumberUtil.displayCurrency(player.getMoney(), ess)));
         if (sender != null) {
             sender.sendMessage(tl("setBalOthers", player.getDisplayName(), NumberUtil.displayCurrency(player.getMoney(), ess)));
