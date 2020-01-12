@@ -432,7 +432,7 @@ public class ReserveEssentials implements EconomyAPI {
     @Override
     public boolean hasHoldings(String identifier, BigDecimal amount) {
         try {
-            return hasAccount(identifier) && Economy.hasEnough(identifier, amount);
+            return Economy.hasEnough(identifier, amount);
         } catch (UserDoesNotExistException ignore) {
             return false;
         }
@@ -447,7 +447,7 @@ public class ReserveEssentials implements EconomyAPI {
     @Override
     public boolean hasHoldings(UUID identifier, BigDecimal amount) {
         try {
-            return hasAccount(identifier) && Economy.hasEnough(getName(identifier), amount);
+            return Economy.hasEnough(getName(identifier), amount);
         } catch (UserDoesNotExistException ignore) {
             return false;
         }
