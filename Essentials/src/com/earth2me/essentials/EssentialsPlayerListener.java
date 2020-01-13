@@ -7,6 +7,7 @@ import com.earth2me.essentials.textreader.TextPager;
 import com.earth2me.essentials.utils.DateUtil;
 import com.earth2me.essentials.utils.LocationUtil;
 import com.earth2me.essentials.utils.MaterialUtil;
+import com.earth2me.essentials.utils.VersionUtil;
 import io.papermc.lib.PaperLib;
 import net.ess3.api.IEssentials;
 import org.bukkit.*;
@@ -595,7 +596,10 @@ public class EssentialsPlayerListener implements Listener {
                     User player = ess.getUser(event.getPlayer());
                     if (player.isAuthorized("essentials.sethome.bed") && player.getWorld().getEnvironment().equals(World.Environment.NORMAL)) {
                         player.getBase().setBedSpawnLocation(event.getClickedBlock().getLocation());
-                        player.sendMessage(tl("bedSet", player.getLocation().getWorld().getName(), player.getLocation().getBlockX(), player.getLocation().getBlockY(), player.getLocation().getBlockZ()));
+                        // In 1.15 and above, vanilla sends its own bed spawn message.
+                        if (VersionUtil.getServerBukkitVersion().isLowerThan(VersionUtil.v1_15_R01)) {
+                            player.sendMessage(tl("bedSet", player.getLocation().getWorld().getName(), player.getLocation().getBlockX(), player.getLocation().getBlockY(), player.getLocation().getBlockZ()));
+                        }
                     }
                 }
                 break;
