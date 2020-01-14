@@ -12,7 +12,6 @@ import net.tnemc.core.economy.response.AccountResponse;
 import net.tnemc.core.economy.response.EconomyResponse;
 import net.tnemc.core.economy.response.GeneralResponse;
 import net.tnemc.core.economy.response.HoldingsResponse;
-import org.bukkit.Bukkit;
 import org.bukkit.World;
 
 import java.math.BigDecimal;
@@ -30,10 +29,7 @@ public class ReserveEssentials implements EconomyAPI {
     }
 
     public static void register(Essentials plugin) {
-        //Check to see if there is an economy provider already registered, if so Essentials will take the back seat.
-        if (!((Reserve) Bukkit.getServer().getPluginManager().getPlugin("Reserve")).economyProvided()) {
-            Reserve.instance().registerProvider(new ReserveEssentials(plugin));
-        }
+        Reserve.instance().registerProvider(new ReserveEssentials(plugin));
     }
 
     /**
