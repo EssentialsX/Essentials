@@ -171,29 +171,6 @@ public class EssentialsProtectEntityListener implements Listener {
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-    public void onEntityTransform(final EntityTransformEvent event) {
-        final Entity entity = event.getEntity();
-        final EntityTransformEvent.TransformReason reason = event.getTransformReason();
-        if (reason == EntityTransformEvent.TransformReason.INFECTION && prot.getSettingBool(ProtectConfig.prevent_villager_infection)) {
-            event.setCancelled(true);
-        } else if (reason == EntityTransformEvent.TransformReason.CURED && prot.getSettingBool(ProtectConfig.prevent_villager_cure)) {
-            event.setCancelled(true);
-        } else if (reason == EntityTransformEvent.TransformReason.LIGHTNING) {
-            if (entity instanceof Villager && prot.getSettingBool(ProtectConfig.prevent_villager_to_witch)) {
-                event.setCancelled(true);
-            } else if (entity instanceof Pig && prot.getSettingBool(ProtectConfig.prevent_pig_transformation)) {
-                event.setCancelled(true);
-            } else if (entity instanceof Creeper && prot.getSettingBool(ProtectConfig.prevent_creeper_charge)) {
-                event.setCancelled(true);
-            } else if (entity instanceof MushroomCow && prot.getSettingBool(ProtectConfig.prevent_mooshroom_switching)) {
-                event.setCancelled(true);
-            }
-        } else if (reason == EntityTransformEvent.TransformReason.DROWNED && prot.getSettingBool(ProtectConfig.prevent_zombie_drowning)) {
-            event.setCancelled(true);
-        }
-    }
-
-    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onCreatureSpawn(final CreatureSpawnEvent event) {
         if (event.getEntity() instanceof Player) {
             return;
