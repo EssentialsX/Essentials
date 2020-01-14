@@ -644,6 +644,12 @@ command-costs:
 # such as accented letters, you MUST save the file as UTF-8, not ANSI.
 currency-symbol: '$'
 
+#Set this to the singular name of your currency.
+currency-singular: 'dollar'
+
+#Set this to the plural name of your currency
+currency-plural: 'dollars'
+
 # Set the maximum amount of money a player can have.
 # The amount is always limited to 10 trillion because of the limitations of a java double.
 max-money: 10000000000000

@@ -18,8 +18,6 @@ import org.bukkit.World;
 import java.math.BigDecimal;
 import java.util.UUID;
 
-import static com.earth2me.essentials.I18n.tl;
-
 /**
  * @author creatorfromhell <daniel.viddy@gmail.com>
  */
@@ -69,6 +67,14 @@ public class ReserveEssentials implements EconomyAPI {
     }
 
     /**
+     * @return True if this implementation should override other economy implementations.
+     */
+    @Override
+    public boolean force() {
+        return false;
+    }
+
+    /**
      * @return Whether or not this implementation should have a default Vault implementation.
      */
     @Override
@@ -82,7 +88,7 @@ public class ReserveEssentials implements EconomyAPI {
      */
     @Override
     public String currencyDefaultPlural() {
-        return tl("moneyPlural");
+        return ess.getSettings().getCurrencyPlural();
     }
 
     /**
@@ -91,7 +97,7 @@ public class ReserveEssentials implements EconomyAPI {
      */
     @Override
     public String currencyDefaultSingular() {
-        return tl("moneySingular");
+        return ess.getSettings().getCurrencySingular();
     }
 
     /**
@@ -101,7 +107,7 @@ public class ReserveEssentials implements EconomyAPI {
      */
     @Override
     public String currencyDefaultPlural(String world) {
-        return tl("moneyPlural");
+        return ess.getSettings().getCurrencyPlural();
     }
 
     /**
@@ -111,7 +117,7 @@ public class ReserveEssentials implements EconomyAPI {
      */
     @Override
     public String currencyDefaultSingular(String world) {
-        return tl("moneySingular");
+        return ess.getSettings().getCurrencySingular();
     }
 
     /**
@@ -121,7 +127,7 @@ public class ReserveEssentials implements EconomyAPI {
      */
     @Override
     public boolean hasCurrency(String name) {
-        return name.equalsIgnoreCase(tl("moneySingular"));
+        return name.equalsIgnoreCase(ess.getSettings().getCurrencySingular());
     }
 
     /**
@@ -132,7 +138,7 @@ public class ReserveEssentials implements EconomyAPI {
      */
     @Override
     public boolean hasCurrency(String name, String world) {
-        return name.equalsIgnoreCase(tl("moneySingular"));
+        return name.equalsIgnoreCase(ess.getSettings().getCurrencySingular());
     }
 
     /**

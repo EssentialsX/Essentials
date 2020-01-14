@@ -672,6 +672,16 @@ public class Settings implements net.ess3.api.ISettings {
         return config.getString("currency-symbol", "$").concat("$").substring(0, 1).replaceAll("[0-9]", "$");
     }
 
+    @Override
+    public String getCurrencySingular() {
+        return config.getString("currency-singular");
+    }
+
+    @Override
+    public String getCurrencyPlural() {
+        return config.getString("currency-plural");
+    }
+
     // #easteregg
     @Override
     @Deprecated
