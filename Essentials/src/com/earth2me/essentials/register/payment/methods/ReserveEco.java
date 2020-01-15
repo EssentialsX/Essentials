@@ -201,7 +201,7 @@ public class ReserveEco implements Method {
     public boolean isCompatible(Plugin plugin) {
         try {
             EconomyAPI economyAPI = ((Reserve) plugin).economy();
-            return plugin.getName().equals("Reserve") && economyAPI != null && !economyAPI.name().equals("Essentials Economy");
+            return plugin.getName().equals("Reserve") && economyAPI != null && !economyAPI.name().equals("EssentialsX");
         } catch (LinkageError | Exception e) {
             return false;
         }

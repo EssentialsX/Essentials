@@ -2,9 +2,9 @@ package com.earth2me.essentials.services;
 
 import com.earth2me.essentials.Essentials;
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.api.Economy;
 import com.earth2me.essentials.api.NoLoanPermittedException;
 import com.earth2me.essentials.api.UserDoesNotExistException;
-import net.ess3.api.Economy;
 import net.tnemc.core.Reserve;
 import net.tnemc.core.economy.EconomyAPI;
 import net.tnemc.core.economy.currency.Currency;
@@ -358,7 +358,8 @@ public class ReserveEssentials implements EconomyAPI {
     public BigDecimal getHoldings(String identifier) {
         if (hasAccount(identifier)) {
             try {
-                return Economy.getMoneyExact(identifier);
+
+                return new BigDecimal(Economy.getMoney(identifier));
             } catch (UserDoesNotExistException ignore) { }
         }
         return ess.getSettings().getStartingBalance();
@@ -373,7 +374,7 @@ public class ReserveEssentials implements EconomyAPI {
     public BigDecimal getHoldings(UUID identifier) {
         if (hasAccount(identifier)) {
             try {
-                return Economy.getMoneyExact(getName(identifier));
+                return new BigDecimal(Economy.getMoney(getName(identifier)));
             } catch (UserDoesNotExistException ignore) { }
         }
         return ess.getSettings().getStartingBalance();
