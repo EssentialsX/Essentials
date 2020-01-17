@@ -27,6 +27,7 @@ public class MaterialUtil {
     private static final Set<Material> POTIONS;
     private static final Set<Material> SIGN_POSTS;
     private static final Set<Material> WALL_SIGNS;
+    private static final Set<Material> DYES;
 
     public static final Material SPAWNER = EnumUtil.getMaterial("MOB_SPAWNER", "SPAWNER");
 
@@ -68,6 +69,11 @@ public class MaterialUtil {
         WALL_SIGNS = EnumUtil.getAllMatching(Material.class, "WALL_SIGN",
             "ACACIA_WALL_SIGN", "BIRCH_WALL_SIGN", "DARK_OAK_WALL_SIGN", "JUNGLE_WALL_SIGN",
             "OAK_WALL_SIGN", "SPRUCE_WALL_SIGN");
+
+        DYES = EnumUtil.getAllMatching(Material.class, "DYE", "BLACK_DYE", "BLUE_DYE", "BROWN_DYE",
+                "CYAN_DYE", "GRAY_DYE", "GREEN_DYE", "LIGHT_BLUE_DYE", "LIGHT_GRAY_DYE",
+                "LIME_DYE", "MAGENTA_DYE", "ORANGE_DYE", "PINK_DYE", "PURPLE_DYE",
+                "RED_DYE", "WHITE_DYE", "YELLOW_DYE");
     }
 
     public static boolean isBed(Material material) {
@@ -84,6 +90,10 @@ public class MaterialUtil {
 
     public static boolean isLeatherArmor(Material material) {
         return LEATHER_ARMOR.contains(material);
+    }
+
+    public static boolean isDye(Material material) {
+        return DYES.contains(material);
     }
 
     public static boolean isMobHead(Material material, int durability) {
