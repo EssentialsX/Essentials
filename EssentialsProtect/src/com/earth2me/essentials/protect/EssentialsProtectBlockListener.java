@@ -1,7 +1,8 @@
 package com.earth2me.essentials.protect;
 
+import com.earth2me.essentials.IEssentials;
+import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.EnumUtil;
-
 import com.earth2me.essentials.utils.MaterialUtil;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -25,9 +26,11 @@ public class EssentialsProtectBlockListener implements Listener {
     private static final Set<Material> LAVA_TYPES = EnumUtil.getAllMatching(Material.class, "LAVA", "STATIONARY_LAVA");
 
     final private IProtect prot;
+    final private IEssentials ess;
 
     EssentialsProtectBlockListener(final IProtect parent) {
         this.prot = parent;
+        this.ess = prot.getEssentialsConnect().getEssentials();
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
@@ -98,7 +101,8 @@ public class EssentialsProtectBlockListener implements Listener {
     public void onSignDye(PlayerInteractEvent event) {
         Material clickedBlock = event.getClickedBlock().getBlockData().getMaterial();
         Action action = event.getAction();
-        Material itemInHand = event.getPlayer().getInventory().getItemInMainHand().getType();
+        User user = ess.getUser(event.getPlayer());
+        Material itemInHand = user.getItemInHand().getType();
 
         // Check Right Click Action with Dye on Sign
         if (MaterialUtil.isSign(clickedBlock) && action == Action.RIGHT_CLICK_BLOCK && MaterialUtil.isDye(itemInHand)) {
