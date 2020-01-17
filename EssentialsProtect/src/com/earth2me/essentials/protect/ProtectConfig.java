@@ -12,6 +12,7 @@ public enum ProtectConfig {
     disable_lightning("protect.disable.lightning", false),
     disable_drown("protect.disable.drown", false),
     disable_wither("protect.disable.wither", false),
+    disable_sign_dyeing("protect.disable.sign-dyeing", false),
     disable_weather_storm("protect.disable.weather.storm", false),
     disable_weather_lightning("protect.disable.weather.lightning", false),
     disable_weather_thunder("protect.disable.weather.thunder", false),
