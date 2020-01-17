@@ -78,6 +78,16 @@ public class Commandhome extends EssentialsCommand {
         throw new NoChargeException();
     }
 
+    @Override
+    protected void run(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception {
+        if (args.length < 1) {
+            throw new NotEnoughArgumentsException();
+        }
+
+        final User target = getPlayer(server, args, 0, true, true);
+        sender.sendMessage(tl("homes", StringUtil.joinList(target.getHomes()), target.getHomes().size(), getHomeLimit(target)));
+    }
+
     private String getHomeLimit(final User player) {
         if (!player.getBase().isOnline()) {
             return "?";
@@ -132,15 +142,5 @@ public class Commandhome extends EssentialsCommand {
         } else {
             return Collections.emptyList();
         }
-    }
-
-    @Override
-    protected void run(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception {
-        if (args.length < 1) {
-            throw new NotEnoughArgumentsException();
-        }
-
-        final User target = getPlayer(server, args, 0, true, true);
-        sender.sendMessage(tl("homes", StringUtil.joinList(target.getHomes()), target.getHomes().size(), getHomeLimit(target)));
     }
 }
