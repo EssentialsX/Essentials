@@ -1,5 +1,6 @@
 package com.earth2me.essentials.commands;
 
+import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.StringUtil;
@@ -131,5 +132,15 @@ public class Commandhome extends EssentialsCommand {
         } else {
             return Collections.emptyList();
         }
+    }
+
+    @Override
+    protected void run(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception {
+        if (args.length < 1) {
+            throw new NotEnoughArgumentsException();
+        }
+
+        final User target = getPlayer(server, args, 0, true, true);
+        sender.sendMessage(tl("homes", StringUtil.joinList(target.getHomes()), target.getHomes().size(), getHomeLimit(target)));
     }
 }
