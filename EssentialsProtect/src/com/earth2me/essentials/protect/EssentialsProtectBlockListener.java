@@ -8,9 +8,11 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBurnEvent;
 import org.bukkit.event.block.BlockFromToEvent;
 import org.bukkit.event.block.BlockIgniteEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.world.PortalCreateEvent;
 
 import java.util.Set;
@@ -88,6 +90,46 @@ public class EssentialsProtectBlockListener implements Listener {
     public void onPortalLight(PortalCreateEvent event) {
         if (event.getReason() == PortalCreateEvent.CreateReason.FIRE) {
             event.setCancelled(prot.getSettingBool(ProtectConfig.prevent_portal_creation));
+        }
+    }
+
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    public void onSignDye(PlayerInteractEvent event) {
+        Material clickedBlock = event.getClickedBlock().getBlockData().getMaterial();
+        Action action = event.getAction();
+        Material itemInHandMat = event.getPlayer().getInventory().getItemInMainHand().getType();
+
+        // Check Right Click Action with Dye on Sign
+        if ((clickedBlock == Material.ACACIA_SIGN ||
+                clickedBlock == Material.ACACIA_WALL_SIGN ||
+                clickedBlock == Material.SPRUCE_SIGN ||
+                clickedBlock == Material.SPRUCE_WALL_SIGN ||
+                clickedBlock == Material.BIRCH_SIGN ||
+                clickedBlock == Material.BIRCH_WALL_SIGN ||
+                clickedBlock == Material.DARK_OAK_SIGN ||
+                clickedBlock == Material.DARK_OAK_WALL_SIGN ||
+                clickedBlock == Material.JUNGLE_SIGN ||
+                clickedBlock == Material.JUNGLE_WALL_SIGN ||
+                clickedBlock == Material.OAK_SIGN ||
+                clickedBlock == Material.OAK_WALL_SIGN) &&
+                action == Action.RIGHT_CLICK_BLOCK &&
+                (itemInHandMat == Material.BLACK_DYE ||
+                        itemInHandMat == Material.BLUE_DYE ||
+                        itemInHandMat == Material.BROWN_DYE ||
+                        itemInHandMat == Material.CYAN_DYE ||
+                        itemInHandMat == Material.GRAY_DYE ||
+                        itemInHandMat == Material.GREEN_DYE ||
+                        itemInHandMat == Material.LIGHT_BLUE_DYE ||
+                        itemInHandMat == Material.LIGHT_GRAY_DYE ||
+                        itemInHandMat == Material.LIME_DYE ||
+                        itemInHandMat == Material.MAGENTA_DYE ||
+                        itemInHandMat == Material.ORANGE_DYE ||
+                        itemInHandMat == Material.PINK_DYE ||
+                        itemInHandMat == Material.PURPLE_DYE ||
+                        itemInHandMat == Material.RED_DYE ||
+                        itemInHandMat == Material.WHITE_DYE ||
+                        itemInHandMat == Material.YELLOW_DYE)) {
+            event.setCancelled(prot.getSettingBool(ProtectConfig.disable_sign_dyeing));
         }
     }
 }
