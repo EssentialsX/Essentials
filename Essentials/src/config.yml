@@ -844,6 +844,9 @@ protect:
     # Should Wither damage be disabled?
     wither: false
 
+    #Should sign dyeing be disabled?
+    sign-dyeing: false
+
     # Disable weather options?
     weather:
       storm: false
