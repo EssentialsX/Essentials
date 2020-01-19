@@ -77,7 +77,7 @@ public class MaterialUtil {
                 "PURPLE_DYE", "RED_DYE", "YELLOW_DYE");
 
         // Dyes 1.14+
-        v1_14_DYES = EnumUtil.getAllMatching(Material.class, "DYE", "BLACK_DYE", "BLUE_DYE", "BROWN_DYE", "WHITE_DYE");
+        V1_14_DYES = EnumUtil.getAllMatching(Material.class, "DYE", "BLACK_DYE", "BLUE_DYE", "BROWN_DYE", "WHITE_DYE");
     }
 
     public static boolean isBed(Material material) {
@@ -98,7 +98,7 @@ public class MaterialUtil {
 
     public static boolean isDye(Material material) {
         return VersionUtil.getServerBukkitVersion().isHigherThanOrEqualTo(VersionUtil.v1_14_R01) ?
-                CLASSIC_DYES.contains(material) : CLASSIC_DYES.contains(material) || v1_14_DYES.contains(material);
+                CLASSIC_DYES.contains(material) : CLASSIC_DYES.contains(material) || V1_14_DYES.contains(material);
     }
 
     public static boolean isMobHead(Material material, int durability) {
