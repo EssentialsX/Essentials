@@ -27,7 +27,7 @@ public class MaterialUtil {
     private static final Set<Material> POTIONS;
     private static final Set<Material> SIGN_POSTS;
     private static final Set<Material> WALL_SIGNS;
-    private static final Set<Material> v1_14_DYES;
+    private static final Set<Material> V1_14_DYES;
     private static final Set<Material> CLASSIC_DYES;
 
     public static final Material SPAWNER = EnumUtil.getMaterial("MOB_SPAWNER", "SPAWNER");
