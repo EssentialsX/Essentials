@@ -844,7 +844,8 @@ protect:
     # Should Wither damage be disabled?
     wither: false
 
-    # Should sign dyeing be disabled?
+    # Should players be able to dye signs?
+    # This does not affect the essentials.sign.color permission.
     sign-dyeing: false
 
     # Disable weather options?
