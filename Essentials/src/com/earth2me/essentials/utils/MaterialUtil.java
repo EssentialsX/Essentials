@@ -27,7 +27,8 @@ public class MaterialUtil {
     private static final Set<Material> POTIONS;
     private static final Set<Material> SIGN_POSTS;
     private static final Set<Material> WALL_SIGNS;
-    private static final Set<Material> DYES;
+    private static final Set<Material> V1_14_DYES;
+    private static final Set<Material> CLASSIC_DYES;
 
     public static final Material SPAWNER = EnumUtil.getMaterial("MOB_SPAWNER", "SPAWNER");
 
@@ -70,10 +71,13 @@ public class MaterialUtil {
             "ACACIA_WALL_SIGN", "BIRCH_WALL_SIGN", "DARK_OAK_WALL_SIGN", "JUNGLE_WALL_SIGN",
             "OAK_WALL_SIGN", "SPRUCE_WALL_SIGN");
 
-        DYES = EnumUtil.getAllMatching(Material.class, "DYE", "BLACK_DYE", "BLUE_DYE", "BROWN_DYE",
-                "CYAN_DYE", "GRAY_DYE", "GREEN_DYE", "LIGHT_BLUE_DYE", "LIGHT_GRAY_DYE",
-                "LIME_DYE", "MAGENTA_DYE", "ORANGE_DYE", "PINK_DYE", "PURPLE_DYE",
-                "RED_DYE", "WHITE_DYE", "YELLOW_DYE");
+        // Dyes until 1.13 (Version included)
+        CLASSIC_DYES = EnumUtil.getAllMatching(Material.class, "CYAN_DYE", "GRAY_DYE", "GREEN_DYE",
+                "LIGHT_BLUE_DYE", "LIGHT_GRAY_DYE", "LIME_DYE", "MAGENTA_DYE", "ORANGE_DYE", "PINK_DYE",
+                "PURPLE_DYE", "RED_DYE", "YELLOW_DYE");
+
+        // Dyes 1.14+
+        V1_14_DYES = EnumUtil.getAllMatching(Material.class, "DYE", "BLACK_DYE", "BLUE_DYE", "BROWN_DYE", "WHITE_DYE");
     }
 
     public static boolean isBed(Material material) {
@@ -93,7 +97,8 @@ public class MaterialUtil {
     }
 
     public static boolean isDye(Material material) {
-        return DYES.contains(material);
+        return VersionUtil.getServerBukkitVersion().isHigherThanOrEqualTo(VersionUtil.v1_14_R01) ?
+                CLASSIC_DYES.contains(material) : CLASSIC_DYES.contains(material) || V1_14_DYES.contains(material);
     }
 
     public static boolean isMobHead(Material material, int durability) {
