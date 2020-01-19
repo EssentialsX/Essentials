@@ -104,9 +104,8 @@ public class EssentialsProtectBlockListener implements Listener {
         if (VersionUtil.getServerBukkitVersion().isLowerThan(VersionUtil.v1_14_R01)) return;
 
         Material clickedBlock = event.getClickedBlock().getBlockData().getMaterial();
+        Material itemInHand = event.getItem().getType();
         Action action = event.getAction();
-        User user = ess.getUser(event.getPlayer());
-        Material itemInHand = user.getItemInHand().getType();
 
         // Check Right Click Action with Dye on Sign
         if (MaterialUtil.isSign(clickedBlock) && action == Action.RIGHT_CLICK_BLOCK && MaterialUtil.isDye(itemInHand)) {
