@@ -4,6 +4,7 @@ import com.earth2me.essentials.IEssentials;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.EnumUtil;
 import com.earth2me.essentials.utils.MaterialUtil;
+import com.earth2me.essentials.utils.VersionUtil;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -99,6 +100,9 @@ public class EssentialsProtectBlockListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onSignDye(PlayerInteractEvent event) {
+
+        if (VersionUtil.getServerBukkitVersion().isLowerThan(VersionUtil.v1_14_R01)) return;
+
         Material clickedBlock = event.getClickedBlock().getBlockData().getMaterial();
         Action action = event.getAction();
         User user = ess.getUser(event.getPlayer());
