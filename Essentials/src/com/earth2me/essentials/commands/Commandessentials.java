@@ -1,25 +1,31 @@
 package com.earth2me.essentials.commands;
 
+import static com.earth2me.essentials.I18n.tl;
+
 import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.EssentialsUpgrade;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.UserMap;
-import com.earth2me.essentials.utils.*;
+import com.earth2me.essentials.compat.PluginReport;
+import com.earth2me.essentials.utils.DateUtil;
+import com.earth2me.essentials.utils.EnumUtil;
+import com.earth2me.essentials.utils.FloatUtil;
+import com.earth2me.essentials.utils.NumberUtil;
+import com.earth2me.essentials.utils.VersionUtil;
 import com.google.common.base.Charsets;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.UUID;
+import java.util.function.Supplier;
 import org.bukkit.Server;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
-import org.bukkit.plugin.PluginDescriptionFile;
-import org.bukkit.plugin.PluginManager;
 import org.bukkit.scheduler.BukkitRunnable;
-
-import java.util.*;
-import java.util.function.Supplier;
-
-import static com.earth2me.essentials.I18n.tl;
 
 // This command has 4 undocumented behaviours #EasterEgg
 public class Commandessentials extends EssentialsCommand {
@@ -36,36 +42,6 @@ public class Commandessentials extends EssentialsCommand {
     }
 
     private transient TuneRunnable currentTune = null;
-
-    private static final List<String> versionPlugins = Arrays.asList(
-        "Vault", // API
-        "Reserve", // API
-        "PlaceholderAPI", // API
-        "CMI", // potential for issues
-        "Towny", // past issues; admins should ensure latest
-        "ChestShop", // past issues; admins should ensure latest
-        "Citizens", // fires player events
-        "LuckPerms", // permissions (recommended)
-        "UltraPermissions",
-        "PermissionsEx", // permissions (unsupported)
-        "GroupManager", // permissions (unsupported)
-        "bPermissions" // permissions (unsupported)
-    );
-
-    private static final List<String> officialPlugins = Arrays.asList(
-        "EssentialsAntiBuild",
-        "EssentialsChat",
-        "EssentialsGeoIP",
-        "EssentialsProtect",
-        "EssentialsSpawn",
-        "EssentialsXMPP"
-    );
-
-    private static final List<String> warnPlugins = Arrays.asList(
-        "PermissionsEx",
-        "GroupManager",
-        "bPremissions"
-    );
 
     @Override
     public void run(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception {
@@ -304,60 +280,10 @@ public class Commandessentials extends EssentialsCommand {
     private void runVersion(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception {
         if (sender.isPlayer() && !ess.getUser(sender.getPlayer()).isAuthorized("essentials.version")) return;
 
-        boolean isMismatched = false;
-        boolean isVaultInstalled = false;
-        boolean isUnsupported = false;
         final boolean isServerSupported = VersionUtil.isServerSupported();
-        final PluginManager pm = server.getPluginManager();
-        final String essVer = pm.getPlugin("Essentials").getDescription().getVersion();
-
         sender.sendMessage(tl(isServerSupported ? "versionOutputFine" : "versionOutputWarn", "Server", server.getBukkitVersion() + " " + server.getVersion()));
-        sender.sendMessage(tl("versionOutputFine", "EssentialsX", essVer));
 
-        for (Plugin plugin : pm.getPlugins()) {
-            final PluginDescriptionFile desc = plugin.getDescription();
-            String name = desc.getName();
-            String version = desc.getVersion();
-
-            if (name.startsWith("Essentials") && !name.equalsIgnoreCase("Essentials")) {
-                if (officialPlugins.contains(name)) {
-                    name = name.replace("Essentials", "EssentialsX");
-
-                    if (!version.equalsIgnoreCase(essVer)) {
-                        isMismatched = true;
-                        sender.sendMessage(tl("versionOutputWarn", name, version));
-                    } else {
-                        sender.sendMessage(tl("versionOutputFine", name, version));
-                    }
-                } else {
-                    sender.sendMessage(tl("versionOutputUnsupported", name, version));
-                    isUnsupported = true;
-                }
-            }
-
-            if (versionPlugins.contains(name)) {
-                if (warnPlugins.contains(name)) {
-                    sender.sendMessage(tl("versionOutputUnsupported", name, version));
-                    isUnsupported = true;
-                } else {
-                    sender.sendMessage(tl("versionOutputFine", name, version));
-                }
-            }
-
-            if (name.equals("Vault")) isVaultInstalled = true;
-        }
-
-        if (isMismatched) {
-            sender.sendMessage(tl("versionMismatchAll"));
-        }
-
-        if (!isVaultInstalled) {
-            sender.sendMessage(tl("versionOutputVaultMissing"));
-        }
-
-        if (isUnsupported) {
-            sender.sendMessage(tl("versionOutputUnsupportedPlugins"));
-        }
+        sender.sendMessage(PluginReport.generateReport());
 
         if (!VersionUtil.isServerSupported()) {
             sender.sendMessage(tl("serverUnsupported"));
