@@ -162,8 +162,8 @@ public class MetaItemStack {
             stack.setItemMeta(meta);
         } else if (split.length > 1 && (split[0].equalsIgnoreCase("lore") || split[0].equalsIgnoreCase("desc")) && hasMetaPermission(sender, "lore", false, true, ess)) {
             final List<String> lore = new ArrayList<String>();
-            for (String line : split[1].split("[^\\\\](\\|)")) {
-                lore.add(FormatUtil.replaceFormat(line.replace('_', ' ')));
+            for (String line : split[1].split("(?<!\\\\)\\|")) {
+                lore.add(FormatUtil.replaceFormat(line.replace('_', ' ').replace("\\|", "|")));
             }
             final ItemMeta meta = stack.getItemMeta();
             meta.setLore(lore);
