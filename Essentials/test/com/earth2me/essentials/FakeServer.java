@@ -818,6 +818,11 @@ public class FakeServer implements Server {
     }
 
     @Override
+    public boolean removeRecipe(NamespacedKey key) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
     public HelpMap getHelpMap() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
