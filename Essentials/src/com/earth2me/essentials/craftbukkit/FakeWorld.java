@@ -449,6 +449,26 @@ public class FakeWorld implements World {
     }
 
     @Override
+    public int getHighestBlockYAt(int i, int i1, HeightMap heightMap) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public int getHighestBlockYAt(Location location, HeightMap heightMap) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public Block getHighestBlockAt(int i, int i1, HeightMap heightMap) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public Block getHighestBlockAt(Location location, HeightMap heightMap) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
     public Biome getBiome(int i, int i1) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
