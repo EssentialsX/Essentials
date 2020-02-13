@@ -21,6 +21,7 @@ public class Commandpending extends EssentialsCommand{
         }
         if(user.getPending() == null){
             user.sendMessage(tl("noPending"));
+            return;
         }
         switch (args[0].toLowerCase()){
             case "confirm":
