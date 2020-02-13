@@ -26,7 +26,6 @@ public class Commandpending extends EssentialsCommand{
         switch (args[0].toLowerCase()){
             case "confirm":
                 user.getPending().run(server,user,commandLabel,args);
-                break;
             case "decline":
                 user.setPending(null);
                 break;

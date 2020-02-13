@@ -171,7 +171,7 @@ public abstract class EssentialsCommand implements IEssentialsCommand {
         charge.charge(user);
     }
     private boolean isPending = false;
-    public void askForPayment(final User user, final BigDecimal cost){
+    public void askForPayment(User user, final BigDecimal cost){
         if(ess.getSettings().isDebug()){
             ess.getLogger().log(Level.INFO, "asking user " + user.getName() + "for payment");
         }
