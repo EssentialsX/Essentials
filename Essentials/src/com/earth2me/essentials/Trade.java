@@ -102,8 +102,18 @@ public class Trade {
         if (exp != null && exp > 0 && SetExpFix.getTotalExperience(user.getBase()) < exp) {
             throw new ChargeException(tl("notEnoughExperience"));
         }
-    }
 
+        if(!askForPayment(user)){
+            throw new ChargeException(tl("userRestriction"));
+        }
+    }
+    public boolean askForPayment(final IUser user){
+        if(ess.getSettings().isDebug()){
+            ess.getLogger().log(Level.INFO, "asking user " + user.getName() + "for payment");
+        }
+        user.sendMessage(tl("doYouWantToPay", NumberUtil.displayCurrency(money,ess)));
+        return true; //TODO: add confirmation command
+    }
     public boolean pay(final IUser user) throws MaxMoneyException {
         return pay(user, OverflowType.ABORT) == null;
     }
