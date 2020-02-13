@@ -300,6 +300,10 @@ commands:
     description: Pays another player from your balance.
     usage: /<command> <player> <amount>
     aliases: [epay]
+  pending:
+    description: Allows to confirm or decline pending transactions
+    usage: /pending [confirm/decline]
+    aliases: [pnd]
   paytoggle:
     description: Toggles whether you are accepting payments.
     usage: /<command>

@@ -1,5 +1,7 @@
 package com.earth2me.essentials.commands;
 
+import com.earth2me.essentials.utils.NumberUtil;
+import net.ess3.api.IUser;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginDescriptionFile;
 import com.earth2me.essentials.CommandSource;
@@ -17,6 +19,7 @@ import org.bukkit.entity.Player;
 
 import org.bukkit.util.StringUtil;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -24,6 +27,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import static com.earth2me.essentials.I18n.tl;
@@ -157,11 +161,24 @@ public abstract class EssentialsCommand implements IEssentialsCommand {
     @Override
     public final void run(final Server server, final User user, final String commandLabel, final Command cmd, final String[] args) throws Exception {
         final Trade charge = new Trade(this.getName(), ess);
+
         charge.isAffordableFor(user);
+        if(!isPending && charge.getCommandCost(user) != null && charge.getCommandCost(user).signum() > 0){
+            askForPayment(user, charge.getCommandCost(user));
+            return;
+        }
         run(server, user, commandLabel, args);
         charge.charge(user);
     }
-
+    private boolean isPending = false;
+    public void askForPayment(final User user, final BigDecimal cost){
+        if(ess.getSettings().isDebug()){
+            ess.getLogger().log(Level.INFO, "asking user " + user.getName() + "for payment");
+        }
+        user.sendMessage(tl("doYouWantToPay", NumberUtil.displayCurrency(cost,ess)));
+        user.setPending(this);
+        isPending = true;
+    }
     protected void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception {
         run(server, user.getSource(), commandLabel, args);
     }

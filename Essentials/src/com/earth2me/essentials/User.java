@@ -1,5 +1,6 @@
 package com.earth2me.essentials;
 
+import com.earth2me.essentials.commands.EssentialsCommand;
 import com.earth2me.essentials.commands.IEssentialsCommand;
 import com.earth2me.essentials.messaging.IMessageRecipient;
 import com.earth2me.essentials.messaging.SimpleMessageRecipient;
@@ -60,6 +61,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
     private Map<User, BigDecimal> confirmingPayments = new WeakHashMap<>();
     private String confirmingClearCommand;
     private long lastNotifiedAboutMailsMs;
+    private EssentialsCommand pending;
 
     public User(final Player base, final IEssentials ess) {
         super(base, ess);
@@ -86,6 +88,14 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
     @Override
     public boolean isAuthorized(final IEssentialsCommand cmd, final String permissionPrefix) {
         return isAuthorized(permissionPrefix + (cmd.getName().equals("r") ? "msg" : cmd.getName()));
+    }
+
+    public EssentialsCommand getPending() {
+        return pending;
+    }
+
+    public void setPending(EssentialsCommand pending) {
+        this.pending = pending;
     }
 
     @Override

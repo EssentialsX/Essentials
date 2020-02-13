@@ -1,5 +1,6 @@
 package com.earth2me.essentials;
 
+import com.earth2me.essentials.commands.EssentialsCommand;
 import com.earth2me.essentials.commands.IEssentialsCommand;
 import net.ess3.api.ITeleport;
 import net.ess3.api.MaxMoneyException;
@@ -191,4 +192,6 @@ public interface IUser {
     void setLastMessageReplyRecipient(boolean enabled);
 
     Map<User, BigDecimal> getConfirmingPayments();
+
+
 }
