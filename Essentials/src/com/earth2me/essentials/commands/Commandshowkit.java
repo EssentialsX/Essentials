@@ -2,6 +2,7 @@ package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.Kit;
 import com.earth2me.essentials.User;
+import org.apache.commons.lang.StringUtils;
 import org.bukkit.Server;
 
 import java.util.ArrayList;
@@ -28,7 +29,9 @@ public class Commandshowkit extends EssentialsCommand {
             Kit kit = new Kit(kitName, ess);
             user.sendMessage(tl("kitContains", kitName));
             for (String s : kit.getItems()) {
-                user.sendMessage(tl("kitItem", s));
+                int maxStringLength = 384;
+
+                user.sendMessage(tl("kitItem", StringUtils.abbreviate(s, maxStringLength)));
             }
         }
     }
