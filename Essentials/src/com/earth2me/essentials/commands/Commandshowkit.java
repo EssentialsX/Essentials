@@ -31,7 +31,11 @@ public class Commandshowkit extends EssentialsCommand {
             for (String s : kit.getItems()) {
                 int maxStringLength = 384;
 
-                user.sendMessage(tl("kitItem", StringUtils.abbreviate(s, maxStringLength)));
+                try {
+                    user.sendMessage(tl("kitItem", StringUtils.abbreviate(s, maxStringLength)));
+                } catch (ClassCastException e) {
+                    throw new Exception("Invalid kit item: " + s);
+                }
             }
         }
     }
