@@ -2,13 +2,13 @@ package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.FloatUtil;
-import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import org.bukkit.Server;
 import org.bukkit.entity.*;
 import org.bukkit.util.Vector;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -16,20 +16,20 @@ import java.util.stream.Collectors;
 import static com.earth2me.essentials.I18n.tl;
 
 public class Commandfireball extends EssentialsCommand {
+    private static final Map<String, Class<? extends Entity>> types = new HashMap<>();
 
-    private static final Map<String, Class<? extends Entity>> types = ImmutableMap.<String, Class<? extends Entity>>builder()
-        .put("fireball", Fireball.class)
-        .put("small", SmallFireball.class)
-        .put("large", LargeFireball.class)
-        .put("dragon", DragonFireball.class)
-        .put("arrow", Arrow.class)
-        .put("skull", WitherSkull.class)
-        .put("egg", Egg.class)
-        .put("snowball", Snowball.class)
-        .put("expbottle", ThrownExpBottle.class)
-        .put("splashpotion", SplashPotion.class)
-        .put("lingeringpotion", LingeringPotion.class)
-        .build();
+    static {
+        String[] classNames = { "Fireball", "SmallFireball", "LargeFireball", "DragonFireball", "Arrow", "WitherSkull",
+                "Egg", "Snowball", "ThrownExpBottle", "SplashPotion", "LingeringPotion"};
+        Class<?>[] classes = new Class<?>[classNames.length];
+        for (int i = 0; i < classNames.length; i++) {
+            classes[i] = classNames[i].getClass();
+            Class<?> c = classes[i];
+            if (c != null) {
+                types.put(classNames[i].toLowerCase(), (Class<? extends Entity>) c);
+            }
+        }
+    }
 
     public Commandfireball() {
         super("fireball");
@@ -61,7 +61,8 @@ public class Commandfireball extends EssentialsCommand {
         }
 
         final Vector direction = user.getBase().getEyeLocation().getDirection().multiply(speed);
-        Projectile projectile = (Projectile) user.getWorld().spawn(user.getBase().getEyeLocation().add(direction.getX(), direction.getY(), direction.getZ()), types.get(type));
+        Projectile projectile = (Projectile) user.getWorld().spawn(user.getBase().getEyeLocation().add(direction.getX(),
+                direction.getY(), direction.getZ()), types.get(type));
         projectile.setShooter(user.getBase());
         projectile.setVelocity(direction);
 
