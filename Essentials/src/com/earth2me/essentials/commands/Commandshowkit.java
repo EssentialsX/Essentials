@@ -2,7 +2,6 @@ package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.Kit;
 import com.earth2me.essentials.User;
-import org.apache.commons.lang.StringUtils;
 import org.bukkit.Server;
 
 import java.util.ArrayList;
@@ -31,7 +30,12 @@ public class Commandshowkit extends EssentialsCommand {
             for (String s : kit.getItems()) {
                 int maxStringLength = 384;
 
-                user.sendMessage(tl("kitItem", StringUtils.abbreviate(s, maxStringLength)));
+                if (s.length() > maxStringLength) {
+                   // To prevent performance loss, don't display item metadata if it's too long
+                    // Keep item name and amount, remove the metadata, and inform the user
+                    s = s.substring(0, s.indexOf(" ", s.indexOf(" ") + 1)) + " (item metadata is too long to display)";
+                }
+                user.sendMessage(tl("kitItem", s));
             }
         }
     }
