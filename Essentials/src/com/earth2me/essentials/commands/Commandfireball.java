@@ -16,6 +16,7 @@ import java.util.stream.Collectors;
 import static com.earth2me.essentials.I18n.tl;
 
 public class Commandfireball extends EssentialsCommand {
+
     private static final Map<String, Class<? extends Entity>> types = ImmutableMap.<String, Class<? extends Entity>>builder()
         .put("fireball", Fireball.class)
         .put("small", SmallFireball.class)
