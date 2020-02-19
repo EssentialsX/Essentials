@@ -2,6 +2,7 @@ package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.FloatUtil;
+import com.earth2me.essentials.utils.VersionUtil;
 import com.google.common.collect.Lists;
 import org.bukkit.Server;
 import org.bukkit.entity.*;
@@ -19,16 +20,19 @@ public class Commandfireball extends EssentialsCommand {
     private static final Map<String, Class<? extends Entity>> types = new HashMap<>();
 
     static {
-        String[] classNames = { "Fireball", "SmallFireball", "LargeFireball", "DragonFireball", "Arrow", "WitherSkull",
-                "Egg", "Snowball", "ThrownExpBottle", "SplashPotion", "LingeringPotion"};
-        Class<?>[] classes = new Class<?>[classNames.length];
-        for (int i = 0; i < classNames.length; i++) {
-            classes[i] = classNames[i].getClass();
-            Class<?> c = classes[i];
-            if (c != null) {
-                types.put(classNames[i].toLowerCase(), (Class<? extends Entity>) c);
-            }
+        types.put("fireball", Fireball.class);
+        types.put("large", LargeFireball.class);
+        if (VersionUtil.getServerBukkitVersion().isHigherThanOrEqualTo(VersionUtil.v1_9_R01)) {
+            types.put("dragon", DragonFireball.class);
+            types.put("small", SmallFireball.class);
         }
+        types.put("arrow", Arrow.class);
+        types.put("skull", WitherSkull.class);
+        types.put("egg", Egg.class);
+        types.put("snowball", Snowball.class);
+        types.put("expbottle", ThrownExpBottle.class);
+        types.put("splashpotion", SplashPotion.class);
+        types.put("lingeringpotion", LingeringPotion.class);
     }
 
     public Commandfireball() {
