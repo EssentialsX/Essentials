@@ -580,7 +580,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
     //Returns true if status expired during this check
     public boolean checkMuteTimeout(final long currentTime) {
         if (getMuteTimeout() > 0 && getMuteTimeout() < currentTime && isMuted()) {
-            final MuteStatusChangeEvent event = new MuteStatusChangeEvent(this, null, false);
+            final MuteStatusChangeEvent event = new MuteStatusChangeEvent(this, null, false, null);
             ess.getServer().getPluginManager().callEvent(event);
             
             if (!event.isCancelled()) {

@@ -5,31 +5,23 @@ import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
-
-/**
- * This handles common boilerplate for other StateChangeEvents
- */
-public class StateChangeEvent extends Event implements Cancellable {
+public class IpBanStatusChangeEvent extends Event implements Cancellable {
     private static final HandlerList handlers = new HandlerList();
     private boolean cancelled = false;
-    IUser affected;
+    String affectedIp;
     IUser controller;
+    private String reason;
     private boolean newValue;
 
-    public StateChangeEvent(IUser affected, IUser controller) {
-        super();
-        this.affected = affected;
+    public IpBanStatusChangeEvent(String affectedIp, IUser controller, boolean newValue, String reason) {
+        this.affectedIp = affectedIp;
         this.controller = controller;
+        this.newValue = newValue;
+        this.reason = reason;
     }
 
-    public StateChangeEvent(boolean isAsync, IUser affected, IUser controller) {
-        super(isAsync);
-        this.affected = affected;
-        this.controller = controller;
-    }
-
-    public IUser getAffected() {
-        return this.affected;
+    public String getAffectedIp() {
+        return affectedIp;
     }
 
     public IUser getController() {
@@ -53,5 +45,17 @@ public class StateChangeEvent extends Event implements Cancellable {
     @Override
     public void setCancelled(boolean cancelled) {
         this.cancelled = cancelled;
+    }
+
+    public boolean getValue() {
+        return newValue;
+    }
+
+    public String getReason() {
+        return reason;
+    }
+
+    public void setReason(String reason) {
+        this.reason = reason;
     }
 }

@@ -4,6 +4,7 @@ import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.Console;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.FormatUtil;
+import net.ess3.api.events.IpBanStatusChangeEvent;
 import org.bukkit.BanList;
 import org.bukkit.Server;
 import org.bukkit.entity.Player;
@@ -51,18 +52,25 @@ public class Commandbanip extends EssentialsCommand {
             banReason = tl("defaultBanReason");
         }
 
-        String banDisplay = tl("banFormat", banReason, senderName);
+        final User controller = sender.isPlayer() ? ess.getUser(sender.getPlayer()) : null;
+        IpBanStatusChangeEvent event = new IpBanStatusChangeEvent(ipAddress, controller, true, banReason);
+        ess.getServer().getPluginManager().callEvent(event);
 
-        ess.getServer().getBanList(BanList.Type.IP).addBan(ipAddress, banReason, null, senderName);
-        server.getLogger().log(Level.INFO, tl("playerBanIpAddress", senderName, ipAddress, banReason));
+        if (!event.isCancelled()) {
+            banReason = event.getReason();
+            String banDisplay = tl("banFormat", banReason, senderName);
 
-        for (Player player : ess.getServer().getOnlinePlayers()) {
-            if (player.getAddress().getAddress().getHostAddress().equalsIgnoreCase(ipAddress)) {
-                player.kickPlayer(banDisplay);
+            ess.getServer().getBanList(BanList.Type.IP).addBan(ipAddress, banReason, null, senderName);
+            server.getLogger().log(Level.INFO, tl("playerBanIpAddress", senderName, ipAddress, banReason));
+
+            for (Player player : ess.getServer().getOnlinePlayers()) {
+                if (player.getAddress().getAddress().getHostAddress().equalsIgnoreCase(ipAddress)) {
+                    player.kickPlayer(banDisplay);
+                }
             }
-        }
 
-        ess.broadcastMessage("essentials.banip.notify", tl("playerBanIpAddress", senderName, ipAddress, banReason));
+            ess.broadcastMessage("essentials.banip.notify", tl("playerBanIpAddress", senderName, ipAddress, banReason));
+        }
     }
 
     @Override

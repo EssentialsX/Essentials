@@ -4,6 +4,7 @@ import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.Console;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.FormatUtil;
+import net.ess3.api.events.IpBanStatusChangeEvent;
 import org.bukkit.BanList;
 import org.bukkit.Server;
 
@@ -39,11 +40,16 @@ public class Commandunbanip extends EssentialsCommand {
             throw new PlayerNotFoundException();
         }
 
+        final User controller = sender.isPlayer() ? ess.getUser(sender.getPlayer()) : null;
+        IpBanStatusChangeEvent event = new IpBanStatusChangeEvent(ipAddress, controller, false, null);
+        ess.getServer().getPluginManager().callEvent(event);
 
-        ess.getServer().getBanList(BanList.Type.IP).pardon(ipAddress);
-        final String senderName = sender.isPlayer() ? sender.getPlayer().getDisplayName() : Console.NAME;
-        server.getLogger().log(Level.INFO, tl("playerUnbanIpAddress", senderName, ipAddress));
+        if (!event.isCancelled()) {
+            ess.getServer().getBanList(BanList.Type.IP).pardon(ipAddress);
+            final String senderName = sender.isPlayer() ? sender.getPlayer().getDisplayName() : Console.NAME;
+            server.getLogger().log(Level.INFO, tl("playerUnbanIpAddress", senderName, ipAddress));
 
-        ess.broadcastMessage("essentials.banip.notify", tl("playerUnbanIpAddress", senderName, ipAddress));
+            ess.broadcastMessage("essentials.banip.notify", tl("playerUnbanIpAddress", senderName, ipAddress));
+        }
     }
 }

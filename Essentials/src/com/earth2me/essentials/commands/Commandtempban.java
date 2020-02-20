@@ -4,10 +4,10 @@ import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.Console;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.DateUtil;
+import net.ess3.api.events.TempBanStatusChangeEvent;
 import org.bukkit.BanList;
 import org.bukkit.Server;
 
-import java.util.Collections;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -39,7 +39,7 @@ public class Commandtempban extends EssentialsCommand {
             }
         }
         final String time = getFinalArg(args, 1);
-        final long banTimestamp = DateUtil.parseDateDiff(time, true);
+        long banTimestamp = DateUtil.parseDateDiff(time, true);
         String banReason = DateUtil.removeTimePattern(time);
 
         final long maxBanLength = ess.getSettings().getMaxTempban() * 1000;
@@ -52,16 +52,24 @@ public class Commandtempban extends EssentialsCommand {
             banReason = tl("defaultBanReason");
         }
 
-        final String senderName = sender.isPlayer() ? sender.getPlayer().getDisplayName() : Console.NAME;
-        ess.getServer().getBanList(BanList.Type.NAME).addBan(user.getName(), banReason, new Date(banTimestamp), senderName);
-        final String expiry = DateUtil.formatDateDiff(banTimestamp);
+        final User controller = sender.isPlayer() ? ess.getUser(sender.getPlayer()) : null;
+        TempBanStatusChangeEvent event = new TempBanStatusChangeEvent(user, controller, banReason, banTimestamp);
+        ess.getServer().getPluginManager().callEvent(event);
 
-        final String banDisplay = tl("tempBanned", expiry, senderName, banReason);
-        user.getBase().kickPlayer(banDisplay);
+        if(!event.isCancelled()) {
+            banReason = event.getReason();
+            banTimestamp = event.getTimestamp();
+            final String senderName = sender.isPlayer() ? sender.getPlayer().getDisplayName() : Console.NAME;
+            ess.getServer().getBanList(BanList.Type.NAME).addBan(user.getName(), banReason, new Date(banTimestamp), senderName);
+            final String expiry = DateUtil.formatDateDiff(banTimestamp);
 
-        final String message = tl("playerTempBanned", senderName, user.getName(), expiry, banReason);
-        server.getLogger().log(Level.INFO, message);
-        ess.broadcastMessage("essentials.ban.notify", message);
+            final String banDisplay = tl("tempBanned", expiry, senderName, banReason);
+            user.getBase().kickPlayer(banDisplay);
+
+            final String message = tl("playerTempBanned", senderName, user.getName(), expiry, banReason);
+            server.getLogger().log(Level.INFO, message);
+            ess.broadcastMessage("essentials.ban.notify", message);
+        }
     }
 
     @Override

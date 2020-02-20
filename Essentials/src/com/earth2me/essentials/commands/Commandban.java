@@ -5,6 +5,7 @@ import com.earth2me.essentials.Console;
 import com.earth2me.essentials.OfflinePlayer;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.FormatUtil;
+import net.ess3.api.events.BanStatusChangeEvent;
 import org.bukkit.BanList;
 import org.bukkit.Server;
 
@@ -51,18 +52,25 @@ public class Commandban extends EssentialsCommand {
             banReason = tl("defaultBanReason");
         }
 
-        ess.getServer().getBanList(BanList.Type.NAME).addBan(user.getName(), banReason, null, senderName);
+        final User controller = sender.isPlayer() ? ess.getUser(sender.getPlayer()) : null;
+        BanStatusChangeEvent event = new BanStatusChangeEvent(user, controller, true, banReason);
+        ess.getServer().getPluginManager().callEvent(event);
 
-        String banDisplay = tl("banFormat", banReason, senderName);
+        if(!event.isCancelled()) {
+            banReason = event.getReason();
+            ess.getServer().getBanList(BanList.Type.NAME).addBan(user.getName(), banReason, null, senderName);
 
-        user.getBase().kickPlayer(banDisplay);
-        server.getLogger().log(Level.INFO, tl("playerBanned", senderName, user.getName(), banDisplay));
+            String banDisplay = tl("banFormat", banReason, senderName);
 
-        if (nomatch) {
-            sender.sendMessage(tl("userUnknown", user.getName()));
+            user.getBase().kickPlayer(banDisplay);
+            server.getLogger().log(Level.INFO, tl("playerBanned", senderName, user.getName(), banDisplay));
+
+            if (nomatch) {
+                sender.sendMessage(tl("userUnknown", user.getName()));
+            }
+
+            ess.broadcastMessage("essentials.ban.notify", tl("playerBanned", senderName, user.getName(), banReason));
         }
-
-        ess.broadcastMessage("essentials.ban.notify", tl("playerBanned", senderName, user.getName(), banReason));
     }
 
     @Override
