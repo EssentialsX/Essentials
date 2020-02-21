@@ -713,10 +713,11 @@ chat:
   #format: '&7{PREFIX}&r {DISPLAYNAME}&r &7{SUFFIX}&r: {MESSAGE}'
 
   group-formats:
-  #  Default: '{WORLDNAME} {DISPLAYNAME}&7:&r {MESSAGE}'
-  #  Admins: '{WORLDNAME} &c[{GROUP}]&r {DISPLAYNAME}&7:&c {MESSAGE}'
+  #  default: '{WORLDNAME} {DISPLAYNAME}&7:&r {MESSAGE}'
+  #  admins: '{WORLDNAME} &c[{GROUP}]&r {DISPLAYNAME}&7:&c {MESSAGE}'
 
   # If you are using group formats make sure to remove the '#' to allow the setting to be read.
+  # Note: Group names are case-sensitive so you must match them up with your permission plugin.
 
 ############################################################
 # +------------------------------------------------------+ #
