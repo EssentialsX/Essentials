@@ -114,7 +114,10 @@
   "atrunksapling": "acacia_sapling",
   "awoodsapling": "acacia_sapling",
   "acacia_sign": {
-    "material": "ACACIA_SIGN"
+    "material": "ACACIA_SIGN",
+    "fallbacks": [
+      "SIGN"
+    ]
   },
   "acaciasign": "acacia_sign",
   "acacia_slab": {
@@ -633,7 +636,10 @@
   "wtrunksapling": "birch_sapling",
   "wwoodsapling": "birch_sapling",
   "birch_sign": {
-    "material": "BIRCH_SIGN"
+    "material": "BIRCH_SIGN",
+    "fallbacks": [
+      "SIGN"
+    ]
   },
   "birchsign": "birch_sign",
   "birch_slab": {
@@ -2637,7 +2643,10 @@
   "dotrunksapling": "dark_oak_sapling",
   "dowoodsapling": "dark_oak_sapling",
   "dark_oak_sign": {
-    "material": "DARK_OAK_SIGN"
+    "material": "DARK_OAK_SIGN",
+    "fallbacks": [
+      "SIGN"
+    ]
   },
   "darkoaksign": "dark_oak_sign",
   "dark_oak_slab": {
@@ -4120,7 +4129,10 @@
   "darkgreencdust": "green_concrete_powder",
   "darkgreencp": "green_concrete_powder",
   "green_dye": {
-    "material": "GREEN_DYE"
+    "material": "GREEN_DYE",
+    "fallbacks": [
+      "CACTUS_GREEN"
+    ]
   },
   "greendye": "green_dye",
   "green_glazed_terracotta": {
@@ -5723,7 +5735,10 @@
   "ftrunksapling": "jungle_sapling",
   "fwoodsapling": "jungle_sapling",
   "jungle_sign": {
-    "material": "JUNGLE_SIGN"
+    "material": "JUNGLE_SIGN",
+    "fallbacks": [
+      "SIGN"
+    ]
   },
   "junglesign": "jungle_sign",
   "jungle_slab": {
@@ -8309,7 +8324,10 @@
   "otrunksapling": "oak_sapling",
   "owoodsapling": "oak_sapling",
   "oak_sign": {
-    "material": "OAK_SIGN"
+    "material": "OAK_SIGN",
+    "fallbacks": [
+      "SIGN"
+    ]
   },
   "oaksign": "oak_sign",
   "oak_slab": {
@@ -9534,7 +9552,10 @@
   "redcdust": "red_concrete_powder",
   "redcp": "red_concrete_powder",
   "red_dye": {
-    "material": "RED_DYE"
+    "material": "RED_DYE",
+    "fallbacks": [
+      "ROSE_RED"
+    ]
   },
   "reddye": "red_dye",
   "red_glazed_terracotta": {
@@ -10312,7 +10333,10 @@
   "strunksapling": "spruce_sapling",
   "swoodsapling": "spruce_sapling",
   "spruce_sign": {
-    "material": "SPRUCE_SIGN"
+    "material": "SPRUCE_SIGN",
+    "fallbacks": [
+      "SIGN"
+    ]
   },
   "sprucesign": "spruce_sign",
   "spruce_slab": {
@@ -11690,7 +11714,10 @@
   "yellowcdust": "yellow_concrete_powder",
   "yellowcp": "yellow_concrete_powder",
   "yellow_dye": {
-    "material": "YELLOW_DYE"
+    "material": "YELLOW_DYE",
+    "fallbacks": [
+      "DANDELION_YELLOW"
+    ]
   },
   "yellowdye": "yellow_dye",
   "yellow_glazed_terracotta": {
@@ -24794,5 +24821,61 @@
   "minecraft:light_blue_dye": "light_blue_dye",
   "minecraft:zombie_villager_spawn_egg": "zombie_villager_spawn_egg",
   "minecraft:light_gray_bed": "light_gray_bed",
-  "sign": "oak_sign"
+  "sign": "oak_sign",
+  "beehive": {
+    "material": "BEEHIVE"
+  },
+  "minecraft:beehive": "beehive",
+  "bee_nest": {
+    "material": "BEE_NEST"
+  },
+  "beenest": "bee_nest",
+  "minecraft:bee_nest": "bee_nest",
+  "beesegg": "bee_spawn_egg",
+  "beespawn": "bee_spawn_egg",
+  "beespawnegg": "bee_spawn_egg",
+  "eggbee": "bee_spawn_egg",
+  "minecraft:bee_spawn_egg": "bee_spawn_egg",
+  "spawnbee": "bee_spawn_egg",
+  "spawneggbee": "bee_spawn_egg",
+  "bee_spawner": {
+    "entity": "BEE",
+    "material": "SPAWNER"
+  },
+  "beecage": "bee_spawner",
+  "beemcage": "bee_spawner",
+  "beemobcage": "bee_spawner",
+  "beemobspawner": "bee_spawner",
+  "beemonstercage": "bee_spawner",
+  "beemonsterspawner": "bee_spawner",
+  "beemspawner": "bee_spawner",
+  "beespawner": "bee_spawner",
+  "honey_block": {
+    "material": "HONEY_BLOCK"
+  },
+  "honeyblock": "honey_block",
+  "minecraft:honey_block": "honey_block",
+  "honey_bottle": {
+    "material": "HONEY_BOTTLE"
+  },
+  "honeybottle": "honey_bottle",
+  "minecraft:honey_bottle": "honey_bottle",
+  "honeycomb": {
+    "material": "HONEYCOMB"
+  },
+  "minecraft:honeycomb": "honeycomb",
+  "honeycomb_block": {
+    "material": "HONEYCOMB_BLOCK"
+  },
+  "honeycombblock": "honeycomb_block",
+  "minecraft:honeycomb_block": "honeycomb_block",
+  "cactusgreen": "green_dye",
+  "cactus_green": "green_dye",
+  "minecraft:cactus_green": "green_dye",
+  "dandelionyellow": "yellow_dye",
+  "dandelion_yellow": "yellow_dye",
+  "minecraft:dandelion_yellow": "yellow_dye",
+  "rosered": "red_dye",
+  "rose_red": "red_dye",
+  "minecraft:rose_red": "red_dye"
 }
