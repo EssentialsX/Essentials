@@ -1338,6 +1338,21 @@ public class OfflinePlayer implements Player {
     }
 
     @Override
+    public void attack(Entity entity) {
+
+    }
+
+    @Override
+    public void swingMainHand() {
+
+    }
+
+    @Override
+    public void swingOffHand() {
+
+    }
+
+    @Override
     public void setCollidable(boolean b) {
     }
 
