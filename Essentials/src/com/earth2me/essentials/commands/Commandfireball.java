@@ -31,9 +31,9 @@ public class Commandfireball extends EssentialsCommand {
                 .put("expbottle", ThrownExpBottle.class);
 
         if (VersionUtil.getServerBukkitVersion().isHigherThanOrEqualTo(VersionUtil.v1_9_R01)) {
-            builder.put("dragon", DragonFireball.class);
-            builder.put("splashpotion", SplashPotion.class);
-            builder.put("lingeringpotion", LingeringPotion.class);
+            builder.put("dragon", DragonFireball.class)
+                    .put("splashpotion", SplashPotion.class)
+                    .put("lingeringpotion", LingeringPotion.class);
         }
 
         if (VersionUtil.getServerBukkitVersion().isHigherThanOrEqualTo(VersionUtil.v1_13_0_R01)) {
