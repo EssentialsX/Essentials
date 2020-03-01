@@ -28,12 +28,12 @@ public class Commandfireball extends EssentialsCommand {
                 .put("skull", WitherSkull.class)
                 .put("egg", Egg.class)
                 .put("snowball", Snowball.class)
-                .put("expbottle", ThrownExpBottle.class)
-                .put("splashpotion", SplashPotion.class)
-                .put("lingeringpotion", LingeringPotion.class);
+                .put("expbottle", ThrownExpBottle.class);
 
         if (VersionUtil.getServerBukkitVersion().isHigherThanOrEqualTo(VersionUtil.v1_9_R01)) {
-            builder.put("dragon", DragonFireball.class);
+            builder.put("dragon", DragonFireball.class)
+                    .put("splashpotion", SplashPotion.class)
+                    .put("lingeringpotion", LingeringPotion.class);
         }
 
         if (VersionUtil.getServerBukkitVersion().isHigherThanOrEqualTo(VersionUtil.v1_13_0_R01)) {
