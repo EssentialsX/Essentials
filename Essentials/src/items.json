@@ -24831,6 +24831,9 @@
   },
   "beenest": "bee_nest",
   "minecraft:bee_nest": "bee_nest",
+  "bee_spawn_egg": {
+    "material": "BEE_SPAWN_EGG"
+  },
   "beesegg": "bee_spawn_egg",
   "beespawn": "bee_spawn_egg",
   "beespawnegg": "bee_spawn_egg",
