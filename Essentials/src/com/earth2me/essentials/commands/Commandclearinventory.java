@@ -124,7 +124,7 @@ public class Commandclearinventory extends EssentialsCommand {
             for (Material mat : mats) {
                 if (amount == -1) // amount -1 means all items will be cleared
                 {
-                    ItemStack stack = new ItemStack(mat, BASE_AMOUNT, data);
+                    ItemStack stack = new ItemStack(mat, BASE_AMOUNT);
                     ItemStack removedStack = player.getInventory().removeItem(stack).get(0);
                     final int removedAmount = (BASE_AMOUNT - removedStack.getAmount());
                     if (removedAmount > 0 || showExtended) {
