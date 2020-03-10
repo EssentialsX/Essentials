@@ -808,7 +808,7 @@ public class EssentialsPlayerListener implements Listener {
 
     @EventHandler(priority = EventPriority.LOW)
     public void onPlayerPickupFireball(final PlayerPickupArrowEvent event) {
-        if (event.getArrow().hasMetadata("Essentials Projectile Arrow")) {
+        if (event.getArrow().hasMetadata("Ess_Fireball_Projectile")) {
             event.setCancelled(true);
         }
     }

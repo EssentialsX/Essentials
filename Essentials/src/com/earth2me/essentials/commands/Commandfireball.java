@@ -77,7 +77,7 @@ public class Commandfireball extends EssentialsCommand {
         projectile.setShooter(user.getBase());
         projectile.setVelocity(direction);
         projectile.setCustomName("Fireball Arrow");
-        projectile.setMetadata("Essentials Projectile Arrow", new FixedMetadataValue(ess, true));
+        projectile.setMetadata("Ess_Fireball_Projectile", new FixedMetadataValue(ess, true));
         projectile.setCustomNameVisible(false);
 
         if (ride) {
