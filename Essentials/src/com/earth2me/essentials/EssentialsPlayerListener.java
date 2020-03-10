@@ -806,6 +806,13 @@ public class EssentialsPlayerListener implements Listener {
         user.updateActivityOnInteract(true);
     }
 
+    @EventHandler
+    public void onPlayerPickupFireball(final PlayerPickupArrowEvent event) {
+        if (event.getArrow().getCustomName().equals("Fireball Arrow")) {
+            event.setCancelled(true);
+        }
+    }
+
     private final class PickupListenerPre1_12 implements Listener {
         @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
         public void onPlayerPickupItem(final org.bukkit.event.player.PlayerPickupItemEvent event) {

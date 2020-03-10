@@ -9,15 +9,14 @@ import org.bukkit.Server;
 import org.bukkit.entity.*;
 import org.bukkit.util.Vector;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static com.earth2me.essentials.I18n.tl;
 
 public class Commandfireball extends EssentialsCommand {
     private static final Map<String, Class<? extends Projectile>> types;
+    private List<UUID> disabled = new ArrayList<>();
 
     static {
         ImmutableMap.Builder<String, Class<? extends Projectile>> builder = ImmutableMap.<String, Class<? extends Projectile>>builder()
@@ -77,6 +76,8 @@ public class Commandfireball extends EssentialsCommand {
         Projectile projectile = user.getWorld().spawn(user.getBase().getEyeLocation().add(direction.getX(), direction.getY(), direction.getZ()), types.get(type));
         projectile.setShooter(user.getBase());
         projectile.setVelocity(direction);
+        projectile.setCustomName("Fireball Arrow");
+        projectile.setCustomNameVisible(false);
 
         if (ride) {
             projectile.addPassenger(user.getBase());
