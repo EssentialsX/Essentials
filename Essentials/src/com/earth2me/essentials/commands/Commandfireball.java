@@ -16,7 +16,6 @@ import static com.earth2me.essentials.I18n.tl;
 
 public class Commandfireball extends EssentialsCommand {
     private static final Map<String, Class<? extends Projectile>> types;
-    private List<UUID> disabled = new ArrayList<>();
 
     static {
         ImmutableMap.Builder<String, Class<? extends Projectile>> builder = ImmutableMap.<String, Class<? extends Projectile>>builder()
