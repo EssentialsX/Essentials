@@ -7,6 +7,7 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import org.bukkit.Server;
 import org.bukkit.entity.*;
+import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.util.Vector;
 
 import java.util.*;
@@ -76,6 +77,7 @@ public class Commandfireball extends EssentialsCommand {
         projectile.setShooter(user.getBase());
         projectile.setVelocity(direction);
         projectile.setCustomName("Fireball Arrow");
+        projectile.setMetadata("Essentials Projectile Arrow", new FixedMetadataValue(ess, true));
         projectile.setCustomNameVisible(false);
 
         if (ride) {
