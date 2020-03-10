@@ -806,7 +806,7 @@ public class EssentialsPlayerListener implements Listener {
         user.updateActivityOnInteract(true);
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.LOW)
     public void onPlayerPickupFireball(final PlayerPickupArrowEvent event) {
         if (event.getArrow().getCustomName().equals("Fireball Arrow")) {
             event.setCancelled(true);
