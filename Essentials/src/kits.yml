@@ -39,3 +39,7 @@ kits:
       - fireworkrocket 1 name:Angry_Creeper color:red fade:green type:creeper power:1
       - fireworkrocket 1 name:Starry_Night color:yellow,orange fade:blue type:star effect:trail,twinkle power:1
       - fireworkrocket 2 name:Solar_Wind color:yellow,orange fade:red shape:large effect:twinkle color:yellow,orange fade:red shape:ball effect:trail color:red,purple fade:pink shape:star effect:trail power:1
+  specialbook:
+    delay: 60
+    items:
+    - '/minecraft:give {USERNAME} written_book{pages:[''["",{"text":"This is a neat book with "},{"text":"clickable","underlined":true,"color":"blue","clickEvent":{"action":"open_url","value":"https://essinfo.xeya.me/permissions.html"},"hoverEvent":{"action":"show_text","value":"Opens the EssentialsX permissions website."}},{"text":" text.","color":"reset"}]''],title:"Book Test",author:Jason}'
