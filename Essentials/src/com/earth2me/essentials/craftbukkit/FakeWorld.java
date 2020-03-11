@@ -604,6 +604,26 @@ public class FakeWorld implements World {
     }
 
     @Override
+    public long getTicksPerWaterSpawns() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public void setTicksPerWaterSpawns(int i) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public long getTicksPerAmbientSpawns() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public void setTicksPerAmbientSpawns(int i) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
     public <T extends Entity> Collection<T> getEntitiesByClass(Class<T> type) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
