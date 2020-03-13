@@ -1634,6 +1634,7 @@ public class Settings implements net.ess3.api.ISettings {
     @Override
     public boolean isRemovingEffectsOnHeal() {
         return removeEffectsOnHeal;
+    }
 
     @Override
     public boolean isSpawnIfNoHome() {
