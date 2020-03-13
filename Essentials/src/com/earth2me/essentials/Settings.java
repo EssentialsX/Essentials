@@ -1625,6 +1625,17 @@ public class Settings implements net.ess3.api.ISettings {
         return maxProjectileSpeed;
     }
 
+    private boolean removeEffectsOnHeal;
+
+    private boolean _isRemovingEffectsOnHeal() {
+        return config.getBoolean("remove-effects-on-heal", true);
+    }
+
+    @Override
+    public boolean isRemovingEffectsOnHeal() {
+        return removeEffectsOnHeal;
+    }
+
     @Override
     public boolean isSpawnIfNoHome() {
         return config.getBoolean("spawn-if-no-home", true);

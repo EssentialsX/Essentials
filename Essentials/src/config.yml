@@ -94,6 +94,9 @@ teleport-to-center: true
 # The delay, in seconds, required between /heal or /feed attempts.
 heal-cooldown: 60
 
+# Do you want to remove potion effects when healing a player?
+remove-effects-on-heal: true
+
 # Near Radius
 # The default radius with /near
 # Used to use chat radius but we are going to make it separate.

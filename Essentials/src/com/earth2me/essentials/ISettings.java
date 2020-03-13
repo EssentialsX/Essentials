@@ -338,5 +338,8 @@ public interface ISettings extends IConf {
 
     double getMaxProjectileSpeed();
 
+    boolean isRemovingEffectsOnHeal();
+
     boolean isSpawnIfNoHome();
+
 }
