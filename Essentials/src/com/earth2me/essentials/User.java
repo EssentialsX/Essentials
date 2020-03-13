@@ -187,8 +187,8 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
         }
 
         if (canAfford(value)) {
-            setMoney(getMoney().subtract(value));
-            reciever.setMoney(reciever.getMoney().add(value));
+            setMoney(getMoney().subtract(value), cause);
+            reciever.setMoney(reciever.getMoney().add(value), cause);
             sendMessage(tl("moneySentTo", NumberUtil.displayCurrency(value, ess), reciever.getDisplayName()));
             reciever.sendMessage(tl("moneyRecievedFrom", NumberUtil.displayCurrency(value, ess), getDisplayName()));
         } else {
