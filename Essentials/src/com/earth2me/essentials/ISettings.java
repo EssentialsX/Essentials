@@ -48,6 +48,8 @@ public interface ISettings extends IConf {
 
     String getCurrencySymbol();
 
+    boolean getCurrencySuffix();
+
     int getOversizedStackSize();
 
     int getDefaultStackSize();

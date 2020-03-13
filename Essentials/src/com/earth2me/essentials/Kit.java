@@ -153,8 +153,8 @@ public class Kit {
             boolean spew = false;
             final boolean allowUnsafe = ess.getSettings().allowUnsafeEnchantments();
             for (String kitItem : output.getLines()) {
-                if (kitItem.startsWith(ess.getSettings().getCurrencySymbol())) {
-                    BigDecimal value = new BigDecimal(kitItem.substring(ess.getSettings().getCurrencySymbol().length()).trim());
+                if (!ess.getSettings().getCurrencySuffix() ? kitItem.startsWith(ess.getSettings().getCurrencySymbol()) : kitItem.endsWith(ess.getSettings().getCurrencySymbol())) {
+                    BigDecimal value = ess.getSettings().getCurrencySuffix() ? new BigDecimal(kitItem.substring(0, ess.getSettings().getCurrencySymbol().length()).trim()) : new BigDecimal(kitItem.substring(ess.getSettings().getCurrencySymbol().length()).trim());
                     Trade t = new Trade(value, ess);
                     t.pay(user, OverflowType.DROP);
                     continue;
