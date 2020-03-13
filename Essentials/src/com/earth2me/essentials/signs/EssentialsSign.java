@@ -27,7 +27,7 @@ import static com.earth2me.essentials.I18n.tl;
 
 
 public class EssentialsSign {
-    private static final Set<Material> EMPTY_SET = new HashSet<Material>();
+    private static final Set<Material> EMPTY_SET = new HashSet<>();
     protected static final BigDecimal MINTRANSACTION = new BigDecimal("0.01");
     protected transient final String signName;
 
@@ -333,9 +333,7 @@ public class EssentialsSign {
 
     protected final int getInteger(final String line) throws SignException {
         try {
-            final int quantity = Integer.parseInt(line);
-
-            return quantity;
+            return Integer.parseInt(line);
         } catch (NumberFormatException ex) {
             throw new SignException("Invalid sign", ex);
         }
@@ -393,9 +391,7 @@ public class EssentialsSign {
     protected final BigDecimal getBigDecimal(final String line) throws SignException {
         try {
             return new BigDecimal(line);
-        } catch (ArithmeticException ex) {
-            throw new SignException(ex.getMessage(), ex);
-        } catch (NumberFormatException ex) {
+        } catch (ArithmeticException | NumberFormatException ex) {
             throw new SignException(ex.getMessage(), ex);
         }
     }

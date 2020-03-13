@@ -57,7 +57,7 @@ public class Commandcreatekit extends EssentialsCommand {
         }
 
         // Command handler will auto fail if this fails.
-        long delay = Long.valueOf(args[1]);
+        long delay = Long.parseLong(args[1]);
         String kitname = args[0];
         ItemStack[] items = user.getBase().getInventory().getContents();
         List<String> list = new ArrayList<>();

@@ -163,7 +163,7 @@ public class EssentialsUpgrade {
             try {
                 config.load();
                 if (config.hasProperty("powertools")) {
-                    @SuppressWarnings("unchecked") final Map<String, Object> powertools = config.getConfigurationSection("powertools").getValues(false);
+                    final Map<String, Object> powertools = config.getConfigurationSection("powertools").getValues(false);
                     if (powertools == null) {
                         continue;
                     }
@@ -204,7 +204,7 @@ public class EssentialsUpgrade {
 
                 config.load();
                 if (config.hasProperty("home") && config.hasProperty("home.default")) {
-                    @SuppressWarnings("unchecked") final String defworld = (String) config.getProperty("home.default");
+                    final String defworld = (String) config.getProperty("home.default");
                     final Location defloc = getFakeLocation(config, "home.worlds." + defworld);
                     if (defloc != null) {
                         config.setProperty("homes.home", defloc);
@@ -575,7 +575,7 @@ public class EssentialsUpgrade {
             conf.load();
 
             String banReason;
-            Long banTimeout;
+            long banTimeout;
 
             try {
                 banReason = conf.getConfigurationSection("ban").getString("reason");

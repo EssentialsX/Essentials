@@ -760,8 +760,7 @@ public class EssentialsPlayerListener implements Listener {
         }
 
         if (refreshPlayer != null) {
-            final Player player = refreshPlayer;
-            ess.scheduleSyncDelayedTask(player::updateInventory, 1);
+            ess.scheduleSyncDelayedTask(refreshPlayer::updateInventory, 1);
         }
     }
 
@@ -795,8 +794,7 @@ public class EssentialsPlayerListener implements Listener {
         }
 
         if (refreshPlayer != null) {
-            final Player player = refreshPlayer;
-            ess.scheduleSyncDelayedTask(player::updateInventory, 1);
+            ess.scheduleSyncDelayedTask(refreshPlayer::updateInventory, 1);
         }
     }
 

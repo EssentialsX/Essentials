@@ -13,7 +13,7 @@ public class ExecuteTimer {
 
 
     public ExecuteTimer() {
-        times = new ArrayList<ExecuteRecord>();
+        times = new ArrayList<>();
     }
 
     public void start() {

@@ -123,7 +123,7 @@ public class VaultEco implements Method {
     }
 
 
-    public class VaultAccount implements MethodAccount {
+    public static class VaultAccount implements MethodAccount {
         private final String name;
         private final Economy economy;
 
@@ -197,7 +197,7 @@ public class VaultEco implements Method {
     }
 
 
-    public class VaultBankAccount implements MethodBankAccount {
+    public static class VaultBankAccount implements MethodBankAccount {
         private final String bank;
         private final Economy economy;
 

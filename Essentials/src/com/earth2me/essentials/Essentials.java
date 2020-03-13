@@ -34,14 +34,6 @@ import com.earth2me.essentials.textreader.SimpleTextInput;
 import com.earth2me.essentials.utils.DateUtil;
 import com.earth2me.essentials.utils.VersionUtil;
 import com.google.common.base.Throwables;
-import java.io.File;
-import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import java.util.stream.Collectors;
 import net.ess3.api.IEssentials;
 import net.ess3.api.ISettings;
 import net.ess3.api.*;
@@ -82,6 +74,15 @@ import org.bukkit.plugin.java.JavaPluginLoader;
 import org.bukkit.scheduler.BukkitScheduler;
 import org.bukkit.scheduler.BukkitTask;
 import org.yaml.snakeyaml.error.YAMLException;
+
+import java.io.File;
+import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 import static com.earth2me.essentials.I18n.tl;
 
@@ -559,9 +560,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
                     cmd.run(getServer(), user, commandLabel, command, args);
                 }
                 return true;
-            } catch (NoChargeException ex) {
-                return true;
-            } catch (QuietAbortException ex) {
+            } catch (NoChargeException | QuietAbortException ex) {
                 return true;
             } catch (NotEnoughArgumentsException ex) {
                 sender.sendMessage(command.getDescription());

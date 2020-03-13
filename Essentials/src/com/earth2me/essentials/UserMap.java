@@ -112,9 +112,7 @@ public class UserMap extends CacheLoader<String, User> implements IConf {
             } else {
                 return legacyCacheGet(uuid);
             }
-        } catch (ExecutionException ex) {
-            return null;
-        } catch (UncheckedExecutionException ex) {
+        } catch (ExecutionException | UncheckedExecutionException ex) {
             return null;
         }
     }

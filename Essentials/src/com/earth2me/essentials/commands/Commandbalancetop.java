@@ -88,7 +88,7 @@ public class Commandbalancetop extends EssentialsCommand {
             try {
                 if (force || cacheage <= System.currentTimeMillis() - CACHETIME) {
                     cache.getLines().clear();
-                    final Map<String, BigDecimal> balances = new HashMap<String, BigDecimal>();
+                    final Map<String, BigDecimal> balances = new HashMap<>();
                     BigDecimal totalMoney = BigDecimal.ZERO;
                     if (ess.getSettings().isEcoDisabled()) {
                         if (ess.getSettings().isDebug()) {
@@ -113,8 +113,8 @@ public class Commandbalancetop extends EssentialsCommand {
                         }
                     }
 
-                    final List<Map.Entry<String, BigDecimal>> sortedEntries = new ArrayList<Map.Entry<String, BigDecimal>>(balances.entrySet());
-                    Collections.sort(sortedEntries, new Comparator<Map.Entry<String, BigDecimal>>() {
+                    final List<Map.Entry<String, BigDecimal>> sortedEntries = new ArrayList<>(balances.entrySet());
+                    sortedEntries.sort(new Comparator<Entry<String, BigDecimal>>() {
                         @Override
                         public int compare(final Entry<String, BigDecimal> entry1, final Entry<String, BigDecimal> entry2) {
                             return entry2.getValue().compareTo(entry1.getValue());

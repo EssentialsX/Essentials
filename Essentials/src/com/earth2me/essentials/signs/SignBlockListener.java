@@ -2,7 +2,6 @@ package com.earth2me.essentials.signs;
 
 import com.earth2me.essentials.I18n;
 import com.earth2me.essentials.User;
-import com.earth2me.essentials.utils.EnumUtil;
 import com.earth2me.essentials.utils.FormatUtil;
 import com.earth2me.essentials.utils.MaterialUtil;
 import net.ess3.api.IEssentials;

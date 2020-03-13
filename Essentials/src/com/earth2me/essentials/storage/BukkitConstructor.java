@@ -5,7 +5,6 @@ import com.earth2me.essentials.utils.NumberUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
 import org.bukkit.World;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
@@ -18,7 +17,6 @@ import org.yaml.snakeyaml.nodes.*;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.Locale;
 
 
 public class BukkitConstructor extends CustomClassLoaderConstructor {

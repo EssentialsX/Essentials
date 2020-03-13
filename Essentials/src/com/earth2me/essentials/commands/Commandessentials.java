@@ -175,7 +175,7 @@ public class Commandessentials extends EssentialsCommand {
     }
 
     // Cow farts.
-    private void runMoo(final Server server, final CommandSource sender, final String command, final String args[]) {
+    private void runMoo(final Server server, final CommandSource sender, final String command, final String[] args) {
         if (args.length == 2 && args[1].equals("moo")) {
             for (String s : CONSOLE_MOO) {
                 logger.info(s);
@@ -197,7 +197,7 @@ public class Commandessentials extends EssentialsCommand {
     }
 
     // Cleans up inactive users.
-    private void runCleanup(final Server server, final CommandSource sender, final String command, final String args[]) throws Exception {
+    private void runCleanup(final Server server, final CommandSource sender, final String command, final String[] args) throws Exception {
         if (args.length < 2 || !NumberUtil.isInt(args[1])) {
             sender.sendMessage("This sub-command will delete users who haven't logged in in the last <days> days.");
             sender.sendMessage("Optional parameters define the minimum amount required to prevent deletion.");
@@ -213,7 +213,7 @@ public class Commandessentials extends EssentialsCommand {
         final UserMap userMap = ess.getUserMap();
 
         ess.runTaskAsynchronously(() -> {
-            Long currTime = System.currentTimeMillis();
+            long currTime = System.currentTimeMillis();
             for (UUID u : userMap.getAllUniqueUsers()) {
                 final User user = ess.getUserMap().getUser(u);
                 if (user == null) {

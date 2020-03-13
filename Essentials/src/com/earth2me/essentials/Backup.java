@@ -85,8 +85,7 @@ public class Backup implements Runnable {
                         @Override
                         public void run() {
                             try {
-                                final BufferedReader reader = new BufferedReader(new InputStreamReader(child.getInputStream()));
-                                try {
+                                try (BufferedReader reader = new BufferedReader(new InputStreamReader(child.getInputStream()))) {
                                     String line;
                                     do {
                                         line = reader.readLine();
@@ -94,8 +93,6 @@ public class Backup implements Runnable {
                                             LOGGER.log(Level.INFO, line);
                                         }
                                     } while (line != null);
-                                } finally {
-                                    reader.close();
                                 }
                             } catch (IOException ex) {
                                 LOGGER.log(Level.SEVERE, null, ex);
@@ -103,9 +100,7 @@ public class Backup implements Runnable {
                         }
                     });
                     child.waitFor();
-                } catch (InterruptedException ex) {
-                    LOGGER.log(Level.SEVERE, null, ex);
-                } catch (IOException ex) {
+                } catch (InterruptedException | IOException ex) {
                     LOGGER.log(Level.SEVERE, null, ex);
                 } finally {
                     class BackupEnableSaveTask implements Runnable {

@@ -238,12 +238,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
     }
 
     public void dispose() {
-        ess.runTaskAsynchronously(new Runnable() {
-            @Override
-            public void run() {
-                _dispose();
-            }
-        });
+        ess.runTaskAsynchronously(this::_dispose);
     }
 
     private void _dispose() {
@@ -487,7 +482,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
         if (ess.getSettings().isEcoDisabled()) {
             return;
         }
-        if (Methods.hasMethod() && super.getMoney() != value) {
+        if (Methods.hasMethod() && !super.getMoney().equals(value)) {
             try {
                 super.setMoney(value, false);
             } catch (MaxMoneyException ex) {
@@ -545,7 +540,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
     @Override
     public void setHidden(final boolean hidden) {
         this.hidden = hidden;
-        if (hidden == true) {
+        if (hidden) {
             setLastLogout(getLastOnlineActivity());
         }
     }
@@ -671,9 +666,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
         }
         if (isAfk()) {
             // Protect AFK players by representing them in a god mode state to render them invulnerable to damage.
-            if (ess.getSettings().getFreezeAfkPlayers()) {
-                return true;
-            }
+            return ess.getSettings().getFreezeAfkPlayers();
         }
         return false;
     }

@@ -68,7 +68,7 @@ public class Jails extends AsyncStorageObjectHolder<com.earth2me.essentials.sett
     }
 
     private void checkRegister() {
-        if (enabled == false && getCount() > 0) {
+        if (!enabled && getCount() > 0) {
             registerListeners();
         }
     }
@@ -97,7 +97,7 @@ public class Jails extends AsyncStorageObjectHolder<com.earth2me.essentials.sett
             if (getData().getJails() == null) {
                 return Collections.emptyList();
             }
-            return new ArrayList<String>(getData().getJails().keySet());
+            return new ArrayList<>(getData().getJails().keySet());
         } finally {
             unlock();
         }
@@ -135,7 +135,7 @@ public class Jails extends AsyncStorageObjectHolder<com.earth2me.essentials.sett
         acquireWriteLock();
         try {
             if (getData().getJails() == null) {
-                getData().setJails(new HashMap<String, Location>());
+                getData().setJails(new HashMap<>());
             }
             getData().getJails().put(jailName.toLowerCase(Locale.ENGLISH), loc);
         } finally {

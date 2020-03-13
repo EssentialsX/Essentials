@@ -120,7 +120,7 @@ public class Commandcondense extends EssentialsCommand {
         }
         if (!bestRecipes.isEmpty()) {
             if (bestRecipes.size() > 1) {
-                Collections.sort(bestRecipes, SimpleRecipeComparator.INSTANCE);
+                bestRecipes.sort(SimpleRecipeComparator.INSTANCE);
             }
             SimpleRecipe recipe = bestRecipes.get(0);
             condenseList.put(stack, recipe);
@@ -171,7 +171,7 @@ public class Commandcondense extends EssentialsCommand {
     }
 
 
-    private class SimpleRecipe implements Recipe {
+    private static class SimpleRecipe implements Recipe {
         private ItemStack result;
         private ItemStack input;
 

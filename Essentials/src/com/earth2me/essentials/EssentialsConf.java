@@ -1,16 +1,17 @@
 package com.earth2me.essentials;
 
-import static com.earth2me.essentials.I18n.tl;
-
 import com.google.common.io.Files;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
+import net.ess3.api.InvalidWorldException;
+import org.bukkit.OfflinePlayer;
+import org.bukkit.*;
+import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.InvalidConfigurationException;
+import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.enchantments.Enchantment;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.util.Vector;
+
+import java.io.*;
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.nio.Buffer;
@@ -19,13 +20,8 @@ import java.nio.CharBuffer;
 import java.nio.charset.Charset;
 import java.nio.charset.CharsetDecoder;
 import java.nio.charset.CoderResult;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Set;
+import java.nio.charset.StandardCharsets;
+import java.util.*;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -34,25 +30,15 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import net.ess3.api.InvalidWorldException;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.OfflinePlayer;
-import org.bukkit.Server;
-import org.bukkit.World;
-import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.InvalidConfigurationException;
-import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.enchantments.Enchantment;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.util.Vector;
+
+import static com.earth2me.essentials.I18n.tl;
 
 
 public class EssentialsConf extends YamlConfiguration {
     protected static final Logger LOGGER = Logger.getLogger("Essentials");
     protected final File configFile;
     protected String templateName = null;
-    protected static final Charset UTF8 = Charset.forName("UTF-8");
+    protected static final Charset UTF8 = StandardCharsets.UTF_8;
     private Class<?> resourceClass = EssentialsConf.class;
     private static final ExecutorService EXECUTOR_SERVICE = Executors.newSingleThreadExecutor();
     private final AtomicInteger pendingDiskWrites = new AtomicInteger(0);
@@ -454,9 +440,7 @@ public class EssentialsConf extends YamlConfiguration {
         } else {
             try {
                 return new BigDecimal(input, MathContext.DECIMAL128);
-            } catch (NumberFormatException e) {
-                return def;
-            } catch (ArithmeticException e) {
+            } catch (NumberFormatException | ArithmeticException e) {
                 return def;
             }
         }

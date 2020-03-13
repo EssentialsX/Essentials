@@ -85,7 +85,7 @@ public class Commandpowertool extends EssentialsCommand {
                     // Replace all commands with this one
                     powertools.clear();
                 } else {
-                    powertools = new ArrayList<String>();
+                    powertools = new ArrayList<>();
                 }
 
                 powertools.add(command);

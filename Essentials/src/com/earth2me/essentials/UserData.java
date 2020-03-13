@@ -150,15 +150,14 @@ public abstract class UserData extends PlayerExtension implements IConf {
         if (config.isConfigurationSection("homes")) {
             return config.getConfigurationSection("homes").getValues(false);
         }
-        return new HashMap<String, Object>();
+        return new HashMap<>();
     }
 
     private String getHomeName(String search) {
         if (NumberUtil.isInt(search)) {
             try {
                 search = getHomes().get(Integer.parseInt(search) - 1);
-            } catch (NumberFormatException e) {
-            } catch (IndexOutOfBoundsException e) {
+            } catch (NumberFormatException | IndexOutOfBoundsException e) {
             }
         }
         return search;
@@ -190,7 +189,7 @@ public abstract class UserData extends PlayerExtension implements IConf {
     }
 
     public List<String> getHomes() {
-        return new ArrayList<String>(homes.keySet());
+        return new ArrayList<>(homes.keySet());
     }
 
     public void setHome(String name, Location loc) {
@@ -480,7 +479,7 @@ public abstract class UserData extends PlayerExtension implements IConf {
 
     public void setIgnoredPlayers(List<String> players) {
         if (players == null || players.isEmpty()) {
-            ignoredPlayers = Collections.synchronizedList(new ArrayList<String>());
+            ignoredPlayers = Collections.synchronizedList(new ArrayList<>());
             config.removeProperty("ignore");
         } else {
             ignoredPlayers = players;
@@ -795,7 +794,7 @@ public abstract class UserData extends PlayerExtension implements IConf {
 
         if (config.isConfigurationSection("timestamps.kits")) {
             final ConfigurationSection section = config.getConfigurationSection("timestamps.kits");
-            final Map<String, Long> timestamps = new HashMap<String, Long>();
+            final Map<String, Long> timestamps = new HashMap<>();
             for (String command : section.getKeys(false)) {
                 if (section.isLong(command)) {
                     timestamps.put(command.toLowerCase(Locale.ENGLISH), section.getLong(command));
@@ -805,7 +804,7 @@ public abstract class UserData extends PlayerExtension implements IConf {
             }
             return timestamps;
         }
-        return new HashMap<String, Long>();
+        return new HashMap<>();
     }
 
     public long getKitTimestamp(String name) {
@@ -844,21 +843,21 @@ public abstract class UserData extends PlayerExtension implements IConf {
         if (config.isConfigurationSection("info")) {
             return config.getConfigurationSection("info").getKeys(true);
         }
-        return new HashSet<String>();
+        return new HashSet<>();
     }
 
     public Map<String, Object> getConfigMap() {
         if (config.isConfigurationSection("info")) {
             return config.getConfigurationSection("info").getValues(true);
         }
-        return new HashMap<String, Object>();
+        return new HashMap<>();
     }
 
     public Map<String, Object> getConfigMap(String node) {
         if (config.isConfigurationSection("info." + node)) {
             return config.getConfigurationSection("info." + node).getValues(true);
         }
-        return new HashMap<String, Object>();
+        return new HashMap<>();
     }
 
     // Pattern, Date. Pattern for less pattern creations
