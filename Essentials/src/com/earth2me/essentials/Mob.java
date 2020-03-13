@@ -89,7 +89,8 @@ public enum Mob {
     PILLAGER("Pillager", Enemies.ENEMY, "PILLAGER"),
     RAVAGER("Ravager", Enemies.ENEMY, "RAVAGER"),
     TRADER_LLAMA("TraderLlama", Enemies.FRIENDLY, "TRADER_LLAMA"),
-    WANDERING_TRADER("WanderingTrader", Enemies.FRIENDLY, "WANDERING_TRADER")
+    WANDERING_TRADER("WanderingTrader", Enemies.FRIENDLY, "WANDERING_TRADER"),
+    BEE("Bee", Enemies.NEUTRAL, "BEE")
     ;
 
     public static final Logger logger = Logger.getLogger("Essentials");

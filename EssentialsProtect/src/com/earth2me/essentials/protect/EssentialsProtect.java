@@ -1,6 +1,7 @@
 package com.earth2me.essentials.protect;
 
 import com.earth2me.essentials.metrics.Metrics;
+import com.earth2me.essentials.utils.VersionUtil;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
@@ -48,6 +49,11 @@ public class EssentialsProtect extends JavaPlugin implements IProtect {
 
         final EssentialsProtectEntityListener entityListener = new EssentialsProtectEntityListener(this);
         pm.registerEvents(entityListener, this);
+
+        if (VersionUtil.getServerBukkitVersion().isHigherThan(VersionUtil.v1_13_2_R01)) {
+            final EssentialsProtectEntityListener1_13_2_R1 entityListener1_13_2_r1 = new EssentialsProtectEntityListener1_13_2_R1(this);
+            pm.registerEvents(entityListener1_13_2_r1, this);
+        }
 
         final EssentialsProtectWeatherListener weatherListener = new EssentialsProtectWeatherListener(this);
         pm.registerEvents(weatherListener, this);

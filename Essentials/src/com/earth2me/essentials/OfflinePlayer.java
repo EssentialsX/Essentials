@@ -111,6 +111,15 @@ public class OfflinePlayer implements Player {
     }
 
     @Override
+    public double getAbsorptionAmount() {
+        return 0;
+    }
+
+    @Override
+    public void setAbsorptionAmount(double v) {
+    }
+
+    @Override
     public boolean isInsideVehicle() {
         return false;
     }
@@ -428,19 +437,6 @@ public class OfflinePlayer implements Player {
     }
 
     @Override
-    public void awardAchievement(Achievement a) {
-    }
-
-    @Override
-    public void removeAchievement(Achievement achievement) {
-    }
-
-    @Override
-    public boolean hasAchievement(Achievement achievement) {
-        return false;
-    }
-
-    @Override
     public void incrementStatistic(Statistic ststc) {
     }
 
@@ -655,6 +651,14 @@ public class OfflinePlayer implements Player {
 
     @Override
     public void setTotalExperience(int i) {
+    }
+
+    @Override
+    public void sendExperienceChange(float v) {
+    }
+
+    @Override
+    public void sendExperienceChange(float v, int i) {
     }
 
     @Override
@@ -1331,6 +1335,21 @@ public class OfflinePlayer implements Player {
     @Override
     public boolean hasAI() {
         return false;
+    }
+
+    @Override
+    public void attack(Entity entity) {
+
+    }
+
+    @Override
+    public void swingMainHand() {
+
+    }
+
+    @Override
+    public void swingOffHand() {
+
     }
 
     @Override

@@ -377,6 +377,21 @@ public class FakeWorld implements World {
     public boolean createExplosion(Location lctn, float f, boolean bln) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
+    
+    @Override
+    public boolean createExplosion(double d, double d1, double d2, float f, boolean bln, boolean bln1, Entity entity) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public boolean createExplosion(Location lctn, float f, boolean bln, boolean bln1) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public boolean createExplosion(Location lctn, float f, boolean bln, boolean bln1, Entity entity) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
 
     @Override
     public <T extends Entity> T spawn(Location lctn, Class<T> type) throws IllegalArgumentException {
@@ -434,7 +449,32 @@ public class FakeWorld implements World {
     }
 
     @Override
+    public int getHighestBlockYAt(int i, int i1, HeightMap heightMap) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public int getHighestBlockYAt(Location location, HeightMap heightMap) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public Block getHighestBlockAt(int i, int i1, HeightMap heightMap) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public Block getHighestBlockAt(Location location, HeightMap heightMap) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
     public Biome getBiome(int i, int i1) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public Biome getBiome(int i, int i1, int i2) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
@@ -444,7 +484,17 @@ public class FakeWorld implements World {
     }
 
     @Override
+    public double getTemperature(int i, int i1, int i2) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
     public double getHumidity(int i, int i1) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public double getHumidity(int i, int i1, int i2) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
@@ -524,6 +574,16 @@ public class FakeWorld implements World {
     }
 
     @Override
+    public boolean isHardcore() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public void setHardcore(boolean hardcore) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
     public long getTicksPerAnimalSpawns() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
@@ -540,6 +600,26 @@ public class FakeWorld implements World {
 
     @Override
     public void setTicksPerMonsterSpawns(int i) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public long getTicksPerWaterSpawns() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public void setTicksPerWaterSpawns(int i) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public long getTicksPerAmbientSpawns() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public void setTicksPerAmbientSpawns(int i) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
@@ -585,6 +665,11 @@ public class FakeWorld implements World {
 
     @Override
     public void setBiome(int arg0, int arg1, Biome arg2) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public void setBiome(int i, int i1, int i2, Biome biome) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
@@ -765,6 +850,16 @@ public class FakeWorld implements World {
 
     @Override
     public Location locateNearestStructure(Location origin, StructureType structureType, int radius, boolean findUnexplored) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public Raid locateNearestRaid(Location location, int radius) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public List<Raid> getRaids() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 

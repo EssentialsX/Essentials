@@ -97,7 +97,7 @@ public class PermissionsHandler implements IPermissionsHandler {
     public void checkPermissions() {
         // load and assign a handler
         List<Class<? extends SuperpermsHandler>> providerClazz = Arrays.asList(
-                PermissionsExHandler.class,
+                ModernVaultHandler.class,
                 GenericVaultHandler.class,
                 SuperpermsHandler.class
         );

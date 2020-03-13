@@ -5,6 +5,7 @@
 # All kit names should be lower case, and will be treated as lower in permissions/costs.
 # Syntax: - name[:durability] amount [enchantment:level]... [itemmeta:value]...
 # For Item Meta information visit http://wiki.ess3.net/wiki/Item_Meta
+# To make the kit execute a command, add /<command> to the items list. Use {PLAYER} to specify the player receiving the kit.
 # 'delay' refers to the cooldown between how often you can use each kit, measured in seconds.
 # Set delay to -1 for a one time kit.
 # For more information, visit http://wiki.ess3.net/wiki/Kits
@@ -23,6 +24,7 @@ kits:
       - dshovel 1 digspeed:3 name:Dwarf lore:Diggy|Diggy|Hole
       - lhelm 1 color:255,255,255 name:Top_Hat lore:Good_day,_Good_day
       - daxe:780 1
+      - /broadcast {PLAYER} just got some fancy tools!
   notch:
     delay: 6000
     items:

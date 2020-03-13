@@ -117,8 +117,9 @@ public class EssentialsGeoIPPlayerListener implements Listener, IConf {
 
         // detect and update the old config.yml. migrate from legacy GeoIP to GeoIP2.
         if (!config.isSet("enable-locale")) {
-            config.set("database.download-url", "https://geolite.maxmind.com/download/geoip/database/GeoLite2-Country.tar.gz");
-            config.set("database.download-url-city", "https://geolite.maxmind.com/download/geoip/database/GeoLite2-City.tar.gz");
+            config.set("database.download-url", "https://download.maxmind.com/app/geoip_download?edition_id=GeoLite2-Country&license_key={LICENSEKEY}&suffix=tar.gz");
+            config.set("database.download-url-city", "https://download.maxmind.com/app/geoip_download?edition_id=GeoLite2-City&license_key={LICENSEKEY}&suffix=tar.gz");
+            config.set("database.license-key", "");
             config.set("database.update.enable", true);
             config.set("database.update.by-every-x-days", 30);
             config.set("enable-locale", true);
@@ -175,6 +176,12 @@ public class EssentialsGeoIPPlayerListener implements Listener, IConf {
                 logger.log(Level.SEVERE, tl("geoIpUrlEmpty"));
                 return;
             }
+            String licenseKey = config.getString("database.license-key", "");
+            if (licenseKey == null || licenseKey.isEmpty()) {
+                logger.log(Level.SEVERE, tl("geoIpLicenseMissing"));
+                return;
+            }
+            url = url.replace("{LICENSEKEY}", licenseKey);
             logger.log(Level.INFO, tl("downloadingGeoIp"));
             URL downloadUrl = new URL(url);
             URLConnection conn = downloadUrl.openConnection();
@@ -183,9 +190,9 @@ public class EssentialsGeoIPPlayerListener implements Listener, IConf {
             InputStream input = conn.getInputStream();
             OutputStream output = new FileOutputStream(databaseFile);
             byte[] buffer = new byte[2048];
-            if (url.endsWith(".gz")) {
+            if (url.contains("gz")) {
                 input = new GZIPInputStream(input);
-                if (url.endsWith(".tar.gz")) {
+                if (url.contains("tar.gz")) {
                     // The new GeoIP2 uses tar.gz to pack the db file along with some other txt. So it makes things a bit complicated here.
                     String filename;
                     TarInputStream tarInputStream = new TarInputStream(input);

@@ -1,13 +1,13 @@
 package com.earth2me.essentials.geoip;
 
+import static com.earth2me.essentials.I18n.tl;
+
 import com.earth2me.essentials.metrics.Metrics;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import net.ess3.api.IEssentials;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
-
-import java.util.logging.Level;
-
-import static com.earth2me.essentials.I18n.tl;
 
 
 public class EssentialsGeoIP extends JavaPlugin {
@@ -25,6 +25,9 @@ public class EssentialsGeoIP extends JavaPlugin {
             this.setEnabled(false);
             return;
         }
+
+        Logger.getLogger(com.fasterxml.jackson.databind.ext.Java7Support.class.getName()).setLevel(Level.SEVERE);
+
         final EssentialsGeoIPPlayerListener playerListener = new EssentialsGeoIPPlayerListener(getDataFolder(), ess);
         pm.registerEvents(playerListener, this);
 
