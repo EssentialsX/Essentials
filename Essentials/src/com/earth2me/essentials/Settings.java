@@ -158,6 +158,11 @@ public class Settings implements net.ess3.api.ISettings {
     }
 
     @Override
+    public boolean isTeleportPassengerDismount() {
+        return config.getBoolean("teleport-passenger-dismount", true);
+    }
+
+    @Override
     public double getTeleportDelay() {
         return config.getDouble("teleport-delay", 0);
     }
