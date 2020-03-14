@@ -77,8 +77,6 @@ public class EssentialsChatPlayerListenerNormal extends EssentialsChatPlayer {
         final String format = event.getFormat();
         event.setFormat(tl("chatTypeLocal").concat(event.getFormat()));
 
-        logger.info(tl("localFormat", user.getName(), event.getMessage()));
-
         final Iterator<Player> it = outList.iterator();
         while (it.hasNext()) {
             final Player onlinePlayer = it.next();

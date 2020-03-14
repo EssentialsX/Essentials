@@ -2,6 +2,7 @@ package com.earth2me.essentials.utils;
 
 import java.util.Collection;
 import java.util.Locale;
+import java.util.UUID;
 import java.util.regex.Pattern;
 
 
@@ -71,6 +72,14 @@ public class StringUtil {
             }
         }
         return buf.toString();
+    }
+
+    public static UUID toUUID(String input) {
+        try {
+            return UUID.fromString(input);
+        } catch (IllegalArgumentException ignored) {}
+
+        return null;
     }
 
     private StringUtil() {

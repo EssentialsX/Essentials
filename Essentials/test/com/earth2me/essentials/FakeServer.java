@@ -798,6 +798,16 @@ public class FakeServer implements Server {
     }
 
     @Override
+    public int getTicksPerWaterSpawns() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public int getTicksPerAmbientSpawns() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
     public List<Recipe> getRecipesFor(ItemStack is) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
@@ -814,6 +824,11 @@ public class FakeServer implements Server {
 
     @Override
     public void resetRecipes() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public boolean removeRecipe(NamespacedKey key) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 

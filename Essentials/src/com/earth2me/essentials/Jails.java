@@ -16,10 +16,7 @@ import org.bukkit.event.block.BlockDamageEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
-import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerRespawnEvent;
-import org.bukkit.event.player.PlayerTeleportEvent;
+import org.bukkit.event.player.*;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import org.bukkit.plugin.PluginManager;
 
@@ -197,6 +194,14 @@ public class Jails extends AsyncStorageObjectHolder<com.earth2me.essentials.sett
 
         @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
         public void onJailPlayerInteract(final PlayerInteractEvent event) {
+            final User user = ess.getUser(event.getPlayer());
+            if (user.isJailed()) {
+                event.setCancelled(true);
+            }
+        }
+
+        @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
+        public void onJailPlayerGameModeChange(PlayerGameModeChangeEvent event) {
             final User user = ess.getUser(event.getPlayer());
             if (user.isJailed()) {
                 event.setCancelled(true);

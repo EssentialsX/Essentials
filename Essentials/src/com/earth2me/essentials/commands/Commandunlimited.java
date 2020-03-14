@@ -5,8 +5,10 @@ import org.bukkit.Material;
 import org.bukkit.Server;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 
 import static com.earth2me.essentials.I18n.tl;
 
@@ -32,14 +34,10 @@ public class Commandunlimited extends EssentialsCommand {
             final String list = getList(target);
             user.sendMessage(list);
         } else if (args[0].equalsIgnoreCase("clear")) {
-            final List<Material> itemList = target.getUnlimited();
+            final Set<Material> itemList = new HashSet<>(target.getUnlimited());
 
-            int index = 0;
-            while (itemList.size() > index) {
-                final Material item = itemList.get(index);
-                if (!toggleUnlimited(user, target, item.toString())) {
-                    index++;
-                }
+            for (Material m : itemList) {
+                toggleUnlimited(user, target, m.toString());
             }
         } else {
             toggleUnlimited(user, target, args[0]);
@@ -50,7 +48,7 @@ public class Commandunlimited extends EssentialsCommand {
         final StringBuilder output = new StringBuilder();
         output.append(tl("unlimitedItems")).append(" ");
         boolean first = true;
-        final List<Material> items = target.getUnlimited();
+        final Set<Material> items = target.getUnlimited();
         if (items.isEmpty()) {
             output.append(tl("none"));
         }

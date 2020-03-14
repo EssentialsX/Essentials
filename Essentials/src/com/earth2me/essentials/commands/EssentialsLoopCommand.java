@@ -4,6 +4,7 @@ import com.earth2me.essentials.ChargeException;
 import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.FormatUtil;
+import com.earth2me.essentials.utils.StringUtil;
 import net.ess3.api.MaxMoneyException;
 import org.bukkit.Server;
 import org.bukkit.entity.Player;
@@ -23,7 +24,11 @@ public abstract class EssentialsLoopCommand extends EssentialsCommand {
             throw new PlayerNotFoundException();
         }
 
-        if (matchWildcards && searchTerm.contentEquals("**")) {
+        final UUID uuid = StringUtil.toUUID(searchTerm);
+        if (uuid != null) {
+            final User matchedUser = ess.getUser(uuid);
+            updatePlayer(server, sender, matchedUser, commandArgs);
+        } else if (matchWildcards && searchTerm.contentEquals("**")) {
             for (UUID sUser : ess.getUserMap().getAllUniqueUsers()) {
                 final User matchedUser = ess.getUser(sUser);
                 updatePlayer(server, sender, matchedUser, commandArgs);

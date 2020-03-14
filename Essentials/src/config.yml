@@ -94,6 +94,9 @@ teleport-to-center: true
 # The delay, in seconds, required between /heal or /feed attempts.
 heal-cooldown: 60
 
+# Do you want to remove potion effects when healing a player?
+remove-effects-on-heal: true
+
 # Near Radius
 # The default radius with /near
 # Used to use chat radius but we are going to make it separate.
@@ -507,7 +510,7 @@ last-message-reply-recipient: true
 # Default is 180 (3 minutes)
 last-message-reply-recipient-timeout: 180
 
-# Toggles whether or not clicking mobs with a milk bucket turns them into a baby.
+# Toggles whether or not left clicking mobs with a milk bucket turns them into a baby.
 milk-bucket-easter-egg: true
 
 # Toggles whether or not the fly status message should be sent to players on join
@@ -717,10 +720,11 @@ chat:
   #format: '&7{PREFIX}&r {DISPLAYNAME}&r &7{SUFFIX}&r: {MESSAGE}'
 
   group-formats:
-  #  Default: '{WORLDNAME} {DISPLAYNAME}&7:&r {MESSAGE}'
-  #  Admins: '{WORLDNAME} &c[{GROUP}]&r {DISPLAYNAME}&7:&c {MESSAGE}'
+  #  default: '{WORLDNAME} {DISPLAYNAME}&7:&r {MESSAGE}'
+  #  admins: '{WORLDNAME} &c[{GROUP}]&r {DISPLAYNAME}&7:&c {MESSAGE}'
 
   # If you are using group formats make sure to remove the '#' to allow the setting to be read.
+  # Note: Group names are case-sensitive so you must match them up with your permission plugin.
 
 ############################################################
 # +------------------------------------------------------+ #
@@ -762,6 +766,22 @@ protect:
     # Monsters won't follow players.
     # permission essentials.protect.entitytarget.bypass disables this.
     entitytarget: false
+    # Prevent certain transformations.
+    transformation:
+      # Prevent creepers becoming charged when struck by lightning.
+      charged-creeper: false
+      # Prevent villagers becoming zombie villagers.
+      zombie-villager: false
+      # Prevent zombie villagers being cured.
+      villager: false
+      # Prevent villagers becoming witches when struck by lightning.
+      witch: false
+      # Prevent pigs becoming zombie pigmen when struck by lightning.
+      zombie-pigman: false
+      # Prevent zombies turning into drowneds, and husks turning into zombies.
+      drowned: false
+      # Prevent mooshrooms changing colour when struck by lightning.
+      mooshroom: false
     # Prevent the spawning of creatures.
     spawn:
       creeper: false
@@ -793,6 +813,7 @@ protect:
       bat: false
       witch: false
       horse: false
+      phantom: false
 
   # Maximum height the creeper should explode. -1 allows them to explode everywhere.
   # Set prevent.creeper-explosion to true, if you want to disable creeper explosions.
@@ -923,6 +944,9 @@ spawn-join-listener-priority: high
 
 # When users die, should they respawn at their first home or bed, instead of the spawnpoint?
 respawn-at-home: false
+
+# If no home is set, would you like to send the player to spawn? (Only applies to /home)
+spawn-if-no-home: true
 
 # Teleport all joining players to the spawnpoint
 spawn-on-join: false
