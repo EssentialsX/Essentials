@@ -1134,6 +1134,11 @@ public class Settings implements net.ess3.api.ISettings {
     }
 
     @Override
+    public long getMaxMute() {
+        return config.getLong("max-mute-time", -1);
+    }
+
+    @Override
     public long getMaxTempban() {
         return config.getLong("max-tempban-time", -1);
     }
