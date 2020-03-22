@@ -42,7 +42,9 @@ public class Economy {
         File folder = new File(ess.getDataFolder(), "userdata");
         name = StringUtil.safeString(name);
         if (!folder.exists()) {
-            folder.mkdirs();
+            if (!folder.mkdirs()) {
+                throw new RuntimeException("Error while creating userdata directory!");
+            }
         }
         UUID npcUUID = UUID.nameUUIDFromBytes(("NPC:" + name).getBytes(Charsets.UTF_8));
         EssentialsUserConf npcConfig = new EssentialsUserConf(name, npcUUID, new File(folder, npcUUID.toString() + ".yml"));
@@ -124,6 +126,7 @@ public class Economy {
      * @return Exact balance of user
      * @throws UserDoesNotExistException
      */
+    @SuppressWarnings("RedundantThrows")
     @Deprecated
     public static BigDecimal getMoneyExact(String name) throws UserDoesNotExistException {
         return getMoneyExact(getUserByName(name));
