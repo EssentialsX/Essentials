@@ -238,6 +238,8 @@ public interface ISettings extends IConf {
 
     void setEssentialsChatActive(boolean b);
 
+    long getMaxMute();
+
     long getMaxTempban();
 
     Map<String, Object> getListGroupConfig();
@@ -337,6 +339,8 @@ public interface ISettings extends IConf {
     Set<Predicate<String>> getNickBlacklist();
 
     double getMaxProjectileSpeed();
+
+    boolean isRemovingEffectsOnHeal();
 
     boolean isSpawnIfNoHome();
 

@@ -2,15 +2,11 @@ package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.Kit;
-import com.earth2me.essentials.User;
-import com.earth2me.essentials.utils.StringUtil;
+import com.google.common.collect.Lists;
 import org.bukkit.Server;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Locale;
-import java.util.logging.Level;
 
 import static com.earth2me.essentials.I18n.tl;
 
@@ -35,7 +31,15 @@ public class Commanddelkit extends EssentialsCommand {
             }
 
             ess.getKits().removeKit(kitName);
-            sender.sendMessage(tl("deleteKit", kit));
+            sender.sendMessage(tl("deleteKit", kitName));
         }
+    }
+
+    @Override
+    protected List<String> getTabCompleteOptions(final Server server, final CommandSource sender, final String commandLabel, final String[] args) {
+        if (args.length == 1) {
+            return Lists.newArrayList(ess.getKits().getKits().getKeys(false));
+        }
+        return Collections.emptyList();
     }
 }

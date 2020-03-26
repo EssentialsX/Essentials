@@ -1,25 +1,31 @@
 package com.earth2me.essentials;
 
-import com.google.common.io.Files;
-import net.ess3.api.InvalidWorldException;
-import org.bukkit.*;
-import org.bukkit.OfflinePlayer;
-import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.InvalidConfigurationException;
-import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.enchantments.Enchantment;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.util.Vector;
+import static com.earth2me.essentials.I18n.tl;
 
-import java.io.*;
+import com.google.common.io.Files;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.math.BigDecimal;
 import java.math.MathContext;
+import java.nio.Buffer;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
 import java.nio.charset.Charset;
 import java.nio.charset.CharsetDecoder;
 import java.nio.charset.CoderResult;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -28,8 +34,18 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import static com.earth2me.essentials.I18n.tl;
+import net.ess3.api.InvalidWorldException;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.OfflinePlayer;
+import org.bukkit.Server;
+import org.bukkit.World;
+import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.InvalidConfigurationException;
+import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.enchantments.Enchantment;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.util.Vector;
 
 
 public class EssentialsConf extends YamlConfiguration {
@@ -108,20 +124,21 @@ public class EssentialsConf extends YamlConfiguration {
                     if (length > buffer.remaining()) {
                         ByteBuffer resize = ByteBuffer.allocate(buffer.capacity() + length - buffer.remaining());
                         int resizePosition = buffer.position();
-                        buffer.rewind();
+                        // Fix builds compiled against Java 9+ breaking on Java 8
+                        ((Buffer) buffer).rewind();
                         resize.put(buffer);
                         resize.position(resizePosition);
                         buffer = resize;
                     }
                     buffer.put(bytebuffer, 0, length);
                 }
-                buffer.rewind();
+                ((Buffer) buffer).rewind();
                 final CharBuffer data = CharBuffer.allocate(buffer.capacity());
                 CharsetDecoder decoder = UTF8.newDecoder();
                 CoderResult result = decoder.decode(buffer, data, true);
                 if (result.isError()) {
-                    buffer.rewind();
-                    data.clear();
+                    ((Buffer) buffer).rewind();
+                    ((Buffer) data).clear();
                     LOGGER.log(Level.INFO, "File " + configFile.getAbsolutePath() + " is not utf-8 encoded, trying " + Charset.defaultCharset().displayName());
                     decoder = Charset.defaultCharset().newDecoder();
                     result = decoder.decode(buffer, data, true);
@@ -134,7 +151,7 @@ public class EssentialsConf extends YamlConfiguration {
                     decoder.flush(data);
                 }
                 final int end = data.position();
-                data.rewind();
+                ((Buffer) data).rewind();
                 super.loadFromString(data.subSequence(0, end).toString());
             }
         } catch (IOException ex) {

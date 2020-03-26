@@ -72,6 +72,6 @@ If you can't make a donation, don't worry! There's lots of other ways to contrib
 * Do you run a server? Take a look at our ["help wanted" issues](https://github.com/EssentialsX/Essentials/issues?q=is%3Aissue+is%3Aopen+sort%3Aupdated-desc+label%3A%22help+wanted%22),
   where you can find issues that need extra testing and investigation. You can also join the [MOSS Discord community](https://discord.gg/casfFyh)
   and provide support to others.
-* Do you speak multiple languages? If so, we always welcome pull requests to our [language files](https://essentialsx.github.io/#/Locale).
+* Do you speak multiple languages? If so, we always welcome contributions to our [Crowdin project](https://crowdin.com/project/essentialsx-official).
 * If you're a developer, you could look through our ["open to PR" issues](https://github.com/EssentialsX/Essentials/issues?q=is%3Aissue+is%3Aopen+sort%3Aupdated-desc+label%3A%22status%3A+open+to+PR%22).
   We're always happy to receive bug fixes and feature additions as pull requests.

@@ -8,6 +8,7 @@ import com.earth2me.essentials.utils.StringUtil;
 import com.google.common.base.Charsets;
 import net.ess3.api.IEssentials;
 import net.ess3.api.MaxMoneyException;
+import net.ess3.api.events.UserBalanceUpdateEvent;
 import org.bukkit.entity.Player;
 
 import java.io.File;
@@ -144,7 +145,7 @@ public class Economy {
             throw new NoLoanPermittedException();
         }
         try {
-            user.setMoney(balance);
+            user.setMoney(balance, UserBalanceUpdateEvent.Cause.API);
         } catch (MaxMoneyException ex) {
             //TODO: Update API to show max balance errors
         }
