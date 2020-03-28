@@ -159,7 +159,7 @@ commands:
   gamemode:
     description: Change player gamemode.
     usage: /<command> <survival|creative|adventure|spectator> [player]
-    aliases: [adventure,eadventure,adventuremode,eadventuremode,creative,eecreative,creativemode,ecreativemode,egamemode,gm,egm,gma,egma,gmc,egmc,gms,egms,gmt,egmt,survival,esurvival,survivalmode,esurvivalmode,gmsp,sp,egmsp,spec,spectator]
+    aliases: [adventure,eadventure,adventuremode,eadventuremode,creative,ecreative,creativemode,ecreativemode,egamemode,gm,egm,gma,egma,gmc,egmc,gms,egms,gmt,egmt,survival,esurvival,survivalmode,esurvivalmode,gmsp,sp,egmsp,spec,spectator]
   gc:
     description: Reports memory, uptime and tick info.
     usage: /<command> [all]
