@@ -2,10 +2,7 @@ package com.earth2me.essentials.utils;
 
 import com.earth2me.essentials.IEssentials;
 import net.ess3.api.IUser;
-import org.bukkit.GameMode;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.World;
+import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.inventory.ItemStack;
@@ -89,18 +86,28 @@ public class LocationUtil {
     }
 
     public static boolean isBlockAboveAir(final World world, final int x, final int y, final int z) {
-        return y > world.getMaxHeight() || HOLLOW_MATERIALS.contains(world.getBlockAt(x, y - 1, z).getType());
+        return isBlockAboveAir(world.getChunkAt(x, z), x, y, z);
+    }
+
+    public static boolean isBlockAboveAir(final Chunk chunk, int x, final int y, int z) {
+        x = x & 0xF;
+        z = z & 0xF;
+        return y > chunk.getWorld().getMaxHeight() || HOLLOW_MATERIALS.contains(chunk.getBlock(x, y - 1, z).getType());
     }
 
     public static boolean isBlockUnsafeForUser(final IUser user, final World world, final int x, final int y, final int z) {
-        if (user.getBase().isOnline() && world.equals(user.getBase().getWorld()) && (user.getBase().getGameMode() == GameMode.CREATIVE || user.getBase().getGameMode() == GameMode.SPECTATOR || user.isGodModeEnabled()) && user.getBase().getAllowFlight()) {
+        return isBlockUnsafeForUser(user, world.getChunkAt(x, z), x, y, z);
+    }
+
+    public static boolean isBlockUnsafeForUser(final IUser user, final Chunk chunk, final int x, final int y, final int z) {
+        if (user.getBase().isOnline() && chunk.getWorld().equals(user.getBase().getWorld()) && (user.getBase().getGameMode() == GameMode.CREATIVE || user.getBase().getGameMode() == GameMode.SPECTATOR || user.isGodModeEnabled()) && user.getBase().getAllowFlight()) {
             return false;
         }
 
-        if (isBlockDamaging(world, x, y, z)) {
+        if (isBlockDamaging(chunk, x, y, z)) {
             return true;
         }
-        return isBlockAboveAir(world, x, y, z);
+        return isBlockAboveAir(chunk, x, y, z);
     }
 
     public static boolean isBlockUnsafe(final World world, final int x, final int y, final int z) {
@@ -108,7 +115,13 @@ public class LocationUtil {
     }
 
     public static boolean isBlockDamaging(final World world, final int x, final int y, final int z) {
-        final Block below = world.getBlockAt(x, y - 1, z);
+        return isBlockDamaging(world.getChunkAt(x, z), x, y, z);
+    }
+
+    public static boolean isBlockDamaging(final Chunk chunk, int x, final int y, int z) {
+        x = x & 0xF;
+        z = z & 0xF;
+        final Block below = chunk.getBlock(x, y - 1, z);
 
         switch (below.getType()) {
             case LAVA:
@@ -128,11 +141,13 @@ public class LocationUtil {
 
         Material PORTAL = EnumUtil.getMaterial("NETHER_PORTAL", "PORTAL");
 
-        if (world.getBlockAt(x, y, z).getType() == PORTAL) {
+        Block block = chunk.getBlock(x, y, z);
+
+        if (block.getType() == PORTAL) {
             return true;
         }
 
-        return (!HOLLOW_MATERIALS.contains(world.getBlockAt(x, y, z).getType())) || (!HOLLOW_MATERIALS.contains(world.getBlockAt(x, y + 1, z).getType()));
+        return (!HOLLOW_MATERIALS.contains(block.getType())) || (!HOLLOW_MATERIALS.contains(chunk.getBlock(x, y + 1, z).getType()));
     }
 
     // Not needed if using getSafeDestination(loc)

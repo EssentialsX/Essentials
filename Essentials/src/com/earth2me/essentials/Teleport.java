@@ -121,28 +121,38 @@ public class Teleport implements ITeleport {
     protected void now(IUser teleportee, ITarget target, TeleportCause cause) throws Exception {
         cancel(false);
         teleportee.setLastLocation();
-        Location loc = target.getLocation();
 
-        if (LocationUtil.isBlockUnsafeForUser(teleportee, loc.getWorld(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ())) {
-            if (ess.getSettings().isTeleportSafetyEnabled()) {
+        PaperLib.getChunkAtAsync(target.getLocation()).thenAccept(chunk -> {
+            Location loc = target.getLocation();
+            if (LocationUtil.isBlockUnsafeForUser(teleportee, chunk, loc.getBlockX(), loc.getBlockY(), loc.getBlockZ())) {
+                if (ess.getSettings().isTeleportSafetyEnabled()) {
+                    if (ess.getSettings().isForceDisableTeleportSafety()) {
+                        PaperLib.teleportAsync(teleportee.getBase(), loc, cause);
+                    } else {
+                        try {
+                            PaperLib.teleportAsync(teleportee.getBase(), LocationUtil.getSafeDestination(ess, teleportee, loc), cause);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                } else {
+                    try {
+                        throw new Exception(tl("unsafeTeleportDestination", loc.getWorld().getName(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ()));
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            } else {
                 if (ess.getSettings().isForceDisableTeleportSafety()) {
                     PaperLib.teleportAsync(teleportee.getBase(), loc, cause);
                 } else {
-                    PaperLib.teleportAsync(teleportee.getBase(), LocationUtil.getSafeDestination(ess, teleportee, loc), cause);
+                    if (ess.getSettings().isTeleportToCenterLocation()) {
+                        loc = LocationUtil.getRoundedDestination(loc);
+                    }
+                    PaperLib.teleportAsync(teleportee.getBase(), loc, cause);
                 }
-            } else {
-                throw new Exception(tl("unsafeTeleportDestination", loc.getWorld().getName(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ()));
             }
-        } else {
-            if (ess.getSettings().isForceDisableTeleportSafety()) {
-                PaperLib.teleportAsync(teleportee.getBase(), loc, cause);
-            } else {
-                if (ess.getSettings().isTeleportToCenterLocation()) {
-                    loc = LocationUtil.getRoundedDestination(loc);
-                }
-                PaperLib.teleportAsync(teleportee.getBase(), loc, cause);
-            }
-        }
+        });
     }
 
     //The teleportPlayer function is used when you want to normally teleportPlayer someone to a location or player.
