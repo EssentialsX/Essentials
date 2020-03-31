@@ -215,6 +215,20 @@ public class EssentialsProtectEntityListener implements Listener {
         if (event.getEntityType() == EntityType.WITHER && prot.getSettingBool(ProtectConfig.prevent_wither_blockreplace)) {
             event.setCancelled(true);
         }
+        if (event.getEntityType() == EntityType.RAVAGER && prot.getSettingBool(ProtectConfig.prevent_ravager_thief)) {
+            event.setCancelled(true);
+        }
+
+        if (event.getEntityType() == EntityType.SHEEP && prot.getSettingBool(ProtectConfig.prevent_sheep_eat_grass)) {
+            event.setCancelled(true);
+        }
+    }
+
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    public void onDoorBreak(EntityBreakDoorEvent event) {
+        if (event.getEntityType() == EntityType.ZOMBIE && prot.getSettingBool(ProtectConfig.prevent_zombie_door_break)) {
+            event.setCancelled(true);
+        }
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
