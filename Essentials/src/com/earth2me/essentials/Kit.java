@@ -165,6 +165,7 @@ public class Kit {
                     String command = kitItem.substring(1);
                     String name = user.getName();
                     command = command.replace("{player}", name);
+                    command = command.replace("{PLAYER}", name);
                     Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command);
                     continue;
                 }
