@@ -15,11 +15,7 @@ public class MuteStatusChangeEvent extends StatusChangeEvent {
     public MuteStatusChangeEvent(IUser affected, IUser controller, boolean value, Long timestamp, String reason) {
         super(affected, controller, value);
         this.timestamp = timestamp;
-        if (reason == null) {
-            this.reason = null;
-        } else {
-            this.reason = reason.isEmpty() ? null : reason;
-        }
+        this.reason = reason == null ? null : (reason.isEmpty() ? null : reason);
     }
 
     /**
