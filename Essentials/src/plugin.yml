@@ -568,3 +568,6 @@ permissions:
   essentials.keepinv:
     default: false
     description: Controls whether players keep their inventory on death.
+  essentials.near.exclude:
+    default: false
+    description: If the player should be excluded from near lookups.
