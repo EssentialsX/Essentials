@@ -34,7 +34,7 @@ public class SignEnchant extends EssentialsSign {
             sign.setLine(2, "§c<enchant>");
             throw new SignException(tl("enchantmentNotFound"));
         }
-        if (enchantLevel.length == 2) {
+        if (enchantLevel.length > 1) {
             try {
                 level = Integer.parseInt(enchantLevel[1]);
             } catch (NumberFormatException ex) {
@@ -73,7 +73,7 @@ public class SignEnchant extends EssentialsSign {
             throw new SignException(tl("enchantmentNotFound"));
         }
         int level = 1;
-        if (enchantLevel.length == 2) {
+        if (enchantLevel.length > 1) {
             try {
                 level = Integer.parseInt(enchantLevel[1]);
             } catch (NumberFormatException ex) {
