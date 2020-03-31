@@ -654,6 +654,14 @@ public class OfflinePlayer implements Player {
     }
 
     @Override
+    public void sendExperienceChange(float v) {
+    }
+
+    @Override
+    public void sendExperienceChange(float v, int i) {
+    }
+
+    @Override
     public float getExhaustion() {
         return 0F;
     }
@@ -1327,6 +1335,21 @@ public class OfflinePlayer implements Player {
     @Override
     public boolean hasAI() {
         return false;
+    }
+
+    @Override
+    public void attack(Entity entity) {
+
+    }
+
+    @Override
+    public void swingMainHand() {
+
+    }
+
+    @Override
+    public void swingOffHand() {
+
     }
 
     @Override

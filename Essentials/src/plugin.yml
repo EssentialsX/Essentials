@@ -41,6 +41,10 @@ commands:
     description: Bans an IP address.
     usage: /<command> <address>
     aliases: [ebanip]
+  beezooka:
+    description: Throw an exploding bee at your opponent.
+    usage: /<command>
+    aliases: [ebeezooka,beecannon,ebeecannon]
   book:
     description: Allows reopening and editing of sealed books.
     usage: /<command> [title|author [name]]
@@ -292,6 +296,10 @@ commands:
     description: May death rain upon them.
     usage: /<command> [player]
     aliases: [enuke]
+  tpoffline:
+    description: Teleport to a player's last known logout location
+    usage: /<command> <player>
+    aliases: [otp, offlinetp, tpoff, tpoffline]
   pay:
     description: Pays another player from your balance.
     usage: /<command> <player> <amount>

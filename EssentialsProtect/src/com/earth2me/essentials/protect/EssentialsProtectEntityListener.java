@@ -2,14 +2,33 @@ package com.earth2me.essentials.protect;
 
 import com.earth2me.essentials.User;
 import net.ess3.api.IEssentials;
-import org.bukkit.entity.*;
+import org.bukkit.entity.Creeper;
+import org.bukkit.entity.EnderDragon;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Fireball;
+import org.bukkit.entity.Player;
+import org.bukkit.entity.Projectile;
+import org.bukkit.entity.SmallFireball;
+import org.bukkit.entity.TNTPrimed;
+import org.bukkit.entity.Villager;
+import org.bukkit.entity.Wither;
+import org.bukkit.entity.WitherSkull;
 import org.bukkit.entity.minecart.ExplosiveMinecart;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.*;
+import org.bukkit.event.entity.CreatureSpawnEvent;
+import org.bukkit.event.entity.EntityBreakDoorEvent;
+import org.bukkit.event.entity.EntityChangeBlockEvent;
+import org.bukkit.event.entity.EntityDamageByBlockEvent;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
+import org.bukkit.event.entity.EntityExplodeEvent;
+import org.bukkit.event.entity.EntityTargetEvent;
 import org.bukkit.event.entity.EntityTargetEvent.TargetReason;
+import org.bukkit.event.entity.ExplosionPrimeEvent;
 import org.bukkit.event.hanging.HangingBreakByEntityEvent;
 import org.bukkit.event.hanging.HangingBreakEvent;
 
@@ -171,29 +190,6 @@ public class EssentialsProtectEntityListener implements Listener {
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-    public void onEntityTransform(final EntityTransformEvent event) {
-        final Entity entity = event.getEntity();
-        final EntityTransformEvent.TransformReason reason = event.getTransformReason();
-        if (reason == EntityTransformEvent.TransformReason.INFECTION && prot.getSettingBool(ProtectConfig.prevent_villager_infection)) {
-            event.setCancelled(true);
-        } else if (reason == EntityTransformEvent.TransformReason.CURED && prot.getSettingBool(ProtectConfig.prevent_villager_cure)) {
-            event.setCancelled(true);
-        } else if (reason == EntityTransformEvent.TransformReason.LIGHTNING) {
-            if (entity instanceof Villager && prot.getSettingBool(ProtectConfig.prevent_villager_to_witch)) {
-                event.setCancelled(true);
-            } else if (entity instanceof Pig && prot.getSettingBool(ProtectConfig.prevent_pig_transformation)) {
-                event.setCancelled(true);
-            } else if (entity instanceof Creeper && prot.getSettingBool(ProtectConfig.prevent_creeper_charge)) {
-                event.setCancelled(true);
-            } else if (entity instanceof MushroomCow && prot.getSettingBool(ProtectConfig.prevent_mooshroom_switching)) {
-                event.setCancelled(true);
-            }
-        } else if (reason == EntityTransformEvent.TransformReason.DROWNED && prot.getSettingBool(ProtectConfig.prevent_zombie_drowning)) {
-            event.setCancelled(true);
-        }
-    }
-
-    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onCreatureSpawn(final CreatureSpawnEvent event) {
         if (event.getEntity() instanceof Player) {
             return;
@@ -236,6 +232,17 @@ public class EssentialsProtectEntityListener implements Listener {
             return;
         }
         if (event.getEntityType() == EntityType.WITHER && prot.getSettingBool(ProtectConfig.prevent_wither_blockreplace)) {
+            event.setCancelled(true);
+        }
+
+        if (event.getEntityType() == EntityType.SHEEP && prot.getSettingBool(ProtectConfig.prevent_sheep_eat_grass)) {
+            event.setCancelled(true);
+        }
+    }
+
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    public void onDoorBreak(EntityBreakDoorEvent event) {
+        if (event.getEntityType() == EntityType.ZOMBIE && prot.getSettingBool(ProtectConfig.prevent_zombie_door_break)) {
             event.setCancelled(true);
         }
     }

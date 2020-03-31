@@ -7,6 +7,7 @@ import com.earth2me.essentials.utils.DateUtil;
 import net.ess3.api.events.MuteStatusChangeEvent;
 import org.bukkit.Server;
 
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.logging.Level;
 
@@ -40,6 +41,25 @@ public class Commandmute extends EssentialsCommand {
                 throw new Exception(tl("muteExempt"));
             }
         }
+
+        long muteTimestamp = 0;
+        String time;
+        String muteReason = "";
+
+        if (args.length > 1) {
+            time = args[1];
+            try {
+                muteTimestamp = DateUtil.parseDateDiff(time, true);
+                muteReason = getFinalArg(args, 2);
+            } catch (Exception e) {
+                muteReason = getFinalArg(args, 1);
+            }
+            final long maxMuteLength = ess.getSettings().getMaxMute() * 1000;
+            if (maxMuteLength > 0 && ((muteTimestamp - GregorianCalendar.getInstance().getTimeInMillis()) > maxMuteLength) && sender.isPlayer() && !(ess.getUser(sender.getPlayer()).isAuthorized("essentials.mute.unlimited"))) {
+                sender.sendMessage(tl("oversizedMute"));
+                throw new NoChargeException();
+            }
+        }
         
         final boolean willMute = (args.length > 1) || !user.getMuted();
         final User controller = sender.isPlayer() ? ess.getUser(sender.getPlayer()) : null;
@@ -47,18 +67,7 @@ public class Commandmute extends EssentialsCommand {
         ess.getServer().getPluginManager().callEvent(event);
         
         if (!event.isCancelled()) {
-            long muteTimestamp = 0;
-
             if (args.length > 1) {
-                final String time = args[1];
-                String muteReason;
-                try {
-                    muteTimestamp = DateUtil.parseDateDiff(time, true);
-                    muteReason = getFinalArg(args, 2);
-                } catch (Exception e) {
-                    muteReason = getFinalArg(args, 1);
-                }
-
                 user.setMuteReason(muteReason.isEmpty() ? null : muteReason);
                 user.setMuted(true);
             } else {

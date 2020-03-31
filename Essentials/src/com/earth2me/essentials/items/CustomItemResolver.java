@@ -25,7 +25,7 @@ public class CustomItemResolver implements IItemDb.ItemResolver, IConf {
     public ItemStack apply(String item) {
         if (map.containsKey(item)) {
             try {
-                return ess.getItemDb().get(item);
+                return ess.getItemDb().get(map.get(item));
             } catch (Exception ignored) {}
         }
 

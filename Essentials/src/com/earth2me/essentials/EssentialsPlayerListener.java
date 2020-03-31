@@ -7,8 +7,10 @@ import com.earth2me.essentials.textreader.TextPager;
 import com.earth2me.essentials.utils.DateUtil;
 import com.earth2me.essentials.utils.LocationUtil;
 import com.earth2me.essentials.utils.MaterialUtil;
+import com.earth2me.essentials.utils.VersionUtil;
 import io.papermc.lib.PaperLib;
 import net.ess3.api.IEssentials;
+import net.ess3.api.events.AfkStatusChangeEvent;
 import org.bukkit.*;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.entity.HumanEntity;
@@ -45,6 +47,24 @@ public class EssentialsPlayerListener implements Listener {
 
     public EssentialsPlayerListener(final IEssentials parent) {
         this.ess = parent;
+    }
+
+    private static boolean isEntityPickupEvent() {
+        try {
+            Class.forName("org.bukkit.event.entity.EntityPickupItemEvent");
+            return true;
+        } catch (ClassNotFoundException ignored) {
+            return false;
+        }
+    }
+
+    private static boolean isCommandSendEvent() {
+        try {
+            Class.forName("org.bukkit.event.player.PlayerCommandSendEvent");
+            return true;
+        } catch (ClassNotFoundException ignored) {
+            return false;
+        }
     }
 
     public void registerEvents() {
@@ -155,7 +175,7 @@ public class EssentialsPlayerListener implements Listener {
                     .replace("{PLAYER}", player.getDisplayName())
                     .replace("{USERNAME}", player.getName())
                     .replace("{ONLINE}", NumberFormat.getInstance().format(ess.getOnlinePlayers().size()));
-            
+
             event.setQuitMessage(msg.isEmpty() ? null : msg);
         }
 
@@ -180,7 +200,7 @@ public class EssentialsPlayerListener implements Listener {
             }
         }
 
-        user.updateActivity(false);
+        user.updateActivity(false, AfkStatusChangeEvent.Cause.QUIT);
         if (!user.isHidden()) {
             user.setLastLogout(System.currentTimeMillis());
         }
@@ -214,7 +234,7 @@ public class EssentialsPlayerListener implements Listener {
 
         final long currentTime = System.currentTimeMillis();
         dUser.checkMuteTimeout(currentTime);
-        dUser.updateActivity(false);
+        dUser.updateActivity(false, AfkStatusChangeEvent.Cause.JOIN);
         dUser.stopTransaction();
 
         class DelayJoinTask implements Runnable {
@@ -257,9 +277,9 @@ public class EssentialsPlayerListener implements Listener {
                     //NOOP
                 } else if (ess.getSettings().isCustomJoinMessage()) {
                     String msg = ess.getSettings().getCustomJoinMessage()
-                        .replace("{PLAYER}", player.getDisplayName()).replace("{USERNAME}", player.getName())
-                        .replace("{UNIQUE}", NumberFormat.getInstance().format(ess.getUserMap().getUniqueUsers()))
-                        .replace("{ONLINE}", NumberFormat.getInstance().format(ess.getOnlinePlayers().size()));
+                            .replace("{PLAYER}", player.getDisplayName()).replace("{USERNAME}", player.getName())
+                            .replace("{UNIQUE}", NumberFormat.getInstance().format(ess.getUserMap().getUniqueUsers()))
+                            .replace("{ONLINE}", NumberFormat.getInstance().format(ess.getOnlinePlayers().size()));
                     if (!msg.isEmpty()) {
                         ess.getServer().broadcastMessage(msg);
                     }
@@ -311,7 +331,7 @@ public class EssentialsPlayerListener implements Listener {
                     user.setGodModeEnabled(false);
                     ess.getLogger().log(Level.INFO, "Set god mode to false for {0} because they had it enabled without permission.", user.getName());
                 }
-                
+
                 user.setConfirmingClearCommand(null);
                 user.getConfirmingPayments().clear();
 
@@ -476,7 +496,7 @@ public class EssentialsPlayerListener implements Listener {
             LOGGER.info(tl("mutedUserSpeaks", player.getName(), event.getMessage()));
             return;
         }
-        
+
         boolean broadcast = true; // whether to broadcast the updated activity
         boolean update = true; // Only modified when the command is afk
 
@@ -495,16 +515,16 @@ public class EssentialsPlayerListener implements Listener {
         }
 
         if (ess.getSettings().isCommandCooldownsEnabled() && pluginCommand != null
-            && !user.isAuthorized("essentials.commandcooldowns.bypass")) {
+                && !user.isAuthorized("essentials.commandcooldowns.bypass")) {
             int argStartIndex = event.getMessage().indexOf(" ");
-            String args = argStartIndex == -1 ? "" // No arguments present 
-                : " " + event.getMessage().substring(argStartIndex); // arguments start at argStartIndex; substring from there.
+            String args = argStartIndex == -1 ? "" // No arguments present
+                    : " " + event.getMessage().substring(argStartIndex); // arguments start at argStartIndex; substring from there.
             String fullCommand = pluginCommand.getName() + args;
 
             // Used to determine whether a user already has an existing cooldown
             // If so, no need to check for (and write) new ones.
             boolean cooldownFound = false;
-            
+
             // Iterate over a copy of getCommandCooldowns in case of concurrent modifications
             for (Entry<Pattern, Long> entry : new HashMap<>(user.getCommandCooldowns()).entrySet()) {
                 // Remove any expired cooldowns
@@ -542,8 +562,8 @@ public class EssentialsPlayerListener implements Listener {
         final User user = ess.getUser(event.getPlayer());
         if (user.getBase().getGameMode() != GameMode.CREATIVE
                 // COMPAT: String compare for 1.7.10
-            && !user.getBase().getGameMode().name().equals("SPECTATOR")
-            && !user.isAuthorized("essentials.fly")) {
+                && !user.getBase().getGameMode().name().equals("SPECTATOR")
+                && !user.isAuthorized("essentials.fly")) {
             user.getBase().setFallDistance(0f);
             user.getBase().setAllowFlight(false);
         }
@@ -595,7 +615,10 @@ public class EssentialsPlayerListener implements Listener {
                     User player = ess.getUser(event.getPlayer());
                     if (player.isAuthorized("essentials.sethome.bed") && player.getWorld().getEnvironment().equals(World.Environment.NORMAL)) {
                         player.getBase().setBedSpawnLocation(event.getClickedBlock().getLocation());
-                        player.sendMessage(tl("bedSet", player.getLocation().getWorld().getName(), player.getLocation().getBlockX(), player.getLocation().getBlockY(), player.getLocation().getBlockZ()));
+                        // In 1.15 and above, vanilla sends its own bed spawn message.
+                        if (VersionUtil.getServerBukkitVersion().isLowerThan(VersionUtil.v1_15_R01)) {
+                            player.sendMessage(tl("bedSet", player.getLocation().getWorld().getName(), player.getLocation().getBlockX(), player.getLocation().getBlockY(), player.getLocation().getBlockZ()));
+                        }
                     }
                 }
                 break;
@@ -726,9 +749,9 @@ public class EssentialsPlayerListener implements Listener {
             }
         } else if (clickedInventory != null && clickedInventory.getType() == InventoryType.PLAYER) {
             if (ess.getSettings().isDirectHatAllowed() && event.getClick() == ClickType.LEFT && event.getSlot() == 39
-                && event.getCursor().getType() != Material.AIR && event.getCursor().getType().getMaxDurability() == 0
-                && !MaterialUtil.isSkull(event.getCursor().getType())
-                && ess.getUser(event.getWhoClicked()).isAuthorized("essentials.hat") && !ess.getUser(event.getWhoClicked()).isAuthorized("essentials.hat.prevent-type." + event.getCursor().getType().name().toLowerCase())) {
+                    && event.getCursor().getType() != Material.AIR && event.getCursor().getType().getMaxDurability() == 0
+                    && !MaterialUtil.isSkull(event.getCursor().getType())
+                    && ess.getUser(event.getWhoClicked()).isAuthorized("essentials.hat") && !ess.getUser(event.getWhoClicked()).isAuthorized("essentials.hat.prevent-type." + event.getCursor().getType().name().toLowerCase())) {
                 event.setCancelled(true);
                 final PlayerInventory inv = (PlayerInventory) clickedInventory;
                 final ItemStack head = inv.getHelmet();
@@ -784,24 +807,6 @@ public class EssentialsPlayerListener implements Listener {
         user.updateActivityOnInteract(true);
     }
 
-    private static boolean isEntityPickupEvent() {
-        try {
-            Class.forName("org.bukkit.event.entity.EntityPickupItemEvent");
-            return true;
-        } catch (ClassNotFoundException ignored) {
-            return false;
-        }
-    }
-
-    private static boolean isCommandSendEvent() {
-        try {
-            Class.forName("org.bukkit.event.player.PlayerCommandSendEvent");
-            return true;
-        } catch (ClassNotFoundException ignored) {
-            return false;
-        }
-    }
-
     private final class PickupListenerPre1_12 implements Listener {
         @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
         public void onPlayerPickupItem(final org.bukkit.event.player.PlayerPickupItemEvent event) {
@@ -829,30 +834,40 @@ public class EssentialsPlayerListener implements Listener {
         public void onCommandSend(final PlayerCommandSendEvent event) {
             User user = ess.getUser(event.getPlayer());
 
-            ArrayList<String> removedCmds = new ArrayList<>(event.getCommands());
+            Set<PluginCommand> checked = new HashSet<>();
+            Set<PluginCommand> toRemove = new HashSet<>();
 
-            event.getCommands().removeIf(str -> shouldHideFromUser(str, user));
+            event.getCommands().removeIf(label -> {
+                if (isEssentialsCommand(label)) {
+                    PluginCommand command = ess.getServer().getPluginCommand(label);
+                    if (!checked.contains(command)) {
+                        checked.add(command);
+                        if (!user.isAuthorized(command.getName().equals("r") ? "essentials.msg" : "essentials." + command.getName())) {
+                            toRemove.add(command);
+                        }
+                    }
+                    return toRemove.contains(command);
+                }
+                return false;
+            });
 
             if (ess.getSettings().isDebug()) {
-                removedCmds.removeAll(event.getCommands());
-                ess.getLogger().info("Removed commands: " + removedCmds.toString());
+                ess.getLogger().info("Removed commands: " + toRemove.toString());
             }
         }
 
         /**
          * Returns true if all of the following are true:
-         *   - The command is a plugin command
-         *   - The plugin command is from Essentials
-         *   - There is no known alternative OR the alternative is overridden by Essentials
-         *   - The user is not allowed to perform the given Essentials command
+         * - The command is a plugin command
+         * - The plugin command is from Essentials
+         * - There is no known alternative OR the alternative is overridden by Essentials
          */
-        private boolean shouldHideFromUser(String commandLabel, User user) {
-            PluginCommand command = ess.getServer().getPluginCommand(commandLabel);
+        private boolean isEssentialsCommand(String label) {
+            PluginCommand command = ess.getServer().getPluginCommand(label);
 
             return command != null
-                && command.getPlugin() == ess
-                && (ess.getSettings().isCommandOverridden(commandLabel) || (ess.getAlternativeCommandsHandler().getAlternative(commandLabel) == null))
-                && !user.isAuthorized(command.getName().equals("r") ? "essentials.msg" : "essentials." + command.getName());
+                    && command.getPlugin() == ess
+                    && (ess.getSettings().isCommandOverridden(label) || (ess.getAlternativeCommandsHandler().getAlternative(label) == null));
         }
     }
 }
