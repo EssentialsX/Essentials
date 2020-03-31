@@ -89,10 +89,8 @@ public class LocationUtil {
         return isBlockAboveAir(world.getChunkAt(x, z), x, y, z);
     }
 
-    public static boolean isBlockAboveAir(final Chunk chunk, int x, final int y, int z) {
-        x = x & 0xF;
-        z = z & 0xF;
-        return y > chunk.getWorld().getMaxHeight() || HOLLOW_MATERIALS.contains(chunk.getBlock(x, y - 1, z).getType());
+    public static boolean isBlockAboveAir(final Chunk chunk, final int x, final int y, int z) {
+        return y > chunk.getWorld().getMaxHeight() || HOLLOW_MATERIALS.contains(chunk.getBlock(x & 0xF, y - 1, z & 0xF).getType());
     }
 
     public static boolean isBlockUnsafeForUser(final IUser user, final World world, final int x, final int y, final int z) {
@@ -118,10 +116,8 @@ public class LocationUtil {
         return isBlockDamaging(world.getChunkAt(x, z), x, y, z);
     }
 
-    public static boolean isBlockDamaging(final Chunk chunk, int x, final int y, int z) {
-        x = x & 0xF;
-        z = z & 0xF;
-        final Block below = chunk.getBlock(x, y - 1, z);
+    public static boolean isBlockDamaging(final Chunk chunk, final int x, final int y, final int z) {
+        final Block below = chunk.getBlock(x & 0xF, y - 1, z & 0xF);
 
         switch (below.getType()) {
             case LAVA:
@@ -141,13 +137,13 @@ public class LocationUtil {
 
         Material PORTAL = EnumUtil.getMaterial("NETHER_PORTAL", "PORTAL");
 
-        Block block = chunk.getBlock(x, y, z);
+        Block block = chunk.getBlock(x & 0xF, y, z & 0xF);
 
         if (block.getType() == PORTAL) {
             return true;
         }
 
-        return (!HOLLOW_MATERIALS.contains(block.getType())) || (!HOLLOW_MATERIALS.contains(chunk.getBlock(x, y + 1, z).getType()));
+        return (!HOLLOW_MATERIALS.contains(block.getType())) || (!HOLLOW_MATERIALS.contains(chunk.getBlock(x & 0xF, y + 1, z & 0xF).getType()));
     }
 
     // Not needed if using getSafeDestination(loc)
