@@ -41,7 +41,7 @@ public class Commandkitreset extends EssentialsCommand {
         List<String> options = new ArrayList<>();
         if (args.length == 1 && user.isAuthorized("essentials.kit.reset")) {
             return getPlayers(server, user);
-        } else if (args.length == 2)  {
+        } else if (args.length == 2 && user.isAuthorized("essentials.kit.reset"))  {
             for (String kitName : ess.getKits().getKits().getKeys(false)) {
                 if (!user.isAuthorized("essentials.kits." + kitName)) { // Only check perm, not time or money
                     continue;
@@ -50,7 +50,7 @@ public class Commandkitreset extends EssentialsCommand {
             }
             return options;
         }
-        return Collections.emptyList();
+        return options;
     }
 
     @Override
