@@ -81,6 +81,7 @@ import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
+import java.util.function.Predicate;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -742,25 +743,25 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
 
     @Override
     public int broadcastMessage(final String message) {
-        return broadcastMessage(null, null, message, true, Collections.emptySet());
+        return broadcastMessage(null, null, message, true, u -> false);
     }
 
     @Override
     public int broadcastMessage(final IUser sender, final String message) {
-        return broadcastMessage(sender, null, message, false, Collections.emptySet());
+        return broadcastMessage(sender, null, message, false, u -> false);
     }
 
     @Override
-    public int broadcastMessage(final IUser sender, final String message, final Collection<IUser> excluded) {
-        return broadcastMessage(sender, null, message, false, excluded);
+    public int broadcastMessage(final IUser sender, final String message, final Predicate<IUser> exclusion) {
+        return broadcastMessage(sender, null, message, false, exclusion);
     }
 
     @Override
     public int broadcastMessage(final String permission, final String message) {
-        return broadcastMessage(null, permission, message, false, Collections.emptySet());
+        return broadcastMessage(null, permission, message, false, u -> false);
     }
 
-    private int broadcastMessage(final IUser sender, final String permission, final String message, final boolean keywords, final Collection<IUser> excluded) {
+    private int broadcastMessage(final IUser sender, final String permission, final String message, final boolean keywords, final Predicate<IUser> exclusion) {
         if (sender != null && sender.isHidden()) {
             return 0;
         }
@@ -771,7 +772,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
         for (Player player : players) {
             final User user = getUser(player);
             if ((permission == null && (sender == null || !user.isIgnoredPlayer(sender))) || (permission != null && user.isAuthorized(permission))) {
-                if (excluded.contains(user)) {
+                if (exclusion.test(user)) {
                     continue;
                 }
                 if (keywords) {

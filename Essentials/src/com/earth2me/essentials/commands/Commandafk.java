@@ -1,11 +1,13 @@
 package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.CommandSource;
+import com.earth2me.essentials.IUser;
 import com.earth2me.essentials.User;
 import org.bukkit.Server;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.function.Function;
 
 import static com.earth2me.essentials.I18n.tl;
 
@@ -80,7 +82,7 @@ public class Commandafk extends EssentialsCommand {
         }
         if (!msg.isEmpty() && ess.getSettings().broadcastAfkMessage()) {
             // exclude user from receiving general AFK announcement in favor of personal message
-            ess.broadcastMessage(user, msg, Collections.singleton(user));
+            ess.broadcastMessage(user, msg, u -> u == user);
         }
         if (!selfmsg.isEmpty()) {
             user.sendMessage(selfmsg);

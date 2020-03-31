@@ -587,7 +587,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
                 final String selfmsg = tl("userIsNotAwaySelf");
                 if (!msg.isEmpty() && ess.getSettings().broadcastAfkMessage()) {
                     // exclude user from receiving general AFK announcement in favor of personal message
-                    ess.broadcastMessage(this, msg, Collections.singleton(this));
+                    ess.broadcastMessage(this, msg, u -> u.equals(this));
                 }
                 if (!selfmsg.isEmpty()) {
                     this.sendMessage(selfmsg);
@@ -640,7 +640,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
                 final String selfmsg = tl("userIsAwaySelf");
                 if (!msg.isEmpty() && ess.getSettings().broadcastAfkMessage()) {
                     // exclude user from receiving general AFK announcement in favor of personal message
-                    ess.broadcastMessage(this, msg, Collections.singleton(this));
+                    ess.broadcastMessage(this, msg, u -> u.equals(this));
                 }
                 if (!selfmsg.isEmpty()) {
                     this.sendMessage(selfmsg);

@@ -18,6 +18,7 @@ import org.bukkit.scheduler.BukkitTask;
 import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
+import java.util.function.Predicate;
 
 public interface IEssentials extends Plugin {
     void addReloadListener(IConf listener);
@@ -47,7 +48,7 @@ public interface IEssentials extends Plugin {
 
     int broadcastMessage(IUser sender, String message);
 
-    int broadcastMessage(IUser sender, String message, Collection<IUser> excluded);
+    int broadcastMessage(IUser sender, String message, Predicate<IUser> exclusion);
 
     int broadcastMessage(String permission, String message);
 
