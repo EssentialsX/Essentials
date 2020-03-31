@@ -66,7 +66,7 @@ public class Economy {
             throw new RuntimeException(noCallBeforeLoad);
         }
         if (name == null) {
-            throw new RuntimeException("Economy username cannot be null");
+            throw new IllegalArgumentException("Economy username cannot be null");
         }
 
         User user = ess.getUser(name);
@@ -93,7 +93,7 @@ public class Economy {
             throw new RuntimeException(noCallBeforeLoad);
         }
         if (uuid == null) {
-            throw new RuntimeException("Economy uuid cannot be null");
+            throw new IllegalArgumentException("Economy uuid cannot be null");
         }
         return ess.getUser(uuid);
     }
@@ -202,7 +202,7 @@ public class Economy {
      */
     public static void setMoney(User user, BigDecimal balance) throws NoLoanPermittedException {
         if (user == null) {
-            throw new RuntimeException("Economy user cannot be null");
+            throw new IllegalArgumentException("Economy user cannot be null");
         }
         if (balance.compareTo(ess.getSettings().getMinMoney()) < 0) {
             throw new NoLoanPermittedException();
@@ -244,7 +244,7 @@ public class Economy {
      * @deprecated Usernames can change, use {@link Economy#add(UUID, BigDecimal)} or {@link Economy#add(User, BigDecimal)}
      *
      * @param name   Name of the user
-     * @param amount The money you want to add
+     * @param amount The amount of money to be added to the user's account
      *
      * @throws UserDoesNotExistException If a user by that name does not exist
      * @throws NoLoanPermittedException  If the user is now allowed to have a negative balance
@@ -265,7 +265,7 @@ public class Economy {
      * @param uuid   UUID of the user
      * @param amount The money you want to add
      *
-     * @throws NoLoanPermittedException  If the user is now allowed to have a negative balance
+     * @throws NoLoanPermittedException  If the user is not allowed to have a negative balance
      * @throws ArithmeticException
      */
     public static void add(UUID uuid, BigDecimal amount) throws NoLoanPermittedException, ArithmeticException {
@@ -280,7 +280,7 @@ public class Economy {
      * @param user   User
      * @param amount The money you want to add
      *
-     * @throws NoLoanPermittedException  If the user is now allowed to have a negative balance
+     * @throws NoLoanPermittedException  If the user is not allowed to have a negative balance
      * @throws ArithmeticException
      */
     public static void add(User user, BigDecimal amount) throws NoLoanPermittedException, ArithmeticException {
