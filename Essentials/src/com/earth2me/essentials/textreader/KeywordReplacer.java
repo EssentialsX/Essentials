@@ -72,8 +72,7 @@ public class KeywordReplacer implements IText {
         }
         execTimer.mark("User Grab");
 
-        for (int i = 0; i < input.getLines().size(); i++) {
-            String line = input.getLines().get(i);
+        for (String line : input.getLines()) {
             final Matcher matcher = KEYWORD.matcher(line);
 
             while (matcher.find()) {
@@ -82,6 +81,7 @@ public class KeywordReplacer implements IText {
                 final String[] matchTokens = KEYWORDSPLIT.split(keywordMatch);
                 line = replaceLine(line, fullMatch, matchTokens, user);
             }
+
             replaced.add(line);
         }
 
@@ -289,7 +289,7 @@ public class KeywordReplacer implements IText {
                 }
             }
 
-            line = line.replace(fullMatch, replacer);
+            line = line.replace(fullMatch.toLowerCase(Locale.US), replacer);
         } catch (IllegalArgumentException ex) {
         }
 

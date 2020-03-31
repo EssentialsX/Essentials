@@ -163,9 +163,7 @@ public class Kit {
 
                 if (kitItem.startsWith("/")) {
                     String command = kitItem.substring(1);
-                    String name = user.getName();
-                    command = command.replace("{player}", name);
-                    command = command.replace("{PLAYER}", name);
+                    command = command.replace("{player}", user.getName());
                     Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command);
                     continue;
                 }
@@ -183,11 +181,10 @@ public class Kit {
                     // We pass a null sender here because kits should not do perm checks
                     metaStack.parseStringMeta(null, allowUnsafe, parts, 2, ess);
                 }
-                
+
                 itemList.add(metaStack.getItemStack());
             }
-            
-            
+
             final Map<Integer, ItemStack> overfilled;
             final boolean allowOversizedStacks = user.isAuthorized("essentials.oversizedstacks");
             final boolean isDropItemsIfFull = ess.getSettings().isDropItemsIfFull();
