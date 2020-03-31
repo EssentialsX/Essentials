@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.function.Predicate;
 import java.util.regex.Pattern;
 
 
@@ -239,6 +240,8 @@ public interface ISettings extends IConf {
 
     void setEssentialsChatActive(boolean b);
 
+    long getMaxMute();
+
     long getMaxTempban();
 
     Map<String, Object> getListGroupConfig();
@@ -329,5 +332,18 @@ public interface ISettings extends IConf {
 
     boolean allowOldIdSigns();
 
+    boolean isWaterSafe();
+  
     boolean isSafeUsermap();
+
+    boolean logCommandBlockCommands();
+
+    Set<Predicate<String>> getNickBlacklist();
+
+    double getMaxProjectileSpeed();
+
+    boolean isRemovingEffectsOnHeal();
+
+    boolean isSpawnIfNoHome();
+
 }

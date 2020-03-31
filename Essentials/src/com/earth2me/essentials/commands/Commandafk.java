@@ -3,6 +3,7 @@ package com.earth2me.essentials.commands;
 import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.IUser;
 import com.earth2me.essentials.User;
+import net.ess3.api.events.AfkStatusChangeEvent;
 import org.bukkit.Server;
 
 import java.util.Collections;
@@ -26,10 +27,6 @@ public class Commandafk extends EssentialsCommand {
                 afkUser = getPlayer(server, user, args, 0);
                 message = args.length > 1 ? getFinalArg(args, 1) : null;
             } catch (PlayerNotFoundException e) {
-                // If only one arg is passed, assume the command executor is targeting another player.
-                if (args.length == 1) {
-                    throw e;
-                }
                 message = getFinalArg(args, 0);
             }
             toggleAfk(user, afkUser, message);
@@ -62,12 +59,12 @@ public class Commandafk extends EssentialsCommand {
         user.setDisplayNick();
         String msg = "";
         String selfmsg = "";
-        if (!user.toggleAfk()) {
+        if (!user.toggleAfk(AfkStatusChangeEvent.Cause.COMMAND)) {
             if (!user.isHidden()) {
                 msg = tl("userIsNotAway", user.getDisplayName());
                 selfmsg = tl("userIsNotAwaySelf");
             }
-            user.updateActivity(false);
+            user.updateActivity(false, AfkStatusChangeEvent.Cause.COMMAND);
         } else {
             if (!user.isHidden()) {
                 if (message != null) {

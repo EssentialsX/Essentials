@@ -8,8 +8,8 @@ import com.earth2me.essentials.textreader.IText;
 import com.earth2me.essentials.textreader.SimpleTextInput;
 import com.earth2me.essentials.utils.EnumUtil;
 import com.earth2me.essentials.utils.FormatUtil;
+import com.earth2me.essentials.utils.LocationUtil;
 import com.earth2me.essentials.utils.NumberUtil;
-
 import net.ess3.api.IEssentials;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -24,14 +24,24 @@ import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
+import java.util.function.Predicate;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import static com.earth2me.essentials.I18n.tl;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
+
+import static com.earth2me.essentials.I18n.tl;
 
 
 public class Settings implements net.ess3.api.ISettings {
@@ -429,6 +439,7 @@ public class Settings implements net.ess3.api.ISettings {
             mFormat = mFormat.replace("{TEAMNAME}", "{5}");
             mFormat = mFormat.replace("{PREFIX}", "{6}");
             mFormat = mFormat.replace("{SUFFIX}", "{7}");
+            mFormat = mFormat.replace("{USERNAME}", "{8}");
             mFormat = "§r".concat(mFormat);
             chatFormats.put(group, mFormat);
         }
@@ -544,7 +555,11 @@ public class Settings implements net.ess3.api.ISettings {
         itemDbType = _getItemDbType();
         forceEnableRecipe = _isForceEnableRecipe();
         allowOldIdSigns = _allowOldIdSigns();
+        isWaterSafe = _isWaterSafe();
         isSafeUsermap = _isSafeUsermap();
+        logCommandBlockCommands = _logCommandBlockCommands();
+        nickBlacklist = _getNickBlacklist();
+        maxProjectileSpeed = _getMaxProjectileSpeed();
     }
 
     void _lateLoadItemSpawnBlacklist() {
@@ -1133,6 +1148,11 @@ public class Settings implements net.ess3.api.ISettings {
     }
 
     @Override
+    public long getMaxMute() {
+        return config.getLong("max-mute-time", -1);
+    }
+
+    @Override
     public long getMaxTempban() {
         return config.getLong("max-tempban-time", -1);
     }
@@ -1556,6 +1576,20 @@ public class Settings implements net.ess3.api.ISettings {
         return allowOldIdSigns;
     }
 
+    private boolean isWaterSafe;
+
+    private boolean _isWaterSafe() {
+        boolean _isWaterSafe = config.getBoolean("is-water-safe", false);
+        LocationUtil.setIsWaterSafe(_isWaterSafe);
+
+        return _isWaterSafe;
+    }
+
+    @Override
+    public boolean isWaterSafe() {
+        return isWaterSafe;
+    }
+    
     private boolean isSafeUsermap;
 
     private boolean _isSafeUsermap() {
@@ -1565,5 +1599,64 @@ public class Settings implements net.ess3.api.ISettings {
     @Override
     public boolean isSafeUsermap() {
         return isSafeUsermap;
+    }
+
+    private boolean logCommandBlockCommands;
+
+    private boolean _logCommandBlockCommands() {
+        return config.getBoolean("log-command-block-commands", true);
+    }
+
+    @Override
+    public boolean logCommandBlockCommands() {
+        return logCommandBlockCommands;
+    }
+
+    private Set<Predicate<String>> nickBlacklist;
+
+    private Set<Predicate<String>> _getNickBlacklist() {
+        Set<Predicate<String>> blacklist = new HashSet<>();
+
+        config.getStringList("nick-blacklist").forEach(entry -> {
+            try {
+                blacklist.add(Pattern.compile(entry).asPredicate());
+            } catch (PatternSyntaxException e) {
+                logger.warning("Invalid nickname blacklist regex: " + entry);
+            }
+        });
+
+        return blacklist;
+    }
+
+    @Override
+    public Set<Predicate<String>> getNickBlacklist() {
+        return nickBlacklist;
+    }
+
+    private double maxProjectileSpeed;
+
+    private double _getMaxProjectileSpeed() {
+        return config.getDouble("max-projectile-speed", 8);
+    }
+
+    @Override
+    public double getMaxProjectileSpeed() {
+        return maxProjectileSpeed;
+    }
+
+    private boolean removeEffectsOnHeal;
+
+    private boolean _isRemovingEffectsOnHeal() {
+        return config.getBoolean("remove-effects-on-heal", true);
+    }
+
+    @Override
+    public boolean isRemovingEffectsOnHeal() {
+        return removeEffectsOnHeal;
+    }
+
+    @Override
+    public boolean isSpawnIfNoHome() {
+        return config.getBoolean("spawn-if-no-home", true);
     }
 }

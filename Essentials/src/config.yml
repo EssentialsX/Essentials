@@ -32,6 +32,12 @@ nickname-prefix: '~'
 # The maximum length allowed in nicknames. The nickname prefix is included in this.
 max-nick-length: 15
 
+# A list of phrases that cannot be used in nicknames. You can include regular expressions here.
+# Users with essentials.nick.blacklist.bypass will be able to bypass this filter.
+nick-blacklist:
+#- Notch
+#- '^Dinnerbone'
+
 # When this option is enabled, nickname length checking will exclude color codes in player names.
 # ie: "&6Notch" has 7 characters (2 are part of a color code), a length of 5 is used when this option is set to true
 ignore-colors-in-max-nick-length: false
@@ -87,6 +93,9 @@ teleport-to-center: true
 
 # The delay, in seconds, required between /heal or /feed attempts.
 heal-cooldown: 60
+
+# Do you want to remove potion effects when healing a player?
+remove-effects-on-heal: true
 
 # Near Radius
 # The default radius with /near
@@ -487,6 +496,10 @@ max-walk-speed: 0.8
 #Set the maximum amount of mail that can be sent within a minute.
 mails-per-minute: 1000
 
+# Set the maximum time /mute can be used for in seconds.
+# Set to -1 to disable, and essentials.mute.unlimited can be used to override.
+max-mute-time: -1
+
 # Set the maximum time /tempban can be used for in seconds.
 # Set to -1 to disable, and essentials.tempban.unlimited can be used to override.
 max-tempban-time: -1
@@ -502,7 +515,7 @@ last-message-reply-recipient: true
 # Default is 180 (3 minutes)
 last-message-reply-recipient-timeout: 180
 
-# Toggles whether or not clicking mobs with a milk bucket turns them into a baby.
+# Toggles whether or not left clicking mobs with a milk bucket turns them into a baby.
 milk-bucket-easter-egg: true
 
 # Toggles whether or not the fly status message should be sent to players on join
@@ -564,9 +577,18 @@ allow-direct-hat: true
 # This doesn't affect running the command from the console, where a world is always required.
 allow-world-in-broadcastworld: true
 
+# Consider water blocks as "safe," therefore allowing players to teleport
+# using commands such as /home or /spawn to a location that is occupied
+# by water blocks
+is-water-safe: false
+
 # Should the usermap try to sanitise usernames before saving them?
 # You should only change this to false if you use Minecraft China.
 safe-usermap-names: true
+
+# Should Essentials output logs when a command block executes a command?
+# Example: CommandBlock at <x>,<y>,<z> issued server command: /<command>
+log-command-block-commands: true
 
 ############################################################
 # +------------------------------------------------------+ #
@@ -603,6 +625,9 @@ sethome-multiple:
 # Leaving this as false will retain Essentials' original behaviour, which is to always
 # change the compass' direction to point towards their first home.
 compass-towards-home-perm: false
+
+# Set the maximum speed for projectiles spawned with /fireball.
+max-projectile-speed: 8
 
 ############################################################
 # +------------------------------------------------------+ #
@@ -700,10 +725,11 @@ chat:
   #format: '&7{PREFIX}&r {DISPLAYNAME}&r &7{SUFFIX}&r: {MESSAGE}'
 
   group-formats:
-  #  Default: '{WORLDNAME} {DISPLAYNAME}&7:&r {MESSAGE}'
-  #  Admins: '{WORLDNAME} &c[{GROUP}]&r {DISPLAYNAME}&7:&c {MESSAGE}'
+  #  default: '{WORLDNAME} {DISPLAYNAME}&7:&r {MESSAGE}'
+  #  admins: '{WORLDNAME} &c[{GROUP}]&r {DISPLAYNAME}&7:&c {MESSAGE}'
 
   # If you are using group formats make sure to remove the '#' to allow the setting to be read.
+  # Note: Group names are case-sensitive so you must match them up with your permission plugin.
 
 ############################################################
 # +------------------------------------------------------+ #
@@ -745,6 +771,28 @@ protect:
     # Monsters won't follow players.
     # permission essentials.protect.entitytarget.bypass disables this.
     entitytarget: false
+    # Prevents zombies from breaking down doors
+    zombie-door-break: false
+    # Prevents Ravagers from stealing blocks
+    ravager-thief: false
+    # Prevents sheep from turning grass to dirt
+    sheep-eat-grass: false
+    # Prevent certain transformations.
+    transformation:
+      # Prevent creepers becoming charged when struck by lightning.
+      charged-creeper: false
+      # Prevent villagers becoming zombie villagers.
+      zombie-villager: false
+      # Prevent zombie villagers being cured.
+      villager: false
+      # Prevent villagers becoming witches when struck by lightning.
+      witch: false
+      # Prevent pigs becoming zombie pigmen when struck by lightning.
+      zombie-pigman: false
+      # Prevent zombies turning into drowneds, and husks turning into zombies.
+      drowned: false
+      # Prevent mooshrooms changing colour when struck by lightning.
+      mooshroom: false
     # Prevent the spawning of creatures.
     spawn:
       creeper: false
@@ -776,6 +824,7 @@ protect:
       bat: false
       witch: false
       horse: false
+      phantom: false
 
   # Maximum height the creeper should explode. -1 allows them to explode everywhere.
   # Set prevent.creeper-explosion to true, if you want to disable creeper explosions.
@@ -906,6 +955,9 @@ spawn-join-listener-priority: high
 
 # When users die, should they respawn at their first home or bed, instead of the spawnpoint?
 respawn-at-home: false
+
+# If no home is set, would you like to send the player to spawn? (Only applies to /home)
+spawn-if-no-home: true
 
 # Teleport all joining players to the spawnpoint
 spawn-on-join: false

@@ -8,10 +8,12 @@ import com.earth2me.essentials.utils.FormatUtil;
 import com.earth2me.essentials.utils.MaterialUtil;
 import com.earth2me.essentials.utils.NumberUtil;
 import com.google.common.base.Joiner;
+import java.lang.reflect.Method;
+import java.util.*;
+import java.util.logging.Level;
+import java.util.regex.Pattern;
 import net.ess3.api.IEssentials;
 import net.ess3.nms.refl.ReflUtil;
-
-import org.apache.commons.lang.ArrayUtils;
 import org.bukkit.Color;
 import org.bukkit.DyeColor;
 import org.bukkit.FireworkEffect;
@@ -25,11 +27,6 @@ import org.bukkit.inventory.meta.*;
 import org.bukkit.potion.Potion;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-
-import java.lang.reflect.Method;
-import java.util.*;
-import java.util.logging.Level;
-import java.util.regex.Pattern;
 
 import static com.earth2me.essentials.I18n.tl;
 
@@ -165,8 +162,8 @@ public class MetaItemStack {
             stack.setItemMeta(meta);
         } else if (split.length > 1 && (split[0].equalsIgnoreCase("lore") || split[0].equalsIgnoreCase("desc")) && hasMetaPermission(sender, "lore", false, true, ess)) {
             final List<String> lore = new ArrayList<String>();
-            for (String line : split[1].split("\\|")) {
-                lore.add(FormatUtil.replaceFormat(line.replace('_', ' ')));
+            for (String line : split[1].split("(?<!\\\\)\\|")) {
+                lore.add(FormatUtil.replaceFormat(line.replace('_', ' ').replace("\\|", "|")));
             }
             final ItemMeta meta = stack.getItemMeta();
             meta.setLore(lore);
@@ -177,9 +174,7 @@ public class MetaItemStack {
         } else if (split.length > 1 && (split[0].equalsIgnoreCase("player") || split[0].equalsIgnoreCase("owner")) && hasMetaPermission(sender, "head", false, true, ess)) {
             if (MaterialUtil.isPlayerHead(stack.getType(), stack.getDurability())) {
                 final String owner = split[1];
-                final SkullMeta meta = (SkullMeta) stack.getItemMeta();
-                meta.setOwningPlayer(ess.getServer().getOfflinePlayer(owner));
-                stack.setItemMeta(meta);
+                setSkullOwner(ess, stack, owner);
             } else {
                 throw new Exception(tl("onlyPlayerSkulls"));
             }
@@ -583,5 +578,25 @@ public class MetaItemStack {
         } catch (Throwable t) {
             t.printStackTrace();
         }
+    }
+
+    private static boolean useNewSkullMethod = true;
+
+    private static void setSkullOwner(final IEssentials ess, final ItemStack stack, final String owner) {
+        if (!(stack.getItemMeta() instanceof SkullMeta)) return;
+
+        SkullMeta meta = (SkullMeta) stack.getItemMeta();
+        if (useNewSkullMethod) {
+            try {
+                meta.setOwningPlayer(ess.getServer().getOfflinePlayer(owner));
+                stack.setItemMeta(meta);
+                return;
+            } catch (NoSuchMethodError e) {
+                useNewSkullMethod = false;
+            }
+        }
+
+        meta.setOwner(owner);
+        stack.setItemMeta(meta);
     }
 }

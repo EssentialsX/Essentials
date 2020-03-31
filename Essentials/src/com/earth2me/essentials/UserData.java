@@ -17,6 +17,7 @@ import java.math.BigDecimal;
 import java.util.*;
 import java.util.Map.Entry;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import static com.earth2me.essentials.I18n.tl;
 
@@ -234,10 +235,10 @@ public abstract class UserData extends PlayerExtension implements IConf {
         config.save();
     }
 
-    private List<Material> unlimited;
+    private Set<Material> unlimited;
 
-    private List<Material> _getUnlimited() {
-        List<Material> retlist = new ArrayList<>();
+    private Set<Material> _getUnlimited() {
+        Set<Material> retlist = new HashSet<>();
         List<String> configList = config.getStringList("unlimited");
         for(String s : configList) {
             Material mat = Material.matchMaterial(s);
@@ -249,7 +250,7 @@ public abstract class UserData extends PlayerExtension implements IConf {
         return retlist;
     }
 
-    public List<Material> getUnlimited() {
+    public Set<Material> getUnlimited() {
         return unlimited;
     }
 
@@ -258,13 +259,20 @@ public abstract class UserData extends PlayerExtension implements IConf {
     }
 
     public void setUnlimited(ItemStack stack, boolean state) {
-        if (unlimited.contains(stack.getType())) {
-            unlimited.remove(stack.getType());
-        }
+        boolean wasUpdated;
         if (state) {
-            unlimited.add(stack.getType());
+            wasUpdated = unlimited.add(stack.getType());
+        } else {
+            wasUpdated = unlimited.remove(stack.getType());
         }
-        config.setProperty("unlimited", unlimited);
+
+        if (wasUpdated) {
+            applyUnlimited();
+        }
+    }
+
+    private void applyUnlimited() {
+        config.setProperty("unlimited", unlimited.stream().map(Enum::name).collect(Collectors.toList()));
         config.save();
     }
 
@@ -801,15 +809,16 @@ public abstract class UserData extends PlayerExtension implements IConf {
     }
 
     public long getKitTimestamp(String name) {
-        name = name.replace('.', '_').replace('/', '_');
+        name = name.replace('.', '_').replace('/', '_').toLowerCase(Locale.ENGLISH);
         if (kitTimestamps != null && kitTimestamps.containsKey(name)) {
             return kitTimestamps.get(name);
         }
-        return 0l;
+        return 0L;
     }
 
-    public void setKitTimestamp(final String name, final long time) {
-        kitTimestamps.put(name.toLowerCase(Locale.ENGLISH), time);
+    public void setKitTimestamp(String name, final long time) {
+        name = name.replace('.', '_').replace('/', '_').toLowerCase(Locale.ENGLISH);
+        kitTimestamps.put(name, time);
         config.setProperty("timestamps.kits", kitTimestamps);
         config.save();
     }
@@ -856,7 +865,7 @@ public abstract class UserData extends PlayerExtension implements IConf {
     private Map<Pattern, Long> commandCooldowns;
 
     private Map<Pattern, Long> _getCommandCooldowns() {
-        if (!config.isConfigurationSection("timestamps.command-cooldowns")) {
+        if (!config.contains("timestamps.command-cooldowns")) {
             return null;
         }
 
