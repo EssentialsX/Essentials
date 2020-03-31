@@ -521,6 +521,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
 
             // Check for disabled commands
             if (getSettings().isCommandDisabled(commandLabel)) {
+                sender.sendMessage(tl("commandDisabled", commandLabel));
                 return true;
             }
 
