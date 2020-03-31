@@ -82,7 +82,7 @@ public abstract class EssentialsCommand implements IEssentialsCommand {
         return getPlayer(server, null, args, pos, getHidden, getOffline);
     }
 
-    private User getPlayer(final Server server, final User sourceUser, final String[] args, final int pos, boolean getHidden, final boolean getOffline) throws PlayerNotFoundException, NotEnoughArgumentsException {
+    User getPlayer(final Server server, final User sourceUser, final String[] args, final int pos, boolean getHidden, final boolean getOffline) throws PlayerNotFoundException, NotEnoughArgumentsException {
         if (args.length <= pos) {
             throw new NotEnoughArgumentsException();
         }
