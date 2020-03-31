@@ -118,7 +118,7 @@ public class Teleport implements ITeleport {
         teleportOwner.sendMessage(tl("teleporting", target.getLocation().getWorld().getName(), target.getLocation().getBlockX(), target.getLocation().getBlockY(), target.getLocation().getBlockZ()));
     }
 
-    protected void now(IUser teleportee, ITarget target, TeleportCause cause) throws Exception {
+    protected void now(IUser teleportee, ITarget target, TeleportCause cause) {
         cancel(false);
         teleportee.setLastLocation();
 
@@ -138,11 +138,7 @@ public class Teleport implements ITeleport {
                         }
                     }
                 } else {
-                    try {
-                        throw new Exception(tl("unsafeTeleportDestination", loc.getWorld().getName(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ()));
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
+                    new Exception(tl("unsafeTeleportDestination", loc.getWorld().getName(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ())).printStackTrace();
                 }
             } else {
                 if (ess.getSettings().isForceDisableTeleportSafety()) {
