@@ -780,8 +780,8 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
     }
 
     @Override
-    public int broadcastMessage(final IUser sender, final String message, final Predicate<IUser> exclusion) {
-        return broadcastMessage(sender, null, message, false, exclusion);
+    public int broadcastMessage(final IUser sender, final String message, final Predicate<IUser> shouldExclude) {
+        return broadcastMessage(sender, null, message, false, shouldExclude);
     }
 
     @Override
@@ -789,7 +789,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
         return broadcastMessage(null, permission, message, false, u -> false);
     }
 
-    private int broadcastMessage(final IUser sender, final String permission, final String message, final boolean keywords, final Predicate<IUser> exclusion) {
+    private int broadcastMessage(final IUser sender, final String permission, final String message, final boolean keywords, final Predicate<IUser> shouldExclude) {
         if (sender != null && sender.isHidden()) {
             return 0;
         }
@@ -800,7 +800,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
         for (Player player : players) {
             final User user = getUser(player);
             if ((permission == null && (sender == null || !user.isIgnoredPlayer(sender))) || (permission != null && user.isAuthorized(permission))) {
-                if (exclusion.test(user)) {
+                if (shouldExclude.test(user)) {
                     continue;
                 }
                 if (keywords) {

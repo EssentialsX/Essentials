@@ -48,7 +48,7 @@ public interface IEssentials extends Plugin {
 
     int broadcastMessage(IUser sender, String message);
 
-    int broadcastMessage(IUser sender, String message, Predicate<IUser> exclusion);
+    int broadcastMessage(IUser sender, String message, Predicate<IUser> shouldExclude);
 
     int broadcastMessage(String permission, String message);
 
