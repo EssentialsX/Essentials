@@ -560,3 +560,8 @@ permissions:
   essentials.keepinv:
     default: false
     description: Controls whether players keep their inventory on death.
+  essentials.togglejail:
+    default: false
+    children:
+      essentials.togglejail.*: true
+      essentials.togglejail.offline: false

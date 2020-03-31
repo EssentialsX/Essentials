@@ -40,14 +40,15 @@ public class Commandtogglejail extends EssentialsCommand {
             }
 
             final User controller = sender.isPlayer() ? ess.getUser(sender.getPlayer()) : null;
+            if (controller != null && !controller.isAuthorized("essentials.togglejail." + args[1])) {
+                throw new Exception(tl("noPerm", "essentials.togglejail." + args[1]));
+            }
+
             final JailStatusChangeEvent event = new JailStatusChangeEvent(player, controller, true);
             ess.getServer().getPluginManager().callEvent(event);
 
             if (!event.isCancelled()) {
                 final String jailName = args[1];
-                if (sender.isPlayer() && !ess.getUser(sender.getPlayer()).isAuthorized("essentials.togglejail." + jailName)) {
-                    throw new Exception(tl("noPerm", "essentials.togglejail." + jailName));
-                }
 
                 if (player.getBase().isOnline()) {
                     ess.getJails().sendToJail(player, jailName);
