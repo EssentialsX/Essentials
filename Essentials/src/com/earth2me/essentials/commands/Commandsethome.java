@@ -49,6 +49,8 @@ public class Commandsethome extends EssentialsCommand {
         if ("bed".equals(name) || NumberUtil.isInt(name)) {
             throw new NoSuchFieldException(tl("invalidHomeName"));
         }
+
+        boolean found = false;
         if (ess.getSettings().isSetSameHomeByConfirm()) {
             for (String h : usersHome.getHomes()) {
                 if (h.equals(name)) {
@@ -56,17 +58,23 @@ public class Commandsethome extends EssentialsCommand {
                         confirmSetHome.put(user, h);
 
                         int time = (20 * ess.getSettings().getHomeOverwriteConfirmTime());
-                        ess.getServer().getScheduler().runTaskLater(ess, () -> confirmSetHome.remove(user), time);
+                        ess.getServer().getScheduler().scheduleSyncDelayedTask(ess, () -> confirmSetHome.remove(user), time);
                         user.sendMessage(tl("confirmForSameHomeSetting", h, time));
                         return;
                     } else if (!h.equals(confirmSetHome.get(user))) {
-                        user.sendMessage("Confirmation canceled because you entered the wrong home name.");
+                        user.sendMessage(tl("confirmCancelled"));
+                        confirmSetHome.remove(user);
                         return;
                     }
 
+                    found = true;
                     confirmSetHome.remove(user);
                     break;
                 }
+            }
+
+            if (!found) {
+                throw new NoSuchFieldException(tl("invalidHomeName"));
             }
         }
 
