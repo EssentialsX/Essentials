@@ -5,8 +5,10 @@ import com.earth2me.essentials.Mob;
 import com.earth2me.essentials.SpawnMob;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.StringUtil;
+import com.google.common.collect.Lists;
 import org.bukkit.Server;
 
+import java.util.Collections;
 import java.util.List;
 
 import static com.earth2me.essentials.I18n.tl;
@@ -58,5 +60,14 @@ public class Commandspawnmob extends EssentialsCommand {
 
         final User target = getPlayer(ess.getServer(), args, 2, true, false);
         SpawnMob.spawnmob(ess, server, sender, target, mobParts, mobData, mobCount);
+    }
+
+    @Override
+    protected List<String> getTabCompleteOptions(Server server, User user, String commandLabel, String[] args) {
+        if (args.length == 1) {
+            return Lists.newArrayList(SpawnMob.mobParts(args[0]));
+        } else {
+            return Collections.emptyList();
+        }
     }
 }

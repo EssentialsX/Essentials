@@ -121,6 +121,8 @@ public interface ISettings extends IConf {
 
     boolean isForceDisableTeleportSafety();
 
+    boolean isTeleportPassengerDismount();
+
     double getTeleportCooldown();
 
     double getTeleportDelay();
@@ -240,6 +242,8 @@ public interface ISettings extends IConf {
 
     void setEssentialsChatActive(boolean b);
 
+    long getMaxMute();
+
     long getMaxTempban();
 
     Map<String, Object> getListGroupConfig();
@@ -340,5 +344,8 @@ public interface ISettings extends IConf {
 
     double getMaxProjectileSpeed();
 
+    boolean isRemovingEffectsOnHeal();
+
     boolean isSpawnIfNoHome();
+
 }

@@ -158,6 +158,11 @@ public class Settings implements net.ess3.api.ISettings {
     }
 
     @Override
+    public boolean isTeleportPassengerDismount() {
+        return config.getBoolean("teleport-passenger-dismount", true);
+    }
+
+    @Override
     public double getTeleportDelay() {
         return config.getDouble("teleport-delay", 0);
     }
@@ -1139,6 +1144,11 @@ public class Settings implements net.ess3.api.ISettings {
     }
 
     @Override
+    public long getMaxMute() {
+        return config.getLong("max-mute-time", -1);
+    }
+
+    @Override
     public long getMaxTempban() {
         return config.getLong("max-tempban-time", -1);
     }
@@ -1628,6 +1638,17 @@ public class Settings implements net.ess3.api.ISettings {
     @Override
     public double getMaxProjectileSpeed() {
         return maxProjectileSpeed;
+    }
+
+    private boolean removeEffectsOnHeal;
+
+    private boolean _isRemovingEffectsOnHeal() {
+        return config.getBoolean("remove-effects-on-heal", true);
+    }
+
+    @Override
+    public boolean isRemovingEffectsOnHeal() {
+        return removeEffectsOnHeal;
     }
 
     @Override

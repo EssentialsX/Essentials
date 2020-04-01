@@ -141,11 +141,11 @@ public class Kit {
         }
     }
 
-    public void expandItems(final User user) throws Exception {
-        expandItems(user, getItems(user));
+    public boolean expandItems(final User user) throws Exception {
+        return expandItems(user, getItems(user));
     }
 
-    public void expandItems(final User user, final List<String> items) throws Exception {
+    public boolean expandItems(final User user, final List<String> items) throws Exception {
         try {
             IText input = new SimpleTextInput(items);
             IText output = new KeywordReplacer(input, user.getSource(), ess, true, true);
@@ -154,6 +154,7 @@ public class Kit {
             final boolean allowUnsafe = ess.getSettings().allowUnsafeEnchantments();
             final boolean currencyIsSuffix = ess.getSettings().getCurrencySuffix();
             final String currencySymbol = ess.getSettings().getCurrencySymbol();
+            List<ItemStack> itemList = new ArrayList<>();
             for (String kitItem : output.getLines()) {
                 if (!currencyIsSuffix ? kitItem.startsWith(ess.getSettings().getCurrencySymbol()) : kitItem.endsWith(ess.getSettings().getCurrencySymbol())) {
                     final String valueString = currencyIsSuffix ? kitItem.substring(0, currencySymbol.length()) : kitItem.substring(currencySymbol.length());
@@ -184,13 +185,19 @@ public class Kit {
                     // We pass a null sender here because kits should not do perm checks
                     metaStack.parseStringMeta(null, allowUnsafe, parts, 2, ess);
                 }
-
-                final Map<Integer, ItemStack> overfilled;
-                final boolean allowOversizedStacks = user.isAuthorized("essentials.oversizedstacks");
+                
+                itemList.add(metaStack.getItemStack());
+            }
+            
+            
+            final Map<Integer, ItemStack> overfilled;
+            final boolean allowOversizedStacks = user.isAuthorized("essentials.oversizedstacks");
+            final boolean isDropItemsIfFull = ess.getSettings().isDropItemsIfFull();
+            if (isDropItemsIfFull) {
                 if (allowOversizedStacks) {
-                    overfilled = InventoryWorkaround.addOversizedItems(user.getBase().getInventory(), ess.getSettings().getOversizedStackSize(), metaStack.getItemStack());
+                    overfilled = InventoryWorkaround.addOversizedItems(user.getBase().getInventory(), ess.getSettings().getOversizedStackSize(), itemList.toArray(new ItemStack[itemList.size()]));
                 } else {
-                    overfilled = InventoryWorkaround.addItems(user.getBase().getInventory(), metaStack.getItemStack());
+                    overfilled = InventoryWorkaround.addItems(user.getBase().getInventory(), itemList.toArray(new ItemStack[itemList.size()]));
                 }
                 for (ItemStack itemStack : overfilled.values()) {
                     int spillAmount = itemStack.getAmount();
@@ -203,6 +210,16 @@ public class Kit {
                     }
                     spew = true;
                 }
+            } else {
+                if (allowOversizedStacks) {
+                    overfilled = InventoryWorkaround.addAllOversizedItems(user.getBase().getInventory(), ess.getSettings().getOversizedStackSize(), itemList.toArray(new ItemStack[itemList.size()]));
+                } else {
+                    overfilled = InventoryWorkaround.addAllItems(user.getBase().getInventory(), itemList.toArray(new ItemStack[itemList.size()]));
+                }
+                if (overfilled != null) {
+                    user.sendMessage(tl("kitInvFullNoDrop"));
+                    return false;
+                }
             }
             user.getBase().updateInventory();
             if (spew) {
@@ -213,5 +230,6 @@ public class Kit {
             ess.getLogger().log(Level.WARNING, e.getMessage());
             throw new Exception(tl("kitError2"), e);
         }
+        return true;
     }
 }
