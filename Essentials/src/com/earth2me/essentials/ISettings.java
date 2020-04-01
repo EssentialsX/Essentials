@@ -3,7 +3,6 @@ package com.earth2me.essentials;
 import com.earth2me.essentials.commands.IEssentialsCommand;
 import com.earth2me.essentials.signs.EssentialsSign;
 import com.earth2me.essentials.textreader.IText;
-
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
@@ -159,6 +158,8 @@ public interface ISettings extends IConf {
     boolean isEcoLogEnabled();
 
     boolean isEcoLogUpdateEnabled();
+
+    boolean realNamesOnList();
 
     boolean removeGodOnDisconnect();
 

@@ -376,6 +376,8 @@ list:
     # Uncomment the line below to simply list all players with no grouping
     #Players: '*'
 
+real-names-on-list: false
+
 # More output to the console.
 debug: false
 
