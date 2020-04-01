@@ -572,7 +572,7 @@ permissions:
     default: false
     description: If the player should be excluded from near lookups.
   essentials.togglejail:
-    default: false
+    default: op
     children:
       essentials.togglejail.*: true
-      essentials.togglejail.offline: false
+      essentials.togglejail.offline: true
