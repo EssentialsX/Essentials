@@ -7,8 +7,10 @@ import net.ess3.api.IEssentials;
 import net.ess3.api.ITeleport;
 import net.ess3.api.IUser;
 import net.ess3.api.events.UserWarpEvent;
+import net.ess3.api.events.UserTeleportEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
@@ -120,8 +122,24 @@ public class Teleport implements ITeleport {
 
     protected void now(IUser teleportee, ITarget target, TeleportCause cause) throws Exception {
         cancel(false);
-        teleportee.setLastLocation();
         Location loc = target.getLocation();
+
+        UserTeleportEvent event = new UserTeleportEvent(teleportee, cause, loc);
+        Bukkit.getServer().getPluginManager().callEvent(event);
+        if (event.isCancelled()) {
+            return;
+        }
+
+        teleportee.setLastLocation();
+
+        if (!teleportee.getBase().getPassengers().isEmpty()) {
+            if (!ess.getSettings().isTeleportPassengerDismount()) {
+                throw new Exception(tl("passengerTeleportFail"));
+            }
+            for (Entity entity : teleportee.getBase().getPassengers()) {
+                entity.leaveVehicle();
+            }
+        }
 
         if (LocationUtil.isBlockUnsafeForUser(teleportee, loc.getWorld(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ())) {
             if (ess.getSettings().isTeleportSafetyEnabled()) {
@@ -286,10 +304,10 @@ public class Teleport implements ITeleport {
     public void warp(IUser teleportee, String warp, Trade chargeFor, TeleportCause cause) throws Exception {
         UserWarpEvent event = new UserWarpEvent(teleportee, warp, chargeFor);
         Bukkit.getServer().getPluginManager().callEvent(event);
-
-        if(event.isCancelled()) {
+        if (event.isCancelled()) {
             return;
         }
+
         warp = event.getWarp();
         Location loc = ess.getWarps().getWarp(warp);
         teleportee.sendMessage(tl("warpingTo", warp, loc.getWorld().getName(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ()));
