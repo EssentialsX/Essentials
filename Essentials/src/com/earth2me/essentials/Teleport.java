@@ -10,6 +10,7 @@ import net.ess3.api.events.UserWarpEvent;
 import net.ess3.api.events.UserTeleportEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
@@ -130,6 +131,15 @@ public class Teleport implements ITeleport {
         }
 
         teleportee.setLastLocation();
+
+        if (!teleportee.getBase().getPassengers().isEmpty()) {
+            if (!ess.getSettings().isTeleportPassengerDismount()) {
+                throw new Exception(tl("passengerTeleportFail"));
+            }
+            for (Entity entity : teleportee.getBase().getPassengers()) {
+                entity.leaveVehicle();
+            }
+        }
 
         if (LocationUtil.isBlockUnsafeForUser(teleportee, loc.getWorld(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ())) {
             if (ess.getSettings().isTeleportSafetyEnabled()) {
