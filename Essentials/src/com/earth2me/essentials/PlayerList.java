@@ -32,7 +32,7 @@ public class PlayerList {
             if (ess.getSettings().realNamesOnList() && !ChatColor.stripColor(user.getDisplayName()).equals(user.getName())) {
                 groupString.append(" (");
                 groupString.append(user.getName());
-                groupString.append(")";
+                groupString.append(")");
             }
             groupString.append("\u00a7f");
         }
