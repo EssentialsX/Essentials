@@ -575,4 +575,4 @@ permissions:
     default: op
     children:
       essentials.togglejail.*: true
-      essentials.togglejail.offline: true
+      essentials.togglejail.offline: false
