@@ -162,6 +162,8 @@ public interface ISettings extends IConf {
 
     boolean isEcoLogUpdateEnabled();
 
+    boolean realNamesOnList();
+
     boolean removeGodOnDisconnect();
 
     boolean changeDisplayName();

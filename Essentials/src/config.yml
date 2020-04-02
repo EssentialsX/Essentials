@@ -381,6 +381,9 @@ list:
     # Uncomment the line below to simply list all players with no grouping
     #Players: '*'
 
+# Displays real names in /list next to players who are using a nickname.
+real-names-on-list: false
+
 # More output to the console.
 debug: false
 

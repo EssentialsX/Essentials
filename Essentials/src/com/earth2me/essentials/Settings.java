@@ -791,6 +791,11 @@ public class Settings implements net.ess3.api.ISettings {
         return economyLogUpdate;
     }
 
+    @Override
+    public boolean realNamesOnList() {
+        return config.getBoolean("real-names-on-list", false);
+    }
+
     public boolean _isEcoLogUpdateEnabled() {
         return config.getBoolean("economy-log-update-enabled", false);
     }
