@@ -29,9 +29,7 @@ public class PlayerList {
             user.setDisplayNick();
             groupString.append(user.getDisplayName());
             if (ess.getSettings().realNamesOnList() && !ChatColor.stripColor(user.getDisplayName()).equals(user.getName())) {
-                groupString.append(" (");
-                groupString.append(user.getName());
-                groupString.append(")");
+                groupString.append(" (").append(user.getName()).append(")");
             }
             groupString.append("\u00a7f");
         }
