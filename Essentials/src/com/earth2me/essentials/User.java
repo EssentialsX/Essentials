@@ -25,7 +25,6 @@ import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.metadata.FixedMetadataValue;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
@@ -794,7 +793,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
                 }
             }
             setHidden(true);
-            this.getBase().setMetadata("vanished", new FixedMetadataValue((Plugin)this.ess, true));
+            this.getBase().setMetadata("vanished", new FixedMetadataValue(this.ess, true));
             ess.getVanishedPlayersNew().add(getName());
             if (isAuthorized("essentials.vanish.effect")) {
                 this.getBase().addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, Integer.MAX_VALUE, 1, false));
@@ -804,7 +803,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
                 p.showPlayer(getBase());
             }
             setHidden(false);
-            this.getBase().removeMetadata("vanished", (Plugin)this.ess);
+            this.getBase().removeMetadata("vanished", this.ess);
             ess.getVanishedPlayersNew().remove(getName());
             if (isAuthorized("essentials.vanish.effect")) {
                 this.getBase().removePotionEffect(PotionEffectType.INVISIBILITY);
