@@ -296,6 +296,10 @@ commands:
     description: May death rain upon them.
     usage: /<command> [player]
     aliases: [enuke]
+  tpoffline:
+    description: Teleport to a player's last known logout location
+    usage: /<command> <player>
+    aliases: [otp, offlinetp, tpoff, tpoffline]
   pay:
     description: Pays another player from your balance.
     usage: /<command> <player> <amount>
@@ -564,3 +568,6 @@ permissions:
   essentials.keepinv:
     default: false
     description: Controls whether players keep their inventory on death.
+  essentials.near.exclude:
+    default: false
+    description: If the player should be excluded from near lookups.
