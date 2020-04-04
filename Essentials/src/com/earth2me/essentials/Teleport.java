@@ -160,15 +160,6 @@ public class Teleport implements ITeleport {
         });
     }
 
-    protected void Gnow(IUser teleportee, ITarget target, TeleportCause cause) throws Exception {
-        CompletableFuture<Exception> exceptionFuture = new CompletableFuture<>();
-        CompletableFuture<Boolean> future = new CompletableFuture<>();
-        nowAsync(teleportee, target, cause, exceptionFuture, future);
-        if (!future.get()) {
-            throw exceptionFuture.get();
-        }
-    }
-
     protected void nowAsync(IUser teleportee, ITarget target, TeleportCause cause, CompletableFuture<Exception> exceptionFuture, CompletableFuture<Boolean> future) {
         cancel(false);
 
