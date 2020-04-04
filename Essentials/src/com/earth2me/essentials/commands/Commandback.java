@@ -3,7 +3,6 @@ package com.earth2me.essentials.commands;
 import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.User;
-import net.ess3.api.IUser;
 import org.bukkit.Server;
 import org.bukkit.entity.Player;
 
@@ -11,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 import static com.earth2me.essentials.I18n.tl;
 
@@ -24,11 +24,11 @@ public class Commandback extends EssentialsCommand {
     protected void run(Server server, User user, String commandLabel, String[] args) throws Exception {
         CommandSource sender = user.getSource();
         if (args.length > 0 && user.isAuthorized("essentials.back.others")) {
-            this.parseCommand(server, sender, args, true);
+            this.parseCommand(server, sender, args, true, commandLabel);
             return;
         }
 
-        teleportBack(sender, user);
+        teleportBack(sender, user, commandLabel);
     }
 
     @Override
@@ -37,10 +37,10 @@ public class Commandback extends EssentialsCommand {
             throw new NotEnoughArgumentsException();
         }
 
-        this.parseCommand(server, sender, args, true);
+        this.parseCommand(server, sender, args, true, commandLabel);
     }
 
-    private void parseCommand(Server server, CommandSource sender, String[] args, boolean allowOthers) throws Exception {
+    private void parseCommand(Server server, CommandSource sender, String[] args, boolean allowOthers, String commandLabel) throws Exception {
         Collection<Player> players = new ArrayList<>();
 
         if (allowOthers && args.length > 0 && args[0].trim().length() > 2) {
@@ -53,11 +53,11 @@ public class Commandback extends EssentialsCommand {
 
         for (Player player : players) {
             sender.sendMessage(tl("backOther", player.getName()));
-            teleportBack(sender, ess.getUser(player));
+            teleportBack(sender, ess.getUser(player), commandLabel);
         }
     }
 
-    private void teleportBack(CommandSource sender, User user) throws Exception {
+    private void teleportBack(CommandSource sender, User user, String commandLabel) throws Exception {
         if (user.getLastLocation() == null) {
             throw new Exception(tl("noLocationFound"));
         }
@@ -78,15 +78,15 @@ public class Commandback extends EssentialsCommand {
         }
 
         if (requester == null) {
-            user.getTeleport().back((IUser) null, null);
+            user.getTeleport().back(null, null, getNewExceptionFuture(sender, commandLabel), new CompletableFuture<>());
         } else if (!requester.equals(user)) {
             Trade charge = new Trade(this.getName(), this.ess);
             charge.isAffordableFor(requester);
-            user.getTeleport().back(requester, charge);
+            user.getTeleport().back(requester, charge, getNewExceptionFuture(sender, commandLabel), new CompletableFuture<>());
         } else {
             Trade charge = new Trade(this.getName(), this.ess);
             charge.isAffordableFor(user);
-            user.getTeleport().back(charge);
+            user.getTeleport().back(charge, getNewExceptionFuture(sender, commandLabel), new CompletableFuture<>());
         }
         throw new NoChargeException();
     }

@@ -7,6 +7,8 @@ import org.bukkit.Location;
 import org.bukkit.Server;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 
+import java.util.concurrent.CompletableFuture;
+
 import static com.earth2me.essentials.I18n.tl;
 
 
@@ -22,8 +24,12 @@ public class Commandtop extends EssentialsCommand {
         final float pitch = user.getLocation().getPitch();
         final float yaw = user.getLocation().getYaw();
         final Location loc = LocationUtil.getSafeDestination(new Location(user.getWorld(), topX, user.getWorld().getMaxHeight(), topZ, yaw, pitch));
-        user.getTeleport().teleport(loc, new Trade(this.getName(), ess), TeleportCause.COMMAND);
-        user.sendMessage(tl("teleportTop", loc.getWorld().getName(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ()));
-
+        CompletableFuture<Boolean> future = new CompletableFuture<>();
+        future.thenAccept(success -> {
+           if (success) {
+               user.sendMessage(tl("teleportTop", loc.getWorld().getName(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ()));
+           }
+        });
+        user.getTeleport().teleport(loc, new Trade(this.getName(), ess), TeleportCause.COMMAND, getNewExceptionFuture(user.getSource(), commandLabel), future);
     }
 }

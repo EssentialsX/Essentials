@@ -4,6 +4,7 @@ import net.ess3.api.IUser;
 import org.bukkit.Location;
 
 import java.util.Collection;
+import java.util.concurrent.CompletableFuture;
 
 
 public interface IJails extends IReload {
@@ -46,12 +47,26 @@ public interface IJails extends IReload {
     /**
      * Attempts to send the given user to the given jail
      *
+     * @deprecated Use {@link IJails#sendToJail(IUser, String, CompletableFuture, CompletableFuture)}
+     *
      * @param user the user to send to jail
      * @param jail the jail to send the user to
      *
      * @throws Exception if the user is offline or jail does not exist
      */
     void sendToJail(IUser user, String jail) throws Exception;
+
+    /**
+     * Attempts to send the given user to the given jail
+     *
+     * @param user            the user to send to jail
+     * @param jail            the jail to send the user to
+     * @param exceptionFuture Future which is completed with an exception if one is thrown during execution
+     * @param future          Future which is completed with the success status of the execution
+     *
+     * @throws Exception if the user is offline or jail does not exist
+     */
+    void sendToJail(IUser user, String jail, CompletableFuture<Exception> exceptionFuture, CompletableFuture<Boolean> future) throws Exception;
 
     /**
      * Set a new jail with the given name and location

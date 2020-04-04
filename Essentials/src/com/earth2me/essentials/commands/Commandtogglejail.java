@@ -9,6 +9,7 @@ import org.bukkit.Server;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 import static com.earth2me.essentials.I18n.tl;
 
@@ -91,7 +92,14 @@ public class Commandtogglejail extends EssentialsCommand {
                 player.sendMessage(tl("jailReleasedPlayerNotify"));
                 player.setJail(null);
                 if (player.getBase().isOnline()) {
-                    player.getTeleport().back();
+                    CompletableFuture<Boolean> future = new CompletableFuture<>();
+                    future.thenAccept(success -> {
+                       if (success) {
+                           sender.sendMessage(tl("jailReleased", player.getName()));
+                       }
+                    });
+                    player.getTeleport().back(getNewExceptionFuture(sender, commandLabel), future);
+                    return;
                 }
                 sender.sendMessage(tl("jailReleased", player.getName()));
             }

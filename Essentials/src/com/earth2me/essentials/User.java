@@ -29,6 +29,7 @@ import org.bukkit.potion.PotionEffectType;
 
 import java.math.BigDecimal;
 import java.util.*;
+import java.util.concurrent.CompletableFuture;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -572,14 +573,9 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
                 sendMessage(tl("haveBeenReleased"));
                 setJail(null);
                 if (ess.getSettings().isTeleportBackWhenFreedFromJail()) {
-                    try {
-                        getTeleport().back();
-                    } catch (Exception ex) {
-                        try {
-                            getTeleport().respawn(null, TeleportCause.PLUGIN);
-                        } catch (Exception ex1) {
-                        }
-                    }
+                    CompletableFuture<Exception> eFuture = new CompletableFuture<>();
+                    eFuture.thenAccept(e -> getTeleport().respawn(null, TeleportCause.PLUGIN, new CompletableFuture<>(), new CompletableFuture<>()));
+                    getTeleport().back(eFuture, new CompletableFuture<>());
                 }
                 return true;
             }

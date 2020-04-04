@@ -7,10 +7,10 @@ import org.bukkit.Location;
 import org.bukkit.Server;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.CompletableFuture;
 
 import static com.earth2me.essentials.I18n.tl;
 
@@ -38,30 +38,32 @@ public class Commandhome extends EssentialsCommand {
                 }
             }
         }
+        CompletableFuture<Exception> eFuture = new CompletableFuture<>();
+        eFuture.thenAccept(e -> showError(user.getBase(), e, commandLabel));
         try {
             if ("bed".equalsIgnoreCase(homeName) && user.isAuthorized("essentials.home.bed")) {
                 final Location bed = player.getBase().getBedSpawnLocation();
                 if (bed != null) {
-                    user.getTeleport().teleport(bed, charge, TeleportCause.COMMAND);
-                    throw new NoChargeException();
+                    user.getTeleport().teleport(bed, charge, TeleportCause.COMMAND, eFuture, new CompletableFuture<>());
+                    return;
                 } else {
                     throw new Exception(tl("bedMissing"));
                 }
             }
-            goHome(user, player, homeName.toLowerCase(Locale.ENGLISH), charge);
+            goHome(user, player, homeName.toLowerCase(Locale.ENGLISH), charge, eFuture);
         } catch (NotEnoughArgumentsException e) {
             Location bed = player.getBase().getBedSpawnLocation();
             final List<String> homes = player.getHomes();
             if (homes.isEmpty() && player.equals(user)) {
                 if (ess.getSettings().isSpawnIfNoHome()) {
-                    user.getTeleport().respawn(charge, TeleportCause.COMMAND);
+                    user.getTeleport().respawn(charge, TeleportCause.COMMAND, eFuture, new CompletableFuture<>());
                 } else {
                     throw new Exception(tl("noHomeSetPlayer"));
                 }
             } else if (homes.isEmpty()) {
                 throw new Exception(tl("noHomeSetPlayer"));
             } else if (homes.size() == 1 && player.equals(user)) {
-                goHome(user, player, homes.get(0), charge);
+                goHome(user, player, homes.get(0), charge, eFuture);
             } else {
                 final int count = homes.size();
                 if (user.isAuthorized("essentials.home.bed")) {
@@ -74,7 +76,6 @@ public class Commandhome extends EssentialsCommand {
                 user.sendMessage(tl("homes", StringUtil.joinList(homes), count, getHomeLimit(player)));
             }
         }
-        throw new NoChargeException();
     }
 
     private String getHomeLimit(final User player) {
@@ -87,7 +88,7 @@ public class Commandhome extends EssentialsCommand {
         return Integer.toString(ess.getSettings().getHomeLimit(player));
     }
 
-    private void goHome(final User user, final User player, final String home, final Trade charge) throws Exception {
+    private void goHome(final User user, final User player, final String home, final Trade charge, CompletableFuture<Exception> eFuture) throws Exception {
         if (home.length() < 1) {
             throw new NotEnoughArgumentsException();
         }
@@ -98,8 +99,13 @@ public class Commandhome extends EssentialsCommand {
         if (user.getWorld() != loc.getWorld() && ess.getSettings().isWorldHomePermissions() && !user.isAuthorized("essentials.worlds." + loc.getWorld().getName())) {
             throw new Exception(tl("noPerm", "essentials.worlds." + loc.getWorld().getName()));
         }
-        user.getTeleport().teleport(loc, charge, TeleportCause.COMMAND);
-        user.sendMessage(tl("teleportHome", home));
+        CompletableFuture<Boolean> future = new CompletableFuture<>();
+        future.thenAccept(success -> {
+           if (success) {
+               user.sendMessage(tl("teleportHome", home));
+           }
+        });
+        user.getTeleport().teleport(loc, charge, TeleportCause.COMMAND, eFuture, future);
     }
 
     @Override

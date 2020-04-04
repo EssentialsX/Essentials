@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
 import static com.earth2me.essentials.I18n.tl;
@@ -41,11 +42,10 @@ public class Commandwarp extends EssentialsCommand {
             User otherUser = null;
             if (args.length == 2 && (user.isAuthorized("essentials.warp.otherplayers") || user.isAuthorized("essentials.warp.others"))) {
                 otherUser = getPlayer(server, user, args, 1);
-                warpUser(user, otherUser, args[0]);
-                throw new NoChargeException();
+                warpUser(user, otherUser, args[0], commandLabel);
+                return;
             }
-            warpUser(user, user, args[0]);
-            throw new NoChargeException();
+            warpUser(user, user, args[0], commandLabel);
         }
     }
 
@@ -56,9 +56,7 @@ public class Commandwarp extends EssentialsCommand {
             throw new NoChargeException();
         }
         User otherUser = getPlayer(server, args, 1, true, false);
-        otherUser.getTeleport().warp(otherUser, args[0], null, TeleportCause.COMMAND);
-        throw new NoChargeException();
-
+        otherUser.getTeleport().warp(otherUser, args[0], null, TeleportCause.COMMAND, getNewExceptionFuture(sender, commandLabel), new CompletableFuture<>());
     }
 
     //TODO: Use one of the new text classes, like /help ?
@@ -91,7 +89,7 @@ public class Commandwarp extends EssentialsCommand {
         }
     }
 
-    private void warpUser(final User owner, final User user, final String name) throws Exception {
+    private void warpUser(final User owner, final User user, final String name, final String commandLabel) throws Exception {
         final Trade chargeWarp = new Trade("warp-" + name.toLowerCase(Locale.ENGLISH).replace('_', '-'), ess);
         final Trade chargeCmd = new Trade(this.getName(), ess);
         final BigDecimal fullCharge = chargeWarp.getCommandCost(user).add(chargeCmd.getCommandCost(user));
@@ -100,7 +98,7 @@ public class Commandwarp extends EssentialsCommand {
         if (ess.getSettings().getPerWarpPermission() && !owner.isAuthorized("essentials.warps." + name)) {
             throw new Exception(tl("warpUsePermission"));
         }
-        owner.getTeleport().warp(user, name, charge, TeleportCause.COMMAND);
+        owner.getTeleport().warp(user, name, charge, TeleportCause.COMMAND, getNewExceptionFuture(user.getSource(), commandLabel), new CompletableFuture<>());
     }
 
     private List<String> getAvailableWarpsFor(final IUser user) {

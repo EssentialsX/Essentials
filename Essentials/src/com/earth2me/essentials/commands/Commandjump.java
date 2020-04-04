@@ -10,6 +10,7 @@ import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 import static com.earth2me.essentials.I18n.tl;
 
@@ -46,8 +47,7 @@ public class Commandjump extends EssentialsCommand {
 
         final Trade charge = new Trade(this.getName(), ess);
         charge.isAffordableFor(user);
-        user.getTeleport().teleport(loc, charge, TeleportCause.COMMAND);
-        throw new NoChargeException();
+        user.getTeleport().teleport(loc, charge, TeleportCause.COMMAND, getNewExceptionFuture(user.getSource(), commandLabel), new CompletableFuture<>());
     }
 
     @Override

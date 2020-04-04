@@ -22,6 +22,7 @@ import org.bukkit.plugin.PluginManager;
 
 import java.io.File;
 import java.util.*;
+import java.util.concurrent.CompletableFuture;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -117,12 +118,31 @@ public class Jails extends AsyncStorageObjectHolder<com.earth2me.essentials.sett
     }
 
     @Override
+    @Deprecated
     public void sendToJail(final IUser user, final String jail) throws Exception {
+        CompletableFuture<Exception> eFuture = new CompletableFuture<>();
+        CompletableFuture<Boolean> future = new CompletableFuture<>();
+        sendToJail(user, jail, eFuture, future);
+        if (!future.get()) {
+            throw eFuture.get();
+        }
+    }
+
+    @Override
+    public void sendToJail(IUser user, String jail, CompletableFuture<Exception> exceptionFuture, CompletableFuture<Boolean> future) throws Exception {
         acquireReadLock();
         try {
             if (user.getBase().isOnline()) {
                 Location loc = getJail(jail);
-                user.getTeleport().now(loc, false, TeleportCause.COMMAND);
+                CompletableFuture<Boolean> future1 = new CompletableFuture<>();
+                future1.thenAccept(success -> {
+                   if (success) {
+                       user.setJail(jail);
+                   }
+                   future.complete(success);
+                });
+                user.getTeleport().now(loc, false, TeleportCause.COMMAND, exceptionFuture, future1);
+                return;
             }
             user.setJail(jail);
         } finally {
