@@ -2,6 +2,7 @@ package com.earth2me.essentials;
 
 import com.earth2me.essentials.utils.DateUtil;
 import com.earth2me.essentials.utils.LocationUtil;
+import com.earth2me.essentials.utils.VersionUtil;
 import io.papermc.lib.PaperLib;
 import net.ess3.api.IEssentials;
 import net.ess3.api.ITeleport;
@@ -22,6 +23,9 @@ import static com.earth2me.essentials.I18n.tl;
 
 
 public class Teleport implements ITeleport {
+
+    private final static boolean USE_LEGACY_PASSENGER_METHOD = VersionUtil.getServerBukkitVersion().isLowerThan(VersionUtil.v1_11_2_R01);
+
     private final IUser teleportOwner;
     private final IEssentials ess;
     private TimedTeleport timedTeleport;
@@ -131,10 +135,19 @@ public class Teleport implements ITeleport {
 
         teleportee.setLastLocation();
 
-        if (!ess.getSettings().isTeleportPassengerDismount()) {
-            throw new Exception(tl("passengerTeleportFail"));
+        boolean hasPassengers;
+        if (USE_LEGACY_PASSENGER_METHOD) {
+            hasPassengers = teleportee.getBase().getPassenger() != null;
+        } else {
+            hasPassengers = !teleportee.getBase().getPassengers().isEmpty();
         }
-        teleportee.getBase().eject();
+
+        if (hasPassengers) {
+            if (!ess.getSettings().isTeleportPassengerDismount()) {
+                throw new Exception(tl("passengerTeleportFail"));
+            }
+            teleportee.getBase().eject();
+        }
 
         if (LocationUtil.isBlockUnsafeForUser(teleportee, loc.getWorld(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ())) {
             if (ess.getSettings().isTeleportSafetyEnabled()) {
