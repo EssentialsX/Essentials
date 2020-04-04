@@ -32,8 +32,6 @@ public interface ITeleport {
      * @param cause           - The reported teleportPlayer cause
      * @param exceptionFuture - Future which is completed with an exception if one is thrown during execution
      * @param future          - Future which is completed with the success status of the execution
-     *
-     * @throws Exception
      */
     void now(Location loc, boolean cooldown, PlayerTeleportEvent.TeleportCause cause, CompletableFuture<Exception> exceptionFuture, CompletableFuture<Boolean> future);
 
@@ -59,8 +57,6 @@ public interface ITeleport {
      * @param cause           - The reported teleportPlayer cause
      * @param exceptionFuture - Future which is completed with an exception if one is thrown during execution
      * @param future          - Future which is completed with the success status of the execution
-     *
-     * @throws Exception
      */
     void now(Player entity, boolean cooldown, PlayerTeleportEvent.TeleportCause cause, CompletableFuture<Exception> exceptionFuture, CompletableFuture<Boolean> future);
 
@@ -89,8 +85,6 @@ public interface ITeleport {
      * @param cause           - The reported teleportPlayer cause.
      * @param exceptionFuture - Future which is completed with an exception if one is thrown during execution
      * @param future          - Future which is completed with the success status of the execution
-     *
-     * @throws Exception
      */
     void teleport(Location loc, Trade chargeFor, PlayerTeleportEvent.TeleportCause cause, CompletableFuture<Exception> exceptionFuture, CompletableFuture<Boolean> future);
 
@@ -116,8 +110,6 @@ public interface ITeleport {
      * @param cause           - The reported teleportPlayer cause
      * @param exceptionFuture - Future which is completed with an exception if one is thrown during execution
      * @param future          - Future which is completed with the success status of the execution
-     *
-     * @throws Exception
      */
     void teleport(Player entity, Trade chargeFor, PlayerTeleportEvent.TeleportCause cause, CompletableFuture<Exception> exceptionFuture, CompletableFuture<Boolean> future);
 
@@ -145,8 +137,6 @@ public interface ITeleport {
      * @param cause           - The reported teleportPlayer cause
      * @param exceptionFuture - Future which is completed with an exception if one is thrown during execution
      * @param future          - Future which is completed with the success status of the execution
-     *
-     * @throws Exception
      */
     void teleportPlayer(IUser otherUser, Location loc, Trade chargeFor, PlayerTeleportEvent.TeleportCause cause, CompletableFuture<Exception> exceptionFuture, CompletableFuture<Boolean> future);
 
@@ -174,8 +164,6 @@ public interface ITeleport {
      * @param cause           - The reported teleportPlayer cause
      * @param exceptionFuture - Future which is completed with an exception if one is thrown during execution
      * @param future          - Future which is completed with the success status of the execution
-     *
-     * @throws Exception
      */
     void teleportPlayer(IUser otherUser, Player entity, Trade chargeFor, PlayerTeleportEvent.TeleportCause cause, CompletableFuture<Exception> exceptionFuture, CompletableFuture<Boolean> future);
 
@@ -199,8 +187,6 @@ public interface ITeleport {
      * @param cause           - The reported teleportPlayer cause
      * @param exceptionFuture - Future which is completed with an exception if one is thrown during execution
      * @param future          - Future which is completed with the success status of the execution
-     *
-     * @throws Exception
      */
     void respawn(final Trade chargeFor, PlayerTeleportEvent.TeleportCause cause, CompletableFuture<Exception> exceptionFuture, CompletableFuture<Boolean> future);
 
@@ -228,8 +214,6 @@ public interface ITeleport {
      * @param cause           - The reported teleportPlayer cause
      * @param exceptionFuture - Future which is completed with an exception if one is thrown during execution
      * @param future          - Future which is completed with the success status of the execution
-     *
-     * @throws Exception
      */
     void warp(IUser otherUser, String warp, Trade chargeFor, PlayerTeleportEvent.TeleportCause cause, CompletableFuture<Exception> exceptionFuture, CompletableFuture<Boolean> future);
 
@@ -251,8 +235,6 @@ public interface ITeleport {
      * @param chargeFor       - What the user will be charged if teleportPlayer is successful
      * @param exceptionFuture - Future which is completed with an exception if one is thrown during execution
      * @param future          - Future which is completed with the success status of the execution
-     *
-     * @throws Exception
      */
     void back(Trade chargeFor, CompletableFuture<Exception> exceptionFuture, CompletableFuture<Boolean> future);
 
@@ -282,8 +264,6 @@ public interface ITeleport {
      * @param chargeFor       - What the {@code teleporter} will be charged if teleportPlayer is successful
      * @param exceptionFuture - Future which is completed with an exception if one is thrown during execution
      * @param future          - Future which is completed with the success status of the execution
-     *
-     * @throws Exception
      */
     void back(IUser teleporter, Trade chargeFor, CompletableFuture<Exception> exceptionFuture, CompletableFuture<Boolean> future);
 
@@ -302,8 +282,6 @@ public interface ITeleport {
      *
      * @param exceptionFuture - Future which is completed with an exception if one is thrown during execution
      * @param future          - Future which is completed with the success status of the execution
-     *
-     * @throws Exception
      */
     void back(CompletableFuture<Exception> exceptionFuture, CompletableFuture<Boolean> future);
 
