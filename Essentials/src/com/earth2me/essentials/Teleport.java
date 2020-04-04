@@ -12,7 +12,6 @@ import net.ess3.api.events.UserTeleportEvent;
 import net.ess3.api.events.UserWarpEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
@@ -168,16 +167,15 @@ public class Teleport implements ITeleport {
         if (event.isCancelled()) {
             return;
         }
+        teleportee.setLastLocation();
 
-        if (!teleportee.getBase().getPassengers().isEmpty()) {
+        if (!teleportee.getBase().isEmpty()) {
             if (!ess.getSettings().isTeleportPassengerDismount()) {
                 exceptionFuture.complete(new Exception(tl("passengerTeleportFail")));
                 future.complete(false);
                 return;
             }
-            for (Entity entity : teleportee.getBase().getPassengers()) {
-                entity.leaveVehicle();
-            }
+            teleportee.getBase().eject();
         }
         teleportee.setLastLocation();
         PaperLib.getChunkAtAsync(target.getLocation()).thenAccept(chunk -> {
