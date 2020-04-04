@@ -20,6 +20,7 @@ import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 
 import static com.earth2me.essentials.I18n.tl;
 
@@ -175,7 +176,18 @@ public class Teleport implements ITeleport {
                 future.complete(false);
                 return;
             }
-            teleportee.getBase().eject();
+            CompletableFuture<Object> dismountFuture = new CompletableFuture<>();
+            Bukkit.getScheduler().runTask(ess, () -> {
+                teleportee.getBase().eject();
+                dismountFuture.complete(new Object());
+            });
+            try {
+                dismountFuture.get(); //EntityDismountEvent requires sync context we also want to wait for it to finish
+            } catch (InterruptedException | ExecutionException e) {
+                exceptionFuture.complete(e);
+                future.complete(false);
+                return;
+            }
         }
         teleportee.setLastLocation();
         PaperLib.getChunkAtAsync(target.getLocation()).thenAccept(chunk -> {

@@ -1,11 +1,12 @@
 package net.ess3.api.events;
 
 import net.ess3.api.IUser;
-import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
+import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 /**
  * Called when the player teleports
  */
@@ -18,6 +19,7 @@ public class UserTeleportEvent extends Event implements Cancellable {
     private boolean cancelled = false;
 
     public UserTeleportEvent(IUser user, TeleportCause cause, Location target) {
+        super(!Bukkit.isPrimaryThread());
         this.user = user;
         this.cause = cause;
         this.target = target;
