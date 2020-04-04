@@ -18,6 +18,8 @@ import java.text.DateFormat;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -81,26 +83,42 @@ public class Trade {
     }
 
     public void isAffordableFor(final IUser user) throws ChargeException {
+        CompletableFuture<Exception> exceptionFuture = new CompletableFuture<>();
+        isAffordableFor(user, exceptionFuture);
+        if (exceptionFuture.isDone()) {
+            try {
+                Exception exception = exceptionFuture.get();
+                throw (ChargeException) exception;
+            } catch (InterruptedException | ExecutionException e) { //This would rarely, if ever, happen.
+                e.printStackTrace();
+            }
+        }
+    }
 
+
+    public void isAffordableFor(final IUser user, CompletableFuture<Exception> exceptionFuture) {
         if (ess.getSettings().isDebug()) {
             ess.getLogger().log(Level.INFO, "checking if " + user.getName() + " can afford charge.");
         }
 
         if (getMoney() != null && getMoney().signum() > 0 && !user.canAfford(getMoney())) {
-            throw new ChargeException(tl("notEnoughMoney", NumberUtil.displayCurrency(getMoney(), ess)));
+            exceptionFuture.complete(new ChargeException(tl("notEnoughMoney", NumberUtil.displayCurrency(getMoney(), ess))));
+            return;
         }
 
         if (getItemStack() != null && !user.getBase().getInventory().containsAtLeast(itemStack, itemStack.getAmount())) {
-            throw new ChargeException(tl("missingItems", getItemStack().getAmount(), ess.getItemDb().name(getItemStack())));
+            exceptionFuture.complete(new ChargeException(tl("missingItems", getItemStack().getAmount(), ess.getItemDb().name(getItemStack()))));
+            return;
         }
 
         BigDecimal money;
         if (command != null && !command.isEmpty() && (money = getCommandCost(user)).signum() > 0 && !user.canAfford(money)) {
-            throw new ChargeException(tl("notEnoughMoney", NumberUtil.displayCurrency(money, ess)));
+            exceptionFuture.complete(new ChargeException(tl("notEnoughMoney", NumberUtil.displayCurrency(money, ess))));
+            return;
         }
 
         if (exp != null && exp > 0 && SetExpFix.getTotalExperience(user.getBase()) < exp) {
-            throw new ChargeException(tl("notEnoughExperience"));
+            exceptionFuture.complete(new ChargeException(tl("notEnoughExperience")));
         }
     }
 
@@ -175,6 +193,19 @@ public class Trade {
     }
 
     public void charge(final IUser user) throws ChargeException {
+        CompletableFuture<Exception> exceptionFuture = new CompletableFuture<>();
+        charge(user, exceptionFuture);
+        if (exceptionFuture.isDone()) {
+            try {
+                Exception exception = exceptionFuture.get();
+                throw (ChargeException) exception;
+            } catch (InterruptedException | ExecutionException e) { //This would rarely, if ever, happen.
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public void charge(final IUser user, CompletableFuture<Exception> exceptionFuture) {
         if (ess.getSettings().isDebug()) {
             ess.getLogger().log(Level.INFO, "attempting to charge user " + user.getName());
         }
@@ -183,7 +214,8 @@ public class Trade {
                 ess.getLogger().log(Level.INFO, "charging user " + user.getName() + " money " + getMoney().toPlainString());
             }
             if (!user.canAfford(getMoney()) && getMoney().signum() > 0) {
-                throw new ChargeException(tl("notEnoughMoney", NumberUtil.displayCurrency(getMoney(), ess)));
+                exceptionFuture.complete(new ChargeException(tl("notEnoughMoney", NumberUtil.displayCurrency(getMoney(), ess))));
+                return;
             }
             user.takeMoney(getMoney());
         }
@@ -192,7 +224,8 @@ public class Trade {
                 ess.getLogger().log(Level.INFO, "charging user " + user.getName() + " itemstack " + getItemStack().toString());
             }
             if (!user.getBase().getInventory().containsAtLeast(getItemStack(), getItemStack().getAmount())) {
-                throw new ChargeException(tl("missingItems", getItemStack().getAmount(), getItemStack().getType().toString().toLowerCase(Locale.ENGLISH).replace("_", " ")));
+                exceptionFuture.complete(new ChargeException(tl("missingItems", getItemStack().getAmount(), getItemStack().getType().toString().toLowerCase(Locale.ENGLISH).replace("_", " "))));
+                return;
             }
             user.getBase().getInventory().removeItem(getItemStack());
             user.getBase().updateInventory();
@@ -200,7 +233,8 @@ public class Trade {
         if (command != null) {
             final BigDecimal cost = getCommandCost(user);
             if (!user.canAfford(cost) && cost.signum() > 0) {
-                throw new ChargeException(tl("notEnoughMoney", NumberUtil.displayCurrency(cost, ess)));
+                exceptionFuture.complete(new ChargeException(tl("notEnoughMoney", NumberUtil.displayCurrency(cost, ess))));
+                return;
             }
             user.takeMoney(cost);
         }
@@ -210,7 +244,8 @@ public class Trade {
             }
             final int experience = SetExpFix.getTotalExperience(user.getBase());
             if (experience < getExperience() && getExperience() > 0) {
-                throw new ChargeException(tl("notEnoughExperience"));
+                exceptionFuture.complete(new ChargeException(tl("notEnoughExperience")));
+                return;
             }
             SetExpFix.setTotalExperience(user.getBase(), experience - getExperience());
         }

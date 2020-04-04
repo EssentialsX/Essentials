@@ -6,6 +6,7 @@ import org.bukkit.Location;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 
 import static com.earth2me.essentials.I18n.tl;
 
@@ -99,13 +100,15 @@ public class TimedTeleport implements Runnable {
                         teleportUser.sendMessage(tl("teleportationCommencing"));
 
                         try {
+                            CompletableFuture<Exception> future = new CompletableFuture<>();
+                            CompletableFuture<Boolean> future1 = new CompletableFuture<>();
                             if (timer_chargeFor != null) {
                                 timer_chargeFor.isAffordableFor(teleportOwner);
                             }
                             if (timer_respawn) {
-                                teleport.respawnNow(teleportUser, timer_cause);
+                                teleport.respawnNow(teleportUser, timer_cause, future, future1);
                             } else {
-                                teleport.now(teleportUser, timer_teleportTarget, timer_cause);
+                                teleport.nowAsync(teleportUser, timer_teleportTarget, timer_cause, future, future1);
                             }
                             if (timer_chargeFor != null) {
                                 timer_chargeFor.charge(teleportOwner);

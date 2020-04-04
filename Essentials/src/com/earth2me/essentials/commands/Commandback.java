@@ -3,6 +3,7 @@ package com.earth2me.essentials.commands;
 import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.User;
+import net.ess3.api.IUser;
 import org.bukkit.Server;
 import org.bukkit.entity.Player;
 
@@ -77,7 +78,7 @@ public class Commandback extends EssentialsCommand {
         }
 
         if (requester == null) {
-            user.getTeleport().back(null, null);
+            user.getTeleport().back((IUser) null, null);
         } else if (!requester.equals(user)) {
             Trade charge = new Trade(this.getName(), this.ess);
             charge.isAffordableFor(requester);
