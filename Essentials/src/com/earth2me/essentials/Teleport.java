@@ -131,7 +131,7 @@ public class Teleport implements ITeleport {
 
         teleportee.setLastLocation();
 
-        if (teleportee.getBase().isEmpty()) {
+        if (!teleportee.getBase().isEmpty()) {
             if (!ess.getSettings().isTeleportPassengerDismount()) {
                 throw new Exception(tl("passengerTeleportFail"));
             }
