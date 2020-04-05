@@ -498,7 +498,12 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
 
     @Override
     public void setAfk(final boolean set) {
-        final AfkStatusChangeEvent afkEvent = new AfkStatusChangeEvent(this, set);
+        setAfk(set, AfkStatusChangeEvent.Cause.UNKNOWN);
+    }
+
+    @Override
+    public void setAfk(boolean set, AfkStatusChangeEvent.Cause cause) {
+        final AfkStatusChangeEvent afkEvent = new AfkStatusChangeEvent(this, set, cause);
         ess.getServer().getPluginManager().callEvent(afkEvent);
         if (afkEvent.isCancelled()) {
             return;
@@ -516,7 +521,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
         _setAfk(set);
         updateAfkListName();
     }
-    
+
     private void updateAfkListName() {
         if (ess.getSettings().isAfkListName()) {
             if(isAfk()) {
@@ -528,8 +533,13 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
         }
     }
 
+    @Deprecated
     public boolean toggleAfk() {
-        setAfk(!isAfk());
+        return toggleAfk(AfkStatusChangeEvent.Cause.UNKNOWN);
+    }
+
+    public boolean toggleAfk(AfkStatusChangeEvent.Cause cause) {
+        setAfk(!isAfk(), cause);
         return isAfk();
     }
 
@@ -594,9 +604,14 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
         return false;
     }
 
+    @Deprecated
     public void updateActivity(final boolean broadcast) {
+        updateActivity(broadcast, AfkStatusChangeEvent.Cause.UNKNOWN);
+    }
+
+    public void updateActivity(final boolean broadcast, AfkStatusChangeEvent.Cause cause) {
         if (isAfk()) {
-            setAfk(false);
+            setAfk(false, cause);
             if (broadcast && !isHidden()) {
                 setDisplayNick();
                 final String msg = tl("userIsNotAway", getDisplayName());
@@ -610,13 +625,13 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
 
     public void updateActivityOnMove(final boolean broadcast) {
         if(ess.getSettings().cancelAfkOnMove()) {
-            updateActivity(broadcast);
+            updateActivity(broadcast, AfkStatusChangeEvent.Cause.MOVE);
         }
     }
 
     public void updateActivityOnInteract(final boolean broadcast) {
         if(ess.getSettings().cancelAfkOnInteract()) {
-            updateActivity(broadcast);
+            updateActivity(broadcast, AfkStatusChangeEvent.Cause.INTERACT);
         }
     }
 
@@ -644,7 +659,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
         }
         final long autoafk = ess.getSettings().getAutoAfk();
         if (!isAfk() && autoafk > 0 && lastActivity + autoafk * 1000 < System.currentTimeMillis() && isAuthorized("essentials.afk.auto")) {
-            setAfk(true);
+            setAfk(true, AfkStatusChangeEvent.Cause.ACTIVITY);
             if (!isHidden()) {
                 setDisplayNick();
                 final String msg = tl("userIsAway", getDisplayName());

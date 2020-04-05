@@ -4,6 +4,7 @@ import org.bukkit.*;
 import org.bukkit.block.Biome;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
+import org.bukkit.boss.DragonBattle;
 import org.bukkit.entity.*;
 import org.bukkit.generator.BlockPopulator;
 import org.bukkit.generator.ChunkGenerator;
@@ -860,6 +861,11 @@ public class FakeWorld implements World {
 
     @Override
     public List<Raid> getRaids() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public DragonBattle getEnderDragonBattle() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 

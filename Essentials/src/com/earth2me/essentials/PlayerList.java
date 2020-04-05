@@ -1,6 +1,7 @@
 package com.earth2me.essentials;
 
 import com.earth2me.essentials.utils.FormatUtil;
+import org.bukkit.ChatColor;
 import org.bukkit.Server;
 
 import java.util.*;
@@ -27,6 +28,9 @@ public class PlayerList {
             }
             user.setDisplayNick();
             groupString.append(user.getDisplayName());
+            if (ess.getSettings().realNamesOnList() && !ChatColor.stripColor(user.getDisplayName()).equals(user.getName())) {
+                groupString.append(" (").append(user.getName()).append(")");
+            }
             groupString.append("\u00a7f");
         }
         return groupString.toString();
@@ -40,7 +44,7 @@ public class PlayerList {
         for (User onlinePlayer : ess.getOnlineUsers()) {
             if (onlinePlayer.isHidden() || (user != null && !user.getBase().canSee(onlinePlayer.getBase()))) {
                 playerHidden++;
-                if (showHidden || user.getBase().canSee(onlinePlayer.getBase())) {
+                if (showHidden || user != null && user.getBase().canSee(onlinePlayer.getBase())) {
                     hiddenCount++;
                 }
             }
@@ -56,8 +60,7 @@ public class PlayerList {
 
     // Build the basic player list, divided by groups.
     public static Map<String, List<User>> getPlayerLists(final IEssentials ess, final User sender, final boolean showHidden) {
-        Server server = ess.getServer();
-        final Map<String, List<User>> playerList = new HashMap<String, List<User>>();
+        final Map<String, List<User>> playerList = new HashMap<>();
         for (User onlineUser : ess.getOnlineUsers()) {
             if ((sender == null && !showHidden && onlineUser.isHidden()) || (sender != null && !showHidden && !sender.getBase().canSee(onlineUser.getBase()))) {
                 continue;
@@ -76,7 +79,7 @@ public class PlayerList {
     // Handle the merging of groups
     public static List<User> getMergedList(final IEssentials ess, final Map<String, List<User>> playerList, final String groupName) {
         final Set<String> configGroups = ess.getSettings().getListGroupConfig().keySet();
-        final List<User> users = new ArrayList<User>();
+        final List<User> users = new ArrayList<>();
         for (String configGroup : configGroups) {
             if (configGroup.equalsIgnoreCase(groupName)) {
                 String[] groupValues = ess.getSettings().getListGroupConfig().get(configGroup).toString().trim().split(" ");

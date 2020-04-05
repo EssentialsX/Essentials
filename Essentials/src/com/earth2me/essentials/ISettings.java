@@ -119,6 +119,8 @@ public interface ISettings extends IConf {
 
     boolean isForceDisableTeleportSafety();
 
+    boolean isTeleportPassengerDismount();
+
     double getTeleportCooldown();
 
     double getTeleportDelay();
@@ -159,6 +161,8 @@ public interface ISettings extends IConf {
     boolean isEcoLogEnabled();
 
     boolean isEcoLogUpdateEnabled();
+
+    boolean realNamesOnList();
 
     boolean removeGodOnDisconnect();
 
