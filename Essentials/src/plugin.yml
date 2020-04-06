@@ -547,6 +547,9 @@ permissions:
     description: Give players with op everything by default
     children:
       essentials.gamemode.*: true
+  essentials.sleepingignored:
+    default: false
+    description: If the player has this permission, they will not have to sleep for the night to be skipped
   # These permissions can't be assigned from player-commands for compatibility reasons
   essentials.teleport.cooldown.bypass.tpa:
     default: true
