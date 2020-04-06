@@ -44,23 +44,33 @@ public class Commandtogglejail extends EssentialsCommand {
             ess.getServer().getPluginManager().callEvent(event);
 
             if (!event.isCancelled()) {
+                long preTimeDiff = 0;
+                if (args.length > 2) {
+                    final String time = getFinalArg(args, 2);
+                    preTimeDiff = DateUtil.parseDateDiff(time, true);
+
+                }
+                final long timeDiff = preTimeDiff;
+                CompletableFuture<Boolean> future = new CompletableFuture<>();
+                future.thenAccept(success -> {
+                    if (success) {
+                        player.setJailed(true);
+                        player.sendMessage(tl("userJailed"));
+                        player.setJail(null);
+                        player.setJail(args[1]);
+                        if (args.length > 2) {
+                            player.setJailTimeout(timeDiff);
+                        }
+                        sender.sendMessage((timeDiff > 0 ? tl("playerJailedFor", player.getName(), DateUtil.formatDateDiff(timeDiff)) : tl("playerJailed", player.getName())));
+                    }
+                });
                 if (player.getBase().isOnline()) {
-                    ess.getJails().sendToJail(player, args[1]);
+                    ess.getJails().sendToJail(player, args[1], getNewExceptionFuture(sender, commandLabel), future);
                 } else {
                     // Check if jail exists
                     ess.getJails().getJail(args[1]);
+                    future.complete(true);
                 }
-                player.setJailed(true);
-                player.sendMessage(tl("userJailed"));
-                player.setJail(null);
-                player.setJail(args[1]);
-                long timeDiff = 0;
-                if (args.length > 2) {
-                    final String time = getFinalArg(args, 2);
-                    timeDiff = DateUtil.parseDateDiff(time, true);
-                    player.setJailTimeout(timeDiff);
-                }
-                sender.sendMessage((timeDiff > 0 ? tl("playerJailedFor", player.getName(), DateUtil.formatDateDiff(timeDiff)) : tl("playerJailed", player.getName())));
             }
             return;
         }
