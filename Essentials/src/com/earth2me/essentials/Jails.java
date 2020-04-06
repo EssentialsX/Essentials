@@ -274,16 +274,24 @@ public class Jails extends AsyncStorageObjectHolder<com.earth2me.essentials.sett
                 return;
             }
 
-            try {
-                sendToJail(user, user.getJail());
-            } catch (Exception ex) {
+            CompletableFuture<Exception> eFuture = new CompletableFuture<>();
+            eFuture.thenAccept(ex -> {
                 if (ess.getSettings().isDebug()) {
                     LOGGER.log(Level.INFO, tl("returnPlayerToJailError", user.getName(), ex.getLocalizedMessage()), ex);
                 } else {
                     LOGGER.log(Level.INFO, tl("returnPlayerToJailError", user.getName(), ex.getLocalizedMessage()));
                 }
+            });
+            CompletableFuture<Boolean> future = new CompletableFuture<>();
+            future.thenAccept(success -> {
+                user.sendMessage(tl("jailMessage"));
+            });
+
+            try {
+                sendToJail(user, user.getJail(), eFuture, future);
+            } catch (Exception ex) {
+                eFuture.complete(ex);
             }
-            user.sendMessage(tl("jailMessage"));
         }
     }
 }
