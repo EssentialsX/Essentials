@@ -629,9 +629,6 @@ same-home-overwrite:
   # Allows players to overwrite an existing home with a confirmation /sethome command.
   enable-confirmation: false
 
-  # The confirmation time in seconds.
-  confirm-time: 10
-
 ############################################################
 # +------------------------------------------------------+ #
 # |                    EssentialsEco                     | #

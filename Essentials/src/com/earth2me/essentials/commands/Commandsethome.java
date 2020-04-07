@@ -3,6 +3,7 @@ package com.earth2me.essentials.commands;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.LocationUtil;
 import com.earth2me.essentials.utils.NumberUtil;
+import com.earth2me.essentials.utils.StringUtil;
 
 import org.bukkit.Location;
 import org.bukkit.Server;
@@ -52,23 +53,19 @@ public class Commandsethome extends EssentialsCommand {
 
         boolean found = false;
         if (ess.getSettings().isSetSameHomeByConfirm()) {
+            String previousSetHomeCommand = user.getConfirmingSetHomeCommand();
+            user.setConfirmingSetHomeCommand(null);
+
             for (String h : usersHome.getHomes()) {
                 if (h.equals(name)) {
-                    if (!confirmSetHome.containsKey(user)) {
-                        confirmSetHome.put(user, h);
-
-                        int time = (20 * ess.getSettings().getHomeOverwriteConfirmTime());
-                        ess.scheduleSyncDelayedTask(() -> confirmSetHome.remove(user), time);
-                        user.sendMessage(tl("confirmForSameHomeSetting", h, time));
-                        return;
-                    } else if (!h.equals(confirmSetHome.get(user))) {
-                        user.sendMessage(tl("confirmCancelled"));
-                        confirmSetHome.remove(user);
+                    String formattedCommand = formatCommand(commandLabel, args);
+                    if (!formattedCommand.equals(previousSetHomeCommand)) {
+                        user.setConfirmingSetHomeCommand(formattedCommand);
+                        user.sendMessage(tl("confirmForSameHomeSetting", h));
                         return;
                     }
 
                     found = true;
-                    confirmSetHome.remove(user);
                     break;
                 }
             }
@@ -88,6 +85,10 @@ public class Commandsethome extends EssentialsCommand {
         user.sendMessage(tl("homeSet", user.getLocation().getWorld().getName(), user.getLocation().getBlockX(),
                             user.getLocation().getBlockY(), user.getLocation().getBlockZ(), name));
 
+    }
+
+    private String formatCommand(String commandLabel, String[] args) {
+        return "/" + commandLabel + " " + StringUtil.joinList(" ", (Object[]) args);
     }
 
     private boolean checkHomeLimit(final User user, final User usersHome, String name) throws Exception {

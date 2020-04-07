@@ -59,6 +59,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
     private long afkSince;
     private Map<User, BigDecimal> confirmingPayments = new WeakHashMap<>();
     private String confirmingClearCommand;
+    private String confirmingSetHomeCommand;
     private long lastNotifiedAboutMailsMs;
 
     public User(final Player base, final IEssentials ess) {
@@ -848,8 +849,8 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
         if (!(object instanceof User)) {
             return false;
         }
-        return this.getName().equalsIgnoreCase(((User) object).getName());
 
+        return this.getName().equalsIgnoreCase(((User) object).getName());
     }
 
     @Override
@@ -912,9 +913,17 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
     public String getConfirmingClearCommand() {
         return confirmingClearCommand;
     }
-    
+
     public void setConfirmingClearCommand(String command) {
         this.confirmingClearCommand = command;
+    }
+
+    public String getConfirmingSetHomeCommand() {
+        return confirmingSetHomeCommand;
+    }
+
+    public void setConfirmingSetHomeCommand(String command) {
+        this.confirmingSetHomeCommand = command;
     }
 
     /**
@@ -928,7 +937,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
             return inventory.getItemInMainHand() != null ? inventory.getItemInMainHand() : inventory.getItemInOffHand();
         }
     }
-    
+
     public void notifyOfMail() {
         List<String> mails = getMails();
         if (mails != null && !mails.isEmpty()) {
