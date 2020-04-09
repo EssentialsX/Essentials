@@ -1,5 +1,6 @@
 package com.earth2me.essentials;
 
+import com.earth2me.essentials.commands.Commandfireball;
 import com.earth2me.essentials.textreader.IText;
 import com.earth2me.essentials.textreader.KeywordReplacer;
 import com.earth2me.essentials.textreader.TextInput;
@@ -68,8 +69,21 @@ public class EssentialsPlayerListener implements Listener {
         }
     }
 
+    private static boolean isArrowPickupEvent() {
+        try {
+            Class.forName("org.bukkit.event.player.PlayerPickupArrowEvent");
+            return true;
+        } catch (ClassNotFoundException ignored) {
+            return false;
+        }
+    }
+
     public void registerEvents() {
         ess.getServer().getPluginManager().registerEvents(this, ess);
+
+        if (isArrowPickupEvent()) {
+            ess.getServer().getPluginManager().registerEvents(new ArrowPickupListener(), ess);
+        }
 
         if (isEntityPickupEvent()) {
             ess.getServer().getPluginManager().registerEvents(new PickupListener1_12(), ess);
@@ -812,6 +826,15 @@ public class EssentialsPlayerListener implements Listener {
     public void onPlayerFishEvent(final PlayerFishEvent event) {
         final User user = ess.getUser(event.getPlayer());
         user.updateActivityOnInteract(true);
+    }
+
+    private final class ArrowPickupListener implements Listener {
+        @EventHandler(priority = EventPriority.LOW)
+        public void onArrowPickup(final org.bukkit.event.player.PlayerPickupArrowEvent event) {
+            if (event.getArrow().hasMetadata(Commandfireball.FIREBALL_META_KEY)) {
+                event.setCancelled(true);
+            }
+        }
     }
 
     private final class PickupListenerPre1_12 implements Listener {
