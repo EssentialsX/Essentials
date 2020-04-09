@@ -149,8 +149,8 @@ commands:
     usage: /<command> [player] [on|off]
     aliases: [efly]
   fireball:
-    description: Throw a fireball.
-    usage: /<command> [small|large|dragon|arrow|skull|egg|snowball|expbottle|splashpotion|lingeringpotion] [speed]
+    description: Throw a fireball or other assorted projectiles.
+    usage: /<command> [fireball|small|large|arrow|skull|egg|snowball|expbottle|dragon|splashpotion|lingeringpotion|trident] [speed]
     aliases: [efireball,fireentity,efireentity,fireskull,efireskull]
   firework:
     description: Allows you to modify a stack of fireworks.
