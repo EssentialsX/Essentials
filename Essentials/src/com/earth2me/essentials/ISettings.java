@@ -119,6 +119,8 @@ public interface ISettings extends IConf {
 
     boolean isForceDisableTeleportSafety();
 
+    boolean isTeleportPassengerDismount();
+
     double getTeleportCooldown();
 
     double getTeleportDelay();
@@ -159,6 +161,8 @@ public interface ISettings extends IConf {
     boolean isEcoLogEnabled();
 
     boolean isEcoLogUpdateEnabled();
+
+    boolean realNamesOnList();
 
     boolean removeGodOnDisconnect();
 
@@ -237,6 +241,8 @@ public interface ISettings extends IConf {
     long getPermissionsLagWarning();
 
     void setEssentialsChatActive(boolean b);
+
+    long getMaxMute();
 
     long getMaxTempban();
 
@@ -338,5 +344,8 @@ public interface ISettings extends IConf {
 
     double getMaxProjectileSpeed();
 
+    boolean isRemovingEffectsOnHeal();
+
     boolean isSpawnIfNoHome();
+
 }
