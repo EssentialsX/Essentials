@@ -348,4 +348,7 @@ public interface ISettings extends IConf {
 
     boolean isSpawnIfNoHome();
 
+    int getInvseeRadius();
+
+    boolean isLimitInvseeDistance();
 }

@@ -107,6 +107,17 @@ remove-effects-on-heal: true
 # Used to use chat radius but we are going to make it separate.
 near-radius: 200
 
+# Invsee Distance Radius
+# The radius for /invsee
+# Only used when limit-invsee-distance is true
+# Default: 200
+invsee-radius: 200
+
+# Invsee Distance Limiting
+# Do you want to limit the distance from which you can invsee a player?
+# Default: false
+limit-invsee-distance: false
+
 # What to prevent from /item and /give.
 # e.g item-spawn-blacklist: 10,11,46
 item-spawn-blacklist:

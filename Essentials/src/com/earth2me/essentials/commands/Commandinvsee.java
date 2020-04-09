@@ -1,6 +1,8 @@
 package com.earth2me.essentials.commands;
 
+import static com.earth2me.essentials.I18n.*;
 import com.earth2me.essentials.User;
+import org.bukkit.Location;
 import org.bukkit.Server;
 import org.bukkit.inventory.Inventory;
 
@@ -22,6 +24,10 @@ public class Commandinvsee extends EssentialsCommand {
         final User invUser = getPlayer(server, user, args, 0);
         Inventory inv;
 
+        if (ess.getSettings().isLimitInvseeDistance() && !user.isAuthorized("essentials.invsee.bypassdistance")) {
+            checkDistance(user, invUser);
+        }
+
         if (args.length > 1 && user.isAuthorized("essentials.invsee.equip")) {
             inv = server.createInventory(invUser.getBase(), 9, "Equipped");
             inv.setContents(invUser.getBase().getInventory().getArmorContents());
@@ -42,6 +48,23 @@ public class Commandinvsee extends EssentialsCommand {
             //    return Lists.newArrayList("equipped");
             //}
             return Collections.emptyList();
+        }
+    }
+
+    private void checkDistance(User invoker, User target) throws Exception {
+        final Location invokerLoc = invoker.getLocation();
+        final Location targetLoc = target.getLocation();
+
+        if (invoker.getWorld() != target.getWorld()) {
+            throw new Exception(tl("invseeDifferentWorld", target.getDisplayName()));
+        }
+
+        final long maxDistance = ess.getSettings().getInvseeRadius();
+        final long maxSquared = maxDistance * maxDistance;
+        final long delta = (long) invokerLoc.distanceSquared(targetLoc);
+
+        if (delta > maxSquared) {
+            throw new Exception(tl("invseeTooFar", maxDistance));
         }
     }
 }

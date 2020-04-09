@@ -564,6 +564,8 @@ public class Settings implements net.ess3.api.ISettings {
         logCommandBlockCommands = _logCommandBlockCommands();
         nickBlacklist = _getNickBlacklist();
         maxProjectileSpeed = _getMaxProjectileSpeed();
+        invseeRadius = _getInvseeRadius();
+        limitInvseeDistance = _isLimitInvseeDistance();
     }
 
     void _lateLoadItemSpawnBlacklist() {
@@ -1654,5 +1656,27 @@ public class Settings implements net.ess3.api.ISettings {
     @Override
     public boolean isSpawnIfNoHome() {
         return config.getBoolean("spawn-if-no-home", true);
+    }
+
+    private int invseeRadius;
+
+    private int _getInvseeRadius() {
+        return config.getInt("invsee-radius", 200);
+    }
+
+    @Override
+    public int getInvseeRadius() {
+        return invseeRadius;
+    }
+
+    private boolean limitInvseeDistance;
+
+    private boolean _isLimitInvseeDistance() {
+        return config.getBoolean("limit-invsee-distance", false);
+    }
+
+    @Override
+    public boolean isLimitInvseeDistance() {
+        return limitInvseeDistance;
     }
 }
