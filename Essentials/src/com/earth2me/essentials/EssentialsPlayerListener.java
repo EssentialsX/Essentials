@@ -438,7 +438,11 @@ public class EssentialsPlayerListener implements Listener {
         final boolean backListener = ess.getSettings().registerBackInListener();
         final boolean teleportInvulnerability = ess.getSettings().isTeleportInvulnerability();
         if (backListener || teleportInvulnerability) {
-            final User user = ess.getUser(event.getPlayer());
+        	Player player = event.getPlayer();
+        	if (player.hasMetadata("NPC")) {
+        		return;
+        	}
+            final User user = ess.getUser(player);
             //There is TeleportCause.COMMMAND but plugins have to actively pass the cause in on their teleports.
             if (backListener && (event.getCause() == TeleportCause.PLUGIN || event.getCause() == TeleportCause.COMMAND)) {
                 user.setLastLocation();
