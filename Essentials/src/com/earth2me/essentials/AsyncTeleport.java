@@ -112,17 +112,6 @@ public class AsyncTeleport implements IAsyncTeleport {
         user.sendMessage(tl("dontMoveMessage", DateUtil.formatDateDiff(c.getTimeInMillis())));
     }
 
-    //The now function is used when you want to skip tp delay when teleporting someone to a location or player.
-    @Override
-    @Deprecated
-    public void now(Location loc, boolean cooldown, TeleportCause cause) throws Exception {
-        CompletableFuture<Exception> exceptionFuture = new CompletableFuture<>();
-        CompletableFuture<Boolean> future = new CompletableFuture<>();
-        now(loc, cooldown, cause, exceptionFuture, future);
-        if (!future.get()) {
-            throw exceptionFuture.get();
-        }
-    }
 
     @Override
     public void now(Location loc, boolean cooldown, TeleportCause cause, CompletableFuture<Exception> exceptionFuture, CompletableFuture<Boolean> future) {
@@ -132,17 +121,6 @@ public class AsyncTeleport implements IAsyncTeleport {
         }
         final ITarget target = new LocationTarget(loc);
         nowAsync(teleportOwner, target, cause, exceptionFuture, future);
-    }
-
-    @Override
-    @Deprecated
-    public void now(Player entity, boolean cooldown, TeleportCause cause) throws Exception {
-        CompletableFuture<Exception> exceptionFuture = new CompletableFuture<>();
-        CompletableFuture<Boolean> future = new CompletableFuture<>();
-        now(entity, cooldown, cause, exceptionFuture, future);
-        if (!future.get()) {
-            throw exceptionFuture.get();
-        }
     }
 
     @Override
@@ -228,40 +206,9 @@ public class AsyncTeleport implements IAsyncTeleport {
         });
     }
 
-    //The teleportPlayer function is used when you want to normally teleportPlayer someone to a location or player.
-    //This method is nolonger used internally and will be removed.
-    @Deprecated
-    @Override
-    public void teleport(Location loc, Trade chargeFor) throws Exception {
-        teleport(loc, chargeFor, TeleportCause.PLUGIN);
-    }
-
-    @Override
-    @Deprecated
-    public void teleport(Location loc, Trade chargeFor, TeleportCause cause) throws Exception {
-        CompletableFuture<Exception> exceptionFuture = new CompletableFuture<>();
-        CompletableFuture<Boolean> future = new CompletableFuture<>();
-        teleport(loc, chargeFor, cause, exceptionFuture, future);
-        if (!future.get()) {
-            throw exceptionFuture.get();
-        }
-    }
-
     @Override
     public void teleport(Location loc, Trade chargeFor, TeleportCause cause, CompletableFuture<Exception> exceptionFuture, CompletableFuture<Boolean> future) {
         teleport(teleportOwner, new LocationTarget(loc), chargeFor, cause, exceptionFuture, future);
-    }
-
-    //This is used when teleporting to a player
-    @Override
-    @Deprecated
-    public void teleport(Player entity, Trade chargeFor, TeleportCause cause) throws Exception {
-        CompletableFuture<Exception> exceptionFuture = new CompletableFuture<>();
-        CompletableFuture<Boolean> future = new CompletableFuture<>();
-        teleport(entity, chargeFor, cause, exceptionFuture, future);
-        if (!future.get()) {
-            throw exceptionFuture.get();
-        }
     }
 
     @Override
@@ -270,33 +217,9 @@ public class AsyncTeleport implements IAsyncTeleport {
         teleport(teleportOwner, new PlayerTarget(entity), chargeFor, cause, exceptionFuture, future);
     }
 
-    //This is used when teleporting to stored location
-    @Override
-    @Deprecated
-    public void teleportPlayer(IUser teleportee, Location loc, Trade chargeFor, TeleportCause cause) throws Exception {
-        CompletableFuture<Exception> exceptionFuture = new CompletableFuture<>();
-        CompletableFuture<Boolean> future = new CompletableFuture<>();
-        teleportPlayer(teleportee, loc, chargeFor, cause, exceptionFuture, future);
-        if (!future.get()) {
-            throw exceptionFuture.get();
-        }
-    }
-
     @Override
     public void teleportPlayer(IUser otherUser, Location loc, Trade chargeFor, TeleportCause cause, CompletableFuture<Exception> exceptionFuture, CompletableFuture<Boolean> future) {
         teleport(otherUser, new LocationTarget(loc), chargeFor, cause, exceptionFuture, future);
-    }
-
-    //This is used on /tphere
-    @Override
-    @Deprecated
-    public void teleportPlayer(IUser teleportee, Player entity, Trade chargeFor, TeleportCause cause) throws Exception {
-        CompletableFuture<Exception> exceptionFuture = new CompletableFuture<>();
-        CompletableFuture<Boolean> future = new CompletableFuture<>();
-        teleportPlayer(teleportee, entity, chargeFor, cause, exceptionFuture, future);
-        if (!future.get()) {
-            throw exceptionFuture.get();
-        }
     }
 
     @Override
@@ -403,18 +326,6 @@ public class AsyncTeleport implements IAsyncTeleport {
         initTimer((long) (delay * 1000.0), teleportee, target, cashCharge, cause, false);
     }
 
-    //The respawn function is a wrapper used to handle tp fallback, on /jail and /home
-    @Override
-    @Deprecated
-    public void respawn(final Trade chargeFor, TeleportCause cause) throws Exception {
-        CompletableFuture<Exception> exceptionFuture = new CompletableFuture<>();
-        CompletableFuture<Boolean> future = new CompletableFuture<>();
-        respawn(chargeFor, cause, exceptionFuture, future);
-        if (!future.get()) {
-            throw exceptionFuture.get();
-        }
-    }
-
     @Override
     public void respawn(Trade chargeFor, TeleportCause cause, CompletableFuture<Exception> exceptionFuture, CompletableFuture<Boolean> future) {
         double delay = ess.getSettings().getTeleportDelay();
@@ -461,18 +372,6 @@ public class AsyncTeleport implements IAsyncTeleport {
         }
     }
 
-    //The warp function is a wrapper used to teleportPlayer a player to a /warp
-    @Override
-    @Deprecated
-    public void warp(IUser teleportee, String warp, Trade chargeFor, TeleportCause cause) throws Exception {
-        CompletableFuture<Exception> exceptionFuture = new CompletableFuture<>();
-        CompletableFuture<Boolean> future = new CompletableFuture<>();
-        warp(teleportee, warp, chargeFor, cause, exceptionFuture, future);
-        if (!future.get()) {
-            throw exceptionFuture.get();
-        }
-    }
-
     @Override
     public void warp(IUser otherUser, String warp, Trade chargeFor, TeleportCause cause, CompletableFuture<Exception> exceptionFuture, CompletableFuture<Boolean> future) {
         UserWarpEvent event = new UserWarpEvent(otherUser, warp, chargeFor);
@@ -497,33 +396,9 @@ public class AsyncTeleport implements IAsyncTeleport {
         teleport(otherUser, new LocationTarget(loc), chargeFor, cause, exceptionFuture, future);
     }
 
-    //The back function is a wrapper used to teleportPlayer a player /back to their previous location.
-    @Override
-    @Deprecated
-    public void back(Trade chargeFor) throws Exception {
-        CompletableFuture<Exception> exceptionFuture = new CompletableFuture<>();
-        CompletableFuture<Boolean> future = new CompletableFuture<>();
-        back(chargeFor, exceptionFuture, future);
-        if (!future.get()) {
-            throw exceptionFuture.get();
-        }
-    }
-
     @Override
     public void back(Trade chargeFor, CompletableFuture<Exception> exceptionFuture, CompletableFuture<Boolean> future) {
         back(teleportOwner, chargeFor, exceptionFuture, future);
-    }
-
-    //This function is a wrapper over the other back function for cases where another player performs back for them
-    @Override
-    @Deprecated
-    public void back(IUser teleporter, Trade chargeFor) throws Exception {
-        CompletableFuture<Exception> exceptionFuture = new CompletableFuture<>();
-        CompletableFuture<Boolean> future = new CompletableFuture<>();
-        back(teleporter, chargeFor, exceptionFuture, future);
-        if (!future.get()) {
-            throw exceptionFuture.get();
-        }
     }
 
     @Override
@@ -532,18 +407,6 @@ public class AsyncTeleport implements IAsyncTeleport {
         final Location loc = teleportOwner.getLastLocation();
         teleportOwner.sendMessage(tl("backUsageMsg", loc.getWorld().getName(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ()));
         teleportOther(teleporter, teleportOwner, new LocationTarget(loc), chargeFor, TeleportCause.COMMAND, exceptionFuture, future);
-    }
-
-    //This function is used to throw a user back after a jail sentence
-    @Override
-    @Deprecated
-    public void back() throws Exception {
-        CompletableFuture<Exception> exceptionFuture = new CompletableFuture<>();
-        CompletableFuture<Boolean> future = new CompletableFuture<>();
-        back(exceptionFuture, future);
-        if (!future.get()) {
-            throw exceptionFuture.get();
-        }
     }
 
     @Override
