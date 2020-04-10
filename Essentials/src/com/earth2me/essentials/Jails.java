@@ -117,14 +117,21 @@ public class Jails extends AsyncStorageObjectHolder<com.earth2me.essentials.sett
         }
     }
 
+    /**
+     * @deprecated This method does not use asynchronous teleportation. Use {@link Jails#sendToJail(IUser, String, CompletableFuture, CompletableFuture)}
+     */
     @Override
     @Deprecated
     public void sendToJail(final IUser user, final String jail) throws Exception {
-        CompletableFuture<Exception> eFuture = new CompletableFuture<>();
-        CompletableFuture<Boolean> future = new CompletableFuture<>();
-        sendToJail(user, jail, eFuture, future);
-        if (!future.get()) {
-            throw eFuture.get();
+        acquireReadLock();
+        try {
+            if (user.getBase().isOnline()) {
+                Location loc = getJail(jail);
+                user.getTeleport().now(loc, false, TeleportCause.COMMAND);
+            }
+            user.setJail(jail);
+        } finally {
+            unlock();
         }
     }
 
