@@ -54,6 +54,7 @@ public interface IJails extends IReload {
      *
      * @throws Exception if the user is offline or jail does not exist
      */
+    @Deprecated
     void sendToJail(IUser user, String jail) throws Exception;
 
     /**

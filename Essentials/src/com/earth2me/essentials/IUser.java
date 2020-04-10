@@ -16,6 +16,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.regex.Pattern;
 
+
 public interface IUser {
     boolean isAuthorized(String node);
 
