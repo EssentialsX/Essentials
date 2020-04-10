@@ -7,11 +7,6 @@ public class MuteStatusChangeEvent extends StatusChangeEvent {
     private Long timestamp;
     private String reason;
 
-    @Deprecated
-    public MuteStatusChangeEvent(IUser affected, IUser controller, boolean value) {
-        this(affected, controller, value, -1, null);
-    }
-
     public MuteStatusChangeEvent(IUser affected, IUser controller, boolean value, long timestamp, String reason) {
         super(affected, controller, value);
         this.timestamp = timestamp;
