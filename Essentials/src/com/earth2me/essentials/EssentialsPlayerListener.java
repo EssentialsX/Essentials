@@ -840,7 +840,9 @@ public class EssentialsPlayerListener implements Listener {
     private final class PickupListenerPre1_12 implements Listener {
         @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
         public void onPlayerPickupItem(final org.bukkit.event.player.PlayerPickupItemEvent event) {
-            if (ess.getSettings().getDisableItemPickupWhileAfk()) {
+            if (event.getItem().hasMetadata(Commandfireball.FIREBALL_META_KEY)) {
+                event.setCancelled(true);
+            } else if (ess.getSettings().getDisableItemPickupWhileAfk()) {
                 if (ess.getUser(event.getPlayer()).isAfk()) {
                     event.setCancelled(true);
                 }
