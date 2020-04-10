@@ -43,7 +43,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
     private transient boolean teleportRequestHere;
     private transient Location teleportLocation;
     private transient boolean vanished;
-    private transient final Teleport teleport;
+    private transient final AsyncTeleport teleport;
     private transient long teleportRequestTime;
     private transient long lastOnlineActivity;
     private transient long lastThrottledAction;
@@ -64,7 +64,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
 
     public User(final Player base, final IEssentials ess) {
         super(base, ess);
-        teleport = new Teleport(this, ess);
+        teleport = new AsyncTeleport(this, ess);
         if (isAfk()) {
             afkPosition = this.getLocation();
         }
@@ -407,7 +407,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
     }
 
     @Override
-    public Teleport getTeleport() {
+    public AsyncTeleport getTeleport() {
         return teleport;
     }
 

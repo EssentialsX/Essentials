@@ -5,7 +5,7 @@ import com.earth2me.essentials.utils.DateUtil;
 import com.earth2me.essentials.utils.LocationUtil;
 import io.papermc.lib.PaperLib;
 import net.ess3.api.IEssentials;
-import net.ess3.api.ITeleport;
+import net.ess3.api.IAsyncTeleport;
 import net.ess3.api.IUser;
 import net.ess3.api.InvalidWorldException;
 import net.ess3.api.events.UserTeleportEvent;
@@ -25,14 +25,14 @@ import java.util.concurrent.ExecutionException;
 import static com.earth2me.essentials.I18n.tl;
 
 
-public class Teleport implements ITeleport {
+public class AsyncTeleport implements IAsyncTeleport {
     private final IUser teleportOwner;
     private final IEssentials ess;
     private TimedTeleport timedTeleport;
 
     private TeleportType tpType;
 
-    public Teleport(IUser user, IEssentials ess) {
+    public AsyncTeleport(IUser user, IEssentials ess) {
         this.teleportOwner = user;
         this.ess = ess;
         tpType = TeleportType.NORMAL;

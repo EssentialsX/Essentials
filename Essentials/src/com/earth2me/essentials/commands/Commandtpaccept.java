@@ -1,6 +1,6 @@
 package com.earth2me.essentials.commands;
 
-import com.earth2me.essentials.Teleport;
+import com.earth2me.essentials.AsyncTeleport;
 import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.User;
 import org.bukkit.Location;
@@ -64,8 +64,8 @@ public class Commandtpaccept extends EssentialsCommand {
         });
         if (user.isTpRequestHere()) {
             final Location loc = user.getTpRequestLocation();
-            Teleport teleport = requester.getTeleport();
-            teleport.setTpType(Teleport.TeleportType.TPA);
+            AsyncTeleport teleport = requester.getTeleport();
+            teleport.setTpType(AsyncTeleport.TeleportType.TPA);
             future.thenAccept(success -> {
                 if (success) {
                     requester.sendMessage(tl("teleporting", loc.getWorld().getName(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ()));
@@ -73,8 +73,8 @@ public class Commandtpaccept extends EssentialsCommand {
             });
             teleport.teleportPlayer(user, user.getTpRequestLocation(), charge, TeleportCause.COMMAND, eFuture, future);
         } else {
-            Teleport teleport = requester.getTeleport();
-            teleport.setTpType(Teleport.TeleportType.TPA);
+            AsyncTeleport teleport = requester.getTeleport();
+            teleport.setTpType(AsyncTeleport.TeleportType.TPA);
             teleport.teleport(user.getBase(), charge, TeleportCause.COMMAND, eFuture, future);
         }
     }

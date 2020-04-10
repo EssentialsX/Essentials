@@ -1,6 +1,6 @@
 package com.earth2me.essentials.commands;
 
-import com.earth2me.essentials.Teleport;
+import com.earth2me.essentials.AsyncTeleport;
 import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.User;
 import net.ess3.api.events.TPARequestEvent;
@@ -42,8 +42,8 @@ public class Commandtpa extends EssentialsCommand {
         }
         if (player.isAutoTeleportEnabled() && !player.isIgnoredPlayer(user)) {
             final Trade charge = new Trade(this.getName(), ess);
-            Teleport teleport = user.getTeleport();
-            teleport.setTpType(Teleport.TeleportType.TPA);
+            AsyncTeleport teleport = user.getTeleport();
+            teleport.setTpType(AsyncTeleport.TeleportType.TPA);
             CompletableFuture<Boolean> future = new CompletableFuture<>();
             future.thenAccept(success -> {
                if (success) {

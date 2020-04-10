@@ -1,7 +1,7 @@
 package com.earth2me.essentials;
 
 import com.earth2me.essentials.commands.IEssentialsCommand;
-import net.ess3.api.ITeleport;
+import net.ess3.api.IAsyncTeleport;
 import net.ess3.api.MaxMoneyException;
 import net.ess3.api.events.AfkStatusChangeEvent;
 import org.bukkit.Location;
@@ -54,7 +54,7 @@ public interface IUser {
      */
     boolean hasOutstandingTeleportRequest();
 
-    ITeleport getTeleport();
+    IAsyncTeleport getTeleport();
 
     BigDecimal getMoney();
 

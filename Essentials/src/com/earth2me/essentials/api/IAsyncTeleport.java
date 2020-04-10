@@ -9,11 +9,11 @@ import org.bukkit.event.player.PlayerTeleportEvent;
 import java.util.concurrent.CompletableFuture;
 
 
-public interface ITeleport {
+public interface IAsyncTeleport {
     /**
      * Used to skip teleportPlayer delay when teleporting someone to a location or player.
      *
-     * @deprecated Use {@link ITeleport#now(Location, boolean, PlayerTeleportEvent.TeleportCause, CompletableFuture, CompletableFuture)}
+     * @deprecated Use {@link IAsyncTeleport#now(Location, boolean, PlayerTeleportEvent.TeleportCause, CompletableFuture, CompletableFuture)}
      *
      * @param loc      - Where should the player end up
      * @param cooldown - If cooldown should be enforced
@@ -38,7 +38,7 @@ public interface ITeleport {
     /**
      * Used to skip teleportPlayer delay when teleporting someone to a location or player.
      *
-     * @deprecated Use {@link ITeleport#now(Player, boolean, PlayerTeleportEvent.TeleportCause, CompletableFuture, CompletableFuture)}
+     * @deprecated Use {@link IAsyncTeleport#now(Player, boolean, PlayerTeleportEvent.TeleportCause, CompletableFuture, CompletableFuture)}
      *
      * @param entity   - Where should the player end up
      * @param cooldown - If cooldown should be enforced
@@ -66,7 +66,7 @@ public interface ITeleport {
     /**
      * Teleport a player to a specific location
      *
-     * @deprecated {@link ITeleport#teleport(Location, Trade, PlayerTeleportEvent.TeleportCause, CompletableFuture, CompletableFuture)}
+     * @deprecated {@link IAsyncTeleport#teleport(Location, Trade, PlayerTeleportEvent.TeleportCause, CompletableFuture, CompletableFuture)}
      *
      * @param loc       - Where should the player end up
      * @param chargeFor - What the user will be charged if teleportPlayer is successful
@@ -91,7 +91,7 @@ public interface ITeleport {
     /**
      * Teleport a player to a specific player
      *
-     * @deprecated Use {@link ITeleport#teleport(Player, Trade, PlayerTeleportEvent.TeleportCause, CompletableFuture, CompletableFuture)}
+     * @deprecated Use {@link IAsyncTeleport#teleport(Player, Trade, PlayerTeleportEvent.TeleportCause, CompletableFuture, CompletableFuture)}
      *
      * @param entity    - Where should the player end up
      * @param chargeFor - What the user will be charged if teleportPlayer is successful
@@ -116,7 +116,7 @@ public interface ITeleport {
     /**
      * Teleport a player to a specific location
      *
-     * @deprecated Use {@link ITeleport#teleportPlayer(IUser, Location, Trade, PlayerTeleportEvent.TeleportCause, CompletableFuture, CompletableFuture)}
+     * @deprecated Use {@link IAsyncTeleport#teleportPlayer(IUser, Location, Trade, PlayerTeleportEvent.TeleportCause, CompletableFuture, CompletableFuture)}
      *
      * @param otherUser - Which user will be teleported
      * @param loc       - Where should the player end up
@@ -143,7 +143,7 @@ public interface ITeleport {
     /**
      * Teleport a player to a specific player
      *
-     * @deprecated Use {@link ITeleport#teleportPlayer(IUser, Player, Trade, PlayerTeleportEvent.TeleportCause, CompletableFuture, CompletableFuture)}
+     * @deprecated Use {@link IAsyncTeleport#teleportPlayer(IUser, Player, Trade, PlayerTeleportEvent.TeleportCause, CompletableFuture, CompletableFuture)}
      *
      * @param otherUser - Which user will be teleported
      * @param entity    - Where should the player end up
@@ -170,7 +170,7 @@ public interface ITeleport {
     /**
      * Teleport wrapper used to handle tp fallback on /jail and /home
      *
-     * @deprecated Use {@link ITeleport#respawn(Trade, PlayerTeleportEvent.TeleportCause, CompletableFuture, CompletableFuture)}
+     * @deprecated Use {@link IAsyncTeleport#respawn(Trade, PlayerTeleportEvent.TeleportCause, CompletableFuture, CompletableFuture)}
      *
      * @param chargeFor - What the user will be charged if teleportPlayer is successful
      * @param cause     - The reported teleportPlayer cause
@@ -193,7 +193,7 @@ public interface ITeleport {
     /**
      * Teleport wrapper used to handle /warp teleports
      *
-     * @deprecated Use {@link ITeleport#warp(IUser, String, Trade, PlayerTeleportEvent.TeleportCause, CompletableFuture, CompletableFuture)}
+     * @deprecated Use {@link IAsyncTeleport#warp(IUser, String, Trade, PlayerTeleportEvent.TeleportCause, CompletableFuture, CompletableFuture)}
      *
      * @param otherUser - Which user will be teleported
      * @param warp      - The name of the warp the user will be teleported too.
@@ -220,7 +220,7 @@ public interface ITeleport {
     /**
      * Teleport wrapper used to handle /back teleports
      *
-     * @deprecated {@link ITeleport#back(Trade, CompletableFuture, CompletableFuture)}
+     * @deprecated {@link IAsyncTeleport#back(Trade, CompletableFuture, CompletableFuture)}
      *
      * @param chargeFor - What the user will be charged if teleportPlayer is successful
      *
@@ -243,7 +243,7 @@ public interface ITeleport {
      * are executed by a different player with this
      * instance of teleport as a target.
      *
-     * @deprecated Use {@link ITeleport#back(IUser, Trade, CompletableFuture, CompletableFuture)}
+     * @deprecated Use {@link IAsyncTeleport#back(IUser, Trade, CompletableFuture, CompletableFuture)}
      *
      * @param teleporter - The user performing the /back command.
      *                     This value may be {@code null} to indicate console.
@@ -270,7 +270,7 @@ public interface ITeleport {
     /**
      * Teleport wrapper used to handle throwing user home after a jail sentence
      *
-     * @deprecated Use {@link ITeleport#back(CompletableFuture, CompletableFuture)}
+     * @deprecated Use {@link IAsyncTeleport#back(CompletableFuture, CompletableFuture)}
      *
      * @throws Exception
      */

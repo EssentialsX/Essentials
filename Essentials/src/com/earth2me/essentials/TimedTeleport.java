@@ -15,7 +15,7 @@ public class TimedTeleport implements Runnable {
     private static final double MOVE_CONSTANT = 0.3;
     private final IUser teleportOwner;
     private final IEssentials ess;
-    private final Teleport teleport;
+    private final AsyncTeleport teleport;
     private final UUID timer_teleportee;
     private int timer_task;
     private final long timer_started; // time this task was initiated
@@ -33,7 +33,7 @@ public class TimedTeleport implements Runnable {
     private final Trade timer_chargeFor;
     private final TeleportCause timer_cause;
 
-    TimedTeleport(IUser user, IEssentials ess, Teleport teleport, long delay, IUser teleportUser, ITarget target, Trade chargeFor, TeleportCause cause, boolean respawn) {
+    TimedTeleport(IUser user, IEssentials ess, AsyncTeleport teleport, long delay, IUser teleportUser, ITarget target, Trade chargeFor, TeleportCause cause, boolean respawn) {
         this.teleportOwner = user;
         this.ess = ess;
         this.teleport = teleport;
