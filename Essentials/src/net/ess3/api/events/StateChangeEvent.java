@@ -7,9 +7,10 @@ import org.bukkit.event.HandlerList;
 
 
 /**
- * This handles common boilerplate for other StateChangeEvents
+ * This handles common boilerplate for events for changes in state.
+ * For boolean state, events should extend StatusChangeEvent instead.
  */
-public class StateChangeEvent extends Event implements Cancellable {
+public abstract class StateChangeEvent extends Event implements Cancellable {
     private static final HandlerList handlers = new HandlerList();
     private boolean cancelled = false;
     IUser affected;
@@ -27,10 +28,20 @@ public class StateChangeEvent extends Event implements Cancellable {
         this.controller = controller;
     }
 
+    /**
+     * Get the user who is affected by the state change.
+     *
+     * @return The user who is affected by the state change.
+     */
     public IUser getAffected() {
         return this.affected;
     }
 
+    /**
+     * Get the user who caused the state change.
+     *
+     * @return The user who caused the state change.
+     */
     public IUser getController() {
         return controller;
     }
