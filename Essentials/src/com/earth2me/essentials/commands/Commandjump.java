@@ -47,7 +47,7 @@ public class Commandjump extends EssentialsCommand {
 
         final Trade charge = new Trade(this.getName(), ess);
         charge.isAffordableFor(user);
-        user.getTeleport().teleport(loc, charge, TeleportCause.COMMAND, getNewExceptionFuture(user.getSource(), commandLabel), new CompletableFuture<>());
+        user.getAsyncTeleport().teleport(loc, charge, TeleportCause.COMMAND, getNewExceptionFuture(user.getSource(), commandLabel), new CompletableFuture<>());
     }
 
     @Override

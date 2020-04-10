@@ -140,7 +140,7 @@ class EssentialsSpawnPlayerListener implements Listener {
             if (spawn != null) {
                 CompletableFuture<Exception> eFuture = new CompletableFuture<>();
                 eFuture.thenAccept(e -> logger.log(Level.WARNING, tl("teleportNewPlayerError"), e));
-                user.getTeleport().now(spawn, false, TeleportCause.PLUGIN, eFuture, new CompletableFuture<>());
+                user.getAsyncTeleport().now(spawn, false, TeleportCause.PLUGIN, eFuture, new CompletableFuture<>());
             }
         }
     }

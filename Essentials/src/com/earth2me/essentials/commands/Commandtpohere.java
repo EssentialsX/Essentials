@@ -31,7 +31,7 @@ public class Commandtpohere extends EssentialsCommand {
 
         CompletableFuture<Exception> eFuture = new CompletableFuture<>();
         eFuture.thenAccept(e -> showError(user.getBase(), e, commandLabel));
-        player.getTeleport().now(user.getBase(), false, TeleportCause.COMMAND, eFuture, new CompletableFuture<>());
+        player.getAsyncTeleport().now(user.getBase(), false, TeleportCause.COMMAND, eFuture, new CompletableFuture<>());
     }
 
     @Override

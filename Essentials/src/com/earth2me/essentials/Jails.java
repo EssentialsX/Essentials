@@ -141,7 +141,7 @@ public class Jails extends AsyncStorageObjectHolder<com.earth2me.essentials.sett
                    }
                    future.complete(success);
                 });
-                user.getTeleport().now(loc, false, TeleportCause.COMMAND, exceptionFuture, future1);
+                user.getAsyncTeleport().now(loc, false, TeleportCause.COMMAND, exceptionFuture, future1);
                 return;
             }
             user.setJail(jail);

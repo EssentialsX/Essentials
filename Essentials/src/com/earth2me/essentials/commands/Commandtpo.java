@@ -29,7 +29,7 @@ public class Commandtpo extends EssentialsCommand {
                 if (user.getWorld() != player.getWorld() && ess.getSettings().isWorldTeleportPermissions() && !user.isAuthorized("essentials.worlds." + player.getWorld().getName())) {
                     throw new Exception(tl("noPerm", "essentials.worlds." + player.getWorld().getName()));
                 }
-                user.getTeleport().now(player.getBase(), false, TeleportCause.COMMAND, eFuture, new CompletableFuture<>());
+                user.getAsyncTeleport().now(player.getBase(), false, TeleportCause.COMMAND, eFuture, new CompletableFuture<>());
                 break;
 
             default:
@@ -49,7 +49,7 @@ public class Commandtpo extends EssentialsCommand {
                        target.sendMessage(tl("teleportAtoB", user.getDisplayName(), toPlayer.getDisplayName()));
                    }
                 });
-                target.getTeleport().now(toPlayer.getBase(), false, TeleportCause.COMMAND, eFuture, future);
+                target.getAsyncTeleport().now(toPlayer.getBase(), false, TeleportCause.COMMAND, eFuture, future);
                 break;
         }
     }

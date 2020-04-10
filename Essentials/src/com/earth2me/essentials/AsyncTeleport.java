@@ -1,11 +1,11 @@
 package com.earth2me.essentials;
 
+import com.earth2me.essentials.api.IAsyncTeleport;
 import com.earth2me.essentials.commands.WarpNotFoundException;
 import com.earth2me.essentials.utils.DateUtil;
 import com.earth2me.essentials.utils.LocationUtil;
 import io.papermc.lib.PaperLib;
 import net.ess3.api.IEssentials;
-import net.ess3.api.IAsyncTeleport;
 import net.ess3.api.IUser;
 import net.ess3.api.InvalidWorldException;
 import net.ess3.api.events.UserTeleportEvent;
@@ -28,7 +28,7 @@ import static com.earth2me.essentials.I18n.tl;
 public class AsyncTeleport implements IAsyncTeleport {
     private final IUser teleportOwner;
     private final IEssentials ess;
-    private TimedTeleport timedTeleport;
+    private AsyncTimedTeleport timedTeleport;
 
     private TeleportType tpType;
 
@@ -427,6 +427,6 @@ public class AsyncTeleport implements IAsyncTeleport {
     }
 
     private void initTimer(long delay, IUser teleportUser, ITarget target, Trade chargeFor, TeleportCause cause, boolean respawn) {
-        timedTeleport = new TimedTeleport(teleportOwner, ess, this, delay, teleportUser, target, chargeFor, cause, respawn);
+        timedTeleport = new AsyncTimedTeleport(teleportOwner, ess, this, delay, teleportUser, target, chargeFor, cause, respawn);
     }
 }

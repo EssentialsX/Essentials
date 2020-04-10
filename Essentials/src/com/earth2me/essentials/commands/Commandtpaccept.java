@@ -64,7 +64,7 @@ public class Commandtpaccept extends EssentialsCommand {
         });
         if (user.isTpRequestHere()) {
             final Location loc = user.getTpRequestLocation();
-            AsyncTeleport teleport = requester.getTeleport();
+            AsyncTeleport teleport = (AsyncTeleport) requester.getAsyncTeleport();
             teleport.setTpType(AsyncTeleport.TeleportType.TPA);
             future.thenAccept(success -> {
                 if (success) {
@@ -73,7 +73,7 @@ public class Commandtpaccept extends EssentialsCommand {
             });
             teleport.teleportPlayer(user, user.getTpRequestLocation(), charge, TeleportCause.COMMAND, eFuture, future);
         } else {
-            AsyncTeleport teleport = requester.getTeleport();
+            AsyncTeleport teleport = (AsyncTeleport) requester.getAsyncTeleport();
             teleport.setTpType(AsyncTeleport.TeleportType.TPA);
             teleport.teleport(user.getBase(), charge, TeleportCause.COMMAND, eFuture, future);
         }

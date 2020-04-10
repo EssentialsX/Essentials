@@ -1,5 +1,7 @@
 package com.earth2me.essentials;
 
+import com.earth2me.essentials.api.IAsyncTeleport;
+import com.earth2me.essentials.api.ITeleport;
 import com.earth2me.essentials.commands.IEssentialsCommand;
 import com.earth2me.essentials.messaging.IMessageRecipient;
 import com.earth2me.essentials.messaging.SimpleMessageRecipient;
@@ -16,7 +18,6 @@ import net.ess3.api.events.JailStatusChangeEvent;
 import net.ess3.api.events.MuteStatusChangeEvent;
 import net.ess3.api.events.UserBalanceUpdateEvent;
 import net.ess3.nms.refl.ReflUtil;
-
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -44,6 +45,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
     private transient Location teleportLocation;
     private transient boolean vanished;
     private transient final AsyncTeleport teleport;
+    private transient final Teleport legacyTeleport;
     private transient long teleportRequestTime;
     private transient long lastOnlineActivity;
     private transient long lastThrottledAction;
@@ -65,6 +67,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
     public User(final Player base, final IEssentials ess) {
         super(base, ess);
         teleport = new AsyncTeleport(this, ess);
+        legacyTeleport = new Teleport(this, ess);
         if (isAfk()) {
             afkPosition = this.getLocation();
         }
@@ -407,8 +410,13 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
     }
 
     @Override
-    public AsyncTeleport getTeleport() {
+    public IAsyncTeleport getAsyncTeleport() {
         return teleport;
+    }
+
+    @Override
+    public ITeleport getTeleport() {
+        return legacyTeleport;
     }
 
     public long getLastOnlineActivity() {
@@ -574,8 +582,8 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
                 setJail(null);
                 if (ess.getSettings().isTeleportBackWhenFreedFromJail()) {
                     CompletableFuture<Exception> eFuture = new CompletableFuture<>();
-                    eFuture.thenAccept(e -> getTeleport().respawn(null, TeleportCause.PLUGIN, new CompletableFuture<>(), new CompletableFuture<>()));
-                    getTeleport().back(eFuture, new CompletableFuture<>());
+                    eFuture.thenAccept(e -> getAsyncTeleport().respawn(null, TeleportCause.PLUGIN, new CompletableFuture<>(), new CompletableFuture<>()));
+                    getAsyncTeleport().back(eFuture, new CompletableFuture<>());
                 }
                 return true;
             }

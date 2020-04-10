@@ -44,7 +44,7 @@ public class Commandtpall extends EssentialsCommand {
             }
             CompletableFuture<Exception> eFuture = new CompletableFuture<>();
             eFuture.thenAccept(e -> showError(sender.getSender(), e, label));
-            player.getTeleport().now(loc, false, TeleportCause.COMMAND, eFuture, new CompletableFuture<>());
+            player.getAsyncTeleport().now(loc, false, TeleportCause.COMMAND, eFuture, new CompletableFuture<>());
         }
     }
 

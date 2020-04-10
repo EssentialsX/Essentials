@@ -44,7 +44,7 @@ public class Commandhome extends EssentialsCommand {
             if ("bed".equalsIgnoreCase(homeName) && user.isAuthorized("essentials.home.bed")) {
                 final Location bed = player.getBase().getBedSpawnLocation();
                 if (bed != null) {
-                    user.getTeleport().teleport(bed, charge, TeleportCause.COMMAND, eFuture, new CompletableFuture<>());
+                    user.getAsyncTeleport().teleport(bed, charge, TeleportCause.COMMAND, eFuture, new CompletableFuture<>());
                     return;
                 } else {
                     throw new Exception(tl("bedMissing"));
@@ -56,7 +56,7 @@ public class Commandhome extends EssentialsCommand {
             final List<String> homes = player.getHomes();
             if (homes.isEmpty() && player.equals(user)) {
                 if (ess.getSettings().isSpawnIfNoHome()) {
-                    user.getTeleport().respawn(charge, TeleportCause.COMMAND, eFuture, new CompletableFuture<>());
+                    user.getAsyncTeleport().respawn(charge, TeleportCause.COMMAND, eFuture, new CompletableFuture<>());
                 } else {
                     throw new Exception(tl("noHomeSetPlayer"));
                 }
@@ -105,7 +105,7 @@ public class Commandhome extends EssentialsCommand {
                user.sendMessage(tl("teleportHome", home));
            }
         });
-        user.getTeleport().teleport(loc, charge, TeleportCause.COMMAND, eFuture, future);
+        user.getAsyncTeleport().teleport(loc, charge, TeleportCause.COMMAND, eFuture, future);
     }
 
     @Override

@@ -62,9 +62,9 @@ public class Commandspawn extends EssentialsCommand {
         CompletableFuture<Exception> eFuture = new CompletableFuture<>();
         eFuture.thenAccept(e -> showError(sender.getSender(), e, commandLabel));
         if (teleportOwner == null) {
-            teleportee.getTeleport().now(spawn, false, TeleportCause.COMMAND, eFuture, future);
+            teleportee.getAsyncTeleport().now(spawn, false, TeleportCause.COMMAND, eFuture, future);
         } else {
-            teleportOwner.getTeleport().teleportPlayer(teleportee, spawn, charge, TeleportCause.COMMAND, eFuture, future);
+            teleportOwner.getAsyncTeleport().teleportPlayer(teleportee, spawn, charge, TeleportCause.COMMAND, eFuture, future);
         }
     }
 }

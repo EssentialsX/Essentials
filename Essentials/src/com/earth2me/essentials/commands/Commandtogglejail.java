@@ -108,7 +108,7 @@ public class Commandtogglejail extends EssentialsCommand {
                            sender.sendMessage(tl("jailReleased", player.getName()));
                        }
                     });
-                    player.getTeleport().back(getNewExceptionFuture(sender, commandLabel), future);
+                    player.getAsyncTeleport().back(getNewExceptionFuture(sender, commandLabel), future);
                     return;
                 }
                 sender.sendMessage(tl("jailReleased", player.getName()));

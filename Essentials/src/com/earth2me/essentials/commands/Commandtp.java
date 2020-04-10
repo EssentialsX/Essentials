@@ -45,7 +45,7 @@ public class Commandtp extends EssentialsCommand {
                 }
                 final Trade charge = new Trade(this.getName(), ess);
                 charge.isAffordableFor(user);
-                user.getTeleport().teleport(player.getBase(), charge, TeleportCause.COMMAND, eFuture, future);
+                user.getAsyncTeleport().teleport(player.getBase(), charge, TeleportCause.COMMAND, eFuture, future);
                 break;
             case 3:
                 if (!user.isAuthorized("essentials.tp.position")) {
@@ -58,7 +58,7 @@ public class Commandtp extends EssentialsCommand {
                     throw new NotEnoughArgumentsException(tl("teleportInvalidLocation"));
                 }
                 final Location locpos = new Location(user.getWorld(), x2, y2, z2, user.getLocation().getYaw(), user.getLocation().getPitch());
-                user.getTeleport().now(locpos, false, TeleportCause.COMMAND, eFuture, future);
+                user.getAsyncTeleport().now(locpos, false, TeleportCause.COMMAND, eFuture, future);
                 future.thenAccept(success -> {
                     if (success) {
                         user.sendMessage(tl("teleporting", locpos.getWorld().getName(), locpos.getBlockX(), locpos.getBlockY(), locpos.getBlockZ()));
@@ -84,7 +84,7 @@ public class Commandtp extends EssentialsCommand {
                     throw new Exception(tl("teleportDisabled", target2.getDisplayName()));
                 }
                 user.sendMessage(tl("teleporting", locposother.getWorld().getName(), locposother.getBlockX(), locposother.getBlockY(), locposother.getBlockZ()));
-                target2.getTeleport().now(locposother, false, TeleportCause.COMMAND, eFuture, future);
+                target2.getAsyncTeleport().now(locposother, false, TeleportCause.COMMAND, eFuture, future);
                 future.thenAccept(success -> {
                     if (success) {
                         target2.sendMessage(tl("teleporting", locposother.getWorld().getName(), locposother.getBlockX(), locposother.getBlockY(), locposother.getBlockZ()));
@@ -108,7 +108,7 @@ public class Commandtp extends EssentialsCommand {
                     throw new Exception(tl("noPerm", "essentials.worlds." + toPlayer.getWorld().getName()));
                 }
                 target.sendMessage(tl("teleportAtoB", user.getDisplayName(), toPlayer.getDisplayName()));
-                target.getTeleport().now(toPlayer.getBase(), false, TeleportCause.COMMAND, eFuture, future);
+                target.getAsyncTeleport().now(toPlayer.getBase(), false, TeleportCause.COMMAND, eFuture, future);
                 break;
         }
     }
@@ -124,7 +124,7 @@ public class Commandtp extends EssentialsCommand {
             final User toPlayer = getPlayer(server, args, 1, true, false);
             target.sendMessage(tl("teleportAtoB", Console.NAME, toPlayer.getDisplayName()));
             CompletableFuture<Exception> eFuture = new CompletableFuture<>();
-            target.getTeleport().now(toPlayer.getBase(), false, TeleportCause.COMMAND, eFuture, new CompletableFuture<>());
+            target.getAsyncTeleport().now(toPlayer.getBase(), false, TeleportCause.COMMAND, eFuture, new CompletableFuture<>());
             eFuture.thenAccept(e -> showError(sender.getSender(), e, commandLabel));
         } else if (args.length > 3) {
             final double x = args[1].startsWith("~") ? target.getLocation().getX() + (args[1].length() > 1 ? Double.parseDouble(args[1].substring(1)) : 0) : Double.parseDouble(args[1]);
@@ -137,7 +137,7 @@ public class Commandtp extends EssentialsCommand {
             sender.sendMessage(tl("teleporting", loc.getWorld().getName(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ()));
             CompletableFuture<Exception> eFuture = new CompletableFuture<>();
             CompletableFuture<Boolean> future = new CompletableFuture<>();
-            target.getTeleport().now(loc, false, TeleportCause.COMMAND, eFuture, future);
+            target.getAsyncTeleport().now(loc, false, TeleportCause.COMMAND, eFuture, future);
             future.thenAccept(success -> {
                 if (success) {
                     target.sendMessage(tl("teleporting", loc.getWorld().getName(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ()));
