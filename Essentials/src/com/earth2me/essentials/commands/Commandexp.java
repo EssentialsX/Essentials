@@ -179,23 +179,22 @@ public class Commandexp extends EssentialsCommand {
             }
             return options;
         } else if (args.length == 2) {
-            if ((args[0].equalsIgnoreCase("set") && user.isAuthorized("essentials.exp.set")) || (args[0].equalsIgnoreCase("give") && user.isAuthorized("essentials.exp.give"))) {
-                String levellessArg = args[1].toLowerCase(Locale.ENGLISH).replace("l", "");
+            if ((args[0].equalsIgnoreCase("set") && user.isAuthorized("essentials.exp.set")) || (args[0].equalsIgnoreCase("give") && user.isAuthorized("essentials.exp.give")) || (args[0].equalsIgnoreCase("take") && user.isAuthorized("essentials.exp.take"))) {
+                String levellessArg = args[1].toLowerCase(Locale.ENGLISH).replaceAll("l", "");
                 if (NumberUtil.isInt(levellessArg)) {
-                    return Lists.newArrayList(levellessArg, args[1] + "l");
-                } else {
-                    return Collections.emptyList();
+                    return Lists.newArrayList(levellessArg + "l");
                 }
-            } else if (args[0].equalsIgnoreCase("show") && user.isAuthorized("essentials.exp.others")) {
-                return getPlayers(server, user);
-            } else {
-                return Collections.emptyList();
             }
-        } else if (args.length == 3 && (args[0].equalsIgnoreCase("set") && user.isAuthorized("essentials.exp.set.others")) || (args[0].equalsIgnoreCase("give") && user.isAuthorized("essentials.exp.give.others"))) {
-            return getPlayers(server, user);
-        } else {
-            return Collections.emptyList();
+            if (user.isAuthorized("essentials.exp.others")) {
+                return getPlayers(server, user);
+            }
+        } else if (args.length == 3 && !(args[0].equalsIgnoreCase("show") || args[0].equalsIgnoreCase("reset"))) {
+            String levellessArg = args[2].toLowerCase(Locale.ENGLISH).replaceAll("l", "");
+            if (NumberUtil.isInt(levellessArg)) {
+                return Lists.newArrayList(levellessArg + "l");
+            }
         }
+        return Collections.emptyList();
     }
 
     @Override

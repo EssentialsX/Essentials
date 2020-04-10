@@ -113,6 +113,11 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
     private transient Kits kits;
 
     public Essentials() {
+
+    }
+
+    protected Essentials(JavaPluginLoader loader, PluginDescriptionFile description, File dataFolder, File file) {
+        super(loader, description, dataFolder, file);
     }
 
     public Essentials(final Server server) {
@@ -521,6 +526,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
 
             // Check for disabled commands
             if (getSettings().isCommandDisabled(commandLabel)) {
+                sender.sendMessage(tl("commandDisabled", commandLabel));
                 return true;
             }
 

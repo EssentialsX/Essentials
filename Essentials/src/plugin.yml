@@ -149,8 +149,8 @@ commands:
     usage: /<command> [player] [on|off]
     aliases: [efly]
   fireball:
-    description: Throw a fireball.
-    usage: /<command> [small|large|dragon|arrow|skull|egg|snowball|expbottle|splashpotion|lingeringpotion] [speed]
+    description: Throw a fireball or other assorted projectiles.
+    usage: /<command> [fireball|small|large|arrow|skull|egg|snowball|expbottle|dragon|splashpotion|lingeringpotion|trident] [speed]
     aliases: [efireball,fireentity,efireentity,fireskull,efireskull]
   firework:
     description: Allows you to modify a stack of fireworks.
@@ -296,6 +296,10 @@ commands:
     description: May death rain upon them.
     usage: /<command> [player]
     aliases: [enuke]
+  tpoffline:
+    description: Teleport to a player's last known logout location
+    usage: /<command> <player>
+    aliases: [otp, offlinetp, tpoff, tpoffline]
   pay:
     description: Pays another player from your balance.
     usage: /<command> <player> <amount>
@@ -543,6 +547,9 @@ permissions:
     description: Give players with op everything by default
     children:
       essentials.gamemode.*: true
+  essentials.sleepingignored:
+    default: false
+    description: If the player has this permission, they will not have to sleep for the night to be skipped
   # These permissions can't be assigned from player-commands for compatibility reasons
   essentials.teleport.cooldown.bypass.tpa:
     default: true
@@ -564,3 +571,6 @@ permissions:
   essentials.keepinv:
     default: false
     description: Controls whether players keep their inventory on death.
+  essentials.near.exclude:
+    default: false
+    description: If the player should be excluded from near lookups.

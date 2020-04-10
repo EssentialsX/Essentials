@@ -158,6 +158,11 @@ public class Settings implements net.ess3.api.ISettings {
     }
 
     @Override
+    public boolean isTeleportPassengerDismount() {
+        return config.getBoolean("teleport-passenger-dismount", true);
+    }
+
+    @Override
     public double getTeleportDelay() {
         return config.getDouble("teleport-delay", 0);
     }
@@ -784,6 +789,11 @@ public class Settings implements net.ess3.api.ISettings {
     @Override
     public boolean isEcoLogUpdateEnabled() {
         return economyLogUpdate;
+    }
+
+    @Override
+    public boolean realNamesOnList() {
+        return config.getBoolean("real-names-on-list", false);
     }
 
     public boolean _isEcoLogUpdateEnabled() {
