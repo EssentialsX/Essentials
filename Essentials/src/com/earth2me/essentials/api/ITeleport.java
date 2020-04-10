@@ -56,7 +56,7 @@ public interface ITeleport {
      * @param entity    - Where should the player end up
      * @param chargeFor - What the user will be charged if teleportPlayer is successful
      * @param cause     - The reported teleportPlayer cause
-
+     *
      * @throws Exception
      */
     @Deprecated
