@@ -9,24 +9,24 @@ public class MuteStatusChangeEvent extends StatusChangeEvent {
 
     @Deprecated
     public MuteStatusChangeEvent(IUser affected, IUser controller, boolean value) {
-        this(affected, controller, value, null, null);
+        this(affected, controller, value, -1, null);
     }
 
-    public MuteStatusChangeEvent(IUser affected, IUser controller, boolean value, Long timestamp, String reason) {
+    public MuteStatusChangeEvent(IUser affected, IUser controller, boolean value, long timestamp, String reason) {
         super(affected, controller, value);
         this.timestamp = timestamp;
         this.reason = reason == null ? null : (reason.isEmpty() ? null : reason);
     }
 
     /**
-     * @return Returns null if the timestamp is unknown due to usage of deprecated api; Otherwise, the timestamp with 0 indicating permanent.
+     * @return If the mute is temporary, returns the timestamp; if permanent, returns 0, and if unknown, returns -1.
      */
     public Long getTimestamp() {
         return timestamp;
     }
 
     /**
-     * @return Returns null if no reason is provided or due to the usage of a deprecated api; Otherwise, the reason.
+     * @return Returns the reason if provided, otherwise null.
      */
     public String getReason() {
         return reason;
