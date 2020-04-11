@@ -34,14 +34,6 @@ import com.earth2me.essentials.textreader.SimpleTextInput;
 import com.earth2me.essentials.utils.DateUtil;
 import com.earth2me.essentials.utils.VersionUtil;
 import com.google.common.base.Throwables;
-import java.io.File;
-import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import java.util.stream.Collectors;
 import net.ess3.api.IEssentials;
 import net.ess3.api.ISettings;
 import net.ess3.api.*;
@@ -83,6 +75,18 @@ import org.bukkit.scheduler.BukkitScheduler;
 import org.bukkit.scheduler.BukkitTask;
 import org.yaml.snakeyaml.error.YAMLException;
 
+import java.io.File;
+import java.io.IOException;
+import java.lang.invoke.MethodHandle;
+import java.lang.invoke.MethodHandles;
+import java.lang.invoke.MethodType;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.util.stream.Collectors;
+
 import static com.earth2me.essentials.I18n.tl;
 
 
@@ -111,6 +115,18 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
     private transient SpawnEggProvider spawnEggProvider;
     private transient PotionMetaProvider potionMetaProvider;
     private transient Kits kits;
+
+    private static final MethodHandle isStopping; //Only in Paper
+
+    static {
+        MethodHandle isStoppingHandle;
+        try {
+            isStoppingHandle = MethodHandles.lookup().findStatic(Bukkit.class, "isStopping", MethodType.methodType(boolean.class));
+        } catch (NoSuchMethodException | IllegalAccessException e) {
+            isStoppingHandle = null;
+        }
+        isStopping = isStoppingHandle;
+    }
 
     public Essentials() {
 
@@ -357,10 +373,27 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
 
     @Override
     public void onDisable() {
+        boolean stopping = false;
+        if (isStopping != null) {
+            try {
+                stopping = (boolean) isStopping.invoke();
+            } catch (Throwable throwable) {
+                throwable.printStackTrace();
+            }
+        }
         for (User user : getOnlineUsers()) {
             if (user.isVanished()) {
                 user.setVanished(false);
                 user.sendMessage(tl("unvanishedReload"));
+            }
+            if (stopping) {
+                user.setLogoutLocation();
+                if (!user.isHidden()) {
+                    user.setLastLogout(System.currentTimeMillis());
+                }
+                user.stopTransaction();
+                user.dispose();
+                continue;
             }
             user.stopTransaction();
         }
