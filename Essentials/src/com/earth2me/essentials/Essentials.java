@@ -392,10 +392,10 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
                     user.setLastLogout(System.currentTimeMillis());
                 }
                 user.stopTransaction();
-                user.dispose();
-                continue;
+                user.cleanup();
+            } else {
+                user.stopTransaction();
             }
-            user.stopTransaction();
         }
         cleanupOpenInventories();
         if (i18n != null) {
