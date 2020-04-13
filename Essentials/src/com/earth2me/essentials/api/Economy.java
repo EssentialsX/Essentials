@@ -247,7 +247,7 @@ public class Economy {
      * @param amount The amount of money to be added to the user's account
      *
      * @throws UserDoesNotExistException If a user by that name does not exist
-     * @throws NoLoanPermittedException  If the user is now allowed to have a negative balance
+     * @throws NoLoanPermittedException  If the user is not allowed to have a negative balance
      * @throws ArithmeticException
      */
     @Deprecated
@@ -454,7 +454,7 @@ public class Economy {
      * @param amount The balance is multiplied by the this value
      *
      * @throws UserDoesNotExistException If a user by that name does not exist
-     * @throws NoLoanPermittedException  If the user is now allowed to have a negative balance
+     * @throws NoLoanPermittedException  If the user is not allowed to have a negative balance
      * @throws ArithmeticException
      */
     @Deprecated
@@ -472,7 +472,7 @@ public class Economy {
      * @param uuid   Name of the user
      * @param amount The balance is multiplied by the this value
      *
-     * @throws NoLoanPermittedException  If the user is now allowed to have a negative balance
+     * @throws NoLoanPermittedException  If the user is not allowed to have a negative balance
      * @throws ArithmeticException
      */
     public static void multiply(UUID uuid, BigDecimal amount) throws NoLoanPermittedException, ArithmeticException {
@@ -485,7 +485,7 @@ public class Economy {
      * @param user   Name of the user
      * @param amount The balance is multiplied by the this value
      *
-     * @throws NoLoanPermittedException  If the user is now allowed to have a negative balance
+     * @throws NoLoanPermittedException  If the user is not allowed to have a negative balance
      * @throws ArithmeticException
      */
     public static void multiply(User user, BigDecimal amount) throws NoLoanPermittedException, ArithmeticException {
