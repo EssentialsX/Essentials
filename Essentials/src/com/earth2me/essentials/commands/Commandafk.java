@@ -56,25 +56,31 @@ public class Commandafk extends EssentialsCommand {
         }
         user.setDisplayNick();
         String msg = "";
+        String selfmsg = "";
         if (!user.toggleAfk(AfkStatusChangeEvent.Cause.COMMAND)) {
-            //user.sendMessage(_("markedAsNotAway"));
             if (!user.isHidden()) {
                 msg = tl("userIsNotAway", user.getDisplayName());
+                selfmsg = tl("userIsNotAwaySelf");
             }
             user.updateActivity(false, AfkStatusChangeEvent.Cause.COMMAND);
         } else {
-            //user.sendMessage(_("markedAsAway"));
             if (!user.isHidden()) {
                 if (message != null) {
                     msg = tl("userIsAwayWithMessage", user.getDisplayName(), message);
+                    selfmsg = tl("userIsAwaySelfWithMessage", message);
                 } else {
                     msg = tl("userIsAway", user.getDisplayName());
+                    selfmsg = tl("userIsAwaySelf");
                 }
             }
             user.setAfkMessage(message);
         }
-        if (!msg.isEmpty()) {
-            ess.broadcastMessage(user, msg);
+        if (!msg.isEmpty() && ess.getSettings().broadcastAfkMessage()) {
+            // exclude user from receiving general AFK announcement in favor of personal message
+            ess.broadcastMessage(user, msg, u -> u == user);
+        }
+        if (!selfmsg.isEmpty()) {
+            user.sendMessage(selfmsg);
         }
         user.setDisplayNick(); // Set this again after toggling
     }
