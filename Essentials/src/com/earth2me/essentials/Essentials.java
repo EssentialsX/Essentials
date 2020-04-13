@@ -45,6 +45,7 @@ import net.ess3.nms.legacy.LegacyPotionMetaProvider;
 import net.ess3.nms.legacy.LegacySpawnEggProvider;
 import net.ess3.nms.legacy.LegacySpawnerProvider;
 import net.ess3.nms.refl.ReflSpawnEggProvider;
+import net.ess3.nms.refl.ReflUtil;
 import net.ess3.nms.updatedmeta.BasePotionDataProvider;
 import net.ess3.nms.updatedmeta.BlockMetaSpawnerProvider;
 import net.ess3.nms.v1_8_R1.v1_8_R1SpawnerProvider;
@@ -118,15 +119,32 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
     private transient Kits kits;
 
     private static final MethodHandle isStopping; //Only in Paper
+    private static final MethodHandle nmsHasStopped;
+    private static final MethodHandle nmsIsRunning;
+    private static final Object nmsServer;
 
     static {
-        MethodHandle isStoppingHandle;
+        MethodHandle isStoppingHandle = null;
+        MethodHandle nmsHasStoppedHandle = null;
+        MethodHandle nmsIsRunningHandle = null;
+        Object nmsServerObject = null;
         try {
             isStoppingHandle = MethodHandles.lookup().findStatic(Bukkit.class, "isStopping", MethodType.methodType(boolean.class));
-        } catch (NoSuchMethodException | IllegalAccessException e) {
-            isStoppingHandle = null;
+        } catch (Throwable e) {
+            try {
+                Class<?> nmsClass = ReflUtil.getNMSClass("MinecraftServer");
+                if (nmsClass != null) {
+                    nmsServerObject = ReflUtil.getMethodCached(nmsClass, "getServer").invoke(null);
+                    nmsIsRunningHandle = MethodHandles.lookup().findVirtual(nmsClass, "isRunning", MethodType.methodType(boolean.class));
+                    nmsHasStoppedHandle = MethodHandles.lookup().findVirtual(nmsClass, "hasStopped", MethodType.methodType(boolean.class));
+                }
+            } catch (Throwable ignored) {
+            }
         }
         isStopping = isStoppingHandle;
+        nmsHasStopped = nmsHasStoppedHandle;
+        nmsIsRunning = nmsIsRunningHandle;
+        nmsServer = nmsServerObject;
     }
 
     public Essentials() {
@@ -374,12 +392,43 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
 
     @Override
     public void onDisable() {
+        boolean stopping = false;
+        if (isStopping != null) {
+            try {
+                stopping = (boolean) isStopping.invoke();
+            } catch (Throwable t) {
+                t.printStackTrace();
+            }
+        } else if (nmsServer != null) {
+            if (nmsHasStopped != null) {
+                try {
+                    stopping = (boolean) nmsHasStopped.invokeExact(nmsServer);
+                } catch (Throwable t) {
+                    t.printStackTrace();
+                }
+            } else if (nmsIsRunning != null) {
+                try {
+                    stopping = (boolean) nmsIsRunning.invokeExact(nmsServer);
+                } catch (Throwable t) {
+                    t.printStackTrace();
+                }
+            }
+        }
+
         for (User user : getOnlineUsers()) {
             if (user.isVanished()) {
                 user.setVanished(false);
                 user.sendMessage(tl("unvanishedReload"));
             }
-            user.stopTransaction();
+            if (stopping) {
+                user.setLastLocation();
+                if (!user.isHidden()) {
+                    user.setLastLogout(System.currentTimeMillis());
+                }
+                user.cleanup();
+            } else {
+                user.stopTransaction();
+            }
         }
         cleanupOpenInventories();
         if (i18n != null) {
