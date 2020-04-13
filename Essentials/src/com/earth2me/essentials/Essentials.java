@@ -83,6 +83,7 @@ import java.lang.invoke.MethodType;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
+import java.util.function.Predicate;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
@@ -373,29 +374,12 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
 
     @Override
     public void onDisable() {
-        boolean stopping = false;
-        if (isStopping != null) {
-            try {
-                stopping = (boolean) isStopping.invoke();
-            } catch (Throwable throwable) {
-                throwable.printStackTrace();
-            }
-        }
         for (User user : getOnlineUsers()) {
             if (user.isVanished()) {
                 user.setVanished(false);
                 user.sendMessage(tl("unvanishedReload"));
             }
-            if (stopping) {
-                user.setLogoutLocation();
-                if (!user.isHidden()) {
-                    user.setLastLogout(System.currentTimeMillis());
-                }
-                user.stopTransaction();
-                user.cleanup();
-            } else {
-                user.stopTransaction();
-            }
+            user.stopTransaction();
         }
         cleanupOpenInventories();
         if (i18n != null) {
@@ -795,20 +779,25 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
 
     @Override
     public int broadcastMessage(final String message) {
-        return broadcastMessage(null, null, message, true);
+        return broadcastMessage(null, null, message, true, u -> false);
     }
 
     @Override
     public int broadcastMessage(final IUser sender, final String message) {
-        return broadcastMessage(sender, null, message, false);
+        return broadcastMessage(sender, null, message, false, u -> false);
+    }
+
+    @Override
+    public int broadcastMessage(final IUser sender, final String message, final Predicate<IUser> shouldExclude) {
+        return broadcastMessage(sender, null, message, false, shouldExclude);
     }
 
     @Override
     public int broadcastMessage(final String permission, final String message) {
-        return broadcastMessage(null, permission, message, false);
+        return broadcastMessage(null, permission, message, false, u -> false);
     }
 
-    private int broadcastMessage(final IUser sender, final String permission, final String message, final boolean keywords) {
+    private int broadcastMessage(final IUser sender, final String permission, final String message, final boolean keywords, final Predicate<IUser> shouldExclude) {
         if (sender != null && sender.isHidden()) {
             return 0;
         }
@@ -820,6 +809,9 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
         for (Player player : players) {
             final User user = getUser(player);
             if ((permission == null && (sender == null || !user.isIgnoredPlayer(sender))) || (permission != null && user.isAuthorized(permission))) {
+                if (shouldExclude.test(user)) {
+                    continue;
+                }
                 if (keywords) {
                     broadcast = new KeywordReplacer(broadcast, new CommandSource(player), this, false);
                 }

@@ -196,6 +196,8 @@ public interface ISettings extends IConf {
 
     String getAfkListName();
 
+    boolean broadcastAfkMessage();
+
     boolean areDeathMessagesEnabled();
 
     void setDebug(boolean debug);

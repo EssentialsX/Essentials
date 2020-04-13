@@ -513,6 +513,7 @@ public class Settings implements net.ess3.api.ISettings {
         sleepIgnoresAfkPlayers = _sleepIgnoresAfkPlayers();
         afkListName = _getAfkListName();
         isAfkListName = !afkListName.equalsIgnoreCase("none");
+        broadcastAfkMessage = _broadcastAfkMessage();
         itemSpawnBl = _getItemSpawnBlacklist();
         loginAttackDelay = _getLoginAttackDelay();
         signUsePerSecond = _getSignUsePerSecond();
@@ -947,6 +948,17 @@ public class Settings implements net.ess3.api.ISettings {
     @Override
     public String getAfkListName() {
         return afkListName;
+    }
+
+    private boolean broadcastAfkMessage;
+
+    @Override
+    public boolean broadcastAfkMessage() {
+        return broadcastAfkMessage;
+    }
+
+    private boolean _broadcastAfkMessage() {
+        return config.getBoolean("broadcast-afk-message", true);
     }
 
     @Override
