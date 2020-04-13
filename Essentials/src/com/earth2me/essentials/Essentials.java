@@ -805,7 +805,6 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
         IText broadcast = new SimpleTextInput(message);
 
         final Collection<Player> players = getOnlinePlayers();
-
         for (Player player : players) {
             final User user = getUser(player);
             if ((permission == null && (sender == null || !user.isIgnoredPlayer(sender))) || (permission != null && user.isAuthorized(permission))) {
