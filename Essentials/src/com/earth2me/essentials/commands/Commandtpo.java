@@ -18,8 +18,6 @@ public class Commandtpo extends EssentialsCommand {
 
     @Override
     public void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception {
-        CompletableFuture<Exception> eFuture = new CompletableFuture<>();
-        eFuture.thenAccept(e -> showError(user.getBase(), e, commandLabel));
         switch (args.length) {
             case 0:
                 throw new NotEnoughArgumentsException();
@@ -29,7 +27,7 @@ public class Commandtpo extends EssentialsCommand {
                 if (user.getWorld() != player.getWorld() && ess.getSettings().isWorldTeleportPermissions() && !user.isAuthorized("essentials.worlds." + player.getWorld().getName())) {
                     throw new Exception(tl("noPerm", "essentials.worlds." + player.getWorld().getName()));
                 }
-                user.getAsyncTeleport().now(player.getBase(), false, TeleportCause.COMMAND, eFuture, new CompletableFuture<>());
+                user.getAsyncTeleport().now(player.getBase(), false, TeleportCause.COMMAND, getNewExceptionFuture(user.getSource(), commandLabel), new CompletableFuture<>());
                 break;
 
             default:
@@ -49,7 +47,7 @@ public class Commandtpo extends EssentialsCommand {
                        target.sendMessage(tl("teleportAtoB", user.getDisplayName(), toPlayer.getDisplayName()));
                    }
                 });
-                target.getAsyncTeleport().now(toPlayer.getBase(), false, TeleportCause.COMMAND, eFuture, future);
+                target.getAsyncTeleport().now(toPlayer.getBase(), false, TeleportCause.COMMAND, getNewExceptionFuture(user.getSource(), commandLabel), future);
                 break;
         }
     }
