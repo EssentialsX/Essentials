@@ -42,9 +42,7 @@ public class Commandtpall extends EssentialsCommand {
             if (sender.equals(target.getBase()) && target.getWorld() != player.getWorld() && ess.getSettings().isWorldTeleportPermissions() && !target.isAuthorized("essentials.worlds." + target.getWorld().getName())) {
                 continue;
             }
-            CompletableFuture<Exception> eFuture = new CompletableFuture<>();
-            eFuture.thenAccept(e -> showError(sender.getSender(), e, label));
-            player.getAsyncTeleport().now(loc, false, TeleportCause.COMMAND, eFuture, new CompletableFuture<>());
+            player.getAsyncTeleport().now(loc, false, TeleportCause.COMMAND, getNewExceptionFuture(sender, label), new CompletableFuture<>());
         }
     }
 

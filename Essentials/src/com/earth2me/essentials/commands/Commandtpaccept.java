@@ -51,10 +51,9 @@ public class Commandtpaccept extends EssentialsCommand {
         user.sendMessage(tl("requestAccepted"));
         requester.sendMessage(tl("requestAcceptedFrom", user.getDisplayName()));
 
-        CompletableFuture<Exception> eFuture = new CompletableFuture<>();
+        CompletableFuture<Exception> eFuture = getNewExceptionFuture(requester.getSource(), commandLabel);
         eFuture.thenAccept(e -> {
             user.sendMessage(tl("pendingTeleportCancelled"));
-            ess.showError(requester.getSource(), e, commandLabel);
         });
         CompletableFuture<Boolean> future = new CompletableFuture<>();
         future.thenAccept(success -> {

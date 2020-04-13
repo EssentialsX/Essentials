@@ -38,32 +38,30 @@ public class Commandhome extends EssentialsCommand {
                 }
             }
         }
-        CompletableFuture<Exception> eFuture = new CompletableFuture<>();
-        eFuture.thenAccept(e -> showError(user.getBase(), e, commandLabel));
         try {
             if ("bed".equalsIgnoreCase(homeName) && user.isAuthorized("essentials.home.bed")) {
                 final Location bed = player.getBase().getBedSpawnLocation();
                 if (bed != null) {
-                    user.getAsyncTeleport().teleport(bed, charge, TeleportCause.COMMAND, eFuture, new CompletableFuture<>());
+                    user.getAsyncTeleport().teleport(bed, charge, TeleportCause.COMMAND, getNewExceptionFuture(user.getSource(), commandLabel), new CompletableFuture<>());
                     return;
                 } else {
                     throw new Exception(tl("bedMissing"));
                 }
             }
-            goHome(user, player, homeName.toLowerCase(Locale.ENGLISH), charge, eFuture);
+            goHome(user, player, homeName.toLowerCase(Locale.ENGLISH), charge, getNewExceptionFuture(user.getSource(), commandLabel));
         } catch (NotEnoughArgumentsException e) {
             Location bed = player.getBase().getBedSpawnLocation();
             final List<String> homes = player.getHomes();
             if (homes.isEmpty() && player.equals(user)) {
                 if (ess.getSettings().isSpawnIfNoHome()) {
-                    user.getAsyncTeleport().respawn(charge, TeleportCause.COMMAND, eFuture, new CompletableFuture<>());
+                    user.getAsyncTeleport().respawn(charge, TeleportCause.COMMAND, getNewExceptionFuture(user.getSource(), commandLabel), new CompletableFuture<>());
                 } else {
                     throw new Exception(tl("noHomeSetPlayer"));
                 }
             } else if (homes.isEmpty()) {
                 throw new Exception(tl("noHomeSetPlayer"));
             } else if (homes.size() == 1 && player.equals(user)) {
-                goHome(user, player, homes.get(0), charge, eFuture);
+                goHome(user, player, homes.get(0), charge, getNewExceptionFuture(user.getSource(), commandLabel));
             } else {
                 final int count = homes.size();
                 if (user.isAuthorized("essentials.home.bed")) {
