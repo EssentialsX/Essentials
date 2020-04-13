@@ -951,8 +951,6 @@ public class Settings implements net.ess3.api.ISettings {
         return config.getBoolean("broadcast-afk-message", true);
     }
 
-
-
     @Override
     public boolean areDeathMessagesEnabled() {
         return config.getBoolean("death-messages", true);

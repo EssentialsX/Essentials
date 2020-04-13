@@ -1,14 +1,12 @@
 package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.CommandSource;
-import com.earth2me.essentials.IUser;
 import com.earth2me.essentials.User;
 import net.ess3.api.events.AfkStatusChangeEvent;
 import org.bukkit.Server;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.function.Function;
 
 import static com.earth2me.essentials.I18n.tl;
 
