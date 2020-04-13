@@ -121,9 +121,7 @@ public class Commandtp extends EssentialsCommand {
         if (args.length == 2) {
             final User toPlayer = getPlayer(server, args, 1, true, false);
             target.sendMessage(tl("teleportAtoB", Console.NAME, toPlayer.getDisplayName()));
-            CompletableFuture<Exception> eFuture = new CompletableFuture<>();
-            target.getAsyncTeleport().now(toPlayer.getBase(), false, TeleportCause.COMMAND, eFuture, new CompletableFuture<>());
-            eFuture.thenAccept(e -> showError(sender.getSender(), e, commandLabel));
+            target.getAsyncTeleport().now(toPlayer.getBase(), false, TeleportCause.COMMAND, getNewExceptionFuture(sender, commandLabel), new CompletableFuture<>());
         } else if (args.length > 3) {
             final double x = args[1].startsWith("~") ? target.getLocation().getX() + (args[1].length() > 1 ? Double.parseDouble(args[1].substring(1)) : 0) : Double.parseDouble(args[1]);
             final double y = args[2].startsWith("~") ? target.getLocation().getY() + (args[2].length() > 1 ? Double.parseDouble(args[2].substring(1)) : 0) : Double.parseDouble(args[2]);
@@ -133,15 +131,13 @@ public class Commandtp extends EssentialsCommand {
             }
             final Location loc = new Location(target.getWorld(), x, y, z, target.getLocation().getYaw(), target.getLocation().getPitch());
             sender.sendMessage(tl("teleporting", loc.getWorld().getName(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ()));
-            CompletableFuture<Exception> eFuture = new CompletableFuture<>();
             CompletableFuture<Boolean> future = new CompletableFuture<>();
-            target.getAsyncTeleport().now(loc, false, TeleportCause.COMMAND, eFuture, future);
+            target.getAsyncTeleport().now(loc, false, TeleportCause.COMMAND, getNewExceptionFuture(sender, commandLabel), future);
             future.thenAccept(success -> {
                 if (success) {
                     target.sendMessage(tl("teleporting", loc.getWorld().getName(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ()));
                 }
             });
-            eFuture.thenAccept(e -> showError(sender.getSender(), e, commandLabel));
         } else {
             throw new NotEnoughArgumentsException();
         }
