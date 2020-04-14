@@ -60,17 +60,17 @@ public class Commandafk extends EssentialsCommand {
         if (!user.toggleAfk(AfkStatusChangeEvent.Cause.COMMAND)) {
             if (!user.isHidden()) {
                 msg = tl("userIsNotAway", user.getDisplayName());
-                selfmsg = tl("userIsNotAwaySelf");
+                selfmsg = tl("userIsNotAwaySelf", user.getDisplayName());
             }
             user.updateActivity(false, AfkStatusChangeEvent.Cause.COMMAND);
         } else {
             if (!user.isHidden()) {
                 if (message != null) {
                     msg = tl("userIsAwayWithMessage", user.getDisplayName(), message);
-                    selfmsg = tl("userIsAwaySelfWithMessage", message);
+                    selfmsg = tl("userIsAwaySelfWithMessage", user.getDisplayName(), message);
                 } else {
                     msg = tl("userIsAway", user.getDisplayName());
-                    selfmsg = tl("userIsAwaySelf");
+                    selfmsg = tl("userIsAwaySelf", user.getDisplayName());
                 }
             }
             user.setAfkMessage(message);
