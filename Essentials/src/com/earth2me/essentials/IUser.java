@@ -194,5 +194,7 @@ public interface IUser {
 
     void setLastMessageReplyRecipient(boolean enabled);
 
+    boolean isPayBlockExempt();
+
     Map<User, BigDecimal> getConfirmingPayments();
 }

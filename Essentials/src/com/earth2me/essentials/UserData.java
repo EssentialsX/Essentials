@@ -93,6 +93,7 @@ public abstract class UserData extends PlayerExtension implements IConf {
         lastAccountName = _getLastAccountName();
         commandCooldowns = _getCommandCooldowns();
         acceptingPay = _getAcceptingPay();
+        blockingIndividualPay = _getBlockingIndividualPay();
         confirmPay = _getConfirmPay();
         confirmClear = _getConfirmClear();
         lastMessageReplyRecipient = _getLastMessageReplyRecipient();
@@ -958,6 +959,50 @@ public abstract class UserData extends PlayerExtension implements IConf {
         this.acceptingPay = acceptingPay;
         config.setProperty("acceptingPay", acceptingPay);
         save();
+    }
+
+    private List<String> blockingIndividualPay = new ArrayList<>();
+
+    public List<String> _getBlockingIndividualPay() {
+        return Collections.synchronizedList(config.getStringList("blockingIndividualPay"));
+    }
+
+    public List<String> getBlockingIndividualPay() {
+        return blockingIndividualPay;
+    }
+
+    public void setBlockingIndividualPay(List<String> players) {
+        if (players == null || players.isEmpty()) {
+            blockingIndividualPay = Collections.synchronizedList(new ArrayList<String>());
+            config.removeProperty("blockingIndividualPay");
+        } else {
+            blockingIndividualPay = players;
+            config.setProperty("blockingIndividualPay", players);
+        }
+        config.save();
+    }
+
+    @Deprecated
+    public boolean isPlayerPayBlocked(final String userName) {
+        final IUser user = ess.getUser(userName);
+        if (user == null || !user.getBase().isOnline()) {
+            return false;
+        }
+        return isPlayerPayBlocked(user);
+    }
+
+    public boolean isPlayerPayBlocked(IUser user) {
+        return (blockingIndividualPay.contains(user.getName().toLowerCase(Locale.ENGLISH)));
+    }
+
+    public void setPlayerPayBlocked(IUser user, boolean set) {
+        final String entry = user.getName().toLowerCase(Locale.ENGLISH);
+        if (set) {
+            if (!blockingIndividualPay.contains(entry)) blockingIndividualPay.add(entry);
+        } else {
+            blockingIndividualPay.remove(entry);
+        }
+        setBlockingIndividualPay(blockingIndividualPay);
     }
 
     private Boolean confirmPay;

@@ -59,7 +59,7 @@ public class Commandpay extends EssentialsLoopCommand {
     protected void updatePlayer(final Server server, final CommandSource sender, final User player, final String[] args) throws ChargeException {
         User user = ess.getUser(sender.getPlayer());
         try {
-            if (!player.isAcceptingPay()) {
+            if (!player.isAcceptingPay() || player.isPlayerPayBlocked(user)) {
                 sender.sendMessage(tl("notAcceptingPay", player.getDisplayName()));
                 return;
             }

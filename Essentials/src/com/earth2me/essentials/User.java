@@ -930,6 +930,11 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
     }
 
     @Override
+    public boolean isPayBlockExempt() {
+        return this.isAuthorized("essentials.paytoggle.exempt");
+    }
+
+    @Override
     public Map<User, BigDecimal> getConfirmingPayments() {
         return confirmingPayments;
     }
