@@ -831,7 +831,7 @@ public class EssentialsPlayerListener implements Listener {
     private final class ArrowPickupListener implements Listener {
         @EventHandler(priority = EventPriority.LOW)
         public void onArrowPickup(final org.bukkit.event.player.PlayerPickupArrowEvent event) {
-            if (event.getArrow().hasMetadata(Commandfireball.FIREBALL_META_KEY)) {
+            if (event.getItem().hasMetadata(Commandfireball.FIREBALL_META_KEY)) {
                 event.setCancelled(true);
             }
         }
