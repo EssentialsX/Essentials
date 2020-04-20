@@ -170,7 +170,7 @@ public class AsyncTeleport implements IAsyncTeleport {
         teleportee.setLastLocation();
         PaperLib.getChunkAtAsync(target.getLocation()).thenAccept(chunk -> {
             Location loc = target.getLocation();
-            if (LocationUtil.isBlockUnsafeForUser(teleportee, chunk, loc.getBlockX(), loc.getBlockY(), loc.getBlockZ())) {
+            if (LocationUtil.isBlockUnsafeForUser(teleportee, chunk.getWorld(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ())) {
                 if (ess.getSettings().isTeleportSafetyEnabled()) {
                     if (ess.getSettings().isForceDisableTeleportSafety()) {
                         //The chunk we're teleporting to is 100% going to be loaded here, no need to teleport async.
