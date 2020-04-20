@@ -2,22 +2,24 @@ package net.ess3.api.events;
 
 import net.ess3.api.IUser;
 
+import java.util.Optional;
+
 
 public class MuteStatusChangeEvent extends StatusChangeEvent {
     private Long timestamp;
     private String reason;
 
-    public MuteStatusChangeEvent(IUser affected, IUser controller, boolean value, long timestamp, String reason) {
+    public MuteStatusChangeEvent(IUser affected, IUser controller, boolean value, Long timestamp, String reason) {
         super(affected, controller, value);
         this.timestamp = timestamp;
         this.reason = reason == null ? null : (reason.isEmpty() ? null : reason);
     }
 
     /**
-     * @return If the mute is temporary, returns the timestamp; if permanent, returns 0, and if unknown, returns -1.
+     * @return If the mute is temporary, returns a present optional with the timestamp; if permanent or unknown, returns an empty optional.
      */
-    public Long getTimestamp() {
-        return timestamp;
+    public Optional<Long> getTimestamp() {
+        return Optional.ofNullable(timestamp <= 0 ? null : timestamp);
     }
 
     /**
