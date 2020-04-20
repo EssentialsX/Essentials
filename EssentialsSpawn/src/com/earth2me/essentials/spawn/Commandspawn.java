@@ -59,12 +59,14 @@ public class Commandspawn extends EssentialsCommand {
         final SpawnStorage spawns = (SpawnStorage) this.module;
         final Location spawn = spawns.getSpawn(teleportee.getGroup());
         sender.sendMessage(tl("teleporting", spawn.getWorld().getName(), spawn.getBlockX(), spawn.getBlockY(), spawn.getBlockZ()));
-        CompletableFuture<Exception> eFuture = new CompletableFuture<>();
-        eFuture.thenAccept(e -> showError(sender.getSender(), e, commandLabel));
+        future.exceptionally(e -> {
+            showError(sender.getSender(), e, commandLabel);
+            return false;
+        });
         if (teleportOwner == null) {
-            teleportee.getAsyncTeleport().now(spawn, false, TeleportCause.COMMAND, eFuture, future);
+            teleportee.getAsyncTeleport().now(spawn, false, TeleportCause.COMMAND, future);
         } else {
-            teleportOwner.getAsyncTeleport().teleportPlayer(teleportee, spawn, charge, TeleportCause.COMMAND, eFuture, future);
+            teleportOwner.getAsyncTeleport().teleportPlayer(teleportee, spawn, charge, TeleportCause.COMMAND, future);
         }
     }
 }

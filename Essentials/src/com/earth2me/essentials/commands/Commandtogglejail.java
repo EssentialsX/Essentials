@@ -51,7 +51,7 @@ public class Commandtogglejail extends EssentialsCommand {
 
                 }
                 final long timeDiff = preTimeDiff;
-                CompletableFuture<Boolean> future = new CompletableFuture<>();
+                CompletableFuture<Boolean> future = getNewExceptionFuture(sender, commandLabel);
                 future.thenAccept(success -> {
                     if (success) {
                         player.setJailed(true);
@@ -65,7 +65,7 @@ public class Commandtogglejail extends EssentialsCommand {
                     }
                 });
                 if (player.getBase().isOnline()) {
-                    ess.getJails().sendToJail(player, args[1], getNewExceptionFuture(sender, commandLabel), future);
+                    ess.getJails().sendToJail(player, args[1], future);
                 } else {
                     // Check if jail exists
                     ess.getJails().getJail(args[1]);
@@ -102,13 +102,13 @@ public class Commandtogglejail extends EssentialsCommand {
                 player.sendMessage(tl("jailReleasedPlayerNotify"));
                 player.setJail(null);
                 if (player.getBase().isOnline()) {
-                    CompletableFuture<Boolean> future = new CompletableFuture<>();
+                    CompletableFuture<Boolean> future = getNewExceptionFuture(sender, commandLabel);
+                    player.getAsyncTeleport().back(future);
                     future.thenAccept(success -> {
-                       if (success) {
-                           sender.sendMessage(tl("jailReleased", player.getName()));
-                       }
+                        if (success) {
+                            sender.sendMessage(tl("jailReleased", player.getName()));
+                        }
                     });
-                    player.getAsyncTeleport().back(getNewExceptionFuture(sender, commandLabel), future);
                     return;
                 }
                 sender.sendMessage(tl("jailReleased", player.getName()));

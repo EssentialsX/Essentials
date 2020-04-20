@@ -5,8 +5,6 @@ import org.bukkit.Location;
 import org.bukkit.Server;
 import org.bukkit.event.player.PlayerTeleportEvent;
 
-import java.util.concurrent.CompletableFuture;
-
 import static com.earth2me.essentials.I18n.tl;
 
 public class Commandtpoffline extends EssentialsCommand {
@@ -30,7 +28,7 @@ public class Commandtpoffline extends EssentialsCommand {
                 }
 
                 user.sendMessage(tl("teleporting", logout.getWorld().getName(), logout.getBlockX(), logout.getBlockY(), logout.getBlockZ()));
-                user.getAsyncTeleport().now(logout, false, PlayerTeleportEvent.TeleportCause.COMMAND, getNewExceptionFuture(user.getSource(), label), new CompletableFuture<>());
+                user.getAsyncTeleport().now(logout, false, PlayerTeleportEvent.TeleportCause.COMMAND, getNewExceptionFuture(user.getSource(), label));
         }
     }
 }

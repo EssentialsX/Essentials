@@ -585,9 +585,12 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
                 sendMessage(tl("haveBeenReleased"));
                 setJail(null);
                 if (ess.getSettings().isTeleportBackWhenFreedFromJail()) {
-                    CompletableFuture<Exception> eFuture = new CompletableFuture<>();
-                    eFuture.thenAccept(e -> getAsyncTeleport().respawn(null, TeleportCause.PLUGIN, new CompletableFuture<>(), new CompletableFuture<>()));
-                    getAsyncTeleport().back(eFuture, new CompletableFuture<>());
+                    CompletableFuture<Boolean> future = new CompletableFuture<>();
+                    getAsyncTeleport().back(future);
+                    future.exceptionally(e -> {
+                        getAsyncTeleport().respawn(null, TeleportCause.PLUGIN, new CompletableFuture<>());
+                        return false;
+                    });
                 }
                 return true;
             }

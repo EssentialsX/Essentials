@@ -42,7 +42,7 @@ public class Commandhome extends EssentialsCommand {
             if ("bed".equalsIgnoreCase(homeName) && user.isAuthorized("essentials.home.bed")) {
                 final Location bed = player.getBase().getBedSpawnLocation();
                 if (bed != null) {
-                    user.getAsyncTeleport().teleport(bed, charge, TeleportCause.COMMAND, getNewExceptionFuture(user.getSource(), commandLabel), new CompletableFuture<>());
+                    user.getAsyncTeleport().teleport(bed, charge, TeleportCause.COMMAND, getNewExceptionFuture(user.getSource(), commandLabel));
                     return;
                 } else {
                     throw new Exception(tl("bedMissing"));
@@ -54,7 +54,7 @@ public class Commandhome extends EssentialsCommand {
             final List<String> homes = player.getHomes();
             if (homes.isEmpty() && player.equals(user)) {
                 if (ess.getSettings().isSpawnIfNoHome()) {
-                    user.getAsyncTeleport().respawn(charge, TeleportCause.COMMAND, getNewExceptionFuture(user.getSource(), commandLabel), new CompletableFuture<>());
+                    user.getAsyncTeleport().respawn(charge, TeleportCause.COMMAND, getNewExceptionFuture(user.getSource(), commandLabel));
                 } else {
                     throw new Exception(tl("noHomeSetPlayer"));
                 }
@@ -86,7 +86,7 @@ public class Commandhome extends EssentialsCommand {
         return Integer.toString(ess.getSettings().getHomeLimit(player));
     }
 
-    private void goHome(final User user, final User player, final String home, final Trade charge, CompletableFuture<Exception> eFuture) throws Exception {
+    private void goHome(final User user, final User player, final String home, final Trade charge, CompletableFuture<Boolean> future) throws Exception {
         if (home.length() < 1) {
             throw new NotEnoughArgumentsException();
         }
@@ -97,13 +97,12 @@ public class Commandhome extends EssentialsCommand {
         if (user.getWorld() != loc.getWorld() && ess.getSettings().isWorldHomePermissions() && !user.isAuthorized("essentials.worlds." + loc.getWorld().getName())) {
             throw new Exception(tl("noPerm", "essentials.worlds." + loc.getWorld().getName()));
         }
-        CompletableFuture<Boolean> future = new CompletableFuture<>();
+        user.getAsyncTeleport().teleport(loc, charge, TeleportCause.COMMAND, future);
         future.thenAccept(success -> {
-           if (success) {
-               user.sendMessage(tl("teleportHome", home));
-           }
+            if (success) {
+                user.sendMessage(tl("teleportHome", home));
+            }
         });
-        user.getAsyncTeleport().teleport(loc, charge, TeleportCause.COMMAND, eFuture, future);
     }
 
     @Override

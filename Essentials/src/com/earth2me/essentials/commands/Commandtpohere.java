@@ -6,7 +6,6 @@ import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
 
 import static com.earth2me.essentials.I18n.tl;
 
@@ -29,7 +28,7 @@ public class Commandtpohere extends EssentialsCommand {
             throw new Exception(tl("noPerm", "essentials.worlds." + user.getWorld().getName()));
         }
 
-        player.getAsyncTeleport().now(user.getBase(), false, TeleportCause.COMMAND, getNewExceptionFuture(user.getSource(), commandLabel), new CompletableFuture<>());
+        player.getAsyncTeleport().now(user.getBase(), false, TeleportCause.COMMAND, getNewExceptionFuture(user.getSource(), commandLabel));
     }
 
     @Override

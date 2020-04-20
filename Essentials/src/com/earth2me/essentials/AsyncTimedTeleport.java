@@ -89,7 +89,7 @@ public class AsyncTimedTeleport implements Runnable {
                 if (now > timer_started + timer_delay) {
                     try {
                         teleport.cooldown(false);
-                    } catch (Exception ex) {
+                    } catch (Throwable ex) {
                         teleportOwner.sendMessage(tl("cooldownWithMessage", ex.getMessage()));
                         if (teleportOwner != teleportUser) {
                             teleportUser.sendMessage(tl("cooldownWithMessage", ex.getMessage()));
@@ -100,19 +100,22 @@ public class AsyncTimedTeleport implements Runnable {
                         teleportUser.sendMessage(tl("teleportationCommencing"));
 
                         try {
-                            CompletableFuture<Exception> future = new CompletableFuture<>();
-                            CompletableFuture<Boolean> future1 = new CompletableFuture<>();
+                            CompletableFuture<Boolean> future = new CompletableFuture<>();
                             if (timer_chargeFor != null) {
                                 timer_chargeFor.isAffordableFor(teleportOwner);
                             }
                             if (timer_respawn) {
-                                teleport.respawnNow(teleportUser, timer_cause, future, future1);
+                                teleport.respawnNow(teleportUser, timer_cause, future);
                             } else {
-                                teleport.nowAsync(teleportUser, timer_teleportTarget, timer_cause, future, future1);
+                                teleport.nowAsync(teleportUser, timer_teleportTarget, timer_cause, future);
                             }
-                            if (timer_chargeFor != null) {
-                                timer_chargeFor.charge(teleportOwner);
-                            }
+                            future.thenAccept(success -> {
+                                if (timer_chargeFor != null) {
+                                    try {
+                                        timer_chargeFor.charge(teleportOwner);
+                                    } catch (ChargeException ignored) { }
+                                }
+                            });
                         } catch (Exception ignored) {}
 
                     } catch (Exception ex) {

@@ -44,14 +44,14 @@ public class Commandtpa extends EssentialsCommand {
             final Trade charge = new Trade(this.getName(), ess);
             AsyncTeleport teleport = (AsyncTeleport) user.getAsyncTeleport();
             teleport.setTpType(AsyncTeleport.TeleportType.TPA);
-            CompletableFuture<Boolean> future = new CompletableFuture<>();
+            CompletableFuture<Boolean> future = getNewExceptionFuture(user.getSource(), commandLabel);
+            teleport.teleport(player.getBase(), charge, PlayerTeleportEvent.TeleportCause.COMMAND, future);
             future.thenAccept(success -> {
-               if (success) {
-                   player.sendMessage(tl("requestAcceptedAuto", user.getDisplayName()));
-                   user.sendMessage(tl("requestAcceptedFromAuto", player.getDisplayName()));
-               }
+                if (success) {
+                    player.sendMessage(tl("requestAcceptedAuto", user.getDisplayName()));
+                    user.sendMessage(tl("requestAcceptedFromAuto", player.getDisplayName()));
+                }
             });
-            teleport.teleport(player.getBase(), charge, PlayerTeleportEvent.TeleportCause.COMMAND, getNewExceptionFuture(user.getSource(), commandLabel), future);
             return;
         }
 

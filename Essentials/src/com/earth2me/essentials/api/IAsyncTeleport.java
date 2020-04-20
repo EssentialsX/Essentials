@@ -17,10 +17,9 @@ public interface IAsyncTeleport {
      * @param loc             - Where should the player end up
      * @param cooldown        - If cooldown should be enforced
      * @param cause           - The reported teleportPlayer cause
-     * @param exceptionFuture - Future which is completed with an exception if one is thrown during execution
      * @param future          - Future which is completed with the success status of the execution
      */
-    void now(Location loc, boolean cooldown, PlayerTeleportEvent.TeleportCause cause, CompletableFuture<Exception> exceptionFuture, CompletableFuture<Boolean> future);
+    void now(Location loc, boolean cooldown, PlayerTeleportEvent.TeleportCause cause, CompletableFuture<Boolean> future);
 
     /**
      * Used to skip teleportPlayer delay when teleporting someone to a location or player.
@@ -28,10 +27,9 @@ public interface IAsyncTeleport {
      * @param entity          - Where should the player end up
      * @param cooldown        - If cooldown should be enforced
      * @param cause           - The reported teleportPlayer cause
-     * @param exceptionFuture - Future which is completed with an exception if one is thrown during execution
      * @param future          - Future which is completed with the success status of the execution
      */
-    void now(Player entity, boolean cooldown, PlayerTeleportEvent.TeleportCause cause, CompletableFuture<Exception> exceptionFuture, CompletableFuture<Boolean> future);
+    void now(Player entity, boolean cooldown, PlayerTeleportEvent.TeleportCause cause, CompletableFuture<Boolean> future);
 
     /**
      * Teleport a player to a specific location
@@ -39,10 +37,9 @@ public interface IAsyncTeleport {
      * @param loc             - Where should the player end up
      * @param chargeFor       - What the user will be charged if teleportPlayer is successful
      * @param cause           - The reported teleportPlayer cause.
-     * @param exceptionFuture - Future which is completed with an exception if one is thrown during execution
      * @param future          - Future which is completed with the success status of the execution
      */
-    void teleport(Location loc, Trade chargeFor, PlayerTeleportEvent.TeleportCause cause, CompletableFuture<Exception> exceptionFuture, CompletableFuture<Boolean> future);
+    void teleport(Location loc, Trade chargeFor, PlayerTeleportEvent.TeleportCause cause, CompletableFuture<Boolean> future);
 
     /**
      * Teleport a player to a specific player
@@ -50,10 +47,9 @@ public interface IAsyncTeleport {
      * @param entity          - Where should the player end up
      * @param chargeFor       - What the user will be charged if teleportPlayer is successful
      * @param cause           - The reported teleportPlayer cause
-     * @param exceptionFuture - Future which is completed with an exception if one is thrown during execution
      * @param future          - Future which is completed with the success status of the execution
      */
-    void teleport(Player entity, Trade chargeFor, PlayerTeleportEvent.TeleportCause cause, CompletableFuture<Exception> exceptionFuture, CompletableFuture<Boolean> future);
+    void teleport(Player entity, Trade chargeFor, PlayerTeleportEvent.TeleportCause cause, CompletableFuture<Boolean> future);
 
     /**
      * Teleport a player to a specific location
@@ -62,10 +58,9 @@ public interface IAsyncTeleport {
      * @param loc             - Where should the player end up
      * @param chargeFor       - What the user will be charged if teleportPlayer is successful
      * @param cause           - The reported teleportPlayer cause
-     * @param exceptionFuture - Future which is completed with an exception if one is thrown during execution
      * @param future          - Future which is completed with the success status of the execution
      */
-    void teleportPlayer(IUser otherUser, Location loc, Trade chargeFor, PlayerTeleportEvent.TeleportCause cause, CompletableFuture<Exception> exceptionFuture, CompletableFuture<Boolean> future);
+    void teleportPlayer(IUser otherUser, Location loc, Trade chargeFor, PlayerTeleportEvent.TeleportCause cause, CompletableFuture<Boolean> future);
 
     /**
      * Teleport a player to a specific player
@@ -74,20 +69,18 @@ public interface IAsyncTeleport {
      * @param entity          - Where should the player end up
      * @param chargeFor       - What the user will be charged if teleportPlayer is successful
      * @param cause           - The reported teleportPlayer cause
-     * @param exceptionFuture - Future which is completed with an exception if one is thrown during execution
      * @param future          - Future which is completed with the success status of the execution
      */
-    void teleportPlayer(IUser otherUser, Player entity, Trade chargeFor, PlayerTeleportEvent.TeleportCause cause, CompletableFuture<Exception> exceptionFuture, CompletableFuture<Boolean> future);
+    void teleportPlayer(IUser otherUser, Player entity, Trade chargeFor, PlayerTeleportEvent.TeleportCause cause, CompletableFuture<Boolean> future);
 
     /**
      * Teleport wrapper used to handle tp fallback on /jail and /home
      *
      * @param chargeFor       - What the user will be charged if teleportPlayer is successful
      * @param cause           - The reported teleportPlayer cause
-     * @param exceptionFuture - Future which is completed with an exception if one is thrown during execution
      * @param future          - Future which is completed with the success status of the execution
      */
-    void respawn(final Trade chargeFor, PlayerTeleportEvent.TeleportCause cause, CompletableFuture<Exception> exceptionFuture, CompletableFuture<Boolean> future);
+    void respawn(final Trade chargeFor, PlayerTeleportEvent.TeleportCause cause, CompletableFuture<Boolean> future);
 
     /**
      * Teleport wrapper used to handle /warp teleports
@@ -96,19 +89,17 @@ public interface IAsyncTeleport {
      * @param warp            - The name of the warp the user will be teleported too.
      * @param chargeFor       - What the user will be charged if teleportPlayer is successful
      * @param cause           - The reported teleportPlayer cause
-     * @param exceptionFuture - Future which is completed with an exception if one is thrown during execution
      * @param future          - Future which is completed with the success status of the execution
      */
-    void warp(IUser otherUser, String warp, Trade chargeFor, PlayerTeleportEvent.TeleportCause cause, CompletableFuture<Exception> exceptionFuture, CompletableFuture<Boolean> future);
+    void warp(IUser otherUser, String warp, Trade chargeFor, PlayerTeleportEvent.TeleportCause cause, CompletableFuture<Boolean> future);
 
     /**
      * Teleport wrapper used to handle /back teleports
      *
      * @param chargeFor       - What the user will be charged if teleportPlayer is successful
-     * @param exceptionFuture - Future which is completed with an exception if one is thrown during execution
      * @param future          - Future which is completed with the success status of the execution
      */
-    void back(Trade chargeFor, CompletableFuture<Exception> exceptionFuture, CompletableFuture<Boolean> future);
+    void back(Trade chargeFor, CompletableFuture<Boolean> future);
 
     /**
      * Teleport wrapper used to handle /back teleports that
@@ -118,17 +109,15 @@ public interface IAsyncTeleport {
      * @param teleporter      - The user performing the /back command.
      *                          This value may be {@code null} to indicate console.
      * @param chargeFor       - What the {@code teleporter} will be charged if teleportPlayer is successful
-     * @param exceptionFuture - Future which is completed with an exception if one is thrown during execution
      * @param future          - Future which is completed with the success status of the execution
      */
-    void back(IUser teleporter, Trade chargeFor, CompletableFuture<Exception> exceptionFuture, CompletableFuture<Boolean> future);
+    void back(IUser teleporter, Trade chargeFor, CompletableFuture<Boolean> future);
 
     /**
      * Teleport wrapper used to handle throwing user home after a jail sentence
      *
-     * @param exceptionFuture - Future which is completed with an exception if one is thrown during execution
      * @param future          - Future which is completed with the success status of the execution
      */
-    void back(CompletableFuture<Exception> exceptionFuture, CompletableFuture<Boolean> future);
+    void back(CompletableFuture<Boolean> future);
 
 }

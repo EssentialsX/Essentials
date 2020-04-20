@@ -44,14 +44,18 @@ public class AsyncTeleport implements IAsyncTeleport {
         NORMAL
     }
 
-    public void cooldown(boolean check) throws Exception {
-        CompletableFuture<Exception> exceptionFuture = new CompletableFuture<>();
+    public void cooldown(boolean check) throws Throwable {
+        CompletableFuture<Boolean> exceptionFuture = new CompletableFuture<>();
         if (cooldown(check, exceptionFuture)) {
-            throw exceptionFuture.get();
+            try {
+                exceptionFuture.get();
+            } catch (ExecutionException e) {
+                throw e.getCause();
+            }
         }
     }
 
-    public boolean cooldown(boolean check, CompletableFuture<Exception> exceptionFuture) {
+    public boolean cooldown(boolean check, CompletableFuture<Boolean> future) {
         final Calendar time = new GregorianCalendar();
         if (teleportOwner.getLastTeleportTimestamp() > 0) {
             // Take the current time, and remove the delay from it.
@@ -75,7 +79,7 @@ public class AsyncTeleport implements IAsyncTeleport {
                 time.setTimeInMillis(lastTime);
                 time.add(Calendar.SECOND, (int) cooldown);
                 time.add(Calendar.MILLISECOND, (int) ((cooldown * 1000.0) % 1000.0));
-                exceptionFuture.complete(new Exception(tl("timeBeforeTeleport", DateUtil.formatDateDiff(time.getTimeInMillis()))));
+                future.completeExceptionally(new Exception(tl("timeBeforeTeleport", DateUtil.formatDateDiff(time.getTimeInMillis()))));
                 return true;
             }
         }
@@ -114,23 +118,22 @@ public class AsyncTeleport implements IAsyncTeleport {
 
 
     @Override
-    public void now(Location loc, boolean cooldown, TeleportCause cause, CompletableFuture<Exception> exceptionFuture, CompletableFuture<Boolean> future) {
-        if (cooldown && cooldown(false, exceptionFuture)) {
-            future.complete(false);
+    public void now(Location loc, boolean cooldown, TeleportCause cause, CompletableFuture<Boolean> future) {
+        if (cooldown && cooldown(false, future)) {
             return;
         }
         final ITarget target = new LocationTarget(loc);
-        nowAsync(teleportOwner, target, cause, exceptionFuture, future);
+        nowAsync(teleportOwner, target, cause, future);
     }
 
     @Override
-    public void now(Player entity, boolean cooldown, TeleportCause cause, CompletableFuture<Exception> exceptionFuture, CompletableFuture<Boolean> future) {
-        if (cooldown && cooldown(false, exceptionFuture)) {
+    public void now(Player entity, boolean cooldown, TeleportCause cause, CompletableFuture<Boolean> future) {
+        if (cooldown && cooldown(false, future)) {
             future.complete(false);
             return;
         }
         final ITarget target = new PlayerTarget(entity);
-        nowAsync(teleportOwner, target, cause, exceptionFuture, future);
+        nowAsync(teleportOwner, target, cause, future);
         future.thenAccept(success -> {
             if (success) {
                 teleportOwner.sendMessage(tl("teleporting", target.getLocation().getWorld().getName(), target.getLocation().getBlockX(), target.getLocation().getBlockY(), target.getLocation().getBlockZ()));
@@ -138,7 +141,7 @@ public class AsyncTeleport implements IAsyncTeleport {
         });
     }
 
-    protected void nowAsync(IUser teleportee, ITarget target, TeleportCause cause, CompletableFuture<Exception> exceptionFuture, CompletableFuture<Boolean> future) {
+    protected void nowAsync(IUser teleportee, ITarget target, TeleportCause cause, CompletableFuture<Boolean> future) {
         cancel(false);
 
         UserTeleportEvent event = new UserTeleportEvent(teleportee, cause, target.getLocation());
@@ -150,8 +153,7 @@ public class AsyncTeleport implements IAsyncTeleport {
 
         if (!teleportee.getBase().isEmpty()) {
             if (!ess.getSettings().isTeleportPassengerDismount()) {
-                exceptionFuture.complete(new Exception(tl("passengerTeleportFail")));
-                future.complete(false);
+                future.completeExceptionally(new Exception(tl("passengerTeleportFail")));
                 return;
             }
             CompletableFuture<Object> dismountFuture = new CompletableFuture<>();
@@ -162,8 +164,7 @@ public class AsyncTeleport implements IAsyncTeleport {
             try {
                 dismountFuture.get(); //EntityDismountEvent requires sync context we also want to wait for it to finish
             } catch (InterruptedException | ExecutionException e) {
-                exceptionFuture.complete(e);
-                future.complete(false);
+                future.completeExceptionally(e);
                 return;
             }
         }
@@ -180,14 +181,12 @@ public class AsyncTeleport implements IAsyncTeleport {
                             //There's a chance the safer location is outside the loaded chunk so still teleport async here.
                             PaperLib.teleportAsync(teleportee.getBase(), LocationUtil.getSafeDestination(ess, teleportee, loc), cause);
                         } catch (Exception e) {
-                            exceptionFuture.complete(e);
-                            future.complete(false);
+                            future.completeExceptionally(e);
                             return;
                         }
                     }
                 } else {
-                    exceptionFuture.complete(new Exception(tl("unsafeTeleportDestination", loc.getWorld().getName(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ())));
-                    future.complete(false);
+                    future.completeExceptionally(new Exception(tl("unsafeTeleportDestination", loc.getWorld().getName(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ())));
                     return;
                 }
             } else {
@@ -207,25 +206,25 @@ public class AsyncTeleport implements IAsyncTeleport {
     }
 
     @Override
-    public void teleport(Location loc, Trade chargeFor, TeleportCause cause, CompletableFuture<Exception> exceptionFuture, CompletableFuture<Boolean> future) {
-        teleport(teleportOwner, new LocationTarget(loc), chargeFor, cause, exceptionFuture, future);
+    public void teleport(Location loc, Trade chargeFor, TeleportCause cause, CompletableFuture<Boolean> future) {
+        teleport(teleportOwner, new LocationTarget(loc), chargeFor, cause, future);
     }
 
     @Override
-    public void teleport(Player entity, Trade chargeFor, TeleportCause cause, CompletableFuture<Exception> exceptionFuture, CompletableFuture<Boolean> future) {
+    public void teleport(Player entity, Trade chargeFor, TeleportCause cause, CompletableFuture<Boolean> future) {
         teleportOwner.sendMessage(tl("teleportToPlayer", entity.getDisplayName()));
-        teleport(teleportOwner, new PlayerTarget(entity), chargeFor, cause, exceptionFuture, future);
+        teleport(teleportOwner, new PlayerTarget(entity), chargeFor, cause, future);
     }
 
     @Override
-    public void teleportPlayer(IUser otherUser, Location loc, Trade chargeFor, TeleportCause cause, CompletableFuture<Exception> exceptionFuture, CompletableFuture<Boolean> future) {
-        teleport(otherUser, new LocationTarget(loc), chargeFor, cause, exceptionFuture, future);
+    public void teleportPlayer(IUser otherUser, Location loc, Trade chargeFor, TeleportCause cause, CompletableFuture<Boolean> future) {
+        teleport(otherUser, new LocationTarget(loc), chargeFor, cause, future);
     }
 
     @Override
-    public void teleportPlayer(IUser otherUser, Player entity, Trade chargeFor, TeleportCause cause, CompletableFuture<Exception> exceptionFuture, CompletableFuture<Boolean> future) {
+    public void teleportPlayer(IUser otherUser, Player entity, Trade chargeFor, TeleportCause cause, CompletableFuture<Boolean> future) {
         ITarget target = new PlayerTarget(entity);
-        teleport(otherUser, target, chargeFor, cause, exceptionFuture, future);
+        teleport(otherUser, target, chargeFor, cause, future);
         future.thenAccept(success -> {
             if (success) {
                 otherUser.sendMessage(tl("teleporting", target.getLocation().getWorld().getName(), target.getLocation().getBlockX(), target.getLocation().getBlockY(), target.getLocation().getBlockZ()));
@@ -234,15 +233,14 @@ public class AsyncTeleport implements IAsyncTeleport {
         });
     }
 
-    private void teleport(IUser teleportee, ITarget target, Trade chargeFor, TeleportCause cause, CompletableFuture<Exception> exceptionFuture, CompletableFuture<Boolean> future) {
+    private void teleport(IUser teleportee, ITarget target, Trade chargeFor, TeleportCause cause, CompletableFuture<Boolean> future) {
         double delay = ess.getSettings().getTeleportDelay();
 
         Trade cashCharge = chargeFor;
 
         if (chargeFor != null) {
-            chargeFor.isAffordableFor(teleportOwner, exceptionFuture);
-            if (exceptionFuture.isDone()) {
-                future.complete(false);
+            chargeFor.isAffordableFor(teleportOwner, future);
+            if (future.isCompletedExceptionally()) {
                 return;
             }
 
@@ -253,20 +251,17 @@ public class AsyncTeleport implements IAsyncTeleport {
             }
         }
 
-        if (cooldown(true, exceptionFuture)) {
-            future.complete(false);
+        if (cooldown(true, future)) {
             return;
         }
         if (delay <= 0 || teleportOwner.isAuthorized("essentials.teleport.timer.bypass") || teleportee.isAuthorized("essentials.teleport.timer.bypass")) {
-            if (cooldown(false, exceptionFuture)) {
-                future.complete(false);
+            if (cooldown(false, future)) {
                 return;
             }
-            nowAsync(teleportee, target, cause, exceptionFuture, future);
+            nowAsync(teleportee, target, cause, future);
             if (cashCharge != null) {
-                cashCharge.charge(teleportOwner, exceptionFuture);
-                if (exceptionFuture.isDone()) {
-                    future.complete(false);
+                cashCharge.charge(teleportOwner, future);
+                if (future.isCompletedExceptionally()) {
                     return;
                 }
             }
@@ -278,15 +273,14 @@ public class AsyncTeleport implements IAsyncTeleport {
         initTimer((long) (delay * 1000.0), teleportee, target, cashCharge, cause, false);
     }
 
-    private void teleportOther(IUser teleporter, IUser teleportee, ITarget target, Trade chargeFor, TeleportCause cause, CompletableFuture<Exception> exceptionFuture, CompletableFuture<Boolean> future) {
+    private void teleportOther(IUser teleporter, IUser teleportee, ITarget target, Trade chargeFor, TeleportCause cause, CompletableFuture<Boolean> future) {
         double delay = ess.getSettings().getTeleportDelay();
 
         Trade cashCharge = chargeFor;
 
         if (teleporter != null && chargeFor != null) {
-            chargeFor.isAffordableFor(teleporter, exceptionFuture);
-            if (exceptionFuture.isDone()) {
-                future.complete(false);
+            chargeFor.isAffordableFor(teleporter, future);
+            if (future.isCompletedExceptionally()) {
                 return;
             }
 
@@ -297,24 +291,21 @@ public class AsyncTeleport implements IAsyncTeleport {
             }
         }
 
-        if (cooldown(true, exceptionFuture)) {
-            future.complete(false);
+        if (cooldown(true, future)) {
             return;
         }
         if (delay <= 0 || teleporter == null
             || teleporter.isAuthorized("essentials.teleport.timer.bypass")
             || teleportOwner.isAuthorized("essentials.teleport.timer.bypass")
             || teleportee.isAuthorized("essentials.teleport.timer.bypass")) {
-            if (cooldown(false, exceptionFuture)) {
-                future.complete(false);
+            if (cooldown(false, future)) {
                 return;
             }
 
-            nowAsync(teleportee, target, cause, exceptionFuture, future);
+            nowAsync(teleportee, target, cause, future);
             if (teleporter != null && cashCharge != null) {
-                cashCharge.charge(teleporter, exceptionFuture);
-                if (exceptionFuture.isDone()) {
-                    future.complete(false);
+                cashCharge.charge(teleporter, future);
+                if (future.isCompletedExceptionally()) {
                     return;
                 }
             }
@@ -327,27 +318,24 @@ public class AsyncTeleport implements IAsyncTeleport {
     }
 
     @Override
-    public void respawn(Trade chargeFor, TeleportCause cause, CompletableFuture<Exception> exceptionFuture, CompletableFuture<Boolean> future) {
+    public void respawn(Trade chargeFor, TeleportCause cause, CompletableFuture<Boolean> future) {
         double delay = ess.getSettings().getTeleportDelay();
         if (chargeFor != null) {
-            chargeFor.isAffordableFor(teleportOwner, exceptionFuture);
-            if (exceptionFuture.isDone()) {
-                future.complete(false);
+            chargeFor.isAffordableFor(teleportOwner, future);
+            if (future.isCompletedExceptionally()) {
                 return;
             }
         }
-        if (cooldown(true, exceptionFuture)) {
-            future.complete(false);
+        if (cooldown(true, future)) {
             return;
         }
         if (delay <= 0 || teleportOwner.isAuthorized("essentials.teleport.timer.bypass")) {
-            if (cooldown(false, exceptionFuture)) {
-                future.complete(false);
+            if (cooldown(false, future)) {
                 return;
             }
-            respawnNow(teleportOwner, cause, exceptionFuture, future);
+            respawnNow(teleportOwner, cause, future);
             if (chargeFor != null) {
-                chargeFor.charge(teleportOwner, exceptionFuture);
+                chargeFor.charge(teleportOwner, future);
             }
             return;
         }
@@ -357,23 +345,23 @@ public class AsyncTeleport implements IAsyncTeleport {
         initTimer((long) (delay * 1000.0), teleportOwner, null, chargeFor, cause, true);
     }
 
-    void respawnNow(IUser teleportee, TeleportCause cause, CompletableFuture<Exception> exceptionFuture, CompletableFuture<Boolean> future) {
+    void respawnNow(IUser teleportee, TeleportCause cause, CompletableFuture<Boolean> future) {
         final Player player = teleportee.getBase();
         Location bed = player.getBedSpawnLocation();
         if (bed != null) {
-            nowAsync(teleportee, new LocationTarget(bed), cause, exceptionFuture, future);
+            nowAsync(teleportee, new LocationTarget(bed), cause, future);
         } else {
             if (ess.getSettings().isDebug()) {
                 ess.getLogger().info("Could not find bed spawn, forcing respawn event.");
             }
             final PlayerRespawnEvent pre = new PlayerRespawnEvent(player, player.getWorld().getSpawnLocation(), false);
             ess.getServer().getPluginManager().callEvent(pre);
-            nowAsync(teleportee, new LocationTarget(pre.getRespawnLocation()), cause, exceptionFuture, future);
+            nowAsync(teleportee, new LocationTarget(pre.getRespawnLocation()), cause, future);
         }
     }
 
     @Override
-    public void warp(IUser otherUser, String warp, Trade chargeFor, TeleportCause cause, CompletableFuture<Exception> exceptionFuture, CompletableFuture<Boolean> future) {
+    public void warp(IUser otherUser, String warp, Trade chargeFor, TeleportCause cause, CompletableFuture<Boolean> future) {
         UserWarpEvent event = new UserWarpEvent(otherUser, warp, chargeFor);
         Bukkit.getServer().getPluginManager().callEvent(event);
         if (event.isCancelled()) {
@@ -385,33 +373,32 @@ public class AsyncTeleport implements IAsyncTeleport {
         try {
             loc = ess.getWarps().getWarp(warp);
         } catch (WarpNotFoundException | InvalidWorldException e) {
-            exceptionFuture.complete(e);
-            future.complete(false);
+            future.completeExceptionally(e);
             return;
         }
         otherUser.sendMessage(tl("warpingTo", warp, loc.getWorld().getName(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ()));
         if (!otherUser.equals(teleportOwner)) {
             teleportOwner.sendMessage(tl("warpingTo", warp, loc.getWorld().getName(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ()));
         }
-        teleport(otherUser, new LocationTarget(loc), chargeFor, cause, exceptionFuture, future);
+        teleport(otherUser, new LocationTarget(loc), chargeFor, cause, future);
     }
 
     @Override
-    public void back(Trade chargeFor, CompletableFuture<Exception> exceptionFuture, CompletableFuture<Boolean> future) {
-        back(teleportOwner, chargeFor, exceptionFuture, future);
+    public void back(Trade chargeFor, CompletableFuture<Boolean> future) {
+        back(teleportOwner, chargeFor, future);
     }
 
     @Override
-    public void back(IUser teleporter, Trade chargeFor, CompletableFuture<Exception> exceptionFuture, CompletableFuture<Boolean> future) {
+    public void back(IUser teleporter, Trade chargeFor, CompletableFuture<Boolean> future) {
         tpType = TeleportType.BACK;
         final Location loc = teleportOwner.getLastLocation();
         teleportOwner.sendMessage(tl("backUsageMsg", loc.getWorld().getName(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ()));
-        teleportOther(teleporter, teleportOwner, new LocationTarget(loc), chargeFor, TeleportCause.COMMAND, exceptionFuture, future);
+        teleportOther(teleporter, teleportOwner, new LocationTarget(loc), chargeFor, TeleportCause.COMMAND, future);
     }
 
     @Override
-    public void back(CompletableFuture<Exception> exceptionFuture, CompletableFuture<Boolean> future) {
-        nowAsync(teleportOwner, new LocationTarget(teleportOwner.getLastLocation()), TeleportCause.COMMAND, exceptionFuture, future);
+    public void back(CompletableFuture<Boolean> future) {
+        nowAsync(teleportOwner, new LocationTarget(teleportOwner.getLastLocation()), TeleportCause.COMMAND, future);
     }
 
     public void setTpType(TeleportType tpType) {

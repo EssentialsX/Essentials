@@ -51,11 +51,11 @@ public class Commandtpaccept extends EssentialsCommand {
         user.sendMessage(tl("requestAccepted"));
         requester.sendMessage(tl("requestAcceptedFrom", user.getDisplayName()));
 
-        CompletableFuture<Exception> eFuture = getNewExceptionFuture(requester.getSource(), commandLabel);
-        eFuture.thenAccept(e -> {
+        CompletableFuture<Boolean> future = getNewExceptionFuture(requester.getSource(), commandLabel);
+        future.exceptionally(e -> {
             user.sendMessage(tl("pendingTeleportCancelled"));
+            return false;
         });
-        CompletableFuture<Boolean> future = new CompletableFuture<>();
         future.thenAccept(success -> {
            if (success) {
                user.requestTeleport(null, false);
@@ -70,11 +70,11 @@ public class Commandtpaccept extends EssentialsCommand {
                     requester.sendMessage(tl("teleporting", loc.getWorld().getName(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ()));
                 }
             });
-            teleport.teleportPlayer(user, user.getTpRequestLocation(), charge, TeleportCause.COMMAND, eFuture, future);
+            teleport.teleportPlayer(user, user.getTpRequestLocation(), charge, TeleportCause.COMMAND, future);
         } else {
             AsyncTeleport teleport = (AsyncTeleport) requester.getAsyncTeleport();
             teleport.setTpType(AsyncTeleport.TeleportType.TPA);
-            teleport.teleport(user.getBase(), charge, TeleportCause.COMMAND, eFuture, future);
+            teleport.teleport(user.getBase(), charge, TeleportCause.COMMAND, future);
         }
     }
 

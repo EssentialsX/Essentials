@@ -54,15 +54,17 @@ public class SignWarp extends EssentialsSign {
         }
 
         final Trade charge = getTrade(sign, 3, ess);
-        CompletableFuture<Exception> eFuture = new CompletableFuture<>();
         CompletableFuture<Boolean> future = new CompletableFuture<>();
-        eFuture.thenAccept(e -> ess.showError(player.getSource(), e, "\\ sign: " + signName));
+        player.getAsyncTeleport().warp(player, warpName, charge, TeleportCause.PLUGIN, future);
         future.thenAccept(success -> {
-           if (success) {
-               Trade.log("Sign", "Warp", "Interact", username, null, username, charge, sign.getBlock().getLocation(), ess);
-           }
+            if (success) {
+                Trade.log("Sign", "Warp", "Interact", username, null, username, charge, sign.getBlock().getLocation(), ess);
+            }
         });
-        player.getAsyncTeleport().warp(player, warpName, charge, TeleportCause.PLUGIN, eFuture, future);
+        future.exceptionally(e -> {
+            ess.showError(player.getSource(), e, "\\ sign: " + signName);
+            return false;
+        });
         return true;
     }
 }

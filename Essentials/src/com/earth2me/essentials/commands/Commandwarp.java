@@ -15,7 +15,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
-import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
 import static com.earth2me.essentials.I18n.tl;
@@ -56,7 +55,7 @@ public class Commandwarp extends EssentialsCommand {
             throw new NoChargeException();
         }
         User otherUser = getPlayer(server, args, 1, true, false);
-        otherUser.getAsyncTeleport().warp(otherUser, args[0], null, TeleportCause.COMMAND, getNewExceptionFuture(sender, commandLabel), new CompletableFuture<>());
+        otherUser.getAsyncTeleport().warp(otherUser, args[0], null, TeleportCause.COMMAND, getNewExceptionFuture(sender, commandLabel));
     }
 
     //TODO: Use one of the new text classes, like /help ?
@@ -98,7 +97,7 @@ public class Commandwarp extends EssentialsCommand {
         if (ess.getSettings().getPerWarpPermission() && !owner.isAuthorized("essentials.warps." + name)) {
             throw new Exception(tl("warpUsePermission"));
         }
-        owner.getAsyncTeleport().warp(user, name, charge, TeleportCause.COMMAND, getNewExceptionFuture(user.getSource(), commandLabel), new CompletableFuture<>());
+        owner.getAsyncTeleport().warp(user, name, charge, TeleportCause.COMMAND, getNewExceptionFuture(user.getSource(), commandLabel));
     }
 
     private List<String> getAvailableWarpsFor(final IUser user) {

@@ -356,9 +356,12 @@ public abstract class EssentialsCommand implements IEssentialsCommand {
         }
     }
 
-    public CompletableFuture<Exception> getNewExceptionFuture(CommandSource sender, String commandLabel) {
-        CompletableFuture<Exception> future = new CompletableFuture<>();
-        future.thenAccept(e -> showError(sender.getSender(), e, commandLabel));
+    public CompletableFuture<Boolean> getNewExceptionFuture(CommandSource sender, String commandLabel) {
+        CompletableFuture<Boolean> future = new CompletableFuture<>();
+        future.exceptionally(e -> {
+            showError(sender.getSender(), e, commandLabel);
+            return false;
+        });
         return future;
     }
 

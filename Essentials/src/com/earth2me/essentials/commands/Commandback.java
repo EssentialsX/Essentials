@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
 
 import static com.earth2me.essentials.I18n.tl;
 
@@ -78,15 +77,15 @@ public class Commandback extends EssentialsCommand {
         }
 
         if (requester == null) {
-            user.getAsyncTeleport().back(null, null, getNewExceptionFuture(sender, commandLabel), new CompletableFuture<>());
+            user.getAsyncTeleport().back(null, null, getNewExceptionFuture(sender, commandLabel));
         } else if (!requester.equals(user)) {
             Trade charge = new Trade(this.getName(), this.ess);
             charge.isAffordableFor(requester);
-            user.getAsyncTeleport().back(requester, charge, getNewExceptionFuture(sender, commandLabel), new CompletableFuture<>());
+            user.getAsyncTeleport().back(requester, charge, getNewExceptionFuture(sender, commandLabel));
         } else {
             Trade charge = new Trade(this.getName(), this.ess);
             charge.isAffordableFor(user);
-            user.getAsyncTeleport().back(charge, getNewExceptionFuture(sender, commandLabel), new CompletableFuture<>());
+            user.getAsyncTeleport().back(charge, getNewExceptionFuture(sender, commandLabel));
         }
         throw new NoChargeException();
     }

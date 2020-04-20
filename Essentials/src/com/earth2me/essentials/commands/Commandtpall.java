@@ -8,7 +8,6 @@ import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
 
 import static com.earth2me.essentials.I18n.tl;
 
@@ -42,7 +41,7 @@ public class Commandtpall extends EssentialsCommand {
             if (sender.equals(target.getBase()) && target.getWorld() != player.getWorld() && ess.getSettings().isWorldTeleportPermissions() && !target.isAuthorized("essentials.worlds." + target.getWorld().getName())) {
                 continue;
             }
-            player.getAsyncTeleport().now(loc, false, TeleportCause.COMMAND, getNewExceptionFuture(sender, label), new CompletableFuture<>());
+            player.getAsyncTeleport().now(loc, false, TeleportCause.COMMAND, getNewExceptionFuture(sender, label));
         }
     }
 

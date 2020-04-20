@@ -118,7 +118,7 @@ public class Jails extends AsyncStorageObjectHolder<com.earth2me.essentials.sett
     }
 
     /**
-     * @deprecated This method does not use asynchronous teleportation. Use {@link Jails#sendToJail(IUser, String, CompletableFuture, CompletableFuture)}
+     * @deprecated This method does not use asynchronous teleportation. Use {@link Jails#sendToJail(IUser, String, CompletableFuture)}
      */
     @Override
     @Deprecated
@@ -136,19 +136,15 @@ public class Jails extends AsyncStorageObjectHolder<com.earth2me.essentials.sett
     }
 
     @Override
-    public void sendToJail(IUser user, String jail, CompletableFuture<Exception> exceptionFuture, CompletableFuture<Boolean> future) throws Exception {
+    public void sendToJail(IUser user, String jail, CompletableFuture<Boolean> future) throws Exception {
         acquireReadLock();
         try {
             if (user.getBase().isOnline()) {
                 Location loc = getJail(jail);
-                CompletableFuture<Boolean> future1 = new CompletableFuture<>();
-                future1.thenAccept(success -> {
-                   if (success) {
-                       user.setJail(jail);
-                   }
-                   future.complete(success);
+                user.getAsyncTeleport().now(loc, false, TeleportCause.COMMAND, future);
+                future.thenAccept(success -> {
+                    user.setJail(jail);
                 });
-                user.getAsyncTeleport().now(loc, false, TeleportCause.COMMAND, exceptionFuture, future1);
                 return;
             }
             user.setJail(jail);
@@ -281,23 +277,21 @@ public class Jails extends AsyncStorageObjectHolder<com.earth2me.essentials.sett
                 return;
             }
 
-            CompletableFuture<Exception> eFuture = new CompletableFuture<>();
-            eFuture.thenAccept(ex -> {
+            CompletableFuture<Boolean> future = new CompletableFuture<>();
+            future.exceptionally(ex -> {
                 if (ess.getSettings().isDebug()) {
                     LOGGER.log(Level.INFO, tl("returnPlayerToJailError", user.getName(), ex.getLocalizedMessage()), ex);
                 } else {
                     LOGGER.log(Level.INFO, tl("returnPlayerToJailError", user.getName(), ex.getLocalizedMessage()));
                 }
+                return false;
             });
-            CompletableFuture<Boolean> future = new CompletableFuture<>();
-            future.thenAccept(success -> {
-                user.sendMessage(tl("jailMessage"));
-            });
+            future.thenAccept(success -> user.sendMessage(tl("jailMessage")));
 
             try {
-                sendToJail(user, user.getJail(), eFuture, future);
+                sendToJail(user, user.getJail(), future);
             } catch (Exception ex) {
-                eFuture.complete(ex);
+                future.completeExceptionally(ex);
             }
         }
     }
