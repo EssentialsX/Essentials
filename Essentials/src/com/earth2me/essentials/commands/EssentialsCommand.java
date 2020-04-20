@@ -351,7 +351,7 @@ public abstract class EssentialsCommand implements IEssentialsCommand {
     public void showError(CommandSender sender, Throwable throwable, String commandLabel) {
         sender.sendMessage(tl("errorWithMessage", throwable.getMessage()));
         if (ess.getSettings().isDebug()) {
-            ess.getLogger().log(Level.INFO, tl("errorCallingCommand", commandLabel), throwable);
+            logger.log(Level.INFO, tl("errorCallingCommand", commandLabel), throwable);
             throwable.printStackTrace();
         }
     }
