@@ -414,7 +414,11 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
         return teleport;
     }
 
+    /**
+     * @deprecated This API is not asynchronous. Use {@link User#getAsyncTeleport()}
+     */
     @Override
+    @Deprecated
     public ITeleport getTeleport() {
         return legacyTeleport;
     }

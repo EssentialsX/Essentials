@@ -56,7 +56,7 @@ public interface IUser {
     boolean hasOutstandingTeleportRequest();
 
     /**
-     * @deprecated This API is not asynchronous. Use {@link com.earth2me.essentials.api.IAsyncTeleport IAsyncTeleport}
+     * @deprecated This API is not asynchronous. Use {@link com.earth2me.essentials.api.IAsyncTeleport IAsyncTeleport} with {@link IUser#getAsyncTeleport()}
      */
     @Deprecated
     ITeleport getTeleport();
