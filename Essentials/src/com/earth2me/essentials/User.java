@@ -1,7 +1,5 @@
 package com.earth2me.essentials;
 
-import com.earth2me.essentials.api.IAsyncTeleport;
-import com.earth2me.essentials.api.ITeleport;
 import com.earth2me.essentials.commands.IEssentialsCommand;
 import com.earth2me.essentials.messaging.IMessageRecipient;
 import com.earth2me.essentials.messaging.SimpleMessageRecipient;
@@ -410,7 +408,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
     }
 
     @Override
-    public IAsyncTeleport getAsyncTeleport() {
+    public AsyncTeleport getAsyncTeleport() {
         return teleport;
     }
 
@@ -419,7 +417,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
      */
     @Override
     @Deprecated
-    public ITeleport getTeleport() {
+    public Teleport getTeleport() {
         return legacyTeleport;
     }
 
