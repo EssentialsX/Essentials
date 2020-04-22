@@ -164,12 +164,14 @@ public class LegacyItemDb extends AbstractItemDb {
         }
 
         if (itemid < 1) {
-            throw new Exception(tl("unknownItemName", itemname));
+            Material matFromName = Material.matchMaterial(itemname.toUpperCase());
+            if (matFromName != null) {
+                itemid = matFromName.getId();
+            }
         }
 
-        ItemData data = legacyIds.get(itemid);
-        if (data == null) {
-            throw new Exception(tl("unknownItemId", itemid));
+        if (itemid < 1) {
+            throw new Exception(tl("unknownItemName", itemname));
         }
 
         Material mat = getFromLegacy(itemid, (byte) metaData);
