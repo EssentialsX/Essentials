@@ -152,7 +152,7 @@ public class Kit {
 
             boolean spew = false;
             final boolean allowUnsafe = ess.getSettings().allowUnsafeEnchantments();
-            final boolean currencyIsSuffix = ess.getSettings().getCurrencySuffix();
+            final boolean currencyIsSuffix = ess.getSettings().isCurrencySymbolSuffixed();
             final String currencySymbol = ess.getSettings().getCurrencySymbol();
             List<ItemStack> itemList = new ArrayList<>();
             for (String kitItem : output.getLines()) {

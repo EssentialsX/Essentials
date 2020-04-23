@@ -678,7 +678,7 @@ public class Settings implements net.ess3.api.ISettings {
     }
 
     @Override
-    public boolean getCurrencySuffix() {
+    public boolean isCurrencySymbolSuffixed() {
         return config.getBoolean("currency-symbol-suffix", false);
     }
 

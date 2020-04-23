@@ -36,7 +36,7 @@ public class NumberUtil {
     }
 
     public static String shortCurrency(final BigDecimal value, final IEssentials ess) {
-        if (ess.getSettings().getCurrencySuffix()) {
+        if (ess.getSettings().isCurrencySymbolSuffixed()) {
             return formatAsCurrency(value) + ess.getSettings().getCurrencySymbol();
         }
         return ess.getSettings().getCurrencySymbol() + formatAsCurrency(value);
@@ -69,7 +69,7 @@ public class NumberUtil {
             currency = currency.substring(1);
             sign = "-";
         }
-        if (ess.getSettings().getCurrencySuffix()) {
+        if (ess.getSettings().isCurrencySymbolSuffixed()) {
             return sign + tl("currency", currency, ess.getSettings().getCurrencySymbol());
         }
         return sign + tl("currency", ess.getSettings().getCurrencySymbol(), currency);
@@ -82,7 +82,7 @@ public class NumberUtil {
             currency = currency.substring(1);
             sign = "-";
         }
-        if (ess.getSettings().getCurrencySuffix()) {
+        if (ess.getSettings().isCurrencySymbolSuffixed()) {
             return sign + tl("currency", currency, ess.getSettings().getCurrencySymbol());
         }
         return sign + tl("currency", ess.getSettings().getCurrencySymbol(), currency);

@@ -48,7 +48,7 @@ public interface ISettings extends IConf {
 
     String getCurrencySymbol();
 
-    boolean getCurrencySuffix();
+    boolean isCurrencySymbolSuffixed();
 
     int getOversizedStackSize();
 
