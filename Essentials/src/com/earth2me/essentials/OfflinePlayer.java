@@ -14,6 +14,7 @@ import org.bukkit.block.data.BlockData;
 import org.bukkit.conversations.Conversation;
 import org.bukkit.conversations.ConversationAbandonedEvent;
 import org.bukkit.entity.*;
+import org.bukkit.entity.memory.MemoryKey;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import org.bukkit.inventory.*;
@@ -23,6 +24,7 @@ import org.bukkit.metadata.MetadataValue;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionAttachment;
 import org.bukkit.permissions.PermissionAttachmentInfo;
+import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -109,6 +111,15 @@ public class OfflinePlayer implements Player {
     }
 
     @Override
+    public double getAbsorptionAmount() {
+        return 0;
+    }
+
+    @Override
+    public void setAbsorptionAmount(double v) {
+    }
+
+    @Override
     public boolean isInsideVehicle() {
         return false;
     }
@@ -159,6 +170,11 @@ public class OfflinePlayer implements Player {
     }
 
     public BlockFace getFacing() {
+        return null;
+    }
+
+    @Override
+    public Pose getPose() {
         return null;
     }
 
@@ -421,19 +437,6 @@ public class OfflinePlayer implements Player {
     }
 
     @Override
-    public void awardAchievement(Achievement a) {
-    }
-
-    @Override
-    public void removeAchievement(Achievement achievement) {
-    }
-
-    @Override
-    public boolean hasAchievement(Achievement achievement) {
-        return false;
-    }
-
-    @Override
     public void incrementStatistic(Statistic ststc) {
     }
 
@@ -648,6 +651,14 @@ public class OfflinePlayer implements Player {
 
     @Override
     public void setTotalExperience(int i) {
+    }
+
+    @Override
+    public void sendExperienceChange(float v) {
+    }
+
+    @Override
+    public void sendExperienceChange(float v, int i) {
     }
 
     @Override
@@ -1008,6 +1019,11 @@ public class OfflinePlayer implements Player {
     }
 
     @Override
+    public float getAttackCooldown() {
+        return 0f;
+    }
+
+    @Override
     public boolean discoverRecipe(NamespacedKey recipe) {
         return false;
     }
@@ -1327,6 +1343,21 @@ public class OfflinePlayer implements Player {
     }
 
     @Override
+    public void attack(Entity entity) {
+
+    }
+
+    @Override
+    public void swingMainHand() {
+
+    }
+
+    @Override
+    public void swingOffHand() {
+
+    }
+
+    @Override
     public void setCollidable(boolean b) {
     }
 
@@ -1336,12 +1367,27 @@ public class OfflinePlayer implements Player {
     }
 
     @Override
+    public <T> T getMemory(MemoryKey<T> memoryKey) {
+        return null;
+    }
+
+    @Override
+    public <T> void setMemory(MemoryKey<T> memoryKey, T t) {
+
+    }
+
+    @Override
     public <T extends Projectile> T launchProjectile(Class<? extends T> type, Vector vector) {
         return null;
     }
 
     @Override
     public void sendSignChange(Location arg0, String[] arg1) throws IllegalArgumentException {
+    }
+
+    @Override
+    public void sendSignChange(Location loc, String[] lines, DyeColor dyeColor) throws IllegalArgumentException {
+
     }
 
     @Override
@@ -1614,4 +1660,13 @@ public class OfflinePlayer implements Player {
     @Override
 	public void updateCommands() {
 	}
+
+    @Override
+    public void openBook(ItemStack book) {
+    }
+
+    @Override
+    public PersistentDataContainer getPersistentDataContainer() {
+        return null;
+    }
 }

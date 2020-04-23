@@ -10,6 +10,10 @@ import java.util.List;
 
 
 public class SuperpermsHandler implements IPermissionsHandler {
+    protected boolean emulateWildcards() {
+        return true;
+    }
+
     @Override
     public String getGroup(final Player base) {
         return null;
@@ -22,7 +26,7 @@ public class SuperpermsHandler implements IPermissionsHandler {
 
     @Override
     public boolean canBuild(final Player base, final String group) {
-        return false;
+        return hasPermission(base, "essentials.build");
     }
 
     @Override
@@ -32,6 +36,10 @@ public class SuperpermsHandler implements IPermissionsHandler {
 
     @Override
     public boolean hasPermission(final Player base, String node) {
+        if (!emulateWildcards()) {
+            return base.hasPermission(node);
+        }
+
         String permCheck = node;
         int index;
         while (true) {
@@ -47,6 +55,11 @@ public class SuperpermsHandler implements IPermissionsHandler {
             node = node.substring(0, index);
             permCheck = node + ".*";
         }
+    }
+
+    @Override
+    public boolean isPermissionSet(final Player base, final String node) {
+        return base.isPermissionSet(node);
     }
 
     @Override

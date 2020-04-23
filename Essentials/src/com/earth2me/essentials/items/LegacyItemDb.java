@@ -249,7 +249,7 @@ public class LegacyItemDb extends AbstractItemDb {
 
     @Override
     public Collection<String> listNames() {
-        Collection<String> values = primaryName.values();
+        Collection<String> values = new ArrayList<>(primaryName.values());
         values.addAll(getResolverNames());
         return values;
     }

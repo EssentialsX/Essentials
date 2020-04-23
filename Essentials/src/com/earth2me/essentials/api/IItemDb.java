@@ -130,10 +130,12 @@ public interface IItemDb {
      * item IDs to modern names.
      *
      * @param item Legacy ID in colon syntax.
-     * @return
+     * @return Material if an appropriate material exists, else null.
      */
     default Material getFromLegacy(String item) {
         final String[] split = item.split(":");
+
+        if (!NumberUtil.isInt(split[0])) return null;
 
         final int id = Integer.parseInt(split[0]);
         byte damage = 0;

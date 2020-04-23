@@ -41,6 +41,10 @@ commands:
     description: Bans an IP address.
     usage: /<command> <address>
     aliases: [ebanip]
+  beezooka:
+    description: Throw an exploding bee at your opponent.
+    usage: /<command>
+    aliases: [ebeezooka,beecannon,ebeecannon]
   book:
     description: Allows reopening and editing of sealed books.
     usage: /<command> [title|author [name]]
@@ -59,7 +63,7 @@ commands:
     aliases: [bcw,ebcw,bcastw,ebcastw,ebroadcastworld,shoutworld,eshoutworld]
   bigtree:
     description: Spawn a big tree where you are looking.
-    usage: /<command> <tree|redwood|jungle>
+    usage: /<command> <tree|redwood|jungle|darkoak>
     aliases: [ebigtree,largetree,elargetree]
   burn:
     description: Set a player on fire.
@@ -96,6 +100,10 @@ commands:
     description: Removes a jail.
     usage: /<command> <jailname>
     aliases: [edeljail,remjail,eremjail,rmjail,ermjail]
+  delkit:
+    description: Deletes the specified kit.
+    usage: /<command> <kit>
+    aliases: [edelkit,remkit,eremkit,rmkit,ermkit,deletekit,edeletekit]
   delwarp:
     description: Deletes the specified warp.
     usage: /<command> <warp>
@@ -141,8 +149,8 @@ commands:
     usage: /<command> [player] [on|off]
     aliases: [efly]
   fireball:
-    description: Throw a fireball.
-    usage: /<command> [small|skull]
+    description: Throw a fireball or other assorted projectiles.
+    usage: /<command> [fireball|small|large|arrow|skull|egg|snowball|expbottle|dragon|splashpotion|lingeringpotion|trident] [speed]
     aliases: [efireball,fireentity,efireentity,fireskull,efireskull]
   firework:
     description: Allows you to modify a stack of fireworks.
@@ -151,7 +159,7 @@ commands:
   gamemode:
     description: Change player gamemode.
     usage: /<command> <survival|creative|adventure|spectator> [player]
-    aliases: [adventure,eadventure,adventuremode,eadventuremode,creative,eecreative,creativemode,ecreativemode,egamemode,gm,egm,gma,egma,gmc,egmc,gms,egms,gmt,egmt,survival,esurvival,survivalmode,esurvivalmode,gmsp,sp,egmsp,spec,spectator]
+    aliases: [adventure,eadventure,adventuremode,eadventuremode,creative,ecreative,eecreative,creativemode,ecreativemode,egamemode,gm,egm,gma,egma,gmc,egmc,gms,egms,gmt,egmt,survival,esurvival,survivalmode,esurvivalmode,gmsp,sp,egmsp,spec,spectator]
   gc:
     description: Reports memory, uptime and tick info.
     usage: /<command> [all]
@@ -208,6 +216,10 @@ commands:
     description: Searches for an item.
     usage: /<command> <item>
     aliases: [dura,edura,durability,edurability,eitemdb,itemno,eitemno]
+  itemname:
+    description: Names an item.
+    usage: /<command> [name]
+    aliases: [iname, einame, eitemname, itemrename, irename, eitemrename, eirename]
   jails:
     description: List all jails.
     usage: /<command>
@@ -284,6 +296,10 @@ commands:
     description: May death rain upon them.
     usage: /<command> [player]
     aliases: [enuke]
+  tpoffline:
+    description: Teleport to a player's last known logout location
+    usage: /<command> <player>
+    aliases: [otp, offlinetp, tpoff, tpoffline]
   pay:
     description: Pays another player from your balance.
     usage: /<command> <player> <amount>
@@ -531,6 +547,9 @@ permissions:
     description: Give players with op everything by default
     children:
       essentials.gamemode.*: true
+  essentials.sleepingignored:
+    default: false
+    description: If the player has this permission, they will not have to sleep for the night to be skipped
   # These permissions can't be assigned from player-commands for compatibility reasons
   essentials.teleport.cooldown.bypass.tpa:
     default: true
@@ -549,3 +568,9 @@ permissions:
     children:
       essentials.seen.ip: true
       essentials.seen.location: true
+  essentials.keepinv:
+    default: false
+    description: Controls whether players keep their inventory on death.
+  essentials.near.exclude:
+    default: false
+    description: If the player should be excluded from near lookups.

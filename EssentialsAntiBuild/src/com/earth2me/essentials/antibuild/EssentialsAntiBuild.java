@@ -60,4 +60,8 @@ public class EssentialsAntiBuild extends JavaPlugin implements IAntiBuild {
         final Boolean bool = settingsBoolean.get(protectConfig);
         return bool == null ? protectConfig.getDefaultValueBoolean() : bool;
     }
+
+    static String getNameForType(Material type) {
+        return type.toString().toLowerCase().replaceAll("_", " ");
+    }
 }

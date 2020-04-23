@@ -63,6 +63,11 @@ public class PermissionsHandler implements IPermissionsHandler {
     }
 
     @Override
+    public boolean isPermissionSet(final Player base, final String node) {
+        return handler.isPermissionSet(base, node);
+    }
+
+    @Override
     public String getPrefix(final Player base) {
         final long start = System.nanoTime();
         String prefix = handler.getPrefix(base);
@@ -92,7 +97,7 @@ public class PermissionsHandler implements IPermissionsHandler {
     public void checkPermissions() {
         // load and assign a handler
         List<Class<? extends SuperpermsHandler>> providerClazz = Arrays.asList(
-                PermissionsExHandler.class,
+                ModernVaultHandler.class,
                 GenericVaultHandler.class,
                 SuperpermsHandler.class
         );

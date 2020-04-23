@@ -26,7 +26,7 @@ EssentialsX is almost a completely drop-in replacement for Essentials. However, 
 
 * **EssentialsX requires Java 8 or higher.** On older versions, the plugin may not work properly.
 
-* **EssentialsX supports Minecraft versions 1.8.8, 1.9.4, 1.10.2, 1.11.2, 1.12.2 and 1.13.2.**
+* **EssentialsX supports Minecraft versions 1.8.8, 1.9.4, 1.10.2, 1.11.2, 1.12.2, 1.13.2, 1.14.4, and 1.15.2.**
 
 
 Support
@@ -58,7 +58,7 @@ Each module's jar can be found in `target/` inside each module's directory.
 Using EssentialsX in your plugin
 --------------------------------
 
-Writing a plugin and want to support EssentialsX? We have a Maven repository at https://ci.ender.zone/plugin/repository/everything/, and the EssentialsX artifact is `net.ess3:EssentialsX:2.16.1`. More information at the [wiki](https://github.com/EssentialsX/Essentials/wiki/Common-Issues#how-do-i-add-essentialsx-as-a-dependency).
+Writing a plugin and want to support EssentialsX? We have a Maven repository at https://ci.ender.zone/plugin/repository/everything/, and the EssentialsX artifact is `net.ess3:EssentialsX:2.17.0`. More information at the [wiki](https://github.com/EssentialsX/Essentials/wiki/Common-Issues#how-do-i-add-essentialsx-as-a-dependency).
 
 
 Contributing
@@ -72,6 +72,6 @@ If you can't make a donation, don't worry! There's lots of other ways to contrib
 * Do you run a server? Take a look at our ["help wanted" issues](https://github.com/EssentialsX/Essentials/issues?q=is%3Aissue+is%3Aopen+sort%3Aupdated-desc+label%3A%22help+wanted%22),
   where you can find issues that need extra testing and investigation. You can also join the [MOSS Discord community](https://discord.gg/casfFyh)
   and provide support to others.
-* Do you speak multiple languages? If so, we always welcome pull requests to our [language files](https://essentialsx.github.io/#/Locale).
+* Do you speak multiple languages? If so, we always welcome contributions to our [Crowdin project](https://crowdin.com/project/essentialsx-official).
 * If you're a developer, you could look through our ["open to PR" issues](https://github.com/EssentialsX/Essentials/issues?q=is%3Aissue+is%3Aopen+sort%3Aupdated-desc+label%3A%22status%3A+open+to+PR%22).
   We're always happy to receive bug fixes and feature additions as pull requests.

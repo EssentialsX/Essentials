@@ -2,6 +2,7 @@ package net.ess3.api.events;
 
 import com.earth2me.essentials.Trade;
 import net.ess3.api.IUser;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
@@ -18,7 +19,8 @@ public class UserWarpEvent extends Event implements Cancellable {
     private boolean cancelled = false;
 
 
-    public UserWarpEvent(IUser user, String warp, Trade trade){
+    public UserWarpEvent(IUser user, String warp, Trade trade) {
+        super(!Bukkit.getServer().isPrimaryThread());
         this.user = user;
         this.warp = warp;
         this.trade = trade;

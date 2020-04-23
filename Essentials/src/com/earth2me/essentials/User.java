@@ -97,6 +97,11 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
         return result;
     }
 
+    @Override
+    public boolean isPermissionSet(final String node) {
+        return isPermSetCheck(node);
+    }
+
     private boolean isAuthorizedCheck(final String node) {
 
         if (base instanceof OfflinePlayer) {
@@ -105,6 +110,24 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
 
         try {
             return ess.getPermissionsHandler().hasPermission(base, node);
+        } catch (Exception ex) {
+            if (ess.getSettings().isDebug()) {
+                ess.getLogger().log(Level.SEVERE, "Permission System Error: " + ess.getPermissionsHandler().getName() + " returned: " + ex.getMessage(), ex);
+            } else {
+                ess.getLogger().log(Level.SEVERE, "Permission System Error: " + ess.getPermissionsHandler().getName() + " returned: " + ex.getMessage());
+            }
+
+            return false;
+        }
+    }
+
+    private boolean isPermSetCheck(final String node) {
+        if (base instanceof OfflinePlayer) {
+            return false;
+        }
+
+        try {
+            return ess.getPermissionsHandler().isPermissionSet(base, node);
         } catch (Exception ex) {
             if (ess.getSettings().isDebug()) {
                 ess.getLogger().log(Level.SEVERE, "Permission System Error: " + ess.getPermissionsHandler().getName() + " returned: " + ex.getMessage(), ex);
@@ -139,10 +162,14 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
 
     @Override
     public void giveMoney(final BigDecimal value, final CommandSource initiator) throws MaxMoneyException {
+        giveMoney(value, initiator, UserBalanceUpdateEvent.Cause.UNKNOWN);
+    }
+
+    public void giveMoney(final BigDecimal value, final CommandSource initiator, UserBalanceUpdateEvent.Cause cause) throws MaxMoneyException {
         if (value.signum() == 0) {
             return;
         }
-        setMoney(getMoney().add(value));
+        setMoney(getMoney().add(value), cause);
         sendMessage(tl("addedToAccount", NumberUtil.displayCurrency(value, ess)));
         if (initiator != null) {
             initiator.sendMessage(tl("addedToOthersAccount", NumberUtil.displayCurrency(value, ess), this.getDisplayName(), NumberUtil.displayCurrency(getMoney(), ess)));
@@ -151,13 +178,17 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
 
     @Override
     public void payUser(final User reciever, final BigDecimal value) throws Exception {
+        payUser(reciever, value, UserBalanceUpdateEvent.Cause.UNKNOWN);
+    }
+
+    public void payUser(final User reciever, final BigDecimal value, UserBalanceUpdateEvent.Cause cause) throws Exception {
         if (value.compareTo(BigDecimal.ZERO) < 1) {
             throw new Exception(tl("payMustBePositive"));
         }
 
         if (canAfford(value)) {
-            setMoney(getMoney().subtract(value));
-            reciever.setMoney(reciever.getMoney().add(value));
+            setMoney(getMoney().subtract(value), cause);
+            reciever.setMoney(reciever.getMoney().add(value), cause);
             sendMessage(tl("moneySentTo", NumberUtil.displayCurrency(value, ess), reciever.getDisplayName()));
             reciever.sendMessage(tl("moneyRecievedFrom", NumberUtil.displayCurrency(value, ess), getDisplayName()));
         } else {
@@ -172,11 +203,15 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
 
     @Override
     public void takeMoney(final BigDecimal value, final CommandSource initiator) {
+        takeMoney(value, initiator, UserBalanceUpdateEvent.Cause.UNKNOWN);
+    }
+
+    public void takeMoney(final BigDecimal value, final CommandSource initiator, UserBalanceUpdateEvent.Cause cause) {
         if (value.signum() == 0) {
             return;
         }
         try {
-            setMoney(getMoney().subtract(value));
+            setMoney(getMoney().subtract(value), cause);
         } catch (MaxMoneyException ex) {
             ess.getLogger().log(Level.WARNING, "Invalid call to takeMoney, total balance can't be more than the max-money limit.", ex);
         }
@@ -417,6 +452,10 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
 
     @Override
     public void setMoney(final BigDecimal value) throws MaxMoneyException {
+        setMoney(value, UserBalanceUpdateEvent.Cause.UNKNOWN);
+    }
+
+    public void setMoney(final BigDecimal value, UserBalanceUpdateEvent.Cause cause) throws MaxMoneyException {
         if (ess.getSettings().isEcoDisabled()) {
             if (ess.getSettings().isDebug()) {
                 ess.getLogger().info("Internal economy functions disabled, aborting balance change.");
@@ -424,11 +463,11 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
             return;
         }
         final BigDecimal oldBalance = _getMoney();
-        
-        UserBalanceUpdateEvent updateEvent = new UserBalanceUpdateEvent(this.getBase(), oldBalance, value);
+
+        UserBalanceUpdateEvent updateEvent = new UserBalanceUpdateEvent(this.getBase(), oldBalance, value, cause);
         ess.getServer().getPluginManager().callEvent(updateEvent);
         BigDecimal newBalance = updateEvent.getNewBalance();
-        
+
         if (Methods.hasMethod()) {
             try {
                 final Method method = Methods.getMethod();
@@ -459,7 +498,12 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
 
     @Override
     public void setAfk(final boolean set) {
-        final AfkStatusChangeEvent afkEvent = new AfkStatusChangeEvent(this, set);
+        setAfk(set, AfkStatusChangeEvent.Cause.UNKNOWN);
+    }
+
+    @Override
+    public void setAfk(boolean set, AfkStatusChangeEvent.Cause cause) {
+        final AfkStatusChangeEvent afkEvent = new AfkStatusChangeEvent(this, set, cause);
         ess.getServer().getPluginManager().callEvent(afkEvent);
         if (afkEvent.isCancelled()) {
             return;
@@ -477,7 +521,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
         _setAfk(set);
         updateAfkListName();
     }
-    
+
     private void updateAfkListName() {
         if (ess.getSettings().isAfkListName()) {
             if(isAfk()) {
@@ -489,8 +533,13 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
         }
     }
 
+    @Deprecated
     public boolean toggleAfk() {
-        setAfk(!isAfk());
+        return toggleAfk(AfkStatusChangeEvent.Cause.UNKNOWN);
+    }
+
+    public boolean toggleAfk(AfkStatusChangeEvent.Cause cause) {
+        setAfk(!isAfk(), cause);
         return isAfk();
     }
 
@@ -555,14 +604,24 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
         return false;
     }
 
+    @Deprecated
     public void updateActivity(final boolean broadcast) {
+        updateActivity(broadcast, AfkStatusChangeEvent.Cause.UNKNOWN);
+    }
+
+    public void updateActivity(final boolean broadcast, AfkStatusChangeEvent.Cause cause) {
         if (isAfk()) {
-            setAfk(false);
+            setAfk(false, cause);
             if (broadcast && !isHidden()) {
                 setDisplayNick();
                 final String msg = tl("userIsNotAway", getDisplayName());
-                if (!msg.isEmpty()) {
-                    ess.broadcastMessage(this, msg);
+                final String selfmsg = tl("userIsNotAwaySelf", getDisplayName());
+                if (!msg.isEmpty() && ess.getSettings().broadcastAfkMessage()) {
+                    // exclude user from receiving general AFK announcement in favor of personal message
+                    ess.broadcastMessage(this, msg, u -> u == this);
+                }
+                if (!selfmsg.isEmpty()) {
+                    this.sendMessage(selfmsg);
                 }
             }
         }
@@ -571,13 +630,13 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
 
     public void updateActivityOnMove(final boolean broadcast) {
         if(ess.getSettings().cancelAfkOnMove()) {
-            updateActivity(broadcast);
+            updateActivity(broadcast, AfkStatusChangeEvent.Cause.MOVE);
         }
     }
 
     public void updateActivityOnInteract(final boolean broadcast) {
         if(ess.getSettings().cancelAfkOnInteract()) {
-            updateActivity(broadcast);
+            updateActivity(broadcast, AfkStatusChangeEvent.Cause.INTERACT);
         }
     }
 
@@ -605,12 +664,17 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
         }
         final long autoafk = ess.getSettings().getAutoAfk();
         if (!isAfk() && autoafk > 0 && lastActivity + autoafk * 1000 < System.currentTimeMillis() && isAuthorized("essentials.afk.auto")) {
-            setAfk(true);
+            setAfk(true, AfkStatusChangeEvent.Cause.ACTIVITY);
             if (!isHidden()) {
                 setDisplayNick();
                 final String msg = tl("userIsAway", getDisplayName());
-                if (!msg.isEmpty()) {
-                    ess.broadcastMessage(this, msg);
+                final String selfmsg = tl("userIsAwaySelf", getDisplayName());
+                if (!msg.isEmpty() && ess.getSettings().broadcastAfkMessage()) {
+                    // exclude user from receiving general AFK announcement in favor of personal message
+                    ess.broadcastMessage(this, msg, u -> u == this);
+                }
+                if (!selfmsg.isEmpty()) {
+                    this.sendMessage(selfmsg);
                 }
             }
         }
