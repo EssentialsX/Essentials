@@ -7,7 +7,7 @@ website: http://tiny.cc/EssentialsCommands
 description: Provides an essential, core set of commands for Bukkit.
 softdepend: [Vault]
 authors: [Zenexer, ementalo, Aelux, Brettflan, KimKandor, snowleo, ceulemans, Xeology, KHobbits, md_5, Iaccidentally, drtshock, vemacs, SupaHam, md678685]
-api-version: 1.13
+api-version: "1.13"
 commands:
   afk:
     description: Marks you as away-from-keyboard.
@@ -574,3 +574,69 @@ permissions:
   essentials.near.exclude:
     default: false
     description: If the player should be excluded from near lookups.
+  essentials.keepxp:
+    default: false
+    description: Allows the user to keep their exp on death, instead of dropping it.
+  essentials.invsee.preventmodify:
+    default: false
+    description: Prevents other players from modifying the players inventory.
+  essentials.afk.auto:
+    default: false
+    description: Players with this permission will be set to afk after a period of inaction as defined in the config file.
+  essentials.home.compass:
+    default: false
+    description: Point the player's compass at their first home. compass-towards-home-perm needs to be enabled in the configuration.
+  essentials.ban.exempt:
+    default: false
+    description: Prevent a specified group or player from being banned
+  essentials.kick.exempt:
+    default: false
+    description: Prevents the player from being kicked.
+  essentials.chat.ignoreexempt:
+    default: false
+    description: Someone with this permission will not be ignored, even if they are on another persons ignore list
+  essentials.kit.exemptdelay:
+    default: false
+    description: Exempts you from the kit delay feature, this affects signs as well as command.
+  essentials.mute.exempt:
+    default: false
+    description: Prevent a specified group or player from being muted
+  essentials.sethome.bed:
+    default: false
+    description: Allows the player to right click a bed during daytime to update their 'bed' home.
+  essentials.silentjoin:
+    default: false
+    description: Allow to join silently
+  essentials.silentjoin.vanish:
+    default: false
+    description: Allow to join silently, and get put in vanish mode
+  essentials.silentquit:
+    default: false
+    description: Suppress leave/quit messages for users with this permission.
+  essentials.sleepingignored:
+    default: false
+    description: User isn't required to be sleeping, for time to be reset.
+  essentials.sudo.exempt:
+    default: false
+    description: Prevents the holder from being sudo'ed by another user
+  essentials.tempban.exempt:
+    default: false
+    description: Prevents a specified group or player from being tempbanned
+  essentials.nick.allowunsafe:
+    default: false
+    description: If a player has this, they can set their username to any value. Use with caution, as this has the potential to break userdata files.
+  essentials.balancetop.exclude:
+    default: false
+    description: Players with this permission are excluded from the balancetop
+  essentials.exempt:
+    default: false
+    description: Parent permission to be exempt from many moderator actions
+    children:
+      essentials.invsee.preventmodify: true
+      essentials.ban.exempt: true
+      essentials.kick.exempt: true
+      essentials.mute.exempt: true
+      essentials.chat.ignoreexempt: true
+      essentials.sudo.exempt: true
+      essentials.tempban.exempt: true
+      essentials.exempt.protect: true
