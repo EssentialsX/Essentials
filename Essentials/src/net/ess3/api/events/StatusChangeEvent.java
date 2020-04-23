@@ -6,9 +6,9 @@ import org.bukkit.event.Cancellable;
 
 
 /**
- * This handles common boilerplate for other StatusChangeEvents
+ * This handles common boilerplate for events for changes in state that are boolean (true/false).
  */
-public class StatusChangeEvent extends StateChangeEvent implements Cancellable {
+public abstract class StatusChangeEvent extends StateChangeEvent implements Cancellable {
     private boolean newValue;
 
     public StatusChangeEvent(IUser affected, IUser controller, boolean value) {

@@ -6,8 +6,8 @@ import io.papermc.lib.PaperLib;
 import net.ess3.api.IEssentials;
 import net.ess3.api.ITeleport;
 import net.ess3.api.IUser;
-import net.ess3.api.events.UserWarpEvent;
 import net.ess3.api.events.UserTeleportEvent;
+import net.ess3.api.events.UserWarpEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -130,6 +130,13 @@ public class Teleport implements ITeleport {
         }
 
         teleportee.setLastLocation();
+
+        if (!teleportee.getBase().isEmpty()) {
+            if (!ess.getSettings().isTeleportPassengerDismount()) {
+                throw new Exception(tl("passengerTeleportFail"));
+            }
+            teleportee.getBase().eject();
+        }
 
         if (LocationUtil.isBlockUnsafeForUser(teleportee, loc.getWorld(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ())) {
             if (ess.getSettings().isTeleportSafetyEnabled()) {

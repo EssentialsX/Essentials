@@ -119,6 +119,8 @@ public interface ISettings extends IConf {
 
     boolean isForceDisableTeleportSafety();
 
+    boolean isTeleportPassengerDismount();
+
     double getTeleportCooldown();
 
     double getTeleportDelay();
@@ -160,6 +162,8 @@ public interface ISettings extends IConf {
 
     boolean isEcoLogUpdateEnabled();
 
+    boolean realNamesOnList();
+
     boolean removeGodOnDisconnect();
 
     boolean changeDisplayName();
@@ -191,6 +195,8 @@ public interface ISettings extends IConf {
     boolean isAfkListName();
 
     String getAfkListName();
+
+    boolean broadcastAfkMessage();
 
     boolean areDeathMessagesEnabled();
 
@@ -287,6 +293,10 @@ public interface ISettings extends IConf {
     boolean isTeleportToCenterLocation();
 
     boolean isCommandCooldownsEnabled();
+
+    boolean isWorldChangeFlyResetEnabled();
+
+    boolean isWorldChangeSpeedResetEnabled();
 
     long getCommandCooldownMs(String label);
 
