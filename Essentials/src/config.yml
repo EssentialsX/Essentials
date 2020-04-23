@@ -4,6 +4,9 @@
 # +------------------------------------------------------+ #
 ############################################################
 
+# This is the config file for EssentialsX.
+# This config was generated for version ${full.version}.
+
 # If you want to use special characters in this document, such as accented letters, you MUST save the file as UTF-8, not ANSI.
 # If you receive an error when Essentials loads, ensure that:
 #   - No tabs are present: YAML only allows spaces
@@ -11,11 +14,7 @@
 #   - You have "escaped" all apostrophes in your text: If you want to write "don't", for example, write "don''t" instead (note the doubled apostrophe)
 #   - Text with symbols is enclosed in single or double quotation marks
 
-# If you have problems join the Essentials help support channel: http://tiny.cc/EssentialsChat
-
-# Version ${full.version}
-
-# KITS ARE NOW IN THE kits.yml FILE
+# If you need help, you can join the EssentialsX community: https://essentialsx.cf/community.html
 
 ############################################################
 # +------------------------------------------------------+ #
@@ -78,6 +77,11 @@ teleport-safety: true
 # teleport-safety and this option need to be set to true to force teleportation to dangerous locations.
 force-disable-teleport-safety: false
 
+# If a player has any passengers, the teleport will fail. Should their passengers be dismounted before they are teleported?
+# If this is set to true, Essentials will dismount the player's passengers before teleporting.
+# If this is set to false, attempted teleports will be canceled with a warning.
+teleport-passenger-dismount: true
+
 # The delay, in seconds, required between /home, /tp, etc.
 teleport-cooldown: 0
 
@@ -93,6 +97,9 @@ teleport-to-center: true
 
 # The delay, in seconds, required between /heal or /feed attempts.
 heal-cooldown: 60
+
+# Do you want to remove potion effects when healing a player?
+remove-effects-on-heal: true
 
 # Near Radius
 # The default radius with /near
@@ -188,6 +195,18 @@ socialspy-commands:
 # Whether the private and public messages from muted players should appear in the social spy.
 # If so, they will be differentiated from those sent by normal players.
 socialspy-listen-muted-players: true
+
+# The following settings listen for when a player changes worlds.
+# If you use another plugin to control speed and flight, you should change these to false.
+
+# When a player changes world, should EssentialsX reset their flight?
+# This will disable flight if the player does not have essentials.fly.
+world-change-fly-reset: true
+
+# When a player changes world, should we reset their speed according to their permissions?
+# This resets the player's speed to the default if they don't have essentials.speed.
+# If the player doesn't have essentials.speed.bypass, this resets their speed to the maximum specified above.
+world-change-speed-reset: true
 
 # Mute Commands
 # These commands will be disabled when a player is muted.
@@ -373,6 +392,9 @@ list:
     # Uncomment the line below to simply list all players with no grouping
     #Players: '*'
 
+# Displays real names in /list next to players who are using a nickname.
+real-names-on-list: false
+
 # More output to the console.
 debug: false
 
@@ -426,6 +448,11 @@ sleep-ignores-afk-players: true
 # should not interfere with the AFK player's list name.
 # You may use color codes, use {USERNAME} the player's name or {PLAYER} for the player's displayname.
 afk-list-name: "none"
+
+# When a player enters or exits AFK mode, should the AFK notification be broadcast
+# to the entire server, or just to the player?
+# When this setting is false, only the player will be notified upon changing their AFK state.
+broadcast-afk-message: true
 
 # You can disable the death messages of Minecraft here.
 death-messages: true
@@ -487,6 +514,10 @@ max-walk-speed: 0.8
 
 #Set the maximum amount of mail that can be sent within a minute.
 mails-per-minute: 1000
+
+# Set the maximum time /mute can be used for in seconds.
+# Set to -1 to disable, and essentials.mute.unlimited can be used to override.
+max-mute-time: -1
 
 # Set the maximum time /tempban can be used for in seconds.
 # Set to -1 to disable, and essentials.tempban.unlimited can be used to override.
@@ -578,17 +609,20 @@ safe-usermap-names: true
 # Example: CommandBlock at <x>,<y>,<z> issued server command: /<command>
 log-command-block-commands: true
 
+# Set the maximum speed for projectiles spawned with /fireball.
+max-projectile-speed: 8
+
 ############################################################
 # +------------------------------------------------------+ #
-# |                   EssentialsHome                     | #
+# |                        Homes                         | #
 # +------------------------------------------------------+ #
 ############################################################
 
-# Allows people to set their bed at daytime.
+# Allows people to set their bed during the day.
 update-bed-at-daytime: true
 
 # Set to true to enable per-world permissions for using homes to teleport between worlds.
-# This applies to the /home only.
+# This applies to the /home command only.
 # Give someone permission to teleport to a world with essentials.worlds.<worldname>
 world-home-permissions: false
 
@@ -614,22 +648,22 @@ sethome-multiple:
 # change the compass' direction to point towards their first home.
 compass-towards-home-perm: false
 
-# Set the maximum speed for projectiles spawned with /fireball.
-max-projectile-speed: 8
+# If no home is set, would you like to send the player to spawn?
+# If set to false, players will not be teleported when they run /home without setting a home first.
+spawn-if-no-home: true
 
 ############################################################
 # +------------------------------------------------------+ #
-# |                    EssentialsEco                     | #
+# |                       Economy                        | #
 # +------------------------------------------------------+ #
 ############################################################
 
 # For more information, visit http://wiki.ess3.net/wiki/Essentials_Economy
 
+# You can control the values of items that are sold to the server by using the /setworth command.
+
 # Defines the balance with which new players begin. Defaults to 0.
 starting-balance: 0
-
-# worth-# defines the value of an item when it is sold to the server via /sell.
-# These are now defined in worth.yml
 
 # Defines the cost to use the given commands PER USE.
 # Some commands like /repair have sub-costs, check the wiki for more information.
@@ -655,6 +689,10 @@ min-money: -10000
 # Enable this to log all interactions with trade/buy/sell signs and sell command.
 economy-log-enabled: false
 
+# Enable this to also log all transactions from other plugins through Vault.
+# This can cause the economy log to fill up quickly so should only be enabled for testing purposes!
+economy-log-update-enabled: false
+
 # Minimum acceptable amount to be used in /pay.
 minimum-pay-amount: 0.001
 
@@ -673,7 +711,7 @@ minimum-pay-amount: 0.001
 
 ############################################################
 # +------------------------------------------------------+ #
-# |                   EssentialsHelp                     | #
+# |                         Help                         | #
 # +------------------------------------------------------+ #
 ############################################################
 
@@ -688,25 +726,25 @@ hide-permissionless-help: true
 
 ############################################################
 # +------------------------------------------------------+ #
-# |                   EssentialsChat                     | #
+# |                   EssentialsX Chat                   | #
 # +------------------------------------------------------+ #
 ############################################################
 
-# This section requires the EssentialsChat.jar to work.
+# You need to install EssentialsX Chat for this section to work.
+# See https://essentialsx.cf/wiki/Module-Breakdown.html for more information.
 
 chat:
 
-  # If EssentialsChat is installed, this will define how far a player's voice travels, in blocks.  Set to 0 to make all chat global.
+  # If EssentialsX Chat is installed, this will define how far a player's voice travels, in blocks. Set to 0 to make all chat global.
   # Note that users with the "essentials.chat.spy" permission will hear everything, regardless of this setting.
-  # Users with essentials.chat.shout can override this by prefixing text with an exclamation mark (!)
-  # Users with essentials.chat.question can override this by prefixing text with a question mark (?)
-  # You can add command costs for shout/question by adding chat-shout and chat-question to the command costs section."
+  # Users with essentials.chat.shout can override this by prefixing their message with an exclamation mark (!)
+  # Users with essentials.chat.question can override this by prefixing their message with a question mark (?)
+  # You can add command costs for shout/question by adding chat-shout and chat-question to the command costs section.
   radius: 0
 
   # Chat formatting can be done in two ways, you can either define a standard format for all chat.
   # Or you can give a group specific chat format, to give some extra variation.
   # For more information of chat formatting, check out the wiki: http://wiki.ess3.net/wiki/Chat_Formatting
-  # For EssentialsX changes, take a look at the EssentialsX wiki: https://github.com/EssentialsX/Essentials/wiki
 
   format: '<{DISPLAYNAME}> {MESSAGE}'
   #format: '&7[{GROUP}]&r {DISPLAYNAME}&7:&r {MESSAGE}'
@@ -718,18 +756,22 @@ chat:
 
   # If you are using group formats make sure to remove the '#' to allow the setting to be read.
   # Note: Group names are case-sensitive so you must match them up with your permission plugin.
+  
+  # You can use permissions to control whether players can use formatting codes in their chat messages.
+  # See https://essentialsx.cf/wiki/Color-Permissions.html for more information.
 
 ############################################################
 # +------------------------------------------------------+ #
-# |                 EssentialsProtect                    | #
+# |                 EssentialsX Protect                  | #
 # +------------------------------------------------------+ #
 ############################################################
 
-# This section requires the EssentialsProtect.jar to work.
+# You need to install EssentialsX Protect for this section to work.
+# See https://essentialsx.cf/wiki/Module-Breakdown.html for more information.
 
 protect:
 
-  # General physics/behavior modifications.
+  # General physics/behavior modifications. Set these to true to disable behaviours.
   prevent:
     lava-flow: false
     water-flow: false
@@ -759,6 +801,12 @@ protect:
     # Monsters won't follow players.
     # permission essentials.protect.entitytarget.bypass disables this.
     entitytarget: false
+    # Prevents zombies from breaking down doors
+    zombie-door-break: false
+    # Prevents Ravagers from stealing blocks
+    ravager-thief: false
+    # Prevents sheep from turning grass to dirt
+    sheep-eat-grass: false
     # Prevent certain transformations.
     transformation:
       # Prevent creepers becoming charged when struck by lightning.
@@ -775,7 +823,7 @@ protect:
       drowned: false
       # Prevent mooshrooms changing colour when struck by lightning.
       mooshroom: false
-    # Prevent the spawning of creatures.
+    # Prevent the spawning of creatures. If a creature is missing, you can add it following the format below.
     spawn:
       creeper: false
       skeleton: false
@@ -853,26 +901,24 @@ protect:
 
 ############################################################
 # +------------------------------------------------------+ #
-# |                EssentialsAntiBuild                   | #
+# |                EssentialsX AntiBuild                 | #
 # +------------------------------------------------------+ #
 ############################################################
 
-  # This section requires the EssentialsAntiBuild.jar to work.
+  # You need to install EssentialsX AntiBuild for this section to work.
+  # See https://essentialsx.cf/wiki/Module-Breakdown.html and http://wiki.ess3.net/wiki/AntiBuild for more information.
 
-  # Disable various default physics and behaviors
-  # For more information, visit http://wiki.ess3.net/wiki/AntiBuild
-
-    # Should people with build: false in permissions be allowed to build?
+    # Should people without the essentials.build permission be allowed to build?
     # Set true to disable building for those people.
     # Setting to false means EssentialsAntiBuild will never prevent you from building.
     build: true
 
-    # Should people with build: false in permissions be allowed to use items?
+    # Should people without the essentials.build permission be allowed to use items?
     # Set true to disable using for those people.
     # Setting to false means EssentialsAntiBuild will never prevent you from using items.
     use: true
 
-    # Should we tell people they are not allowed to build?
+    # Should we warn people when they are not allowed to build?
     warn-on-build-disallow: true
 
   # For which block types would you like to be alerted?
@@ -901,11 +947,12 @@ protect:
 
 ############################################################
 # +------------------------------------------------------+ #
-# |            Essentials Spawn / New Players            | #
+# |            EssentialsX Spawn + New Players           | #
 # +------------------------------------------------------+ #
 ############################################################
 
-# This section requires essentialsspawn.jar to work.
+# You need to install EssentialsX Spawn for this section to work.
+# See https://essentialsx.cf/wiki/Module-Breakdown.html for more information.
 
 newbies:
   # Should we announce to the server when someone logs in for the first time?
@@ -937,9 +984,6 @@ spawn-join-listener-priority: high
 
 # When users die, should they respawn at their first home or bed, instead of the spawnpoint?
 respawn-at-home: false
-
-# If no home is set, would you like to send the player to spawn? (Only applies to /home)
-spawn-if-no-home: true
 
 # Teleport all joining players to the spawnpoint
 spawn-on-join: false

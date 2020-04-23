@@ -158,6 +158,11 @@ public class Settings implements net.ess3.api.ISettings {
     }
 
     @Override
+    public boolean isTeleportPassengerDismount() {
+        return config.getBoolean("teleport-passenger-dismount", true);
+    }
+
+    @Override
     public double getTeleportDelay() {
         return config.getDouble("teleport-delay", 0);
     }
@@ -508,6 +513,7 @@ public class Settings implements net.ess3.api.ISettings {
         sleepIgnoresAfkPlayers = _sleepIgnoresAfkPlayers();
         afkListName = _getAfkListName();
         isAfkListName = !afkListName.equalsIgnoreCase("none");
+        broadcastAfkMessage = _broadcastAfkMessage();
         itemSpawnBl = _getItemSpawnBlacklist();
         loginAttackDelay = _getLoginAttackDelay();
         signUsePerSecond = _getSignUsePerSecond();
@@ -786,6 +792,11 @@ public class Settings implements net.ess3.api.ISettings {
         return economyLogUpdate;
     }
 
+    @Override
+    public boolean realNamesOnList() {
+        return config.getBoolean("real-names-on-list", false);
+    }
+
     public boolean _isEcoLogUpdateEnabled() {
         return config.getBoolean("economy-log-update-enabled", false);
     }
@@ -937,6 +948,17 @@ public class Settings implements net.ess3.api.ISettings {
     @Override
     public String getAfkListName() {
         return afkListName;
+    }
+
+    private boolean broadcastAfkMessage;
+
+    @Override
+    public boolean broadcastAfkMessage() {
+        return broadcastAfkMessage;
+    }
+
+    private boolean _broadcastAfkMessage() {
+        return config.getBoolean("broadcast-afk-message", true);
     }
 
     @Override
@@ -1129,6 +1151,11 @@ public class Settings implements net.ess3.api.ISettings {
     @Override
     public long getPermissionsLagWarning() {
         return permissionsLagWarning;
+    }
+
+    @Override
+    public long getMaxMute() {
+        return config.getLong("max-mute-time", -1);
     }
 
     @Override
@@ -1469,6 +1496,16 @@ public class Settings implements net.ess3.api.ISettings {
         return config.getBoolean("allow-direct-hat", true);
     }
 
+    @Override
+    public boolean isWorldChangeFlyResetEnabled() {
+        return config.getBoolean("world-change-fly-reset", true);
+    }
+
+    @Override
+    public boolean isWorldChangeSpeedResetEnabled() {
+        return config.getBoolean("world-change-speed-reset", true);
+    }
+
     private List<String> defaultEnabledConfirmCommands;
 
     private List<String> _getDefaultEnabledConfirmCommands() {
@@ -1621,6 +1658,17 @@ public class Settings implements net.ess3.api.ISettings {
     @Override
     public double getMaxProjectileSpeed() {
         return maxProjectileSpeed;
+    }
+
+    private boolean removeEffectsOnHeal;
+
+    private boolean _isRemovingEffectsOnHeal() {
+        return config.getBoolean("remove-effects-on-heal", true);
+    }
+
+    @Override
+    public boolean isRemovingEffectsOnHeal() {
+        return removeEffectsOnHeal;
     }
 
     @Override

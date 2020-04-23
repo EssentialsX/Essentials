@@ -81,8 +81,9 @@ public class Commandkit extends EssentialsCommand {
 
                 kit.checkDelay(userFrom);
                 kit.checkAffordable(userFrom);
+                if (!kit.expandItems(userTo))
+                    continue;
                 kit.setTime(userFrom);
-                kit.expandItems(userTo);
                 kit.chargeUser(userTo);
 
                 if (!userFrom.equals(userTo)) {

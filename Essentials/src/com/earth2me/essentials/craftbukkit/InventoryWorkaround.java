@@ -80,6 +80,25 @@ public final class InventoryWorkaround {
         }
         return addItems(fakeInventory, items);
     }
+    
+    public static Map<Integer, ItemStack> addAllOversizedItems(final Inventory inventory, final int oversizedStacks, final ItemStack... items) {
+        ItemStack[] contents = inventory.getContents();
+
+        final Inventory fakeInventory;
+        if (isCombinedInventory(inventory)) {
+            fakeInventory = makeTruncatedPlayerInventory((PlayerInventory) inventory);
+        } else {
+            fakeInventory = Bukkit.getServer().createInventory(null, inventory.getType());
+            fakeInventory.setContents(contents);
+        }
+        Map<Integer, ItemStack> overflow = addOversizedItems(fakeInventory, oversizedStacks, items);
+        if (overflow.isEmpty()) {
+            addOversizedItems(inventory, oversizedStacks, items);
+            return null;
+        }
+        return overflow;
+    }
+
 
     // Returns what it couldn't store
     public static Map<Integer, ItemStack> addItems(final Inventory inventory, final ItemStack... items) {

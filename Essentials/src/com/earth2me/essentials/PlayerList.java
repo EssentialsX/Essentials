@@ -1,6 +1,7 @@
 package com.earth2me.essentials;
 
 import com.earth2me.essentials.utils.FormatUtil;
+import org.bukkit.ChatColor;
 import org.bukkit.Server;
 
 import java.util.*;
@@ -27,6 +28,9 @@ public class PlayerList {
             }
             user.setDisplayNick();
             groupString.append(user.getDisplayName());
+            if (ess.getSettings().realNamesOnList() && !ChatColor.stripColor(user.getDisplayName()).equals(user.getName())) {
+                groupString.append(" (").append(user.getName()).append(")");
+            }
             groupString.append("\u00a7f");
         }
         return groupString.toString();
@@ -40,7 +44,7 @@ public class PlayerList {
         for (User onlinePlayer : ess.getOnlineUsers()) {
             if (onlinePlayer.isHidden() || (user != null && !user.getBase().canSee(onlinePlayer.getBase()))) {
                 playerHidden++;
-                if (showHidden || user.getBase().canSee(onlinePlayer.getBase())) {
+                if (showHidden || user != null && user.getBase().canSee(onlinePlayer.getBase())) {
                     hiddenCount++;
                 }
             }

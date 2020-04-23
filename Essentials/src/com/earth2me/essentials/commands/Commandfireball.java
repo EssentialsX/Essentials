@@ -7,6 +7,7 @@ import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import org.bukkit.Server;
 import org.bukkit.entity.*;
+import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.util.Vector;
 
 import java.util.Collections;
@@ -17,6 +18,9 @@ import java.util.stream.Collectors;
 import static com.earth2me.essentials.I18n.tl;
 
 public class Commandfireball extends EssentialsCommand {
+
+    public static final String FIREBALL_META_KEY = "ess_fireball_proj";
+
     private static final Map<String, Class<? extends Projectile>> types;
 
     static {
@@ -77,6 +81,7 @@ public class Commandfireball extends EssentialsCommand {
         Projectile projectile = user.getWorld().spawn(user.getBase().getEyeLocation().add(direction.getX(), direction.getY(), direction.getZ()), types.get(type));
         projectile.setShooter(user.getBase());
         projectile.setVelocity(direction);
+        projectile.setMetadata(FIREBALL_META_KEY, new FixedMetadataValue(ess, true));
 
         if (ride) {
             projectile.addPassenger(user.getBase());
