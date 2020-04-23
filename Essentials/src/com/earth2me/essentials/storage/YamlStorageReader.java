@@ -38,7 +38,7 @@ public class YamlStorageReader implements IStorageReader {
         }
         lock.lock();
         try {
-            T object = (T) yaml.load(reader);
+            T object = yaml.load(reader);
             if (object == null) {
                 object = clazz.newInstance();
             }

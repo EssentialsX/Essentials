@@ -290,7 +290,7 @@ public class KeywordReplacer implements IText {
             }
 
             line = line.replace(fullMatch, replacer);
-        } catch (IllegalArgumentException ex) {
+        } catch (IllegalArgumentException ignored) {
         }
 
         return line;

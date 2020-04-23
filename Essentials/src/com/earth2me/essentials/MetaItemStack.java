@@ -165,7 +165,7 @@ public class MetaItemStack {
             meta.setLore(lore);
             stack.setItemMeta(meta);
         } else if (split[0].equalsIgnoreCase("unbreakable") && hasMetaPermission(sender, "unbreakable", false, true, ess)) {
-            boolean value = split.length > 1 ? Boolean.parseBoolean(split[1]) : true;
+            boolean value = split.length <= 1 || Boolean.parseBoolean(split[1]);
             setUnbreakable(stack, value);
         } else if (split.length > 1 && (split[0].equalsIgnoreCase("player") || split[0].equalsIgnoreCase("owner")) && hasMetaPermission(sender, "head", false, true, ess)) {
             if (MaterialUtil.isPlayerHead(stack.getType(), stack.getDurability())) {

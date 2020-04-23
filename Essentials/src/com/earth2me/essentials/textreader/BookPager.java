@@ -20,7 +20,6 @@ public class BookPager {
 
     public List<String> getPages(final String pageStr) throws Exception {
         List<String> lines = text.getLines();
-        List<String> chapters = text.getChapters();
         List<String> pageLines = new ArrayList<>();
         Map<String, Integer> bookmarks = text.getBookmarks();
 

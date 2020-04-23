@@ -92,8 +92,8 @@ public class SpawnMob {
     public static void spawnmob(final IEssentials ess, final Server server, final CommandSource sender, final User target, final Location loc, final List<String> parts, final List<String> data, int mobCount) throws Exception {
         final Location sloc = LocationUtil.getSafeDestination(loc);
 
-        for (int i = 0; i < parts.size(); i++) {
-            Mob mob = Mob.fromName(parts.get(i));
+        for (String part : parts) {
+            Mob mob = Mob.fromName(part);
             checkSpawnable(ess, sender, mob);
         }
 

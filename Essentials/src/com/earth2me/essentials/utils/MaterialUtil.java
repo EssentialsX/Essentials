@@ -88,7 +88,7 @@ public class MaterialUtil {
             return true;
         }
 
-        return LEGACY_SKULLS.contains(material) && (durability < 0 || durability != 3);
+        return LEGACY_SKULLS.contains(material) && (durability != 3);
     }
 
     public static boolean isPlayerHead(Material material, int durability) {

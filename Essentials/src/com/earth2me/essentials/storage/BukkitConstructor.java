@@ -20,11 +20,8 @@ import java.lang.reflect.Method;
 
 
 public class BukkitConstructor extends CustomClassLoaderConstructor {
-    private final transient Plugin plugin;
-
-    public BukkitConstructor(final Class clazz, final Plugin plugin) {
+    public BukkitConstructor(final Class<?> clazz, final Plugin plugin) {
         super(clazz, plugin.getClass().getClassLoader());
-        this.plugin = plugin;
         yamlClassConstructors.put(NodeId.scalar, new ConstructBukkitScalar());
         yamlClassConstructors.put(NodeId.mapping, new ConstructBukkitMapping());
 

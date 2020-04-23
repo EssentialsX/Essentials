@@ -25,12 +25,11 @@ import static com.earth2me.essentials.I18n.tl;
 public abstract class UserData extends PlayerExtension implements IConf {
     protected final transient IEssentials ess;
     private final EssentialsUserConf config;
-    private final File folder;
 
     protected UserData(Player base, IEssentials ess) {
         super(base);
         this.ess = ess;
-        folder = new File(ess.getDataFolder(), "userdata");
+        File folder = new File(ess.getDataFolder(), "userdata");
         if (!folder.exists()) {
             folder.mkdirs();
         }
@@ -157,7 +156,7 @@ public abstract class UserData extends PlayerExtension implements IConf {
         if (NumberUtil.isInt(search)) {
             try {
                 search = getHomes().get(Integer.parseInt(search) - 1);
-            } catch (NumberFormatException | IndexOutOfBoundsException e) {
+            } catch (NumberFormatException | IndexOutOfBoundsException ignored) {
             }
         }
         return search;

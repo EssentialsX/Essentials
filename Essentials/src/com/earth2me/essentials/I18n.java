@@ -145,7 +145,7 @@ public class I18n implements net.ess3.api.II18n {
             if (file.exists()) {
                 try {
                     return file.toURI().toURL();
-                } catch (MalformedURLException ex) {
+                } catch (MalformedURLException ignored) {
                 }
             }
             return null;
@@ -157,7 +157,7 @@ public class I18n implements net.ess3.api.II18n {
             if (file.exists()) {
                 try {
                     return new FileInputStream(file);
-                } catch (FileNotFoundException ex) {
+                } catch (FileNotFoundException ignored) {
                 }
             }
             return null;

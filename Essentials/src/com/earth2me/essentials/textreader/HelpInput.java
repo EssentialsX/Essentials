@@ -89,7 +89,7 @@ public class HelpInput implements IText {
                                 }
                             }
                         }
-                    } catch (NullPointerException ex) {
+                    } catch (NullPointerException ignored) {
                     }
                 }
                 if (!pluginLines.isEmpty()) {
@@ -101,7 +101,7 @@ public class HelpInput implements IText {
                         lines.add(tl("helpPlugin", pluginName, pluginNameLow));
                     }
                 }
-            } catch (NullPointerException ex) {
+            } catch (NullPointerException ignored) {
             } catch (Exception ex) {
                 if (!reported) {
                     logger.log(Level.WARNING, tl("commandHelpFailedForPlugin", pluginNameLow), ex);

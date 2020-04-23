@@ -9,6 +9,7 @@ import net.ess3.api.MaxMoneyException;
 import org.bukkit.inventory.ItemStack;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 
 public class SignBuy extends EssentialsSign {
@@ -39,7 +40,7 @@ public class SignBuy extends EssentialsSign {
                 items = new Trade(item, ess);
 
                 BigDecimal chargeAmount = charge.getMoney();
-                BigDecimal pricePerSingleItem = chargeAmount.divide(new BigDecimal(initialItemAmount));
+                BigDecimal pricePerSingleItem = chargeAmount.divide(new BigDecimal(initialItemAmount), RoundingMode.HALF_EVEN);
                 pricePerSingleItem = pricePerSingleItem.multiply(new BigDecimal(newItemAmount));
                 charge = new Trade(pricePerSingleItem, ess);
             }

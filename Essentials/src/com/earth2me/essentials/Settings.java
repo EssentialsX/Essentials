@@ -384,7 +384,7 @@ public class Settings implements net.ess3.api.ISettings {
 
         try {
             return ChatColor.valueOf(colorName.toUpperCase(Locale.ENGLISH));
-        } catch (IllegalArgumentException ex) {
+        } catch (IllegalArgumentException ignored) {
         }
 
         return ChatColor.getByChar(colorName);
@@ -1343,7 +1343,7 @@ public class Settings implements net.ess3.api.ISettings {
              * >> Process cooldown value
              * ================================ */
             Object value = section.get(cmdEntry);
-            if (!(value instanceof Number) && value instanceof String) {
+            if (value instanceof String) {
                 try {
                     value = Double.parseDouble(value.toString());
                 } catch (NumberFormatException ignored) {
@@ -1455,7 +1455,6 @@ public class Settings implements net.ess3.api.ISettings {
                 newSigns.add(Signs.valueOf(signName).getSign());
             } catch (Exception ex) {
                 logger.log(Level.SEVERE, tl("unknownItemInList", signName, "unprotected-sign-names"));
-                continue;
             }
         }
         return newSigns;

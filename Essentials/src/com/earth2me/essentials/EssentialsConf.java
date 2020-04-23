@@ -111,20 +111,20 @@ public class EssentialsConf extends YamlConfiguration {
                         ByteBuffer resize = ByteBuffer.allocate(buffer.capacity() + length - buffer.remaining());
                         int resizePosition = buffer.position();
                         // Fix builds compiled against Java 9+ breaking on Java 8
-                        ((Buffer) buffer).rewind();
+                        buffer.rewind();
                         resize.put(buffer);
                         resize.position(resizePosition);
                         buffer = resize;
                     }
                     buffer.put(bytebuffer, 0, length);
                 }
-                ((Buffer) buffer).rewind();
+                buffer.rewind();
                 final CharBuffer data = CharBuffer.allocate(buffer.capacity());
                 CharsetDecoder decoder = UTF8.newDecoder();
                 CoderResult result = decoder.decode(buffer, data, true);
                 if (result.isError()) {
-                    ((Buffer) buffer).rewind();
-                    ((Buffer) data).clear();
+                    buffer.rewind();
+                    data.clear();
                     LOGGER.log(Level.INFO, "File " + configFile.getAbsolutePath() + " is not utf-8 encoded, trying " + Charset.defaultCharset().displayName());
                     decoder = Charset.defaultCharset().newDecoder();
                     result = decoder.decode(buffer, data, true);
@@ -137,7 +137,7 @@ public class EssentialsConf extends YamlConfiguration {
                     decoder.flush(data);
                 }
                 final int end = data.position();
-                ((Buffer) data).rewind();
+                data.rewind();
                 super.loadFromString(data.subSequence(0, end).toString());
             }
         } catch (IOException ex) {

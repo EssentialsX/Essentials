@@ -11,7 +11,6 @@ import org.bukkit.Server;
 import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.util.*;
-import java.util.Map.Entry;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import static com.earth2me.essentials.I18n.tl;
@@ -114,12 +113,7 @@ public class Commandbalancetop extends EssentialsCommand {
                     }
 
                     final List<Map.Entry<String, BigDecimal>> sortedEntries = new ArrayList<>(balances.entrySet());
-                    sortedEntries.sort(new Comparator<Entry<String, BigDecimal>>() {
-                        @Override
-                        public int compare(final Entry<String, BigDecimal> entry1, final Entry<String, BigDecimal> entry2) {
-                            return entry2.getValue().compareTo(entry1.getValue());
-                        }
-                    });
+                    sortedEntries.sort((entry1, entry2) -> entry2.getValue().compareTo(entry1.getValue()));
 
                     cache.getLines().add(tl("serverTotal", NumberUtil.displayCurrency(totalMoney, ess)));
                     int pos = 1;

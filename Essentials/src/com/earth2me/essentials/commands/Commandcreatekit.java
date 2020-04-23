@@ -85,46 +85,43 @@ public class Commandcreatekit extends EssentialsCommand {
     }
 
     private void uploadPaste(final CommandSource sender, final String kitName, final long delay, final String contents) {
-        executorService.submit(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    HttpURLConnection connection = (HttpURLConnection) new URL(PASTE_UPLOAD_URL).openConnection();
-                    connection.setRequestMethod("POST");
-                    connection.setDoInput(true);
-                    connection.setDoOutput(true);
-                    connection.setRequestProperty("User-Agent", "EssentialsX plugin");
-                    try (OutputStream os = connection.getOutputStream()) {
-                        os.write(contents.getBytes(Charsets.UTF_8));
-                    }
-                    // Error
-                    if (connection.getResponseCode() >= 400) {
-                        sender.sendMessage(tl("createKitFailed", kitName));
-                        String message = CharStreams.toString(new InputStreamReader(connection.getErrorStream(), Charsets.UTF_8));
-                        ess.getLogger().severe("Error creating kit: " + message);
-                        return;
-                    }
-
-                    // Read URL
-                    JsonObject object = GSON.fromJson(new InputStreamReader(connection.getInputStream(), Charsets.UTF_8), JsonObject.class);
-                    String pasteUrl = PASTE_URL + object.get("key").getAsString();
-                    connection.disconnect();
-
-                    String separator = tl("createKitSeparator");
-                    String delayFormat = "0";
-                    if (delay > 0) {
-                        delayFormat = DateUtil.formatDateDiff(System.currentTimeMillis() + (delay * 1000));
-                    }
-                    sender.sendMessage(separator);
-                    sender.sendMessage(tl("createKitSuccess", kitName, delayFormat, pasteUrl));
-                    sender.sendMessage(separator);
-                    if (ess.getSettings().isDebug()) {
-                        ess.getLogger().info(sender.getSender().getName() + " created a kit: " + pasteUrl);
-                    }
-                } catch (Exception e) {
-                    sender.sendMessage(tl("createKitFailed", kitName));
-                    e.printStackTrace();
+        executorService.submit(() -> {
+            try {
+                HttpURLConnection connection = (HttpURLConnection) new URL(PASTE_UPLOAD_URL).openConnection();
+                connection.setRequestMethod("POST");
+                connection.setDoInput(true);
+                connection.setDoOutput(true);
+                connection.setRequestProperty("User-Agent", "EssentialsX plugin");
+                try (OutputStream os = connection.getOutputStream()) {
+                    os.write(contents.getBytes(Charsets.UTF_8));
                 }
+                // Error
+                if (connection.getResponseCode() >= 400) {
+                    sender.sendMessage(tl("createKitFailed", kitName));
+                    String message = CharStreams.toString(new InputStreamReader(connection.getErrorStream(), Charsets.UTF_8));
+                    ess.getLogger().severe("Error creating kit: " + message);
+                    return;
+                }
+
+                // Read URL
+                JsonObject object = GSON.fromJson(new InputStreamReader(connection.getInputStream(), Charsets.UTF_8), JsonObject.class);
+                String pasteUrl = PASTE_URL + object.get("key").getAsString();
+                connection.disconnect();
+
+                String separator = tl("createKitSeparator");
+                String delayFormat = "0";
+                if (delay > 0) {
+                    delayFormat = DateUtil.formatDateDiff(System.currentTimeMillis() + (delay * 1000));
+                }
+                sender.sendMessage(separator);
+                sender.sendMessage(tl("createKitSuccess", kitName, delayFormat, pasteUrl));
+                sender.sendMessage(separator);
+                if (ess.getSettings().isDebug()) {
+                    ess.getLogger().info(sender.getSender().getName() + " created a kit: " + pasteUrl);
+                }
+            } catch (Exception e) {
+                sender.sendMessage(tl("createKitFailed", kitName));
+                e.printStackTrace();
             }
         });
     }

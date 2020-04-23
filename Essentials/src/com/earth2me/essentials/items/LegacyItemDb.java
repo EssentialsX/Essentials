@@ -252,7 +252,7 @@ public class LegacyItemDb extends AbstractItemDb {
     }
 
     static class ItemData {
-        private int itemNo;
+        private final int itemNo;
         final private short itemData;
 
         ItemData(final int itemNo, final short itemData) {

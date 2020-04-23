@@ -90,7 +90,7 @@ public class Warps implements IConf, net.ess3.api.IWarps {
         try {
             uuid = UUID.fromString(conf.getString("lastowner"));
         }
-        catch (Exception ex) {}
+        catch (Exception ignored) {}
         return uuid;
     }
     
@@ -111,11 +111,11 @@ public class Warps implements IConf, net.ess3.api.IWarps {
         warpPoints.clear();
         File[] listOfFiles = warpsFolder.listFiles();
         if (listOfFiles.length >= 1) {
-            for (int i = 0; i < listOfFiles.length; i++) {
-                String filename = listOfFiles[i].getName();
-                if (listOfFiles[i].isFile() && filename.endsWith(".yml")) {
+            for (File listOfFile : listOfFiles) {
+                String filename = listOfFile.getName();
+                if (listOfFile.isFile() && filename.endsWith(".yml")) {
                     try {
-                        EssentialsConf conf = new EssentialsConf(listOfFiles[i]);
+                        EssentialsConf conf = new EssentialsConf(listOfFile);
                         conf.load();
                         String name = conf.getString("name");
                         if (name != null) {
