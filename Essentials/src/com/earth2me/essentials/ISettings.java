@@ -294,6 +294,10 @@ public interface ISettings extends IConf {
 
     boolean isCommandCooldownsEnabled();
 
+    boolean isWorldChangeFlyResetEnabled();
+
+    boolean isWorldChangeSpeedResetEnabled();
+
     long getCommandCooldownMs(String label);
 
     Entry<Pattern, Long> getCommandCooldownEntry(String label);

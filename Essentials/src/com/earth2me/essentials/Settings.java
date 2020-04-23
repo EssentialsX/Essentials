@@ -1498,6 +1498,16 @@ public class Settings implements net.ess3.api.ISettings {
         return config.getBoolean("allow-direct-hat", true);
     }
 
+    @Override
+    public boolean isWorldChangeFlyResetEnabled() {
+        return config.getBoolean("world-change-fly-reset", true);
+    }
+
+    @Override
+    public boolean isWorldChangeSpeedResetEnabled() {
+        return config.getBoolean("world-change-speed-reset", true);
+    }
+
     private List<String> defaultEnabledConfirmCommands;
 
     private List<String> _getDefaultEnabledConfirmCommands() {

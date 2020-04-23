@@ -581,27 +581,31 @@ public class EssentialsPlayerListener implements Listener {
     @EventHandler(priority = EventPriority.NORMAL)
     public void onPlayerChangedWorldFlyReset(final PlayerChangedWorldEvent event) {
         final User user = ess.getUser(event.getPlayer());
-        if (user.getBase().getGameMode() != GameMode.CREATIVE
-                // COMPAT: String compare for 1.7.10
-                && !user.getBase().getGameMode().name().equals("SPECTATOR")
-                && !user.isAuthorized("essentials.fly")) {
-            user.getBase().setFallDistance(0f);
-            user.getBase().setAllowFlight(false);
-        }
-        if (!user.isAuthorized("essentials.speed")) {
-            user.getBase().setFlySpeed(0.1f);
-            user.getBase().setWalkSpeed(0.2f);
-        } else {
-            if (user.getBase().getFlySpeed() > ess.getSettings().getMaxFlySpeed() && !user.isAuthorized("essentials.speed.bypass")) {
-                user.getBase().setFlySpeed((float) ess.getSettings().getMaxFlySpeed());
-            } else {
-                user.getBase().setFlySpeed(user.getBase().getFlySpeed() * 0.99999f);
-            }
 
-            if (user.getBase().getWalkSpeed() > ess.getSettings().getMaxWalkSpeed() && !user.isAuthorized("essentials.speed.bypass")) {
-                user.getBase().setWalkSpeed((float) ess.getSettings().getMaxWalkSpeed());
+        if (ess.getSettings().isWorldChangeFlyResetEnabled()) {
+            if (user.getBase().getGameMode() != GameMode.CREATIVE
+                    // COMPAT: String compare for 1.7.10
+                    && !user.getBase().getGameMode().name().equals("SPECTATOR")
+                    && !user.isAuthorized("essentials.fly")) {
+                user.getBase().setFallDistance(0f);
+                user.getBase().setAllowFlight(false);
+            }
+        }
+
+        if (ess.getSettings().isWorldChangeSpeedResetEnabled()) {
+            if (!user.isAuthorized("essentials.speed")) {
+                user.getBase().setFlySpeed(0.1f);
+                user.getBase().setWalkSpeed(0.2f);
             } else {
-                user.getBase().setWalkSpeed(user.getBase().getWalkSpeed() * 0.99999f);
+                if (user.getBase().getFlySpeed() > ess.getSettings().getMaxFlySpeed() && !user.isAuthorized("essentials.speed.bypass")) {
+                    user.getBase().setFlySpeed((float) ess.getSettings().getMaxFlySpeed());
+                } else {
+                    user.getBase().setFlySpeed(user.getBase().getFlySpeed() * 0.99999f);
+                }
+
+                if (user.getBase().getWalkSpeed() > ess.getSettings().getMaxWalkSpeed() && !user.isAuthorized("essentials.speed.bypass")) {
+                    user.getBase().setWalkSpeed((float) ess.getSettings().getMaxWalkSpeed());
+                }
             }
         }
     }
