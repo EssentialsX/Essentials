@@ -1,5 +1,6 @@
 package com.earth2me.essentials;
 
+import com.earth2me.essentials.commands.Commandfireball;
 import com.earth2me.essentials.textreader.IText;
 import com.earth2me.essentials.textreader.KeywordReplacer;
 import com.earth2me.essentials.textreader.TextInput;
@@ -31,6 +32,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 
 import java.io.IOException;
+import java.lang.management.ManagementFactory;
 import java.text.NumberFormat;
 import java.util.*;
 import java.util.Map.Entry;
@@ -67,8 +69,21 @@ public class EssentialsPlayerListener implements Listener {
         }
     }
 
+    private static boolean isArrowPickupEvent() {
+        try {
+            Class.forName("org.bukkit.event.player.PlayerPickupArrowEvent");
+            return true;
+        } catch (ClassNotFoundException ignored) {
+            return false;
+        }
+    }
+
     public void registerEvents() {
         ess.getServer().getPluginManager().registerEvents(this, ess);
+
+        if (isArrowPickupEvent()) {
+            ess.getServer().getPluginManager().registerEvents(new ArrowPickupListener(), ess);
+        }
 
         if (isEntityPickupEvent()) {
             ess.getServer().getPluginManager().registerEvents(new PickupListener1_12(), ess);
@@ -174,7 +189,8 @@ public class EssentialsPlayerListener implements Listener {
             final String msg = ess.getSettings().getCustomQuitMessage()
                     .replace("{PLAYER}", player.getDisplayName())
                     .replace("{USERNAME}", player.getName())
-                    .replace("{ONLINE}", NumberFormat.getInstance().format(ess.getOnlinePlayers().size()));
+                    .replace("{ONLINE}", NumberFormat.getInstance().format(ess.getOnlinePlayers().size()))
+                    .replace("{UPTIME}", DateUtil.formatDateDiff(ManagementFactory.getRuntimeMXBean().getStartTime()));
 
             event.setQuitMessage(msg.isEmpty() ? null : msg);
         }
@@ -279,7 +295,8 @@ public class EssentialsPlayerListener implements Listener {
                     String msg = ess.getSettings().getCustomJoinMessage()
                             .replace("{PLAYER}", player.getDisplayName()).replace("{USERNAME}", player.getName())
                             .replace("{UNIQUE}", NumberFormat.getInstance().format(ess.getUserMap().getUniqueUsers()))
-                            .replace("{ONLINE}", NumberFormat.getInstance().format(ess.getOnlinePlayers().size()));
+                            .replace("{ONLINE}", NumberFormat.getInstance().format(ess.getOnlinePlayers().size()))
+                            .replace("{UPTIME}", DateUtil.formatDateDiff(ManagementFactory.getRuntimeMXBean().getStartTime()));
                     if (!msg.isEmpty()) {
                         ess.getServer().broadcastMessage(msg);
                     }
@@ -435,7 +452,11 @@ public class EssentialsPlayerListener implements Listener {
         final boolean backListener = ess.getSettings().registerBackInListener();
         final boolean teleportInvulnerability = ess.getSettings().isTeleportInvulnerability();
         if (backListener || teleportInvulnerability) {
-            final User user = ess.getUser(event.getPlayer());
+        	Player player = event.getPlayer();
+        	if (player.hasMetadata("NPC")) {
+        		return;
+        	}
+            final User user = ess.getUser(player);
             //There is TeleportCause.COMMMAND but plugins have to actively pass the cause in on their teleports.
             if (backListener && (event.getCause() == TeleportCause.PLUGIN || event.getCause() == TeleportCause.COMMAND)) {
                 user.setLastLocation();
@@ -807,10 +828,21 @@ public class EssentialsPlayerListener implements Listener {
         user.updateActivityOnInteract(true);
     }
 
+    private final class ArrowPickupListener implements Listener {
+        @EventHandler(priority = EventPriority.LOW)
+        public void onArrowPickup(final org.bukkit.event.player.PlayerPickupArrowEvent event) {
+            if (event.getArrow().hasMetadata(Commandfireball.FIREBALL_META_KEY)) {
+                event.setCancelled(true);
+            }
+        }
+    }
+
     private final class PickupListenerPre1_12 implements Listener {
         @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
         public void onPlayerPickupItem(final org.bukkit.event.player.PlayerPickupItemEvent event) {
-            if (ess.getSettings().getDisableItemPickupWhileAfk()) {
+            if (event.getItem().hasMetadata(Commandfireball.FIREBALL_META_KEY)) {
+                event.setCancelled(true);
+            } else if (ess.getSettings().getDisableItemPickupWhileAfk()) {
                 if (ess.getUser(event.getPlayer()).isAfk()) {
                     event.setCancelled(true);
                 }

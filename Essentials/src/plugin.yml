@@ -149,8 +149,8 @@ commands:
     usage: /<command> [player] [on|off]
     aliases: [efly]
   fireball:
-    description: Throw a fireball.
-    usage: /<command> [small|large|dragon|arrow|skull|egg|snowball|expbottle|splashpotion|lingeringpotion] [speed]
+    description: Throw a fireball or other assorted projectiles.
+    usage: /<command> [fireball|small|large|arrow|skull|egg|snowball|expbottle|dragon|splashpotion|lingeringpotion|trident] [speed]
     aliases: [efireball,fireentity,efireentity,fireskull,efireskull]
   firework:
     description: Allows you to modify a stack of fireworks.
@@ -159,7 +159,7 @@ commands:
   gamemode:
     description: Change player gamemode.
     usage: /<command> <survival|creative|adventure|spectator> [player]
-    aliases: [adventure,eadventure,adventuremode,eadventuremode,creative,eecreative,creativemode,ecreativemode,egamemode,gm,egm,gma,egma,gmc,egmc,gms,egms,gmt,egmt,survival,esurvival,survivalmode,esurvivalmode,gmsp,sp,egmsp,spec,spectator]
+    aliases: [adventure,eadventure,adventuremode,eadventuremode,creative,ecreative,eecreative,creativemode,ecreativemode,egamemode,gm,egm,gma,egma,gmc,egmc,gms,egms,gmt,egmt,survival,esurvival,survivalmode,esurvivalmode,gmsp,sp,egmsp,spec,spectator]
   gc:
     description: Reports memory, uptime and tick info.
     usage: /<command> [all]
@@ -547,6 +547,9 @@ permissions:
     description: Give players with op everything by default
     children:
       essentials.gamemode.*: true
+  essentials.sleepingignored:
+    default: false
+    description: If the player has this permission, they will not have to sleep for the night to be skipped
   # These permissions can't be assigned from player-commands for compatibility reasons
   essentials.teleport.cooldown.bypass.tpa:
     default: true

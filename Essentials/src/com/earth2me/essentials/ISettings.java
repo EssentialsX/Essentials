@@ -164,6 +164,8 @@ public interface ISettings extends IConf {
 
     boolean isEcoLogUpdateEnabled();
 
+    boolean realNamesOnList();
+
     boolean removeGodOnDisconnect();
 
     boolean changeDisplayName();
@@ -195,6 +197,8 @@ public interface ISettings extends IConf {
     boolean isAfkListName();
 
     String getAfkListName();
+
+    boolean broadcastAfkMessage();
 
     boolean areDeathMessagesEnabled();
 

@@ -140,6 +140,10 @@ public class EssentialsEntityListener implements Listener {
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerDeathEvent(final PlayerDeathEvent event) {
+        Entity entity = event.getEntity();
+        if (entity.hasMetadata("NPC")) {
+            return;
+        }
         final User user = ess.getUser(event.getEntity());
         if (user.isAuthorized("essentials.back.ondeath") && !ess.getSettings().isCommandDisabled("back")) {
             user.setLastLocation();

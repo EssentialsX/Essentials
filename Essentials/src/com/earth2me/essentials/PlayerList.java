@@ -1,6 +1,7 @@
 package com.earth2me.essentials;
 
 import com.earth2me.essentials.utils.FormatUtil;
+import org.bukkit.ChatColor;
 import org.bukkit.Server;
 
 import java.util.*;
@@ -27,6 +28,9 @@ public class PlayerList {
             }
             user.setDisplayNick();
             groupString.append(user.getDisplayName());
+            if (ess.getSettings().realNamesOnList() && !ChatColor.stripColor(user.getDisplayName()).equals(user.getName())) {
+                groupString.append(" (").append(user.getName()).append(")");
+            }
             groupString.append("\u00a7f");
         }
         return groupString.toString();
