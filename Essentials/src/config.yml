@@ -656,8 +656,8 @@ command-costs:
 # such as accented letters, you MUST save the file as UTF-8, not ANSI.
 currency-symbol: '$'
 
-# Enable this to make the currency symbol appear behind the currency amount rather than in-front.
-# For example, the euro symbol typically appears after the current amount
+# Enable this to make the currency symbol appear at the end of the amount rather than at the start.
+# For example, the euro symbol typically appears after the current amount.
 currency-symbol-suffix: false
 
 # Set the maximum amount of money a player can have.
