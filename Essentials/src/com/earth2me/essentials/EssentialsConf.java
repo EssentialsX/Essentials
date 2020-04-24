@@ -118,7 +118,7 @@ public class EssentialsConf extends YamlConfiguration {
                     }
                     buffer.put(bytebuffer, 0, length);
                 }
-                buffer.rewind();
+                ((Buffer) buffer).rewind();
                 final CharBuffer data = CharBuffer.allocate(buffer.capacity());
                 CharsetDecoder decoder = UTF8.newDecoder();
                 CoderResult result = decoder.decode(buffer, data, true);
