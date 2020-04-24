@@ -111,7 +111,7 @@ public class EssentialsConf extends YamlConfiguration {
                         ByteBuffer resize = ByteBuffer.allocate(buffer.capacity() + length - buffer.remaining());
                         int resizePosition = buffer.position();
                         // Fix builds compiled against Java 9+ breaking on Java 8
-                        buffer.rewind();
+                        ((Buffer) buffer).rewind();
                         resize.put(buffer);
                         resize.position(resizePosition);
                         buffer = resize;
