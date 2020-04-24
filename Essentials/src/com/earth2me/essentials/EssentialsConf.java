@@ -123,8 +123,8 @@ public class EssentialsConf extends YamlConfiguration {
                 CharsetDecoder decoder = UTF8.newDecoder();
                 CoderResult result = decoder.decode(buffer, data, true);
                 if (result.isError()) {
-                    buffer.rewind();
-                    data.clear();
+                    ((Buffer) buffer).rewind();
+                    ((Buffer) data).clear();
                     LOGGER.log(Level.INFO, "File " + configFile.getAbsolutePath() + " is not utf-8 encoded, trying " + Charset.defaultCharset().displayName());
                     decoder = Charset.defaultCharset().newDecoder();
                     result = decoder.decode(buffer, data, true);
