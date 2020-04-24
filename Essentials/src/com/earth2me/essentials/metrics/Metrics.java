@@ -50,7 +50,7 @@ public class Metrics {
     private static final String URL = "https://bStats.org/submitData/bukkit";
 
     // Is bStats enabled on this server?
-    private final boolean enabled;
+    private boolean enabled;
 
     // Should failed requests be logged?
     private static boolean logFailedRequests;
