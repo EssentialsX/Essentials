@@ -60,7 +60,6 @@ public class PlayerList {
 
     // Build the basic player list, divided by groups.
     public static Map<String, List<User>> getPlayerLists(final IEssentials ess, final User sender, final boolean showHidden) {
-        Server server = ess.getServer();
         final Map<String, List<User>> playerList = new HashMap<>();
         for (User onlineUser : ess.getOnlineUsers()) {
             if ((sender == null && !showHidden && onlineUser.isHidden()) || (sender != null && !showHidden && !sender.getBase().canSee(onlineUser.getBase()))) {
@@ -82,7 +81,7 @@ public class PlayerList {
                 String[] groupValues = ess.getSettings().getListGroupConfig().get(configGroup).toString().trim().split(" ");
                 for (String groupValue : groupValues) {
                     groupValue = groupValue.toLowerCase(Locale.ENGLISH);
-                    if (groupValue == null || groupValue.isEmpty()) {
+                    if (groupValue.isEmpty()) {
                         continue;
                     }
                     List<User> u = playerList.get(groupValue.trim());
@@ -104,7 +103,7 @@ public class PlayerList {
         if (groupUsers != null && !groupUsers.isEmpty()) {
             users.addAll(groupUsers);
         }
-        if (users == null || users.isEmpty()) {
+        if (users.isEmpty()) {
             throw new Exception(tl("groupDoesNotExist"));
         }
         String displayGroupName = Character.toTitleCase(groupName.charAt(0)) +
