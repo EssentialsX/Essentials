@@ -137,7 +137,7 @@ public class EssentialsConf extends YamlConfiguration {
                     decoder.flush(data);
                 }
                 final int end = data.position();
-                data.rewind();
+                ((Buffer) data).rewind();
                 super.loadFromString(data.subSequence(0, end).toString());
             }
         } catch (IOException ex) {
