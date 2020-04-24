@@ -8,6 +8,8 @@ import com.earth2me.essentials.textreader.KeywordReplacer;
 import com.earth2me.essentials.textreader.SimpleTextInput;
 import com.earth2me.essentials.utils.DateUtil;
 import net.ess3.api.IEssentials;
+import net.ess3.api.events.UserKitUseEvent;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
@@ -149,6 +151,12 @@ public class Kit {
         try {
             IText input = new SimpleTextInput(items);
             IText output = new KeywordReplacer(input, user.getSource(), ess, true, true);
+
+            UserKitUseEvent event = new UserKitUseEvent(user, this);
+            Bukkit.getPluginManager().callEvent(event);
+            if (event.isCancelled()) {
+                return false;
+            }
 
             boolean spew = false;
             final boolean allowUnsafe = ess.getSettings().allowUnsafeEnchantments();
