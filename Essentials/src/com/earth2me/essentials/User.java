@@ -599,7 +599,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
     //Returns true if status expired during this check
     public boolean checkMuteTimeout(final long currentTime) {
         if (getMuteTimeout() > 0 && getMuteTimeout() < currentTime && isMuted()) {
-            final MuteStatusChangeEvent event = new MuteStatusChangeEvent(this, null, false);
+            final MuteStatusChangeEvent event = new MuteStatusChangeEvent(this, null, false, getMuteTimeout(), getMuteReason());
             ess.getServer().getPluginManager().callEvent(event);
             
             if (!event.isCancelled()) {
@@ -624,8 +624,13 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
             if (broadcast && !isHidden()) {
                 setDisplayNick();
                 final String msg = tl("userIsNotAway", getDisplayName());
-                if (!msg.isEmpty()) {
-                    ess.broadcastMessage(this, msg);
+                final String selfmsg = tl("userIsNotAwaySelf", getDisplayName());
+                if (!msg.isEmpty() && ess.getSettings().broadcastAfkMessage()) {
+                    // exclude user from receiving general AFK announcement in favor of personal message
+                    ess.broadcastMessage(this, msg, u -> u == this);
+                }
+                if (!selfmsg.isEmpty()) {
+                    this.sendMessage(selfmsg);
                 }
             }
         }
@@ -672,8 +677,13 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
             if (!isHidden()) {
                 setDisplayNick();
                 final String msg = tl("userIsAway", getDisplayName());
-                if (!msg.isEmpty()) {
-                    ess.broadcastMessage(this, msg);
+                final String selfmsg = tl("userIsAwaySelf", getDisplayName());
+                if (!msg.isEmpty() && ess.getSettings().broadcastAfkMessage()) {
+                    // exclude user from receiving general AFK announcement in favor of personal message
+                    ess.broadcastMessage(this, msg, u -> u == this);
+                }
+                if (!selfmsg.isEmpty()) {
+                    this.sendMessage(selfmsg);
                 }
             }
         }

@@ -196,6 +196,8 @@ public interface ISettings extends IConf {
 
     String getAfkListName();
 
+    boolean broadcastAfkMessage();
+
     boolean areDeathMessagesEnabled();
 
     void setDebug(boolean debug);
@@ -291,6 +293,10 @@ public interface ISettings extends IConf {
     boolean isTeleportToCenterLocation();
 
     boolean isCommandCooldownsEnabled();
+
+    boolean isWorldChangeFlyResetEnabled();
+
+    boolean isWorldChangeSpeedResetEnabled();
 
     long getCommandCooldownMs(String label);
 

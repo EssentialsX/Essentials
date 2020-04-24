@@ -13,6 +13,6 @@ Minecraft colors:
 &8 &&8  &9 &&9  &a &&a  &b &&b
 &c &&c  &d &&d  &e &&e  &f &&f
 &0 
-&&k &kMagic&r   &&l &lBold
-&&m &mStrike&r  &&n &nUline
+&&k &kMagic&r   &&l &lBold&r
+&&m &mStrike&r  &&n &nUline&r
 &&o &oItalic&r   &&r &rReset

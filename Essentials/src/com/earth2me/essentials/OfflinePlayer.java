@@ -1019,6 +1019,11 @@ public class OfflinePlayer implements Player {
     }
 
     @Override
+    public float getAttackCooldown() {
+        return 0f;
+    }
+
+    @Override
     public boolean discoverRecipe(NamespacedKey recipe) {
         return false;
     }
