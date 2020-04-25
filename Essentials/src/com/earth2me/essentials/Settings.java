@@ -678,6 +678,11 @@ public class Settings implements net.ess3.api.ISettings {
         return config.getString("currency-symbol", "$").concat("$").substring(0, 1).replaceAll("[0-9]", "$");
     }
 
+    @Override
+    public boolean isCurrencySymbolSuffixed() {
+        return config.getBoolean("currency-symbol-suffix", false);
+    }
+
     // #easteregg
     @Override
     @Deprecated

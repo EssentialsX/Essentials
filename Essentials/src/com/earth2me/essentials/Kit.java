@@ -151,10 +151,13 @@ public class Kit {
 
             boolean spew = false;
             final boolean allowUnsafe = ess.getSettings().allowUnsafeEnchantments();
+            final boolean currencyIsSuffix = ess.getSettings().isCurrencySymbolSuffixed();
+            final String currencySymbol = ess.getSettings().getCurrencySymbol();
             List<ItemStack> itemList = new ArrayList<>();
             for (String kitItem : output.getLines()) {
-                if (kitItem.startsWith(ess.getSettings().getCurrencySymbol())) {
-                    BigDecimal value = new BigDecimal(kitItem.substring(ess.getSettings().getCurrencySymbol().length()).trim());
+                if (!currencyIsSuffix ? kitItem.startsWith(ess.getSettings().getCurrencySymbol()) : kitItem.endsWith(ess.getSettings().getCurrencySymbol())) {
+                    final String valueString = currencyIsSuffix ? kitItem.substring(0, currencySymbol.length()) : kitItem.substring(currencySymbol.length());
+                    BigDecimal value = new BigDecimal(valueString.trim());
                     Trade t = new Trade(value, ess);
                     t.pay(user, OverflowType.DROP);
                     continue;
