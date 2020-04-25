@@ -199,31 +199,28 @@ public class Commandseen extends EssentialsCommand {
 
         sender.sendMessage(tl("runningPlayerMatch", ipAddress));
 
-        ess.runTaskAsynchronously(new Runnable() {
-            @Override
-            public void run() {
-                final List<String> matches = new ArrayList<>();
-                for (final UUID u : userMap.getAllUniqueUsers()) {
-                    final User user = ess.getUserMap().getUser(u);
-                    if (user == null) {
-                        continue;
-                    }
-
-                    final String uIPAddress = user.getLastLoginAddress();
-
-                    if (!uIPAddress.isEmpty() && uIPAddress.equalsIgnoreCase(ipAddress)) {
-                        matches.add(user.getName());
-                    }
+        ess.runTaskAsynchronously(() -> {
+            final List<String> matches = new ArrayList<>();
+            for (final UUID u : userMap.getAllUniqueUsers()) {
+                final User user = ess.getUserMap().getUser(u);
+                if (user == null) {
+                    continue;
                 }
 
-                if (matches.size() > 0) {
-                    sender.sendMessage(tl("matchingIPAddress"));
-                    sender.sendMessage(StringUtil.joinList(matches));
-                } else {
-                    sender.sendMessage(tl("noMatchingPlayers"));
-                }
+                final String uIPAddress = user.getLastLoginAddress();
 
+                if (!uIPAddress.isEmpty() && uIPAddress.equalsIgnoreCase(ipAddress)) {
+                    matches.add(user.getName());
+                }
             }
+
+            if (matches.size() > 0) {
+                sender.sendMessage(tl("matchingIPAddress"));
+                sender.sendMessage(StringUtil.joinList(matches));
+            } else {
+                sender.sendMessage(tl("noMatchingPlayers"));
+            }
+
         });
 
     }

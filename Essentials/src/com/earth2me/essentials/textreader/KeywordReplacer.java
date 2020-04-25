@@ -33,11 +33,11 @@ public class KeywordReplacer implements IText {
     private final transient boolean includePrivate;
     private transient ExecuteTimer execTimer;
     private final transient boolean replaceSpacesWithUnderscores;
-    private final EnumMap<KeywordType, Object> keywordCache = new EnumMap<KeywordType, Object>(KeywordType.class);
+    private final EnumMap<KeywordType, Object> keywordCache = new EnumMap<>(KeywordType.class);
 
     public KeywordReplacer(final IText input, final CommandSource sender, final IEssentials ess) {
         this.input = input;
-        this.replaced = new ArrayList<String>(this.input.getLines().size());
+        this.replaced = new ArrayList<>(this.input.getLines().size());
         this.ess = ess;
         this.includePrivate = true;
         this.replaceSpacesWithUnderscores = false;
@@ -46,7 +46,7 @@ public class KeywordReplacer implements IText {
 
     public KeywordReplacer(final IText input, final CommandSource sender, final IEssentials ess, final boolean showPrivate) {
         this.input = input;
-        this.replaced = new ArrayList<String>(this.input.getLines().size());
+        this.replaced = new ArrayList<>(this.input.getLines().size());
         this.ess = ess;
         this.includePrivate = showPrivate;
         this.replaceSpacesWithUnderscores = false;
@@ -56,7 +56,7 @@ public class KeywordReplacer implements IText {
     public KeywordReplacer(final IText input, final CommandSource sender, final IEssentials ess, final boolean showPrivate,
                            boolean replaceSpacesWithUnderscores) {
         this.input = input;
-        this.replaced = new ArrayList<String>(this.input.getLines().size());
+        this.replaced = new ArrayList<>(this.input.getLines().size());
         this.ess = ess;
         this.includePrivate = showPrivate;
         this.replaceSpacesWithUnderscores = replaceSpacesWithUnderscores;
@@ -184,7 +184,7 @@ public class KeywordReplacer implements IText {
 
                             //First lets build the per group playerlist
                             final Map<String, List<User>> playerList = PlayerList.getPlayerLists(ess, user, showHidden);
-                            outputList = new HashMap<String, String>();
+                            outputList = new HashMap<>();
                             for (String groupName : playerList.keySet()) {
                                 final List<User> groupUsers = playerList.get(groupName);
                                 if (groupUsers != null && !groupUsers.isEmpty()) {
@@ -290,7 +290,7 @@ public class KeywordReplacer implements IText {
             }
 
             line = line.replace(fullMatch, replacer);
-        } catch (IllegalArgumentException ex) {
+        } catch (IllegalArgumentException ignored) {
         }
 
         return line;

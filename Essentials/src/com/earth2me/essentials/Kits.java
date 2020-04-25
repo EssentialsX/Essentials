@@ -64,7 +64,6 @@ public class Kits implements IConf {
             // you just found if you don't toLowercase it.
             if (kits.isConfigurationSection(name.toLowerCase())) {
                 return kits.getConfigurationSection(name.toLowerCase()).getValues(true);
-            } else {
             }
         }
 

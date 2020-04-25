@@ -66,11 +66,7 @@ public class PlayerList {
                 continue;
             }
             final String group = FormatUtil.stripFormat(FormatUtil.stripEssentialsFormat(onlineUser.getGroup().toLowerCase()));
-            List<User> list = playerList.get(group);
-            if (list == null) {
-                list = new ArrayList<User>();
-                playerList.put(group, list);
-            }
+            List<User> list = playerList.computeIfAbsent(group, k -> new ArrayList<>());
             list.add(onlineUser);
         }
         return playerList;
@@ -85,7 +81,7 @@ public class PlayerList {
                 String[] groupValues = ess.getSettings().getListGroupConfig().get(configGroup).toString().trim().split(" ");
                 for (String groupValue : groupValues) {
                     groupValue = groupValue.toLowerCase(Locale.ENGLISH);
-                    if (groupValue == null || groupValue.isEmpty()) {
+                    if (groupValue.isEmpty()) {
                         continue;
                     }
                     List<User> u = playerList.get(groupValue.trim());
@@ -107,20 +103,17 @@ public class PlayerList {
         if (groupUsers != null && !groupUsers.isEmpty()) {
             users.addAll(groupUsers);
         }
-        if (users == null || users.isEmpty()) {
+        if (users.isEmpty()) {
             throw new Exception(tl("groupDoesNotExist"));
         }
-        final StringBuilder displayGroupName = new StringBuilder();
-        displayGroupName.append(Character.toTitleCase(groupName.charAt(0)));
-        displayGroupName.append(groupName.substring(1));
-        return outputFormat(displayGroupName.toString(), listUsers(ess, users, ", "));
+        String displayGroupName = Character.toTitleCase(groupName.charAt(0)) +
+            groupName.substring(1);
+        return outputFormat(displayGroupName, listUsers(ess, users, ", "));
     }
 
     // Build the output string
     public static String outputFormat(final String group, final String message) {
-        final StringBuilder outputString = new StringBuilder();
-        outputString.append(tl("listGroupTag", FormatUtil.replaceFormat(group)));
-        outputString.append(message);
-        return outputString.toString();
+        return tl("listGroupTag", FormatUtil.replaceFormat(group)) +
+            message;
     }
 }

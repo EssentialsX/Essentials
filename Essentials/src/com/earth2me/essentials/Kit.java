@@ -50,7 +50,6 @@ public class Kit {
         long nextUse = getNextUse(user);
 
         if (nextUse == 0L) {
-            return;
         } else if (nextUse < 0L) {
             user.sendMessage(tl("kitOnce"));
             throw new NoChargeException();
@@ -122,7 +121,7 @@ public class Kit {
             throw new Exception(tl("kitNotFound"));
         }
         try {
-            final List<String> itemList = new ArrayList<String>();
+            final List<String> itemList = new ArrayList<>();
             final Object kitItems = kit.get("items");
             if (kitItems instanceof List) {
                 for (Object item : (List) kitItems) {
@@ -192,14 +191,14 @@ public class Kit {
             final boolean isDropItemsIfFull = ess.getSettings().isDropItemsIfFull();
             if (isDropItemsIfFull) {
                 if (allowOversizedStacks) {
-                    overfilled = InventoryWorkaround.addOversizedItems(user.getBase().getInventory(), ess.getSettings().getOversizedStackSize(), itemList.toArray(new ItemStack[itemList.size()]));
+                    overfilled = InventoryWorkaround.addOversizedItems(user.getBase().getInventory(), ess.getSettings().getOversizedStackSize(), itemList.toArray(new ItemStack[0]));
                 } else {
-                    overfilled = InventoryWorkaround.addItems(user.getBase().getInventory(), itemList.toArray(new ItemStack[itemList.size()]));
+                    overfilled = InventoryWorkaround.addItems(user.getBase().getInventory(), itemList.toArray(new ItemStack[0]));
                 }
                 for (ItemStack itemStack : overfilled.values()) {
                     int spillAmount = itemStack.getAmount();
                     if (!allowOversizedStacks) {
-                        itemStack.setAmount(spillAmount < itemStack.getMaxStackSize() ? spillAmount : itemStack.getMaxStackSize());
+                        itemStack.setAmount(Math.min(spillAmount, itemStack.getMaxStackSize()));
                     }
                     while (spillAmount > 0) {
                         user.getWorld().dropItemNaturally(user.getLocation(), itemStack);
@@ -209,9 +208,9 @@ public class Kit {
                 }
             } else {
                 if (allowOversizedStacks) {
-                    overfilled = InventoryWorkaround.addAllOversizedItems(user.getBase().getInventory(), ess.getSettings().getOversizedStackSize(), itemList.toArray(new ItemStack[itemList.size()]));
+                    overfilled = InventoryWorkaround.addAllOversizedItems(user.getBase().getInventory(), ess.getSettings().getOversizedStackSize(), itemList.toArray(new ItemStack[0]));
                 } else {
-                    overfilled = InventoryWorkaround.addAllItems(user.getBase().getInventory(), itemList.toArray(new ItemStack[itemList.size()]));
+                    overfilled = InventoryWorkaround.addAllItems(user.getBase().getInventory(), itemList.toArray(new ItemStack[0]));
                 }
                 if (overfilled != null) {
                     user.sendMessage(tl("kitInvFullNoDrop"));

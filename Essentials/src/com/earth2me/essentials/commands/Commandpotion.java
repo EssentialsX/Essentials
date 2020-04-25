@@ -1,30 +1,21 @@
 package com.earth2me.essentials.commands;
 
-import org.bukkit.DyeColor;
-
-import com.google.common.collect.Lists;
 import com.earth2me.essentials.MetaItemStack;
 import com.earth2me.essentials.Potions;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.StringUtil;
+import com.google.common.collect.Lists;
+import net.ess3.nms.refl.ReflUtil;
 import org.bukkit.Material;
 import org.bukkit.Server;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.PotionMeta;
-import org.bukkit.potion.PotionData;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.*;
 
 import static com.earth2me.essentials.I18n.tl;
-
-import net.ess3.nms.refl.ReflUtil;
 
 
 public class Commandpotion extends EssentialsCommand {

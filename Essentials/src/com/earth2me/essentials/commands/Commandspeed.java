@@ -88,10 +88,7 @@ public class Commandspeed extends EssentialsCommand {
         boolean canWalk = user.isAuthorized("essentials.speed.walk");
         if (input && canFly || !input && canWalk || !canFly && !canWalk) {
             return input;
-        } else if (canWalk) {
-            return false;
-        }
-        return true;
+        } else return !canWalk;
     }
 
     private boolean isFlyMode(final String modeString) throws NotEnoughArgumentsException {

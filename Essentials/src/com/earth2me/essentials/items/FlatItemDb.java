@@ -25,7 +25,7 @@ import static com.earth2me.essentials.I18n.tl;
 
 public class FlatItemDb extends AbstractItemDb {
     protected static final Logger LOGGER = Logger.getLogger("Essentials");
-    private static Gson gson = new Gson();
+    private static final Gson gson = new Gson();
 
     // Maps primary name to ItemData
     private final transient Map<String, ItemData> items = new HashMap<>();

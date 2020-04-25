@@ -13,8 +13,8 @@ import static com.earth2me.essentials.I18n.tl;
 
 public class NumberUtil {
 
-    private static DecimalFormat twoDPlaces = new DecimalFormat("#,###.##");
-    private static DecimalFormat currencyFormat = new DecimalFormat("#0.00", DecimalFormatSymbols.getInstance(Locale.US));
+    private static final DecimalFormat twoDPlaces = new DecimalFormat("#,###.##");
+    private static final DecimalFormat currencyFormat = new DecimalFormat("#0.00", DecimalFormatSymbols.getInstance(Locale.US));
     
     // This field is likely to be modified in com.earth2me.essentials.Settings when loading currency format.
     // This ensures that we can supply a constant formatting.

@@ -8,10 +8,6 @@ import com.earth2me.essentials.utils.FormatUtil;
 import com.earth2me.essentials.utils.MaterialUtil;
 import com.earth2me.essentials.utils.NumberUtil;
 import com.google.common.base.Joiner;
-import java.lang.reflect.Method;
-import java.util.*;
-import java.util.logging.Level;
-import java.util.regex.Pattern;
 import net.ess3.api.IEssentials;
 import net.ess3.nms.refl.ReflUtil;
 import org.bukkit.Color;
@@ -27,6 +23,11 @@ import org.bukkit.inventory.meta.*;
 import org.bukkit.potion.Potion;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+
+import java.lang.reflect.Method;
+import java.util.*;
+import java.util.logging.Level;
+import java.util.regex.Pattern;
 
 import static com.earth2me.essentials.I18n.tl;
 
@@ -100,16 +101,11 @@ public class MetaItemStack {
         try {
             ess.getServer().getUnsafe().modifyItemStack(stack.clone(), "{}");
             return true;
-        } catch (NullPointerException npe) {
-            if (ess.getSettings().isDebug()) {
-                ess.getLogger().log(Level.INFO, "Itemstack is invalid", npe);
-            }
-            return false;
         } catch (NoSuchMethodError nsme) {
             return true;
-        } catch (Throwable throwable) {
+        } catch (Throwable npe) {
             if (ess.getSettings().isDebug()) {
-                ess.getLogger().log(Level.INFO, "Itemstack is invalid", throwable);
+                ess.getLogger().log(Level.INFO, "Itemstack is invalid", npe);
             }
             return false;
         }
@@ -161,7 +157,7 @@ public class MetaItemStack {
             meta.setDisplayName(displayName);
             stack.setItemMeta(meta);
         } else if (split.length > 1 && (split[0].equalsIgnoreCase("lore") || split[0].equalsIgnoreCase("desc")) && hasMetaPermission(sender, "lore", false, true, ess)) {
-            final List<String> lore = new ArrayList<String>();
+            final List<String> lore = new ArrayList<>();
             for (String line : split[1].split("(?<!\\\\)\\|")) {
                 lore.add(FormatUtil.replaceFormat(line.replace('_', ' ').replace("\\|", "|")));
             }
@@ -169,7 +165,7 @@ public class MetaItemStack {
             meta.setLore(lore);
             stack.setItemMeta(meta);
         } else if (split[0].equalsIgnoreCase("unbreakable") && hasMetaPermission(sender, "unbreakable", false, true, ess)) {
-            boolean value = split.length > 1 ? Boolean.valueOf(split[1]) : true;
+            boolean value = split.length <= 1 || Boolean.parseBoolean(split[1]);
             setUnbreakable(stack, value);
         } else if (split.length > 1 && (split[0].equalsIgnoreCase("player") || split[0].equalsIgnoreCase("owner")) && hasMetaPermission(sender, "head", false, true, ess)) {
             if (MaterialUtil.isPlayerHead(stack.getType(), stack.getDurability())) {
@@ -292,7 +288,7 @@ public class MetaItemStack {
                     builder = FireworkEffect.builder();
                 }
 
-                List<Color> primaryColors = new ArrayList<Color>();
+                List<Color> primaryColors = new ArrayList<>();
                 String[] colors = split[1].split(",");
                 for (String color : colors) {
                     if (colorMap.containsKey(color.toUpperCase())) {
@@ -315,7 +311,7 @@ public class MetaItemStack {
                     builder.with(finalEffect);
                 }
             } else if (split[0].equalsIgnoreCase("fade") || (allowShortName && split[0].equalsIgnoreCase("f"))) {
-                List<Color> fadeColors = new ArrayList<Color>();
+                List<Color> fadeColors = new ArrayList<>();
                 String[] colors = split[1].split(",");
                 for (String color : colors) {
                     if (colorMap.containsKey(color.toUpperCase())) {
@@ -379,7 +375,7 @@ public class MetaItemStack {
                     throw new Exception(tl("invalidPotionMeta", split[1]));
                 }
             } else if (split[0].equalsIgnoreCase("splash") || (allowShortName && split[0].equalsIgnoreCase("s"))) {
-                isSplashPotion = Boolean.valueOf(split[1]);
+                isSplashPotion = Boolean.parseBoolean(split[1]);
             }
 
             if (isValidPotion()) {
@@ -486,11 +482,11 @@ public class MetaItemStack {
 
             final BannerMeta meta = (BannerMeta) stack.getItemMeta();
             if (split[0].equalsIgnoreCase("basecolor")) {
-                Color color = Color.fromRGB(Integer.valueOf(split[1]));
+                Color color = Color.fromRGB(Integer.parseInt(split[1]));
                 meta.setBaseColor(DyeColor.getByColor(color));
             } else if (patternType != null) {
                 PatternType type = PatternType.valueOf(split[0]);
-                DyeColor color = DyeColor.getByColor(Color.fromRGB(Integer.valueOf(split[1])));
+                DyeColor color = DyeColor.getByColor(Color.fromRGB(Integer.parseInt(split[1])));
                 org.bukkit.block.banner.Pattern pattern = new org.bukkit.block.banner.Pattern(color, type);
                 meta.addPattern(pattern);
             }
@@ -512,11 +508,11 @@ public class MetaItemStack {
             BlockStateMeta meta = (BlockStateMeta) stack.getItemMeta();
             Banner banner = (Banner) meta.getBlockState();
             if (split[0].equalsIgnoreCase("basecolor")) {
-                Color color = Color.fromRGB(Integer.valueOf(split[1]));
+                Color color = Color.fromRGB(Integer.parseInt(split[1]));
                 banner.setBaseColor(DyeColor.getByColor(color));
             } else if (patternType != null) {
                 PatternType type = PatternType.valueOf(split[0]);
-                DyeColor color = DyeColor.getByColor(Color.fromRGB(Integer.valueOf(split[1])));
+                DyeColor color = DyeColor.getByColor(Color.fromRGB(Integer.parseInt(split[1])));
                 org.bukkit.block.banner.Pattern pattern = new org.bukkit.block.banner.Pattern(color, type);
                 banner.addPattern(pattern);
             }

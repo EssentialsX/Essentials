@@ -83,7 +83,7 @@ public class SignProtection extends EssentialsSign {
     }
 
     private Map<Location, SignProtectionState> getConnectedSigns(final Block block, final User user, final String username, boolean secure) {
-        final Map<Location, SignProtectionState> signs = new HashMap<Location, SignProtectionState>();
+        final Map<Location, SignProtectionState> signs = new HashMap<>();
         getConnectedSigns(block, signs, user, username, secure ? 4 : 2);
         return signs;
     }

@@ -71,7 +71,7 @@ public interface IUser {
      *
      * @return If the user is hidden or not
      *
-     * @see isVanished
+     * @see IUser#isVanished()
      */
     boolean isHidden();
 
@@ -100,7 +100,7 @@ public interface IUser {
      *
      * @return If the user is vanished or not
      *
-     * @see isHidden
+     * @see IUser#isHidden()
      */
     boolean isVanished();
 

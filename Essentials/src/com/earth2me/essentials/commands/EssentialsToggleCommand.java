@@ -58,7 +58,7 @@ public abstract class EssentialsToggleCommand extends EssentialsCommand {
             foundUser = true;
             if (args.length > 1) {
                 Boolean toggle = matchToggleArgument(args[1]);
-                if (toggle == true) {
+                if (toggle) {
                     togglePlayer(sender, player, true);
                 } else {
                     togglePlayer(sender, player, false);
