@@ -101,8 +101,8 @@ public class SignTrade extends EssentialsSign {
         final String signOwner = sign.getLine(3);
 
         final boolean isOwner = (signOwner.length() > 3 && signOwner.substring(2).equalsIgnoreCase(username));
-        final boolean canBreak = isOwner ? true : player.isAuthorized("essentials.signs.trade.override");
-        final boolean canCollect = isOwner ? true : player.isAuthorized("essentials.signs.trade.override.collect");
+        final boolean canBreak = isOwner || player.isAuthorized("essentials.signs.trade.override");
+        final boolean canCollect = isOwner || player.isAuthorized("essentials.signs.trade.override.collect");
 
         if (canBreak) {
             try {
@@ -267,7 +267,7 @@ public class SignTrade extends EssentialsSign {
         }
         final Integer exp = trade.getExperience();
         if (exp != null) {
-            changeAmount(sign, index, BigDecimal.valueOf(-exp.intValue()), ess);
+            changeAmount(sign, index, BigDecimal.valueOf(-exp), ess);
         }
     }
 
@@ -282,7 +282,7 @@ public class SignTrade extends EssentialsSign {
         }
         final Integer exp = trade.getExperience();
         if (exp != null) {
-            changeAmount(sign, index, BigDecimal.valueOf(exp.intValue()), ess);
+            changeAmount(sign, index, BigDecimal.valueOf(exp), ess);
         }
     }
 

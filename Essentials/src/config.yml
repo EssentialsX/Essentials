@@ -678,6 +678,10 @@ command-costs:
 # such as accented letters, you MUST save the file as UTF-8, not ANSI.
 currency-symbol: '$'
 
+# Enable this to make the currency symbol appear at the end of the amount rather than at the start.
+# For example, the euro symbol typically appears after the current amount.
+currency-symbol-suffix: false
+
 # Set the maximum amount of money a player can have.
 # The amount is always limited to 10 trillion because of the limitations of a java double.
 max-money: 10000000000000

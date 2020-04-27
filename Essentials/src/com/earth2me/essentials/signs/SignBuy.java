@@ -5,7 +5,6 @@ import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.User;
 import net.ess3.api.IEssentials;
 import net.ess3.api.MaxMoneyException;
-
 import org.bukkit.inventory.ItemStack;
 
 import java.math.BigDecimal;
@@ -39,6 +38,7 @@ public class SignBuy extends EssentialsSign {
                 items = new Trade(item, ess);
 
                 BigDecimal chargeAmount = charge.getMoney();
+                //noinspection BigDecimalMethodWithoutRoundingCalled
                 BigDecimal pricePerSingleItem = chargeAmount.divide(new BigDecimal(initialItemAmount));
                 pricePerSingleItem = pricePerSingleItem.multiply(new BigDecimal(newItemAmount));
                 charge = new Trade(pricePerSingleItem, ess);

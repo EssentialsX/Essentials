@@ -139,7 +139,7 @@ public class Commandexp extends EssentialsCommand {
             if (give) {
                 neededLevel += target.getBase().getLevel();
             }
-            amount = (long) SetExpFix.getExpToLevel(neededLevel);
+            amount = SetExpFix.getExpToLevel(neededLevel);
             SetExpFix.setTotalExperience(target.getBase(), 0);
         } else {
             amount = Long.parseLong(strAmount);
@@ -152,10 +152,10 @@ public class Commandexp extends EssentialsCommand {
             amount += SetExpFix.getTotalExperience(target.getBase());
         }
         if (amount > Integer.MAX_VALUE) {
-            amount = (long) Integer.MAX_VALUE;
+            amount = Integer.MAX_VALUE;
         }
-        if (amount < 0l) {
-            amount = 0l;
+        if (amount < 0L) {
+            amount = 0L;
         }
         SetExpFix.setTotalExperience(target.getBase(), (int) amount);
         sender.sendMessage(tl("expSet", target.getDisplayName(), amount));
