@@ -42,7 +42,7 @@ public class OfflinePlayer implements Player {
     private final transient Server server;
     private transient Location location = new Location(null, 0, 0, 0, 0, 0);
     private transient World world;
-    private transient org.bukkit.OfflinePlayer base;
+    private final transient org.bukkit.OfflinePlayer base;
     private boolean allowFlight = false;
     private boolean isFlying = false;
     private String name = null;
@@ -1016,6 +1016,11 @@ public class OfflinePlayer implements Player {
     @Override
     public int getExpToLevel() {
         return 0;
+    }
+
+    @Override
+    public float getAttackCooldown() {
+        return 0f;
     }
 
     @Override

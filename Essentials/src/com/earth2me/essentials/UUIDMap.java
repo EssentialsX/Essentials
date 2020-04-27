@@ -15,7 +15,7 @@ import java.util.regex.Pattern;
 
 public class UUIDMap {
     private final transient net.ess3.api.IEssentials ess;
-    private File userList;
+    private final File userList;
     private final transient Pattern splitPattern = Pattern.compile(",");
 
     private static boolean pendingWrite;
@@ -28,15 +28,12 @@ public class UUIDMap {
         this.ess = ess;
         userList = new File(ess.getDataFolder(), "usermap.csv");
         pendingWrite = false;
-        writeTaskRunnable = new Runnable() {
-            @Override
-            public void run() {
-                if (pendingWrite) {
-                    try {
-                        new WriteRunner(ess.getDataFolder(), userList, ess.getUserMap().getNames()).run();
-                    } catch (Throwable t) { // bad code to prevent task from being suppressed
-                        t.printStackTrace();
-                    }
+        writeTaskRunnable = () -> {
+            if (pendingWrite) {
+                try {
+                    new WriteRunner(ess.getDataFolder(), userList, ess.getUserMap().getNames()).run();
+                } catch (Throwable t) { // bad code to prevent task from being suppressed
+                    t.printStackTrace();
                 }
             }
         };

@@ -11,8 +11,8 @@ import java.util.Set;
 
 
 public class Enchantments {
-    private static final Map<String, Enchantment> ENCHANTMENTS = new HashMap<String, Enchantment>();
-    private static final Map<String, Enchantment> ALIASENCHANTMENTS = new HashMap<String, Enchantment>();
+    private static final Map<String, Enchantment> ENCHANTMENTS = new HashMap<>();
+    private static final Map<String, Enchantment> ALIASENCHANTMENTS = new HashMap<>();
     private static boolean isFlat;
 
     static {

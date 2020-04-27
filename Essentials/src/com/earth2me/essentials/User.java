@@ -37,7 +37,7 @@ import static com.earth2me.essentials.I18n.tl;
 
 public class User extends UserData implements Comparable<User>, IMessageRecipient, net.ess3.api.IUser {
     private static final Logger logger = Logger.getLogger("Essentials");
-    private IMessageRecipient messageRecipient;
+    private final IMessageRecipient messageRecipient;
     private transient UUID teleportRequester;
     private transient boolean teleportRequestHere;
     private transient Location teleportLocation;
@@ -57,7 +57,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
     private boolean ignoreMsg = false;
     private String afkMessage;
     private long afkSince;
-    private Map<User, BigDecimal> confirmingPayments = new WeakHashMap<>();
+    private final Map<User, BigDecimal> confirmingPayments = new WeakHashMap<>();
     private String confirmingClearCommand;
     private long lastNotifiedAboutMailsMs;
 
@@ -238,12 +238,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
     }
 
     public void dispose() {
-        ess.runTaskAsynchronously(new Runnable() {
-            @Override
-            public void run() {
-                _dispose();
-            }
-        });
+        ess.runTaskAsynchronously(this::_dispose);
     }
 
     private void _dispose() {
@@ -346,7 +341,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
                     prefix.insert(0, opPrefix.toString());
                     suffix = "§r";
                 }
-            } catch (Exception e) {
+            } catch (Exception ignored) {
             }
         }
 
@@ -444,7 +439,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
                 }
                 final Method.MethodAccount account = Methods.getMethod().getAccount(this.getName());
                 return BigDecimal.valueOf(account.balance());
-            } catch (Exception ex) {
+            } catch (Exception ignored) {
             }
         }
         return super.getMoney();
@@ -476,7 +471,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
                 }
                 final Method.MethodAccount account = Methods.getMethod().getAccount(this.getName());
                 account.set(newBalance.doubleValue());
-            } catch (Exception ex) {
+            } catch (Exception ignored) {
             }
         }
         super.setMoney(newBalance, true);
@@ -487,7 +482,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
         if (ess.getSettings().isEcoDisabled()) {
             return;
         }
-        if (Methods.hasMethod() && super.getMoney() != value) {
+        if (Methods.hasMethod() && !super.getMoney().equals(value)) {
             try {
                 super.setMoney(value, false);
             } catch (MaxMoneyException ex) {
@@ -555,7 +550,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
     @Override
     public void setHidden(final boolean hidden) {
         this.hidden = hidden;
-        if (hidden == true) {
+        if (hidden) {
             setLastLogout(getLastOnlineActivity());
         }
     }
@@ -577,7 +572,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
                     } catch (Exception ex) {
                         try {
                             getTeleport().respawn(null, TeleportCause.PLUGIN);
-                        } catch (Exception ex1) {
+                        } catch (Exception ignored) {
                         }
                     }
                 }
@@ -590,7 +585,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
     //Returns true if status expired during this check
     public boolean checkMuteTimeout(final long currentTime) {
         if (getMuteTimeout() > 0 && getMuteTimeout() < currentTime && isMuted()) {
-            final MuteStatusChangeEvent event = new MuteStatusChangeEvent(this, null, false);
+            final MuteStatusChangeEvent event = new MuteStatusChangeEvent(this, null, false, getMuteTimeout(), getMuteReason());
             ess.getServer().getPluginManager().callEvent(event);
             
             if (!event.isCancelled()) {
@@ -615,8 +610,13 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
             if (broadcast && !isHidden()) {
                 setDisplayNick();
                 final String msg = tl("userIsNotAway", getDisplayName());
-                if (!msg.isEmpty()) {
-                    ess.broadcastMessage(this, msg);
+                final String selfmsg = tl("userIsNotAwaySelf", getDisplayName());
+                if (!msg.isEmpty() && ess.getSettings().broadcastAfkMessage()) {
+                    // exclude user from receiving general AFK announcement in favor of personal message
+                    ess.broadcastMessage(this, msg, u -> u == this);
+                }
+                if (!selfmsg.isEmpty()) {
+                    this.sendMessage(selfmsg);
                 }
             }
         }
@@ -663,8 +663,13 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
             if (!isHidden()) {
                 setDisplayNick();
                 final String msg = tl("userIsAway", getDisplayName());
-                if (!msg.isEmpty()) {
-                    ess.broadcastMessage(this, msg);
+                final String selfmsg = tl("userIsAwaySelf", getDisplayName());
+                if (!msg.isEmpty() && ess.getSettings().broadcastAfkMessage()) {
+                    // exclude user from receiving general AFK announcement in favor of personal message
+                    ess.broadcastMessage(this, msg, u -> u == this);
+                }
+                if (!selfmsg.isEmpty()) {
+                    this.sendMessage(selfmsg);
                 }
             }
         }
@@ -686,9 +691,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
         }
         if (isAfk()) {
             // Protect AFK players by representing them in a god mode state to render them invulnerable to damage.
-            if (ess.getSettings().getFreezeAfkPlayers()) {
-                return true;
-            }
+            return ess.getSettings().getFreezeAfkPlayers();
         }
         return false;
     }

@@ -185,7 +185,7 @@ public abstract class EssentialsCommand implements IEssentialsCommand {
         if (options == null) {
             return null;
         }
-        return StringUtil.copyPartialMatches(args[args.length - 1], options, Lists.<String>newArrayList());
+        return StringUtil.copyPartialMatches(args[args.length - 1], options, Lists.newArrayList());
     }
 
     // Doesn't need to do any starts-with checks
@@ -203,7 +203,7 @@ public abstract class EssentialsCommand implements IEssentialsCommand {
         if (options == null) {
             return null;
         }
-        return StringUtil.copyPartialMatches(args[args.length - 1], options, Lists.<String>newArrayList());
+        return StringUtil.copyPartialMatches(args[args.length - 1], options, Lists.newArrayList());
     }
 
     // Doesn't need to do any starts-with checks
@@ -333,9 +333,7 @@ public abstract class EssentialsCommand implements IEssentialsCommand {
         int numArgs = args.length - index - 1;
         ess.getLogger().info(numArgs + " " + index + " " + Arrays.toString(args));
         String[] effectiveArgs = new String[numArgs];
-        for (int i = 0; i < numArgs; i++) {
-            effectiveArgs[i] = args[i + index];
-        }
+        System.arraycopy(args, index, effectiveArgs, 0, numArgs);
         if (effectiveArgs.length == 0) {
             effectiveArgs = new String[] { "" };
         }

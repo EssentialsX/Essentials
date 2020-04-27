@@ -4,10 +4,8 @@ import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.Console;
 import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.User;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Server;
-import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 
 import java.util.Collections;

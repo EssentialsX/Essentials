@@ -38,13 +38,13 @@ public class Commandnear extends EssentialsCommand {
             } catch (NumberFormatException e) {
                 try {
                     otherUser = getPlayer(server, user, args, 0);
-                } catch (Exception ex) {
+                } catch (Exception ignored) {
                 }
             }
             if (args.length > 1 && otherUser != null) {
                 try {
                     radius = Long.parseLong(args[1]);
-                } catch (NumberFormatException e) {
+                } catch (NumberFormatException ignored) {
                 }
             }
         }
@@ -72,7 +72,7 @@ public class Commandnear extends EssentialsCommand {
         if (args.length > 1) {
             try {
                 radius = Long.parseLong(args[1]);
-            } catch (NumberFormatException e) {
+            } catch (NumberFormatException ignored) {
             }
         }
         sender.sendMessage(tl("nearbyPlayers", getLocal(server, otherUser, radius)));

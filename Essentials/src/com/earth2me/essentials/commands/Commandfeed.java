@@ -60,7 +60,7 @@ public class Commandfeed extends EssentialsLoopCommand {
             throw new QuietAbortException();
         }
 
-        player.setFoodLevel(flce.getFoodLevel() > 20 ? 20 : flce.getFoodLevel());
+        player.setFoodLevel(Math.min(flce.getFoodLevel(), 20));
         player.setSaturation(10);
         player.setExhaustion(0F);
     }

@@ -34,14 +34,6 @@ import com.earth2me.essentials.textreader.SimpleTextInput;
 import com.earth2me.essentials.utils.DateUtil;
 import com.earth2me.essentials.utils.VersionUtil;
 import com.google.common.base.Throwables;
-import java.io.File;
-import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import java.util.stream.Collectors;
 import net.ess3.api.IEssentials;
 import net.ess3.api.ISettings;
 import net.ess3.api.*;
@@ -82,6 +74,16 @@ import org.bukkit.plugin.java.JavaPluginLoader;
 import org.bukkit.scheduler.BukkitScheduler;
 import org.bukkit.scheduler.BukkitTask;
 import org.yaml.snakeyaml.error.YAMLException;
+
+import java.io.File;
+import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.*;
+import java.util.function.Predicate;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 import static com.earth2me.essentials.I18n.tl;
 
@@ -281,6 +283,9 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
             backup = new Backup(this);
             permissionsHandler = new PermissionsHandler(this, settings.useBukkitPermissions());
             alternativeCommandsHandler = new AlternativeCommandsHandler(this);
+
+            // Register hat permissions
+            Commandhat.registerPermissionsIfNecessary(getServer().getPluginManager());
 
             timer = new EssentialsTimer(this);
             scheduleSyncRepeatingTask(timer, 1000, 50);
@@ -565,9 +570,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
                     cmd.run(getServer(), user, commandLabel, command, args);
                 }
                 return true;
-            } catch (NoChargeException ex) {
-                return true;
-            } catch (QuietAbortException ex) {
+            } catch (NoChargeException | QuietAbortException ex) {
                 return true;
             } catch (NotEnoughArgumentsException ex) {
                 sender.sendMessage(command.getDescription());
@@ -762,20 +765,25 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
 
     @Override
     public int broadcastMessage(final String message) {
-        return broadcastMessage(null, null, message, true);
+        return broadcastMessage(null, null, message, true, u -> false);
     }
 
     @Override
     public int broadcastMessage(final IUser sender, final String message) {
-        return broadcastMessage(sender, null, message, false);
+        return broadcastMessage(sender, null, message, false, u -> false);
+    }
+
+    @Override
+    public int broadcastMessage(final IUser sender, final String message, final Predicate<IUser> shouldExclude) {
+        return broadcastMessage(sender, null, message, false, shouldExclude);
     }
 
     @Override
     public int broadcastMessage(final String permission, final String message) {
-        return broadcastMessage(null, permission, message, false);
+        return broadcastMessage(null, permission, message, false, u -> false);
     }
 
-    private int broadcastMessage(final IUser sender, final String permission, final String message, final boolean keywords) {
+    private int broadcastMessage(final IUser sender, final String permission, final String message, final boolean keywords, final Predicate<IUser> shouldExclude) {
         if (sender != null && sender.isHidden()) {
             return 0;
         }
@@ -783,10 +791,12 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
         IText broadcast = new SimpleTextInput(message);
 
         final Collection<Player> players = getOnlinePlayers();
-
         for (Player player : players) {
             final User user = getUser(player);
             if ((permission == null && (sender == null || !user.isIgnoredPlayer(sender))) || (permission != null && user.isAuthorized(permission))) {
+                if (shouldExclude.test(user)) {
+                    continue;
+                }
                 if (keywords) {
                     broadcast = new KeywordReplacer(broadcast, new CommandSource(player), this, false);
                 }

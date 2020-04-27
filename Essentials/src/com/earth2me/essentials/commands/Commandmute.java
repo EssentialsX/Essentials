@@ -44,7 +44,7 @@ public class Commandmute extends EssentialsCommand {
 
         long muteTimestamp = 0;
         String time;
-        String muteReason = "";
+        String muteReason = null;
 
         if (args.length > 1) {
             time = args[1];
@@ -63,11 +63,11 @@ public class Commandmute extends EssentialsCommand {
         
         final boolean willMute = (args.length > 1) || !user.getMuted();
         final User controller = sender.isPlayer() ? ess.getUser(sender.getPlayer()) : null;
-        final MuteStatusChangeEvent event = new MuteStatusChangeEvent(user, controller, willMute);
+        final MuteStatusChangeEvent event = new MuteStatusChangeEvent(user, controller, willMute, muteTimestamp, muteReason);
         ess.getServer().getPluginManager().callEvent(event);
         
         if (!event.isCancelled()) {
-            if (args.length > 1) {
+            if (muteReason != null) {
                 user.setMuteReason(muteReason.isEmpty() ? null : muteReason);
                 user.setMuted(true);
             } else {
