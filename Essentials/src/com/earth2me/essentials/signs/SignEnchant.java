@@ -77,7 +77,7 @@ public class SignEnchant extends EssentialsSign {
             try {
                 level = Integer.parseInt(enchantLevel[1]);
             } catch (NumberFormatException ex) {
-                level = enchantment.getMaxLevel();
+                throw new SignException(ex.getMessage(), ex);
             }
         }
 
