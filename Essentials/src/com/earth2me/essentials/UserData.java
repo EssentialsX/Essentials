@@ -496,16 +496,27 @@ public abstract class UserData extends PlayerExtension implements IConf {
         return isIgnoredPlayer(user);
     }
 
+    public boolean deleteIgnoredLegacy(String name) {
+        return ignoredPlayers.remove(name.toLowerCase(Locale.ENGLISH));
+    }
+
     public boolean isIgnoredPlayer(IUser user) {
-        return (ignoredPlayers.contains(user.getName().toLowerCase(Locale.ENGLISH)) && !user.isIgnoreExempt());
+        return (ignoredPlayers.contains(user.getBase().getUniqueId().toString()) || ignoredPlayers.contains(user.getName().toLowerCase(Locale.ENGLISH))) && !user.isIgnoreExempt();
     }
 
     public void setIgnoredPlayer(IUser user, boolean set) {
-        final String entry = user.getName().toLowerCase(Locale.ENGLISH);
+        String name = user.getName().toLowerCase(Locale.ENGLISH);
+        String uuid = user.getBase().getUniqueId().toString();
         if (set) {
-            if (!ignoredPlayers.contains(entry)) ignoredPlayers.add(entry);
+            if (ignoredPlayers.contains(name)) { // Convert legacy name -> uuid
+                ignoredPlayers.remove(name);
+                ignoredPlayers.add(uuid);
+            } else if (!ignoredPlayers.contains(uuid)) {
+                ignoredPlayers.add(uuid);
+            }
         } else {
-            ignoredPlayers.remove(entry);
+            ignoredPlayers.remove(name);
+            ignoredPlayers.remove(uuid);
         }
         setIgnoredPlayers(ignoredPlayers);
     }

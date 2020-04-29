@@ -31,6 +31,12 @@ public class Commandignore extends EssentialsCommand {
                 player = ess.getOfflineUser(args[0]);
             }
             if (player == null) {
+                //Needed for edge cases where a username was ignored and they changed their name.
+                //Will no longer occur for newly ignored players due to the new uuid based system.
+                if (user.deleteIgnoredLegacy(args[0])) {
+                    user.sendMessage(tl("unignorePlayer", args[0]));
+                    return;
+                }
                 throw new PlayerNotFoundException();
             }
             if (player.isIgnoreExempt()) {
