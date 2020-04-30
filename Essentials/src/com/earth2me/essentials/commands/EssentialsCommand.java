@@ -156,6 +156,8 @@ public abstract class EssentialsCommand implements IEssentialsCommand {
 
     @Override
     public final void run(final Server server, final User user, final String commandLabel, final Command cmd, final String[] args) throws Exception {
+        
+
         final Trade charge = new Trade(this.getName(), ess);
         charge.isAffordableFor(user);
         run(server, user, commandLabel, args);
