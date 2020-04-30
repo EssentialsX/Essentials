@@ -38,6 +38,7 @@ public enum ProtectConfig {
     prevent_creeper_explosion("protect.prevent.creeper-explosion", true),
     prevent_creeper_playerdmg("protect.prevent.creeper-playerdamage", false),
     prevent_creeper_blockdmg("protect.prevent.creeper-blockdamage", false),
+    prevent_ender_crystal_explosion("protect.prevent.ender-crystal-explosion", false),
     prevent_enderman_pickup("protect.prevent.enderman-pickup", false),
     prevent_villager_death("protect.prevent.villager-death", false),
     prevent_enderdragon_blockdmg("protect.prevent.enderdragon-blockdamage", true),
