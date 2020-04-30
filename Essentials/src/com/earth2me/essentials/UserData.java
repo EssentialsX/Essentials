@@ -486,8 +486,13 @@ public abstract class UserData extends PlayerExtension implements IConf {
     public void setIgnoredPlayers(List<String> players) {
         List<UUID> uuids = new ArrayList<>();
         for (String player : players) {
-            uuids.add(ess.getOfflineUser(player).getBase().getUniqueId());
+            User user = ess.getOfflineUser(player);
+            if (user == null) {
+                return;
+            }
+            uuids.add(user.getBase().getUniqueId());
         }
+        setIgnoredPlayerUUIDs(uuids);
     }
 
     public void setIgnoredPlayerUUIDs(List<UUID> players) {
