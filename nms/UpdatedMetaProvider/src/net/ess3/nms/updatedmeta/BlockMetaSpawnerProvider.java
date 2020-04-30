@@ -20,7 +20,8 @@ public class BlockMetaSpawnerProvider extends SpawnerProvider {
 
     @Override
     public EntityType getEntityType(ItemStack is) {
-        BlockStateMeta bsm = (BlockStateMeta) is.getItemMeta();
+        ItemStack clonedItemStack = is.clone();
+        BlockStateMeta bsm = (BlockStateMeta) clonedItemStack.getItemMeta();
         CreatureSpawner bs = (CreatureSpawner) bsm.getBlockState();
         return bs.getSpawnedType();
     }
