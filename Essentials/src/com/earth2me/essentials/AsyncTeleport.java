@@ -141,6 +141,19 @@ public class AsyncTeleport implements IAsyncTeleport {
         });
     }
 
+    private void runOnMain(Runnable runnable) throws ExecutionException, InterruptedException {
+        if (Bukkit.isPrimaryThread()) {
+            runnable.run();
+            return;
+        }
+        CompletableFuture<Object> taskLock = new CompletableFuture<>();
+        Bukkit.getScheduler().runTask(ess, () -> {
+            runnable.run();
+            taskLock.complete(new Object());
+        });
+        taskLock.get();
+    }
+
     protected void nowAsync(IUser teleportee, ITarget target, TeleportCause cause, CompletableFuture<Boolean> future) {
         cancel(false);
 
@@ -156,14 +169,10 @@ public class AsyncTeleport implements IAsyncTeleport {
                 future.completeExceptionally(new Exception(tl("passengerTeleportFail")));
                 return;
             }
-            CompletableFuture<Object> dismountFuture = new CompletableFuture<>();
-            Bukkit.getScheduler().runTask(ess, () -> {
-                teleportee.getBase().eject();
-                dismountFuture.complete(new Object());
-            });
+
             try {
-                dismountFuture.get(); //EntityDismountEvent requires sync context we also want to wait for it to finish
-            } catch (InterruptedException | ExecutionException e) {
+                runOnMain(() -> teleportee.getBase().eject()); //EntityDismountEvent requires a sync context.
+            } catch (ExecutionException | InterruptedException e) {
                 future.completeExceptionally(e);
                 return;
             }
