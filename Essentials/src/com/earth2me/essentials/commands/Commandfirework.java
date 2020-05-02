@@ -7,7 +7,6 @@ import com.earth2me.essentials.utils.NumberUtil;
 import com.google.common.collect.Lists;
 import org.bukkit.DyeColor;
 import org.bukkit.FireworkEffect;
-import org.bukkit.Material;
 import org.bukkit.Server;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Firework;

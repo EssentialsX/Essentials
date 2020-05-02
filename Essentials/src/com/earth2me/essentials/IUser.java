@@ -77,6 +77,7 @@ public interface IUser {
      * supported plugins. Use isVanished() if you want to check if a user is vanished by Essentials.
      *
      * @return If the user is hidden or not
+     *
      * @see IUser#isVanished()
      */
     boolean isHidden();
@@ -105,6 +106,7 @@ public interface IUser {
      * plugin.
      *
      * @return If the user is vanished or not
+     *
      * @see IUser#isHidden()
      */
     boolean isVanished();

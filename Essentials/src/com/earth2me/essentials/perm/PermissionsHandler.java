@@ -11,7 +11,7 @@ import java.util.logging.Level;
 
 public class PermissionsHandler implements IPermissionsHandler {
     private transient IPermissionsHandler handler = null;
-    private transient String defaultGroup = "default";
+    private final transient String defaultGroup = "default";
     private final transient Essentials ess;
     private transient boolean useSuperperms;
 

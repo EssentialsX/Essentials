@@ -1,19 +1,18 @@
 package com.earth2me.essentials.commands;
 
-import static com.earth2me.essentials.I18n.tl;
-
 import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.craftbukkit.InventoryWorkaround;
 import com.earth2me.essentials.utils.NumberUtil;
 import com.earth2me.essentials.utils.StringUtil;
-
 import org.bukkit.Material;
 import org.bukkit.Server;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.*;
+
+import static com.earth2me.essentials.I18n.tl;
 
 
 public class Commandclearinventory extends EssentialsCommand {
@@ -38,7 +37,7 @@ public class Commandclearinventory extends EssentialsCommand {
 
     private void parseCommand(Server server, CommandSource sender, String commandLabel, String[] args, boolean allowOthers, boolean allowAll)
         throws Exception {
-        Collection<Player> players = new ArrayList<Player>();
+        Collection<Player> players = new ArrayList<>();
         User senderUser = ess.getUser(sender.getPlayer());
         String previousClearCommand = "";
         
@@ -195,6 +194,6 @@ public class Commandclearinventory extends EssentialsCommand {
     }
 
     private String formatCommand(String commandLabel, String[] args) {
-        return "/" + commandLabel + " " + StringUtil.joinList(" ", (Object[]) args);
+        return "/" + commandLabel + " " + StringUtil.joinList(" ", args);
     }
 }

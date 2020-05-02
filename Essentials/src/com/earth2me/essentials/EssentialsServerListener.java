@@ -17,7 +17,7 @@ import java.util.logging.Level;
 
 
 public class EssentialsServerListener implements Listener {
-    private static List<String> ignoredSLPECallers = Arrays.asList(
+    private static final List<String> ignoredSLPECallers = Arrays.asList(
         ".LegacyPingHandler.channelRead(", // CB responding to pings from pre-Netty clients
         "de.dytanic.cloudnet.bridge.BukkitBootstrap" // CloudNet v2 doing... something
     );
@@ -25,7 +25,7 @@ public class EssentialsServerListener implements Listener {
     private final transient IEssentials ess;
     private boolean unsupportedLogged = false;
     private boolean npeWarned = false;
-    private boolean isPaperSample;
+    private final boolean isPaperSample;
     private Method setSampleText;
     private Method getSampleText;
 

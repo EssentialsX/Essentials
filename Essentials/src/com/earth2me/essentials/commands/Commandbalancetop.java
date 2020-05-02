@@ -11,7 +11,6 @@ import org.bukkit.Server;
 import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.util.*;
-import java.util.Map.Entry;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import static com.earth2me.essentials.I18n.tl;
@@ -88,7 +87,7 @@ public class Commandbalancetop extends EssentialsCommand {
             try {
                 if (force || cacheage <= System.currentTimeMillis() - CACHETIME) {
                     cache.getLines().clear();
-                    final Map<String, BigDecimal> balances = new HashMap<String, BigDecimal>();
+                    final Map<String, BigDecimal> balances = new HashMap<>();
                     BigDecimal totalMoney = BigDecimal.ZERO;
                     if (ess.getSettings().isEcoDisabled()) {
                         if (ess.getSettings().isDebug()) {
@@ -113,13 +112,8 @@ public class Commandbalancetop extends EssentialsCommand {
                         }
                     }
 
-                    final List<Map.Entry<String, BigDecimal>> sortedEntries = new ArrayList<Map.Entry<String, BigDecimal>>(balances.entrySet());
-                    Collections.sort(sortedEntries, new Comparator<Map.Entry<String, BigDecimal>>() {
-                        @Override
-                        public int compare(final Entry<String, BigDecimal> entry1, final Entry<String, BigDecimal> entry2) {
-                            return entry2.getValue().compareTo(entry1.getValue());
-                        }
-                    });
+                    final List<Map.Entry<String, BigDecimal>> sortedEntries = new ArrayList<>(balances.entrySet());
+                    sortedEntries.sort((entry1, entry2) -> entry2.getValue().compareTo(entry1.getValue()));
 
                     cache.getLines().add(tl("serverTotal", NumberUtil.displayCurrency(totalMoney, ess)));
                     int pos = 1;

@@ -25,7 +25,7 @@ public class UserMap extends CacheLoader<String, User> implements IConf {
     private final transient ConcurrentSkipListSet<UUID> keys = new ConcurrentSkipListSet<>();
     private final transient ConcurrentSkipListMap<String, UUID> names = new ConcurrentSkipListMap<>();
     private final transient ConcurrentSkipListMap<UUID, ArrayList<String>> history = new ConcurrentSkipListMap<>();
-    private UUIDMap uuidMap;
+    private final UUIDMap uuidMap;
 
     private final transient Cache<String, User> users;
     private static boolean legacy = false;
@@ -53,29 +53,26 @@ public class UserMap extends CacheLoader<String, User> implements IConf {
     }
 
     private void loadAllUsersAsync(final IEssentials ess) {
-        ess.runTaskAsynchronously(new Runnable() {
-            @Override
-            public void run() {
-                synchronized (users) {
-                    final File userdir = new File(ess.getDataFolder(), "userdata");
-                    if (!userdir.exists()) {
-                        return;
-                    }
-                    keys.clear();
-                    users.invalidateAll();
-                    for (String string : userdir.list()) {
-                        if (!string.endsWith(".yml")) {
-                            continue;
-                        }
-                        final String name = string.substring(0, string.length() - 4);
-                        try {
-                            keys.add(UUID.fromString(name));
-                        } catch (IllegalArgumentException ex) {
-                            //Ignore these users till they rejoin.
-                        }
-                    }
-                    uuidMap.loadAllUsers(names, history);
+        ess.runTaskAsynchronously(() -> {
+            synchronized (users) {
+                final File userdir = new File(ess.getDataFolder(), "userdata");
+                if (!userdir.exists()) {
+                    return;
                 }
+                keys.clear();
+                users.invalidateAll();
+                for (String string : userdir.list()) {
+                    if (!string.endsWith(".yml")) {
+                        continue;
+                    }
+                    final String name = string.substring(0, string.length() - 4);
+                    try {
+                        keys.add(UUID.fromString(name));
+                    } catch (IllegalArgumentException ex) {
+                        //Ignore these users till they rejoin.
+                    }
+                }
+                uuidMap.loadAllUsers(names, history);
             }
         });
     }
@@ -112,9 +109,7 @@ public class UserMap extends CacheLoader<String, User> implements IConf {
             } else {
                 return legacyCacheGet(uuid);
             }
-        } catch (ExecutionException ex) {
-            return null;
-        } catch (UncheckedExecutionException ex) {
+        } catch (ExecutionException | UncheckedExecutionException ex) {
             return null;
         }
     }
