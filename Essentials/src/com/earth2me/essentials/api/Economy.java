@@ -126,17 +126,27 @@ public class Economy {
      * @return Exact balance of user
      * @throws UserDoesNotExistException
      */
-    @SuppressWarnings("RedundantThrows")
     @Deprecated
     public static BigDecimal getMoneyExact(String name) throws UserDoesNotExistException {
-        return getMoneyExact(getUserByName(name));
+        User user = getUserByName(name);
+        if (user == null) {
+            throw new UserDoesNotExistException(name);
+        }
+        return getMoneyExact(user);
     }
 
-    public static BigDecimal getMoneyExact(UUID uuid) {
-        return getMoneyExact(getUserByUUID(uuid));
+    public static BigDecimal getMoneyExact(UUID uuid) throws UserDoesNotExistException {
+        User user = getUserByUUID(uuid);
+        if (user == null) {
+            throw new UserDoesNotExistException(uuid);
+        }
+        return getMoneyExact(user);
     }
 
     public static BigDecimal getMoneyExact(User user) {
+        if (user == null) {
+            throw new IllegalArgumentException("Economy user cannot be null");
+        }
         return user.getMoney();
     }
 
@@ -186,10 +196,15 @@ public class Economy {
      * @param uuid    UUID of user
      * @param balance The balance you want to set
      *
-     * @throws NoLoanPermittedException If the user is not allowed to have a negative balance
+     * @throws UserDoesNotExistException If a user by that uuid does not exist
+     * @throws NoLoanPermittedException  If the user is not allowed to have a negative balance
      */
-    public static void setMoney(UUID uuid, BigDecimal balance) throws NoLoanPermittedException {
-        setMoney(getUserByUUID(uuid), balance);
+    public static void setMoney(UUID uuid, BigDecimal balance) throws NoLoanPermittedException, UserDoesNotExistException {
+        User user = getUserByUUID(uuid);
+        if (user == null) {
+            throw new UserDoesNotExistException(uuid);
+        }
+        setMoney(user, balance);
     }
 
     /**
@@ -265,11 +280,16 @@ public class Economy {
      * @param uuid   UUID of the user
      * @param amount The money you want to add
      *
+     * @throws UserDoesNotExistException If a user by that uuid does not exist
      * @throws NoLoanPermittedException  If the user is not allowed to have a negative balance
      * @throws ArithmeticException
      */
-    public static void add(UUID uuid, BigDecimal amount) throws NoLoanPermittedException, ArithmeticException {
-        add(getUserByUUID(uuid), amount);
+    public static void add(UUID uuid, BigDecimal amount) throws NoLoanPermittedException, ArithmeticException, UserDoesNotExistException {
+        User user = getUserByUUID(uuid);
+        if (user == null) {
+            throw new UserDoesNotExistException(uuid);
+        }
+        add(user, amount);
     }
 
     /**
@@ -284,6 +304,9 @@ public class Economy {
      * @throws ArithmeticException
      */
     public static void add(User user, BigDecimal amount) throws NoLoanPermittedException, ArithmeticException {
+        if (user == null) {
+            throw new IllegalArgumentException("Economy user cannot be null");
+        }
         BigDecimal result = getMoneyExact(user).add(amount, MATH_CONTEXT);
         setMoney(user, result);
         Trade.log("API", "Add", "API", user.getName(), new Trade(amount, ess), null, null, null, ess);
@@ -334,11 +357,16 @@ public class Economy {
      * @param uuid   UUID of the user
      * @param amount The money you want to subtract
      *
-     * @throws NoLoanPermittedException If the user is not allowed to have a negative balance
+     * @throws UserDoesNotExistException If a user by that UUID does not exist
+     * @throws NoLoanPermittedException  If the user is not allowed to have a negative balance
      * @throws ArithmeticException
      */
-    public static void subtract(UUID uuid, BigDecimal amount) throws NoLoanPermittedException, ArithmeticException {
-        subtract(getUserByUUID(uuid), amount);
+    public static void subtract(UUID uuid, BigDecimal amount) throws NoLoanPermittedException, ArithmeticException, UserDoesNotExistException {
+        User user = getUserByUUID(uuid);
+        if (user == null) {
+            throw new UserDoesNotExistException(uuid);
+        }
+        subtract(user, amount);
     }
 
     /**
@@ -351,6 +379,9 @@ public class Economy {
      * @throws ArithmeticException
      */
     public static void subtract(User user, BigDecimal amount) throws NoLoanPermittedException, ArithmeticException {
+        if (user == null) {
+            throw new IllegalArgumentException("Economy user cannot be null");
+        }
         BigDecimal result = getMoneyExact(user).subtract(amount, MATH_CONTEXT);
         setMoney(user, result);
         Trade.log("API", "Subtract", "API", user.getName(), new Trade(amount, ess), null, null, null, ess);
@@ -403,11 +434,16 @@ public class Economy {
      * @param uuid   Name of the user
      * @param amount The balance is divided by this value
      *
+     * @throws UserDoesNotExistException If a user by that UUID does not exist
      * @throws NoLoanPermittedException  If the user is not allowed to have a negative balance
      * @throws ArithmeticException
      */
-    public static void divide(UUID uuid, BigDecimal amount) throws NoLoanPermittedException, ArithmeticException {
-        divide(getUserByUUID(uuid), amount);
+    public static void divide(UUID uuid, BigDecimal amount) throws NoLoanPermittedException, ArithmeticException, UserDoesNotExistException {
+        User user = getUserByUUID(uuid);
+        if (user == null) {
+            throw new UserDoesNotExistException(uuid);
+        }
+        divide(user, amount);
     }
 
     /**
@@ -420,6 +456,9 @@ public class Economy {
      * @throws ArithmeticException
      */
     public static void divide(User user, BigDecimal amount) throws NoLoanPermittedException, ArithmeticException {
+        if (user == null) {
+            throw new IllegalArgumentException("Economy user cannot be null");
+        }
         BigDecimal result = getMoneyExact(user).divide(amount, MATH_CONTEXT);
         setMoney(user, result);
         Trade.log("API", "Divide", "API", user.getName(), new Trade(amount, ess), null, null, null, ess);
@@ -472,11 +511,16 @@ public class Economy {
      * @param uuid   Name of the user
      * @param amount The balance is multiplied by the this value
      *
+     * @throws UserDoesNotExistException If a user by that uuid does not exist
      * @throws NoLoanPermittedException  If the user is not allowed to have a negative balance
      * @throws ArithmeticException
      */
-    public static void multiply(UUID uuid, BigDecimal amount) throws NoLoanPermittedException, ArithmeticException {
-        multiply(getUserByUUID(uuid), amount);
+    public static void multiply(UUID uuid, BigDecimal amount) throws NoLoanPermittedException, ArithmeticException, UserDoesNotExistException {
+        User user = getUserByUUID(uuid);
+        if (user == null) {
+            throw new UserDoesNotExistException(uuid);
+        }
+        multiply(user, amount);
     }
 
     /**
@@ -489,6 +533,9 @@ public class Economy {
      * @throws ArithmeticException
      */
     public static void multiply(User user, BigDecimal amount) throws NoLoanPermittedException, ArithmeticException {
+        if (user == null) {
+            throw new IllegalArgumentException("Economy user cannot be null");
+        }
         BigDecimal result = getMoneyExact(user).multiply(amount, MATH_CONTEXT);
         setMoney(user, result);
         Trade.log("API", "Multiply", "API", user.getName(), new Trade(amount, ess), null, null, null, ess);
@@ -518,10 +565,15 @@ public class Economy {
      *
      * @param uuid UUID of the user
      *
+     * @throws UserDoesNotExistException If a user by that UUID does not exists
      * @throws NoLoanPermittedException  If the user is not allowed to have a negative balance
      */
-    public static void resetBalance(UUID uuid) throws NoLoanPermittedException {
-        resetBalance(getUserByUUID(uuid));
+    public static void resetBalance(UUID uuid) throws NoLoanPermittedException, UserDoesNotExistException {
+        User user = getUserByUUID(uuid);
+        if (user == null) {
+            throw new UserDoesNotExistException(uuid);
+        }
+        resetBalance(user);
     }
 
     /**
@@ -534,6 +586,9 @@ public class Economy {
     public static void resetBalance(User user) throws NoLoanPermittedException {
         if (ess == null) {
             throw new RuntimeException(noCallBeforeLoad);
+        }
+        if (user == null) {
+            throw new IllegalArgumentException("Economy user cannot be null");
         }
         setMoney(user, ess.getSettings().getStartingBalance());
         Trade.log("API", "Reset", "API", user.getName(), new Trade(BigDecimal.ZERO, ess), null, null, null, ess);
@@ -584,10 +639,15 @@ public class Economy {
      *
      * @return true, if the user has more or an equal amount of money
      *
+     * @throws UserDoesNotExistException If a user by that UUID does not exist
      * @throws ArithmeticException
      */
-    public static boolean hasEnough(UUID uuid, BigDecimal amount) throws ArithmeticException {
-        return hasEnough(getUserByUUID(uuid), amount);
+    public static boolean hasEnough(UUID uuid, BigDecimal amount) throws ArithmeticException, UserDoesNotExistException {
+        User user = getUserByUUID(uuid);
+        if (user == null) {
+            throw new UserDoesNotExistException(uuid);
+        }
+        return hasEnough(user, amount);
     }
 
     /**
@@ -599,6 +659,9 @@ public class Economy {
      * @throws ArithmeticException
      */
     public static boolean hasEnough(User user, BigDecimal amount) throws ArithmeticException {
+        if (user == null) {
+            throw new IllegalArgumentException("Economy user cannot be null");
+        }
         return amount.compareTo(getMoneyExact(user)) <= 0;
     }
 
@@ -648,10 +711,15 @@ public class Economy {
      *
      * @return true, if the user has more money
      *
+     * @throws UserDoesNotExistException If a user by that UUID does not exists
      * @throws ArithmeticException
      */
-    public static boolean hasMore(UUID uuid, BigDecimal amount) throws ArithmeticException {
-        return hasMore(getUserByUUID(uuid), amount);
+    public static boolean hasMore(UUID uuid, BigDecimal amount) throws ArithmeticException, UserDoesNotExistException {
+        User user = getUserByUUID(uuid);
+        if (user == null) {
+            throw new UserDoesNotExistException(uuid);
+        }
+        return hasMore(user, amount);
     }
 
     /**
@@ -663,6 +731,9 @@ public class Economy {
      * @throws ArithmeticException
      */
     public static boolean hasMore(User user, BigDecimal amount) throws ArithmeticException {
+        if (user == null) {
+            throw new IllegalArgumentException("Economy user cannot be null");
+        }
         return amount.compareTo(getMoneyExact(user)) < 0;
     }
 
@@ -712,10 +783,15 @@ public class Economy {
      *
      * @return true, if the user has less money
      *
+     * @throws UserDoesNotExistException If a user by that UUID does not exist
      * @throws ArithmeticException
      */
-    public static boolean hasLess(UUID uuid, BigDecimal amount) throws ArithmeticException {
-        return hasLess(getUserByUUID(uuid), amount);
+    public static boolean hasLess(UUID uuid, BigDecimal amount) throws ArithmeticException, UserDoesNotExistException {
+        User user = getUserByUUID(uuid);
+        if (user == null) {
+            throw new UserDoesNotExistException(uuid);
+        }
+        return hasLess(user, amount);
     }
 
     /**
@@ -727,6 +803,9 @@ public class Economy {
      * @throws ArithmeticException
      */
     public static boolean hasLess(User user, BigDecimal amount) throws ArithmeticException {
+        if (user == null) {
+            throw new IllegalArgumentException("Economy user cannot be null");
+        }
         return amount.compareTo(getMoneyExact(user)) > 0;
     }
 
@@ -756,9 +835,15 @@ public class Economy {
      * @param uuid UUID of the user
      * 
      * @return true, if the user has a negative balance
+     *
+     * @throws UserDoesNotExistException If a user by that UUID does not exists
      */
-    public static boolean isNegative(UUID uuid) {
-        return isNegative(getUserByUUID(uuid));
+    public static boolean isNegative(UUID uuid) throws UserDoesNotExistException {
+        User user = getUserByUUID(uuid);
+        if (user == null) {
+            throw new UserDoesNotExistException(uuid);
+        }
+        return isNegative(user);
     }
 
     /**
@@ -769,6 +854,9 @@ public class Economy {
      * @return true, if the user has a negative balance
      */
     public static boolean isNegative(User user) {
+        if (user == null) {
+            throw new IllegalArgumentException("Economy user cannot be null");
+        }
         return getMoneyExact(user).signum() < 0;
     }
 
@@ -799,12 +887,26 @@ public class Economy {
     /**
      * Test if a player exists to avoid the UserDoesNotExistException
      *
+     * @deprecated Essentials is moving away from username based economy methods. This may be removed in the future.
+     *
      * @param name Name of the user
      *
      * @return true, if the user exists
      */
+    @Deprecated
     public static boolean playerExists(String name) {
         return getUserByName(name) != null;
+    }
+
+    /**
+     * Test if a player exists to avoid the UserDoesNotExistException
+     *
+     * @param uuid UUID of the user
+     *
+     * @return true, if the user exists
+     */
+    public static boolean playerExists(UUID uuid) {
+        return getUserByUUID(uuid) != null;
     }
 
     /**
