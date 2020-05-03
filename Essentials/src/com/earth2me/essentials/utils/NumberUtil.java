@@ -11,14 +11,14 @@ import java.util.Locale;
 
 import static com.earth2me.essentials.I18n.tl;
 
-
 public class NumberUtil {
-    static DecimalFormat twoDPlaces = new DecimalFormat("#,###.##");
-    static DecimalFormat currencyFormat = new DecimalFormat("#0.00", DecimalFormatSymbols.getInstance(Locale.US));
+
+    private static final DecimalFormat twoDPlaces = new DecimalFormat("#,###.##");
+    private static final DecimalFormat currencyFormat = new DecimalFormat("#0.00", DecimalFormatSymbols.getInstance(Locale.US));
     
     // This field is likely to be modified in com.earth2me.essentials.Settings when loading currency format.
     // This ensures that we can supply a constant formatting.
-    static final NumberFormat PRETTY_FORMAT = NumberFormat.getInstance(Locale.US);
+    private static NumberFormat PRETTY_FORMAT = NumberFormat.getInstance(Locale.US);
 
     static {
         twoDPlaces.setRoundingMode(RoundingMode.HALF_UP);
@@ -30,7 +30,15 @@ public class NumberUtil {
         PRETTY_FORMAT.setMaximumFractionDigits(2);
     }
 
+    // this method should only be called by Essentials
+    public static void internalSetPrettyFormat(NumberFormat prettyFormat) {
+        PRETTY_FORMAT = prettyFormat;
+    }
+
     public static String shortCurrency(final BigDecimal value, final IEssentials ess) {
+        if (ess.getSettings().isCurrencySymbolSuffixed()) {
+            return formatAsCurrency(value) + ess.getSettings().getCurrencySymbol();
+        }
         return ess.getSettings().getCurrencySymbol() + formatAsCurrency(value);
     }
 
@@ -61,6 +69,9 @@ public class NumberUtil {
             currency = currency.substring(1);
             sign = "-";
         }
+        if (ess.getSettings().isCurrencySymbolSuffixed()) {
+            return sign + tl("currency", currency, ess.getSettings().getCurrencySymbol());
+        }
         return sign + tl("currency", ess.getSettings().getCurrencySymbol(), currency);
     }
 
@@ -70,6 +81,9 @@ public class NumberUtil {
         if (value.signum() < 0) {
             currency = currency.substring(1);
             sign = "-";
+        }
+        if (ess.getSettings().isCurrencySymbolSuffixed()) {
+            return sign + tl("currency", currency, ess.getSettings().getCurrencySymbol());
         }
         return sign + tl("currency", ess.getSettings().getCurrencySymbol(), currency);
     }

@@ -1,6 +1,6 @@
 package com.earth2me.essentials;
 
-import com.earth2me.essentials.utils.NumberUtil;
+import org.bukkit.NamespacedKey;
 import org.bukkit.enchantments.Enchantment;
 
 import java.util.HashMap;
@@ -11,8 +11,9 @@ import java.util.Set;
 
 
 public class Enchantments {
-    private static final Map<String, Enchantment> ENCHANTMENTS = new HashMap<String, Enchantment>();
-    private static final Map<String, Enchantment> ALIASENCHANTMENTS = new HashMap<String, Enchantment>();
+    private static final Map<String, Enchantment> ENCHANTMENTS = new HashMap<>();
+    private static final Map<String, Enchantment> ALIASENCHANTMENTS = new HashMap<>();
+    private static boolean isFlat;
 
     static {
         ENCHANTMENTS.put("alldamage", Enchantment.DAMAGE_ALL);
@@ -197,14 +198,77 @@ public class Enchantments {
                 ALIASENCHANTMENTS.put("sweeping", sweeping);
             }
         } catch (IllegalArgumentException ignored) {}
+
+
+        try { // 1.13
+            Enchantment loyalty = Enchantment.getByName("LOYALTY");
+            if (loyalty != null) {
+                ENCHANTMENTS.put("loyalty", loyalty);
+                ALIASENCHANTMENTS.put("loyal", loyalty);
+                ALIASENCHANTMENTS.put("return", loyalty);
+            }
+            Enchantment impaling = Enchantment.getByName("IMPALING");
+            if (impaling != null) {
+                ENCHANTMENTS.put("impaling", impaling);
+                ALIASENCHANTMENTS.put("impale", impaling);
+                ALIASENCHANTMENTS.put("oceandamage", impaling);
+                ALIASENCHANTMENTS.put("oceandmg", impaling);
+            }
+            Enchantment riptide = Enchantment.getByName("RIPTIDE");
+            if (riptide != null) {
+                ENCHANTMENTS.put("riptide", riptide);
+                ALIASENCHANTMENTS.put("rip", riptide);
+                ALIASENCHANTMENTS.put("tide", riptide);
+                ALIASENCHANTMENTS.put("launch", riptide);
+            }
+            Enchantment channelling = Enchantment.getByName("CHANNELING");
+            if (channelling != null) {
+                ENCHANTMENTS.put("channelling", channelling);
+                ALIASENCHANTMENTS.put("chanelling", channelling);
+                ALIASENCHANTMENTS.put("channeling", channelling);
+                ALIASENCHANTMENTS.put("chaneling", channelling);
+                ALIASENCHANTMENTS.put("channel", channelling);
+            }
+        } catch (IllegalArgumentException ignored) {}
+
+
+        try { // 1.14
+            Enchantment multishot = Enchantment.getByName("MULTISHOT");
+            if (multishot != null) {
+                ENCHANTMENTS.put("multishot", multishot);
+                ALIASENCHANTMENTS.put("tripleshot", multishot);
+            }
+            Enchantment quickCharge = Enchantment.getByName("QUICK_CHARGE");
+            if (quickCharge != null) {
+                ENCHANTMENTS.put("quickcharge", quickCharge);
+                ALIASENCHANTMENTS.put("quickdraw", quickCharge);
+                ALIASENCHANTMENTS.put("fastcharge", quickCharge);
+                ALIASENCHANTMENTS.put("fastdraw", quickCharge);
+            }
+            Enchantment piercing = Enchantment.getByName("PIERCING");
+            if (piercing != null) {
+                ENCHANTMENTS.put("piercing", piercing);
+            }
+        } catch (IllegalArgumentException ignored) {}
+
+        try {
+            Class<?> namespacedKeyClass = Class.forName("org.bukkit.NamespacedKey");
+            Class<?> enchantmentClass = Class.forName("org.bukkit.enchantments.Enchantment");
+            enchantmentClass.getDeclaredMethod("getByKey", namespacedKeyClass);
+            isFlat = true;
+        } catch (ClassNotFoundException | NoSuchMethodException e) {
+            isFlat = false;
+        }
     }
 
     public static Enchantment getByName(String name) {
-        Enchantment enchantment;
-        if (NumberUtil.isInt(name)) {
-            enchantment = Enchantment.getById(Integer.parseInt(name));
-        } else {
-            enchantment = Enchantment.getByName(name.toUpperCase(Locale.ENGLISH));
+        Enchantment enchantment = null;
+        if (isFlat) { // 1.13+ only
+            enchantment = Enchantment.getByKey(NamespacedKey.minecraft(name.toLowerCase()));
+        }
+
+        if (enchantment == null) {
+            enchantment = Enchantment.getByName(name.toUpperCase());
         }
         if (enchantment == null) {
             enchantment = ENCHANTMENTS.get(name.toLowerCase(Locale.ENGLISH));

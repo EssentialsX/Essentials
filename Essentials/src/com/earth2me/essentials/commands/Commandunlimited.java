@@ -5,8 +5,9 @@ import org.bukkit.Material;
 import org.bukkit.Server;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.List;
+import java.util.HashSet;
 import java.util.Locale;
+import java.util.Set;
 
 import static com.earth2me.essentials.I18n.tl;
 
@@ -32,14 +33,10 @@ public class Commandunlimited extends EssentialsCommand {
             final String list = getList(target);
             user.sendMessage(list);
         } else if (args[0].equalsIgnoreCase("clear")) {
-            final List<Integer> itemList = target.getUnlimited();
+            final Set<Material> itemList = new HashSet<>(target.getUnlimited());
 
-            int index = 0;
-            while (itemList.size() > index) {
-                final Integer item = itemList.get(index);
-                if (toggleUnlimited(user, target, item.toString()) == false) {
-                    index++;
-                }
+            for (Material m : itemList) {
+                toggleUnlimited(user, target, m.toString());
             }
         } else {
             toggleUnlimited(user, target, args[0]);
@@ -50,16 +47,16 @@ public class Commandunlimited extends EssentialsCommand {
         final StringBuilder output = new StringBuilder();
         output.append(tl("unlimitedItems")).append(" ");
         boolean first = true;
-        final List<Integer> items = target.getUnlimited();
+        final Set<Material> items = target.getUnlimited();
         if (items.isEmpty()) {
             output.append(tl("none"));
         }
-        for (Integer integer : items) {
+        for (Material material : items) {
             if (!first) {
                 output.append(", ");
             }
             first = false;
-            final String matname = Material.getMaterial(integer).toString().toLowerCase(Locale.ENGLISH).replace("_", "");
+            final String matname = material.toString().toLowerCase(Locale.ENGLISH).replace("_", "");
             output.append(matname);
         }
 
@@ -71,7 +68,7 @@ public class Commandunlimited extends EssentialsCommand {
         stack.setAmount(Math.min(stack.getType().getMaxStackSize(), 2));
 
         final String itemname = stack.getType().toString().toLowerCase(Locale.ENGLISH).replace("_", "");
-        if (ess.getSettings().permissionBasedItemSpawn() && (!user.isAuthorized("essentials.unlimited.item-all") && !user.isAuthorized("essentials.unlimited.item-" + itemname) && !user.isAuthorized("essentials.unlimited.item-" + stack.getTypeId()) && !((stack.getType() == Material.WATER_BUCKET || stack.getType() == Material.LAVA_BUCKET) && user.isAuthorized("essentials.unlimited.item-bucket")))) {
+        if (ess.getSettings().permissionBasedItemSpawn() && (!user.isAuthorized("essentials.unlimited.item-all") && !user.isAuthorized("essentials.unlimited.item-" + itemname) && !((stack.getType() == Material.WATER_BUCKET || stack.getType() == Material.LAVA_BUCKET) && user.isAuthorized("essentials.unlimited.item-bucket")))) {
             throw new Exception(tl("unlimitedItemPermission", itemname));
         }
 

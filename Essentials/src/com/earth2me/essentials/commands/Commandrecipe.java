@@ -2,7 +2,9 @@ package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.utils.EnumUtil;
 import com.earth2me.essentials.utils.NumberUtil;
+import com.earth2me.essentials.utils.VersionUtil;
 import org.bukkit.Material;
 import org.bukkit.Server;
 import org.bukkit.inventory.*;
@@ -15,17 +17,21 @@ import java.util.Map;
 
 import static com.earth2me.essentials.I18n.tl;
 
-import net.ess3.nms.refl.ReflUtil;
-
-
 public class Commandrecipe extends EssentialsCommand {
+
+    private static final Material FIREWORK_ROCKET = EnumUtil.getMaterial("FIREWORK_ROCKET", "FIREWORK");
+    private static final Material FIREWORK_STAR = EnumUtil.getMaterial("FIREWORK_STAR", "FIREWORK_CHARGE");
+    private static final Material GUNPOWDER = EnumUtil.getMaterial("GUNPOWDER", "SULPHUR");
+
     public Commandrecipe() {
         super("recipe");
     }
     
     private void disableCommandForVersion1_12() throws Exception {
-        if (ReflUtil.getNmsVersionObject().equals(ReflUtil.V1_12_R1)) {
-            throw new Exception("/recipe is temporarily disabled. Please use the recipe book in your inventory.");
+        VersionUtil.BukkitVersion version = VersionUtil.getServerBukkitVersion();
+        if (version.isHigherThanOrEqualTo(VersionUtil.v1_12_0_R01)
+            && !ess.getSettings().isForceEnableRecipe()) {
+            throw new Exception("Please use the recipe book in your inventory.");
         }
     }
 
@@ -64,11 +70,11 @@ public class Commandrecipe extends EssentialsCommand {
         } else if (selectedRecipe instanceof ShapedRecipe) {
             shapedRecipe(sender, (ShapedRecipe) selectedRecipe, sender.isPlayer());
         } else if (selectedRecipe instanceof ShapelessRecipe) {
-            if (recipesOfType.size() == 1 && itemType.getType() == Material.FIREWORK) {
+            if (recipesOfType.size() == 1 && (itemType.getType() == FIREWORK_ROCKET)) {
                 ShapelessRecipe shapelessRecipe = new ShapelessRecipe(itemType);
-                shapelessRecipe.addIngredient(Material.SULPHUR);
+                shapelessRecipe.addIngredient(GUNPOWDER);
                 shapelessRecipe.addIngredient(Material.PAPER);
-                shapelessRecipe.addIngredient(Material.FIREWORK_CHARGE);
+                shapelessRecipe.addIngredient(FIREWORK_STAR);
                 shapelessRecipe(sender, shapelessRecipe, sender.isPlayer());
             } else {
                 shapelessRecipe(sender, (ShapelessRecipe) selectedRecipe, sender.isPlayer());
@@ -127,7 +133,7 @@ public class Commandrecipe extends EssentialsCommand {
             sender.sendMessage(tl("recipeGrid", colorMap.get(materials[2][0]), colorMap.get(materials[2][1]), colorMap.get(materials[2][2])));
 
             StringBuilder s = new StringBuilder();
-            for (Material items : colorMap.keySet().toArray(new Material[colorMap.size()])) {
+            for (Material items : colorMap.keySet().toArray(new Material[0])) {
                 s.append(tl("recipeGridItem", colorMap.get(items), getMaterialName(items)));
             }
             sender.sendMessage(tl("recipeWhere", s.toString()));

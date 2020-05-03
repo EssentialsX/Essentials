@@ -6,8 +6,6 @@ import org.bukkit.Server;
 import org.bukkit.block.Block;
 import org.bukkit.event.block.BlockBreakEvent;
 
-import java.util.Set;
-
 import static com.earth2me.essentials.I18n.tl;
 
 
@@ -19,7 +17,7 @@ public class Commandbreak extends EssentialsCommand {
     //TODO: Switch to use util class
     @Override
     public void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception {
-        final Block block = user.getBase().getTargetBlock((Set<Material>) null, 20);
+        final Block block = user.getBase().getTargetBlock(null, 20);
         if (block == null) {
             throw new NoChargeException();
         }

@@ -7,3 +7,14 @@ website: http://tiny.cc/EssentialsCommands
 description: Provides build protection.
 authors: [Zenexer, ementalo, Aelux, Brettflan, KimKandor, snowleo, ceulemans, Xeology, KHobbits, Iaccidentally]
 depend: [Essentials]
+api-version: "1.13"
+
+permissions:
+  essentials.exempt.protect:
+    default: false
+    description: Exempt from EssentialsProtect/EssentialsAntiBuild protections
+    children:
+      essentials.protect.alerts.notrigger: true
+      essentials.protect.exemptbreak: true
+      essentials.protect.exemptplacement: true
+      essentials.protect.exemptusage: true

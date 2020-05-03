@@ -11,9 +11,9 @@ import java.util.logging.Level;
 
 public class PermissionsHandler implements IPermissionsHandler {
     private transient IPermissionsHandler handler = null;
-    private transient String defaultGroup = "default";
+    private final transient String defaultGroup = "default";
     private final transient Essentials ess;
-    private transient boolean useSuperperms = false;
+    private transient boolean useSuperperms;
 
     private Class<?> lastHandler = null;
 
@@ -63,6 +63,11 @@ public class PermissionsHandler implements IPermissionsHandler {
     }
 
     @Override
+    public boolean isPermissionSet(final Player base, final String node) {
+        return handler.isPermissionSet(base, node);
+    }
+
+    @Override
     public String getPrefix(final Player base) {
         final long start = System.nanoTime();
         String prefix = handler.getPrefix(base);
@@ -92,10 +97,7 @@ public class PermissionsHandler implements IPermissionsHandler {
     public void checkPermissions() {
         // load and assign a handler
         List<Class<? extends SuperpermsHandler>> providerClazz = Arrays.asList(
-                BPermissions2Handler.class,
-                PermissionsExHandler.class,
-                PrivilegesHandler.class,
-                SimplyPermsHandler.class,
+                ModernVaultHandler.class,
                 GenericVaultHandler.class,
                 SuperpermsHandler.class
         );
@@ -158,7 +160,4 @@ public class PermissionsHandler implements IPermissionsHandler {
         }
     }
 
-    private void checkPermLag(long start) {
-        checkPermLag(start, "not defined");
-    }
 }

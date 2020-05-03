@@ -4,8 +4,7 @@ import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.NumberUtil;
 import com.google.common.collect.Lists;
-
-import org.bukkit.ChatColor;
+import net.ess3.api.events.UserBalanceUpdateEvent;
 import org.bukkit.Server;
 import org.bukkit.inventory.ItemStack;
 
@@ -89,7 +88,7 @@ public class Commandsell extends EssentialsCommand {
 
     private BigDecimal sellItem(User user, ItemStack is, String[] args, boolean isBulkSell) throws Exception {
         int amount = ess.getWorth().getAmount(ess, user, is, args, isBulkSell);
-        BigDecimal worth = ess.getWorth().getPrice(is);
+        BigDecimal worth = ess.getWorth().getPrice(ess, is);
 
         if (worth == null) {
             throw new Exception(tl("itemCannotBeSold"));
@@ -114,7 +113,7 @@ public class Commandsell extends EssentialsCommand {
         user.getBase().getInventory().removeItem(ris);
         user.getBase().updateInventory();
         Trade.log("Command", "Sell", "Item", user.getName(), new Trade(ris, ess), user.getName(), new Trade(result, ess), user.getLocation(), ess);
-        user.giveMoney(result);
+        user.giveMoney(result, null, UserBalanceUpdateEvent.Cause.COMMAND_SELL);
         user.sendMessage(tl("itemSold", NumberUtil.displayCurrency(result, ess), amount, is.getType().toString().toLowerCase(Locale.ENGLISH), NumberUtil.displayCurrency(worth, ess)));
         logger.log(Level.INFO, tl("itemSoldConsole", user.getDisplayName(), is.getType().toString().toLowerCase(Locale.ENGLISH), NumberUtil.displayCurrency(result, ess), amount, NumberUtil.displayCurrency(worth, ess)));
         return result;

@@ -1,18 +1,17 @@
 package com.earth2me.essentials.register.payment.methods;
 
 import com.earth2me.essentials.register.payment.Method;
-import net.milkbowl.vault.Vault;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.RegisteredServiceProvider;
 
 
 public class VaultEco implements Method {
-    private Vault vault;
+    private Plugin vault;
     private Economy economy;
 
     @Override
-    public Vault getPlugin() {
+    public Plugin getPlugin() {
         return this.vault;
     }
 
@@ -108,17 +107,15 @@ public class VaultEco implements Method {
     public boolean isCompatible(Plugin plugin) {
         try {
             RegisteredServiceProvider<Economy> ecoPlugin = plugin.getServer().getServicesManager().getRegistration(net.milkbowl.vault.economy.Economy.class);
-            return plugin instanceof Vault && ecoPlugin != null && !ecoPlugin.getProvider().getName().equals("Essentials Economy");
-        } catch (LinkageError e) {
-            return false;
-        } catch (Exception e) {
+            return plugin.getName().equals("Vault") && ecoPlugin != null && !ecoPlugin.getProvider().getName().equals("Essentials Economy");
+        } catch (LinkageError | Exception e) {
             return false;
         }
     }
 
     @Override
     public void setPlugin(Plugin plugin) {
-        this.vault = (Vault) plugin;
+        this.vault = plugin;
         RegisteredServiceProvider<Economy> economyProvider = this.vault.getServer().getServicesManager().getRegistration(net.milkbowl.vault.economy.Economy.class);
         if (economyProvider != null) {
             this.economy = economyProvider.getProvider();
@@ -126,11 +123,11 @@ public class VaultEco implements Method {
     }
 
 
-    public class VaultAccount implements MethodAccount {
+    public static class VaultAccount implements MethodAccount {
         private final String name;
         private final Economy economy;
 
-        public VaultAccount(String name, Economy economy) {
+        VaultAccount(String name, Economy economy) {
             this.name = name;
             this.economy = economy;
         }
@@ -200,7 +197,7 @@ public class VaultEco implements Method {
     }
 
 
-    public class VaultBankAccount implements MethodBankAccount {
+    public static class VaultBankAccount implements MethodBankAccount {
         private final String bank;
         private final Economy economy;
 

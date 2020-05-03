@@ -2,8 +2,13 @@ package com.earth2me.essentials;
 
 import com.earth2me.essentials.utils.DateUtil;
 import com.earth2me.essentials.utils.LocationUtil;
+import io.papermc.lib.PaperLib;
 import net.ess3.api.IEssentials;
+import net.ess3.api.ITeleport;
 import net.ess3.api.IUser;
+import net.ess3.api.events.UserTeleportEvent;
+import net.ess3.api.events.UserWarpEvent;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerRespawnEvent;
@@ -16,7 +21,7 @@ import java.util.GregorianCalendar;
 import static com.earth2me.essentials.I18n.tl;
 
 
-public class Teleport implements net.ess3.api.ITeleport {
+public class Teleport implements ITeleport {
     private final IUser teleportOwner;
     private final IEssentials ess;
     private TimedTeleport timedTeleport;
@@ -47,7 +52,7 @@ public class Teleport implements net.ess3.api.ITeleport {
             final long earliestLong = earliestTime.getTimeInMillis();
 
             // When was the last teleportPlayer used?
-            final Long lastTime = teleportOwner.getLastTeleportTimestamp();
+            final long lastTime = teleportOwner.getLastTeleportTimestamp();
 
             if (lastTime > time.getTimeInMillis()) {
                 // This is to make sure time didn't get messed up on last teleportPlayer use.
@@ -116,27 +121,41 @@ public class Teleport implements net.ess3.api.ITeleport {
 
     protected void now(IUser teleportee, ITarget target, TeleportCause cause) throws Exception {
         cancel(false);
-        teleportee.setLastLocation();
         Location loc = target.getLocation();
+
+        UserTeleportEvent event = new UserTeleportEvent(teleportee, cause, loc);
+        Bukkit.getServer().getPluginManager().callEvent(event);
+        if (event.isCancelled()) {
+            return;
+        }
+
+        teleportee.setLastLocation();
+
+        if (!teleportee.getBase().isEmpty()) {
+            if (!ess.getSettings().isTeleportPassengerDismount()) {
+                throw new Exception(tl("passengerTeleportFail"));
+            }
+            teleportee.getBase().eject();
+        }
 
         if (LocationUtil.isBlockUnsafeForUser(teleportee, loc.getWorld(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ())) {
             if (ess.getSettings().isTeleportSafetyEnabled()) {
                 if (ess.getSettings().isForceDisableTeleportSafety()) {
-                    teleportee.getBase().teleport(loc, cause);
+                    PaperLib.teleportAsync(teleportee.getBase(), loc, cause);
                 } else {
-                    teleportee.getBase().teleport(LocationUtil.getSafeDestination(ess, teleportee, loc), cause);
+                    PaperLib.teleportAsync(teleportee.getBase(), LocationUtil.getSafeDestination(ess, teleportee, loc), cause);
                 }
             } else {
                 throw new Exception(tl("unsafeTeleportDestination", loc.getWorld().getName(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ()));
             }
         } else {
             if (ess.getSettings().isForceDisableTeleportSafety()) {
-                teleportee.getBase().teleport(loc, cause);
+                PaperLib.teleportAsync(teleportee.getBase(), loc, cause);
             } else {
                 if (ess.getSettings().isTeleportToCenterLocation()) {
                     loc = LocationUtil.getRoundedDestination(loc);
                 }
-                teleportee.getBase().teleport(loc, cause);
+                PaperLib.teleportAsync(teleportee.getBase(), loc, cause);
             }
         }
     }
@@ -207,6 +226,39 @@ public class Teleport implements net.ess3.api.ITeleport {
         initTimer((long) (delay * 1000.0), teleportee, target, cashCharge, cause, false);
     }
 
+    private void teleportOther(IUser teleporter, IUser teleportee, ITarget target, Trade chargeFor, TeleportCause cause) throws Exception {
+        double delay = ess.getSettings().getTeleportDelay();
+
+        Trade cashCharge = chargeFor;
+
+        if (teleporter != null && chargeFor != null) {
+            chargeFor.isAffordableFor(teleporter);
+
+            //This code is to make sure that commandcosts are checked in the initial world, and not in the resulting world.
+            if (!chargeFor.getCommandCost(teleporter).equals(BigDecimal.ZERO)) {
+                //By converting a command cost to a regular cost, the command cost permission isn't checked when executing the charge after teleport.
+                cashCharge = new Trade(chargeFor.getCommandCost(teleporter), ess);
+            }
+        }
+
+        cooldown(true);
+        if (delay <= 0 || teleporter == null
+                || teleporter.isAuthorized("essentials.teleport.timer.bypass")
+                || teleportOwner.isAuthorized("essentials.teleport.timer.bypass")
+                || teleportee.isAuthorized("essentials.teleport.timer.bypass")) {
+            cooldown(false);
+            now(teleportee, target, cause);
+            if (teleporter != null && cashCharge != null) {
+                cashCharge.charge(teleporter);
+            }
+            return;
+        }
+
+        cancel(false);
+        warnUser(teleportee, delay);
+        initTimer((long) (delay * 1000.0), teleportee, target, cashCharge, cause, false);
+    }
+
     //The respawn function is a wrapper used to handle tp fallback, on /jail and /home
     @Override
     public void respawn(final Trade chargeFor, TeleportCause cause) throws Exception {
@@ -229,7 +281,7 @@ public class Teleport implements net.ess3.api.ITeleport {
         initTimer((long) (delay * 1000.0), teleportOwner, null, chargeFor, cause, true);
     }
 
-    protected void respawnNow(IUser teleportee, TeleportCause cause) throws Exception {
+    void respawnNow(IUser teleportee, TeleportCause cause) throws Exception {
         final Player player = teleportee.getBase();
         Location bed = player.getBedSpawnLocation();
         if (bed != null) {
@@ -247,6 +299,13 @@ public class Teleport implements net.ess3.api.ITeleport {
     //The warp function is a wrapper used to teleportPlayer a player to a /warp
     @Override
     public void warp(IUser teleportee, String warp, Trade chargeFor, TeleportCause cause) throws Exception {
+        UserWarpEvent event = new UserWarpEvent(teleportee, warp, chargeFor);
+        Bukkit.getServer().getPluginManager().callEvent(event);
+        if (event.isCancelled()) {
+            return;
+        }
+
+        warp = event.getWarp();
         Location loc = ess.getWarps().getWarp(warp);
         teleportee.sendMessage(tl("warpingTo", warp, loc.getWorld().getName(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ()));
         if (!teleportee.equals(teleportOwner)) {
@@ -258,10 +317,16 @@ public class Teleport implements net.ess3.api.ITeleport {
     //The back function is a wrapper used to teleportPlayer a player /back to their previous location.
     @Override
     public void back(Trade chargeFor) throws Exception {
+        back(teleportOwner, chargeFor);
+    }
+
+    //This function is a wrapper over the other back function for cases where another player performs back for them
+    @Override
+    public void back(IUser teleporter, Trade chargeFor) throws Exception {
         tpType = TeleportType.BACK;
         final Location loc = teleportOwner.getLastLocation();
         teleportOwner.sendMessage(tl("backUsageMsg", loc.getWorld().getName(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ()));
-        teleport(teleportOwner, new LocationTarget(loc), chargeFor, TeleportCause.COMMAND);
+        teleportOther(teleporter, teleportOwner, new LocationTarget(loc), chargeFor, TeleportCause.COMMAND);
     }
 
     //This function is used to throw a user back after a jail sentence

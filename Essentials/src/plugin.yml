@@ -7,6 +7,7 @@ website: http://tiny.cc/EssentialsCommands
 description: Provides an essential, core set of commands for Bukkit.
 softdepend: [Vault]
 authors: [Zenexer, ementalo, Aelux, Brettflan, KimKandor, snowleo, ceulemans, Xeology, KHobbits, md_5, Iaccidentally, drtshock, vemacs, SupaHam, md678685]
+api-version: "1.13"
 commands:
   afk:
     description: Marks you as away-from-keyboard.
@@ -18,7 +19,7 @@ commands:
     aliases: [eantioch,grenade,egrenade,tnt,etnt]
   back:
     description: Teleports you to your location prior to tp/spawn/warp.
-    usage: /<command>
+    usage: /<command> [player]
     aliases: [eback,return,ereturn]
   backup:
     description: Runs the backup if configured.
@@ -40,6 +41,10 @@ commands:
     description: Bans an IP address.
     usage: /<command> <address>
     aliases: [ebanip]
+  beezooka:
+    description: Throw an exploding bee at your opponent.
+    usage: /<command>
+    aliases: [ebeezooka,beecannon,ebeecannon]
   book:
     description: Allows reopening and editing of sealed books.
     usage: /<command> [title|author [name]]
@@ -58,7 +63,7 @@ commands:
     aliases: [bcw,ebcw,bcastw,ebcastw,ebroadcastworld,shoutworld,eshoutworld]
   bigtree:
     description: Spawn a big tree where you are looking.
-    usage: /<command> <tree|redwood|jungle>
+    usage: /<command> <tree|redwood|jungle|darkoak>
     aliases: [ebigtree,largetree,elargetree]
   burn:
     description: Set a player on fire.
@@ -95,6 +100,10 @@ commands:
     description: Removes a jail.
     usage: /<command> <jailname>
     aliases: [edeljail,remjail,eremjail,rmjail,ermjail]
+  delkit:
+    description: Deletes the specified kit.
+    usage: /<command> <kit>
+    aliases: [edelkit,remkit,eremkit,rmkit,ermkit,deletekit,edeletekit]
   delwarp:
     description: Deletes the specified warp.
     usage: /<command> <warp>
@@ -140,8 +149,8 @@ commands:
     usage: /<command> [player] [on|off]
     aliases: [efly]
   fireball:
-    description: Throw a fireball.
-    usage: /<command> [small|skull]
+    description: Throw a fireball or other assorted projectiles.
+    usage: /<command> [fireball|small|large|arrow|skull|egg|snowball|expbottle|dragon|splashpotion|lingeringpotion|trident] [speed]
     aliases: [efireball,fireentity,efireentity,fireskull,efireskull]
   firework:
     description: Allows you to modify a stack of fireworks.
@@ -150,7 +159,7 @@ commands:
   gamemode:
     description: Change player gamemode.
     usage: /<command> <survival|creative|adventure|spectator> [player]
-    aliases: [adventure,eadventure,adventuremode,eadventuremode,creative,eecreative,creativemode,ecreativemode,egamemode,gm,egm,gma,egma,gmc,egmc,gms,egms,gmt,egmt,survival,esurvival,survivalmode,esurvivalmode,gmsp,sp,egmsp,spec,spectator]
+    aliases: [adventure,eadventure,adventuremode,eadventuremode,creative,ecreative,eecreative,creativemode,ecreativemode,egamemode,gm,egm,gma,egma,gmc,egmc,gms,egms,gmt,egmt,survival,esurvival,survivalmode,esurvivalmode,gmsp,sp,egmsp,spec,spectator]
   gc:
     description: Reports memory, uptime and tick info.
     usage: /<command> [all]
@@ -207,6 +216,10 @@ commands:
     description: Searches for an item.
     usage: /<command> <item>
     aliases: [dura,edura,durability,edurability,eitemdb,itemno,eitemno]
+  itemname:
+    description: Names an item.
+    usage: /<command> [name]
+    aliases: [iname, einame, eitemname, itemrename, irename, eitemrename, eirename]
   jails:
     description: List all jails.
     usage: /<command>
@@ -269,7 +282,7 @@ commands:
     aliases: [emsgtoggle]
   mute:
     description: Mutes or unmutes a player.
-    usage: /<command> <player> [datediff]
+    usage: /<command> <player> [datediff] [reason]
     aliases: [emute,silence,esilence]
   near:
     description: Lists the players near by or around a player.
@@ -283,6 +296,10 @@ commands:
     description: May death rain upon them.
     usage: /<command> [player]
     aliases: [enuke]
+  tpoffline:
+    description: Teleport to a player's last known logout location
+    usage: /<command> <player>
+    aliases: [otp, offlinetp, tpoff, tpoffline]
   pay:
     description: Pays another player from your balance.
     usage: /<command> <player> <amount>
@@ -323,6 +340,10 @@ commands:
     description: Quickly reply to the last player to message you.
     usage: /<command> <message>
     aliases: [er,reply,ereply]
+  rtoggle:
+    description: Change whether the recipient of the reply is last recipient or last sender
+    usage: /<command> [player] [on|off]
+    aliases: [ertoggle, replytoggle, ereplytoggle]
   realname:
     description: Displays the username of a user based on nick.
     usage: /<command> <nickname>
@@ -443,6 +464,10 @@ commands:
     description: Teleport all online players to another player.
     usage: /<command> <player>
     aliases: [etpall]
+  tpauto:
+    description: Automatically accept teleportation requests.
+    usage: /<command> <player>
+    aliases: [etpauto]
   tpacancel:
     description: Cancel all outstanding teleport requests. Specify [player] to cancel requests with them.
     usage: /<command> [player]
@@ -522,6 +547,9 @@ permissions:
     description: Give players with op everything by default
     children:
       essentials.gamemode.*: true
+  essentials.sleepingignored:
+    default: false
+    description: If the player has this permission, they will not have to sleep for the night to be skipped
   # These permissions can't be assigned from player-commands for compatibility reasons
   essentials.teleport.cooldown.bypass.tpa:
     default: true
@@ -540,3 +568,75 @@ permissions:
     children:
       essentials.seen.ip: true
       essentials.seen.location: true
+  essentials.keepinv:
+    default: false
+    description: Controls whether players keep their inventory on death.
+  essentials.near.exclude:
+    default: false
+    description: If the player should be excluded from near lookups.
+  essentials.keepxp:
+    default: false
+    description: Allows the user to keep their exp on death, instead of dropping it.
+  essentials.invsee.preventmodify:
+    default: false
+    description: Prevents other players from modifying the players inventory.
+  essentials.afk.auto:
+    default: false
+    description: Players with this permission will be set to afk after a period of inaction as defined in the config file.
+  essentials.home.compass:
+    default: false
+    description: Point the player's compass at their first home. compass-towards-home-perm needs to be enabled in the configuration.
+  essentials.ban.exempt:
+    default: false
+    description: Prevent a specified group or player from being banned
+  essentials.kick.exempt:
+    default: false
+    description: Prevents the player from being kicked.
+  essentials.chat.ignoreexempt:
+    default: false
+    description: Someone with this permission will not be ignored, even if they are on another persons ignore list
+  essentials.kit.exemptdelay:
+    default: false
+    description: Exempts you from the kit delay feature, this affects signs as well as command.
+  essentials.mute.exempt:
+    default: false
+    description: Prevent a specified group or player from being muted
+  essentials.sethome.bed:
+    default: false
+    description: Allows the player to right click a bed during daytime to update their 'bed' home.
+  essentials.silentjoin:
+    default: false
+    description: Allow to join silently
+  essentials.silentjoin.vanish:
+    default: false
+    description: Allow to join silently, and get put in vanish mode
+  essentials.silentquit:
+    default: false
+    description: Suppress leave/quit messages for users with this permission.
+  essentials.sleepingignored:
+    default: false
+    description: User isn't required to be sleeping, for time to be reset.
+  essentials.sudo.exempt:
+    default: false
+    description: Prevents the holder from being sudo'ed by another user
+  essentials.tempban.exempt:
+    default: false
+    description: Prevents a specified group or player from being tempbanned
+  essentials.nick.allowunsafe:
+    default: false
+    description: If a player has this, they can set their username to any value. Use with caution, as this has the potential to break userdata files.
+  essentials.balancetop.exclude:
+    default: false
+    description: Players with this permission are excluded from the balancetop
+  essentials.exempt:
+    default: false
+    description: Parent permission to be exempt from many moderator actions
+    children:
+      essentials.invsee.preventmodify: true
+      essentials.ban.exempt: true
+      essentials.kick.exempt: true
+      essentials.mute.exempt: true
+      essentials.chat.ignoreexempt: true
+      essentials.sudo.exempt: true
+      essentials.tempban.exempt: true
+      essentials.exempt.protect: true

@@ -9,6 +9,8 @@ import org.bukkit.World;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.PriorityQueue;
+import java.util.Queue;
 
 import static com.earth2me.essentials.I18n.tl;
 
@@ -36,13 +38,13 @@ public class Commandnear extends EssentialsCommand {
             } catch (NumberFormatException e) {
                 try {
                     otherUser = getPlayer(server, user, args, 0);
-                } catch (Exception ex) {
+                } catch (Exception ignored) {
                 }
             }
             if (args.length > 1 && otherUser != null) {
                 try {
                     radius = Long.parseLong(args[1]);
-                } catch (NumberFormatException e) {
+                } catch (NumberFormatException ignored) {
                 }
             }
         }
@@ -70,7 +72,7 @@ public class Commandnear extends EssentialsCommand {
         if (args.length > 1) {
             try {
                 radius = Long.parseLong(args[1]);
-            } catch (NumberFormatException e) {
+            } catch (NumberFormatException ignored) {
             }
         }
         sender.sendMessage(tl("nearbyPlayers", getLocal(server, otherUser, radius)));
@@ -83,8 +85,10 @@ public class Commandnear extends EssentialsCommand {
         final long radiusSquared = radius * radius;
         boolean showHidden = user.canInteractVanished();
 
+        Queue<User> nearbyPlayers = new PriorityQueue<>((o1, o2) -> (int) (o1.getLocation().distanceSquared(loc) - o2.getLocation().distanceSquared(loc)));
+
         for (User player : ess.getOnlineUsers()) {
-            if (!player.equals(user) && (!player.isHidden(user.getBase()) || showHidden || user.getBase().canSee(player.getBase()))) {
+            if (!player.equals(user) && !player.isAuthorized("essentials.near.exclude") && (!player.isHidden(user.getBase()) || showHidden || user.getBase().canSee(player.getBase()))) {
                 final Location playerLoc = player.getLocation();
                 if (playerLoc.getWorld() != world) {
                     continue;
@@ -92,13 +96,19 @@ public class Commandnear extends EssentialsCommand {
 
                 final long delta = (long) playerLoc.distanceSquared(loc);
                 if (delta < radiusSquared) {
-                    if (output.length() > 0) {
-                        output.append(", ");
-                    }
-                    output.append(player.getDisplayName()).append("§f(§4").append((long) Math.sqrt(delta)).append("m§f)");
+                    nearbyPlayers.offer(player);
                 }
             }
         }
+
+        while (!nearbyPlayers.isEmpty()) {
+            if (output.length() > 0) {
+                output.append(", ");
+            }
+            User nearbyPlayer = nearbyPlayers.poll();
+            output.append(nearbyPlayer.getDisplayName()).append("§f(§4").append((long) nearbyPlayer.getLocation().distance(loc)).append("m§f)");
+        }
+
         return output.length() > 1 ? output.toString() : tl("none");
     }
 

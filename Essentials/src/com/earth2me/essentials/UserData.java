@@ -7,6 +7,7 @@ import net.ess3.api.IEssentials;
 import net.ess3.api.InvalidWorldException;
 import net.ess3.api.MaxMoneyException;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -16,6 +17,7 @@ import java.math.BigDecimal;
 import java.util.*;
 import java.util.Map.Entry;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import static com.earth2me.essentials.I18n.tl;
 
@@ -23,12 +25,11 @@ import static com.earth2me.essentials.I18n.tl;
 public abstract class UserData extends PlayerExtension implements IConf {
     protected final transient IEssentials ess;
     private final EssentialsUserConf config;
-    private final File folder;
 
     protected UserData(Player base, IEssentials ess) {
         super(base);
         this.ess = ess;
-        folder = new File(ess.getDataFolder(), "userdata");
+        File folder = new File(ess.getDataFolder(), "userdata");
         if (!folder.exists()) {
             folder.mkdirs();
         }
@@ -73,6 +74,7 @@ public abstract class UserData extends PlayerExtension implements IConf {
         godmode = _getGodModeEnabled();
         muted = _getMuted();
         muteTimeout = _getMuteTimeout();
+        muteReason = _getMuteReason();
         jailed = _getJailed();
         jailTimeout = _getJailTimeout();
         lastLogin = _getLastLogin();
@@ -92,6 +94,7 @@ public abstract class UserData extends PlayerExtension implements IConf {
         acceptingPay = _getAcceptingPay();
         confirmPay = _getConfirmPay();
         confirmClear = _getConfirmClear();
+        lastMessageReplyRecipient = _getLastMessageReplyRecipient();
     }
 
     private BigDecimal money;
@@ -146,15 +149,14 @@ public abstract class UserData extends PlayerExtension implements IConf {
         if (config.isConfigurationSection("homes")) {
             return config.getConfigurationSection("homes").getValues(false);
         }
-        return new HashMap<String, Object>();
+        return new HashMap<>();
     }
 
     private String getHomeName(String search) {
         if (NumberUtil.isInt(search)) {
             try {
                 search = getHomes().get(Integer.parseInt(search) - 1);
-            } catch (NumberFormatException e) {
-            } catch (IndexOutOfBoundsException e) {
+            } catch (NumberFormatException | IndexOutOfBoundsException ignored) {
             }
         }
         return search;
@@ -186,7 +188,7 @@ public abstract class UserData extends PlayerExtension implements IConf {
     }
 
     public List<String> getHomes() {
-        return new ArrayList<String>(homes.keySet());
+        return new ArrayList<>(homes.keySet());
     }
 
     public void setHome(String name, Location loc) {
@@ -231,28 +233,44 @@ public abstract class UserData extends PlayerExtension implements IConf {
         config.save();
     }
 
-    private List<Integer> unlimited;
+    private Set<Material> unlimited;
 
-    private List<Integer> _getUnlimited() {
-        return config.getIntegerList("unlimited");
+    private Set<Material> _getUnlimited() {
+        Set<Material> retlist = new HashSet<>();
+        List<String> configList = config.getStringList("unlimited");
+        for(String s : configList) {
+            Material mat = Material.matchMaterial(s);
+            if(mat != null) {
+                retlist.add(mat);
+            }
+        }
+
+        return retlist;
     }
 
-    public List<Integer> getUnlimited() {
+    public Set<Material> getUnlimited() {
         return unlimited;
     }
 
     public boolean hasUnlimited(ItemStack stack) {
-        return unlimited.contains(stack.getTypeId());
+        return unlimited.contains(stack.getType());
     }
 
     public void setUnlimited(ItemStack stack, boolean state) {
-        if (unlimited.contains(stack.getTypeId())) {
-            unlimited.remove(Integer.valueOf(stack.getTypeId()));
-        }
+        boolean wasUpdated;
         if (state) {
-            unlimited.add(stack.getTypeId());
+            wasUpdated = unlimited.add(stack.getType());
+        } else {
+            wasUpdated = unlimited.remove(stack.getType());
         }
-        config.setProperty("unlimited", unlimited);
+
+        if (wasUpdated) {
+            applyUnlimited();
+        }
+    }
+
+    private void applyUnlimited() {
+        config.setProperty("unlimited", unlimited.stream().map(Enum::name).collect(Collectors.toList()));
         config.save();
     }
 
@@ -262,7 +280,7 @@ public abstract class UserData extends PlayerExtension implements IConf {
         if (config.isConfigurationSection("powertools")) {
             return config.getConfigurationSection("powertools").getValues(false);
         }
-        return new HashMap<String, Object>();
+        return new HashMap<>();
     }
 
     public void clearAllPowertools() {
@@ -273,19 +291,19 @@ public abstract class UserData extends PlayerExtension implements IConf {
 
     @SuppressWarnings("unchecked")
     public List<String> getPowertool(ItemStack stack) {
-        return (List<String>) powertools.get("" + stack.getTypeId());
+        return (List<String>) powertools.get(stack.getType().name().toLowerCase(Locale.ENGLISH));
     }
 
     @SuppressWarnings("unchecked")
-    public List<String> getPowertool(int id) {
-        return (List<String>) powertools.get("" + id);
+    public List<String> getPowertool(Material material) {
+        return (List<String>) powertools.get(material.name().toLowerCase(Locale.ENGLISH));
     }
 
     public void setPowertool(ItemStack stack, List<String> commandList) {
         if (commandList == null || commandList.isEmpty()) {
-            powertools.remove("" + stack.getTypeId());
+            powertools.remove(stack.getType().name().toLowerCase(Locale.ENGLISH));
         } else {
-            powertools.put("" + stack.getTypeId(), commandList);
+            powertools.put(stack.getType().name().toLowerCase(Locale.ENGLISH), commandList);
         }
         config.setProperty("powertools", powertools);
         config.save();
@@ -436,6 +454,22 @@ public abstract class UserData extends PlayerExtension implements IConf {
         config.save();
     }
 
+    private boolean autoTeleportEnabled;
+
+    private boolean _getAutoTeleportEnabled() {
+        return config.getBoolean("teleportauto", false);
+    }
+
+    public boolean isAutoTeleportEnabled() {
+        return autoTeleportEnabled;
+    }
+
+    public void setAutoTeleportEnabled(boolean set) {
+        autoTeleportEnabled = set;
+        config.setProperty("teleportauto", set);
+        config.save();
+    }
+
     private List<String> ignoredPlayers;
 
     public List<String> _getIgnoredPlayers() {
@@ -444,7 +478,7 @@ public abstract class UserData extends PlayerExtension implements IConf {
 
     public void setIgnoredPlayers(List<String> players) {
         if (players == null || players.isEmpty()) {
-            ignoredPlayers = Collections.synchronizedList(new ArrayList<String>());
+            ignoredPlayers = Collections.synchronizedList(new ArrayList<>());
             config.removeProperty("ignore");
         } else {
             ignoredPlayers = players;
@@ -493,6 +527,7 @@ public abstract class UserData extends PlayerExtension implements IConf {
     }
 
     private boolean muted;
+    private String muteReason;
 
     public boolean _getMuted() {
         return config.getBoolean("muted", false);
@@ -510,6 +545,29 @@ public abstract class UserData extends PlayerExtension implements IConf {
         muted = set;
         config.setProperty("muted", set);
         config.save();
+    }
+
+    public String _getMuteReason() {
+        return config.getString("muteReason");
+    }
+
+    public String getMuteReason() {
+        return muteReason;
+    }
+
+    public void setMuteReason(String reason) {
+        if (reason == null) {
+            config.removeProperty("muteReason");
+            muteReason = null;
+        } else {
+            muteReason = reason;
+            config.setProperty("muteReason", reason);
+        }
+        config.save();
+    }
+
+    public boolean hasMuteReason(){
+        return muteReason != null;
     }
 
     private long muteTimeout;
@@ -735,7 +793,7 @@ public abstract class UserData extends PlayerExtension implements IConf {
 
         if (config.isConfigurationSection("timestamps.kits")) {
             final ConfigurationSection section = config.getConfigurationSection("timestamps.kits");
-            final Map<String, Long> timestamps = new HashMap<String, Long>();
+            final Map<String, Long> timestamps = new HashMap<>();
             for (String command : section.getKeys(false)) {
                 if (section.isLong(command)) {
                     timestamps.put(command.toLowerCase(Locale.ENGLISH), section.getLong(command));
@@ -745,19 +803,20 @@ public abstract class UserData extends PlayerExtension implements IConf {
             }
             return timestamps;
         }
-        return new HashMap<String, Long>();
+        return new HashMap<>();
     }
 
     public long getKitTimestamp(String name) {
-        name = name.replace('.', '_').replace('/', '_');
+        name = name.replace('.', '_').replace('/', '_').toLowerCase(Locale.ENGLISH);
         if (kitTimestamps != null && kitTimestamps.containsKey(name)) {
             return kitTimestamps.get(name);
         }
-        return 0l;
+        return 0L;
     }
 
-    public void setKitTimestamp(final String name, final long time) {
-        kitTimestamps.put(name.toLowerCase(Locale.ENGLISH), time);
+    public void setKitTimestamp(String name, final long time) {
+        name = name.replace('.', '_').replace('/', '_').toLowerCase(Locale.ENGLISH);
+        kitTimestamps.put(name, time);
         config.setProperty("timestamps.kits", kitTimestamps);
         config.save();
     }
@@ -783,28 +842,28 @@ public abstract class UserData extends PlayerExtension implements IConf {
         if (config.isConfigurationSection("info")) {
             return config.getConfigurationSection("info").getKeys(true);
         }
-        return new HashSet<String>();
+        return new HashSet<>();
     }
 
     public Map<String, Object> getConfigMap() {
         if (config.isConfigurationSection("info")) {
             return config.getConfigurationSection("info").getValues(true);
         }
-        return new HashMap<String, Object>();
+        return new HashMap<>();
     }
 
     public Map<String, Object> getConfigMap(String node) {
         if (config.isConfigurationSection("info." + node)) {
             return config.getConfigurationSection("info." + node).getValues(true);
         }
-        return new HashMap<String, Object>();
+        return new HashMap<>();
     }
 
     // Pattern, Date. Pattern for less pattern creations
     private Map<Pattern, Long> commandCooldowns;
 
     private Map<Pattern, Long> _getCommandCooldowns() {
-        if (!config.isConfigurationSection("timestamps.command-cooldowns")) {
+        if (!config.contains("timestamps.command-cooldowns")) {
             return null;
         }
 
@@ -928,6 +987,22 @@ public abstract class UserData extends PlayerExtension implements IConf {
     public void setPromptingClearConfirm(boolean prompt) {
         this.confirmClear = prompt;
         config.setProperty("confirm-clear", prompt);
+        save();
+    }
+
+    private boolean lastMessageReplyRecipient;
+
+    private boolean _getLastMessageReplyRecipient() {
+        return config.getBoolean("last-message-reply-recipient", ess.getSettings().isLastMessageReplyRecipient());
+    }
+
+    public boolean isLastMessageReplyRecipient() {
+        return this.lastMessageReplyRecipient;
+    }
+
+    public void setLastMessageReplyRecipient(boolean enabled) {
+        this.lastMessageReplyRecipient = enabled;
+        config.setProperty("last-message-reply-recipient", enabled);
         save();
     }
 

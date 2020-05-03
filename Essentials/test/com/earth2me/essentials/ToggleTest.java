@@ -39,8 +39,7 @@ public class ToggleTest extends TestCase {
             cmd = (IEssentialsCommand) Essentials.class.getClassLoader().loadClass("com.earth2me.essentials.commands.Command" + command).newInstance();
             cmd.setEssentials(ess);
             cmd.run(server, user, command, null, args);
-        } catch (NoChargeException ex) {
-        }
+        } catch (NoChargeException ignored) {}
 
     }
 
@@ -53,8 +52,7 @@ public class ToggleTest extends TestCase {
             cmd = (IEssentialsCommand) Essentials.class.getClassLoader().loadClass("com.earth2me.essentials.commands.Command" + command).newInstance();
             cmd.setEssentials(ess);
             cmd.run(server, new CommandSource(sender), command, null, args);
-        } catch (NoChargeException ex) {
-        }
+        } catch (NoChargeException ignored) {}
 
     }
 

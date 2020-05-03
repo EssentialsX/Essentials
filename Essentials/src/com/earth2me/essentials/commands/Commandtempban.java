@@ -7,7 +7,6 @@ import com.earth2me.essentials.utils.DateUtil;
 import org.bukkit.BanList;
 import org.bukkit.Server;
 
-import java.util.Collections;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;

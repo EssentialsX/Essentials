@@ -1,13 +1,12 @@
 package com.earth2me.essentials.messaging;
 
-import static com.earth2me.essentials.I18n.tl;
-
-import com.earth2me.essentials.Console;
 import com.earth2me.essentials.IEssentials;
 import com.earth2me.essentials.IUser;
 import com.earth2me.essentials.User;
 
 import java.lang.ref.WeakReference;
+
+import static com.earth2me.essentials.I18n.tl;
 
 /**
  * Represents a simple reusable implementation of {@link IMessageRecipient}. This class provides functionality for the following methods:
@@ -82,7 +81,7 @@ public class SimpleMessageRecipient implements IMessageRecipient {
                     sendMessage(tl("userAFK", recipient.getDisplayName()));
                 }
             default:
-                sendMessage(tl("msgFormat", tl("me"), recipient.getDisplayName(), message));
+                sendMessage(tl("msgFormat", tl("meSender"), recipient.getDisplayName(), message));
 
                 // Better Social Spy
                 User senderUser = getUser(this);
@@ -120,20 +119,22 @@ public class SimpleMessageRecipient implements IMessageRecipient {
 
         User user = getUser(this);
         boolean afk = false;
+        boolean isLastMessageReplyRecipient = ess.getSettings().isLastMessageReplyRecipient();
         if (user != null) {
-              if (user.isIgnoreMsg() && sender instanceof IUser && !((IUser) sender).isAuthorized("essentials.msgtoggle.bypass")) { // Don't ignore console and senders with permission
-                  return MessageResponse.MESSAGES_IGNORED;
+            if (user.isIgnoreMsg() && sender instanceof IUser && !((IUser) sender).isAuthorized("essentials.msgtoggle.bypass")) { // Don't ignore console and senders with permission
+                return MessageResponse.MESSAGES_IGNORED;
             }
             afk = user.isAfk();
+            isLastMessageReplyRecipient = user.isLastMessageReplyRecipient();
             // Check whether this recipient ignores the sender, only if the sender is not the console.
             if (sender instanceof IUser && user.isIgnoredPlayer((IUser) sender)) {
                 return MessageResponse.SENDER_IGNORED;
             }
         }
         // Display the formatted message to this recipient.
-        sendMessage(tl("msgFormat", sender.getDisplayName(), tl("me"), message));
+        sendMessage(tl("msgFormat", sender.getDisplayName(), tl("meRecipient"), message));
 
-        if (ess.getSettings().isLastMessageReplyRecipient()) {
+        if (isLastMessageReplyRecipient) {
             // If this recipient doesn't have a reply recipient, initiate by setting the first
             // message sender to this recipient's replyRecipient.
             long timeout = ess.getSettings().getLastMessageReplyRecipientTimeout() * 1000;

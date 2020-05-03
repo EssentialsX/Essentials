@@ -1,5 +1,6 @@
 package com.earth2me.essentials.signs;
 
+import com.earth2me.essentials.utils.MaterialUtil;
 import net.ess3.api.IEssentials;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -10,7 +11,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 
-import java.util.HashSet;
 import java.util.Set;
 import java.util.logging.Level;
 
@@ -39,7 +39,7 @@ public class SignPlayerListener implements Listener {
         if (event.isCancelled() && event.getAction() == Action.RIGHT_CLICK_AIR) {
             Block targetBlock = null;
             try {
-                targetBlock = event.getPlayer().getTargetBlock((Set<Material>) null, 5);
+                targetBlock = event.getPlayer().getTargetBlock(null, 5);
             } catch (IllegalStateException ex) {
                 if (ess.getSettings().isDebug()) {
                     ess.getLogger().log(Level.WARNING, ex.getMessage(), ex);
@@ -54,7 +54,7 @@ public class SignPlayerListener implements Listener {
         }
 
         final Material mat = block.getType();
-        if (mat == Material.SIGN_POST || mat == Material.WALL_SIGN) {
+        if (MaterialUtil.isSign(mat)) {
             final String csign = ((Sign) block.getState()).getLine(0);
             for (EssentialsSign sign : ess.getSettings().enabledSigns()) {
                 if (csign.equalsIgnoreCase(sign.getSuccessName(ess))) {

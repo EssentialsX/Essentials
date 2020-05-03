@@ -64,7 +64,6 @@ public class Kits implements IConf {
             // you just found if you don't toLowercase it.
             if (kits.isConfigurationSection(name.toLowerCase())) {
                 return kits.getConfigurationSection(name.toLowerCase()).getValues(true);
-            } else {
             }
         }
 
@@ -75,6 +74,12 @@ public class Kits implements IConf {
         // Will overwrite but w/e
         config.set("kits." + name + ".delay", delay);
         config.set("kits." + name + ".items", lines);
+        kits = _getKits();
+        config.save();
+    }
+
+    public void removeKit(String name) {
+        config.set("kits." + name, null);
         kits = _getKits();
         config.save();
     }

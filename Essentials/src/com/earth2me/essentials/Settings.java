@@ -1,43 +1,53 @@
 package com.earth2me.essentials;
 
+import com.earth2me.essentials.api.IItemDb;
 import com.earth2me.essentials.commands.IEssentialsCommand;
 import com.earth2me.essentials.signs.EssentialsSign;
 import com.earth2me.essentials.signs.Signs;
 import com.earth2me.essentials.textreader.IText;
 import com.earth2me.essentials.textreader.SimpleTextInput;
+import com.earth2me.essentials.utils.EnumUtil;
 import com.earth2me.essentials.utils.FormatUtil;
+import com.earth2me.essentials.utils.LocationUtil;
 import com.earth2me.essentials.utils.NumberUtil;
-
 import net.ess3.api.IEssentials;
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.MemoryConfiguration;
 import org.bukkit.event.EventPriority;
 import org.bukkit.inventory.ItemStack;
 
 import java.io.File;
-import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
+import java.util.function.Predicate;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import static com.earth2me.essentials.I18n.tl;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
+
+import static com.earth2me.essentials.I18n.tl;
 
 
 public class Settings implements net.ess3.api.ISettings {
     private final transient EssentialsConf config;
     private static final Logger logger = Logger.getLogger("Essentials");
     private final transient IEssentials ess;
-    private boolean metricsEnabled = true;
 
     public Settings(IEssentials ess) {
         this.ess = ess;
@@ -148,6 +158,11 @@ public class Settings implements net.ess3.api.ISettings {
     }
 
     @Override
+    public boolean isTeleportPassengerDismount() {
+        return config.getBoolean("teleport-passenger-dismount", true);
+    }
+
+    @Override
     public double getTeleportDelay() {
         return config.getDouble("teleport-delay", 0);
     }
@@ -172,7 +187,7 @@ public class Settings implements net.ess3.api.ISettings {
         return isCommandDisabled(cmd.getName());
     }
 
-    private Set<String> disabledCommands = new HashSet<String>();
+    private Set<String> disabledCommands = new HashSet<>();
 
     @Override
     public boolean isCommandDisabled(String label) {
@@ -180,7 +195,7 @@ public class Settings implements net.ess3.api.ISettings {
     }
 
     private Set<String> getDisabledCommands() {
-        Set<String> disCommands = new HashSet<String>();
+        Set<String> disCommands = new HashSet<>();
         for (String c : config.getStringList("disabled-commands")) {
             disCommands.add(c.toLowerCase(Locale.ENGLISH));
         }
@@ -260,10 +275,10 @@ public class Settings implements net.ess3.api.ISettings {
         return BigDecimal.ZERO;
     }
 
-    private Set<String> socialSpyCommands = new HashSet<String>();
+    private Set<String> socialSpyCommands = new HashSet<>();
 
     private Set<String> _getSocialSpyCommands() {
-        Set<String> socialspyCommands = new HashSet<String>();
+        Set<String> socialspyCommands = new HashSet<>();
 
         if (config.isList("socialspy-commands")) {
             for (String c : config.getStringList("socialspy-commands")) {
@@ -286,10 +301,10 @@ public class Settings implements net.ess3.api.ISettings {
         return config.getBoolean("socialspy-listen-muted-players", true);
     }
 
-    private Set<String> muteCommands = new HashSet<String>();
+    private Set<String> muteCommands = new HashSet<>();
 
     private Set<String> _getMuteCommands() {
-        Set<String> muteCommands = new HashSet<String>();
+        Set<String> muteCommands = new HashSet<>();
         if (config.isList("mute-commands")) {
             for (String s : config.getStringList("mute-commands")) {
                 muteCommands.add(s.toLowerCase(Locale.ENGLISH));
@@ -369,7 +384,7 @@ public class Settings implements net.ess3.api.ISettings {
 
         try {
             return ChatColor.valueOf(colorName.toUpperCase(Locale.ENGLISH));
-        } catch (IllegalArgumentException ex) {
+        } catch (IllegalArgumentException ignored) {
         }
 
         return ChatColor.getByChar(colorName);
@@ -410,7 +425,7 @@ public class Settings implements net.ess3.api.ISettings {
         return config.getString("backup.command", null);
     }
 
-    private final Map<String, String> chatFormats = Collections.synchronizedMap(new HashMap<String, String>());
+    private final Map<String, String> chatFormats = Collections.synchronizedMap(new HashMap<>());
 
     @Override
     public String getChatFormat(String group) {
@@ -429,6 +444,7 @@ public class Settings implements net.ess3.api.ISettings {
             mFormat = mFormat.replace("{TEAMNAME}", "{5}");
             mFormat = mFormat.replace("{PREFIX}", "{6}");
             mFormat = mFormat.replace("{SUFFIX}", "{7}");
+            mFormat = mFormat.replace("{USERNAME}", "{8}");
             mFormat = "§r".concat(mFormat);
             chatFormats.put(group, mFormat);
         }
@@ -471,7 +487,7 @@ public class Settings implements net.ess3.api.ISettings {
                 return values;
             }
         }
-        Map<String, Object> defaultMap = new HashMap<String, Object>();
+        Map<String, Object> defaultMap = new HashMap<>();
         if (config.getBoolean("sort-list-by-groups", false)) {
             defaultMap.put("ListByGroup", "ListByGroup");
         } else {
@@ -483,7 +499,7 @@ public class Settings implements net.ess3.api.ISettings {
     @Override
     public void reloadConfig() {
         config.load();
-        noGodWorlds = new HashSet<String>(config.getStringList("no-god-in-worlds"));
+        noGodWorlds = new HashSet<>(config.getStringList("no-god-in-worlds"));
         enabledSigns = _getEnabledSigns();
         teleportSafety = _isTeleportSafetyEnabled();
         forceDisableTeleportSafety = _isForceDisableTeleportSafety();
@@ -494,8 +510,10 @@ public class Settings implements net.ess3.api.ISettings {
         cancelAfkOnInteract = _cancelAfkOnInteract();
         cancelAfkOnMove = _cancelAfkOnMove();
         getFreezeAfkPlayers = _getFreezeAfkPlayers();
+        sleepIgnoresAfkPlayers = _sleepIgnoresAfkPlayers();
         afkListName = _getAfkListName();
         isAfkListName = !afkListName.equalsIgnoreCase("none");
+        broadcastAfkMessage = _broadcastAfkMessage();
         itemSpawnBl = _getItemSpawnBlacklist();
         loginAttackDelay = _getLoginAttackDelay();
         signUsePerSecond = _getSignUsePerSecond();
@@ -536,22 +554,35 @@ public class Settings implements net.ess3.api.ISettings {
         currencyFormat = _getCurrencyFormat();
         unprotectedSigns = _getUnprotectedSign();
         defaultEnabledConfirmCommands = _getDefaultEnabledConfirmCommands();
+        teleportBackWhenFreedFromJail = _isTeleportBackWhenFreedFromJail();
         isCompassTowardsHomePerm = _isCompassTowardsHomePerm();
         isAllowWorldInBroadcastworld = _isAllowWorldInBroadcastworld();
-        allowSellNamedItems = _allowSellNamedItems();
+        itemDbType = _getItemDbType();
+        forceEnableRecipe = _isForceEnableRecipe();
+        allowOldIdSigns = _allowOldIdSigns();
+        isWaterSafe = _isWaterSafe();
+        isSafeUsermap = _isSafeUsermap();
+        logCommandBlockCommands = _logCommandBlockCommands();
+        nickBlacklist = _getNickBlacklist();
+        maxProjectileSpeed = _getMaxProjectileSpeed();
     }
 
-    private List<Integer> itemSpawnBl = new ArrayList<Integer>();
+    void _lateLoadItemSpawnBlacklist() {
+        itemSpawnBl = _getItemSpawnBlacklist();
+    }
+
+    private List<Material> itemSpawnBl = new ArrayList<>();
 
     @Override
-    public List<Integer> itemSpawnBlacklist() {
+    public List<Material> itemSpawnBlacklist() {
         return itemSpawnBl;
     }
 
-    private List<Integer> _getItemSpawnBlacklist() {
-        final List<Integer> epItemSpwn = new ArrayList<Integer>();
-        if (ess.getItemDb() == null) {
-            logger.log(Level.FINE, "Aborting ItemSpawnBL read, itemDB not yet loaded.");
+    private List<Material> _getItemSpawnBlacklist() {
+        final List<Material> epItemSpwn = new ArrayList<>();
+        final IItemDb itemDb = ess.getItemDb();
+        if (itemDb == null || !itemDb.isReady()) {
+            logger.log(Level.FINE, "Skipping item spawn blacklist read; item DB not yet loaded.");
             return epItemSpwn;
         }
         for (String itemName : config.getString("item-spawn-blacklist", "").split(",")) {
@@ -560,16 +591,16 @@ public class Settings implements net.ess3.api.ISettings {
                 continue;
             }
             try {
-                final ItemStack iStack = ess.getItemDb().get(itemName);
-                epItemSpwn.add(iStack.getTypeId());
+                final ItemStack iStack = itemDb.get(itemName);
+                epItemSpwn.add(iStack.getType());
             } catch (Exception ex) {
-                logger.log(Level.SEVERE, tl("unknownItemInList", itemName, "item-spawn-blacklist"));
+                logger.log(Level.SEVERE, tl("unknownItemInList", itemName, "item-spawn-blacklist"), ex);
             }
         }
         return epItemSpwn;
     }
 
-    private List<EssentialsSign> enabledSigns = new ArrayList<EssentialsSign>();
+    private List<EssentialsSign> enabledSigns = new ArrayList<>();
     private boolean signsEnabled = false;
 
     @Override
@@ -580,7 +611,7 @@ public class Settings implements net.ess3.api.ISettings {
     private List<EssentialsSign> _getEnabledSigns() {
         this.signsEnabled = false; // Ensure boolean resets on reload.
 
-        List<EssentialsSign> newSigns = new ArrayList<EssentialsSign>();
+        List<EssentialsSign> newSigns = new ArrayList<>();
 
         for (String signName : config.getStringList("enabledSigns")) {
             signName = signName.trim().toUpperCase(Locale.ENGLISH);
@@ -647,10 +678,22 @@ public class Settings implements net.ess3.api.ISettings {
         return config.getString("currency-symbol", "$").concat("$").substring(0, 1).replaceAll("[0-9]", "$");
     }
 
+    @Override
+    public boolean isCurrencySymbolSuffixed() {
+        return config.getBoolean("currency-symbol-suffix", false);
+    }
+
     // #easteregg
     @Override
+    @Deprecated
     public boolean isTradeInStacks(int id) {
         return config.getBoolean("trade-in-stacks-" + id, false);
+    }
+
+    // #easteregg
+    @Override
+    public boolean isTradeInStacks(Material type) {
+        return config.getBoolean("trade-in-stacks." + type.toString().toLowerCase().replace("_", ""), false);
     }
 
     // #easteregg
@@ -671,19 +714,27 @@ public class Settings implements net.ess3.api.ISettings {
     }
 
     @Override
-    public List<Integer> getProtectList(final String configName) {
-        final List<Integer> list = new ArrayList<Integer>();
+    public List<Material> getProtectList(final String configName) {
+        final List<Material> list = new ArrayList<>();
         for (String itemName : config.getString(configName, "").split(",")) {
             itemName = itemName.trim();
             if (itemName.isEmpty()) {
                 continue;
             }
-            ItemStack itemStack;
-            try {
-                itemStack = ess.getItemDb().get(itemName);
-                list.add(itemStack.getTypeId());
-            } catch (Exception ex) {
+
+            Material mat = EnumUtil.getMaterial(itemName.toUpperCase());
+            
+            if (mat == null) {
+                try {
+                    ItemStack itemStack = ess.getItemDb().get(itemName);
+                    mat = itemStack.getType();
+                } catch (Exception ignored) {}
+            }
+
+            if (mat == null) {
                 logger.log(Level.SEVERE, tl("unknownItemInList", itemName, configName));
+            } else {
+                list.add(mat);
             }
         }
         return list;
@@ -744,6 +795,11 @@ public class Settings implements net.ess3.api.ISettings {
     @Override
     public boolean isEcoLogUpdateEnabled() {
         return economyLogUpdate;
+    }
+
+    @Override
+    public boolean realNamesOnList() {
+        return config.getBoolean("real-names-on-list", false);
     }
 
     public boolean _isEcoLogUpdateEnabled() {
@@ -871,6 +927,17 @@ public class Settings implements net.ess3.api.ISettings {
         return config.getBoolean("cancel-afk-on-interact", true);
     }
 
+    private boolean sleepIgnoresAfkPlayers;
+
+    @Override
+    public boolean sleepIgnoresAfkPlayers() {
+        return sleepIgnoresAfkPlayers;
+    }
+
+    private boolean _sleepIgnoresAfkPlayers() {
+        return config.getBoolean("sleep-ignores-afk-players", true);
+    }
+
     private String afkListName;
     private boolean isAfkListName;
 
@@ -888,12 +955,23 @@ public class Settings implements net.ess3.api.ISettings {
         return afkListName;
     }
 
+    private boolean broadcastAfkMessage;
+
+    @Override
+    public boolean broadcastAfkMessage() {
+        return broadcastAfkMessage;
+    }
+
+    private boolean _broadcastAfkMessage() {
+        return config.getBoolean("broadcast-afk-message", true);
+    }
+
     @Override
     public boolean areDeathMessagesEnabled() {
         return config.getBoolean("death-messages", true);
     }
 
-    private Set<String> noGodWorlds = new HashSet<String>();
+    private Set<String> noGodWorlds = new HashSet<>();
 
     @Override
     public Set<String> getNoGodWorlds() {
@@ -1059,8 +1137,7 @@ public class Settings implements net.ess3.api.ISettings {
 
     private long _getEconomyLagWarning() {
         // Default to 25ms
-        final long value = (long) (config.getDouble("economy-lag-warning", 25.0) * 1000000);
-        return value;
+        return (long) (config.getDouble("economy-lag-warning", 25.0) * 1000000);
     }
 
     @Override
@@ -1073,13 +1150,17 @@ public class Settings implements net.ess3.api.ISettings {
 
     private long _getPermissionsLagWarning() {
         // Default to 25ms
-        final long value = (long) (config.getDouble("permissions-lag-warning", 25.0) * 1000000);
-        return value;
+        return (long) (config.getDouble("permissions-lag-warning", 25.0) * 1000000);
     }
 
     @Override
     public long getPermissionsLagWarning() {
         return permissionsLagWarning;
+    }
+
+    @Override
+    public long getMaxMute() {
+        return config.getLong("max-mute-time", -1);
     }
 
     @Override
@@ -1095,6 +1176,11 @@ public class Settings implements net.ess3.api.ISettings {
     @Override
     public boolean ignoreColorsInMaxLength() {
         return config.getBoolean("ignore-colors-in-max-nick-length", false);
+    }
+
+    @Override
+    public boolean hideDisplayNameInVanish() {
+        return config.getBoolean("hide-displayname-in-vanish", false);
     }
 
     private boolean allowSilentJoin;
@@ -1262,7 +1348,7 @@ public class Settings implements net.ess3.api.ISettings {
              * >> Process cooldown value
              * ================================ */
             Object value = section.get(cmdEntry);
-            if (!(value instanceof Number) && value instanceof String) {
+            if (value instanceof String) {
                 try {
                     value = Double.parseDouble(value.toString());
                 } catch (NumberFormatException ignored) {
@@ -1345,24 +1431,8 @@ public class Settings implements net.ess3.api.ISettings {
         DecimalFormat currencyFormat = new DecimalFormat(currencyFormatString, decimalFormatSymbols);
         currencyFormat.setRoundingMode(RoundingMode.FLOOR);
 
-        // Updates NumberUtil#PRETTY_FORMAT field so that all of Essentials
-        // can follow a single format.
-        try {
-            Field field = NumberUtil.class.getDeclaredField("PRETTY_FORMAT");
-            field.setAccessible(true);
-            Field modifiersField = Field.class.getDeclaredField("modifiers");
-            modifiersField.setAccessible(true);
-            modifiersField.setInt(field, field.getModifiers() & ~Modifier.FINAL);
-            field.set(null, currencyFormat);
-            modifiersField.setAccessible(false);
-            field.setAccessible(false);
-        } catch (NoSuchFieldException | IllegalAccessException e) {
-            ess.getLogger().severe("Failed to apply custom currency format: " + e.getMessage());
-            if (isDebug()) {
-                e.printStackTrace();
-            }
-        }
-
+        // Updates NumberUtil#PRETTY_FORMAT field so that all of Essentials can follow a single format.
+        NumberUtil.internalSetPrettyFormat(currencyFormat);
         return currencyFormat;
     }
 
@@ -1390,7 +1460,6 @@ public class Settings implements net.ess3.api.ISettings {
                 newSigns.add(Signs.valueOf(signName).getSign());
             } catch (Exception ex) {
                 logger.log(Level.SEVERE, tl("unknownItemInList", signName, "unprotected-sign-names"));
-                continue;
             }
         }
         return newSigns;
@@ -1431,6 +1500,16 @@ public class Settings implements net.ess3.api.ISettings {
         return config.getBoolean("allow-direct-hat", true);
     }
 
+    @Override
+    public boolean isWorldChangeFlyResetEnabled() {
+        return config.getBoolean("world-change-fly-reset", true);
+    }
+
+    @Override
+    public boolean isWorldChangeSpeedResetEnabled() {
+        return config.getBoolean("world-change-speed-reset", true);
+    }
+
     private List<String> defaultEnabledConfirmCommands;
 
     private List<String> _getDefaultEnabledConfirmCommands() {
@@ -1449,6 +1528,17 @@ public class Settings implements net.ess3.api.ISettings {
     @Override
     public boolean isConfirmCommandEnabledByDefault(String commandName) {
         return getDefaultEnabledConfirmCommands().contains(commandName.toLowerCase());
+    }
+
+    private boolean teleportBackWhenFreedFromJail;
+
+    private boolean _isTeleportBackWhenFreedFromJail() {
+        return config.getBoolean("teleport-back-when-freed-from-jail", true);
+    }
+
+    @Override
+    public boolean isTeleportBackWhenFreedFromJail() {
+        return teleportBackWhenFreedFromJail;
     }
 
     private boolean isCompassTowardsHomePerm;
@@ -1472,15 +1562,121 @@ public class Settings implements net.ess3.api.ISettings {
     public boolean isAllowWorldInBroadcastworld() {
         return isAllowWorldInBroadcastworld;
     }
-    
-    private boolean allowSellNamedItems;
-    
-    private boolean _allowSellNamedItems() {
-        return config.getBoolean("allow-sell-named-items");
+
+    private String itemDbType; // #EasterEgg - admins can manually switch items provider if they want
+
+    private String _getItemDbType() {
+        return config.getString("item-db-type", "auto");
+    }
+
+    @Override
+    public String getItemDbType() {
+        return itemDbType;
+    }
+
+    private boolean forceEnableRecipe; // https://github.com/EssentialsX/Essentials/issues/1397
+
+    private boolean _isForceEnableRecipe() {
+        return config.getBoolean("force-enable-recipe", false);
+    }
+
+    @Override
+    public boolean isForceEnableRecipe() {
+        return forceEnableRecipe;
+    }
+
+    private boolean allowOldIdSigns;
+
+    private boolean _allowOldIdSigns() {
+        return config.getBoolean("allow-old-id-signs", false);
+    }
+
+    @Override
+    public boolean allowOldIdSigns() {
+        return allowOldIdSigns;
+    }
+
+    private boolean isWaterSafe;
+
+    private boolean _isWaterSafe() {
+        boolean _isWaterSafe = config.getBoolean("is-water-safe", false);
+        LocationUtil.setIsWaterSafe(_isWaterSafe);
+
+        return _isWaterSafe;
+    }
+
+    @Override
+    public boolean isWaterSafe() {
+        return isWaterSafe;
     }
     
+    private boolean isSafeUsermap;
+
+    private boolean _isSafeUsermap() {
+        return config.getBoolean("safe-usermap-names", true);
+    }
+
     @Override
-    public boolean allowSellNamedItems() {
-        return allowSellNamedItems;
+    public boolean isSafeUsermap() {
+        return isSafeUsermap;
+    }
+
+    private boolean logCommandBlockCommands;
+
+    private boolean _logCommandBlockCommands() {
+        return config.getBoolean("log-command-block-commands", true);
+    }
+
+    @Override
+    public boolean logCommandBlockCommands() {
+        return logCommandBlockCommands;
+    }
+
+    private Set<Predicate<String>> nickBlacklist;
+
+    private Set<Predicate<String>> _getNickBlacklist() {
+        Set<Predicate<String>> blacklist = new HashSet<>();
+
+        config.getStringList("nick-blacklist").forEach(entry -> {
+            try {
+                blacklist.add(Pattern.compile(entry).asPredicate());
+            } catch (PatternSyntaxException e) {
+                logger.warning("Invalid nickname blacklist regex: " + entry);
+            }
+        });
+
+        return blacklist;
+    }
+
+    @Override
+    public Set<Predicate<String>> getNickBlacklist() {
+        return nickBlacklist;
+    }
+
+    private double maxProjectileSpeed;
+
+    private double _getMaxProjectileSpeed() {
+        return config.getDouble("max-projectile-speed", 8);
+    }
+
+    @Override
+    public double getMaxProjectileSpeed() {
+        return maxProjectileSpeed;
+    }
+
+    private boolean removeEffectsOnHeal;
+
+    private boolean _isRemovingEffectsOnHeal() {
+        return config.getBoolean("remove-effects-on-heal", true);
+    }
+
+    @Override
+    public boolean isRemovingEffectsOnHeal() {
+        return removeEffectsOnHeal;
+    }
+
+    @Override
+    public boolean isSpawnIfNoHome() {
+        return config.getBoolean("spawn-if-no-home", true);
     }
 }

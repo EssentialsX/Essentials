@@ -3,13 +3,13 @@ package com.earth2me.essentials;
 import com.earth2me.essentials.textreader.BookInput;
 import com.earth2me.essentials.textreader.BookPager;
 import com.earth2me.essentials.textreader.IText;
+import com.earth2me.essentials.utils.EnumUtil;
 import com.earth2me.essentials.utils.FormatUtil;
+import com.earth2me.essentials.utils.MaterialUtil;
 import com.earth2me.essentials.utils.NumberUtil;
 import com.google.common.base.Joiner;
 import net.ess3.api.IEssentials;
 import net.ess3.nms.refl.ReflUtil;
-
-import org.apache.commons.lang.ArrayUtils;
 import org.bukkit.Color;
 import org.bukkit.DyeColor;
 import org.bukkit.FireworkEffect;
@@ -33,8 +33,8 @@ import static com.earth2me.essentials.I18n.tl;
 
 
 public class MetaItemStack {
-    private static final Map<String, DyeColor> colorMap = new HashMap<String, DyeColor>();
-    private static final Map<String, FireworkEffect.Type> fireworkShape = new HashMap<String, FireworkEffect.Type>();
+    private static final Map<String, DyeColor> colorMap = new HashMap<>();
+    private static final Map<String, FireworkEffect.Type> fireworkShape = new HashMap<>();
 
     static {
         for (DyeColor color : DyeColor.values()) {
@@ -97,24 +97,15 @@ public class MetaItemStack {
         completePotion = true;
     }
 
-    private boolean isPotion(Material type) {
-        return type.name().endsWith("POTION");
-    }
-
     public boolean canSpawn(final IEssentials ess) {
         try {
             ess.getServer().getUnsafe().modifyItemStack(stack.clone(), "{}");
             return true;
-        } catch (NullPointerException npe) {
-            if (ess.getSettings().isDebug()) {
-                ess.getLogger().log(Level.INFO, "Itemstack is invalid", npe);
-            }
-            return false;
         } catch (NoSuchMethodError nsme) {
             return true;
-        } catch (Throwable throwable) {
+        } catch (Throwable npe) {
             if (ess.getSettings().isDebug()) {
-                ess.getLogger().log(Level.INFO, "Itemstack is invalid", throwable);
+                ess.getLogger().log(Level.INFO, "Itemstack is invalid", npe);
             }
             return false;
         }
@@ -158,16 +149,7 @@ public class MetaItemStack {
             return;
         }
 
-        Material banner = null;
-        Material shield = null;
-
-        try {
-            // 1.8
-            banner = Material.valueOf("BANNER");
-
-            // 1.9
-            shield = Material.valueOf("SHIELD");
-        } catch(IllegalArgumentException ignored){}
+        Material WRITTEN_BOOK = EnumUtil.getMaterial("WRITTEN_BOOK");
 
         if (split.length > 1 && split[0].equalsIgnoreCase("name") && hasMetaPermission(sender, "name", false, true, ess)) {
             final String displayName = FormatUtil.replaceFormat(split[1].replace('_', ' '));
@@ -175,26 +157,24 @@ public class MetaItemStack {
             meta.setDisplayName(displayName);
             stack.setItemMeta(meta);
         } else if (split.length > 1 && (split[0].equalsIgnoreCase("lore") || split[0].equalsIgnoreCase("desc")) && hasMetaPermission(sender, "lore", false, true, ess)) {
-            final List<String> lore = new ArrayList<String>();
-            for (String line : split[1].split("\\|")) {
-                lore.add(FormatUtil.replaceFormat(line.replace('_', ' ')));
+            final List<String> lore = new ArrayList<>();
+            for (String line : split[1].split("(?<!\\\\)\\|")) {
+                lore.add(FormatUtil.replaceFormat(line.replace('_', ' ').replace("\\|", "|")));
             }
             final ItemMeta meta = stack.getItemMeta();
             meta.setLore(lore);
             stack.setItemMeta(meta);
         } else if (split[0].equalsIgnoreCase("unbreakable") && hasMetaPermission(sender, "unbreakable", false, true, ess)) {
-            boolean value = split.length > 1 ? Boolean.valueOf(split[1]) : true;
+            boolean value = split.length <= 1 || Boolean.parseBoolean(split[1]);
             setUnbreakable(stack, value);
-        } else if (split.length > 1 && (split[0].equalsIgnoreCase("player") || split[0].equalsIgnoreCase("owner")) && stack.getType() == Material.SKULL_ITEM && hasMetaPermission(sender, "head", false, true, ess)) {
-            if (stack.getDurability() == 3) {
+        } else if (split.length > 1 && (split[0].equalsIgnoreCase("player") || split[0].equalsIgnoreCase("owner")) && hasMetaPermission(sender, "head", false, true, ess)) {
+            if (MaterialUtil.isPlayerHead(stack.getType(), stack.getDurability())) {
                 final String owner = split[1];
-                final SkullMeta meta = (SkullMeta) stack.getItemMeta();
-                meta.setOwner(owner);
-                stack.setItemMeta(meta);
+                setSkullOwner(ess, stack, owner);
             } else {
                 throw new Exception(tl("onlyPlayerSkulls"));
             }
-        } else if (split.length > 1 && split[0].equalsIgnoreCase("book") && stack.getType() == Material.WRITTEN_BOOK && (hasMetaPermission(sender, "book", true, true, ess) || hasMetaPermission(sender, "chapter-" + split[1].toLowerCase(Locale.ENGLISH), true, true, ess))) {
+        } else if (split.length > 1 && split[0].equalsIgnoreCase("book") && stack.getType() == WRITTEN_BOOK && (hasMetaPermission(sender, "book", true, true, ess) || hasMetaPermission(sender, "chapter-" + split[1].toLowerCase(Locale.ENGLISH), true, true, ess))) {
             final BookMeta meta = (BookMeta) stack.getItemMeta();
             final IText input = new BookInput("book", true, ess);
             final BookPager pager = new BookPager(input);
@@ -202,42 +182,48 @@ public class MetaItemStack {
             List<String> pages = pager.getPages(split[1]);
             meta.setPages(pages);
             stack.setItemMeta(meta);
-        } else if (split.length > 1 && split[0].equalsIgnoreCase("author") && stack.getType() == Material.WRITTEN_BOOK && hasMetaPermission(sender, "author", false, true, ess)) {
+        } else if (split.length > 1 && split[0].equalsIgnoreCase("author") && stack.getType() == WRITTEN_BOOK && hasMetaPermission(sender, "author", false, true, ess)) {
             final String author = FormatUtil.replaceFormat(split[1]);
             final BookMeta meta = (BookMeta) stack.getItemMeta();
             meta.setAuthor(author);
             stack.setItemMeta(meta);
-        } else if (split.length > 1 && split[0].equalsIgnoreCase("title") && stack.getType() == Material.WRITTEN_BOOK && hasMetaPermission(sender, "title", false, true, ess)) {
+        } else if (split.length > 1 && split[0].equalsIgnoreCase("title") && stack.getType() == WRITTEN_BOOK && hasMetaPermission(sender, "title", false, true, ess)) {
             final String title = FormatUtil.replaceFormat(split[1].replace('_', ' '));
             final BookMeta meta = (BookMeta) stack.getItemMeta();
             meta.setTitle(title);
             stack.setItemMeta(meta);
-        } else if (split.length > 1 && split[0].equalsIgnoreCase("power") && stack.getType() == Material.FIREWORK && hasMetaPermission(sender, "firework-power", false, true, ess)) {
+        } else if (split.length > 1 && split[0].equalsIgnoreCase("power") && (MaterialUtil.isFirework(stack.getType()))&& hasMetaPermission(sender, "firework-power", false, true, ess)) {
             final int power = NumberUtil.isInt(split[1]) ? Integer.parseInt(split[1]) : 0;
             final FireworkMeta meta = (FireworkMeta) stack.getItemMeta();
             meta.setPower(power > 3 ? 4 : power);
             stack.setItemMeta(meta);
         } else if (split.length > 1 && split[0].equalsIgnoreCase("itemflags") && hasMetaPermission(sender, "itemflags", false, true, ess)) {
             addItemFlags(string);
-        } else if (stack.getType() == Material.FIREWORK) {//WARNING - Meta for fireworks will be ignored after this point.
+        } else if (MaterialUtil.isFirework(stack.getType())) {
+            //WARNING - Meta for fireworks will be ignored after this point.
             addFireworkMeta(sender, false, string, ess);
-        } else if (isPotion(stack.getType())) { //WARNING - Meta for potions will be ignored after this point.
+        } else if (MaterialUtil.isPotion(stack.getType())) {
+            //WARNING - Meta for potions will be ignored after this point.
             addPotionMeta(sender, false, string, ess);
-        } else if (banner != null && stack.getType() == banner) { //WARNING - Meta for banners will be ignored after this point.
-            addBannerMeta(sender, false, string, ess);
-        } else if (shield != null && stack.getType() == shield) { //WARNING - Meta for shields will be ignored after this point.
-            addBannerMeta(sender, false, string, ess);
-        } else if (split.length > 1 && (split[0].equalsIgnoreCase("color") || split[0].equalsIgnoreCase("colour")) && (stack.getType() == Material.LEATHER_BOOTS || stack.getType() == Material.LEATHER_CHESTPLATE || stack.getType() == Material.LEATHER_HELMET || stack.getType() == Material.LEATHER_LEGGINGS)) {
+        } else if (MaterialUtil.isBanner(stack.getType())) {
+            if (stack.getType().toString().equals("SHIELD") && Enchantments.getByName(split[0]) != null) {
+                parseEnchantmentStrings(sender, allowUnsafe, split, ess);
+            } else {
+                //WARNING - Meta for banners will be ignored after this point.
+                addBannerMeta(sender, false, string, ess);
+            }
+        } else if (split.length > 1 && (split[0].equalsIgnoreCase("color") || split[0].equalsIgnoreCase("colour")) && MaterialUtil.isLeatherArmor(stack.getType())) {
             final String[] color = split[1].split("(\\||,)");
-            if(color.length == 1 && (NumberUtil.isInt(color[0]) || color[0].startsWith("#"))) { // int rgb and hex
+            if (color.length == 1 && (NumberUtil.isInt(color[0]) || color[0].startsWith("#"))) {
+                // Either integer or hexadecimal
                 final LeatherArmorMeta meta = (LeatherArmorMeta) stack.getItemMeta();
                 String input = color[0];
-                if(input.startsWith("#")) {
+                if (input.startsWith("#")) { // Hex
                     meta.setColor(Color.fromRGB(
                         Integer.valueOf(input.substring(1, 3), 16),
                         Integer.valueOf(input.substring(3, 5), 16),
                         Integer.valueOf(input.substring(5, 7), 16)));
-                } else {
+                } else { // Int
                     meta.setColor(Color.fromRGB(Integer.parseInt(input)));
                 }
                 stack.setItemMeta(meta);
@@ -281,7 +267,7 @@ public class MetaItemStack {
     }
 
     public void addFireworkMeta(final CommandSource sender, final boolean allowShortName, final String string, final IEssentials ess) throws Exception {
-        if (stack.getType() == Material.FIREWORK) {
+    if (MaterialUtil.isFirework(stack.getType())) {
             final String[] split = splitPattern.split(string, 2);
             if (split.length < 2) {
                 return;
@@ -302,7 +288,7 @@ public class MetaItemStack {
                     builder = FireworkEffect.builder();
                 }
 
-                List<Color> primaryColors = new ArrayList<Color>();
+                List<Color> primaryColors = new ArrayList<>();
                 String[] colors = split[1].split(",");
                 for (String color : colors) {
                     if (colorMap.containsKey(color.toUpperCase())) {
@@ -325,7 +311,7 @@ public class MetaItemStack {
                     builder.with(finalEffect);
                 }
             } else if (split[0].equalsIgnoreCase("fade") || (allowShortName && split[0].equalsIgnoreCase("f"))) {
-                List<Color> fadeColors = new ArrayList<Color>();
+                List<Color> fadeColors = new ArrayList<>();
                 String[] colors = split[1].split(",");
                 for (String color : colors) {
                     if (colorMap.containsKey(color.toUpperCase())) {
@@ -353,7 +339,7 @@ public class MetaItemStack {
     }
 
     public void addPotionMeta(final CommandSource sender, final boolean allowShortName, final String string, final IEssentials ess) throws Exception {
-        if (isPotion(stack.getType())) {
+        if (MaterialUtil.isPotion(stack.getType())) {
             final String[] split = splitPattern.split(string, 2);
 
             if (split.length < 2) {
@@ -389,7 +375,7 @@ public class MetaItemStack {
                     throw new Exception(tl("invalidPotionMeta", split[1]));
                 }
             } else if (split[0].equalsIgnoreCase("splash") || (allowShortName && split[0].equalsIgnoreCase("s"))) {
-                isSplashPotion = Boolean.valueOf(split[1]);
+                isSplashPotion = Boolean.parseBoolean(split[1]);
             }
 
             if (isValidPotion()) {
@@ -482,7 +468,7 @@ public class MetaItemStack {
     }
 
     public void addBannerMeta(final CommandSource sender, final boolean allowShortName, final String string, final IEssentials ess) throws Exception {
-        if (stack.getType() == Material.BANNER && string != null) {
+        if (MaterialUtil.isBanner(stack.getType()) && !stack.getType().toString().equals("SHIELD") && string != null) {
             final String[] split = splitPattern.split(string, 2);
 
             if (split.length < 2) {
@@ -496,17 +482,17 @@ public class MetaItemStack {
 
             final BannerMeta meta = (BannerMeta) stack.getItemMeta();
             if (split[0].equalsIgnoreCase("basecolor")) {
-                Color color = Color.fromRGB(Integer.valueOf(split[1]));
+                Color color = Color.fromRGB(Integer.parseInt(split[1]));
                 meta.setBaseColor(DyeColor.getByColor(color));
             } else if (patternType != null) {
                 PatternType type = PatternType.valueOf(split[0]);
-                DyeColor color = DyeColor.getByColor(Color.fromRGB(Integer.valueOf(split[1])));
+                DyeColor color = DyeColor.getByColor(Color.fromRGB(Integer.parseInt(split[1])));
                 org.bukkit.block.banner.Pattern pattern = new org.bukkit.block.banner.Pattern(color, type);
                 meta.addPattern(pattern);
             }
 
             stack.setItemMeta(meta);
-        } else if (stack.getType() == Material.SHIELD && string != null) {
+        } else if (stack.getType().toString().equals("SHIELD") && string != null) {
             final String[] split = splitPattern.split(string, 2);
 
             if (split.length < 2) {
@@ -522,11 +508,11 @@ public class MetaItemStack {
             BlockStateMeta meta = (BlockStateMeta) stack.getItemMeta();
             Banner banner = (Banner) meta.getBlockState();
             if (split[0].equalsIgnoreCase("basecolor")) {
-                Color color = Color.fromRGB(Integer.valueOf(split[1]));
+                Color color = Color.fromRGB(Integer.parseInt(split[1]));
                 banner.setBaseColor(DyeColor.getByColor(color));
             } else if (patternType != null) {
                 PatternType type = PatternType.valueOf(split[0]);
-                DyeColor color = DyeColor.getByColor(Color.fromRGB(Integer.valueOf(split[1])));
+                DyeColor color = DyeColor.getByColor(Color.fromRGB(Integer.parseInt(split[1])));
                 org.bukkit.block.banner.Pattern pattern = new org.bukkit.block.banner.Pattern(color, type);
                 banner.addPattern(pattern);
             }
@@ -588,5 +574,25 @@ public class MetaItemStack {
         } catch (Throwable t) {
             t.printStackTrace();
         }
+    }
+
+    private static boolean useNewSkullMethod = true;
+
+    private static void setSkullOwner(final IEssentials ess, final ItemStack stack, final String owner) {
+        if (!(stack.getItemMeta() instanceof SkullMeta)) return;
+
+        SkullMeta meta = (SkullMeta) stack.getItemMeta();
+        if (useNewSkullMethod) {
+            try {
+                meta.setOwningPlayer(ess.getServer().getOfflinePlayer(owner));
+                stack.setItemMeta(meta);
+                return;
+            } catch (NoSuchMethodError e) {
+                useNewSkullMethod = false;
+            }
+        }
+
+        meta.setOwner(owner);
+        stack.setItemMeta(meta);
     }
 }

@@ -1,7 +1,11 @@
 package com.earth2me.essentials.commands;
 
+import com.earth2me.essentials.Teleport;
+import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.User;
+import net.ess3.api.events.TPARequestEvent;
 import org.bukkit.Server;
+import org.bukkit.event.player.PlayerTeleportEvent;
 
 import java.util.Collections;
 import java.util.List;
@@ -32,11 +36,25 @@ public class Commandtpa extends EssentialsCommand {
         }
         // Don't let sender request teleport twice to the same player.
         if (user.getConfigUUID().equals(player.getTeleportRequest()) && player.hasOutstandingTeleportRequest() // Check timeout
-            && player.isTpRequestHere() == false) { // Make sure the last teleport request was actually tpa and not tpahere
+            && !player.isTpRequestHere()) { // Make sure the last teleport request was actually tpa and not tpahere
             throw new Exception(tl("requestSentAlready", player.getDisplayName()));
+        }
+        if (player.isAutoTeleportEnabled() && !player.isIgnoredPlayer(user)) {
+            final Trade charge = new Trade(this.getName(), ess);
+            Teleport teleport = user.getTeleport();
+            teleport.setTpType(Teleport.TeleportType.TPA);
+            teleport.teleport(player.getBase(), charge, PlayerTeleportEvent.TeleportCause.COMMAND);
+            player.sendMessage(tl("requestAcceptedAuto", user.getDisplayName()));
+            user.sendMessage(tl("requestAcceptedFromAuto", player.getDisplayName()));
+            return;
         }
 
         if (!player.isIgnoredPlayer(user)) {
+            TPARequestEvent tpaEvent = new TPARequestEvent(user.getSource(), player, false);
+            ess.getServer().getPluginManager().callEvent(tpaEvent);
+            if (tpaEvent.isCancelled()) {
+                throw new Exception(tl("teleportRequestCancelled", player.getDisplayName()));
+            }
             player.requestTeleport(user, false);
             player.sendMessage(tl("teleportRequest", user.getDisplayName()));
             player.sendMessage(tl("typeTpaccept"));
@@ -46,7 +64,9 @@ public class Commandtpa extends EssentialsCommand {
             }
         }
         user.sendMessage(tl("requestSent", player.getDisplayName()));
-        user.sendMessage(tl("typeTpacancel"));
+        if (user.isAuthorized("essentials.tpacancel")) {
+            user.sendMessage(tl("typeTpacancel"));
+        }
     }
 
     @Override

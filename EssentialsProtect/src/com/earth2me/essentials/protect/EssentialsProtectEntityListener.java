@@ -2,14 +2,34 @@ package com.earth2me.essentials.protect;
 
 import com.earth2me.essentials.User;
 import net.ess3.api.IEssentials;
-import org.bukkit.entity.*;
+import org.bukkit.entity.Creeper;
+import org.bukkit.entity.EnderCrystal;
+import org.bukkit.entity.EnderDragon;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Fireball;
+import org.bukkit.entity.Player;
+import org.bukkit.entity.Projectile;
+import org.bukkit.entity.SmallFireball;
+import org.bukkit.entity.TNTPrimed;
+import org.bukkit.entity.Villager;
+import org.bukkit.entity.Wither;
+import org.bukkit.entity.WitherSkull;
 import org.bukkit.entity.minecart.ExplosiveMinecart;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.*;
+import org.bukkit.event.entity.CreatureSpawnEvent;
+import org.bukkit.event.entity.EntityBreakDoorEvent;
+import org.bukkit.event.entity.EntityChangeBlockEvent;
+import org.bukkit.event.entity.EntityDamageByBlockEvent;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
+import org.bukkit.event.entity.EntityExplodeEvent;
+import org.bukkit.event.entity.EntityTargetEvent;
 import org.bukkit.event.entity.EntityTargetEvent.TargetReason;
+import org.bukkit.event.entity.ExplosionPrimeEvent;
 import org.bukkit.event.hanging.HangingBreakByEntityEvent;
 import org.bukkit.event.hanging.HangingBreakEvent;
 
@@ -20,7 +40,7 @@ public class EssentialsProtectEntityListener implements Listener {
     private final IProtect prot;
     private final IEssentials ess;
 
-    public EssentialsProtectEntityListener(final IProtect prot) {
+    EssentialsProtectEntityListener(final IProtect prot) {
         this.prot = prot;
         this.ess = prot.getEssentialsConnect().getEssentials();
     }
@@ -159,12 +179,14 @@ public class EssentialsProtectEntityListener implements Listener {
         } else if (entity instanceof TNTPrimed && prot.getSettingBool(ProtectConfig.prevent_tnt_explosion)) {
             event.setCancelled(true);
 
-        } else if ((entity instanceof Fireball || entity instanceof SmallFireball) && prot.getSettingBool(ProtectConfig.prevent_fireball_explosion)) {
+        } else if (entity instanceof Fireball && prot.getSettingBool(ProtectConfig.prevent_fireball_explosion)) {
             event.setCancelled(true);
 
         } else if ((entity instanceof WitherSkull) && prot.getSettingBool(ProtectConfig.prevent_witherskull_explosion)) {
             event.setCancelled(true);
         } else if ((entity instanceof ExplosiveMinecart) && prot.getSettingBool(ProtectConfig.prevent_tntminecart_explosion)) {
+            event.setCancelled(true);
+        } else if (entity instanceof EnderCrystal && prot.getSettingBool(ProtectConfig.prevent_ender_crystal_explosion)) {
             event.setCancelled(true);
         }
 
@@ -180,7 +202,7 @@ public class EssentialsProtectEntityListener implements Listener {
             return;
         }
         final String creatureName = creature.toString().toLowerCase(Locale.ENGLISH);
-        if (creatureName == null || creatureName.isEmpty()) {
+        if (creatureName.isEmpty()) {
             return;
         }
         if (ess.getSettings().getProtectPreventSpawn(creatureName)) {
@@ -194,7 +216,7 @@ public class EssentialsProtectEntityListener implements Listener {
             return;
         }
         final User user = ess.getUser((Player) event.getTarget());
-        if ((event.getReason() == TargetReason.CLOSEST_PLAYER || event.getReason() == TargetReason.TARGET_ATTACKED_ENTITY || event.getReason() == TargetReason.PIG_ZOMBIE_TARGET || event.getReason() == TargetReason.RANDOM_TARGET || event.getReason() == TargetReason.DEFEND_VILLAGE || event.getReason() == TargetReason.TARGET_ATTACKED_OWNER || event.getReason() == TargetReason.OWNER_ATTACKED_TARGET) && prot.getSettingBool(ProtectConfig.prevent_entitytarget) && !user.isAuthorized("essentials.protect.entitytarget.bypass")) {
+        if ((event.getReason() == TargetReason.CLOSEST_PLAYER || event.getReason() == TargetReason.TARGET_ATTACKED_ENTITY || event.getReason() == TargetReason.TARGET_ATTACKED_NEARBY_ENTITY || event.getReason() == TargetReason.RANDOM_TARGET || event.getReason() == TargetReason.DEFEND_VILLAGE || event.getReason() == TargetReason.TARGET_ATTACKED_OWNER || event.getReason() == TargetReason.OWNER_ATTACKED_TARGET) && prot.getSettingBool(ProtectConfig.prevent_entitytarget) && !user.isAuthorized("essentials.protect.entitytarget.bypass")) {
             event.setCancelled(true);
         }
     }
@@ -213,6 +235,17 @@ public class EssentialsProtectEntityListener implements Listener {
             return;
         }
         if (event.getEntityType() == EntityType.WITHER && prot.getSettingBool(ProtectConfig.prevent_wither_blockreplace)) {
+            event.setCancelled(true);
+        }
+
+        if (event.getEntityType() == EntityType.SHEEP && prot.getSettingBool(ProtectConfig.prevent_sheep_eat_grass)) {
+            event.setCancelled(true);
+        }
+    }
+
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    public void onDoorBreak(EntityBreakDoorEvent event) {
+        if (event.getEntityType() == EntityType.ZOMBIE && prot.getSettingBool(ProtectConfig.prevent_zombie_door_break)) {
             event.setCancelled(true);
         }
     }

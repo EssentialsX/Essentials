@@ -22,7 +22,7 @@ public class Commandcondense extends EssentialsCommand {
         super("condense");
     }
 
-    private Map<ItemStack, SimpleRecipe> condenseList = new HashMap<>();
+    private final Map<ItemStack, SimpleRecipe> condenseList = new HashMap<>();
 
     @Override
     public void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception {
@@ -120,7 +120,7 @@ public class Commandcondense extends EssentialsCommand {
         }
         if (!bestRecipes.isEmpty()) {
             if (bestRecipes.size() > 1) {
-                Collections.sort(bestRecipes, SimpleRecipeComparator.INSTANCE);
+                bestRecipes.sort(SimpleRecipeComparator.INSTANCE);
             }
             SimpleRecipe recipe = bestRecipes.get(0);
             condenseList.put(stack, recipe);
@@ -135,6 +135,10 @@ public class Commandcondense extends EssentialsCommand {
 
         if (recipe instanceof ShapedRecipe) {
             ShapedRecipe sRecipe = (ShapedRecipe) recipe;
+            if (sRecipe.getShape().length != sRecipe.getShape()[0].length()) {
+                // Only accept square recipes
+                return null;
+            }
             inputList = sRecipe.getIngredientMap().values();
         } else if (recipe instanceof ShapelessRecipe) {
             ShapelessRecipe slRecipe = (ShapelessRecipe) recipe;
@@ -167,9 +171,9 @@ public class Commandcondense extends EssentialsCommand {
     }
 
 
-    private class SimpleRecipe implements Recipe {
-        private ItemStack result;
-        private ItemStack input;
+    private static class SimpleRecipe implements Recipe {
+        private final ItemStack result;
+        private final ItemStack input;
 
         private SimpleRecipe(ItemStack result, ItemStack input) {
             this.result = result;

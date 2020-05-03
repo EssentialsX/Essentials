@@ -38,19 +38,16 @@ public class ManagedFile {
             try {
                 copyResourceAscii("/" + filename, file);
             } catch (IOException ex) {
-                Bukkit.getLogger().log(Level.SEVERE, tl("itemsCsvNotLoaded"), ex);
+                Bukkit.getLogger().log(Level.SEVERE, tl("itemsCsvNotLoaded", filename), ex);
             }
         }
     }
 
     public static void copyResourceAscii(final String resourceName, final File file) throws IOException {
-        final InputStreamReader reader = new InputStreamReader(ManagedFile.class.getResourceAsStream(resourceName));
-        try {
+        try (InputStreamReader reader = new InputStreamReader(ManagedFile.class.getResourceAsStream(resourceName))) {
             final MessageDigest digest = getDigest();
-            final DigestOutputStream digestStream = new DigestOutputStream(new FileOutputStream(file), digest);
-            try {
-                final OutputStreamWriter writer = new OutputStreamWriter(digestStream);
-                try {
+            try (DigestOutputStream digestStream = new DigestOutputStream(new FileOutputStream(file), digest)) {
+                try (OutputStreamWriter writer = new OutputStreamWriter(digestStream)) {
                     final char[] buffer = new char[BUFFERSIZE];
                     do {
                         final int length = reader.read(buffer);
@@ -66,14 +63,8 @@ public class ManagedFile {
                     digestStream.on(false);
                     digestStream.write('#');
                     digestStream.write(hashInt.toString(16).getBytes());
-                } finally {
-                    writer.close();
                 }
-            } finally {
-                digestStream.close();
             }
-        } finally {
-            reader.close();
         }
     }
 
@@ -81,8 +72,7 @@ public class ManagedFile {
         if (file.length() < 33) {
             return false;
         }
-        final BufferedInputStream bis = new BufferedInputStream(new FileInputStream(file));
-        try {
+        try (BufferedInputStream bis = new BufferedInputStream(new FileInputStream(file))) {
             final byte[] buffer = new byte[(int) file.length()];
             int position = 0;
             do {
@@ -96,8 +86,7 @@ public class ManagedFile {
             if (bais.skip(file.length() - 33) != file.length() - 33) {
                 return false;
             }
-            final BufferedReader reader = new BufferedReader(new InputStreamReader(bais));
-            try {
+            try (BufferedReader reader = new BufferedReader(new InputStreamReader(bais))) {
                 String hash = reader.readLine();
                 if (hash != null && hash.matches("#[a-f0-9]{32}")) {
                     hash = hash.substring(1);
@@ -108,8 +97,7 @@ public class ManagedFile {
                         if (!versioncheck.equalsIgnoreCase(version)) {
                             bais.reset();
                             final MessageDigest digest = getDigest();
-                            final DigestInputStream digestStream = new DigestInputStream(bais, digest);
-                            try {
+                            try (DigestInputStream digestStream = new DigestInputStream(bais, digest)) {
                                 final byte[] bytes = new byte[(int) file.length() - 33];
                                 digestStream.read(bytes);
                                 final BigInteger correct = new BigInteger(hash, 16);
@@ -119,17 +107,11 @@ public class ManagedFile {
                                 } else {
                                     Bukkit.getLogger().warning("File " + file.toString() + " has been modified by user and file version differs, please update the file manually.");
                                 }
-                            } finally {
-                                digestStream.close();
                             }
                         }
                     }
                 }
-            } finally {
-                reader.close();
             }
-        } finally {
-            bis.close();
         }
         return false;
     }
@@ -144,9 +126,8 @@ public class ManagedFile {
 
     public List<String> getLines() {
         try {
-            final BufferedReader reader = new BufferedReader(new FileReader(file));
-            try {
-                final List<String> lines = new ArrayList<String>();
+            try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+                final List<String> lines = new ArrayList<>();
                 do {
                     final String line = reader.readLine();
                     if (line == null) {
@@ -156,8 +137,6 @@ public class ManagedFile {
                     }
                 } while (true);
                 return lines;
-            } finally {
-                reader.close();
             }
         } catch (IOException ex) {
             Bukkit.getLogger().log(Level.SEVERE, ex.getMessage(), ex);

@@ -5,6 +5,7 @@ import com.earth2me.essentials.signs.EssentialsSign;
 import com.earth2me.essentials.textreader.IText;
 
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.event.EventPriority;
 
@@ -14,6 +15,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.function.Predicate;
 import java.util.regex.Pattern;
 
 
@@ -45,6 +47,8 @@ public interface ISettings extends IConf {
     BigDecimal getCommandCost(String label);
 
     String getCurrencySymbol();
+
+    boolean isCurrencySymbolSuffixed();
 
     int getOversizedStackSize();
 
@@ -95,7 +99,7 @@ public interface ISettings extends IConf {
 
     int getProtectCreeperMaxHeight();
 
-    List<Integer> getProtectList(final String configName);
+    List<Material> getProtectList(final String configName);
 
     boolean getProtectPreventSpawn(final String creatureName);
 
@@ -117,6 +121,8 @@ public interface ISettings extends IConf {
 
     boolean isForceDisableTeleportSafety();
 
+    boolean isTeleportPassengerDismount();
+
     double getTeleportCooldown();
 
     double getTeleportDelay();
@@ -133,9 +139,12 @@ public interface ISettings extends IConf {
 
     boolean isEcoDisabled();
 
+    @Deprecated
     boolean isTradeInStacks(int id);
 
-    List<Integer> itemSpawnBlacklist();
+    boolean isTradeInStacks(Material type);
+
+    List<Material> itemSpawnBlacklist();
 
     List<EssentialsSign> enabledSigns();
 
@@ -154,6 +163,8 @@ public interface ISettings extends IConf {
     boolean isEcoLogEnabled();
 
     boolean isEcoLogUpdateEnabled();
+
+    boolean realNamesOnList();
 
     boolean removeGodOnDisconnect();
 
@@ -181,9 +192,13 @@ public interface ISettings extends IConf {
 
     boolean cancelAfkOnInteract();
 
+    boolean sleepIgnoresAfkPlayers();
+
     boolean isAfkListName();
 
     String getAfkListName();
+
+    boolean broadcastAfkMessage();
 
     boolean areDeathMessagesEnabled();
 
@@ -231,6 +246,8 @@ public interface ISettings extends IConf {
 
     void setEssentialsChatActive(boolean b);
 
+    long getMaxMute();
+
     long getMaxTempban();
 
     Map<String, Object> getListGroupConfig();
@@ -238,6 +255,8 @@ public interface ISettings extends IConf {
     int getMaxNickLength();
 
     boolean ignoreColorsInMaxLength();
+
+    boolean hideDisplayNameInVanish();
 
     int getMaxUserCacheCount();
 
@@ -277,6 +296,10 @@ public interface ISettings extends IConf {
 
     boolean isCommandCooldownsEnabled();
 
+    boolean isWorldChangeFlyResetEnabled();
+
+    boolean isWorldChangeSpeedResetEnabled();
+
     long getCommandCooldownMs(String label);
 
     Entry<Pattern, Long> getCommandCooldownEntry(String label);
@@ -307,9 +330,30 @@ public interface ISettings extends IConf {
 
     boolean isConfirmCommandEnabledByDefault(String commandName);
 
+    boolean isTeleportBackWhenFreedFromJail();
+
     boolean isCompassTowardsHomePerm();
 
     boolean isAllowWorldInBroadcastworld();
 
-    boolean allowSellNamedItems();
+    String getItemDbType();
+
+    boolean isForceEnableRecipe();
+
+    boolean allowOldIdSigns();
+
+    boolean isWaterSafe();
+  
+    boolean isSafeUsermap();
+
+    boolean logCommandBlockCommands();
+
+    Set<Predicate<String>> getNickBlacklist();
+
+    double getMaxProjectileSpeed();
+
+    boolean isRemovingEffectsOnHeal();
+
+    boolean isSpawnIfNoHome();
+
 }

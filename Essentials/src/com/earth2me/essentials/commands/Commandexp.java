@@ -36,6 +36,18 @@ public class Commandexp extends EssentialsCommand {
             } else {
                 setExp(user.getSource(), user, args[1], true);
             }
+        } else if (args.length > 1 && args[0].equalsIgnoreCase("take") && user.isAuthorized("essentials.exp.take")) {
+            if (args.length == 3 && user.isAuthorized("essentials.exp.take.others")) {
+                expMatch(server, user.getSource(), args[1], "-" + args[2], true);
+            } else {
+                setExp(user.getSource(), user, "-" + args[1], true);
+            }        
+        } else if (args.length < 3 && args[0].equalsIgnoreCase("reset") && user.isAuthorized("essentials.exp.reset")) {
+            if (args.length == 2 && user.isAuthorized("essentials.exp.reset.others")) {
+                expMatch(server, user.getSource(), args[1], "0", false);
+            } else {
+                setExp(user.getSource(), user, "0", false);
+            }
         } else if (args[0].equalsIgnoreCase("show")) {
             if (args.length >= 2 && user.isAuthorized("essentials.exp.others")) {
                 String match = args[1].trim();
@@ -127,7 +139,7 @@ public class Commandexp extends EssentialsCommand {
             if (give) {
                 neededLevel += target.getBase().getLevel();
             }
-            amount = (long) SetExpFix.getExpToLevel(neededLevel);
+            amount = SetExpFix.getExpToLevel(neededLevel);
             SetExpFix.setTotalExperience(target.getBase(), 0);
         } else {
             amount = Long.parseLong(strAmount);
@@ -140,10 +152,10 @@ public class Commandexp extends EssentialsCommand {
             amount += SetExpFix.getTotalExperience(target.getBase());
         }
         if (amount > Integer.MAX_VALUE) {
-            amount = (long) Integer.MAX_VALUE;
+            amount = Integer.MAX_VALUE;
         }
-        if (amount < 0l) {
-            amount = 0l;
+        if (amount < 0L) {
+            amount = 0L;
         }
         SetExpFix.setTotalExperience(target.getBase(), (int) amount);
         sender.sendMessage(tl("expSet", target.getDisplayName(), amount));
@@ -159,32 +171,37 @@ public class Commandexp extends EssentialsCommand {
             if (user.isAuthorized("essentials.exp.give")) {
                 options.add("give");
             }
+            if (user.isAuthorized("essentials.exp.take")) {
+                options.add("take");
+            }
+            if (user.isAuthorized("essentials.exp.reset")) {
+                options.add("reset");
+            }
             return options;
         } else if (args.length == 2) {
-            if ((args[0].equalsIgnoreCase("set") && user.isAuthorized("essentials.exp.set")) || (args[0].equalsIgnoreCase("give") && user.isAuthorized("essentials.exp.give"))) {
-                String levellessArg = args[1].toLowerCase(Locale.ENGLISH).replace("l", "");
+            if ((args[0].equalsIgnoreCase("set") && user.isAuthorized("essentials.exp.set")) || (args[0].equalsIgnoreCase("give") && user.isAuthorized("essentials.exp.give")) || (args[0].equalsIgnoreCase("take") && user.isAuthorized("essentials.exp.take"))) {
+                String levellessArg = args[1].toLowerCase(Locale.ENGLISH).replaceAll("l", "");
                 if (NumberUtil.isInt(levellessArg)) {
-                    return Lists.newArrayList(levellessArg, args[1] + "l");
-                } else {
-                    return Collections.emptyList();
+                    return Lists.newArrayList(levellessArg + "l");
                 }
-            } else if (args[0].equalsIgnoreCase("show") && user.isAuthorized("essentials.exp.others")) {
-                return getPlayers(server, user);
-            } else {
-                return Collections.emptyList();
             }
-        } else if (args.length == 3 && (args[0].equalsIgnoreCase("set") && user.isAuthorized("essentials.exp.set.others")) || (args[0].equalsIgnoreCase("give") && user.isAuthorized("essentials.exp.give.others"))) {
-            return getPlayers(server, user);
-        } else {
-            return Collections.emptyList();
+            if (user.isAuthorized("essentials.exp.others")) {
+                return getPlayers(server, user);
+            }
+        } else if (args.length == 3 && !(args[0].equalsIgnoreCase("show") || args[0].equalsIgnoreCase("reset"))) {
+            String levellessArg = args[2].toLowerCase(Locale.ENGLISH).replaceAll("l", "");
+            if (NumberUtil.isInt(levellessArg)) {
+                return Lists.newArrayList(levellessArg + "l");
+            }
         }
+        return Collections.emptyList();
     }
 
     @Override
     protected List<String> getTabCompleteOptions(final Server server, final CommandSource sender, final String commandLabel, final String[] args) {
         if (args.length == 1) {
             // TODO: This seems somewhat buggy, both setting and showing - right now, ignoring that
-            return Lists.newArrayList("set", "give", "show");
+            return Lists.newArrayList("set", "give", "show", "take", "reset");
         } else if (args.length == 2) {
             if (args[0].equalsIgnoreCase("set") || args[0].equalsIgnoreCase("give")) {
                 String levellessArg = args[1].toLowerCase(Locale.ENGLISH).replace("l", "");

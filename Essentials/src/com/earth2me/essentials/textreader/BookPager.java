@@ -20,8 +20,7 @@ public class BookPager {
 
     public List<String> getPages(final String pageStr) throws Exception {
         List<String> lines = text.getLines();
-        List<String> chapters = text.getChapters();
-        List<String> pageLines = new ArrayList<String>();
+        List<String> pageLines = new ArrayList<>();
         Map<String, Integer> bookmarks = text.getBookmarks();
 
         //This checks to see if we have the chapter in the index
@@ -39,7 +38,7 @@ public class BookPager {
             }
         }
 
-        List<String> pages = new ArrayList<String>();
+        List<String> pages = new ArrayList<>();
         double pageLength = 0;
 
         for (int lineNo = chapterstart; lineNo < chapterend; lineNo += 1) {
@@ -54,7 +53,7 @@ public class BookPager {
             boolean forcePageEnd = false;
 
             while (pointer < lineLength) {
-                Character letter = pageLine.charAt(pointer);
+                char letter = pageLine.charAt(pointer);
 
                 if (pageLine.charAt(start) == ' ') {
                     start++;
@@ -95,7 +94,7 @@ public class BookPager {
                 pageLength++;
 
                 if (letter == '\u00a7' && pointer + 1 < lineLength) {
-                    Character nextLetter = pageLine.charAt(pointer + 1);
+                    char nextLetter = pageLine.charAt(pointer + 1);
                     if (nextLetter == 'l' || nextLetter == 'L') {
                         weight = 1.25;
                     } else {

@@ -50,7 +50,6 @@ public class Kit {
         long nextUse = getNextUse(user);
 
         if (nextUse == 0L) {
-            return;
         } else if (nextUse < 0L) {
             user.sendMessage(tl("kitOnce"));
             throw new NoChargeException();
@@ -122,7 +121,7 @@ public class Kit {
             throw new Exception(tl("kitNotFound"));
         }
         try {
-            final List<String> itemList = new ArrayList<String>();
+            final List<String> itemList = new ArrayList<>();
             final Object kitItems = kit.get("items");
             if (kitItems instanceof List) {
                 for (Object item : (List) kitItems) {
@@ -141,20 +140,24 @@ public class Kit {
         }
     }
 
-    public void expandItems(final User user) throws Exception {
-        expandItems(user, getItems(user));
+    public boolean expandItems(final User user) throws Exception {
+        return expandItems(user, getItems(user));
     }
 
-    public void expandItems(final User user, final List<String> items) throws Exception {
+    public boolean expandItems(final User user, final List<String> items) throws Exception {
         try {
             IText input = new SimpleTextInput(items);
             IText output = new KeywordReplacer(input, user.getSource(), ess, true, true);
 
             boolean spew = false;
             final boolean allowUnsafe = ess.getSettings().allowUnsafeEnchantments();
+            final boolean currencyIsSuffix = ess.getSettings().isCurrencySymbolSuffixed();
+            final String currencySymbol = ess.getSettings().getCurrencySymbol();
+            List<ItemStack> itemList = new ArrayList<>();
             for (String kitItem : output.getLines()) {
-                if (kitItem.startsWith(ess.getSettings().getCurrencySymbol())) {
-                    BigDecimal value = new BigDecimal(kitItem.substring(ess.getSettings().getCurrencySymbol().length()).trim());
+                if (!currencyIsSuffix ? kitItem.startsWith(ess.getSettings().getCurrencySymbol()) : kitItem.endsWith(ess.getSettings().getCurrencySymbol())) {
+                    final String valueString = currencyIsSuffix ? kitItem.substring(0, currencySymbol.length()) : kitItem.substring(currencySymbol.length());
+                    BigDecimal value = new BigDecimal(valueString.trim());
                     Trade t = new Trade(value, ess);
                     t.pay(user, OverflowType.DROP);
                     continue;
@@ -181,24 +184,40 @@ public class Kit {
                     // We pass a null sender here because kits should not do perm checks
                     metaStack.parseStringMeta(null, allowUnsafe, parts, 2, ess);
                 }
-
-                final Map<Integer, ItemStack> overfilled;
-                final boolean allowOversizedStacks = user.isAuthorized("essentials.oversizedstacks");
+                
+                itemList.add(metaStack.getItemStack());
+            }
+            
+            
+            final Map<Integer, ItemStack> overfilled;
+            final boolean allowOversizedStacks = user.isAuthorized("essentials.oversizedstacks");
+            final boolean isDropItemsIfFull = ess.getSettings().isDropItemsIfFull();
+            if (isDropItemsIfFull) {
                 if (allowOversizedStacks) {
-                    overfilled = InventoryWorkaround.addOversizedItems(user.getBase().getInventory(), ess.getSettings().getOversizedStackSize(), metaStack.getItemStack());
+                    overfilled = InventoryWorkaround.addOversizedItems(user.getBase().getInventory(), ess.getSettings().getOversizedStackSize(), itemList.toArray(new ItemStack[0]));
                 } else {
-                    overfilled = InventoryWorkaround.addItems(user.getBase().getInventory(), metaStack.getItemStack());
+                    overfilled = InventoryWorkaround.addItems(user.getBase().getInventory(), itemList.toArray(new ItemStack[0]));
                 }
                 for (ItemStack itemStack : overfilled.values()) {
                     int spillAmount = itemStack.getAmount();
                     if (!allowOversizedStacks) {
-                        itemStack.setAmount(spillAmount < itemStack.getMaxStackSize() ? spillAmount : itemStack.getMaxStackSize());
+                        itemStack.setAmount(Math.min(spillAmount, itemStack.getMaxStackSize()));
                     }
                     while (spillAmount > 0) {
                         user.getWorld().dropItemNaturally(user.getLocation(), itemStack);
                         spillAmount -= itemStack.getAmount();
                     }
                     spew = true;
+                }
+            } else {
+                if (allowOversizedStacks) {
+                    overfilled = InventoryWorkaround.addAllOversizedItems(user.getBase().getInventory(), ess.getSettings().getOversizedStackSize(), itemList.toArray(new ItemStack[0]));
+                } else {
+                    overfilled = InventoryWorkaround.addAllItems(user.getBase().getInventory(), itemList.toArray(new ItemStack[0]));
+                }
+                if (overfilled != null) {
+                    user.sendMessage(tl("kitInvFullNoDrop"));
+                    return false;
                 }
             }
             user.getBase().updateInventory();
@@ -210,5 +229,6 @@ public class Kit {
             ess.getLogger().log(Level.WARNING, e.getMessage());
             throw new Exception(tl("kitError2"), e);
         }
+        return true;
     }
 }

@@ -38,30 +38,33 @@ public enum ProtectConfig {
     prevent_creeper_explosion("protect.prevent.creeper-explosion", true),
     prevent_creeper_playerdmg("protect.prevent.creeper-playerdamage", false),
     prevent_creeper_blockdmg("protect.prevent.creeper-blockdamage", false),
+    prevent_ender_crystal_explosion("protect.prevent.ender-crystal-explosion", false),
     prevent_enderman_pickup("protect.prevent.enderman-pickup", false),
     prevent_villager_death("protect.prevent.villager-death", false),
     prevent_enderdragon_blockdmg("protect.prevent.enderdragon-blockdamage", true),
     prevent_entitytarget("protect.prevent.entitytarget", false),
-    enderdragon_fakeexplosions("protect.enderdragon-fakeexplosions", false);
+    enderdragon_fakeexplosions("protect.enderdragon-fakeexplosions", false),
+    prevent_zombie_door_break("protect.prevent.zombie-door-break", false),
+    prevent_ravager_thief("protect.prevent.ravager-thief", false),
+    prevent_sheep_eat_grass("protect.prevent.sheep-eat-grass", false),
+    prevent_creeper_charge("protect.prevent.transformation.charged-creeper", false),
+    prevent_villager_infection("protect.prevent.transformation.zombie-villager", false),
+    prevent_villager_cure("protect.prevent.transformation.villager", false),
+    prevent_villager_to_witch("protect.prevent.transformation.witch", false),
+    prevent_pig_transformation("protect.prevent.transformation.zombie-pigman", false),
+    prevent_zombie_drowning("protect.prevent.transformation.drowned", false),
+    prevent_mooshroom_switching("protect.prevent.transformation.mooshroom", false);
     private final String configName;
     private final String defValueString;
     private final boolean defValueBoolean;
     private final boolean isList;
     private final boolean isString;
 
-    private ProtectConfig(final String configName) {
-        this(configName, null, false, true, false);
-    }
-
-    private ProtectConfig(final String configName, final String defValueString) {
-        this(configName, defValueString, false, false, true);
-    }
-
-    private ProtectConfig(final String configName, final boolean defValueBoolean) {
+    ProtectConfig(final String configName, final boolean defValueBoolean) {
         this(configName, null, defValueBoolean, false, false);
     }
 
-    private ProtectConfig(final String configName, final String defValueString, final boolean defValueBoolean, final boolean isList, final boolean isString) {
+    ProtectConfig(final String configName, final String defValueString, final boolean defValueBoolean, final boolean isList, final boolean isString) {
         this.configName = configName;
         this.defValueString = defValueString;
         this.defValueBoolean = defValueBoolean;

@@ -2,8 +2,8 @@ package com.earth2me.essentials;
 
 import com.google.common.io.Files;
 import net.ess3.api.InvalidWorldException;
-import org.bukkit.*;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.*;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -14,11 +14,13 @@ import org.bukkit.util.Vector;
 import java.io.*;
 import java.math.BigDecimal;
 import java.math.MathContext;
+import java.nio.Buffer;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
 import java.nio.charset.Charset;
 import java.nio.charset.CharsetDecoder;
 import java.nio.charset.CoderResult;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
@@ -36,7 +38,7 @@ public class EssentialsConf extends YamlConfiguration {
     protected static final Logger LOGGER = Logger.getLogger("Essentials");
     protected final File configFile;
     protected String templateName = null;
-    protected static final Charset UTF8 = Charset.forName("UTF-8");
+    protected static final Charset UTF8 = StandardCharsets.UTF_8;
     private Class<?> resourceClass = EssentialsConf.class;
     private static final ExecutorService EXECUTOR_SERVICE = Executors.newSingleThreadExecutor();
     private final AtomicInteger pendingDiskWrites = new AtomicInteger(0);
@@ -108,20 +110,21 @@ public class EssentialsConf extends YamlConfiguration {
                     if (length > buffer.remaining()) {
                         ByteBuffer resize = ByteBuffer.allocate(buffer.capacity() + length - buffer.remaining());
                         int resizePosition = buffer.position();
-                        buffer.rewind();
+                        // Fix builds compiled against Java 9+ breaking on Java 8
+                        ((Buffer) buffer).rewind();
                         resize.put(buffer);
                         resize.position(resizePosition);
                         buffer = resize;
                     }
                     buffer.put(bytebuffer, 0, length);
                 }
-                buffer.rewind();
+                ((Buffer) buffer).rewind();
                 final CharBuffer data = CharBuffer.allocate(buffer.capacity());
                 CharsetDecoder decoder = UTF8.newDecoder();
                 CoderResult result = decoder.decode(buffer, data, true);
                 if (result.isError()) {
-                    buffer.rewind();
-                    data.clear();
+                    ((Buffer) buffer).rewind();
+                    ((Buffer) data).clear();
                     LOGGER.log(Level.INFO, "File " + configFile.getAbsolutePath() + " is not utf-8 encoded, trying " + Charset.defaultCharset().displayName());
                     decoder = Charset.defaultCharset().newDecoder();
                     result = decoder.decode(buffer, data, true);
@@ -134,7 +137,7 @@ public class EssentialsConf extends YamlConfiguration {
                     decoder.flush(data);
                 }
                 final int end = data.position();
-                data.rewind();
+                ((Buffer) data).rewind();
                 super.loadFromString(data.subSequence(0, end).toString());
             }
         } catch (IOException ex) {
@@ -437,9 +440,7 @@ public class EssentialsConf extends YamlConfiguration {
         } else {
             try {
                 return new BigDecimal(input, MathContext.DECIMAL128);
-            } catch (NumberFormatException e) {
-                return def;
-            } catch (ArithmeticException e) {
+            } catch (NumberFormatException | ArithmeticException e) {
                 return def;
             }
         }

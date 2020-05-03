@@ -82,7 +82,7 @@ public abstract class EssentialsCommand implements IEssentialsCommand {
         return getPlayer(server, null, args, pos, getHidden, getOffline);
     }
 
-    private User getPlayer(final Server server, final User sourceUser, final String[] args, final int pos, boolean getHidden, final boolean getOffline) throws PlayerNotFoundException, NotEnoughArgumentsException {
+    User getPlayer(final Server server, final User sourceUser, final String[] args, final int pos, boolean getHidden, final boolean getOffline) throws PlayerNotFoundException, NotEnoughArgumentsException {
         if (args.length <= pos) {
             throw new NotEnoughArgumentsException();
         }
@@ -104,7 +104,11 @@ public abstract class EssentialsCommand implements IEssentialsCommand {
         try {
             exPlayer = server.getPlayer(UUID.fromString(searchTerm));
         } catch (IllegalArgumentException ex) {
-            exPlayer = server.getPlayer(searchTerm);
+            if (getOffline) {
+                exPlayer = server.getPlayerExact(searchTerm);
+            } else {
+                exPlayer = server.getPlayer(searchTerm);
+            }
         }
 
         if (exPlayer != null) {
@@ -181,7 +185,7 @@ public abstract class EssentialsCommand implements IEssentialsCommand {
         if (options == null) {
             return null;
         }
-        return StringUtil.copyPartialMatches(args[args.length - 1], options, Lists.<String>newArrayList());
+        return StringUtil.copyPartialMatches(args[args.length - 1], options, Lists.newArrayList());
     }
 
     // Doesn't need to do any starts-with checks
@@ -199,7 +203,7 @@ public abstract class EssentialsCommand implements IEssentialsCommand {
         if (options == null) {
             return null;
         }
-        return StringUtil.copyPartialMatches(args[args.length - 1], options, Lists.<String>newArrayList());
+        return StringUtil.copyPartialMatches(args[args.length - 1], options, Lists.newArrayList());
     }
 
     // Doesn't need to do any starts-with checks
@@ -329,9 +333,7 @@ public abstract class EssentialsCommand implements IEssentialsCommand {
         int numArgs = args.length - index - 1;
         ess.getLogger().info(numArgs + " " + index + " " + Arrays.toString(args));
         String[] effectiveArgs = new String[numArgs];
-        for (int i = 0; i < numArgs; i++) {
-            effectiveArgs[i] = args[i + index];
-        }
+        System.arraycopy(args, index, effectiveArgs, 0, numArgs);
         if (effectiveArgs.length == 0) {
             effectiveArgs = new String[] { "" };
         }

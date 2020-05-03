@@ -11,7 +11,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import java.util.Map;
 
 public abstract class SpawnerProvider implements Provider {
-    protected Map<EntityType, String> entityToDisplayName = ImmutableMap.<EntityType, String>builder()
+    private Map<EntityType, String> entityToDisplayName = ImmutableMap.<EntityType, String>builder()
             .put(EntityType.CAVE_SPIDER, "Cave Spider")
             .put(EntityType.PIG_ZOMBIE, "Zombie Pigman")
             .put(EntityType.MAGMA_CUBE, "Magma Cube")
@@ -31,7 +31,13 @@ public abstract class SpawnerProvider implements Provider {
     public boolean tryProvider() {
         try {
             EntityType type = EntityType.CREEPER;
-            ItemStack is = setEntityType(new ItemStack(Material.MOB_SPAWNER), type);
+            Material MOB_SPAWNER;
+            try {
+                MOB_SPAWNER = Material.SPAWNER;
+            } catch (Exception e) {
+                MOB_SPAWNER = Material.valueOf("MOB_SPAWNER");
+            }
+            ItemStack is = setEntityType(new ItemStack(MOB_SPAWNER), type);
             EntityType readType = getEntityType(is);
             return type == readType;
         } catch (Throwable t) {
@@ -39,6 +45,7 @@ public abstract class SpawnerProvider implements Provider {
         }
     }
 
+    @SuppressWarnings("deprecation")
     protected ItemStack setDisplayName(ItemStack is, EntityType type) {
         ItemMeta meta = is.getItemMeta();
         String displayName;

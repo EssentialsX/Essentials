@@ -4,7 +4,9 @@ import com.earth2me.essentials.ChargeException;
 import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.Trade.OverflowType;
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.utils.EnumUtil;
 import com.earth2me.essentials.utils.FormatUtil;
+import com.earth2me.essentials.utils.MaterialUtil;
 import net.ess3.api.IEssentials;
 import net.ess3.api.MaxMoneyException;
 import org.bukkit.Location;
@@ -21,14 +23,14 @@ import static com.earth2me.essentials.I18n.tl;
 
 @Deprecated // This sign will be removed soon
 public class SignProtection extends EssentialsSign {
-    private final transient Set<Material> protectedBlocks = EnumSet.noneOf(Material.class);
+    private final transient Set<Material> protectedBlocks = EnumUtil.getAllMatching(Material.class,
+        "CHEST",
+        "FURNACE",
+        "BURNING_FURNACE",
+        "DISPENSER");
 
     public SignProtection() {
         super("Protection");
-        protectedBlocks.add(Material.CHEST);
-        protectedBlocks.add(Material.BURNING_FURNACE);
-        protectedBlocks.add(Material.FURNACE);
-        protectedBlocks.add(Material.DISPENSER);
     }
 
     @Override
@@ -73,7 +75,7 @@ public class SignProtection extends EssentialsSign {
                 final Block sign = entry.getKey().getBlock();
                 if (!hasAdjacentBlock(sign, block)) {
                     block.setType(Material.AIR);
-                    final Trade trade = new Trade(new ItemStack(Material.SIGN, 1), ess);
+                    final Trade trade = new Trade(new ItemStack(sign.getType(), 1), ess);
                     trade.pay(player, OverflowType.DROP);
                 }
             }
@@ -81,7 +83,7 @@ public class SignProtection extends EssentialsSign {
     }
 
     private Map<Location, SignProtectionState> getConnectedSigns(final Block block, final User user, final String username, boolean secure) {
-        final Map<Location, SignProtectionState> signs = new HashMap<Location, SignProtectionState>();
+        final Map<Location, SignProtectionState> signs = new HashMap<>();
         getConnectedSigns(block, signs, user, username, secure ? 4 : 2);
         return signs;
     }
@@ -103,7 +105,7 @@ public class SignProtection extends EssentialsSign {
     }
 
     private SignProtectionState checkProtectionSign(final Block block, final User user, final String username) {
-        if (block.getType() == Material.SIGN_POST || block.getType() == Material.WALL_SIGN) {
+        if (MaterialUtil.isSign(block.getType())) {
             final BlockSign sign = new BlockSign(block);
             if (sign.getLine(0).equals(this.getSuccessName())) { // TODO call getSuccessName(IEssentials)
                 return checkProtectionSign(sign, user, username);
@@ -160,7 +162,7 @@ public class SignProtection extends EssentialsSign {
     public boolean isBlockProtected(final Block block) {
         final Block[] faces = getAdjacentBlocks(block);
         for (Block b : faces) {
-            if (b.getType() == Material.SIGN_POST || b.getType() == Material.WALL_SIGN) {
+            if (MaterialUtil.isSign(b.getType())) {
                 final Sign sign = (Sign) b.getState();
                 if (sign.getLine(0).equalsIgnoreCase("§1[Protection]")) {
                     return true;
@@ -170,7 +172,7 @@ public class SignProtection extends EssentialsSign {
                 final Block[] faceChest = getAdjacentBlocks(b);
 
                 for (Block a : faceChest) {
-                    if (a.getType() == Material.SIGN_POST || a.getType() == Material.WALL_SIGN) {
+                    if (MaterialUtil.isSign(a.getType())) {
                         final Sign sign = (Sign) a.getState();
                         if (sign.getLine(0).equalsIgnoreCase("§1[Protection]")) {
                             return true;

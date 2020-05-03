@@ -70,7 +70,7 @@ public interface IWarps extends IConf {
     /**
      * Gets Lastowner UUID
      *   
-     * @param name - Name of warp
+     * @param warp - Name of warp
      *
      * @throws WarpNotFoundException
      */

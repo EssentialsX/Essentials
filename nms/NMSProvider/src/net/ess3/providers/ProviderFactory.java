@@ -28,7 +28,7 @@ public class ProviderFactory<T extends Provider> {
 
     private T loadProvider(Class<? extends T> providerClass) {
         try {
-            return providerClass.newInstance();
+            return providerClass.getConstructor().newInstance();
         } catch (Throwable ignored) {
             return null;
         }

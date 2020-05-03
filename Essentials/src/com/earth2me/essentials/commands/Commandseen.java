@@ -117,7 +117,12 @@ public class Commandseen extends EssentialsCommand {
             sender.sendMessage(tl("whoisJail", (user.getJailTimeout() > 0 ? DateUtil.formatDateDiff(user.getJailTimeout()) : tl("true"))));
         }
         if (user.isMuted()) {
-            sender.sendMessage(tl("whoisMuted", (user.getMuteTimeout() > 0 ? DateUtil.formatDateDiff(user.getMuteTimeout()) : tl("true"))));
+            long muteTimeout = user.getMuteTimeout();
+            if (!user.hasMuteReason()) {
+                sender.sendMessage(tl("whoisMuted", (muteTimeout > 0 ? DateUtil.formatDateDiff(muteTimeout) : tl("true"))));
+            } else {
+                sender.sendMessage(tl("whoisMutedReason", (muteTimeout > 0 ? DateUtil.formatDateDiff(muteTimeout) : tl("true")), user.getMuteReason()));
+            }
         }
         final String location = user.getGeoLocation();
         if (location != null && (!(sender.isPlayer()) || ess.getUser(sender.getPlayer()).isAuthorized("essentials.geoip.show"))) {
@@ -159,6 +164,15 @@ public class Commandseen extends EssentialsCommand {
             }
         }
 
+        if (user.isMuted()) {
+            long muteTimeout = user.getMuteTimeout();
+            if (!user.hasMuteReason()) {
+                sender.sendMessage(tl("whoisMuted", (muteTimeout > 0 ? DateUtil.formatDateDiff(muteTimeout) : tl("true"))));
+            } else {
+                sender.sendMessage(tl("whoisMutedReason", (muteTimeout > 0 ? DateUtil.formatDateDiff(muteTimeout) : tl("true")), user.getMuteReason()));
+            }
+        }
+
         final String location = user.getGeoLocation();
         if (location != null && (!(sender.isPlayer()) || ess.getUser(sender.getPlayer()).isAuthorized("essentials.geoip.show"))) {
             sender.sendMessage(tl("whoisGeoLocation", location));
@@ -185,31 +199,28 @@ public class Commandseen extends EssentialsCommand {
 
         sender.sendMessage(tl("runningPlayerMatch", ipAddress));
 
-        ess.runTaskAsynchronously(new Runnable() {
-            @Override
-            public void run() {
-                final List<String> matches = new ArrayList<>();
-                for (final UUID u : userMap.getAllUniqueUsers()) {
-                    final User user = ess.getUserMap().getUser(u);
-                    if (user == null) {
-                        continue;
-                    }
-
-                    final String uIPAddress = user.getLastLoginAddress();
-
-                    if (!uIPAddress.isEmpty() && uIPAddress.equalsIgnoreCase(ipAddress)) {
-                        matches.add(user.getName());
-                    }
+        ess.runTaskAsynchronously(() -> {
+            final List<String> matches = new ArrayList<>();
+            for (final UUID u : userMap.getAllUniqueUsers()) {
+                final User user = ess.getUserMap().getUser(u);
+                if (user == null) {
+                    continue;
                 }
 
-                if (matches.size() > 0) {
-                    sender.sendMessage(tl("matchingIPAddress"));
-                    sender.sendMessage(StringUtil.joinList(matches));
-                } else {
-                    sender.sendMessage(tl("noMatchingPlayers"));
-                }
+                final String uIPAddress = user.getLastLoginAddress();
 
+                if (!uIPAddress.isEmpty() && uIPAddress.equalsIgnoreCase(ipAddress)) {
+                    matches.add(user.getName());
+                }
             }
+
+            if (matches.size() > 0) {
+                sender.sendMessage(tl("matchingIPAddress"));
+                sender.sendMessage(StringUtil.joinList(matches));
+            } else {
+                sender.sendMessage(tl("noMatchingPlayers"));
+            }
+
         });
 
     }
