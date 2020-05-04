@@ -21,7 +21,7 @@ public class Commandignore extends EssentialsCommand {
             StringBuilder sb = new StringBuilder();
             for (UUID uuid : user._getIgnoredPlayers()) {
                 User curUser = ess.getUser(uuid);
-                if (curUser != null && curUser.getName() != null && !curUser.getName().trim().equals("")) {
+                if (curUser != null && curUser.getName() != null && !curUser.getName().trim().isEmpty()) {
                     sb.append(curUser.getName()).append(" ");
                 }
             }
