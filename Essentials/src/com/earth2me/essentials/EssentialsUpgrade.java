@@ -65,9 +65,9 @@ public class EssentialsUpgrade {
                         if (name == null) {
                             continue;
                         }
-                        OfflinePlayer user = ((OfflinePlayer) ess.getOfflineUser(name).getBase());
-                        if (user != null) {
-                            migratedIgnores.add(user.getUniqueId().toString());
+                        User user = ess.getOfflineUser(name);
+                        if (user != null && user.getBase() != null) {
+                            migratedIgnores.add(user.getBase().getUniqueId().toString());
                         }
                     }
                     config.removeProperty("ignore");
