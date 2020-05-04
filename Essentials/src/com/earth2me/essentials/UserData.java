@@ -470,19 +470,42 @@ public abstract class UserData extends PlayerExtension implements IConf {
         config.save();
     }
 
-    private List<String> ignoredPlayers;
+    private List<UUID> ignoredPlayers;
 
-    public List<String> _getIgnoredPlayers() {
-        return Collections.synchronizedList(config.getStringList("ignore"));
+    public List<UUID> _getIgnoredPlayers() {
+        List<UUID> players = new ArrayList<>();
+        for (String uuid : config.getStringList("ignore")) {
+            try {
+                players.add(UUID.fromString(uuid));
+            } catch (IllegalArgumentException ignored) {}
+        }
+        return Collections.synchronizedList(players);
     }
 
+    @Deprecated
     public void setIgnoredPlayers(List<String> players) {
+        List<UUID> uuids = new ArrayList<>();
+        for (String player : players) {
+            User user = ess.getOfflineUser(player);
+            if (user == null) {
+                return;
+            }
+            uuids.add(user.getBase().getUniqueId());
+        }
+        setIgnoredPlayerUUIDs(uuids);
+    }
+
+    public void setIgnoredPlayerUUIDs(List<UUID> players) {
         if (players == null || players.isEmpty()) {
             ignoredPlayers = Collections.synchronizedList(new ArrayList<>());
             config.removeProperty("ignore");
         } else {
             ignoredPlayers = players;
-            config.setProperty("ignore", players);
+            List<String> uuids = new ArrayList<>();
+            for (UUID uuid : players) {
+                uuids.add(uuid.toString());
+            }
+            config.setProperty("ignore", uuids);
         }
         config.save();
     }
@@ -497,17 +520,19 @@ public abstract class UserData extends PlayerExtension implements IConf {
     }
 
     public boolean isIgnoredPlayer(IUser user) {
-        return (ignoredPlayers.contains(user.getName().toLowerCase(Locale.ENGLISH)) && !user.isIgnoreExempt());
+        return ignoredPlayers.contains(user.getBase().getUniqueId()) && !user.isIgnoreExempt();
     }
 
     public void setIgnoredPlayer(IUser user, boolean set) {
-        final String entry = user.getName().toLowerCase(Locale.ENGLISH);
+        UUID uuid = user.getBase().getUniqueId();
         if (set) {
-            if (!ignoredPlayers.contains(entry)) ignoredPlayers.add(entry);
+            if (!ignoredPlayers.contains(uuid)) {
+                ignoredPlayers.add(uuid);
+            }
         } else {
-            ignoredPlayers.remove(entry);
+            ignoredPlayers.remove(uuid);
         }
-        setIgnoredPlayers(ignoredPlayers);
+        setIgnoredPlayerUUIDs(ignoredPlayers);
     }
 
     private boolean godmode;

@@ -42,6 +42,47 @@ public class EssentialsUpgrade {
         doneFile.load();
     }
 
+    public void convertIgnoreList() {
+        if (doneFile.getBoolean("updateUsersIgnoreListUUID", false)) {
+            return;
+        }
+        final File userdataFolder = new File(ess.getDataFolder(), "userdata");
+        if (!userdataFolder.exists() || !userdataFolder.isDirectory()) {
+            return;
+        }
+        final File[] userFiles = userdataFolder.listFiles();
+
+        for (File file : userFiles) {
+            if (!file.isFile() || !file.getName().endsWith(".yml")) {
+                continue;
+            }
+            final EssentialsConf config = new EssentialsConf(file);
+            try {
+                config.load();
+                if (config.hasProperty("ignore")) {
+                    List<String> migratedIgnores = new ArrayList<>();
+                    for (String name : Collections.synchronizedList(config.getStringList("ignore"))) {
+                        if (name == null) {
+                            continue;
+                        }
+                        OfflinePlayer user = ((OfflinePlayer) ess.getOfflineUser(name).getBase());
+                        if (user != null) {
+                            migratedIgnores.add(user.getUniqueId().toString());
+                        }
+                    }
+                    config.removeProperty("ignore");
+                    config.setProperty("ignore", migratedIgnores);
+                    config.forceSave();
+                }
+            } catch (RuntimeException ex) {
+                LOGGER.log(Level.INFO, "File: " + file.toString());
+                throw ex;
+            }
+        }
+        doneFile.setProperty("updateUsersIgnoreListUUID", true);
+        doneFile.save();
+    }
+
     public void convertKits() {
         Kits kits = ess.getKits();
         EssentialsConf config = kits.getConfig();
@@ -713,5 +754,6 @@ public class EssentialsUpgrade {
         banFormatChange();
         warnMetrics();
         repairUserMap();
+        convertIgnoreList();
     }
 }
