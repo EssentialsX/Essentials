@@ -43,9 +43,13 @@ public class EssentialsUpgrade {
     }
 
     public void convertIgnoreList() {
+        Pattern pattern = Pattern.compile("^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$");
         if (doneFile.getBoolean("updateUsersIgnoreListUUID", false)) {
             return;
         }
+
+        LOGGER.info("Attempting to migrate ignore list to UUIDs");
+
         final File userdataFolder = new File(ess.getDataFolder(), "userdata");
         if (!userdataFolder.exists() || !userdataFolder.isDirectory()) {
             return;
@@ -65,6 +69,10 @@ public class EssentialsUpgrade {
                         if (name == null) {
                             continue;
                         }
+                        if (pattern.matcher(name.trim()).matches()) {
+                            LOGGER.info("Detected already migrated ignore list!");
+                            return;
+                        }
                         User user = ess.getOfflineUser(name);
                         if (user != null && user.getBase() != null) {
                             migratedIgnores.add(user.getBase().getUniqueId().toString());
@@ -81,6 +89,7 @@ public class EssentialsUpgrade {
         }
         doneFile.setProperty("updateUsersIgnoreListUUID", true);
         doneFile.save();
+        LOGGER.info("Done converting ignore list.");
     }
 
     public void convertKits() {
