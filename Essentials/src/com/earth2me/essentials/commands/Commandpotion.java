@@ -39,10 +39,20 @@ public class Commandpotion extends EssentialsCommand {
         }
         
         boolean holdingPotion = stack.getType() == Material.POTION;
+        boolean holdingArrow = false;
         if (!holdingPotion && ReflUtil.getNmsVersionObject().isHigherThanOrEqualTo(ReflUtil.V1_9_R1)) {
             holdingPotion = stack.getType() == Material.SPLASH_POTION || stack.getType() == Material.LINGERING_POTION;
+            holdingArrow = stack.getType()  == Material.TIPPED_ARROW && ReflUtil.getNmsVersionObject().isHigherThanOrEqualTo(ReflUtil.V1_9_R1);
+
+            if (!holdingArrow) {
+                if (stack.getType() == Material.ARROW || stack.getType() == Material.SPECTRAL_ARROW) {
+                    holdingArrow = true;
+                    stack.setType(Material.TIPPED_ARROW);
+                }
+            }
         }
-        if (holdingPotion) {
+
+        if (holdingPotion || holdingArrow) {
             PotionMeta pmeta = (PotionMeta) stack.getItemMeta();
             if (args.length > 0) {
                 if (args[0].equalsIgnoreCase("clear")) {
