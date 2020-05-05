@@ -40,24 +40,32 @@ public class Commandpotion extends EssentialsCommand {
         
         boolean holdingPotion = stack.getType() == Material.POTION;
         boolean holdingArrow = false;
+        boolean wasSpectral = false;
+
         if (!holdingPotion && ReflUtil.getNmsVersionObject().isHigherThanOrEqualTo(ReflUtil.V1_9_R1)) {
             holdingPotion = stack.getType() == Material.SPLASH_POTION || stack.getType() == Material.LINGERING_POTION;
-            holdingArrow = stack.getType()  == Material.TIPPED_ARROW && ReflUtil.getNmsVersionObject().isHigherThanOrEqualTo(ReflUtil.V1_9_R1);
+            holdingArrow = stack.getType() == Material.ARROW && ReflUtil.getNmsVersionObject().isHigherThanOrEqualTo(ReflUtil.V1_9_R1);
 
             if (!holdingArrow) {
-                if (stack.getType() == Material.ARROW || stack.getType() == Material.SPECTRAL_ARROW) {
+                if (stack.getType() == Material.TIPPED_ARROW || stack.getType() == Material.SPECTRAL_ARROW) {
+                    if (stack.getType() == Material.SPECTRAL_ARROW) {
+                        wasSpectral = true;
+                    }
                     holdingArrow = true;
-                    stack.setType(Material.TIPPED_ARROW);
                 }
             }
         }
 
         if (holdingPotion || holdingArrow) {
-            PotionMeta pmeta = (PotionMeta) stack.getItemMeta();
+            ItemStack potionStack = stack.clone();
+            if (holdingArrow) {
+                potionStack.setType(Material.TIPPED_ARROW);
+            }
+            PotionMeta pmeta = (PotionMeta) potionStack.getItemMeta();
             if (args.length > 0) {
                 if (args[0].equalsIgnoreCase("clear")) {
                     pmeta.clearCustomEffects();
-                    stack.setItemMeta(pmeta);
+                    potionStack.setItemMeta(pmeta);
                 } else if (args[0].equalsIgnoreCase("apply") && user.isAuthorized("essentials.potion.apply")) {
                     for (PotionEffect effect : pmeta.getCustomEffects()) {
                         effect.apply(user.getBase());
@@ -65,12 +73,19 @@ public class Commandpotion extends EssentialsCommand {
                 } else if (args.length < 3) {
                     throw new NotEnoughArgumentsException();
                 } else {
-                    final MetaItemStack mStack = new MetaItemStack(stack);
+                    final MetaItemStack mStack = new MetaItemStack(potionStack);
+                    if (wasSpectral) {
+                        mStack.addPotionMeta(user.getSource(), true, "effect:glowing", ess);
+                        mStack.addPotionMeta(user.getSource(), true, "duration:10", ess);
+                        mStack.addPotionMeta(user.getSource(), true, "power:1", ess);
+                    }
+
                     for (String arg : args) {
                         mStack.addPotionMeta(user.getSource(), true, arg, ess);
                     }
                     if (mStack.completePotion()) {
                         pmeta = (PotionMeta) mStack.getItemStack().getItemMeta();
+                        stack.setType(potionStack.getType());
                         stack.setItemMeta(pmeta);
                     } else {
                         user.sendMessage(tl("invalidPotion"));
