@@ -799,6 +799,7 @@ protect:
     creeper-explosion: false
     creeper-playerdamage: false
     creeper-blockdamage: false
+    ender-crystal-explosion: false
     enderdragon-blockdamage: true
     enderman-pickup: false
     villager-death: false
