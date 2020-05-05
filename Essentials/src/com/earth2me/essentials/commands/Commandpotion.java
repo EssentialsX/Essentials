@@ -4,8 +4,8 @@ import com.earth2me.essentials.MetaItemStack;
 import com.earth2me.essentials.Potions;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.StringUtil;
+import com.earth2me.essentials.utils.VersionUtil;
 import com.google.common.collect.Lists;
-import net.ess3.nms.refl.ReflUtil;
 import org.bukkit.Material;
 import org.bukkit.Server;
 import org.bukkit.inventory.ItemStack;
@@ -42,9 +42,9 @@ public class Commandpotion extends EssentialsCommand {
         boolean holdingArrow = false;
         boolean wasSpectral = false;
 
-        if (!holdingPotion && ReflUtil.getNmsVersionObject().isHigherThanOrEqualTo(ReflUtil.V1_9_R1)) {
+        if (!holdingPotion && VersionUtil.v1_9_R01.isHigherThanOrEqualTo(VersionUtil.v1_9_R01)) {
             holdingPotion = stack.getType() == Material.SPLASH_POTION || stack.getType() == Material.LINGERING_POTION;
-            holdingArrow = stack.getType() == Material.ARROW && ReflUtil.getNmsVersionObject().isHigherThanOrEqualTo(ReflUtil.V1_9_R1);
+            holdingArrow = stack.getType() == Material.ARROW;
 
             if (!holdingArrow) {
                 if (stack.getType() == Material.TIPPED_ARROW || stack.getType() == Material.SPECTRAL_ARROW) {
