@@ -12,7 +12,7 @@ import net.ess3.api.IUser;
 /**
  * Called when the player is given a kit
  */
-public class UserKitUseEvent extends Event implements Cancellable {
+public class KitClaimEvent extends Event implements Cancellable {
 
     private static final HandlerList handlers = new HandlerList();
 
@@ -20,7 +20,7 @@ public class UserKitUseEvent extends Event implements Cancellable {
     private IUser user;
     private boolean cancelled;
 
-    public UserKitUseEvent(IUser user, Kit kit) {
+    public KitClaimEvent(IUser user, Kit kit) {
         super(!Bukkit.getServer().isPrimaryThread());
         this.user = user;
         this.kit = kit;
