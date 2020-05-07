@@ -7,7 +7,6 @@ import org.bukkit.Location;
 import org.bukkit.Server;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
@@ -105,29 +104,31 @@ public class Commandhome extends EssentialsCommand {
     @Override
     protected List<String> getTabCompleteOptions(final Server server, final User user, final String commandLabel, final String[] args) {
         boolean canVisitOthers = user.isAuthorized("essentials.home.others");
-
+        boolean canVisitBed = user.isAuthorized("essentials.home.bed");
         if (args.length == 1) {
+            List<String> homes = user.getHomes();
+            if (canVisitBed) {
+                homes.add("bed");
+            }
             if (canVisitOthers) {
-                return getPlayers(server, user);
-            } else {
-                List<String> homes = user.getHomes();
-                if (user.isAuthorized("essentials.home.bed")) {
-                    homes.add("bed");
+                int sepIndex = args[0].indexOf(':');
+                if (sepIndex < 0) {
+                    getPlayers(server, user).forEach(player -> homes.add(player + ":"));
+                } else {
+                    String namePart = args[0].substring(0, sepIndex);
+                    User otherUser;
+                    try {
+                        otherUser = getPlayer(server, new String[]{namePart}, 0, true, true);
+                    } catch (Exception ex) {
+                        return homes;
+                    }
+                    otherUser.getHomes().forEach(home -> homes.add(namePart + ":" + home));
+                    if (canVisitBed) {
+                        homes.add(namePart + ":bed");
+                    }
                 }
-                return homes;
             }
-        } else if (args.length == 2 && canVisitOthers) {
-            try {
-                User otherUser = getPlayer(server, args, 0, true, true);
-                List<String> homes = otherUser.getHomes();
-                if (user.isAuthorized("essentials.home.bed")) {
-                    homes.add("bed");
-                }
-                return homes;
-            } catch (Exception ex) {
-                // No such user
-                return Collections.emptyList();
-            }
+            return homes;
         } else {
             return Collections.emptyList();
         }

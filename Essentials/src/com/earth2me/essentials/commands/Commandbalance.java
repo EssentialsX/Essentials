@@ -23,7 +23,7 @@ public class Commandbalance extends EssentialsCommand {
             throw new NotEnoughArgumentsException();
         }
 
-        User target = getPlayer(server, args, 0, true, true);
+        User target = getPlayer(server, args, 0, false, true);
         sender.sendMessage(tl("balanceOther", target.isHidden() ? target.getName() : target.getDisplayName(), NumberUtil.displayCurrency(target.getMoney(), ess)));
     }
 

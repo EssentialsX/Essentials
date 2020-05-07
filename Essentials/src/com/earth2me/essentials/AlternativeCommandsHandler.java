@@ -46,15 +46,12 @@ public class AlternativeCommandsHandler {
                 continue;
             }
             for (String label : labels) {
-                List<PluginCommand> plugincommands = altcommands.get(label.toLowerCase(Locale.ENGLISH));
-                if (plugincommands == null) {
-                    plugincommands = new ArrayList<>();
-                    altcommands.put(label.toLowerCase(Locale.ENGLISH), plugincommands);
-                }
+                List<PluginCommand> plugincommands = altcommands.computeIfAbsent(label.toLowerCase(Locale.ENGLISH), k -> new ArrayList<>());
                 boolean found = false;
                 for (PluginCommand pc2 : plugincommands) {
                     if (pc2.getPlugin().equals(plugin)) {
                         found = true;
+                        break;
                     }
                 }
                 if (!found) {
@@ -68,13 +65,7 @@ public class AlternativeCommandsHandler {
         final Iterator<Map.Entry<String, List<PluginCommand>>> iterator = altcommands.entrySet().iterator();
         while (iterator.hasNext()) {
             final Map.Entry<String, List<PluginCommand>> entry = iterator.next();
-            final Iterator<PluginCommand> pcIterator = entry.getValue().iterator();
-            while (pcIterator.hasNext()) {
-                final PluginCommand pc = pcIterator.next();
-                if (pc.getPlugin() == null || pc.getPlugin().equals(plugin)) {
-                    pcIterator.remove();
-                }
-            }
+            entry.getValue().removeIf(pc -> pc.getPlugin() == null || pc.getPlugin().equals(plugin));
             if (entry.getValue().isEmpty()) {
                 iterator.remove();
             }

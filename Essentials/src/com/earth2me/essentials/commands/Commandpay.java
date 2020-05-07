@@ -50,7 +50,7 @@ public class Commandpay extends EssentialsLoopCommand {
         }
         loopOnlinePlayers(server, user.getSource(), false, user.isAuthorized("essentials.pay.multiple"), args[0], args);
         if (informToConfirm) {
-            String cmd = "/" + commandLabel + " " + StringUtil.joinList(" ", (Object[]) args);
+            String cmd = "/" + commandLabel + " " + StringUtil.joinList(" ", args);
             user.sendMessage(tl("confirmPayment", NumberUtil.displayCurrency(amount, ess), cmd));
         }
     }
