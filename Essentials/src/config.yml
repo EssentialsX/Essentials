@@ -332,8 +332,8 @@ pastebin-createkit: false
 # However, serialization removes the ability to edit kits by hand and kits *may* break in future versions.
 # If this is true, /createkit will use item serialization.
 # If this is false, /createkit will use the regular item alias system.
-# Default is true.
-use-better-kits: true
+# Default is false.
+use-better-kits: false
 
 # Essentials Sign Control
 # See http://wiki.ess3.net/wiki/Sign_Tutorial for instructions on how to use these.
