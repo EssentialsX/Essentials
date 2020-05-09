@@ -328,6 +328,8 @@ public interface ISettings extends IConf {
 
     boolean isPastebinCreateKit();
 
+    boolean isUseBetterKits();
+
     boolean isAllowBulkBuySell();
 
     boolean isAllowSellNamedItems();

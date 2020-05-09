@@ -1529,6 +1529,11 @@ public class Settings implements net.ess3.api.ISettings {
     }
 
     @Override
+    public boolean isUseBetterKits() {
+        return config.getBoolean("use-better-kits", true);
+    }
+
+    @Override
     public boolean isAllowBulkBuySell() {
         return config.getBoolean("allow-bulk-buy-sell", false);
     }

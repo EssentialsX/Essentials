@@ -324,8 +324,16 @@ skip-used-one-time-kits-from-kit-list: false
 # Determines the functionality of the /createkit command.
 # If this is true, /createkit will give the user a link with the kit code.
 # If this is false, /createkit will add the kit to the kits.yml config file directly.
-#
+# Default is false.
 pastebin-createkit: false
+
+# Determines if /createkit will generate kits with item serialization.
+# By using serialization, there is added support for for complex items such as potions and shulker boxes.
+# However, serialization removes the ability to edit kits by hand and kits *may* break in future versions.
+# If this is true, /createkit will use item serialization.
+# If this is false, /createkit will use the regular item alias system.
+# Default is true.
+use-better-kits: true
 
 # Essentials Sign Control
 # See http://wiki.ess3.net/wiki/Sign_Tutorial for instructions on how to use these.

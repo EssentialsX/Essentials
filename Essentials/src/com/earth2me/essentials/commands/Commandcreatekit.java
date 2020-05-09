@@ -65,16 +65,14 @@ public class Commandcreatekit extends EssentialsCommand {
         for (ItemStack is : items) {
             if (is != null && is.getType() != null && is.getType() != Material.AIR) {
                 String serialized;
-                try {
+                if (ess.getSettings().isUseBetterKits()) {
                     ByteArrayOutputStream bos = new ByteArrayOutputStream();
                     BukkitObjectOutputStream bukkitOutStream = new BukkitObjectOutputStream(bos);
                     bukkitOutStream.writeObject(is);
                     bukkitOutStream.close();
                     serialized = "@" + Base64Coder.encodeLines(bos.toByteArray());
                     bos.close();
-                } catch (Exception e) {
-                    System.out.println("AYAYA CLAP AYAYA CLAP AYAYA CLAP AYAYA CLAP AYAYA CLAP AYAYA CLAP AYAYA CLAP AYAYA CLAP AYAYA CLAP");
-                    e.printStackTrace();
+                } else {
                     serialized = ess.getItemDb().serialize(is);
                 }
                 list.add(serialized);
