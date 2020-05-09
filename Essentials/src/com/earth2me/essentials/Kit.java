@@ -11,7 +11,10 @@ import net.ess3.api.IEssentials;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.util.io.BukkitObjectInputStream;
+import org.yaml.snakeyaml.external.biz.base64Coder.Base64Coder;
 
+import java.io.ByteArrayInputStream;
 import java.math.BigDecimal;
 import java.util.*;
 import java.util.logging.Level;
@@ -168,6 +171,13 @@ public class Kit {
                     String name = user.getName();
                     command = command.replace("{player}", name);
                     Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command);
+                    continue;
+                }
+
+                if (kitItem.startsWith("@")) {
+                    BukkitObjectInputStream bis = new BukkitObjectInputStream(new ByteArrayInputStream(Base64Coder.decodeLines(kitItem.substring(1))));
+                    itemList.add((ItemStack) bis.readObject());
+                    bis.close();
                     continue;
                 }
 

@@ -1,14 +1,12 @@
 package com.earth2me.essentials.commands;
 
+import com.earth2me.essentials.CommandSource;
+import com.earth2me.essentials.User;
+import com.earth2me.essentials.utils.DateUtil;
 import com.google.common.base.Charsets;
 import com.google.common.io.CharStreams;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-
-import com.earth2me.essentials.CommandSource;
-import com.earth2me.essentials.User;
-import com.earth2me.essentials.utils.DateUtil;
-
 import org.bukkit.Material;
 import org.bukkit.Server;
 import org.bukkit.configuration.ConfigurationSection;
@@ -16,11 +14,14 @@ import org.bukkit.configuration.MemoryConfiguration;
 import org.bukkit.configuration.file.YamlConstructor;
 import org.bukkit.configuration.file.YamlRepresenter;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.util.io.BukkitObjectOutputStream;
 import org.yaml.snakeyaml.DumperOptions;
 import org.yaml.snakeyaml.DumperOptions.FlowStyle;
 import org.yaml.snakeyaml.Yaml;
+import org.yaml.snakeyaml.external.biz.base64Coder.Base64Coder;
 import org.yaml.snakeyaml.representer.Representer;
 
+import java.io.ByteArrayOutputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
@@ -63,7 +64,19 @@ public class Commandcreatekit extends EssentialsCommand {
         List<String> list = new ArrayList<>();
         for (ItemStack is : items) {
             if (is != null && is.getType() != null && is.getType() != Material.AIR) {
-                String serialized = ess.getItemDb().serialize(is);
+                String serialized;
+                try {
+                    ByteArrayOutputStream bos = new ByteArrayOutputStream();
+                    BukkitObjectOutputStream bukkitOutStream = new BukkitObjectOutputStream(bos);
+                    bukkitOutStream.writeObject(is);
+                    bukkitOutStream.close();
+                    serialized = "@" + Base64Coder.encodeLines(bos.toByteArray());
+                    bos.close();
+                } catch (Exception e) {
+                    System.out.println("AYAYA CLAP AYAYA CLAP AYAYA CLAP AYAYA CLAP AYAYA CLAP AYAYA CLAP AYAYA CLAP AYAYA CLAP AYAYA CLAP");
+                    e.printStackTrace();
+                    serialized = ess.getItemDb().serialize(is);
+                }
                 list.add(serialized);
             }
         }
