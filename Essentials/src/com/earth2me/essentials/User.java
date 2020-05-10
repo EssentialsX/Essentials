@@ -612,6 +612,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
                 {
                     ignoredPlayerTimeouts.remove(player.getKey());
                     setIgnoredPlayer(player.getKey(), false);
+                    sendMessage(tl("unignorePlayer", ess.getUser(player.getKey()).getName()));
                 }
             }
         }

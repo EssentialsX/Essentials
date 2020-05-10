@@ -198,7 +198,7 @@ commands:
     aliases: [ehome,homes,ehomes]
   ignore:
     description: Ignore or unignore other players.
-    usage: /<command> <player>
+    usage: /<command> <player> [datediff]
     aliases: [eignore,unignore,eunignore,delignore,edelignore,remignore,eremignore,rmignore,ermignore]
   info:
     description: Shows information set by the server owner.

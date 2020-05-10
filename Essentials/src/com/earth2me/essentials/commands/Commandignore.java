@@ -45,14 +45,14 @@ public class Commandignore extends EssentialsCommand {
                 user.sendMessage(tl("unignorePlayer", player.getName()));
             } else {
                 user.setIgnoredPlayer(player, true);
-                user.sendMessage(tl("ignorePlayer", player.getName()));
                 if (args.length > 1) {
-                    System.out.println("Ignoring with timer");
                     long ignoreTimestamp = 0;
                     final String time = args[1];
                     ignoreTimestamp = DateUtil.parseDateDiff(time, true);
-                    System.out.println(time);
                     user.setIgnoredPlayerTimeout(player, ignoreTimestamp);
+                    user.sendMessage(tl("ignorePlayerFor", player.getName(), time));
+                } else {
+                    user.sendMessage(tl("ignorePlayer", player.getName()));
                 }
             }
         }
