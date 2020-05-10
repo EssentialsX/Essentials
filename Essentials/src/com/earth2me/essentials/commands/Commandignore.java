@@ -1,5 +1,6 @@
 package com.earth2me.essentials.commands;
 
+import com.earth2me.essentials.utils.DateUtil;
 import com.earth2me.essentials.User;
 import org.bukkit.Server;
 
@@ -45,6 +46,14 @@ public class Commandignore extends EssentialsCommand {
             } else {
                 user.setIgnoredPlayer(player, true);
                 user.sendMessage(tl("ignorePlayer", player.getName()));
+                if (args.length > 1) {
+                    System.out.println("Ignoring with timer");
+                    long ignoreTimestamp = 0;
+                    final String time = args[1];
+                    ignoreTimestamp = DateUtil.parseDateDiff(time, true);
+                    System.out.println(time);
+                    user.setIgnoredPlayerTimeout(player, ignoreTimestamp);
+                }
             }
         }
     }

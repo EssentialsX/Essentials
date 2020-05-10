@@ -88,6 +88,7 @@ public abstract class UserData extends PlayerExtension implements IConf {
         kitTimestamps = _getKitTimestamps();
         nickname = _getNickname();
         ignoredPlayers = _getIgnoredPlayers();
+        ignoredPlayerTimeouts = _getIgnoredPlayerTimeouts();
         logoutLocation = _getLogoutLocation();
         lastAccountName = _getLastAccountName();
         commandCooldowns = _getCommandCooldowns();
@@ -472,6 +473,8 @@ public abstract class UserData extends PlayerExtension implements IConf {
 
     private List<UUID> ignoredPlayers;
 
+    public Map<UUID,Long> ignoredPlayerTimeouts;
+
     public List<UUID> _getIgnoredPlayers() {
         List<UUID> players = new ArrayList<>();
         for (String uuid : config.getStringList("ignore")) {
@@ -493,6 +496,36 @@ public abstract class UserData extends PlayerExtension implements IConf {
             uuids.add(user.getBase().getUniqueId());
         }
         setIgnoredPlayerUUIDs(uuids);
+    }
+
+    public Map<UUID,Long> _getIgnoredPlayerTimeouts()
+    {
+        Map<UUID,Long> ignoreTimeouts = new HashMap<UUID,Long>();
+        Map<UUID,Long> loadedTimeouts = (Map<UUID,Long>) config.getProperty("ignoretimeouts");
+        if (loadedTimeouts != null) {
+            ignoreTimeouts = loadedTimeouts;
+        }
+        return ignoreTimeouts;
+    }
+
+    public void setIgnoredPlayerTimeouts(Map<UUID,Long> timeouts)
+    {
+        if (timeouts == null || timeouts.isEmpty())
+        {
+            ignoredPlayerTimeouts = new HashMap<UUID,Long>();
+            config.removeProperty("ignoretimeouts");
+        }
+        else
+        {
+            ignoredPlayerTimeouts = timeouts;
+            config.setProperty("ignoretimeouts", timeouts);
+        }
+        config.save();
+    }
+
+    public long getIgnoredPlayerTimeout(UUID uuid)
+    {
+        return ignoredPlayerTimeouts.get(uuid);
     }
 
     public void setIgnoredPlayerUUIDs(List<UUID> players) {
@@ -519,20 +552,36 @@ public abstract class UserData extends PlayerExtension implements IConf {
         return isIgnoredPlayer(user);
     }
 
+
+
     public boolean isIgnoredPlayer(IUser user) {
         return ignoredPlayers.contains(user.getBase().getUniqueId()) && !user.isIgnoreExempt();
     }
 
     public void setIgnoredPlayer(IUser user, boolean set) {
         UUID uuid = user.getBase().getUniqueId();
-        if (set) {
+        setIgnoredPlayer(uuid, set);
+    }
+
+    public void setIgnoredPlayer(UUID uuid, boolean set) {
+         if (set) {
             if (!ignoredPlayers.contains(uuid)) {
                 ignoredPlayers.add(uuid);
             }
         } else {
             ignoredPlayers.remove(uuid);
         }
-        setIgnoredPlayerUUIDs(ignoredPlayers);
+        setIgnoredPlayerUUIDs(ignoredPlayers);       
+    }
+
+    public void setIgnoredPlayerTimeout(IUser user, long time)
+    {
+        UUID uuid = user.getBase().getUniqueId();
+        System.out.println("UUID: " + uuid);
+        System.out.println("Map: " + ignoredPlayerTimeouts);
+        ignoredPlayerTimeouts.put(uuid, time);
+        System.out.println("Map (final): " + ignoredPlayerTimeouts);
+        setIgnoredPlayerTimeouts(ignoredPlayerTimeouts);
     }
 
     private boolean godmode;
