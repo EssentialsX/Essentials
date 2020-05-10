@@ -356,4 +356,6 @@ public interface ISettings extends IConf {
 
     boolean isSpawnIfNoHome();
 
+    boolean keepInventoryPermission();
+
 }

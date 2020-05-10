@@ -166,7 +166,8 @@ public class EssentialsEntityListener implements Listener {
     @EventHandler(priority = EventPriority.LOW)
     public void onPlayerDeathInvEvent(final PlayerDeathEvent event) {
         final User user = ess.getUser(event.getEntity());
-        if (user.isAuthorized("essentials.keepinv")) {
+        //Added a configuration boolean to aid those who use wildcard permissions.
+        if (user.isAuthorized("essentials.keepinv") && ess.getSettings().keepInventoryPermission()) {
             event.setKeepInventory(true);
             event.getDrops().clear();
         }

@@ -612,6 +612,12 @@ log-command-block-commands: true
 # Set the maximum speed for projectiles spawned with /fireball.
 max-projectile-speed: 8
 
+# Should essentials keep player inventories if they
+# have permissions?
+#
+# Requires the permission: essentials.keepinv
+keep-inventory-permisison: false
+
 ############################################################
 # +------------------------------------------------------+ #
 # |                        Homes                         | #
