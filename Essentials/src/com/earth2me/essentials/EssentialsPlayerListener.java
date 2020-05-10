@@ -42,7 +42,6 @@ import java.util.regex.Pattern;
 
 import static com.earth2me.essentials.I18n.tl;
 
-
 public class EssentialsPlayerListener implements Listener {
     private static final Logger LOGGER = Logger.getLogger("Essentials");
     private final transient IEssentials ess;
@@ -93,6 +92,14 @@ public class EssentialsPlayerListener implements Listener {
 
         if (isCommandSendEvent()) {
             ess.getServer().getPluginManager().registerEvents(new CommandSendListener(), ess);
+        }
+    }
+    
+    @EventHandler(priority = EventPriority.NORMAL)
+    public void onPlayerDeath(final PlayerDeathEvent event) {
+        final User user = ess.getUser((Player) event.getEntity());
+        if(user.isHidden()) {
+            event.setDeathMessage(null);
         }
     }
 
