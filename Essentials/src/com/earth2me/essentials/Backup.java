@@ -26,7 +26,7 @@ public class Backup implements Runnable {
     public Backup(final IEssentials ess) {
         this.ess = ess;
         server = ess.getServer();
-        if (!ess.getOnlinePlayers().isEmpty()) {
+        if (!ess.getOnlinePlayers().isEmpty() || ess.getSettings().isAlwaysRunBackup()) {
             ess.runTaskAsynchronously(this::startTask);
         }
     }
@@ -112,7 +112,7 @@ public class Backup implements Runnable {
                     @Override
                     public void run() {
                         server.dispatchCommand(cs, "save-on");
-                        if (ess.getOnlinePlayers().isEmpty()) {
+                        if (!ess.getSettings().isAlwaysRunBackup() && ess.getOnlinePlayers().isEmpty()) {
                             stopTask();
                         }
                         active = false;
