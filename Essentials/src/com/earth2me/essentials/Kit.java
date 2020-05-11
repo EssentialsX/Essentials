@@ -7,6 +7,7 @@ import com.earth2me.essentials.textreader.IText;
 import com.earth2me.essentials.textreader.KeywordReplacer;
 import com.earth2me.essentials.textreader.SimpleTextInput;
 import com.earth2me.essentials.utils.DateUtil;
+import com.earth2me.essentials.utils.NumberUtil;
 import net.ess3.api.IEssentials;
 import net.ess3.api.events.KitClaimEvent;
 
@@ -160,11 +161,10 @@ public class Kit {
             boolean spew = false;
             final boolean allowUnsafe = ess.getSettings().allowUnsafeEnchantments();
             final boolean currencyIsSuffix = ess.getSettings().isCurrencySymbolSuffixed();
-            final String currencySymbol = ess.getSettings().getCurrencySymbol();
             List<ItemStack> itemList = new ArrayList<>();
             for (String kitItem : output.getLines()) {
                 if (!currencyIsSuffix ? kitItem.startsWith(ess.getSettings().getCurrencySymbol()) : kitItem.endsWith(ess.getSettings().getCurrencySymbol())) {
-                    final String valueString = currencyIsSuffix ? kitItem.substring(0, currencySymbol.length()) : kitItem.substring(currencySymbol.length());
+                    final String valueString = NumberUtil.sanitizeCurrencyString(kitItem, ess);
                     BigDecimal value = new BigDecimal(valueString.trim());
                     Trade t = new Trade(value, ess);
                     t.pay(user, OverflowType.DROP);
