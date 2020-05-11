@@ -165,9 +165,9 @@ public interface IUser {
     Map<Pattern, Long> getCommandCooldowns();
 
     Date getCommandCooldownExpiry(String label);
-
+    
     void addCommandCooldown(Pattern pattern, Date expiresAt, boolean save);
-
+    
     boolean clearCommandCooldown(Pattern pattern);
 
     /*
@@ -182,19 +182,19 @@ public interface IUser {
     String getAfkMessage();
 
     void setAfkMessage(final String message);
-
+    
     long getAfkSince();
-
+    
     boolean isAcceptingPay();
-
+    
     void setAcceptingPay(boolean acceptingPay);
-
+    
     boolean isPromptingPayConfirm();
-
+    
     void setPromptingPayConfirm(boolean prompt);
-
+    
     boolean isPromptingClearConfirm();
-
+    
     void setPromptingClearConfirm(boolean prompt);
 
     boolean isLastMessageReplyRecipient();
