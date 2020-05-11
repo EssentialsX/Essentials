@@ -381,6 +381,13 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
         getUserMap().getUUIDMap().shutdown();
 
         HandlerList.unregisterAll(this);
+        while (getBackup().isActive()) {
+            try {
+                Thread.sleep(10);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     @Override

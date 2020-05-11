@@ -52,6 +52,10 @@ public class Backup implements Runnable {
         }
     }
 
+    public boolean isActive() {
+        return active;
+    }
+
     @Override
     public void run() {
         if (active) {
