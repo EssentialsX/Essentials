@@ -364,13 +364,17 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
 
     @Override
     public void onDisable() {
+        boolean stopping = ServerState.isStopping();
+        if (!stopping) {
+            LOGGER.log(Level.SEVERE, tl("serverReloading"));
+        }
         getBackup().setPendingShutdown(true);
         for (User user : getOnlineUsers()) {
             if (user.isVanished()) {
                 user.setVanished(false);
                 user.sendMessage(tl("unvanishedReload"));
             }
-            if (ServerState.isStopping()) {
+            if (stopping) {
                 user.setLastLocation();
                 if (!user.isHidden()) {
                     user.setLastLogout(System.currentTimeMillis());
