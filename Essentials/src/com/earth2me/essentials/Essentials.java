@@ -18,6 +18,7 @@
 package com.earth2me.essentials;
 
 import com.earth2me.essentials.commands.*;
+import com.earth2me.essentials.craftbukkit.ServerState;
 import com.earth2me.essentials.items.AbstractItemDb;
 import com.earth2me.essentials.items.CustomItemResolver;
 import com.earth2me.essentials.items.FlatItemDb;
@@ -45,7 +46,6 @@ import net.ess3.nms.legacy.LegacyPotionMetaProvider;
 import net.ess3.nms.legacy.LegacySpawnEggProvider;
 import net.ess3.nms.legacy.LegacySpawnerProvider;
 import net.ess3.nms.refl.ReflSpawnEggProvider;
-import net.ess3.nms.refl.ReflUtil;
 import net.ess3.nms.updatedmeta.BasePotionDataProvider;
 import net.ess3.nms.updatedmeta.BlockMetaSpawnerProvider;
 import net.ess3.nms.v1_8_R1.v1_8_R1SpawnerProvider;
@@ -78,9 +78,6 @@ import org.yaml.snakeyaml.error.YAMLException;
 
 import java.io.File;
 import java.io.IOException;
-import java.lang.invoke.MethodHandle;
-import java.lang.invoke.MethodHandles;
-import java.lang.invoke.MethodType;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
@@ -117,35 +114,6 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
     private transient SpawnEggProvider spawnEggProvider;
     private transient PotionMetaProvider potionMetaProvider;
     private transient Kits kits;
-
-    private static final MethodHandle isStopping; //Only in Paper
-    private static final MethodHandle nmsHasStopped;
-    private static final MethodHandle nmsIsRunning;
-    private static final Object nmsServer;
-
-    static {
-        MethodHandle isStoppingHandle = null;
-        MethodHandle nmsHasStoppedHandle = null;
-        MethodHandle nmsIsRunningHandle = null;
-        Object nmsServerObject = null;
-        try {
-            isStoppingHandle = MethodHandles.lookup().findStatic(Bukkit.class, "isStopping", MethodType.methodType(boolean.class));
-        } catch (Throwable e) {
-            try {
-                Class<?> nmsClass = ReflUtil.getNMSClass("MinecraftServer");
-                if (nmsClass != null) {
-                    nmsServerObject = ReflUtil.getMethodCached(nmsClass, "getServer").invoke(null);
-                    nmsIsRunningHandle = MethodHandles.lookup().findVirtual(nmsClass, "isRunning", MethodType.methodType(boolean.class));
-                    nmsHasStoppedHandle = MethodHandles.lookup().findVirtual(nmsClass, "hasStopped", MethodType.methodType(boolean.class));
-                }
-            } catch (Throwable ignored) {
-            }
-        }
-        isStopping = isStoppingHandle;
-        nmsHasStopped = nmsHasStoppedHandle;
-        nmsIsRunning = nmsIsRunningHandle;
-        nmsServer = nmsServerObject;
-    }
 
     public Essentials() {
 
@@ -392,35 +360,12 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
 
     @Override
     public void onDisable() {
-        boolean stopping = false;
-        if (isStopping != null) {
-            try {
-                stopping = (boolean) isStopping.invoke();
-            } catch (Throwable t) {
-                t.printStackTrace();
-            }
-        } else if (nmsServer != null) {
-            if (nmsHasStopped != null) {
-                try {
-                    stopping = (boolean) nmsHasStopped.invokeExact(nmsServer);
-                } catch (Throwable t) {
-                    t.printStackTrace();
-                }
-            } else if (nmsIsRunning != null) {
-                try {
-                    stopping = (boolean) nmsIsRunning.invokeExact(nmsServer);
-                } catch (Throwable t) {
-                    t.printStackTrace();
-                }
-            }
-        }
-
         for (User user : getOnlineUsers()) {
             if (user.isVanished()) {
                 user.setVanished(false);
                 user.sendMessage(tl("unvanishedReload"));
             }
-            if (stopping) {
+            if (ServerState.isStopping()) {
                 user.setLastLocation();
                 if (!user.isHidden()) {
                     user.setLastLogout(System.currentTimeMillis());
