@@ -360,6 +360,10 @@ commands:
     description: Repairs the durability of one or all items.
     usage: /<command> [hand|all]
     aliases: [fix,efix,erepair]
+  rest:
+    description: Rests you or the given player.
+    usage: /<command> [player]
+    aliases: [erest]
   rules:
     description: Views the server rules.
     usage: /<command> [chapter] [page]
