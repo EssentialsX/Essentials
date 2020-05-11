@@ -1,8 +1,8 @@
 package com.earth2me.essentials;
 
 import com.earth2me.essentials.api.IAsyncTeleport;
-import com.earth2me.essentials.api.ITeleport;
 import com.earth2me.essentials.commands.IEssentialsCommand;
+import net.ess3.api.ITeleport;
 import net.ess3.api.MaxMoneyException;
 import net.ess3.api.events.AfkStatusChangeEvent;
 import org.bukkit.Location;
