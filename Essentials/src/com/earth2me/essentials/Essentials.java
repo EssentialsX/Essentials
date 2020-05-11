@@ -18,6 +18,7 @@
 package com.earth2me.essentials;
 
 import com.earth2me.essentials.commands.*;
+import com.earth2me.essentials.craftbukkit.ServerState;
 import com.earth2me.essentials.items.AbstractItemDb;
 import com.earth2me.essentials.items.CustomItemResolver;
 import com.earth2me.essentials.items.FlatItemDb;
@@ -369,7 +370,15 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
                 user.setVanished(false);
                 user.sendMessage(tl("unvanishedReload"));
             }
-            user.stopTransaction();
+            if (ServerState.isStopping()) {
+                user.setLastLocation();
+                if (!user.isHidden()) {
+                    user.setLastLogout(System.currentTimeMillis());
+                }
+                user.cleanup();
+            } else {
+                user.stopTransaction();
+            }
         }
         cleanupOpenInventories();
         if (getBackup().getTaskLock() != null && !getBackup().getTaskLock().isDone()) {
