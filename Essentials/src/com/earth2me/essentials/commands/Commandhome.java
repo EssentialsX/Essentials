@@ -3,6 +3,7 @@ package com.earth2me.essentials.commands;
 import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.StringUtil;
+import io.papermc.lib.PaperLib;
 import org.bukkit.Location;
 import org.bukkit.Server;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
@@ -40,39 +41,46 @@ public class Commandhome extends EssentialsCommand {
         }
         try {
             if ("bed".equalsIgnoreCase(homeName) && user.isAuthorized("essentials.home.bed")) {
-                final Location bed = player.getBase().getBedSpawnLocation();
-                if (bed != null) {
-                    user.getAsyncTeleport().teleport(bed, charge, TeleportCause.COMMAND, getNewExceptionFuture(user.getSource(), commandLabel));
-                    return;
-                } else {
-                    throw new Exception(tl("bedMissing"));
-                }
+                PaperLib.getBedSpawnLocationAsync(player.getBase(), true).thenAccept(location -> {
+                    if (location != null) {
+                        user.getAsyncTeleport().teleport(location, charge, TeleportCause.COMMAND, getNewExceptionFuture(user.getSource(), commandLabel));
+                    } else {
+                        showError(user.getBase(), new Exception(tl("bedMissing")), commandLabel);
+                    }
+                });
+                return;
             }
             goHome(user, player, homeName.toLowerCase(Locale.ENGLISH), charge, getNewExceptionFuture(user.getSource(), commandLabel));
         } catch (NotEnoughArgumentsException e) {
-            Location bed = player.getBase().getBedSpawnLocation();
-            final List<String> homes = player.getHomes();
-            if (homes.isEmpty() && player.equals(user)) {
-                if (ess.getSettings().isSpawnIfNoHome()) {
-                    user.getAsyncTeleport().respawn(charge, TeleportCause.COMMAND, getNewExceptionFuture(user.getSource(), commandLabel));
-                } else {
-                    throw new Exception(tl("noHomeSetPlayer"));
-                }
-            } else if (homes.isEmpty()) {
-                throw new Exception(tl("noHomeSetPlayer"));
-            } else if (homes.size() == 1 && player.equals(user)) {
-                goHome(user, player, homes.get(0), charge, getNewExceptionFuture(user.getSource(), commandLabel));
-            } else {
-                final int count = homes.size();
-                if (user.isAuthorized("essentials.home.bed")) {
-                    if (bed != null) {
-                        homes.add(tl("bed"));
+            final User finalPlayer = player;
+            PaperLib.getBedSpawnLocationAsync(player.getBase(), true).thenAccept(bed -> {
+                final List<String> homes = finalPlayer.getHomes();
+                if (homes.isEmpty() && finalPlayer.equals(user)) {
+                    if (ess.getSettings().isSpawnIfNoHome()) {
+                        user.getAsyncTeleport().respawn(charge, TeleportCause.COMMAND, getNewExceptionFuture(user.getSource(), commandLabel));
                     } else {
-                        homes.add(tl("bedNull"));
+                        showError(user.getBase(), new Exception(tl("noHomeSetPlayer")), commandLabel);
                     }
+                } else if (homes.isEmpty()) {
+                    showError(user.getBase(), new Exception(tl("noHomeSetPlayer")), commandLabel);
+                } else if (homes.size() == 1 && finalPlayer.equals(user)) {
+                    try {
+                        goHome(user, finalPlayer, homes.get(0), charge, getNewExceptionFuture(user.getSource(), commandLabel));
+                    } catch (Exception exception) {
+                        showError(user.getBase(), exception, commandLabel);
+                    }
+                } else {
+                    final int count = homes.size();
+                    if (user.isAuthorized("essentials.home.bed")) {
+                        if (bed != null) {
+                            homes.add(tl("bed"));
+                        } else {
+                            homes.add(tl("bedNull"));
+                        }
+                    }
+                    user.sendMessage(tl("homes", StringUtil.joinList(homes), count, getHomeLimit(finalPlayer)));
                 }
-                user.sendMessage(tl("homes", StringUtil.joinList(homes), count, getHomeLimit(player)));
-            }
+            });
         }
     }
 
