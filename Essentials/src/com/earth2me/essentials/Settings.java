@@ -427,7 +427,7 @@ public class Settings implements net.ess3.api.ISettings {
 
     @Override
     public boolean isAlwaysRunBackup() {
-        return config.getBoolean("backup.always-run-backup", false);
+        return config.getBoolean("backup.always-run", false);
     }
 
     private final Map<String, String> chatFormats = Collections.synchronizedMap(new HashMap<>());
