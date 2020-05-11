@@ -314,6 +314,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
             handleCrash(ex);
             throw ex;
         }
+        getBackup().setPendingShutdown(false);
     }
 
     @Override
@@ -363,12 +364,17 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
 
     @Override
     public void onDisable() {
+        boolean stopping = ServerState.isStopping();
+        if (!stopping) {
+            LOGGER.log(Level.SEVERE, tl("serverReloading"));
+        }
+        getBackup().setPendingShutdown(true);
         for (User user : getOnlineUsers()) {
             if (user.isVanished()) {
                 user.setVanished(false);
                 user.sendMessage(tl("unvanishedReload"));
             }
-            if (ServerState.isStopping()) {
+            if (stopping) {
                 user.setLastLocation();
                 if (!user.isHidden()) {
                     user.setLastLogout(System.currentTimeMillis());
@@ -379,6 +385,10 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
             }
         }
         cleanupOpenInventories();
+        if (getBackup().getTaskLock() != null && !getBackup().getTaskLock().isDone()) {
+            LOGGER.log(Level.SEVERE, tl("backupInProgress"));
+            getBackup().getTaskLock().join();
+        }
         if (i18n != null) {
             i18n.onDisable();
         }
