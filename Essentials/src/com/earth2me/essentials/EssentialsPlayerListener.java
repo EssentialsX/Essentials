@@ -98,7 +98,7 @@ public class EssentialsPlayerListener implements Listener {
     @EventHandler(priority = EventPriority.NORMAL)
     public void onPlayerDeath(final PlayerDeathEvent event) {
         final User user = ess.getUser((Player) event.getEntity());
-        if(user.isHidden()) {
+        if(user.isVanished()) {
             event.setDeathMessage(null);
         }
     }
