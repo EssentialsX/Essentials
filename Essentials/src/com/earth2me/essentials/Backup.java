@@ -69,12 +69,12 @@ public class Backup implements Runnable {
         if (active) {
             return;
         }
-        active = true;
-        taskLock = new CompletableFuture<>();
         final String command = ess.getSettings().getBackupCommand();
         if (command == null || "".equals(command)) {
             return;
         }
+        active = true;
+        taskLock = new CompletableFuture<>();
         if ("save-all".equalsIgnoreCase(command)) {
             final CommandSender cs = server.getConsoleSender();
             server.dispatchCommand(cs, "save-all");
