@@ -161,7 +161,7 @@ public interface IUser {
     Map<String, Object> getConfigMap();
 
     Map<String, Object> getConfigMap(String node);
-
+    
     Map<Pattern, Long> getCommandCooldowns();
 
     Date getCommandCooldownExpiry(String label);
