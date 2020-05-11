@@ -69,6 +69,7 @@ public class SimpleMessageRecipient implements IMessageRecipient {
             return MessageResponse.EVENT_CANCELLED;
         }
 
+        message = event.getMessage();
         MessageResponse messageResponse = recipient.onReceiveMessage(this.parent, message);
         switch (messageResponse) {
             case UNREACHABLE:
