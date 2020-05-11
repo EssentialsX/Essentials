@@ -313,6 +313,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
             handleCrash(ex);
             throw ex;
         }
+        getBackup().setPendingShutdown(false);
     }
 
     @Override
@@ -362,6 +363,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
 
     @Override
     public void onDisable() {
+        getBackup().setPendingShutdown(true);
         for (User user : getOnlineUsers()) {
             if (user.isVanished()) {
                 user.setVanished(false);
