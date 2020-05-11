@@ -7,6 +7,7 @@ import org.bukkit.command.CommandSender;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -22,6 +23,7 @@ public class Backup implements Runnable {
     private transient int taskId = -1;
     private transient boolean active = false;
     private final AtomicBoolean pendingShutdown = new AtomicBoolean(false);
+    private transient CompletableFuture<Object> taskLock = null;
 
     public Backup(final IEssentials ess) {
         this.ess = ess;
@@ -54,8 +56,8 @@ public class Backup implements Runnable {
         }
     }
 
-    public boolean isActive() {
-        return active;
+    public CompletableFuture<Object> getTaskLock() {
+        return taskLock;
     }
 
     public void setPendingShutdown(boolean shutdown) {
@@ -68,6 +70,7 @@ public class Backup implements Runnable {
             return;
         }
         active = true;
+        taskLock = new CompletableFuture<>();
         final String command = ess.getSettings().getBackupCommand();
         if (command == null || "".equals(command)) {
             return;
@@ -76,6 +79,7 @@ public class Backup implements Runnable {
             final CommandSender cs = server.getConsoleSender();
             server.dispatchCommand(cs, "save-all");
             active = false;
+            taskLock.complete(new Object());
             return;
         }
         LOGGER.log(Level.INFO, tl("backupStarted"));
@@ -116,6 +120,7 @@ public class Backup implements Runnable {
                             stopTask();
                         }
                         active = false;
+                        taskLock.complete(new Object());
                         LOGGER.log(Level.INFO, tl("backupFinished"));
                     }
                 }

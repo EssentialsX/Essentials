@@ -372,6 +372,10 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
             user.stopTransaction();
         }
         cleanupOpenInventories();
+        if (getBackup().getTaskLock() != null && !getBackup().getTaskLock().isDone()) {
+            LOGGER.log(Level.SEVERE, tl("backupInProgress"));
+            getBackup().getTaskLock().join();
+        }
         if (i18n != null) {
             i18n.onDisable();
         }
@@ -383,13 +387,6 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
         getUserMap().getUUIDMap().shutdown();
 
         HandlerList.unregisterAll(this);
-        while (getBackup().isActive()) {
-            try {
-                Thread.sleep(10);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
     }
 
     @Override
