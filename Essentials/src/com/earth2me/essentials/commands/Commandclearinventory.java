@@ -96,13 +96,16 @@ public class Commandclearinventory extends EssentialsCommand {
                 final String[] split = args[offset].split(",");
                 for (String item : split) {
                     final String[] itemParts = item.split(":");
+                    boolean added = false;
                     try {
-                        mats.add(ess.getItemDb().get(itemParts[0]).getType());
+                        added = mats.add(ess.getItemDb().get(itemParts[0]).getType());
                     } catch (Exception ignored) {}
-                    try {
-                        dats.add(Short.parseShort(itemParts[1]));
-                    } catch (Exception e) {
-                        dats.add((short) 0);
+                    if (added) {
+                        try {
+                            dats.add(Short.parseShort(itemParts[1]));
+                        } catch (Exception e) {
+                            dats.add((short) 0);
+                        }
                     }
                 }
                 type = 1;
