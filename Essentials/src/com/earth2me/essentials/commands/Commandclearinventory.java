@@ -5,6 +5,7 @@ import com.earth2me.essentials.User;
 import com.earth2me.essentials.craftbukkit.InventoryWorkaround;
 import com.earth2me.essentials.utils.NumberUtil;
 import com.earth2me.essentials.utils.StringUtil;
+import com.earth2me.essentials.utils.VersionUtil;
 import org.bukkit.Material;
 import org.bukkit.Server;
 import org.bukkit.entity.Player;
@@ -40,7 +41,7 @@ public class Commandclearinventory extends EssentialsCommand {
         Collection<Player> players = new ArrayList<>();
         User senderUser = ess.getUser(sender.getPlayer());
         String previousClearCommand = "";
-        
+
         int offset = 0;
 
         if (sender.isPlayer()) {
@@ -79,11 +80,11 @@ public class Commandclearinventory extends EssentialsCommand {
         }
     }
 
-    protected void clearHandler(CommandSource sender, Player player, String[] args, int offset, boolean showExtended) throws Exception {
-        short data = -1;
+    protected void clearHandler(CommandSource sender, Player player, String[] args, int offset, boolean showExtended) {
         int type = -1;
         int amount = -1;
-        final Set<Material> mats = new HashSet<>();
+        final Queue<Material> mats = new LinkedList<>();
+        final Queue<Short> dats = new LinkedList<>();
 
         if (args.length > (offset + 1) && NumberUtil.isInt(args[(offset + 1)])) {
             amount = Integer.parseInt(args[(offset + 1)]);
@@ -93,13 +94,17 @@ public class Commandclearinventory extends EssentialsCommand {
                 type = -2;
             } else if (!args[offset].equalsIgnoreCase("*")) {
                 final String[] split = args[offset].split(",");
-
-                for (String name : split) {
+                for (String item : split) {
+                    final String[] itemParts = item.split(":");
                     try {
-                        mats.add(ess.getItemDb().get(name).getType());
+                        mats.add(ess.getItemDb().get(itemParts[0]).getType());
                     } catch (Exception ignored) {}
+                    try {
+                        dats.add(Short.parseShort(itemParts[1]));
+                    } catch (Exception e) {
+                        dats.add((short) 0);
+                    }
                 }
-
                 type = 1;
             }
         }
@@ -120,20 +125,23 @@ public class Commandclearinventory extends EssentialsCommand {
             InventoryWorkaround.setItemInOffHand(player, null);
             player.getInventory().setArmorContents(null);
         } else {
-            for (Material mat : mats) {
+            while(!mats.isEmpty()) {
+                Material mat = mats.poll();
+                Short dat = dats.poll();
+                ItemStack stack = new ItemStack(mat);
+                if (VersionUtil.getServerBukkitVersion().isLowerThan(VersionUtil.v1_13_0_R01)) {
+                    stack.setDurability(dat == null ? 0 : dat);
+                }
                 if (amount == -1) // amount -1 means all items will be cleared
                 {
-                    ItemStack stack = new ItemStack(mat, BASE_AMOUNT, data);
+                    stack.setAmount(BASE_AMOUNT);
                     ItemStack removedStack = player.getInventory().removeItem(stack).get(0);
                     final int removedAmount = (BASE_AMOUNT - removedStack.getAmount());
                     if (removedAmount > 0 || showExtended) {
                         sender.sendMessage(tl("inventoryClearingStack", removedAmount, stack.getType().toString().toLowerCase(Locale.ENGLISH), player.getDisplayName()));
                     }
                 } else {
-                    if (amount < 0) {
-                        amount = 1;
-                    }
-                    ItemStack stack = new ItemStack(mat, amount);
+                    stack.setAmount(amount < 0 ? 1 : amount);
                     if (player.getInventory().containsAtLeast(stack, amount)) {
                         sender.sendMessage(tl("inventoryClearingStack", amount, stack.getType().toString().toLowerCase(Locale.ENGLISH), player.getDisplayName()));
                         player.getInventory().removeItem(stack);
