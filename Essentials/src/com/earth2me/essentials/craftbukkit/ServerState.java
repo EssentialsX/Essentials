@@ -20,12 +20,13 @@ public class ServerState {
         MethodHandle nmsIsRunningHandle = null;
         Object nmsServerObject = null;
         try {
+            //noinspection JavaLangInvokeHandleSignature - We don't compile against Paper
             isStoppingHandle = MethodHandles.lookup().findStatic(Bukkit.class, "isStopping", MethodType.methodType(boolean.class));
         } catch (Throwable e) {
             try {
                 Class<?> nmsClass = ReflUtil.getNMSClass("MinecraftServer");
                 if (nmsClass != null) {
-                    nmsServerObject = ReflUtil.getMethodCached(nmsClass, "getServer").invoke(null);
+                    nmsServerObject = nmsClass.getMethod("getServer").invoke(null);
                     nmsIsRunningHandle = MethodHandles.lookup().findVirtual(nmsClass, "isRunning", MethodType.methodType(boolean.class));
                     nmsHasStoppedHandle = MethodHandles.lookup().findVirtual(nmsClass, "hasStopped", MethodType.methodType(boolean.class));
                 }
@@ -49,13 +50,13 @@ public class ServerState {
         } else if (nmsServer != null) {
             if (nmsHasStopped != null) {
                 try {
-                    stopping = (boolean) nmsHasStopped.invokeExact(nmsServer);
+                    stopping = (boolean) nmsHasStopped.invoke(nmsServer);
                 } catch (Throwable t) {
                     t.printStackTrace();
                 }
             } else if (nmsIsRunning != null) {
                 try {
-                    stopping = (boolean) nmsIsRunning.invokeExact(nmsServer);
+                    stopping = !(boolean) nmsIsRunning.invoke(nmsServer);
                 } catch (Throwable t) {
                     t.printStackTrace();
                 }
