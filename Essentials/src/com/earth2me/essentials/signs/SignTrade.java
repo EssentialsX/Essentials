@@ -151,9 +151,6 @@ public class SignTrade extends EssentialsSign {
         if (split.length == 1 && !amountNeeded) {
             final BigDecimal money = getMoney(split[0], ess);
             if (money != null) {
-                if (NumberUtil.shortCurrency(money, ess).length() * 2 > 15) {
-                    throw new SignException("Line can be too long!");
-                }
                 sign.setLine(index, NumberUtil.shortCurrency(money, ess) + ":0");
                 return;
             }
@@ -182,9 +179,6 @@ public class SignTrade extends EssentialsSign {
                 throw new SignException(tl("moreThanZero"));
             }
             String newline = amount + " " + split[1] + ":0";
-            if ((newline + amount).length() > 15) {
-                throw new SignException("Line can be too long!");
-            }
             sign.setLine(index, newline);
             return;
         }
