@@ -1,11 +1,7 @@
 package com.earth2me.essentials.antibuild;
 
-import static com.earth2me.essentials.I18n.tl;
-
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.VersionUtil;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import net.ess3.api.IEssentials;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -16,11 +12,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.BlockBreakEvent;
-import org.bukkit.event.block.BlockDispenseEvent;
-import org.bukkit.event.block.BlockPistonExtendEvent;
-import org.bukkit.event.block.BlockPistonRetractEvent;
-import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.block.*;
 import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.hanging.HangingBreakByEntityEvent;
 import org.bukkit.event.inventory.CraftItemEvent;
@@ -28,6 +20,11 @@ import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.inventory.ItemStack;
+
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import static com.earth2me.essentials.I18n.tl;
 
 
 public class EssentialsAntiBuildListener implements Listener {
