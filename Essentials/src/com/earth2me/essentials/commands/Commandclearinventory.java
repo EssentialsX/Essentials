@@ -98,17 +98,21 @@ public class Commandclearinventory extends EssentialsCommand {
         }
     }
 
+    private enum ClearHandlerType {
+        ALL_EXCEPT_ARMOR, ALL_INCLUDING_ARMOR, SPECIFIC_ITEM
+    }
+
     protected void clearHandler(CommandSource sender, Player player, String[] args, int offset, boolean showExtended) {
-        int type = -1;
-        int amount = -1;
+        ClearHandlerType type = ClearHandlerType.ALL_EXCEPT_ARMOR;
         final Set<Item> items = new HashSet<>();
+        int amount = -1;
 
         if (args.length > (offset + 1) && NumberUtil.isInt(args[(offset + 1)])) {
             amount = Integer.parseInt(args[(offset + 1)]);
         }
         if (args.length > offset) {
             if (args[offset].equalsIgnoreCase("**")) {
-                type = -2;
+                type = ClearHandlerType.ALL_INCLUDING_ARMOR;
             } else if (!args[offset].equalsIgnoreCase("*")) {
                 final String[] split = args[offset].split(",");
                 for (String item : split) {
@@ -123,18 +127,18 @@ public class Commandclearinventory extends EssentialsCommand {
                         items.add(new Item(ess.getItemDb().get(itemParts[0]).getType(), data));
                     } catch (Exception ignored) {}
                 }
-                type = 1;
+                type = ClearHandlerType.SPECIFIC_ITEM;
             }
         }
 
-        if (type == -1) // type -1 represents wildcard or all items
+        if (type == ClearHandlerType.ALL_EXCEPT_ARMOR) // type -1 represents wildcard or all items
         {
             if (showExtended) {
                 sender.sendMessage(tl("inventoryClearingAllItems", player.getDisplayName()));
             }
             InventoryWorkaround.clearInventoryNoArmor(player.getInventory());
             InventoryWorkaround.setItemInOffHand(player, null);
-        } else if (type == -2) // type -2 represents double wildcard or all items and armor
+        } else if (type == ClearHandlerType.ALL_INCLUDING_ARMOR) // type -2 represents double wildcard or all items and armor
         {
             if (showExtended) {
                 sender.sendMessage(tl("inventoryClearingAllArmor", player.getDisplayName()));
