@@ -1258,6 +1258,11 @@ public class Settings implements net.ess3.api.ISettings {
         return new BigDecimal(config.getString("minimum-pay-amount", "0.001"));
     }
 
+    @Override
+    public boolean isPayExcludesIgnoreList() {
+        return config.getBoolean("pay-excludes-ignore-list", true);
+    }
+
     @Override public long getLastMessageReplyRecipientTimeout() {
         return config.getLong("last-message-reply-recipient-timeout", 180);
     }
