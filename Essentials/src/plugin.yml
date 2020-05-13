@@ -632,6 +632,12 @@ permissions:
   essentials.balancetop.exclude:
     default: false
     description: Players with this permission are excluded from the balancetop
+  essentials.back.onteleport:
+    default: true
+    description: Players with this permission will have back location stored during any teleportation
+  essentials.back.ondeath:
+    default: false
+    description: Players with this permission will have back location stored during death
   essentials.exempt:
     default: false
     description: Parent permission to be exempt from many moderator actions
