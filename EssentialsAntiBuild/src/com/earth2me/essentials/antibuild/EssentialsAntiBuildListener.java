@@ -158,7 +158,7 @@ public class EssentialsAntiBuildListener implements Listener {
         }
     }
 
-    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void onItemFrameInteract(final PlayerInteractEntityEvent event) {
         final User user = ess.getUser(event.getPlayer());
 
@@ -187,7 +187,7 @@ public class EssentialsAntiBuildListener implements Listener {
         }
     }
 
-    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void onArmorStandInteract(final PlayerInteractAtEntityEvent event) {
         final User user = ess.getUser(event.getPlayer());
 
