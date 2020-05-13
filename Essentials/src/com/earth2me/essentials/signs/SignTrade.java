@@ -173,7 +173,7 @@ public class SignTrade extends EssentialsSign {
         }
 
         if (split.length == 2 && !amountNeeded) {
-            final int amount = getIntegerPositive(split[0]);
+            final int amount = getIntegerPositive(NumberUtil.sanitizeCurrencyString(split[0], ess));
 
             if (amount < 1) {
                 throw new SignException(tl("moreThanZero"));
@@ -190,7 +190,7 @@ public class SignTrade extends EssentialsSign {
         }
 
         if (split.length == 3 && amountNeeded) {
-            final int stackamount = getIntegerPositive(split[0]);
+            final int stackamount = getIntegerPositive(NumberUtil.sanitizeCurrencyString(split[0], ess));
             int amount = getIntegerPositive(split[2]);
             amount -= amount % stackamount;
             if (amount < 1 || stackamount < 1) {
@@ -230,7 +230,7 @@ public class SignTrade extends EssentialsSign {
 
         if (split.length == 3) {
             if (split[1].equalsIgnoreCase("exp") || split[1].equalsIgnoreCase("xp")) {
-                final int stackamount = getIntegerPositive(split[0]);
+                final int stackamount = getIntegerPositive(NumberUtil.sanitizeCurrencyString(split[0], ess));
                 int amount = getInteger(split[2]);
                 if (amountType == AmountType.ROUNDED) {
                     amount -= amount % stackamount;
@@ -240,7 +240,7 @@ public class SignTrade extends EssentialsSign {
                 }
                 return new Trade((amountType == AmountType.COST ? stackamount : amount), ess);
             } else {
-                final int stackamount = getIntegerPositive(split[0]);
+                final int stackamount = getIntegerPositive(NumberUtil.sanitizeCurrencyString(split[0], ess));
                 final ItemStack item = getItemStack(split[1], stackamount, allowId, ess);
                 int amount = getInteger(split[2]);
                 if (amountType == AmountType.ROUNDED) {
@@ -331,7 +331,7 @@ public class SignTrade extends EssentialsSign {
 
         if (split.length == 3) {
             if (split[1].equalsIgnoreCase("exp") || split[1].equalsIgnoreCase("xp")) {
-                final int stackamount = getIntegerPositive(split[0]);
+                final int stackamount = getIntegerPositive(NumberUtil.sanitizeCurrencyString(split[0], ess));
                 final String newline = stackamount + " " + split[1] + ":" + (value.intValueExact());
                 if (newline.length() > 15) {
                     throw new SignException("This sign is full: Line too long!");
@@ -339,7 +339,7 @@ public class SignTrade extends EssentialsSign {
                 sign.setLine(index, newline);
                 return;
             } else {
-                final int stackamount = getIntegerPositive(split[0]);
+                final int stackamount = getIntegerPositive(NumberUtil.sanitizeCurrencyString(split[0], ess));
                 getItemStack(split[1], stackamount, ess);
                 final String newline = stackamount + " " + split[1] + ":" + (value.intValueExact());
                 if (newline.length() > 15) {
