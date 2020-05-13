@@ -131,14 +131,14 @@ public class Commandclearinventory extends EssentialsCommand {
             }
         }
 
-        if (type == ClearHandlerType.ALL_EXCEPT_ARMOR) // type -1 represents wildcard or all items
+        if (type == ClearHandlerType.ALL_EXCEPT_ARMOR)
         {
             if (showExtended) {
                 sender.sendMessage(tl("inventoryClearingAllItems", player.getDisplayName()));
             }
             InventoryWorkaround.clearInventoryNoArmor(player.getInventory());
             InventoryWorkaround.setItemInOffHand(player, null);
-        } else if (type == ClearHandlerType.ALL_INCLUDING_ARMOR) // type -2 represents double wildcard or all items and armor
+        } else if (type == ClearHandlerType.ALL_INCLUDING_ARMOR)
         {
             if (showExtended) {
                 sender.sendMessage(tl("inventoryClearingAllArmor", player.getDisplayName()));
