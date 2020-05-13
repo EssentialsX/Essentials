@@ -1260,7 +1260,7 @@ public class Settings implements net.ess3.api.ISettings {
 
     @Override
     public boolean isPayExcludesIgnoreList() {
-        return config.getBoolean("pay-excludes-ignore-list", true);
+        return config.getBoolean("pay-excludes-ignore-list", false);
     }
 
     @Override public long getLastMessageReplyRecipientTimeout() {
