@@ -80,11 +80,28 @@ public class Commandclearinventory extends EssentialsCommand {
         }
     }
 
+    private static class Item {
+        private Material material;
+        private short data;
+
+        public Item(Material material, short data) {
+            this.material = material;
+            this.data = data;
+        }
+
+        public Material getMaterial() {
+            return material;
+        }
+
+        public short getData() {
+            return data;
+        }
+    }
+
     protected void clearHandler(CommandSource sender, Player player, String[] args, int offset, boolean showExtended) {
         int type = -1;
         int amount = -1;
-        final Queue<Material> mats = new LinkedList<>();
-        final Queue<Short> dats = new LinkedList<>();
+        final Set<Item> items = new HashSet<>();
 
         if (args.length > (offset + 1) && NumberUtil.isInt(args[(offset + 1)])) {
             amount = Integer.parseInt(args[(offset + 1)]);
@@ -96,17 +113,15 @@ public class Commandclearinventory extends EssentialsCommand {
                 final String[] split = args[offset].split(",");
                 for (String item : split) {
                     final String[] itemParts = item.split(":");
-                    boolean added = false;
+                    short data;
                     try {
-                        added = mats.add(ess.getItemDb().get(itemParts[0]).getType());
-                    } catch (Exception ignored) {}
-                    if (added) {
-                        try {
-                            dats.add(Short.parseShort(itemParts[1]));
-                        } catch (Exception e) {
-                            dats.add((short) 0);
-                        }
+                        data = Short.parseShort(itemParts[1]);
+                    } catch (Exception e) {
+                        data = 0;
                     }
+                    try {
+                        items.add(new Item(ess.getItemDb().get(itemParts[0]).getType(), data));
+                    } catch (Exception ignored) {}
                 }
                 type = 1;
             }
@@ -128,12 +143,10 @@ public class Commandclearinventory extends EssentialsCommand {
             InventoryWorkaround.setItemInOffHand(player, null);
             player.getInventory().setArmorContents(null);
         } else {
-            while(!mats.isEmpty()) {
-                Material mat = mats.poll();
-                Short dat = dats.poll();
-                ItemStack stack = new ItemStack(mat);
+            for (Item item : items) {
+                ItemStack stack = new ItemStack(item.getMaterial());
                 if (VersionUtil.getServerBukkitVersion().isLowerThan(VersionUtil.v1_13_0_R01)) {
-                    stack.setDurability(dat == null ? 0 : dat);
+                    stack.setDurability(item.getData());
                 }
                 if (amount == -1) // amount -1 means all items will be cleared
                 {
