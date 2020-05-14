@@ -1,0 +1,15 @@
+# This determines the command prefix when there are conflicts (/name:home, /name:help, etc.)
+name: EssentialsXDiscord
+main: com.earth2me.essentials.discord.EssentialsXDiscord
+# Note to developers: This next line cannot change, or the automatic versioning system will break.
+version: ${full.version}
+website: http://essentialsx.github.io/#/EssentialsX-Discord
+description: Provides integration between Minecraft and Discord servers. WIP.
+authors: [md678685]
+depend: [Essentials]
+softdepend: [EssentialsChat]
+api-version: 1.13
+commands:
+  discord:
+    description: Does something related to Discord. #TODO: decide on how commands work and what they do
+    usage: /<command> [subcommand]

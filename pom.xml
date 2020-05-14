@@ -39,6 +39,10 @@
 		    <id>jitpack</id>
 		    <url>https://jitpack.io</url>
 		</repository>
+        <repository>
+            <id>jcenter</id>
+            <url>https://jcenter.bintray.com</url>
+        </repository>
     </repositories>
 
     <modules>
@@ -49,6 +53,7 @@
         <module>EssentialsProtect</module>
         <module>EssentialsSpawn</module>
         <module>EssentialsXMPP</module>
+        <module>EssentialsXDiscord</module>
         <module>nms/NMSProvider</module>
         <module>nms/UpdatedMetaProvider</module>
         <module>nms/LegacyProvider</module>
@@ -132,6 +137,11 @@
                         <artifactItem>
                             <groupId>${project.groupId}</groupId>
                             <artifactId>EssentialsXXMPP</artifactId>
+                            <version>${project.version}</version>
+                        </artifactItem>
+                        <artifactItem>
+                            <groupId>${project.groupId}</groupId>
+                            <artifactId>EssentialsXDiscord</artifactId>
                             <version>${project.version}</version>
                         </artifactItem>
                     </artifactItems>

@@ -1,0 +1,19 @@
+#version: ${full.version}
+############################################################
+# +------------------------------------------------------+ #
+# |                  EssentialsXDiscord                  | #
+# +------------------------------------------------------+ #
+############################################################
+
+# This config file only works when the EssentialsXDiscord jar is installed.
+
+# You need to create a bot user in order to connect your server to Discord.
+# You can find instructions on this here: #TODO write up docs
+
+# The token for your bot from the Discord Developers site.
+token: ""
+
+# The ID of your server.
+server-id: ""
+
+# TODO: plan out how we intend to map Discord channels to game chat
