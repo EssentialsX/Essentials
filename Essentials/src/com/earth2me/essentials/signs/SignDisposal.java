@@ -1,5 +1,6 @@
 package com.earth2me.essentials.signs;
 
+import com.earth2me.essentials.ChargeException;
 import com.earth2me.essentials.User;
 import net.ess3.api.IEssentials;
 
@@ -9,6 +10,16 @@ import static com.earth2me.essentials.I18n.tl;
 public class SignDisposal extends EssentialsSign {
     public SignDisposal() {
         super("Disposal");
+    }
+
+    @Override
+    protected boolean onSignCreate(ISign sign, User player, String username, IEssentials ess) throws SignException, ChargeException {
+        if (!player.isAuthorized("essentials.signs.disposal.name")) {
+            sign.setLine(1, "");
+            sign.setLine(2, "");
+            sign.setLine(3, "");
+        }
+        return true;
     }
 
     @Override
