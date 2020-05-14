@@ -11,9 +11,12 @@
 # You can find instructions on this here: #TODO write up docs
 
 # The token for your bot from the Discord Developers site.
-token: ""
+token: "INSERT-TOKEN-HERE"
 
 # The ID of your server.
 server-id: ""
+
+# The channel to log messages to
+channel-id: ""
 
 # TODO: plan out how we intend to map Discord channels to game chat
