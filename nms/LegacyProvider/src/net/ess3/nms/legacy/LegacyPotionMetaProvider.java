@@ -12,9 +12,4 @@ public class LegacyPotionMetaProvider extends PotionMetaProvider {
         potion.setDurability((short) effectId);
         return potion;
     }
-
-    @Override
-    public String getHumanName() {
-        return "legacy potion meta provider";
-    }
 }

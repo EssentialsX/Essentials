@@ -1,6 +1,7 @@
 package net.ess3.nms;
 
 import net.ess3.providers.Provider;
+import net.ess3.providers.ProviderType;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
@@ -15,5 +16,10 @@ public abstract class PotionMetaProvider implements Provider {
         } catch (Throwable t) {
             return false;
         }
+    }
+
+    @Override
+    public ProviderType getType() {
+        return ProviderType.POTION_META;
     }
 }

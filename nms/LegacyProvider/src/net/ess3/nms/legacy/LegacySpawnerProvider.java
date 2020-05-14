@@ -16,9 +16,4 @@ public class LegacySpawnerProvider extends SpawnerProvider {
     public EntityType getEntityType(ItemStack is) {
         return EntityType.fromId((int) is.getData().getData());
     }
-
-    @Override
-    public String getHumanName() {
-        return "legacy item data provider";
-    }
 }

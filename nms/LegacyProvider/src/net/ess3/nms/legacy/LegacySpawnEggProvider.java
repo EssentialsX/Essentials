@@ -22,9 +22,4 @@ public class LegacySpawnEggProvider extends SpawnEggProvider {
             throw new IllegalArgumentException("Item is missing data");
         }
     }
-
-    @Override
-    public String getHumanName() {
-        return "legacy item data provider";
-    }
 }

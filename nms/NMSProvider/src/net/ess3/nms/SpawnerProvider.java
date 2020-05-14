@@ -2,6 +2,7 @@ package net.ess3.nms;
 
 import net.ess3.providers.Provider;
 import com.google.common.collect.ImmutableMap;
+import net.ess3.providers.ProviderType;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
@@ -25,6 +26,7 @@ public abstract class SpawnerProvider implements Provider {
             .build();
 
     public abstract ItemStack setEntityType(ItemStack is, EntityType type) throws IllegalArgumentException;
+
     public abstract EntityType getEntityType(ItemStack is) throws IllegalArgumentException;
 
     @Override
@@ -57,5 +59,10 @@ public abstract class SpawnerProvider implements Provider {
         meta.setDisplayName(ChatColor.RESET + displayName + " Spawner");
         is.setItemMeta(meta);
         return is;
+    }
+
+    @Override
+    public ProviderType getType() {
+        return ProviderType.MOB_SPAWNER;
     }
 }

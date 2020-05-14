@@ -65,9 +65,4 @@ public class BasePotionDataProvider extends PotionMetaProvider {
     private static int getBit(int n, int k) {
         return (n >> k) & 1;
     }
-
-    @Override
-    public String getHumanName() {
-        return "1.9+ BasePotionData provider";
-    }
 }

@@ -22,9 +22,4 @@ public class FlatSpawnEggProvider extends SpawnEggProvider {
             throw new IllegalArgumentException("Not a spawn egg");
         }
     }
-
-    @Override
-    public String getHumanName() {
-        return "1.13+ flat spawn egg provider";
-    }
 }

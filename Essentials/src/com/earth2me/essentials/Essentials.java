@@ -250,18 +250,18 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
                         Arrays.asList(
                                 BlockMetaSpawnerProvider.class,
                                 LegacySpawnerProvider.class
-                        ), "mob spawner").getProvider();
+                        )).getProvider();
                 spawnEggProvider = new ProviderFactory<>(getLogger(),
                         Arrays.asList(
                                 FlatSpawnEggProvider.class,
                                 ReflSpawnEggProvider.class,
                                 LegacySpawnEggProvider.class
-                        ), "spawn egg").getProvider();
+                        )).getProvider();
                 potionMetaProvider = new ProviderFactory<>(getLogger(),
                         Arrays.asList(
                                 BasePotionDataProvider.class,
                                 LegacyPotionMetaProvider.class
-                        ), "potion meta").getProvider();
+                        )).getProvider();
                 execTimer.mark("Init(Providers)");
                 reload();
 

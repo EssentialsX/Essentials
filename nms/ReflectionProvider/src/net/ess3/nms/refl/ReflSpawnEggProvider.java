@@ -28,9 +28,4 @@ public class ReflSpawnEggProvider extends SpawnEggProvider {
             throw new IllegalArgumentException(e.getMessage(), e.getCause());
         }
     }
-
-    @Override
-    public String getHumanName() {
-        return "Reflection based provider";
-    }
 }

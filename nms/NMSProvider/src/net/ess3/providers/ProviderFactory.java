@@ -4,26 +4,24 @@ import java.util.logging.Logger;
 
 public class ProviderFactory<T extends Provider> {
     private Logger logger;
-    private String providerType;
-    private Iterable<Class <? extends T>> availableProviders;
+    private Iterable<Class <? extends T>> providers;
 
-    public ProviderFactory(Logger logger, Iterable<Class <? extends T>> availableProviders, String providerType) {
+    public ProviderFactory(Logger logger, Iterable<Class <? extends T>> providers) {
         this.logger = logger;
-        this.providerType = providerType;
-        this.availableProviders = availableProviders;
+        this.providers = providers;
     }
 
     public T getProvider() {
-        T finalProvider = null;
-        for (Class<? extends T> providerClass : availableProviders) {
-            finalProvider = loadProvider(providerClass);
-            if (finalProvider != null && finalProvider.tryProvider()) {
+        T provider = null;
+        for (Class<? extends T> providerClass : providers) {
+            provider = loadProvider(providerClass);
+            if (provider != null && provider.tryProvider()) {
                 break;
             }
         }
-        assert finalProvider != null;
-        logger.info("Using " + finalProvider.getHumanName() + " as " + providerType + " provider.");
-        return finalProvider;
+        assert provider != null;
+        logger.info("Using " + provider.getClass().getSimpleName() + " as " + provider.getType() + " provider.");
+        return provider;
     }
 
     private T loadProvider(Class<? extends T> providerClass) {
