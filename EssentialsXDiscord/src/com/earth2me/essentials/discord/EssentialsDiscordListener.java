@@ -1,32 +1,22 @@
 package com.earth2me.essentials.discord;
 
-import com.earth2me.essentials.EssentialsConf;
-import com.earth2me.essentials.IConf;
-import com.earth2me.essentials.IEssentials;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
-import org.bukkit.event.Listener;
+import org.bukkit.Bukkit;
 
 import javax.security.auth.login.LoginException;
-import java.io.File;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class EssentialsDiscordListener extends ListenerAdapter implements Listener, IConf {
-
+public class EssentialsDiscordListener extends ListenerAdapter {
     private static final Logger logger = Logger.getLogger("EssentialsDiscord");
-    private JDA jda = null;
-    private final File dataFolder;
-    private final EssentialsConf config;
-    private final transient IEssentials ess;
 
-    public EssentialsDiscordListener(File dataFolder, IEssentials ess) {
-        this.ess = ess;
-        this.dataFolder = dataFolder;
-        this.config = new EssentialsConf(new File(dataFolder, "config.yml"));
-        config.setTemplateName("/config.yml", EssentialsDiscord.class);
-        reloadConfig();
+    private JDA jda = null;
+    private final EssentialsDiscord plugin;
+
+    public EssentialsDiscordListener(EssentialsDiscord plugin) {
+        this.plugin = plugin;
     }
 
     public void startup() throws LoginException, InterruptedException {
@@ -35,7 +25,7 @@ public class EssentialsDiscordListener extends ListenerAdapter implements Listen
         }
 
         logger.log(Level.INFO, "Attempting to login to discord...");
-        this.jda = JDABuilder.createDefault(config.getString("token"))
+        this.jda = JDABuilder.createDefault(plugin.getSettings().getBotToken())
                 .addEventListeners(this)
                 .setAutoReconnect(true)
                 .setContextEnabled(false)
@@ -43,10 +33,6 @@ public class EssentialsDiscordListener extends ListenerAdapter implements Listen
                 //We don't want to be async here since players could *possibly* chat before jda starts
                 .awaitReady();
         logger.log(Level.INFO, "Successfully logged in as " + jda.getSelfUser().getAsTag());
-    }
-
-    @Override
-    public void reloadConfig() {
-        config.load();
+        Bukkit.getServer().getPluginManager().registerEvents(new BukkitListener(plugin, jda), plugin);
     }
 }

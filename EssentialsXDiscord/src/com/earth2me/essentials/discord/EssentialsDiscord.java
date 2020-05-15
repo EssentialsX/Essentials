@@ -6,6 +6,7 @@ import net.ess3.api.IEssentials;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import javax.security.auth.login.LoginException;
+import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -16,11 +17,13 @@ public class EssentialsDiscord extends JavaPlugin implements IEssentialsModule {
     private static final Logger logger = Logger.getLogger("EssentialsDiscord");
 
     private transient Metrics metrics = null;
+    private transient IEssentials ess;
     private EssentialsDiscordListener discordListener;
+    private DiscordSettings settings;
 
     @Override
     public void onEnable() {
-        final IEssentials ess = (IEssentials) getServer().getPluginManager().getPlugin("Essentials");
+        ess = Objects.requireNonNull((IEssentials) getServer().getPluginManager().getPlugin("Essentials"));
         if (!getDescription().getVersion().equals(ess.getDescription().getVersion())) {
             getLogger().log(Level.WARNING, tl("versionMismatchAll"));
         }
@@ -30,17 +33,27 @@ public class EssentialsDiscord extends JavaPlugin implements IEssentialsModule {
             return;
         }
 
+        settings = new DiscordSettings(this);
+
         if (metrics == null) {
             metrics = new Metrics(this);
         }
 
         if (discordListener == null) {
-            discordListener = new EssentialsDiscordListener(getDataFolder(), ess);
+            discordListener = new EssentialsDiscordListener(this);
         }
         try {
             discordListener.startup();
         } catch (LoginException | InterruptedException e) {
             e.printStackTrace();
         }
+    }
+
+    public DiscordSettings getSettings() {
+        return settings;
+    }
+
+    public IEssentials getParent() {
+        return ess;
     }
 }
