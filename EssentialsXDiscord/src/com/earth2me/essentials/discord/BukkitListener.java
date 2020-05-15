@@ -1,6 +1,7 @@
 package com.earth2me.essentials.discord;
 
 import com.earth2me.essentials.discord.utils.DiscordUtils;
+import com.earth2me.essentials.discord.utils.MessageType;
 import net.dv8tion.jda.api.JDA;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -22,8 +23,6 @@ public class BukkitListener implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onChat(AsyncPlayerChatEvent event) {
-        for (DiscordSettings.ChannelDefinition channel : plugin.getSettings().getChannelDefinitions("chat")) {
-            DiscordUtils.sendMessage(jda, channel.getChannelId(), event.getPlayer().getDisplayName() + ": " + event.getMessage());
-        }
+        DiscordUtils.sendMessage(jda, MessageType.GLOBAL_CHAT, event.getPlayer().getDisplayName() + ": " + event.getMessage());
     }
 }

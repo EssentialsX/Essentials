@@ -34,6 +34,7 @@ public class EssentialsDiscord extends JavaPlugin implements IEssentialsModule {
         }
 
         settings = new DiscordSettings(this);
+        ess.addReloadListener(settings);
 
         if (metrics == null) {
             metrics = new Metrics(this);
