@@ -11,12 +11,13 @@ public enum MessageType {
     HELPOP("helpop", true, false),
     BROADCAST("broadcast"),
     PLAYER_JOIN("join"),
-    PLAYER_LEAVE("leave"),
+    PLAYER_QUIT("quit"),
     PLAYER_DEATH("death"),
     PLAYER_ADVANCEMENT("advancement"),
     PLAYER_MUTE("mute"),
     PLAYER_KICK("kick"),
     PLAYER_BAN("ban"),
+    PLAYER_AWAY("afk"),
     CONSOLE_LOG("console", false, true),
     OTHER("other")
     ;

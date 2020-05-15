@@ -35,12 +35,12 @@ public class BukkitListener implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onQuit(PlayerQuitEvent event) {
-        sendMessage(jda, MessageType.PLAYER_JOIN, event.getPlayer().getName() + " has left the server.");
+        sendMessage(jda, MessageType.PLAYER_QUIT, event.getPlayer().getName() + " has left the server.");
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onDeath(PlayerDeathEvent event) {
-        sendMessage(jda, MessageType.PLAYER_JOIN, event.getEntity().getName() + " has died!");
+        sendMessage(jda, MessageType.PLAYER_DEATH, event.getEntity().getName() + " has died!");
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
