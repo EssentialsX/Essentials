@@ -408,6 +408,20 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
         }
 
         i18n.updateLocale(settings.getLocale());
+        for (String commandName : this.getDescription().getCommands().keySet()) {
+            Command command = this.getCommand(commandName);
+            if (command == null) {
+                continue;
+            }
+            String tlDescription = tl(commandName + "CommandDescription");
+            if (!tlDescription.isEmpty()) {
+                command.setDescription(tlDescription);
+            }
+            String tlUsage = tl(commandName + "CommandUsage");
+            if (!tlUsage.isEmpty()) {
+                command.setUsage(tlUsage);
+            }
+        }
 
         final PluginManager pm = getServer().getPluginManager();
         registerListeners(pm);
