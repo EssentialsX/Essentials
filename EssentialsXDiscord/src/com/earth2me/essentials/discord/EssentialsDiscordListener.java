@@ -27,6 +27,7 @@ public class EssentialsDiscordListener extends ListenerAdapter {
         logger.log(Level.INFO, "Attempting to login to discord...");
         this.jda = JDABuilder.createDefault(plugin.getSettings().getBotToken())
                 .addEventListeners(this)
+                .addEventListeners(new DiscordListener(plugin))
                 .setAutoReconnect(true)
                 .setContextEnabled(false)
                 .build()
