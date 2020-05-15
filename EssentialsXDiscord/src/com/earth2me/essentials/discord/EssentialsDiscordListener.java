@@ -2,14 +2,13 @@ package com.earth2me.essentials.discord;
 
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
-import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.bukkit.Bukkit;
 
 import javax.security.auth.login.LoginException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class EssentialsDiscordListener extends ListenerAdapter {
+public class EssentialsDiscordListener {
     private static final Logger logger = Logger.getLogger("EssentialsDiscord");
 
     private JDA jda = null;
@@ -26,7 +25,6 @@ public class EssentialsDiscordListener extends ListenerAdapter {
 
         logger.log(Level.INFO, "Attempting to login to discord...");
         this.jda = JDABuilder.createDefault(plugin.getSettings().getBotToken())
-                .addEventListeners(this)
                 .addEventListeners(new DiscordListener(plugin))
                 .setAutoReconnect(true)
                 .setContextEnabled(false)
