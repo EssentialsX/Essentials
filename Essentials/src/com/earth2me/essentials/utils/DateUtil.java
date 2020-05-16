@@ -131,6 +131,8 @@ public class DateUtil {
         if (toDate.equals(fromDate)) {
             return tl("now");
         }
+        // Temporary 50ms time buffer added to avoid display truncation due to code execution delays
+        toDate.add(Calendar.MILLISECOND, 50);
         if (toDate.after(fromDate)) {
             future = true;
         }
@@ -148,6 +150,8 @@ public class DateUtil {
                 sb.append(" ").append(diff).append(" ").append(names[i * 2 + (diff > 1 ? 1 : 0)]);
             }
         }
+        // Preserve correctness in the original date object by removing the extra buffer time
+        toDate.add(Calendar.MILLISECOND, -50);
         if (sb.length() == 0) {
             return tl("now");
         }
