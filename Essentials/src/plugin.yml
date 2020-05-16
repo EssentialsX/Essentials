@@ -428,6 +428,10 @@ commands:
     description: Temporary ban a user.
     usage: /<command> <playername> <datediff> <reason>
     aliases: [etempban]
+  tempbanip:
+    description: Temporary ban an IP Address
+    usage: /<command> <playername> <dateddiff> <reason>
+    aliases: [etempbanip]
   thunder:
     description: Enable/disable thunder.
     usage: /<command> <true/false> [duration]
