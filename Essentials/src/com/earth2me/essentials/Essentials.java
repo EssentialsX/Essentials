@@ -18,6 +18,7 @@
 package com.earth2me.essentials;
 
 import com.earth2me.essentials.commands.*;
+import com.earth2me.essentials.craftbukkit.ServerState;
 import com.earth2me.essentials.items.AbstractItemDb;
 import com.earth2me.essentials.items.CustomItemResolver;
 import com.earth2me.essentials.items.FlatItemDb;
@@ -47,8 +48,6 @@ import net.ess3.nms.legacy.LegacySpawnerProvider;
 import net.ess3.nms.refl.ReflSpawnEggProvider;
 import net.ess3.nms.updatedmeta.BasePotionDataProvider;
 import net.ess3.nms.updatedmeta.BlockMetaSpawnerProvider;
-import net.ess3.nms.v1_8_R1.v1_8_R1SpawnerProvider;
-import net.ess3.nms.v1_8_R2.v1_8_R2SpawnerProvider;
 import net.ess3.providers.ProviderFactory;
 import org.bukkit.Bukkit;
 import org.bukkit.Server;
@@ -250,8 +249,6 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
                 spawnerProvider = new ProviderFactory<>(getLogger(),
                         Arrays.asList(
                                 BlockMetaSpawnerProvider.class,
-                                v1_8_R2SpawnerProvider.class,
-                                v1_8_R1SpawnerProvider.class,
                                 LegacySpawnerProvider.class
                         ), "mob spawner").getProvider();
                 spawnEggProvider = new ProviderFactory<>(getLogger(),
@@ -313,6 +310,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
             handleCrash(ex);
             throw ex;
         }
+        getBackup().setPendingShutdown(false);
     }
 
     @Override
@@ -362,14 +360,31 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
 
     @Override
     public void onDisable() {
+        boolean stopping = ServerState.isStopping();
+        if (!stopping) {
+            LOGGER.log(Level.SEVERE, tl("serverReloading"));
+        }
+        getBackup().setPendingShutdown(true);
         for (User user : getOnlineUsers()) {
             if (user.isVanished()) {
                 user.setVanished(false);
                 user.sendMessage(tl("unvanishedReload"));
             }
-            user.stopTransaction();
+            if (stopping) {
+                user.setLastLocation();
+                if (!user.isHidden()) {
+                    user.setLastLogout(System.currentTimeMillis());
+                }
+                user.cleanup();
+            } else {
+                user.stopTransaction();
+            }
         }
         cleanupOpenInventories();
+        if (getBackup().getTaskLock() != null && !getBackup().getTaskLock().isDone()) {
+            LOGGER.log(Level.SEVERE, tl("backupInProgress"));
+            getBackup().getTaskLock().join();
+        }
         if (i18n != null) {
             i18n.onDisable();
         }

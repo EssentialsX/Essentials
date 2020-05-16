@@ -371,6 +371,8 @@ unprotected-sign-names:
 backup:
   # Interval in minutes.
   interval: 30
+  # If true, the backup task will run even if there are no players online.
+  always-run: false
   # Unless you add a valid backup command or script here, this feature will be useless.
   # Use 'save-all' to simply force regular world saving without backup.
   #command: 'rdiff-backup World1 backups/World1'
