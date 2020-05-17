@@ -6,12 +6,14 @@ import com.earth2me.essentials.craftbukkit.SetExpFix;
 import com.earth2me.essentials.utils.DateUtil;
 import com.earth2me.essentials.utils.EnumUtil;
 import com.earth2me.essentials.utils.NumberUtil;
+import org.bukkit.Location;
 import org.bukkit.Server;
 import org.bukkit.Statistic;
 
-import java.util.Locale;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
+import java.util.UUID;
 
 import static com.earth2me.essentials.I18n.tl;
 
@@ -25,43 +27,94 @@ public class Commandwhois extends EssentialsCommand {
         super("whois");
     }
 
-    @Override
     public void run(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception {
         if (args.length < 1) {
             throw new NotEnoughArgumentsException();
         }
 
-        User user = getPlayer(server, sender, args, 0);
+        User player;
+        try {
+            final UUID uuid = UUID.fromString(args[0]);
+            player = ess.getUser(uuid);
+        }
+        catch (IllegalArgumentException ignored) {
+            player = ess.getOfflineUser(args[0]);
+        }
+        if (player == null) {
+            ess.getScheduler().runTaskAsynchronously(ess, () -> {
+                User userFromBukkit = ess.getUserMap().getUserFromBukkit(args[0]);
+                try {
+                    if (userFromBukkit != null) {
+                        sendWhois(sender, userFromBukkit);
+                    }
+                    else {
+                        User target;
+                        if (sender.isPlayer()) {
+                            User senderPlayer = ess.getUser(sender.getPlayer());
+                            target = getPlayer(server, senderPlayer, args, 0, senderPlayer.canInteractVanished(), true);
+                        }
+                        else {
+                            target = getPlayer(server, args, 0, true, true);
+                        }
+                        sendWhois(sender, target);
+                    }
+                }
+                catch (Exception e) {
+                    ess.showError(sender, e, commandLabel);
+                }
+            });
+        }
+        else {
+            sendWhois(sender, player);
+        }
+    }
 
+    private void sendWhois(final CommandSource sender, final User user) {
+        final boolean online = user.getBase().isOnline();
         sender.sendMessage(tl("whoisTop", user.getName()));
         user.setDisplayNick();
         sender.sendMessage(tl("whoisNick", user.getDisplayName()));
         sender.sendMessage(tl("whoisUuid", user.getBase().getUniqueId().toString()));
-        sender.sendMessage(tl("whoisHealth", user.getBase().getHealth()));
-        sender.sendMessage(tl("whoisHunger", user.getBase().getFoodLevel(), user.getBase().getSaturation()));
-        sender.sendMessage(tl("whoisExp", SetExpFix.getTotalExperience(user.getBase()), user.getBase().getLevel()));
-        sender.sendMessage(tl("whoisLocation", user.getLocation().getWorld().getName(), user.getLocation().getBlockX(), user.getLocation().getBlockY(), user.getLocation().getBlockZ()));
-        long playtimeMs = System.currentTimeMillis() - (user.getBase().getStatistic(PLAY_ONE_TICK) * 50);
-        sender.sendMessage(tl("whoisPlaytime", DateUtil.formatDateDiff(playtimeMs)));
+        if (online) {
+            sender.sendMessage(tl("whoisOnline", DateUtil.formatDateDiff(user.getLastLogin())));
+        } else {
+            sender.sendMessage(tl("whoisOffline", DateUtil.formatDateDiff(user.getLastLogout())));
+        }
+        if (online) {
+            sender.sendMessage(tl("whoisHealth", user.getBase().getHealth()));
+            sender.sendMessage(tl("whoisHunger", user.getBase().getFoodLevel(), user.getBase().getSaturation()));
+            sender.sendMessage(tl("whoisExp", SetExpFix.getTotalExperience(user.getBase()), user.getBase().getLevel()));
+        }
+        final Location loc = online ? user.getLocation() : user.getLogoutLocation();
+        sender.sendMessage(tl("whoisLocation", loc.getWorld().getName(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ()));
+        if (online) {
+            long playtimeMs = System.currentTimeMillis() - (user.getBase().getStatistic(PLAY_ONE_TICK) * 50);
+            sender.sendMessage(tl("whoisPlaytime", DateUtil.formatDateDiff(playtimeMs)));
+        }
         if (!ess.getSettings().isEcoDisabled()) {
             sender.sendMessage(tl("whoisMoney", NumberUtil.displayCurrency(user.getMoney(), ess)));
         }
         if (!sender.isPlayer() || ess.getUser(sender.getPlayer()).isAuthorized("essentials.whois.ip")) {
-            sender.sendMessage(tl("whoisIPAddress", user.getBase().getAddress().getAddress().toString()));
+            final String ip = online ? user.getBase().getAddress().getAddress().toString() : user.getLastLoginAddress();
+            sender.sendMessage(tl("whoisIPAddress", ip));
         }
         final String location = user.getGeoLocation();
         if (location != null && (!sender.isPlayer() || ess.getUser(sender.getPlayer()).isAuthorized("essentials.geoip.show"))) {
             sender.sendMessage(tl("whoisGeoLocation", location));
         }
-        sender.sendMessage(tl("whoisGamemode", tl(user.getBase().getGameMode().toString().toLowerCase(Locale.ENGLISH))));
+        if (online) {
+            sender.sendMessage(tl("whoisGamemode", tl(user.getBase().getGameMode().toString().toLowerCase(Locale.ENGLISH))));
+        }
         sender.sendMessage(tl("whoisGod", (user.isGodModeEnabled() ? tl("true") : tl("false"))));
-        sender.sendMessage(tl("whoisOp", (user.getBase().isOp() ? tl("true") : tl("false"))));
-        sender.sendMessage(tl("whoisFly", user.getBase().getAllowFlight() ? tl("true") : tl("false"), user.getBase().isFlying() ? tl("flying") : tl("notFlying")));
-        sender.sendMessage(tl("whoisSpeed", user.getBase().isFlying() ? user.getBase().getFlySpeed() : user.getBase().getWalkSpeed()));
-        if (user.isAfk()) {
-            sender.sendMessage(tl("whoisAFKSince", tl("true"), DateUtil.formatDateDiff(user.getAfkSince())));
-        } else {
-            sender.sendMessage(tl("whoisAFK", tl("false")));
+        if (online) {
+            sender.sendMessage(tl("whoisOp", (user.getBase().isOp() ? tl("true") : tl("false"))));
+            sender.sendMessage(tl("whoisFly", user.getBase().getAllowFlight() ? tl("true") : tl("false"), user.getBase().isFlying() ? tl("flying") : tl("notFlying")));
+            sender.sendMessage(tl("whoisSpeed", user.getBase().isFlying() ? user.getBase().getFlySpeed() : user.getBase().getWalkSpeed()));
+            if (user.isAfk()) {
+                sender.sendMessage(tl("whoisAFKSince", tl("true"), DateUtil.formatDateDiff(user.getAfkSince())));
+            } else {
+                sender.sendMessage(tl("whoisAFK", tl("false")));
+            }
         }
         sender.sendMessage(tl("whoisJail", (user.isJailed() ? user.getJailTimeout() > 0 ? DateUtil.formatDateDiff(user.getJailTimeout()) : tl("true") : tl("false"))));
 
@@ -70,7 +123,7 @@ public class Commandwhois extends EssentialsCommand {
             sender.sendMessage(tl("whoisMuted", (user.isMuted() ? (muteTimeout > 0 ? DateUtil.formatDateDiff(muteTimeout) : tl("true")) : tl("false"))));
         } else {
             sender.sendMessage(tl("whoisMutedReason", (user.isMuted() ? (muteTimeout > 0 ? DateUtil.formatDateDiff(muteTimeout) : tl("true")) : tl("false")),
-                user.getMuteReason()));
+                    user.getMuteReason()));
         }
     }
 
