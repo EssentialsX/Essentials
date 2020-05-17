@@ -76,9 +76,9 @@ public class Commandwhois extends EssentialsCommand {
         sender.sendMessage(tl("whoisNick", user.getDisplayName()));
         sender.sendMessage(tl("whoisUuid", user.getBase().getUniqueId().toString()));
         if (online) {
-            sender.sendMessage(tl("whoisOnline", DateUtil.formatDateDiff(user.getLastLogin())));
+            sender.sendMessage(tl("whoisOnline"));
         } else {
-            sender.sendMessage(tl("whoisOffline", DateUtil.formatDateDiff(user.getLastLogout())));
+            sender.sendMessage(tl("whoisOffline"));
         }
         if (online) {
             sender.sendMessage(tl("whoisHealth", user.getBase().getHealth()));
