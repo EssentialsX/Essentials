@@ -266,7 +266,7 @@ commands:
     aliases: [action,eaction,describe,edescribe,eme]
   more:
     description: Fills the item stack in hand to maximum size.
-    usage: /<command>
+    usage: /<command> [amount]
     aliases: [emore]
   motd:
     description: Views the Message Of The Day.
