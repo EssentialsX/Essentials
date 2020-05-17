@@ -35,9 +35,13 @@ public class Commandmore extends EssentialsCommand {
         int newStackSize = stack.getAmount();
         if (args.length >= 1) {
             try {
-                newStackSize += Integer.parseInt(args[0]);
+                int increment = Integer.parseInt(args[0]);
+                if (increment < 1) {
+                    throw new NumberFormatException("increment is less than or equal to zero");
+                }
+                newStackSize += increment;
             } catch(NumberFormatException e) {
-                throw new Exception(tl("numberRequired"));
+                throw new Exception(tl("nonZeroPosNumber"));
             }
 
             if (newStackSize > ((canOversized) ? ess.getSettings().getOversizedStackSize() : stack.getMaxStackSize())) {
