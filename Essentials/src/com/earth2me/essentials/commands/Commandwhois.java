@@ -2,18 +2,17 @@ package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.craftbukkit.BanLookup;
 import com.earth2me.essentials.craftbukkit.SetExpFix;
 import com.earth2me.essentials.utils.DateUtil;
 import com.earth2me.essentials.utils.EnumUtil;
 import com.earth2me.essentials.utils.NumberUtil;
+import org.bukkit.BanEntry;
 import org.bukkit.Location;
 import org.bukkit.Server;
 import org.bukkit.Statistic;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Locale;
-import java.util.UUID;
+import java.util.*;
 
 import static com.earth2me.essentials.I18n.tl;
 
@@ -120,6 +119,34 @@ public class Commandwhois extends EssentialsCommand {
         } else {
             sender.sendMessage(tl("whoisMutedReason", (user.isMuted() ? (muteTimeout > 0 ? DateUtil.formatDateDiff(muteTimeout) : tl("true")) : tl("false")),
                 user.getMuteReason()));
+        }
+
+        final BanEntry userBan = BanLookup.getBanEntry(ess, user.getName());
+        if (userBan != null) {
+            final String reason = userBan.getReason();
+            sender.sendMessage(tl("whoisBanned", reason));
+            if (userBan.getExpiration() != null) {
+                Date expiry = userBan.getExpiration();
+                String expireString = tl("now");
+                if (expiry.after(new Date())) {
+                    expireString = DateUtil.formatDateDiff(expiry.getTime());
+                }
+                sender.sendMessage(tl("whoisTempBanned", expireString));
+            }
+        }
+
+        final BanEntry ipBan = BanLookup.getIpBanEntry(ess, user.getLastLoginAddress());
+        if (ipBan != null) {
+            final String reason = ipBan.getReason();
+            sender.sendMessage(tl("whoisBannedIp", reason));
+            if (ipBan.getExpiration() != null) {
+                Date expiry = ipBan.getExpiration();
+                String expireString = tl("now");
+                if (expiry.after(new Date())) {
+                    expireString = DateUtil.formatDateDiff(expiry.getTime());
+                }
+                sender.sendMessage(tl("whoisTempBannedIp", expireString));
+            }
         }
     }
 

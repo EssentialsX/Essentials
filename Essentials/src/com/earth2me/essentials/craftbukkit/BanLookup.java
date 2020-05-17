@@ -27,4 +27,7 @@ public class BanLookup {
         return null;
     }
 
+    public static BanEntry getIpBanEntry(IEssentials ess, String ipAddress) {
+        return ess.getServer().getBanList(BanList.Type.IP).getBanEntry(ipAddress);
+    }
 }
