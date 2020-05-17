@@ -45,7 +45,8 @@ public class Commandmore extends EssentialsCommand {
             }
 
             if (newStackSize > ((canOversized) ? ess.getSettings().getOversizedStackSize() : stack.getMaxStackSize())) {
-                throw new Exception(tl(canOversized ? "fullStackDefaultOversize" : "fullStackDefault", canOversized ? ess.getSettings().getOversizedStackSize() : stack.getMaxStackSize()));
+                user.sendMessage(tl(canOversized ? "fullStackDefaultOversize" : "fullStackDefault", canOversized ? ess.getSettings().getOversizedStackSize() : stack.getMaxStackSize()));
+                newStackSize = canOversized ? ess.getSettings().getOversizedStackSize() : stack.getMaxStackSize();
             }
         } else if (canOversized) {
             newStackSize = ess.getSettings().getOversizedStackSize();
