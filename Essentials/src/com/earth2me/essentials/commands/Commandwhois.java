@@ -27,11 +27,11 @@ public class Commandwhois extends EssentialsCommand {
         super("whois");
     }
 
+    @Override
     public void run(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception {
         if (args.length < 1) {
             throw new NotEnoughArgumentsException();
         }
-
         User player;
         try {
             final UUID uuid = UUID.fromString(args[0]);
@@ -123,7 +123,7 @@ public class Commandwhois extends EssentialsCommand {
             sender.sendMessage(tl("whoisMuted", (user.isMuted() ? (muteTimeout > 0 ? DateUtil.formatDateDiff(muteTimeout) : tl("true")) : tl("false"))));
         } else {
             sender.sendMessage(tl("whoisMutedReason", (user.isMuted() ? (muteTimeout > 0 ? DateUtil.formatDateDiff(muteTimeout) : tl("true")) : tl("false")),
-                    user.getMuteReason()));
+                user.getMuteReason()));
         }
     }
 
