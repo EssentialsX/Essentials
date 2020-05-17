@@ -36,8 +36,7 @@ public class Commandwhois extends EssentialsCommand {
         try {
             final UUID uuid = UUID.fromString(args[0]);
             player = ess.getUser(uuid);
-        }
-        catch (IllegalArgumentException ignored) {
+        } catch (IllegalArgumentException ignored) {
             player = ess.getOfflineUser(args[0]);
         }
         if (player == null) {
@@ -46,20 +45,17 @@ public class Commandwhois extends EssentialsCommand {
                 try {
                     if (userFromBukkit != null) {
                         sendWhois(sender, userFromBukkit);
-                    }
-                    else {
+                    } else {
                         User target;
                         if (sender.isPlayer()) {
                             User senderPlayer = ess.getUser(sender.getPlayer());
                             target = getPlayer(server, senderPlayer, args, 0, senderPlayer.canInteractVanished(), true);
-                        }
-                        else {
+                        } else {
                             target = getPlayer(server, args, 0, true, true);
                         }
                         sendWhois(sender, target);
                     }
-                }
-                catch (Exception e) {
+                } catch (Exception e) {
                     ess.showError(sender, e, commandLabel);
                 }
             });
