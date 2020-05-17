@@ -1,5 +1,5 @@
 # This determines the command prefix when there are conflicts (/name:home, /name:help, etc.)
-name: EssentialsXDiscord
+name: EssentialsDiscord
 main: com.earth2me.essentials.discord.EssentialsDiscord
 # Note to developers: This next line cannot change, or the automatic versioning system will break.
 version: ${full.version}

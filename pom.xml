@@ -53,7 +53,7 @@
         <module>EssentialsProtect</module>
         <module>EssentialsSpawn</module>
         <module>EssentialsXMPP</module>
-        <module>EssentialsXDiscord</module>
+        <module>EssentialsDiscord</module>
         <module>nms/NMSProvider</module>
         <module>nms/UpdatedMetaProvider</module>
         <module>nms/LegacyProvider</module>
