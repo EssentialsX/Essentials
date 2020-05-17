@@ -16,8 +16,8 @@ import java.util.Locale;
 
 import static com.earth2me.essentials.I18n.tl;
 
+
 public class Commandeco extends EssentialsLoopCommand {
-    
     Commandeco.EcoCommands cmd;
     BigDecimal amount;
     boolean isPercent;
@@ -109,9 +109,9 @@ public class Commandeco extends EssentialsLoopCommand {
     private void reset(final User player, final CommandSource sender) throws MaxMoneyException {
         BigDecimal startingBalance = ess.getSettings().getStartingBalance();
         player.setMoney(startingBalance, UserBalanceUpdateEvent.Cause.COMMAND_ECO);
-        player.sendMessage(tl("resetBalSelf", startingBalance.toString()));
+        player.sendMessage(tl("resetBalSelf", NumberUtil.displayCurrency(startingBalance, ess)));
         if(sender != null) {
-            sender.sendMessage(tl("resetBalOther", player.getDisplayName(), startingBalance.toString()));
+            sender.sendMessage(tl("resetBalOther", player.getDisplayName(), NumberUtil.displayCurrency(startingBalance, ess)));
         }
     }
 
