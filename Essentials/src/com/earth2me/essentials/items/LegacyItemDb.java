@@ -122,7 +122,7 @@ public class LegacyItemDb extends AbstractItemDb {
     @Override
     public ItemStack get(final String id, final boolean useResolvers) throws Exception {
         if (useResolvers) {
-            ItemStack resolved = tryResolvers(id);
+            ItemStack resolved = tryRevolverDeserialize(id);
             if (resolved != null) {
                 return resolved;
             }
