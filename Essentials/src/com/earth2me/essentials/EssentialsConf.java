@@ -337,7 +337,11 @@ public class EssentialsConf extends YamlConfiguration {
     }
 
     public Location getLocation(final String path, final Server server) throws InvalidWorldException {
-        return getLocationData(path, server).getLocation();
+        LocationData data = getLocationData(path, server);
+        if (data == null) {
+            return null;
+        }
+        return data.getLocation();
     }
     
     public LocationData getLocationData(final String path, final Server server) {
