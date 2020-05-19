@@ -2,6 +2,8 @@ package com.earth2me.essentials;
 
 import com.google.common.io.Files;
 import net.ess3.api.InvalidWorldException;
+import net.ess3.api.LocationData;
+
 import org.bukkit.OfflinePlayer;
 import org.bukkit.*;
 import org.bukkit.configuration.ConfigurationSection;
@@ -335,16 +337,16 @@ public class EssentialsConf extends YamlConfiguration {
     }
 
     public Location getLocation(final String path, final Server server) throws InvalidWorldException {
+        return getLocationData(path, server).getLocation();
+    }
+    
+    public LocationData getLocationData(final String path, final Server server) {
         final String worldString = (path == null ? "" : path + ".") + "world";
         final String worldName = getString(worldString);
         if (worldName == null || worldName.isEmpty()) {
             return null;
         }
-        final World world = server.getWorld(worldName);
-        if (world == null) {
-            throw new InvalidWorldException(worldName);
-        }
-        return new Location(world, getDouble((path == null ? "" : path + ".") + "x", 0), getDouble((path == null ? "" : path + ".") + "y", 0), getDouble((path == null ? "" : path + ".") + "z", 0), (float) getDouble((path == null ? "" : path + ".") + "yaw", 0), (float) getDouble((path == null ? "" : path + ".") + "pitch", 0));
+        return new LocationData(worldName, getDouble((path == null ? "" : path + ".") + "x", 0), getDouble((path == null ? "" : path + ".") + "y", 0), getDouble((path == null ? "" : path + ".") + "z", 0), (float) getDouble((path == null ? "" : path + ".") + "yaw", 0), (float) getDouble((path == null ? "" : path + ".") + "pitch", 0));
     }
 
     public void setProperty(final String path, final Location loc) {

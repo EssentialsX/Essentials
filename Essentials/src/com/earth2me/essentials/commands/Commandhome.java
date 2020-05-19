@@ -3,6 +3,11 @@ package com.earth2me.essentials.commands;
 import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.StringUtil;
+
+import net.ess3.api.LocationData;
+import net.ess3.api.events.UserTeleportHomeEvent;
+
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Server;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
@@ -90,13 +95,19 @@ public class Commandhome extends EssentialsCommand {
         if (home.length() < 1) {
             throw new NotEnoughArgumentsException();
         }
-        final Location loc = player.getHome(home);
-        if (loc == null) {
+        final LocationData locationData = player.getHomeSafe(home);
+        if (locationData == null) {
             throw new NotEnoughArgumentsException();
         }
-        if (user.getWorld() != loc.getWorld() && ess.getSettings().isWorldHomePermissions() && !user.isAuthorized("essentials.worlds." + loc.getWorld().getName())) {
-            throw new Exception(tl("noPerm", "essentials.worlds." + loc.getWorld().getName()));
+        if (!user.getWorld().getName().equals(locationData.getWorldName()) && ess.getSettings().isWorldHomePermissions() && !user.isAuthorized("essentials.worlds." + locationData.getWorldName())) {
+            throw new Exception(tl("noPerm", "essentials.worlds." + locationData.getWorldName()));
         }
+        UserTeleportHomeEvent event = new UserTeleportHomeEvent(user, locationData);
+        Bukkit.getPluginManager().callEvent(event);
+        if (event.isCancelled()) {
+            return;
+        }
+        Location loc = locationData.getLocation();
         user.getTeleport().teleport(loc, charge, TeleportCause.COMMAND);
         user.sendMessage(tl("teleportHome", home));
     }

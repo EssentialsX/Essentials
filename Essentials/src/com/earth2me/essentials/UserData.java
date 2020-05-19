@@ -5,6 +5,7 @@ import com.earth2me.essentials.utils.StringUtil;
 import com.google.common.collect.ImmutableMap;
 import net.ess3.api.IEssentials;
 import net.ess3.api.InvalidWorldException;
+import net.ess3.api.LocationData;
 import net.ess3.api.MaxMoneyException;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -165,6 +166,11 @@ public abstract class UserData extends PlayerExtension implements IConf {
     public Location getHome(String name) throws Exception {
         String search = getHomeName(name);
         return config.getLocation("homes." + search, this.getBase().getServer());
+    }
+    
+    public LocationData getHomeSafe(String name) throws Exception {
+        String search = getHomeName(name);
+        return config.getLocationData("homes." + search, this.getBase().getServer());
     }
 
     public Location getHome(final Location world) {
