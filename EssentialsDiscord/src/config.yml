@@ -14,9 +14,13 @@
 token: "INSERT-TOKEN-HERE"
 
 # The ID of your server.
-server-id: ""
+guild: 0
 
-# The channel to log messages to
-channel-id: ""
+# The channels that will be used for messaging, defaulting to the primary channel.
+channels:
+  primary: 0
 
-# TODO: plan out how we intend to map Discord channels to game chat
+# Status message for the bot to display. The activity must be playing or listening.
+status:
+  activity: "playing"
+  message: "Minecraft"

@@ -22,11 +22,15 @@ public class DiscordSettings implements IConf {
     }
 
     public String getBotToken() {
-        return config.getString("token");
+        return config.getString("token", "");
     }
 
-    public String getGuildId() {
-        return config.getString("server-id");
+    public long getGuildId() {
+        return config.getLong("guild", 0);
+    }
+
+    public long getPrimaryChannelId() {
+        return config.getLong("channels.primary", 0);
     }
 
     private List<ChannelDefinition> channelDefinitions;
@@ -71,6 +75,14 @@ public class DiscordSettings implements IConf {
             }
         }
         return definitions;
+    }
+
+    public String getStatusActivity() {
+        return config.getString("status.activity", "default");
+    }
+
+    public String getStatusMessage() {
+        return config.getString("status.message", "Minecraft");
     }
 
     @Override
