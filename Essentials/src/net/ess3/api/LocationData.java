@@ -10,16 +10,16 @@ public class LocationData {
     private double x;
     private double y;
     private double z;
-    private float pitch;
     private float yaw;
+    private float pitch;
 
-    public LocationData(String worldName, double x, double y, double z, float pitch, float yaw) {
+    public LocationData(String worldName, double x, double y, double z, float yaw, float pitch) {
         this.worldName = worldName;
         this.x = x;
         this.y = y;
         this.z = z;
-        this.pitch = pitch;
         this.yaw = yaw;
+        this.pitch = pitch;
     }
 
     public String getWorldName() {
@@ -38,12 +38,12 @@ public class LocationData {
         return z;
     }
 
-    public float getPitch() {
-        return pitch;
-    }
-
     public float getYaw() {
         return yaw;
+    }
+    
+    public float getPitch() {
+        return pitch;
     }
 
     public boolean exists() {
