@@ -17,6 +17,7 @@ import org.bukkit.potion.Potion;
 import org.bukkit.potion.PotionEffect;
 
 import java.util.*;
+import java.util.Map.Entry;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -28,6 +29,7 @@ public abstract class AbstractItemDb implements IConf, net.ess3.api.IItemDb {
     protected boolean ready = false;
 
     private final Map<PluginKey, ItemResolver> resolverMap = new HashMap<>();
+    private final Map<PluginKey, ItemSerializer> serializerMap = new HashMap<>();
 
     AbstractItemDb(IEssentials ess) {
         this.ess = ess;
@@ -42,6 +44,16 @@ public abstract class AbstractItemDb implements IConf, net.ess3.api.IItemDb {
 
         resolverMap.put(key, resolver);
     }
+    
+    @Override
+    public void registerSerializer(Plugin plugin, String name, ItemSerializer serializer) throws Exception {
+        PluginKey key = PluginKey.fromKey(plugin, name);
+        if (serializerMap.containsKey(key)) {
+            throw new Exception("Tried to add a duplicate serializer with name " + key.toString());
+        }
+
+        serializerMap.put(key, serializer);
+    }
 
     @Override
     public void unregisterResolver(Plugin plugin, String name) throws Exception {
@@ -52,15 +64,35 @@ public abstract class AbstractItemDb implements IConf, net.ess3.api.IItemDb {
 
         resolverMap.remove(key);
     }
+    
+    @Override
+    public void unregisterSerializer(Plugin plugin, String name) throws Exception {
+        PluginKey key = PluginKey.fromKey(plugin, name);
+        if (!serializerMap.containsKey(key)) {
+            throw new Exception("Tried to remove nonexistent serializer with name " + key.toString());
+        }
+
+        serializerMap.remove(key);
+    }
 
     @Override
     public boolean isResolverPresent(Plugin plugin, String name) {
         return resolverMap.containsKey(PluginKey.fromKey(plugin, name));
     }
+    
+    @Override
+    public boolean isSerializerPresent(Plugin plugin, String name) {
+        return serializerMap.containsKey(PluginKey.fromKey(plugin, name));
+    }
 
     @Override
     public Map<PluginKey, ItemResolver> getResolvers() {
         return new HashMap<>(resolverMap);
+    }
+    
+    @Override
+    public Map<PluginKey, ItemSerializer> getSerializers() {
+        return new HashMap<>(serializerMap);
     }
 
     @Override
@@ -74,24 +106,58 @@ public abstract class AbstractItemDb implements IConf, net.ess3.api.IItemDb {
 
         return matchingResolvers;
     }
+    
+    @Override
+    public Map<PluginKey, ItemSerializer> getSerializers(Plugin plugin) {
+        Map<PluginKey, ItemSerializer> matchingSerializers = new HashMap<>();
+        for (PluginKey key : serializerMap.keySet()) {
+            if (key.getPlugin().equals(plugin)) {
+                matchingSerializers.put(key, serializerMap.get(key));
+            }
+        }
+
+        return matchingSerializers;
+    }
 
     @Override
     public ItemResolver getResolver(Plugin plugin, String name) {
         return resolverMap.get(PluginKey.fromKey(plugin, name));
+    }
+    
+    @Override
+    public ItemSerializer getSerializer(Plugin plugin, String name) {
+        return serializerMap.get(PluginKey.fromKey(plugin, name));
     }
 
     @Override
     public ItemStack get(String id) throws Exception {
         return get(id, true);
     }
-
-    ItemStack tryResolvers(String id) {
-        for (PluginKey key : resolverMap.keySet()) {
+    
+    String trySerializers(ItemStack is) {
+        for (Entry<PluginKey, ItemSerializer> entry : serializerMap.entrySet()) {
             if (ess.getSettings().isDebug()) {
-                ess.getLogger().info(String.format("Trying resolver '%s' for item '%s'...", key, id));
+                ess.getLogger().info(String.format("Trying serializer '%s' for item '%s'...", entry.getKey(), is));
             }
 
-            Function<String, ItemStack> resolver = resolverMap.get(key);
+            Function<ItemStack, String> resolver = entry.getValue();
+            String str = resolver.apply(is);
+
+            if (str != null) {
+                return str;
+            }
+        }
+
+        return null;
+    }
+
+    ItemStack tryResolvers(String id) {
+        for (Entry<PluginKey, ItemResolver> entry : resolverMap.entrySet()) {
+            if (ess.getSettings().isDebug()) {
+                ess.getLogger().info(String.format("Trying resolver '%s' for item '%s'...", entry.getKey(), id));
+            }
+
+            Function<String, ItemStack> resolver = entry.getValue();
             ItemStack stack = resolver.apply(id);
 
             if (stack != null) {
@@ -144,6 +210,17 @@ public abstract class AbstractItemDb implements IConf, net.ess3.api.IItemDb {
 
     @Override
     public String serialize(ItemStack is) {
+        return serialize(is, true);
+    }
+    
+    @Override
+    public String serialize(ItemStack is, boolean useCustomSerializers) {
+        if (useCustomSerializers) {
+            String serialized = trySerializers(is);
+            if (serialized != null) {
+                return serialized;
+            }
+        }
         String mat = name(is);
         if (VersionUtil.getServerBukkitVersion().isLowerThanOrEqualTo(VersionUtil.v1_12_2_R01) && is.getData().getData() != 0) {
             mat = mat + ":" + is.getData().getData();

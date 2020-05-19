@@ -73,12 +73,80 @@ public interface IItemDb extends com.earth2me.essentials.api.IItemDb {
      * @throws Exception if the item stack cannot be created
      */
     ItemStack get(String name, boolean useResolvers) throws Exception;
+    
+    /**
+     * Add an item serializer that is called before serializing the item in the item database.
+     *
+     * @param plugin The owning plugin
+     * @param name The name of the serializer
+     * @param serializer The serializer accepting an ItemStack and returning an String, or null to
+     *                 use the default Essentials serialization
+     * @throws Exception If a serializer with a conflicting name is found
+     */
+    void registerSerializer(Plugin plugin, String name, ItemSerializer serializer) throws Exception;
+
+    /**
+     * Remove an item serializer from the given plugin with the given name.
+     *
+     * @param plugin The owning plugin
+     * @param name The name of the serializer
+     * @throws Exception If no matching serializer was found
+     */
+    void unregisterSerializer(Plugin plugin, String name) throws Exception;
+
+    /**
+     * Check whether a serializer with a given name from a given plugin has been registered.
+     *
+     * @param plugin The owning plugin
+     * @param name The name of the serializer
+     * @return Whether the serializer could be found
+     */
+    boolean isSerializerPresent(Plugin plugin, String name);
+
+    /**
+     * Get all registered serializers.
+     *
+     * @return A map of all registered serializers
+     */
+    Map<PluginKey, ItemSerializer> getSerializers();
+
+    /**
+     * Get all registered serializers from the given plugin.
+     *
+     * @param plugin The owning plugin
+     * @return A map of all matching serializers
+     */
+    Map<PluginKey, ItemSerializer> getSerializers(Plugin plugin);
+
+    /**
+     * Get the serializer function with the given name from the given plugin.
+     *
+     * @param plugin The owning plugin
+     * @param name The name of the serializer
+     * @return The serializer function, or null if not found
+     */
+    ItemSerializer getSerializer(Plugin plugin, String name);
+
+    /**
+     * Converts the given {@link ItemStack} to a string representation
+     *
+     * @param name Item name to look up in the database
+     * @param useCustomSerializers Whether to call other plugins' item serializers functions before looking the
+     *                     item up in the database
+     * @return A string representation of the given item stack
+     * @throws Exception if the item stack cannot be created
+     */
+    String serialize(ItemStack itemStack, boolean useCustomSerializers) throws Exception;
 
     @FunctionalInterface
     interface ItemResolver extends Function<String, ItemStack> {
         default Collection<String> getNames() {
             return null;
         }
+    }
+    
+    @FunctionalInterface
+    interface ItemSerializer extends Function<ItemStack, String> {
     }
 
 }
