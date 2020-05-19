@@ -146,16 +146,16 @@ public class EssentialsEntityListener implements Listener {
             return;
         }
         final User user = ess.getUser(event.getEntity());
+        if (ess.getSettings().infoAfterDeath()) {
+            final Location loc = user.getLocation();
+            user.sendMessage(tl("infoAfterDeath", loc.getWorld().getName(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ()));
+        }
         if (user.isAuthorized("essentials.back.ondeath") && !ess.getSettings().isCommandDisabled("back")) {
             user.setLastLocation();
             user.sendMessage(tl("backAfterDeath"));
         }
         if (!ess.getSettings().areDeathMessagesEnabled()) {
             event.setDeathMessage("");
-        }
-        if (ess.getSettings().infoAfterDeath()) {
-            final Location loc = user.getLocation();
-            user.sendMessage(tl("infoAfterDeath", loc.getWorld().getName(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ()));
         }
     }
 
