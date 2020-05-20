@@ -87,7 +87,7 @@ public abstract class AbstractItemDb implements IConf, net.ess3.api.IItemDb {
         return get(id, true);
     }
 
-    ItemStack tryRevolverDeserialize(String id) {
+    ItemStack tryResolverDeserialize(String id) {
         for (PluginKey key : resolverMap.keySet()) {
             if (ess.getSettings().isDebug()) {
                 ess.getLogger().info(String.format("Trying to deserialize item '%s' with resolver '%s'...", id, key));
