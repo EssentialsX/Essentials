@@ -250,7 +250,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
                         Arrays.asList(
                                 BlockMetaSpawnerProvider.class,
                                 LegacySpawnerProvider.class
-                        ), "spawner").getProvider();
+                        ), "mob spawner").getProvider();
                 spawnEggProvider = new ProviderFactory<>(getLogger(),
                         Arrays.asList(
                                 FlatSpawnEggProvider.class,
