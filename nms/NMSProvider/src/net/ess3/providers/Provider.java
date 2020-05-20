@@ -4,6 +4,4 @@ public interface Provider {
     boolean tryProvider();
 
     String getDescription();
-
-    String getType();
 }

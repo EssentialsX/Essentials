@@ -59,9 +59,4 @@ public abstract class SpawnerProvider implements Provider {
         is.setItemMeta(meta);
         return is;
     }
-
-    @Override
-    public String getType() {
-        return "Spawner";
-    }
 }

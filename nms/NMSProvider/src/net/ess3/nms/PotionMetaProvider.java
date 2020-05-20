@@ -16,9 +16,4 @@ public abstract class PotionMetaProvider implements Provider {
             return false;
         }
     }
-
-    @Override
-    public String getType() {
-        return "Potion Meta";
-    }
 }

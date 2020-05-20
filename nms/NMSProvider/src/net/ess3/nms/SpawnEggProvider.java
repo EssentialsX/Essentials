@@ -20,9 +20,4 @@ public abstract class SpawnEggProvider implements Provider {
             return false;
         }
     }
-
-    @Override
-    public String getType() {
-        return "Spawn Egg";
-    }
 }
