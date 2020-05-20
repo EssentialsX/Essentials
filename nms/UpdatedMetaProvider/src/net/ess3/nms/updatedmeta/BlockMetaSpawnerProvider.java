@@ -24,4 +24,9 @@ public class BlockMetaSpawnerProvider extends SpawnerProvider {
         CreatureSpawner bs = (CreatureSpawner) bsm.getBlockState();
         return bs.getSpawnedType();
     }
+
+    @Override
+    public String getDescription() {
+        return "1.8.3+ BlockStateMeta provider";
+    }
 }

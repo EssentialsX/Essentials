@@ -20,7 +20,7 @@ public class ProviderFactory<T extends Provider> {
             }
         }
         assert provider != null;
-        logger.info("Using " + provider.getClass().getSimpleName() + " as " + provider.getType() + " provider.");
+        logger.info("Using " + provider.getDescription() + " as " + provider.getType() + " provider.");
         return provider;
     }
 

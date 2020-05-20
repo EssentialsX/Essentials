@@ -2,7 +2,6 @@ package net.ess3.nms;
 
 import net.ess3.providers.Provider;
 import com.google.common.collect.ImmutableMap;
-import net.ess3.providers.ProviderType;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
@@ -62,7 +61,7 @@ public abstract class SpawnerProvider implements Provider {
     }
 
     @Override
-    public ProviderType getType() {
-        return ProviderType.MOB_SPAWNER;
+    public String getType() {
+        return "Spawner";
     }
 }

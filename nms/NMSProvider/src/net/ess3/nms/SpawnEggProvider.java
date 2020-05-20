@@ -1,7 +1,6 @@
 package net.ess3.nms;
 
 import net.ess3.providers.Provider;
-import net.ess3.providers.ProviderType;
 import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
 
@@ -23,7 +22,7 @@ public abstract class SpawnEggProvider implements Provider {
     }
 
     @Override
-    public ProviderType getType() {
-        return ProviderType.SPAWN_EGG;
+    public String getType() {
+        return "Spawn Egg";
     }
 }
