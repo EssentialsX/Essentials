@@ -1,7 +1,7 @@
 package net.ess3.nms;
 
-import net.ess3.providers.Provider;
 import com.google.common.collect.ImmutableMap;
+import net.ess3.providers.Provider;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
@@ -29,14 +29,15 @@ public abstract class SpawnerProvider implements Provider {
 
     @Override
     public boolean tryProvider() {
+        EntityType type = EntityType.CREEPER;
+        Material MOB_SPAWNER;
         try {
-            EntityType type = EntityType.CREEPER;
-            Material MOB_SPAWNER;
-            try {
-                MOB_SPAWNER = Material.SPAWNER;
-            } catch (Exception e) {
-                MOB_SPAWNER = Material.valueOf("MOB_SPAWNER");
-            }
+            MOB_SPAWNER = Material.valueOf("SPAWNER");
+        } catch (Exception e) {
+            MOB_SPAWNER = Material.valueOf("MOB_SPAWNER");
+        }
+
+        try {
             ItemStack is = setEntityType(new ItemStack(MOB_SPAWNER), type);
             EntityType readType = getEntityType(is);
             return type == readType;
