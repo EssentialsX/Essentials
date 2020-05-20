@@ -104,14 +104,14 @@ public abstract class AbstractItemDb implements IConf, net.ess3.api.IItemDb {
         return null;
     }
 
-    String tryRevolverSerialize(ItemStack stack) {
+    String tryResolverSerialize(ItemStack stack) {
         for (PluginKey key : resolverMap.keySet()) {
             if (ess.getSettings().isDebug()) {
                 ess.getLogger().info(String.format("Trying to serialize '%s' with resolver '%s'...", stack.toString(), key));
             }
 
             ItemResolver resolver = resolverMap.get(key);
-            String serialized = resolver.getName(stack);
+            String serialized = resolver.serialize(stack);
 
             if (serialized != null) {
                 return serialized;
@@ -173,7 +173,7 @@ public abstract class AbstractItemDb implements IConf, net.ess3.api.IItemDb {
     @Override
     public String serialize(ItemStack is, boolean useResolvers) {
         if (useResolvers) {
-            String serialized = tryRevolverSerialize(is);
+            String serialized = tryResolverSerialize(is);
             if (serialized != null) {
                 return serialized;
             }

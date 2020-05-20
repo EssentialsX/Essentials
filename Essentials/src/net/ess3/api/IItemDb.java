@@ -118,7 +118,7 @@ public interface IItemDb extends com.earth2me.essentials.api.IItemDb {
          * @param stack The stack to serialize
          * @return The name of the item if a suitable name was found, else null
          */
-        default String getName(ItemStack stack) {
+        default String serialize(ItemStack stack) {
             return null;
         }
     }
