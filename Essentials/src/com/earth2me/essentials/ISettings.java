@@ -262,7 +262,7 @@ public interface ISettings extends IConf {
 
     int getMaxUserCacheCount();
     
-    boolean storeIPAddressPlainText();
+    boolean storeUserIPAddress();
     
     boolean allowSilentJoinQuit();
 
