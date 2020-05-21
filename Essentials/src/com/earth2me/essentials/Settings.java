@@ -817,7 +817,11 @@ public class Settings implements net.ess3.api.ISettings {
     }
 
     private boolean changeDisplayName = true;
-
+    
+    public boolean storeIPAddressPlainText() {
+        return config.getBoolean("store-users-ip-address", true);
+    }
+    
     private boolean _changeDisplayName() {
         return config.getBoolean("change-displayname", true);
     }
