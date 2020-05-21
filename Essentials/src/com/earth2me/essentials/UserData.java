@@ -697,6 +697,17 @@ public abstract class UserData extends PlayerExtension implements IConf {
     public String getLastLoginAddress() {
         return lastLoginAddress;
     }
+    
+    // Gives the user an option to store the Player's ip
+    // address in the Player's UUID file
+    private void _setLastLoginAddress(String address) {
+        lastLoginAddress = address;
+        if (ess.getSettings().storeIPAddressPlainText()) {
+            config.setProperty("ipAddress", address);
+        } else {
+        	config.setProperty("ipAddress", "hidden");
+        }
+    }
 
     private void _setLastLoginAddress(String address) {
         lastLoginAddress = address;
