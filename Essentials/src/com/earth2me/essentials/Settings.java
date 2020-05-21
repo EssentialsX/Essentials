@@ -828,7 +828,7 @@ public class Settings implements net.ess3.api.ISettings {
     }
     
     public boolean storeIPAddressPlainText() {
-        return config.getBoolean("store-users-ip-address", true);
+        return config.getBoolean("store-ip-address", true);
     }
     
     private boolean changePlayerListName = false;
