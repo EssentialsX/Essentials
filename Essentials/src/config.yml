@@ -410,7 +410,7 @@ debug: false
 # Turn off god mode when people leave the server.
 remove-god-on-disconnect: false
 
-# Set to false if essentials should not store user's ip addresses in their player data
+# Set this to false if essentials should not store user's ip addresses in their player data
 store-ip-address: true
 
 # Auto-AFK
