@@ -700,7 +700,7 @@ public abstract class UserData extends PlayerExtension implements IConf {
 
     private void _setLastLoginAddress(String address) {
         lastLoginAddress = address;
-        if (ess.getSettings().storeIPAddressPlainText()) {
+        if (ess.getSettings().storeUserIPAddress()) {
             config.setProperty("ipAddress", address);
         } else {
         	config.setProperty("ipAddress", "hidden");
