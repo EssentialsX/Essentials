@@ -410,6 +410,9 @@ debug: false
 # Turn off god mode when people leave the server.
 remove-god-on-disconnect: false
 
+# Turn this off if you wish to not store the users IP address within the UUID file.
+store-users-ip-address: true
+
 # Auto-AFK
 # After this timeout in seconds, the user will be set as AFK.
 # This feature requires the player to have essentials.afk.auto node.
