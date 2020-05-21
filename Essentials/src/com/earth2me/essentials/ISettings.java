@@ -261,7 +261,9 @@ public interface ISettings extends IConf {
     boolean hideDisplayNameInVanish();
 
     int getMaxUserCacheCount();
-
+    
+    boolean storeIPAddressPlainText();
+    
     boolean allowSilentJoinQuit();
 
     boolean isCustomJoinMessage();
