@@ -815,7 +815,11 @@ public class Settings implements net.ess3.api.ISettings {
     public boolean removeGodOnDisconnect() {
         return config.getBoolean("remove-god-on-disconnect", false);
     }
-
+    
+    public boolean isstoreIPAddressPlainText() {
+        return config.getBoolean("store-users-ip-address", true);
+    }
+    
     private boolean changeDisplayName = true;
 
     private boolean _changeDisplayName() {
@@ -826,7 +830,11 @@ public class Settings implements net.ess3.api.ISettings {
     public boolean changeDisplayName() {
         return changeDisplayName;
     }
-
+    
+    public boolean storeIPAddressPlainText() {
+        return config.getBoolean("store-users-ip-address", true);
+    }
+    
     private boolean changePlayerListName = false;
 
     private boolean _changePlayerListName() {
