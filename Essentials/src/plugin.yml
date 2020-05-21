@@ -118,7 +118,7 @@ commands:
     aliases: [edisposal,trash,etrash]
   eco:
     description: Manages the server economy.
-    usage: /<command> <give|take|set> <player> <amount>
+    usage: /<command> [give|take|set] [player] <amount>
     aliases: [eeco,economy,eeconomy]
   enchant:
     description: Enchants the item the user is holding.
