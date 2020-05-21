@@ -658,12 +658,7 @@ public abstract class UserData extends PlayerExtension implements IConf {
     public long getLastLogin() {
         return lastLogin;
     }
-
-    private void _setLastLogin(long time) {
-        lastLogin = time;
-        config.setProperty("timestamps.login", time);
-    }
-
+    
     public void setLastLogin(long time) {
         _setLastLogin(time);
         if (base.getAddress() != null && base.getAddress().getAddress() != null) {
