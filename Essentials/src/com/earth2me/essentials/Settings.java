@@ -827,7 +827,7 @@ public class Settings implements net.ess3.api.ISettings {
         return changeDisplayName;
     }
     
-    public boolean storeIPAddressPlainText() {
+    public boolean storeUserIPAddress() {
         return config.getBoolean("store-ip-address", true);
     }
     
