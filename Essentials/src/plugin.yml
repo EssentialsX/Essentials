@@ -296,6 +296,10 @@ commands:
     description: May death rain upon them.
     usage: /<command> [player]
     aliases: [enuke]
+  tporandom:
+    description: Teleport to a random player on the server.
+    usage: /<command> <player>
+    aliases: []
   tpoffline:
     description: Teleport to a player's last known logout location
     usage: /<command> <player>
