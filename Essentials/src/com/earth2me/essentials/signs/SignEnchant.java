@@ -28,21 +28,19 @@ public class SignEnchant extends EssentialsSign {
             throw e;
         }
         final String[] enchantLevel = sign.getLine(2).split(":");
-        if (enchantLevel.length != 2) {
-            sign.setLine(2, "§c<enchant>");
-            throw new SignException(tl("invalidSignLine", 3));
-        }
+        int level = 1;
         final Enchantment enchantment = Enchantments.getByName(enchantLevel[0]);
         if (enchantment == null) {
             sign.setLine(2, "§c<enchant>");
             throw new SignException(tl("enchantmentNotFound"));
         }
-        int level;
-        try {
-            level = Integer.parseInt(enchantLevel[1]);
-        } catch (NumberFormatException ex) {
-            sign.setLine(2, "§c<enchant>");
-            throw new SignException(ex.getMessage(), ex);
+        if (enchantLevel.length > 1) {
+            try {
+                level = Integer.parseInt(enchantLevel[1]);
+            } catch (NumberFormatException ex) {
+                sign.setLine(2, "§c<enchant>");
+                throw new SignException(ex.getMessage(), ex);
+            }
         }
         final boolean allowUnsafe = ess.getSettings().allowUnsafeEnchantments() && player.isAuthorized("essentials.enchantments.allowunsafe") && player.isAuthorized("essentials.signs.enchant.allowunsafe");
         if (level < 0 || (!allowUnsafe && level > enchantment.getMaxLevel())) {
@@ -70,18 +68,17 @@ public class SignEnchant extends EssentialsSign {
         final Trade charge = getTrade(sign, 3, ess);
         charge.isAffordableFor(player);
         final String[] enchantLevel = sign.getLine(2).split(":");
-        if (enchantLevel.length != 2) {
-            throw new SignException(tl("invalidSignLine", 3));
-        }
         final Enchantment enchantment = Enchantments.getByName(enchantLevel[0]);
         if (enchantment == null) {
             throw new SignException(tl("enchantmentNotFound"));
         }
-        int level;
-        try {
-            level = Integer.parseInt(enchantLevel[1]);
-        } catch (NumberFormatException ex) {
-            level = enchantment.getMaxLevel();
+        int level = 1;
+        if (enchantLevel.length > 1) {
+            try {
+                level = Integer.parseInt(enchantLevel[1]);
+            } catch (NumberFormatException ex) {
+                throw new SignException(ex.getMessage(), ex);
+            }
         }
 
         final ItemStack playerHand = player.getBase().getItemInHand();

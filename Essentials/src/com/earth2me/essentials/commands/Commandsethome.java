@@ -1,11 +1,14 @@
 package com.earth2me.essentials.commands;
 
+import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.LocationUtil;
 import com.earth2me.essentials.utils.NumberUtil;
 import org.bukkit.Location;
 import org.bukkit.Server;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Locale;
 
 import static com.earth2me.essentials.I18n.tl;
@@ -69,5 +72,10 @@ public class Commandsethome extends EssentialsCommand {
             return limit == 1;
         }
         return false;
+    }
+
+    @Override
+    protected List<String> getTabCompleteOptions(final Server server, final CommandSource sender, final String commandLabel, final String[] args) {
+        return Collections.emptyList();
     }
 }

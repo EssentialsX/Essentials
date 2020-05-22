@@ -140,7 +140,9 @@ public class Teleport implements ITeleport {
             return;
         }
 
-        teleportee.setLastLocation();
+        if (teleportee.isAuthorized("essentials.back.onteleport")) {
+            teleportee.setLastLocation();
+        }
 
         if (!teleportee.getBase().isEmpty()) {
             if (!ess.getSettings().isTeleportPassengerDismount()) {
