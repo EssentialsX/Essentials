@@ -599,6 +599,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
         return false;
     }
 
+    /*
     //Returns a list of UUIDs who's ignore timeout expired during this check
     public List<UUID> checkIgnoreTimeouts(final long currentTime) {
         List<UUID> expiredIgnoredPlayers = new ArrayList();
@@ -617,6 +618,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
         }
         return expiredIgnoredPlayers;
     }
+    */
 
     @Deprecated
     public void updateActivity(final boolean broadcast) {

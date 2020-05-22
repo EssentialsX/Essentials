@@ -552,7 +552,18 @@ public abstract class UserData extends PlayerExtension implements IConf {
 
 
     public boolean isIgnoredPlayer(IUser user) {
-        return ignoredPlayers.contains(user.getBase().getUniqueId()) && !user.isIgnoreExempt();
+	UUID uuid = user.getBase().getUniqueId();
+	//If there is a timeout stored for the player, check if expired, if so set ingored status to false.
+	Long timeout = getIgnoredPlayerTimeout(uuid);
+	if (timeout != null) {
+		final long currentTime = System.currentTimeMillis();
+		if (timeout > 0 && timeout < currentTime) {
+			ignoredPlayerTimeouts.remove(uuid);
+			setIgnoredPlayer(uuid, false);
+			ess.getUser(uuid).sendMessage(tl("unignoredPlayer", ess.getUser(uuid).getName()));
+		}
+	}
+        return ignoredPlayers.contains(uuid) && !user.isIgnoreExempt();
     }
 
     public void setIgnoredPlayer(IUser user, boolean set) {
