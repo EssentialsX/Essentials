@@ -1481,6 +1481,11 @@ public class Settings implements net.ess3.api.ISettings {
     }
 
     @Override
+    public boolean isAllowSellNamedItems() {
+        return config.getBoolean("allow-sell-named-items", false);
+    }
+
+    @Override
     public boolean isAddingPrefixInPlayerlist() {
         return config.getBoolean("add-prefix-in-playerlist", false);
     }

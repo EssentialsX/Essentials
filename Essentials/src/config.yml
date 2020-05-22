@@ -573,6 +573,10 @@ npcs-in-balance-ranking: false
 # This is useful when a sign sells or buys one item at a time and the player wants to sell a bunch at once.
 allow-bulk-buy-sell: true
 
+# Allow selling of items with custom names with the /sell command.
+# This may be useful to prevent players accidentally selling named items.
+allow-sell-named-items: false
+
 # Delay for the MOTD display for players on join, in milliseconds.
 # This has no effect if the MOTD command or permission are disabled.
 delay-motd: 0
