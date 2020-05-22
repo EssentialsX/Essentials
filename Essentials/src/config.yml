@@ -713,7 +713,7 @@ protect:
     water-bucket-flow: false
     fire-spread: true
     lava-fire-spread: true
-    lava-item-damage: true
+    lava-itemdamage: true
     flint-fire: false
     lightning-fire-spread: true
     portal-creation: false
