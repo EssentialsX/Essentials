@@ -498,8 +498,7 @@ public abstract class UserData extends PlayerExtension implements IConf {
         setIgnoredPlayerUUIDs(uuids);
     }
 
-    public Map<UUID,Long> _getIgnoredPlayerTimeouts()
-    {
+    public Map<UUID,Long> _getIgnoredPlayerTimeouts() {
         Map<UUID,Long> ignoreTimeouts = new HashMap<UUID,Long>();
         Map<UUID,Long> loadedTimeouts = (Map<UUID,Long>) config.getProperty("ignoretimeouts");
         if (loadedTimeouts != null) {
@@ -508,8 +507,7 @@ public abstract class UserData extends PlayerExtension implements IConf {
         return ignoreTimeouts;
     }
 
-    public void setIgnoredPlayerTimeouts(Map<UUID,Long> timeouts)
-    {
+    public void setIgnoredPlayerTimeouts(Map<UUID,Long> timeouts) {
         if (timeouts == null || timeouts.isEmpty())
         {
             ignoredPlayerTimeouts = new HashMap<UUID,Long>();
@@ -523,8 +521,7 @@ public abstract class UserData extends PlayerExtension implements IConf {
         config.save();
     }
 
-    public long getIgnoredPlayerTimeout(UUID uuid)
-    {
+    public long getIgnoredPlayerTimeout(UUID uuid) {
         return ignoredPlayerTimeouts.get(uuid);
     }
 
@@ -571,16 +568,12 @@ public abstract class UserData extends PlayerExtension implements IConf {
         } else {
             ignoredPlayers.remove(uuid);
         }
-        setIgnoredPlayerUUIDs(ignoredPlayers);       
+        setIgnoredPlayerUUIDs(ignoredPlayers);
     }
 
-    public void setIgnoredPlayerTimeout(IUser user, long time)
-    {
+    public void setIgnoredPlayerTimeout(IUser user, long time) {
         UUID uuid = user.getBase().getUniqueId();
-        System.out.println("UUID: " + uuid);
-        System.out.println("Map: " + ignoredPlayerTimeouts);
         ignoredPlayerTimeouts.put(uuid, time);
-        System.out.println("Map (final): " + ignoredPlayerTimeouts);
         setIgnoredPlayerTimeouts(ignoredPlayerTimeouts);
     }
 

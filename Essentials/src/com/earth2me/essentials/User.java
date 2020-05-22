@@ -600,8 +600,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
     }
 
     //Returns a list of UUIDs who's ignore timeout expired during this check
-    public List<UUID> checkIgnoreTimeouts(final long currentTime)
-    {
+    public List<UUID> checkIgnoreTimeouts(final long currentTime) {
         List<UUID> expiredIgnoredPlayers = new ArrayList();
         if (ignoredPlayerTimeouts != null) {
             Iterator ignoredPlayers = ignoredPlayerTimeouts.entrySet().iterator();
