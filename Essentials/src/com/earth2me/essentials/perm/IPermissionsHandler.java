@@ -3,6 +3,8 @@ package com.earth2me.essentials.perm;
 import org.bukkit.entity.Player;
 
 import java.util.List;
+import java.util.Set;
+import java.util.function.Function;
 
 
 public interface IPermissionsHandler {
@@ -23,7 +25,7 @@ public interface IPermissionsHandler {
 
     String getSuffix(Player base);
 
-    void registerContexts();
+    void registerContext(String context, Function<Player, String> calculator, Set<String> suggestions);
 
     boolean tryProvider();
 }

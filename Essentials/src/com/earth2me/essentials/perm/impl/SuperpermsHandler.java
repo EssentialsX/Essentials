@@ -1,6 +1,5 @@
 package com.earth2me.essentials.perm.impl;
 
-import com.earth2me.essentials.Essentials;
 import com.earth2me.essentials.perm.IPermissionsHandler;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -8,11 +7,11 @@ import org.bukkit.plugin.Plugin;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
+import java.util.function.Function;
 
 
 public class SuperpermsHandler implements IPermissionsHandler {
-    protected final Essentials ess = (Essentials) Bukkit.getPluginManager().getPlugin("Essentials");
-
     protected boolean emulateWildcards() {
         return true;
     }
@@ -76,7 +75,7 @@ public class SuperpermsHandler implements IPermissionsHandler {
     }
 
     @Override
-    public void registerContexts() {
+    public void registerContext(String context, Function<Player, String> calculator, Set<String> suggestions) {
     }
 
     @Override

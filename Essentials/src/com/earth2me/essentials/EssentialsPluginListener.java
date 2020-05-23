@@ -1,6 +1,7 @@
 package com.earth2me.essentials;
 
 import com.earth2me.essentials.register.payment.Methods;
+import com.google.common.collect.ImmutableSet;
 import net.ess3.api.IEssentials;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -25,7 +26,9 @@ public class EssentialsPluginListener implements Listener, IConf {
         }
         ess.getPermissionsHandler().setUseSuperperms(ess.getSettings().useBukkitPermissions());
         ess.getPermissionsHandler().checkPermissions();
-        ess.getPermissionsHandler().registerContexts();
+        ess.getPermissionsHandler().registerContext("afk", player -> Boolean.toString(ess.getUser(player).isAfk()), ImmutableSet.of("true", "false"));
+        ess.getPermissionsHandler().registerContext("muted", player -> Boolean.toString(ess.getUser(player).isMuted()), ImmutableSet.of("true", "false"));
+        ess.getPermissionsHandler().registerContext("vanished", player -> Boolean.toString(ess.getUser(player).isHidden()), ImmutableSet.of("true", "false"));
         ess.getAlternativeCommandsHandler().addPlugin(event.getPlugin());
         if (!Methods.hasMethod() && Methods.setMethod(ess.getServer().getPluginManager())) {
             ess.getLogger().log(Level.INFO, "Payment method found (" + Methods.getMethod().getLongName() + " version: " + ess.getPaymentMethod().getMethod().getVersion() + ")");

@@ -7,6 +7,8 @@ import org.bukkit.entity.Player;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
+import java.util.function.Function;
 import java.util.logging.Level;
 
 public class PermissionsHandler implements IPermissionsHandler {
@@ -90,8 +92,8 @@ public class PermissionsHandler implements IPermissionsHandler {
     }
 
     @Override
-    public void registerContexts() {
-        handler.registerContexts();
+    public void registerContext(String context, Function<Player, String> calculator, Set<String> suggestions) {
+        handler.registerContext(context, calculator, suggestions);
     }
 
     @Override
