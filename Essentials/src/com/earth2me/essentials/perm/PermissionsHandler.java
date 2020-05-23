@@ -90,6 +90,11 @@ public class PermissionsHandler implements IPermissionsHandler {
     }
 
     @Override
+    public void registerContexts() {
+        handler.registerContexts();
+    }
+
+    @Override
     public boolean tryProvider() {
         return true;
     }
@@ -97,6 +102,7 @@ public class PermissionsHandler implements IPermissionsHandler {
     public void checkPermissions() {
         // load and assign a handler
         List<Class<? extends SuperpermsHandler>> providerClazz = Arrays.asList(
+                LuckPermsHandler.class,
                 ModernVaultHandler.class,
                 GenericVaultHandler.class,
                 SuperpermsHandler.class

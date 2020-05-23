@@ -23,5 +23,7 @@ public interface IPermissionsHandler {
 
     String getSuffix(Player base);
 
+    void registerContexts();
+
     boolean tryProvider();
 }
