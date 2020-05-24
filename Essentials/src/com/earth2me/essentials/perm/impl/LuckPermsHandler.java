@@ -9,7 +9,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.RegisteredServiceProvider;
 
-import java.util.Set;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -17,7 +16,7 @@ public class LuckPermsHandler extends ModernVaultHandler {
     private LuckPerms luckPerms;
 
     @Override
-    public void registerContext(String context, Function<Player, Iterable<String>> calculator, Supplier<Set<String>> suggestions) {
+    public void registerContext(String context, Function<Player, Iterable<String>> calculator, Supplier<Iterable<String>> suggestions) {
         luckPerms.getContextManager().registerCalculator(new ContextCalculator<Player>() {
             @Override
             public void calculate(Player target, ContextConsumer consumer) {
