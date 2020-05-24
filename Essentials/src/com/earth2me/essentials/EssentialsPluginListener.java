@@ -9,6 +9,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.server.PluginDisableEvent;
 import org.bukkit.event.server.PluginEnableEvent;
 
+import java.util.Collections;
 import java.util.logging.Level;
 
 
@@ -26,9 +27,9 @@ public class EssentialsPluginListener implements Listener, IConf {
         }
         ess.getPermissionsHandler().setUseSuperperms(ess.getSettings().useBukkitPermissions());
         ess.getPermissionsHandler().checkPermissions();
-        ess.getPermissionsHandler().registerContext("afk", player -> Boolean.toString(ess.getUser(player).isAfk()), ImmutableSet.of("true", "false"));
-        ess.getPermissionsHandler().registerContext("muted", player -> Boolean.toString(ess.getUser(player).isMuted()), ImmutableSet.of("true", "false"));
-        ess.getPermissionsHandler().registerContext("vanished", player -> Boolean.toString(ess.getUser(player).isHidden()), ImmutableSet.of("true", "false"));
+        ess.getPermissionsHandler().registerContext("afk", player -> Collections.singleton(String.valueOf(ess.getUser(player).isAfk())), () -> ImmutableSet.of("true", "false"));
+        ess.getPermissionsHandler().registerContext("muted", player -> Collections.singleton(String.valueOf(ess.getUser(player).isMuted())), () -> ImmutableSet.of("true", "false"));
+        ess.getPermissionsHandler().registerContext("vanished", player -> Collections.singleton(String.valueOf(ess.getUser(player).isHidden())), () -> ImmutableSet.of("true", "false"));
         ess.getAlternativeCommandsHandler().addPlugin(event.getPlugin());
         if (!Methods.hasMethod() && Methods.setMethod(ess.getServer().getPluginManager())) {
             ess.getLogger().log(Level.INFO, "Payment method found (" + Methods.getMethod().getLongName() + " version: " + ess.getPaymentMethod().getMethod().getVersion() + ")");

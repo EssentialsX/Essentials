@@ -5,6 +5,7 @@ import org.bukkit.entity.Player;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 
 public interface IPermissionsHandler {
@@ -25,7 +26,7 @@ public interface IPermissionsHandler {
 
     String getSuffix(Player base);
 
-    void registerContext(String context, Function<Player, String> calculator, Set<String> suggestions);
+    void registerContext(String context, Function<Player, Iterable<String>> calculator, Supplier<Set<String>> suggestions);
 
     boolean tryProvider();
 }

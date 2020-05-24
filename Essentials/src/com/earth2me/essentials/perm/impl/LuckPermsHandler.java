@@ -11,22 +11,23 @@ import org.bukkit.plugin.RegisteredServiceProvider;
 
 import java.util.Set;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 public class LuckPermsHandler extends ModernVaultHandler {
     private LuckPerms luckPerms;
 
     @Override
-    public void registerContext(String context, Function<Player, String> calculator, Set<String> suggestions) {
+    public void registerContext(String context, Function<Player, Iterable<String>> calculator, Supplier<Set<String>> suggestions) {
         luckPerms.getContextManager().registerCalculator(new ContextCalculator<Player>() {
             @Override
             public void calculate(Player target, ContextConsumer consumer) {
-                consumer.accept(context, calculator.apply(target));
+                calculator.apply(target).forEach(value -> consumer.accept(context, value));
             }
 
             @Override
             public ContextSet estimatePotentialContexts() {
                 ImmutableContextSet.Builder builder = ImmutableContextSet.builder();
-                suggestions.forEach(suggestion -> builder.add(context, suggestion));
+                suggestions.get().forEach(value -> builder.add(context, value));
                 return builder.build();
             }
         });
