@@ -79,6 +79,10 @@ public class SuperpermsHandler implements IPermissionsHandler {
     }
 
     @Override
+    public void unregisterContexts() {
+    }
+
+    @Override
     public boolean tryProvider() {
         return getEnabledPermsPlugin() != null;
     }

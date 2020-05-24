@@ -41,6 +41,7 @@ public class EssentialsPluginListener implements Listener, IConf {
         if (event.getPlugin().getName().equals("EssentialsChat")) {
             ess.getSettings().setEssentialsChatActive(false);
         }
+        ess.getPermissionsHandler().unregisterContexts();
         ess.getAlternativeCommandsHandler().removePlugin(event.getPlugin());
         // Check to see if the plugin thats being disabled is the one we are using
         if (ess.getPaymentMethod() != null && Methods.hasMethod() && Methods.checkDisabled(event.getPlugin())) {

@@ -97,6 +97,11 @@ public class PermissionsHandler implements IPermissionsHandler {
     }
 
     @Override
+    public void unregisterContexts() {
+        handler.unregisterContexts();
+    }
+
+    @Override
     public boolean tryProvider() {
         return true;
     }

@@ -27,5 +27,7 @@ public interface IPermissionsHandler {
 
     void registerContext(String context, Function<Player, Iterable<String>> calculator, Supplier<Iterable<String>> suggestions);
 
+    void unregisterContexts();
+
     boolean tryProvider();
 }
