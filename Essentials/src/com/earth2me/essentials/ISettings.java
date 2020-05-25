@@ -204,6 +204,8 @@ public interface ISettings extends IConf {
 
     boolean areDeathMessagesEnabled();
 
+    boolean isKeepVanishingItems();
+
     void setDebug(boolean debug);
 
     Set<String> getNoGodWorlds();

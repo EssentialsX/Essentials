@@ -976,6 +976,11 @@ public class Settings implements net.ess3.api.ISettings {
         return config.getBoolean("death-messages", true);
     }
 
+    @Override
+    public boolean isKeepVanishingItems() {
+        return config.getBoolean("keep-vanishing-items-keepinv", true);
+    }
+
     private Set<String> noGodWorlds = new HashSet<>();
 
     @Override

@@ -1,7 +1,9 @@
 package com.earth2me.essentials;
 
+import com.earth2me.essentials.utils.VersionUtil;
 import net.ess3.api.IEssentials;
 import org.bukkit.Material;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -169,6 +171,21 @@ public class EssentialsEntityListener implements Listener {
         if (user.isAuthorized("essentials.keepinv")) {
             event.setKeepInventory(true);
             event.getDrops().clear();
+            if (!ess.getSettings().isKeepVanishingItems() && VersionUtil.getServerBukkitVersion().isHigherThanOrEqualTo(VersionUtil.v1_11_2_R01)) {
+                for (ItemStack stack : event.getEntity().getInventory()) {
+                    if (stack != null && stack.getEnchantments().containsKey(Enchantment.VANISHING_CURSE)) {
+                        event.getEntity().getInventory().remove(stack);
+                    }
+                }
+                ItemStack[] armor = event.getEntity().getInventory().getArmorContents();
+                for (int i = 0; i < armor.length; i++) {
+                    ItemStack stack = armor[i];
+                    if (stack != null && stack.getEnchantments().containsKey(Enchantment.VANISHING_CURSE)) {
+                        armor[i] = null;
+                    }
+                }
+                event.getEntity().getInventory().setArmorContents(armor);
+            }
         }
     }
 
