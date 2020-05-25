@@ -216,6 +216,10 @@ commands:
     description: Searches for an item.
     usage: /<command> <item>
     aliases: [dura,edura,durability,edurability,eitemdb,itemno,eitemno]
+  itemlore:
+    description: Edit the lore of an item.
+    usage: /<command> <add/clear> [text]
+    aliases: [ilore, eilore, eitemlore]
   itemname:
     description: Names an item.
     usage: /<command> [name]
