@@ -1653,12 +1653,6 @@ public class Settings implements net.ess3.api.ISettings {
         return blacklist;
     }
 
-    // #easteregg
-    @Override
-    public String getContextPrefix() {
-        return config.getString("context-prefix", "");
-    }
-
     @Override
     public Set<Predicate<String>> getNickBlacklist() {
         return nickBlacklist;
