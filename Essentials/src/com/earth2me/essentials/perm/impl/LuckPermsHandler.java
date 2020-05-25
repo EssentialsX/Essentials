@@ -40,6 +40,7 @@ public class LuckPermsHandler extends ModernVaultHandler {
     @Override
     public void unregisterContexts() {
         contextCalculators.forEach(contextCalculator -> luckPerms.getContextManager().unregisterCalculator(contextCalculator));
+        contextCalculators.clear();
     }
 
     @Override
