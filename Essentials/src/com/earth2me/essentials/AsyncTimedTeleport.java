@@ -99,24 +99,28 @@ public class AsyncTimedTeleport implements Runnable {
                         cancelTimer(false);
                         teleportUser.sendMessage(tl("teleportationCommencing"));
 
-                        try {
-                            CompletableFuture<Boolean> future = new CompletableFuture<>();
+                        CompletableFuture<Boolean> future = new CompletableFuture<>();
+                        future.exceptionally(e -> {
+                            ess.showError(teleportOwner.getSource(), e, "\\ teleport");
+                            return false;
+                        });
+                        if (timer_chargeFor != null) {
+                            timer_chargeFor.isAffordableFor(teleportOwner);
+                        }
+                        if (timer_respawn) {
+                            teleport.respawnNow(teleportUser, timer_cause, future);
+                        } else {
+                            teleport.nowAsync(teleportUser, timer_teleportTarget, timer_cause, future);
+                        }
+                        future.thenAccept(success -> {
                             if (timer_chargeFor != null) {
-                                timer_chargeFor.isAffordableFor(teleportOwner);
-                            }
-                            if (timer_respawn) {
-                                teleport.respawnNow(teleportUser, timer_cause, future);
-                            } else {
-                                teleport.nowAsync(teleportUser, timer_teleportTarget, timer_cause, future);
-                            }
-                            future.thenAccept(success -> {
-                                if (timer_chargeFor != null) {
-                                    try {
-                                        timer_chargeFor.charge(teleportOwner);
-                                    } catch (ChargeException ignored) { }
+                                try {
+                                    timer_chargeFor.charge(teleportOwner);
+                                } catch (ChargeException ex) {
+                                    ess.showError(teleportOwner.getSource(), ex, "\\ teleport");
                                 }
-                            });
-                        } catch (Exception ignored) {}
+                            }
+                        });
 
                     } catch (Exception ex) {
                         ess.showError(teleportOwner.getSource(), ex, "\\ teleport");

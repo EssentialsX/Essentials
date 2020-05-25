@@ -98,19 +98,17 @@ public class TimedTeleport implements Runnable {
                         cancelTimer(false);
                         teleportUser.sendMessage(tl("teleportationCommencing"));
 
-                        try {
-                            if (timer_chargeFor != null) {
-                                timer_chargeFor.isAffordableFor(teleportOwner);
-                            }
-                            if (timer_respawn) {
-                                teleport.respawnNow(teleportUser, timer_cause);
-                            } else {
-                                teleport.now(teleportUser, timer_teleportTarget, timer_cause);
-                            }
-                            if (timer_chargeFor != null) {
-                                timer_chargeFor.charge(teleportOwner);
-                            }
-                        } catch (Exception ignored) {}
+                        if (timer_chargeFor != null) {
+                            timer_chargeFor.isAffordableFor(teleportOwner);
+                        }
+                        if (timer_respawn) {
+                            teleport.respawnNow(teleportUser, timer_cause);
+                        } else {
+                            teleport.now(teleportUser, timer_teleportTarget, timer_cause);
+                        }
+                        if (timer_chargeFor != null) {
+                            timer_chargeFor.charge(teleportOwner);
+                        }
 
                     } catch (Exception ex) {
                         ess.showError(teleportOwner.getSource(), ex, "\\ teleport");
