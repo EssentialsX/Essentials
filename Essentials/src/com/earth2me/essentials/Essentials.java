@@ -281,9 +281,9 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
             backup = new Backup(this);
             permissionsHandler = new PermissionsHandler(this, settings.useBukkitPermissions());
             permissionsHandler.checkPermissions();
-            permissionsHandler.registerContext("ess-afk", player -> Collections.singleton(String.valueOf(this.getUser(player).isAfk())), () -> ImmutableSet.of("true", "false"));
-            permissionsHandler.registerContext("ess-muted", player -> Collections.singleton(String.valueOf(this.getUser(player).isMuted())), () -> ImmutableSet.of("true", "false"));
-            permissionsHandler.registerContext("ess-vanished", player -> Collections.singleton(String.valueOf(this.getUser(player).isHidden())), () -> ImmutableSet.of("true", "false"));
+            permissionsHandler.registerContext("essentials:afk", player -> Collections.singleton(String.valueOf(this.getUser(player).isAfk())), () -> ImmutableSet.of("true", "false"));
+            permissionsHandler.registerContext("essentials:muted", player -> Collections.singleton(String.valueOf(this.getUser(player).isMuted())), () -> ImmutableSet.of("true", "false"));
+            permissionsHandler.registerContext("essentials:vanished", player -> Collections.singleton(String.valueOf(this.getUser(player).isHidden())), () -> ImmutableSet.of("true", "false"));
             alternativeCommandsHandler = new AlternativeCommandsHandler(this);
 
             // Register hat permissions
