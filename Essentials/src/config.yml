@@ -464,12 +464,11 @@ death-messages: true
 # In addition, people with essentials.silentjoin.vanish will be vanished on join.
 allow-silent-join-quit: false
 
-# You can set a custom join message here, set to "none" to disable.
-# You may use color codes, use {USERNAME} the player's name or {PLAYER} for the player's displayname.
+# You can set a custom join message here. Set to "none" to use the vanilla join message or "" to disable join messages entirely.
+# You may use color codes, {USERNAME} for the player's name, and {PLAYER} for the player's displayname.
 custom-join-message: "none"
 
-# You can set a custom quit message here, set to "none" to disable.
-# You may use color codes, use {USERNAME} the player's name or {PLAYER} for the player's displayname.
+# Same as above, except it's for quit messages
 custom-quit-message: "none"
 
 # Add worlds to this list, if you want to automatically disable god mode there.
