@@ -35,6 +35,7 @@ import com.earth2me.essentials.textreader.SimpleTextInput;
 import com.earth2me.essentials.utils.DateUtil;
 import com.earth2me.essentials.utils.VersionUtil;
 import com.google.common.base.Throwables;
+import com.google.common.collect.ImmutableSet;
 import net.ess3.api.IEssentials;
 import net.ess3.api.ISettings;
 import net.ess3.api.*;
@@ -279,6 +280,10 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
             }
             backup = new Backup(this);
             permissionsHandler = new PermissionsHandler(this, settings.useBukkitPermissions());
+            permissionsHandler.checkPermissions();
+            permissionsHandler.registerContext("ess-afk", player -> Collections.singleton(String.valueOf(this.getUser(player).isAfk())), () -> ImmutableSet.of("true", "false"));
+            permissionsHandler.registerContext("ess-muted", player -> Collections.singleton(String.valueOf(this.getUser(player).isMuted())), () -> ImmutableSet.of("true", "false"));
+            permissionsHandler.registerContext("ess-vanished", player -> Collections.singleton(String.valueOf(this.getUser(player).isHidden())), () -> ImmutableSet.of("true", "false"));
             alternativeCommandsHandler = new AlternativeCommandsHandler(this);
 
             // Register hat permissions
@@ -391,6 +396,9 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
         if (backup != null) {
             backup.stopTask();
         }
+
+        this.getPermissionsHandler().unregisterContexts();
+
         Economy.setEss(null);
         Trade.closeLog();
         getUserMap().getUUIDMap().shutdown();
