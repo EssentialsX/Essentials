@@ -16,73 +16,55 @@ import java.util.*;
 import static com.earth2me.essentials.I18n.tl;
 
 
-public class Commandclearinventory extends EssentialsCommand {
+public class Commandclearinventory extends EssentialsLoopCommand {
 
     public Commandclearinventory() {
         super("clearinventory");
     }
 
     private static final int BASE_AMOUNT = 100000;
-    private static final int EXTENDED_CAP = 8;
 
     @Override
     public void run(Server server, User user, String commandLabel, String[] args) throws Exception {
-        parseCommand(server, user.getSource(), commandLabel, args, user.isAuthorized("essentials.clearinventory.others"),
-            user.isAuthorized("essentials.clearinventory.all") || user.isAuthorized("essentials.clearinventory.multiple"));
-    }
+        final String previousClearCommand = user.getConfirmingClearCommand();
+        user.setConfirmingClearCommand(null);
 
-    @Override
-    protected void run(Server server, CommandSource sender, String commandLabel, String[] args) throws Exception {
-        parseCommand(server, sender, commandLabel, args, true, true);
-    }
-
-    private void parseCommand(Server server, CommandSource sender, String commandLabel, String[] args, boolean allowOthers, boolean allowAll)
-        throws Exception {
-        Collection<Player> players = new ArrayList<>();
-        User senderUser = ess.getUser(sender.getPlayer());
-        String previousClearCommand = "";
-
-        int offset = 0;
-
-        if (sender.isPlayer()) {
-            players.add(sender.getPlayer());
-            // Clear previous command execution before potential errors to reset confirmation.
-            previousClearCommand = senderUser.getConfirmingClearCommand();
-            senderUser.setConfirmingClearCommand(null);
-        }
-
-        if (allowAll && args.length > 0 && args[0].contentEquals("*")) {
-            sender.sendMessage(tl("inventoryClearingFromAll"));
-            offset = 1;
-            players = ess.getOnlinePlayers();
-        } else if (allowOthers && args.length > 0 && args[0].trim().length() > 2) {
-            offset = 1;
-            players = server.matchPlayer(args[0].trim());
-        }
-
-        if (players.size() < 1) {
-            throw new PlayerNotFoundException();
-        }
-
-
-        // Confirm
         String formattedCommand = formatCommand(commandLabel, args);
-        if (senderUser != null && senderUser.isPromptingClearConfirm()) {
+        if (user.isPromptingClearConfirm()) {
             if (!formattedCommand.equals(previousClearCommand)) {
-                senderUser.setConfirmingClearCommand(formattedCommand);
-                senderUser.sendMessage(tl("confirmClear", formattedCommand));
+                user.setConfirmingClearCommand(formattedCommand);
+                user.sendMessage(tl("confirmClear", formattedCommand));
                 return;
             }
         }
 
-        for (Player player : players) {
-            clearHandler(sender, player, args, offset, players.size() < EXTENDED_CAP);
+        if (args.length == 0 || !args[0].contains("*") || server.matchPlayer(args[0]).isEmpty()) {
+            clearHandler(user.getSource(), user.getBase(), args, 0);
+            return;
         }
+
+        if (user.isAuthorized("essentials.clearinventory.others")) {
+            loopOnlinePlayers(server, user.getSource(), true, true, args[0], null);
+        }
+        throw new PlayerNotFoundException();
+    }
+
+    @Override
+    protected void run(Server server, CommandSource sender, String commandLabel, String[] args) throws Exception {
+        if (args.length == 0) {
+            throw new NotEnoughArgumentsException();
+        }
+        loopOnlinePlayers(server, sender, true, true, args[0], args);
+    }
+
+    @Override
+    protected void updatePlayer(final Server server, final CommandSource sender, final User player, final String[] args) throws PlayerExemptException {
+        clearHandler(sender, player.getBase(), args, 1);
     }
 
     private static class Item {
-        private Material material;
-        private short data;
+        private final Material material;
+        private final short data;
 
         public Item(Material material, short data) {
             this.material = material;
@@ -102,7 +84,7 @@ public class Commandclearinventory extends EssentialsCommand {
         ALL_EXCEPT_ARMOR, ALL_INCLUDING_ARMOR, SPECIFIC_ITEM
     }
 
-    protected void clearHandler(CommandSource sender, Player player, String[] args, int offset, boolean showExtended) {
+    protected void clearHandler(CommandSource sender, Player player, String[] args, int offset) {
         ClearHandlerType type = ClearHandlerType.ALL_EXCEPT_ARMOR;
         final Set<Item> items = new HashSet<>();
         int amount = -1;
@@ -131,18 +113,12 @@ public class Commandclearinventory extends EssentialsCommand {
             }
         }
 
-        if (type == ClearHandlerType.ALL_EXCEPT_ARMOR)
-        {
-            if (showExtended) {
-                sender.sendMessage(tl("inventoryClearingAllItems", player.getDisplayName()));
-            }
+        if (type == ClearHandlerType.ALL_EXCEPT_ARMOR) {
+            sender.sendMessage(tl("inventoryClearingAllItems", player.getDisplayName()));
             InventoryWorkaround.clearInventoryNoArmor(player.getInventory());
             InventoryWorkaround.setItemInOffHand(player, null);
-        } else if (type == ClearHandlerType.ALL_INCLUDING_ARMOR)
-        {
-            if (showExtended) {
-                sender.sendMessage(tl("inventoryClearingAllArmor", player.getDisplayName()));
-            }
+        } else if (type == ClearHandlerType.ALL_INCLUDING_ARMOR) {
+            sender.sendMessage(tl("inventoryClearingAllArmor", player.getDisplayName()));
             InventoryWorkaround.clearInventoryNoArmor(player.getInventory());
             InventoryWorkaround.setItemInOffHand(player, null);
             player.getInventory().setArmorContents(null);
@@ -157,7 +133,7 @@ public class Commandclearinventory extends EssentialsCommand {
                     stack.setAmount(BASE_AMOUNT);
                     ItemStack removedStack = player.getInventory().removeItem(stack).get(0);
                     final int removedAmount = (BASE_AMOUNT - removedStack.getAmount());
-                    if (removedAmount > 0 || showExtended) {
+                    if (removedAmount > 0) {
                         sender.sendMessage(tl("inventoryClearingStack", removedAmount, stack.getType().toString().toLowerCase(Locale.ENGLISH), player.getDisplayName()));
                     }
                 } else {
@@ -165,10 +141,6 @@ public class Commandclearinventory extends EssentialsCommand {
                     if (player.getInventory().containsAtLeast(stack, amount)) {
                         sender.sendMessage(tl("inventoryClearingStack", amount, stack.getType().toString().toLowerCase(Locale.ENGLISH), player.getDisplayName()));
                         player.getInventory().removeItem(stack);
-                    } else {
-                        if (showExtended) {
-                            sender.sendMessage(tl("inventoryClearFail", player.getDisplayName(), amount, stack.getType().toString().toLowerCase(Locale.ENGLISH)));
-                        }
                     }
                 }
             }
