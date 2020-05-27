@@ -360,4 +360,6 @@ public interface ISettings extends IConf {
 
     boolean isConfirmHomeOverwrite();
 
+    boolean infoAfterDeath();
+
 }

@@ -1689,4 +1689,9 @@ public class Settings implements net.ess3.api.ISettings {
     public boolean isConfirmHomeOverwrite() {
         return config.getBoolean("confirm-home-overwrite", false);
     }
+
+    @Override
+    public boolean infoAfterDeath() {
+        return config.getBoolean("send-info-after-death", false);
+    }
 }
