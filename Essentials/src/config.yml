@@ -702,6 +702,9 @@ economy-log-update-enabled: false
 # Minimum acceptable amount to be used in /pay.
 minimum-pay-amount: 0.001
 
+# Enable this to block users who try to /pay another user which ignore them.
+pay-excludes-ignore-list: false
+
 # The format of currency, excluding symbols. See currency-symbol-format-locale for symbol configuration.
 #
 # "#,##0.00" is how the majority of countries display currency.
