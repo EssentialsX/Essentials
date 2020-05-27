@@ -7,6 +7,8 @@ import org.bukkit.command.CommandSender;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -20,11 +22,13 @@ public class Backup implements Runnable {
     private transient boolean running = false;
     private transient int taskId = -1;
     private transient boolean active = false;
+    private final AtomicBoolean pendingShutdown = new AtomicBoolean(false);
+    private transient CompletableFuture<Object> taskLock = null;
 
     public Backup(final IEssentials ess) {
         this.ess = ess;
         server = ess.getServer();
-        if (!ess.getOnlinePlayers().isEmpty()) {
+        if (!ess.getOnlinePlayers().isEmpty() || ess.getSettings().isAlwaysRunBackup()) {
             ess.runTaskAsynchronously(this::startTask);
         }
     }
@@ -52,20 +56,30 @@ public class Backup implements Runnable {
         }
     }
 
+    public CompletableFuture<Object> getTaskLock() {
+        return taskLock;
+    }
+
+    public void setPendingShutdown(boolean shutdown) {
+        pendingShutdown.set(shutdown);
+    }
+
     @Override
     public void run() {
         if (active) {
             return;
         }
-        active = true;
         final String command = ess.getSettings().getBackupCommand();
         if (command == null || "".equals(command)) {
             return;
         }
+        active = true;
+        taskLock = new CompletableFuture<>();
         if ("save-all".equalsIgnoreCase(command)) {
             final CommandSender cs = server.getConsoleSender();
             server.dispatchCommand(cs, "save-all");
             active = false;
+            taskLock.complete(new Object());
             return;
         }
         LOGGER.log(Level.INFO, tl("backupStarted"));
@@ -73,52 +87,44 @@ public class Backup implements Runnable {
         server.dispatchCommand(cs, "save-all");
         server.dispatchCommand(cs, "save-off");
 
-        ess.runTaskAsynchronously(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    final ProcessBuilder childBuilder = new ProcessBuilder(command);
-                    childBuilder.redirectErrorStream(true);
-                    childBuilder.directory(ess.getDataFolder().getParentFile().getParentFile());
-                    final Process child = childBuilder.start();
-                    ess.runTaskAsynchronously(new Runnable() {
-                        @Override
-                        public void run() {
-                            try {
-                                final BufferedReader reader = new BufferedReader(new InputStreamReader(child.getInputStream()));
-                                try {
-                                    String line;
-                                    do {
-                                        line = reader.readLine();
-                                        if (line != null) {
-                                            LOGGER.log(Level.INFO, line);
-                                        }
-                                    } while (line != null);
-                                } finally {
-                                    reader.close();
+        ess.runTaskAsynchronously(() -> {
+            try {
+                final ProcessBuilder childBuilder = new ProcessBuilder(command);
+                childBuilder.redirectErrorStream(true);
+                childBuilder.directory(ess.getDataFolder().getParentFile().getParentFile());
+                final Process child = childBuilder.start();
+                ess.runTaskAsynchronously(() -> {
+                    try {
+                        try (BufferedReader reader = new BufferedReader(new InputStreamReader(child.getInputStream()))) {
+                            String line;
+                            do {
+                                line = reader.readLine();
+                                if (line != null) {
+                                    LOGGER.log(Level.INFO, line);
                                 }
-                            } catch (IOException ex) {
-                                LOGGER.log(Level.SEVERE, null, ex);
-                            }
+                            } while (line != null);
                         }
-                    });
-                    child.waitFor();
-                } catch (InterruptedException ex) {
-                    LOGGER.log(Level.SEVERE, null, ex);
-                } catch (IOException ex) {
-                    LOGGER.log(Level.SEVERE, null, ex);
-                } finally {
-                    class BackupEnableSaveTask implements Runnable {
-                        @Override
-                        public void run() {
-                            server.dispatchCommand(cs, "save-on");
-                            if (ess.getOnlinePlayers().isEmpty()) {
-                                stopTask();
-                            }
-                            active = false;
-                            LOGGER.log(Level.INFO, tl("backupFinished"));
-                        }
+                    } catch (IOException ex) {
+                        LOGGER.log(Level.SEVERE, null, ex);
                     }
+                });
+                child.waitFor();
+            } catch (InterruptedException | IOException ex) {
+                LOGGER.log(Level.SEVERE, null, ex);
+            } finally {
+                class BackupEnableSaveTask implements Runnable {
+                    @Override
+                    public void run() {
+                        server.dispatchCommand(cs, "save-on");
+                        if (!ess.getSettings().isAlwaysRunBackup() && ess.getOnlinePlayers().isEmpty()) {
+                            stopTask();
+                        }
+                        active = false;
+                        taskLock.complete(new Object());
+                        LOGGER.log(Level.INFO, tl("backupFinished"));
+                    }
+                }
+                if (!pendingShutdown.get()) {
                     ess.scheduleSyncDelayedTask(new BackupEnableSaveTask());
                 }
             }

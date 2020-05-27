@@ -27,7 +27,7 @@ import static com.earth2me.essentials.I18n.tl;
 
 
 public class EssentialsSign {
-    private static final Set<Material> EMPTY_SET = new HashSet<Material>();
+    private static final Set<Material> EMPTY_SET = new HashSet<>();
     protected static final BigDecimal MINTRANSACTION = new BigDecimal("0.01");
     protected transient final String signName;
 
@@ -94,7 +94,7 @@ public class EssentialsSign {
     }
 
     public String getUsername(final User user) {
-        return user.getName().substring(0, user.getName().length() > 13 ? 13 : user.getName().length());
+        return user.getName().substring(0, Math.min(user.getName().length(), 13));
     }
 
     protected final boolean onSignInteract(final Block block, final Player player, final IEssentials ess) {
@@ -333,9 +333,7 @@ public class EssentialsSign {
 
     protected final int getInteger(final String line) throws SignException {
         try {
-            final int quantity = Integer.parseInt(line);
-
-            return quantity;
+            return Integer.parseInt(line);
         } catch (NumberFormatException ex) {
             throw new SignException("Invalid sign", ex);
         }
@@ -377,9 +375,9 @@ public class EssentialsSign {
         return stack;
     }
 
-    protected final BigDecimal getMoney(final String line) throws SignException {
-        final boolean isMoney = line.matches("^[^0-9-\\.][\\.0-9]+$");
-        return isMoney ? getBigDecimalPositive(line.substring(1)) : null;
+    protected final BigDecimal getMoney(final String line, final IEssentials ess) throws SignException {
+        final boolean isMoney = line.matches("^[^0-9-\\.]?[\\.0-9]+[^0-9-\\.]?$");
+        return isMoney ? getBigDecimalPositive(NumberUtil.sanitizeCurrencyString(line, ess)) : null;
     }
 
     protected final BigDecimal getBigDecimalPositive(final String line) throws SignException {
@@ -393,9 +391,7 @@ public class EssentialsSign {
     protected final BigDecimal getBigDecimal(final String line) throws SignException {
         try {
             return new BigDecimal(line);
-        } catch (ArithmeticException ex) {
-            throw new SignException(ex.getMessage(), ex);
-        } catch (NumberFormatException ex) {
+        } catch (ArithmeticException | NumberFormatException ex) {
             throw new SignException(ex.getMessage(), ex);
         }
     }
@@ -414,7 +410,7 @@ public class EssentialsSign {
             return new Trade(signName.toLowerCase(Locale.ENGLISH) + "sign", ess);
         }
 
-        final BigDecimal money = getMoney(line);
+        final BigDecimal money = getMoney(line, ess);
         if (money == null) {
             final String[] split = line.split("[ :]+", 2);
             if (split.length != 2) {

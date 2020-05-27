@@ -57,14 +57,14 @@ public class Commandlist extends EssentialsCommand {
                 continue;
             }
 
-            List<User> outputUserList = new ArrayList<>();
+            List<User> outputUserList;
             final List<User> matchedList = playerList.get(configGroup);
 
             // If the group value is an int, then we might need to truncate it
             if (NumberUtil.isInt(groupValue)) {
                 if (matchedList != null && !matchedList.isEmpty()) {
                     playerList.remove(configGroup);
-                    outputUserList.addAll(matchedList);
+                    outputUserList = new ArrayList<>(matchedList);
                     int limit = Integer.parseInt(groupValue);
                     if (matchedList.size() > limit) {
                         sender.sendMessage(PlayerList.outputFormat(oConfigGroup, tl("groupNumber", matchedList.size(), commandLabel, FormatUtil.stripFormat(configGroup))));
@@ -86,7 +86,7 @@ public class Commandlist extends EssentialsCommand {
         }
 
         Set<String> var = playerList.keySet();
-        String[] onlineGroups = var.toArray(new String[var.size()]);
+        String[] onlineGroups = var.toArray(new String[0]);
         Arrays.sort(onlineGroups, String.CASE_INSENSITIVE_ORDER);
 
         // If we have an asterisk group, then merge all remaining groups
@@ -98,7 +98,7 @@ public class Commandlist extends EssentialsCommand {
             for (String key : asterisk) {
                 playerList.put(key, asteriskUsers);
             }
-            onlineGroups = asterisk.toArray(new String[asterisk.size()]);
+            onlineGroups = asterisk.toArray(new String[0]);
         }
 
         // If we have any groups remaining after the custom groups loop through and display them

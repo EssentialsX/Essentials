@@ -4,8 +4,6 @@ import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.utils.StringUtil;
 import org.bukkit.Server;
 
-import java.util.Collection;
-
 import static com.earth2me.essentials.I18n.tl;
 
 

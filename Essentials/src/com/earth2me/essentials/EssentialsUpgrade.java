@@ -42,6 +42,56 @@ public class EssentialsUpgrade {
         doneFile.load();
     }
 
+    public void convertIgnoreList() {
+        Pattern pattern = Pattern.compile("^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$");
+        if (doneFile.getBoolean("updateUsersIgnoreListUUID", false)) {
+            return;
+        }
+
+        LOGGER.info("Attempting to migrate ignore list to UUIDs");
+
+        final File userdataFolder = new File(ess.getDataFolder(), "userdata");
+        if (!userdataFolder.exists() || !userdataFolder.isDirectory()) {
+            return;
+        }
+        final File[] userFiles = userdataFolder.listFiles();
+
+        for (File file : userFiles) {
+            if (!file.isFile() || !file.getName().endsWith(".yml")) {
+                continue;
+            }
+            final EssentialsConf config = new EssentialsConf(file);
+            try {
+                config.load();
+                if (config.hasProperty("ignore")) {
+                    List<String> migratedIgnores = new ArrayList<>();
+                    for (String name : Collections.synchronizedList(config.getStringList("ignore"))) {
+                        if (name == null) {
+                            continue;
+                        }
+                        if (pattern.matcher(name.trim()).matches()) {
+                            LOGGER.info("Detected already migrated ignore list!");
+                            return;
+                        }
+                        User user = ess.getOfflineUser(name);
+                        if (user != null && user.getBase() != null) {
+                            migratedIgnores.add(user.getBase().getUniqueId().toString());
+                        }
+                    }
+                    config.removeProperty("ignore");
+                    config.setProperty("ignore", migratedIgnores);
+                    config.forceSave();
+                }
+            } catch (RuntimeException ex) {
+                LOGGER.log(Level.INFO, "File: " + file.toString());
+                throw ex;
+            }
+        }
+        doneFile.setProperty("updateUsersIgnoreListUUID", true);
+        doneFile.save();
+        LOGGER.info("Done converting ignore list.");
+    }
+
     public void convertKits() {
         Kits kits = ess.getKits();
         EssentialsConf config = kits.getConfig();
@@ -163,7 +213,7 @@ public class EssentialsUpgrade {
             try {
                 config.load();
                 if (config.hasProperty("powertools")) {
-                    @SuppressWarnings("unchecked") final Map<String, Object> powertools = config.getConfigurationSection("powertools").getValues(false);
+                    final Map<String, Object> powertools = config.getConfigurationSection("powertools").getValues(false);
                     if (powertools == null) {
                         continue;
                     }
@@ -204,7 +254,7 @@ public class EssentialsUpgrade {
 
                 config.load();
                 if (config.hasProperty("home") && config.hasProperty("home.default")) {
-                    @SuppressWarnings("unchecked") final String defworld = (String) config.getProperty("home.default");
+                    final String defworld = (String) config.getProperty("home.default");
                     final Location defloc = getFakeLocation(config, "home.worlds." + defworld);
                     if (defloc != null) {
                         config.setProperty("homes.home", defloc);
@@ -575,7 +625,7 @@ public class EssentialsUpgrade {
             conf.load();
 
             String banReason;
-            Long banTimeout;
+            long banTimeout;
 
             try {
                 banReason = conf.getConfigurationSection("ban").getString("reason");
@@ -616,12 +666,7 @@ public class EssentialsUpgrade {
         }
     }
 
-    private static final FileFilter YML_FILTER = new FileFilter() {
-        @Override
-        public boolean accept(File pathname) {
-            return pathname.isFile() && pathname.getName().endsWith(".yml");
-        }
-    };
+    private static final FileFilter YML_FILTER = pathname -> pathname.isFile() && pathname.getName().endsWith(".yml");
 
     private static final String PATTERN_CONFIG_UUID_REGEX = "(?mi)^uuid:\\s*([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})\\s*$";
     private static final Pattern PATTERN_CONFIG_UUID = Pattern.compile(PATTERN_CONFIG_UUID_REGEX);
@@ -718,5 +763,6 @@ public class EssentialsUpgrade {
         banFormatChange();
         warnMetrics();
         repairUserMap();
+        convertIgnoreList();
     }
 }

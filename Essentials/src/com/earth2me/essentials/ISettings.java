@@ -32,6 +32,8 @@ public interface ISettings extends IConf {
 
     long getBackupInterval();
 
+    boolean isAlwaysRunBackup();
+
     String getChatFormat(String group);
 
     int getChatRadius();
@@ -47,6 +49,8 @@ public interface ISettings extends IConf {
     BigDecimal getCommandCost(String label);
 
     String getCurrencySymbol();
+
+    boolean isCurrencySymbolSuffixed();
 
     int getOversizedStackSize();
 
@@ -162,6 +166,8 @@ public interface ISettings extends IConf {
 
     boolean isEcoLogUpdateEnabled();
 
+    boolean realNamesOnList();
+
     boolean removeGodOnDisconnect();
 
     boolean changeDisplayName();
@@ -193,6 +199,8 @@ public interface ISettings extends IConf {
     boolean isAfkListName();
 
     String getAfkListName();
+
+    boolean broadcastAfkMessage();
 
     boolean areDeathMessagesEnabled();
 
@@ -290,6 +298,10 @@ public interface ISettings extends IConf {
 
     boolean isCommandCooldownsEnabled();
 
+    boolean isWorldChangeFlyResetEnabled();
+
+    boolean isWorldChangeSpeedResetEnabled();
+
     long getCommandCooldownMs(String label);
 
     Entry<Pattern, Long> getCommandCooldownEntry(String label);
@@ -345,5 +357,7 @@ public interface ISettings extends IConf {
     boolean isRemovingEffectsOnHeal();
 
     boolean isSpawnIfNoHome();
+
+    boolean infoAfterDeath();
 
 }

@@ -4,11 +4,12 @@ import net.ess3.api.IEssentials;
 
 import java.io.*;
 import java.lang.ref.SoftReference;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 
 public class BookInput implements IText {
-    private final static HashMap<String, SoftReference<BookInput>> cache = new HashMap<String, SoftReference<BookInput>>();
+    private final static HashMap<String, SoftReference<BookInput>> cache = new HashMap<>();
     private final transient List<String> lines;
     private final transient List<String> chapters;
     private final transient Map<String, Integer> bookmarks;
@@ -22,18 +23,13 @@ public class BookInput implements IText {
         }
         if (!file.exists()) {
             if (createFile) {
-                final InputStream input = ess.getResource(filename + ".txt");
-                final OutputStream output = new FileOutputStream(file);
-                try {
+                try (InputStream input = ess.getResource(filename + ".txt"); OutputStream output = new FileOutputStream(file)) {
                     final byte[] buffer = new byte[1024];
                     int length = input.read(buffer);
                     while (length > 0) {
                         output.write(buffer, 0, length);
                         length = input.read(buffer);
                     }
-                } finally {
-                    output.close();
-                    input.close();
                 }
                 ess.getLogger().info("File " + filename + ".txt does not exist. Creating one for you.");
             }
@@ -51,10 +47,10 @@ public class BookInput implements IText {
                 final SoftReference<BookInput> inputRef = cache.get(file.getName());
                 BookInput input;
                 if (inputRef == null || (input = inputRef.get()) == null || input.lastChange < lastChange) {
-                    lines = new ArrayList<String>();
-                    chapters = new ArrayList<String>();
-                    bookmarks = new HashMap<String, Integer>();
-                    cache.put(file.getName(), new SoftReference<BookInput>(this));
+                    lines = new ArrayList<>();
+                    chapters = new ArrayList<>();
+                    bookmarks = new HashMap<>();
+                    cache.put(file.getName(), new SoftReference<>(this));
                     readFromfile = true;
                 } else {
                     lines = Collections.unmodifiableList(input.getLines());
@@ -64,7 +60,7 @@ public class BookInput implements IText {
                 }
             }
             if (readFromfile) {
-                final Reader reader = new InputStreamReader(new FileInputStream(file), "utf-8");
+                final Reader reader = new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8);
                 final BufferedReader bufferedReader = new BufferedReader(reader);
                 try {
                     int lineNumber = 0;

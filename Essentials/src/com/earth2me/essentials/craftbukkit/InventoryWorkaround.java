@@ -152,7 +152,7 @@ public final class InventoryWorkaround {
 
             while (true) {
                 // Do we already have a stack of it?
-                final int maxAmount = oversizedStacks > item.getType().getMaxStackSize() ? oversizedStacks : item.getType().getMaxStackSize();
+                final int maxAmount = Math.max(oversizedStacks, item.getType().getMaxStackSize());
                 final int firstPartial = firstPartial(inventory, item, maxAmount);
 
                 // Drat! no partial stack
@@ -259,7 +259,6 @@ public final class InventoryWorkaround {
         }
     }
 
-    @SuppressWarnings("deprecation")
     public static void setItemInOffHand(Player p, ItemStack item) {
         // This assumes that all builds that support a main hand also support an off hand.
         if (hasMainHandSupport == null || hasMainHandSupport) {

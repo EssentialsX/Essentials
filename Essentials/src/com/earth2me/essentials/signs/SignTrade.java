@@ -101,8 +101,8 @@ public class SignTrade extends EssentialsSign {
         final String signOwner = sign.getLine(3);
 
         final boolean isOwner = (signOwner.length() > 3 && signOwner.substring(2).equalsIgnoreCase(username));
-        final boolean canBreak = isOwner ? true : player.isAuthorized("essentials.signs.trade.override");
-        final boolean canCollect = isOwner ? true : player.isAuthorized("essentials.signs.trade.override.collect");
+        final boolean canBreak = isOwner || player.isAuthorized("essentials.signs.trade.override");
+        final boolean canCollect = isOwner || player.isAuthorized("essentials.signs.trade.override.collect");
 
         if (canBreak) {
             try {
@@ -149,7 +149,7 @@ public class SignTrade extends EssentialsSign {
         final String[] split = line.split("[ :]+");
 
         if (split.length == 1 && !amountNeeded) {
-            final BigDecimal money = getMoney(split[0]);
+            final BigDecimal money = getMoney(split[0], ess);
             if (money != null) {
                 if (NumberUtil.shortCurrency(money, ess).length() * 2 > 15) {
                     throw new SignException("Line can be too long!");
@@ -160,7 +160,7 @@ public class SignTrade extends EssentialsSign {
         }
 
         if (split.length == 2 && amountNeeded) {
-            final BigDecimal money = getMoney(split[0]);
+            final BigDecimal money = getMoney(split[0], ess);
             BigDecimal amount = getBigDecimalPositive(split[1]);
             if (money != null && amount != null) {
                 amount = amount.subtract(amount.remainder(money));
@@ -218,7 +218,7 @@ public class SignTrade extends EssentialsSign {
 
         if (split.length == 2) {
             try {
-                final BigDecimal money = getMoney(split[0]);
+                final BigDecimal money = getMoney(split[0], ess);
                 final BigDecimal amount = notEmpty ? getBigDecimalPositive(split[1]) : getBigDecimal(split[1]);
                 if (money != null && amount != null) {
                     return new Trade(amountType == AmountType.COST ? money : amount, ess);
@@ -267,7 +267,7 @@ public class SignTrade extends EssentialsSign {
         }
         final Integer exp = trade.getExperience();
         if (exp != null) {
-            changeAmount(sign, index, BigDecimal.valueOf(-exp.intValue()), ess);
+            changeAmount(sign, index, BigDecimal.valueOf(-exp), ess);
         }
     }
 
@@ -282,7 +282,7 @@ public class SignTrade extends EssentialsSign {
         }
         final Integer exp = trade.getExperience();
         if (exp != null) {
-            changeAmount(sign, index, BigDecimal.valueOf(exp.intValue()), ess);
+            changeAmount(sign, index, BigDecimal.valueOf(exp), ess);
         }
     }
 
@@ -317,7 +317,7 @@ public class SignTrade extends EssentialsSign {
         final String[] split = line.split("[ :]+");
 
         if (split.length == 2) {
-            final BigDecimal money = getMoney(split[0]);
+            final BigDecimal money = getMoney(split[0], ess);
             final BigDecimal amount = getBigDecimal(split[1]);
             if (money != null && amount != null) {
                 final String newline = NumberUtil.shortCurrency(money, ess) + ":" + NumberUtil.shortCurrency(value, ess).substring(1);
