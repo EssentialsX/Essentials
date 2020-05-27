@@ -1684,4 +1684,9 @@ public class Settings implements net.ess3.api.ISettings {
     public boolean isSpawnIfNoHome() {
         return config.getBoolean("spawn-if-no-home", true);
     }
+    
+    @Override
+    public boolean infoAfterDeath() {
+        return config.getBoolean("send-info-after-death", false);
+    }
 }
