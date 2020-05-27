@@ -55,6 +55,12 @@ public class Commandsethome extends EssentialsCommand {
             throw new Exception(tl("unsafeTeleportDestination", location.getWorld().getName(), location.getBlockX(), location.getBlockY(), location.getBlockZ()));
         }
 
+        if (ess.getSettings().isConfirmHomeOverwrite() && usersHome.hasHome(name) && !name.equals(usersHome.getLastHomeConfirmation())) {
+            usersHome.setLastHomeConfirmation(name);
+            user.sendMessage(tl("homeConfirmation", name));
+            return;
+        }
+
         usersHome.setHome(name, location);
         user.sendMessage(tl("homeSet", user.getLocation().getWorld().getName(), user.getLocation().getBlockX(), user.getLocation().getBlockY(), user.getLocation().getBlockZ(), name));
 

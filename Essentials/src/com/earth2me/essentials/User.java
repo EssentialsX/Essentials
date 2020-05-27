@@ -60,6 +60,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
     private final Map<User, BigDecimal> confirmingPayments = new WeakHashMap<>();
     private String confirmingClearCommand;
     private long lastNotifiedAboutMailsMs;
+    private String lastHomeConfirmation;
 
     public User(final Player base, final IEssentials ess) {
         super(base, ess);
@@ -956,5 +957,13 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
                 lastNotifiedAboutMailsMs = System.currentTimeMillis();
             }
         }
+    }
+
+    public String getLastHomeConfirmation() {
+        return lastHomeConfirmation;
+    }
+
+    public void setLastHomeConfirmation(String lastHomeConfirmation) {
+        this.lastHomeConfirmation = lastHomeConfirmation;
     }
 }

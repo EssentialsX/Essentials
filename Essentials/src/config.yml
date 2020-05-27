@@ -651,6 +651,9 @@ compass-towards-home-perm: false
 # If set to false, players will not be teleported when they run /home without setting a home first.
 spawn-if-no-home: true
 
+# Should players be asked to provide confirmation for homes which they attempt to overwrite?
+confirm-home-overwrite: false
+
 ############################################################
 # +------------------------------------------------------+ #
 # |                       Economy                        | #
