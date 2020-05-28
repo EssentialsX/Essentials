@@ -24,7 +24,7 @@ public class LegacySpawnEggProvider extends SpawnEggProvider {
     }
 
     @Override
-    public String getHumanName() {
+    public String getDescription() {
         return "legacy item data provider";
     }
 }
