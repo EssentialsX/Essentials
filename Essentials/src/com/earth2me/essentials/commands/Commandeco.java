@@ -1,8 +1,11 @@
 package com.earth2me.essentials.commands;
 
+import com.earth2me.essentials.ChargeException;
 import com.earth2me.essentials.CommandSource;
+import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.NumberUtil;
 import com.google.common.collect.Lists;
+import net.ess3.api.MaxMoneyException;
 import net.ess3.api.events.UserBalanceUpdateEvent;
 import org.bukkit.Server;
 
@@ -52,7 +55,7 @@ public class Commandeco extends EssentialsLoopCommand {
                     if (player.getMoney().subtract(userAmount).compareTo(ess.getSettings().getMinMoney()) >= 0) {
                         player.takeMoney(userAmount, sender, UserBalanceUpdateEvent.Cause.COMMAND_ECO);
                     } else {
-                        throw new Exception(tl("minimumBalanceError", NumberUtil.displayCurrency(ess.getSettings().getMinMoney(), ess)));
+                        ess.showError(sender, new Exception(tl("minimumBalanceError", NumberUtil.displayCurrency(ess.getSettings().getMinMoney(), ess))), commandLabel);
                     }
                     break;
                 }
@@ -74,6 +77,11 @@ public class Commandeco extends EssentialsLoopCommand {
 
     private enum EcoCommands {
         GIVE, TAKE, SET, RESET
+    }
+
+    @Override
+    protected void updatePlayer(Server server, CommandSource sender, User user, String[] args) throws NotEnoughArgumentsException, PlayerExemptException, ChargeException, MaxMoneyException {
+
     }
 
     @Override
