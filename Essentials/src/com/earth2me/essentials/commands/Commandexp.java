@@ -1,12 +1,12 @@
 package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.CommandSource;
+import com.earth2me.essentials.IUser;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.craftbukkit.SetExpFix;
 import com.earth2me.essentials.utils.NumberUtil;
 import com.google.common.collect.Lists;
 import org.bukkit.Server;
-import org.bukkit.entity.Player;
 
 import java.util.Collections;
 import java.util.List;
@@ -15,126 +15,121 @@ import java.util.Locale;
 import static com.earth2me.essentials.I18n.tl;
 
 
-public class Commandexp extends EssentialsCommand {
+public class Commandexp extends EssentialsLoopCommand {
     public Commandexp() {
         super("exp");
     }
 
     @Override
-    public void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception {
-        if (args.length == 0) {
-            showExp(user.getSource(), user);
-        } else if (args.length > 1 && args[0].equalsIgnoreCase("set") && user.isAuthorized("essentials.exp.set")) {
-            if (args.length == 3 && user.isAuthorized("essentials.exp.set.others")) {
-                expMatch(server, user.getSource(), args[1], args[2], false);
-            } else {
-                setExp(user.getSource(), user, args[1], false);
-            }
-        } else if (args.length > 1 && args[0].equalsIgnoreCase("give") && user.isAuthorized("essentials.exp.give")) {
-            if (args.length == 3 && user.isAuthorized("essentials.exp.give.others")) {
-                expMatch(server, user.getSource(), args[1], args[2], true);
-            } else {
-                setExp(user.getSource(), user, args[1], true);
-            }
-        } else if (args.length > 1 && args[0].equalsIgnoreCase("take") && user.isAuthorized("essentials.exp.take")) {
-            if (args.length == 3 && user.isAuthorized("essentials.exp.take.others")) {
-                expMatch(server, user.getSource(), args[1], "-" + args[2], true);
-            } else {
-                setExp(user.getSource(), user, "-" + args[1], true);
-            }        
-        } else if (args.length < 3 && args[0].equalsIgnoreCase("reset") && user.isAuthorized("essentials.exp.reset")) {
-            if (args.length == 2 && user.isAuthorized("essentials.exp.reset.others")) {
-                expMatch(server, user.getSource(), args[1], "0", false);
-            } else {
-                setExp(user.getSource(), user, "0", false);
-            }
-        } else if (args[0].equalsIgnoreCase("show")) {
-            if (args.length >= 2 && user.isAuthorized("essentials.exp.others")) {
-                String match = args[1].trim();
-                showMatch(server, user.getSource(), match);
-            } else {
-                showExp(user.getSource(), user);
-            }
-        } else {
-            if (args.length >= 1 && NumberUtil.isInt(args[0].toLowerCase(Locale.ENGLISH).replace("l", "")) && user.isAuthorized("essentials.exp.give")) {
-                if (args.length >= 2 && user.isAuthorized("essentials.exp.give.others")) {
-                    expMatch(server, user.getSource(), args[1], args[0], true);
-                } else {
-                    setExp(user.getSource(), user, args[0], true);
-                }
-            } else if (args.length >= 1 && user.isAuthorized("essentials.exp.others")) {
-                String match = args[0].trim();
-                showMatch(server, user.getSource(), match);
-            } else {
-                showExp(user.getSource(), user);
-            }
-        }
-    }
-
-    @Override
     public void run(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception {
-        if (args.length < 1) {
-            throw new NotEnoughArgumentsException();
-        } else if (args.length > 2 && args[0].equalsIgnoreCase("set")) {
-            expMatch(server, sender, args[1], args[2], false);
-        } else if (args.length > 2 && args[0].equalsIgnoreCase("give")) {
-            expMatch(server, sender, args[1], args[2], true);
-        } else if (args.length > 2 && args[0].equalsIgnoreCase("take")) {
-            expMatch(server, sender, args[1], "-" + args[2], true);
-        } else if (args.length > 2 && args[0].equalsIgnoreCase("reset")) {
-            expMatch(server, sender, args[1], "0", false);
-        } else {
-            String match = args[0].trim();
-            if (args.length >= 2 && NumberUtil.isInt(args[0].toLowerCase(Locale.ENGLISH).replace("l", ""))) {
-                match = args[1].trim();
-                expMatch(server, sender, match, args[0], true);
-            } else if (args.length == 1) {
-                match = args[0].trim();
+        IUser user = sender.getUser(ess);
+        if (args.length == 0 || (args.length < 2 && user == null)) {
+            if (user == null) {
+                throw new NotEnoughArgumentsException();
             }
-            showMatch(server, sender, match);
+            showExp(sender, user);
+            return;
+        }
+
+        ExpCommands cmd;
+        try {
+            cmd = ExpCommands.valueOf(args[0].toUpperCase(Locale.ENGLISH));
+        } catch (Exception ex) {
+            throw new NotEnoughArgumentsException(ex);
+        }
+
+        if (!cmd.hasPermission(user)) {
+            user.sendMessage(tl("noAccessSubCommand", "/" + commandLabel + " " + cmd.name().toLowerCase(Locale.ENGLISH)));
+            return;
+        }
+
+        switch (cmd) {
+            case SET: {
+                if (args.length == 3 && cmd.hasOtherPermission(user)) {
+                    loopOnlinePlayersConsumer(server,sender, true, true, args[1], player -> setExp(sender, player, args[2], false));
+                } else if (args.length == 2 && user != null) {
+                    setExp(sender, user, args[1], false);
+                } else {
+                    throw new NotEnoughArgumentsException();
+                }
+                return;
+            }
+            case GIVE: {
+                if (args.length == 3 && cmd.hasOtherPermission(user)) {
+                    loopOnlinePlayersConsumer(server, sender, true, true, args[1], player -> setExp(sender, player, args[2], true));
+                } else if (args.length == 2 && user != null) {
+                    setExp(sender, user, args[1], true);
+                } else {
+                    throw new NotEnoughArgumentsException();
+                }
+                return;
+            }
+            case TAKE: {
+                if (args.length == 3 && cmd.hasOtherPermission(user)) {
+                    loopOnlinePlayersConsumer(server, sender, true, true, args[1], player -> setExp(sender, player, "-" + args[2], true));
+                } else if (args.length == 2) {
+                    setExp(sender, user, "-" + args[1], true);
+                } else {
+                    throw new NotEnoughArgumentsException();
+                }
+                return;
+            }
+            case RESET: {
+                if (args.length == 2 && cmd.hasOtherPermission(user)) {
+                    loopOnlinePlayersConsumer(server, sender, true, true, args[1], player -> setExp(sender, player, "0", false));
+                } else if (user != null) {
+                    setExp(sender, user, "0", false);
+                } else {
+                    throw new NotEnoughArgumentsException();
+                }
+                return;
+            }
+            case SHOW: {
+                if (args.length == 2 && (user == null || user.isAuthorized("essentials.exp.others"))) {
+                    showExp(sender, getPlayer(server, sender, args[1]));
+                } else if (user != null) {
+                    showExp(sender, user);
+                } else {
+                    throw new NotEnoughArgumentsException();
+                }
+                return;
+            }
+        }
+        throw new NotEnoughArgumentsException(); //Should never happen but in the impossible chance it does...
+    }
+
+    private enum ExpCommands {
+        SET,
+        GIVE,
+        TAKE,
+        RESET,
+        SHOW(false);
+
+        private final boolean permCheck;
+
+        ExpCommands() {
+            permCheck = true;
+        }
+
+        ExpCommands(boolean perm) {
+            permCheck = perm;
+        }
+
+        boolean hasPermission(IUser user) {
+            return user == null || !permCheck || user.isAuthorized("essentials.exp." + name().toLowerCase(Locale.ENGLISH));
+        }
+
+        boolean hasOtherPermission(IUser user) {
+            return user == null || user.isAuthorized("essentials.exp." + name().toLowerCase(Locale.ENGLISH) + ".others");
         }
     }
 
-    private void showMatch(final Server server, final CommandSource sender, final String match) throws PlayerNotFoundException {
-        boolean skipHidden = sender.isPlayer() && !ess.getUser(sender.getPlayer()).canInteractVanished();
-        boolean foundUser = false;
-        final List<Player> matchedPlayers = server.matchPlayer(match);
-        for (Player matchPlayer : matchedPlayers) {
-            final User player = ess.getUser(matchPlayer);
-            if (skipHidden && player.isHidden(sender.getPlayer()) && !sender.getPlayer().canSee(matchPlayer)) {
-                continue;
-            }
-            foundUser = true;
-            showExp(sender, player);
-        }
-        if (!foundUser) {
-            throw new PlayerNotFoundException();
-        }
-    }
-
-    private void expMatch(final Server server, final CommandSource sender, final String match, String amount, final boolean give) throws NotEnoughArgumentsException, PlayerNotFoundException {
-        boolean skipHidden = sender.isPlayer() && !ess.getUser(sender.getPlayer()).canInteractVanished();
-        boolean foundUser = false;
-        final List<Player> matchedPlayers = server.matchPlayer(match);
-        for (Player matchPlayer : matchedPlayers) {
-            final User player = ess.getUser(matchPlayer);
-            if (skipHidden && player.isHidden(sender.getPlayer()) && !sender.getPlayer().canSee(matchPlayer)) {
-                continue;
-            }
-            foundUser = true;
-            setExp(sender, player, amount, give);
-        }
-        if (!foundUser) {
-            throw new PlayerNotFoundException();
-        }
-    }
-
-    private void showExp(final CommandSource sender, final User target) {
+    private void showExp(final CommandSource sender, final IUser target) {
         sender.sendMessage(tl("exp", target.getDisplayName(), SetExpFix.getTotalExperience(target.getBase()), target.getBase().getLevel(), SetExpFix.getExpUntilNextLevel(target.getBase())));
     }
 
     //TODO: Limit who can give negative exp?
-    private void setExp(final CommandSource sender, final User target, String strAmount, final boolean give) throws NotEnoughArgumentsException {
+    private void setExp(final CommandSource sender, final IUser target, String strAmount, final boolean give) throws NotEnoughArgumentsException {
         long amount;
         strAmount = strAmount.toLowerCase(Locale.ENGLISH);
         if (strAmount.contains("l")) {
@@ -163,6 +158,10 @@ public class Commandexp extends EssentialsCommand {
         }
         SetExpFix.setTotalExperience(target.getBase(), (int) amount);
         sender.sendMessage(tl("expSet", target.getDisplayName(), amount));
+    }
+
+    @Override
+    protected void updatePlayer(Server server, CommandSource sender, User user, String[] args) {
     }
 
     @Override
