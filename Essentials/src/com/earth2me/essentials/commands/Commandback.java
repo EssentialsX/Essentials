@@ -20,7 +20,7 @@ public class Commandback extends EssentialsCommand {
     protected void run(Server server, User user, String commandLabel, String[] args) throws Exception {
         CommandSource sender = user.getSource();
         if (args.length > 0 && user.isAuthorized("essentials.back.others")) {
-            this.parseCommand(server, sender, args);
+            parseOthers(server, sender, args);
             return;
         }
 
@@ -33,7 +33,7 @@ public class Commandback extends EssentialsCommand {
             throw new NotEnoughArgumentsException();
         }
 
-        this.parseCommand(server, sender, args);
+        parseOthers(server, sender, args);
     }
 
     private void parseOthers(Server server, CommandSource sender, String[] args) throws Exception {
