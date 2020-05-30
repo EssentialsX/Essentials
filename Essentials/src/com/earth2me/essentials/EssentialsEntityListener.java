@@ -2,6 +2,7 @@ package com.earth2me.essentials;
 
 import com.earth2me.essentials.utils.VersionUtil;
 import net.ess3.api.IEssentials;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.*;
@@ -147,6 +148,10 @@ public class EssentialsEntityListener implements Listener {
             return;
         }
         final User user = ess.getUser(event.getEntity());
+        if (ess.getSettings().infoAfterDeath()) {
+            final Location loc = user.getLocation();
+            user.sendMessage(tl("infoAfterDeath", loc.getWorld().getName(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ()));
+        }
         if (user.isAuthorized("essentials.back.ondeath") && !ess.getSettings().isCommandDisabled("back")) {
             user.setLastLocation();
             user.sendMessage(tl("backAfterDeath"));

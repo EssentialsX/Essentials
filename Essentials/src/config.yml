@@ -464,17 +464,17 @@ death-messages: true
 # essentials.keepinv permission upon death.
 keep-vanishing-items-keepinv: true
 
+# When players die, should they receive the coordinates they died at?
+send-info-after-death: false
+
 # Should players with permissions be able to join and part silently?
 # You can control this with essentials.silentjoin and essentials.silentquit permissions if it is enabled.
 # In addition, people with essentials.silentjoin.vanish will be vanished on join.
 allow-silent-join-quit: false
 
-# You can set a custom join message here, set to "none" to disable.
-# You may use color codes, use {USERNAME} the player's name or {PLAYER} for the player's displayname.
+# You can set custom join and quit messages here. Set to "none" to use the default message or "" to disable the message entirely.
+# You may use color codes, {USERNAME} for the player's name, and {PLAYER} for the player's displayname.
 custom-join-message: "none"
-
-# You can set a custom quit message here, set to "none" to disable.
-# You may use color codes, use {USERNAME} the player's name or {PLAYER} for the player's displayname.
 custom-quit-message: "none"
 
 # Add worlds to this list, if you want to automatically disable god mode there.
@@ -706,6 +706,9 @@ economy-log-update-enabled: false
 
 # Minimum acceptable amount to be used in /pay.
 minimum-pay-amount: 0.001
+
+# Enable this to block users who try to /pay another user which ignore them.
+pay-excludes-ignore-list: false
 
 # The format of currency, excluding symbols. See currency-symbol-format-locale for symbol configuration.
 #

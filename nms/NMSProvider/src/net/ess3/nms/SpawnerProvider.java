@@ -25,6 +25,7 @@ public abstract class SpawnerProvider implements Provider {
             .build();
 
     public abstract ItemStack setEntityType(ItemStack is, EntityType type) throws IllegalArgumentException;
+
     public abstract EntityType getEntityType(ItemStack is) throws IllegalArgumentException;
 
     @Override
