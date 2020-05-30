@@ -22,6 +22,13 @@ public class CommandSource {
         return null;
     }
 
+    public final IUser getUser(IEssentials ess) {
+        if (sender instanceof Player) {
+            return ess.getUser((Player) sender);
+        }
+        return null;
+    }
+
     public final boolean isPlayer() {
         return (sender instanceof Player);
     }
