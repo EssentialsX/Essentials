@@ -8,6 +8,7 @@ import com.earth2me.essentials.utils.NumberUtil;
 import com.google.common.collect.Lists;
 import org.bukkit.Server;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
@@ -168,17 +169,10 @@ public class Commandexp extends EssentialsLoopCommand {
     protected List<String> getTabCompleteOptions(final Server server, final User user, final String commandLabel, final String[] args) {
         if (args.length == 1) {
             List<String> options = Lists.newArrayList("show");
-            if (user.isAuthorized("essentials.exp.set")) {
-                options.add("set");
-            }
-            if (user.isAuthorized("essentials.exp.give")) {
-                options.add("give");
-            }
-            if (user.isAuthorized("essentials.exp.take")) {
-                options.add("take");
-            }
-            if (user.isAuthorized("essentials.exp.reset")) {
-                options.add("reset");
+            for (ExpCommands cmd : ExpCommands.values()) {
+                if (cmd.hasPermission(user)) {
+                    options.add(cmd.name().toLowerCase(Locale.ENGLISH));
+                }
             }
             return options;
         } else if (args.length == 2) {
@@ -203,8 +197,11 @@ public class Commandexp extends EssentialsLoopCommand {
     @Override
     protected List<String> getTabCompleteOptions(final Server server, final CommandSource sender, final String commandLabel, final String[] args) {
         if (args.length == 1) {
-            // TODO: This seems somewhat buggy, both setting and showing - right now, ignoring that
-            return Lists.newArrayList("set", "give", "show", "take", "reset");
+            List<String> list = new ArrayList<>();
+            for (ExpCommands cmd : ExpCommands.values()) {
+                list.add(cmd.name().toLowerCase(Locale.ENGLISH));
+            }
+            return list;
         } else if (args.length == 2) {
             if (args[0].equalsIgnoreCase("set") || args[0].equalsIgnoreCase("give")) {
                 String levellessArg = args[1].toLowerCase(Locale.ENGLISH).replace("l", "");
