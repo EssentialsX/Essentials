@@ -8,8 +8,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.earth2me.essentials.I18n.tl;
-
 public class DiscordSettings implements IConf {
     private final EssentialsConf config;
     private final EssentialsDiscord plugin;
@@ -30,7 +28,11 @@ public class DiscordSettings implements IConf {
     }
 
     public long getPrimaryChannelId() {
-        return config.getLong("channels.primary", 0);
+        return config.getLong("channels.primary.id", 0);
+    }
+
+    public long getChannelId(String name) {
+        return config.getLong("channel." + name + ".id", 0);
     }
 
     private List<ChannelDefinition> channelDefinitions;
@@ -39,42 +41,40 @@ public class DiscordSettings implements IConf {
         return channelDefinitions;
     }
 
-    public List<ChannelDefinition> getChannelDefinitions(final String type) {
-        List<ChannelDefinition> results = new ArrayList<>();
+    public ChannelDefinition getChannelDefinition(String name) {
         for (ChannelDefinition channelDefinition : channelDefinitions) {
-            if (channelDefinition.getType().equalsIgnoreCase(type)) {
-                results.add(channelDefinition);
+            if (channelDefinition.getName().equals(name)) {
+                return channelDefinition;
             }
         }
-        return results;
+        return null;
     }
 
-    private List<ChannelDefinition> _getChannelDefinitions() {
-        List<ConfigurationSection> sections = (List<ConfigurationSection>) config.getList("channels");
-        List<ChannelDefinition> definitions = new ArrayList<>();
-
-        if (sections != null) {
-            for (ConfigurationSection section : sections) {
-                String type = section.getString("type", null);
-                String channelId = section.getString("channel-id", null);
-                boolean isWebhook = section.getBoolean("use-webhook", false);
-                String format = section.getString("format", null);
-
-                if (type == null) {
-                    plugin.getLogger().severe(tl("discordDefTypeMissing", section.toString(), section.getCurrentPath()));
-                    continue;
-                } else if (channelId == null) {
-                    plugin.getLogger().severe(tl("discordDefIdMissing", section.toString(), section.getCurrentPath()));
-                    continue;
-                } else if (format == null) {
-                    plugin.getLogger().severe(tl("discordDefFormatMissing", section.toString(), section.getCurrentPath()));
-                    continue;
-                }
-
-                definitions.add(new ChannelDefinition(type, channelId, isWebhook, format));
+    public ChannelDefinition getChannelDefinition(long id) {
+        for (ChannelDefinition channelDefinition : channelDefinitions) {
+            if (channelDefinition.getId() == id) {
+                return channelDefinition;
             }
         }
-        return definitions;
+        return null;
+    }
+
+    public ChannelDefinition getMessageChannel(String type) {
+        return getChannelDefinition(config.getString("messages." + type, "primary"));
+    }
+
+    private void _loadChannelDefinitions() {
+        channelDefinitions = new ArrayList<>();
+        ConfigurationSection channelsSection = config.getConfigurationSection("channels");
+        if (channelsSection == null) {
+            return;
+        }
+        for (String channel : channelsSection.getKeys(false)) {
+            long id = config.getLong("channels." + channel + ".id", 0);
+            if (id > 0) {
+                channelDefinitions.add(new ChannelDefinition(channel, id));
+            }
+        }
     }
 
     public String getStatusActivity() {
@@ -88,36 +88,24 @@ public class DiscordSettings implements IConf {
     @Override
     public void reloadConfig() {
         config.load();
-        channelDefinitions = _getChannelDefinitions();
+        _loadChannelDefinitions();
     }
 
     public static class ChannelDefinition {
-        private final String type;
-        private final String channelId;
-        private final boolean webhook;
-        private final String format;
+        private final String name;
+        private final long id;
 
-        public ChannelDefinition(String type, String channelId, boolean webhook, String format) {
-            this.type = type;
-            this.channelId = channelId;
-            this.webhook = webhook;
-            this.format = format;
+        public ChannelDefinition(String name, long id) {
+            this.name = name;
+            this.id = id;
         }
 
-        public String getType() {
-            return type;
+        public String getName() {
+            return name;
         }
 
-        public String getChannelId() {
-            return channelId;
-        }
-
-        public boolean isWebhook() {
-            return webhook;
-        }
-
-        public String getFormat() {
-            return format;
+        public long getId() {
+            return id;
         }
     }
 }

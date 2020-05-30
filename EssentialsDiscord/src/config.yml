@@ -18,7 +18,12 @@ guild: 0
 
 # The channels that will be used for messaging, defaulting to the primary channel.
 channels:
-  primary: 0
+  primary:
+    id: 0
+
+# Determine which channels certain messages will go to.
+messages:
+  chat: primary
 
 # Status message for the bot to display. The activity must be playing or listening.
 status:

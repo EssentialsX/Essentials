@@ -17,6 +17,12 @@ public class DiscordListener extends ListenerAdapter {
         if (event.isWebhookMessage() || event.getAuthor().isBot()) {
             return;
         }
-        Bukkit.broadcastMessage(event.getAuthor().getAsTag() + ": " + event.getMessage().getContentStripped());
+        DiscordSettings.ChannelDefinition channelDefinition = plugin.getSettings().getChannelDefinition(event.getChannel().getIdLong());
+        if (channelDefinition == null) {
+            return;
+        }
+        String message = event.getAuthor().getAsTag() + ": " + event.getMessage().getContentStripped();
+        String permission = "essentials.discord.channel." + channelDefinition.getName() + ".read";
+        Bukkit.broadcast(message, permission);
     }
 }

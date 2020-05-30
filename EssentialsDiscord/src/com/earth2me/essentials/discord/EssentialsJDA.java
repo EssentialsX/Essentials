@@ -1,6 +1,5 @@
 package com.earth2me.essentials.discord;
 
-import com.earth2me.essentials.discord.utils.MessageType;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Activity;
@@ -46,29 +45,11 @@ public class EssentialsJDA {
     }
 
     public void sendMessage(String message) {
-        TextChannel channel = this.jda.getTextChannelById(plugin.getSettings().getPrimaryChannelId());
-        if (channel == null) {
-            logger.log(Level.WARNING, tl("discordInvalidChannelId"));
-            return;
-        }
-        String messageStripped = ChatColor.stripColor(message);
-        channel.sendMessage(messageStripped).queue(success -> {
-        }, fail -> {
-            if (plugin.getParent().getSettings().isDebug()) {
-                fail.printStackTrace();
-            }
-            logger.log(Level.SEVERE, tl("discordMessageError", fail.getMessage()));
-        });
+        sendMessage(plugin.getSettings().getPrimaryChannelId(), message);
     }
 
-    public void sendMessage(MessageType type, String message) {
-        for (DiscordSettings.ChannelDefinition channel : plugin.getSettings().getChannelDefinitions(type.getConfigName())) {
-            sendMessage(channel.getChannelId(), message);
-        }
-    }
-
-    public void sendMessage(String textChannelId, String message) {
-        TextChannel channel = this.jda.getTextChannelById(textChannelId);
+    public void sendMessage(long channelId, String message) {
+        TextChannel channel = this.jda.getTextChannelById(channelId);
         if (channel == null) {
             logger.log(Level.WARNING, tl("discordInvalidChannelId"));
             return;
