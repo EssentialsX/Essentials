@@ -2,6 +2,7 @@ package com.earth2me.essentials.perm;
 
 import com.earth2me.essentials.Essentials;
 import com.earth2me.essentials.perm.impl.*;
+import com.google.common.collect.ImmutableSet;
 import org.bukkit.entity.Player;
 
 import java.util.Arrays;
@@ -118,7 +119,14 @@ public class PermissionsHandler implements IPermissionsHandler {
             try {
                 IPermissionsHandler provider = providerClass.newInstance();
                 if (provider.tryProvider()) {
+                    if (provider.getClass().isInstance(this.handler)) {
+                        return;
+                    }
+                    if (this.handler != null) {
+                        unregisterContexts();
+                    }
                     this.handler = provider;
+                    initContexts();
                     break;
                 }
             } catch (Throwable ignored) {
@@ -171,6 +179,12 @@ public class PermissionsHandler implements IPermissionsHandler {
         if (elapsed > ess.getSettings().getPermissionsLagWarning()) {
             ess.getLogger().log(Level.WARNING, String.format("Permissions lag notice with (%s). Response took %fms. Summary: %s", getName(), elapsed / 1000000.0, summary));
         }
+    }
+
+    private void initContexts() {
+        registerContext("essentials:afk", player -> Collections.singleton(String.valueOf(ess.getUser(player).isAfk())), () -> ImmutableSet.of("true", "false"));
+        registerContext("essentials:muted", player -> Collections.singleton(String.valueOf(ess.getUser(player).isMuted())), () -> ImmutableSet.of("true", "false"));
+        registerContext("essentials:vanished", player -> Collections.singleton(String.valueOf(ess.getUser(player).isHidden())), () -> ImmutableSet.of("true", "false"));
     }
 
 }
