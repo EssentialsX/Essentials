@@ -78,7 +78,7 @@ public class Commandlist extends EssentialsCommand {
             outputUserList = PlayerList.getMergedList(ess, playerList, configGroup);
 
             // If we have no users, than we don't need to continue parsing this group
-            if (outputUserList == null || outputUserList.isEmpty()) {
+            if (outputUserList.isEmpty()) {
                 continue;
             }
 
