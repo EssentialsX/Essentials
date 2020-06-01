@@ -43,4 +43,8 @@ public class CommandSource {
             sender.sendMessage(message);
         }
     }
+
+    public boolean isAuthorized(String permission, IEssentials ess) {
+        return !isPlayer() || getUser(ess).isAuthorized(permission);
+    }
 }
