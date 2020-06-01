@@ -47,7 +47,7 @@ public class Commandexp extends EssentialsLoopCommand {
         switch (cmd) {
             case SET: {
                 if (args.length == 3 && cmd.hasOtherPermission(user)) {
-                    loopOnlinePlayersConsumer(server,sender, true, true, args[1], player -> setExp(sender, player, args[2], false));
+                    loopOnlinePlayersConsumer(server,sender, false, true, args[1], player -> setExp(sender, player, args[2], false));
                 } else if (args.length == 2 && user != null) {
                     setExp(sender, user, args[1], false);
                 } else {
@@ -57,7 +57,7 @@ public class Commandexp extends EssentialsLoopCommand {
             }
             case GIVE: {
                 if (args.length == 3 && cmd.hasOtherPermission(user)) {
-                    loopOnlinePlayersConsumer(server, sender, true, true, args[1], player -> setExp(sender, player, args[2], true));
+                    loopOnlinePlayersConsumer(server, sender, false, true, args[1], player -> setExp(sender, player, args[2], true));
                 } else if (args.length == 2 && user != null) {
                     setExp(sender, user, args[1], true);
                 } else {
@@ -67,7 +67,7 @@ public class Commandexp extends EssentialsLoopCommand {
             }
             case TAKE: {
                 if (args.length == 3 && cmd.hasOtherPermission(user)) {
-                    loopOnlinePlayersConsumer(server, sender, true, true, args[1], player -> setExp(sender, player, "-" + args[2], true));
+                    loopOnlinePlayersConsumer(server, sender, false, true, args[1], player -> setExp(sender, player, "-" + args[2], true));
                 } else if (args.length == 2) {
                     setExp(sender, user, "-" + args[1], true);
                 } else {
@@ -77,7 +77,7 @@ public class Commandexp extends EssentialsLoopCommand {
             }
             case RESET: {
                 if (args.length == 2 && cmd.hasOtherPermission(user)) {
-                    loopOnlinePlayersConsumer(server, sender, true, true, args[1], player -> setExp(sender, player, "0", false));
+                    loopOnlinePlayersConsumer(server, sender, false, true, args[1], player -> setExp(sender, player, "0", false));
                 } else if (user != null) {
                     setExp(sender, user, "0", false);
                 } else {
