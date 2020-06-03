@@ -391,6 +391,9 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
         if (backup != null) {
             backup.stopTask();
         }
+
+        this.getPermissionsHandler().unregisterContexts();
+
         Economy.setEss(null);
         Trade.closeLog();
         getUserMap().getUUIDMap().shutdown();
