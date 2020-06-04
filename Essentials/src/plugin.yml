@@ -621,9 +621,6 @@ permissions:
   essentials.silentquit:
     default: false
     description: Suppress leave/quit messages for users with this permission.
-  essentials.sleepingignored:
-    default: false
-    description: User isn't required to be sleeping, for time to be reset.
   essentials.sudo.exempt:
     default: false
     description: Prevents the holder from being sudo'ed by another user
