@@ -34,7 +34,6 @@ import com.earth2me.essentials.textreader.KeywordReplacer;
 import com.earth2me.essentials.textreader.SimpleTextInput;
 import com.earth2me.essentials.utils.DateUtil;
 import com.earth2me.essentials.utils.VersionUtil;
-import com.google.common.base.Throwables;
 import net.ess3.api.IEssentials;
 import net.ess3.api.ISettings;
 import net.ess3.api.*;
@@ -76,13 +75,10 @@ import org.yaml.snakeyaml.error.YAMLException;
 
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.*;
 import java.util.function.Predicate;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.stream.Collectors;
 
 import static com.earth2me.essentials.I18n.tl;
 
@@ -107,7 +103,6 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
     private transient Metrics metrics;
     private transient EssentialsTimer timer;
     private final transient Set<String> vanishedPlayers = new LinkedHashSet<>();
-    private transient Method oldGetOnlinePlayers;
     private transient SpawnerProvider spawnerProvider;
     private transient SpawnEggProvider spawnEggProvider;
     private transient PotionMetaProvider potionMetaProvider;
@@ -186,13 +181,6 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
             for (Plugin plugin : pm.getPlugins()) {
                 if (plugin.getDescription().getName().startsWith("Essentials") && !plugin.getDescription().getVersion().equals(this.getDescription().getVersion()) && !plugin.getDescription().getName().equals("EssentialsAntiCheat")) {
                     getLogger().warning(tl("versionMismatch", plugin.getDescription().getName()));
-                }
-            }
-
-            for (Method method : Server.class.getDeclaredMethods()) {
-                if (method.getName().endsWith("getOnlinePlayers") && method.getReturnType() == Player[].class) {
-                    oldGetOnlinePlayers = method;
-                    break;
                 }
             }
 
@@ -901,22 +889,16 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
 
     @Override
     public Collection<Player> getOnlinePlayers() {
-        try {
-            return (Collection<Player>) getServer().getOnlinePlayers(); // Needed for sanity here, the Bukkit API is a bit broken in the sense it only allows subclasses of Player to this list
-        } catch (NoSuchMethodError ex) {
-            try {
-                return Arrays.asList((Player[]) oldGetOnlinePlayers.invoke(getServer()));
-            } catch (InvocationTargetException ex1) {
-                throw Throwables.propagate(ex.getCause());
-            } catch (IllegalAccessException ex1) {
-                throw new RuntimeException("Error invoking oldGetOnlinePlayers", ex1);
-            }
-        }
+        return (Collection<Player>) getServer().getOnlinePlayers();
     }
 
     @Override
-    public Iterable<User> getOnlineUsers() {
-        return getOnlinePlayers().stream().map(this::getUser).collect(Collectors.toList());
+    public List<User> getOnlineUsers() {
+        List<User> onlineUsers = new ArrayList<>();
+        for (Player player : getOnlinePlayers()) {
+            onlineUsers.add(getUser(player));
+        }
+        return onlineUsers;
     }
 
     @Override
