@@ -599,27 +599,6 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
         return false;
     }
 
-    /*
-    //Returns a list of UUIDs who's ignore timeout expired during this check
-    public List<UUID> checkIgnoreTimeouts(final long currentTime) {
-        List<UUID> expiredIgnoredPlayers = new ArrayList();
-        if (ignoredPlayerTimeouts != null) {
-            Iterator ignoredPlayers = ignoredPlayerTimeouts.entrySet().iterator();
-            while (ignoredPlayers.hasNext())
-            {
-                Map.Entry<UUID,Long> player = (Map.Entry<UUID,Long>)ignoredPlayers.next();
-                if (player.getValue() > 0 && player.getValue() < currentTime)
-                {
-                    ignoredPlayerTimeouts.remove(player.getKey());
-                    setIgnoredPlayer(player.getKey(), false);
-                    sendMessage(tl("unignorePlayer", ess.getUser(player.getKey()).getName()));
-                }
-            }
-        }
-        return expiredIgnoredPlayers;
-    }
-    */
-
     @Deprecated
     public void updateActivity(final boolean broadcast) {
         updateActivity(broadcast, AfkStatusChangeEvent.Cause.UNKNOWN);
