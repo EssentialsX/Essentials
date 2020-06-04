@@ -521,7 +521,7 @@ public abstract class UserData extends PlayerExtension implements IConf {
         config.save();
     }
 
-    public long getIgnoredPlayerTimeout(UUID uuid) {
+    public Long getIgnoredPlayerTimeout(UUID uuid) {
         return ignoredPlayerTimeouts.get(uuid);
     }
 
@@ -553,6 +553,7 @@ public abstract class UserData extends PlayerExtension implements IConf {
 
     public boolean isIgnoredPlayer(IUser user) {
 	UUID uuid = user.getBase().getUniqueId();
+	System.out.println(uuid);
 	//If there is a timeout stored for the player, check if expired, if so set ingored status to false.
 	Long timeout = getIgnoredPlayerTimeout(uuid);
 	if (timeout != null) {
