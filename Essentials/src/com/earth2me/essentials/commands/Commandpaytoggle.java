@@ -20,11 +20,7 @@ public class Commandpaytoggle extends EssentialsCommand {
             acceptingPay = false;
         }
         user.setAcceptingPay(acceptingPay);
-        if (acceptingPay) {
-            user.sendMessage(tl("payToggleOn"));
-        } else {
-            user.sendMessage(tl("payToggleOff"));
-        }
+        user.sendMessage(acceptingPay ? tl("payToggleOn") : tl("payToggleOff"));
     }
 }
 

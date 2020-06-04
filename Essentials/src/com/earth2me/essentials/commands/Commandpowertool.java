@@ -25,23 +25,22 @@ public class Commandpowertool extends EssentialsCommand {
     protected void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception {
         final String command = getFinalArg(args, 0);
         final ItemStack itemStack = user.getBase().getItemInHand();
-        powertool(server, user.getSource(), user, commandLabel, itemStack, command);
+        powertool(user.getSource(), user, itemStack, command);
     }
 
     @Override
     protected void run(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception {
-        if (args.length < 3) //running from console means inserting a player and item before the standard syntax
-        {
+        if (args.length < 3) {
             throw new Exception("When running from console, usage is: /" + commandLabel + " <player> <itemid> <command>");
         }
 
         final User user = getPlayer(server, args, 0, true, true);
         final ItemStack itemStack = ess.getItemDb().get(args[1]);
         final String command = getFinalArg(args, 2);
-        powertool(server, sender, user, commandLabel, itemStack, command);
+        powertool(sender, user, itemStack, command);
     }
 
-    protected void powertool(final Server server, final CommandSource sender, final User user, final String commandLabel, final ItemStack itemStack, String command) throws Exception {
+    protected void powertool(final CommandSource sender, final User user, final ItemStack itemStack, String command) throws Exception {
         // check to see if this is a clear all command
         if (command != null && command.equalsIgnoreCase("d:")) {
             user.clearAllPowertools();

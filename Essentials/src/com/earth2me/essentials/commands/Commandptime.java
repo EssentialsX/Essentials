@@ -51,21 +51,20 @@ public class Commandptime extends EssentialsCommand {
             }
         }
 
-        Long ticks;
+        Long ticks = null;
         // Parse the target time int ticks from args[0]
         String timeParam = args[0];
-        boolean relative = true;
-        if (timeParam.startsWith("@")) {
-            relative = false;
+        boolean relative = !timeParam.startsWith("@");
+        if (!relative) {
             timeParam = timeParam.substring(1);
         }
 
         if (getAliases.contains(timeParam)) {
             getUsersTime(sender, users);
             return;
-        } else if (DescParseTickFormat.meansReset(timeParam)) {
-            ticks = null;
-        } else {
+        }
+
+        if (!DescParseTickFormat.meansReset(timeParam)) {
             try {
                 ticks = DescParseTickFormat.parse(timeParam);
             } catch (NumberFormatException e) {
@@ -87,14 +86,11 @@ public class Commandptime extends EssentialsCommand {
         for (User user : users) {
             if (user.getBase().getPlayerTimeOffset() == 0) {
                 sender.sendMessage(tl("pTimeNormal", user.getName()));
-            } else {
-                String time = DescParseTickFormat.format(user.getBase().getPlayerTime());
-                if (!user.getBase().isPlayerTimeRelative()) {
-                    sender.sendMessage(tl("pTimeCurrentFixed", user.getName(), time));
-                } else {
-                    sender.sendMessage(tl("pTimeCurrent", user.getName(), time));
-                }
+                return;
             }
+
+            String time = DescParseTickFormat.format(user.getBase().getPlayerTime());
+            sender.sendMessage(user.getBase().isPlayerTimeRelative() ? tl("pTimeCurrent", user.getName(), time) : tl("pTimeCurrentFixed", user.getName(), time));
         }
     }
 
@@ -134,14 +130,11 @@ public class Commandptime extends EssentialsCommand {
         // Inform the sender of the change
         if (ticks == null) {
             sender.sendMessage(tl("pTimeReset", msg.toString()));
-        } else {
-            String time = DescParseTickFormat.format(ticks);
-            if (!relative) {
-                sender.sendMessage(tl("pTimeSetFixed", time, msg.toString()));
-            } else {
-                sender.sendMessage(tl("pTimeSet", time, msg.toString()));
-            }
+            return;
         }
+
+        String time = DescParseTickFormat.format(ticks);
+        sender.sendMessage(relative ? tl("pTimeSet", time, msg.toString()) : tl("pTimeSetFixed", time, msg.toString()));
     }
 
     /**

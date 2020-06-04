@@ -25,10 +25,8 @@ public class Commandnuke extends EssentialsCommand {
         Collection<Player> targets;
         if (args.length > 0) {
             targets = new ArrayList<>();
-            int pos = 0;
-            for (String arg : args) {
-                targets.add(getPlayer(server, sender, args, pos).getBase());
-                pos++;
+            for (int i = 0; args.length > i; i++) {
+                targets.add(getPlayer(server, sender, args, i).getBase());
             }
         } else {
             targets = ess.getOnlinePlayers();
@@ -43,8 +41,7 @@ public class Commandnuke extends EssentialsCommand {
             final World world = loc.getWorld();
             for (int x = -10; x <= 10; x += 5) {
                 for (int z = -10; z <= 10; z += 5) {
-                    final Location tntloc = new Location(world, loc.getBlockX() + x, world.getHighestBlockYAt(loc) + 64, loc.getBlockZ() + z);
-                    final TNTPrimed tnt = world.spawn(tntloc, TNTPrimed.class);
+                    world.spawn(new Location(world, loc.getBlockX() + x, world.getHighestBlockYAt(loc) + 64, loc.getBlockZ() + z), TNTPrimed.class);
                 }
             }
         }

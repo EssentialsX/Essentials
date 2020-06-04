@@ -22,7 +22,7 @@ public class CommandSource {
         return null;
     }
 
-    public final IUser getUser(IEssentials ess) {
+    public final net.ess3.api.IUser getUser(IEssentials ess) {
         if (sender instanceof Player) {
             return ess.getUser((Player) sender);
         }
