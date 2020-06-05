@@ -138,11 +138,3 @@ public class Commandptime extends EssentialsLoopCommand {
     protected void updatePlayer(Server server, CommandSource sender, User user, String[] args) {
     }
 }
-
-
-class UserNameComparator implements Comparator<User> {
-    @Override
-    public int compare(User a, User b) {
-        return a.getName().compareTo(b.getName());
-    }
-}
