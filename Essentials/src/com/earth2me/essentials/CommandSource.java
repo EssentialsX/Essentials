@@ -16,7 +16,7 @@ public class CommandSource {
     }
 
     public final Player getPlayer() {
-        if (sender instanceof Player) {
+        if (isPlayer()) {
             return (Player) sender;
         }
         return null;
@@ -46,5 +46,9 @@ public class CommandSource {
 
     public boolean isAuthorized(String permission, IEssentials ess) {
         return !isPlayer() || getUser(ess).isAuthorized(permission);
+    }
+
+    public String getSelfSelector() {
+        return isPlayer() ? getPlayer().getName() : "*";
     }
 }
