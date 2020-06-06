@@ -21,13 +21,14 @@ public class Commandxmpp extends EssentialsCommand {
         final String address = EssentialsXMPP.getInstance().getAddress(args[0]);
         if (address == null) {
             sender.sendMessage("§cThere are no players matching that name.");
-        } else {
-            final String message = getFinalArg(args, 1);
-            final String senderName = sender.isPlayer() ? ess.getUser(sender.getPlayer()).getDisplayName() : Console.NAME;
-            sender.sendMessage("[" + senderName + ">" + address + "] " + message);
-            if (!EssentialsXMPP.getInstance().sendMessage(address, "[" + senderName + "] " + message)) {
-                sender.sendMessage("§cError sending message.");
-            }
+            return;
+        }
+
+        final String message = getFinalArg(args, 1);
+        final String senderName = sender.isPlayer() ? ess.getUser(sender.getPlayer()).getDisplayName() : Console.NAME;
+        sender.sendMessage("[" + senderName + ">" + address + "] " + message);
+        if (!EssentialsXMPP.getInstance().sendMessage(address, "[" + senderName + "] " + message)) {
+            sender.sendMessage("§cError sending message.");
         }
     }
 }
