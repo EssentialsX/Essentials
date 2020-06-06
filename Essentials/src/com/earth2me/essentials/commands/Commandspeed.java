@@ -22,9 +22,7 @@ public class Commandspeed extends EssentialsCommand {
         if (args.length < 2) {
             throw new NotEnoughArgumentsException();
         }
-        final boolean isFly = isFlyMode(args[0]);
-        final float speed = getMoveSpeed(args[1]);
-        speedOtherPlayers(server, sender, isFly, true, speed, args[2]);
+        speedOtherPlayers(server, sender, isFlyMode(args[0]), true, getMoveSpeed(args[1]), args[2]);
     }
 
     @Override
@@ -52,12 +50,12 @@ public class Commandspeed extends EssentialsCommand {
         }
 
         if (isFly) {
-            user.getBase().setFlySpeed(getRealMoveSpeed(speed, isFly, isBypass));
+            user.getBase().setFlySpeed(getRealMoveSpeed(speed, true, isBypass));
             user.sendMessage(tl("moveSpeed", tl("flying"), speed, user.getDisplayName()));
-        } else {
-            user.getBase().setWalkSpeed(getRealMoveSpeed(speed, isFly, isBypass));
-            user.sendMessage(tl("moveSpeed", tl("walking"), speed, user.getDisplayName()));
+            return;
         }
+        user.getBase().setWalkSpeed(getRealMoveSpeed(speed, false, isBypass));
+        user.sendMessage(tl("moveSpeed", tl("walking"), speed, user.getDisplayName()));
     }
 
     private void speedOtherPlayers(final Server server, final CommandSource sender, final boolean isFly, final boolean isBypass, final float speed, final String name) throws PlayerNotFoundException {
@@ -71,10 +69,10 @@ public class Commandspeed extends EssentialsCommand {
             }
             foundUser = true;
             if (isFly) {
-                matchPlayer.setFlySpeed(getRealMoveSpeed(speed, isFly, isBypass));
+                matchPlayer.setFlySpeed(getRealMoveSpeed(speed, true, isBypass));
                 sender.sendMessage(tl("moveSpeed", tl("flying"), speed, matchPlayer.getDisplayName()));
             } else {
-                matchPlayer.setWalkSpeed(getRealMoveSpeed(speed, isFly, isBypass));
+                matchPlayer.setWalkSpeed(getRealMoveSpeed(speed, false, isBypass));
                 sender.sendMessage(tl("moveSpeed", tl("walking"), speed, matchPlayer.getDisplayName()));
             }
         }
@@ -83,7 +81,7 @@ public class Commandspeed extends EssentialsCommand {
         }
     }
 
-    private Boolean flyPermCheck(User user, boolean input) throws Exception {
+    private Boolean flyPermCheck(User user, boolean input) {
         boolean canFly = user.isAuthorized("essentials.speed.fly");
         boolean canWalk = user.isAuthorized("essentials.speed.walk");
         if (input && canFly || !input && canWalk || !canFly && !canWalk) {
@@ -134,17 +132,8 @@ public class Commandspeed extends EssentialsCommand {
     }
 
     @Override
-    protected List<String> getTabCompleteOptions(Server server, User user, String commandLabel, String[] args) {
-        if (args.length == 3 && user.isAuthorized("essentials.speed.others")) {
-            return getPlayers(server, user);
-        } else {
-            return Collections.emptyList();
-        }
-    }
-
-    @Override
     protected List<String> getTabCompleteOptions(Server server, CommandSource sender, String commandLabel, String[] args) {
-        if (args.length == 3) {
+        if (args.length == 3 && sender.isAuthorized("essentials.speed.others", ess)) {
             return getPlayers(server, sender);
         } else {
             return Collections.emptyList();

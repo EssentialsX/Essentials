@@ -12,11 +12,13 @@ import org.bukkit.inventory.meta.SkullMeta;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.regex.Pattern;
 
 import static com.earth2me.essentials.I18n.tl;
 
 public class Commandskull extends EssentialsCommand {
 
+    private static final Pattern NAME_PATTERN = Pattern.compile("^[A-Za-z0-9_]+$");
     private static final Material SKULL_ITEM = EnumUtil.getMaterial("PLAYER_HEAD", "SKULL_ITEM");
 
     public Commandskull() {
@@ -26,9 +28,8 @@ public class Commandskull extends EssentialsCommand {
     @Override
     protected void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception {
         String owner;
-
         if (args.length > 0 && user.isAuthorized("essentials.skull.others")) {
-            if (!args[0].matches("^[A-Za-z0-9_]+$")) {
+            if (!NAME_PATTERN.matcher(args[0]).matches()) {
                 throw new IllegalArgumentException(tl("alphaNames"));
             }
             owner = args[0];
@@ -37,7 +38,7 @@ public class Commandskull extends EssentialsCommand {
         }
 
         ItemStack itemSkull = user.getItemInHand();
-        SkullMeta metaSkull = null;
+        SkullMeta metaSkull;
         boolean spawn = false;
 
         if (itemSkull != null && MaterialUtil.isPlayerHead(itemSkull.getType(), itemSkull.getDurability())) {
@@ -56,15 +57,15 @@ public class Commandskull extends EssentialsCommand {
 
         metaSkull.setDisplayName("§fSkull of " + owner);
         metaSkull.setOwner(owner);
-
         itemSkull.setItemMeta(metaSkull);
 
         if (spawn) {
             InventoryWorkaround.addItems(user.getBase().getInventory(), itemSkull);
             user.sendMessage(tl("givenSkull", owner));
-        } else {
-            user.sendMessage(tl("skullChanged", owner));
+            return;
         }
+
+        user.sendMessage(tl("skullChanged", owner));
     }
 
     @Override

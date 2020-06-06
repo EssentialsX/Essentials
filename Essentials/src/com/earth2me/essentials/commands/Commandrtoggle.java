@@ -22,7 +22,7 @@ public class Commandrtoggle extends EssentialsToggleCommand {
     }
 
     @Override
-    void togglePlayer(CommandSource sender, User user, Boolean enabled) throws NotEnoughArgumentsException {
+    protected void togglePlayer(CommandSource sender, User user, Boolean enabled) {
         if (enabled == null) {
             enabled = !user.isLastMessageReplyRecipient();
         }

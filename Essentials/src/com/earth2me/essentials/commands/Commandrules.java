@@ -1,7 +1,6 @@
 package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.CommandSource;
-import com.earth2me.essentials.textreader.IText;
 import com.earth2me.essentials.textreader.KeywordReplacer;
 import com.earth2me.essentials.textreader.TextInput;
 import com.earth2me.essentials.textreader.TextPager;
@@ -19,9 +18,7 @@ public class Commandrules extends EssentialsCommand {
             ess.getUser(sender.getPlayer()).setDisplayNick();
         }
 
-        final IText input = new TextInput(sender, "rules", true, ess);
-        final IText output = new KeywordReplacer(input, sender, ess);
-        final TextPager pager = new TextPager(output);
+        final TextPager pager = new TextPager(new KeywordReplacer(new TextInput(sender, "rules", true, ess), sender, ess));
         pager.showPage(args.length > 0 ? args[0] : null, args.length > 1 ? args[1] : null, commandLabel, sender);
     }
 }
