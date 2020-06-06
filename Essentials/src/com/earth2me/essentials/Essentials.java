@@ -581,6 +581,9 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
                 if (!ex.getMessage().isEmpty()) {
                     sender.sendMessage(ex.getMessage());
                 }
+                if (ex.getCause() != null && settings.isDebug()) {
+                    ex.getCause().printStackTrace();
+                }
                 return true;
             } catch (Exception ex) {
                 showError(sender, ex, commandLabel);
