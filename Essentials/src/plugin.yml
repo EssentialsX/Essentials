@@ -438,7 +438,7 @@ commands:
     aliases: [ethunder]
   time:
     description: Display/Change the world time. Defaults to current world.
-    usage: /<command> [day|night|dawn|17:30|4pm|4000ticks] [worldname|all]
+    usage: /<command> [set|add] <day|night|dawn|17:30|4pm|4000ticks> [worldname|all]
     aliases: [day,eday,night,enight,etime]
   togglejail:
     description: Jails/Unjails a player, TPs them to the jail specified.
