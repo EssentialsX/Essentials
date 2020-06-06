@@ -46,12 +46,12 @@ public class Commandtree extends EssentialsCommand {
         if (!user.getWorld().getBlockAt(loc).isPassable()) {
             throw new Exception(tl("treeFailure"));
         }
-        final boolean success = user.getWorld().generateTree(loc, tree);
-        if (success) {
+
+        if (user.getWorld().generateTree(loc, tree)) {
             user.sendMessage(tl("treeSpawned"));
-        } else {
-            user.sendMessage(tl("treeFailure"));
+            return;
         }
+        user.sendMessage(tl("treeFailure"));
     }
 
     @Override
