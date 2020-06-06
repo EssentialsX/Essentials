@@ -16,7 +16,7 @@ public class CommandSource {
     }
 
     public final Player getPlayer() {
-        if (isPlayer()) {
+        if (sender instanceof Player) {
             return (Player) sender;
         }
         return null;
@@ -30,7 +30,7 @@ public class CommandSource {
     }
 
     public final boolean isPlayer() {
-        return (sender instanceof Player);
+        return sender instanceof Player;
     }
 
     public final CommandSender setSender(final CommandSender base) {
@@ -45,10 +45,10 @@ public class CommandSource {
     }
 
     public boolean isAuthorized(String permission, IEssentials ess) {
-        return !isPlayer() || getUser(ess).isAuthorized(permission);
+        return !(sender instanceof Player) || getUser(ess).isAuthorized(permission);
     }
 
     public String getSelfSelector() {
-        return isPlayer() ? getPlayer().getName() : "*";
+        return sender instanceof Player ? getPlayer().getName() : "*";
     }
 }
