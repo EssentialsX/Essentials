@@ -169,8 +169,7 @@ public class I18n implements net.ess3.api.II18n {
      */
     private static class UTF8PropertiesControl extends ResourceBundle.Control {
         public ResourceBundle newBundle(String baseName, Locale locale, String format, ClassLoader loader, boolean reload) throws IOException {
-            String bundleName = toBundleName(baseName, locale);
-            String resourceName = toResourceName(bundleName, "properties");
+            String resourceName = toResourceName(toBundleName(baseName, locale), "properties");
             ResourceBundle bundle = null;
             InputStream stream = null;
             if (reload) {
