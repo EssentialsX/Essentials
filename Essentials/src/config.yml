@@ -621,7 +621,7 @@ max-projectile-speed: 8
 ############################################################
 
 # Allows people to set their bed during the day.
-# Has no effect in Minecraft 1.15+
+# This setting has no effect in Minecraft 1.15+, as Minecraft will always allow the player to set their bed location during the day.
 update-bed-at-daytime: true
 
 # Set to true to enable per-world permissions for using homes to teleport between worlds.
