@@ -284,6 +284,8 @@ public interface ISettings extends IConf {
 
     BigDecimal getMinimumPayAmount();
 
+    boolean isPayExcludesIgnoreList();
+
     long getLastMessageReplyRecipientTimeout();
 
     boolean isMilkBucketEasterEggEnabled();
@@ -361,5 +363,7 @@ public interface ISettings extends IConf {
     boolean isRemovingEffectsOnHeal();
 
     boolean isSpawnIfNoHome();
+
+    boolean infoAfterDeath();
 
 }
