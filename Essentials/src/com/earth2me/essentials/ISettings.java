@@ -204,7 +204,9 @@ public interface ISettings extends IConf {
 
     boolean areDeathMessagesEnabled();
 
-    boolean isKeepVanishingItems();
+    String getVanishingItemsPolicy();
+
+    String getBindingItemsPolicy();
 
     void setDebug(boolean debug);
 

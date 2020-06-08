@@ -570,6 +570,8 @@ public class Settings implements net.ess3.api.ISettings {
         logCommandBlockCommands = _logCommandBlockCommands();
         nickBlacklist = _getNickBlacklist();
         maxProjectileSpeed = _getMaxProjectileSpeed();
+        vanishingItemPolicy = _getVanishingItemsPolicy();
+        bindingItemPolicy = _getBindingItemsPolicy();
     }
 
     void _lateLoadItemSpawnBlacklist() {
@@ -976,9 +978,34 @@ public class Settings implements net.ess3.api.ISettings {
         return config.getBoolean("death-messages", true);
     }
 
+    private String vanishingItemPolicy;
+
+    public String _getVanishingItemsPolicy() {
+        String value = config.getString("vanishing-items-policy", "keep").toLowerCase(Locale.ENGLISH);
+        if (!value.equals("delete") && !value.equals("drop") && !value.equals("keep")) {
+            value = "delete";
+        }
+        return value;
+    }
+
     @Override
-    public boolean isKeepVanishingItems() {
-        return config.getBoolean("keep-vanishing-items-keepinv", true);
+    public String getVanishingItemsPolicy() {
+        return vanishingItemPolicy;
+    }
+
+    private String bindingItemPolicy;
+
+    public String _getBindingItemsPolicy() {
+        String value = config.getString("binding-items-policy", "keep").toLowerCase(Locale.ENGLISH);
+        if (!value.equals("delete") && !value.equals("drop") && !value.equals("keep")) {
+            value = "delete";
+        }
+        return value;
+    }
+
+    @Override
+    public String getBindingItemsPolicy() {
+        return bindingItemPolicy;
     }
 
     private Set<String> noGodWorlds = new HashSet<>();

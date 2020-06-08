@@ -171,17 +171,53 @@ public class EssentialsEntityListener implements Listener {
         if (user.isAuthorized("essentials.keepinv")) {
             event.setKeepInventory(true);
             event.getDrops().clear();
-            if (!ess.getSettings().isKeepVanishingItems() && VersionUtil.getServerBukkitVersion().isHigherThanOrEqualTo(VersionUtil.v1_11_2_R01)) {
+            String vanish = ess.getSettings().getVanishingItemsPolicy();
+            String bind = ess.getSettings().getBindingItemsPolicy();
+            if (VersionUtil.getServerBukkitVersion().isHigherThanOrEqualTo(VersionUtil.v1_11_2_R01) && (!vanish.equals("keep") || !bind.equals("keep"))) {
                 for (ItemStack stack : event.getEntity().getInventory()) {
-                    if (stack != null && stack.getEnchantments().containsKey(Enchantment.VANISHING_CURSE)) {
-                        event.getEntity().getInventory().remove(stack);
+                    if (stack != null) {
+                        if (stack.getEnchantments().containsKey(Enchantment.VANISHING_CURSE)) {
+                            if (vanish.equals("delete")) {
+                                event.getEntity().getInventory().remove(stack);
+                            } else if (vanish.equals("drop")) {
+                                event.getDrops().add(stack);
+                                event.getEntity().getInventory().remove(stack);
+                            }
+                        }
+                        if (stack.getEnchantments().containsKey(Enchantment.BINDING_CURSE)) {
+                            if (bind.equals("delete")) {
+                                event.getEntity().getInventory().remove(stack);
+                            } else if (bind.equals("drop")) {
+                                event.getEntity().getInventory().remove(stack);
+                                event.getDrops().add(stack);
+                            }
+                        }
                     }
                 }
                 ItemStack[] armor = event.getEntity().getInventory().getArmorContents();
                 for (int i = 0; i < armor.length; i++) {
                     ItemStack stack = armor[i];
-                    if (stack != null && stack.getEnchantments().containsKey(Enchantment.VANISHING_CURSE)) {
-                        armor[i] = null;
+                    if (stack != null) {
+                        if (stack.getEnchantments().containsKey(Enchantment.VANISHING_CURSE)) {
+                            if (vanish.equals("delete")) {
+                                armor[i] = null;
+                            } else if (vanish.equals("drop")) {
+                                if (!event.getDrops().contains(stack)) {
+                                    event.getDrops().add(stack);
+                                }
+                                armor[i] = null;
+                            }
+                        }
+                        if (stack.getEnchantments().containsKey(Enchantment.BINDING_CURSE)) {
+                            if (bind.equals("delete")) {
+                                armor[i] = null;
+                            } else if (bind.equals("drop")) {
+                                if (!event.getDrops().contains(stack)) {
+                                    event.getDrops().add(stack);
+                                }
+                                armor[i] = null;
+                            }
+                        }
                     }
                 }
                 event.getEntity().getInventory().setArmorContents(armor);

@@ -459,10 +459,17 @@ broadcast-afk-message: true
 # You can disable the death messages of Minecraft here.
 death-messages: true
 
-# Should players with the essentials.keepinv permission keep items with the curse of vanishing when they die?
-# You can set this to false to make curse of vanishing items get removed from the inventory of players with the
-# essentials.keepinv permission upon death.
-keep-vanishing-items-keepinv: true
+# How should essentials handle players with the essentials.keepinv permission who have items with
+# curse of vanishing when they die?
+# You can set this to "keep" (to keep the item), "drop" (to drop the item), or "delete" (to delete the item).
+# Defaults to "keep"
+vanishing-items-policy: keep
+
+# How should essentials handle players with the essentials.keepinv permission who have items with
+# curse of binding when they die?
+# You can set this to "keep" (to keep the item), "drop" (to drop the item), or "delete" (to delete the item).
+# Defaults to "keep"
+binding-items-policy: keep
 
 # Should players with permissions be able to join and part silently?
 # You can control this with essentials.silentjoin and essentials.silentquit permissions if it is enabled.
