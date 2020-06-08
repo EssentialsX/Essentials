@@ -218,7 +218,7 @@ commands:
     aliases: [dura,edura,durability,edurability,eitemdb,itemno,eitemno]
   itemlore:
     description: Edit the lore of an item.
-    usage: /<command> <add/clear> [text]
+    usage: /<command> <add/set/clear> [text/line] [text]
     aliases: [ilore, eilore, eitemlore]
   itemname:
     description: Names an item.
