@@ -1,3 +1,5 @@
+# Determines how much items are worth on the server.
+# This can be set in this file, or with the /setworth command.
 worth:
 
   # Items not listed in this file will not be sellable on the server
