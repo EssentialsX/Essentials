@@ -18,13 +18,24 @@ public class SignSell extends EssentialsSign {
 
     @Override
     protected boolean onSignCreate(final ISign sign, final User player, final String username, final IEssentials ess) throws SignException {
-        validateTrade(sign, 1, 2, player, ess);
+        validateTrade(sign, 1, 2, player, ess);  
+        if(ess.getSettings().isSellSignUpdatedToWorth()) {
+            try {
+                updateFromWorth(sign, ess);
+            }
+            catch (SignException e) {
+                // It's fine
+            }
+        }
         validateTrade(sign, 3, ess);
         return true;
     }
 
     @Override
     protected boolean onSignInteract(final ISign sign, final User player, final String username, final IEssentials ess) throws SignException, ChargeException, MaxMoneyException {
+        if(ess.getSettings().isSellSignUpdatedToWorth()) {
+            updateFromWorth(sign, ess);
+        }
         Trade charge = getTrade(sign, 1, 2, player, ess);
         Trade money = getTrade(sign, 3, ess);
 

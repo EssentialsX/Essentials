@@ -9,7 +9,6 @@ import org.bukkit.inventory.ItemStack;
 
 import java.math.BigDecimal;
 
-
 public class SignBuy extends EssentialsSign {
     public SignBuy() {
         super("Buy");
@@ -18,12 +17,23 @@ public class SignBuy extends EssentialsSign {
     @Override
     protected boolean onSignCreate(final ISign sign, final User player, final String username, final IEssentials ess) throws SignException {
         validateTrade(sign, 1, 2, player, ess);
+        if(ess.getSettings().isBuySignUpdatedToWorth()) {
+            try {
+              updateFromWorth(sign, ess, ess.getSettings().getEcoBuyMultiplier());
+            }
+            catch (SignException e) {
+              // It's fine
+            }
+        }
         validateTrade(sign, 3, ess);
         return true;
     }
 
     @Override
     protected boolean onSignInteract(final ISign sign, final User player, final String username, final IEssentials ess) throws SignException, ChargeException, MaxMoneyException {
+        if(ess.getSettings().isBuySignUpdatedToWorth()) {
+            updateFromWorth(sign, ess, ess.getSettings().getEcoBuyMultiplier());
+        }
         Trade items = getTrade(sign, 1, 2, player, ess);
         Trade charge = getTrade(sign, 3, ess);
 

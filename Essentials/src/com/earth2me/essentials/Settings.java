@@ -570,6 +570,9 @@ public class Settings implements net.ess3.api.ISettings {
         economyLog = _isEcoLogEnabled();
         economyLogUpdate = _isEcoLogUpdateEnabled();
         economyDisabled = _isEcoDisabled();
+        sellSignUpdatedToWorth = _getSellSignUpdatedToWorth();
+        buySignUpdatedToWorth = _getBuySignUpdatedToWorth();
+        economyBuyMultiplier = _getEcoBuyMultiplier();
         allowSilentJoin = _allowSilentJoinQuit();
         customJoinMessage = _getCustomJoinMessage();
         isCustomJoinMessage = !customJoinMessage.equals("none");
@@ -736,6 +739,41 @@ public class Settings implements net.ess3.api.ISettings {
     @Override
     public boolean isEcoDisabled() {
         return economyDisabled;
+    }
+
+    private boolean buySignUpdatedToWorth = false;
+
+    private boolean _getBuySignUpdatedToWorth() {
+      return config.getBoolean("economy-update-buy-sign-to-worth", false);
+    }
+
+    @Override
+    public boolean isBuySignUpdatedToWorth() {
+      return buySignUpdatedToWorth;
+    }
+
+    private boolean sellSignUpdatedToWorth = false;
+
+    private boolean _getSellSignUpdatedToWorth() {
+      return config.getBoolean("economy-update-sell-sign-to-worth", false);
+    }
+
+    @Override
+    public boolean isSellSignUpdatedToWorth() {
+      return sellSignUpdatedToWorth;
+    }
+
+    private BigDecimal economyBuyMultiplier = new BigDecimal("1.0");
+
+    private BigDecimal _getEcoBuyMultiplier() {
+      BigDecimal multiplier = config.getBigDecimal("economy-buy-multiplier", new BigDecimal("1.0"));
+      if (multiplier.compareTo(BigDecimal.ZERO) <= 0) return new BigDecimal("1.0");
+      return multiplier;
+    }
+
+    @Override
+    public BigDecimal getEcoBuyMultiplier() {
+        return economyBuyMultiplier;
     }
 
     @Override

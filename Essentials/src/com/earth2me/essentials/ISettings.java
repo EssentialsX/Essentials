@@ -145,6 +145,12 @@ public interface ISettings extends IConf {
 
     boolean isEcoDisabled();
 
+    boolean isBuySignUpdatedToWorth();
+
+    boolean isSellSignUpdatedToWorth();
+    
+    BigDecimal getEcoBuyMultiplier();
+
     @Deprecated
     boolean isTradeInStacks(int id);
 

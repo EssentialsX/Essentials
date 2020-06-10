@@ -436,6 +436,30 @@ public class EssentialsSign {
         }
     }
 
+    /**
+     * Updates the sign cost to the value of the item specified in worth.yml
+     */
+    protected void updateFromWorth(final ISign sign, final IEssentials ess) throws SignException {
+      updateFromWorth(sign, ess, new BigDecimal("1"));
+    }
+    
+    /**
+     * Updates the sign cost to the value of the item specified in worth.yml multiplied by a multiplier factor
+     */
+    protected void updateFromWorth(final ISign sign, final IEssentials ess, final BigDecimal multiplier) throws SignException {
+      final ItemStack stack = getItemStack(getSignText(sign, 2), getIntegerPositive(sign.getLine(1)), ess);
+      final int amount = stack.getAmount();
+      BigDecimal price = ess.getWorth().getPrice(ess, stack);
+      if (price == null || amount == 0) return;
+      price = price.multiply(multiplier).multiply(new BigDecimal(amount));
+      final BigDecimal oldPrice = getMoney(getSignText(sign, 3), ess);
+      if ( oldPrice == null || price.compareTo(oldPrice) != 0) {
+        sign.setLine(3, NumberUtil.shortCurrency(price, ess));
+        sign.updateSign();
+        throw new SignException("Price changed from  " + oldPrice + " to " + price); //TODO: TL
+      }
+  }
+
     private void showError(final IEssentials ess, final CommandSource sender, final Throwable exception, final String signName) {
         ess.showError(sender, exception, "\\ sign: " + signName);
     }
