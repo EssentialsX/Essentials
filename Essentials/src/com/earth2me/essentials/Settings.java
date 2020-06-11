@@ -570,8 +570,6 @@ public class Settings implements net.ess3.api.ISettings {
         economyLog = _isEcoLogEnabled();
         economyLogUpdate = _isEcoLogUpdateEnabled();
         economyDisabled = _isEcoDisabled();
-        sellSignUpdatedToWorth = _getSellSignUpdatedToWorth();
-        buySignUpdatedToWorth = _getBuySignUpdatedToWorth();
         economyBuyMultiplier = _getEcoBuyMultiplier();
         allowSilentJoin = _allowSilentJoinQuit();
         customJoinMessage = _getCustomJoinMessage();

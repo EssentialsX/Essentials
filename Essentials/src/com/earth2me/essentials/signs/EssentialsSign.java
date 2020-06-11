@@ -450,7 +450,9 @@ public class EssentialsSign {
       final ItemStack stack = getItemStack(getSignText(sign, 2), getIntegerPositive(sign.getLine(1)), ess);
       final int amount = stack.getAmount();
       BigDecimal price = ess.getWorth().getPrice(ess, stack);
-      if (price == null || amount == 0) return;
+      if (price == null || amount == 0) {
+        return;
+      }
       price = price.multiply(multiplier).multiply(new BigDecimal(amount));
       final BigDecimal oldPrice = getMoney(getSignText(sign, 3), ess);
       if ( oldPrice == null || price.compareTo(oldPrice) != 0) {
