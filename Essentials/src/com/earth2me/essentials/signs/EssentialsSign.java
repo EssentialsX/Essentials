@@ -455,7 +455,7 @@ public class EssentialsSign {
       }
       price = price.multiply(multiplier).multiply(new BigDecimal(amount));
       final BigDecimal oldPrice = getMoney(getSignText(sign, 3), ess);
-      if ( oldPrice == null || price.compareTo(oldPrice) != 0) {
+      if (oldPrice == null || price.compareTo(oldPrice) != 0) {
         sign.setLine(3, NumberUtil.shortCurrency(price, ess));
         sign.updateSign();
         throw new SignException(tl("priceChanged", oldPrice, price));
