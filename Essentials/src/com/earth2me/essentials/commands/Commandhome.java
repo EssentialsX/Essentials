@@ -41,9 +41,18 @@ public class Commandhome extends EssentialsCommand {
         }
         try {
             if ("bed".equalsIgnoreCase(homeName) && user.isAuthorized("essentials.home.bed")) {
+                if (!player.getBase().isOnline()) {
+                    throw new Exception(tl("bedOffline"));
+                }
                 PaperLib.getBedSpawnLocationAsync(player.getBase(), true).thenAccept(location -> {
+                    CompletableFuture<Boolean> future = getNewExceptionFuture(user.getSource(), commandLabel);
                     if (location != null) {
-                        user.getAsyncTeleport().teleport(location, charge, TeleportCause.COMMAND, getNewExceptionFuture(user.getSource(), commandLabel));
+                        future.thenAccept(success -> {
+                            if (success) {
+                                user.sendMessage(tl("teleportHome", "bed"));
+                            }
+                        });
+                        user.getAsyncTeleport().teleport(location, charge, TeleportCause.COMMAND, future);
                     } else {
                         showError(user.getBase(), new Exception(tl("bedMissing")), commandLabel);
                     }
