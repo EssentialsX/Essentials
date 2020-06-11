@@ -435,13 +435,6 @@ public class EssentialsSign {
             return new Trade(money, ess);
         }
     }
-
-    /**
-     * Updates the sign cost to the value of the item specified in worth.yml
-     */
-    protected void updateFromWorth(final ISign sign, final IEssentials ess) throws SignException {
-      updateFromWorth(sign, ess, new BigDecimal("1"));
-    }
     
     /**
      * Updates the sign cost to the value of the item specified in worth.yml multiplied by a multiplier factor

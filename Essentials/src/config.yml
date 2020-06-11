@@ -727,14 +727,14 @@ max-money: 10000000000000
 # Setting this to 0, will disable overdrafts/loans completely.  Users need 'essentials.eco.loan' perm to go below 0.
 min-money: -10000
 
-# Enable this to make sell signs automatically adjust their price according to worth.yml
+# Enable this to make sell signs adjust their price according to worth.yml when they are created or used
 economy-update-sell-sign-to-worth: false
 
-# Enable this to make buy signs automatically adjust their price according to worth.yml
+# Enable this to make buy signs adjust their price according to worth.yml when they are created or used
 economy-update-buy-sign-to-worth: false
 
 # If you don't want buy and sell prices to be the same, set this multiplier to something higher then 1.0
-# All buy prices for players will be multiplied by this amount.
+# All buy prices on buy signs will be the worth value multiplied by this amount.
 economy-buy-multiplier: 1.0
 
 # Enable this to log all interactions with trade/buy/sell signs and sell command.

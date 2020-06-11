@@ -22,7 +22,7 @@ public class SignBuy extends EssentialsSign {
               updateFromWorth(sign, ess, ess.getSettings().getEcoBuyMultiplier());
             }
             catch (SignException e) {
-              // It's fine
+                // The price changed, which is to be expected on sign create
             }
         }
         validateTrade(sign, 3, ess);

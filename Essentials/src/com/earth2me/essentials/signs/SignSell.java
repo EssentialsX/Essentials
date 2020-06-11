@@ -21,10 +21,10 @@ public class SignSell extends EssentialsSign {
         validateTrade(sign, 1, 2, player, ess);  
         if(ess.getSettings().isSellSignUpdatedToWorth()) {
             try {
-                updateFromWorth(sign, ess);
+                updateFromWorth(sign, ess, new BigDecimal("1.0"));
             }
             catch (SignException e) {
-                // It's fine
+                // The price changed, which is to be expected on sign create
             }
         }
         validateTrade(sign, 3, ess);
@@ -34,7 +34,7 @@ public class SignSell extends EssentialsSign {
     @Override
     protected boolean onSignInteract(final ISign sign, final User player, final String username, final IEssentials ess) throws SignException, ChargeException, MaxMoneyException {
         if(ess.getSettings().isSellSignUpdatedToWorth()) {
-            updateFromWorth(sign, ess);
+            updateFromWorth(sign, ess, new BigDecimal("1.0"));
         }
         Trade charge = getTrade(sign, 1, 2, player, ess);
         Trade money = getTrade(sign, 3, ess);
