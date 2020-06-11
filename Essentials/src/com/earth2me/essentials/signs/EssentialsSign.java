@@ -451,7 +451,7 @@ public class EssentialsSign {
       if (oldPrice == null || price.compareTo(oldPrice) != 0) {
         sign.setLine(3, NumberUtil.shortCurrency(price, ess));
         sign.updateSign();
-        throw new SignException(tl("priceChanged", oldPrice, price));
+        throw new SignException(tl("priceChanged", stack.getType().toString().toLowerCase(Locale.ENGLISH), oldPrice, price));
       }
   }
 
