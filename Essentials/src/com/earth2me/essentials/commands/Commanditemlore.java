@@ -57,6 +57,8 @@ public class Commanditemlore extends EssentialsCommand {
             } catch (Exception e) {
                 throw new Exception(tl("itemloreNoLine", line), e);
             }
+            im.setLore(lore);
+            item.setItemMeta(im);
             user.sendMessage(tl("itemloreSuccessLore", line, newLine));
         } else {
             throw new NotEnoughArgumentsException();
