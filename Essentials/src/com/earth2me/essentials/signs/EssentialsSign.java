@@ -19,6 +19,7 @@ import org.bukkit.event.block.SignChangeEvent;
 import org.bukkit.inventory.ItemStack;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
@@ -450,7 +451,7 @@ public class EssentialsSign {
       if (price == null || amount == 0) {
         return;
       }
-      price = price.multiply(multiplier).multiply(new BigDecimal(amount));
+      price = price.multiply(multiplier).multiply(new BigDecimal(amount)).setScale(2, RoundingMode.HALF_UP);
       final BigDecimal oldPrice = getMoney(getSignText(sign, 3), ess);
       if (oldPrice == null || price.compareTo(oldPrice) != 0) {
         sign.setLine(3, NumberUtil.shortCurrency(price, ess));
