@@ -983,7 +983,7 @@ public class Settings implements net.ess3.api.ISettings {
     public String _getVanishingItemsPolicy() {
         String value = config.getString("vanishing-items-policy", "keep").toLowerCase(Locale.ENGLISH);
         if (!value.equals("delete") && !value.equals("drop") && !value.equals("keep")) {
-            value = "delete";
+            value = "keep";
         }
         return value;
     }
@@ -998,7 +998,7 @@ public class Settings implements net.ess3.api.ISettings {
     public String _getBindingItemsPolicy() {
         String value = config.getString("binding-items-policy", "keep").toLowerCase(Locale.ENGLISH);
         if (!value.equals("delete") && !value.equals("drop") && !value.equals("keep")) {
-            value = "delete";
+            value = "keep";
         }
         return value;
     }
