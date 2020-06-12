@@ -114,7 +114,7 @@ public class EssentialsPlayerListener implements Listener {
             event.setCancelled(true);
 
             String dateDiff = user.getMuteTimeout() > 0 ? DateUtil.formatDateDiff(user.getMuteTimeout()) : "Permanent";
-            user.sendMessage(user.hasMuteReason() ? tl("voiceSilencedReasonNew", dateDiff, user.getMuteReason()) : tl("voiceSilencedNew", dateDiff));
+            user.sendMessage(user.hasMuteReason() ? tl("voiceSilencedReason", dateDiff, user.getMuteReason()) : tl("voiceSilenced", dateDiff));
 
             LOGGER.info(tl("mutedUserSpeaks", user.getName(), event.getMessage()));
         }
@@ -515,7 +515,8 @@ public class EssentialsPlayerListener implements Listener {
         final User user = ess.getUser(player);
         if (user.isMuted() && (ess.getSettings().getMuteCommands().contains(cmd) || ess.getSettings().getMuteCommands().contains("*"))) {
             event.setCancelled(true);
-            player.sendMessage(tl("voiceSilencedNew", user.getMuteTimeout() > 0 ? DateUtil.formatDateDiff(user.getMuteTimeout()) : "Permanent"));
+            String dateDiff = DateUtil.formatDateDiff(user.getMuteTimeout());
+            player.sendMessage(user.hasMuteReason() ? tl("voiceSilencedReasonNew", dateDiff, user.getMuteReason()) : tl("voiceSilencedNew", dateDiff));
             LOGGER.info(tl("mutedUserSpeaks", player.getName(), event.getMessage()));
             return;
         }
