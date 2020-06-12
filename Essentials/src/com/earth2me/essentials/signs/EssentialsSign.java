@@ -435,11 +435,15 @@ public class EssentialsSign {
             return new Trade(money, ess);
         }
     }
-    
+      
     /**
      * Updates the sign cost to the value of the item specified in worth.yml multiplied by a multiplier factor
+     * @param sign
+     * @param ess
+     * @param multiplier multiply the worth price by this amount
+     * @param changeOk set this to true if you don't want an Exception thrown when the price was updated
      */
-    protected void updateFromWorth(final ISign sign, final IEssentials ess, final BigDecimal multiplier) throws SignException {
+    protected void updateFromWorth(final ISign sign, final IEssentials ess, final BigDecimal multiplier, final boolean changeOk) throws SignException {
       final ItemStack stack = getItemStack(getSignText(sign, 2), getIntegerPositive(sign.getLine(1)), ess);
       final int amount = stack.getAmount();
       BigDecimal price = ess.getWorth().getPrice(ess, stack);
@@ -451,7 +455,9 @@ public class EssentialsSign {
       if (oldPrice == null || price.compareTo(oldPrice) != 0) {
         sign.setLine(3, NumberUtil.shortCurrency(price, ess));
         sign.updateSign();
-        throw new SignException(tl("priceChanged", stack.getType().toString().toLowerCase(Locale.ENGLISH), oldPrice, price));
+        if(!changeOk) {
+            throw new SignException(tl("priceChanged", stack.getType().toString().toLowerCase(Locale.ENGLISH), oldPrice, price));
+        }
       }
   }
 

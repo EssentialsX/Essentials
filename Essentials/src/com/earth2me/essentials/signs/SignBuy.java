@@ -18,12 +18,7 @@ public class SignBuy extends EssentialsSign {
     protected boolean onSignCreate(final ISign sign, final User player, final String username, final IEssentials ess) throws SignException {
         validateTrade(sign, 1, 2, player, ess);
         if(ess.getSettings().isBuySignUpdatedToWorth()) {
-            try {
-              updateFromWorth(sign, ess, ess.getSettings().getEcoBuyMultiplier());
-            }
-            catch (SignException e) {
-                // The price changed, which is to be expected on sign create
-            }
+            updateFromWorth(sign, ess, ess.getSettings().getEcoBuyMultiplier(), true);
         }
         validateTrade(sign, 3, ess);
         return true;
@@ -32,7 +27,7 @@ public class SignBuy extends EssentialsSign {
     @Override
     protected boolean onSignInteract(final ISign sign, final User player, final String username, final IEssentials ess) throws SignException, ChargeException, MaxMoneyException {
         if(ess.getSettings().isBuySignUpdatedToWorth()) {
-            updateFromWorth(sign, ess, ess.getSettings().getEcoBuyMultiplier());
+            updateFromWorth(sign, ess, ess.getSettings().getEcoBuyMultiplier(), false);
         }
         Trade items = getTrade(sign, 1, 2, player, ess);
         Trade charge = getTrade(sign, 3, ess);
