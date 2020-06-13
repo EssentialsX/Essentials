@@ -20,7 +20,7 @@ public class Commandmsg extends EssentialsLoopCommand {
 
     @Override
     public void run(Server server, CommandSource sender, String commandLabel, String[] args) throws Exception {
-        if (args.length < 2 || args[0].trim().length() < 2 || args[1].trim().isEmpty()) {
+        if (args.length < 2 || args[0].trim().isEmpty() || args[1].trim().isEmpty()) {
             throw new NotEnoughArgumentsException();
         }
 

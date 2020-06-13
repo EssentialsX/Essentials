@@ -32,6 +32,8 @@ public interface ISettings extends IConf {
 
     long getBackupInterval();
 
+    boolean isAlwaysRunBackup();
+
     String getChatFormat(String group);
 
     int getChatRadius();
@@ -278,6 +280,8 @@ public interface ISettings extends IConf {
 
     BigDecimal getMinimumPayAmount();
 
+    boolean isPayExcludesIgnoreList();
+
     long getLastMessageReplyRecipientTimeout();
 
     boolean isMilkBucketEasterEggEnabled();
@@ -355,5 +359,7 @@ public interface ISettings extends IConf {
     boolean isRemovingEffectsOnHeal();
 
     boolean isSpawnIfNoHome();
+
+    boolean infoAfterDeath();
 
 }

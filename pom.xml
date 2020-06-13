@@ -51,8 +51,6 @@
         <module>EssentialsXMPP</module>
         <module>nms/NMSProvider</module>
         <module>nms/UpdatedMetaProvider</module>
-        <module>nms/1_8_R1Provider</module>
-        <module>nms/1_8_R2Provider</module>
         <module>nms/LegacyProvider</module>
         <module>nms/ReflectionProvider</module>
         <module>nms/FlattenedProvider</module>
@@ -253,28 +251,6 @@
                         <tags>true</tags>
                     </gitDescribe>
                 </configuration>
-
-            </plugin>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>native2ascii-maven-plugin</artifactId>
-                <version>2.0.1</version>
-                <executions>
-                    <execution>
-                        <id>utf8-to-latin1</id>
-                        <goals>
-                            <goal>inplace</goal>
-                        </goals>
-                        <phase>process-resources</phase>
-                        <configuration>
-                            <dir>${project.build.outputDirectory}</dir>
-                            <encoding>${project.build.sourceEncoding}</encoding>
-                            <includes>
-                                <include>**/*.properties</include>
-                            </includes>
-                        </configuration>
-                    </execution>
-                </executions>
             </plugin>
         </plugins>
         <resources>
