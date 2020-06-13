@@ -18,7 +18,7 @@ public class LegacySpawnerProvider extends SpawnerProvider {
     }
 
     @Override
-    public String getHumanName() {
+    public String getDescription() {
         return "legacy item data provider";
     }
 }

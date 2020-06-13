@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with ASkyBlock.  If not, see <http://www.gnu.org/licenses/>.
  ******************************************************************************
-*/
+ */
 package net.ess3.nms.refl;
 
 import org.bukkit.Material;
@@ -95,7 +95,7 @@ public class SpawnEggRefl {
         }
         Object id = NBTTagCompoundConstructor.newInstance();
         Method tagSetString = ReflUtil.getMethodCached(NBTTagCompoundClass, "setString", String.class, String.class);
-        
+
         String idString = type.getName();
         if (ReflUtil.getNmsVersionObject().isHigherThanOrEqualTo(ReflUtil.V1_11_R1)) {
             // 1.11 requires domain prefix of minecraft.
@@ -152,4 +152,3 @@ public class SpawnEggRefl {
         }
     }
 }
-
