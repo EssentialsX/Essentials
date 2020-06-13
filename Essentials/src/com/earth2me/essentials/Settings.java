@@ -570,6 +570,7 @@ public class Settings implements net.ess3.api.ISettings {
         logCommandBlockCommands = _logCommandBlockCommands();
         nickBlacklist = _getNickBlacklist();
         maxProjectileSpeed = _getMaxProjectileSpeed();
+        removeEffectsOnHeal = _isRemovingEffectsOnHeal();
     }
 
     void _lateLoadItemSpawnBlacklist() {
