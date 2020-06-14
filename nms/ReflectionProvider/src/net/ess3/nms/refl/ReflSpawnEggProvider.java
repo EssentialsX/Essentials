@@ -30,7 +30,7 @@ public class ReflSpawnEggProvider extends SpawnEggProvider {
     }
 
     @Override
-    public String getDescription() {
+    public String getHumanName() {
         return "Reflection based provider";
     }
 }

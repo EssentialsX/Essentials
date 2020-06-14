@@ -26,7 +26,7 @@ public class BlockMetaSpawnerProvider extends SpawnerProvider {
     }
 
     @Override
-    public String getDescription() {
+    public String getHumanName() {
         return "1.8.3+ BlockStateMeta provider";
     }
 }

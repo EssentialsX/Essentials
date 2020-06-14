@@ -3,7 +3,6 @@ package com.earth2me.essentials.messaging;
 import com.earth2me.essentials.IEssentials;
 import com.earth2me.essentials.IUser;
 import com.earth2me.essentials.User;
-import net.ess3.api.events.PrivateMessagePreSendEvent;
 
 import java.lang.ref.WeakReference;
 
@@ -63,13 +62,6 @@ public class SimpleMessageRecipient implements IMessageRecipient {
     }
 
     @Override public MessageResponse sendMessage(IMessageRecipient recipient, String message) {
-        final PrivateMessagePreSendEvent event = new PrivateMessagePreSendEvent(this, recipient, message);
-        ess.getServer().getPluginManager().callEvent(event);
-        if (event.isCancelled()) {
-            return MessageResponse.EVENT_CANCELLED;
-        }
-
-        message = event.getMessage();
         MessageResponse messageResponse = recipient.onReceiveMessage(this.parent, message);
         switch (messageResponse) {
             case UNREACHABLE:

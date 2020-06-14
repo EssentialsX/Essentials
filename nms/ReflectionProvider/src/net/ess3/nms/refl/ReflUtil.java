@@ -36,7 +36,7 @@ public class ReflUtil {
         }
         return nmsVersion;
     }
-
+    
     public static NMSVersion getNmsVersionObject() {
         if (nmsVersionObject == null) {
             nmsVersionObject = NMSVersion.fromString(getNMSVersion());
@@ -224,7 +224,7 @@ public class ReflUtil {
 
     /**
      * https://gist.github.com/SupaHam/dad1db6406596c5f8e4b221ff473831c
-     *
+     * 
      * @author SupaHam (<a href="https://github.com/SupaHam">https://github.com/SupaHam</a>)
      */
     public static class NMSVersion implements Comparable<NMSVersion> {
@@ -232,7 +232,7 @@ public class ReflUtil {
         private final int major;
         private final int minor;
         private final int release;
-
+        
         public static NMSVersion fromString(String string) {
             Preconditions.checkNotNull(string, "string cannot be null.");
             Matcher matcher = VERSION_PATTERN.matcher(string);
@@ -251,19 +251,19 @@ public class ReflUtil {
             this.minor = minor;
             this.release = release;
         }
-
+        
         public boolean isHigherThan(NMSVersion o) {
             return compareTo(o) > 0;
         }
-
+        
         public boolean isHigherThanOrEqualTo(NMSVersion o) {
             return compareTo(o) >= 0;
         }
-
+        
         public boolean isLowerThan(NMSVersion o) {
             return compareTo(o) < 0;
         }
-
+        
         public boolean isLowerThanOrEqualTo(NMSVersion o) {
             return compareTo(o) <= 0;
         }
@@ -290,8 +290,8 @@ public class ReflUtil {
             }
             NMSVersion that = (NMSVersion) o;
             return major == that.major &&
-                    minor == that.minor &&
-                    release == that.release;
+                minor == that.minor &&
+                release == that.release;
         }
 
         @Override
@@ -301,7 +301,7 @@ public class ReflUtil {
 
         @Override
         public String toString() {
-            return "v" + major + "_" + minor + "_R" + release;
+            return "v" + major + "_" + minor  + "_R" + release;
         }
 
         @Override

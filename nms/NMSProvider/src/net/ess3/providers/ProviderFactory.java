@@ -5,24 +5,25 @@ import java.util.logging.Logger;
 public class ProviderFactory<T extends Provider> {
     private Logger logger;
     private String providerType;
-    private Iterable<Class<? extends T>> providers;
+    private Iterable<Class <? extends T>> availableProviders;
 
-    public ProviderFactory(Logger logger, Iterable<Class<? extends T>> providers, String providerType) {
+    public ProviderFactory(Logger logger, Iterable<Class <? extends T>> availableProviders, String providerType) {
         this.logger = logger;
         this.providerType = providerType;
-        this.providers = providers;
+        this.availableProviders = availableProviders;
     }
 
     public T getProvider() {
-        for (Class<? extends T> providerClass : providers) {
-            T provider = loadProvider(providerClass);
-            if (provider != null && provider.tryProvider()) {
-                logger.info("Using " + provider.getDescription() + " as " + providerType + " provider.");
-                return provider;
+        T finalProvider = null;
+        for (Class<? extends T> providerClass : availableProviders) {
+            finalProvider = loadProvider(providerClass);
+            if (finalProvider != null && finalProvider.tryProvider()) {
+                break;
             }
         }
-        logger.severe("The " + providerType + " provider failed to load! Some parts of Essentials may not function correctly.");
-        return null;
+        assert finalProvider != null;
+        logger.info("Using " + finalProvider.getHumanName() + " as " + providerType + " provider.");
+        return finalProvider;
     }
 
     private T loadProvider(Class<? extends T> providerClass) {

@@ -33,11 +33,9 @@ public class Commandbigtree extends EssentialsCommand {
             throw new NotEnoughArgumentsException();
         }
 
-        final Location loc = LocationUtil.getTarget(user.getBase()).add(0, 1, 0);
-        if (!user.getWorld().getBlockAt(loc).isPassable()) {
-            throw new Exception(tl("bigTreeFailure"));
-        }
-        final boolean success = user.getWorld().generateTree(loc, tree);
+        final Location loc = LocationUtil.getTarget(user.getBase());
+        final Location safeLocation = LocationUtil.getSafeDestination(loc);
+        final boolean success = user.getWorld().generateTree(safeLocation, tree);
         if (success) {
             user.sendMessage(tl("bigTreeSuccess"));
         } else {

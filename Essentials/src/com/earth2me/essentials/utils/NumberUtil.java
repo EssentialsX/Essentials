@@ -88,15 +88,6 @@ public class NumberUtil {
         return sign + tl("currency", ess.getSettings().getCurrencySymbol(), currency);
     }
 
-    public static String sanitizeCurrencyString(final String input, final IEssentials ess) {
-        String symbol = ess.getSettings().getCurrencySymbol();
-        boolean suffix = ess.getSettings().isCurrencySymbolSuffixed();
-        if (input.contains(symbol)) {
-            return suffix ? input.substring(0, input.indexOf(symbol)) : input.substring(symbol.length());
-        }
-        return input;
-    }
-
     public static boolean isInt(final String sInt) {
         try {
             Integer.parseInt(sInt);
