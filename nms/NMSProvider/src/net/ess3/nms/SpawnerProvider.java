@@ -10,7 +10,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.Map;
 
-public abstract class SpawnerItemProvider implements Provider {
+public abstract class SpawnerProvider implements Provider {
     private Map<EntityType, String> entityToDisplayName = ImmutableMap.<EntityType, String>builder()
             .put(EntityType.CAVE_SPIDER, "Cave Spider")
             .put(EntityType.PIG_ZOMBIE, "Zombie Pigman")

@@ -40,17 +40,14 @@ import net.ess3.api.ISettings;
 import net.ess3.api.*;
 import net.ess3.nms.PotionMetaProvider;
 import net.ess3.nms.SpawnEggProvider;
-import net.ess3.nms.SpawnerBlockProvider;
-import net.ess3.nms.SpawnerItemProvider;
+import net.ess3.nms.SpawnerProvider;
 import net.ess3.nms.flattened.FlatSpawnEggProvider;
 import net.ess3.nms.legacy.LegacyPotionMetaProvider;
 import net.ess3.nms.legacy.LegacySpawnEggProvider;
-import net.ess3.nms.legacy.LegacySpawnerItemProvider;
+import net.ess3.nms.legacy.LegacySpawnerProvider;
 import net.ess3.nms.refl.ReflSpawnEggProvider;
-import net.ess3.nms.refl.ReflSpawnerBlockProvider;
 import net.ess3.nms.updatedmeta.BasePotionDataProvider;
-import net.ess3.nms.updatedmeta.BlockMetaSpawnerItemProvider;
-import net.ess3.nms.updatedmeta.BukkitSpawnerBlockProvider;
+import net.ess3.nms.updatedmeta.BlockMetaSpawnerProvider;
 import net.ess3.providers.ProviderFactory;
 import org.bukkit.Bukkit;
 import org.bukkit.Server;
@@ -111,8 +108,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
     private transient EssentialsTimer timer;
     private final transient Set<String> vanishedPlayers = new LinkedHashSet<>();
     private transient Method oldGetOnlinePlayers;
-    private transient SpawnerItemProvider spawnerItemProvider;
-    private transient SpawnerBlockProvider spawnerBlockProvider;
+    private transient SpawnerProvider spawnerProvider;
     private transient SpawnEggProvider spawnEggProvider;
     private transient PotionMetaProvider potionMetaProvider;
     private transient Kits kits;
@@ -250,16 +246,11 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
                 confList.add(jails);
                 execTimer.mark("Init(Jails)");
 
-                spawnerItemProvider = new ProviderFactory<>(getLogger(),
+                spawnerProvider = new ProviderFactory<>(getLogger(),
                         Arrays.asList(
-                                BlockMetaSpawnerItemProvider.class,
-                                LegacySpawnerItemProvider.class
-                        ), "mob spawner item").getProvider();
-                spawnerBlockProvider = new ProviderFactory<>(getLogger(),
-                        Arrays.asList(
-                                BukkitSpawnerBlockProvider.class,
-                                ReflSpawnerBlockProvider.class
-                        ), "mob spawner block").getProvider();
+                                BlockMetaSpawnerProvider.class,
+                                LegacySpawnerProvider.class
+                        ), "mob spawner").getProvider();
                 spawnEggProvider = new ProviderFactory<>(getLogger(),
                         Arrays.asList(
                                 FlatSpawnEggProvider.class,
@@ -932,13 +923,8 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
     }
 
     @Override
-    public SpawnerItemProvider getSpawnerItemProvider() {
-        return spawnerItemProvider;
-    }
-
-    @Override
-    public SpawnerBlockProvider getSpawnerBlockProvider() {
-        return spawnerBlockProvider;
+    public SpawnerProvider getSpawnerProvider() {
+        return spawnerProvider;
     }
 
     @Override

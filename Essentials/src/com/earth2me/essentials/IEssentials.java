@@ -6,8 +6,7 @@ import com.earth2me.essentials.api.IWarps;
 import com.earth2me.essentials.metrics.Metrics;
 import com.earth2me.essentials.perm.PermissionsHandler;
 import com.earth2me.essentials.register.payment.Methods;
-import net.ess3.nms.SpawnerBlockProvider;
-import net.ess3.nms.SpawnerItemProvider;
+import net.ess3.nms.SpawnerProvider;
 import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -106,7 +105,5 @@ public interface IEssentials extends Plugin {
 
     Iterable<User> getOnlineUsers();
 
-    SpawnerItemProvider getSpawnerItemProvider();
-
-    SpawnerBlockProvider getSpawnerBlockProvider();
+    SpawnerProvider getSpawnerProvider();
 }

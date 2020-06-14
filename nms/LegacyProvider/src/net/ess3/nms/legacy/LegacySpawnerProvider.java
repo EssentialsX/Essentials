@@ -1,11 +1,11 @@
 package net.ess3.nms.legacy;
 
-import net.ess3.nms.SpawnerItemProvider;
+import net.ess3.nms.SpawnerProvider;
 import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
 
 @SuppressWarnings("deprecation")
-public class LegacySpawnerItemProvider extends SpawnerItemProvider {
+public class LegacySpawnerProvider extends SpawnerProvider {
     @Override
     public ItemStack setEntityType(ItemStack is, EntityType type) {
         is.getData().setData((byte) type.getTypeId());
