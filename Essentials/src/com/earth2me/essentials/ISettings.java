@@ -144,10 +144,6 @@ public interface ISettings extends IConf {
     boolean isDebug();
 
     boolean isEcoDisabled();
-
-    boolean isBuySignUpdatedToWorth();
-
-    boolean isSellSignUpdatedToWorth();
     
     BigDecimal getEcoBuyMultiplier();
 

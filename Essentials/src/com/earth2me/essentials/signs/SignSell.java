@@ -10,6 +10,8 @@ import org.bukkit.inventory.ItemStack;
 
 import java.math.BigDecimal;
 
+import static com.earth2me.essentials.I18n.tl;
+
 
 public class SignSell extends EssentialsSign {
     public SignSell() {
@@ -19,16 +21,18 @@ public class SignSell extends EssentialsSign {
     @Override
     protected boolean onSignCreate(final ISign sign, final User player, final String username, final IEssentials ess) throws SignException {
         validateTrade(sign, 1, 2, player, ess);  
-        if(ess.getSettings().isSellSignUpdatedToWorth()) {
+        if(sign.getLine(3).isEmpty()) {
             updateFromWorth(sign, ess, new BigDecimal("1.0"), true);
         }
-        validateTrade(sign, 3, ess);
+        else {
+            validateTrade(sign, 3, ess);
+        }
         return true;
     }
 
     @Override
     protected boolean onSignInteract(final ISign sign, final User player, final String username, final IEssentials ess) throws SignException, ChargeException, MaxMoneyException {
-        if(ess.getSettings().isSellSignUpdatedToWorth()) {
+        if(sign.getLine(3).startsWith(tl("signFormatWorth"))) {
             updateFromWorth(sign, ess, new BigDecimal("1.0"), false);
         }
         Trade charge = getTrade(sign, 1, 2, player, ess);

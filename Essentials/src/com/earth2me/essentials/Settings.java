@@ -739,16 +739,6 @@ public class Settings implements net.ess3.api.ISettings {
         return economyDisabled;
     }
 
-    @Override
-    public boolean isBuySignUpdatedToWorth() {
-      return config.getBoolean("economy-update-buy-sign-to-worth", false);
-    }
-
-    @Override
-    public boolean isSellSignUpdatedToWorth() {
-      return config.getBoolean("economy-update-sell-sign-to-worth", false);
-    }
-
     private BigDecimal economyBuyMultiplier;
 
     private BigDecimal _getEcoBuyMultiplier() {
