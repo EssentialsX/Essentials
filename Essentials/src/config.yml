@@ -371,6 +371,8 @@ unprotected-sign-names:
 backup:
   # Interval in minutes.
   interval: 30
+  # If true, the backup task will run even if there are no players online.
+  always-run: false
   # Unless you add a valid backup command or script here, this feature will be useless.
   # Use 'save-all' to simply force regular world saving without backup.
   #command: 'rdiff-backup World1 backups/World1'
@@ -457,17 +459,17 @@ broadcast-afk-message: true
 # You can disable the death messages of Minecraft here.
 death-messages: true
 
+# When players die, should they receive the coordinates they died at?
+send-info-after-death: false
+
 # Should players with permissions be able to join and part silently?
 # You can control this with essentials.silentjoin and essentials.silentquit permissions if it is enabled.
 # In addition, people with essentials.silentjoin.vanish will be vanished on join.
 allow-silent-join-quit: false
 
-# You can set a custom join message here, set to "none" to disable.
-# You may use color codes, use {USERNAME} the player's name or {PLAYER} for the player's displayname.
+# You can set custom join and quit messages here. Set to "none" to use the default message or "" to disable the message entirely.
+# You may use color codes, {USERNAME} for the player's name, and {PLAYER} for the player's displayname.
 custom-join-message: "none"
-
-# You can set a custom quit message here, set to "none" to disable.
-# You may use color codes, use {USERNAME} the player's name or {PLAYER} for the player's displayname.
 custom-quit-message: "none"
 
 # Add worlds to this list, if you want to automatically disable god mode there.
@@ -619,6 +621,7 @@ max-projectile-speed: 8
 ############################################################
 
 # Allows people to set their bed during the day.
+# This setting has no effect in Minecraft 1.15+, as Minecraft will always allow the player to set their bed location during the day.
 update-bed-at-daytime: true
 
 # Set to true to enable per-world permissions for using homes to teleport between worlds.
@@ -699,6 +702,9 @@ economy-log-update-enabled: false
 
 # Minimum acceptable amount to be used in /pay.
 minimum-pay-amount: 0.001
+
+# Enable this to block users who try to /pay another user which ignore them.
+pay-excludes-ignore-list: false
 
 # The format of currency, excluding symbols. See currency-symbol-format-locale for symbol configuration.
 #

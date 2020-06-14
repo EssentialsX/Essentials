@@ -5,7 +5,7 @@ main: com.earth2me.essentials.Essentials
 version: ${full.version}
 website: http://tiny.cc/EssentialsCommands
 description: Provides an essential, core set of commands for Bukkit.
-softdepend: [Vault]
+softdepend: [Vault, LuckPerms]
 authors: [Zenexer, ementalo, Aelux, Brettflan, KimKandor, snowleo, ceulemans, Xeology, KHobbits, md_5, Iaccidentally, drtshock, vemacs, SupaHam, md678685]
 api-version: "1.13"
 commands:
@@ -360,6 +360,10 @@ commands:
     description: Repairs the durability of one or all items.
     usage: /<command> [hand|all]
     aliases: [fix,efix,erepair]
+  rest:
+    description: Rests you or the given player.
+    usage: /<command> [player]
+    aliases: [erest]
   rules:
     description: Views the server rules.
     usage: /<command> [chapter] [page]
@@ -424,6 +428,10 @@ commands:
     description: Temporary ban a user.
     usage: /<command> <playername> <datediff> <reason>
     aliases: [etempban]
+  tempbanip:
+    description: Temporarily ban an IP Address.
+    usage: /<command> <playername> <datediff> <reason>
+    aliases: [etempbanip]
   thunder:
     description: Enable/disable thunder.
     usage: /<command> <true/false> [duration]
@@ -628,6 +636,12 @@ permissions:
   essentials.balancetop.exclude:
     default: false
     description: Players with this permission are excluded from the balancetop
+  essentials.back.onteleport:
+    default: true
+    description: Players with this permission will have back location stored during any teleportation
+  essentials.back.ondeath:
+    default: false
+    description: Players with this permission will have back location stored during death
   essentials.exempt:
     default: false
     description: Parent permission to be exempt from many moderator actions

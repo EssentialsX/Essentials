@@ -16,3 +16,4 @@
 # Build files
 target/
 jars/
+out/

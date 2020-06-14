@@ -425,6 +425,11 @@ public class Settings implements net.ess3.api.ISettings {
         return config.getString("backup.command", null);
     }
 
+    @Override
+    public boolean isAlwaysRunBackup() {
+        return config.getBoolean("backup.always-run", false);
+    }
+
     private final Map<String, String> chatFormats = Collections.synchronizedMap(new HashMap<>());
 
     @Override
@@ -565,6 +570,7 @@ public class Settings implements net.ess3.api.ISettings {
         logCommandBlockCommands = _logCommandBlockCommands();
         nickBlacklist = _getNickBlacklist();
         maxProjectileSpeed = _getMaxProjectileSpeed();
+        removeEffectsOnHeal = _isRemovingEffectsOnHeal();
     }
 
     void _lateLoadItemSpawnBlacklist() {
@@ -1253,6 +1259,11 @@ public class Settings implements net.ess3.api.ISettings {
         return new BigDecimal(config.getString("minimum-pay-amount", "0.001"));
     }
 
+    @Override
+    public boolean isPayExcludesIgnoreList() {
+        return config.getBoolean("pay-excludes-ignore-list", false);
+    }
+
     @Override public long getLastMessageReplyRecipientTimeout() {
         return config.getLong("last-message-reply-recipient-timeout", 180);
     }
@@ -1678,5 +1689,10 @@ public class Settings implements net.ess3.api.ISettings {
     @Override
     public boolean isSpawnIfNoHome() {
         return config.getBoolean("spawn-if-no-home", true);
+    }
+    
+    @Override
+    public boolean infoAfterDeath() {
+        return config.getBoolean("send-info-after-death", false);
     }
 }

@@ -7,6 +7,8 @@ import org.bukkit.plugin.Plugin;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Function;
+import java.util.function.Supplier;
 
 
 public class SuperpermsHandler implements IPermissionsHandler {
@@ -70,6 +72,14 @@ public class SuperpermsHandler implements IPermissionsHandler {
     @Override
     public String getSuffix(final Player base) {
         return null;
+    }
+
+    @Override
+    public void registerContext(String context, Function<Player, Iterable<String>> calculator, Supplier<Iterable<String>> suggestions) {
+    }
+
+    @Override
+    public void unregisterContexts() {
     }
 
     @Override
