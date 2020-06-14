@@ -11,7 +11,6 @@ import net.ess3.nms.SpawnerBlockProvider;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Server;
-import org.bukkit.block.Block;
 import org.bukkit.block.CreatureSpawner;
 
 import java.util.Locale;
