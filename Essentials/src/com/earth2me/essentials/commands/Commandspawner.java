@@ -7,16 +7,13 @@ import com.earth2me.essentials.utils.EnumUtil;
 import com.earth2me.essentials.utils.LocationUtil;
 import com.earth2me.essentials.utils.NumberUtil;
 import com.earth2me.essentials.utils.StringUtil;
-import com.earth2me.essentials.utils.VersionUtil;
-import net.ess3.nms.refl.ReflUtil;
+import net.ess3.nms.SpawnerBlockProvider;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Server;
 import org.bukkit.block.Block;
 import org.bukkit.block.CreatureSpawner;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 import java.util.Locale;
 
 import static com.earth2me.essentials.I18n.tl;
@@ -62,30 +59,14 @@ public class Commandspawner extends EssentialsCommand {
         final Trade charge = new Trade("spawner-" + mob.name.toLowerCase(Locale.ENGLISH), ess);
         charge.isAffordableFor(user);
         try {
-            Block block = target.getBlock();
-            CreatureSpawner spawner = (CreatureSpawner) block.getState();
+            CreatureSpawner spawner = (CreatureSpawner) target.getBlock().getState();
             spawner.setSpawnedType(mob.getType());
             if (delay > 0) {
-                if (VersionUtil.getServerBukkitVersion().isHigherThanOrEqualTo(VersionUtil.v1_12_2_R01)) {
-                    spawner.setMinSpawnDelay(0);
-                    spawner.setMaxSpawnDelay(Integer.MAX_VALUE);
-                    spawner.setMinSpawnDelay(delay);
-                    spawner.setMaxSpawnDelay(delay);
-                } else {
-                    Class<?> craftWorld = ReflUtil.getOBCClass("CraftWorld");
-                    Class<?> tileEntityMobSpawner = ReflUtil.getNMSClass("TileEntityMobSpawner");
-                    Class<?> mobSpawnerAbstract = ReflUtil.getNMSClass("MobSpawnerAbstract");
-                    Method getSpawner = tileEntityMobSpawner.getDeclaredMethod("getSpawner");
-                    Method getTileEntityAt = craftWorld.getDeclaredMethod("getTileEntityAt", int.class, int.class, int.class);
-                    Object craftTileEntity = getTileEntityAt.invoke(block.getWorld(), block.getX(), block.getY(), block.getZ());
-                    Object nmsSpawner = getSpawner.invoke(craftTileEntity);
-                    Field minSpawnDelay = ReflUtil.getFieldCached(mobSpawnerAbstract, "minSpawnDelay");
-                    Field maxSpawnDelay = ReflUtil.getFieldCached(mobSpawnerAbstract, "maxSpawnDelay");
-                    if (minSpawnDelay != null && maxSpawnDelay != null) {
-                        minSpawnDelay.setInt(nmsSpawner, delay);
-                        maxSpawnDelay.setInt(nmsSpawner, delay);
-                    }
-                }
+                SpawnerBlockProvider spawnerBlockProvider = ess.getSpawnerBlockProvider();
+                spawnerBlockProvider.setMinSpawnDelay(spawner, 1);
+                spawnerBlockProvider.setMaxSpawnDelay(spawner, Integer.MAX_VALUE);
+                spawnerBlockProvider.setMinSpawnDelay(spawner, delay);
+                spawnerBlockProvider.setMaxSpawnDelay(spawner, delay);
             }
             spawner.setDelay(delay);
             spawner.update();
