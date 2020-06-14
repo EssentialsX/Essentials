@@ -1,13 +1,13 @@
 package net.ess3.nms.updatedmeta;
 
-import net.ess3.nms.SpawnerProvider;
+import net.ess3.nms.SpawnerItemProvider;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.CreatureSpawner;
 import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BlockStateMeta;
 
-public class BlockMetaSpawnerProvider extends SpawnerProvider {
+public class BlockMetaSpawnerItemProvider extends SpawnerItemProvider {
     @Override
     public ItemStack setEntityType(ItemStack is, EntityType type) {
         BlockStateMeta bsm = (BlockStateMeta) is.getItemMeta();
