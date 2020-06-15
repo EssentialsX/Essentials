@@ -2,16 +2,19 @@ package com.earth2me.essentials.perm;
 
 import com.earth2me.essentials.Essentials;
 import com.earth2me.essentials.perm.impl.*;
+import com.google.common.collect.ImmutableSet;
 import org.bukkit.entity.Player;
 
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.function.Function;
+import java.util.function.Supplier;
 import java.util.logging.Level;
 
 public class PermissionsHandler implements IPermissionsHandler {
     private transient IPermissionsHandler handler = null;
-    private transient String defaultGroup = "default";
+    private final transient String defaultGroup = "default";
     private final transient Essentials ess;
     private transient boolean useSuperperms;
 
@@ -90,6 +93,16 @@ public class PermissionsHandler implements IPermissionsHandler {
     }
 
     @Override
+    public void registerContext(String context, Function<Player, Iterable<String>> calculator, Supplier<Iterable<String>> suggestions) {
+        handler.registerContext(context, calculator, suggestions);
+    }
+
+    @Override
+    public void unregisterContexts() {
+        handler.unregisterContexts();
+    }
+
+    @Override
     public boolean tryProvider() {
         return true;
     }
@@ -97,6 +110,7 @@ public class PermissionsHandler implements IPermissionsHandler {
     public void checkPermissions() {
         // load and assign a handler
         List<Class<? extends SuperpermsHandler>> providerClazz = Arrays.asList(
+                LuckPermsHandler.class,
                 ModernVaultHandler.class,
                 GenericVaultHandler.class,
                 SuperpermsHandler.class
@@ -105,7 +119,14 @@ public class PermissionsHandler implements IPermissionsHandler {
             try {
                 IPermissionsHandler provider = providerClass.newInstance();
                 if (provider.tryProvider()) {
+                    if (provider.getClass().isInstance(this.handler)) {
+                        return;
+                    }
+                    if (this.handler != null) {
+                        unregisterContexts();
+                    }
                     this.handler = provider;
+                    initContexts();
                     break;
                 }
             } catch (Throwable ignored) {
@@ -158,6 +179,12 @@ public class PermissionsHandler implements IPermissionsHandler {
         if (elapsed > ess.getSettings().getPermissionsLagWarning()) {
             ess.getLogger().log(Level.WARNING, String.format("Permissions lag notice with (%s). Response took %fms. Summary: %s", getName(), elapsed / 1000000.0, summary));
         }
+    }
+
+    private void initContexts() {
+        registerContext("essentials:afk", player -> Collections.singleton(String.valueOf(ess.getUser(player).isAfk())), () -> ImmutableSet.of("true", "false"));
+        registerContext("essentials:muted", player -> Collections.singleton(String.valueOf(ess.getUser(player).isMuted())), () -> ImmutableSet.of("true", "false"));
+        registerContext("essentials:vanished", player -> Collections.singleton(String.valueOf(ess.getUser(player).isHidden())), () -> ImmutableSet.of("true", "false"));
     }
 
 }

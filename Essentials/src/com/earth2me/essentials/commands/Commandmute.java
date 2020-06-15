@@ -8,6 +8,7 @@ import net.ess3.api.events.MuteStatusChangeEvent;
 import net.ess3.api.events.TempMuteStatusChangeEvent;
 import org.bukkit.Server;
 
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.logging.Level;
 
@@ -43,35 +44,41 @@ public class Commandmute extends EssentialsCommand {
         }
 
         long muteTimestamp = 0;
+        String time;
         String muteReason = null;
 
         if (args.length > 1) {
-            final String time = args[1];
+            time = args[1];
             try {
                 muteTimestamp = DateUtil.parseDateDiff(time, true);
                 muteReason = getFinalArg(args, 2);
             } catch (Exception e) {
                 muteReason = getFinalArg(args, 1);
             }
+            final long maxMuteLength = ess.getSettings().getMaxMute() * 1000;
+            if (maxMuteLength > 0 && ((muteTimestamp - GregorianCalendar.getInstance().getTimeInMillis()) > maxMuteLength) && sender.isPlayer() && !(ess.getUser(sender.getPlayer()).isAuthorized("essentials.mute.unlimited"))) {
+                sender.sendMessage(tl("oversizedMute"));
+                throw new NoChargeException();
+            }
         }
-        
+
         final boolean willMute = (args.length > 1) || !user.getMuted();
         final User controller = sender.isPlayer() ? ess.getUser(sender.getPlayer()) : null;
         final MuteStatusChangeEvent event;
-        if(muteTimestamp == 0) {
+        if (muteTimestamp == 0) {
             event = new MuteStatusChangeEvent(user, controller, willMute, muteReason);
         } else {
             event = new TempMuteStatusChangeEvent(user, controller, muteReason, muteTimestamp);
         }
         ess.getServer().getPluginManager().callEvent(event);
-        
+
         if (!event.isCancelled()) {
             muteReason = event.getReason();
-            if(event instanceof TempMuteStatusChangeEvent) {
+            if (event instanceof TempMuteStatusChangeEvent) {
                 muteTimestamp = ((TempMuteStatusChangeEvent) event).getTimestamp();
             }
 
-            if (args.length > 1) {
+            if (muteReason != null) {
                 user.setMuteReason(muteReason.isEmpty() ? null : muteReason);
                 user.setMuted(true);
             } else {
@@ -80,7 +87,6 @@ public class Commandmute extends EssentialsCommand {
                     user.setMuteReason(null);
                 }
             }
-
 
             user.setMuteTimeout(muteTimestamp);
             final boolean muted = user.getMuted();

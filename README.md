@@ -1,4 +1,4 @@
-[![EssentialsX](https://i.imgur.com/CP4SZpB.png)](https://essentialsx.github.io)
+[![EssentialsX](https://i.imgur.com/CP4SZpB.png)](https://essentialsx.cf)
 
 [<img alt="Jenkins" src="https://img.shields.io/badge/-Download_from_Jenkins-D24939.svg?logo=jenkins&style=flat-square&logoColor=white" height=32>](http://ci.ender.zone/job/EssentialsX/)
 
@@ -26,7 +26,7 @@ EssentialsX is almost a completely drop-in replacement for Essentials. However, 
 
 * **EssentialsX requires Java 8 or higher.** On older versions, the plugin may not work properly.
 
-* **EssentialsX supports Minecraft versions 1.8.8, 1.9.4, 1.10.2, 1.11.2, 1.12.2, 1.13.2 and 1.14.4.**
+* **EssentialsX supports Minecraft versions 1.8.8, 1.9.4, 1.10.2, 1.11.2, 1.12.2, 1.13.2, 1.14.4, and 1.15.2.**
 
 
 Support
@@ -40,16 +40,8 @@ If you need to report a bug or want to suggest a new feature, you can [open an i
 Building
 --------
 
-EssentialsX builds against the Spigot/CraftBukkit server software for legacy support.
-
-To compile EssentialsX, you first need to run [BuildTools](https://www.spigotmc.org/wiki/buildtools).
-This only needs to be done once. There are two ways to do this:
-
-* Use the provided script at `scripts/buildtools.sh` to automatically download and run BuildTools if needed.
-* Download and run BuildTools yourself for versions `1.8` and `1.8.3`.
-
-Next, to build EssentialsX with Maven, run the following command:
-```
+To build EssentialsX, you need JDK 8 or higher and Maven installed on your system. Then, run the following command:
+```sh
 mvn clean install
 ```
 
@@ -58,7 +50,8 @@ Each module's jar can be found in `target/` inside each module's directory.
 Using EssentialsX in your plugin
 --------------------------------
 
-Writing a plugin and want to support EssentialsX? We have a Maven repository at https://ci.ender.zone/plugin/repository/everything/, and the EssentialsX artifact is `net.ess3:EssentialsX:2.17.0`. More information at the [wiki](https://github.com/EssentialsX/Essentials/wiki/Common-Issues#how-do-i-add-essentialsx-as-a-dependency).
+Do you want to integrate with EssentialsX in your plugin? EssentialsX is available on the **ender.zone Maven repository** at https://ci.ender.zone/plugin/repository/everything/, and the EssentialsX artifact is `net.ess3:EssentialsX:2.17.2`.
+More information at the [wiki](https://github.com/EssentialsX/Essentials/wiki/Common-Issues#how-do-i-add-essentialsx-as-a-dependency).
 
 
 Contributing

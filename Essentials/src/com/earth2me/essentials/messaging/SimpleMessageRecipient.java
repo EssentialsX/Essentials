@@ -3,6 +3,7 @@ package com.earth2me.essentials.messaging;
 import com.earth2me.essentials.IEssentials;
 import com.earth2me.essentials.IUser;
 import com.earth2me.essentials.User;
+import net.ess3.api.events.PrivateMessagePreSendEvent;
 
 import java.lang.ref.WeakReference;
 
@@ -62,6 +63,13 @@ public class SimpleMessageRecipient implements IMessageRecipient {
     }
 
     @Override public MessageResponse sendMessage(IMessageRecipient recipient, String message) {
+        final PrivateMessagePreSendEvent event = new PrivateMessagePreSendEvent(this, recipient, message);
+        ess.getServer().getPluginManager().callEvent(event);
+        if (event.isCancelled()) {
+            return MessageResponse.EVENT_CANCELLED;
+        }
+
+        message = event.getMessage();
         MessageResponse messageResponse = recipient.onReceiveMessage(this.parent, message);
         switch (messageResponse) {
             case UNREACHABLE:
@@ -81,7 +89,7 @@ public class SimpleMessageRecipient implements IMessageRecipient {
                     sendMessage(tl("userAFK", recipient.getDisplayName()));
                 }
             default:
-                sendMessage(tl("msgFormat", tl("me"), recipient.getDisplayName(), message));
+                sendMessage(tl("msgFormat", tl("meSender"), recipient.getDisplayName(), message));
 
                 // Better Social Spy
                 User senderUser = getUser(this);
@@ -132,7 +140,7 @@ public class SimpleMessageRecipient implements IMessageRecipient {
             }
         }
         // Display the formatted message to this recipient.
-        sendMessage(tl("msgFormat", sender.getDisplayName(), tl("me"), message));
+        sendMessage(tl("msgFormat", sender.getDisplayName(), tl("meRecipient"), message));
 
         if (isLastMessageReplyRecipient) {
             // If this recipient doesn't have a reply recipient, initiate by setting the first

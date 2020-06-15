@@ -14,6 +14,7 @@ import net.ess3.api.MaxMoneyException;
 import net.ess3.api.events.AfkStatusChangeEvent;
 import net.ess3.api.events.JailStatusChangeEvent;
 import net.ess3.api.events.MuteStatusChangeEvent;
+import net.ess3.api.events.TempMuteStatusChangeEvent;
 import net.ess3.api.events.UserBalanceUpdateEvent;
 import net.ess3.nms.refl.ReflUtil;
 
@@ -37,7 +38,7 @@ import static com.earth2me.essentials.I18n.tl;
 
 public class User extends UserData implements Comparable<User>, IMessageRecipient, net.ess3.api.IUser {
     private static final Logger logger = Logger.getLogger("Essentials");
-    private IMessageRecipient messageRecipient;
+    private final IMessageRecipient messageRecipient;
     private transient UUID teleportRequester;
     private transient boolean teleportRequestHere;
     private transient Location teleportLocation;
@@ -57,7 +58,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
     private boolean ignoreMsg = false;
     private String afkMessage;
     private long afkSince;
-    private Map<User, BigDecimal> confirmingPayments = new WeakHashMap<>();
+    private final Map<User, BigDecimal> confirmingPayments = new WeakHashMap<>();
     private String confirmingClearCommand;
     private long lastNotifiedAboutMailsMs;
 
@@ -187,8 +188,8 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
         }
 
         if (canAfford(value)) {
-            setMoney(getMoney().subtract(value));
-            reciever.setMoney(reciever.getMoney().add(value));
+            setMoney(getMoney().subtract(value), cause);
+            reciever.setMoney(reciever.getMoney().add(value), cause);
             sendMessage(tl("moneySentTo", NumberUtil.displayCurrency(value, ess), reciever.getDisplayName()));
             reciever.sendMessage(tl("moneyRecievedFrom", NumberUtil.displayCurrency(value, ess), getDisplayName()));
         } else {
@@ -238,12 +239,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
     }
 
     public void dispose() {
-        ess.runTaskAsynchronously(new Runnable() {
-            @Override
-            public void run() {
-                _dispose();
-            }
-        });
+        ess.runTaskAsynchronously(this::_dispose);
     }
 
     private void _dispose() {
@@ -346,7 +342,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
                     prefix.insert(0, opPrefix.toString());
                     suffix = "§r";
                 }
-            } catch (Exception e) {
+            } catch (Exception ignored) {
             }
         }
 
@@ -444,7 +440,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
                 }
                 final Method.MethodAccount account = Methods.getMethod().getAccount(this.getName());
                 return BigDecimal.valueOf(account.balance());
-            } catch (Exception ex) {
+            } catch (Exception ignored) {
             }
         }
         return super.getMoney();
@@ -476,7 +472,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
                 }
                 final Method.MethodAccount account = Methods.getMethod().getAccount(this.getName());
                 account.set(newBalance.doubleValue());
-            } catch (Exception ex) {
+            } catch (Exception ignored) {
             }
         }
         super.setMoney(newBalance, true);
@@ -487,7 +483,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
         if (ess.getSettings().isEcoDisabled()) {
             return;
         }
-        if (Methods.hasMethod() && super.getMoney() != value) {
+        if (Methods.hasMethod() && !super.getMoney().equals(value)) {
             try {
                 super.setMoney(value, false);
             } catch (MaxMoneyException ex) {
@@ -498,7 +494,12 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
 
     @Override
     public void setAfk(final boolean set) {
-        final AfkStatusChangeEvent afkEvent = new AfkStatusChangeEvent(this, set);
+        setAfk(set, AfkStatusChangeEvent.Cause.UNKNOWN);
+    }
+
+    @Override
+    public void setAfk(boolean set, AfkStatusChangeEvent.Cause cause) {
+        final AfkStatusChangeEvent afkEvent = new AfkStatusChangeEvent(this, set, cause);
         ess.getServer().getPluginManager().callEvent(afkEvent);
         if (afkEvent.isCancelled()) {
             return;
@@ -516,7 +517,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
         _setAfk(set);
         updateAfkListName();
     }
-    
+
     private void updateAfkListName() {
         if (ess.getSettings().isAfkListName()) {
             if(isAfk()) {
@@ -528,8 +529,13 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
         }
     }
 
+    @Deprecated
     public boolean toggleAfk() {
-        setAfk(!isAfk());
+        return toggleAfk(AfkStatusChangeEvent.Cause.UNKNOWN);
+    }
+
+    public boolean toggleAfk(AfkStatusChangeEvent.Cause cause) {
+        setAfk(!isAfk(), cause);
         return isAfk();
     }
 
@@ -545,7 +551,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
     @Override
     public void setHidden(final boolean hidden) {
         this.hidden = hidden;
-        if (hidden == true) {
+        if (hidden) {
             setLastLogout(getLastOnlineActivity());
         }
     }
@@ -567,7 +573,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
                     } catch (Exception ex) {
                         try {
                             getTeleport().respawn(null, TeleportCause.PLUGIN);
-                        } catch (Exception ex1) {
+                        } catch (Exception ignored) {
                         }
                     }
                 }
@@ -580,7 +586,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
     //Returns true if status expired during this check
     public boolean checkMuteTimeout(final long currentTime) {
         if (getMuteTimeout() > 0 && getMuteTimeout() < currentTime && isMuted()) {
-            final MuteStatusChangeEvent event = new MuteStatusChangeEvent(this, null, false, null);
+            final MuteStatusChangeEvent event = new TempMuteStatusChangeEvent(this, null, getMuteReason(), getMuteTimeout());
             ess.getServer().getPluginManager().callEvent(event);
             
             if (!event.isCancelled()) {
@@ -594,14 +600,24 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
         return false;
     }
 
+    @Deprecated
     public void updateActivity(final boolean broadcast) {
+        updateActivity(broadcast, AfkStatusChangeEvent.Cause.UNKNOWN);
+    }
+
+    public void updateActivity(final boolean broadcast, AfkStatusChangeEvent.Cause cause) {
         if (isAfk()) {
-            setAfk(false);
+            setAfk(false, cause);
             if (broadcast && !isHidden()) {
                 setDisplayNick();
                 final String msg = tl("userIsNotAway", getDisplayName());
-                if (!msg.isEmpty()) {
-                    ess.broadcastMessage(this, msg);
+                final String selfmsg = tl("userIsNotAwaySelf", getDisplayName());
+                if (!msg.isEmpty() && ess.getSettings().broadcastAfkMessage()) {
+                    // exclude user from receiving general AFK announcement in favor of personal message
+                    ess.broadcastMessage(this, msg, u -> u == this);
+                }
+                if (!selfmsg.isEmpty()) {
+                    this.sendMessage(selfmsg);
                 }
             }
         }
@@ -610,13 +626,13 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
 
     public void updateActivityOnMove(final boolean broadcast) {
         if(ess.getSettings().cancelAfkOnMove()) {
-            updateActivity(broadcast);
+            updateActivity(broadcast, AfkStatusChangeEvent.Cause.MOVE);
         }
     }
 
     public void updateActivityOnInteract(final boolean broadcast) {
         if(ess.getSettings().cancelAfkOnInteract()) {
-            updateActivity(broadcast);
+            updateActivity(broadcast, AfkStatusChangeEvent.Cause.INTERACT);
         }
     }
 
@@ -644,12 +660,17 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
         }
         final long autoafk = ess.getSettings().getAutoAfk();
         if (!isAfk() && autoafk > 0 && lastActivity + autoafk * 1000 < System.currentTimeMillis() && isAuthorized("essentials.afk.auto")) {
-            setAfk(true);
+            setAfk(true, AfkStatusChangeEvent.Cause.ACTIVITY);
             if (!isHidden()) {
                 setDisplayNick();
                 final String msg = tl("userIsAway", getDisplayName());
-                if (!msg.isEmpty()) {
-                    ess.broadcastMessage(this, msg);
+                final String selfmsg = tl("userIsAwaySelf", getDisplayName());
+                if (!msg.isEmpty() && ess.getSettings().broadcastAfkMessage()) {
+                    // exclude user from receiving general AFK announcement in favor of personal message
+                    ess.broadcastMessage(this, msg, u -> u == this);
+                }
+                if (!selfmsg.isEmpty()) {
+                    this.sendMessage(selfmsg);
                 }
             }
         }
@@ -671,9 +692,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
         }
         if (isAfk()) {
             // Protect AFK players by representing them in a god mode state to render them invulnerable to damage.
-            if (ess.getSettings().getFreezeAfkPlayers()) {
-                return true;
-            }
+            return ess.getSettings().getFreezeAfkPlayers();
         }
         return false;
     }

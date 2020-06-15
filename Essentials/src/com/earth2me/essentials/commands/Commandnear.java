@@ -38,13 +38,13 @@ public class Commandnear extends EssentialsCommand {
             } catch (NumberFormatException e) {
                 try {
                     otherUser = getPlayer(server, user, args, 0);
-                } catch (Exception ex) {
+                } catch (Exception ignored) {
                 }
             }
             if (args.length > 1 && otherUser != null) {
                 try {
                     radius = Long.parseLong(args[1]);
-                } catch (NumberFormatException e) {
+                } catch (NumberFormatException ignored) {
                 }
             }
         }
@@ -72,7 +72,7 @@ public class Commandnear extends EssentialsCommand {
         if (args.length > 1) {
             try {
                 radius = Long.parseLong(args[1]);
-            } catch (NumberFormatException e) {
+            } catch (NumberFormatException ignored) {
             }
         }
         sender.sendMessage(tl("nearbyPlayers", getLocal(server, otherUser, radius)));
@@ -88,7 +88,7 @@ public class Commandnear extends EssentialsCommand {
         Queue<User> nearbyPlayers = new PriorityQueue<>((o1, o2) -> (int) (o1.getLocation().distanceSquared(loc) - o2.getLocation().distanceSquared(loc)));
 
         for (User player : ess.getOnlineUsers()) {
-            if (!player.equals(user) && (!player.isHidden(user.getBase()) || showHidden || user.getBase().canSee(player.getBase()))) {
+            if (!player.equals(user) && !player.isAuthorized("essentials.near.exclude") && (!player.isHidden(user.getBase()) || showHidden || user.getBase().canSee(player.getBase()))) {
                 final Location playerLoc = player.getLocation();
                 if (playerLoc.getWorld() != world) {
                     continue;

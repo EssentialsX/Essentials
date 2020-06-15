@@ -79,6 +79,10 @@ public class Commandexp extends EssentialsCommand {
             expMatch(server, sender, args[1], args[2], false);
         } else if (args.length > 2 && args[0].equalsIgnoreCase("give")) {
             expMatch(server, sender, args[1], args[2], true);
+        } else if (args.length > 2 && args[0].equalsIgnoreCase("take")) {
+            expMatch(server, sender, args[1], "-" + args[2], true);
+        } else if (args.length > 2 && args[0].equalsIgnoreCase("reset")) {
+            expMatch(server, sender, args[1], "0", false);
         } else {
             String match = args[0].trim();
             if (args.length >= 2 && NumberUtil.isInt(args[0].toLowerCase(Locale.ENGLISH).replace("l", ""))) {
@@ -139,7 +143,7 @@ public class Commandexp extends EssentialsCommand {
             if (give) {
                 neededLevel += target.getBase().getLevel();
             }
-            amount = (long) SetExpFix.getExpToLevel(neededLevel);
+            amount = SetExpFix.getExpToLevel(neededLevel);
             SetExpFix.setTotalExperience(target.getBase(), 0);
         } else {
             amount = Long.parseLong(strAmount);
@@ -152,10 +156,10 @@ public class Commandexp extends EssentialsCommand {
             amount += SetExpFix.getTotalExperience(target.getBase());
         }
         if (amount > Integer.MAX_VALUE) {
-            amount = (long) Integer.MAX_VALUE;
+            amount = Integer.MAX_VALUE;
         }
-        if (amount < 0l) {
-            amount = 0l;
+        if (amount < 0L) {
+            amount = 0L;
         }
         SetExpFix.setTotalExperience(target.getBase(), (int) amount);
         sender.sendMessage(tl("expSet", target.getDisplayName(), amount));
@@ -179,23 +183,22 @@ public class Commandexp extends EssentialsCommand {
             }
             return options;
         } else if (args.length == 2) {
-            if ((args[0].equalsIgnoreCase("set") && user.isAuthorized("essentials.exp.set")) || (args[0].equalsIgnoreCase("give") && user.isAuthorized("essentials.exp.give"))) {
-                String levellessArg = args[1].toLowerCase(Locale.ENGLISH).replace("l", "");
+            if ((args[0].equalsIgnoreCase("set") && user.isAuthorized("essentials.exp.set")) || (args[0].equalsIgnoreCase("give") && user.isAuthorized("essentials.exp.give")) || (args[0].equalsIgnoreCase("take") && user.isAuthorized("essentials.exp.take"))) {
+                String levellessArg = args[1].toLowerCase(Locale.ENGLISH).replaceAll("l", "");
                 if (NumberUtil.isInt(levellessArg)) {
-                    return Lists.newArrayList(levellessArg, args[1] + "l");
-                } else {
-                    return Collections.emptyList();
+                    return Lists.newArrayList(levellessArg + "l");
                 }
-            } else if (args[0].equalsIgnoreCase("show") && user.isAuthorized("essentials.exp.others")) {
-                return getPlayers(server, user);
-            } else {
-                return Collections.emptyList();
             }
-        } else if (args.length == 3 && (args[0].equalsIgnoreCase("set") && user.isAuthorized("essentials.exp.set.others")) || (args[0].equalsIgnoreCase("give") && user.isAuthorized("essentials.exp.give.others"))) {
-            return getPlayers(server, user);
-        } else {
-            return Collections.emptyList();
+            if (user.isAuthorized("essentials.exp.others")) {
+                return getPlayers(server, user);
+            }
+        } else if (args.length == 3 && !(args[0].equalsIgnoreCase("show") || args[0].equalsIgnoreCase("reset"))) {
+            String levellessArg = args[2].toLowerCase(Locale.ENGLISH).replaceAll("l", "");
+            if (NumberUtil.isInt(levellessArg)) {
+                return Lists.newArrayList(levellessArg + "l");
+            }
         }
+        return Collections.emptyList();
     }
 
     @Override

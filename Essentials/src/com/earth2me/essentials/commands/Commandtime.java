@@ -29,7 +29,7 @@ public class Commandtime extends EssentialsCommand {
             add = true;
             argList.set(0, argList.get(0) + "t");
         }
-        final String[] validArgs = argList.toArray(new String[argList.size()]);
+        final String[] validArgs = argList.toArray(new String[0]);
 
         // Which World(s) are we interested in?
         String worldSelector = null;

@@ -24,11 +24,10 @@ public class Commandlightning extends EssentialsLoopCommand {
 
     @Override
     public void run(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception {
-        User user;
         if (sender.isPlayer()) {
-            user = ess.getUser(sender.getPlayer());
-            if ((args.length < 1 || user != null && !user.isAuthorized("essentials.lightning.others"))) {
-                user.getWorld().strikeLightning(user.getBase().getTargetBlock((Set<Material>) null, 600).getLocation());
+            User user = ess.getUser(sender.getPlayer());
+            if ((args.length < 1 || !user.isAuthorized("essentials.lightning.others"))) {
+                user.getWorld().strikeLightning(user.getBase().getTargetBlock(null, 600).getLocation());
                 return;
             }
         }
@@ -36,7 +35,7 @@ public class Commandlightning extends EssentialsLoopCommand {
         if (args.length > 1) {
             try {
                 power = Integer.parseInt(args[1]);
-            } catch (NumberFormatException ex) {
+            } catch (NumberFormatException ignored) {
             }
         }
         loopOnlinePlayers(server, sender, true, true, args[0], null);
@@ -64,6 +63,7 @@ public class Commandlightning extends EssentialsLoopCommand {
             return super.getTabCompleteOptions(server, user, commandLabel, args);
         }
     }
+
     @Override
     protected List<String> getTabCompleteOptions(final Server server, final CommandSource sender, final String commandLabel, final String[] args) {
         if (args.length == 1) {

@@ -32,6 +32,8 @@ public interface ISettings extends IConf {
 
     long getBackupInterval();
 
+    boolean isAlwaysRunBackup();
+
     String getChatFormat(String group);
 
     int getChatRadius();
@@ -47,6 +49,8 @@ public interface ISettings extends IConf {
     BigDecimal getCommandCost(String label);
 
     String getCurrencySymbol();
+
+    boolean isCurrencySymbolSuffixed();
 
     int getOversizedStackSize();
 
@@ -119,6 +123,8 @@ public interface ISettings extends IConf {
 
     boolean isForceDisableTeleportSafety();
 
+    boolean isTeleportPassengerDismount();
+
     double getTeleportCooldown();
 
     double getTeleportDelay();
@@ -160,6 +166,8 @@ public interface ISettings extends IConf {
 
     boolean isEcoLogUpdateEnabled();
 
+    boolean realNamesOnList();
+
     boolean removeGodOnDisconnect();
 
     boolean changeDisplayName();
@@ -191,6 +199,8 @@ public interface ISettings extends IConf {
     boolean isAfkListName();
 
     String getAfkListName();
+
+    boolean broadcastAfkMessage();
 
     boolean areDeathMessagesEnabled();
 
@@ -238,6 +248,8 @@ public interface ISettings extends IConf {
 
     void setEssentialsChatActive(boolean b);
 
+    long getMaxMute();
+
     long getMaxTempban();
 
     Map<String, Object> getListGroupConfig();
@@ -268,6 +280,8 @@ public interface ISettings extends IConf {
 
     BigDecimal getMinimumPayAmount();
 
+    boolean isPayExcludesIgnoreList();
+
     long getLastMessageReplyRecipientTimeout();
 
     boolean isMilkBucketEasterEggEnabled();
@@ -286,6 +300,10 @@ public interface ISettings extends IConf {
 
     boolean isCommandCooldownsEnabled();
 
+    boolean isWorldChangeFlyResetEnabled();
+
+    boolean isWorldChangeSpeedResetEnabled();
+
     long getCommandCooldownMs(String label);
 
     Entry<Pattern, Long> getCommandCooldownEntry(String label);
@@ -301,6 +319,8 @@ public interface ISettings extends IConf {
     boolean isPastebinCreateKit();
 
     boolean isAllowBulkBuySell();
+
+    boolean isAllowSellNamedItems();
 
     boolean isAddingPrefixInPlayerlist();
 
@@ -338,5 +358,10 @@ public interface ISettings extends IConf {
 
     double getMaxProjectileSpeed();
 
+    boolean isRemovingEffectsOnHeal();
+
     boolean isSpawnIfNoHome();
+
+    boolean infoAfterDeath();
+
 }

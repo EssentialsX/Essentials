@@ -14,7 +14,7 @@ public class LegacyPotionMetaProvider extends PotionMetaProvider {
     }
 
     @Override
-    public String getHumanName() {
+    public String getDescription() {
         return "legacy potion meta provider";
     }
 }

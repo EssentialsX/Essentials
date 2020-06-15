@@ -17,9 +17,6 @@ import java.util.Map;
 
 import static com.earth2me.essentials.I18n.tl;
 
-import net.ess3.nms.refl.ReflUtil;
-
-
 public class Commandrecipe extends EssentialsCommand {
 
     private static final Material FIREWORK_ROCKET = EnumUtil.getMaterial("FIREWORK_ROCKET", "FIREWORK");
@@ -136,7 +133,7 @@ public class Commandrecipe extends EssentialsCommand {
             sender.sendMessage(tl("recipeGrid", colorMap.get(materials[2][0]), colorMap.get(materials[2][1]), colorMap.get(materials[2][2])));
 
             StringBuilder s = new StringBuilder();
-            for (Material items : colorMap.keySet().toArray(new Material[colorMap.size()])) {
+            for (Material items : colorMap.keySet().toArray(new Material[0])) {
                 s.append(tl("recipeGridItem", colorMap.get(items), getMaterialName(items)));
             }
             sender.sendMessage(tl("recipeWhere", s.toString()));

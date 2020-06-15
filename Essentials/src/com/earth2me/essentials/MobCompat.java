@@ -67,9 +67,9 @@ public class MobCompat {
         WEAPONSMITH("BLACKSMITH", "WEAPON_SMITH", "WEAPONSMITH")
         ;
 
-        private String oldProfession;
-        private String oldCareer;
-        private String newProfession;
+        private final String oldProfession;
+        private final String oldCareer;
+        private final String newProfession;
 
         VillagerProfession(final String oldProfession, final String career) {
             this.oldProfession = oldProfession;
@@ -89,9 +89,9 @@ public class MobCompat {
     }
 
     // Older cats are Ocelots, whereas 1.14+ cats are Cats
-    private static Class catClass = ReflUtil.getClassCached("org.bukkit.entity.Cat");
-    private static Class catTypeClass = ReflUtil.getClassCached("org.bukkit.entity.Cat.Type");
-    private static Method catSetTypeMethod = (catClass == null || catTypeClass == null) ? null : ReflUtil.getMethodCached(catClass, "setCatType", catTypeClass);
+    private static final Class catClass = ReflUtil.getClassCached("org.bukkit.entity.Cat");
+    private static final Class catTypeClass = ReflUtil.getClassCached("org.bukkit.entity.Cat.Type");
+    private static final Method catSetTypeMethod = (catClass == null || catTypeClass == null) ? null : ReflUtil.getMethodCached(catClass, "setCatType", catTypeClass);
 
     private static boolean isNewCat() {
         return (catClass != null && catTypeClass != null && catSetTypeMethod != null);
@@ -110,8 +110,8 @@ public class MobCompat {
     }
 
     // Older villagers have professions and careers, 1.14+ villagers only have professions
-    private static Class villagerCareerClass = ReflUtil.getClassCached("org.bukkit.entity.Villager.Career");
-    private static Method villagerSetCareerMethod = (villagerCareerClass == null) ? null : ReflUtil.getMethodCached(Villager.class, "setCareer", villagerCareerClass);
+    private static final Class villagerCareerClass = ReflUtil.getClassCached("org.bukkit.entity.Villager.Career");
+    private static final Method villagerSetCareerMethod = (villagerCareerClass == null) ? null : ReflUtil.getMethodCached(Villager.class, "setCareer", villagerCareerClass);
 
     private static boolean isCareerVillager() {
         return (villagerCareerClass != null && villagerSetCareerMethod != null);

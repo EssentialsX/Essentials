@@ -25,7 +25,7 @@ import static com.earth2me.essentials.I18n.tl;
 
 public class FlatItemDb extends AbstractItemDb {
     protected static final Logger LOGGER = Logger.getLogger("Essentials");
-    private static Gson gson = new Gson();
+    private static final Gson gson = new Gson();
 
     // Maps primary name to ItemData
     private final transient Map<String, ItemData> items = new HashMap<>();
@@ -102,7 +102,7 @@ public class FlatItemDb extends AbstractItemDb {
     @Override
     public ItemStack get(String id, boolean useResolvers) throws Exception {
         if (useResolvers) {
-            ItemStack resolved = tryResolvers(id);
+            ItemStack resolved = tryResolverDeserialize(id);
             if (resolved != null) {
                 return resolved;
             }

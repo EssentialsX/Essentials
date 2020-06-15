@@ -27,13 +27,13 @@ public class Commandext extends EssentialsLoopCommand {
 
     @Override
     public void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception {
-        if (args.length < 1) {
-            extPlayer(user.getBase());
-            user.sendMessage(tl("extinguish"));
+        if (args.length > 0 && user.isAuthorized("essentials.ext.others")) {
+            loopOnlinePlayers(server, user.getSource(), true, true, args[0], null);
             return;
         }
 
-        loopOnlinePlayers(server, user.getSource(), true, true, args[0], null);
+        extPlayer(user.getBase());
+        user.sendMessage(tl("extinguish"));
     }
 
     @Override

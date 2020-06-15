@@ -3,6 +3,7 @@ package com.earth2me.essentials;
 import com.earth2me.essentials.commands.IEssentialsCommand;
 import net.ess3.api.ITeleport;
 import net.ess3.api.MaxMoneyException;
+import net.ess3.api.events.AfkStatusChangeEvent;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -59,7 +60,10 @@ public interface IUser {
 
     void setMoney(final BigDecimal value) throws MaxMoneyException;
 
+    @Deprecated
     void setAfk(final boolean set);
+
+    void setAfk(final boolean set, final AfkStatusChangeEvent.Cause cause);
 
     /**
      * 'Hidden' Represents when a player is hidden from others. This status includes when the player is hidden via other
@@ -67,7 +71,7 @@ public interface IUser {
      *
      * @return If the user is hidden or not
      *
-     * @see isVanished
+     * @see IUser#isVanished()
      */
     boolean isHidden();
 
@@ -96,7 +100,7 @@ public interface IUser {
      *
      * @return If the user is vanished or not
      *
-     * @see isHidden
+     * @see IUser#isHidden()
      */
     boolean isVanished();
 

@@ -6,6 +6,7 @@ import io.papermc.lib.PaperLib;
 import net.ess3.api.IEssentials;
 import net.ess3.api.ITeleport;
 import net.ess3.api.IUser;
+import net.ess3.api.events.UserTeleportEvent;
 import net.ess3.api.events.UserWarpEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -120,8 +121,24 @@ public class Teleport implements ITeleport {
 
     protected void now(IUser teleportee, ITarget target, TeleportCause cause) throws Exception {
         cancel(false);
-        teleportee.setLastLocation();
         Location loc = target.getLocation();
+
+        UserTeleportEvent event = new UserTeleportEvent(teleportee, cause, loc);
+        Bukkit.getServer().getPluginManager().callEvent(event);
+        if (event.isCancelled()) {
+            return;
+        }
+
+        if (teleportee.isAuthorized("essentials.back.onteleport")) {
+            teleportee.setLastLocation();
+        }
+
+        if (!teleportee.getBase().isEmpty()) {
+            if (!ess.getSettings().isTeleportPassengerDismount()) {
+                throw new Exception(tl("passengerTeleportFail"));
+            }
+            teleportee.getBase().eject();
+        }
 
         if (LocationUtil.isBlockUnsafeForUser(teleportee, loc.getWorld(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ())) {
             if (ess.getSettings().isTeleportSafetyEnabled()) {
@@ -286,10 +303,10 @@ public class Teleport implements ITeleport {
     public void warp(IUser teleportee, String warp, Trade chargeFor, TeleportCause cause) throws Exception {
         UserWarpEvent event = new UserWarpEvent(teleportee, warp, chargeFor);
         Bukkit.getServer().getPluginManager().callEvent(event);
-
-        if(event.isCancelled()) {
+        if (event.isCancelled()) {
             return;
         }
+
         warp = event.getWarp();
         Location loc = ess.getWarps().getWarp(warp);
         teleportee.sendMessage(tl("warpingTo", warp, loc.getWorld().getName(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ()));
