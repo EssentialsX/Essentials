@@ -792,22 +792,28 @@ protect:
     water-bucket-flow: false
     fire-spread: true
     lava-fire-spread: true
+    lava-itemdamage: false
     flint-fire: false
     lightning-fire-spread: true
     portal-creation: false
     tnt-explosion: false
     tnt-playerdamage: false
+    tnt-itemdamage: false
     tnt-minecart-explosion: false
     tnt-minecart-playerdamage: false
+    tnt-minecart-itemdamage: false
     fireball-explosion: false
     fireball-fire: false
     fireball-playerdamage: false
+    fireball-itemdamage: false
     witherskull-explosion: false
     witherskull-playerdamage: false
+    witherskull-itemdamage: false
     wither-spawnexplosion: false
     wither-blockreplace: false
     creeper-explosion: false
     creeper-playerdamage: false
+    creeper-itemdamage: false
     creeper-blockdamage: false
     ender-crystal-explosion: false
     enderdragon-blockdamage: true
