@@ -29,5 +29,7 @@ public interface IPermissionsHandler {
 
     void unregisterContexts();
 
+    String getBackendName();
+
     boolean tryProvider();
 }
