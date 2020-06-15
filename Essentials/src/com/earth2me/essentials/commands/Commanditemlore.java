@@ -24,8 +24,7 @@ public class Commanditemlore extends EssentialsCommand {
     protected void run(Server server, User user, String commandLabel, String[] args) throws Exception {
         ItemStack item = user.getBase().getItemInHand();
         if (item.getType().name().contains("AIR")) {
-            user.sendMessage(tl("itemloreInvalidItem"));
-            return;
+            throw new Exception(tl("itemloreInvalidItem"));
         }
 
         if (args.length == 0) {
