@@ -459,6 +459,18 @@ broadcast-afk-message: true
 # You can disable the death messages of Minecraft here.
 death-messages: true
 
+# How should essentials handle players with the essentials.keepinv permission who have items with
+# curse of vanishing when they die?
+# You can set this to "keep" (to keep the item), "drop" (to drop the item), or "delete" (to delete the item).
+# Defaults to "keep"
+vanishing-items-policy: keep
+
+# How should essentials handle players with the essentials.keepinv permission who have items with
+# curse of binding when they die?
+# You can set this to "keep" (to keep the item), "drop" (to drop the item), or "delete" (to delete the item).
+# Defaults to "keep"
+binding-items-policy: keep
+
 # When players die, should they receive the coordinates they died at?
 send-info-after-death: false
 

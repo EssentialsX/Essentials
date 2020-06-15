@@ -204,6 +204,16 @@ public interface ISettings extends IConf {
 
     boolean areDeathMessagesEnabled();
 
+    KeepInvPolicy getVanishingItemsPolicy();
+
+    KeepInvPolicy getBindingItemsPolicy();
+
+    enum KeepInvPolicy {
+        KEEP,
+        DELETE,
+        DROP
+    }
+
     void setDebug(boolean debug);
 
     Set<String> getNoGodWorlds();
