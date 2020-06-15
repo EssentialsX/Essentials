@@ -713,13 +713,13 @@ protect:
     water-bucket-flow: false
     fire-spread: true
     lava-fire-spread: true
-    lava-itemdamage: true
+    lava-itemdamage: false
     flint-fire: false
     lightning-fire-spread: true
     portal-creation: false
     tnt-explosion: false
     tnt-playerdamage: false
-    tnt-itemdamage: true
+    tnt-itemdamage: false
     tnt-minecart-explosion: false
     tnt-minecart-playerdamage: false
     tnt-minecart-itemdamage: false
