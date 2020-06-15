@@ -979,33 +979,35 @@ public class Settings implements net.ess3.api.ISettings {
         return config.getBoolean("death-messages", true);
     }
 
-    private String vanishingItemPolicy;
+    private KeepInvPolicy vanishingItemPolicy;
 
-    public String _getVanishingItemsPolicy() {
+    public KeepInvPolicy _getVanishingItemsPolicy() {
         String value = config.getString("vanishing-items-policy", "keep").toLowerCase(Locale.ENGLISH);
-        if (!value.equals("delete") && !value.equals("drop") && !value.equals("keep")) {
-            value = "keep";
+        try {
+            return KeepInvPolicy.valueOf(value.toUpperCase(Locale.ENGLISH));
+        } catch (IllegalArgumentException e) {
+            return KeepInvPolicy.KEEP;
         }
-        return value;
     }
 
     @Override
-    public String getVanishingItemsPolicy() {
+    public KeepInvPolicy getVanishingItemsPolicy() {
         return vanishingItemPolicy;
     }
 
-    private String bindingItemPolicy;
+    private KeepInvPolicy bindingItemPolicy;
 
-    public String _getBindingItemsPolicy() {
+    public KeepInvPolicy _getBindingItemsPolicy() {
         String value = config.getString("binding-items-policy", "keep").toLowerCase(Locale.ENGLISH);
-        if (!value.equals("delete") && !value.equals("drop") && !value.equals("keep")) {
-            value = "keep";
+        try {
+            return KeepInvPolicy.valueOf(value.toUpperCase(Locale.ENGLISH));
+        } catch (IllegalArgumentException e) {
+            return KeepInvPolicy.KEEP;
         }
-        return value;
     }
 
     @Override
-    public String getBindingItemsPolicy() {
+    public KeepInvPolicy getBindingItemsPolicy() {
         return bindingItemPolicy;
     }
 
