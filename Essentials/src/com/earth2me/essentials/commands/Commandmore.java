@@ -1,6 +1,7 @@
 package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.utils.NumberUtil;
 import org.bukkit.Material;
 import org.bukkit.Server;
 import org.bukkit.inventory.ItemStack;
@@ -34,15 +35,10 @@ public class Commandmore extends EssentialsCommand {
 
         int newStackSize = stack.getAmount();
         if (args.length >= 1) {
-            try {
-                int increment = Integer.parseInt(args[0]);
-                if (increment < 1) {
-                    throw new NumberFormatException("increment is less than or equal to zero");
-                }
-                newStackSize += increment;
-            } catch(NumberFormatException e) {
+            if (!NumberUtil.isPosInt(args[0])) {
                 throw new Exception(tl("nonZeroPosNumber"));
             }
+            newStackSize += Integer.parseInt(args[0]);
 
             if (newStackSize > ((canOversized) ? ess.getSettings().getOversizedStackSize() : stack.getMaxStackSize())) {
                 user.sendMessage(tl(canOversized ? "fullStackDefaultOversize" : "fullStackDefault", canOversized ? ess.getSettings().getOversizedStackSize() : stack.getMaxStackSize()));

@@ -105,4 +105,11 @@ public class NumberUtil {
         }
         return true;
     }
+
+    public static boolean isPosInt(final String sInt) {
+        if (!isInt(sInt)) {
+            return false;
+        }
+        return Integer.parseInt(sInt) > 0;
+    }
 }
