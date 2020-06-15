@@ -570,6 +570,7 @@ public class Settings implements net.ess3.api.ISettings {
         logCommandBlockCommands = _logCommandBlockCommands();
         nickBlacklist = _getNickBlacklist();
         maxProjectileSpeed = _getMaxProjectileSpeed();
+        removeEffectsOnHeal = _isRemovingEffectsOnHeal();
         vanishingItemPolicy = _getVanishingItemsPolicy();
         bindingItemPolicy = _getBindingItemsPolicy();
     }
@@ -1515,6 +1516,11 @@ public class Settings implements net.ess3.api.ISettings {
     @Override
     public boolean isAllowBulkBuySell() {
         return config.getBoolean("allow-bulk-buy-sell", false);
+    }
+
+    @Override
+    public boolean isAllowSellNamedItems() {
+        return config.getBoolean("allow-selling-named-items", false);
     }
 
     @Override
