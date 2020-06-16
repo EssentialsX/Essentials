@@ -5,6 +5,7 @@ import com.earth2me.essentials.User;
 import com.earth2me.essentials.craftbukkit.InventoryWorkaround;
 import com.earth2me.essentials.utils.NumberUtil;
 import com.earth2me.essentials.utils.StringUtil;
+import com.earth2me.essentials.utils.VersionUtil;
 import org.bukkit.Material;
 import org.bukkit.Server;
 import org.bukkit.entity.Player;
@@ -40,7 +41,7 @@ public class Commandclearinventory extends EssentialsCommand {
         Collection<Player> players = new ArrayList<>();
         User senderUser = ess.getUser(sender.getPlayer());
         String previousClearCommand = "";
-        
+
         int offset = 0;
 
         if (sender.isPlayer()) {
@@ -79,39 +80,65 @@ public class Commandclearinventory extends EssentialsCommand {
         }
     }
 
-    protected void clearHandler(CommandSource sender, Player player, String[] args, int offset, boolean showExtended) throws Exception {
-        short data = -1;
-        int type = -1;
+    private static class Item {
+        private Material material;
+        private short data;
+
+        public Item(Material material, short data) {
+            this.material = material;
+            this.data = data;
+        }
+
+        public Material getMaterial() {
+            return material;
+        }
+
+        public short getData() {
+            return data;
+        }
+    }
+
+    private enum ClearHandlerType {
+        ALL_EXCEPT_ARMOR, ALL_INCLUDING_ARMOR, SPECIFIC_ITEM
+    }
+
+    protected void clearHandler(CommandSource sender, Player player, String[] args, int offset, boolean showExtended) {
+        ClearHandlerType type = ClearHandlerType.ALL_EXCEPT_ARMOR;
+        final Set<Item> items = new HashSet<>();
         int amount = -1;
-        final Set<Material> mats = new HashSet<>();
 
         if (args.length > (offset + 1) && NumberUtil.isInt(args[(offset + 1)])) {
             amount = Integer.parseInt(args[(offset + 1)]);
         }
         if (args.length > offset) {
             if (args[offset].equalsIgnoreCase("**")) {
-                type = -2;
+                type = ClearHandlerType.ALL_INCLUDING_ARMOR;
             } else if (!args[offset].equalsIgnoreCase("*")) {
                 final String[] split = args[offset].split(",");
-
-                for (String name : split) {
+                for (String item : split) {
+                    final String[] itemParts = item.split(":");
+                    short data;
                     try {
-                        mats.add(ess.getItemDb().get(name).getType());
+                        data = Short.parseShort(itemParts[1]);
+                    } catch (Exception e) {
+                        data = 0;
+                    }
+                    try {
+                        items.add(new Item(ess.getItemDb().get(itemParts[0]).getType(), data));
                     } catch (Exception ignored) {}
                 }
-
-                type = 1;
+                type = ClearHandlerType.SPECIFIC_ITEM;
             }
         }
 
-        if (type == -1) // type -1 represents wildcard or all items
+        if (type == ClearHandlerType.ALL_EXCEPT_ARMOR)
         {
             if (showExtended) {
                 sender.sendMessage(tl("inventoryClearingAllItems", player.getDisplayName()));
             }
             InventoryWorkaround.clearInventoryNoArmor(player.getInventory());
             InventoryWorkaround.setItemInOffHand(player, null);
-        } else if (type == -2) // type -2 represents double wildcard or all items and armor
+        } else if (type == ClearHandlerType.ALL_INCLUDING_ARMOR)
         {
             if (showExtended) {
                 sender.sendMessage(tl("inventoryClearingAllArmor", player.getDisplayName()));
@@ -120,20 +147,21 @@ public class Commandclearinventory extends EssentialsCommand {
             InventoryWorkaround.setItemInOffHand(player, null);
             player.getInventory().setArmorContents(null);
         } else {
-            for (Material mat : mats) {
+            for (Item item : items) {
+                ItemStack stack = new ItemStack(item.getMaterial());
+                if (VersionUtil.getServerBukkitVersion().isLowerThan(VersionUtil.v1_13_0_R01)) {
+                    stack.setDurability(item.getData());
+                }
                 if (amount == -1) // amount -1 means all items will be cleared
                 {
-                    ItemStack stack = new ItemStack(mat, BASE_AMOUNT, data);
+                    stack.setAmount(BASE_AMOUNT);
                     ItemStack removedStack = player.getInventory().removeItem(stack).get(0);
                     final int removedAmount = (BASE_AMOUNT - removedStack.getAmount());
                     if (removedAmount > 0 || showExtended) {
                         sender.sendMessage(tl("inventoryClearingStack", removedAmount, stack.getType().toString().toLowerCase(Locale.ENGLISH), player.getDisplayName()));
                     }
                 } else {
-                    if (amount < 0) {
-                        amount = 1;
-                    }
-                    ItemStack stack = new ItemStack(mat, amount);
+                    stack.setAmount(amount < 0 ? 1 : amount);
                     if (player.getInventory().containsAtLeast(stack, amount)) {
                         sender.sendMessage(tl("inventoryClearingStack", amount, stack.getType().toString().toLowerCase(Locale.ENGLISH), player.getDisplayName()));
                         player.getInventory().removeItem(stack);
