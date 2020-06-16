@@ -570,6 +570,9 @@ public class Settings implements net.ess3.api.ISettings {
         logCommandBlockCommands = _logCommandBlockCommands();
         nickBlacklist = _getNickBlacklist();
         maxProjectileSpeed = _getMaxProjectileSpeed();
+        removeEffectsOnHeal = _isRemovingEffectsOnHeal();
+        vanishingItemPolicy = _getVanishingItemsPolicy();
+        bindingItemPolicy = _getBindingItemsPolicy();
     }
 
     void _lateLoadItemSpawnBlacklist() {
@@ -974,6 +977,38 @@ public class Settings implements net.ess3.api.ISettings {
     @Override
     public boolean areDeathMessagesEnabled() {
         return config.getBoolean("death-messages", true);
+    }
+
+    private KeepInvPolicy vanishingItemPolicy;
+
+    public KeepInvPolicy _getVanishingItemsPolicy() {
+        String value = config.getString("vanishing-items-policy", "keep").toLowerCase(Locale.ENGLISH);
+        try {
+            return KeepInvPolicy.valueOf(value.toUpperCase(Locale.ENGLISH));
+        } catch (IllegalArgumentException e) {
+            return KeepInvPolicy.KEEP;
+        }
+    }
+
+    @Override
+    public KeepInvPolicy getVanishingItemsPolicy() {
+        return vanishingItemPolicy;
+    }
+
+    private KeepInvPolicy bindingItemPolicy;
+
+    public KeepInvPolicy _getBindingItemsPolicy() {
+        String value = config.getString("binding-items-policy", "keep").toLowerCase(Locale.ENGLISH);
+        try {
+            return KeepInvPolicy.valueOf(value.toUpperCase(Locale.ENGLISH));
+        } catch (IllegalArgumentException e) {
+            return KeepInvPolicy.KEEP;
+        }
+    }
+
+    @Override
+    public KeepInvPolicy getBindingItemsPolicy() {
+        return bindingItemPolicy;
     }
 
     private Set<String> noGodWorlds = new HashSet<>();
@@ -1483,6 +1518,11 @@ public class Settings implements net.ess3.api.ISettings {
     @Override
     public boolean isAllowBulkBuySell() {
         return config.getBoolean("allow-bulk-buy-sell", false);
+    }
+
+    @Override
+    public boolean isAllowSellNamedItems() {
+        return config.getBoolean("allow-selling-named-items", false);
     }
 
     @Override

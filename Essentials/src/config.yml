@@ -459,6 +459,18 @@ broadcast-afk-message: true
 # You can disable the death messages of Minecraft here.
 death-messages: true
 
+# How should essentials handle players with the essentials.keepinv permission who have items with
+# curse of vanishing when they die?
+# You can set this to "keep" (to keep the item), "drop" (to drop the item), or "delete" (to delete the item).
+# Defaults to "keep"
+vanishing-items-policy: keep
+
+# How should essentials handle players with the essentials.keepinv permission who have items with
+# curse of binding when they die?
+# You can set this to "keep" (to keep the item), "drop" (to drop the item), or "delete" (to delete the item).
+# Defaults to "keep"
+binding-items-policy: keep
+
 # When players die, should they receive the coordinates they died at?
 send-info-after-death: false
 
@@ -573,6 +585,10 @@ npcs-in-balance-ranking: false
 # This is useful when a sign sells or buys one item at a time and the player wants to sell a bunch at once.
 allow-bulk-buy-sell: true
 
+# Allow selling of items with custom names with the /sell command.
+# This may be useful to prevent players accidentally selling named items.
+allow-selling-named-items: false
+
 # Delay for the MOTD display for players on join, in milliseconds.
 # This has no effect if the MOTD command or permission are disabled.
 delay-motd: 0
@@ -621,6 +637,7 @@ max-projectile-speed: 8
 ############################################################
 
 # Allows people to set their bed during the day.
+# This setting has no effect in Minecraft 1.15+, as Minecraft will always allow the player to set their bed location during the day.
 update-bed-at-daytime: true
 
 # Set to true to enable per-world permissions for using homes to teleport between worlds.
@@ -787,22 +804,28 @@ protect:
     water-bucket-flow: false
     fire-spread: true
     lava-fire-spread: true
+    lava-itemdamage: false
     flint-fire: false
     lightning-fire-spread: true
     portal-creation: false
     tnt-explosion: false
     tnt-playerdamage: false
+    tnt-itemdamage: false
     tnt-minecart-explosion: false
     tnt-minecart-playerdamage: false
+    tnt-minecart-itemdamage: false
     fireball-explosion: false
     fireball-fire: false
     fireball-playerdamage: false
+    fireball-itemdamage: false
     witherskull-explosion: false
     witherskull-playerdamage: false
+    witherskull-itemdamage: false
     wither-spawnexplosion: false
     wither-blockreplace: false
     creeper-explosion: false
     creeper-playerdamage: false
+    creeper-itemdamage: false
     creeper-blockdamage: false
     ender-crystal-explosion: false
     enderdragon-blockdamage: true

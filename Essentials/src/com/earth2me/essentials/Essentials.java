@@ -379,6 +379,9 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
         if (backup != null) {
             backup.stopTask();
         }
+
+        this.getPermissionsHandler().unregisterContexts();
+
         Economy.setEss(null);
         Trade.closeLog();
         getUserMap().getUUIDMap().shutdown();
@@ -396,6 +399,13 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
         }
 
         i18n.updateLocale(settings.getLocale());
+        for (String commandName : this.getDescription().getCommands().keySet()) {
+            Command command = this.getCommand(commandName);
+            if (command != null) {
+                command.setDescription(tl(commandName + "CommandDescription"));
+                command.setUsage(tl(commandName + "CommandUsage"));
+            }
+        }
 
         final PluginManager pm = getServer().getPluginManager();
         registerListeners(pm);
