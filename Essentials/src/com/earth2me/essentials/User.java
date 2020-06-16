@@ -61,6 +61,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
     private String confirmingClearCommand;
     private long lastNotifiedAboutMailsMs;
     private String lastHomeConfirmation;
+    private long lastHomeConfirmationTimestamp;
 
     public User(final Player base, final IEssentials ess) {
         super(base, ess);
@@ -965,5 +966,13 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
 
     public void setLastHomeConfirmation(String lastHomeConfirmation) {
         this.lastHomeConfirmation = lastHomeConfirmation;
+    }
+
+    public long getLastHomeConfirmationTimestamp() {
+        return lastHomeConfirmationTimestamp;
+    }
+
+    public void setLastHomeConfirmationTimestamp() {
+        this.lastHomeConfirmationTimestamp = System.currentTimeMillis();
     }
 }
