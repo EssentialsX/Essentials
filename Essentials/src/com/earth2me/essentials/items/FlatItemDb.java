@@ -102,7 +102,7 @@ public class FlatItemDb extends AbstractItemDb {
     @Override
     public ItemStack get(String id, boolean useResolvers) throws Exception {
         if (useResolvers) {
-            ItemStack resolved = tryResolvers(id);
+            ItemStack resolved = tryResolverDeserialize(id);
             if (resolved != null) {
                 return resolved;
             }
