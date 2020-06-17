@@ -38,13 +38,14 @@ public class Commandclearinventory extends EssentialsLoopCommand {
             }
         }
 
-        if (args.length == 0 || !args[0].contains("*") || server.matchPlayer(args[0]).isEmpty()) {
+        if (args.length == 0 || (!args[0].contains("*") && server.matchPlayer(args[0]).isEmpty())) {
             clearHandler(user.getSource(), user.getBase(), args, 0);
             return;
         }
 
         if (user.isAuthorized("essentials.clearinventory.others")) {
-            loopOnlinePlayers(server, user.getSource(), true, true, args[0], null);
+            loopOnlinePlayers(server, user.getSource(), false, true, args[0], args);
+            return;
         }
         throw new PlayerNotFoundException();
     }
@@ -54,11 +55,11 @@ public class Commandclearinventory extends EssentialsLoopCommand {
         if (args.length == 0) {
             throw new NotEnoughArgumentsException();
         }
-        loopOnlinePlayers(server, sender, true, true, args[0], args);
+        loopOnlinePlayers(server, sender, false, true, args[0], args);
     }
 
     @Override
-    protected void updatePlayer(final Server server, final CommandSource sender, final User player, final String[] args) throws PlayerExemptException {
+    protected void updatePlayer(final Server server, final CommandSource sender, final User player, final String[] args) {
         clearHandler(sender, player.getBase(), args, 1);
     }
 
