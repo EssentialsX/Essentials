@@ -6,6 +6,7 @@ import com.earth2me.essentials.utils.FloatUtil;
 import org.bukkit.Server;
 import org.bukkit.entity.Player;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -13,6 +14,9 @@ import static com.earth2me.essentials.I18n.tl;
 
 
 public class Commandspeed extends EssentialsCommand {
+    private final List<String> types = Arrays.asList("walk", "fly", "1", "1.5", "1.75", "2");
+    private final List<String> speeds = Arrays.asList("1", "1.5", "1.75", "2");
+
     public Commandspeed() {
         super("speed");
     }
@@ -133,7 +137,11 @@ public class Commandspeed extends EssentialsCommand {
 
     @Override
     protected List<String> getTabCompleteOptions(Server server, CommandSource sender, String commandLabel, String[] args) {
-        if (args.length == 3 && sender.isAuthorized("essentials.speed.others", ess)) {
+        if (args.length == 1) {
+            return types;
+        } else if (args.length == 2) {
+            return speeds;
+        } else if (args.length == 3 && sender.isAuthorized("essentials.speed.others", ess)) {
             return getPlayers(server, sender);
         } else {
             return Collections.emptyList();
