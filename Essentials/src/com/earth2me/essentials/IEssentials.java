@@ -103,7 +103,7 @@ public interface IEssentials extends Plugin {
 
     Collection<Player> getOnlinePlayers();
 
-    List<User> getOnlineUsers();
+    Collection<User> getOnlineUsers();
 
     SpawnerProvider getSpawnerProvider();
 }
