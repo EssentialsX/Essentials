@@ -135,9 +135,8 @@ public class Commandtime extends EssentialsCommand {
 
     @Override
     protected List<String> getTabCompleteOptions(Server server, CommandSource sender, String commandLabel, String[] args) {
-        boolean isConsole = sender.isPlayer();
         if (args.length == 1) {
-            if (isConsole || sender.isAuthorized("essentials.time.set", ess)) {
+            if (sender.isAuthorized("essentials.time.set", ess)) {
                 return subCommands;
             } else {
                 return Collections.emptyList();
@@ -153,11 +152,11 @@ public class Commandtime extends EssentialsCommand {
         } else if (args.length == 3 && (args[0].equalsIgnoreCase("set") || args[0].equalsIgnoreCase("add"))) {
             List<String> worlds = Lists.newArrayList();
             for (World world : server.getWorlds()) {
-                if (isConsole || sender.isAuthorized("essentials.time.world." + normalizeWorldName(world), ess)) {
+                if (sender.isAuthorized("essentials.time.world." + normalizeWorldName(world), ess)) {
                     worlds.add(world.getName());
                 }
             }
-            if (isConsole || sender.isAuthorized("essentials.time.world.all", ess)) {
+            if (sender.isAuthorized("essentials.time.world.all", ess)) {
                 worlds.add("*");
             }
             return worlds;
