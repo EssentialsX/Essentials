@@ -5,7 +5,7 @@ main: com.earth2me.essentials.Essentials
 version: ${full.version}
 website: http://tiny.cc/EssentialsCommands
 description: Provides an essential, core set of commands for Bukkit.
-softdepend: [Vault]
+softdepend: [Vault, LuckPerms]
 authors: [Zenexer, ementalo, Aelux, Brettflan, KimKandor, snowleo, ceulemans, Xeology, KHobbits, md_5, Iaccidentally, drtshock, vemacs, SupaHam, md678685]
 api-version: "1.13"
 commands:
@@ -432,6 +432,10 @@ commands:
     description: Temporary ban a user.
     usage: /<command> <playername> <datediff> <reason>
     aliases: [etempban]
+  tempbanip:
+    description: Temporarily ban an IP Address.
+    usage: /<command> <playername> <datediff> <reason>
+    aliases: [etempbanip]
   thunder:
     description: Enable/disable thunder.
     usage: /<command> <true/false> [duration]

@@ -5,12 +5,16 @@ import com.earth2me.essentials.utils.EnumUtil;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.entity.*;
+import org.bukkit.entity.minecart.ExplosiveMinecart;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBurnEvent;
 import org.bukkit.event.block.BlockFromToEvent;
 import org.bukkit.event.block.BlockIgniteEvent;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.world.PortalCreateEvent;
 
 import java.util.Set;
@@ -55,6 +59,37 @@ public class EssentialsProtectBlockListener implements Listener {
 
         if (event.getCause().equals(BlockIgniteEvent.IgniteCause.FIREBALL)) {
             event.setCancelled(prot.getSettingBool(ProtectConfig.prevent_fireball_fire));
+        }
+    }
+
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    public void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
+        if (event.getEntity() instanceof Item) {
+            if (event.getCause() == EntityDamageEvent.DamageCause.FIRE || event.getCause() == EntityDamageEvent.DamageCause.FIRE_TICK || event.getCause() == EntityDamageEvent.DamageCause.LAVA) {
+                event.setCancelled(prot.getSettingBool(ProtectConfig.disable_lava_item_dmg));
+            }
+
+            if (event.getCause() == EntityDamageEvent.DamageCause.ENTITY_EXPLOSION) {
+                if (event.getDamager() instanceof TNTPrimed) {
+                    event.setCancelled(prot.getSettingBool(ProtectConfig.prevent_tnt_itemdmg));
+                }
+
+                if (event.getDamager() instanceof Creeper) {
+                    event.setCancelled(prot.getSettingBool(ProtectConfig.prevent_creeper_itemdmg));
+                }
+
+                if (event.getDamager() instanceof ExplosiveMinecart) {
+                    event.setCancelled(prot.getSettingBool(ProtectConfig.prevent_tntminecart_itemdmg));
+                }
+
+                if (event.getDamager() instanceof WitherSkull) {
+                    event.setCancelled(prot.getSettingBool(ProtectConfig.prevent_witherskull_itemdmg));
+                }
+
+                if (event.getDamager() instanceof Fireball) {
+                    event.setCancelled(prot.getSettingBool(ProtectConfig.prevent_fireball_itemdmg));
+                }
+            }
         }
     }
 

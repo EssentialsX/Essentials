@@ -204,6 +204,16 @@ public interface ISettings extends IConf {
 
     boolean areDeathMessagesEnabled();
 
+    KeepInvPolicy getVanishingItemsPolicy();
+
+    KeepInvPolicy getBindingItemsPolicy();
+
+    enum KeepInvPolicy {
+        KEEP,
+        DELETE,
+        DROP
+    }
+
     void setDebug(boolean debug);
 
     Set<String> getNoGodWorlds();
@@ -280,6 +290,8 @@ public interface ISettings extends IConf {
 
     BigDecimal getMinimumPayAmount();
 
+    boolean isPayExcludesIgnoreList();
+
     long getLastMessageReplyRecipientTimeout();
 
     boolean isMilkBucketEasterEggEnabled();
@@ -317,6 +329,8 @@ public interface ISettings extends IConf {
     boolean isPastebinCreateKit();
 
     boolean isAllowBulkBuySell();
+
+    boolean isAllowSellNamedItems();
 
     boolean isAddingPrefixInPlayerlist();
 
@@ -357,5 +371,7 @@ public interface ISettings extends IConf {
     boolean isRemovingEffectsOnHeal();
 
     boolean isSpawnIfNoHome();
+
+    boolean infoAfterDeath();
 
 }
