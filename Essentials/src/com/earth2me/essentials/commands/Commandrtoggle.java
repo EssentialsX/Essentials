@@ -22,7 +22,7 @@ public class Commandrtoggle extends EssentialsToggleCommand {
     }
 
     @Override
-    protected void togglePlayer(CommandSource sender, User user, Boolean enabled) {
+    void togglePlayer(CommandSource sender, User user, Boolean enabled) {
         if (enabled == null) {
             enabled = !user.isLastMessageReplyRecipient();
         }
