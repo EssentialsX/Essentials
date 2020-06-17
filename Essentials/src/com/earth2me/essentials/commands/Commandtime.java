@@ -14,6 +14,11 @@ import static com.earth2me.essentials.I18n.tl;
 
 
 public class Commandtime extends EssentialsCommand {
+    private final List<String> subCommands = Arrays.asList("add", "set");
+    private final List<String> timeNames = Arrays.asList("sunrise", "day", "morning", "noon", "afternoon", "sunset", "night", "midnight");
+    private final List<String> timeNumbers = Arrays.asList("1000", "2000", "3000", "4000", "5000");
+
+
     public Commandtime() {
         super("time");
     }
@@ -133,15 +138,15 @@ public class Commandtime extends EssentialsCommand {
         boolean isConsole = sender.isPlayer();
         if (args.length == 1) {
             if (isConsole || sender.isAuthorized("essentials.time.set", ess)) {
-                return Lists.newArrayList("set", "add");
+                return subCommands;
             } else {
                 return Collections.emptyList();
             }
         } else if (args.length == 2) {
             if (args[0].equalsIgnoreCase("set")) {
-                return Lists.newArrayList("sunrise", "day", "morning", "noon", "afternoon", "sunset", "night", "midnight");
+                return timeNames;
             } else if (args[0].equalsIgnoreCase("add")) {
-                return Lists.newArrayList("500", "1000", "1500", "2000", "2500", "3000");
+                return timeNumbers;
             } else {
                 return Collections.emptyList();
             }
