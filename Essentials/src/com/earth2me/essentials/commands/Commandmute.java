@@ -36,10 +36,8 @@ public class Commandmute extends EssentialsCommand {
             if (!sender.isAuthorized("essentials.mute.offline", ess)) {
                 throw new Exception(tl("muteExemptOffline"));
             }
-        } else {
-            if (user.isAuthorized("essentials.mute.exempt")) {
+        } else if (user.isAuthorized("essentials.mute.exempt")) {
                 throw new Exception(tl("muteExempt"));
-            }
         }
 
         long muteTimestamp = 0;
