@@ -25,7 +25,7 @@ public class Commandnuke extends EssentialsCommand {
         Collection<Player> targets;
         if (args.length > 0) {
             targets = new ArrayList<>();
-            for (int i = 0; args.length > i; i++) {
+            for (int i = 0; i < args.length; ++i) {
                 targets.add(getPlayer(server, sender, args, i).getBase());
             }
         } else {
