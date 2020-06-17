@@ -24,7 +24,7 @@ public class FlatSpawnEggProvider extends SpawnEggProvider {
     }
 
     @Override
-    public String getHumanName() {
+    public String getDescription() {
         return "1.13+ flat spawn egg provider";
     }
 }

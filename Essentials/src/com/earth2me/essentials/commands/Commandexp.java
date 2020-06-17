@@ -79,6 +79,10 @@ public class Commandexp extends EssentialsCommand {
             expMatch(server, sender, args[1], args[2], false);
         } else if (args.length > 2 && args[0].equalsIgnoreCase("give")) {
             expMatch(server, sender, args[1], args[2], true);
+        } else if (args.length > 2 && args[0].equalsIgnoreCase("take")) {
+            expMatch(server, sender, args[1], "-" + args[2], true);
+        } else if (args.length > 2 && args[0].equalsIgnoreCase("reset")) {
+            expMatch(server, sender, args[1], "0", false);
         } else {
             String match = args[0].trim();
             if (args.length >= 2 && NumberUtil.isInt(args[0].toLowerCase(Locale.ENGLISH).replace("l", ""))) {

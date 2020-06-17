@@ -6,6 +6,7 @@ import org.bukkit.inventory.ItemStack;
 
 public abstract class SpawnEggProvider implements Provider {
     public abstract ItemStack createEggItem(EntityType type) throws IllegalArgumentException;
+
     public abstract EntityType getSpawnedType(ItemStack eggItem) throws IllegalArgumentException;
 
     @Override

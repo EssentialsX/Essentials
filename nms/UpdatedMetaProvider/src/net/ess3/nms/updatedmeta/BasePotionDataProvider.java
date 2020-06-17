@@ -67,7 +67,7 @@ public class BasePotionDataProvider extends PotionMetaProvider {
     }
 
     @Override
-    public String getHumanName() {
+    public String getDescription() {
         return "1.9+ BasePotionData provider";
     }
 }

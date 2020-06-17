@@ -570,6 +570,9 @@ public class Settings implements net.ess3.api.ISettings {
         logCommandBlockCommands = _logCommandBlockCommands();
         nickBlacklist = _getNickBlacklist();
         maxProjectileSpeed = _getMaxProjectileSpeed();
+        removeEffectsOnHeal = _isRemovingEffectsOnHeal();
+        vanishingItemPolicy = _getVanishingItemsPolicy();
+        bindingItemPolicy = _getBindingItemsPolicy();
     }
 
     void _lateLoadItemSpawnBlacklist() {
@@ -976,6 +979,38 @@ public class Settings implements net.ess3.api.ISettings {
         return config.getBoolean("death-messages", true);
     }
 
+    private KeepInvPolicy vanishingItemPolicy;
+
+    public KeepInvPolicy _getVanishingItemsPolicy() {
+        String value = config.getString("vanishing-items-policy", "keep").toLowerCase(Locale.ENGLISH);
+        try {
+            return KeepInvPolicy.valueOf(value.toUpperCase(Locale.ENGLISH));
+        } catch (IllegalArgumentException e) {
+            return KeepInvPolicy.KEEP;
+        }
+    }
+
+    @Override
+    public KeepInvPolicy getVanishingItemsPolicy() {
+        return vanishingItemPolicy;
+    }
+
+    private KeepInvPolicy bindingItemPolicy;
+
+    public KeepInvPolicy _getBindingItemsPolicy() {
+        String value = config.getString("binding-items-policy", "keep").toLowerCase(Locale.ENGLISH);
+        try {
+            return KeepInvPolicy.valueOf(value.toUpperCase(Locale.ENGLISH));
+        } catch (IllegalArgumentException e) {
+            return KeepInvPolicy.KEEP;
+        }
+    }
+
+    @Override
+    public KeepInvPolicy getBindingItemsPolicy() {
+        return bindingItemPolicy;
+    }
+
     private Set<String> noGodWorlds = new HashSet<>();
 
     @Override
@@ -1258,6 +1293,11 @@ public class Settings implements net.ess3.api.ISettings {
         return new BigDecimal(config.getString("minimum-pay-amount", "0.001"));
     }
 
+    @Override
+    public boolean isPayExcludesIgnoreList() {
+        return config.getBoolean("pay-excludes-ignore-list", false);
+    }
+
     @Override public long getLastMessageReplyRecipientTimeout() {
         return config.getLong("last-message-reply-recipient-timeout", 180);
     }
@@ -1481,6 +1521,11 @@ public class Settings implements net.ess3.api.ISettings {
     }
 
     @Override
+    public boolean isAllowSellNamedItems() {
+        return config.getBoolean("allow-selling-named-items", false);
+    }
+
+    @Override
     public boolean isAddingPrefixInPlayerlist() {
         return config.getBoolean("add-prefix-in-playerlist", false);
     }
@@ -1683,5 +1728,10 @@ public class Settings implements net.ess3.api.ISettings {
     @Override
     public boolean isSpawnIfNoHome() {
         return config.getBoolean("spawn-if-no-home", true);
+    }
+    
+    @Override
+    public boolean infoAfterDeath() {
+        return config.getBoolean("send-info-after-death", false);
     }
 }
