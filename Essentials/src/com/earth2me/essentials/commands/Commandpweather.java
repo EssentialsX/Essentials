@@ -10,10 +10,10 @@ import org.bukkit.WeatherType;
 import java.util.*;
 
 import static com.earth2me.essentials.I18n.tl;
-import static com.earth2me.essentials.commands.Commandptime.getAliases;
 
 public class Commandpweather extends EssentialsLoopCommand {
-    public static final Map<String, WeatherType> weatherAliases = new HashMap<>();
+    private static final List<String> getAliases = Arrays.asList("get", "list", "show", "display");
+    private static final Map<String, WeatherType> weatherAliases = new HashMap<>();
 
     static {
         weatherAliases.put("sun", WeatherType.CLEAR);

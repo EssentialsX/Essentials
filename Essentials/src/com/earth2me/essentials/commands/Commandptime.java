@@ -14,7 +14,7 @@ import static com.earth2me.essentials.I18n.tl;
 
 
 public class Commandptime extends EssentialsLoopCommand {
-    protected static final List<String> getAliases = Arrays.asList("get", "list", "show", "display");
+    private static final List<String> getAliases = Arrays.asList("get", "list", "show", "display");
 
     public Commandptime() {
         super("ptime");
