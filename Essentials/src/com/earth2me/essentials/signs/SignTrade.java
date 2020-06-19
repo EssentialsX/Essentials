@@ -151,9 +151,6 @@ public class SignTrade extends EssentialsSign {
         if (split.length == 1 && !amountNeeded) {
             final BigDecimal money = getMoney(split[0], ess);
             if (money != null) {
-                if (NumberUtil.shortCurrency(money, ess).length() * 2 > 15) {
-                    throw new SignException("Line can be too long!");
-                }
                 sign.setLine(index, NumberUtil.shortCurrency(money, ess) + ":0");
                 return;
             }
@@ -182,9 +179,6 @@ public class SignTrade extends EssentialsSign {
                 throw new SignException(tl("moreThanZero"));
             }
             String newline = amount + " " + split[1] + ":0";
-            if ((newline + amount).length() > 15) {
-                throw new SignException("Line can be too long!");
-            }
             sign.setLine(index, newline);
             return;
         }
@@ -321,9 +315,6 @@ public class SignTrade extends EssentialsSign {
             final BigDecimal amount = getBigDecimal(split[1]);
             if (money != null && amount != null) {
                 final String newline = NumberUtil.shortCurrency(money, ess) + ":" + NumberUtil.shortCurrency(value, ess).substring(1);
-                if (newline.length() > 15) {
-                    throw new SignException("This sign is full: Line too long!");
-                }
                 sign.setLine(index, newline);
                 return;
             }
@@ -333,18 +324,12 @@ public class SignTrade extends EssentialsSign {
             if (split[1].equalsIgnoreCase("exp") || split[1].equalsIgnoreCase("xp")) {
                 final int stackamount = getIntegerPositive(split[0]);
                 final String newline = stackamount + " " + split[1] + ":" + (value.intValueExact());
-                if (newline.length() > 15) {
-                    throw new SignException("This sign is full: Line too long!");
-                }
                 sign.setLine(index, newline);
                 return;
             } else {
                 final int stackamount = getIntegerPositive(split[0]);
                 getItemStack(split[1], stackamount, ess);
                 final String newline = stackamount + " " + split[1] + ":" + (value.intValueExact());
-                if (newline.length() > 15) {
-                    throw new SignException("This sign is full: Line too long!");
-                }
                 sign.setLine(index, newline);
                 return;
             }
