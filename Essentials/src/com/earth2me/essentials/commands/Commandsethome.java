@@ -65,6 +65,7 @@ public class Commandsethome extends EssentialsCommand {
 
         usersHome.setHome(name, location);
         user.sendMessage(tl("homeSet", user.getLocation().getWorld().getName(), user.getLocation().getBlockX(), user.getLocation().getBlockY(), user.getLocation().getBlockZ(), name));
+        usersHome.setLastHomeConfirmation(null);
 
     }
 
