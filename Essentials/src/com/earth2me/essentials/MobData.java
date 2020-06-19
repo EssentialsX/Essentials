@@ -153,7 +153,13 @@ public enum MobData {
     CREAMY_TRADER_LLAMA("creamy", MobCompat.TRADER_LLAMA, "llama:CREAMY", true),
     WHITE_TRADER_LLAMA("white", MobCompat.TRADER_LLAMA, "llama:WHITE", true),
     BROWN_TRADER_LLAMA("brown", MobCompat.TRADER_LLAMA, "llama:BROWN", true),
-    GRAY_TRADER_LLAMA("gray", MobCompat.TRADER_LLAMA, "llama:GRAY", true)
+    GRAY_TRADER_LLAMA("gray", MobCompat.TRADER_LLAMA, "llama:GRAY", true),
+    RANDOM_SHULKER("random", MobCompat.SHULKER, Data.COLORABLE, true),
+    COLORABLE_SHULKER("", StringUtil.joinList(DyeColor.values()).toLowerCase(Locale.ENGLISH), MobCompat.SHULKER, Data.COLORABLE, true),
+    RED_FOX("red", MobCompat.FOX, "fox:RED", true),
+    SNOW_FOX("snow", MobCompat.FOX, "fox:SNOW", true),
+    SIZE_PHANTOM("", "<1-100>", MobCompat.PHANTOM, Data.SIZE, true),
+    RAID_LEADER("leader", MobCompat.RAIDER, Data.RAID_LEADER, true),
     ;
 
 
@@ -170,9 +176,9 @@ public enum MobData {
         TAMED,
         COLORABLE,
         EXP,
-        SIZE
+        SIZE,
+        RAID_LEADER,
     }
-
 
 
     public static final Logger logger = Logger.getLogger("Essentials");
@@ -205,8 +211,9 @@ public enum MobData {
     public static LinkedHashMap<String, MobData> getPossibleData(final Entity spawned, boolean publicOnly) {
         LinkedHashMap<String, MobData> mobList = new LinkedHashMap<>();
         for (MobData data : MobData.values()) {
-            if (data.type == null || (publicOnly && !data.isPublic)) continue;
-            
+            if (data.type == null || (publicOnly && !data.isPublic)) {
+                continue;
+            }
             if (data.type instanceof EntityType && spawned.getType().equals(data.type)) {
                 mobList.put(data.nickname.toLowerCase(Locale.ENGLISH), data);
             } else if (data.type instanceof Class && ((Class) data.type).isAssignableFrom(spawned.getClass())) {
@@ -291,7 +298,12 @@ public enum MobData {
             }
         } else if (this.value.equals(Data.SIZE)) {
             try {
-                ((Slime) spawned).setSize(Integer.parseInt(rawData));
+                int size = Integer.parseInt(rawData);
+                if (spawned instanceof Slime) {
+                    ((Slime) spawned).setSize(size);
+                } else if (spawned.getType() == MobCompat.PHANTOM) {
+                    ((Phantom) spawned).setSize(size);
+                }
                 this.matched = rawData;
             } catch (NumberFormatException e) {
                 throw new Exception(tl("slimeMalformedSize"), e);
@@ -313,6 +325,8 @@ public enum MobData {
                 InventoryWorkaround.setItemInMainHand(invent, new ItemStack((Material) this.value, 1));
                 InventoryWorkaround.setItemInMainHandDropChance(invent, 0.1f);
             }
+        } else if (this.value.equals(Data.RAID_LEADER)) {
+            ((Raider) spawned).setPatrolLeader(true);
         } else if (this.value instanceof String) {
             final String[] split = ((String) this.value).split(":");
             switch (split[0]) {
@@ -336,6 +350,9 @@ public enum MobData {
                     break;
                 case "villagertype":
                     MobCompat.setVillagerType(spawned, split[1]);
+                    break;
+                case "fox":
+                    MobCompat.setFoxType(spawned, split[1]);
                     break;
             }
         } else {

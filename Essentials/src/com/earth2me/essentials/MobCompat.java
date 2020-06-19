@@ -1,18 +1,27 @@
 package com.earth2me.essentials;
 
 import com.earth2me.essentials.utils.EnumUtil;
+import com.earth2me.essentials.utils.VersionUtil;
 import net.ess3.nms.refl.ReflUtil;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Fox;
+import org.bukkit.entity.Llama;
+import org.bukkit.entity.MushroomCow;
 import org.bukkit.entity.Ocelot;
+import org.bukkit.entity.Panda;
+import org.bukkit.entity.Parrot;
+import org.bukkit.entity.TropicalFish;
 import org.bukkit.entity.Villager;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 import static com.earth2me.essentials.utils.EnumUtil.getEntityType;
 
 public class MobCompat {
+
+    // Constants for mob interfaces added in later versions
+    public static final Class RAIDER = ReflUtil.getClassCached("org.bukkit.entity.Raider");
 
     // Constants for mobs added in later versions
     public static final EntityType LLAMA = getEntityType("LLAMA");
@@ -20,6 +29,10 @@ public class MobCompat {
     public static final EntityType TROPICAL_FISH = getEntityType("TROPICAL_FISH");
     public static final EntityType PANDA = getEntityType("PANDA");
     public static final EntityType TRADER_LLAMA = getEntityType("TRADER_LLAMA");
+    public static final EntityType SHULKER = getEntityType("SHULKER");
+    public static final EntityType STRAY = getEntityType("STRAY");
+    public static final EntityType FOX = getEntityType("FOX");
+    public static final EntityType PHANTOM = getEntityType("PHANTOM");
 
     // Constants for mobs that have changed since earlier versions
     public static final EntityType CAT = getEntityType("CAT", "OCELOT");
@@ -64,7 +77,7 @@ public class MobCompat {
         NITWIT("NITWIT", "NITWIT"),
         SHEPHERD("FARMER", "SHEPHERD"),
         TOOLSMITH("BLACKSMITH", "TOOL_SMITH", "TOOLSMITH"),
-        WEAPONSMITH("BLACKSMITH", "WEAPON_SMITH", "WEAPONSMITH")
+        WEAPONSMITH("BLACKSMITH", "WEAPON_SMITH", "WEAPONSMITH"),
         ;
 
         private final String oldProfession;
@@ -89,41 +102,33 @@ public class MobCompat {
     }
 
     // Older cats are Ocelots, whereas 1.14+ cats are Cats
-    private static final Class catClass = ReflUtil.getClassCached("org.bukkit.entity.Cat");
-    private static final Class catTypeClass = ReflUtil.getClassCached("org.bukkit.entity.Cat.Type");
-    private static final Method catSetTypeMethod = (catClass == null || catTypeClass == null) ? null : ReflUtil.getMethodCached(catClass, "setCatType", catTypeClass);
-
-    private static boolean isNewCat() {
-        return (catClass != null && catTypeClass != null && catSetTypeMethod != null);
-    }
-
     public static void setCatType(final Entity entity, final CatType type) {
-        if (isNewCat()) {
+        if (VersionUtil.getServerBukkitVersion().isLowerThan(VersionUtil.v1_14_R01)) {
+            ((Ocelot) entity).setCatType(Ocelot.Type.valueOf(type.ocelotTypeName));
+        } else {
+            Class cat = ReflUtil.getClassCached("org.bukkit.entity.Cat");
+            Class catType = ReflUtil.getClassCached("org.bukkit.entity.Cat$Type");
+            Method setCatType = ReflUtil.getMethodCached(cat, "setCatType", catType);
             try {
-                catSetTypeMethod.invoke(entity, EnumUtil.valueOf(catTypeClass, type.catTypeName));
-            } catch (IllegalAccessException | InvocationTargetException e) {
+                setCatType.invoke(entity, EnumUtil.valueOf(catType, type.catTypeName));
+            } catch (Exception e) {
                 e.printStackTrace();
             }
-        } else {
-            ((Ocelot) entity).setCatType(Ocelot.Type.valueOf(type.ocelotTypeName));
         }
     }
 
     // Older villagers have professions and careers, 1.14+ villagers only have professions
-    private static final Class villagerCareerClass = ReflUtil.getClassCached("org.bukkit.entity.Villager.Career");
-    private static final Method villagerSetCareerMethod = (villagerCareerClass == null) ? null : ReflUtil.getMethodCached(Villager.class, "setCareer", villagerCareerClass);
-
-    private static boolean isCareerVillager() {
-        return (villagerCareerClass != null && villagerSetCareerMethod != null);
-    }
-
     public static void setVillagerProfession(final Entity entity, final VillagerProfession profession) {
-        if (!isCareerVillager()) {
-            ((Villager) entity).setProfession(profession.asEnum());
-        } else {
-            ((Villager) entity).setProfession(profession.asEnum());
+        if (!(entity instanceof Villager)) {
+            return;
+        }
+        Villager villager = (Villager) entity;
+        villager.setProfession(profession.asEnum());
+        if (VersionUtil.getServerBukkitVersion().isLowerThan(VersionUtil.v1_14_R01)) {
+            Class villagerCareer = ReflUtil.getClassCached("org.bukkit.entity.Villager$Career");
+            Method setCareer = ReflUtil.getMethodCached(Villager.class, "setCareer", villagerCareer);
             try {
-                villagerSetCareerMethod.invoke(entity, EnumUtil.valueOf(villagerCareerClass, profession.oldCareer));
+                setCareer.invoke(entity, EnumUtil.valueOf(villagerCareer, profession.oldCareer));
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -132,92 +137,77 @@ public class MobCompat {
 
     // Only 1.14+ villagers have biome variants
     public static void setVillagerType(final Entity entity, final String type) {
-        Class typeEnum = ReflUtil.getClassCached("org.bukkit.entity.Villager.Type");
-        if (typeEnum == null) return;
-
-        Method villagerSetTypeMethod = ReflUtil.getMethodCached(Villager.class, "setVillagerType", typeEnum);
-        try {
-            villagerSetTypeMethod.invoke(entity, EnumUtil.valueOf(typeEnum, type));
-        } catch (Exception e) {
-            e.printStackTrace();
+        if (VersionUtil.getServerBukkitVersion().isLowerThan(VersionUtil.v1_14_R01)) {
+            return;
+        }
+        if (entity instanceof Villager) {
+            ((Villager) entity).setVillagerType(Villager.Type.valueOf(type));
         }
     }
 
     // Llamas only exist in 1.11+
     public static void setLlamaColor(final Entity entity, final String color) {
-        Class llamaClass = ReflUtil.getClassCached("org.bukkit.entity.Llama");
-        if (llamaClass == null) return;
-
-        Class colorEnum = ReflUtil.getClassCached("org.bukkit.entity.Llama.Color");
-        Method setVariantMethod = ReflUtil.getMethodCached(llamaClass, "setColor");
-
-        try {
-            setVariantMethod.invoke(entity, EnumUtil.valueOf(colorEnum, color));
-        } catch (Exception e) {
-            e.printStackTrace();
+        if (VersionUtil.getServerBukkitVersion().isLowerThan(VersionUtil.v1_11_R01)) {
+            return;
+        }
+        if (entity instanceof Llama) {
+            ((Llama) entity).setColor(Llama.Color.valueOf(color));
         }
     }
 
     // Parrots only exist in 1.12+
     public static void setParrotVariant(final Entity entity, final String variant) {
-        Class parrotClass = ReflUtil.getClassCached("org.bukkit.entity.Parrot");
-        if (parrotClass == null) return;
-
-        Class variantEnum = ReflUtil.getClassCached("org.bukkit.entity.Parrot.Variant");
-        Method setVariantMethod = ReflUtil.getMethodCached(parrotClass, "setVariant");
-        try {
-            setVariantMethod.invoke(entity, EnumUtil.valueOf(variantEnum, variant));
-        } catch (Exception e) {
-            e.printStackTrace();
+        if (VersionUtil.getServerBukkitVersion().isLowerThan(VersionUtil.v1_12_0_R01)) {
+            return;
+        }
+        if (entity instanceof Parrot) {
+            ((Parrot) entity).setVariant(Parrot.Variant.valueOf(variant));
         }
     }
 
     // Tropical fish only exist in 1.13+
     public static void setTropicalFishPattern(final Entity entity, final String pattern) {
-        Class tropicalFishClass = ReflUtil.getClassCached("org.bukkit.entity.TropicalFish");
-        if (tropicalFishClass == null) return;
-
-        Class patternEnum = ReflUtil.getClassCached("org.bukkit.entity.TropicalFish.Pattern");
-        Method setPatternMethod = ReflUtil.getMethodCached(tropicalFishClass, "setPattern");
-        try {
-            setPatternMethod.invoke(entity, EnumUtil.valueOf(patternEnum, pattern));
-        } catch (Exception e) {
-            e.printStackTrace();
+        if (VersionUtil.getServerBukkitVersion().isLowerThan(VersionUtil.v1_12_0_R01)) {
+            return;
+        }
+        if (entity instanceof TropicalFish) {
+            ((TropicalFish) entity).setPattern(TropicalFish.Pattern.valueOf(pattern));
         }
     }
 
     // Mushroom cow variant API only exists in 1.14+
     public static void setMooshroomVariant(final Entity entity, final String variant) {
-        Class mushroomCowClass = ReflUtil.getClassCached("org.bukkit.entity.MushroomCow");
-        Class variantEnum = ReflUtil.getClassCached("org.bukkit.entity.MushroomCow.Variant");
-        if (mushroomCowClass == null || variantEnum == null) return;
-
-        Method setVariantMethod = ReflUtil.getMethodCached(mushroomCowClass, "setVariant");
-        try {
-            setVariantMethod.invoke(entity, EnumUtil.valueOf(variantEnum, variant));
-        } catch (Exception e) {
-            e.printStackTrace();
+        if (VersionUtil.getServerBukkitVersion().isLowerThan(VersionUtil.v1_14_R01)) {
+            return;
+        }
+        if (entity instanceof MushroomCow) {
+            ((MushroomCow) entity).setVariant(MushroomCow.Variant.valueOf(variant));
         }
     }
 
     // Pandas only exists in 1.14+
     public static void setPandaGene(final Entity entity, final String gene, final boolean mainGene) {
-        Class pandaClass = ReflUtil.getClassCached("org.bukkit.entity.Panda");
-        if (pandaClass == null) return;
-
-        Class geneEnum = ReflUtil.getClassCached("org.bukkit.entity.Panda.Gene");
-        Method setGeneMethod;
-
-        if (mainGene) {
-            setGeneMethod = ReflUtil.getMethodCached(pandaClass, "setMainGene");
-        } else {
-            setGeneMethod = ReflUtil.getMethodCached(pandaClass, "setHiddenGene");
+        if (VersionUtil.getServerBukkitVersion().isLowerThan(VersionUtil.v1_14_R01)) {
+            return;
         }
+        if (entity instanceof Panda) {
+            Panda panda = (Panda) entity;
+            Panda.Gene pandaGene = Panda.Gene.valueOf(gene);
+            if (mainGene) {
+                panda.setMainGene(pandaGene);
+            } else {
+                panda.setHiddenGene(pandaGene);
+            }
+        }
+    }
 
-        try {
-            setGeneMethod.invoke(entity, EnumUtil.valueOf(geneEnum, gene));
-        } catch (Exception e) {
-            e.printStackTrace();
+    // Foxes only exist in 1.14+
+    public static void setFoxType(final Entity entity, final String type) {
+        if (VersionUtil.getServerBukkitVersion().isLowerThan(VersionUtil.v1_14_R01)) {
+            return;
+        }
+        if (entity instanceof Fox) {
+            ((Fox) entity).setFoxType(Fox.Type.valueOf(type));
         }
     }
 
