@@ -12,6 +12,7 @@ import org.bukkit.material.Colorable;
 
 import java.util.*;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 import static com.earth2me.essentials.I18n.tl;
 
@@ -32,7 +33,7 @@ public enum MobData {
     TAMED_TAMEABLE("tamed", Tameable.class, Data.TAMED, true),
     TAME_TAMEABLE("tame", Tameable.class, Data.TAMED, false),
     RANDOM_SHEEP("random", EntityType.SHEEP, Data.COLORABLE, true),
-    COLORABLE_SHEEP("", StringUtil.joinList(DyeColor.values()).toLowerCase(Locale.ENGLISH), EntityType.SHEEP, Data.COLORABLE, true),
+    COLORABLE_SHEEP("", Arrays.stream(DyeColor.values()).map(color -> color.name().toLowerCase(Locale.ENGLISH)).collect(Collectors.toList()), EntityType.SHEEP, Data.COLORABLE, true),
     POLKA_HORSE("polka", EntityType.HORSE, Horse.Style.BLACK_DOTS, true),
     SOOTY_HORSE("sooty", EntityType.HORSE, Horse.Style.BLACK_DOTS, false),
     BLAZE_HORSE("blaze", EntityType.HORSE, Horse.Style.WHITE, true),
@@ -113,8 +114,8 @@ public enum MobData {
     SNOWY_VILLAGER("snowy", EntityType.VILLAGER, "villagertype:SNOWY", true),
     SWAMP_VILLAGER("swamp", EntityType.VILLAGER, "villagertype:SWAMP", true),
     TAIGA_VILLAGER("taiga", EntityType.VILLAGER, "villagertype:TAIGA", true),
-    SIZE_SLIME("", "<1-100>", EntityType.SLIME.getEntityClass(), Data.SIZE, true),
-    NUM_EXPERIENCE_ORB("", "<1-2000000000>", EntityType.EXPERIENCE_ORB, Data.EXP, true),
+    SIZE_SLIME("", Collections.singletonList("<1-100>"), EntityType.SLIME.getEntityClass(), Data.SIZE, true),
+    NUM_EXPERIENCE_ORB("", Collections.singletonList("<1-2000000000>"), EntityType.EXPERIENCE_ORB, Data.EXP, true),
     RED_PARROT("red", MobCompat.PARROT, "parrot:RED", true),
     GREEN_PARROT("green", MobCompat.PARROT, "parrot:GREEN", true),
     BLUE_PARROT("blue", MobCompat.PARROT, "parrot:BLUE", true),
@@ -155,11 +156,13 @@ public enum MobData {
     BROWN_TRADER_LLAMA("brown", MobCompat.TRADER_LLAMA, "llama:BROWN", true),
     GRAY_TRADER_LLAMA("gray", MobCompat.TRADER_LLAMA, "llama:GRAY", true),
     RANDOM_SHULKER("random", MobCompat.SHULKER, Data.COLORABLE, true),
-    COLORABLE_SHULKER("", StringUtil.joinList(DyeColor.values()).toLowerCase(Locale.ENGLISH), MobCompat.SHULKER, Data.COLORABLE, true),
+    COLORABLE_SHULKER("", Arrays.stream(DyeColor.values()).map(color -> color.name().toLowerCase(Locale.ENGLISH)).collect(Collectors.toList()), MobCompat.SHULKER, Data.COLORABLE, true),
     RED_FOX("red", MobCompat.FOX, "fox:RED", true),
     SNOW_FOX("snow", MobCompat.FOX, "fox:SNOW", true),
-    SIZE_PHANTOM("", "<1-100>", MobCompat.PHANTOM, Data.SIZE, true),
+    SIZE_PHANTOM("", Collections.singletonList("<1-100>"), MobCompat.PHANTOM, Data.SIZE, true),
     RAID_LEADER("leader", MobCompat.RAIDER, Data.RAID_LEADER, true),
+    TROPICAL_FISH_BODY_COLOR("fish_body_color", Arrays.stream(DyeColor.values()).map(color -> color.name().toLowerCase(Locale.ENGLISH) + "body").collect(Collectors.toList()), MobCompat.TROPICAL_FISH, Data.FISH_BODY_COLOR, true),
+    TROPICAL_FISH_PATTERN_COLOR("fish_pattern_color", Arrays.stream(DyeColor.values()).map(color -> color.name().toLowerCase(Locale.ENGLISH) + "pattern").collect(Collectors.toList()), MobCompat.TROPICAL_FISH, Data.FISH_PATTERN_COLOR, true),
     ;
 
 
@@ -178,35 +181,37 @@ public enum MobData {
         EXP,
         SIZE,
         RAID_LEADER,
+        FISH_BODY_COLOR,
+        FISH_PATTERN_COLOR,
     }
 
 
     public static final Logger logger = Logger.getLogger("Essentials");
 
-    MobData(String n, Object type, Object value, boolean isPublic) {
-        this.nickname = n;
-        this.matched = n;
-        this.helpMessage = n;
-        this.type = type;
-        this.value = value;
-        this.isPublic = isPublic;
-    }
-
-    MobData(String n, String h, Object type, Object value, boolean isPublic) {
-        this.nickname = n;
-        this.matched = n;
-        this.helpMessage = h;
-        this.type = type;
-        this.value = value;
-        this.isPublic = isPublic;
-    }
-
     final private String nickname;
-    final private String helpMessage;
+    final private List<String> suggestions;
     final private Object type;
     final private Object value;
     final private boolean isPublic;
     private String matched;
+
+    MobData(String n, Object type, Object value, boolean isPublic) {
+        this.nickname = n;
+        this.matched = n;
+        this.suggestions = Collections.singletonList(n);
+        this.type = type;
+        this.value = value;
+        this.isPublic = isPublic;
+    }
+
+    MobData(String n, List<String> s, Object type, Object value, boolean isPublic) {
+        this.nickname = n;
+        this.matched = n;
+        this.suggestions = s;
+        this.type = type;
+        this.value = value;
+        this.isPublic = isPublic;
+    }
 
     public static LinkedHashMap<String, MobData> getPossibleData(final Entity spawned, boolean publicOnly) {
         LinkedHashMap<String, MobData> mobList = new LinkedHashMap<>();
@@ -229,7 +234,7 @@ public enum MobData {
         LinkedHashMap<String, MobData> posData = getPossibleData(spawned, true);
 
         for (MobData data : posData.values()) {
-            output.add(data.helpMessage);
+            output.add(StringUtil.joinList(data.suggestions));
         }
         return output;
     }
@@ -240,9 +245,11 @@ public enum MobData {
         }
 
         LinkedHashMap<String, MobData> posData = getPossibleData(spawned, false);
-        for (String data : posData.keySet()) {
-            if (name.contains(data)) {
-                return posData.get(data);
+        for (MobData data : posData.values()) {
+            for (String suggestion : data.suggestions) {
+                if (name.contains(suggestion)) {
+                    return data;
+                }
             }
         }
         return null;
@@ -327,6 +334,24 @@ public enum MobData {
             }
         } else if (this.value.equals(Data.RAID_LEADER)) {
             ((Raider) spawned).setPatrolLeader(true);
+        } else if (this.value.equals(Data.FISH_BODY_COLOR)) {
+            for (String match : TROPICAL_FISH_BODY_COLOR.suggestions) {
+                if (rawData.contains(match)) {
+                    this.matched = match;
+                    final String color = match.substring(0, match.indexOf("body")).toUpperCase(Locale.ENGLISH);
+                    ((TropicalFish) spawned).setBodyColor(DyeColor.valueOf(color));
+                    break;
+                }
+            }
+        } else if (this.value.equals(Data.FISH_PATTERN_COLOR)) {
+            for (String match : TROPICAL_FISH_PATTERN_COLOR.suggestions) {
+                if (rawData.contains(match)) {
+                    this.matched = match;
+                    final String color = match.substring(0, match.indexOf("pattern")).toUpperCase(Locale.ENGLISH);
+                    ((TropicalFish) spawned).setPatternColor(DyeColor.valueOf(color));
+                    break;
+                }
+            }
         } else if (this.value instanceof String) {
             final String[] split = ((String) this.value).split(":");
             switch (split[0]) {
