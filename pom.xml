@@ -54,6 +54,8 @@
         <module>nms/LegacyProvider</module>
         <module>nms/ReflectionProvider</module>
         <module>nms/FlattenedProvider</module>
+        <module>providers/BaseProviders</module>
+        <module>providers/NMSReflectionProvider</module>
     </modules>
 
     <dependencies>
