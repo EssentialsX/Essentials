@@ -63,7 +63,7 @@ public interface IUser {
     @Deprecated
     void setAfk(final boolean set);
 
-    boolean setAfk(final boolean set, final AfkStatusChangeEvent.Cause cause);
+    void setAfk(final boolean set, final AfkStatusChangeEvent.Cause cause);
 
     /**
      * 'Hidden' Represents when a player is hidden from others. This status includes when the player is hidden via other
