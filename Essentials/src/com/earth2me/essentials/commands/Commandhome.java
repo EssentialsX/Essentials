@@ -3,6 +3,8 @@ package com.earth2me.essentials.commands;
 import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.StringUtil;
+import net.ess3.api.events.UserTeleportHomeEvent;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Server;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
@@ -41,7 +43,11 @@ public class Commandhome extends EssentialsCommand {
             if ("bed".equalsIgnoreCase(homeName) && user.isAuthorized("essentials.home.bed")) {
                 final Location bed = player.getBase().getBedSpawnLocation();
                 if (bed != null) {
-                    user.getTeleport().teleport(bed, charge, TeleportCause.COMMAND);
+                    UserTeleportHomeEvent event = new UserTeleportHomeEvent(user, bed, UserTeleportHomeEvent.HomeType.BED);
+                    Bukkit.getServer().getPluginManager().callEvent(event);
+                    if (!event.isCancelled()) {
+                        user.getTeleport().teleport(bed, charge, TeleportCause.COMMAND);
+                    }
                     throw new NoChargeException();
                 } else {
                     throw new Exception(tl("bedMissing"));
@@ -53,7 +59,11 @@ public class Commandhome extends EssentialsCommand {
             final List<String> homes = player.getHomes();
             if (homes.isEmpty() && player.equals(user)) {
                 if (ess.getSettings().isSpawnIfNoHome()) {
-                    user.getTeleport().respawn(charge, TeleportCause.COMMAND);
+                    UserTeleportHomeEvent event = new UserTeleportHomeEvent(user, bed != null ? bed : player.getWorld().getSpawnLocation(), UserTeleportHomeEvent.HomeType.RESPAWN);
+                    Bukkit.getServer().getPluginManager().callEvent(event);
+                    if (!event.isCancelled()) {
+                        user.getTeleport().respawn(charge, TeleportCause.COMMAND);
+                    }
                 } else {
                     throw new Exception(tl("noHomeSetPlayer"));
                 }
@@ -97,8 +107,12 @@ public class Commandhome extends EssentialsCommand {
         if (user.getWorld() != loc.getWorld() && ess.getSettings().isWorldHomePermissions() && !user.isAuthorized("essentials.worlds." + loc.getWorld().getName())) {
             throw new Exception(tl("noPerm", "essentials.worlds." + loc.getWorld().getName()));
         }
-        user.getTeleport().teleport(loc, charge, TeleportCause.COMMAND);
-        user.sendMessage(tl("teleportHome", home));
+        UserTeleportHomeEvent event = new UserTeleportHomeEvent(user, loc, UserTeleportHomeEvent.HomeType.HOME);
+        Bukkit.getServer().getPluginManager().callEvent(event);
+        if (!event.isCancelled()) {
+            user.getTeleport().teleport(loc, charge, TeleportCause.COMMAND);
+            user.sendMessage(tl("teleportHome", home));
+        }
     }
 
     @Override
