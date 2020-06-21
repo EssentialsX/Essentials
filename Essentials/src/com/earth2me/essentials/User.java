@@ -497,11 +497,11 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
     }
 
     @Override
-    public void setAfk(boolean set, AfkStatusChangeEvent.Cause cause) {
+    public boolean setAfk(boolean set, AfkStatusChangeEvent.Cause cause) {
         final AfkStatusChangeEvent afkEvent = new AfkStatusChangeEvent(this, set, cause);
         ess.getServer().getPluginManager().callEvent(afkEvent);
         if (afkEvent.isCancelled()) {
-            return;
+            return false;
         }
 
         this.getBase().setSleepingIgnored(this.isAuthorized("essentials.sleepingignored") || set && ess.getSettings().sleepIgnoresAfkPlayers());
@@ -515,6 +515,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
         }
         _setAfk(set);
         updateAfkListName();
+        return true;
     }
 
     private void updateAfkListName() {
@@ -606,8 +607,9 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
 
     public void updateActivity(final boolean broadcast, AfkStatusChangeEvent.Cause cause) {
         if (isAfk()) {
-            setAfk(false, cause);
-            if (broadcast && !isHidden()) {
+            if (!setAfk(false, cause)) {
+                return;
+            } else if (broadcast && !isHidden()) {
                 setDisplayNick();
                 final String msg = tl("userIsNotAway", getDisplayName());
                 final String selfmsg = tl("userIsNotAwaySelf", getDisplayName());
