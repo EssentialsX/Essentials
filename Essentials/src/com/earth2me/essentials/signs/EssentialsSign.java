@@ -376,7 +376,8 @@ public class EssentialsSign {
         return stack;
     }
 
-    protected final BigDecimal getMoney(final String line, final IEssentials ess) throws SignException {
+    protected final BigDecimal getMoney(String line, final IEssentials ess) throws SignException {
+        line = ChatColor.stripColor(line);
         final boolean isMoney = line.matches("^[^0-9-\\.]?[\\.0-9]+[^0-9-\\.]?$");
         return isMoney ? getBigDecimalPositive(NumberUtil.sanitizeCurrencyString(line, ess)) : null;
     }
