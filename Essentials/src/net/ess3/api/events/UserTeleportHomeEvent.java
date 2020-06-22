@@ -15,12 +15,14 @@ public class UserTeleportHomeEvent extends Event implements Cancellable {
     private static final HandlerList handlers = new HandlerList();
 
     private final IUser user;
+    private final String homeName;
     private final Location target;
     private final HomeType homeType;
     private boolean cancelled = false;
 
-    public UserTeleportHomeEvent(IUser user, Location target, HomeType homeType) {
+    public UserTeleportHomeEvent(IUser user, String homeName, Location target, HomeType homeType) {
         this.user = user;
+        this.homeName = homeName;
         this.target = target;
         this.homeType = homeType;
     }
@@ -35,6 +37,20 @@ public class UserTeleportHomeEvent extends Event implements Cancellable {
     }
 
     /**
+     * Returns the name of the home being teleported to.
+     *
+     * The behavior of this method varies based on the {@link HomeType} as follows;
+     * {@link HomeType#HOME}  - Returns name of home being teleported to.
+     * {@link HomeType#BED}   - Returns "bed".
+     * {@link HomeType#SPAWN} - Returns null.
+     *
+     * @return Name of home being teleported to, or null if the user had no homes set.
+     */
+    public String getHomeName() {
+        return homeName;
+    }
+
+    /**
      * Returns the location the user is teleporting to.
      *
      * @return Teleportation destination location.
@@ -46,9 +62,9 @@ public class UserTeleportHomeEvent extends Event implements Cancellable {
     /**
      * Returns the home location type.
      *
-     * {@link HomeType#HOME}    - A user-set home location.
-     * {@link HomeType#BED}     - A user's bed location.
-     * {@link HomeType#RESPAWN} - A user's bed location, if set. Otherwise, the world spawn.
+     * {@link HomeType#HOME}  - A user-set home location.
+     * {@link HomeType#BED}   - A user's bed location.
+     * {@link HomeType#SPAWN} - The user's current world spawn.
      *
      * @return Home location type.
      */
@@ -78,6 +94,6 @@ public class UserTeleportHomeEvent extends Event implements Cancellable {
     public enum HomeType {
         HOME,
         BED,
-        RESPAWN
+        SPAWN
     }
 }

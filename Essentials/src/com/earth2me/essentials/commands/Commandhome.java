@@ -42,7 +42,7 @@ public class Commandhome extends EssentialsCommand {
             if ("bed".equalsIgnoreCase(homeName) && user.isAuthorized("essentials.home.bed")) {
                 final Location bed = player.getBase().getBedSpawnLocation();
                 if (bed != null) {
-                    UserTeleportHomeEvent event = new UserTeleportHomeEvent(user, bed, UserTeleportHomeEvent.HomeType.BED);
+                    UserTeleportHomeEvent event = new UserTeleportHomeEvent(user, "bed", bed, UserTeleportHomeEvent.HomeType.BED);
                     server.getPluginManager().callEvent(event);
                     if (!event.isCancelled()) {
                         user.getTeleport().teleport(bed, charge, TeleportCause.COMMAND);
@@ -58,7 +58,7 @@ public class Commandhome extends EssentialsCommand {
             final List<String> homes = player.getHomes();
             if (homes.isEmpty() && player.equals(user)) {
                 if (ess.getSettings().isSpawnIfNoHome()) {
-                    UserTeleportHomeEvent event = new UserTeleportHomeEvent(user, bed != null ? bed : player.getWorld().getSpawnLocation(), UserTeleportHomeEvent.HomeType.RESPAWN);
+                    UserTeleportHomeEvent event = new UserTeleportHomeEvent(user, null, bed != null ? bed : player.getWorld().getSpawnLocation(), bed != null ? UserTeleportHomeEvent.HomeType.BED : UserTeleportHomeEvent.HomeType.SPAWN);
                     server.getPluginManager().callEvent(event);
                     if (!event.isCancelled()) {
                         user.getTeleport().respawn(charge, TeleportCause.COMMAND);
@@ -106,7 +106,7 @@ public class Commandhome extends EssentialsCommand {
         if (user.getWorld() != loc.getWorld() && ess.getSettings().isWorldHomePermissions() && !user.isAuthorized("essentials.worlds." + loc.getWorld().getName())) {
             throw new Exception(tl("noPerm", "essentials.worlds." + loc.getWorld().getName()));
         }
-        UserTeleportHomeEvent event = new UserTeleportHomeEvent(user, loc, UserTeleportHomeEvent.HomeType.HOME);
+        UserTeleportHomeEvent event = new UserTeleportHomeEvent(user, home, loc, UserTeleportHomeEvent.HomeType.HOME);
         user.getServer().getPluginManager().callEvent(event);
         if (!event.isCancelled()) {
             user.getTeleport().teleport(loc, charge, TeleportCause.COMMAND);
