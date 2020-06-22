@@ -4,7 +4,6 @@ import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.StringUtil;
 import net.ess3.api.events.UserTeleportHomeEvent;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Server;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
@@ -44,7 +43,7 @@ public class Commandhome extends EssentialsCommand {
                 final Location bed = player.getBase().getBedSpawnLocation();
                 if (bed != null) {
                     UserTeleportHomeEvent event = new UserTeleportHomeEvent(user, bed, UserTeleportHomeEvent.HomeType.BED);
-                    Bukkit.getServer().getPluginManager().callEvent(event);
+                    server.getPluginManager().callEvent(event);
                     if (!event.isCancelled()) {
                         user.getTeleport().teleport(bed, charge, TeleportCause.COMMAND);
                     }
@@ -60,7 +59,7 @@ public class Commandhome extends EssentialsCommand {
             if (homes.isEmpty() && player.equals(user)) {
                 if (ess.getSettings().isSpawnIfNoHome()) {
                     UserTeleportHomeEvent event = new UserTeleportHomeEvent(user, bed != null ? bed : player.getWorld().getSpawnLocation(), UserTeleportHomeEvent.HomeType.RESPAWN);
-                    Bukkit.getServer().getPluginManager().callEvent(event);
+                    server.getPluginManager().callEvent(event);
                     if (!event.isCancelled()) {
                         user.getTeleport().respawn(charge, TeleportCause.COMMAND);
                     }
@@ -108,7 +107,7 @@ public class Commandhome extends EssentialsCommand {
             throw new Exception(tl("noPerm", "essentials.worlds." + loc.getWorld().getName()));
         }
         UserTeleportHomeEvent event = new UserTeleportHomeEvent(user, loc, UserTeleportHomeEvent.HomeType.HOME);
-        Bukkit.getServer().getPluginManager().callEvent(event);
+        user.getServer().getPluginManager().callEvent(event);
         if (!event.isCancelled()) {
             user.getTeleport().teleport(loc, charge, TeleportCause.COMMAND);
             user.sendMessage(tl("teleportHome", home));
