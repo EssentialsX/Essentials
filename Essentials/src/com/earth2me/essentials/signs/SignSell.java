@@ -22,7 +22,7 @@ public class SignSell extends EssentialsSign {
     protected boolean onSignCreate(final ISign sign, final User player, final String username, final IEssentials ess) throws SignException {
         validateTrade(sign, 1, 2, player, ess);  
         if(sign.getLine(3).isEmpty()) {
-            updateFromWorth(sign, ess, new BigDecimal("1.0"), true);
+            updateFromWorth(sign, player, ess, new BigDecimal("1.0"));
         }
         else {
             validateTrade(sign, 3, ess);
@@ -32,8 +32,8 @@ public class SignSell extends EssentialsSign {
 
     @Override
     protected boolean onSignInteract(final ISign sign, final User player, final String username, final IEssentials ess) throws SignException, ChargeException, MaxMoneyException {
-        if(sign.getLine(3).startsWith(tl("signFormatWorth"))) {
-            updateFromWorth(sign, ess, new BigDecimal("1.0"), false);
+        if(sign.getLine(3).startsWith(tl("signFormatWorth")) && updateFromWorth(sign, player, ess, new BigDecimal("1.0"))) {
+            return false;
         }
         Trade charge = getTrade(sign, 1, 2, player, ess);
         Trade money = getTrade(sign, 3, ess);

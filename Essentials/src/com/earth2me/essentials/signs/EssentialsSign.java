@@ -441,26 +441,28 @@ public class EssentialsSign {
     /**
      * Updates the sign cost to the value of the item specified in worth.yml multiplied by a multiplier factor
      * @param sign
+     * @param player
      * @param ess
      * @param multiplier multiply the worth price by this amount
-     * @param changeOk set this to true if you don't want an Exception thrown when the price was updated
+     * 
+     * @returns true if the price was changed, false otherwise
      */
-    protected void updateFromWorth(final ISign sign, final IEssentials ess, final BigDecimal multiplier, final boolean changeOk) throws SignException {
-      final ItemStack stack = getItemStack(getSignText(sign, 2), getIntegerPositive(sign.getLine(1)), ess);
-      final int amount = stack.getAmount();
-      BigDecimal price = ess.getWorth().getPrice(ess, stack);
-      if (price == null || amount == 0) {
-        return;
-      }
-      price = price.multiply(multiplier).multiply(new BigDecimal(amount)).setScale(2, RoundingMode.UP);
-      final BigDecimal oldPrice = getMoney(getSignText(sign, 3), ess);
-      if (oldPrice == null || price.compareTo(oldPrice) != 0) {
-        sign.setLine(3, tl("signFormatWorth") + NumberUtil.shortCurrency(price, ess));
-        sign.updateSign();
-        if(!changeOk) {
-            throw new SignException(tl("priceChanged", amount, stack.getType().toString().toLowerCase(Locale.ENGLISH), oldPrice, price));
+    protected boolean updateFromWorth(final ISign sign, final User player, final IEssentials ess, final BigDecimal multiplier) throws SignException {
+        final ItemStack stack = getItemStack(getSignText(sign, 2), getIntegerPositive(sign.getLine(1)), ess);
+        final int amount = stack.getAmount();
+        BigDecimal price = ess.getWorth().getPrice(ess, stack);
+        if (price != null && amount > 0) {
+            price = price.multiply(multiplier).multiply(new BigDecimal(amount)).setScale(2, RoundingMode.UP);
+            final BigDecimal oldPrice = getMoney(getSignText(sign, 3), ess);
+            if (oldPrice == null || price.compareTo(oldPrice) != 0) {
+                final String priceString = NumberUtil.shortCurrency(price, ess);
+                sign.setLine(3, tl("signFormatWorth") + priceString);
+                sign.updateSign();
+                player.sendMessage(tl("priceChanged", amount, stack.getType().toString().toLowerCase(Locale.ENGLISH), (oldPrice == null ? tl("none") : NumberUtil.shortCurrency(oldPrice, ess)), priceString));
+                return true;
+            }
         }
-      }
+        return false;
   }
 
     private void showError(final IEssentials ess, final CommandSource sender, final Throwable exception, final String signName) {

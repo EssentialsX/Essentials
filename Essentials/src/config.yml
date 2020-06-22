@@ -729,7 +729,7 @@ min-money: -10000
 
 # If you don't want buy and sell prices to be the same, set this multiplier to something higher then 1.0
 # All buy prices on buy signs will be the worth value multiplied by this amount.
-economy-buy-multiplier: 1.0
+buy-multiplier: 1.0
 
 # Enable this to log all interactions with trade/buy/sell signs and sell command.
 economy-log-enabled: false

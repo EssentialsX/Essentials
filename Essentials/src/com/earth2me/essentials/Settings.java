@@ -742,7 +742,7 @@ public class Settings implements net.ess3.api.ISettings {
     private BigDecimal economyBuyMultiplier;
 
     private BigDecimal _getEcoBuyMultiplier() {
-      BigDecimal multiplier = config.getBigDecimal("economy-buy-multiplier", new BigDecimal("1.0"));
+      BigDecimal multiplier = config.getBigDecimal("buy-multiplier", new BigDecimal("1.0"));
       if (multiplier.compareTo(BigDecimal.ZERO) <= 0) return new BigDecimal("1.0");
       return multiplier;
     }
