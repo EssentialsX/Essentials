@@ -39,9 +39,4 @@ public interface SpawnerProvider extends Provider {
         is.setItemMeta(meta);
         return is;
     }
-
-    @Override
-    default boolean tryProvider() {
-        return false;
-    }
 }
