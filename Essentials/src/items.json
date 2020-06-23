@@ -194,6 +194,8 @@
     ]
   },
   "acaciasign": "acacia_sign",
+  "acsign": "acacia_sign",
+  "asign": "acacia_sign",
   "minecraft:acacia_sign": "acacia_sign",
   "acacia_slab": {
     "material": "ACACIA_SLAB"
@@ -306,8 +308,28 @@
   "activator_rail": {
     "material": "ACTIVATOR_RAIL"
   },
+  "activaterail": "activator_rail",
+  "activaterails": "activator_rail",
+  "activatetrack": "activator_rail",
   "activatorrail": "activator_rail",
+  "activatorrails": "activator_rail",
+  "activatortrack": "activator_rail",
+  "actrail": "activator_rail",
+  "actrails": "activator_rail",
+  "acttrack": "activator_rail",
+  "arail": "activator_rail",
+  "arails": "activator_rail",
+  "atrack": "activator_rail",
   "minecraft:activator_rail": "activator_rail",
+  "trail": "activator_rail",
+  "trails": "activator_rail",
+  "triggerrail": "activator_rail",
+  "triggerrails": "activator_rail",
+  "triggertrack": "activator_rail",
+  "trrail": "activator_rail",
+  "trrails": "activator_rail",
+  "trtrack": "activator_rail",
+  "ttrack": "activator_rail",
   "air": {
     "material": "AIR"
   },
@@ -868,7 +890,12 @@
     ]
   },
   "birchsign": "birch_sign",
+  "bsign": "birch_sign",
+  "lightsign": "birch_sign",
+  "lsign": "birch_sign",
   "minecraft:birch_sign": "birch_sign",
+  "whitesign": "birch_sign",
+  "wsign": "birch_sign",
   "birch_slab": {
     "material": "BIRCH_SLAB"
   },
@@ -1872,8 +1899,23 @@
   "chest_minecart": {
     "material": "CHEST_MINECART"
   },
+  "ccart": "chest_minecart",
+  "chestcart": "chest_minecart",
+  "chestmc": "chest_minecart",
+  "chestmcart": "chest_minecart",
   "chestminecart": "chest_minecart",
+  "cmc": "chest_minecart",
+  "cmcart": "chest_minecart",
+  "cminecart": "chest_minecart",
   "minecraft:chest_minecart": "chest_minecart",
+  "scart": "chest_minecart",
+  "smc": "chest_minecart",
+  "smcart": "chest_minecart",
+  "sminecart": "chest_minecart",
+  "storagecart": "chest_minecart",
+  "storagemc": "chest_minecart",
+  "storagemcart": "chest_minecart",
+  "storageminecart": "chest_minecart",
   "chicken": {
     "material": "CHICKEN"
   },
@@ -2065,7 +2107,30 @@
   "command_block_minecart": {
     "material": "COMMAND_BLOCK_MINECART"
   },
+  "cbcart": "command_block_minecart",
+  "cblockcart": "command_block_minecart",
+  "cblockmc": "command_block_minecart",
+  "cblockmcart": "command_block_minecart",
+  "cblockminecart": "command_block_minecart",
+  "cbmc": "command_block_minecart",
+  "cbmcart": "command_block_minecart",
+  "cbminecart": "command_block_minecart",
+  "cmdblockcart": "command_block_minecart",
+  "cmdblockmc": "command_block_minecart",
+  "cmdblockmcart": "command_block_minecart",
+  "cmdblockminecart": "command_block_minecart",
+  "cmdcart": "command_block_minecart",
+  "cmdmc": "command_block_minecart",
+  "cmdmcart": "command_block_minecart",
+  "cmdminecart": "command_block_minecart",
+  "commandblockcart": "command_block_minecart",
+  "commandblockmc": "command_block_minecart",
+  "commandblockmcart": "command_block_minecart",
   "commandblockminecart": "command_block_minecart",
+  "commandcart": "command_block_minecart",
+  "commandmc": "command_block_minecart",
+  "commandmcart": "command_block_minecart",
+  "commandminecart": "command_block_minecart",
   "minecraft:command_block_minecart": "command_block_minecart",
   "comparator": {
     "material": "COMPARATOR"
@@ -2915,7 +2980,9 @@
       "SIGN"
     ]
   },
+  "dark_oaksign": "dark_oak_sign",
   "darkoaksign": "dark_oak_sign",
+  "dosign": "dark_oak_sign",
   "minecraft:dark_oak_sign": "dark_oak_sign",
   "dark_oak_slab": {
     "material": "DARK_OAK_SLAB"
@@ -3178,7 +3245,21 @@
   "detector_rail": {
     "material": "DETECTOR_RAIL"
   },
+  "detectingrail": "detector_rail",
+  "detectingrails": "detector_rail",
+  "detectingtrack": "detector_rail",
   "detectorrail": "detector_rail",
+  "detectorrails": "detector_rail",
+  "detectortrack": "detector_rail",
+  "detectrail": "detector_rail",
+  "detectrails": "detector_rail",
+  "detecttrack": "detector_rail",
+  "detrail": "detector_rail",
+  "detrails": "detector_rail",
+  "dettrack": "detector_rail",
+  "drail": "detector_rail",
+  "drails": "detector_rail",
+  "dtrack": "detector_rail",
   "minecraft:detector_rail": "detector_rail",
   "diamond": {
     "material": "DIAMOND"
@@ -4000,8 +4081,35 @@
   "furnace_minecart": {
     "material": "FURNACE_MINECART"
   },
+  "ecart": "furnace_minecart",
+  "emc": "furnace_minecart",
+  "emcart": "furnace_minecart",
+  "eminecart": "furnace_minecart",
+  "enginecart": "furnace_minecart",
+  "enginemc": "furnace_minecart",
+  "enginemcart": "furnace_minecart",
+  "engineminecart": "furnace_minecart",
+  "fcart": "furnace_minecart",
+  "fmc": "furnace_minecart",
+  "fmcart": "furnace_minecart",
+  "fminecart": "furnace_minecart",
+  "furnacecart": "furnace_minecart",
+  "furnacemc": "furnace_minecart",
+  "furnacemcart": "furnace_minecart",
   "furnaceminecart": "furnace_minecart",
   "minecraft:furnace_minecart": "furnace_minecart",
+  "pcart": "furnace_minecart",
+  "pmc": "furnace_minecart",
+  "pmcart": "furnace_minecart",
+  "pminecart": "furnace_minecart",
+  "powercart": "furnace_minecart",
+  "poweredcart": "furnace_minecart",
+  "poweredmc": "furnace_minecart",
+  "poweredmcart": "furnace_minecart",
+  "poweredminecart": "furnace_minecart",
+  "powermc": "furnace_minecart",
+  "powermcart": "furnace_minecart",
+  "powerminecart": "furnace_minecart",
   "ghast_spawn_egg": {
     "material": "GHAST_SPAWN_EGG"
   },
@@ -5338,6 +5446,17 @@
   "hopper_minecart": {
     "material": "HOPPER_MINECART"
   },
+  "hcart": "hopper_minecart",
+  "hmc": "hopper_minecart",
+  "hmcart": "hopper_minecart",
+  "hminecart": "hopper_minecart",
+  "hopcart": "hopper_minecart",
+  "hopmc": "hopper_minecart",
+  "hopmcart": "hopper_minecart",
+  "hopminecart": "hopper_minecart",
+  "hoppercart": "hopper_minecart",
+  "hoppermc": "hopper_minecart",
+  "hoppermcart": "hopper_minecart",
   "hopperminecart": "hopper_minecart",
   "minecraft:hopper_minecart": "hopper_minecart",
   "horn_coral": {
@@ -6168,6 +6287,9 @@
       "SIGN"
     ]
   },
+  "forestsign": "jungle_sign",
+  "fsign": "jungle_sign",
+  "jsign": "jungle_sign",
   "junglesign": "jungle_sign",
   "minecraft:jungle_sign": "jungle_sign",
   "jungle_slab": {
@@ -7915,6 +8037,9 @@
   "minecart": {
     "material": "MINECART"
   },
+  "cart": "minecart",
+  "mc": "minecart",
+  "mcart": "minecart",
   "minecraft:minecart": "minecart",
   "mojang_banner_pattern": {
     "material": "MOJANG_BANNER_PATTERN"
@@ -8689,6 +8814,7 @@
   },
   "minecraft:oak_sign": "oak_sign",
   "oaksign": "oak_sign",
+  "osign": "oak_sign",
   "oak_slab": {
     "material": "OAK_SLAB"
   },
@@ -9573,8 +9699,31 @@
   "powered_rail": {
     "material": "POWERED_RAIL"
   },
+  "boosterrail": "powered_rail",
+  "boosterrails": "powered_rail",
+  "boostertrack": "powered_rail",
+  "boostrail": "powered_rail",
+  "boostrails": "powered_rail",
+  "boosttrack": "powered_rail",
+  "brail": "powered_rail",
+  "brails": "powered_rail",
+  "btrack": "powered_rail",
   "minecraft:powered_rail": "powered_rail",
   "poweredrail": "powered_rail",
+  "poweredrails": "powered_rail",
+  "poweredtrack": "powered_rail",
+  "powerrail": "powered_rail",
+  "powerrails": "powered_rail",
+  "powertrack": "powered_rail",
+  "powrail": "powered_rail",
+  "powrails": "powered_rail",
+  "powtrack": "powered_rail",
+  "prail": "powered_rail",
+  "prails": "powered_rail",
+  "ptrack": "powered_rail",
+  "pwrrail": "powered_rail",
+  "pwrrails": "powered_rail",
+  "pwrtrack": "powered_rail",
   "prismarine": {
     "material": "PRISMARINE"
   },
@@ -9979,21 +10128,21 @@
   "rabbit": {
     "material": "RABBIT"
   },
-  "hare": "rabbit_stew",
-  "hasenpfeffer": "rabbit_stew",
+  "hare": "rabbit",
+  "hasenpfeffer": "rabbit",
   "minecraft:rabbit": "rabbit",
-  "plainhare": "rabbit_stew",
-  "plainhasenpfeffer": "rabbit_stew",
-  "plainrabbit": "rabbit_stew",
-  "rahare": "rabbit_stew",
-  "rahasenpfeffer": "rabbit_stew",
-  "rarabbit": "rabbit_stew",
-  "rawhare": "rabbit_stew",
-  "rawhasenpfeffer": "rabbit_stew",
-  "rawrabbit": "rabbit_stew",
-  "uncookedhare": "rabbit_stew",
-  "uncookedhasenpfeffer": "rabbit_stew",
-  "uncookedrabbit": "rabbit_stew",
+  "plainhare": "rabbit",
+  "plainhasenpfeffer": "rabbit",
+  "plainrabbit": "rabbit",
+  "rahare": "rabbit",
+  "rahasenpfeffer": "rabbit",
+  "rarabbit": "rabbit",
+  "rawhare": "rabbit",
+  "rawhasenpfeffer": "rabbit",
+  "rawrabbit": "rabbit",
+  "uncookedhare": "rabbit",
+  "uncookedhasenpfeffer": "rabbit",
+  "uncookedrabbit": "rabbit",
   "rabbit_foot": {
     "material": "RABBIT_FOOT"
   },
@@ -10040,12 +10189,28 @@
   "rabbit_stew": {
     "material": "RABBIT_STEW"
   },
+  "haresoup": "rabbit_stew",
+  "harestew": "rabbit_stew",
+  "hasenpfeffersoup": "rabbit_stew",
+  "hasenpfefferstew": "rabbit_stew",
   "minecraft:rabbit_stew": "rabbit_stew",
+  "rabbitsoup": "rabbit_stew",
   "rabbitstew": "rabbit_stew",
   "rail": {
     "material": "RAIL"
   },
+  "mcartrail": "rail",
+  "mcartrails": "rail",
+  "mcarttrack": "rail",
+  "mcrail": "rail",
+  "mcrails": "rail",
+  "mctrack": "rail",
+  "minecartrail": "rail",
+  "minecartrails": "rail",
+  "minecarttrack": "rail",
   "minecraft:rail": "rail",
+  "rails": "rail",
+  "track": "rail",
   "ravager_spawn_egg": {
     "material": "RAVAGER_SPAWN_EGG"
   },
@@ -11525,8 +11690,13 @@
       "SIGN"
     ]
   },
+  "darksign": "spruce_sign",
+  "dsign": "spruce_sign",
   "minecraft:spruce_sign": "spruce_sign",
+  "pinesign": "spruce_sign",
+  "psign": "spruce_sign",
   "sprucesign": "spruce_sign",
+  "ssign": "spruce_sign",
   "spruce_slab": {
     "material": "SPRUCE_SLAB"
   },
@@ -12752,7 +12922,30 @@
   "tnt_minecart": {
     "material": "TNT_MINECART"
   },
+  "bcart": "tnt_minecart",
+  "bmc": "tnt_minecart",
+  "bmcart": "tnt_minecart",
+  "bminecart": "tnt_minecart",
+  "bombcart": "tnt_minecart",
+  "bombmc": "tnt_minecart",
+  "bombmcart": "tnt_minecart",
+  "bombminecart": "tnt_minecart",
+  "dcart": "tnt_minecart",
+  "dmc": "tnt_minecart",
+  "dmcart": "tnt_minecart",
+  "dminecart": "tnt_minecart",
+  "dynamitecart": "tnt_minecart",
+  "dynamitemc": "tnt_minecart",
+  "dynamitemcart": "tnt_minecart",
+  "dynamiteminecart": "tnt_minecart",
   "minecraft:tnt_minecart": "tnt_minecart",
+  "tcart": "tnt_minecart",
+  "tmc": "tnt_minecart",
+  "tmcart": "tnt_minecart",
+  "tminecart": "tnt_minecart",
+  "tntcart": "tnt_minecart",
+  "tntmc": "tnt_minecart",
+  "tntmcart": "tnt_minecart",
   "tntminecart": "tnt_minecart",
   "torch": {
     "material": "TORCH"
