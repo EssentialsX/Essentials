@@ -355,6 +355,12 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
 
         pm.registerEvents(tntListener, this);
 
+        try {
+            Class.forName("com.destroystokyo.paper.event.player.PlayerRecipeBookClickEvent");
+            final EssentialsPaperListener paperListener = new EssentialsPaperListener(this);
+            pm.registerEvents(paperListener, this);
+        } catch (ClassNotFoundException ignored) {}
+
         jails.resetListener();
     }
 

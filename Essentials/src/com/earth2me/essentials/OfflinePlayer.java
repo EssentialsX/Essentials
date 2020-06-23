@@ -1,7 +1,13 @@
 package com.earth2me.essentials;
 
+import com.destroystokyo.paper.ClientOption;
+import com.destroystokyo.paper.Title;
+import com.destroystokyo.paper.block.TargetBlockInfo;
+import com.destroystokyo.paper.entity.TargetEntityInfo;
+import com.destroystokyo.paper.profile.PlayerProfile;
 import net.ess3.nms.refl.ReflUtil;
 
+import net.md_5.bungee.api.chat.BaseComponent;
 import org.bukkit.*;
 import org.bukkit.advancement.Advancement;
 import org.bukkit.advancement.AdvancementProgress;
@@ -10,12 +16,16 @@ import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.PistonMoveReaction;
+import org.bukkit.block.Sign;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.conversations.Conversation;
 import org.bukkit.conversations.ConversationAbandonedEvent;
 import org.bukkit.entity.*;
 import org.bukkit.entity.memory.MemoryKey;
+import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.inventory.InventoryCloseEvent;
+import org.bukkit.event.player.PlayerResourcePackStatusEvent;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import org.bukkit.inventory.*;
 import org.bukkit.inventory.InventoryView.Property;
@@ -80,6 +90,16 @@ public class OfflinePlayer implements Player {
 
     @Override
     public InetSocketAddress getAddress() {
+        return null;
+    }
+
+    @Override
+    public int getProtocolVersion() {
+        return 0;
+    }
+
+    @Override
+    public InetSocketAddress getVirtualHost() {
         return null;
     }
 
@@ -235,6 +255,31 @@ public class OfflinePlayer implements Player {
 
     @Override
     public Block getTargetBlock(Set<Material> mat, int i) {
+        return null;
+    }
+
+    @Override
+    public Block getTargetBlock(int i, TargetBlockInfo.FluidMode fluidMode) {
+        return null;
+    }
+
+    @Override
+    public BlockFace getTargetBlockFace(int i, TargetBlockInfo.FluidMode fluidMode) {
+        return null;
+    }
+
+    @Override
+    public TargetBlockInfo getTargetBlockInfo(int i, TargetBlockInfo.FluidMode fluidMode) {
+        return null;
+    }
+
+    @Override
+    public Entity getTargetEntity(int i, boolean b) {
+        return null;
+    }
+
+    @Override
+    public TargetEntityInfo getTargetEntityInfo(int i, boolean b) {
         return null;
     }
 
@@ -627,6 +672,76 @@ public class OfflinePlayer implements Player {
     }
 
     @Override
+    public void sendActionBar(String s) {
+
+    }
+
+    @Override
+    public void sendActionBar(char c, String s) {
+
+    }
+
+    @Override
+    public void setPlayerListHeaderFooter(BaseComponent[] baseComponents, BaseComponent[] baseComponents1) {
+
+    }
+
+    @Override
+    public void setPlayerListHeaderFooter(BaseComponent baseComponent, BaseComponent baseComponent1) {
+
+    }
+
+    @Override
+    public void setTitleTimes(int i, int i1, int i2) {
+
+    }
+
+    @Override
+    public void setSubtitle(BaseComponent[] baseComponents) {
+
+    }
+
+    @Override
+    public void setSubtitle(BaseComponent baseComponent) {
+
+    }
+
+    @Override
+    public void showTitle(BaseComponent[] baseComponents) {
+
+    }
+
+    @Override
+    public void showTitle(BaseComponent baseComponent) {
+
+    }
+
+    @Override
+    public void showTitle(BaseComponent[] baseComponents, BaseComponent[] baseComponents1, int i, int i1, int i2) {
+
+    }
+
+    @Override
+    public void showTitle(BaseComponent baseComponent, BaseComponent baseComponent1, int i, int i1, int i2) {
+
+    }
+
+    @Override
+    public void sendTitle(Title title) {
+
+    }
+
+    @Override
+    public void updateTitle(Title title) {
+
+    }
+
+    @Override
+    public void hideTitle() {
+
+    }
+
+    @Override
     public GameMode getGameMode() {
         return GameMode.SURVIVAL;
     }
@@ -750,6 +865,16 @@ public class OfflinePlayer implements Player {
     }
 
     @Override
+    public void giveExp(int i, boolean b) {
+
+    }
+
+    @Override
+    public int applyMending(int i) {
+        return 0;
+    }
+
+    @Override
     public float getExp() {
         return 0F;
     }
@@ -771,6 +896,11 @@ public class OfflinePlayer implements Player {
     @Override
     public Player getKiller() {
         return null;
+    }
+
+    @Override
+    public void setKiller(Player player) {
+
     }
 
     void setName(final String name) {
@@ -941,6 +1071,11 @@ public class OfflinePlayer implements Player {
     }
 
     @Override
+    public void closeInventory(InventoryCloseEvent.Reason reason) {
+
+    }
+
+    @Override
     public ItemStack getItemOnCursor() {
         return null;
     }
@@ -1000,6 +1135,16 @@ public class OfflinePlayer implements Player {
     }
 
     @Override
+    public boolean isJumping() {
+        return false;
+    }
+
+    @Override
+    public void setJumping(boolean b) {
+
+    }
+
+    @Override
     public void abandonConversation(Conversation arg0, ConversationAbandonedEvent arg1) {
     }
 
@@ -1016,6 +1161,16 @@ public class OfflinePlayer implements Player {
     @Override
     public int getExpToLevel() {
         return 0;
+    }
+
+    @Override
+    public Entity releaseLeftShoulderEntity() {
+        return null;
+    }
+
+    @Override
+    public Entity releaseRightShoulderEntity() {
+        return null;
     }
 
     @Override
@@ -1377,6 +1532,41 @@ public class OfflinePlayer implements Player {
     }
 
     @Override
+    public int getArrowsStuck() {
+        return 0;
+    }
+
+    @Override
+    public void setArrowsStuck(int i) {
+
+    }
+
+    @Override
+    public int getShieldBlockingDelay() {
+        return 0;
+    }
+
+    @Override
+    public void setShieldBlockingDelay(int i) {
+
+    }
+
+    @Override
+    public ItemStack getActiveItem() {
+        return null;
+    }
+
+    @Override
+    public int getItemUseRemainingTime() {
+        return 0;
+    }
+
+    @Override
+    public int getHandRaisedTime() {
+        return 0;
+    }
+
+    @Override
     public <T extends Projectile> T launchProjectile(Class<? extends T> type, Vector vector) {
         return null;
     }
@@ -1393,6 +1583,21 @@ public class OfflinePlayer implements Player {
     @Override
     public Location getBedSpawnLocation() {
         return null;
+    }
+
+    @Override
+    public Location getPotentialBedLocation() {
+        return null;
+    }
+
+    @Override
+    public long getLastLogin() {
+        return 0;
+    }
+
+    @Override
+    public long getLastSeen() {
+        return 0;
     }
 
     @Override
@@ -1591,6 +1796,26 @@ public class OfflinePlayer implements Player {
     }
 
     @Override
+    public boolean getAffectsSpawning() {
+        return false;
+    }
+
+    @Override
+    public void setAffectsSpawning(boolean b) {
+
+    }
+
+    @Override
+    public int getViewDistance() {
+        return 0;
+    }
+
+    @Override
+    public void setViewDistance(int i) {
+
+    }
+
+    @Override
     public boolean hasCooldown(Material material) {
         return false;
     }
@@ -1620,6 +1845,11 @@ public class OfflinePlayer implements Player {
 
     @Override
     public void setShoulderEntityRight(Entity entity) {
+    }
+
+    @Override
+    public void openSign(Sign sign) {
+
     }
 
     @Override
@@ -1663,6 +1893,81 @@ public class OfflinePlayer implements Player {
 
     @Override
     public void openBook(ItemStack book) {
+    }
+
+    @Override
+    public void setResourcePack(String s, String s1) {
+
+    }
+
+    @Override
+    public PlayerResourcePackStatusEvent.Status getResourcePackStatus() {
+        return null;
+    }
+
+    @Override
+    public String getResourcePackHash() {
+        return null;
+    }
+
+    @Override
+    public boolean hasResourcePack() {
+        return false;
+    }
+
+    @Override
+    public PlayerProfile getPlayerProfile() {
+        return null;
+    }
+
+    @Override
+    public void setPlayerProfile(PlayerProfile playerProfile) {
+
+    }
+
+    @Override
+    public float getCooldownPeriod() {
+        return 0;
+    }
+
+    @Override
+    public float getCooledAttackStrength(float v) {
+        return 0;
+    }
+
+    @Override
+    public void resetCooldown() {
+
+    }
+
+    @Override
+    public <T> T getClientOption(ClientOption<T> clientOption) {
+        return null;
+    }
+
+    @Override
+    public Spigot spigot() {
+        return null;
+    }
+
+    @Override
+    public Location getOrigin() {
+        return null;
+    }
+
+    @Override
+    public boolean fromMobSpawner() {
+        return false;
+    }
+
+    @Override
+    public Chunk getChunk() {
+        return null;
+    }
+
+    @Override
+    public CreatureSpawnEvent.SpawnReason getEntitySpawnReason() {
+        return null;
     }
 
     @Override
