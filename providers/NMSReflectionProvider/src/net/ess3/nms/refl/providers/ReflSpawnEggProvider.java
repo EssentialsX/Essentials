@@ -1,7 +1,7 @@
 package net.ess3.nms.refl.providers;
 
 import net.ess3.nms.refl.SpawnEggRefl;
-import net.ess3.provider.providers.SpawnEggProvider;
+import net.ess3.provider.SpawnEggProvider;
 import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
 
