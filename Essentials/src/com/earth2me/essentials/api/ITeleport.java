@@ -7,6 +7,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerTeleportEvent;
 
 
+/**
+ * @deprecated This API is not asynchronous. Use {@link com.earth2me.essentials.api.IAsyncTeleport IAsyncTeleport}
+ */
 public interface ITeleport {
     /**
      * Used to skip teleportPlayer delay when teleporting someone to a location or player.
@@ -17,6 +20,7 @@ public interface ITeleport {
      *
      * @throws Exception
      */
+    @Deprecated
     void now(Location loc, boolean cooldown, PlayerTeleportEvent.TeleportCause cause) throws Exception;
 
     /**
@@ -28,6 +32,7 @@ public interface ITeleport {
      *
      * @throws Exception
      */
+    @Deprecated
     void now(Player entity, boolean cooldown, PlayerTeleportEvent.TeleportCause cause) throws Exception;
 
     @Deprecated
@@ -42,6 +47,7 @@ public interface ITeleport {
      *
      * @throws Exception
      */
+    @Deprecated
     void teleport(Location loc, Trade chargeFor, PlayerTeleportEvent.TeleportCause cause) throws Exception;
 
     /**
@@ -53,6 +59,7 @@ public interface ITeleport {
      *
      * @throws Exception
      */
+    @Deprecated
     void teleport(Player entity, Trade chargeFor, PlayerTeleportEvent.TeleportCause cause) throws Exception;
 
     /**
@@ -65,6 +72,7 @@ public interface ITeleport {
      *
      * @throws Exception
      */
+    @Deprecated
     void teleportPlayer(IUser otherUser, Location loc, Trade chargeFor, PlayerTeleportEvent.TeleportCause cause) throws Exception;
 
     /**
@@ -77,6 +85,7 @@ public interface ITeleport {
      *
      * @throws Exception
      */
+    @Deprecated
     void teleportPlayer(IUser otherUser, Player entity, Trade chargeFor, PlayerTeleportEvent.TeleportCause cause) throws Exception;
 
     /**
@@ -87,6 +96,7 @@ public interface ITeleport {
      *
      * @throws Exception
      */
+    @Deprecated
     void respawn(final Trade chargeFor, PlayerTeleportEvent.TeleportCause cause) throws Exception;
 
     /**
@@ -99,6 +109,7 @@ public interface ITeleport {
      *
      * @throws Exception
      */
+    @Deprecated
     void warp(IUser otherUser, String warp, Trade chargeFor, PlayerTeleportEvent.TeleportCause cause) throws Exception;
 
     /**
@@ -108,6 +119,7 @@ public interface ITeleport {
      *
      * @throws Exception
      */
+    @Deprecated
     void back(Trade chargeFor) throws Exception;
 
     /**
@@ -117,10 +129,11 @@ public interface ITeleport {
      *
      * @param teleporter - The user performing the /back command.
      *                   This value may be {@code null} to indicate console.
-     * @param chargeFor - What the {@code teleporter} will be charged if teleportPlayer is successful
+     * @param chargeFor  - What the {@code teleporter} will be charged if teleportPlayer is successful
      *
      * @throws Exception
      */
+    @Deprecated
     void back(IUser teleporter, Trade chargeFor) throws Exception;
 
     /**
@@ -128,6 +141,7 @@ public interface ITeleport {
      *
      * @throws Exception
      */
+    @Deprecated
     void back() throws Exception;
 
 }
