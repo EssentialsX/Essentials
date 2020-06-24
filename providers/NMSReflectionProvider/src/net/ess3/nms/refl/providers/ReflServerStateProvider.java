@@ -20,9 +20,7 @@ public class ReflServerStateProvider implements ServerStateProvider {
             serverObject = nmsClass.getMethod("getServer").invoke(null);
             isRunning = MethodHandles.lookup().findVirtual(nmsClass, "isRunning", MethodType.methodType(boolean.class));
         } catch (Exception e) {
-            logger.severe("Something's gone terribly wrong!");
             e.printStackTrace();
-            logger.severe("Something's gone terribly wrong!");
         }
         nmsServer = serverObject;
         nmsIsRunning = isRunning;

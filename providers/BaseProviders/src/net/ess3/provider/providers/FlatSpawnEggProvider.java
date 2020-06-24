@@ -23,6 +23,6 @@ public class FlatSpawnEggProvider implements SpawnEggProvider {
 
     @Override
     public String getDescription() {
-        return "1.13+ Flatting Spawn Egg Provider";
+        return "1.13+ Flattening Spawn Egg Provider";
     }
 }
