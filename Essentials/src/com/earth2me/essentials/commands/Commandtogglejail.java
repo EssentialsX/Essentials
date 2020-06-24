@@ -9,6 +9,7 @@ import org.bukkit.Server;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 import static com.earth2me.essentials.I18n.tl;
 
@@ -43,22 +44,33 @@ public class Commandtogglejail extends EssentialsCommand {
             ess.getServer().getPluginManager().callEvent(event);
 
             if (!event.isCancelled()) {
+                long preTimeDiff = 0;
+                if (args.length > 2) {
+                    final String time = getFinalArg(args, 2);
+                    preTimeDiff = DateUtil.parseDateDiff(time, true);
+
+                }
+                final long timeDiff = preTimeDiff;
+                CompletableFuture<Boolean> future = getNewExceptionFuture(sender, commandLabel);
+                future.thenAccept(success -> {
+                    if (success) {
+                        player.setJailed(true);
+                        player.sendMessage(tl("userJailed"));
+                        player.setJail(null);
+                        player.setJail(args[1]);
+                        if (args.length > 2) {
+                            player.setJailTimeout(timeDiff);
+                        }
+                        sender.sendMessage((timeDiff > 0 ? tl("playerJailedFor", player.getName(), DateUtil.formatDateDiff(timeDiff)) : tl("playerJailed", player.getName())));
+                    }
+                });
                 if (player.getBase().isOnline()) {
-                    ess.getJails().sendToJail(player, args[1]);
+                    ess.getJails().sendToJail(player, args[1], future);
                 } else {
                     // Check if jail exists
                     ess.getJails().getJail(args[1]);
+                    future.complete(true);
                 }
-                player.setJailed(true);
-                player.sendMessage(tl("userJailed"));
-                player.setJail(null);
-                player.setJail(args[1]);
-                long timeDiff = 0;
-                if (args.length > 2) {
-                    timeDiff = DateUtil.parseDateDiff(getFinalArg(args, 2), true);
-                    player.setJailTimeout(timeDiff);
-                }
-                sender.sendMessage((timeDiff > 0 ? tl("playerJailedFor", player.getName(), DateUtil.formatDateDiff(timeDiff)) : tl("playerJailed", player.getName())));
             }
             return;
         }
@@ -89,7 +101,14 @@ public class Commandtogglejail extends EssentialsCommand {
                 player.sendMessage(tl("jailReleasedPlayerNotify"));
                 player.setJail(null);
                 if (player.getBase().isOnline()) {
-                    player.getTeleport().back();
+                    CompletableFuture<Boolean> future = getNewExceptionFuture(sender, commandLabel);
+                    player.getAsyncTeleport().back(future);
+                    future.thenAccept(success -> {
+                        if (success) {
+                            sender.sendMessage(tl("jailReleased", player.getName()));
+                        }
+                    });
+                    return;
                 }
                 sender.sendMessage(tl("jailReleased", player.getName()));
             }

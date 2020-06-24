@@ -12,6 +12,7 @@ import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 import static com.earth2me.essentials.I18n.tl;
 
@@ -27,12 +28,17 @@ public class Commandspawn extends EssentialsCommand {
         charge.isAffordableFor(user);
         if (args.length > 0 && user.isAuthorized("essentials.spawn.others")) {
             final User otherUser = getPlayer(server, user, args, 0);
-            respawn(user.getSource(), user, otherUser, charge);
-            if (!otherUser.equals(user)) {
-                otherUser.sendMessage(tl("teleportAtoB", user.getDisplayName(), "spawn"));
-            }
+            CompletableFuture<Boolean> future = new CompletableFuture<>();
+            future.thenAccept(success -> {
+                if (success) {
+                    if (!otherUser.equals(user)) {
+                        otherUser.sendMessage(tl("teleportAtoB", user.getDisplayName(), "spawn"));
+                    }
+                }
+            });
+            respawn(user.getSource(), user, otherUser, charge, commandLabel, future);
         } else {
-            respawn(user.getSource(), user, user, charge);
+            respawn(user.getSource(), user, user, charge, commandLabel, new CompletableFuture<>());
         }
     }
 
@@ -42,8 +48,13 @@ public class Commandspawn extends EssentialsCommand {
             throw new NotEnoughArgumentsException();
         }
         final User user = getPlayer(server, args, 0, true, false);
-        respawn(sender, null, user, null);
-        user.sendMessage(tl("teleportAtoB", Console.NAME, "spawn"));
+        CompletableFuture<Boolean> future = new CompletableFuture<>();
+        respawn(sender, null, user, null, commandLabel, future);
+        future.thenAccept(success -> {
+            if (success) {
+                user.sendMessage(tl("teleportAtoB", Console.NAME, "spawn"));
+            }
+        });
     }
 
     @Override
@@ -54,13 +65,17 @@ public class Commandspawn extends EssentialsCommand {
         return Collections.emptyList();
     }
 
-    private void respawn(final CommandSource sender, final User teleportOwner, final User teleportee, final Trade charge) throws Exception {
+    private void respawn(final CommandSource sender, final User teleportOwner, final User teleportee, final Trade charge, String commandLabel, CompletableFuture<Boolean> future) throws Exception {
         final Location spawn = ((SpawnStorage) this.module).getSpawn(teleportee.getGroup());
         sender.sendMessage(tl("teleporting", spawn.getWorld().getName(), spawn.getBlockX(), spawn.getBlockY(), spawn.getBlockZ()));
+        future.exceptionally(e -> {
+            showError(sender.getSender(), e, commandLabel);
+            return false;
+        });
         if (teleportOwner == null) {
-            teleportee.getTeleport().now(spawn, false, TeleportCause.COMMAND);
+            teleportee.getAsyncTeleport().now(spawn, false, TeleportCause.COMMAND, future);
             return;
         }
-        teleportOwner.getTeleport().teleportPlayer(teleportee, spawn, charge, TeleportCause.COMMAND);
+        teleportOwner.getAsyncTeleport().teleportPlayer(teleportee, spawn, charge, TeleportCause.COMMAND, future);
     }
 }

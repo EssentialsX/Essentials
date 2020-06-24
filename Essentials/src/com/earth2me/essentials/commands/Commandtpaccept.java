@@ -1,11 +1,13 @@
 package com.earth2me.essentials.commands;
 
-import com.earth2me.essentials.Teleport;
+import com.earth2me.essentials.AsyncTeleport;
 import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.User;
 import org.bukkit.Location;
 import org.bukkit.Server;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
+
+import java.util.concurrent.CompletableFuture;
 
 import static com.earth2me.essentials.I18n.tl;
 
@@ -49,24 +51,31 @@ public class Commandtpaccept extends EssentialsCommand {
         user.sendMessage(tl("requestAccepted"));
         requester.sendMessage(tl("requestAcceptedFrom", user.getDisplayName()));
 
-        try {
-            if (user.isTpRequestHere()) {
-                final Location loc = user.getTpRequestLocation();
-                Teleport teleport = requester.getTeleport();
-                teleport.setTpType(Teleport.TeleportType.TPA);
-                teleport.teleportPlayer(user, user.getTpRequestLocation(), charge, TeleportCause.COMMAND);
-                requester.sendMessage(tl("teleporting", loc.getWorld().getName(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ()));
-            } else {
-                Teleport teleport = requester.getTeleport();
-                teleport.setTpType(Teleport.TeleportType.TPA);
-                teleport.teleport(user.getBase(), charge, TeleportCause.COMMAND);
-            }
-        } catch (Exception ex) {
+        CompletableFuture<Boolean> future = getNewExceptionFuture(requester.getSource(), commandLabel);
+        future.exceptionally(e -> {
             user.sendMessage(tl("pendingTeleportCancelled"));
-            ess.showError(requester.getSource(), ex, commandLabel);
+            return false;
+        });
+        future.thenAccept(success -> {
+           if (success) {
+               user.requestTeleport(null, false);
+           }
+        });
+        if (user.isTpRequestHere()) {
+            final Location loc = user.getTpRequestLocation();
+            AsyncTeleport teleport = (AsyncTeleport) requester.getAsyncTeleport();
+            teleport.setTpType(AsyncTeleport.TeleportType.TPA);
+            future.thenAccept(success -> {
+                if (success) {
+                    requester.sendMessage(tl("teleporting", loc.getWorld().getName(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ()));
+                }
+            });
+            teleport.teleportPlayer(user, user.getTpRequestLocation(), charge, TeleportCause.COMMAND, future);
+        } else {
+            AsyncTeleport teleport = (AsyncTeleport) requester.getAsyncTeleport();
+            teleport.setTpType(AsyncTeleport.TeleportType.TPA);
+            teleport.teleport(user.getBase(), charge, TeleportCause.COMMAND, future);
         }
-        user.requestTeleport(null, false);
-        throw new NoChargeException();
     }
 
 }
