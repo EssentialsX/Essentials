@@ -49,11 +49,9 @@
         <module>EssentialsProtect</module>
         <module>EssentialsSpawn</module>
         <module>EssentialsXMPP</module>
-        <module>nms/NMSProvider</module>
-        <module>nms/UpdatedMetaProvider</module>
-        <module>nms/LegacyProvider</module>
-        <module>nms/ReflectionProvider</module>
-        <module>nms/FlattenedProvider</module>
+        <module>providers/BaseProviders</module>
+        <module>providers/NMSReflectionProvider</module>
+        <module>providers/PaperProvider</module>
     </modules>
 
     <dependencies>

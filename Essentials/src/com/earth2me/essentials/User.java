@@ -16,7 +16,6 @@ import net.ess3.api.events.JailStatusChangeEvent;
 import net.ess3.api.events.MuteStatusChangeEvent;
 import net.ess3.api.events.UserBalanceUpdateEvent;
 import net.ess3.nms.refl.ReflUtil;
-
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -29,6 +28,7 @@ import org.bukkit.potion.PotionEffectType;
 
 import java.math.BigDecimal;
 import java.util.*;
+import java.util.concurrent.CompletableFuture;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -42,7 +42,8 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
     private transient boolean teleportRequestHere;
     private transient Location teleportLocation;
     private transient boolean vanished;
-    private transient final Teleport teleport;
+    private transient final AsyncTeleport teleport;
+    private transient final Teleport legacyTeleport;
     private transient long teleportRequestTime;
     private transient long lastOnlineActivity;
     private transient long lastThrottledAction;
@@ -63,7 +64,8 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
 
     public User(final Player base, final IEssentials ess) {
         super(base, ess);
-        teleport = new Teleport(this, ess);
+        teleport = new AsyncTeleport(this, ess);
+        legacyTeleport = new Teleport(this, ess);
         if (isAfk()) {
             afkPosition = this.getLocation();
         }
@@ -401,8 +403,17 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
     }
 
     @Override
-    public Teleport getTeleport() {
+    public AsyncTeleport getAsyncTeleport() {
         return teleport;
+    }
+
+    /**
+     * @deprecated This API is not asynchronous. Use {@link User#getAsyncTeleport()}
+     */
+    @Override
+    @Deprecated
+    public Teleport getTeleport() {
+        return legacyTeleport;
     }
 
     public long getLastOnlineActivity() {
@@ -567,14 +578,12 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
                 sendMessage(tl("haveBeenReleased"));
                 setJail(null);
                 if (ess.getSettings().isTeleportBackWhenFreedFromJail()) {
-                    try {
-                        getTeleport().back();
-                    } catch (Exception ex) {
-                        try {
-                            getTeleport().respawn(null, TeleportCause.PLUGIN);
-                        } catch (Exception ignored) {
-                        }
-                    }
+                    CompletableFuture<Boolean> future = new CompletableFuture<>();
+                    getAsyncTeleport().back(future);
+                    future.exceptionally(e -> {
+                        getAsyncTeleport().respawn(null, TeleportCause.PLUGIN, new CompletableFuture<>());
+                        return false;
+                    });
                 }
                 return true;
             }

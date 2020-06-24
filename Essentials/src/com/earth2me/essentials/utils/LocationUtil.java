@@ -153,7 +153,7 @@ public class LocationUtil {
     }
 
     public static Location getSafeDestination(final IEssentials ess, final IUser user, final Location loc) throws Exception {
-        if (user.getBase().isOnline() && loc.getWorld().equals(user.getBase().getWorld()) && (user.getBase().getGameMode() == GameMode.CREATIVE || user.isGodModeEnabled()) && user.getBase().getAllowFlight()) {
+        if (user.getBase().isOnline() && (user.getBase().getGameMode() == GameMode.CREATIVE || user.getBase().getGameMode() == GameMode.SPECTATOR || user.isGodModeEnabled()) || user.getBase().getAllowFlight()) {
             if (shouldFly(loc)) {
                 user.getBase().setFlying(true);
             }
