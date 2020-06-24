@@ -10,6 +10,7 @@ import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 import static com.earth2me.essentials.I18n.tl;
 
@@ -21,6 +22,7 @@ public class Commandtp extends EssentialsCommand {
 
     @Override
     public void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception {
+        CompletableFuture<Boolean> future = getNewExceptionFuture(user.getSource(), commandLabel);
         switch (args.length) {
             case 0:
                 throw new NotEnoughArgumentsException();
@@ -41,8 +43,8 @@ public class Commandtp extends EssentialsCommand {
                 }
                 final Trade charge = new Trade(this.getName(), ess);
                 charge.isAffordableFor(user);
-                user.getTeleport().teleport(player.getBase(), charge, TeleportCause.COMMAND);
-                throw new NoChargeException();
+                user.getAsyncTeleport().teleport(player.getBase(), charge, TeleportCause.COMMAND, future);
+                break;
             case 3:
                 if (!user.isAuthorized("essentials.tp.position")) {
                     throw new Exception(tl("noPerm", "essentials.tp.position"));
@@ -54,8 +56,12 @@ public class Commandtp extends EssentialsCommand {
                     throw new NotEnoughArgumentsException(tl("teleportInvalidLocation"));
                 }
                 final Location locpos = new Location(user.getWorld(), x2, y2, z2, user.getLocation().getYaw(), user.getLocation().getPitch());
-                user.getTeleport().now(locpos, false, TeleportCause.COMMAND);
-                user.sendMessage(tl("teleporting", locpos.getWorld().getName(), locpos.getBlockX(), locpos.getBlockY(), locpos.getBlockZ()));
+                user.getAsyncTeleport().now(locpos, false, TeleportCause.COMMAND, future);
+                future.thenAccept(success -> {
+                    if (success) {
+                        user.sendMessage(tl("teleporting", locpos.getWorld().getName(), locpos.getBlockX(), locpos.getBlockY(), locpos.getBlockZ()));
+                    }
+                });
                 break;
             case 4:
                 if (!user.isAuthorized("essentials.tp.others")) {
@@ -76,8 +82,12 @@ public class Commandtp extends EssentialsCommand {
                     throw new Exception(tl("teleportDisabled", target2.getDisplayName()));
                 }
                 user.sendMessage(tl("teleporting", locposother.getWorld().getName(), locposother.getBlockX(), locposother.getBlockY(), locposother.getBlockZ()));
-                target2.getTeleport().now(locposother, false, TeleportCause.COMMAND);
-                target2.sendMessage(tl("teleporting", locposother.getWorld().getName(), locposother.getBlockX(), locposother.getBlockY(), locposother.getBlockZ()));
+                target2.getAsyncTeleport().now(locposother, false, TeleportCause.COMMAND, future);
+                future.thenAccept(success -> {
+                    if (success) {
+                        target2.sendMessage(tl("teleporting", locposother.getWorld().getName(), locposother.getBlockX(), locposother.getBlockY(), locposother.getBlockZ()));
+                    }
+                });
                 break;
             case 2:
             default:
@@ -96,7 +106,7 @@ public class Commandtp extends EssentialsCommand {
                     throw new Exception(tl("noPerm", "essentials.worlds." + toPlayer.getWorld().getName()));
                 }
                 target.sendMessage(tl("teleportAtoB", user.getDisplayName(), toPlayer.getDisplayName()));
-                target.getTeleport().now(toPlayer.getBase(), false, TeleportCause.COMMAND);
+                target.getAsyncTeleport().now(toPlayer.getBase(), false, TeleportCause.COMMAND, future);
                 break;
         }
     }
@@ -111,7 +121,7 @@ public class Commandtp extends EssentialsCommand {
         if (args.length == 2) {
             final User toPlayer = getPlayer(server, args, 1, true, false);
             target.sendMessage(tl("teleportAtoB", Console.NAME, toPlayer.getDisplayName()));
-            target.getTeleport().now(toPlayer.getBase(), false, TeleportCause.COMMAND);
+            target.getAsyncTeleport().now(toPlayer.getBase(), false, TeleportCause.COMMAND, getNewExceptionFuture(sender, commandLabel));
         } else if (args.length > 3) {
             final double x = args[1].startsWith("~") ? target.getLocation().getX() + (args[1].length() > 1 ? Double.parseDouble(args[1].substring(1)) : 0) : Double.parseDouble(args[1]);
             final double y = args[2].startsWith("~") ? target.getLocation().getY() + (args[2].length() > 1 ? Double.parseDouble(args[2].substring(1)) : 0) : Double.parseDouble(args[2]);
@@ -121,8 +131,13 @@ public class Commandtp extends EssentialsCommand {
             }
             final Location loc = new Location(target.getWorld(), x, y, z, target.getLocation().getYaw(), target.getLocation().getPitch());
             sender.sendMessage(tl("teleporting", loc.getWorld().getName(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ()));
-            target.getTeleport().now(loc, false, TeleportCause.COMMAND);
-            target.sendMessage(tl("teleporting", loc.getWorld().getName(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ()));
+            CompletableFuture<Boolean> future = getNewExceptionFuture(sender, commandLabel);
+            target.getAsyncTeleport().now(loc, false, TeleportCause.COMMAND, future);
+            future.thenAccept(success -> {
+                if (success) {
+                    target.sendMessage(tl("teleporting", loc.getWorld().getName(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ()));
+                }
+            });
         } else {
             throw new NotEnoughArgumentsException();
         }

@@ -6,15 +6,16 @@ import org.bukkit.Location;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 
 import static com.earth2me.essentials.I18n.tl;
 
 
-public class TimedTeleport implements Runnable {
+public class AsyncTimedTeleport implements Runnable {
     private static final double MOVE_CONSTANT = 0.3;
     private final IUser teleportOwner;
     private final IEssentials ess;
-    private final Teleport teleport;
+    private final AsyncTeleport teleport;
     private final UUID timer_teleportee;
     private int timer_task;
     private final long timer_started; // time this task was initiated
@@ -32,7 +33,7 @@ public class TimedTeleport implements Runnable {
     private final Trade timer_chargeFor;
     private final TeleportCause timer_cause;
 
-    TimedTeleport(IUser user, IEssentials ess, Teleport teleport, long delay, IUser teleportUser, ITarget target, Trade chargeFor, TeleportCause cause, boolean respawn) {
+    AsyncTimedTeleport(IUser user, IEssentials ess, AsyncTeleport teleport, long delay, IUser teleportUser, ITarget target, Trade chargeFor, TeleportCause cause, boolean respawn) {
         this.teleportOwner = user;
         this.ess = ess;
         this.teleport = teleport;
@@ -88,7 +89,7 @@ public class TimedTeleport implements Runnable {
                 if (now > timer_started + timer_delay) {
                     try {
                         teleport.cooldown(false);
-                    } catch (Exception ex) {
+                    } catch (Throwable ex) {
                         teleportOwner.sendMessage(tl("cooldownWithMessage", ex.getMessage()));
                         if (teleportOwner != teleportUser) {
                             teleportUser.sendMessage(tl("cooldownWithMessage", ex.getMessage()));
@@ -98,17 +99,28 @@ public class TimedTeleport implements Runnable {
                         cancelTimer(false);
                         teleportUser.sendMessage(tl("teleportationCommencing"));
 
+                        CompletableFuture<Boolean> future = new CompletableFuture<>();
+                        future.exceptionally(e -> {
+                            ess.showError(teleportOwner.getSource(), e, "\\ teleport");
+                            return false;
+                        });
                         if (timer_chargeFor != null) {
                             timer_chargeFor.isAffordableFor(teleportOwner);
                         }
                         if (timer_respawn) {
-                            teleport.respawnNow(teleportUser, timer_cause);
+                            teleport.respawnNow(teleportUser, timer_cause, future);
                         } else {
-                            teleport.now(teleportUser, timer_teleportTarget, timer_cause);
+                            teleport.nowAsync(teleportUser, timer_teleportTarget, timer_cause, future);
                         }
-                        if (timer_chargeFor != null) {
-                            timer_chargeFor.charge(teleportOwner);
-                        }
+                        future.thenAccept(success -> {
+                            if (timer_chargeFor != null) {
+                                try {
+                                    timer_chargeFor.charge(teleportOwner);
+                                } catch (ChargeException ex) {
+                                    ess.showError(teleportOwner.getSource(), ex, "\\ teleport");
+                                }
+                            }
+                        });
 
                     } catch (Exception ex) {
                         ess.showError(teleportOwner.getSource(), ex, "\\ teleport");

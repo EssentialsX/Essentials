@@ -17,6 +17,7 @@ import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.CompletableFuture;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -135,13 +136,14 @@ class EssentialsSpawnPlayerListener implements Listener {
                 return;
             }
 
-            try {
-                final Location spawn = spawns.getSpawn(ess.getSettings().getNewbieSpawn());
-                if (spawn != null) {
-                    user.getTeleport().now(spawn, false, TeleportCause.PLUGIN);
-                }
-            } catch (Exception ex) {
-                logger.log(Level.WARNING, tl("teleportNewPlayerError"), ex);
+            final Location spawn = spawns.getSpawn(ess.getSettings().getNewbieSpawn());
+            if (spawn != null) {
+                CompletableFuture<Boolean> future = new CompletableFuture<>();
+                future.exceptionally(e -> {
+                    logger.log(Level.WARNING, tl("teleportNewPlayerError"), e);
+                    return false;
+                });
+                user.getAsyncTeleport().now(spawn, false, TeleportCause.PLUGIN, future);
             }
         }
     }

@@ -1,5 +1,6 @@
 package com.earth2me.essentials.commands;
 
+import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginDescriptionFile;
 import com.earth2me.essentials.CommandSource;
@@ -24,6 +25,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import static com.earth2me.essentials.I18n.tl;
@@ -344,6 +347,24 @@ public abstract class EssentialsCommand implements IEssentialsCommand {
         ess.getLogger().info(command + " -- " + Arrays.toString(effectiveArgs));
 
         return command.tabComplete(sender.getSender(), label, effectiveArgs);
+    }
+
+    @Override
+    public void showError(CommandSender sender, Throwable throwable, String commandLabel) {
+        sender.sendMessage(tl("errorWithMessage", throwable.getMessage()));
+        if (ess.getSettings().isDebug()) {
+            logger.log(Level.INFO, tl("errorCallingCommand", commandLabel), throwable);
+            throwable.printStackTrace();
+        }
+    }
+
+    public CompletableFuture<Boolean> getNewExceptionFuture(CommandSource sender, String commandLabel) {
+        CompletableFuture<Boolean> future = new CompletableFuture<>();
+        future.exceptionally(e -> {
+            showError(sender.getSender(), e, commandLabel);
+            return false;
+        });
+        return future;
     }
 
     /**
