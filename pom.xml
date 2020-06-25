@@ -52,6 +52,7 @@
         <module>providers/BaseProviders</module>
         <module>providers/NMSReflectionProvider</module>
         <module>providers/PaperProvider</module>
+        <module>providers/1_8Provider</module>
     </modules>
 
     <dependencies>
