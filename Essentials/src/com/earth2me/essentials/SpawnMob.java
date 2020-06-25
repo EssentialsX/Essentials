@@ -240,7 +240,7 @@ public class SpawnMob {
             invent.setBootsDropChance(0.0f);
         }
 
-        if (type == EntityType.PIG_ZOMBIE) {
+        if (type == MobCompat.ZOMBIFIED_PIGLIN) {
             final PigZombie zombie = ((PigZombie) spawned);
             setVillager(zombie, false);
 

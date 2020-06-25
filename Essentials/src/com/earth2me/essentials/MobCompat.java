@@ -36,6 +36,7 @@ public class MobCompat {
 
     // Constants for mobs that have changed since earlier versions
     public static final EntityType CAT = getEntityType("CAT", "OCELOT");
+    public static final EntityType ZOMBIFIED_PIGLIN = getEntityType("ZOMBIFIED_PIGLIN", "PIG_ZOMBIE");
 
     public enum CatType {
         // These are (loosely) Mojang names for the cats

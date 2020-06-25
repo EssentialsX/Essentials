@@ -23,7 +23,7 @@ public enum Mob {
     GIANT("Giant", Enemies.ENEMY, EntityType.GIANT),
     HORSE("Horse", Enemies.FRIENDLY, EntityType.HORSE),
     PIG("Pig", Enemies.FRIENDLY, EntityType.PIG),
-    PIGZOMB("PigZombie", Enemies.NEUTRAL, EntityType.PIG_ZOMBIE),
+    PIGZOMB("PigZombie", Enemies.NEUTRAL, MobCompat.ZOMBIFIED_PIGLIN),
     SHEEP("Sheep", Enemies.FRIENDLY, "", EntityType.SHEEP),
     SKELETON("Skeleton", Enemies.ENEMY, EntityType.SKELETON),
     SLIME("Slime", Enemies.ENEMY, EntityType.SLIME),
@@ -92,6 +92,10 @@ public enum Mob {
     WANDERING_TRADER("WanderingTrader", Enemies.FRIENDLY, "WANDERING_TRADER"),
     BEE("Bee", Enemies.NEUTRAL, "BEE"),
     STRAY("Stray", Enemies.ENEMY, "STRAY"),
+    HOGLIN("Hoglin", Enemies.ENEMY, "HOGLIN"),
+    PIGLIN("Piglin", Enemies.NEUTRAL, "PIGLIN"),
+    STRIDER("Strider", Enemies.FRIENDLY, "STRIDER"),
+    ZOGLIN("Zoglin", Enemies.ENEMY, "ZOGLIN"),
     ;
 
     public static final Logger logger = Logger.getLogger("Essentials");
