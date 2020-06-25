@@ -90,7 +90,11 @@ public enum Mob {
     RAVAGER("Ravager", Enemies.ENEMY, "RAVAGER"),
     TRADER_LLAMA("TraderLlama", Enemies.FRIENDLY, "TRADER_LLAMA"),
     WANDERING_TRADER("WanderingTrader", Enemies.FRIENDLY, "WANDERING_TRADER"),
-    BEE("Bee", Enemies.NEUTRAL, "BEE")
+    BEE("Bee", Enemies.NEUTRAL, "BEE"),
+    HOGLIN("Hoglin", Enemies.ADULT_ENEMY, "HOGLIN"),
+    PIGLIN("Piglin", Enemies.ADULT_ENEMY, "PIGLIN"),
+    STRIDER("Strider", Enemies.FRIENDLY, "STRIDER"),
+    ZOGLIN("Zoglin", Enemies.ENEMY, "ZOGLIN"),
     ;
 
     public static final Logger logger = Logger.getLogger("Essentials");
@@ -154,7 +158,8 @@ public enum Mob {
     public enum Enemies {
         FRIENDLY("friendly"),
         NEUTRAL("neutral"),
-        ENEMY("enemy");
+        ENEMY("enemy"),
+        ADULT_ENEMY("adult_enemy");
 
         Enemies(final String type) {
             this.type = type;
