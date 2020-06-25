@@ -235,30 +235,20 @@ public class SpawnMob {
             final EntityEquipment invent = ((LivingEntity) spawned).getEquipment();
             InventoryWorkaround.setItemInMainHand(invent, new ItemStack(Material.BOW, 1));
             InventoryWorkaround.setItemInMainHandDropChance(invent, 0.1f);
-
-            invent.setBoots(new ItemStack(GOLDEN_BOOTS, 1));
-            invent.setBootsDropChance(0.0f);
         }
 
-        if (type.name().equals("PIG_ZOMBIE") || type.name().equals("ZOMBIFIED_PIGLIN")) {
+        if (type == MobCompat.ZOMBIFIED_PIGLIN) {
             final PigZombie zombie = ((PigZombie) spawned);
             setVillager(zombie, false);
 
             final EntityEquipment invent = zombie.getEquipment();
             InventoryWorkaround.setItemInMainHand(invent, new ItemStack(GOLDEN_SWORD, 1));
             InventoryWorkaround.setItemInMainHandDropChance(invent, 0.1f);
-
-            invent.setBoots(new ItemStack(GOLDEN_BOOTS, 1));
-            invent.setBootsDropChance(0.0f);
         }
 
         if (type == EntityType.ZOMBIE) {
             final Zombie zombie = ((Zombie) spawned);
             setVillager(zombie, false);
-
-            final EntityEquipment invent = zombie.getEquipment();
-            invent.setBoots(new ItemStack(GOLDEN_BOOTS, 1));
-            invent.setBootsDropChance(0.0f);
         }
 
         if (type == EntityType.HORSE) {
