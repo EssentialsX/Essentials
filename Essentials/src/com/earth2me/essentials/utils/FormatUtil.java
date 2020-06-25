@@ -21,7 +21,7 @@ public class FormatUtil {
     //Essentials '&' convention colour codes
     private static final Pattern REPLACE_ALL_PATTERN = Pattern.compile("(&)?&([0-9a-fk-orA-FK-OR])");
 
-    private static final Pattern REPLACE_ALL_RGB_PATTERN = Pattern.compile("(&)?&#([A-Fa-f0-9]{6})");
+    private static final Pattern REPLACE_ALL_RGB_PATTERN = Pattern.compile("(&)?&#([0-9a-fA-F]{6})");
     //Used to prepare xmpp output
     private static final Pattern LOGCOLOR_PATTERN = Pattern.compile("\\x1B\\[([0-9]{1,2}(;[0-9]{1,2})?)?[m|K]");
     private static final Pattern URL_PATTERN = Pattern.compile("((?:(?:https?)://)?[\\w-_\\.]{2,})\\.([a-zA-Z]{2,3}(?:/\\S+)?)");
