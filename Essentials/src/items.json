@@ -4507,15 +4507,15 @@
   "gold_ore": {
     "material": "GOLD_ORE"
   },
-  "go": "nether_gold_ore",
-  "goldo": "nether_gold_ore",
-  "goldore": "nether_gold_ore",
-  "gore": "nether_gold_ore",
+  "go": "gold_ore",
+  "goldo": "gold_ore",
+  "goldore": "gold_ore",
+  "gore": "gold_ore",
   "minecraft:gold_ore": "gold_ore",
-  "og": "nether_gold_ore",
-  "ogold": "nether_gold_ore",
-  "oreg": "nether_gold_ore",
-  "oregold": "nether_gold_ore",
+  "og": "gold_ore",
+  "ogold": "gold_ore",
+  "oreg": "gold_ore",
+  "oregold": "gold_ore",
   "golden_apple": {
     "material": "GOLDEN_APPLE"
   },
@@ -8688,7 +8688,19 @@
     "material": "NETHER_GOLD_ORE"
   },
   "minecraft:nether_gold_ore": "nether_gold_ore",
+  "nether_goldo": "nether_gold_ore",
+  "nether_goldore": "nether_gold_ore",
   "nethergoldore": "nether_gold_ore",
+  "nethgoldo": "nether_gold_ore",
+  "nethgoldore": "nether_gold_ore",
+  "ngo": "nether_gold_ore",
+  "ngore": "nether_gold_ore",
+  "onether_gold": "nether_gold_ore",
+  "onethgold": "nether_gold_ore",
+  "ong": "nether_gold_ore",
+  "orenether_gold": "nether_gold_ore",
+  "orenethgold": "nether_gold_ore",
+  "oreng": "nether_gold_ore",
   "nether_quartz_ore": {
     "material": "NETHER_QUARTZ_ORE"
   },
