@@ -90,13 +90,7 @@ public class FormatUtil {
                 if (!isEscaped) {
                     try {
                         String hexCode = rgbMatcher.group(2);
-                        Color.decode("#" + hexCode); //Validates hex color. If invalid, code is marked as escaped.
-                        StringBuilder assembledColorCode = new StringBuilder();
-                        assembledColorCode.append("\u00a7x");
-                        for (char curChar : hexCode.toCharArray()) {
-                            assembledColorCode.append("\u00a7").append(curChar);
-                        }
-                        rgbMatcher.appendReplacement(rgbBuilder, assembledColorCode.toString());
+                        rgbMatcher.appendReplacement(rgbBuilder, parseHexColor(hexCode));
                         continue;
                     } catch (NumberFormatException ignored) {
                     }
@@ -107,6 +101,19 @@ public class FormatUtil {
             return rgbBuilder.toString();
         }
         return legacyBuilder.toString();
+    }
+
+    public static String parseHexColor(String hexColor) throws NumberFormatException {
+        if (hexColor.startsWith("#")) {
+            hexColor = hexColor.substring(1); //fuck you im reassigning this.
+        }
+        Color.decode("#" + hexColor);
+        StringBuilder assembledColorCode = new StringBuilder();
+        assembledColorCode.append("\u00a7x");
+        for (char curChar : hexColor.toCharArray()) {
+            assembledColorCode.append("\u00a7").append(curChar);
+        }
+        return assembledColorCode.toString();
     }
 
     static String stripColor(final String input, final Set<ChatColor> strip) {
