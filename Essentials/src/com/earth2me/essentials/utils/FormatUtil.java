@@ -103,7 +103,14 @@ public class FormatUtil {
         return legacyBuilder.toString();
     }
 
+    /**
+     * @throws NumberFormatException If the provided hex color code is invalid or if version is lower than 1.16.
+     */
     public static String parseHexColor(String hexColor) throws NumberFormatException {
+        if (VersionUtil.getServerBukkitVersion().isLowerThan(VersionUtil.v1_16_1_R01)) {
+            throw new NumberFormatException("Cannot use RGB colors in versions < 1.16");
+        }
+
         if (hexColor.startsWith("#")) {
             hexColor = hexColor.substring(1); //fuck you im reassigning this.
         }
