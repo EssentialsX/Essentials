@@ -1,13 +1,11 @@
 package com.earth2me.essentials.craftbukkit;
 
-import com.destroystokyo.paper.HeightmapType;
 import org.bukkit.*;
 import org.bukkit.block.Biome;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.boss.DragonBattle;
 import org.bukkit.entity.*;
-import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.generator.BlockPopulator;
 import org.bukkit.generator.ChunkGenerator;
 import org.bukkit.inventory.ItemStack;
@@ -15,7 +13,6 @@ import org.bukkit.material.MaterialData;
 import org.bukkit.metadata.MetadataValue;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.util.BoundingBox;
-import org.bukkit.util.Consumer;
 import org.bukkit.util.RayTraceResult;
 import org.bukkit.util.Vector;
 
@@ -25,7 +22,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
-import java.util.concurrent.CompletableFuture;
 import java.util.function.Predicate;
 
 
@@ -36,31 +32,6 @@ public class FakeWorld implements World {
     public FakeWorld(String string, Environment environment) {
         this.name = string;
         this.env = environment;
-    }
-
-    @Override
-    public int getEntityCount() {
-        return 0;
-    }
-
-    @Override
-    public int getTileEntityCount() {
-        return 0;
-    }
-
-    @Override
-    public int getTickableTileEntityCount() {
-        return 0;
-    }
-
-    @Override
-    public int getChunkCount() {
-        return 0;
-    }
-
-    @Override
-    public int getPlayerCount() {
-        return 0;
     }
 
     @Override
@@ -96,11 +67,6 @@ public class FakeWorld implements World {
     @Override
     public Chunk getChunkAt(Block block) {
         throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public CompletableFuture<Chunk> getChunkAtAsync(int i, int i1, boolean b, boolean b1) {
-        return null;
     }
 
     @Override
@@ -309,11 +275,6 @@ public class FakeWorld implements World {
     }
 
     @Override
-    public boolean isDayTime() {
-        return false;
-    }
-
-    @Override
     public boolean hasStorm() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
@@ -417,12 +378,7 @@ public class FakeWorld implements World {
     public boolean createExplosion(Location lctn, float f, boolean bln) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
-
-    @Override
-    public boolean createExplosion(Entity entity, Location location, float v, boolean b, boolean b1) {
-        return false;
-    }
-
+    
     @Override
     public boolean createExplosion(double d, double d1, double d2, float f, boolean bln, boolean bln1, Entity entity) {
         throw new UnsupportedOperationException("Not supported yet.");
@@ -446,11 +402,6 @@ public class FakeWorld implements World {
     @Override
     public <T extends Entity> T spawn(Location location, Class<T> aClass, org.bukkit.util.Consumer<T> consumer) throws IllegalArgumentException {
         throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public <T extends Entity> T spawn(Location location, Class<T> aClass, Consumer<T> consumer, CreatureSpawnEvent.SpawnReason spawnReason) throws IllegalArgumentException {
-        return null;
     }
 
     @Override
@@ -496,11 +447,6 @@ public class FakeWorld implements World {
     @Override
     public Block getHighestBlockAt(Location lctn) {
         throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public int getHighestBlockYAt(int i, int i1, HeightmapType heightmapType) throws UnsupportedOperationException {
-        return 0;
     }
 
     @Override
@@ -894,11 +840,6 @@ public class FakeWorld implements World {
     }
 
     @Override
-    public <T> void spawnParticle(Particle particle, List<Player> list, Player player, double v, double v1, double v2, int i, double v3, double v4, double v5, double v6, T t, boolean b) {
-
-    }
-
-    @Override
     public <T> void spawnParticle(Particle particle, Location location, int i, double v, double v1, double v2, double v3, T t, boolean b) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
@@ -911,31 +852,6 @@ public class FakeWorld implements World {
     @Override
     public Location locateNearestStructure(Location origin, StructureType structureType, int radius, boolean findUnexplored) {
         throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public int getViewDistance() {
-        return 0;
-    }
-
-    @Override
-    public void setViewDistance(int i) {
-
-    }
-
-    @Override
-    public int getNoTickViewDistance() {
-        return 0;
-    }
-
-    @Override
-    public void setNoTickViewDistance(int i) {
-
-    }
-
-    @Override
-    public Spigot spigot() {
-        return null;
     }
 
     @Override
@@ -956,11 +872,6 @@ public class FakeWorld implements World {
     @Override
     public List<Entity> getNearbyEntities(Location loc, double x, double y, double z) {
         throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public Entity getEntity(UUID uuid) {
-        return null;
     }
 
     @Override
