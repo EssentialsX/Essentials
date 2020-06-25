@@ -1,8 +1,24 @@
 package com.earth2me.essentials;
 
 import net.ess3.nms.refl.ReflUtil;
-
-import org.bukkit.*;
+import org.bukkit.BanList;
+import org.bukkit.DyeColor;
+import org.bukkit.Effect;
+import org.bukkit.EntityEffect;
+import org.bukkit.FluidCollisionMode;
+import org.bukkit.GameMode;
+import org.bukkit.Instrument;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
+import org.bukkit.Note;
+import org.bukkit.Particle;
+import org.bukkit.Server;
+import org.bukkit.Sound;
+import org.bukkit.SoundCategory;
+import org.bukkit.Statistic;
+import org.bukkit.WeatherType;
+import org.bukkit.World;
 import org.bukkit.advancement.Advancement;
 import org.bukkit.advancement.AdvancementProgress;
 import org.bukkit.attribute.Attribute;
@@ -13,12 +29,24 @@ import org.bukkit.block.PistonMoveReaction;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.conversations.Conversation;
 import org.bukkit.conversations.ConversationAbandonedEvent;
-import org.bukkit.entity.*;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Player;
+import org.bukkit.entity.Pose;
+import org.bukkit.entity.Projectile;
+import org.bukkit.entity.Vehicle;
+import org.bukkit.entity.Villager;
 import org.bukkit.entity.memory.MemoryKey;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
-import org.bukkit.inventory.*;
+import org.bukkit.inventory.EntityEquipment;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.InventoryView.Property;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.MainHand;
+import org.bukkit.inventory.Merchant;
+import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.map.MapView;
 import org.bukkit.metadata.MetadataValue;
 import org.bukkit.permissions.Permission;
@@ -36,7 +64,12 @@ import org.bukkit.util.Vector;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.InetSocketAddress;
-import java.util.*;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.UUID;
 
 public class OfflinePlayer implements Player {
     private final transient Server server;
@@ -45,7 +78,7 @@ public class OfflinePlayer implements Player {
     private final transient org.bukkit.OfflinePlayer base;
     private boolean allowFlight = false;
     private boolean isFlying = false;
-    private String name = null;
+    private String name;
 
     public OfflinePlayer(final UUID uuid, final Server server) {
         this.server = server;
@@ -117,6 +150,7 @@ public class OfflinePlayer implements Player {
 
     @Override
     public void setAbsorptionAmount(double v) {
+
     }
 
     @Override
@@ -145,9 +179,8 @@ public class OfflinePlayer implements Player {
     }
 
     @Override
-    public void setRotation(float yaw, float pitch) {
-        location.setYaw(yaw);
-        location.setPitch(pitch);
+    public void setRotation(float v, float v1) {
+
     }
 
     public void setLocation(Location loc) {
@@ -244,22 +277,22 @@ public class OfflinePlayer implements Player {
     }
 
     @Override
-    public Block getTargetBlockExact(int maxDistance) {
+    public Block getTargetBlockExact(int i) {
         return null;
     }
 
     @Override
-    public Block getTargetBlockExact(int maxDistance, FluidCollisionMode fluidCollisionMode) {
+    public Block getTargetBlockExact(int i, FluidCollisionMode fluidCollisionMode) {
         return null;
     }
 
     @Override
-    public RayTraceResult rayTraceBlocks(double maxDistance) {
+    public RayTraceResult rayTraceBlocks(double v) {
         return null;
     }
 
     @Override
-    public RayTraceResult rayTraceBlocks(double maxDistance, FluidCollisionMode fluidCollisionMode) {
+    public RayTraceResult rayTraceBlocks(double v, FluidCollisionMode fluidCollisionMode) {
         return null;
     }
 
@@ -406,6 +439,21 @@ public class OfflinePlayer implements Player {
     @Override
     public int getSleepTicks() {
         return 0;
+    }
+
+    @Override
+    public boolean sleep(Location location, boolean b) {
+        return false;
+    }
+
+    @Override
+    public void wakeup(boolean b) {
+
+    }
+
+    @Override
+    public Location getBedLocation() {
+        return null;
     }
 
     @Override
@@ -655,10 +703,12 @@ public class OfflinePlayer implements Player {
 
     @Override
     public void sendExperienceChange(float v) {
+
     }
 
     @Override
     public void sendExperienceChange(float v, int i) {
+
     }
 
     @Override
@@ -805,21 +855,6 @@ public class OfflinePlayer implements Player {
 
     @Override
     public void setBedSpawnLocation(Location lctn, boolean force) {
-    }
-
-    @Override
-    public boolean sleep(Location location, boolean force) {
-        return false;
-    }
-
-    @Override
-    public void wakeup(boolean setSpawnLocation) {
-
-    }
-
-    @Override
-    public Location getBedLocation() {
-        return null;
     }
 
     @Override
@@ -1020,7 +1055,7 @@ public class OfflinePlayer implements Player {
 
     @Override
     public float getAttackCooldown() {
-        return 0f;
+        return 0;
     }
 
     @Override
@@ -1367,6 +1402,11 @@ public class OfflinePlayer implements Player {
     }
 
     @Override
+    public Set<UUID> getCollidableExemptions() {
+        return null;
+    }
+
+    @Override
     public <T> T getMemory(MemoryKey<T> memoryKey) {
         return null;
     }
@@ -1386,7 +1426,7 @@ public class OfflinePlayer implements Player {
     }
 
     @Override
-    public void sendSignChange(Location loc, String[] lines, DyeColor dyeColor) throws IllegalArgumentException {
+    public void sendSignChange(Location location, String[] strings, DyeColor dyeColor) throws IllegalArgumentException {
 
     }
 
@@ -1443,7 +1483,7 @@ public class OfflinePlayer implements Player {
         }
         try {
             Method method = base.getClass().getDeclaredMethod("setBanned", boolean.class);
-            method.invoke(banned);
+            method.invoke(base, banned);
         } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
             // This will never happen in a normal CraftBukkit pre-1.12 instance
             e.printStackTrace();
@@ -1662,7 +1702,13 @@ public class OfflinePlayer implements Player {
 	}
 
     @Override
-    public void openBook(ItemStack book) {
+    public void openBook(ItemStack itemStack) {
+
+    }
+
+    @Override
+    public Spigot spigot() {
+        return null;
     }
 
     @Override

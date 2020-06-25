@@ -23,7 +23,7 @@ public enum Mob {
     GIANT("Giant", Enemies.ENEMY, EntityType.GIANT),
     HORSE("Horse", Enemies.FRIENDLY, EntityType.HORSE),
     PIG("Pig", Enemies.FRIENDLY, EntityType.PIG),
-    PIGZOMB("PigZombie", Enemies.NEUTRAL, EntityType.PIG_ZOMBIE),
+    PIGZOMB("PigZombie", Enemies.NEUTRAL, "PIG_ZOMBIE"),
     SHEEP("Sheep", Enemies.FRIENDLY, "", EntityType.SHEEP),
     SKELETON("Skeleton", Enemies.ENEMY, EntityType.SKELETON),
     SLIME("Slime", Enemies.ENEMY, EntityType.SLIME),
