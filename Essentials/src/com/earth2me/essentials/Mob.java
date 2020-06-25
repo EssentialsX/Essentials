@@ -92,8 +92,8 @@ public enum Mob {
     WANDERING_TRADER("WanderingTrader", Enemies.FRIENDLY, "WANDERING_TRADER"),
     BEE("Bee", Enemies.NEUTRAL, "BEE"),
     STRAY("Stray", Enemies.ENEMY, "STRAY"),
-    HOGLIN("Hoglin", Enemies.ENEMY, "HOGLIN"),
-    PIGLIN("Piglin", Enemies.NEUTRAL, "PIGLIN"),
+    HOGLIN("Hoglin", Enemies.ADULT_ENEMY, "HOGLIN"),
+    PIGLIN("Piglin", Enemies.ADULT_ENEMY, "PIGLIN"),
     STRIDER("Strider", Enemies.FRIENDLY, "STRIDER"),
     ZOGLIN("Zoglin", Enemies.ENEMY, "ZOGLIN"),
     ;
