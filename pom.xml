@@ -49,18 +49,17 @@
         <module>EssentialsProtect</module>
         <module>EssentialsSpawn</module>
         <module>EssentialsXMPP</module>
-        <module>nms/NMSProvider</module>
-        <module>nms/UpdatedMetaProvider</module>
-        <module>nms/LegacyProvider</module>
-        <module>nms/ReflectionProvider</module>
-        <module>nms/FlattenedProvider</module>
+        <module>providers/BaseProviders</module>
+        <module>providers/NMSReflectionProvider</module>
+        <module>providers/PaperProvider</module>
+        <module>providers/1_8Provider</module>
     </modules>
 
     <dependencies>
         <dependency>
-            <groupId>org.bukkit</groupId>
-            <artifactId>bukkit</artifactId>
-            <version>1.15.2-R0.1-SNAPSHOT</version>
+            <groupId>org.spigotmc</groupId>
+            <artifactId>spigot-api</artifactId>
+            <version>1.16.1-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
         <dependency>

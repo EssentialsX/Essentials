@@ -159,7 +159,8 @@ public enum Mob {
     public enum Enemies {
         FRIENDLY("friendly"),
         NEUTRAL("neutral"),
-        ENEMY("enemy");
+        ENEMY("enemy"),
+        ADULT_ENEMY("adult_enemy");
 
         Enemies(final String type) {
             this.type = type;

@@ -66,8 +66,7 @@ public class Commandworld extends EssentialsCommand {
 
         final Trade charge = new Trade(this.getName(), ess);
         charge.isAffordableFor(user);
-        user.getTeleport().teleport(target, charge, TeleportCause.COMMAND);
-        throw new NoChargeException();
+        user.getAsyncTeleport().teleport(target, charge, TeleportCause.COMMAND, getNewExceptionFuture(user.getSource(), commandLabel));
     }
 
     @Override

@@ -18,7 +18,6 @@
 package com.earth2me.essentials;
 
 import com.earth2me.essentials.commands.*;
-import com.earth2me.essentials.craftbukkit.ServerState;
 import com.earth2me.essentials.items.AbstractItemDb;
 import com.earth2me.essentials.items.CustomItemResolver;
 import com.earth2me.essentials.items.FlatItemDb;
@@ -35,20 +34,17 @@ import com.earth2me.essentials.textreader.SimpleTextInput;
 import com.earth2me.essentials.utils.DateUtil;
 import com.earth2me.essentials.utils.VersionUtil;
 import com.google.common.base.Throwables;
+import io.papermc.lib.PaperLib;
 import net.ess3.api.IEssentials;
 import net.ess3.api.ISettings;
 import net.ess3.api.*;
-import net.ess3.nms.PotionMetaProvider;
-import net.ess3.nms.SpawnEggProvider;
-import net.ess3.nms.SpawnerProvider;
-import net.ess3.nms.flattened.FlatSpawnEggProvider;
-import net.ess3.nms.legacy.LegacyPotionMetaProvider;
-import net.ess3.nms.legacy.LegacySpawnEggProvider;
-import net.ess3.nms.legacy.LegacySpawnerProvider;
-import net.ess3.nms.refl.ReflSpawnEggProvider;
-import net.ess3.nms.updatedmeta.BasePotionDataProvider;
-import net.ess3.nms.updatedmeta.BlockMetaSpawnerProvider;
-import net.ess3.providers.ProviderFactory;
+import net.ess3.nms.refl.providers.ReflServerStateProvider;
+import net.ess3.nms.refl.providers.ReflSpawnEggProvider;
+import net.ess3.provider.PotionMetaProvider;
+import net.ess3.provider.ServerStateProvider;
+import net.ess3.provider.SpawnEggProvider;
+import net.ess3.provider.SpawnerProvider;
+import net.ess3.provider.providers.*;
 import org.bukkit.Bukkit;
 import org.bukkit.Server;
 import org.bukkit.World;
@@ -111,6 +107,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
     private transient SpawnerProvider spawnerProvider;
     private transient SpawnEggProvider spawnEggProvider;
     private transient PotionMetaProvider potionMetaProvider;
+    private transient ServerStateProvider serverStateProvider;
     private transient Kits kits;
 
     public Essentials() {
@@ -123,15 +120,6 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
 
     public Essentials(final Server server) {
         super(new JavaPluginLoader(server), new PluginDescriptionFile("Essentials", "", "com.earth2me.essentials.Essentials"), null, null);
-    }
-
-    @SuppressWarnings("unused")
-    public void forceLoadClasses() {
-        try {
-            Class.forName(OfflinePlayer.class.getName());
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
     }
 
     @Override
@@ -196,8 +184,6 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
                 }
             }
 
-            forceLoadClasses();
-
             try {
                 final EssentialsUpgrade upgrade = new EssentialsUpgrade(this);
                 upgrade.beforeSettings();
@@ -246,22 +232,32 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
                 confList.add(jails);
                 execTimer.mark("Init(Jails)");
 
-                spawnerProvider = new ProviderFactory<>(getLogger(),
-                        Arrays.asList(
-                                BlockMetaSpawnerProvider.class,
-                                LegacySpawnerProvider.class
-                        ), "mob spawner").getProvider();
-                spawnEggProvider = new ProviderFactory<>(getLogger(),
-                        Arrays.asList(
-                                FlatSpawnEggProvider.class,
-                                ReflSpawnEggProvider.class,
-                                LegacySpawnEggProvider.class
-                        ), "spawn egg").getProvider();
-                potionMetaProvider = new ProviderFactory<>(getLogger(),
-                        Arrays.asList(
-                                BasePotionDataProvider.class,
-                                LegacyPotionMetaProvider.class
-                        ), "potion meta").getProvider();
+                //Spawner provider only uses one but it's here for legacy...
+                spawnerProvider = new BlockMetaSpawnerProvider();
+
+                //Spawn Egg Providers
+                if (VersionUtil.getServerBukkitVersion().isLowerThanOrEqualTo(VersionUtil.v1_8_8_R01)) {
+                    spawnEggProvider = new LegacySpawnEggProvider();
+                } else if (VersionUtil.getServerBukkitVersion().isLowerThanOrEqualTo(VersionUtil.v1_12_2_R01)) {
+                    spawnEggProvider = new ReflSpawnEggProvider();
+                } else {
+                    spawnEggProvider = new FlatSpawnEggProvider();
+                }
+
+                //Potion Meta Provider
+                if (VersionUtil.getServerBukkitVersion().isLowerThanOrEqualTo(VersionUtil.v1_8_8_R01)) {
+                    potionMetaProvider = new LegacyPotionMetaProvider();
+                } else {
+                    potionMetaProvider = new BasePotionDataProvider();
+                }
+
+                //Server State Provider
+                if (PaperLib.isPaper() && VersionUtil.getServerBukkitVersion().isHigherThanOrEqualTo(VersionUtil.v1_15_2_R01)) {
+                    serverStateProvider = new PaperServerStateProvider();
+                } else {
+                    serverStateProvider = new ReflServerStateProvider(getLogger());
+                }
+
                 execTimer.mark("Init(Providers)");
                 reload();
 
@@ -360,7 +356,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
 
     @Override
     public void onDisable() {
-        boolean stopping = ServerState.isStopping();
+        boolean stopping = getServerStateProvider().isStopping();
         if (!stopping) {
             LOGGER.log(Level.SEVERE, tl("serverReloading"));
         }
@@ -947,6 +943,11 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
     @Override
     public CustomItemResolver getCustomItemResolver() {
         return customItemResolver;
+    }
+
+    @Override
+    public ServerStateProvider getServerStateProvider() {
+        return serverStateProvider;
     }
 
     private static void addDefaultBackPermissionsToWorld(World w) {

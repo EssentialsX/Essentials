@@ -252,6 +252,15 @@ public class Enchantments {
         } catch (IllegalArgumentException ignored) {}
 
         try {
+            Enchantment soulspeed = Enchantment.getByName("SOUL_SPEED");
+            if (soulspeed != null) {
+                ENCHANTMENTS.put("soulspeed", soulspeed);
+                ALIASENCHANTMENTS.put("soilspeed", soulspeed);
+                ALIASENCHANTMENTS.put("sandspeed", soulspeed);
+            }
+        } catch (IllegalArgumentException ignored) {}
+
+        try {
             Class<?> namespacedKeyClass = Class.forName("org.bukkit.NamespacedKey");
             Class<?> enchantmentClass = Class.forName("org.bukkit.enchantments.Enchantment");
             enchantmentClass.getDeclaredMethod("getByKey", namespacedKeyClass);
