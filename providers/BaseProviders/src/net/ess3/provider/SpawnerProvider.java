@@ -1,30 +1,32 @@
 package net.ess3.provider;
 
-import com.google.common.collect.ImmutableMap;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public interface SpawnerProvider extends Provider {
     ItemStack setEntityType(ItemStack is, EntityType type) throws IllegalArgumentException;
 
     EntityType getEntityType(ItemStack is) throws IllegalArgumentException;
 
-    Map<EntityType, String> entityToDisplayName = ImmutableMap.<EntityType, String>builder()
-            .put(EntityType.CAVE_SPIDER, "Cave Spider")
-            .put(EntityType.PIG_ZOMBIE, "Zombie Pigman")
-            .put(EntityType.MAGMA_CUBE, "Magma Cube")
-            .put(EntityType.ENDER_DRAGON, "Ender Dragon")
-            .put(EntityType.MUSHROOM_COW, "Mooshroom")
-            .put(EntityType.SNOWMAN, "Snow Golem")
-            .put(EntityType.OCELOT, "Ocelot")
-            .put(EntityType.IRON_GOLEM, "Iron Golem")
-            .put(EntityType.WITHER, "Wither")
-            .put(EntityType.HORSE, "Horse")
-            .build();
+    Map<EntityType, String> entityToDisplayName = Stream.of("CAVE_SPIDER:Cave Spider", "PIG_ZOMBIE:Zombie Pigman",
+            "ZOMBIFIED_PIGLIN:Zombie Piglin", "MAGMA_CUBE:Magma Cube", "ENDER_DRAGON:Ender Dragon",
+            "MUSHROOM_COW:Mooshroom", "SNOWMAN:Snow Golem", "OCELOT:Ocelot", "IRON_GOLEM:Iron Golem", "WITHER:Wither",
+            "HORSE:Horse")
+            .filter(s -> {
+                try {
+                    EntityType.valueOf(s);
+                    return true;
+                } catch (IllegalArgumentException e) {
+                    return false;
+                }
+            })
+            .collect(Collectors.toMap(s -> EntityType.valueOf(s.split(":")[0]), s -> s.split(":")[1]));
 
     default ItemStack setDisplayName(ItemStack is, EntityType type) {
         ItemMeta meta = is.getItemMeta();
