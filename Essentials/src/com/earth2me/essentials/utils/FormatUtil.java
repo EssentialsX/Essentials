@@ -107,6 +107,9 @@ public class FormatUtil {
         if (hexColor.startsWith("#")) {
             hexColor = hexColor.substring(1); //fuck you im reassigning this.
         }
+        if (hexColor.length() != 6) {
+            throw new NumberFormatException("Invalid hex length");
+        }
         Color.decode("#" + hexColor);
         StringBuilder assembledColorCode = new StringBuilder();
         assembledColorCode.append("\u00a7x");
