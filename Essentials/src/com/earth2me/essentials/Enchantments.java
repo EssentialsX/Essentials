@@ -251,7 +251,7 @@ public class Enchantments {
             }
         } catch (IllegalArgumentException ignored) {}
 
-        try {
+        try { // 1.16
             Enchantment soulspeed = Enchantment.getByName("SOUL_SPEED");
             if (soulspeed != null) {
                 ENCHANTMENTS.put("soulspeed", soulspeed);
