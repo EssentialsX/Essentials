@@ -899,6 +899,11 @@ public class FakeServer implements Server {
     }
 
     @Override
+    public int getTicksPerWaterAmbientSpawns() {
+        return 0;
+    }
+
+    @Override
     public int getTicksPerAmbientSpawns() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
@@ -981,6 +986,11 @@ public class FakeServer implements Server {
     @Override
     public int getWaterAnimalSpawnLimit() {
         throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public int getWaterAmbientSpawnLimit() {
+        return 0;
     }
 
     @Override
