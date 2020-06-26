@@ -396,6 +396,10 @@ commands:
     description: Show contents of a kit.
     usage: /<command> <kitname>
     aliases: [kitpreview,preview,kitshow]
+  editsign:
+    description: Edits a sign in the world.
+    usage: /<command> <set/reset> <line number> [text]
+    aliases: [sign, esign, eeditsign]
   skull:
     description: Set the owner of a player skull
     usage: /<command> [owner]
