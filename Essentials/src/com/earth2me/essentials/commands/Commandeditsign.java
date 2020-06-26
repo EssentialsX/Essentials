@@ -4,6 +4,7 @@ import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.FormatUtil;
 import com.earth2me.essentials.utils.NumberUtil;
 import com.google.common.collect.Lists;
+import org.bukkit.ChatColor;
 import org.bukkit.Server;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
@@ -33,6 +34,9 @@ public class Commandeditsign extends EssentialsCommand {
         try {
             if (args[0].equalsIgnoreCase("set") && args.length > 2) {
                 String text = FormatUtil.formatString(user, "essentials.editsign", getFinalArg(args, 2)).trim();
+                if (ChatColor.stripColor(text).length() > 15 && user.isAuthorized("essentials.editsign.unlimited")) {
+                    throw new Exception(tl("editsignCommandLimit"));
+                }
                 sign.setLine(line, text);
                 sign.update();
                 user.sendMessage(tl("editsignCommandSetSuccess", line + 1, text));
