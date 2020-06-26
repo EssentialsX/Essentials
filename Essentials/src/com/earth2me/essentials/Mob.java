@@ -24,7 +24,7 @@ public enum Mob {
     HORSE("Horse", Enemies.FRIENDLY, EntityType.HORSE),
     PIG("Pig", Enemies.FRIENDLY, EntityType.PIG),
     PIGZOMB("PigZombie", Enemies.NEUTRAL, MobCompat.ZOMBIFIED_PIGLIN),
-    ZOMBIFIED_PIGLIN("Zombified Piglin", Enemies.NEUTRAL, MobCompat.ZOMBIFIED_PIGLIN),
+    ZOMBIFIED_PIGLIN("ZombifiedPiglin", Enemies.NEUTRAL, MobCompat.ZOMBIFIED_PIGLIN),
     SHEEP("Sheep", Enemies.FRIENDLY, "", EntityType.SHEEP),
     SKELETON("Skeleton", Enemies.ENEMY, EntityType.SKELETON),
     SLIME("Slime", Enemies.ENEMY, EntityType.SLIME),
