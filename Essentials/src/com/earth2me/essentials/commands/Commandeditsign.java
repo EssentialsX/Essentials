@@ -34,7 +34,7 @@ public class Commandeditsign extends EssentialsCommand {
         try {
             if (args[0].equalsIgnoreCase("set") && args.length > 2) {
                 String text = FormatUtil.formatString(user, "essentials.editsign", getFinalArg(args, 2)).trim();
-                if (ChatColor.stripColor(text).length() > 15 && user.isAuthorized("essentials.editsign.unlimited")) {
+                if (ChatColor.stripColor(text).length() > 15 && !user.isAuthorized("essentials.editsign.unlimited")) {
                     throw new Exception(tl("editsignCommandLimit"));
                 }
                 sign.setLine(line, text);
