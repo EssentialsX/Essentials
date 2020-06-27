@@ -19,6 +19,7 @@ public class Commandsettpr extends EssentialsCommand {
     @Override
     protected void run(Server server, User user, String commandLabel, String[] args) throws Exception {
         RandomTeleport randomTeleport = ess.getRandomTeleport();
+        randomTeleport.getCachedLocations().clear();
         if (args.length == 0 || "center".equalsIgnoreCase(args[0])) {
             randomTeleport.setCenter(user.getLocation());
             user.sendMessage(tl("settpr"));

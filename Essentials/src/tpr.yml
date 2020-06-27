@@ -1,3 +1,16 @@
 # Configuration for the random teleport command
 min-range: 0.0
 max-range: 1000.0
+excluded-biomes:
+  - cold_ocean
+  - deep_cold_ocean
+  - deep_frozen_ocean
+  - deep_lukewarm_ocean
+  - deep_ocean
+  - deep_warm_ocean
+  - frozen_ocean
+  - frozen_river
+  - lukewarm_ocean
+  - ocean
+  - river
+  - warm_ocean
