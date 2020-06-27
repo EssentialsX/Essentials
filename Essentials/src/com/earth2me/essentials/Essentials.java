@@ -123,15 +123,6 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
         super(new JavaPluginLoader(server), new PluginDescriptionFile("Essentials", "", "com.earth2me.essentials.Essentials"), null, null);
     }
 
-    @SuppressWarnings("unused")
-    public void forceLoadClasses() {
-        try {
-            Class.forName(OfflinePlayer.class.getName());
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-    }
-
     @Override
     public ISettings getSettings() {
         return settings;
@@ -193,8 +184,6 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
                     break;
                 }
             }
-
-            forceLoadClasses();
 
             try {
                 final EssentialsUpgrade upgrade = new EssentialsUpgrade(this);

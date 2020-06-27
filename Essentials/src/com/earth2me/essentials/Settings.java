@@ -365,29 +365,37 @@ public class Settings implements net.ess3.api.ISettings {
         return config.getBoolean("skip-used-one-time-kits-from-kit-list", false);
     }
 
-    private ChatColor operatorColor = null;
+    private String operatorColor = null;
 
     @Override
-    public ChatColor getOperatorColor() {
+    public String getOperatorColor() {
         return operatorColor;
     }
 
-    private ChatColor _getOperatorColor() {
+    private String _getOperatorColor() {
         String colorName = config.getString("ops-name-color", null);
 
         if (colorName == null) {
-            return ChatColor.DARK_RED;
-        }
-        if ("none".equalsIgnoreCase(colorName) || colorName.isEmpty()) {
+            return ChatColor.RED.toString();
+        } else if (colorName.equalsIgnoreCase("none") || colorName.isEmpty()) {
             return null;
         }
 
         try {
-            return ChatColor.valueOf(colorName.toUpperCase(Locale.ENGLISH));
+            return FormatUtil.parseHexColor(colorName);
+        } catch (NumberFormatException ignored) {
+        }
+
+        try {
+            return ChatColor.valueOf(colorName.toUpperCase(Locale.ENGLISH)).toString();
         } catch (IllegalArgumentException ignored) {
         }
 
-        return ChatColor.getByChar(colorName);
+        ChatColor lastResort = ChatColor.getByChar(colorName);
+        if (lastResort != null) {
+            return lastResort.toString();
+        }
+        return null;
     }
 
     @Override

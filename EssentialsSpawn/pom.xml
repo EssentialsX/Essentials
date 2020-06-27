@@ -31,12 +31,6 @@
                         <includes>net.ess3:EssentialsXSpawn</includes>
                     </artifactSet>
                     <createDependencyReducedPom>false</createDependencyReducedPom>
-                    <relocations>
-                        <relocation>
-                            <pattern>io.papermc.lib</pattern>
-                            <shadedPattern>com.earth2me.essentials.paperlib</shadedPattern>
-                        </relocation>
-                    </relocations>
                 </configuration>
             </plugin>
         </plugins>
@@ -47,11 +41,6 @@
             <groupId>net.ess3</groupId>
             <artifactId>EssentialsX</artifactId>
             <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>io.papermc</groupId>
-            <artifactId>paperlib</artifactId>
-            <version>1.0.2</version>
         </dependency>
     </dependencies>
 </project>

@@ -44,7 +44,7 @@ class EssentialsSpawnPlayerListener implements Listener {
 
         if (ess.getSettings().getRespawnAtHome()) {
             Location home;
-            final Location bed = user.getBase().getBedSpawnLocation();
+            final Location bed = user.getBase().getBedSpawnLocation(); // cannot nuke this sync load due to the event being sync so it would hand either way.
             if (bed != null) {
                 home = bed;
             } else {
