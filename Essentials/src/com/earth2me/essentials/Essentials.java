@@ -109,6 +109,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
     private transient PotionMetaProvider potionMetaProvider;
     private transient ServerStateProvider serverStateProvider;
     private transient Kits kits;
+    private transient RandomTeleport randomTeleport;
 
     public Essentials() {
 
@@ -228,6 +229,10 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
                 itemDb = getItemDbFromConfig();
                 confList.add(itemDb);
                 execTimer.mark("Init(ItemDB)");
+
+                randomTeleport = new RandomTeleport(this);
+                confList.add(randomTeleport);
+                execTimer.mark("Init(RandomTeleport)");
 
                 customItemResolver = new CustomItemResolver(this);
                 try {
@@ -675,6 +680,11 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
     @Override
     public Kits getKits() {
         return kits;
+    }
+
+    @Override
+    public RandomTeleport getRandomTeleport() {
+        return randomTeleport;
     }
 
     @Override

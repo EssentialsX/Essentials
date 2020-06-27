@@ -384,6 +384,10 @@ commands:
     description: Creates a jail where you specified named [jailname].
     usage: /<command> <jailname>
     aliases: [esetjail,createjail,ecreatejail]
+  settpr:
+    description: Set the random teleport location and parameters.
+    usage: /<command> [center|minrange|maxrange] [value]
+    aliases: [esettpr, settprandom, esettprandom]
   setwarp:
     description: Creates a new warp.
     usage: /<command> <warp>
@@ -500,6 +504,10 @@ commands:
     description: Teleport to coordinates.
     usage: /<command> <x> <y> <z> [yaw] [pitch] [world]
     aliases: [etppos]
+  tpr:
+    description: Teleport randomly.
+    usage: /<command>
+    aliases: [etpr, tprandom, etprandom]
   tptoggle:
     description: Blocks all forms of teleportation.
     usage: /<command> [player] [on|off]
