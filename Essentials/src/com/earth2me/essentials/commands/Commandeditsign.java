@@ -21,7 +21,7 @@ public class Commandeditsign extends EssentialsCommand {
 
     @Override
     protected void run(Server server, User user, String commandLabel, String[] args) throws Exception {
-        if (args.length < 2 || !NumberUtil.isInt(args[1])) {
+        if (args.length == 0 || (args.length > 1 && !NumberUtil.isInt(args[1]))) {
             throw new NotEnoughArgumentsException();
         }
 
@@ -30,9 +30,9 @@ public class Commandeditsign extends EssentialsCommand {
             throw new Exception(tl("editsignCommandTarget"));
         }
         Sign sign = (Sign) target.getState();
-        int line = Integer.parseInt(args[1]) - 1;
         try {
             if (args[0].equalsIgnoreCase("set") && args.length > 2) {
+                int line = Integer.parseInt(args[1]) - 1;
                 String text = FormatUtil.formatString(user, "essentials.editsign", getFinalArg(args, 2)).trim();
                 if (ChatColor.stripColor(text).length() > 15 && !user.isAuthorized("essentials.editsign.unlimited")) {
                     throw new Exception(tl("editsignCommandLimit"));
@@ -40,7 +40,15 @@ public class Commandeditsign extends EssentialsCommand {
                 sign.setLine(line, text);
                 sign.update();
                 user.sendMessage(tl("editsignCommandSetSuccess", line + 1, text));
-            } else if (args[0].equalsIgnoreCase("reset")) {
+            } else if (args[0].equalsIgnoreCase("clear")) {
+                if (args.length == 1) {
+                    for (int i = 0; i < 4; i++) { // A whole one line of line savings!
+                        sign.setLine(i, "");
+                    }
+                    sign.update();
+                    return;
+                }
+                int line = Integer.parseInt(args[1]) - 1;
                 sign.setLine(line, "");
                 sign.update();
                 user.sendMessage(tl("editsignCommandResetLine", line + 1));

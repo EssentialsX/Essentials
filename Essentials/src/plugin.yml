@@ -398,7 +398,7 @@ commands:
     aliases: [kitpreview,preview,kitshow]
   editsign:
     description: Edits a sign in the world.
-    usage: /<command> <set/reset> <line number> [text]
+    usage: /<command> <set/clear> <line number> [text]
     aliases: [sign, esign, eeditsign]
   skull:
     description: Set the owner of a player skull
