@@ -15,7 +15,6 @@ import net.ess3.api.events.AfkStatusChangeEvent;
 import net.ess3.api.events.JailStatusChangeEvent;
 import net.ess3.api.events.MuteStatusChangeEvent;
 import net.ess3.api.events.UserBalanceUpdateEvent;
-import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -26,7 +25,13 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import java.math.BigDecimal;
-import java.util.*;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.UUID;
+import java.util.WeakHashMap;
 import java.util.concurrent.CompletableFuture;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -351,12 +356,15 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
 
         if (this.getBase().isOp()) {
             try {
-                final ChatColor opPrefix = ess.getSettings().getOperatorColor();
-                if (opPrefix != null && opPrefix.toString().length() > 0) {
-                    prefix.insert(0, opPrefix.toString());
+                final String opPrefix = ess.getSettings().getOperatorColor();
+                if (opPrefix != null && !opPrefix.isEmpty()) {
+                    prefix.insert(0, opPrefix);
                     suffix = "§r";
                 }
-            } catch (Exception ignored) {
+            } catch (Exception e) {
+                if (ess.getSettings().isDebug()) {
+                    e.printStackTrace();
+                }
             }
         }
 

@@ -356,17 +356,18 @@ public class AsyncTeleport implements IAsyncTeleport {
 
     void respawnNow(IUser teleportee, TeleportCause cause, CompletableFuture<Boolean> future) {
         final Player player = teleportee.getBase();
-        Location bed = player.getBedSpawnLocation();
-        if (bed != null) {
-            nowAsync(teleportee, new LocationTarget(bed), cause, future);
-        } else {
-            if (ess.getSettings().isDebug()) {
-                ess.getLogger().info("Could not find bed spawn, forcing respawn event.");
+        PaperLib.getBedSpawnLocationAsync(player, true).thenAccept(location -> {
+            if (location != null) {
+                nowAsync(teleportee, new LocationTarget(location), cause, future);
+            } else {
+                if (ess.getSettings().isDebug()) {
+                    ess.getLogger().info("Could not find bed spawn, forcing respawn event.");
+                }
+                final PlayerRespawnEvent pre = new PlayerRespawnEvent(player, player.getWorld().getSpawnLocation(), false);
+                ess.getServer().getPluginManager().callEvent(pre);
+                nowAsync(teleportee, new LocationTarget(pre.getRespawnLocation()), cause, future);
             }
-            final PlayerRespawnEvent pre = new PlayerRespawnEvent(player, player.getWorld().getSpawnLocation(), false);
-            ess.getServer().getPluginManager().callEvent(pre);
-            nowAsync(teleportee, new LocationTarget(pre.getRespawnLocation()), cause, future);
-        }
+        });
     }
 
     @Override

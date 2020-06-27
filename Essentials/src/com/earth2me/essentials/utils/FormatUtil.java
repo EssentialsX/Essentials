@@ -3,6 +3,7 @@ package com.earth2me.essentials.utils;
 import net.ess3.api.IUser;
 import org.bukkit.ChatColor;
 
+import java.awt.Color;
 import java.util.EnumSet;
 import java.util.Locale;
 import java.util.Set;
@@ -19,6 +20,8 @@ public class FormatUtil {
     private static final Pattern STRIP_ALL_PATTERN = Pattern.compile("\u00a7+([0-9a-fk-orA-FK-OR])");
     //Essentials '&' convention colour codes
     private static final Pattern REPLACE_ALL_PATTERN = Pattern.compile("(&)?&([0-9a-fk-orA-FK-OR])");
+
+    private static final Pattern REPLACE_ALL_RGB_PATTERN = Pattern.compile("(&)?&#([0-9a-fA-F]{6})");
     //Used to prepare xmpp output
     private static final Pattern LOGCOLOR_PATTERN = Pattern.compile("\\x1B\\[([0-9]{1,2}(;[0-9]{1,2})?)?[m|K]");
     private static final Pattern URL_PATTERN = Pattern.compile("((?:(?:https?)://)?[\\w-_\\.]{2,})\\.([a-zA-Z]{2,3}(?:/\\S+)?)");
@@ -57,28 +60,70 @@ public class FormatUtil {
         if (input == null) {
             return null;
         }
-        return replaceColor(input, EnumSet.allOf(ChatColor.class));
+        return replaceColor(input, EnumSet.allOf(ChatColor.class), true);
     }
 
-    static String replaceColor(final String input, final Set<ChatColor> supported) {
-        StringBuffer builder = new StringBuffer();
-        Matcher matcher = REPLACE_ALL_PATTERN.matcher(input);
-        searchLoop: while (matcher.find()) {
-            boolean isEscaped = (matcher.group(1) != null);
+    static String replaceColor(final String input, final Set<ChatColor> supported, boolean rgb) {
+        StringBuffer legacyBuilder = new StringBuffer();
+        Matcher legacyMatcher = REPLACE_ALL_PATTERN.matcher(input);
+        legacyLoop: while (legacyMatcher.find()) {
+            boolean isEscaped = (legacyMatcher.group(1) != null);
             if (!isEscaped) {
-                char code = matcher.group(2).toLowerCase(Locale.ROOT).charAt(0);
+                char code = legacyMatcher.group(2).toLowerCase(Locale.ROOT).charAt(0);
                 for (ChatColor color : supported) {
                     if (color.getChar() == code) {
-                        matcher.appendReplacement(builder, "\u00a7$2");
-                        continue searchLoop;
+                        legacyMatcher.appendReplacement(legacyBuilder, "\u00a7$2");
+                        continue legacyLoop;
                     }
                 }
             }
             // Don't change & to section sign (or replace two &'s with one)
-            matcher.appendReplacement(builder, "&$2");
+            legacyMatcher.appendReplacement(legacyBuilder, "&$2");
         }
-        matcher.appendTail(builder);
-        return builder.toString();
+        legacyMatcher.appendTail(legacyBuilder);
+
+        if (rgb) {
+            StringBuffer rgbBuilder = new StringBuffer();
+            Matcher rgbMatcher = REPLACE_ALL_RGB_PATTERN.matcher(legacyBuilder.toString());
+            while (rgbMatcher.find()) {
+                boolean isEscaped = (rgbMatcher.group(1) != null);
+                if (!isEscaped) {
+                    try {
+                        String hexCode = rgbMatcher.group(2);
+                        rgbMatcher.appendReplacement(rgbBuilder, parseHexColor(hexCode));
+                        continue;
+                    } catch (NumberFormatException ignored) {
+                    }
+                }
+                rgbMatcher.appendReplacement(rgbBuilder, "&#$2");
+            }
+            rgbMatcher.appendTail(rgbBuilder);
+            return rgbBuilder.toString();
+        }
+        return legacyBuilder.toString();
+    }
+
+    /**
+     * @throws NumberFormatException If the provided hex color code is invalid or if version is lower than 1.16.
+     */
+    public static String parseHexColor(String hexColor) throws NumberFormatException {
+        if (VersionUtil.getServerBukkitVersion().isLowerThan(VersionUtil.v1_16_1_R01)) {
+            throw new NumberFormatException("Cannot use RGB colors in versions < 1.16");
+        }
+
+        if (hexColor.startsWith("#")) {
+            hexColor = hexColor.substring(1); //fuck you im reassigning this.
+        }
+        if (hexColor.length() != 6) {
+            throw new NumberFormatException("Invalid hex length");
+        }
+        Color.decode("#" + hexColor);
+        StringBuilder assembledColorCode = new StringBuilder();
+        assembledColorCode.append("\u00a7x");
+        for (char curChar : hexColor.toCharArray()) {
+            assembledColorCode.append("\u00a7").append(curChar);
+        }
+        return assembledColorCode.toString();
     }
 
     static String stripColor(final String input, final Set<ChatColor> strip) {
@@ -134,8 +179,9 @@ public class FormatUtil {
         }
         EnumSet<ChatColor> strip = EnumSet.complementOf(supported);
 
-        if (!supported.isEmpty()) {
-            message = replaceColor(message, supported);
+        boolean rgb = user.isAuthorized(permBase + ".rgb");
+        if (!supported.isEmpty() || rgb) {
+            message = replaceColor(message, supported, rgb);
         }
         if (!strip.isEmpty()) {
             message = stripColor(message, strip);

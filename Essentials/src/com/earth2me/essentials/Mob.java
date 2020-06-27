@@ -23,7 +23,8 @@ public enum Mob {
     GIANT("Giant", Enemies.ENEMY, EntityType.GIANT),
     HORSE("Horse", Enemies.FRIENDLY, EntityType.HORSE),
     PIG("Pig", Enemies.FRIENDLY, EntityType.PIG),
-    PIGZOMB("PigZombie", Enemies.NEUTRAL, EntityType.PIG_ZOMBIE),
+    PIGZOMB("PigZombie", Enemies.NEUTRAL, MobCompat.ZOMBIFIED_PIGLIN),
+    ZOMBIFIED_PIGLIN("ZombifiedPiglin", Enemies.NEUTRAL, MobCompat.ZOMBIFIED_PIGLIN),
     SHEEP("Sheep", Enemies.FRIENDLY, "", EntityType.SHEEP),
     SKELETON("Skeleton", Enemies.ENEMY, EntityType.SKELETON),
     SLIME("Slime", Enemies.ENEMY, EntityType.SLIME),
@@ -90,7 +91,12 @@ public enum Mob {
     RAVAGER("Ravager", Enemies.ENEMY, "RAVAGER"),
     TRADER_LLAMA("TraderLlama", Enemies.FRIENDLY, "TRADER_LLAMA"),
     WANDERING_TRADER("WanderingTrader", Enemies.FRIENDLY, "WANDERING_TRADER"),
-    BEE("Bee", Enemies.NEUTRAL, "BEE")
+    BEE("Bee", Enemies.NEUTRAL, "BEE"),
+    STRAY("Stray", Enemies.ENEMY, "STRAY"),
+    HOGLIN("Hoglin", Enemies.ADULT_ENEMY, "HOGLIN"),
+    PIGLIN("Piglin", Enemies.ADULT_ENEMY, "PIGLIN"),
+    STRIDER("Strider", Enemies.FRIENDLY, "STRIDER"),
+    ZOGLIN("Zoglin", Enemies.ENEMY, "ZOGLIN"),
     ;
 
     public static final Logger logger = Logger.getLogger("Essentials");
@@ -154,7 +160,8 @@ public enum Mob {
     public enum Enemies {
         FRIENDLY("friendly"),
         NEUTRAL("neutral"),
-        ENEMY("enemy");
+        ENEMY("enemy"),
+        ADULT_ENEMY("adult_enemy");
 
         Enemies(final String type) {
             this.type = type;
