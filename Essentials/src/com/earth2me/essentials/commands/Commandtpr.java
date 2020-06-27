@@ -57,13 +57,15 @@ public class Commandtpr extends EssentialsCommand {
         Queue<Location> cachedLocations = randomTeleport.getCachedLocations();
         // Try to build up the cache if it is below the threshold
         if (cachedLocations.size() < randomTeleport.getCacheThreshold()) {
-            for (int i = 0; i < findAttempts; ++i) {
-                calculateRandomLocation(center, minRange, maxRange).thenAccept(location -> {
-                    if (isValidRandomLocation(randomTeleport, location)) {
-                        randomTeleport.getCachedLocations().add(location);
-                    }
-                });
-            }
+            ess.getServer().getScheduler().scheduleSyncDelayedTask(ess, () -> {
+                for (int i = 0; i < findAttempts; ++i) {
+                    calculateRandomLocation(center, minRange, maxRange).thenAccept(location -> {
+                        if (isValidRandomLocation(randomTeleport, location)) {
+                            randomTeleport.getCachedLocations().add(location);
+                        }
+                    });
+                }
+            });
         }
         CompletableFuture<Location> future = new CompletableFuture<>();
         // Return a random location immediately if one is available, otherwise try to find one now
