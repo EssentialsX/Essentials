@@ -46,12 +46,13 @@ public class Commandeditsign extends EssentialsCommand {
                         sign.setLine(i, "");
                     }
                     sign.update();
-                    return;
+                    user.sendMessage(tl("editsignCommandClear"));
+                } else {
+                    int line = Integer.parseInt(args[1]) - 1;
+                    sign.setLine(line, "");
+                    sign.update();
+                    user.sendMessage(tl("editsignCommandClearLine", line + 1));
                 }
-                int line = Integer.parseInt(args[1]) - 1;
-                sign.setLine(line, "");
-                sign.update();
-                user.sendMessage(tl("editsignCommandResetLine", line + 1));
             } else {
                 throw new NotEnoughArgumentsException();
             }
@@ -63,7 +64,7 @@ public class Commandeditsign extends EssentialsCommand {
     @Override
     protected List<String> getTabCompleteOptions(Server server, User user, String commandLabel, String[] args) {
         if (args.length == 1) {
-            return Lists.newArrayList("set", "reset");
+            return Lists.newArrayList("set", "clear");
         } else if (args.length == 2) {
             return Lists.newArrayList("1", "2", "3", "4");
         } else {
