@@ -14,6 +14,7 @@ public class RandomTeleport implements IConf {
         File file = new File(essentials.getDataFolder(), "tpr.yml");
         config = new EssentialsConf(file);
         config.setTemplateName("/tpr.yml");
+        config.options().copyHeader(true);
         reloadConfig();
     }
 

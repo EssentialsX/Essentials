@@ -1,2 +1,3 @@
-min-range: 0
-max-range: 1000
+# Configuration for the random teleport command
+min-range: 0.0
+max-range: 1000.0
