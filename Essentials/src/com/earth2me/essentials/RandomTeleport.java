@@ -33,10 +33,16 @@ public class RandomTeleport implements IConf {
 
     public Location getCenter() {
         try {
-            return config.getLocation("center", essentials.getServer());
-        } catch (InvalidWorldException e) {
-            return null;
+            Location center = config.getLocation("center", essentials.getServer());
+            if (center != null) {
+                return center;
+            }
+        } catch (InvalidWorldException ignored) {
         }
+        Location center = essentials.getServer().getWorlds().get(0).getWorldBorder().getCenter();
+        center.setY(center.getWorld().getHighestBlockYAt(center) + 1);
+        setCenter(center);
+        return center;
     }
 
     public void setCenter(Location center) {
