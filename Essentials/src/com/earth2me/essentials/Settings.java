@@ -158,6 +158,11 @@ public class Settings implements net.ess3.api.ISettings {
     }
 
     @Override
+    public boolean isAlwaysTeleportSafety() {
+        return config.getBoolean("force-safe-teleport-location", false);
+    }
+
+    @Override
     public boolean isTeleportPassengerDismount() {
         return config.getBoolean("teleport-passenger-dismount", true);
     }
