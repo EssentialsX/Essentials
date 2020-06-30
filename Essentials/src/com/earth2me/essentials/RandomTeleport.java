@@ -60,7 +60,7 @@ public class RandomTeleport implements IConf {
     }
 
     public double getMaxRange() {
-        return config.getDouble("max-range", 1000d);
+        return config.getDouble("max-range", getCenter().getWorld().getWorldBorder().getSize() / 2);
     }
 
     public void setMaxRange(double maxRange) {
