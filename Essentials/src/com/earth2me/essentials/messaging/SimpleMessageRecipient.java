@@ -64,7 +64,7 @@ public class SimpleMessageRecipient implements IMessageRecipient {
     }
 
     @Override public MessageResponse sendMessage(IMessageRecipient recipient, String message) {
-        final PrivateMessagePreSendEvent preSendEvent = new PrivateMessagePreSendEvent(this, recipient, message);
+        final PrivateMessagePreSendEvent preSendEvent = new PrivateMessagePreSendEvent(parent, recipient, message);
         ess.getServer().getPluginManager().callEvent(preSendEvent);
         if (preSendEvent.isCancelled()) {
             return MessageResponse.EVENT_CANCELLED;
