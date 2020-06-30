@@ -40,8 +40,8 @@ import net.ess3.api.ISettings;
 import net.ess3.api.*;
 import net.ess3.nms.refl.providers.ReflServerStateProvider;
 import net.ess3.nms.refl.providers.ReflSpawnEggProvider;
-import net.ess3.provider.EventProvider;
 import net.ess3.provider.PotionMetaProvider;
+import net.ess3.provider.ProviderListener;
 import net.ess3.provider.ServerStateProvider;
 import net.ess3.provider.SpawnEggProvider;
 import net.ess3.provider.SpawnerProvider;
@@ -111,7 +111,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
     private transient SpawnEggProvider spawnEggProvider;
     private transient PotionMetaProvider potionMetaProvider;
     private transient ServerStateProvider serverStateProvider;
-    private transient EventProvider recipeBookEventProvider;
+    private transient ProviderListener recipeBookEventProvider;
     private transient Kits kits;
 
     public Essentials() {
@@ -277,7 +277,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
                 if (PaperLib.isPaper()) {
                     try {
                         Class.forName("com.destroystokyo.paper.event.player.PlayerRecipeBookClickEvent");
-                        recipeBookEventProvider = new PaperPlayerRecipeBookClickEventProvider(event -> {
+                        recipeBookEventProvider = new PaperRecipeBookListener(event -> {
                             if (this.getUser(((PlayerEvent) event).getPlayer()).isRecipeSee()) {
                                 ((Cancellable)event).setCancelled(true);
                             }

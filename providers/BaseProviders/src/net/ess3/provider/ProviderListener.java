@@ -5,10 +5,10 @@ import org.bukkit.event.Listener;
 
 import java.util.function.Consumer;
 
-public abstract class EventProvider implements Provider, Listener {
+public abstract class ProviderListener implements Provider, Listener {
     protected Consumer<Event> function;
 
-    public EventProvider(Consumer<Event> function) {
+    public ProviderListener(Consumer<Event> function) {
         this.function = function;
     }
 }

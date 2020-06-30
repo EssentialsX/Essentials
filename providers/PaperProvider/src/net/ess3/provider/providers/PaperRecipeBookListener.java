@@ -1,14 +1,14 @@
 package net.ess3.provider.providers;
 
 import com.destroystokyo.paper.event.player.PlayerRecipeBookClickEvent;
-import net.ess3.provider.EventProvider;
+import net.ess3.provider.ProviderListener;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 
 import java.util.function.Consumer;
 
-public class PaperPlayerRecipeBookClickEventProvider extends EventProvider {
-    public PaperPlayerRecipeBookClickEventProvider(Consumer<Event> function) {
+public class PaperRecipeBookListener extends ProviderListener {
+    public PaperRecipeBookListener(Consumer<Event> function) {
         super(function);
     }
 
