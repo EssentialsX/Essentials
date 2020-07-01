@@ -4,6 +4,7 @@ import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.EnumUtil;
 import com.earth2me.essentials.utils.NumberUtil;
+import com.earth2me.essentials.utils.VersionUtil;
 import org.bukkit.Material;
 import org.bukkit.Server;
 import org.bukkit.inventory.*;
@@ -28,11 +29,14 @@ public class Commandrecipe extends EssentialsCommand {
 
     @Override
     public void run(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception {
-        try {
-            Class.forName("com.destroystokyo.paper.event.player.PlayerRecipeBookClickEvent");
-        } catch (ClassNotFoundException e) {
-            sender.sendMessage(tl("unsupportedFeature"));
-            return;
+        // On versions at or above 1.12, we need recipe book API
+        if (VersionUtil.getServerBukkitVersion().isHigherThanOrEqualTo(VersionUtil.v1_12_0_R01)) {
+            try {
+                Class.forName("com.destroystokyo.paper.event.player.PlayerRecipeBookClickEvent");
+            } catch (ClassNotFoundException e) {
+                sender.sendMessage(tl("unsupportedFeature"));
+                return;
+            }
         }
 
         if (args.length < 1) {

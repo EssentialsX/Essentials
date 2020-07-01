@@ -354,8 +354,6 @@ public interface ISettings extends IConf {
 
     String getItemDbType();
 
-    boolean isForceEnableRecipe();
-
     boolean allowOldIdSigns();
 
     boolean isWaterSafe();
