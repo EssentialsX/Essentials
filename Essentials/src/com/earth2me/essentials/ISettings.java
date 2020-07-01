@@ -372,6 +372,8 @@ public interface ISettings extends IConf {
 
     boolean isSpawnIfNoHome();
 
+    boolean isConfirmHomeOverwrite();
+
     boolean infoAfterDeath();
 
 }
