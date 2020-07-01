@@ -219,7 +219,7 @@ commands:
   itemlore:
     description: Edit the lore of an item.
     usage: /<command> <add/set/clear> [text/line] [text]
-    aliases: [ilore, eilore, eitemlore]
+    aliases: [lore, elore, ilore, eilore, eitemlore]
   itemname:
     description: Names an item.
     usage: /<command> [name]
