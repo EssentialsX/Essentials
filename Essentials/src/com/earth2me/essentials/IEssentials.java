@@ -6,6 +6,7 @@ import com.earth2me.essentials.api.IWarps;
 import com.earth2me.essentials.metrics.Metrics;
 import com.earth2me.essentials.perm.PermissionsHandler;
 import com.earth2me.essentials.register.payment.Methods;
+import net.ess3.provider.SerializationProvider;
 import net.ess3.provider.ServerStateProvider;
 import net.ess3.provider.SpawnerProvider;
 import org.bukkit.World;
@@ -109,4 +110,6 @@ public interface IEssentials extends Plugin {
     SpawnerProvider getSpawnerProvider();
 
     ServerStateProvider getServerStateProvider();
+
+    SerializationProvider getSerializationProvider();
 }

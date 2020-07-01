@@ -10,16 +10,17 @@ import com.earth2me.essentials.utils.DateUtil;
 import com.earth2me.essentials.utils.NumberUtil;
 import net.ess3.api.IEssentials;
 import net.ess3.api.events.KitClaimEvent;
-
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.util.io.BukkitObjectInputStream;
 import org.yaml.snakeyaml.external.biz.base64Coder.Base64Coder;
 
-import java.io.ByteArrayInputStream;
 import java.math.BigDecimal;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 
 import static com.earth2me.essentials.I18n.tl;
@@ -183,9 +184,11 @@ public class Kit {
                 }
 
                 if (kitItem.startsWith("@")) {
-                    BukkitObjectInputStream bis = new BukkitObjectInputStream(new ByteArrayInputStream(Base64Coder.decodeLines(kitItem.substring(1))));
-                    itemList.add((ItemStack) bis.readObject());
-                    bis.close();
+                    if (ess.getSerializationProvider() == null) {
+                        ess.getLogger().log(Level.WARNING, "Cannot give kit item in kit \"" + kitName + "\" to user " + user.getName() + " as kit item requires Paper 1.15.2+ to deserialize.");
+                        continue;
+                    }
+                    itemList.add(ess.getSerializationProvider().deserializeItem(Base64Coder.decodeLines(kitItem.substring(1))));
                     continue;
                 }
 

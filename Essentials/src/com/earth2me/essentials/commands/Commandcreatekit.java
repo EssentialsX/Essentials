@@ -14,14 +14,12 @@ import org.bukkit.configuration.MemoryConfiguration;
 import org.bukkit.configuration.file.YamlConstructor;
 import org.bukkit.configuration.file.YamlRepresenter;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.util.io.BukkitObjectOutputStream;
 import org.yaml.snakeyaml.DumperOptions;
 import org.yaml.snakeyaml.DumperOptions.FlowStyle;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.external.biz.base64Coder.Base64Coder;
 import org.yaml.snakeyaml.representer.Representer;
 
-import java.io.ByteArrayOutputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
@@ -62,16 +60,19 @@ public class Commandcreatekit extends EssentialsCommand {
         String kitname = args[0];
         ItemStack[] items = user.getBase().getInventory().getContents();
         List<String> list = new ArrayList<>();
+
+        boolean usePaperSerial = ess.getSettings().isUseBetterKits();
+
+        if (usePaperSerial && ess.getSerializationProvider() == null) {
+            ess.showError(user.getSource(), new Exception(tl("createKitUnsupported")), commandLabel);
+            usePaperSerial = false;
+        }
+
         for (ItemStack is : items) {
             if (is != null && is.getType() != null && is.getType() != Material.AIR) {
                 String serialized;
-                if (ess.getSettings().isUseBetterKits()) {
-                    ByteArrayOutputStream bos = new ByteArrayOutputStream();
-                    BukkitObjectOutputStream bukkitOutStream = new BukkitObjectOutputStream(bos);
-                    bukkitOutStream.writeObject(is);
-                    bukkitOutStream.close();
-                    serialized = "@" + Base64Coder.encodeLines(bos.toByteArray());
-                    bos.close();
+                if (usePaperSerial) {
+                    serialized = "@" + Base64Coder.encodeLines(ess.getSerializationProvider().serializeItem(is));
                 } else {
                     serialized = ess.getItemDb().serialize(is);
                 }

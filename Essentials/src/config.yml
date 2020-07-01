@@ -329,12 +329,11 @@ pastebin-createkit: false
 
 # Determines if /createkit will generate kits with item serialization.
 # By using serialization, there is added support for for complex items such as potions and shulker boxes.
-# However, serialization removes the ability to edit kits by hand and kits *may* break in future versions.
+# **Warning**: This option only works on 1.15+ Paper servers.
 # The old kit style and commands will still work and function as expected and are not planned to be removed.
-# If this is true, /createkit will use item serialization.
-# If this is false, /createkit will use the regular item alias system.
+# If this is true, /createkit will use item serialization otherwise, it will use the regular item alias system.
 # Default is false.
-use-better-kits: false
+use-paper-serialization-in-createkit: false
 
 # Essentials Sign Control
 # See http://wiki.ess3.net/wiki/Sign_Tutorial for instructions on how to use these.

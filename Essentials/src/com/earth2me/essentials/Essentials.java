@@ -41,6 +41,7 @@ import net.ess3.api.*;
 import net.ess3.nms.refl.providers.ReflServerStateProvider;
 import net.ess3.nms.refl.providers.ReflSpawnEggProvider;
 import net.ess3.provider.PotionMetaProvider;
+import net.ess3.provider.SerializationProvider;
 import net.ess3.provider.ServerStateProvider;
 import net.ess3.provider.SpawnEggProvider;
 import net.ess3.provider.SpawnerProvider;
@@ -108,6 +109,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
     private transient SpawnEggProvider spawnEggProvider;
     private transient PotionMetaProvider potionMetaProvider;
     private transient ServerStateProvider serverStateProvider;
+    private transient SerializationProvider serializationProvider = null;
     private transient Kits kits;
 
     public Essentials() {
@@ -254,6 +256,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
                 //Server State Provider
                 if (PaperLib.isPaper() && VersionUtil.getServerBukkitVersion().isHigherThanOrEqualTo(VersionUtil.v1_15_2_R01)) {
                     serverStateProvider = new PaperServerStateProvider();
+                    serializationProvider = new PaperSerializationProvider();
                 } else {
                     serverStateProvider = new ReflServerStateProvider(getLogger());
                 }
@@ -948,6 +951,11 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
     @Override
     public ServerStateProvider getServerStateProvider() {
         return serverStateProvider;
+    }
+
+    @Override
+    public SerializationProvider getSerializationProvider() {
+        return serializationProvider;
     }
 
     private static void addDefaultBackPermissionsToWorld(World w) {
