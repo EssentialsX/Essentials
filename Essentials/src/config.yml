@@ -329,7 +329,7 @@ pastebin-createkit: false
 
 # Determines if /createkit will generate kits with item serialization.
 # By using serialization, there is added support for for complex items such as potions and shulker boxes.
-# **Warning**: This option only works on 1.15+ Paper servers.
+# **Warning**: This option only works on 1.15+ Paper servers and will bypass any custom serializers.
 # The old kit style and commands will still work and function as expected and are not planned to be removed.
 # If this is true, /createkit will use item serialization otherwise, it will use the regular item alias system.
 # Default is false.
