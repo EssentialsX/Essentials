@@ -279,7 +279,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
                         Class.forName("com.destroystokyo.paper.event.player.PlayerRecipeBookClickEvent");
                         recipeBookEventProvider = new PaperRecipeBookListener(event -> {
                             if (this.getUser(((PlayerEvent) event).getPlayer()).isRecipeSee()) {
-                                ((Cancellable)event).setCancelled(true);
+                                ((Cancellable) event).setCancelled(true);
                             }
                         });
                     } catch (ClassNotFoundException ignored) {}
