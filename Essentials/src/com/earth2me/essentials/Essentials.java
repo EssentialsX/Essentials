@@ -140,7 +140,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
         i18n.onEnable();
         i18n.updateLocale("en");
         Console.setInstance(this);
-        
+
         LOGGER.log(Level.INFO, tl("usingTempFolderForTesting"));
         LOGGER.log(Level.INFO, dataFolder.toString());
         settings = new Settings(this);
@@ -164,7 +164,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
             i18n = new I18n(this);
             i18n.onEnable();
             execTimer.mark("I18n1");
-            
+
             Console.setInstance(this);
 
             if (!VersionUtil.isServerSupported()) {
@@ -220,6 +220,9 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
                 execTimer.mark("Init(ItemDB)");
 
                 randomTeleport = new RandomTeleport(this);
+                if (randomTeleport.getPreCache()) {
+                    randomTeleport.cacheRandomLocations(randomTeleport.getCenter(), randomTeleport.getMinRange(), randomTeleport.getMaxRange());
+                }
                 confList.add(randomTeleport);
                 execTimer.mark("Init(RandomTeleport)");
 
@@ -427,7 +430,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String commandLabel, String[] args) {
         return onTabCompleteEssentials(sender, command, commandLabel, args, Essentials.class.getClassLoader(),
-            "com.earth2me.essentials.commands.Command", "essentials.", null);
+                "com.earth2me.essentials.commands.Command", "essentials.", null);
     }
 
     @Override

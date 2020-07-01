@@ -1,5 +1,7 @@
 package com.earth2me.essentials;
 
+import com.earth2me.essentials.utils.VersionUtil;
+import io.papermc.lib.PaperLib;
 import net.ess3.api.InvalidWorldException;
 import org.bukkit.Location;
 import org.bukkit.block.Biome;
@@ -8,13 +10,17 @@ import java.io.File;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Queue;
+import java.util.Random;
 import java.util.Set;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class RandomTeleport implements IConf {
     private final IEssentials essentials;
     private final EssentialsConf config;
     private final ConcurrentLinkedQueue<Location> cachedLocations = new ConcurrentLinkedQueue<>();
+    private static final Random RANDOM = new Random();
+    private static final int HIGHEST_BLOCK_Y_OFFSET = VersionUtil.getServerBukkitVersion().isHigherThanOrEqualTo(VersionUtil.v1_15_R01) ? 1 : 0;
 
     public RandomTeleport(final IEssentials essentials) {
         this.essentials = essentials;
@@ -88,7 +94,82 @@ public class RandomTeleport implements IConf {
         return config.getInt("cache-threshold", 10);
     }
 
+    public boolean getPreCache() {
+        return config.getBoolean("pre-cache", true);
+    }
+
     public Queue<Location> getCachedLocations() {
         return cachedLocations;
+    }
+
+    // Get a random location; cached if possible. Otherwise on demand.
+    public CompletableFuture<Location> getRandomLocation(Location center, double minRange, double maxRange) {
+        int findAttempts = this.getFindAttempts();
+        Queue<Location> cachedLocations = this.getCachedLocations();
+        // Try to build up the cache if it is below the threshold
+        if (cachedLocations.size() < this.getCacheThreshold()) {
+            cacheRandomLocations(center, minRange, maxRange);
+        }
+        CompletableFuture<Location> future = new CompletableFuture<>();
+        // Return a random location immediately if one is available, otherwise try to find one now
+        if (cachedLocations.isEmpty()) {
+            attemptRandomLocation(findAttempts, center, minRange, maxRange).thenAccept(future::complete);
+        } else {
+            future.complete(cachedLocations.poll());
+        }
+        return future;
+    }
+
+    // Prompts caching random valid locations, up to a maximum number of attempts
+    public void cacheRandomLocations(Location center, double minRange, double maxRange) {
+        essentials.getServer().getScheduler().scheduleSyncDelayedTask(essentials, () -> {
+            for (int i = 0; i < this.getFindAttempts(); ++i) {
+                calculateRandomLocation(center, minRange, maxRange).thenAccept(location -> {
+                    if (isValidRandomLocation(location)) {
+                        this.getCachedLocations().add(location);
+                    }
+                });
+            }
+        });
+    }
+
+    // Recursively attempt to find a random location. After a maximum number of attempts, the center is returned.
+    private CompletableFuture<Location> attemptRandomLocation(int attempts, Location center, double minRange, double maxRange) {
+        CompletableFuture<Location> future = new CompletableFuture<>();
+        if (attempts > 0) {
+            calculateRandomLocation(center, minRange, maxRange).thenAccept(location -> {
+                if (isValidRandomLocation(location)) {
+                    future.complete(location);
+                } else {
+                    attemptRandomLocation(attempts - 1, center, minRange, maxRange).thenAccept(future::complete);
+                }
+            });
+        } else {
+            future.complete(center);
+        }
+        return future;
+    }
+
+    // Calculates a random location asynchronously.
+    private CompletableFuture<Location> calculateRandomLocation(Location center, double minRange, double maxRange) {
+        CompletableFuture<Location> future = new CompletableFuture<>();
+        final int dx = RANDOM.nextBoolean() ? 1 : -1, dz = RANDOM.nextBoolean() ? 1 : -1;
+        Location location = new Location(
+                center.getWorld(),
+                center.getX() + dx * (minRange + RANDOM.nextDouble() * (maxRange - minRange)),
+                center.getWorld().getMaxHeight(),
+                center.getZ() + dz * (minRange + RANDOM.nextDouble() * (maxRange - minRange)),
+                360 * RANDOM.nextFloat() - 180,
+                0
+        );
+        PaperLib.getChunkAtAsync(location).thenAccept(chunk -> {
+            location.setY(center.getWorld().getHighestBlockYAt(location) + HIGHEST_BLOCK_Y_OFFSET);
+            future.complete(location);
+        });
+        return future;
+    }
+
+    private boolean isValidRandomLocation(Location location) {
+        return !this.getExcludedBiomes().contains(location.getBlock().getBiome());
     }
 }
