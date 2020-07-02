@@ -42,6 +42,7 @@ import net.ess3.nms.refl.providers.ReflServerStateProvider;
 import net.ess3.nms.refl.providers.ReflSpawnEggProvider;
 import net.ess3.provider.PotionMetaProvider;
 import net.ess3.provider.SerializationProvider;
+import net.ess3.provider.ProviderListener;
 import net.ess3.provider.ServerStateProvider;
 import net.ess3.provider.SpawnEggProvider;
 import net.ess3.provider.SpawnerProvider;
@@ -52,10 +53,12 @@ import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.command.*;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Cancellable;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.world.WorldLoadEvent;
 import org.bukkit.event.world.WorldUnloadEvent;
@@ -110,6 +113,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
     private transient PotionMetaProvider potionMetaProvider;
     private transient ServerStateProvider serverStateProvider;
     private transient SerializationProvider serializationProvider = null;
+    private transient ProviderListener recipeBookEventProvider;
     private transient Kits kits;
 
     public Essentials() {
@@ -141,7 +145,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
         i18n.onEnable();
         i18n.updateLocale("en");
         Console.setInstance(this);
-        
+
         LOGGER.log(Level.INFO, tl("usingTempFolderForTesting"));
         LOGGER.log(Level.INFO, dataFolder.toString());
         settings = new Settings(this);
@@ -165,7 +169,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
             i18n = new I18n(this);
             i18n.onEnable();
             execTimer.mark("I18n1");
-            
+
             Console.setInstance(this);
 
             if (!VersionUtil.isServerSupported()) {
@@ -261,6 +265,18 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
                     serverStateProvider = new ReflServerStateProvider(getLogger());
                 }
 
+                //Event Providers
+                if (PaperLib.isPaper()) {
+                    try {
+                        Class.forName("com.destroystokyo.paper.event.player.PlayerRecipeBookClickEvent");
+                        recipeBookEventProvider = new PaperRecipeBookListener(event -> {
+                            if (this.getUser(((PlayerEvent) event).getPlayer()).isRecipeSee()) {
+                                ((Cancellable) event).setCancelled(true);
+                            }
+                        });
+                    } catch (ClassNotFoundException ignored) {}
+                }
+
                 execTimer.mark("Init(Providers)");
                 reload();
 
@@ -353,6 +369,10 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
         pm.registerEvents(serverListener, this);
 
         pm.registerEvents(tntListener, this);
+
+        if (recipeBookEventProvider != null) {
+            pm.registerEvents(recipeBookEventProvider, this);
+        }
 
         jails.resetListener();
     }
