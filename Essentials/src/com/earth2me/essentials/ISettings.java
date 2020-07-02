@@ -125,6 +125,8 @@ public interface ISettings extends IConf {
 
     boolean isTeleportPassengerDismount();
 
+    boolean isForcePassengerTeleport();
+
     double getTeleportCooldown();
 
     double getTeleportDelay();
