@@ -49,8 +49,11 @@ public class Commandmail extends EssentialsCommand {
             }
 
             if (user.isMuted()) {
-                String dateDiff = user.getMuteTimeout() > 0 ? DateUtil.formatDateDiff(user.getMuteTimeout()) : "Permanent";
-                throw new Exception(user.hasMuteReason() ? tl("voiceSilencedReason", dateDiff, user.getMuteReason()) : tl("voiceSilenced", dateDiff));
+                String dateDiff = user.getMuteTimeout() > 0 ? DateUtil.formatDateDiff(user.getMuteTimeout()) : null;
+                if (dateDiff == null) {
+                    throw new Exception(user.hasMuteReason() ? tl("voiceSilencedReason", user.getMuteReason()) : tl("voiceSilenced"));
+                }
+                throw new Exception(user.hasMuteReason() ? tl("voiceSilencedReasonTime", dateDiff, user.getMuteReason()) : tl("voiceSilencedTime", dateDiff));
             }
 
             User u = getPlayer(server, args[1], true, true);

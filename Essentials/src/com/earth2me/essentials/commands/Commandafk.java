@@ -49,8 +49,11 @@ public class Commandafk extends EssentialsCommand {
     private void toggleAfk(User sender, User user, String message) throws Exception {
         if (message != null && sender != null) {
             if (sender.isMuted()) {
-                String dateDiff = sender.getMuteTimeout() > 0 ? DateUtil.formatDateDiff(sender.getMuteTimeout()) : "Permanent";
-                throw new Exception(sender.hasMuteReason() ? tl("voiceSilencedReason", dateDiff, sender.getMuteReason()) : tl("voiceSilenced", dateDiff));
+                String dateDiff = sender.getMuteTimeout() > 0 ? DateUtil.formatDateDiff(sender.getMuteTimeout()) : null;
+                if (dateDiff == null) {
+                    throw new Exception(sender.hasMuteReason() ? tl("voiceSilencedReason", sender.getMuteReason()) : tl("voiceSilenced"));
+                }
+                throw new Exception(sender.hasMuteReason() ? tl("voiceSilencedReasonTime", dateDiff, sender.getMuteReason()) : tl("voiceSilencedTime", dateDiff));
             }
             if (!sender.isAuthorized("essentials.afk.message")) {
                 throw new Exception(tl("noPermToAFKMessage"));

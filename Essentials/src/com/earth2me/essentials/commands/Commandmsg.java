@@ -29,8 +29,11 @@ public class Commandmsg extends EssentialsLoopCommand {
         if (sender.isPlayer()) {
             User user = ess.getUser(sender.getPlayer());
             if (user.isMuted()) {
-                String dateDiff = user.getMuteTimeout() > 0 ? DateUtil.formatDateDiff(user.getMuteTimeout()) : "Permanent";
-                throw new Exception(user.hasMuteReason() ? tl("voiceSilencedReason", dateDiff, user.getMuteReason()) : tl("voiceSilenced", dateDiff));
+                String dateDiff = user.getMuteTimeout() > 0 ? DateUtil.formatDateDiff(user.getMuteTimeout()) : null;
+                if (dateDiff == null) {
+                    throw new Exception(user.hasMuteReason() ? tl("voiceSilencedReason", user.getMuteReason()) : tl("voiceSilenced"));
+                }
+                throw new Exception(user.hasMuteReason() ? tl("voiceSilencedReasonTime", dateDiff, user.getMuteReason()) : tl("voiceSilencedTime", dateDiff));
             }
             message = FormatUtil.formatMessage(user, "essentials.msg", message);
             canWildcard = user.isAuthorized("essentials.msg.multiple");

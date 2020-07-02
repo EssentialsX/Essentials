@@ -113,8 +113,12 @@ public class EssentialsPlayerListener implements Listener {
         if (user.isMuted()) {
             event.setCancelled(true);
 
-            String dateDiff = user.getMuteTimeout() > 0 ? DateUtil.formatDateDiff(user.getMuteTimeout()) : "Permanent";
-            user.sendMessage(user.hasMuteReason() ? tl("voiceSilencedReason", dateDiff, user.getMuteReason()) : tl("voiceSilenced", dateDiff));
+            String dateDiff = user.getMuteTimeout() > 0 ? DateUtil.formatDateDiff(user.getMuteTimeout()) : null;
+            if (dateDiff == null) {
+                user.sendMessage(user.hasMuteReason() ? tl("voiceSilencedReason", user.getMuteReason()) : tl("voiceSilenced"));
+            } else {
+                user.sendMessage(user.hasMuteReason() ? tl("voiceSilencedReasonTime", dateDiff, user.getMuteReason()) : tl("voiceSilencedTime", dateDiff));
+            }
 
             LOGGER.info(tl("mutedUserSpeaks", user.getName(), event.getMessage()));
         }
@@ -515,8 +519,12 @@ public class EssentialsPlayerListener implements Listener {
         final User user = ess.getUser(player);
         if (user.isMuted() && (ess.getSettings().getMuteCommands().contains(cmd) || ess.getSettings().getMuteCommands().contains("*"))) {
             event.setCancelled(true);
-            String dateDiff = DateUtil.formatDateDiff(user.getMuteTimeout());
-            player.sendMessage(user.hasMuteReason() ? tl("voiceSilencedReasonNew", dateDiff, user.getMuteReason()) : tl("voiceSilencedNew", dateDiff));
+            String dateDiff = user.getMuteTimeout() > 0 ? DateUtil.formatDateDiff(user.getMuteTimeout()) : null;
+            if (dateDiff == null) {
+                player.sendMessage(user.hasMuteReason() ? tl("voiceSilencedReason", user.getMuteReason()) : tl("voiceSilenced"));
+            } else {
+                player.sendMessage(user.hasMuteReason() ? tl("voiceSilencedReasonTime", dateDiff, user.getMuteReason()) : tl("voiceSilencedTime", dateDiff));
+            }
             LOGGER.info(tl("mutedUserSpeaks", player.getName(), event.getMessage()));
             return;
         }

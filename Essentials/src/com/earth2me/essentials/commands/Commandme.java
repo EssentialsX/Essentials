@@ -25,8 +25,11 @@ public class Commandme extends EssentialsCommand {
     @Override
     public void run(Server server, User user, String commandLabel, String[] args) throws Exception {
         if (user.isMuted()) {
-            String dateDiff = user.getMuteTimeout() > 0 ? DateUtil.formatDateDiff(user.getMuteTimeout()) : "Permanent";
-            throw new Exception(user.hasMuteReason() ? tl("voiceSilencedReason", dateDiff, user.getMuteReason()) : tl("voiceSilenced", dateDiff));
+            String dateDiff = user.getMuteTimeout() > 0 ? DateUtil.formatDateDiff(user.getMuteTimeout()) : null;
+            if (dateDiff == null) {
+                throw new Exception(user.hasMuteReason() ? tl("voiceSilencedReason", user.getMuteReason()) : tl("voiceSilenced"));
+            }
+            throw new Exception(user.hasMuteReason() ? tl("voiceSilencedReasonTime", dateDiff, user.getMuteReason()) : tl("voiceSilencedTime", dateDiff));
         }
 
         if (args.length < 1) {
