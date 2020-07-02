@@ -106,7 +106,7 @@ public class NumberUtil {
         return true;
     }
 
-    public static boolean isPosInt(final String sInt) {
+    public static boolean isPositiveInt(final String sInt) {
         if (!isInt(sInt)) {
             return false;
         }

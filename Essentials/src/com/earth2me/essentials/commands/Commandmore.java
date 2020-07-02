@@ -35,7 +35,7 @@ public class Commandmore extends EssentialsCommand {
 
         int newStackSize = stack.getAmount();
         if (args.length >= 1) {
-            if (!NumberUtil.isPosInt(args[0])) {
+            if (!NumberUtil.isPositiveInt(args[0])) {
                 throw new Exception(tl("nonZeroPosNumber"));
             }
             newStackSize += Integer.parseInt(args[0]);

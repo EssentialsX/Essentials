@@ -265,7 +265,7 @@ commands:
     usage: /<command> <description>
     aliases: [action,eaction,describe,edescribe,eme]
   more:
-    description: Fills the item stack in hand to maximum size.
+    description: Fills the item stack in hand to specified amount, or to maximum size if none is specified.
     usage: /<command> [amount]
     aliases: [emore]
   motd:
