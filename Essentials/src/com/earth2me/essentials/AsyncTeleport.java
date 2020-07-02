@@ -164,7 +164,7 @@ public class AsyncTeleport implements IAsyncTeleport {
         }
         teleportee.setLastLocation();
 
-        if (!teleportee.getBase().isEmpty()) {
+        if (!ess.getSettings().isForcePassengerTeleport() && !teleportee.getBase().isEmpty()) {
             if (!ess.getSettings().isTeleportPassengerDismount()) {
                 future.completeExceptionally(new Exception(tl("passengerTeleportFail")));
                 return;

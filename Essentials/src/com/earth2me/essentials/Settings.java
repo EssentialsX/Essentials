@@ -168,6 +168,11 @@ public class Settings implements net.ess3.api.ISettings {
     }
 
     @Override
+    public boolean isForcePassengerTeleport() {
+        return config.getBoolean("force-passenger-teleportation", false);
+    }
+
+    @Override
     public double getTeleportDelay() {
         return config.getDouble("teleport-delay", 0);
     }
