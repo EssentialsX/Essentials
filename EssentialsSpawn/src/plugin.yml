@@ -11,10 +11,12 @@ api-version: 1.13
 commands:
   setspawn:
     description: Sets the spawn point to your current position.
+    permission: essentials.setspawn
     usage: /<command> <group>
     aliases: [esetspawn]
   spawn:
     description: Teleports to the spawn point.
+    permission: essentials.spawn
     usage: /<command> [player]
     aliases: [espawn]
 permissions:

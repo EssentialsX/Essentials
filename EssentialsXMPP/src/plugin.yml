@@ -11,10 +11,13 @@ api-version: 1.13
 commands:
   setxmpp:
     description: Sets your XMPP address.
+    permission: essentials.setxmpp
     usage: /<command> <address>
   xmpp:
     description: Sends a message to a player.
+    permission: essentials.xmpp
     usage: /<command> <player> <message>
   xmppspy:
     description: Toggles XMPP spy for all messages.
+    permission: essentials.xmppspy
     usage: /<command> <player>
