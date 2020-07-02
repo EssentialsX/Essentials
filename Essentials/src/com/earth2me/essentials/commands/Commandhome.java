@@ -62,6 +62,9 @@ public class Commandhome extends EssentialsCommand {
             }
             goHome(user, player, homeName.toLowerCase(Locale.ENGLISH), charge, getNewExceptionFuture(user.getSource(), commandLabel));
         } catch (NotEnoughArgumentsException e) {
+            if (!player.getBase().isOnline() || player.getBase() instanceof OfflinePlayer) {
+                throw new Exception(tl("bedOffline"));
+            }
             final User finalPlayer = player;
             PaperLib.getBedSpawnLocationAsync(player.getBase(), true).thenAccept(bed -> {
                 final List<String> homes = finalPlayer.getHomes();
