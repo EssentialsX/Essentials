@@ -435,6 +435,35 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
             }
         }
 
+        // Register command permissions and no-usage message
+        boolean useBukkitPerms = settings.useBukkitPermissions();
+        for (Plugin plugin : getServer().getPluginManager().getPlugins()) {
+            if (plugin.getDescription().getMain().startsWith("com.earth2me.essentials")) {
+                for (String commandName : plugin.getDescription().getCommands().keySet()) {
+                    Command command = getServer().getPluginCommand(plugin.getName() + ":" + commandName);
+                    if (command != null) {
+                        if (useBukkitPerms) {
+                            if (command.getPermission() == null) {
+                                String permission = "essentials." + (command.getName().equals("r") ? "msg" : command.getName());
+                                command.setPermission(permission);
+                                if (getServer().getPluginManager().getPermission(permission) == null) {
+                                    getServer().getPluginManager().addPermission(new Permission(permission, PermissionDefault.OP));
+                                }
+                            }
+                            command.setPermissionMessage(tl("noAccessCommand"));
+                        } else {
+                            command.setPermission(null);
+                            command.setPermissionMessage(null);
+                        }
+                    }
+                }
+            }
+        }
+        if (permissionsHandler != null) {
+            permissionsHandler.setUseSuperperms(useBukkitPerms);
+            permissionsHandler.checkPermissions();
+        }
+
         final PluginManager pm = getServer().getPluginManager();
         registerListeners(pm);
     }

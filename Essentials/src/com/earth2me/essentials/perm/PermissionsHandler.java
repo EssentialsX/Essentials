@@ -109,35 +109,39 @@ public class PermissionsHandler implements IPermissionsHandler {
 
     public void checkPermissions() {
         // load and assign a handler
-        List<Class<? extends SuperpermsHandler>> providerClazz = Arrays.asList(
-                LuckPermsHandler.class,
-                ModernVaultHandler.class,
-                GenericVaultHandler.class,
-                SuperpermsHandler.class
-        );
-        for (Class<? extends IPermissionsHandler> providerClass : providerClazz) {
-            try {
-                IPermissionsHandler provider = providerClass.newInstance();
-                if (provider.tryProvider()) {
-                    if (provider.getClass().isInstance(this.handler)) {
-                        return;
+        if (useSuperperms) {
+            List<Class<? extends SuperpermsHandler>> providerClazz = Arrays.asList(
+                    LuckPermsHandler.class,
+                    ModernVaultHandler.class,
+                    GenericVaultHandler.class,
+                    SuperpermsHandler.class
+            );
+            for (Class<? extends IPermissionsHandler> providerClass : providerClazz) {
+                try {
+                    IPermissionsHandler provider = providerClass.newInstance();
+                    if (provider.tryProvider()) {
+                        if (provider.getClass().isInstance(this.handler)) {
+                            return;
+                        }
+                        if (this.handler != null) {
+                            unregisterContexts();
+                        }
+                        this.handler = provider;
+                        initContexts();
+                        break;
                     }
-                    if (this.handler != null) {
-                        unregisterContexts();
-                    }
-                    this.handler = provider;
-                    initContexts();
-                    break;
+                } catch (Throwable ignored) {
                 }
-            } catch (Throwable ignored) {
             }
-        }
-        if (handler == null) {
-            if (useSuperperms) {
+            if (handler == null) {
+                // How?
                 handler = new SuperpermsHandler();
-            } else {
-                handler = new ConfigPermissionsHandler(ess);
             }
+        } else {
+            if (this.handler != null) {
+                unregisterContexts();
+            }
+            handler = new ConfigPermissionsHandler(ess);
         }
 
         // don't spam logs
