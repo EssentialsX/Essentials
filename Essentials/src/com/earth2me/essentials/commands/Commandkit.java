@@ -1,10 +1,6 @@
 package com.earth2me.essentials.commands;
 
-import com.earth2me.essentials.CommandSource;
-import com.earth2me.essentials.Kit;
-import com.earth2me.essentials.User;
-import com.earth2me.essentials.utils.StringUtil;
-import org.bukkit.Server;
+import static com.earth2me.essentials.I18n.tl;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -12,7 +8,12 @@ import java.util.List;
 import java.util.Locale;
 import java.util.logging.Level;
 
-import static com.earth2me.essentials.I18n.tl;
+import org.bukkit.Server;
+
+import com.earth2me.essentials.CommandSource;
+import com.earth2me.essentials.Kit;
+import com.earth2me.essentials.User;
+import com.earth2me.essentials.utils.StringUtil;
 
 
 public class Commandkit extends EssentialsCommand {

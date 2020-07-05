@@ -13,6 +13,9 @@
 kits:
   tools:
     delay: 10
+    helmet: ghelmet 1 durability:1
+    chestplate: gchestplate
+    boots: gboots
     items:
       - stonesword 1
       - stoneshovel 1
