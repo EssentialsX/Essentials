@@ -2,19 +2,6 @@ package com.earth2me.essentials;
 
 import static com.earth2me.essentials.I18n.tl;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
-import java.util.List;
-import java.util.Map;
-import java.util.logging.Level;
-
-import org.bukkit.Bukkit;
-import org.bukkit.Material;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.PlayerInventory;
-
 import com.earth2me.essentials.Trade.OverflowType;
 import com.earth2me.essentials.commands.NoChargeException;
 import com.earth2me.essentials.craftbukkit.InventoryWorkaround;
@@ -27,6 +14,16 @@ import com.earth2me.essentials.utils.NumberUtil;
 import net.ess3.api.IEssentials;
 import net.ess3.api.events.KitClaimEvent;
 
+import org.bukkit.Bukkit;
+import org.bukkit.Material;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
+
+import java.math.BigDecimal;
+import java.util.*;
+import java.util.logging.Level;
+
+import static com.earth2me.essentials.I18n.tl;
 
 public class Kit {
     final IEssentials ess;
@@ -125,72 +122,18 @@ public class Kit {
         return getItems();
     }
 
-    public String getBootsItem() throws Exception {
+    public List<String> getEquipItems() throws Exception {
     	if (kit == null) {
     		throw new Exception(tl("kitNotFound"));
     	}
     	try {
-    		String helmet;
-    		Object helmetItem = kit.get("boots");
-    		if (helmetItem instanceof String) {
-    			helmet = helmetItem.toString();
-    		}
-    		else throw new Exception("Invalid kit item:" + helmetItem.toString());
-    		return helmet;
-    	} catch (Exception e) {
-            ess.getLogger().log(Level.WARNING, "Error parsing kit " + kitName + ": " + e.getMessage());
-            throw new Exception(tl("kitError2"), e);
-    	}
-    }
-    
-    public String getLeggingsItem() throws Exception {
-    	if (kit == null) {
-    		throw new Exception(tl("kitNotFound"));
-    	}
-    	try {
-    		String helmet;
-    		Object helmetItem = kit.get("leggings");
-    		if (helmetItem instanceof String) {
-    			helmet = helmetItem.toString();
-    		}
-    		else throw new Exception("Invalid kit item:" + helmetItem.toString());
-    		return helmet;
-    	} catch (Exception e) {
-            ess.getLogger().log(Level.WARNING, "Error parsing kit " + kitName + ": " + e.getMessage());
-            throw new Exception(tl("kitError2"), e);
-    	}
-    }
-    
-    public String getChestPlateItem() throws Exception {
-    	if (kit == null) {
-    		throw new Exception(tl("kitNotFound"));
-    	}
-    	try {
-    		String helmet;
-    		Object helmetItem = kit.get("chestplate");
-    		if (helmetItem instanceof String) {
-    			helmet = helmetItem.toString();
-    		}
-    		else throw new Exception("Invalid kit item:" + helmetItem.toString());
-    		return helmet;
-    	} catch (Exception e) {
-            ess.getLogger().log(Level.WARNING, "Error parsing kit " + kitName + ": " + e.getMessage());
-            throw new Exception(tl("kitError2"), e);
-    	}
-    }
-    
-    public String getHelmetItem() throws Exception {
-    	if (kit == null) {
-    		throw new Exception(tl("kitNotFound"));
-    	}
-    	try {
-    		String helmet;
-    		Object helmetItem = kit.get("helmet");
-    		if (helmetItem instanceof String) {
-    			helmet = helmetItem.toString();
-    		}
-    		else throw new Exception("Invalid kit item:" + helmetItem.toString());
-    		return helmet;
+    		final List<String> equipItems = new ArrayList<>();
+    		if (kit.containsKey("helmet")) equipItems.add(kit.get("helmet").toString());
+    		if (kit.containsKey("chestplate")) equipItems.add(kit.get("chestplate").toString());
+    		if (kit.containsKey("leggings")) equipItems.add(kit.get("leggings").toString());
+    		if (kit.containsKey("boots")) equipItems.add(kit.get("boots").toString());
+    		return equipItems;
+    		
     	} catch (Exception e) {
             ess.getLogger().log(Level.WARNING, "Error parsing kit " + kitName + ": " + e.getMessage());
             throw new Exception(tl("kitError2"), e);
@@ -239,10 +182,10 @@ public class Kit {
             final boolean allowUnsafe = ess.getSettings().allowUnsafeEnchantments();
             final boolean currencyIsSuffix = ess.getSettings().isCurrencySymbolSuffixed();
             List<ItemStack> itemList = new ArrayList<>();
+            List<ItemStack> equipItemList = new ArrayList<>();
             List<String> commandQueue = new ArrayList<>();
             List<String> moneyQueue = new ArrayList<>();
             for (String kitItem : output.getLines()) {
-                Bukkit.getLogger().info(kitItem);
                 if (!currencyIsSuffix ? kitItem.startsWith(ess.getSettings().getCurrencySymbol()) : kitItem.endsWith(ess.getSettings().getCurrencySymbol())) {
                     moneyQueue.add(NumberUtil.sanitizeCurrencyString(kitItem, ess));
                     continue;
@@ -272,7 +215,17 @@ public class Kit {
                 
                 itemList.add(metaStack.getItemStack());
             }
-            
+            for (String equip : getEquipItems()) {
+            	final String[] parts = equip.split(" +");
+            	final ItemStack parseStack = ess.getItemDb().get(parts[0], parts.length > 1 ? Integer.parseInt(parts[1]) : 1);
+            	
+            	final MetaItemStack metaStack = new MetaItemStack(parseStack);
+            	
+            	if (parts.length > 2) {
+            		metaStack.parseStringMeta(null, allowUnsafe, parts, 2, ess);
+            	}
+            	equipItemList.add(metaStack.getItemStack());
+            }
             
             final Map<Integer, ItemStack> overfilled;
             final boolean allowOversizedStacks = user.isAuthorized("essentials.oversizedstacks");
@@ -280,57 +233,22 @@ public class Kit {
             final boolean isKitAutoEquip = ess.getSettings().isKitAutoEquip();
             if (isKitAutoEquip) {
             	PlayerInventory inv = user.getBase().getInventory();
-            	if (kit.containsKey("helmet")) {
-                	if (inv.getHelmet() == null) {
-                		final String helmet = getHelmetItem();
-                		final String parts[] = helmet.split(" +");
-                		final ItemStack parseHelmet = ess.getItemDb().get(parts[0], parts.length > 1 ? Integer.parseInt(parts[1]) : 1);
-                		final MetaItemStack metaStack = new MetaItemStack(parseHelmet);
-                		if (parts.length > 2) {
-                			metaStack.parseStringMeta(null, allowUnsafe, parts, 2, ess);
-                		}
-                		inv.setHelmet(metaStack.getItemStack());
-
-                	}
-            	}
-            	if (kit.containsKey("chestplate")) {
-            		if (inv.getChestplate() == null) {
-                		final String chestPlate = getChestPlateItem();
-                		final String parts[] = chestPlate.split(" +");
-                		final ItemStack parseChestplate = ess.getItemDb().get(parts[0], parts.length > 1 ? Integer.parseInt(parts[1]) : 1);
-                		final MetaItemStack metaStack = new MetaItemStack(parseChestplate);
-                		if (parts.length > 2) {
-                			metaStack.parseStringMeta(null, allowUnsafe, parts, 2, ess);
-                		}
-                		inv.setChestplate(metaStack.getItemStack());
-
-                	}
-            	}
-            	if (kit.containsKey("leggings")) {
-                	if (inv.getLeggings() == null) {
-                		final String leggings = getLeggingsItem();
-                		final String parts[] = leggings.split(" +");
-                		final ItemStack parseLeggings = ess.getItemDb().get(parts[0], parts.length > 1 ? Integer.parseInt(parts[1]) : 1);
-                		final MetaItemStack metaStack = new MetaItemStack(parseLeggings);
-                		if (parts.length > 2) {
-                			metaStack.parseStringMeta(null, allowUnsafe, parts, 2, ess);
-                		}
-                		inv.setLeggings(metaStack.getItemStack());
-                	}
-            	}
-            	if (kit.containsKey("boots")) {
-            		if (inv.getBoots() == null) {
-                		final String boots = getBootsItem();
-                		final String parts[] = boots.split(" +");
-                		final ItemStack parseBoots = ess.getItemDb().get(parts[0], parts.length > 1 ? Integer.parseInt(parts[1]) : 1);
-                		final MetaItemStack metaStack = new MetaItemStack(parseBoots);
-                		if (parts.length > 2) {
-                			metaStack.parseStringMeta(null, allowUnsafe, parts, 2, ess);
-                		}
-                		inv.setBoots(metaStack.getItemStack());
-                	}
-            	}
-
+                for (ItemStack equip : equipItemList) {
+                	if (equip.getType().toString().contains("HELMET"))
+                		if (inv.getHelmet() == null) inv.setHelmet(equip);
+                		else itemList.add(equip);
+                	else if (equip.getType().toString().contains("CHESTPLATE"))
+                		if (inv.getChestplate() == null) inv.setChestplate(equip);
+                		else itemList.add(equip);
+                	else if (equip.getType().toString().contains("LEGGINGS"))
+                		if (inv.getLeggings() == null) inv.setLeggings(equip);
+                		else itemList.add(equip);
+                	else if (equip.getType().toString().contains("BOOTS"))
+                		if (inv.getBoots() == null) inv.setBoots(equip);
+                		else itemList.add(equip);
+                }
+            } else {
+            	itemList.addAll(equipItemList);
             }
             if (isDropItemsIfFull) {
                 if (allowOversizedStacks) {

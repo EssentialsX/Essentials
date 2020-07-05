@@ -1,5 +1,22 @@
 package com.earth2me.essentials;
 
+import com.earth2me.essentials.api.IItemDb;
+import com.earth2me.essentials.commands.IEssentialsCommand;
+import com.earth2me.essentials.signs.EssentialsSign;
+import com.earth2me.essentials.signs.Signs;
+import com.earth2me.essentials.textreader.IText;
+import com.earth2me.essentials.textreader.SimpleTextInput;
+import com.earth2me.essentials.utils.EnumUtil;
+import com.earth2me.essentials.utils.FormatUtil;
+import com.earth2me.essentials.utils.LocationUtil;
+import com.earth2me.essentials.utils.NumberUtil;
+import net.ess3.api.IEssentials;
+import org.bukkit.ChatColor;
+import org.bukkit.Material;
+import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.MemoryConfiguration;
+import org.bukkit.event.EventPriority;
+import org.bukkit.inventory.ItemStack;
 import static com.earth2me.essentials.I18n.tl;
 
 import java.io.File;
@@ -25,25 +42,7 @@ import java.util.logging.Logger;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
-import org.bukkit.ChatColor;
-import org.bukkit.Material;
-import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.MemoryConfiguration;
-import org.bukkit.event.EventPriority;
-import org.bukkit.inventory.ItemStack;
-
-import com.earth2me.essentials.api.IItemDb;
-import com.earth2me.essentials.commands.IEssentialsCommand;
-import com.earth2me.essentials.signs.EssentialsSign;
-import com.earth2me.essentials.signs.Signs;
-import com.earth2me.essentials.textreader.IText;
-import com.earth2me.essentials.textreader.SimpleTextInput;
-import com.earth2me.essentials.utils.EnumUtil;
-import com.earth2me.essentials.utils.FormatUtil;
-import com.earth2me.essentials.utils.LocationUtil;
-import com.earth2me.essentials.utils.NumberUtil;
-
-import net.ess3.api.IEssentials;
+import static com.earth2me.essentials.I18n.tl;
 
 
 public class Settings implements net.ess3.api.ISettings {
