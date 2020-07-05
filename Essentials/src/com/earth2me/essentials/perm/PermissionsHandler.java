@@ -103,6 +103,11 @@ public class PermissionsHandler implements IPermissionsHandler {
     }
 
     @Override
+    public String getBackendName() {
+        return handler.getBackendName();
+    }
+
+    @Override
     public boolean tryProvider() {
         return true;
     }

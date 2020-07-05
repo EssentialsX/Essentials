@@ -1,6 +1,7 @@
 package com.earth2me.essentials.protect;
 
 import com.earth2me.essentials.metrics.Metrics;
+import com.earth2me.essentials.metrics.MetricsWrapper;
 import com.earth2me.essentials.utils.VersionUtil;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -20,7 +21,7 @@ public class EssentialsProtect extends JavaPlugin implements IProtect {
     private final Map<ProtectConfig, String> settingsString = new EnumMap<>(ProtectConfig.class);
     private final Map<ProtectConfig, List<Material>> settingsList = new EnumMap<>(ProtectConfig.class);
     private EssentialsConnect ess = null;
-    private transient Metrics metrics = null;
+    private transient MetricsWrapper metrics = null;
 
     private final EmergencyListener emListener = new EmergencyListener(this);
 
@@ -36,7 +37,7 @@ public class EssentialsProtect extends JavaPlugin implements IProtect {
         initialize(pm, essPlugin);
 
         if (metrics == null) {
-            metrics = new Metrics(this);
+            metrics = new MetricsWrapper(this, 3816, false);
         }
     }
 

@@ -83,6 +83,11 @@ public class SuperpermsHandler implements IPermissionsHandler {
     }
 
     @Override
+    public String getBackendName() {
+        return getEnabledPermsPlugin();
+    }
+
+    @Override
     public boolean tryProvider() {
         return getEnabledPermsPlugin() != null;
     }
