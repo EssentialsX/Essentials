@@ -839,6 +839,8 @@ protect:
     enderdragon-blockdamage: true
     enderman-pickup: false
     villager-death: false
+    bed-explosion: false
+    respawn-anchor-explosion: false
     # Monsters won't follow players.
     # permission essentials.protect.entitytarget.bypass disables this.
     entitytarget: false
