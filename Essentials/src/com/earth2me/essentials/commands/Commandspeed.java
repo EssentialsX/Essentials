@@ -14,8 +14,8 @@ import static com.earth2me.essentials.I18n.tl;
 
 
 public class Commandspeed extends EssentialsCommand {
-    private final List<String> types = Arrays.asList("walk", "fly", "1", "1.5", "1.75", "2");
-    private final List<String> speeds = Arrays.asList("1", "1.5", "1.75", "2");
+    private static final List<String> types = Arrays.asList("walk", "fly", "1", "1.5", "1.75", "2");
+    private static final List<String> speeds = Arrays.asList("1", "1.5", "1.75", "2");
 
     public Commandspeed() {
         super("speed");
