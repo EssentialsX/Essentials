@@ -95,6 +95,9 @@ public class Commandtime extends EssentialsCommand {
         }
     }
 
+    /**
+     * Parses worlds from command args, otherwise returns all worlds.
+     */
     private Set<World> getWorlds(final Server server, final CommandSource sender, final String selector) throws Exception {
         final Set<World> worlds = new TreeSet<>(new WorldNameComparator());
 
