@@ -1,6 +1,5 @@
 package com.earth2me.essentials.protect;
 
-import com.earth2me.essentials.metrics.Metrics;
 import com.earth2me.essentials.metrics.MetricsWrapper;
 import com.earth2me.essentials.utils.VersionUtil;
 import org.bukkit.Material;
@@ -33,7 +32,7 @@ public class EssentialsProtect extends JavaPlugin implements IProtect {
             enableEmergencyMode(pm);
             return;
         }
-        
+
         initialize(pm, essPlugin);
 
         if (metrics == null) {
@@ -52,12 +51,17 @@ public class EssentialsProtect extends JavaPlugin implements IProtect {
         pm.registerEvents(entityListener, this);
 
         if (VersionUtil.getServerBukkitVersion().isHigherThan(VersionUtil.v1_13_2_R01)) {
-            final EssentialsProtectEntityListener1_13_2_R1 entityListener1_13_2_r1 = new EssentialsProtectEntityListener1_13_2_R1(this);
-            pm.registerEvents(entityListener1_13_2_r1, this);
+            final EssentialsProtectEntityListener_1_13_2_R1 entityListener_1_13_2_r1 = new EssentialsProtectEntityListener_1_13_2_R1(this);
+            pm.registerEvents(entityListener_1_13_2_r1, this);
         }
         if (VersionUtil.getServerBukkitVersion().isHigherThan(VersionUtil.v1_14_R01)) {
             final EssentialsProtectEntityListener_1_14_R1 entityListener_1_14_r1 = new EssentialsProtectEntityListener_1_14_R1(this);
             pm.registerEvents(entityListener_1_14_r1, this);
+        }
+
+        if (VersionUtil.getServerBukkitVersion().isHigherThanOrEqualTo(VersionUtil.v1_16_1_R01)) {
+            final EssentialsProtectBlockListener_1_16_R1 blockListener_1_16_r1 = new EssentialsProtectBlockListener_1_16_R1(this);
+            pm.registerEvents(blockListener_1_16_r1, this);
         }
 
         final EssentialsProtectWeatherListener weatherListener = new EssentialsProtectWeatherListener(this);
