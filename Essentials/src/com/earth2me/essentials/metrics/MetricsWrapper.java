@@ -65,8 +65,13 @@ public class MetricsWrapper {
         metrics.addCustomChart(new Metrics.DrilldownPie("econPlugin", () -> {
             Map<String, Map<String, Integer>> result = new HashMap<>();
             Map<String, Integer> backend = new HashMap<>();
-            backend.put(Methods.getMethod().getPlugin().getName(), 1);
-            result.put(Methods.getMethod().getName(), backend);
+            if (Methods.hasMethod()) {
+                backend.put(Methods.getMethod().getBackend(), 1);
+                result.put(Methods.getMethod().getName(), backend);
+            } else {
+                backend.put("Essentials", 1);
+                result.put("Essentials", backend);
+            }
             return result;
         }));
     }
