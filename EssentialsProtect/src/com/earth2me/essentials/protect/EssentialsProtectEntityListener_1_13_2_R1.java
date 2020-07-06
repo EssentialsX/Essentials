@@ -11,11 +11,11 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityTransformEvent;
 
-public class EssentialsProtectEntityListener1_13_2_R1 implements Listener {
+public class EssentialsProtectEntityListener_1_13_2_R1 implements Listener {
     private final IProtect prot;
     private final IEssentials ess;
 
-    EssentialsProtectEntityListener1_13_2_R1(final IProtect prot) {
+    EssentialsProtectEntityListener_1_13_2_R1(final IProtect prot) {
         this.prot = prot;
         this.ess = prot.getEssentialsConnect().getEssentials();
     }

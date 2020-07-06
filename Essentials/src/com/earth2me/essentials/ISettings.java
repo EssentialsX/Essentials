@@ -121,7 +121,11 @@ public interface ISettings extends IConf {
 
     boolean isForceDisableTeleportSafety();
 
+    boolean isAlwaysTeleportSafety();
+
     boolean isTeleportPassengerDismount();
+
+    boolean isForcePassengerTeleport();
 
     double getTeleportCooldown();
 
@@ -352,8 +356,6 @@ public interface ISettings extends IConf {
 
     String getItemDbType();
 
-    boolean isForceEnableRecipe();
-
     boolean allowOldIdSigns();
 
     boolean isWaterSafe();
@@ -369,6 +371,8 @@ public interface ISettings extends IConf {
     boolean isRemovingEffectsOnHeal();
 
     boolean isSpawnIfNoHome();
+
+    boolean isConfirmHomeOverwrite();
 
     boolean infoAfterDeath();
 
