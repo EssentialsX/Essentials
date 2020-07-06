@@ -113,6 +113,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
     private transient ServerStateProvider serverStateProvider;
     private transient ProviderListener recipeBookEventProvider;
     private transient Kits kits;
+    private transient RandomTeleport randomTeleport;
 
     public Essentials() {
 
@@ -221,6 +222,13 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
                 itemDb = getItemDbFromConfig();
                 confList.add(itemDb);
                 execTimer.mark("Init(ItemDB)");
+
+                randomTeleport = new RandomTeleport(this);
+                if (randomTeleport.getPreCache()) {
+                    randomTeleport.cacheRandomLocations(randomTeleport.getCenter(), randomTeleport.getMinRange(), randomTeleport.getMaxRange());
+                }
+                confList.add(randomTeleport);
+                execTimer.mark("Init(RandomTeleport)");
 
                 customItemResolver = new CustomItemResolver(this);
                 try {
@@ -437,7 +445,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String commandLabel, String[] args) {
         return onTabCompleteEssentials(sender, command, commandLabel, args, Essentials.class.getClassLoader(),
-            "com.earth2me.essentials.commands.Command", "essentials.", null);
+                "com.earth2me.essentials.commands.Command", "essentials.", null);
     }
 
     @Override
@@ -680,6 +688,11 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
     @Override
     public Kits getKits() {
         return kits;
+    }
+
+    @Override
+    public RandomTeleport getRandomTeleport() {
+        return randomTeleport;
     }
 
     @Deprecated
