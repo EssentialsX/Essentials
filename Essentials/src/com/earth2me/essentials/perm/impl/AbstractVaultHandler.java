@@ -23,8 +23,10 @@ public abstract class AbstractVaultHandler extends SuperpermsHandler {
         }
 
         RegisteredServiceProvider<Permission> permsProvider = Bukkit.getServer().getServicesManager().getRegistration(Permission.class);
-        perms = permsProvider.getProvider();
         RegisteredServiceProvider<Chat> chatProvider = Bukkit.getServer().getServicesManager().getRegistration(Chat.class);
+        if (permsProvider == null || chatProvider == null) return false;
+
+        perms = permsProvider.getProvider();
         chat = chatProvider.getProvider();
         return perms != null && chat != null;
     }
@@ -76,7 +78,13 @@ public abstract class AbstractVaultHandler extends SuperpermsHandler {
 
     @Override
     public String getBackendName() {
-        return JavaPlugin.getProvidingPlugin(perms.getClass()).getName();
+        String reportedPlugin = perms.getName();
+        String classPlugin = JavaPlugin.getProvidingPlugin(perms.getClass()).getName();
+
+        if (reportedPlugin.equals(classPlugin)) {
+            return reportedPlugin;
+        }
+        return reportedPlugin + " (" + classPlugin + ")";
     }
 
     boolean canLoad() {
