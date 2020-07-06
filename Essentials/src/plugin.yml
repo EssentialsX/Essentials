@@ -133,7 +133,7 @@ commands:
     usage: /<command>
     aliases: [eessentials, ess, eess, essversion]
   exp:
-    description: Give, set, reset, or look at a players exp.
+    description: Give, set, reset, or look at a players experience.
     usage: /<command> [reset|show|set|give] [playername [amount]]
     aliases: [eexp,xp]
   ext:
