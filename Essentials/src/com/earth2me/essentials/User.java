@@ -65,6 +65,8 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
     private final Map<User, BigDecimal> confirmingPayments = new WeakHashMap<>();
     private String confirmingClearCommand;
     private long lastNotifiedAboutMailsMs;
+    private String lastHomeConfirmation;
+    private long lastHomeConfirmationTimestamp;
 
     public User(final Player base, final IEssentials ess) {
         super(base, ess);
@@ -371,14 +373,19 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
         if (ess.getSettings().addPrefixSuffix()) {
             //These two extra toggles are not documented, because they are mostly redundant #EasterEgg
             if (withPrefix || !ess.getSettings().disablePrefix()) {
-                final String ptext = ess.getPermissionsHandler().getPrefix(base).replace('&', '§');
+                final String ptext = FormatUtil.replaceFormat(ess.getPermissionsHandler().getPrefix(base));
                 prefix.insert(0, ptext);
                 suffix = "§r";
             }
             if (withSuffix || !ess.getSettings().disableSuffix()) {
-                final String stext = ess.getPermissionsHandler().getSuffix(base).replace('&', '§');
+                final String stext = FormatUtil.replaceFormat(ess.getPermissionsHandler().getSuffix(base));
                 suffix = stext + "§r";
-                suffix = suffix.replace("§f§f", "§f").replace("§f§r", "§r").replace("§r§r", "§r");
+                // :YEP: WHAT ARE THEY DOING?
+                // :YEP: STILL. LEGACY CODE.
+                // :YEP: BUT WHY?
+                // :YEP: I CAN'T BELIEVE THIS!
+                // Code from 1542 BC #EasterEgg
+                suffix = suffix.replace("§f§r", "§r").replace("§r§r", "§r");
             }
         }
         final String strPrefix = prefix.toString();
@@ -975,5 +982,21 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
                 lastNotifiedAboutMailsMs = System.currentTimeMillis();
             }
         }
+    }
+
+    public String getLastHomeConfirmation() {
+        return lastHomeConfirmation;
+    }
+
+    public void setLastHomeConfirmation(String lastHomeConfirmation) {
+        this.lastHomeConfirmation = lastHomeConfirmation;
+    }
+
+    public long getLastHomeConfirmationTimestamp() {
+        return lastHomeConfirmationTimestamp;
+    }
+
+    public void setLastHomeConfirmationTimestamp() {
+        this.lastHomeConfirmationTimestamp = System.currentTimeMillis();
     }
 }

@@ -2,7 +2,9 @@ package com.earth2me.essentials.protect;
 
 import com.earth2me.essentials.utils.EnumUtil;
 
+import com.earth2me.essentials.utils.MaterialUtil;
 import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.*;
@@ -10,11 +12,13 @@ import org.bukkit.entity.minecart.ExplosiveMinecart;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBurnEvent;
 import org.bukkit.event.block.BlockFromToEvent;
 import org.bukkit.event.block.BlockIgniteEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.world.PortalCreateEvent;
 
 import java.util.Set;
@@ -123,6 +127,21 @@ public class EssentialsProtectBlockListener implements Listener {
     public void onPortalLight(PortalCreateEvent event) {
         if (event.getReason() == PortalCreateEvent.CreateReason.FIRE) {
             event.setCancelled(prot.getSettingBool(ProtectConfig.prevent_portal_creation));
+        }
+    }
+
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    public void onPlayerInteract(final PlayerInteractEvent event) {
+        if (!event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
+            return;
+        }
+        Block block = event.getClickedBlock();
+        if (block == null) {
+            return;
+        }
+        World.Environment environment = block.getWorld().getEnvironment();
+        if (MaterialUtil.isBed(block.getType()) && !environment.equals(World.Environment.NORMAL)) {
+            event.setCancelled(prot.getSettingBool(ProtectConfig.prevent_bed_explosion));
         }
     }
 }

@@ -23,7 +23,7 @@ public class Commanddelkit extends EssentialsCommand {
             sender.sendMessage(kitList.length() > 0 ? tl("kits", kitList) : tl("noKits"));
             throw new NoChargeException();
         } else {
-            final String kitName = args[0];
+            final String kitName = ess.getKits().matchKit(args[0]);
             final Kit kit = new Kit(kitName, ess);
 
             if (sender.getPlayer() != null) {

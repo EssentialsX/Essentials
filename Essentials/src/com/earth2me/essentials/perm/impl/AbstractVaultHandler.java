@@ -5,6 +5,7 @@ import net.milkbowl.vault.permission.Permission;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.RegisteredServiceProvider;
+import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.Arrays;
 import java.util.List;
@@ -22,8 +23,10 @@ public abstract class AbstractVaultHandler extends SuperpermsHandler {
         }
 
         RegisteredServiceProvider<Permission> permsProvider = Bukkit.getServer().getServicesManager().getRegistration(Permission.class);
-        perms = permsProvider.getProvider();
         RegisteredServiceProvider<Chat> chatProvider = Bukkit.getServer().getServicesManager().getRegistration(Chat.class);
+        if (permsProvider == null || chatProvider == null) return false;
+
+        perms = permsProvider.getProvider();
         chat = chatProvider.getProvider();
         return perms != null && chat != null;
     }
@@ -71,6 +74,17 @@ public abstract class AbstractVaultHandler extends SuperpermsHandler {
         }
 
         return null;
+    }
+
+    @Override
+    public String getBackendName() {
+        String reportedPlugin = perms.getName();
+        String classPlugin = JavaPlugin.getProvidingPlugin(perms.getClass()).getName();
+
+        if (reportedPlugin.equals(classPlugin)) {
+            return reportedPlugin;
+        }
+        return reportedPlugin + " (" + classPlugin + ")";
     }
 
     boolean canLoad() {

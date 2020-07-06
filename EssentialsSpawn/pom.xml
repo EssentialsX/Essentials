@@ -31,6 +31,12 @@
                         <includes>net.ess3:EssentialsXSpawn</includes>
                     </artifactSet>
                     <createDependencyReducedPom>false</createDependencyReducedPom>
+                    <relocations>
+                        <relocation>
+                            <pattern>io.papermc.lib</pattern>
+                            <shadedPattern>com.earth2me.essentials.paperlib</shadedPattern>
+                        </relocation>
+                    </relocations>
                 </configuration>
             </plugin>
         </plugins>

@@ -1,5 +1,6 @@
 package com.earth2me.essentials.commands;
 
+import com.earth2me.essentials.OfflinePlayer;
 import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.StringUtil;
@@ -41,7 +42,7 @@ public class Commandhome extends EssentialsCommand {
         }
         try {
             if ("bed".equalsIgnoreCase(homeName) && user.isAuthorized("essentials.home.bed")) {
-                if (!player.getBase().isOnline()) {
+                if (!player.getBase().isOnline() || player.getBase() instanceof OfflinePlayer) {
                     throw new Exception(tl("bedOffline"));
                 }
                 PaperLib.getBedSpawnLocationAsync(player.getBase(), true).thenAccept(location -> {
@@ -62,7 +63,8 @@ public class Commandhome extends EssentialsCommand {
             goHome(user, player, homeName.toLowerCase(Locale.ENGLISH), charge, getNewExceptionFuture(user.getSource(), commandLabel));
         } catch (NotEnoughArgumentsException e) {
             final User finalPlayer = player;
-            PaperLib.getBedSpawnLocationAsync(player.getBase(), true).thenAccept(bed -> {
+            CompletableFuture<Location> message = new CompletableFuture<>();
+            message.thenAccept(bed -> {
                 final List<String> homes = finalPlayer.getHomes();
                 if (homes.isEmpty() && finalPlayer.equals(user)) {
                     if (ess.getSettings().isSpawnIfNoHome()) {
@@ -90,6 +92,11 @@ public class Commandhome extends EssentialsCommand {
                     user.sendMessage(tl("homes", StringUtil.joinList(homes), count, getHomeLimit(finalPlayer)));
                 }
             });
+            if (!player.getBase().isOnline() || player.getBase() instanceof OfflinePlayer) {
+                message.complete(null);
+                return;
+            }
+            PaperLib.getBedSpawnLocationAsync(player.getBase(), true).thenAccept(message::complete);
         }
     }
 

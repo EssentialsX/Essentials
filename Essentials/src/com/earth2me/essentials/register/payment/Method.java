@@ -24,7 +24,7 @@ public interface Method {
      * @see #getName()
      * @see #getVersion()
      */
-    Object getPlugin();
+    Plugin getPlugin();
 
     /**
      * Returns the actual name of this method.
