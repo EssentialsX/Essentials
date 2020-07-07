@@ -570,7 +570,6 @@ public class Settings implements net.ess3.api.ISettings {
         isCustomJoinMessage = !customJoinMessage.equals("none");
         customQuitMessage = _getCustomQuitMessage();
         isCustomQuitMessage = !customQuitMessage.equals("none");
-        joinQuitMessagePlayerCount = _getJoinQuitMessagePlayerCount();
         muteCommands = _getMuteCommands();
         spawnOnJoinGroups = _getSpawnOnJoinGroups();
         commandCooldowns = _getCommandCooldowns();
@@ -1286,20 +1285,14 @@ public class Settings implements net.ess3.api.ISettings {
         return isCustomQuitMessage;
     }
 
-    private int joinQuitMessagePlayerCount;
-
-    public int _getJoinQuitMessagePlayerCount() {
+    @Override
+    public int getJoinQuitMessagePlayerCount() {
         return config.getInt("hide-join-quit-messages-above", -1);
     }
 
     @Override
-    public int getJoinQuitMessagePlayerCount() {
-        return joinQuitMessagePlayerCount;
-    }
-
-    @Override
     public boolean hasJoinQuitMessagePlayerCount() {
-        return joinQuitMessagePlayerCount >= 0;
+        return getJoinQuitMessagePlayerCount() >= 0;
     }
 
     @Override
