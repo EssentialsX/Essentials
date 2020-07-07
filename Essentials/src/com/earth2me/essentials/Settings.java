@@ -1286,6 +1286,16 @@ public class Settings implements net.ess3.api.ISettings {
     }
 
     @Override
+    public int getJoinQuitMessagePlayerCount() {
+        return config.getInt("hide-join-quit-messages-above", -1);
+    }
+
+    @Override
+    public boolean hasJoinQuitMessagePlayerCount() {
+        return getJoinQuitMessagePlayerCount() >= 0;
+    }
+
+    @Override
     public boolean isNotifyNoNewMail() {
         return config.getBoolean("notify-no-new-mail", true);
     }

@@ -210,6 +210,10 @@ public interface ISettings extends IConf {
 
     KeepInvPolicy getBindingItemsPolicy();
 
+    int getJoinQuitMessagePlayerCount();
+
+    boolean hasJoinQuitMessagePlayerCount();
+
     enum KeepInvPolicy {
         KEEP,
         DELETE,
