@@ -187,7 +187,7 @@ public class EssentialsPlayerListener implements Listener {
     public void onPlayerQuit(final PlayerQuitEvent event) {
         final User user = ess.getUser(event.getPlayer());
 
-        if (ess.getSettings().allowSilentJoinQuit() && user.isAuthorized("essentials.silentquit")) {
+        if (hideJoinQuitMessages() || (ess.getSettings().allowSilentJoinQuit() && user.isAuthorized("essentials.silentquit"))) {
             event.setQuitMessage(null);
         } else if (ess.getSettings().isCustomQuitMessage() && event.getQuitMessage() != null) {
             final Player player = event.getPlayer();
@@ -235,9 +235,13 @@ public class EssentialsPlayerListener implements Listener {
         final String joinMessage = event.getJoinMessage();
         ess.runTaskAsynchronously(() -> delayedJoin(event.getPlayer(), joinMessage));
 
-        if (ess.getSettings().allowSilentJoinQuit() || ess.getSettings().isCustomJoinMessage()) {
+        if (hideJoinQuitMessages() || ess.getSettings().allowSilentJoinQuit() || ess.getSettings().isCustomJoinMessage()) {
             event.setJoinMessage(null);
         }
+    }
+
+    private boolean hideJoinQuitMessages() {
+        return ess.getSettings().hasJoinQuitMessagePlayerCount() && ess.getServer().getOnlinePlayers().size() > ess.getSettings().getJoinQuitMessagePlayerCount();
     }
 
     public void delayedJoin(final Player player, final String message) {
@@ -294,7 +298,7 @@ public class EssentialsPlayerListener implements Listener {
                     if (user.isAuthorized("essentials.silentjoin.vanish")) {
                         user.setVanished(true);
                     }
-                } else if (message == null) {
+                } else if (message == null || hideJoinQuitMessages()) {
                     //NOOP
                 } else if (ess.getSettings().isCustomJoinMessage()) {
                     String msg = ess.getSettings().getCustomJoinMessage()
