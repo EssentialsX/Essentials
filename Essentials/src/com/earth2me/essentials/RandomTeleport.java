@@ -1,9 +1,11 @@
 package com.earth2me.essentials;
 
+import com.earth2me.essentials.utils.LocationUtil;
 import com.earth2me.essentials.utils.VersionUtil;
 import io.papermc.lib.PaperLib;
 import net.ess3.api.InvalidWorldException;
 import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.block.Biome;
 
 import java.io.File;
@@ -163,13 +165,27 @@ public class RandomTeleport implements IConf {
                 0
         );
         PaperLib.getChunkAtAsync(location).thenAccept(chunk -> {
-            location.setY(center.getWorld().getHighestBlockYAt(location) + HIGHEST_BLOCK_Y_OFFSET);
+            if (World.Environment.NETHER.equals(center.getWorld().getEnvironment())) {
+                location.setY(getNetherYAt(location));
+            } else {
+                location.setY(center.getWorld().getHighestBlockYAt(location) + HIGHEST_BLOCK_Y_OFFSET);
+            }
             future.complete(location);
         });
         return future;
     }
 
+    // Returns an appropriate elevation for a given location in the nether, or -1 if none is found
+    private double getNetherYAt(Location location) {
+        for (int y = 32; y < location.getWorld().getMaxHeight() / 2; ++y) {
+            if (!LocationUtil.isBlockUnsafe(location.getWorld(), location.getBlockX(), y, location.getBlockZ())) {
+                return y;
+            }
+        }
+        return -1;
+    }
+
     private boolean isValidRandomLocation(Location location) {
-        return !this.getExcludedBiomes().contains(location.getBlock().getBiome());
+        return location.getBlockY() > 0 && !this.getExcludedBiomes().contains(location.getBlock().getBiome());
     }
 }
