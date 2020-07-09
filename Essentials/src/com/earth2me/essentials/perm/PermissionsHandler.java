@@ -8,6 +8,7 @@ import org.bukkit.entity.Player;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.logging.Level;
@@ -190,6 +191,14 @@ public class PermissionsHandler implements IPermissionsHandler {
         registerContext("essentials:afk", player -> Collections.singleton(String.valueOf(ess.getUser(player).isAfk())), () -> ImmutableSet.of("true", "false"));
         registerContext("essentials:muted", player -> Collections.singleton(String.valueOf(ess.getUser(player).isMuted())), () -> ImmutableSet.of("true", "false"));
         registerContext("essentials:vanished", player -> Collections.singleton(String.valueOf(ess.getUser(player).isHidden())), () -> ImmutableSet.of("true", "false"));
+        registerContext("essentials:jailed", player -> Collections.singleton(String.valueOf(ess.getUser(player).isJailed())), () -> ImmutableSet.of("true", "false"));
+        registerContext("essentials:jail", player -> Optional.ofNullable(ess.getUser(player).getJail()).map(Arrays::asList).orElse(Collections.emptyList()), () -> {
+            try {
+                return ess.getJails().getList();
+            } catch (Exception e) {
+                return Collections.emptyList();
+            }
+        });
     }
 
 }
