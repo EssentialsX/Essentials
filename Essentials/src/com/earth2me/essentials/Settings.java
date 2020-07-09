@@ -158,8 +158,18 @@ public class Settings implements net.ess3.api.ISettings {
     }
 
     @Override
+    public boolean isAlwaysTeleportSafety() {
+        return config.getBoolean("force-safe-teleport-location", false);
+    }
+
+    @Override
     public boolean isTeleportPassengerDismount() {
         return config.getBoolean("teleport-passenger-dismount", true);
+    }
+
+    @Override
+    public boolean isForcePassengerTeleport() {
+        return config.getBoolean("force-passenger-teleportation", false);
     }
 
     @Override
@@ -571,7 +581,6 @@ public class Settings implements net.ess3.api.ISettings {
         isCompassTowardsHomePerm = _isCompassTowardsHomePerm();
         isAllowWorldInBroadcastworld = _isAllowWorldInBroadcastworld();
         itemDbType = _getItemDbType();
-        forceEnableRecipe = _isForceEnableRecipe();
         allowOldIdSigns = _allowOldIdSigns();
         isWaterSafe = _isWaterSafe();
         isSafeUsermap = _isSafeUsermap();
@@ -1277,6 +1286,16 @@ public class Settings implements net.ess3.api.ISettings {
     }
 
     @Override
+    public int getJoinQuitMessagePlayerCount() {
+        return config.getInt("hide-join-quit-messages-above", -1);
+    }
+
+    @Override
+    public boolean hasJoinQuitMessagePlayerCount() {
+        return getJoinQuitMessagePlayerCount() >= 0;
+    }
+
+    @Override
     public boolean isNotifyNoNewMail() {
         return config.getBoolean("notify-no-new-mail", true);
     }
@@ -1634,15 +1653,6 @@ public class Settings implements net.ess3.api.ISettings {
 
     private boolean forceEnableRecipe; // https://github.com/EssentialsX/Essentials/issues/1397
 
-    private boolean _isForceEnableRecipe() {
-        return config.getBoolean("force-enable-recipe", false);
-    }
-
-    @Override
-    public boolean isForceEnableRecipe() {
-        return forceEnableRecipe;
-    }
-
     private boolean allowOldIdSigns;
 
     private boolean _allowOldIdSigns() {
@@ -1737,7 +1747,12 @@ public class Settings implements net.ess3.api.ISettings {
     public boolean isSpawnIfNoHome() {
         return config.getBoolean("spawn-if-no-home", true);
     }
-    
+
+    @Override
+    public boolean isConfirmHomeOverwrite() {
+        return config.getBoolean("confirm-home-overwrite", false);
+    }
+
     @Override
     public boolean infoAfterDeath() {
         return config.getBoolean("send-info-after-death", false);

@@ -78,6 +78,10 @@ teleport-safety: true
 # teleport-safety and this option need to be set to true to force teleportation to dangerous locations.
 force-disable-teleport-safety: false
 
+# If a player is teleporting to an unsafe location in creative, adventure, or god mode; they will not be teleported to a
+# safe location. If you'd like players to be teleported to a safe location all of the time, set this option to true.
+force-safe-teleport-location: false
+
 # If a player has any passengers, the teleport will fail. Should their passengers be dismounted before they are teleported?
 # If this is set to true, Essentials will dismount the player's passengers before teleporting.
 # If this is set to false, attempted teleports will be canceled with a warning.
@@ -480,10 +484,16 @@ send-info-after-death: false
 # In addition, people with essentials.silentjoin.vanish will be vanished on join.
 allow-silent-join-quit: false
 
-# You can set custom join and quit messages here. Set to "none" to use the default message or "" to disable the message entirely.
+# You can set custom join and quit messages here. Set this to "none" to use the default Minecraft message,
+# or set this to "" to hide the message entirely.
 # You may use color codes, {USERNAME} for the player's name, and {PLAYER} for the player's displayname.
 custom-join-message: "none"
 custom-quit-message: "none"
+
+# You can disable join and quit messages when the player count reaches a certain limit.
+# When the player count is below this number, join/quit messages will always be shown.
+# Set this to -1 to always show join and quit messages regardless of player count.
+hide-join-quit-messages-above: -1
 
 # Add worlds to this list, if you want to automatically disable god mode there.
 no-god-in-worlds:
@@ -672,6 +682,9 @@ compass-towards-home-perm: false
 # If set to false, players will not be teleported when they run /home without setting a home first.
 spawn-if-no-home: true
 
+# Should players be asked to provide confirmation for homes which they attempt to overwrite?
+confirm-home-overwrite: false
+
 ############################################################
 # +------------------------------------------------------+ #
 # |                       Economy                        | #
@@ -832,6 +845,8 @@ protect:
     enderdragon-blockdamage: true
     enderman-pickup: false
     villager-death: false
+    bed-explosion: false
+    respawn-anchor-explosion: false
     # Monsters won't follow players.
     # permission essentials.protect.entitytarget.bypass disables this.
     entitytarget: false

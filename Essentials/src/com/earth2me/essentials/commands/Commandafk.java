@@ -2,6 +2,7 @@ package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.utils.DateUtil;
 import net.ess3.api.events.AfkStatusChangeEvent;
 import org.bukkit.Server;
 
@@ -48,7 +49,11 @@ public class Commandafk extends EssentialsCommand {
     private void toggleAfk(User sender, User user, String message) throws Exception {
         if (message != null && sender != null) {
             if (sender.isMuted()) {
-                throw new Exception(sender.hasMuteReason() ? tl("voiceSilencedReason", sender.getMuteReason()) : tl("voiceSilenced"));
+                String dateDiff = sender.getMuteTimeout() > 0 ? DateUtil.formatDateDiff(sender.getMuteTimeout()) : null;
+                if (dateDiff == null) {
+                    throw new Exception(sender.hasMuteReason() ? tl("voiceSilencedReason", sender.getMuteReason()) : tl("voiceSilenced"));
+                }
+                throw new Exception(sender.hasMuteReason() ? tl("voiceSilencedReasonTime", dateDiff, sender.getMuteReason()) : tl("voiceSilencedTime", dateDiff));
             }
             if (!sender.isAuthorized("essentials.afk.message")) {
                 throw new Exception(tl("noPermToAFKMessage"));

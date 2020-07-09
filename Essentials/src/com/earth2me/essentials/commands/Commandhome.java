@@ -1,9 +1,11 @@
 package com.earth2me.essentials.commands;
 
+import com.earth2me.essentials.OfflinePlayer;
 import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.StringUtil;
 import io.papermc.lib.PaperLib;
+import net.ess3.api.events.UserTeleportHomeEvent;
 import org.bukkit.Location;
 import org.bukkit.Server;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
@@ -41,12 +43,17 @@ public class Commandhome extends EssentialsCommand {
         }
         try {
             if ("bed".equalsIgnoreCase(homeName) && user.isAuthorized("essentials.home.bed")) {
-                if (!player.getBase().isOnline()) {
+                if (!player.getBase().isOnline() || player.getBase() instanceof OfflinePlayer) {
                     throw new Exception(tl("bedOffline"));
                 }
                 PaperLib.getBedSpawnLocationAsync(player.getBase(), true).thenAccept(location -> {
                     CompletableFuture<Boolean> future = getNewExceptionFuture(user.getSource(), commandLabel);
                     if (location != null) {
+                        UserTeleportHomeEvent event = new UserTeleportHomeEvent(user, "bed", location, UserTeleportHomeEvent.HomeType.BED);
+                        server.getPluginManager().callEvent(event);
+                        if (event.isCancelled()) {
+                            return;
+                        }
                         future.thenAccept(success -> {
                             if (success) {
                                 user.sendMessage(tl("teleportHome", "bed"));
@@ -62,11 +69,16 @@ public class Commandhome extends EssentialsCommand {
             goHome(user, player, homeName.toLowerCase(Locale.ENGLISH), charge, getNewExceptionFuture(user.getSource(), commandLabel));
         } catch (NotEnoughArgumentsException e) {
             final User finalPlayer = player;
-            PaperLib.getBedSpawnLocationAsync(player.getBase(), true).thenAccept(bed -> {
+            CompletableFuture<Location> message = new CompletableFuture<>();
+            message.thenAccept(bed -> {
                 final List<String> homes = finalPlayer.getHomes();
                 if (homes.isEmpty() && finalPlayer.equals(user)) {
                     if (ess.getSettings().isSpawnIfNoHome()) {
-                        user.getAsyncTeleport().respawn(charge, TeleportCause.COMMAND, getNewExceptionFuture(user.getSource(), commandLabel));
+                        UserTeleportHomeEvent event = new UserTeleportHomeEvent(user, null, bed != null ? bed : finalPlayer.getWorld().getSpawnLocation(), bed != null ? UserTeleportHomeEvent.HomeType.BED : UserTeleportHomeEvent.HomeType.SPAWN);
+                        server.getPluginManager().callEvent(event);
+                        if (!event.isCancelled()) {
+                            user.getAsyncTeleport().respawn(charge, TeleportCause.COMMAND, getNewExceptionFuture(user.getSource(), commandLabel));
+                        }
                     } else {
                         showError(user.getBase(), new Exception(tl("noHomeSetPlayer")), commandLabel);
                     }
@@ -90,6 +102,11 @@ public class Commandhome extends EssentialsCommand {
                     user.sendMessage(tl("homes", StringUtil.joinList(homes), count, getHomeLimit(finalPlayer)));
                 }
             });
+            if (!player.getBase().isOnline() || player.getBase() instanceof OfflinePlayer) {
+                message.complete(null);
+                return;
+            }
+            PaperLib.getBedSpawnLocationAsync(player.getBase(), true).thenAccept(message::complete);
         }
     }
 
@@ -114,12 +131,16 @@ public class Commandhome extends EssentialsCommand {
         if (user.getWorld() != loc.getWorld() && ess.getSettings().isWorldHomePermissions() && !user.isAuthorized("essentials.worlds." + loc.getWorld().getName())) {
             throw new Exception(tl("noPerm", "essentials.worlds." + loc.getWorld().getName()));
         }
-        user.getAsyncTeleport().teleport(loc, charge, TeleportCause.COMMAND, future);
-        future.thenAccept(success -> {
-            if (success) {
-                user.sendMessage(tl("teleportHome", home));
-            }
-        });
+        UserTeleportHomeEvent event = new UserTeleportHomeEvent(user, home, loc, UserTeleportHomeEvent.HomeType.HOME);
+        user.getServer().getPluginManager().callEvent(event);
+        if (!event.isCancelled()) {
+            user.getAsyncTeleport().teleport(loc, charge, TeleportCause.COMMAND, future);
+            future.thenAccept(success -> {
+                if (success) {
+                    user.sendMessage(tl("teleportHome", home));
+                }
+            });
+        }
     }
 
     @Override

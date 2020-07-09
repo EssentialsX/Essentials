@@ -6,35 +6,52 @@ import org.bukkit.Location;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
-import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
+
 /**
- * Called when the player teleports
+ * Called when the player uses the command /tpr
  */
-public class UserTeleportEvent extends Event implements Cancellable {
+public class UserRandomTeleportEvent extends Event implements Cancellable {
     private static final HandlerList handlers = new HandlerList();
 
     private IUser user;
-    private TeleportCause cause;
-    private Location target;
+    private Location center;
+    private double minRange, maxRange;
     private boolean cancelled = false;
 
-    public UserTeleportEvent(IUser user, TeleportCause cause, Location target) {
+    public UserRandomTeleportEvent(IUser user, Location center, double minRange, double maxRange) {
         super(!Bukkit.isPrimaryThread());
         this.user = user;
-        this.cause = cause;
-        this.target = target;
+        this.center = center;
+        this.minRange = minRange;
+        this.maxRange = maxRange;
     }
 
     public IUser getUser() {
         return user;
     }
 
-    public TeleportCause getTeleportCause() {
-        return cause;
+    public Location getCenter() {
+        return center;
     }
 
-    public Location getLocation() {
-        return target;
+    public void setCenter(Location center) {
+        this.center = center;
+    }
+
+    public double getMinRange() {
+        return minRange;
+    }
+
+    public void setMinRange(double minRange) {
+        this.minRange = minRange;
+    }
+
+    public double getMaxRange() {
+        return maxRange;
+    }
+
+    public void setMaxRange(double maxRange) {
+        this.maxRange = maxRange;
     }
 
     @Override

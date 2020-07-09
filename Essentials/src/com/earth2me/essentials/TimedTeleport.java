@@ -9,7 +9,7 @@ import java.util.UUID;
 
 import static com.earth2me.essentials.I18n.tl;
 
-
+@Deprecated
 public class TimedTeleport implements Runnable {
     private static final double MOVE_CONSTANT = 0.3;
     private final IUser teleportOwner;

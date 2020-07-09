@@ -6,8 +6,9 @@ import io.papermc.lib.PaperLib;
 import net.ess3.api.IEssentials;
 import net.ess3.api.ITeleport;
 import net.ess3.api.IUser;
-import net.ess3.api.events.UserTeleportEvent;
 import net.ess3.api.events.UserWarpEvent;
+import net.ess3.api.events.teleport.PreTeleportEvent;
+import net.ess3.api.events.teleport.TeleportWarmupEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -134,7 +135,7 @@ public class Teleport implements ITeleport {
         cancel(false);
         Location loc = target.getLocation();
 
-        UserTeleportEvent event = new UserTeleportEvent(teleportee, cause, loc);
+        PreTeleportEvent event = new PreTeleportEvent(teleportee, cause, target);
         Bukkit.getServer().getPluginManager().callEvent(event);
         if (event.isCancelled()) {
             return;
@@ -217,6 +218,13 @@ public class Teleport implements ITeleport {
     private void teleport(IUser teleportee, ITarget target, Trade chargeFor, TeleportCause cause) throws Exception {
         double delay = ess.getSettings().getTeleportDelay();
 
+        TeleportWarmupEvent event = new TeleportWarmupEvent(teleportee, cause, target, delay);
+        Bukkit.getServer().getPluginManager().callEvent(event);
+        if (event.isCancelled()) {
+            return;
+        }
+        delay = event.getDelay();
+
         Trade cashCharge = chargeFor;
 
         if (chargeFor != null) {
@@ -247,6 +255,13 @@ public class Teleport implements ITeleport {
     @Deprecated
     private void teleportOther(IUser teleporter, IUser teleportee, ITarget target, Trade chargeFor, TeleportCause cause) throws Exception {
         double delay = ess.getSettings().getTeleportDelay();
+
+        TeleportWarmupEvent event = new TeleportWarmupEvent(teleporter, teleportee, cause, target, delay);
+        Bukkit.getServer().getPluginManager().callEvent(event);
+        if (event.isCancelled()) {
+            return;
+        }
+        delay = event.getDelay();
 
         Trade cashCharge = chargeFor;
 
@@ -283,6 +298,14 @@ public class Teleport implements ITeleport {
     @Deprecated
     public void respawn(final Trade chargeFor, TeleportCause cause) throws Exception {
         double delay = ess.getSettings().getTeleportDelay();
+
+        TeleportWarmupEvent event = new TeleportWarmupEvent(teleportOwner, cause, null, delay);
+        Bukkit.getServer().getPluginManager().callEvent(event);
+        if (event.isCancelled()) {
+            return;
+        }
+        delay = event.getDelay();
+
         if (chargeFor != null) {
             chargeFor.isAffordableFor(teleportOwner);
         }
