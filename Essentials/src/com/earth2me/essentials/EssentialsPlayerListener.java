@@ -910,14 +910,14 @@ public class EssentialsPlayerListener implements Listener {
         /**
          * Returns true if all of the following are true:
          * - The command is a plugin command
-         * - The plugin command is from Essentials
+         * - The plugin command is from a plugin in an essentials-controlled package
          * - There is no known alternative OR the alternative is overridden by Essentials
          */
         private boolean isEssentialsCommand(String label) {
             PluginCommand command = ess.getServer().getPluginCommand(label);
 
             return command != null
-                    && command.getPlugin() == ess
+                    && (command.getPlugin() == ess || command.getPlugin().getClass().getName().startsWith("com.earth2me.essentials"))
                     && (ess.getSettings().isCommandOverridden(label) || (ess.getAlternativeCommandsHandler().getAlternative(label) == null));
         }
     }
