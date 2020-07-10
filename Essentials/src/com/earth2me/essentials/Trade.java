@@ -369,7 +369,7 @@ public class Trade {
         else if (trade.getMoney() != null)
             return String.format("(amt:%f,money,cur:%s)", trade.getMoney(), ess.getSettings().getCurrencySymbol());
         else if (trade.getExperience() != null)
-            return String.format("(amt:%d, exp)", trade.getExperience());
+            return String.format("(amt:%d,exp)", trade.getExperience());
         else
             return "??";
     }
