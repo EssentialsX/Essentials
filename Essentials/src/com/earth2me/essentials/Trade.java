@@ -26,351 +26,362 @@ import java.util.logging.Logger;
 import static com.earth2me.essentials.I18n.tl;
 
 public class Trade {
-  private final transient String command;
-  private final transient Trade fallbackTrade;
-  private final transient BigDecimal money;
-  private final transient ItemStack itemStack;
-  private final transient Integer exp;
-  private final transient IEssentials ess;
+    private final transient String command;
+    private final transient Trade fallbackTrade;
+    private final transient BigDecimal money;
+    private final transient ItemStack itemStack;
+    private final transient Integer exp;
+    private final transient IEssentials ess;
 
-  public enum TradeType {
-    MONEY, EXP, ITEM
-  }
-
-  public enum OverflowType {
-    ABORT, DROP, RETURN
-  }
-
-  public Trade(final String command, final IEssentials ess) {
-    this(command, null, null, null, null, ess);
-  }
-
-  public Trade(final String command, final Trade fallback, final IEssentials ess) {
-    this(command, fallback, null, null, null, ess);
-  }
-
-  @Deprecated
-  public Trade(final double money, final com.earth2me.essentials.IEssentials ess) {
-    this(null, null, BigDecimal.valueOf(money), null, null, (IEssentials) ess);
-  }
-
-  public Trade(final BigDecimal money, final IEssentials ess) {
-    this(null, null, money, null, null, ess);
-  }
-
-  public Trade(final ItemStack items, final IEssentials ess) {
-    this(null, null, null, items, null, ess);
-  }
-
-  public Trade(final int exp, final IEssentials ess) {
-    this(null, null, null, null, exp, ess);
-  }
-
-  private Trade(final String command, final Trade fallback, final BigDecimal money, final ItemStack item,
-      final Integer exp, final IEssentials ess) {
-    this.command = command;
-    this.fallbackTrade = fallback;
-    this.money = money;
-    this.itemStack = item;
-    this.exp = exp;
-    this.ess = ess;
-  }
-
-  public void isAffordableFor(final IUser user) throws ChargeException {
-    CompletableFuture<Boolean> future = new CompletableFuture<>();
-    isAffordableFor(user, future);
-    if (future.isCompletedExceptionally()) {
-      try {
-        future.get();
-      } catch (InterruptedException e) { // If this happens, we have bigger problems...
-        e.printStackTrace();
-      } catch (ExecutionException e) {
-        throw (ChargeException) e.getCause();
-      }
-    }
-  }
-
-  public void isAffordableFor(final IUser user, CompletableFuture<Boolean> future) {
-    if (ess.getSettings().isDebug()) {
-      ess.getLogger().log(Level.INFO, "checking if " + user.getName() + " can afford charge.");
+    public enum TradeType {
+        MONEY, EXP, ITEM
     }
 
-    if (getMoney() != null && getMoney().signum() > 0 && !user.canAfford(getMoney())) {
-      future.completeExceptionally(
-          new ChargeException(tl("notEnoughMoney", NumberUtil.displayCurrency(getMoney(), ess))));
-      return;
+    public enum OverflowType {
+        ABORT, DROP, RETURN
     }
 
-    if (getItemStack() != null && !user.getBase().getInventory().containsAtLeast(itemStack, itemStack.getAmount())) {
-      future.completeExceptionally(
-          new ChargeException(tl("missingItems", getItemStack().getAmount(), ess.getItemDb().name(getItemStack()))));
-      return;
+    public Trade(final String command, final IEssentials ess) {
+        this(command, null, null, null, null, ess);
     }
 
-    BigDecimal money;
-    if (command != null && !command.isEmpty() && (money = getCommandCost(user)).signum() > 0
-        && !user.canAfford(money)) {
-      future.completeExceptionally(new ChargeException(tl("notEnoughMoney", NumberUtil.displayCurrency(money, ess))));
-      return;
+    public Trade(final String command, final Trade fallback, final IEssentials ess) {
+        this(command, fallback, null, null, null, ess);
     }
 
-    if (exp != null && exp > 0 && SetExpFix.getTotalExperience(user.getBase()) < exp) {
-      future.completeExceptionally(new ChargeException(tl("notEnoughExperience")));
+    @Deprecated
+    public Trade(final double money, final com.earth2me.essentials.IEssentials ess) {
+        this(null, null, BigDecimal.valueOf(money), null, null, (IEssentials) ess);
     }
-  }
 
-  public boolean pay(final IUser user) throws MaxMoneyException {
-    return pay(user, OverflowType.ABORT) == null;
-  }
-
-  public Map<Integer, ItemStack> pay(final IUser user, final OverflowType type) throws MaxMoneyException {
-    if (getMoney() != null && getMoney().signum() > 0) {
-      if (ess.getSettings().isDebug()) {
-        ess.getLogger().log(Level.INFO, "paying user " + user.getName() + " via trade " + getMoney().toPlainString());
-      }
-      user.giveMoney(getMoney());
+    public Trade(final BigDecimal money, final IEssentials ess) {
+        this(null, null, money, null, null, ess);
     }
-    if (getItemStack() != null) {
-      // This stores the would be overflow
-      Map<Integer, ItemStack> overFlow = InventoryWorkaround.addAllItems(user.getBase().getInventory(), getItemStack());
 
-      if (overFlow != null) {
-        switch (type) {
-          case ABORT:
-            if (ess.getSettings().isDebug()) {
-              ess.getLogger().log(Level.INFO, "abort paying " + user.getName() + " itemstack "
-                  + getItemStack().toString() + " due to lack of inventory space ");
-            }
+    public Trade(final ItemStack items, final IEssentials ess) {
+        this(null, null, null, items, null, ess);
+    }
 
-            return overFlow;
+    public Trade(final int exp, final IEssentials ess) {
+        this(null, null, null, null, exp, ess);
+    }
 
-          case RETURN:
-            // Pay the user the items, and return overflow
-            final Map<Integer, ItemStack> returnStack = InventoryWorkaround.addItems(user.getBase().getInventory(),
-                getItemStack());
-            user.getBase().updateInventory();
+    private Trade(final String command, final Trade fallback, final BigDecimal money, final ItemStack item,
+            final Integer exp, final IEssentials ess) {
+        this.command = command;
+        this.fallbackTrade = fallback;
+        this.money = money;
+        this.itemStack = item;
+        this.exp = exp;
+        this.ess = ess;
+    }
 
-            if (ess.getSettings().isDebug()) {
-              ess.getLogger().log(Level.INFO, "paying " + user.getName() + " partial itemstack "
-                  + getItemStack().toString() + " with overflow " + returnStack.get(0).toString());
-            }
-
-            return returnStack;
-
-          case DROP:
-            // Pay the users the items directly, and drop the rest, will always return no
-            // overflow.
-            final Map<Integer, ItemStack> leftOver = InventoryWorkaround.addItems(user.getBase().getInventory(),
-                getItemStack());
-            final Location loc = user.getBase().getLocation();
-            for (ItemStack loStack : leftOver.values()) {
-              final int maxStackSize = loStack.getType().getMaxStackSize();
-              final int stacks = loStack.getAmount() / maxStackSize;
-              final int leftover = loStack.getAmount() % maxStackSize;
-              final Item[] itemStacks = new Item[stacks + (leftover > 0 ? 1 : 0)];
-              for (int i = 0; i < stacks; i++) {
-                final ItemStack stack = loStack.clone();
-                stack.setAmount(maxStackSize);
-                itemStacks[i] = loc.getWorld().dropItem(loc, stack);
-              }
-              if (leftover > 0) {
-                final ItemStack stack = loStack.clone();
-                stack.setAmount(leftover);
-                itemStacks[stacks] = loc.getWorld().dropItem(loc, stack);
-              }
-            }
-            if (ess.getSettings().isDebug()) {
-              ess.getLogger().log(Level.INFO, "paying " + user.getName() + " partial itemstack "
-                  + getItemStack().toString() + " and dropping overflow " + leftOver.get(0).toString());
+    public void isAffordableFor(final IUser user) throws ChargeException {
+        CompletableFuture<Boolean> future = new CompletableFuture<>();
+        isAffordableFor(user, future);
+        if (future.isCompletedExceptionally()) {
+            try {
+                future.get();
+            } catch (InterruptedException e) { // If this happens, we have bigger problems...
+                e.printStackTrace();
+            } catch (ExecutionException e) {
+                throw (ChargeException) e.getCause();
             }
         }
-      } else if (ess.getSettings().isDebug()) {
-        ess.getLogger().log(Level.INFO, "paying " + user.getName() + " itemstack " + getItemStack().toString());
-      }
-      user.getBase().updateInventory();
-    }
-    if (getExperience() != null) {
-      SetExpFix.setTotalExperience(user.getBase(), SetExpFix.getTotalExperience(user.getBase()) + getExperience());
-    }
-    return null;
-  }
-
-  public void charge(final IUser user) throws ChargeException {
-    CompletableFuture<Boolean> future = new CompletableFuture<>();
-    charge(user, future);
-    if (future.isCompletedExceptionally()) {
-      try {
-        future.get();
-      } catch (InterruptedException e) { // If this happens, we have bigger problems...
-        e.printStackTrace();
-      } catch (ExecutionException e) {
-        throw (ChargeException) e.getCause();
-      }
-    }
-  }
-
-  public void charge(final IUser user, CompletableFuture<Boolean> future) {
-    if (ess.getSettings().isDebug()) {
-      ess.getLogger().log(Level.INFO, "attempting to charge user " + user.getName());
-    }
-    if (getMoney() != null) {
-      if (ess.getSettings().isDebug()) {
-        ess.getLogger().log(Level.INFO, "charging user " + user.getName() + " money " + getMoney().toPlainString());
-      }
-      if (!user.canAfford(getMoney()) && getMoney().signum() > 0) {
-        future.completeExceptionally(
-            new ChargeException(tl("notEnoughMoney", NumberUtil.displayCurrency(getMoney(), ess))));
-        return;
-      }
-      user.takeMoney(getMoney());
-    }
-    if (getItemStack() != null) {
-      if (ess.getSettings().isDebug()) {
-        ess.getLogger().log(Level.INFO, "charging user " + user.getName() + " itemstack " + getItemStack().toString());
-      }
-      if (!user.getBase().getInventory().containsAtLeast(getItemStack(), getItemStack().getAmount())) {
-        future.completeExceptionally(new ChargeException(tl("missingItems", getItemStack().getAmount(),
-            getItemStack().getType().toString().toLowerCase(Locale.ENGLISH).replace("_", " "))));
-        return;
-      }
-      user.getBase().getInventory().removeItem(getItemStack());
-      user.getBase().updateInventory();
-    }
-    if (command != null) {
-      final BigDecimal cost = getCommandCost(user);
-      if (!user.canAfford(cost) && cost.signum() > 0) {
-        future.completeExceptionally(new ChargeException(tl("notEnoughMoney", NumberUtil.displayCurrency(cost, ess))));
-        return;
-      }
-      user.takeMoney(cost);
-    }
-    if (getExperience() != null) {
-      if (ess.getSettings().isDebug()) {
-        ess.getLogger().log(Level.INFO, "charging user " + user.getName() + " exp " + getExperience());
-      }
-      final int experience = SetExpFix.getTotalExperience(user.getBase());
-      if (experience < getExperience() && getExperience() > 0) {
-        future.completeExceptionally(new ChargeException(tl("notEnoughExperience")));
-        return;
-      }
-      SetExpFix.setTotalExperience(user.getBase(), experience - getExperience());
-    }
-    if (ess.getSettings().isDebug()) {
-      ess.getLogger().log(Level.INFO, "charge user " + user.getName() + " completed");
-    }
-  }
-
-  public BigDecimal getMoney() {
-    return money;
-  }
-
-  public ItemStack getItemStack() {
-    return itemStack;
-  }
-
-  public Integer getExperience() {
-    return exp;
-  }
-
-  public TradeType getType() {
-    if (getExperience() != null) {
-      return TradeType.EXP;
     }
 
-    if (getItemStack() != null) {
-      return TradeType.ITEM;
+    public void isAffordableFor(final IUser user, CompletableFuture<Boolean> future) {
+        if (ess.getSettings().isDebug()) {
+            ess.getLogger().log(Level.INFO, "checking if " + user.getName() + " can afford charge.");
+        }
+
+        if (getMoney() != null && getMoney().signum() > 0 && !user.canAfford(getMoney())) {
+            future.completeExceptionally(
+                    new ChargeException(tl("notEnoughMoney", NumberUtil.displayCurrency(getMoney(), ess))));
+            return;
+        }
+
+        if (getItemStack() != null
+                && !user.getBase().getInventory().containsAtLeast(itemStack, itemStack.getAmount())) {
+            future.completeExceptionally(new ChargeException(
+                    tl("missingItems", getItemStack().getAmount(), ess.getItemDb().name(getItemStack()))));
+            return;
+        }
+
+        BigDecimal money;
+        if (command != null && !command.isEmpty() && (money = getCommandCost(user)).signum() > 0
+                && !user.canAfford(money)) {
+            future.completeExceptionally(
+                    new ChargeException(tl("notEnoughMoney", NumberUtil.displayCurrency(money, ess))));
+            return;
+        }
+
+        if (exp != null && exp > 0 && SetExpFix.getTotalExperience(user.getBase()) < exp) {
+            future.completeExceptionally(new ChargeException(tl("notEnoughExperience")));
+        }
     }
 
-    return TradeType.MONEY;
-  }
-
-  public BigDecimal getCommandCost(final IUser user) {
-    BigDecimal cost = BigDecimal.ZERO;
-    if (command != null && !command.isEmpty()) {
-      cost = ess.getSettings().getCommandCost(command.charAt(0) == '/' ? command.substring(1) : command);
-      if (cost.signum() == 0 && fallbackTrade != null) {
-        cost = fallbackTrade.getCommandCost(user);
-      }
-
-      if (ess.getSettings().isDebug()) {
-        ess.getLogger().log(Level.INFO,
-            "calculated command (" + command + ") cost for " + user.getName() + " as " + cost);
-      }
-    }
-    if (cost.signum() != 0 && (user.isAuthorized("essentials.nocommandcost.all")
-        || user.isAuthorized("essentials.nocommandcost." + command))) {
-      return BigDecimal.ZERO;
-    }
-    return cost;
-  }
-
-  private static FileWriter fw = null;
-
-  public static void log(String type, String subtype, String event, String sender, Trade charge, String receiver,
-      Trade pay, Location loc, IEssentials ess) {
-
-    // isEcoLogUpdateEnabled() - This refers to log entries with no location, ie API
-    // updates #EasterEgg
-    // isEcoLogEnabled() - This refers to log entries with with location, ie /pay
-    // /sell and eco signs.
-    // Check if logging is enabled
-    if ((loc == null && !ess.getSettings().isEcoLogUpdateEnabled())
-        || (loc != null && !ess.getSettings().isEcoLogEnabled()))
-      return;
-
-    // Init the file writer
-    if (fw == null) {
-      try {
-        fw = new FileWriter(new File(ess.getDataFolder(), "trade.log"), true);
-      } catch (IOException ex) {
-        Logger.getLogger("Essentials").log(Level.SEVERE, null, ex);
-      }
+    public boolean pay(final IUser user) throws MaxMoneyException {
+        return pay(user, OverflowType.ABORT) == null;
     }
 
-    // [Time] [Type:Subtype:Event]
-    String logFormat = "[%s] %s:%s:%s send:%s/rec:%s/pay:%s/charge:%s/loc:%s \n";
+    public Map<Integer, ItemStack> pay(final IUser user, final OverflowType type) throws MaxMoneyException {
+        if (getMoney() != null && getMoney().signum() > 0) {
+            if (ess.getSettings().isDebug()) {
+                ess.getLogger().log(Level.INFO,
+                        "paying user " + user.getName() + " via trade " + getMoney().toPlainString());
+            }
+            user.giveMoney(getMoney());
+        }
+        if (getItemStack() != null) {
+            // This stores the would be overflow
+            Map<Integer, ItemStack> overFlow = InventoryWorkaround.addAllItems(user.getBase().getInventory(),
+                    getItemStack());
 
-    String time = DateFormat.getDateTimeInstance(DateFormat.FULL, DateFormat.FULL).format(new Date());
+            if (overFlow != null) {
+                switch (type) {
+                    case ABORT:
+                        if (ess.getSettings().isDebug()) {
+                            ess.getLogger().log(Level.INFO, "abort paying " + user.getName() + " itemstack "
+                                    + getItemStack().toString() + " due to lack of inventory space ");
+                        }
 
-    String safeSender = sender != null ? sender : "??";
-    String safeReceiver = receiver != null ? receiver : "??";
+                        return overFlow;
 
-    String locationString = loc != null
-        ? String.format("%s:%d,%d,%d", loc.getWorld().getName(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ())
-        : "??";
+                    case RETURN:
+                        // Pay the user the items, and return overflow
+                        final Map<Integer, ItemStack> returnStack = InventoryWorkaround
+                                .addItems(user.getBase().getInventory(), getItemStack());
+                        user.getBase().updateInventory();
 
-    String log = String.format(logFormat, time, type, subtype, event, safeSender, safeReceiver, formatTrade(pay, ess),
-        formatTrade(charge, ess), locationString);
+                        if (ess.getSettings().isDebug()) {
+                            ess.getLogger().log(Level.INFO, "paying " + user.getName() + " partial itemstack "
+                                    + getItemStack().toString() + " with overflow " + returnStack.get(0).toString());
+                        }
 
-    try {
-      fw.write(log);
-      fw.flush();
-    } catch (IOException ex) {
-      Logger.getLogger("Essentials").log(Level.SEVERE, null, ex);
+                        return returnStack;
+
+                    case DROP:
+                        // Pay the users the items directly, and drop the rest, will always return no
+                        // overflow.
+                        final Map<Integer, ItemStack> leftOver = InventoryWorkaround
+                                .addItems(user.getBase().getInventory(), getItemStack());
+                        final Location loc = user.getBase().getLocation();
+                        for (ItemStack loStack : leftOver.values()) {
+                            final int maxStackSize = loStack.getType().getMaxStackSize();
+                            final int stacks = loStack.getAmount() / maxStackSize;
+                            final int leftover = loStack.getAmount() % maxStackSize;
+                            final Item[] itemStacks = new Item[stacks + (leftover > 0 ? 1 : 0)];
+                            for (int i = 0; i < stacks; i++) {
+                                final ItemStack stack = loStack.clone();
+                                stack.setAmount(maxStackSize);
+                                itemStacks[i] = loc.getWorld().dropItem(loc, stack);
+                            }
+                            if (leftover > 0) {
+                                final ItemStack stack = loStack.clone();
+                                stack.setAmount(leftover);
+                                itemStacks[stacks] = loc.getWorld().dropItem(loc, stack);
+                            }
+                        }
+                        if (ess.getSettings().isDebug()) {
+                            ess.getLogger().log(Level.INFO,
+                                    "paying " + user.getName() + " partial itemstack " + getItemStack().toString()
+                                            + " and dropping overflow " + leftOver.get(0).toString());
+                        }
+                }
+            } else if (ess.getSettings().isDebug()) {
+                ess.getLogger().log(Level.INFO, "paying " + user.getName() + " itemstack " + getItemStack().toString());
+            }
+            user.getBase().updateInventory();
+        }
+        if (getExperience() != null) {
+            SetExpFix.setTotalExperience(user.getBase(),
+                    SetExpFix.getTotalExperience(user.getBase()) + getExperience());
+        }
+        return null;
     }
-  }
 
-  private static String formatTrade(Trade trade, IEssentials ess) {
-    if (trade == null)
-      return "??";
-    else if (trade.getItemStack() != null)
-      return String.format("(amt:%d,type:%s)", trade.getItemStack().getAmount(), trade.getItemStack().getType().name());
-    else if (trade.getMoney() != null)
-      return String.format("(amt:%f,money,cur:%s)", trade.getMoney(), ess.getSettings().getCurrencySymbol());
-    else if (trade.getExperience() != null)
-      return String.format("(amt:%d, exp)", trade.getExperience());
-    else
-      return "??";
-  }
-
-  public static void closeLog() {
-    if (fw != null) {
-      try {
-        fw.close();
-      } catch (IOException ex) {
-        Logger.getLogger("Essentials").log(Level.SEVERE, null, ex);
-      }
-      fw = null;
+    public void charge(final IUser user) throws ChargeException {
+        CompletableFuture<Boolean> future = new CompletableFuture<>();
+        charge(user, future);
+        if (future.isCompletedExceptionally()) {
+            try {
+                future.get();
+            } catch (InterruptedException e) { // If this happens, we have bigger problems...
+                e.printStackTrace();
+            } catch (ExecutionException e) {
+                throw (ChargeException) e.getCause();
+            }
+        }
     }
-  }
+
+    public void charge(final IUser user, CompletableFuture<Boolean> future) {
+        if (ess.getSettings().isDebug()) {
+            ess.getLogger().log(Level.INFO, "attempting to charge user " + user.getName());
+        }
+        if (getMoney() != null) {
+            if (ess.getSettings().isDebug()) {
+                ess.getLogger().log(Level.INFO,
+                        "charging user " + user.getName() + " money " + getMoney().toPlainString());
+            }
+            if (!user.canAfford(getMoney()) && getMoney().signum() > 0) {
+                future.completeExceptionally(
+                        new ChargeException(tl("notEnoughMoney", NumberUtil.displayCurrency(getMoney(), ess))));
+                return;
+            }
+            user.takeMoney(getMoney());
+        }
+        if (getItemStack() != null) {
+            if (ess.getSettings().isDebug()) {
+                ess.getLogger().log(Level.INFO,
+                        "charging user " + user.getName() + " itemstack " + getItemStack().toString());
+            }
+            if (!user.getBase().getInventory().containsAtLeast(getItemStack(), getItemStack().getAmount())) {
+                future.completeExceptionally(new ChargeException(tl("missingItems", getItemStack().getAmount(),
+                        getItemStack().getType().toString().toLowerCase(Locale.ENGLISH).replace("_", " "))));
+                return;
+            }
+            user.getBase().getInventory().removeItem(getItemStack());
+            user.getBase().updateInventory();
+        }
+        if (command != null) {
+            final BigDecimal cost = getCommandCost(user);
+            if (!user.canAfford(cost) && cost.signum() > 0) {
+                future.completeExceptionally(
+                        new ChargeException(tl("notEnoughMoney", NumberUtil.displayCurrency(cost, ess))));
+                return;
+            }
+            user.takeMoney(cost);
+        }
+        if (getExperience() != null) {
+            if (ess.getSettings().isDebug()) {
+                ess.getLogger().log(Level.INFO, "charging user " + user.getName() + " exp " + getExperience());
+            }
+            final int experience = SetExpFix.getTotalExperience(user.getBase());
+            if (experience < getExperience() && getExperience() > 0) {
+                future.completeExceptionally(new ChargeException(tl("notEnoughExperience")));
+                return;
+            }
+            SetExpFix.setTotalExperience(user.getBase(), experience - getExperience());
+        }
+        if (ess.getSettings().isDebug()) {
+            ess.getLogger().log(Level.INFO, "charge user " + user.getName() + " completed");
+        }
+    }
+
+    public BigDecimal getMoney() {
+        return money;
+    }
+
+    public ItemStack getItemStack() {
+        return itemStack;
+    }
+
+    public Integer getExperience() {
+        return exp;
+    }
+
+    public TradeType getType() {
+        if (getExperience() != null) {
+            return TradeType.EXP;
+        }
+
+        if (getItemStack() != null) {
+            return TradeType.ITEM;
+        }
+
+        return TradeType.MONEY;
+    }
+
+    public BigDecimal getCommandCost(final IUser user) {
+        BigDecimal cost = BigDecimal.ZERO;
+        if (command != null && !command.isEmpty()) {
+            cost = ess.getSettings().getCommandCost(command.charAt(0) == '/' ? command.substring(1) : command);
+            if (cost.signum() == 0 && fallbackTrade != null) {
+                cost = fallbackTrade.getCommandCost(user);
+            }
+
+            if (ess.getSettings().isDebug()) {
+                ess.getLogger().log(Level.INFO,
+                        "calculated command (" + command + ") cost for " + user.getName() + " as " + cost);
+            }
+        }
+        if (cost.signum() != 0 && (user.isAuthorized("essentials.nocommandcost.all")
+                || user.isAuthorized("essentials.nocommandcost." + command))) {
+            return BigDecimal.ZERO;
+        }
+        return cost;
+    }
+
+    private static FileWriter fw = null;
+
+    public static void log(String type, String subtype, String event, String sender, Trade charge, String receiver,
+            Trade pay, Location loc, IEssentials ess) {
+
+        // isEcoLogUpdateEnabled() - This refers to log entries with no location, ie API
+        // updates #EasterEgg
+        // isEcoLogEnabled() - This refers to log entries with with location, ie /pay
+        // /sell and eco signs.
+        // Check if logging is enabled
+        if ((loc == null && !ess.getSettings().isEcoLogUpdateEnabled())
+                || (loc != null && !ess.getSettings().isEcoLogEnabled()))
+            return;
+
+        // Init the file writer
+        if (fw == null) {
+            try {
+                fw = new FileWriter(new File(ess.getDataFolder(), "trade.log"), true);
+            } catch (IOException ex) {
+                Logger.getLogger("Essentials").log(Level.SEVERE, null, ex);
+            }
+        }
+
+        // [Time] [Type:Subtype:Event]
+        String logFormat = "[%s] %s:%s:%s send:%s/rec:%s/pay:%s/charge:%s/loc:%s \n";
+
+        String time = DateFormat.getDateTimeInstance(DateFormat.FULL, DateFormat.FULL).format(new Date());
+
+        String safeSender = sender != null ? sender : "??";
+        String safeReceiver = receiver != null ? receiver : "??";
+
+        String locationString = loc != null
+                ? String.format("%s:%d,%d,%d", loc.getWorld().getName(), loc.getBlockX(), loc.getBlockY(),
+                        loc.getBlockZ())
+                : "??";
+
+        String log = String.format(logFormat, time, type, subtype, event, safeSender, safeReceiver,
+                formatTrade(pay, ess), formatTrade(charge, ess), locationString);
+
+        try {
+            fw.write(log);
+            fw.flush();
+        } catch (IOException ex) {
+            Logger.getLogger("Essentials").log(Level.SEVERE, null, ex);
+        }
+    }
+
+    private static String formatTrade(Trade trade, IEssentials ess) {
+        if (trade == null)
+            return "??";
+        else if (trade.getItemStack() != null)
+            return String.format("(amt:%d,type:%s)", trade.getItemStack().getAmount(),
+                    trade.getItemStack().getType().name());
+        else if (trade.getMoney() != null)
+            return String.format("(amt:%f,money,cur:%s)", trade.getMoney(), ess.getSettings().getCurrencySymbol());
+        else if (trade.getExperience() != null)
+            return String.format("(amt:%d, exp)", trade.getExperience());
+        else
+            return "??";
+    }
+
+    public static void closeLog() {
+        if (fw != null) {
+            try {
+                fw.close();
+            } catch (IOException ex) {
+                Logger.getLogger("Essentials").log(Level.SEVERE, null, ex);
+            }
+            fw = null;
+        }
+    }
 }
