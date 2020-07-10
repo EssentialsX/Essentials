@@ -1,7 +1,5 @@
 package com.earth2me.essentials;
 
-import static com.earth2me.essentials.I18n.tl;
-
 import com.earth2me.essentials.Trade.OverflowType;
 import com.earth2me.essentials.commands.NoChargeException;
 import com.earth2me.essentials.craftbukkit.InventoryWorkaround;
@@ -10,7 +8,6 @@ import com.earth2me.essentials.textreader.KeywordReplacer;
 import com.earth2me.essentials.textreader.SimpleTextInput;
 import com.earth2me.essentials.utils.DateUtil;
 import com.earth2me.essentials.utils.NumberUtil;
-
 import net.ess3.api.IEssentials;
 import net.ess3.api.events.KitClaimEvent;
 
