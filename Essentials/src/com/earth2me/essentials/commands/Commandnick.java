@@ -114,7 +114,7 @@ public class Commandnick extends EssentialsLoopCommand {
 
     private void setNickname(final Server server, final CommandSource sender, final User target, final String nickname) {
         final User controller = sender.isPlayer() ? ess.getUser(sender.getPlayer()) : null;
-        final NickChangeEvent nickEvent = new NickChangeEvent(controller, target, nickname);
+        final NickChangeEvent nickEvent = new NickChangeEvent(target, controller, nickname);
         server.getPluginManager().callEvent(nickEvent);
         if (!nickEvent.isCancelled()) {
             target.setNickname(nickname);
