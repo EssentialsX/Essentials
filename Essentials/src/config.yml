@@ -726,6 +726,9 @@ min-money: -10000
 # Enable this to log all interactions with trade/buy/sell signs and sell command.
 economy-log-enabled: false
 
+# Enable this for more readable economy logs (option above must be true)
+prettier-economy-log: false
+
 # Enable this to also log all transactions from other plugins through Vault.
 # This can cause the economy log to fill up quickly so should only be enabled for testing purposes!
 economy-log-update-enabled: false
