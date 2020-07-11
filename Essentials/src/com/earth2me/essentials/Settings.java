@@ -60,7 +60,7 @@ public class Settings implements net.ess3.api.ISettings {
     public boolean getRespawnAtHome() {
         return config.getBoolean("respawn-at-home", false);
     }
-        
+
     @Override
     public boolean getUpdateBedAtDaytime() {
         return config.getBoolean("update-bed-at-daytime", true);
