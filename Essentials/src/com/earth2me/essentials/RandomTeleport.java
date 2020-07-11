@@ -17,8 +17,6 @@ import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-import static java.lang.Math.random;
-
 public class RandomTeleport implements IConf {
     private final IEssentials essentials;
     private final EssentialsConf config;
@@ -157,7 +155,7 @@ public class RandomTeleport implements IConf {
     // Calculates a random location asynchronously.
     private CompletableFuture<Location> calculateRandomLocation(Location center, double minRange, double maxRange) {
         CompletableFuture<Location> future = new CompletableFuture<>();
-        int[] offset = getRandXySquare(minRange, maxRange);
+        double[] offset = getRandXySquare(minRange, maxRange);
         Location location = new Location(
                 center.getWorld(),
                 center.getX() + offset[0],
@@ -188,39 +186,24 @@ public class RandomTeleport implements IConf {
      * @param maxRange The maximum that {@code |x|} or {@code |y|} will be.
      * @return A pair of numbers, each randomly generated, that satisfy the above conditions.
      */
-    private int[] getRandXySquare(double minRange, double maxRange) {
+    private double[] getRandXySquare(double minRange, double maxRange) {
         double[] randPairAtSize = new double[]{
-                random() * (maxRange - minRange) + minRange,
-                random() * (maxRange + minRange) - minRange};
-        switch ((int) (random() * 4)) {
-            //Note: case 0 would be multiplying the vector by the identity matrix, which does not change the vector.
+                RANDOM.nextDouble() * (maxRange - minRange) + minRange,
+                RANDOM.nextDouble() * (maxRange + minRange) - minRange};
+        switch ((int) (RANDOM.nextDouble() * 4)) {
+            case 0:
+                return randPairAtSize;
             case 1:
-                randPairAtSize = multiplyMatrixVector(new double[][]{{0, -1}, {1, 0}}, randPairAtSize);
-                break;
+                return new double[]{-randPairAtSize[1], randPairAtSize[0]};
             case 2:
-                randPairAtSize = multiplyMatrixVector(new double[][]{{-1, 0}, {0, -1}}, randPairAtSize);
-                break;
+                return new double[]{-randPairAtSize[0], -randPairAtSize[1]};
             case 3:
-                randPairAtSize = multiplyMatrixVector(new double[][]{{0, 1}, {-1, 0}}, randPairAtSize);
-                break;
+                return new double[]{randPairAtSize[1], -randPairAtSize[0]};
         }
-        return new int[]{
-                (int) randPairAtSize[0],
-                (int) randPairAtSize[1]};
+        //This line will never be reached as the random number in the switch will ALWAYS be in the range 0-3 inclusive.
+        return new double[]{0, 0};
     }
 
-    /**
-     * Multiplies a vector by a matrix. This only works with a 2x2 matrix and 2x1 vector.
-     * @param matrix The matrix to multiply the vector by.
-     * @param vector The vector to multiply.
-     * @return The resulting vector.
-     */
-    private static double[] multiplyMatrixVector(double[][] matrix, double[] vector) {
-        return new double[]{
-                matrix[0][0] * vector[0] + matrix[0][1] * vector[1],
-                matrix[1][0] * vector[0] + matrix[1][1] * vector[1]
-        };
-    }
 
     // Returns an appropriate elevation for a given location in the nether, or -1 if none is found
     private double getNetherYAt(Location location) {
