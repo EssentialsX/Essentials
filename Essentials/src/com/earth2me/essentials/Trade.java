@@ -300,17 +300,13 @@ public class Trade {
 
     private static FileWriter fw = null;
 
-    public static void log(String type, String subtype, String event, String sender, Trade charge, String receiver,
-            Trade pay, Location loc, IEssentials ess) {
+    public static void log(String type, String subtype, String event, String sender, Trade charge, String receiver, Trade pay, Location loc, IEssentials ess) {
+        //isEcoLogUpdateEnabled() - This refers to log entries with no location, ie API updates #EasterEgg
+        //isEcoLogEnabled() - This refers to log entries with with location, ie /pay /sell and eco signs.
 
-        // isEcoLogUpdateEnabled() - This refers to log entries with no location, ie API
-        // updates #EasterEgg
-        // isEcoLogEnabled() - This refers to log entries with with location, ie /pay
-        // /sell and eco signs.
-        // Check if logging is enabled
-        if ((loc == null && !ess.getSettings().isEcoLogUpdateEnabled())
-                || (loc != null && !ess.getSettings().isEcoLogEnabled()))
+        if ((loc == null && !ess.getSettings().isEcoLogUpdateEnabled()) || (loc != null && !ess.getSettings().isEcoLogEnabled())) {
             return;
+        }
 
         // Init the file writer
         if (fw == null) {
