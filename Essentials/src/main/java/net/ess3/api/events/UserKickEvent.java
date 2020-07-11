@@ -1,7 +1,6 @@
 package net.ess3.api.events;
 
 import com.earth2me.essentials.IUser;
-import org.bukkit.Bukkit;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
@@ -15,7 +14,6 @@ public class UserKickEvent extends Event implements Cancellable {
     private boolean cancelled;
 
     public UserKickEvent(IUser kicked, IUser kicker, String reason) {
-        super(!Bukkit.isPrimaryThread());
         this.kicked = kicked;
         this.kicker = kicker;
         this.reason = reason;
