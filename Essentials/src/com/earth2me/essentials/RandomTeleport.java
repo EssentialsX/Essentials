@@ -97,7 +97,7 @@ public class RandomTeleport implements IConf {
     }
 
     public boolean getPreCache() {
-        return config.getBoolean("pre-cache", true);
+        return config.getBoolean("pre-cache", false);
     }
 
     public Queue<Location> getCachedLocations() {
