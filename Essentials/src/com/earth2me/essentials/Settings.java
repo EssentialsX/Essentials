@@ -59,8 +59,8 @@ public class Settings implements net.ess3.api.ISettings {
     @Override
     public boolean getRespawnAtHome() {
         return config.getBoolean("respawn-at-home", false);
-    }
-
+        }
+        
     @Override
     public boolean getUpdateBedAtDaytime() {
         return config.getBoolean("update-bed-at-daytime", true);
@@ -808,6 +808,11 @@ public class Settings implements net.ess3.api.ISettings {
     @Override
     public boolean isEcoLogEnabled() {
         return economyLog;
+    }
+
+    @Override
+    public boolean isEcoLogPrettier() {
+        return config.getBoolean("prettier-economy-log", false);
     }
 
     public boolean _isEcoLogEnabled() {

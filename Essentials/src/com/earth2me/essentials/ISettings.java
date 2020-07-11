@@ -166,7 +166,9 @@ public interface ISettings extends IConf {
 
     boolean isEcoLogEnabled();
 
-    boolean isEcoLogUpdateEnabled();
+		boolean isEcoLogUpdateEnabled();
+		
+		boolean isEcoLogPrettier();
 
     boolean realNamesOnList();
 

@@ -321,28 +321,98 @@ public class Trade {
             }
         }
 
-        // [Time] [Type:Subtype:Event]
-        String logFormat = "[%s] %s:%s:%s send:%s/rec:%s/pay:%s/charge:%s/loc:%s \n";
+        if (ess.getSettings().isEcoLogPrettier()) {
+            String logFormat = "[%s] %s:%s:%s send:%s/rec:%s/pay:%s/charge:%s/loc:%s \n";
 
-        String time = DateFormat.getDateTimeInstance(DateFormat.FULL, DateFormat.FULL).format(new Date());
+            String time = DateFormat.getDateTimeInstance(DateFormat.FULL, DateFormat.FULL).format(new Date());
 
-        String safeSender = sender != null ? sender : "??";
-        String safeReceiver = receiver != null ? receiver : "??";
+            String safeSender = sender != null ? sender : "??";
+            String safeReceiver = receiver != null ? receiver : "??";
 
-        String locationString = loc != null
+            String locationString = loc != null
                 ? String.format("%s:%d,%d,%d", loc.getWorld().getName(), loc.getBlockX(), loc.getBlockY(),
                         loc.getBlockZ())
                 : "??";
 
-        String log = String.format(logFormat, time, type, subtype, event, safeSender, safeReceiver,
+            String log = String.format(logFormat, time, type, subtype, event, safeSender, safeReceiver,
                 formatTrade(pay, ess), formatTrade(charge, ess), locationString);
 
-        try {
-            fw.write(log);
-            fw.flush();
-        } catch (IOException ex) {
-            Logger.getLogger("Essentials").log(Level.SEVERE, null, ex);
+            try {
+                fw.write(log);
+                fw.flush();
+            } catch (IOException ex) {
+                Logger.getLogger("Essentials").log(Level.SEVERE, null, ex);
+            }
+        } else { // Use legacy eco log formatting
+            StringBuilder sb = new StringBuilder();
+            sb.append(type).append(",").append(subtype).append(",").append(event).append(",\"");
+            sb.append(DateFormat.getDateTimeInstance(DateFormat.FULL, DateFormat.FULL).format(new Date()));
+            sb.append("\",\"");
+            if (sender != null) {
+                sb.append(sender);
+            }
+            sb.append("\",");
+            if (charge == null) {
+                sb.append("\"\",\"\",\"\"");
+            } else {
+                if (charge.getItemStack() != null) {
+                    sb.append(charge.getItemStack().getAmount()).append(",");
+                    sb.append(charge.getItemStack().getType().toString()).append(",");
+                    sb.append(charge.getItemStack().getDurability());
+                }
+                if (charge.getMoney() != null) {
+                    sb.append(charge.getMoney()).append(",");
+                    sb.append("money").append(",");
+                    sb.append(ess.getSettings().getCurrencySymbol());
+                }
+                if (charge.getExperience() != null) {
+                    sb.append(charge.getExperience()).append(",");
+                    sb.append("exp").append(",");
+                    sb.append("\"\"");
+                }
+            }
+            sb.append(",\"");
+            if (receiver != null) {
+                sb.append(receiver);
+            }
+            sb.append("\",");
+            if (pay == null) {
+                sb.append("\"\",\"\",\"\"");
+            } else {
+                if (pay.getItemStack() != null) {
+                    sb.append(pay.getItemStack().getAmount()).append(",");
+                    sb.append(pay.getItemStack().getType().toString()).append(",");
+                    sb.append(pay.getItemStack().getDurability());
+                }
+                if (pay.getMoney() != null) {
+                    sb.append(pay.getMoney()).append(",");
+                    sb.append("money").append(",");
+                    sb.append(ess.getSettings().getCurrencySymbol());
+                }
+                if (pay.getExperience() != null) {
+                    sb.append(pay.getExperience()).append(",");
+                    sb.append("exp").append(",");
+                    sb.append("\"\"");
+                }
+            }
+            if (loc == null) {
+                sb.append(",\"\",\"\",\"\",\"\"");
+            } else {
+                sb.append(",\"");
+                sb.append(loc.getWorld().getName()).append("\",");
+                sb.append(loc.getBlockX()).append(",");
+                sb.append(loc.getBlockY()).append(",");
+                sb.append(loc.getBlockZ()).append(",");
+            }
+            sb.append("\n");
+            try {
+                fw.write(sb.toString());
+                fw.flush();
+            } catch (IOException ex) {
+                Logger.getLogger("Essentials").log(Level.SEVERE, null, ex);
+            }
         }
+
     }
 
     private static String formatTrade(Trade trade, IEssentials ess) {
