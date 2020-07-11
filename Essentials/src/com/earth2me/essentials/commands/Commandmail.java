@@ -56,8 +56,10 @@ public class Commandmail extends EssentialsCommand {
                 throw new Exception(user.hasMuteReason() ? tl("voiceSilencedReasonTime", dateDiff, user.getMuteReason()) : tl("voiceSilencedTime", dateDiff));
             }
 
-            User u = getPlayer(server, args[1], true, true);
-            if (u == null) {
+            User u;
+            try {
+                u = getPlayer(server, args[1], true, true);
+            } catch (PlayerNotFoundException e) {
                 throw new Exception(tl("playerNeverOnServer", args[1]));
             }
 
@@ -111,8 +113,10 @@ public class Commandmail extends EssentialsCommand {
         } else if (args.length >= 1 && "clear".equalsIgnoreCase(args[0])) {
             throw new Exception(tl("onlyPlayers", commandLabel + " clear"));
         } else if (args.length >= 3 && "send".equalsIgnoreCase(args[0])) {
-            User u = getPlayer(server, args[1], true, true);
-            if (u == null) {
+            User u;
+            try {
+                u = getPlayer(server, args[1], true, true);
+            } catch (PlayerNotFoundException e) {
                 throw new Exception(tl("playerNeverOnServer", args[1]));
             }
             u.addMail(tl("mailFormat", "Server", FormatUtil.replaceFormat(getFinalArg(args, 2))));
@@ -124,8 +128,10 @@ public class Commandmail extends EssentialsCommand {
             return;
         } else if (args.length >= 2) {
             //allow sending from console without "send" argument, since it's the only thing the console can do
-            User u = getPlayer(server, args[0], true, true);
-            if (u == null) {
+            User u;
+            try {
+                u = getPlayer(server, args[0], true, true);
+            } catch (PlayerNotFoundException e) {
                 throw new Exception(tl("playerNeverOnServer", args[0]));
             }
             u.addMail(tl("mailFormat", "Server", FormatUtil.replaceFormat(getFinalArg(args, 1))));
