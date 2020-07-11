@@ -43,14 +43,16 @@ public class Commandkick extends EssentialsCommand {
         UserKickEvent event = new UserKickEvent(user, target, kickReason);
         ess.getServer().getPluginManager().callEvent(event);
 
-        if (!event.isCancelled()) {
-            kickReason = event.getReason();
-            target.getBase().kickPlayer(kickReason);
-            final String senderDisplayName = sender.isPlayer() ? sender.getPlayer().getDisplayName() : Console.DISPLAY_NAME;
-
-            server.getLogger().log(Level.INFO, tl("playerKicked", senderDisplayName, target.getName(), kickReason));
-            ess.broadcastMessage("essentials.kick.notify", tl("playerKicked", senderDisplayName, target.getName(), kickReason));
+        if (event.isCancelled()) {
+            return;
         }
+
+        kickReason = event.getReason();
+        target.getBase().kickPlayer(kickReason);
+        final String senderDisplayName = sender.isPlayer() ? sender.getPlayer().getDisplayName() : Console.DISPLAY_NAME;
+
+        server.getLogger().log(Level.INFO, tl("playerKicked", senderDisplayName, target.getName(), kickReason));
+        ess.broadcastMessage("essentials.kick.notify", tl("playerKicked", senderDisplayName, target.getName(), kickReason));
     }
 
     @Override
