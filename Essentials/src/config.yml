@@ -726,7 +726,7 @@ min-money: -10000
 # Enable this to log all interactions with trade/buy/sell signs and sell command.
 economy-log-enabled: false
 
-# Enable this to make the econmy log favor human readable messages instead of parseable ones.
+# Enable this to make the economy log favor human readable messages instead of parseable ones.
 # Requires economy-log-enabled to be set to true.
 prettier-economy-log: false
 
