@@ -420,7 +420,7 @@ public class Trade {
             return "??";
         else if (trade.getItemStack() != null)
             return String.format("(amt:%d,type:%s)", trade.getItemStack().getAmount(),
-                    trade.getItemStack().getType().name());
+                trade.getItemStack().getType().name());
         else if (trade.getMoney() != null)
             return String.format("(amt:%f,money,cur:%s)", trade.getMoney(), ess.getSettings().getCurrencySymbol());
         else if (trade.getExperience() != null)
