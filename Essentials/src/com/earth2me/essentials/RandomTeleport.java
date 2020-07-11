@@ -180,7 +180,7 @@ public class RandomTeleport implements IConf {
         double[] randPairAtSize = new double[]{
                 RANDOM.nextDouble() * (maxRange - minRange) + minRange,
                 RANDOM.nextDouble() * (maxRange + minRange) - minRange};
-        switch ((int) (RANDOM.nextInt(4))) {
+        switch (RANDOM.nextInt(4)) {
             case 1:
                 return new double[]{-randPairAtSize[1], randPairAtSize[0]};
             case 2:
