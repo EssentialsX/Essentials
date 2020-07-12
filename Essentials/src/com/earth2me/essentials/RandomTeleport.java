@@ -160,7 +160,7 @@ public class RandomTeleport implements IConf {
                 center.getWorld(),
                 center.getX() + offsets[0],
                 center.getWorld().getMaxHeight(),
-                center.getZ() + offset[1],
+                center.getZ() + offsets[1],
                 360 * RANDOM.nextFloat() - 180,
                 0
         );
