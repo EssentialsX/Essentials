@@ -176,7 +176,7 @@ public class Commandessentials extends EssentialsCommand {
 
     // Cow farts.
     private void runMoo(final Server server, final CommandSource sender, final String command, final String[] args) {
-        if (args.length == 2 && (args[1].equals("moo") || args[1].equals("moomoo")) {
+        if (args.length == 2 && (args[1].equals("moo") || args[1].equals("moomoo"))) {
             for (String s : CONSOLE_MOO) {
                 logger.info(s);
             }
