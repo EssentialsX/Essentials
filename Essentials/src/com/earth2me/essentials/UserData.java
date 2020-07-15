@@ -994,7 +994,7 @@ public abstract class UserData extends PlayerExtension implements IConf {
         return config.getBoolean("keepInventory", false);
     }
 
-    public boolean isKeepInventory() {
+    public boolean isKeepInvEnabled() {
         return keepInventory;
     }
 

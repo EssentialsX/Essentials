@@ -177,7 +177,7 @@ public class EssentialsEntityListener implements Listener {
     @EventHandler(priority = EventPriority.LOW)
     public void onPlayerDeathInvEvent(final PlayerDeathEvent event) {
         final User user = ess.getUser(event.getEntity());
-        if (user.isKeepInventory()) {
+        if (user.isKeepInvEnabled()) {
             event.setKeepInventory(true);
             event.getDrops().clear();
             ISettings.KeepInvPolicy vanish = ess.getSettings().getVanishingItemsPolicy();

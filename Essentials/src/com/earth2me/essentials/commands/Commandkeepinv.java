@@ -25,7 +25,7 @@ public class Commandkeepinv extends EssentialsToggleCommand {
     @Override
     void togglePlayer(CommandSource sender, User user, Boolean enabled) {
         if (enabled == null) {
-            enabled = !user.isKeepInventory();
+            enabled = !user.isKeepInvEnabled();
         }
 
         user.setKeepInventory(enabled);

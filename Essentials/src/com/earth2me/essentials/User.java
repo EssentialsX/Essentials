@@ -720,6 +720,11 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
         return false;
     }
 
+    @Override
+    public boolean isKeepInvEnabled() {
+        return super.isKeepInvEnabled();
+    }
+
     public boolean isGodModeEnabledRaw() {
         return super.isGodModeEnabled();
     }
@@ -833,11 +838,6 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
                 this.getBase().removePotionEffect(PotionEffectType.INVISIBILITY);
             }
         }
-    }
-
-    @Override
-    public boolean isKeepInventory() {
-        return this.isKeepInventory();
     }
 
     public boolean checkSignThrottle() {

@@ -86,6 +86,8 @@ public interface IUser {
 
     boolean isGodModeEnabled();
 
+    boolean isKeepInvEnabled();
+
     String getGroup();
 
     boolean inGroup(final String group);
