@@ -3,6 +3,7 @@ package com.earth2me.essentials.chat;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.FormatUtil;
 import net.ess3.api.IEssentials;
+import org.bukkit.ChatColor;
 import org.bukkit.Server;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -39,10 +40,13 @@ public class EssentialsChatPlayerListenerLowest extends EssentialsChatPlayer {
         // This listener should apply the general chat formatting only...then return control back the event handler
         String formatted = FormatUtil.formatMessage(user, "essentials.chat", event.getMessage());
 
-        if (formatted.contains("§") && formatted.length() == 2)
+        String withoutColors = ChatColor.stripColor(formatted);
+
+        if (withoutColors.length() == 0) {
             event.setCancelled(true);
-        else
-            event.setMessage(formatted);
+        }
+
+        event.setMessage(formatted);
 
         String group = user.getGroup();
         String world = user.getWorld().getName();
