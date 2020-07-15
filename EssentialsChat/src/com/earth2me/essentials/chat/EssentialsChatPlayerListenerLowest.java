@@ -42,6 +42,7 @@ public class EssentialsChatPlayerListenerLowest extends EssentialsChatPlayer {
 
         if ((ChatColor.stripColor(formatted)).length() == 0) {
             event.setCancelled(true);
+            return;
         }
 
         event.setMessage(formatted);
