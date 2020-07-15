@@ -232,6 +232,10 @@ commands:
     description: Jumps to the nearest block in the line of sight.
     usage: /<command>
     aliases: [j,ej,ejump,jumpto,ejumpto]
+  keepinv:
+    description: Toggles keep inventory
+    usage: /<command> [player]
+    aliases: [ki, kitoggle, invkeep, keepinvtoggle]
   kick:
     description: Kicks a specified player with a reason.
     usage: /<command> <player> [reason]

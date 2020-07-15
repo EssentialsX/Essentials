@@ -835,6 +835,11 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
         }
     }
 
+    @Override
+    public boolean isKeepInventory() {
+        return this.isKeepInventory();
+    }
+
     public boolean checkSignThrottle() {
         if (isSignThrottled()) {
             return true;

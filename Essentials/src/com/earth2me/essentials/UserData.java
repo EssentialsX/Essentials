@@ -92,6 +92,7 @@ public abstract class UserData extends PlayerExtension implements IConf {
         lastAccountName = _getLastAccountName();
         commandCooldowns = _getCommandCooldowns();
         acceptingPay = _getAcceptingPay();
+        keepInventory = _getKeepInventory();
         confirmPay = _getConfirmPay();
         confirmClear = _getConfirmClear();
         lastMessageReplyRecipient = _getLastMessageReplyRecipient();
@@ -984,6 +985,22 @@ public abstract class UserData extends PlayerExtension implements IConf {
     public void setAcceptingPay(boolean acceptingPay) {
         this.acceptingPay = acceptingPay;
         config.setProperty("acceptingPay", acceptingPay);
+        save();
+    }
+
+    private boolean keepInventory = false; // players should not keep inventory by default
+
+    public boolean _getKeepInventory() {
+        return config.getBoolean("keepInventory", false);
+    }
+
+    public boolean isKeepInventory() {
+        return keepInventory;
+    }
+
+    public void setKeepInventory(boolean keepInventory) {
+        this.keepInventory = keepInventory;
+        config.setProperty("keepInventory", keepInventory);
         save();
     }
 
