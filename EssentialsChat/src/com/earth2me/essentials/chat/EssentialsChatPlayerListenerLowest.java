@@ -22,6 +22,7 @@ public class EssentialsChatPlayerListenerLowest extends EssentialsChatPlayer {
     @EventHandler(priority = EventPriority.LOWEST)
     @Override
     public void onPlayerChat(final AsyncPlayerChatEvent event) {
+        System.out.println("Calling event");
         if (isAborted(event)) {
             return;
         }
@@ -29,6 +30,7 @@ public class EssentialsChatPlayerListenerLowest extends EssentialsChatPlayer {
         final User user = ess.getUser(event.getPlayer());
 
         if (user == null) {
+            System.out.println("User null");
             event.setCancelled(true);
             return;
         }
@@ -36,8 +38,16 @@ public class EssentialsChatPlayerListenerLowest extends EssentialsChatPlayer {
         final ChatStore chatStore = new ChatStore(ess, user, getChatType(event.getMessage()));
         setChatStore(event, chatStore);
 
+        System.out.println("Event message: " + event.getMessage());
+
         // This listener should apply the general chat formatting only...then return control back the event handler
-        event.setMessage(FormatUtil.formatMessage(user, "essentials.chat", event.getMessage()));
+        String formatted = FormatUtil.formatMessage(user, "essentials.chat", event.getMessage());
+
+        if (formatted.contains("§") && formatted.length() == 2)
+            event.setCancelled(true);
+        else
+            event.setMessage(formatted);
+
         String group = user.getGroup();
         String world = user.getWorld().getName();
 
