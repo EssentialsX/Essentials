@@ -38,13 +38,11 @@ public class EssentialsChatPlayerListenerLowest extends EssentialsChatPlayer {
         setChatStore(event, chatStore);
 
         // This listener should apply the general chat formatting only...then return control back the event handler
-        String formatted = FormatUtil.formatMessage(user, "essentials.chat", event.getMessage());
+        event.setMessage(FormatUtil.formatMessage(user, "essentials.chat", event.getMessage()));
 
-        if ((ChatColor.stripColor(formatted)).length() == 0) {
+        if ((ChatColor.stripColor(event.getMessage())).length() == 0) {
             event.setCancelled(true);
         }
-
-        event.setMessage(formatted);
 
         String group = user.getGroup();
         String world = user.getWorld().getName();
