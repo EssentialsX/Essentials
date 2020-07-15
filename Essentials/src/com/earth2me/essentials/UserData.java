@@ -992,7 +992,7 @@ public abstract class UserData extends PlayerExtension implements IConf {
 
     public boolean _getKeepInventory() {
         if (base.hasPermission("essentials.keepinv")) {
-            keepInventory = true;
+            return true;
         }
 
         return config.getBoolean("keepInventory", false);
