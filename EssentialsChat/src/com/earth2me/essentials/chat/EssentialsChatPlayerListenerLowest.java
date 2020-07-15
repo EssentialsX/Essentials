@@ -42,6 +42,7 @@ public class EssentialsChatPlayerListenerLowest extends EssentialsChatPlayer {
 
         if ((ChatColor.stripColor(event.getMessage())).length() == 0) {
             event.setCancelled(true);
+            return;
         }
 
         String group = user.getGroup();
