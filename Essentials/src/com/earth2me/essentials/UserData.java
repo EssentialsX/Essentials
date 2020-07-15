@@ -991,6 +991,10 @@ public abstract class UserData extends PlayerExtension implements IConf {
     private boolean keepInventory = false; // players should not keep inventory by default
 
     public boolean _getKeepInventory() {
+        if (base.hasPermission("essentials.keepinv")) {
+            keepInventory = true;
+        }
+
         return config.getBoolean("keepInventory", false);
     }
 
