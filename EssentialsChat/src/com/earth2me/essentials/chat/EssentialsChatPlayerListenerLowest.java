@@ -22,7 +22,6 @@ public class EssentialsChatPlayerListenerLowest extends EssentialsChatPlayer {
     @EventHandler(priority = EventPriority.LOWEST)
     @Override
     public void onPlayerChat(final AsyncPlayerChatEvent event) {
-        System.out.println("Calling event");
         if (isAborted(event)) {
             return;
         }
@@ -30,15 +29,12 @@ public class EssentialsChatPlayerListenerLowest extends EssentialsChatPlayer {
         final User user = ess.getUser(event.getPlayer());
 
         if (user == null) {
-            System.out.println("User null");
             event.setCancelled(true);
             return;
         }
 
         final ChatStore chatStore = new ChatStore(ess, user, getChatType(event.getMessage()));
         setChatStore(event, chatStore);
-
-        System.out.println("Event message: " + event.getMessage());
 
         // This listener should apply the general chat formatting only...then return control back the event handler
         String formatted = FormatUtil.formatMessage(user, "essentials.chat", event.getMessage());
