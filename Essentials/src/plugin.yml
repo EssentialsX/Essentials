@@ -232,10 +232,6 @@ commands:
     description: Jumps to the nearest block in the line of sight.
     usage: /<command>
     aliases: [j,ej,ejump,jumpto,ejumpto]
-  keepinv:
-    description: Toggles keep inventory
-    usage: /<command> [player]
-    aliases: [ki, kitoggle, invkeep, keepinvtoggle]
   kick:
     description: Kicks a specified player with a reason.
     usage: /<command> <player> [reason]
@@ -456,6 +452,10 @@ commands:
     description: Display/Change the world time. Defaults to current world.
     usage: /<command> [day|night|dawn|17:30|4pm|4000ticks] [worldname|all]
     aliases: [day,eday,night,enight,etime]
+  togglekeepinv:
+    description: Toggles keep inventory
+    usage: /<command> [player]
+    aliases: [ki, kitoggle, invkeep, keepinv]
   togglejail:
     description: Jails/Unjails a player, TPs them to the jail specified.
     usage: /<command> <player> <jailname> [datediff]
@@ -596,6 +596,9 @@ permissions:
     children:
       essentials.seen.ip: true
       essentials.seen.location: true
+  essentials.keepinv:
+    default: false
+    description: Controls whether players keep their inventory on death.
   essentials.near.exclude:
     default: false
     description: If the player should be excluded from near lookups.

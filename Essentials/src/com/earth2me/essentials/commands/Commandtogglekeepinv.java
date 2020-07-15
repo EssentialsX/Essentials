@@ -6,10 +6,10 @@ import org.bukkit.Server;
 
 import static com.earth2me.essentials.I18n.tl;
 
-public class Commandkeepinv extends EssentialsToggleCommand {
+public class Commandtogglekeepinv extends EssentialsToggleCommand {
 
-    public Commandkeepinv() {
-        super("keepinv", "essentials.keepinv.others");
+    public Commandtogglekeepinv() {
+        super("togglekeepinv", "essentials.togglekeepinv.others");
     }
 
     @Override
@@ -30,10 +30,10 @@ public class Commandkeepinv extends EssentialsToggleCommand {
 
         user.setKeepInventory(enabled);
 
-        user.sendMessage(enabled ? tl("keepInvEnabled") : tl("keepInvDisabled"));
+        user.sendMessage(enabled ? tl("togglekeepinvEnabled") : tl("togglekeepinvDisabled"));
 
         if (!sender.isPlayer() || !user.getBase().equals(sender.getPlayer())) {
-            sender.sendMessage(enabled ? tl("keepInvEnabledFor", user.getDisplayName()) : tl("keepInvDisabledFor", user.getDisplayName()));
+            sender.sendMessage(enabled ? tl("toggleKeepinvEnabledFor", user.getDisplayName()) : tl("togglekeepinvDisabledFor", user.getDisplayName()));
         }
     }
 }
