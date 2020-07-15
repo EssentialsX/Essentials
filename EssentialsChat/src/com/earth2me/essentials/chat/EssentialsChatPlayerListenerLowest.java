@@ -40,9 +40,7 @@ public class EssentialsChatPlayerListenerLowest extends EssentialsChatPlayer {
         // This listener should apply the general chat formatting only...then return control back the event handler
         String formatted = FormatUtil.formatMessage(user, "essentials.chat", event.getMessage());
 
-        String withoutColors = ChatColor.stripColor(formatted);
-
-        if (withoutColors.length() == 0) {
+        if ((ChatColor.stripColor(formatted)).length() == 0) {
             event.setCancelled(true);
         }
 
