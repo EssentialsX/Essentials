@@ -192,7 +192,6 @@ public class RandomTeleport implements IConf {
         return future;
     }
 
-
     // Returns an appropriate elevation for a given location in the nether, or -1 if none is found
     private double getNetherYAt(Location location) {
         for (int y = 32; y < location.getWorld().getMaxHeight() / 2; ++y) {
