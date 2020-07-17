@@ -1034,6 +1034,9 @@ spawn-join-listener-priority: high
 # When users die, should they respawn at their first home or bed, instead of the spawnpoint?
 respawn-at-home: false
 
+# When users die, should EssentialsSpawn respect users' respawn anchors?
+respawn-at-anchor: false
+
 # Teleport all joining players to the spawnpoint
 spawn-on-join: false
 # The following value of `guests` states that all players in group `guests` will be teleported to spawn when joining.
