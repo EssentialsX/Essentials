@@ -155,12 +155,29 @@ public class RandomTeleport implements IConf {
     // Calculates a random location asynchronously.
     private CompletableFuture<Location> calculateRandomLocation(Location center, double minRange, double maxRange) {
         CompletableFuture<Location> future = new CompletableFuture<>();
-        final int dx = RANDOM.nextBoolean() ? 1 : -1, dz = RANDOM.nextBoolean() ? 1 : -1;
+        // Find an equally distributed offset by randomly rotating a point inside a rectangle about the origin
+        double rectX = RANDOM.nextDouble() * (maxRange - minRange) + minRange;
+        double rectZ = RANDOM.nextDouble() * (maxRange + minRange) - minRange;
+        double offsetX, offsetZ;
+        int transform = RANDOM.nextInt(4);
+        if (transform == 0) {
+            offsetX = rectX;
+            offsetZ = rectZ;
+        } else if (transform == 1) {
+            offsetX = -rectZ;
+            offsetZ = rectX;
+        } else if (transform == 2) {
+            offsetX = -rectX;
+            offsetZ = -rectZ;
+        } else {
+            offsetX = rectZ;
+            offsetZ = -rectX;
+        }
         Location location = new Location(
                 center.getWorld(),
-                center.getX() + dx * (minRange + RANDOM.nextDouble() * (maxRange - minRange)),
+                center.getX() + offsetX,
                 center.getWorld().getMaxHeight(),
-                center.getZ() + dz * (minRange + RANDOM.nextDouble() * (maxRange - minRange)),
+                center.getZ() + offsetZ,
                 360 * RANDOM.nextFloat() - 180,
                 0
         );
