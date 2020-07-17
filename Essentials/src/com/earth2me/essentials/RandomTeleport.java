@@ -155,12 +155,29 @@ public class RandomTeleport implements IConf {
     // Calculates a random location asynchronously.
     private CompletableFuture<Location> calculateRandomLocation(Location center, double minRange, double maxRange) {
         CompletableFuture<Location> future = new CompletableFuture<>();
-        double[] offsets = getRandomOffsets(minRange, maxRange);
+        // Find an equally distributed offset by randomly rotating a point inside a rectangle about the origin
+        double rectX = RANDOM.nextDouble() * (maxRange - minRange) + minRange;
+        double rectZ = RANDOM.nextDouble() * (maxRange + minRange) - minRange;
+        double offsetX, offsetZ;
+        int transform = RANDOM.nextInt(4);
+        if (transform == 0) {
+            offsetX = rectX;
+            offsetZ = rectZ;
+        } else if (transform == 1) {
+            offsetX = -rectZ;
+            offsetZ = rectX;
+        } else if (transform == 2) {
+            offsetX = -rectX;
+            offsetZ = -rectZ;
+        } else {
+            offsetX = rectZ;
+            offsetZ = -rectX;
+        }
         Location location = new Location(
                 center.getWorld(),
-                center.getX() + offsets[0],
+                center.getX() + offsetX,
                 center.getWorld().getMaxHeight(),
-                center.getZ() + offsets[1],
+                center.getZ() + offsetZ,
                 360 * RANDOM.nextFloat() - 180,
                 0
         );
@@ -175,22 +192,6 @@ public class RandomTeleport implements IConf {
         return future;
     }
 
-    // Returns an array of length 2 representing random coordinates inside a square with a square hole in the middle
-    private double[] getRandomOffsets(double minRange, double maxRange) {
-        double[] randPairAtSize = new double[]{
-                RANDOM.nextDouble() * (maxRange - minRange) + minRange,
-                RANDOM.nextDouble() * (maxRange + minRange) - minRange};
-        switch (RANDOM.nextInt(4)) {
-            case 1:
-                return new double[]{-randPairAtSize[1], randPairAtSize[0]};
-            case 2:
-                return new double[]{-randPairAtSize[0], -randPairAtSize[1]};
-            case 3:
-                return new double[]{randPairAtSize[1], -randPairAtSize[0]};
-            default: //Catches case 0 without requiring a return outside the switch
-                return randPairAtSize;
-        }
-    }
 
     // Returns an appropriate elevation for a given location in the nether, or -1 if none is found
     private double getNetherYAt(Location location) {
