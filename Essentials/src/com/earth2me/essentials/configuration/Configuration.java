@@ -9,7 +9,10 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
+import java.nio.CharBuffer;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public abstract class Configuration {
@@ -37,12 +40,19 @@ public abstract class Configuration {
         try {
             BufferedWriter writer = new BufferedWriter(new FileWriter(configFile));
 
+            List<String> builtPaths = new ArrayList<>();
             for (Field field : getClass().getDeclaredFields()) {
                 if (!Modifier.isStatic(field.getModifiers()) || Modifier.isTransient(field.getModifiers()) || !Modifier.isPublic(field.getModifiers())) {
                     continue;
                 }
 
                 String path = getPath(field.getName());
+                int depth = path.split("\\.").length - 1;
+                String depthBuffer = "";
+                if (depth > 0) {
+                    depthBuffer = CharBuffer.allocate(depth).toString().replace('\0', ' ');
+                }
+
                 if (config.isSet(path)) {
                     field.set(null, getParser(field).parseToJava(field.getType(), config.get(path)));
                 }
@@ -55,12 +65,12 @@ public abstract class Configuration {
 
                 if (field.isAnnotationPresent(ConfigurationComment.class)) {
                     for (String line : field.getAnnotation(ConfigurationComment.class).value()) {
-                        writer.write("#" + line);
+                        writer.write(depthBuffer + "#" + line);
                         writer.newLine();
                     }
                 }
 
-                writer.write(path + ": " + getParser(field).parseToYAML(field.get(null)));
+                writer.write(depthBuffer + path + ": " + getParser(field).parseToYAML(field.get(null)));
                 writer.newLine();
             }
 
@@ -80,8 +90,13 @@ public abstract class Configuration {
     private String getPath(String name) {
         StringBuilder path = new StringBuilder();
         for (char curChar : name.toCharArray()) {
+            if (curChar == '_') {
+                path.append('.');
+                continue;
+            }
+
             if (path.length() != 0 && Character.isUpperCase(curChar)) {
-                path.append("-");
+                path.append('-');
             }
             path.append(curChar);
         }
