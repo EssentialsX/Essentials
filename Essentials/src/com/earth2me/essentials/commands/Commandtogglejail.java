@@ -5,6 +5,7 @@ import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.DateUtil;
 import net.ess3.api.events.JailStatusChangeEvent;
 import org.bukkit.Server;
+import org.bukkit.event.player.PlayerTeleportEvent;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -101,13 +102,18 @@ public class Commandtogglejail extends EssentialsCommand {
                 player.setJailTimeout(0);
                 player.sendMessage(tl("jailReleasedPlayerNotify"));
                 player.setJail(null);
-                if (player.getBase().isOnline()) {
+                if (player.getBase().isOnline() && ess.getSettings().isTeleportBackWhenFreedFromJail()) {
                     CompletableFuture<Boolean> future = getNewExceptionFuture(sender, commandLabel);
                     player.getAsyncTeleport().back(future);
                     future.thenAccept(success -> {
                         if (success) {
                             sender.sendMessage(tl("jailReleased", player.getName()));
                         }
+                    });
+                    future.exceptionally(e -> {
+                        player.getAsyncTeleport().respawn(null, PlayerTeleportEvent.TeleportCause.PLUGIN, new CompletableFuture<>());
+                        sender.sendMessage(tl("jailReleased", player.getName()));
+                        return false;
                     });
                     return;
                 }
