@@ -145,6 +145,10 @@ public abstract class Configuration {
 
     private static ValueParser getParser(Field field) {
         ValueParser parser = null;
+        if (field.isAnnotationPresent(RestrictedValues.class)) {
+            RestrictedValues rv = field.getAnnotation(RestrictedValues.class);
+            parser = new RestrictedValuesParser(rv.defaultValue(), rv.values());
+        }
         if (field.isAnnotationPresent(Parser.class)) {
             parser = getParser(field.getAnnotation(Parser.class).value());
         }
