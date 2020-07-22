@@ -112,7 +112,19 @@ public abstract class Configuration {
                     path = pathSplit[depth];
                 }
 
-                writer.write(depthBuffer + path + ": " + getParser(field).parseToYAML(field.get(null)));
+                writer.write(depthBuffer + path + ": ");
+
+                // Check if a list is the current object. If it is, apply the correct depth buffer to it.
+                String[] parsed = getParser(field).parseToYAML(field.get(null)).split("\\n");
+                if (parsed.length > 1) {
+                    for (String curElement : parsed) {
+                        writer.write(depthBuffer + "  " + curElement);
+                        writer.newLine();
+                    }
+                    continue;
+                }
+
+                writer.write(parsed[0]);
                 writer.newLine();
             }
 
