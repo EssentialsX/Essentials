@@ -57,6 +57,8 @@ public abstract class Configuration {
 
                 if (config.isSet(path)) {
                     field.set(null, getParser(field).parseToJava(field.getType(), config.get(path)));
+                } else if (field.isAnnotationPresent(HiddenValue.class)) {
+                    continue;
                 }
 
                 if (field.isAnnotationPresent(Separator.class)) {
