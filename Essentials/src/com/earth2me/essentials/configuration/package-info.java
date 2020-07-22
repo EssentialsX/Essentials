@@ -1,5 +1,5 @@
 /**
- * A large part of Essentials' config system is based off of (or "borrowed" from) ChestShop's "Breeze" configuration system.
+ * Essentials' config system is based off of (ands "borrows" from) ChestShop's "Breeze" configuration system.
  *
  * ChestShop, and subsequently Breeze, is licensed under the LGPL-2.1 License.
  *

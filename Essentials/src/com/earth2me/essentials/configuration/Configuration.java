@@ -42,15 +42,17 @@ public abstract class Configuration {
 
             List<String> builtPaths = new ArrayList<>();
             for (Field field : getClass().getDeclaredFields()) {
-                if (!Modifier.isStatic(field.getModifiers()) || Modifier.isTransient(field.getModifiers()) || !Modifier.isPublic(field.getModifiers())) {
+                int mod = field.getModifiers();
+                if (!Modifier.isPublic(mod) || !Modifier.isStatic(mod) || Modifier.isFinal(mod) || Modifier.isTransient(mod)) {
                     continue;
                 }
 
                 String path = getPath(field.getName());
-                int depth = path.split("\\.").length - 1;
+                String[] pathSplit = path.split("\\.");
+                int depth = pathSplit.length - 1;
                 String depthBuffer = "";
                 if (depth > 0) {
-                    depthBuffer = CharBuffer.allocate(depth).toString().replace('\0', ' ');
+                    depthBuffer = CharBuffer.allocate(depth).toString().replace("\0", "  ");
                 }
 
                 if (config.isSet(path)) {
@@ -68,6 +70,36 @@ public abstract class Configuration {
                         writer.write(depthBuffer + "#" + line);
                         writer.newLine();
                     }
+                }
+
+                // Build master paths if applicable
+                if (depth > 0) {
+                    String curPath = "";
+                    int pathTraversal = 1;
+                    for (String curSplit : pathSplit) {
+                        if (pathTraversal > depth) {
+                            continue;
+                        }
+                        pathTraversal++;
+
+                        curPath = curPath + curSplit;
+                        if (builtPaths.contains(curPath)) {
+                            curPath = curPath + ".";
+                            continue;
+                        }
+                        String[] curPathSplit = curPath.split("\\.");
+                        String buffer = "";
+                        if (curPathSplit.length - 1 > 0) {
+                            buffer = CharBuffer.allocate(curPathSplit.length - 1).toString().replace("\0", "  ");
+                        }
+                        writer.write(buffer + curPathSplit[curPathSplit.length - 1] + ":");
+                        writer.newLine();
+                        builtPaths.add(curPath);
+                        curPath = curPath + ".";
+                    }
+
+                    // We've traversed all the paths that should be there.
+                    path = pathSplit[depth];
                 }
 
                 writer.write(depthBuffer + path + ": " + getParser(field).parseToYAML(field.get(null)));
