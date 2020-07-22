@@ -11,6 +11,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.nio.CharBuffer;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -115,11 +116,18 @@ public abstract class Configuration {
                 writer.write(depthBuffer + path + ": ");
 
                 // Check if a list is the current object. If it is, apply the correct depth buffer to it.
-                String[] parsed = getParser(field).parseToYAML(field.get(null)).split("\\n");
-                if (parsed.length > 1) {
+                Object value = field.get(null);
+                String[] parsed = getParser(field).parseToYAML(value).split("\\n");
+                if (value instanceof Collection) {
                     for (String curElement : parsed) {
                         writer.write(depthBuffer + "  " + curElement);
                         writer.newLine();
+                    }
+                    if (field.isAnnotationPresent(ExampleValues.class) && parsed.length == 1) {
+                        for (String example : field.getAnnotation(ExampleValues.class).value()) {
+                            writer.write("#  - " + depthBuffer + getParser("special:default").parseToYAML(example));
+                            writer.newLine();
+                        }
                     }
                     continue;
                 }
