@@ -67,7 +67,14 @@ public abstract class Configuration {
                 }
 
                 if (config.isSet(path)) {
-                    field.set(null, getParser(field).parseToJava(field.getType(), config.get(path)));
+                    Object parsed = getParser(field).parseToJava(field.getType(), config.get(path));
+                    if (field.isAnnotationPresent(CheckRegex.class) && parsed instanceof String) {
+                        CheckRegex check = field.getAnnotation(CheckRegex.class);
+                        if (!((String) parsed).matches(check.regex())) {
+                            parsed = check.defaultValue();
+                        }
+                    }
+                    field.set(null, parsed);
                 } else if (field.isAnnotationPresent(HiddenValue.class)) {
                     continue;
                 }
