@@ -40,6 +40,14 @@ public abstract class Configuration {
         try {
             BufferedWriter writer = new BufferedWriter(new FileWriter(configFile));
 
+            if (getClass().isAnnotationPresent(Header.class)) {
+                for (String line : getClass().getAnnotation(Header.class).value()) {
+                    writer.write("#" + line);
+                    writer.newLine();
+                }
+                writer.newLine();
+            }
+
             List<String> builtPaths = new ArrayList<>();
             for (Field field : getClass().getDeclaredFields()) {
                 int mod = field.getModifiers();
