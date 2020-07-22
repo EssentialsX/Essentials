@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Map;
 
 public abstract class Configuration {
-    private static Map<String, ValueParser> PARSERS = new HashMap<>();
+    private static final Map<String, ValueParser> PARSERS = new HashMap<>();
 
     static {
         registerParser("special:default", new ValueParser());
@@ -43,7 +43,9 @@ public abstract class Configuration {
 
             if (getClass().isAnnotationPresent(Header.class)) {
                 for (String line : getClass().getAnnotation(Header.class).value()) {
-                    writer.write("#" + line);
+                    if (!line.isEmpty()) {
+                        writer.write("#" + line);
+                    }
                     writer.newLine();
                 }
                 writer.newLine();
@@ -78,7 +80,9 @@ public abstract class Configuration {
 
                 if (field.isAnnotationPresent(ConfigurationComment.class)) {
                     for (String line : field.getAnnotation(ConfigurationComment.class).value()) {
-                        writer.write(depthBuffer + "#" + line);
+                        if (!line.isEmpty()) {
+                            writer.write(depthBuffer + "#" + line);
+                        }
                         writer.newLine();
                     }
                 }
