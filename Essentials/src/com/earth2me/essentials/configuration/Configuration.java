@@ -1,5 +1,7 @@
 package com.earth2me.essentials.configuration;
 
+import com.earth2me.essentials.utils.FormatUtil;
+import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
@@ -14,6 +16,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 public abstract class Configuration {
@@ -26,6 +29,38 @@ public abstract class Configuration {
             @Override
             public <T> Object parseToJava(Class<T> type, Object object) {
                 return Enum.valueOf((Class<? extends Enum>) type, ((String) object).toUpperCase());
+            }
+        });
+        registerParser("color", new ValueParser() {
+            @Override
+            public String parseToYAML(Object object) {
+//                String value = (String) object;
+                //TODO unformat
+                return "c";
+            }
+
+            @Override
+            public <T> Object parseToJava(Class<T> type, Object object) {
+                String value = (String) object;
+                if (value.equalsIgnoreCase("none") || value.isEmpty()) {
+                    return null;
+                }
+
+                try {
+                    FormatUtil.parseHexColor(value);
+                } catch (NumberFormatException ignored) {
+                }
+
+                try {
+                    return ChatColor.valueOf(value.toUpperCase(Locale.ENGLISH)).toString();
+                } catch (IllegalArgumentException ignored) {
+                }
+
+                ChatColor lastResort = ChatColor.getByChar(value);
+                if (lastResort != null) {
+                    return lastResort.toString();
+                }
+                return null;
             }
         });
     }

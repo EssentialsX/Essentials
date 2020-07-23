@@ -886,6 +886,11 @@ public class Settings implements net.ess3.api.ISettings {
     }
 
     @Override
+    public boolean isEssentialsChatActive() {
+        return essentialsChatActive;
+    }
+
+    @Override
     public boolean addPrefixSuffix() {
         return prefixsuffixconfigured ? addprefixsuffix : essentialsChatActive;
     }

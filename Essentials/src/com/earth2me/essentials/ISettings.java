@@ -266,6 +266,8 @@ public interface ISettings extends IConf {
 
     void setEssentialsChatActive(boolean b);
 
+    boolean isEssentialsChatActive();
+
     long getMaxMute();
 
     long getMaxTempban();
