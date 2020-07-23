@@ -3,7 +3,7 @@ name: Essentials
 main: com.earth2me.essentials.Essentials
 # Note to developers: This next line cannot change, or the automatic versioning system will break.
 version: ${full.version}
-website: https://essinfo.xeya.me/index.html
+website: https://essentialsx.net/wiki/Home.html
 description: Provides an essential, core set of commands for Bukkit.
 softdepend: [Vault, LuckPerms]
 authors: [Zenexer, ementalo, Aelux, Brettflan, KimKandor, snowleo, ceulemans, Xeology, KHobbits, md_5, Iaccidentally, drtshock, vemacs, SupaHam, md678685]

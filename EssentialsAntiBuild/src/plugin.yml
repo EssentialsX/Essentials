@@ -3,7 +3,7 @@ name: EssentialsAntiBuild
 main: com.earth2me.essentials.antibuild.EssentialsAntiBuild
 # Note to developers: This next line cannot change, or the automatic versioning system will break.
 version: ${full.version}
-website: https://essinfo.xeya.me/index.html
+website: https://essentialsx.net/wiki/Home.html
 description: Provides build protection.
 authors: [Zenexer, ementalo, Aelux, Brettflan, KimKandor, snowleo, ceulemans, Xeology, KHobbits, Iaccidentally]
 depend: [Essentials]

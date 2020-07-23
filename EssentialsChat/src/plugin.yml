@@ -3,7 +3,7 @@ name: EssentialsChat
 main: com.earth2me.essentials.chat.EssentialsChat
 # Note to developers: This next line cannot change, or the automatic versioning system will break.
 version: ${full.version}
-website: https://essinfo.xeya.me/index.html
+website: https://essentialsx.net/wiki/Home.html
 description: Provides chat control features for Essentials.  Requires Permissions.
 authors: [Zenexer, ementalo, Aelux, Brettflan, KimKandor, snowleo, ceulemans, Xeology, KHobbits, md_5, Okamosy, Iaccidentally]
 depend: [Essentials]
