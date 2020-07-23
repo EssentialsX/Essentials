@@ -7,6 +7,7 @@ website: http://tiny.cc/EssentialsCommands
 description: Provides an essential, core set of commands for Bukkit.
 softdepend: [Vault, LuckPerms]
 authors: [Zenexer, ementalo, Aelux, Brettflan, KimKandor, snowleo, ceulemans, Xeology, KHobbits, md_5, Iaccidentally, drtshock, vemacs, SupaHam, md678685]
+contributors: [LaxWasHere, pop4959, JRoy, Triagonal, zml2008]
 api-version: "1.13"
 commands:
   afk:
