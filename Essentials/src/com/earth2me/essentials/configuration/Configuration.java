@@ -145,6 +145,7 @@ public abstract class Configuration {
 
                 writer.write(parsed[0]);
                 writer.newLine();
+                writer.newLine();
             }
 
             writer.close();
