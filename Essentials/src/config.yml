@@ -789,7 +789,6 @@ chat:
 
   format: '<{DISPLAYNAME}> {MESSAGE}'
   #format: '&7[{GROUP}]&r {DISPLAYNAME}&7:&r {MESSAGE}'
-  #format: '&7{PREFIX}&r {USERNAME}&r &7{SUFFIX}&r: {MESSAGE}'
 
   group-formats:
   #  default: '{WORLDNAME} {DISPLAYNAME}&7:&r {MESSAGE}'
