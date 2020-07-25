@@ -5,6 +5,7 @@ import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.User;
 import net.ess3.api.events.UserRandomTeleportEvent;
 import org.bukkit.Server;
+import org.bukkit.World;
 import org.bukkit.event.player.PlayerTeleportEvent;
 
 import java.util.Collections;
@@ -25,7 +26,8 @@ public class Commandtpr extends EssentialsCommand {
         final Trade charge = new Trade(this.getName(), ess);
         charge.isAffordableFor(user);
         RandomTeleport randomTeleport = ess.getRandomTeleport();
-        UserRandomTeleportEvent event = new UserRandomTeleportEvent(user, randomTeleport.getCenter(), randomTeleport.getMinRange(), randomTeleport.getMaxRange());
+        World world = randomTeleport.getPerWorld() ? user.getWorld() : null;
+        UserRandomTeleportEvent event = new UserRandomTeleportEvent(user, world, randomTeleport.getCenter(world), randomTeleport.getMinRange(world), randomTeleport.getMaxRange(world));
         server.getPluginManager().callEvent(event);
         if (event.isCancelled()) {
             return;

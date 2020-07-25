@@ -3,6 +3,7 @@ package net.ess3.api.events;
 import net.ess3.api.IUser;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
@@ -14,10 +15,21 @@ public class UserRandomTeleportEvent extends Event implements Cancellable {
     private static final HandlerList handlers = new HandlerList();
 
     private IUser user;
+    private World world;
     private Location center;
     private double minRange, maxRange;
     private boolean cancelled = false;
 
+    public UserRandomTeleportEvent(IUser user, World world, Location center, double minRange, double maxRange) {
+        super(!Bukkit.isPrimaryThread());
+        this.user = user;
+        this.world = world;
+        this.center = center;
+        this.minRange = minRange;
+        this.maxRange = maxRange;
+    }
+
+    @Deprecated
     public UserRandomTeleportEvent(IUser user, Location center, double minRange, double maxRange) {
         super(!Bukkit.isPrimaryThread());
         this.user = user;
@@ -28,6 +40,10 @@ public class UserRandomTeleportEvent extends Event implements Cancellable {
 
     public IUser getUser() {
         return user;
+    }
+
+    public World getWorld() {
+        return world;
     }
 
     public Location getCenter() {

@@ -225,7 +225,8 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
 
                 randomTeleport = new RandomTeleport(this);
                 if (randomTeleport.getPreCache()) {
-                    randomTeleport.cacheRandomLocations(randomTeleport.getCenter(), randomTeleport.getMinRange(), randomTeleport.getMaxRange());
+                    List<World> worlds = randomTeleport.getPerWorld() ? this.getServer().getWorlds() : Collections.singletonList(this.getServer().getWorlds().get(0));
+                    worlds.forEach(world -> randomTeleport.cacheRandomLocations(randomTeleport.getCenter(world), randomTeleport.getMinRange(world), randomTeleport.getMaxRange(world)));
                 }
                 confList.add(randomTeleport);
                 execTimer.mark("Init(RandomTeleport)");
