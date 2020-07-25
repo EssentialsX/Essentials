@@ -6,6 +6,7 @@ import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
+import org.bukkit.WorldBorder;
 import org.bukkit.block.Block;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.inventory.ItemStack;
@@ -92,15 +93,25 @@ public class LocationUtil {
         return y > world.getMaxHeight() || HOLLOW_MATERIALS.contains(world.getBlockAt(x, y - 1, z).getType());
     }
 
+    public static boolean isBlockOutsideWorldBorder(final World world, final int x, final int z) {
+        final Location center = world.getWorldBorder().getCenter();
+        final int radius = (int) world.getWorldBorder().getSize() / 2;
+        final int x1 = center.getBlockX() - radius, x2 = center.getBlockX() + radius;
+        final int z1 = center.getBlockZ() - radius, z2 = center.getBlockZ() + radius;
+        return x < x1 || x > x2 || z < z1 || z > z2;
+    }
+
     public static boolean isBlockUnsafeForUser(final IUser user, final World world, final int x, final int y, final int z) {
         if (user.getBase().isOnline() && world.equals(user.getBase().getWorld()) && (user.getBase().getGameMode() == GameMode.CREATIVE || user.getBase().getGameMode() == GameMode.SPECTATOR || user.isGodModeEnabled()) && user.getBase().getAllowFlight()) {
             return false;
         }
-
         if (isBlockDamaging(world, x, y, z)) {
             return true;
         }
-        return isBlockAboveAir(world, x, y, z);
+        if (isBlockAboveAir(world, x, y, z)) {
+            return true;
+        }
+        return isBlockOutsideWorldBorder(world, x, z);
     }
 
     public static boolean isBlockUnsafe(final World world, final int x, final int y, final int z) {
@@ -175,6 +186,22 @@ public class LocationUtil {
         int x = loc.getBlockX();
         int y = (int) Math.round(loc.getY());
         int z = loc.getBlockZ();
+        if (isBlockOutsideWorldBorder(world, x, z)) {
+            final Location center = world.getWorldBorder().getCenter();
+            final int radius = (int) world.getWorldBorder().getSize() / 2;
+            final int x1 = center.getBlockX() - radius, x2 = center.getBlockX() + radius;
+            final int z1 = center.getBlockZ() - radius, z2 = center.getBlockZ() + radius;
+            if (x < x1) {
+                x = x1;
+            } else if (x > x2) {
+                x = x2;
+            }
+            if (z < z1) {
+                z = z1;
+            } else if (z > z2) {
+                z = z2;
+            }
+        }
         final int origX = x;
         final int origY = y;
         final int origZ = z;
