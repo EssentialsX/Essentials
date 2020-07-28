@@ -3,7 +3,7 @@ name: EssentialsProtect
 main: com.earth2me.essentials.protect.EssentialsProtect
 # Note to developers: This next line cannot change, or the automatic versioning system will break.
 version: ${full.version}
-website: https://essentialsx.net/wiki/Home.html
+website: https://essentialsx.net/
 description: Provides protection for various parts of the world.
 authors: [Zenexer, ementalo, Aelux, Brettflan, KimKandor, snowleo, ceulemans, Xeology, KHobbits]
 softdepend: [Essentials]
