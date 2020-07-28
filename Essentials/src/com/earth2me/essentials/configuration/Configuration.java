@@ -175,6 +175,7 @@ public abstract class Configuration {
                             writer.newLine();
                         }
                     }
+                    writer.newLine();
                     continue;
                 }
 
