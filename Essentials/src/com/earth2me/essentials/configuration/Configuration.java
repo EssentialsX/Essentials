@@ -101,7 +101,8 @@ public abstract class Configuration {
                     depthBuffer = CharBuffer.allocate(depth).toString().replace("\0", "  ");
                 }
 
-                if (config.isSet(path)) {
+                boolean isPreDefined = config.isSet(path);
+                if (isPreDefined) {
                     Object parsed = getParser(field).parseToJava(field.getType(), config.get(path));
                     if (field.isAnnotationPresent(CheckRegex.class) && parsed instanceof String) {
                         CheckRegex check = field.getAnnotation(CheckRegex.class);
@@ -159,10 +160,15 @@ public abstract class Configuration {
                     path = pathSplit[depth];
                 }
 
-                writer.write(depthBuffer + path + ": ");
+                boolean kleenean = !isPreDefined && field.isAnnotationPresent(Kleenean.class) && field.getType() == Boolean.class && !field.getType().isPrimitive();
+
+                writer.write((kleenean ? "#" : "") + depthBuffer + path + ": ");
 
                 // Check if a list is the current object. If it is, apply the correct depth buffer to it.
                 Object value = field.get(null);
+                if (kleenean && value == null) {
+                    value = field.getAnnotation(Kleenean.class).value();
+                }
                 String[] parsed = getParser(field).parseToYAML(value).split("\\n");
                 if (value instanceof Collection) {
                     for (String curElement : parsed) {
