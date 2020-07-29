@@ -150,12 +150,20 @@ public class FormatUtil {
         if (message == null) {
             return null;
         }
-        EnumSet<ChatColor> supported = getSupported(user, permBase);
+        return unformatString(message, getSupported(user, permBase), user.isAuthorized(permBase + ".rgb"));
+    }
 
-        // RGB Codes
+    public static String unformatString(String message, EnumSet<ChatColor> supported, boolean rgb) {
+        if (message == null) {
+            return null;
+        }
+
+        if (supported == null) {
+            supported = EnumSet.allOf(ChatColor.class);
+        }
+
         StringBuffer rgbBuilder = new StringBuffer();
         Matcher rgbMatcher = STRIP_RGB_PATTERN.matcher(message);
-        boolean rgb = user.isAuthorized(permBase + ".rgb");
         while (rgbMatcher.find()) {
             String code = rgbMatcher.group(1).replace("\u00a7", "");
             if (rgb) {
