@@ -1,9 +1,13 @@
 package com.earth2me.essentials.configuration;
 
+import com.earth2me.essentials.IEssentials;
+import com.earth2me.essentials.api.IItemDb;
 import com.earth2me.essentials.utils.FormatUtil;
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.inventory.ItemStack;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -18,9 +22,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import static com.earth2me.essentials.I18n.tl;
 
 public abstract class Configuration {
     private static final Map<String, ValueParser> PARSERS = new HashMap<>();
+
+    protected static final Logger logger = Logger.getLogger("Essentials");
+    private static IEssentials ess;
 
     static {
         registerParser("special:default", new ValueParser());
@@ -63,12 +74,49 @@ public abstract class Configuration {
                 return null;
             }
         });
+        registerParser("csv:material", new ValueParser() {
+            private final Map<String, Material> map = new HashMap<>();
+
+            @Override
+            public <T> Object parseToJava(Class<T> type, Object object) {
+                map.clear();
+                String value = (String) object;
+                System.out.println(value);
+                IItemDb itemDb = ess.getItemDb();
+                if (itemDb == null || !itemDb.isReady()) {
+                    System.out.println("yeah...");
+                    logger.log(Level.FINE, "Skipping item spawn blacklist read; item DB not yet loaded.");
+                    return map.values();
+                }
+                for (String itemName : value.split(",")) {
+                    itemName = itemName.trim();
+                    if (itemName.isEmpty()) {
+                        continue;
+                    }
+                    try {
+                        final ItemStack iStack = itemDb.get(itemName);
+                        System.out.println(itemName);
+                        System.out.println(iStack.getType());
+                        map.put(itemName, iStack.getType());
+                    } catch (Exception ex) {
+                        logger.log(Level.SEVERE, tl("unknownItemInList", itemName, "item-spawn-blacklist"), ex);
+                    }
+                }
+                return map.values();
+            }
+
+            @Override
+            public String parseToYAML(Object object) {
+                return super.parseToYAML(String.join(",", map.keySet())).trim();
+            }
+        });
     }
 
     private final File configFile;
 
-    public Configuration(File configFile) {
+    public Configuration(File configFile, IEssentials essentials) {
         this.configFile = configFile;
+        ess = essentials;
     }
 
     public void load() {
