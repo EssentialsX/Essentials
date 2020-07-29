@@ -45,6 +45,9 @@ public abstract class Configuration {
         registerParser("color", new ValueParser() {
             @Override
             public String parseToYAML(Object object) {
+                if (object == null) {
+                    return super.parseToYAML("");
+                }
                 return super.parseToYAML(FormatUtil.unformatString((String) object, null, true).substring(1));
             }
 
