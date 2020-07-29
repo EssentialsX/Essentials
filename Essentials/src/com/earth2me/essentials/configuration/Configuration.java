@@ -2,6 +2,8 @@ package com.earth2me.essentials.configuration;
 
 import com.earth2me.essentials.IEssentials;
 import com.earth2me.essentials.api.IItemDb;
+import com.earth2me.essentials.signs.EssentialsSign;
+import com.earth2me.essentials.signs.Signs;
 import com.earth2me.essentials.utils.FormatUtil;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -111,6 +113,48 @@ public abstract class Configuration {
                 return super.parseToYAML(String.join(",", map.keySet())).trim();
             }
         });
+        registerParser("signs", new ValueParser() {
+            @Override
+            public String parseToYAML(Object object) {
+                List<String> yamlList = new ArrayList<>();
+                if (object != null) {
+                    //noinspection unchecked
+                    for (EssentialsSign sign : (List<EssentialsSign>) object) {
+                        yamlList.add(sign.getName().toLowerCase());
+                    }
+                }
+                return super.parseToYAML(yamlList);
+            }
+
+            @Override
+            public <T> Object parseToJava(Class<T> type, Object object) {
+                List<EssentialsSign> list = new ArrayList<>();
+                boolean color = false;
+                //noinspection unchecked
+                for (String name : (List<String>) super.parseToJava(List.class, object)) {
+                    name = name.trim().toUpperCase(Locale.ENGLISH);
+                    if (name.isEmpty()) {
+                        continue;
+                    }
+
+                    if (name.equals("COLOR") || name.equals("COLOUR")) {
+                        color = true;
+                        continue;
+                    }
+
+                    try {
+                        list.add(Signs.valueOf(name).getSign());
+                    } catch (Exception e) {
+                        logger.log(Level.SEVERE, tl("unknownItemInList", name, "enabledSigns"));
+                    }
+                }
+
+                if (!color && list.isEmpty()) {
+                    return null;
+                }
+                return list;
+            }
+        });
     }
 
     private final File configFile;
@@ -142,7 +186,7 @@ public abstract class Configuration {
                     continue;
                 }
 
-                String path = getPath(field.getName());
+                String path = getPath(field);
                 String[] pathSplit = path.split("\\.");
                 int depth = pathSplit.length - 1;
                 String depthBuffer = "";
@@ -170,15 +214,6 @@ public abstract class Configuration {
                     }
                 }
 
-                if (field.isAnnotationPresent(ConfigurationComment.class)) {
-                    for (String line : field.getAnnotation(ConfigurationComment.class).value()) {
-                        if (!line.isEmpty()) {
-                            writer.write(depthBuffer + "#" + line);
-                        }
-                        writer.newLine();
-                    }
-                }
-
                 // Build master paths if applicable
                 if (depth > 0) {
                     String curPath = "";
@@ -199,7 +234,20 @@ public abstract class Configuration {
                         if (curPathSplit.length - 1 > 0) {
                             buffer = CharBuffer.allocate(curPathSplit.length - 1).toString().replace("\0", "  ");
                         }
-                        writer.write(buffer + curPathSplit[curPathSplit.length - 1] + ":");
+
+                        String curNode = buffer + curPathSplit[curPathSplit.length - 1];
+                        if (field.isAnnotationPresent(SectionComment.class)) {
+                            for (String comments : field.getAnnotation(SectionComment.class).value()) {
+                                String[] nodeSplit = comments.split(":");
+                                if (nodeSplit[0].equalsIgnoreCase(curNode) && nodeSplit.length > 1) {
+                                    for (String line : nodeSplit[1].split("(?<!\\\\)(?:\\\\\\\\)*,")) {
+                                        writer.write("#" + line);
+                                        writer.newLine();
+                                    }
+                                }
+                            }
+                        }
+                        writer.write(curNode + ":");
                         writer.newLine();
                         builtPaths.add(curPath);
                         curPath = curPath + ".";
@@ -209,8 +257,16 @@ public abstract class Configuration {
                     path = pathSplit[depth];
                 }
 
-                boolean kleenean = !isPreDefined && field.isAnnotationPresent(Kleenean.class) && field.getType() == Boolean.class && !field.getType().isPrimitive();
+                if (field.isAnnotationPresent(ConfigurationComment.class)) {
+                    for (String line : field.getAnnotation(ConfigurationComment.class).value()) {
+                        if (!line.isEmpty()) {
+                            writer.write(depthBuffer + "#" + line);
+                        }
+                        writer.newLine();
+                    }
+                }
 
+                boolean kleenean = !isPreDefined && field.isAnnotationPresent(Kleenean.class) && field.getType() == Boolean.class && !field.getType().isPrimitive();
                 writer.write((kleenean ? "#" : "") + depthBuffer + path + ": ");
 
                 // Check if a list is the current object. If it is, apply the correct depth buffer to it.
@@ -219,7 +275,7 @@ public abstract class Configuration {
                     value = field.getAnnotation(Kleenean.class).value();
                 }
                 String[] parsed = getParser(field).parseToYAML(value).split("\\n");
-                if (value instanceof Collection) {
+                if (Collection.class.isAssignableFrom(field.getType())) {
                     for (String curElement : parsed) {
                         writer.write(depthBuffer + "  " + curElement);
                         writer.newLine();
@@ -249,12 +305,16 @@ public abstract class Configuration {
      * Gets the yaml path from a field/method name.
      *
      * Uppercase characters indicate the previous character should be a dash.
-     * @param name The name of the field/method to translate.
+     * @param field The field who's name to translate.
      * @return The translated path.
      */
-    private String getPath(String name) {
+    private String getPath(Field field) {
+        if (field.isAnnotationPresent(CustomPath.class)) {
+            return field.getAnnotation(CustomPath.class).value();
+        }
+
         StringBuilder path = new StringBuilder();
-        for (char curChar : name.toCharArray()) {
+        for (char curChar : field.getName().toCharArray()) {
             if (curChar == '_') {
                 path.append('.');
                 continue;
