@@ -3,23 +3,31 @@ package com.earth2me.essentials;
 import com.earth2me.essentials.configuration.Configuration;
 import com.earth2me.essentials.configuration.ConfigurationComment;
 import com.earth2me.essentials.configuration.CustomPath;
+import com.earth2me.essentials.configuration.ExampleKeyValue;
 import com.earth2me.essentials.configuration.ExampleValues;
 import com.earth2me.essentials.configuration.Header;
 import com.earth2me.essentials.configuration.HiddenValue;
 import com.earth2me.essentials.configuration.KeyValueParser;
 import com.earth2me.essentials.configuration.Kleenean;
+import com.earth2me.essentials.configuration.NoSeparator;
 import com.earth2me.essentials.configuration.Parser;
 import com.earth2me.essentials.configuration.SectionComment;
 import com.earth2me.essentials.signs.EssentialsSign;
 import org.bukkit.ChatColor;
+import org.bukkit.configuration.ConfigurationSection;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
+
+import static com.earth2me.essentials.ISettings.KeepInvPolicy;
 
 @Header({
         "###########################################################",
@@ -126,10 +134,10 @@ public class EssentialsConfig extends Configuration {
     "Used to use chat radius but we are going to make it separate."})
     public static int nearRadius = 200;
 
-    @ConfigurationComment({"What to prevent from /item and /give.",
-    "e.g item-spawn-blacklist: dirt,grass,stone"})
-    @Parser("csv:material")
-    public static Collection<Material> itemSpawnBlacklist = new ArrayList<>();
+//    @ConfigurationComment({"What to prevent from /item and /give.",
+//    "e.g item-spawn-blacklist: dirt,grass,stone"})
+//    @Parser("csv:material")
+//    public static Collection<Material> itemSpawnBlacklist = new ArrayList<>();
     @ConfigurationComment({"Set this to true if you want permission based item spawn rules.",
     "Note: The blacklist above will be ignored then.",
     "Example permissions (these go in your permissions manager):",
@@ -281,6 +289,175 @@ public class EssentialsConfig extends Configuration {
     @CustomPath("list")
     @Parser("list")
     public static Map<String, Object> listGroupConfig = Collections.singletonMap("Admins", "owner admin");
+    @ConfigurationComment("Displays real names in /list next to players who are using a nickname.")
+    public static boolean realNamesOnList = false;
+
+    @ConfigurationComment("More output to the console")
+    public static boolean debug = false;
+    @ConfigurationComment({"Set the locale for all messages.",
+    "If you don't set this, the default locale of the server will be used.",
+    "For example, to set language to English, set locale to en, to use the file \"messages_en.properties\".",
+    "Don't forget to remove the # in front of the line.",
+    "For more information, visit http://wiki.ess3.net/wiki/Locale"})
+    public static String locale = "";
+
+    @ConfigurationComment("Turn off god mode when people leave the server.")
+    public static boolean removeGodOnDisconnect = false;
+
+    @ConfigurationComment({"Auto-AFK",
+    "After this timeout in seconds, the user will be set as AFK.",
+    "This feature requires the player to have essentials.afk.auto node.",
+    "Set to -1 for no timeout."})
+    public static int autoAfk = 300;
+    @ConfigurationComment({"After this timeout in seconds, the user will be kicked from the server.",
+    "essentials.afk.kickexempt node overrides this feature.",
+    "Set to -1 for no timeout."})
+    public static int autoAfkKick = -1;
+    @ConfigurationComment({"Set this to true, if you want to freeze the player, if the player is AFK.",
+    "Other players or monsters can't push the player out of AFK mode then.",
+    "This will also enable temporary god mode for the AFK player.",
+    "The player has to use the command /afk to leave the AFK mode."})
+    public static boolean freezeAfkPlayers = false;
+    @ConfigurationComment({"When the player is AFK, should he be able to pickup items?",
+    "Enable this, when you don't want people idling in mob traps."})
+    public static boolean disableItemPickupWhileAfk = false;
+    @ConfigurationComment({"This setting controls if a player is marked as active on interaction.",
+    "When this setting is false, the player would need to manually un-AFK using the /afk command."})
+    public static boolean cancelAfkOnInteract = true;
+    @ConfigurationComment({"Should we automatically remove afk status when a player moves?",
+    "Player will be removed from AFK on chat/command regardless of this setting.",
+    "Disable this to reduce server lag."})
+    public static boolean cancelAfkOnMove = true;
+    @ConfigurationComment({"Should AFK players be ignored when other players are trying to sleep?",
+    "When this setting is false, players won't be able to skip the night if some players are AFK.",
+    "Users with the permission node essentials.sleepingignored will always be ignored."})
+    public static boolean sleepIgnoresAfkPlayers = true;
+    @ConfigurationComment({"Set the player's list name when they are AFK. This is none by default which specifies that Essentials",
+    "should not interfere with the AFK player's list name.",
+    "You may use color codes, use {USERNAME} the player's name or {PLAYER} for the player's displayname."})
+    public static String afkListName = "none";
+    @ConfigurationComment({"When a player enters or exits AFK mode, should the AFK notification be broadcast",
+    "to the entire server, or just to the player?",
+    "When this setting is false, only the player will be notified upon changing their AFK state."})
+    public static boolean broadcastAfkMessage = true;
+
+    @ConfigurationComment("You can disable the death messages of Minecraft here.")
+    public static boolean deathMessages = true;
+    @ConfigurationComment("When players die, should they receive the coordinates they died at?")
+    public static boolean sendInfoAfterDeath = false;
+
+    @ConfigurationComment({"How should essentials handle players with the essentials.keepinv permission who have items with",
+    "curse of vanishing when they die?",
+    "You can set this to \"keep\" (to keep the item), \"drop\" (to drop the item), or \"delete\" (to delete the item).",
+    "Defaults to \"keep\""})
+    public static KeepInvPolicy vanishingItemsPolicy = KeepInvPolicy.KEEP;
+    @ConfigurationComment({"How should essentials handle players with the essentials.keepinv permission who have items with",
+            "curse of binding when they die?",
+            "You can set this to \"keep\" (to keep the item), \"drop\" (to drop the item), or \"delete\" (to delete the item).",
+            "Defaults to \"keep\""})
+    public static KeepInvPolicy bindingItemsPolicy = KeepInvPolicy.KEEP;
+
+    @ConfigurationComment({"Should players with permissions be able to join and part silently?",
+    "You can control this with essentials.silentjoin and essentials.silentquit permissions if it is enabled.",
+    "In addition, people with essentials.silentjoin.vanish will be vanished on join."})
+    public static boolean allowSilentJoinQuit = false;
+
+    @ConfigurationComment({"You can set custom join and quit messages here. Set this to \"none\" to use the default Minecraft message,",
+    "or set this to \"\" to hide the message entirely.",
+    "You may use color codes, {USERNAME} for the player's name, and {PLAYER} for the player's displayname."})
+    @NoSeparator
+    public static String customJoinMessage = "none";
+    public static String customQuitMessage = "none";
+
+    @ConfigurationComment({"You can disable join and quit messages when the player count reaches a certain limit.",
+    "When the player count is below this number, join/quit messages will always be shown.",
+    "Set this to -1 to always show join and quit messages regardless of player count."})
+    public static int hideJoinQuitMessagesAbove = -1;
+
+    @ConfigurationComment("Add worlds to this list, if you want to automatically disable god mode there.")
+    @ExampleValues("world_nether")
+    public static List<String> noGodInWorlds = new ArrayList<>();
+    @ConfigurationComment({"Set to true to enable per-world permissions for teleporting between worlds with essentials commands.",
+    "This applies to /world, /back, /tp[a|o][here|all], but not warps.",
+    "Give someone permission to teleport to a world with essentials.worlds.<worldname>",
+    "This does not affect the /home command, there is a separate toggle below for this."})
+    public static boolean worldTeleportPermissions = false;
+
+    @ConfigurationComment({"The number of items given if the quantity parameter is left out in /item or /give.",
+    "If this number is below 1, the maximum stack size size is given. If over-sized stacks.",
+    "are not enabled, any number higher than the maximum stack size results in more than one stack."})
+    public static int defaultStackSize = -1;
+    @ConfigurationComment({"Over-sized stacks are stacks that ignore the normal max stack size.",
+    "They can be obtained using /give and /item, if the player has essentials.oversizedstacks permission.",
+    "How many items should be in an over-sized stack?"})
+    public static int oversizedStacksize = 64;
+
+    @ConfigurationComment({"Allow repair of enchanted weapons and armor.",
+    "If you set this to false, you can still allow it for certain players using the permission.",
+    "essentials.repair.enchanted"})
+    public static boolean repairEnchanted = true;
+    @ConfigurationComment({"Allow 'unsafe' enchantments in kits and item spawning.",
+    "Warning: Mixing and overleveling some enchantments can cause issues with clients, servers and plugins."})
+    public static boolean unsafeEnchantments = false;
+
+    @ConfigurationComment({"Do you want Essentials to keep track of previous location for /back in the teleport listener?",
+    "If you set this to true any plugin that uses teleport will have the previous location registered."})
+    public static boolean registerBackInListener = false;
+
+    @ConfigurationComment("Delay to wait before people can cause attack damage after logging in.")
+    public static int loginAttackDelay = 5;
+
+    @ConfigurationComment("Set the max fly speed, values range from 0.1 to 1.0")
+    public static double maxFlySpeed = 0.8;
+    @ConfigurationComment("Set the max walk speed, values range from 0.1 to 1.0")
+    public static double maxWalkSpeed = 0.8;
+
+    @ConfigurationComment("Set the maximum amount of mail that can be sent within a minute.")
+    public static int mailsPerMinute = 1000;
+
+    @ConfigurationComment({"Set the maximum time /mute can be used for in seconds.",
+    "Set to -1 to disable, and essentials.mute.unlimited can be used to override."})
+    public static int maxMuteTime = -1;
+    @ConfigurationComment({"Set the maximum time /tempban can be used for in seconds.",
+    "Set to -1 to disable, and essentials.tempban.unlimited can be used to override."})
+    public static int maxTempbanTime = -1;
+
+    @ConfigurationComment({"Changes the default /reply functionality. This can be changed on a per-player basis using /rtoggle.",
+    "If true, /r goes to the person you messaged last, otherwise the first person that messaged you.",
+    "If false, /r goes to the last person that messaged you."})
+    public static boolean lastMessageReplyRecipient = true;
+    @ConfigurationComment({"If last-message-reply-recipient is enabled for a particular player,",
+    "this specifies the duration, in seconds, that would need to elapse for the",
+    "reply-recipient to update when receiving a message.",
+    "Default is 180 (3 minutes)"})
+    public static int lastMessageReplyRecipientTimeout = 180;
+
+    // why? :)
+    @ConfigurationComment("Toggles whether or not left clicking mobs with a milk bucket turns them into a baby.")
+    public static boolean milkBucketEasterEgg = true;
+
+    @ConfigurationComment("Toggles whether or not the fly status message should be sent to players on join.")
+    public static boolean sendFlyEnableOnJoin = true;
+
+    @ConfigurationComment({"Set to true to enable per-world permissions for setting time for individual worlds with essentials commands.",
+    "This applies to /time, /day, /eday, /night, /enight, /etime.",
+    "Give someone permission to teleport to a world with essentials.time.world.<worldname>."})
+    public static boolean worldTimePermissions = false;
+
+    @ConfigurationComment({"Specify cooldown for both Essentials commands and external commands as well.",
+    "All commands do not start with a Forward Slash (/). Instead of /msg, write msg",
+    "#",
+    "Wildcards are supported. E.g.",
+    "- '*i*': 50",
+    "adds a 50 second cooldown to all commands that include the letter i",
+    "#",
+    "EssentialsX supports regex by starting the command with a caret ^",
+    "For example, to target commands starting with ban and not banip the following would be used:",
+    " '^ban([^ip])( .*)?': 60 # 60 seconds /ban cooldown.",
+    "Note: If you have a command that starts with ^, then you can escape it using backslash (\\). e.g. \\^command: 123"})
+    @ExampleKeyValue({"feed: 100 # 100 second cooldown on /feed command", "'*': 5 # 5 Second cooldown on all commands"})
+    @Parser("coolcmds")
+    public static Map<Pattern, Long> commandCooldowns = new LinkedHashMap<>();
 
     static {
         registerParser("list", new KeyValueParser(new HashMap<String, Object>() {{
@@ -290,5 +467,61 @@ public class EssentialsConfig extends Configuration {
                 put("Players", "*");
             }
         }}));
+        registerParser("coolcmds", new KeyValueParser() {
+            private final Map<String, Long> yamlCooldowns = new LinkedHashMap<>();
+
+            @Override
+            public <T> Object parseToJava(Class<T> type, Object object) {
+                yamlCooldowns.clear();
+                if (!(object instanceof ConfigurationSection)) {
+                    return new LinkedHashMap<>();
+                }
+                ConfigurationSection section = (ConfigurationSection) object;
+                Map<Pattern, Long> result = new LinkedHashMap<>();
+                for (String cmdEntry : section.getKeys(false)) {
+                    Pattern pattern = null;
+                    if (cmdEntry.startsWith("^")) {
+                        try {
+                            pattern = Pattern.compile(cmdEntry.substring(1));
+                        } catch (PatternSyntaxException e) {
+                            logger.warning("Command cooldown error: " + e.getMessage());
+                        }
+                    } else {
+                        // Escape above Regex
+                        if (cmdEntry.startsWith("\\^")) {
+                            cmdEntry = cmdEntry.substring(1);
+                        }
+                        String cmd = cmdEntry
+                                .replaceAll("\\*", ".*"); // Wildcards are accepted as asterisk * as known universally.
+                        pattern = Pattern.compile(cmd + "( .*)?"); // This matches arguments, if present, to "ignore" them from the feature.
+                    }
+
+                    Object value = section.get(cmdEntry);
+                    if (value instanceof String) {
+                        try {
+                            value = Double.parseDouble(value.toString());
+                        } catch (NumberFormatException ignored) {
+                        }
+                    }
+                    if (!(value instanceof Number)) {
+                        logger.warning("Command cooldown error: '" + value + "' is not a valid cooldown");
+                        continue;
+                    }
+                    double cooldown = ((Number) value).doubleValue();
+                    if (cooldown < 1) {
+                        logger.warning("Command cooldown with very short " + cooldown + " cooldown.");
+                    }
+
+                    yamlCooldowns.put(cmdEntry, (long) cooldown);
+                    result.put(pattern, (long) cooldown * 1000); // convert to milliseconds
+                }
+                return result;
+            }
+
+            @Override
+            public String parseToYAML(Object object) {
+                return super.parseToYAML(yamlCooldowns);
+            }
+        });
     }
 }

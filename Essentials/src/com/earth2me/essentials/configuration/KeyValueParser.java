@@ -32,10 +32,10 @@ public class KeyValueParser extends ValueParser {
     public String parseToYAML(Object object) {
         if (object instanceof Map) {
             //noinspection unchecked
-            Map<String, Object> map = (Map<String, Object>) object;
+            Map<Object, Object> map = (Map<Object, Object>) object;
             StringBuilder sb = new StringBuilder();
-            for (Map.Entry<String, Object> entry : map.entrySet()) {
-                sb.append("\n  ").append(entry.getKey()).append(": ")
+            for (Map.Entry<Object, Object> entry : map.entrySet()) {
+                sb.append("\n  \"").append(entry.getKey().toString()).append("\": ")
                         .append(Configuration.getParser(entry.getValue().getClass()).parseToYAML(entry.getValue()));
             }
             return sb.toString();

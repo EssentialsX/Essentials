@@ -38,6 +38,11 @@ public abstract class Configuration {
     static {
         registerParser("special:default", new ValueParser());
         registerParser("special:enum", new ValueParser() {
+            @Override
+            public String parseToYAML(Object object) {
+                return super.parseToYAML((((Enum<?>) object).name().toLowerCase()));
+            }
+
             @SuppressWarnings({"unchecked", "rawtypes"})
             @Override
             public <T> Object parseToJava(Class<T> type, Object object) {
@@ -276,7 +281,7 @@ public abstract class Configuration {
                     value = field.getAnnotation(Kleenean.class).value();
                 }
                 String[] parsed = getParser(field).parseToYAML(value).split("\\n");
-                if (Collection.class.isAssignableFrom(field.getType()) || parsed.length > 1) {
+                if (Map.class.isAssignableFrom(field.getType()) || Collection.class.isAssignableFrom(field.getType()) || parsed.length > 1) {
                     for (String curElement : parsed) {
                         writer.write(depthBuffer + "  " + curElement);
                         writer.newLine();
@@ -287,13 +292,23 @@ public abstract class Configuration {
                             writer.newLine();
                         }
                     }
-                    writer.newLine();
+                    if (field.isAnnotationPresent(ExampleKeyValue.class) && parsed.length == 1) {
+                        for (String entry : field.getAnnotation(ExampleKeyValue.class).value()) {
+                            writer.write("#  " + depthBuffer + entry);
+                            writer.newLine();
+                        }
+                    }
+                    if (!field.isAnnotationPresent(NoSeparator.class)) {
+                        writer.newLine();
+                    }
                     continue;
                 }
 
                 writer.write(parsed[0]);
                 writer.newLine();
-                writer.newLine();
+                if (!field.isAnnotationPresent(NoSeparator.class)) {
+                    writer.newLine();
+                }
             }
 
             writer.close();
