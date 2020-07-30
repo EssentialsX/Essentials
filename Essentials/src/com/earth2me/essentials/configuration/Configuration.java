@@ -44,6 +44,7 @@ public abstract class Configuration {
                 return Enum.valueOf((Class<? extends Enum>) type, ((String) object).toUpperCase());
             }
         });
+        registerParser("special:map", new KeyValueParser());
         registerParser("color", new ValueParser() {
             @Override
             public String parseToYAML(Object object) {
@@ -275,7 +276,7 @@ public abstract class Configuration {
                     value = field.getAnnotation(Kleenean.class).value();
                 }
                 String[] parsed = getParser(field).parseToYAML(value).split("\\n");
-                if (Collection.class.isAssignableFrom(field.getType())) {
+                if (Collection.class.isAssignableFrom(field.getType()) || parsed.length > 1) {
                     for (String curElement : parsed) {
                         writer.write(depthBuffer + "  " + curElement);
                         writer.newLine();
@@ -328,7 +329,7 @@ public abstract class Configuration {
         return path.toString().toLowerCase();
     }
 
-    private static void registerParser(String name, ValueParser valueParser) {
+    protected static void registerParser(String name, ValueParser valueParser) {
         PARSERS.put(name.toLowerCase(), valueParser);
     }
 
@@ -346,9 +347,14 @@ public abstract class Configuration {
             parser = getParser(field.getAnnotation(Parser.class).value());
         }
         if (parser == null) {
-            parser = getParser(field.getType().getSimpleName());
+            parser = getParser(field.getType());
         }
-        if (parser == null && field.getType().isEnum()) {
+        return parser;
+    }
+
+    protected static ValueParser getParser(Class<?> type) {
+        ValueParser parser = getParser(type.getSimpleName());
+        if (parser == null && type.isEnum()) {
             parser = getParser("special:enum");
         }
         if (parser == null) {

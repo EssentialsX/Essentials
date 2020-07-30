@@ -5,17 +5,21 @@ import com.earth2me.essentials.configuration.ConfigurationComment;
 import com.earth2me.essentials.configuration.CustomPath;
 import com.earth2me.essentials.configuration.ExampleValues;
 import com.earth2me.essentials.configuration.Header;
+import com.earth2me.essentials.configuration.HiddenValue;
+import com.earth2me.essentials.configuration.KeyValueParser;
 import com.earth2me.essentials.configuration.Kleenean;
 import com.earth2me.essentials.configuration.Parser;
 import com.earth2me.essentials.configuration.SectionComment;
 import com.earth2me.essentials.signs.EssentialsSign;
-import org.bukkit.Material;
+import org.bukkit.ChatColor;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Header({
         "###########################################################",
@@ -50,7 +54,7 @@ public class EssentialsConfig extends Configuration {
     @ConfigurationComment({"A color code between 0-9 or a-f. Set to 'none' to disable.",
             "In 1.16+ you can use hex color codes here as well. (For example, #613e1d is brown)."})
     @Parser("color")
-    public static String opsNameColor = "c";
+    public static String opsNameColor = ChatColor.DARK_RED.toString();
     @ConfigurationComment("The character(s) to prefix all nicknames, so that you know they are not true usernames.")
     public static String nicknamePrefix = "~";
     @ConfigurationComment("The maximum length allowed in nicknames. The nickname prefix is included in this.")
@@ -268,4 +272,23 @@ public class EssentialsConfig extends Configuration {
 
     @ConfigurationComment("Set this true to enable permission per warp.")
     public static boolean perWarpPermission = false;
+
+    @HiddenValue
+    public static boolean sortListByGroups = false;
+    @ConfigurationComment({"Sort output of /list command by groups.",
+    "You can hide and merge the groups displayed in /list by defining the desired behaviour here.",
+    "Detailed instructions and examples can be found on the wiki: http://wiki.ess3.net/wiki/List"})
+    @CustomPath("list")
+    @Parser("list")
+    public static Map<String, Object> listGroupConfig = Collections.singletonMap("Admins", "owner admin");
+
+    static {
+        registerParser("list", new KeyValueParser(new HashMap<String, Object>() {{
+            if (sortListByGroups) {
+                put("ListByGroup", "ListByGroup");
+            } else {
+                put("Players", "*");
+            }
+        }}));
+    }
 }
