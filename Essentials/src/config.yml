@@ -372,7 +372,10 @@ allow-old-id-signs: false
 unprotected-sign-names:
   #- kit
 
-# Backup runs a batch/bash command while saving is disabled.
+# Backup runs a custom batch/bash command at a specified interval.
+# The server will save the world before executing the backup command, and disable
+# saving during the backup to prevent world corruption or other conflicts.
+# Backups can also be triggered manually with /backup.
 backup:
   # Interval in minutes.
   interval: 30
@@ -380,6 +383,7 @@ backup:
   always-run: false
   # Unless you add a valid backup command or script here, this feature will be useless.
   # Use 'save-all' to simply force regular world saving without backup.
+  # The example command below utilizes rdiff-backup: https://rdiff-backup.net/
   #command: 'rdiff-backup World1 backups/World1'
 
 # Set this true to enable permission per warp.
