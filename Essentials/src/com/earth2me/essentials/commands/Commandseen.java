@@ -64,23 +64,16 @@ public class Commandseen extends EssentialsCommand {
             ess.getScheduler().runTaskAsynchronously(ess, new Runnable() {
                 @Override
                 public void run() {
-                    User userFromBukkit = ess.getUserMap().getUserFromBukkit(args[0]);
                     try {
-                        if (userFromBukkit != null) {
-                            showUserSeen(userFromBukkit);
+                        final User user = getPlayer(server, args, 0, false, true);
+                        if (user == null) {
+                            throw new PlayerNotFoundException();
                         } else {
-                            showUserSeen(getPlayer(server, sender, args, 0));
+                            showSeenMessage(server, sender, user, showBan, showIp, showLocation);
                         }
                     } catch (Exception e) {
                         ess.showError(sender, e, commandLabel);
                     }
-                }
-
-                private void showUserSeen(User user) throws Exception {
-                    if (user == null) {
-                        throw new PlayerNotFoundException();
-                    }
-                    showSeenMessage(server, sender, user, showBan, showIp, showLocation);
                 }
             });
         } else {
