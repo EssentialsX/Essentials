@@ -1,5 +1,6 @@
 package com.earth2me.essentials;
 
+import com.earth2me.essentials.configuration.CheckRegex;
 import com.earth2me.essentials.configuration.Configuration;
 import com.earth2me.essentials.configuration.ConfigurationComment;
 import com.earth2me.essentials.configuration.CustomPath;
@@ -17,6 +18,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.configuration.ConfigurationSection;
 
 import java.io.File;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -458,6 +460,138 @@ public class EssentialsConfig extends Configuration {
     @ExampleKeyValue({"feed: 100 # 100 second cooldown on /feed command", "'*': 5 # 5 Second cooldown on all commands"})
     @Parser("coolcmds")
     public static Map<Pattern, Long> commandCooldowns = new LinkedHashMap<>();
+    @ConfigurationComment("Whether command cooldowns should be persistent past server shutdowns")
+    public static boolean commandCooldownPersistence = true;
+
+    @ConfigurationComment({"Whether NPC balances should be listed in balance ranking features such as /balancetop.",
+    "NPC balances can include features like factions from FactionsUUID plugin."})
+    public static boolean npcsInBalanceRanking = false;
+
+    @ConfigurationComment({"Allow bulk buying and selling signs when the player is sneaking.",
+    "This is useful when a sign sells or buys one item at a time and the player wants to sell a bunch at once."})
+    public static boolean allowBulkBuySell = true;
+    @ConfigurationComment({"Allow selling of items with custom names with the /sell command.",
+    "This may be useful to prevent players accidentally selling named items."})
+    public static boolean allowSellingNamedItems = false;
+
+    @ConfigurationComment({"Delay for the MOTD display for players on join, in milliseconds.",
+    "This has no effect if the MOTD command or permission are disabled."})
+    public static int delayMotd = 0;
+
+    @ConfigurationComment({"A list of commands that should have their complementary confirm commands enabled by default.",
+    "This is empty by default, for the latest list of valid commands see the latest source config.yml."})
+    @ExampleValues({"pay", "clearinventory"})
+    public static List<String> defaultEnabledConfirmCommands = new ArrayList<>();
+
+    @ConfigurationComment("Whether or not to teleport a player back to their previous position after they have been freed from jail.")
+    public static boolean teleportBackWhenFreedFromJail = true;
+    @ConfigurationComment({"Set the timeout, in seconds for players to accept a tpa before the request is cancelled.",
+    "Set to 0 for no timeout."})
+    public static int tpaAcceptCancellation = 120;
+
+    @ConfigurationComment("Allow players to set hats by clicking on their helmet slot.")
+    public static boolean allowDirectHat = true;
+
+    @ConfigurationComment({"Allow in-game players to specify a world when running /broadcastworld.",
+    "If false, running /broadcastworld in-game will always send a message to the player's current world.",
+    "This doesn't affect running the command from the console, where a world is always required."})
+    public static boolean allowWorldInBroadcastWorld = true;
+
+    @ConfigurationComment({"Consider water blocks as \"safe,\" therefore allowing players to teleport",
+    "using commands such as /home or /spawn to a location that is occupied",
+    "by water blocks"})
+    public static boolean isWaterSafe = false;
+
+    @ConfigurationComment({"Should the usermap try to sanitise usernames before saving them?",
+    "You should only change this to false if you use Minecraft China."})
+    public static boolean safeUsermapNames = true;
+
+    @ConfigurationComment({"Should Essentials output logs when a command block executes a command?",
+    "Example: CommandBlock at <x>,<y>,<z> issued server command: /<command>"})
+    public static boolean logCommandBlockCommands = true;
+
+    @ConfigurationComment("Set the maximum speed for projectiles spawned with /fireball.")
+    public static int maxProjectileSpeed = 8;
+
+    @ConfigurationComment({"###########################################################",
+    " +------------------------------------------------------+ #",
+    " |                        Homes                         | #",
+    " +------------------------------------------------------+ #",
+    "###########################################################",
+    "",
+    "Allows people to set their bed during the day.",
+    "This setting has no effect in Minecraft 1.15+, as Minecraft will always allow the player to set their bed location during the day."})
+    public static boolean updateBedAtDaytime = true;
+    @ConfigurationComment({"Set to true to enable per-world permissions for using homes to teleport between worlds.",
+    "This applies to the /home command only.",
+    "Give someone permission to teleport to a world with essentials.worlds.<worldname>"})
+    public static boolean worldHomePermissions = false;
+    @ConfigurationComment({"Allow players to have multiple homes.",
+    "Players need essentials.sethome.multiple before they can have more than 1 home.",
+    "You can set the default number of multiple homes using the 'default' rank below.",
+    "To remove the home limit entirely, give people 'essentials.sethome.multiple.unlimited'.",
+    "To grant different home amounts to different people, you need to define a 'home-rank' below.",
+    "Create the 'home-rank' below, and give the matching permission: essentials.sethome.multiple.<home-rank>",
+    "For more information, visit http://wiki.ess3.net/wiki/Multihome"})
+    @Parser("special:map")
+    public static Map<String, Integer> sethomeMultiple = new HashMap<String, Integer>() {{
+        put("default", 3);
+        put("vip", 5);
+        put("staff", 10);
+    }};
+    @ConfigurationComment({"In this example someone with 'essentials.sethome.multiple' and 'essentials.sethome.multiple.vip' will have 5 homes.",
+    "Remember, they MUST have both permission nodes in order to be able to set multiple homes.",
+    "",
+    "Controls whether players need the permission \"essentials.home.compass\" in order to point",
+    "the player's compass at their first home.",
+    "#",
+    "Leaving this as false will retain Essentials' original behaviour, which is to always",
+    "change the compass' direction to point towards their first home."})
+    public static boolean compassTowardsHomePerm = false;
+    @ConfigurationComment({"If no home is set, would you like to send the player to spawn?",
+    "If set to false, players will not be teleported when they run /home without setting a home first."})
+    public static boolean spawnIfNoHome = true;
+    @ConfigurationComment("Should players be asked to provide confirmation for homes which they attempt to overwrite?")
+    public static boolean confirmHomeOverwrite = false;
+
+    @ConfigurationComment({"###########################################################",
+    " +------------------------------------------------------+ #",
+    " |                       Economy                        | #",
+    " +------------------------------------------------------+ #",
+    "###########################################################",
+    "For more information, visit http://wiki.ess3.net/wiki/Essentials_Economy",
+    "You can control the values of items that are sold to the server by using the /setworth command.",
+    "",
+    "Defines the balance with which new players begin. Defaults to 0."})
+    public static BigDecimal startingBalance = BigDecimal.ZERO;
+    @ConfigurationComment({"Defines the cost to use the given commands PER USE.",
+    "Some commands like /repair have sub-costs, check the wiki for more information."})
+    @ExampleKeyValue({"example: 1000 # /example costs $1000 PER USE", "kit-tools: 1500 # /kit tools costs $1500 PER USE"})
+    @Parser("special:map")
+    public static Map<String, BigDecimal> commandCosts = new HashMap<>();
+    @ConfigurationComment({"Set this to a currency symbol you want to use.",
+    "Remember, if you want to use special characters in this document,",
+    "such as accented letters, you MUST save the file as UTF-8, not ANSI."})
+    @CheckRegex(regex = "\\A[^0-9]\\Z", defaultValue = "$")
+    public static String currencySymbol = "$";
+    @ConfigurationComment({"Enable this to make the currency symbol appear at the end of the amount rather than at the start.",
+    "For example, the euro symbol typically appears after the current amount."})
+    public static boolean currencySymbolSuffix = false;
+    @ConfigurationComment({"Set the maximum amount of money a player can have.",
+    "The amount is always limited to 10 trillion because of the limitations of a java double."})
+    public static BigDecimal maxMoney = new BigDecimal("10000000000000");
+    @ConfigurationComment({"Set the minimum amount of money a player can have (must be above the negative of max-money).",
+    "Setting this to 0, will disable overdrafts/loans completely.  Users need 'essentials.eco.loan' perm to go below 0."})
+    public static BigDecimal minMoney = new BigDecimal("-10000");
+    @ConfigurationComment("Enable this to log all interactions with trade/buy/sell signs and sell command.")
+    public static boolean economyLogEnabled = false;
+    @ConfigurationComment({"Enable this to also log all transactions from other plugins through Vault.",
+    "This can cause the economy log to fill up quickly so should only be enabled for testing purposes!"})
+    public static boolean economyLogUpdateEnabled = false;
+    @ConfigurationComment("Minimum acceptable amount to be used in /pay.")
+    public static BigDecimal minimumPayAmount = new BigDecimal("0.001");
+    @ConfigurationComment("Enable this to block users who try to /pay another user which ignore them.")
+    public static boolean payExcludesIgnoreList = false;
 
     static {
         registerParser("list", new KeyValueParser(new HashMap<String, Object>() {{

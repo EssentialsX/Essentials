@@ -17,6 +17,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
+import java.math.BigDecimal;
+import java.math.MathContext;
 import java.nio.CharBuffer;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -50,6 +52,20 @@ public abstract class Configuration {
             }
         });
         registerParser("special:map", new KeyValueParser());
+        registerParser("BigDecimal", new ValueParser() {
+            @Override
+            public <T> Object parseToJava(Class<T> type, Object object) {
+                String str = String.valueOf(super.parseToJava(String.class, object));
+                if (str.isEmpty()) {
+                    return BigDecimal.ZERO;
+                }
+                try {
+                    return new BigDecimal(str, MathContext.DECIMAL128);
+                } catch (NumberFormatException | ArithmeticException e) {
+                    return BigDecimal.ZERO;
+                }
+            }
+        });
         registerParser("color", new ValueParser() {
             @Override
             public String parseToYAML(Object object) {
