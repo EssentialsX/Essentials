@@ -41,47 +41,36 @@ public class Commandseen extends EssentialsCommand {
         if (args.length < 1) {
             throw new NotEnoughArgumentsException();
         }
+
         User player;
-        // Check by uuid, if it fails check by name.
+        // check by uuid
         try {
             UUID uuid = UUID.fromString(args[0]);
             player = ess.getUser(uuid);
-        }catch (IllegalArgumentException ignored) { // Thrown if invalid UUID from string, check by name.
-            player = ess.getOfflineUser(args[0]);
-        }
-
-        if (player == null) {
+        } catch (IllegalArgumentException ignored1) {
+            // check by ip
             if (ipLookup && FormatUtil.validIP(args[0])) {
                 seenIP(server, sender, args[0]);
                 return;
-            } else if (ess.getServer().getBanList(BanList.Type.IP).isBanned(args[0])) {
+            }
+            // check if ip banned
+            else if (ess.getServer().getBanList(BanList.Type.IP).isBanned(args[0])) {
                 sender.sendMessage(tl("isIpBanned", args[0]));
                 return;
-            } else if (BanLookup.isBanned(ess, args[0])) {
+            }
+            // check if name banned
+            else if (BanLookup.isBanned(ess, args[0])) {
                 sender.sendMessage(tl("whoisBanned", showBan ? BanLookup.getBanEntry(ess, args[0]).getReason() : tl("true")));
                 return;
             }
-            ess.getScheduler().runTaskAsynchronously(ess, new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        final User user = getPlayer(server, args, 0, false, true);
-                        if (user == null) {
-                            throw new PlayerNotFoundException();
-                        } else {
-                            showSeenMessage(server, sender, user, showBan, showIp, showLocation);
-                        }
-                    } catch (Exception e) {
-                        ess.showError(sender, e, commandLabel);
-                    }
-                }
-            });
-        } else {
-            showSeenMessage(server, sender, player, showBan, showIp, showLocation);
+            // check by name
+            try {
+                player = getPlayer(server, args, 0, false, true);
+            } catch (PlayerNotFoundException ignored2) {
+                throw new Exception(tl("playerNeverOnServer", args[0]));
+            }
         }
-    }
 
-    private void showSeenMessage(Server server, CommandSource sender, User player, boolean showBan, boolean showIp, boolean showLocation)  throws Exception {
         if (player.getBase().isOnline() && canInteractWith(sender, player)) {
             seenOnline(server, sender, player, showBan, showIp, showLocation);
         } else {
