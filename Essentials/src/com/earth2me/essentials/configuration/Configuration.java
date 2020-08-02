@@ -262,10 +262,11 @@ public abstract class Configuration {
                             for (String comments : field.getAnnotation(SectionComment.class).value()) {
                                 String[] nodeSplit = comments.split(":");
                                 if (nodeSplit[0].equalsIgnoreCase(curNode) && nodeSplit.length > 1) {
-                                    for (String line : nodeSplit[1].split("(?<!\\\\)(?:\\\\\\\\)*,")) {
-                                        writer.write("#" + line);
-                                        writer.newLine();
+                                    String comment = comments.replaceFirst(curNode + ":", "").trim();
+                                    if (!comment.isEmpty()) {
+                                        writer.write("#" + comment);
                                     }
+                                    writer.newLine();
                                 }
                             }
                         }
