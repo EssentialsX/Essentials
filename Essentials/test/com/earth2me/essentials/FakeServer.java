@@ -742,6 +742,11 @@ public class FakeServer implements Server {
             }
 
             @Override
+            public Spigot spigot() {
+                throw new UnsupportedOperationException("Not supported yet.");
+            }
+
+            @Override
             public boolean isPermissionSet(String name) {
                 throw new UnsupportedOperationException("Not supported yet.");
             }
@@ -894,12 +899,22 @@ public class FakeServer implements Server {
     }
 
     @Override
+    public int getTicksPerWaterAmbientSpawns() {
+        return 0;
+    }
+
+    @Override
     public int getTicksPerAmbientSpawns() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
     public List<Recipe> getRecipesFor(ItemStack is) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public Recipe getRecipe(NamespacedKey namespacedKey) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
@@ -976,6 +991,11 @@ public class FakeServer implements Server {
     @Override
     public int getWaterAnimalSpawnLimit() {
         throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public int getWaterAmbientSpawnLimit() {
+        return 0;
     }
 
     @Override
@@ -1071,6 +1091,11 @@ public class FakeServer implements Server {
     @Override
     @SuppressWarnings("deprecation")
     public UnsafeValues getUnsafe() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public Spigot spigot() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 

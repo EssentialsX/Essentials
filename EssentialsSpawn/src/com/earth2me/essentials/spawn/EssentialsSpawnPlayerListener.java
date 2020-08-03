@@ -6,6 +6,7 @@ import com.earth2me.essentials.User;
 import com.earth2me.essentials.textreader.IText;
 import com.earth2me.essentials.textreader.KeywordReplacer;
 import com.earth2me.essentials.textreader.SimpleTextPager;
+import com.earth2me.essentials.utils.VersionUtil;
 import io.papermc.lib.PaperLib;
 import net.ess3.api.IEssentials;
 import org.bukkit.Location;
@@ -17,6 +18,7 @@ import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.CompletableFuture;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -41,9 +43,13 @@ class EssentialsSpawnPlayerListener implements Listener {
             return;
         }
 
+        if (VersionUtil.getServerBukkitVersion().isHigherThanOrEqualTo(VersionUtil.v1_16_1_R01) && event.isAnchorSpawn() && ess.getSettings().isRespawnAtAnchor()) {
+            return;
+        }
+
         if (ess.getSettings().getRespawnAtHome()) {
             Location home;
-            final Location bed = user.getBase().getBedSpawnLocation();
+            final Location bed = user.getBase().getBedSpawnLocation(); // cannot nuke this sync load due to the event being sync so it would hand either way.
             if (bed != null) {
                 home = bed;
             } else {
@@ -135,13 +141,14 @@ class EssentialsSpawnPlayerListener implements Listener {
                 return;
             }
 
-            try {
-                final Location spawn = spawns.getSpawn(ess.getSettings().getNewbieSpawn());
-                if (spawn != null) {
-                    user.getTeleport().now(spawn, false, TeleportCause.PLUGIN);
-                }
-            } catch (Exception ex) {
-                logger.log(Level.WARNING, tl("teleportNewPlayerError"), ex);
+            final Location spawn = spawns.getSpawn(ess.getSettings().getNewbieSpawn());
+            if (spawn != null) {
+                CompletableFuture<Boolean> future = new CompletableFuture<>();
+                future.exceptionally(e -> {
+                    logger.log(Level.WARNING, tl("teleportNewPlayerError"), e);
+                    return false;
+                });
+                user.getAsyncTeleport().now(spawn, false, TeleportCause.PLUGIN, future);
             }
         }
     }

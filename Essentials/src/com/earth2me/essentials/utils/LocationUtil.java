@@ -153,8 +153,8 @@ public class LocationUtil {
     }
 
     public static Location getSafeDestination(final IEssentials ess, final IUser user, final Location loc) throws Exception {
-        if (user.getBase().isOnline() && loc.getWorld().equals(user.getBase().getWorld()) && (user.getBase().getGameMode() == GameMode.CREATIVE || user.isGodModeEnabled()) && user.getBase().getAllowFlight()) {
-            if (shouldFly(loc)) {
+        if (user.getBase().isOnline() && (ess == null || !ess.getSettings().isAlwaysTeleportSafety()) && (user.getBase().getGameMode() == GameMode.CREATIVE || user.getBase().getGameMode() == GameMode.SPECTATOR || user.isGodModeEnabled())) {
+            if (shouldFly(loc) && user.getBase().getAllowFlight()) {
                 user.getBase().setFlying(true);
             }
             // ess can be null if old deprecated method is calling it.

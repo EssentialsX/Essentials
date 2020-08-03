@@ -6,7 +6,7 @@
     <parent>
         <groupId>net.ess3</groupId>
         <artifactId>EssentialsXParent</artifactId>
-        <version>2.17.2</version>
+        <version>2.18.0</version>
     </parent>
 
     <artifactId>EssentialsX</artifactId>
@@ -52,6 +52,12 @@
             <groupId>com.github.milkbowl</groupId>
             <artifactId>VaultAPI</artifactId>
             <version>1.7</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.bukkit</groupId>
+                    <artifactId>bukkit</artifactId>
+                </exclusion>
+            </exclusions>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -63,37 +69,49 @@
         <dependency>
             <groupId>io.papermc</groupId>
             <artifactId>paperlib</artifactId>
-            <version>1.0.2</version>
+            <version>1.0.4</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>net.ess3</groupId>
-            <artifactId>NMSProvider</artifactId>
-            <version>2.17.2</version>
+            <artifactId>BaseProviders</artifactId>
+            <version>2.18.0</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>net.ess3</groupId>
-            <artifactId>UpdatedMetaProvider</artifactId>
-            <version>2.17.2</version>
+            <artifactId>NMSReflectionProvider</artifactId>
+            <version>2.18.0</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.bukkit</groupId>
+                    <artifactId>bukkit</artifactId>
+                </exclusion>
+            </exclusions>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>net.ess3</groupId>
-            <artifactId>LegacyProvider</artifactId>
-            <version>2.17.2</version>
+            <artifactId>PaperProvider</artifactId>
+            <version>2.18.0</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.destroystokyo.paper</groupId>
+                    <artifactId>paper-api</artifactId>
+                </exclusion>
+            </exclusions>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>net.ess3</groupId>
-            <artifactId>ReflectionProvider</artifactId>
-            <version>2.17.2</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>net.ess3</groupId>
-            <artifactId>FlattenedProvider</artifactId>
-            <version>2.17.2</version>
+            <artifactId>1_8Provider</artifactId>
+            <version>2.18.0</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.bukkit</groupId>
+                    <artifactId>bukkit</artifactId>
+                </exclusion>
+            </exclusions>
             <scope>compile</scope>
         </dependency>
     </dependencies>

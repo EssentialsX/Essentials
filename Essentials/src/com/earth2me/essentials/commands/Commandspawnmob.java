@@ -65,7 +65,7 @@ public class Commandspawnmob extends EssentialsCommand {
     @Override
     protected List<String> getTabCompleteOptions(Server server, User user, String commandLabel, String[] args) {
         if (args.length == 1) {
-            return Lists.newArrayList(SpawnMob.mobParts(args[0]));
+            return Lists.newArrayList(Mob.getMobList());
         } else {
             return Collections.emptyList();
         }

@@ -1,5 +1,6 @@
 package com.earth2me.essentials;
 
+import com.earth2me.essentials.api.IAsyncTeleport;
 import com.earth2me.essentials.commands.IEssentialsCommand;
 import net.ess3.api.ITeleport;
 import net.ess3.api.MaxMoneyException;
@@ -54,7 +55,13 @@ public interface IUser {
      */
     boolean hasOutstandingTeleportRequest();
 
+    /**
+     * @deprecated This API is not asynchronous. Use {@link com.earth2me.essentials.api.IAsyncTeleport IAsyncTeleport} with {@link IUser#getAsyncTeleport()}
+     */
+    @Deprecated
     ITeleport getTeleport();
+
+    IAsyncTeleport getAsyncTeleport();
 
     BigDecimal getMoney();
 
