@@ -9,8 +9,7 @@ import org.bukkit.World;
 import org.bukkit.block.Biome;
 
 import java.io.File;
-import java.util.HashSet;
-import java.util.List;
+import java.util.EnumSet;
 import java.util.Queue;
 import java.util.Random;
 import java.util.Set;
@@ -92,14 +91,13 @@ public class RandomTeleport implements IConf {
     }
 
     public Set<Biome> getExcludedBiomes() {
-        List<String> biomeNames = config.getStringList("excluded-biomes");
-        Set<Biome> excludedBiomes = new HashSet<>();
-        for (String biomeName : biomeNames) {
+        final EnumSet<Biome> excludedBiomes = EnumSet.noneOf(Biome.class);
+        config.getStringList("excluded-biomes").forEach(biome -> {
             try {
-                excludedBiomes.add(Biome.valueOf(biomeName.toUpperCase()));
+                excludedBiomes.add(Biome.valueOf(biome.toUpperCase()));
             } catch (IllegalArgumentException ignored) {
             }
-        }
+        });
         return excludedBiomes;
     }
 
