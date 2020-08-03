@@ -106,10 +106,8 @@ public abstract class Configuration {
             public <T> Object parseToJava(Class<T> type, Object object) {
                 map.clear();
                 String value = (String) object;
-                System.out.println(value);
                 IItemDb itemDb = ess.getItemDb();
                 if (itemDb == null || !itemDb.isReady()) {
-                    System.out.println("yeah...");
                     logger.log(Level.FINE, "Skipping item spawn blacklist read; item DB not yet loaded.");
                     return map.values();
                 }
@@ -120,8 +118,6 @@ public abstract class Configuration {
                     }
                     try {
                         final ItemStack iStack = itemDb.get(itemName);
-                        System.out.println(itemName);
-                        System.out.println(iStack.getType());
                         map.put(itemName, iStack.getType());
                     } catch (Exception ex) {
                         logger.log(Level.SEVERE, tl("unknownItemInList", itemName, "item-spawn-blacklist"), ex);
@@ -133,6 +129,38 @@ public abstract class Configuration {
             @Override
             public String parseToYAML(Object object) {
                 return super.parseToYAML(String.join(",", map.keySet())).trim();
+            }
+        });
+        registerParser("csv:materialenum", new ValueParser() {
+            @Override
+            public <T> Object parseToJava(Class<T> type, Object object) {
+                List<Material> list = new ArrayList<>();
+                String value = (String) object;
+                for (String itemName : value.split(",")) {
+                    itemName = itemName.trim();
+                    if (itemName.isEmpty()) {
+                        continue;
+                    }
+                    try {
+                        list.add(Material.valueOf(itemName));
+                    } catch (Exception ex) {
+                        logger.log(Level.SEVERE, tl("unknownItemInList", itemName, ""), ex);
+                    }
+                }
+                return list;
+            }
+
+            @Override
+            public String parseToYAML(Object object) {
+                StringBuilder builder = new StringBuilder();
+                String del = "";
+                //noinspection unchecked
+                for (Material mat : (List<Material>) object) {
+                    builder.append(del);
+                    del = ",";
+                    builder.append(mat.name());
+                }
+                return builder.toString();
             }
         });
         registerParser("signs", new ValueParser() {
@@ -217,8 +245,13 @@ public abstract class Configuration {
                 }
 
                 boolean isPreDefined = config.isSet(path);
+                defined:
                 if (isPreDefined) {
                     Object parsed = getParser(field).parseToJava(field.getType(), config.get(path));
+                    if (parsed == null && field.isAnnotationPresent(IgnoreWhenNull.class)) {
+                        isPreDefined = false;
+                        break defined;
+                    }
                     if (field.isAnnotationPresent(CheckRegex.class) && parsed instanceof String) {
                         CheckRegex check = field.getAnnotation(CheckRegex.class);
                         if (!((String) parsed).matches(check.regex())) {

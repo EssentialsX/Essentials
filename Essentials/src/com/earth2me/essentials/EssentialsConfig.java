@@ -8,13 +8,17 @@ import com.earth2me.essentials.configuration.ExampleKeyValue;
 import com.earth2me.essentials.configuration.ExampleValues;
 import com.earth2me.essentials.configuration.Header;
 import com.earth2me.essentials.configuration.HiddenValue;
+import com.earth2me.essentials.configuration.IgnoreWhenNull;
 import com.earth2me.essentials.configuration.KeyValueParser;
 import com.earth2me.essentials.configuration.Kleenean;
 import com.earth2me.essentials.configuration.NoSeparator;
 import com.earth2me.essentials.configuration.Parser;
 import com.earth2me.essentials.configuration.SectionComment;
+import com.earth2me.essentials.configuration.ValueParser;
 import com.earth2me.essentials.signs.EssentialsSign;
+import com.google.common.collect.HashBiMap;
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 
 import java.io.File;
@@ -29,6 +33,7 @@ import java.util.Map;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
+import static com.earth2me.essentials.ISettings.EssEventPriority;
 import static com.earth2me.essentials.ISettings.KeepInvPolicy;
 
 @Header({
@@ -352,11 +357,13 @@ public class EssentialsConfig extends Configuration {
     "curse of vanishing when they die?",
     "You can set this to \"keep\" (to keep the item), \"drop\" (to drop the item), or \"delete\" (to delete the item).",
     "Defaults to \"keep\""})
+    @IgnoreWhenNull
     public static KeepInvPolicy vanishingItemsPolicy = KeepInvPolicy.KEEP;
     @ConfigurationComment({"How should essentials handle players with the essentials.keepinv permission who have items with",
             "curse of binding when they die?",
             "You can set this to \"keep\" (to keep the item), \"drop\" (to drop the item), or \"delete\" (to delete the item).",
             "Defaults to \"keep\""})
+    @IgnoreWhenNull
     public static KeepInvPolicy bindingItemsPolicy = KeepInvPolicy.KEEP;
 
     @ConfigurationComment({"Should players with permissions be able to join and part silently?",
@@ -593,7 +600,296 @@ public class EssentialsConfig extends Configuration {
     @ConfigurationComment("Enable this to block users who try to /pay another user which ignore them.")
     public static boolean payExcludesIgnoreList = false;
 
+    @ConfigurationComment({"###########################################################",
+    " +------------------------------------------------------+ #",
+    " |                         Help                         | #",
+    " +------------------------------------------------------+ #",
+    "###########################################################",
+    "",
+    "Show other plugins commands in help."})
+    public static boolean nonEssInHelp = true;
+    @ConfigurationComment({"Hide plugins which do not give a permission.",
+    "You can override a true value here for a single plugin by adding a permission to a user/group.",
+    "The individual permission is: essentials.help.<plugin>, anyone with essentials.* or '*' will see all help regardless.",
+    "You can use negative permissions to remove access to just a single plugins help if the following is enabled."})
+    public static boolean hidePermissionlessHelp = true;
+
+    @SectionComment({"chat:###########################################################",
+    "chat: +------------------------------------------------------+ #",
+    "chat: |                   EssentialsX Chat                   | #",
+    "chat: +------------------------------------------------------+ #",
+    "chat:###########################################################",
+    "chat: ",
+    "chat:You need to install EssentialsX Chat for this section to work.",
+    "chat:See https://essentialsx.net/wiki/Module-Breakdown.html for more information."})
+    @ConfigurationComment({"If EssentialsX Chat is installed, this will define how far a player's voice travels, in blocks. Set to 0 to make all chat global.",
+    "Note that users with the \"essentials.chat.spy\" permission will hear everything, regardless of this setting.",
+    "Users with essentials.chat.shout can override this by prefixing their message with an exclamation mark (!)",
+    "Users with essentials.chat.question can override this by prefixing their message with a question mark (?)",
+    "You can add command costs for shout/question by adding chat-shout and chat-question to the command costs section."})
+    @CustomPath("chat.radius")
+    public static int chatRadius = 0;
+    @ConfigurationComment({"Chat formatting can be done in two ways, you can either define a standard format for all chat.",
+    "Or you can give a group specific chat format, to give some extra variation.",
+    "For more information of chat formatting, check out the wiki: http://wiki.ess3.net/wiki/Chat_Formatting"})
+    @CustomPath("chat.format")
+    public static String chatFormat = "<{DISPLAYNAME}> {MESSAGE}";
+    @ConfigurationComment({"If you are using group formats make sure to remove the '#' to allow the setting to be read.",
+    "Note: Group names are case-sensitive so you must match them up with your permission plugin."})
+    @ExampleKeyValue({"\"default\": \"{WORLDNAME} {DISPLAYNAME}&7:&r {MESSAGE}\"", "\"admins\": \"{WORLDNAME} &c[{GROUP}]&r {DISPLAYNAME}&7:&c {MESSAGE}\""})
+    @Parser("special:map")
+    @CustomPath("chat.group-formats")
+    public static HashBiMap<String, String> chatGroupFormats = HashBiMap.create();
+
+    @SectionComment({"protect:###########################################################",
+    "protect: +------------------------------------------------------+ #",
+    "protect: |                 EssentialsX Protect                  | #",
+    "protect: +------------------------------------------------------+ #",
+    "protect:###########################################################",
+    "protect:You need to install EssentialsX Protect for this section to work.",
+    "protect:See https://essentialsx.net/wiki/Module-Breakdown.html for more information.",
+    "prevent:General physics/behavior modifications. Set these to true to disable behaviours."})
+    public static boolean protect_prevent_lavaFlow = false;
+    public static boolean protect_prevent_waterFlow = false;
+    public static boolean protect_prevent_waterBucketFlow = false;
+    public static boolean protect_prevent_lavaFireSpread = true;
+    public static boolean protect_prevent_lavaItemdamage = false;
+    public static boolean protect_prevent_flintFire = false;
+    public static boolean protect_prevent_lightningFireSpread = true;
+    public static boolean protect_prevent_portalCreation = false;
+    public static boolean protect_prevent_tntExplosion = false;
+    public static boolean protect_prevent_tntPlayerdamage = false;
+    public static boolean protect_prevent_tntItemdamage = false;
+    public static boolean protect_prevent_tntMinecartExplosion = false;
+    public static boolean protect_prevent_tntMinecartPlayerdamage = false;
+    public static boolean protect_prevent_tntMinecartItemdamage = false;
+    public static boolean protect_prevent_fireballExplosion = false;
+    public static boolean protect_prevent_fireballFire = false;
+    public static boolean protect_prevent_fireballPlayerdamage = false;
+    public static boolean protect_prevent_fireballItemdamage = false;
+    public static boolean protect_prevent_witherskullExplosion = false;
+    public static boolean protect_prevent_witherskullPlayerdamage = false;
+    public static boolean protect_prevent_witherskullItemdamage = false;
+    public static boolean protect_prevent_witherSpawnexplosion = false;
+    public static boolean protect_prevent_witherBlockreplace = false;
+    public static boolean protect_prevent_creeperExplosion = false;
+    public static boolean protect_prevent_creeperPlayerdamage = false;
+    public static boolean protect_prevent_creeperItemdamage = false;
+    public static boolean protect_prevent_creeperBlockdamage = false;
+    public static boolean protect_prevent_enderCrystalExplosion = false;
+    public static boolean protect_prevent_enderdragonBlockdamage = true;
+    public static boolean protect_prevent_endermanPickup = false;
+    public static boolean protect_prevent_villagerDeath = false;
+    public static boolean protect_prevent_bedExplosion = false;
+    public static boolean protect_prevent_respawnAnchorExplosion = false;
+    @ConfigurationComment({"Monsters won't follow players.",
+    "permission essentials.protect.entitytarget.bypass disables this."})
+    public static boolean protect_prevent_entitytarget = false;
+    @ConfigurationComment("Prevents zombies from breaking down doors")
+    public static boolean protect_prevent_zombieDoorBreak = false;
+    @ConfigurationComment("Prevents Ravagers from stealing blocks")
+    public static boolean protect_prevent_ravagerThief = false;
+    @ConfigurationComment("Prevents sheep from turning grass to dirt")
+    public static boolean protect_prevent_sheepEatGrass = false;
+    @SectionComment("transformation:Prevent certain transformations.")
+    @ConfigurationComment("Prevent creepers becoming charged when struck by lightning.")
+    public static boolean protect_prevent_transformation_chargedCreeper = false;
+    @ConfigurationComment("Prevent villagers becoming zombie villagers.")
+    public static boolean protect_prevent_transformation_zombieVillager = false;
+    @ConfigurationComment("Prevent zombie villagers being cured.")
+    public static boolean protect_prevent_transformation_villager = false;
+    @ConfigurationComment("Prevent villagers becoming witches when struck by lightning.")
+    public static boolean protect_prevent_transformation_witch = false;
+    @ConfigurationComment("Prevent pigs becoming zombie pigmen when struck by lightning.")
+    public static boolean protect_prevent_transformation_zombiePigman = false;
+    @ConfigurationComment("Prevent zombies turning into drowneds, and husks turning into zombies.")
+    public static boolean protect_prevent_transformation_drowned = false;
+    @ConfigurationComment("Prevent mooshrooms changing colour when struck by lightning.")
+    public static boolean protect_prevent_transformation_mooshroom = false;
+    @SectionComment("spawn:Prevent the spawning of creatures. If a creature is missing, you can add it following the format below.")
+    public static boolean protect_prevent_spawn_creeper = false;
+    public static boolean protect_prevent_spawn_skeleton = false;
+    public static boolean protect_prevent_spawn_spider = false;
+    public static boolean protect_prevent_spawn_giant = false;
+    public static boolean protect_prevent_spawn_zombie = false;
+    public static boolean protect_prevent_spawn_slime = false;
+    public static boolean protect_prevent_spawn_ghast = false;
+    @CustomPath("protect.prevent.spawn.pig_zombie")
+    public static boolean protect_prevent_spawn_pig_zombie = false;
+    public static boolean protect_prevent_spawn_enderman = false;
+    @CustomPath("protect.prevent.spawn.cave_spider")
+    public static boolean protect_prevent_spawn_cave_spider = false;
+    public static boolean protect_prevent_spawn_silverfish = false;
+    public static boolean protect_prevent_spawn_blaze = false;
+    @CustomPath("protect.prevent.spawn.magma_cube")
+    public static boolean protect_prevent_spawn_magma_cube = false;
+    @CustomPath("protect.prevent.spawn.ender_dragon")
+    public static boolean protect_prevent_spawn_ender_dragon = false;
+    public static boolean protect_prevent_spawn_pig = false;
+    public static boolean protect_prevent_spawn_sheep = false;
+    public static boolean protect_prevent_spawn_cow = false;
+    public static boolean protect_prevent_spawn_chicken = false;
+    public static boolean protect_prevent_spawn_squid = false;
+    public static boolean protect_prevent_spawn_wolf = false;
+    @CustomPath("protect.prevent.spawn.mushroom_cow")
+    public static boolean protect_prevent_spawn_mushroom_cow = false;
+    public static boolean protect_prevent_spawn_snowman = false;
+    public static boolean protect_prevent_spawn_ocelot = false;
+    @CustomPath("protect.prevent.spawn.iron_golem")
+    public static boolean protect_prevent_spawn_iron_golem = false;
+    public static boolean protect_prevent_spawn_villager = false;
+    public static boolean protect_prevent_spawn_wither = false;
+    public static boolean protect_prevent_spawn_bat = false;
+    public static boolean protect_prevent_spawn_witch = false;
+    public static boolean protect_prevent_spawn_horse = false;
+    public static boolean protect_prevent_spawn_phantom = false;
+
+    @SectionComment({"creeper:Maximum height the creeper should explode. -1 allows them to explode everywhere.",
+    "creeper:Set prevent.creeper-explosion to true, if you want to disable creeper explosions."})
+    public static int protect_prevent_creeper_maxHeight = -1;
+
+    @SectionComment("disable:Disable various default physics and behaviors.")
+    @ConfigurationComment("Should fall damage be disabled?")
+    public static boolean protect_prevent_disable_fall = false;
+    @ConfigurationComment({"Users with the essentials.protect.pvp permission will still be able to attack each other if this is set to true.",
+    "They will be unable to attack users without that same permission node."})
+    public static boolean protect_prevent_disable_pvp = false;
+    @ConfigurationComment({"Should drowning damage be disabled?",
+    "(Split into two behaviors; generally, you want both set to the same value.)"})
+    public static boolean protect_prevent_disable_drown = false;
+    public static boolean protect_prevent_disable_suffocate = false;
+    @ConfigurationComment("Should damage via lava be disabled?  Items that fall into lava will still burn to a crisp. ;)")
+    public static boolean protect_prevent_disable_lavadmg = false;
+    @ConfigurationComment("Should arrow damage be disabled?")
+    public static boolean protect_prevent_disable_projectiles = false;
+    @ConfigurationComment("This will disable damage from touching cacti.")
+    public static boolean protect_prevent_disable_contactdmg = false;
+    @ConfigurationComment("Burn, baby, burn!  Should fire damage be disabled?")
+    public static boolean protect_prevent_disable_firedmg = false;
+    @ConfigurationComment("Should the damage after hit by a lightning be disabled?")
+    public static boolean protect_prevent_disable_lightning = false;
+    @ConfigurationComment("Should Wither damage be disabled?")
+    public static boolean protect_prevent_disable_wither = false;
+    @SectionComment("weather:Disable weather options?")
+    public static boolean protect_prevent_disable_weather_storm = false;
+    public static boolean protect_prevent_disable_weather_thunder = false;
+    public static boolean protect_prevent_disable_weather_lightning = false;
+    @SectionComment({"###########################################################",
+    " +------------------------------------------------------+ #",
+    " |                EssentialsX AntiBuild                 | #",
+    " +------------------------------------------------------+ #",
+    "###########################################################",
+    "",
+    "You need to install EssentialsX AntiBuild for this section to work.",
+    "See https://essentialsx.net/wiki/Module-Breakdown.html and http://wiki.ess3.net/wiki/AntiBuild for more information.",
+    "",
+    "Should people without the essentials.build permission be allowed to build?",
+    "Set true to disable building for those people.",
+    "Setting to false means EssentialsAntiBuild will never prevent you from building."})
+    public static boolean protect_prevent_disable_build = false;
+    @ConfigurationComment({"Should people without the essentials.build permission be allowed to use items?",
+    "Set true to disable using for those people.",
+    "Setting to false means EssentialsAntiBuild will never prevent you from using items."})
+    public static boolean protect_prevent_disable_use = true;
+    @ConfigurationComment("Should we warn people when they are not allowed to build?")
+    public static boolean protect_prevent_disable_warnOnBuildDisallow = true;
+    @SectionComment({"alert:For which block types would you like to be alerted?",
+    "alert:You can find a list of items at https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Material.html."})
+    @Parser("csv:materialenum")
+    public static List<Material> protect_prevent_alert_onPlacement = Arrays.asList(Material.LAVA, Material.TNT, Material.LAVA_BUCKET);
+    @Parser("csv:materialenum")
+    public static List<Material> protect_prevent_alert_onUse = Collections.singletonList(Material.LAVA_BUCKET);
+    @Parser("csv:materialenum")
+    public static List<Material> protect_prevent_alert_onBreak = new ArrayList<>();
+    @ConfigurationComment("Which blocks should people be prevented from placing?")
+    @Parser("csv:materialenum")
+    public static List<Material> protect_prevent_blacklist_placement = Arrays.asList(Material.LAVA, Material.TNT, Material.LAVA_BUCKET);
+    @ConfigurationComment("Which items should people be prevented from using?")
+    @Parser("csv:materialenum")
+    public static List<Material> protect_prevent_blacklist_usage = Collections.singletonList(Material.LAVA_BUCKET);
+    @ConfigurationComment("Which blocks should people be prevented from breaking?")
+    @Parser("csv:materialenum")
+    public static List<Material> protect_prevent_blacklist_break = new ArrayList<>();
+    @ConfigurationComment("Which blocks should not be pushed by pistons?")
+    @Parser("csv:materialenum")
+    public static List<Material> protect_prevent_blacklist_piston = new ArrayList<>();
+    @ConfigurationComment("Which blocks should not be dispensed by dispensers")
+    @Parser("csv:materialenum")
+    public static List<Material> protect_prevent_blacklist_dispenser = new ArrayList<>();
+
+    @SectionComment({"###########################################################",
+    " +------------------------------------------------------+ #",
+    " |            EssentialsX Spawn + New Players           | #",
+    " +------------------------------------------------------+ #",
+    "###########################################################",
+    "",
+    "You need to install EssentialsX Spawn for this section to work.",
+    "See https://essentialsx.net/wiki/Module-Breakdown.html for more information."})
+    @ConfigurationComment({"Should we announce to the server when someone logs in for the first time?",
+    "If so, use this format, replacing {DISPLAYNAME} with the player name.",
+    "If not, set to ''"})
+    public static String newbies_announceFormat = "&dWelcome {DISPLAYNAME}&d to the server!";
+    @ConfigurationComment({"When we spawn for the first time, which spawnpoint do we use?",
+    "Set to \"none\" if you want to use the spawn point of the world."})
+    public static String newbies_spawnpoint = "newbies";
+    @ConfigurationComment({"Do we want to give users anything on first join? Set to '' to disable",
+    "This kit will be given regardless of cost and permissions, and will not trigger the kit delay."})
+    public static String newbies_kit = "tools";
+
+    @ConfigurationComment({"What priority should we use for handling respawns?",
+    "Set this to none, if you want vanilla respawning behaviour.",
+    "Set this to lowest, if you want Multiverse to handle the respawning.",
+    "Set this to high, if you want EssentialsSpawn to handle the respawning.",
+    "Set this to highest, if you want to force EssentialsSpawn to handle the respawning."})
+    @IgnoreWhenNull
+    public static EssEventPriority respawnListenerPriority = EssEventPriority.HIGH;
+    @ConfigurationComment({"What priority should we use for handling spawning on joining the server?",
+    "See respawn-listener-priority for possible values.",
+    "Note: changing this may impact or break spawn-on-join functionality."})
+    @IgnoreWhenNull
+    public static EssEventPriority spawnJoinListenerPriority = EssEventPriority.HIGH;
+    @ConfigurationComment("When users die, should they respawn at their first home or bed, instead of the spawnpoint?")
+    public static boolean respawnAtHome = false;
+    @ConfigurationComment("When users die, should EssentialsSpawn respect users' respawn anchors?")
+    public static boolean respawnAtAnchor = false;
+    @ConfigurationComment("Teleport all joining players to the spawnpoint")
+    @IgnoreWhenNull
+    @Parser("spawngroups")
+    public static List<String> spawnOnJoin = new ArrayList<>();
+
     static {
+        registerParser("spawngroups", new ValueParser() {
+            @Override
+            public <T> Object parseToJava(Class<T> type, Object object) {
+                if (object == null) {
+                    return null;
+                }
+                if (object instanceof List) {
+                    List<String> groups = new ArrayList<>();
+                    for (Object obj : (List<?>) object) {
+                        groups.add(obj.toString());
+                    }
+                    return groups;
+                } else if (object instanceof Boolean) {
+                    return (Boolean) object ? Collections.singletonList("*") : null;
+                }
+                String val = (String) object;
+                return !val.isEmpty() ? Collections.singletonList(val) : null;
+            }
+
+            @Override
+            public String parseToYAML(Object object) {
+                //noinspection unchecked
+                List<String> obj = (List<String>) object;
+                if (obj.isEmpty()) {
+                    return "false";
+                } else if (obj.get(0).equals("*")) {
+                    return "true";
+                } else {
+                    return super.parseToYAML(obj);
+                }
+            }
+        });
         registerParser("list", new KeyValueParser(new HashMap<String, Object>() {{
             if (sortListByGroups) {
                 put("ListByGroup", "ListByGroup");

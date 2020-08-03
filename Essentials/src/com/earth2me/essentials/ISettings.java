@@ -222,6 +222,16 @@ public interface ISettings extends IConf {
         DROP
     }
 
+    enum EssEventPriority {
+        NONE,
+        LOWEST,
+        LOW,
+        NORMAL,
+        HIGH,
+        HIGHEST,
+        MONITOR
+    }
+
     void setDebug(boolean debug);
 
     Set<String> getNoGodWorlds();
