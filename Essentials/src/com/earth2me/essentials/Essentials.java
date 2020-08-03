@@ -40,11 +40,13 @@ import net.ess3.api.ISettings;
 import net.ess3.api.*;
 import net.ess3.nms.refl.providers.ReflServerStateProvider;
 import net.ess3.nms.refl.providers.ReflSpawnEggProvider;
+import net.ess3.nms.refl.providers.ReflSpawnerBlockProvider;
 import net.ess3.provider.PotionMetaProvider;
 import net.ess3.provider.ProviderListener;
 import net.ess3.provider.ServerStateProvider;
 import net.ess3.provider.SpawnEggProvider;
-import net.ess3.provider.SpawnerProvider;
+import net.ess3.provider.SpawnerBlockProvider;
+import net.ess3.provider.SpawnerItemProvider;
 import net.ess3.provider.providers.*;
 import org.bukkit.Bukkit;
 import org.bukkit.Server;
@@ -245,8 +247,15 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
                 confList.add(jails);
                 execTimer.mark("Init(Jails)");
 
-                //Spawner provider only uses one but it's here for legacy...
-                spawnerProvider = new BlockMetaSpawnerProvider();
+                //Spawner item provider only uses one but it's here for legacy...
+                spawnerItemProvider = new BlockMetaSpawnerItemProvider();
+
+                //Spawner block providers
+                if (VersionUtil.getServerBukkitVersion().isLowerThan(VersionUtil.v1_12_0_R01)) {
+                    spawnerBlockProvider = new ReflSpawnerBlockProvider();
+                } else {
+                    spawnerBlockProvider = new BukkitSpawnerBlockProvider();
+                }
 
                 //Spawn Egg Providers
                 if (VersionUtil.getServerBukkitVersion().isLowerThanOrEqualTo(VersionUtil.v1_8_8_R01)) {

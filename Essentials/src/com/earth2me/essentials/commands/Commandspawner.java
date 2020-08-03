@@ -7,7 +7,7 @@ import com.earth2me.essentials.utils.EnumUtil;
 import com.earth2me.essentials.utils.LocationUtil;
 import com.earth2me.essentials.utils.NumberUtil;
 import com.earth2me.essentials.utils.StringUtil;
-import net.ess3.nms.SpawnerBlockProvider;
+import net.ess3.provider.SpawnerBlockProvider;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Server;
