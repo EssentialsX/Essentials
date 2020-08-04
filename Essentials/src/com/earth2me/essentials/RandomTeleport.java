@@ -62,7 +62,7 @@ public class RandomTeleport implements IConf {
         }
         World defaultWorld = world == null || !getPerWorld() ? essentials.getServer().getWorlds().get(0) : world;
         Location center = defaultWorld.getWorldBorder().getCenter();
-        center.setY(center.getWorld().getHighestBlockYAt(center) + 1);
+        center.setY(center.getWorld().getHighestBlockYAt(center) + HIGHEST_BLOCK_Y_OFFSET);
         setCenter(world, center);
         return center;
     }
