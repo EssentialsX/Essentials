@@ -3,6 +3,7 @@ package com.earth2me.essentials.chat;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.FormatUtil;
 import net.ess3.api.IEssentials;
+import org.bukkit.ChatColor;
 import org.bukkit.Server;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -38,6 +39,12 @@ public class EssentialsChatPlayerListenerLowest extends EssentialsChatPlayer {
 
         // This listener should apply the general chat formatting only...then return control back the event handler
         event.setMessage(FormatUtil.formatMessage(user, "essentials.chat", event.getMessage()));
+
+        if ((ChatColor.stripColor(event.getMessage())).length() == 0) {
+            event.setCancelled(true);
+            return;
+        }
+
         String group = user.getGroup();
         String world = user.getWorld().getName();
 
