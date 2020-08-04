@@ -9,7 +9,7 @@ import org.bukkit.event.HandlerList;
 /**
  * Called when a user is teleported home via the /home command.
  *
- * This is called before {@link net.ess3.api.events.UserTeleportEvent UserTeleportEvent}.
+ * This is called before {@link net.ess3.api.events.teleport.TeleportWarmupEvent TeleportWarmupEvent}.
  */
 public class UserTeleportHomeEvent extends Event implements Cancellable {
     private static final HandlerList handlers = new HandlerList();

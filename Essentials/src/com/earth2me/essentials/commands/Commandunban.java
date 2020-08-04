@@ -22,16 +22,17 @@ public class Commandunban extends EssentialsCommand {
         if (args.length < 1) {
             throw new NotEnoughArgumentsException();
         }
+
         String name;
         try {
             final User user = getPlayer(server, args, 0, true, true);
             name = user.getName();
             ess.getServer().getBanList(BanList.Type.NAME).pardon(name);
-        } catch (NoSuchFieldException e) {
+        } catch (PlayerNotFoundException e) {
             final OfflinePlayer player = server.getOfflinePlayer(args[0]);
             name = player.getName();
             if (!player.isBanned()) {
-                throw new Exception(tl("playerNotFound"), e);
+                throw new Exception(tl("playerNeverOnServer", args[0]));
             }
             ess.getServer().getBanList(BanList.Type.NAME).pardon(name);
         }
