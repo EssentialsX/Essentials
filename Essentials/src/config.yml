@@ -327,11 +327,11 @@ skip-used-one-time-kits-from-kit-list: false
 # Default is false.
 pastebin-createkit: false
 
-# Determines if /createkit will generate kits with item serialization.
-# By using serialization, there is added support for for complex items such as potions and shulker boxes.
-# **Warning**: This option only works on 1.15+ Paper servers and will bypass any custom serializers.
-# The old kit style and commands will still work and function as expected and are not planned to be removed.
-# If this is true, /createkit will use item serialization otherwise, it will use the regular item alias system.
+# Determines if /createkit will generate kits using NBT item serialization.
+# If this is true, /createkit will store items as NBT; otherwise, it will use Essentials' human-readable item format.
+# By using NBT serialization, /createkit can store items with complex metadata such as shulker boxes and weapons with custom attributes.
+# WARNING: This option only works on 1.15+ Paper servers, and it will bypass any custom serializers from other plugins such as Magic.
+# This option only affects /createkit - you can still create kits by hand in `kits.yml` using Essentials' human-readable item format.
 # Default is false.
 use-paper-serialization-in-createkit: false
 
