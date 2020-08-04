@@ -56,11 +56,6 @@ public class Commandtpaccept extends EssentialsCommand {
             user.sendMessage(tl("pendingTeleportCancelled"));
             return false;
         });
-        future.thenAccept(success -> {
-           if (success) {
-               user.requestTeleport(null, false);
-           }
-        });
         if (user.isTpRequestHere()) {
             final Location loc = user.getTpRequestLocation();
             AsyncTeleport teleport = (AsyncTeleport) requester.getAsyncTeleport();
@@ -76,6 +71,7 @@ public class Commandtpaccept extends EssentialsCommand {
             teleport.setTpType(AsyncTeleport.TeleportType.TPA);
             teleport.teleport(user.getBase(), charge, TeleportCause.COMMAND, future);
         }
+        user.requestTeleport(null, false);
     }
 
 }
