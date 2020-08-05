@@ -7,6 +7,7 @@ import com.earth2me.essentials.utils.EnumUtil;
 import com.earth2me.essentials.utils.LocationUtil;
 import com.earth2me.essentials.utils.NumberUtil;
 import com.earth2me.essentials.utils.StringUtil;
+import net.ess3.provider.SpawnerBlockProvider;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Server;
@@ -59,6 +60,13 @@ public class Commandspawner extends EssentialsCommand {
         try {
             CreatureSpawner spawner = (CreatureSpawner) target.getBlock().getState();
             spawner.setSpawnedType(mob.getType());
+            if (delay > 0) {
+                SpawnerBlockProvider spawnerBlockProvider = ess.getSpawnerBlockProvider();
+                spawnerBlockProvider.setMinSpawnDelay(spawner, 1);
+                spawnerBlockProvider.setMaxSpawnDelay(spawner, Integer.MAX_VALUE);
+                spawnerBlockProvider.setMinSpawnDelay(spawner, delay);
+                spawnerBlockProvider.setMaxSpawnDelay(spawner, delay);
+            }
             spawner.setDelay(delay);
             spawner.update();
         } catch (Throwable ex) {
