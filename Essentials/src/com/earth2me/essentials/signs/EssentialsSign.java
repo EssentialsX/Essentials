@@ -19,7 +19,6 @@ import org.bukkit.event.block.SignChangeEvent;
 import org.bukkit.inventory.ItemStack;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
@@ -266,7 +265,7 @@ public class EssentialsSign {
         return false;
     }
 
-    private String getSignText(final ISign sign, final int lineNumber) {
+    protected String getSignText(final ISign sign, final int lineNumber) {
         return sign.getLine(lineNumber).trim();
     }
 
@@ -437,33 +436,6 @@ public class EssentialsSign {
             return new Trade(money, ess);
         }
     }
-      
-    /**
-     * Updates the sign cost to the value of the item specified in worth.yml multiplied by a multiplier factor
-     * @param sign
-     * @param player
-     * @param ess
-     * @param multiplier multiply the worth price by this amount
-     * 
-     * @returns true if the price was changed, false otherwise
-     */
-    protected boolean updateFromWorth(final ISign sign, final User player, final IEssentials ess, final BigDecimal multiplier) throws SignException {
-        final ItemStack stack = getItemStack(getSignText(sign, 2), getIntegerPositive(sign.getLine(1)), ess);
-        final int amount = stack.getAmount();
-        BigDecimal price = ess.getWorth().getPrice(ess, stack);
-        if (price != null && amount > 0) {
-            price = price.multiply(multiplier).multiply(new BigDecimal(amount)).setScale(2, RoundingMode.UP);
-            final BigDecimal oldPrice = getMoney(getSignText(sign, 3), ess);
-            if (oldPrice == null || price.compareTo(oldPrice) != 0) {
-                final String priceString = NumberUtil.shortCurrency(price, ess);
-                sign.setLine(3, tl("signFormatWorth") + priceString);
-                sign.updateSign();
-                player.sendMessage(tl("priceChanged", amount, stack.getType().toString().toLowerCase(Locale.ENGLISH), (oldPrice == null ? tl("none") : NumberUtil.shortCurrency(oldPrice, ess)), priceString));
-                return true;
-            }
-        }
-        return false;
-  }
 
     private void showError(final IEssentials ess, final CommandSource sender, final Throwable exception, final String signName) {
         ess.showError(sender, exception, "\\ sign: " + signName);

@@ -11,7 +11,7 @@ import java.math.BigDecimal;
 
 import static com.earth2me.essentials.I18n.tl;
 
-public class SignBuy extends EssentialsSign {
+public class SignBuy extends EssentialsShopSign {
     public SignBuy() {
         super("Buy");
     }
@@ -20,9 +20,8 @@ public class SignBuy extends EssentialsSign {
     protected boolean onSignCreate(final ISign sign, final User player, final String username, final IEssentials ess) throws SignException {
         validateTrade(sign, 1, 2, player, ess);
         if(sign.getLine(3).isEmpty()) {
-            updateFromWorth(sign, player, ess, ess.getSettings().getEcoBuyMultiplier());
-        }
-        else {
+            updateFromWorthMultiplied(sign, player, ess);
+        } else {
             validateTrade(sign, 3, ess);
         }
         return true;
@@ -30,7 +29,7 @@ public class SignBuy extends EssentialsSign {
 
     @Override
     protected boolean onSignInteract(final ISign sign, final User player, final String username, final IEssentials ess) throws SignException, ChargeException, MaxMoneyException {
-        if(sign.getLine(3).startsWith(tl("signFormatWorth")) && updateFromWorth(sign, player, ess, ess.getSettings().getEcoBuyMultiplier())) {
+        if(sign.getLine(3).startsWith(tl("signFormatWorth")) && updateFromWorthMultiplied(sign, player, ess)) {
             return false;
         }
         Trade items = getTrade(sign, 1, 2, player, ess);
