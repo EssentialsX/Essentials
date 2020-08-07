@@ -44,8 +44,10 @@ public class Commandhat extends EssentialsCommand {
         ImmutableMap.Builder<String, Boolean> children = ImmutableMap.builder();
         for (Material mat : Material.values()) {
             final String matPerm = PERM_PREFIX + mat.name().toLowerCase();
-            children.put(matPerm, true);
-            toRegister.addPermission(new Permission(matPerm, "Prevent using " + mat + " as a type of hat.", PermissionDefault.FALSE));
+			 if (toRegister.getPermission(matPerm) == null) {
+				children.put(matPerm, true);
+				toRegister.addPermission(new Permission(matPerm, "Prevent using " + mat + " as a type of hat.", PermissionDefault.FALSE));
+			 }
         }
         toRegister.addPermission(new Permission(PERM_PREFIX + "*", "Prevent all types of hats", PermissionDefault.FALSE, children.build()));
     }
