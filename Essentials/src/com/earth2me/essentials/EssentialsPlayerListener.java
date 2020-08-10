@@ -187,7 +187,7 @@ public class EssentialsPlayerListener implements Listener {
     public void onPlayerQuit(final PlayerQuitEvent event) {
         final User user = ess.getUser(event.getPlayer());
 
-        if (ess.getSettings().allowSilentJoinQuit() && user.isAuthorized("essentials.silentquit")) {
+        if (hideJoinQuitMessages() || (ess.getSettings().allowSilentJoinQuit() && user.isAuthorized("essentials.silentquit"))) {
             event.setQuitMessage(null);
         } else if (ess.getSettings().isCustomQuitMessage() && event.getQuitMessage() != null) {
             final Player player = event.getPlayer();
@@ -212,7 +212,8 @@ public class EssentialsPlayerListener implements Listener {
             user.getBase().getOpenInventory().getTopInventory().clear();
         }
 
-        for (HumanEntity viewer : user.getBase().getInventory().getViewers()) {
+        ArrayList<HumanEntity> viewers = new ArrayList<>(user.getBase().getInventory().getViewers());
+        for (HumanEntity viewer : viewers) {
             if (viewer instanceof Player) {
                 User uviewer = ess.getUser((Player) viewer);
                 if (uviewer.isInvSee()) {
@@ -235,9 +236,13 @@ public class EssentialsPlayerListener implements Listener {
         final String joinMessage = event.getJoinMessage();
         ess.runTaskAsynchronously(() -> delayedJoin(event.getPlayer(), joinMessage));
 
-        if (ess.getSettings().allowSilentJoinQuit() || ess.getSettings().isCustomJoinMessage()) {
+        if (hideJoinQuitMessages() || ess.getSettings().allowSilentJoinQuit() || ess.getSettings().isCustomJoinMessage()) {
             event.setJoinMessage(null);
         }
+    }
+
+    private boolean hideJoinQuitMessages() {
+        return ess.getSettings().hasJoinQuitMessagePlayerCount() && ess.getServer().getOnlinePlayers().size() > ess.getSettings().getJoinQuitMessagePlayerCount();
     }
 
     public void delayedJoin(final Player player, final String message) {
@@ -294,7 +299,7 @@ public class EssentialsPlayerListener implements Listener {
                     if (user.isAuthorized("essentials.silentjoin.vanish")) {
                         user.setVanished(true);
                     }
-                } else if (message == null) {
+                } else if (message == null || hideJoinQuitMessages()) {
                     //NOOP
                 } else if (ess.getSettings().isCustomJoinMessage()) {
                     String msg = ess.getSettings().getCustomJoinMessage()
@@ -906,14 +911,14 @@ public class EssentialsPlayerListener implements Listener {
         /**
          * Returns true if all of the following are true:
          * - The command is a plugin command
-         * - The plugin command is from Essentials
+         * - The plugin command is from a plugin in an essentials-controlled package
          * - There is no known alternative OR the alternative is overridden by Essentials
          */
         private boolean isEssentialsCommand(String label) {
             PluginCommand command = ess.getServer().getPluginCommand(label);
 
             return command != null
-                    && command.getPlugin() == ess
+                    && (command.getPlugin() == ess || command.getPlugin().getClass().getName().startsWith("com.earth2me.essentials"))
                     && (ess.getSettings().isCommandOverridden(label) || (ess.getAlternativeCommandsHandler().getAlternative(label) == null));
         }
     }

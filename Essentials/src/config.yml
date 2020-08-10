@@ -372,7 +372,10 @@ allow-old-id-signs: false
 unprotected-sign-names:
   #- kit
 
-# Backup runs a batch/bash command while saving is disabled.
+# Backup runs a custom batch/bash command at a specified interval.
+# The server will save the world before executing the backup command, and disable
+# saving during the backup to prevent world corruption or other conflicts.
+# Backups can also be triggered manually with /backup.
 backup:
   # Interval in minutes.
   interval: 30
@@ -380,6 +383,7 @@ backup:
   always-run: false
   # Unless you add a valid backup command or script here, this feature will be useless.
   # Use 'save-all' to simply force regular world saving without backup.
+  # The example command below utilizes rdiff-backup: https://rdiff-backup.net/
   #command: 'rdiff-backup World1 backups/World1'
 
 # Set this true to enable permission per warp.
@@ -484,10 +488,16 @@ send-info-after-death: false
 # In addition, people with essentials.silentjoin.vanish will be vanished on join.
 allow-silent-join-quit: false
 
-# You can set custom join and quit messages here. Set to "none" to use the default message or "" to disable the message entirely.
+# You can set custom join and quit messages here. Set this to "none" to use the default Minecraft message,
+# or set this to "" to hide the message entirely.
 # You may use color codes, {USERNAME} for the player's name, and {PLAYER} for the player's displayname.
 custom-join-message: "none"
 custom-quit-message: "none"
+
+# You can disable join and quit messages when the player count reaches a certain limit.
+# When the player count is below this number, join/quit messages will always be shown.
+# Set this to -1 to always show join and quit messages regardless of player count.
+hide-join-quit-messages-above: -1
 
 # Add worlds to this list, if you want to automatically disable god mode there.
 no-god-in-worlds:
@@ -1027,6 +1037,9 @@ spawn-join-listener-priority: high
 
 # When users die, should they respawn at their first home or bed, instead of the spawnpoint?
 respawn-at-home: false
+
+# When users die, should EssentialsSpawn respect users' respawn anchors?
+respawn-at-anchor: false
 
 # Teleport all joining players to the spawnpoint
 spawn-on-join: false

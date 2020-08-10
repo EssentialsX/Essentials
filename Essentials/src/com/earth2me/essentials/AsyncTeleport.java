@@ -8,8 +8,9 @@ import io.papermc.lib.PaperLib;
 import net.ess3.api.IEssentials;
 import net.ess3.api.IUser;
 import net.ess3.api.InvalidWorldException;
-import net.ess3.api.events.UserTeleportEvent;
 import net.ess3.api.events.UserWarpEvent;
+import net.ess3.api.events.teleport.PreTeleportEvent;
+import net.ess3.api.events.teleport.TeleportWarmupEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -157,7 +158,7 @@ public class AsyncTeleport implements IAsyncTeleport {
     protected void nowAsync(IUser teleportee, ITarget target, TeleportCause cause, CompletableFuture<Boolean> future) {
         cancel(false);
 
-        UserTeleportEvent event = new UserTeleportEvent(teleportee, cause, target.getLocation());
+        PreTeleportEvent event = new PreTeleportEvent(teleportee, cause, target);
         Bukkit.getServer().getPluginManager().callEvent(event);
         if (event.isCancelled()) {
             return;
@@ -245,6 +246,13 @@ public class AsyncTeleport implements IAsyncTeleport {
     private void teleport(IUser teleportee, ITarget target, Trade chargeFor, TeleportCause cause, CompletableFuture<Boolean> future) {
         double delay = ess.getSettings().getTeleportDelay();
 
+        TeleportWarmupEvent event = new TeleportWarmupEvent(teleportee, cause, target, delay);
+        Bukkit.getServer().getPluginManager().callEvent(event);
+        if (event.isCancelled()) {
+            return;
+        }
+        delay = event.getDelay();
+
         Trade cashCharge = chargeFor;
 
         if (chargeFor != null) {
@@ -284,6 +292,13 @@ public class AsyncTeleport implements IAsyncTeleport {
 
     private void teleportOther(IUser teleporter, IUser teleportee, ITarget target, Trade chargeFor, TeleportCause cause, CompletableFuture<Boolean> future) {
         double delay = ess.getSettings().getTeleportDelay();
+
+        TeleportWarmupEvent event = new TeleportWarmupEvent(teleportee, cause, target, delay);
+        Bukkit.getServer().getPluginManager().callEvent(event);
+        if (event.isCancelled()) {
+            return;
+        }
+        delay = event.getDelay();
 
         Trade cashCharge = chargeFor;
 
@@ -329,6 +344,14 @@ public class AsyncTeleport implements IAsyncTeleport {
     @Override
     public void respawn(Trade chargeFor, TeleportCause cause, CompletableFuture<Boolean> future) {
         double delay = ess.getSettings().getTeleportDelay();
+
+        TeleportWarmupEvent event = new TeleportWarmupEvent(teleportOwner, cause, null, delay);
+        Bukkit.getServer().getPluginManager().callEvent(event);
+        if (event.isCancelled()) {
+            return;
+        }
+        delay = event.getDelay();
+
         if (chargeFor != null) {
             chargeFor.isAffordableFor(teleportOwner, future);
             if (future.isCompletedExceptionally()) {

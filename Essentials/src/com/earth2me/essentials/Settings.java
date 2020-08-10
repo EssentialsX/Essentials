@@ -62,6 +62,11 @@ public class Settings implements net.ess3.api.ISettings {
     }
 
     @Override
+    public boolean isRespawnAtAnchor() {
+        return config.getBoolean("respawn-at-anchor", false);
+    }
+
+    @Override
     public boolean getUpdateBedAtDaytime() {
         return config.getBoolean("update-bed-at-daytime", true);
     }
@@ -1283,6 +1288,16 @@ public class Settings implements net.ess3.api.ISettings {
     @Override
     public boolean isCustomQuitMessage() {
         return isCustomQuitMessage;
+    }
+
+    @Override
+    public int getJoinQuitMessagePlayerCount() {
+        return config.getInt("hide-join-quit-messages-above", -1);
+    }
+
+    @Override
+    public boolean hasJoinQuitMessagePlayerCount() {
+        return getJoinQuitMessagePlayerCount() >= 0;
     }
 
     @Override

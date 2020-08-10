@@ -914,6 +914,11 @@ public class FakeServer implements Server {
     }
 
     @Override
+    public Recipe getRecipe(NamespacedKey namespacedKey) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
     public Iterator<Recipe> recipeIterator() {
         throw new UnsupportedOperationException("Not supported yet.");
     }

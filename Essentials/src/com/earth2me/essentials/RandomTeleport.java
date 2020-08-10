@@ -1,9 +1,11 @@
 package com.earth2me.essentials;
 
+import com.earth2me.essentials.utils.LocationUtil;
 import com.earth2me.essentials.utils.VersionUtil;
 import io.papermc.lib.PaperLib;
 import net.ess3.api.InvalidWorldException;
 import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.block.Biome;
 
 import java.io.File;
@@ -95,7 +97,7 @@ public class RandomTeleport implements IConf {
     }
 
     public boolean getPreCache() {
-        return config.getBoolean("pre-cache", true);
+        return config.getBoolean("pre-cache", false);
     }
 
     public Queue<Location> getCachedLocations() {
@@ -153,23 +155,54 @@ public class RandomTeleport implements IConf {
     // Calculates a random location asynchronously.
     private CompletableFuture<Location> calculateRandomLocation(Location center, double minRange, double maxRange) {
         CompletableFuture<Location> future = new CompletableFuture<>();
-        final int dx = RANDOM.nextBoolean() ? 1 : -1, dz = RANDOM.nextBoolean() ? 1 : -1;
+        // Find an equally distributed offset by randomly rotating a point inside a rectangle about the origin
+        double rectX = RANDOM.nextDouble() * (maxRange - minRange) + minRange;
+        double rectZ = RANDOM.nextDouble() * (maxRange + minRange) - minRange;
+        double offsetX, offsetZ;
+        int transform = RANDOM.nextInt(4);
+        if (transform == 0) {
+            offsetX = rectX;
+            offsetZ = rectZ;
+        } else if (transform == 1) {
+            offsetX = -rectZ;
+            offsetZ = rectX;
+        } else if (transform == 2) {
+            offsetX = -rectX;
+            offsetZ = -rectZ;
+        } else {
+            offsetX = rectZ;
+            offsetZ = -rectX;
+        }
         Location location = new Location(
                 center.getWorld(),
-                center.getX() + dx * (minRange + RANDOM.nextDouble() * (maxRange - minRange)),
+                center.getX() + offsetX,
                 center.getWorld().getMaxHeight(),
-                center.getZ() + dz * (minRange + RANDOM.nextDouble() * (maxRange - minRange)),
+                center.getZ() + offsetZ,
                 360 * RANDOM.nextFloat() - 180,
                 0
         );
         PaperLib.getChunkAtAsync(location).thenAccept(chunk -> {
-            location.setY(center.getWorld().getHighestBlockYAt(location) + HIGHEST_BLOCK_Y_OFFSET);
+            if (World.Environment.NETHER.equals(center.getWorld().getEnvironment())) {
+                location.setY(getNetherYAt(location));
+            } else {
+                location.setY(center.getWorld().getHighestBlockYAt(location) + HIGHEST_BLOCK_Y_OFFSET);
+            }
             future.complete(location);
         });
         return future;
     }
 
+    // Returns an appropriate elevation for a given location in the nether, or -1 if none is found
+    private double getNetherYAt(Location location) {
+        for (int y = 32; y < location.getWorld().getMaxHeight() / 2; ++y) {
+            if (!LocationUtil.isBlockUnsafe(location.getWorld(), location.getBlockX(), y, location.getBlockZ())) {
+                return y;
+            }
+        }
+        return -1;
+    }
+
     private boolean isValidRandomLocation(Location location) {
-        return !this.getExcludedBiomes().contains(location.getBlock().getBiome());
+        return location.getBlockY() > 0 && !this.getExcludedBiomes().contains(location.getBlock().getBiome());
     }
 }

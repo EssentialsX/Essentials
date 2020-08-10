@@ -62,7 +62,11 @@ public class Commandseen extends EssentialsCommand {
                         if (userFromBukkit != null) {
                             showUserSeen(userFromBukkit);
                         } else {
-                            showUserSeen(getPlayer(server, sender, args, 0));
+                            try {
+                                showUserSeen(getPlayer(server, sender, args, 0));
+                            } catch (PlayerNotFoundException e) {
+                                throw new Exception(tl("playerNeverOnServer", args[0]));
+                            }
                         }
                     } catch (Exception e) {
                         ess.showError(sender, e, commandLabel);
@@ -70,9 +74,6 @@ public class Commandseen extends EssentialsCommand {
                 }
 
                 private void showUserSeen(User user) throws Exception {
-                    if (user == null) {
-                        throw new PlayerNotFoundException();
-                    }
                     showSeenMessage(sender, user, showBan, showIp, showLocation);
                 }
             });

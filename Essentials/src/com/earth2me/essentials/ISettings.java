@@ -107,6 +107,8 @@ public interface ISettings extends IConf {
 
     boolean getRespawnAtHome();
 
+    boolean isRespawnAtAnchor();
+
     Set getMultipleHomes();
 
     int getHomeLimit(String set);
@@ -209,6 +211,10 @@ public interface ISettings extends IConf {
     KeepInvPolicy getVanishingItemsPolicy();
 
     KeepInvPolicy getBindingItemsPolicy();
+
+    int getJoinQuitMessagePlayerCount();
+
+    boolean hasJoinQuitMessagePlayerCount();
 
     enum KeepInvPolicy {
         KEEP,

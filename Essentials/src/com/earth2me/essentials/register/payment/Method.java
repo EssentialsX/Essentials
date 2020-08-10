@@ -34,6 +34,13 @@ public interface Method {
     String getName();
 
     /**
+     * Returns the backend plugin of this economy method, if applicable.
+     *
+     * @return <code>String</code> Plugin name.
+     */
+    String getBackend();
+
+    /**
      * Returns the reported name of this method.
      *
      * @return <code>String</code> Plugin name.
