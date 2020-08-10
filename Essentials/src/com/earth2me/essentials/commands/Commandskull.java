@@ -9,6 +9,7 @@ import org.bukkit.Material;
 import org.bukkit.Server;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.Collections;
 import java.util.List;
@@ -55,17 +56,30 @@ public class Commandskull extends EssentialsCommand {
             throw new Exception(tl("noPermissionSkull"));
         }
 
-        metaSkull.setDisplayName("§fSkull of " + owner);
-        metaSkull.setOwner(owner);
-        itemSkull.setItemMeta(metaSkull);
+        editSkull(user, itemSkull, metaSkull, owner, spawn);
+    }
 
-        if (spawn) {
-            InventoryWorkaround.addItems(user.getBase().getInventory(), itemSkull);
-            user.sendMessage(tl("givenSkull", owner));
-            return;
-        }
-
-        user.sendMessage(tl("skullChanged", owner));
+    private void editSkull(User user, ItemStack stack, SkullMeta skullMeta, String owner, boolean spawn) {
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                //Run this stuff async because SkullMeta#setOwner causes a http request.
+                skullMeta.setDisplayName("§fSkull of " + owner);
+                skullMeta.setOwner(owner);
+                new BukkitRunnable() {
+                    @Override
+                    public void run() {
+                        stack.setItemMeta(skullMeta);
+                        if (spawn) {
+                            InventoryWorkaround.addItems(user.getBase().getInventory(), stack);
+                            user.sendMessage(tl("givenSkull", owner));
+                            return;
+                        }
+                        user.sendMessage(tl("skullChanged", owner));
+                    }
+                }.runTask(ess);
+            }
+        }.runTaskAsynchronously(ess);
     }
 
     @Override
