@@ -226,10 +226,8 @@ public class Commandremove extends EssentialsCommand {
                             break;
                         case ENTITIES:
                         case ALL:
-                            if (e instanceof Entity) {
-                                e.remove();
-                                removed++;
-                            }
+                            e.remove();
+                            removed++;
                             break;
                         case CUSTOM:
                             for (Mob type : customRemoveTypes) {

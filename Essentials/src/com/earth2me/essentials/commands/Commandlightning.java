@@ -3,55 +3,54 @@ package com.earth2me.essentials.commands;
 import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.User;
 import com.google.common.collect.Lists;
-
-import org.bukkit.Material;
 import org.bukkit.Server;
 import org.bukkit.entity.LightningStrike;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Set;
 
 import static com.earth2me.essentials.I18n.tl;
 
 
 public class Commandlightning extends EssentialsLoopCommand {
-    int power = 5;
-
     public Commandlightning() {
         super("lightning");
     }
 
     @Override
     public void run(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception {
-        if (sender.isPlayer()) {
-            User user = ess.getUser(sender.getPlayer());
-            if ((args.length < 1 || !user.isAuthorized("essentials.lightning.others"))) {
-                user.getWorld().strikeLightning(user.getBase().getTargetBlock(null, 600).getLocation());
+        if (args.length == 0) {
+            if (sender.isPlayer() || !sender.isAuthorized("essentials.lightning.others", ess)) {
+                sender.getPlayer().getWorld().strikeLightning(sender.getPlayer().getTargetBlock(null, 600).getLocation());
                 return;
             }
+            throw new NotEnoughArgumentsException();
         }
 
+        int power = 5;
         if (args.length > 1) {
             try {
                 power = Integer.parseInt(args[1]);
             } catch (NumberFormatException ignored) {
             }
         }
+        final int finalPower = power;
+        loopOnlinePlayersConsumer(server, sender, false, true, args[0], player -> {
+            sender.sendMessage(tl("lightningUse", player.getDisplayName()));
+            final LightningStrike strike = player.getBase().getWorld().strikeLightningEffect(player.getBase().getLocation());
+
+            if (!player.isGodModeEnabled()) {
+                player.getBase().damage(finalPower, strike);
+            }
+            if (ess.getSettings().warnOnSmite()) {
+                player.sendMessage(tl("lightningSmited"));
+            }
+        });
         loopOnlinePlayers(server, sender, true, true, args[0], null);
     }
 
     @Override
     protected void updatePlayer(final Server server, final CommandSource sender, final User matchUser, final String[] args) {
-        sender.sendMessage(tl("lightningUse", matchUser.getDisplayName()));
-        final LightningStrike strike = matchUser.getBase().getWorld().strikeLightningEffect(matchUser.getBase().getLocation());
-
-        if (!matchUser.isGodModeEnabled()) {
-            matchUser.getBase().damage(power, strike);
-        }
-        if (ess.getSettings().warnOnSmite()) {
-            matchUser.sendMessage(tl("lightningSmited"));
-        }
     }
 
     @Override
@@ -69,7 +68,7 @@ public class Commandlightning extends EssentialsLoopCommand {
         if (args.length == 1) {
             return getPlayers(server, sender);
         } else if (args.length == 2) {
-            return Lists.newArrayList(Integer.toString(this.power));
+            return Lists.newArrayList("5");
         } else {
             return Collections.emptyList();
         }

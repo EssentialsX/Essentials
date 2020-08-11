@@ -44,7 +44,7 @@ public class Commandbalancetop extends EssentialsCommand {
         if (!force && lock.readLock().tryLock()) {
             try {
                 if (cacheage > System.currentTimeMillis() - CACHETIME) {
-                    outputCache(sender, commandLabel, page);
+                    outputCache(sender, page);
                     return;
                 }
                 if (ess.getUserMap().getUniqueUsers() > MINUSERS) {
@@ -53,17 +53,16 @@ public class Commandbalancetop extends EssentialsCommand {
             } finally {
                 lock.readLock().unlock();
             }
-            ess.runTaskAsynchronously(new Viewer(sender, commandLabel, page, force));
         } else {
             if (ess.getUserMap().getUniqueUsers() > MINUSERS) {
                 sender.sendMessage(tl("orderBalances", ess.getUserMap().getUniqueUsers()));
             }
-            ess.runTaskAsynchronously(new Viewer(sender, commandLabel, page, force));
         }
+        ess.runTaskAsynchronously(new Viewer(sender, commandLabel, page, force));
 
     }
 
-    private static void outputCache(final CommandSource sender, String command, int page) {
+    private static void outputCache(final CommandSource sender, int page) {
         final Calendar cal = Calendar.getInstance();
         cal.setTimeInMillis(cacheage);
         final DateFormat format = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT);
@@ -149,7 +148,7 @@ public class Commandbalancetop extends EssentialsCommand {
             lock.readLock().lock();
             try {
                 if (!force && cacheage > System.currentTimeMillis() - CACHETIME) {
-                    outputCache(sender, commandLabel, page);
+                    outputCache(sender, page);
                     return;
                 }
             } finally {

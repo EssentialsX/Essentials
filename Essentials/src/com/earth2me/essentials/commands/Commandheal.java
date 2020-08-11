@@ -30,7 +30,7 @@ public class Commandheal extends EssentialsLoopCommand {
             return;
         }
 
-        healPlayer(user);
+        updatePlayer(server, user.getSource(), user, args);
     }
 
     @Override
@@ -43,42 +43,38 @@ public class Commandheal extends EssentialsLoopCommand {
     }
 
     @Override
-    protected void updatePlayer(final Server server, final CommandSource sender, final User player, final String[] args) throws PlayerExemptException {
+    protected void updatePlayer(final Server server, final CommandSource sender, final User user, final String[] args) throws PlayerExemptException {
         try {
-            healPlayer(player);
-            sender.sendMessage(tl("healOther", player.getDisplayName()));
+            final Player player = user.getBase();
+
+            if (player.getHealth() == 0) {
+                throw new PlayerExemptException(tl("healDead"));
+            }
+
+            final double amount = player.getMaxHealth() - player.getHealth();
+            final EntityRegainHealthEvent erhe = new EntityRegainHealthEvent(player, amount, RegainReason.CUSTOM);
+            ess.getServer().getPluginManager().callEvent(erhe);
+            if (erhe.isCancelled()) {
+                throw new QuietAbortException();
+            }
+
+            double newAmount = player.getHealth() + erhe.getAmount();
+            if (newAmount > player.getMaxHealth()) {
+                newAmount = player.getMaxHealth();
+            }
+
+            player.setHealth(newAmount);
+            player.setFoodLevel(20);
+            player.setFireTicks(0);
+            user.sendMessage(tl("heal"));
+            if (ess.getSettings().isRemovingEffectsOnHeal()) {
+                for (PotionEffect effect : player.getActivePotionEffects()) {
+                    player.removePotionEffect(effect.getType());
+                }
+            }
+            sender.sendMessage(tl("healOther", user.getDisplayName()));
         } catch (QuietAbortException e) {
             //Handle Quietly
-        }
-    }
-
-    private void healPlayer(final User user) throws PlayerExemptException, QuietAbortException {
-        final Player player = user.getBase();
-
-        if (player.getHealth() == 0) {
-            throw new PlayerExemptException(tl("healDead"));
-        }
-
-        final double amount = player.getMaxHealth() - player.getHealth();
-        final EntityRegainHealthEvent erhe = new EntityRegainHealthEvent(player, amount, RegainReason.CUSTOM);
-        ess.getServer().getPluginManager().callEvent(erhe);
-        if (erhe.isCancelled()) {
-            throw new QuietAbortException();
-        }
-
-        double newAmount = player.getHealth() + erhe.getAmount();
-        if (newAmount > player.getMaxHealth()) {
-            newAmount = player.getMaxHealth();
-        }
-
-        player.setHealth(newAmount);
-        player.setFoodLevel(20);
-        player.setFireTicks(0);
-        user.sendMessage(tl("heal"));
-        if (ess.getSettings().isRemovingEffectsOnHeal()) {
-            for (PotionEffect effect : player.getActivePotionEffects()) {
-                player.removePotionEffect(effect.getType());
-            }
         }
     }
 

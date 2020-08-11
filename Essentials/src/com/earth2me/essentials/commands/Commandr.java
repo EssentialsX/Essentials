@@ -24,10 +24,8 @@ public class Commandr extends EssentialsCommand {
 
         String message = getFinalArg(args, 0);
         IMessageRecipient messageSender;
-
         if (sender.isPlayer()) {
             User user = ess.getUser(sender.getPlayer());
-
             if (user.isMuted()) {
                 String dateDiff = user.getMuteTimeout() > 0 ? DateUtil.formatDateDiff(user.getMuteTimeout()) : null;
                 if (dateDiff == null) {

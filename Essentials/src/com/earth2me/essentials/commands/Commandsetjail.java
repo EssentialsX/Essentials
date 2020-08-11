@@ -19,6 +19,5 @@ public class Commandsetjail extends EssentialsCommand {
         }
         ess.getJails().setJail(args[0], user.getLocation());
         user.sendMessage(tl("jailSet", StringUtil.sanitizeString(args[0])));
-
     }
 }

@@ -27,7 +27,6 @@ public class Commandsell extends EssentialsCommand {
     @Override
     public void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception {
         BigDecimal totalWorth = BigDecimal.ZERO;
-        String type = "";
         if (args.length < 1) {
             throw new NotEnoughArgumentsException();
         }
@@ -82,9 +81,9 @@ public class Commandsell extends EssentialsCommand {
         }
         if (count != 1) {
             if (args[0].equalsIgnoreCase("blocks")) {
-                user.sendMessage(tl("totalWorthBlocks", type, NumberUtil.displayCurrency(totalWorth, ess)));
+                user.sendMessage(tl("totalWorthBlocks", NumberUtil.displayCurrency(totalWorth, ess)));
             } else {
-                user.sendMessage(tl("totalWorthAll", type, NumberUtil.displayCurrency(totalWorth, ess)));
+                user.sendMessage(tl("totalWorthAll", NumberUtil.displayCurrency(totalWorth, ess)));
             }
         }
     }

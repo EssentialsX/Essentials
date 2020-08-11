@@ -1,9 +1,7 @@
 package com.earth2me.essentials.commands;
 
-import com.earth2me.essentials.ChargeException;
 import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.User;
-import net.ess3.api.MaxMoneyException;
 import org.bukkit.Server;
 
 import java.util.Locale;
@@ -22,20 +20,15 @@ public class Commandsudo extends EssentialsLoopCommand {
             throw new NotEnoughArgumentsException();
         }
 
-        final String[] arguments = new String[args.length - 1];
-        if (arguments.length > 0) {
-            System.arraycopy(args, 1, arguments, 0, args.length - 1);
-        }
-
-        final String command = getFinalArg(arguments, 0);
+        final String command = getFinalArg(args, 1);
         boolean multiple = !sender.isPlayer() || ess.getUser(sender.getPlayer()).isAuthorized("essentials.sudo.multiple");
 
         sender.sendMessage(tl("sudoRun", args[0], command, ""));
-        loopOnlinePlayers(server, sender, multiple, multiple, args[0], new String[]{command});
+        loopOnlinePlayers(server, sender, false, multiple, args[0], new String[]{command});
     }
 
     @Override
-    protected void updatePlayer(final Server server, final CommandSource sender, final User user, String[] args) throws NotEnoughArgumentsException, PlayerExemptException, ChargeException, MaxMoneyException {
+    protected void updatePlayer(final Server server, final CommandSource sender, final User user, String[] args) {
         if (user.getName().equals(sender.getSender().getName())) {
             return; // Silently don't do anything.
         }
@@ -51,7 +44,7 @@ public class Commandsudo extends EssentialsLoopCommand {
         }
 
         final String command = getFinalArg(args, 0);
-        if (command != null && command.length() > 0) {
+        if (command.length() > 0) {
             class SudoCommandTask implements Runnable {
                 @Override
                 public void run() {

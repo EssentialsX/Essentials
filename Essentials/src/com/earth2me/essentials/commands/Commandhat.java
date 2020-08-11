@@ -52,42 +52,46 @@ public class Commandhat extends EssentialsCommand {
 
     @Override
     protected void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception {
-        if (args.length > 0 && (args[0].contains("rem") || args[0].contains("off") || args[0].equalsIgnoreCase("0"))) {
+        if (args.length == 0 || (!args[0].contains("rem") && !args[0].contains("off") && !args[0].equalsIgnoreCase("0"))) {
+            final ItemStack hand = user.getItemInHand();
+            if (hand == null || hand.getType() == Material.AIR) {
+                user.sendMessage(tl("hatFail"));
+                return;
+            }
+
+            if (user.isAuthorized("essentials.hat.prevent-type." + hand.getType().name().toLowerCase())) {
+                user.sendMessage(tl("hatFail"));
+                return;
+            }
+
+            if (hand.getType().getMaxDurability() != 0) {
+                user.sendMessage(tl("hatArmor"));
+                return;
+            }
+
             final PlayerInventory inv = user.getBase().getInventory();
             final ItemStack head = inv.getHelmet();
-            if (head == null || head.getType() == Material.AIR) {
-                user.sendMessage(tl("hatEmpty"));
-            } else if (VersionUtil.getServerBukkitVersion().isHigherThan(VersionUtil.v1_9_4_R01) && head.getEnchantments().containsKey(Enchantment.BINDING_CURSE) && !user.isAuthorized("essentials.hat.ignore-binding")) {
+            if (VersionUtil.getServerBukkitVersion().isHigherThan(VersionUtil.v1_9_4_R01) && head != null && head.getEnchantments().containsKey(Enchantment.BINDING_CURSE) && !user.isAuthorized("essentials.hat.ignore-binding")) {
                 user.sendMessage(tl("hatCurse"));
-            } else {
-                final ItemStack air = new ItemStack(Material.AIR);
-                inv.setHelmet(air);
-                InventoryWorkaround.addItems(user.getBase().getInventory(), head);
-                user.sendMessage(tl("hatRemoved"));
+                return;
             }
+            inv.setHelmet(hand);
+            inv.setItemInHand(head);
+            user.sendMessage(tl("hatPlaced"));
+            return;
+        }
+
+        final PlayerInventory inv = user.getBase().getInventory();
+        final ItemStack head = inv.getHelmet();
+        if (head == null || head.getType() == Material.AIR) {
+            user.sendMessage(tl("hatEmpty"));
+        } else if (VersionUtil.getServerBukkitVersion().isHigherThan(VersionUtil.v1_9_4_R01) && head.getEnchantments().containsKey(Enchantment.BINDING_CURSE) && !user.isAuthorized("essentials.hat.ignore-binding")) {
+            user.sendMessage(tl("hatCurse"));
         } else {
-            final ItemStack hand = user.getItemInHand();
-            if (hand != null && hand.getType() != Material.AIR) {
-                if (user.isAuthorized("essentials.hat.prevent-type." + hand.getType().name().toLowerCase())) {
-                    user.sendMessage(tl("hatFail"));
-                    return;
-                }
-                if (hand.getType().getMaxDurability() == 0) {
-                    final PlayerInventory inv = user.getBase().getInventory();
-                    final ItemStack head = inv.getHelmet();
-                    if (VersionUtil.getServerBukkitVersion().isHigherThan(VersionUtil.v1_9_4_R01) && head != null && head.getEnchantments().containsKey(Enchantment.BINDING_CURSE) && !user.isAuthorized("essentials.hat.ignore-binding")) {
-                        user.sendMessage(tl("hatCurse"));
-                        return;
-                    }
-                    inv.setHelmet(hand);
-                    inv.setItemInHand(head);
-                    user.sendMessage(tl("hatPlaced"));
-                } else {
-                    user.sendMessage(tl("hatArmor"));
-                }
-            } else {
-                user.sendMessage(tl("hatFail"));
-            }
+            final ItemStack air = new ItemStack(Material.AIR);
+            inv.setHelmet(air);
+            InventoryWorkaround.addItems(user.getBase().getInventory(), head);
+            user.sendMessage(tl("hatRemoved"));
         }
     }
 
