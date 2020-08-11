@@ -10,7 +10,7 @@ This is a fork of Essentials called EssentialsX.
 
 If you are using this, do **NOT** ask Essentials for support.
 
-The official upstream repository is at https://github.com/Essentials/Essentials.
+The official upstream repository for the original Essentials project is at https://github.com/Essentials/Essentials.
 
 
 Why use EssentialsX?
@@ -26,7 +26,7 @@ EssentialsX is almost a completely drop-in replacement for Essentials. However, 
 
 * **EssentialsX requires Java 8 or higher.** On older versions, the plugin may not work properly.
 
-* **EssentialsX supports Minecraft versions 1.8.8, 1.9.4, 1.10.2, 1.11.2, 1.12.2, 1.13.2, 1.14.4, 1.15.2, and 1.16.1.**
+* **EssentialsX supports Minecraft versions 1.8.8, 1.9.4, 1.10.2, 1.11.2, 1.12.2, 1.13.2, 1.14.4, 1.15.2, and 1.16.2.**
 
 
 Support
@@ -50,7 +50,7 @@ Each module's jar can be found in `target/` inside each module's directory.
 Using EssentialsX in your plugin
 --------------------------------
 
-Do you want to integrate with EssentialsX in your plugin? EssentialsX is available on the **ender.zone Maven repository** at https://ci.ender.zone/plugin/repository/everything/, and the EssentialsX artifact is `net.ess3:EssentialsX:2.17.2`.
+Do you want to integrate with EssentialsX in your plugin? EssentialsX is available on the **ender.zone Maven repository** at https://ci.ender.zone/plugin/repository/everything/, and the EssentialsX artifact is `net.ess3:EssentialsX:2.18.1`.
 More information at the [wiki](https://github.com/EssentialsX/Essentials/wiki/Common-Issues#how-do-i-add-essentialsx-as-a-dependency).
 
 
