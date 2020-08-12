@@ -26,7 +26,7 @@ public class Commandgamemode extends EssentialsLoopCommand {
         } else if (args.length == 1) {
             loopOnlinePlayersConsumer(server, sender, false, true, args[0], user -> setUserGamemode(sender, matchGameMode(commandLabel), user));
         } else if (args.length == 2) {
-            loopOnlinePlayersConsumer(server, sender, false, true, args[1], user -> setUserGamemode(sender, matchGameMode(commandLabel), user));
+            loopOnlinePlayersConsumer(server, sender, false, true, args[1], user -> setUserGamemode(sender, matchGameMode(args[0]), user));
         }
 
     }
@@ -85,6 +85,7 @@ public class Commandgamemode extends EssentialsLoopCommand {
 
     private GameMode matchGameMode(String modeString) throws NotEnoughArgumentsException {
         GameMode mode = null;
+        modeString = modeString.toLowerCase();
         if (modeString.equalsIgnoreCase("gmc") || modeString.equalsIgnoreCase("egmc") || modeString.contains("creat") || modeString.equalsIgnoreCase("1") || modeString.equalsIgnoreCase("c")) {
             mode = GameMode.CREATIVE;
         } else if (modeString.equalsIgnoreCase("gms") || modeString.equalsIgnoreCase("egms") || modeString.contains("survi") || modeString.equalsIgnoreCase("0") || modeString.equalsIgnoreCase("s")) {
