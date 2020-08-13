@@ -361,7 +361,7 @@ public class MetaItemStack {
                 if (NumberUtil.isInt(split[1])) {
                     validPotionPower = true;
                     power = Integer.parseInt(split[1]);
-                    if (power > 0 && power < 4) {
+                    if (power > 0) {
                         power -= 1;
                     }
                 } else {
