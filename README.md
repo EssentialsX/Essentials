@@ -1,4 +1,4 @@
-[![EssentialsX](https://i.imgur.com/CP4SZpB.png)](https://essentialsx.cf)
+[![EssentialsX](https://i.imgur.com/CP4SZpB.png)](https://essentialsx.net)
 
 [<img alt="Jenkins" src="https://img.shields.io/badge/-Download_from_Jenkins-D24939.svg?logo=jenkins&style=flat-square&logoColor=white" height=32>](http://ci.ender.zone/job/EssentialsX/)
 
@@ -16,7 +16,7 @@ The official upstream repository for the original Essentials project is at https
 Why use EssentialsX?
 --------
 
-EssentialsX is an unofficial continuation of Essentials, updated to support modern Minecraft and Spigot versions. It provides several performance enhancements and fixes that are currently not available in Essentials and Spigot-Essentials. [For more details, see the wiki.](https://essentialsx.github.io/#/Improvements)
+EssentialsX is an unofficial continuation of Essentials, updated to support modern Minecraft and Spigot versions. It provides several performance enhancements and fixes that are currently not available in Essentials and Spigot-Essentials. [For more details, see the wiki.](https://essentialsx.net/wiki/Improvements.html)
 
 EssentialsX is almost a completely drop-in replacement for Essentials. However, it has different requirements:
 
@@ -50,8 +50,8 @@ Each module's jar can be found in `target/` inside each module's directory.
 Using EssentialsX in your plugin
 --------------------------------
 
-Do you want to integrate with EssentialsX in your plugin? EssentialsX is available on the **ender.zone Maven repository** at https://ci.ender.zone/plugin/repository/everything/, and the EssentialsX artifact is `net.ess3:EssentialsX:2.18.1`.
-More information at the [wiki](https://github.com/EssentialsX/Essentials/wiki/Common-Issues#how-do-i-add-essentialsx-as-a-dependency).
+Do you want to integrate with EssentialsX in your plugin? EssentialsX is available on the **ender.zone Maven repository** at https://ci.ender.zone/plugin/repository/everything/, and the EssentialsX artifact is `net.ess3:EssentialsX:2.18.0`.
+More information at the [wiki](https://essentialsx.net/wiki/Common-Issues.html#how-do-i-add-essentialsx-as-a-dependency).
 
 
 Contributing
