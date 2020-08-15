@@ -42,8 +42,8 @@ public class Commandseen extends EssentialsCommand {
             player = ess.getUser(uuid);
         } catch (IllegalArgumentException ignored1) {
             // check by ip
-            if (ipLookup && FormatUtil.validIP(args[0])) {
-                seenIP(server, sender, args[0]);
+            if (FormatUtil.validIP(args[0])) {
+                seenIP(sender, args[0]);
                 return;
             }
             // check if ip banned
