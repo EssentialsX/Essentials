@@ -4,10 +4,7 @@ import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.User;
 import org.bukkit.Server;
-import org.bukkit.entity.Player;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -23,7 +20,7 @@ public class Commandback extends EssentialsCommand {
     protected void run(Server server, User user, String commandLabel, String[] args) throws Exception {
         CommandSource sender = user.getSource();
         if (args.length > 0 && user.isAuthorized("essentials.back.others")) {
-            this.parseCommand(server, sender, args, true, commandLabel);
+            parseOthers(server, sender, args, commandLabel);
             return;
         }
 
@@ -32,28 +29,17 @@ public class Commandback extends EssentialsCommand {
 
     @Override
     protected void run(Server server, CommandSource sender, String commandLabel, String[] args) throws Exception {
-        if (args.length < 1) {
+        if (args.length == 0) {
             throw new NotEnoughArgumentsException();
         }
 
-        this.parseCommand(server, sender, args, true, commandLabel);
+        parseOthers(server, sender, args, commandLabel);
     }
 
-    private void parseCommand(Server server, CommandSource sender, String[] args, boolean allowOthers, String commandLabel) throws Exception {
-        Collection<Player> players = new ArrayList<>();
-
-        if (allowOthers && args.length > 0 && args[0].trim().length() > 2) {
-            players = server.matchPlayer(args[0].trim());
-        }
-
-        if (players.size() < 1) {
-            throw new PlayerNotFoundException();
-        }
-
-        for (Player player : players) {
-            sender.sendMessage(tl("backOther", player.getName()));
-            teleportBack(sender, ess.getUser(player), commandLabel);
-        }
+    private void parseOthers(Server server, CommandSource sender, String[] args, String commandLabel) throws Exception {
+        User player = getPlayer(server, args, 0, true, false);
+        sender.sendMessage(tl("backOther", player.getName()));
+        teleportBack(sender, player, commandLabel);
     }
 
     private void teleportBack(CommandSource sender, User user, String commandLabel) throws Exception {

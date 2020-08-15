@@ -28,16 +28,9 @@ public class Commandseen extends EssentialsCommand {
 
     @Override
     protected void run(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception {
-        seen(server, sender, commandLabel, args, true, true, true, true);
-    }
-
-    @Override
-    protected void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception {
-        seen(server, user.getSource(), commandLabel, args, user.isAuthorized("essentials.seen.banreason"), user.isAuthorized("essentials.seen.ip"), user.isAuthorized("essentials.seen.location"), user.isAuthorized("essentials.seen.ipsearch"));
-    }
-
-    protected void seen(final Server server, final CommandSource sender, final String commandLabel, final String[] args,
-                        final boolean showBan, final boolean showIp, final boolean showLocation, final boolean ipLookup) throws Exception {
+        boolean showBan = sender.isAuthorized("essentials.seen.banreason", ess);
+        boolean showIp = sender.isAuthorized("essentials.seen.ip", ess);
+        boolean showLocation = sender.isAuthorized("essentials.seen.location", ess);
         if (args.length < 1) {
             throw new NotEnoughArgumentsException();
         }
@@ -72,13 +65,13 @@ public class Commandseen extends EssentialsCommand {
         }
 
         if (player.getBase().isOnline() && canInteractWith(sender, player)) {
-            seenOnline(server, sender, player, showBan, showIp, showLocation);
+            seenOnline(sender, player, showIp);
         } else {
-            seenOffline(server, sender, player, showBan, showIp, showLocation);
+            seenOffline(sender, player, showBan, showIp, showLocation);
         }
     }
 
-    private void seenOnline(final Server server, final CommandSource sender, final User user, final boolean showBan, final boolean showIp, final boolean showLocation) throws Exception {
+    private void seenOnline(final CommandSource sender, final User user, final boolean showIp) {
 
         user.setDisplayNick();
         sender.sendMessage(tl("seenOnline", user.getDisplayName(), DateUtil.formatDateDiff(user.getLastLogin())));
@@ -115,7 +108,7 @@ public class Commandseen extends EssentialsCommand {
         }
     }
 
-    private void seenOffline(final Server server, final CommandSource sender, User user, final boolean showBan, final boolean showIp, final boolean showLocation) throws Exception {
+    private void seenOffline(final CommandSource sender, User user, final boolean showBan, final boolean showIp, final boolean showLocation) {
         user.setDisplayNick();
         if (user.getLastLogout() > 0) {
             sender.sendMessage(tl("seenOffline", user.getName(), DateUtil.formatDateDiff(user.getLastLogout())));
@@ -172,7 +165,7 @@ public class Commandseen extends EssentialsCommand {
         }
     }
 
-    private void seenIP(final Server server, final CommandSource sender, final String ipAddress) throws Exception {
+    private void seenIP(final CommandSource sender, final String ipAddress) {
         final UserMap userMap = ess.getUserMap();
 
         if (ess.getServer().getBanList(BanList.Type.IP).isBanned(ipAddress)) {

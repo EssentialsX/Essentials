@@ -8,6 +8,7 @@ import org.bukkit.inventory.ItemStack;
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
+import java.util.StringJoiner;
 
 import static com.earth2me.essentials.I18n.tl;
 
@@ -19,23 +20,19 @@ public class Commandunlimited extends EssentialsCommand {
 
     @Override
     public void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception {
-        if (args.length < 1) {
+        if (args.length == 0) {
             throw new NotEnoughArgumentsException();
         }
 
         User target = user;
-
         if (args.length > 1 && user.isAuthorized("essentials.unlimited.others")) {
             target = getPlayer(server, user, args, 1);
         }
 
         if (args[0].equalsIgnoreCase("list")) {
-            final String list = getList(target);
-            user.sendMessage(list);
+            user.sendMessage(getList(target));
         } else if (args[0].equalsIgnoreCase("clear")) {
-            final Set<Material> itemList = new HashSet<>(target.getUnlimited());
-
-            for (Material m : itemList) {
+            for (Material m : new HashSet<>(target.getUnlimited())) {
                 toggleUnlimited(user, target, m.toString());
             }
         } else {
@@ -46,24 +43,20 @@ public class Commandunlimited extends EssentialsCommand {
     private String getList(final User target) {
         final StringBuilder output = new StringBuilder();
         output.append(tl("unlimitedItems")).append(" ");
-        boolean first = true;
         final Set<Material> items = target.getUnlimited();
         if (items.isEmpty()) {
             output.append(tl("none"));
         }
+        StringJoiner joiner = new StringJoiner(",");
         for (Material material : items) {
-            if (!first) {
-                output.append(", ");
-            }
-            first = false;
-            final String matname = material.toString().toLowerCase(Locale.ENGLISH).replace("_", "");
-            output.append(matname);
+            joiner.add(material.toString().toLowerCase(Locale.ENGLISH).replace("_", ""));
         }
+        output.append(joiner.toString());
 
         return output.toString();
     }
 
-    private Boolean toggleUnlimited(final User user, final User target, final String item) throws Exception {
+    private void toggleUnlimited(final User user, final User target, final String item) throws Exception {
         final ItemStack stack = ess.getItemDb().get(item, 1);
         stack.setAmount(Math.min(stack.getType().getMaxStackSize(), 2));
 
@@ -87,7 +80,5 @@ public class Commandunlimited extends EssentialsCommand {
         }
         target.sendMessage(tl(message, itemname, target.getDisplayName()));
         target.setUnlimited(stack, enableUnlimited);
-
-        return true;
     }
 }

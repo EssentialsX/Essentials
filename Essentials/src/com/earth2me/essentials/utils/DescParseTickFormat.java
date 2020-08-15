@@ -189,7 +189,7 @@ public final class DescParseTickFormat {
     }
 
     public static String formatTicks(final long ticks) {
-        return (ticks % ticksPerDay) + "ticks";
+        return (ticks % ticksPerDay) + " ticks";
     }
 
     public static String format24(final long ticks) {

@@ -6,6 +6,7 @@ import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.FormatUtil;
 import org.bukkit.Server;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.logging.Level;
 
@@ -20,7 +21,7 @@ public class Commandhelpop extends EssentialsCommand {
     @Override
     public void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception {
         user.setDisplayNick();
-        final String message = sendMessage(server, user.getSource(), user.getDisplayName(), args);
+        final String message = sendMessage(server, user.getDisplayName(), args);
         if (!user.isAuthorized("essentials.helpop.receive")) {
             user.sendMessage(message);
         }
@@ -28,10 +29,10 @@ public class Commandhelpop extends EssentialsCommand {
 
     @Override
     public void run(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception {
-        sendMessage(server, sender, Console.NAME, args);
+        sendMessage(server, Console.NAME, args);
     }
 
-    private String sendMessage(final Server server, final CommandSource sender, final String from, final String[] args) throws Exception {
+    private String sendMessage(final Server server, final String from, final String[] args) throws Exception {
         if (args.length < 1) {
             throw new NotEnoughArgumentsException();
         }
@@ -43,6 +44,6 @@ public class Commandhelpop extends EssentialsCommand {
 
     @Override
     protected List<String> getTabCompleteOptions(Server server, CommandSource sender, String commandLabel, String[] args) {
-        return null;  // Use vanilla handler for message
+        return Collections.emptyList();
     }
 }

@@ -22,14 +22,10 @@ public class Commandworth extends EssentialsCommand {
 
     @Override
     public void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception {
-        BigDecimal totalWorth = BigDecimal.ZERO;
-        String type = "";
-
         List<ItemStack> is = ess.getItemDb().getMatching(user, args);
         int count = 0;
-
         boolean isBulk = is.size() > 1;
-
+        BigDecimal totalWorth = BigDecimal.ZERO;
         for (ItemStack stack : is) {
             try {
                 if (stack.getAmount() > 0) {
@@ -51,22 +47,19 @@ public class Commandworth extends EssentialsCommand {
         }
         if (count > 1) {
             if (args.length > 0 && args[0].equalsIgnoreCase("blocks")) {
-                user.sendMessage(tl("totalSellableBlocks", type, NumberUtil.displayCurrency(totalWorth, ess)));
-            } else {
-                user.sendMessage(tl("totalSellableAll", type, NumberUtil.displayCurrency(totalWorth, ess)));
+                user.sendMessage(tl("totalSellableBlocks", NumberUtil.displayCurrency(totalWorth, ess)));
+                return;
             }
+            user.sendMessage(tl("totalSellableAll", NumberUtil.displayCurrency(totalWorth, ess)));
         }
     }
 
     @Override
     public void run(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception {
-        if (args.length < 1) {
+        if (args.length == 0) {
             throw new NotEnoughArgumentsException();
         }
-
-        ItemStack stack = ess.getItemDb().get(args[0]);
-
-        itemWorth(sender, null, stack, args);
+        itemWorth(sender, null, ess.getItemDb().get(args[0]), args);
     }
 
     private BigDecimal itemWorth(CommandSource sender, User user, ItemStack is, String[] args) throws Exception {
@@ -85,7 +78,6 @@ public class Commandworth extends EssentialsCommand {
         }
 
         BigDecimal worth = ess.getWorth().getPrice(ess, is);
-
         if (worth == null) {
             throw new Exception(tl("itemCannotBeSold"));
         }
@@ -95,9 +87,7 @@ public class Commandworth extends EssentialsCommand {
         }
 
         BigDecimal result = worth.multiply(BigDecimal.valueOf(amount));
-
         sender.sendMessage(is.getDurability() != 0 ? tl("worthMeta", is.getType().toString().toLowerCase(Locale.ENGLISH).replace("_", ""), is.getDurability(), NumberUtil.displayCurrency(result, ess), amount, NumberUtil.displayCurrency(worth, ess)) : tl("worth", is.getType().toString().toLowerCase(Locale.ENGLISH).replace("_", ""), NumberUtil.displayCurrency(result, ess), amount, NumberUtil.displayCurrency(worth, ess)));
-
         return result;
     }
 

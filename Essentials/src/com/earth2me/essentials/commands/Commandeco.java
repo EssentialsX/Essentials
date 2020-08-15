@@ -18,9 +18,6 @@ import static com.earth2me.essentials.I18n.tl;
 
 
 public class Commandeco extends EssentialsLoopCommand {
-    Commandeco.EcoCommands cmd;
-    BigDecimal amount;
-    boolean isPercent;
 
     public Commandeco() {
         super("eco");
@@ -32,80 +29,59 @@ public class Commandeco extends EssentialsLoopCommand {
             throw new NotEnoughArgumentsException();
         }
 
-        BigDecimal startingBalance = ess.getSettings().getStartingBalance();
-
+        EcoCommands cmd;
+        boolean isPercent;
+        BigDecimal amount;
         try {
-            cmd = Commandeco.EcoCommands.valueOf(args[0].toUpperCase(Locale.ENGLISH));
+            cmd = EcoCommands.valueOf(args[0].toUpperCase(Locale.ENGLISH));
             isPercent = cmd != EcoCommands.RESET && args[2].endsWith("%");
-            amount = (cmd == Commandeco.EcoCommands.RESET) ? startingBalance : new BigDecimal(args[2].replaceAll("[^0-9\\.]", ""));
+            amount = (cmd == EcoCommands.RESET) ? ess.getSettings().getStartingBalance() : new BigDecimal(args[2].replaceAll("[^0-9\\.]", ""));
         } catch (Exception ex) {
             throw new NotEnoughArgumentsException(ex);
         }
 
-        loopOfflinePlayers(server, sender, false, true, args[1], args);
-
-        if (cmd == Commandeco.EcoCommands.RESET || cmd == Commandeco.EcoCommands.SET) {
-            if (args[1].contentEquals("**")) {
-                server.broadcastMessage(tl("resetBalAll", NumberUtil.displayCurrency(amount, ess)));
-            } else if (args[1].contentEquals("*")) {
-                server.broadcastMessage(tl("resetBal", NumberUtil.displayCurrency(amount, ess)));
+        loopOfflinePlayersConsumer(server, sender, false, true, args[1], player -> {
+            BigDecimal userAmount = amount;
+            if (isPercent) {
+                userAmount = player.getMoney().multiply(userAmount).scaleByPowerOfTen(-2);
             }
-        }
-    }
 
-    @Override
-    protected void updatePlayer(final Server server, final CommandSource sender, final User player, final String[] args) throws NotEnoughArgumentsException, ChargeException, MaxMoneyException {
-        if (isPercent && cmd != EcoCommands.RESET) {
-            amount = player.getMoney().multiply(amount).scaleByPowerOfTen(-2);
-        }
-        switch (cmd) {
-            case GIVE:
-                player.giveMoney(amount, sender, UserBalanceUpdateEvent.Cause.COMMAND_ECO);
-                break;
-
-            case TAKE:
-                take(amount, player, sender);
-                break;
-
-            case RESET:
-            case SET:
-                set(amount, player, sender);
-                break;
-        }
-    }
-
-    private void take(BigDecimal amount, final User player, final CommandSource sender) throws ChargeException {
-        BigDecimal money = player.getMoney();
-        BigDecimal minBalance = ess.getSettings().getMinMoney();
-        if (money.subtract(amount).compareTo(minBalance) >= 0) {
-            player.takeMoney(amount, sender, UserBalanceUpdateEvent.Cause.COMMAND_ECO);
-        } else if (sender == null) {
-            try {
-                player.setMoney(minBalance, UserBalanceUpdateEvent.Cause.COMMAND_ECO);
-            } catch (MaxMoneyException ex) {
-                // Take shouldn't be able to throw a max money exception
+            switch (cmd) {
+                case GIVE: {
+                    player.giveMoney(userAmount, sender, UserBalanceUpdateEvent.Cause.COMMAND_ECO);
+                    break;
+                }
+                case TAKE: {
+                    if (player.getMoney().subtract(userAmount).compareTo(ess.getSettings().getMinMoney()) >= 0) {
+                        player.takeMoney(userAmount, sender, UserBalanceUpdateEvent.Cause.COMMAND_ECO);
+                    } else {
+                        ess.showError(sender, new Exception(tl("minimumBalanceError", NumberUtil.displayCurrency(ess.getSettings().getMinMoney(), ess))), commandLabel);
+                    }
+                    break;
+                }
+                case RESET:
+                case SET: {
+                    BigDecimal minBal = ess.getSettings().getMinMoney();
+                    BigDecimal maxBal = ess.getSettings().getMaxMoney();
+                    boolean underMin = (userAmount.compareTo(minBal) < 0);
+                    boolean aboveMax = (userAmount.compareTo(maxBal) > 0);
+                    player.setMoney(underMin ? minBal : aboveMax ? maxBal : userAmount, UserBalanceUpdateEvent.Cause.COMMAND_ECO);
+                    player.sendMessage(tl("setBal", NumberUtil.displayCurrency(player.getMoney(), ess)));
+                    sender.sendMessage(tl("setBalOthers", player.getDisplayName(), NumberUtil.displayCurrency(player.getMoney(), ess)));
+                    break;
+                }
             }
-            player.sendMessage(tl("takenFromAccount", NumberUtil.displayCurrency(player.getMoney(), ess)));
-        } else {
-            throw new ChargeException(tl("insufficientFunds"));
-        }
-    }
-
-    private void set(BigDecimal amount, final User player, final CommandSource sender) throws MaxMoneyException {
-        BigDecimal minBalance = ess.getSettings().getMinMoney();
-        BigDecimal maxBalance = ess.getSettings().getMaxMoney();
-        boolean underMinimum = (amount.compareTo(minBalance) < 0);
-        boolean aboveMax = (amount.compareTo(maxBalance) > 0);
-        player.setMoney(underMinimum ? minBalance : aboveMax ? maxBalance : amount, UserBalanceUpdateEvent.Cause.COMMAND_ECO);
-        player.sendMessage(tl("setBal", NumberUtil.displayCurrency(player.getMoney(), ess)));
-        if (sender != null) {
-            sender.sendMessage(tl("setBalOthers", player.getDisplayName(), NumberUtil.displayCurrency(player.getMoney(), ess)));
-        }
+        });
     }
 
 
     private enum EcoCommands {
         GIVE, TAKE, SET, RESET
+    }
+
+    @Override
+    protected void updatePlayer(Server server, CommandSource sender, User user, String[] args) throws NotEnoughArgumentsException, PlayerExemptException, ChargeException, MaxMoneyException {
+
     }
 
     @Override
