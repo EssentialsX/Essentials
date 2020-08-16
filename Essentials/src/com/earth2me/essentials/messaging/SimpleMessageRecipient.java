@@ -150,7 +150,7 @@ public class SimpleMessageRecipient implements IMessageRecipient {
         sendMessage(tl("msgFormat", sender.getDisplayName(), tl("meRecipient"), message));
 
         // Play a "ding" sound when receiving a message
-        if (!user.isIgnoreMsgSound()) {
+        if (user != null && !user.isIgnoreMsgSound()) {
             Bukkit.getPlayer(user.getConfigUUID()).playSound(user.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 2.0f, 1.0f);
         }
 
