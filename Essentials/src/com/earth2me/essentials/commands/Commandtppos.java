@@ -56,6 +56,8 @@ public class Commandtppos extends EssentialsCommand {
         charge.isAffordableFor(user);
         user.sendMessage(tl("teleporting", loc.getWorld().getName(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ()));
         user.getAsyncTeleport().teleport(loc, charge, TeleportCause.COMMAND, getNewExceptionFuture(user.getSource(), commandLabel));
+
+        throw new NoChargeException();
     }
 
     @Override
