@@ -284,6 +284,10 @@ commands:
     description: Blocks receiving all private messages.
     usage: /<command> [player] [on|off]
     aliases: [emsgtoggle]
+  msgsoundtoggle:
+    description: Blocks message sound alerts.
+    usage: /<command> [player] [on|off]
+    aliases: [emsgsoundtoggle]
   mute:
     description: Mutes or unmutes a player.
     usage: /<command> <player> [datediff] [reason]

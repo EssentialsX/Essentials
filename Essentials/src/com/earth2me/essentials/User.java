@@ -60,6 +60,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
     private boolean enderSee = false;
     private transient long teleportInvulnerabilityTimestamp = 0;
     private boolean ignoreMsg = false;
+    private boolean ignoreMsgSound = false;
     private String afkMessage;
     private long afkSince;
     private final Map<User, BigDecimal> confirmingPayments = new WeakHashMap<>();
@@ -804,6 +805,16 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
     @Override
     public void setIgnoreMsg(boolean ignoreMsg) {
         this.ignoreMsg = ignoreMsg;
+    }
+
+    @Override
+    public boolean isIgnoreMsgSound() {
+        return ignoreMsgSound;
+    }
+
+    @Override
+    public void setIgnoreMsgSound(boolean ignoreMsgSound) {
+        this.ignoreMsgSound = ignoreMsgSound;
     }
 
     @Override

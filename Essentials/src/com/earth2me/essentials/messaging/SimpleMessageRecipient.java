@@ -5,6 +5,8 @@ import com.earth2me.essentials.IUser;
 import com.earth2me.essentials.User;
 import net.ess3.api.events.PrivateMessagePreSendEvent;
 import net.ess3.api.events.PrivateMessageSentEvent;
+import org.bukkit.Bukkit;
+import org.bukkit.Sound;
 
 import java.lang.ref.WeakReference;
 
@@ -146,6 +148,11 @@ public class SimpleMessageRecipient implements IMessageRecipient {
         }
         // Display the formatted message to this recipient.
         sendMessage(tl("msgFormat", sender.getDisplayName(), tl("meRecipient"), message));
+
+        // Play a "ding" sound when receiving a message
+        if (!user.isIgnoreMsgSound()) {
+            Bukkit.getPlayer(user.getConfigUUID()).playSound(user.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 2.0f, 1.0f);
+        }
 
         if (isLastMessageReplyRecipient) {
             // If this recipient doesn't have a reply recipient, initiate by setting the first

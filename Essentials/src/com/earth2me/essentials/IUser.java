@@ -154,6 +154,10 @@ public interface IUser {
 
     boolean isIgnoreMsg();
 
+    void setIgnoreMsgSound(boolean ignoreMsgSound);
+
+    boolean isIgnoreMsgSound();
+
     void setConfigProperty(String node, Object object);
 
     Set<String> getConfigKeys();
