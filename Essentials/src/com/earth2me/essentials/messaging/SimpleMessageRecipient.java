@@ -3,6 +3,7 @@ package com.earth2me.essentials.messaging;
 import com.earth2me.essentials.IEssentials;
 import com.earth2me.essentials.IUser;
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.utils.VersionUtil;
 import net.ess3.api.events.PrivateMessagePreSendEvent;
 import net.ess3.api.events.PrivateMessageSentEvent;
 import org.bukkit.Bukkit;
@@ -151,7 +152,15 @@ public class SimpleMessageRecipient implements IMessageRecipient {
 
         // Play a "ding" sound when receiving a message
         if (user != null && !user.isIgnoreMsgSound()) {
-            Bukkit.getPlayer(user.getConfigUUID()).playSound(user.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 2.0f, 1.0f);
+            Sound dingSound;
+
+            if (VersionUtil.getServerBukkitVersion().isHigherThanOrEqualTo(VersionUtil.v1_9_R01)) {
+                dingSound = Sound.ENTITY_EXPERIENCE_ORB_PICKUP;
+            } else {
+                dingSound = Sound.valueOf("ORB_PICKUP");
+            }
+
+            Bukkit.getPlayer(user.getConfigUUID()).playSound(user.getLocation(), dingSound, 2.0f, 1.0f);
         }
 
         if (isLastMessageReplyRecipient) {
