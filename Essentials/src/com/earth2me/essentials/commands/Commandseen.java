@@ -9,14 +9,18 @@ import com.earth2me.essentials.utils.FormatUtil;
 import com.earth2me.essentials.utils.StringUtil;
 import org.bukkit.BanEntry;
 import org.bukkit.BanList;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.Server;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 import java.util.Collections;
+import java.util.stream.Collectors;
 
 import static com.earth2me.essentials.I18n.tl;
 
@@ -222,7 +226,14 @@ public class Commandseen extends EssentialsCommand {
     @Override
     protected List<String> getTabCompleteOptions(Server server, CommandSource sender, String commandLabel, String[] args) {
         if (args.length == 1) {
-            return getPlayers(server, sender);
+            return ess.getUserMap()
+                      .getAllUniqueUsers()
+                      .stream()
+                      .map(Bukkit::getOfflinePlayer)
+                      .map(OfflinePlayer::getName)
+                      .filter(Objects::nonNull)
+                      .filter(name -> name.startsWith(args[0]))
+                      .collect(Collectors.toList());
         } else {
             return Collections.emptyList();
         }
