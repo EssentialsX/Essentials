@@ -992,7 +992,7 @@ protect:
     # Which blocks should people be prevented from breaking?
     break:
 
-    # Which blocks should not be pushed by pistons?
+    # Which blocks should not be moved by pistons?
     piston:
 
     # Which blocks should not be dispensed by dispensers
