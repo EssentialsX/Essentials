@@ -277,9 +277,11 @@ public class EssentialsAntiBuildListener implements Listener {
         if (!event.isSticky()) {
             return;
         }
-        final Block block = event.getBlock();
-        if (prot.checkProtectionItems(AntiBuildConfig.blacklist_piston, block.getType())) {
-            event.setCancelled(true);
+        for (Block block : event.getBlocks()) {
+            if (prot.checkProtectionItems(AntiBuildConfig.blacklist_piston, block.getType())) {
+                event.setCancelled(true);
+                return;
+            }
         }
     }
 
