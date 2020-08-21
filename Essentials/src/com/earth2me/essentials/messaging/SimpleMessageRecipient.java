@@ -10,6 +10,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 
 import java.lang.ref.WeakReference;
+import java.util.ArrayList;
+import java.util.Set;
 
 import static com.earth2me.essentials.I18n.tl;
 
@@ -126,6 +128,8 @@ public class SimpleMessageRecipient implements IMessageRecipient {
 
         return messageResponse;
     }
+    
+    private static final Sound ORB_SOUND = new ArrayList<>(EnumUtil.getAllMatching(Sound.class, "ENTITY_EXPERIENCE_ORB_PICKUP", "ORB_PICKUP")).get(0);
 
     @Override
     public MessageResponse onReceiveMessage(IMessageRecipient sender, String message) {
@@ -152,15 +156,7 @@ public class SimpleMessageRecipient implements IMessageRecipient {
 
         // Play a "ding" sound when receiving a message
         if (user != null && !user.isIgnoreMsgSound()) {
-            Sound dingSound;
-
-            if (VersionUtil.getServerBukkitVersion().isHigherThanOrEqualTo(VersionUtil.v1_9_R01)) {
-                dingSound = Sound.ENTITY_EXPERIENCE_ORB_PICKUP;
-            } else {
-                dingSound = Sound.valueOf("ORB_PICKUP");
-            }
-
-            Bukkit.getPlayer(user.getConfigUUID()).playSound(user.getLocation(), dingSound, 2.0f, 1.0f);
+            Bukkit.getPlayer(user.getConfigUUID()).playSound(user.getLocation(), ORB_SOUND, 2.0f, 1.0f);
         }
 
         if (isLastMessageReplyRecipient) {
