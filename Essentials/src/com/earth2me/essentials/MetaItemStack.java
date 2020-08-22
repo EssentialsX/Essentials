@@ -367,6 +367,13 @@ public class MetaItemStack {
                 } else {
                     throw new Exception(tl("invalidPotionMeta", split[1]));
                 }
+            } else if (split[0].equalsIgnoreCase("amplifier") || (allowShortName && split[0].equalsIgnoreCase("a"))) {
+                if (NumberUtil.isInt(split[1])) {
+                    validPotionPower = true;
+                    power = Integer.parseInt(split[1]);
+                } else {
+                    throw new Exception(tl("invalidPotionMeta", split[1]));
+                }
             } else if (split[0].equalsIgnoreCase("duration") || (allowShortName && split[0].equalsIgnoreCase("d"))) {
                 if (NumberUtil.isInt(split[1])) {
                     validPotionDuration = true;
