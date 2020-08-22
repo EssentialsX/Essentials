@@ -64,6 +64,10 @@ public class Commandtime extends EssentialsCommand {
 
         // Start updating world times, we have what we need
         User user = ess.getUser(sender.getPlayer());
+        if (!user.isAuthorized("essentials.time.set")) {
+            throw new Exception(tl("timeSetPermission"));
+        }
+
         for (World world : worlds) {
             if (!canUpdateWorld(user, world)) {
                 throw new Exception(tl("timeSetWorldPermission", user.getWorld().getName()));
