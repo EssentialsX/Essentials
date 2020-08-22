@@ -87,7 +87,7 @@ public class Commandpotion extends EssentialsCommand {
             }
             return options;
         } else if (args.length == 2 && args[0].startsWith("effect:")) {
-            return Lists.newArrayList("power:1", "power:2", "power:3", "power:4");
+            return Lists.newArrayList("power:1", "power:2", "power:3", "power:4", "amplifier:0", "amplifier:1", "amplifier:2", "amplifier:3");
         } else if (args.length == 3 && args[0].startsWith("effect:")) {
             List<String> options = Lists.newArrayList();
             for (String duration : COMMON_DURATIONS) {
