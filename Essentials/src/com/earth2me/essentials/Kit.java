@@ -184,7 +184,7 @@ public class Kit {
 
                 if (kitItem.startsWith("@")) {
                     if (ess.getSerializationProvider() == null) {
-                        ess.getLogger().log(Level.WARNING, "Cannot give kit item in kit \"" + kitName + "\" to user " + user.getName() + " as kit item requires Paper 1.15.2+ to deserialize.");
+                        ess.getLogger().log(Level.WARNING, tl("kitError3", kitName, user.getName()));
                         continue;
                     }
                     itemList.add(ess.getSerializationProvider().deserializeItem(Base64Coder.decodeLines(kitItem.substring(1))));
