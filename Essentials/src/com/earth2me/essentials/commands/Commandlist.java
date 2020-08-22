@@ -120,7 +120,7 @@ public class Commandlist extends EssentialsCommand {
     @Override
     protected List<String> getTabCompleteOptions(final Server server, final CommandSource sender, final String commandLabel, final String[] args) {
         if (args.length == 1) {
-            return getGroups();
+            return new ArrayList<>(PlayerList.getPlayerLists(ess, sender.getUser(ess), true).keySet());
         } else {
             return Collections.emptyList();
         }
