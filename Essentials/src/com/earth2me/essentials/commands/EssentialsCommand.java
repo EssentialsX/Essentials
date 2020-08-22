@@ -285,9 +285,9 @@ public abstract class EssentialsCommand implements IEssentialsCommand {
     /**
      * Returns a list of all online groups.
      */
-    protected List<String> getGroups() {
+    protected List<String> getGroups(CommandSource interactor) {
         // TODO: A better way to do this
-        return new ArrayList<>(PlayerList.getPlayerLists(ess, null, true).keySet());
+        return new ArrayList<>(PlayerList.getPlayerLists(ess, interactor.getUser(ess), true).keySet());
     }
 
     /**
