@@ -17,8 +17,15 @@ import static com.earth2me.essentials.I18n.tl;
 
 public class LocationUtil {
     // Water types used for TRANSPARENT_MATERIALS and is-water-safe config option
-    private static final Set<Material> WATER_TYPES =
-            EnumUtil.getAllMatching(Material.class, "WATER", "FLOWING_WATER");
+    private static final Set<Material> WATER_TYPES = EnumUtil.getAllMatching(Material.class,
+            "FLOWING_WATER", "WATER");
+
+    // Types checked by isBlockDamaging
+    private static final Set<Material> DAMAGING_TYPES = EnumUtil.getAllMatching(Material.class,
+            "CACTUS", "CAMPFIRE", "FIRE", "MAGMA_BLOCK", "SOUL_CAMPFIRE", "SOUL_FIRE", "SWEET_BERRY_BUSH", "WITHER_ROSE");
+    private static final Set<Material> LAVA_TYPES = EnumUtil.getAllMatching(Material.class,
+            "FLOWING_LAVA", "LAVA", "STATIONARY_LAVA");
+    private static final Material PORTAL = EnumUtil.getMaterial("NETHER_PORTAL", "PORTAL");
 
     // The player can stand inside these materials
     private static final Set<Material> HOLLOW_MATERIALS = new HashSet<>();
@@ -143,31 +150,19 @@ public class LocationUtil {
     }
 
     public static boolean isBlockDamaging(final World world, final int x, final int y, final int z) {
-        final Block below = world.getBlockAt(x, y - 1, z);
+        final Material block = world.getBlockAt(x, y, z).getType();
+        final Material below = world.getBlockAt(x, y - 1, z).getType();
+        final Material above = world.getBlockAt(x, y + 1, z).getType();
 
-        switch (below.getType()) {
-            case LAVA:
-            case FIRE:
-                return true;
-        }
-
-        if (MaterialUtil.isBed(below.getType())) {
+        if (DAMAGING_TYPES.contains(below) || LAVA_TYPES.contains(below) || MaterialUtil.isBed(below)) {
             return true;
         }
 
-        try {
-            if (below.getType() == Material.valueOf("FLOWING_LAVA")) {
-                return true;
-            }
-        } catch (Exception ignored) {} // 1.13 LAVA uses Levelled
-
-        Material PORTAL = EnumUtil.getMaterial("NETHER_PORTAL", "PORTAL");
-
-        if (world.getBlockAt(x, y, z).getType() == PORTAL) {
+        if (block == PORTAL) {
             return true;
         }
 
-        return (!HOLLOW_MATERIALS.contains(world.getBlockAt(x, y, z).getType())) || (!HOLLOW_MATERIALS.contains(world.getBlockAt(x, y + 1, z).getType()));
+        return !HOLLOW_MATERIALS.contains(block) || !HOLLOW_MATERIALS.contains(above);
     }
 
     // Not needed if using getSafeDestination(loc)
