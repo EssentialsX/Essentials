@@ -6,7 +6,7 @@
     <parent>
         <groupId>net.ess3</groupId>
         <artifactId>EssentialsXParent</artifactId>
-        <version>2.18.0</version>
+        <version>2.18.1</version>
     </parent>
 
     <artifactId>EssentialsX</artifactId>
@@ -75,13 +75,13 @@
         <dependency>
             <groupId>net.ess3</groupId>
             <artifactId>BaseProviders</artifactId>
-            <version>2.18.0</version>
+            <version>2.18.1</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>net.ess3</groupId>
             <artifactId>NMSReflectionProvider</artifactId>
-            <version>2.18.0</version>
+            <version>2.18.1</version>
             <exclusions>
                 <exclusion>
                     <groupId>org.bukkit</groupId>
@@ -93,7 +93,7 @@
         <dependency>
             <groupId>net.ess3</groupId>
             <artifactId>PaperProvider</artifactId>
-            <version>2.18.0</version>
+            <version>2.18.1</version>
             <exclusions>
                 <exclusion>
                     <groupId>com.destroystokyo.paper</groupId>
@@ -105,7 +105,7 @@
         <dependency>
             <groupId>net.ess3</groupId>
             <artifactId>1_8Provider</artifactId>
-            <version>2.18.0</version>
+            <version>2.18.1</version>
             <exclusions>
                 <exclusion>
                     <groupId>org.bukkit</groupId>

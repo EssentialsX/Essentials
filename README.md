@@ -14,7 +14,7 @@ The official upstream repository for the original Essentials project is at https
 
 
 Why use EssentialsX?
---------
+--------------------
 
 EssentialsX is an unofficial continuation of Essentials, updated to support modern Minecraft and Spigot versions. It provides several performance enhancements and fixes that are currently not available in Essentials and Spigot-Essentials. [For more details, see the wiki.](https://essentialsx.net/wiki/Improvements.html)
 
@@ -47,11 +47,13 @@ mvn clean install
 
 Each module's jar can be found in `target/` inside each module's directory.
 
+
 Using EssentialsX in your plugin
 --------------------------------
 
-Do you want to integrate with EssentialsX in your plugin? EssentialsX is available on the **ender.zone Maven repository** at https://ci.ender.zone/plugin/repository/everything/, and the EssentialsX artifact is `net.ess3:EssentialsX:2.18.1`.
-More information at the [wiki](https://essentialsx.net/wiki/Common-Issues.html#how-do-i-add-essentialsx-as-a-dependency).
+Do you want to integrate with EssentialsX in your plugin? EssentialsX is available on the **ender.zone Maven repository** at https://ci.ender.zone/plugin/repository/everything/.
+
+To depend on EssentialsX 2.18.1, you should use the artifact `net.ess3:EssentialsX:2.18.1`. You can find more information at the [wiki](https://essentialsx.net/wiki/Common-Issues.html#how-do-i-add-essentialsx-as-a-dependency).
 
 
 Contributing
@@ -59,12 +61,16 @@ Contributing
 
 Want to help improve EssentialsX? There are numerous ways you can contribute to the project.
 
-If you'd like to make a financial contribution to the project, you can join our [Patreon](https://www.patreon.com/essentialsx/).
-If you can't make a donation, don't worry! There's lots of other ways to contribute:
+If you'd like to make a financial contribution to the project, you can join our [Patreon](https://www.patreon.com/essentialsx/),
+or to make a one-off donation you can visit our [Ko-fi page](https://ko-fi.com/essentialsx). If you can't make a
+donation, don't worry! There's lots of other ways to contribute:
 
-* Do you run a server? Take a look at our ["help wanted" issues](https://github.com/EssentialsX/Essentials/issues?q=is%3Aissue+is%3Aopen+sort%3Aupdated-desc+label%3A%22help+wanted%22),
-  where you can find issues that need extra testing and investigation. You can also join the [MOSS Discord community](https://discord.gg/casfFyh)
-  and provide support to others.
+* Do you run a server? Take a look at our ["help wanted"](https://github.com/EssentialsX/Essentials/issues?q=is%3Aissue+is%3Aopen+sort%3Aupdated-desc+label%3A%22help+wanted%22)
+  and ["bug: unconfirmed"](https://github.com/EssentialsX/Essentials/issues?q=is%3Aissue+is%3Aopen+sort%3Aupdated-desc+label%3A%22bug%3A+unconfirmed%22)
+  issues, where you can find issues that need extra testing and investigation.
 * Do you speak multiple languages? If so, we always welcome contributions to our [Crowdin project](https://crowdin.com/project/essentialsx-official).
-* If you're a developer, you could look through our ["open to PR" issues](https://github.com/EssentialsX/Essentials/issues?q=is%3Aissue+is%3Aopen+sort%3Aupdated-desc+label%3A%22status%3A+open+to+PR%22).
-  We're always happy to receive bug fixes and feature additions as pull requests.
+* Do you enjoy helping others? If so, why not contribute to the [EssentialsX documentation](https://github.com/EssentialsX/wiki)?
+  You can also join the [MOSS Discord community](https://discord.gg/casfFyh) and provide direct community support to
+  other EssentialsX users.
+* If you're a developer, you could look through our ["open to PR"](https://github.com/EssentialsX/Essentials/issues?q=is%3Aissue+is%3Aopen+sort%3Aupdated-desc+label%3A%22status%3A+open+to+PR%22)
+  issues. We're always happy to receive bug fixes and feature additions as pull requests.
