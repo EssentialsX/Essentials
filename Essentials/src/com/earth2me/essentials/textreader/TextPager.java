@@ -51,13 +51,14 @@ public class TextPager {
                 return;
             } else {
                 int page = 1;
-                try {
-                    page = Integer.parseInt(pageStr);
-                } catch (NumberFormatException ex) {
-                    page = 1;
-                }
-                if (page < 1) {
-                    page = 1;
+                if (pageStr != null) {
+                    try {
+                        page = Integer.parseInt(pageStr);
+                    } catch (NumberFormatException ignored) {
+                    }
+                    if (page < 1) {
+                        page = 1;
+                    }
                 }
 
                 int start = onePage ? 0 : (page - 1) * 9;
@@ -101,8 +102,7 @@ public class TextPager {
         if (chapterPageStr != null) {
             try {
                 chapterpage = Integer.parseInt(chapterPageStr) - 1;
-            } catch (NumberFormatException ex) {
-                chapterpage = 0;
+            } catch (NumberFormatException ignored) {
             }
             if (chapterpage < 0) {
                 chapterpage = 0;

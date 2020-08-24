@@ -117,7 +117,7 @@ public class Commandbalancetop extends EssentialsCommand {
                     cache.getLines().add(tl("serverTotal", NumberUtil.displayCurrency(totalMoney, ess)));
                     int pos = 1;
                     for (Map.Entry<String, BigDecimal> entry : sortedEntries) {
-                        cache.getLines().add(pos + ". " + entry.getKey() + ", " + NumberUtil.displayCurrency(entry.getValue(), ess));
+                        cache.getLines().add(tl("balanceTopLine", pos, entry.getKey(), NumberUtil.displayCurrency(entry.getValue(), ess)));
                         pos++;
                     }
                     cacheage = System.currentTimeMillis();
