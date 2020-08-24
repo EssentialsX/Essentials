@@ -5,7 +5,7 @@ import org.bukkit.Statistic;
 import org.bukkit.entity.EntityType;
 
 import java.lang.reflect.Field;
-import java.util.HashSet;
+import java.util.EnumSet;
 import java.util.Set;
 
 public class EnumUtil {
@@ -20,7 +20,7 @@ public class EnumUtil {
      * @param <T> The enum to search through
      * @return The first matching enum field
      */
-    public static <T extends Enum> T valueOf(Class<T> enumClass, String... names) {
+    public static <T extends Enum<T>> T valueOf(Class<T> enumClass, String... names) {
         for (String name : names) {
             try {
                 Field enumField = enumClass.getDeclaredField(name);
@@ -43,8 +43,8 @@ public class EnumUtil {
      * @param <T> The enum to search through
      * @return All matching enum fields
      */
-    public static <T extends Enum> Set<T> getAllMatching(Class<T> enumClass, String... names) {
-        Set<T> set = new HashSet<>();
+    public static <T extends Enum<T>> Set<T> getAllMatching(Class<T> enumClass, String... names) {
+        Set<T> set = EnumSet.noneOf(enumClass);
 
         for (String name : names) {
             try {
