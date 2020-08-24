@@ -44,8 +44,18 @@ public class Commandpay extends EssentialsLoopCommand {
             throw new Exception(tl("minimumPayAmount", NumberUtil.displayCurrencyExactly(ess.getSettings().getMinimumPayAmount(), ess)));
         }
         final AtomicBoolean informToConfirm = new AtomicBoolean(false);
-        loopOnlinePlayersConsumer(server, user.getSource(), false, user.isAuthorized("essentials.pay.multiple"), args[0], player -> {
+        final boolean canPayOffline = user.isAuthorized("essentials.pay.offline");
+        if (!canPayOffline && args[0].equals("**")) {
+            user.sendMessage(tl("payOffline"));
+            return;
+        }
+        loopOfflinePlayersConsumer(server, user.getSource(), false, user.isAuthorized("essentials.pay.multiple"), args[0], player -> {
             try {
+                if (player.getBase() != null && !player.getBase().isOnline() && !canPayOffline) {
+                    user.sendMessage(tl("payOffline"));
+                    return;
+                }
+
                 if (!player.isAcceptingPay() || (ess.getSettings().isPayExcludesIgnoreList() && player.isIgnoredPlayer(user))) {
                     user.sendMessage(tl("notAcceptingPay", player.getDisplayName()));
                     return;
