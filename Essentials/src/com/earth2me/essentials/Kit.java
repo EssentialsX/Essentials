@@ -160,12 +160,12 @@ public class Kit {
 
             boolean spew = false;
             final boolean allowUnsafe = ess.getSettings().allowUnsafeEnchantments();
-            final boolean currencyIsSuffix = ess.getSettings().isCurrencySymbolSuffixed();
             List<ItemStack> itemList = new ArrayList<>();
             List<String> commandQueue = new ArrayList<>();
             List<String> moneyQueue = new ArrayList<>();
+            String currencySymbol = ess.getSettings().getCurrencySymbol().isEmpty() ? "$" : ess.getSettings().getCurrencySymbol();
             for (String kitItem : output.getLines()) {
-                if (!currencyIsSuffix ? kitItem.startsWith(ess.getSettings().getCurrencySymbol()) : kitItem.endsWith(ess.getSettings().getCurrencySymbol())) {
+                if (kitItem.startsWith("$") || kitItem.startsWith(currencySymbol)) {
                     moneyQueue.add(NumberUtil.sanitizeCurrencyString(kitItem, ess));
                     continue;
                 }
