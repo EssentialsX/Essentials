@@ -552,6 +552,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
                 getBase().setPlayerListName(afkName);
             } else {
                 getBase().setPlayerListName(null);
+                setDisplayNick();
             }
         }
     }
