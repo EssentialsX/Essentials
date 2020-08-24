@@ -89,12 +89,7 @@ public class NumberUtil {
     }
 
     public static String sanitizeCurrencyString(final String input, final IEssentials ess) {
-        String symbol = ess.getSettings().getCurrencySymbol();
-        boolean suffix = ess.getSettings().isCurrencySymbolSuffixed();
-        if (input.contains(symbol)) {
-            return suffix ? input.substring(0, input.indexOf(symbol)) : input.substring(symbol.length());
-        }
-        return input;
+        return input.replace(ess.getSettings().getCurrencySymbol(), "");
     }
 
     public static boolean isInt(final String sInt) {
