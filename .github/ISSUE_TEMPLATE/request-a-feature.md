@@ -1,6 +1,7 @@
 ---
 name: Request a feature
 about: Suggest a feature you want to see in EssentialsX!
+labels: 'type: enhancement'
 
 ---
 
