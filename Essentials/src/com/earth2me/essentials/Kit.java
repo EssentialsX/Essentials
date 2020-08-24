@@ -7,6 +7,7 @@ import com.earth2me.essentials.textreader.IText;
 import com.earth2me.essentials.textreader.KeywordReplacer;
 import com.earth2me.essentials.textreader.SimpleTextInput;
 import com.earth2me.essentials.utils.DateUtil;
+import com.earth2me.essentials.utils.MaterialUtil;
 import com.earth2me.essentials.utils.NumberUtil;
 import net.ess3.api.IEssentials;
 import net.ess3.api.events.KitClaimEvent;
@@ -161,6 +162,7 @@ public class Kit {
             boolean spew = false;
             final boolean allowUnsafe = ess.getSettings().allowUnsafeEnchantments();
             final boolean currencyIsSuffix = ess.getSettings().isCurrencySymbolSuffixed();
+            final boolean autoEquip = ess.getSettings().isKitAutoEquip();
             List<ItemStack> itemList = new ArrayList<>();
             List<String> commandQueue = new ArrayList<>();
             List<String> moneyQueue = new ArrayList<>();
@@ -190,6 +192,24 @@ public class Kit {
                 if (parts.length > 2) {
                     // We pass a null sender here because kits should not do perm checks
                     metaStack.parseStringMeta(null, allowUnsafe, parts, 2, ess);
+                }
+
+                if (autoEquip) {
+                    ItemStack stack = metaStack.getItemStack();
+                    Material material = stack.getType();
+                    if (MaterialUtil.isHelmet(material) && isEmptyStack(user.getBase().getInventory().getHelmet())) {
+                        user.getBase().getInventory().setHelmet(stack);
+                        continue;
+                    } else if (MaterialUtil.isChestplate(material) && isEmptyStack(user.getBase().getInventory().getChestplate())) {
+                        user.getBase().getInventory().setChestplate(stack);
+                        continue;
+                    } else if (MaterialUtil.isLeggings(material) && isEmptyStack(user.getBase().getInventory().getLeggings())) {
+                        user.getBase().getInventory().setLeggings(stack);
+                        continue;
+                    } else if (MaterialUtil.isBoots(material) && isEmptyStack(user.getBase().getInventory().getBoots())) {
+                        user.getBase().getInventory().setBoots(stack);
+                        continue;
+                    }
                 }
                 
                 itemList.add(metaStack.getItemStack());
@@ -251,5 +271,9 @@ public class Kit {
             throw new Exception(tl("kitError2"), e);
         }
         return true;
+    }
+
+    private boolean isEmptyStack(ItemStack stack) {
+        return stack == null || stack.getType().isAir();
     }
 }
