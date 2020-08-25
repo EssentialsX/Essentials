@@ -15,6 +15,7 @@ import net.ess3.api.events.KitClaimEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
 
 import java.math.BigDecimal;
 import java.util.*;
@@ -197,17 +198,18 @@ public class Kit {
                 if (autoEquip) {
                     ItemStack stack = metaStack.getItemStack();
                     Material material = stack.getType();
-                    if (MaterialUtil.isHelmet(material) && isEmptyStack(user.getBase().getInventory().getHelmet())) {
-                        user.getBase().getInventory().setHelmet(stack);
+                    PlayerInventory inventory = user.getBase().getInventory();
+                    if (MaterialUtil.isHelmet(material) && isEmptyStack(inventory.getHelmet())) {
+                        inventory.setHelmet(stack);
                         continue;
-                    } else if (MaterialUtil.isChestplate(material) && isEmptyStack(user.getBase().getInventory().getChestplate())) {
-                        user.getBase().getInventory().setChestplate(stack);
+                    } else if (MaterialUtil.isChestplate(material) && isEmptyStack(inventory.getChestplate())) {
+                        inventory.setChestplate(stack);
                         continue;
-                    } else if (MaterialUtil.isLeggings(material) && isEmptyStack(user.getBase().getInventory().getLeggings())) {
-                        user.getBase().getInventory().setLeggings(stack);
+                    } else if (MaterialUtil.isLeggings(material) && isEmptyStack(inventory.getLeggings())) {
+                        inventory.setLeggings(stack);
                         continue;
-                    } else if (MaterialUtil.isBoots(material) && isEmptyStack(user.getBase().getInventory().getBoots())) {
-                        user.getBase().getInventory().setBoots(stack);
+                    } else if (MaterialUtil.isBoots(material) && isEmptyStack(inventory.getBoots())) {
+                        inventory.setBoots(stack);
                         continue;
                     }
                 }
