@@ -43,7 +43,7 @@ public class Commandclearinventory extends EssentialsLoopCommand {
             return;
         }
 
-        if (user.isAuthorized("essentials.clearinventory.others")) {
+        if ((args[0].contains("*") && (user.isAuthorized("essentials.clearinventory.all") || user.isAuthorized("essentials.clearinventory.multiple"))) || user.isAuthorized("essentials.clearinventory.others")) {
             loopOnlinePlayers(server, user.getSource(), false, true, args[0], args);
             return;
         }
