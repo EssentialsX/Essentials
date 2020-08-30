@@ -10,6 +10,7 @@ import org.bukkit.Server;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -101,6 +102,6 @@ public class Commandme extends EssentialsCommand {
 
     @Override
     protected List<String> getTabCompleteOptions(Server server, CommandSource sender, String commandLabel, String[] args) {
-        return null;  // It's a chat message, use the default chat handler
+        return Collections.emptyList();
     }
 }

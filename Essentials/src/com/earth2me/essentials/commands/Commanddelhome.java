@@ -1,6 +1,7 @@
 package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.CommandSource;
+import com.earth2me.essentials.IUser;
 import com.earth2me.essentials.User;
 import org.bukkit.Server;
 
@@ -54,10 +55,10 @@ public class Commanddelhome extends EssentialsCommand {
 
     @Override
     protected List<String> getTabCompleteOptions(final Server server, final CommandSource sender, final String commandLabel, final String[] args) {
-        User user = ess.getUser(sender.getPlayer());
-        boolean canDelOthers = user == null || user.isAuthorized("essentials.delhome.others");
+        IUser user = sender.getUser(ess);
+        boolean canDelOthers = sender.isAuthorized("essentials.delhome.others", ess);
         if (args.length == 1) {
-            List<String> homes = user == null ? new ArrayList<>() : user.getHomes();
+            List<String> homes = sender.isPlayer() ? new ArrayList<>() : user.getHomes();
             if (canDelOthers) {
                 int sepIndex = args[0].indexOf(':');
                 if (sepIndex < 0) {

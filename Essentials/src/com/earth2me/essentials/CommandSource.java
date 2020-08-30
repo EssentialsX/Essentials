@@ -51,4 +51,8 @@ public class CommandSource {
     public String getSelfSelector() {
         return sender instanceof Player ? getPlayer().getName() : "*";
     }
+
+    public String getDisplayName() {
+        return sender instanceof Player ? getPlayer().getDisplayName() : getSender().getName();
+    }
 }
