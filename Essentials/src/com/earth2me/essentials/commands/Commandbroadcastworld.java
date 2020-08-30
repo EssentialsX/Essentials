@@ -79,21 +79,8 @@ public class Commandbroadcastworld extends EssentialsCommand {
     }
 
     @Override
-    protected List<String> getTabCompleteOptions(Server server, User user, String commandLabel, String[] args) {
-        if (args.length == 1 && ess.getSettings().isAllowWorldInBroadcastworld()) {
-            List<String> worlds = Lists.newArrayList();
-            for (World world : server.getWorlds()) {
-                worlds.add(world.getName());
-            }
-            return worlds;
-        } else {
-            return Collections.emptyList();
-        }
-    }
-
-    @Override
     protected List<String> getTabCompleteOptions(Server server, CommandSource sender, String commandLabel, String[] args) {
-        if (args.length == 1) {
+        if (args.length == 1 && (!sender.isPlayer() || ess.getSettings().isAllowWorldInBroadcastworld())) {
             List<String> worlds = Lists.newArrayList();
             for (World world : server.getWorlds()) {
                 worlds.add(world.getName());

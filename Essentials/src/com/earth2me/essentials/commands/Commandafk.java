@@ -91,17 +91,8 @@ public class Commandafk extends EssentialsCommand {
     }
 
     @Override
-    protected List<String> getTabCompleteOptions(Server server, User user, String commandLabel, String[] args) {
-        if (args.length == 1 && user.isAuthorized("essentials.afk.others")) {
-            return getPlayers(server, user);
-        } else {
-            return Collections.emptyList();
-        }
-    }
-
-    @Override
     protected List<String> getTabCompleteOptions(Server server, CommandSource sender, String commandLabel, String[] args) {
-        if (args.length == 1) {
+        if (args.length == 1 && sender.isAuthorized("essentials.afk.others", ess)) {
             return getPlayers(server, sender);
         } else {
             return Collections.emptyList();
