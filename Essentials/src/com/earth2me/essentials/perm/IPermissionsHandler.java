@@ -32,4 +32,8 @@ public interface IPermissionsHandler {
     String getBackendName();
 
     boolean tryProvider();
+    
+    default boolean hasOfflineSupport() {
+        return false;
+    }
 }
