@@ -931,7 +931,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
     }
 
     @Override
-    public List<User> getOnlineUsers() {
+    public Iterable<User> getOnlineUsers() {
         List<User> onlineUsers = new ArrayList<>();
         for (Player player : getOnlinePlayers()) {
             onlineUsers.add(getUser(player));
