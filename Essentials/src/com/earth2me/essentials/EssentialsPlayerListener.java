@@ -276,6 +276,7 @@ public class EssentialsPlayerListener implements Listener {
 
                 user.setLastAccountName(user.getBase().getName());
                 user.setLastLogin(currentTime);
+                user.setExcludedFromBalTop(user.isAuthorized("essentials.balancetop.exclude"));
                 user.setDisplayNick();
                 updateCompass(user);
 

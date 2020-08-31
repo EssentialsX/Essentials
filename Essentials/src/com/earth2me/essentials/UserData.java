@@ -95,6 +95,7 @@ public abstract class UserData extends PlayerExtension implements IConf {
         confirmPay = _getConfirmPay();
         confirmClear = _getConfirmClear();
         lastMessageReplyRecipient = _getLastMessageReplyRecipient();
+        excludedFromBalTop = _isExcludedFromBalTop();
     }
 
     private BigDecimal money;
@@ -185,6 +186,22 @@ public abstract class UserData extends PlayerExtension implements IConf {
         } catch (InvalidWorldException ex) {
             return null;
         }
+    }
+    
+    private boolean excludedFromBalTop = false;
+
+    public void setExcludedFromBalTop(boolean excludedFromBalTop) {
+        this.excludedFromBalTop = excludedFromBalTop;
+        config.set("balTopExempt", excludedFromBalTop);
+        config.save();
+    }
+
+    public boolean isExcludedFromBalTop() {
+        return excludedFromBalTop;
+    }
+    
+    private boolean _isExcludedFromBalTop() {
+        return config.hasProperty("balTopExempt") && config.getBoolean("balTopExempt");
     }
 
     public List<String> getHomes() {
