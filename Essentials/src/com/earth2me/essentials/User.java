@@ -112,7 +112,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
 
     private boolean isAuthorizedCheck(final String node) {
 
-        if (base instanceof OfflinePlayer && !ess.getPermissionsHandler().hasOfflineSupport()) {
+        if (base instanceof OfflinePlayer) {
             return false;
         }
 
@@ -130,7 +130,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
     }
 
     private boolean isPermSetCheck(final String node) {
-        if (base instanceof OfflinePlayer && !ess.getPermissionsHandler().hasOfflineSupport()) {
+        if (base instanceof OfflinePlayer) {
             return false;
         }
 

@@ -1,16 +1,10 @@
 package com.earth2me.essentials.perm.impl;
 
-import com.earth2me.essentials.OfflinePlayer;
 import net.luckperms.api.LuckPerms;
-import net.luckperms.api.LuckPermsProvider;
-import net.luckperms.api.cacheddata.CachedPermissionData;
 import net.luckperms.api.context.ContextCalculator;
 import net.luckperms.api.context.ContextConsumer;
-import net.luckperms.api.context.ContextManager;
 import net.luckperms.api.context.ContextSet;
 import net.luckperms.api.context.ImmutableContextSet;
-import net.luckperms.api.model.user.User;
-import net.luckperms.api.query.QueryOptions;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.RegisteredServiceProvider;
@@ -57,29 +51,5 @@ public class LuckPermsHandler extends ModernVaultHandler {
             contextCalculators = new HashSet<>();
         }
         return luckPerms != null && super.tryProvider();
-    }
-
-    @Override
-    public boolean hasOfflineSupport() {
-        return true;
-    }
-
-    @Override
-    public boolean hasPermission(Player base, String node) {
-        // Do offline perm checking.
-        if (base instanceof OfflinePlayer) {
-            User user = luckPerms.getUserManager().loadUser(base.getUniqueId()).join();
-            return hasPermission(user, node);
-        }
-        
-        return super.hasPermission(base, node);
-    }
-
-    private boolean hasPermission(User user, String permission) {
-        ContextManager contextManager = luckPerms.getContextManager();
-        ImmutableContextSet contextSet = contextManager.getContext(user).orElseGet(contextManager::getStaticContext);
-
-        CachedPermissionData permissionData = user.getCachedData().getPermissionData(QueryOptions.contextual(contextSet));
-        return permissionData.checkPermission(permission).asBoolean();
     }
 }
