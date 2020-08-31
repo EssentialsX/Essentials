@@ -1,7 +1,6 @@
 package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.CommandSource;
-import com.earth2me.essentials.OfflinePlayer;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.textreader.SimpleTextInput;
 import com.earth2me.essentials.textreader.TextPager;
@@ -101,12 +100,6 @@ public class Commandbalancetop extends EssentialsCommand {
                                     // Don't list NPCs in output
                                     continue;
                                 }
-                                
-                                // Normal perm checks don't work with offline players.
-                                if (!user.getBase().isOnline() && user.isExcludedFromBalTop()) {
-                                    continue;
-                                }
-                                
                                 if (!user.isAuthorized("essentials.balancetop.exclude")) {
                                     final BigDecimal userMoney = user.getMoney();
                                     user.updateMoneyCache(userMoney);
