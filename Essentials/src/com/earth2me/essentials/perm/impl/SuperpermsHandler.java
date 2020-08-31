@@ -47,7 +47,7 @@ public class SuperpermsHandler implements IPermissionsHandler {
      * @param node node to check
      * @return whether an op would, in absense of other permissions being set, have
      */
-    private boolean isDeniedToOps(final String node) {
+    boolean isDeniedToOps(final String node) {
         final Permission perm = Bukkit.getServer().getPluginManager().getPermission(node);
         return perm != null && !perm.getDefault().getValue(true);
     }
