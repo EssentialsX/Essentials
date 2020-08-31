@@ -201,4 +201,12 @@ public class PermissionsHandler implements IPermissionsHandler {
         });
     }
 
+    @Override
+    public boolean hasOfflineSupport() {
+        if (handler == null) {
+            return false;
+        }
+        
+        return handler.hasOfflineSupport();
+    }
 }
