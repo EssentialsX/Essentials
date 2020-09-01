@@ -72,7 +72,7 @@ public class LuckPermsHandler extends ModernVaultHandler {
         String permCheck = node;
         int index;
         while (true) {
-            if (data.checkPermission(permCheck) != Tristate.UNDEFINED || isDeniedToOps(node)) {
+            if (data.getPermissionMap().containsKey(permCheck) || isDeniedToOps(node)) {
                 return data.checkPermission(permCheck).asBoolean();
             }
 
