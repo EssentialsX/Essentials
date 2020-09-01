@@ -9,15 +9,18 @@ import net.luckperms.api.context.ContextManager;
 import net.luckperms.api.context.ContextSet;
 import net.luckperms.api.context.ImmutableContextSet;
 import net.luckperms.api.model.user.User;
+import net.luckperms.api.node.Node;
 import net.luckperms.api.node.NodeBuilder;
 import net.luckperms.api.node.NodeEqualityPredicate;
 import net.luckperms.api.node.types.PermissionNode;
+import net.luckperms.api.query.QueryMode;
 import net.luckperms.api.query.QueryOptions;
 import net.luckperms.api.util.Tristate;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.RegisteredServiceProvider;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -114,8 +117,10 @@ public class LuckPermsHandler extends ModernVaultHandler {
         // Do offline perm checking.
         if (base instanceof OfflinePlayer) {
             User user = getUser(base);
-            return user.data().contains(PermissionNode.builder().permission(node).build(),
-                    NodeEqualityPredicate.EXACT).asBoolean();
+            
+            return user.getCachedData().getPermissionData(QueryOptions.nonContextual())
+                    .getPermissionMap()
+                    .containsKey(node);
         }
         
         return base.isPermissionSet(node);
