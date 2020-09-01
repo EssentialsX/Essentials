@@ -103,6 +103,9 @@ public class LuckPermsHandler extends ModernVaultHandler {
         return super.hasPermission(base, node);
     }
 
+    // Loading a single User from the LP db takes ~10ms(blocking), this 
+    // lag is eliminated after the intial load of the user as it gets cached.
+    // As such, offline perm checking should be used judicously.
     @Override
     public boolean isPermissionSet(Player base, String node) {
         // Do offline perm checking.
