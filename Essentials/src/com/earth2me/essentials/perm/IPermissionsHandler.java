@@ -33,7 +33,5 @@ public interface IPermissionsHandler {
 
     boolean tryProvider();
     
-    default boolean hasOfflineSupport() {
-        return false;
-    }
+    boolean hasOfflineSupport();
 }

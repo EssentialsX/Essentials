@@ -144,4 +144,9 @@ public class SuperpermsHandler implements IPermissionsHandler {
         }
         return enabledPermsPlugin;
     }
+
+    @Override
+    public boolean hasOfflineSupport() {
+        return false;
+    }
 }

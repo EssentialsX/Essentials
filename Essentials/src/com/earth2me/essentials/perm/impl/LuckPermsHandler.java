@@ -9,6 +9,9 @@ import net.luckperms.api.context.ContextManager;
 import net.luckperms.api.context.ContextSet;
 import net.luckperms.api.context.ImmutableContextSet;
 import net.luckperms.api.model.user.User;
+import net.luckperms.api.node.NodeBuilder;
+import net.luckperms.api.node.NodeEqualityPredicate;
+import net.luckperms.api.node.types.PermissionNode;
 import net.luckperms.api.query.QueryOptions;
 import net.luckperms.api.util.Tristate;
 import org.bukkit.Bukkit;
@@ -86,6 +89,9 @@ public class LuckPermsHandler extends ModernVaultHandler {
         }
     }
 
+    // Loading a single User from the LP db takes ~10ms(blocking).
+    // Any substantial delay is eliminated after the initial load of the user after it gets cached.
+    // As such, offline perm checking should consider these specifications judiciously.
     @Override
     public boolean hasPermission(Player base, String node) {
         // Do offline perm checking.
@@ -102,16 +108,14 @@ public class LuckPermsHandler extends ModernVaultHandler {
         
         return super.hasPermission(base, node);
     }
-
-    // Loading a single User from the LP db takes ~10ms(blocking), this 
-    // lag is eliminated after the intial load of the user as it gets cached.
-    // As such, offline perm checking should be used judicously.
+    
     @Override
     public boolean isPermissionSet(Player base, String node) {
         // Do offline perm checking.
         if (base instanceof OfflinePlayer) {
             User user = getUser(base);
-            return fetchDataCache(user).checkPermission(node) != Tristate.UNDEFINED;
+            return user.data().contains(PermissionNode.builder().permission(node).build(),
+                    NodeEqualityPredicate.EXACT).asBoolean();
         }
         
         return base.isPermissionSet(node);
