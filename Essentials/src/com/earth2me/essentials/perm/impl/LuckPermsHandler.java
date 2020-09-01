@@ -9,18 +9,12 @@ import net.luckperms.api.context.ContextManager;
 import net.luckperms.api.context.ContextSet;
 import net.luckperms.api.context.ImmutableContextSet;
 import net.luckperms.api.model.user.User;
-import net.luckperms.api.node.Node;
-import net.luckperms.api.node.NodeBuilder;
-import net.luckperms.api.node.NodeEqualityPredicate;
-import net.luckperms.api.node.types.PermissionNode;
-import net.luckperms.api.query.QueryMode;
 import net.luckperms.api.query.QueryOptions;
 import net.luckperms.api.util.Tristate;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.RegisteredServiceProvider;
 
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -99,7 +93,7 @@ public class LuckPermsHandler extends ModernVaultHandler {
     public boolean hasPermission(Player base, String node) {
         // Do offline perm checking.
         if (base instanceof OfflinePlayer) {
-            User user = getUser(base);
+            User user = loadOfflineUser(base);
             CachedPermissionData data = fetchDataCache(user);
             
             if (!emulateWildcards()) {
@@ -116,9 +110,8 @@ public class LuckPermsHandler extends ModernVaultHandler {
     public boolean isPermissionSet(Player base, String node) {
         // Do offline perm checking.
         if (base instanceof OfflinePlayer) {
-            User user = getUser(base);
-            
-            return user.getCachedData().getPermissionData(QueryOptions.nonContextual())
+            User user = loadOfflineUser(base);
+            return fetchDataCache(user)
                     .getPermissionMap()
                     .containsKey(node);
         }
@@ -126,7 +119,7 @@ public class LuckPermsHandler extends ModernVaultHandler {
         return base.isPermissionSet(node);
     }
     
-    private User getUser(Player player) {
+    private User loadOfflineUser(Player player) {
         offlineUserCache.computeIfAbsent(player.getUniqueId(),
                 (id) -> luckPerms.getUserManager().loadUser(id).join());
         return offlineUserCache.get(player.getUniqueId());
