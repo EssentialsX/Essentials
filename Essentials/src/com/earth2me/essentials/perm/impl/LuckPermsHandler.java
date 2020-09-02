@@ -1,6 +1,7 @@
 package com.earth2me.essentials.perm.impl;
 
 import com.earth2me.essentials.OfflinePlayer;
+import com.earth2me.essentials.perm.IPermissionsHandler;
 import net.luckperms.api.LuckPerms;
 import net.luckperms.api.cacheddata.CachedPermissionData;
 import net.luckperms.api.context.ContextCalculator;
@@ -9,24 +10,29 @@ import net.luckperms.api.context.ContextManager;
 import net.luckperms.api.context.ContextSet;
 import net.luckperms.api.context.ImmutableContextSet;
 import net.luckperms.api.model.user.User;
+import net.luckperms.api.node.NodeType;
+import net.luckperms.api.node.types.InheritanceNode;
 import net.luckperms.api.query.QueryOptions;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.RegisteredServiceProvider;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 public class LuckPermsHandler extends ModernVaultHandler {
     private LuckPerms luckPerms;
     private Set<ContextCalculator<Player>> contextCalculators;
     private final Map<UUID, User> offlineUserCache = new ConcurrentHashMap<>();
-
+    
     @Override
     public void registerContext(String context, Function<Player, Iterable<String>> calculator, Supplier<Iterable<String>> suggestions) {
         ContextCalculator<Player> contextCalculator = new ContextCalculator<Player>() {
@@ -117,6 +123,7 @@ public class LuckPermsHandler extends ModernVaultHandler {
     private User loadOfflineUser(Player player) {
         offlineUserCache.computeIfAbsent(player.getUniqueId(),
                 (id) -> luckPerms.getUserManager().loadUser(id).join());
+        
         return offlineUserCache.get(player.getUniqueId());
     }
     
@@ -125,5 +132,32 @@ public class LuckPermsHandler extends ModernVaultHandler {
         ImmutableContextSet contextSet = contextManager.getContext(user).orElseGet(contextManager::getStaticContext);
         
         return user.getCachedData().getPermissionData(QueryOptions.contextual(contextSet));
+    }
+
+    @Override
+    public boolean inGroup(Player base, String group) {
+        if (base instanceof OfflinePlayer) {
+            return getOfflineGroups(base).contains(group);
+        }
+        
+        return super.inGroup(base, group);
+    }
+
+    @Override
+    public List<String> getGroups(Player base) {
+        if (base instanceof OfflinePlayer) {
+            return new ArrayList<>(getOfflineGroups(base));
+        }
+        
+        return super.getGroups(base);
+    }
+
+    private Set<String> getOfflineGroups(Player base) {
+        User user = loadOfflineUser(base);
+        return user.getNodes().stream()
+                .filter(NodeType.INHERITANCE::matches)
+                .map(NodeType.INHERITANCE::cast)
+                .map(InheritanceNode::getGroupName)
+                .collect(Collectors.toSet());
     }
 }
