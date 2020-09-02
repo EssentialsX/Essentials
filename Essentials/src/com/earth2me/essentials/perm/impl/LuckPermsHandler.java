@@ -106,9 +106,9 @@ public class LuckPermsHandler extends ModernVaultHandler {
         // Do offline perm checking.
         if (base instanceof OfflinePlayer) {
             User user = loadOfflineUser(base);
-            return fetchDataCache(user)
-                    .getPermissionMap()
-                    .containsKey(node);
+            CachedPermissionData data = fetchDataCache(user);
+            return data.getPermissionMap().containsKey(node)
+                    || fetchDataCache(user).checkPermission(node).asBoolean();
         }
         
         return base.isPermissionSet(node);
