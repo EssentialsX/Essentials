@@ -10,7 +10,6 @@ import net.luckperms.api.context.ContextSet;
 import net.luckperms.api.context.ImmutableContextSet;
 import net.luckperms.api.model.user.User;
 import net.luckperms.api.query.QueryOptions;
-import net.luckperms.api.util.Tristate;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.RegisteredServiceProvider;
@@ -67,24 +66,6 @@ public class LuckPermsHandler extends ModernVaultHandler {
     public boolean hasOfflineSupport() {
         return true;
     }
-    
-    public boolean performWildcardEmulation(CachedPermissionData data, String node) {
-        String permCheck = node;
-        int index;
-        while (true) {
-            if (data.getPermissionMap().containsKey(permCheck) || isDeniedToOps(node)) {
-                return data.checkPermission(permCheck).asBoolean();
-            }
-
-            index = node.lastIndexOf('.');
-            if (index < 1) {
-                return data.checkPermission("*").asBoolean();
-            }
-
-            node = node.substring(0, index);
-            permCheck = node + ".*";
-        }
-    }
 
     // Loading a single User from the LP db takes ~10ms(blocking).
     // Any substantial delay is eliminated after the initial load of the user after it gets cached.
@@ -100,7 +81,21 @@ public class LuckPermsHandler extends ModernVaultHandler {
                 return data.checkPermission(node).asBoolean();
             }
             
-            return performWildcardEmulation(data, node);
+            String permCheck = node;
+            int index;
+            while (true) {
+                if (isPermissionSet(base, permCheck) || isDeniedToOps(node)) {
+                    return data.checkPermission(permCheck).asBoolean();
+                }
+    
+                index = node.lastIndexOf('.');
+                if (index < 1) {
+                    return data.checkPermission("*").asBoolean();
+                }
+    
+                node = node.substring(0, index);
+                permCheck = node + ".*";
+            }
         }
         
         return super.hasPermission(base, node);
