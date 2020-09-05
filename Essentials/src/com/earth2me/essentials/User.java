@@ -11,10 +11,7 @@ import com.earth2me.essentials.utils.NumberUtil;
 import com.earth2me.essentials.utils.VersionUtil;
 import net.ess3.api.IEssentials;
 import net.ess3.api.MaxMoneyException;
-import net.ess3.api.events.AfkStatusChangeEvent;
-import net.ess3.api.events.JailStatusChangeEvent;
-import net.ess3.api.events.MuteStatusChangeEvent;
-import net.ess3.api.events.UserBalanceUpdateEvent;
+import net.ess3.api.events.*;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -199,6 +196,8 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
             reciever.setMoney(reciever.getMoney().add(value), cause);
             sendMessage(tl("moneySentTo", NumberUtil.displayCurrency(value, ess), reciever.getDisplayName()));
             reciever.sendMessage(tl("moneyRecievedFrom", NumberUtil.displayCurrency(value, ess), getDisplayName()));
+            TransactionEvent transactionEvent = new TransactionEvent(this.getSource(), reciever, value);
+            ess.getServer().getPluginManager().callEvent(transactionEvent);
         } else {
             throw new ChargeException(tl("notEnoughMoney", NumberUtil.displayCurrency(value, ess)));
         }
