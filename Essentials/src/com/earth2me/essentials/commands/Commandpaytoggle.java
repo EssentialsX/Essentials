@@ -36,9 +36,9 @@ public class Commandpaytoggle extends EssentialsToggleCommand {
 
         user.setAcceptingPay(enabled);
 
-        user.sendMessage(!enabled ? tl("payToggleOn") : tl("payToggleOff"));
+        user.sendMessage(enabled ? tl("payToggleOn") : tl("payToggleOff"));
         if (!sender.isPlayer() || !user.getBase().equals(sender.getPlayer())) {
-            sender.sendMessage(!enabled ? tl("payEnabledFor", user.getDisplayName()) : tl("payDisabledFor", user.getDisplayName()));
+            sender.sendMessage(enabled ? tl("payEnabledFor", user.getDisplayName()) : tl("payDisabledFor", user.getDisplayName()));
         }
     }
 }
