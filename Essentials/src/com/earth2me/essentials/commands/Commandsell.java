@@ -80,10 +80,11 @@ public class Commandsell extends EssentialsCommand {
             ess.showError(user.getSource(), new Exception(tl("cannotSellTheseNamedItems", String.join(ChatColor.RESET + ", ", names))), commandLabel);
         }
         if (count != 1) {
+            String totalWorthStr = NumberUtil.displayCurrency(totalWorth, ess);
             if (args[0].equalsIgnoreCase("blocks")) {
-                user.sendMessage(tl("totalWorthBlocks", NumberUtil.displayCurrency(totalWorth, ess)));
+                user.sendMessage(tl("totalWorthBlocks", totalWorthStr, totalWorthStr));
             } else {
-                user.sendMessage(tl("totalWorthAll", NumberUtil.displayCurrency(totalWorth, ess)));
+                user.sendMessage(tl("totalWorthAll", totalWorthStr, totalWorthStr));
             }
         }
     }
