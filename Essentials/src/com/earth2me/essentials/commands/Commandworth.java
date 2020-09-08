@@ -46,11 +46,12 @@ public class Commandworth extends EssentialsCommand {
             }
         }
         if (count > 1) {
+            String totalWorthStr = NumberUtil.displayCurrency(totalWorth, ess);
             if (args.length > 0 && args[0].equalsIgnoreCase("blocks")) {
-                user.sendMessage(tl("totalSellableBlocks", NumberUtil.displayCurrency(totalWorth, ess)));
+                user.sendMessage(tl("totalSellableBlocks", totalWorthStr, totalWorthStr));
                 return;
             }
-            user.sendMessage(tl("totalSellableAll", NumberUtil.displayCurrency(totalWorth, ess)));
+            user.sendMessage(tl("totalSellableAll", totalWorthStr, totalWorthStr));
         }
     }
 
