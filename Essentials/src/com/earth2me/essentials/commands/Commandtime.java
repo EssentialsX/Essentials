@@ -1,14 +1,22 @@
 package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.CommandSource;
-import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.DescParseTickFormat;
 import com.earth2me.essentials.utils.NumberUtil;
 import com.google.common.collect.Lists;
 import org.bukkit.Server;
 import org.bukkit.World;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Locale;
+import java.util.Set;
+import java.util.StringJoiner;
+import java.util.TreeSet;
 
 import static com.earth2me.essentials.I18n.tl;
 
@@ -63,14 +71,14 @@ public class Commandtime extends EssentialsCommand {
         }
 
         // Start updating world times, we have what we need
-        User user = ess.getUser(sender.getPlayer());
-        if (!user.isAuthorized("essentials.time.set")) {
+        if (!sender.isAuthorized("essentials.time.set", ess)) {
             throw new Exception(tl("timeSetPermission"));
         }
 
         for (World world : worlds) {
-            if (!canUpdateWorld(user, world)) {
-                throw new Exception(tl("timeSetWorldPermission", user.getWorld().getName()));
+            if (!canUpdateWorld(sender, world)) {
+                //We can ensure that this is User as the console has all permissions (for essentials commands).
+                throw new Exception(tl("timeSetWorldPermission", sender.getUser(ess).getBase().getWorld().getName()));
             }
         }
 
@@ -127,13 +135,13 @@ public class Commandtime extends EssentialsCommand {
         return worlds;
     }
     
-    private boolean canUpdateAll(User user) {
-        return !ess.getSettings().isWorldTimePermissions() // First check if per world permissions are enabled, if not, return true. 
-            || user == null || user.isAuthorized("essentials.time.world.all");
+    private boolean canUpdateAll(CommandSource sender) {
+        return !ess.getSettings().isWorldTimePermissions() // First check if per world permissions are enabled, if not, return true.
+            || sender.isAuthorized("essentials.time.world.all", ess);
     }
 
-    private boolean canUpdateWorld(User user, World world) {
-        return canUpdateAll(user) || user.isAuthorized("essentials.time.world." + normalizeWorldName(world));
+    private boolean canUpdateWorld(CommandSource sender, World world) {
+        return canUpdateAll(sender) || sender.isAuthorized("essentials.time.world." + normalizeWorldName(world), ess);
     }
 
     private String normalizeWorldName(World world) {
