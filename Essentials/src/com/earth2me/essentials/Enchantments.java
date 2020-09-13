@@ -295,4 +295,18 @@ public class Enchantments {
     public static Set<String> keySet() {
         return ENCHANTMENTS.keySet();
     }
+
+    public static void registerEnchantment(String name, Enchantment enchantment) {
+        if(ENCHANTMENTS.containsKey(name) || ALIASENCHANTMENTS.containsKey(name))
+            return;
+
+        ENCHANTMENTS.put(name, enchantment);
+    }
+
+    public static void registerAlias(String name, Enchantment enchantment) {
+        if(ENCHANTMENTS.containsKey(name) || ALIASENCHANTMENTS.containsKey(name) || !ENCHANTMENTS.containsValue(enchantment))
+            return;
+
+        ALIASENCHANTMENTS.put(name, enchantment);
+    }
 }
