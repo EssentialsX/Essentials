@@ -63,6 +63,7 @@ import net.ess3.provider.providers.FlatSpawnEggProvider;
 import net.ess3.provider.providers.LegacyPotionMetaProvider;
 import net.ess3.provider.providers.LegacySpawnEggProvider;
 import net.ess3.provider.providers.PaperContainerProvider;
+import net.ess3.provider.providers.PaperKnownCommandsProvider;
 import net.ess3.provider.providers.PaperRecipeBookListener;
 import net.ess3.provider.providers.PaperServerStateProvider;
 import org.bukkit.Bukkit;
@@ -328,7 +329,11 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
                 }
 
                 //Known Commands Provider
-                knownCommandsProvider = new ReflKnownCommandsProvider();
+                if (PaperLib.isPaper() && VersionUtil.getServerBukkitVersion().isHigherThanOrEqualTo(VersionUtil.v1_11_2_R01)) {
+                    knownCommandsProvider = new PaperKnownCommandsProvider();
+                } else {
+                    knownCommandsProvider = new ReflKnownCommandsProvider();
+                }
 
                 execTimer.mark("Init(Providers)");
                 reload();
