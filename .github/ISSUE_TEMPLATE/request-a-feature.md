@@ -27,7 +27,7 @@ If you have a feature suggestion for EssentialsX, read the following tips:
 3.  Check whether it has already been asked or added.
       You can search the issue tracker to see if your feature has already been
       requested at https://github.com/EssentialsX/Essentials/issues. You can
-      also check the wiki at https://essentialsx.github.io/ to see if the
+      also check the wiki at https://essentialsx.net/ to see if the
       feature was recently added.
 
 4.  Ask yourself: "Does this belong in EssentialsX?"
