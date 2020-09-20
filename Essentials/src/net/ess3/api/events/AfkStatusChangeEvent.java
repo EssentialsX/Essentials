@@ -27,6 +27,7 @@ public class AfkStatusChangeEvent extends StatusChangeEvent {
         COMMAND,
         JOIN,
         QUIT,
+        CHAT,
         UNKNOWN
     }
 }
