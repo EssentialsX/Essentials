@@ -25,13 +25,7 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import java.math.BigDecimal;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.UUID;
-import java.util.WeakHashMap;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -659,6 +653,12 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
     public void updateActivityOnInteract(final boolean broadcast) {
         if(ess.getSettings().cancelAfkOnInteract()) {
             updateActivity(broadcast, AfkStatusChangeEvent.Cause.INTERACT);
+        }
+    }
+
+    public void updateActivityOnChat(final boolean broadcast) {
+        if(ess.getSettings().cancelAfkOnChat()) {
+            updateActivity(broadcast, AfkStatusChangeEvent.Cause.CHAT);
         }
     }
 

@@ -24,17 +24,8 @@ import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
-import java.util.Set;
 import java.util.function.Predicate;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -536,6 +527,7 @@ public class Settings implements net.ess3.api.ISettings {
         disableItemPickupWhileAfk = _getDisableItemPickupWhileAfk();
         registerBackInListener = _registerBackInListener();
         cancelAfkOnInteract = _cancelAfkOnInteract();
+        cancelAfkOnChat = _cancelAfkOnChat();
         cancelAfkOnMove = _cancelAfkOnMove();
         getFreezeAfkPlayers = _getFreezeAfkPlayers();
         sleepIgnoresAfkPlayers = _sleepIgnoresAfkPlayers();
@@ -955,6 +947,17 @@ public class Settings implements net.ess3.api.ISettings {
 
     private boolean _cancelAfkOnInteract() {
         return config.getBoolean("cancel-afk-on-interact", true);
+    }
+
+    private boolean cancelAfkOnChat;
+
+    @Override
+    public boolean cancelAfkOnChat() {
+        return cancelAfkOnChat;
+    }
+
+    private boolean _cancelAfkOnChat() {
+        return config.getBoolean("cancel-afk-on-chat", true);
     }
 
     private boolean sleepIgnoresAfkPlayers;
