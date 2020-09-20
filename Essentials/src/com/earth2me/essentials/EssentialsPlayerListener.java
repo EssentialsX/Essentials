@@ -140,6 +140,10 @@ public class EssentialsPlayerListener implements Listener {
 
         user.updateActivityOnInteract(true);
         user.setDisplayNick();
+        
+        if(user.isAFK()) {
+             user.updateActivity(false, AfkStatusChangeEvent.Cause.CHAT);
+        }
     }
 
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
