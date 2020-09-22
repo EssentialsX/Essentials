@@ -10,19 +10,22 @@ import org.bukkit.Server;
 
 import static com.earth2me.essentials.I18n.tl;
 
-
 public class Commandsetwarp extends EssentialsCommand {
     public Commandsetwarp() {
         super("setwarp");
     }
 
     @Override
-    public void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception {
+    public void run(final Server server, final User user, final String commandLabel, final String[] args)
+            throws Exception {
         if (args.length == 0) {
             throw new NotEnoughArgumentsException();
         }
 
-        if (NumberUtil.isInt(args[0]) || args[0].isEmpty()) {
+        final String warpName = args[0];
+        final String safeWarpName = StringUtil.safeString(warpName);
+
+        if (NumberUtil.isInt(warpName) || warpName.isEmpty()) {
             throw new Exception(tl("invalidWarpName"));
         }
 
@@ -30,15 +33,23 @@ public class Commandsetwarp extends EssentialsCommand {
         Location warpLoc = null;
 
         try {
-            warpLoc = warps.getWarp(args[0]);
+            warpLoc = warps.getWarp(warpName);
         } catch (WarpNotFoundException | InvalidWorldException ignored) {
         }
 
-        if (warpLoc == null || user.isAuthorized("essentials.warp.overwrite." + StringUtil.safeString(args[0]))) {
-            warps.setWarp(user, args[0], user.getLocation());
-        } else {
+        final boolean warpExists = warpLoc != null;
+        final boolean canOverwrite = user.isAuthorized("essentials.warp.overwrite." + safeWarpName);
+        final boolean canCreate = user.isAuthorized("essentials.warp.set." + safeWarpName);
+
+        if (warpExists && !canOverwrite) {
             throw new Exception(tl("warpOverwrite"));
         }
-        user.sendMessage(tl("warpSet", args[0]));
+
+        if (!warpExists && !canCreate && !canOverwrite) {
+            throw new Exception(tl("warpCreate"));
+        }
+
+        warps.setWarp(user, warpName, user.getLocation());
+        user.sendMessage(tl("warpSet", warpName));
     }
 }

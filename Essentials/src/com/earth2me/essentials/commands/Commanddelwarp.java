@@ -16,7 +16,8 @@ public class Commanddelwarp extends EssentialsCommand {
     }
 
     @Override
-    public void run(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception {
+    public void run(final Server server, final CommandSource sender, final String commandLabel, final String[] args)
+            throws Exception {
         if (args.length == 0) {
             throw new NotEnoughArgumentsException();
         }
@@ -26,11 +27,12 @@ public class Commanddelwarp extends EssentialsCommand {
     }
 
     @Override
-    protected List<String> getTabCompleteOptions(final Server server, final CommandSource sender, final String commandLabel, final String[] args) {
-        if (args.length == 1) {
-            return new ArrayList<>(ess.getWarps().getList());
-        } else {
+    protected List<String> getTabCompleteOptions(final Server server, final CommandSource sender,
+                                                 final String commandLabel, final String[] args) {
+        if (args.length != 1) {
             return Collections.emptyList();
         }
+
+        return new ArrayList<>(ess.getWarps().getList());
     }
 }
