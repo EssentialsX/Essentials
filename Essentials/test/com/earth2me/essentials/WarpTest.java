@@ -88,7 +88,7 @@ public class WarpTest {
     }
 
     private void grantCreate(String warpName, boolean value) {
-        when(userMock.isAuthorized("essentials.setwarp." + warpName)).thenReturn(value);
+        when(userMock.isAuthorized("essentials.warp.set." + warpName)).thenReturn(value);
     }
 
     private void grantOverwrite(String warpName, boolean value) {
