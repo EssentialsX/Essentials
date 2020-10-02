@@ -40,6 +40,7 @@ import net.ess3.api.*;
 import net.ess3.nms.refl.providers.ReflServerStateProvider;
 import net.ess3.nms.refl.providers.ReflSpawnEggProvider;
 import net.ess3.nms.refl.providers.ReflSpawnerBlockProvider;
+import net.ess3.provider.MaterialTagProvider;
 import net.ess3.provider.PotionMetaProvider;
 import net.ess3.provider.ProviderListener;
 import net.ess3.provider.ServerStateProvider;
@@ -110,6 +111,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
     private transient PotionMetaProvider potionMetaProvider;
     private transient ServerStateProvider serverStateProvider;
     private transient ProviderListener recipeBookEventProvider;
+    private transient MaterialTagProvider materialTagProvider;
     private transient Kits kits;
     private transient RandomTeleport randomTeleport;
 
@@ -278,6 +280,11 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
                             }
                         });
                     } catch (ClassNotFoundException ignored) {}
+                }
+
+                //Material Tag Providers
+                if (VersionUtil.getServerBukkitVersion().isHigherThanOrEqualTo(VersionUtil.v1_13_0_R01)) {
+                    materialTagProvider = PaperLib.isPaper() ? new PaperMaterialTagProvider() : new BukkitMaterialTagProvider();
                 }
 
                 execTimer.mark("Init(Providers)");
@@ -967,6 +974,10 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
     @Override
     public ServerStateProvider getServerStateProvider() {
         return serverStateProvider;
+    }
+
+    public MaterialTagProvider getMaterialTagProvider() {
+        return materialTagProvider;
     }
 
     private static void addDefaultBackPermissionsToWorld(World w) {
