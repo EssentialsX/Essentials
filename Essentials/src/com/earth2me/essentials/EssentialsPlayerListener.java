@@ -342,6 +342,8 @@ public class EssentialsPlayerListener implements Listener {
                             user.getBase().sendMessage(tl("flyMode", tl("enabled"), user.getDisplayName()));
                         }
                     }
+                } else {
+                    resetUserFly(user);
                 }
 
                 if (!user.isAuthorized("essentials.speed")) {
@@ -602,13 +604,7 @@ public class EssentialsPlayerListener implements Listener {
         final User user = ess.getUser(event.getPlayer());
 
         if (ess.getSettings().isWorldChangeFlyResetEnabled()) {
-            if (user.getBase().getGameMode() != GameMode.CREATIVE
-                    // COMPAT: String compare for 1.7.10
-                    && !user.getBase().getGameMode().name().equals("SPECTATOR")
-                    && !user.isAuthorized("essentials.fly")) {
-                user.getBase().setFallDistance(0f);
-                user.getBase().setAllowFlight(false);
-            }
+            resetUserFly(user);
         }
 
         if (ess.getSettings().isWorldChangeSpeedResetEnabled()) {
@@ -626,6 +622,16 @@ public class EssentialsPlayerListener implements Listener {
                     user.getBase().setWalkSpeed((float) ess.getSettings().getMaxWalkSpeed());
                 }
             }
+        }
+    }
+
+    private void resetUserFly(User user) {
+        if (user.getBase().getGameMode() != GameMode.CREATIVE
+                // COMPAT: String compare for 1.7.10
+                && !user.getBase().getGameMode().name().equals("SPECTATOR")
+                && !user.isAuthorized("essentials.fly")) {
+            user.getBase().setFallDistance(0f);
+            user.getBase().setAllowFlight(false);
         }
     }
 
