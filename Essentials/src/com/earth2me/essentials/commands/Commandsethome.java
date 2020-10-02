@@ -24,7 +24,6 @@ public class Commandsethome extends EssentialsCommand {
     public void run(final Server server, final User user, final String commandLabel, String[] args) throws Exception {
         User usersHome = user;
         String name = "home";
-        final Location location = user.getLocation();
 
         if (args.length > 0) {
             //Allowing both formats /sethome khobbits house | /sethome khobbits:house
@@ -52,6 +51,7 @@ public class Commandsethome extends EssentialsCommand {
             throw new NoSuchFieldException(tl("invalidHomeName"));
         }
 
+        final Location location = user.getLocation();
         if (!ess.getSettings().isTeleportSafetyEnabled() && LocationUtil.isBlockUnsafeForUser(usersHome, location.getWorld(), location.getBlockX(), location.getBlockY(), location.getBlockZ())) {
             throw new Exception(tl("unsafeTeleportDestination", location.getWorld().getName(), location.getBlockX(), location.getBlockY(), location.getBlockZ()));
         }

@@ -59,7 +59,7 @@ public class PlayerList {
     }
 
     // Build the basic player list, divided by groups.
-    public static Map<String, List<User>> getPlayerLists(final IEssentials ess, final User sender, final boolean showHidden) {
+    public static Map<String, List<User>> getPlayerLists(final IEssentials ess, final IUser sender, final boolean showHidden) {
         final Map<String, List<User>> playerList = new HashMap<>();
         for (User onlineUser : ess.getOnlineUsers()) {
             if ((sender == null && !showHidden && onlineUser.isHidden()) || (sender != null && !showHidden && !sender.getBase().canSee(onlineUser.getBase()))) {

@@ -1,10 +1,9 @@
 package com.earth2me.essentials.commands;
 
-import static com.earth2me.essentials.I18n.tl;
-
 import com.earth2me.essentials.User;
-
 import org.bukkit.Server;
+
+import static com.earth2me.essentials.I18n.tl;
 
 public class Commandpayconfirmtoggle extends EssentialsCommand {
 
@@ -21,11 +20,7 @@ public class Commandpayconfirmtoggle extends EssentialsCommand {
             confirmingPay = false;
         }
         user.setPromptingPayConfirm(confirmingPay);
-        if (confirmingPay) {
-            user.sendMessage(tl("payConfirmToggleOn"));
-        } else {
-            user.sendMessage(tl("payConfirmToggleOff"));
-        }
+        user.sendMessage(confirmingPay ? tl("payConfirmToggleOn") : tl("payConfirmToggleOff"));
         user.getConfirmingPayments().clear(); // Clear any outstanding confirmations.
     }
 }

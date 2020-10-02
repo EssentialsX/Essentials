@@ -26,7 +26,7 @@ public class Commandrepair extends EssentialsCommand {
 
     @Override
     public void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception {
-        if (args.length < 1 || args[0].equalsIgnoreCase("hand") || !user.isAuthorized("essentials.repair.all")) {
+        if (args.length == 0 || args[0].equalsIgnoreCase("hand") || !user.isAuthorized("essentials.repair.all")) {
             repairHand(user);
         } else if (args[0].equalsIgnoreCase("all")) {
             final Trade charge = new Trade("repair-all", ess);

@@ -35,7 +35,7 @@ public class EnumUtil {
     }
 
     /**
-     * Return a set containing <b>all</b> fields of the given enum that maths one of the provided
+     * Return a set containing <b>all</b> fields of the given enum that match one of the provided
      * names.
      *
      * @param enumClass The class to search through

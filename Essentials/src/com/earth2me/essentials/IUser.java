@@ -179,6 +179,8 @@ public interface IUser {
 
     String getName();
 
+    String getDisplayName();
+
     String getAfkMessage();
 
     void setAfkMessage(final String message);

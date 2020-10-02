@@ -5,11 +5,14 @@ import com.earth2me.essentials.Console;
 import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.commands.EssentialsCommand;
+import com.earth2me.essentials.commands.NoChargeException;
 import com.earth2me.essentials.commands.NotEnoughArgumentsException;
 import org.bukkit.Location;
 import org.bukkit.Server;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 import static com.earth2me.essentials.I18n.tl;
@@ -38,11 +41,13 @@ public class Commandspawn extends EssentialsCommand {
         } else {
             respawn(user.getSource(), user, user, charge, commandLabel, new CompletableFuture<>());
         }
+        
+        throw new NoChargeException();
     }
 
     @Override
     protected void run(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception {
-        if (args.length < 1) {
+        if (args.length == 0) {
             throw new NotEnoughArgumentsException();
         }
         final User user = getPlayer(server, args, 0, true, false);
@@ -55,9 +60,16 @@ public class Commandspawn extends EssentialsCommand {
         });
     }
 
+    @Override
+    protected List<String> getTabCompleteOptions(Server server, CommandSource sender, String commandLabel, String[] args) {
+        if (args.length == 1 && sender.isAuthorized("essentials.spawn.others", ess)) {
+            return getPlayers(server, sender);
+        }
+        return Collections.emptyList();
+    }
+
     private void respawn(final CommandSource sender, final User teleportOwner, final User teleportee, final Trade charge, String commandLabel, CompletableFuture<Boolean> future) throws Exception {
-        final SpawnStorage spawns = (SpawnStorage) this.module;
-        final Location spawn = spawns.getSpawn(teleportee.getGroup());
+        final Location spawn = ((SpawnStorage) this.module).getSpawn(teleportee.getGroup());
         sender.sendMessage(tl("teleporting", spawn.getWorld().getName(), spawn.getBlockX(), spawn.getBlockY(), spawn.getBlockZ()));
         future.exceptionally(e -> {
             showError(sender.getSender(), e, commandLabel);
@@ -65,8 +77,8 @@ public class Commandspawn extends EssentialsCommand {
         });
         if (teleportOwner == null) {
             teleportee.getAsyncTeleport().now(spawn, false, TeleportCause.COMMAND, future);
-        } else {
-            teleportOwner.getAsyncTeleport().teleportPlayer(teleportee, spawn, charge, TeleportCause.COMMAND, future);
+            return;
         }
+        teleportOwner.getAsyncTeleport().teleportPlayer(teleportee, spawn, charge, TeleportCause.COMMAND, future);
     }
 }

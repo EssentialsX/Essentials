@@ -7,6 +7,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -93,9 +94,9 @@ public class MetricsWrapper {
             Map<String, int[]> result = new HashMap<>();
             for (Map.Entry<String, Boolean> entry : commands.entrySet()) {
                 if (entry.getValue()) {
-                    result.put(entry.getKey(), new int[]{1,0});
+                    result.put(entry.getKey(), new int[]{1, 0});
                 } else {
-                    result.put(entry.getKey(), new int[]{0,1});
+                    result.put(entry.getKey(), new int[]{0, 1});
                 }
             }
             return result;
@@ -111,7 +112,8 @@ public class MetricsWrapper {
                 try {
                     service.getField("B_STATS_VERSION"); // Identifies bStats classes
 
-                    if (KNOWN_FORCED_METRICS.contains(JavaPlugin.getProvidingPlugin(service).getName())) {
+                    JavaPlugin owningPlugin = getProvidingPlugin(service);
+                    if (owningPlugin != null && KNOWN_FORCED_METRICS.contains(owningPlugin.getName())) {
                         warnForcedMetrics(service);
                     } else {
                         try {
@@ -138,5 +140,22 @@ public class MetricsWrapper {
         plugin.getLogger().severe("Your server is running a plugin that may not respect bStats' opt-out settings.");
         plugin.getLogger().severe("This may cause data to be uploaded to bStats.org for plugins that use bStats, even if you've opted out in the bStats config.");
         plugin.getLogger().severe("Please report this to bStats and to the authors of '" + servicePlugin.getName() + "'. (Offending class: " + service.getName() + ")");
+    }
+
+    private JavaPlugin getProvidingPlugin(Class<?> clazz) {
+        try {
+            return JavaPlugin.getProvidingPlugin(clazz);
+        } catch (Exception ignored) {}
+
+        ClassLoader parent = clazz.getClassLoader().getParent();
+        if (parent.getClass().getName().equals("org.bukkit.plugin.java.PluginClassLoader")) {
+            try {
+                Field pluginField = parent.getClass().getDeclaredField("plugin");
+                pluginField.setAccessible(true);
+                return (JavaPlugin) pluginField.get(parent);
+            } catch (Exception ignored) {}
+        }
+
+        return null;
     }
 }

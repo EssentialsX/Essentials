@@ -44,7 +44,7 @@ public class Commandtp extends EssentialsCommand {
                 final Trade charge = new Trade(this.getName(), ess);
                 charge.isAffordableFor(user);
                 user.getAsyncTeleport().teleport(player.getBase(), charge, TeleportCause.COMMAND, future);
-                break;
+                throw new NoChargeException();
             case 3:
                 if (!user.isAuthorized("essentials.tp.position")) {
                     throw new Exception(tl("noPerm", "essentials.tp.position"));

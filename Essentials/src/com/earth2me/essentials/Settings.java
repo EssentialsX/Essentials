@@ -62,6 +62,11 @@ public class Settings implements net.ess3.api.ISettings {
     }
 
     @Override
+    public boolean isRespawnAtAnchor() {
+        return config.getBoolean("respawn-at-anchor", false);
+    }
+
+    @Override
     public boolean getUpdateBedAtDaytime() {
         return config.getBoolean("update-bed-at-daytime", true);
     }

@@ -17,10 +17,8 @@ public class Commandbreak extends EssentialsCommand {
     //TODO: Switch to use util class
     @Override
     public void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception {
+
         final Block block = user.getBase().getTargetBlock(null, 20);
-        if (block == null) {
-            throw new NoChargeException();
-        }
         if (block.getType() == Material.AIR) {
             throw new NoChargeException();
         }

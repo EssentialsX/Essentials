@@ -13,19 +13,18 @@ import java.util.List;
 import static com.earth2me.essentials.I18n.tl;
 
 public class Commandmsg extends EssentialsLoopCommand {
-
     public Commandmsg() {
         super("msg");
     }
 
     @Override
     public void run(Server server, CommandSource sender, String commandLabel, String[] args) throws Exception {
-        if (args.length < 2 || args[0].trim().isEmpty() || args[1].trim().isEmpty()) {
+        if (args.length < 2) {
             throw new NotEnoughArgumentsException();
         }
 
         String message = getFinalArg(args, 1);
-        boolean canWildcard;
+        boolean canWildcard = sender.isAuthorized("essentials.msg.multiple", ess);
         if (sender.isPlayer()) {
             User user = ess.getUser(sender.getPlayer());
             if (user.isMuted()) {
@@ -36,10 +35,8 @@ public class Commandmsg extends EssentialsLoopCommand {
                 throw new Exception(user.hasMuteReason() ? tl("voiceSilencedReasonTime", dateDiff, user.getMuteReason()) : tl("voiceSilencedTime", dateDiff));
             }
             message = FormatUtil.formatMessage(user, "essentials.msg", message);
-            canWildcard = user.isAuthorized("essentials.msg.multiple");
         } else {
             message = FormatUtil.replaceFormat(message);
-            canWildcard = true;
         }
 
         // Sending messages to console
@@ -49,7 +46,7 @@ public class Commandmsg extends EssentialsLoopCommand {
             return;
         }
 
-        loopOnlinePlayers(server, sender, canWildcard, canWildcard, args[0], new String[]{message});
+        loopOnlinePlayers(server, sender, false, canWildcard, args[0], new String[]{message});
     }
 
     @Override

@@ -9,7 +9,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public interface SpawnerProvider extends Provider {
+public interface SpawnerItemProvider extends Provider {
     ItemStack setEntityType(ItemStack is, EntityType type) throws IllegalArgumentException;
 
     EntityType getEntityType(ItemStack is) throws IllegalArgumentException;

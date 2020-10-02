@@ -1,13 +1,13 @@
 package net.ess3.provider.providers;
 
-import net.ess3.provider.SpawnerProvider;
+import net.ess3.provider.SpawnerItemProvider;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.CreatureSpawner;
 import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BlockStateMeta;
 
-public class BlockMetaSpawnerProvider implements SpawnerProvider {
+public class BlockMetaSpawnerItemProvider implements SpawnerItemProvider {
     @Override
     public ItemStack setEntityType(ItemStack is, EntityType type) throws IllegalArgumentException {
         BlockStateMeta bsm = (BlockStateMeta) is.getItemMeta();

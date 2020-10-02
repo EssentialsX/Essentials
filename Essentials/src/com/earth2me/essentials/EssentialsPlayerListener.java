@@ -212,7 +212,8 @@ public class EssentialsPlayerListener implements Listener {
             user.getBase().getOpenInventory().getTopInventory().clear();
         }
 
-        for (HumanEntity viewer : user.getBase().getInventory().getViewers()) {
+        ArrayList<HumanEntity> viewers = new ArrayList<>(user.getBase().getInventory().getViewers());
+        for (HumanEntity viewer : viewers) {
             if (viewer instanceof Player) {
                 User uviewer = ess.getUser((Player) viewer);
                 if (uviewer.isInvSee()) {

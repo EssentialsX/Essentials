@@ -64,7 +64,7 @@ public class Commandhome extends EssentialsCommand {
                         showError(user.getBase(), new Exception(tl("bedMissing")), commandLabel);
                     }
                 });
-                return;
+                throw new NoChargeException();
             }
             goHome(user, player, homeName.toLowerCase(Locale.ENGLISH), charge, getNewExceptionFuture(user.getSource(), commandLabel));
         } catch (NotEnoughArgumentsException e) {
@@ -108,6 +108,7 @@ public class Commandhome extends EssentialsCommand {
             }
             PaperLib.getBedSpawnLocationAsync(player.getBase(), true).thenAccept(message::complete);
         }
+        throw new NoChargeException();
     }
 
     private String getHomeLimit(final User player) {

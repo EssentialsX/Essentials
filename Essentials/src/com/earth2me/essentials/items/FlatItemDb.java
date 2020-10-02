@@ -145,7 +145,7 @@ public class FlatItemDb extends AbstractItemDb {
         // setItemMeta to prevent a race condition
         EntityType entity = data.getEntity();
         if (entity != null && material.toString().contains("SPAWNER")) {
-            ess.getSpawnerProvider().setEntityType(stack, entity);
+            ess.getSpawnerItemProvider().setEntityType(stack, entity);
         }
 
         return stack;
@@ -203,7 +203,7 @@ public class FlatItemDb extends AbstractItemDb {
             PotionData potion = ((PotionMeta) item.getItemMeta()).getBasePotionData();
             return new ItemData(type, potion);
         } else if (type.toString().contains("SPAWNER")) {
-            EntityType entity = ess.getSpawnerProvider().getEntityType(item);
+            EntityType entity = ess.getSpawnerItemProvider().getEntityType(item);
             return new ItemData(type, entity);
         } else {
             return new ItemData(type);

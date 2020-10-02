@@ -1,10 +1,6 @@
 package com.earth2me.essentials.commands;
 
-import org.bukkit.command.CommandSender;
-import org.bukkit.plugin.Plugin;
-import org.bukkit.plugin.PluginDescriptionFile;
 import com.earth2me.essentials.CommandSource;
-import com.earth2me.essentials.PlayerList;
 import com.earth2me.essentials.IEssentialsModule;
 import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.User;
@@ -14,8 +10,10 @@ import com.google.common.collect.Lists;
 import net.ess3.api.IEssentials;
 import org.bukkit.Server;
 import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-
+import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.util.StringUtil;
 
 import java.util.ArrayList;
@@ -280,14 +278,6 @@ public abstract class EssentialsCommand implements IEssentialsCommand {
             }
         }
         return players;
-    }
-
-    /**
-     * Returns a list of all online groups.
-     */
-    protected List<String> getGroups() {
-        // TODO: A better way to do this
-        return new ArrayList<>(PlayerList.getPlayerLists(ess, null, true).keySet());
     }
 
     /**

@@ -28,7 +28,7 @@ public class Commandclearinventory extends EssentialsCommand {
     @Override
     public void run(Server server, User user, String commandLabel, String[] args) throws Exception {
         parseCommand(server, user.getSource(), commandLabel, args, user.isAuthorized("essentials.clearinventory.others"),
-            user.isAuthorized("essentials.clearinventory.all") || user.isAuthorized("essentials.clearinventory.multiple"));
+                user.isAuthorized("essentials.clearinventory.all") || user.isAuthorized("essentials.clearinventory.multiple"));
     }
 
     @Override
@@ -37,7 +37,7 @@ public class Commandclearinventory extends EssentialsCommand {
     }
 
     private void parseCommand(Server server, CommandSource sender, String commandLabel, String[] args, boolean allowOthers, boolean allowAll)
-        throws Exception {
+            throws Exception {
         Collection<Player> players = new ArrayList<>();
         User senderUser = ess.getUser(sender.getPlayer());
         String previousClearCommand = "";
@@ -81,8 +81,8 @@ public class Commandclearinventory extends EssentialsCommand {
     }
 
     private static class Item {
-        private Material material;
-        private short data;
+        private final Material material;
+        private final short data;
 
         public Item(Material material, short data) {
             this.material = material;

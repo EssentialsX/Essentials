@@ -6,6 +6,7 @@ import com.earth2me.essentials.User;
 import com.earth2me.essentials.textreader.IText;
 import com.earth2me.essentials.textreader.KeywordReplacer;
 import com.earth2me.essentials.textreader.SimpleTextPager;
+import com.earth2me.essentials.utils.VersionUtil;
 import io.papermc.lib.PaperLib;
 import net.ess3.api.IEssentials;
 import org.bukkit.Location;
@@ -39,6 +40,10 @@ class EssentialsSpawnPlayerListener implements Listener {
         final User user = ess.getUser(event.getPlayer());
 
         if (user.isJailed() && user.getJail() != null && !user.getJail().isEmpty()) {
+            return;
+        }
+
+        if (VersionUtil.getServerBukkitVersion().isHigherThanOrEqualTo(VersionUtil.v1_16_1_R01) && event.isAnchorSpawn() && ess.getSettings().isRespawnAtAnchor()) {
             return;
         }
 

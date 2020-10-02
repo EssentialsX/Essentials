@@ -86,7 +86,7 @@ public class EssentialsProtectEntityListener implements Listener {
             }
 
             //Creeper explode prevention
-            if (eAttack instanceof Creeper && (prot.getSettingBool(ProtectConfig.prevent_creeper_explosion) || prot.getSettingBool(ProtectConfig.prevent_creeper_playerdmg)) && !(target instanceof Player && shouldBeDamaged(user, "creeper"))) {
+            if (eAttack instanceof Creeper && prot.getSettingBool(ProtectConfig.prevent_creeper_playerdmg) && !(target instanceof Player && shouldBeDamaged(user, "creeper"))) {
                 event.setCancelled(true);
                 return;
             }

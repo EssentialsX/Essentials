@@ -39,6 +39,7 @@ public class Commandtpr extends EssentialsCommand {
                 }
             });
         });
+        throw new NoChargeException();
     }
 
     @Override

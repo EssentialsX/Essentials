@@ -67,6 +67,14 @@ public class Commandeditsign extends EssentialsCommand {
             return Lists.newArrayList("set", "clear");
         } else if (args.length == 2) {
             return Lists.newArrayList("1", "2", "3", "4");
+        } else if (args.length == 3 && args[0].equalsIgnoreCase("set") && NumberUtil.isPositiveInt(args[1])) {
+            int line = Integer.parseInt(args[1]);
+            Block target = user.getBase().getTargetBlock(null, 5);
+            if (target.getState() instanceof Sign && line <= 4) {
+                Sign sign = (Sign) target.getState();
+                return Lists.newArrayList(FormatUtil.unformatString(user, "essentials.editsign", sign.getLine(line - 1)));
+            }
+            return Collections.emptyList();
         } else {
             return Collections.emptyList();
         }

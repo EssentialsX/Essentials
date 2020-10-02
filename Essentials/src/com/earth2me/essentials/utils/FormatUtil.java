@@ -18,6 +18,8 @@ public class FormatUtil {
 
     //Vanilla patterns used to strip existing formats
     private static final Pattern STRIP_ALL_PATTERN = Pattern.compile("\u00a7+([0-9a-fk-orA-FK-OR])");
+    //Pattern used to strip md_5 legacy hex hack
+    private static final Pattern STRIP_RGB_PATTERN = Pattern.compile("\u00a7x((?:\u00a7[0-9a-fA-F]){6})");
     //Essentials '&' convention colour codes
     private static final Pattern REPLACE_ALL_PATTERN = Pattern.compile("(&)?&([0-9a-fk-orA-FK-OR])");
 
@@ -144,11 +146,63 @@ public class FormatUtil {
         return builder.toString();
     }
 
+    public static String unformatString(final IUser user, final String permBase, String message) {
+        if (message == null) {
+            return null;
+        }
+        EnumSet<ChatColor> supported = getSupported(user, permBase);
+
+        // RGB Codes
+        StringBuffer rgbBuilder = new StringBuffer();
+        Matcher rgbMatcher = STRIP_RGB_PATTERN.matcher(message);
+        boolean rgb = user.isAuthorized(permBase + ".rgb");
+        while (rgbMatcher.find()) {
+            String code = rgbMatcher.group(1).replace("\u00a7", "");
+            if (rgb) {
+                rgbMatcher.appendReplacement(rgbBuilder, "&#" + code);
+                continue;
+            }
+            rgbMatcher.appendReplacement(rgbBuilder, "");
+        }
+        rgbMatcher.appendTail(rgbBuilder);
+        message = rgbBuilder.toString(); // arreter de parler
+
+        // Legacy Colors
+        StringBuffer builder = new StringBuffer();
+        Matcher matcher = STRIP_ALL_PATTERN.matcher(message);
+        searchLoop: while (matcher.find()) {
+            char code = matcher.group(1).toLowerCase(Locale.ROOT).charAt(0);
+            for (ChatColor color : supported) {
+                if (color.getChar() == code) {
+                    matcher.appendReplacement(builder, "&" + code);
+                    continue searchLoop;
+                }
+            }
+            matcher.appendReplacement(builder, "");
+        }
+        matcher.appendTail(builder);
+        return builder.toString();
+    }
+
     //This is the general permission sensitive message format function, does not touch urls.
     public static String formatString(final IUser user, final String permBase, String message) {
         if (message == null) {
             return null;
         }
+        EnumSet<ChatColor> supported = getSupported(user, permBase);
+        EnumSet<ChatColor> strip = EnumSet.complementOf(supported);
+
+        boolean rgb = user.isAuthorized(permBase + ".rgb");
+        if (!supported.isEmpty() || rgb) {
+            message = replaceColor(message, supported, rgb);
+        }
+        if (!strip.isEmpty()) {
+            message = stripColor(message, strip);
+        }
+        return message;
+    }
+
+    private static EnumSet<ChatColor> getSupported(IUser user, String permBase) {
         EnumSet<ChatColor> supported = EnumSet.noneOf(ChatColor.class);
         if (user.isAuthorized(permBase + ".color")) {
             supported.addAll(COLORS);
@@ -177,16 +231,7 @@ public class FormatUtil {
                 supported.remove(chatColor);
             }
         }
-        EnumSet<ChatColor> strip = EnumSet.complementOf(supported);
-
-        boolean rgb = user.isAuthorized(permBase + ".rgb");
-        if (!supported.isEmpty() || rgb) {
-            message = replaceColor(message, supported, rgb);
-        }
-        if (!strip.isEmpty()) {
-            message = stripColor(message, strip);
-        }
-        return message;
+        return supported;
     }
 
     public static String stripLogColorFormat(final String input) {

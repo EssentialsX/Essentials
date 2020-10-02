@@ -52,24 +52,23 @@ public class Commandtempbanip extends EssentialsCommand {
         final long maxBanLength = ess.getSettings().getMaxTempban() * 1000;
         if (maxBanLength > 0 && ((banTimestamp - GregorianCalendar.getInstance().getTimeInMillis()) > maxBanLength) && sender.isPlayer() && !(ess.getUser(sender.getPlayer()).isAuthorized("essentials.tempban.unlimited"))) {
             sender.sendMessage(tl("oversizedTempban"));
-            throw new NoChargeException();
+            return;
         }
 
         if (banReason.length() < 2) {
             banReason = tl("defaultBanReason");
         }
 
-        String banDisplay = tl("banFormat", banReason, senderName);
-
         ess.getServer().getBanList(BanList.Type.IP).addBan(ipAddress, banReason, new Date(banTimestamp), senderName);
-        final String message = tl("playerTempBanIpAddress", senderName, ipAddress, DateUtil.formatDateDiff(banTimestamp), banReason);
 
+        String banDisplay = tl("banFormat", banReason, senderName);
         for (Player player : ess.getServer().getOnlinePlayers()) {
             if (player.getAddress().getAddress().getHostAddress().equalsIgnoreCase(ipAddress)) {
                 player.kickPlayer(banDisplay);
             }
         }
 
+        String message = tl("playerTempBanIpAddress", senderName, ipAddress, DateUtil.formatDateDiff(banTimestamp), banReason);
         server.getLogger().log(Level.INFO, message);
         ess.broadcastMessage("essentials.banip.notify", message);
     }

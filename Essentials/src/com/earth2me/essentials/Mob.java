@@ -97,6 +97,7 @@ public enum Mob {
     PIGLIN("Piglin", Enemies.ADULT_ENEMY, "PIGLIN"),
     STRIDER("Strider", Enemies.FRIENDLY, "STRIDER"),
     ZOGLIN("Zoglin", Enemies.ENEMY, "ZOGLIN"),
+    PIGLIN_BRUTE("PiglinBrute", Enemies.ADULT_ENEMY, "PIGLIN_BRUTE"),
     ;
 
     public static final Logger logger = Logger.getLogger("Essentials");
