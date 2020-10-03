@@ -584,6 +584,11 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
         }
     }
 
+    @Override
+    public boolean isHiddenFrom(Player player) {
+        return !player.canSee(getBase());
+    }
+
     //Returns true if status expired during this check
     public boolean checkJailTimeout(final long currentTime) {
         if (getJailTimeout() > 0 && getJailTimeout() < currentTime && isJailed()) {

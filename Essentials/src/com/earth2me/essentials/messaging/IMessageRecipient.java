@@ -1,5 +1,7 @@
 package com.earth2me.essentials.messaging;
 
+import org.bukkit.entity.Player;
+
 /**
  * Represents an interface for message recipients.
  */
@@ -104,4 +106,6 @@ public interface IMessageRecipient {
             return this == SUCCESS || this == SUCCESS_BUT_AFK;
         }
     }
+
+    boolean isHiddenFrom(Player player);
 }

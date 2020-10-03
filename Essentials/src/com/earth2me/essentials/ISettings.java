@@ -296,6 +296,8 @@ public interface ISettings extends IConf {
 
     boolean isLastMessageReplyRecipient();
 
+    boolean isReplyToVanished();
+
     BigDecimal getMinimumPayAmount();
 
     boolean isPayExcludesIgnoreList();
