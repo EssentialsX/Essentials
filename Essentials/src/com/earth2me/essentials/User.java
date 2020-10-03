@@ -680,7 +680,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
 
             for (User user : ess.getOnlineUsers()) {
                 if (user.isAuthorized("essentials.kick.notify")) {
-                    user.sendMessage(tl("playerKicked", Console.NAME, getName(), kickReason));
+                    user.sendMessage(tl("playerKicked", Console.DISPLAY_NAME, getName(), kickReason));
                 }
             }
         }

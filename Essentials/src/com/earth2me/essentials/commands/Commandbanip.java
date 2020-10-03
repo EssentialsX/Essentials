@@ -27,6 +27,7 @@ public class Commandbanip extends EssentialsCommand {
         }
 
         final String senderName = sender.isPlayer() ? sender.getPlayer().getDisplayName() : Console.NAME;
+        final String senderDisplayName = sender.isPlayer() ? sender.getPlayer().getDisplayName() : Console.DISPLAY_NAME;
 
         String ipAddress;
         if (FormatUtil.validIP(args[0])) {
@@ -51,10 +52,10 @@ public class Commandbanip extends EssentialsCommand {
             banReason = tl("defaultBanReason");
         }
 
-        String banDisplay = tl("banFormat", banReason, senderName);
+        String banDisplay = tl("banFormat", banReason, senderDisplayName);
 
         ess.getServer().getBanList(BanList.Type.IP).addBan(ipAddress, banReason, null, senderName);
-        server.getLogger().log(Level.INFO, tl("playerBanIpAddress", senderName, ipAddress, banReason));
+        server.getLogger().log(Level.INFO, tl("playerBanIpAddress", senderDisplayName, ipAddress, banReason));
 
         for (Player player : ess.getServer().getOnlinePlayers()) {
             if (player.getAddress().getAddress().getHostAddress().equalsIgnoreCase(ipAddress)) {
@@ -62,7 +63,8 @@ public class Commandbanip extends EssentialsCommand {
             }
         }
 
-        ess.broadcastMessage("essentials.banip.notify", tl("playerBanIpAddress", senderName, ipAddress, banReason));
+        ess.broadcastMessage("essentials.banip.notify", tl("playerBanIpAddress",
+                senderDisplayName, ipAddress, banReason));
     }
 
     @Override

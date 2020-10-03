@@ -659,11 +659,8 @@ public class EssentialsUpgrade {
     }
 
     private void updateBan(String playerName, String banReason, Long banTimeout) {
-        if (banTimeout == 0) {
-            Bukkit.getBanList(BanList.Type.NAME).addBan(playerName, banReason, null, Console.NAME);
-        } else {
-            Bukkit.getBanList(BanList.Type.NAME).addBan(playerName, banReason, new Date(banTimeout), Console.NAME);
-        }
+        final Date date = banTimeout == 0 ? null : new Date(banTimeout);
+        Bukkit.getBanList(BanList.Type.NAME).addBan(playerName, banReason, date, Console.NAME);
     }
 
     private static final FileFilter YML_FILTER = pathname -> pathname.isFile() && pathname.getName().endsWith(".yml");

@@ -55,7 +55,7 @@ public class Commandspawn extends EssentialsCommand {
         respawn(sender, null, user, null, commandLabel, future);
         future.thenAccept(success -> {
             if (success) {
-                user.sendMessage(tl("teleportAtoB", Console.NAME, "spawn"));
+                user.sendMessage(tl("teleportAtoB", Console.DISPLAY_NAME, "spawn"));
             }
         });
     }

@@ -2,15 +2,17 @@ package com.earth2me.essentials;
 
 import com.earth2me.essentials.messaging.IMessageRecipient;
 import com.earth2me.essentials.messaging.SimpleMessageRecipient;
-
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
+
+import static com.earth2me.essentials.I18n.tl;
 
 
 public final class Console implements IMessageRecipient {
     public static final String NAME = "Console";
+    public static final String DISPLAY_NAME = tl("consoleName");
     private static Console instance; // Set in essentials
-    
+
     private final IEssentials ess;
     private final IMessageRecipient messageRecipient;
 
@@ -21,7 +23,7 @@ public final class Console implements IMessageRecipient {
     static void setInstance(IEssentials ess) { // Called in Essentials#onEnable()
         instance = new Console(ess);
     }
-    
+
     /**
      * @deprecated Use {@link Console#getCommandSender()}
      */
@@ -39,39 +41,47 @@ public final class Console implements IMessageRecipient {
         return ess.getServer().getConsoleSender();
     }
 
-    @Override public String getName() {
+    @Override
+    public String getName() {
         return Console.NAME;
     }
 
-    @Override public String getDisplayName() {
-        return Console.NAME;
+    @Override
+    public String getDisplayName() {
+        return Console.DISPLAY_NAME;
     }
 
-    @Override public void sendMessage(String message) {
+    @Override
+    public void sendMessage(String message) {
         getCommandSender().sendMessage(message);
     }
 
-    @Override public boolean isReachable() {
+    @Override
+    public boolean isReachable() {
         return true;
     }
-    
+
     /* ================================
      * >> DELEGATE METHODS
      * ================================ */
 
-    @Override public MessageResponse sendMessage(IMessageRecipient recipient, String message) {
+    @Override
+    public MessageResponse sendMessage(IMessageRecipient recipient, String message) {
         return this.messageRecipient.sendMessage(recipient, message);
     }
 
-    @Override public MessageResponse onReceiveMessage(IMessageRecipient sender, String message) {
+    @Override
+    public MessageResponse onReceiveMessage(IMessageRecipient sender, String message) {
         return this.messageRecipient.onReceiveMessage(sender, message);
     }
 
-    @Override public IMessageRecipient getReplyRecipient() {
+    @Override
+    public IMessageRecipient getReplyRecipient() {
         return this.messageRecipient.getReplyRecipient();
     }
 
-    @Override public void setReplyRecipient(IMessageRecipient recipient) {
+    @Override
+    public void setReplyRecipient(IMessageRecipient recipient) {
         this.messageRecipient.setReplyRecipient(recipient);
     }
 }
