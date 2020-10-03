@@ -13,10 +13,12 @@ import org.bukkit.entity.Player;
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.math.BigDecimal;
 import java.util.*;
 import java.util.concurrent.ConcurrentSkipListMap;
 import java.util.concurrent.ConcurrentSkipListSet;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.regex.Pattern;
 
 
@@ -25,6 +27,8 @@ public class UserMap extends CacheLoader<String, User> implements IConf {
     private final transient ConcurrentSkipListSet<UUID> keys = new ConcurrentSkipListSet<>();
     private final transient ConcurrentSkipListMap<String, UUID> names = new ConcurrentSkipListMap<>();
     private final transient ConcurrentSkipListMap<UUID, ArrayList<String>> history = new ConcurrentSkipListMap<>();
+    private final transient ConcurrentSkipListMap<String, BigDecimal> balanceTopCache = new ConcurrentSkipListMap<>();
+    private transient AtomicReference<BigDecimal> balanceTopTotal = new AtomicReference<>(BigDecimal.ZERO);
     private final UUIDMap uuidMap;
 
     private final transient Cache<String, User> users;
@@ -217,7 +221,36 @@ public class UserMap extends CacheLoader<String, User> implements IConf {
         final File userFolder = new File(ess.getDataFolder(), "userdata");
         return new File(userFolder, StringUtil.sanitizeFileName(name) + ".yml");
     }
-//	class UserMapRemovalListener implements RemovalListener
+
+    public ConcurrentSkipListMap<String, BigDecimal> getBalanceTopCache() {
+        return balanceTopCache.clone();
+    }
+
+    public AtomicReference<BigDecimal> getBalanceTopTotal() {
+        return balanceTopTotal;
+    }
+
+    protected void calculateBalanceTopMap() {
+        balanceTopCache.clear();
+        for (UUID u : getAllUniqueUsers()) {
+            final User user = ess.getUserMap().getUser(u);
+            if (user != null) {
+                if (!ess.getSettings().isNpcsInBalanceRanking() && user.isNPC()) {
+                    // Don't list NPCs in output
+                    continue;
+                }
+                if (!user.isAuthorized("essentials.balancetop.exclude")) {
+                    final BigDecimal userMoney = user.getMoney();
+                    user.updateMoneyCache(userMoney);
+                    balanceTopTotal.set(balanceTopTotal.get().add(userMoney));
+                    final String name = user.isHidden() ? user.getName() : user.getDisplayName();
+                    balanceTopCache.put(name, userMoney);
+                }
+            }
+        }
+    }
+
+    //	class UserMapRemovalListener implements RemovalListener
 //	{
 //		@Override
 //		public void onRemoval(final RemovalNotification notification)

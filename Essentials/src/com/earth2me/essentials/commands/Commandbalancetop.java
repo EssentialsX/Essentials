@@ -1,7 +1,6 @@
 package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.CommandSource;
-import com.earth2me.essentials.User;
 import com.earth2me.essentials.textreader.SimpleTextInput;
 import com.earth2me.essentials.textreader.TextPager;
 import com.earth2me.essentials.utils.NumberUtil;
@@ -10,7 +9,12 @@ import org.bukkit.Server;
 
 import java.math.BigDecimal;
 import java.text.DateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentNavigableMap;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import static com.earth2me.essentials.I18n.tl;
@@ -85,38 +89,19 @@ public class Commandbalancetop extends EssentialsCommand {
             lock.writeLock().lock();
             try {
                 if (force || cacheage <= System.currentTimeMillis() - CACHETIME) {
-                    cache.getLines().clear();
-                    final Map<String, BigDecimal> balances = new HashMap<>();
-                    BigDecimal totalMoney = BigDecimal.ZERO;
                     if (ess.getSettings().isEcoDisabled()) {
                         if (ess.getSettings().isDebug()) {
                             ess.getLogger().info("Internal economy functions disabled, aborting baltop.");
                         }
                     } else {
-                        for (UUID u : ess.getUserMap().getAllUniqueUsers()) {
-                            final User user = ess.getUserMap().getUser(u);
-                            if (user != null) {
-                                if (!ess.getSettings().isNpcsInBalanceRanking() && user.isNPC()) {
-                                    // Don't list NPCs in output
-                                    continue;
-                                }
-                                if (!user.isAuthorized("essentials.balancetop.exclude")) {
-                                    final BigDecimal userMoney = user.getMoney();
-                                    user.updateMoneyCache(userMoney);
-                                    totalMoney = totalMoney.add(userMoney);
-                                    final String name = user.isHidden() ? user.getName() : user.getDisplayName();
-                                    balances.put(name, userMoney);
-                                }
-                            }
-                        }
+                        viewer.getSender().calculateBalanceTopMap(ess);
                     }
 
-                    final List<Map.Entry<String, BigDecimal>> sortedEntries = new ArrayList<>(balances.entrySet());
-                    sortedEntries.sort((entry1, entry2) -> entry2.getValue().compareTo(entry1.getValue()));
-
-                    cache.getLines().add(tl("serverTotal", NumberUtil.displayCurrency(totalMoney, ess)));
+                    cache.getLines().add(tl("serverTotal", NumberUtil.displayCurrency(ess.getUserMap().getBalanceTopTotal().get(), ess)));
                     int pos = 1;
-                    for (Map.Entry<String, BigDecimal> entry : sortedEntries) {
+                    final List<Map.Entry<String, BigDecimal>> sortedEntries = new ArrayList<>(ess.getUserMap().getBalanceTopCache().entrySet());
+                    sortedEntries.sort((entry1, entry2) -> entry2.getValue().compareTo(entry1.getValue()));
+                    for (ConcurrentNavigableMap.Entry<String, BigDecimal> entry : sortedEntries) {
                         cache.getLines().add(tl("balanceTopLine", pos, entry.getKey(), NumberUtil.displayCurrency(entry.getValue(), ess)));
                         pos++;
                     }
@@ -155,6 +140,10 @@ public class Commandbalancetop extends EssentialsCommand {
                 lock.readLock().unlock();
             }
             ess.runTaskAsynchronously(new Calculator(new Viewer(sender, commandLabel, page, false), force));
+        }
+
+        public CommandSource getSender() {
+            return sender;
         }
     }
 
