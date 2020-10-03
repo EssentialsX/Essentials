@@ -20,20 +20,20 @@ public class Commandeditsign extends EssentialsCommand {
     }
 
     @Override
-    protected void run(Server server, User user, String commandLabel, String[] args) throws Exception {
+    protected void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception {
         if (args.length == 0 || (args.length > 1 && !NumberUtil.isInt(args[1]))) {
             throw new NotEnoughArgumentsException();
         }
 
-        Block target = user.getBase().getTargetBlock(null, 5); //5 is a good number
+        final Block target = user.getBase().getTargetBlock(null, 5); //5 is a good number
         if (!(target.getState() instanceof Sign)) {
             throw new Exception(tl("editsignCommandTarget"));
         }
-        Sign sign = (Sign) target.getState();
+        final Sign sign = (Sign) target.getState();
         try {
             if (args[0].equalsIgnoreCase("set") && args.length > 2) {
-                int line = Integer.parseInt(args[1]) - 1;
-                String text = FormatUtil.formatString(user, "essentials.editsign", getFinalArg(args, 2)).trim();
+                final int line = Integer.parseInt(args[1]) - 1;
+                final String text = FormatUtil.formatString(user, "essentials.editsign", getFinalArg(args, 2)).trim();
                 if (ChatColor.stripColor(text).length() > 15 && !user.isAuthorized("essentials.editsign.unlimited")) {
                     throw new Exception(tl("editsignCommandLimit"));
                 }
@@ -48,7 +48,7 @@ public class Commandeditsign extends EssentialsCommand {
                     sign.update();
                     user.sendMessage(tl("editsignCommandClear"));
                 } else {
-                    int line = Integer.parseInt(args[1]) - 1;
+                    final int line = Integer.parseInt(args[1]) - 1;
                     sign.setLine(line, "");
                     sign.update();
                     user.sendMessage(tl("editsignCommandClearLine", line + 1));
@@ -56,22 +56,22 @@ public class Commandeditsign extends EssentialsCommand {
             } else {
                 throw new NotEnoughArgumentsException();
             }
-        } catch (IndexOutOfBoundsException e) {
+        } catch (final IndexOutOfBoundsException e) {
             throw new Exception(tl("editsignCommandNoLine"));
         }
     }
 
     @Override
-    protected List<String> getTabCompleteOptions(Server server, User user, String commandLabel, String[] args) {
+    protected List<String> getTabCompleteOptions(final Server server, final User user, final String commandLabel, final String[] args) {
         if (args.length == 1) {
             return Lists.newArrayList("set", "clear");
         } else if (args.length == 2) {
             return Lists.newArrayList("1", "2", "3", "4");
         } else if (args.length == 3 && args[0].equalsIgnoreCase("set") && NumberUtil.isPositiveInt(args[1])) {
-            int line = Integer.parseInt(args[1]);
-            Block target = user.getBase().getTargetBlock(null, 5);
+            final int line = Integer.parseInt(args[1]);
+            final Block target = user.getBase().getTargetBlock(null, 5);
             if (target.getState() instanceof Sign && line <= 4) {
-                Sign sign = (Sign) target.getState();
+                final Sign sign = (Sign) target.getState();
                 return Lists.newArrayList(FormatUtil.unformatString(user, "essentials.editsign", sign.getLine(line - 1)));
             }
             return Collections.emptyList();

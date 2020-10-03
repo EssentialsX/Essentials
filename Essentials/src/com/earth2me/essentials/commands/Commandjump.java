@@ -32,7 +32,7 @@ public class Commandjump extends EssentialsCommand {
             return;
         }
 
-        Location loc;
+        final Location loc;
         final Location cloc = user.getLocation();
 
         try {
@@ -40,7 +40,7 @@ public class Commandjump extends EssentialsCommand {
             loc.setYaw(cloc.getYaw());
             loc.setPitch(cloc.getPitch());
             loc.setY(loc.getY() + 1);
-        } catch (NullPointerException ex) {
+        } catch (final NullPointerException ex) {
             throw new Exception(tl("jumpError"), ex);
         }
 
@@ -52,7 +52,7 @@ public class Commandjump extends EssentialsCommand {
     }
 
     @Override
-    protected List<String> getTabCompleteOptions(Server server, User user, String commandLabel, String[] args) {
+    protected List<String> getTabCompleteOptions(final Server server, final User user, final String commandLabel, final String[] args) {
         if (args.length == 1 && user.isAuthorized("essentials.jump.lock")) {
             // XXX these actually do the same thing
             return Lists.newArrayList("lock", "unlock");

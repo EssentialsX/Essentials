@@ -11,11 +11,14 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Set;
 import java.util.logging.Level;
 
 import static com.earth2me.essentials.I18n.tl;
-
 
 public class EssentialsChatPlayerListenerNormal extends EssentialsChatPlayer {
     EssentialsChatPlayerListenerNormal(final Server server, final IEssentials ess, final Map<AsyncPlayerChatEvent, ChatStore> chatStorage) {
@@ -62,12 +65,12 @@ public class EssentialsChatPlayerListenerNormal extends EssentialsChatPlayer {
             return;
         }
 
-        Set<Player> outList = event.getRecipients();
-        Set<Player> spyList = new HashSet<>();
+        final Set<Player> outList = event.getRecipients();
+        final Set<Player> spyList = new HashSet<>();
 
         try {
             outList.add(event.getPlayer());
-        } catch (UnsupportedOperationException ex) {
+        } catch (final UnsupportedOperationException ex) {
             if (ess.getSettings().isDebug()) {
                 logger.log(Level.INFO, "Plugin triggered custom chat event, local chat handling aborted.", ex);
             }
@@ -105,11 +108,11 @@ public class EssentialsChatPlayerListenerNormal extends EssentialsChatPlayer {
             user.sendMessage(tl("localNoOne"));
         }
 
-        LocalChatSpyEvent spyEvent = new LocalChatSpyEvent(event.isAsynchronous(), event.getPlayer(), format, event.getMessage(), spyList);
+        final LocalChatSpyEvent spyEvent = new LocalChatSpyEvent(event.isAsynchronous(), event.getPlayer(), format, event.getMessage(), spyList);
         server.getPluginManager().callEvent(spyEvent);
 
         if (!spyEvent.isCancelled()) {
-            for (Player onlinePlayer : spyEvent.getRecipients()) {
+            for (final Player onlinePlayer : spyEvent.getRecipients()) {
                 onlinePlayer.sendMessage(String.format(spyEvent.getFormat(), user.getDisplayName(), spyEvent.getMessage()));
             }
         }

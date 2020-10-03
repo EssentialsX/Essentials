@@ -7,10 +7,15 @@ import com.earth2me.essentials.utils.NumberUtil;
 import com.earth2me.essentials.utils.VersionUtil;
 import org.bukkit.Material;
 import org.bukkit.Server;
-import org.bukkit.inventory.*;
+import org.bukkit.inventory.FurnaceRecipe;
+import org.bukkit.inventory.InventoryView;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.Recipe;
+import org.bukkit.inventory.ShapedRecipe;
+import org.bukkit.inventory.ShapelessRecipe;
 
-import java.util.HashMap;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -33,7 +38,7 @@ public class Commandrecipe extends EssentialsCommand {
         if (VersionUtil.getServerBukkitVersion().isHigherThanOrEqualTo(VersionUtil.v1_12_0_R01)) {
             try {
                 Class.forName("com.destroystokyo.paper.event.player.PlayerRecipeBookClickEvent");
-            } catch (ClassNotFoundException e) {
+            } catch (final ClassNotFoundException e) {
                 sender.sendMessage(tl("unsupportedFeature"));
                 return;
             }
@@ -72,7 +77,7 @@ public class Commandrecipe extends EssentialsCommand {
             shapedRecipe(sender, (ShapedRecipe) selectedRecipe, sender.isPlayer());
         } else if (selectedRecipe instanceof ShapelessRecipe) {
             if (recipesOfType.size() == 1 && (itemType.getType() == FIREWORK_ROCKET)) {
-                ShapelessRecipe shapelessRecipe = new ShapelessRecipe(itemType);
+                final ShapelessRecipe shapelessRecipe = new ShapelessRecipe(itemType);
                 shapelessRecipe.addIngredient(GUNPOWDER);
                 shapelessRecipe.addIngredient(Material.PAPER);
                 shapelessRecipe.addIngredient(FIREWORK_STAR);
@@ -116,8 +121,8 @@ public class Commandrecipe extends EssentialsCommand {
         } else {
             final HashMap<Material, String> colorMap = new HashMap<>();
             int i = 1;
-            for (Character c : "abcdefghi".toCharArray()) {
-                ItemStack item = recipeMap.get(c);
+            for (final Character c : "abcdefghi".toCharArray()) {
+                final ItemStack item = recipeMap.get(c);
                 if (!colorMap.containsKey(item == null ? null : item.getType())) {
                     colorMap.put(item == null ? null : item.getType(), String.valueOf(i++));
                 }
@@ -125,7 +130,7 @@ public class Commandrecipe extends EssentialsCommand {
             final Material[][] materials = new Material[3][3];
             for (int j = 0; j < recipe.getShape().length; j++) {
                 for (int k = 0; k < recipe.getShape()[j].length(); k++) {
-                    ItemStack item = recipe.getIngredientMap().get(recipe.getShape()[j].toCharArray()[k]);
+                    final ItemStack item = recipe.getIngredientMap().get(recipe.getShape()[j].toCharArray()[k]);
                     materials[j][k] = item == null ? null : item.getType();
                 }
             }
@@ -133,8 +138,8 @@ public class Commandrecipe extends EssentialsCommand {
             sender.sendMessage(tl("recipeGrid", colorMap.get(materials[1][0]), colorMap.get(materials[1][1]), colorMap.get(materials[1][2])));
             sender.sendMessage(tl("recipeGrid", colorMap.get(materials[2][0]), colorMap.get(materials[2][1]), colorMap.get(materials[2][2])));
 
-            StringBuilder s = new StringBuilder();
-            for (Material items : colorMap.keySet().toArray(new Material[0])) {
+            final StringBuilder s = new StringBuilder();
+            for (final Material items : colorMap.keySet().toArray(new Material[0])) {
                 s.append(tl("recipeGridItem", colorMap.get(items), getMaterialName(items)));
             }
             sender.sendMessage(tl("recipeWhere", s.toString()));
@@ -156,7 +161,7 @@ public class Commandrecipe extends EssentialsCommand {
             }
 
         } else {
-            StringBuilder s = new StringBuilder();
+            final StringBuilder s = new StringBuilder();
             for (int i = 0; i < ingredients.size(); i++) {
                 s.append(getMaterialName(ingredients.get(i)));
                 if (i != ingredients.size() - 1) {

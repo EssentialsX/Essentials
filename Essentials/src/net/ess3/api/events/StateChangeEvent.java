@@ -5,27 +5,30 @@ import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
-
 /**
  * This handles common boilerplate for events for changes in state.
  * For boolean state, events should extend StatusChangeEvent instead.
  */
 public abstract class StateChangeEvent extends Event implements Cancellable {
     private static final HandlerList handlers = new HandlerList();
+    final IUser affected;
+    final IUser controller;
     private boolean cancelled = false;
-    IUser affected;
-    IUser controller;
 
-    public StateChangeEvent(IUser affected, IUser controller) {
+    public StateChangeEvent(final IUser affected, final IUser controller) {
         super();
         this.affected = affected;
         this.controller = controller;
     }
 
-    public StateChangeEvent(boolean isAsync, IUser affected, IUser controller) {
+    public StateChangeEvent(final boolean isAsync, final IUser affected, final IUser controller) {
         super(isAsync);
         this.affected = affected;
         this.controller = controller;
+    }
+
+    public static HandlerList getHandlerList() {
+        return handlers;
     }
 
     /**
@@ -51,17 +54,13 @@ public abstract class StateChangeEvent extends Event implements Cancellable {
         return handlers;
     }
 
-    public static HandlerList getHandlerList() {
-        return handlers;
-    }
-
     @Override
     public boolean isCancelled() {
         return cancelled;
     }
 
     @Override
-    public void setCancelled(boolean cancelled) {
+    public void setCancelled(final boolean cancelled) {
         this.cancelled = cancelled;
     }
 }

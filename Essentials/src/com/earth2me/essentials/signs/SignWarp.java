@@ -10,7 +10,6 @@ import java.util.concurrent.CompletableFuture;
 
 import static com.earth2me.essentials.I18n.tl;
 
-
 public class SignWarp extends EssentialsSign {
     public SignWarp() {
         super("Warp");
@@ -27,7 +26,7 @@ public class SignWarp extends EssentialsSign {
         } else {
             try {
                 ess.getWarps().getWarp(warpName);
-            } catch (Exception ex) {
+            } catch (final Exception ex) {
                 throw new SignException(ex.getMessage(), ex);
             }
             final String group = sign.getLine(2);
@@ -54,7 +53,7 @@ public class SignWarp extends EssentialsSign {
         }
 
         final Trade charge = getTrade(sign, 3, ess);
-        CompletableFuture<Boolean> future = new CompletableFuture<>();
+        final CompletableFuture<Boolean> future = new CompletableFuture<>();
         player.getAsyncTeleport().warp(player, warpName, charge, TeleportCause.PLUGIN, future);
         future.thenAccept(success -> {
             if (success) {

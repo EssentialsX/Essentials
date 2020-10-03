@@ -15,7 +15,6 @@ import java.util.Locale;
 
 import static com.earth2me.essentials.I18n.tl;
 
-
 public class Commandexp extends EssentialsLoopCommand {
     public Commandexp() {
         super("exp");
@@ -23,7 +22,7 @@ public class Commandexp extends EssentialsLoopCommand {
 
     @Override
     public void run(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception {
-        IUser user = sender.getUser(ess);
+        final IUser user = sender.getUser(ess);
         if (args.length == 0 || (args.length < 2 && user == null)) {
             if (user == null) {
                 throw new NotEnoughArgumentsException();
@@ -32,10 +31,10 @@ public class Commandexp extends EssentialsLoopCommand {
             return;
         }
 
-        ExpCommands cmd;
+        final ExpCommands cmd;
         try {
             cmd = ExpCommands.valueOf(args[0].toUpperCase(Locale.ENGLISH));
-        } catch (Exception ex) {
+        } catch (final Exception ex) {
             throw new NotEnoughArgumentsException(ex);
         }
 
@@ -47,7 +46,7 @@ public class Commandexp extends EssentialsLoopCommand {
         switch (cmd) {
             case SET: {
                 if (args.length == 3 && cmd.hasOtherPermission(user)) {
-                    loopOnlinePlayersConsumer(server,sender, false, true, args[1], player -> setExp(sender, player, args[2], false));
+                    loopOnlinePlayersConsumer(server, sender, false, true, args[1], player -> setExp(sender, player, args[2], false));
                 } else if (args.length == 2 && user != null) {
                     setExp(sender, user, args[1], false);
                 } else {
@@ -99,32 +98,6 @@ public class Commandexp extends EssentialsLoopCommand {
         throw new NotEnoughArgumentsException(); //Should never happen but in the impossible chance it does...
     }
 
-    private enum ExpCommands {
-        SET,
-        GIVE,
-        TAKE,
-        RESET,
-        SHOW(false);
-
-        private final boolean permCheck;
-
-        ExpCommands() {
-            permCheck = true;
-        }
-
-        ExpCommands(boolean perm) {
-            permCheck = perm;
-        }
-
-        boolean hasPermission(IUser user) {
-            return user == null || !permCheck || user.isAuthorized("essentials.exp." + name().toLowerCase(Locale.ENGLISH));
-        }
-
-        boolean hasOtherPermission(IUser user) {
-            return user == null || user.isAuthorized("essentials.exp." + name().toLowerCase(Locale.ENGLISH) + ".others");
-        }
-    }
-
     private void showExp(final CommandSource sender, final IUser target) {
         sender.sendMessage(tl("exp", target.getDisplayName(), SetExpFix.getTotalExperience(target.getBase()), target.getBase().getLevel(), SetExpFix.getExpUntilNextLevel(target.getBase())));
     }
@@ -162,14 +135,14 @@ public class Commandexp extends EssentialsLoopCommand {
     }
 
     @Override
-    protected void updatePlayer(Server server, CommandSource sender, User user, String[] args) {
+    protected void updatePlayer(final Server server, final CommandSource sender, final User user, final String[] args) {
     }
 
     @Override
     protected List<String> getTabCompleteOptions(final Server server, final User user, final String commandLabel, final String[] args) {
         if (args.length == 1) {
-            List<String> options = Lists.newArrayList("show");
-            for (ExpCommands cmd : ExpCommands.values()) {
+            final List<String> options = Lists.newArrayList("show");
+            for (final ExpCommands cmd : ExpCommands.values()) {
                 if (cmd.hasPermission(user)) {
                     options.add(cmd.name().toLowerCase(Locale.ENGLISH));
                 }
@@ -177,7 +150,7 @@ public class Commandexp extends EssentialsLoopCommand {
             return options;
         } else if (args.length == 2) {
             if ((args[0].equalsIgnoreCase("set") && user.isAuthorized("essentials.exp.set")) || (args[0].equalsIgnoreCase("give") && user.isAuthorized("essentials.exp.give")) || (args[0].equalsIgnoreCase("take") && user.isAuthorized("essentials.exp.take"))) {
-                String levellessArg = args[1].toLowerCase(Locale.ENGLISH).replaceAll("l", "");
+                final String levellessArg = args[1].toLowerCase(Locale.ENGLISH).replaceAll("l", "");
                 if (NumberUtil.isInt(levellessArg)) {
                     return Lists.newArrayList(levellessArg + "l");
                 }
@@ -186,7 +159,7 @@ public class Commandexp extends EssentialsLoopCommand {
                 return getPlayers(server, user);
             }
         } else if (args.length == 3 && !(args[0].equalsIgnoreCase("show") || args[0].equalsIgnoreCase("reset"))) {
-            String levellessArg = args[2].toLowerCase(Locale.ENGLISH).replaceAll("l", "");
+            final String levellessArg = args[2].toLowerCase(Locale.ENGLISH).replaceAll("l", "");
             if (NumberUtil.isInt(levellessArg)) {
                 return Lists.newArrayList(levellessArg + "l");
             }
@@ -197,14 +170,14 @@ public class Commandexp extends EssentialsLoopCommand {
     @Override
     protected List<String> getTabCompleteOptions(final Server server, final CommandSource sender, final String commandLabel, final String[] args) {
         if (args.length == 1) {
-            List<String> list = new ArrayList<>();
-            for (ExpCommands cmd : ExpCommands.values()) {
+            final List<String> list = new ArrayList<>();
+            for (final ExpCommands cmd : ExpCommands.values()) {
                 list.add(cmd.name().toLowerCase(Locale.ENGLISH));
             }
             return list;
         } else if (args.length == 2) {
             if (args[0].equalsIgnoreCase("set") || args[0].equalsIgnoreCase("give")) {
-                String levellessArg = args[1].toLowerCase(Locale.ENGLISH).replace("l", "");
+                final String levellessArg = args[1].toLowerCase(Locale.ENGLISH).replace("l", "");
                 if (NumberUtil.isInt(levellessArg)) {
                     return Lists.newArrayList(levellessArg, args[1] + "l");
                 } else {
@@ -217,6 +190,32 @@ public class Commandexp extends EssentialsLoopCommand {
             return getPlayers(server, sender);
         } else {
             return Collections.emptyList();
+        }
+    }
+
+    private enum ExpCommands {
+        SET,
+        GIVE,
+        TAKE,
+        RESET,
+        SHOW(false);
+
+        private final boolean permCheck;
+
+        ExpCommands() {
+            permCheck = true;
+        }
+
+        ExpCommands(final boolean perm) {
+            permCheck = perm;
+        }
+
+        boolean hasPermission(final IUser user) {
+            return user == null || !permCheck || user.isAuthorized("essentials.exp." + name().toLowerCase(Locale.ENGLISH));
+        }
+
+        boolean hasOtherPermission(final IUser user) {
+            return user == null || user.isAuthorized("essentials.exp." + name().toLowerCase(Locale.ENGLISH) + ".others");
         }
     }
 }

@@ -19,7 +19,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
 
-
 public class YamlStorageWriter implements IStorageWriter {
     private transient static final Pattern NON_WORD_PATTERN = Pattern.compile("\\W");
     private transient static final Yaml YAML = new Yaml();
@@ -33,13 +32,13 @@ public class YamlStorageWriter implements IStorageWriter {
     public void save(final StorageObject object) {
         try {
             writeToFile(object, 0, object.getClass());
-        } catch (IllegalArgumentException | IllegalAccessException ex) {
+        } catch (final IllegalArgumentException | IllegalAccessException ex) {
             Logger.getLogger(YamlStorageWriter.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
     private void writeToFile(final Object object, final int depth, final Class clazz) throws IllegalAccessException {
-        for (Field field : clazz.getDeclaredFields()) {
+        for (final Field field : clazz.getDeclaredFields()) {
             final int modifier = field.getModifiers();
             if (Modifier.isPrivate(modifier) && !Modifier.isTransient(modifier) && !Modifier.isStatic(modifier)) {
                 field.setAccessible(true);
@@ -89,7 +88,7 @@ public class YamlStorageWriter implements IStorageWriter {
         final boolean commentPresent = field.isAnnotationPresent(Comment.class);
         if (commentPresent) {
             final Comment comments = field.getAnnotation(Comment.class);
-            for (String comment : comments.value()) {
+            for (final String comment : comments.value()) {
                 final String trimmed = comment.trim();
                 if (trimmed.isEmpty()) {
                     continue;
@@ -108,7 +107,7 @@ public class YamlStorageWriter implements IStorageWriter {
         if (data.isEmpty()) {
             writer.println();
         }
-        for (Object entry : data) {
+        for (final Object entry : data) {
             if (entry != null) {
                 writeIndention(depth);
                 writer.print("- ");
@@ -130,7 +129,7 @@ public class YamlStorageWriter implements IStorageWriter {
         if (data.isEmpty()) {
             writer.println();
         }
-        for (Entry<Object, Object> entry : data.entrySet()) {
+        for (final Entry<Object, Object> entry : data.entrySet()) {
             final Object value = entry.getValue();
             if (value != null) {
                 writeIndention(depth);
@@ -181,7 +180,7 @@ public class YamlStorageWriter implements IStorageWriter {
 
     private void writeKey(final Object data) {
         if (data instanceof String || data instanceof Boolean || data instanceof Number) {
-            String output = data.toString();
+            final String output = data.toString();
             if (NON_WORD_PATTERN.matcher(output).find()) {
                 writer.print('"');
                 writer.print(output.replace("\"", "\\\""));
@@ -218,13 +217,13 @@ public class YamlStorageWriter implements IStorageWriter {
         writeMaterialData(itemStack.getData());
         writer.print(' ');
         writer.print(itemStack.getAmount());
-        for (Entry<Enchantment, Integer> entry : itemStack.getEnchantments().entrySet()) {
+        for (final Entry<Enchantment, Integer> entry : itemStack.getEnchantments().entrySet()) {
             writer.print(' ');
             writeEnchantmentLevel(entry);
         }
     }
 
-    private void writeEnchantmentLevel(Object data) {
+    private void writeEnchantmentLevel(final Object data) {
         final Entry<Enchantment, Integer> enchLevel = (Entry<Enchantment, Integer>) data;
         writer.print(enchLevel.getKey().getName().toLowerCase(Locale.ENGLISH));
         writer.print(':');

@@ -14,7 +14,6 @@ import java.util.concurrent.CompletableFuture;
 
 import static com.earth2me.essentials.I18n.tl;
 
-
 public class Commandtogglejail extends EssentialsCommand {
     public Commandtogglejail() {
         super("togglejail");
@@ -52,7 +51,7 @@ public class Commandtogglejail extends EssentialsCommand {
 
                 }
                 final long timeDiff = preTimeDiff;
-                CompletableFuture<Boolean> future = getNewExceptionFuture(sender, commandLabel);
+                final CompletableFuture<Boolean> future = getNewExceptionFuture(sender, commandLabel);
                 future.thenAccept(success -> {
                     if (success) {
                         player.setJailed(true);
@@ -62,7 +61,7 @@ public class Commandtogglejail extends EssentialsCommand {
                         if (args.length > 2) {
                             player.setJailTimeout(timeDiff);
                         }
-                        sender.sendMessage((timeDiff > 0 ? tl("playerJailedFor", player.getName(), DateUtil.formatDateDiff(timeDiff)) : tl("playerJailed", player.getName())));
+                        sender.sendMessage(timeDiff > 0 ? tl("playerJailedFor", player.getName(), DateUtil.formatDateDiff(timeDiff)) : tl("playerJailed", player.getName()));
                     }
                 });
                 if (player.getBase().isOnline()) {
@@ -102,7 +101,7 @@ public class Commandtogglejail extends EssentialsCommand {
                 player.sendMessage(tl("jailReleasedPlayerNotify"));
                 player.setJail(null);
                 if (player.getBase().isOnline() && ess.getSettings().isTeleportBackWhenFreedFromJail()) {
-                    CompletableFuture<Boolean> future = getNewExceptionFuture(sender, commandLabel);
+                    final CompletableFuture<Boolean> future = getNewExceptionFuture(sender, commandLabel);
                     player.getAsyncTeleport().back(future);
                     future.thenAccept(success -> {
                         if (success) {
@@ -128,7 +127,7 @@ public class Commandtogglejail extends EssentialsCommand {
         } else if (args.length == 2) {
             try {
                 return new ArrayList<>(ess.getJails().getList());
-            } catch (Exception e) {
+            } catch (final Exception e) {
                 return Collections.emptyList();
             }
         } else {

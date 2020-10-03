@@ -3,11 +3,10 @@ package net.ess3.api.events;
 import net.ess3.api.IUser;
 import org.bukkit.event.Cancellable;
 
-
 public class NickChangeEvent extends StateChangeEvent implements Cancellable {
-    private String newValue;
+    private final String newValue;
 
-    public NickChangeEvent(IUser affected, IUser controller, String value) {
+    public NickChangeEvent(final IUser affected, final IUser controller, final String value) {
         super(affected, controller);
         this.newValue = value;
     }

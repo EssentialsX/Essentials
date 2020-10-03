@@ -11,7 +11,6 @@ import java.util.Locale;
 
 import static com.earth2me.essentials.I18n.tl;
 
-
 public class SignGameMode extends EssentialsSign {
     public SignGameMode() {
         super("GameMode");
@@ -47,7 +46,7 @@ public class SignGameMode extends EssentialsSign {
         return true;
     }
 
-    private void performSetMode(String mode, Player player) throws SignException {
+    private void performSetMode(final String mode, final Player player) throws SignException {
         if (mode.contains("survi") || mode.equalsIgnoreCase("0")) {
             player.setGameMode(GameMode.SURVIVAL);
         } else if (mode.contains("creat") || mode.equalsIgnoreCase("1")) {

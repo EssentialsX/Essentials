@@ -13,42 +13,44 @@ import org.bukkit.plugin.Plugin;
 import org.yaml.snakeyaml.constructor.BaseConstructor;
 import org.yaml.snakeyaml.constructor.CustomClassLoaderConstructor;
 import org.yaml.snakeyaml.introspector.PropertyUtils;
-import org.yaml.snakeyaml.nodes.*;
+import org.yaml.snakeyaml.nodes.MappingNode;
+import org.yaml.snakeyaml.nodes.Node;
+import org.yaml.snakeyaml.nodes.NodeId;
+import org.yaml.snakeyaml.nodes.NodeTuple;
+import org.yaml.snakeyaml.nodes.ScalarNode;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-
 public class BukkitConstructor extends CustomClassLoaderConstructor {
+    private Method constructScalarMethod = null;
+
     public BukkitConstructor(final Class<?> clazz, final Plugin plugin) {
         super(clazz, plugin.getClass().getClassLoader());
         yamlClassConstructors.put(NodeId.scalar, new ConstructBukkitScalar());
         yamlClassConstructors.put(NodeId.mapping, new ConstructBukkitMapping());
 
-        PropertyUtils propertyUtils = getPropertyUtils();
+        final PropertyUtils propertyUtils = getPropertyUtils();
         propertyUtils.setSkipMissingProperties(true);
         setPropertyUtils(propertyUtils);
     }
 
-    private Method constructScalarMethod = null;
-
-    protected String constructScalarRefl(ScalarNode scalarNode) {
+    protected String constructScalarRefl(final ScalarNode scalarNode) {
         try {
             if (constructScalarMethod == null) {
                 constructScalarMethod = BaseConstructor.class.getDeclaredMethod("constructScalar", ScalarNode.class);
             }
             return (String) constructScalarMethod.invoke(this, scalarNode);
-        } catch (NoSuchMethodException
-                | SecurityException
-                | IllegalAccessException
-                | IllegalArgumentException
-                | InvocationTargetException e) {
+        } catch (final NoSuchMethodException
+            | SecurityException
+            | IllegalAccessException
+            | IllegalArgumentException
+            | InvocationTargetException e) {
             e.printStackTrace();
         }
 
         return null;
     }
-
 
     private class ConstructBukkitScalar extends ConstructScalar {
 
@@ -69,7 +71,7 @@ public class BukkitConstructor extends CustomClassLoaderConstructor {
                     return null;
                 }
 
-                Material mat = Material.matchMaterial(split[0]);
+                final Material mat = Material.matchMaterial(split[0]);
 
                 if (mat == null) {
                     return null;
@@ -94,7 +96,7 @@ public class BukkitConstructor extends CustomClassLoaderConstructor {
                     return null;
                 }
 
-                Material mat = Material.matchMaterial(split2[0]);
+                final Material mat = Material.matchMaterial(split2[0]);
 
                 if (mat == null) {
                     return null;
@@ -114,7 +116,7 @@ public class BukkitConstructor extends CustomClassLoaderConstructor {
                         if (split3.length < 1) {
                             continue;
                         }
-                        Enchantment enchantment = Enchantments.getByName(split3[0]);
+                        final Enchantment enchantment = Enchantments.getByName(split3[0]);
                         if (enchantment == null) {
                             continue;
                         }
@@ -142,7 +144,7 @@ public class BukkitConstructor extends CustomClassLoaderConstructor {
                 if (split.length == 0) {
                     return null;
                 }
-                Enchantment enchant = Enchantments.getByName(split[0]);
+                final Enchantment enchant = Enchantments.getByName(split[0]);
                 if (enchant == null) {
                     return null;
                 }
@@ -163,7 +165,7 @@ public class BukkitConstructor extends CustomClassLoaderConstructor {
     }
 
     private class ConstructBukkitMapping extends ConstructMapping {
-        
+
         @Override
         public Object construct(final Node node) {
             if (node.getType().equals(Location.class)) {
@@ -175,7 +177,7 @@ public class BukkitConstructor extends CustomClassLoaderConstructor {
                 if (mnode.getValue().size() < 4) {
                     return null;
                 }
-                for (NodeTuple nodeTuple : mnode.getValue()) {
+                for (final NodeTuple nodeTuple : mnode.getValue()) {
                     final String key = constructScalarRefl((ScalarNode) nodeTuple.getKeyNode());
                     final ScalarNode snode = (ScalarNode) nodeTuple.getValueNode();
                     if (key.equalsIgnoreCase("world")) {

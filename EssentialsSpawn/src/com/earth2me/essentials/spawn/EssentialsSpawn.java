@@ -15,7 +15,6 @@ import java.util.logging.Level;
 
 import static com.earth2me.essentials.I18n.tl;
 
-
 public class EssentialsSpawn extends JavaPlugin implements IEssentialsSpawn {
     private transient IEssentials ess;
     private transient SpawnStorage spawns;
@@ -38,16 +37,16 @@ public class EssentialsSpawn extends JavaPlugin implements IEssentialsSpawn {
 
         final EssentialsSpawnPlayerListener playerListener = new EssentialsSpawnPlayerListener(ess, spawns);
 
-        EventPriority respawnPriority = ess.getSettings().getRespawnPriority();
+        final EventPriority respawnPriority = ess.getSettings().getRespawnPriority();
         if (respawnPriority != null) {
             pluginManager.registerEvent(PlayerRespawnEvent.class, playerListener, respawnPriority, (ll, event) ->
-                    ((EssentialsSpawnPlayerListener) ll).onPlayerRespawn((PlayerRespawnEvent) event), this);
+                ((EssentialsSpawnPlayerListener) ll).onPlayerRespawn((PlayerRespawnEvent) event), this);
         }
 
-        EventPriority joinPriority = ess.getSettings().getSpawnJoinPriority();
+        final EventPriority joinPriority = ess.getSettings().getSpawnJoinPriority();
         if (joinPriority != null) {
             pluginManager.registerEvent(PlayerJoinEvent.class, playerListener, joinPriority, (ll, event) ->
-                    ((EssentialsSpawnPlayerListener) ll).onPlayerJoin((PlayerJoinEvent) event), this);
+                ((EssentialsSpawnPlayerListener) ll).onPlayerJoin((PlayerJoinEvent) event), this);
         }
 
         if (metrics == null) {
@@ -66,7 +65,7 @@ public class EssentialsSpawn extends JavaPlugin implements IEssentialsSpawn {
     }
 
     @Override
-    public void setSpawn(Location loc, String group) {
+    public void setSpawn(final Location loc, final String group) {
         if (group == null) {
             throw new IllegalArgumentException("Null group");
         }
@@ -74,7 +73,7 @@ public class EssentialsSpawn extends JavaPlugin implements IEssentialsSpawn {
     }
 
     @Override
-    public Location getSpawn(String group) {
+    public Location getSpawn(final String group) {
         if (group == null) {
             throw new IllegalArgumentException("Null group");
         }

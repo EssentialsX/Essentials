@@ -2,16 +2,15 @@ package net.ess3.api.events;
 
 import net.ess3.api.IUser;
 
-
 public class AfkStatusChangeEvent extends StatusChangeEvent {
-    private Cause cause;
+    private final Cause cause;
 
     @Deprecated
-    public AfkStatusChangeEvent(IUser affected, boolean value) {
+    public AfkStatusChangeEvent(final IUser affected, final boolean value) {
         this(affected, value, Cause.UNKNOWN);
     }
 
-    public AfkStatusChangeEvent(IUser affected, boolean value, Cause cause) {
+    public AfkStatusChangeEvent(final IUser affected, final boolean value, final Cause cause) {
         super(affected, affected, value);
         this.cause = cause;
     }

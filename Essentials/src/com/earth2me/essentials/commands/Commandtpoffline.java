@@ -15,20 +15,18 @@ public class Commandtpoffline extends EssentialsCommand {
 
     @Override
     public void run(final Server server, final User user, final String label, final String[] args) throws Exception {
-        switch (args.length) {
-            case 0:
-                throw new NotEnoughArgumentsException();
+        if (args.length == 0) {
+            throw new NotEnoughArgumentsException();
+        } else {
+            final User target = getPlayer(server, args, 0, true, true);
+            final Location logout = target.getLogoutLocation();
 
-            default:
-                final User target = getPlayer(server, args, 0, true, true);
-                final Location logout = target.getLogoutLocation();
+            if (user.getWorld() != logout.getWorld() && ess.getSettings().isWorldTeleportPermissions() && !user.isAuthorized("essentials.worlds." + logout.getWorld().getName())) {
+                throw new Exception(tl("noPerm", "essentials.worlds." + logout.getWorld().getName()));
+            }
 
-                if (user.getWorld() != logout.getWorld() && ess.getSettings().isWorldTeleportPermissions() && !user.isAuthorized("essentials.worlds." + logout.getWorld().getName())) {
-                    throw new Exception(tl("noPerm", "essentials.worlds." + logout.getWorld().getName()));
-                }
-
-                user.sendMessage(tl("teleporting", logout.getWorld().getName(), logout.getBlockX(), logout.getBlockY(), logout.getBlockZ()));
-                user.getAsyncTeleport().now(logout, false, PlayerTeleportEvent.TeleportCause.COMMAND, getNewExceptionFuture(user.getSource(), label));
+            user.sendMessage(tl("teleporting", logout.getWorld().getName(), logout.getBlockX(), logout.getBlockY(), logout.getBlockZ()));
+            user.getAsyncTeleport().now(logout, false, PlayerTeleportEvent.TeleportCause.COMMAND, getNewExceptionFuture(user.getSource(), label));
         }
     }
 }

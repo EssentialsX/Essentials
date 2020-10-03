@@ -7,7 +7,13 @@ import com.google.common.collect.Lists;
 import org.bukkit.Server;
 import org.bukkit.WeatherType;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.StringJoiner;
 
 import static com.earth2me.essentials.I18n.tl;
 
@@ -49,7 +55,7 @@ public class Commandpweather extends EssentialsLoopCommand {
             if (ess.getOnlinePlayers().size() > 1) {
                 sender.sendMessage(tl("pWeatherPlayers"));
             }
-            for (User player : ess.getOnlineUsers()) {
+            for (final User player : ess.getOnlineUsers()) {
                 getUserWeather(sender, player);
             }
         }
@@ -59,12 +65,12 @@ public class Commandpweather extends EssentialsLoopCommand {
             return;
         }
 
-        String weather = args[0].toLowerCase();
+        final String weather = args[0].toLowerCase();
         if (!weatherAliases.containsKey(weather) && !weather.equalsIgnoreCase("reset")) {
             throw new NotEnoughArgumentsException(tl("pWeatherInvalidAlias"));
         }
 
-        StringJoiner joiner = new StringJoiner(",");
+        final StringJoiner joiner = new StringJoiner(",");
         loopOnlinePlayersConsumer(server, sender, false, true, args.length > 1 ? args[1] : sender.getSelfSelector(), player -> {
             setUserWeather(player, weather);
             joiner.add(player.getName());
@@ -78,7 +84,7 @@ public class Commandpweather extends EssentialsLoopCommand {
         sender.sendMessage(tl("pWeatherSet", weather, joiner.toString()));
     }
 
-    private void getUserWeather(CommandSource sender, IUser user) {
+    private void getUserWeather(final CommandSource sender, final IUser user) {
         if (user == null) {
             return;
         }
@@ -90,7 +96,7 @@ public class Commandpweather extends EssentialsLoopCommand {
         sender.sendMessage(tl("pWeatherCurrent", user.getName(), user.getBase().getPlayerWeather().toString().toLowerCase(Locale.ENGLISH)));
     }
 
-    private void setUserWeather(User user, String weatherType) {
+    private void setUserWeather(final User user, final String weatherType) {
         if (weatherType.equalsIgnoreCase("reset")) {
             user.getBase().resetPlayerWeather();
             return;
@@ -99,7 +105,7 @@ public class Commandpweather extends EssentialsLoopCommand {
     }
 
     @Override
-    protected List<String> getTabCompleteOptions(Server server, User user, String commandLabel, String[] args) {
+    protected List<String> getTabCompleteOptions(final Server server, final User user, final String commandLabel, final String[] args) {
         if (args.length == 1) {
             return Lists.newArrayList("get", "reset", "storm", "sun");
         } else if (args.length == 2 && (getAliases.contains(args[0]) || user == null || user.isAuthorized("essentials.pweather.others"))) {
@@ -110,6 +116,6 @@ public class Commandpweather extends EssentialsLoopCommand {
     }
 
     @Override
-    protected void updatePlayer(Server server, CommandSource sender, User user, String[] args) {
+    protected void updatePlayer(final Server server, final CommandSource sender, final User user, final String[] args) {
     }
 }

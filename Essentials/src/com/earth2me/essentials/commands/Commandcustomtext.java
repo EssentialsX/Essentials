@@ -8,7 +8,6 @@ import com.earth2me.essentials.textreader.TextPager;
 import com.earth2me.essentials.utils.NumberUtil;
 import org.bukkit.Server;
 
-
 public class Commandcustomtext extends EssentialsCommand {
     public Commandcustomtext() {
         super("customtext");
@@ -24,7 +23,7 @@ public class Commandcustomtext extends EssentialsCommand {
         final IText output = new KeywordReplacer(input, sender, ess);
         final TextPager pager = new TextPager(output);
         String chapter = commandLabel;
-        String page;
+        final String page;
 
         if (commandLabel.equalsIgnoreCase("customtext") && args.length > 0 && !NumberUtil.isInt(commandLabel)) {
             chapter = args[0];

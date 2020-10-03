@@ -24,7 +24,7 @@ public class Commandtree extends EssentialsCommand {
         if (args.length < 1) {
             throw new NotEnoughArgumentsException();
         } else {
-            for (TreeType type : TreeType.values()) {
+            for (final TreeType type : TreeType.values()) {
                 if (type.name().replace("_", "").equalsIgnoreCase(args[0])) {
                     tree = type;
                     break;
@@ -55,10 +55,10 @@ public class Commandtree extends EssentialsCommand {
     }
 
     @Override
-    protected List<String> getTabCompleteOptions(Server server, User user, String commandLabel, String[] args) {
+    protected List<String> getTabCompleteOptions(final Server server, final User user, final String commandLabel, final String[] args) {
         if (args.length == 1) {
-            List<String> options = Lists.newArrayList();
-            for (TreeType type : TreeType.values()) {
+            final List<String> options = Lists.newArrayList();
+            for (final TreeType type : TreeType.values()) {
                 options.add(type.name().toLowerCase(Locale.ENGLISH).replace("_", ""));
             }
             return options;

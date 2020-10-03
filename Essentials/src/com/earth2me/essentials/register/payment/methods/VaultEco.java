@@ -5,7 +5,6 @@ import net.milkbowl.vault.economy.Economy;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.RegisteredServiceProvider;
 
-
 public class VaultEco implements Method {
     private Plugin vault;
     private Economy economy;
@@ -16,7 +15,16 @@ public class VaultEco implements Method {
     }
 
     @Override
-    public boolean createAccount(String name, Double amount) {
+    public void setPlugin(final Plugin plugin) {
+        this.vault = plugin;
+        final RegisteredServiceProvider<Economy> economyProvider = this.vault.getServer().getServicesManager().getRegistration(net.milkbowl.vault.economy.Economy.class);
+        if (economyProvider != null) {
+            this.economy = economyProvider.getProvider();
+        }
+    }
+
+    @Override
+    public boolean createAccount(final String name, final Double amount) {
         if (hasAccount(name)) {
             return false;
         }
@@ -50,7 +58,7 @@ public class VaultEco implements Method {
     }
 
     @Override
-    public String format(double amount) {
+    public String format(final double amount) {
         return this.economy.format(amount);
     }
 
@@ -60,26 +68,26 @@ public class VaultEco implements Method {
     }
 
     @Override
-    public boolean hasBank(String bank) {
+    public boolean hasBank(final String bank) {
         return this.economy.getBanks().contains(bank);
     }
 
     @Override
-    public boolean hasAccount(String name) {
+    public boolean hasAccount(final String name) {
         return this.economy.hasAccount(name);
     }
 
     @Override
-    public boolean hasBankAccount(String bank, String name) {
+    public boolean hasBankAccount(final String bank, final String name) {
         return this.economy.isBankOwner(bank, name).transactionSuccess() || this.economy.isBankMember(bank, name).transactionSuccess();
     }
 
     @Override
-    public boolean createAccount(String name) {
+    public boolean createAccount(final String name) {
         return this.economy.createBank(name, "").transactionSuccess();
     }
 
-    public boolean createAccount(String name, double balance) {
+    public boolean createAccount(final String name, final double balance) {
         if (!this.economy.createBank(name, "").transactionSuccess()) {
             return false;
         }
@@ -87,7 +95,7 @@ public class VaultEco implements Method {
     }
 
     @Override
-    public MethodAccount getAccount(String name) {
+    public MethodAccount getAccount(final String name) {
         if (!hasAccount(name)) {
             return null;
         }
@@ -96,7 +104,7 @@ public class VaultEco implements Method {
     }
 
     @Override
-    public MethodBankAccount getBankAccount(String bank, String name) {
+    public MethodBankAccount getBankAccount(final String bank, final String name) {
         if (!hasBankAccount(bank, name)) {
             return null;
         }
@@ -105,30 +113,20 @@ public class VaultEco implements Method {
     }
 
     @Override
-    public boolean isCompatible(Plugin plugin) {
+    public boolean isCompatible(final Plugin plugin) {
         try {
-            RegisteredServiceProvider<Economy> ecoPlugin = plugin.getServer().getServicesManager().getRegistration(net.milkbowl.vault.economy.Economy.class);
+            final RegisteredServiceProvider<Economy> ecoPlugin = plugin.getServer().getServicesManager().getRegistration(net.milkbowl.vault.economy.Economy.class);
             return plugin.getName().equals("Vault") && ecoPlugin != null && !ecoPlugin.getProvider().getName().equals("Essentials Economy");
-        } catch (LinkageError | Exception e) {
+        } catch (final LinkageError | Exception e) {
             return false;
         }
     }
-
-    @Override
-    public void setPlugin(Plugin plugin) {
-        this.vault = plugin;
-        RegisteredServiceProvider<Economy> economyProvider = this.vault.getServer().getServicesManager().getRegistration(net.milkbowl.vault.economy.Economy.class);
-        if (economyProvider != null) {
-            this.economy = economyProvider.getProvider();
-        }
-    }
-
 
     public static class VaultAccount implements MethodAccount {
         private final String name;
         private final Economy economy;
 
-        VaultAccount(String name, Economy economy) {
+        VaultAccount(final String name, final Economy economy) {
             this.name = name;
             this.economy = economy;
         }
@@ -139,7 +137,7 @@ public class VaultEco implements Method {
         }
 
         @Override
-        public boolean set(double amount) {
+        public boolean set(final double amount) {
             if (!this.economy.withdrawPlayer(this.name, this.balance()).transactionSuccess()) {
                 return false;
             }
@@ -150,45 +148,45 @@ public class VaultEco implements Method {
         }
 
         @Override
-        public boolean add(double amount) {
+        public boolean add(final double amount) {
             return this.economy.depositPlayer(this.name, amount).transactionSuccess();
         }
 
         @Override
-        public boolean subtract(double amount) {
+        public boolean subtract(final double amount) {
             return this.economy.withdrawPlayer(this.name, amount).transactionSuccess();
         }
 
         @Override
-        public boolean multiply(double amount) {
-            double balance = this.balance();
+        public boolean multiply(final double amount) {
+            final double balance = this.balance();
             return this.set(balance * amount);
         }
 
         @Override
-        public boolean divide(double amount) {
-            double balance = this.balance();
+        public boolean divide(final double amount) {
+            final double balance = this.balance();
             return this.set(balance / amount);
         }
 
         @Override
-        public boolean hasEnough(double amount) {
-            return (this.balance() >= amount);
+        public boolean hasEnough(final double amount) {
+            return this.balance() >= amount;
         }
 
         @Override
-        public boolean hasOver(double amount) {
-            return (this.balance() > amount);
+        public boolean hasOver(final double amount) {
+            return this.balance() > amount;
         }
 
         @Override
-        public boolean hasUnder(double amount) {
-            return (this.balance() < amount);
+        public boolean hasUnder(final double amount) {
+            return this.balance() < amount;
         }
 
         @Override
         public boolean isNegative() {
-            return (this.balance() < 0);
+            return this.balance() < 0;
         }
 
         @Override
@@ -197,12 +195,11 @@ public class VaultEco implements Method {
         }
     }
 
-
     public static class VaultBankAccount implements MethodBankAccount {
         private final String bank;
         private final Economy economy;
 
-        public VaultBankAccount(String bank, Economy economy) {
+        public VaultBankAccount(final String bank, final Economy economy) {
             this.bank = bank;
             this.economy = economy;
         }
@@ -223,7 +220,7 @@ public class VaultEco implements Method {
         }
 
         @Override
-        public boolean set(double amount) {
+        public boolean set(final double amount) {
             if (!this.economy.bankWithdraw(this.bank, this.balance()).transactionSuccess()) {
                 return false;
             }
@@ -234,45 +231,45 @@ public class VaultEco implements Method {
         }
 
         @Override
-        public boolean add(double amount) {
+        public boolean add(final double amount) {
             return this.economy.bankDeposit(this.bank, amount).transactionSuccess();
         }
 
         @Override
-        public boolean subtract(double amount) {
+        public boolean subtract(final double amount) {
             return this.economy.bankWithdraw(this.bank, amount).transactionSuccess();
         }
 
         @Override
-        public boolean multiply(double amount) {
-            double balance = this.balance();
+        public boolean multiply(final double amount) {
+            final double balance = this.balance();
             return this.set(balance * amount);
         }
 
         @Override
-        public boolean divide(double amount) {
-            double balance = this.balance();
+        public boolean divide(final double amount) {
+            final double balance = this.balance();
             return this.set(balance / amount);
         }
 
         @Override
-        public boolean hasEnough(double amount) {
-            return (this.balance() >= amount);
+        public boolean hasEnough(final double amount) {
+            return this.balance() >= amount;
         }
 
         @Override
-        public boolean hasOver(double amount) {
-            return (this.balance() > amount);
+        public boolean hasOver(final double amount) {
+            return this.balance() > amount;
         }
 
         @Override
-        public boolean hasUnder(double amount) {
-            return (this.balance() < amount);
+        public boolean hasUnder(final double amount) {
+            return this.balance() < amount;
         }
 
         @Override
         public boolean isNegative() {
-            return (this.balance() < 0);
+            return this.balance() < 0;
         }
 
         @Override

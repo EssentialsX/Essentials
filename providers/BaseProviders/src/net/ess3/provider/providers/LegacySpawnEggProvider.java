@@ -9,13 +9,13 @@ import org.bukkit.material.SpawnEgg;
 @SuppressWarnings("deprecation")
 public class LegacySpawnEggProvider implements SpawnEggProvider {
     @Override
-    public ItemStack createEggItem(EntityType type) throws IllegalArgumentException {
+    public ItemStack createEggItem(final EntityType type) throws IllegalArgumentException {
         return new SpawnEgg(type).toItemStack();
     }
 
     @Override
-    public EntityType getSpawnedType(ItemStack eggItem) throws IllegalArgumentException {
-        MaterialData data = eggItem.getData();
+    public EntityType getSpawnedType(final ItemStack eggItem) throws IllegalArgumentException {
+        final MaterialData data = eggItem.getData();
         if (data instanceof SpawnEgg) {
             return ((SpawnEgg) data).getSpawnedType();
         }

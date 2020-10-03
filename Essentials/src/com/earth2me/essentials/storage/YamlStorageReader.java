@@ -7,9 +7,12 @@ import org.yaml.snakeyaml.constructor.Constructor;
 
 import java.io.Reader;
 import java.lang.reflect.Field;
-import java.util.*;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.locks.ReentrantLock;
-
 
 public class YamlStorageReader implements IStorageReader {
     private transient static final Map<Class, Yaml> PREPARED_YAMLS = Collections.synchronizedMap(new HashMap<>());
@@ -43,7 +46,7 @@ public class YamlStorageReader implements IStorageReader {
                 object = clazz.newInstance();
             }
             return object;
-        } catch (IllegalAccessException | InstantiationException ex) {
+        } catch (final IllegalAccessException | InstantiationException ex) {
             throw new ObjectLoadException(ex);
         } finally {
             lock.unlock();
@@ -61,7 +64,7 @@ public class YamlStorageReader implements IStorageReader {
     private void prepareConstructor(final Constructor constructor, final Set<Class> classes, final Class clazz) {
         classes.add(clazz);
         final TypeDescription description = new TypeDescription(clazz);
-        for (Field field : clazz.getDeclaredFields()) {
+        for (final Field field : clazz.getDeclaredFields()) {
             prepareList(field, description, classes, constructor);
             prepareMap(field, description, classes, constructor);
             if (StorageObject.class.isAssignableFrom(field.getType()) && !classes.contains(field.getType())) {

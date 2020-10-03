@@ -4,7 +4,6 @@ import com.earth2me.essentials.api.IItemDb;
 import com.earth2me.essentials.api.IJails;
 import com.earth2me.essentials.api.IWarps;
 import com.earth2me.essentials.perm.PermissionsHandler;
-import com.earth2me.essentials.register.payment.Methods;
 import net.ess3.provider.ServerStateProvider;
 import net.ess3.provider.SpawnerBlockProvider;
 import net.ess3.provider.SpawnerItemProvider;
@@ -68,8 +67,6 @@ public interface IEssentials extends Plugin {
     Kits getKits();
 
     RandomTeleport getRandomTeleport();
-
-    Methods getPaymentMethod();
 
     BukkitTask runTaskAsynchronously(Runnable run);
 

@@ -5,17 +5,37 @@ import com.earth2me.essentials.utils.EnumUtil;
 import com.earth2me.essentials.utils.StringUtil;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
-import org.bukkit.entity.*;
+import org.bukkit.entity.Ageable;
+import org.bukkit.entity.Creeper;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.ExperienceOrb;
+import org.bukkit.entity.Horse;
+import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Phantom;
+import org.bukkit.entity.Pig;
+import org.bukkit.entity.Player;
+import org.bukkit.entity.Raider;
+import org.bukkit.entity.Slime;
+import org.bukkit.entity.Tameable;
+import org.bukkit.entity.TropicalFish;
+import org.bukkit.entity.Wolf;
+import org.bukkit.entity.Zombie;
 import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.Colorable;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Random;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 import static com.earth2me.essentials.I18n.tl;
-
 
 public enum MobData {
 
@@ -165,29 +185,7 @@ public enum MobData {
     TROPICAL_FISH_PATTERN_COLOR("fish_pattern_color", Arrays.stream(DyeColor.values()).map(color -> color.name().toLowerCase(Locale.ENGLISH) + "pattern").collect(Collectors.toList()), MobCompat.TROPICAL_FISH, Data.FISH_PATTERN_COLOR, true),
     ;
 
-
-    public enum Data {
-        ADULT,
-        BABY,
-        CHEST,
-        ADULTZOMBIE,
-        BABYZOMBIE,
-        HORSESADDLE,
-        PIGSADDLE,
-        ELECTRIFIED,
-        ANGRY,
-        TAMED,
-        COLORABLE,
-        EXP,
-        SIZE,
-        RAID_LEADER,
-        FISH_BODY_COLOR,
-        FISH_PATTERN_COLOR,
-    }
-
-
     public static final Logger logger = Logger.getLogger("Essentials");
-
     final private String nickname;
     final private List<String> suggestions;
     final private Object type;
@@ -195,7 +193,7 @@ public enum MobData {
     final private boolean isPublic;
     private String matched;
 
-    MobData(String n, Object type, Object value, boolean isPublic) {
+    MobData(final String n, final Object type, final Object value, final boolean isPublic) {
         this.nickname = n;
         this.matched = n;
         this.suggestions = Collections.singletonList(n);
@@ -204,7 +202,7 @@ public enum MobData {
         this.isPublic = isPublic;
     }
 
-    MobData(String n, List<String> s, Object type, Object value, boolean isPublic) {
+    MobData(final String n, final List<String> s, final Object type, final Object value, final boolean isPublic) {
         this.nickname = n;
         this.matched = n;
         this.suggestions = s;
@@ -213,9 +211,9 @@ public enum MobData {
         this.isPublic = isPublic;
     }
 
-    public static LinkedHashMap<String, MobData> getPossibleData(final Entity spawned, boolean publicOnly) {
-        LinkedHashMap<String, MobData> mobList = new LinkedHashMap<>();
-        for (MobData data : MobData.values()) {
+    public static LinkedHashMap<String, MobData> getPossibleData(final Entity spawned, final boolean publicOnly) {
+        final LinkedHashMap<String, MobData> mobList = new LinkedHashMap<>();
+        for (final MobData data : MobData.values()) {
             if (data.type == null || (publicOnly && !data.isPublic)) {
                 continue;
             }
@@ -230,10 +228,10 @@ public enum MobData {
     }
 
     public static List<String> getValidHelp(final Entity spawned) {
-        List<String> output = new ArrayList<>();
-        LinkedHashMap<String, MobData> posData = getPossibleData(spawned, true);
+        final List<String> output = new ArrayList<>();
+        final LinkedHashMap<String, MobData> posData = getPossibleData(spawned, true);
 
-        for (MobData data : posData.values()) {
+        for (final MobData data : posData.values()) {
             output.add(StringUtil.joinList(data.suggestions));
         }
         return output;
@@ -244,9 +242,9 @@ public enum MobData {
             return null;
         }
 
-        LinkedHashMap<String, MobData> posData = getPossibleData(spawned, false);
-        for (MobData data : posData.values()) {
-            for (String suggestion : data.suggestions) {
+        final LinkedHashMap<String, MobData> posData = getPossibleData(spawned, false);
+        for (final MobData data : posData.values()) {
+            for (final String suggestion : data.suggestions) {
                 if (name.contains(suggestion)) {
                     return data;
                 }
@@ -273,14 +271,14 @@ public enum MobData {
         } else if (this.value.equals(Data.ELECTRIFIED)) {
             ((Creeper) spawned).setPowered(true);
         } else if (this.value.equals(Data.HORSESADDLE)) {
-            final Horse horse = ((Horse) spawned);
+            final Horse horse = (Horse) spawned;
             horse.setTamed(true);
             horse.setOwner(target);
             horse.getInventory().setSaddle(new ItemStack(Material.SADDLE, 1));
         } else if (this.value.equals(Data.PIGSADDLE)) {
             ((Pig) spawned).setSaddle(true);
         } else if (this.value.equals(Data.TAMED)) {
-            final Tameable tameable = ((Tameable) spawned);
+            final Tameable tameable = (Tameable) spawned;
             tameable.setTamed(true);
             tameable.setOwner(target);
         } else if (this.value.equals(Data.COLORABLE)) {
@@ -293,26 +291,26 @@ public enum MobData {
                     ((Colorable) spawned).setColor(DyeColor.valueOf(color));
                 }
                 this.matched = rawData;
-            } catch (Exception e) {
+            } catch (final Exception e) {
                 throw new Exception(tl("sheepMalformedColor"), e);
             }
         } else if (this.value.equals(Data.EXP)) {
             try {
                 ((ExperienceOrb) spawned).setExperience(Integer.parseInt(rawData));
                 this.matched = rawData;
-            } catch (NumberFormatException e) {
+            } catch (final NumberFormatException e) {
                 throw new Exception(tl("invalidNumber"), e);
             }
         } else if (this.value.equals(Data.SIZE)) {
             try {
-                int size = Integer.parseInt(rawData);
+                final int size = Integer.parseInt(rawData);
                 if (spawned instanceof Slime) {
                     ((Slime) spawned).setSize(size);
                 } else if (spawned.getType() == MobCompat.PHANTOM) {
                     ((Phantom) spawned).setSize(size);
                 }
                 this.matched = rawData;
-            } catch (NumberFormatException e) {
+            } catch (final NumberFormatException e) {
                 throw new Exception(tl("slimeMalformedSize"), e);
             }
         } else if (this.value instanceof Horse.Color) {
@@ -335,7 +333,7 @@ public enum MobData {
         } else if (this.value.equals(Data.RAID_LEADER)) {
             ((Raider) spawned).setPatrolLeader(true);
         } else if (this.value.equals(Data.FISH_BODY_COLOR)) {
-            for (String match : TROPICAL_FISH_BODY_COLOR.suggestions) {
+            for (final String match : TROPICAL_FISH_BODY_COLOR.suggestions) {
                 if (rawData.contains(match)) {
                     this.matched = match;
                     final String color = match.substring(0, match.indexOf("body")).toUpperCase(Locale.ENGLISH);
@@ -344,7 +342,7 @@ public enum MobData {
                 }
             }
         } else if (this.value.equals(Data.FISH_PATTERN_COLOR)) {
-            for (String match : TROPICAL_FISH_PATTERN_COLOR.suggestions) {
+            for (final String match : TROPICAL_FISH_PATTERN_COLOR.suggestions) {
                 if (rawData.contains(match)) {
                     this.matched = match;
                     final String color = match.substring(0, match.indexOf("pattern")).toUpperCase(Locale.ENGLISH);
@@ -383,5 +381,24 @@ public enum MobData {
         } else {
             logger.warning("Unknown mob data type: " + this.toString());
         }
+    }
+
+    public enum Data {
+        ADULT,
+        BABY,
+        CHEST,
+        ADULTZOMBIE,
+        BABYZOMBIE,
+        HORSESADDLE,
+        PIGSADDLE,
+        ELECTRIFIED,
+        ANGRY,
+        TAMED,
+        COLORABLE,
+        EXP,
+        SIZE,
+        RAID_LEADER,
+        FISH_BODY_COLOR,
+        FISH_PATTERN_COLOR,
     }
 }

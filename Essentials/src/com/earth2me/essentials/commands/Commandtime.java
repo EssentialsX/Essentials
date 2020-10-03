@@ -20,12 +20,10 @@ import java.util.TreeSet;
 
 import static com.earth2me.essentials.I18n.tl;
 
-
 public class Commandtime extends EssentialsCommand {
     private final List<String> subCommands = Arrays.asList("add", "set");
     private final List<String> timeNames = Arrays.asList("sunrise", "day", "morning", "noon", "afternoon", "sunset", "night", "midnight");
     private final List<String> timeNumbers = Arrays.asList("1000", "2000", "3000", "4000", "5000");
-
 
     public Commandtime() {
         super("time");
@@ -33,8 +31,8 @@ public class Commandtime extends EssentialsCommand {
 
     @Override
     public void run(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception {
-        long timeTick;
-        Set<World> worlds;
+        final long timeTick;
+        final Set<World> worlds;
         boolean add = false;
         if (args.length == 0) {
             worlds = getWorlds(server, sender, null);
@@ -48,7 +46,7 @@ public class Commandtime extends EssentialsCommand {
             worlds = getWorlds(server, sender, null);
             try {
                 timeTick = DescParseTickFormat.parse(NumberUtil.isInt(args[0]) ? (args[0] + "t") : args[0]);
-            } catch (NumberFormatException e) {
+            } catch (final NumberFormatException e) {
                 throw new NotEnoughArgumentsException(e);
             }
         } else {
@@ -57,14 +55,14 @@ public class Commandtime extends EssentialsCommand {
                     add = args[0].equalsIgnoreCase("add");
                     timeTick = DescParseTickFormat.parse(NumberUtil.isInt(args[1]) ? (args[1] + "t") : args[1]);
                     worlds = getWorlds(server, sender, args.length > 2 ? args[2] : null);
-                } catch (NumberFormatException e) {
+                } catch (final NumberFormatException e) {
                     throw new NotEnoughArgumentsException(e);
                 }
             } else {
                 try {
                     timeTick = DescParseTickFormat.parse(NumberUtil.isInt(args[0]) ? (args[0] + "t") : args[0]);
                     worlds = getWorlds(server, sender, args[1]);
-                } catch (NumberFormatException e) {
+                } catch (final NumberFormatException e) {
                     throw new NotEnoughArgumentsException(e);
                 }
             }
@@ -75,7 +73,7 @@ public class Commandtime extends EssentialsCommand {
             throw new Exception(tl("timeSetPermission"));
         }
 
-        for (World world : worlds) {
+        for (final World world : worlds) {
             if (!canUpdateWorld(sender, world)) {
                 //We can ensure that this is User as the console has all permissions (for essentials commands).
                 throw new Exception(tl("timeSetWorldPermission", sender.getUser(ess).getBase().getWorld().getName()));
@@ -83,7 +81,7 @@ public class Commandtime extends EssentialsCommand {
         }
 
         final StringJoiner joiner = new StringJoiner(",");
-        for (World world : worlds) {
+        for (final World world : worlds) {
             long time = world.getTime();
             if (!add) {
                 time -= time % 24000;
@@ -102,7 +100,7 @@ public class Commandtime extends EssentialsCommand {
             return;
         }
 
-        for (World world : worlds) {
+        for (final World world : worlds) {
             sender.sendMessage(tl("timeWorldCurrent", world.getName(), DescParseTickFormat.format(world.getTime())));
         }
     }
@@ -134,22 +132,22 @@ public class Commandtime extends EssentialsCommand {
         }
         return worlds;
     }
-    
-    private boolean canUpdateAll(CommandSource sender) {
+
+    private boolean canUpdateAll(final CommandSource sender) {
         return !ess.getSettings().isWorldTimePermissions() // First check if per world permissions are enabled, if not, return true.
             || sender.isAuthorized("essentials.time.world.all", ess);
     }
 
-    private boolean canUpdateWorld(CommandSource sender, World world) {
+    private boolean canUpdateWorld(final CommandSource sender, final World world) {
         return canUpdateAll(sender) || sender.isAuthorized("essentials.time.world." + normalizeWorldName(world), ess);
     }
 
-    private String normalizeWorldName(World world) {
+    private String normalizeWorldName(final World world) {
         return world.getName().toLowerCase().replaceAll("\\s+", "_");
     }
 
     @Override
-    protected List<String> getTabCompleteOptions(Server server, CommandSource sender, String commandLabel, String[] args) {
+    protected List<String> getTabCompleteOptions(final Server server, final CommandSource sender, final String commandLabel, final String[] args) {
         if (args.length == 1) {
             if (sender.isAuthorized("essentials.time.set", ess)) {
                 return subCommands;
@@ -165,8 +163,8 @@ public class Commandtime extends EssentialsCommand {
                 return Collections.emptyList();
             }
         } else if (args.length == 3 && (args[0].equalsIgnoreCase("set") || args[0].equalsIgnoreCase("add"))) {
-            List<String> worlds = Lists.newArrayList();
-            for (World world : server.getWorlds()) {
+            final List<String> worlds = Lists.newArrayList();
+            for (final World world : server.getWorlds()) {
                 if (sender.isAuthorized("essentials.time.world." + normalizeWorldName(world), ess)) {
                     worlds.add(world.getName());
                 }
@@ -180,7 +178,6 @@ public class Commandtime extends EssentialsCommand {
         }
     }
 }
-
 
 class WorldNameComparator implements Comparator<World> {
     @Override
