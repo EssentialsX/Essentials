@@ -9,19 +9,18 @@ import java.util.logging.Logger;
 
 import static com.earth2me.essentials.I18n.tl;
 
-
 class EssentialsConnect {
     private static final Logger logger = Logger.getLogger("EssentialsProtect");
     private final IEssentials ess;
     private final IProtect protect;
 
-    EssentialsConnect(Plugin essPlugin, Plugin essProtect) {
+    EssentialsConnect(final Plugin essPlugin, final Plugin essProtect) {
         if (!essProtect.getDescription().getVersion().equals(essPlugin.getDescription().getVersion())) {
             logger.log(Level.WARNING, tl("versionMismatchAll"));
         }
         ess = (IEssentials) essPlugin;
         protect = (IProtect) essProtect;
-        ProtectReloader pr = new ProtectReloader();
+        final ProtectReloader pr = new ProtectReloader();
         pr.reloadConfig();
         ess.addReloadListener(pr);
     }
@@ -33,7 +32,7 @@ class EssentialsConnect {
     private class ProtectReloader implements IConf {
         @Override
         public void reloadConfig() {
-            for (ProtectConfig protectConfig : ProtectConfig.values()) {
+            for (final ProtectConfig protectConfig : ProtectConfig.values()) {
                 if (protectConfig.isList()) {
                     protect.getSettingsList().put(protectConfig, ess.getSettings().getProtectList(protectConfig.getConfigName()));
                 } else if (protectConfig.isString()) {

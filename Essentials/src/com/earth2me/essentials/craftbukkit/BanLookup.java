@@ -7,19 +7,22 @@ import org.bukkit.BanList;
 
 import java.util.Set;
 
+public final class BanLookup {
 
-public class BanLookup {
-    public static Boolean isBanned(IEssentials ess, User user) {
+    private BanLookup() {
+    }
+
+    public static Boolean isBanned(final IEssentials ess, final User user) {
         return isBanned(ess, user.getName());
     }
 
-    public static Boolean isBanned(IEssentials ess, String name) {
+    public static Boolean isBanned(final IEssentials ess, final String name) {
         return getBanEntry(ess, name) != null;
     }
 
-    public static BanEntry getBanEntry(IEssentials ess, String name) {
-        Set<BanEntry> benteries = ess.getServer().getBanList(BanList.Type.NAME).getBanEntries();
-        for (BanEntry banEnt : benteries) {
+    public static BanEntry getBanEntry(final IEssentials ess, final String name) {
+        final Set<BanEntry> benteries = ess.getServer().getBanList(BanList.Type.NAME).getBanEntries();
+        for (final BanEntry banEnt : benteries) {
             if (banEnt.getTarget().equals(name)) {
                 return banEnt;
             }

@@ -9,9 +9,17 @@ public final class PluginKey {
     private final Plugin plugin;
     private final String key;
 
-    private PluginKey(Plugin plugin, String key) {
+    private PluginKey(final Plugin plugin, final String key) {
         this.plugin = plugin;
         this.key = key;
+    }
+
+    public static PluginKey random(final Plugin plugin) {
+        return new PluginKey(plugin, UUID.randomUUID().toString());
+    }
+
+    public static PluginKey fromKey(final Plugin plugin, final String key) {
+        return new PluginKey(plugin, key);
     }
 
     public Plugin getPlugin() {
@@ -33,19 +41,11 @@ public final class PluginKey {
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(final Object o) {
         if (!(o instanceof PluginKey || o.getClass().getName().equals("org.bukkit.NamespacedKey"))) {
             return false;
         }
         return this == o || this.toString().equals(o.toString());
-    }
-
-    public static PluginKey random(Plugin plugin) {
-        return new PluginKey(plugin, UUID.randomUUID().toString());
-    }
-
-    public static PluginKey fromKey(Plugin plugin, String key) {
-        return new PluginKey(plugin, key);
     }
 
 }

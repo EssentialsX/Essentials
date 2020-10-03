@@ -9,15 +9,12 @@ import java.io.File;
 import java.util.Collection;
 import java.util.UUID;
 
-
 public interface IWarps extends IConf {
     /**
      * Get a warp by name
      *
      * @param warp - Warp name
-     *
      * @return - Location the warp is set to
-     *
      * @throws WarpNotFoundException When the warp is not found
      * @throws InvalidWorldException When the world the warp is in is not found
      */
@@ -41,7 +38,6 @@ public interface IWarps extends IConf {
      * Delete a warp from the warp DB
      *
      * @param name - Name of warp
-     *
      * @throws Exception
      */
     void removeWarp(String name) throws Exception;
@@ -51,7 +47,6 @@ public interface IWarps extends IConf {
      *
      * @param name - Name of warp
      * @param loc  - Location of warp
-     *
      * @throws Exception
      */
     void setWarp(String name, Location loc) throws Exception;
@@ -62,19 +57,18 @@ public interface IWarps extends IConf {
      * @param user - User of warp
      * @param name - Name of warp
      * @param loc  - Location of warp
-     *
      * @throws Exception
      */
     void setWarp(IUser user, String name, Location loc) throws Exception;
-      
+
     /**
      * Gets Lastowner UUID
-     *   
-     * @param warp - Name of warp
      *
+     * @param warp - Name of warp
      * @throws WarpNotFoundException
      */
     UUID getLastOwner(String warp) throws WarpNotFoundException;
+
     /**
      * Check to see if the file is empty
      *
@@ -86,9 +80,7 @@ public interface IWarps extends IConf {
      * Get a warp file note: this is not yet implemented, as 3.x uses different storage methods
      *
      * @param name - name of file
-     *
      * @return - an instance of the file
-     *
      * @throws InvalidNameException - When the file is not found
      */
     File getWarpFile(String name) throws net.ess3.api.InvalidNameException;

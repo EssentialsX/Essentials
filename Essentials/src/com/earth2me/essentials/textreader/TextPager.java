@@ -9,7 +9,6 @@ import java.util.Map;
 
 import static com.earth2me.essentials.I18n.tl;
 
-
 public class TextPager {
     private final transient IText text;
     private final transient boolean onePage;
@@ -24,9 +23,9 @@ public class TextPager {
     }
 
     public void showPage(final String pageStr, final String chapterPageStr, final String commandName, final CommandSource sender) {
-        List<String> lines = text.getLines();
-        List<String> chapters = text.getChapters();
-        Map<String, Integer> bookmarks = text.getBookmarks();
+        final List<String> lines = text.getLines();
+        final List<String> chapters = text.getChapters();
+        final Map<String, Integer> bookmarks = text.getBookmarks();
 
         //This code deals with the initial chapter.  We use this to display the initial output or contents.
         //We also use this code to display some extra information if we don't intend to use chapters
@@ -40,7 +39,7 @@ public class TextPager {
                 sender.sendMessage(tl("infoChapter"));
                 final StringBuilder sb = new StringBuilder();
                 boolean first = true;
-                for (String string : chapters) {
+                for (final String string : chapters) {
                     if (!first) {
                         sb.append(", ");
                     }
@@ -54,30 +53,30 @@ public class TextPager {
                 if (pageStr != null) {
                     try {
                         page = Integer.parseInt(pageStr);
-                    } catch (NumberFormatException ignored) {
+                    } catch (final NumberFormatException ignored) {
                     }
                     if (page < 1) {
                         page = 1;
                     }
                 }
 
-                int start = onePage ? 0 : (page - 1) * 9;
+                final int start = onePage ? 0 : (page - 1) * 9;
                 int end;
                 for (end = 0; end < lines.size(); end++) {
-                    String line = lines.get(end);
+                    final String line = lines.get(end);
                     if (line.startsWith("#")) {
                         break;
                     }
                 }
 
-                int pages = end / 9 + (end % 9 > 0 ? 1 : 0);
+                final int pages = end / 9 + (end % 9 > 0 ? 1 : 0);
                 if (page > pages) {
                     sender.sendMessage(tl("infoUnknownChapter"));
                     return;
                 }
                 if (!onePage && commandName != null) {
 
-                    StringBuilder content = new StringBuilder();
+                    final StringBuilder content = new StringBuilder();
                     final String[] title = commandName.split(" ", 2);
                     if (title.length > 1) {
                         content.append(I18n.capitalCase(title[0])).append(": ");
@@ -102,7 +101,7 @@ public class TextPager {
         if (chapterPageStr != null) {
             try {
                 chapterpage = Integer.parseInt(chapterPageStr) - 1;
-            } catch (NumberFormatException ignored) {
+            } catch (final NumberFormatException ignored) {
             }
             if (chapterpage < 0) {
                 chapterpage = 0;
@@ -130,7 +129,7 @@ public class TextPager {
         final int page = chapterpage + 1;
         final int pages = (chapterend - chapterstart) / 9 + ((chapterend - chapterstart) % 9 > 0 ? 1 : 0);
         if (!onePage && commandName != null) {
-            StringBuilder content = new StringBuilder();
+            final StringBuilder content = new StringBuilder();
             content.append(I18n.capitalCase(commandName)).append(": ");
             content.append(pageStr);
             sender.sendMessage(tl("infoChapterPages", content, page, pages));

@@ -5,13 +5,11 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permission;
 import org.bukkit.plugin.Plugin;
-import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.Function;
 import java.util.function.Supplier;
-
 
 public class SuperpermsHandler implements IPermissionsHandler {
     protected boolean emulateWildcards() {
@@ -114,7 +112,7 @@ public class SuperpermsHandler implements IPermissionsHandler {
     }
 
     @Override
-    public void registerContext(String context, Function<Player, Iterable<String>> calculator, Supplier<Iterable<String>> suggestions) {
+    public void registerContext(final String context, final Function<Player, Iterable<String>> calculator, final Supplier<Iterable<String>> suggestions) {
     }
 
     @Override
@@ -133,10 +131,10 @@ public class SuperpermsHandler implements IPermissionsHandler {
 
     public String getEnabledPermsPlugin() {
         String enabledPermsPlugin = null;
-        List<String> specialCasePlugins = Arrays.asList("PermissionsEx", "GroupManager",
-                "SimplyPerms", "Privileges", "bPermissions", "zPermissions", "PermissionsBukkit",
-                "DroxPerms", "xPerms", "LuckPerms");
-        for (Plugin plugin : Bukkit.getPluginManager().getPlugins()) {
+        final List<String> specialCasePlugins = Arrays.asList("PermissionsEx", "GroupManager",
+            "SimplyPerms", "Privileges", "bPermissions", "zPermissions", "PermissionsBukkit",
+            "DroxPerms", "xPerms", "LuckPerms");
+        for (final Plugin plugin : Bukkit.getPluginManager().getPlugins()) {
             if (specialCasePlugins.contains(plugin.getName())) {
                 enabledPermsPlugin = plugin.getName();
                 break;

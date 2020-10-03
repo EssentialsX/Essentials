@@ -10,16 +10,25 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Server;
 import org.bukkit.block.Block;
-import org.bukkit.entity.*;
+import org.bukkit.entity.Ageable;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Horse;
+import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.PigZombie;
+import org.bukkit.entity.Zombie;
 import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Locale;
+import java.util.Set;
 
 import static com.earth2me.essentials.I18n.tl;
 
-
-public class SpawnMob {
+public final class SpawnMob {
 
     private static final Material GOLDEN_HELMET = EnumUtil.getMaterial("GOLDEN_HELMET", "GOLD_HELMET");
     private static final Material GOLDEN_CHESTPLATE = EnumUtil.getMaterial("GOLDEN_CHESTPLATE", "GOLD_CHESTPLATE");
@@ -27,10 +36,13 @@ public class SpawnMob {
     private static final Material GOLDEN_BOOTS = EnumUtil.getMaterial("GOLDEN_BOOTS", "GOLD_BOOTS");
     private static final Material GOLDEN_SWORD = EnumUtil.getMaterial("GOLDEN_SWORD", "GOLD_SWORD");
 
+    private SpawnMob() {
+    }
+
     public static String mobList(final User user) {
         final Set<String> mobList = Mob.getMobList();
         final Set<String> availableList = new HashSet<>();
-        for (String mob : mobList) {
+        for (final String mob : mobList) {
             if (user.isAuthorized("essentials.spawnmob." + mob.toLowerCase(Locale.ENGLISH))) {
                 availableList.add(mob);
             }
@@ -42,24 +54,24 @@ public class SpawnMob {
     }
 
     public static List<String> mobParts(final String mobString) {
-        String[] mobParts = mobString.split(",");
+        final String[] mobParts = mobString.split(",");
 
-        List<String> mobs = new ArrayList<>();
+        final List<String> mobs = new ArrayList<>();
 
-        for (String mobPart : mobParts) {
-            String[] mobDatas = mobPart.split(":");
+        for (final String mobPart : mobParts) {
+            final String[] mobDatas = mobPart.split(":");
             mobs.add(mobDatas[0]);
         }
         return mobs;
     }
 
     public static List<String> mobData(final String mobString) {
-        String[] mobParts = mobString.split(",");
+        final String[] mobParts = mobString.split(",");
 
-        List<String> mobData = new ArrayList<>();
+        final List<String> mobData = new ArrayList<>();
 
-        for (String mobPart : mobParts) {
-            String[] mobDatas = mobPart.split(":");
+        for (final String mobPart : mobParts) {
+            final String[] mobDatas = mobPart.split(":");
             if (mobDatas.length == 1) {
                 if (mobPart.contains(":")) {
                     mobData.add("");
@@ -75,7 +87,7 @@ public class SpawnMob {
     }
 
     // This method spawns a mob where the user is looking, owned by user
-    public static void spawnmob(final IEssentials ess, final Server server, final User user, final List<String> parts, final List<String> data, int mobCount) throws Exception {
+    public static void spawnmob(final IEssentials ess, final Server server, final User user, final List<String> parts, final List<String> data, final int mobCount) throws Exception {
         final Block block = LocationUtil.getTarget(user.getBase()).getBlock();
         if (block == null) {
             throw new Exception(tl("unableToSpawnMob"));
@@ -84,7 +96,7 @@ public class SpawnMob {
     }
 
     // This method spawns a mob at target, owned by target
-    public static void spawnmob(final IEssentials ess, final Server server, final CommandSource sender, final User target, final List<String> parts, final List<String> data, int mobCount) throws Exception {
+    public static void spawnmob(final IEssentials ess, final Server server, final CommandSource sender, final User target, final List<String> parts, final List<String> data, final int mobCount) throws Exception {
         spawnmob(ess, server, sender, target, target.getLocation(), parts, data, mobCount);
     }
 
@@ -92,8 +104,8 @@ public class SpawnMob {
     public static void spawnmob(final IEssentials ess, final Server server, final CommandSource sender, final User target, final Location loc, final List<String> parts, final List<String> data, int mobCount) throws Exception {
         final Location sloc = LocationUtil.getSafeDestination(loc);
 
-        for (String part : parts) {
-            Mob mob = Mob.fromName(part);
+        for (final String part : parts) {
+            final Mob mob = Mob.fromName(part);
             checkSpawnable(ess, sender, mob);
         }
 
@@ -112,22 +124,22 @@ public class SpawnMob {
             sender.sendMessage(tl("mobSpawnLimit"));
         }
 
-        Mob mob = Mob.fromName(parts.get(0)); // Get the first mob
+        final Mob mob = Mob.fromName(parts.get(0)); // Get the first mob
         try {
             for (int i = 0; i < mobCount; i++) {
                 spawnMob(ess, server, sender, target, sloc, parts, data);
             }
             sender.sendMessage(mobCount * parts.size() + " " + mob.name.toLowerCase(Locale.ENGLISH) + mob.suffix + " " + tl("spawned"));
-        } catch (MobException e1) {
+        } catch (final MobException e1) {
             throw new Exception(tl("unableToSpawnMob"), e1);
-        } catch (NumberFormatException e2) {
+        } catch (final NumberFormatException e2) {
             throw new Exception(tl("numberRequired"), e2);
-        } catch (NullPointerException np) {
+        } catch (final NullPointerException np) {
             throw new Exception(tl("soloMob"), np);
         }
     }
 
-    private static void spawnMob(final IEssentials ess, final Server server, final CommandSource sender, final User target, final Location sloc, List<String> parts, List<String> data) throws Exception {
+    private static void spawnMob(final IEssentials ess, final Server server, final CommandSource sender, final User target, final Location sloc, final List<String> parts, final List<String> data) throws Exception {
         Mob mob;
         Entity spawnedMob = null;
         Entity spawnedMount;
@@ -143,10 +155,10 @@ public class SpawnMob {
                 }
             }
 
-            int next = (i + 1);
-            if (next < parts.size()) //If it's the last mob in the list, don't set the mount
-            {
-                Mob mMob = Mob.fromName(parts.get(next));
+            final int next = i + 1;
+            // If it's the last mob in the list, don't set the mount
+            if (next < parts.size()) {
+                final Mob mMob = Mob.fromName(parts.get(next));
                 spawnedMount = mMob.spawn(sloc.getWorld(), server, sloc);
                 defaultMobData(mMob.getType(), spawnedMount);
 
@@ -161,7 +173,7 @@ public class SpawnMob {
         }
     }
 
-    private static void checkSpawnable(IEssentials ess, CommandSource sender, Mob mob) throws Exception {
+    private static void checkSpawnable(final IEssentials ess, final CommandSource sender, final Mob mob) throws Exception {
         if (mob == null || mob.getType() == null) {
             throw new Exception(tl("invalidMob"));
         }
@@ -238,7 +250,7 @@ public class SpawnMob {
         }
 
         if (type == MobCompat.ZOMBIFIED_PIGLIN) {
-            final PigZombie zombie = ((PigZombie) spawned);
+            final PigZombie zombie = (PigZombie) spawned;
             setVillager(zombie, false);
 
             final EntityEquipment invent = zombie.getEquipment();
@@ -247,7 +259,7 @@ public class SpawnMob {
         }
 
         if (type == EntityType.ZOMBIE) {
-            final Zombie zombie = ((Zombie) spawned);
+            final Zombie zombie = (Zombie) spawned;
             setVillager(zombie, false);
         }
 
@@ -257,10 +269,10 @@ public class SpawnMob {
     }
 
     @SuppressWarnings("deprecation")
-    private static void setVillager(Zombie zombie, boolean villager) {
+    private static void setVillager(final Zombie zombie, final boolean villager) {
         try {
             zombie.setVillager(villager);
-        } catch (Exception ignored) {
+        } catch (final Exception ignored) {
         }
     }
 }

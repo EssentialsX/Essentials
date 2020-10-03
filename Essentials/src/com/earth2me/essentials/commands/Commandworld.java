@@ -13,7 +13,6 @@ import java.util.List;
 
 import static com.earth2me.essentials.I18n.tl;
 
-
 public class Commandworld extends EssentialsCommand {
     public Commandworld() {
         super("world");
@@ -21,14 +20,14 @@ public class Commandworld extends EssentialsCommand {
 
     @Override
     protected void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception {
-        World world;
+        final World world;
 
         if (args.length < 1) {
             World nether = null;
 
             final List<World> worlds = server.getWorlds();
 
-            for (World world2 : worlds) {
+            for (final World world2 : worlds) {
                 if (world2.getEnvironment() == World.Environment.NETHER) {
                     nether = world2;
                     break;
@@ -52,7 +51,7 @@ public class Commandworld extends EssentialsCommand {
             throw new Exception(tl("noPerm", "essentials.worlds." + world.getName()));
         }
 
-        double factor;
+        final double factor;
         if (user.getWorld().getEnvironment() == World.Environment.NETHER && world.getEnvironment() == World.Environment.NORMAL) {
             factor = 8.0;
         } else if (user.getWorld().getEnvironment() == World.Environment.NORMAL && world.getEnvironment() == World.Environment.NETHER) {
@@ -72,10 +71,10 @@ public class Commandworld extends EssentialsCommand {
     }
 
     @Override
-    protected List<String> getTabCompleteOptions(Server server, User user, String commandLabel, String[] args) {
+    protected List<String> getTabCompleteOptions(final Server server, final User user, final String commandLabel, final String[] args) {
         if (args.length == 1) {
-            List<String> worlds = Lists.newArrayList();
-            for (World world : server.getWorlds()) {
+            final List<String> worlds = Lists.newArrayList();
+            for (final World world : server.getWorlds()) {
                 if (ess.getSettings().isWorldTeleportPermissions() && !user.isAuthorized("essentials.worlds." + world.getName())) {
                     continue;
                 }

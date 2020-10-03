@@ -4,7 +4,6 @@ import org.bukkit.enchantments.Enchantment;
 
 import java.util.Map.Entry;
 
-
 public class EnchantmentLevel implements Entry<Enchantment, Integer> {
     private Enchantment enchantment;
     private int level;
@@ -42,7 +41,7 @@ public class EnchantmentLevel implements Entry<Enchantment, Integer> {
 
     @Override
     public Integer setValue(final Integer v) {
-        int t = level;
+        final int t = level;
         level = v;
         return t;
     }

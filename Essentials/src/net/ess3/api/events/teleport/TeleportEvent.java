@@ -15,7 +15,7 @@ public abstract class TeleportEvent extends Event implements Cancellable {
     private final ITarget target;
     private boolean cancelled = false;
 
-    TeleportEvent(IUser teleporter, IUser teleportee, PlayerTeleportEvent.TeleportCause cause, ITarget target) {
+    TeleportEvent(final IUser teleporter, final IUser teleportee, final PlayerTeleportEvent.TeleportCause cause, final ITarget target) {
         super(!Bukkit.isPrimaryThread());
         this.teleporter = teleporter;
         this.teleportee = teleportee;
@@ -23,7 +23,7 @@ public abstract class TeleportEvent extends Event implements Cancellable {
         this.target = target;
     }
 
-    TeleportEvent(IUser teleportee, PlayerTeleportEvent.TeleportCause cause, ITarget target) {
+    TeleportEvent(final IUser teleportee, final PlayerTeleportEvent.TeleportCause cause, final ITarget target) {
         this(teleportee, teleportee, cause, target);
     }
 
@@ -61,7 +61,7 @@ public abstract class TeleportEvent extends Event implements Cancellable {
     }
 
     @Override
-    public void setCancelled(boolean b) {
+    public void setCancelled(final boolean b) {
         cancelled = b;
     }
 }

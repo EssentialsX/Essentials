@@ -1,10 +1,16 @@
 package com.earth2me.essentials.utils;
 
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Set;
+import java.util.TimeZone;
 
 import static com.earth2me.essentials.I18n.tl;
-
 
 /**
  * This utility class is used for converting between the ingame time in ticks to ingame time as a friendly string. Note
@@ -60,6 +66,9 @@ public final class DescParseTickFormat {
         resetAliases.add("default");
     }
 
+    private DescParseTickFormat() {
+    }
+
     // ============================================
     public static long parse(String desc) throws NumberFormatException {
         // Only look at alphanumeric and lowercase and : for 24:00
@@ -68,25 +77,25 @@ public final class DescParseTickFormat {
         // Detect ticks format
         try {
             return parseTicks(desc);
-        } catch (NumberFormatException ignored) {
+        } catch (final NumberFormatException ignored) {
         }
 
         // Detect 24-hour format
         try {
             return parse24(desc);
-        } catch (NumberFormatException ignored) {
+        } catch (final NumberFormatException ignored) {
         }
 
         // Detect 12-hour format
         try {
             return parse12(desc);
-        } catch (NumberFormatException ignored) {
+        } catch (final NumberFormatException ignored) {
         }
 
         // Detect aliases
         try {
             return parseAlias(desc);
-        } catch (NumberFormatException ignored) {
+        } catch (final NumberFormatException ignored) {
         }
 
         // Well we failed to understand...
@@ -129,7 +138,7 @@ public final class DescParseTickFormat {
         int minutes = 0;
 
         desc = desc.toLowerCase(Locale.ENGLISH);
-        String parsetime = desc.replaceAll("[^0-9]", "");
+        final String parsetime = desc.replaceAll("[^0-9]", "");
 
         if (parsetime.length() > 4) {
             throw new NumberFormatException();
@@ -162,7 +171,7 @@ public final class DescParseTickFormat {
 
     public static long hoursMinutesToTicks(final int hours, final int minutes) {
         long ret = ticksAtMidnight;
-        ret += (hours) * ticksPerHour;
+        ret += hours * ticksPerHour;
 
         ret += (minutes / 60.0) * ticksPerHour;
 
@@ -241,8 +250,5 @@ public final class DescParseTickFormat {
         cal.add(Calendar.SECOND, (int) seconds + 1); // To solve rounding errors.
 
         return cal.getTime();
-    }
-
-    private DescParseTickFormat() {
     }
 }

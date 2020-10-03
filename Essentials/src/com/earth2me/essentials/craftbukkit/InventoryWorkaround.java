@@ -17,6 +17,14 @@ import java.util.Map;
  */
 
 public final class InventoryWorkaround {
+    /*
+    Spigot 1.9, for whatever reason, decided to merge the armor and main player inventories without providing a way
+    to access the main inventory. There's lots of ugly code in here to work around that.
+     */
+    private static final int USABLE_PLAYER_INV_SIZE = 36;
+    // Hot-ish code so cache
+    private static Boolean hasMainHandSupport = null;
+
     private InventoryWorkaround() {
     }
 
@@ -34,18 +42,12 @@ public final class InventoryWorkaround {
         return -1;
     }
 
-    /*
-    Spigot 1.9, for whatever reason, decided to merge the armor and main player inventories without providing a way
-    to access the main inventory. There's lots of ugly code in here to work around that.
-     */
-    private static final int USABLE_PLAYER_INV_SIZE = 36;
-
-    private static boolean isCombinedInventory(Inventory inventory) {
+    private static boolean isCombinedInventory(final Inventory inventory) {
         return inventory instanceof PlayerInventory && inventory.getContents().length > USABLE_PLAYER_INV_SIZE;
     }
 
     // Clears inventory without clearing armor
-    public static void clearInventoryNoArmor(PlayerInventory inventory) {
+    public static void clearInventoryNoArmor(final PlayerInventory inventory) {
         if (isCombinedInventory(inventory)) {
             for (int i = 0; i < USABLE_PLAYER_INV_SIZE; i++) {
                 inventory.setItem(i, null);
@@ -55,8 +57,8 @@ public final class InventoryWorkaround {
         }
     }
 
-    private static Inventory makeTruncatedPlayerInventory(PlayerInventory playerInventory) {
-        Inventory fakeInventory = Bukkit.getServer().createInventory(null, USABLE_PLAYER_INV_SIZE);
+    private static Inventory makeTruncatedPlayerInventory(final PlayerInventory playerInventory) {
+        final Inventory fakeInventory = Bukkit.getServer().createInventory(null, USABLE_PLAYER_INV_SIZE);
         fakeInventory.setContents(Arrays.copyOf(playerInventory.getContents(), fakeInventory.getSize()));
         return fakeInventory;
     }
@@ -64,7 +66,7 @@ public final class InventoryWorkaround {
     // Returns what it couldn't store
     // This will will abort if it couldn't store all items
     public static Map<Integer, ItemStack> addAllItems(final Inventory inventory, final ItemStack... items) {
-        ItemStack[] contents = inventory.getContents();
+        final ItemStack[] contents = inventory.getContents();
 
         final Inventory fakeInventory;
         if (isCombinedInventory(inventory)) {
@@ -73,16 +75,16 @@ public final class InventoryWorkaround {
             fakeInventory = Bukkit.getServer().createInventory(null, inventory.getType());
             fakeInventory.setContents(contents);
         }
-        Map<Integer, ItemStack> overflow = addItems(fakeInventory, items);
+        final Map<Integer, ItemStack> overflow = addItems(fakeInventory, items);
         if (overflow.isEmpty()) {
             addItems(inventory, items);
             return null;
         }
         return addItems(fakeInventory, items);
     }
-    
+
     public static Map<Integer, ItemStack> addAllOversizedItems(final Inventory inventory, final int oversizedStacks, final ItemStack... items) {
-        ItemStack[] contents = inventory.getContents();
+        final ItemStack[] contents = inventory.getContents();
 
         final Inventory fakeInventory;
         if (isCombinedInventory(inventory)) {
@@ -91,14 +93,13 @@ public final class InventoryWorkaround {
             fakeInventory = Bukkit.getServer().createInventory(null, inventory.getType());
             fakeInventory.setContents(contents);
         }
-        Map<Integer, ItemStack> overflow = addOversizedItems(fakeInventory, oversizedStacks, items);
+        final Map<Integer, ItemStack> overflow = addOversizedItems(fakeInventory, oversizedStacks, items);
         if (overflow.isEmpty()) {
             addOversizedItems(inventory, oversizedStacks, items);
             return null;
         }
         return overflow;
     }
-
 
     // Returns what it couldn't store
     public static Map<Integer, ItemStack> addItems(final Inventory inventory, final ItemStack... items) {
@@ -109,8 +110,8 @@ public final class InventoryWorkaround {
     // Set oversizedStack to below normal stack size to disable oversized stacks
     public static Map<Integer, ItemStack> addOversizedItems(final Inventory inventory, final int oversizedStacks, final ItemStack... items) {
         if (isCombinedInventory(inventory)) {
-            Inventory fakeInventory = makeTruncatedPlayerInventory((PlayerInventory) inventory);
-            Map<Integer, ItemStack> overflow = addOversizedItems(fakeInventory, oversizedStacks, items);
+            final Inventory fakeInventory = makeTruncatedPlayerInventory((PlayerInventory) inventory);
+            final Map<Integer, ItemStack> overflow = addOversizedItems(fakeInventory, oversizedStacks, items);
             for (int i = 0; i < fakeInventory.getContents().length; i++) {
                 inventory.setItem(i, fakeInventory.getContents()[i]);
             }
@@ -119,15 +120,15 @@ public final class InventoryWorkaround {
 
         final Map<Integer, ItemStack> leftover = new HashMap<>();
 
-		/*
+        /*
          * TODO: some optimization - Create a 'firstPartial' with a 'fromIndex' - Record the lastPartial per Material -
-		 * Cache firstEmpty result
-		 */
+         * Cache firstEmpty result
+         */
 
         // combine items
 
         final ItemStack[] combined = new ItemStack[items.length];
-        for (ItemStack item : items) {
+        for (final ItemStack item : items) {
             if (item == null || item.getAmount() < 1) {
                 continue;
             }
@@ -142,7 +143,6 @@ public final class InventoryWorkaround {
                 }
             }
         }
-
 
         for (int i = 0; i < combined.length; i++) {
             final ItemStack item = combined[i];
@@ -199,16 +199,13 @@ public final class InventoryWorkaround {
         return leftover;
     }
 
-    // Hot-ish code so cache
-    private static Boolean hasMainHandSupport = null;
-
     @SuppressWarnings("deprecation")
-    public static void setItemInMainHand(Player p, ItemStack item) {
+    public static void setItemInMainHand(final Player p, final ItemStack item) {
         if (hasMainHandSupport == null) {
             try {
                 p.getInventory().setItemInMainHand(item);
                 hasMainHandSupport = true;
-            } catch (Throwable e) {
+            } catch (final Throwable e) {
                 p.setItemInHand(item);
                 hasMainHandSupport = false;
             }
@@ -222,12 +219,12 @@ public final class InventoryWorkaround {
     }
 
     @SuppressWarnings("deprecation")
-    public static void setItemInMainHand(EntityEquipment invent, ItemStack item) {
+    public static void setItemInMainHand(final EntityEquipment invent, final ItemStack item) {
         if (hasMainHandSupport == null) {
             try {
                 invent.setItemInMainHand(item);
                 hasMainHandSupport = true;
-            } catch (Throwable e) {
+            } catch (final Throwable e) {
                 invent.setItemInHand(item);
                 hasMainHandSupport = false;
             }
@@ -241,12 +238,12 @@ public final class InventoryWorkaround {
     }
 
     @SuppressWarnings("deprecation")
-    public static void setItemInMainHandDropChance(EntityEquipment invent, float chance) {
+    public static void setItemInMainHandDropChance(final EntityEquipment invent, final float chance) {
         if (hasMainHandSupport == null) {
             try {
                 invent.setItemInMainHandDropChance(chance);
                 hasMainHandSupport = true;
-            } catch (Throwable e) {
+            } catch (final Throwable e) {
                 invent.setItemInHandDropChance(chance);
                 hasMainHandSupport = false;
             }
@@ -259,13 +256,13 @@ public final class InventoryWorkaround {
         }
     }
 
-    public static void setItemInOffHand(Player p, ItemStack item) {
+    public static void setItemInOffHand(final Player p, final ItemStack item) {
         // This assumes that all builds that support a main hand also support an off hand.
         if (hasMainHandSupport == null || hasMainHandSupport) {
             try {
                 p.getInventory().setItemInOffHand(item);
                 hasMainHandSupport = true;
-            } catch (Throwable e) {
+            } catch (final Throwable e) {
                 hasMainHandSupport = false;
             }
         }

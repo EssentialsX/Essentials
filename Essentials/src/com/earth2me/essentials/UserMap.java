@@ -13,22 +13,26 @@ import org.bukkit.entity.Player;
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentSkipListMap;
 import java.util.concurrent.ConcurrentSkipListSet;
 import java.util.concurrent.ExecutionException;
 import java.util.regex.Pattern;
 
-
 public class UserMap extends CacheLoader<String, User> implements IConf {
+    private static boolean legacy = false;
+    private static Method getLegacy;
     private final transient IEssentials ess;
     private final transient ConcurrentSkipListSet<UUID> keys = new ConcurrentSkipListSet<>();
     private final transient ConcurrentSkipListMap<String, UUID> names = new ConcurrentSkipListMap<>();
     private final transient ConcurrentSkipListMap<UUID, ArrayList<String>> history = new ConcurrentSkipListMap<>();
     private final UUIDMap uuidMap;
-
     private final transient Cache<String, User> users;
-    private static boolean legacy = false;
+    private final Pattern validUserPattern = Pattern.compile("^[a-zA-Z0-9_]{2,16}$");
 
     public UserMap(final IEssentials ess) {
         super();
@@ -36,11 +40,11 @@ public class UserMap extends CacheLoader<String, User> implements IConf {
         uuidMap = new UUIDMap(ess);
         //RemovalListener<UUID, User> remListener = new UserMapRemovalListener();
         //users = CacheBuilder.newBuilder().maximumSize(ess.getSettings().getMaxUserCacheCount()).softValues().removalListener(remListener).build(this);
-        CacheBuilder<Object, Object> cacheBuilder = CacheBuilder.newBuilder();
-        int maxCount = ess.getSettings().getMaxUserCacheCount();
+        final CacheBuilder<Object, Object> cacheBuilder = CacheBuilder.newBuilder();
+        final int maxCount = ess.getSettings().getMaxUserCacheCount();
         try {
             cacheBuilder.maximumSize(maxCount);
-        } catch (NoSuchMethodError nsme) {
+        } catch (final NoSuchMethodError nsme) {
             legacy = true;
             legacyMaximumSize(cacheBuilder, maxCount);
         }
@@ -61,14 +65,14 @@ public class UserMap extends CacheLoader<String, User> implements IConf {
                 }
                 keys.clear();
                 users.invalidateAll();
-                for (String string : userdir.list()) {
+                for (final String string : userdir.list()) {
                     if (!string.endsWith(".yml")) {
                         continue;
                     }
                     final String name = string.substring(0, string.length() - 4);
                     try {
                         keys.add(UUID.fromString(name));
-                    } catch (IllegalArgumentException ex) {
+                    } catch (final IllegalArgumentException ex) {
                         //Ignore these users till they rejoin.
                     }
                 }
@@ -92,12 +96,12 @@ public class UserMap extends CacheLoader<String, User> implements IConf {
             final File userFile = getUserFileFromString(sanitizedName);
             if (userFile.exists()) {
                 ess.getLogger().info("Importing user " + name + " to usermap.");
-                User user = new User(new OfflinePlayer(sanitizedName, ess.getServer()), ess);
+                final User user = new User(new OfflinePlayer(sanitizedName, ess.getServer()), ess);
                 trackUUID(user.getBase().getUniqueId(), user.getName(), true);
                 return user;
             }
             return null;
-        } catch (UncheckedExecutionException ex) {
+        } catch (final UncheckedExecutionException ex) {
             return null;
         }
     }
@@ -109,12 +113,12 @@ public class UserMap extends CacheLoader<String, User> implements IConf {
             } else {
                 return legacyCacheGet(uuid);
             }
-        } catch (ExecutionException | UncheckedExecutionException ex) {
+        } catch (final ExecutionException | UncheckedExecutionException ex) {
             return null;
         }
     }
 
-    public void trackUUID(final UUID uuid, final String name, boolean replace) {
+    public void trackUUID(final UUID uuid, final String name, final boolean replace) {
         if (uuid != null) {
             keys.add(uuid);
             if (name != null && name.length() > 0) {
@@ -139,7 +143,7 @@ public class UserMap extends CacheLoader<String, User> implements IConf {
 
     @Override
     public User load(final String stringUUID) throws Exception {
-        UUID uuid = UUID.fromString(stringUUID);
+        final UUID uuid = UUID.fromString(stringUUID);
         Player player = ess.getServer().getPlayer(uuid);
         if (player != null) {
             final User user = new User(player, ess);
@@ -175,7 +179,7 @@ public class UserMap extends CacheLoader<String, User> implements IConf {
             ess.getLogger().warning("Name collection is null, cannot remove user.");
             return;
         }
-        UUID uuid = names.get(name);
+        final UUID uuid = names.get(name);
         if (uuid != null) {
             keys.remove(uuid);
             users.invalidate(uuid.toString());
@@ -207,6 +211,18 @@ public class UserMap extends CacheLoader<String, User> implements IConf {
     public UUIDMap getUUIDMap() {
         return uuidMap;
     }
+    //  class UserMapRemovalListener implements RemovalListener
+    //  {
+    //      @Override
+    //      public void onRemoval(final RemovalNotification notification)
+    //      {
+    //          Object value = notification.getValue();
+    //          if (value != null)
+    //          {
+    //              ((User)value).cleanup();
+    //          }
+    //      }
+    //  }
 
     private File getUserFileFromID(final UUID uuid) {
         final File userFolder = new File(ess.getDataFolder(), "userdata");
@@ -217,20 +233,6 @@ public class UserMap extends CacheLoader<String, User> implements IConf {
         final File userFolder = new File(ess.getDataFolder(), "userdata");
         return new File(userFolder, StringUtil.sanitizeFileName(name) + ".yml");
     }
-//	class UserMapRemovalListener implements RemovalListener
-//	{
-//		@Override
-//		public void onRemoval(final RemovalNotification notification)
-//		{
-//			Object value = notification.getValue();
-//			if (value != null)
-//			{
-//				((User)value).cleanup();
-//			}
-//		}
-//	}
-
-    private final Pattern validUserPattern = Pattern.compile("^[a-zA-Z0-9_]{2,16}$");
 
     @SuppressWarnings("deprecation")
     public User getUserFromBukkit(String name) {
@@ -242,14 +244,14 @@ public class UserMap extends CacheLoader<String, User> implements IConf {
         if (name == null || !validUserPattern.matcher(name).matches()) {
             return null;
         }
-        org.bukkit.OfflinePlayer offlinePlayer = ess.getServer().getOfflinePlayer(name);
+        final org.bukkit.OfflinePlayer offlinePlayer = ess.getServer().getOfflinePlayer(name);
         if (offlinePlayer == null) {
             return null;
         }
-        UUID uuid;
+        final UUID uuid;
         try {
             uuid = offlinePlayer.getUniqueId();
-        } catch (UnsupportedOperationException | NullPointerException e) {
+        } catch (final UnsupportedOperationException | NullPointerException e) {
             return null;
         }
         // This is how Bukkit generates fake UUIDs
@@ -261,12 +263,10 @@ public class UserMap extends CacheLoader<String, User> implements IConf {
         }
     }
 
-    private static Method getLegacy;
-
-    private User legacyCacheGet(UUID uuid) {
+    private User legacyCacheGet(final UUID uuid) {
         if (getLegacy == null) {
-            Class<?> usersClass = users.getClass();
-            for (Method m : usersClass.getDeclaredMethods()) {
+            final Class<?> usersClass = users.getClass();
+            for (final Method m : usersClass.getDeclaredMethods()) {
                 if (m.getName().equals("get")) {
                     getLegacy = m;
                     getLegacy.setAccessible(true);
@@ -276,25 +276,25 @@ public class UserMap extends CacheLoader<String, User> implements IConf {
         }
         try {
             return (User) getLegacy.invoke(users, uuid.toString());
-        } catch (IllegalAccessException | InvocationTargetException e) {
+        } catch (final IllegalAccessException | InvocationTargetException e) {
             return null;
         }
     }
 
-    private void legacyMaximumSize(CacheBuilder builder, int maxCount) {
+    private void legacyMaximumSize(final CacheBuilder builder, final int maxCount) {
         try {
-            Method maxSizeLegacy = builder.getClass().getDeclaredMethod("maximumSize", Integer.TYPE);
+            final Method maxSizeLegacy = builder.getClass().getDeclaredMethod("maximumSize", Integer.TYPE);
             maxSizeLegacy.setAccessible(true);
             maxSizeLegacy.invoke(builder, maxCount);
-        } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
+        } catch (final NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
             e.printStackTrace();
         }
     }
 
     @SuppressWarnings("unchecked")
-    private Cache<String, User> legacyBuild(CacheBuilder builder) {
+    private Cache<String, User> legacyBuild(final CacheBuilder builder) {
         Method build = null;
-        for (Method method : builder.getClass().getDeclaredMethods()) {
+        for (final Method method : builder.getClass().getDeclaredMethods()) {
             if (method.getName().equals("build")) {
                 build = method;
                 break;
@@ -305,7 +305,7 @@ public class UserMap extends CacheLoader<String, User> implements IConf {
             assert build != null;
             build.setAccessible(true);
             legacyUsers = (Cache<String, User>) build.invoke(builder, this);
-        } catch (IllegalAccessException | InvocationTargetException e) {
+        } catch (final IllegalAccessException | InvocationTargetException e) {
             legacyUsers = null;
         }
         return legacyUsers;

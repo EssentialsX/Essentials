@@ -10,7 +10,6 @@ import java.util.Locale;
 import java.util.UUID;
 import java.util.logging.Level;
 
-
 public class EssentialsUserConf extends EssentialsConf {
     public final String username;
     public final UUID uuid;
@@ -32,7 +31,7 @@ public class EssentialsUserConf extends EssentialsConf {
         final File file = new File(configFile.getParentFile(), username + ".yml");
         try {
             Files.move(file, new File(configFile.getParentFile(), uuid + ".yml"));
-        } catch (IOException ex) {
+        } catch (final IOException ex) {
             Bukkit.getLogger().log(Level.WARNING, "Failed to migrate user: " + username, ex);
         }
 
@@ -56,7 +55,7 @@ public class EssentialsUserConf extends EssentialsConf {
     public void convertAltFile() {
         try {
             Files.move(getAltFile(), new File(configFile.getParentFile(), uuid + ".yml"));
-        } catch (IOException ex) {
+        } catch (final IOException ex) {
             Bukkit.getLogger().log(Level.WARNING, "Failed to migrate user: " + username, ex);
         }
     }

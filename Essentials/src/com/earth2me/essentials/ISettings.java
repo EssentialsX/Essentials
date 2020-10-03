@@ -16,7 +16,6 @@ import java.util.Set;
 import java.util.function.Predicate;
 import java.util.regex.Pattern;
 
-
 public interface ISettings extends IConf {
     boolean areSignsDisabled();
 
@@ -143,6 +142,8 @@ public interface ISettings extends IConf {
 
     boolean isDebug();
 
+    void setDebug(boolean debug);
+
     boolean isEcoDisabled();
 
     @Deprecated
@@ -215,14 +216,6 @@ public interface ISettings extends IConf {
     int getJoinQuitMessagePlayerCount();
 
     boolean hasJoinQuitMessagePlayerCount();
-
-    enum KeepInvPolicy {
-        KEEP,
-        DELETE,
-        DROP
-    }
-
-    void setDebug(boolean debug);
 
     Set<String> getNoGodWorlds();
 
@@ -365,7 +358,7 @@ public interface ISettings extends IConf {
     boolean allowOldIdSigns();
 
     boolean isWaterSafe();
-  
+
     boolean isSafeUsermap();
 
     boolean logCommandBlockCommands();
@@ -381,5 +374,11 @@ public interface ISettings extends IConf {
     boolean isConfirmHomeOverwrite();
 
     boolean infoAfterDeath();
+
+    enum KeepInvPolicy {
+        KEEP,
+        DELETE,
+        DROP
+    }
 
 }

@@ -7,8 +7,8 @@ import org.bukkit.inventory.ItemStack;
 @SuppressWarnings("deprecation")
 public class LegacyPotionMetaProvider implements PotionMetaProvider {
     @Override
-    public ItemStack createPotionItem(Material initial, int effectId) {
-        ItemStack potion = new ItemStack(initial, 1);
+    public ItemStack createPotionItem(final Material initial, final int effectId) {
+        final ItemStack potion = new ItemStack(initial, 1);
         potion.setDurability((short) effectId);
         return potion;
     }
