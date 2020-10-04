@@ -9,12 +9,10 @@ import org.bukkit.Server;
 
 import java.math.BigDecimal;
 import java.text.DateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ConcurrentNavigableMap;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import static com.earth2me.essentials.I18n.tl;
@@ -97,11 +95,9 @@ public class Commandbalancetop extends EssentialsCommand {
                         viewer.getSender().calculateBalanceTopMap(ess);
                     }
 
-                    cache.getLines().add(tl("serverTotal", NumberUtil.displayCurrency(ess.getUserMap().getBalanceTopTotal().get(), ess)));
+                    cache.getLines().add(tl("serverTotal", NumberUtil.displayCurrency(ess.getBalanceTop().getBalanceTopTotal(), ess)));
                     int pos = 1;
-                    final List<Map.Entry<String, BigDecimal>> sortedEntries = new ArrayList<>(ess.getUserMap().getBalanceTopCache().entrySet());
-                    sortedEntries.sort((entry1, entry2) -> entry2.getValue().compareTo(entry1.getValue()));
-                    for (ConcurrentNavigableMap.Entry<String, BigDecimal> entry : sortedEntries) {
+                    for (Map.Entry<String, BigDecimal> entry : ess.getBalanceTop().getBalanceTopCache()) {
                         cache.getLines().add(tl("balanceTopLine", pos, entry.getKey(), NumberUtil.displayCurrency(entry.getValue(), ess)));
                         pos++;
                     }

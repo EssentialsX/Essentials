@@ -57,9 +57,9 @@ public class CommandSource {
     }
 
     /**
-     * Helper method to access protected method {@link UserMap#calculateBalanceTopMap()} due to its dangerous nature.
+     * Helper method to access protected method {@link BalanceTop#calculateBalanceTopMap()} due to its dangerous nature.
      */
     public void calculateBalanceTopMap(IEssentials ess) {
-        ess.getUserMap().calculateBalanceTopMap();
+        ess.getBalanceTop().calculateBalanceTopMap();
     }
 }

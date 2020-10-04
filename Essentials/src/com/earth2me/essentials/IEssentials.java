@@ -95,6 +95,8 @@ public interface IEssentials extends Plugin {
 
     UserMap getUserMap();
 
+    BalanceTop getBalanceTop();
+
     EssentialsTimer getTimer();
 
     @Deprecated
