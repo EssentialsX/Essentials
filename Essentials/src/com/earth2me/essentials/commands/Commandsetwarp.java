@@ -16,14 +16,12 @@ public class Commandsetwarp extends EssentialsCommand {
     }
 
     @Override
-    public void run(final Server server, final User user, final String commandLabel, final String[] args)
-            throws Exception {
+    public void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception {
         if (args.length == 0) {
             throw new NotEnoughArgumentsException();
         }
 
         final String warpName = args[0];
-        final String safeWarpName = StringUtil.safeString(warpName);
 
         if (NumberUtil.isInt(warpName) || warpName.isEmpty()) {
             throw new Exception(tl("invalidWarpName"));
@@ -38,6 +36,7 @@ public class Commandsetwarp extends EssentialsCommand {
         }
 
         final boolean warpExists = warpLoc != null;
+        final String safeWarpName = StringUtil.safeString(warpName);
         final boolean canOverwrite = user.isAuthorized("essentials.warp.overwrite." + safeWarpName);
         final boolean canCreate = user.isAuthorized("essentials.warp.set." + safeWarpName);
 
@@ -46,7 +45,7 @@ public class Commandsetwarp extends EssentialsCommand {
         }
 
         if (!warpExists && !canCreate && !canOverwrite) {
-            throw new Exception(tl("warpCreate"));
+            throw new Exception(tl("warpCanCreate"));
         }
 
         warps.setWarp(user, warpName, user.getLocation());
