@@ -13,11 +13,7 @@ import org.bukkit.entity.Player;
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.ConcurrentSkipListMap;
 import java.util.concurrent.ConcurrentSkipListSet;
 import java.util.concurrent.ExecutionException;
@@ -221,8 +217,7 @@ public class UserMap extends CacheLoader<String, User> implements IConf {
         final File userFolder = new File(ess.getDataFolder(), "userdata");
         return new File(userFolder, StringUtil.sanitizeFileName(name) + ".yml");
     }
-
-    //	class UserMapRemovalListener implements RemovalListener
+//	class UserMapRemovalListener implements RemovalListener
 //	{
 //		@Override
 //		public void onRemoval(final RemovalNotification notification)
