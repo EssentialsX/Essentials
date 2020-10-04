@@ -77,6 +77,7 @@ public abstract class UserData extends PlayerExtension implements IConf {
         muteReason = _getMuteReason();
         jailed = _getJailed();
         jailTimeout = _getJailTimeout();
+        onlineJailed = _getOnlineJailedTime();
         lastLogin = _getLastLogin();
         lastLogout = _getLastLogout();
         lastLoginAddress = _getLastLoginAddress();
@@ -650,6 +651,22 @@ public abstract class UserData extends PlayerExtension implements IConf {
     public void setJailTimeout(long time) {
         jailTimeout = time;
         config.setProperty("timestamps.jail", time);
+        config.save();
+    }
+
+    private long onlineJailed;
+
+    private long _getOnlineJailedTime() {
+        return config.getLong("timestamps.onlinejail", 0);
+    }
+
+    public long getOnlineJailedTime() {
+        return onlineJailed;
+    }
+
+    public void setOnlineJailedTime(long onlineJailed) {
+        this.onlineJailed = onlineJailed;
+        config.setProperty("timestamps.onlinejail", onlineJailed);
         config.save();
     }
 

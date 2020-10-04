@@ -3,8 +3,10 @@ package com.earth2me.essentials.commands;
 import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.DateUtil;
+import com.earth2me.essentials.utils.EnumUtil;
 import net.ess3.api.events.JailStatusChangeEvent;
 import org.bukkit.Server;
+import org.bukkit.Statistic;
 import org.bukkit.event.player.PlayerTeleportEvent;
 
 import java.util.ArrayList;
@@ -16,6 +18,8 @@ import static com.earth2me.essentials.I18n.tl;
 
 
 public class Commandtogglejail extends EssentialsCommand {
+    private static final Statistic PLAY_ONE_TICK = EnumUtil.getStatistic("PLAY_ONE_MINUTE", "PLAY_ONE_TICK");
+
     public Commandtogglejail() {
         super("togglejail");
     }
@@ -45,13 +49,15 @@ public class Commandtogglejail extends EssentialsCommand {
             ess.getServer().getPluginManager().callEvent(event);
 
             if (!event.isCancelled()) {
+                long displayTime = 0;
                 long preTimeDiff = 0;
                 if (args.length > 2) {
                     final String time = getFinalArg(args, 2);
-                    preTimeDiff = DateUtil.parseDateDiff(time, true);
-
+                    displayTime = DateUtil.parseDateDiff(time, true);
+                    preTimeDiff = DateUtil.parseDateDiff(time, true, ess.getSettings().isJailOnlineTime());
                 }
                 final long timeDiff = preTimeDiff;
+                final long finalDisplayTime = displayTime;
                 CompletableFuture<Boolean> future = getNewExceptionFuture(sender, commandLabel);
                 future.thenAccept(success -> {
                     if (success) {
@@ -61,8 +67,9 @@ public class Commandtogglejail extends EssentialsCommand {
                         player.setJail(args[1]);
                         if (args.length > 2) {
                             player.setJailTimeout(timeDiff);
+                            player.setOnlineJailedTime(ess.getSettings().isJailOnlineTime() ? ((player.getBase().getStatistic(PLAY_ONE_TICK)) + (timeDiff / 50)) : 0);
                         }
-                        sender.sendMessage((timeDiff > 0 ? tl("playerJailedFor", player.getName(), DateUtil.formatDateDiff(timeDiff)) : tl("playerJailed", player.getName())));
+                        sender.sendMessage((timeDiff > 0 ? tl("playerJailedFor", player.getName(), DateUtil.formatDateDiff(finalDisplayTime)) : tl("playerJailed", player.getName())));
                     }
                 });
                 if (player.getBase().isOnline()) {

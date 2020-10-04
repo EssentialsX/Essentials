@@ -17,6 +17,10 @@ public class DateUtil {
     }
 
     public static long parseDateDiff(String time, boolean future) throws Exception {
+        return parseDateDiff(time, future, false);
+    }
+
+    public static long parseDateDiff(String time, boolean future, boolean emptyEpoch) throws Exception {
         Matcher m = timePattern.matcher(time);
         int years = 0;
         int months = 0;
@@ -65,6 +69,11 @@ public class DateUtil {
             throw new Exception(tl("illegalDate"));
         }
         Calendar c = new GregorianCalendar();
+
+        if (emptyEpoch) {
+            c.setTimeInMillis(0);
+        }
+
         if (years > 0) {
             if (years > maxYears) {
                 years = maxYears;

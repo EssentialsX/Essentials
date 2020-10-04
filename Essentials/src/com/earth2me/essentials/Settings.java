@@ -1623,6 +1623,11 @@ public class Settings implements net.ess3.api.ISettings {
         return teleportBackWhenFreedFromJail;
     }
 
+    @Override
+    public boolean isJailOnlineTime() {
+        return config.getBoolean("jail-online-time", false);
+    }
+
     private boolean isCompassTowardsHomePerm;
 
     private boolean _isCompassTowardsHomePerm() {

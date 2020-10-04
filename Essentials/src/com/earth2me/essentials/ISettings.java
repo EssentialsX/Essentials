@@ -356,6 +356,8 @@ public interface ISettings extends IConf {
 
     boolean isTeleportBackWhenFreedFromJail();
 
+    boolean isJailOnlineTime();
+
     boolean isCompassTowardsHomePerm();
 
     boolean isAllowWorldInBroadcastworld();
