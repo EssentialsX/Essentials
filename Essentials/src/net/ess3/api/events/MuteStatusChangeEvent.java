@@ -4,6 +4,9 @@ import net.ess3.api.IUser;
 
 import java.util.Optional;
 
+/**
+ * Fired when a player's mute status is changed.
+ */
 public class MuteStatusChangeEvent extends StatusChangeEvent {
     private final Long timestamp;
     private final String reason;

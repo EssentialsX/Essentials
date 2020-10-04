@@ -94,6 +94,12 @@ public interface IEssentials extends Plugin {
 
     EssentialsTimer getTimer();
 
+    /**
+     * Get a list of players who are vanished.
+     *
+     * @return A list of players who are vanished
+     * @deprecated Use {@link net.ess3.api.IEssentials#getVanishedPlayersNew()} where possible.
+     */
     @Deprecated
     List<String> getVanishedPlayers();
 

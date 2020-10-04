@@ -9,6 +9,12 @@ import java.io.File;
 import java.util.Collection;
 import java.util.UUID;
 
+/**
+ * Provides access to the storage of warp locations. Maintainers should add methods to <i>this interface</i>.
+ *
+ * @deprecated External plugins should use {@link net.ess3.api.IWarps} instead of this interface, in case future APIs are added.
+ */
+@Deprecated
 public interface IWarps extends IConf {
     /**
      * Get a warp by name
@@ -16,7 +22,7 @@ public interface IWarps extends IConf {
      * @param warp - Warp name
      * @return - Location the warp is set to
      * @throws WarpNotFoundException When the warp is not found
-     * @throws InvalidWorldException When the world the warp is in is not found
+     * @throws net.ess3.api.InvalidWorldException When the world the warp is in is not found
      */
     Location getWarp(String warp) throws WarpNotFoundException, net.ess3.api.InvalidWorldException;
 
@@ -77,11 +83,8 @@ public interface IWarps extends IConf {
     boolean isEmpty();
 
     /**
-     * Get a warp file note: this is not yet implemented, as 3.x uses different storage methods
-     *
-     * @param name - name of file
-     * @return - an instance of the file
-     * @throws InvalidNameException - When the file is not found
+     * @deprecated This method relates to the abandoned 3.x storage refactor and is not implemented.
      */
+    @Deprecated
     File getWarpFile(String name) throws net.ess3.api.InvalidNameException;
 }

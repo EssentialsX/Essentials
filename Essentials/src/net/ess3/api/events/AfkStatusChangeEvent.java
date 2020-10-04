@@ -2,6 +2,9 @@ package net.ess3.api.events;
 
 import net.ess3.api.IUser;
 
+/**
+ * Fired when a player's AFK status changes.
+ */
 public class AfkStatusChangeEvent extends StatusChangeEvent {
     private final Cause cause;
 
@@ -19,6 +22,9 @@ public class AfkStatusChangeEvent extends StatusChangeEvent {
         return cause;
     }
 
+    /**
+     * The cause of the AFK status change.
+     */
     public enum Cause {
         ACTIVITY,
         MOVE,

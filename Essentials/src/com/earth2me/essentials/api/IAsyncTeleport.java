@@ -8,6 +8,10 @@ import org.bukkit.event.player.PlayerTeleportEvent;
 
 import java.util.concurrent.CompletableFuture;
 
+/**
+ * Manages EssentialsX's teleport functionality for a player.
+ * Use this if you want to access EssentialsX's async/safe teleport functionality and teleport warmups and cooldowns.
+ */
 public interface IAsyncTeleport {
 
     /**

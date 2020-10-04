@@ -136,8 +136,11 @@ public class Warps implements IConf, net.ess3.api.IWarps {
         }
     }
 
-    //This is here for future 3.x api support. Not implemented here becasue storage is handled differently
+    /**
+     * @deprecated This method relates to the abandoned 3.x storage refactor and is not implemented.
+     */
     @Override
+    @Deprecated
     public File getWarpFile(final String name) throws InvalidNameException {
         throw new UnsupportedOperationException("Not supported yet.");
     }

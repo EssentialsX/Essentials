@@ -16,6 +16,12 @@ import java.util.Map;
 import java.util.Set;
 import java.util.regex.Pattern;
 
+/**
+ * Provides access to the user abstraction and stored data. Maintainers should add methods to <i>this interface</i>.
+ *
+ * @deprecated External plugins should use {@link net.ess3.api.IUser} instead of this interface, in case future APIs are added.
+ */
+@Deprecated
 public interface IUser {
     boolean isAuthorized(String node);
 

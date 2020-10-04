@@ -6,6 +6,9 @@ import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
+/**
+ * Fired when a /tpa, /tpaall or /tpahere request is made.
+ */
 public class TPARequestEvent extends Event implements Cancellable {
     private static final HandlerList handlers = new HandlerList();
     private final CommandSource requester;

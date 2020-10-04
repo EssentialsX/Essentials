@@ -11,6 +11,13 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
 
+/**
+ * Provides access to the current item alias registry.
+ *
+ * @deprecated External plugins should use {@link net.ess3.api.IItemDb} instead, which includes access to {@link net.ess3.api.IItemDb.ItemResolver}
+ *             APIs.
+ */
+@Deprecated
 public interface IItemDb {
 
     /**
