@@ -7,6 +7,11 @@ import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.player.PlayerTeleportEvent;
 
+/**
+ * Abstract class for various teleport events.
+ *
+ * You should listen to {@link PreTeleportEvent} or {@link TeleportWarmupEvent} depending on your needs.
+ */
 public abstract class TeleportEvent extends Event implements Cancellable {
 
     private final IUser teleporter;

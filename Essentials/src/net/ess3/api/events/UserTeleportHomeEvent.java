@@ -91,6 +91,9 @@ public class UserTeleportHomeEvent extends Event implements Cancellable {
         return handlers;
     }
 
+    /**
+     * The type of home location.
+     */
     public enum HomeType {
         HOME,
         BED,

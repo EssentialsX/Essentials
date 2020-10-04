@@ -6,6 +6,12 @@ import org.bukkit.Location;
 import java.util.Collection;
 import java.util.concurrent.CompletableFuture;
 
+/**
+ * Provides access to the storage of jail locations. Maintainers should add methods to <i>this interface</i>.
+ *
+ * @deprecated External plugins should use {@link net.ess3.api.IJails} instead of this interface in case future APIs are added.
+ */
+@Deprecated
 public interface IJails extends IReload {
     /**
      * Gets the location of the jail with the given name

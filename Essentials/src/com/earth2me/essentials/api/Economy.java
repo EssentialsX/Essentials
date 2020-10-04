@@ -132,6 +132,13 @@ public class Economy {
         return getMoneyExact(user);
     }
 
+    /**
+     * Get the exact balance of the account with the given UUID.
+     *
+     * @param uuid The UUID of the user account to retrieve the balance for
+     * @return The account's balance
+     * @throws UserDoesNotExistException If the user does not exist
+     */
     public static BigDecimal getMoneyExact(final UUID uuid) throws UserDoesNotExistException {
         final User user = getUserByUUID(uuid);
         if (user == null) {
@@ -140,6 +147,12 @@ public class Economy {
         return getMoneyExact(user);
     }
 
+    /**
+     * Get the exact balance of the account with the given UUID.
+     *
+     * @param user The user account to retrieve the balance for
+     * @return The account's balance
+     */
     public static BigDecimal getMoneyExact(final User user) {
         if (user == null) {
             throw new IllegalArgumentException("Economy user cannot be null");
@@ -792,6 +805,7 @@ public class Economy {
      *
      * @param amount The amount of money
      * @return Formatted money
+     * @deprecated Use {@link #format(BigDecimal)} if your input is already a {@link BigDecimal}.
      */
     @Deprecated
     public static String format(final double amount) {
@@ -803,6 +817,12 @@ public class Economy {
         }
     }
 
+    /**
+     * Formats the amount of money like all other Essentials functions. Example: $100000 or $12345.67
+     *
+     * @param amount The amount of money
+     * @return Formatted money
+     */
     public static String format(final BigDecimal amount) {
         if (ess == null) {
             throw new RuntimeException(noCallBeforeLoad);

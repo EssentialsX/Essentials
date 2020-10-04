@@ -7,7 +7,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerTeleportEvent;
 
 /**
- * @deprecated This API is not asynchronous. Use {@link com.earth2me.essentials.api.IAsyncTeleport IAsyncTeleport}
+ * @deprecated This API is not asynchronous and is no longer maintained. Use {@link com.earth2me.essentials.api.IAsyncTeleport IAsyncTeleport}.
  */
 public interface ITeleport {
     /**
@@ -32,6 +32,13 @@ public interface ITeleport {
     @Deprecated
     void now(Player entity, boolean cooldown, PlayerTeleportEvent.TeleportCause cause) throws Exception;
 
+    /**
+     * Teleport a player to a specific location
+     *
+     * @param loc       - Where should the player end up
+     * @param chargeFor - What the user will be charged if teleportPlayer is successful
+     * @throws Exception
+     */
     @Deprecated
     void teleport(Location loc, Trade chargeFor) throws Exception;
 

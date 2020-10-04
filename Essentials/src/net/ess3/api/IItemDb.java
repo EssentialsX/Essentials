@@ -7,6 +7,9 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.function.Function;
 
+/**
+ * Provides access to the current item alias registry, and allows registration of custom item resolvers.
+ */
 public interface IItemDb extends com.earth2me.essentials.api.IItemDb {
 
     /**
@@ -65,6 +68,10 @@ public interface IItemDb extends com.earth2me.essentials.api.IItemDb {
     /**
      * Create a stack from the given name with the maximum stack size for that material.
      *
+     * Note: it is unlikely that external plugins will need to call this method directly. In most cases, {@link IItemDb#get(String)}
+     * and {@link IItemDb#get(String, int)} should be sufficient. However, if you intend to perform an item lookup <i>inside</i>
+     * a {@link ItemResolver} implementation, you <b>must</b> call this method with useResolvers as false to prevent recursion.
+     *
      * @param name         Item name to look up in the database
      * @param useResolvers Whether to call other plugins' resolver functions before looking the
      *                     item up in the database
@@ -81,9 +88,15 @@ public interface IItemDb extends com.earth2me.essentials.api.IItemDb {
      * @param useResolvers Whether to call other plugins' item resolvers before looking the
      *                     item up in the database
      * @return A string representation of the given item stack
+     * @deprecated This will soon be replaced with a new two-way API. It should not be relied upon by external plugins!
      */
+    @Deprecated
     String serialize(ItemStack itemStack, boolean useResolvers);
 
+    /**
+     * A service capable of resolving custom item names to items and vice versa, as well as adding extra item names to
+     * tab complete suggestions.
+     */
     @FunctionalInterface
     interface ItemResolver extends Function<String, ItemStack> {
 

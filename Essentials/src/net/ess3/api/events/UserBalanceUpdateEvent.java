@@ -8,6 +8,9 @@ import org.bukkit.event.HandlerList;
 
 import java.math.BigDecimal;
 
+/**
+ * Fired when a user's balance updates.
+ */
 public class UserBalanceUpdateEvent extends Event {
     private static final HandlerList handlers = new HandlerList();
     private final Player player;
@@ -45,6 +48,11 @@ public class UserBalanceUpdateEvent extends Event {
         return balance;
     }
 
+    /**
+     * Override the value that the user's balance will be changed to.
+     *
+     * @param newBalance The user's new balance
+     */
     public void setNewBalance(final BigDecimal newBalance) {
         Preconditions.checkNotNull(newBalance, "newBalance cannot be null.");
         this.balance = newBalance;
@@ -58,6 +66,9 @@ public class UserBalanceUpdateEvent extends Event {
         return cause;
     }
 
+    /**
+     * The cause of the balance update.
+     */
     public enum Cause {
         COMMAND_ECO,
         COMMAND_PAY,
