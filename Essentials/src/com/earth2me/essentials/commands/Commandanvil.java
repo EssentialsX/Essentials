@@ -17,6 +17,7 @@ public class Commandanvil extends EssentialsCommand {
             user.sendMessage(tl("unsupportedBrand"));
             return;
         }
+
         ess.getContainerProvider().openAnvil(user.getBase());
     }
 }

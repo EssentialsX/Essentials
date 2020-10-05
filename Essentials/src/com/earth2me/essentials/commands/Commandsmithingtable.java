@@ -17,6 +17,7 @@ public class Commandsmithingtable extends EssentialsCommand {
             user.sendMessage(tl("unsupportedBrand"));
             return;
         }
+
         ess.getContainerProvider().openSmithingTable(user.getBase());
     }
 }
