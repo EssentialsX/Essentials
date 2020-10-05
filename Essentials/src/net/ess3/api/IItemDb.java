@@ -74,9 +74,51 @@ public interface IItemDb extends com.earth2me.essentials.api.IItemDb {
      */
     ItemStack get(String name, boolean useResolvers) throws Exception;
 
+    /**
+     * Converts the given {@link ItemStack} to a string representation that can be saved.
+     * This is typically used for /createkit but may be used by other plugins for various purposes too.
+     *
+     * @param itemStack    The stack to serialize
+     * @param useResolvers Whether to call other plugins' item resolvers before looking the
+     *                     item up in the database
+     * @return A string representation of the given item stack
+     */
+    String serialize(ItemStack itemStack, boolean useResolvers);
+
     @FunctionalInterface
     interface ItemResolver extends Function<String, ItemStack> {
+
+        /**
+         * Creates an item stack from the given name, if the given name is recognised by this resolver.
+         *
+         * @param name The name of the item to resolve
+         * @return A default stack of the item, or null if not recognised by this resolver.
+         */
+        @Override
+        ItemStack apply(String name);
+
+        /**
+         * Get all possible names that are recognised by this item resolver.
+         * <p>
+         * Implementing this method is optional but recommended, since it enables custom items to be seen in tab complete.
+         *
+         * @return A collection of all the possible names for items that this resolver recognises.
+         */
         default Collection<String> getNames() {
+            return null;
+        }
+
+        /**
+         * Get a name recognised by this resolver for the given ItemStack, and return null if none was found.
+         * The implementation of {@link ItemResolver#apply(String)} must recognise any string returned here.
+         * Note that if you return a string here, no extra meta will be added - if you want to add extra meta, you need to return it with your serialized string.
+         * <p>
+         * Implementing this method is optional but recommended, since it enables custom items to be saved by /createkit.
+         *
+         * @param stack The stack to serialize
+         * @return The name of the item if a suitable name was found, else null
+         */
+        default String serialize(ItemStack stack) {
             return null;
         }
     }

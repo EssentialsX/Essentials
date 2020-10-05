@@ -2,6 +2,7 @@ package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.utils.DateUtil;
 import com.earth2me.essentials.utils.FormatUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -9,6 +10,7 @@ import org.bukkit.Server;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -24,7 +26,11 @@ public class Commandme extends EssentialsCommand {
     @Override
     public void run(Server server, User user, String commandLabel, String[] args) throws Exception {
         if (user.isMuted()) {
-            throw new Exception(user.hasMuteReason() ? tl("voiceSilencedReason", user.getMuteReason()) : tl("voiceSilenced"));
+            String dateDiff = user.getMuteTimeout() > 0 ? DateUtil.formatDateDiff(user.getMuteTimeout()) : null;
+            if (dateDiff == null) {
+                throw new Exception(user.hasMuteReason() ? tl("voiceSilencedReason", user.getMuteReason()) : tl("voiceSilenced"));
+            }
+            throw new Exception(user.hasMuteReason() ? tl("voiceSilencedReasonTime", dateDiff, user.getMuteReason()) : tl("voiceSilencedTime", dateDiff));
         }
 
         if (args.length < 1) {
@@ -96,6 +102,6 @@ public class Commandme extends EssentialsCommand {
 
     @Override
     protected List<String> getTabCompleteOptions(Server server, CommandSource sender, String commandLabel, String[] args) {
-        return null;  // It's a chat message, use the default chat handler
+        return Collections.emptyList();
     }
 }

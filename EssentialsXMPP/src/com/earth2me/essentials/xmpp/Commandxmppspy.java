@@ -1,38 +1,36 @@
 package com.earth2me.essentials.xmpp;
 
+import com.earth2me.essentials.ChargeException;
 import com.earth2me.essentials.CommandSource;
-import com.earth2me.essentials.commands.EssentialsCommand;
+import com.earth2me.essentials.User;
+import com.earth2me.essentials.commands.EssentialsLoopCommand;
 import com.earth2me.essentials.commands.NotEnoughArgumentsException;
+import com.earth2me.essentials.commands.PlayerExemptException;
+import com.earth2me.essentials.commands.PlayerNotFoundException;
+import net.ess3.api.MaxMoneyException;
 import org.bukkit.Server;
-import org.bukkit.entity.Player;
-
-import java.util.List;
 
 
-public class Commandxmppspy extends EssentialsCommand {
+public class Commandxmppspy extends EssentialsLoopCommand {
     public Commandxmppspy() {
         super("xmppspy");
     }
 
     @Override
-    protected void run(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws NotEnoughArgumentsException {
-        if (args.length < 1) {
+    protected void run(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws NotEnoughArgumentsException, PlayerExemptException, MaxMoneyException, ChargeException, PlayerNotFoundException {
+        if (args.length == 0) {
             throw new NotEnoughArgumentsException();
         }
 
-        final List<Player> matches = server.matchPlayer(args[0]);
+        loopOnlinePlayers(server, sender, false, true, args[0], args);
+    }
 
-        if (matches.isEmpty()) {
-            sender.sendMessage("§cThere are no players matching that name.");
-        }
-
-        for (Player p : matches) {
-            try {
-                final boolean toggle = EssentialsXMPP.getInstance().toggleSpy(p);
-                sender.sendMessage("XMPP Spy " + (toggle ? "enabled" : "disabled") + " for " + p.getDisplayName());
-            } catch (Exception ex) {
-                sender.sendMessage("Error: " + ex.getMessage());
-            }
+    @Override
+    protected void updatePlayer(Server server, CommandSource sender, User user, String[] args) {
+        try {
+            sender.sendMessage("XMPP Spy " + (EssentialsXMPP.getInstance().toggleSpy(user.getBase()) ? "enabled" : "disabled") + " for " + user.getDisplayName());
+        } catch (Exception ex) {
+            sender.sendMessage("Error: " + ex.getMessage());
         }
     }
 }

@@ -15,9 +15,6 @@ import net.ess3.api.events.AfkStatusChangeEvent;
 import net.ess3.api.events.JailStatusChangeEvent;
 import net.ess3.api.events.MuteStatusChangeEvent;
 import net.ess3.api.events.UserBalanceUpdateEvent;
-import net.ess3.nms.refl.ReflUtil;
-
-import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -28,7 +25,14 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import java.math.BigDecimal;
-import java.util.*;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.UUID;
+import java.util.WeakHashMap;
+import java.util.concurrent.CompletableFuture;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -42,7 +46,8 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
     private transient boolean teleportRequestHere;
     private transient Location teleportLocation;
     private transient boolean vanished;
-    private transient final Teleport teleport;
+    private transient final AsyncTeleport teleport;
+    private transient final Teleport legacyTeleport;
     private transient long teleportRequestTime;
     private transient long lastOnlineActivity;
     private transient long lastThrottledAction;
@@ -63,7 +68,8 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
 
     public User(final Player base, final IEssentials ess) {
         super(base, ess);
-        teleport = new Teleport(this, ess);
+        teleport = new AsyncTeleport(this, ess);
+        legacyTeleport = new Teleport(this, ess);
         if (isAfk()) {
             afkPosition = this.getLocation();
         }
@@ -316,11 +322,25 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
         return teleportLocation;
     }
 
-    public String getNick(final boolean longnick) {
-        return getNick(longnick, true, true);
+    public String getNick() {
+        return getNick(true, true);
     }
 
-    public String getNick(final boolean longnick, final boolean withPrefix, final boolean withSuffix) {
+    /**
+     * Needed for backwards compatibility.
+     */
+    public String getNick(final boolean longnick) {
+        return getNick(true, true);
+    }
+
+    /**
+     * Needed for backwards compatibility.
+     */
+    public String getNick(boolean longnick, final boolean withPrefix, final boolean withSuffix) {
+        return getNick(withPrefix, withSuffix);
+    }
+
+    public String getNick(final boolean withPrefix, final boolean withSuffix) {
         final StringBuilder prefix = new StringBuilder();
         String nickname;
         String suffix = "";
@@ -336,39 +356,38 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
 
         if (this.getBase().isOp()) {
             try {
-                final ChatColor opPrefix = ess.getSettings().getOperatorColor();
-                if (opPrefix != null && opPrefix.toString().length() > 0) {
-                    prefix.insert(0, opPrefix.toString());
+                final String opPrefix = ess.getSettings().getOperatorColor();
+                if (opPrefix != null && !opPrefix.isEmpty()) {
+                    prefix.insert(0, opPrefix);
                     suffix = "§r";
                 }
-            } catch (Exception ignored) {
+            } catch (Exception e) {
+                if (ess.getSettings().isDebug()) {
+                    e.printStackTrace();
+                }
             }
         }
 
         if (ess.getSettings().addPrefixSuffix()) {
             //These two extra toggles are not documented, because they are mostly redundant #EasterEgg
             if (withPrefix || !ess.getSettings().disablePrefix()) {
-                final String ptext = ess.getPermissionsHandler().getPrefix(base).replace('&', '§');
+                final String ptext = FormatUtil.replaceFormat(ess.getPermissionsHandler().getPrefix(base));
                 prefix.insert(0, ptext);
                 suffix = "§r";
             }
             if (withSuffix || !ess.getSettings().disableSuffix()) {
-                final String stext = ess.getPermissionsHandler().getSuffix(base).replace('&', '§');
+                final String stext = FormatUtil.replaceFormat(ess.getPermissionsHandler().getSuffix(base));
                 suffix = stext + "§r";
-                suffix = suffix.replace("§f§f", "§f").replace("§f§r", "§r").replace("§r§r", "§r");
+                // :YEP: WHAT ARE THEY DOING?
+                // :YEP: STILL. LEGACY CODE.
+                // :YEP: BUT WHY?
+                // :YEP: I CAN'T BELIEVE THIS!
+                // Code from 1542 BC #EasterEgg
+                suffix = suffix.replace("§f§r", "§r").replace("§r§r", "§r");
             }
         }
         final String strPrefix = prefix.toString();
         String output = strPrefix + nickname + suffix;
-        if (!longnick && output.length() > 16) {
-            output = strPrefix + nickname;
-        }
-        if (!longnick && output.length() > 16) {
-            output = FormatUtil.lastCode(strPrefix) + nickname;
-        }
-        if (!longnick && output.length() > 16) {
-            output = FormatUtil.lastCode(strPrefix) + nickname.substring(0, 14);
-        }
         if (output.charAt(output.length() - 1) == '§') {
             output = output.substring(0, output.length() - 1);
         }
@@ -381,10 +400,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
             if (isAfk()) {
                 updateAfkListName();
             } else if (ess.getSettings().changePlayerListName()) {
-                // 1.8 enabled player list-names longer than 16 characters.
-                // If the server is on 1.8 or higher, provide that functionality. Otherwise, keep prior functionality.
-                boolean higherOrEqualTo1_8 = ReflUtil.getNmsVersionObject().isHigherThanOrEqualTo(ReflUtil.V1_8_R1);
-                String name = getNick(higherOrEqualTo1_8, ess.getSettings().isAddingPrefixInPlayerlist(), ess.getSettings().isAddingSuffixInPlayerlist());
+                String name = getNick(ess.getSettings().isAddingPrefixInPlayerlist(), ess.getSettings().isAddingSuffixInPlayerlist());
                 try {
                     this.getBase().setPlayerListName(name);
                 } catch (IllegalArgumentException e) {
@@ -396,13 +412,23 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
         }
     }
 
+    @Override
     public String getDisplayName() {
         return super.getBase().getDisplayName() == null || (ess.getSettings().hideDisplayNameInVanish() && isHidden()) ? super.getBase().getName() : super.getBase().getDisplayName();
     }
 
     @Override
-    public Teleport getTeleport() {
+    public AsyncTeleport getAsyncTeleport() {
         return teleport;
+    }
+
+    /**
+     * @deprecated This API is not asynchronous. Use {@link User#getAsyncTeleport()}
+     */
+    @Override
+    @Deprecated
+    public Teleport getTeleport() {
+        return legacyTeleport;
     }
 
     public long getLastOnlineActivity() {
@@ -524,6 +550,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
                 getBase().setPlayerListName(afkName);
             } else {
                 getBase().setPlayerListName(null);
+                setDisplayNick();
             }
         }
     }
@@ -567,14 +594,12 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
                 sendMessage(tl("haveBeenReleased"));
                 setJail(null);
                 if (ess.getSettings().isTeleportBackWhenFreedFromJail()) {
-                    try {
-                        getTeleport().back();
-                    } catch (Exception ex) {
-                        try {
-                            getTeleport().respawn(null, TeleportCause.PLUGIN);
-                        } catch (Exception ignored) {
-                        }
-                    }
+                    CompletableFuture<Boolean> future = new CompletableFuture<>();
+                    getAsyncTeleport().back(future);
+                    future.exceptionally(e -> {
+                        getAsyncTeleport().respawn(null, TeleportCause.PLUGIN, new CompletableFuture<>());
+                        return false;
+                    });
                 }
                 return true;
             }

@@ -122,7 +122,7 @@ public class LegacyItemDb extends AbstractItemDb {
     @Override
     public ItemStack get(final String id, final boolean useResolvers) throws Exception {
         if (useResolvers) {
-            ItemStack resolved = tryResolvers(id);
+            ItemStack resolved = tryResolverDeserialize(id);
             if (resolved != null) {
                 return resolved;
             }
@@ -185,7 +185,7 @@ public class LegacyItemDb extends AbstractItemDb {
         if (mat == MOB_SPAWNER) {
             if (metaData == 0) metaData = EntityType.PIG.getTypeId();
             try {
-                retval = ess.getSpawnerProvider().setEntityType(retval, EntityType.fromId(metaData));
+                retval = ess.getSpawnerItemProvider().setEntityType(retval, EntityType.fromId(metaData));
             } catch (IllegalArgumentException e) {
                 throw new Exception("Can't spawn entity ID " + metaData + " from mob spawners.");
             }

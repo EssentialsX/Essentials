@@ -19,7 +19,7 @@ public class Commandkill extends EssentialsLoopCommand {
 
     @Override
     public void run(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception {
-        if (args.length < 1) {
+        if (args.length == 0) {
             throw new NotEnoughArgumentsException();
         }
 
@@ -32,18 +32,13 @@ public class Commandkill extends EssentialsLoopCommand {
         if (sender.isPlayer() && user.isAuthorized("essentials.kill.exempt") && !ess.getUser(sender.getPlayer()).isAuthorized("essentials.kill.force")) {
             throw new PlayerExemptException(tl("killExempt", matchPlayer.getDisplayName()));
         }
-        final EntityDamageEvent ede = new EntityDamageEvent(matchPlayer, sender.isPlayer() && sender.getPlayer().getName().equals(matchPlayer.getName()) ? EntityDamageEvent.DamageCause.SUICIDE : EntityDamageEvent.DamageCause.CUSTOM, Short.MAX_VALUE);
+        final EntityDamageEvent ede = new EntityDamageEvent(matchPlayer, sender.isPlayer() && sender.getPlayer().getName().equals(matchPlayer.getName()) ? EntityDamageEvent.DamageCause.SUICIDE : EntityDamageEvent.DamageCause.CUSTOM, Float.MAX_VALUE);
         server.getPluginManager().callEvent(ede);
         if (ede.isCancelled() && sender.isPlayer() && !ess.getUser(sender.getPlayer()).isAuthorized("essentials.kill.force")) {
             return;
         }
         ede.getEntity().setLastDamageCause(ede);
-        matchPlayer.damage(Short.MAX_VALUE);
-
-        if (matchPlayer.getHealth() > 0) {
-            matchPlayer.setHealth(0);
-        }
-
+        matchPlayer.setHealth(0);
         sender.sendMessage(tl("kill", matchPlayer.getDisplayName()));
     }
 

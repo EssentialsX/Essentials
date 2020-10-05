@@ -24,6 +24,11 @@ public class ConfigPermissionsHandler extends SuperpermsHandler {
     }
 
     @Override
+    public String getBackendName() {
+        return "Essentials";
+    }
+
+    @Override
     public boolean tryProvider() {
         return true;
     }

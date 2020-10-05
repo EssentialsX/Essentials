@@ -53,13 +53,9 @@ public class Commandfireball extends EssentialsCommand {
 
     @Override
     protected void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception {
-        String type = "fireball";
+        String type = args.length > 0 && types.containsKey(args[0]) ? args[0] : "fireball";
         double speed = 2;
-        boolean ride = false;
-
-        if (args.length > 0 && types.containsKey(args[0])) {
-            type = args[0];
-        }
+        boolean ride = args.length > 2 && args[2].equalsIgnoreCase("ride") && user.isAuthorized("essentials.fireball.ride");
 
         if (args.length > 1) {
             try {
@@ -67,10 +63,6 @@ public class Commandfireball extends EssentialsCommand {
                 speed = Double.max(0, Double.min(speed, ess.getSettings().getMaxProjectileSpeed()));
             } catch (Exception ignored) {
             }
-        }
-
-        if (args.length > 2 && args[2].equalsIgnoreCase("ride") && user.isAuthorized("essentials.fireball.ride")) {
-            ride = true;
         }
 
         if (!user.isAuthorized("essentials.fireball." + type)) {

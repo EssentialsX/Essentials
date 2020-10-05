@@ -22,6 +22,7 @@ import org.bukkit.plugin.PluginManager;
 
 import java.io.File;
 import java.util.*;
+import java.util.concurrent.CompletableFuture;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -116,13 +117,35 @@ public class Jails extends AsyncStorageObjectHolder<com.earth2me.essentials.sett
         }
     }
 
+    /**
+     * @deprecated This method does not use asynchronous teleportation. Use {@link Jails#sendToJail(IUser, String, CompletableFuture)}
+     */
     @Override
+    @Deprecated
     public void sendToJail(final IUser user, final String jail) throws Exception {
         acquireReadLock();
         try {
             if (user.getBase().isOnline()) {
                 Location loc = getJail(jail);
                 user.getTeleport().now(loc, false, TeleportCause.COMMAND);
+            }
+            user.setJail(jail);
+        } finally {
+            unlock();
+        }
+    }
+
+    @Override
+    public void sendToJail(IUser user, String jail, CompletableFuture<Boolean> future) throws Exception {
+        acquireReadLock();
+        try {
+            if (user.getBase().isOnline()) {
+                Location loc = getJail(jail);
+                user.getAsyncTeleport().now(loc, false, TeleportCause.COMMAND, future);
+                future.thenAccept(success -> {
+                    user.setJail(jail);
+                });
+                return;
             }
             user.setJail(jail);
         } finally {
@@ -254,16 +277,22 @@ public class Jails extends AsyncStorageObjectHolder<com.earth2me.essentials.sett
                 return;
             }
 
-            try {
-                sendToJail(user, user.getJail());
-            } catch (Exception ex) {
+            CompletableFuture<Boolean> future = new CompletableFuture<>();
+            future.exceptionally(ex -> {
                 if (ess.getSettings().isDebug()) {
                     LOGGER.log(Level.INFO, tl("returnPlayerToJailError", user.getName(), ex.getLocalizedMessage()), ex);
                 } else {
                     LOGGER.log(Level.INFO, tl("returnPlayerToJailError", user.getName(), ex.getLocalizedMessage()));
                 }
+                return false;
+            });
+            future.thenAccept(success -> user.sendMessage(tl("jailMessage")));
+
+            try {
+                sendToJail(user, user.getJail(), future);
+            } catch (Exception ex) {
+                future.completeExceptionally(ex);
             }
-            user.sendMessage(tl("jailMessage"));
         }
     }
 }

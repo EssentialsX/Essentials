@@ -16,6 +16,8 @@ import java.io.File;
 import java.util.*;
 import java.util.logging.*;
 
+import static com.earth2me.essentials.I18n.tl;
+
 
 public class XMPPManager extends Handler implements MessageListener, ChatManagerListener, IConf {
     private static final Logger logger = Logger.getLogger("EssentialsXMPP");
@@ -86,7 +88,7 @@ public class XMPPManager extends Handler implements MessageListener, ChatManager
     private boolean connect() {
         final String server = config.getString("xmpp.server");
         if (server == null || server.equals("example.com")) {
-            logger.log(Level.WARNING, "config broken for xmpp");
+            logger.log(Level.WARNING, tl("xmppNotConfigured"));
             return false;
         }
         final int port = config.getInt("xmpp.port", 5222);
@@ -128,10 +130,14 @@ public class XMPPManager extends Handler implements MessageListener, ChatManager
         if (connection != null) {
             connection.disconnect(new Presence(Presence.Type.unavailable));
         }
-
     }
 
     final void updatePresence() {
+        if (connection == null) {
+            parent.getEss().getLogger().warning(tl("xmppNotConfigured"));
+            return;
+        }
+
         final int usercount;
         final StringBuilder stringBuilder = new StringBuilder();
 

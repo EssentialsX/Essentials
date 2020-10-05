@@ -5,10 +5,12 @@ import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.NumberUtil;
 import com.google.common.collect.Lists;
 import net.ess3.api.events.UserBalanceUpdateEvent;
+import org.bukkit.ChatColor;
 import org.bukkit.Server;
 import org.bukkit.inventory.ItemStack;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
@@ -25,7 +27,6 @@ public class Commandsell extends EssentialsCommand {
     @Override
     public void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception {
         BigDecimal totalWorth = BigDecimal.ZERO;
-        String type = "";
         if (args.length < 1) {
             throw new NotEnoughArgumentsException();
         }
@@ -41,7 +42,17 @@ public class Commandsell extends EssentialsCommand {
 
         boolean isBulk = is.size() > 1;
 
+        List<ItemStack> notSold = new ArrayList<>();
         for (ItemStack stack : is) {
+            if (!ess.getSettings().isAllowSellNamedItems()) {
+                if (stack.getItemMeta() != null && stack.getItemMeta().hasDisplayName()) {
+                    if (isBulk) {
+                        notSold.add(stack);
+                        continue;
+                    }
+                    throw new Exception(tl("cannotSellNamedItem"));
+                }
+            }
             try {
                 if (stack.getAmount() > 0) {
                     totalWorth = totalWorth.add(sellItem(user, stack, args, isBulk));
@@ -59,11 +70,21 @@ public class Commandsell extends EssentialsCommand {
                 }
             }
         }
+        if (!notSold.isEmpty()) {
+            List<String> names = new ArrayList<>();
+            for (ItemStack stack : notSold) {
+                if (stack.getItemMeta() != null) { //This was already validated but IDE still freaks out
+                    names.add(stack.getItemMeta().getDisplayName());
+                }
+            }
+            ess.showError(user.getSource(), new Exception(tl("cannotSellTheseNamedItems", String.join(ChatColor.RESET + ", ", names))), commandLabel);
+        }
         if (count != 1) {
+            String totalWorthStr = NumberUtil.displayCurrency(totalWorth, ess);
             if (args[0].equalsIgnoreCase("blocks")) {
-                user.sendMessage(tl("totalWorthBlocks", type, NumberUtil.displayCurrency(totalWorth, ess)));
+                user.sendMessage(tl("totalWorthBlocks", totalWorthStr, totalWorthStr));
             } else {
-                user.sendMessage(tl("totalWorthAll", type, NumberUtil.displayCurrency(totalWorth, ess)));
+                user.sendMessage(tl("totalWorthAll", totalWorthStr, totalWorthStr));
             }
         }
     }
@@ -97,7 +118,7 @@ public class Commandsell extends EssentialsCommand {
         Trade.log("Command", "Sell", "Item", user.getName(), new Trade(ris, ess), user.getName(), new Trade(result, ess), user.getLocation(), ess);
         user.giveMoney(result, null, UserBalanceUpdateEvent.Cause.COMMAND_SELL);
         user.sendMessage(tl("itemSold", NumberUtil.displayCurrency(result, ess), amount, is.getType().toString().toLowerCase(Locale.ENGLISH), NumberUtil.displayCurrency(worth, ess)));
-        logger.log(Level.INFO, tl("itemSoldConsole", user.getDisplayName(), is.getType().toString().toLowerCase(Locale.ENGLISH), NumberUtil.displayCurrency(result, ess), amount, NumberUtil.displayCurrency(worth, ess)));
+        logger.log(Level.INFO, tl("itemSoldConsole", user.getName(), is.getType().toString().toLowerCase(Locale.ENGLISH), NumberUtil.displayCurrency(result, ess), amount, NumberUtil.displayCurrency(worth, ess), user.getDisplayName()));
         return result;
     }
 

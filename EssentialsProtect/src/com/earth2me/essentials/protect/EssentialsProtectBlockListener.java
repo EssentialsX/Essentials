@@ -2,15 +2,23 @@ package com.earth2me.essentials.protect;
 
 import com.earth2me.essentials.utils.EnumUtil;
 
+import com.earth2me.essentials.utils.MaterialUtil;
 import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.entity.*;
+import org.bukkit.entity.minecart.ExplosiveMinecart;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBurnEvent;
 import org.bukkit.event.block.BlockFromToEvent;
 import org.bukkit.event.block.BlockIgniteEvent;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.world.PortalCreateEvent;
 
 import java.util.Set;
@@ -59,6 +67,37 @@ public class EssentialsProtectBlockListener implements Listener {
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    public void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
+        if (event.getEntity() instanceof Item) {
+            if (event.getCause() == EntityDamageEvent.DamageCause.FIRE || event.getCause() == EntityDamageEvent.DamageCause.FIRE_TICK || event.getCause() == EntityDamageEvent.DamageCause.LAVA) {
+                event.setCancelled(prot.getSettingBool(ProtectConfig.disable_lava_item_dmg));
+            }
+
+            if (event.getCause() == EntityDamageEvent.DamageCause.ENTITY_EXPLOSION) {
+                if (event.getDamager() instanceof TNTPrimed) {
+                    event.setCancelled(prot.getSettingBool(ProtectConfig.prevent_tnt_itemdmg));
+                }
+
+                if (event.getDamager() instanceof Creeper) {
+                    event.setCancelled(prot.getSettingBool(ProtectConfig.prevent_creeper_itemdmg));
+                }
+
+                if (event.getDamager() instanceof ExplosiveMinecart) {
+                    event.setCancelled(prot.getSettingBool(ProtectConfig.prevent_tntminecart_itemdmg));
+                }
+
+                if (event.getDamager() instanceof WitherSkull) {
+                    event.setCancelled(prot.getSettingBool(ProtectConfig.prevent_witherskull_itemdmg));
+                }
+
+                if (event.getDamager() instanceof Fireball) {
+                    event.setCancelled(prot.getSettingBool(ProtectConfig.prevent_fireball_itemdmg));
+                }
+            }
+        }
+    }
+
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onBlockFromTo(final BlockFromToEvent event) {
         final Block block = event.getBlock();
 
@@ -88,6 +127,21 @@ public class EssentialsProtectBlockListener implements Listener {
     public void onPortalLight(PortalCreateEvent event) {
         if (event.getReason() == PortalCreateEvent.CreateReason.FIRE) {
             event.setCancelled(prot.getSettingBool(ProtectConfig.prevent_portal_creation));
+        }
+    }
+
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    public void onPlayerInteract(final PlayerInteractEvent event) {
+        if (!event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
+            return;
+        }
+        Block block = event.getClickedBlock();
+        if (block == null) {
+            return;
+        }
+        World.Environment environment = block.getWorld().getEnvironment();
+        if (MaterialUtil.isBed(block.getType()) && !environment.equals(World.Environment.NORMAL)) {
+            event.setCancelled(prot.getSettingBool(ProtectConfig.prevent_bed_explosion));
         }
     }
 }

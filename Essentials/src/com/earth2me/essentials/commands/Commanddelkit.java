@@ -18,12 +18,12 @@ public class Commanddelkit extends EssentialsCommand {
 
     @Override
     public void run(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception {
-        if (args.length < 1) {
+        if (args.length == 0) {
             final String kitList = ess.getKits().listKits(ess, null);
             sender.sendMessage(kitList.length() > 0 ? tl("kits", kitList) : tl("noKits"));
             throw new NoChargeException();
         } else {
-            final String kitName = args[0];
+            final String kitName = ess.getKits().matchKit(args[0]);
             final Kit kit = new Kit(kitName, ess);
 
             if (sender.getPlayer() != null) {

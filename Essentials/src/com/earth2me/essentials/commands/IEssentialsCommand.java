@@ -6,6 +6,8 @@ import com.earth2me.essentials.User;
 import net.ess3.api.IEssentials;
 import org.bukkit.Server;
 import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
+
 import java.util.List;
 
 
@@ -23,4 +25,6 @@ public interface IEssentialsCommand {
     void setEssentials(IEssentials ess);
 
     void setEssentialsModule(IEssentialsModule module);
+
+    void showError(CommandSender sender, Throwable throwable, String commandLabel);
 }

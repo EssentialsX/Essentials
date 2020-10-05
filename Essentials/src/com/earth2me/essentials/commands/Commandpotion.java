@@ -26,7 +26,6 @@ public class Commandpotion extends EssentialsCommand {
     @Override
     protected void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception {
         final ItemStack stack = user.getItemInHand();
-
         if (args.length == 0) {
             final Set<String> potionslist = new TreeSet<>();
             for (Map.Entry<String, PotionEffectType> entry : Potions.entrySet()) {
@@ -44,31 +43,28 @@ public class Commandpotion extends EssentialsCommand {
         }
         if (holdingPotion) {
             PotionMeta pmeta = (PotionMeta) stack.getItemMeta();
-            if (args.length > 0) {
-                if (args[0].equalsIgnoreCase("clear")) {
-                    pmeta.clearCustomEffects();
+            if (args[0].equalsIgnoreCase("clear")) {
+                pmeta.clearCustomEffects();
+                stack.setItemMeta(pmeta);
+            } else if (args[0].equalsIgnoreCase("apply") && user.isAuthorized("essentials.potion.apply")) {
+                for (PotionEffect effect : pmeta.getCustomEffects()) {
+                    effect.apply(user.getBase());
+                }
+            } else if (args.length < 3) {
+                throw new NotEnoughArgumentsException();
+            } else {
+                final MetaItemStack mStack = new MetaItemStack(stack);
+                for (String arg : args) {
+                    mStack.addPotionMeta(user.getSource(), true, arg, ess);
+                }
+                if (mStack.completePotion()) {
+                    pmeta = (PotionMeta) mStack.getItemStack().getItemMeta();
                     stack.setItemMeta(pmeta);
-                } else if (args[0].equalsIgnoreCase("apply") && user.isAuthorized("essentials.potion.apply")) {
-                    for (PotionEffect effect : pmeta.getCustomEffects()) {
-                        effect.apply(user.getBase());
-                    }
-                } else if (args.length < 3) {
-                    throw new NotEnoughArgumentsException();
                 } else {
-                    final MetaItemStack mStack = new MetaItemStack(stack);
-                    for (String arg : args) {
-                        mStack.addPotionMeta(user.getSource(), true, arg, ess);
-                    }
-                    if (mStack.completePotion()) {
-                        pmeta = (PotionMeta) mStack.getItemStack().getItemMeta();
-                        stack.setItemMeta(pmeta);
-                    } else {
-                        user.sendMessage(tl("invalidPotion"));
-                        throw new NotEnoughArgumentsException();
-                    }
+                    user.sendMessage(tl("invalidPotion"));
+                    throw new NotEnoughArgumentsException();
                 }
             }
-
         } else {
             throw new Exception(tl("holdPotion"));
         }
@@ -91,7 +87,7 @@ public class Commandpotion extends EssentialsCommand {
             }
             return options;
         } else if (args.length == 2 && args[0].startsWith("effect:")) {
-            return Lists.newArrayList("power:1", "power:2", "power:3", "power:4");
+            return Lists.newArrayList("power:1", "power:2", "power:3", "power:4", "amplifier:0", "amplifier:1", "amplifier:2", "amplifier:3");
         } else if (args.length == 3 && args[0].startsWith("effect:")) {
             List<String> options = Lists.newArrayList();
             for (String duration : COMMON_DURATIONS) {

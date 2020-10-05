@@ -5,7 +5,7 @@
 
     <groupId>net.ess3</groupId>
     <artifactId>EssentialsXParent</artifactId>
-    <version>2.17.2</version>
+    <version>2.18.1</version>
 
     <packaging>pom</packaging>
 
@@ -35,10 +35,10 @@
             <id>paper-repo</id>
             <url>https://papermc.io/repo/repository/maven-public/</url>
         </repository>
-		<repository>
-		    <id>jitpack</id>
-		    <url>https://jitpack.io</url>
-		</repository>
+        <repository>
+            <id>jitpack</id>
+            <url>https://jitpack.io</url>
+        </repository>
     </repositories>
 
     <modules>
@@ -49,20 +49,17 @@
         <module>EssentialsProtect</module>
         <module>EssentialsSpawn</module>
         <module>EssentialsXMPP</module>
-        <module>nms/NMSProvider</module>
-        <module>nms/UpdatedMetaProvider</module>
-        <module>nms/1_8_R1Provider</module>
-        <module>nms/1_8_R2Provider</module>
-        <module>nms/LegacyProvider</module>
-        <module>nms/ReflectionProvider</module>
-        <module>nms/FlattenedProvider</module>
+        <module>providers/BaseProviders</module>
+        <module>providers/NMSReflectionProvider</module>
+        <module>providers/PaperProvider</module>
+        <module>providers/1_8Provider</module>
     </modules>
 
     <dependencies>
         <dependency>
-            <groupId>org.bukkit</groupId>
-            <artifactId>bukkit</artifactId>
-            <version>1.15.2-R0.1-SNAPSHOT</version>
+            <groupId>org.spigotmc</groupId>
+            <artifactId>spigot-api</artifactId>
+            <version>1.16.3-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -191,6 +188,7 @@
                             <value>${full.version}</value>
                         </replacement>
                         <replacement>
+                            <!--suppress UnresolvedMavenProperty -->
                             <token>$${build.number}</token>
                             <value>${full.version}</value>
                         </replacement>
@@ -253,30 +251,25 @@
                         <tags>true</tags>
                     </gitDescribe>
                 </configuration>
-
             </plugin>
             <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>native2ascii-maven-plugin</artifactId>
-                <version>2.0.1</version>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-checkstyle-plugin</artifactId>
+                <version>3.1.1</version>
+                <configuration>
+                    <configLocation>.checkstyle/checkstyle.xml</configLocation>
+                    <suppressionsLocation>.checkstyle/suppressions.xml</suppressionsLocation>
+                </configuration>
                 <executions>
                     <execution>
-                        <id>utf8-to-latin1</id>
                         <goals>
-                            <goal>inplace</goal>
+                            <goal>check</goal>
                         </goals>
-                        <phase>process-resources</phase>
-                        <configuration>
-                            <dir>${project.build.outputDirectory}</dir>
-                            <encoding>${project.build.sourceEncoding}</encoding>
-                            <includes>
-                                <include>**/*.properties</include>
-                            </includes>
-                        </configuration>
                     </execution>
                 </executions>
             </plugin>
         </plugins>
+
         <resources>
             <resource>
                 <directory>src</directory>
@@ -296,9 +289,10 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
         <!-- The plugins' release version -->
-        <release.version>2.17.2</release.version>
+        <release.version>2.18.1</release.version>
 
         <!-- The plugins' build number -->
+        <!--suppress UnresolvedMavenProperty -->
         <build.version>${git.closest.tag.commit.count}</build.version>
 
         <full.version>${release.version}.${build.version}</full.version>

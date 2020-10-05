@@ -24,7 +24,7 @@ public interface Method {
      * @see #getName()
      * @see #getVersion()
      */
-    Object getPlugin();
+    Plugin getPlugin();
 
     /**
      * Returns the actual name of this method.
@@ -32,6 +32,13 @@ public interface Method {
      * @return <code>String</code> Plugin name.
      */
     String getName();
+
+    /**
+     * Returns the backend plugin of this economy method, if applicable.
+     *
+     * @return <code>String</code> Plugin name.
+     */
+    String getBackend();
 
     /**
      * Returns the reported name of this method.

@@ -3,6 +3,7 @@ package com.earth2me.essentials.protect;
 import com.earth2me.essentials.User;
 import net.ess3.api.IEssentials;
 import org.bukkit.entity.Creeper;
+import org.bukkit.entity.EnderCrystal;
 import org.bukkit.entity.EnderDragon;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
@@ -85,7 +86,7 @@ public class EssentialsProtectEntityListener implements Listener {
             }
 
             //Creeper explode prevention
-            if (eAttack instanceof Creeper && (prot.getSettingBool(ProtectConfig.prevent_creeper_explosion) || prot.getSettingBool(ProtectConfig.prevent_creeper_playerdmg)) && !(target instanceof Player && shouldBeDamaged(user, "creeper"))) {
+            if (eAttack instanceof Creeper && prot.getSettingBool(ProtectConfig.prevent_creeper_playerdmg) && !(target instanceof Player && shouldBeDamaged(user, "creeper"))) {
                 event.setCancelled(true);
                 return;
             }
@@ -184,6 +185,8 @@ public class EssentialsProtectEntityListener implements Listener {
         } else if ((entity instanceof WitherSkull) && prot.getSettingBool(ProtectConfig.prevent_witherskull_explosion)) {
             event.setCancelled(true);
         } else if ((entity instanceof ExplosiveMinecart) && prot.getSettingBool(ProtectConfig.prevent_tntminecart_explosion)) {
+            event.setCancelled(true);
+        } else if (entity instanceof EnderCrystal && prot.getSettingBool(ProtectConfig.prevent_ender_crystal_explosion)) {
             event.setCancelled(true);
         }
 

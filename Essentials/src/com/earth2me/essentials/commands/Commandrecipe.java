@@ -26,18 +26,19 @@ public class Commandrecipe extends EssentialsCommand {
     public Commandrecipe() {
         super("recipe");
     }
-    
-    private void disableCommandForVersion1_12() throws Exception {
-        VersionUtil.BukkitVersion version = VersionUtil.getServerBukkitVersion();
-        if (version.isHigherThanOrEqualTo(VersionUtil.v1_12_0_R01)
-            && !ess.getSettings().isForceEnableRecipe()) {
-            throw new Exception("Please use the recipe book in your inventory.");
-        }
-    }
 
     @Override
     public void run(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception {
-        disableCommandForVersion1_12();
+        // On versions at or above 1.12, we need recipe book API
+        if (VersionUtil.getServerBukkitVersion().isHigherThanOrEqualTo(VersionUtil.v1_12_0_R01)) {
+            try {
+                Class.forName("com.destroystokyo.paper.event.player.PlayerRecipeBookClickEvent");
+            } catch (ClassNotFoundException e) {
+                sender.sendMessage(tl("unsupportedFeature"));
+                return;
+            }
+        }
+
         if (args.length < 1) {
             throw new NotEnoughArgumentsException();
         }

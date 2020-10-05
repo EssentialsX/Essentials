@@ -1,3 +1,5 @@
+# Determines how much items are worth on the server.
+# This can be set in this file, or by running the /setworth command.
 worth:
 
   # Items not listed in this file will not be sellable on the server
@@ -29,7 +31,6 @@ worth:
   minecart: 23.0
   leatherchestplate: 85.0
   storageminecart: 30.0
-  leaves: 1.0
   feather: 3.0
   goldchestplate: 6.5
   mushroomsoup: 4.5

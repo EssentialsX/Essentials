@@ -2,6 +2,7 @@ package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.utils.DateUtil;
 import net.ess3.api.events.AfkStatusChangeEvent;
 import org.bukkit.Server;
 
@@ -48,7 +49,11 @@ public class Commandafk extends EssentialsCommand {
     private void toggleAfk(User sender, User user, String message) throws Exception {
         if (message != null && sender != null) {
             if (sender.isMuted()) {
-                throw new Exception(sender.hasMuteReason() ? tl("voiceSilencedReason", sender.getMuteReason()) : tl("voiceSilenced"));
+                String dateDiff = sender.getMuteTimeout() > 0 ? DateUtil.formatDateDiff(sender.getMuteTimeout()) : null;
+                if (dateDiff == null) {
+                    throw new Exception(sender.hasMuteReason() ? tl("voiceSilencedReason", sender.getMuteReason()) : tl("voiceSilenced"));
+                }
+                throw new Exception(sender.hasMuteReason() ? tl("voiceSilencedReasonTime", dateDiff, sender.getMuteReason()) : tl("voiceSilencedTime", dateDiff));
             }
             if (!sender.isAuthorized("essentials.afk.message")) {
                 throw new Exception(tl("noPermToAFKMessage"));
@@ -86,17 +91,8 @@ public class Commandafk extends EssentialsCommand {
     }
 
     @Override
-    protected List<String> getTabCompleteOptions(Server server, User user, String commandLabel, String[] args) {
-        if (args.length == 1 && user.isAuthorized("essentials.afk.others")) {
-            return getPlayers(server, user);
-        } else {
-            return Collections.emptyList();
-        }
-    }
-
-    @Override
     protected List<String> getTabCompleteOptions(Server server, CommandSource sender, String commandLabel, String[] args) {
-        if (args.length == 1) {
+        if (args.length == 1 && sender.isAuthorized("essentials.afk.others", ess)) {
             return getPlayers(server, sender);
         } else {
             return Collections.emptyList();

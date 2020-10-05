@@ -21,7 +21,7 @@ public class Commanditemdb extends EssentialsCommand {
     protected void run(Server server, CommandSource sender, String commandLabel, String[] args) throws Exception {
         ItemStack itemStack = null;
         boolean itemHeld = false;
-        if (args.length < 1) {
+        if (args.length == 0) {
             if (sender.isPlayer() && sender.getPlayer() != null) {
                 itemHeld = true;
                 itemStack = ess.getUser(sender.getPlayer()).getItemInHand();

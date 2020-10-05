@@ -134,6 +134,8 @@ public class DateUtil {
         if (toDate.after(fromDate)) {
             future = true;
         }
+        // Temporary 50ms time buffer added to avoid display truncation due to code execution delays
+        toDate.add(Calendar.MILLISECOND, future ? 50 : -50);
         StringBuilder sb = new StringBuilder();
         int[] types = new int[]{Calendar.YEAR, Calendar.MONTH, Calendar.DAY_OF_MONTH, Calendar.HOUR_OF_DAY, Calendar.MINUTE, Calendar.SECOND};
         String[] names = new String[]{tl("year"), tl("years"), tl("month"), tl("months"), tl("day"), tl("days"), tl("hour"), tl("hours"), tl("minute"), tl("minutes"), tl("second"), tl("seconds")};
@@ -148,6 +150,8 @@ public class DateUtil {
                 sb.append(" ").append(diff).append(" ").append(names[i * 2 + (diff > 1 ? 1 : 0)]);
             }
         }
+        // Preserve correctness in the original date object by removing the extra buffer time
+        toDate.add(Calendar.MILLISECOND, future ? -50 : 50);
         if (sb.length() == 0) {
             return tl("now");
         }

@@ -1,77 +1,100 @@
 package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.CommandSource;
-import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.DescParseTickFormat;
 import com.earth2me.essentials.utils.NumberUtil;
 import com.google.common.collect.Lists;
 import org.bukkit.Server;
 import org.bukkit.World;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Locale;
+import java.util.Set;
+import java.util.StringJoiner;
+import java.util.TreeSet;
 
 import static com.earth2me.essentials.I18n.tl;
 
 
 public class Commandtime extends EssentialsCommand {
+    private final List<String> subCommands = Arrays.asList("add", "set");
+    private final List<String> timeNames = Arrays.asList("sunrise", "day", "morning", "noon", "afternoon", "sunset", "night", "midnight");
+    private final List<String> timeNumbers = Arrays.asList("1000", "2000", "3000", "4000", "5000");
+
+
     public Commandtime() {
         super("time");
     }
 
     @Override
     public void run(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception {
+        long timeTick;
+        Set<World> worlds;
         boolean add = false;
-        final List<String> argList = new ArrayList<>(Arrays.asList(args));
-        if (argList.remove("set") && !argList.isEmpty() && NumberUtil.isInt(argList.get(0))) {
-            argList.set(0, argList.get(0) + "t");
-        }
-        if (argList.remove("add") && !argList.isEmpty() && NumberUtil.isInt(argList.get(0))) {
-            add = true;
-            argList.set(0, argList.get(0) + "t");
-        }
-        final String[] validArgs = argList.toArray(new String[0]);
-
-        // Which World(s) are we interested in?
-        String worldSelector = null;
-        if (validArgs.length == 2) {
-            worldSelector = validArgs[1];
-        }
-        final Set<World> worlds = getWorlds(server, sender, worldSelector);
-        final String setTime;
-
-        // If no arguments we are reading the time
-        if (validArgs.length == 0) {
-            if (commandLabel.equalsIgnoreCase("day") || commandLabel.equalsIgnoreCase("eday")) {
-                setTime = "day";
-            } else if (commandLabel.equalsIgnoreCase("night") || commandLabel.equalsIgnoreCase("enight")) {
-                setTime = "night";
+        if (args.length == 0) {
+            worlds = getWorlds(server, sender, null);
+            if (commandLabel.endsWith("day") || commandLabel.endsWith("night")) {
+                timeTick = DescParseTickFormat.parse(commandLabel.toLowerCase(Locale.ENGLISH).replace("e", "")); // These are 100% safe things to parse, no need for catching
             } else {
                 getWorldsTime(sender, worlds);
-                throw new NoChargeException();
+                return;
+            }
+        } else if (args.length == 1) {
+            worlds = getWorlds(server, sender, null);
+            try {
+                timeTick = DescParseTickFormat.parse(NumberUtil.isInt(args[0]) ? (args[0] + "t") : args[0]);
+            } catch (NumberFormatException e) {
+                throw new NotEnoughArgumentsException(e);
             }
         } else {
-            setTime = validArgs[0];
+            if (args[0].equalsIgnoreCase("set") || args[0].equalsIgnoreCase("add")) {
+                try {
+                    add = args[0].equalsIgnoreCase("add");
+                    timeTick = DescParseTickFormat.parse(NumberUtil.isInt(args[1]) ? (args[1] + "t") : args[1]);
+                    worlds = getWorlds(server, sender, args.length > 2 ? args[2] : null);
+                } catch (NumberFormatException e) {
+                    throw new NotEnoughArgumentsException(e);
+                }
+            } else {
+                try {
+                    timeTick = DescParseTickFormat.parse(NumberUtil.isInt(args[0]) ? (args[0] + "t") : args[0]);
+                    worlds = getWorlds(server, sender, args[1]);
+                } catch (NumberFormatException e) {
+                    throw new NotEnoughArgumentsException(e);
+                }
+            }
         }
 
-        final User user = ess.getUser(sender.getPlayer());
-        if (user != null && !user.isAuthorized("essentials.time.set")) {
+        // Start updating world times, we have what we need
+        if (!sender.isAuthorized("essentials.time.set", ess)) {
             throw new Exception(tl("timeSetPermission"));
         }
 
-        // Parse the target time int ticks from args[0]
-        long ticks;
-        try {
-            ticks = DescParseTickFormat.parse(setTime);
-        } catch (NumberFormatException e) {
-            throw new NotEnoughArgumentsException(e);
+        for (World world : worlds) {
+            if (!canUpdateWorld(sender, world)) {
+                //We can ensure that this is User as the console has all permissions (for essentials commands).
+                throw new Exception(tl("timeSetWorldPermission", sender.getUser(ess).getBase().getWorld().getName()));
+            }
         }
 
-        setWorldsTime(sender, worlds, ticks, add);
+        final StringJoiner joiner = new StringJoiner(",");
+        for (World world : worlds) {
+            long time = world.getTime();
+            if (!add) {
+                time -= time % 24000;
+            }
+            world.setTime(time + (add ? 0 : 24000) + timeTick);
+            joiner.add(world.getName());
+        }
+
+        sender.sendMessage(tl(add ? "timeWorldAdd" : "timeWorldSet", DescParseTickFormat.formatTicks(timeTick), joiner.toString()));
     }
 
-    /**
-     * Used to get the time and inform
-     */
     private void getWorldsTime(final CommandSource sender, final Collection<World> worlds) {
         if (worlds.size() == 1) {
             final Iterator<World> iter = worlds.iterator();
@@ -85,39 +108,7 @@ public class Commandtime extends EssentialsCommand {
     }
 
     /**
-     * Used to set the time and inform of the change
-     */
-    private void setWorldsTime(final CommandSource sender, final Collection<World> worlds, final long ticks, final boolean add) throws Exception {
-        User user = ess.getUser(sender.getPlayer());
-        for (World world : worlds) {
-            if (!canUpdateWorld(user, world)) {
-                throw new Exception(tl("timeSetWorldPermission", user.getWorld().getName()));
-            }
-        }
-
-        // Update the time
-        for (World world : worlds) {
-            long time = world.getTime();
-            if (!add) {
-                time -= time % 24000;
-            }
-            world.setTime(time + (add ? 0 : 24000) + ticks);
-        }
-
-        final StringBuilder output = new StringBuilder();
-        for (World world : worlds) {
-            if (output.length() > 0) {
-                output.append(", ");
-            }
-
-            output.append(world.getName());
-        }
-
-        sender.sendMessage(tl("timeWorldSet", DescParseTickFormat.format(ticks), output.toString()));
-    }
-
-    /**
-     * Used to parse an argument of the type "world(s) selector"
+     * Parses worlds from command args, otherwise returns all worlds.
      */
     private Set<World> getWorlds(final Server server, final CommandSource sender, final String selector) throws Exception {
         final Set<World> worlds = new TreeSet<>(new WorldNameComparator());
@@ -125,9 +116,7 @@ public class Commandtime extends EssentialsCommand {
         // If there is no selector we want the world the user is currently in. Or all worlds if it isn't a user.
         if (selector == null) {
             if (sender.isPlayer()) {
-
-                final User user = ess.getUser(sender.getPlayer());
-                worlds.add(user.getWorld());
+                worlds.add(sender.getPlayer().getWorld());
             } else {
                 worlds.addAll(server.getWorlds());
             }
@@ -138,26 +127,21 @@ public class Commandtime extends EssentialsCommand {
         final World world = server.getWorld(selector);
         if (world != null) {
             worlds.add(world);
-        }
-        // If that fails, Is the argument something like "*" or "all"?
-        else if (selector.equalsIgnoreCase("*") || selector.equalsIgnoreCase("all")) {
+        } else if (selector.equalsIgnoreCase("*") || selector.equalsIgnoreCase("all")) { // If that fails, Is the argument something like "*" or "all"?
             worlds.addAll(server.getWorlds());
-        }
-        // We failed to understand the world target...
-        else {
+        } else { // We failed to understand the world target...
             throw new Exception(tl("invalidWorld"));
         }
-
         return worlds;
     }
     
-    private boolean canUpdateAll(User user) {
-        return !ess.getSettings().isWorldTimePermissions() // First check if per world permissions are enabled, if not, return true. 
-            || user == null || user.isAuthorized("essentials.time.world.all");
+    private boolean canUpdateAll(CommandSource sender) {
+        return !ess.getSettings().isWorldTimePermissions() // First check if per world permissions are enabled, if not, return true.
+            || sender.isAuthorized("essentials.time.world.all", ess);
     }
 
-    private boolean canUpdateWorld(User user, World world) {
-        return canUpdateAll(user) || user.isAuthorized("essentials.time.world." + normalizeWorldName(world));
+    private boolean canUpdateWorld(CommandSource sender, World world) {
+        return canUpdateAll(sender) || sender.isAuthorized("essentials.time.world." + normalizeWorldName(world), ess);
     }
 
     private String normalizeWorldName(World world) {
@@ -166,25 +150,28 @@ public class Commandtime extends EssentialsCommand {
 
     @Override
     protected List<String> getTabCompleteOptions(Server server, CommandSource sender, String commandLabel, String[] args) {
-        final User user = ess.getUser(sender.getPlayer());
-
         if (args.length == 1) {
-            if (user == null || user.isAuthorized("essentials.time.set")) {
-                return Lists.newArrayList("set", "add");
+            if (sender.isAuthorized("essentials.time.set", ess)) {
+                return subCommands;
             } else {
                 return Collections.emptyList();
             }
-        } else if (args.length == 2 && args[0].equalsIgnoreCase("set")) {
-            return Lists.newArrayList("sunrise", "day", "morning", "noon", "afternoon", "sunset", "night", "midnight");
-            // TODO: handle tab completion for add
+        } else if (args.length == 2) {
+            if (args[0].equalsIgnoreCase("set")) {
+                return timeNames;
+            } else if (args[0].equalsIgnoreCase("add")) {
+                return timeNumbers;
+            } else {
+                return Collections.emptyList();
+            }
         } else if (args.length == 3 && (args[0].equalsIgnoreCase("set") || args[0].equalsIgnoreCase("add"))) {
             List<String> worlds = Lists.newArrayList();
             for (World world : server.getWorlds()) {
-                if (user == null || user.isAuthorized("essentials.time.world." + normalizeWorldName(world))) {
+                if (sender.isAuthorized("essentials.time.world." + normalizeWorldName(world), ess)) {
                     worlds.add(world.getName());
                 }
             }
-            if (user == null || user.isAuthorized("essentials.time.world.all")) {
+            if (sender.isAuthorized("essentials.time.world.all", ess)) {
                 worlds.add("*");
             }
             return worlds;

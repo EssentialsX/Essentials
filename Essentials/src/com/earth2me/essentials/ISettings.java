@@ -3,8 +3,6 @@ package com.earth2me.essentials;
 import com.earth2me.essentials.commands.IEssentialsCommand;
 import com.earth2me.essentials.signs.EssentialsSign;
 import com.earth2me.essentials.textreader.IText;
-
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.event.EventPriority;
@@ -31,6 +29,8 @@ public interface ISettings extends IConf {
     String getBackupCommand();
 
     long getBackupInterval();
+
+    boolean isAlwaysRunBackup();
 
     String getChatFormat(String group);
 
@@ -91,7 +91,7 @@ public interface ISettings extends IConf {
 
     String getNicknamePrefix();
 
-    ChatColor getOperatorColor() throws Exception;
+    String getOperatorColor() throws Exception;
 
     boolean getPerWarpPermission();
 
@@ -107,6 +107,8 @@ public interface ISettings extends IConf {
 
     boolean getRespawnAtHome();
 
+    boolean isRespawnAtAnchor();
+
     Set getMultipleHomes();
 
     int getHomeLimit(String set);
@@ -121,7 +123,11 @@ public interface ISettings extends IConf {
 
     boolean isForceDisableTeleportSafety();
 
+    boolean isAlwaysTeleportSafety();
+
     boolean isTeleportPassengerDismount();
+
+    boolean isForcePassengerTeleport();
 
     double getTeleportCooldown();
 
@@ -278,6 +284,8 @@ public interface ISettings extends IConf {
 
     BigDecimal getMinimumPayAmount();
 
+    boolean isPayExcludesIgnoreList();
+
     long getLastMessageReplyRecipientTimeout();
 
     boolean isMilkBucketEasterEggEnabled();
@@ -316,6 +324,8 @@ public interface ISettings extends IConf {
 
     boolean isAllowBulkBuySell();
 
+    boolean isAllowSellNamedItems();
+
     boolean isAddingPrefixInPlayerlist();
 
     boolean isAddingSuffixInPlayerlist();
@@ -338,8 +348,6 @@ public interface ISettings extends IConf {
 
     String getItemDbType();
 
-    boolean isForceEnableRecipe();
-
     boolean allowOldIdSigns();
 
     boolean isWaterSafe();
@@ -355,5 +363,7 @@ public interface ISettings extends IConf {
     boolean isRemovingEffectsOnHeal();
 
     boolean isSpawnIfNoHome();
+
+	boolean isConfirmationBeforeCommandCharge();
 
 }

@@ -28,8 +28,7 @@ public class Commandtpohere extends EssentialsCommand {
             throw new Exception(tl("noPerm", "essentials.worlds." + user.getWorld().getName()));
         }
 
-        // Verify permission
-        player.getTeleport().now(user.getBase(), false, TeleportCause.COMMAND);
+        player.getAsyncTeleport().now(user.getBase(), false, TeleportCause.COMMAND, getNewExceptionFuture(user.getSource(), commandLabel));
     }
 
     @Override

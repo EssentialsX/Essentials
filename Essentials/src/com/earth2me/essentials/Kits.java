@@ -70,6 +70,21 @@ public class Kits implements IConf {
         return null;
     }
 
+    // Tries to find an existing kit name that matches the given name, ignoring case. Returns null if no match.
+    public String matchKit(String name) {
+        if (config.isConfigurationSection("kits")) {
+            final ConfigurationSection section = config.getConfigurationSection("kits");
+            if (section != null) {
+                for (String kitName : section.getKeys(false)) {
+                    if (kitName.equalsIgnoreCase(name)) {
+                        return kitName;
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
     public void addKit(String name, List<String> lines, long delay) {
         // Will overwrite but w/e
         config.set("kits." + name + ".delay", delay);

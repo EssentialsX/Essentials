@@ -42,6 +42,56 @@ public class EssentialsUpgrade {
         doneFile.load();
     }
 
+    public void convertIgnoreList() {
+        Pattern pattern = Pattern.compile("^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$");
+        if (doneFile.getBoolean("updateUsersIgnoreListUUID", false)) {
+            return;
+        }
+
+        LOGGER.info("Attempting to migrate ignore list to UUIDs");
+
+        final File userdataFolder = new File(ess.getDataFolder(), "userdata");
+        if (!userdataFolder.exists() || !userdataFolder.isDirectory()) {
+            return;
+        }
+        final File[] userFiles = userdataFolder.listFiles();
+
+        for (File file : userFiles) {
+            if (!file.isFile() || !file.getName().endsWith(".yml")) {
+                continue;
+            }
+            final EssentialsConf config = new EssentialsConf(file);
+            try {
+                config.load();
+                if (config.hasProperty("ignore")) {
+                    List<String> migratedIgnores = new ArrayList<>();
+                    for (String name : Collections.synchronizedList(config.getStringList("ignore"))) {
+                        if (name == null) {
+                            continue;
+                        }
+                        if (pattern.matcher(name.trim()).matches()) {
+                            LOGGER.info("Detected already migrated ignore list!");
+                            return;
+                        }
+                        User user = ess.getOfflineUser(name);
+                        if (user != null && user.getBase() != null) {
+                            migratedIgnores.add(user.getBase().getUniqueId().toString());
+                        }
+                    }
+                    config.removeProperty("ignore");
+                    config.setProperty("ignore", migratedIgnores);
+                    config.forceSave();
+                }
+            } catch (RuntimeException ex) {
+                LOGGER.log(Level.INFO, "File: " + file.toString());
+                throw ex;
+            }
+        }
+        doneFile.setProperty("updateUsersIgnoreListUUID", true);
+        doneFile.save();
+        LOGGER.info("Done converting ignore list.");
+    }
+
     public void convertKits() {
         Kits kits = ess.getKits();
         EssentialsConf config = kits.getConfig();
@@ -713,5 +763,6 @@ public class EssentialsUpgrade {
         banFormatChange();
         warnMetrics();
         repairUserMap();
+        convertIgnoreList();
     }
 }

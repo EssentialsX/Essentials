@@ -5,6 +5,7 @@ import com.earth2me.essentials.User;
 import com.earth2me.essentials.textreader.IText;
 import com.earth2me.essentials.textreader.SimpleTextInput;
 import com.earth2me.essentials.textreader.TextPager;
+import com.earth2me.essentials.utils.DateUtil;
 import com.earth2me.essentials.utils.FormatUtil;
 import com.earth2me.essentials.utils.StringUtil;
 import com.google.common.collect.Lists;
@@ -25,7 +26,6 @@ public class Commandmail extends EssentialsCommand {
         super("mail");
     }
 
-    //TODO: Tidy this up / TL these errors.
     @Override
     public void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception {
         if (args.length >= 1 && "read".equalsIgnoreCase(args[0])) {
@@ -48,11 +48,17 @@ public class Commandmail extends EssentialsCommand {
             }
 
             if (user.isMuted()) {
-                throw new Exception(user.hasMuteReason() ? tl("voiceSilencedReason", user.getMuteReason()) : tl("voiceSilenced"));
+                String dateDiff = user.getMuteTimeout() > 0 ? DateUtil.formatDateDiff(user.getMuteTimeout()) : null;
+                if (dateDiff == null) {
+                    throw new Exception(user.hasMuteReason() ? tl("voiceSilencedReason", user.getMuteReason()) : tl("voiceSilenced"));
+                }
+                throw new Exception(user.hasMuteReason() ? tl("voiceSilencedReasonTime", dateDiff, user.getMuteReason()) : tl("voiceSilencedTime", dateDiff));
             }
 
-            User u = getPlayer(server, args[1], true, true);
-            if (u == null) {
+            User u;
+            try {
+                u = getPlayer(server, args[1], true, true);
+            } catch (PlayerNotFoundException e) {
                 throw new Exception(tl("playerNeverOnServer", args[1]));
             }
 
@@ -106,8 +112,10 @@ public class Commandmail extends EssentialsCommand {
         } else if (args.length >= 1 && "clear".equalsIgnoreCase(args[0])) {
             throw new Exception(tl("onlyPlayers", commandLabel + " clear"));
         } else if (args.length >= 3 && "send".equalsIgnoreCase(args[0])) {
-            User u = getPlayer(server, args[1], true, true);
-            if (u == null) {
+            User u;
+            try {
+                u = getPlayer(server, args[1], true, true);
+            } catch (PlayerNotFoundException e) {
                 throw new Exception(tl("playerNeverOnServer", args[1]));
             }
             u.addMail(tl("mailFormat", "Server", FormatUtil.replaceFormat(getFinalArg(args, 2))));
@@ -119,8 +127,10 @@ public class Commandmail extends EssentialsCommand {
             return;
         } else if (args.length >= 2) {
             //allow sending from console without "send" argument, since it's the only thing the console can do
-            User u = getPlayer(server, args[0], true, true);
-            if (u == null) {
+            User u;
+            try {
+                u = getPlayer(server, args[0], true, true);
+            } catch (PlayerNotFoundException e) {
                 throw new Exception(tl("playerNeverOnServer", args[0]));
             }
             u.addMail(tl("mailFormat", "Server", FormatUtil.replaceFormat(getFinalArg(args, 1))));

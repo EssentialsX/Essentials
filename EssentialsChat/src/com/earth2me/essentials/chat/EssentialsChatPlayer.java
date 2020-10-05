@@ -38,9 +38,9 @@ public abstract class EssentialsChatPlayer implements Listener {
 
         final char prefix = message.charAt(0);
         if (prefix == ess.getSettings().getChatShout()) {
-            return "shout";
+            return message.length() > 1 ? "shout" : "";
         } else if (prefix == ess.getSettings().getChatQuestion()) {
-            return "question";
+            return message.length() > 1 ? "question" : "";
         } else {
             return "";
         }

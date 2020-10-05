@@ -6,6 +6,8 @@ import com.earth2me.essentials.User;
 import net.ess3.api.IEssentials;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 
+import java.util.concurrent.CompletableFuture;
+
 import static com.earth2me.essentials.I18n.tl;
 
 
@@ -52,12 +54,17 @@ public class SignWarp extends EssentialsSign {
         }
 
         final Trade charge = getTrade(sign, 3, ess);
-        try {
-            player.getTeleport().warp(player, warpName, charge, TeleportCause.PLUGIN);
-            Trade.log("Sign", "Warp", "Interact", username, null, username, charge, sign.getBlock().getLocation(), ess);
-        } catch (Exception ex) {
-            throw new SignException(ex.getMessage(), ex);
-        }
+        CompletableFuture<Boolean> future = new CompletableFuture<>();
+        player.getAsyncTeleport().warp(player, warpName, charge, TeleportCause.PLUGIN, future);
+        future.thenAccept(success -> {
+            if (success) {
+                Trade.log("Sign", "Warp", "Interact", username, null, username, charge, sign.getBlock().getLocation(), ess);
+            }
+        });
+        future.exceptionally(e -> {
+            ess.showError(player.getSource(), e, "\\ sign: " + signName);
+            return false;
+        });
         return true;
     }
 }

@@ -7,7 +7,10 @@ import com.earth2me.essentials.textreader.IText;
 import com.earth2me.essentials.textreader.KeywordReplacer;
 import com.earth2me.essentials.textreader.SimpleTextInput;
 import com.earth2me.essentials.utils.DateUtil;
+import com.earth2me.essentials.utils.NumberUtil;
 import net.ess3.api.IEssentials;
+import net.ess3.api.events.KitClaimEvent;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
@@ -149,17 +152,21 @@ public class Kit {
             IText input = new SimpleTextInput(items);
             IText output = new KeywordReplacer(input, user.getSource(), ess, true, true);
 
+            KitClaimEvent event = new KitClaimEvent(user, this);
+            Bukkit.getPluginManager().callEvent(event);
+            if (event.isCancelled()) {
+                return false;
+            }
+
             boolean spew = false;
             final boolean allowUnsafe = ess.getSettings().allowUnsafeEnchantments();
             final boolean currencyIsSuffix = ess.getSettings().isCurrencySymbolSuffixed();
-            final String currencySymbol = ess.getSettings().getCurrencySymbol();
             List<ItemStack> itemList = new ArrayList<>();
+            List<String> commandQueue = new ArrayList<>();
+            List<String> moneyQueue = new ArrayList<>();
             for (String kitItem : output.getLines()) {
                 if (!currencyIsSuffix ? kitItem.startsWith(ess.getSettings().getCurrencySymbol()) : kitItem.endsWith(ess.getSettings().getCurrencySymbol())) {
-                    final String valueString = currencyIsSuffix ? kitItem.substring(0, currencySymbol.length()) : kitItem.substring(currencySymbol.length());
-                    BigDecimal value = new BigDecimal(valueString.trim());
-                    Trade t = new Trade(value, ess);
-                    t.pay(user, OverflowType.DROP);
+                    moneyQueue.add(NumberUtil.sanitizeCurrencyString(kitItem, ess));
                     continue;
                 }
 
@@ -167,7 +174,7 @@ public class Kit {
                     String command = kitItem.substring(1);
                     String name = user.getName();
                     command = command.replace("{player}", name);
-                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command);
+                    commandQueue.add(command);
                     continue;
                 }
 
@@ -221,6 +228,20 @@ public class Kit {
                 }
             }
             user.getBase().updateInventory();
+
+            // Process money & command queues
+            // Done after all items have been processed so commands are not run and money is not given if
+            // an error occurs during the item giving process
+            for (String valueString : moneyQueue) {
+                BigDecimal value = new BigDecimal(valueString.trim());
+                Trade t = new Trade(value, ess);
+                t.pay(user, OverflowType.DROP);
+            }
+
+            for (String cmd : commandQueue) {
+                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), cmd);
+            }
+
             if (spew) {
                 user.sendMessage(tl("kitInvFull"));
             }
