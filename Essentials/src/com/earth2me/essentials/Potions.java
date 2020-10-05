@@ -9,8 +9,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-
-public class Potions {
+public final class Potions {
     private static final Map<String, PotionEffectType> POTIONS = new HashMap<>();
     private static final Map<String, PotionEffectType> ALIASPOTIONS = new HashMap<>();
 
@@ -124,10 +123,14 @@ public class Potions {
 
             POTIONS.put("luck", PotionEffectType.LUCK);
             POTIONS.put("unluck", PotionEffectType.UNLUCK);
-        } catch (Throwable ignored) {}
+        } catch (final Throwable ignored) {
+        }
     }
 
-    public static PotionEffectType getByName(String name) {
+    private Potions() {
+    }
+
+    public static PotionEffectType getByName(final String name) {
         PotionEffectType peffect;
         if (NumberUtil.isInt(name)) {
             peffect = PotionEffectType.getById(Integer.parseInt(name));

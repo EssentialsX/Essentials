@@ -9,11 +9,10 @@ import org.junit.Test;
 
 import java.io.IOException;
 
-
 public class StorageTest {
-    private Essentials ess;
-    private FakeServer server;
-    private World world;
+    private final Essentials ess;
+    private final FakeServer server;
+    private final World world;
 
     public StorageTest() {
         server = new FakeServer();
@@ -21,21 +20,21 @@ public class StorageTest {
         ess = new Essentials(server);
         try {
             ess.setupForTesting(server);
-        } catch (InvalidDescriptionException ex) {
+        } catch (final InvalidDescriptionException ex) {
             Assert.fail("InvalidDescriptionException");
-        } catch (IOException ex) {
+        } catch (final IOException ex) {
             Assert.fail("IOException");
         }
     }
 
     @Test
     public void testOldUserdata() {
-        ExecuteTimer ext = new ExecuteTimer();
+        final ExecuteTimer ext = new ExecuteTimer();
         ext.start();
-        OfflinePlayer base1 = server.createPlayer("testPlayer1");
+        final OfflinePlayer base1 = server.createPlayer("testPlayer1");
         server.addPlayer(base1);
         ext.mark("fake user created");
-        UserData user = ess.getUser(base1);
+        final UserData user = ess.getUser(base1);
         ext.mark("load empty user");
         for (int j = 0; j < 1; j++) {
             user.setHome("home", new Location(world, j, j, j));

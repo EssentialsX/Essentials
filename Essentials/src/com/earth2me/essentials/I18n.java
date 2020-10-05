@@ -2,44 +2,69 @@ package com.earth2me.essentials;
 
 import net.ess3.api.IEssentials;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.nio.charset.StandardCharsets;
 import java.text.MessageFormat;
-import java.util.*;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
+import java.util.MissingResourceException;
+import java.util.PropertyResourceBundle;
+import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
 
-
 public class I18n implements net.ess3.api.II18n {
-    private static I18n instance;
     private static final String MESSAGES = "messages";
-    private final transient Locale defaultLocale = Locale.getDefault();
-    private transient Locale currentLocale = defaultLocale;
-    private transient ResourceBundle customBundle;
-    private transient ResourceBundle localeBundle;
-    private final transient ResourceBundle defaultBundle;
-    private transient Map<String, MessageFormat> messageFormatCache = new HashMap<>();
-    private final transient IEssentials ess;
     private static final Pattern NODOUBLEMARK = Pattern.compile("''");
     private static final ResourceBundle NULL_BUNDLE = new ResourceBundle() {
         public Enumeration<String> getKeys() {
             return null;
         }
 
-        protected Object handleGetObject(String key) {
+        protected Object handleGetObject(final String key) {
             return null;
         }
     };
+    private static I18n instance;
+    private final transient Locale defaultLocale = Locale.getDefault();
+    private final transient ResourceBundle defaultBundle;
+    private final transient IEssentials ess;
+    private transient Locale currentLocale = defaultLocale;
+    private transient ResourceBundle customBundle;
+    private transient ResourceBundle localeBundle;
+    private transient Map<String, MessageFormat> messageFormatCache = new HashMap<>();
 
     public I18n(final IEssentials ess) {
         this.ess = ess;
         defaultBundle = ResourceBundle.getBundle(MESSAGES, Locale.ENGLISH, new UTF8PropertiesControl());
         localeBundle = defaultBundle;
         customBundle = NULL_BUNDLE;
+    }
+
+    public static String tl(final String string, final Object... objects) {
+        if (instance == null) {
+            return "";
+        }
+        if (objects.length == 0) {
+            return NODOUBLEMARK.matcher(instance.translate(string)).replaceAll("'");
+        } else {
+            return instance.format(string, objects);
+        }
+    }
+
+    public static String capitalCase(final String input) {
+        return input == null || input.length() == 0 ? input : input.toUpperCase(Locale.ENGLISH).charAt(0) + input.toLowerCase(Locale.ENGLISH).substring(1);
     }
 
     public void onEnable() {
@@ -59,23 +84,12 @@ public class I18n implements net.ess3.api.II18n {
         try {
             try {
                 return customBundle.getString(string);
-            } catch (MissingResourceException ex) {
+            } catch (final MissingResourceException ex) {
                 return localeBundle.getString(string);
             }
-        } catch (MissingResourceException ex) {
+        } catch (final MissingResourceException ex) {
             Logger.getLogger("Essentials").log(Level.WARNING, String.format("Missing translation key \"%s\" in translation file %s", ex.getKey(), localeBundle.getLocale().toString()), ex);
             return defaultBundle.getString(string);
-        }
-    }
-
-    public static String tl(final String string, final Object... objects) {
-        if (instance == null) {
-            return "";
-        }
-        if (objects.length == 0) {
-            return NODOUBLEMARK.matcher(instance.translate(string)).replaceAll("'");
-        } else {
-            return instance.format(string, objects);
         }
     }
 
@@ -85,7 +99,7 @@ public class I18n implements net.ess3.api.II18n {
         if (messageFormat == null) {
             try {
                 messageFormat = new MessageFormat(format);
-            } catch (IllegalArgumentException e) {
+            } catch (final IllegalArgumentException e) {
                 ess.getLogger().log(Level.SEVERE, "Invalid Translation key for '" + string + "': " + e.getMessage());
                 format = format.replaceAll("\\{(\\D*?)\\}", "\\[$1\\]");
                 messageFormat = new MessageFormat(format);
@@ -114,19 +128,15 @@ public class I18n implements net.ess3.api.II18n {
 
         try {
             localeBundle = ResourceBundle.getBundle(MESSAGES, currentLocale, new UTF8PropertiesControl());
-        } catch (MissingResourceException ex) {
+        } catch (final MissingResourceException ex) {
             localeBundle = NULL_BUNDLE;
         }
 
         try {
             customBundle = ResourceBundle.getBundle(MESSAGES, currentLocale, new FileResClassLoader(I18n.class.getClassLoader(), ess), new UTF8PropertiesControl());
-        } catch (MissingResourceException ex) {
+        } catch (final MissingResourceException ex) {
             customBundle = NULL_BUNDLE;
         }
-    }
-
-    public static String capitalCase(final String input) {
-        return input == null || input.length() == 0 ? input : input.toUpperCase(Locale.ENGLISH).charAt(0) + input.toLowerCase(Locale.ENGLISH).substring(1);
     }
 
     /**
@@ -146,7 +156,8 @@ public class I18n implements net.ess3.api.II18n {
             if (file.exists()) {
                 try {
                     return file.toURI().toURL();
-                } catch (MalformedURLException ignored) {}
+                } catch (final MalformedURLException ignored) {
+                }
             }
             return null;
         }
@@ -157,7 +168,8 @@ public class I18n implements net.ess3.api.II18n {
             if (file.exists()) {
                 try {
                     return new FileInputStream(file);
-                } catch (FileNotFoundException ignored) {}
+                } catch (final FileNotFoundException ignored) {
+                }
             }
             return null;
         }
@@ -168,14 +180,14 @@ public class I18n implements net.ess3.api.II18n {
      * Java 9 fixes this by defaulting to UTF-8 for .properties files.
      */
     private static class UTF8PropertiesControl extends ResourceBundle.Control {
-        public ResourceBundle newBundle(String baseName, Locale locale, String format, ClassLoader loader, boolean reload) throws IOException {
-            String resourceName = toResourceName(toBundleName(baseName, locale), "properties");
+        public ResourceBundle newBundle(final String baseName, final Locale locale, final String format, final ClassLoader loader, final boolean reload) throws IOException {
+            final String resourceName = toResourceName(toBundleName(baseName, locale), "properties");
             ResourceBundle bundle = null;
             InputStream stream = null;
             if (reload) {
-                URL url = loader.getResource(resourceName);
+                final URL url = loader.getResource(resourceName);
                 if (url != null) {
-                    URLConnection connection = url.openConnection();
+                    final URLConnection connection = url.openConnection();
                     if (connection != null) {
                         connection.setUseCaches(false);
                         stream = connection.getInputStream();

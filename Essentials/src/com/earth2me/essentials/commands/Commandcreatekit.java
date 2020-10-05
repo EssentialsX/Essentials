@@ -1,14 +1,12 @@
 package com.earth2me.essentials.commands;
 
+import com.earth2me.essentials.CommandSource;
+import com.earth2me.essentials.User;
+import com.earth2me.essentials.utils.DateUtil;
 import com.google.common.base.Charsets;
 import com.google.common.io.CharStreams;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-
-import com.earth2me.essentials.CommandSource;
-import com.earth2me.essentials.User;
-import com.earth2me.essentials.utils.DateUtil;
-
 import org.bukkit.Material;
 import org.bukkit.Server;
 import org.bukkit.configuration.ConfigurationSection;
@@ -57,13 +55,13 @@ public class Commandcreatekit extends EssentialsCommand {
         }
 
         // Command handler will auto fail if this fails.
-        long delay = Long.parseLong(args[1]);
-        String kitname = args[0];
-        ItemStack[] items = user.getBase().getInventory().getContents();
-        List<String> list = new ArrayList<>();
-        for (ItemStack is : items) {
+        final long delay = Long.parseLong(args[1]);
+        final String kitname = args[0];
+        final ItemStack[] items = user.getBase().getInventory().getContents();
+        final List<String> list = new ArrayList<>();
+        for (final ItemStack is : items) {
             if (is != null && is.getType() != null && is.getType() != Material.AIR) {
-                String serialized = ess.getItemDb().serialize(is);
+                final String serialized = ess.getItemDb().serialize(is);
                 list.add(serialized);
             }
         }
@@ -72,7 +70,7 @@ public class Commandcreatekit extends EssentialsCommand {
             ess.getKits().addKit(kitname, list, delay);
             user.sendMessage(tl("createdKit", kitname, list.size(), delay));
         } else {
-            ConfigurationSection config = new MemoryConfiguration();
+            final ConfigurationSection config = new MemoryConfiguration();
             config.set("kits." + kitname + ".delay", delay);
             config.set("kits." + kitname + ".items", list);
 
@@ -87,28 +85,28 @@ public class Commandcreatekit extends EssentialsCommand {
     private void uploadPaste(final CommandSource sender, final String kitName, final long delay, final String contents) {
         executorService.submit(() -> {
             try {
-                HttpURLConnection connection = (HttpURLConnection) new URL(PASTE_UPLOAD_URL).openConnection();
+                final HttpURLConnection connection = (HttpURLConnection) new URL(PASTE_UPLOAD_URL).openConnection();
                 connection.setRequestMethod("POST");
                 connection.setDoInput(true);
                 connection.setDoOutput(true);
                 connection.setRequestProperty("User-Agent", "EssentialsX plugin");
-                try (OutputStream os = connection.getOutputStream()) {
+                try (final OutputStream os = connection.getOutputStream()) {
                     os.write(contents.getBytes(Charsets.UTF_8));
                 }
                 // Error
                 if (connection.getResponseCode() >= 400) {
                     sender.sendMessage(tl("createKitFailed", kitName));
-                    String message = CharStreams.toString(new InputStreamReader(connection.getErrorStream(), Charsets.UTF_8));
+                    final String message = CharStreams.toString(new InputStreamReader(connection.getErrorStream(), Charsets.UTF_8));
                     ess.getLogger().severe("Error creating kit: " + message);
                     return;
                 }
 
                 // Read URL
-                JsonObject object = GSON.fromJson(new InputStreamReader(connection.getInputStream(), Charsets.UTF_8), JsonObject.class);
-                String pasteUrl = PASTE_URL + object.get("key").getAsString();
+                final JsonObject object = GSON.fromJson(new InputStreamReader(connection.getInputStream(), Charsets.UTF_8), JsonObject.class);
+                final String pasteUrl = PASTE_URL + object.get("key").getAsString();
                 connection.disconnect();
 
-                String separator = tl("createKitSeparator");
+                final String separator = tl("createKitSeparator");
                 String delayFormat = "0";
                 if (delay > 0) {
                     delayFormat = DateUtil.formatDateDiff(System.currentTimeMillis() + (delay * 1000));
@@ -119,7 +117,7 @@ public class Commandcreatekit extends EssentialsCommand {
                 if (ess.getSettings().isDebug()) {
                     ess.getLogger().info(sender.getSender().getName() + " created a kit: " + pasteUrl);
                 }
-            } catch (Exception e) {
+            } catch (final Exception e) {
                 sender.sendMessage(tl("createKitFailed", kitName));
                 e.printStackTrace();
             }

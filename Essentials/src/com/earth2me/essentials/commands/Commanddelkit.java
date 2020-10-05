@@ -10,7 +10,6 @@ import java.util.List;
 
 import static com.earth2me.essentials.I18n.tl;
 
-
 public class Commanddelkit extends EssentialsCommand {
     public Commanddelkit() {
         super("delkit");

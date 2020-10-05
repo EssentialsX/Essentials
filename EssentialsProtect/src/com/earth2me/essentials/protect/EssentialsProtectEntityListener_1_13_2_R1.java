@@ -1,6 +1,5 @@
 package com.earth2me.essentials.protect;
 
-import net.ess3.api.IEssentials;
 import org.bukkit.entity.Creeper;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.MushroomCow;
@@ -13,11 +12,9 @@ import org.bukkit.event.entity.EntityTransformEvent;
 
 public class EssentialsProtectEntityListener_1_13_2_R1 implements Listener {
     private final IProtect prot;
-    private final IEssentials ess;
 
     EssentialsProtectEntityListener_1_13_2_R1(final IProtect prot) {
         this.prot = prot;
-        this.ess = prot.getEssentialsConnect().getEssentials();
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)

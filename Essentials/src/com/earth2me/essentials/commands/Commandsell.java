@@ -18,7 +18,6 @@ import java.util.logging.Level;
 
 import static com.earth2me.essentials.I18n.tl;
 
-
 public class Commandsell extends EssentialsCommand {
     public Commandsell() {
         super("sell");
@@ -37,12 +36,12 @@ public class Commandsell extends EssentialsCommand {
             throw new Exception(tl("sellBulkPermission"));
         }
 
-        List<ItemStack> is = ess.getItemDb().getMatching(user, args);
+        final List<ItemStack> is = ess.getItemDb().getMatching(user, args);
         int count = 0;
 
-        boolean isBulk = is.size() > 1;
+        final boolean isBulk = is.size() > 1;
 
-        List<ItemStack> notSold = new ArrayList<>();
+        final List<ItemStack> notSold = new ArrayList<>();
         for (ItemStack stack : is) {
             if (!ess.getSettings().isAllowSellNamedItems()) {
                 if (stack.getItemMeta() != null && stack.getItemMeta().hasDisplayName()) {
@@ -58,21 +57,21 @@ public class Commandsell extends EssentialsCommand {
                     totalWorth = totalWorth.add(sellItem(user, stack, args, isBulk));
                     stack = stack.clone();
                     count++;
-                    for (ItemStack zeroStack : is) {
+                    for (final ItemStack zeroStack : is) {
                         if (zeroStack.isSimilar(stack)) {
                             zeroStack.setAmount(0);
                         }
                     }
                 }
-            } catch (Exception e) {
+            } catch (final Exception e) {
                 if (!isBulk) {
                     throw e;
                 }
             }
         }
         if (!notSold.isEmpty()) {
-            List<String> names = new ArrayList<>();
-            for (ItemStack stack : notSold) {
+            final List<String> names = new ArrayList<>();
+            for (final ItemStack stack : notSold) {
                 if (stack.getItemMeta() != null) { //This was already validated but IDE still freaks out
                     names.add(stack.getItemMeta().getDisplayName());
                 }
@@ -80,7 +79,7 @@ public class Commandsell extends EssentialsCommand {
             ess.showError(user.getSource(), new Exception(tl("cannotSellTheseNamedItems", String.join(ChatColor.RESET + ", ", names))), commandLabel);
         }
         if (count != 1) {
-            String totalWorthStr = NumberUtil.displayCurrency(totalWorth, ess);
+            final String totalWorthStr = NumberUtil.displayCurrency(totalWorth, ess);
             if (args[0].equalsIgnoreCase("blocks")) {
                 user.sendMessage(tl("totalWorthBlocks", totalWorthStr, totalWorthStr));
             } else {
@@ -89,9 +88,9 @@ public class Commandsell extends EssentialsCommand {
         }
     }
 
-    private BigDecimal sellItem(User user, ItemStack is, String[] args, boolean isBulkSell) throws Exception {
-        int amount = ess.getWorth().getAmount(ess, user, is, args, isBulkSell);
-        BigDecimal worth = ess.getWorth().getPrice(ess, is);
+    private BigDecimal sellItem(final User user, final ItemStack is, final String[] args, final boolean isBulkSell) throws Exception {
+        final int amount = ess.getWorth().getAmount(ess, user, is, args, isBulkSell);
+        final BigDecimal worth = ess.getWorth().getPrice(ess, is);
 
         if (worth == null) {
             throw new Exception(tl("itemCannotBeSold"));
@@ -104,7 +103,7 @@ public class Commandsell extends EssentialsCommand {
             return BigDecimal.ZERO;
         }
 
-        BigDecimal result = worth.multiply(BigDecimal.valueOf(amount));
+        final BigDecimal result = worth.multiply(BigDecimal.valueOf(amount));
 
         //TODO: Prices for Enchantments
         final ItemStack ris = is.clone();
@@ -118,12 +117,12 @@ public class Commandsell extends EssentialsCommand {
         Trade.log("Command", "Sell", "Item", user.getName(), new Trade(ris, ess), user.getName(), new Trade(result, ess), user.getLocation(), ess);
         user.giveMoney(result, null, UserBalanceUpdateEvent.Cause.COMMAND_SELL);
         user.sendMessage(tl("itemSold", NumberUtil.displayCurrency(result, ess), amount, is.getType().toString().toLowerCase(Locale.ENGLISH), NumberUtil.displayCurrency(worth, ess)));
-        logger.log(Level.INFO, tl("itemSoldConsole", user.getDisplayName(), is.getType().toString().toLowerCase(Locale.ENGLISH), NumberUtil.displayCurrency(result, ess), amount, NumberUtil.displayCurrency(worth, ess)));
+        logger.log(Level.INFO, tl("itemSoldConsole", user.getName(), is.getType().toString().toLowerCase(Locale.ENGLISH), NumberUtil.displayCurrency(result, ess), amount, NumberUtil.displayCurrency(worth, ess), user.getDisplayName()));
         return result;
     }
 
     @Override
-    protected List<String> getTabCompleteOptions(Server server, User user, String commandLabel, String[] args) {
+    protected List<String> getTabCompleteOptions(final Server server, final User user, final String commandLabel, final String[] args) {
         if (args.length == 1) {
             return getMatchingItems(args[0]);
         } else if (args.length == 2) {

@@ -10,9 +10,9 @@ import java.lang.reflect.Method;
 import java.util.EnumSet;
 import java.util.Set;
 
-public class MaterialUtil {
+public final class MaterialUtil {
 
-
+    public static final Material SPAWNER = EnumUtil.getMaterial("MOB_SPAWNER", "SPAWNER");
     private static final Set<Material> BEDS;
     private static final Set<Material> BANNERS;
     private static final Set<Material> FIREWORKS;
@@ -25,8 +25,6 @@ public class MaterialUtil {
     private static final Set<Material> SIGN_POSTS;
     private static final Set<Material> WALL_SIGNS;
 
-    public static final Material SPAWNER = EnumUtil.getMaterial("MOB_SPAWNER", "SPAWNER");
-
     static {
 
         BEDS = EnumUtil.getAllMatching(Material.class, "BED", "BED_BLOCK", "WHITE_BED", "ORANGE_BED",
@@ -36,7 +34,7 @@ public class MaterialUtil {
 
         BANNERS = EnumUtil.getAllMatching(Material.class, "BANNER", "WHITE_BANNER",
             "ORANGE_BANNER", "MAGENTA_BANNER", "LIGHT_BLUE_BANNER", "YELLOW_BANNER", "LIME_BANNER",
-            "PINK_BANNER","GRAY_BANNER","LIGHT_GRAY_BANNER", "CYAN_BANNER", "PURPLE_BANNER",
+            "PINK_BANNER", "GRAY_BANNER", "LIGHT_GRAY_BANNER", "CYAN_BANNER", "PURPLE_BANNER",
             "BLUE_BANNER", "BROWN_BANNER", "GREEN_BANNER", "RED_BANNER", "BLACK_BANNER", "SHIELD");
 
         FIREWORKS = EnumUtil.getAllMatching(Material.class, "FIREWORK", "FIREWORK_ROCKET",
@@ -45,7 +43,7 @@ public class MaterialUtil {
         LEATHER_ARMOR = EnumUtil.getAllMatching(Material.class, "LEATHER_HELMET",
             "LEATHER_CHESTPLATE", "LEATHER_LEGGINGS", "LEATHER_BOOTS");
 
-        LEGACY_SKULLS = EnumUtil.getAllMatching(Material.class,"SKULL", "SKULL_ITEM");
+        LEGACY_SKULLS = EnumUtil.getAllMatching(Material.class, "SKULL", "SKULL_ITEM");
 
         MOB_HEADS = EnumUtil.getAllMatching(Material.class, "SKELETON_SKULL",
             "SKELETON_WALL_SKULL", "WITHER_SKELETON_SKULL", "WITHER_SKELETON_WALL_SKULL",
@@ -70,23 +68,26 @@ public class MaterialUtil {
             "CRIMSON_WALL_SIGN", "WARPED_WALL_SIGN");
     }
 
-    public static boolean isBed(Material material) {
+    private MaterialUtil() {
+    }
+
+    public static boolean isBed(final Material material) {
         return BEDS.contains(material);
     }
 
-    public static boolean isBanner(Material material) {
+    public static boolean isBanner(final Material material) {
         return BANNERS.contains(material);
     }
 
-    public static boolean isFirework(Material material) {
+    public static boolean isFirework(final Material material) {
         return FIREWORKS.contains(material);
     }
 
-    public static boolean isLeatherArmor(Material material) {
+    public static boolean isLeatherArmor(final Material material) {
         return LEATHER_ARMOR.contains(material);
     }
 
-    public static boolean isMobHead(Material material, int durability) {
+    public static boolean isMobHead(final Material material, final int durability) {
         if (MOB_HEADS.contains(material)) {
             return true;
         }
@@ -94,7 +95,7 @@ public class MaterialUtil {
         return LEGACY_SKULLS.contains(material) && (durability != 3);
     }
 
-    public static boolean isPlayerHead(Material material, int durability) {
+    public static boolean isPlayerHead(final Material material, final int durability) {
         if (PLAYER_HEADS.contains(material)) {
             return true;
         }
@@ -102,47 +103,49 @@ public class MaterialUtil {
         return LEGACY_SKULLS.contains(material) && durability == 3;
     }
 
-    public static boolean isPotion(Material material) {
+    public static boolean isPotion(final Material material) {
         return POTIONS.contains(material);
     }
 
-    public static boolean isSignPost(Material material) {
+    public static boolean isSignPost(final Material material) {
         return SIGN_POSTS.contains(material);
     }
 
-    public static boolean isWallSign(Material material) {
+    public static boolean isWallSign(final Material material) {
         return WALL_SIGNS.contains(material);
     }
 
-    public static boolean isSign(Material material) {
+    public static boolean isSign(final Material material) {
         return isSignPost(material) || isWallSign(material);
     }
 
-    public static boolean isSkull(Material material) {
+    public static boolean isSkull(final Material material) {
         return isPlayerHead(material, -1) || isMobHead(material, -1);
     }
 
-    public static Material convertFromLegacy(int id, byte damage) {
-        for (Material material : EnumSet.allOf(Material.class)) {
+    public static Material convertFromLegacy(final int id, final byte damage) {
+        for (final Material material : EnumSet.allOf(Material.class)) {
             if (material.getId() == id) {
                 try {
                     return Bukkit.getUnsafe().fromLegacy(new MaterialData(material, damage));
-                } catch (NoSuchMethodError error) {
+                } catch (final NoSuchMethodError error) {
                     break;
                 }
             }
         }
 
         try {
-            Method getMaterialFromId = Material.class.getDeclaredMethod("getMaterial", int.class);
+            //noinspection JavaReflectionMemberAccess
+            final Method getMaterialFromId = Material.class.getDeclaredMethod("getMaterial", int.class);
             return (Material) getMaterialFromId.invoke(null, id);
-        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException ignored) {}
+        } catch (final NoSuchMethodException | IllegalAccessException | InvocationTargetException ignored) {
+        }
 
         return null;
     }
 
-    public static DyeColor getColorOf(Material material) {
-        for (DyeColor color : DyeColor.values()) {
+    public static DyeColor getColorOf(final Material material) {
+        for (final DyeColor color : DyeColor.values()) {
             if (material.toString().contains(color.name())) {
                 return color;
             }

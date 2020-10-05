@@ -6,7 +6,6 @@ import org.bukkit.plugin.PluginManager;
 import java.util.HashSet;
 import java.util.Set;
 
-
 /**
  * The <code>Methods</code> initializes Methods that utilize the Method interface based on a "first come, first served"
  * basis.
@@ -25,33 +24,27 @@ import java.util.Set;
  * @author Nijikokun <nijikokun@shortmail.com> (@nijikokun) @copyright: Copyright (C) 2011 @license: AOL license
  * <http://aol.nexua.org>
  */
-public class Methods {
+public final class Methods {
+    private static final Set<Method> Methods = new HashSet<>();
+    private static final Set<String> Dependencies = new HashSet<>();
+    private static final Set<Method> Attachables = new HashSet<>();
     private static String version = null;
     private static boolean self = false;
     private static Method Method = null;
     private static String preferred = "";
-    private static final Set<Method> Methods = new HashSet<>();
-    private static final Set<String> Dependencies = new HashSet<>();
-    private static final Set<Method> Attachables = new HashSet<>();
 
-    static {
-        _init();
+    private Methods() {
     }
 
     /**
      * Implement all methods along with their respective name & class.
      */
-    private static void _init() {
-        addMethod("Vault", new com.earth2me.essentials.register.payment.methods.VaultEco());
-    }
+    public static void init() {
+        if (!Methods.isEmpty()) {
+            throw new IllegalStateException("Methods already initialised!");
+        }
 
-    /**
-     * Used by the plugin to setup version
-     *
-     * @param v version
-     */
-    public static void setVersion(String v) {
-        version = v;
+        addMethod("Vault", new com.earth2me.essentials.register.payment.methods.VaultEco());
     }
 
     /**
@@ -75,10 +68,18 @@ public class Methods {
     }
 
     /**
+     * Used by the plugin to setup version
+     *
+     * @param v version
+     */
+    public static void setVersion(final String v) {
+        version = v;
+    }
+
+    /**
      * Returns an array of payment method names that have been loaded through the <code>_init</code> method.
      *
      * @return <code>Set<String></code> - Array of payment methods that are loaded.
-     *
      * @see #setMethod(PluginManager)
      */
     public static Set<String> getDependencies() {
@@ -90,11 +91,10 @@ public class Methods {
      * payments and other various economic activity.
      *
      * @param plugin Plugin data from bukkit, Internal Class file.
-     *
      * @return Method <em>or</em> Null
      */
-    public static Method createMethod(Plugin plugin) {
-        for (Method method : Methods) {
+    public static Method createMethod(final Plugin plugin) {
+        for (final Method method : Methods) {
             if (method.isCompatible(plugin)) {
                 method.setPlugin(plugin);
                 return method;
@@ -104,7 +104,7 @@ public class Methods {
         return null;
     }
 
-    private static void addMethod(String name, Method method) {
+    private static void addMethod(final String name, final Method method) {
         Dependencies.add(name);
         Methods.add(method);
     }
@@ -113,22 +113,20 @@ public class Methods {
      * Verifies if Register has set a payment method for usage yet.
      *
      * @return <code>boolean</code>
-     *
      * @see #setMethod(PluginManager)
      * @see #checkDisabled(Plugin)
      */
     public static boolean hasMethod() {
-        return (Method != null);
+        return Method != null;
     }
 
     /**
      * Checks Plugin Class against a multitude of checks to verify it's usability as a payment method.
      *
      * @param manager the plugin manager for the server
-     *
      * @return <code>boolean</code> True on success, False on failure.
      */
-    public static boolean setMethod(PluginManager manager) {
+    public static boolean setMethod(final PluginManager manager) {
         if (hasMethod()) {
             return true;
         }
@@ -142,7 +140,7 @@ public class Methods {
         boolean match = false;
         Plugin plugin;
 
-        for (String name : getDependencies()) {
+        for (final String name : getDependencies()) {
             if (hasMethod()) {
                 break;
             }
@@ -152,7 +150,7 @@ public class Methods {
                 continue;
             }
 
-            Method current = createMethod(plugin);
+            final Method current = createMethod(plugin);
             if (current == null) {
                 continue;
             }
@@ -169,7 +167,7 @@ public class Methods {
                 if (hasMethod()) {
                     match = true;
                 } else {
-                    for (Method attached : Attachables) {
+                    for (final Method attached : Attachables) {
                         if (attached == null) {
                             continue;
                         }
@@ -205,7 +203,7 @@ public class Methods {
      *
      * @return <code>boolean</code>
      */
-    public static boolean setPreferred(String check) {
+    public static boolean setPreferred(final String check) {
         if (getDependencies().contains(check)) {
             preferred = check;
             return true;
@@ -228,10 +226,9 @@ public class Methods {
      * Register.
      *
      * @param method Plugin data from bukkit, Internal Class file.
-     *
      * @return <code>boolean</code>
      */
-    public static boolean checkDisabled(Plugin method) {
+    public static boolean checkDisabled(final Plugin method) {
         if (!hasMethod()) {
             return true;
         }
@@ -240,6 +237,6 @@ public class Methods {
             Method = null;
         }
 
-        return (Method == null);
+        return Method == null;
     }
 }

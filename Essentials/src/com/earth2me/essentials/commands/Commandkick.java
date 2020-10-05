@@ -12,7 +12,6 @@ import java.util.logging.Level;
 
 import static com.earth2me.essentials.I18n.tl;
 
-
 public class Commandkick extends EssentialsCommand {
     public Commandkick() {
         super("kick");
@@ -26,7 +25,7 @@ public class Commandkick extends EssentialsCommand {
 
         final User target = getPlayer(server, args, 0, true, false);
         if (sender.isPlayer()) {
-            User user = ess.getUser(sender.getPlayer());
+            final User user = ess.getUser(sender.getPlayer());
             if (target.isHidden(sender.getPlayer()) && !user.canInteractVanished() && !sender.getPlayer().canSee(target.getBase())) {
                 throw new PlayerNotFoundException();
             }
@@ -47,7 +46,7 @@ public class Commandkick extends EssentialsCommand {
     }
 
     @Override
-    protected List<String> getTabCompleteOptions(Server server, CommandSource sender, String commandLabel, String[] args) {
+    protected List<String> getTabCompleteOptions(final Server server, final CommandSource sender, final String commandLabel, final String[] args) {
         if (args.length == 1) {
             return getPlayers(server, sender);
         } else {

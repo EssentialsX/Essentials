@@ -12,7 +12,6 @@ import java.util.logging.Level;
 
 import static com.earth2me.essentials.I18n.tl;
 
-
 public class Commandhelpop extends EssentialsCommand {
     public Commandhelpop() {
         super("helpop");
@@ -43,7 +42,7 @@ public class Commandhelpop extends EssentialsCommand {
     }
 
     @Override
-    protected List<String> getTabCompleteOptions(Server server, CommandSource sender, String commandLabel, String[] args) {
+    protected List<String> getTabCompleteOptions(final Server server, final CommandSource sender, final String commandLabel, final String[] args) {
         return Collections.emptyList();
     }
 }

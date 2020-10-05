@@ -1,6 +1,10 @@
 package com.earth2me.essentials.signs;
 
-import com.earth2me.essentials.*;
+import com.earth2me.essentials.ChargeException;
+import com.earth2me.essentials.CommandSource;
+import com.earth2me.essentials.MetaItemStack;
+import com.earth2me.essentials.Trade;
+import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.MaterialUtil;
 import com.earth2me.essentials.utils.NumberUtil;
 import net.ess3.api.IEssentials;
@@ -25,14 +29,66 @@ import java.util.Set;
 
 import static com.earth2me.essentials.I18n.tl;
 
-
 public class EssentialsSign {
-    private static final Set<Material> EMPTY_SET = new HashSet<>();
     protected static final BigDecimal MINTRANSACTION = new BigDecimal("0.01");
+    private static final Set<Material> EMPTY_SET = new HashSet<>();
     protected transient final String signName;
 
     public EssentialsSign(final String signName) {
         this.signName = signName;
+    }
+
+    protected static boolean checkIfBlockBreaksSigns(final Block block) {
+        final Block sign = block.getRelative(BlockFace.UP);
+        if (MaterialUtil.isSignPost(sign.getType()) && isValidSign(new BlockSign(sign))) {
+            return true;
+        }
+        final BlockFace[] directions = new BlockFace[] {BlockFace.NORTH, BlockFace.EAST, BlockFace.SOUTH, BlockFace.WEST};
+        for (final BlockFace blockFace : directions) {
+            final Block signBlock = block.getRelative(blockFace);
+            if (MaterialUtil.isWallSign(signBlock.getType())) {
+                try {
+                    if (getWallSignFacing(signBlock) == blockFace && isValidSign(new BlockSign(signBlock))) {
+                        return true;
+                    }
+                } catch (final NullPointerException ex) {
+                    // Sometimes signs enter a state of being semi broken, having no text or state data, usually while burning.
+                }
+            }
+        }
+        return false;
+    }
+
+    /**
+     * @deprecated, use {@link #isValidSign(IEssentials, ISign)} if possible
+     */
+    @Deprecated
+    public static boolean isValidSign(final ISign sign) {
+        return sign.getLine(0).matches("§1\\[.*\\]");
+    }
+
+    public static boolean isValidSign(final IEssentials ess, final ISign sign) {
+        if (!sign.getLine(0).matches("§1\\[.*\\]"))
+            return false;
+
+        // Validate that the sign is actually an essentials sign
+        final String signName = ChatColor.stripColor(sign.getLine(0)).replaceAll("[^a-zA-Z]", "");
+        for (final EssentialsSign essSign : ess.getSettings().enabledSigns()) {
+            if (essSign.getName().equalsIgnoreCase(signName))
+                return true;
+        }
+
+        return false;
+    }
+
+    private static BlockFace getWallSignFacing(final Block block) {
+        try {
+            final WallSign signData = (WallSign) block.getState().getBlockData();
+            return signData.getFacing();
+        } catch (final NoClassDefFoundError | NoSuchMethodError e) {
+            final org.bukkit.material.Sign signMat = (org.bukkit.material.Sign) block.getState().getData();
+            return signMat.getFacing();
+        }
     }
 
     protected final boolean onSignCreate(final SignChangeEvent event, final IEssentials ess) {
@@ -60,15 +116,15 @@ public class EssentialsSign {
                 sign.setLine(0, getSuccessName(ess));
             }
             return ret;
-        } catch (ChargeException | SignException ex) {
+        } catch (final ChargeException | SignException ex) {
             showError(ess, user.getSource(), ex, signName);
         }
         // Return true, so the player sees the wrong sign.
         return true;
     }
 
-    public String getSuccessName(IEssentials ess) {
-        String successName = getSuccessName();
+    public String getSuccessName(final IEssentials ess) {
+        final String successName = getSuccessName();
         if (successName == null) {
             ess.getLogger().severe("signFormatSuccess message must use the {0} argument.");
         }
@@ -94,6 +150,7 @@ public class EssentialsSign {
     }
 
     public String getUsername(final User user) {
+        // Truncate username to ensure it can fit on a sign
         return user.getName().substring(0, Math.min(user.getName().length(), 13));
     }
 
@@ -115,7 +172,7 @@ public class EssentialsSign {
             }
 
             return onSignInteract(sign, user, getUsername(user), ess);
-        } catch (Exception ex) {
+        } catch (final Exception ex) {
             showError(ess, user.getSource(), ex, signName);
             return false;
         }
@@ -136,7 +193,7 @@ public class EssentialsSign {
             }
 
             return onSignBreak(sign, user, getUsername(user), ess);
-        } catch (SignException ex) {
+        } catch (final SignException ex) {
             showError(ess, user.getSource(), ex, signName);
             return false;
         }
@@ -155,30 +212,30 @@ public class EssentialsSign {
     }
 
     protected final boolean onBlockPlace(final Block block, final Player player, final IEssentials ess) {
-        User user = ess.getUser(player);
+        final User user = ess.getUser(player);
         try {
             return onBlockPlace(block, user, getUsername(user), ess);
-        } catch (ChargeException | SignException ex) {
+        } catch (final ChargeException | SignException ex) {
             showError(ess, user.getSource(), ex, signName);
         }
         return false;
     }
 
     protected final boolean onBlockInteract(final Block block, final Player player, final IEssentials ess) {
-        User user = ess.getUser(player);
+        final User user = ess.getUser(player);
         try {
             return onBlockInteract(block, user, getUsername(user), ess);
-        } catch (ChargeException | SignException ex) {
+        } catch (final ChargeException | SignException ex) {
             showError(ess, user.getSource(), ex, signName);
         }
         return false;
     }
 
     protected final boolean onBlockBreak(final Block block, final Player player, final IEssentials ess) throws MaxMoneyException {
-        User user = ess.getUser(player);
+        final User user = ess.getUser(player);
         try {
             return onBlockBreak(block, user, getUsername(user), ess);
-        } catch (SignException ex) {
+        } catch (final SignException ex) {
             showError(ess, user.getSource(), ex, signName);
         }
         return false;
@@ -202,47 +259,6 @@ public class EssentialsSign {
 
     protected boolean onBlockPush(final Block block, final IEssentials ess) {
         return true;
-    }
-
-    protected static boolean checkIfBlockBreaksSigns(final Block block) {
-        final Block sign = block.getRelative(BlockFace.UP);
-        if (MaterialUtil.isSignPost(sign.getType()) && isValidSign(new BlockSign(sign))) {
-            return true;
-        }
-        final BlockFace[] directions = new BlockFace[]{BlockFace.NORTH, BlockFace.EAST, BlockFace.SOUTH, BlockFace.WEST};
-        for (BlockFace blockFace : directions) {
-            final Block signBlock = block.getRelative(blockFace);
-            if (MaterialUtil.isWallSign(signBlock.getType())) {
-                try {
-                    if (getWallSignFacing(signBlock) == blockFace && isValidSign(new BlockSign(signBlock))) {
-                        return true;
-                    }
-                } catch (NullPointerException ex) {
-                    // Sometimes signs enter a state of being semi broken, having no text or state data, usually while burning.
-                }
-            }
-        }
-        return false;
-    }
-
-    /** @deprecated, use {@link #isValidSign(IEssentials, ISign)} if possible */
-    @Deprecated
-    public static boolean isValidSign(final ISign sign) {
-        return sign.getLine(0).matches("§1\\[.*\\]");
-    }
-
-    public static boolean isValidSign(final IEssentials ess, final ISign sign) {
-        if (!sign.getLine(0).matches("§1\\[.*\\]"))
-            return false;
-
-        // Validate that the sign is actually an essentials sign
-        String signName = ChatColor.stripColor(sign.getLine(0)).replaceAll("[^a-zA-Z]", "");
-        for (EssentialsSign essSign : ess.getSettings().enabledSigns()) {
-            if (essSign.getName().equalsIgnoreCase(signName))
-                return true;
-        }
-
-        return false;
     }
 
     protected boolean onBlockPlace(final Block block, final User player, final String username, final IEssentials ess) throws SignException, ChargeException {
@@ -284,7 +300,7 @@ public class EssentialsSign {
     protected final void validateTrade(final ISign sign, final int amountIndex, final int itemIndex, final User player, final IEssentials ess) throws SignException {
         final String itemType = getSignText(sign, itemIndex);
         if (itemType.equalsIgnoreCase("exp") || itemType.equalsIgnoreCase("xp")) {
-            int amount = getIntegerPositive(getSignText(sign, amountIndex));
+            final int amount = getIntegerPositive(getSignText(sign, amountIndex));
             sign.setLine(amountIndex, Integer.toString(amount));
             sign.setLine(itemIndex, "exp");
             return;
@@ -334,7 +350,7 @@ public class EssentialsSign {
     protected final int getInteger(final String line) throws SignException {
         try {
             return Integer.parseInt(line);
-        } catch (NumberFormatException ex) {
+        } catch (final NumberFormatException ex) {
             throw new SignException("Invalid sign", ex);
         }
     }
@@ -355,7 +371,7 @@ public class EssentialsSign {
             final ItemStack item = ess.getItemDb().get(itemName);
             item.setAmount(quantity);
             return item;
-        } catch (Exception ex) {
+        } catch (final Exception ex) {
             throw new SignException(ex.getMessage(), ex);
         }
     }
@@ -364,12 +380,12 @@ public class EssentialsSign {
         ItemStack stack = item;
         try {
             if (!meta.isEmpty()) {
-                MetaItemStack metaStack = new MetaItemStack(stack);
+                final MetaItemStack metaStack = new MetaItemStack(stack);
                 final boolean allowUnsafe = ess.getSettings().allowUnsafeEnchantments();
                 metaStack.addStringMeta(null, allowUnsafe, meta, ess);
                 stack = metaStack.getItemStack();
             }
-        } catch (Exception ex) {
+        } catch (final Exception ex) {
             throw new SignException(ex.getMessage(), ex);
         }
         return stack;
@@ -391,7 +407,7 @@ public class EssentialsSign {
     protected final BigDecimal getBigDecimal(final String line) throws SignException {
         try {
             return new BigDecimal(line);
-        } catch (ArithmeticException | NumberFormatException ex) {
+        } catch (final ArithmeticException | NumberFormatException ex) {
             throw new SignException(ex.getMessage(), ex);
         }
     }
@@ -440,16 +456,15 @@ public class EssentialsSign {
         ess.showError(sender, exception, "\\ sign: " + signName);
     }
 
-    private static BlockFace getWallSignFacing(Block block) {
-        try {
-            final WallSign signData = (WallSign) block.getState().getBlockData();
-            return signData.getFacing();
-        } catch (NoClassDefFoundError | NoSuchMethodError e) {
-            final org.bukkit.material.Sign signMat = (org.bukkit.material.Sign) block.getState().getData();
-            return signMat.getFacing();
-        }
-    }
+    public interface ISign {
+        String getLine(final int index);
 
+        void setLine(final int index, final String text);
+
+        Block getBlock();
+
+        void updateSign();
+    }
 
     static class EventSign implements ISign {
         private final transient SignChangeEvent event;
@@ -464,8 +479,8 @@ public class EssentialsSign {
 
         @Override
         public final String getLine(final int index) {
-            StringBuilder builder = new StringBuilder();
-            for (char c : event.getLine(index).toCharArray()) {
+            final StringBuilder builder = new StringBuilder();
+            for (final char c : event.getLine(index).toCharArray()) {
                 if (c < 0xF700 || c > 0xF747) {
                     builder.append(c);
                 }
@@ -492,7 +507,6 @@ public class EssentialsSign {
         }
     }
 
-
     static class BlockSign implements ISign {
         private final transient Sign sign;
         private final transient Block block;
@@ -504,8 +518,8 @@ public class EssentialsSign {
 
         @Override
         public final String getLine(final int index) {
-            StringBuilder builder = new StringBuilder();
-            for (char c : sign.getLine(index).toCharArray()) {
+            final StringBuilder builder = new StringBuilder();
+            for (final char c : sign.getLine(index).toCharArray()) {
                 if (c < 0xF700 || c > 0xF747) {
                     builder.append(c);
                 }
@@ -528,16 +542,5 @@ public class EssentialsSign {
         public final void updateSign() {
             sign.update();
         }
-    }
-
-
-    public interface ISign {
-        String getLine(final int index);
-
-        void setLine(final int index, final String text);
-
-        Block getBlock();
-
-        void updateSign();
     }
 }

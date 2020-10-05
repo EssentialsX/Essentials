@@ -6,9 +6,9 @@ import org.bukkit.event.Listener;
 import java.util.function.Consumer;
 
 public abstract class ProviderListener implements Provider, Listener {
-    protected Consumer<Event> function;
+    protected final Consumer<Event> function;
 
-    public ProviderListener(Consumer<Event> function) {
+    public ProviderListener(final Consumer<Event> function) {
         this.function = function;
     }
 }

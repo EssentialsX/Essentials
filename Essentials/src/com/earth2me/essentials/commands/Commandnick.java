@@ -15,7 +15,6 @@ import java.util.function.Predicate;
 
 import static com.earth2me.essentials.I18n.tl;
 
-
 public class Commandnick extends EssentialsLoopCommand {
     public Commandnick() {
         super("nick");
@@ -71,14 +70,14 @@ public class Commandnick extends EssentialsLoopCommand {
     }
 
     private String formatNickname(final User user, final String nick) throws Exception {
-        String newNick = user == null ? FormatUtil.replaceFormat(nick) : FormatUtil.formatString(user, "essentials.nick", nick);
+        final String newNick = user == null ? FormatUtil.replaceFormat(nick) : FormatUtil.formatString(user, "essentials.nick", nick);
         if (!newNick.matches("^[a-zA-Z_0-9\u00a7]+$") && user != null && !user.isAuthorized("essentials.nick.allowunsafe")) {
             throw new Exception(tl("nickNamesAlpha"));
         } else if (getNickLength(newNick) > ess.getSettings().getMaxNickLength()) {
             throw new Exception(tl("nickTooLong"));
         } else if (FormatUtil.stripFormat(newNick).length() < 1) {
             throw new Exception(tl("nickNamesAlpha"));
-        } else if (user != null && (user.isAuthorized("essentials.nick.changecolors") && !user.isAuthorized("essentials.nick.changecolors.bypass")) && !FormatUtil.stripFormat(newNick).equals(user.getName())) {
+        } else if (user != null && user.isAuthorized("essentials.nick.changecolors") && !user.isAuthorized("essentials.nick.changecolors.bypass") && !FormatUtil.stripFormat(newNick).equals(user.getName())) {
             throw new Exception(tl("nickNamesOnlyColorChanges"));
         } else if (user != null && !user.isAuthorized("essentials.nick.blacklist.bypass") && isNickBanned(newNick)) {
             throw new Exception(tl("nickNameBlacklist", nick));
@@ -86,8 +85,8 @@ public class Commandnick extends EssentialsLoopCommand {
         return newNick;
     }
 
-    private boolean isNickBanned(String newNick) {
-        for (Predicate<String> predicate : ess.getSettings().getNickBlacklist()) {
+    private boolean isNickBanned(final String newNick) {
+        for (final Predicate<String> predicate : ess.getSettings().getNickBlacklist()) {
             if (predicate.test(newNick)) {
                 return true;
             }
@@ -99,7 +98,7 @@ public class Commandnick extends EssentialsLoopCommand {
         return ess.getSettings().ignoreColorsInMaxLength() ? ChatColor.stripColor(nick).length() : nick.length();
     }
 
-    private boolean nickInUse(final User target, String nick) {
+    private boolean nickInUse(final User target, final String nick) {
         final String lowerNick = FormatUtil.stripFormat(nick.toLowerCase(Locale.ENGLISH));
         for (final Player onlinePlayer : ess.getOnlinePlayers()) {
             if (target.getBase().getName().equals(onlinePlayer.getName())) {

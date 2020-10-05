@@ -13,10 +13,14 @@ import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
 
 import static com.earth2me.essentials.I18n.tl;
-
 
 public class Commandpotion extends EssentialsCommand {
     public Commandpotion() {
@@ -28,15 +32,15 @@ public class Commandpotion extends EssentialsCommand {
         final ItemStack stack = user.getItemInHand();
         if (args.length == 0) {
             final Set<String> potionslist = new TreeSet<>();
-            for (Map.Entry<String, PotionEffectType> entry : Potions.entrySet()) {
+            for (final Map.Entry<String, PotionEffectType> entry : Potions.entrySet()) {
                 final String potionName = entry.getValue().getName().toLowerCase(Locale.ENGLISH);
-                if (potionslist.contains(potionName) || (user.isAuthorized("essentials.potion." + potionName))) {
+                if (potionslist.contains(potionName) || user.isAuthorized("essentials.potion." + potionName)) {
                     potionslist.add(entry.getKey());
                 }
             }
             throw new NotEnoughArgumentsException(tl("potions", StringUtil.joinList(potionslist.toArray())));
         }
-        
+
         boolean holdingPotion = stack.getType() == Material.POTION;
         if (!holdingPotion && ReflUtil.getNmsVersionObject().isHigherThanOrEqualTo(ReflUtil.V1_9_R1)) {
             holdingPotion = stack.getType() == Material.SPLASH_POTION || stack.getType() == Material.LINGERING_POTION;
@@ -47,14 +51,14 @@ public class Commandpotion extends EssentialsCommand {
                 pmeta.clearCustomEffects();
                 stack.setItemMeta(pmeta);
             } else if (args[0].equalsIgnoreCase("apply") && user.isAuthorized("essentials.potion.apply")) {
-                for (PotionEffect effect : pmeta.getCustomEffects()) {
+                for (final PotionEffect effect : pmeta.getCustomEffects()) {
                     effect.apply(user.getBase());
                 }
             } else if (args.length < 3) {
                 throw new NotEnoughArgumentsException();
             } else {
                 final MetaItemStack mStack = new MetaItemStack(stack);
-                for (String arg : args) {
+                for (final String arg : args) {
                     mStack.addPotionMeta(user.getSource(), true, arg, ess);
                 }
                 if (mStack.completePotion()) {
@@ -71,15 +75,15 @@ public class Commandpotion extends EssentialsCommand {
     }
 
     @Override
-    protected List<String> getTabCompleteOptions(Server server, User user, String commandLabel, String[] args) {
+    protected List<String> getTabCompleteOptions(final Server server, final User user, final String commandLabel, final String[] args) {
         // Note: this enforces an order of effect power duration splash, which the actual command doesn't have.  But that's fine. 
         if (args.length == 1) {
-            List<String> options = Lists.newArrayList();
+            final List<String> options = Lists.newArrayList();
             options.add("clear");
             if (user.isAuthorized("essentials.potion.apply")) {
                 options.add("apply");
             }
-            for (Map.Entry<String, PotionEffectType> entry : Potions.entrySet()) {
+            for (final Map.Entry<String, PotionEffectType> entry : Potions.entrySet()) {
                 final String potionName = entry.getValue().getName().toLowerCase(Locale.ENGLISH);
                 if (user.isAuthorized("essentials.potion." + potionName)) {
                     options.add("effect:" + entry.getKey());
@@ -89,8 +93,8 @@ public class Commandpotion extends EssentialsCommand {
         } else if (args.length == 2 && args[0].startsWith("effect:")) {
             return Lists.newArrayList("power:1", "power:2", "power:3", "power:4", "amplifier:0", "amplifier:1", "amplifier:2", "amplifier:3");
         } else if (args.length == 3 && args[0].startsWith("effect:")) {
-            List<String> options = Lists.newArrayList();
-            for (String duration : COMMON_DURATIONS) {
+            final List<String> options = Lists.newArrayList();
+            for (final String duration : COMMON_DURATIONS) {
                 options.add("duration:" + duration);
             }
             return options;

@@ -17,12 +17,12 @@ public class TeleportWarmupEvent extends TeleportEvent {
 
     private double delay;
 
-    public TeleportWarmupEvent(IUser teleporter, IUser teleportee, PlayerTeleportEvent.TeleportCause cause, ITarget target, double delay) {
+    public TeleportWarmupEvent(final IUser teleporter, final IUser teleportee, final PlayerTeleportEvent.TeleportCause cause, final ITarget target, final double delay) {
         super(teleporter, teleportee, cause, target);
         this.delay = delay;
     }
 
-    public TeleportWarmupEvent(IUser teleportee, PlayerTeleportEvent.TeleportCause cause, ITarget target, double delay) {
+    public TeleportWarmupEvent(final IUser teleportee, final PlayerTeleportEvent.TeleportCause cause, final ITarget target, final double delay) {
         super(teleportee, cause, target);
         this.delay = delay;
     }
@@ -46,7 +46,7 @@ public class TeleportWarmupEvent extends TeleportEvent {
     /**
      * @param delay The warmup delay, in seconds. Set this to 0 to skip the warmup delay.
      */
-    public void setDelay(double delay) {
+    public void setDelay(final double delay) {
         this.delay = delay;
     }
 }

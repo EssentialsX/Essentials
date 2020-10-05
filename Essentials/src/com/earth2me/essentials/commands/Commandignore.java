@@ -9,7 +9,6 @@ import java.util.UUID;
 
 import static com.earth2me.essentials.I18n.tl;
 
-
 public class Commandignore extends EssentialsCommand {
     public Commandignore() {
         super("ignore");
@@ -18,14 +17,14 @@ public class Commandignore extends EssentialsCommand {
     @Override
     protected void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception {
         if (args.length == 0) {
-            StringBuilder sb = new StringBuilder();
-            for (UUID uuid : user._getIgnoredPlayers()) {
-                User curUser = ess.getUser(uuid);
+            final StringBuilder sb = new StringBuilder();
+            for (final UUID uuid : user._getIgnoredPlayers()) {
+                final User curUser = ess.getUser(uuid);
                 if (curUser != null && curUser.getName() != null && !curUser.getName().trim().isEmpty()) {
                     sb.append(curUser.getName()).append(" ");
                 }
             }
-            String ignoredList = sb.toString().trim();
+            final String ignoredList = sb.toString().trim();
             user.sendMessage(ignoredList.length() > 0 ? tl("ignoredList", ignoredList) : tl("noIgnored"));
             return;
         }
@@ -33,7 +32,7 @@ public class Commandignore extends EssentialsCommand {
         User player;
         try {
             player = getPlayer(server, args, 0, true, true);
-        } catch (PlayerNotFoundException ex) {
+        } catch (final PlayerNotFoundException ex) {
             player = ess.getOfflineUser(args[0]);
         }
         if (player == null) {
@@ -52,7 +51,7 @@ public class Commandignore extends EssentialsCommand {
     }
 
     @Override
-    protected List<String> getTabCompleteOptions(Server server, User user, String commandLabel, String[] args) {
+    protected List<String> getTabCompleteOptions(final Server server, final User user, final String commandLabel, final String[] args) {
         if (args.length == 1) {
             return getPlayers(server, user);
         } else {

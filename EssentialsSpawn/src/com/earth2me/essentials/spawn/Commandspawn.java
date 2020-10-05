@@ -17,7 +17,6 @@ import java.util.concurrent.CompletableFuture;
 
 import static com.earth2me.essentials.I18n.tl;
 
-
 public class Commandspawn extends EssentialsCommand {
     public Commandspawn() {
         super("spawn");
@@ -29,7 +28,7 @@ public class Commandspawn extends EssentialsCommand {
         charge.isAffordableFor(user);
         if (args.length > 0 && user.isAuthorized("essentials.spawn.others")) {
             final User otherUser = getPlayer(server, user, args, 0);
-            CompletableFuture<Boolean> future = new CompletableFuture<>();
+            final CompletableFuture<Boolean> future = new CompletableFuture<>();
             future.thenAccept(success -> {
                 if (success) {
                     if (!otherUser.equals(user)) {
@@ -41,7 +40,7 @@ public class Commandspawn extends EssentialsCommand {
         } else {
             respawn(user.getSource(), user, user, charge, commandLabel, new CompletableFuture<>());
         }
-        
+
         throw new NoChargeException();
     }
 
@@ -51,7 +50,7 @@ public class Commandspawn extends EssentialsCommand {
             throw new NotEnoughArgumentsException();
         }
         final User user = getPlayer(server, args, 0, true, false);
-        CompletableFuture<Boolean> future = new CompletableFuture<>();
+        final CompletableFuture<Boolean> future = new CompletableFuture<>();
         respawn(sender, null, user, null, commandLabel, future);
         future.thenAccept(success -> {
             if (success) {
@@ -61,14 +60,14 @@ public class Commandspawn extends EssentialsCommand {
     }
 
     @Override
-    protected List<String> getTabCompleteOptions(Server server, CommandSource sender, String commandLabel, String[] args) {
+    protected List<String> getTabCompleteOptions(final Server server, final CommandSource sender, final String commandLabel, final String[] args) {
         if (args.length == 1 && sender.isAuthorized("essentials.spawn.others", ess)) {
             return getPlayers(server, sender);
         }
         return Collections.emptyList();
     }
 
-    private void respawn(final CommandSource sender, final User teleportOwner, final User teleportee, final Trade charge, String commandLabel, CompletableFuture<Boolean> future) throws Exception {
+    private void respawn(final CommandSource sender, final User teleportOwner, final User teleportee, final Trade charge, final String commandLabel, final CompletableFuture<Boolean> future) throws Exception {
         final Location spawn = ((SpawnStorage) this.module).getSpawn(teleportee.getGroup());
         sender.sendMessage(tl("teleporting", spawn.getWorld().getName(), spawn.getBlockX(), spawn.getBlockY(), spawn.getBlockZ()));
         future.exceptionally(e -> {

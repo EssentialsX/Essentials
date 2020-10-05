@@ -7,7 +7,6 @@ import org.bukkit.command.CommandSender;
 
 import static com.earth2me.essentials.I18n.tl;
 
-
 public final class Console implements IMessageRecipient {
     public static final String NAME = "Console";
     public static final String DISPLAY_NAME = tl("consoleName");
@@ -16,11 +15,16 @@ public final class Console implements IMessageRecipient {
     private final IEssentials ess;
     private final IMessageRecipient messageRecipient;
 
+    private Console(final IEssentials ess) {
+        this.ess = ess;
+        this.messageRecipient = new SimpleMessageRecipient(ess, this);
+    }
+
     public static Console getInstance() {
         return instance;
     }
 
-    static void setInstance(IEssentials ess) { // Called in Essentials#onEnable()
+    static void setInstance(final IEssentials ess) { // Called in Essentials#onEnable()
         instance = new Console(ess);
     }
 
@@ -28,13 +32,8 @@ public final class Console implements IMessageRecipient {
      * @deprecated Use {@link Console#getCommandSender()}
      */
     @Deprecated
-    public static CommandSender getCommandSender(Server server) throws Exception {
+    public static CommandSender getCommandSender(final Server server) throws Exception {
         return server.getConsoleSender();
-    }
-
-    private Console(IEssentials ess) {
-        this.ess = ess;
-        this.messageRecipient = new SimpleMessageRecipient(ess, this);
     }
 
     public CommandSender getCommandSender() {
@@ -52,7 +51,7 @@ public final class Console implements IMessageRecipient {
     }
 
     @Override
-    public void sendMessage(String message) {
+    public void sendMessage(final String message) {
         getCommandSender().sendMessage(message);
     }
 
@@ -66,12 +65,12 @@ public final class Console implements IMessageRecipient {
      * ================================ */
 
     @Override
-    public MessageResponse sendMessage(IMessageRecipient recipient, String message) {
+    public MessageResponse sendMessage(final IMessageRecipient recipient, final String message) {
         return this.messageRecipient.sendMessage(recipient, message);
     }
 
     @Override
-    public MessageResponse onReceiveMessage(IMessageRecipient sender, String message) {
+    public MessageResponse onReceiveMessage(final IMessageRecipient sender, final String message) {
         return this.messageRecipient.onReceiveMessage(sender, message);
     }
 
@@ -81,7 +80,7 @@ public final class Console implements IMessageRecipient {
     }
 
     @Override
-    public void setReplyRecipient(IMessageRecipient recipient) {
+    public void setReplyRecipient(final IMessageRecipient recipient) {
         this.messageRecipient.setReplyRecipient(recipient);
     }
 }

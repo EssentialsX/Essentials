@@ -10,7 +10,6 @@ import java.util.List;
 
 import static com.earth2me.essentials.I18n.tl;
 
-
 public class Commandtpaall extends EssentialsCommand {
     public Commandtpaall() {
         super("tpaall");
@@ -32,7 +31,7 @@ public class Commandtpaall extends EssentialsCommand {
 
     private void teleportAAllPlayers(final Server server, final CommandSource sender, final User target) {
         sender.sendMessage(tl("teleportAAll"));
-        for (User player : ess.getOnlineUsers()) {
+        for (final User player : ess.getOnlineUsers()) {
             if (target == player) {
                 continue;
             }
@@ -43,7 +42,7 @@ public class Commandtpaall extends EssentialsCommand {
                 continue;
             }
             try {
-                TPARequestEvent tpaEvent = new TPARequestEvent(sender, player, true);
+                final TPARequestEvent tpaEvent = new TPARequestEvent(sender, player, true);
                 ess.getServer().getPluginManager().callEvent(tpaEvent);
                 if (tpaEvent.isCancelled()) {
                     sender.sendMessage(tl("teleportRequestCancelled", player.getDisplayName()));
@@ -55,14 +54,14 @@ public class Commandtpaall extends EssentialsCommand {
                 if (ess.getSettings().getTpaAcceptCancellation() != 0) {
                     player.sendMessage(tl("teleportRequestTimeoutInfo", ess.getSettings().getTpaAcceptCancellation()));
                 }
-            } catch (Exception ex) {
+            } catch (final Exception ex) {
                 ess.showError(sender, ex, getName());
             }
         }
     }
 
     @Override
-    protected List<String> getTabCompleteOptions(Server server, CommandSource sender, String commandLabel, String[] args) {
+    protected List<String> getTabCompleteOptions(final Server server, final CommandSource sender, final String commandLabel, final String[] args) {
         if (args.length == 1) {
             return getPlayers(server, sender);
         } else {

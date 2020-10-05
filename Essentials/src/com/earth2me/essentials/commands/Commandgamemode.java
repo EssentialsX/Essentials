@@ -13,8 +13,9 @@ import java.util.Locale;
 
 import static com.earth2me.essentials.I18n.tl;
 
-
 public class Commandgamemode extends EssentialsLoopCommand {
+    private final List<String> STANDARD_OPTIONS = ImmutableList.of("creative", "survival", "adventure", "spectator", "toggle");
+
     public Commandgamemode() {
         super("gamemode");
     }
@@ -42,7 +43,7 @@ public class Commandgamemode extends EssentialsLoopCommand {
         } else {
             try {
                 gameMode = matchGameMode(args[0].toLowerCase(Locale.ENGLISH));
-            } catch (NotEnoughArgumentsException e) {
+            } catch (final NotEnoughArgumentsException e) {
                 if (user.isAuthorized("essentials.gamemode.others")) {
                     loopOnlinePlayersConsumer(server, user.getSource(), false, true, args[0], player -> setUserGamemode(user.getSource(), matchGameMode(commandLabel), player));
                     return;
@@ -79,7 +80,7 @@ public class Commandgamemode extends EssentialsLoopCommand {
     }
 
     // essentials.gamemode will let them change to any but essentials.gamemode.survival would only let them change to survival.
-    private boolean isProhibitedChange(IUser user, GameMode to) {
+    private boolean isProhibitedChange(final IUser user, final GameMode to) {
         return user != null && !user.isAuthorized("essentials.gamemode.all") && !user.isAuthorized("essentials.gamemode." + to.name().toLowerCase());
     }
 
@@ -100,7 +101,6 @@ public class Commandgamemode extends EssentialsLoopCommand {
         return mode;
     }
 
-    private final List<String> STANDARD_OPTIONS = ImmutableList.of("creative", "survival", "adventure", "spectator", "toggle");
     @Override
     protected List<String> getTabCompleteOptions(final Server server, final CommandSource sender, final String commandLabel, final String[] args) {
         if (args.length == 1) {
@@ -108,7 +108,7 @@ public class Commandgamemode extends EssentialsLoopCommand {
                 // Direct command?  Don't ask for the mode
                 matchGameMode(commandLabel);
                 return getPlayers(server, sender);
-            } catch (NotEnoughArgumentsException e) {
+            } catch (final NotEnoughArgumentsException e) {
                 return STANDARD_OPTIONS;
             }
         } else if (args.length == 2) {
@@ -125,7 +125,7 @@ public class Commandgamemode extends EssentialsLoopCommand {
             // Direct command?
             matchGameMode(commandLabel);
             isDirectGamemodeCommand = true;
-        } catch (NotEnoughArgumentsException ex) {
+        } catch (final NotEnoughArgumentsException ex) {
             isDirectGamemodeCommand = false;
         }
         if (args.length == 1) {
@@ -142,7 +142,7 @@ public class Commandgamemode extends EssentialsLoopCommand {
     }
 
     @Override
-    protected void updatePlayer(Server server, CommandSource sender, User user, String[] args) {
+    protected void updatePlayer(final Server server, final CommandSource sender, final User user, final String[] args) {
 
     }
 }

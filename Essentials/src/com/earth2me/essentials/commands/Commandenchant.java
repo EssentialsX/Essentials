@@ -11,10 +11,15 @@ import org.bukkit.Server;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
 
 import static com.earth2me.essentials.I18n.tl;
-
 
 public class Commandenchant extends EssentialsCommand {
     public Commandenchant() {
@@ -31,7 +36,7 @@ public class Commandenchant extends EssentialsCommand {
 
         if (args.length == 0) {
             final Set<String> usableEnchants = new TreeSet<>();
-            for (Map.Entry<String, Enchantment> entry : Enchantments.entrySet()) {
+            for (final Map.Entry<String, Enchantment> entry : Enchantments.entrySet()) {
                 final String name = entry.getValue().getName().toLowerCase(Locale.ENGLISH);
                 if (usableEnchants.contains(name) || (user.isAuthorized("essentials.enchantments." + name) && entry.getValue().canEnchantItem(stack))) {
                     usableEnchants.add(entry.getKey());
@@ -44,7 +49,7 @@ public class Commandenchant extends EssentialsCommand {
         if (args.length > 1) {
             try {
                 level = Integer.parseInt(args[1]);
-            } catch (NumberFormatException ex) {
+            } catch (final NumberFormatException ex) {
                 throw new NotEnoughArgumentsException();
             }
         }
@@ -67,13 +72,13 @@ public class Commandenchant extends EssentialsCommand {
         if (args.length == 1) {
             return new ArrayList<>(Enchantments.keySet());
         } else if (args.length == 2) {
-            Enchantment enchantment = Enchantments.getByName(args[0]);
+            final Enchantment enchantment = Enchantments.getByName(args[0]);
             if (enchantment == null) {
                 return Collections.emptyList();
             }
-            int min = enchantment.getStartLevel();
-            int max = enchantment.getMaxLevel();
-            List<String> options = Lists.newArrayList();
+            final int min = enchantment.getStartLevel();
+            final int max = enchantment.getMaxLevel();
+            final List<String> options = Lists.newArrayList();
             for (int i = min; i <= max; i++) {
                 options.add(Integer.toString(i));
             }

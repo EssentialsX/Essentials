@@ -7,7 +7,6 @@ import com.earth2me.essentials.commands.NotEnoughArgumentsException;
 import org.bukkit.ChatColor;
 import org.bukkit.Server;
 
-
 public class Commandxmpp extends EssentialsCommand {
     public Commandxmpp() {
         super("xmpp");

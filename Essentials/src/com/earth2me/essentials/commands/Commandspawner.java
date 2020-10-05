@@ -17,7 +17,6 @@ import java.util.Locale;
 
 import static com.earth2me.essentials.I18n.tl;
 
-
 public class Commandspawner extends EssentialsCommand {
 
     private static final Material MOB_SPAWNER = EnumUtil.getMaterial("SPAWNER", "MOB_SPAWNER");
@@ -38,10 +37,10 @@ public class Commandspawner extends EssentialsCommand {
             throw new Exception(tl("mobSpawnTarget"));
         }
 
-        String name = args[0];
+        final String name = args[0];
         int delay = 0;
 
-        Mob mob = Mob.fromName(name);
+        final Mob mob = Mob.fromName(name);
         if (mob == null) {
             throw new Exception(tl("invalidMob"));
         }
@@ -59,10 +58,10 @@ public class Commandspawner extends EssentialsCommand {
         final Trade charge = new Trade("spawner-" + mob.name.toLowerCase(Locale.ENGLISH), ess);
         charge.isAffordableFor(user);
         try {
-            CreatureSpawner spawner = (CreatureSpawner) target.getBlock().getState();
+            final CreatureSpawner spawner = (CreatureSpawner) target.getBlock().getState();
             spawner.setSpawnedType(mob.getType());
             if (delay > 0) {
-                SpawnerBlockProvider spawnerBlockProvider = ess.getSpawnerBlockProvider();
+                final SpawnerBlockProvider spawnerBlockProvider = ess.getSpawnerBlockProvider();
                 spawnerBlockProvider.setMinSpawnDelay(spawner, 1);
                 spawnerBlockProvider.setMaxSpawnDelay(spawner, Integer.MAX_VALUE);
                 spawnerBlockProvider.setMinSpawnDelay(spawner, delay);
@@ -70,7 +69,7 @@ public class Commandspawner extends EssentialsCommand {
             }
             spawner.setDelay(delay);
             spawner.update();
-        } catch (Throwable ex) {
+        } catch (final Throwable ex) {
             throw new Exception(tl("mobSpawnError"), ex);
         }
         charge.charge(user);

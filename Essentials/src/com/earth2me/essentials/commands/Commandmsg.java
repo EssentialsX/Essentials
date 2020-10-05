@@ -18,17 +18,17 @@ public class Commandmsg extends EssentialsLoopCommand {
     }
 
     @Override
-    public void run(Server server, CommandSource sender, String commandLabel, String[] args) throws Exception {
+    public void run(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception {
         if (args.length < 2) {
             throw new NotEnoughArgumentsException();
         }
 
         String message = getFinalArg(args, 1);
-        boolean canWildcard = sender.isAuthorized("essentials.msg.multiple", ess);
+        final boolean canWildcard = sender.isAuthorized("essentials.msg.multiple", ess);
         if (sender.isPlayer()) {
-            User user = ess.getUser(sender.getPlayer());
+            final User user = ess.getUser(sender.getPlayer());
             if (user.isMuted()) {
-                String dateDiff = user.getMuteTimeout() > 0 ? DateUtil.formatDateDiff(user.getMuteTimeout()) : null;
+                final String dateDiff = user.getMuteTimeout() > 0 ? DateUtil.formatDateDiff(user.getMuteTimeout()) : null;
                 if (dateDiff == null) {
                     throw new Exception(user.hasMuteReason() ? tl("voiceSilencedReason", user.getMuteReason()) : tl("voiceSilenced"));
                 }
@@ -41,26 +41,27 @@ public class Commandmsg extends EssentialsLoopCommand {
 
         // Sending messages to console
         if (args[0].equalsIgnoreCase(Console.NAME) || args[0].equalsIgnoreCase(Console.DISPLAY_NAME)) {
-            IMessageRecipient messageSender = sender.isPlayer() ? ess.getUser(sender.getPlayer()) : Console.getInstance();
+            final IMessageRecipient messageSender = sender.isPlayer() ? ess.getUser(sender.getPlayer()) :
+                    Console.getInstance();
             messageSender.sendMessage(Console.getInstance(), message);
             return;
         }
 
-        loopOnlinePlayers(server, sender, false, canWildcard, args[0], new String[]{message});
+        loopOnlinePlayers(server, sender, false, canWildcard, args[0], new String[] {message});
     }
 
     @Override
     protected void updatePlayer(final Server server, final CommandSource sender, final User messageReceiver, final String[] args) {
-        IMessageRecipient messageSender = sender.isPlayer() ? ess.getUser(sender.getPlayer()) : Console.getInstance();
+        final IMessageRecipient messageSender = sender.isPlayer() ? ess.getUser(sender.getPlayer()) : Console.getInstance();
         messageSender.sendMessage(messageReceiver, args[0]); // args[0] is the message.
     }
 
     @Override
-    protected List<String> getTabCompleteOptions(Server server, CommandSource sender, String commandLabel, String[] args) {
+    protected List<String> getTabCompleteOptions(final Server server, final CommandSource sender, final String commandLabel, final String[] args) {
         if (args.length == 1) {
             return getPlayers(server, sender);
         } else {
-            return null;  // It's a chat message, use the default chat handler
+            return null; // It's a chat message, use the default chat handler
         }
     }
 }

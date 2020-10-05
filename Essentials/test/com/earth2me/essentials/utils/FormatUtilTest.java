@@ -1,10 +1,11 @@
 package com.earth2me.essentials.utils;
 
 import net.ess3.api.IUser;
-
 import org.junit.Test;
-import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
+
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class FormatUtilTest {
 
@@ -105,8 +106,8 @@ public class FormatUtilTest {
         checkUnformatPerms("§x§b§3§4§2§f§5Th§eis is §aa §dmessag§5e", "&#b342f5Th&eis is a message", "rgb", "yellow");
     }
 
-    private IUser getMockUser(String... perms) {
-        IUser user = mock(IUser.class);
+    private IUser getMockUser(final String... perms) {
+        final IUser user = mock(IUser.class);
         for (String perm : perms) {
             if (perm.startsWith("-")) {
                 // Negated perms
@@ -121,11 +122,11 @@ public class FormatUtilTest {
         return user;
     }
 
-    private void checkFormatPerms(String input, String expectedOutput, String... perms) {
+    private void checkFormatPerms(final String input, final String expectedOutput, final String... perms) {
         assertEquals(expectedOutput, FormatUtil.formatString(getMockUser(perms), "essentials.chat", input));
     }
 
-    private void checkUnformatPerms(String input, String expectedOutput, String... perms) {
+    private void checkUnformatPerms(final String input, final String expectedOutput, final String... perms) {
         assertEquals(expectedOutput, FormatUtil.unformatString(getMockUser(perms), "essentials.chat", input));
     }
 }

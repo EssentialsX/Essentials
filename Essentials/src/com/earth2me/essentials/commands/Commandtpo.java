@@ -10,7 +10,6 @@ import java.util.concurrent.CompletableFuture;
 
 import static com.earth2me.essentials.I18n.tl;
 
-
 public class Commandtpo extends EssentialsCommand {
     public Commandtpo() {
         super("tpo");
@@ -41,7 +40,7 @@ public class Commandtpo extends EssentialsCommand {
                     throw new Exception(tl("noPerm", "essentials.worlds." + toPlayer.getWorld().getName()));
                 }
 
-                CompletableFuture<Boolean> future = getNewExceptionFuture(user.getSource(), commandLabel);
+                final CompletableFuture<Boolean> future = getNewExceptionFuture(user.getSource(), commandLabel);
                 target.getAsyncTeleport().now(toPlayer.getBase(), false, TeleportCause.COMMAND, future);
                 future.thenAccept(success -> {
                     if (success) {
@@ -53,7 +52,7 @@ public class Commandtpo extends EssentialsCommand {
     }
 
     @Override
-    protected List<String> getTabCompleteOptions(Server server, User user, String commandLabel, String[] args) {
+    protected List<String> getTabCompleteOptions(final Server server, final User user, final String commandLabel, final String[] args) {
         // Don't handle coords
         if (args.length == 1 || (args.length == 2 && user.isAuthorized("essentials.tp.others"))) {
             return getPlayers(server, user);

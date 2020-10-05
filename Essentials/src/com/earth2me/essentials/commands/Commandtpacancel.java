@@ -6,7 +6,6 @@ import org.bukkit.Server;
 
 import static com.earth2me.essentials.I18n.tl;
 
-
 public class Commandtpacancel extends EssentialsCommand {
 
     public Commandtpacancel() {
@@ -15,14 +14,15 @@ public class Commandtpacancel extends EssentialsCommand {
 
     /**
      * Cancel {@link User}'s tp request if its {@code requester} is equal to the given {@code requester}.
-     * @param ess ess instance
-     * @param user user holding tp request
+     *
+     * @param ess       ess instance
+     * @param user      user holding tp request
      * @param requester tp requester
      * @return whether tp was cancelled
      */
-    public static boolean cancelTeleportRequest(IEssentials ess, User user, User requester) throws Exception {
+    public static boolean cancelTeleportRequest(final IEssentials ess, final User user, final User requester) throws Exception {
         if (user.getTeleportRequest() != null) {
-            User userRequester = ess.getUser(user.getTeleportRequest());
+            final User userRequester = ess.getUser(user.getTeleportRequest());
             if (requester.equals(userRequester)) {
                 user.requestTeleport(null, false);
                 return true;
@@ -35,7 +35,7 @@ public class Commandtpacancel extends EssentialsCommand {
     public void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception {
         if (args.length == 0) {
             int cancellations = 0;
-            for (User onlineUser : ess.getOnlineUsers()) {
+            for (final User onlineUser : ess.getOnlineUsers()) {
                 if (onlineUser == user) continue;
                 if (cancelTeleportRequest(ess, onlineUser, user)) {
                     cancellations++;
@@ -47,7 +47,7 @@ public class Commandtpacancel extends EssentialsCommand {
                 throw new Exception(tl("noPendingRequest"));
             }
         } else {
-            User targetPlayer = getPlayer(server, user, args, 0);
+            final User targetPlayer = getPlayer(server, user, args, 0);
             if (cancelTeleportRequest(ess, targetPlayer, user)) {
                 user.sendMessage(tl("teleportRequestSpecificCancelled", targetPlayer.getName()));
             }

@@ -14,17 +14,22 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.*;
+import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockBurnEvent;
+import org.bukkit.event.block.BlockIgniteEvent;
+import org.bukkit.event.block.BlockPistonExtendEvent;
+import org.bukkit.event.block.BlockPistonRetractEvent;
+import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.block.SignChangeEvent;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
 
 public class SignBlockListener implements Listener {
     private static final Logger LOGGER = Logger.getLogger("Essentials");
     private final transient IEssentials ess;
 
-    public SignBlockListener(IEssentials ess) {
+    public SignBlockListener(final IEssentials ess) {
         this.ess = ess;
     }
 
@@ -38,7 +43,7 @@ public class SignBlockListener implements Listener {
             if (protectSignsAndBlocks(event.getBlock(), event.getPlayer())) {
                 event.setCancelled(true);
             }
-        } catch (MaxMoneyException ex) {
+        } catch (final MaxMoneyException ex) {
             event.setCancelled(true);
         }
     }
@@ -56,14 +61,14 @@ public class SignBlockListener implements Listener {
         if (MaterialUtil.isSign(mat)) {
             final Sign csign = (Sign) block.getState();
 
-            for (EssentialsSign sign : ess.getSettings().enabledSigns()) {
+            for (final EssentialsSign sign : ess.getSettings().enabledSigns()) {
                 if (csign.getLine(0).equalsIgnoreCase(sign.getSuccessName(ess)) && !sign.onSignBreak(block, player, ess)) {
                     return true;
                 }
             }
         }
 
-        for (EssentialsSign sign : ess.getSettings().enabledSigns()) {
+        for (final EssentialsSign sign : ess.getSettings().enabledSigns()) {
             if (sign.areHeavyEventRequired() && sign.getBlocks().contains(block.getType()) && !sign.onBlockBreak(block, player, ess)) {
                 LOGGER.log(Level.INFO, "A block was protected by a sign.");
                 return true;
@@ -78,7 +83,7 @@ public class SignBlockListener implements Listener {
             event.getHandlers().unregister(this);
             return;
         }
-        User user = ess.getUser(event.getPlayer());
+        final User user = ess.getUser(event.getPlayer());
 
         for (int i = 0; i < 4; i++) {
             event.setLine(i, FormatUtil.formatString(user, "essentials.signs", event.getLine(i)));
@@ -89,18 +94,18 @@ public class SignBlockListener implements Listener {
             return;
         }
         //We loop through all sign types here to prevent clashes with preexisting signs later
-        for (Signs signs : Signs.values()) {
+        for (final Signs signs : Signs.values()) {
             final EssentialsSign sign = signs.getSign();
             // If the top sign line contains any of the success name (excluding colors), just remove all colours from the first line.
             // This is to ensure we are only modifying possible Essentials Sign and not just removing colors from the first line of all signs.
             // Top line and sign#getSuccessName() are both lowercased since contains is case-sensitive.
-            String successName = sign.getSuccessName(ess);
+            final String successName = sign.getSuccessName(ess);
             if (successName == null) {
                 event.getPlayer().sendMessage(I18n.tl("errorWithMessage",
                     "Please report this error to a staff member."));
                 return;
             }
-            String lSuccessName = ChatColor.stripColor(successName.toLowerCase());
+            final String lSuccessName = ChatColor.stripColor(successName.toLowerCase());
             if (lColorlessTopLine.contains(lSuccessName)) {
 
                 // If this sign is not enabled and it has been requested to not protect it's name (when disabled), then do not protect the name.
@@ -121,7 +126,7 @@ public class SignBlockListener implements Listener {
             return;
         }
 
-        for (EssentialsSign sign : ess.getSettings().enabledSigns()) {
+        for (final EssentialsSign sign : ess.getSettings().enabledSigns()) {
             if (event.getLine(0).equalsIgnoreCase(sign.getSuccessName(ess))) {
                 event.setCancelled(true);
                 return;
@@ -149,7 +154,7 @@ public class SignBlockListener implements Listener {
         if (MaterialUtil.isSign(block.getType())) {
             return;
         }
-        for (EssentialsSign sign : ess.getSettings().enabledSigns()) {
+        for (final EssentialsSign sign : ess.getSettings().enabledSigns()) {
             if (sign.areHeavyEventRequired() && sign.getBlocks().contains(block.getType()) && !sign.onBlockPlace(block, event.getPlayer(), ess)) {
                 event.setCancelled(true);
                 return;
@@ -169,7 +174,7 @@ public class SignBlockListener implements Listener {
             event.setCancelled(true);
             return;
         }
-        for (EssentialsSign sign : ess.getSettings().enabledSigns()) {
+        for (final EssentialsSign sign : ess.getSettings().enabledSigns()) {
             if (sign.areHeavyEventRequired() && sign.getBlocks().contains(block.getType()) && !sign.onBlockBurn(block, ess)) {
                 event.setCancelled(true);
                 return;
@@ -189,7 +194,7 @@ public class SignBlockListener implements Listener {
             event.setCancelled(true);
             return;
         }
-        for (EssentialsSign sign : ess.getSettings().enabledSigns()) {
+        for (final EssentialsSign sign : ess.getSettings().enabledSigns()) {
             if (sign.areHeavyEventRequired() && sign.getBlocks().contains(block.getType()) && !sign.onBlockIgnite(block, ess)) {
                 event.setCancelled(true);
                 return;
@@ -204,12 +209,12 @@ public class SignBlockListener implements Listener {
             return;
         }
 
-        for (Block block : event.getBlocks()) {
+        for (final Block block : event.getBlocks()) {
             if ((MaterialUtil.isSign(block.getType()) && EssentialsSign.isValidSign(ess, new EssentialsSign.BlockSign(block))) || EssentialsSign.checkIfBlockBreaksSigns(block)) {
                 event.setCancelled(true);
                 return;
             }
-            for (EssentialsSign sign : ess.getSettings().enabledSigns()) {
+            for (final EssentialsSign sign : ess.getSettings().enabledSigns()) {
                 if (sign.areHeavyEventRequired() && sign.getBlocks().contains(block.getType()) && !sign.onBlockPush(block, ess)) {
                     event.setCancelled(true);
                     return;
@@ -227,14 +232,14 @@ public class SignBlockListener implements Listener {
 
         if (event.isSticky()) {
             final Block pistonBaseBlock = event.getBlock();
-            final Block[] affectedBlocks = new Block[]{pistonBaseBlock, pistonBaseBlock.getRelative(event.getDirection()), event.getRetractLocation().getBlock()};
+            final Block[] affectedBlocks = new Block[] {pistonBaseBlock, pistonBaseBlock.getRelative(event.getDirection()), event.getRetractLocation().getBlock()};
 
-            for (Block block : affectedBlocks) {
+            for (final Block block : affectedBlocks) {
                 if ((MaterialUtil.isSign(block.getType()) && EssentialsSign.isValidSign(ess, new EssentialsSign.BlockSign(block))) || EssentialsSign.checkIfBlockBreaksSigns(block)) {
                     event.setCancelled(true);
                     return;
                 }
-                for (EssentialsSign sign : ess.getSettings().enabledSigns()) {
+                for (final EssentialsSign sign : ess.getSettings().enabledSigns()) {
                     if (sign.areHeavyEventRequired() && sign.getBlocks().contains(block.getType()) && !sign.onBlockPush(block, ess)) {
                         event.setCancelled(true);
                         return;
