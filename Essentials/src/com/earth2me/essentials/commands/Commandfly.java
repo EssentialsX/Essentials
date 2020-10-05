@@ -2,8 +2,8 @@ package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.User;
-import org.bukkit.Server;
 import net.ess3.api.events.FlyStatusChangeEvent;
+import org.bukkit.Server;
 
 import static com.earth2me.essentials.I18n.tl;
 
@@ -23,14 +23,14 @@ public class Commandfly extends EssentialsToggleCommand {
     }
 
     @Override
-    void togglePlayer(CommandSource sender, User user, Boolean enabled) {
+    void togglePlayer(final CommandSource sender, final User user, Boolean enabled) {
         if (enabled == null) {
             enabled = !user.getBase().getAllowFlight();
         }
 
-        FlyStatusChangeEvent event = new FlyStatusChangeEvent(user, sender.isPlayer() ? ess.getUser(sender.getPlayer()) : null, enabled);
+        final FlyStatusChangeEvent event = new FlyStatusChangeEvent(user, sender.isPlayer() ? ess.getUser(sender.getPlayer()) : null, enabled);
         ess.getServer().getPluginManager().callEvent(event);
-        
+
         if (!event.isCancelled()) {
             user.getBase().setFallDistance(0f);
             user.getBase().setAllowFlight(enabled);

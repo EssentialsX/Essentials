@@ -11,10 +11,9 @@ import org.bukkit.event.player.AsyncPlayerChatEvent;
 import java.util.Map;
 import java.util.logging.Logger;
 
-
 public abstract class EssentialsChatPlayer implements Listener {
     static final Logger logger = Logger.getLogger("EssentialsChat");
-    transient IEssentials ess;
+    final transient IEssentials ess;
     final transient Server server;
     private final transient Map<AsyncPlayerChatEvent, ChatStore> chatStorage;
 
@@ -65,7 +64,7 @@ public abstract class EssentialsChatPlayer implements Listener {
     boolean charge(final AsyncPlayerChatEvent event, final ChatStore chatStore) {
         try {
             charge(chatStore.getUser(), chatStore.getCharge());
-        } catch (ChargeException e) {
+        } catch (final ChargeException e) {
             ess.showError(chatStore.getUser().getSource(), e, "\\ chat " + chatStore.getLongType());
             event.setCancelled(true);
             return false;

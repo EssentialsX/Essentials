@@ -19,16 +19,16 @@ public class LuckPermsHandler extends ModernVaultHandler {
     private Set<ContextCalculator<Player>> contextCalculators;
 
     @Override
-    public void registerContext(String context, Function<Player, Iterable<String>> calculator, Supplier<Iterable<String>> suggestions) {
-        ContextCalculator<Player> contextCalculator = new ContextCalculator<Player>() {
+    public void registerContext(final String context, final Function<Player, Iterable<String>> calculator, final Supplier<Iterable<String>> suggestions) {
+        final ContextCalculator<Player> contextCalculator = new ContextCalculator<Player>() {
             @Override
-            public void calculate(Player target, ContextConsumer consumer) {
+            public void calculate(final Player target, final ContextConsumer consumer) {
                 calculator.apply(target).forEach(value -> consumer.accept(context, value));
             }
 
             @Override
             public ContextSet estimatePotentialContexts() {
-                ImmutableContextSet.Builder builder = ImmutableContextSet.builder();
+                final ImmutableContextSet.Builder builder = ImmutableContextSet.builder();
                 suggestions.get().forEach(value -> builder.add(context, value));
                 return builder.build();
             }
@@ -45,7 +45,7 @@ public class LuckPermsHandler extends ModernVaultHandler {
 
     @Override
     public boolean tryProvider() {
-        RegisteredServiceProvider<LuckPerms> provider = Bukkit.getServicesManager().getRegistration(LuckPerms.class);
+        final RegisteredServiceProvider<LuckPerms> provider = Bukkit.getServicesManager().getRegistration(LuckPerms.class);
         if (provider != null) {
             luckPerms = provider.getProvider();
             contextCalculators = new HashSet<>();

@@ -28,7 +28,7 @@ public class Commandskull extends EssentialsCommand {
 
     @Override
     protected void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception {
-        String owner;
+        final String owner;
         if (args.length > 0 && user.isAuthorized("essentials.skull.others")) {
             if (!NAME_PATTERN.matcher(args[0]).matches()) {
                 throw new IllegalArgumentException(tl("alphaNames"));
@@ -39,7 +39,7 @@ public class Commandskull extends EssentialsCommand {
         }
 
         ItemStack itemSkull = user.getItemInHand();
-        SkullMeta metaSkull;
+        final SkullMeta metaSkull;
         boolean spawn = false;
 
         if (itemSkull != null && MaterialUtil.isPlayerHead(itemSkull.getType(), itemSkull.getDurability())) {
@@ -59,7 +59,7 @@ public class Commandskull extends EssentialsCommand {
         editSkull(user, itemSkull, metaSkull, owner, spawn);
     }
 
-    private void editSkull(User user, ItemStack stack, SkullMeta skullMeta, String owner, boolean spawn) {
+    private void editSkull(final User user, final ItemStack stack, final SkullMeta skullMeta, final String owner, final boolean spawn) {
         new BukkitRunnable() {
             @Override
             public void run() {
@@ -83,7 +83,7 @@ public class Commandskull extends EssentialsCommand {
     }
 
     @Override
-    protected List<String> getTabCompleteOptions(Server server, User user, String commandLabel, String[] args) {
+    protected List<String> getTabCompleteOptions(final Server server, final User user, final String commandLabel, final String[] args) {
         if (args.length == 1) {
             if (user.isAuthorized("essentials.skull.others")) {
                 return getPlayers(server, user);

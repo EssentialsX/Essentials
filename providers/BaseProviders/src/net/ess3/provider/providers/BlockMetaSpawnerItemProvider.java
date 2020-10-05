@@ -9,9 +9,9 @@ import org.bukkit.inventory.meta.BlockStateMeta;
 
 public class BlockMetaSpawnerItemProvider implements SpawnerItemProvider {
     @Override
-    public ItemStack setEntityType(ItemStack is, EntityType type) throws IllegalArgumentException {
-        BlockStateMeta bsm = (BlockStateMeta) is.getItemMeta();
-        BlockState bs = bsm.getBlockState();
+    public ItemStack setEntityType(final ItemStack is, final EntityType type) throws IllegalArgumentException {
+        final BlockStateMeta bsm = (BlockStateMeta) is.getItemMeta();
+        final BlockState bs = bsm.getBlockState();
         ((CreatureSpawner) bs).setSpawnedType(type);
         bsm.setBlockState(bs);
         is.setItemMeta(bsm);
@@ -19,9 +19,9 @@ public class BlockMetaSpawnerItemProvider implements SpawnerItemProvider {
     }
 
     @Override
-    public EntityType getEntityType(ItemStack is) throws IllegalArgumentException {
-        BlockStateMeta bsm = (BlockStateMeta) is.getItemMeta();
-        CreatureSpawner bs = (CreatureSpawner) bsm.getBlockState();
+    public EntityType getEntityType(final ItemStack is) throws IllegalArgumentException {
+        final BlockStateMeta bsm = (BlockStateMeta) is.getItemMeta();
+        final CreatureSpawner bs = (CreatureSpawner) bsm.getBlockState();
         return bs.getSpawnedType();
     }
 

@@ -13,19 +13,18 @@ import java.util.concurrent.CompletableFuture;
 
 import static com.earth2me.essentials.I18n.tl;
 
-
 public class Commandtpa extends EssentialsCommand {
     public Commandtpa() {
         super("tpa");
     }
 
     @Override
-    public void run(Server server, User user, String commandLabel, String[] args) throws Exception {
+    public void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception {
         if (args.length < 1) {
             throw new NotEnoughArgumentsException();
         }
 
-        User player = getPlayer(server, user, args, 0);
+        final User player = getPlayer(server, user, args, 0);
         if (user.getName().equalsIgnoreCase(player.getName())) {
             throw new NotEnoughArgumentsException();
         }
@@ -45,9 +44,9 @@ public class Commandtpa extends EssentialsCommand {
         }
         if (player.isAutoTeleportEnabled() && !player.isIgnoredPlayer(user)) {
             final Trade charge = new Trade(this.getName(), ess);
-            AsyncTeleport teleport = (AsyncTeleport) user.getAsyncTeleport();
+            final AsyncTeleport teleport = user.getAsyncTeleport();
             teleport.setTpType(AsyncTeleport.TeleportType.TPA);
-            CompletableFuture<Boolean> future = getNewExceptionFuture(user.getSource(), commandLabel);
+            final CompletableFuture<Boolean> future = getNewExceptionFuture(user.getSource(), commandLabel);
             teleport.teleport(player.getBase(), charge, PlayerTeleportEvent.TeleportCause.COMMAND, future);
             future.thenAccept(success -> {
                 if (success) {
@@ -59,7 +58,7 @@ public class Commandtpa extends EssentialsCommand {
         }
 
         if (!player.isIgnoredPlayer(user)) {
-            TPARequestEvent tpaEvent = new TPARequestEvent(user.getSource(), player, false);
+            final TPARequestEvent tpaEvent = new TPARequestEvent(user.getSource(), player, false);
             ess.getServer().getPluginManager().callEvent(tpaEvent);
             if (tpaEvent.isCancelled()) {
                 throw new Exception(tl("teleportRequestCancelled", player.getDisplayName()));
@@ -79,7 +78,7 @@ public class Commandtpa extends EssentialsCommand {
     }
 
     @Override
-    protected List<String> getTabCompleteOptions(Server server, User user, String commandLabel, String[] args) {
+    protected List<String> getTabCompleteOptions(final Server server, final User user, final String commandLabel, final String[] args) {
         if (args.length == 1) {
             return getPlayers(server, user);
         } else {

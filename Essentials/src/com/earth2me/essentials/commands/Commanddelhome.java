@@ -12,21 +12,20 @@ import java.util.Locale;
 
 import static com.earth2me.essentials.I18n.tl;
 
-
 public class Commanddelhome extends EssentialsCommand {
     public Commanddelhome() {
         super("delhome");
     }
 
     @Override
-    public void run(final Server server, final CommandSource sender, final String commandLabel, String[] args) throws Exception {
+    public void run(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception {
         if (args.length < 1) {
             throw new NotEnoughArgumentsException();
         }
 
         User user = ess.getUser(sender.getPlayer());
-        String name;
-        String[] expandedArg;
+        final String name;
+        final String[] expandedArg;
 
         //Allowing both formats /sethome khobbits house | /sethome khobbits:house
         final String[] nameParts = args[0].split(":");
@@ -55,20 +54,20 @@ public class Commanddelhome extends EssentialsCommand {
 
     @Override
     protected List<String> getTabCompleteOptions(final Server server, final CommandSource sender, final String commandLabel, final String[] args) {
-        IUser user = sender.getUser(ess);
-        boolean canDelOthers = sender.isAuthorized("essentials.delhome.others", ess);
+        final IUser user = sender.getUser(ess);
+        final boolean canDelOthers = sender.isAuthorized("essentials.delhome.others", ess);
         if (args.length == 1) {
-            List<String> homes = sender.isPlayer() ? new ArrayList<>() : user.getHomes();
+            final List<String> homes = sender.isPlayer() ? new ArrayList<>() : user.getHomes();
             if (canDelOthers) {
-                int sepIndex = args[0].indexOf(':');
+                final int sepIndex = args[0].indexOf(':');
                 if (sepIndex < 0) {
                     getPlayers(server, sender).forEach(player -> homes.add(player + ":"));
                 } else {
-                    String namePart = args[0].substring(0, sepIndex);
-                    User otherUser;
+                    final String namePart = args[0].substring(0, sepIndex);
+                    final User otherUser;
                     try {
-                        otherUser = getPlayer(server, new String[]{namePart}, 0, true, true);
-                    } catch (Exception ex) {
+                        otherUser = getPlayer(server, new String[] {namePart}, 0, true, true);
+                    } catch (final Exception ex) {
                         return homes;
                     }
                     otherUser.getHomes().forEach(home -> homes.add(namePart + ":" + home));

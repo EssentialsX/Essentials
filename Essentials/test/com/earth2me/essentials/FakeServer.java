@@ -1,12 +1,29 @@
 package com.earth2me.essentials;
 
 import com.earth2me.essentials.craftbukkit.FakeWorld;
-import org.bukkit.*;
+import org.bukkit.BanList;
+import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
+import org.bukkit.Keyed;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
+import org.bukkit.Server;
+import org.bukkit.Statistic;
+import org.bukkit.StructureType;
+import org.bukkit.Tag;
+import org.bukkit.UnsafeValues;
 import org.bukkit.Warning.WarningState;
+import org.bukkit.World;
 import org.bukkit.World.Environment;
+import org.bukkit.WorldCreator;
 import org.bukkit.advancement.Advancement;
 import org.bukkit.block.data.BlockData;
-import org.bukkit.boss.*;
+import org.bukkit.boss.BarColor;
+import org.bukkit.boss.BarFlag;
+import org.bukkit.boss.BarStyle;
+import org.bukkit.boss.BossBar;
+import org.bukkit.boss.KeyedBossBar;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.command.PluginCommand;
@@ -22,14 +39,25 @@ import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.generator.ChunkGenerator;
 import org.bukkit.help.HelpMap;
-import org.bukkit.inventory.*;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.InventoryHolder;
+import org.bukkit.inventory.ItemFactory;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.Merchant;
+import org.bukkit.inventory.Recipe;
 import org.bukkit.loot.LootTable;
 import org.bukkit.map.MapView;
 import org.bukkit.permissions.Permissible;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionAttachment;
 import org.bukkit.permissions.PermissionAttachmentInfo;
-import org.bukkit.plugin.*;
+import org.bukkit.plugin.EventExecutor;
+import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.PluginLoader;
+import org.bukkit.plugin.PluginManager;
+import org.bukkit.plugin.RegisteredListener;
+import org.bukkit.plugin.ServicesManager;
+import org.bukkit.plugin.UnknownDependencyException;
 import org.bukkit.plugin.messaging.Messenger;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitScheduler;
@@ -40,17 +68,22 @@ import org.bukkit.util.CachedServerIcon;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.UUID;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
 import java.util.function.Consumer;
 import java.util.logging.Logger;
 
-
 public class FakeServer implements Server {
-    private List<Player> players = new ArrayList<>();
     private final List<World> worlds = new ArrayList<>();
-    private PluginManager pluginManager = new FakePluginManager();
+    private final PluginManager pluginManager = new FakePluginManager();
+    private List<Player> players = new ArrayList<>();
 
     FakeServer() {
         if (Bukkit.getServer() == null) {
@@ -73,7 +106,7 @@ public class FakeServer implements Server {
         return players;
     }
 
-    public void setOnlinePlayers(List<Player> players) {
+    public void setOnlinePlayers(final List<Player> players) {
         this.players = players;
     }
 
@@ -93,9 +126,9 @@ public class FakeServer implements Server {
     }
 
     @Override
-    public int broadcastMessage(String string) {
+    public int broadcastMessage(final String string) {
         int i = 0;
-        for (Player player : players) {
+        for (final Player player : players) {
             player.sendMessage(string);
             i++;
         }
@@ -118,8 +151,8 @@ public class FakeServer implements Server {
     }
 
     @Override
-    public Player getPlayer(String string) {
-        for (Player player : players) {
+    public Player getPlayer(final String string) {
+        for (final Player player : players) {
             if (player.getName().equalsIgnoreCase(string)) {
                 return player;
             }
@@ -128,9 +161,9 @@ public class FakeServer implements Server {
     }
 
     @Override
-    public List<Player> matchPlayer(String string) {
-        List<Player> matches = new ArrayList<>();
-        for (Player player : players) {
+    public List<Player> matchPlayer(final String string) {
+        final List<Player> matches = new ArrayList<>();
+        for (final Player player : players) {
             if (player.getName().substring(0, Math.min(player.getName().length(), string.length())).equalsIgnoreCase(string)) {
                 matches.add(player);
             }
@@ -147,62 +180,62 @@ public class FakeServer implements Server {
     public BukkitScheduler getScheduler() {
         return new BukkitScheduler() {
             @Override
-            public int scheduleSyncDelayedTask(Plugin plugin, Runnable r, long l) {
+            public int scheduleSyncDelayedTask(final Plugin plugin, final Runnable r, final long l) {
                 throw new UnsupportedOperationException("Not supported yet.");
             }
 
             @Override
-            public int scheduleSyncDelayedTask(Plugin plugin, BukkitRunnable bukkitRunnable, long l) {
+            public int scheduleSyncDelayedTask(final Plugin plugin, final BukkitRunnable bukkitRunnable, final long l) {
                 throw new UnsupportedOperationException("Not supported yet.");
             }
 
             @Override
-            public int scheduleSyncDelayedTask(Plugin plugin, Runnable r) {
+            public int scheduleSyncDelayedTask(final Plugin plugin, final Runnable r) {
                 throw new UnsupportedOperationException("Not supported yet.");
             }
 
             @Override
-            public int scheduleSyncDelayedTask(Plugin plugin, BukkitRunnable bukkitRunnable) {
+            public int scheduleSyncDelayedTask(final Plugin plugin, final BukkitRunnable bukkitRunnable) {
                 throw new UnsupportedOperationException("Not supported yet.");
             }
 
             @Override
-            public int scheduleSyncRepeatingTask(Plugin plugin, Runnable r, long l, long l1) {
+            public int scheduleSyncRepeatingTask(final Plugin plugin, final Runnable r, final long l, final long l1) {
                 throw new UnsupportedOperationException("Not supported yet.");
             }
 
             @Override
-            public int scheduleSyncRepeatingTask(Plugin plugin, BukkitRunnable bukkitRunnable, long l, long l1) {
+            public int scheduleSyncRepeatingTask(final Plugin plugin, final BukkitRunnable bukkitRunnable, final long l, final long l1) {
                 throw new UnsupportedOperationException("Not supported yet.");
             }
 
             @Override
-            public int scheduleAsyncRepeatingTask(Plugin plugin, Runnable r, long l, long l1) {
+            public int scheduleAsyncRepeatingTask(final Plugin plugin, final Runnable r, final long l, final long l1) {
                 throw new UnsupportedOperationException("Not supported yet.");
             }
 
             @Override
-            public <T> Future<T> callSyncMethod(Plugin plugin, Callable<T> clbl) {
+            public <T> Future<T> callSyncMethod(final Plugin plugin, final Callable<T> clbl) {
                 throw new UnsupportedOperationException("Not supported yet.");
             }
 
             @Override
-            public void cancelTask(int i) {
+            public void cancelTask(final int i) {
                 throw new UnsupportedOperationException("Not supported yet.");
             }
 
             @Override
-            public void cancelTasks(Plugin plugin) {
+            public void cancelTasks(final Plugin plugin) {
                 throw new UnsupportedOperationException("Not supported yet.");
             }
 
             @Override
-            public boolean isCurrentlyRunning(int i) {
+            public boolean isCurrentlyRunning(final int i) {
                 throw new UnsupportedOperationException("Not supported yet.");
             }
 
             @Override
-            public boolean isQueued(int i) {
+            public boolean isQueued(final int i) {
                 throw new UnsupportedOperationException("Not supported yet.");
             }
 
@@ -217,104 +250,104 @@ public class FakeServer implements Server {
             }
 
             @Override
-            public BukkitTask runTask(Plugin plugin, Runnable r) throws IllegalArgumentException {
+            public BukkitTask runTask(final Plugin plugin, final Runnable r) throws IllegalArgumentException {
                 throw new UnsupportedOperationException("Not supported yet.");
             }
 
             @Override
-            public void runTask(Plugin plugin, Consumer<BukkitTask> task) throws IllegalArgumentException {
+            public void runTask(final Plugin plugin, final Consumer<BukkitTask> task) throws IllegalArgumentException {
                 throw new UnsupportedOperationException("Not supported yet.");
             }
 
             @Override
-            public BukkitTask runTask(Plugin plugin, BukkitRunnable bukkitRunnable) throws IllegalArgumentException {
+            public BukkitTask runTask(final Plugin plugin, final BukkitRunnable bukkitRunnable) throws IllegalArgumentException {
                 return null;
             }
 
             @Override
-            public BukkitTask runTaskAsynchronously(Plugin plugin, Runnable r) throws IllegalArgumentException {
+            public BukkitTask runTaskAsynchronously(final Plugin plugin, final Runnable r) throws IllegalArgumentException {
                 r.run();
                 return null;
             }
 
             @Override
-            public void runTaskAsynchronously(Plugin plugin, Consumer<BukkitTask> task) throws IllegalArgumentException {
+            public void runTaskAsynchronously(final Plugin plugin, final Consumer<BukkitTask> task) throws IllegalArgumentException {
                 throw new UnsupportedOperationException("Not supported yet.");
             }
 
             @Override
-            public BukkitTask runTaskAsynchronously(Plugin plugin, BukkitRunnable bukkitRunnable) throws IllegalArgumentException {
+            public BukkitTask runTaskAsynchronously(final Plugin plugin, final BukkitRunnable bukkitRunnable) throws IllegalArgumentException {
                 return null;
             }
 
             @Override
-            public BukkitTask runTaskLater(Plugin plugin, Runnable r, long l) throws IllegalArgumentException {
+            public BukkitTask runTaskLater(final Plugin plugin, final Runnable r, final long l) throws IllegalArgumentException {
                 throw new UnsupportedOperationException("Not supported yet.");
             }
 
             @Override
-            public void runTaskLater(Plugin plugin, Consumer<BukkitTask> task, long delay) throws IllegalArgumentException {
+            public void runTaskLater(final Plugin plugin, final Consumer<BukkitTask> task, final long delay) throws IllegalArgumentException {
                 throw new UnsupportedOperationException("Not supported yet.");
             }
 
             @Override
-            public BukkitTask runTaskLater(Plugin plugin, BukkitRunnable bukkitRunnable, long l) throws IllegalArgumentException {
+            public BukkitTask runTaskLater(final Plugin plugin, final BukkitRunnable bukkitRunnable, final long l) throws IllegalArgumentException {
                 return null;
             }
 
             @Override
-            public BukkitTask runTaskLaterAsynchronously(Plugin plugin, Runnable r, long l) throws IllegalArgumentException {
+            public BukkitTask runTaskLaterAsynchronously(final Plugin plugin, final Runnable r, final long l) throws IllegalArgumentException {
                 r.run();
                 return null;
             }
 
             @Override
-            public void runTaskLaterAsynchronously(Plugin plugin, Consumer<BukkitTask> task, long delay) throws IllegalArgumentException {
+            public void runTaskLaterAsynchronously(final Plugin plugin, final Consumer<BukkitTask> task, final long delay) throws IllegalArgumentException {
                 throw new UnsupportedOperationException("Not supported yet.");
             }
 
             @Override
-            public BukkitTask runTaskLaterAsynchronously(Plugin plugin, BukkitRunnable bukkitRunnable, long l) throws IllegalArgumentException {
+            public BukkitTask runTaskLaterAsynchronously(final Plugin plugin, final BukkitRunnable bukkitRunnable, final long l) throws IllegalArgumentException {
                 return null;
             }
 
             @Override
-            public BukkitTask runTaskTimer(Plugin plugin, Runnable r, long l, long l1) throws IllegalArgumentException {
+            public BukkitTask runTaskTimer(final Plugin plugin, final Runnable r, final long l, final long l1) throws IllegalArgumentException {
                 throw new UnsupportedOperationException("Not supported yet.");
             }
 
             @Override
-            public void runTaskTimer(Plugin plugin, Consumer<BukkitTask> task, long delay, long period) throws IllegalArgumentException {
+            public void runTaskTimer(final Plugin plugin, final Consumer<BukkitTask> task, final long delay, final long period) throws IllegalArgumentException {
                 throw new UnsupportedOperationException("Not supported yet.");
             }
 
             @Override
-            public BukkitTask runTaskTimer(Plugin plugin, BukkitRunnable bukkitRunnable, long l, long l1) throws IllegalArgumentException {
+            public BukkitTask runTaskTimer(final Plugin plugin, final BukkitRunnable bukkitRunnable, final long l, final long l1) throws IllegalArgumentException {
                 return null;
             }
 
             @Override
-            public BukkitTask runTaskTimerAsynchronously(Plugin plugin, Runnable r, long l, long l1) throws IllegalArgumentException {
+            public BukkitTask runTaskTimerAsynchronously(final Plugin plugin, final Runnable r, final long l, final long l1) throws IllegalArgumentException {
                 throw new UnsupportedOperationException("Not supported yet.");
             }
 
             @Override
-            public void runTaskTimerAsynchronously(Plugin plugin, Consumer<BukkitTask> task, long delay, long period) throws IllegalArgumentException {
+            public void runTaskTimerAsynchronously(final Plugin plugin, final Consumer<BukkitTask> task, final long delay, final long period) throws IllegalArgumentException {
                 throw new UnsupportedOperationException("Not supported yet.");
             }
 
             @Override
-            public BukkitTask runTaskTimerAsynchronously(Plugin plugin, BukkitRunnable bukkitRunnable, long l, long l1) throws IllegalArgumentException {
+            public BukkitTask runTaskTimerAsynchronously(final Plugin plugin, final BukkitRunnable bukkitRunnable, final long l, final long l1) throws IllegalArgumentException {
                 return null;
             }
 
             @Override
-            public int scheduleAsyncDelayedTask(Plugin plugin, Runnable r, long l) {
+            public int scheduleAsyncDelayedTask(final Plugin plugin, final Runnable r, final long l) {
                 throw new UnsupportedOperationException("Not supported yet.");
             }
 
             @Override
-            public int scheduleAsyncDelayedTask(Plugin plugin, Runnable r) {
+            public int scheduleAsyncDelayedTask(final Plugin plugin, final Runnable r) {
                 throw new UnsupportedOperationException("Not supported yet.");
             }
         };
@@ -330,21 +363,21 @@ public class FakeServer implements Server {
         return worlds;
     }
 
-    public World createWorld(String string, Environment e) {
-        World w = new FakeWorld(string, e);
+    public World createWorld(final String string, final Environment e) {
+        final World w = new FakeWorld(string, e);
         worlds.add(w);
         return w;
     }
 
-    public World createWorld(String string, Environment e, long l) {
-        World w = new FakeWorld(string, e);
+    public World createWorld(final String string, final Environment e, final long l) {
+        final World w = new FakeWorld(string, e);
         worlds.add(w);
         return w;
     }
 
     @Override
-    public World getWorld(String string) {
-        for (World world : worlds) {
+    public World getWorld(final String string) {
+        for (final World world : worlds) {
             if (world.getName().equalsIgnoreCase(string)) {
                 return world;
             }
@@ -362,7 +395,7 @@ public class FakeServer implements Server {
     }
 
     @Override
-    public PluginCommand getPluginCommand(String string) {
+    public PluginCommand getPluginCommand(final String string) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
@@ -371,38 +404,38 @@ public class FakeServer implements Server {
     }
 
     @Override
-    public boolean dispatchCommand(CommandSender cs, String string) {
+    public boolean dispatchCommand(final CommandSender cs, final String string) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
-    public boolean addRecipe(Recipe recipe) {
+    public boolean addRecipe(final Recipe recipe) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    void addPlayer(Player base1) {
+    void addPlayer(final Player base1) {
         players.add(base1);
         pluginManager.callEvent(new PlayerJoinEvent(base1, null));
     }
 
-    OfflinePlayer createPlayer(String name) {
-        OfflinePlayer player = new OfflinePlayer(name, this);
+    OfflinePlayer createPlayer(final String name) {
+        final OfflinePlayer player = new OfflinePlayer(name, this);
         player.setLocation(new Location(worlds.get(0), 0, 0, 0, 0, 0));
         return player;
     }
 
     @Override
-    public World createWorld(WorldCreator creator) {
+    public World createWorld(final WorldCreator creator) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
-    public boolean unloadWorld(String string, boolean bln) {
+    public boolean unloadWorld(final String string, final boolean bln) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
-    public boolean unloadWorld(World world, boolean bln) {
+    public boolean unloadWorld(final World world, final boolean bln) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
@@ -417,7 +450,7 @@ public class FakeServer implements Server {
     }
 
     @Override
-    public void setSpawnRadius(int i) {
+    public void setSpawnRadius(final int i) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
@@ -426,16 +459,16 @@ public class FakeServer implements Server {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    public World getWorld(long l) {
+    public World getWorld(final long l) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
-    public World getWorld(UUID uuid) {
+    public World getWorld(final UUID uuid) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    public MapView getMap(int id) {
+    public MapView getMap(final int id) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
@@ -455,17 +488,17 @@ public class FakeServer implements Server {
     }
 
     @Override
-    public MapView createMap(World world) {
+    public MapView createMap(final World world) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
-    public ItemStack createExplorerMap(World world, Location location, StructureType structureType) {
+    public ItemStack createExplorerMap(final World world, final Location location, final StructureType structureType) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
-    public ItemStack createExplorerMap(World world, Location location, StructureType structureType, int radius, boolean findUnexplored) {
+    public ItemStack createExplorerMap(final World world, final Location location, final StructureType structureType, final int radius, final boolean findUnexplored) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
@@ -475,7 +508,7 @@ public class FakeServer implements Server {
     }
 
     @Override
-    public void setWhitelist(boolean bln) {
+    public void setWhitelist(final boolean bln) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
@@ -490,8 +523,8 @@ public class FakeServer implements Server {
     }
 
     @Override
-    public Player getPlayerExact(String string) {
-        for (Player player : players) {
+    public Player getPlayerExact(final String string) {
+        for (final Player player : players) {
             if (player.getName().equals(string)) {
                 return player;
             }
@@ -505,7 +538,7 @@ public class FakeServer implements Server {
     }
 
     @Override
-    public int broadcast(String string, String string1) {
+    public int broadcast(final String string, final String string1) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
@@ -537,7 +570,7 @@ public class FakeServer implements Server {
             }
 
             @Override
-            public void setWhitelisted(boolean bln) {
+            public void setWhitelisted(final boolean bln) {
                 throw new UnsupportedOperationException("Not supported yet.");
             }
 
@@ -552,17 +585,15 @@ public class FakeServer implements Server {
             }
 
             @Override
-            public void setOp(boolean bln) {
-                throw new UnsupportedOperationException("Not supported yet.");
-            }
-
-            @Override
             public Map<String, Object> serialize() {
                 throw new UnsupportedOperationException("Not supported yet.");
             }
 
             @Override
             public long getFirstPlayed() {
+                throw new UnsupportedOperationException("Not supported yet.");
+            }            @Override
+            public void setOp(final boolean bln) {
                 throw new UnsupportedOperationException("Not supported yet.");
             }
 
@@ -595,94 +626,97 @@ public class FakeServer implements Server {
             }
 
             @Override
-            public void incrementStatistic(Statistic statistic) {
+            public void incrementStatistic(final Statistic statistic) {
                 throw new UnsupportedOperationException("Not supported yet.");
             }
 
             @Override
-            public void decrementStatistic(Statistic statistic) {
+            public void decrementStatistic(final Statistic statistic) {
                 throw new UnsupportedOperationException("Not supported yet.");
             }
 
             @Override
-            public int getStatistic(Statistic statistic) {
+            public int getStatistic(final Statistic statistic) {
                 throw new UnsupportedOperationException("Not supported yet.");
             }
 
             @Override
-            public void incrementStatistic(Statistic statistic, int amount) {
+            public void incrementStatistic(final Statistic statistic, final int amount) {
                 throw new UnsupportedOperationException("Not supported yet.");
             }
 
             @Override
-            public void decrementStatistic(Statistic statistic, int amount) {
+            public void decrementStatistic(final Statistic statistic, final int amount) {
                 throw new UnsupportedOperationException("Not supported yet.");
             }
 
             @Override
-            public void setStatistic(Statistic statistic, int newValue) {
+            public void setStatistic(final Statistic statistic, final int newValue) {
                 throw new UnsupportedOperationException("Not supported yet.");
             }
 
             @Override
-            public void incrementStatistic(Statistic statistic, Material material) {
+            public void incrementStatistic(final Statistic statistic, final Material material) {
                 throw new UnsupportedOperationException("Not supported yet.");
             }
 
             @Override
-            public void decrementStatistic(Statistic statistic, Material material) {
+            public void decrementStatistic(final Statistic statistic, final Material material) {
                 throw new UnsupportedOperationException("Not supported yet.");
             }
 
             @Override
-            public int getStatistic(Statistic statistic, Material material) {
+            public int getStatistic(final Statistic statistic, final Material material) {
                 throw new UnsupportedOperationException("Not supported yet.");
             }
 
             @Override
-            public void incrementStatistic(Statistic statistic, Material material, int amount) {
+            public void incrementStatistic(final Statistic statistic, final Material material, final int amount) {
                 throw new UnsupportedOperationException("Not supported yet.");
             }
 
             @Override
-            public void decrementStatistic(Statistic statistic, Material material, int amount) {
+            public void decrementStatistic(final Statistic statistic, final Material material, final int amount) {
                 throw new UnsupportedOperationException("Not supported yet.");
             }
 
             @Override
-            public void setStatistic(Statistic statistic, Material material, int newValue) {
+            public void setStatistic(final Statistic statistic, final Material material, final int newValue) {
                 throw new UnsupportedOperationException("Not supported yet.");
             }
 
             @Override
-            public void incrementStatistic(Statistic statistic, EntityType entityType) {
+            public void incrementStatistic(final Statistic statistic, final EntityType entityType) {
                 throw new UnsupportedOperationException("Not supported yet.");
             }
 
             @Override
-            public void decrementStatistic(Statistic statistic, EntityType entityType) {
+            public void decrementStatistic(final Statistic statistic, final EntityType entityType) {
                 throw new UnsupportedOperationException("Not supported yet.");
             }
 
             @Override
-            public int getStatistic(Statistic statistic, EntityType entityType) {
+            public int getStatistic(final Statistic statistic, final EntityType entityType) {
                 throw new UnsupportedOperationException("Not supported yet.");
             }
 
             @Override
-            public void incrementStatistic(Statistic statistic, EntityType entityType, int amount) {
+            public void incrementStatistic(final Statistic statistic, final EntityType entityType, final int amount) {
                 throw new UnsupportedOperationException("Not supported yet.");
             }
 
             @Override
-            public void decrementStatistic(Statistic statistic, EntityType entityType, int amount) {
+            public void decrementStatistic(final Statistic statistic, final EntityType entityType, final int amount) {
                 throw new UnsupportedOperationException("Not supported yet.");
             }
 
             @Override
-            public void setStatistic(Statistic statistic, EntityType entityType, int newValue) {
+            public void setStatistic(final Statistic statistic, final EntityType entityType, final int newValue) {
                 throw new UnsupportedOperationException("Not supported yet.");
             }
+
+
+
         };
     }
 
@@ -692,12 +726,12 @@ public class FakeServer implements Server {
     }
 
     @Override
-    public void banIP(String string) {
+    public void banIP(final String string) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
-    public void unbanIP(String string) {
+    public void unbanIP(final String string) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
@@ -712,7 +746,7 @@ public class FakeServer implements Server {
     }
 
     @Override
-    public void setDefaultGameMode(GameMode gamemode) {
+    public void setDefaultGameMode(final GameMode gamemode) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
@@ -720,13 +754,13 @@ public class FakeServer implements Server {
     public ConsoleCommandSender getConsoleSender() {
         return new ConsoleCommandSender() {
             @Override
-            public void sendMessage(String message) {
+            public void sendMessage(final String message) {
                 System.out.println("Console message: " + message);
             }
 
             @Override
-            public void sendMessage(String[] messages) {
-                for (String message : messages) {
+            public void sendMessage(final String[] messages) {
+                for (final String message : messages) {
                     System.out.println("Console message: " + message);
                 }
             }
@@ -747,47 +781,47 @@ public class FakeServer implements Server {
             }
 
             @Override
-            public boolean isPermissionSet(String name) {
+            public boolean isPermissionSet(final String name) {
                 throw new UnsupportedOperationException("Not supported yet.");
             }
 
             @Override
-            public boolean isPermissionSet(Permission perm) {
+            public boolean isPermissionSet(final Permission perm) {
                 throw new UnsupportedOperationException("Not supported yet.");
             }
 
             @Override
-            public boolean hasPermission(String name) {
+            public boolean hasPermission(final String name) {
                 return true;
             }
 
             @Override
-            public boolean hasPermission(Permission perm) {
+            public boolean hasPermission(final Permission perm) {
                 throw new UnsupportedOperationException("Not supported yet.");
             }
 
             @Override
-            public PermissionAttachment addAttachment(Plugin plugin, String name, boolean value) {
+            public PermissionAttachment addAttachment(final Plugin plugin, final String name, final boolean value) {
                 throw new UnsupportedOperationException("Not supported yet.");
             }
 
             @Override
-            public PermissionAttachment addAttachment(Plugin plugin) {
+            public PermissionAttachment addAttachment(final Plugin plugin) {
                 throw new UnsupportedOperationException("Not supported yet.");
             }
 
             @Override
-            public PermissionAttachment addAttachment(Plugin plugin, String name, boolean value, int ticks) {
+            public PermissionAttachment addAttachment(final Plugin plugin, final String name, final boolean value, final int ticks) {
                 throw new UnsupportedOperationException("Not supported yet.");
             }
 
             @Override
-            public PermissionAttachment addAttachment(Plugin plugin, int ticks) {
+            public PermissionAttachment addAttachment(final Plugin plugin, final int ticks) {
                 throw new UnsupportedOperationException("Not supported yet.");
             }
 
             @Override
-            public void removeAttachment(PermissionAttachment attachment) {
+            public void removeAttachment(final PermissionAttachment attachment) {
                 throw new UnsupportedOperationException("Not supported yet.");
             }
 
@@ -807,39 +841,40 @@ public class FakeServer implements Server {
             }
 
             @Override
-            public void setOp(boolean value) {
-                throw new UnsupportedOperationException("Not supported yet.");
-            }
-
-            @Override
             public boolean isConversing() {
                 throw new UnsupportedOperationException("Not supported yet.");
             }
 
             @Override
-            public void acceptConversationInput(String input) {
+            public void acceptConversationInput(final String input) {
+                throw new UnsupportedOperationException("Not supported yet.");
+            }            @Override
+            public void setOp(final boolean value) {
                 throw new UnsupportedOperationException("Not supported yet.");
             }
 
             @Override
-            public boolean beginConversation(Conversation conversation) {
+            public boolean beginConversation(final Conversation conversation) {
                 throw new UnsupportedOperationException("Not supported yet.");
             }
 
             @Override
-            public void abandonConversation(Conversation conversation) {
+            public void abandonConversation(final Conversation conversation) {
                 throw new UnsupportedOperationException("Not supported yet.");
             }
 
             @Override
-            public void abandonConversation(Conversation conversation, ConversationAbandonedEvent details) {
+            public void abandonConversation(final Conversation conversation, final ConversationAbandonedEvent details) {
                 throw new UnsupportedOperationException("Not supported yet.");
             }
 
             @Override
-            public void sendRawMessage(String message) {
+            public void sendRawMessage(final String message) {
                 throw new UnsupportedOperationException("Not supported yet.");
             }
+
+
+
         };
     }
 
@@ -874,7 +909,7 @@ public class FakeServer implements Server {
     }
 
     @Override
-    public void sendPluginMessage(Plugin plugin, String string, byte[] bytes) {
+    public void sendPluginMessage(final Plugin plugin, final String string, final byte[] bytes) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
@@ -909,12 +944,12 @@ public class FakeServer implements Server {
     }
 
     @Override
-    public List<Recipe> getRecipesFor(ItemStack is) {
+    public List<Recipe> getRecipesFor(final ItemStack is) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
-    public Recipe getRecipe(NamespacedKey namespacedKey) {
+    public Recipe getRecipe(final NamespacedKey namespacedKey) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
@@ -934,7 +969,7 @@ public class FakeServer implements Server {
     }
 
     @Override
-    public boolean removeRecipe(NamespacedKey key) {
+    public boolean removeRecipe(final NamespacedKey key) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
@@ -944,22 +979,22 @@ public class FakeServer implements Server {
     }
 
     @Override
-    public Inventory createInventory(InventoryHolder ih, InventoryType it) {
+    public Inventory createInventory(final InventoryHolder ih, final InventoryType it) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
-    public Inventory createInventory(InventoryHolder ih, int i) {
+    public Inventory createInventory(final InventoryHolder ih, final int i) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
-    public Inventory createInventory(InventoryHolder ih, int i, String string) {
+    public Inventory createInventory(final InventoryHolder ih, final int i, final String string) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
-    public Merchant createMerchant(String s) {
+    public Merchant createMerchant(final String s) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
@@ -1039,17 +1074,12 @@ public class FakeServer implements Server {
     }
 
     @Override
-    public CachedServerIcon loadServerIcon(File file) {
+    public CachedServerIcon loadServerIcon(final File file) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
-    public CachedServerIcon loadServerIcon(BufferedImage bufferedImage) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public void setIdleTimeout(int i) {
+    public CachedServerIcon loadServerIcon(final BufferedImage bufferedImage) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
@@ -1059,17 +1089,22 @@ public class FakeServer implements Server {
     }
 
     @Override
-    public ChunkGenerator.ChunkData createChunkData(World world) {
+    public void setIdleTimeout(final int i) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
-    public BossBar createBossBar(String s, BarColor barColor, BarStyle barStyle, BarFlag... barFlags) {
+    public ChunkGenerator.ChunkData createChunkData(final World world) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
-    public KeyedBossBar createBossBar(NamespacedKey key, String title, BarColor color, BarStyle style, BarFlag... flags) {
+    public BossBar createBossBar(final String s, final BarColor barColor, final BarStyle barStyle, final BarFlag... barFlags) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public KeyedBossBar createBossBar(final NamespacedKey key, final String title, final BarColor color, final BarStyle style, final BarFlag... flags) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
@@ -1079,12 +1114,12 @@ public class FakeServer implements Server {
     }
 
     @Override
-    public KeyedBossBar getBossBar(NamespacedKey key) {
+    public KeyedBossBar getBossBar(final NamespacedKey key) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
-    public boolean removeBossBar(NamespacedKey key) {
+    public boolean removeBossBar(final NamespacedKey key) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
@@ -1100,13 +1135,13 @@ public class FakeServer implements Server {
     }
 
     @Override
-    public BanList getBanList(BanList.Type arg0) {
+    public BanList getBanList(final BanList.Type arg0) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
-    public Player getPlayer(UUID arg0) {
-        for (Player player : players) {
+    public Player getPlayer(final UUID arg0) {
+        for (final Player player : players) {
             if (player.getUniqueId().equals(arg0)) {
                 return player;
             }
@@ -1115,7 +1150,7 @@ public class FakeServer implements Server {
     }
 
     @Override
-    public org.bukkit.OfflinePlayer getOfflinePlayer(UUID arg0) {
+    public org.bukkit.OfflinePlayer getOfflinePlayer(final UUID arg0) {
         if (arg0.toString().equalsIgnoreCase("3c9ebe1a-9098-43fd-bc0c-a369b76817ba")) {
             return createOPlayer("testPlayer1");
         }
@@ -1126,7 +1161,7 @@ public class FakeServer implements Server {
     }
 
     @Override
-    public Inventory createInventory(InventoryHolder arg0, InventoryType arg1, String arg2) {
+    public Inventory createInventory(final InventoryHolder arg0, final InventoryType arg1, final String arg2) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
@@ -1136,12 +1171,12 @@ public class FakeServer implements Server {
     }
 
     @Override
-    public Entity getEntity(UUID uuid) {
+    public Entity getEntity(final UUID uuid) {
         return getPlayer(uuid);
     }
 
     @Override
-    public Advancement getAdvancement(NamespacedKey key) {
+    public Advancement getAdvancement(final NamespacedKey key) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
@@ -1151,44 +1186,54 @@ public class FakeServer implements Server {
     }
 
     @Override
-    public BlockData createBlockData(Material material) {
+    public BlockData createBlockData(final Material material) {
         return null;
     }
 
     @Override
-    public BlockData createBlockData(Material material, Consumer<BlockData> consumer) {
+    public BlockData createBlockData(final Material material, final Consumer<BlockData> consumer) {
         return null;
     }
 
     @Override
-    public BlockData createBlockData(String data) throws IllegalArgumentException {
+    public BlockData createBlockData(final String data) throws IllegalArgumentException {
         return null;
     }
 
     @Override
-    public BlockData createBlockData(Material material, String data) throws IllegalArgumentException {
+    public BlockData createBlockData(final Material material, final String data) throws IllegalArgumentException {
         return null;
     }
 
     @Override
-    public <T extends Keyed> Tag<T> getTag(String s, NamespacedKey namespacedKey, Class<T> aClass) {
+    public <T extends Keyed> Tag<T> getTag(final String s, final NamespacedKey namespacedKey, final Class<T> aClass) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    public <T extends Keyed> Iterable<Tag<T>> getTags(String registry, Class<T> clazz) {
+    public <T extends Keyed> Iterable<Tag<T>> getTags(final String registry, final Class<T> clazz) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    class FakePluginManager implements PluginManager {
-        ArrayList<RegisteredListener> listeners = new ArrayList<>();
+    @Override
+    public LootTable getLootTable(final NamespacedKey arg0) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public List<Entity> selectEntities(final CommandSender sender, final String selector) throws IllegalArgumentException {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    static class FakePluginManager implements PluginManager {
+        final ArrayList<RegisteredListener> listeners = new ArrayList<>();
 
         @Override
-        public void registerInterface(Class<? extends PluginLoader> loader) throws IllegalArgumentException {
+        public void registerInterface(final Class<? extends PluginLoader> loader) throws IllegalArgumentException {
             throw new UnsupportedOperationException("Not supported yet.");
         }
 
         @Override
-        public Plugin getPlugin(String name) {
+        public Plugin getPlugin(final String name) {
             throw new UnsupportedOperationException("Not supported yet.");
         }
 
@@ -1198,22 +1243,22 @@ public class FakeServer implements Server {
         }
 
         @Override
-        public boolean isPluginEnabled(String name) {
+        public boolean isPluginEnabled(final String name) {
             throw new UnsupportedOperationException("Not supported yet.");
         }
 
         @Override
-        public boolean isPluginEnabled(Plugin plugin) {
+        public boolean isPluginEnabled(final Plugin plugin) {
             throw new UnsupportedOperationException("Not supported yet.");
         }
 
         @Override
-        public Plugin loadPlugin(File file) throws UnknownDependencyException {
+        public Plugin loadPlugin(final File file) throws UnknownDependencyException {
             throw new UnsupportedOperationException("Not supported yet.");
         }
 
         @Override
-        public Plugin[] loadPlugins(File directory) {
+        public Plugin[] loadPlugins(final File directory) {
             throw new UnsupportedOperationException("Not supported yet.");
         }
 
@@ -1228,15 +1273,15 @@ public class FakeServer implements Server {
         }
 
         @Override
-        public void callEvent(Event event) throws IllegalStateException {
+        public void callEvent(final Event event) throws IllegalStateException {
             Logger.getLogger("Minecraft").info("Called event " + event.getEventName());
             if (event instanceof PlayerJoinEvent) {
-                for (RegisteredListener listener : listeners) {
+                for (final RegisteredListener listener : listeners) {
                     if (listener.getListener() instanceof EssentialsPlayerListener) {
-                        PlayerJoinEvent jEvent = (PlayerJoinEvent) event;
-                        EssentialsPlayerListener epl = (EssentialsPlayerListener) listener.getListener();
+                        final PlayerJoinEvent jEvent = (PlayerJoinEvent) event;
+                        final EssentialsPlayerListener epl = (EssentialsPlayerListener) listener.getListener();
                         epl.onPlayerJoin(jEvent);
-                        Essentials ess = (Essentials) listener.getPlugin();
+                        final Essentials ess = (Essentials) listener.getPlugin();
                         ess.getLogger().info("Sending join event to Essentials");
                         ess.getUser(jEvent.getPlayer());
                     }
@@ -1245,87 +1290,87 @@ public class FakeServer implements Server {
         }
 
         @Override
-        public void registerEvents(Listener listener, Plugin plugin) {
+        public void registerEvents(final Listener listener, final Plugin plugin) {
             listeners.add(new RegisteredListener(listener, null, null, plugin, false));
         }
 
         @Override
-        public void registerEvent(Class<? extends Event> event, Listener listener, EventPriority priority, EventExecutor executor, Plugin plugin) {
+        public void registerEvent(final Class<? extends Event> event, final Listener listener, final EventPriority priority, final EventExecutor executor, final Plugin plugin) {
             throw new UnsupportedOperationException("Not supported yet.");
         }
 
         @Override
-        public void registerEvent(Class<? extends Event> event, Listener listener, EventPriority priority, EventExecutor executor, Plugin plugin, boolean ignoreCancelled) {
+        public void registerEvent(final Class<? extends Event> event, final Listener listener, final EventPriority priority, final EventExecutor executor, final Plugin plugin, final boolean ignoreCancelled) {
             throw new UnsupportedOperationException("Not supported yet.");
         }
 
         @Override
-        public void enablePlugin(Plugin plugin) {
+        public void enablePlugin(final Plugin plugin) {
             throw new UnsupportedOperationException("Not supported yet.");
         }
 
         @Override
-        public void disablePlugin(Plugin plugin) {
+        public void disablePlugin(final Plugin plugin) {
             throw new UnsupportedOperationException("Not supported yet.");
         }
 
         @Override
-        public Permission getPermission(String name) {
+        public Permission getPermission(final String name) {
             throw new UnsupportedOperationException("Not supported yet.");
         }
 
         @Override
-        public void addPermission(Permission perm) {
+        public void addPermission(final Permission perm) {
             throw new UnsupportedOperationException("Not supported yet.");
         }
 
         @Override
-        public void removePermission(Permission perm) {
+        public void removePermission(final Permission perm) {
             throw new UnsupportedOperationException("Not supported yet.");
         }
 
         @Override
-        public void removePermission(String name) {
+        public void removePermission(final String name) {
             throw new UnsupportedOperationException("Not supported yet.");
         }
 
         @Override
-        public Set<Permission> getDefaultPermissions(boolean op) {
+        public Set<Permission> getDefaultPermissions(final boolean op) {
             throw new UnsupportedOperationException("Not supported yet.");
         }
 
         @Override
-        public void recalculatePermissionDefaults(Permission perm) {
+        public void recalculatePermissionDefaults(final Permission perm) {
             throw new UnsupportedOperationException("Not supported yet.");
         }
 
         @Override
-        public void subscribeToPermission(String permission, Permissible permissible) {
+        public void subscribeToPermission(final String permission, final Permissible permissible) {
             throw new UnsupportedOperationException("Not supported yet.");
         }
 
         @Override
-        public void unsubscribeFromPermission(String permission, Permissible permissible) {
+        public void unsubscribeFromPermission(final String permission, final Permissible permissible) {
             throw new UnsupportedOperationException("Not supported yet.");
         }
 
         @Override
-        public Set<Permissible> getPermissionSubscriptions(String permission) {
+        public Set<Permissible> getPermissionSubscriptions(final String permission) {
             throw new UnsupportedOperationException("Not supported yet.");
         }
 
         @Override
-        public void subscribeToDefaultPerms(boolean op, Permissible permissible) {
+        public void subscribeToDefaultPerms(final boolean op, final Permissible permissible) {
             throw new UnsupportedOperationException("Not supported yet.");
         }
 
         @Override
-        public void unsubscribeFromDefaultPerms(boolean op, Permissible permissible) {
+        public void unsubscribeFromDefaultPerms(final boolean op, final Permissible permissible) {
             throw new UnsupportedOperationException("Not supported yet.");
         }
 
         @Override
-        public Set<Permissible> getDefaultPermSubscriptions(boolean op) {
+        public Set<Permissible> getDefaultPermSubscriptions(final boolean op) {
             throw new UnsupportedOperationException("Not supported yet.");
         }
 
@@ -1338,16 +1383,6 @@ public class FakeServer implements Server {
         public boolean useTimings() {
             throw new UnsupportedOperationException("Not supported yet.");
         }
-    }
-
-    @Override
-	public LootTable getLootTable(NamespacedKey arg0) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public List<Entity> selectEntities(CommandSender sender, String selector) throws IllegalArgumentException {
-        throw new UnsupportedOperationException("Not supported yet.");
     }
 
 }

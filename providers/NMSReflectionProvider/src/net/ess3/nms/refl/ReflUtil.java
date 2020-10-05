@@ -15,18 +15,27 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class ReflUtil {
+public final class ReflUtil {
+    public static final NMSVersion V1_12_R1 = NMSVersion.fromString("v1_12_R1");
     public static final NMSVersion V1_8_R1 = NMSVersion.fromString("v1_8_R1");
     public static final NMSVersion V1_9_R1 = NMSVersion.fromString("v1_9_R1");
     public static final NMSVersion V1_11_R1 = NMSVersion.fromString("v1_11_R1");
-    public static final NMSVersion V1_12_R1 = NMSVersion.fromString("v1_12_R1");
+    private static final Map<String, Class<?>> classCache = new HashMap<>();
+    private static final Table<Class<?>, String, Method> methodCache = HashBasedTable.create();
+    private static final Table<Class<?>, MethodParams, Method> methodParamCache = HashBasedTable.create();
+    private static final Table<Class<?>, String, Field> fieldCache = HashBasedTable.create();
+    private static final Map<Class<?>, Constructor<?>> constructorCache = new HashMap<>();
+    private static final Table<Class<?>, ConstructorParams, Constructor<?>> constructorParamCache = HashBasedTable.create();
     private static NMSVersion nmsVersionObject;
     private static String nmsVersion;
 
+    private ReflUtil() {
+    }
+
     public static String getNMSVersion() {
         if (nmsVersion == null) {
-            String name = Bukkit.getServer().getClass().getName();
-            String[] parts = name.split("\\.");
+            final String name = Bukkit.getServer().getClass().getName();
+            final String[] parts = name.split("\\.");
             nmsVersion = parts[3];
         }
         return nmsVersion;
@@ -39,107 +48,95 @@ public class ReflUtil {
         return nmsVersionObject;
     }
 
-    public static Class<?> getNMSClass(String className) {
+    public static Class<?> getNMSClass(final String className) {
         return getClassCached("net.minecraft.server." + getNMSVersion() + "." + className);
     }
 
-    public static Class<?> getOBCClass(String className) {
+    public static Class<?> getOBCClass(final String className) {
         return getClassCached("org.bukkit.craftbukkit." + getNMSVersion() + "." + className);
     }
 
-    private static final Map<String, Class<?>> classCache = new HashMap<>();
-
-    public static Class<?> getClassCached(String className) {
+    public static Class<?> getClassCached(final String className) {
         if (classCache.containsKey(className)) {
             return classCache.get(className);
         }
         try {
-            Class<?> classForName = Class.forName(className);
+            final Class<?> classForName = Class.forName(className);
             classCache.put(className, classForName);
             return classForName;
-        } catch (ClassNotFoundException e) {
+        } catch (final ClassNotFoundException e) {
             return null;
         }
     }
 
-    private static final Table<Class<?>, String, Method> methodCache = HashBasedTable.create();
-
-    public static Method getMethodCached(Class<?> clazz, String methodName) {
+    public static Method getMethodCached(final Class<?> clazz, final String methodName) {
         if (methodCache.contains(clazz, methodName)) {
             return methodCache.get(clazz, methodName);
         }
         try {
-            Method method = clazz.getDeclaredMethod(methodName);
+            final Method method = clazz.getDeclaredMethod(methodName);
             method.setAccessible(true);
             methodCache.put(clazz, methodName, method);
             return method;
-        } catch (NoSuchMethodException e) {
+        } catch (final NoSuchMethodException e) {
             return null;
         }
     }
 
-    private static final Table<Class<?>, MethodParams, Method> methodParamCache = HashBasedTable.create();
-
-    public static Method getMethodCached(Class<?> clazz, String methodName, Class<?>... params) {
-        MethodParams methodParams = new MethodParams(methodName, params);
+    public static Method getMethodCached(final Class<?> clazz, final String methodName, final Class<?>... params) {
+        final MethodParams methodParams = new MethodParams(methodName, params);
         if (methodParamCache.contains(clazz, methodParams)) {
             return methodParamCache.get(clazz, methodParams);
         }
         try {
-            Method method = clazz.getDeclaredMethod(methodName, params);
+            final Method method = clazz.getDeclaredMethod(methodName, params);
             method.setAccessible(true);
             methodParamCache.put(clazz, methodParams, method);
             return method;
-        } catch (NoSuchMethodException e) {
+        } catch (final NoSuchMethodException e) {
             return null;
         }
     }
 
-    private static final Table<Class<?>, String, Field> fieldCache = HashBasedTable.create();
-
-    public static Field getFieldCached(Class<?> clazz, String fieldName) {
+    public static Field getFieldCached(final Class<?> clazz, final String fieldName) {
         if (fieldCache.contains(clazz, fieldName)) {
             return fieldCache.get(clazz, fieldName);
         }
         try {
-            Field field = clazz.getDeclaredField(fieldName);
+            final Field field = clazz.getDeclaredField(fieldName);
             field.setAccessible(true);
             fieldCache.put(clazz, fieldName, field);
             return field;
-        } catch (NoSuchFieldException e) {
+        } catch (final NoSuchFieldException e) {
             return null;
         }
     }
 
-    private static final Map<Class<?>, Constructor<?>> constructorCache = new HashMap<>();
-
-    public static Constructor<?> getConstructorCached(Class<?> clazz) {
+    public static Constructor<?> getConstructorCached(final Class<?> clazz) {
         if (constructorCache.containsKey(clazz)) {
             return constructorCache.get(clazz);
         }
         try {
-            Constructor<?> constructor = clazz.getDeclaredConstructor();
+            final Constructor<?> constructor = clazz.getDeclaredConstructor();
             constructor.setAccessible(true);
             constructorCache.put(clazz, constructor);
             return constructor;
-        } catch (NoSuchMethodException e) {
+        } catch (final NoSuchMethodException e) {
             return null;
         }
     }
 
-    private static final Table<Class<?>, ConstructorParams, Constructor<?>> constructorParamCache = HashBasedTable.create();
-
-    public static Constructor<?> getConstructorCached(Class<?> clazz, Class<?>... params) {
-        ConstructorParams constructorParams = new ConstructorParams(params);
+    public static Constructor<?> getConstructorCached(final Class<?> clazz, final Class<?>... params) {
+        final ConstructorParams constructorParams = new ConstructorParams(params);
         if (constructorParamCache.contains(clazz, constructorParams)) {
             return constructorParamCache.get(clazz, constructorParams);
         }
         try {
-            Constructor<?> constructor = clazz.getDeclaredConstructor(params);
+            final Constructor<?> constructor = clazz.getDeclaredConstructor(params);
             constructor.setAccessible(true);
             constructorParamCache.put(clazz, constructorParams, constructor);
             return constructor;
-        } catch (NoSuchMethodException e) {
+        } catch (final NoSuchMethodException e) {
             return null;
         }
     }
@@ -197,16 +194,16 @@ public class ReflUtil {
     private static class ConstructorParams {
         private final Class<?>[] params;
 
-        ConstructorParams(Class<?>[] params) {
+        ConstructorParams(final Class<?>[] params) {
             this.params = params;
         }
 
         @Override
-        public boolean equals(Object o) {
+        public boolean equals(final Object o) {
             if (this == o) return true;
             if (o == null || getClass() != o.getClass()) return false;
 
-            ConstructorParams that = (ConstructorParams) o;
+            final ConstructorParams that = (ConstructorParams) o;
 
             return Arrays.deepEquals(params, that.params);
         }
@@ -222,13 +219,19 @@ public class ReflUtil {
      *
      * @author SupaHam (<a href="https://github.com/SupaHam">https://github.com/SupaHam</a>)
      */
-    public static class NMSVersion implements Comparable<NMSVersion> {
+    public static final class NMSVersion implements Comparable<NMSVersion> {
         private static final Pattern VERSION_PATTERN = Pattern.compile("^v(\\d+)_(\\d+)_R(\\d+)");
         private final int major;
         private final int minor;
         private final int release;
 
-        public static NMSVersion fromString(String string) {
+        private NMSVersion(final int major, final int minor, final int release) {
+            this.major = major;
+            this.minor = minor;
+            this.release = release;
+        }
+
+        public static NMSVersion fromString(final String string) {
             Preconditions.checkNotNull(string, "string cannot be null.");
             Matcher matcher = VERSION_PATTERN.matcher(string);
             if (!matcher.matches()) {
@@ -241,25 +244,19 @@ public class ReflUtil {
             return new NMSVersion(Integer.parseInt(matcher.group(1)), Integer.parseInt(matcher.group(2)), Integer.parseInt(matcher.group(3)));
         }
 
-        private NMSVersion(int major, int minor, int release) {
-            this.major = major;
-            this.minor = minor;
-            this.release = release;
-        }
-
-        public boolean isHigherThan(NMSVersion o) {
+        public boolean isHigherThan(final NMSVersion o) {
             return compareTo(o) > 0;
         }
 
-        public boolean isHigherThanOrEqualTo(NMSVersion o) {
+        public boolean isHigherThanOrEqualTo(final NMSVersion o) {
             return compareTo(o) >= 0;
         }
 
-        public boolean isLowerThan(NMSVersion o) {
+        public boolean isLowerThan(final NMSVersion o) {
             return compareTo(o) < 0;
         }
 
-        public boolean isLowerThanOrEqualTo(NMSVersion o) {
+        public boolean isLowerThanOrEqualTo(final NMSVersion o) {
             return compareTo(o) <= 0;
         }
 
@@ -276,17 +273,17 @@ public class ReflUtil {
         }
 
         @Override
-        public boolean equals(Object o) {
+        public boolean equals(final Object o) {
             if (this == o) {
                 return true;
             }
             if (o == null || getClass() != o.getClass()) {
                 return false;
             }
-            NMSVersion that = (NMSVersion) o;
+            final NMSVersion that = (NMSVersion) o;
             return major == that.major &&
-                    minor == that.minor &&
-                    release == that.release;
+                minor == that.minor &&
+                release == that.release;
         }
 
         @Override
@@ -300,7 +297,7 @@ public class ReflUtil {
         }
 
         @Override
-        public int compareTo(NMSVersion o) {
+        public int compareTo(final NMSVersion o) {
             if (major < o.major) {
                 return -1;
             } else if (major > o.major) {

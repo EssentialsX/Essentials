@@ -16,7 +16,6 @@ import java.util.logging.Level;
 
 import static com.earth2me.essentials.I18n.tl;
 
-
 public class EssentialsXMPP extends JavaPlugin implements IEssentialsXMPP {
     private static EssentialsXMPP instance = null;
     private transient UserManager users;
@@ -26,6 +25,10 @@ public class EssentialsXMPP extends JavaPlugin implements IEssentialsXMPP {
 
     static IEssentialsXMPP getInstance() {
         return instance;
+    }
+
+    static void updatePresence() {
+        instance.xmpp.updatePresence();
     }
 
     @Override
@@ -84,7 +87,7 @@ public class EssentialsXMPP extends JavaPlugin implements IEssentialsXMPP {
 
     @Override
     public IUser getUserByAddress(final String address) {
-        String username = instance.users.getUserByAddress(address);
+        final String username = instance.users.getUserByAddress(address);
         return username == null ? null : ess.getUser(username);
     }
 
@@ -111,10 +114,6 @@ public class EssentialsXMPP extends JavaPlugin implements IEssentialsXMPP {
         return instance.xmpp.sendMessage(address, message);
     }
 
-    static void updatePresence() {
-        instance.xmpp.updatePresence();
-    }
-
     @Override
     public List<String> getSpyUsers() {
         return instance.users.getSpyUsers();
@@ -124,12 +123,13 @@ public class EssentialsXMPP extends JavaPlugin implements IEssentialsXMPP {
     public void broadcastMessage(final IUser sender, final String message, final String xmppAddress) {
         ess.broadcastMessage(sender, message);
         try {
-            for (String address : getSpyUsers()) {
+            for (final String address : getSpyUsers()) {
                 if (!address.equalsIgnoreCase(xmppAddress)) {
                     sendMessage(address, message);
                 }
             }
-        } catch (Exception ignored) {}
+        } catch (final Exception ignored) {
+        }
     }
 
     @Override

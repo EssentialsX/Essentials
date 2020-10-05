@@ -3,30 +3,32 @@ package com.earth2me.essentials.items;
 import com.earth2me.essentials.Essentials;
 import com.earth2me.essentials.EssentialsConf;
 import com.earth2me.essentials.IConf;
-import java.io.File;
-import java.util.Collection;
-import java.util.HashMap;
 import net.ess3.api.IItemDb;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
+
+import java.io.File;
+import java.util.Collection;
+import java.util.HashMap;
 
 public class CustomItemResolver implements IItemDb.ItemResolver, IConf {
     private final EssentialsConf config;
     private final Essentials ess;
     private final HashMap<String, String> map = new HashMap<>();
 
-    public CustomItemResolver(Essentials ess) {
+    public CustomItemResolver(final Essentials ess) {
         config = new EssentialsConf(new File(ess.getDataFolder(), "custom_items.yml"));
         this.ess = ess;
         config.setTemplateName("/custom_items.yml");
     }
 
     @Override
-    public ItemStack apply(String item) {
+    public ItemStack apply(final String item) {
         if (map.containsKey(item)) {
             try {
                 return ess.getItemDb().get(map.get(item));
-            } catch (Exception ignored) {}
+            } catch (final Exception ignored) {
+            }
         }
 
         return null;
@@ -42,15 +44,15 @@ public class CustomItemResolver implements IItemDb.ItemResolver, IConf {
         map.clear();
         config.load();
 
-        ConfigurationSection section = config.getConfigurationSection("aliases");
+        final ConfigurationSection section = config.getConfigurationSection("aliases");
         if (section == null || section.getKeys(false).isEmpty()) {
             ess.getLogger().warning("No aliases found in custom_items.yml.");
             return;
         }
 
-        for (String alias : section.getKeys(false)) {
+        for (final String alias : section.getKeys(false)) {
             if (!section.isString(alias)) continue;
-            String target = section.getString(alias);
+            final String target = section.getString(alias);
 
             if (target != null && !section.contains(target) && existsInItemDb(target)) {
                 map.put(alias, target);
@@ -58,7 +60,7 @@ public class CustomItemResolver implements IItemDb.ItemResolver, IConf {
         }
     }
 
-    public void setAlias(String alias, String target) {
+    public void setAlias(final String alias, final String target) {
         if (map.containsKey(alias) && map.get(alias).equalsIgnoreCase(target)) {
             return;
         }
@@ -67,7 +69,7 @@ public class CustomItemResolver implements IItemDb.ItemResolver, IConf {
         save();
     }
 
-    public void removeAlias(String alias) {
+    public void removeAlias(final String alias) {
         if (map.remove(alias) != null) {
             save();
         }
@@ -78,11 +80,11 @@ public class CustomItemResolver implements IItemDb.ItemResolver, IConf {
         config.save();
     }
 
-    private boolean existsInItemDb(String item) {
+    private boolean existsInItemDb(final String item) {
         try {
             ess.getItemDb().get(item);
             return true;
-        } catch (Exception e) {
+        } catch (final Exception e) {
             return false;
         }
     }

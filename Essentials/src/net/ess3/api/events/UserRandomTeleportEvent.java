@@ -13,17 +13,22 @@ import org.bukkit.event.HandlerList;
 public class UserRandomTeleportEvent extends Event implements Cancellable {
     private static final HandlerList handlers = new HandlerList();
 
-    private IUser user;
+    private final IUser user;
     private Location center;
-    private double minRange, maxRange;
+    private double minRange;
+    private double maxRange;
     private boolean cancelled = false;
 
-    public UserRandomTeleportEvent(IUser user, Location center, double minRange, double maxRange) {
+    public UserRandomTeleportEvent(final IUser user, final Location center, final double minRange, final double maxRange) {
         super(!Bukkit.isPrimaryThread());
         this.user = user;
         this.center = center;
         this.minRange = minRange;
         this.maxRange = maxRange;
+    }
+
+    public static HandlerList getHandlerList() {
+        return handlers;
     }
 
     public IUser getUser() {
@@ -34,7 +39,7 @@ public class UserRandomTeleportEvent extends Event implements Cancellable {
         return center;
     }
 
-    public void setCenter(Location center) {
+    public void setCenter(final Location center) {
         this.center = center;
     }
 
@@ -42,7 +47,7 @@ public class UserRandomTeleportEvent extends Event implements Cancellable {
         return minRange;
     }
 
-    public void setMinRange(double minRange) {
+    public void setMinRange(final double minRange) {
         this.minRange = minRange;
     }
 
@@ -50,7 +55,7 @@ public class UserRandomTeleportEvent extends Event implements Cancellable {
         return maxRange;
     }
 
-    public void setMaxRange(double maxRange) {
+    public void setMaxRange(final double maxRange) {
         this.maxRange = maxRange;
     }
 
@@ -60,16 +65,12 @@ public class UserRandomTeleportEvent extends Event implements Cancellable {
     }
 
     @Override
-    public void setCancelled(boolean b) {
+    public void setCancelled(final boolean b) {
         cancelled = b;
     }
 
     @Override
     public HandlerList getHandlers() {
-        return handlers;
-    }
-
-    public static HandlerList getHandlerList() {
         return handlers;
     }
 }

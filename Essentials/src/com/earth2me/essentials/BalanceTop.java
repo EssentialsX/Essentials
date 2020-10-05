@@ -22,7 +22,7 @@ public class BalanceTop {
     }
 
     protected void calculateBalanceTopMap() {
-        HashMap<String, BigDecimal> map = new HashMap<>();
+        final HashMap<String, BigDecimal> map = new HashMap<>();
         for (UUID u : ess.getUserMap().getAllUniqueUsers()) {
             final User user = ess.getUserMap().getUser(u);
             if (user != null) {
@@ -48,10 +48,10 @@ public class BalanceTop {
      * @return A future with the latest balance top map.
      */
     public CompletableFuture<List<Map.Entry<String, BigDecimal>>> calculateBalanceTopMapAsync() {
-        CompletableFuture<List<Map.Entry<String, BigDecimal>>> future = new CompletableFuture<>();
+        final CompletableFuture<List<Map.Entry<String, BigDecimal>>> future = new CompletableFuture<>();
         ess.runTaskAsynchronously(() -> {
-            HashMap<String, BigDecimal> map = new HashMap<>();
-            List<Map.Entry<String, BigDecimal>> returned;
+            final HashMap<String, BigDecimal> map = new HashMap<>();
+            final List<Map.Entry<String, BigDecimal>> returned;
             for (UUID u : ess.getUserMap().getAllUniqueUsers()) {
                 final User user = ess.getUserMap().getUser(u);
                 if (user != null) {

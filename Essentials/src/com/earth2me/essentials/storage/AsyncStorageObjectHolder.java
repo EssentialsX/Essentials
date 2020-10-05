@@ -9,19 +9,18 @@ import java.io.File;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.logging.Level;
 
-
 public abstract class AsyncStorageObjectHolder<T extends StorageObject> implements IConf, IStorageObjectHolder<T>, IReload {
-    private transient T data;
+    protected final transient IEssentials ess;
     private final transient ReentrantReadWriteLock rwl = new ReentrantReadWriteLock();
     private final transient Class<T> clazz;
-    protected final transient IEssentials ess;
+    private transient T data;
 
     public AsyncStorageObjectHolder(final IEssentials ess, final Class<T> clazz) {
         this.ess = ess;
         this.clazz = clazz;
         try {
             this.data = clazz.newInstance();
-        } catch (IllegalAccessException | InstantiationException ex) {
+        } catch (final IllegalAccessException | InstantiationException ex) {
             Bukkit.getLogger().log(Level.SEVERE, ex.getMessage(), ex);
         }
     }
@@ -77,7 +76,6 @@ public abstract class AsyncStorageObjectHolder<T extends StorageObject> implemen
 
     public abstract File getStorageFile();
 
-
     private class StorageObjectDataWriter extends AbstractDelayedYamlFileWriter {
         StorageObjectDataWriter() {
             super(ess, getStorageFile());
@@ -95,7 +93,6 @@ public abstract class AsyncStorageObjectHolder<T extends StorageObject> implemen
             finishWrite();
         }
     }
-
 
     private class StorageObjectDataReader extends AbstractDelayedYamlFileReader<T> {
         StorageObjectDataReader() {
@@ -121,7 +118,7 @@ public abstract class AsyncStorageObjectHolder<T extends StorageObject> implemen
             if (data == null) {
                 try {
                     data = clazz.newInstance();
-                } catch (IllegalAccessException | InstantiationException ex) {
+                } catch (final IllegalAccessException | InstantiationException ex) {
                     Bukkit.getLogger().log(Level.SEVERE, ex.getMessage(), ex);
                 }
             }

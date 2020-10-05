@@ -35,7 +35,6 @@ import org.bukkit.event.hanging.HangingBreakEvent;
 
 import java.util.Locale;
 
-
 public class EssentialsProtectEntityListener implements Listener {
     private final IProtect prot;
     private final IEssentials ess;
@@ -152,7 +151,7 @@ public class EssentialsProtectEntityListener implements Listener {
     }
 
     private boolean shouldBeDamaged(final User user, final String type) {
-        return (user.isAuthorized("essentials.protect.damage.".concat(type)) && !user.isAuthorized("essentials.protect.damage.disable"));
+        return user.isAuthorized("essentials.protect.damage.".concat(type)) && !user.isAuthorized("essentials.protect.damage.disable");
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
@@ -160,7 +159,7 @@ public class EssentialsProtectEntityListener implements Listener {
         if (event.getEntity() == null) {
             return;
         }
-        Entity entity = event.getEntity();
+        final Entity entity = event.getEntity();
         final int maxHeight = ess.getSettings().getProtectCreeperMaxHeight();
 
         if (entity instanceof EnderDragon && prot.getSettingBool(ProtectConfig.prevent_enderdragon_blockdmg)) {
@@ -222,14 +221,14 @@ public class EssentialsProtectEntityListener implements Listener {
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-    public void onExplosionPrime(ExplosionPrimeEvent event) {
+    public void onExplosionPrime(final ExplosionPrimeEvent event) {
         if ((event.getEntity() instanceof Fireball || event.getEntity() instanceof SmallFireball) && prot.getSettingBool(ProtectConfig.prevent_fireball_fire)) {
             event.setFire(false);
         }
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-    public void onEntityChangeBlock(EntityChangeBlockEvent event) {
+    public void onEntityChangeBlock(final EntityChangeBlockEvent event) {
         if (event.getEntityType() == EntityType.ENDERMAN && prot.getSettingBool(ProtectConfig.prevent_enderman_pickup)) {
             event.setCancelled(true);
             return;
@@ -244,14 +243,14 @@ public class EssentialsProtectEntityListener implements Listener {
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-    public void onDoorBreak(EntityBreakDoorEvent event) {
+    public void onDoorBreak(final EntityBreakDoorEvent event) {
         if (event.getEntityType() == EntityType.ZOMBIE && prot.getSettingBool(ProtectConfig.prevent_zombie_door_break)) {
             event.setCancelled(true);
         }
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-    public void onPaintingBreak(HangingBreakByEntityEvent event) {
+    public void onPaintingBreak(final HangingBreakByEntityEvent event) {
         if ((event.getCause() == HangingBreakEvent.RemoveCause.ENTITY) && ((event.getRemover() instanceof Creeper) && prot.getSettingBool(ProtectConfig.prevent_creeper_explosion) || (((event.getRemover() instanceof Fireball) || (event.getRemover() instanceof SmallFireball)) && prot.getSettingBool(ProtectConfig.prevent_fireball_explosion)) || ((event.getRemover() instanceof TNTPrimed) && prot.getSettingBool(ProtectConfig.prevent_tnt_explosion)) || ((event.getRemover() instanceof WitherSkull) && prot.getSettingBool(ProtectConfig.prevent_witherskull_explosion)))) {
             event.setCancelled(true);
         }

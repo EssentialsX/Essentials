@@ -10,7 +10,6 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import static com.earth2me.essentials.I18n.tl;
 
-
 public class SignFree extends EssentialsSign {
     public SignFree() {
         super("Free");
@@ -22,7 +21,7 @@ public class SignFree extends EssentialsSign {
             ItemStack item = getItemStack(sign.getLine(1), 1, ess);
             item = getItemMeta(item, sign.getLine(2), ess);
             item = getItemMeta(item, sign.getLine(3), ess);
-        } catch (SignException ex) {
+        } catch (final SignException ex) {
             sign.setLine(1, "§c<item>");
             throw new SignException(ex.getMessage(), ex);
         }
@@ -41,11 +40,11 @@ public class SignFree extends EssentialsSign {
 
         item.setAmount(item.getType().getMaxStackSize());
 
-        ItemMeta meta = item.getItemMeta();
+        final ItemMeta meta = item.getItemMeta();
 
         final String displayName = meta.hasDisplayName() ? meta.getDisplayName() : item.getType().toString();
 
-        Inventory invent = ess.getServer().createInventory(player.getBase(), 36, displayName);
+        final Inventory invent = ess.getServer().createInventory(player.getBase(), 36, displayName);
         for (int i = 0; i < 36; i++) {
             invent.addItem(item);
         }

@@ -3,7 +3,6 @@ package com.earth2me.essentials.textreader;
 import java.util.List;
 import java.util.Map;
 
-
 public interface IText {
     // Contains the raw text lines
     List<String> getLines();
