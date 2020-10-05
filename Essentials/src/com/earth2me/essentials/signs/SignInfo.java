@@ -11,7 +11,6 @@ import net.ess3.api.IEssentials;
 
 import java.io.IOException;
 
-
 public class SignInfo extends EssentialsSign {
     public SignInfo() {
         super("Info");
@@ -28,8 +27,8 @@ public class SignInfo extends EssentialsSign {
         final Trade charge = getTrade(sign, 3, ess);
         charge.isAffordableFor(player);
 
-        String chapter = sign.getLine(1);
-        String page = sign.getLine(2);
+        final String chapter = sign.getLine(1);
+        final String page = sign.getLine(2);
 
         final IText input;
         try {
@@ -39,7 +38,7 @@ public class SignInfo extends EssentialsSign {
             final TextPager pager = new TextPager(output);
             pager.showPage(chapter, page, null, player.getSource());
 
-        } catch (IOException ex) {
+        } catch (final IOException ex) {
             throw new SignException(ex.getMessage(), ex);
         }
 

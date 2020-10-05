@@ -2,11 +2,24 @@ package com.earth2me.essentials.textreader;
 
 import net.ess3.api.IEssentials;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.Reader;
 import java.lang.ref.SoftReference;
 import java.nio.charset.StandardCharsets;
-import java.util.*;
-
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 
 public class BookInput implements IText {
     private final static HashMap<String, SoftReference<BookInput>> cache = new HashMap<>();
@@ -23,7 +36,7 @@ public class BookInput implements IText {
         }
         if (!file.exists()) {
             if (createFile) {
-                try (InputStream input = ess.getResource(filename + ".txt"); OutputStream output = new FileOutputStream(file)) {
+                try (final InputStream input = ess.getResource(filename + ".txt"); final OutputStream output = new FileOutputStream(file)) {
                     final byte[] buffer = new byte[1024];
                     int length = input.read(buffer);
                     while (length > 0) {
@@ -42,10 +55,10 @@ public class BookInput implements IText {
             throw new FileNotFoundException("Could not create " + filename + ".txt");
         } else {
             lastChange = file.lastModified();
-            boolean readFromfile;
+            final boolean readFromfile;
             synchronized (cache) {
                 final SoftReference<BookInput> inputRef = cache.get(file.getName());
-                BookInput input;
+                final BookInput input;
                 if (inputRef == null || (input = inputRef.get()) == null || input.lastChange < lastChange) {
                     lines = new ArrayList<>();
                     chapters = new ArrayList<>();

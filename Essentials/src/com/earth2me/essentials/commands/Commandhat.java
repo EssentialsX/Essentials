@@ -19,30 +19,29 @@ import java.util.List;
 
 import static com.earth2me.essentials.I18n.tl;
 
-
 public class Commandhat extends EssentialsCommand {
-    public Commandhat() {
-        super("hat");
-    }
-
     /**
      * The prefix for hat prevention commands
      */
     private static final String PERM_PREFIX = "essentials.hat.prevent-type.";
+
+    public Commandhat() {
+        super("hat");
+    }
 
     /**
      * Register permissions used by this command.
      *
      * @param toRegister The plugin manager to register permissions in.
      */
-    public static void registerPermissionsIfNecessary(PluginManager toRegister) {
-        Permission hatPerm = toRegister.getPermission(PERM_PREFIX + "*");
+    public static void registerPermissionsIfNecessary(final PluginManager toRegister) {
+        final Permission hatPerm = toRegister.getPermission(PERM_PREFIX + "*");
         if (hatPerm != null) {
             return;
         }
 
-        ImmutableMap.Builder<String, Boolean> children = ImmutableMap.builder();
-        for (Material mat : Material.values()) {
+        final ImmutableMap.Builder<String, Boolean> children = ImmutableMap.builder();
+        for (final Material mat : Material.values()) {
             final String matPerm = PERM_PREFIX + mat.name().toLowerCase();
             children.put(matPerm, true);
             toRegister.addPermission(new Permission(matPerm, "Prevent using " + mat + " as a type of hat.", PermissionDefault.FALSE));

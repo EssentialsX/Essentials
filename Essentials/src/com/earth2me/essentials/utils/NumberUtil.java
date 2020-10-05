@@ -11,11 +11,11 @@ import java.util.Locale;
 
 import static com.earth2me.essentials.I18n.tl;
 
-public class NumberUtil {
+public final class NumberUtil {
 
     private static final DecimalFormat twoDPlaces = new DecimalFormat("#,###.##");
     private static final DecimalFormat currencyFormat = new DecimalFormat("#0.00", DecimalFormatSymbols.getInstance(Locale.US));
-    
+
     // This field is likely to be modified in com.earth2me.essentials.Settings when loading currency format.
     // This ensures that we can supply a constant formatting.
     private static NumberFormat PRETTY_FORMAT = NumberFormat.getInstance(Locale.US);
@@ -30,8 +30,11 @@ public class NumberUtil {
         PRETTY_FORMAT.setMaximumFractionDigits(2);
     }
 
+    private NumberUtil() {
+    }
+
     // this method should only be called by Essentials
-    public static void internalSetPrettyFormat(NumberFormat prettyFormat) {
+    public static void internalSetPrettyFormat(final NumberFormat prettyFormat) {
         PRETTY_FORMAT = prettyFormat;
     }
 
@@ -54,7 +57,7 @@ public class NumberUtil {
         return str;
     }
 
-    public static String formatAsPrettyCurrency(BigDecimal value) {
+    public static String formatAsPrettyCurrency(final BigDecimal value) {
         String str = PRETTY_FORMAT.format(value);
         if (str.endsWith(".00")) {
             str = str.substring(0, str.length() - 3);
@@ -95,7 +98,7 @@ public class NumberUtil {
     public static boolean isInt(final String sInt) {
         try {
             Integer.parseInt(sInt);
-        } catch (NumberFormatException e) {
+        } catch (final NumberFormatException e) {
             return false;
         }
         return true;

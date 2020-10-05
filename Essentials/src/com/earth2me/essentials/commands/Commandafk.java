@@ -11,45 +11,44 @@ import java.util.List;
 
 import static com.earth2me.essentials.I18n.tl;
 
-
 public class Commandafk extends EssentialsCommand {
     public Commandafk() {
         super("afk");
     }
 
     @Override
-    public void run(Server server, User user, String commandLabel, String[] args) throws Exception {
+    public void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception {
         if (args.length > 0 && user.isAuthorized("essentials.afk.others")) {
             User afkUser = user; // if no player found, but message specified, set command executor to target user
             String message;
             try {
                 afkUser = getPlayer(server, user, args, 0);
                 message = args.length > 1 ? getFinalArg(args, 1) : null;
-            } catch (PlayerNotFoundException e) {
+            } catch (final PlayerNotFoundException e) {
                 message = getFinalArg(args, 0);
             }
             toggleAfk(user, afkUser, message);
         } else {
-            String message = args.length > 0 ? getFinalArg(args, 0) : null;
+            final String message = args.length > 0 ? getFinalArg(args, 0) : null;
             toggleAfk(user, user, message);
         }
     }
 
     @Override
-    public void run(Server server, CommandSource sender, String commandLabel, String[] args) throws Exception {
+    public void run(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception {
         if (args.length > 0) {
-            User afkUser = getPlayer(server, args, 0, true, false);
-            String message = args.length > 1 ? getFinalArg(args, 1) : null;
+            final User afkUser = getPlayer(server, args, 0, true, false);
+            final String message = args.length > 1 ? getFinalArg(args, 1) : null;
             toggleAfk(null, afkUser, message);
         } else {
             throw new NotEnoughArgumentsException();
         }
     }
 
-    private void toggleAfk(User sender, User user, String message) throws Exception {
+    private void toggleAfk(final User sender, final User user, final String message) throws Exception {
         if (message != null && sender != null) {
             if (sender.isMuted()) {
-                String dateDiff = sender.getMuteTimeout() > 0 ? DateUtil.formatDateDiff(sender.getMuteTimeout()) : null;
+                final String dateDiff = sender.getMuteTimeout() > 0 ? DateUtil.formatDateDiff(sender.getMuteTimeout()) : null;
                 if (dateDiff == null) {
                     throw new Exception(sender.hasMuteReason() ? tl("voiceSilencedReason", sender.getMuteReason()) : tl("voiceSilenced"));
                 }
@@ -91,17 +90,8 @@ public class Commandafk extends EssentialsCommand {
     }
 
     @Override
-    protected List<String> getTabCompleteOptions(Server server, User user, String commandLabel, String[] args) {
-        if (args.length == 1 && user.isAuthorized("essentials.afk.others")) {
-            return getPlayers(server, user);
-        } else {
-            return Collections.emptyList();
-        }
-    }
-
-    @Override
-    protected List<String> getTabCompleteOptions(Server server, CommandSource sender, String commandLabel, String[] args) {
-        if (args.length == 1) {
+    protected List<String> getTabCompleteOptions(final Server server, final CommandSource sender, final String commandLabel, final String[] args) {
+        if (args.length == 1 && sender.isAuthorized("essentials.afk.others", ess)) {
             return getPlayers(server, sender);
         } else {
             return Collections.emptyList();

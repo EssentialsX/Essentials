@@ -10,7 +10,6 @@ import org.bukkit.event.server.PluginEnableEvent;
 
 import java.util.logging.Level;
 
-
 public class EssentialsPluginListener implements Listener, IConf {
     private final transient IEssentials ess;
 
@@ -27,7 +26,7 @@ public class EssentialsPluginListener implements Listener, IConf {
         ess.getPermissionsHandler().checkPermissions();
         ess.getAlternativeCommandsHandler().addPlugin(event.getPlugin());
         if (!Methods.hasMethod() && Methods.setMethod(ess.getServer().getPluginManager())) {
-            ess.getLogger().log(Level.INFO, "Payment method found (" + Methods.getMethod().getLongName() + " version: " + ess.getPaymentMethod().getMethod().getVersion() + ")");
+            ess.getLogger().log(Level.INFO, "Payment method found (" + Methods.getMethod().getLongName() + " version: " + Methods.getMethod().getVersion() + ")");
         }
     }
 
@@ -39,7 +38,7 @@ public class EssentialsPluginListener implements Listener, IConf {
         ess.getPermissionsHandler().checkPermissions();
         ess.getAlternativeCommandsHandler().removePlugin(event.getPlugin());
         // Check to see if the plugin thats being disabled is the one we are using
-        if (ess.getPaymentMethod() != null && Methods.hasMethod() && Methods.checkDisabled(event.getPlugin())) {
+        if (Methods.hasMethod() && Methods.checkDisabled(event.getPlugin())) {
             Methods.reset();
             ess.getLogger().log(Level.INFO, "Payment method was disabled. No longer accepting payments.");
         }

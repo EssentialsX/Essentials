@@ -16,18 +16,25 @@ import org.bukkit.event.block.BlockDamageEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
-import org.bukkit.event.player.*;
+import org.bukkit.event.player.PlayerGameModeChangeEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerRespawnEvent;
+import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import org.bukkit.plugin.PluginManager;
 
 import java.io.File;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Locale;
 import java.util.concurrent.CompletableFuture;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import static com.earth2me.essentials.I18n.tl;
-
 
 public class Jails extends AsyncStorageObjectHolder<com.earth2me.essentials.settings.Jails> implements net.ess3.api.IJails {
     private static final transient Logger LOGGER = Bukkit.getLogger();
@@ -81,7 +88,7 @@ public class Jails extends AsyncStorageObjectHolder<com.earth2me.essentials.sett
             if (getData().getJails() == null || jailName == null || !getData().getJails().containsKey(jailName.toLowerCase(Locale.ENGLISH))) {
                 throw new Exception(tl("jailNotExist"));
             }
-            Location loc = getData().getJails().get(jailName.toLowerCase(Locale.ENGLISH));
+            final Location loc = getData().getJails().get(jailName.toLowerCase(Locale.ENGLISH));
             if (loc == null || loc.getWorld() == null) {
                 throw new Exception(tl("jailNotExist"));
             }
@@ -126,7 +133,7 @@ public class Jails extends AsyncStorageObjectHolder<com.earth2me.essentials.sett
         acquireReadLock();
         try {
             if (user.getBase().isOnline()) {
-                Location loc = getJail(jail);
+                final Location loc = getJail(jail);
                 user.getTeleport().now(loc, false, TeleportCause.COMMAND);
             }
             user.setJail(jail);
@@ -136,15 +143,13 @@ public class Jails extends AsyncStorageObjectHolder<com.earth2me.essentials.sett
     }
 
     @Override
-    public void sendToJail(IUser user, String jail, CompletableFuture<Boolean> future) throws Exception {
+    public void sendToJail(final IUser user, final String jail, final CompletableFuture<Boolean> future) throws Exception {
         acquireReadLock();
         try {
             if (user.getBase().isOnline()) {
-                Location loc = getJail(jail);
+                final Location loc = getJail(jail);
                 user.getAsyncTeleport().now(loc, false, TeleportCause.COMMAND, future);
-                future.thenAccept(success -> {
-                    user.setJail(jail);
-                });
+                future.thenAccept(success -> user.setJail(jail));
                 return;
             }
             user.setJail(jail);
@@ -170,11 +175,10 @@ public class Jails extends AsyncStorageObjectHolder<com.earth2me.essentials.sett
     public int getCount() {
         try {
             return getList().size();
-        } catch (Exception ex) {
+        } catch (final Exception ex) {
             return 0;
         }
     }
-
 
     private class JailListener implements Listener {
         @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
@@ -224,7 +228,7 @@ public class Jails extends AsyncStorageObjectHolder<com.earth2me.essentials.sett
         }
 
         @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
-        public void onJailPlayerGameModeChange(PlayerGameModeChangeEvent event) {
+        public void onJailPlayerGameModeChange(final PlayerGameModeChangeEvent event) {
             final User user = ess.getUser(event.getPlayer());
             if (user.isJailed()) {
                 event.setCancelled(true);
@@ -240,7 +244,7 @@ public class Jails extends AsyncStorageObjectHolder<com.earth2me.essentials.sett
 
             try {
                 event.setRespawnLocation(getJail(user.getJail()));
-            } catch (Exception ex) {
+            } catch (final Exception ex) {
                 if (ess.getSettings().isDebug()) {
                     LOGGER.log(Level.INFO, tl("returnPlayerToJailError", user.getName(), ex.getLocalizedMessage()), ex);
                 } else {
@@ -258,7 +262,7 @@ public class Jails extends AsyncStorageObjectHolder<com.earth2me.essentials.sett
 
             try {
                 event.setTo(getJail(user.getJail()));
-            } catch (Exception ex) {
+            } catch (final Exception ex) {
                 if (ess.getSettings().isDebug()) {
                     LOGGER.log(Level.INFO, tl("returnPlayerToJailError", user.getName(), ex.getLocalizedMessage()), ex);
                 } else {
@@ -277,7 +281,7 @@ public class Jails extends AsyncStorageObjectHolder<com.earth2me.essentials.sett
                 return;
             }
 
-            CompletableFuture<Boolean> future = new CompletableFuture<>();
+            final CompletableFuture<Boolean> future = new CompletableFuture<>();
             future.exceptionally(ex -> {
                 if (ess.getSettings().isDebug()) {
                     LOGGER.log(Level.INFO, tl("returnPlayerToJailError", user.getName(), ex.getLocalizedMessage()), ex);
@@ -290,7 +294,7 @@ public class Jails extends AsyncStorageObjectHolder<com.earth2me.essentials.sett
 
             try {
                 sendToJail(user, user.getJail(), future);
-            } catch (Exception ex) {
+            } catch (final Exception ex) {
                 future.completeExceptionally(ex);
             }
         }

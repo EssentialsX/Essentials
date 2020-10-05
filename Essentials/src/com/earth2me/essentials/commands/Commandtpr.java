@@ -13,7 +13,6 @@ import java.util.concurrent.CompletableFuture;
 
 import static com.earth2me.essentials.I18n.tl;
 
-
 public class Commandtpr extends EssentialsCommand {
 
     public Commandtpr() {
@@ -21,17 +20,17 @@ public class Commandtpr extends EssentialsCommand {
     }
 
     @Override
-    protected void run(Server server, User user, String commandLabel, String[] args) throws Exception {
+    protected void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception {
         final Trade charge = new Trade(this.getName(), ess);
         charge.isAffordableFor(user);
-        RandomTeleport randomTeleport = ess.getRandomTeleport();
-        UserRandomTeleportEvent event = new UserRandomTeleportEvent(user, randomTeleport.getCenter(), randomTeleport.getMinRange(), randomTeleport.getMaxRange());
+        final RandomTeleport randomTeleport = ess.getRandomTeleport();
+        final UserRandomTeleportEvent event = new UserRandomTeleportEvent(user, randomTeleport.getCenter(), randomTeleport.getMinRange(), randomTeleport.getMaxRange());
         server.getPluginManager().callEvent(event);
         if (event.isCancelled()) {
             return;
         }
         randomTeleport.getRandomLocation(event.getCenter(), event.getMinRange(), event.getMaxRange()).thenAccept(location -> {
-            CompletableFuture<Boolean> future = getNewExceptionFuture(user.getSource(), commandLabel);
+            final CompletableFuture<Boolean> future = getNewExceptionFuture(user.getSource(), commandLabel);
             user.getAsyncTeleport().teleport(location, charge, PlayerTeleportEvent.TeleportCause.COMMAND, future);
             future.thenAccept(success -> {
                 if (success) {
@@ -43,7 +42,7 @@ public class Commandtpr extends EssentialsCommand {
     }
 
     @Override
-    protected List<String> getTabCompleteOptions(Server server, User user, String commandLabel, String[] args) {
+    protected List<String> getTabCompleteOptions(final Server server, final User user, final String commandLabel, final String[] args) {
         return Collections.emptyList();
     }
 }

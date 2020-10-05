@@ -12,17 +12,23 @@ import org.bukkit.inventory.Recipe;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.ShapelessRecipe;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 import static com.earth2me.essentials.I18n.tl;
 
-
 public class Commandcondense extends EssentialsCommand {
+    private final Map<ItemStack, SimpleRecipe> condenseList = new HashMap<>();
+
     public Commandcondense() {
         super("condense");
     }
-
-    private final Map<ItemStack, SimpleRecipe> condenseList = new HashMap<>();
 
     @Override
     public void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception {
@@ -32,7 +38,7 @@ public class Commandcondense extends EssentialsCommand {
         if (args.length > 0) {
             is = ess.getItemDb().getMatching(user, args);
         } else {
-            for (ItemStack stack : user.getBase().getInventory().getContents()) {
+            for (final ItemStack stack : user.getBase().getInventory().getContents()) {
                 if (stack == null || stack.getType() == Material.AIR) {
                     continue;
                 }
@@ -65,7 +71,7 @@ public class Commandcondense extends EssentialsCommand {
 
             if (validateReverse) {
                 boolean pass = false;
-                for (Recipe revRecipe : ess.getServer().getRecipesFor(input)) {
+                for (final Recipe revRecipe : ess.getServer().getRecipesFor(input)) {
                     if (getStackOnRecipeMatch(revRecipe, result) != null) {
                         pass = true;
                         break;
@@ -84,7 +90,7 @@ public class Commandcondense extends EssentialsCommand {
                 }
             }
 
-            int output = ((amount / input.getAmount()) * result.getAmount());
+            final int output = (amount / input.getAmount()) * result.getAmount();
             amount -= amount % input.getAmount();
 
             if (amount > 0) {
@@ -106,7 +112,7 @@ public class Commandcondense extends EssentialsCommand {
         }
 
         final Iterator<Recipe> intr = ess.getServer().recipeIterator();
-        List<SimpleRecipe> bestRecipes = new ArrayList<>();
+        final List<SimpleRecipe> bestRecipes = new ArrayList<>();
         while (intr.hasNext()) {
             final Recipe recipe = intr.next();
             final Collection<ItemStack> recipeItems = getStackOnRecipeMatch(recipe, stack);
@@ -122,7 +128,7 @@ public class Commandcondense extends EssentialsCommand {
             if (bestRecipes.size() > 1) {
                 bestRecipes.sort(SimpleRecipeComparator.INSTANCE);
             }
-            SimpleRecipe recipe = bestRecipes.get(0);
+            final SimpleRecipe recipe = bestRecipes.get(0);
             condenseList.put(stack, recipe);
             return recipe;
         }
@@ -134,23 +140,23 @@ public class Commandcondense extends EssentialsCommand {
         final Collection<ItemStack> inputList;
 
         if (recipe instanceof ShapedRecipe) {
-            ShapedRecipe sRecipe = (ShapedRecipe) recipe;
+            final ShapedRecipe sRecipe = (ShapedRecipe) recipe;
             if (sRecipe.getShape().length != sRecipe.getShape()[0].length()) {
                 // Only accept square recipes
                 return null;
             }
             inputList = sRecipe.getIngredientMap().values();
         } else if (recipe instanceof ShapelessRecipe) {
-            ShapelessRecipe slRecipe = (ShapelessRecipe) recipe;
+            final ShapelessRecipe slRecipe = (ShapelessRecipe) recipe;
             inputList = slRecipe.getIngredientList();
         } else {
             return null;
         }
 
         boolean match = true;
-        Iterator<ItemStack> iter = inputList.iterator();
+        final Iterator<ItemStack> iter = inputList.iterator();
         while (iter.hasNext()) {
-            ItemStack inputSlot = iter.next();
+            final ItemStack inputSlot = iter.next();
             if (inputSlot == null) {
                 iter.remove();
                 continue;
@@ -170,12 +176,20 @@ public class Commandcondense extends EssentialsCommand {
         return null;
     }
 
+    @Override
+    protected List<String> getTabCompleteOptions(final Server server, final User user, final String commandLabel, final String[] args) {
+        if (args.length == 1) {
+            return getMatchingItems(args[0]);
+        } else {
+            return Collections.emptyList();
+        }
+    }
 
-    private static class SimpleRecipe implements Recipe {
+    private static final class SimpleRecipe implements Recipe {
         private final ItemStack result;
         private final ItemStack input;
 
-        private SimpleRecipe(ItemStack result, ItemStack input) {
+        private SimpleRecipe(final ItemStack result, final ItemStack input) {
             this.result = result;
             this.input = input;
         }
@@ -190,20 +204,12 @@ public class Commandcondense extends EssentialsCommand {
         }
     }
 
-    @Override
-    protected List<String> getTabCompleteOptions(Server server, User user, String commandLabel, String[] args) {
-        if (args.length == 1) {
-            return getMatchingItems(args[0]);
-        } else {
-            return Collections.emptyList();
-        }
-    }
-
     private static class SimpleRecipeComparator implements Comparator<SimpleRecipe> {
 
         private static final SimpleRecipeComparator INSTANCE = new SimpleRecipeComparator();
+
         @Override
-        public int compare(SimpleRecipe o1, SimpleRecipe o2) {
+        public int compare(final SimpleRecipe o1, final SimpleRecipe o2) {
             return Integer.compare(o2.getInput().getAmount(), o1.getInput().getAmount());
         }
     }

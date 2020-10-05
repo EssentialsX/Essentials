@@ -33,8 +33,47 @@ import java.lang.reflect.Method;
 public class SpawnEggRefl {
     private EntityType type;
 
-    public SpawnEggRefl(EntityType type) {
+    public SpawnEggRefl(final EntityType type) {
         this.type = type;
+    }
+
+    /**
+     * Converts from an item stack to a spawn egg
+     *
+     * @param item - ItemStack, quantity is disregarded
+     * @return SpawnEgg
+     */
+    public static SpawnEggRefl fromItemStack(final ItemStack item) throws Exception {
+        if (item == null)
+            throw new IllegalArgumentException("Item cannot be null");
+        if (item.getType() != Material.MONSTER_EGG)
+            throw new IllegalArgumentException("Item is not a monster egg");
+
+        final Class<?> NMSItemStackClass = ReflUtil.getNMSClass("ItemStack");
+        final Class<?> craftItemStackClass = ReflUtil.getOBCClass("inventory.CraftItemStack");
+        final Method asNMSCopyMethod = ReflUtil.getMethodCached(craftItemStackClass, "asNMSCopy", ItemStack.class);
+
+        final Object stack = asNMSCopyMethod.invoke(null, item);
+        final Object tagCompound = ReflUtil.getMethodCached(NMSItemStackClass, "getTag").invoke(stack);
+        if (tagCompound != null) {
+            final Method tagGetCompound = ReflUtil.getMethodCached(tagCompound.getClass(), "getCompound", String.class);
+            final Object entityTag = tagGetCompound.invoke(tagCompound, "EntityTag");
+
+            final Method tagGetString = ReflUtil.getMethodCached(entityTag.getClass(), "getString", String.class);
+            String idString = (String) tagGetString.invoke(entityTag, "id");
+            if (ReflUtil.getNmsVersionObject().isHigherThanOrEqualTo(ReflUtil.V1_11_R1)) {
+                idString = idString.split("minecraft:")[1];
+            }
+            //noinspection deprecation
+            final EntityType type = EntityType.fromName(idString);
+            if (type != null) {
+                return new SpawnEggRefl(type);
+            } else {
+                throw new IllegalArgumentException("Unable to parse type from item");
+            }
+        } else {
+            throw new IllegalArgumentException("Item is lacking tag compound");
+        }
     }
 
     /**
@@ -51,7 +90,7 @@ public class SpawnEggRefl {
      *
      * @param type The entity type.
      */
-    public void setSpawnedType(EntityType type) {
+    public void setSpawnedType(final EntityType type) {
         if (type.isAlive()) {
             this.type = type;
         }
@@ -78,23 +117,23 @@ public class SpawnEggRefl {
      * @return ItemStack of spawn eggs
      */
     @SuppressWarnings("deprecation")
-    public ItemStack toItemStack(int amount) throws Exception {
-        ItemStack item = new ItemStack(Material.MONSTER_EGG, amount);
+    public ItemStack toItemStack(final int amount) throws Exception {
+        final ItemStack item = new ItemStack(Material.MONSTER_EGG, amount);
 
-        Class<?> craftItemStackClass = ReflUtil.getOBCClass("inventory.CraftItemStack");
-        Method asNMSCopyMethod = ReflUtil.getMethodCached(craftItemStackClass, "asNMSCopy", ItemStack.class);
+        final Class<?> craftItemStackClass = ReflUtil.getOBCClass("inventory.CraftItemStack");
+        final Method asNMSCopyMethod = ReflUtil.getMethodCached(craftItemStackClass, "asNMSCopy", ItemStack.class);
 
-        Class<?> NMSItemStackClass = ReflUtil.getNMSClass("ItemStack");
-        Object stack = asNMSCopyMethod.invoke(null, item);
+        final Class<?> NMSItemStackClass = ReflUtil.getNMSClass("ItemStack");
+        final Object stack = asNMSCopyMethod.invoke(null, item);
         Object tagCompound = ReflUtil.getMethodCached(NMSItemStackClass, "getTag").invoke(stack);
 
-        Class<?> NBTTagCompoundClass = ReflUtil.getNMSClass("NBTTagCompound");
-        Constructor<?> NBTTagCompoundConstructor = ReflUtil.getConstructorCached(NBTTagCompoundClass);
+        final Class<?> NBTTagCompoundClass = ReflUtil.getNMSClass("NBTTagCompound");
+        final Constructor<?> NBTTagCompoundConstructor = ReflUtil.getConstructorCached(NBTTagCompoundClass);
         if (tagCompound == null) {
             tagCompound = NBTTagCompoundConstructor.newInstance();
         }
-        Object id = NBTTagCompoundConstructor.newInstance();
-        Method tagSetString = ReflUtil.getMethodCached(NBTTagCompoundClass, "setString", String.class, String.class);
+        final Object id = NBTTagCompoundConstructor.newInstance();
+        final Method tagSetString = ReflUtil.getMethodCached(NBTTagCompoundClass, "setString", String.class, String.class);
 
         String idString = type.getName();
         if (ReflUtil.getNmsVersionObject().isHigherThanOrEqualTo(ReflUtil.V1_11_R1)) {
@@ -103,52 +142,13 @@ public class SpawnEggRefl {
         }
         tagSetString.invoke(id, "id", idString);
 
-        Method tagSetTag = ReflUtil.getMethodCached(NBTTagCompoundClass, "set", String.class, NBTTagCompoundClass.getSuperclass());
+        final Method tagSetTag = ReflUtil.getMethodCached(NBTTagCompoundClass, "set", String.class, NBTTagCompoundClass.getSuperclass());
         tagSetTag.invoke(tagCompound, "EntityTag", id);
 
-        Method stackSetTag = ReflUtil.getMethodCached(NMSItemStackClass, "setTag", NBTTagCompoundClass);
+        final Method stackSetTag = ReflUtil.getMethodCached(NMSItemStackClass, "setTag", NBTTagCompoundClass);
         stackSetTag.invoke(stack, tagCompound);
 
-        Method asBukkitCopyMethod = ReflUtil.getMethodCached(craftItemStackClass, "asBukkitCopy", NMSItemStackClass);
+        final Method asBukkitCopyMethod = ReflUtil.getMethodCached(craftItemStackClass, "asBukkitCopy", NMSItemStackClass);
         return (ItemStack) asBukkitCopyMethod.invoke(null, stack);
-    }
-
-    /**
-     * Converts from an item stack to a spawn egg
-     *
-     * @param item - ItemStack, quantity is disregarded
-     * @return SpawnEgg
-     */
-    public static SpawnEggRefl fromItemStack(ItemStack item) throws Exception {
-        if (item == null)
-            throw new IllegalArgumentException("Item cannot be null");
-        if (item.getType() != Material.MONSTER_EGG)
-            throw new IllegalArgumentException("Item is not a monster egg");
-
-        Class<?> NMSItemStackClass = ReflUtil.getNMSClass("ItemStack");
-        Class<?> craftItemStackClass = ReflUtil.getOBCClass("inventory.CraftItemStack");
-        Method asNMSCopyMethod = ReflUtil.getMethodCached(craftItemStackClass, "asNMSCopy", ItemStack.class);
-
-        Object stack = asNMSCopyMethod.invoke(null, item);
-        Object tagCompound = ReflUtil.getMethodCached(NMSItemStackClass, "getTag").invoke(stack);
-        if (tagCompound != null) {
-            Method tagGetCompound = ReflUtil.getMethodCached(tagCompound.getClass(), "getCompound", String.class);
-            Object entityTag = tagGetCompound.invoke(tagCompound, "EntityTag");
-
-            Method tagGetString = ReflUtil.getMethodCached(entityTag.getClass(), "getString", String.class);
-            String idString = (String) tagGetString.invoke(entityTag, "id");
-            if (ReflUtil.getNmsVersionObject().isHigherThanOrEqualTo(ReflUtil.V1_11_R1)) {
-                idString = idString.split("minecraft:")[1];
-            }
-            @SuppressWarnings("deprecation")
-            EntityType type = EntityType.fromName(idString);
-            if (type != null) {
-                return new SpawnEggRefl(type);
-            } else {
-                throw new IllegalArgumentException("Unable to parse type from item");
-            }
-        } else {
-            throw new IllegalArgumentException("Item is lacking tag compound");
-        }
     }
 }

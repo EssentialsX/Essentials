@@ -6,11 +6,24 @@ import com.earth2me.essentials.utils.FormatUtil;
 import com.earth2me.essentials.utils.StringUtil;
 import net.ess3.api.IEssentials;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.Reader;
 import java.lang.ref.SoftReference;
 import java.nio.charset.StandardCharsets;
-import java.util.*;
-
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 
 public class TextInput implements IText {
     private static final HashMap<String, SoftReference<TextInput>> cache = new HashMap<>();
@@ -34,10 +47,10 @@ public class TextInput implements IText {
         }
         if (file.exists()) {
             lastChange = file.lastModified();
-            boolean readFromfile;
+            final boolean readFromfile;
             synchronized (cache) {
                 final SoftReference<TextInput> inputRef = cache.get(file.getName());
-                TextInput input;
+                final TextInput input;
                 if (inputRef == null || (input = inputRef.get()) == null || input.lastChange < lastChange) {
                     lines = new ArrayList<>();
                     chapters = new ArrayList<>();
@@ -62,9 +75,9 @@ public class TextInput implements IText {
                             break;
                         }
                         if (line.length() > 1 && line.charAt(0) == '#') {
-                            String[] titles = line.substring(1).trim().replace(" ", "_").split(",");
+                            final String[] titles = line.substring(1).trim().replace(" ", "_").split(",");
                             chapters.add(FormatUtil.replaceFormat(titles[0]));
-                            for (String title : titles) {
+                            for (final String title : titles) {
                                 bookmarks.put(FormatUtil.stripEssentialsFormat(title.toLowerCase(Locale.ENGLISH)), lineNumber);
                             }
                         }
@@ -82,7 +95,7 @@ public class TextInput implements IText {
             chapters = Collections.emptyList();
             bookmarks = Collections.emptyMap();
             if (createFile) {
-                try (InputStream input = ess.getResource(filename + ".txt"); OutputStream output = new FileOutputStream(file)) {
+                try (final InputStream input = ess.getResource(filename + ".txt"); final OutputStream output = new FileOutputStream(file)) {
                     final byte[] buffer = new byte[1024];
                     int length = input.read(buffer);
                     while (length > 0) {

@@ -13,7 +13,6 @@ import java.util.List;
 
 import static com.earth2me.essentials.I18n.tl;
 
-
 public class Commandheal extends EssentialsLoopCommand {
     public Commandheal() {
         super("heal");
@@ -68,31 +67,23 @@ public class Commandheal extends EssentialsLoopCommand {
             player.setFireTicks(0);
             user.sendMessage(tl("heal"));
             if (ess.getSettings().isRemovingEffectsOnHeal()) {
-                for (PotionEffect effect : player.getActivePotionEffects()) {
+                for (final PotionEffect effect : player.getActivePotionEffects()) {
                     player.removePotionEffect(effect.getType());
                 }
             }
             sender.sendMessage(tl("healOther", user.getDisplayName()));
-        } catch (QuietAbortException e) {
+        } catch (final QuietAbortException e) {
             //Handle Quietly
         }
     }
 
     @Override
-    protected List<String> getTabCompleteOptions(Server server, User user, String commandLabel, String[] args) {
-        if (args.length == 1 && user.isAuthorized("essentials.heal.others")) {
-            return getPlayers(server, user);
-        } else {
-            return Collections.emptyList();
-        }
-    }
-
-    @Override
-    protected List<String> getTabCompleteOptions(Server server, CommandSource sender, String commandLabel, String[] args) {
-        if (args.length == 1) {
+    protected List<String> getTabCompleteOptions(final Server server, final CommandSource sender, final String commandLabel, final String[] args) {
+        if (args.length == 1 && sender.isAuthorized("essentials.heal.others", ess)) {
             return getPlayers(server, sender);
         } else {
             return Collections.emptyList();
+
         }
     }
 }

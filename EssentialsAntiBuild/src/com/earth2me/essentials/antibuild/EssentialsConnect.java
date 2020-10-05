@@ -12,19 +12,18 @@ import java.util.logging.Logger;
 
 import static com.earth2me.essentials.I18n.tl;
 
-
 class EssentialsConnect {
     private static final Logger logger = Logger.getLogger("EssentialsAntiBuild");
     private final transient IEssentials ess;
     private final transient IAntiBuild protect;
 
-    EssentialsConnect(Plugin essPlugin, Plugin essProtect) {
+    EssentialsConnect(final Plugin essPlugin, final Plugin essProtect) {
         if (!essProtect.getDescription().getVersion().equals(essPlugin.getDescription().getVersion())) {
             logger.log(Level.WARNING, tl("versionMismatchAll"));
         }
         ess = (IEssentials) essPlugin;
         protect = (IAntiBuild) essProtect;
-        AntiBuildReloader pr = new AntiBuildReloader();
+        final AntiBuildReloader pr = new AntiBuildReloader();
         pr.reloadConfig();
         ess.addReloadListener(pr);
     }
@@ -37,7 +36,7 @@ class EssentialsConnect {
         final Location loc = user.getLocation();
         final String warnMessage = tl("alertFormat", user.getName(), type, item, loc.getWorld().getName() + "," + loc.getBlockX() + "," + loc.getBlockY() + "," + loc.getBlockZ());
         logger.log(Level.WARNING, warnMessage);
-        for (Player p : ess.getServer().getOnlinePlayers()) {
+        for (final Player p : ess.getServer().getOnlinePlayers()) {
             final User alertUser = ess.getUser(p);
             if (alertUser.isAuthorized("essentials.protect.alerts")) {
                 alertUser.sendMessage(warnMessage);
@@ -48,7 +47,7 @@ class EssentialsConnect {
     private class AntiBuildReloader implements IConf {
         @Override
         public void reloadConfig() {
-            for (AntiBuildConfig protectConfig : AntiBuildConfig.values()) {
+            for (final AntiBuildConfig protectConfig : AntiBuildConfig.values()) {
                 if (protectConfig.isList()) {
                     protect.getSettingsList().put(protectConfig, ess.getSettings().getProtectList(protectConfig.getConfigName()));
                 } else {

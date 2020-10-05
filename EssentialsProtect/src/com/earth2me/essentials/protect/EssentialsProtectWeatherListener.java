@@ -7,7 +7,6 @@ import org.bukkit.event.weather.LightningStrikeEvent;
 import org.bukkit.event.weather.ThunderChangeEvent;
 import org.bukkit.event.weather.WeatherChangeEvent;
 
-
 public class EssentialsProtectWeatherListener implements Listener {
     private final IProtect prot;
 

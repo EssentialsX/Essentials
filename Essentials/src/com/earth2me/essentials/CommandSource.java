@@ -3,7 +3,6 @@ package com.earth2me.essentials;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-
 public class CommandSource {
     protected CommandSender sender;
 
@@ -22,7 +21,7 @@ public class CommandSource {
         return null;
     }
 
-    public final net.ess3.api.IUser getUser(IEssentials ess) {
+    public final net.ess3.api.IUser getUser(final IEssentials ess) {
         if (sender instanceof Player) {
             return ess.getUser((Player) sender);
         }
@@ -37,18 +36,21 @@ public class CommandSource {
         return this.sender = base;
     }
 
-
-    public void sendMessage(String message) {
+    public void sendMessage(final String message) {
         if (!message.isEmpty()) {
             sender.sendMessage(message);
         }
     }
 
-    public boolean isAuthorized(String permission, IEssentials ess) {
+    public boolean isAuthorized(final String permission, final IEssentials ess) {
         return !(sender instanceof Player) || getUser(ess).isAuthorized(permission);
     }
 
     public String getSelfSelector() {
         return sender instanceof Player ? getPlayer().getName() : "*";
+    }
+
+    public String getDisplayName() {
+        return sender instanceof Player ? getPlayer().getDisplayName() : getSender().getName();
     }
 }

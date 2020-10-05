@@ -11,7 +11,6 @@ import java.util.Locale;
 
 import static com.earth2me.essentials.I18n.tl;
 
-
 public class SignKit extends EssentialsSign {
     public SignKit() {
         super("Kit");
@@ -29,7 +28,7 @@ public class SignKit extends EssentialsSign {
         } else {
             try {
                 ess.getKits().getKit(kitName);
-            } catch (Exception ex) {
+            } catch (final Exception ex) {
                 throw new SignException(ex.getMessage(), ex);
             }
             final String group = sign.getLine(2);
@@ -44,7 +43,7 @@ public class SignKit extends EssentialsSign {
     protected boolean onSignInteract(final ISign sign, final User player, final String username, final IEssentials ess) throws SignException, ChargeException {
         final String kitName = sign.getLine(1).toLowerCase(Locale.ENGLISH).trim();
         final String group = sign.getLine(2).trim();
-        if ((!group.isEmpty() && ("§2Everyone".equals(group) || player.inGroup(group))) || (group.isEmpty() && (player.isAuthorized("essentials.kits." + kitName)))) {
+        if ((!group.isEmpty() && ("§2Everyone".equals(group) || player.inGroup(group))) || (group.isEmpty() && player.isAuthorized("essentials.kits." + kitName))) {
             final Trade charge = getTrade(sign, 3, ess);
             charge.isAffordableFor(player);
             try {
@@ -55,9 +54,9 @@ public class SignKit extends EssentialsSign {
 
                 charge.charge(player);
                 Trade.log("Sign", "Kit", "Interact", username, null, username, charge, sign.getBlock().getLocation(), ess);
-            } catch (NoChargeException ex) {
+            } catch (final NoChargeException ex) {
                 return false;
-            } catch (Exception ex) {
+            } catch (final Exception ex) {
                 throw new SignException(ex.getMessage(), ex);
             }
             return true;

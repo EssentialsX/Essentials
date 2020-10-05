@@ -1,6 +1,7 @@
 ---
 name: Report a bug
 about: Report an EssentialsX bug. Only use this if you're 100% sure there's something wrong with EssentialsX - otherwise, try "Help!".
+labels: 'bug: unconfirmed'
 
 ---
 

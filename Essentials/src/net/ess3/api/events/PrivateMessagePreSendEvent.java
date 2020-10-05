@@ -11,16 +11,19 @@ import org.bukkit.event.HandlerList;
 public class PrivateMessagePreSendEvent extends Event implements Cancellable {
 
     private static final HandlerList handlers = new HandlerList();
+    private final IMessageRecipient sender;
+    private final IMessageRecipient recipient;
     private boolean cancelled;
-
-    private IMessageRecipient sender;
-    private IMessageRecipient recipient;
     private String message;
 
-    public PrivateMessagePreSendEvent(IMessageRecipient sender, IMessageRecipient recipient, String message) {
+    public PrivateMessagePreSendEvent(final IMessageRecipient sender, final IMessageRecipient recipient, final String message) {
         this.sender = sender;
         this.recipient = recipient;
         this.message = message;
+    }
+
+    public static HandlerList getHandlerList() {
+        return handlers;
     }
 
     public IMessageRecipient getSender() {
@@ -35,7 +38,7 @@ public class PrivateMessagePreSendEvent extends Event implements Cancellable {
         return message;
     }
 
-    public void setMessage(String message) {
+    public void setMessage(final String message) {
         this.message = message;
     }
 
@@ -45,16 +48,12 @@ public class PrivateMessagePreSendEvent extends Event implements Cancellable {
     }
 
     @Override
-    public void setCancelled(boolean b) {
+    public void setCancelled(final boolean b) {
         this.cancelled = b;
     }
 
     @Override
     public HandlerList getHandlers() {
-        return handlers;
-    }
-
-    public static HandlerList getHandlerList() {
         return handlers;
     }
 }

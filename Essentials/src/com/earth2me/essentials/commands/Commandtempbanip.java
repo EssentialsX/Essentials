@@ -34,9 +34,9 @@ public class Commandtempbanip extends EssentialsCommand {
             ipAddress = args[0];
         } else {
             try {
-                User player = getPlayer(server, args, 0, true, true);
+                final User player = getPlayer(server, args, 0, true, true);
                 ipAddress = player.getLastLoginAddress();
-            } catch (PlayerNotFoundException ex) {
+            } catch (final PlayerNotFoundException ex) {
                 ipAddress = args[0];
             }
         }
@@ -50,7 +50,7 @@ public class Commandtempbanip extends EssentialsCommand {
         String banReason = DateUtil.removeTimePattern(time);
 
         final long maxBanLength = ess.getSettings().getMaxTempban() * 1000;
-        if (maxBanLength > 0 && ((banTimestamp - GregorianCalendar.getInstance().getTimeInMillis()) > maxBanLength) && sender.isPlayer() && !(ess.getUser(sender.getPlayer()).isAuthorized("essentials.tempban.unlimited"))) {
+        if (maxBanLength > 0 && ((banTimestamp - GregorianCalendar.getInstance().getTimeInMillis()) > maxBanLength) && sender.isPlayer() && !ess.getUser(sender.getPlayer()).isAuthorized("essentials.tempban.unlimited")) {
             sender.sendMessage(tl("oversizedTempban"));
             return;
         }
@@ -61,20 +61,20 @@ public class Commandtempbanip extends EssentialsCommand {
 
         ess.getServer().getBanList(BanList.Type.IP).addBan(ipAddress, banReason, new Date(banTimestamp), senderName);
 
-        String banDisplay = tl("banFormat", banReason, senderName);
-        for (Player player : ess.getServer().getOnlinePlayers()) {
+        final String banDisplay = tl("banFormat", banReason, senderName);
+        for (final Player player : ess.getServer().getOnlinePlayers()) {
             if (player.getAddress().getAddress().getHostAddress().equalsIgnoreCase(ipAddress)) {
                 player.kickPlayer(banDisplay);
             }
         }
 
-        String message = tl("playerTempBanIpAddress", senderName, ipAddress, DateUtil.formatDateDiff(banTimestamp), banReason);
+        final String message = tl("playerTempBanIpAddress", senderName, ipAddress, DateUtil.formatDateDiff(banTimestamp), banReason);
         server.getLogger().log(Level.INFO, message);
         ess.broadcastMessage("essentials.banip.notify", message);
     }
 
     @Override
-    protected List<String> getTabCompleteOptions(Server server, CommandSource sender, String commandLabel, String[] args) {
+    protected List<String> getTabCompleteOptions(final Server server, final CommandSource sender, final String commandLabel, final String[] args) {
         if (args.length == 1) {
             // TODO: Also list IP addresses?
             return getPlayers(server, sender);

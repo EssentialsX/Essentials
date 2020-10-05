@@ -10,17 +10,14 @@ import java.util.concurrent.CompletableFuture;
 
 import static com.earth2me.essentials.I18n.tl;
 
-
 public class AsyncTimedTeleport implements Runnable {
     private static final double MOVE_CONSTANT = 0.3;
     private final IUser teleportOwner;
     private final IEssentials ess;
     private final AsyncTeleport teleport;
     private final UUID timer_teleportee;
-    private int timer_task;
     private final long timer_started; // time this task was initiated
     private final long timer_delay; // how long to delay the teleportPlayer
-    private double timer_health;
     // note that I initially stored a clone of the location for reference, but...
     // when comparing locations, I got incorrect mismatches (rounding errors, looked like)
     // so, the X/Y/Z values are stored instead and rounded off
@@ -32,8 +29,10 @@ public class AsyncTimedTeleport implements Runnable {
     private final boolean timer_canMove;
     private final Trade timer_chargeFor;
     private final TeleportCause timer_cause;
+    private int timer_task;
+    private double timer_health;
 
-    AsyncTimedTeleport(IUser user, IEssentials ess, AsyncTeleport teleport, long delay, IUser teleportUser, ITarget target, Trade chargeFor, TeleportCause cause, boolean respawn) {
+    AsyncTimedTeleport(final IUser user, final IEssentials ess, final AsyncTeleport teleport, final long delay, final IUser teleportUser, final ITarget target, final Trade chargeFor, final TeleportCause cause, final boolean respawn) {
         this.teleportOwner = user;
         this.ess = ess;
         this.teleport = teleport;
@@ -84,12 +83,12 @@ public class AsyncTimedTeleport implements Runnable {
             @Override
             public void run() {
 
-                timer_health = teleportUser.getBase().getHealth();  // in case user healed, then later gets injured
+                timer_health = teleportUser.getBase().getHealth(); // in case user healed, then later gets injured
                 final long now = System.currentTimeMillis();
                 if (now > timer_started + timer_delay) {
                     try {
                         teleport.cooldown(false);
-                    } catch (Throwable ex) {
+                    } catch (final Throwable ex) {
                         teleportOwner.sendMessage(tl("cooldownWithMessage", ex.getMessage()));
                         if (teleportOwner != teleportUser) {
                             teleportUser.sendMessage(tl("cooldownWithMessage", ex.getMessage()));
@@ -99,7 +98,7 @@ public class AsyncTimedTeleport implements Runnable {
                         cancelTimer(false);
                         teleportUser.sendMessage(tl("teleportationCommencing"));
 
-                        CompletableFuture<Boolean> future = new CompletableFuture<>();
+                        final CompletableFuture<Boolean> future = new CompletableFuture<>();
                         future.exceptionally(e -> {
                             ess.showError(teleportOwner.getSource(), e, "\\ teleport");
                             return false;
@@ -116,23 +115,24 @@ public class AsyncTimedTeleport implements Runnable {
                             if (timer_chargeFor != null) {
                                 try {
                                     timer_chargeFor.charge(teleportOwner);
-                                } catch (ChargeException ex) {
+                                } catch (final ChargeException ex) {
                                     ess.showError(teleportOwner.getSource(), ex, "\\ teleport");
                                 }
                             }
                         });
 
-                    } catch (Exception ex) {
+                    } catch (final Exception ex) {
                         ess.showError(teleportOwner.getSource(), ex, "\\ teleport");
                     }
                 }
             }
         }
+
         ess.scheduleSyncDelayedTask(new DelayedTeleportTask());
     }
 
     //If we need to cancelTimer a pending teleportPlayer call this method
-    void cancelTimer(boolean notifyUser) {
+    void cancelTimer(final boolean notifyUser) {
         if (timer_task == -1) {
             return;
         }

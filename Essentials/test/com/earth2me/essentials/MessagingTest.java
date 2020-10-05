@@ -1,12 +1,7 @@
 package com.earth2me.essentials;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.fail;
-
 import com.earth2me.essentials.commands.IEssentialsCommand;
 import com.earth2me.essentials.commands.NoChargeException;
-
 import org.bukkit.World.Environment;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.InvalidDescriptionException;
@@ -14,6 +9,9 @@ import org.junit.Test;
 
 import java.io.IOException;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.fail;
 
 public class MessagingTest {
 
@@ -27,9 +25,9 @@ public class MessagingTest {
         ess = new Essentials(server);
         try {
             ess.setupForTesting(server);
-        } catch (InvalidDescriptionException ex) {
+        } catch (final InvalidDescriptionException ex) {
             fail("InvalidDescriptionException");
-        } catch (IOException ex) {
+        } catch (final IOException ex) {
             fail("IOException");
         }
         base1 = server.createPlayer("testPlayer1");
@@ -37,43 +35,45 @@ public class MessagingTest {
         ess.getUser(base1);
     }
 
-    private void runCommand(String command, User user, String args) throws Exception {
+    private void runCommand(final String command, final User user, final String args) throws Exception {
         runCommand(command, user, args.split("\\s+"));
     }
 
-    private void runCommand(String command, User user, String[] args) throws Exception {
-        IEssentialsCommand cmd;
+    private void runCommand(final String command, final User user, final String[] args) throws Exception {
+        final IEssentialsCommand cmd;
 
         try {
             cmd = (IEssentialsCommand) Essentials.class.getClassLoader()
                 .loadClass("com.earth2me.essentials.commands.Command" + command).newInstance();
             cmd.setEssentials(ess);
             cmd.run(server, user, command, null, args);
-        } catch (NoChargeException ignored) {}
+        } catch (final NoChargeException ignored) {
+        }
 
     }
 
-    private void runConsoleCommand(String command, String args) throws Exception {
+    private void runConsoleCommand(final String command, final String args) throws Exception {
         runConsoleCommand(command, args.split("\\s+"));
     }
 
-    private void runConsoleCommand(String command, String[] args) throws Exception {
-        IEssentialsCommand cmd;
+    private void runConsoleCommand(final String command, final String[] args) throws Exception {
+        final IEssentialsCommand cmd;
 
-        CommandSender sender = server.getConsoleSender();
+        final CommandSender sender = server.getConsoleSender();
 
         try {
             cmd = (IEssentialsCommand) Essentials.class.getClassLoader()
                 .loadClass("com.earth2me.essentials.commands.Command" + command).newInstance();
             cmd.setEssentials(ess);
             cmd.run(server, new CommandSource(sender), command, null, args);
-        } catch (NoChargeException ignored) {}
+        } catch (final NoChargeException ignored) {
+        }
     }
 
     @Test(expected = Exception.class) // I really don't like this, but see note below about console reply
     public void testNullLastMessageReplyRecipient() throws Exception {
-        User user1 = ess.getUser(base1);
-        Console console = Console.getInstance();
+        final User user1 = ess.getUser(base1);
+        final Console console = Console.getInstance();
         if (ess.getSettings().isLastMessageReplyRecipient()) {
             assertNull(console.getReplyRecipient()); // console never messaged or received messages from anyone.
 
@@ -95,8 +95,8 @@ public class MessagingTest {
 
     @Test
     public void testNonNullLastMessageReplyRecipient() throws Exception {
-        User user1 = ess.getUser(base1);
-        Console console = Console.getInstance();
+        final User user1 = ess.getUser(base1);
+        final Console console = Console.getInstance();
 
         if (ess.getSettings().isLastMessageReplyRecipient()) {
             assertNull(console.getReplyRecipient()); // console never messaged or received messages from anyone.
