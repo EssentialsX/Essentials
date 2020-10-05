@@ -1,11 +1,14 @@
 package com.earth2me.essentials.spawn;
 
+import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.commands.EssentialsCommand;
 import org.bukkit.Server;
 
-import static com.earth2me.essentials.I18n.tl;
+import java.util.Collections;
+import java.util.List;
 
+import static com.earth2me.essentials.I18n.tl;
 
 public class Commandsetspawn extends EssentialsCommand {
     public Commandsetspawn() {
@@ -17,5 +20,10 @@ public class Commandsetspawn extends EssentialsCommand {
         final String group = args.length > 0 ? getFinalArg(args, 0) : "default";
         ((SpawnStorage) module).setSpawn(user.getLocation(), group);
         user.sendMessage(tl("spawnSet", group));
+    }
+
+    @Override
+    protected List<String> getTabCompleteOptions(final Server server, final CommandSource sender, final String commandLabel, final String[] args) {
+        return Collections.emptyList();
     }
 }

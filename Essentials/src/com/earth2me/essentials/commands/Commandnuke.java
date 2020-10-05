@@ -14,7 +14,6 @@ import java.util.List;
 
 import static com.earth2me.essentials.I18n.tl;
 
-
 public class Commandnuke extends EssentialsCommand {
     public Commandnuke() {
         super("nuke");
@@ -22,19 +21,17 @@ public class Commandnuke extends EssentialsCommand {
 
     @Override
     protected void run(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws NoSuchFieldException, NotEnoughArgumentsException {
-        Collection<Player> targets;
+        final Collection<Player> targets;
         if (args.length > 0) {
             targets = new ArrayList<>();
-            int pos = 0;
-            for (String arg : args) {
-                targets.add(getPlayer(server, sender, args, pos).getBase());
-                pos++;
+            for (int i = 0; i < args.length; ++i) {
+                targets.add(getPlayer(server, sender, args, i).getBase());
             }
         } else {
             targets = ess.getOnlinePlayers();
         }
         ess.getTNTListener().enable();
-        for (Player player : targets) {
+        for (final Player player : targets) {
             if (player == null) {
                 continue;
             }
@@ -43,15 +40,14 @@ public class Commandnuke extends EssentialsCommand {
             final World world = loc.getWorld();
             for (int x = -10; x <= 10; x += 5) {
                 for (int z = -10; z <= 10; z += 5) {
-                    final Location tntloc = new Location(world, loc.getBlockX() + x, world.getHighestBlockYAt(loc) + 64, loc.getBlockZ() + z);
-                    final TNTPrimed tnt = world.spawn(tntloc, TNTPrimed.class);
+                    world.spawn(new Location(world, loc.getBlockX() + x, world.getHighestBlockYAt(loc) + 64, loc.getBlockZ() + z), TNTPrimed.class);
                 }
             }
         }
     }
 
     @Override
-    protected List<String> getTabCompleteOptions(Server server, CommandSource sender, String commandLabel, String[] args) {
+    protected List<String> getTabCompleteOptions(final Server server, final CommandSource sender, final String commandLabel, final String[] args) {
         if (args.length == 1) {
             return getPlayers(server, sender);
         } else {

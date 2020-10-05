@@ -1,10 +1,6 @@
 package com.earth2me.essentials.commands;
 
-import org.bukkit.command.CommandSender;
-import org.bukkit.plugin.Plugin;
-import org.bukkit.plugin.PluginDescriptionFile;
 import com.earth2me.essentials.CommandSource;
-import com.earth2me.essentials.PlayerList;
 import com.earth2me.essentials.IEssentialsModule;
 import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.User;
@@ -14,8 +10,10 @@ import com.google.common.collect.Lists;
 import net.ess3.api.IEssentials;
 import org.bukkit.Server;
 import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-
+import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.util.StringUtil;
 
 import java.util.ArrayList;
@@ -31,15 +29,45 @@ import java.util.logging.Logger;
 
 import static com.earth2me.essentials.I18n.tl;
 
-
 public abstract class EssentialsCommand implements IEssentialsCommand {
+    protected static final Logger logger = Logger.getLogger("Essentials");
+    /**
+     * Common time durations (in seconds), for use in tab completion.
+     */
+    protected static final List<String> COMMON_DURATIONS = ImmutableList.of("1", "60", "600", "3600", "86400");
+    /**
+     * Common date diffs, for use in tab completion
+     */
+    protected static final List<String> COMMON_DATE_DIFFS = ImmutableList.of("1m", "15m", "1h", "3h", "12h", "1d", "1w", "1mo", "1y");
     private final transient String name;
     protected transient IEssentials ess;
     protected transient IEssentialsModule module;
-    protected static final Logger logger = Logger.getLogger("Essentials");
 
     protected EssentialsCommand(final String name) {
         this.name = name;
+    }
+
+    public static String getFinalArg(final String[] args, final int start) {
+        final StringBuilder bldr = new StringBuilder();
+        for (int i = start; i < args.length; i++) {
+            if (i != start) {
+                bldr.append(" ");
+            }
+            bldr.append(args[i]);
+        }
+        return bldr.toString();
+    }
+
+    private static boolean canInteractWith(final User interactor, final User interactee) {
+        if (interactor == null) {
+            return !interactee.isHidden();
+        }
+
+        if (interactor.equals(interactee)) {
+            return true;
+        }
+
+        return interactor.getBase().canSee(interactee.getBase());
     }
 
     @Override
@@ -60,7 +88,7 @@ public abstract class EssentialsCommand implements IEssentialsCommand {
     // Get online players - only show vanished if source has permission
     protected User getPlayer(final Server server, final CommandSource sender, final String[] args, final int pos) throws PlayerNotFoundException, NotEnoughArgumentsException {
         if (sender.isPlayer()) {
-            User user = ess.getUser(sender.getPlayer());
+            final User user = ess.getUser(sender.getPlayer());
             return getPlayer(server, user, args, pos);
         }
         return getPlayer(server, args, pos, true, false);
@@ -69,7 +97,7 @@ public abstract class EssentialsCommand implements IEssentialsCommand {
     // Get online players - only show vanished if source has permission
     protected User getPlayer(final Server server, final CommandSource sender, final String searchTerm) throws PlayerNotFoundException, NotEnoughArgumentsException {
         if (sender.isPlayer()) {
-            User user = ess.getUser(sender.getPlayer());
+            final User user = ess.getUser(sender.getPlayer());
             return getPlayer(server, user, searchTerm, user.canInteractVanished(), false);
         }
         return getPlayer(server, searchTerm, true, false);
@@ -81,11 +109,11 @@ public abstract class EssentialsCommand implements IEssentialsCommand {
     }
 
     // Get online or offline players, this method allows for raw access
-    protected User getPlayer(final Server server, final String[] args, final int pos, boolean getHidden, final boolean getOffline) throws PlayerNotFoundException, NotEnoughArgumentsException {
+    protected User getPlayer(final Server server, final String[] args, final int pos, final boolean getHidden, final boolean getOffline) throws PlayerNotFoundException, NotEnoughArgumentsException {
         return getPlayer(server, null, args, pos, getHidden, getOffline);
     }
 
-    User getPlayer(final Server server, final User sourceUser, final String[] args, final int pos, boolean getHidden, final boolean getOffline) throws PlayerNotFoundException, NotEnoughArgumentsException {
+    User getPlayer(final Server server, final User sourceUser, final String[] args, final int pos, final boolean getHidden, final boolean getOffline) throws PlayerNotFoundException, NotEnoughArgumentsException {
         if (args.length <= pos) {
             throw new NotEnoughArgumentsException();
         }
@@ -96,17 +124,17 @@ public abstract class EssentialsCommand implements IEssentialsCommand {
     }
 
     // Get online or offline players, this method allows for raw access
-    protected User getPlayer(final Server server, final String searchTerm, boolean getHidden, final boolean getOffline) throws PlayerNotFoundException {
+    protected User getPlayer(final Server server, final String searchTerm, final boolean getHidden, final boolean getOffline) throws PlayerNotFoundException {
         return getPlayer(server, null, searchTerm, getHidden, getOffline);
     }
 
-    private User getPlayer(final Server server, final User sourceUser, final String searchTerm, boolean getHidden, final boolean getOffline) throws PlayerNotFoundException {
+    private User getPlayer(final Server server, final User sourceUser, final String searchTerm, final boolean getHidden, final boolean getOffline) throws PlayerNotFoundException {
         final User user;
         Player exPlayer;
 
         try {
             exPlayer = server.getPlayer(UUID.fromString(searchTerm));
-        } catch (IllegalArgumentException ex) {
+        } catch (final IllegalArgumentException ex) {
             if (getOffline) {
                 exPlayer = server.getPlayerExact(searchTerm);
             } else {
@@ -138,7 +166,7 @@ public abstract class EssentialsCommand implements IEssentialsCommand {
 
         if (matches.isEmpty()) {
             final String matchText = searchTerm.toLowerCase(Locale.ENGLISH);
-            for (User userMatch : ess.getOnlineUsers()) {
+            for (final User userMatch : ess.getOnlineUsers()) {
                 if (getHidden || canInteractWith(sourceUser, userMatch)) {
                     final String displayName = FormatUtil.stripFormat(userMatch.getDisplayName()).toLowerCase(Locale.ENGLISH);
                     if (displayName.contains(matchText)) {
@@ -147,7 +175,7 @@ public abstract class EssentialsCommand implements IEssentialsCommand {
                 }
             }
         } else {
-            for (Player player : matches) {
+            for (final Player player : matches) {
                 final User userMatch = ess.getUser(player);
                 if (userMatch.getDisplayName().startsWith(searchTerm) && (getHidden || canInteractWith(sourceUser, userMatch))) {
                     return userMatch;
@@ -188,7 +216,7 @@ public abstract class EssentialsCommand implements IEssentialsCommand {
             // Shouldn't happen, but bail out early if it does so that args[0] can always be used
             return Collections.emptyList();
         }
-        List<String> options = getTabCompleteOptions(server, user, commandLabel, args);
+        final List<String> options = getTabCompleteOptions(server, user, commandLabel, args);
         if (options == null) {
             return null;
         }
@@ -206,7 +234,7 @@ public abstract class EssentialsCommand implements IEssentialsCommand {
             // Shouldn't happen, but bail out early if it does so that args[0] can always be used
             return Collections.emptyList();
         }
-        List<String> options = getTabCompleteOptions(server, sender, commandLabel, args);
+        final List<String> options = getTabCompleteOptions(server, sender, commandLabel, args);
         if (options == null) {
             return null;
         }
@@ -219,18 +247,7 @@ public abstract class EssentialsCommand implements IEssentialsCommand {
         return getPlayers(server, sender);
     }
 
-    public static String getFinalArg(final String[] args, final int start) {
-        final StringBuilder bldr = new StringBuilder();
-        for (int i = start; i < args.length; i++) {
-            if (i != start) {
-                bldr.append(" ");
-            }
-            bldr.append(args[i]);
-        }
-        return bldr.toString();
-    }
-
-    boolean canInteractWith(CommandSource interactor, User interactee) {
+    boolean canInteractWith(final CommandSource interactor, final User interactee) {
         if (interactor == null) {
             return !interactee.isHidden();
         }
@@ -242,25 +259,13 @@ public abstract class EssentialsCommand implements IEssentialsCommand {
         return true; // console
     }
 
-    private static boolean canInteractWith(User interactor, User interactee) {
-        if (interactor == null) {
-            return !interactee.isHidden();
-        }
-
-        if (interactor.equals(interactee)) {
-            return true;
-        }
-
-        return interactor.getBase().canSee(interactee.getBase());
-    }
-
     /**
      * Gets a list of all player names that can be seen with by the given CommandSource,
      * for tab completion.
      */
     protected List<String> getPlayers(final Server server, final CommandSource interactor) {
-        List<String> players = Lists.newArrayList();
-        for (User user : ess.getOnlineUsers()) {
+        final List<String> players = Lists.newArrayList();
+        for (final User user : ess.getOnlineUsers()) {
             if (canInteractWith(interactor, user)) {
                 players.add(user.getName());
             }
@@ -273,21 +278,13 @@ public abstract class EssentialsCommand implements IEssentialsCommand {
      * for tab completion.
      */
     protected List<String> getPlayers(final Server server, final User interactor) {
-        List<String> players = Lists.newArrayList();
-        for (User user : ess.getOnlineUsers()) {
+        final List<String> players = Lists.newArrayList();
+        for (final User user : ess.getOnlineUsers()) {
             if (canInteractWith(interactor, user)) {
                 players.add(user.getName());
             }
         }
         return players;
-    }
-
-    /**
-     * Returns a list of all online groups.
-     */
-    protected List<String> getGroups() {
-        // TODO: A better way to do this
-        return new ArrayList<>(PlayerList.getPlayerLists(ess, null, true).keySet());
     }
 
     /**
@@ -301,8 +298,8 @@ public abstract class EssentialsCommand implements IEssentialsCommand {
     /**
      * Gets a list of tab-completable items usable for "getMatching".
      */
-    protected List<String> getMatchingItems(String arg) {
-        List<String> items = Lists.newArrayList("hand", "inventory", "blocks");
+    protected List<String> getMatchingItems(final String arg) {
+        final List<String> items = Lists.newArrayList("hand", "inventory", "blocks");
         if (!arg.isEmpty()) {
             // Emphasize the other items if they haven't entered anything yet.
             items.addAll(getItems());
@@ -312,12 +309,12 @@ public abstract class EssentialsCommand implements IEssentialsCommand {
 
     /**
      * Lists all commands.
-     *
+     * <p>
      * TODO: Use the real commandmap to do this automatically.
      */
-    protected final List<String> getCommands(Server server) {
-        List<String> commands = Lists.newArrayList();
-        for (Plugin p : server.getPluginManager().getPlugins()) {
+    protected final List<String> getCommands(final Server server) {
+        final List<String> commands = Lists.newArrayList();
+        for (final Plugin p : server.getPluginManager().getPlugins()) {
             final PluginDescriptionFile desc = p.getDescription();
             final Map<String, Map<String, Object>> cmds = desc.getCommands();
             if (cmds != null) {
@@ -330,19 +327,19 @@ public abstract class EssentialsCommand implements IEssentialsCommand {
     /**
      * Attempts to tab-complete a command or its arguments.
      */
-    protected final List<String> tabCompleteCommand(CommandSource sender, Server server, String label, String[] args, int index) {
+    protected final List<String> tabCompleteCommand(final CommandSource sender, final Server server, final String label, final String[] args, final int index) {
         // TODO: Pass this to the real commandmap
-        Command command = server.getPluginCommand(label);
+        final Command command = server.getPluginCommand(label);
         if (command == null) {
             return Collections.emptyList();
         }
 
-        int numArgs = args.length - index - 1;
+        final int numArgs = args.length - index - 1;
         ess.getLogger().info(numArgs + " " + index + " " + Arrays.toString(args));
         String[] effectiveArgs = new String[numArgs];
         System.arraycopy(args, index, effectiveArgs, 0, numArgs);
         if (effectiveArgs.length == 0) {
-            effectiveArgs = new String[] { "" };
+            effectiveArgs = new String[] {""};
         }
         ess.getLogger().info(command + " -- " + Arrays.toString(effectiveArgs));
 
@@ -350,7 +347,7 @@ public abstract class EssentialsCommand implements IEssentialsCommand {
     }
 
     @Override
-    public void showError(CommandSender sender, Throwable throwable, String commandLabel) {
+    public void showError(final CommandSender sender, final Throwable throwable, final String commandLabel) {
         sender.sendMessage(tl("errorWithMessage", throwable.getMessage()));
         if (ess.getSettings().isDebug()) {
             logger.log(Level.INFO, tl("errorCallingCommand", commandLabel), throwable);
@@ -358,21 +355,12 @@ public abstract class EssentialsCommand implements IEssentialsCommand {
         }
     }
 
-    public CompletableFuture<Boolean> getNewExceptionFuture(CommandSource sender, String commandLabel) {
-        CompletableFuture<Boolean> future = new CompletableFuture<>();
+    public CompletableFuture<Boolean> getNewExceptionFuture(final CommandSource sender, final String commandLabel) {
+        final CompletableFuture<Boolean> future = new CompletableFuture<>();
         future.exceptionally(e -> {
             showError(sender.getSender(), e, commandLabel);
             return false;
         });
         return future;
     }
-
-    /**
-     * Common time durations (in seconds), for use in tab completion.
-     */
-    protected static final List<String> COMMON_DURATIONS = ImmutableList.of("1", "60", "600", "3600", "86400");
-    /**
-     * Common date diffs, for use in tab completion
-     */
-    protected static final List<String> COMMON_DATE_DIFFS = ImmutableList.of("1m", "15m", "1h", "3h", "12h", "1d", "1w", "1mo", "1y");
 }

@@ -1,6 +1,5 @@
 package com.earth2me.essentials.protect;
 
-
 public enum ProtectConfig {
     disable_contactdmg("protect.disable.contactdmg", false),
     disable_lavadmg("protect.disable.lavadmg", false),
@@ -47,6 +46,8 @@ public enum ProtectConfig {
     prevent_ender_crystal_explosion("protect.prevent.ender-crystal-explosion", false),
     prevent_enderman_pickup("protect.prevent.enderman-pickup", false),
     prevent_villager_death("protect.prevent.villager-death", false),
+    prevent_bed_explosion("protect.prevent.bed-explosion", false),
+    prevent_respawn_anchor_explosion("protect.prevent.respawn-anchor-explosion", false),
     prevent_enderdragon_blockdmg("protect.prevent.enderdragon-blockdamage", true),
     prevent_entitytarget("protect.prevent.entitytarget", false),
     enderdragon_fakeexplosions("protect.enderdragon-fakeexplosions", false),

@@ -11,7 +11,6 @@ import java.util.concurrent.CompletableFuture;
 
 import static com.earth2me.essentials.I18n.tl;
 
-
 public class Commandtpaccept extends EssentialsCommand {
     public Commandtpaccept() {
         super("tpaccept");
@@ -22,7 +21,7 @@ public class Commandtpaccept extends EssentialsCommand {
         final User requester;
         try {
             requester = ess.getUser(user.getTeleportRequest());
-        } catch (Exception ex) {
+        } catch (final Exception ex) {
             throw new Exception(tl("noPendingRequest"));
         }
 
@@ -51,19 +50,14 @@ public class Commandtpaccept extends EssentialsCommand {
         user.sendMessage(tl("requestAccepted"));
         requester.sendMessage(tl("requestAcceptedFrom", user.getDisplayName()));
 
-        CompletableFuture<Boolean> future = getNewExceptionFuture(requester.getSource(), commandLabel);
+        final CompletableFuture<Boolean> future = getNewExceptionFuture(requester.getSource(), commandLabel);
         future.exceptionally(e -> {
             user.sendMessage(tl("pendingTeleportCancelled"));
             return false;
         });
-        future.thenAccept(success -> {
-           if (success) {
-               user.requestTeleport(null, false);
-           }
-        });
         if (user.isTpRequestHere()) {
             final Location loc = user.getTpRequestLocation();
-            AsyncTeleport teleport = (AsyncTeleport) requester.getAsyncTeleport();
+            final AsyncTeleport teleport = requester.getAsyncTeleport();
             teleport.setTpType(AsyncTeleport.TeleportType.TPA);
             future.thenAccept(success -> {
                 if (success) {
@@ -72,10 +66,12 @@ public class Commandtpaccept extends EssentialsCommand {
             });
             teleport.teleportPlayer(user, user.getTpRequestLocation(), charge, TeleportCause.COMMAND, future);
         } else {
-            AsyncTeleport teleport = (AsyncTeleport) requester.getAsyncTeleport();
+            final AsyncTeleport teleport = requester.getAsyncTeleport();
             teleport.setTpType(AsyncTeleport.TeleportType.TPA);
             teleport.teleport(user.getBase(), charge, TeleportCause.COMMAND, future);
         }
+        user.requestTeleport(null, false);
+        throw new NoChargeException();
     }
 
 }

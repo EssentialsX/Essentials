@@ -4,11 +4,11 @@ import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.Console;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.messaging.IMessageRecipient;
+import com.earth2me.essentials.utils.DateUtil;
 import com.earth2me.essentials.utils.FormatUtil;
 import org.bukkit.Server;
 
 import static com.earth2me.essentials.I18n.tl;
-
 
 public class Commandr extends EssentialsCommand {
     public Commandr() {
@@ -22,13 +22,15 @@ public class Commandr extends EssentialsCommand {
         }
 
         String message = getFinalArg(args, 0);
-        IMessageRecipient messageSender;
-
+        final IMessageRecipient messageSender;
         if (sender.isPlayer()) {
-            User user = ess.getUser(sender.getPlayer());
-
+            final User user = ess.getUser(sender.getPlayer());
             if (user.isMuted()) {
-                throw new Exception(user.hasMuteReason() ? tl("voiceSilencedReason", user.getMuteReason()) : tl("voiceSilenced"));
+                final String dateDiff = user.getMuteTimeout() > 0 ? DateUtil.formatDateDiff(user.getMuteTimeout()) : null;
+                if (dateDiff == null) {
+                    throw new Exception(user.hasMuteReason() ? tl("voiceSilencedReason", user.getMuteReason()) : tl("voiceSilenced"));
+                }
+                throw new Exception(user.hasMuteReason() ? tl("voiceSilencedReasonTime", dateDiff, user.getMuteReason()) : tl("voiceSilencedTime", dateDiff));
             }
 
             message = FormatUtil.formatMessage(user, "essentials.msg", message);

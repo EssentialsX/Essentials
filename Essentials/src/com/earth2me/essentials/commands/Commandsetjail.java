@@ -6,7 +6,6 @@ import org.bukkit.Server;
 
 import static com.earth2me.essentials.I18n.tl;
 
-
 public class Commandsetjail extends EssentialsCommand {
     public Commandsetjail() {
         super("setjail");
@@ -19,6 +18,5 @@ public class Commandsetjail extends EssentialsCommand {
         }
         ess.getJails().setJail(args[0], user.getLocation());
         user.sendMessage(tl("jailSet", StringUtil.sanitizeString(args[0])));
-
     }
 }

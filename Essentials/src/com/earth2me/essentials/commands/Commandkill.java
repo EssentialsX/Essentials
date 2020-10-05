@@ -11,7 +11,6 @@ import java.util.List;
 
 import static com.earth2me.essentials.I18n.tl;
 
-
 public class Commandkill extends EssentialsLoopCommand {
     public Commandkill() {
         super("kill");
@@ -19,7 +18,7 @@ public class Commandkill extends EssentialsLoopCommand {
 
     @Override
     public void run(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception {
-        if (args.length < 1) {
+        if (args.length == 0) {
             throw new NotEnoughArgumentsException();
         }
 
@@ -43,7 +42,7 @@ public class Commandkill extends EssentialsLoopCommand {
     }
 
     @Override
-    protected List<String> getTabCompleteOptions(Server server, CommandSource sender, String commandLabel, String[] args) {
+    protected List<String> getTabCompleteOptions(final Server server, final CommandSource sender, final String commandLabel, final String[] args) {
         if (args.length == 1) {
             return getPlayers(server, sender);
         } else {

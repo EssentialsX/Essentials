@@ -11,20 +11,18 @@ import java.util.List;
 
 import static com.earth2me.essentials.I18n.tl;
 
-
 public class Commandweather extends EssentialsCommand {
     public Commandweather() {
         super("weather");
     }
 
-    //TODO: Remove duplication
     @Override
     public void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception {
         final boolean isStorm;
-        if (args.length < 1) {
-            if (commandLabel.equalsIgnoreCase("sun") || commandLabel.equalsIgnoreCase("esun")) {
+        if (args.length == 0) {
+            if (commandLabel.endsWith("sun")) {
                 isStorm = false;
-            } else if (commandLabel.equalsIgnoreCase("storm") || commandLabel.equalsIgnoreCase("estorm") || commandLabel.equalsIgnoreCase("rain") || commandLabel.equalsIgnoreCase("erain")) {
+            } else if (commandLabel.endsWith("storm") || commandLabel.endsWith("rain")) {
                 isStorm = true;
             } else {
                 throw new NotEnoughArgumentsException();
@@ -32,22 +30,22 @@ public class Commandweather extends EssentialsCommand {
         } else {
             isStorm = args[0].equalsIgnoreCase("storm");
         }
-        final World world = user.getWorld();
-        if (args.length > 1) {
 
+        final World world = user.getWorld();
+
+        if (args.length > 1) {
             world.setStorm(isStorm);
             world.setWeatherDuration(Integer.parseInt(args[1]) * 20);
             user.sendMessage(isStorm ? tl("weatherStormFor", world.getName(), args[1]) : tl("weatherSunFor", world.getName(), args[1]));
-        } else {
-            world.setStorm(isStorm);
-            user.sendMessage(isStorm ? tl("weatherStorm", world.getName()) : tl("weatherSun", world.getName()));
+            return;
         }
+        world.setStorm(isStorm);
+        user.sendMessage(isStorm ? tl("weatherStorm", world.getName()) : tl("weatherSun", world.getName()));
     }
 
     @Override
     protected void run(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception {
-        if (args.length < 2) //running from console means inserting a world arg before other args
-        {
+        if (args.length < 2) { //running from console means inserting a world arg before other args
             throw new Exception("When running from console, usage is: /" + commandLabel + " <world> <storm/sun> [duration]");
         }
 
@@ -56,19 +54,19 @@ public class Commandweather extends EssentialsCommand {
         if (world == null) {
             throw new Exception(tl("weatherInvalidWorld", args[0]));
         }
-        if (args.length > 2) {
 
+        if (args.length > 2) {
             world.setStorm(isStorm);
             world.setWeatherDuration(Integer.parseInt(args[2]) * 20);
             sender.sendMessage(isStorm ? tl("weatherStormFor", world.getName(), args[2]) : tl("weatherSunFor", world.getName(), args[2]));
-        } else {
-            world.setStorm(isStorm);
-            sender.sendMessage(isStorm ? tl("weatherStorm", world.getName()) : tl("weatherSun", world.getName()));
+            return;
         }
+        world.setStorm(isStorm);
+        sender.sendMessage(isStorm ? tl("weatherStorm", world.getName()) : tl("weatherSun", world.getName()));
     }
 
     @Override
-    protected List<String> getTabCompleteOptions(Server server, User user, String commandLabel, String[] args) {
+    protected List<String> getTabCompleteOptions(final Server server, final User user, final String commandLabel, final String[] args) {
         if (args.length == 1) {
             return Lists.newArrayList("storm", "sun");
         } else if (args.length == 2) {
@@ -79,10 +77,10 @@ public class Commandweather extends EssentialsCommand {
     }
 
     @Override
-    protected List<String> getTabCompleteOptions(Server server, CommandSource sender, String commandLabel, String[] args) {
+    protected List<String> getTabCompleteOptions(final Server server, final CommandSource sender, final String commandLabel, final String[] args) {
         if (args.length == 1) {
-            List<String> worlds = Lists.newArrayList();
-            for (World world : server.getWorlds()) {
+            final List<String> worlds = Lists.newArrayList();
+            for (final World world : server.getWorlds()) {
                 worlds.add(world.getName());
             }
             return worlds;

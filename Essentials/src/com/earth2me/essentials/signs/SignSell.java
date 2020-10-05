@@ -10,7 +10,6 @@ import org.bukkit.inventory.ItemStack;
 
 import java.math.BigDecimal;
 
-
 public class SignSell extends EssentialsSign {
     public SignSell() {
         super("Sell");
@@ -30,15 +29,15 @@ public class SignSell extends EssentialsSign {
 
         // Check if the player is trying to sell in bulk.
         if (ess.getSettings().isAllowBulkBuySell() && player.getBase().isSneaking()) {
-            ItemStack heldItem = player.getItemInHand();
+            final ItemStack heldItem = player.getItemInHand();
             if (charge.getItemStack().isSimilar(heldItem)) {
-                int initialItemAmount = charge.getItemStack().getAmount();
-                int newItemAmount = heldItem.getAmount();
-                ItemStack item = charge.getItemStack();
+                final int initialItemAmount = charge.getItemStack().getAmount();
+                final int newItemAmount = heldItem.getAmount();
+                final ItemStack item = charge.getItemStack();
                 item.setAmount(newItemAmount);
                 charge = new Trade(item, ess);
 
-                BigDecimal chargeAmount = money.getMoney();
+                final BigDecimal chargeAmount = money.getMoney();
                 //noinspection BigDecimalMethodWithoutRoundingCalled
                 BigDecimal pricePerSingleItem = chargeAmount.divide(new BigDecimal(initialItemAmount));
                 pricePerSingleItem = pricePerSingleItem.multiply(new BigDecimal(newItemAmount));

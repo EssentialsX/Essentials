@@ -9,7 +9,6 @@ import java.util.List;
 
 import static com.earth2me.essentials.I18n.tl;
 
-
 public class Commandtpahere extends EssentialsCommand {
     public Commandtpahere() {
         super("tpahere");
@@ -25,6 +24,9 @@ public class Commandtpahere extends EssentialsCommand {
         if (user.getName().equalsIgnoreCase(player.getName())) {
             throw new NotEnoughArgumentsException();
         }
+        if (!player.isAuthorized("essentials.tpaccept")) {
+            throw new Exception(tl("teleportNoAcceptPermission", player.getDisplayName()));
+        }
         if (!player.isTeleportEnabled()) {
             throw new Exception(tl("teleportDisabled", player.getDisplayName()));
         }
@@ -37,7 +39,7 @@ public class Commandtpahere extends EssentialsCommand {
             throw new Exception(tl("requestSentAlready", player.getDisplayName()));
         }
         if (!player.isIgnoredPlayer(user)) {
-            TPARequestEvent tpaEvent = new TPARequestEvent(user.getSource(), player, true);
+            final TPARequestEvent tpaEvent = new TPARequestEvent(user.getSource(), player, true);
             ess.getServer().getPluginManager().callEvent(tpaEvent);
             if (tpaEvent.isCancelled()) {
                 throw new Exception(tl("teleportRequestCancelled", player.getDisplayName()));
@@ -55,7 +57,7 @@ public class Commandtpahere extends EssentialsCommand {
     }
 
     @Override
-    protected List<String> getTabCompleteOptions(Server server, User user, String commandLabel, String[] args) {
+    protected List<String> getTabCompleteOptions(final Server server, final User user, final String commandLabel, final String[] args) {
         if (args.length == 1) {
             return getPlayers(server, user);
         } else {

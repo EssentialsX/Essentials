@@ -14,7 +14,6 @@ import java.util.concurrent.TimeUnit;
 
 import static com.earth2me.essentials.I18n.tl;
 
-
 public class Commandsethome extends EssentialsCommand {
     public Commandsethome() {
         super("sethome");
@@ -24,7 +23,6 @@ public class Commandsethome extends EssentialsCommand {
     public void run(final Server server, final User user, final String commandLabel, String[] args) throws Exception {
         User usersHome = user;
         String name = "home";
-        final Location location = user.getLocation();
 
         if (args.length > 0) {
             //Allowing both formats /sethome khobbits house | /sethome khobbits:house
@@ -52,6 +50,7 @@ public class Commandsethome extends EssentialsCommand {
             throw new NoSuchFieldException(tl("invalidHomeName"));
         }
 
+        final Location location = user.getLocation();
         if (!ess.getSettings().isTeleportSafetyEnabled() && LocationUtil.isBlockUnsafeForUser(usersHome, location.getWorld(), location.getBlockX(), location.getBlockY(), location.getBlockZ())) {
             throw new Exception(tl("unsafeTeleportDestination", location.getWorld().getName(), location.getBlockX(), location.getBlockY(), location.getBlockZ()));
         }
@@ -69,9 +68,9 @@ public class Commandsethome extends EssentialsCommand {
 
     }
 
-    private boolean checkHomeLimit(final User user, final User usersHome, String name) throws Exception {
+    private boolean checkHomeLimit(final User user, final User usersHome, final String name) throws Exception {
         if (!user.isAuthorized("essentials.sethome.multiple.unlimited")) {
-            int limit = ess.getSettings().getHomeLimit(user);
+            final int limit = ess.getSettings().getHomeLimit(user);
             if (usersHome.getHomes().size() == limit && usersHome.getHomes().contains(name)) {
                 return false;
             }

@@ -2,6 +2,7 @@ package com.earth2me.essentials.xmpp;
 
 import com.earth2me.essentials.IEssentials;
 import com.earth2me.essentials.metrics.Metrics;
+import com.earth2me.essentials.metrics.MetricsWrapper;
 import net.ess3.api.IUser;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -15,16 +16,19 @@ import java.util.logging.Level;
 
 import static com.earth2me.essentials.I18n.tl;
 
-
 public class EssentialsXMPP extends JavaPlugin implements IEssentialsXMPP {
     private static EssentialsXMPP instance = null;
     private transient UserManager users;
     private transient XMPPManager xmpp;
     private transient IEssentials ess;
-    private transient Metrics metrics = null;
+    private transient MetricsWrapper metrics = null;
 
     static IEssentialsXMPP getInstance() {
         return instance;
+    }
+
+    static void updatePresence() {
+        instance.xmpp.updatePresence();
     }
 
     @Override
@@ -51,7 +55,7 @@ public class EssentialsXMPP extends JavaPlugin implements IEssentialsXMPP {
         ess.addReloadListener(xmpp);
 
         if (metrics == null) {
-            metrics = new Metrics(this);
+            metrics = new MetricsWrapper(this, 3818, true);
             metrics.addCustomChart(new Metrics.SimplePie("config-valid", () -> xmpp.isConfigValid() ? "yes" : "no"));
         }
     }
@@ -66,6 +70,7 @@ public class EssentialsXMPP extends JavaPlugin implements IEssentialsXMPP {
 
     @Override
     public boolean onCommand(final CommandSender sender, final Command command, final String commandLabel, final String[] args) {
+        metrics.markCommand(command.getName(), true);
         return ess.onCommandEssentials(sender, command, commandLabel, args, EssentialsXMPP.class.getClassLoader(), "com.earth2me.essentials.xmpp.Command", "essentials.", null);
     }
 
@@ -82,7 +87,7 @@ public class EssentialsXMPP extends JavaPlugin implements IEssentialsXMPP {
 
     @Override
     public IUser getUserByAddress(final String address) {
-        String username = instance.users.getUserByAddress(address);
+        final String username = instance.users.getUserByAddress(address);
         return username == null ? null : ess.getUser(username);
     }
 
@@ -109,10 +114,6 @@ public class EssentialsXMPP extends JavaPlugin implements IEssentialsXMPP {
         return instance.xmpp.sendMessage(address, message);
     }
 
-    static void updatePresence() {
-        instance.xmpp.updatePresence();
-    }
-
     @Override
     public List<String> getSpyUsers() {
         return instance.users.getSpyUsers();
@@ -122,12 +123,13 @@ public class EssentialsXMPP extends JavaPlugin implements IEssentialsXMPP {
     public void broadcastMessage(final IUser sender, final String message, final String xmppAddress) {
         ess.broadcastMessage(sender, message);
         try {
-            for (String address : getSpyUsers()) {
+            for (final String address : getSpyUsers()) {
                 if (!address.equalsIgnoreCase(xmppAddress)) {
                     sendMessage(address, message);
                 }
             }
-        } catch (Exception ignored) {}
+        } catch (final Exception ignored) {
+        }
     }
 
     @Override

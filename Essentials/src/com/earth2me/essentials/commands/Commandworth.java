@@ -14,7 +14,6 @@ import java.util.Locale;
 
 import static com.earth2me.essentials.I18n.tl;
 
-
 public class Commandworth extends EssentialsCommand {
     public Commandworth() {
         super("worth");
@@ -22,60 +21,54 @@ public class Commandworth extends EssentialsCommand {
 
     @Override
     public void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception {
-        BigDecimal totalWorth = BigDecimal.ZERO;
-        String type = "";
-
-        List<ItemStack> is = ess.getItemDb().getMatching(user, args);
+        final List<ItemStack> is = ess.getItemDb().getMatching(user, args);
         int count = 0;
-
-        boolean isBulk = is.size() > 1;
-
+        final boolean isBulk = is.size() > 1;
+        BigDecimal totalWorth = BigDecimal.ZERO;
         for (ItemStack stack : is) {
             try {
                 if (stack.getAmount() > 0) {
                     totalWorth = totalWorth.add(itemWorth(user.getSource(), user, stack, args));
                     stack = stack.clone();
                     count++;
-                    for (ItemStack zeroStack : is) {
+                    for (final ItemStack zeroStack : is) {
                         if (zeroStack.isSimilar(stack)) {
                             zeroStack.setAmount(0);
                         }
                     }
                 }
 
-            } catch (Exception e) {
+            } catch (final Exception e) {
                 if (!isBulk) {
                     throw e;
                 }
             }
         }
         if (count > 1) {
+            final String totalWorthStr = NumberUtil.displayCurrency(totalWorth, ess);
             if (args.length > 0 && args[0].equalsIgnoreCase("blocks")) {
-                user.sendMessage(tl("totalSellableBlocks", type, NumberUtil.displayCurrency(totalWorth, ess)));
-            } else {
-                user.sendMessage(tl("totalSellableAll", type, NumberUtil.displayCurrency(totalWorth, ess)));
+                user.sendMessage(tl("totalSellableBlocks", totalWorthStr, totalWorthStr));
+                return;
             }
+            user.sendMessage(tl("totalSellableAll", totalWorthStr, totalWorthStr));
         }
     }
 
     @Override
     public void run(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception {
-        if (args.length < 1) {
+        if (args.length == 0) {
             throw new NotEnoughArgumentsException();
         }
-
-        ItemStack stack = ess.getItemDb().get(args[0]);
-
-        itemWorth(sender, null, stack, args);
+        itemWorth(sender, null, ess.getItemDb().get(args[0]), args);
     }
 
-    private BigDecimal itemWorth(CommandSource sender, User user, ItemStack is, String[] args) throws Exception {
+    private BigDecimal itemWorth(final CommandSource sender, final User user, final ItemStack is, final String[] args) throws Exception {
         int amount = 1;
         if (user == null) {
             if (args.length > 1) {
                 try {
                     amount = Integer.parseInt(args[1].replaceAll("[^0-9]", ""));
-                } catch (NumberFormatException ex) {
+                } catch (final NumberFormatException ex) {
                     throw new NotEnoughArgumentsException(ex);
                 }
 
@@ -84,8 +77,7 @@ public class Commandworth extends EssentialsCommand {
             amount = ess.getWorth().getAmount(ess, user, is, args, true);
         }
 
-        BigDecimal worth = ess.getWorth().getPrice(ess, is);
-
+        final BigDecimal worth = ess.getWorth().getPrice(ess, is);
         if (worth == null) {
             throw new Exception(tl("itemCannotBeSold"));
         }
@@ -94,15 +86,13 @@ public class Commandworth extends EssentialsCommand {
             amount = 0;
         }
 
-        BigDecimal result = worth.multiply(BigDecimal.valueOf(amount));
-
+        final BigDecimal result = worth.multiply(BigDecimal.valueOf(amount));
         sender.sendMessage(is.getDurability() != 0 ? tl("worthMeta", is.getType().toString().toLowerCase(Locale.ENGLISH).replace("_", ""), is.getDurability(), NumberUtil.displayCurrency(result, ess), amount, NumberUtil.displayCurrency(worth, ess)) : tl("worth", is.getType().toString().toLowerCase(Locale.ENGLISH).replace("_", ""), NumberUtil.displayCurrency(result, ess), amount, NumberUtil.displayCurrency(worth, ess)));
-
         return result;
     }
 
     @Override
-    protected List<String> getTabCompleteOptions(Server server, User user, String commandLabel, String[] args) {
+    protected List<String> getTabCompleteOptions(final Server server, final User user, final String commandLabel, final String[] args) {
         if (args.length == 1) {
             return getMatchingItems(args[0]);
         } else if (args.length == 2) {
@@ -113,7 +103,7 @@ public class Commandworth extends EssentialsCommand {
     }
 
     @Override
-    protected List<String> getTabCompleteOptions(Server server, CommandSource sender, String commandLabel, String[] args) {
+    protected List<String> getTabCompleteOptions(final Server server, final CommandSource sender, final String commandLabel, final String[] args) {
         if (args.length == 1) {
             return getItems();
         } else if (args.length == 2) {

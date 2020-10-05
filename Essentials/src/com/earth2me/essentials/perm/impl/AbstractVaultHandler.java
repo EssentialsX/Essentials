@@ -5,6 +5,7 @@ import net.milkbowl.vault.permission.Permission;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.RegisteredServiceProvider;
+import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.Arrays;
 import java.util.List;
@@ -17,13 +18,15 @@ public abstract class AbstractVaultHandler extends SuperpermsHandler {
         try {
             Class.forName("net.milkbowl.vault.permission.Permission");
             Class.forName("net.milkbowl.vault.chat.Chat");
-        } catch (ClassNotFoundException e) {
+        } catch (final ClassNotFoundException e) {
             return false;
         }
 
-        RegisteredServiceProvider<Permission> permsProvider = Bukkit.getServer().getServicesManager().getRegistration(Permission.class);
+        final RegisteredServiceProvider<Permission> permsProvider = Bukkit.getServer().getServicesManager().getRegistration(Permission.class);
+        final RegisteredServiceProvider<Chat> chatProvider = Bukkit.getServer().getServicesManager().getRegistration(Chat.class);
+        if (permsProvider == null || chatProvider == null) return false;
+
         perms = permsProvider.getProvider();
-        RegisteredServiceProvider<Chat> chatProvider = Bukkit.getServer().getServicesManager().getRegistration(Chat.class);
         chat = chatProvider.getProvider();
         return perms != null && chat != null;
     }
@@ -45,12 +48,12 @@ public abstract class AbstractVaultHandler extends SuperpermsHandler {
 
     @Override
     public String getPrefix(final Player base) {
-        String playerPrefix = chat.getPlayerPrefix(base);
+        final String playerPrefix = chat.getPlayerPrefix(base);
         if (playerPrefix != null) {
             return playerPrefix;
         }
 
-        String playerGroup = perms.getPrimaryGroup(base);
+        final String playerGroup = perms.getPrimaryGroup(base);
         if (playerGroup != null) {
             return chat.getGroupPrefix(base.getWorld().getName(), playerGroup);
         }
@@ -60,12 +63,12 @@ public abstract class AbstractVaultHandler extends SuperpermsHandler {
 
     @Override
     public String getSuffix(final Player base) {
-        String playerSuffix = chat.getPlayerSuffix(base);
+        final String playerSuffix = chat.getPlayerSuffix(base);
         if (playerSuffix != null) {
             return playerSuffix;
         }
 
-        String playerGroup = perms.getPrimaryGroup(base);
+        final String playerGroup = perms.getPrimaryGroup(base);
         if (playerGroup != null) {
             return chat.getGroupSuffix(base.getWorld().getName(), playerGroup);
         }
@@ -73,11 +76,22 @@ public abstract class AbstractVaultHandler extends SuperpermsHandler {
         return null;
     }
 
+    @Override
+    public String getBackendName() {
+        final String reportedPlugin = perms.getName();
+        final String classPlugin = JavaPlugin.getProvidingPlugin(perms.getClass()).getName();
+
+        if (reportedPlugin.equals(classPlugin)) {
+            return reportedPlugin;
+        }
+        return reportedPlugin + " (" + classPlugin + ")";
+    }
+
     boolean canLoad() {
         if (Bukkit.getPluginManager().getPlugin("Vault") == null) return false;
         try {
             return setupProviders();
-        } catch (Throwable t) {
+        } catch (final Throwable t) {
             return false;
         }
     }

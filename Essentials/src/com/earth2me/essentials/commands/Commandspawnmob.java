@@ -13,7 +13,6 @@ import java.util.List;
 
 import static com.earth2me.essentials.I18n.tl;
 
-
 public class Commandspawnmob extends EssentialsCommand {
     public Commandspawnmob() {
         super("spawnmob");
@@ -21,13 +20,12 @@ public class Commandspawnmob extends EssentialsCommand {
 
     @Override
     public void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception {
-        if (args.length < 1) {
-            final String mobList = SpawnMob.mobList(user);
-            throw new NotEnoughArgumentsException(tl("mobsAvailable", mobList));
+        if (args.length == 0) {
+            throw new NotEnoughArgumentsException(tl("mobsAvailable", StringUtil.joinList(Mob.getMobList())));
         }
 
-        List<String> mobParts = SpawnMob.mobParts(args[0]);
-        List<String> mobData = SpawnMob.mobData(args[0]);
+        final List<String> mobParts = SpawnMob.mobParts(args[0]);
+        final List<String> mobData = SpawnMob.mobData(args[0]);
 
         int mobCount = 1;
         if (args.length >= 2) {
@@ -39,8 +37,7 @@ public class Commandspawnmob extends EssentialsCommand {
         }
 
         if (args.length >= 3) {
-            final User target = getPlayer(ess.getServer(), user, args, 2);
-            SpawnMob.spawnmob(ess, server, user.getSource(), target, mobParts, mobData, mobCount);
+            SpawnMob.spawnmob(ess, server, user.getSource(), getPlayer(ess.getServer(), user, args, 2), mobParts, mobData, mobCount);
             return;
         }
 
@@ -50,20 +47,17 @@ public class Commandspawnmob extends EssentialsCommand {
     @Override
     public void run(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception {
         if (args.length < 3) {
-            final String mobList = StringUtil.joinList(Mob.getMobList());
-            throw new NotEnoughArgumentsException(tl("mobsAvailable", mobList));
+            throw new NotEnoughArgumentsException(tl("mobsAvailable", StringUtil.joinList(Mob.getMobList())));
         }
 
-        List<String> mobParts = SpawnMob.mobParts(args[0]);
-        List<String> mobData = SpawnMob.mobData(args[0]);
-        int mobCount = Integer.parseInt(args[1]);
+        final List<String> mobParts = SpawnMob.mobParts(args[0]);
+        final List<String> mobData = SpawnMob.mobData(args[0]);
 
-        final User target = getPlayer(ess.getServer(), args, 2, true, false);
-        SpawnMob.spawnmob(ess, server, sender, target, mobParts, mobData, mobCount);
+        SpawnMob.spawnmob(ess, server, sender, getPlayer(ess.getServer(), args, 2, true, false), mobParts, mobData, Integer.parseInt(args[1]));
     }
 
     @Override
-    protected List<String> getTabCompleteOptions(Server server, User user, String commandLabel, String[] args) {
+    protected List<String> getTabCompleteOptions(final Server server, final User user, final String commandLabel, final String[] args) {
         if (args.length == 1) {
             return Lists.newArrayList(Mob.getMobList());
         } else {

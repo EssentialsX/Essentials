@@ -5,23 +5,37 @@ import com.earth2me.essentials.utils.VersionUtil;
 import net.ess3.api.IEssentials;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
-import org.bukkit.entity.*;
+import org.bukkit.entity.ArmorStand;
+import org.bukkit.entity.EnderCrystal;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.HumanEntity;
+import org.bukkit.entity.ItemFrame;
+import org.bukkit.entity.Player;
+import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.*;
+import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockDispenseEvent;
+import org.bukkit.event.block.BlockPistonExtendEvent;
+import org.bukkit.event.block.BlockPistonRetractEvent;
+import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.hanging.HangingBreakByEntityEvent;
 import org.bukkit.event.inventory.CraftItemEvent;
-import org.bukkit.event.player.*;
+import org.bukkit.event.player.PlayerDropItemEvent;
+import org.bukkit.event.player.PlayerInteractAtEntityEvent;
+import org.bukkit.event.player.PlayerInteractEntityEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import static com.earth2me.essentials.I18n.tl;
-
 
 public class EssentialsAntiBuildListener implements Listener {
     private static final Logger logger = Logger.getLogger("EssentialsAntiBuild");
@@ -43,7 +57,7 @@ public class EssentialsAntiBuildListener implements Listener {
         try {
             Class.forName("org.bukkit.event.entity.EntityPickupItemEvent");
             return true;
-        } catch (ClassNotFoundException ignored) {
+        } catch (final ClassNotFoundException ignored) {
             return false;
         }
     }
@@ -76,7 +90,6 @@ public class EssentialsAntiBuildListener implements Listener {
                 }
             }
         }
-
 
         return user.isAuthorized(blockPerm);
     }
@@ -222,8 +235,8 @@ public class EssentialsAntiBuildListener implements Listener {
 
         if (event.getDamager() instanceof Player) {
             player = (Player) event.getDamager();
-        } else if (event.getDamager() instanceof Projectile && ((Projectile)event.getDamager()).getShooter() instanceof Player) {
-            player = (Player) ((Projectile)event.getDamager()).getShooter();
+        } else if (event.getDamager() instanceof Projectile && ((Projectile) event.getDamager()).getShooter() instanceof Player) {
+            player = (Player) ((Projectile) event.getDamager()).getShooter();
         } else {
             return;
         }
@@ -264,7 +277,7 @@ public class EssentialsAntiBuildListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onBlockPistonExtend(final BlockPistonExtendEvent event) {
-        for (Block block : event.getBlocks()) {
+        for (final Block block : event.getBlocks()) {
             if (prot.checkProtectionItems(AntiBuildConfig.blacklist_piston, block.getType())) {
                 event.setCancelled(true);
                 return;
@@ -277,9 +290,11 @@ public class EssentialsAntiBuildListener implements Listener {
         if (!event.isSticky()) {
             return;
         }
-        final Block block = event.getBlock();
-        if (prot.checkProtectionItems(AntiBuildConfig.blacklist_piston, block.getType())) {
-            event.setCancelled(true);
+        for (final Block block : event.getBlocks()) {
+            if (prot.checkProtectionItems(AntiBuildConfig.blacklist_piston, block.getType())) {
+                event.setCancelled(true);
+                return;
+            }
         }
     }
 
@@ -320,7 +335,7 @@ public class EssentialsAntiBuildListener implements Listener {
 
     @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
     public void onCraftItemEvent(final CraftItemEvent event) {
-        HumanEntity entity = event.getWhoClicked();
+        final HumanEntity entity = event.getWhoClicked();
 
         if (entity instanceof Player) {
             final User user = ess.getUser((Player) entity);
@@ -364,7 +379,7 @@ public class EssentialsAntiBuildListener implements Listener {
 
     private class EntityPickupItemListener implements Listener {
         @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
-        public void onPlayerPickupItem(EntityPickupItemEvent event) {
+        public void onPlayerPickupItem(final EntityPickupItemEvent event) {
             if (!(event.getEntity() instanceof Player)) return;
 
             final User user = ess.getUser((Player) event.getEntity());
@@ -381,7 +396,7 @@ public class EssentialsAntiBuildListener implements Listener {
 
     private class PlayerPickupItemListener implements Listener {
         @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
-        public void onPlayerPickupItem(PlayerPickupItemEvent event) {
+        public void onPlayerPickupItem(final PlayerPickupItemEvent event) {
 
             final User user = ess.getUser(event.getPlayer());
             final ItemStack item = event.getItem().getItemStack();

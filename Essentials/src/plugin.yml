@@ -3,7 +3,7 @@ name: Essentials
 main: com.earth2me.essentials.Essentials
 # Note to developers: This next line cannot change, or the automatic versioning system will break.
 version: ${full.version}
-website: http://tiny.cc/EssentialsCommands
+website: https://essentialsx.net/
 description: Provides an essential, core set of commands for Bukkit.
 softdepend: [Vault, LuckPerms]
 authors: [Zenexer, ementalo, Aelux, Brettflan, KimKandor, snowleo, ceulemans, Xeology, KHobbits, md_5, Iaccidentally, drtshock, vemacs, SupaHam, md678685]
@@ -133,8 +133,8 @@ commands:
     usage: /<command>
     aliases: [eessentials, ess, eess, essversion]
   exp:
-    description: Give, set or look at a players exp.
-    usage: /<command> [show|set|give] [playername [amount]]
+    description: Give, set, reset, or look at a players experience.
+    usage: /<command> [reset|show|set|give] [playername [amount]]
     aliases: [eexp,xp]
   ext:
     description: Extinguish players.
@@ -216,6 +216,10 @@ commands:
     description: Searches for an item.
     usage: /<command> <item>
     aliases: [dura,edura,durability,edurability,eitemdb,itemno,eitemno]
+  itemlore:
+    description: Edit the lore of an item.
+    usage: /<command> <add/set/clear> [text/line] [text]
+    aliases: [lore, elore, ilore, eilore, eitemlore]
   itemname:
     description: Names an item.
     usage: /<command> [name]
@@ -265,8 +269,8 @@ commands:
     usage: /<command> <description>
     aliases: [action,eaction,describe,edescribe,eme]
   more:
-    description: Fills the item stack in hand to maximum size.
-    usage: /<command>
+    description: Fills the item stack in hand to specified amount, or to maximum size if none is specified.
+    usage: /<command> [amount]
     aliases: [emore]
   motd:
     description: Views the Message Of The Day.
@@ -384,6 +388,10 @@ commands:
     description: Creates a jail where you specified named [jailname].
     usage: /<command> <jailname>
     aliases: [esetjail,createjail,ecreatejail]
+  settpr:
+    description: Set the random teleport location and parameters.
+    usage: /<command> [center|minrange|maxrange] [value]
+    aliases: [esettpr, settprandom, esettprandom]
   setwarp:
     description: Creates a new warp.
     usage: /<command> <warp>
@@ -442,7 +450,7 @@ commands:
     aliases: [ethunder]
   time:
     description: Display/Change the world time. Defaults to current world.
-    usage: /<command> [day|night|dawn|17:30|4pm|4000ticks] [worldname|all]
+    usage: /<command> [set|add] [day|night|dawn|17:30|4pm|4000ticks] [worldname|all]
     aliases: [day,eday,night,enight,etime]
   togglejail:
     description: Jails/Unjails a player, TPs them to the jail specified.
@@ -504,6 +512,10 @@ commands:
     description: Teleport to coordinates.
     usage: /<command> <x> <y> <z> [yaw] [pitch] [world]
     aliases: [etppos]
+  tpr:
+    description: Teleport randomly.
+    usage: /<command>
+    aliases: [etpr, tprandom, etprandom]
   tptoggle:
     description: Blocks all forms of teleportation.
     usage: /<command> [player] [on|off]
@@ -559,9 +571,6 @@ permissions:
     description: Give players with op everything by default
     children:
       essentials.gamemode.*: true
-  essentials.sleepingignored:
-    default: false
-    description: If the player has this permission, they will not have to sleep for the night to be skipped
   # These permissions can't be assigned from player-commands for compatibility reasons
   essentials.teleport.cooldown.bypass.tpa:
     default: true
@@ -625,9 +634,6 @@ permissions:
   essentials.silentquit:
     default: false
     description: Suppress leave/quit messages for users with this permission.
-  essentials.sleepingignored:
-    default: false
-    description: User isn't required to be sleeping, for time to be reset.
   essentials.sudo.exempt:
     default: false
     description: Prevents the holder from being sudo'ed by another user

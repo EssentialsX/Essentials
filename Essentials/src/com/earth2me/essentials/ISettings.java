@@ -16,7 +16,6 @@ import java.util.Set;
 import java.util.function.Predicate;
 import java.util.regex.Pattern;
 
-
 public interface ISettings extends IConf {
     boolean areSignsDisabled();
 
@@ -107,6 +106,8 @@ public interface ISettings extends IConf {
 
     boolean getRespawnAtHome();
 
+    boolean isRespawnAtAnchor();
+
     Set getMultipleHomes();
 
     int getHomeLimit(String set);
@@ -125,6 +126,8 @@ public interface ISettings extends IConf {
 
     boolean isTeleportPassengerDismount();
 
+    boolean isForcePassengerTeleport();
+
     double getTeleportCooldown();
 
     double getTeleportDelay();
@@ -138,6 +141,8 @@ public interface ISettings extends IConf {
     boolean isCommandOverridden(String name);
 
     boolean isDebug();
+
+    void setDebug(boolean debug);
 
     boolean isEcoDisabled();
 
@@ -208,13 +213,9 @@ public interface ISettings extends IConf {
 
     KeepInvPolicy getBindingItemsPolicy();
 
-    enum KeepInvPolicy {
-        KEEP,
-        DELETE,
-        DROP
-    }
+    int getJoinQuitMessagePlayerCount();
 
-    void setDebug(boolean debug);
+    boolean hasJoinQuitMessagePlayerCount();
 
     Set<String> getNoGodWorlds();
 
@@ -359,7 +360,7 @@ public interface ISettings extends IConf {
     boolean allowOldIdSigns();
 
     boolean isWaterSafe();
-  
+
     boolean isSafeUsermap();
 
     boolean logCommandBlockCommands();
@@ -375,5 +376,11 @@ public interface ISettings extends IConf {
     boolean isConfirmHomeOverwrite();
 
     boolean infoAfterDeath();
+
+    enum KeepInvPolicy {
+        KEEP,
+        DELETE,
+        DROP
+    }
 
 }

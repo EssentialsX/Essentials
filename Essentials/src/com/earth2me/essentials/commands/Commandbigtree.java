@@ -12,7 +12,6 @@ import java.util.List;
 
 import static com.earth2me.essentials.I18n.tl;
 
-
 public class Commandbigtree extends EssentialsCommand {
     public Commandbigtree() {
         super("bigtree");
@@ -20,7 +19,7 @@ public class Commandbigtree extends EssentialsCommand {
 
     @Override
     public void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception {
-        TreeType tree;
+        final TreeType tree;
         if (args.length > 0 && args[0].equalsIgnoreCase("redwood")) {
             tree = TreeType.TALL_REDWOOD;
         } else if (args.length > 0 && args[0].equalsIgnoreCase("tree")) {
@@ -34,7 +33,7 @@ public class Commandbigtree extends EssentialsCommand {
         }
 
         final Location loc = LocationUtil.getTarget(user.getBase()).add(0, 1, 0);
-        if (!user.getWorld().getBlockAt(loc).isPassable()) {
+        if (loc.getBlock().getType().isSolid()) {
             throw new Exception(tl("bigTreeFailure"));
         }
         final boolean success = user.getWorld().generateTree(loc, tree);
@@ -46,7 +45,7 @@ public class Commandbigtree extends EssentialsCommand {
     }
 
     @Override
-    protected List<String> getTabCompleteOptions(Server server, User user, String commandLabel, String[] args) {
+    protected List<String> getTabCompleteOptions(final Server server, final User user, final String commandLabel, final String[] args) {
         if (args.length == 1) {
             return Lists.newArrayList("redwood", "tree", "jungle", "darkoak");
         } else {

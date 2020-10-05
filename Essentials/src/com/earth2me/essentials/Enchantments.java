@@ -9,8 +9,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-
-public class Enchantments {
+public final class Enchantments {
     private static final Map<String, Enchantment> ENCHANTMENTS = new HashMap<>();
     private static final Map<String, Enchantment> ALIASENCHANTMENTS = new HashMap<>();
     private static boolean isFlat;
@@ -152,76 +151,78 @@ public class Enchantments {
 
         // 1.8
         try {
-            Enchantment depthStrider = Enchantment.getByName("DEPTH_STRIDER");
+            final Enchantment depthStrider = Enchantment.getByName("DEPTH_STRIDER");
             if (depthStrider != null) {
                 ENCHANTMENTS.put("depthstrider", depthStrider);
                 ALIASENCHANTMENTS.put("depth", depthStrider);
                 ALIASENCHANTMENTS.put("strider", depthStrider);
             }
-        } catch (IllegalArgumentException ignored) {}
+        } catch (final IllegalArgumentException ignored) {
+        }
 
         // 1.9
         try {
-            Enchantment frostWalker = Enchantment.getByName("FROST_WALKER");
+            final Enchantment frostWalker = Enchantment.getByName("FROST_WALKER");
             if (frostWalker != null) {
                 ENCHANTMENTS.put("frostwalker", frostWalker);
                 ALIASENCHANTMENTS.put("frost", frostWalker);
                 ALIASENCHANTMENTS.put("walker", frostWalker);
             }
 
-            Enchantment mending = Enchantment.getByName("MENDING");
+            final Enchantment mending = Enchantment.getByName("MENDING");
             if (mending != null) {
                 ENCHANTMENTS.put("mending", mending);
             }
-        } catch (IllegalArgumentException ignored) {}
+        } catch (final IllegalArgumentException ignored) {
+        }
 
         // 1.11
         try {
-            Enchantment bindingCurse = Enchantment.getByName("BINDING_CURSE");
+            final Enchantment bindingCurse = Enchantment.getByName("BINDING_CURSE");
             if (bindingCurse != null) {
                 ENCHANTMENTS.put("bindingcurse", bindingCurse);
                 ALIASENCHANTMENTS.put("bindcurse", bindingCurse);
                 ALIASENCHANTMENTS.put("binding", bindingCurse);
                 ALIASENCHANTMENTS.put("bind", bindingCurse);
             }
-            Enchantment vanishingCurse = Enchantment.getByName("VANISHING_CURSE");
+            final Enchantment vanishingCurse = Enchantment.getByName("VANISHING_CURSE");
             if (vanishingCurse != null) {
                 ENCHANTMENTS.put("vanishingcurse", vanishingCurse);
                 ALIASENCHANTMENTS.put("vanishcurse", vanishingCurse);
                 ALIASENCHANTMENTS.put("vanishing", vanishingCurse);
                 ALIASENCHANTMENTS.put("vanish", vanishingCurse);
             }
-            Enchantment sweeping = Enchantment.getByName("SWEEPING_EDGE");
+            final Enchantment sweeping = Enchantment.getByName("SWEEPING_EDGE");
             if (sweeping != null) {
                 ENCHANTMENTS.put("sweepingedge", sweeping);
                 ALIASENCHANTMENTS.put("sweepedge", sweeping);
                 ALIASENCHANTMENTS.put("sweeping", sweeping);
             }
-        } catch (IllegalArgumentException ignored) {}
-
+        } catch (final IllegalArgumentException ignored) {
+        }
 
         try { // 1.13
-            Enchantment loyalty = Enchantment.getByName("LOYALTY");
+            final Enchantment loyalty = Enchantment.getByName("LOYALTY");
             if (loyalty != null) {
                 ENCHANTMENTS.put("loyalty", loyalty);
                 ALIASENCHANTMENTS.put("loyal", loyalty);
                 ALIASENCHANTMENTS.put("return", loyalty);
             }
-            Enchantment impaling = Enchantment.getByName("IMPALING");
+            final Enchantment impaling = Enchantment.getByName("IMPALING");
             if (impaling != null) {
                 ENCHANTMENTS.put("impaling", impaling);
                 ALIASENCHANTMENTS.put("impale", impaling);
                 ALIASENCHANTMENTS.put("oceandamage", impaling);
                 ALIASENCHANTMENTS.put("oceandmg", impaling);
             }
-            Enchantment riptide = Enchantment.getByName("RIPTIDE");
+            final Enchantment riptide = Enchantment.getByName("RIPTIDE");
             if (riptide != null) {
                 ENCHANTMENTS.put("riptide", riptide);
                 ALIASENCHANTMENTS.put("rip", riptide);
                 ALIASENCHANTMENTS.put("tide", riptide);
                 ALIASENCHANTMENTS.put("launch", riptide);
             }
-            Enchantment channelling = Enchantment.getByName("CHANNELING");
+            final Enchantment channelling = Enchantment.getByName("CHANNELING");
             if (channelling != null) {
                 ENCHANTMENTS.put("channelling", channelling);
                 ALIASENCHANTMENTS.put("chanelling", channelling);
@@ -229,48 +230,53 @@ public class Enchantments {
                 ALIASENCHANTMENTS.put("chaneling", channelling);
                 ALIASENCHANTMENTS.put("channel", channelling);
             }
-        } catch (IllegalArgumentException ignored) {}
-
+        } catch (final IllegalArgumentException ignored) {
+        }
 
         try { // 1.14
-            Enchantment multishot = Enchantment.getByName("MULTISHOT");
+            final Enchantment multishot = Enchantment.getByName("MULTISHOT");
             if (multishot != null) {
                 ENCHANTMENTS.put("multishot", multishot);
                 ALIASENCHANTMENTS.put("tripleshot", multishot);
             }
-            Enchantment quickCharge = Enchantment.getByName("QUICK_CHARGE");
+            final Enchantment quickCharge = Enchantment.getByName("QUICK_CHARGE");
             if (quickCharge != null) {
                 ENCHANTMENTS.put("quickcharge", quickCharge);
                 ALIASENCHANTMENTS.put("quickdraw", quickCharge);
                 ALIASENCHANTMENTS.put("fastcharge", quickCharge);
                 ALIASENCHANTMENTS.put("fastdraw", quickCharge);
             }
-            Enchantment piercing = Enchantment.getByName("PIERCING");
+            final Enchantment piercing = Enchantment.getByName("PIERCING");
             if (piercing != null) {
                 ENCHANTMENTS.put("piercing", piercing);
             }
-        } catch (IllegalArgumentException ignored) {}
+        } catch (final IllegalArgumentException ignored) {
+        }
 
         try { // 1.16
-            Enchantment soulspeed = Enchantment.getByName("SOUL_SPEED");
+            final Enchantment soulspeed = Enchantment.getByName("SOUL_SPEED");
             if (soulspeed != null) {
                 ENCHANTMENTS.put("soulspeed", soulspeed);
                 ALIASENCHANTMENTS.put("soilspeed", soulspeed);
                 ALIASENCHANTMENTS.put("sandspeed", soulspeed);
             }
-        } catch (IllegalArgumentException ignored) {}
+        } catch (final IllegalArgumentException ignored) {
+        }
 
         try {
-            Class<?> namespacedKeyClass = Class.forName("org.bukkit.NamespacedKey");
-            Class<?> enchantmentClass = Class.forName("org.bukkit.enchantments.Enchantment");
+            final Class<?> namespacedKeyClass = Class.forName("org.bukkit.NamespacedKey");
+            final Class<?> enchantmentClass = Class.forName("org.bukkit.enchantments.Enchantment");
             enchantmentClass.getDeclaredMethod("getByKey", namespacedKeyClass);
             isFlat = true;
-        } catch (ClassNotFoundException | NoSuchMethodException e) {
+        } catch (final ClassNotFoundException | NoSuchMethodException e) {
             isFlat = false;
         }
     }
 
-    public static Enchantment getByName(String name) {
+    private Enchantments() {
+    }
+
+    public static Enchantment getByName(final String name) {
         Enchantment enchantment = null;
         if (isFlat) { // 1.13+ only
             enchantment = Enchantment.getByKey(NamespacedKey.minecraft(name.toLowerCase()));

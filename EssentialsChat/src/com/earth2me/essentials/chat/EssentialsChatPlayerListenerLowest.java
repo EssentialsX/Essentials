@@ -3,6 +3,7 @@ package com.earth2me.essentials.chat;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.FormatUtil;
 import net.ess3.api.IEssentials;
+import org.bukkit.ChatColor;
 import org.bukkit.Server;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -12,7 +13,6 @@ import org.bukkit.scoreboard.Team;
 
 import java.util.Locale;
 import java.util.Map;
-
 
 public class EssentialsChatPlayerListenerLowest extends EssentialsChatPlayer {
     EssentialsChatPlayerListenerLowest(final Server server, final IEssentials ess, final Map<AsyncPlayerChatEvent, ChatStore> chatStorage) {
@@ -38,13 +38,19 @@ public class EssentialsChatPlayerListenerLowest extends EssentialsChatPlayer {
 
         // This listener should apply the general chat formatting only...then return control back the event handler
         event.setMessage(FormatUtil.formatMessage(user, "essentials.chat", event.getMessage()));
-        String group = user.getGroup();
-        String world = user.getWorld().getName();
 
-        Player player = user.getBase();
-        String prefix = FormatUtil.replaceFormat(ess.getPermissionsHandler().getPrefix(player));
-        String suffix = FormatUtil.replaceFormat(ess.getPermissionsHandler().getSuffix(player));
-        Team team = player.getScoreboard().getPlayerTeam(player);
+        if (ChatColor.stripColor(event.getMessage()).length() == 0) {
+            event.setCancelled(true);
+            return;
+        }
+
+        final String group = user.getGroup();
+        final String world = user.getWorld().getName();
+
+        final Player player = user.getBase();
+        final String prefix = FormatUtil.replaceFormat(ess.getPermissionsHandler().getPrefix(player));
+        final String suffix = FormatUtil.replaceFormat(ess.getPermissionsHandler().getSuffix(player));
+        final Team team = player.getScoreboard().getPlayerTeam(player);
 
         String format = ess.getSettings().getChatFormat(group);
         format = format.replace("{0}", group);

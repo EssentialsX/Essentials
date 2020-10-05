@@ -3,10 +3,13 @@ package com.earth2me.essentials.geoip;
 import com.earth2me.essentials.EssentialsConf;
 import com.earth2me.essentials.IConf;
 import com.earth2me.essentials.User;
+import com.ice.tar.TarEntry;
+import com.ice.tar.TarInputStream;
 import com.maxmind.geoip2.DatabaseReader;
+import com.maxmind.geoip2.exception.AddressNotFoundException;
+import com.maxmind.geoip2.exception.GeoIp2Exception;
 import com.maxmind.geoip2.model.CityResponse;
 import com.maxmind.geoip2.model.CountryResponse;
-import com.maxmind.geoip2.exception.*;
 import net.ess3.api.IEssentials;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -14,28 +17,34 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 
-import java.io.*;
-import java.net.*;
-import java.util.logging.Level;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.InetAddress;
+import java.net.MalformedURLException;
+import java.net.NetworkInterface;
+import java.net.SocketException;
+import java.net.URL;
+import java.net.URLConnection;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.zip.GZIPInputStream;
-import java.util.Arrays;
-import com.ice.tar.TarInputStream;
-import com.ice.tar.TarEntry;
 
 import static com.earth2me.essentials.I18n.tl;
 
-
 public class EssentialsGeoIPPlayerListener implements Listener, IConf {
-    private DatabaseReader mmreader = null; // initialize maxmind geoip2 reader
     private static final Logger logger = Logger.getLogger("EssentialsGeoIP");
-    private File databaseFile;
-    private File dataFolder;
+    private final File dataFolder;
     private final EssentialsConf config;
     private final transient IEssentials ess;
+    private DatabaseReader mmreader = null; // initialize maxmind geoip2 reader
+    private File databaseFile;
 
-    EssentialsGeoIPPlayerListener(File dataFolder, IEssentials ess) {
+    EssentialsGeoIPPlayerListener(final File dataFolder, final IEssentials ess) {
         this.ess = ess;
         this.dataFolder = dataFolder;
         this.config = new EssentialsConf(new File(dataFolder, "config.yml"));
@@ -48,24 +57,28 @@ public class EssentialsGeoIPPlayerListener implements Listener, IConf {
         ess.runTaskAsynchronously(() -> delayedJoin(event.getPlayer()));
     }
 
-    private void delayedJoin(Player player) {
-        User u = ess.getUser(player);
+    private void delayedJoin(final Player player) {
+        final User u = ess.getUser(player);
         if (u.isAuthorized("essentials.geoip.hide") || player.getAddress() == null) {
             return;
         }
-        InetAddress address = player.getAddress().getAddress();
-        StringBuilder sb = new StringBuilder();
+        final InetAddress address = player.getAddress().getAddress();
+        final StringBuilder sb = new StringBuilder();
 
+        if (mmreader == null) {
+            logger.log(Level.WARNING, tl("geoIpErrorOnJoin", u.getName()));
+            return;
+        }
 
         try {
             if (config.getBoolean("database.show-cities", false)) {
-                CityResponse response = mmreader.city(address);
+                final CityResponse response = mmreader.city(address);
                 if (response == null) {
                     return;
                 }
-                String city;
-                String region;
-                String country;
+                final String city;
+                final String region;
+                final String country;
                 city = response.getCity().getName();
                 region = response.getMostSpecificSubdivision().getName();
                 country = response.getCountry().getName();
@@ -77,14 +90,14 @@ public class EssentialsGeoIPPlayerListener implements Listener, IConf {
                 }
                 sb.append(country);
             } else {
-                CountryResponse response = mmreader.country(address);
+                final CountryResponse response = mmreader.country(address);
                 sb.append(response.getCountry().getName());
             }
-        } catch (AddressNotFoundException ex) {
+        } catch (final AddressNotFoundException ex) {
 
             if (checkIfLocal(address)) {
-                for (Player online : player.getServer().getOnlinePlayers()) {
-                    User user = ess.getUser(online);
+                for (final Player online : player.getServer().getOnlinePlayers()) {
+                    final User user = ess.getUser(online);
                     if (user.isAuthorized("essentials.geoip.show")) {
                         user.sendMessage(tl("geoipCantFind", u.getDisplayName()));
                     }
@@ -94,7 +107,7 @@ public class EssentialsGeoIPPlayerListener implements Listener, IConf {
             // GeoIP2 API forced this when address not found in their DB. jar will not complied without this.
             // TODO: Maybe, we can set a new custom msg about addr-not-found in messages.properties.
             logger.log(Level.INFO, tl("cantReadGeoIpDB") + " " + ex.getLocalizedMessage());
-        } catch (IOException | GeoIp2Exception ex) {
+        } catch (final IOException | GeoIp2Exception ex) {
             // GeoIP2 API forced this when address not found in their DB. jar will not complied without this.
             logger.log(Level.SEVERE, tl("cantReadGeoIpDB") + " " + ex.getLocalizedMessage());
         }
@@ -102,8 +115,8 @@ public class EssentialsGeoIPPlayerListener implements Listener, IConf {
             u.setGeoLocation(sb.toString());
         }
         if (config.getBoolean("show-on-login", true) && !u.isHidden()) {
-            for (Player onlinePlayer : player.getServer().getOnlinePlayers()) {
-                User user = ess.getUser(onlinePlayer);
+            for (final Player onlinePlayer : player.getServer().getOnlinePlayers()) {
+                final User user = ess.getUser(onlinePlayer);
                 if (user.isAuthorized("essentials.geoip.show")) {
                     user.sendMessage(tl("geoipJoinFormat", u.getDisplayName(), sb.toString()));
                 }
@@ -125,8 +138,8 @@ public class EssentialsGeoIPPlayerListener implements Listener, IConf {
             config.set("enable-locale", true);
             config.save();
             // delete old GeoIP.dat fiiles
-            File oldDatFile = new File(dataFolder, "GeoIP.dat");
-            File oldDatFileCity = new File(dataFolder, "GeoIP-City.dat");
+            final File oldDatFile = new File(dataFolder, "GeoIP.dat");
+            final File oldDatFileCity = new File(dataFolder, "GeoIP-City.dat");
             oldDatFile.delete();
             oldDatFileCity.delete();
         }
@@ -145,8 +158,8 @@ public class EssentialsGeoIPPlayerListener implements Listener, IConf {
             }
         } else if (config.getBoolean("database.update.enable", true)) {
             // try to update expired mmdb files
-            long diff = new Date().getTime() - databaseFile.lastModified();
-            if (diff/24/3600/1000>config.getLong("database.update.by-every-x-days", 30)) {
+            final long diff = new Date().getTime() - databaseFile.lastModified();
+            if (diff / 24 / 3600 / 1000 > config.getLong("database.update.by-every-x-days", 30)) {
                 downloadDatabase();
             }
         }
@@ -159,11 +172,11 @@ public class EssentialsGeoIPPlayerListener implements Listener, IConf {
                 if ("zh".equalsIgnoreCase(locale)) {
                     locale = "zh-CN";
                 }
-                mmreader = new DatabaseReader.Builder(databaseFile).locales(Arrays.asList(locale,"en")).build();
+                mmreader = new DatabaseReader.Builder(databaseFile).locales(Arrays.asList(locale, "en")).build();
             } else {
                 mmreader = new DatabaseReader.Builder(databaseFile).build();
             }
-        } catch (IOException ex) {
+        } catch (final IOException ex) {
             logger.log(Level.SEVERE, tl("cantReadGeoIpDB"), ex);
         }
     }
@@ -180,26 +193,26 @@ public class EssentialsGeoIPPlayerListener implements Listener, IConf {
                 logger.log(Level.SEVERE, tl("geoIpUrlEmpty"));
                 return;
             }
-            String licenseKey = config.getString("database.license-key", "");
+            final String licenseKey = config.getString("database.license-key", "");
             if (licenseKey == null || licenseKey.isEmpty()) {
                 logger.log(Level.SEVERE, tl("geoIpLicenseMissing"));
                 return;
             }
             url = url.replace("{LICENSEKEY}", licenseKey);
             logger.log(Level.INFO, tl("downloadingGeoIp"));
-            URL downloadUrl = new URL(url);
-            URLConnection conn = downloadUrl.openConnection();
+            final URL downloadUrl = new URL(url);
+            final URLConnection conn = downloadUrl.openConnection();
             conn.setConnectTimeout(10000);
             conn.connect();
             InputStream input = conn.getInputStream();
-            OutputStream output = new FileOutputStream(databaseFile);
-            byte[] buffer = new byte[2048];
+            final OutputStream output = new FileOutputStream(databaseFile);
+            final byte[] buffer = new byte[2048];
             if (url.contains("gz")) {
                 input = new GZIPInputStream(input);
                 if (url.contains("tar.gz")) {
                     // The new GeoIP2 uses tar.gz to pack the db file along with some other txt. So it makes things a bit complicated here.
                     String filename;
-                    TarInputStream tarInputStream = new TarInputStream(input);
+                    final TarInputStream tarInputStream = new TarInputStream(input);
                     TarEntry entry;
                     while ((entry = tarInputStream.getNextEntry()) != null) {
                         if (!entry.isDirectory()) {
@@ -219,14 +232,14 @@ public class EssentialsGeoIPPlayerListener implements Listener, IConf {
             }
             output.close();
             input.close();
-        } catch (MalformedURLException ex) {
+        } catch (final MalformedURLException ex) {
             logger.log(Level.SEVERE, tl("geoIpUrlInvalid"), ex);
-        } catch (IOException ex) {
+        } catch (final IOException ex) {
             logger.log(Level.SEVERE, tl("connectionFailed"), ex);
         }
     }
 
-    private boolean checkIfLocal(InetAddress address) {
+    private boolean checkIfLocal(final InetAddress address) {
         if (address.isAnyLocalAddress() || address.isLoopbackAddress()) {
             return true;
         }
@@ -234,7 +247,7 @@ public class EssentialsGeoIPPlayerListener implements Listener, IConf {
         // Double checks if address is defined on any interface
         try {
             return NetworkInterface.getByInetAddress(address) != null;
-        } catch (SocketException e) {
+        } catch (final SocketException e) {
             return false;
         }
     }

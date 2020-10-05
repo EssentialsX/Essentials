@@ -7,7 +7,6 @@ import org.bukkit.entity.Player;
 
 import static com.earth2me.essentials.I18n.tl;
 
-
 public class Commandkickall extends EssentialsCommand {
     public Commandkickall() {
         super("kickall");
@@ -18,7 +17,7 @@ public class Commandkickall extends EssentialsCommand {
         String kickReason = args.length > 0 ? getFinalArg(args, 0) : tl("kickDefault");
         kickReason = FormatUtil.replaceFormat(kickReason.replace("\\n", "\n").replace("|", "\n"));
 
-        for (Player onlinePlayer : ess.getOnlinePlayers()) {
+        for (final Player onlinePlayer : ess.getOnlinePlayers()) {
             if (!sender.isPlayer() || !onlinePlayer.getName().equalsIgnoreCase(sender.getPlayer().getName())) {
                 if (!ess.getUser(onlinePlayer).isAuthorized("essentials.kickall.exempt")) {
                     onlinePlayer.kickPlayer(kickReason);

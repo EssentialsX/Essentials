@@ -14,8 +14,7 @@ public class Commandping extends EssentialsCommand {
 
     @Override
     public void run(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception {
-        if (args.length < 1) {
-
+        if (args.length == 0) {
             sender.sendMessage(tl("pong"));
         } else {
             sender.sendMessage(FormatUtil.replaceFormat(getFinalArg(args, 0)));

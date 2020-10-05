@@ -4,7 +4,6 @@ import com.earth2me.essentials.Mob;
 import com.earth2me.essentials.User;
 import org.bukkit.Location;
 import org.bukkit.Server;
-import org.bukkit.World;
 import org.bukkit.entity.Cat;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Ocelot;
@@ -20,47 +19,34 @@ public class Commandkittycannon extends EssentialsCommand {
         super("kittycannon");
     }
 
-    @Override
-    protected void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception {
-        final Entity ocelot = Mob.CAT.getType() == null ? spawnOcelot(user.getWorld(), server, user) : spawnCat(user.getWorld(), server, user);
-
-        class KittyCannonExplodeTask implements Runnable {
-            @Override
-            public void run() {
-                final Location loc = ocelot.getLocation();
-                ocelot.remove();
-                loc.getWorld().createExplosion(loc, 0F);
-            }
-        }
-        ess.scheduleSyncDelayedTask(new KittyCannonExplodeTask(), 20);
-
-    }
-
-    private static Ocelot spawnOcelot(World world, Server server, User user) throws Mob.MobException {
+    private static Ocelot spawnOcelot(final Server server, final User user) throws Mob.MobException {
         final Ocelot ocelot = (Ocelot) Mob.OCELOT.spawn(user.getWorld(), server, user.getBase().getEyeLocation());
-        if (ocelot == null) {
-            return null;
-        }
         final int i = random.nextInt(Ocelot.Type.values().length);
         ocelot.setCatType(Ocelot.Type.values()[i]);
         ((Tameable) ocelot).setTamed(true);
         ocelot.setBaby();
         ocelot.setVelocity(user.getBase().getEyeLocation().getDirection().multiply(2));
-
         return ocelot;
     }
 
-    private static Entity spawnCat(World world, Server server, User user) throws Mob.MobException {
+    private static Entity spawnCat(final Server server, final User user) throws Mob.MobException {
         final Cat cat = (Cat) Mob.CAT.spawn(user.getWorld(), server, user.getBase().getEyeLocation());
-        if (cat == null) {
-            return null;
-        }
         final int i = random.nextInt(Cat.Type.values().length);
         cat.setCatType(Cat.Type.values()[i]);
         cat.setTamed(true);
         cat.setBaby();
         cat.setVelocity(user.getBase().getEyeLocation().getDirection().multiply(2));
-
         return cat;
+    }
+
+    @Override
+    protected void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception {
+        final Entity ocelot = Mob.CAT.getType() == null ? spawnOcelot(server, user) : spawnCat(server, user);
+        ess.scheduleSyncDelayedTask(() -> {
+            final Location loc = ocelot.getLocation();
+            ocelot.remove();
+            loc.getWorld().createExplosion(loc, 0F);
+        }, 20);
+
     }
 }

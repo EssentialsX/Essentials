@@ -1,6 +1,6 @@
 package com.earth2me.essentials.spawn;
 
-import com.earth2me.essentials.metrics.Metrics;
+import com.earth2me.essentials.metrics.MetricsWrapper;
 import net.ess3.api.IEssentials;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
@@ -15,11 +15,10 @@ import java.util.logging.Level;
 
 import static com.earth2me.essentials.I18n.tl;
 
-
 public class EssentialsSpawn extends JavaPlugin implements IEssentialsSpawn {
     private transient IEssentials ess;
     private transient SpawnStorage spawns;
-    private transient Metrics metrics = null;
+    private transient MetricsWrapper metrics = null;
 
     @Override
     public void onEnable() {
@@ -38,20 +37,20 @@ public class EssentialsSpawn extends JavaPlugin implements IEssentialsSpawn {
 
         final EssentialsSpawnPlayerListener playerListener = new EssentialsSpawnPlayerListener(ess, spawns);
 
-        EventPriority respawnPriority = ess.getSettings().getRespawnPriority();
+        final EventPriority respawnPriority = ess.getSettings().getRespawnPriority();
         if (respawnPriority != null) {
             pluginManager.registerEvent(PlayerRespawnEvent.class, playerListener, respawnPriority, (ll, event) ->
-                    ((EssentialsSpawnPlayerListener) ll).onPlayerRespawn((PlayerRespawnEvent) event), this);
+                ((EssentialsSpawnPlayerListener) ll).onPlayerRespawn((PlayerRespawnEvent) event), this);
         }
 
-        EventPriority joinPriority = ess.getSettings().getSpawnJoinPriority();
+        final EventPriority joinPriority = ess.getSettings().getSpawnJoinPriority();
         if (joinPriority != null) {
             pluginManager.registerEvent(PlayerJoinEvent.class, playerListener, joinPriority, (ll, event) ->
-                    ((EssentialsSpawnPlayerListener) ll).onPlayerJoin((PlayerJoinEvent) event), this);
+                ((EssentialsSpawnPlayerListener) ll).onPlayerJoin((PlayerJoinEvent) event), this);
         }
 
         if (metrics == null) {
-            metrics = new Metrics(this);
+            metrics = new MetricsWrapper(this, 3817, true);
         }
     }
 
@@ -61,11 +60,12 @@ public class EssentialsSpawn extends JavaPlugin implements IEssentialsSpawn {
 
     @Override
     public boolean onCommand(final CommandSender sender, final Command command, final String commandLabel, final String[] args) {
+        metrics.markCommand(command.getName(), true);
         return ess.onCommandEssentials(sender, command, commandLabel, args, EssentialsSpawn.class.getClassLoader(), "com.earth2me.essentials.spawn.Command", "essentials.", spawns);
     }
 
     @Override
-    public void setSpawn(Location loc, String group) {
+    public void setSpawn(final Location loc, final String group) {
         if (group == null) {
             throw new IllegalArgumentException("Null group");
         }
@@ -73,7 +73,7 @@ public class EssentialsSpawn extends JavaPlugin implements IEssentialsSpawn {
     }
 
     @Override
-    public Location getSpawn(String group) {
+    public Location getSpawn(final String group) {
         if (group == null) {
             throw new IllegalArgumentException("Null group");
         }

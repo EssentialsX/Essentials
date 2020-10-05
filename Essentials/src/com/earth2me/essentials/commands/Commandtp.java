@@ -14,7 +14,6 @@ import java.util.concurrent.CompletableFuture;
 
 import static com.earth2me.essentials.I18n.tl;
 
-
 public class Commandtp extends EssentialsCommand {
     public Commandtp() {
         super("tp");
@@ -22,7 +21,7 @@ public class Commandtp extends EssentialsCommand {
 
     @Override
     public void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception {
-        CompletableFuture<Boolean> future = getNewExceptionFuture(user.getSource(), commandLabel);
+        final CompletableFuture<Boolean> future = getNewExceptionFuture(user.getSource(), commandLabel);
         switch (args.length) {
             case 0:
                 throw new NotEnoughArgumentsException();
@@ -44,7 +43,7 @@ public class Commandtp extends EssentialsCommand {
                 final Trade charge = new Trade(this.getName(), ess);
                 charge.isAffordableFor(user);
                 user.getAsyncTeleport().teleport(player.getBase(), charge, TeleportCause.COMMAND, future);
-                break;
+                throw new NoChargeException();
             case 3:
                 if (!user.isAuthorized("essentials.tp.position")) {
                     throw new Exception(tl("noPerm", "essentials.tp.position"));
@@ -131,7 +130,7 @@ public class Commandtp extends EssentialsCommand {
             }
             final Location loc = new Location(target.getWorld(), x, y, z, target.getLocation().getYaw(), target.getLocation().getPitch());
             sender.sendMessage(tl("teleporting", loc.getWorld().getName(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ()));
-            CompletableFuture<Boolean> future = getNewExceptionFuture(sender, commandLabel);
+            final CompletableFuture<Boolean> future = getNewExceptionFuture(sender, commandLabel);
             target.getAsyncTeleport().now(loc, false, TeleportCause.COMMAND, future);
             future.thenAccept(success -> {
                 if (success) {
@@ -144,7 +143,7 @@ public class Commandtp extends EssentialsCommand {
     }
 
     @Override
-    protected List<String> getTabCompleteOptions(Server server, User user, String commandLabel, String[] args) {
+    protected List<String> getTabCompleteOptions(final Server server, final User user, final String commandLabel, final String[] args) {
         // Don't handle coords
         if (args.length == 1 || (args.length == 2 && user.isAuthorized("essentials.tp.others"))) {
             return getPlayers(server, user);
@@ -154,7 +153,7 @@ public class Commandtp extends EssentialsCommand {
     }
 
     @Override
-    protected List<String> getTabCompleteOptions(Server server, CommandSource sender, String commandLabel, String[] args) {
+    protected List<String> getTabCompleteOptions(final Server server, final CommandSource sender, final String commandLabel, final String[] args) {
         // Don't handle coords
         if (args.length == 1 || args.length == 2) {
             return getPlayers(server, sender);

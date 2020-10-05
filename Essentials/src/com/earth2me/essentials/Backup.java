@@ -14,15 +14,14 @@ import java.util.logging.Logger;
 
 import static com.earth2me.essentials.I18n.tl;
 
-
 public class Backup implements Runnable {
     private static final Logger LOGGER = Logger.getLogger("Essentials");
     private transient final Server server;
     private transient final IEssentials ess;
+    private final AtomicBoolean pendingShutdown = new AtomicBoolean(false);
     private transient boolean running = false;
     private transient int taskId = -1;
     private transient boolean active = false;
-    private final AtomicBoolean pendingShutdown = new AtomicBoolean(false);
     private transient CompletableFuture<Object> taskLock = null;
 
     public Backup(final IEssentials ess) {
@@ -60,7 +59,7 @@ public class Backup implements Runnable {
         return taskLock;
     }
 
-    public void setPendingShutdown(boolean shutdown) {
+    public void setPendingShutdown(final boolean shutdown) {
         pendingShutdown.set(shutdown);
     }
 
@@ -95,7 +94,7 @@ public class Backup implements Runnable {
                 final Process child = childBuilder.start();
                 ess.runTaskAsynchronously(() -> {
                     try {
-                        try (BufferedReader reader = new BufferedReader(new InputStreamReader(child.getInputStream()))) {
+                        try (final BufferedReader reader = new BufferedReader(new InputStreamReader(child.getInputStream()))) {
                             String line;
                             do {
                                 line = reader.readLine();
@@ -104,12 +103,12 @@ public class Backup implements Runnable {
                                 }
                             } while (line != null);
                         }
-                    } catch (IOException ex) {
+                    } catch (final IOException ex) {
                         LOGGER.log(Level.SEVERE, null, ex);
                     }
                 });
                 child.waitFor();
-            } catch (InterruptedException | IOException ex) {
+            } catch (final InterruptedException | IOException ex) {
                 LOGGER.log(Level.SEVERE, null, ex);
             } finally {
                 class BackupEnableSaveTask implements Runnable {
@@ -124,6 +123,7 @@ public class Backup implements Runnable {
                         LOGGER.log(Level.INFO, tl("backupFinished"));
                     }
                 }
+
                 if (!pendingShutdown.get()) {
                     ess.scheduleSyncDelayedTask(new BackupEnableSaveTask());
                 }

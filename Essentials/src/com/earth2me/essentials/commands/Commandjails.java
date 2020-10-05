@@ -6,7 +6,6 @@ import org.bukkit.Server;
 
 import static com.earth2me.essentials.I18n.tl;
 
-
 public class Commandjails extends EssentialsCommand {
     public Commandjails() {
         super("jails");
@@ -14,7 +13,7 @@ public class Commandjails extends EssentialsCommand {
 
     @Override
     protected void run(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception {
-        if (ess.getJails().getCount() < 1) {
+        if (ess.getJails().getCount() == 0) {
             sender.sendMessage(tl("noJailsDefined"));
         } else {
             sender.sendMessage(tl("jailList", StringUtil.joinList(" ", ess.getJails().getList())));

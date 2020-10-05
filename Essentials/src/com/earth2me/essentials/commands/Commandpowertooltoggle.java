@@ -5,7 +5,6 @@ import org.bukkit.Server;
 
 import static com.earth2me.essentials.I18n.tl;
 
-
 public class Commandpowertooltoggle extends EssentialsCommand {
     public Commandpowertooltoggle() {
         super("powertooltoggle");

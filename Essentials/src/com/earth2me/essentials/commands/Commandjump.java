@@ -24,15 +24,15 @@ public class Commandjump extends EssentialsCommand {
         if (args.length > 0 && args[0].contains("lock") && user.isAuthorized("essentials.jump.lock")) {
             if (user.isFlyClickJump()) {
                 user.setRightClickJump(false);
-                user.sendMessage("Flying wizard mode disabled");
+                user.sendMessage(tl("jumpEasterDisable"));
             } else {
                 user.setRightClickJump(true);
-                user.sendMessage("Enabling flying wizard mode");
+                user.sendMessage(tl("jumpEasterEnable"));
             }
             return;
         }
 
-        Location loc;
+        final Location loc;
         final Location cloc = user.getLocation();
 
         try {
@@ -40,17 +40,19 @@ public class Commandjump extends EssentialsCommand {
             loc.setYaw(cloc.getYaw());
             loc.setPitch(cloc.getPitch());
             loc.setY(loc.getY() + 1);
-        } catch (NullPointerException ex) {
+        } catch (final NullPointerException ex) {
             throw new Exception(tl("jumpError"), ex);
         }
 
         final Trade charge = new Trade(this.getName(), ess);
         charge.isAffordableFor(user);
         user.getAsyncTeleport().teleport(loc, charge, TeleportCause.COMMAND, getNewExceptionFuture(user.getSource(), commandLabel));
+
+        throw new NoChargeException();
     }
 
     @Override
-    protected List<String> getTabCompleteOptions(Server server, User user, String commandLabel, String[] args) {
+    protected List<String> getTabCompleteOptions(final Server server, final User user, final String commandLabel, final String[] args) {
         if (args.length == 1 && user.isAuthorized("essentials.jump.lock")) {
             // XXX these actually do the same thing
             return Lists.newArrayList("lock", "unlock");

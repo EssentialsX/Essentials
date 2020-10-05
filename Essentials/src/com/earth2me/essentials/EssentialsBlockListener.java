@@ -15,7 +15,6 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.Locale;
 
-
 public class EssentialsBlockListener implements Listener {
     private final transient IEssentials ess;
 
@@ -37,7 +36,7 @@ public class EssentialsBlockListener implements Listener {
             final BlockState blockState = event.getBlockPlaced().getState();
             if (blockState instanceof CreatureSpawner) {
                 final CreatureSpawner spawner = (CreatureSpawner) blockState;
-                final EntityType type = ess.getSpawnerProvider().getEntityType(event.getItemInHand());
+                final EntityType type = ess.getSpawnerItemProvider().getEntityType(event.getItemInHand());
                 if (type != null && Mob.fromBukkitType(type) != null) {
                     if (ess.getUser(event.getPlayer()).isAuthorized("essentials.spawnerconvert." + Mob.fromBukkitType(type).name().toLowerCase(Locale.ENGLISH))) {
                         spawner.setSpawnedType(type);
@@ -56,6 +55,7 @@ public class EssentialsBlockListener implements Listener {
                     user.getBase().updateInventory();
                 }
             }
+
             ess.scheduleSyncDelayedTask(new UnlimitedItemSpawnTask());
         }
     }

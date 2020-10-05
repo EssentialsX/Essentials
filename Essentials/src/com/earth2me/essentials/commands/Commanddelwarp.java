@@ -9,7 +9,6 @@ import java.util.List;
 
 import static com.earth2me.essentials.I18n.tl;
 
-
 public class Commanddelwarp extends EssentialsCommand {
     public Commanddelwarp() {
         super("delwarp");
@@ -17,7 +16,7 @@ public class Commanddelwarp extends EssentialsCommand {
 
     @Override
     public void run(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception {
-        if (args.length < 1) {
+        if (args.length == 0) {
             throw new NotEnoughArgumentsException();
         }
 

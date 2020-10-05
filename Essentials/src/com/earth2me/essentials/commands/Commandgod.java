@@ -7,7 +7,6 @@ import org.bukkit.Server;
 
 import static com.earth2me.essentials.I18n.tl;
 
-
 public class Commandgod extends EssentialsToggleCommand {
     public Commandgod() {
         super("god", "essentials.god.others");
@@ -24,13 +23,12 @@ public class Commandgod extends EssentialsToggleCommand {
     }
 
     @Override
-    void togglePlayer(CommandSource sender, User user, Boolean enabled) {
+    void togglePlayer(final CommandSource sender, final User user, Boolean enabled) {
         if (enabled == null) {
             enabled = !user.isGodModeEnabled();
         }
 
-        final User controller = sender.isPlayer() ? ess.getUser(sender.getPlayer()) : null;
-        final GodStatusChangeEvent godEvent = new GodStatusChangeEvent(user, controller, enabled);
+        final GodStatusChangeEvent godEvent = new GodStatusChangeEvent(user, sender.isPlayer() ? ess.getUser(sender.getPlayer()) : null, enabled);
         ess.getServer().getPluginManager().callEvent(godEvent);
         if (!godEvent.isCancelled()) {
             user.setGodModeEnabled(enabled);

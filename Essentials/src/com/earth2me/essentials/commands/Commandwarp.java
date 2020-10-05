@@ -19,7 +19,6 @@ import java.util.stream.Collectors;
 
 import static com.earth2me.essentials.I18n.tl;
 
-
 public class Commandwarp extends EssentialsCommand {
     private static final int WARPS_PER_PAGE = 20;
 
@@ -42,9 +41,10 @@ public class Commandwarp extends EssentialsCommand {
             if (args.length == 2 && (user.isAuthorized("essentials.warp.otherplayers") || user.isAuthorized("essentials.warp.others"))) {
                 otherUser = getPlayer(server, user, args, 1);
                 warpUser(user, otherUser, args[0], commandLabel);
-                return;
+                throw new NoChargeException();
             }
             warpUser(user, user, args[0], commandLabel);
+            throw new NoChargeException();
         }
     }
 
@@ -54,8 +54,9 @@ public class Commandwarp extends EssentialsCommand {
             warpList(sender, args, null);
             throw new NoChargeException();
         }
-        User otherUser = getPlayer(server, args, 1, true, false);
+        final User otherUser = getPlayer(server, args, 1, true, false);
         otherUser.getAsyncTeleport().warp(otherUser, args[0], null, TeleportCause.COMMAND, getNewExceptionFuture(sender, commandLabel));
+        throw new NoChargeException();
     }
 
     //TODO: Use one of the new text classes, like /help ?

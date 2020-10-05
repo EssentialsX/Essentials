@@ -4,7 +4,6 @@ import net.ess3.api.IEssentials;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
-
 public class ConfigPermissionsHandler extends SuperpermsHandler {
     private final transient IEssentials ess;
 
@@ -21,6 +20,11 @@ public class ConfigPermissionsHandler extends SuperpermsHandler {
     public boolean hasPermission(final Player base, final String node) {
         final String[] cmds = node.split("\\.", 2);
         return ess.getSettings().isPlayerCommand(cmds[cmds.length - 1]) || super.hasPermission(base, node);
+    }
+
+    @Override
+    public String getBackendName() {
+        return "Essentials";
     }
 
     @Override
