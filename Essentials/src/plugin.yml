@@ -76,7 +76,7 @@ commands:
   cartographytable:
     description: Opens up a cartography table.
     usage: /<command>
-    aliases: [ecartographytable]
+    aliases: [ecartographytable, carttable, ecarttable]
   clearinventory:
     description: Clear all items in your inventory.
     usage: /<command> [player|*] [item[:<data>]|*|**] [amount]
@@ -431,7 +431,7 @@ commands:
   smithingtable:
     description: Opens up a smithing table.
     usage: /<command>
-    aliases: [esmithingtable]
+    aliases: [esmithingtable, smithtable, esmithtable]
   socialspy:
     description: Toggles if you can see msg/mail commands in chat.
     usage: /<command> [player] [on|off]
