@@ -56,10 +56,6 @@ public class EssentialsGeoIPPlayerListener implements Listener, IConf {
         InetAddress address = player.getAddress().getAddress();
         StringBuilder sb = new StringBuilder();
 
-        if (mmreader == null) {
-            logger.log(Level.WARNING, tl("geoIpErrorOnJoin", u.getName()));
-            return;
-        }
 
         try {
             if (config.getBoolean("database.show-cities", false)) {

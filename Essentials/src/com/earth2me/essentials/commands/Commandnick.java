@@ -11,7 +11,6 @@ import org.bukkit.entity.Player;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
-import java.util.function.Predicate;
 
 import static com.earth2me.essentials.I18n.tl;
 
@@ -31,10 +30,12 @@ public class Commandnick extends EssentialsLoopCommand {
         }
 
         if (args.length > 1 && user.isAuthorized("essentials.nick.others")) {
-            loopOfflinePlayers(server, user.getSource(), false, true, args[0], formatNickname(user, args[1]).split(" "));
+            final String[] nickname = formatNickname(user, args[1]).split(" ");
+            loopOfflinePlayers(server, user.getSource(), false, true, args[0], nickname);
             user.sendMessage(tl("nickChanged"));
         } else {
-            updatePlayer(server, user.getSource(), user, formatNickname(user, args[0]).split(" "));
+            final String[] nickname = formatNickname(user, args[0]).split(" ");
+            updatePlayer(server, user.getSource(), user, nickname);
         }
     }
 
@@ -46,7 +47,8 @@ public class Commandnick extends EssentialsLoopCommand {
         if (!ess.getSettings().changeDisplayName()) {
             throw new Exception(tl("nickDisplayName"));
         }
-        loopOfflinePlayers(server, sender, false, true, args[0], formatNickname(null, args[1]).split(" "));
+        final String[] nickname = formatNickname(null, args[1]).split(" ");
+        loopOfflinePlayers(server, sender, false, true, args[0], nickname);
         sender.sendMessage(tl("nickChanged"));
     }
 
@@ -57,12 +59,13 @@ public class Commandnick extends EssentialsLoopCommand {
             setNickname(server, sender, target, null);
             target.sendMessage(tl("nickNoMore"));
         } else if (target.getName().equalsIgnoreCase(nick)) {
+            String oldName = target.getDisplayName();
             setNickname(server, sender, target, nick);
-            if (!target.getDisplayName().equalsIgnoreCase(target.getDisplayName())) {
+            if (!target.getDisplayName().equalsIgnoreCase(oldName)) {
                 target.sendMessage(tl("nickNoMore"));
             }
             target.sendMessage(tl("nickSet", target.getDisplayName()));
-        } else if (nickInUse(target, nick)) {
+        } else if (nickInUse(server, target, nick)) {
             throw new NotEnoughArgumentsException(tl("nickInUse"));
         } else {
             setNickname(server, sender, target, nick);
@@ -87,19 +90,15 @@ public class Commandnick extends EssentialsLoopCommand {
     }
 
     private boolean isNickBanned(String newNick) {
-        for (Predicate<String> predicate : ess.getSettings().getNickBlacklist()) {
-            if (predicate.test(newNick)) {
-                return true;
-            }
-        }
-        return false;
+        return ess.getSettings().getNickBlacklist().stream()
+            .anyMatch(entry -> entry.test(newNick));
     }
 
     private int getNickLength(final String nick) {
         return ess.getSettings().ignoreColorsInMaxLength() ? ChatColor.stripColor(nick).length() : nick.length();
     }
 
-    private boolean nickInUse(final User target, String nick) {
+    private boolean nickInUse(final Server server, final User target, String nick) {
         final String lowerNick = FormatUtil.stripFormat(nick.toLowerCase(Locale.ENGLISH));
         for (final Player onlinePlayer : ess.getOnlinePlayers()) {
             if (target.getBase().getName().equals(onlinePlayer.getName())) {
@@ -114,7 +113,8 @@ public class Commandnick extends EssentialsLoopCommand {
     }
 
     private void setNickname(final Server server, final CommandSource sender, final User target, final String nickname) {
-        final NickChangeEvent nickEvent = new NickChangeEvent(sender.getUser(ess), target, nickname);
+        final User controller = sender.isPlayer() ? ess.getUser(sender.getPlayer()) : null;
+        final NickChangeEvent nickEvent = new NickChangeEvent(controller, target, nickname);
         server.getPluginManager().callEvent(nickEvent);
         if (!nickEvent.isCancelled()) {
             target.setNickname(nickname);
@@ -123,8 +123,17 @@ public class Commandnick extends EssentialsLoopCommand {
     }
 
     @Override
+    protected List<String> getTabCompleteOptions(final Server server, final User user, final String commandLabel, final String[] args) {
+        if (args.length == 1 && user.isAuthorized("essentials.nick.others")) {
+            return getPlayers(server, user);
+        } else {
+            return Collections.emptyList();
+        }
+    }
+
+    @Override
     protected List<String> getTabCompleteOptions(final Server server, final CommandSource sender, final String commandLabel, final String[] args) {
-        if (args.length == 1 && sender.isAuthorized("essentials.nick.others", ess)) {
+        if (args.length == 1) {
             return getPlayers(server, sender);
         } else {
             return Collections.emptyList();

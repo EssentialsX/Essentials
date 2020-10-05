@@ -94,7 +94,6 @@ public class EssentialsSign {
     }
 
     public String getUsername(final User user) {
-        // Truncate username to ensure it can fit on a sign
         return user.getName().substring(0, Math.min(user.getName().length(), 13));
     }
 
@@ -376,9 +375,9 @@ public class EssentialsSign {
         return stack;
     }
 
-    protected final BigDecimal getMoney(final String line, final IEssentials ess) throws SignException {
-        final boolean isMoney = line.matches("^[^0-9-\\.]?[\\.0-9]+[^0-9-\\.]?$");
-        return isMoney ? getBigDecimalPositive(NumberUtil.sanitizeCurrencyString(line, ess)) : null;
+    protected final BigDecimal getMoney(final String line) throws SignException {
+        final boolean isMoney = line.matches("^[^0-9-\\.][\\.0-9]+$");
+        return isMoney ? getBigDecimalPositive(line.substring(1)) : null;
     }
 
     protected final BigDecimal getBigDecimalPositive(final String line) throws SignException {
@@ -411,7 +410,7 @@ public class EssentialsSign {
             return new Trade(signName.toLowerCase(Locale.ENGLISH) + "sign", ess);
         }
 
-        final BigDecimal money = getMoney(line, ess);
+        final BigDecimal money = getMoney(line);
         if (money == null) {
             final String[] split = line.split("[ :]+", 2);
             if (split.length != 2) {

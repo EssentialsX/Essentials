@@ -5,8 +5,6 @@ import static com.earth2me.essentials.I18n.tl;
 import com.earth2me.essentials.metrics.Metrics;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import com.earth2me.essentials.metrics.MetricsWrapper;
 import net.ess3.api.IEssentials;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -14,7 +12,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public class EssentialsGeoIP extends JavaPlugin {
   
-    private transient MetricsWrapper metrics = null;
+    private transient Metrics metrics = null;
 
     @Override
     public void onEnable() {
@@ -37,7 +35,7 @@ public class EssentialsGeoIP extends JavaPlugin {
         getLogger().log(Level.INFO, "This product includes GeoLite2 data created by MaxMind, available from http://www.maxmind.com/.");
 
         if (metrics == null) {
-            metrics = new MetricsWrapper(this, 3815, false);
+            metrics = new Metrics(this);
         }
     }
 

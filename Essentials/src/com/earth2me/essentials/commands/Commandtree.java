@@ -42,16 +42,14 @@ public class Commandtree extends EssentialsCommand {
             }
         }
 
-        final Location loc = LocationUtil.getTarget(user.getBase()).add(0, 1, 0);
-        if (loc.getBlock().getType().isSolid()) {
-            throw new Exception(tl("treeFailure"));
-        }
-
-        if (user.getWorld().generateTree(loc, tree)) {
+        final Location loc = LocationUtil.getTarget(user.getBase());
+        final Location safeLocation = LocationUtil.getSafeDestination(loc);
+        final boolean success = user.getWorld().generateTree(safeLocation, tree);
+        if (success) {
             user.sendMessage(tl("treeSpawned"));
-            return;
+        } else {
+            user.sendMessage(tl("treeFailure"));
         }
-        user.sendMessage(tl("treeFailure"));
     }
 
     @Override

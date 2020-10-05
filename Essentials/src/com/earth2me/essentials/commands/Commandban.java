@@ -37,8 +37,10 @@ public class Commandban extends EssentialsCommand {
             if (sender.isPlayer() && !ess.getUser(sender.getPlayer()).isAuthorized("essentials.ban.offline")) {
                 throw new Exception(tl("banExemptOffline"));
             }
-        } else if (user.isAuthorized("essentials.ban.exempt") && sender.isPlayer()) {
-            throw new Exception(tl("banExempt"));
+        } else {
+            if (user.isAuthorized("essentials.ban.exempt") && sender.isPlayer()) {
+                throw new Exception(tl("banExempt"));
+            }
         }
 
         final String senderName = sender.isPlayer() ? sender.getPlayer().getDisplayName() : Console.NAME;

@@ -17,15 +17,8 @@ import static com.earth2me.essentials.I18n.tl;
 
 public class LocationUtil {
     // Water types used for TRANSPARENT_MATERIALS and is-water-safe config option
-    private static final Set<Material> WATER_TYPES = EnumUtil.getAllMatching(Material.class,
-            "FLOWING_WATER", "WATER");
-
-    // Types checked by isBlockDamaging
-    private static final Set<Material> DAMAGING_TYPES = EnumUtil.getAllMatching(Material.class,
-            "CACTUS", "CAMPFIRE", "FIRE", "MAGMA_BLOCK", "SOUL_CAMPFIRE", "SOUL_FIRE", "SWEET_BERRY_BUSH", "WITHER_ROSE");
-    private static final Set<Material> LAVA_TYPES = EnumUtil.getAllMatching(Material.class,
-            "FLOWING_LAVA", "LAVA", "STATIONARY_LAVA");
-    private static final Material PORTAL = EnumUtil.getMaterial("NETHER_PORTAL", "PORTAL");
+    private static final Set<Material> WATER_TYPES =
+            EnumUtil.getAllMatching(Material.class, "WATER", "FLOWING_WATER");
 
     // The player can stand inside these materials
     private static final Set<Material> HOLLOW_MATERIALS = new HashSet<>();
@@ -99,38 +92,6 @@ public class LocationUtil {
         return y > world.getMaxHeight() || HOLLOW_MATERIALS.contains(world.getBlockAt(x, y - 1, z).getType());
     }
 
-    public static boolean isBlockOutsideWorldBorder(final World world, final int x, final int z) {
-        final Location center = world.getWorldBorder().getCenter();
-        final int radius = (int) world.getWorldBorder().getSize() / 2;
-        final int x1 = center.getBlockX() - radius, x2 = center.getBlockX() + radius;
-        final int z1 = center.getBlockZ() - radius, z2 = center.getBlockZ() + radius;
-        return x < x1 || x > x2 || z < z1 || z > z2;
-    }
-
-    public static int getXInsideWorldBorder(final World world, final int x) {
-        final Location center = world.getWorldBorder().getCenter();
-        final int radius = (int) world.getWorldBorder().getSize() / 2;
-        final int x1 = center.getBlockX() - radius, x2 = center.getBlockX() + radius;
-        if (x < x1) {
-            return x1;
-        } else if (x > x2) {
-            return x2;
-        }
-        return x;
-    }
-
-    public static int getZInsideWorldBorder(final World world, final int z) {
-        final Location center = world.getWorldBorder().getCenter();
-        final int radius = (int) world.getWorldBorder().getSize() / 2;
-        final int z1 = center.getBlockZ() - radius, z2 = center.getBlockZ() + radius;
-        if (z < z1) {
-            return z1;
-        } else if (z > z2) {
-            return z2;
-        }
-        return z;
-    }
-
     public static boolean isBlockUnsafeForUser(final IUser user, final World world, final int x, final int y, final int z) {
         if (user.getBase().isOnline() && world.equals(user.getBase().getWorld()) && (user.getBase().getGameMode() == GameMode.CREATIVE || user.getBase().getGameMode() == GameMode.SPECTATOR || user.isGodModeEnabled()) && user.getBase().getAllowFlight()) {
             return false;
@@ -139,10 +100,7 @@ public class LocationUtil {
         if (isBlockDamaging(world, x, y, z)) {
             return true;
         }
-        if (isBlockAboveAir(world, x, y, z)) {
-            return true;
-        }
-        return isBlockOutsideWorldBorder(world, x, z);
+        return isBlockAboveAir(world, x, y, z);
     }
 
     public static boolean isBlockUnsafe(final World world, final int x, final int y, final int z) {
@@ -150,19 +108,31 @@ public class LocationUtil {
     }
 
     public static boolean isBlockDamaging(final World world, final int x, final int y, final int z) {
-        final Material block = world.getBlockAt(x, y, z).getType();
-        final Material below = world.getBlockAt(x, y - 1, z).getType();
-        final Material above = world.getBlockAt(x, y + 1, z).getType();
+        final Block below = world.getBlockAt(x, y - 1, z);
 
-        if (DAMAGING_TYPES.contains(below) || LAVA_TYPES.contains(below) || MaterialUtil.isBed(below)) {
+        switch (below.getType()) {
+            case LAVA:
+            case FIRE:
+                return true;
+        }
+
+        if (MaterialUtil.isBed(below.getType())) {
             return true;
         }
 
-        if (block == PORTAL) {
+        try {
+            if (below.getType() == Material.valueOf("FLOWING_LAVA")) {
+                return true;
+            }
+        } catch (Exception ignored) {} // 1.13 LAVA uses Levelled
+
+        Material PORTAL = EnumUtil.getMaterial("NETHER_PORTAL", "PORTAL");
+
+        if (world.getBlockAt(x, y, z).getType() == PORTAL) {
             return true;
         }
 
-        return !HOLLOW_MATERIALS.contains(block) || !HOLLOW_MATERIALS.contains(above);
+        return (!HOLLOW_MATERIALS.contains(world.getBlockAt(x, y, z).getType())) || (!HOLLOW_MATERIALS.contains(world.getBlockAt(x, y + 1, z).getType()));
     }
 
     // Not needed if using getSafeDestination(loc)
@@ -183,8 +153,8 @@ public class LocationUtil {
     }
 
     public static Location getSafeDestination(final IEssentials ess, final IUser user, final Location loc) throws Exception {
-        if (user.getBase().isOnline() && (ess == null || !ess.getSettings().isAlwaysTeleportSafety()) && (user.getBase().getGameMode() == GameMode.CREATIVE || user.getBase().getGameMode() == GameMode.SPECTATOR || user.isGodModeEnabled())) {
-            if (shouldFly(loc) && user.getBase().getAllowFlight()) {
+        if (user.getBase().isOnline() && loc.getWorld().equals(user.getBase().getWorld()) && (user.getBase().getGameMode() == GameMode.CREATIVE || user.isGodModeEnabled()) && user.getBase().getAllowFlight()) {
+            if (shouldFly(loc)) {
                 user.getBase().setFlying(true);
             }
             // ess can be null if old deprecated method is calling it.
@@ -205,10 +175,6 @@ public class LocationUtil {
         int x = loc.getBlockX();
         int y = (int) Math.round(loc.getY());
         int z = loc.getBlockZ();
-        if (isBlockOutsideWorldBorder(world, x, z)) {
-            x = getXInsideWorldBorder(world, x);
-            z = getZInsideWorldBorder(world, z);
-        }
         final int origX = x;
         final int origY = y;
         final int origZ = z;

@@ -3,7 +3,6 @@ package com.earth2me.essentials.commands;
 import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.User;
 import com.google.common.collect.Lists;
-import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Server;
 import org.bukkit.World;
@@ -60,7 +59,7 @@ public class Commandnear extends EssentialsCommand {
         if (otherUser == null || !user.isAuthorized("essentials.near.others")) {
             otherUser = user;
         }
-        user.sendMessage(tl("nearbyPlayers", getLocal(otherUser, radius)));
+        user.sendMessage(tl("nearbyPlayers", getLocal(server, otherUser, radius)));
     }
 
     @Override
@@ -76,10 +75,10 @@ public class Commandnear extends EssentialsCommand {
             } catch (NumberFormatException ignored) {
             }
         }
-        sender.sendMessage(tl("nearbyPlayers", getLocal(otherUser, radius)));
+        sender.sendMessage(tl("nearbyPlayers", getLocal(server, otherUser, radius)));
     }
 
-    private String getLocal(final User user, final long radius) {
+    private String getLocal(final Server server, final User user, final long radius) {
         final Location loc = user.getLocation();
         final World world = loc.getWorld();
         final StringBuilder output = new StringBuilder();
@@ -107,10 +106,7 @@ public class Commandnear extends EssentialsCommand {
                 output.append(", ");
             }
             User nearbyPlayer = nearbyPlayers.poll();
-            if (nearbyPlayer == null) {
-                continue;
-            }
-            output.append(nearbyPlayer.getDisplayName()).append(ChatColor.WHITE + "(" + ChatColor.RED).append((long) nearbyPlayer.getLocation().distance(loc)).append("m" + ChatColor.WHITE + ")");
+            output.append(nearbyPlayer.getDisplayName()).append("§f(§4").append((long) nearbyPlayer.getLocation().distance(loc)).append("m§f)");
         }
 
         return output.length() > 1 ? output.toString() : tl("none");

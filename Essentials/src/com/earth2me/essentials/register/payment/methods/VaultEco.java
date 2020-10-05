@@ -29,14 +29,13 @@ public class VaultEco implements Method {
         return this.vault.getDescription().getName();
     }
 
-    @Override
-    public String getBackend() {
+    public String getEconomy() {
         return economy == null ? "NoEco" : economy.getName();
     }
 
     @Override
     public String getLongName() {
-        return getName().concat(" - Economy: ").concat(getBackend());
+        return getName().concat(" - Economy: ").concat(getEconomy());
     }
 
     @Override

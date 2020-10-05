@@ -27,9 +27,12 @@ public class Commandkit extends EssentialsCommand {
             user.sendMessage(kitList.length() > 0 ? tl("kits", kitList) : tl("noKits"));
             throw new NoChargeException();
         } else if (args.length > 1 && user.isAuthorized("essentials.kit.others")) {
-            giveKits(getPlayer(server, user, args, 1), user, StringUtil.sanitizeString(args[0].toLowerCase(Locale.ENGLISH)).trim());
+            final User userTo = getPlayer(server, user, args, 1);
+            final String kitNames = StringUtil.sanitizeString(args[0].toLowerCase(Locale.ENGLISH)).trim();
+            giveKits(userTo, user, kitNames);
         } else {
-            giveKits(user, user, StringUtil.sanitizeString(args[0].toLowerCase(Locale.ENGLISH)).trim());
+            final String kitNames = StringUtil.sanitizeString(args[0].toLowerCase(Locale.ENGLISH)).trim();
+            giveKits(user, user, kitNames);
         }
     }
 
@@ -41,9 +44,11 @@ public class Commandkit extends EssentialsCommand {
             throw new NoChargeException();
         } else {
             final User userTo = getPlayer(server, args, 1, true, false);
+            final String[] kits = args[0].toLowerCase(Locale.ENGLISH).split(",");
 
-            for (final String kitName : args[0].toLowerCase(Locale.ENGLISH).split(",")) {
-                new Kit(kitName, ess).expandItems(userTo);
+            for (final String kitName : kits) {
+                final Kit kit = new Kit(kitName, ess);
+                kit.expandItems(userTo);
 
                 sender.sendMessage(tl("kitGiveTo", kitName, userTo.getDisplayName()));
                 userTo.sendMessage(tl("kitReceive", kitName));
@@ -55,10 +60,11 @@ public class Commandkit extends EssentialsCommand {
         if (kitNames.isEmpty()) {
             throw new Exception(tl("kitNotFound"));
         }
+        String[] kitList = kitNames.split(",");
 
         List<Kit> kits = new ArrayList<>();
 
-        for (final String kitName : kitNames.split(",")) {
+        for (final String kitName : kitList) {
             if (kitName.isEmpty()) {
                 throw new Exception(tl("kitNotFound"));
             }

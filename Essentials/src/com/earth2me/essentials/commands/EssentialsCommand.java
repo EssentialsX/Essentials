@@ -1,6 +1,9 @@
 package com.earth2me.essentials.commands;
 
+import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.PluginDescriptionFile;
 import com.earth2me.essentials.CommandSource;
+import com.earth2me.essentials.PlayerList;
 import com.earth2me.essentials.IEssentialsModule;
 import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.User;
@@ -10,10 +13,8 @@ import com.google.common.collect.Lists;
 import net.ess3.api.IEssentials;
 import org.bukkit.Server;
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
-import org.bukkit.plugin.PluginDescriptionFile;
+
 import org.bukkit.util.StringUtil;
 
 import java.util.ArrayList;
@@ -23,8 +24,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
-import java.util.concurrent.CompletableFuture;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import static com.earth2me.essentials.I18n.tl;
@@ -125,10 +124,6 @@ public abstract class EssentialsCommand implements IEssentialsCommand {
 
             if (getHidden || canInteractWith(sourceUser, user)) {
                 return user;
-            } else { // not looking for hidden and cannot interact (i.e is hidden)
-                if (getOffline && user.getName().equalsIgnoreCase(searchTerm)) { // if looking for offline and got an exact match
-                    return user;
-                }
             }
             throw new PlayerNotFoundException();
         }
@@ -161,22 +156,9 @@ public abstract class EssentialsCommand implements IEssentialsCommand {
 
     @Override
     public final void run(final Server server, final User user, final String commandLabel, final Command cmd, final String[] args) throws Exception {
+        
+
         final Trade charge = new Trade(this.getName(), ess);
-
-		if (ess.getSettings().isConfirmationBeforeCommandCharge() &&
-                (charge.getMoney() != null && charge.getMoney().signum() > 0) ||
-                    (charge.getCommandCost(user) != BigDecimal.ZERO)) {
-            final String previousCommand = user.getCommandPaymentConfirmation();
-            user.setCommandPaymentConfirmation(null);
-
-            final String formattedCommand = formatCommand(commandLabel, args);
-            if (!formattedCommand.equals(previousCommand)) {
-                user.setCommandPaymentConfirmation(formattedCommand);
-                user.sendMessage(tl("confirmCommandPayment", formattedCommand, charge.getMoney().signum()));
-                return;
-            }
-        }
-
         charge.isAffordableFor(user);
         run(server, user, commandLabel, args);
         charge.charge(user);
@@ -296,6 +278,14 @@ public abstract class EssentialsCommand implements IEssentialsCommand {
     }
 
     /**
+     * Returns a list of all online groups.
+     */
+    protected List<String> getGroups() {
+        // TODO: A better way to do this
+        return new ArrayList<>(PlayerList.getPlayerLists(ess, null, true).keySet());
+    }
+
+    /**
      * Gets a list of tab-completable items that start with the given name.
      * Due to the number of items, this may not return the entire list.
      */
@@ -352,24 +342,6 @@ public abstract class EssentialsCommand implements IEssentialsCommand {
         ess.getLogger().info(command + " -- " + Arrays.toString(effectiveArgs));
 
         return command.tabComplete(sender.getSender(), label, effectiveArgs);
-    }
-
-    @Override
-    public void showError(CommandSender sender, Throwable throwable, String commandLabel) {
-        sender.sendMessage(tl("errorWithMessage", throwable.getMessage()));
-        if (ess.getSettings().isDebug()) {
-            logger.log(Level.INFO, tl("errorCallingCommand", commandLabel), throwable);
-            throwable.printStackTrace();
-        }
-    }
-
-    public CompletableFuture<Boolean> getNewExceptionFuture(CommandSource sender, String commandLabel) {
-        CompletableFuture<Boolean> future = new CompletableFuture<>();
-        future.exceptionally(e -> {
-            showError(sender.getSender(), e, commandLabel);
-            return false;
-        });
-        return future;
     }
 
     /**

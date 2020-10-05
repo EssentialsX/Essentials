@@ -6,7 +6,6 @@ import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.Mob;
 import com.earth2me.essentials.User;
 import org.bukkit.Chunk;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.Server;
 import org.bukkit.World;
 import org.bukkit.entity.*;
@@ -127,8 +126,8 @@ public class Commandremove extends EssentialsCommand {
 
                 for (ToRemove toRemove : removeTypes) {
 
-                    // We should skip any animals tamed by players unless we are specifially targetting them.
-                    if (e instanceof Tameable && ((Tameable) e).isTamed() && (((Tameable) e).getOwner() instanceof Player || ((Tameable) e).getOwner() instanceof OfflinePlayer) && !removeTypes.contains(ToRemove.TAMED)) {
+                    // We should skip any TAMED animals unless we are specifially targetting them.
+                    if (e instanceof Tameable && ((Tameable) e).isTamed() && !removeTypes.contains(ToRemove.TAMED)) {
                         continue;
                     }
 
@@ -226,8 +225,10 @@ public class Commandremove extends EssentialsCommand {
                             break;
                         case ENTITIES:
                         case ALL:
-                            e.remove();
-                            removed++;
+                            if (e instanceof Entity) {
+                                e.remove();
+                                removed++;
+                            }
                             break;
                         case CUSTOM:
                             for (Mob type : customRemoveTypes) {

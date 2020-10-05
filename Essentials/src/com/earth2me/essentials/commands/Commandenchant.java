@@ -11,7 +11,13 @@ import org.bukkit.Server;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
 
 import static com.earth2me.essentials.I18n.tl;
 
@@ -28,16 +34,16 @@ public class Commandenchant extends EssentialsCommand {
         if (stack == null || stack.getType() == Material.AIR) {
             throw new Exception(tl("nothingInHand"));
         }
-
         if (args.length == 0) {
-            final Set<String> usableEnchants = new TreeSet<>();
+            final Set<String> enchantmentslist = new TreeSet<>();
             for (Map.Entry<String, Enchantment> entry : Enchantments.entrySet()) {
-                final String name = entry.getValue().getName().toLowerCase(Locale.ENGLISH);
-                if (usableEnchants.contains(name) || (user.isAuthorized("essentials.enchantments." + name) && entry.getValue().canEnchantItem(stack))) {
-                    usableEnchants.add(entry.getKey());
+                final String enchantmentName = entry.getValue().getName().toLowerCase(Locale.ENGLISH);
+                if (enchantmentslist.contains(enchantmentName) || (user.isAuthorized("essentials.enchantments." + enchantmentName) && entry.getValue().canEnchantItem(stack))) {
+                    enchantmentslist.add(entry.getKey());
+                    //enchantmentslist.add(enchantmentName);
                 }
             }
-            throw new NotEnoughArgumentsException(tl("enchantments", StringUtil.joinList(usableEnchants.toArray())));
+            throw new NotEnoughArgumentsException(tl("enchantments", StringUtil.joinList(enchantmentslist.toArray())));
         }
 
         int level = 1;
@@ -45,20 +51,23 @@ public class Commandenchant extends EssentialsCommand {
             try {
                 level = Integer.parseInt(args[1]);
             } catch (NumberFormatException ex) {
-                throw new NotEnoughArgumentsException();
+                level = -1;
             }
         }
 
+        final boolean allowUnsafe = ess.getSettings().allowUnsafeEnchantments() && user.isAuthorized("essentials.enchantments.allowunsafe");
+
         final MetaItemStack metaStack = new MetaItemStack(stack);
         final Enchantment enchantment = metaStack.getEnchantment(user, args[0]);
-        metaStack.addEnchantment(user.getSource(), ess.getSettings().allowUnsafeEnchantments() && user.isAuthorized("essentials.enchantments.allowunsafe"), enchantment, level);
+        metaStack.addEnchantment(user.getSource(), allowUnsafe, enchantment, level);
         InventoryWorkaround.setItemInMainHand(user.getBase(), metaStack.getItemStack());
+
         user.getBase().updateInventory();
-        final String enchantName = enchantment.getName().toLowerCase(Locale.ENGLISH).replace('_', ' ');
+        final String enchantmentName = enchantment.getName().toLowerCase(Locale.ENGLISH);
         if (level == 0) {
-            user.sendMessage(tl("enchantmentRemoved", enchantName));
+            user.sendMessage(tl("enchantmentRemoved", enchantmentName.replace('_', ' ')));
         } else {
-            user.sendMessage(tl("enchantmentApplied", enchantName));
+            user.sendMessage(tl("enchantmentApplied", enchantmentName.replace('_', ' ')));
         }
     }
 

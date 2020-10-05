@@ -26,12 +26,16 @@ public class Commandtempban extends EssentialsCommand {
             throw new NotEnoughArgumentsException();
         }
         final User user = getPlayer(server, args, 0, true, true);
-        if (!user.getBase().isOnline() && sender.isPlayer() && !ess.getUser(sender.getPlayer()).isAuthorized("essentials.tempban.offline")) {
-            sender.sendMessage(tl("tempbanExemptOffline"));
-            return;
-        } else if (user.isAuthorized("essentials.tempban.exempt") && sender.isPlayer()) {
-            sender.sendMessage(tl("tempbanExempt"));
-            return;
+        if (!user.getBase().isOnline()) {
+            if (sender.isPlayer() && !ess.getUser(sender.getPlayer()).isAuthorized("essentials.tempban.offline")) {
+                sender.sendMessage(tl("tempbanExemptOffline"));
+                return;
+            }
+        } else {
+            if (user.isAuthorized("essentials.tempban.exempt") && sender.isPlayer()) {
+                sender.sendMessage(tl("tempbanExempt"));
+                return;
+            }
         }
         final String time = getFinalArg(args, 1);
         final long banTimestamp = DateUtil.parseDateDiff(time, true);
@@ -40,7 +44,7 @@ public class Commandtempban extends EssentialsCommand {
         final long maxBanLength = ess.getSettings().getMaxTempban() * 1000;
         if (maxBanLength > 0 && ((banTimestamp - GregorianCalendar.getInstance().getTimeInMillis()) > maxBanLength) && sender.isPlayer() && !(ess.getUser(sender.getPlayer()).isAuthorized("essentials.tempban.unlimited"))) {
             sender.sendMessage(tl("oversizedTempban"));
-            return;
+            throw new NoChargeException();
         }
 
         if (banReason.length() < 2) {
@@ -51,7 +55,8 @@ public class Commandtempban extends EssentialsCommand {
         ess.getServer().getBanList(BanList.Type.NAME).addBan(user.getName(), banReason, new Date(banTimestamp), senderName);
         final String expiry = DateUtil.formatDateDiff(banTimestamp);
 
-        user.getBase().kickPlayer(tl("tempBanned", expiry, senderName, banReason));
+        final String banDisplay = tl("tempBanned", expiry, senderName, banReason);
+        user.getBase().kickPlayer(banDisplay);
 
         final String message = tl("playerTempBanned", senderName, user.getName(), expiry, banReason);
         server.getLogger().log(Level.INFO, message);

@@ -2,10 +2,11 @@ package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.User;
-import net.ess3.api.events.VanishStatusChangeEvent;
 import org.bukkit.Server;
 
 import static com.earth2me.essentials.I18n.tl;
+
+import net.ess3.api.events.VanishStatusChangeEvent;
 
 
 public class Commandvanish extends EssentialsToggleCommand {
@@ -24,12 +25,13 @@ public class Commandvanish extends EssentialsToggleCommand {
     }
 
     @Override
-    void togglePlayer(CommandSource sender, User user, Boolean enabled) {
+    void togglePlayer(CommandSource sender, User user, Boolean enabled) throws NotEnoughArgumentsException {
         if (enabled == null) {
             enabled = !user.isVanished();
         }
-        
-        VanishStatusChangeEvent vanishEvent = new VanishStatusChangeEvent(sender.isPlayer() ? ess.getUser(sender.getPlayer()) : null, user, enabled);
+
+        final User controller = sender.isPlayer() ? ess.getUser(sender.getPlayer()) : null;
+        VanishStatusChangeEvent vanishEvent = new VanishStatusChangeEvent(controller, user, enabled);
         ess.getServer().getPluginManager().callEvent(vanishEvent);
         if (vanishEvent.isCancelled()) {
             return;

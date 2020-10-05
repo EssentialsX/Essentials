@@ -6,7 +6,6 @@ import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
 
 import static com.earth2me.essentials.I18n.tl;
 
@@ -27,7 +26,7 @@ public class Commandtpo extends EssentialsCommand {
                 if (user.getWorld() != player.getWorld() && ess.getSettings().isWorldTeleportPermissions() && !user.isAuthorized("essentials.worlds." + player.getWorld().getName())) {
                     throw new Exception(tl("noPerm", "essentials.worlds." + player.getWorld().getName()));
                 }
-                user.getAsyncTeleport().now(player.getBase(), false, TeleportCause.COMMAND, getNewExceptionFuture(user.getSource(), commandLabel));
+                user.getTeleport().now(player.getBase(), false, TeleportCause.COMMAND);
                 break;
 
             default:
@@ -41,13 +40,8 @@ public class Commandtpo extends EssentialsCommand {
                     throw new Exception(tl("noPerm", "essentials.worlds." + toPlayer.getWorld().getName()));
                 }
 
-                CompletableFuture<Boolean> future = getNewExceptionFuture(user.getSource(), commandLabel);
-                target.getAsyncTeleport().now(toPlayer.getBase(), false, TeleportCause.COMMAND, future);
-                future.thenAccept(success -> {
-                    if (success) {
-                        target.sendMessage(tl("teleportAtoB", user.getDisplayName(), toPlayer.getDisplayName()));
-                    }
-                });
+                target.getTeleport().now(toPlayer.getBase(), false, TeleportCause.COMMAND);
+                target.sendMessage(tl("teleportAtoB", user.getDisplayName(), toPlayer.getDisplayName()));
                 break;
         }
     }

@@ -1,7 +1,6 @@
 ---
 name: Request a feature
 about: Suggest a feature you want to see in EssentialsX!
-labels: 'type: enhancement'
 
 ---
 
@@ -27,8 +26,8 @@ If you have a feature suggestion for EssentialsX, read the following tips:
 3.  Check whether it has already been asked or added.
       You can search the issue tracker to see if your feature has already been
       requested at https://github.com/EssentialsX/Essentials/issues. You can
-      also check the changelogs at https://github.com/EssentialsX/Essentials/releases
-      to see if the feature was recently added.
+      also check the wiki at https://essentialsx.github.io/ to see if the
+      feature was recently added.
 
 4.  Ask yourself: "Does this belong in EssentialsX?"
       There are lots of features that we reject because most servers won't

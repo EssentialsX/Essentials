@@ -1,7 +1,6 @@
 ---
 name: Help!
 about: Encountered a problem with EssentialsX? Not sure how to fix it?
-labels: 'type: question'
 
 ---
 
@@ -20,7 +19,7 @@ If you're happy to wait (or you were sent here from Discord), read on:
 
 2.  Check the Common Issues page.
       Read through the wiki page to see if you've encountered a regular issue:
-      https://essentialsx.net/wiki/Common-Issues.html
+      https://essentialsx.github.io/#/Common-Issues
 
 3.  Delete this line and all above lines before posting your issue!       -->
 

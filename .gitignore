@@ -1,13 +1,10 @@
-# Other IDE files
+# IDE files
 *.classpath
 *.project
 *.settings/
-.idea/*
+.idea/
 *.iml
 .DS_Store
-
-# Checkstyle-IDEA config
-!.idea/checkstyle-idea.xml
 
 # Essentials files
 /Essentials/userdata
@@ -19,4 +16,3 @@
 # Build files
 target/
 jars/
-out/

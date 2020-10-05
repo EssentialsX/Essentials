@@ -1,42 +1,41 @@
 package com.earth2me.essentials.commands;
 
+import static com.earth2me.essentials.I18n.tl;
+
 import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.Console;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.messaging.IMessageRecipient;
-import com.earth2me.essentials.utils.DateUtil;
 import com.earth2me.essentials.utils.FormatUtil;
+
 import org.bukkit.Server;
 
 import java.util.List;
 
-import static com.earth2me.essentials.I18n.tl;
-
 public class Commandmsg extends EssentialsLoopCommand {
+
     public Commandmsg() {
         super("msg");
     }
 
     @Override
     public void run(Server server, CommandSource sender, String commandLabel, String[] args) throws Exception {
-        if (args.length < 2) {
+        if (args.length < 2 || args[0].trim().length() < 2 || args[1].trim().isEmpty()) {
             throw new NotEnoughArgumentsException();
         }
 
         String message = getFinalArg(args, 1);
-        boolean canWildcard = sender.isAuthorized("essentials.msg.multiple", ess);
+        boolean canWildcard;
         if (sender.isPlayer()) {
             User user = ess.getUser(sender.getPlayer());
             if (user.isMuted()) {
-                String dateDiff = user.getMuteTimeout() > 0 ? DateUtil.formatDateDiff(user.getMuteTimeout()) : null;
-                if (dateDiff == null) {
-                    throw new Exception(user.hasMuteReason() ? tl("voiceSilencedReason", user.getMuteReason()) : tl("voiceSilenced"));
-                }
-                throw new Exception(user.hasMuteReason() ? tl("voiceSilencedReasonTime", dateDiff, user.getMuteReason()) : tl("voiceSilencedTime", dateDiff));
+                throw new Exception(user.hasMuteReason() ? tl("voiceSilencedReason", user.getMuteReason()) : tl("voiceSilenced"));
             }
             message = FormatUtil.formatMessage(user, "essentials.msg", message);
+            canWildcard = user.isAuthorized("essentials.msg.multiple");
         } else {
             message = FormatUtil.replaceFormat(message);
+            canWildcard = true;
         }
 
         // Sending messages to console
@@ -46,7 +45,7 @@ public class Commandmsg extends EssentialsLoopCommand {
             return;
         }
 
-        loopOnlinePlayers(server, sender, false, canWildcard, args[0], new String[]{message});
+        loopOnlinePlayers(server, sender, canWildcard, canWildcard, args[0], new String[]{message});
     }
 
     @Override

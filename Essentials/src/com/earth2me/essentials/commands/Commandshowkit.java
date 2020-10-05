@@ -12,6 +12,7 @@ import java.util.Locale;
 import static com.earth2me.essentials.I18n.tl;
 
 public class Commandshowkit extends EssentialsCommand {
+
     public Commandshowkit() {
         super("showkit");
     }
@@ -22,9 +23,11 @@ public class Commandshowkit extends EssentialsCommand {
             throw new NotEnoughArgumentsException();
         }
 
-        for (final String kitName : args[0].toLowerCase(Locale.ENGLISH).split(",")) {
+        final String[] kits = args[0].toLowerCase(Locale.ENGLISH).split(",");
+        for (final String kitName : kits) {
+            Kit kit = new Kit(kitName, ess);
             user.sendMessage(tl("kitContains", kitName));
-            for (String s : new Kit(kitName, ess).getItems()) {
+            for (String s : kit.getItems()) {
                 user.sendMessage(tl("kitItem", s));
             }
         }

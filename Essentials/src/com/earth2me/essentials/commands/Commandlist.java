@@ -78,7 +78,7 @@ public class Commandlist extends EssentialsCommand {
             outputUserList = PlayerList.getMergedList(ess, playerList, configGroup);
 
             // If we have no users, than we don't need to continue parsing this group
-            if (outputUserList.isEmpty()) {
+            if (outputUserList == null || outputUserList.isEmpty()) {
                 continue;
             }
 
@@ -120,7 +120,7 @@ public class Commandlist extends EssentialsCommand {
     @Override
     protected List<String> getTabCompleteOptions(final Server server, final CommandSource sender, final String commandLabel, final String[] args) {
         if (args.length == 1) {
-            return new ArrayList<>(PlayerList.getPlayerLists(ess, sender.getUser(ess), true).keySet());
+            return getGroups();
         } else {
             return Collections.emptyList();
         }

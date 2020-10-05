@@ -62,11 +62,6 @@ public class Settings implements net.ess3.api.ISettings {
     }
 
     @Override
-    public boolean isRespawnAtAnchor() {
-        return config.getBoolean("respawn-at-anchor", false);
-    }
-
-    @Override
     public boolean getUpdateBedAtDaytime() {
         return config.getBoolean("update-bed-at-daytime", true);
     }
@@ -163,18 +158,8 @@ public class Settings implements net.ess3.api.ISettings {
     }
 
     @Override
-    public boolean isAlwaysTeleportSafety() {
-        return config.getBoolean("force-safe-teleport-location", false);
-    }
-
-    @Override
     public boolean isTeleportPassengerDismount() {
         return config.getBoolean("teleport-passenger-dismount", true);
-    }
-
-    @Override
-    public boolean isForcePassengerTeleport() {
-        return config.getBoolean("force-passenger-teleportation", false);
     }
 
     @Override
@@ -380,37 +365,29 @@ public class Settings implements net.ess3.api.ISettings {
         return config.getBoolean("skip-used-one-time-kits-from-kit-list", false);
     }
 
-    private String operatorColor = null;
+    private ChatColor operatorColor = null;
 
     @Override
-    public String getOperatorColor() {
+    public ChatColor getOperatorColor() {
         return operatorColor;
     }
 
-    private String _getOperatorColor() {
+    private ChatColor _getOperatorColor() {
         String colorName = config.getString("ops-name-color", null);
 
         if (colorName == null) {
-            return ChatColor.RED.toString();
-        } else if (colorName.equalsIgnoreCase("none") || colorName.isEmpty()) {
+            return ChatColor.DARK_RED;
+        }
+        if ("none".equalsIgnoreCase(colorName) || colorName.isEmpty()) {
             return null;
         }
 
         try {
-            return FormatUtil.parseHexColor(colorName);
-        } catch (NumberFormatException ignored) {
-        }
-
-        try {
-            return ChatColor.valueOf(colorName.toUpperCase(Locale.ENGLISH)).toString();
+            return ChatColor.valueOf(colorName.toUpperCase(Locale.ENGLISH));
         } catch (IllegalArgumentException ignored) {
         }
 
-        ChatColor lastResort = ChatColor.getByChar(colorName);
-        if (lastResort != null) {
-            return lastResort.toString();
-        }
-        return null;
+        return ChatColor.getByChar(colorName);
     }
 
     @Override
@@ -446,11 +423,6 @@ public class Settings implements net.ess3.api.ISettings {
     @Override
     public String getBackupCommand() {
         return config.getString("backup.command", null);
-    }
-
-    @Override
-    public boolean isAlwaysRunBackup() {
-        return config.getBoolean("backup.always-run", false);
     }
 
     private final Map<String, String> chatFormats = Collections.synchronizedMap(new HashMap<>());
@@ -586,20 +558,13 @@ public class Settings implements net.ess3.api.ISettings {
         isCompassTowardsHomePerm = _isCompassTowardsHomePerm();
         isAllowWorldInBroadcastworld = _isAllowWorldInBroadcastworld();
         itemDbType = _getItemDbType();
+        forceEnableRecipe = _isForceEnableRecipe();
         allowOldIdSigns = _allowOldIdSigns();
         isWaterSafe = _isWaterSafe();
         isSafeUsermap = _isSafeUsermap();
         logCommandBlockCommands = _logCommandBlockCommands();
         nickBlacklist = _getNickBlacklist();
         maxProjectileSpeed = _getMaxProjectileSpeed();
-<<<<<<< HEAD
-		confirmationBeforeCommandCharge = _isConfirmationBeforeCommandCharge();
-=======
-        confirmationBeforeCommandCharge = _isConfirmationBeforeCommandCharge();
-        removeEffectsOnHeal = _isRemovingEffectsOnHeal();
-        vanishingItemPolicy = _getVanishingItemsPolicy();
-        bindingItemPolicy = _getBindingItemsPolicy();
->>>>>>> 67488f22... Will stop this
     }
 
     void _lateLoadItemSpawnBlacklist() {
@@ -1288,11 +1253,6 @@ public class Settings implements net.ess3.api.ISettings {
         return new BigDecimal(config.getString("minimum-pay-amount", "0.001"));
     }
 
-    @Override
-    public boolean isPayExcludesIgnoreList() {
-        return config.getBoolean("pay-excludes-ignore-list", false);
-    }
-
     @Override public long getLastMessageReplyRecipientTimeout() {
         return config.getLong("last-message-reply-recipient-timeout", 180);
     }
@@ -1516,11 +1476,6 @@ public class Settings implements net.ess3.api.ISettings {
     }
 
     @Override
-    public boolean isAllowSellNamedItems() {
-        return config.getBoolean("allow-selling-named-items", false);
-    }
-
-    @Override
     public boolean isAddingPrefixInPlayerlist() {
         return config.getBoolean("add-prefix-in-playerlist", false);
     }
@@ -1621,6 +1576,15 @@ public class Settings implements net.ess3.api.ISettings {
 
     private boolean forceEnableRecipe; // https://github.com/EssentialsX/Essentials/issues/1397
 
+    private boolean _isForceEnableRecipe() {
+        return config.getBoolean("force-enable-recipe", false);
+    }
+
+    @Override
+    public boolean isForceEnableRecipe() {
+        return forceEnableRecipe;
+    }
+
     private boolean allowOldIdSigns;
 
     private boolean _allowOldIdSigns() {
@@ -1714,16 +1678,5 @@ public class Settings implements net.ess3.api.ISettings {
     @Override
     public boolean isSpawnIfNoHome() {
         return config.getBoolean("spawn-if-no-home", true);
-    }
-
-    private boolean confirmationBeforeCommandCharge;
-
-    private boolean _isConfirmationBeforeCommandCharge() {
-        return confirmationBeforeCommandCharge;
-    }
-
-    @Override
-    public boolean isConfirmationBeforeCommandCharge() {
-        return config.getBoolean("confirm-before-command-cost", false);
     }
 }

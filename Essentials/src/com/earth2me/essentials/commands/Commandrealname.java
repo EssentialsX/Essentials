@@ -17,12 +17,10 @@ public class Commandrealname extends EssentialsCommand {
 
     @Override
     protected void run(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception {
-        if (args.length == 0) {
+        if (args.length < 1) {
             throw new NotEnoughArgumentsException();
         }
-
-        final String lookup = args[0].toLowerCase(Locale.ENGLISH);
-
+        final String whois = args[0].toLowerCase(Locale.ENGLISH);
         boolean skipHidden = sender.isPlayer() && !ess.getUser(sender.getPlayer()).canInteractVanished();
         boolean foundUser = false;
         for (User u : ess.getOnlineUsers()) {
@@ -30,7 +28,8 @@ public class Commandrealname extends EssentialsCommand {
                 continue;
             }
             u.setDisplayNick();
-            if (FormatUtil.stripFormat(u.getDisplayName()).toLowerCase(Locale.ENGLISH).contains(lookup)) {
+            final String displayName = FormatUtil.stripFormat(u.getDisplayName()).toLowerCase(Locale.ENGLISH);
+            if (displayName.contains(whois)) {
                 foundUser = true;
                 sender.sendMessage(tl("realName", u.getDisplayName(), u.getName()));
             }

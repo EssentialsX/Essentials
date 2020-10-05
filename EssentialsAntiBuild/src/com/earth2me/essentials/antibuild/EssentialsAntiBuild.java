@@ -1,7 +1,6 @@
 package com.earth2me.essentials.antibuild;
 
 import com.earth2me.essentials.metrics.Metrics;
-import com.earth2me.essentials.metrics.MetricsWrapper;
 import org.bukkit.Material;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
@@ -16,7 +15,7 @@ public class EssentialsAntiBuild extends JavaPlugin implements IAntiBuild {
     private final transient Map<AntiBuildConfig, Boolean> settingsBoolean = new EnumMap<>(AntiBuildConfig.class);
     private final transient Map<AntiBuildConfig, List<Material>> settingsList = new EnumMap<>(AntiBuildConfig.class);
     private transient EssentialsConnect ess = null;
-    private transient MetricsWrapper metrics = null;
+    private transient Metrics metrics = null;
 
     @Override
     public void onEnable() {
@@ -31,7 +30,7 @@ public class EssentialsAntiBuild extends JavaPlugin implements IAntiBuild {
         pm.registerEvents(blockListener, this);
 
         if (metrics == null) {
-            metrics = new MetricsWrapper(this, 3813, false);
+            metrics = new Metrics(this);
         }
     }
 

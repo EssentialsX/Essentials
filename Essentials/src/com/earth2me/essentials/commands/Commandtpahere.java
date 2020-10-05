@@ -25,9 +25,6 @@ public class Commandtpahere extends EssentialsCommand {
         if (user.getName().equalsIgnoreCase(player.getName())) {
             throw new NotEnoughArgumentsException();
         }
-        if (!player.isAuthorized("essentials.tpaccept")) {
-            throw new Exception(tl("teleportNoAcceptPermission", player.getDisplayName()));
-        }
         if (!player.isTeleportEnabled()) {
             throw new Exception(tl("teleportDisabled", player.getDisplayName()));
         }

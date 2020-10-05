@@ -28,8 +28,11 @@ jobs:
       uses: actions/setup-java@v1
       with:
         java-version: 1.8
+    - name: Run BuildTools
+      if: steps.cache.outputs.cache-hit != 'true'
+      run: chmod +x scripts/buildtools.sh && ./scripts/buildtools.sh
     - name: Build with Maven
-      run: mvn package verify --file pom.xml
+      run: mvn package --file pom.xml
     - name: Copy artifacts
       run: mkdir -p ./out/ && cp -t ./out/ **/target/Essentials*.jar
     - uses: actions/upload-artifact@master

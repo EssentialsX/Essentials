@@ -20,10 +20,6 @@ public abstract class EssentialsLoopCommand extends EssentialsCommand {
     }
 
     protected void loopOfflinePlayers(final Server server, final CommandSource sender, final boolean multipleStringMatches, boolean matchWildcards, final String searchTerm, final String[] commandArgs) throws PlayerNotFoundException, NotEnoughArgumentsException, PlayerExemptException, ChargeException, MaxMoneyException {
-        loopOfflinePlayersConsumer(server, sender, multipleStringMatches, matchWildcards, searchTerm, user -> updatePlayer(server, sender, user, commandArgs));
-    }
-
-    protected void loopOfflinePlayersConsumer(final Server server, final CommandSource sender, final boolean multipleStringMatches, boolean matchWildcards, final String searchTerm, UserConsumer userConsumer) throws PlayerNotFoundException, NotEnoughArgumentsException, PlayerExemptException, ChargeException, MaxMoneyException {
         if (searchTerm.isEmpty()) {
             throw new PlayerNotFoundException();
         }
@@ -31,11 +27,11 @@ public abstract class EssentialsLoopCommand extends EssentialsCommand {
         final UUID uuid = StringUtil.toUUID(searchTerm);
         if (uuid != null) {
             final User matchedUser = ess.getUser(uuid);
-            userConsumer.accept(matchedUser);
+            updatePlayer(server, sender, matchedUser, commandArgs);
         } else if (matchWildcards && searchTerm.contentEquals("**")) {
             for (UUID sUser : ess.getUserMap().getAllUniqueUsers()) {
                 final User matchedUser = ess.getUser(sUser);
-                userConsumer.accept(matchedUser);
+                updatePlayer(server, sender, matchedUser, commandArgs);
             }
         } else if (matchWildcards && searchTerm.contentEquals("*")) {
             boolean skipHidden = sender.isPlayer() && !ess.getUser(sender.getPlayer()).canInteractVanished();
@@ -43,7 +39,7 @@ public abstract class EssentialsLoopCommand extends EssentialsCommand {
                 if (skipHidden && onlineUser.isHidden(sender.getPlayer()) && !sender.getPlayer().canSee(onlineUser.getBase())) {
                     continue;
                 }
-                userConsumer.accept(onlineUser);
+                updatePlayer(server, sender, onlineUser, commandArgs);
             }
         } else if (multipleStringMatches) {
             if (searchTerm.trim().length() < 3) {
@@ -52,23 +48,19 @@ public abstract class EssentialsLoopCommand extends EssentialsCommand {
             final List<Player> matchedPlayers = server.matchPlayer(searchTerm);
             if (matchedPlayers.isEmpty()) {
                 final User matchedUser = getPlayer(server, searchTerm, true, true);
-                userConsumer.accept(matchedUser);
+                updatePlayer(server, sender, matchedUser, commandArgs);
             }
             for (Player matchPlayer : matchedPlayers) {
                 final User matchedUser = ess.getUser(matchPlayer);
-                userConsumer.accept(matchedUser);
+                updatePlayer(server, sender, matchedUser, commandArgs);
             }
         } else {
             final User user = getPlayer(server, searchTerm, true, true);
-            userConsumer.accept(user);
+            updatePlayer(server, sender, user, commandArgs);
         }
     }
 
     protected void loopOnlinePlayers(final Server server, final CommandSource sender, final boolean multipleStringMatches, boolean matchWildcards, final String searchTerm, final String[] commandArgs) throws PlayerNotFoundException, NotEnoughArgumentsException, PlayerExemptException, ChargeException, MaxMoneyException {
-        loopOnlinePlayersConsumer(server, sender, multipleStringMatches, matchWildcards, searchTerm, user -> updatePlayer(server, sender, user, commandArgs));
-    }
-
-    protected void loopOnlinePlayersConsumer(final Server server, final CommandSource sender, final boolean multipleStringMatches, boolean matchWildcards, final String searchTerm, UserConsumer userConsumer) throws PlayerNotFoundException, NotEnoughArgumentsException, PlayerExemptException, ChargeException, MaxMoneyException {
         if (searchTerm.isEmpty()) {
             throw new PlayerNotFoundException();
         }
@@ -80,7 +72,7 @@ public abstract class EssentialsLoopCommand extends EssentialsCommand {
                 if (skipHidden && onlineUser.isHidden(sender.getPlayer()) && !sender.getPlayer().canSee(onlineUser.getBase())) {
                     continue;
                 }
-                userConsumer.accept(onlineUser);
+                updatePlayer(server, sender, onlineUser, commandArgs);
             }
         } else if (multipleStringMatches) {
             if (searchTerm.trim().length() < 2) {
@@ -98,7 +90,7 @@ public abstract class EssentialsLoopCommand extends EssentialsCommand {
                     final String displayName = FormatUtil.stripFormat(player.getDisplayName()).toLowerCase(Locale.ENGLISH);
                     if (displayName.contains(matchText)) {
                         foundUser = true;
-                        userConsumer.accept(player);
+                        updatePlayer(server, sender, player, commandArgs);
                     }
                 }
             } else {
@@ -108,7 +100,7 @@ public abstract class EssentialsLoopCommand extends EssentialsCommand {
                         continue;
                     }
                     foundUser = true;
-                    userConsumer.accept(player);
+                    updatePlayer(server, sender, player, commandArgs);
                 }
             }
             if (!foundUser) {
@@ -116,7 +108,7 @@ public abstract class EssentialsLoopCommand extends EssentialsCommand {
             }
         } else {
             final User player = getPlayer(server, sender, searchTerm);
-            userConsumer.accept(player);
+            updatePlayer(server, sender, player, commandArgs);
         }
     }
 
@@ -136,9 +128,5 @@ public abstract class EssentialsLoopCommand extends EssentialsCommand {
         players.add("**");
         players.add("*");
         return players;
-    }
-
-    public interface UserConsumer {
-        void accept(User user) throws PlayerNotFoundException, NotEnoughArgumentsException, PlayerExemptException, ChargeException, MaxMoneyException;
     }
 }

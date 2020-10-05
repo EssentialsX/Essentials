@@ -113,12 +113,7 @@ public class EssentialsPlayerListener implements Listener {
         if (user.isMuted()) {
             event.setCancelled(true);
 
-            String dateDiff = user.getMuteTimeout() > 0 ? DateUtil.formatDateDiff(user.getMuteTimeout()) : null;
-            if (dateDiff == null) {
-                user.sendMessage(user.hasMuteReason() ? tl("voiceSilencedReason", user.getMuteReason()) : tl("voiceSilenced"));
-            } else {
-                user.sendMessage(user.hasMuteReason() ? tl("voiceSilencedReasonTime", dateDiff, user.getMuteReason()) : tl("voiceSilencedTime", dateDiff));
-            }
+            user.sendMessage(user.hasMuteReason() ? tl("voiceSilencedReason", user.getMuteReason()) : tl("voiceSilenced"));
 
             LOGGER.info(tl("mutedUserSpeaks", user.getName(), event.getMessage()));
         }
@@ -212,8 +207,7 @@ public class EssentialsPlayerListener implements Listener {
             user.getBase().getOpenInventory().getTopInventory().clear();
         }
 
-        ArrayList<HumanEntity> viewers = new ArrayList<>(user.getBase().getInventory().getViewers());
-        for (HumanEntity viewer : viewers) {
+        for (HumanEntity viewer : user.getBase().getInventory().getViewers()) {
             if (viewer instanceof Player) {
                 User uviewer = ess.getUser((Player) viewer);
                 if (uviewer.isInvSee()) {
@@ -405,14 +399,11 @@ public class EssentialsPlayerListener implements Listener {
 
         Location loc = user.getHome(user.getLocation());
         if (loc == null) {
-            PaperLib.getBedSpawnLocationAsync(user.getBase(), false).thenAccept(location -> {
-                if (location != null) {
-                    user.getBase().setCompassTarget(location);
-                }
-            });
-            return;
+            loc = user.getBase().getBedSpawnLocation();
         }
-        user.getBase().setCompassTarget(loc);
+        if (loc != null) {
+            user.getBase().setCompassTarget(loc);
+        }
     }
 
     @EventHandler(priority = EventPriority.LOW)
@@ -467,7 +458,7 @@ public class EssentialsPlayerListener implements Listener {
         	}
             final User user = ess.getUser(player);
             //There is TeleportCause.COMMMAND but plugins have to actively pass the cause in on their teleports.
-            if (user.isAuthorized("essentials.back.onteleport") && backListener && (event.getCause() == TeleportCause.PLUGIN || event.getCause() == TeleportCause.COMMAND)) {
+            if (backListener && (event.getCause() == TeleportCause.PLUGIN || event.getCause() == TeleportCause.COMMAND)) {
                 user.setLastLocation();
             }
             if (teleportInvulnerability && (event.getCause() == TeleportCause.PLUGIN || event.getCause() == TeleportCause.COMMAND)) {
@@ -520,15 +511,9 @@ public class EssentialsPlayerListener implements Listener {
             }
         }
 
-        final User user = ess.getUser(player);
-        if (user.isMuted() && (ess.getSettings().getMuteCommands().contains(cmd) || ess.getSettings().getMuteCommands().contains("*"))) {
+        if (ess.getUser(player).isMuted() && (ess.getSettings().getMuteCommands().contains(cmd) || ess.getSettings().getMuteCommands().contains("*"))) {
             event.setCancelled(true);
-            String dateDiff = user.getMuteTimeout() > 0 ? DateUtil.formatDateDiff(user.getMuteTimeout()) : null;
-            if (dateDiff == null) {
-                player.sendMessage(user.hasMuteReason() ? tl("voiceSilencedReason", user.getMuteReason()) : tl("voiceSilenced"));
-            } else {
-                player.sendMessage(user.hasMuteReason() ? tl("voiceSilencedReasonTime", dateDiff, user.getMuteReason()) : tl("voiceSilencedTime", dateDiff));
-            }
+            player.sendMessage(tl("voiceSilenced"));
             LOGGER.info(tl("mutedUserSpeaks", player.getName(), event.getMessage()));
             return;
         }
@@ -545,7 +530,7 @@ public class EssentialsPlayerListener implements Listener {
                     broadcast = false;
             }
         }
-
+        final User user = ess.getUser(player);
         if (update) {
             user.updateActivityOnInteract(broadcast);
         }
@@ -907,14 +892,14 @@ public class EssentialsPlayerListener implements Listener {
         /**
          * Returns true if all of the following are true:
          * - The command is a plugin command
-         * - The plugin command is from a plugin in an essentials-controlled package
+         * - The plugin command is from Essentials
          * - There is no known alternative OR the alternative is overridden by Essentials
          */
         private boolean isEssentialsCommand(String label) {
             PluginCommand command = ess.getServer().getPluginCommand(label);
 
             return command != null
-                    && (command.getPlugin() == ess || command.getPlugin().getClass().getName().startsWith("com.earth2me.essentials"))
+                    && command.getPlugin() == ess
                     && (ess.getSettings().isCommandOverridden(label) || (ess.getAlternativeCommandsHandler().getAlternative(label) == null));
         }
     }

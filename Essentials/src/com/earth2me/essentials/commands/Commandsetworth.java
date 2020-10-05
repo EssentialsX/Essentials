@@ -22,6 +22,7 @@ public class Commandsetworth extends EssentialsCommand {
 
         ItemStack stack;
         String price;
+
         if (args.length == 1) {
             stack = user.getBase().getInventory().getItemInHand();
             price = args[0];
@@ -40,7 +41,8 @@ public class Commandsetworth extends EssentialsCommand {
             throw new NotEnoughArgumentsException();
         }
 
-        ess.getWorth().setPrice(ess, ess.getItemDb().get(args[0]), FloatUtil.parseDouble(args[1]));
+        ItemStack stack = ess.getItemDb().get(args[0]);
+        ess.getWorth().setPrice(ess, stack, FloatUtil.parseDouble(args[1]));
         sender.sendMessage(tl("worthSet"));
     }
 }

@@ -1,11 +1,9 @@
 package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.CommandSource;
-import com.earth2me.essentials.IUser;
 import com.earth2me.essentials.User;
 import org.bukkit.Server;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
@@ -55,26 +53,23 @@ public class Commanddelhome extends EssentialsCommand {
 
     @Override
     protected List<String> getTabCompleteOptions(final Server server, final CommandSource sender, final String commandLabel, final String[] args) {
-        IUser user = sender.getUser(ess);
-        boolean canDelOthers = sender.isAuthorized("essentials.delhome.others", ess);
+        User user = ess.getUser(sender.getPlayer());
+        boolean canDelOthers = (user == null || user.isAuthorized("essentials.delhome.others"));
+
         if (args.length == 1) {
-            List<String> homes = sender.isPlayer() ? new ArrayList<>() : user.getHomes();
             if (canDelOthers) {
-                int sepIndex = args[0].indexOf(':');
-                if (sepIndex < 0) {
-                    getPlayers(server, sender).forEach(player -> homes.add(player + ":"));
-                } else {
-                    String namePart = args[0].substring(0, sepIndex);
-                    User otherUser;
-                    try {
-                        otherUser = getPlayer(server, new String[]{namePart}, 0, true, true);
-                    } catch (Exception ex) {
-                        return homes;
-                    }
-                    otherUser.getHomes().forEach(home -> homes.add(namePart + ":" + home));
-                }
+                return getPlayers(server, sender);
+            } else {
+                return user.getHomes();
             }
-            return homes;
+        } else if (args.length == 2 && canDelOthers) {
+            try {
+                user = getPlayer(server, args, 0, true, true);
+                return user.getHomes();
+            } catch (Exception ex) {
+                // No such user
+                return Collections.emptyList();
+            }
         } else {
             return Collections.emptyList();
         }

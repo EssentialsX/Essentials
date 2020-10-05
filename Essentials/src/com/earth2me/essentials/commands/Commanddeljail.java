@@ -15,7 +15,7 @@ public class Commanddeljail extends EssentialsCommand {
 
     @Override
     protected void run(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception {
-        if (args.length == 0) {
+        if (args.length < 1) {
             throw new NotEnoughArgumentsException();
         }
 

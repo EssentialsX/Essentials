@@ -6,10 +6,7 @@ import com.earth2me.essentials.utils.MaterialUtil;
 import com.earth2me.essentials.utils.VersionUtil;
 import net.ess3.api.IEssentials;
 import net.ess3.api.PluginKey;
-import org.bukkit.Color;
-import org.bukkit.DyeColor;
-import org.bukkit.FireworkEffect;
-import org.bukkit.Material;
+import org.bukkit.*;
 import org.bukkit.block.Banner;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemFlag;
@@ -21,6 +18,7 @@ import org.bukkit.potion.PotionEffect;
 
 import java.util.*;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import static com.earth2me.essentials.I18n.tl;
 
@@ -87,10 +85,10 @@ public abstract class AbstractItemDb implements IConf, net.ess3.api.IItemDb {
         return get(id, true);
     }
 
-    ItemStack tryResolverDeserialize(String id) {
+    ItemStack tryResolvers(String id) {
         for (PluginKey key : resolverMap.keySet()) {
             if (ess.getSettings().isDebug()) {
-                ess.getLogger().info(String.format("Trying to deserialize item '%s' with resolver '%s'...", id, key));
+                ess.getLogger().info(String.format("Trying resolver '%s' for item '%s'...", key, id));
             }
 
             Function<String, ItemStack> resolver = resolverMap.get(key);
@@ -104,32 +102,11 @@ public abstract class AbstractItemDb implements IConf, net.ess3.api.IItemDb {
         return null;
     }
 
-    String tryResolverSerialize(ItemStack stack) {
-        for (PluginKey key : resolverMap.keySet()) {
-            if (ess.getSettings().isDebug()) {
-                ess.getLogger().info(String.format("Trying to serialize '%s' with resolver '%s'...", stack.toString(), key));
-            }
-
-            ItemResolver resolver = resolverMap.get(key);
-            String serialized = resolver.serialize(stack);
-
-            if (serialized != null) {
-                return serialized;
-            }
-        }
-
-        return null;
-    }
-
     Collection<String> getResolverNames() {
-        List<String> result = new ArrayList<>();
-        for (ItemResolver resolver : resolverMap.values()) {
-            Collection<String> resolverNames = resolver.getNames();
-            if (resolverNames != null) {
-                result.addAll(resolverNames);
-            }
-        }
-        return result;
+        return resolverMap.values().stream()
+            .map(ItemResolver::getNames)
+            .flatMap(Collection::stream)
+            .collect(Collectors.toList());
     }
 
     @Override
@@ -167,18 +144,6 @@ public abstract class AbstractItemDb implements IConf, net.ess3.api.IItemDb {
 
     @Override
     public String serialize(ItemStack is) {
-        return serialize(is, true);
-    }
-
-    @Override
-    public String serialize(ItemStack is, boolean useResolvers) {
-        if (useResolvers) {
-            String serialized = tryResolverSerialize(is);
-            if (serialized != null) {
-                return serialized;
-            }
-        }
-
         String mat = name(is);
         if (VersionUtil.getServerBukkitVersion().isLowerThanOrEqualTo(VersionUtil.v1_12_2_R01) && is.getData().getData() != 0) {
             mat = mat + ":" + is.getData().getData();
@@ -322,8 +287,8 @@ public abstract class AbstractItemDb implements IConf, net.ess3.api.IItemDb {
                     }
                     if (baseDyeColor != null) {
                         int basecolor = baseDyeColor
-                                .getColor()
-                                .asRGB();
+                            .getColor()
+                            .asRGB();
                         sb.append("basecolor:").append(basecolor).append(" ");
                     }
                     for (org.bukkit.block.banner.Pattern p : bannerMeta.getPatterns()) {

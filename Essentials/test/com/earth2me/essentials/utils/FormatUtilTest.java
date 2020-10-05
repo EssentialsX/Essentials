@@ -90,22 +90,7 @@ public class FormatUtilTest {
         checkFormatPerms("This is &&&a message", "This is &&a message", "color");
     }
 
-    @Test
-    public void testUnformat() {
-        // Unformatting should only unformat codes which you have perms for
-        checkUnformatPerms("§bMessage", "Message");
-        checkUnformatPerms("§bMessage", "&bMessage", "color");
-
-        // It should work for rgb color codes too
-        checkUnformatPerms("§x§b§3§4§2§f§5This is a message", "This is a message");
-        checkUnformatPerms("§x§b§3§4§2§f§5This is a message", "&#b342f5This is a message", "rgb");
-
-        checkUnformatPerms("§x§b§3§4§2§f§5Th§eis is §aa §dmessag§5e", "This is a message");
-        checkUnformatPerms("§x§b§3§4§2§f§5Th§eis is §aa §dmessag§5e", "&#b342f5This is a message", "rgb");
-        checkUnformatPerms("§x§b§3§4§2§f§5Th§eis is §aa §dmessag§5e", "&#b342f5Th&eis is a message", "rgb", "yellow");
-    }
-
-    private IUser getMockUser(String... perms) {
+    private void checkFormatPerms(String input, String expectedOutput, String... perms) {
         IUser user = mock(IUser.class);
         for (String perm : perms) {
             if (perm.startsWith("-")) {
@@ -118,14 +103,6 @@ public class FormatUtilTest {
 
             when(user.isPermissionSet("essentials.chat." + perm)).thenReturn(true);
         }
-        return user;
-    }
-
-    private void checkFormatPerms(String input, String expectedOutput, String... perms) {
-        assertEquals(expectedOutput, FormatUtil.formatString(getMockUser(perms), "essentials.chat", input));
-    }
-
-    private void checkUnformatPerms(String input, String expectedOutput, String... perms) {
-        assertEquals(expectedOutput, FormatUtil.unformatString(getMockUser(perms), "essentials.chat", input));
+        assertEquals(expectedOutput, FormatUtil.formatString(user, "essentials.chat", input));
     }
 }

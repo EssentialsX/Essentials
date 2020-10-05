@@ -91,9 +91,7 @@ public interface IMessageRecipient {
         /** States that the message was <b>NOT</b> received as a result of the sender being ignored by the recipient. */
         SENDER_IGNORED,
         /** States that the message was <b>NOT</b> received as a result of the recipient being unreachable. */
-        UNREACHABLE,
-        /** States that the message was <b>NOT</b> received as a result of the message pre-send event being cancelled. */
-        EVENT_CANCELLED;
+        UNREACHABLE;
 
         /**
          * Returns whether this response is a success. In other words equal to {@link #SUCCESS} or {@link #SUCCESS_BUT_AFK}

@@ -1,9 +1,11 @@
 package com.earth2me.essentials.api;
 
+import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.MaterialUtil;
 import com.earth2me.essentials.utils.NumberUtil;
 import com.earth2me.essentials.utils.StringUtil;
+import net.ess3.api.IEssentials;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
@@ -83,12 +85,13 @@ public interface IItemDb {
     List<ItemStack> getMatching(User user, String[] args) throws Exception;
 
     /**
-     * Converts the given {@link ItemStack} to a string representation that can be saved.
-     * This is typically used for /createkit but can be used by other plugins for various purposes too.
-     * Note that this will try registered resolvers first - to avoid this, use {@link net.ess3.api.IItemDb#serialize(ItemStack, boolean)} instead.
+     * Serialise an ItemStack into a format that can be decoded by
+     * {@link #get(String) get} and
+     * {@link com.earth2me.essentials.MetaItemStack#parseStringMeta(CommandSource, boolean, String[], int, IEssentials)} MetaItemStack#parseStringMeta}.
+     * Used to encode items for kits.
      *
-     * @param is The stack to serialize
-     * @return A string representing the given stack
+     * @param is Stack to serialise
+     * @return Serialised stack
      */
     String serialize(ItemStack is);
 

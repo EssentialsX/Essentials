@@ -24,10 +24,10 @@ public class Commandjump extends EssentialsCommand {
         if (args.length > 0 && args[0].contains("lock") && user.isAuthorized("essentials.jump.lock")) {
             if (user.isFlyClickJump()) {
                 user.setRightClickJump(false);
-                user.sendMessage(tl("jumpEasterDisable"));
+                user.sendMessage("Flying wizard mode disabled");
             } else {
                 user.setRightClickJump(true);
-                user.sendMessage(tl("jumpEasterEnable"));
+                user.sendMessage("Enabling flying wizard mode");
             }
             return;
         }
@@ -46,8 +46,7 @@ public class Commandjump extends EssentialsCommand {
 
         final Trade charge = new Trade(this.getName(), ess);
         charge.isAffordableFor(user);
-        user.getAsyncTeleport().teleport(loc, charge, TeleportCause.COMMAND, getNewExceptionFuture(user.getSource(), commandLabel));
-
+        user.getTeleport().teleport(loc, charge, TeleportCause.COMMAND);
         throw new NoChargeException();
     }
 

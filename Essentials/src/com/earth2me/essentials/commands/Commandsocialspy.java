@@ -23,12 +23,13 @@ public class Commandsocialspy extends EssentialsToggleCommand {
     }
 
     @Override
-    protected void togglePlayer(CommandSource sender, User user, Boolean enabled) {
+    void togglePlayer(CommandSource sender, User user, Boolean enabled) throws NotEnoughArgumentsException {
         if (enabled == null) {
             enabled = !user.isSocialSpyEnabled();
         }
 
         user.setSocialSpyEnabled(enabled);
+
 
         user.sendMessage(tl("socialSpy", user.getDisplayName(), enabled ? tl("enabled") : tl("disabled")));
         if (!sender.isPlayer() || !sender.getPlayer().equals(user.getBase())) {

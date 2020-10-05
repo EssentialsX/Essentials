@@ -9,7 +9,7 @@ import java.util.UUID;
 
 import static com.earth2me.essentials.I18n.tl;
 
-@Deprecated
+
 public class TimedTeleport implements Runnable {
     private static final double MOVE_CONSTANT = 0.3;
     private final IUser teleportOwner;
@@ -98,17 +98,19 @@ public class TimedTeleport implements Runnable {
                         cancelTimer(false);
                         teleportUser.sendMessage(tl("teleportationCommencing"));
 
-                        if (timer_chargeFor != null) {
-                            timer_chargeFor.isAffordableFor(teleportOwner);
-                        }
-                        if (timer_respawn) {
-                            teleport.respawnNow(teleportUser, timer_cause);
-                        } else {
-                            teleport.now(teleportUser, timer_teleportTarget, timer_cause);
-                        }
-                        if (timer_chargeFor != null) {
-                            timer_chargeFor.charge(teleportOwner);
-                        }
+                        try {
+                            if (timer_chargeFor != null) {
+                                timer_chargeFor.isAffordableFor(teleportOwner);
+                            }
+                            if (timer_respawn) {
+                                teleport.respawnNow(teleportUser, timer_cause);
+                            } else {
+                                teleport.now(teleportUser, timer_teleportTarget, timer_cause);
+                            }
+                            if (timer_chargeFor != null) {
+                                timer_chargeFor.charge(teleportOwner);
+                            }
+                        } catch (Exception ignored) {}
 
                     } catch (Exception ex) {
                         ess.showError(teleportOwner.getSource(), ex, "\\ teleport");

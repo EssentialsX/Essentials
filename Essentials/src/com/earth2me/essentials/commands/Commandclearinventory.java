@@ -5,7 +5,6 @@ import com.earth2me.essentials.User;
 import com.earth2me.essentials.craftbukkit.InventoryWorkaround;
 import com.earth2me.essentials.utils.NumberUtil;
 import com.earth2me.essentials.utils.StringUtil;
-import com.earth2me.essentials.utils.VersionUtil;
 import org.bukkit.Material;
 import org.bukkit.Server;
 import org.bukkit.entity.Player;
@@ -16,132 +15,132 @@ import java.util.*;
 import static com.earth2me.essentials.I18n.tl;
 
 
-public class Commandclearinventory extends EssentialsLoopCommand {
+public class Commandclearinventory extends EssentialsCommand {
 
     public Commandclearinventory() {
         super("clearinventory");
     }
 
     private static final int BASE_AMOUNT = 100000;
+    private static final int EXTENDED_CAP = 8;
 
     @Override
     public void run(Server server, User user, String commandLabel, String[] args) throws Exception {
-        final String previousClearCommand = user.getConfirmingClearCommand();
-        user.setConfirmingClearCommand(null);
-
-        String formattedCommand = formatCommand(commandLabel, args);
-        if (user.isPromptingClearConfirm()) {
-            if (!formattedCommand.equals(previousClearCommand)) {
-                user.setConfirmingClearCommand(formattedCommand);
-                user.sendMessage(tl("confirmClear", formattedCommand));
-                return;
-            }
-        }
-
-        if (args.length == 0 || (!args[0].contains("*") && server.matchPlayer(args[0]).isEmpty())) {
-            clearHandler(user.getSource(), user.getBase(), args, 0);
-            return;
-        }
-
-        if (user.isAuthorized("essentials.clearinventory.others")) {
-            loopOnlinePlayers(server, user.getSource(), false, true, args[0], args);
-            return;
-        }
-        throw new PlayerNotFoundException();
+        parseCommand(server, user.getSource(), commandLabel, args, user.isAuthorized("essentials.clearinventory.others"),
+            user.isAuthorized("essentials.clearinventory.all") || user.isAuthorized("essentials.clearinventory.multiple"));
     }
 
     @Override
     protected void run(Server server, CommandSource sender, String commandLabel, String[] args) throws Exception {
-        if (args.length == 0) {
-            throw new NotEnoughArgumentsException();
-        }
-        loopOnlinePlayers(server, sender, false, true, args[0], args);
+        parseCommand(server, sender, commandLabel, args, true, true);
     }
 
-    @Override
-    protected void updatePlayer(final Server server, final CommandSource sender, final User player, final String[] args) {
-        clearHandler(sender, player.getBase(), args, 1);
-    }
+    private void parseCommand(Server server, CommandSource sender, String commandLabel, String[] args, boolean allowOthers, boolean allowAll)
+        throws Exception {
+        Collection<Player> players = new ArrayList<>();
+        User senderUser = ess.getUser(sender.getPlayer());
+        String previousClearCommand = "";
+        
+        int offset = 0;
 
-    private static class Item {
-        private final Material material;
-        private final short data;
-
-        public Item(Material material, short data) {
-            this.material = material;
-            this.data = data;
+        if (sender.isPlayer()) {
+            players.add(sender.getPlayer());
+            // Clear previous command execution before potential errors to reset confirmation.
+            previousClearCommand = senderUser.getConfirmingClearCommand();
+            senderUser.setConfirmingClearCommand(null);
         }
 
-        public Material getMaterial() {
-            return material;
+        if (allowAll && args.length > 0 && args[0].contentEquals("*")) {
+            sender.sendMessage(tl("inventoryClearingFromAll"));
+            offset = 1;
+            players = ess.getOnlinePlayers();
+        } else if (allowOthers && args.length > 0 && args[0].trim().length() > 2) {
+            offset = 1;
+            players = server.matchPlayer(args[0].trim());
         }
 
-        public short getData() {
-            return data;
+        if (players.size() < 1) {
+            throw new PlayerNotFoundException();
+        }
+
+
+        // Confirm
+        String formattedCommand = formatCommand(commandLabel, args);
+        if (senderUser != null && senderUser.isPromptingClearConfirm()) {
+            if (!formattedCommand.equals(previousClearCommand)) {
+                senderUser.setConfirmingClearCommand(formattedCommand);
+                senderUser.sendMessage(tl("confirmClear", formattedCommand));
+                return;
+            }
+        }
+
+        for (Player player : players) {
+            clearHandler(sender, player, args, offset, players.size() < EXTENDED_CAP);
         }
     }
 
-    private enum ClearHandlerType {
-        ALL_EXCEPT_ARMOR, ALL_INCLUDING_ARMOR, SPECIFIC_ITEM
-    }
-
-    protected void clearHandler(CommandSource sender, Player player, String[] args, int offset) {
-        ClearHandlerType type = ClearHandlerType.ALL_EXCEPT_ARMOR;
-        final Set<Item> items = new HashSet<>();
+    protected void clearHandler(CommandSource sender, Player player, String[] args, int offset, boolean showExtended) throws Exception {
+        short data = -1;
+        int type = -1;
         int amount = -1;
+        final Set<Material> mats = new HashSet<>();
 
         if (args.length > (offset + 1) && NumberUtil.isInt(args[(offset + 1)])) {
             amount = Integer.parseInt(args[(offset + 1)]);
         }
         if (args.length > offset) {
             if (args[offset].equalsIgnoreCase("**")) {
-                type = ClearHandlerType.ALL_INCLUDING_ARMOR;
+                type = -2;
             } else if (!args[offset].equalsIgnoreCase("*")) {
                 final String[] split = args[offset].split(",");
-                for (String item : split) {
-                    final String[] itemParts = item.split(":");
-                    short data;
+
+                for (String name : split) {
                     try {
-                        data = Short.parseShort(itemParts[1]);
-                    } catch (Exception e) {
-                        data = 0;
-                    }
-                    try {
-                        items.add(new Item(ess.getItemDb().get(itemParts[0]).getType(), data));
+                        mats.add(ess.getItemDb().get(name).getType());
                     } catch (Exception ignored) {}
                 }
-                type = ClearHandlerType.SPECIFIC_ITEM;
+
+                type = 1;
             }
         }
 
-        if (type == ClearHandlerType.ALL_EXCEPT_ARMOR) {
-            sender.sendMessage(tl("inventoryClearingAllItems", player.getDisplayName()));
+        if (type == -1) // type -1 represents wildcard or all items
+        {
+            if (showExtended) {
+                sender.sendMessage(tl("inventoryClearingAllItems", player.getDisplayName()));
+            }
             InventoryWorkaround.clearInventoryNoArmor(player.getInventory());
             InventoryWorkaround.setItemInOffHand(player, null);
-        } else if (type == ClearHandlerType.ALL_INCLUDING_ARMOR) {
-            sender.sendMessage(tl("inventoryClearingAllArmor", player.getDisplayName()));
+        } else if (type == -2) // type -2 represents double wildcard or all items and armor
+        {
+            if (showExtended) {
+                sender.sendMessage(tl("inventoryClearingAllArmor", player.getDisplayName()));
+            }
             InventoryWorkaround.clearInventoryNoArmor(player.getInventory());
             InventoryWorkaround.setItemInOffHand(player, null);
             player.getInventory().setArmorContents(null);
         } else {
-            for (Item item : items) {
-                ItemStack stack = new ItemStack(item.getMaterial());
-                if (VersionUtil.getServerBukkitVersion().isLowerThan(VersionUtil.v1_13_0_R01)) {
-                    stack.setDurability(item.getData());
-                }
+            for (Material mat : mats) {
                 if (amount == -1) // amount -1 means all items will be cleared
                 {
-                    stack.setAmount(BASE_AMOUNT);
+                    ItemStack stack = new ItemStack(mat, BASE_AMOUNT, data);
                     ItemStack removedStack = player.getInventory().removeItem(stack).get(0);
                     final int removedAmount = (BASE_AMOUNT - removedStack.getAmount());
-                    if (removedAmount > 0) {
+                    if (removedAmount > 0 || showExtended) {
                         sender.sendMessage(tl("inventoryClearingStack", removedAmount, stack.getType().toString().toLowerCase(Locale.ENGLISH), player.getDisplayName()));
                     }
                 } else {
-                    stack.setAmount(amount < 0 ? 1 : amount);
+                    if (amount < 0) {
+                        amount = 1;
+                    }
+                    ItemStack stack = new ItemStack(mat, amount);
                     if (player.getInventory().containsAtLeast(stack, amount)) {
                         sender.sendMessage(tl("inventoryClearingStack", amount, stack.getType().toString().toLowerCase(Locale.ENGLISH), player.getDisplayName()));
                         player.getInventory().removeItem(stack);
+                    } else {
+                        if (showExtended) {
+                            sender.sendMessage(tl("inventoryClearFail", player.getDisplayName(), amount, stack.getType().toString().toLowerCase(Locale.ENGLISH)));
+                        }
                     }
                 }
             }
@@ -192,5 +191,9 @@ public class Commandclearinventory extends EssentialsLoopCommand {
         } else {
             return Collections.emptyList();
         }
+    }
+
+    private String formatCommand(String commandLabel, String[] args) {
+        return "/" + commandLabel + " " + StringUtil.joinList(" ", args);
     }
 }
