@@ -41,6 +41,7 @@ import java.util.logging.Logger;
 import static com.earth2me.essentials.I18n.tl;
 
 public class User extends UserData implements Comparable<User>, IMessageRecipient, net.ess3.api.IUser {
+    private static final Statistic PLAY_ONE_TICK = EnumUtil.getStatistic("PLAY_ONE_MINUTE", "PLAY_ONE_TICK");
     private static final Logger logger = Logger.getLogger("Essentials");
     private final IMessageRecipient messageRecipient;
     private transient final AsyncTeleport teleport;
@@ -574,10 +575,6 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
         return hidden;
     }
 
-    public boolean isHidden(final Player player) {
-        return hidden || !player.canSee(getBase());
-    }
-
     @Override
     public void setHidden(final boolean hidden) {
         this.hidden = hidden;
@@ -586,7 +583,9 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
         }
     }
 
-    private static final Statistic PLAY_ONE_TICK = EnumUtil.getStatistic("PLAY_ONE_MINUTE", "PLAY_ONE_TICK");
+    public boolean isHidden(final Player player) {
+        return hidden || !player.canSee(getBase());
+    }
 
     //Returns true if status expired during this check
     public boolean checkJailTimeout(final long currentTime) {

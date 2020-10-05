@@ -618,7 +618,7 @@ default-enabled-confirm-commands:
 teleport-back-when-freed-from-jail: true
 
 # Whether or not jail time should only be counted while the user is online.
-# If true, a jailed players time will only decrement when they are online.
+# If true, a jailed player's time will only decrement when they are online.
 jail-online-time: false
 
 # Set the timeout, in seconds for players to accept a tpa before the request is cancelled.
