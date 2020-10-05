@@ -7,7 +7,12 @@ labels: 'bug: unconfirmed'
 
 <!-- EssentialsX bug reporting guide
 
-Don't put anything inside this block, as it won't be included in the issue.
+NOTE: Failure to fill out this template properly may result in your issue being
+      delayed or ignored.
+
+Don't put anything inside this block, as it will be hidden when you post your
+PR. Make sure to also not type between any arrows in the template, as this text
+will also be hidden.
 
 If you are reporting a bug, please follow the following steps:
 
@@ -27,33 +32,43 @@ If you are reporting a bug, please follow the following steps:
 4.  If you are reporting a bug with commands or something else in-game,
     please include screenshots to help us diagnose the problem.
 
-5.  Make sure not to write between the arrows, as anything there will be
-    hidden.
-
-6.  Delete this line and all above lines before posting your issue!       -->
+-->
 
 ### Information
 
-**Full output of `/ess version`**:
+**Full output of `/ess version`:**
+<!--
+    Paste the output of `/ess version` inside the ```s, preferably copied
+    directly from the console.
+-->
+```
 
 ```
-<!-- Run the command in your console, and copy and paste the whole output here -->
-```
 
-**Server log**: <!-- Upload `logs/latest.log` to https://gist.github.com/, replace this with link -->
+**Server log:**
+<!--
+    Upload `logs/latest.log` to https://gist.github.com/ then paste the link
+    below this block.
+-->
 
-**EssentialsX config**: <!-- Upload `plugins/Essentials/config.yml` to https://gist.github.com/, replace this with link -->
+
+**EssentialsX config:**
+<!--
+    Upload `plugins/Essentials/config.yml` (and other config files if relevant)
+    to https://gist.github.com/ then paste the link below this block.
+-->
+
 
 ### Details
 
-**Description**  
-<!-- Replace this with a brief summary of the bug. -->
+**Description:**  
+<!-- What is the bug? Type a brief summary below this line. -->
 
-**Steps to reproduce**  
-<!-- Replace this with exactly what you did to cause the bug. -->
+**Steps to reproduce:**  
+<!-- How did you cause it? Describe what you did to cause the bug below. -->
 
-**Expected behavior**  
-<!-- Replace this with what you expected to happen. -->
+**Expected behavior:**  
+<!-- What did you expect to happen? Type below this line. -->
 
-**Screenshots**  
-<!-- Replace this with screenshots, if necessary. -->
+**Screenshots:**  
+<!-- If necessary, include screenshots or a video below this line. -->
