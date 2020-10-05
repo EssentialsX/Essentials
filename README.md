@@ -74,3 +74,5 @@ donation, don't worry! There's lots of other ways to contribute:
   other EssentialsX users.
 * If you're a developer, you could look through our ["open to PR"](https://github.com/EssentialsX/Essentials/issues?q=is%3Aissue+is%3Aopen+sort%3Aupdated-desc+label%3A%22status%3A+open+to+PR%22)
   issues. We're always happy to receive bug fixes and feature additions as pull requests.
+
+See [CONTRIBUTING.md](https://github.com/EssentialsX/Essentials/blob/2.x/CONTRIBUTING.md) to find out more.
