@@ -2,8 +2,11 @@ package com.earth2me.essentials.craftbukkit;
 
 import org.bukkit.entity.Player;
 
+public final class SetExpFix {
 
-public class SetExpFix {
+    private SetExpFix() {
+    }
+
     //This method is used to update both the recorded total experience and displayed total experience.
     //We reset both types to prevent issues.
     public static void setTotalExperience(final Player player, final int exp) {
@@ -79,8 +82,8 @@ public class SetExpFix {
     }
 
     public static int getExpUntilNextLevel(final Player player) {
-        int exp = Math.round(getExpAtLevel(player) * player.getExp());
-        int nextLevel = player.getLevel();
+        final int exp = Math.round(getExpAtLevel(player) * player.getExp());
+        final int nextLevel = player.getLevel();
         return getExpAtLevel(nextLevel) - exp;
     }
 }

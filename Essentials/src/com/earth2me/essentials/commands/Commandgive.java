@@ -18,7 +18,6 @@ import java.util.Map;
 
 import static com.earth2me.essentials.I18n.tl;
 
-
 public class Commandgive extends EssentialsLoopCommand {
     public Commandgive() {
         super("give");
@@ -48,11 +47,11 @@ public class Commandgive extends EssentialsLoopCommand {
             } else if (ess.getSettings().getOversizedStackSize() > 0 && sender.isAuthorized("essentials.oversizedstacks", ess)) {
                 stack.setAmount(ess.getSettings().getOversizedStackSize());
             }
-        } catch (NumberFormatException e) {
+        } catch (final NumberFormatException e) {
             throw new NotEnoughArgumentsException();
         }
 
-        MetaItemStack metaStack = new MetaItemStack(stack);
+        final MetaItemStack metaStack = new MetaItemStack(stack);
         if (!metaStack.canSpawn(ess)) {
             throw new Exception(tl("unableToSpawnItem", itemname));
         }
@@ -63,7 +62,7 @@ public class Commandgive extends EssentialsLoopCommand {
                 allowUnsafe = false;
             }
 
-            int metaStart = NumberUtil.isInt(args[3]) ? 4 : 3;
+            final int metaStart = NumberUtil.isInt(args[3]) ? 4 : 3;
 
             if (args.length > metaStart) {
                 metaStack.parseStringMeta(sender, allowUnsafe, args, metaStart, ess);
@@ -77,11 +76,11 @@ public class Commandgive extends EssentialsLoopCommand {
         }
 
         final String itemName = stack.getType().toString().toLowerCase(Locale.ENGLISH).replace('_', ' ');
-        boolean isDropItemsIfFull = ess.getSettings().isDropItemsIfFull();
+        final boolean isDropItemsIfFull = ess.getSettings().isDropItemsIfFull();
         final ItemStack finalStack = stack;
         loopOnlinePlayersConsumer(server, sender, false, true, args[0], player -> {
             sender.sendMessage(tl("giveSpawn", finalStack.getAmount(), itemName, player.getDisplayName()));
-            Map<Integer, ItemStack> leftovers;
+            final Map<Integer, ItemStack> leftovers;
 
             if (player.isAuthorized("essentials.oversizedstacks")) {
                 leftovers = InventoryWorkaround.addOversizedItems(player.getBase().getInventory(), ess.getSettings().getOversizedStackSize(), finalStack);
@@ -89,9 +88,9 @@ public class Commandgive extends EssentialsLoopCommand {
                 leftovers = InventoryWorkaround.addItems(player.getBase().getInventory(), finalStack);
             }
 
-            for (ItemStack item : leftovers.values()) {
+            for (final ItemStack item : leftovers.values()) {
                 if (isDropItemsIfFull) {
-                    World w = player.getWorld();
+                    final World w = player.getWorld();
                     w.dropItemNaturally(player.getLocation(), item);
                 } else {
                     sender.sendMessage(tl("giveSpawnFailure", item.getAmount(), itemName, player.getDisplayName()));
@@ -109,7 +108,7 @@ public class Commandgive extends EssentialsLoopCommand {
         } else if (args.length == 2) {
             return getItems();
         } else if (args.length == 3) {
-            return Lists.newArrayList("1", "64");  // TODO: get actual max size
+            return Lists.newArrayList("1", "64"); // TODO: get actual max size
         } else if (args.length == 4) {
             return Lists.newArrayList("0");
         } else {
@@ -118,7 +117,7 @@ public class Commandgive extends EssentialsLoopCommand {
     }
 
     @Override
-    protected void updatePlayer(Server server, CommandSource sender, User user, String[] args) {
+    protected void updatePlayer(final Server server, final CommandSource sender, final User user, final String[] args) {
 
     }
 }

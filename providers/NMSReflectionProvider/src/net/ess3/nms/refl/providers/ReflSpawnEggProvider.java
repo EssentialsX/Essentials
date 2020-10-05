@@ -8,19 +8,19 @@ import org.bukkit.inventory.ItemStack;
 public class ReflSpawnEggProvider implements SpawnEggProvider {
 
     @Override
-    public ItemStack createEggItem(EntityType type) throws IllegalArgumentException {
+    public ItemStack createEggItem(final EntityType type) throws IllegalArgumentException {
         try {
             return new SpawnEggRefl(type).toItemStack();
-        } catch (Exception e) {
+        } catch (final Exception e) {
             throw new IllegalArgumentException(e.getMessage(), e.getCause());
         }
     }
 
     @Override
-    public EntityType getSpawnedType(ItemStack eggItem) throws IllegalArgumentException {
+    public EntityType getSpawnedType(final ItemStack eggItem) throws IllegalArgumentException {
         try {
             return SpawnEggRefl.fromItemStack(eggItem).getSpawnedType();
-        } catch (Exception e) {
+        } catch (final Exception e) {
             throw new IllegalArgumentException(e.getMessage(), e.getCause());
         }
     }

@@ -14,7 +14,6 @@ import java.util.logging.Level;
 
 import static com.earth2me.essentials.I18n.tl;
 
-
 public class Commandtempban extends EssentialsCommand {
     public Commandtempban() {
         super("tempban");
@@ -38,7 +37,7 @@ public class Commandtempban extends EssentialsCommand {
         String banReason = DateUtil.removeTimePattern(time);
 
         final long maxBanLength = ess.getSettings().getMaxTempban() * 1000;
-        if (maxBanLength > 0 && ((banTimestamp - GregorianCalendar.getInstance().getTimeInMillis()) > maxBanLength) && sender.isPlayer() && !(ess.getUser(sender.getPlayer()).isAuthorized("essentials.tempban.unlimited"))) {
+        if (maxBanLength > 0 && ((banTimestamp - GregorianCalendar.getInstance().getTimeInMillis()) > maxBanLength) && sender.isPlayer() && !ess.getUser(sender.getPlayer()).isAuthorized("essentials.tempban.unlimited")) {
             sender.sendMessage(tl("oversizedTempban"));
             return;
         }
@@ -59,7 +58,7 @@ public class Commandtempban extends EssentialsCommand {
     }
 
     @Override
-    protected List<String> getTabCompleteOptions(Server server, CommandSource sender, String commandLabel, String[] args) {
+    protected List<String> getTabCompleteOptions(final Server server, final CommandSource sender, final String commandLabel, final String[] args) {
         if (args.length == 1) {
             return getPlayers(server, sender);
         } else {

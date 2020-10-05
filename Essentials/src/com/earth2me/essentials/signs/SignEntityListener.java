@@ -9,7 +9,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 
-
 public class SignEntityListener implements Listener {
 
     private final transient IEssentials ess;
@@ -25,12 +24,12 @@ public class SignEntityListener implements Listener {
             return;
         }
 
-        for (Block block : event.blockList()) {
+        for (final Block block : event.blockList()) {
             if ((MaterialUtil.isSign(block.getType()) && EssentialsSign.isValidSign(ess, new EssentialsSign.BlockSign(block))) || EssentialsSign.checkIfBlockBreaksSigns(block)) {
                 event.setCancelled(true);
                 return;
             }
-            for (EssentialsSign sign : ess.getSettings().enabledSigns()) {
+            for (final EssentialsSign sign : ess.getSettings().enabledSigns()) {
                 if (sign.areHeavyEventRequired() && sign.getBlocks().contains(block.getType())) {
                     event.setCancelled(!sign.onBlockExplode(block, ess));
                     return;
@@ -51,7 +50,7 @@ public class SignEntityListener implements Listener {
             event.setCancelled(true);
             return;
         }
-        for (EssentialsSign sign : ess.getSettings().enabledSigns()) {
+        for (final EssentialsSign sign : ess.getSettings().enabledSigns()) {
             if (sign.areHeavyEventRequired() && sign.getBlocks().contains(block.getType()) && !sign.onBlockBreak(block, ess)) {
                 event.setCancelled(true);
                 return;

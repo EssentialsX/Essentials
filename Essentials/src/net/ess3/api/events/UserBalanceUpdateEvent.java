@@ -1,7 +1,6 @@
 package net.ess3.api.events;
 
 import com.google.common.base.Preconditions;
-
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
@@ -9,20 +8,22 @@ import org.bukkit.event.HandlerList;
 
 import java.math.BigDecimal;
 
-
+/**
+ * Fired when a user's balance updates.
+ */
 public class UserBalanceUpdateEvent extends Event {
     private static final HandlerList handlers = new HandlerList();
     private final Player player;
     private final BigDecimal originalBalance;
+    private final Cause cause;
     private BigDecimal balance;
-    private Cause cause;
 
     @Deprecated
-    public UserBalanceUpdateEvent(Player player, BigDecimal originalBalance, BigDecimal balance) {
+    public UserBalanceUpdateEvent(final Player player, final BigDecimal originalBalance, final BigDecimal balance) {
         this(player, originalBalance, balance, Cause.UNKNOWN);
     }
 
-    public UserBalanceUpdateEvent(Player player, BigDecimal originalBalance, BigDecimal balance, Cause cause) {
+    public UserBalanceUpdateEvent(final Player player, final BigDecimal originalBalance, final BigDecimal balance, final Cause cause) {
         super(!Bukkit.getServer().isPrimaryThread());
         this.player = player;
         this.originalBalance = originalBalance;
@@ -30,12 +31,12 @@ public class UserBalanceUpdateEvent extends Event {
         this.cause = cause;
     }
 
-    @Override
-    public HandlerList getHandlers() {
+    public static HandlerList getHandlerList() {
         return handlers;
     }
 
-    public static HandlerList getHandlerList() {
+    @Override
+    public HandlerList getHandlers() {
         return handlers;
     }
 
@@ -46,8 +47,13 @@ public class UserBalanceUpdateEvent extends Event {
     public BigDecimal getNewBalance() {
         return balance;
     }
-    
-    public void setNewBalance(BigDecimal newBalance) {
+
+    /**
+     * Override the value that the user's balance will be changed to.
+     *
+     * @param newBalance The user's new balance
+     */
+    public void setNewBalance(final BigDecimal newBalance) {
         Preconditions.checkNotNull(newBalance, "newBalance cannot be null.");
         this.balance = newBalance;
     }
@@ -60,6 +66,9 @@ public class UserBalanceUpdateEvent extends Event {
         return cause;
     }
 
+    /**
+     * The cause of the balance update.
+     */
     public enum Cause {
         COMMAND_ECO,
         COMMAND_PAY,

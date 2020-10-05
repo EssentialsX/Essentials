@@ -19,8 +19,7 @@ public interface IMessageRecipient {
      * String)} implementation by the {@code sender}.
      *
      * @param recipient recipient to receive the {@code message}
-     * @param message message to send
-     *
+     * @param message   message to send
      * @return the response of the message
      */
     MessageResponse sendMessage(IMessageRecipient recipient, String message);
@@ -30,12 +29,11 @@ public interface IMessageRecipient {
      * <br />
      * The {@link MessageResponse} that is returned is used to determine what exactly should happen in the {@link #sendMessage(IMessageRecipient,
      * String)} implementation by the {@code sender}.
-     * <p />
+     * <p/>
      * <b>This method should only be called by {@link #sendMessage(IMessageRecipient, String)}.</b>
      *
-     * @param sender sender of the {@code message}
+     * @param sender  sender of the {@code message}
      * @param message message being received
-     *
      * @return the response of the message
      */
     MessageResponse onReceiveMessage(IMessageRecipient sender, String message);
@@ -44,7 +42,6 @@ public interface IMessageRecipient {
      * Returns the name of this recipient. This name is typically used internally to identify this recipient.
      *
      * @return name of this recipient
-     *
      * @see #getDisplayName()
      */
     String getName();
@@ -82,17 +79,29 @@ public interface IMessageRecipient {
      * {@link IMessageRecipient#onReceiveMessage(IMessageRecipient, String)}.
      */
     enum MessageResponse {
-        /** States that the message was received and assumed readable by the receiver. */
+        /**
+         * States that the message was received and assumed readable by the receiver.
+         */
         SUCCESS,
-        /** States that the message was received, but the receiver was away, assuming the message was not read. */
+        /**
+         * States that the message was received, but the receiver was away, assuming the message was not read.
+         */
         SUCCESS_BUT_AFK,
-        /** States that the message was <b>NOT</b> received as a result of the receiver ignoring all messages. */
+        /**
+         * States that the message was <b>NOT</b> received as a result of the receiver ignoring all messages.
+         */
         MESSAGES_IGNORED,
-        /** States that the message was <b>NOT</b> received as a result of the sender being ignored by the recipient. */
+        /**
+         * States that the message was <b>NOT</b> received as a result of the sender being ignored by the recipient.
+         */
         SENDER_IGNORED,
-        /** States that the message was <b>NOT</b> received as a result of the recipient being unreachable. */
+        /**
+         * States that the message was <b>NOT</b> received as a result of the recipient being unreachable.
+         */
         UNREACHABLE,
-        /** States that the message was <b>NOT</b> received as a result of the message pre-send event being cancelled. */
+        /**
+         * States that the message was <b>NOT</b> received as a result of the message pre-send event being cancelled.
+         */
         EVENT_CANCELLED;
 
         /**

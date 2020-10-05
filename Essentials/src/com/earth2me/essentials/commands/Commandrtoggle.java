@@ -12,17 +12,17 @@ public class Commandrtoggle extends EssentialsToggleCommand {
     }
 
     @Override
-    public void run(Server server, User user, String commandLabel, String[] args) throws Exception {
+    public void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception {
         handleToggleWithArgs(server, user, args);
     }
 
     @Override
-    public void run(Server server, CommandSource sender, String commandLabel, String[] args) throws Exception {
+    public void run(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception {
         toggleOtherPlayers(server, sender, args);
     }
 
     @Override
-    void togglePlayer(CommandSource sender, User user, Boolean enabled) {
+    void togglePlayer(final CommandSource sender, final User user, Boolean enabled) {
         if (enabled == null) {
             enabled = !user.isLastMessageReplyRecipient();
         }

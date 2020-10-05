@@ -32,7 +32,7 @@ public class Commandsetwarp extends EssentialsCommand {
 
         try {
             warpLoc = warps.getWarp(warpName);
-        } catch (WarpNotFoundException | InvalidWorldException ignored) {
+        } catch (final WarpNotFoundException | InvalidWorldException ignored) {
         }
 
         final boolean warpExists = warpLoc != null;

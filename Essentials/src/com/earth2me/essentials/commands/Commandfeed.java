@@ -11,7 +11,6 @@ import java.util.List;
 
 import static com.earth2me.essentials.I18n.tl;
 
-
 public class Commandfeed extends EssentialsLoopCommand {
     public Commandfeed() {
         super("feed");
@@ -46,7 +45,7 @@ public class Commandfeed extends EssentialsLoopCommand {
         try {
             feedPlayer(player.getBase());
             sender.sendMessage(tl("feedOther", player.getDisplayName()));
-        } catch (QuietAbortException e) {
+        } catch (final QuietAbortException e) {
             //Handle Quietly
         }
     }
@@ -66,7 +65,7 @@ public class Commandfeed extends EssentialsLoopCommand {
     }
 
     @Override
-    protected List<String> getTabCompleteOptions(Server server, CommandSource sender, String commandLabel, String[] args) {
+    protected List<String> getTabCompleteOptions(final Server server, final CommandSource sender, final String commandLabel, final String[] args) {
         if (args.length == 1 && sender.isAuthorized("essentials.feed.others", ess)) {
             return getPlayers(server, sender);
         } else {

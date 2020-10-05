@@ -14,7 +14,6 @@ import java.util.List;
 
 import static com.earth2me.essentials.I18n.tl;
 
-
 public class Commandbook extends EssentialsCommand {
 
     private static final Material WRITABLE_BOOK = EnumUtil.getMaterial("WRITABLE_BOOK", "BOOK_AND_QUILL");
@@ -28,7 +27,7 @@ public class Commandbook extends EssentialsCommand {
         final ItemStack item = user.getItemInHand();
         final String player = user.getName();
         if (item.getType() == Material.WRITTEN_BOOK) {
-            BookMeta bmeta = (BookMeta) item.getItemMeta();
+            final BookMeta bmeta = (BookMeta) item.getItemMeta();
 
             if (args.length > 1 && args[0].equalsIgnoreCase("author")) {
                 if (user.isAuthorized("essentials.book.author") && (isAuthor(bmeta, player) || user.isAuthorized("essentials.book.others"))) {
@@ -48,7 +47,7 @@ public class Commandbook extends EssentialsCommand {
                 }
             } else {
                 if (isAuthor(bmeta, player) || user.isAuthorized("essentials.book.others")) {
-                    ItemStack newItem = new ItemStack(WRITABLE_BOOK, item.getAmount());
+                    final ItemStack newItem = new ItemStack(WRITABLE_BOOK, item.getAmount());
                     newItem.setItemMeta(bmeta);
                     InventoryWorkaround.setItemInMainHand(user.getBase(), newItem);
                     user.sendMessage(tl("editBookContents"));
@@ -57,11 +56,11 @@ public class Commandbook extends EssentialsCommand {
                 }
             }
         } else if (item.getType() == WRITABLE_BOOK) {
-            BookMeta bmeta = (BookMeta) item.getItemMeta();
+            final BookMeta bmeta = (BookMeta) item.getItemMeta();
             if (!user.isAuthorized("essentials.book.author")) {
                 bmeta.setAuthor(player);
             }
-            ItemStack newItem = new ItemStack(Material.WRITTEN_BOOK, item.getAmount());
+            final ItemStack newItem = new ItemStack(Material.WRITTEN_BOOK, item.getAmount());
             newItem.setItemMeta(bmeta);
             InventoryWorkaround.setItemInMainHand(user.getBase(), newItem);
             user.sendMessage(tl("bookLocked"));
@@ -70,16 +69,16 @@ public class Commandbook extends EssentialsCommand {
         }
     }
 
-    private boolean isAuthor(BookMeta bmeta, String player) {
-        String author = bmeta.getAuthor();
+    private boolean isAuthor(final BookMeta bmeta, final String player) {
+        final String author = bmeta.getAuthor();
         return author != null && author.equalsIgnoreCase(player);
     }
 
     @Override
-    protected List<String> getTabCompleteOptions(Server server, User user, String commandLabel, String[] args) {
+    protected List<String> getTabCompleteOptions(final Server server, final User user, final String commandLabel, final String[] args) {
         // Right now, we aren't testing what's held in the player's hand - we could, but it's not necessarily worth it
         if (args.length == 1) {
-            List<String> options = Lists.newArrayList("sign", "unsign");  // sign and unsign aren't real, but work
+            final List<String> options = Lists.newArrayList("sign", "unsign"); // sign and unsign aren't real, but work
             if (user.isAuthorized("essentials.book.author")) {
                 options.add("author");
             }
@@ -88,7 +87,7 @@ public class Commandbook extends EssentialsCommand {
             }
             return options;
         } else if (args.length == 2 && args[0].equalsIgnoreCase("author") && user.isAuthorized("essentials.book.author")) {
-            List<String> options = getPlayers(server, user);
+            final List<String> options = getPlayers(server, user);
             options.add("Herobrine"); // #EasterEgg
             return options;
         } else {

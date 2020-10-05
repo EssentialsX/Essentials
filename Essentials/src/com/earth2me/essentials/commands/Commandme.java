@@ -17,16 +17,15 @@ import java.util.Set;
 
 import static com.earth2me.essentials.I18n.tl;
 
-
 public class Commandme extends EssentialsCommand {
     public Commandme() {
         super("me");
     }
 
     @Override
-    public void run(Server server, User user, String commandLabel, String[] args) throws Exception {
+    public void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception {
         if (user.isMuted()) {
-            String dateDiff = user.getMuteTimeout() > 0 ? DateUtil.formatDateDiff(user.getMuteTimeout()) : null;
+            final String dateDiff = user.getMuteTimeout() > 0 ? DateUtil.formatDateDiff(user.getMuteTimeout()) : null;
             if (dateDiff == null) {
                 throw new Exception(user.hasMuteReason() ? tl("voiceSilencedReason", user.getMuteReason()) : tl("voiceSilenced"));
             }
@@ -41,18 +40,18 @@ public class Commandme extends EssentialsCommand {
         message = FormatUtil.formatMessage(user, "essentials.chat", message);
 
         user.setDisplayNick();
-        int radius = ess.getSettings().getChatRadius();
-        String toSend = tl("action", user.getDisplayName(), message);
+        final int radius = ess.getSettings().getChatRadius();
+        final String toSend = tl("action", user.getDisplayName(), message);
         if (radius < 1) {
             ess.broadcastMessage(user, toSend);
             return;
         }
 
-        World world = user.getWorld();
-        Location loc = user.getLocation();
-        Set<Player> outList = new HashSet<>();
+        final World world = user.getWorld();
+        final Location loc = user.getLocation();
+        final Set<Player> outList = new HashSet<>();
 
-        for (Player player : Bukkit.getOnlinePlayers()) {
+        for (final Player player : Bukkit.getOnlinePlayers()) {
             final User onlineUser = ess.getUser(player);
             if (!onlineUser.equals(user)) {
                 boolean abort = false;
@@ -83,13 +82,13 @@ public class Commandme extends EssentialsCommand {
             user.sendMessage(tl("localNoOne"));
         }
 
-        for (Player onlinePlayer : outList) {
+        for (final Player onlinePlayer : outList) {
             onlinePlayer.sendMessage(toSend);
         }
     }
 
     @Override
-    public void run(Server server, CommandSource sender, String commandLabel, String[] args) throws Exception {
+    public void run(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception {
         if (args.length < 1) {
             throw new NotEnoughArgumentsException();
         }
@@ -101,7 +100,7 @@ public class Commandme extends EssentialsCommand {
     }
 
     @Override
-    protected List<String> getTabCompleteOptions(Server server, CommandSource sender, String commandLabel, String[] args) {
+    protected List<String> getTabCompleteOptions(final Server server, final CommandSource sender, final String commandLabel, final String[] args) {
         return Collections.emptyList();
     }
 }

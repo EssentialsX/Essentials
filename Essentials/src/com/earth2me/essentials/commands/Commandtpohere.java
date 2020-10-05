@@ -9,7 +9,6 @@ import java.util.List;
 
 import static com.earth2me.essentials.I18n.tl;
 
-
 public class Commandtpohere extends EssentialsCommand {
     public Commandtpohere() {
         super("tpohere");
@@ -32,7 +31,7 @@ public class Commandtpohere extends EssentialsCommand {
     }
 
     @Override
-    protected List<String> getTabCompleteOptions(Server server, User user, String commandLabel, String[] args) {
+    protected List<String> getTabCompleteOptions(final Server server, final User user, final String commandLabel, final String[] args) {
         if (args.length == 1) {
             return getPlayers(server, user);
         } else {

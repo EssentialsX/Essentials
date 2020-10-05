@@ -4,14 +4,19 @@ import com.earth2me.essentials.EssentialsConf;
 import com.earth2me.essentials.IConf;
 
 import java.io.File;
-import java.util.*;
-
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Set;
 
 public class UserManager implements IConf {
-    private final transient EssentialsConf users;
-    private final transient List<String> spyusers = Collections.synchronizedList(new ArrayList<>());
     private static final String ADDRESS = "address";
     private static final String SPY = "spy";
+    private final transient EssentialsConf users;
+    private final transient List<String> spyusers = Collections.synchronizedList(new ArrayList<>());
 
     UserManager(final File folder) {
         users = new EssentialsConf(new File(folder, "users.yml"));
@@ -32,7 +37,7 @@ public class UserManager implements IConf {
 
     final String getUserByAddress(final String search) {
         final Set<String> usernames = users.getKeys(false);
-        for (String username : usernames) {
+        for (final String username : usernames) {
             final String address = users.getString(username + "." + ADDRESS, null);
             if (search.equalsIgnoreCase(address)) {
                 return username;
@@ -63,7 +68,7 @@ public class UserManager implements IConf {
         users.load();
         spyusers.clear();
         final Set<String> keys = users.getKeys(false);
-        for (String key : keys) {
+        for (final String key : keys) {
             if (isSpy(key)) {
                 final String address = getAddress(key);
                 if (address != null) {
