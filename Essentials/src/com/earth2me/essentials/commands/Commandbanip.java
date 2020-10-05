@@ -14,7 +14,6 @@ import java.util.logging.Level;
 
 import static com.earth2me.essentials.I18n.tl;
 
-
 public class Commandbanip extends EssentialsCommand {
     public Commandbanip() {
         super("banip");
@@ -33,9 +32,9 @@ public class Commandbanip extends EssentialsCommand {
             ipAddress = args[0];
         } else {
             try {
-                User player = getPlayer(server, args, 0, true, true);
+                final User player = getPlayer(server, args, 0, true, true);
                 ipAddress = player.getLastLoginAddress();
-            } catch (PlayerNotFoundException ex) {
+            } catch (final PlayerNotFoundException ex) {
                 ipAddress = args[0];
             }
         }
@@ -44,19 +43,19 @@ public class Commandbanip extends EssentialsCommand {
             throw new PlayerNotFoundException();
         }
 
-        String banReason;
+        final String banReason;
         if (args.length > 1) {
             banReason = FormatUtil.replaceFormat(getFinalArg(args, 1).replace("\\n", "\n").replace("|", "\n"));
         } else {
             banReason = tl("defaultBanReason");
         }
 
-        String banDisplay = tl("banFormat", banReason, senderName);
+        final String banDisplay = tl("banFormat", banReason, senderName);
 
         ess.getServer().getBanList(BanList.Type.IP).addBan(ipAddress, banReason, null, senderName);
         server.getLogger().log(Level.INFO, tl("playerBanIpAddress", senderName, ipAddress, banReason));
 
-        for (Player player : ess.getServer().getOnlinePlayers()) {
+        for (final Player player : ess.getServer().getOnlinePlayers()) {
             if (player.getAddress().getAddress().getHostAddress().equalsIgnoreCase(ipAddress)) {
                 player.kickPlayer(banDisplay);
             }
@@ -66,7 +65,7 @@ public class Commandbanip extends EssentialsCommand {
     }
 
     @Override
-    protected List<String> getTabCompleteOptions(Server server, CommandSource sender, String commandLabel, String[] args) {
+    protected List<String> getTabCompleteOptions(final Server server, final CommandSource sender, final String commandLabel, final String[] args) {
         if (args.length == 1) {
             // TODO: Also list IP addresses?
             return getPlayers(server, sender);

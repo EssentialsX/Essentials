@@ -11,7 +11,6 @@ import java.util.List;
 
 import static com.earth2me.essentials.I18n.tl;
 
-
 public class Commandweather extends EssentialsCommand {
     public Commandweather() {
         super("weather");
@@ -67,7 +66,7 @@ public class Commandweather extends EssentialsCommand {
     }
 
     @Override
-    protected List<String> getTabCompleteOptions(Server server, User user, String commandLabel, String[] args) {
+    protected List<String> getTabCompleteOptions(final Server server, final User user, final String commandLabel, final String[] args) {
         if (args.length == 1) {
             return Lists.newArrayList("storm", "sun");
         } else if (args.length == 2) {
@@ -78,10 +77,10 @@ public class Commandweather extends EssentialsCommand {
     }
 
     @Override
-    protected List<String> getTabCompleteOptions(Server server, CommandSource sender, String commandLabel, String[] args) {
+    protected List<String> getTabCompleteOptions(final Server server, final CommandSource sender, final String commandLabel, final String[] args) {
         if (args.length == 1) {
-            List<String> worlds = Lists.newArrayList();
-            for (World world : server.getWorlds()) {
+            final List<String> worlds = Lists.newArrayList();
+            for (final World world : server.getWorlds()) {
                 worlds.add(world.getName());
             }
             return worlds;

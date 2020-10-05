@@ -10,7 +10,6 @@ import java.util.Locale;
 
 import static com.earth2me.essentials.I18n.tl;
 
-
 public class Commandmore extends EssentialsCommand {
     public Commandmore() {
         super("more");
@@ -23,8 +22,8 @@ public class Commandmore extends EssentialsCommand {
             throw new Exception(tl("cantSpawnItem", "Air"));
         }
 
-        boolean canOversized = user.isAuthorized("essentials.oversizedstacks");
-        if (stack.getAmount() >= ((canOversized) ? ess.getSettings().getOversizedStackSize() : stack.getMaxStackSize())) {
+        final boolean canOversized = user.isAuthorized("essentials.oversizedstacks");
+        if (stack.getAmount() >= (canOversized ? ess.getSettings().getOversizedStackSize() : stack.getMaxStackSize())) {
             throw new Exception(tl("fullStack"));
         }
 
@@ -40,7 +39,7 @@ public class Commandmore extends EssentialsCommand {
             }
             newStackSize += Integer.parseInt(args[0]);
 
-            if (newStackSize > ((canOversized) ? ess.getSettings().getOversizedStackSize() : stack.getMaxStackSize())) {
+            if (newStackSize > (canOversized ? ess.getSettings().getOversizedStackSize() : stack.getMaxStackSize())) {
                 user.sendMessage(tl(canOversized ? "fullStackDefaultOversize" : "fullStackDefault", canOversized ? ess.getSettings().getOversizedStackSize() : stack.getMaxStackSize()));
                 newStackSize = canOversized ? ess.getSettings().getOversizedStackSize() : stack.getMaxStackSize();
             }

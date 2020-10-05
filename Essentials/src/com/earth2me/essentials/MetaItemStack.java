@@ -19,28 +19,44 @@ import org.bukkit.block.banner.PatternType;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.*;
+import org.bukkit.inventory.meta.BannerMeta;
+import org.bukkit.inventory.meta.BlockStateMeta;
+import org.bukkit.inventory.meta.BookMeta;
+import org.bukkit.inventory.meta.EnchantmentStorageMeta;
+import org.bukkit.inventory.meta.FireworkMeta;
+import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.LeatherArmorMeta;
+import org.bukkit.inventory.meta.PotionMeta;
+import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.potion.Potion;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import java.lang.reflect.Method;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.regex.Pattern;
 
 import static com.earth2me.essentials.I18n.tl;
 
-
 public class MetaItemStack {
     private static final Map<String, DyeColor> colorMap = new HashMap<>();
     private static final Map<String, FireworkEffect.Type> fireworkShape = new HashMap<>();
+    private static int bukkitUnbreakableSupport = -1;
+    private static Method spigotMethod;
+    private static Method setUnbreakableMethod;
+    private static boolean useNewSkullMethod = true;
 
     static {
-        for (DyeColor color : DyeColor.values()) {
+        for (final DyeColor color : DyeColor.values()) {
             colorMap.put(color.name(), color);
         }
-        for (FireworkEffect.Type type : FireworkEffect.Type.values()) {
+        for (final FireworkEffect.Type type : FireworkEffect.Type.values()) {
             fireworkShape.put(type.name(), type);
         }
     }
@@ -61,6 +77,24 @@ public class MetaItemStack {
 
     public MetaItemStack(final ItemStack stack) {
         this.stack = stack.clone();
+    }
+
+    private static void setSkullOwner(final IEssentials ess, final ItemStack stack, final String owner) {
+        if (!(stack.getItemMeta() instanceof SkullMeta)) return;
+
+        final SkullMeta meta = (SkullMeta) stack.getItemMeta();
+        if (useNewSkullMethod) {
+            try {
+                meta.setOwningPlayer(ess.getServer().getOfflinePlayer(owner));
+                stack.setItemMeta(meta);
+                return;
+            } catch (final NoSuchMethodError e) {
+                useNewSkullMethod = false;
+            }
+        }
+
+        meta.setOwner(owner);
+        stack.setItemMeta(meta);
     }
 
     public ItemStack getItemStack() {
@@ -101,9 +135,9 @@ public class MetaItemStack {
         try {
             ess.getServer().getUnsafe().modifyItemStack(stack.clone(), "{}");
             return true;
-        } catch (NoSuchMethodError nsme) {
+        } catch (final NoSuchMethodError nsme) {
             return true;
-        } catch (Throwable npe) {
+        } catch (final Throwable npe) {
             if (ess.getSettings().isDebug()) {
                 ess.getLogger().log(Level.INFO, "Itemstack is invalid", npe);
             }
@@ -111,17 +145,17 @@ public class MetaItemStack {
         }
     }
 
-    public void parseStringMeta(final CommandSource sender, final boolean allowUnsafe, String[] string, int fromArg, final IEssentials ess) throws Exception {
+    public void parseStringMeta(final CommandSource sender, final boolean allowUnsafe, final String[] string, final int fromArg, final IEssentials ess) throws Exception {
         if (string[fromArg].startsWith("{") && hasMetaPermission(sender, "vanilla", false, true, ess)) {
             try {
                 stack = ess.getServer().getUnsafe().modifyItemStack(stack, Joiner.on(' ').join(Arrays.asList(string).subList(fromArg, string.length)));
-            } catch (NullPointerException npe) {
+            } catch (final NullPointerException npe) {
                 if (ess.getSettings().isDebug()) {
                     ess.getLogger().log(Level.INFO, "Itemstack is invalid", npe);
                 }
-            } catch (NoSuchMethodError nsme) {
+            } catch (final NoSuchMethodError nsme) {
                 throw new Exception(tl("noMetaJson"), nsme);
-            } catch (Throwable throwable) {
+            } catch (final Throwable throwable) {
                 throw new Exception(throwable.getMessage(), throwable);
             }
         } else {
@@ -132,8 +166,8 @@ public class MetaItemStack {
                 if (!hasMetaPermission(sender, "firework", true, true, ess)) {
                     throw new Exception(tl("noMetaFirework"));
                 }
-                FireworkEffect effect = builder.build();
-                FireworkMeta fmeta = (FireworkMeta) stack.getItemMeta();
+                final FireworkEffect effect = builder.build();
+                final FireworkMeta fmeta = (FireworkMeta) stack.getItemMeta();
                 fmeta.addEffect(effect);
                 if (fmeta.getEffects().size() > 1 && !hasMetaPermission(sender, "firework-multiple", true, true, ess)) {
                     throw new Exception(tl("multipleCharges"));
@@ -149,7 +183,7 @@ public class MetaItemStack {
             return;
         }
 
-        Material WRITTEN_BOOK = EnumUtil.getMaterial("WRITTEN_BOOK");
+        final Material WRITTEN_BOOK = EnumUtil.getMaterial("WRITTEN_BOOK");
 
         if (split.length > 1 && split[0].equalsIgnoreCase("name") && hasMetaPermission(sender, "name", false, true, ess)) {
             final String displayName = FormatUtil.replaceFormat(split[1].replace('_', ' '));
@@ -158,14 +192,14 @@ public class MetaItemStack {
             stack.setItemMeta(meta);
         } else if (split.length > 1 && (split[0].equalsIgnoreCase("lore") || split[0].equalsIgnoreCase("desc")) && hasMetaPermission(sender, "lore", false, true, ess)) {
             final List<String> lore = new ArrayList<>();
-            for (String line : split[1].split("(?<!\\\\)\\|")) {
+            for (final String line : split[1].split("(?<!\\\\)\\|")) {
                 lore.add(FormatUtil.replaceFormat(line.replace('_', ' ').replace("\\|", "|")));
             }
             final ItemMeta meta = stack.getItemMeta();
             meta.setLore(lore);
             stack.setItemMeta(meta);
         } else if (split[0].equalsIgnoreCase("unbreakable") && hasMetaPermission(sender, "unbreakable", false, true, ess)) {
-            boolean value = split.length <= 1 || Boolean.parseBoolean(split[1]);
+            final boolean value = split.length <= 1 || Boolean.parseBoolean(split[1]);
             setUnbreakable(stack, value);
         } else if (split.length > 1 && (split[0].equalsIgnoreCase("player") || split[0].equalsIgnoreCase("owner")) && hasMetaPermission(sender, "head", false, true, ess)) {
             if (MaterialUtil.isPlayerHead(stack.getType(), stack.getDurability())) {
@@ -179,7 +213,7 @@ public class MetaItemStack {
             final IText input = new BookInput("book", true, ess);
             final BookPager pager = new BookPager(input);
 
-            List<String> pages = pager.getPages(split[1]);
+            final List<String> pages = pager.getPages(split[1]);
             meta.setPages(pages);
             stack.setItemMeta(meta);
         } else if (split.length > 1 && split[0].equalsIgnoreCase("author") && stack.getType() == WRITTEN_BOOK && hasMetaPermission(sender, "author", false, true, ess)) {
@@ -192,7 +226,7 @@ public class MetaItemStack {
             final BookMeta meta = (BookMeta) stack.getItemMeta();
             meta.setTitle(title);
             stack.setItemMeta(meta);
-        } else if (split.length > 1 && split[0].equalsIgnoreCase("power") && (MaterialUtil.isFirework(stack.getType()))&& hasMetaPermission(sender, "firework-power", false, true, ess)) {
+        } else if (split.length > 1 && split[0].equalsIgnoreCase("power") && MaterialUtil.isFirework(stack.getType()) && hasMetaPermission(sender, "firework-power", false, true, ess)) {
             final int power = NumberUtil.isInt(split[1]) ? Integer.parseInt(split[1]) : 0;
             final FireworkMeta meta = (FireworkMeta) stack.getItemMeta();
             meta.setPower(power > 3 ? 4 : power);
@@ -217,7 +251,7 @@ public class MetaItemStack {
             if (color.length == 1 && (NumberUtil.isInt(color[0]) || color[0].startsWith("#"))) {
                 // Either integer or hexadecimal
                 final LeatherArmorMeta meta = (LeatherArmorMeta) stack.getItemMeta();
-                String input = color[0];
+                final String input = color[0];
                 if (input.startsWith("#")) { // Hex
                     meta.setColor(Color.fromRGB(
                         Integer.valueOf(input.substring(1, 3), 16),
@@ -243,16 +277,16 @@ public class MetaItemStack {
     }
 
     public void addItemFlags(final String string) throws Exception {
-        String[] separate = splitPattern.split(string, 2);
+        final String[] separate = splitPattern.split(string, 2);
         if (separate.length != 2) {
             throw new Exception(tl("invalidItemFlagMeta", string));
         }
 
-        String[] split = separate[1].split(",");
-        ItemMeta meta = stack.getItemMeta();
+        final String[] split = separate[1].split(",");
+        final ItemMeta meta = stack.getItemMeta();
 
-        for (String s : split) {
-            for (ItemFlag flag : ItemFlag.values()) {
+        for (final String s : split) {
+            for (final ItemFlag flag : ItemFlag.values()) {
                 if (s.equalsIgnoreCase(flag.name())) {
                     meta.addItemFlags(flag);
                 }
@@ -267,7 +301,7 @@ public class MetaItemStack {
     }
 
     public void addFireworkMeta(final CommandSource sender, final boolean allowShortName, final String string, final IEssentials ess) throws Exception {
-    if (MaterialUtil.isFirework(stack.getType())) {
+        if (MaterialUtil.isFirework(stack.getType())) {
             final String[] split = splitPattern.split(string, 2);
             if (split.length < 2) {
                 return;
@@ -278,8 +312,8 @@ public class MetaItemStack {
                     if (!hasMetaPermission(sender, "firework", true, true, ess)) {
                         throw new Exception(tl("noMetaFirework"));
                     }
-                    FireworkEffect effect = builder.build();
-                    FireworkMeta fmeta = (FireworkMeta) stack.getItemMeta();
+                    final FireworkEffect effect = builder.build();
+                    final FireworkMeta fmeta = (FireworkMeta) stack.getItemMeta();
                     fmeta.addEffect(effect);
                     if (fmeta.getEffects().size() > 1 && !hasMetaPermission(sender, "firework-multiple", true, true, ess)) {
                         throw new Exception(tl("multipleCharges"));
@@ -288,9 +322,9 @@ public class MetaItemStack {
                     builder = FireworkEffect.builder();
                 }
 
-                List<Color> primaryColors = new ArrayList<>();
-                String[] colors = split[1].split(",");
-                for (String color : colors) {
+                final List<Color> primaryColors = new ArrayList<>();
+                final String[] colors = split[1].split(",");
+                for (final String color : colors) {
                     if (colorMap.containsKey(color.toUpperCase())) {
                         validFirework = true;
                         primaryColors.add(colorMap.get(color.toUpperCase()).getFireworkColor());
@@ -301,7 +335,7 @@ public class MetaItemStack {
                 builder.withColor(primaryColors);
             } else if (split[0].equalsIgnoreCase("shape") || split[0].equalsIgnoreCase("type") || (allowShortName && (split[0].equalsIgnoreCase("s") || split[0].equalsIgnoreCase("t")))) {
                 FireworkEffect.Type finalEffect = null;
-                split[1] = (split[1].equalsIgnoreCase("large") ? "BALL_LARGE" : split[1]);
+                split[1] = split[1].equalsIgnoreCase("large") ? "BALL_LARGE" : split[1];
                 if (fireworkShape.containsKey(split[1].toUpperCase())) {
                     finalEffect = fireworkShape.get(split[1].toUpperCase());
                 } else {
@@ -311,9 +345,9 @@ public class MetaItemStack {
                     builder.with(finalEffect);
                 }
             } else if (split[0].equalsIgnoreCase("fade") || (allowShortName && split[0].equalsIgnoreCase("f"))) {
-                List<Color> fadeColors = new ArrayList<>();
-                String[] colors = split[1].split(",");
-                for (String color : colors) {
+                final List<Color> fadeColors = new ArrayList<>();
+                final String[] colors = split[1].split(",");
+                for (final String color : colors) {
                     if (colorMap.containsKey(color.toUpperCase())) {
                         fadeColors.add(colorMap.get(color.toUpperCase()).getFireworkColor());
                     } else {
@@ -324,8 +358,8 @@ public class MetaItemStack {
                     builder.withFade(fadeColors);
                 }
             } else if (split[0].equalsIgnoreCase("effect") || (allowShortName && split[0].equalsIgnoreCase("e"))) {
-                String[] effects = split[1].split(",");
-                for (String effect : effects) {
+                final String[] effects = split[1].split(",");
+                for (final String effect : effects) {
                     if (effect.equalsIgnoreCase("twinkle")) {
                         builder.flicker(true);
                     } else if (effect.equalsIgnoreCase("trail")) {
@@ -386,7 +420,7 @@ public class MetaItemStack {
             }
 
             if (isValidPotion()) {
-                PotionMeta pmeta = (PotionMeta) stack.getItemMeta();
+                final PotionMeta pmeta = (PotionMeta) stack.getItemMeta();
                 pEffect = pEffectType.createEffect(duration, power);
                 if (pmeta.getCustomEffects().size() > 1 && !hasMetaPermission(sender, "potions.multiple", true, false, ess)) {
                     throw new Exception(tl("multiplePotionEffects"));
@@ -400,7 +434,7 @@ public class MetaItemStack {
                         stack.setType(Material.POTION);
                     }
                 } else {
-                    Potion potion = Potion.fromItemStack(stack);
+                    final Potion potion = Potion.fromItemStack(stack);
                     potion.setSplash(isSplashPotion);
                     potion.apply(stack);
                 }
@@ -419,7 +453,7 @@ public class MetaItemStack {
         if (split.length > 1) {
             try {
                 level = Integer.parseInt(split[1]);
-            } catch (NumberFormatException ex) {
+            } catch (final NumberFormatException ex) {
                 level = -1;
             }
         }
@@ -436,15 +470,14 @@ public class MetaItemStack {
         }
         try {
             if (stack.getType().equals(Material.ENCHANTED_BOOK)) {
-                EnchantmentStorageMeta meta = (EnchantmentStorageMeta) stack.getItemMeta();
+                final EnchantmentStorageMeta meta = (EnchantmentStorageMeta) stack.getItemMeta();
                 if (level == 0) {
                     meta.removeStoredEnchant(enchantment);
                 } else {
                     meta.addStoredEnchant(enchantment, level, allowUnsafe);
                 }
                 stack.setItemMeta(meta);
-            } else // all other material types besides ENCHANTED_BOOK
-            {
+            } else { // all other material types besides ENCHANTED_BOOK
                 if (level == 0) {
                     stack.removeEnchantment(enchantment);
                 } else {
@@ -455,7 +488,7 @@ public class MetaItemStack {
                     }
                 }
             }
-        } catch (Exception ex) {
+        } catch (final Exception ex) {
             throw new Exception("Enchantment " + enchantment.getName() + ": " + ex.getMessage(), ex);
         }
     }
@@ -485,16 +518,17 @@ public class MetaItemStack {
             PatternType patternType = null;
             try {
                 patternType = PatternType.valueOf(split[0]);
-            } catch (Exception ignored ) {}
+            } catch (final Exception ignored) {
+            }
 
             final BannerMeta meta = (BannerMeta) stack.getItemMeta();
             if (split[0].equalsIgnoreCase("basecolor")) {
-                Color color = Color.fromRGB(Integer.parseInt(split[1]));
+                final Color color = Color.fromRGB(Integer.parseInt(split[1]));
                 meta.setBaseColor(DyeColor.getByColor(color));
             } else if (patternType != null) {
-                PatternType type = PatternType.valueOf(split[0]);
-                DyeColor color = DyeColor.getByColor(Color.fromRGB(Integer.parseInt(split[1])));
-                org.bukkit.block.banner.Pattern pattern = new org.bukkit.block.banner.Pattern(color, type);
+                final PatternType type = PatternType.valueOf(split[0]);
+                final DyeColor color = DyeColor.getByColor(Color.fromRGB(Integer.parseInt(split[1])));
+                final org.bukkit.block.banner.Pattern pattern = new org.bukkit.block.banner.Pattern(color, type);
                 meta.addPattern(pattern);
             }
 
@@ -509,18 +543,19 @@ public class MetaItemStack {
             PatternType patternType = null;
             try {
                 patternType = PatternType.valueOf(split[0]);
-            } catch (Exception ignored ) {}
+            } catch (final Exception ignored) {
+            }
 
             // Hacky fix for accessing Shield meta - https://github.com/drtshock/Essentials/pull/745#issuecomment-234843795
-            BlockStateMeta meta = (BlockStateMeta) stack.getItemMeta();
-            Banner banner = (Banner) meta.getBlockState();
+            final BlockStateMeta meta = (BlockStateMeta) stack.getItemMeta();
+            final Banner banner = (Banner) meta.getBlockState();
             if (split[0].equalsIgnoreCase("basecolor")) {
-                Color color = Color.fromRGB(Integer.parseInt(split[1]));
+                final Color color = Color.fromRGB(Integer.parseInt(split[1]));
                 banner.setBaseColor(DyeColor.getByColor(color));
             } else if (patternType != null) {
-                PatternType type = PatternType.valueOf(split[0]);
-                DyeColor color = DyeColor.getByColor(Color.fromRGB(Integer.parseInt(split[1])));
-                org.bukkit.block.banner.Pattern pattern = new org.bukkit.block.banner.Pattern(color, type);
+                final PatternType type = PatternType.valueOf(split[0]);
+                final DyeColor color = DyeColor.getByColor(Color.fromRGB(Integer.parseInt(split[1])));
+                final org.bukkit.block.banner.Pattern pattern = new org.bukkit.block.banner.Pattern(color, type);
                 banner.addPattern(pattern);
             }
             banner.update();
@@ -547,18 +582,14 @@ public class MetaItemStack {
         }
     }
 
-    private static int bukkitUnbreakableSupport = -1;
-    private static Method spigotMethod;
-    private static Method setUnbreakableMethod;
-
-    private void setUnbreakable(ItemStack is, boolean unbreakable) {
-        ItemMeta meta = is.getItemMeta();
+    private void setUnbreakable(final ItemStack is, final boolean unbreakable) {
+        final ItemMeta meta = is.getItemMeta();
         try {
             if (bukkitUnbreakableSupport == -1) {
                 try {
                     ItemMeta.class.getDeclaredMethod("setUnbreakable", boolean.class);
                     bukkitUnbreakableSupport = 1;
-                } catch (NoSuchMethodException | SecurityException ex) {
+                } catch (final NoSuchMethodException | SecurityException ex) {
                     bukkitUnbreakableSupport = 0;
                 }
             }
@@ -570,7 +601,7 @@ public class MetaItemStack {
                     spigotMethod = meta.getClass().getDeclaredMethod("spigot");
                     spigotMethod.setAccessible(true);
                 }
-                Object itemStackSpigot = spigotMethod.invoke(meta);
+                final Object itemStackSpigot = spigotMethod.invoke(meta);
                 if (setUnbreakableMethod == null) {
                     setUnbreakableMethod = itemStackSpigot.getClass().getDeclaredMethod("setUnbreakable", Boolean.TYPE);
                     setUnbreakableMethod.setAccessible(true);
@@ -578,28 +609,8 @@ public class MetaItemStack {
                 setUnbreakableMethod.invoke(itemStackSpigot, unbreakable);
             }
             is.setItemMeta(meta);
-        } catch (Throwable t) {
+        } catch (final Throwable t) {
             t.printStackTrace();
         }
-    }
-
-    private static boolean useNewSkullMethod = true;
-
-    private static void setSkullOwner(final IEssentials ess, final ItemStack stack, final String owner) {
-        if (!(stack.getItemMeta() instanceof SkullMeta)) return;
-
-        SkullMeta meta = (SkullMeta) stack.getItemMeta();
-        if (useNewSkullMethod) {
-            try {
-                meta.setOwningPlayer(ess.getServer().getOfflinePlayer(owner));
-                stack.setItemMeta(meta);
-                return;
-            } catch (NoSuchMethodError e) {
-                useNewSkullMethod = false;
-            }
-        }
-
-        meta.setOwner(owner);
-        stack.setItemMeta(meta);
     }
 }

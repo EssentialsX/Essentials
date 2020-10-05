@@ -9,7 +9,6 @@ import net.ess3.api.IEssentials;
 
 import static com.earth2me.essentials.I18n.tl;
 
-
 public class SignRepair extends EssentialsSign {
     public SignRepair() {
         super("Repair");
@@ -33,7 +32,7 @@ public class SignRepair extends EssentialsSign {
         final Trade charge = getTrade(sign, 2, ess);
         charge.isAffordableFor(player);
 
-        Commandrepair command = new Commandrepair();
+        final Commandrepair command = new Commandrepair();
         command.setEssentials(ess);
 
         try {
@@ -45,7 +44,7 @@ public class SignRepair extends EssentialsSign {
                 throw new NotEnoughArgumentsException();
             }
 
-        } catch (Exception ex) {
+        } catch (final Exception ex) {
             throw new SignException(ex.getMessage(), ex);
         }
 

@@ -2,8 +2,11 @@ package com.earth2me.essentials;
 
 import com.google.common.io.Files;
 import net.ess3.api.InvalidWorldException;
+import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
-import org.bukkit.*;
+import org.bukkit.Server;
+import org.bukkit.World;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -11,7 +14,14 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.nio.Buffer;
@@ -21,7 +31,13 @@ import java.nio.charset.Charset;
 import java.nio.charset.CharsetDecoder;
 import java.nio.charset.CoderResult;
 import java.nio.charset.StandardCharsets;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -33,23 +49,33 @@ import java.util.logging.Logger;
 
 import static com.earth2me.essentials.I18n.tl;
 
-
 public class EssentialsConf extends YamlConfiguration {
     protected static final Logger LOGGER = Logger.getLogger("Essentials");
-    protected final File configFile;
-    protected String templateName = null;
     protected static final Charset UTF8 = StandardCharsets.UTF_8;
-    private Class<?> resourceClass = EssentialsConf.class;
     private static final ExecutorService EXECUTOR_SERVICE = Executors.newSingleThreadExecutor();
+    protected final File configFile;
     private final AtomicInteger pendingDiskWrites = new AtomicInteger(0);
     private final AtomicBoolean transaction = new AtomicBoolean(false);
+    private final byte[] bytebuffer = new byte[1024];
+    protected String templateName = null;
+    private Class<?> resourceClass = EssentialsConf.class;
 
     public EssentialsConf(final File configFile) {
         super();
         this.configFile = configFile.getAbsoluteFile();
     }
 
-    private final byte[] bytebuffer = new byte[1024];
+    public static BigDecimal toBigDecimal(final String input, final BigDecimal def) {
+        if (input == null || input.isEmpty()) {
+            return def;
+        } else {
+            try {
+                return new BigDecimal(input, MathContext.DECIMAL128);
+            } catch (final NumberFormatException | ArithmeticException e) {
+                return def;
+            }
+        }
+    }
 
     public synchronized void load() {
         if (pendingDiskWrites.get() != 0) {
@@ -70,16 +96,16 @@ public class EssentialsConf extends YamlConfiguration {
                         input.close();
                         configFile.delete();
                     }
-                } catch (IOException ex) {
+                } catch (final IOException ex) {
                     LOGGER.log(Level.SEVERE, null, ex);
                 } finally {
                     try {
                         input.close();
-                    } catch (IOException ex) {
+                    } catch (final IOException ex) {
                         LOGGER.log(Level.SEVERE, null, ex);
                     }
                 }
-            } catch (FileNotFoundException ex) {
+            } catch (final FileNotFoundException ex) {
                 LOGGER.log(Level.SEVERE, null, ex);
             }
         }
@@ -97,10 +123,9 @@ public class EssentialsConf extends YamlConfiguration {
             }
         }
 
-
         try {
-            try (FileInputStream inputStream = new FileInputStream(configFile)) {
-                long startSize = configFile.length();
+            try (final FileInputStream inputStream = new FileInputStream(configFile)) {
+                final long startSize = configFile.length();
                 if (startSize > Integer.MAX_VALUE) {
                     throw new InvalidConfigurationException("File too big");
                 }
@@ -108,8 +133,8 @@ public class EssentialsConf extends YamlConfiguration {
                 int length;
                 while ((length = inputStream.read(bytebuffer)) != -1) {
                     if (length > buffer.remaining()) {
-                        ByteBuffer resize = ByteBuffer.allocate(buffer.capacity() + length - buffer.remaining());
-                        int resizePosition = buffer.position();
+                        final ByteBuffer resize = ByteBuffer.allocate(buffer.capacity() + length - buffer.remaining());
+                        final int resizePosition = buffer.position();
                         // Fix builds compiled against Java 9+ breaking on Java 8
                         ((Buffer) buffer).rewind();
                         resize.put(buffer);
@@ -140,10 +165,10 @@ public class EssentialsConf extends YamlConfiguration {
                 ((Buffer) data).rewind();
                 super.loadFromString(data.subSequence(0, end).toString());
             }
-        } catch (IOException ex) {
+        } catch (final IOException ex) {
             LOGGER.log(Level.SEVERE, ex.getMessage(), ex);
-        } catch (InvalidConfigurationException ex) {
-            File broken = new File(configFile.getAbsolutePath() + ".broken." + System.currentTimeMillis());
+        } catch (final InvalidConfigurationException ex) {
+            final File broken = new File(configFile.getAbsolutePath() + ".broken." + System.currentTimeMillis());
             configFile.renameTo(broken);
             LOGGER.log(Level.SEVERE, "The file " + configFile.toString() + " is broken, it has been renamed to " + broken.toString(), ex.getCause());
         }
@@ -175,28 +200,28 @@ public class EssentialsConf extends YamlConfiguration {
                 return;
             }
             ostr = new FileOutputStream(configFile);
-            byte[] buffer = new byte[1024];
+            final byte[] buffer = new byte[1024];
             int length = 0;
             length = istr.read(buffer);
             while (length > 0) {
                 ostr.write(buffer, 0, length);
                 length = istr.read(buffer);
             }
-        } catch (IOException ex) {
+        } catch (final IOException ex) {
             LOGGER.log(Level.SEVERE, tl("failedToWriteConfig", configFile.toString()), ex);
         } finally {
             try {
                 if (istr != null) {
                     istr.close();
                 }
-            } catch (IOException ex) {
+            } catch (final IOException ex) {
                 Logger.getLogger(EssentialsConf.class.getName()).log(Level.SEVERE, null, ex);
             }
             try {
                 if (ostr != null) {
                     ostr.close();
                 }
-            } catch (IOException ex) {
+            } catch (final IOException ex) {
                 LOGGER.log(Level.SEVERE, tl("failedToCloseConfig", configFile.toString()), ex);
             }
         }
@@ -227,7 +252,7 @@ public class EssentialsConf extends YamlConfiguration {
     public void save() {
         try {
             save(configFile);
-        } catch (IOException ex) {
+        } catch (final IOException ex) {
             LOGGER.log(Level.SEVERE, ex.getMessage(), ex);
         }
     }
@@ -247,11 +272,11 @@ public class EssentialsConf extends YamlConfiguration {
     //This needs fixed to discard outstanding save requests.
     public synchronized void forceSave() {
         try {
-            Future<?> future = delayedSave(configFile);
+            final Future<?> future = delayedSave(configFile);
             if (future != null) {
                 future.get();
             }
-        } catch (InterruptedException | ExecutionException ex) {
+        } catch (final InterruptedException | ExecutionException ex) {
             LOGGER.log(Level.SEVERE, ex.getMessage(), ex);
         }
     }
@@ -274,60 +299,6 @@ public class EssentialsConf extends YamlConfiguration {
         pendingDiskWrites.incrementAndGet();
 
         return EXECUTOR_SERVICE.submit(new WriteRunner(configFile, data, pendingDiskWrites));
-    }
-
-
-    private static class WriteRunner implements Runnable {
-        private final File configFile;
-        private final String data;
-        private final AtomicInteger pendingDiskWrites;
-
-        private WriteRunner(final File configFile, final String data, final AtomicInteger pendingDiskWrites) {
-            this.configFile = configFile;
-            this.data = data;
-            this.pendingDiskWrites = pendingDiskWrites;
-        }
-
-        @Override
-        public void run() {
-            //long startTime = System.nanoTime();
-            synchronized (configFile) {
-                if (pendingDiskWrites.get() > 1) {
-                    // Writes can be skipped, because they are stored in a queue (in the executor).
-                    // Only the last is actually written.
-                    pendingDiskWrites.decrementAndGet();
-                    //LOGGER.log(Level.INFO, configFile + " skipped writing in " + (System.nanoTime() - startTime) + " nsec.");
-                    return;
-                }
-                try {
-                    Files.createParentDirs(configFile);
-
-                    if (!configFile.exists()) {
-                        try {
-                            LOGGER.log(Level.INFO, tl("creatingEmptyConfig", configFile.toString()));
-                            if (!configFile.createNewFile()) {
-                                LOGGER.log(Level.SEVERE, tl("failedToCreateConfig", configFile.toString()));
-                                return;
-                            }
-                        } catch (IOException ex) {
-                            LOGGER.log(Level.SEVERE, tl("failedToCreateConfig", configFile.toString()), ex);
-                            return;
-                        }
-                    }
-
-                    try (FileOutputStream fos = new FileOutputStream(configFile)) {
-                        try (OutputStreamWriter writer = new OutputStreamWriter(fos, UTF8)) {
-                            writer.write(data);
-                        }
-                    }
-                } catch (IOException e) {
-                    LOGGER.log(Level.SEVERE, e.getMessage(), e);
-                } finally {
-                    //LOGGER.log(Level.INFO, configFile + " written to disk in " + (System.nanoTime() - startTime) + " nsec.");
-                    pendingDiskWrites.decrementAndGet();
-                }
-            }
-        }
     }
 
     public boolean hasProperty(final String path) {
@@ -361,7 +332,7 @@ public class EssentialsConf extends YamlConfiguration {
         final ItemStack stack = new ItemStack(Material.valueOf(getString(path + ".type", "AIR")), getInt(path + ".amount", 1), (short) getInt(path + ".damage", 0));
         final ConfigurationSection enchants = getConfigurationSection(path + ".enchant");
         if (enchants != null) {
-            for (String enchant : enchants.getKeys(false)) {
+            for (final String enchant : enchants.getKeys(false)) {
                 final Enchantment enchantment = Enchantment.getByName(enchant.toUpperCase(Locale.ENGLISH));
                 if (enchantment == null) {
                     continue;
@@ -373,8 +344,8 @@ public class EssentialsConf extends YamlConfiguration {
         return stack;
         /*
          * ,
-		 * (byte)getInt(path + ".data", 0)
-		 */
+         * (byte)getInt(path + ".data", 0)
+         */
     }
 
     public void setProperty(final String path, final ItemStack stack) {
@@ -382,10 +353,10 @@ public class EssentialsConf extends YamlConfiguration {
         map.put("type", stack.getType().toString());
         map.put("amount", stack.getAmount());
         map.put("damage", stack.getDurability());
-        Map<Enchantment, Integer> enchantments = stack.getEnchantments();
+        final Map<Enchantment, Integer> enchantments = stack.getEnchantments();
         if (!enchantments.isEmpty()) {
-            Map<String, Integer> enchant = new HashMap<>();
-            for (Map.Entry<Enchantment, Integer> entry : enchantments.entrySet()) {
+            final Map<String, Integer> enchant = new HashMap<>();
+            for (final Map.Entry<Enchantment, Integer> entry : enchantments.entrySet()) {
                 enchant.put(entry.getKey().getName().toLowerCase(Locale.ENGLISH), entry.getValue());
             }
             map.put("enchant", enchant);
@@ -395,15 +366,15 @@ public class EssentialsConf extends YamlConfiguration {
         set(path, map);
     }
 
-    public void setProperty(String path, List object) {
+    public void setProperty(final String path, final List object) {
         set(path, new ArrayList(object));
     }
 
-    public void setProperty(String path, Map object) {
+    public void setProperty(final String path, final Map object) {
         set(path, new LinkedHashMap(object));
     }
 
-    public Object getProperty(String path) {
+    public Object getProperty(final String path) {
         return get(path);
     }
 
@@ -411,21 +382,21 @@ public class EssentialsConf extends YamlConfiguration {
         set(path, bigDecimal.toString());
     }
 
-    public void setProperty(String path, Object object) {
+    public void setProperty(final String path, final Object object) {
         set(path, object);
     }
 
-    public void removeProperty(String path) {
+    public void removeProperty(final String path) {
         set(path, null);
     }
 
     @Override
-    public synchronized Object get(String path) {
+    public synchronized Object get(final String path) {
         return super.get(path);
     }
 
     @Override
-    public synchronized Object get(String path, Object def) {
+    public synchronized Object get(final String path, final Object def) {
         return super.get(path, def);
     }
 
@@ -434,50 +405,38 @@ public class EssentialsConf extends YamlConfiguration {
         return toBigDecimal(input, def);
     }
 
-    public static BigDecimal toBigDecimal(final String input, final BigDecimal def) {
-        if (input == null || input.isEmpty()) {
-            return def;
-        } else {
-            try {
-                return new BigDecimal(input, MathContext.DECIMAL128);
-            } catch (NumberFormatException | ArithmeticException e) {
-                return def;
-            }
-        }
-    }
-
     @Override
-    public synchronized boolean getBoolean(String path) {
+    public synchronized boolean getBoolean(final String path) {
         return super.getBoolean(path);
     }
 
     @Override
-    public synchronized boolean getBoolean(String path, boolean def) {
+    public synchronized boolean getBoolean(final String path, final boolean def) {
         return super.getBoolean(path, def);
     }
 
     @Override
-    public synchronized List<Boolean> getBooleanList(String path) {
+    public synchronized List<Boolean> getBooleanList(final String path) {
         return super.getBooleanList(path);
     }
 
     @Override
-    public synchronized List<Byte> getByteList(String path) {
+    public synchronized List<Byte> getByteList(final String path) {
         return super.getByteList(path);
     }
 
     @Override
-    public synchronized List<Character> getCharacterList(String path) {
+    public synchronized List<Character> getCharacterList(final String path) {
         return super.getCharacterList(path);
     }
 
     @Override
-    public synchronized ConfigurationSection getConfigurationSection(String path) {
+    public synchronized ConfigurationSection getConfigurationSection(final String path) {
         return super.getConfigurationSection(path);
     }
 
     @Override
-    public synchronized double getDouble(String path) {
+    public synchronized double getDouble(final String path) {
         return super.getDouble(path);
     }
 
@@ -487,52 +446,52 @@ public class EssentialsConf extends YamlConfiguration {
     }
 
     @Override
-    public synchronized List<Double> getDoubleList(String path) {
+    public synchronized List<Double> getDoubleList(final String path) {
         return super.getDoubleList(path);
     }
 
     @Override
-    public synchronized List<Float> getFloatList(String path) {
+    public synchronized List<Float> getFloatList(final String path) {
         return super.getFloatList(path);
     }
 
     @Override
-    public synchronized int getInt(String path) {
+    public synchronized int getInt(final String path) {
         return super.getInt(path);
     }
 
     @Override
-    public synchronized int getInt(String path, int def) {
+    public synchronized int getInt(final String path, final int def) {
         return super.getInt(path, def);
     }
 
     @Override
-    public synchronized List<Integer> getIntegerList(String path) {
+    public synchronized List<Integer> getIntegerList(final String path) {
         return super.getIntegerList(path);
     }
 
     @Override
-    public synchronized ItemStack getItemStack(String path, ItemStack def) {
+    public synchronized ItemStack getItemStack(final String path, final ItemStack def) {
         return super.getItemStack(path, def);
     }
 
     @Override
-    public synchronized Set<String> getKeys(boolean deep) {
+    public synchronized Set<String> getKeys(final boolean deep) {
         return super.getKeys(deep);
     }
 
     @Override
-    public synchronized List<?> getList(String path) {
+    public synchronized List<?> getList(final String path) {
         return super.getList(path);
     }
 
     @Override
-    public synchronized List<?> getList(String path, List<?> def) {
+    public synchronized List<?> getList(final String path, final List<?> def) {
         return super.getList(path, def);
     }
 
     @Override
-    public synchronized long getLong(String path) {
+    public synchronized long getLong(final String path) {
         return super.getLong(path);
     }
 
@@ -542,7 +501,7 @@ public class EssentialsConf extends YamlConfiguration {
     }
 
     @Override
-    public synchronized List<Long> getLongList(String path) {
+    public synchronized List<Long> getLongList(final String path) {
         return super.getLongList(path);
     }
 
@@ -551,112 +510,165 @@ public class EssentialsConf extends YamlConfiguration {
     }
 
     @Override
-    public synchronized List<Map<?, ?>> getMapList(String path) {
+    public synchronized List<Map<?, ?>> getMapList(final String path) {
         return super.getMapList(path);
     }
 
     @Override
-    public synchronized OfflinePlayer getOfflinePlayer(String path) {
+    public synchronized OfflinePlayer getOfflinePlayer(final String path) {
         return super.getOfflinePlayer(path);
     }
 
     @Override
-    public synchronized OfflinePlayer getOfflinePlayer(String path, OfflinePlayer def) {
+    public synchronized OfflinePlayer getOfflinePlayer(final String path, final OfflinePlayer def) {
         return super.getOfflinePlayer(path, def);
     }
 
     @Override
-    public synchronized List<Short> getShortList(String path) {
+    public synchronized List<Short> getShortList(final String path) {
         return super.getShortList(path);
     }
 
     @Override
-    public synchronized String getString(String path) {
+    public synchronized String getString(final String path) {
         return super.getString(path);
     }
 
     @Override
-    public synchronized String getString(String path, String def) {
+    public synchronized String getString(final String path, final String def) {
         return super.getString(path, def);
     }
 
     @Override
-    public synchronized List<String> getStringList(String path) {
+    public synchronized List<String> getStringList(final String path) {
         return super.getStringList(path);
     }
 
     @Override
-    public synchronized Map<String, Object> getValues(boolean deep) {
+    public synchronized Map<String, Object> getValues(final boolean deep) {
         return super.getValues(deep);
     }
 
     @Override
-    public synchronized Vector getVector(String path) {
+    public synchronized Vector getVector(final String path) {
         return super.getVector(path);
     }
 
     @Override
-    public synchronized Vector getVector(String path, Vector def) {
+    public synchronized Vector getVector(final String path, final Vector def) {
         return super.getVector(path, def);
     }
 
     @Override
-    public synchronized boolean isBoolean(String path) {
+    public synchronized boolean isBoolean(final String path) {
         return super.isBoolean(path);
     }
 
     @Override
-    public synchronized boolean isConfigurationSection(String path) {
+    public synchronized boolean isConfigurationSection(final String path) {
         return super.isConfigurationSection(path);
     }
 
     @Override
-    public synchronized boolean isDouble(String path) {
+    public synchronized boolean isDouble(final String path) {
         return super.isDouble(path);
     }
 
     @Override
-    public synchronized boolean isInt(String path) {
+    public synchronized boolean isInt(final String path) {
         return super.isInt(path);
     }
 
     @Override
-    public synchronized boolean isItemStack(String path) {
+    public synchronized boolean isItemStack(final String path) {
         return super.isItemStack(path);
     }
 
     @Override
-    public synchronized boolean isList(String path) {
+    public synchronized boolean isList(final String path) {
         return super.isList(path);
     }
 
     @Override
-    public synchronized boolean isLong(String path) {
+    public synchronized boolean isLong(final String path) {
         return super.isLong(path);
     }
 
     @Override
-    public synchronized boolean isOfflinePlayer(String path) {
+    public synchronized boolean isOfflinePlayer(final String path) {
         return super.isOfflinePlayer(path);
     }
 
     @Override
-    public synchronized boolean isSet(String path) {
+    public synchronized boolean isSet(final String path) {
         return super.isSet(path);
     }
 
     @Override
-    public synchronized boolean isString(String path) {
+    public synchronized boolean isString(final String path) {
         return super.isString(path);
     }
 
     @Override
-    public synchronized boolean isVector(String path) {
+    public synchronized boolean isVector(final String path) {
         return super.isVector(path);
     }
 
     @Override
-    public synchronized void set(String path, Object value) {
+    public synchronized void set(final String path, final Object value) {
         super.set(path, value);
+    }
+
+    private static final class WriteRunner implements Runnable {
+        private final File configFile;
+        private final String data;
+        private final AtomicInteger pendingDiskWrites;
+
+        private WriteRunner(final File configFile, final String data, final AtomicInteger pendingDiskWrites) {
+            this.configFile = configFile;
+            this.data = data;
+            this.pendingDiskWrites = pendingDiskWrites;
+        }
+
+        @Override
+        public void run() {
+            //long startTime = System.nanoTime();
+            synchronized (configFile) {
+                if (pendingDiskWrites.get() > 1) {
+                    // Writes can be skipped, because they are stored in a queue (in the executor).
+                    // Only the last is actually written.
+                    pendingDiskWrites.decrementAndGet();
+                    //LOGGER.log(Level.INFO, configFile + " skipped writing in " + (System.nanoTime() - startTime) + " nsec.");
+                    return;
+                }
+                try {
+                    Files.createParentDirs(configFile);
+
+                    if (!configFile.exists()) {
+                        try {
+                            LOGGER.log(Level.INFO, tl("creatingEmptyConfig", configFile.toString()));
+                            if (!configFile.createNewFile()) {
+                                LOGGER.log(Level.SEVERE, tl("failedToCreateConfig", configFile.toString()));
+                                return;
+                            }
+                        } catch (final IOException ex) {
+                            LOGGER.log(Level.SEVERE, tl("failedToCreateConfig", configFile.toString()), ex);
+                            return;
+                        }
+                    }
+
+                    try (final FileOutputStream fos = new FileOutputStream(configFile)) {
+                        try (final OutputStreamWriter writer = new OutputStreamWriter(fos, UTF8)) {
+                            writer.write(data);
+                        }
+                    }
+                } catch (final IOException e) {
+                    LOGGER.log(Level.SEVERE, e.getMessage(), e);
+                } finally {
+                    //LOGGER.log(Level.INFO, configFile + " written to disk in " + (System.nanoTime() - startTime) + " nsec.");
+                    pendingDiskWrites.decrementAndGet();
+                }
+            }
+        }
     }
 }

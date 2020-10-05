@@ -14,15 +14,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 
-
 public class EssentialsProtect extends JavaPlugin implements IProtect {
     private final Map<ProtectConfig, Boolean> settingsBoolean = new EnumMap<>(ProtectConfig.class);
     private final Map<ProtectConfig, String> settingsString = new EnumMap<>(ProtectConfig.class);
     private final Map<ProtectConfig, List<Material>> settingsList = new EnumMap<>(ProtectConfig.class);
+    private final EmergencyListener emListener = new EmergencyListener(this);
     private EssentialsConnect ess = null;
     private transient MetricsWrapper metrics = null;
-
-    private final EmergencyListener emListener = new EmergencyListener(this);
 
     @Override
     public void onEnable() {
@@ -71,7 +69,7 @@ public class EssentialsProtect extends JavaPlugin implements IProtect {
     private void enableEmergencyMode(final PluginManager pm) {
         pm.registerEvents(emListener, this);
 
-        for (Player player : getServer().getOnlinePlayers()) {
+        for (final Player player : getServer().getOnlinePlayers()) {
             player.sendMessage("Essentials Protect is in emergency mode. Check your log for errors.");
         }
         getLogger().log(Level.SEVERE, "Essentials not installed or failed to load. Essentials Protect is in emergency mode now.");
@@ -87,7 +85,7 @@ public class EssentialsProtect extends JavaPlugin implements IProtect {
 
         HandlerList.unregisterAll(emListener);
 
-        for (Player player : getServer().getOnlinePlayers()) {
+        for (final Player player : getServer().getOnlinePlayers()) {
             player.sendMessage("Essentials Protect is no longer in emergency mode.");
         }
         getLogger().log(Level.SEVERE, "Essentials was loaded late! Essentials Protect is no longer in emergency mode.");

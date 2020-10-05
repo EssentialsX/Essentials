@@ -24,7 +24,6 @@ import java.util.logging.Logger;
 
 import static com.earth2me.essentials.I18n.tl;
 
-
 class EssentialsSpawnPlayerListener implements Listener {
     private static final Logger logger = Logger.getLogger("EssentialsSpawn");
     private final transient IEssentials ess;
@@ -48,7 +47,7 @@ class EssentialsSpawnPlayerListener implements Listener {
         }
 
         if (ess.getSettings().getRespawnAtHome()) {
-            Location home;
+            final Location home;
             final Location bed = user.getBase().getBedSpawnLocation(); // cannot nuke this sync load due to the event being sync so it would hand either way.
             if (bed != null) {
                 home = bed;
@@ -73,16 +72,16 @@ class EssentialsSpawnPlayerListener implements Listener {
     private void delayedJoin(final Player player) {
         if (player.hasPlayedBefore()) {
             logger.log(Level.FINE, "Old player join");
-            List<String> spawnOnJoinGroups = ess.getSettings().getSpawnOnJoinGroups();
+            final List<String> spawnOnJoinGroups = ess.getSettings().getSpawnOnJoinGroups();
             if (!spawnOnJoinGroups.isEmpty()) {
                 final User user = ess.getUser(player);
-                
+
                 if (ess.getSettings().isUserInSpawnOnJoinGroup(user) && !user.isAuthorized("essentials.spawn-on-join.exempt")) {
                     ess.scheduleSyncDelayedTask(() -> {
-                        Location spawn = spawns.getSpawn(user.getGroup());
+                        final Location spawn = spawns.getSpawn(user.getGroup());
                         try {
                             PaperLib.teleportAsync(user.getBase(), spawn, TeleportCause.PLUGIN);
-                        } catch (Exception e) {
+                        } catch (final Exception e) {
                             ess.showError(user.getSource(), e, "spawn-on-join");
                         }
                     });
@@ -108,7 +107,7 @@ class EssentialsSpawnPlayerListener implements Listener {
                 final IText output = new KeywordReplacer(ess.getSettings().getAnnounceNewPlayerFormat(), user.getSource(), ess);
                 final SimpleTextPager pager = new SimpleTextPager(output);
 
-                for (String line : pager.getLines()) {
+                for (final String line : pager.getLines()) {
                     ess.broadcastMessage(user, line);
                 }
             }
@@ -118,7 +117,7 @@ class EssentialsSpawnPlayerListener implements Listener {
                 try {
                     final Kit kit = new Kit(kitName.toLowerCase(Locale.ENGLISH), ess);
                     kit.expandItems(user);
-                } catch (Exception ex) {
+                } catch (final Exception ex) {
                     logger.log(Level.WARNING, ex.getMessage());
                 }
             }
@@ -126,7 +125,6 @@ class EssentialsSpawnPlayerListener implements Listener {
             logger.log(Level.FINE, "New player join");
         }, 2L);
     }
-
 
     private class NewPlayerTeleport implements Runnable {
         private final transient User user;
@@ -143,7 +141,7 @@ class EssentialsSpawnPlayerListener implements Listener {
 
             final Location spawn = spawns.getSpawn(ess.getSettings().getNewbieSpawn());
             if (spawn != null) {
-                CompletableFuture<Boolean> future = new CompletableFuture<>();
+                final CompletableFuture<Boolean> future = new CompletableFuture<>();
                 future.exceptionally(e -> {
                     logger.log(Level.WARNING, tl("teleportNewPlayerError"), e);
                     return false;

@@ -19,7 +19,6 @@ import java.util.stream.Collectors;
 
 import static com.earth2me.essentials.I18n.tl;
 
-
 public class Commandwarp extends EssentialsCommand {
     private static final int WARPS_PER_PAGE = 20;
 
@@ -55,7 +54,7 @@ public class Commandwarp extends EssentialsCommand {
             warpList(sender, args, null);
             throw new NoChargeException();
         }
-        User otherUser = getPlayer(server, args, 1, true, false);
+        final User otherUser = getPlayer(server, args, 1, true, false);
         otherUser.getAsyncTeleport().warp(otherUser, args[0], null, TeleportCause.COMMAND, getNewExceptionFuture(sender, commandLabel));
         throw new NoChargeException();
     }

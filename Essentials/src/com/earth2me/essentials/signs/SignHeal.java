@@ -7,7 +7,6 @@ import net.ess3.api.IEssentials;
 
 import static com.earth2me.essentials.I18n.tl;
 
-
 public class SignHeal extends EssentialsSign {
     public SignHeal() {
         super("Heal");

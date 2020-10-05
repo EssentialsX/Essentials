@@ -23,13 +23,13 @@ public class EssentialsProtectBlockListener_1_16_R1 implements Listener {
         if (!event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
             return;
         }
-        Block block = event.getClickedBlock();
+        final Block block = event.getClickedBlock();
         if (block == null) {
             return;
         }
-        World.Environment environment = block.getWorld().getEnvironment();
+        final World.Environment environment = block.getWorld().getEnvironment();
         if (block.getType() == Material.RESPAWN_ANCHOR && !environment.equals(World.Environment.NETHER)) {
-            RespawnAnchor respawnAnchor = (RespawnAnchor) block.getBlockData();
+            final RespawnAnchor respawnAnchor = (RespawnAnchor) block.getBlockData();
             if (respawnAnchor.getCharges() == respawnAnchor.getMaximumCharges()) {
                 event.setCancelled(prot.getSettingBool(ProtectConfig.prevent_respawn_anchor_explosion));
             }

@@ -11,7 +11,6 @@ import java.util.logging.Level;
 
 import static com.earth2me.essentials.I18n.tl;
 
-
 public class Commandunbanip extends EssentialsCommand {
     public Commandunbanip() {
         super("unbanip");
@@ -28,9 +27,9 @@ public class Commandunbanip extends EssentialsCommand {
             ipAddress = args[0];
         } else {
             try {
-                User player = getPlayer(server, args, 0, true, true);
+                final User player = getPlayer(server, args, 0, true, true);
                 ipAddress = player.getLastLoginAddress();
-            } catch (PlayerNotFoundException ex) {
+            } catch (final PlayerNotFoundException ex) {
                 ipAddress = args[0];
             }
         }
@@ -38,7 +37,6 @@ public class Commandunbanip extends EssentialsCommand {
         if (ipAddress.isEmpty()) {
             throw new PlayerNotFoundException();
         }
-
 
         ess.getServer().getBanList(BanList.Type.IP).pardon(ipAddress);
         final String senderName = sender.isPlayer() ? sender.getPlayer().getDisplayName() : Console.NAME;

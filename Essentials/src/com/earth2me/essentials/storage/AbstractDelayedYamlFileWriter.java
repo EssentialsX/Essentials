@@ -8,11 +8,10 @@ import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.util.logging.Level;
 
-
 public abstract class AbstractDelayedYamlFileWriter implements Runnable {
     private final transient File file;
 
-    public AbstractDelayedYamlFileWriter(IEssentials ess, File file) {
+    public AbstractDelayedYamlFileWriter(final IEssentials ess, final File file) {
         this.file = file;
         ess.runTaskAsynchronously(this);
     }
@@ -30,7 +29,7 @@ public abstract class AbstractDelayedYamlFileWriter implements Runnable {
             }
             pw = new PrintWriter(file);
             new YamlStorageWriter(pw).save(object);
-        } catch (FileNotFoundException ex) {
+        } catch (final FileNotFoundException ex) {
             Bukkit.getLogger().log(Level.SEVERE, file.toString(), ex);
         } finally {
             onFinish();

@@ -14,12 +14,24 @@ import org.bukkit.block.Banner;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.*;
+import org.bukkit.inventory.meta.BannerMeta;
+import org.bukkit.inventory.meta.BlockStateMeta;
+import org.bukkit.inventory.meta.BookMeta;
+import org.bukkit.inventory.meta.EnchantmentStorageMeta;
+import org.bukkit.inventory.meta.FireworkMeta;
+import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.LeatherArmorMeta;
+import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.potion.Potion;
 import org.bukkit.potion.PotionEffect;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.function.Function;
 
 import static com.earth2me.essentials.I18n.tl;
@@ -27,17 +39,16 @@ import static com.earth2me.essentials.I18n.tl;
 public abstract class AbstractItemDb implements IConf, net.ess3.api.IItemDb {
 
     protected final IEssentials ess;
+    private final Map<PluginKey, ItemResolver> resolverMap = new HashMap<>();
     protected boolean ready = false;
 
-    private final Map<PluginKey, ItemResolver> resolverMap = new HashMap<>();
-
-    AbstractItemDb(IEssentials ess) {
+    AbstractItemDb(final IEssentials ess) {
         this.ess = ess;
     }
 
     @Override
-    public void registerResolver(Plugin plugin, String name, ItemResolver resolver) throws Exception {
-        PluginKey key = PluginKey.fromKey(plugin, name);
+    public void registerResolver(final Plugin plugin, final String name, final ItemResolver resolver) throws Exception {
+        final PluginKey key = PluginKey.fromKey(plugin, name);
         if (resolverMap.containsKey(key)) {
             throw new Exception("Tried to add a duplicate resolver with name " + key.toString());
         }
@@ -46,8 +57,8 @@ public abstract class AbstractItemDb implements IConf, net.ess3.api.IItemDb {
     }
 
     @Override
-    public void unregisterResolver(Plugin plugin, String name) throws Exception {
-        PluginKey key = PluginKey.fromKey(plugin, name);
+    public void unregisterResolver(final Plugin plugin, final String name) throws Exception {
+        final PluginKey key = PluginKey.fromKey(plugin, name);
         if (!resolverMap.containsKey(key)) {
             throw new Exception("Tried to remove nonexistent resolver with name " + key.toString());
         }
@@ -56,7 +67,7 @@ public abstract class AbstractItemDb implements IConf, net.ess3.api.IItemDb {
     }
 
     @Override
-    public boolean isResolverPresent(Plugin plugin, String name) {
+    public boolean isResolverPresent(final Plugin plugin, final String name) {
         return resolverMap.containsKey(PluginKey.fromKey(plugin, name));
     }
 
@@ -66,9 +77,9 @@ public abstract class AbstractItemDb implements IConf, net.ess3.api.IItemDb {
     }
 
     @Override
-    public Map<PluginKey, ItemResolver> getResolvers(Plugin plugin) {
-        Map<PluginKey, ItemResolver> matchingResolvers = new HashMap<>();
-        for (PluginKey key : resolverMap.keySet()) {
+    public Map<PluginKey, ItemResolver> getResolvers(final Plugin plugin) {
+        final Map<PluginKey, ItemResolver> matchingResolvers = new HashMap<>();
+        for (final PluginKey key : resolverMap.keySet()) {
             if (key.getPlugin().equals(plugin)) {
                 matchingResolvers.put(key, resolverMap.get(key));
             }
@@ -78,23 +89,23 @@ public abstract class AbstractItemDb implements IConf, net.ess3.api.IItemDb {
     }
 
     @Override
-    public ItemResolver getResolver(Plugin plugin, String name) {
+    public ItemResolver getResolver(final Plugin plugin, final String name) {
         return resolverMap.get(PluginKey.fromKey(plugin, name));
     }
 
     @Override
-    public ItemStack get(String id) throws Exception {
+    public ItemStack get(final String id) throws Exception {
         return get(id, true);
     }
 
-    ItemStack tryResolverDeserialize(String id) {
-        for (PluginKey key : resolverMap.keySet()) {
+    ItemStack tryResolverDeserialize(final String id) {
+        for (final PluginKey key : resolverMap.keySet()) {
             if (ess.getSettings().isDebug()) {
                 ess.getLogger().info(String.format("Trying to deserialize item '%s' with resolver '%s'...", id, key));
             }
 
-            Function<String, ItemStack> resolver = resolverMap.get(key);
-            ItemStack stack = resolver.apply(id);
+            final Function<String, ItemStack> resolver = resolverMap.get(key);
+            final ItemStack stack = resolver.apply(id);
 
             if (stack != null) {
                 return stack;
@@ -104,14 +115,14 @@ public abstract class AbstractItemDb implements IConf, net.ess3.api.IItemDb {
         return null;
     }
 
-    String tryResolverSerialize(ItemStack stack) {
-        for (PluginKey key : resolverMap.keySet()) {
+    String tryResolverSerialize(final ItemStack stack) {
+        for (final PluginKey key : resolverMap.keySet()) {
             if (ess.getSettings().isDebug()) {
                 ess.getLogger().info(String.format("Trying to serialize '%s' with resolver '%s'...", stack.toString(), key));
             }
 
-            ItemResolver resolver = resolverMap.get(key);
-            String serialized = resolver.serialize(stack);
+            final ItemResolver resolver = resolverMap.get(key);
+            final String serialized = resolver.serialize(stack);
 
             if (serialized != null) {
                 return serialized;
@@ -122,9 +133,9 @@ public abstract class AbstractItemDb implements IConf, net.ess3.api.IItemDb {
     }
 
     Collection<String> getResolverNames() {
-        List<String> result = new ArrayList<>();
-        for (ItemResolver resolver : resolverMap.values()) {
-            Collection<String> resolverNames = resolver.getNames();
+        final List<String> result = new ArrayList<>();
+        for (final ItemResolver resolver : resolverMap.values()) {
+            final Collection<String> resolverNames = resolver.getNames();
             if (resolverNames != null) {
                 result.addAll(resolverNames);
             }
@@ -133,22 +144,22 @@ public abstract class AbstractItemDb implements IConf, net.ess3.api.IItemDb {
     }
 
     @Override
-    public List<ItemStack> getMatching(User user, String[] args) throws Exception {
-        List<ItemStack> is = new ArrayList<>();
+    public List<ItemStack> getMatching(final User user, final String[] args) throws Exception {
+        final List<ItemStack> is = new ArrayList<>();
 
         if (args.length < 1) {
             is.add(user.getItemInHand().clone());
         } else if (args[0].equalsIgnoreCase("hand")) {
             is.add(user.getItemInHand().clone());
         } else if (args[0].equalsIgnoreCase("inventory") || args[0].equalsIgnoreCase("invent") || args[0].equalsIgnoreCase("all")) {
-            for (ItemStack stack : user.getBase().getInventory().getContents()) {
+            for (final ItemStack stack : user.getBase().getInventory().getContents()) {
                 if (stack == null || stack.getType() == Material.AIR) {
                     continue;
                 }
                 is.add(stack.clone());
             }
         } else if (args[0].equalsIgnoreCase("blocks")) {
-            for (ItemStack stack : user.getBase().getInventory().getContents()) {
+            for (final ItemStack stack : user.getBase().getInventory().getContents()) {
                 if (stack == null || stack.getType() == Material.AIR) {
                     continue;
                 }
@@ -166,14 +177,14 @@ public abstract class AbstractItemDb implements IConf, net.ess3.api.IItemDb {
     }
 
     @Override
-    public String serialize(ItemStack is) {
+    public String serialize(final ItemStack is) {
         return serialize(is, true);
     }
 
     @Override
-    public String serialize(ItemStack is, boolean useResolvers) {
+    public String serialize(final ItemStack is, final boolean useResolvers) {
         if (useResolvers) {
-            String serialized = tryResolverSerialize(is);
+            final String serialized = tryResolverSerialize(is);
             if (serialized != null) {
                 return serialized;
             }
@@ -183,13 +194,13 @@ public abstract class AbstractItemDb implements IConf, net.ess3.api.IItemDb {
         if (VersionUtil.getServerBukkitVersion().isLowerThanOrEqualTo(VersionUtil.v1_12_2_R01) && is.getData().getData() != 0) {
             mat = mat + ":" + is.getData().getData();
         }
-        int quantity = is.getAmount();
-        StringBuilder sb = new StringBuilder(); // Add space AFTER you add something. We can trim at end.
+        final int quantity = is.getAmount();
+        final StringBuilder sb = new StringBuilder(); // Add space AFTER you add something. We can trim at end.
         sb.append(mat).append(" ").append(quantity).append(" ");
 
         // ItemMeta applies to anything.
         if (is.hasItemMeta()) {
-            ItemMeta meta = is.getItemMeta();
+            final ItemMeta meta = is.getItemMeta();
             if (meta.hasDisplayName()) {
                 sb.append("name:").append(meta.getDisplayName().replaceAll(" ", "_")).append(" ");
             }
@@ -197,7 +208,7 @@ public abstract class AbstractItemDb implements IConf, net.ess3.api.IItemDb {
             if (meta.hasLore()) {
                 sb.append("lore:");
                 boolean first = true;
-                for (String s : meta.getLore()) {
+                for (final String s : meta.getLore()) {
                     // Add | before the line if it's not the first one. Easy but weird way
                     // to do this since we need each line separated by |
                     if (!first) {
@@ -210,16 +221,16 @@ public abstract class AbstractItemDb implements IConf, net.ess3.api.IItemDb {
             }
 
             if (meta.hasEnchants()) {
-                for (Enchantment e : meta.getEnchants().keySet()) {
+                for (final Enchantment e : meta.getEnchants().keySet()) {
                     sb.append(e.getName().toLowerCase()).append(":").append(meta.getEnchantLevel(e)).append(" ");
                 }
             }
 
-            Set<ItemFlag> flags = meta.getItemFlags();
+            final Set<ItemFlag> flags = meta.getItemFlags();
             if (flags != null && !flags.isEmpty()) {
                 sb.append("itemflags:");
                 boolean first = true;
-                for (ItemFlag flag : flags) {
+                for (final ItemFlag flag : flags) {
                     if (!first) {
                         sb.append(",");
                     }
@@ -235,7 +246,7 @@ public abstract class AbstractItemDb implements IConf, net.ess3.api.IItemDb {
             case WRITTEN_BOOK:
                 // Everything from http://wiki.ess3.net/wiki/Item_Meta#Books in that order.
                 // Interesting as I didn't see a way to do pages or chapters.
-                BookMeta bookMeta = (BookMeta) is.getItemMeta();
+                final BookMeta bookMeta = (BookMeta) is.getItemMeta();
                 if (bookMeta.hasTitle()) {
                     sb.append("title:").append(bookMeta.getTitle()).append(" ");
                 }
@@ -245,8 +256,8 @@ public abstract class AbstractItemDb implements IConf, net.ess3.api.IItemDb {
                 // Only other thing it could have is lore but that's done up there ^^^
                 break;
             case ENCHANTED_BOOK:
-                EnchantmentStorageMeta enchantmentStorageMeta = (EnchantmentStorageMeta) is.getItemMeta();
-                for (Enchantment e : enchantmentStorageMeta.getStoredEnchants().keySet()) {
+                final EnchantmentStorageMeta enchantmentStorageMeta = (EnchantmentStorageMeta) is.getItemMeta();
+                for (final Enchantment e : enchantmentStorageMeta.getStoredEnchants().keySet()) {
                     sb.append(e.getName().toLowerCase()).append(":").append(enchantmentStorageMeta.getStoredEnchantLevel(e)).append(" ");
                 }
                 break;
@@ -254,13 +265,13 @@ public abstract class AbstractItemDb implements IConf, net.ess3.api.IItemDb {
 
         if (MaterialUtil.isFirework(material)) {
             // Everything from http://wiki.ess3.net/wiki/Item_Meta#Fireworks in that order.
-            FireworkMeta fireworkMeta = (FireworkMeta) is.getItemMeta();
+            final FireworkMeta fireworkMeta = (FireworkMeta) is.getItemMeta();
             if (fireworkMeta.hasEffects()) {
-                for (FireworkEffect effect : fireworkMeta.getEffects()) {
+                for (final FireworkEffect effect : fireworkMeta.getEffects()) {
                     if (effect.getColors() != null && !effect.getColors().isEmpty()) {
                         sb.append("color:");
                         boolean first = true;
-                        for (Color c : effect.getColors()) {
+                        for (final Color c : effect.getColors()) {
                             if (!first) {
                                 sb.append(","); // same thing as above.
                             }
@@ -274,7 +285,7 @@ public abstract class AbstractItemDb implements IConf, net.ess3.api.IItemDb {
                     if (effect.getFadeColors() != null && !effect.getFadeColors().isEmpty()) {
                         sb.append("fade:");
                         boolean first = true;
-                        for (Color c : effect.getFadeColors()) {
+                        for (final Color c : effect.getFadeColors()) {
                             if (!first) {
                                 sb.append(","); // same thing as above.
                             }
@@ -287,55 +298,55 @@ public abstract class AbstractItemDb implements IConf, net.ess3.api.IItemDb {
                 sb.append("power:").append(fireworkMeta.getPower()).append(" ");
             }
         } else if (MaterialUtil.isPotion(material)) {
-            Potion potion = Potion.fromItemStack(is);
-            for (PotionEffect e : potion.getEffects()) {
+            final Potion potion = Potion.fromItemStack(is);
+            for (final PotionEffect e : potion.getEffects()) {
                 // long but needs to be effect:speed power:2 duration:120 in that order.
                 sb.append("splash:").append(potion.isSplash()).append(" ").append("effect:").append(e.getType().getName().toLowerCase()).append(" ").append("power:").append(e.getAmplifier()).append(" ").append("duration:").append(e.getDuration() / 20).append(" ");
             }
         } else if (MaterialUtil.isPlayerHead(material, is.getData().getData())) {
             // item stack with meta
-            SkullMeta skullMeta = (SkullMeta) is.getItemMeta();
+            final SkullMeta skullMeta = (SkullMeta) is.getItemMeta();
             if (skullMeta != null && skullMeta.hasOwner()) {
                 sb.append("player:").append(skullMeta.getOwner()).append(" ");
             }
         } else if (MaterialUtil.isBanner(material)) {
             if (material.toString().contains("SHIELD")) {
                 // Hacky fix for accessing Shield meta - https://github.com/drtshock/Essentials/pull/745#issuecomment-234843795
-                BlockStateMeta shieldMeta = (BlockStateMeta) is.getItemMeta();
-                Banner shieldBannerMeta = (Banner) shieldMeta.getBlockState();
-                DyeColor baseDyeColor = shieldBannerMeta.getBaseColor();
+                final BlockStateMeta shieldMeta = (BlockStateMeta) is.getItemMeta();
+                final Banner shieldBannerMeta = (Banner) shieldMeta.getBlockState();
+                final DyeColor baseDyeColor = shieldBannerMeta.getBaseColor();
                 if (baseDyeColor != null) {
-                    int basecolor = baseDyeColor.getColor().asRGB();
+                    final int basecolor = baseDyeColor.getColor().asRGB();
                     sb.append("basecolor:").append(basecolor).append(" ");
                 }
-                for (org.bukkit.block.banner.Pattern p : shieldBannerMeta.getPatterns()) {
-                    String type = p.getPattern().getIdentifier();
-                    int color = p.getColor().getColor().asRGB();
+                for (final org.bukkit.block.banner.Pattern p : shieldBannerMeta.getPatterns()) {
+                    final String type = p.getPattern().getIdentifier();
+                    final int color = p.getColor().getColor().asRGB();
                     sb.append(type).append(",").append(color).append(" ");
                 }
             } else {
-                BannerMeta bannerMeta = (BannerMeta) is.getItemMeta();
+                final BannerMeta bannerMeta = (BannerMeta) is.getItemMeta();
                 if (bannerMeta != null) {
                     DyeColor baseDyeColor = bannerMeta.getBaseColor();
                     if (baseDyeColor == null) {
                         baseDyeColor = MaterialUtil.getColorOf(material);
                     }
                     if (baseDyeColor != null) {
-                        int basecolor = baseDyeColor
-                                .getColor()
-                                .asRGB();
+                        final int basecolor = baseDyeColor
+                            .getColor()
+                            .asRGB();
                         sb.append("basecolor:").append(basecolor).append(" ");
                     }
-                    for (org.bukkit.block.banner.Pattern p : bannerMeta.getPatterns()) {
-                        String type = p.getPattern().getIdentifier();
-                        int color = p.getColor().getColor().asRGB();
+                    for (final org.bukkit.block.banner.Pattern p : bannerMeta.getPatterns()) {
+                        final String type = p.getPattern().getIdentifier();
+                        final int color = p.getColor().getColor().asRGB();
                         sb.append(type).append(",").append(color).append(" ");
                     }
                 }
             }
         } else if (MaterialUtil.isLeatherArmor(material)) {
-            LeatherArmorMeta leatherArmorMeta = (LeatherArmorMeta) is.getItemMeta();
-            int rgb = leatherArmorMeta.getColor().asRGB();
+            final LeatherArmorMeta leatherArmorMeta = (LeatherArmorMeta) is.getItemMeta();
+            final int rgb = leatherArmorMeta.getColor().asRGB();
             sb.append("color:").append(rgb).append(" ");
         }
 

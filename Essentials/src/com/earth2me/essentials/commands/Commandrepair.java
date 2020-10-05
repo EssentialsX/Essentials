@@ -18,7 +18,6 @@ import java.util.Locale;
 
 import static com.earth2me.essentials.I18n.tl;
 
-
 public class Commandrepair extends EssentialsCommand {
     public Commandrepair() {
         super("repair");
@@ -38,7 +37,7 @@ public class Commandrepair extends EssentialsCommand {
         }
     }
 
-    public void repairHand(User user) throws Exception {
+    public void repairHand(final User user) throws Exception {
         final ItemStack item = user.getItemInHand();
         if (item == null || item.getType().isBlock() || item.getDurability() == 0) {
             throw new Exception(tl("repairInvalidType"));
@@ -60,7 +59,7 @@ public class Commandrepair extends EssentialsCommand {
         user.sendMessage(tl("repair", itemName.replace('_', ' ')));
     }
 
-    public void repairAll(User user) throws Exception {
+    public void repairAll(final User user) throws Exception {
         final List<String> repaired = new ArrayList<>();
         repairItems(user.getBase().getInventory().getContents(), user, repaired);
 
@@ -90,7 +89,7 @@ public class Commandrepair extends EssentialsCommand {
     }
 
     private void repairItems(final ItemStack[] items, final IUser user, final List<String> repaired) throws Exception {
-        for (ItemStack item : items) {
+        for (final ItemStack item : items) {
             if (item == null || item.getType().isBlock() || item.getDurability() == 0) {
                 continue;
             }
@@ -100,7 +99,7 @@ public class Commandrepair extends EssentialsCommand {
 
             try {
                 charge.isAffordableFor(user);
-            } catch (ChargeException ex) {
+            } catch (final ChargeException ex) {
                 user.sendMessage(ex.getMessage());
                 continue;
             }
@@ -110,12 +109,12 @@ public class Commandrepair extends EssentialsCommand {
 
             try {
                 repairItem(item);
-            } catch (Exception e) {
+            } catch (final Exception e) {
                 continue;
             }
             try {
                 charge.charge(user);
-            } catch (ChargeException ex) {
+            } catch (final ChargeException ex) {
                 user.sendMessage(ex.getMessage());
             }
             repaired.add(itemName.replace('_', ' '));
@@ -133,9 +132,9 @@ public class Commandrepair extends EssentialsCommand {
     }
 
     @Override
-    protected List<String> getTabCompleteOptions(Server server, User user, String commandLabel, String[] args) {
+    protected List<String> getTabCompleteOptions(final Server server, final User user, final String commandLabel, final String[] args) {
         if (args.length == 1) {
-            List<String> options = Lists.newArrayList("hand");
+            final List<String> options = Lists.newArrayList("hand");
             if (user.isAuthorized("essentials.repair.all")) {
                 options.add("all");
             }

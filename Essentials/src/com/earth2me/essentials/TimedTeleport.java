@@ -16,10 +16,8 @@ public class TimedTeleport implements Runnable {
     private final IEssentials ess;
     private final Teleport teleport;
     private final UUID timer_teleportee;
-    private int timer_task;
     private final long timer_started; // time this task was initiated
     private final long timer_delay; // how long to delay the teleportPlayer
-    private double timer_health;
     // note that I initially stored a clone of the location for reference, but...
     // when comparing locations, I got incorrect mismatches (rounding errors, looked like)
     // so, the X/Y/Z values are stored instead and rounded off
@@ -31,8 +29,10 @@ public class TimedTeleport implements Runnable {
     private final boolean timer_canMove;
     private final Trade timer_chargeFor;
     private final TeleportCause timer_cause;
+    private int timer_task;
+    private double timer_health;
 
-    TimedTeleport(IUser user, IEssentials ess, Teleport teleport, long delay, IUser teleportUser, ITarget target, Trade chargeFor, TeleportCause cause, boolean respawn) {
+    TimedTeleport(final IUser user, final IEssentials ess, final Teleport teleport, final long delay, final IUser teleportUser, final ITarget target, final Trade chargeFor, final TeleportCause cause, final boolean respawn) {
         this.teleportOwner = user;
         this.ess = ess;
         this.teleport = teleport;
@@ -83,12 +83,12 @@ public class TimedTeleport implements Runnable {
             @Override
             public void run() {
 
-                timer_health = teleportUser.getBase().getHealth();  // in case user healed, then later gets injured
+                timer_health = teleportUser.getBase().getHealth(); // in case user healed, then later gets injured
                 final long now = System.currentTimeMillis();
                 if (now > timer_started + timer_delay) {
                     try {
                         teleport.cooldown(false);
-                    } catch (Exception ex) {
+                    } catch (final Exception ex) {
                         teleportOwner.sendMessage(tl("cooldownWithMessage", ex.getMessage()));
                         if (teleportOwner != teleportUser) {
                             teleportUser.sendMessage(tl("cooldownWithMessage", ex.getMessage()));
@@ -110,17 +110,18 @@ public class TimedTeleport implements Runnable {
                             timer_chargeFor.charge(teleportOwner);
                         }
 
-                    } catch (Exception ex) {
+                    } catch (final Exception ex) {
                         ess.showError(teleportOwner.getSource(), ex, "\\ teleport");
                     }
                 }
             }
         }
+
         ess.scheduleSyncDelayedTask(new DelayedTeleportTask());
     }
 
     //If we need to cancelTimer a pending teleportPlayer call this method
-    void cancelTimer(boolean notifyUser) {
+    void cancelTimer(final boolean notifyUser) {
         if (timer_task == -1) {
             return;
         }

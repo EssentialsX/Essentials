@@ -1,12 +1,11 @@
 package com.earth2me.essentials.commands;
 
-
 public class QuietAbortException extends Exception {
     public QuietAbortException() {
         super();
     }
 
-    public QuietAbortException(String message) {
+    public QuietAbortException(final String message) {
         super(message);
     }
 }

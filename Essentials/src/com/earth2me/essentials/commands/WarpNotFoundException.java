@@ -7,7 +7,7 @@ public class WarpNotFoundException extends Exception {
         super(tl("warpNotExist"));
     }
 
-    public WarpNotFoundException(String message) {
+    public WarpNotFoundException(final String message) {
         super(message);
     }
 }

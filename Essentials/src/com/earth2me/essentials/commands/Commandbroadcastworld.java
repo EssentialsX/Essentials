@@ -17,7 +17,6 @@ import java.util.List;
 
 import static com.earth2me.essentials.I18n.tl;
 
-
 public class Commandbroadcastworld extends EssentialsCommand {
 
     public Commandbroadcastworld() {
@@ -33,7 +32,7 @@ public class Commandbroadcastworld extends EssentialsCommand {
         World world = user.getWorld();
         String message = getFinalArg(args, 0);
         if (args.length > 1 && ess.getSettings().isAllowWorldInBroadcastworld()) {
-            World argWorld = ess.getWorld(args[0]);
+            final World argWorld = ess.getWorld(args[0]);
             if (argWorld != null) {
                 world = argWorld;
                 message = getFinalArg(args, 1);
@@ -49,7 +48,7 @@ public class Commandbroadcastworld extends EssentialsCommand {
             throw new NotEnoughArgumentsException("world");
         }
 
-        World world = ess.getWorld(args[0]);
+        final World world = ess.getWorld(args[0]);
         if (world == null) {
             throw new Exception(tl("invalidWorld"));
         }
@@ -63,15 +62,15 @@ public class Commandbroadcastworld extends EssentialsCommand {
         sendToWorld(world, tl("broadcast", FormatUtil.replaceFormat(message).replace("\\n", "\n"), name));
     }
 
-    private void sendToWorld(World world, String message) {
+    private void sendToWorld(final World world, final String message) {
         IText broadcast = new SimpleTextInput(message);
         final Collection<Player> players = ess.getOnlinePlayers();
 
-        for (Player player : players) {
+        for (final Player player : players) {
             if (player.getWorld().equals(world)) {
                 final User user = ess.getUser(player);
                 broadcast = new KeywordReplacer(broadcast, new CommandSource(player), ess, false);
-                for (String messageText : broadcast.getLines()) {
+                for (final String messageText : broadcast.getLines()) {
                     user.sendMessage(messageText);
                 }
             }
@@ -79,10 +78,10 @@ public class Commandbroadcastworld extends EssentialsCommand {
     }
 
     @Override
-    protected List<String> getTabCompleteOptions(Server server, CommandSource sender, String commandLabel, String[] args) {
+    protected List<String> getTabCompleteOptions(final Server server, final CommandSource sender, final String commandLabel, final String[] args) {
         if (args.length == 1 && (!sender.isPlayer() || ess.getSettings().isAllowWorldInBroadcastworld())) {
-            List<String> worlds = Lists.newArrayList();
-            for (World world : server.getWorlds()) {
+            final List<String> worlds = Lists.newArrayList();
+            for (final World world : server.getWorlds()) {
                 worlds.add(world.getName());
             }
             return worlds;
