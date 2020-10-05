@@ -11,7 +11,6 @@ import java.util.logging.Level;
 
 import static com.earth2me.essentials.I18n.tl;
 
-
 public class Commandunban extends EssentialsCommand {
     public Commandunban() {
         super("unban");
@@ -28,7 +27,7 @@ public class Commandunban extends EssentialsCommand {
             final User user = getPlayer(server, args, 0, true, true);
             name = user.getName();
             ess.getServer().getBanList(BanList.Type.NAME).pardon(name);
-        } catch (PlayerNotFoundException e) {
+        } catch (final PlayerNotFoundException e) {
             final OfflinePlayer player = server.getOfflinePlayer(args[0]);
             name = player.getName();
             if (!player.isBanned()) {

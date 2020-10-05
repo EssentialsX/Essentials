@@ -7,12 +7,14 @@ import java.util.regex.Pattern;
 
 import static com.earth2me.essentials.I18n.tl;
 
-
-public class DateUtil {
+public final class DateUtil {
     private static final Pattern timePattern = Pattern.compile("(?:([0-9]+)\\s*y[a-z]*[,\\s]*)?" + "(?:([0-9]+)\\s*mo[a-z]*[,\\s]*)?" + "(?:([0-9]+)\\s*w[a-z]*[,\\s]*)?" + "(?:([0-9]+)\\s*d[a-z]*[,\\s]*)?" + "(?:([0-9]+)\\s*h[a-z]*[,\\s]*)?" + "(?:([0-9]+)\\s*m[a-z]*[,\\s]*)?" + "(?:([0-9]+)\\s*(?:s[a-z]*)?)?", Pattern.CASE_INSENSITIVE);
     private static final int maxYears = 100000;
 
-    public static String removeTimePattern(String input) {
+    private DateUtil() {
+    }
+
+    public static String removeTimePattern(final String input) {
         return timePattern.matcher(input).replaceFirst("").trim();
     }
 
@@ -21,7 +23,7 @@ public class DateUtil {
     }
 
     public static long parseDateDiff(String time, boolean future, boolean emptyEpoch) throws Exception {
-        Matcher m = timePattern.matcher(time);
+        final Matcher m = timePattern.matcher(time);
         int years = 0;
         int months = 0;
         int weeks = 0;
@@ -68,7 +70,7 @@ public class DateUtil {
         if (!found) {
             throw new Exception(tl("illegalDate"));
         }
-        Calendar c = new GregorianCalendar();
+        final Calendar c = new GregorianCalendar();
 
         if (emptyEpoch) {
             c.setTimeInMillis(0);
@@ -98,7 +100,7 @@ public class DateUtil {
         if (seconds > 0) {
             c.add(Calendar.SECOND, seconds * (future ? 1 : -1));
         }
-        Calendar max = new GregorianCalendar();
+        final Calendar max = new GregorianCalendar();
         max.add(Calendar.YEAR, 10);
         if (c.after(max)) {
             return max.getTimeInMillis();
@@ -106,14 +108,14 @@ public class DateUtil {
         return c.getTimeInMillis();
     }
 
-    static int dateDiff(int type, Calendar fromDate, Calendar toDate, boolean future) {
-        int year = Calendar.YEAR;
+    static int dateDiff(final int type, final Calendar fromDate, final Calendar toDate, final boolean future) {
+        final int year = Calendar.YEAR;
 
-        int fromYear = fromDate.get(year);
-        int toYear = toDate.get(year);
+        final int fromYear = fromDate.get(year);
+        final int toYear = toDate.get(year);
         if (Math.abs(fromYear - toYear) > maxYears) {
             toDate.set(year, fromYear +
-                    (future ? maxYears : -maxYears));
+                (future ? maxYears : -maxYears));
         }
 
         int diff = 0;
@@ -128,14 +130,14 @@ public class DateUtil {
         return diff;
     }
 
-    public static String formatDateDiff(long date) {
-        Calendar c = new GregorianCalendar();
+    public static String formatDateDiff(final long date) {
+        final Calendar c = new GregorianCalendar();
         c.setTimeInMillis(date);
-        Calendar now = new GregorianCalendar();
+        final Calendar now = new GregorianCalendar();
         return DateUtil.formatDateDiff(now, c);
     }
 
-    public static String formatDateDiff(Calendar fromDate, Calendar toDate) {
+    public static String formatDateDiff(final Calendar fromDate, final Calendar toDate) {
         boolean future = false;
         if (toDate.equals(fromDate)) {
             return tl("now");
@@ -145,15 +147,15 @@ public class DateUtil {
         }
         // Temporary 50ms time buffer added to avoid display truncation due to code execution delays
         toDate.add(Calendar.MILLISECOND, future ? 50 : -50);
-        StringBuilder sb = new StringBuilder();
-        int[] types = new int[]{Calendar.YEAR, Calendar.MONTH, Calendar.DAY_OF_MONTH, Calendar.HOUR_OF_DAY, Calendar.MINUTE, Calendar.SECOND};
-        String[] names = new String[]{tl("year"), tl("years"), tl("month"), tl("months"), tl("day"), tl("days"), tl("hour"), tl("hours"), tl("minute"), tl("minutes"), tl("second"), tl("seconds")};
+        final StringBuilder sb = new StringBuilder();
+        final int[] types = new int[] {Calendar.YEAR, Calendar.MONTH, Calendar.DAY_OF_MONTH, Calendar.HOUR_OF_DAY, Calendar.MINUTE, Calendar.SECOND};
+        final String[] names = new String[] {tl("year"), tl("years"), tl("month"), tl("months"), tl("day"), tl("days"), tl("hour"), tl("hours"), tl("minute"), tl("minutes"), tl("second"), tl("seconds")};
         int accuracy = 0;
         for (int i = 0; i < types.length; i++) {
             if (accuracy > 2) {
                 break;
             }
-            int diff = dateDiff(types[i], fromDate, toDate, future);
+            final int diff = dateDiff(types[i], fromDate, toDate, future);
             if (diff > 0) {
                 accuracy++;
                 sb.append(" ").append(diff).append(" ").append(names[i * 2 + (diff > 1 ? 1 : 0)]);

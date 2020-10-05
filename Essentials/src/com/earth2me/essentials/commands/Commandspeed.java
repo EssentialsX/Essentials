@@ -12,7 +12,6 @@ import java.util.List;
 
 import static com.earth2me.essentials.I18n.tl;
 
-
 public class Commandspeed extends EssentialsCommand {
     private static final List<String> types = Arrays.asList("walk", "fly", "1", "1.5", "1.75", "2");
     private static final List<String> speeds = Arrays.asList("1", "1.5", "1.75", "2");
@@ -35,9 +34,9 @@ public class Commandspeed extends EssentialsCommand {
             throw new NotEnoughArgumentsException();
         }
 
-        boolean isFly;
-        float speed;
-        boolean isBypass = user.isAuthorized("essentials.speed.bypass");
+        final boolean isFly;
+        final float speed;
+        final boolean isBypass = user.isAuthorized("essentials.speed.bypass");
         if (args.length == 1) {
             isFly = flyPermCheck(user, user.getBase().isFlying());
             speed = getMoveSpeed(args[0]);
@@ -63,10 +62,10 @@ public class Commandspeed extends EssentialsCommand {
     }
 
     private void speedOtherPlayers(final Server server, final CommandSource sender, final boolean isFly, final boolean isBypass, final float speed, final String name) throws PlayerNotFoundException {
-        boolean skipHidden = sender.isPlayer() && !ess.getUser(sender.getPlayer()).canInteractVanished();
+        final boolean skipHidden = sender.isPlayer() && !ess.getUser(sender.getPlayer()).canInteractVanished();
         boolean foundUser = false;
         final List<Player> matchedPlayers = server.matchPlayer(name);
-        for (Player matchPlayer : matchedPlayers) {
+        for (final Player matchPlayer : matchedPlayers) {
             final User player = ess.getUser(matchPlayer);
             if (skipHidden && player.isHidden(sender.getPlayer()) && !sender.getPlayer().canSee(matchPlayer)) {
                 continue;
@@ -85,16 +84,16 @@ public class Commandspeed extends EssentialsCommand {
         }
     }
 
-    private Boolean flyPermCheck(User user, boolean input) {
-        boolean canFly = user.isAuthorized("essentials.speed.fly");
-        boolean canWalk = user.isAuthorized("essentials.speed.walk");
+    private Boolean flyPermCheck(final User user, final boolean input) {
+        final boolean canFly = user.isAuthorized("essentials.speed.fly");
+        final boolean canWalk = user.isAuthorized("essentials.speed.walk");
         if (input && canFly || !input && canWalk || !canFly && !canWalk) {
             return input;
         } else return !canWalk;
     }
 
     private boolean isFlyMode(final String modeString) throws NotEnoughArgumentsException {
-        boolean isFlyMode;
+        final boolean isFlyMode;
         if (modeString.contains("fly") || modeString.equalsIgnoreCase("f")) {
             isFlyMode = true;
         } else if (modeString.contains("walk") || modeString.contains("run") || modeString.equalsIgnoreCase("w") || modeString.equalsIgnoreCase("r")) {
@@ -114,7 +113,7 @@ public class Commandspeed extends EssentialsCommand {
             } else if (userSpeed < 0.0001f) {
                 userSpeed = 0.0001f;
             }
-        } catch (NumberFormatException e) {
+        } catch (final NumberFormatException e) {
             throw new NotEnoughArgumentsException();
         }
         return userSpeed;
@@ -130,13 +129,13 @@ public class Commandspeed extends EssentialsCommand {
         if (userSpeed < 1f) {
             return defaultSpeed * userSpeed;
         } else {
-            float ratio = ((userSpeed - 1) / 9) * (maxSpeed - defaultSpeed);
+            final float ratio = ((userSpeed - 1) / 9) * (maxSpeed - defaultSpeed);
             return ratio + defaultSpeed;
         }
     }
 
     @Override
-    protected List<String> getTabCompleteOptions(Server server, CommandSource sender, String commandLabel, String[] args) {
+    protected List<String> getTabCompleteOptions(final Server server, final CommandSource sender, final String commandLabel, final String[] args) {
         if (args.length == 1) {
             return types;
         } else if (args.length == 2) {

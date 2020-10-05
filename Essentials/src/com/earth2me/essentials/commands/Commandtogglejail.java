@@ -16,7 +16,6 @@ import java.util.concurrent.CompletableFuture;
 
 import static com.earth2me.essentials.I18n.tl;
 
-
 public class Commandtogglejail extends EssentialsCommand {
     private static final Statistic PLAY_ONE_TICK = EnumUtil.getStatistic("PLAY_ONE_MINUTE", "PLAY_ONE_TICK");
 
@@ -58,7 +57,7 @@ public class Commandtogglejail extends EssentialsCommand {
                 }
                 final long timeDiff = preTimeDiff;
                 final long finalDisplayTime = displayTime;
-                CompletableFuture<Boolean> future = getNewExceptionFuture(sender, commandLabel);
+                final CompletableFuture<Boolean> future = getNewExceptionFuture(sender, commandLabel);
                 future.thenAccept(success -> {
                     if (success) {
                         player.setJailed(true);
@@ -69,7 +68,7 @@ public class Commandtogglejail extends EssentialsCommand {
                             player.setJailTimeout(timeDiff);
                             player.setOnlineJailedTime(ess.getSettings().isJailOnlineTime() ? ((player.getBase().getStatistic(PLAY_ONE_TICK)) + (timeDiff / 50)) : 0);
                         }
-                        sender.sendMessage((timeDiff > 0 ? tl("playerJailedFor", player.getName(), DateUtil.formatDateDiff(finalDisplayTime)) : tl("playerJailed", player.getName())));
+                        sender.sendMessage(timeDiff > 0 ? tl("playerJailedFor", player.getName(), DateUtil.formatDateDiff(finalDisplayTime)) : tl("playerJailed", player.getName()));
                     }
                 });
                 if (player.getBase().isOnline()) {
@@ -109,7 +108,7 @@ public class Commandtogglejail extends EssentialsCommand {
                 player.sendMessage(tl("jailReleasedPlayerNotify"));
                 player.setJail(null);
                 if (player.getBase().isOnline() && ess.getSettings().isTeleportBackWhenFreedFromJail()) {
-                    CompletableFuture<Boolean> future = getNewExceptionFuture(sender, commandLabel);
+                    final CompletableFuture<Boolean> future = getNewExceptionFuture(sender, commandLabel);
                     player.getAsyncTeleport().back(future);
                     future.thenAccept(success -> {
                         if (success) {
@@ -135,7 +134,7 @@ public class Commandtogglejail extends EssentialsCommand {
         } else if (args.length == 2) {
             try {
                 return new ArrayList<>(ess.getJails().getList());
-            } catch (Exception e) {
+            } catch (final Exception e) {
                 return Collections.emptyList();
             }
         } else {

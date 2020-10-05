@@ -19,18 +19,7 @@ public class Commandkittycannon extends EssentialsCommand {
         super("kittycannon");
     }
 
-    @Override
-    protected void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception {
-        final Entity ocelot = Mob.CAT.getType() == null ? spawnOcelot(server, user) : spawnCat(server, user);
-        ess.scheduleSyncDelayedTask(() -> {
-            final Location loc = ocelot.getLocation();
-            ocelot.remove();
-            loc.getWorld().createExplosion(loc, 0F);
-        }, 20);
-
-    }
-
-    private static Ocelot spawnOcelot(Server server, User user) throws Mob.MobException {
+    private static Ocelot spawnOcelot(final Server server, final User user) throws Mob.MobException {
         final Ocelot ocelot = (Ocelot) Mob.OCELOT.spawn(user.getWorld(), server, user.getBase().getEyeLocation());
         final int i = random.nextInt(Ocelot.Type.values().length);
         ocelot.setCatType(Ocelot.Type.values()[i]);
@@ -40,7 +29,7 @@ public class Commandkittycannon extends EssentialsCommand {
         return ocelot;
     }
 
-    private static Entity spawnCat(Server server, User user) throws Mob.MobException {
+    private static Entity spawnCat(final Server server, final User user) throws Mob.MobException {
         final Cat cat = (Cat) Mob.CAT.spawn(user.getWorld(), server, user.getBase().getEyeLocation());
         final int i = random.nextInt(Cat.Type.values().length);
         cat.setCatType(Cat.Type.values()[i]);
@@ -48,5 +37,16 @@ public class Commandkittycannon extends EssentialsCommand {
         cat.setBaby();
         cat.setVelocity(user.getBase().getEyeLocation().getDirection().multiply(2));
         return cat;
+    }
+
+    @Override
+    protected void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception {
+        final Entity ocelot = Mob.CAT.getType() == null ? spawnOcelot(server, user) : spawnCat(server, user);
+        ess.scheduleSyncDelayedTask(() -> {
+            final Location loc = ocelot.getLocation();
+            ocelot.remove();
+            loc.getWorld().createExplosion(loc, 0F);
+        }, 20);
+
     }
 }

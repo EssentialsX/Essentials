@@ -1,6 +1,5 @@
 package com.earth2me.essentials.protect;
 
-
 public enum ProtectConfig {
     disable_contactdmg("protect.disable.contactdmg", false),
     disable_lavadmg("protect.disable.lavadmg", false),

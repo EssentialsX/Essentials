@@ -9,18 +9,17 @@ import org.bukkit.entity.Player;
 import java.util.Collections;
 import java.util.List;
 
-
 public abstract class EssentialsToggleCommand extends EssentialsCommand {
-    String othersPermission;
+    final String othersPermission;
 
-    public EssentialsToggleCommand(String command, String othersPermission) {
+    public EssentialsToggleCommand(final String command, final String othersPermission) {
         super(command);
         this.othersPermission = othersPermission;
     }
 
-    protected void handleToggleWithArgs(Server server, User user, String[] args) throws Exception {
+    protected void handleToggleWithArgs(final Server server, final User user, final String[] args) throws Exception {
         if (args.length == 1) {
-            Boolean toggle = matchToggleArgument(args[0]);
+            final Boolean toggle = matchToggleArgument(args[0]);
             if (toggle == null && user.isAuthorized(othersPermission)) {
                 toggleOtherPlayers(server, user.getSource(), args);
             } else {
@@ -47,22 +46,18 @@ public abstract class EssentialsToggleCommand extends EssentialsCommand {
             throw new PlayerNotFoundException();
         }
 
-        boolean skipHidden = sender.isPlayer() && !ess.getUser(sender.getPlayer()).canInteractVanished();
+        final boolean skipHidden = sender.isPlayer() && !ess.getUser(sender.getPlayer()).canInteractVanished();
         boolean foundUser = false;
         final List<Player> matchedPlayers = server.matchPlayer(args[0]);
-        for (Player matchPlayer : matchedPlayers) {
+        for (final Player matchPlayer : matchedPlayers) {
             final User player = ess.getUser(matchPlayer);
             if (skipHidden && player.isHidden(sender.getPlayer()) && !sender.getPlayer().canSee(matchPlayer)) {
                 continue;
             }
             foundUser = true;
             if (args.length > 1) {
-                Boolean toggle = matchToggleArgument(args[1]);
-                if (toggle) {
-                    togglePlayer(sender, player, true);
-                } else {
-                    togglePlayer(sender, player, false);
-                }
+                final Boolean toggle = matchToggleArgument(args[1]);
+                togglePlayer(sender, player, toggle);
             } else {
                 togglePlayer(sender, player, null);
             }

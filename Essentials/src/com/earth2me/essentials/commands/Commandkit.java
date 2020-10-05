@@ -14,7 +14,6 @@ import java.util.logging.Level;
 
 import static com.earth2me.essentials.I18n.tl;
 
-
 public class Commandkit extends EssentialsCommand {
     public Commandkit() {
         super("kit");
@@ -56,14 +55,14 @@ public class Commandkit extends EssentialsCommand {
             throw new Exception(tl("kitNotFound"));
         }
 
-        List<Kit> kits = new ArrayList<>();
+        final List<Kit> kits = new ArrayList<>();
 
         for (final String kitName : kitNames.split(",")) {
             if (kitName.isEmpty()) {
                 throw new Exception(tl("kitNotFound"));
             }
 
-            Kit kit = new Kit(kitName, ess);
+            final Kit kit = new Kit(kitName, ess);
             kit.checkPerms(userFrom);
             kit.checkDelay(userFrom);
             kit.checkAffordable(userFrom);
@@ -86,11 +85,11 @@ public class Commandkit extends EssentialsCommand {
 
                 userTo.sendMessage(tl("kitReceive", kit.getName()));
 
-            } catch (NoChargeException ex) {
+            } catch (final NoChargeException ex) {
                 if (ess.getSettings().isDebug()) {
                     ess.getLogger().log(Level.INFO, "Soft kit error, abort spawning " + kit.getName(), ex);
                 }
-            } catch (Exception ex) {
+            } catch (final Exception ex) {
                 ess.showError(userFrom.getSource(), ex, "\\ kit: " + kit.getName());
             }
         }
@@ -99,9 +98,9 @@ public class Commandkit extends EssentialsCommand {
     @Override
     protected List<String> getTabCompleteOptions(final Server server, final User user, final String commandLabel, final String[] args) {
         if (args.length == 1) {
-            List<String> options = new ArrayList<>();
+            final List<String> options = new ArrayList<>();
             // TODO: Move all of this to its own method
-            for (String kitName : ess.getKits().getKits().getKeys(false)) {
+            for (final String kitName : ess.getKits().getKits().getKeys(false)) {
                 if (!user.isAuthorized("essentials.kits." + kitName)) { // Only check perm, not time or money
                     continue;
                 }

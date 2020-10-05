@@ -16,19 +16,19 @@ public class Spawns implements StorageObject {
         return spawns;
     }
 
-    public void setSpawns(Map<String, Location> spawns) {
+    public void setSpawns(final Map<String, Location> spawns) {
         this.spawns = spawns;
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(final Object o) {
         if (this == o) {
             return true;
         }
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        Spawns spawns1 = (Spawns) o;
+        final Spawns spawns1 = (Spawns) o;
         return Objects.equals(spawns, spawns1.spawns);
     }
 

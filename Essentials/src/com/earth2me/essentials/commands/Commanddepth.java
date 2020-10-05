@@ -5,7 +5,6 @@ import org.bukkit.Server;
 
 import static com.earth2me.essentials.I18n.tl;
 
-
 public class Commanddepth extends EssentialsCommand {
     public Commanddepth() {
         super("depth");
@@ -17,7 +16,7 @@ public class Commanddepth extends EssentialsCommand {
         if (depth > 0) {
             user.sendMessage(tl("depthAboveSea", depth));
         } else if (depth < 0) {
-            user.sendMessage(tl("depthBelowSea", (-depth)));
+            user.sendMessage(tl("depthBelowSea", -depth));
         } else {
             user.sendMessage(tl("depth"));
         }

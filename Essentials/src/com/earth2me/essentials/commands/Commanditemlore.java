@@ -21,8 +21,8 @@ public class Commanditemlore extends EssentialsCommand {
     }
 
     @Override
-    protected void run(Server server, User user, String commandLabel, String[] args) throws Exception {
-        ItemStack item = user.getBase().getItemInHand();
+    protected void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception {
+        final ItemStack item = user.getBase().getItemInHand();
         if (item.getType().name().contains("AIR")) {
             throw new Exception(tl("itemloreInvalidItem"));
         }
@@ -31,10 +31,10 @@ public class Commanditemlore extends EssentialsCommand {
             throw new NotEnoughArgumentsException();
         }
 
-        ItemMeta im = item.getItemMeta();
+        final ItemMeta im = item.getItemMeta();
         if (args[0].equalsIgnoreCase("add") && args.length > 1) {
-            String line = FormatUtil.formatString(user, "essentials.itemlore", getFinalArg(args, 1)).trim();
-            List<String> lore = im.hasLore() ? im.getLore() : new ArrayList<>();
+            final String line = FormatUtil.formatString(user, "essentials.itemlore", getFinalArg(args, 1)).trim();
+            final List<String> lore = im.hasLore() ? im.getLore() : new ArrayList<>();
             lore.add(line);
             im.setLore(lore);
             item.setItemMeta(im);
@@ -48,12 +48,12 @@ public class Commanditemlore extends EssentialsCommand {
                 throw new Exception(tl("itemloreNoLore"));
             }
 
-            int line = Integer.parseInt(args[1]);
-            String newLine = FormatUtil.formatString(user, "essentials.itemlore", getFinalArg(args, 2)).trim();
-            List<String> lore = im.getLore();
+            final int line = Integer.parseInt(args[1]);
+            final String newLine = FormatUtil.formatString(user, "essentials.itemlore", getFinalArg(args, 2)).trim();
+            final List<String> lore = im.getLore();
             try {
                 lore.set(line - 1, newLine);
-            } catch (Exception e) {
+            } catch (final Exception e) {
                 throw new Exception(tl("itemloreNoLine", line), e);
             }
             im.setLore(lore);
@@ -65,7 +65,7 @@ public class Commanditemlore extends EssentialsCommand {
     }
 
     @Override
-    protected List<String> getTabCompleteOptions(Server server, User user, String commandLabel, String[] args) {
+    protected List<String> getTabCompleteOptions(final Server server, final User user, final String commandLabel, final String[] args) {
         if (args.length == 1) {
             return Lists.newArrayList("add", "set", "clear");
         } else {

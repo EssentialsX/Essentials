@@ -8,7 +8,6 @@ import java.util.Locale;
 
 import static com.earth2me.essentials.I18n.tl;
 
-
 public class Commandsudo extends EssentialsLoopCommand {
     public Commandsudo() {
         super("sudo");
@@ -21,14 +20,14 @@ public class Commandsudo extends EssentialsLoopCommand {
         }
 
         final String command = getFinalArg(args, 1);
-        boolean multiple = !sender.isPlayer() || ess.getUser(sender.getPlayer()).isAuthorized("essentials.sudo.multiple");
+        final boolean multiple = !sender.isPlayer() || ess.getUser(sender.getPlayer()).isAuthorized("essentials.sudo.multiple");
 
         sender.sendMessage(tl("sudoRun", args[0], command, ""));
-        loopOnlinePlayers(server, sender, false, multiple, args[0], new String[]{command});
+        loopOnlinePlayers(server, sender, false, multiple, args[0], new String[] {command});
     }
 
     @Override
-    protected void updatePlayer(final Server server, final CommandSource sender, final User user, String[] args) {
+    protected void updatePlayer(final Server server, final CommandSource sender, final User user, final String[] args) {
         if (user.getName().equals(sender.getSender().getName())) {
             return; // Silently don't do anything.
         }
@@ -50,11 +49,12 @@ public class Commandsudo extends EssentialsLoopCommand {
                 public void run() {
                     try {
                         user.getBase().chat("/" + command);
-                    } catch (Exception e) {
+                    } catch (final Exception e) {
                         sender.sendMessage(tl("errorCallingCommand", command));
                     }
                 }
             }
+
             ess.scheduleSyncDelayedTask(new SudoCommandTask());
         }
     }

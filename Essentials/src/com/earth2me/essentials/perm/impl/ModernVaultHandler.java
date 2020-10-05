@@ -1,9 +1,10 @@
 package com.earth2me.essentials.perm.impl;
 
+import org.bukkit.entity.Player;
+
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
-import org.bukkit.entity.Player;
 
 public class ModernVaultHandler extends AbstractVaultHandler {
     private final List<String> supportedPlugins = Arrays.asList("PermissionsEx", "LuckPerms");

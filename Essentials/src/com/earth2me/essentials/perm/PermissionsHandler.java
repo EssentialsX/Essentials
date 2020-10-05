@@ -1,7 +1,12 @@
 package com.earth2me.essentials.perm;
 
 import com.earth2me.essentials.Essentials;
-import com.earth2me.essentials.perm.impl.*;
+import com.earth2me.essentials.perm.impl.AbstractVaultHandler;
+import com.earth2me.essentials.perm.impl.ConfigPermissionsHandler;
+import com.earth2me.essentials.perm.impl.GenericVaultHandler;
+import com.earth2me.essentials.perm.impl.LuckPermsHandler;
+import com.earth2me.essentials.perm.impl.ModernVaultHandler;
+import com.earth2me.essentials.perm.impl.SuperpermsHandler;
 import com.google.common.collect.ImmutableSet;
 import org.bukkit.entity.Player;
 
@@ -14,9 +19,9 @@ import java.util.function.Supplier;
 import java.util.logging.Level;
 
 public class PermissionsHandler implements IPermissionsHandler {
-    private transient IPermissionsHandler handler = null;
     private final transient String defaultGroup = "default";
     private final transient Essentials ess;
+    private transient IPermissionsHandler handler = null;
     private transient boolean useSuperperms;
 
     private Class<?> lastHandler = null;
@@ -94,7 +99,7 @@ public class PermissionsHandler implements IPermissionsHandler {
     }
 
     @Override
-    public void registerContext(String context, Function<Player, Iterable<String>> calculator, Supplier<Iterable<String>> suggestions) {
+    public void registerContext(final String context, final Function<Player, Iterable<String>> calculator, final Supplier<Iterable<String>> suggestions) {
         handler.registerContext(context, calculator, suggestions);
     }
 
@@ -115,15 +120,15 @@ public class PermissionsHandler implements IPermissionsHandler {
 
     public void checkPermissions() {
         // load and assign a handler
-        List<Class<? extends SuperpermsHandler>> providerClazz = Arrays.asList(
-                LuckPermsHandler.class,
-                ModernVaultHandler.class,
-                GenericVaultHandler.class,
-                SuperpermsHandler.class
+        final List<Class<? extends SuperpermsHandler>> providerClazz = Arrays.asList(
+            LuckPermsHandler.class,
+            ModernVaultHandler.class,
+            GenericVaultHandler.class,
+            SuperpermsHandler.class
         );
-        for (Class<? extends IPermissionsHandler> providerClass : providerClazz) {
+        for (final Class<? extends IPermissionsHandler> providerClass : providerClazz) {
             try {
-                IPermissionsHandler provider = providerClass.newInstance();
+                final IPermissionsHandler provider = providerClass.newInstance();
                 if (provider.tryProvider()) {
                     if (provider.getClass().isInstance(this.handler)) {
                         return;
@@ -135,7 +140,7 @@ public class PermissionsHandler implements IPermissionsHandler {
                     initContexts();
                     break;
                 }
-            } catch (Throwable ignored) {
+            } catch (final Throwable ignored) {
             }
         }
         if (handler == null) {
@@ -147,7 +152,7 @@ public class PermissionsHandler implements IPermissionsHandler {
         }
 
         // don't spam logs
-        Class<?> handlerClass = handler.getClass();
+        final Class<?> handlerClass = handler.getClass();
         if (lastHandler != null && lastHandler == handlerClass) {
             return;
         }
@@ -161,9 +166,9 @@ public class PermissionsHandler implements IPermissionsHandler {
         } else if (handler.getClass() == SuperpermsHandler.class) {
             if (handler.tryProvider()) {
                 ess.getLogger().warning("Detected supported permissions plugin " +
-                        ((SuperpermsHandler) handler).getEnabledPermsPlugin() + " without Vault installed.");
+                    ((SuperpermsHandler) handler).getEnabledPermsPlugin() + " without Vault installed.");
                 ess.getLogger().warning("Features such as chat prefixes/suffixes and group-related functionality will not " +
-                        "work until you install Vault.");
+                    "work until you install Vault.");
             }
             ess.getLogger().info("Using superperms-based permissions.");
         } else if (handler.getClass() == ConfigPermissionsHandler.class) {
@@ -180,7 +185,7 @@ public class PermissionsHandler implements IPermissionsHandler {
         return handler.getClass().getSimpleName().replace("Provider", "");
     }
 
-    private void checkPermLag(long start, String summary) {
+    private void checkPermLag(final long start, final String summary) {
         final long elapsed = System.nanoTime() - start;
         if (elapsed > ess.getSettings().getPermissionsLagWarning()) {
             ess.getLogger().log(Level.WARNING, String.format("Permissions lag notice with (%s). Response took %fms. Summary: %s", getName(), elapsed / 1000000.0, summary));
@@ -195,7 +200,7 @@ public class PermissionsHandler implements IPermissionsHandler {
         registerContext("essentials:jail", player -> Optional.ofNullable(ess.getUser(player).getJail()).map(Arrays::asList).orElse(Collections.emptyList()), () -> {
             try {
                 return ess.getJails().getList();
-            } catch (Exception e) {
+            } catch (final Exception e) {
                 return Collections.emptyList();
             }
         });

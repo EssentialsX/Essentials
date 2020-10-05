@@ -17,7 +17,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 import static com.earth2me.essentials.I18n.tl;
 
-
 public class Commandpay extends EssentialsLoopCommand {
     public Commandpay() {
         super("pay");
@@ -28,12 +27,12 @@ public class Commandpay extends EssentialsLoopCommand {
         if (args.length < 2) {
             throw new NotEnoughArgumentsException();
         }
-        
+
         if (args[1].contains("-")) {
             throw new Exception(tl("payMustBePositive"));
         }
 
-        String stringAmount = args[1].replaceAll("[^0-9\\.]", "");
+        final String stringAmount = args[1].replaceAll("[^0-9\\.]", "");
 
         if (stringAmount.length() < 1) {
             throw new NotEnoughArgumentsException();
@@ -64,18 +63,18 @@ public class Commandpay extends EssentialsLoopCommand {
                 user.payUser(player, amount, UserBalanceUpdateEvent.Cause.COMMAND_PAY);
                 user.getConfirmingPayments().remove(player);
                 Trade.log("Command", "Pay", "Player", user.getName(), new Trade(amount, ess), player.getName(), new Trade(amount, ess), user.getLocation(), ess);
-            } catch (MaxMoneyException ex) {
+            } catch (final MaxMoneyException ex) {
                 user.sendMessage(tl("maxMoney"));
                 try {
                     user.setMoney(user.getMoney().add(amount));
-                } catch (MaxMoneyException ignored) {
+                } catch (final MaxMoneyException ignored) {
                 }
-            } catch (Exception e) {
+            } catch (final Exception e) {
                 user.sendMessage(e.getMessage());
             }
         });
         if (informToConfirm.get()) {
-            String cmd = "/" + commandLabel + " " + StringUtil.joinList(" ", args);
+            final String cmd = "/" + commandLabel + " " + StringUtil.joinList(" ", args);
             user.sendMessage(tl("confirmPayment", NumberUtil.displayCurrency(amount, ess), cmd));
         }
     }
@@ -86,7 +85,7 @@ public class Commandpay extends EssentialsLoopCommand {
     }
 
     @Override
-    protected List<String> getTabCompleteOptions(Server server, CommandSource sender, String commandLabel, String[] args) {
+    protected List<String> getTabCompleteOptions(final Server server, final CommandSource sender, final String commandLabel, final String[] args) {
         if (args.length == 1) {
             return getPlayers(server, sender);
         } else if (args.length == 2) {

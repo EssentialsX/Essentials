@@ -3,26 +3,31 @@ package com.earth2me.essentials;
 import com.google.common.io.Files;
 import org.bukkit.Bukkit;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
-import java.util.concurrent.*;
+import java.util.concurrent.ConcurrentSkipListMap;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.regex.Pattern;
 
-
 public class UUIDMap {
+    private static final ScheduledExecutorService writeScheduler = Executors.newScheduledThreadPool(1);
+    private static boolean pendingWrite;
+    private static boolean loading = false;
     private final transient net.ess3.api.IEssentials ess;
     private final File userList;
     private final transient Pattern splitPattern = Pattern.compile(",");
-
-    private static boolean pendingWrite;
-    private static final ScheduledExecutorService writeScheduler = Executors.newScheduledThreadPool(1);
     private final Runnable writeTaskRunnable;
-
-    private static boolean loading = false;
 
     public UUIDMap(final net.ess3.api.IEssentials ess) {
         this.ess = ess;
@@ -32,7 +37,7 @@ public class UUIDMap {
             if (pendingWrite) {
                 try {
                     new WriteRunner(ess.getDataFolder(), userList, ess.getUserMap().getNames()).run();
-                } catch (Throwable t) { // bad code to prevent task from being suppressed
+                } catch (final Throwable t) { // bad code to prevent task from being suppressed
                     t.printStackTrace();
                 }
             }
@@ -58,7 +63,7 @@ public class UUIDMap {
             history.clear();
             loading = true;
 
-            try (BufferedReader reader = new BufferedReader(new FileReader(userList))) {
+            try (final BufferedReader reader = new BufferedReader(new FileReader(userList))) {
                 while (true) {
                     final String line = reader.readLine();
                     if (line == null) {
@@ -84,7 +89,7 @@ public class UUIDMap {
                 }
             }
             loading = false;
-        } catch (IOException ex) {
+        } catch (final IOException ex) {
             Bukkit.getLogger().log(Level.SEVERE, ex.getMessage(), ex);
         }
     }
@@ -106,7 +111,7 @@ public class UUIDMap {
         writeScheduler.shutdown();
     }
 
-    private static class WriteRunner implements Runnable {
+    private static final class WriteRunner implements Runnable {
         private final File location;
         private final File endFile;
         private final Map<String, UUID> names;
@@ -129,19 +134,19 @@ public class UUIDMap {
                 configFile = File.createTempFile("usermap", ".tmp.csv", location);
 
                 final BufferedWriter bWriter = new BufferedWriter(new FileWriter(configFile));
-                for (Map.Entry<String, UUID> entry : names.entrySet()) {
+                for (final Map.Entry<String, UUID> entry : names.entrySet()) {
                     bWriter.write(entry.getKey() + "," + entry.getValue().toString());
                     bWriter.newLine();
                 }
 
                 bWriter.close();
                 Files.move(configFile, endFile);
-            } catch (IOException ex) {
+            } catch (final IOException ex) {
                 try {
                     if (configFile != null && configFile.exists()) {
                         Files.move(configFile, new File(endFile.getParentFile(), "usermap.bak.csv"));
                     }
-                } catch (Exception ex2) {
+                } catch (final Exception ex2) {
                     Bukkit.getLogger().log(Level.SEVERE, ex2.getMessage(), ex2);
                 }
                 Bukkit.getLogger().log(Level.WARNING, ex.getMessage(), ex);

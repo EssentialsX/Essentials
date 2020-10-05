@@ -4,7 +4,11 @@ import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.EssentialsUpgrade;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.UserMap;
-import com.earth2me.essentials.utils.*;
+import com.earth2me.essentials.utils.DateUtil;
+import com.earth2me.essentials.utils.EnumUtil;
+import com.earth2me.essentials.utils.FloatUtil;
+import com.earth2me.essentials.utils.NumberUtil;
+import com.earth2me.essentials.utils.VersionUtil;
 import com.google.common.base.Charsets;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
@@ -16,7 +20,13 @@ import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.UUID;
 import java.util.function.Supplier;
 
 import static com.earth2me.essentials.I18n.tl;
@@ -28,15 +38,8 @@ public class Commandessentials extends EssentialsCommand {
     private static final Sound MOO_SOUND = EnumUtil.valueOf(Sound.class, "COW_IDLE", "ENTITY_COW_MILK");
 
     private static final String NYAN_TUNE = "1D#,1E,2F#,,2A#,1E,1D#,1E,2F#,2B,2D#,2E,2D#,2A#,2B,,2F#,,1D#,1E,2F#,2B,2C#,2A#,2B,2C#,2E,2D#,2E,2C#,,2F#,,2G#,,1D,1D#,,1C#,1D,1C#,1B,,1B,,1C#,,1D,,1D,1C#,1B,1C#,1D#,2F#,2G#,1D#,2F#,1C#,1D#,1B,1C#,1B,1D#,,2F#,,2G#,1D#,2F#,1C#,1D#,1B,1D,1D#,1D,1C#,1B,1C#,1D,,1B,1C#,1D#,2F#,1C#,1D,1C#,1B,1C#,,1B,,1C#,,2F#,,2G#,,1D,1D#,,1C#,1D,1C#,1B,,1B,,1C#,,1D,,1D,1C#,1B,1C#,1D#,2F#,2G#,1D#,2F#,1C#,1D#,1B,1C#,1B,1D#,,2F#,,2G#,1D#,2F#,1C#,1D#,1B,1D,1D#,1D,1C#,1B,1C#,1D,,1B,1C#,1D#,2F#,1C#,1D,1C#,1B,1C#,,1B,,1B,,1B,,1F#,1G#,1B,,1F#,1G#,1B,1C#,1D#,1B,1E,1D#,1E,2F#,1B,,1B,,1F#,1G#,1B,1E,1D#,1C#,1B,,,,1F#,1B,,1F#,1G#,1B,,1F#,1G#,1B,1B,1C#,1D#,1B,1F#,1G#,1F#,1B,,1B,1A#,1B,1F#,1G#,1B,1E,1D#,1E,2F#,1B,,1A#,,1B,,1F#,1G#,1B,,1F#,1G#,1B,1C#,1D#,1B,1E,1D#,1E,2F#,1B,,1B,,1F#,1G#,1B,1F#,1E,1D#,1C#,1B,,,,1F#,1B,,1F#,1G#,1B,,1F#,1G#,1B,1B,1C#,1D#,1B,1F#,1G#,1F#,1B,,1B,1A#,1B,1F#,1G#,1B,1E,1D#,1E,2F#,1B,,1A#,,1B,,1F#,1G#,1B,,1F#,1G#,1B,1C#,1D#,1B,1E,1D#,1E,2F#,1B,,1B,,1F#,1G#,1B,1F#,1E,1D#,1C#,1B,,,,1F#,1B,,1F#,1G#,1B,,1F#,1G#,1B,1B,1C#,1D#,1B,1F#,1G#,1F#,1B,,1B,1A#,1B,1F#,1G#,1B,1E,1D#,1E,2F#,1B,,1A#,,1B,,1F#,1G#,1B,,1F#,1G#,1B,1C#,1D#,1B,1E,1D#,1E,2F#,1B,,1B,,1F#,1G#,1B,1F#,1E,1D#,1C#,1B,,,,1F#,1B,,1F#,1G#,1B,,1F#,1G#,1B,1B,1C#,1D#,1B,1F#,1G#,1F#,1B,,1B,1A#,1B,1F#,1G#,1B,1E,1D#,1E,2F#,1B,,1A#,,1B,,1F#,1G#,1B,,1F#,1G#,1B,1C#,1D#,1B,1E,1D#,1E,2F#,1B,,1B,,1F#,1G#,1B,1F#,1E,1D#,1C#,1B,,,,1F#,1B,,1F#,1G#,1B,,1F#,1G#,1B,1B,1C#,1D#,1B,1F#,1G#,1F#,1B,,1B,1A#,1B,1F#,1G#,1B,1E,1D#,1E,2F#,1B,,1B,,";
-    private static final String[] CONSOLE_MOO = new String[]{"         (__)", "         (oo)", "   /------\\/", "  / |    ||", " *  /\\---/\\", "    ~~   ~~", "....\"Have you mooed today?\"..."};
-    private static final String[] PLAYER_MOO = new String[]{"            (__)", "            (oo)", "   /------\\/", "  /  |      | |", " *  /\\---/\\", "    ~~    ~~", "....\"Have you mooed today?\"..."};
-
-    public Commandessentials() {
-        super("essentials");
-    }
-
-    private transient TuneRunnable currentTune = null;
-
+    private static final String[] CONSOLE_MOO = new String[] {"         (__)", "         (oo)", "   /------\\/", "  / |    ||", " *  /\\---/\\", "    ~~   ~~", "....\"Have you mooed today?\"..."};
+    private static final String[] PLAYER_MOO = new String[] {"            (__)", "            (oo)", "   /------\\/", "  /  |      | |", " *  /\\---/\\", "    ~~    ~~", "....\"Have you mooed today?\"..."};
     private static final List<String> versionPlugins = Arrays.asList(
         "Vault", // API
         "Reserve", // API
@@ -51,7 +54,6 @@ public class Commandessentials extends EssentialsCommand {
         "GroupManager", // permissions (unsupported)
         "bPermissions" // permissions (unsupported)
     );
-
     private static final List<String> officialPlugins = Arrays.asList(
         "EssentialsAntiBuild",
         "EssentialsChat",
@@ -60,12 +62,16 @@ public class Commandessentials extends EssentialsCommand {
         "EssentialsSpawn",
         "EssentialsXMPP"
     );
-
     private static final List<String> warnPlugins = Arrays.asList(
         "PermissionsEx",
         "GroupManager",
         "bPremissions"
     );
+    private transient TuneRunnable currentTune = null;
+
+    public Commandessentials() {
+        super("essentials");
+    }
 
     @Override
     public void run(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception {
@@ -73,23 +79,23 @@ public class Commandessentials extends EssentialsCommand {
             showUsage(sender);
         }
 
-        switch(args[0]) {
+        switch (args[0]) {
             // Info commands
             case "debug":
             case "verbose":
                 runDebug(server, sender, commandLabel, args);
                 break;
-                
+
             case "ver":
             case "version":
                 runVersion(server, sender, commandLabel, args);
                 break;
-                
+
             case "cmd":
             case "commands":
                 runCommands(server, sender, commandLabel, args);
                 break;
-                
+
             // Data commands
             case "reload":
                 runReload(server, sender, commandLabel, args);
@@ -106,7 +112,7 @@ public class Commandessentials extends EssentialsCommand {
             case "uuidtest":
                 runUUIDTest(server, sender, commandLabel, args);
                 break;
-                
+
             // "#EasterEgg"
             case "nya":
             case "nyan":
@@ -116,7 +122,8 @@ public class Commandessentials extends EssentialsCommand {
                 runMoo(server, sender, commandLabel, args);
                 break;
             default:
-                showUsage(sender);    
+                showUsage(sender);
+                break;
         }
     }
 
@@ -128,7 +135,7 @@ public class Commandessentials extends EssentialsCommand {
     // Lists commands that are being handed over to other plugins.
     private void runCommands(final Server server, final CommandSource sender, final String commandLabel, final String[] args) {
         final StringBuilder disabledCommands = new StringBuilder();
-        for (Map.Entry<String, String> entry : ess.getAlternativeCommandsHandler().disabledCommands().entrySet()) {
+        for (final Map.Entry<String, String> entry : ess.getAlternativeCommandsHandler().disabledCommands().entrySet()) {
             if (disabledCommands.length() > 0) {
                 disabledCommands.append("\n");
             }
@@ -177,10 +184,10 @@ public class Commandessentials extends EssentialsCommand {
     // Cow farts.
     private void runMoo(final Server server, final CommandSource sender, final String command, final String[] args) {
         if (args.length == 2 && args[1].equals("moo")) {
-            for (String s : CONSOLE_MOO) {
+            for (final String s : CONSOLE_MOO) {
                 logger.info(s);
             }
-            for (Player player : ess.getOnlinePlayers()) {
+            for (final Player player : ess.getOnlinePlayers()) {
                 player.sendMessage(PLAYER_MOO);
                 player.playSound(player.getLocation(), MOO_SOUND, 1, 1.0f);
             }
@@ -213,8 +220,8 @@ public class Commandessentials extends EssentialsCommand {
         final UserMap userMap = ess.getUserMap();
 
         ess.runTaskAsynchronously(() -> {
-            long currTime = System.currentTimeMillis();
-            for (UUID u : userMap.getAllUniqueUsers()) {
+            final long currTime = System.currentTimeMillis();
+            for (final UUID u : userMap.getAllUniqueUsers()) {
                 final User user = ess.getUserMap().getUser(u);
                 if (user == null) {
                     continue;
@@ -232,10 +239,10 @@ public class Commandessentials extends EssentialsCommand {
                     continue;
                 }
 
-                long timeDiff = currTime - lastLog;
-                long milliDays = daysArg * 24L * 60L * 60L * 1000L;
-                int homeCount = user.getHomes().size();
-                double moneyCount = user.getMoney().doubleValue();
+                final long timeDiff = currTime - lastLog;
+                final long milliDays = daysArg * 24L * 60L * 60L * 1000L;
+                final int homeCount = user.getHomes().size();
+                final double moneyCount = user.getMoney().doubleValue();
 
                 if ((lastLog == 0) || (timeDiff < milliDays) || (homeCount > homesArg) || (moneyCount > moneyArg)) {
                     continue;
@@ -256,7 +263,7 @@ public class Commandessentials extends EssentialsCommand {
     private void runUUIDConvert(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception {
         sender.sendMessage("Starting Essentials UUID userdata conversion; this may lag the server.");
 
-        Boolean ignoreUFCache = (args.length > 2 && args[1].toLowerCase(Locale.ENGLISH).contains("ignore"));
+        final Boolean ignoreUFCache = args.length > 2 && args[1].toLowerCase(Locale.ENGLISH).contains("ignore");
         EssentialsUpgrade.uuidFileConvert(ess, ignoreUFCache);
 
         sender.sendMessage("UUID conversion complete. Check your server log for more information.");
@@ -267,22 +274,22 @@ public class Commandessentials extends EssentialsCommand {
         if (args.length < 2) {
             throw new Exception("/<command> uuidtest <name>");
         }
-        String name = args[1];
+        final String name = args[1];
         sender.sendMessage("Looking up UUID for " + name);
 
         UUID onlineUUID = null;
 
-        for (Player player : ess.getOnlinePlayers()) {
+        for (final Player player : ess.getOnlinePlayers()) {
             if (player.getName().equalsIgnoreCase(name)) {
                 onlineUUID = player.getUniqueId();
                 break;
             }
         }
 
-        UUID essUUID = ess.getUserMap().getUser(name).getConfigUUID();
+        final UUID essUUID = ess.getUserMap().getUser(name).getConfigUUID();
 
-        org.bukkit.OfflinePlayer player = ess.getServer().getOfflinePlayer(name);
-        UUID bukkituuid = player.getUniqueId();
+        final org.bukkit.OfflinePlayer player = ess.getServer().getOfflinePlayer(name);
+        final UUID bukkituuid = player.getUniqueId();
         sender.sendMessage("Bukkit Lookup: " + bukkituuid.toString());
 
         if (onlineUUID != null && onlineUUID != bukkituuid) {
@@ -293,10 +300,10 @@ public class Commandessentials extends EssentialsCommand {
             sender.sendMessage("Essentials config: " + essUUID.toString());
         }
 
-        UUID npcuuid = UUID.nameUUIDFromBytes(("NPC:" + name).getBytes(Charsets.UTF_8));
+        final UUID npcuuid = UUID.nameUUIDFromBytes(("NPC:" + name).getBytes(Charsets.UTF_8));
         sender.sendMessage("NPC UUID: " + npcuuid.toString());
 
-        UUID offlineuuid = UUID.nameUUIDFromBytes(("OfflinePlayer:" + name).getBytes(Charsets.UTF_8));
+        final UUID offlineuuid = UUID.nameUUIDFromBytes(("OfflinePlayer:" + name).getBytes(Charsets.UTF_8));
         sender.sendMessage("Offline Mode UUID: " + offlineuuid.toString());
     }
 
@@ -314,10 +321,10 @@ public class Commandessentials extends EssentialsCommand {
         sender.sendMessage(tl(isServerSupported ? "versionOutputFine" : "versionOutputWarn", "Server", server.getBukkitVersion() + " " + server.getVersion()));
         sender.sendMessage(tl("versionOutputFine", "EssentialsX", essVer));
 
-        for (Plugin plugin : pm.getPlugins()) {
+        for (final Plugin plugin : pm.getPlugins()) {
             final PluginDescriptionFile desc = plugin.getDescription();
             String name = desc.getName();
-            String version = desc.getVersion();
+            final String version = desc.getVersion();
 
             if (name.startsWith("Essentials") && !name.equalsIgnoreCase("Essentials")) {
                 if (officialPlugins.contains(name)) {
@@ -367,7 +374,7 @@ public class Commandessentials extends EssentialsCommand {
     @Override
     protected List<String> getTabCompleteOptions(final Server server, final CommandSource sender, final String commandLabel, final String[] args) {
         if (args.length == 1) {
-            List<String> options = Lists.newArrayList();
+            final List<String> options = Lists.newArrayList();
             options.add("debug");
             options.add("commands");
             options.add("version");
@@ -409,7 +416,7 @@ public class Commandessentials extends EssentialsCommand {
 
         return Collections.emptyList();
     }
-    
+
     private static class TuneRunnable extends BukkitRunnable {
         private static final Map<String, Float> noteMap = ImmutableMap.<String, Float>builder()
             .put("1F#", 0.5f)
@@ -460,7 +467,7 @@ public class Commandessentials extends EssentialsCommand {
                 return;
             }
 
-            for (Player onlinePlayer : players.get()) {
+            for (final Player onlinePlayer : players.get()) {
                 onlinePlayer.playSound(onlinePlayer.getLocation(), sound, 1, noteMap.get(note));
             }
         }

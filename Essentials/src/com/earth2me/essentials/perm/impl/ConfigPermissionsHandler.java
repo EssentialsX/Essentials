@@ -4,7 +4,6 @@ import net.ess3.api.IEssentials;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
-
 public class ConfigPermissionsHandler extends SuperpermsHandler {
     private final transient IEssentials ess;
 

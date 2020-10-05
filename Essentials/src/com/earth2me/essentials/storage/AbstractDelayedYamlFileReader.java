@@ -9,11 +9,10 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.logging.Level;
 
-
 public abstract class AbstractDelayedYamlFileReader<T extends StorageObject> implements Runnable {
+    protected final transient IEssentials plugin;
     private final transient File file;
     private final transient Class<T> clazz;
-    protected final transient IEssentials plugin;
 
     public AbstractDelayedYamlFileReader(final IEssentials ess, final File file, final Class<T> clazz) {
         this.file = file;
@@ -35,17 +34,17 @@ public abstract class AbstractDelayedYamlFileReader<T extends StorageObject> imp
             } finally {
                 try {
                     reader.close();
-                } catch (IOException ex) {
+                } catch (final IOException ex) {
                     Bukkit.getLogger().log(Level.SEVERE, "File can't be closed: " + file.toString(), ex);
                 }
             }
 
-        } catch (FileNotFoundException ex) {
+        } catch (final FileNotFoundException ex) {
             onException();
             if (plugin.getSettings() == null || plugin.getSettings().isDebug()) {
                 Bukkit.getLogger().log(Level.INFO, "File not found: " + file.toString());
             }
-        } catch (ObjectLoadException ex) {
+        } catch (final ObjectLoadException ex) {
             onException();
             Bukkit.getLogger().log(Level.SEVERE, "File broken: " + file.toString(), ex.getCause());
         }
