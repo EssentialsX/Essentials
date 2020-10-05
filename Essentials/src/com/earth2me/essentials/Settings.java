@@ -1290,7 +1290,7 @@ public class Settings implements net.ess3.api.ISettings {
 
     @Override
     public boolean isLastMessageReplyRecipient() {
-        return config.getBoolean("last-message-reply-recipient", false);
+        return config.getBoolean("last-message-reply-recipient", true);
     }
 
     @Override
