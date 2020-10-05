@@ -8,12 +8,12 @@ import org.bukkit.event.EventHandler;
 import java.util.function.Consumer;
 
 public class PaperRecipeBookListener extends ProviderListener {
-    public PaperRecipeBookListener(Consumer<Event> function) {
+    public PaperRecipeBookListener(final Consumer<Event> function) {
         super(function);
     }
 
     @EventHandler
-    public void onPlayerRecipeBookClick(PlayerRecipeBookClickEvent event) {
+    public void onPlayerRecipeBookClick(final PlayerRecipeBookClickEvent event) {
         function.accept(event);
     }
 

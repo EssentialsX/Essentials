@@ -12,7 +12,6 @@ import org.bukkit.event.player.PlayerQuitEvent;
 
 import java.util.List;
 
-
 class EssentialsXMPPPlayerListener implements Listener {
     private final transient IEssentials ess;
 
@@ -42,18 +41,18 @@ class EssentialsXMPPPlayerListener implements Listener {
 
         Bukkit.getScheduler().scheduleSyncDelayedTask(ess, EssentialsXMPP::updatePresence);
 
-
         sendMessageToSpyUsers("Player " + user.getDisplayName() + " left the game");
     }
 
     private void sendMessageToSpyUsers(final String message) {
         try {
-            List<String> users = EssentialsXMPP.getInstance().getSpyUsers();
+            final List<String> users = EssentialsXMPP.getInstance().getSpyUsers();
             synchronized (users) {
                 for (final String address : users) {
                     Bukkit.getScheduler().scheduleSyncDelayedTask(ess, () -> EssentialsXMPP.getInstance().sendMessage(address, message));
                 }
             }
-        } catch (Exception ignored) {}
+        } catch (final Exception ignored) {
+        }
     }
 }

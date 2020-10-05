@@ -10,7 +10,6 @@ import java.util.List;
 
 import static com.earth2me.essentials.I18n.tl;
 
-
 public class Commandthunder extends EssentialsCommand {
     public Commandthunder() {
         super("thunder");
@@ -32,11 +31,11 @@ public class Commandthunder extends EssentialsCommand {
 
         world.setThundering(setThunder);
         world.setThunderDuration(Integer.parseInt(args[1]) * 20);
-        user.sendMessage(tl("thunderDuration", (setThunder ? tl("enabled") : tl("disabled")), Integer.parseInt(args[1])));
+        user.sendMessage(tl("thunderDuration", setThunder ? tl("enabled") : tl("disabled"), Integer.parseInt(args[1])));
     }
 
     @Override
-    protected List<String> getTabCompleteOptions(Server server, User user, String commandLabel, String[] args) {
+    protected List<String> getTabCompleteOptions(final Server server, final User user, final String commandLabel, final String[] args) {
         if (args.length == 1) {
             return Lists.newArrayList("true", "false");
         } else if (args.length == 2) {

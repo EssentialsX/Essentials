@@ -53,20 +53,20 @@ public class Commandfirework extends EssentialsCommand {
         }
 
         if (args[0].equalsIgnoreCase("clear")) {
-            FireworkMeta fmeta = (FireworkMeta) stack.getItemMeta();
+            final FireworkMeta fmeta = (FireworkMeta) stack.getItemMeta();
             fmeta.clearEffects();
             stack.setItemMeta(fmeta);
             user.sendMessage(tl("fireworkEffectsCleared"));
-        } else if (args.length > 1 && (args[0].equalsIgnoreCase("power") || (args[0].equalsIgnoreCase("p")))) {
-            FireworkMeta fmeta = (FireworkMeta) stack.getItemMeta();
+        } else if (args.length > 1 && (args[0].equalsIgnoreCase("power") || args[0].equalsIgnoreCase("p"))) {
+            final FireworkMeta fmeta = (FireworkMeta) stack.getItemMeta();
             try {
-                int power = Integer.parseInt(args[1]);
+                final int power = Integer.parseInt(args[1]);
                 fmeta.setPower(power > 3 ? 4 : power);
-            } catch (NumberFormatException e) {
+            } catch (final NumberFormatException e) {
                 throw new Exception(tl("invalidFireworkFormat", args[1], args[0]));
             }
             stack.setItemMeta(fmeta);
-        } else if ((args[0].equalsIgnoreCase("fire") || (args[0].equalsIgnoreCase("f"))) && user.isAuthorized("essentials.firework.fire")) {
+        } else if ((args[0].equalsIgnoreCase("fire") || args[0].equalsIgnoreCase("f")) && user.isAuthorized("essentials.firework.fire")) {
             int amount = 1;
             boolean direction = false;
             if (args.length > 1) {
@@ -82,8 +82,8 @@ public class Commandfirework extends EssentialsCommand {
                 }
             }
             for (int i = 0; i < amount; i++) {
-                Firework firework = (Firework) user.getWorld().spawnEntity(user.getLocation(), EntityType.FIREWORK);
-                FireworkMeta fmeta = (FireworkMeta) stack.getItemMeta();
+                final Firework firework = (Firework) user.getWorld().spawnEntity(user.getLocation(), EntityType.FIREWORK);
+                final FireworkMeta fmeta = (FireworkMeta) stack.getItemMeta();
                 if (direction) {
                     final Vector vector = user.getBase().getEyeLocation().getDirection().multiply(0.070);
                     if (fmeta.getPower() > 1) {
@@ -95,18 +95,18 @@ public class Commandfirework extends EssentialsCommand {
             }
         } else {
             final MetaItemStack mStack = new MetaItemStack(stack);
-            for (String arg : args) {
+            for (final String arg : args) {
                 try {
                     mStack.addFireworkMeta(user.getSource(), true, arg, ess);
-                } catch (Exception e) {
+                } catch (final Exception e) {
                     user.sendMessage(tl("fireworkSyntax"));
                     throw e;
                 }
             }
 
             if (mStack.isValidFirework()) {
-                FireworkMeta fmeta = (FireworkMeta) mStack.getItemStack().getItemMeta();
-                FireworkEffect effect = mStack.getFireworkBuilder().build();
+                final FireworkMeta fmeta = (FireworkMeta) mStack.getItemStack().getItemMeta();
+                final FireworkEffect effect = mStack.getFireworkBuilder().build();
                 if (fmeta.getEffects().size() > 0 && !user.isAuthorized("essentials.firework.multiple")) {
                     throw new Exception(tl("multipleCharges"));
                 }
@@ -120,18 +120,18 @@ public class Commandfirework extends EssentialsCommand {
     }
 
     @Override
-    protected List<String> getTabCompleteOptions(Server server, User user, String commandLabel, String[] args) {
+    protected List<String> getTabCompleteOptions(final Server server, final User user, final String commandLabel, final String[] args) {
         // Note: this enforces an order of color fade shape effect, which the actual command doesn't have.  But that's fine. 
         if (args.length == 1) {
-            List<String> options = Lists.newArrayList();
+            final List<String> options = Lists.newArrayList();
             if (args[0].startsWith("color:")) {
-                String prefix;
+                final String prefix;
                 if (args[0].contains(",")) {
                     prefix = args[0].substring(0, args[0].lastIndexOf(',') + 1);
                 } else {
                     prefix = "color:";
                 }
-                for (DyeColor color : DyeColor.values()) {
+                for (final DyeColor color : DyeColor.values()) {
                     options.add(prefix + color.name().toLowerCase() + ",");
                 }
                 return options;
@@ -149,17 +149,17 @@ public class Commandfirework extends EssentialsCommand {
             } else if (args[0].equals("fire")) {
                 return Lists.newArrayList("1");
             } else if (args[0].startsWith("color:")) {
-                List<String> options = Lists.newArrayList();
+                final List<String> options = Lists.newArrayList();
                 if (!args[1].startsWith("fade:")) {
                     args[1] = "fade:";
                 }
-                String prefix;
+                final String prefix;
                 if (args[1].contains(",")) {
                     prefix = args[1].substring(0, args[1].lastIndexOf(',') + 1);
                 } else {
                     prefix = "fade:";
                 }
-                for (DyeColor color : DyeColor.values()) {
+                for (final DyeColor color : DyeColor.values()) {
                     options.add(prefix + color.name().toLowerCase() + ",");
                 }
                 return options;

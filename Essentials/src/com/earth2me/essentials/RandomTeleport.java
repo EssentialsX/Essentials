@@ -18,15 +18,15 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class RandomTeleport implements IConf {
+    private static final Random RANDOM = new Random();
+    private static final int HIGHEST_BLOCK_Y_OFFSET = VersionUtil.getServerBukkitVersion().isHigherThanOrEqualTo(VersionUtil.v1_15_R01) ? 1 : 0;
     private final IEssentials essentials;
     private final EssentialsConf config;
     private final ConcurrentLinkedQueue<Location> cachedLocations = new ConcurrentLinkedQueue<>();
-    private static final Random RANDOM = new Random();
-    private static final int HIGHEST_BLOCK_Y_OFFSET = VersionUtil.getServerBukkitVersion().isHigherThanOrEqualTo(VersionUtil.v1_15_R01) ? 1 : 0;
 
     public RandomTeleport(final IEssentials essentials) {
         this.essentials = essentials;
-        File file = new File(essentials.getDataFolder(), "tpr.yml");
+        final File file = new File(essentials.getDataFolder(), "tpr.yml");
         config = new EssentialsConf(file);
         config.setTemplateName("/tpr.yml");
         config.options().copyHeader(true);
@@ -41,19 +41,19 @@ public class RandomTeleport implements IConf {
 
     public Location getCenter() {
         try {
-            Location center = config.getLocation("center", essentials.getServer());
+            final Location center = config.getLocation("center", essentials.getServer());
             if (center != null) {
                 return center;
             }
-        } catch (InvalidWorldException ignored) {
+        } catch (final InvalidWorldException ignored) {
         }
-        Location center = essentials.getServer().getWorlds().get(0).getWorldBorder().getCenter();
+        final Location center = essentials.getServer().getWorlds().get(0).getWorldBorder().getCenter();
         center.setY(center.getWorld().getHighestBlockYAt(center) + 1);
         setCenter(center);
         return center;
     }
 
-    public void setCenter(Location center) {
+    public void setCenter(final Location center) {
         config.setProperty("center", center);
         config.save();
     }
@@ -62,7 +62,7 @@ public class RandomTeleport implements IConf {
         return config.getDouble("min-range", 0d);
     }
 
-    public void setMinRange(double minRange) {
+    public void setMinRange(final double minRange) {
         config.setProperty("min-range", minRange);
         config.save();
     }
@@ -71,18 +71,18 @@ public class RandomTeleport implements IConf {
         return config.getDouble("max-range", getCenter().getWorld().getWorldBorder().getSize() / 2);
     }
 
-    public void setMaxRange(double maxRange) {
+    public void setMaxRange(final double maxRange) {
         config.setProperty("max-range", maxRange);
         config.save();
     }
 
     public Set<Biome> getExcludedBiomes() {
-        List<String> biomeNames = config.getStringList("excluded-biomes");
-        Set<Biome> excludedBiomes = new HashSet<>();
-        for (String biomeName : biomeNames) {
+        final List<String> biomeNames = config.getStringList("excluded-biomes");
+        final Set<Biome> excludedBiomes = new HashSet<>();
+        for (final String biomeName : biomeNames) {
             try {
                 excludedBiomes.add(Biome.valueOf(biomeName.toUpperCase()));
-            } catch (IllegalArgumentException ignored) {
+            } catch (final IllegalArgumentException ignored) {
             }
         }
         return excludedBiomes;
@@ -105,14 +105,14 @@ public class RandomTeleport implements IConf {
     }
 
     // Get a random location; cached if possible. Otherwise on demand.
-    public CompletableFuture<Location> getRandomLocation(Location center, double minRange, double maxRange) {
-        int findAttempts = this.getFindAttempts();
-        Queue<Location> cachedLocations = this.getCachedLocations();
+    public CompletableFuture<Location> getRandomLocation(final Location center, final double minRange, final double maxRange) {
+        final int findAttempts = this.getFindAttempts();
+        final Queue<Location> cachedLocations = this.getCachedLocations();
         // Try to build up the cache if it is below the threshold
         if (cachedLocations.size() < this.getCacheThreshold()) {
             cacheRandomLocations(center, minRange, maxRange);
         }
-        CompletableFuture<Location> future = new CompletableFuture<>();
+        final CompletableFuture<Location> future = new CompletableFuture<>();
         // Return a random location immediately if one is available, otherwise try to find one now
         if (cachedLocations.isEmpty()) {
             attemptRandomLocation(findAttempts, center, minRange, maxRange).thenAccept(future::complete);
@@ -123,7 +123,7 @@ public class RandomTeleport implements IConf {
     }
 
     // Prompts caching random valid locations, up to a maximum number of attempts
-    public void cacheRandomLocations(Location center, double minRange, double maxRange) {
+    public void cacheRandomLocations(final Location center, final double minRange, final double maxRange) {
         essentials.getServer().getScheduler().scheduleSyncDelayedTask(essentials, () -> {
             for (int i = 0; i < this.getFindAttempts(); ++i) {
                 calculateRandomLocation(center, minRange, maxRange).thenAccept(location -> {
@@ -136,8 +136,8 @@ public class RandomTeleport implements IConf {
     }
 
     // Recursively attempt to find a random location. After a maximum number of attempts, the center is returned.
-    private CompletableFuture<Location> attemptRandomLocation(int attempts, Location center, double minRange, double maxRange) {
-        CompletableFuture<Location> future = new CompletableFuture<>();
+    private CompletableFuture<Location> attemptRandomLocation(final int attempts, final Location center, final double minRange, final double maxRange) {
+        final CompletableFuture<Location> future = new CompletableFuture<>();
         if (attempts > 0) {
             calculateRandomLocation(center, minRange, maxRange).thenAccept(location -> {
                 if (isValidRandomLocation(location)) {
@@ -153,13 +153,14 @@ public class RandomTeleport implements IConf {
     }
 
     // Calculates a random location asynchronously.
-    private CompletableFuture<Location> calculateRandomLocation(Location center, double minRange, double maxRange) {
-        CompletableFuture<Location> future = new CompletableFuture<>();
+    private CompletableFuture<Location> calculateRandomLocation(final Location center, final double minRange, final double maxRange) {
+        final CompletableFuture<Location> future = new CompletableFuture<>();
         // Find an equally distributed offset by randomly rotating a point inside a rectangle about the origin
-        double rectX = RANDOM.nextDouble() * (maxRange - minRange) + minRange;
-        double rectZ = RANDOM.nextDouble() * (maxRange + minRange) - minRange;
-        double offsetX, offsetZ;
-        int transform = RANDOM.nextInt(4);
+        final double rectX = RANDOM.nextDouble() * (maxRange - minRange) + minRange;
+        final double rectZ = RANDOM.nextDouble() * (maxRange + minRange) - minRange;
+        final double offsetX;
+        final double offsetZ;
+        final int transform = RANDOM.nextInt(4);
         if (transform == 0) {
             offsetX = rectX;
             offsetZ = rectZ;
@@ -173,13 +174,13 @@ public class RandomTeleport implements IConf {
             offsetX = rectZ;
             offsetZ = -rectX;
         }
-        Location location = new Location(
-                center.getWorld(),
-                center.getX() + offsetX,
-                center.getWorld().getMaxHeight(),
-                center.getZ() + offsetZ,
-                360 * RANDOM.nextFloat() - 180,
-                0
+        final Location location = new Location(
+            center.getWorld(),
+            center.getX() + offsetX,
+            center.getWorld().getMaxHeight(),
+            center.getZ() + offsetZ,
+            360 * RANDOM.nextFloat() - 180,
+            0
         );
         PaperLib.getChunkAtAsync(location).thenAccept(chunk -> {
             if (World.Environment.NETHER.equals(center.getWorld().getEnvironment())) {
@@ -193,7 +194,7 @@ public class RandomTeleport implements IConf {
     }
 
     // Returns an appropriate elevation for a given location in the nether, or -1 if none is found
-    private double getNetherYAt(Location location) {
+    private double getNetherYAt(final Location location) {
         for (int y = 32; y < location.getWorld().getMaxHeight() / 2; ++y) {
             if (!LocationUtil.isBlockUnsafe(location.getWorld(), location.getBlockX(), y, location.getBlockZ())) {
                 return y;
@@ -202,7 +203,7 @@ public class RandomTeleport implements IConf {
         return -1;
     }
 
-    private boolean isValidRandomLocation(Location location) {
+    private boolean isValidRandomLocation(final Location location) {
         return location.getBlockY() > 0 && !this.getExcludedBiomes().contains(location.getBlock().getBiome());
     }
 }

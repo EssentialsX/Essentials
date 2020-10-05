@@ -12,11 +12,10 @@ import java.util.Locale;
 
 import static com.earth2me.essentials.I18n.tl;
 
-
 public class Worth implements IConf {
     private final EssentialsConf config;
 
-    public Worth(File dataFolder) {
+    public Worth(final File dataFolder) {
         config = new EssentialsConf(new File(dataFolder, "worth.yml"));
         config.setTemplateName("/worth.yml");
         config.load();
@@ -29,10 +28,10 @@ public class Worth implements IConf {
      * @param itemStack The item stack to look up in the config.
      * @return The price from the config.
      */
-    public BigDecimal getPrice(IEssentials ess, ItemStack itemStack) {
+    public BigDecimal getPrice(final IEssentials ess, final ItemStack itemStack) {
         BigDecimal result;
 
-        String itemname = itemStack.getType().toString().toLowerCase(Locale.ENGLISH).replace("_", "");
+        final String itemname = itemStack.getType().toString().toLowerCase(Locale.ENGLISH).replace("_", "");
 
         // Check for matches with data value from stack
         // Note that we always default to BigDecimal.ONE.negate(), equivalent to -1
@@ -73,7 +72,7 @@ public class Worth implements IConf {
      * @return The amount of items to sell from the player's inventory.
      * @throws Exception Thrown if trying to sell air or an invalid amount.
      */
-    public int getAmount(IEssentials ess, User user, ItemStack is, String[] args, boolean isBulkSell) throws Exception {
+    public int getAmount(final IEssentials ess, final User user, final ItemStack is, final String[] args, final boolean isBulkSell) throws Exception {
         if (is == null || is.getType() == Material.AIR) {
             throw new Exception(tl("itemSellAir"));
         }
@@ -83,7 +82,7 @@ public class Worth implements IConf {
         if (args.length > 1) {
             try {
                 amount = Integer.parseInt(args[1].replaceAll("[^0-9]", ""));
-            } catch (NumberFormatException ex) {
+            } catch (final NumberFormatException ex) {
                 throw new NotEnoughArgumentsException(ex);
             }
             if (args[1].startsWith("-")) {
@@ -91,15 +90,15 @@ public class Worth implements IConf {
             }
         }
 
-        boolean stack = args.length > 1 && args[1].endsWith("s");
-        boolean requireStack = ess.getSettings().isTradeInStacks(is.getType());
+        final boolean stack = args.length > 1 && args[1].endsWith("s");
+        final boolean requireStack = ess.getSettings().isTradeInStacks(is.getType());
 
         if (requireStack && !stack) {
             throw new Exception(tl("itemMustBeStacked"));
         }
 
         int max = 0;
-        for (ItemStack s : user.getBase().getInventory().getContents()) {
+        for (final ItemStack s : user.getBase().getInventory().getContents()) {
             if (s == null || !s.isSimilar(is)) {
                 continue;
             }
@@ -136,7 +135,7 @@ public class Worth implements IConf {
      * @param itemStack A stack of the item to save.
      * @param price     The new price of the item.
      */
-    public void setPrice(IEssentials ess, ItemStack itemStack, double price) {
+    public void setPrice(final IEssentials ess, final ItemStack itemStack, final double price) {
         String path = "worth." + itemStack.getType().toString().toLowerCase(Locale.ENGLISH).replace("_", "");
 
         // Spigot 1.13+ throws an exception if a 1.13+ plugin even *attempts* to do set data.

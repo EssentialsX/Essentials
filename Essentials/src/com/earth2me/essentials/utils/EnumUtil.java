@@ -8,27 +8,30 @@ import java.lang.reflect.Field;
 import java.util.HashSet;
 import java.util.Set;
 
-public class EnumUtil {
+public final class EnumUtil {
 
+    private EnumUtil() {
+    }
 
     /**
      * Returns the field matching the first provided enum name that exists within the given
      * enum class. If no field is found, this method returns null.
      *
      * @param enumClass The class to search through
-     * @param names The names of the fields to search for
-     * @param <T> The enum to search through
+     * @param names     The names of the fields to search for
+     * @param <T>       The enum to search through
      * @return The first matching enum field
      */
-    public static <T extends Enum> T valueOf(Class<T> enumClass, String... names) {
-        for (String name : names) {
+    public static <T extends Enum> T valueOf(final Class<T> enumClass, final String... names) {
+        for (final String name : names) {
             try {
-                Field enumField = enumClass.getDeclaredField(name);
+                final Field enumField = enumClass.getDeclaredField(name);
 
                 if (enumField.isEnumConstant()) {
                     return (T) enumField.get(null);
                 }
-            } catch (NoSuchFieldException | IllegalAccessException ignored) {}
+            } catch (final NoSuchFieldException | IllegalAccessException ignored) {
+            }
         }
 
         return null;
@@ -39,21 +42,22 @@ public class EnumUtil {
      * names.
      *
      * @param enumClass The class to search through
-     * @param names The names of the fields to search for
-     * @param <T> The enum to search through
+     * @param names     The names of the fields to search for
+     * @param <T>       The enum to search through
      * @return All matching enum fields
      */
-    public static <T extends Enum> Set<T> getAllMatching(Class<T> enumClass, String... names) {
-        Set<T> set = new HashSet<>();
+    public static <T extends Enum> Set<T> getAllMatching(final Class<T> enumClass, final String... names) {
+        final Set<T> set = new HashSet<>();
 
-        for (String name : names) {
+        for (final String name : names) {
             try {
-                Field enumField = enumClass.getDeclaredField(name);
+                final Field enumField = enumClass.getDeclaredField(name);
 
                 if (enumField.isEnumConstant()) {
                     set.add((T) enumField.get(null));
                 }
-            } catch (NoSuchFieldException | IllegalAccessException ignored) {}
+            } catch (final NoSuchFieldException | IllegalAccessException ignored) {
+            }
         }
 
         return set;
@@ -65,7 +69,7 @@ public class EnumUtil {
      * @param names The names of the fields to search for
      * @return The first matching Material
      */
-    public static Material getMaterial(String... names) {
+    public static Material getMaterial(final String... names) {
         return valueOf(Material.class, names);
     }
 
@@ -75,11 +79,11 @@ public class EnumUtil {
      * @param names The names of the fields to search for
      * @return The first matching Statistic
      */
-    public static Statistic getStatistic(String... names) {
+    public static Statistic getStatistic(final String... names) {
         return valueOf(Statistic.class, names);
     }
 
-    public static EntityType getEntityType(String... names) {
+    public static EntityType getEntityType(final String... names) {
         return valueOf(EntityType.class, names);
     }
 }

@@ -6,12 +6,15 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginDescriptionFile;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import static com.earth2me.essentials.I18n.tl;
-
 
 public class HelpInput implements IText {
     private static final String DESCRIPTION = "description";
@@ -31,7 +34,7 @@ public class HelpInput implements IText {
             lines.add(tl("helpMatching", match));
         }
 
-        for (Plugin p : ess.getServer().getPluginManager().getPlugins()) {
+        for (final Plugin p : ess.getServer().getPluginManager().getPlugins()) {
             try {
                 final List<String> pluginLines = new ArrayList<>();
                 final PluginDescriptionFile desc = p.getDescription();
@@ -45,9 +48,9 @@ public class HelpInput implements IText {
                 }
                 final boolean isOnWhitelist = user.isAuthorized("essentials.help." + pluginNameLow);
 
-                for (Map.Entry<String, Map<String, Object>> k : cmds.entrySet()) {
+                for (final Map.Entry<String, Map<String, Object>> k : cmds.entrySet()) {
                     try {
-                        if (!match.equalsIgnoreCase("") && (!pluginNameLow.contains(match)) && (!k.getKey().toLowerCase(Locale.ENGLISH).contains(match)) && (!(k.getValue().get(DESCRIPTION) instanceof String && ((String) k.getValue().get(DESCRIPTION)).toLowerCase(Locale.ENGLISH).contains(match)))) {
+                        if (!match.equalsIgnoreCase("") && !pluginNameLow.contains(match) && !k.getKey().toLowerCase(Locale.ENGLISH).contains(match) && !(k.getValue().get(DESCRIPTION) instanceof String && ((String) k.getValue().get(DESCRIPTION)).toLowerCase(Locale.ENGLISH).contains(match))) {
                             continue;
                         }
 
@@ -69,7 +72,7 @@ public class HelpInput implements IText {
                                     pluginLines.add(tl("helpLine", k.getKey(), value.get(DESCRIPTION)));
                                 } else if (permissions instanceof List && !((List<Object>) permissions).isEmpty()) {
                                     boolean enabled = false;
-                                    for (Object o : (List<Object>) permissions) {
+                                    for (final Object o : (List<Object>) permissions) {
                                         if (o instanceof String && user.isAuthorized(o.toString())) {
                                             enabled = true;
                                             break;
@@ -89,7 +92,7 @@ public class HelpInput implements IText {
                                 }
                             }
                         }
-                    } catch (NullPointerException ignored) {
+                    } catch (final NullPointerException ignored) {
                     }
                 }
                 if (!pluginLines.isEmpty()) {
@@ -101,8 +104,8 @@ public class HelpInput implements IText {
                         lines.add(tl("helpPlugin", pluginName, pluginNameLow));
                     }
                 }
-            } catch (NullPointerException ignored) {
-            } catch (Exception ex) {
+            } catch (final NullPointerException ignored) {
+            } catch (final Exception ex) {
                 if (!reported) {
                     logger.log(Level.WARNING, tl("commandHelpFailedForPlugin", pluginNameLow), ex);
                 }

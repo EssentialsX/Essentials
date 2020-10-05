@@ -4,7 +4,6 @@ import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.User;
 import net.ess3.api.IEssentials;
 
-
 class ChatStore {
     private final User user;
     private final String type;
@@ -37,7 +36,7 @@ class ChatStore {
         return radius;
     }
 
-    void setRadius(long radius) {
+    void setRadius(final long radius) {
         this.radius = radius;
     }
 }

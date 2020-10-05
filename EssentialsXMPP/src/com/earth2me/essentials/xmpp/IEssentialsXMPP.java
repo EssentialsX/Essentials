@@ -7,7 +7,6 @@ import org.bukkit.plugin.Plugin;
 
 import java.util.List;
 
-
 public interface IEssentialsXMPP extends Plugin {
     String getAddress(final Player user);
 

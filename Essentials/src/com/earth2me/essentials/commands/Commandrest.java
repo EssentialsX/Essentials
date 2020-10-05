@@ -45,7 +45,7 @@ public class Commandrest extends EssentialsLoopCommand {
     }
 
     @Override
-    protected List<String> getTabCompleteOptions(Server server, CommandSource sender, String commandLabel, String[] args) {
+    protected List<String> getTabCompleteOptions(final Server server, final CommandSource sender, final String commandLabel, final String[] args) {
         if (args.length == 1 && sender.isAuthorized("essentials.rest.others", ess)) {
             return getPlayers(server, sender);
         } else {

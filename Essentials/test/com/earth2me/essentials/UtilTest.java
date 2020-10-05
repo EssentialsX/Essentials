@@ -13,26 +13,30 @@ import java.util.GregorianCalendar;
 import java.util.HashSet;
 import java.util.Set;
 
-
 public class UtilTest extends TestCase {
 
     public UtilTest() {
-        FakeServer server = new FakeServer();
+        final FakeServer server = new FakeServer();
         server.createWorld("testWorld", Environment.NORMAL);
-        Essentials ess = new Essentials(server);
+        final Essentials ess = new Essentials(server);
         try {
             ess.setupForTesting(server);
-        } catch (InvalidDescriptionException ex) {
+        } catch (final InvalidDescriptionException ex) {
             fail("InvalidDescriptionException");
-        } catch (IOException ex) {
+        } catch (final IOException ex) {
             fail("IOException");
         }
     }
 
     public void testSafeLocation() {
-        Set<String> testSet = new HashSet<>();
+        final Set<String> testSet = new HashSet<>();
         int count = 0;
-        int x, y, z, origX, origY, origZ;
+        int x;
+        int y;
+        int z;
+        final int origX;
+        final int origY;
+        final int origZ;
         x = y = z = origX = origY = origZ = 0;
         int i = 0;
         while (true) {
@@ -49,13 +53,13 @@ public class UtilTest extends TestCase {
         assertTrue(testSet.contains("0:0:0"));
         assertTrue(testSet.contains("3:3:3"));
         assertEquals(testSet.size(), count);
-        int diameter = LocationUtil.RADIUS * 2 + 1;
+        final int diameter = LocationUtil.RADIUS * 2 + 1;
         assertEquals(diameter * diameter * diameter, count);
     }
 
     public void testFDDnow() {
-        Calendar c = new GregorianCalendar();
-        String resp = DateUtil.formatDateDiff(c, c);
+        final Calendar c = new GregorianCalendar();
+        final String resp = DateUtil.formatDateDiff(c, c);
         assertEquals(resp, "now");
     }
 

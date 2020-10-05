@@ -21,7 +21,7 @@ public class Commandinvsee extends EssentialsCommand {
         }
 
         final User invUser = getPlayer(server, user, args, 0);
-        Inventory inv;
+        final Inventory inv;
 
         if (args.length > 1 && user.isAuthorized("essentials.invsee.equip")) {
             inv = server.createInventory(invUser.getBase(), 9, "Equipped");
@@ -38,7 +38,7 @@ public class Commandinvsee extends EssentialsCommand {
     }
 
     @Override
-    protected List<String> getTabCompleteOptions(Server server, User user, String commandLabel, String[] args) {
+    protected List<String> getTabCompleteOptions(final Server server, final User user, final String commandLabel, final String[] args) {
         if (args.length == 1) {
             return getPlayers(server, user);
         } else {

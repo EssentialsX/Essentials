@@ -12,7 +12,6 @@ import java.util.Locale;
 
 import static com.earth2me.essentials.I18n.tl;
 
-
 public class SignEnchant extends EssentialsSign {
     public SignEnchant() {
         super("Enchant");
@@ -23,7 +22,7 @@ public class SignEnchant extends EssentialsSign {
         final ItemStack stack;
         try {
             stack = sign.getLine(1).equals("*") || sign.getLine(1).equalsIgnoreCase("any") ? null : getItemStack(sign.getLine(1), 1, ess);
-        } catch (SignException e) {
+        } catch (final SignException e) {
             sign.setLine(1, "§c<item|any>");
             throw e;
         }
@@ -37,7 +36,7 @@ public class SignEnchant extends EssentialsSign {
         if (enchantLevel.length > 1) {
             try {
                 level = Integer.parseInt(enchantLevel[1]);
-            } catch (NumberFormatException ex) {
+            } catch (final NumberFormatException ex) {
                 sign.setLine(2, "§c<enchant>");
                 throw new SignException(ex.getMessage(), ex);
             }
@@ -55,7 +54,7 @@ public class SignEnchant extends EssentialsSign {
                     stack.addEnchantment(enchantment, level);
                 }
             }
-        } catch (Throwable ex) {
+        } catch (final Throwable ex) {
             throw new SignException(ex.getMessage(), ex);
         }
         getTrade(sign, 3, ess);
@@ -63,7 +62,7 @@ public class SignEnchant extends EssentialsSign {
     }
 
     @Override
-    protected boolean onSignInteract(ISign sign, User player, String username, IEssentials ess) throws SignException, ChargeException {
+    protected boolean onSignInteract(final ISign sign, final User player, final String username, final IEssentials ess) throws SignException, ChargeException {
         final ItemStack search = sign.getLine(1).equals("*") || sign.getLine(1).equalsIgnoreCase("any") ? null : getItemStack(sign.getLine(1), 1, ess);
         final Trade charge = getTrade(sign, 3, ess);
         charge.isAffordableFor(player);
@@ -76,7 +75,7 @@ public class SignEnchant extends EssentialsSign {
         if (enchantLevel.length > 1) {
             try {
                 level = Integer.parseInt(enchantLevel[1]);
-            } catch (NumberFormatException ex) {
+            } catch (final NumberFormatException ex) {
                 throw new SignException(ex.getMessage(), ex);
             }
         }
@@ -99,7 +98,7 @@ public class SignEnchant extends EssentialsSign {
                     playerHand.addEnchantment(enchantment, level);
                 }
             }
-        } catch (Exception ex) {
+        } catch (final Exception ex) {
             throw new SignException(ex.getMessage(), ex);
         }
 

@@ -9,12 +9,11 @@ import com.earth2me.essentials.utils.NumberUtil;
 import org.bukkit.Server;
 import org.bukkit.Statistic;
 
-import java.util.Locale;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 
 import static com.earth2me.essentials.I18n.tl;
-
 
 public class Commandwhois extends EssentialsCommand {
     // For some reason, in 1.13 PLAY_ONE_MINUTE = ticks played = what used to be PLAY_ONE_TICK
@@ -31,7 +30,7 @@ public class Commandwhois extends EssentialsCommand {
             throw new NotEnoughArgumentsException();
         }
 
-        User user = getPlayer(server, sender, args, 0);
+        final User user = getPlayer(server, sender, args, 0);
 
         sender.sendMessage(tl("whoisTop", user.getName()));
         user.setDisplayNick();
@@ -41,7 +40,7 @@ public class Commandwhois extends EssentialsCommand {
         sender.sendMessage(tl("whoisHunger", user.getBase().getFoodLevel(), user.getBase().getSaturation()));
         sender.sendMessage(tl("whoisExp", SetExpFix.getTotalExperience(user.getBase()), user.getBase().getLevel()));
         sender.sendMessage(tl("whoisLocation", user.getLocation().getWorld().getName(), user.getLocation().getBlockX(), user.getLocation().getBlockY(), user.getLocation().getBlockZ()));
-        long playtimeMs = System.currentTimeMillis() - (user.getBase().getStatistic(PLAY_ONE_TICK) * 50);
+        final long playtimeMs = System.currentTimeMillis() - (user.getBase().getStatistic(PLAY_ONE_TICK) * 50);
         sender.sendMessage(tl("whoisPlaytime", DateUtil.formatDateDiff(playtimeMs)));
         if (!ess.getSettings().isEcoDisabled()) {
             sender.sendMessage(tl("whoisMoney", NumberUtil.displayCurrency(user.getMoney(), ess)));
@@ -54,8 +53,8 @@ public class Commandwhois extends EssentialsCommand {
             sender.sendMessage(tl("whoisGeoLocation", location));
         }
         sender.sendMessage(tl("whoisGamemode", tl(user.getBase().getGameMode().toString().toLowerCase(Locale.ENGLISH))));
-        sender.sendMessage(tl("whoisGod", (user.isGodModeEnabled() ? tl("true") : tl("false"))));
-        sender.sendMessage(tl("whoisOp", (user.getBase().isOp() ? tl("true") : tl("false"))));
+        sender.sendMessage(tl("whoisGod", user.isGodModeEnabled() ? tl("true") : tl("false")));
+        sender.sendMessage(tl("whoisOp", user.getBase().isOp() ? tl("true") : tl("false")));
         sender.sendMessage(tl("whoisFly", user.getBase().getAllowFlight() ? tl("true") : tl("false"), user.getBase().isFlying() ? tl("flying") : tl("notFlying")));
         sender.sendMessage(tl("whoisSpeed", user.getBase().isFlying() ? user.getBase().getFlySpeed() : user.getBase().getWalkSpeed()));
         if (user.isAfk()) {
@@ -63,19 +62,19 @@ public class Commandwhois extends EssentialsCommand {
         } else {
             sender.sendMessage(tl("whoisAFK", tl("false")));
         }
-        sender.sendMessage(tl("whoisJail", (user.isJailed() ? user.getJailTimeout() > 0 ? DateUtil.formatDateDiff(user.getJailTimeout()) : tl("true") : tl("false"))));
+        sender.sendMessage(tl("whoisJail", user.isJailed() ? user.getJailTimeout() > 0 ? DateUtil.formatDateDiff(user.getJailTimeout()) : tl("true") : tl("false")));
 
-        long muteTimeout = user.getMuteTimeout();
+        final long muteTimeout = user.getMuteTimeout();
         if (!user.hasMuteReason()) {
-            sender.sendMessage(tl("whoisMuted", (user.isMuted() ? (muteTimeout > 0 ? DateUtil.formatDateDiff(muteTimeout) : tl("true")) : tl("false"))));
+            sender.sendMessage(tl("whoisMuted", user.isMuted() ? muteTimeout > 0 ? DateUtil.formatDateDiff(muteTimeout) : tl("true") : tl("false")));
         } else {
-            sender.sendMessage(tl("whoisMutedReason", (user.isMuted() ? (muteTimeout > 0 ? DateUtil.formatDateDiff(muteTimeout) : tl("true")) : tl("false")),
+            sender.sendMessage(tl("whoisMutedReason", user.isMuted() ? muteTimeout > 0 ? DateUtil.formatDateDiff(muteTimeout) : tl("true") : tl("false"),
                 user.getMuteReason()));
         }
     }
 
     @Override
-    protected List<String> getTabCompleteOptions(Server server, CommandSource sender, String commandLabel, String[] args) {
+    protected List<String> getTabCompleteOptions(final Server server, final CommandSource sender, final String commandLabel, final String[] args) {
         if (args.length == 1) {
             return getPlayers(server, sender);
         } else {

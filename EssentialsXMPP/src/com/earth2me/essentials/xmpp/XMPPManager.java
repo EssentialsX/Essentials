@@ -6,28 +6,43 @@ import com.earth2me.essentials.IConf;
 import com.earth2me.essentials.utils.FormatUtil;
 import net.ess3.api.IUser;
 import org.bukkit.entity.Player;
-import org.jivesoftware.smack.*;
+import org.jivesoftware.smack.Chat;
+import org.jivesoftware.smack.ChatManager;
+import org.jivesoftware.smack.ChatManagerListener;
+import org.jivesoftware.smack.ConnectionConfiguration;
+import org.jivesoftware.smack.MessageListener;
 import org.jivesoftware.smack.Roster.SubscriptionMode;
+import org.jivesoftware.smack.XMPPConnection;
+import org.jivesoftware.smack.XMPPException;
 import org.jivesoftware.smack.packet.Message;
 import org.jivesoftware.smack.packet.Presence;
 import org.jivesoftware.smack.util.StringUtils;
 
 import java.io.File;
-import java.util.*;
-import java.util.logging.*;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Set;
+import java.util.logging.Handler;
+import java.util.logging.Level;
+import java.util.logging.LogRecord;
+import java.util.logging.Logger;
+import java.util.logging.SimpleFormatter;
 
 import static com.earth2me.essentials.I18n.tl;
-
 
 public class XMPPManager extends Handler implements MessageListener, ChatManagerListener, IConf {
     private static final Logger logger = Logger.getLogger("EssentialsXMPP");
     private static final SimpleFormatter formatter = new SimpleFormatter();
     private final transient EssentialsConf config;
-    private transient XMPPConnection connection;
-    private transient ChatManager chatManager;
     private final transient Map<String, Chat> chats = Collections.synchronizedMap(new HashMap<>());
     private final transient Set<LogRecord> logrecords = Collections.synchronizedSet(new HashSet<>());
     private final transient IEssentialsXMPP parent;
+    private transient XMPPConnection connection;
+    private transient ChatManager chatManager;
     private transient List<String> logUsers;
     private transient Level logLevel;
     private transient boolean ignoreLagMessages = true;
@@ -58,7 +73,7 @@ public class XMPPManager extends Handler implements MessageListener, ChatManager
                     chat.sendMessage(FormatUtil.stripFormat(message));
                     return true;
                 }
-            } catch (XMPPException ex) {
+            } catch (final XMPPException ex) {
                 disableChat(address);
             }
         }
@@ -81,6 +96,7 @@ public class XMPPManager extends Handler implements MessageListener, ChatManager
                 default:
                     final IUser sender = parent.getUserByAddress(StringUtils.parseBareAddress(chat.getParticipant()));
                     parent.broadcastMessage(sender, "=" + sender.getBase().getDisplayName() + ": " + message, StringUtils.parseBareAddress(chat.getParticipant()));
+                    break;
             }
         }
     }
@@ -96,7 +112,7 @@ public class XMPPManager extends Handler implements MessageListener, ChatManager
         final String xmppuser = config.getString("xmpp.user");
         final String password = config.getString("xmpp.password");
         final ConnectionConfiguration connConf = new ConnectionConfiguration(server, port, serviceName);
-        String stringBuilder = "Connecting to xmpp server " + server + ":" + port + " as user " + xmppuser + ".";
+        final String stringBuilder = "Connecting to xmpp server " + server + ":" + port + " as user " + xmppuser + ".";
         logger.log(Level.INFO, stringBuilder);
         connConf.setSASLAuthenticationEnabled(config.getBoolean("xmpp.sasl-enabled", false));
         connConf.setSendPresence(true);
@@ -113,7 +129,7 @@ public class XMPPManager extends Handler implements MessageListener, ChatManager
             chatManager = connection.getChatManager();
             chatManager.addChatListener(this);
             return true;
-        } catch (XMPPException ex) {
+        } catch (final XMPPException ex) {
             logger.log(Level.WARNING, "Failed to connect to server: " + server, ex);
             return false;
         }
@@ -186,7 +202,7 @@ public class XMPPManager extends Handler implements MessageListener, ChatManager
             final String level = config.getString("log-level", "info");
             try {
                 logLevel = Level.parse(level.toUpperCase(Locale.ENGLISH));
-            } catch (IllegalArgumentException e) {
+            } catch (final IllegalArgumentException e) {
                 logLevel = Level.INFO;
             }
             ignoreLagMessages = config.getBoolean("ignore-lag-messages", true);
@@ -204,7 +220,7 @@ public class XMPPManager extends Handler implements MessageListener, ChatManager
                     logrecords.add(logRecord);
                 }
             }
-        } catch (Exception ignored) {
+        } catch (final Exception ignored) {
             // Ignore all exceptions
             // Otherwise we create a loop.
         }
@@ -232,10 +248,10 @@ public class XMPPManager extends Handler implements MessageListener, ChatManager
                     }
                 }
                 if (!copy.isEmpty()) {
-                    for (String user : logUsers) {
+                    for (final String user : logUsers) {
                         try {
                             XMPPManager.this.startChat(user);
-                            for (LogRecord logRecord : copy) {
+                            for (final LogRecord logRecord : copy) {
                                 final String message = formatter.format(logRecord);
                                 if (!XMPPManager.this.sendMessage(user, FormatUtil.stripLogColorFormat(message))) {
                                     failedUsers.add(user);
@@ -243,7 +259,7 @@ public class XMPPManager extends Handler implements MessageListener, ChatManager
                                 }
 
                             }
-                        } catch (XMPPException ex) {
+                        } catch (final XMPPException ex) {
                             failedUsers.add(user);
                             logger.removeHandler(XMPPManager.this);
                             logger.log(Level.SEVERE, "Failed to deliver log message! Disabling logging to XMPP.", ex);
@@ -258,7 +274,7 @@ public class XMPPManager extends Handler implements MessageListener, ChatManager
                 }
                 try {
                     Thread.sleep(2000);
-                } catch (InterruptedException ex) {
+                } catch (final InterruptedException ex) {
                     threadrunning = false;
                 }
             }
@@ -290,12 +306,12 @@ public class XMPPManager extends Handler implements MessageListener, ChatManager
             if (matches.isEmpty()) {
                 try {
                     chat.sendMessage("User " + parts[0] + " not found");
-                } catch (XMPPException ex) {
+                } catch (final XMPPException ex) {
                     logger.log(Level.WARNING, "Failed to send xmpp message.", ex);
                 }
             } else {
                 final String from = "[" + parent.getUserByAddress(StringUtils.parseBareAddress(chat.getParticipant())) + ">";
-                for (Player p : matches) {
+                for (final Player p : matches) {
                     p.sendMessage(from + p.getDisplayName() + "]  " + message);
                 }
             }
@@ -306,7 +322,7 @@ public class XMPPManager extends Handler implements MessageListener, ChatManager
         if (config.getStringList("op-users").contains(StringUtils.parseBareAddress(chat.getParticipant()))) {
             try {
                 parent.getServer().dispatchCommand(Console.getInstance().getCommandSender(), message.substring(1));
-            } catch (Exception ex) {
+            } catch (final Exception ex) {
                 logger.log(Level.SEVERE, ex.getMessage(), ex);
             }
         }

@@ -12,7 +12,7 @@ public class SimpleTextPager {
     }
 
     public void showPage(final CommandSource sender) {
-        for (String line : text.getLines()) {
+        for (final String line : text.getLines()) {
             sender.sendMessage(line);
         }
     }
@@ -21,7 +21,7 @@ public class SimpleTextPager {
         return text.getLines();
     }
 
-    public String getLine(int line) {
+    public String getLine(final int line) {
         if (text.getLines().size() < line) {
             return null;
         }

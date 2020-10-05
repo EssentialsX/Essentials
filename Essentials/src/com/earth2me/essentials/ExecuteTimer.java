@@ -6,11 +6,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-
 public class ExecuteTimer {
     private final transient List<ExecuteRecord> times;
     private final transient DecimalFormat decimalFormat = new DecimalFormat("#0.000", DecimalFormatSymbols.getInstance(Locale.US));
-
 
     public ExecuteTimer() {
         times = new ArrayList<>();
@@ -37,7 +35,7 @@ public class ExecuteTimer {
         long time2 = 0;
         double duration;
 
-        for (ExecuteRecord pair : times) {
+        for (final ExecuteRecord pair : times) {
             mark = pair.getMark();
             time2 = pair.getTime();
             if (time1 > 0) {
@@ -54,12 +52,11 @@ public class ExecuteTimer {
         return output.toString();
     }
 
-
     private static class ExecuteRecord {
         private final String mark;
         private final long time;
 
-        public ExecuteRecord(final String mark, final long time) {
+        ExecuteRecord(final String mark, final long time) {
             this.mark = mark;
             this.time = time;
         }

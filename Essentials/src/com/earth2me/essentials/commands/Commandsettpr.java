@@ -10,15 +10,14 @@ import java.util.List;
 
 import static com.earth2me.essentials.I18n.tl;
 
-
 public class Commandsettpr extends EssentialsCommand {
     public Commandsettpr() {
         super("settpr");
     }
 
     @Override
-    protected void run(Server server, User user, String commandLabel, String[] args) throws Exception {
-        RandomTeleport randomTeleport = ess.getRandomTeleport();
+    protected void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception {
+        final RandomTeleport randomTeleport = ess.getRandomTeleport();
         randomTeleport.getCachedLocations().clear();
         if (args.length == 0 || "center".equalsIgnoreCase(args[0])) {
             randomTeleport.setCenter(user.getLocation());
@@ -34,7 +33,7 @@ public class Commandsettpr extends EssentialsCommand {
     }
 
     @Override
-    protected List<String> getTabCompleteOptions(Server server, User user, String commandLabel, String[] args) {
+    protected List<String> getTabCompleteOptions(final Server server, final User user, final String commandLabel, final String[] args) {
         if (args.length == 1) {
             return Arrays.asList("center", "minrange", "maxrange");
         }

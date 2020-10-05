@@ -5,12 +5,12 @@ import org.bukkit.block.CreatureSpawner;
 
 public class BukkitSpawnerBlockProvider implements SpawnerBlockProvider {
     @Override
-    public void setMaxSpawnDelay(CreatureSpawner spawner, int delay) {
+    public void setMaxSpawnDelay(final CreatureSpawner spawner, final int delay) {
         spawner.setMaxSpawnDelay(delay);
     }
 
     @Override
-    public void setMinSpawnDelay(CreatureSpawner spawner, int delay) {
+    public void setMinSpawnDelay(final CreatureSpawner spawner, final int delay) {
         spawner.setMinSpawnDelay(delay);
     }
 

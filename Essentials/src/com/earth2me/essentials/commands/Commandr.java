@@ -10,7 +10,6 @@ import org.bukkit.Server;
 
 import static com.earth2me.essentials.I18n.tl;
 
-
 public class Commandr extends EssentialsCommand {
     public Commandr() {
         super("r");
@@ -23,11 +22,11 @@ public class Commandr extends EssentialsCommand {
         }
 
         String message = getFinalArg(args, 0);
-        IMessageRecipient messageSender;
+        final IMessageRecipient messageSender;
         if (sender.isPlayer()) {
-            User user = ess.getUser(sender.getPlayer());
+            final User user = ess.getUser(sender.getPlayer());
             if (user.isMuted()) {
-                String dateDiff = user.getMuteTimeout() > 0 ? DateUtil.formatDateDiff(user.getMuteTimeout()) : null;
+                final String dateDiff = user.getMuteTimeout() > 0 ? DateUtil.formatDateDiff(user.getMuteTimeout()) : null;
                 if (dateDiff == null) {
                     throw new Exception(user.hasMuteReason() ? tl("voiceSilencedReason", user.getMuteReason()) : tl("voiceSilenced"));
                 }

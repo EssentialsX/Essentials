@@ -17,7 +17,6 @@ import java.util.UUID;
 
 import static com.earth2me.essentials.I18n.tl;
 
-
 public class Commandmail extends EssentialsCommand {
     private static int mailsPerMinute = 0;
     private static long timestamp = 0;
@@ -35,7 +34,7 @@ public class Commandmail extends EssentialsCommand {
                 throw new NoChargeException();
             }
 
-            IText input = new SimpleTextInput(mail);
+            final IText input = new SimpleTextInput(mail);
             final TextPager pager = new TextPager(input);
             pager.showPage(args.length > 1 ? args[1] : null, null, commandLabel + " " + args[0], user.getSource());
 
@@ -48,21 +47,21 @@ public class Commandmail extends EssentialsCommand {
             }
 
             if (user.isMuted()) {
-                String dateDiff = user.getMuteTimeout() > 0 ? DateUtil.formatDateDiff(user.getMuteTimeout()) : null;
+                final String dateDiff = user.getMuteTimeout() > 0 ? DateUtil.formatDateDiff(user.getMuteTimeout()) : null;
                 if (dateDiff == null) {
                     throw new Exception(user.hasMuteReason() ? tl("voiceSilencedReason", user.getMuteReason()) : tl("voiceSilenced"));
                 }
                 throw new Exception(user.hasMuteReason() ? tl("voiceSilencedReasonTime", dateDiff, user.getMuteReason()) : tl("voiceSilencedTime", dateDiff));
             }
 
-            User u;
+            final User u;
             try {
                 u = getPlayer(server, args[1], true, true);
-            } catch (PlayerNotFoundException e) {
+            } catch (final PlayerNotFoundException e) {
                 throw new Exception(tl("playerNeverOnServer", args[1]));
             }
 
-            String mail = tl("mailFormat", user.getName(), FormatUtil.formatMessage(user, "essentials.mail", StringUtil.sanitizeString(FormatUtil.stripFormat(getFinalArg(args, 2)))));
+            final String mail = tl("mailFormat", user.getName(), FormatUtil.formatMessage(user, "essentials.mail", StringUtil.sanitizeString(FormatUtil.stripFormat(getFinalArg(args, 2)))));
             if (mail.length() > 1000) {
                 throw new Exception(tl("mailTooLong"));
             }
@@ -88,7 +87,7 @@ public class Commandmail extends EssentialsCommand {
                 throw new Exception(tl("noPerm", "essentials.mail.sendall"));
             }
             ess.runTaskAsynchronously(new SendAll(tl("mailFormat", user.getName(),
-                    FormatUtil.formatMessage(user, "essentials.mail", StringUtil.sanitizeString(FormatUtil.stripFormat(getFinalArg(args, 1)))))));
+                FormatUtil.formatMessage(user, "essentials.mail", StringUtil.sanitizeString(FormatUtil.stripFormat(getFinalArg(args, 1)))))));
             user.sendMessage(tl("mailSent"));
             return;
         }
@@ -106,16 +105,16 @@ public class Commandmail extends EssentialsCommand {
     }
 
     @Override
-    protected void run(Server server, CommandSource sender, String commandLabel, String[] args) throws Exception {
+    protected void run(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception {
         if (args.length >= 1 && "read".equalsIgnoreCase(args[0])) {
             throw new Exception(tl("onlyPlayers", commandLabel + " read"));
         } else if (args.length >= 1 && "clear".equalsIgnoreCase(args[0])) {
             throw new Exception(tl("onlyPlayers", commandLabel + " clear"));
         } else if (args.length >= 3 && "send".equalsIgnoreCase(args[0])) {
-            User u;
+            final User u;
             try {
                 u = getPlayer(server, args[1], true, true);
-            } catch (PlayerNotFoundException e) {
+            } catch (final PlayerNotFoundException e) {
                 throw new Exception(tl("playerNeverOnServer", args[1]));
             }
             u.addMail(tl("mailFormat", "Server", FormatUtil.replaceFormat(getFinalArg(args, 2))));
@@ -127,10 +126,10 @@ public class Commandmail extends EssentialsCommand {
             return;
         } else if (args.length >= 2) {
             //allow sending from console without "send" argument, since it's the only thing the console can do
-            User u;
+            final User u;
             try {
                 u = getPlayer(server, args[0], true, true);
-            } catch (PlayerNotFoundException e) {
+            } catch (final PlayerNotFoundException e) {
                 throw new Exception(tl("playerNeverOnServer", args[0]));
             }
             u.addMail(tl("mailFormat", "Server", FormatUtil.replaceFormat(getFinalArg(args, 1))));
@@ -140,29 +139,10 @@ public class Commandmail extends EssentialsCommand {
         throw new NotEnoughArgumentsException();
     }
 
-
-    private class SendAll implements Runnable {
-        String message;
-
-        public SendAll(String message) {
-            this.message = message;
-        }
-
-        @Override
-        public void run() {
-            for (UUID userid : ess.getUserMap().getAllUniqueUsers()) {
-                User user = ess.getUserMap().getUser(userid);
-                if (user != null) {
-                    user.addMail(message);
-                }
-            }
-        }
-    }
-
     @Override
     protected List<String> getTabCompleteOptions(final Server server, final User user, final String commandLabel, final String[] args) {
         if (args.length == 1) {
-            List<String> options = Lists.newArrayList("read", "clear");
+            final List<String> options = Lists.newArrayList("read", "clear");
             if (user.isAuthorized("essentials.mail.send")) {
                 options.add("send");
             }
@@ -174,11 +154,11 @@ public class Commandmail extends EssentialsCommand {
             return getPlayers(server, user);
         } else if (args.length == 2 && args[0].equalsIgnoreCase("read")) {
             final List<String> mail = user.getMails();
-            int pages = mail.size() / 9 + (mail.size() % 9 > 0 ? 1 : 0);
+            final int pages = mail.size() / 9 + (mail.size() % 9 > 0 ? 1 : 0);
             if (pages == 0) {
                 return Lists.newArrayList("0");
             } else {
-                List<String> options = Lists.newArrayList("1");
+                final List<String> options = Lists.newArrayList("1");
                 if (pages > 1) {
                     options.add(String.valueOf(pages));
                 }
@@ -201,6 +181,24 @@ public class Commandmail extends EssentialsCommand {
             return null; // Use vanilla handler
         } else {
             return Collections.emptyList();
+        }
+    }
+
+    private class SendAll implements Runnable {
+        final String message;
+
+        SendAll(final String message) {
+            this.message = message;
+        }
+
+        @Override
+        public void run() {
+            for (final UUID userid : ess.getUserMap().getAllUniqueUsers()) {
+                final User user = ess.getUserMap().getUser(userid);
+                if (user != null) {
+                    user.addMail(message);
+                }
+            }
         }
     }
 }

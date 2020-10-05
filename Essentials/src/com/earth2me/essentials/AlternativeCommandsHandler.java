@@ -6,10 +6,14 @@ import org.bukkit.command.PluginCommand;
 import org.bukkit.command.PluginCommandYamlParser;
 import org.bukkit.plugin.Plugin;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
 
 public class AlternativeCommandsHandler {
     private static final Logger LOGGER = Logger.getLogger("Essentials");
@@ -19,7 +23,7 @@ public class AlternativeCommandsHandler {
 
     public AlternativeCommandsHandler(final IEssentials ess) {
         this.ess = ess;
-        for (Plugin plugin : ess.getServer().getPluginManager().getPlugins()) {
+        for (final Plugin plugin : ess.getServer().getPluginManager().getPlugins()) {
             if (plugin.isEnabled()) {
                 addPlugin(plugin);
             }
@@ -33,7 +37,7 @@ public class AlternativeCommandsHandler {
         final List<Command> commands = PluginCommandYamlParser.parse(plugin);
         final String pluginName = plugin.getDescription().getName().toLowerCase(Locale.ENGLISH);
 
-        for (Command command : commands) {
+        for (final Command command : commands) {
             final PluginCommand pc = (PluginCommand) command;
             final List<String> labels = new ArrayList<>(pc.getAliases());
             labels.add(pc.getName());
@@ -45,10 +49,10 @@ public class AlternativeCommandsHandler {
             if (reg == null || !reg.getPlugin().equals(plugin)) {
                 continue;
             }
-            for (String label : labels) {
-                List<PluginCommand> plugincommands = altcommands.computeIfAbsent(label.toLowerCase(Locale.ENGLISH), k -> new ArrayList<>());
+            for (final String label : labels) {
+                final List<PluginCommand> plugincommands = altcommands.computeIfAbsent(label.toLowerCase(Locale.ENGLISH), k -> new ArrayList<>());
                 boolean found = false;
-                for (PluginCommand pc2 : plugincommands) {
+                for (final PluginCommand pc2 : plugincommands) {
                     if (pc2.getPlugin().equals(plugin)) {
                         found = true;
                         break;
@@ -81,7 +85,7 @@ public class AlternativeCommandsHandler {
             return commands.get(0);
         }
         // return the first command that is not an alias
-        for (PluginCommand command : commands) {
+        for (final PluginCommand command : commands) {
             if (command.getName().equalsIgnoreCase(label)) {
                 return command;
             }

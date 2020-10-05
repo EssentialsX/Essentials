@@ -14,7 +14,6 @@ import java.util.logging.Level;
 
 import static com.earth2me.essentials.I18n.tl;
 
-
 public class Commandban extends EssentialsCommand {
     public Commandban() {
         super("ban");
@@ -29,7 +28,7 @@ public class Commandban extends EssentialsCommand {
         User user;
         try {
             user = getPlayer(server, args, 0, true, true);
-        } catch (PlayerNotFoundException e) {
+        } catch (final PlayerNotFoundException e) {
             nomatch = true;
             user = ess.getUser(new OfflinePlayer(args[0], ess.getServer()));
         }
@@ -42,7 +41,7 @@ public class Commandban extends EssentialsCommand {
         }
 
         final String senderName = sender.isPlayer() ? sender.getPlayer().getDisplayName() : Console.NAME;
-        String banReason;
+        final String banReason;
         if (args.length > 1) {
             banReason = FormatUtil.replaceFormat(getFinalArg(args, 1).replace("\\n", "\n").replace("|", "\n"));
         } else {
@@ -51,7 +50,7 @@ public class Commandban extends EssentialsCommand {
 
         ess.getServer().getBanList(BanList.Type.NAME).addBan(user.getName(), banReason, null, senderName);
 
-        String banDisplay = tl("banFormat", banReason, senderName);
+        final String banDisplay = tl("banFormat", banReason, senderName);
 
         user.getBase().kickPlayer(banDisplay);
         server.getLogger().log(Level.INFO, tl("playerBanned", senderName, user.getName(), banDisplay));
@@ -64,7 +63,7 @@ public class Commandban extends EssentialsCommand {
     }
 
     @Override
-    protected List<String> getTabCompleteOptions(Server server, CommandSource sender, String commandLabel, String[] args) {
+    protected List<String> getTabCompleteOptions(final Server server, final CommandSource sender, final String commandLabel, final String[] args) {
         if (args.length == 1) {
             return getPlayers(server, sender);
         } else {

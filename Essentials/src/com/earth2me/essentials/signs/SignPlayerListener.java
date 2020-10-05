@@ -11,9 +11,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 
-import java.util.Set;
 import java.util.logging.Level;
-
 
 public class SignPlayerListener implements Listener {
     private final transient IEssentials ess;
@@ -40,7 +38,7 @@ public class SignPlayerListener implements Listener {
             Block targetBlock = null;
             try {
                 targetBlock = event.getPlayer().getTargetBlock(null, 5);
-            } catch (IllegalStateException ex) {
+            } catch (final IllegalStateException ex) {
                 if (ess.getSettings().isDebug()) {
                     ess.getLogger().log(Level.WARNING, ex.getMessage(), ex);
                 }
@@ -56,7 +54,7 @@ public class SignPlayerListener implements Listener {
         final Material mat = block.getType();
         if (MaterialUtil.isSign(mat)) {
             final String csign = ((Sign) block.getState()).getLine(0);
-            for (EssentialsSign sign : ess.getSettings().enabledSigns()) {
+            for (final EssentialsSign sign : ess.getSettings().enabledSigns()) {
                 if (csign.equalsIgnoreCase(sign.getSuccessName(ess))) {
                     sign.onSignInteract(block, event.getPlayer(), ess);
                     event.setCancelled(true);
@@ -64,7 +62,7 @@ public class SignPlayerListener implements Listener {
                 }
             }
         } else {
-            for (EssentialsSign sign : ess.getSettings().enabledSigns()) {
+            for (final EssentialsSign sign : ess.getSettings().enabledSigns()) {
                 if (sign.areHeavyEventRequired() && sign.getBlocks().contains(block.getType()) && !sign.onBlockInteract(block, event.getPlayer(), ess)) {
                     event.setCancelled(true);
                     return;
