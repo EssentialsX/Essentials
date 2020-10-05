@@ -46,7 +46,7 @@ If you have a feature suggestion for EssentialsX, read the following tips:
 **Feature description:**  
 <!-- What feature are you suggesting? Type below this line. -->
 
-**How the feature is useful**
+**How the feature is useful:**  
 <!--
     How is the feature useful to players, server owners and/or developers?
     Type below this block.
