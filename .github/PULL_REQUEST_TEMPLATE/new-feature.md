@@ -45,8 +45,9 @@ If you are submitting a new feature, please follow the following steps:
 ### Information
 
 <!--
-    Replace #nnnn with the original issue. If this PR implements features from
-    multiple issues, you should repeat the "fixes #nnnn" for each issue. 
+    Replace #nnnn with the number of the original issue. If this PR implements
+    features from multiple issues, you should repeat the "closes #nnnn" for
+    each issue. 
 -->
 
 This PR closes #nnnn. 

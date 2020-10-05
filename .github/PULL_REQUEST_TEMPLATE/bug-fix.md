@@ -1,7 +1,7 @@
 ---
 name: Bug fix
 about: Use this if your PR fixes a bug in EssentialsX.
-labels: 'bug: unconfirmed'
+labels: 'type: bugfix'
 ---
 
 <!-- EssentialsX bug fix submission guide
@@ -45,8 +45,8 @@ If you are submitting a bug fix, please follow the following steps:
 ### Information
 
 <!--
-    Replace #nnnn with the original issue. If this PR fixes multiple issues,
-    you should repeat the "fixes #nnnn" for each issue. 
+    Replace #nnnn with the number of the original issue. If this PR fixes
+    multiple issues, you should repeat the "fixes #nnnn" for each issue. 
 -->
 
 This PR fixes #nnnn. 

@@ -11,8 +11,8 @@ NOTE: Failure to fill out this template properly may result in your issue being
       delayed or ignored.
 
 Don't put anything inside this block, as it will be hidden when you post your
-PR. Make sure to also not type between any arrows in the template, as this text
-will also be hidden.
+issue. Make sure to also not type between any arrows in the template, as this
+text will also be hidden.
 
 Not sure if your feature fits in EssentialsX? Feel free to ask on our Discord
 server: https://discord.gg/F7gexAQ
