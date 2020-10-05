@@ -17,6 +17,7 @@ public class Commandloom extends EssentialsCommand {
             user.sendMessage(tl("unsupportedBrand"));
             return;
         }
+
         ess.getContainerProvider().openLoom(user.getBase());
     }
 }

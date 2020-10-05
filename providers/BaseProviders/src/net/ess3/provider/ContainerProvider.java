@@ -11,4 +11,5 @@ public interface ContainerProvider extends Provider {
     InventoryView openLoom(Player player);
     InventoryView openSmithingTable(Player player);
     InventoryView openStonecutter(Player player);
+
 }

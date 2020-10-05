@@ -17,6 +17,7 @@ public class Commandstonecutter extends EssentialsCommand {
             user.sendMessage(tl("unsupportedBrand"));
             return;
         }
+
         ess.getContainerProvider().openStonecutter(user.getBase());
     }
 }

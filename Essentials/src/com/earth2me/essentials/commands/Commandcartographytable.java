@@ -17,6 +17,7 @@ public class Commandcartographytable extends EssentialsCommand {
             user.sendMessage(tl("unsupportedBrand"));
             return;
         }
+
         ess.getContainerProvider().openCartographyTable(user.getBase());
     }
 }
