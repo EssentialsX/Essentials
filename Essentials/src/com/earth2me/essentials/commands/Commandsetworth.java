@@ -8,7 +8,6 @@ import org.bukkit.inventory.ItemStack;
 
 import static com.earth2me.essentials.I18n.tl;
 
-
 public class Commandsetworth extends EssentialsCommand {
     public Commandsetworth() {
         super("setworth");
@@ -20,8 +19,8 @@ public class Commandsetworth extends EssentialsCommand {
             throw new NotEnoughArgumentsException();
         }
 
-        ItemStack stack;
-        String price;
+        final ItemStack stack;
+        final String price;
         if (args.length == 1) {
             stack = user.getBase().getInventory().getItemInHand();
             price = args[0];

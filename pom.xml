@@ -35,10 +35,10 @@
             <id>paper-repo</id>
             <url>https://papermc.io/repo/repository/maven-public/</url>
         </repository>
-		<repository>
-		    <id>jitpack</id>
-		    <url>https://jitpack.io</url>
-		</repository>
+        <repository>
+            <id>jitpack</id>
+            <url>https://jitpack.io</url>
+        </repository>
     </repositories>
 
     <modules>
@@ -59,7 +59,7 @@
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-api</artifactId>
-            <version>1.16.2-R0.1-SNAPSHOT</version>
+            <version>1.16.3-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -188,6 +188,7 @@
                             <value>${full.version}</value>
                         </replacement>
                         <replacement>
+                            <!--suppress UnresolvedMavenProperty -->
                             <token>$${build.number}</token>
                             <value>${full.version}</value>
                         </replacement>
@@ -251,7 +252,24 @@
                     </gitDescribe>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-checkstyle-plugin</artifactId>
+                <version>3.1.1</version>
+                <configuration>
+                    <configLocation>.checkstyle/checkstyle.xml</configLocation>
+                    <suppressionsLocation>.checkstyle/suppressions.xml</suppressionsLocation>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
+
         <resources>
             <resource>
                 <directory>src</directory>
@@ -274,6 +292,7 @@
         <release.version>2.18.1</release.version>
 
         <!-- The plugins' build number -->
+        <!--suppress UnresolvedMavenProperty -->
         <build.version>${git.closest.tag.commit.count}</build.version>
 
         <full.version>${release.version}.${build.version}</full.version>

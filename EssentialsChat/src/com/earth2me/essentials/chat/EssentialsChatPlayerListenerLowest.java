@@ -14,7 +14,6 @@ import org.bukkit.scoreboard.Team;
 import java.util.Locale;
 import java.util.Map;
 
-
 public class EssentialsChatPlayerListenerLowest extends EssentialsChatPlayer {
     EssentialsChatPlayerListenerLowest(final Server server, final IEssentials ess, final Map<AsyncPlayerChatEvent, ChatStore> chatStorage) {
         super(server, ess, chatStorage);
@@ -40,18 +39,18 @@ public class EssentialsChatPlayerListenerLowest extends EssentialsChatPlayer {
         // This listener should apply the general chat formatting only...then return control back the event handler
         event.setMessage(FormatUtil.formatMessage(user, "essentials.chat", event.getMessage()));
 
-        if ((ChatColor.stripColor(event.getMessage())).length() == 0) {
+        if (ChatColor.stripColor(event.getMessage()).length() == 0) {
             event.setCancelled(true);
             return;
         }
 
-        String group = user.getGroup();
-        String world = user.getWorld().getName();
+        final String group = user.getGroup();
+        final String world = user.getWorld().getName();
 
-        Player player = user.getBase();
-        String prefix = FormatUtil.replaceFormat(ess.getPermissionsHandler().getPrefix(player));
-        String suffix = FormatUtil.replaceFormat(ess.getPermissionsHandler().getSuffix(player));
-        Team team = player.getScoreboard().getPlayerTeam(player);
+        final Player player = user.getBase();
+        final String prefix = FormatUtil.replaceFormat(ess.getPermissionsHandler().getPrefix(player));
+        final String suffix = FormatUtil.replaceFormat(ess.getPermissionsHandler().getSuffix(player));
+        final Team team = player.getScoreboard().getPlayerTeam(player);
 
         String format = ess.getSettings().getChatFormat(group);
         format = format.replace("{0}", group);

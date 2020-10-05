@@ -10,7 +10,6 @@ import java.util.List;
 
 import static com.earth2me.essentials.I18n.tl;
 
-
 public class Commandgetpos extends EssentialsCommand {
     public Commandgetpos() {
         super("getpos");
@@ -48,17 +47,8 @@ public class Commandgetpos extends EssentialsCommand {
     }
 
     @Override
-    protected List<String> getTabCompleteOptions(Server server, User user, String commandLabel, String[] args) {
-        if (args.length == 1 && user.isAuthorized("essentials.getpos.others")) {
-            return getPlayers(server, user);
-        } else {
-            return Collections.emptyList();
-        }
-    }
-
-    @Override
-    protected List<String> getTabCompleteOptions(Server server, CommandSource sender, String commandLabel, String[] args) {
-        if (args.length == 1) {
+    protected List<String> getTabCompleteOptions(final Server server, final CommandSource sender, final String commandLabel, final String[] args) {
+        if (args.length == 1 && sender.isAuthorized("essentials.getpos.others", ess)) {
             return getPlayers(server, sender);
         } else {
             return Collections.emptyList();

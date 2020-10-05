@@ -6,7 +6,6 @@ import org.bukkit.Server;
 
 import static com.earth2me.essentials.I18n.tl;
 
-
 public class Commandsocialspy extends EssentialsToggleCommand {
     public Commandsocialspy() {
         super("socialspy", "essentials.socialspy.others");
@@ -23,7 +22,7 @@ public class Commandsocialspy extends EssentialsToggleCommand {
     }
 
     @Override
-    protected void togglePlayer(CommandSource sender, User user, Boolean enabled) {
+    protected void togglePlayer(final CommandSource sender, final User user, Boolean enabled) {
         if (enabled == null) {
             enabled = !user.isSocialSpyEnabled();
         }

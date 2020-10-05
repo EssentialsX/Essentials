@@ -8,7 +8,6 @@ import org.bukkit.event.block.BlockBreakEvent;
 
 import static com.earth2me.essentials.I18n.tl;
 
-
 public class Commandbreak extends EssentialsCommand {
     public Commandbreak() {
         super("break");

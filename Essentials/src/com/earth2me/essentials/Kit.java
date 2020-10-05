@@ -11,18 +11,20 @@ import com.earth2me.essentials.utils.MaterialUtil;
 import com.earth2me.essentials.utils.NumberUtil;
 import net.ess3.api.IEssentials;
 import net.ess3.api.events.KitClaimEvent;
-
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 
 import java.math.BigDecimal;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 
 import static com.earth2me.essentials.I18n.tl;
-
 
 public class Kit {
     final IEssentials ess;
@@ -52,7 +54,7 @@ public class Kit {
     }
 
     public void checkDelay(final User user) throws Exception {
-        long nextUse = getNextUse(user);
+        final long nextUse = getNextUse(user);
 
         if (nextUse == 0L) {
         } else if (nextUse < 0L) {
@@ -88,7 +90,7 @@ public class Kit {
         try {
             // Make sure delay is valid
             delay = kit.containsKey("delay") ? ((Number) kit.get("delay")).doubleValue() : 0.0d;
-        } catch (Exception e) {
+        } catch (final Exception e) {
             throw new Exception(tl("kitError2"));
         }
 
@@ -129,7 +131,7 @@ public class Kit {
             final List<String> itemList = new ArrayList<>();
             final Object kitItems = kit.get("items");
             if (kitItems instanceof List) {
-                for (Object item : (List) kitItems) {
+                for (final Object item : (List) kitItems) {
                     if (item instanceof String) {
                         itemList.add(item.toString());
                         continue;
@@ -139,7 +141,7 @@ public class Kit {
                 return itemList;
             }
             throw new Exception("Invalid item list");
-        } catch (Exception e) {
+        } catch (final Exception e) {
             ess.getLogger().log(Level.WARNING, "Error parsing kit " + kitName + ": " + e.getMessage());
             throw new Exception(tl("kitError2"), e);
         }
@@ -151,10 +153,10 @@ public class Kit {
 
     public boolean expandItems(final User user, final List<String> items) throws Exception {
         try {
-            IText input = new SimpleTextInput(items);
-            IText output = new KeywordReplacer(input, user.getSource(), ess, true, true);
+            final IText input = new SimpleTextInput(items);
+            final IText output = new KeywordReplacer(input, user.getSource(), ess, true, true);
 
-            KitClaimEvent event = new KitClaimEvent(user, this);
+            final KitClaimEvent event = new KitClaimEvent(user, this);
             Bukkit.getPluginManager().callEvent(event);
             if (event.isCancelled()) {
                 return false;
@@ -164,10 +166,10 @@ public class Kit {
             final boolean allowUnsafe = ess.getSettings().allowUnsafeEnchantments();
             final boolean currencyIsSuffix = ess.getSettings().isCurrencySymbolSuffixed();
             final boolean autoEquip = ess.getSettings().isKitAutoEquip();
-            List<ItemStack> itemList = new ArrayList<>();
-            List<String> commandQueue = new ArrayList<>();
-            List<String> moneyQueue = new ArrayList<>();
-            for (String kitItem : output.getLines()) {
+            final List<ItemStack> itemList = new ArrayList<>();
+            final List<String> commandQueue = new ArrayList<>();
+            final List<String> moneyQueue = new ArrayList<>();
+            for (final String kitItem : output.getLines()) {
                 if (!currencyIsSuffix ? kitItem.startsWith(ess.getSettings().getCurrencySymbol()) : kitItem.endsWith(ess.getSettings().getCurrencySymbol())) {
                     moneyQueue.add(NumberUtil.sanitizeCurrencyString(kitItem, ess));
                     continue;
@@ -175,7 +177,7 @@ public class Kit {
 
                 if (kitItem.startsWith("/")) {
                     String command = kitItem.substring(1);
-                    String name = user.getName();
+                    final String name = user.getName();
                     command = command.replace("{player}", name);
                     commandQueue.add(command);
                     continue;
@@ -196,9 +198,9 @@ public class Kit {
                 }
 
                 if (autoEquip) {
-                    ItemStack stack = metaStack.getItemStack();
-                    Material material = stack.getType();
-                    PlayerInventory inventory = user.getBase().getInventory();
+                    final ItemStack stack = metaStack.getItemStack();
+                    final Material material = stack.getType();
+                    final PlayerInventory inventory = user.getBase().getInventory();
                     if (MaterialUtil.isHelmet(material) && isEmptyStack(inventory.getHelmet())) {
                         inventory.setHelmet(stack);
                         continue;
@@ -213,11 +215,10 @@ public class Kit {
                         continue;
                     }
                 }
-                
+
                 itemList.add(metaStack.getItemStack());
             }
-            
-            
+
             final Map<Integer, ItemStack> overfilled;
             final boolean allowOversizedStacks = user.isAuthorized("essentials.oversizedstacks");
             final boolean isDropItemsIfFull = ess.getSettings().isDropItemsIfFull();
@@ -227,7 +228,7 @@ public class Kit {
                 } else {
                     overfilled = InventoryWorkaround.addItems(user.getBase().getInventory(), itemList.toArray(new ItemStack[0]));
                 }
-                for (ItemStack itemStack : overfilled.values()) {
+                for (final ItemStack itemStack : overfilled.values()) {
                     int spillAmount = itemStack.getAmount();
                     if (!allowOversizedStacks) {
                         itemStack.setAmount(Math.min(spillAmount, itemStack.getMaxStackSize()));
@@ -254,20 +255,20 @@ public class Kit {
             // Process money & command queues
             // Done after all items have been processed so commands are not run and money is not given if
             // an error occurs during the item giving process
-            for (String valueString : moneyQueue) {
-                BigDecimal value = new BigDecimal(valueString.trim());
-                Trade t = new Trade(value, ess);
+            for (final String valueString : moneyQueue) {
+                final BigDecimal value = new BigDecimal(valueString.trim());
+                final Trade t = new Trade(value, ess);
                 t.pay(user, OverflowType.DROP);
             }
 
-            for (String cmd : commandQueue) {
+            for (final String cmd : commandQueue) {
                 Bukkit.dispatchCommand(Bukkit.getConsoleSender(), cmd);
             }
 
             if (spew) {
                 user.sendMessage(tl("kitInvFull"));
             }
-        } catch (Exception e) {
+        } catch (final Exception e) {
             user.getBase().updateInventory();
             ess.getLogger().log(Level.WARNING, e.getMessage());
             throw new Exception(tl("kitError2"), e);

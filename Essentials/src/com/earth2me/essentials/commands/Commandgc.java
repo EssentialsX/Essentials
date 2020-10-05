@@ -3,14 +3,17 @@ package com.earth2me.essentials.commands;
 import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.utils.DateUtil;
 import com.earth2me.essentials.utils.NumberUtil;
-import org.bukkit.*;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.Chunk;
+import org.bukkit.Server;
+import org.bukkit.World;
 
 import java.lang.management.ManagementFactory;
 import java.util.List;
 import java.util.logging.Level;
 
 import static com.earth2me.essentials.I18n.tl;
-
 
 public class Commandgc extends EssentialsCommand {
     public Commandgc() {
@@ -19,8 +22,8 @@ public class Commandgc extends EssentialsCommand {
 
     @Override
     protected void run(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception {
-        double tps = ess.getTimer().getAverageTPS();
-        ChatColor color;
+        final double tps = ess.getTimer().getAverageTPS();
+        final ChatColor color;
         if (tps >= 18.0) {
             color = ChatColor.GREEN;
         } else if (tps >= 15.0) {
@@ -31,12 +34,12 @@ public class Commandgc extends EssentialsCommand {
 
         sender.sendMessage(tl("uptime", DateUtil.formatDateDiff(ManagementFactory.getRuntimeMXBean().getStartTime())));
         sender.sendMessage(tl("tps", "" + color + NumberUtil.formatDouble(tps)));
-        sender.sendMessage(tl("gcmax", (Runtime.getRuntime().maxMemory() / 1024 / 1024)));
-        sender.sendMessage(tl("gctotal", (Runtime.getRuntime().totalMemory() / 1024 / 1024)));
-        sender.sendMessage(tl("gcfree", (Runtime.getRuntime().freeMemory() / 1024 / 1024)));
+        sender.sendMessage(tl("gcmax", Runtime.getRuntime().maxMemory() / 1024 / 1024));
+        sender.sendMessage(tl("gctotal", Runtime.getRuntime().totalMemory() / 1024 / 1024));
+        sender.sendMessage(tl("gcfree", Runtime.getRuntime().freeMemory() / 1024 / 1024));
 
-        List<World> worlds = server.getWorlds();
-        for (World w : worlds) {
+        final List<World> worlds = server.getWorlds();
+        for (final World w : worlds) {
             String worldType = "World";
             switch (w.getEnvironment()) {
                 case NETHER:
@@ -50,10 +53,10 @@ public class Commandgc extends EssentialsCommand {
             int tileEntities = 0;
 
             try {
-                for (Chunk chunk : w.getLoadedChunks()) {
+                for (final Chunk chunk : w.getLoadedChunks()) {
                     tileEntities += chunk.getTileEntities().length;
                 }
-            } catch (java.lang.ClassCastException ex) {
+            } catch (final java.lang.ClassCastException ex) {
                 Bukkit.getLogger().log(Level.SEVERE, "Corrupted chunk data on world " + w, ex);
             }
 

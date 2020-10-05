@@ -7,7 +7,6 @@ import java.util.List;
 
 import static com.earth2me.essentials.I18n.tl;
 
-
 public class SignMail extends EssentialsSign {
     public SignMail() {
         super("Mail");
@@ -20,7 +19,7 @@ public class SignMail extends EssentialsSign {
             player.sendMessage(tl("noNewMail"));
             return false;
         }
-        for (String s : mail) {
+        for (final String s : mail) {
             player.sendMessage(s);
         }
         player.sendMessage(tl("markMailAsRead"));

@@ -4,7 +4,6 @@ import com.earth2me.essentials.api.NoLoanPermittedException;
 import com.earth2me.essentials.api.UserDoesNotExistException;
 import com.earth2me.essentials.commands.IEssentialsCommand;
 import com.earth2me.essentials.commands.NoChargeException;
-
 import net.ess3.api.Economy;
 import org.bukkit.World.Environment;
 import org.bukkit.command.CommandSender;
@@ -14,12 +13,11 @@ import org.junit.Test;
 
 import java.io.IOException;
 
-
 public class EconomyTest {
-    private final transient Essentials ess;
     private static final String NPCNAME = "npc1";
     private static final String PLAYERNAME = "testPlayer1";
     private static final String PLAYERNAME2 = "testPlayer2";
+    private final transient Essentials ess;
     private final FakeServer server;
 
     public EconomyTest() {
@@ -28,9 +26,9 @@ public class EconomyTest {
         ess = new Essentials(server);
         try {
             ess.setupForTesting(server);
-        } catch (InvalidDescriptionException ex) {
+        } catch (final InvalidDescriptionException ex) {
             Assert.fail("InvalidDescriptionException");
-        } catch (IOException ex) {
+        } catch (final IOException ex) {
             Assert.fail("IOException");
         }
         server.addPlayer(new OfflinePlayer(PLAYERNAME, ess.getServer()));
@@ -47,7 +45,7 @@ public class EconomyTest {
         Assert.assertNotNull("NPC can be accessed", ess.getOfflineUser(NPCNAME));
         try {
             Economy.removeNPC(NPCNAME);
-        } catch (UserDoesNotExistException ex) {
+        } catch (final UserDoesNotExistException ex) {
             Assert.fail(ex.getMessage());
         }
         Assert.assertFalse("NPC can be removed", Economy.playerExists(NPCNAME));
@@ -59,16 +57,16 @@ public class EconomyTest {
             Economy.resetBalance(PLAYERNAME);
             Assert.assertEquals("Player has no money", 0.0, Economy.getMoney(PLAYERNAME), 0);
             Economy.add(PLAYERNAME, 10.0);
-            Assert.assertEquals("Add money", 10.0, Economy.getMoney(PLAYERNAME),0);
+            Assert.assertEquals("Add money", 10.0, Economy.getMoney(PLAYERNAME), 0);
             Economy.subtract(PLAYERNAME, 5.0);
-            Assert.assertEquals("Subtract money", 5.0, Economy.getMoney(PLAYERNAME),0);
+            Assert.assertEquals("Subtract money", 5.0, Economy.getMoney(PLAYERNAME), 0);
             Economy.multiply(PLAYERNAME, 2.0);
-            Assert.assertEquals("Multiply money", 10.0, Economy.getMoney(PLAYERNAME),0);
+            Assert.assertEquals("Multiply money", 10.0, Economy.getMoney(PLAYERNAME), 0);
             Economy.divide(PLAYERNAME, 2.0);
-            Assert.assertEquals("Divide money", 5.0, Economy.getMoney(PLAYERNAME),0);
+            Assert.assertEquals("Divide money", 5.0, Economy.getMoney(PLAYERNAME), 0);
             Economy.setMoney(PLAYERNAME, 10.0);
-            Assert.assertEquals("Set money", 10.0, Economy.getMoney(PLAYERNAME),0);
-        } catch (NoLoanPermittedException | UserDoesNotExistException ex) {
+            Assert.assertEquals("Set money", 10.0, Economy.getMoney(PLAYERNAME), 0);
+        } catch (final NoLoanPermittedException | UserDoesNotExistException ex) {
             Assert.fail(ex.getMessage());
         }
 
@@ -79,66 +77,68 @@ public class EconomyTest {
         Assert.assertEquals("Format $10.10", "$10.10", Economy.format(10.1000001));
         Assert.assertEquals("Format $10.10", "$10.10", Economy.format(10.1099999));
 
-
         //test Exceptions
         try {
             Assert.assertTrue("Player exists", Economy.playerExists(PLAYERNAME));
             Economy.resetBalance(PLAYERNAME);
-            Assert.assertEquals("Reset balance", 0.0, Economy.getMoney(PLAYERNAME),0);
+            Assert.assertEquals("Reset balance", 0.0, Economy.getMoney(PLAYERNAME), 0);
             Economy.subtract(PLAYERNAME, 5.0);
             Assert.fail("Did not throw exception");
-        } catch (NoLoanPermittedException ignored) {
-        } catch (UserDoesNotExistException ex) {
+        } catch (final NoLoanPermittedException ignored) {
+        } catch (final UserDoesNotExistException ex) {
             Assert.fail(ex.getMessage());
         }
 
         try {
             Economy.resetBalance("UnknownPlayer");
             Assert.fail("Did not throw exception");
-        } catch (NoLoanPermittedException ex) {
+        } catch (final NoLoanPermittedException ex) {
             Assert.fail(ex.getMessage());
-        } catch (UserDoesNotExistException ignored) {}
+        } catch (final UserDoesNotExistException ignored) {
+        }
     }
 
-    private void runCommand(String command, User user, String args) throws Exception {
+    private void runCommand(final String command, final User user, final String args) throws Exception {
         runCommand(command, user, args.split("\\s+"));
     }
 
-    private void runCommand(String command, User user, String[] args) throws Exception {
-        IEssentialsCommand cmd;
+    private void runCommand(final String command, final User user, final String[] args) throws Exception {
+        final IEssentialsCommand cmd;
 
         try {
             cmd = (IEssentialsCommand) Essentials.class.getClassLoader()
                 .loadClass("com.earth2me.essentials.commands.Command" + command).newInstance();
             cmd.setEssentials(ess);
             cmd.run(server, user, command, null, args);
-        } catch (NoChargeException ignored) {}
+        } catch (final NoChargeException ignored) {
+        }
 
     }
 
-    private void runConsoleCommand(String command, String args) throws Exception {
+    private void runConsoleCommand(final String command, final String args) throws Exception {
         runConsoleCommand(command, args.split("\\s+"));
     }
 
-    private void runConsoleCommand(String command, String[] args) throws Exception {
-        IEssentialsCommand cmd;
+    private void runConsoleCommand(final String command, final String[] args) throws Exception {
+        final IEssentialsCommand cmd;
 
-        CommandSender sender = server.getConsoleSender();
+        final CommandSender sender = server.getConsoleSender();
 
         try {
             cmd = (IEssentialsCommand) Essentials.class.getClassLoader()
                 .loadClass("com.earth2me.essentials.commands.Command" + command).newInstance();
             cmd.setEssentials(ess);
             cmd.run(server, new CommandSource(sender), command, null, args);
-        } catch (NoChargeException ignored) {}
+        } catch (final NoChargeException ignored) {
+        }
     }
 
     @Test
     public void testNegativePayCommand() {
-        User user1 = ess.getUser(PLAYERNAME);
+        final User user1 = ess.getUser(PLAYERNAME);
         try {
             runCommand("pay", user1, PLAYERNAME2 + " -123");
-        } catch (Exception e) {
+        } catch (final Exception e) {
             Assert.assertEquals(I18n.tl("payMustBePositive"), e.getMessage());
         }
     }

@@ -16,13 +16,71 @@ import org.bukkit.plugin.Plugin;
 import java.lang.management.ManagementFactory;
 import java.text.DateFormat;
 import java.text.NumberFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.EnumMap;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static com.earth2me.essentials.I18n.tl;
 
+//When adding a keyword here, you also need to add the implementation above
+enum KeywordType {
+    PLAYER(KeywordCachable.CACHEABLE),
+    DISPLAYNAME(KeywordCachable.CACHEABLE),
+    USERNAME(KeywordCachable.NOTCACHEABLE),
+    BALANCE(KeywordCachable.CACHEABLE),
+    MAILS(KeywordCachable.CACHEABLE),
+    WORLD(KeywordCachable.CACHEABLE),
+    WORLDNAME(KeywordCachable.CACHEABLE),
+    ONLINE(KeywordCachable.CACHEABLE),
+    UNIQUE(KeywordCachable.CACHEABLE),
+    WORLDS(KeywordCachable.CACHEABLE),
+    PLAYERLIST(KeywordCachable.SUBVALUE, true),
+    TIME(KeywordCachable.CACHEABLE),
+    DATE(KeywordCachable.CACHEABLE),
+    WORLDTIME12(KeywordCachable.CACHEABLE),
+    WORLDTIME24(KeywordCachable.CACHEABLE),
+    WORLDDATE(KeywordCachable.CACHEABLE),
+    COORDS(KeywordCachable.CACHEABLE),
+    TPS(KeywordCachable.CACHEABLE),
+    UPTIME(KeywordCachable.CACHEABLE),
+    IP(KeywordCachable.CACHEABLE, true),
+    ADDRESS(KeywordCachable.CACHEABLE, true),
+    PLUGINS(KeywordCachable.CACHEABLE, true),
+    VERSION(KeywordCachable.CACHEABLE, true);
+    private final KeywordCachable type;
+    private final boolean isPrivate;
+
+    KeywordType(final KeywordCachable type) {
+        this.type = type;
+        this.isPrivate = false;
+    }
+
+    KeywordType(final KeywordCachable type, final boolean isPrivate) {
+        this.type = type;
+        this.isPrivate = isPrivate;
+    }
+
+    public KeywordCachable getType() {
+        return type;
+    }
+
+    public boolean isPrivate() {
+        return isPrivate;
+    }
+}
+
+enum KeywordCachable {
+    CACHEABLE, // This keyword can be cached as a string
+    SUBVALUE, // This keyword can be cached as a map
+    NOTCACHEABLE // This keyword should never be cached
+}
 
 public class KeywordReplacer implements IText {
     private static final Pattern KEYWORD = Pattern.compile("\\{([^\\{\\}]+)\\}");
@@ -31,7 +89,6 @@ public class KeywordReplacer implements IText {
     private final transient List<String> replaced;
     private final transient IEssentials ess;
     private final transient boolean includePrivate;
-    private transient ExecuteTimer execTimer;
     private final transient boolean replaceSpacesWithUnderscores;
     private final EnumMap<KeywordType, Object> keywordCache = new EnumMap<>(KeywordType.class);
 
@@ -54,7 +111,7 @@ public class KeywordReplacer implements IText {
     }
 
     public KeywordReplacer(final IText input, final CommandSource sender, final IEssentials ess, final boolean showPrivate,
-                           boolean replaceSpacesWithUnderscores) {
+                           final boolean replaceSpacesWithUnderscores) {
         this.input = input;
         this.replaced = new ArrayList<>(this.input.getLines().size());
         this.ess = ess;
@@ -64,7 +121,7 @@ public class KeywordReplacer implements IText {
     }
 
     private void replaceKeywords(final CommandSource sender) {
-        execTimer = new ExecuteTimer();
+        final ExecuteTimer execTimer = new ExecuteTimer();
         execTimer.start();
         User user = null;
         if (sender.isPlayer()) {
@@ -96,7 +153,7 @@ public class KeywordReplacer implements IText {
         final String keyword = matchTokens[0];
         try {
             String replacer = null;
-            KeywordType validKeyword = KeywordType.valueOf(keyword);
+            final KeywordType validKeyword = KeywordType.valueOf(keyword);
             if (validKeyword.getType().equals(KeywordCachable.CACHEABLE) && keywordCache.containsKey(validKeyword)) {
                 replacer = keywordCache.get(validKeyword).toString();
             } else if (validKeyword.getType().equals(KeywordCachable.SUBVALUE)) {
@@ -106,7 +163,7 @@ public class KeywordReplacer implements IText {
                 }
 
                 if (keywordCache.containsKey(validKeyword)) {
-                    Map<String, String> values = (Map<String, String>) keywordCache.get(validKeyword);
+                    final Map<String, String> values = (Map<String, String>) keywordCache.get(validKeyword);
                     if (values.containsKey(subKeyword)) {
                         replacer = values.get(subKeyword);
                     }
@@ -150,7 +207,7 @@ public class KeywordReplacer implements IText {
                         break;
                     case ONLINE:
                         int playerHidden = 0;
-                        for (User u : ess.getOnlineUsers()) {
+                        for (final User u : ess.getOnlineUsers()) {
                             if (u.isHidden()) {
                                 playerHidden++;
                             }
@@ -162,7 +219,7 @@ public class KeywordReplacer implements IText {
                         break;
                     case WORLDS:
                         final StringBuilder worldsBuilder = new StringBuilder();
-                        for (World w : ess.getServer().getWorlds()) {
+                        for (final World w : ess.getServer().getWorlds()) {
                             if (worldsBuilder.length() > 0) {
                                 worldsBuilder.append(", ");
                             }
@@ -185,7 +242,7 @@ public class KeywordReplacer implements IText {
                             //First lets build the per group playerlist
                             final Map<String, List<User>> playerList = PlayerList.getPlayerLists(ess, user, showHidden);
                             outputList = new HashMap<>();
-                            for (String groupName : playerList.keySet()) {
+                            for (final String groupName : playerList.keySet()) {
                                 final List<User> groupUsers = playerList.get(groupName);
                                 if (groupUsers != null && !groupUsers.isEmpty()) {
                                     outputList.put(groupName, PlayerList.listUsers(ess, groupUsers, " "));
@@ -194,7 +251,7 @@ public class KeywordReplacer implements IText {
 
                             //Now lets build the all user playerlist
                             final StringBuilder playerlistBuilder = new StringBuilder();
-                            for (Player p : ess.getOnlinePlayers()) {
+                            for (final Player p : ess.getOnlinePlayers()) {
                                 if (ess.getUser(p).isHidden()) {
                                     continue;
                                 }
@@ -263,7 +320,7 @@ public class KeywordReplacer implements IText {
                         break;
                     case PLUGINS:
                         final StringBuilder pluginlistBuilder = new StringBuilder();
-                        for (Plugin p : ess.getServer().getPluginManager().getPlugins()) {
+                        for (final Plugin p : ess.getServer().getPluginManager().getPlugins()) {
                             if (pluginlistBuilder.length() > 0) {
                                 pluginlistBuilder.append(", ");
                             }
@@ -290,7 +347,7 @@ public class KeywordReplacer implements IText {
             }
 
             line = line.replace(fullMatch, replacer);
-        } catch (IllegalArgumentException ignored) {
+        } catch (final IllegalArgumentException ignored) {
         }
 
         return line;
@@ -310,58 +367,4 @@ public class KeywordReplacer implements IText {
     public Map<String, Integer> getBookmarks() {
         return input.getBookmarks();
     }
-}
-
-//When adding a keyword here, you also need to add the implementation above
-enum KeywordType {
-    PLAYER(KeywordCachable.CACHEABLE),
-    DISPLAYNAME(KeywordCachable.CACHEABLE),
-    USERNAME(KeywordCachable.NOTCACHEABLE),
-    BALANCE(KeywordCachable.CACHEABLE),
-    MAILS(KeywordCachable.CACHEABLE),
-    WORLD(KeywordCachable.CACHEABLE),
-    WORLDNAME(KeywordCachable.CACHEABLE),
-    ONLINE(KeywordCachable.CACHEABLE),
-    UNIQUE(KeywordCachable.CACHEABLE),
-    WORLDS(KeywordCachable.CACHEABLE),
-    PLAYERLIST(KeywordCachable.SUBVALUE, true),
-    TIME(KeywordCachable.CACHEABLE),
-    DATE(KeywordCachable.CACHEABLE),
-    WORLDTIME12(KeywordCachable.CACHEABLE),
-    WORLDTIME24(KeywordCachable.CACHEABLE),
-    WORLDDATE(KeywordCachable.CACHEABLE),
-    COORDS(KeywordCachable.CACHEABLE),
-    TPS(KeywordCachable.CACHEABLE),
-    UPTIME(KeywordCachable.CACHEABLE),
-    IP(KeywordCachable.CACHEABLE, true),
-    ADDRESS(KeywordCachable.CACHEABLE, true),
-    PLUGINS(KeywordCachable.CACHEABLE, true),
-    VERSION(KeywordCachable.CACHEABLE, true);
-    private final KeywordCachable type;
-    private final boolean isPrivate;
-
-    KeywordType(KeywordCachable type) {
-        this.type = type;
-        this.isPrivate = false;
-    }
-
-    KeywordType(KeywordCachable type, boolean isPrivate) {
-        this.type = type;
-        this.isPrivate = isPrivate;
-    }
-
-    public KeywordCachable getType() {
-        return type;
-    }
-
-    public boolean isPrivate() {
-        return isPrivate;
-    }
-}
-
-
-enum KeywordCachable {
-    CACHEABLE, // This keyword can be cached as a string
-    SUBVALUE, // This keyword can be cached as a map
-    NOTCACHEABLE // This keyword should never be cached
 }

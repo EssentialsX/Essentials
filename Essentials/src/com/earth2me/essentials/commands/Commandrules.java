@@ -6,7 +6,6 @@ import com.earth2me.essentials.textreader.TextInput;
 import com.earth2me.essentials.textreader.TextPager;
 import org.bukkit.Server;
 
-
 public class Commandrules extends EssentialsCommand {
     public Commandrules() {
         super("rules");

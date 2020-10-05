@@ -1,6 +1,7 @@
 ---
 name: Help!
 about: Encountered a problem with EssentialsX? Not sure how to fix it?
+labels: 'type: question'
 
 ---
 

@@ -13,12 +13,12 @@ public class Commandpaytoggle extends EssentialsToggleCommand {
     }
 
     @Override
-    protected void run(Server server, CommandSource sender, String commandLabel, String[] args) throws Exception {
+    protected void run(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception {
         toggleOtherPlayers(server, sender, args);
     }
 
     @Override
-    public void run(Server server, User user, String commandLabel, String[] args) throws Exception {
+    public void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception {
         if (commandLabel.contains("payon")) {
             togglePlayer(user.getSource(), user, true);
         } else if (commandLabel.contains("payoff")) {
@@ -29,16 +29,16 @@ public class Commandpaytoggle extends EssentialsToggleCommand {
     }
 
     @Override
-    void togglePlayer(CommandSource sender, User user, Boolean enabled) {
+    void togglePlayer(final CommandSource sender, final User user, Boolean enabled) {
         if (enabled == null) {
             enabled = !user.isAcceptingPay();
         }
 
         user.setAcceptingPay(enabled);
 
-        user.sendMessage(!enabled ? tl("payToggleOn") : tl("payToggleOff"));
+        user.sendMessage(enabled ? tl("payToggleOn") : tl("payToggleOff"));
         if (!sender.isPlayer() || !user.getBase().equals(sender.getPlayer())) {
-            sender.sendMessage(!enabled ? tl("payEnabledFor", user.getDisplayName()) : tl("payDisabledFor", user.getDisplayName()));
+            sender.sendMessage(enabled ? tl("payEnabledFor", user.getDisplayName()) : tl("payDisabledFor", user.getDisplayName()));
         }
     }
 }

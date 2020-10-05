@@ -11,13 +11,19 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
 
-
+/**
+ * Provides access to the current item alias registry.
+ *
+ * @deprecated External plugins should use {@link net.ess3.api.IItemDb} instead, which includes access to {@link net.ess3.api.IItemDb.ItemResolver}
+ *             APIs.
+ */
+@Deprecated
 public interface IItemDb {
 
     /**
      * Create a stack from the given name with the given quantity.
      *
-     * @param name Item name to look up in the database
+     * @param name     Item name to look up in the database
      * @param quantity Quantity of the item stack
      * @return The requested item stack
      * @throws Exception if the item stack cannot be created
@@ -30,7 +36,7 @@ public interface IItemDb {
 
     /**
      * Create a stack from the given name with the maximum stack size for that material.
-     *
+     * <p>
      * Note that this will always check against resolver functions from other plugins as well.
      * To avoid this behaviour, use net.ess3.api.IItemDb#get(String name, boolean useResolvers).
      *
@@ -46,7 +52,7 @@ public interface IItemDb {
      * @param item Item stack whose names to find
      * @return Comma-separated list of up to 15 item names
      */
-    default String names(ItemStack item) {
+    default String names(final ItemStack item) {
         List<String> nameList = nameList(item);
 
         if (nameList.size() > 15) {
@@ -107,7 +113,7 @@ public interface IItemDb {
      * @return Updated material
      */
     @Deprecated
-    default Material getFromLegacyId(int id) {
+    default Material getFromLegacyId(final int id) {
         return getFromLegacy(id, (byte) 0);
     }
 
@@ -129,7 +135,7 @@ public interface IItemDb {
      * @param item Legacy ID in colon syntax.
      * @return Material if an appropriate material exists, else null.
      */
-    default Material getFromLegacy(String item) {
+    default Material getFromLegacy(final String item) {
         final String[] split = item.split(":");
 
         if (!NumberUtil.isInt(split[0])) return null;
@@ -148,7 +154,7 @@ public interface IItemDb {
      * Convert legacy ID and damage value to Material. Used for conversion from item IDs to
      * modern names.
      *
-     * @param id Legacy ID
+     * @param id     Legacy ID
      * @param damage Damage value
      * @return Material
      */

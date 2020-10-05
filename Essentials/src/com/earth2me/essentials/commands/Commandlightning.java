@@ -11,7 +11,6 @@ import java.util.List;
 
 import static com.earth2me.essentials.I18n.tl;
 
-
 public class Commandlightning extends EssentialsLoopCommand {
     public Commandlightning() {
         super("lightning");
@@ -19,8 +18,8 @@ public class Commandlightning extends EssentialsLoopCommand {
 
     @Override
     public void run(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception {
-        if (args.length == 0) {
-            if (sender.isPlayer() || !sender.isAuthorized("essentials.lightning.others", ess)) {
+        if (args.length == 0 || !sender.isAuthorized("essentials.lightning.others", ess)) {
+            if (sender.isPlayer()) {
                 sender.getPlayer().getWorld().strikeLightning(sender.getPlayer().getTargetBlock(null, 600).getLocation());
                 return;
             }
@@ -31,7 +30,7 @@ public class Commandlightning extends EssentialsLoopCommand {
         if (args.length > 1) {
             try {
                 power = Integer.parseInt(args[1]);
-            } catch (NumberFormatException ignored) {
+            } catch (final NumberFormatException ignored) {
             }
         }
         final int finalPower = power;

@@ -12,9 +12,8 @@ import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.server.PluginEnableEvent;
 
-
 public class EmergencyListener implements Listener {
-    private EssentialsProtect plugin;
+    private final EssentialsProtect plugin;
 
     EmergencyListener(final EssentialsProtect essProtPlugin) {
         plugin = essProtPlugin;

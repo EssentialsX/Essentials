@@ -10,7 +10,6 @@ import java.util.List;
 
 import static com.earth2me.essentials.I18n.tl;
 
-
 public class Commandsetspawn extends EssentialsCommand {
     public Commandsetspawn() {
         super("setspawn");
@@ -24,7 +23,7 @@ public class Commandsetspawn extends EssentialsCommand {
     }
 
     @Override
-    protected List<String> getTabCompleteOptions(Server server, CommandSource sender, String commandLabel, String[] args) {
+    protected List<String> getTabCompleteOptions(final Server server, final CommandSource sender, final String commandLabel, final String[] args) {
         return Collections.emptyList();
     }
 }

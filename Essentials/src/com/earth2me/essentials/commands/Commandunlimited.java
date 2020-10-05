@@ -12,7 +12,6 @@ import java.util.StringJoiner;
 
 import static com.earth2me.essentials.I18n.tl;
 
-
 public class Commandunlimited extends EssentialsCommand {
     public Commandunlimited() {
         super("unlimited");
@@ -32,7 +31,7 @@ public class Commandunlimited extends EssentialsCommand {
         if (args[0].equalsIgnoreCase("list")) {
             user.sendMessage(getList(target));
         } else if (args[0].equalsIgnoreCase("clear")) {
-            for (Material m : new HashSet<>(target.getUnlimited())) {
+            for (final Material m : new HashSet<>(target.getUnlimited())) {
                 toggleUnlimited(user, target, m.toString());
             }
         } else {
@@ -47,8 +46,8 @@ public class Commandunlimited extends EssentialsCommand {
         if (items.isEmpty()) {
             output.append(tl("none"));
         }
-        StringJoiner joiner = new StringJoiner(",");
-        for (Material material : items) {
+        final StringJoiner joiner = new StringJoiner(",");
+        for (final Material material : items) {
             joiner.add(material.toString().toLowerCase(Locale.ENGLISH).replace("_", ""));
         }
         output.append(joiner.toString());
@@ -61,7 +60,7 @@ public class Commandunlimited extends EssentialsCommand {
         stack.setAmount(Math.min(stack.getType().getMaxStackSize(), 2));
 
         final String itemname = stack.getType().toString().toLowerCase(Locale.ENGLISH).replace("_", "");
-        if (ess.getSettings().permissionBasedItemSpawn() && (!user.isAuthorized("essentials.unlimited.item-all") && !user.isAuthorized("essentials.unlimited.item-" + itemname) && !((stack.getType() == Material.WATER_BUCKET || stack.getType() == Material.LAVA_BUCKET) && user.isAuthorized("essentials.unlimited.item-bucket")))) {
+        if (ess.getSettings().permissionBasedItemSpawn() && !user.isAuthorized("essentials.unlimited.item-all") && !user.isAuthorized("essentials.unlimited.item-" + itemname) && !((stack.getType() == Material.WATER_BUCKET || stack.getType() == Material.LAVA_BUCKET) && user.isAuthorized("essentials.unlimited.item-bucket"))) {
             throw new Exception(tl("unlimitedItemPermission", itemname));
         }
 

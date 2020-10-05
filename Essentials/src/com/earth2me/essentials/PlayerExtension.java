@@ -5,7 +5,6 @@ import org.bukkit.Server;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 
-
 public class PlayerExtension {
     protected Player base;
 

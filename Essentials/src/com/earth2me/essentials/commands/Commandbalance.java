@@ -10,7 +10,6 @@ import java.util.List;
 
 import static com.earth2me.essentials.I18n.tl;
 
-
 public class Commandbalance extends EssentialsCommand {
     public Commandbalance() {
         super("balance");
@@ -22,7 +21,7 @@ public class Commandbalance extends EssentialsCommand {
             throw new NotEnoughArgumentsException();
         }
 
-        User target = getPlayer(server, args, 0, false, true);
+        final User target = getPlayer(server, args, 0, false, true);
         sender.sendMessage(tl("balanceOther", target.isHidden() ? target.getName() : target.getDisplayName(), NumberUtil.displayCurrency(target.getMoney(), ess)));
     }
 
@@ -39,17 +38,8 @@ public class Commandbalance extends EssentialsCommand {
     }
 
     @Override
-    protected List<String> getTabCompleteOptions(Server server, User user, String commandLabel, String[] args) {
-        if (args.length == 1 && user.isAuthorized("essentials.balance.others")) {
-            return getPlayers(server, user);
-        } else {
-            return Collections.emptyList();
-        }
-    }
-
-    @Override
-    protected List<String> getTabCompleteOptions(Server server, CommandSource sender, String commandLabel, String[] args) {
-        if (args.length == 1) {
+    protected List<String> getTabCompleteOptions(final Server server, final CommandSource sender, final String commandLabel, final String[] args) {
+        if (args.length == 1 && sender.isAuthorized("essentials.balance.others", ess)) {
             return getPlayers(server, sender);
         } else {
             return Collections.emptyList();

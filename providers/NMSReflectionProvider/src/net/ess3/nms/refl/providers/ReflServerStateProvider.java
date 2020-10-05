@@ -12,14 +12,14 @@ public class ReflServerStateProvider implements ServerStateProvider {
     private final Object nmsServer;
     private final MethodHandle nmsIsRunning;
 
-    public ReflServerStateProvider(Logger logger) {
+    public ReflServerStateProvider(final Logger logger) {
         Object serverObject = null;
         MethodHandle isRunning = null;
-        Class<?> nmsClass = ReflUtil.getNMSClass("MinecraftServer");
+        final Class<?> nmsClass = ReflUtil.getNMSClass("MinecraftServer");
         try {
             serverObject = nmsClass.getMethod("getServer").invoke(null);
             isRunning = MethodHandles.lookup().findVirtual(nmsClass, "isRunning", MethodType.methodType(boolean.class));
-        } catch (Exception e) {
+        } catch (final Exception e) {
             e.printStackTrace();
         }
         nmsServer = serverObject;
@@ -31,7 +31,7 @@ public class ReflServerStateProvider implements ServerStateProvider {
         if (nmsServer != null && nmsIsRunning != null) {
             try {
                 return !(boolean) nmsIsRunning.invoke(nmsServer);
-            } catch (Throwable throwable) {
+            } catch (final Throwable throwable) {
                 throwable.printStackTrace();
             }
         }
