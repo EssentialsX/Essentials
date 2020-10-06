@@ -108,7 +108,7 @@ public class Commandbalancetop extends EssentialsCommand {
 
                     cache.getLines().add(tl("serverTotal", NumberUtil.displayCurrency(ess.getBalanceTop().getBalanceTopTotal(), ess)));
                     int pos = 1;
-                    for (Map.Entry<String, BigDecimal> entry : ess.getBalanceTop().getBalanceTopCache()) {
+                    for (final Map.Entry<String, BigDecimal> entry : ess.getBalanceTop().getBalanceTopCache()) {
                         cache.getLines().add(tl("balanceTopLine", pos, entry.getKey(), NumberUtil.displayCurrency(entry.getValue(), ess)));
                         pos++;
                     }

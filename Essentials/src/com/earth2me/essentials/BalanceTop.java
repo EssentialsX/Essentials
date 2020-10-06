@@ -45,6 +45,7 @@ public class BalanceTop {
 
     /**
      * Returns a future which will be completed with the latest calculated balance top map.
+     *
      * @return A future with the latest balance top map.
      */
     public CompletableFuture<List<Map.Entry<String, BigDecimal>>> calculateBalanceTopMapAsync() {
