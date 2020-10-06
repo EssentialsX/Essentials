@@ -35,7 +35,7 @@ If you are submitting a new feature, please follow the following steps:
 
 3.  Include a demonstration.
       If you are adding commands, please provide screenshots and/or a video
-      demonstration of the feature. Similarly, if you are adding new API,
+      demonstration of the feature. Similarly, if you are adding a new API,
       please include a link to example code that takes advantage of your
       proposed API. This will aid us in reviewing PRs and speed up the process
       significantly.

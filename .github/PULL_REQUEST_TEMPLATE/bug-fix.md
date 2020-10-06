@@ -72,7 +72,6 @@ This PR fixes #nnnn.
 **Demonstration**  
 <!--
     Below this block, include screenshots/log snippets from before and after as
-    necessary. If you have created or used a test case plugin, please link to
-    a download of the plugin, source code and exact version used where
-    possible.
+    necessary. If you have created or used a test case plugin, please link to a
+    download of the plugin, source code and exact version used where possible.
 -->
