@@ -22,7 +22,9 @@ Submitting a PR
 
 EssentialsX has extensive templates for PRs that detail how to submit your PR. To find out more, see the PR templates for:
 * [Bug fixes](https://github.com/EssentialsX/Essentials/blob/2.x/.github/PULL_REQUEST_TEMPLATE/bug-fix.md) 
-* [New features](https://github.com/EssentialsX/Essentials/blob/2.x/.github/PULL_REQUEST_TEMPLATE/new-feature.md) 
+* [New features](https://github.com/EssentialsX/Essentials/blob/2.x/.github/PULL_REQUEST_TEMPLATE/new-feature.md)
+
+Want to discuss a feature before opening a PR? Join the [EssentialsX Development Discord server](https://discord.gg/CUN7qVb). Note that this server is **not for end-users** - if you need support with EssentialsX, you should join [MOSS](https://discord.gg/casfFyh) instead.
 
 By contributing to EssentialsX, you agree to license your code under the [GNU General Public License version 3](https://github.com/EssentialsX/Essentials/blob/2.x/LICENSE).
 
