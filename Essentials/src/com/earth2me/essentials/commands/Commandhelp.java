@@ -10,6 +10,7 @@ import com.earth2me.essentials.textreader.TextPager;
 import com.earth2me.essentials.utils.NumberUtil;
 import org.bukkit.Server;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
@@ -57,7 +58,9 @@ public class Commandhelp extends EssentialsCommand {
     @Override
     protected List<String> getTabCompleteOptions(final Server server, final CommandSource sender, final String commandLabel, final String[] args) {
         if (args.length == 1) {
-            return getCommands(server);
+            final List<String> suggestions = new ArrayList<>(getCommands(server));
+            suggestions.addAll(getPlugins(server));
+            return suggestions;
         } else {
             return Collections.emptyList();
         }
