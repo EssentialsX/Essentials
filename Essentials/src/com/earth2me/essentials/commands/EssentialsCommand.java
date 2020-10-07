@@ -325,6 +325,20 @@ public abstract class EssentialsCommand implements IEssentialsCommand {
     }
 
     /**
+     * Lists all plugin names
+     *
+     * @param server Server instance
+     * @return List of plugin names
+     */
+    protected final List<String> getPlugins(final Server server) {
+        final List<String> plugins = Lists.newArrayList();
+        for (final Plugin p : server.getPluginManager().getPlugins()) {
+            plugins.add(p.getName());
+        }
+        return plugins;
+    }
+
+    /**
      * Attempts to tab-complete a command or its arguments.
      */
     protected final List<String> tabCompleteCommand(final CommandSource sender, final Server server, final String label, final String[] args, final int index) {
