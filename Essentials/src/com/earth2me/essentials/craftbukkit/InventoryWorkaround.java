@@ -278,5 +278,6 @@ public final class InventoryWorkaround {
             hasMainHandSupport = true;
             return removedAmount;
         }
+        return 0;
     }
 }
