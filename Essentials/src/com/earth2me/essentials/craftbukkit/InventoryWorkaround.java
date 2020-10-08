@@ -12,6 +12,10 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
+/*
+ * This class can be removed when https://github.com/Bukkit/CraftBukkit/pull/193 is accepted to CraftBukkit
+ */
+
 public final class InventoryWorkaround {
     /*
     Spigot 1.9, for whatever reason, decided to merge the armor and main player inventories without providing a way
@@ -265,20 +269,14 @@ public final class InventoryWorkaround {
     }
 
     public static int clearItemInOffHand(final Player p, final ItemStack item) {
-        if (hasMainHandSupport == null || hasMainHandSupport) {
-            try {
-                int removedAmount = 0;
-                if (p.getInventory().getItemInOffHand().getType().equals(item.getType())) {
-                    removedAmount = p.getInventory().getItemInOffHand().getAmount();
-                    p.getInventory().setItemInOffHand(null);
-                }
-                hasMainHandSupport = true;
-                return removedAmount;
-            } catch (final Throwable e) {
-                hasMainHandSupport = false;
-                return 0;
+        if (hasMainHandSupport) {
+            int removedAmount = 0;
+            if (p.getInventory().getItemInOffHand().getType().equals(item.getType())) {
+                removedAmount = p.getInventory().getItemInOffHand().getAmount();
+                p.getInventory().setItemInOffHand(null);
             }
+            hasMainHandSupport = true;
+            return removedAmount;
         }
-        return 0;
     }
 }
