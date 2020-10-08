@@ -15,6 +15,10 @@ This includes this header block and any other explanatory text blocks.
 Want to discuss your PR before submitting it? Join the EssentialsX Development
 server: https://discord.gg/CUN7qVb
 
+By contributing to EssentialsX, you agree to license your code under the
+GNU General Public License version 3, which can be found at the link below:
+https://github.com/EssentialsX/Essentials/blob/2.x/LICENSE
+
 If you are submitting a new feature, please follow the following steps:
 
 1.  Fill out the template in full.
