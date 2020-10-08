@@ -984,7 +984,10 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
             }
         }
     }
-
+    
+    public void addWarning(String reason, String sender) {
+        setWarnings(getWarnings() + 1);
+    }
     public String getLastHomeConfirmation() {
         return lastHomeConfirmation;
     }

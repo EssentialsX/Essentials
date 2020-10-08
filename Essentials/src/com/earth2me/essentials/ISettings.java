@@ -116,6 +116,10 @@ public interface ISettings extends IConf {
     int getHomeLimit(User user);
 
     int getSpawnMobLimit();
+    
+    int getMaxWarnings();
+    
+    boolean isBanFinalWarning();
 
     BigDecimal getStartingBalance();
 

@@ -540,6 +540,10 @@ commands:
     description: Hide yourself from other players.
     usage: /<command> [player] [on|off]
     aliases: [v,ev,evanish]
+  warn:
+    description: Give a user a warning
+    usage: /<command> [player]
+    aliases: [ewarn,warning,ewarning]
   warp:
     description: List all warps or warp to the specified location.
     usage: /<command> <pagenumber|warp> [player]

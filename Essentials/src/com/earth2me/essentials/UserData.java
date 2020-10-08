@@ -70,6 +70,7 @@ public abstract class UserData extends PlayerExtension implements IConf {
         lastHealTimestamp = _getLastHealTimestamp();
         jail = _getJail();
         mails = _getMails();
+        warnings = _getWarnings();
         teleportEnabled = _getTeleportEnabled();
         godmode = _getGodModeEnabled();
         muted = _getMuted();
@@ -722,7 +723,22 @@ public abstract class UserData extends PlayerExtension implements IConf {
         config.setProperty("afk", set);
         config.save();
     }
-
+    private int warnings;
+    
+    private int _getWarnings() {
+        return warnings;
+    }
+    
+    public int getWarnings() {
+        return config.getInt("warnings");
+    }
+    
+    public void setWarnings(int warns) {
+        warnings = warns;
+        config.setProperty("warnings", warns);
+        config.save();
+    }
+    
     private boolean newplayer;
     private String geolocation;
 

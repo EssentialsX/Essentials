@@ -563,6 +563,7 @@ public class Settings implements net.ess3.api.ISettings {
         socialSpyCommands = _getSocialSpyCommands();
         warnOnBuildDisallow = _warnOnBuildDisallow();
         mailsPerMinute = _getMailsPerMinute();
+        maxWarnings = _getMaxWarnings();
         maxMoney = _getMaxMoney();
         minMoney = _getMinMoney();
         permissionsLagWarning = _getPermissionsLagWarning();
@@ -791,7 +792,17 @@ public class Settings implements net.ess3.api.ISettings {
     public BigDecimal getMaxMoney() {
         return maxMoney;
     }
-
+    
+    private int maxWarnings;
+    
+    public int getMaxWarnings() {
+        return maxWarnings;
+    }
+    
+    private int _getMaxWarnings() {
+        return config.getInt("max-warnings", 3);
+    }
+    
     private static final BigDecimal MINMONEY = new BigDecimal("-10000000000000");
     private BigDecimal minMoney = MINMONEY;
 
@@ -1761,5 +1772,10 @@ public class Settings implements net.ess3.api.ISettings {
     @Override
     public boolean infoAfterDeath() {
         return config.getBoolean("send-info-after-death", false);
+    }
+
+    @Override
+    public boolean isBanFinalWarning() {
+        return config.getBoolean("ban-on-final-warning", true);
     }
 }
