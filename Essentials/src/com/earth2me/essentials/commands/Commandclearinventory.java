@@ -137,7 +137,7 @@ public class Commandclearinventory extends EssentialsCommand {
                 if (amount == -1) {
                     stack.setAmount(BASE_AMOUNT);
                     final ItemStack removedStack = player.getInventory().removeItem(stack).get(0);
-                    final int removedAmount = BASE_AMOUNT - removedStack.getAmount();
+                    final int removedAmount = BASE_AMOUNT - removedStack.getAmount() + InventoryWorkaround.clearItemInOffHand(player, stack);
                     if (removedAmount > 0 || showExtended) {
                         sender.sendMessage(tl("inventoryClearingStack", removedAmount, stack.getType().toString().toLowerCase(Locale.ENGLISH), player.getDisplayName()));
                     }
