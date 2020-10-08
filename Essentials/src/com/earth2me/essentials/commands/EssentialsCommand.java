@@ -148,7 +148,7 @@ public abstract class EssentialsCommand implements IEssentialsCommand {
             Object searchId;
             try {
                 searchId = UUID.fromString(searchTerm);
-            }catch(final IllegalArgumentException ex) {
+            } catch(final IllegalArgumentException ex) {
                 searchId = searchTerm;
             }
             
