@@ -145,12 +145,17 @@ public abstract class EssentialsCommand implements IEssentialsCommand {
         if (exPlayer != null) {
             user = ess.getUser(exPlayer);
         } else {
+            Object searchId;
             try {
-                UUID playerId = UUID.fromString(searchTerm);
-                
-                user = ess.getUser(playerId);
+                searchId = UUID.fromString(searchTerm);
             }catch(final IllegalArgumentException ex) {
-                user = ess.getUser(searchTerm);
+                searchId = searchTerm;
+            }
+            
+            if (searchId instanceof String) {
+                user = ess.getUser((String) searchId);
+            } else { 
+                user = ess.getUser((UUID) searchId);
             }
         }
 
