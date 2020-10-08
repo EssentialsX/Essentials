@@ -5,12 +5,26 @@ import net.ess3.api.IEssentials;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.entity.*;
+import org.bukkit.entity.Ageable;
+import org.bukkit.entity.Arrow;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Player;
+import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.*;
+import org.bukkit.event.entity.EntityCombustByEntityEvent;
+import org.bukkit.event.entity.EntityCombustEvent;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityRegainHealthEvent;
 import org.bukkit.event.entity.EntityRegainHealthEvent.RegainReason;
+import org.bukkit.event.entity.EntityShootBowEvent;
+import org.bukkit.event.entity.EntityTargetEvent;
+import org.bukkit.event.entity.FoodLevelChangeEvent;
+import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.entity.PotionSplashEvent;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
@@ -20,13 +34,12 @@ import java.util.regex.Pattern;
 
 import static com.earth2me.essentials.I18n.tl;
 
-
 public class EssentialsEntityListener implements Listener {
     private static final Logger LOGGER = Logger.getLogger("Essentials");
     private static final transient Pattern powertoolPlayer = Pattern.compile("\\{player\\}");
     private final IEssentials ess;
 
-    public EssentialsEntityListener(IEssentials ess) {
+    public EssentialsEntityListener(final IEssentials ess) {
         this.ess = ess;
     }
 
@@ -42,7 +55,7 @@ public class EssentialsEntityListener implements Listener {
             } else if (eDefend instanceof Ageable) {
                 final ItemStack hand = attacker.getBase().getItemInHand();
                 if (ess.getSettings().isMilkBucketEasterEggEnabled()
-                        && hand != null && hand.getType() == Material.MILK_BUCKET) {
+                    && hand != null && hand.getType() == Material.MILK_BUCKET) {
                     ((Ageable) eDefend).setBaby();
                     hand.setType(Material.BUCKET);
                     attacker.getBase().setItemInHand(hand);
@@ -99,6 +112,7 @@ public class EssentialsEntityListener implements Listener {
                             LOGGER.log(Level.INFO, String.format("[PT] %s issued server command: /%s", attacker.getName(), command));
                         }
                     }
+
                     ess.scheduleSyncDelayedTask(new PowerToolInteractTask());
 
                     event.setCancelled(true);
@@ -128,9 +142,9 @@ public class EssentialsEntityListener implements Listener {
     @EventHandler(priority = EventPriority.MONITOR)
     public void onEntityCombustByEntity(final EntityCombustByEntityEvent event) {
         if (event.getCombuster() instanceof Arrow && event.getEntity() instanceof Player) {
-            Arrow combuster = (Arrow) event.getCombuster();
+            final Arrow combuster = (Arrow) event.getCombuster();
             if (combuster.getShooter() instanceof Player) {
-                Player shooter = (Player) combuster.getShooter();
+                final Player shooter = (Player) combuster.getShooter();
                 if (shooter.hasMetadata("NPC")) {
                     return;
                 }
@@ -147,7 +161,7 @@ public class EssentialsEntityListener implements Listener {
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerDeathEvent(final PlayerDeathEvent event) {
-        Entity entity = event.getEntity();
+        final Entity entity = event.getEntity();
         if (entity.hasMetadata("NPC")) {
             return;
         }
@@ -180,10 +194,10 @@ public class EssentialsEntityListener implements Listener {
         if (user.isAuthorized("essentials.keepinv")) {
             event.setKeepInventory(true);
             event.getDrops().clear();
-            ISettings.KeepInvPolicy vanish = ess.getSettings().getVanishingItemsPolicy();
-            ISettings.KeepInvPolicy bind = ess.getSettings().getBindingItemsPolicy();
+            final ISettings.KeepInvPolicy vanish = ess.getSettings().getVanishingItemsPolicy();
+            final ISettings.KeepInvPolicy bind = ess.getSettings().getBindingItemsPolicy();
             if (VersionUtil.getServerBukkitVersion().isHigherThanOrEqualTo(VersionUtil.v1_11_2_R01) && (vanish != ISettings.KeepInvPolicy.KEEP || bind != ISettings.KeepInvPolicy.KEEP)) {
-                for (ItemStack stack : event.getEntity().getInventory()) {
+                for (final ItemStack stack : event.getEntity().getInventory()) {
                     if (stack != null) {
                         if (stack.getEnchantments().containsKey(Enchantment.VANISHING_CURSE)) {
                             if (vanish == ISettings.KeepInvPolicy.DELETE) {
@@ -203,9 +217,9 @@ public class EssentialsEntityListener implements Listener {
                         }
                     }
                 }
-                ItemStack[] armor = event.getEntity().getInventory().getArmorContents();
+                final ItemStack[] armor = event.getEntity().getInventory().getArmorContents();
                 for (int i = 0; i < armor.length; i++) {
-                    ItemStack stack = armor[i];
+                    final ItemStack stack = armor[i];
                     if (stack != null) {
                         if (stack.getEnchantments().containsKey(Enchantment.VANISHING_CURSE)) {
                             if (vanish == ISettings.KeepInvPolicy.DELETE) {
@@ -257,7 +271,7 @@ public class EssentialsEntityListener implements Listener {
 
     @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
     public void onPotionSplashEvent(final PotionSplashEvent event) {
-        for (LivingEntity entity : event.getAffectedEntities()) {
+        for (final LivingEntity entity : event.getAffectedEntities()) {
             if (entity instanceof Player && ess.getUser((Player) entity).isGodModeEnabled()) {
                 event.setIntensity(entity, 0d);
             }
@@ -265,7 +279,7 @@ public class EssentialsEntityListener implements Listener {
     }
 
     @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
-    public void onEntityShootBow(EntityShootBowEvent event) {
+    public void onEntityShootBow(final EntityShootBowEvent event) {
         if (event.getEntity() instanceof Player) {
             final User user = ess.getUser((Player) event.getEntity());
             if (user.isAfk()) {
@@ -275,7 +289,7 @@ public class EssentialsEntityListener implements Listener {
     }
 
     @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
-    public void onEntityTarget(EntityTargetEvent event) {
+    public void onEntityTarget(final EntityTargetEvent event) {
         if (event.getTarget() instanceof Player) {
             final User user = ess.getUser((Player) event.getTarget());
             if (user.isVanished()) {

@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-
 public interface IPermissionsHandler {
     String getGroup(Player base);
 

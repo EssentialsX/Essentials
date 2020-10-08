@@ -14,7 +14,6 @@ import java.util.Locale;
 
 import static com.earth2me.essentials.I18n.tl;
 
-
 public class Commanditem extends EssentialsCommand {
     public Commanditem() {
         super("item");
@@ -41,11 +40,11 @@ public class Commanditem extends EssentialsCommand {
             } else if (ess.getSettings().getOversizedStackSize() > 0 && user.isAuthorized("essentials.oversizedstacks")) {
                 stack.setAmount(ess.getSettings().getOversizedStackSize());
             }
-        } catch (NumberFormatException e) {
+        } catch (final NumberFormatException e) {
             throw new NotEnoughArgumentsException();
         }
 
-        MetaItemStack metaStack = new MetaItemStack(stack);
+        final MetaItemStack metaStack = new MetaItemStack(stack);
         if (!metaStack.canSpawn(ess)) {
             throw new Exception(tl("unableToSpawnItem", itemname));
         }
@@ -57,7 +56,6 @@ public class Commanditem extends EssentialsCommand {
 
             stack = metaStack.getItemStack();
         }
-
 
         if (stack.getType() == Material.AIR) {
             throw new Exception(tl("cantSpawnItem", "Air"));
@@ -78,7 +76,7 @@ public class Commanditem extends EssentialsCommand {
         if (args.length == 1) {
             return getItems();
         } else if (args.length == 2) {
-            return Lists.newArrayList("1", "64");  // TODO: get actual max size
+            return Lists.newArrayList("1", "64"); // TODO: get actual max size
         } else if (args.length == 3) {
             return Lists.newArrayList("0");
         } else {

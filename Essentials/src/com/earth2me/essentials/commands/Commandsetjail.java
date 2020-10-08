@@ -6,7 +6,6 @@ import org.bukkit.Server;
 
 import static com.earth2me.essentials.I18n.tl;
 
-
 public class Commandsetjail extends EssentialsCommand {
     public Commandsetjail() {
         super("setjail");

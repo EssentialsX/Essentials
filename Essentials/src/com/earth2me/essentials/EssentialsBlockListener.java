@@ -15,7 +15,6 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.Locale;
 
-
 public class EssentialsBlockListener implements Listener {
     private final transient IEssentials ess;
 
@@ -56,6 +55,7 @@ public class EssentialsBlockListener implements Listener {
                     user.getBase().updateInventory();
                 }
             }
+
             ess.scheduleSyncDelayedTask(new UnlimitedItemSpawnTask());
         }
     }

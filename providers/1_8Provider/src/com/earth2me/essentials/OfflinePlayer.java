@@ -65,9 +65,9 @@ import java.util.UUID;
 
 public class OfflinePlayer implements Player {
     private final transient Server server;
+    private final transient org.bukkit.OfflinePlayer base;
     private transient Location location = new Location(null, 0, 0, 0, 0, 0);
     private transient World world;
-    private final transient org.bukkit.OfflinePlayer base;
     private boolean allowFlight = false;
     private boolean isFlying = false;
     private String name;
@@ -96,11 +96,7 @@ public class OfflinePlayer implements Player {
     }
 
     @Override
-    public void setDisplayName(String string) {
-    }
-
-    @Override
-    public void setCompassTarget(Location lctn) {
+    public void setDisplayName(final String string) {
     }
 
     @Override
@@ -109,7 +105,7 @@ public class OfflinePlayer implements Player {
     }
 
     @Override
-    public void kickPlayer(String string) {
+    public void kickPlayer(final String string) {
     }
 
     @Override
@@ -123,7 +119,7 @@ public class OfflinePlayer implements Player {
     }
 
     @Override
-    public void setItemInHand(ItemStack is) {
+    public void setItemInHand(final ItemStack is) {
     }
 
     @Override
@@ -132,7 +128,7 @@ public class OfflinePlayer implements Player {
     }
 
     @Override
-    public void setHealth(double d) {
+    public void setHealth(final double d) {
     }
 
     @Override
@@ -155,22 +151,22 @@ public class OfflinePlayer implements Player {
         return location;
     }
 
+    public void setLocation(final Location loc) {
+        location = loc;
+        world = loc.getWorld();
+    }
+
     @Override
     public World getWorld() {
         return world;
     }
 
-    public void setLocation(Location loc) {
-        location = loc;
-        world = loc.getWorld();
-    }
-
-    public void teleportTo(Location lctn) {
+    public void teleportTo(final Location lctn) {
         location = lctn;
         world = location.getWorld();
     }
 
-    public void teleportTo(Entity entity) {
+    public void teleportTo(final Entity entity) {
         teleportTo(entity.getLocation());
     }
 
@@ -184,7 +180,7 @@ public class OfflinePlayer implements Player {
     }
 
     @Override
-    public boolean performCommand(String string) {
+    public boolean performCommand(final String string) {
         return false;
     }
 
@@ -194,7 +190,7 @@ public class OfflinePlayer implements Player {
     }
 
     @Override
-    public void setRemainingAir(int i) {
+    public void setRemainingAir(final int i) {
     }
 
     @Override
@@ -203,7 +199,7 @@ public class OfflinePlayer implements Player {
     }
 
     @Override
-    public void setMaximumAir(int i) {
+    public void setMaximumAir(final int i) {
     }
 
     @Override
@@ -212,7 +208,7 @@ public class OfflinePlayer implements Player {
     }
 
     @Override
-    public void setSneaking(boolean bln) {
+    public void setSneaking(final boolean bln) {
     }
 
     @Override
@@ -220,22 +216,22 @@ public class OfflinePlayer implements Player {
     }
 
     @Override
-    public void awardAchievement(Achievement achievement) {
+    public void awardAchievement(final Achievement achievement) {
 
     }
 
     @Override
-    public void removeAchievement(Achievement achievement) {
+    public void removeAchievement(final Achievement achievement) {
 
     }
 
     @Override
-    public boolean hasAchievement(Achievement achievement) {
+    public boolean hasAchievement(final Achievement achievement) {
         return false;
     }
 
     @Override
-    public void chat(String string) {
+    public void chat(final String string) {
     }
 
     @Override
@@ -244,22 +240,22 @@ public class OfflinePlayer implements Player {
     }
 
     @Override
-    public double getEyeHeight(boolean bln) {
+    public double getEyeHeight(final boolean bln) {
         return 0D;
     }
 
     @Override
-    public List<Block> getLineOfSight(Set<Material> mat, int i) {
+    public List<Block> getLineOfSight(final Set<Material> mat, final int i) {
         return Collections.emptyList();
     }
 
     @Override
-    public Block getTargetBlock(Set<Material> mat, int i) {
+    public Block getTargetBlock(final Set<Material> mat, final int i) {
         return null;
     }
 
     @Override
-    public List<Block> getLastTwoTargetBlocks(Set<Material> mat, int i) {
+    public List<Block> getLastTwoTargetBlocks(final Set<Material> mat, final int i) {
         return Collections.emptyList();
     }
 
@@ -269,12 +265,12 @@ public class OfflinePlayer implements Player {
     }
 
     @Override
-    public int getMaxFireTicks() {
-        return 0;
+    public void setFireTicks(final int i) {
     }
 
     @Override
-    public void setFireTicks(int i) {
+    public int getMaxFireTicks() {
+        return 0;
     }
 
     @Override
@@ -290,16 +286,16 @@ public class OfflinePlayer implements Player {
         return getVelocity();
     }
 
-    public void setMomentum(Vector vector) {
-    }
-
-    @Override
-    public void setVelocity(Vector vector) {
+    public void setMomentum(final Vector vector) {
     }
 
     @Override
     public Vector getVelocity() {
         return new Vector(0, 0, 0);
+    }
+
+    @Override
+    public void setVelocity(final Vector vector) {
     }
 
     @Override
@@ -313,11 +309,11 @@ public class OfflinePlayer implements Player {
     }
 
     @Override
-    public void damage(double d) {
+    public void damage(final double d) {
     }
 
     @Override
-    public void damage(double d, Entity entity) {
+    public void damage(final double d, final Entity entity) {
     }
 
     @Override
@@ -326,7 +322,7 @@ public class OfflinePlayer implements Player {
     }
 
     @Override
-    public void sendRawMessage(String string) {
+    public void sendRawMessage(final String string) {
     }
 
     @Override
@@ -335,12 +331,16 @@ public class OfflinePlayer implements Player {
     }
 
     @Override
+    public void setCompassTarget(final Location lctn) {
+    }
+
+    @Override
     public int getMaximumNoDamageTicks() {
         return 0;
     }
 
     @Override
-    public void setMaximumNoDamageTicks(int i) {
+    public void setMaximumNoDamageTicks(final int i) {
     }
 
     @Override
@@ -349,7 +349,7 @@ public class OfflinePlayer implements Player {
     }
 
     @Override
-    public void setLastDamage(double d) {
+    public void setLastDamage(final double d) {
     }
 
     @Override
@@ -358,16 +358,16 @@ public class OfflinePlayer implements Player {
     }
 
     @Override
-    public void setNoDamageTicks(int i) {
+    public void setNoDamageTicks(final int i) {
     }
 
     @Override
-    public boolean teleport(Location lctn) {
+    public boolean teleport(final Location lctn) {
         return false;
     }
 
     @Override
-    public boolean teleport(Entity entity) {
+    public boolean teleport(final Entity entity) {
         return false;
     }
 
@@ -377,7 +377,7 @@ public class OfflinePlayer implements Player {
     }
 
     @Override
-    public boolean setPassenger(Entity entity) {
+    public boolean setPassenger(final Entity entity) {
         return false;
     }
 
@@ -387,12 +387,12 @@ public class OfflinePlayer implements Player {
     }
 
     @Override
-    public boolean addPassenger(Entity passenger) {
+    public boolean addPassenger(final Entity passenger) {
         return false;
     }
 
     @Override
-    public boolean removePassenger(Entity passenger) {
+    public boolean removePassenger(final Entity passenger) {
         return false;
     }
 
@@ -425,7 +425,7 @@ public class OfflinePlayer implements Player {
     }
 
     @Override
-    public List<Entity> getNearbyEntities(double d, double d1, double d2) {
+    public List<Entity> getNearbyEntities(final double d, final double d1, final double d2) {
         return Collections.emptyList();
     }
 
@@ -440,11 +440,7 @@ public class OfflinePlayer implements Player {
     }
 
     @Override
-    public void setFallDistance(float f) {
-    }
-
-    @Override
-    public void setSleepingIgnored(boolean bln) {
+    public void setFallDistance(final float f) {
     }
 
     @Override
@@ -453,90 +449,90 @@ public class OfflinePlayer implements Player {
     }
 
     @Override
-    public void incrementStatistic(Statistic ststc) {
+    public void setSleepingIgnored(final boolean bln) {
     }
 
     @Override
-    public void decrementStatistic(Statistic statistic) throws IllegalArgumentException {
+    public void incrementStatistic(final Statistic ststc) {
     }
 
     @Override
-    public void incrementStatistic(Statistic ststc, int i) {
+    public void decrementStatistic(final Statistic statistic) throws IllegalArgumentException {
     }
 
     @Override
-    public void decrementStatistic(Statistic statistic, int i) throws IllegalArgumentException {
+    public void incrementStatistic(final Statistic ststc, final int i) {
     }
 
     @Override
-    public void setStatistic(Statistic statistic, int i) throws IllegalArgumentException {
+    public void decrementStatistic(final Statistic statistic, final int i) throws IllegalArgumentException {
     }
 
     @Override
-    public int getStatistic(Statistic statistic) throws IllegalArgumentException {
+    public void setStatistic(final Statistic statistic, final int i) throws IllegalArgumentException {
+    }
+
+    @Override
+    public int getStatistic(final Statistic statistic) throws IllegalArgumentException {
         return 0;
     }
 
     @Override
-    public void incrementStatistic(Statistic ststc, Material mtrl) {
+    public void incrementStatistic(final Statistic ststc, final Material mtrl) {
     }
 
     @Override
-    public void decrementStatistic(Statistic statistic, Material material) throws IllegalArgumentException {
+    public void decrementStatistic(final Statistic statistic, final Material material) throws IllegalArgumentException {
     }
 
     @Override
-    public int getStatistic(Statistic statistic, Material material) throws IllegalArgumentException {
+    public int getStatistic(final Statistic statistic, final Material material) throws IllegalArgumentException {
         return 0;
     }
 
     @Override
-    public void incrementStatistic(Statistic ststc, Material mtrl, int i) {
+    public void incrementStatistic(final Statistic ststc, final Material mtrl, final int i) {
     }
 
     @Override
-    public void decrementStatistic(Statistic statistic, Material material, int i) throws IllegalArgumentException {
+    public void decrementStatistic(final Statistic statistic, final Material material, final int i) throws IllegalArgumentException {
     }
 
     @Override
-    public void setStatistic(Statistic statistic, Material material, int i) throws IllegalArgumentException {
+    public void setStatistic(final Statistic statistic, final Material material, final int i) throws IllegalArgumentException {
     }
 
     @Override
-    public void incrementStatistic(Statistic statistic, EntityType entityType) throws IllegalArgumentException {
+    public void incrementStatistic(final Statistic statistic, final EntityType entityType) throws IllegalArgumentException {
     }
 
     @Override
-    public void decrementStatistic(Statistic statistic, EntityType entityType) throws IllegalArgumentException {
+    public void decrementStatistic(final Statistic statistic, final EntityType entityType) throws IllegalArgumentException {
     }
 
     @Override
-    public int getStatistic(Statistic statistic, EntityType entityType) throws IllegalArgumentException {
+    public int getStatistic(final Statistic statistic, final EntityType entityType) throws IllegalArgumentException {
         return 0;
     }
 
     @Override
-    public void incrementStatistic(Statistic statistic, EntityType entityType, int i) throws IllegalArgumentException {
+    public void incrementStatistic(final Statistic statistic, final EntityType entityType, final int i) throws IllegalArgumentException {
     }
 
     @Override
-    public void decrementStatistic(Statistic statistic, EntityType entityType, int i) {
+    public void decrementStatistic(final Statistic statistic, final EntityType entityType, final int i) {
     }
 
     @Override
-    public void setStatistic(Statistic statistic, EntityType entityType, int i) {
+    public void setStatistic(final Statistic statistic, final EntityType entityType, final int i) {
     }
 
     @Override
-    public void playNote(Location lctn, byte b, byte b1) {
+    public void playNote(final Location lctn, final byte b, final byte b1) {
     }
 
     @Override
-    public void sendBlockChange(Location lctn, Material mtrl, byte b) {
-    }
-
-    @Override
-    public void setLastDamageCause(EntityDamageEvent ede) {
+    public void sendBlockChange(final Location lctn, final Material mtrl, final byte b) {
     }
 
     @Override
@@ -545,25 +541,29 @@ public class OfflinePlayer implements Player {
     }
 
     @Override
-    public void playEffect(Location lctn, Effect effect, int i) {
+    public void setLastDamageCause(final EntityDamageEvent ede) {
     }
 
     @Override
-    public boolean sendChunkChange(Location lctn, int i, int i1, int i2, byte[] bytes) {
+    public void playEffect(final Location lctn, final Effect effect, final int i) {
+    }
+
+    @Override
+    public boolean sendChunkChange(final Location lctn, final int i, final int i1, final int i2, final byte[] bytes) {
         return true;
     }
 
     @Override
-    public void sendBlockChange(Location location, int i, byte b) {
+    public void sendBlockChange(final Location location, final int i, final byte b) {
 
     }
 
     @Override
-    public void playNote(Location lctn, Instrument i, Note note) {
+    public void playNote(final Location lctn, final Instrument i, final Note note) {
     }
 
     @Override
-    public void setPlayerTime(long l, boolean bln) {
+    public void setPlayerTime(final long l, final boolean bln) {
     }
 
     @Override
@@ -586,47 +586,47 @@ public class OfflinePlayer implements Player {
     }
 
     @Override
-    public boolean isPermissionSet(String string) {
+    public boolean isPermissionSet(final String string) {
         return false;
     }
 
     @Override
-    public boolean isPermissionSet(Permission prmsn) {
+    public boolean isPermissionSet(final Permission prmsn) {
         return false;
     }
 
     @Override
-    public boolean hasPermission(String string) {
+    public boolean hasPermission(final String string) {
         return false;
     }
 
     @Override
-    public boolean hasPermission(Permission prmsn) {
+    public boolean hasPermission(final Permission prmsn) {
         return false;
     }
 
     @Override
-    public PermissionAttachment addAttachment(Plugin plugin, String string, boolean bln) {
+    public PermissionAttachment addAttachment(final Plugin plugin, final String string, final boolean bln) {
         return null;
     }
 
     @Override
-    public PermissionAttachment addAttachment(Plugin plugin) {
+    public PermissionAttachment addAttachment(final Plugin plugin) {
         return null;
     }
 
     @Override
-    public PermissionAttachment addAttachment(Plugin plugin, String string, boolean bln, int i) {
+    public PermissionAttachment addAttachment(final Plugin plugin, final String string, final boolean bln, final int i) {
         return null;
     }
 
     @Override
-    public PermissionAttachment addAttachment(Plugin plugin, int i) {
+    public PermissionAttachment addAttachment(final Plugin plugin, final int i) {
         return null;
     }
 
     @Override
-    public void removeAttachment(PermissionAttachment pa) {
+    public void removeAttachment(final PermissionAttachment pa) {
     }
 
     @Override
@@ -639,7 +639,7 @@ public class OfflinePlayer implements Player {
     }
 
     @Override
-    public void sendMap(MapView mv) {
+    public void sendMap(final MapView mv) {
     }
 
     @Override
@@ -648,7 +648,7 @@ public class OfflinePlayer implements Player {
     }
 
     @Override
-    public void setGameMode(GameMode gm) {
+    public void setGameMode(final GameMode gm) {
     }
 
     @Override
@@ -657,7 +657,7 @@ public class OfflinePlayer implements Player {
     }
 
     @Override
-    public void setLevel(int i) {
+    public void setLevel(final int i) {
     }
 
     @Override
@@ -666,7 +666,7 @@ public class OfflinePlayer implements Player {
     }
 
     @Override
-    public void setTotalExperience(int i) {
+    public void setTotalExperience(final int i) {
     }
 
     @Override
@@ -675,7 +675,7 @@ public class OfflinePlayer implements Player {
     }
 
     @Override
-    public void setExhaustion(float f) {
+    public void setExhaustion(final float f) {
     }
 
     @Override
@@ -684,7 +684,7 @@ public class OfflinePlayer implements Player {
     }
 
     @Override
-    public void setSaturation(float f) {
+    public void setSaturation(final float f) {
     }
 
     @Override
@@ -693,7 +693,7 @@ public class OfflinePlayer implements Player {
     }
 
     @Override
-    public void setFoodLevel(int i) {
+    public void setFoodLevel(final int i) {
     }
 
     @Override
@@ -702,11 +702,7 @@ public class OfflinePlayer implements Player {
     }
 
     @Override
-    public void setSprinting(boolean bln) {
-    }
-
-    @Override
-    public void setPlayerListName(String name) {
+    public void setSprinting(final boolean bln) {
     }
 
     @Override
@@ -715,12 +711,16 @@ public class OfflinePlayer implements Player {
     }
 
     @Override
+    public void setPlayerListName(final String name) {
+    }
+
+    @Override
     public int getTicksLived() {
         return 0;
     }
 
     @Override
-    public void setTicksLived(int i) {
+    public void setTicksLived(final int i) {
     }
 
     @Override
@@ -729,7 +729,11 @@ public class OfflinePlayer implements Player {
     }
 
     @Override
-    public void giveExp(int i) {
+    public void setMaxHealth(final double i) {
+    }
+
+    @Override
+    public void giveExp(final int i) {
     }
 
     @Override
@@ -738,16 +742,16 @@ public class OfflinePlayer implements Player {
     }
 
     @Override
-    public void setExp(float f) {
+    public void setExp(final float f) {
     }
 
     @Override
-    public boolean teleport(Location lctn, TeleportCause tc) {
+    public boolean teleport(final Location lctn, final TeleportCause tc) {
         return false;
     }
 
     @Override
-    public boolean teleport(Entity entity, TeleportCause tc) {
+    public boolean teleport(final Entity entity, final TeleportCause tc) {
         return false;
     }
 
@@ -756,15 +760,8 @@ public class OfflinePlayer implements Player {
         return null;
     }
 
-    void setName(final String name) {
-        this.name = base.getName();
-        if (this.name == null) {
-            this.name = name;
-        }
-    }
-
     @Override
-    public void sendPluginMessage(Plugin plugin, String string, byte[] bytes) {
+    public void sendPluginMessage(final Plugin plugin, final String string, final byte[] bytes) {
     }
 
     @Override
@@ -773,77 +770,73 @@ public class OfflinePlayer implements Player {
     }
 
     @Override
-    public void setAllowFlight(boolean bln) {
-        allowFlight = bln;
-    }
-
-    @Override
     public boolean getAllowFlight() {
         return allowFlight;
     }
 
     @Override
-    public void setBedSpawnLocation(Location lctn) {
+    public void setAllowFlight(final boolean bln) {
+        allowFlight = bln;
     }
 
     @Override
-    public void setBedSpawnLocation(Location lctn, boolean force) {
+    public void setBedSpawnLocation(final Location lctn, final boolean force) {
     }
 
     @Override
-    public void playEffect(EntityEffect ee) {
+    public void playEffect(final EntityEffect ee) {
     }
 
     @Override
-    public void hidePlayer(Player player) {
+    public void hidePlayer(final Player player) {
     }
 
     @Override
-    public void hidePlayer(Plugin plugin, Player player) {
-
-    }
-
-    @Override
-    public void showPlayer(Player player) {
-    }
-
-    @Override
-    public void showPlayer(Plugin plugin, Player player) {
+    public void hidePlayer(final Plugin plugin, final Player player) {
 
     }
 
     @Override
-    public boolean canSee(Player player) {
+    public void showPlayer(final Player player) {
+    }
+
+    @Override
+    public void showPlayer(final Plugin plugin, final Player player) {
+
+    }
+
+    @Override
+    public boolean canSee(final Player player) {
         return false;
     }
 
     @Override
-    public boolean addPotionEffect(PotionEffect pe) {
+    public boolean addPotionEffect(final PotionEffect pe) {
         return false;
     }
 
     @Override
-    public boolean addPotionEffect(PotionEffect pe, boolean bln) {
+    public boolean addPotionEffect(final PotionEffect pe, final boolean bln) {
         return false;
     }
 
     @Override
-    public boolean addPotionEffects(Collection<PotionEffect> clctn) {
+    public boolean addPotionEffects(final Collection<PotionEffect> clctn) {
         return false;
     }
 
     @Override
-    public boolean hasPotionEffect(PotionEffectType pet) {
+    public boolean hasPotionEffect(final PotionEffectType pet) {
         return false;
     }
 
     @Override
-    public PotionEffect getPotionEffect(PotionEffectType type) {
+    public PotionEffect getPotionEffect(final PotionEffectType type) {
         return null;
     }
 
     @Override
-    public void removePotionEffect(PotionEffectType pet) {
+    public void removePotionEffect(final PotionEffectType pet) {
     }
 
     @Override
@@ -852,7 +845,7 @@ public class OfflinePlayer implements Player {
     }
 
     @Override
-    public <T extends Projectile> T launchProjectile(Class<? extends T> arg0) {
+    public <T extends Projectile> T launchProjectile(final Class<? extends T> arg0) {
         return null;
     }
 
@@ -862,11 +855,11 @@ public class OfflinePlayer implements Player {
     }
 
     @Override
-    public <T> void playEffect(Location lctn, Effect effect, T t) {
+    public <T> void playEffect(final Location lctn, final Effect effect, final T t) {
     }
 
     @Override
-    public boolean setWindowProperty(Property prprt, int i) {
+    public boolean setWindowProperty(final Property prprt, final int i) {
         return false;
     }
 
@@ -876,31 +869,31 @@ public class OfflinePlayer implements Player {
     }
 
     @Override
-    public InventoryView openInventory(Inventory invntr) {
+    public InventoryView openInventory(final Inventory invntr) {
         return null;
     }
 
     @Override
-    public InventoryView openWorkbench(Location lctn, boolean bln) {
+    public InventoryView openWorkbench(final Location lctn, final boolean bln) {
         return null;
     }
 
     @Override
-    public InventoryView openEnchanting(Location lctn, boolean bln) {
+    public InventoryView openEnchanting(final Location lctn, final boolean bln) {
         return null;
     }
 
     @Override
-    public void openInventory(InventoryView iv) {
+    public void openInventory(final InventoryView iv) {
     }
 
     @Override
-    public InventoryView openMerchant(Villager trader, boolean force) {
+    public InventoryView openMerchant(final Villager trader, final boolean force) {
         return null;
     }
 
     @Override
-    public InventoryView openMerchant(Merchant merchant, boolean force) {
+    public InventoryView openMerchant(final Merchant merchant, final boolean force) {
         return null;
     }
 
@@ -914,40 +907,40 @@ public class OfflinePlayer implements Player {
     }
 
     @Override
-    public void setItemOnCursor(ItemStack is) {
+    public void setItemOnCursor(final ItemStack is) {
     }
 
     @Override
-    public boolean hasCooldown(Material material) {
+    public boolean hasCooldown(final Material material) {
         return false;
     }
 
     @Override
-    public int getCooldown(Material material) {
+    public int getCooldown(final Material material) {
         return 0;
     }
 
     @Override
-    public void setCooldown(Material material, int ticks) {
+    public void setCooldown(final Material material, final int ticks) {
 
     }
 
     @Override
-    public void setMetadata(String string, MetadataValue mv) {
+    public void setMetadata(final String string, final MetadataValue mv) {
     }
 
     @Override
-    public List<MetadataValue> getMetadata(String string) {
+    public List<MetadataValue> getMetadata(final String string) {
         return Collections.emptyList();
     }
 
     @Override
-    public boolean hasMetadata(String string) {
+    public boolean hasMetadata(final String string) {
         return false;
     }
 
     @Override
-    public void removeMetadata(String string, Plugin plugin) {
+    public void removeMetadata(final String string, final Plugin plugin) {
     }
 
     @Override
@@ -956,20 +949,20 @@ public class OfflinePlayer implements Player {
     }
 
     @Override
-    public void acceptConversationInput(String string) {
+    public void acceptConversationInput(final String string) {
     }
 
     @Override
-    public boolean beginConversation(Conversation c) {
+    public boolean beginConversation(final Conversation c) {
         return false;
     }
 
     @Override
-    public void abandonConversation(Conversation c) {
+    public void abandonConversation(final Conversation c) {
     }
 
     @Override
-    public void sendMessage(String[] strings) {
+    public void sendMessage(final String[] strings) {
     }
 
     @Override
@@ -983,7 +976,7 @@ public class OfflinePlayer implements Player {
     }
 
     @Override
-    public void abandonConversation(Conversation arg0, ConversationAbandonedEvent arg1) {
+    public void abandonConversation(final Conversation arg0, final ConversationAbandonedEvent arg1) {
     }
 
     @Override
@@ -992,7 +985,7 @@ public class OfflinePlayer implements Player {
     }
 
     @Override
-    public void setFlying(boolean arg0) {
+    public void setFlying(final boolean arg0) {
         isFlying = arg0;
     }
 
@@ -1007,7 +1000,7 @@ public class OfflinePlayer implements Player {
     }
 
     @Override
-    public void setShoulderEntityLeft(Entity entity) {
+    public void setShoulderEntityLeft(final Entity entity) {
 
     }
 
@@ -1017,12 +1010,12 @@ public class OfflinePlayer implements Player {
     }
 
     @Override
-    public void setShoulderEntityRight(Entity entity) {
+    public void setShoulderEntityRight(final Entity entity) {
 
     }
 
     @Override
-    public boolean hasLineOfSight(Entity entity) {
+    public boolean hasLineOfSight(final Entity entity) {
         return false;
     }
 
@@ -1032,21 +1025,21 @@ public class OfflinePlayer implements Player {
     }
 
     @Override
-    public void setFlySpeed(float value) throws IllegalArgumentException {
-    }
-
-    @Override
-    public void setWalkSpeed(float value) throws IllegalArgumentException {
-    }
-
-    @Override
     public float getFlySpeed() {
         return 0.1f;
     }
 
     @Override
+    public void setFlySpeed(final float value) throws IllegalArgumentException {
+    }
+
+    @Override
     public float getWalkSpeed() {
         return 0.2f;
+    }
+
+    @Override
+    public void setWalkSpeed(final float value) throws IllegalArgumentException {
     }
 
     @Override
@@ -1060,11 +1053,11 @@ public class OfflinePlayer implements Player {
     }
 
     @Override
-    public void playSound(Location arg0, Sound arg1, float arg2, float arg3) {
+    public void playSound(final Location arg0, final Sound arg1, final float arg2, final float arg3) {
     }
 
     @Override
-    public void giveExpLevels(int i) {
+    public void giveExpLevels(final int i) {
     }
 
     @Override
@@ -1073,7 +1066,7 @@ public class OfflinePlayer implements Player {
     }
 
     @Override
-    public void setRemoveWhenFarAway(boolean bln) {
+    public void setRemoveWhenFarAway(final boolean bln) {
     }
 
     @Override
@@ -1082,42 +1075,34 @@ public class OfflinePlayer implements Player {
     }
 
     @Override
-    public void setCanPickupItems(boolean bln) {
-    }
-
-    @Override
     public boolean getCanPickupItems() {
         return false;
     }
 
     @Override
-    public Location getLocation(Location lctn) {
+    public void setCanPickupItems(final boolean bln) {
+    }
+
+    @Override
+    public Location getLocation(final Location lctn) {
         return lctn;
     }
 
     @Override
-    public void setTexturePack(String string) {
+    public void setTexturePack(final String string) {
     }
 
     @Override
-    public void setResourcePack(String s) {
+    public void setResourcePack(final String s) {
     }
 
     @Override
-    public void setResourcePack(String url, byte[] hash) {
+    public void setResourcePack(final String url, final byte[] hash) {
 
-    }
-
-    @Override
-    public void setMaxHealth(double i) {
     }
 
     @Override
     public void resetMaxHealth() {
-    }
-
-    @Override
-    public void setCustomName(String string) {
     }
 
     @Override
@@ -1126,7 +1111,7 @@ public class OfflinePlayer implements Player {
     }
 
     @Override
-    public void setCustomNameVisible(boolean bln) {
+    public void setCustomName(final String string) {
     }
 
     @Override
@@ -1135,8 +1120,7 @@ public class OfflinePlayer implements Player {
     }
 
     @Override
-    public void setGlowing(boolean flag) {
-
+    public void setCustomNameVisible(final boolean bln) {
     }
 
     @Override
@@ -1145,7 +1129,7 @@ public class OfflinePlayer implements Player {
     }
 
     @Override
-    public void setInvulnerable(boolean flag) {
+    public void setGlowing(final boolean flag) {
 
     }
 
@@ -1155,12 +1139,17 @@ public class OfflinePlayer implements Player {
     }
 
     @Override
+    public void setInvulnerable(final boolean flag) {
+
+    }
+
+    @Override
     public boolean isSilent() {
         return false;
     }
 
     @Override
-    public void setSilent(boolean flag) {
+    public void setSilent(final boolean flag) {
 
     }
 
@@ -1170,7 +1159,7 @@ public class OfflinePlayer implements Player {
     }
 
     @Override
-    public void setGravity(boolean gravity) {
+    public void setGravity(final boolean gravity) {
 
     }
 
@@ -1180,7 +1169,7 @@ public class OfflinePlayer implements Player {
     }
 
     @Override
-    public void setPortalCooldown(int cooldown) {
+    public void setPortalCooldown(final int cooldown) {
 
     }
 
@@ -1190,12 +1179,12 @@ public class OfflinePlayer implements Player {
     }
 
     @Override
-    public boolean addScoreboardTag(String tag) {
+    public boolean addScoreboardTag(final String tag) {
         return false;
     }
 
     @Override
-    public boolean removeScoreboardTag(String tag) {
+    public boolean removeScoreboardTag(final String tag) {
         return false;
     }
 
@@ -1205,12 +1194,12 @@ public class OfflinePlayer implements Player {
     }
 
     @Override
-    public void setPlayerWeather(WeatherType arg0) {
+    public WeatherType getPlayerWeather() {
+        return null; // per player weather, null means default anyways
     }
 
     @Override
-    public WeatherType getPlayerWeather() {
-        return null; // per player weather, null means default anyways
+    public void setPlayerWeather(final WeatherType arg0) {
     }
 
     @Override
@@ -1228,40 +1217,40 @@ public class OfflinePlayer implements Player {
     }
 
     @Override
-    public void setScoreboard(Scoreboard scrbrd) throws IllegalArgumentException, IllegalStateException {
+    public void setScoreboard(final Scoreboard scrbrd) throws IllegalArgumentException, IllegalStateException {
     }
 
     @Override
-    public void playSound(Location arg0, String arg1, float arg2, float arg3) {
+    public void playSound(final Location arg0, final String arg1, final float arg2, final float arg3) {
     }
 
     @Override
-    public void playSound(Location location, Sound sound, SoundCategory category, float volume, float pitch) {
-
-    }
-
-    @Override
-    public void playSound(Location location, String sound, SoundCategory category, float volume, float pitch) {
+    public void playSound(final Location location, final Sound sound, final SoundCategory category, final float volume, final float pitch) {
 
     }
 
     @Override
-    public void stopSound(Sound sound) {
+    public void playSound(final Location location, final String sound, final SoundCategory category, final float volume, final float pitch) {
 
     }
 
     @Override
-    public void stopSound(String sound) {
+    public void stopSound(final Sound sound) {
 
     }
 
     @Override
-    public void stopSound(Sound sound, SoundCategory category) {
+    public void stopSound(final String sound) {
 
     }
 
     @Override
-    public void stopSound(String sound, SoundCategory category) {
+    public void stopSound(final Sound sound, final SoundCategory category) {
+
+    }
+
+    @Override
+    public void stopSound(final String sound, final SoundCategory category) {
 
     }
 
@@ -1271,12 +1260,7 @@ public class OfflinePlayer implements Player {
     }
 
     @Override
-    public void setHealthScaled(boolean arg0) {
-    }
-
-    @Override
-    public void setHealthScale(double arg0) throws IllegalArgumentException {
-
+    public void setHealthScaled(final boolean arg0) {
     }
 
     @Override
@@ -1285,7 +1269,8 @@ public class OfflinePlayer implements Player {
     }
 
     @Override
-    public void setSpectatorTarget(Entity entity) {
+    public void setHealthScale(final double arg0) throws IllegalArgumentException {
+
     }
 
     @Override
@@ -1299,7 +1284,7 @@ public class OfflinePlayer implements Player {
     }
 
     @Override
-    public boolean setLeashHolder(Entity arg0) {
+    public boolean setLeashHolder(final Entity arg0) {
         return false;
     }
 
@@ -1309,12 +1294,12 @@ public class OfflinePlayer implements Player {
     }
 
     @Override
-    public void setGliding(boolean gliding) {
+    public void setGliding(final boolean gliding) {
 
     }
 
     @Override
-    public void setAI(boolean ai) {
+    public void setAI(final boolean ai) {
 
     }
 
@@ -1324,22 +1309,22 @@ public class OfflinePlayer implements Player {
     }
 
     @Override
-    public void setCollidable(boolean collidable) {
-
-    }
-
-    @Override
     public boolean isCollidable() {
         return false;
     }
 
     @Override
-    public <T extends Projectile> T launchProjectile(Class<? extends T> type, Vector vector) {
+    public void setCollidable(final boolean collidable) {
+
+    }
+
+    @Override
+    public <T extends Projectile> T launchProjectile(final Class<? extends T> type, final Vector vector) {
         return null;
     }
 
     @Override
-    public void sendSignChange(Location arg0, String[] arg1) throws IllegalArgumentException {
+    public void sendSignChange(final Location arg0, final String[] arg1) throws IllegalArgumentException {
     }
 
     @Override
@@ -1348,8 +1333,19 @@ public class OfflinePlayer implements Player {
     }
 
     @Override
+    public void setBedSpawnLocation(final Location lctn) {
+    }
+
+    @Override
     public String getName() {
         return name;
+    }
+
+    void setName(final String name) {
+        this.name = base.getName();
+        if (this.name == null) {
+            this.name = name;
+        }
     }
 
     @Override
@@ -1363,7 +1359,7 @@ public class OfflinePlayer implements Player {
     }
 
     @Override
-    public void setOp(boolean value) {
+    public void setOp(final boolean value) {
         base.setOp(value);
     }
 
@@ -1382,7 +1378,7 @@ public class OfflinePlayer implements Player {
 
     // Removed in 1.12, retain for backwards compatibility.
     @Deprecated
-    public void setBanned(boolean banned) {
+    public void setBanned(final boolean banned) {
         if (ReflUtil.getNmsVersionObject().isHigherThanOrEqualTo(ReflUtil.V1_12_R1)) {
             throw new UnsupportedOperationException("Cannot call setBanned on MC 1.12 and higher.");
         }
@@ -1394,9 +1390,9 @@ public class OfflinePlayer implements Player {
             }
         }
         try {
-            Method method = base.getClass().getDeclaredMethod("setBanned", boolean.class);
+            final Method method = base.getClass().getDeclaredMethod("setBanned", boolean.class);
             method.invoke(base, banned);
-        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+        } catch (final NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
             // This will never happen in a normal CraftBukkit pre-1.12 instance
             e.printStackTrace();
         }
@@ -1408,7 +1404,7 @@ public class OfflinePlayer implements Player {
     }
 
     @Override
-    public void setWhitelisted(boolean value) {
+    public void setWhitelisted(final boolean value) {
         base.setWhitelisted(value);
     }
 
@@ -1443,71 +1439,75 @@ public class OfflinePlayer implements Player {
     }
 
     @Override
+    public void setSpectatorTarget(final Entity entity) {
+    }
+
+    @Override
     public void resetTitle() {
     }
 
     @Override
-    public void spawnParticle(Particle particle, Location location, int count) {
+    public void spawnParticle(final Particle particle, final Location location, final int count) {
 
     }
 
     @Override
-    public void spawnParticle(Particle particle, double x, double y, double z, int count) {
+    public void spawnParticle(final Particle particle, final double x, final double y, final double z, final int count) {
 
     }
 
     @Override
-    public <T> void spawnParticle(Particle particle, Location location, int count, T data) {
+    public <T> void spawnParticle(final Particle particle, final Location location, final int count, final T data) {
 
     }
 
     @Override
-    public <T> void spawnParticle(Particle particle, double x, double y, double z, int count, T data) {
+    public <T> void spawnParticle(final Particle particle, final double x, final double y, final double z, final int count, final T data) {
 
     }
 
     @Override
-    public void spawnParticle(Particle particle, Location location, int count, double offsetX, double offsetY, double offsetZ) {
+    public void spawnParticle(final Particle particle, final Location location, final int count, final double offsetX, final double offsetY, final double offsetZ) {
 
     }
 
     @Override
-    public void spawnParticle(Particle particle, double x, double y, double z, int count, double offsetX, double offsetY, double offsetZ) {
+    public void spawnParticle(final Particle particle, final double x, final double y, final double z, final int count, final double offsetX, final double offsetY, final double offsetZ) {
 
     }
 
     @Override
-    public <T> void spawnParticle(Particle particle, Location location, int count, double offsetX, double offsetY, double offsetZ, T data) {
+    public <T> void spawnParticle(final Particle particle, final Location location, final int count, final double offsetX, final double offsetY, final double offsetZ, final T data) {
 
     }
 
     @Override
-    public <T> void spawnParticle(Particle particle, double x, double y, double z, int count, double offsetX, double offsetY, double offsetZ, T data) {
+    public <T> void spawnParticle(final Particle particle, final double x, final double y, final double z, final int count, final double offsetX, final double offsetY, final double offsetZ, final T data) {
 
     }
 
     @Override
-    public void spawnParticle(Particle particle, Location location, int count, double offsetX, double offsetY, double offsetZ, double extra) {
+    public void spawnParticle(final Particle particle, final Location location, final int count, final double offsetX, final double offsetY, final double offsetZ, final double extra) {
 
     }
 
     @Override
-    public void spawnParticle(Particle particle, double x, double y, double z, int count, double offsetX, double offsetY, double offsetZ, double extra) {
+    public void spawnParticle(final Particle particle, final double x, final double y, final double z, final int count, final double offsetX, final double offsetY, final double offsetZ, final double extra) {
 
     }
 
     @Override
-    public <T> void spawnParticle(Particle particle, Location location, int count, double offsetX, double offsetY, double offsetZ, double extra, T data) {
+    public <T> void spawnParticle(final Particle particle, final Location location, final int count, final double offsetX, final double offsetY, final double offsetZ, final double extra, final T data) {
 
     }
 
     @Override
-    public <T> void spawnParticle(Particle particle, double x, double y, double z, int count, double offsetX, double offsetY, double offsetZ, double extra, T data) {
+    public <T> void spawnParticle(final Particle particle, final double x, final double y, final double z, final int count, final double offsetX, final double offsetY, final double offsetZ, final double extra, final T data) {
 
     }
 
     @Override
-    public AdvancementProgress getAdvancementProgress(Advancement advancement) {
+    public AdvancementProgress getAdvancementProgress(final Advancement advancement) {
         return null;
     }
 
@@ -1517,17 +1517,17 @@ public class OfflinePlayer implements Player {
     }
 
     @Override
-    public void sendTitle(String title, String subtitle) {
+    public void sendTitle(final String title, final String subtitle) {
 
     }
 
     @Override
-    public void sendTitle(String title, String subtitle, int fadeIn, int stay, int fadeOut) {
+    public void sendTitle(final String title, final String subtitle, final int fadeIn, final int stay, final int fadeOut) {
 
     }
 
     @Override
-    public AttributeInstance getAttribute(Attribute attribute) {
+    public AttributeInstance getAttribute(final Attribute attribute) {
         return null;
     }
 }

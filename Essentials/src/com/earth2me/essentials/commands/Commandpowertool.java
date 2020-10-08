@@ -15,7 +15,6 @@ import java.util.Locale;
 
 import static com.earth2me.essentials.I18n.tl;
 
-
 public class Commandpowertool extends EssentialsCommand {
     public Commandpowertool() {
         super("powertool");
@@ -105,23 +104,24 @@ public class Commandpowertool extends EssentialsCommand {
     }
 
     @Override
-    protected List<String> getTabCompleteOptions(Server server, User user, String commandLabel, String[] args) {
+    protected List<String> getTabCompleteOptions(final Server server, final User user, final String commandLabel, final String[] args) {
         if (args.length == 1) {
-            List<String> options = Lists.newArrayList("d:", "c:", "l:");
+            final List<String> options = Lists.newArrayList("d:", "c:", "l:");
 
             if (user.isAuthorized("essentials.powertool.append")) {
-                for (String command : getCommands(server)) {
+                for (final String command : getCommands(server)) {
                     options.add("a:" + command);
                 }
             }
 
             try {
                 final ItemStack itemStack = user.getBase().getItemInHand();
-                List<String> powertools = user.getPowertool(itemStack);
-                for (String tool : powertools) {
+                final List<String> powertools = user.getPowertool(itemStack);
+                for (final String tool : powertools) {
                     options.add("r:" + tool);
                 }
-            } catch (Exception ignored) {}
+            } catch (final Exception ignored) {
+            }
             return options;
         } else if (args[0].startsWith("a:")) {
             return tabCompleteCommand(user.getSource(), server, args[0].substring(2), args, 1);
@@ -131,26 +131,27 @@ public class Commandpowertool extends EssentialsCommand {
     }
 
     @Override
-    protected List<String> getTabCompleteOptions(Server server, CommandSource sender, String commandLabel, String[] args) {
+    protected List<String> getTabCompleteOptions(final Server server, final CommandSource sender, final String commandLabel, final String[] args) {
         if (args.length == 1) {
             return getPlayers(server, sender);
         } else if (args.length == 2) {
             return getItems();
         } else if (args.length == 3) {
-            List<String> options = Lists.newArrayList("d:", "c:", "l:");
+            final List<String> options = Lists.newArrayList("d:", "c:", "l:");
 
-            for (String command : getCommands(server)) {
+            for (final String command : getCommands(server)) {
                 options.add("a:" + command);
             }
 
             try {
                 final User user = getPlayer(server, args, 0, true, true);
                 final ItemStack itemStack = ess.getItemDb().get(args[1]);
-                List<String> powertools = user.getPowertool(itemStack);
-                for (String tool : powertools) {
+                final List<String> powertools = user.getPowertool(itemStack);
+                for (final String tool : powertools) {
                     options.add("r:" + tool);
                 }
-            } catch (Exception ignored) {}
+            } catch (final Exception ignored) {
+            }
             return options;
         } else if (args[2].startsWith("a:")) {
             return tabCompleteCommand(sender, server, args[2].substring(2), args, 3);

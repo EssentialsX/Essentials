@@ -10,24 +10,24 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-
-public class FormatUtil {
+public final class FormatUtil {
+    public static final Pattern IPPATTERN = Pattern.compile("^([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\.([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\." + "([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\.([01]?\\d\\d?|2[0-4]\\d|25[0-5])$");
     private static final Set<ChatColor> COLORS = EnumSet.of(ChatColor.BLACK, ChatColor.DARK_BLUE, ChatColor.DARK_GREEN, ChatColor.DARK_AQUA, ChatColor.DARK_RED, ChatColor.DARK_PURPLE, ChatColor.GOLD, ChatColor.GRAY, ChatColor.DARK_GRAY, ChatColor.BLUE, ChatColor.GREEN, ChatColor.AQUA, ChatColor.RED, ChatColor.LIGHT_PURPLE, ChatColor.YELLOW, ChatColor.WHITE);
     private static final Set<ChatColor> FORMATS = EnumSet.of(ChatColor.BOLD, ChatColor.STRIKETHROUGH, ChatColor.UNDERLINE, ChatColor.ITALIC, ChatColor.RESET);
     private static final Set<ChatColor> MAGIC = EnumSet.of(ChatColor.MAGIC);
-
     //Vanilla patterns used to strip existing formats
     private static final Pattern STRIP_ALL_PATTERN = Pattern.compile("\u00a7+([0-9a-fk-orA-FK-OR])");
     //Pattern used to strip md_5 legacy hex hack
     private static final Pattern STRIP_RGB_PATTERN = Pattern.compile("\u00a7x((?:\u00a7[0-9a-fA-F]){6})");
     //Essentials '&' convention colour codes
     private static final Pattern REPLACE_ALL_PATTERN = Pattern.compile("(&)?&([0-9a-fk-orA-FK-OR])");
-
     private static final Pattern REPLACE_ALL_RGB_PATTERN = Pattern.compile("(&)?&#([0-9a-fA-F]{6})");
     //Used to prepare xmpp output
     private static final Pattern LOGCOLOR_PATTERN = Pattern.compile("\\x1B\\[([0-9]{1,2}(;[0-9]{1,2})?)?[m|K]");
     private static final Pattern URL_PATTERN = Pattern.compile("((?:(?:https?)://)?[\\w-_\\.]{2,})\\.([a-zA-Z]{2,3}(?:/\\S+)?)");
-    public static final Pattern IPPATTERN = Pattern.compile("^([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\.([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\." + "([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\.([01]?\\d\\d?|2[0-4]\\d|25[0-5])$");
+
+    private FormatUtil() {
+    }
 
     //This method is used to simply strip the native minecraft colour codes
     public static String stripFormat(final String input) {
@@ -65,14 +65,15 @@ public class FormatUtil {
         return replaceColor(input, EnumSet.allOf(ChatColor.class), true);
     }
 
-    static String replaceColor(final String input, final Set<ChatColor> supported, boolean rgb) {
-        StringBuffer legacyBuilder = new StringBuffer();
-        Matcher legacyMatcher = REPLACE_ALL_PATTERN.matcher(input);
-        legacyLoop: while (legacyMatcher.find()) {
-            boolean isEscaped = (legacyMatcher.group(1) != null);
+    static String replaceColor(final String input, final Set<ChatColor> supported, final boolean rgb) {
+        final StringBuffer legacyBuilder = new StringBuffer();
+        final Matcher legacyMatcher = REPLACE_ALL_PATTERN.matcher(input);
+        legacyLoop:
+        while (legacyMatcher.find()) {
+            final boolean isEscaped = legacyMatcher.group(1) != null;
             if (!isEscaped) {
-                char code = legacyMatcher.group(2).toLowerCase(Locale.ROOT).charAt(0);
-                for (ChatColor color : supported) {
+                final char code = legacyMatcher.group(2).toLowerCase(Locale.ROOT).charAt(0);
+                for (final ChatColor color : supported) {
                     if (color.getChar() == code) {
                         legacyMatcher.appendReplacement(legacyBuilder, "\u00a7$2");
                         continue legacyLoop;
@@ -85,16 +86,16 @@ public class FormatUtil {
         legacyMatcher.appendTail(legacyBuilder);
 
         if (rgb) {
-            StringBuffer rgbBuilder = new StringBuffer();
-            Matcher rgbMatcher = REPLACE_ALL_RGB_PATTERN.matcher(legacyBuilder.toString());
+            final StringBuffer rgbBuilder = new StringBuffer();
+            final Matcher rgbMatcher = REPLACE_ALL_RGB_PATTERN.matcher(legacyBuilder.toString());
             while (rgbMatcher.find()) {
-                boolean isEscaped = (rgbMatcher.group(1) != null);
+                final boolean isEscaped = rgbMatcher.group(1) != null;
                 if (!isEscaped) {
                     try {
-                        String hexCode = rgbMatcher.group(2);
+                        final String hexCode = rgbMatcher.group(2);
                         rgbMatcher.appendReplacement(rgbBuilder, parseHexColor(hexCode));
                         continue;
-                    } catch (NumberFormatException ignored) {
+                    } catch (final NumberFormatException ignored) {
                     }
                 }
                 rgbMatcher.appendReplacement(rgbBuilder, "&#$2");
@@ -120,20 +121,21 @@ public class FormatUtil {
             throw new NumberFormatException("Invalid hex length");
         }
         Color.decode("#" + hexColor);
-        StringBuilder assembledColorCode = new StringBuilder();
+        final StringBuilder assembledColorCode = new StringBuilder();
         assembledColorCode.append("\u00a7x");
-        for (char curChar : hexColor.toCharArray()) {
+        for (final char curChar : hexColor.toCharArray()) {
             assembledColorCode.append("\u00a7").append(curChar);
         }
         return assembledColorCode.toString();
     }
 
     static String stripColor(final String input, final Set<ChatColor> strip) {
-        StringBuffer builder = new StringBuffer();
-        Matcher matcher = STRIP_ALL_PATTERN.matcher(input);
-        searchLoop: while (matcher.find()) {
-            char code = matcher.group(1).toLowerCase(Locale.ROOT).charAt(0);
-            for (ChatColor color : strip) {
+        final StringBuffer builder = new StringBuffer();
+        final Matcher matcher = STRIP_ALL_PATTERN.matcher(input);
+        searchLoop:
+        while (matcher.find()) {
+            final char code = matcher.group(1).toLowerCase(Locale.ROOT).charAt(0);
+            for (final ChatColor color : strip) {
                 if (color.getChar() == code) {
                     matcher.appendReplacement(builder, "");
                     continue searchLoop;
@@ -150,14 +152,14 @@ public class FormatUtil {
         if (message == null) {
             return null;
         }
-        EnumSet<ChatColor> supported = getSupported(user, permBase);
+        final EnumSet<ChatColor> supported = getSupported(user, permBase);
 
         // RGB Codes
-        StringBuffer rgbBuilder = new StringBuffer();
-        Matcher rgbMatcher = STRIP_RGB_PATTERN.matcher(message);
-        boolean rgb = user.isAuthorized(permBase + ".rgb");
+        final StringBuffer rgbBuilder = new StringBuffer();
+        final Matcher rgbMatcher = STRIP_RGB_PATTERN.matcher(message);
+        final boolean rgb = user.isAuthorized(permBase + ".rgb");
         while (rgbMatcher.find()) {
-            String code = rgbMatcher.group(1).replace("\u00a7", "");
+            final String code = rgbMatcher.group(1).replace("\u00a7", "");
             if (rgb) {
                 rgbMatcher.appendReplacement(rgbBuilder, "&#" + code);
                 continue;
@@ -168,11 +170,12 @@ public class FormatUtil {
         message = rgbBuilder.toString(); // arreter de parler
 
         // Legacy Colors
-        StringBuffer builder = new StringBuffer();
-        Matcher matcher = STRIP_ALL_PATTERN.matcher(message);
-        searchLoop: while (matcher.find()) {
-            char code = matcher.group(1).toLowerCase(Locale.ROOT).charAt(0);
-            for (ChatColor color : supported) {
+        final StringBuffer builder = new StringBuffer();
+        final Matcher matcher = STRIP_ALL_PATTERN.matcher(message);
+        searchLoop:
+        while (matcher.find()) {
+            final char code = matcher.group(1).toLowerCase(Locale.ROOT).charAt(0);
+            for (final ChatColor color : supported) {
                 if (color.getChar() == code) {
                     matcher.appendReplacement(builder, "&" + code);
                     continue searchLoop;
@@ -189,10 +192,10 @@ public class FormatUtil {
         if (message == null) {
             return null;
         }
-        EnumSet<ChatColor> supported = getSupported(user, permBase);
-        EnumSet<ChatColor> strip = EnumSet.complementOf(supported);
+        final EnumSet<ChatColor> supported = getSupported(user, permBase);
+        final EnumSet<ChatColor> strip = EnumSet.complementOf(supported);
 
-        boolean rgb = user.isAuthorized(permBase + ".rgb");
+        final boolean rgb = user.isAuthorized(permBase + ".rgb");
         if (!supported.isEmpty() || rgb) {
             message = replaceColor(message, supported, rgb);
         }
@@ -202,8 +205,8 @@ public class FormatUtil {
         return message;
     }
 
-    private static EnumSet<ChatColor> getSupported(IUser user, String permBase) {
-        EnumSet<ChatColor> supported = EnumSet.noneOf(ChatColor.class);
+    private static EnumSet<ChatColor> getSupported(final IUser user, final String permBase) {
+        final EnumSet<ChatColor> supported = EnumSet.noneOf(ChatColor.class);
         if (user.isAuthorized(permBase + ".color")) {
             supported.addAll(COLORS);
         }
@@ -213,7 +216,7 @@ public class FormatUtil {
         if (user.isAuthorized(permBase + ".magic")) {
             supported.addAll(MAGIC);
         }
-        for (ChatColor chatColor : ChatColor.values()) {
+        for (final ChatColor chatColor : ChatColor.values()) {
             String colorName = chatColor.name();
             if (chatColor == ChatColor.MAGIC) {
                 // Bukkit's name doesn't match with vanilla's
@@ -246,7 +249,7 @@ public class FormatUtil {
     }
 
     public static String lastCode(final String input) {
-        int pos = input.lastIndexOf('\u00a7');
+        final int pos = input.lastIndexOf('\u00a7');
         if (pos == -1 || (pos + 1) == input.length()) {
             return "";
         }
@@ -264,7 +267,7 @@ public class FormatUtil {
         return text;
     }
 
-    public static boolean validIP(String ipAddress) {
+    public static boolean validIP(final String ipAddress) {
         return IPPATTERN.matcher(ipAddress).matches();
     }
 }

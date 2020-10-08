@@ -16,12 +16,17 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.potion.PotionData;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 import static com.earth2me.essentials.I18n.tl;
-
 
 public class FlatItemDb extends AbstractItemDb {
     protected static final Logger LOGGER = Logger.getLogger("Essentials");
@@ -55,7 +60,7 @@ public class FlatItemDb extends AbstractItemDb {
     private void rebuild() {
         this.reset();
 
-        String json = file.getLines().stream()
+        final String json = file.getLines().stream()
             .filter(line -> !line.startsWith("#"))
             .collect(Collectors.joining());
 
@@ -71,24 +76,25 @@ public class FlatItemDb extends AbstractItemDb {
         allAliases.clear();
     }
 
-    private void loadJSON(String source) {
-        JsonObject map = (new JsonParser()).parse(source).getAsJsonObject();
+    private void loadJSON(final String source) {
+        final JsonObject map = new JsonParser().parse(source).getAsJsonObject();
 
-        for (Map.Entry<String, JsonElement> entry : map.entrySet()) {
-            String key = entry.getKey();
-            JsonElement element = entry.getValue();
+        for (final Map.Entry<String, JsonElement> entry : map.entrySet()) {
+            final String key = entry.getKey();
+            final JsonElement element = entry.getValue();
             boolean valid = false;
 
             if (element.isJsonObject()) {
-                ItemData data = gson.fromJson(element, ItemData.class);
+                final ItemData data = gson.fromJson(element, ItemData.class);
                 items.put(key, data);
                 valid = true;
             } else {
                 try {
-                    String target = element.getAsString();
+                    final String target = element.getAsString();
                     itemAliases.put(key, target);
                     valid = true;
-                } catch (Exception ignored) {}
+                } catch (final Exception ignored) {
+                }
             }
 
             if (valid) {
@@ -100,9 +106,9 @@ public class FlatItemDb extends AbstractItemDb {
     }
 
     @Override
-    public ItemStack get(String id, boolean useResolvers) throws Exception {
+    public ItemStack get(String id, final boolean useResolvers) throws Exception {
         if (useResolvers) {
-            ItemStack resolved = tryResolverDeserialize(id);
+            final ItemStack resolved = tryResolverDeserialize(id);
             if (resolved != null) {
                 return resolved;
             }
@@ -111,31 +117,31 @@ public class FlatItemDb extends AbstractItemDb {
         id = id.toLowerCase();
         final String[] split = id.split(":");
 
-        ItemData data = getByName(split[0]);
+        final ItemData data = getByName(split[0]);
 
         if (data == null) {
             throw new Exception(tl("unknownItemName", id));
         }
 
-        Material material = data.getMaterial();
+        final Material material = data.getMaterial();
 
         if (!material.isItem()) throw new Exception(tl("unableToSpawnItem", id));
 
-        ItemStack stack = new ItemStack(material);
+        final ItemStack stack = new ItemStack(material);
         stack.setAmount(material.getMaxStackSize());
 
-        PotionData potionData = data.getPotionData();
-        ItemMeta meta = stack.getItemMeta();
+        final PotionData potionData = data.getPotionData();
+        final ItemMeta meta = stack.getItemMeta();
 
         if (potionData != null && meta instanceof PotionMeta) {
-            PotionMeta potionMeta = (PotionMeta) meta;
+            final PotionMeta potionMeta = (PotionMeta) meta;
             potionMeta.setBasePotionData(potionData);
         }
 
         // For some reason, Damageable doesn't extend ItemMeta but CB implements them in the same
         // class. As to why, your guess is as good as mine.
         if (split.length > 1 && meta instanceof Damageable) {
-            Damageable damageMeta = (Damageable) meta;
+            final Damageable damageMeta = (Damageable) meta;
             damageMeta.setDamage(Integer.parseInt(split[1]));
         }
 
@@ -143,7 +149,7 @@ public class FlatItemDb extends AbstractItemDb {
 
         // The spawner provider will update the meta again, so we need to call it after
         // setItemMeta to prevent a race condition
-        EntityType entity = data.getEntity();
+        final EntityType entity = data.getEntity();
         if (entity != null && material.toString().contains("SPAWNER")) {
             ess.getSpawnerItemProvider().setEntityType(stack, entity);
         }
@@ -163,12 +169,12 @@ public class FlatItemDb extends AbstractItemDb {
     }
 
     @Override
-    public List<String> nameList(ItemStack item) {
-        List<String> names = new ArrayList<>();
-        String primaryName = name(item);
+    public List<String> nameList(final ItemStack item) {
+        final List<String> names = new ArrayList<>();
+        final String primaryName = name(item);
         names.add(primaryName);
 
-        for (Map.Entry<String, String> entry : itemAliases.entrySet()) {
+        for (final Map.Entry<String, String> entry : itemAliases.entrySet()) {
             if (entry.getValue().equalsIgnoreCase(primaryName)) {
                 names.add(entry.getKey());
             }
@@ -178,10 +184,10 @@ public class FlatItemDb extends AbstractItemDb {
     }
 
     @Override
-    public String name(ItemStack item) {
-        ItemData data = lookup(item);
+    public String name(final ItemStack item) {
+        final ItemData data = lookup(item);
 
-        for (Map.Entry<String, ItemData> entry : items.entrySet()) {
+        for (final Map.Entry<String, ItemData> entry : items.entrySet()) {
             if (entry.getValue().equals(data)) {
                 return entry.getKey();
             }
@@ -192,18 +198,18 @@ public class FlatItemDb extends AbstractItemDb {
 
     @Override
     @Deprecated
-    public int getLegacyId(Material material) {
+    public int getLegacyId(final Material material) {
         throw new UnsupportedOperationException("Legacy IDs aren't supported on this version.");
     }
 
-    private ItemData lookup(ItemStack item) {
-        Material type = item.getType();
+    private ItemData lookup(final ItemStack item) {
+        final Material type = item.getType();
 
         if (MaterialUtil.isPotion(type) && item.getItemMeta() instanceof PotionMeta) {
-            PotionData potion = ((PotionMeta) item.getItemMeta()).getBasePotionData();
+            final PotionData potion = ((PotionMeta) item.getItemMeta()).getBasePotionData();
             return new ItemData(type, potion);
         } else if (type.toString().contains("SPAWNER")) {
-            EntityType entity = ess.getSpawnerItemProvider().getEntityType(item);
+            final EntityType entity = ess.getSpawnerItemProvider().getEntityType(item);
             return new ItemData(type, entity);
         } else {
             return new ItemData(type);
@@ -212,7 +218,7 @@ public class FlatItemDb extends AbstractItemDb {
 
     @Override
     public Collection<String> listNames() {
-        Set<String> names = new HashSet<>(allAliases);
+        final Set<String> names = new HashSet<>(allAliases);
         names.addAll(getResolverNames());
         return names;
     }
@@ -223,16 +229,16 @@ public class FlatItemDb extends AbstractItemDb {
         private PotionData potionData = null;
         private EntityType entity = null;
 
-        ItemData(Material material) {
+        ItemData(final Material material) {
             this.material = material;
         }
 
-        ItemData(Material material, PotionData potionData) {
+        ItemData(final Material material, final PotionData potionData) {
             this.material = material;
             this.potionData = potionData;
         }
 
-        ItemData(Material material, EntityType entity) {
+        ItemData(final Material material, final EntityType entity) {
             this.material = material;
             this.entity = entity;
         }
@@ -243,14 +249,14 @@ public class FlatItemDb extends AbstractItemDb {
         }
 
         @Override
-        public boolean equals(Object o) {
+        public boolean equals(final Object o) {
             if (o == null) {
                 return false;
             }
             if (!(o instanceof ItemData)) {
                 return false;
             }
-            ItemData that = (ItemData) o;
+            final ItemData that = (ItemData) o;
             return this.getMaterial() == that.getMaterial() && potionDataEquals(that) && entityEquals(that);
         }
 
@@ -271,7 +277,7 @@ public class FlatItemDb extends AbstractItemDb {
             return this.entity;
         }
 
-        private boolean potionDataEquals(ItemData o) {
+        private boolean potionDataEquals(final ItemData o) {
             if (this.potionData == null && o.getPotionData() == null) {
                 return true;
             } else if (this.potionData != null && o.getPotionData() != null) {
@@ -281,7 +287,7 @@ public class FlatItemDb extends AbstractItemDb {
             }
         }
 
-        private boolean entityEquals(ItemData o) {
+        private boolean entityEquals(final ItemData o) {
             if (this.entity == null && o.getEntity() == null) { // neither have an entity
                 return true;
             } else if (this.entity != null && o.getEntity() != null) { // both have an entity; check if it's the same one

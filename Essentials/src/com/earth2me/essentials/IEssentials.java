@@ -4,7 +4,7 @@ import com.earth2me.essentials.api.IItemDb;
 import com.earth2me.essentials.api.IJails;
 import com.earth2me.essentials.api.IWarps;
 import com.earth2me.essentials.perm.PermissionsHandler;
-import com.earth2me.essentials.register.payment.Methods;
+import net.ess3.provider.ContainerProvider;
 import net.ess3.provider.ServerStateProvider;
 import net.ess3.provider.SpawnerBlockProvider;
 import net.ess3.provider.SpawnerItemProvider;
@@ -69,8 +69,6 @@ public interface IEssentials extends Plugin {
 
     RandomTeleport getRandomTeleport();
 
-    Methods getPaymentMethod();
-
     BukkitTask runTaskAsynchronously(Runnable run);
 
     BukkitTask runTaskLaterAsynchronously(Runnable run, long delay);
@@ -97,6 +95,12 @@ public interface IEssentials extends Plugin {
 
     EssentialsTimer getTimer();
 
+    /**
+     * Get a list of players who are vanished.
+     *
+     * @return A list of players who are vanished
+     * @deprecated Use {@link net.ess3.api.IEssentials#getVanishedPlayersNew()} where possible.
+     */
     @Deprecated
     List<String> getVanishedPlayers();
 
@@ -109,4 +113,6 @@ public interface IEssentials extends Plugin {
     SpawnerBlockProvider getSpawnerBlockProvider();
 
     ServerStateProvider getServerStateProvider();
+
+    ContainerProvider getContainerProvider();
 }

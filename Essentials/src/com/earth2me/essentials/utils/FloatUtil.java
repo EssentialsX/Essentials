@@ -3,12 +3,12 @@ package com.earth2me.essentials.utils;
 /**
  * parseFloat and parseDouble proxies that are protected against non-finite values.
  */
-public class FloatUtil {
+public final class FloatUtil {
     private FloatUtil() {
     }
 
-    public static float parseFloat(String s) throws NumberFormatException {
-        float f = Float.parseFloat(s);
+    public static float parseFloat(final String s) throws NumberFormatException {
+        final float f = Float.parseFloat(s);
         if (Float.isNaN(f)) {
             throw new NumberFormatException("NaN is not valid");
         }
@@ -18,8 +18,8 @@ public class FloatUtil {
         return f;
     }
 
-    public static double parseDouble(String s) throws NumberFormatException {
-        double d = Double.parseDouble(s);
+    public static double parseDouble(final String s) throws NumberFormatException {
+        final double d = Double.parseDouble(s);
         if (Double.isNaN(d)) {
             throw new NumberFormatException("NaN is not valid");
         }

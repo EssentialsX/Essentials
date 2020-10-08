@@ -1,10 +1,9 @@
 package com.earth2me.essentials.commands;
 
-import static com.earth2me.essentials.I18n.tl;
-
 import com.earth2me.essentials.User;
-
 import org.bukkit.Server;
+
+import static com.earth2me.essentials.I18n.tl;
 
 public class Commandclearinventoryconfirmtoggle extends EssentialsCommand {
 
@@ -13,7 +12,7 @@ public class Commandclearinventoryconfirmtoggle extends EssentialsCommand {
     }
 
     @Override
-    public void run(Server server, User user, String commandLabel, String[] args) throws Exception {
+    public void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception {
         boolean confirmingClear = !user.isPromptingClearConfirm();
         if (commandLabel.toLowerCase().endsWith("on")) {
             confirmingClear = true;

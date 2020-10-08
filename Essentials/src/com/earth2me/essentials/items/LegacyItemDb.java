@@ -10,13 +10,18 @@ import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static com.earth2me.essentials.I18n.tl;
-
 
 public class LegacyItemDb extends AbstractItemDb {
     protected static final Logger LOGGER = Logger.getLogger("Essentials");
@@ -49,7 +54,7 @@ public class LegacyItemDb extends AbstractItemDb {
         names.clear();
         primaryName.clear();
 
-        for (String line : lines) {
+        for (final String line : lines) {
             if (line.length() > 0 && line.charAt(0) == '#') {
                 continue;
             }
@@ -60,7 +65,7 @@ public class LegacyItemDb extends AbstractItemDb {
             String nbt = null;
 
             int col = 0;
-            Matcher matcher = csvSplitPattern.matcher(line);
+            final Matcher matcher = csvSplitPattern.matcher(line);
             while (matcher.find()) {
                 String match = matcher.group(1);
                 if (StringUtils.stripToNull(match) == null) {
@@ -96,12 +101,12 @@ public class LegacyItemDb extends AbstractItemDb {
                 nbtData.put(itemName, nbt);
             }
 
-            ItemData itemData = new ItemData(numeric, data);
+            final ItemData itemData = new ItemData(numeric, data);
             if (names.containsKey(itemData)) {
-                List<String> nameList = names.get(itemData);
+                final List<String> nameList = names.get(itemData);
                 nameList.add(itemName);
             } else {
-                List<String> nameList = new ArrayList<>();
+                final List<String> nameList = new ArrayList<>();
                 nameList.add(itemName);
                 names.put(itemData, nameList);
                 primaryName.put(itemData, itemName);
@@ -110,7 +115,7 @@ public class LegacyItemDb extends AbstractItemDb {
             legacyIds.put(numeric, itemData);
         }
 
-        for (List<String> nameList : names.values()) {
+        for (final List<String> nameList : names.values()) {
             nameList.sort(LengthCompare.INSTANCE);
         }
 
@@ -122,7 +127,7 @@ public class LegacyItemDb extends AbstractItemDb {
     @Override
     public ItemStack get(final String id, final boolean useResolvers) throws Exception {
         if (useResolvers) {
-            ItemStack resolved = tryResolverDeserialize(id);
+            final ItemStack resolved = tryResolverDeserialize(id);
             if (resolved != null) {
                 return resolved;
             }
@@ -131,7 +136,7 @@ public class LegacyItemDb extends AbstractItemDb {
         int itemid = 0;
         String itemname;
         short metaData = 0;
-        Matcher parts = splitPattern.matcher(id);
+        final Matcher parts = splitPattern.matcher(id);
         if (parts.matches()) {
             itemname = parts.group(2);
             metaData = Short.parseShort(parts.group(3));
@@ -157,7 +162,7 @@ public class LegacyItemDb extends AbstractItemDb {
         }
 
         if (itemid < 1) {
-            Material matFromName = EnumUtil.getMaterial(itemname.toUpperCase());
+            final Material matFromName = EnumUtil.getMaterial(itemname.toUpperCase());
             if (matFromName != null) {
                 itemid = matFromName.getId();
             }
@@ -167,12 +172,12 @@ public class LegacyItemDb extends AbstractItemDb {
             throw new Exception(tl("unknownItemName", itemname));
         }
 
-        ItemData data = legacyIds.get(itemid);
+        final ItemData data = legacyIds.get(itemid);
         if (data == null) {
             throw new Exception(tl("unknownItemId", itemid));
         }
 
-        Material mat = getFromLegacy(itemid, (byte) metaData);
+        final Material mat = getFromLegacy(itemid, (byte) metaData);
         ItemStack retval = new ItemStack(mat);
         if (nbtData.containsKey(itemname)) {
             String nbt = nbtData.get(itemname);
@@ -181,24 +186,24 @@ public class LegacyItemDb extends AbstractItemDb {
             }
             retval = ess.getServer().getUnsafe().modifyItemStack(retval, nbt);
         }
-        Material MOB_SPAWNER = EnumUtil.getMaterial("SPAWNER", "MOB_SPAWNER");
+        final Material MOB_SPAWNER = EnumUtil.getMaterial("SPAWNER", "MOB_SPAWNER");
         if (mat == MOB_SPAWNER) {
             if (metaData == 0) metaData = EntityType.PIG.getTypeId();
             try {
                 retval = ess.getSpawnerItemProvider().setEntityType(retval, EntityType.fromId(metaData));
-            } catch (IllegalArgumentException e) {
+            } catch (final IllegalArgumentException e) {
                 throw new Exception("Can't spawn entity ID " + metaData + " from mob spawners.");
             }
         } else if (mat.name().contains("MONSTER_EGG")) {
-            EntityType type;
+            final EntityType type;
             try {
                 type = EntityType.fromId(metaData);
-            } catch (IllegalArgumentException e) {
+            } catch (final IllegalArgumentException e) {
                 throw new Exception("Can't spawn entity ID " + metaData + " from spawn eggs.");
             }
             retval = ess.getSpawnEggProvider().createEggItem(type);
         } else if (mat.name().endsWith("POTION")
-                && ReflUtil.getNmsVersionObject().isLowerThan(ReflUtil.V1_11_R1)) { // Only apply this to pre-1.11 as items.csv might only work in 1.11
+            && ReflUtil.getNmsVersionObject().isLowerThan(ReflUtil.V1_11_R1)) { // Only apply this to pre-1.11 as items.csv might only work in 1.11
             retval = ess.getPotionMetaProvider().createPotionItem(mat, metaData);
         } else {
             retval.setDurability(metaData);
@@ -208,7 +213,7 @@ public class LegacyItemDb extends AbstractItemDb {
     }
 
     @Override
-    public List<String> nameList(ItemStack item) {
+    public List<String> nameList(final ItemStack item) {
         ItemData itemData = new ItemData(item.getType().getId(), item.getDurability());
         List<String> nameList = names.get(itemData);
         if (nameList == null) {
@@ -223,7 +228,7 @@ public class LegacyItemDb extends AbstractItemDb {
     }
 
     @Override
-    public String name(ItemStack item) {
+    public String name(final ItemStack item) {
         ItemData itemData = new ItemData(item.getType().getId(), item.getDurability());
         String name = primaryName.get(itemData);
         if (name == null) {
@@ -234,9 +239,9 @@ public class LegacyItemDb extends AbstractItemDb {
     }
 
     @Override
-    public int getLegacyId(Material material) throws Exception {
-        for(Map.Entry<String, Integer> entry : items.entrySet()) {
-            if(material.name().toLowerCase(Locale.ENGLISH).equalsIgnoreCase(entry.getKey())) {
+    public int getLegacyId(final Material material) throws Exception {
+        for (final Map.Entry<String, Integer> entry : items.entrySet()) {
+            if (material.name().toLowerCase(Locale.ENGLISH).equalsIgnoreCase(entry.getKey())) {
                 return entry.getValue();
             }
         }
@@ -246,7 +251,7 @@ public class LegacyItemDb extends AbstractItemDb {
 
     @Override
     public Collection<String> listNames() {
-        Collection<String> values = new ArrayList<>(primaryName.values());
+        final Collection<String> values = new ArrayList<>(primaryName.values());
         values.addAll(getResolverNames());
         return values;
     }
@@ -274,29 +279,28 @@ public class LegacyItemDb extends AbstractItemDb {
         }
 
         @Override
-        public boolean equals(Object o) {
+        public boolean equals(final Object o) {
             if (o == null) {
                 return false;
             }
             if (!(o instanceof ItemData)) {
                 return false;
             }
-            ItemData pairo = (ItemData) o;
+            final ItemData pairo = (ItemData) o;
             return this.itemNo == pairo.getItemNo() && this.itemData == pairo.getItemData();
         }
     }
-
 
     static class LengthCompare implements java.util.Comparator<String> {
 
         private static final LengthCompare INSTANCE = new LengthCompare();
 
-        public LengthCompare() {
+        LengthCompare() {
             super();
         }
 
         @Override
-        public int compare(String s1, String s2) {
+        public int compare(final String s1, final String s2) {
             return s1.length() - s2.length();
         }
     }

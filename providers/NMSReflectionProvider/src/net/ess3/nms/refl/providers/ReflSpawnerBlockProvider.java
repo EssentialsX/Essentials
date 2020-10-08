@@ -10,25 +10,25 @@ import java.lang.reflect.Method;
 
 public class ReflSpawnerBlockProvider implements SpawnerBlockProvider {
     @Override
-    public void setMaxSpawnDelay(CreatureSpawner spawner, int delay) {
-        Class<?> mobSpawnerAbstract = ReflUtil.getNMSClass("MobSpawnerAbstract");
-        Field maxSpawnDelay = ReflUtil.getFieldCached(mobSpawnerAbstract, "maxSpawnDelay");
+    public void setMaxSpawnDelay(final CreatureSpawner spawner, final int delay) {
+        final Class<?> mobSpawnerAbstract = ReflUtil.getNMSClass("MobSpawnerAbstract");
+        final Field maxSpawnDelay = ReflUtil.getFieldCached(mobSpawnerAbstract, "maxSpawnDelay");
         if (maxSpawnDelay != null) {
             try {
                 maxSpawnDelay.setInt(getNMSSpawner(spawner), delay);
-            } catch (IllegalAccessException ignored) {
+            } catch (final IllegalAccessException ignored) {
             }
         }
     }
 
     @Override
-    public void setMinSpawnDelay(CreatureSpawner spawner, int delay) {
-        Class<?> mobSpawnerAbstract = ReflUtil.getNMSClass("MobSpawnerAbstract");
-        Field minSpawnDelay = ReflUtil.getFieldCached(mobSpawnerAbstract, "minSpawnDelay");
+    public void setMinSpawnDelay(final CreatureSpawner spawner, final int delay) {
+        final Class<?> mobSpawnerAbstract = ReflUtil.getNMSClass("MobSpawnerAbstract");
+        final Field minSpawnDelay = ReflUtil.getFieldCached(mobSpawnerAbstract, "minSpawnDelay");
         if (minSpawnDelay != null) {
             try {
                 minSpawnDelay.setInt(getNMSSpawner(spawner), delay);
-            } catch (IllegalAccessException ignored) {
+            } catch (final IllegalAccessException ignored) {
             }
         }
     }
@@ -38,17 +38,17 @@ public class ReflSpawnerBlockProvider implements SpawnerBlockProvider {
         return "Reflection based provider";
     }
 
-    private Object getNMSSpawner(CreatureSpawner spawner) {
+    private Object getNMSSpawner(final CreatureSpawner spawner) {
         try {
-            Class<?> craftWorld = ReflUtil.getOBCClass("CraftWorld");
-            Class<?> tileEntityMobSpawner = ReflUtil.getNMSClass("TileEntityMobSpawner");
-            Method getSpawner = ReflUtil.getMethodCached(tileEntityMobSpawner, "getSpawner");
-            Method getTileEntityAt = ReflUtil.getMethodCached(craftWorld, "getTileEntityAt", int.class, int.class, int.class);
+            final Class<?> craftWorld = ReflUtil.getOBCClass("CraftWorld");
+            final Class<?> tileEntityMobSpawner = ReflUtil.getNMSClass("TileEntityMobSpawner");
+            final Method getSpawner = ReflUtil.getMethodCached(tileEntityMobSpawner, "getSpawner");
+            final Method getTileEntityAt = ReflUtil.getMethodCached(craftWorld, "getTileEntityAt", int.class, int.class, int.class);
             if (getSpawner != null && getTileEntityAt != null) {
-                Object craftTileEntity = getTileEntityAt.invoke(spawner.getWorld(), spawner.getX(), spawner.getY(), spawner.getZ());
+                final Object craftTileEntity = getTileEntityAt.invoke(spawner.getWorld(), spawner.getX(), spawner.getY(), spawner.getZ());
                 return getSpawner.invoke(craftTileEntity);
             }
-        } catch (IllegalAccessException | InvocationTargetException ignored) {
+        } catch (final IllegalAccessException | InvocationTargetException ignored) {
         }
         return null;
     }
