@@ -9,9 +9,8 @@ labels: 'type: bugfix'
 NOTE: Failure to fill out this template properly may result in your PR being
       delayed or ignored without warning.
 
-Don't put anything inside this block, as it will be hidden when you post your
-PR. Make sure to also not type between any arrows in the template, as this text
-will also be hidden.
+Don't type between any arrows in the template, as this text will be hidden.
+This includes this header block and any other explanatory text blocks.
 
 Want to discuss your PR before submitting it? Join the EssentialsX Development
 server: https://discord.gg/CUN7qVb
@@ -31,7 +30,7 @@ If you are submitting a bug fix, please follow the following steps:
       Copy and paste any logs into https://gist.github.com/, then paste a
       link to them in the relevant parts of the template. Do not use Hastebin
       or Pastebin, as this can cause issues with future reviews.
-      DO NOT drag logs into this box!
+      **DO NOT drag logs into this text box!**
 
 3.  If you are fixing a performance issue, please include a link to a
     Timings and/or profiler report, both before and after your PR.
@@ -46,17 +45,18 @@ If you are submitting a bug fix, please follow the following steps:
 
 <!--
     Replace #nnnn with the number of the original issue. If this PR fixes
-    multiple issues, you should repeat the "fixes #nnnn" for each issue. 
+    multiple issues, you should repeat the phrase "fixes #nnnn" for each issue. 
 -->
 
 This PR fixes #nnnn. 
 
 ### Details
 
-**Proposed fix**  
+**Proposed fix:**    
 <!-- Type a description of your proposed fix below this line. -->
 
-**Environments tested**  
+
+**Environments tested:**    
 <!--
     Below this line, put an "x" inside the box for the environments you have
     tested this bug fix on, and if relevant alter the OS and Java version
@@ -69,7 +69,8 @@ This PR fixes #nnnn.
 - [ ] CraftBukkit/Spigot/Paper 1.12.2 (any OS, any Java 8+ version)
 - [ ] CraftBukkit 1.8.8 (any OS, any Java 8+ version)
 
-**Demonstration**  
+
+**Demonstration:**    
 <!--
     Below this block, include screenshots/log snippets from before and after as
     necessary. If you have created or used a test case plugin, please link to a

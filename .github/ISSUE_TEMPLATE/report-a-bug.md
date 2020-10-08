@@ -10,9 +10,8 @@ labels: 'bug: unconfirmed'
 NOTE: Failure to fill out this template properly may result in your issue being
       delayed or ignored.
 
-Don't put anything inside this block, as it will be hidden when you post your
-issue. Make sure to also not type between any arrows in the template, as this
-text will also be hidden.
+Don't type between any arrows in the template, as this text will be hidden.
+This includes this header block and any other explanatory text blocks.
 
 If you are reporting a bug, please follow the following steps:
 
@@ -24,7 +23,7 @@ If you are reporting a bug, please follow the following steps:
       Copy and paste any logs into https://gist.github.com/, then paste a
       link to them in the relevant parts of the template. Avoid using
       Hastebin or Pastebin, as this makes providing support more difficult.
-      **DO NOT drag files into this box!**
+      **DO NOT drag files into this text box!**
 
 3.  If you are reporting a performance issue, please include a link to a
     Timings and/or profiler report.
@@ -38,17 +37,19 @@ If you are reporting a bug, please follow the following steps:
 
 **Full output of `/ess version`:**
 <!--
-    Paste the output of `/ess version` inside the ```s, preferably copied
-    directly from the console.
+    Run /ess version in the console, then paste the full output of the command
+    between the ```s.
 -->
 ```
 
 ```
 
-**Server log:**
+**Server startup log:**
 <!--
-    Upload `logs/latest.log` to https://gist.github.com/ then paste the link
-    below this block.
+    Restart your server and upload `logs/latest.log` to
+    https://gist.github.com/. You may redact sensitive data (such as IP
+    addresses), but you should make it clear what data was removed. Once
+    uploaded, paste the link below this block.
 -->
 
 
@@ -69,6 +70,14 @@ If you are reporting a bug, please follow the following steps:
 
 **Expected behavior:**  
 <!-- What did you expect to happen? Type below this line. -->
+
+**Console stack trace:**  
+<!--
+    If you are encountering an error in the console, paste it between the ```s.
+-->
+```
+
+```
 
 **Screenshots:**  
 <!-- If necessary, include screenshots or a video below this line. -->

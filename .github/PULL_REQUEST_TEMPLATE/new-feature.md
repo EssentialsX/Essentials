@@ -9,9 +9,8 @@ labels: 'type: enhancement'
 NOTE: Failure to fill out this template properly may result in your PR being
       delayed or ignored without warning.
 
-Don't put anything inside this block, as it will be hidden when you post your
-PR. Make sure to also not type between any arrows in the template, as this text
-will also be hidden.
+Don't type between any arrows in the template, as this text will be hidden.
+This includes this header block and any other explanatory text blocks.
 
 Want to discuss your PR before submitting it? Join the EssentialsX Development
 server: https://discord.gg/CUN7qVb
@@ -31,7 +30,7 @@ If you are submitting a new feature, please follow the following steps:
       https://github.com/EssentialsX/Essentials/issues/new/choose
 
 2.  If you are fixing a performance issue, please use the "Bug fix" PR template
-      instead. This is better suited to performance issues.
+      instead. The "bug fix" template is better suited to performance issues.
 
 3.  Include a demonstration.
       If you are adding commands, please provide screenshots and/or a video
@@ -46,8 +45,8 @@ If you are submitting a new feature, please follow the following steps:
 
 <!--
     Replace #nnnn with the number of the original issue. If this PR implements
-    features from multiple issues, you should repeat the "closes #nnnn" for
-    each issue. 
+    features from multiple issues, you should repeat the phrase "closes #nnnn"
+    for each issue. 
 -->
 
 This PR closes #nnnn. 
@@ -57,9 +56,9 @@ This PR closes #nnnn.
 **Proposed feature**  
 <!-- Type a description of your proposed feature below this line. -->
 
-**Environments tested**
+**Environments tested:**  
 <!--
-    Below this line, put an "x" inside the box for the environments you have
+    Below this block, put an "x" inside the box for the environments you have
     tested this bug fix on, and if relevant alter the OS and Java version
     accordingly. If this feature does not apply to an environment, strike
     through the environment using ~~strikethrough~~. If you have tested on
@@ -70,7 +69,7 @@ This PR closes #nnnn.
 - [ ] CraftBukkit/Spigot/Paper 1.12.2 (any OS, any Java 8+ version)
 - [ ] CraftBukkit 1.8.8 (any OS, any Java 8+ version)
 
-**Demonstration**
+**Demonstration:**  
 <!--
     Below this block, include screenshots/code snippets from before and after
     as necessary. If you have created or used a test case plugin, please link

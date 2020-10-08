@@ -10,9 +10,8 @@ labels: 'type: question'
 NOTE: Failure to fill out this template properly may result in your issue being
       delayed or ignored.
 
-Don't put anything inside this block, as it will be hidden when you post your
-issue. Make sure to also not type between any arrows in the template, as this
-text will also be hidden.
+Don't type between any arrows in the template, as this text will be hidden.
+This includes this header block and any other explanatory text blocks.
 
 Want faster support? Come join our Discord server to get help from both
 developers and community members: https://discord.gg/F7gexAQ
@@ -33,10 +32,10 @@ If you're happy to wait (or you were sent here from Discord), read on:
       link to them in the relevant parts of the template. Do not use Hastebin
       or Pastebin, as this can cause issues when trying to solve issues in the
       future.
-      DO NOT drag logs into this box!
+      **DO NOT drag logs into this text box!**
 
 4.  If you are encountering a performance issue, please include a link to a
-    Timings and/or profiler report, both before and after your PR.
+    Timings and/or profiler report.
 
 -->
 
@@ -44,24 +43,28 @@ If you're happy to wait (or you were sent here from Discord), read on:
 
 **Full output of `/ess version`:**
 <!--
-    Paste the output of `/ess version` inside the ```s, preferably copied
-    directly from the console.
+    Run /ess version in the console, then paste the full output of the command
+    between the ```s.
 -->
 ```
 
 ```
 
-**Server log:**
+**Server startup log:**
 <!--
-    Upload `logs/latest.log` to https://gist.github.com/ then paste the link
-    below this block.
+    Restart your server and upload `logs/latest.log` to
+    https://gist.github.com/. You may redact sensitive data (such as IP
+    addresses), but you should make it clear what data was removed. Once
+    uploaded, paste the link below this block.
 -->
+
 
 **EssentialsX config:**
 <!--
     Upload `plugins/Essentials/config.yml` (and other config files if relevant)
     to https://gist.github.com/ then paste the link below this block.
 -->
+
 
 ### Help request
 
@@ -70,6 +73,14 @@ If you're happy to wait (or you were sent here from Discord), read on:
 
 **What I have tried:**  
 <!-- What have you tried so far? Type below this line. -->
+
+**Console stack trace:**  
+<!--
+    If you are reporting an error in the console, paste it between the ```s.
+-->
+```
+
+```
 
 **Screenshots:**  
 <!-- If relevant, include any screenshots or a video below this line. -->
