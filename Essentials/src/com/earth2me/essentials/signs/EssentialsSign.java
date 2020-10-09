@@ -150,6 +150,7 @@ public class EssentialsSign {
     }
 
     public String getUsername(final User user) {
+        // Truncate username to ensure it can fit on a sign
         return user.getName().substring(0, Math.min(user.getName().length(), 13));
     }
 

@@ -20,6 +20,9 @@ import java.util.Set;
  *  economy:
  *      preferred: "iConomy"
  * </pre></blockquote>
+ * <p>
+ * For more information about the licensing of this code in EssentialsX, see below:
+ * https://gist.github.com/md678685/0935441c9573c030c8bd5a2e604aeec3
  *
  * @author Nijikokun <nijikokun@shortmail.com> (@nijikokun) @copyright: Copyright (C) 2011 @license: AOL license
  * <http://aol.nexua.org>

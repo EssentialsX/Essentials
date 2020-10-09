@@ -17,6 +17,10 @@ commands:
     description: 'A little surprise for operators.'
     usage: /<command> [message]
     aliases: [eantioch,grenade,egrenade,tnt,etnt]
+  anvil:
+    description: Opens up an Anvil.
+    usage: /<command>
+    aliases: [eanvil]
   back:
     description: Teleports you to your location prior to tp/spawn/warp.
     usage: /<command> [player]
@@ -69,6 +73,10 @@ commands:
     description: Set a player on fire.
     usage: /<command> <player> <seconds>
     aliases: [eburn]
+  cartographytable:
+    description: Opens up a cartography table.
+    usage: /<command>
+    aliases: [ecartographytable, carttable, ecarttable]
   clearinventory:
     description: Clear all items in your inventory.
     usage: /<command> [player|*] [item[:<data>]|*|**] [amount]
@@ -176,6 +184,10 @@ commands:
     description: Enables your godly powers.
     usage: /<command> [player] [on|off]
     aliases: [egod,godmode,egodmode,tgm,etgm]
+  grindstone:
+    description: Opens up a grindstone.
+    usage: /<command>
+    aliases: [egrindstone]
   hat:
     description: Get some cool new headgear.
     usage: /<command> [remove]
@@ -260,6 +272,10 @@ commands:
     description: List all online players.
     usage: /<command> [group]
     aliases: [elist,online,eonline,playerlist,eplayerlist,plist,eplist,who,ewho]
+  loom:
+    description: Opens up a loom.
+    usage: /<command>
+    aliases: [eloom]
   mail:
     description: Manages inter-player, intra-server mail.
     usage: /<command> [read|clear|send [to] [message]|sendall [message]]
@@ -412,6 +428,10 @@ commands:
     description: Set the owner of a player skull
     usage: /<command> [owner]
     aliases: [eskull, playerskull, eplayerskull, head, ehead]
+  smithingtable:
+    description: Opens up a smithing table.
+    usage: /<command>
+    aliases: [esmithingtable, smithtable, esmithtable]
   socialspy:
     description: Toggles if you can see msg/mail commands in chat.
     usage: /<command> [player] [on|off]
@@ -428,6 +448,10 @@ commands:
     description: Change your speed limits.
     usage: /<command> [type] <speed> [player]
     aliases: [flyspeed,eflyspeed,fspeed,efspeed,espeed,walkspeed,ewalkspeed,wspeed,ewspeed]
+  stonecutter:
+    description: Opens up a stonecutter.
+    usage: /<command>
+    aliases: [estonecutter]
   sudo:
     description: Make another user perform a command.
     usage: /<command> <player> <command [args]>
