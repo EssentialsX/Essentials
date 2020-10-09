@@ -70,6 +70,7 @@ public abstract class UserData extends PlayerExtension implements IConf {
     private Boolean confirmPay;
     private Boolean confirmClear;
     private boolean lastMessageReplyRecipient;
+    private int warnings = 0;
 
     protected UserData(final Player base, final IEssentials ess) {
         super(base);
@@ -722,8 +723,7 @@ public abstract class UserData extends PlayerExtension implements IConf {
         config.setProperty("afk", set);
         config.save();
     }
-    private int warnings;
-    
+        
     private int _getWarnings() {
         return warnings;
     }

@@ -5,7 +5,6 @@ import com.earth2me.essentials.Console;
 import com.earth2me.essentials.OfflinePlayer;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.FormatUtil;
-import org.bukkit.BanList;
 import org.bukkit.Server;
 
 import java.util.Collections;
@@ -13,7 +12,7 @@ import java.util.List;
 import java.util.logging.Level;
 
 import static com.earth2me.essentials.I18n.tl;
-
+import org.bukkit.BanList;
 
 public class Commandwarn extends EssentialsCommand {
     public Commandwarn() {
@@ -42,25 +41,36 @@ public class Commandwarn extends EssentialsCommand {
         }
 
         final String senderName = sender.isPlayer() ? sender.getPlayer().getDisplayName() : Console.NAME;
-        String warnReason;
+        final String warnReason;
         if (args.length > 1) {
             warnReason = FormatUtil.replaceFormat(getFinalArg(args, 1).replace("\\n", "\n").replace("|", "\n"));
         } else {
-            warnReason = tl("defaultBanReason");
+            warnReason = tl("defaultWarnReason", user.getWarnings());
         }
         
         user.addWarning(warnReason, senderName);
-        String warnDisplay = tl("warnFormat", warnReason, senderName);
+        final String warnDisplay = tl("warnFormat", warnReason, senderName, user.getWarnings());
 
         user.sendMessage(warnDisplay);
         
-        server.getLogger().log(Level.INFO, tl("playerWarned", senderName, user.getName(), warnDisplay));
+        server.getLogger().log(Level.INFO, tl("playerWarned", senderName, user.getName(), warnDisplay, user.getWarnings()));
 
         if (nomatch) {
             sender.sendMessage(tl("userUnknown", user.getName()));
         }
-
-        ess.broadcastMessage("essentials.warn.notify", tl("playerWarned", senderName, user.getName(), warnReason));
+        
+        ess.broadcastMessage("essentials.warn.notify", tl("playerWarned", senderName, user.getName(), warnReason, user.getWarnings()));
+        
+        if (user.getWarnings() > ess.getConfig().getInt("max-warnings")) {
+            final String finalWarning = tl("warnFinal", warnReason);
+            
+            if (ess.getConfig().getBoolean("ban-on-final-warning")) {
+                ess.getServer().getBanList(BanList.Type.NAME).addBan(user.getName(), finalWarning, null, senderName);
+                server.getLogger().log(Level.INFO, tl("playerBanned", senderName, user.getName(), finalWarning));
+            }
+            
+            user.getBase().kickPlayer(finalWarning);
+        } 
     }
 
     @Override

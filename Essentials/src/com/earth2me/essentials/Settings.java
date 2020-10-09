@@ -128,6 +128,7 @@ public class Settings implements net.ess3.api.ISettings {
     private boolean logCommandBlockCommands;
     private Set<Predicate<String>> nickBlacklist;
     private double maxProjectileSpeed;
+    private int maxWarnings;
     private boolean removeEffectsOnHeal;
 
     public Settings(final IEssentials ess) {
@@ -837,9 +838,7 @@ public class Settings implements net.ess3.api.ISettings {
     public BigDecimal getMaxMoney() {
         return maxMoney;
     }
-    
-    private int maxWarnings;
-    
+        
     public int getMaxWarnings() {
         return maxWarnings;
     }
