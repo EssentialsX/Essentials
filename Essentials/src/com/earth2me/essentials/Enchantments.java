@@ -305,8 +305,9 @@ public class Enchantments {
     }
 
     public static void registerAlias(String name, Enchantment enchantment) {
-        if(ENCHANTMENTS.containsKey(name) || ALIASENCHANTMENTS.containsKey(name) || !ENCHANTMENTS.containsValue(enchantment))
+        if (ENCHANTMENTS.containsKey(name) || ALIASENCHANTMENTS.containsKey(name) || !ENCHANTMENTS.containsValue(enchantment)) {
             return;
+        }
 
         ALIASENCHANTMENTS.put(name, enchantment);
     }
