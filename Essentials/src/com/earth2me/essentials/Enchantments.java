@@ -297,8 +297,9 @@ public class Enchantments {
     }
 
     public static void registerEnchantment(String name, Enchantment enchantment) {
-        if(ENCHANTMENTS.containsKey(name) || ALIASENCHANTMENTS.containsKey(name))
+        if (ENCHANTMENTS.containsKey(name) || ALIASENCHANTMENTS.containsKey(name)) {
             return;
+        }
 
         ENCHANTMENTS.put(name, enchantment);
     }
