@@ -1281,6 +1281,11 @@ public class Settings implements net.ess3.api.ISettings {
         return config.getBoolean("drop-items-if-full", false);
     }
 
+    @Override
+    public boolean isOffHandSlotClearingEnabled() {
+        return config.getBoolean("clear-offhand-slot", true);
+    }
+
     // #easteregg
     @Override
     public int getMaxUserCacheCount() {

@@ -269,14 +269,19 @@ public final class InventoryWorkaround {
     }
 
     public static int clearItemInOffHand(final Player p, final ItemStack item) {
-        if (hasMainHandSupport) {
-            int removedAmount = 0;
-            if (p.getInventory().getItemInOffHand().getType().equals(item.getType())) {
-                removedAmount = p.getInventory().getItemInOffHand().getAmount();
-                p.getInventory().setItemInOffHand(null);
+        // This should be added because if `/clear` itself is not initilized it will return an Error: null.
+        if (hasMainHandSupport == null || hasMainHandSupport) {
+            try {
+                int removedAmount = 0;
+                if (p.getInventory().getItemInOffHand().getType().equals(item.getType())) {
+                    removedAmount = p.getInventory().getItemInOffHand().getAmount();
+                    p.getInventory().setItemInOffHand(null);
+                }
+                hasMainHandSupport = true;
+                return removedAmount;
+            } catch (final Throwable e) {
+                hasMainHandSupport = false;
             }
-            hasMainHandSupport = true;
-            return removedAmount;
         }
         return 0;
     }

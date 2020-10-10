@@ -141,6 +141,9 @@ warn-on-smite: true
 # Shall we drop items instead of adding to inventory if the target inventory is full?
 drop-items-if-full: false
 
+# Shall we clear the offhand slot when executing the command /clear [player] [item]
+clear-offhand-slot: false
+
 # Essentials Mail Notification
 # Should we notify players if they have no new mail?
 notify-no-new-mail: true
