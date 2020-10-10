@@ -30,11 +30,9 @@ public class Commandtree extends EssentialsCommand {
                     break;
                 }
             }
-
             if (args[0].equalsIgnoreCase("jungle")) {
                 tree = TreeType.SMALL_JUNGLE;
             }
- 
             if (tree == null) {
                 throw new NotEnoughArgumentsException();
             }
