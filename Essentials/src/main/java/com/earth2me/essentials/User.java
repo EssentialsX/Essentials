@@ -504,7 +504,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
             }
         }
         super.setMoney(newBalance, true);
-        Trade.log("Update", "Set", "API", getName(), new Trade(newBalance, ess), null, null, null, ess);
+        Trade.log("Update", "Set", "API", getName(), new Trade(newBalance, ess), null, null, null, newBalance, ess);
     }
 
     public void updateMoneyCache(final BigDecimal value) {
