@@ -39,32 +39,32 @@ public class EssentialsProtectBlockListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onBlockIgnite(final BlockIgniteEvent event) {
-        if (event.getBlock().getType() == Material.OBSIDIAN || event.getBlock().getRelative(BlockFace.DOWN).getType() == Material.OBSIDIAN && prot.getSettingBool(ProtectConfig.prevent_portal_creation)) {
-            event.setCancelled(true);
+        if (event.getBlock().getType() == Material.OBSIDIAN || event.getBlock().getRelative(BlockFace.DOWN).getType() == Material.OBSIDIAN) {
+            event.setCancelled(prot.getSettingBool(ProtectConfig.prevent_portal_creation));
             return;
         }
 
-        if (event.getCause().equals(BlockIgniteEvent.IgniteCause.SPREAD) && prot.getSettingBool(ProtectConfig.prevent_fire_spread)) {
-            event.setCancelled(true);
+        if (event.getCause().equals(BlockIgniteEvent.IgniteCause.SPREAD)) {
+            event.setCancelled(prot.getSettingBool(ProtectConfig.prevent_fire_spread));
             return;
         }
 
-        if (event.getCause().equals(BlockIgniteEvent.IgniteCause.FLINT_AND_STEEL) && prot.getSettingBool(ProtectConfig.prevent_flint_fire)) {
-            event.setCancelled(true);
+        if (event.getCause().equals(BlockIgniteEvent.IgniteCause.FLINT_AND_STEEL)) {
+            event.setCancelled(prot.getSettingBool(ProtectConfig.prevent_flint_fire));
             return;
         }
 
-        if (event.getCause().equals(BlockIgniteEvent.IgniteCause.LAVA) && prot.getSettingBool(ProtectConfig.prevent_lava_fire_spread)) {
-            event.setCancelled(true);
+        if (event.getCause().equals(BlockIgniteEvent.IgniteCause.LAVA)) {
+            event.setCancelled(prot.getSettingBool(ProtectConfig.prevent_lava_fire_spread));
             return;
         }
-        if (event.getCause().equals(BlockIgniteEvent.IgniteCause.LIGHTNING) && prot.getSettingBool(ProtectConfig.prevent_lightning_fire_spread)) {
-            event.setCancelled(true);
+        if (event.getCause().equals(BlockIgniteEvent.IgniteCause.LIGHTNING)) {
+            event.setCancelled(prot.getSettingBool(ProtectConfig.prevent_lightning_fire_spread));
             return;
         }
 
-        if (event.getCause().equals(BlockIgniteEvent.IgniteCause.FIREBALL) && prot.getSettingBool(ProtectConfig.prevent_fireball_fire)) {
-            event.setCancelled(true);
+        if (event.getCause().equals(BlockIgniteEvent.IgniteCause.FIREBALL)) {
+            event.setCancelled(prot.getSettingBool(ProtectConfig.prevent_fireball_fire));
         }
     }
 
@@ -76,24 +76,24 @@ public class EssentialsProtectBlockListener implements Listener {
             }
 
             if (event.getCause() == EntityDamageEvent.DamageCause.ENTITY_EXPLOSION) {
-                if (event.getDamager() instanceof TNTPrimed && prot.getSettingBool(ProtectConfig.prevent_tnt_itemdmg)) {
-                    event.setCancelled(true);
+                if (event.getDamager() instanceof TNTPrimed) {
+                    event.setCancelled(prot.getSettingBool(ProtectConfig.prevent_tnt_itemdmg));
                 }
 
-                if (event.getDamager() instanceof Creeper && prot.getSettingBool(ProtectConfig.prevent_creeper_itemdmg)) {
-                    event.setCancelled(true);
+                if (event.getDamager() instanceof Creeper) {
+                    event.setCancelled(prot.getSettingBool(ProtectConfig.prevent_creeper_itemdmg));
                 }
 
-                if (event.getDamager() instanceof ExplosiveMinecart && prot.getSettingBool(ProtectConfig.prevent_tntminecart_itemdmg)) {
-                    event.setCancelled(true);
+                if (event.getDamager() instanceof ExplosiveMinecart) {
+                    event.setCancelled(prot.getSettingBool(ProtectConfig.prevent_tntminecart_itemdmg));
                 }
 
-                if (event.getDamager() instanceof WitherSkull && prot.getSettingBool(ProtectConfig.prevent_witherskull_itemdmg)) {
-                    event.setCancelled(true);
+                if (event.getDamager() instanceof WitherSkull) {
+                    event.setCancelled(prot.getSettingBool(ProtectConfig.prevent_witherskull_itemdmg));
                 }
 
-                if (event.getDamager() instanceof Fireball && prot.getSettingBool(ProtectConfig.prevent_fireball_itemdmg)) {
-                    event.setCancelled(true);
+                if (event.getDamager() instanceof Fireball) {
+                    event.setCancelled(prot.getSettingBool(ProtectConfig.prevent_fireball_itemdmg));
                 }
             }
         }
@@ -103,18 +103,18 @@ public class EssentialsProtectBlockListener implements Listener {
     public void onBlockFromTo(final BlockFromToEvent event) {
         final Block block = event.getBlock();
 
-        if (WATER_TYPES.contains(block.getType()) && prot.getSettingBool(ProtectConfig.prevent_water_flow)) {
-            event.setCancelled(true);
+        if (WATER_TYPES.contains(block.getType())) {
+            event.setCancelled(prot.getSettingBool(ProtectConfig.prevent_water_flow));
             return;
         }
 
-        if (LAVA_TYPES.contains(block.getType()) && prot.getSettingBool(ProtectConfig.prevent_lava_flow)) {
-            event.setCancelled(true);
+        if (LAVA_TYPES.contains(block.getType())) {
+            event.setCancelled(prot.getSettingBool(ProtectConfig.prevent_lava_flow));
             return;
         }
 
-        if (block.getType() == Material.AIR && prot.getSettingBool(ProtectConfig.prevent_water_bucket_flow)) {
-            event.setCancelled(true);
+        if (block.getType() == Material.AIR) {
+            event.setCancelled(prot.getSettingBool(ProtectConfig.prevent_water_bucket_flow));
         }
     }
 
@@ -127,8 +127,8 @@ public class EssentialsProtectBlockListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onPortalLight(final PortalCreateEvent event) {
-        if (event.getReason() == PortalCreateEvent.CreateReason.FIRE && prot.getSettingBool(ProtectConfig.prevent_portal_creation)) {
-            event.setCancelled(true);
+        if (event.getReason() == PortalCreateEvent.CreateReason.FIRE) {
+            event.setCancelled(prot.getSettingBool(ProtectConfig.prevent_portal_creation));
         }
     }
 
@@ -142,8 +142,8 @@ public class EssentialsProtectBlockListener implements Listener {
             return;
         }
         final World.Environment environment = block.getWorld().getEnvironment();
-        if (MaterialUtil.isBed(block.getType()) && !environment.equals(World.Environment.NORMAL) && prot.getSettingBool(ProtectConfig.prevent_bed_explosion)) {
-            event.setCancelled(true);
+        if (MaterialUtil.isBed(block.getType()) && !environment.equals(World.Environment.NORMAL)) {
+            event.setCancelled(prot.getSettingBool(ProtectConfig.prevent_bed_explosion));
         }
     }
 }
