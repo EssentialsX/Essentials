@@ -1283,7 +1283,7 @@ public class Settings implements net.ess3.api.ISettings {
 
     @Override
     public boolean isOffHandSlotClearingEnabled() {
-        return config.getBoolean("clear-offhand-slot", true);
+        return config.getBoolean("clear-offhand-slot", false);
     }
 
     // #easteregg
