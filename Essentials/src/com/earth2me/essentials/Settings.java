@@ -1280,12 +1280,7 @@ public class Settings implements net.ess3.api.ISettings {
     public boolean isDropItemsIfFull() {
         return config.getBoolean("drop-items-if-full", false);
     }
-
-    @Override
-    public boolean isOffHandSlotClearingEnabled() {
-        return config.getBoolean("clear-offhand-slot", false);
-    }
-
+    
     // #easteregg
     @Override
     public int getMaxUserCacheCount() {

@@ -287,8 +287,6 @@ public interface ISettings extends IConf {
 
     boolean isDropItemsIfFull();
 
-    boolean isOffHandSlotClearingEnabled();
-
     boolean isLastMessageReplyRecipient();
 
     BigDecimal getMinimumPayAmount();
