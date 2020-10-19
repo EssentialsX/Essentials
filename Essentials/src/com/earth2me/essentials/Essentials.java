@@ -214,8 +214,16 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
 
             Console.setInstance(this);
 
-            if (!VersionUtil.isServerSupported()) {
-                getLogger().severe(tl("serverUnsupported"));
+            switch (VersionUtil.getServerSupportStatus()) {
+                case UNSTABLE:
+                    getLogger().severe(tl("serverUnsupportedMods"));
+                    break;
+                case OUTDATED:
+                    getLogger().severe(tl("serverUnsupported"));
+                    break;
+                case LIMITED:
+                    getLogger().info(tl("serverUnsupportedLimitedApi"));
+                    break;
             }
 
             final PluginManager pm = getServer().getPluginManager();

@@ -3,6 +3,7 @@ package com.earth2me.essentials.utils;
 import com.google.common.base.Objects;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableSet;
+import io.papermc.lib.PaperLib;
 import org.bukkit.Bukkit;
 
 import java.util.Set;
@@ -44,8 +45,22 @@ public final class VersionUtil {
         return serverVersion;
     }
 
+    public static SupportStatus getServerSupportStatus() {
+        try {
+            Class.forName("net.minecraftforge.common.MinecraftForge");
+            return SupportStatus.UNSTABLE;
+        } catch (final ClassNotFoundException ignored) {
+        }
+
+        if (!supportedVersions.contains(getServerBukkitVersion())) {
+            return SupportStatus.OUTDATED;
+        }
+
+        return PaperLib.isPaper() ? SupportStatus.FULL : SupportStatus.LIMITED;
+    }
+
     public static boolean isServerSupported() {
-        return supportedVersions.contains(getServerBukkitVersion());
+        return getServerSupportStatus().isSupported();
     }
 
     public static final class BukkitVersion implements Comparable<BukkitVersion> {
@@ -186,6 +201,24 @@ public final class VersionUtil {
                     }
                 }
             }
+        }
+    }
+
+    public enum SupportStatus {
+        FULL(true),
+        LIMITED(true),
+        UNSTABLE(false),
+        OUTDATED(false)
+        ;
+
+        private final boolean supported;
+
+        SupportStatus(final boolean supported) {
+            this.supported = supported;
+        }
+
+        public boolean isSupported() {
+            return supported;
         }
     }
 }
