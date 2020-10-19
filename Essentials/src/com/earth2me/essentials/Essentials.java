@@ -17,7 +17,6 @@
  */
 package com.earth2me.essentials;
 
-import com.earth2me.essentials.commands.Commandhat;
 import com.earth2me.essentials.commands.EssentialsCommand;
 import com.earth2me.essentials.commands.IEssentialsCommand;
 import com.earth2me.essentials.commands.NoChargeException;
@@ -28,6 +27,7 @@ import com.earth2me.essentials.items.CustomItemResolver;
 import com.earth2me.essentials.items.FlatItemDb;
 import com.earth2me.essentials.items.LegacyItemDb;
 import com.earth2me.essentials.metrics.MetricsWrapper;
+import com.earth2me.essentials.perm.PermissionsDefaults;
 import com.earth2me.essentials.perm.PermissionsHandler;
 import com.earth2me.essentials.register.payment.Methods;
 import com.earth2me.essentials.signs.SignBlockListener;
@@ -85,8 +85,6 @@ import org.bukkit.event.player.PlayerEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.world.WorldLoadEvent;
 import org.bukkit.event.world.WorldUnloadEvent;
-import org.bukkit.permissions.Permission;
-import org.bukkit.permissions.PermissionDefault;
 import org.bukkit.plugin.InvalidDescriptionException;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginDescriptionFile;
@@ -156,18 +154,6 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
 
     public Essentials(final Server server) {
         super(new JavaPluginLoader(server), new PluginDescriptionFile("Essentials", "", "com.earth2me.essentials.Essentials"), null, null);
-    }
-
-    private static void addDefaultBackPermissionsToWorld(final World w) {
-        final String permName = "essentials.back.into." + w.getName();
-
-        Permission p = Bukkit.getPluginManager().getPermission(permName);
-        if (p == null) {
-            p = new Permission(permName,
-                "Allows access to /back when the destination location is within world " + w.getName(),
-                PermissionDefault.TRUE);
-            Bukkit.getPluginManager().addPermission(p);
-        }
     }
 
     @Override
@@ -362,17 +348,15 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
             permissionsHandler = new PermissionsHandler(this, settings.useBukkitPermissions());
             alternativeCommandsHandler = new AlternativeCommandsHandler(this);
 
-            // Register hat permissions
-            Commandhat.registerPermissionsIfNecessary(getServer().getPluginManager());
-
             timer = new EssentialsTimer(this);
             scheduleSyncRepeatingTask(timer, 1000, 50);
 
             Economy.setEss(this);
             execTimer.mark("RegHandler");
 
-            for (final World w : Bukkit.getWorlds())
-                addDefaultBackPermissionsToWorld(w);
+            // Register /hat and /back default permissions
+            PermissionsDefaults.registerAllBackDefaults();
+            PermissionsDefaults.registerAllHatDefaults();
 
             metrics = new MetricsWrapper(this, 858, true);
 
@@ -1064,7 +1048,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
 
         @EventHandler(priority = EventPriority.LOW)
         public void onWorldLoad(final WorldLoadEvent event) {
-            addDefaultBackPermissionsToWorld(event.getWorld());
+            PermissionsDefaults.registerBackDefaultFor(event.getWorld());
 
             ess.getJails().onReload();
             ess.getWarps().reloadConfig();
