@@ -29,13 +29,12 @@ public class ReflKnownCommandsProvider implements KnownCommandsProvider {
                     }
                 }
             }
-        } catch (final Exception exception)  {
+        } catch (final Exception exception) {
             exception.printStackTrace();
         } finally {
             this.knownCommands = knownCommands;
         }
     }
-
 
     @Override
     public Map<String, Command> getKnownCommands() {
