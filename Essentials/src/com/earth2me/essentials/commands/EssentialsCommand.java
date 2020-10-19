@@ -7,13 +7,14 @@ import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.FormatUtil;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import net.ess3.api.IEssentials;
 import org.bukkit.Server;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.PluginIdentifiableCommand;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
-import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.util.StringUtil;
 
 import java.util.ArrayList;
@@ -309,17 +310,15 @@ public abstract class EssentialsCommand implements IEssentialsCommand {
 
     /**
      * Lists all commands.
-     * <p>
-     * TODO: Use the real commandmap to do this automatically.
      */
-    protected final List<String> getCommands(final Server server) {
-        final List<String> commands = Lists.newArrayList();
-        for (final Plugin p : server.getPluginManager().getPlugins()) {
-            final PluginDescriptionFile desc = p.getDescription();
-            final Map<String, Map<String, Object>> cmds = desc.getCommands();
-            if (cmds != null) {
-                commands.addAll(cmds.keySet());
+    protected final List<String> getCommands(Server server) {
+        final Map<String, Command> commandMap = Maps.newHashMap(this.ess.getKnownCommandsProvider().getKnownCommands());
+        final List<String> commands = Lists.newArrayListWithCapacity(commandMap.size());
+        for (final Command command : commandMap.values()) {
+            if (!(command instanceof PluginIdentifiableCommand)) {
+                continue;
             }
+            commands.add(command.getName());
         }
         return commands;
     }

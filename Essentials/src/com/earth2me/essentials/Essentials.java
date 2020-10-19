@@ -47,7 +47,9 @@ import net.ess3.api.ISettings;
 import net.ess3.nms.refl.providers.ReflServerStateProvider;
 import net.ess3.nms.refl.providers.ReflSpawnEggProvider;
 import net.ess3.nms.refl.providers.ReflSpawnerBlockProvider;
+import net.ess3.nms.refl.providers.ReflKnownCommandsProvider;
 import net.ess3.provider.ContainerProvider;
+import net.ess3.provider.KnownCommandsProvider;
 import net.ess3.provider.PotionMetaProvider;
 import net.ess3.provider.ProviderListener;
 import net.ess3.provider.ServerStateProvider;
@@ -61,6 +63,7 @@ import net.ess3.provider.providers.FlatSpawnEggProvider;
 import net.ess3.provider.providers.LegacyPotionMetaProvider;
 import net.ess3.provider.providers.LegacySpawnEggProvider;
 import net.ess3.provider.providers.PaperContainerProvider;
+import net.ess3.provider.providers.PaperKnownCommandsProvider;
 import net.ess3.provider.providers.PaperRecipeBookListener;
 import net.ess3.provider.providers.PaperServerStateProvider;
 import org.bukkit.Bukkit;
@@ -134,6 +137,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
     private transient PotionMetaProvider potionMetaProvider;
     private transient ServerStateProvider serverStateProvider;
     private transient ContainerProvider containerProvider;
+    private transient KnownCommandsProvider knownCommandsProvider;
     private transient ProviderListener recipeBookEventProvider;
     private transient Kits kits;
     private transient RandomTeleport randomTeleport;
@@ -322,6 +326,13 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
                         });
                     } catch (final ClassNotFoundException ignored) {
                     }
+                }
+
+                //Known Commands Provider
+                if (PaperLib.isPaper() && VersionUtil.getServerBukkitVersion().isHigherThanOrEqualTo(VersionUtil.v1_11_2_R01)) {
+                    knownCommandsProvider = new PaperKnownCommandsProvider();
+                } else {
+                    knownCommandsProvider = new ReflKnownCommandsProvider();
                 }
 
                 execTimer.mark("Init(Providers)");
@@ -1011,6 +1022,11 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
     @Override
     public ContainerProvider getContainerProvider() {
         return containerProvider;
+    }
+
+    @Override
+    public KnownCommandsProvider getKnownCommandsProvider() {
+        return knownCommandsProvider;
     }
 
     private AbstractItemDb getItemDbFromConfig() {
