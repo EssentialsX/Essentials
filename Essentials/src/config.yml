@@ -331,6 +331,7 @@ pastebin-createkit: false
 # If this is true, /createkit will store items as NBT; otherwise, it will use Essentials' human-readable item format.
 # By using NBT serialization, /createkit can store items with complex metadata such as shulker boxes and weapons with custom attributes.
 # WARNING: This option only works on 1.15+ Paper servers, and it will bypass any custom serializers from other plugins such as Magic.
+# WARNING: When creating kits via /createkit with this option enabled, you will not be able to downgrade your server with these kit items.
 # This option only affects /createkit - you can still create kits by hand in `kits.yml` using Essentials' human-readable item format.
 # Default is false.
 use-paper-serialization-in-createkit: false
