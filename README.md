@@ -59,11 +59,11 @@ To depend on EssentialsX 2.18.1, you should use the artifact `net.ess3:Essential
 Contributing
 ------------
 
-Want to help improve EssentialsX? There are numerous ways you can contribute to the project.
+Want to help improve EssentialsX? There are several ways you can support and contribute to the project.
 
 If you'd like to make a financial contribution to the project, you can join our [Patreon](https://www.patreon.com/essentialsx/),
 or to make a one-off donation you can visit our [Ko-fi page](https://ko-fi.com/essentialsx). If you can't make a
-donation, don't worry! There's lots of other ways to contribute:
+donation, don't worry! There are lots of other ways to contribute:
 
 * Do you run a server? Take a look at our ["help wanted"](https://github.com/EssentialsX/Essentials/issues?q=is%3Aissue+is%3Aopen+sort%3Aupdated-desc+label%3A%22help+wanted%22)
   and ["bug: unconfirmed"](https://github.com/EssentialsX/Essentials/issues?q=is%3Aissue+is%3Aopen+sort%3Aupdated-desc+label%3A%22bug%3A+unconfirmed%22)
@@ -74,3 +74,5 @@ donation, don't worry! There's lots of other ways to contribute:
   other EssentialsX users.
 * If you're a developer, you could look through our ["open to PR"](https://github.com/EssentialsX/Essentials/issues?q=is%3Aissue+is%3Aopen+sort%3Aupdated-desc+label%3A%22status%3A+open+to+PR%22)
   issues. We're always happy to receive bug fixes and feature additions as pull requests.
+
+See [CONTRIBUTING.md](https://github.com/EssentialsX/Essentials/blob/2.x/CONTRIBUTING.md) to find out more.
