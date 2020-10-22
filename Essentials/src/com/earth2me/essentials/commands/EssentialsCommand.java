@@ -348,13 +348,17 @@ public abstract class EssentialsCommand implements IEssentialsCommand {
         }
 
         final int numArgs = args.length - index - 1;
-        ess.getLogger().info(numArgs + " " + index + " " + Arrays.toString(args));
+        if (ess.getSettings().isDebug()) {
+            ess.getLogger().info(numArgs + " " + index + " " + Arrays.toString(args));
+        }
         String[] effectiveArgs = new String[numArgs];
         System.arraycopy(args, index, effectiveArgs, 0, numArgs);
         if (effectiveArgs.length == 0) {
             effectiveArgs = new String[] {""};
         }
-        ess.getLogger().info(command + " -- " + Arrays.toString(effectiveArgs));
+        if (ess.getSettings().isDebug()) {
+            ess.getLogger().info(command + " -- " + Arrays.toString(effectiveArgs));
+        }
 
         return command.tabComplete(sender.getSender(), label, effectiveArgs);
     }
