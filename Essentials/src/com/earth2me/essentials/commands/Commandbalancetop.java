@@ -13,24 +13,22 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.locks.ReentrantReadWriteLock;
+import java.util.concurrent.CompletableFuture;
 
 import static com.earth2me.essentials.I18n.tl;
 
 public class Commandbalancetop extends EssentialsCommand {
     public static final int MINUSERS = 50;
     private static final int CACHETIME = 2 * 60 * 1000;
-    private static final SimpleTextInput cache = new SimpleTextInput();
-    private static final ReentrantReadWriteLock lock = new ReentrantReadWriteLock();
-    private static long cacheage = 0;
+    private static SimpleTextInput cache = new SimpleTextInput();
 
     public Commandbalancetop() {
         super("balancetop");
     }
 
-    private static void outputCache(final CommandSource sender, final int page) {
+    private void outputCache(final CommandSource sender, final int page) {
         final Calendar cal = Calendar.getInstance();
-        cal.setTimeInMillis(cacheage);
+        cal.setTimeInMillis(ess.getBalanceTop().getCacheAge());
         final DateFormat format = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT);
         sender.sendMessage(tl("balanceTop", format.format(cal.getTime())));
         new TextPager(cache).showPage(Integer.toString(page), null, "balancetop", sender);
@@ -50,25 +48,17 @@ public class Commandbalancetop extends EssentialsCommand {
             }
         }
 
-        if (!force && lock.readLock().tryLock()) {
-            try {
-                if (cacheage > System.currentTimeMillis() - CACHETIME) {
-                    outputCache(sender, page);
-                    return;
-                }
-                if (ess.getUserMap().getUniqueUsers() > MINUSERS) {
-                    sender.sendMessage(tl("orderBalances", ess.getUserMap().getUniqueUsers()));
-                }
-            } finally {
-                lock.readLock().unlock();
-            }
-        } else {
-            if (ess.getUserMap().getUniqueUsers() > MINUSERS) {
-                sender.sendMessage(tl("orderBalances", ess.getUserMap().getUniqueUsers()));
-            }
+        if (!force && ess.getBalanceTop().getCacheAge() > System.currentTimeMillis() - CACHETIME) {
+            outputCache(sender, page);
+            return;
         }
-        ess.runTaskAsynchronously(new Viewer(sender, commandLabel, page, force));
 
+        //If there are less than 50 users in our usermap, there is no need to display a warning as these calculations should be done quickly
+        if (ess.getUserMap().getUniqueUsers() > MINUSERS) {
+            sender.sendMessage(tl("orderBalances", ess.getUserMap().getUniqueUsers()));
+        }
+
+        ess.runTaskAsynchronously(new Viewer(sender, page, force));
     }
 
     @Override
@@ -84,72 +74,42 @@ public class Commandbalancetop extends EssentialsCommand {
         }
     }
 
-    private class Calculator implements Runnable {
-        private final transient Viewer viewer;
-        private final boolean force;
-
-        Calculator(final Viewer viewer, final boolean force) {
-            this.viewer = viewer;
-            this.force = force;
-        }
-
-        @Override
-        public void run() {
-            lock.writeLock().lock();
-            try {
-                if (force || cacheage <= System.currentTimeMillis() - CACHETIME) {
-                    if (ess.getSettings().isEcoDisabled()) {
-                        if (ess.getSettings().isDebug()) {
-                            ess.getLogger().info("Internal economy functions disabled, aborting baltop.");
-                        }
-                    } else {
-                        viewer.getSender().calculateBalanceTopMap(ess);
-                    }
-
-                    cache.getLines().add(tl("serverTotal", NumberUtil.displayCurrency(ess.getBalanceTop().getBalanceTopTotal(), ess)));
-                    int pos = 1;
-                    for (final Map.Entry<String, BigDecimal> entry : ess.getBalanceTop().getBalanceTopCache()) {
-                        cache.getLines().add(tl("balanceTopLine", pos, entry.getKey(), NumberUtil.displayCurrency(entry.getValue(), ess)));
-                        pos++;
-                    }
-                    cacheage = System.currentTimeMillis();
-                }
-            } finally {
-                lock.writeLock().unlock();
-            }
-            ess.runTaskAsynchronously(viewer);
-        }
-    }
-
     private class Viewer implements Runnable {
         private final transient CommandSource sender;
         private final transient int page;
         private final transient boolean force;
-        private final transient String commandLabel;
 
-        Viewer(final CommandSource sender, final String commandLabel, final int page, final boolean force) {
+        Viewer(final CommandSource sender, final int page, final boolean force) {
             this.sender = sender;
             this.page = page;
             this.force = force;
-            this.commandLabel = commandLabel;
         }
 
         @Override
         public void run() {
-            lock.readLock().lock();
-            try {
-                if (!force && cacheage > System.currentTimeMillis() - CACHETIME) {
-                    outputCache(sender, page);
-                    return;
+            if (ess.getSettings().isEcoDisabled()) {
+                if (ess.getSettings().isDebug()) {
+                    ess.getLogger().info("Internal economy functions disabled, aborting baltop.");
                 }
-            } finally {
-                lock.readLock().unlock();
+                return;
             }
-            ess.runTaskAsynchronously(new Calculator(new Viewer(sender, commandLabel, page, false), force));
-        }
 
-        public CommandSource getSender() {
-            return sender;
+            final boolean fresh = force || ess.getBalanceTop().isCacheLocked() || ess.getBalanceTop().getCacheAge() <= System.currentTimeMillis() - CACHETIME;
+            final CompletableFuture<Void> future = fresh ? ess.getBalanceTop().calculateBalanceTopMapAsync() : CompletableFuture.completedFuture(null);
+            future.thenAccept(unused -> {
+                if (fresh) {
+                    final SimpleTextInput newCache = new SimpleTextInput();
+                    newCache.getLines().add(tl("serverTotal", NumberUtil.displayCurrency(ess.getBalanceTop().getBalanceTopTotal(), ess)));
+                    int pos = 1;
+                    for (final Map.Entry<String, BigDecimal> entry : ess.getBalanceTop().getBalanceTopCache()) {
+                        newCache.getLines().add(tl("balanceTopLine", pos, entry.getKey(), NumberUtil.displayCurrency(entry.getValue(), ess)));
+                        pos++;
+                    }
+                    cache = newCache;
+                }
+
+                outputCache(sender, page);
+            });
         }
     }
 }

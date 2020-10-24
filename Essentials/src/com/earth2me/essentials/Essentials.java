@@ -235,7 +235,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
                 execTimer.mark("Init(Usermap)");
 
                 balanceTop = new BalanceTop(this);
-                execTimer.mark("Init(Balancetop)");
+                execTimer.mark("Init(BalanceTop)");
 
                 kits = new Kits(this);
                 confList.add(kits);

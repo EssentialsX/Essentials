@@ -53,11 +53,4 @@ public class CommandSource {
     public String getDisplayName() {
         return sender instanceof Player ? getPlayer().getDisplayName() : getSender().getName();
     }
-
-    /**
-     * Helper method to access protected method {@link BalanceTop#calculateBalanceTopMap()} due to its dangerous nature.
-     */
-    public void calculateBalanceTopMap(IEssentials ess) {
-        ess.getBalanceTop().calculateBalanceTopMap();
-    }
 }
