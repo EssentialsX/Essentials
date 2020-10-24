@@ -314,11 +314,20 @@ public class Commandessentials extends EssentialsCommand {
         boolean isMismatched = false;
         boolean isVaultInstalled = false;
         boolean isUnsupported = false;
-        final boolean isServerSupported = VersionUtil.isServerSupported();
+        final VersionUtil.SupportStatus supportStatus = VersionUtil.getServerSupportStatus();
         final PluginManager pm = server.getPluginManager();
         final String essVer = pm.getPlugin("Essentials").getDescription().getVersion();
 
-        sender.sendMessage(tl(isServerSupported ? "versionOutputFine" : "versionOutputWarn", "Server", server.getBukkitVersion() + " " + server.getVersion()));
+        final String serverMessageKey;
+        if (supportStatus.isSupported()) {
+            serverMessageKey = "versionOutputFine";
+        } else if (supportStatus == VersionUtil.SupportStatus.UNSTABLE) {
+            serverMessageKey = "versionOutputUnsupported";
+        } else {
+            serverMessageKey = "versionOutputWarn";
+        }
+
+        sender.sendMessage(tl(serverMessageKey, "Server", server.getBukkitVersion() + " " + server.getVersion()));
         sender.sendMessage(tl("versionOutputFine", "EssentialsX", essVer));
 
         for (final Plugin plugin : pm.getPlugins()) {
@@ -366,8 +375,16 @@ public class Commandessentials extends EssentialsCommand {
             sender.sendMessage(tl("versionOutputUnsupportedPlugins"));
         }
 
-        if (!VersionUtil.isServerSupported()) {
-            sender.sendMessage(tl("serverUnsupported"));
+        switch (supportStatus) {
+            case UNSTABLE:
+                sender.sendMessage(tl("serverUnsupportedMods"));
+                break;
+            case OUTDATED:
+                sender.sendMessage(tl("serverUnsupported"));
+                break;
+            case LIMITED:
+                sender.sendMessage(tl("serverUnsupportedLimitedApi"));
+                break;
         }
     }
 

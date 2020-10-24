@@ -6,6 +6,9 @@ import org.bukkit.plugin.Plugin;
  * Interface to be implemented by a payment method.
  * Copyright (C) 2011
  * AOL license <http://aol.nexua.org>
+ * <p>
+ * For more information about the licensing of this code in EssentialsX, see below:
+ * https://gist.github.com/md678685/0935441c9573c030c8bd5a2e604aeec3
  *
  * @author Nijikokun <nijikokun@shortmail.com> (@nijikokun)
  */

@@ -4,6 +4,8 @@ import com.earth2me.essentials.api.IItemDb;
 import com.earth2me.essentials.api.IJails;
 import com.earth2me.essentials.api.IWarps;
 import com.earth2me.essentials.perm.PermissionsHandler;
+import net.ess3.provider.ContainerProvider;
+import net.ess3.provider.KnownCommandsProvider;
 import net.ess3.provider.ServerStateProvider;
 import net.ess3.provider.SpawnerBlockProvider;
 import net.ess3.provider.SpawnerItemProvider;
@@ -114,4 +116,8 @@ public interface IEssentials extends Plugin {
     SpawnerBlockProvider getSpawnerBlockProvider();
 
     ServerStateProvider getServerStateProvider();
+
+    ContainerProvider getContainerProvider();
+
+    KnownCommandsProvider getKnownCommandsProvider();
 }
