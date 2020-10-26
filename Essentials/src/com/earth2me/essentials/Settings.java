@@ -595,6 +595,7 @@ public class Settings implements net.ess3.api.ISettings {
         cancelAfkOnMove = _cancelAfkOnMove();
         getFreezeAfkPlayers = _getFreezeAfkPlayers();
         sleepIgnoresAfkPlayers = _sleepIgnoresAfkPlayers();
+        sleepIgnoresAfkPlayers = _sleepIgnoresAfkPlayers();
         afkListName = _getAfkListName();
         isAfkListName = !afkListName.equalsIgnoreCase("none");
         broadcastAfkMessage = _broadcastAfkMessage();
@@ -982,6 +983,15 @@ public class Settings implements net.ess3.api.ISettings {
 
     private boolean _sleepIgnoresAfkPlayers() {
         return config.getBoolean("sleep-ignores-afk-players", true);
+    }
+    
+    @Override
+    public boolean ignoreSleepingIgnored() {
+        return ignoreSleepingIgnored;
+    }
+
+    private boolean _ignoreSleepingIgnored() {
+        return config.getBoolean("ignore-sleepingignored-permission", false);
     }
 
     public String _getAfkListName() {
