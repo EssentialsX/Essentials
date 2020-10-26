@@ -455,8 +455,8 @@ cancel-afk-on-move: true
 # Users with the permission node essentials.sleepingignored will always be ignored.
 sleep-ignores-afk-players: true
 
-# Should players with essentials.* permission use essentials.sleepingignored?
-# When this setting is true, sleeping will ignore essentials.sleepingignored.
+# Should players with essentials.* permission that are not afk count as essentials.sleepingignored?
+# When this setting is true, sleeping will ignore essentials.sleepingignored for non afk players.
 # Enabled this if you use a Sleep Plugin.
 ignore-sleepingignored-permission-for-non-afk-players: false
 
