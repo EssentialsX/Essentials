@@ -89,6 +89,7 @@ public class Settings implements net.ess3.api.ISettings {
     private boolean cancelAfkOnMove;
     private boolean cancelAfkOnInteract;
     private boolean sleepIgnoresAfkPlayers;
+    private boolean ignoreSleepingIgnored;
     private String afkListName;
     private boolean isAfkListName;
     private boolean broadcastAfkMessage;
