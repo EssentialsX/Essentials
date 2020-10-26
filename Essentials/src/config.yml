@@ -455,6 +455,11 @@ cancel-afk-on-move: true
 # Users with the permission node essentials.sleepingignored will always be ignored.
 sleep-ignores-afk-players: true
 
+# Should players with essentials.* permission use essentials.sleepingignored?
+# When this setting is true, sleeping will ignore essentials.sleepingignored.
+# Enabled this if you use a Sleep Plugin.
+ignore-sleepingignored-permission: false
+
 # Set the player's list name when they are AFK. This is none by default which specifies that Essentials 
 # should not interfere with the AFK player's list name.
 # You may use color codes, use {USERNAME} the player's name or {PLAYER} for the player's displayname.
