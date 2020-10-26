@@ -315,7 +315,7 @@ public class EssentialsPlayerListener implements Listener {
                     }
                 }
 
-                if (user.isAuthorized("essentials.sleepingignored") && ess.getSettings().ignoreSleepingIgnored()) {
+                if (user.isAuthorized("essentials.sleepingignored") && !ess.getSettings().ignoreSleepingIgnored()) {
                     user.getBase().setSleepingIgnored(true);
                 }
 
