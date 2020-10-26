@@ -201,6 +201,8 @@ public interface ISettings extends IConf {
 
     boolean sleepIgnoresAfkPlayers();
 
+    boolean ignoreSleepingIgnored();
+
     boolean isAfkListName();
 
     String getAfkListName();
