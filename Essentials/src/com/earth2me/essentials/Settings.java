@@ -991,7 +991,7 @@ public class Settings implements net.ess3.api.ISettings {
     }
 
     private boolean _ignoreSleepingIgnored() {
-        return config.getBoolean("ignore-sleepingignored-permission", false);
+        return config.getBoolean("ignore-sleepingignored-permission-for-non-afk-players", false);
     }
 
     public String _getAfkListName() {
