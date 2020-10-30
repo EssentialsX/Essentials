@@ -44,11 +44,13 @@ import net.ess3.api.IEssentials;
 import net.ess3.api.IItemDb;
 import net.ess3.api.IJails;
 import net.ess3.api.ISettings;
+import net.ess3.nms.refl.providers.ReflFormattedCommandAliasProvider;
 import net.ess3.nms.refl.providers.ReflServerStateProvider;
 import net.ess3.nms.refl.providers.ReflSpawnEggProvider;
 import net.ess3.nms.refl.providers.ReflSpawnerBlockProvider;
 import net.ess3.nms.refl.providers.ReflKnownCommandsProvider;
 import net.ess3.provider.ContainerProvider;
+import net.ess3.provider.FormattedCommandAliasProvider;
 import net.ess3.provider.KnownCommandsProvider;
 import net.ess3.provider.PotionMetaProvider;
 import net.ess3.provider.ProviderListener;
@@ -136,6 +138,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
     private transient ServerStateProvider serverStateProvider;
     private transient ContainerProvider containerProvider;
     private transient KnownCommandsProvider knownCommandsProvider;
+    private transient FormattedCommandAliasProvider formattedCommandAliasProvider;
     private transient ProviderListener recipeBookEventProvider;
     private transient Kits kits;
     private transient RandomTeleport randomTeleport;
@@ -328,6 +331,9 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
                 } else {
                     knownCommandsProvider = new ReflKnownCommandsProvider();
                 }
+
+                //Command Alias provider
+                formattedCommandAliasProvider = new ReflFormattedCommandAliasProvider(PaperLib.isPaper());
 
                 execTimer.mark("Init(Providers)");
                 reload();
@@ -1019,6 +1025,11 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
     @Override
     public KnownCommandsProvider getKnownCommandsProvider() {
         return knownCommandsProvider;
+    }
+
+    @Override
+    public FormattedCommandAliasProvider getFormattedCommandAliasProvider() {
+        return formattedCommandAliasProvider;
     }
 
     private AbstractItemDb getItemDbFromConfig() {
