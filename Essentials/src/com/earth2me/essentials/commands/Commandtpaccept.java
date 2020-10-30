@@ -20,7 +20,6 @@ public class Commandtpaccept extends EssentialsCommand {
 
     @Override
     public void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception {
-
         final User requester;
         try {
             requester = ess.getUser(user.getTeleportRequest());
@@ -52,7 +51,7 @@ public class Commandtpaccept extends EssentialsCommand {
         Bukkit.getServer().getPluginManager().callEvent(event);
         if (event.isCancelled()) {
             user.requestTeleport(null, false);
-            return;
+            throw new NoChargeException();
         }
 
         final Trade charge = new Trade(this.getName(), ess);
