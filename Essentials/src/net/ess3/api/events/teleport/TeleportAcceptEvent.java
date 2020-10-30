@@ -24,7 +24,6 @@ public class TeleportAcceptEvent extends Event implements Cancellable {
         this.sender = sender;
         this.receiver = receiver;
         this.cause = cause;
-        System.out.println(sender.getBase().getName() + " " + receiver.getBase().getName());
     }
 
     public IUser getSender() {
