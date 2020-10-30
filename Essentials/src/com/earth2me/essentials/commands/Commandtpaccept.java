@@ -3,6 +3,8 @@ package com.earth2me.essentials.commands;
 import com.earth2me.essentials.AsyncTeleport;
 import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.User;
+import net.ess3.api.events.teleport.TeleportAcceptEvent;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Server;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
@@ -18,6 +20,7 @@ public class Commandtpaccept extends EssentialsCommand {
 
     @Override
     public void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception {
+
         final User requester;
         try {
             requester = ess.getUser(user.getTeleportRequest());
@@ -44,6 +47,12 @@ public class Commandtpaccept extends EssentialsCommand {
         if (!user.hasOutstandingTeleportRequest()) {
             user.requestTeleport(null, false);
             throw new Exception(tl("requestTimedOut"));
+        }
+        final TeleportAcceptEvent event = new TeleportAcceptEvent(requester, user, TeleportCause.COMMAND);
+        Bukkit.getServer().getPluginManager().callEvent(event);
+        if (event.isCancelled()) {
+            user.requestTeleport(null, false);
+            return;
         }
 
         final Trade charge = new Trade(this.getName(), ess);
