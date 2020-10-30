@@ -50,7 +50,6 @@ public class Commandtpaccept extends EssentialsCommand {
         final TeleportAcceptEvent event = new TeleportAcceptEvent(requester, user, TeleportCause.COMMAND);
         Bukkit.getServer().getPluginManager().callEvent(event);
         if (event.isCancelled()) {
-            user.requestTeleport(null, false);
             throw new NoChargeException();
         }
 
