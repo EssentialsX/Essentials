@@ -7,7 +7,7 @@ import org.bukkit.event.HandlerList;
 import org.bukkit.event.player.PlayerTeleportEvent;
 
 /**
- * Event that's called when a player executes /tpaccept
+ * Called when a player accepts a teleport request.
  * <p>
  * Cancelling this event will prevent the user from teleporting.
  */
