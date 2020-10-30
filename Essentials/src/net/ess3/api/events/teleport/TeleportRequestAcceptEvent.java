@@ -58,8 +58,9 @@ public class TeleportRequestAcceptEvent extends Event implements Cancellable {
     }
 
     public enum RequestType {
-        ACCEPT,
-        ACCEPT_ALL,
-        ACCEPT_HERE
+        TPA,
+        TPA_ALL,
+        TPA_HERE,
+        UNKNOWN
     }
 }
