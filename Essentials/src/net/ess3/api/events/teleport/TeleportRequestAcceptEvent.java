@@ -11,19 +11,19 @@ import org.bukkit.event.player.PlayerTeleportEvent;
  * <p>
  * Cancelling this event will prevent the user from teleporting.
  */
-public class TeleportAcceptEvent extends Event implements Cancellable {
+public class TeleportRequestAcceptEvent extends Event implements Cancellable {
 
     private static final HandlerList handlers = new HandlerList();
     private final IUser sender;
     private final IUser receiver;
-    private final PlayerTeleportEvent.TeleportCause cause;
+    private final RequestType requestType;
 
     private boolean cancelled;
 
-    public TeleportAcceptEvent(IUser sender, IUser receiver, PlayerTeleportEvent.TeleportCause cause) {
+    public TeleportRequestAcceptEvent(IUser sender, IUser receiver, RequestType requestType) {
         this.sender = sender;
         this.receiver = receiver;
-        this.cause = cause;
+        this.requestType = requestType;
     }
 
     public IUser getSender() {
@@ -34,8 +34,8 @@ public class TeleportAcceptEvent extends Event implements Cancellable {
         return receiver;
     }
 
-    public PlayerTeleportEvent.TeleportCause getCause() {
-        return cause;
+    public RequestType getRequestType() {
+        return requestType;
     }
 
     public static HandlerList getHandlerList() {
@@ -55,5 +55,11 @@ public class TeleportAcceptEvent extends Event implements Cancellable {
     @Override
     public void setCancelled(boolean b) {
         cancelled = b;
+    }
+
+    public enum RequestType {
+        ACCEPT,
+        ACCEPT_ALL,
+        ACCEPT_HERE
     }
 }
