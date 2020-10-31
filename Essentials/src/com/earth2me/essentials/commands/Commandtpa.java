@@ -5,6 +5,7 @@ import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.User;
 import net.ess3.api.events.TPARequestEvent;
 import net.ess3.api.events.teleport.TeleportRequestAcceptEvent;
+import org.bukkit.Bukkit;
 import org.bukkit.Server;
 import org.bukkit.event.player.PlayerTeleportEvent;
 
@@ -43,7 +44,14 @@ public class Commandtpa extends EssentialsCommand {
             && !player.isTpRequestHere()) { // Make sure the last teleport request was actually tpa and not tpahere
             throw new Exception(tl("requestSentAlready", player.getDisplayName()));
         }
+
         if (player.isAutoTeleportEnabled() && !player.isIgnoredPlayer(user)) {
+            final TeleportRequestAcceptEvent event = new TeleportRequestAcceptEvent(player, user);
+            Bukkit.getServer().getPluginManager().callEvent(event);
+            user.setRequestType(TeleportRequestAcceptEvent.RequestType.TPA);
+            if (event.isCancelled()) {
+                return;
+            }
             final Trade charge = new Trade(this.getName(), ess);
             final AsyncTeleport teleport = user.getAsyncTeleport();
             teleport.setTpType(AsyncTeleport.TeleportType.TPA);
