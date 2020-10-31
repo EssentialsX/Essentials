@@ -52,8 +52,8 @@ public class TeleportRequestAcceptEvent extends Event implements Cancellable {
     }
 
     @Override
-    public void setCancelled(boolean b) {
-        cancelled = b;
+    public void setCancelled(boolean cancel) {
+        this.cancelled = cancel;
     }
 
     /**
