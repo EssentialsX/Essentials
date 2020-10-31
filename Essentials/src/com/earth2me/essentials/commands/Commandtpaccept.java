@@ -47,7 +47,7 @@ public class Commandtpaccept extends EssentialsCommand {
             user.requestTeleport(null, false);
             throw new Exception(tl("requestTimedOut"));
         }
-        final TeleportRequestAcceptEvent event = new TeleportRequestAcceptEvent(requester, user, TeleportRequestAcceptEvent.RequestType.UNKNOWN);
+        final TeleportRequestAcceptEvent event = new TeleportRequestAcceptEvent(requester, user);
         Bukkit.getServer().getPluginManager().callEvent(event);
         if (event.isCancelled()) {
             throw new NoChargeException();

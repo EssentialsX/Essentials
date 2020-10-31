@@ -4,6 +4,7 @@ import com.earth2me.essentials.AsyncTeleport;
 import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.User;
 import net.ess3.api.events.TPARequestEvent;
+import net.ess3.api.events.teleport.TeleportRequestAcceptEvent;
 import org.bukkit.Server;
 import org.bukkit.event.player.PlayerTeleportEvent;
 
@@ -64,6 +65,7 @@ public class Commandtpa extends EssentialsCommand {
                 throw new Exception(tl("teleportRequestCancelled", player.getDisplayName()));
             }
             player.requestTeleport(user, false);
+            player.setRequestType(TeleportRequestAcceptEvent.RequestType.TPA);
             player.sendMessage(tl("teleportRequest", user.getDisplayName()));
             player.sendMessage(tl("typeTpaccept"));
             player.sendMessage(tl("typeTpdeny"));

@@ -15,6 +15,7 @@ import net.ess3.api.events.AfkStatusChangeEvent;
 import net.ess3.api.events.JailStatusChangeEvent;
 import net.ess3.api.events.MuteStatusChangeEvent;
 import net.ess3.api.events.UserBalanceUpdateEvent;
+import net.ess3.api.events.teleport.TeleportRequestAcceptEvent;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -66,6 +67,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
     private long lastNotifiedAboutMailsMs;
     private String lastHomeConfirmation;
     private long lastHomeConfirmationTimestamp;
+    private TeleportRequestAcceptEvent.RequestType requestType = TeleportRequestAcceptEvent.RequestType.UNKNOWN;
 
     public User(final Player base, final IEssentials ess) {
         super(base, ess);
@@ -1003,5 +1005,13 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
 
     public void setLastHomeConfirmationTimestamp() {
         this.lastHomeConfirmationTimestamp = System.currentTimeMillis();
+    }
+
+    public TeleportRequestAcceptEvent.RequestType getRequestType() {
+        return requestType;
+    }
+
+    public void setRequestType(TeleportRequestAcceptEvent.RequestType requestType) {
+        this.requestType = requestType;
     }
 }

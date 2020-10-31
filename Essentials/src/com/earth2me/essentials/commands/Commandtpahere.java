@@ -2,6 +2,7 @@ package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.User;
 import net.ess3.api.events.TPARequestEvent;
+import net.ess3.api.events.teleport.TeleportRequestAcceptEvent;
 import org.bukkit.Server;
 
 import java.util.Collections;
@@ -44,6 +45,7 @@ public class Commandtpahere extends EssentialsCommand {
             if (tpaEvent.isCancelled()) {
                 throw new Exception(tl("teleportRequestCancelled", player.getDisplayName()));
             }
+            player.setRequestType(TeleportRequestAcceptEvent.RequestType.TPA_HERE);
             player.requestTeleport(user, true);
             player.sendMessage(tl("teleportHereRequest", user.getDisplayName()));
             player.sendMessage(tl("typeTpaccept"));

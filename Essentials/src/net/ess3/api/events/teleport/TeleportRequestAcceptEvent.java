@@ -1,10 +1,9 @@
 package net.ess3.api.events.teleport;
 
-import net.ess3.api.IUser;
+import com.earth2me.essentials.User;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
-import org.bukkit.event.player.PlayerTeleportEvent;
 
 /**
  * Called when a player accepts a teleport request.
@@ -14,23 +13,23 @@ import org.bukkit.event.player.PlayerTeleportEvent;
 public class TeleportRequestAcceptEvent extends Event implements Cancellable {
 
     private static final HandlerList handlers = new HandlerList();
-    private final IUser sender;
-    private final IUser receiver;
+    private final User sender;
+    private final User receiver;
     private final RequestType requestType;
 
     private boolean cancelled;
 
-    public TeleportRequestAcceptEvent(IUser sender, IUser receiver, RequestType requestType) {
+    public TeleportRequestAcceptEvent(User sender, User receiver) {
         this.sender = sender;
         this.receiver = receiver;
-        this.requestType = requestType;
+        this.requestType = receiver.getRequestType();
     }
 
-    public IUser getSender() {
+    public User getSender() {
         return sender;
     }
 
-    public IUser getReceiver() {
+    public User getReceiver() {
         return receiver;
     }
 
@@ -57,6 +56,9 @@ public class TeleportRequestAcceptEvent extends Event implements Cancellable {
         cancelled = b;
     }
 
+    /**
+     * Used to determine what teleport occured
+     */
     public enum RequestType {
         TPA,
         TPA_ALL,
