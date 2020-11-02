@@ -69,7 +69,7 @@ This PR closes #nnnn.
     other environments, add a new line with relevant details.
 -->
 
-- [ ] Paper 1.16.3 (any OS, any Java 8+ version)
+- [ ] Paper 1.16.4 (any OS, any Java 8+ version)
 - [ ] CraftBukkit/Spigot/Paper 1.12.2 (any OS, any Java 8+ version)
 - [ ] CraftBukkit 1.8.8 (any OS, any Java 8+ version)
 
