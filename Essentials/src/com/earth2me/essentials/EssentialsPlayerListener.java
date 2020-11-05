@@ -19,6 +19,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.command.PluginCommand;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -815,7 +816,8 @@ public class EssentialsPlayerListener implements Listener {
             if (ess.getSettings().isDirectHatAllowed() && event.getClick() == ClickType.LEFT && event.getSlot() == 39
                 && event.getCursor().getType() != Material.AIR && event.getCursor().getType().getMaxDurability() == 0
                 && !MaterialUtil.isSkull(event.getCursor().getType())
-                && ess.getUser(event.getWhoClicked()).isAuthorized("essentials.hat") && !ess.getUser(event.getWhoClicked()).isAuthorized("essentials.hat.prevent-type." + event.getCursor().getType().name().toLowerCase())) {
+                && ess.getUser(event.getWhoClicked()).isAuthorized("essentials.hat") && !ess.getUser(event.getWhoClicked()).isAuthorized("essentials.hat.prevent-type." + event.getCursor().getType().name().toLowerCase())
+                && (VersionUtil.getServerBukkitVersion().isHigherThan(VersionUtil.v1_9_4_R01) && ((((PlayerInventory) clickedInventory).getHelmet() != null && !((PlayerInventory) clickedInventory).getHelmet().getEnchantments().containsKey(Enchantment.BINDING_CURSE) || ess.getUser(event.getWhoClicked()).isAuthorized("essentials.hat.ignore-binding")) || ((PlayerInventory) clickedInventory).getHelmet() == null) || VersionUtil.getServerBukkitVersion().isLowerThanOrEqualTo(VersionUtil.v1_9_4_R01))) {
                 event.setCancelled(true);
                 final PlayerInventory inv = (PlayerInventory) clickedInventory;
                 final ItemStack head = inv.getHelmet();
