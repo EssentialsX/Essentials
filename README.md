@@ -53,7 +53,7 @@ Using EssentialsX in your plugin
 
 Do you want to integrate with EssentialsX in your plugin? EssentialsX is available on the **ender.zone Maven repository** at https://ci.ender.zone/plugin/repository/everything/.
 
-To depend on EssentialsX 2.18.1, you should use the artifact `net.ess3:EssentialsX:2.18.1`. You can find more information at the [wiki](https://essentialsx.net/wiki/Common-Issues.html#how-do-i-add-essentialsx-as-a-dependency).
+To depend on EssentialsX 2.18.2, you should use the artifact `net.ess3:EssentialsX:2.18.2`. You can find more information at the [wiki](https://essentialsx.net/wiki/Common-Issues.html#how-do-i-add-essentialsx-as-a-dependency).
 
 
 Contributing
