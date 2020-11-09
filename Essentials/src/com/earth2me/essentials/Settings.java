@@ -1294,6 +1294,11 @@ public class Settings implements net.ess3.api.ISettings {
     }
 
     @Override
+    public boolean isReplyToVanished() {
+        return config.getBoolean("last-message-reply-vanished", true);
+    }
+
+    @Override
     public BigDecimal getMinimumPayAmount() {
         return new BigDecimal(config.getString("minimum-pay-amount", "0.001"));
     }

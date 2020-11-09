@@ -4,6 +4,7 @@ import com.earth2me.essentials.messaging.IMessageRecipient;
 import com.earth2me.essentials.messaging.SimpleMessageRecipient;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 public final class Console implements IMessageRecipient {
     public static final String NAME = "Console";
@@ -79,5 +80,10 @@ public final class Console implements IMessageRecipient {
     @Override
     public void setReplyRecipient(final IMessageRecipient recipient) {
         this.messageRecipient.setReplyRecipient(recipient);
+    }
+
+    @Override
+    public boolean isHiddenFrom(Player player) {
+        return false;
     }
 }

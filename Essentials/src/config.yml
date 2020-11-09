@@ -563,6 +563,11 @@ last-message-reply-recipient: true
 # Default is 180 (3 minutes)
 last-message-reply-recipient-timeout: 180
 
+# Changes the default /reply functionality.
+# If true, /reply will not check if the person you're replying to has vanished.
+# If false, players will not be able to /reply to players who they can no longer see due to vanish.
+last-message-reply-vanished: false
+
 # Toggles whether or not left clicking mobs with a milk bucket turns them into a baby.
 milk-bucket-easter-egg: true
 
