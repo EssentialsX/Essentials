@@ -88,7 +88,7 @@ public class Backup implements Runnable {
 
         ess.runTaskAsynchronously(() -> {
             try {
-                final ProcessBuilder childBuilder = new ProcessBuilder(command);
+                final ProcessBuilder childBuilder = new ProcessBuilder(command.split(" "));
                 childBuilder.redirectErrorStream(true);
                 childBuilder.directory(ess.getDataFolder().getParentFile().getParentFile());
                 final Process child = childBuilder.start();
