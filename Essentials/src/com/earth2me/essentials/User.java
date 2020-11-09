@@ -17,6 +17,7 @@ import net.ess3.api.events.MuteStatusChangeEvent;
 import net.ess3.api.events.UserBalanceUpdateEvent;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import org.bukkit.inventory.ItemStack;
@@ -1008,5 +1009,14 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
 
     public void setLastHomeConfirmationTimestamp() {
         this.lastHomeConfirmationTimestamp = System.currentTimeMillis();
+    }
+
+    @Override
+    public Block getTargetBlock(int maxDistance) {
+        final Block block;
+        if (VersionUtil.getServerBukkitVersion().isLowerThan(VersionUtil.v1_13_2_R01) || (block = base.getTargetBlockExact(maxDistance)) == null) {
+            return base.getTargetBlock(null, maxDistance);
+        }
+        return block;
     }
 }

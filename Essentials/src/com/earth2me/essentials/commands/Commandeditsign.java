@@ -25,7 +25,7 @@ public class Commandeditsign extends EssentialsCommand {
             throw new NotEnoughArgumentsException();
         }
 
-        final Block target = user.getBase().getTargetBlock(null, 5); //5 is a good number
+        final Block target = user.getTargetBlock(5); //5 is a good number
         if (!(target.getState() instanceof Sign)) {
             throw new Exception(tl("editsignCommandTarget"));
         }
@@ -69,7 +69,7 @@ public class Commandeditsign extends EssentialsCommand {
             return Lists.newArrayList("1", "2", "3", "4");
         } else if (args.length == 3 && args[0].equalsIgnoreCase("set") && NumberUtil.isPositiveInt(args[1])) {
             final int line = Integer.parseInt(args[1]);
-            final Block target = user.getBase().getTargetBlock(null, 5);
+            final Block target = user.getTargetBlock(5);
             if (target.getState() instanceof Sign && line <= 4) {
                 final Sign sign = (Sign) target.getState();
                 return Lists.newArrayList(FormatUtil.unformatString(user, "essentials.editsign", sign.getLine(line - 1)));

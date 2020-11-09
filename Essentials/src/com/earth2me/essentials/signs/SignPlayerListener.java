@@ -37,7 +37,7 @@ public class SignPlayerListener implements Listener {
         if (event.isCancelled() && event.getAction() == Action.RIGHT_CLICK_AIR) {
             Block targetBlock = null;
             try {
-                targetBlock = event.getPlayer().getTargetBlock(null, 5);
+                targetBlock = ess.getUser(event.getPlayer()).getTargetBlock(5);
             } catch (final IllegalStateException ex) {
                 if (ess.getSettings().isDebug()) {
                     ess.getLogger().log(Level.WARNING, ex.getMessage(), ex);
