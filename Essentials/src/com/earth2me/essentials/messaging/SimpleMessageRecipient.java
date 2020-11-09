@@ -5,6 +5,7 @@ import com.earth2me.essentials.IUser;
 import com.earth2me.essentials.User;
 import net.ess3.api.events.PrivateMessagePreSendEvent;
 import net.ess3.api.events.PrivateMessageSentEvent;
+import org.bukkit.entity.Player;
 
 import java.lang.ref.WeakReference;
 
@@ -189,5 +190,10 @@ public class SimpleMessageRecipient implements IMessageRecipient {
     @Override
     public void setReplyRecipient(final IMessageRecipient replyRecipient) {
         this.replyRecipient = new WeakReference<>(replyRecipient);
+    }
+
+    @Override
+    public boolean isHiddenFrom(Player player) {
+        return parent.isHiddenFrom(player);
     }
 }
