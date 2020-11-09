@@ -7,6 +7,7 @@ import net.ess3.api.MaxMoneyException;
 import net.ess3.api.events.AfkStatusChangeEvent;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
 import java.math.BigDecimal;
@@ -207,4 +208,6 @@ public interface IUser {
     void setLastMessageReplyRecipient(boolean enabled);
 
     Map<User, BigDecimal> getConfirmingPayments();
+
+    Block getTargetBlock(int maxDistance);
 }
