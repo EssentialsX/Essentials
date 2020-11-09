@@ -1280,7 +1280,7 @@ public class Settings implements net.ess3.api.ISettings {
     public boolean isDropItemsIfFull() {
         return config.getBoolean("drop-items-if-full", false);
     }
-    
+
     // #easteregg
     @Override
     public int getMaxUserCacheCount() {
