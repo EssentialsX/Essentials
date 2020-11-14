@@ -57,7 +57,7 @@ public class Commanddelhome extends EssentialsCommand {
         final IUser user = sender.getUser(ess);
         final boolean canDelOthers = sender.isAuthorized("essentials.delhome.others", ess);
         if (args.length == 1) {
-            final List<String> homes = sender.isPlayer() ? new ArrayList<>() : user.getHomes();
+            final List<String> homes = user == null ? new ArrayList<>() : user.getHomes();
             if (canDelOthers) {
                 final int sepIndex = args[0].indexOf(':');
                 if (sepIndex < 0) {
