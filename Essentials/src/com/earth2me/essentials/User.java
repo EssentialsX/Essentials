@@ -131,7 +131,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
             lastTrackedPermission.clear();
         }
 
-        boolean hasPermission = ess.getPermissionsHandler().hasPermission(base, node);
+        final boolean hasPermission = ess.getPermissionsHandler().hasPermission(base, node);
         lastTrackedPermission.put(node, hasPermission);
 
         try {
