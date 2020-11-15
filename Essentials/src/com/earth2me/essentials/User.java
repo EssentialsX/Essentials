@@ -22,6 +22,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
+import org.bukkit.permissions.PermissionAttachmentInfo;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
@@ -67,6 +68,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
     private long lastNotifiedAboutMailsMs;
     private String lastHomeConfirmation;
     private long lastHomeConfirmationTimestamp;
+    private final Map<String, Boolean> lastTrackedPermission = new WeakHashMap<>();
 
     public User(final Player base, final IEssentials ess) {
         super(base, ess);
@@ -111,13 +113,29 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
     }
 
     private boolean isAuthorizedCheck(final String node) {
-
         if (base instanceof OfflinePlayer) {
             return false;
         }
 
+        // Track player permissions change to avoid calling Player#hasPermission multiple times
+        if (!lastTrackedPermission.isEmpty()) {
+            for (PermissionAttachmentInfo info : base.getEffectivePermissions()) {
+                if (lastTrackedPermission.containsKey(info.getPermission())) {
+                    if (info.getValue() != lastTrackedPermission.get(info.getPermission())) {
+                        break;
+                    }
+
+                    return true;
+                }
+            }
+            lastTrackedPermission.clear();
+        }
+
+        boolean hasPermission = ess.getPermissionsHandler().hasPermission(base, node);
+        lastTrackedPermission.put(node, hasPermission);
+
         try {
-            return ess.getPermissionsHandler().hasPermission(base, node);
+            return hasPermission;
         } catch (final Exception ex) {
             if (ess.getSettings().isDebug()) {
                 ess.getLogger().log(Level.SEVERE, "Permission System Error: " + ess.getPermissionsHandler().getName() + " returned: " + ex.getMessage(), ex);
