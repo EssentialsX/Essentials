@@ -14,7 +14,7 @@
 #   - You have "escaped" all apostrophes in your text: If you want to write "don't", for example, write "don''t" instead (note the doubled apostrophe)
 #   - Text with symbols is enclosed in single or double quotation marks
 
-# If you need help, you can join the EssentialsX community: https://essentialsx.cf/community.html
+# If you need help, you can join the EssentialsX community: https://essentialsx.net/community.html
 
 ############################################################
 # +------------------------------------------------------+ #
@@ -780,7 +780,7 @@ hide-permissionless-help: true
 ############################################################
 
 # You need to install EssentialsX Chat for this section to work.
-# See https://essentialsx.cf/wiki/Module-Breakdown.html for more information.
+# See https://essentialsx.net/wiki/Module-Breakdown.html for more information.
 
 chat:
 
@@ -808,7 +808,7 @@ chat:
   # Note: Group names are case-sensitive so you must match them up with your permission plugin.
   
   # You can use permissions to control whether players can use formatting codes in their chat messages.
-  # See https://essentialsx.cf/wiki/Color-Permissions.html for more information.
+  # See https://essentialsx.net/wiki/Color-Permissions.html for more information.
 
 ############################################################
 # +------------------------------------------------------+ #
@@ -817,7 +817,7 @@ chat:
 ############################################################
 
 # You need to install EssentialsX Protect for this section to work.
-# See https://essentialsx.cf/wiki/Module-Breakdown.html for more information.
+# See https://essentialsx.net/wiki/Module-Breakdown.html for more information.
 
 protect:
 
@@ -965,7 +965,7 @@ protect:
 ############################################################
 
   # You need to install EssentialsX AntiBuild for this section to work.
-  # See https://essentialsx.cf/wiki/Module-Breakdown.html and http://wiki.ess3.net/wiki/AntiBuild for more information.
+  # See https://essentialsx.net/wiki/Module-Breakdown.html and http://wiki.ess3.net/wiki/AntiBuild for more information.
 
     # Should people without the essentials.build permission be allowed to build?
     # Set true to disable building for those people.
@@ -1011,7 +1011,7 @@ protect:
 ############################################################
 
 # You need to install EssentialsX Spawn for this section to work.
-# See https://essentialsx.cf/wiki/Module-Breakdown.html for more information.
+# See https://essentialsx.net/wiki/Module-Breakdown.html for more information.
 
 newbies:
   # Should we announce to the server when someone logs in for the first time?
