@@ -62,8 +62,7 @@ public class Commandbanip extends EssentialsCommand {
             }
         }
 
-        ess.broadcastMessage("essentials.banip.notify", tl("playerBanIpAddress",
-                senderDisplayName, ipAddress, banReason));
+        ess.broadcastMessage("essentials.banip.notify", tl("playerBanIpAddress", senderDisplayName, ipAddress, banReason));
     }
 
     @Override

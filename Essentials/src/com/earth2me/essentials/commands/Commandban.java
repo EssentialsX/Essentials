@@ -60,8 +60,7 @@ public class Commandban extends EssentialsCommand {
             sender.sendMessage(tl("userUnknown", user.getName()));
         }
 
-        ess.broadcastMessage("essentials.ban.notify", tl("playerBanned",
-                senderDisplayName, user.getName(), banReason));
+        ess.broadcastMessage("essentials.ban.notify", tl("playerBanned", senderDisplayName, user.getName(), banReason));
     }
 
     @Override
