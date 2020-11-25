@@ -4596,6 +4596,10 @@
     "material": "ENCHANTED_GOLDEN_APPLE"
   },
   "enchantedgoldenapple": "enchanted_golden_apple",
+  "godapple": "enchanted_golden_apple",
+  "god_apple": "enchanted_golden_apple",
+  "notchapple": "enchanted_golden_apple",
+  "notch_apple": "enchanted_golden_apple",
   "minecraft:enchanted_golden_apple": "enchanted_golden_apple",
   "enchanting_table": {
     "material": "ENCHANTING_TABLE"
