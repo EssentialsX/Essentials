@@ -35,7 +35,7 @@ jobs:
         chmod +x gradlew
         ./gradlew build --stacktrace
     - name: Deploy with Gradle
-      if: ${{ success() && github.event_name == 'push' && github.repository == 'EssentialsX/Essentials' && github.ref == 'refs/head/2.x' }}
+      if: ${{ success() && github.event_name == 'push' && github.repository == 'EssentialsX/Essentials' && github.ref == 'refs/heads/2.x' }}
       env:
         ORG_GRADLE_PROJECT_essxUsername: ${{ secrets.ESSENTIALSX_DEPLOY_USERNAME }}
         ORG_GRADLE_PROJECT_essxPassword: ${{ secrets.ESSENTIALSX_DEPLOY_PASSWORD }}
