@@ -34,6 +34,11 @@ jobs:
       run: |
         chmod +x gradlew
         ./gradlew build --stacktrace
+    - name: Upload Artifacts
+      uses: actions/upload-artifact@master
+      with:
+        name: EssentialsX plugin jars
+        path: jars/
     - name: Deploy with Gradle
       if: ${{ success() && github.event_name == 'push' && github.repository == 'EssentialsX/Essentials' && github.ref == 'refs/heads/2.x' }}
       env:
@@ -41,8 +46,3 @@ jobs:
         ORG_GRADLE_PROJECT_essxPassword: ${{ secrets.ESSENTIALSX_DEPLOY_PASSWORD }}
       run: |
         ./gradlew publish
-    - name: Upload Artifacts
-      uses: actions/upload-artifact@master
-      with:
-        name: EssentialsX plugin jars
-        path: jars/
