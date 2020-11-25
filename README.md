@@ -26,7 +26,7 @@ EssentialsX is almost a completely drop-in replacement for Essentials. However, 
 
 * **EssentialsX requires Java 8 or higher.** On older versions, the plugin may not work properly.
 
-* **EssentialsX supports Minecraft versions 1.8.8, 1.9.4, 1.10.2, 1.11.2, 1.12.2, 1.13.2, 1.14.4, 1.15.2, and 1.16.2.**
+* **EssentialsX supports Minecraft versions 1.8.8, 1.9.4, 1.10.2, 1.11.2, 1.12.2, 1.13.2, 1.14.4, 1.15.2, and 1.16.4.**
 
 
 Support
@@ -40,30 +40,48 @@ If you need to report a bug or want to suggest a new feature, you can [open an i
 Building
 --------
 
-To build EssentialsX, you need JDK 8 or higher and Maven installed on your system. Then, run the following command:
+To build EssentialsX, you need JDK 8 or higher installed on your system. Then, run the following command:
 ```sh
-mvn clean install
+./gradlew build
 ```
 
-Each module's jar can be found in `target/` inside each module's directory.
+...or if you're on windows run the following command:
+
+```batch
+gradlew build
+```
+
+Each module's jar can be found in `build/libs/` inside each module's directory or in `jars/`.
 
 
 Using EssentialsX in your plugin
 --------------------------------
 
-Do you want to integrate with EssentialsX in your plugin? EssentialsX is available on the **ender.zone Maven repository** at https://ci.ender.zone/plugin/repository/everything/.
+Do you want to integrate with EssentialsX in your plugin? You can use the EssentialsX Maven repo to build against EssentialsX's API.
 
-To depend on EssentialsX 2.18.1, you should use the artifact `net.ess3:EssentialsX:2.18.1`. You can find more information at the [wiki](https://essentialsx.net/wiki/Common-Issues.html#how-do-i-add-essentialsx-as-a-dependency).
+Releases are hosted on the Maven repo at `https://repo.essentialsx.net/releases/`, while snapshots (including dev builds) are hosted at `https://repo.essentialsx.net/snapshots/`.
 
+To add EssentialsX to your build system, you should use the following artifacts:
+
+| Type            | Group ID        | Artifact ID | Version         |
+| :-------------- | :-------------- | :---------- | :-------------- |
+| Older releases  | net.ess3        | EssentialsX | 2.18.2          |
+| Snapshots       | net.essentialsx | EssentialsX | 2.19.0-SNAPSHOT |
+| Future releases | net.essentialsx | EssentialsX | 2.19.0          |
+
+Note: up until `2.18.2`, EssentialsX used the `net.ess3` group ID, but starting with `2.19.0` snapshots, the group ID is now `net.essentialsx`.
+When updating your plugin, make sure you use the correct group ID.
+
+You can find more information and examples at the [wiki](https://essentialsx.net/wiki/Common-Issues.html#how-do-i-add-essentialsx-as-a-dependency).
 
 Contributing
 ------------
 
-Want to help improve EssentialsX? There are numerous ways you can contribute to the project.
+Want to help improve EssentialsX? There are several ways you can support and contribute to the project.
 
 If you'd like to make a financial contribution to the project, you can join our [Patreon](https://www.patreon.com/essentialsx/),
 or to make a one-off donation you can visit our [Ko-fi page](https://ko-fi.com/essentialsx). If you can't make a
-donation, don't worry! There's lots of other ways to contribute:
+donation, don't worry! There are lots of other ways to contribute:
 
 * Do you run a server? Take a look at our ["help wanted"](https://github.com/EssentialsX/Essentials/issues?q=is%3Aissue+is%3Aopen+sort%3Aupdated-desc+label%3A%22help+wanted%22)
   and ["bug: unconfirmed"](https://github.com/EssentialsX/Essentials/issues?q=is%3Aissue+is%3Aopen+sort%3Aupdated-desc+label%3A%22bug%3A+unconfirmed%22)
@@ -74,3 +92,5 @@ donation, don't worry! There's lots of other ways to contribute:
   other EssentialsX users.
 * If you're a developer, you could look through our ["open to PR"](https://github.com/EssentialsX/Essentials/issues?q=is%3Aissue+is%3Aopen+sort%3Aupdated-desc+label%3A%22status%3A+open+to+PR%22)
   issues. We're always happy to receive bug fixes and feature additions as pull requests.
+
+See [CONTRIBUTING.md](https://github.com/EssentialsX/Essentials/blob/2.x/CONTRIBUTING.md) to find out more.

@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: MOSS Discord Server
+    url: https://discord.gg/casfFyh
+    about: Need help with using EssentialsX? Join the MOSS Discord server for help.
+  - name: EssentialsX Development Discord Server
+    url: https://discord.gg/CUN7qVb
+    about: Got questions or want to discuss changes before opening your PR? Join the EssentialsX Development Discord server. (Need help? Join MOSS instead.)
