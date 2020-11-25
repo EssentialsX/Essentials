@@ -8,6 +8,9 @@ import org.bukkit.event.HandlerList;
 
 import java.math.BigDecimal;
 
+/**
+ * Fired when a transaction (e.g. /pay) is successfully handled.
+ */
 public class TransactionEvent extends Event {
     private static final HandlerList handlers = new HandlerList();
 
