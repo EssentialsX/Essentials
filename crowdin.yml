@@ -1,6 +1,6 @@
 files:
-  - source: /Essentials/src/messages.properties
-    translation: /Essentials/src/messages_%locale_with_underscore%.properties
+  - source: /Essentials/src/main/resources/messages.properties
+    translation: /Essentials/src/main/resources/messages_%locale_with_underscore%.properties
     languages_mapping:
       locale_with_underscore:
         bg: bg

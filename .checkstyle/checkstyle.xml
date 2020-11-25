@@ -24,7 +24,7 @@
 
     <!-- https://checkstyle.org/config_filters.html#SuppressionFilter -->
     <module name="SuppressionFilter">
-        <property name="file" value="${checkstyle.suppressions.file}"/>
+        <property name="file" value="${configDirectory}/suppressions.xml"/>
     </module>
 
     <!-- https://checkstyle.org/config_filters.html#SuppressWithPlainTextCommentFilter -->
