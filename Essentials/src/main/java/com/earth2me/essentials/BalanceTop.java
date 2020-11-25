@@ -58,7 +58,7 @@ public class BalanceTop {
     /**
      * Re-calculates the balance top cache asynchronously.
      *
-     * This method will return a {@link CompletableFuture<Void>} which
+     * This method will return a {@link CompletableFuture CompletableFuture&lt;Void&gt;} which
      * will be completed upon the recalculation of the balance top map.
      * After which you should run {@link BalanceTop#getBalanceTopCache()}
      * to get the newly updated cache
