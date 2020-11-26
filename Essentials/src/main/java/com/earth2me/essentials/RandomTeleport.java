@@ -18,11 +18,11 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class RandomTeleport implements IConf {
+    private static final Random RANDOM = new Random();
+    private static final int HIGHEST_BLOCK_Y_OFFSET = VersionUtil.getServerBukkitVersion().isHigherThanOrEqualTo(VersionUtil.v1_15_R01) ? 1 : 0;
     private final IEssentials essentials;
     private final EssentialsConf config;
     private final ConcurrentHashMap<String, ConcurrentLinkedQueue<Location>> cache = new ConcurrentHashMap<>();
-    private static final Random RANDOM = new Random();
-    private static final int HIGHEST_BLOCK_Y_OFFSET = VersionUtil.getServerBukkitVersion().isHigherThanOrEqualTo(VersionUtil.v1_15_R01) ? 1 : 0;
 
     public RandomTeleport(final IEssentials essentials) {
         this.essentials = essentials;
@@ -95,7 +95,7 @@ public class RandomTeleport implements IConf {
         config.getStringList("excluded-biomes").forEach(biome -> {
             try {
                 excludedBiomes.add(Biome.valueOf(biome.toUpperCase()));
-            } catch (IllegalArgumentException ignored) {
+            } catch (final IllegalArgumentException ignored) {
             }
         });
         return excludedBiomes;
