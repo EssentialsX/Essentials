@@ -345,6 +345,21 @@ public class FakeWorld implements World {
     }
 
     @Override
+    public boolean isClearWeather() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public void setClearWeatherDuration(int duration) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public int getClearWeatherDuration() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
     public Environment getEnvironment() {
         return env;
     }
