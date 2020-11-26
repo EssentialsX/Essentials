@@ -119,12 +119,16 @@ subprojects {
         }
     }
 
+    compileJava {
+        options.compilerArgs.add('-Xlint:-deprecation')
+    }
+
     javadoc {
         title = "${project.name} API (v${rootProject.ext.fullVersion})"
         options.links(
                 'https://hub.spigotmc.org/javadocs/spigot/'
         )
-        options.addStringOption('Xdoclint:none', '-quiet')
+        options.addStringOption('-Xdoclint:none', '-quiet')
     }
 
     // undo https://github.com/KyoriPowered/indra/blob/master/indra-common/src/main/kotlin/net/kyori/indra/IndraPlugin.kt#L57
