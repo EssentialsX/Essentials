@@ -26,9 +26,9 @@ public class BukkitMaterialTagProvider implements MaterialTagProvider {
             return false;
         }
         try {
-            Field tagField = Tag.class.getDeclaredField(tagName.toUpperCase());
+            final Field tagField = Tag.class.getDeclaredField(tagName.toUpperCase());
             @SuppressWarnings("unchecked")
-            Tag<Material> tagSet = (Tag<Material>) tagField.get(null);
+            final Tag<Material> tagSet = (Tag<Material>) tagField.get(null);
             return tagSet.isTagged(material);
         } catch (NoSuchFieldException | IllegalAccessException | ClassCastException e) {
             return false;

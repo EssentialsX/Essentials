@@ -34,13 +34,13 @@ public class PaperMaterialTagProvider implements MaterialTagProvider {
             return false;
         }
         try {
-            Field tagField = Tag.class.getDeclaredField(tagName.toUpperCase());
-            MaterialSetTag tagSet = (MaterialSetTag) tagField.get(null);
+            final Field tagField = Tag.class.getDeclaredField(tagName.toUpperCase());
+            final MaterialSetTag tagSet = (MaterialSetTag) tagField.get(null);
             return tagSet.isTagged(material);
         } catch (NoSuchFieldException | IllegalAccessException | ClassCastException e) {
             try {
-                Field tagField = MaterialTags.class.getDeclaredField(tagName.toUpperCase());
-                Tag<Material> tagSet = (Tag<Material>) tagField.get(null);
+                final Field tagField = MaterialTags.class.getDeclaredField(tagName.toUpperCase());
+                final Tag<Material> tagSet = (Tag<Material>) tagField.get(null);
                 return tagSet.isTagged(material);
             } catch (NoSuchFieldException | IllegalAccessException | ClassCastException ex) {
                 return false;
