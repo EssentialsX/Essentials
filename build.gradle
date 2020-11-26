@@ -51,7 +51,6 @@ subprojects {
     apply plugin: 'com.github.johnrengelman.shadow'
 
     repositories {
-        mavenLocal()
         maven { url = 'https://hub.spigotmc.org/nexus/content/groups/public/' }
         maven { url = 'https://papermc.io/repo/repository/maven-public/' }
         maven {
