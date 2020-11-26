@@ -128,7 +128,7 @@ subprojects {
         options.links(
                 'https://hub.spigotmc.org/javadocs/spigot/'
         )
-        options.addStringOption('-Xdoclint:none', '-quiet')
+        options.addBooleanOption('Xdoclint:none', true)
     }
 
     // undo https://github.com/KyoriPowered/indra/blob/master/indra-common/src/main/kotlin/net/kyori/indra/IndraPlugin.kt#L57
