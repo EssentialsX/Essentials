@@ -1,0 +1,10 @@
+dependencies {
+    compileOnly project(':EssentialsX')
+    implementation 'org.igniterealtime.smack:smack:3.2.1'
+}
+
+shadowJar {
+    dependencies {
+        include (dependency('org.igniterealtime.smack:smack'))
+    }
+}
