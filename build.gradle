@@ -72,6 +72,11 @@ subprojects {
         }
     }
 
+    // Dependency caching
+    configurations.all {
+        resolutionStrategy.cacheChangingModulesFor 5, 'minutes'
+    }
+
     // Version Injection
     processResources {
         inputs.property('fullVersion', fullVersion)
