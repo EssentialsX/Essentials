@@ -14,7 +14,9 @@ import java.util.Map;
 
 public class MetricsWrapper {
 
-    private static final List<String> KNOWN_FORCED_METRICS = ImmutableList.of("ChatControl");
+    private static final List<String> KNOWN_FORCED_METRICS = ImmutableList.of(
+            "ChatControl",
+            "catserver.server.Metrics");
     private static boolean hasWarned = false;
     private final Essentials ess;
     private final Metrics metrics;
@@ -93,13 +95,27 @@ public class MetricsWrapper {
             final Map<String, int[]> result = new HashMap<>();
             for (final Map.Entry<String, Boolean> entry : commands.entrySet()) {
                 if (entry.getValue()) {
-                    result.put(entry.getKey(), new int[] {1, 0});
+                    result.put(entry.getKey(), new int[]{1, 0});
                 } else {
-                    result.put(entry.getKey(), new int[] {0, 1});
+                    result.put(entry.getKey(), new int[]{0, 1});
                 }
             }
             return result;
         }));
+    }
+
+    private boolean isForcedMetricsClass(Class<?> bStatsService) {
+        for (String identifier : KNOWN_FORCED_METRICS) {
+            if (bStatsService.getCanonicalName().contains(identifier)) {
+                return true;
+            }
+        }
+
+        final JavaPlugin owningPlugin = getProvidingPlugin(bStatsService);
+        if (owningPlugin != null && KNOWN_FORCED_METRICS.contains(owningPlugin.getName())) {
+            return true;
+        }
+        return false;
     }
 
     private void checkForcedMetrics() {
@@ -111,8 +127,7 @@ public class MetricsWrapper {
                 try {
                     service.getField("B_STATS_VERSION"); // Identifies bStats classes
 
-                    final JavaPlugin owningPlugin = getProvidingPlugin(service);
-                    if (owningPlugin != null && KNOWN_FORCED_METRICS.contains(owningPlugin.getName())) {
+                    if (isForcedMetricsClass(service)) {
                         warnForcedMetrics(service);
                     } else {
                         try {
@@ -123,7 +138,7 @@ public class MetricsWrapper {
                         }
 
                         try {
-                            service.getDeclaredField("enabled"); // In modified forced metrics classes, this will fail
+                            service.getDeclaredField("enabled"); // In some modified forced metrics classes, this will fail
                         } catch (final NoSuchFieldException e) {
                             warnForcedMetrics(service);
                         }
