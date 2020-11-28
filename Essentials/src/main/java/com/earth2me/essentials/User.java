@@ -41,28 +41,40 @@ import static com.earth2me.essentials.I18n.tl;
 
 public class User extends UserData implements Comparable<User>, IMessageRecipient, net.ess3.api.IUser {
     private static final Logger logger = Logger.getLogger("Essentials");
+
+    // User modules
     private final IMessageRecipient messageRecipient;
     private transient final AsyncTeleport teleport;
     private transient final Teleport legacyTeleport;
+
+    // User command confirmation strings
     private final Map<User, BigDecimal> confirmingPayments = new WeakHashMap<>();
+
+    // User teleport variables
     private transient UUID teleportRequester;
     private transient boolean teleportRequestHere;
     private transient Location teleportLocation;
-    private transient boolean vanished;
     private transient long teleportRequestTime;
-    private transient long lastOnlineActivity;
-    private transient long lastThrottledAction;
-    private transient long lastActivity = System.currentTimeMillis();
+
+    // User properties
+    private transient boolean vanished;
     private boolean hidden = false;
     private boolean rightClickJump = false;
-    private transient Location afkPosition = null;
     private boolean invSee = false;
     private boolean recipeSee = false;
     private boolean enderSee = false;
-    private transient long teleportInvulnerabilityTimestamp = 0;
     private boolean ignoreMsg = false;
+
+    // User afk variables
     private String afkMessage;
     private long afkSince;
+    private transient Location afkPosition = null;
+
+    // Misc
+    private transient long lastOnlineActivity;
+    private transient long lastThrottledAction;
+    private transient long lastActivity = System.currentTimeMillis();
+    private transient long teleportInvulnerabilityTimestamp = 0;
     private String confirmingClearCommand;
     private long lastNotifiedAboutMailsMs;
     private String lastHomeConfirmation;
