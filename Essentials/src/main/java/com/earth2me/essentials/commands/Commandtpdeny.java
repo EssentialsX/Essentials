@@ -1,5 +1,6 @@
 package com.earth2me.essentials.commands;
 
+import com.earth2me.essentials.IUser;
 import com.earth2me.essentials.User;
 import org.bukkit.Server;
 
@@ -12,16 +13,38 @@ public class Commandtpdeny extends EssentialsCommand {
 
     @Override
     public void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception {
-        if (user.getTeleportRequest() == null) {
+        if (!user.hasPendingTpaRequests(false)) {
             throw new Exception(tl("noPendingRequest"));
         }
-        final User player = ess.getUser(user.getTeleportRequest());
+
+        final IUser.TpaRequestToken denyToken;
+        if (args.length > 0) {
+            if (args[0].startsWith("*") || args[0].equalsIgnoreCase("all")) {
+                IUser.TpaRequestToken token;
+                while ((token = user.getNextTpaToken(true, true, true)) != null) {
+                    final User player = ess.getUser(token.getRequesterUuid());
+                    if (player != null) {
+                        player.sendMessage(tl("requestDeniedFrom", user.getDisplayName()));
+                    }
+
+                    user.removeTpaRequest(token.getName());
+                }
+                user.sendMessage(tl("requestDeniedAll"));
+                return;
+            } else {
+                denyToken = user.getOutstandingTpaRequest(getPlayer(server, user, args, 0).getName(), false);
+            }
+        } else {
+            denyToken = user.getNextTpaToken(false, true, false);
+        }
+
+        final User player = ess.getUser(denyToken.getRequesterUuid());
         if (player == null) {
             throw new Exception(tl("noPendingRequest"));
         }
 
         user.sendMessage(tl("requestDenied"));
         player.sendMessage(tl("requestDeniedFrom", user.getDisplayName()));
-        user.requestTeleport(null, false);
+        user.removeTpaRequest(denyToken.getName());
     }
 }

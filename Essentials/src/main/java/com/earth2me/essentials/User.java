@@ -28,6 +28,8 @@ import org.bukkit.potion.PotionEffectType;
 import java.math.BigDecimal;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -51,10 +53,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
     private final Map<User, BigDecimal> confirmingPayments = new WeakHashMap<>();
 
     // User teleport variables
-    private transient UUID teleportRequester;
-    private transient boolean teleportRequestHere;
-    private transient Location teleportLocation;
-    private transient long teleportRequestTime;
+    private final transient LinkedHashMap<String, TpaRequestToken> teleportRequestQueue = new LinkedHashMap<>();
 
     // User properties
     private transient boolean vanished;
@@ -93,9 +92,8 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
         this.messageRecipient = new SimpleMessageRecipient(ess, this);
     }
 
-    User update(final Player base) {
+    void update(final Player base) {
         setBase(base);
-        return this;
     }
 
     @Override
@@ -297,44 +295,71 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
 
     @Override
     public void requestTeleport(final User player, final boolean here) {
-        teleportRequestTime = System.currentTimeMillis();
-        teleportRequester = player == null ? null : player.getBase().getUniqueId();
-        teleportRequestHere = here;
-        if (player == null) {
-            teleportLocation = null;
-        } else {
-            teleportLocation = here ? player.getLocation() : this.getLocation();
+        final TpaRequestToken token = teleportRequestQueue.getOrDefault(player.getName(), new TpaRequestToken(player.getName(), player.getUUID()));
+        token.setTime(System.currentTimeMillis());
+        token.setHere(here);
+        token.setLocation(here ? player.getLocation() : this.getLocation());
+    }
+
+    public boolean hasPendingTpaRequests(boolean inform) {
+        getNextTpaToken(inform, false, false);
+        return !teleportRequestQueue.isEmpty();
+    }
+
+    public boolean hasOutstandingTpaRequest(String playerUsername, boolean here) {
+        final TpaRequestToken token = getOutstandingTpaRequest(playerUsername, false);
+        return token != null && token.isHere() == here;
+    }
+
+    public TpaRequestToken getOutstandingTpaRequest(String playerUsername, boolean inform) {
+        if (!teleportRequestQueue.containsKey(playerUsername)) {
+            return null;
         }
+
+        final long timeout = ess.getSettings().getTpaAcceptCancellation();
+        final TpaRequestToken token = teleportRequestQueue.get(playerUsername);
+        if (timeout < 1 || System.currentTimeMillis() - token.getTime() <= timeout * 1000) {
+            return token;
+        }
+        teleportRequestQueue.remove(playerUsername);
+        if (inform) {
+            sendMessage(tl("requestTimedOutFrom", ess.getUser(token.getRequesterUuid()).getDisplayName()));
+        }
+        return null;
+    }
+
+    public TpaRequestToken removeTpaRequest(String playerUsername) {
+        return teleportRequestQueue.remove(playerUsername);
     }
 
     @Override
-    public boolean hasOutstandingTeleportRequest() {
-        if (getTeleportRequest() != null) { // Player has outstanding teleport request.
-            final long timeout = ess.getSettings().getTpaAcceptCancellation();
-            if (timeout != 0) {
-                if ((System.currentTimeMillis() - getTeleportRequestTime()) / 1000 <= timeout) { // Player has outstanding request
-                    return true;
-                } else { // outstanding request expired.
-                    requestTeleport(null, false);
-                    return false;
+    public TpaRequestToken getNextTpaToken(boolean inform, boolean shallow, boolean onlyHere) {
+        if (teleportRequestQueue.size() == 0) {
+            return null;
+        }
+
+        final long timeout = ess.getSettings().getTpaAcceptCancellation();
+        final Iterator<Map.Entry<String, TpaRequestToken>> iterator = teleportRequestQueue.entrySet().iterator();
+        TpaRequestToken nextToken = null;
+        while (iterator.hasNext()) {
+            final TpaRequestToken token = iterator.next().getValue();
+            if (timeout < 1 || (System.currentTimeMillis() - token.getTime()) <= timeout * 1000) {
+                if (onlyHere && !token.isHere()) {
+                    continue;
                 }
-            } else { // outstanding request does not expire
-                return true;
+                if (shallow) {
+                    return token;
+                } else if (nextToken == null) {
+                    nextToken = token;
+                }
+            } else {
+                if (inform) {
+                    sendMessage(tl("requestTimedOutFrom", ess.getUser(token.getRequesterUuid()).getDisplayName()));
+                }
+                iterator.remove();
             }
         }
-        return false;
-    }
-
-    public UUID getTeleportRequest() {
-        return teleportRequester;
-    }
-
-    public boolean isTpRequestHere() {
-        return teleportRequestHere;
-    }
-
-    public Location getTpRequestLocation() {
-        return teleportLocation;
+        return nextToken;
     }
 
     public String getNick() {
@@ -770,10 +795,6 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
         return ess.getPermissionsHandler().canBuild(base, getGroup());
     }
 
-    public long getTeleportRequestTime() {
-        return teleportRequestTime;
-    }
-
     public boolean isInvSee() {
         return invSee;
     }
@@ -927,6 +948,11 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
     @Override
     public String getName() {
         return this.getBase().getName();
+    }
+
+    @Override
+    public UUID getUUID() {
+        return this.getBase().getUniqueId();
     }
 
     @Override

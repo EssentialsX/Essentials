@@ -11,10 +11,12 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
 import java.math.BigDecimal;
+
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 import java.util.regex.Pattern;
 
 /**
@@ -55,13 +57,6 @@ public interface IUser {
     void requestTeleport(final User player, final boolean here);
 
     /**
-     * Returns whether this user has an outstanding teleport request to deal with.
-     *
-     * @return whether there is a teleport request
-     */
-    boolean hasOutstandingTeleportRequest();
-
-    /**
      * @deprecated This API is not asynchronous. Use {@link com.earth2me.essentials.api.IAsyncTeleport IAsyncTeleport} with {@link IUser#getAsyncTeleport()}
      */
     @Deprecated
@@ -93,8 +88,6 @@ public interface IUser {
     boolean inGroup(final String group);
 
     boolean canBuild();
-
-    long getTeleportRequestTime();
 
     void enableInvulnerabilityAfterTeleport();
 
@@ -183,6 +176,8 @@ public interface IUser {
 
     String getName();
 
+    UUID getUUID();
+
     String getDisplayName();
 
     String getAfkMessage();
@@ -210,4 +205,51 @@ public interface IUser {
     Map<User, BigDecimal> getConfirmingPayments();
 
     Block getTargetBlock(int maxDistance);
+
+    TpaRequestToken getNextTpaToken(boolean inform, boolean shallow, boolean onlyHere);
+
+    class TpaRequestToken {
+        private final String name;
+        private final UUID requesterUuid;
+        private boolean here;
+        private Location location;
+        private long time;
+
+        public TpaRequestToken(String name, UUID requesterUuid) {
+            this.name = name;
+            this.requesterUuid = requesterUuid;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public UUID getRequesterUuid() {
+            return requesterUuid;
+        }
+
+        public boolean isHere() {
+            return here;
+        }
+
+        public void setHere(boolean here) {
+            this.here = here;
+        }
+
+        public Location getLocation() {
+            return location;
+        }
+
+        public void setLocation(Location location) {
+            this.location = location;
+        }
+
+        public long getTime() {
+            return time;
+        }
+
+        public void setTime(long time) {
+            this.time = time;
+        }
+    }
 }

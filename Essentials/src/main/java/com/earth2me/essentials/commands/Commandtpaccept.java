@@ -1,6 +1,7 @@
 package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.AsyncTeleport;
+import com.earth2me.essentials.IUser;
 import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.User;
 import org.bukkit.Location;
@@ -18,32 +19,48 @@ public class Commandtpaccept extends EssentialsCommand {
 
     @Override
     public void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception {
-        final User requester;
-        try {
-            requester = ess.getUser(user.getTeleportRequest());
-        } catch (final Exception ex) {
+        if (args.length > 0) {
+            if (args[0].startsWith("*") || args[0].equalsIgnoreCase("all")) {
+                if (!user.hasPendingTpaRequests(true)) {
+                    throw new Exception(tl("noPendingRequest"));
+                }
+
+                IUser.TpaRequestToken token;
+                while ((token = user.getNextTpaToken(true, true, true)) != null) {
+                    try {
+                        handleTeleport(user, token, commandLabel);
+                    } catch (Exception e) {
+                        ess.showError(user.getSource(), e, commandLabel);
+                    } finally {
+                        user.removeTpaRequest(token.getName());
+                    }
+                }
+                throw new NoChargeException();
+            }
+            handleTeleport(user, user.getOutstandingTpaRequest(getPlayer(server, user, args, 0).getName(), true), commandLabel);
+        } else {
+            handleTeleport(user, user.getNextTpaToken(true, false, false), commandLabel);
+        }
+        throw new NoChargeException();
+    }
+
+    private void handleTeleport(final User user, final IUser.TpaRequestToken token, String commandLabel) throws Exception {
+        if (token == null) {
             throw new Exception(tl("noPendingRequest"));
         }
+        final User requester = ess.getUser(token.getRequesterUuid());
 
         if (!requester.getBase().isOnline()) {
+            user.removeTpaRequest(token.getName());
             throw new Exception(tl("noPendingRequest"));
         }
 
-        if (user.isTpRequestHere() && ((!requester.isAuthorized("essentials.tpahere") && !requester.isAuthorized("essentials.tpaall")) || (user.getWorld() != requester.getWorld() && ess.getSettings().isWorldTeleportPermissions() && !user.isAuthorized("essentials.worlds." + user.getWorld().getName())))) {
+        if (token.isHere() && ((!requester.isAuthorized("essentials.tpahere") && !requester.isAuthorized("essentials.tpaall")) || (user.getWorld() != requester.getWorld() && ess.getSettings().isWorldTeleportPermissions() && !user.isAuthorized("essentials.worlds." + user.getWorld().getName())))) {
             throw new Exception(tl("noPendingRequest"));
         }
 
-        if (!user.isTpRequestHere() && (!requester.isAuthorized("essentials.tpa") || (user.getWorld() != requester.getWorld() && ess.getSettings().isWorldTeleportPermissions() && !user.isAuthorized("essentials.worlds." + requester.getWorld().getName())))) {
+        if (!token.isHere() && (!requester.isAuthorized("essentials.tpa") || (user.getWorld() != requester.getWorld() && ess.getSettings().isWorldTeleportPermissions() && !user.isAuthorized("essentials.worlds." + requester.getWorld().getName())))) {
             throw new Exception(tl("noPendingRequest"));
-        }
-
-        if (args.length > 0 && !requester.getName().contains(args[0])) {
-            throw new Exception(tl("noPendingRequest"));
-        }
-
-        if (!user.hasOutstandingTeleportRequest()) {
-            user.requestTeleport(null, false);
-            throw new Exception(tl("requestTimedOut"));
         }
 
         final Trade charge = new Trade(this.getName(), ess);
@@ -55,8 +72,8 @@ public class Commandtpaccept extends EssentialsCommand {
             user.sendMessage(tl("pendingTeleportCancelled"));
             return false;
         });
-        if (user.isTpRequestHere()) {
-            final Location loc = user.getTpRequestLocation();
+        if (token.isHere()) {
+            final Location loc = token.getLocation();
             final AsyncTeleport teleport = requester.getAsyncTeleport();
             teleport.setTpType(AsyncTeleport.TeleportType.TPA);
             future.thenAccept(success -> {
@@ -64,14 +81,13 @@ public class Commandtpaccept extends EssentialsCommand {
                     requester.sendMessage(tl("teleporting", loc.getWorld().getName(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ()));
                 }
             });
-            teleport.teleportPlayer(user, user.getTpRequestLocation(), charge, TeleportCause.COMMAND, future);
+            teleport.teleportPlayer(user, loc, charge, TeleportCause.COMMAND, future);
         } else {
             final AsyncTeleport teleport = requester.getAsyncTeleport();
             teleport.setTpType(AsyncTeleport.TeleportType.TPA);
             teleport.teleport(user.getBase(), charge, TeleportCause.COMMAND, future);
         }
-        user.requestTeleport(null, false);
-        throw new NoChargeException();
+        user.removeTpaRequest(token.getName());
     }
 
 }
