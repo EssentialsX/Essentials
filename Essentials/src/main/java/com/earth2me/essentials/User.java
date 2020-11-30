@@ -346,7 +346,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
     }
 
     @Override
-    public TpaRequestToken getNextTpaToken(boolean inform, boolean shallow, boolean onlyHere) {
+    public TpaRequestToken getNextTpaToken(boolean inform, boolean shallow, boolean excludeHere) {
         if (teleportRequestQueue.size() == 0) {
             return null;
         }
@@ -357,7 +357,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
         while (iterator.hasNext()) {
             final TpaRequestToken token = iterator.next().getValue();
             if (timeout < 1 || (System.currentTimeMillis() - token.getTime()) <= timeout * 1000) {
-                if (onlyHere && !token.isHere()) {
+                if (excludeHere && token.isHere()) {
                     continue;
                 }
                 if (shallow) {

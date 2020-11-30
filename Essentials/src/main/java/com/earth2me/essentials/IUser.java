@@ -206,7 +206,7 @@ public interface IUser {
 
     Block getTargetBlock(int maxDistance);
 
-    TpaRequestToken getNextTpaToken(boolean inform, boolean shallow, boolean onlyHere);
+    TpaRequestToken getNextTpaToken(boolean inform, boolean shallow, boolean excludeHere);
 
     class TpaRequestToken {
         private final String name;
