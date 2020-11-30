@@ -26,19 +26,24 @@ public class Commandtpaccept extends EssentialsCommand {
                 }
 
                 IUser.TpaRequestToken token;
+                int count = 0;
                 while ((token = user.getNextTpaToken(true, true, true)) != null) {
                     try {
                         handleTeleport(user, token, commandLabel);
+                        count++;
                     } catch (Exception e) {
                         ess.showError(user.getSource(), e, commandLabel);
                     } finally {
                         user.removeTpaRequest(token.getName());
                     }
                 }
+                user.sendMessage(tl("requestAcceptedAll", count));
                 throw new NoChargeException();
             }
+            user.sendMessage(tl("requestAccepted"));
             handleTeleport(user, user.getOutstandingTpaRequest(getPlayer(server, user, args, 0).getName(), true), commandLabel);
         } else {
+            user.sendMessage(tl("requestAccepted"));
             handleTeleport(user, user.getNextTpaToken(true, false, false), commandLabel);
         }
         throw new NoChargeException();
@@ -64,7 +69,6 @@ public class Commandtpaccept extends EssentialsCommand {
         }
 
         final Trade charge = new Trade(this.getName(), ess);
-        user.sendMessage(tl("requestAccepted"));
         requester.sendMessage(tl("requestAcceptedFrom", user.getDisplayName()));
 
         final CompletableFuture<Boolean> future = getNewExceptionFuture(requester.getSource(), commandLabel);

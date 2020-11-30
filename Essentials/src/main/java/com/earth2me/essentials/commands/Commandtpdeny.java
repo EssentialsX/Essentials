@@ -21,15 +21,17 @@ public class Commandtpdeny extends EssentialsCommand {
         if (args.length > 0) {
             if (args[0].startsWith("*") || args[0].equalsIgnoreCase("all")) {
                 IUser.TpaRequestToken token;
-                while ((token = user.getNextTpaToken(true, true, true)) != null) {
+                int count = 0;
+                while ((token = user.getNextTpaToken(false, true, true)) != null) {
                     final User player = ess.getUser(token.getRequesterUuid());
                     if (player != null) {
                         player.sendMessage(tl("requestDeniedFrom", user.getDisplayName()));
                     }
 
                     user.removeTpaRequest(token.getName());
+                    count++;
                 }
-                user.sendMessage(tl("requestDeniedAll"));
+                user.sendMessage(tl("requestDeniedAll", count));
                 return;
             } else {
                 denyToken = user.getOutstandingTpaRequest(getPlayer(server, user, args, 0).getName(), false);
