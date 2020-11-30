@@ -4,6 +4,10 @@ import com.earth2me.essentials.IUser;
 import com.earth2me.essentials.User;
 import org.bukkit.Server;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 import static com.earth2me.essentials.I18n.tl;
 
 public class Commandtpdeny extends EssentialsCommand {
@@ -48,5 +52,16 @@ public class Commandtpdeny extends EssentialsCommand {
         user.sendMessage(tl("requestDenied"));
         player.sendMessage(tl("requestDeniedFrom", user.getDisplayName()));
         user.removeTpaRequest(denyToken.getName());
+    }
+
+    @Override
+    protected List<String> getTabCompleteOptions(Server server, User user, String commandLabel, String[] args) {
+        if (args.length == 1) {
+            List<String> options = new ArrayList<>(user.getPendingTpaKeys());
+            options.add("*");
+            return options;
+        } else {
+            return Collections.emptyList();
+        }
     }
 }

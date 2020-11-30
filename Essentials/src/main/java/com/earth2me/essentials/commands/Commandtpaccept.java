@@ -8,6 +8,9 @@ import org.bukkit.Location;
 import org.bukkit.Server;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 import static com.earth2me.essentials.I18n.tl;
@@ -47,6 +50,17 @@ public class Commandtpaccept extends EssentialsCommand {
             handleTeleport(user, user.getNextTpaToken(true, false, false), commandLabel);
         }
         throw new NoChargeException();
+    }
+
+    @Override
+    protected List<String> getTabCompleteOptions(Server server, User user, String commandLabel, String[] args) {
+        if (args.length == 1) {
+            List<String> options = new ArrayList<>(user.getPendingTpaKeys());
+            options.add("*");
+            return options;
+        } else {
+            return Collections.emptyList();
+        }
     }
 
     private void handleTeleport(final User user, final IUser.TpaRequestToken token, String commandLabel) throws Exception {
@@ -93,5 +107,4 @@ public class Commandtpaccept extends EssentialsCommand {
         }
         user.removeTpaRequest(token.getName());
     }
-
 }

@@ -27,6 +27,7 @@ import org.bukkit.potion.PotionEffectType;
 
 import java.math.BigDecimal;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
@@ -312,6 +313,10 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
 
         // Add request to queue
         teleportRequestQueue.put(token.getName(), token);
+    }
+
+    public Collection<String> getPendingTpaKeys() {
+        return teleportRequestQueue.keySet();
     }
 
     public boolean hasPendingTpaRequests(boolean inform) {
