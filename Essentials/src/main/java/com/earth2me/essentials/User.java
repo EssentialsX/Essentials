@@ -299,6 +299,19 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
         token.setTime(System.currentTimeMillis());
         token.setHere(here);
         token.setLocation(here ? player.getLocation() : this.getLocation());
+
+        // Handle max queue size
+        teleportRequestQueue.remove(token.getName());
+        if (teleportRequestQueue.size() >= ess.getSettings().getTpaMaxAmount()) {
+            String lastKey = null;
+            for (Map.Entry<String, TpaRequestToken> entry : teleportRequestQueue.entrySet()) {
+                lastKey = entry.getKey();
+            }
+            teleportRequestQueue.remove(lastKey);
+        }
+
+        // Add request to queue
+        teleportRequestQueue.put(token.getName(), token);
     }
 
     public boolean hasPendingTpaRequests(boolean inform) {
