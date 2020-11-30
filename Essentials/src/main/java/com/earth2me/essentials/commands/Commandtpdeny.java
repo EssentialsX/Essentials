@@ -57,7 +57,7 @@ public class Commandtpdeny extends EssentialsCommand {
     @Override
     protected List<String> getTabCompleteOptions(Server server, User user, String commandLabel, String[] args) {
         if (args.length == 1) {
-            List<String> options = new ArrayList<>(user.getPendingTpaKeys());
+            final List<String> options = new ArrayList<>(user.getPendingTpaKeys());
             options.add("*");
             return options;
         } else {
