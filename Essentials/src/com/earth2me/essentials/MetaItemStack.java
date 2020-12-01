@@ -267,7 +267,7 @@ public class MetaItemStack {
     }
 
     public void addFireworkMeta(final CommandSource sender, final boolean allowShortName, final String string, final IEssentials ess) throws Exception {
-    if (MaterialUtil.isFirework(stack.getType())) {
+        if (MaterialUtil.isFirework(stack.getType())) {
             final String[] split = splitPattern.split(string, 2);
             if (split.length < 2) {
                 return;
@@ -294,6 +294,8 @@ public class MetaItemStack {
                     if (colorMap.containsKey(color.toUpperCase())) {
                         validFirework = true;
                         primaryColors.add(colorMap.get(color.toUpperCase()).getFireworkColor());
+                    } else if (getColorFromRGB(color) != null) {
+                        primaryColors.add(getColorFromRGB(color));
                     } else {
                         throw new Exception(tl("invalidFireworkFormat", split[1], split[0]));
                     }
@@ -315,7 +317,9 @@ public class MetaItemStack {
                 String[] colors = split[1].split(",");
                 for (String color : colors) {
                     if (colorMap.containsKey(color.toUpperCase())) {
-                        fadeColors.add(colorMap.get(color.toUpperCase()).getFireworkColor());
+                        fadeColors.add(colorMap.get(color.toUpperCase()).getColor());
+                    } else if (getColorFromRGB(color) != null) {
+                        fadeColors.add(getColorFromRGB(color));
                     } else {
                         throw new Exception(tl("invalidFireworkFormat", split[1], split[0]));
                     }
@@ -336,6 +340,17 @@ public class MetaItemStack {
                 }
             }
         }
+    }
+
+    private Color getColorFromRGB(String color) {
+        Color c;
+        try {
+            c = Color.fromRGB(Integer.decode(color.substring(color.indexOf('[') + 4, color.indexOf(']') - 1)));
+        } catch (Exception e) {
+            c = null;
+        }
+
+        return c;
     }
 
     public void addPotionMeta(final CommandSource sender, final boolean allowShortName, final String string, final IEssentials ess) throws Exception {
