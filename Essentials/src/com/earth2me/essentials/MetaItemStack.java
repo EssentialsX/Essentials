@@ -62,6 +62,7 @@ public class MetaItemStack {
     }
 
     private final transient Pattern splitPattern = Pattern.compile("[:+',;.]");
+    private final transient Pattern hexStringPattern = Pattern.compile("^Color:\\[rgb(0x[0-9a-fA-F]{2,6})\\]$");
     private ItemStack stack;
     private FireworkEffect.Builder builder = FireworkEffect.builder();
     private PotionEffectType pEffectType;
@@ -329,7 +330,11 @@ public class MetaItemStack {
                         validFirework = true;
                         primaryColors.add(colorMap.get(color.toUpperCase()).getFireworkColor());
                     } else {
-                        throw new Exception(tl("invalidFireworkFormat", split[1], split[0]));
+                        final Color c = getColorFromRgbHexString(color);
+                        if (c == null) {
+                            throw new Exception(tl("invalidFireworkFormat", split[1], split[0]));
+                        }
+                        primaryColors.add(c);
                     }
                 }
                 builder.withColor(primaryColors);
@@ -351,7 +356,11 @@ public class MetaItemStack {
                     if (colorMap.containsKey(color.toUpperCase())) {
                         fadeColors.add(colorMap.get(color.toUpperCase()).getFireworkColor());
                     } else {
-                        throw new Exception(tl("invalidFireworkFormat", split[1], split[0]));
+                        final Color c = getColorFromRgbHexString(color);
+                        if (c == null) {
+                            throw new Exception(tl("invalidFireworkFormat", split[1], split[0]));
+                        }
+                        fadeColors.add(c);
                     }
                 }
                 if (!fadeColors.isEmpty()) {
@@ -370,6 +379,14 @@ public class MetaItemStack {
                 }
             }
         }
+    }
+
+    private Color getColorFromRgbHexString(String color) {
+        final Matcher hexStringMatcher = hexStringPattern.matcher(color);
+        if (hexStringMatcher.find()) {
+            return Color.fromRGB(Integer.decode(hexStringMatcher.group(1)));
+        }
+        return null;
     }
 
     public void addPotionMeta(final CommandSource sender, final boolean allowShortName, final String string, final IEssentials ess) throws Exception {
