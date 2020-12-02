@@ -7,7 +7,7 @@ import java.util.concurrent.CompletableFuture;
 
 /**
  * A class which provides numerous methods to interact with Essentials' balance top calculations.
- *
+ * <p>
  * Note: Implementations of this class should be thread-safe and thus do not need to be called from the server thread.
  */
 public interface BalanceTop {

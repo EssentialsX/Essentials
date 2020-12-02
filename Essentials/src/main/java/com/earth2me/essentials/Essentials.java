@@ -44,10 +44,10 @@ import net.ess3.api.IEssentials;
 import net.ess3.api.IItemDb;
 import net.ess3.api.IJails;
 import net.ess3.api.ISettings;
+import net.ess3.nms.refl.providers.ReflKnownCommandsProvider;
 import net.ess3.nms.refl.providers.ReflServerStateProvider;
 import net.ess3.nms.refl.providers.ReflSpawnEggProvider;
 import net.ess3.nms.refl.providers.ReflSpawnerBlockProvider;
-import net.ess3.nms.refl.providers.ReflKnownCommandsProvider;
 import net.ess3.provider.ContainerProvider;
 import net.ess3.provider.KnownCommandsProvider;
 import net.ess3.provider.PotionMetaProvider;
@@ -66,6 +66,7 @@ import net.ess3.provider.providers.PaperContainerProvider;
 import net.ess3.provider.providers.PaperKnownCommandsProvider;
 import net.ess3.provider.providers.PaperRecipeBookListener;
 import net.ess3.provider.providers.PaperServerStateProvider;
+import net.essentialsx.api.v2.services.BalanceTop;
 import org.bukkit.Bukkit;
 import org.bukkit.Server;
 import org.bukkit.World;
@@ -953,7 +954,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
     }
 
     @Override
-    public BalanceTopImpl getBalanceTop() {
+    public BalanceTop getBalanceTop() {
         return balanceTop;
     }
 
