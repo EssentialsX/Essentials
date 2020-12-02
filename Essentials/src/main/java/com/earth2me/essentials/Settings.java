@@ -129,7 +129,6 @@ public class Settings implements net.ess3.api.ISettings {
     private Set<Predicate<String>> nickBlacklist;
     private double maxProjectileSpeed;
     private boolean removeEffectsOnHeal;
-    private boolean bedSpawnEnabled;
 
     public Settings(final IEssentials ess) {
         this.ess = ess;
@@ -651,7 +650,6 @@ public class Settings implements net.ess3.api.ISettings {
         removeEffectsOnHeal = _isRemovingEffectsOnHeal();
         vanishingItemPolicy = _getVanishingItemsPolicy();
         bindingItemPolicy = _getBindingItemsPolicy();
-        bedSpawnEnabled = _isBedSpawnEnabled();
     }
 
     void _lateLoadItemSpawnBlacklist() {
@@ -1710,13 +1708,8 @@ public class Settings implements net.ess3.api.ISettings {
         return config.getBoolean("send-info-after-death", false);
     }
 
-    private boolean _isBedSpawnEnabled() {
-        return config.getBoolean("respawn-at-home-bed", true);
-    }
-
     @Override
     public boolean isRespawnAtBed() {
-        return bedSpawnEnabled;
+        return config.getBoolean("respawn-at-home-bed", true);
     }
-
 }
