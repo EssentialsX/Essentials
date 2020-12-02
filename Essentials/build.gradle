@@ -4,7 +4,7 @@ dependencies {
     }
     compileOnly 'net.luckperms:api:5.0'
 
-    api 'io.papermc:paperlib:1.0.6-SNAPSHOT'
+    api 'io.papermc:paperlib:1.0.6'
 
     // Providers
     api project(':providers:BaseProviders')
