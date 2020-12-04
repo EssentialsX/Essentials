@@ -53,7 +53,7 @@ public class Commandbalancetop extends EssentialsCommand {
             return;
         }
 
-        //If there are less than 50 users in our usermap, there is no need to display a warning as these calculations should be done quickly
+        // If there are less than 50 users in our usermap, there is no need to display a warning as these calculations should be done quickly
         if (ess.getUserMap().getUniqueUsers() > MINUSERS) {
             sender.sendMessage(tl("orderBalances", ess.getUserMap().getUniqueUsers()));
         }
