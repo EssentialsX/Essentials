@@ -86,7 +86,7 @@ public final class VersionUtil {
                 return supportStatus = SupportStatus.OUTDATED;
             }
 
-            return supportStatus = (PaperLib.isPaper() ? SupportStatus.FULL : SupportStatus.LIMITED);
+            return supportStatus = PaperLib.isPaper() ? SupportStatus.FULL : SupportStatus.LIMITED;
         }
         return supportStatus;
     }
