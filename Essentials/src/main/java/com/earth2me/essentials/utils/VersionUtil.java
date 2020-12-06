@@ -4,6 +4,7 @@ import com.google.common.base.Objects;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableSet;
 import io.papermc.lib.PaperLib;
+import net.ess3.nms.refl.ReflUtil;
 import org.bukkit.Bukkit;
 
 import java.util.Set;
@@ -74,6 +75,11 @@ public final class VersionUtil {
                 Class.forName("net.minecraftforge.common.MinecraftForge");
                 return supportStatus = SupportStatus.UNSTABLE;
             } catch (final ClassNotFoundException ignored) {
+            }
+
+            // Check for non-nms Bukkit Implis
+            if (ReflUtil.getClassCached("MinecraftServer") == null) {
+                return supportStatus = SupportStatus.UNSTABLE;
             }
 
             if (!supportedVersions.contains(getServerBukkitVersion())) {
