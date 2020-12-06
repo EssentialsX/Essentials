@@ -376,6 +376,10 @@ public class Commandessentials extends EssentialsCommand {
         }
 
         switch (supportStatus) {
+            case DANGEROUS: {
+                sender.sendMessage(tl("serverUnsupportedDangerous"));
+                break;
+            }
             case UNSTABLE:
                 sender.sendMessage(tl("serverUnsupportedMods"));
                 break;

@@ -47,6 +47,12 @@ public final class VersionUtil {
     public static SupportStatus getServerSupportStatus() {
         if (supportStatus == null) {
             try {
+                Class.forName("org.yatopiamc.yatopia.server.YatopiaConfig");
+                return supportStatus = SupportStatus.DANGEROUS;
+            } catch (final ClassNotFoundException ignored) {
+            }
+
+            try {
                 Class.forName("net.minecraftforge.common.MinecraftForge");
                 return supportStatus = SupportStatus.UNSTABLE;
             } catch (final ClassNotFoundException ignored) {
@@ -209,6 +215,7 @@ public final class VersionUtil {
     public enum SupportStatus {
         FULL(true),
         LIMITED(true),
+        DANGEROUS(false),
         UNSTABLE(false),
         OUTDATED(false)
         ;

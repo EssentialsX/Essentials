@@ -201,6 +201,10 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
             Console.setInstance(this);
 
             switch (VersionUtil.getServerSupportStatus()) {
+                case DANGEROUS: {
+                    getLogger().severe(tl("serverUnsupportedDangerous"));
+                    break;
+                }
                 case UNSTABLE:
                     getLogger().severe(tl("serverUnsupportedMods"));
                     break;
