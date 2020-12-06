@@ -32,6 +32,7 @@ public final class VersionUtil {
     private static final Set<BukkitVersion> supportedVersions = ImmutableSet.of(v1_8_8_R01, v1_9_4_R01, v1_10_2_R01, v1_11_2_R01, v1_12_2_R01, v1_13_2_R01, v1_14_4_R01, v1_15_2_R01, v1_16_4_R01);
 
     private static BukkitVersion serverVersion = null;
+    private static SupportStatus supportStatus = null;
 
     private VersionUtil() {
     }
@@ -44,17 +45,20 @@ public final class VersionUtil {
     }
 
     public static SupportStatus getServerSupportStatus() {
-        try {
-            Class.forName("net.minecraftforge.common.MinecraftForge");
-            return SupportStatus.UNSTABLE;
-        } catch (final ClassNotFoundException ignored) {
-        }
+        if (supportStatus == null) {
+            try {
+                Class.forName("net.minecraftforge.common.MinecraftForge");
+                return supportStatus = SupportStatus.UNSTABLE;
+            } catch (final ClassNotFoundException ignored) {
+            }
 
-        if (!supportedVersions.contains(getServerBukkitVersion())) {
-            return SupportStatus.OUTDATED;
-        }
+            if (!supportedVersions.contains(getServerBukkitVersion())) {
+                return supportStatus = SupportStatus.OUTDATED;
+            }
 
-        return PaperLib.isPaper() ? SupportStatus.FULL : SupportStatus.LIMITED;
+            return supportStatus = (PaperLib.isPaper() ? SupportStatus.FULL : SupportStatus.LIMITED);
+        }
+        return supportStatus;
     }
 
     public static boolean isServerSupported() {
