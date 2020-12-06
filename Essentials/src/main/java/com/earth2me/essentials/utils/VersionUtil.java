@@ -78,7 +78,7 @@ public final class VersionUtil {
             }
 
             // Check for non-nms Bukkit Implis
-            if (ReflUtil.getClassCached("MinecraftServer") == null) {
+            if (ReflUtil.getNMSClass("MinecraftServer") == null) {
                 return supportStatus = SupportStatus.UNSTABLE;
             }
 
