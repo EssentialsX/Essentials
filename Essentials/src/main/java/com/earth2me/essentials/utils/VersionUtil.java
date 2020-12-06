@@ -2,11 +2,13 @@ package com.earth2me.essentials.utils;
 
 import com.google.common.base.Objects;
 import com.google.common.base.Preconditions;
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import io.papermc.lib.PaperLib;
 import net.ess3.nms.refl.ReflUtil;
 import org.bukkit.Bukkit;
 
+import java.util.Map;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -32,21 +34,26 @@ public final class VersionUtil {
 
     private static final Set<BukkitVersion> supportedVersions = ImmutableSet.of(v1_8_8_R01, v1_9_4_R01, v1_10_2_R01, v1_11_2_R01, v1_12_2_R01, v1_13_2_R01, v1_14_4_R01, v1_15_2_R01, v1_16_4_R01);
 
-    private static final Set<String> dangerousServerClasses = ImmutableSet.of(
+    private static final Map<String, SupportStatus> unsupportedServerClasses = new ImmutableMap.Builder<String, SupportStatus>().put(
             // Yatopia - Extremely volatile patch set;
             //   * Messes with bungeecord UUIDs
             //   * Frequent data corruptions
-            "org.yatopiamc.yatopia.server.YatopiaConfig",
+            "org.yatopiamc.yatopia.server.YatopiaConfig", SupportStatus.DANGEROUS_FORK).put(
 
             // AirplaneLite - Yatopia sidestream;
             //   * Attempts unsafe chunk concurrency
-            "gg.airplane.structs.ChunkMapMap",
-            "gg.airplane.structs.ConcLong2ObjectOpenHashMap",
+            "gg.airplane.structs.ChunkMapMap", SupportStatus.DANGEROUS_FORK).put(
+            "gg.airplane.structs.ConcLong2ObjectOpenHashMap", SupportStatus.DANGEROUS_FORK).put(
 
             // Akarin - Dangerous patch history;
             //   * Potentially unsafe saving of nms.JsonList
-            "io.akarin.server.Config"
-    );
+            "io.akarin.server.Config", SupportStatus.DANGEROUS_FORK).put(
+
+            // Forge - Doesn't support bukkit;
+            "net.minecraftforge.common.MinecraftForge", SupportStatus.UNSTABLE).put(
+
+            "!net.minecraft.server." + ReflUtil.getNMSVersion() + ".MinecraftServer", SupportStatus.NMS_CLEANROOM
+    ).build();
 
     private static BukkitVersion serverVersion = null;
     private static SupportStatus supportStatus = null;
@@ -63,23 +70,19 @@ public final class VersionUtil {
 
     public static SupportStatus getServerSupportStatus() {
         if (supportStatus == null) {
-            for (String clazz : dangerousServerClasses) {
+            for (Map.Entry<String, SupportStatus> entry : unsupportedServerClasses.entrySet()) {
+                boolean inverted = entry.getKey().contains("!");
+                String clazz = entry.getKey().replace("!", "");
                 try {
                     Class.forName(clazz);
-                    return supportStatus = SupportStatus.DANGEROUS;
+                    if (!inverted) {
+                        return supportStatus = entry.getValue();
+                    }
                 } catch (final ClassNotFoundException ignored) {
+                    if (inverted) {
+                        return supportStatus = entry.getValue();
+                    }
                 }
-            }
-
-            try {
-                Class.forName("net.minecraftforge.common.MinecraftForge");
-                return supportStatus = SupportStatus.UNSTABLE;
-            } catch (final ClassNotFoundException ignored) {
-            }
-
-            // Check for non-nms Bukkit Implis
-            if (ReflUtil.getNMSClass("MinecraftServer") == null) {
-                return supportStatus = SupportStatus.UNSTABLE;
             }
 
             if (!supportedVersions.contains(getServerBukkitVersion())) {
@@ -239,7 +242,8 @@ public final class VersionUtil {
     public enum SupportStatus {
         FULL(true),
         LIMITED(true),
-        DANGEROUS(false),
+        DANGEROUS_FORK(false),
+        NMS_CLEANROOM(false),
         UNSTABLE(false),
         OUTDATED(false)
         ;

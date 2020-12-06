@@ -376,10 +376,12 @@ public class Commandessentials extends EssentialsCommand {
         }
 
         switch (supportStatus) {
-            case DANGEROUS: {
+            case NMS_CLEANROOM:
+                sender.sendMessage(tl("serverUnsupportedCleanroom"));
+                break;
+            case DANGEROUS_FORK:
                 sender.sendMessage(tl("serverUnsupportedDangerous"));
                 break;
-            }
             case UNSTABLE:
                 sender.sendMessage(tl("serverUnsupportedMods"));
                 break;
