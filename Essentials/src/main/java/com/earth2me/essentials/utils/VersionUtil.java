@@ -31,6 +31,22 @@ public final class VersionUtil {
 
     private static final Set<BukkitVersion> supportedVersions = ImmutableSet.of(v1_8_8_R01, v1_9_4_R01, v1_10_2_R01, v1_11_2_R01, v1_12_2_R01, v1_13_2_R01, v1_14_4_R01, v1_15_2_R01, v1_16_4_R01);
 
+    private static final Set<String> dangerousServerClasses = ImmutableSet.of(
+            // Yatopia - Extremely volatile patch set;
+            //   * Messes with bungeecord UUIDs
+            //   * Frequent data corruptions
+            "org.yatopiamc.yatopia.server.YatopiaConfig",
+
+            // AirplaneLite - Yatopia sidestream;
+            //   * Attempts unsafe chunk concurrency
+            "gg.airplane.structs.ChunkMapMap",
+            "gg.airplane.structs.ConcLong2ObjectOpenHashMap",
+
+            // Akarin - Dangerous patch history;
+            //   * Potentially unsafe saving of nms.JsonList
+            "io.akarin.server.Config"
+    );
+
     private static BukkitVersion serverVersion = null;
     private static SupportStatus supportStatus = null;
 
@@ -46,10 +62,12 @@ public final class VersionUtil {
 
     public static SupportStatus getServerSupportStatus() {
         if (supportStatus == null) {
-            try {
-                Class.forName("org.yatopiamc.yatopia.server.YatopiaConfig");
-                return supportStatus = SupportStatus.DANGEROUS;
-            } catch (final ClassNotFoundException ignored) {
+            for (String clazz : dangerousServerClasses) {
+                try {
+                    Class.forName(clazz);
+                    return supportStatus = SupportStatus.DANGEROUS;
+                } catch (final ClassNotFoundException ignored) {
+                }
             }
 
             try {
