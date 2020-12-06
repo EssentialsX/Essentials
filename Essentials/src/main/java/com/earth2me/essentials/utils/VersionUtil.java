@@ -71,8 +71,8 @@ public final class VersionUtil {
     public static SupportStatus getServerSupportStatus() {
         if (supportStatus == null) {
             for (Map.Entry<String, SupportStatus> entry : unsupportedServerClasses.entrySet()) {
-                boolean inverted = entry.getKey().contains("!");
-                String clazz = entry.getKey().replace("!", "");
+                final boolean inverted = entry.getKey().contains("!");
+                final String clazz = entry.getKey().replace("!", "");
                 try {
                     Class.forName(clazz);
                     if (!inverted) {
