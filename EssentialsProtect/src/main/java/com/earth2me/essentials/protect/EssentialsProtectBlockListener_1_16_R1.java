@@ -30,7 +30,7 @@ public class EssentialsProtectBlockListener_1_16_R1 implements Listener {
         final World.Environment environment = block.getWorld().getEnvironment();
         if (block.getType() == Material.RESPAWN_ANCHOR && !environment.equals(World.Environment.NETHER)) {
             final RespawnAnchor respawnAnchor = (RespawnAnchor) block.getBlockData();
-            if (respawnAnchor.getCharges() == respawnAnchor.getMaximumCharges()) {
+            if ((respawnAnchor.getCharges() > 0 && (event.getItem() == null || event.getItem().getType() != Material.GLOWSTONE)) || respawnAnchor.getCharges() == respawnAnchor.getMaximumCharges()) {
                 event.setCancelled(prot.getSettingBool(ProtectConfig.prevent_respawn_anchor_explosion));
             }
         }
