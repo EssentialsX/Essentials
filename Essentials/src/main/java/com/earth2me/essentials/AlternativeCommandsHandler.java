@@ -2,7 +2,7 @@ package com.earth2me.essentials;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.PluginCommand;
-import org.bukkit.command.PluginCommandYamlParser;
+import org.bukkit.command.PluginIdentifiableCommand;
 import org.bukkit.plugin.Plugin;
 
 import java.util.ArrayList;
@@ -33,7 +33,7 @@ public class AlternativeCommandsHandler {
         if (plugin.getDescription().getMain().contains("com.earth2me.essentials")) {
             return;
         }
-        final List<Command> commands = PluginCommandYamlParser.parse(plugin);
+        final List<Command> commands = getPluginCommands(plugin);
         final String pluginName = plugin.getDescription().getName().toLowerCase(Locale.ENGLISH);
 
         for (final Command command : commands) {
@@ -62,6 +62,16 @@ public class AlternativeCommandsHandler {
                 }
             }
         }
+    }
+
+    private List<Command> getPluginCommands(Plugin plugin) {
+        List<Command> commands = new ArrayList<>();
+        for (Command cmd : ess.getKnownCommandsProvider().getKnownCommands().values()) {
+            if (cmd instanceof PluginIdentifiableCommand && ((PluginIdentifiableCommand) cmd).getPlugin().getName().equals(plugin.getName())) {
+                commands.add(cmd);
+            }
+        }
+        return commands;
     }
 
     public void removePlugin(final Plugin plugin) {
