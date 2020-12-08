@@ -65,7 +65,7 @@ public class AlternativeCommandsHandler {
     }
 
     private List<Command> getPluginCommands(Plugin plugin) {
-        List<Command> commands = new ArrayList<>();
+        final List<Command> commands = new ArrayList<>();
         for (Command cmd : ess.getKnownCommandsProvider().getKnownCommands().values()) {
             if (cmd instanceof PluginIdentifiableCommand && ((PluginIdentifiableCommand) cmd).getPlugin().getName().equals(plugin.getName())) {
                 commands.add(cmd);
