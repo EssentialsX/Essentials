@@ -568,6 +568,10 @@ commands:
     description: List all warps or warp to the specified location.
     usage: /<command> <pagenumber|warp> [player]
     aliases: [ewarp,warps,ewarps]
+  warpinfo:
+    description: Finds location information for a specified warp.
+    usage: /<command> <warp>
+    aliases: [ewarpinfo]
   weather:
     description: Sets the weather.
     usage: /<command> <storm/sun> [duration]
