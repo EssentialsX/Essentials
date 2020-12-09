@@ -379,6 +379,16 @@ public class FakeWorld implements World {
     }
 
     @Override
+    public boolean createExplosion(Location location, float v, boolean b, boolean b1) {
+        return false;
+    }
+
+    @Override
+    public boolean createExplosion(Location location, float v, boolean b, boolean b1, Entity entity) {
+        return false;
+    }
+
+    @Override
     public <T extends Entity> T spawn(Location lctn, Class<T> type) throws IllegalArgumentException {
         throw new UnsupportedOperationException("Not supported yet.");
     }
@@ -689,6 +699,11 @@ public class FakeWorld implements World {
     }
 
     @Override
+    public boolean createExplosion(double v, double v1, double v2, float v3, boolean b, boolean b1, Entity entity) {
+        return false;
+    }
+
+    @Override
     public WorldBorder getWorldBorder() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
@@ -766,6 +781,16 @@ public class FakeWorld implements World {
     @Override
     public Location locateNearestStructure(Location origin, StructureType structureType, int radius, boolean findUnexplored) {
         throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public Raid locateNearestRaid(Location location, int i) {
+        return null;
+    }
+
+    @Override
+    public List<Raid> getRaids() {
+        return null;
     }
 
     @Override

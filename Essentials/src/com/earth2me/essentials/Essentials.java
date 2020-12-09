@@ -27,6 +27,7 @@ import com.earth2me.essentials.register.payment.Methods;
 import com.earth2me.essentials.signs.SignBlockListener;
 import com.earth2me.essentials.signs.SignEntityListener;
 import com.earth2me.essentials.signs.SignPlayerListener;
+import com.earth2me.essentials.tasks.VanishTask;
 import com.earth2me.essentials.textreader.IText;
 import com.earth2me.essentials.textreader.KeywordReplacer;
 import com.earth2me.essentials.textreader.SimpleTextInput;
@@ -160,6 +161,8 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
 
     @Override
     public void onEnable() {
+        new VanishTask(this).runTaskTimer(this, 20L, 20L);
+
         try {
             if (LOGGER != this.getLogger()) {
                 LOGGER.setParent(this.getLogger());

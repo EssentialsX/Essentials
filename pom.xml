@@ -24,6 +24,10 @@
 
     <repositories>
         <repository>
+            <id>rayzr-repo</id>
+            <url>https://rayzr.dev/repo/</url>
+        </repository>
+        <repository>
             <id>ess-repo</id>
             <url>https://ci.ender.zone/plugin/repository/everything/</url>
         </repository>
