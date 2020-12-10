@@ -34,32 +34,39 @@ public final class VersionUtil {
 
     private static final Set<BukkitVersion> supportedVersions = ImmutableSet.of(v1_8_8_R01, v1_9_4_R01, v1_10_2_R01, v1_11_2_R01, v1_12_2_R01, v1_13_2_R01, v1_14_4_R01, v1_15_2_R01, v1_16_4_R01);
 
-    private static final Map<String, SupportStatus> unsupportedServerClasses = new ImmutableMap.Builder<String, SupportStatus>().put(
-            // Yatopia - Extremely volatile patch set;
-            //   * Messes with bungeecord UUIDs
-            //   * Frequent data corruptions
-            "org.yatopiamc.yatopia.server.YatopiaConfig", SupportStatus.DANGEROUS_FORK).put(
+    private static final Map<String, SupportStatus> unsupportedServerClasses;
 
-            // KibblePatcher - Dangerous bytecode editor snakeoil that's only use it to break plugins
-            "net.kibblelands.server.FastMath", SupportStatus.DANGEROUS_FORK).put(
+    static {
+        final ImmutableMap.Builder<String, SupportStatus> builder = new ImmutableMap.Builder<>();
 
-            // AirplaneLite - Yatopia sidestream;
-            //   * Attempts unsafe chunk concurrency
-            "gg.airplane.structs.ChunkMapMap", SupportStatus.DANGEROUS_FORK).put(
-            "gg.airplane.structs.ConcLong2ObjectOpenHashMap", SupportStatus.DANGEROUS_FORK).put(
+        // Yatopia - Extremely volatile patch set;
+        //   * Messes with bungeecord UUIDs
+        //   * Frequent data corruptions
+        builder.put("org.yatopiamc.yatopia.server.YatopiaConfig", SupportStatus.DANGEROUS_FORK);
 
-            // Akarin - Dangerous patch history;
-            //   * Potentially unsafe saving of nms.JsonList
-            "io.akarin.server.Config", SupportStatus.DANGEROUS_FORK).put(
+        // KibblePatcher - Dangerous bytecode editor snakeoil that's only use it to break plugins
+        builder.put("net.kibblelands.server.FastMath", SupportStatus.DANGEROUS_FORK);
 
-            // Forge - Doesn't support bukkit
-            "net.minecraftforge.common.MinecraftForge", SupportStatus.UNSTABLE).put(
+        // AirplaneLite - Yatopia sidestream;
+        //   * Attempts unsafe chunk concurrency
+        builder.put("gg.airplane.structs.ChunkMapMap", SupportStatus.DANGEROUS_FORK);
+        builder.put("gg.airplane.structs.ConcLong2ObjectOpenHashMap", SupportStatus.DANGEROUS_FORK);
 
-            // Fabric - Doesn't support bukkit
-            "net.fabricmc.loader.launch.knot.KnotServer", SupportStatus.UNSTABLE).put(
+        // Akarin - Dangerous patch history;
+        //   * Potentially unsafe saving of nms.JsonList
+        builder.put("io.akarin.server.Config", SupportStatus.DANGEROUS_FORK);
 
-            "!net.minecraft.server." + ReflUtil.getNMSVersion() + ".MinecraftServer", SupportStatus.NMS_CLEANROOM
-    ).build();
+        // Forge - Doesn't support bukkit
+        builder.put("net.minecraftforge.common.MinecraftForge", SupportStatus.UNSTABLE);
+
+        // Fabric - Doesn't support bukkit
+        builder.put("net.fabricmc.loader.launch.knot.KnotServer", SupportStatus.UNSTABLE);
+
+        // Misc translation layers that do not add NMS will be caught by this
+        builder.put("!net.minecraft.server." + ReflUtil.getNMSVersion() + ".MinecraftServer", SupportStatus.NMS_CLEANROOM);
+
+        unsupportedServerClasses = builder.build();
+    }
 
     private static BukkitVersion serverVersion = null;
     private static SupportStatus supportStatus = null;
