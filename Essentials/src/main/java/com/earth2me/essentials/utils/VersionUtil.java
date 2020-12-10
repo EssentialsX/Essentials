@@ -52,8 +52,11 @@ public final class VersionUtil {
             //   * Potentially unsafe saving of nms.JsonList
             "io.akarin.server.Config", SupportStatus.DANGEROUS_FORK).put(
 
-            // Forge - Doesn't support bukkit;
+            // Forge - Doesn't support bukkit
             "net.minecraftforge.common.MinecraftForge", SupportStatus.UNSTABLE).put(
+
+            // Fabric - Doesn't support bukkit
+            "net.fabricmc.loader.launch.knot.KnotServer", SupportStatus.UNSTABLE).put(
 
             "!net.minecraft.server." + ReflUtil.getNMSVersion() + ".MinecraftServer", SupportStatus.NMS_CLEANROOM
     ).build();
