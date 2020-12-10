@@ -33,35 +33,6 @@ public class Commandwarpinfo extends EssentialsCommand {
         sender.sendMessage(tl("whoisLocation", loc.getWorld().getName(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ()));
     }
 
-    private List<String> getAvailableWarpsFor(final IUser user) {
-        if (ess.getSettings().getPerWarpPermission() && user != null) {
-            return ess.getWarps().getList().stream()
-                .filter(warpName -> user.isAuthorized("essentials.warps." + warpName))
-                .collect(Collectors.toList());
-        }
-
-        return new ArrayList<>(ess.getWarps().getList());
-    }
-
-    /**
-     * Show the information for the warp to appear
-     * @param name the name of the warp
-     * @param loc the location of the warp
-     */
-    private void showWarpInfoMessage(final CommandSource sender, final String name, final Location loc) {
-        sender.sendMessage(tl("warpInfo", name));
-        sender.sendMessage(tl("whoisLocation", loc.getWorld().getName(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ()));
-    }
-
-    @Override
-    protected List<String> getTabCompleteOptions(final Server server, final User user, final String commandLabel, final String[] args) {
-        if (args.length == 1 && user.isAuthorized("essentials.warp.list")) {
-            return getAvailableWarpsFor(user);
-        } else {
-            return Collections.emptyList();
-        }
-    }
-
     @Override
     protected List<String> getTabCompleteOptions(final Server server, final CommandSource sender, final String commandLabel, final String[] args) {
         if (args.length == 1) {
