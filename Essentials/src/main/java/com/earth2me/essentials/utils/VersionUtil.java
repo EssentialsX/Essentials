@@ -40,6 +40,9 @@ public final class VersionUtil {
             //   * Frequent data corruptions
             "org.yatopiamc.yatopia.server.YatopiaConfig", SupportStatus.DANGEROUS_FORK).put(
 
+            // KibblePatcher - Dangerous bytecode editor snakeoil that's only use it to break plugins
+            "net.kibblelands.server.FastMath", SupportStatus.DANGEROUS_FORK).put(
+
             // AirplaneLite - Yatopia sidestream;
             //   * Attempts unsafe chunk concurrency
             "gg.airplane.structs.ChunkMapMap", SupportStatus.DANGEROUS_FORK).put(
