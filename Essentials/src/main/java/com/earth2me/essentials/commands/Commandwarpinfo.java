@@ -19,21 +19,6 @@ public class Commandwarpinfo extends EssentialsCommand {
         super("warpinfo");
     }
 
-    @Override
-    public void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception {
-        if (args.length == 0) {
-            if (!user.isAuthorized("essentials.warpinfo")) {
-                throw new Exception(tl("noPerm", "essentials.warpinfo"));
-            }
-            throw new NotEnoughArgumentsException();
-        }
-        final String warpName = args[0];
-        if (!user.isAuthorized("essentials.warps." + warpName)) {
-            throw new Exception(tl("warpUsePermission"));
-        }
-        final Location warpLocation = ess.getWarps().getWarp(args[0]);
-        showWarpInfoMessage(user.getSource(), warpName, warpLocation);
-    }
 
     @Override
     public void run(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception {
