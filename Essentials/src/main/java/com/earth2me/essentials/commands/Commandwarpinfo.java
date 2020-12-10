@@ -24,11 +24,8 @@ public class Commandwarpinfo extends EssentialsCommand {
         if (args.length == 0) {
             throw new NotEnoughArgumentsException();
         }
-        if (!sender.isAuthorized("essentials.warpinfo")) {
-            throw new Exception(tl("noPerm", "essentials.warpinfo"));
-        }
         final String name = args[0];
-        final Location loc = ess.getWarps().getWarp(args[0]);
+        final Location loc = ess.getWarps().getWarp(name);
         sender.sendMessage(tl("warpInfo", name));
         sender.sendMessage(tl("whoisLocation", loc.getWorld().getName(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ()));
     }
@@ -37,9 +34,9 @@ public class Commandwarpinfo extends EssentialsCommand {
     protected List<String> getTabCompleteOptions(final Server server, final CommandSource sender, final String commandLabel, final String[] args) {
         if (args.length == 1) {
             if (ess.getSettings().getPerWarpPermission() && sender.isPlayer()) {
-                List<String> list = new ArrayList<>();
+                final List<String> list = new ArrayList<>();
                 for (String curWarp : ess.getWarps().getList()) {
-                    if (sender.isAuthorized("essentials.warps." + curWarp)) {
+                    if (sender.isAuthorized("essentials.warps." + curWarp, ess)) {
                         list.add(curWarp);
                     }
                 }
