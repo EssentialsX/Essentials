@@ -36,6 +36,15 @@ public class Commandwarpinfo extends EssentialsCommand {
     @Override
     protected List<String> getTabCompleteOptions(final Server server, final CommandSource sender, final String commandLabel, final String[] args) {
         if (args.length == 1) {
+            if (ess.getSettings().getPerWarpPermission() && sender.isPlayer()) {
+                List<String> list = new ArrayList<>();
+                for (String curWarp : ess.getWarps().getList()) {
+                    if (sender.isAuthorized("essentials.warps." + curWarp)) {
+                        list.add(curWarp);
+                    }
+                }
+                return list;
+            }
             return new ArrayList<>(ess.getWarps().getList());
         } else {
             return Collections.emptyList();
