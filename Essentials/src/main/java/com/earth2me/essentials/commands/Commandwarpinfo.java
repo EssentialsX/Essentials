@@ -19,15 +19,18 @@ public class Commandwarpinfo extends EssentialsCommand {
         super("warpinfo");
     }
 
-
     @Override
     public void run(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception {
         if (args.length == 0) {
             throw new NotEnoughArgumentsException();
         }
-        final String warpName = args[0];
-        final Location warpLocation = ess.getWarps().getWarp(args[0]);
-        showWarpInfoMessage(sender, warpName, warpLocation);
+        if (!sender.isAuthorized("essentials.warpinfo")) {
+            throw new Exception(tl("noPerm", "essentials.warpinfo"));
+        }
+        final String name = args[0];
+        final Location loc = ess.getWarps().getWarp(args[0]);
+        sender.sendMessage(tl("warpInfo", name));
+        sender.sendMessage(tl("whoisLocation", loc.getWorld().getName(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ()));
     }
 
     private List<String> getAvailableWarpsFor(final IUser user) {
