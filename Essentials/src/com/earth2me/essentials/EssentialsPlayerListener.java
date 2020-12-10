@@ -118,21 +118,21 @@ public class EssentialsPlayerListener implements Listener {
             if (player.getGameMode() == GameMode.SPECTATOR && !playerPreviousGameModeMap.containsKey(player.getUniqueId())) {
                 return;
             }
-            if (this.playerLastSneakTimeMap.containsKey(player.getUniqueId()) && System.currentTimeMillis() - this.playerLastSneakTimeMap.get(player.getUniqueId()) < 350L) {
-                this.playerLastSneakTimeMap.remove(player.getUniqueId());
-                final GameMode gameMode = (this.playerPreviousGameModeMap.containsKey(player.getUniqueId()) && this.playerPreviousGameModeMap.get(player.getUniqueId()) != player.getGameMode()) ? this.playerPreviousGameModeMap.remove(player.getUniqueId()) : GameMode.SPECTATOR;
+            if (playerLastSneakTimeMap.containsKey(player.getUniqueId()) && System.currentTimeMillis() - playerLastSneakTimeMap.get(player.getUniqueId()) < 350L) {
+                playerLastSneakTimeMap.remove(player.getUniqueId());
+                final GameMode gameMode = (playerPreviousGameModeMap.containsKey(player.getUniqueId()) && playerPreviousGameModeMap.get(player.getUniqueId()) != player.getGameMode()) ? this.playerPreviousGameModeMap.remove(player.getUniqueId()) : GameMode.SPECTATOR;
                 if (player.getGameMode() != GameMode.SPECTATOR) {
-                    this.playerPreviousGameModeMap.put(player.getUniqueId(), player.getGameMode());
+                    playerPreviousGameModeMap.put(player.getUniqueId(), player.getGameMode());
                 }
                 player.setGameMode(gameMode);
-                if (!this.playerLastMessageMap.containsKey(player)) {
-                    this.playerLastMessageMap.put(player, System.currentTimeMillis());
+                if (!playerLastMessageMap.containsKey(player)) {
+                    playerLastMessageMap.put(player, System.currentTimeMillis());
                 }
-                else if (System.currentTimeMillis() - this.playerLastMessageMap.get(player) > TimeUnit.MINUTES.toMillis(5L)) {
+                else if (System.currentTimeMillis() - playerLastMessageMap.get(player) > TimeUnit.MINUTES.toMillis(5L)) {
                 }
             }
             else {
-                this.playerLastSneakTimeMap.put(player.getUniqueId(), System.currentTimeMillis());
+                playerLastSneakTimeMap.put(player.getUniqueId(), System.currentTimeMillis());
             }
         }
     }

@@ -28,7 +28,13 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import java.math.BigDecimal;
-import java.util.*;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.UUID;
+import java.util.WeakHashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -246,7 +252,8 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
         if (ess.getSettings().permissionBasedItemSpawn()) {
             final String name = material.toString().toLowerCase(Locale.ENGLISH).replace("_", "");
 
-            if (isAuthorized("essentials.itemspawn.item-all") || isAuthorized("essentials.itemspawn.item-" + name)) return true;
+            if (isAuthorized("essentials.itemspawn.item-all") || isAuthorized("essentials.itemspawn.item-" + name))
+                return true;
 
             if (VersionUtil.getServerBukkitVersion().isLowerThan(VersionUtil.v1_13_0_R01)) {
                 final int id = material.getId();
@@ -447,11 +454,11 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
             return;
         }
         final BigDecimal oldBalance = _getMoney();
-        
+
         UserBalanceUpdateEvent updateEvent = new UserBalanceUpdateEvent(this.getBase(), oldBalance, value);
         ess.getServer().getPluginManager().callEvent(updateEvent);
         BigDecimal newBalance = updateEvent.getNewBalance();
-        
+
         if (Methods.hasMethod()) {
             try {
                 final Method method = Methods.getMethod();
@@ -500,10 +507,10 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
         _setAfk(set);
         updateAfkListName();
     }
-    
+
     private void updateAfkListName() {
         if (ess.getSettings().isAfkListName()) {
-            if(isAfk()) {
+            if (isAfk()) {
                 String afkName = ess.getSettings().getAfkListName().replace("{PLAYER}", getDisplayName()).replace("{USERNAME}", getName());
                 getBase().setPlayerListName(afkName);
             } else {
@@ -566,7 +573,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
         if (getMuteTimeout() > 0 && getMuteTimeout() < currentTime && isMuted()) {
             final MuteStatusChangeEvent event = new MuteStatusChangeEvent(this, null, false);
             ess.getServer().getPluginManager().callEvent(event);
-            
+
             if (!event.isCancelled()) {
                 setMuteTimeout(0);
                 sendMessage(tl("canTalkAgain"));
@@ -593,13 +600,13 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
     }
 
     public void updateActivityOnMove(final boolean broadcast) {
-        if(ess.getSettings().cancelAfkOnMove()) {
+        if (ess.getSettings().cancelAfkOnMove()) {
             updateActivity(broadcast);
         }
     }
 
     public void updateActivityOnInteract(final boolean broadcast) {
-        if(ess.getSettings().cancelAfkOnInteract()) {
+        if (ess.getSettings().cancelAfkOnInteract()) {
             updateActivity(broadcast);
         }
     }
@@ -612,9 +619,9 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
 
         final long autoafkkick = ess.getSettings().getAutoAfkKick();
         if (autoafkkick > 0
-            && lastActivity > 0 && (lastActivity + (autoafkkick * 1000)) < System.currentTimeMillis()
-            && !isAuthorized("essentials.kick.exempt")
-            && !isAuthorized("essentials.afk.kickexempt")) {
+                && lastActivity > 0 && (lastActivity + (autoafkkick * 1000)) < System.currentTimeMillis()
+                && !isAuthorized("essentials.kick.exempt")
+                && !isAuthorized("essentials.afk.kickexempt")) {
             final String kickReason = tl("autoAfkKickReason", autoafkkick / 60.0);
             lastActivity = 0;
             this.getBase().kickPlayer(kickReason);
@@ -765,15 +772,15 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
             if (isAuthorized("essentials.vanish.effect")) {
                 this.getBase().addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, Integer.MAX_VALUE, 1, false));
             }
+            this.getBase().addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, Integer.MAX_VALUE, 1, false));
         } else {
-            for (Player p : ess.getOnlinePlayers()) {
-                p.showPlayer(getBase());
-            }
+            ess.getOnlinePlayers().forEach(p -> p.showPlayer(getBase()));
             setHidden(false);
             ess.getVanishedPlayersNew().remove(getName());
             if (isAuthorized("essentials.vanish.effect")) {
                 this.getBase().removePotionEffect(PotionEffectType.INVISIBILITY);
             }
+            this.getBase().getActivePotionEffects().forEach(potionEffect -> getBase().removePotionEffect(potionEffect.getType()));
         }
     }
 
@@ -850,24 +857,29 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
     public String getName() {
         return this.getBase().getName();
     }
-    
-    @Override public boolean isReachable() {
+
+    @Override
+    public boolean isReachable() {
         return getBase().isOnline();
     }
 
-    @Override public MessageResponse sendMessage(IMessageRecipient recipient, String message) {
+    @Override
+    public MessageResponse sendMessage(IMessageRecipient recipient, String message) {
         return this.messageRecipient.sendMessage(recipient, message);
     }
 
-    @Override public MessageResponse onReceiveMessage(IMessageRecipient sender, String message) {
+    @Override
+    public MessageResponse onReceiveMessage(IMessageRecipient sender, String message) {
         return this.messageRecipient.onReceiveMessage(sender, message);
     }
 
-    @Override public IMessageRecipient getReplyRecipient() {
+    @Override
+    public IMessageRecipient getReplyRecipient() {
         return this.messageRecipient.getReplyRecipient();
     }
 
-    @Override public void setReplyRecipient(IMessageRecipient recipient) {
+    @Override
+    public void setReplyRecipient(IMessageRecipient recipient) {
         this.messageRecipient.setReplyRecipient(recipient);
     }
 
@@ -896,7 +908,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
     public String getConfirmingClearCommand() {
         return confirmingClearCommand;
     }
-    
+
     public void setConfirmingClearCommand(String command) {
         this.confirmingClearCommand = command;
     }
@@ -912,7 +924,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
             return inventory.getItemInMainHand() != null ? inventory.getItemInMainHand() : inventory.getItemInOffHand();
         }
     }
-    
+
     public void notifyOfMail() {
         List<String> mails = getMails();
         if (mails != null && !mails.isEmpty()) {
