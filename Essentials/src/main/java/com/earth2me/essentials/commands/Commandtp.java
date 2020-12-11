@@ -119,7 +119,7 @@ public class Commandtp extends EssentialsCommand {
         final User target = getPlayer(server, args, 0, true, false);
         if (args.length == 2) {
             final User toPlayer = getPlayer(server, args, 1, true, false);
-            target.sendMessage(tl("teleportAtoB", Console.NAME, toPlayer.getDisplayName()));
+            target.sendMessage(tl("teleportAtoB", Console.DISPLAY_NAME, toPlayer.getDisplayName()));
             target.getAsyncTeleport().now(toPlayer.getBase(), false, TeleportCause.COMMAND, getNewExceptionFuture(sender, commandLabel));
         } else if (args.length > 3) {
             final double x = args[1].startsWith("~") ? target.getLocation().getX() + (args[1].length() > 1 ? Double.parseDouble(args[1].substring(1)) : 0) : Double.parseDouble(args[1]);
