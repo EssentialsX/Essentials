@@ -285,7 +285,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
                 }
 
                 //Spawn Egg Providers
-                if (VersionUtil.getServerBukkitVersion().isLowerThanOrEqualTo(VersionUtil.v1_8_8_R01)) {
+                if (VersionUtil.getServerBukkitVersion().isLowerThan(VersionUtil.v1_9_R01)) {
                     spawnEggProvider = new LegacySpawnEggProvider();
                 } else if (VersionUtil.getServerBukkitVersion().isLowerThanOrEqualTo(VersionUtil.v1_12_2_R01)) {
                     spawnEggProvider = new ReflSpawnEggProvider();
@@ -294,7 +294,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
                 }
 
                 //Potion Meta Provider
-                if (VersionUtil.getServerBukkitVersion().isLowerThanOrEqualTo(VersionUtil.v1_8_8_R01)) {
+                if (VersionUtil.getServerBukkitVersion().isLowerThan(VersionUtil.v1_9_R01)) {
                     potionMetaProvider = new LegacyPotionMetaProvider();
                 } else {
                     potionMetaProvider = new BasePotionDataProvider();
