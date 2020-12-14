@@ -224,22 +224,22 @@ public class FlatItemDb extends AbstractItemDb {
     }
 
     public static class ItemData {
-        private Material material;
+        private String material;
         private String[] fallbacks = null;
         private PotionData potionData = null;
         private EntityType entity = null;
 
         ItemData(final Material material) {
-            this.material = material;
+            this.material = material.name();
         }
 
         ItemData(final Material material, final PotionData potionData) {
-            this.material = material;
+            this.material = material.name();
             this.potionData = potionData;
         }
 
         ItemData(final Material material, final EntityType entity) {
-            this.material = material;
+            this.material = material.name();
             this.entity = entity;
         }
 
@@ -262,11 +262,11 @@ public class FlatItemDb extends AbstractItemDb {
 
         public Material getMaterial() {
             if (material == null && fallbacks != null) {
-                material = EnumUtil.getMaterial(fallbacks);
+                material = EnumUtil.getMaterial(fallbacks).name();
                 fallbacks = null; // If fallback fails, don't keep trying to look up fallbacks
             }
 
-            return material;
+            return Material.valueOf(material);
         }
 
         public PotionData getPotionData() {
