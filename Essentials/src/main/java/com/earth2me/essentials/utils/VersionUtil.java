@@ -44,7 +44,7 @@ public final class VersionUtil {
         //   * Frequent data corruptions
         builder.put("org.yatopiamc.yatopia.server.YatopiaConfig", SupportStatus.DANGEROUS_FORK);
 
-        // KibblePatcher - Dangerous bytecode editor snakeoil that's only use it to break plugins
+        // KibblePatcher - Dangerous bytecode editor snakeoil that's only use is to break plugins
         builder.put("net.kibblelands.server.FastMath", SupportStatus.DANGEROUS_FORK);
 
         // AirplaneLite - Yatopia sidestream;
