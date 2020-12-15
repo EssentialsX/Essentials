@@ -674,7 +674,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
             return;
         }
 
-        final long autoafkkick = ess.getSettings().getAutoAfkKick();
+        final long autoafkkick = ess.getSettings().getAutoAfkKick(this);
         if (autoafkkick > 0
             && lastActivity > 0 && (lastActivity + (autoafkkick * 1000)) < System.currentTimeMillis()
             && !isAuthorized("essentials.kick.exempt")

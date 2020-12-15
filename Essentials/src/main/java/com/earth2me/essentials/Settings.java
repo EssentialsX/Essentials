@@ -943,8 +943,28 @@ public class Settings implements net.ess3.api.ISettings {
     }
 
     @Override
-    public long getAutoAfkKick() {
-        return config.getLong("auto-afk-kick", -1);
+    public long getAutoAfkKick(final User user) {
+        long limit = -1;
+        final Set<String> limitList = getAfkLimits();
+        if (limitList != null) {
+            for (String set : limitList) {
+                if (user.isAuthorized("essentials.auto-afk-kick." + set)) {
+                    limit = getAutoAfkKick(set);
+                }
+            }
+        }
+        return limit;
+    }
+
+    @Override
+    public long getAutoAfkKick(final String set) {
+        return config.getLong("auto-afk-kick." + set, config.getLong("auto-afk-kick.default", -1));
+    }
+
+    @Override
+    public Set<String> getAfkLimits() {
+        final ConfigurationSection section = config.getConfigurationSection("auto-afk-kick");
+        return section == null ? null : section.getKeys(false);
     }
 
     @Override

@@ -191,7 +191,11 @@ public interface ISettings extends IConf {
 
     long getAutoAfk();
 
-    long getAutoAfkKick();
+    long getAutoAfkKick(User user);
+
+    long getAutoAfkKick(String set);
+
+    Set<String> getAfkLimits();
 
     boolean getFreezeAfkPlayers();
 
