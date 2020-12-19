@@ -1,0 +1,14 @@
+dependencies {
+    compileOnly project(':EssentialsX')
+    implementation 'net.dv8tion:JDA:4.2.0_222'
+}
+
+repositories {
+    jcenter()
+}
+
+shadowJar {
+    dependencies {
+        include (dependency('net.dv8tion:JDA'))
+    }
+}

@@ -1,0 +1,34 @@
+#############################################################
+# +-------------------------------------------------------+ #
+# |                  EssentialsX Discord                  | #
+# +-------------------------------------------------------+ #
+#############################################################
+
+# This is the config file for EssentialsXDiscord.
+# This config was generated for version ${full.version}.
+
+# You need to create a bot user in order to connect your server to Discord.
+# You can find instructions on this here: #TODO write up docs
+
+# The token for your bot from the Discord Developers site.
+token: "INSERT-TOKEN-HERE"
+
+# The ID of your server.
+# #TODO tutorial
+guild: 0
+
+# Text channels
+# Channels defined here can be used in the messages config section below
+# If the primary channel is not defined or invalid, the default channel of the server will be used.
+channels:
+  primary: 0
+
+# Determine which channels certain messages will be sent to from the above list of channels
+# If an invalid channel is used, the primary channel will be used instead
+messages:
+  chat: primary
+
+# Status message for the bot to display. The activity must be playing or listening.
+status:
+  activity: "playing"
+  message: "Minecraft"
