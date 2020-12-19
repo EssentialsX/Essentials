@@ -3,6 +3,7 @@ package com.earth2me.essentials.metrics;
 import com.earth2me.essentials.Essentials;
 import com.earth2me.essentials.register.payment.Methods;
 import com.google.common.collect.ImmutableList;
+import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
