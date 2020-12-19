@@ -34,6 +34,10 @@ public class EssentialsJDA {
         return channel;
     }
 
+    public void sendMessage(String key, String message) {
+        getChannel(key).sendMessage(message).queue();
+    }
+
     public void startup() throws LoginException, InterruptedException {
         shutdown();
 
@@ -82,5 +86,9 @@ public class EssentialsJDA {
             HandlerList.unregisterAll(plugin);
             jda.shutdown();
         }
+    }
+
+    public EssentialsDiscord getPlugin() {
+        return plugin;
     }
 }

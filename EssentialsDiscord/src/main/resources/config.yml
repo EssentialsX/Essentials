@@ -22,6 +22,19 @@ guild: 0
 # If the primary channel is not defined or invalid, the default channel of the server will be used.
 channels:
   primary: 0
+  # Used when a player is muted
+  mute: 0
+  # Used when a player chats
+  chat: 0
+  # Used when a player joins the game
+  join: 0
+  # Used when a player leaves the game
+  quit: 0
+  # Used when a player dies
+  death: 0
+  # Used when a player gets kicked
+  kick: 0
+
 
 # Determine which channels certain messages will be sent to from the above list of channels
 # If an invalid channel is used, the primary channel will be used instead
