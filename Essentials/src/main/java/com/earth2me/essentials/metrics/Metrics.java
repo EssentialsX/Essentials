@@ -26,10 +26,11 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-import java.util.Timer;
-import java.util.TimerTask;
 import java.util.UUID;
 import java.util.concurrent.Callable;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.zip.GZIPOutputStream;
 
@@ -59,8 +60,8 @@ public class Metrics {
         if (System.getProperty("bstats.relocatecheck") == null || !System.getProperty("bstats.relocatecheck").equals("false")) {
             // Maven's Relocate is clever and changes strings, too. So we have to use this little "trick" ... :D
             final String defaultPackage = new String(
-                new byte[] {'o', 'r', 'g', '.', 'b', 's', 't', 'a', 't', 's', '.', 'b', 'u', 'k', 'k', 'i', 't'});
-            final String examplePackage = new String(new byte[] {'y', 'o', 'u', 'r', '.', 'p', 'a', 'c', 'k', 'a', 'g', 'e'});
+                    new byte[]{'o', 'r', 'g', '.', 'b', 's', 't', 'a', 't', 's', '.', 'b', 'u', 'k', 'k', 'i', 't'});
+            final String examplePackage = new String(new byte[]{'y', 'o', 'u', 'r', '.', 'p', 'a', 'c', 'k', 'a', 'g', 'e'});
             // We want to make sure nobody just copy & pastes the example and use the wrong package names
             if (Metrics.class.getPackage().getName().equals(defaultPackage) || Metrics.class.getPackage().getName().equals(examplePackage)) {
                 throw new IllegalStateException("bStats Metrics class has not been relocated correctly!");
@@ -75,6 +76,10 @@ public class Metrics {
 
     // The plugin id
     private final int pluginId;
+
+    // Executor service for requests
+    // We use an executor service because the Bukkit scheduler is affected by server lags
+    private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 
     // A list with all custom charts
     private final List<CustomChart> charts = new ArrayList<>();
@@ -114,10 +119,10 @@ public class Metrics {
 
             // Inform the server owners about bStats
             config.options().header(
-                "bStats collects some data for plugin authors like how many servers are using their plugins.\n" +
-                    "To honor their work, you should not disable it.\n" +
-                    "This has nearly no effect on the server performance!\n" +
-                    "Check out https://bStats.org/ to learn more :)"
+                    "bStats collects some data for plugin authors like how many servers are using their plugins.\n" +
+                            "To honor their work, you should not disable it.\n" +
+                            "This has nearly no effect on the server performance!\n" +
+                            "Check out https://bStats.org/ to learn more :)"
             ).copyDefaults(true);
             try {
                 config.save(configFile);
@@ -245,22 +250,24 @@ public class Metrics {
      * Starts the Scheduler which submits our data every 30 minutes.
      */
     private void startSubmitting() {
-        final Timer timer = new Timer(true); // We use a timer cause the Bukkit scheduler is affected by server lags
-        timer.scheduleAtFixedRate(new TimerTask() {
-            @Override
-            public void run() {
-                if (!plugin.isEnabled()) { // Plugin was disabled
-                    timer.cancel();
-                    return;
-                }
-                // Nevertheless we want our code to run in the Bukkit main thread, so we have to use the Bukkit scheduler
-                // Don't be afraid! The connection to the bStats server is still async, only the stats collection is sync ;)
-                Bukkit.getScheduler().runTask(plugin, () -> submitData());
+        final Runnable submitTask = () -> {
+            if (!plugin.isEnabled()) { // Plugin was disabled
+                scheduler.shutdown();
+                return;
             }
-        }, 1000 * 60 * 5, 1000 * 60 * 30);
-        // Submit the data every 30 minutes, first time after 5 minutes to give other plugins enough time to start
-        // WARNING: Changing the frequency has no effect but your plugin WILL be blocked/deleted!
-        // WARNING: Just don't do it!
+            // Nevertheless we want our code to run in the Bukkit main thread, so we have to use the Bukkit scheduler
+            // Don't be afraid! The connection to the bStats server is still async, only the stats collection is sync ;)
+            Bukkit.getScheduler().runTask(plugin, this::submitData);
+        };
+
+        // Many servers tend to restart at a fixed time at xx:00 which causes an uneven distribution of requests on the
+        // bStats backend. To circumvent this problem, we introduce some randomness into the initial and second delay.
+        // WARNING: You must not modify and part of this Metrics class, including the submit delay or frequency!
+        // WARNING: Modifying this code will get your plugin banned on bStats. Just don't do it!
+        final long initialDelay = (long) (1000 * 60 * (3 + Math.random() * 3));
+        final long secondDelay = (long) (1000 * 60 * (Math.random() * 30));
+        scheduler.schedule(submitTask, initialDelay, TimeUnit.MILLISECONDS);
+        scheduler.scheduleAtFixedRate(submitTask, initialDelay + secondDelay, 1000 * 60 * 30, TimeUnit.MILLISECONDS);
     }
 
     /**
@@ -305,8 +312,8 @@ public class Metrics {
             // This fixes java.lang.NoSuchMethodError: org.bukkit.Bukkit.getOnlinePlayers()Ljava/util/Collection;
             final Method onlinePlayersMethod = Class.forName("org.bukkit.Server").getMethod("getOnlinePlayers");
             playerAmount = onlinePlayersMethod.getReturnType().equals(Collection.class)
-                ? ((Collection<?>) onlinePlayersMethod.invoke(Bukkit.getServer())).size()
-                : ((Player[]) onlinePlayersMethod.invoke(Bukkit.getServer())).length;
+                    ? ((Collection<?>) onlinePlayersMethod.invoke(Bukkit.getServer())).size()
+                    : ((Player[]) onlinePlayersMethod.invoke(Bukkit.getServer())).length;
         } catch (final Exception e) {
             playerAmount = Bukkit.getOnlinePlayers().size(); // Just use the new method if the Reflection failed
         }
