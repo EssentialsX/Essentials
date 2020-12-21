@@ -38,7 +38,7 @@ ext {
     GIT_COMMIT = grgit == null ? "unknown" : grgit.head().abbreviatedId
     GIT_DEPTH = commitsSinceLastTag()
 
-    fullVersion = "${version}-${GIT_COMMIT}".replace("-SNAPSHOT", "-dev+${GIT_DEPTH}")
+    fullVersion = "${version}".replace("-SNAPSHOT", "-dev+${GIT_DEPTH}-${GIT_COMMIT}")
 
     checkstyleVersion = '8.36.2'
     spigotVersion = '1.16.4-R0.1-SNAPSHOT'
