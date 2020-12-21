@@ -1034,11 +1034,13 @@ newbies:
 # Set this to lowest, if you want Multiverse to handle the respawning.
 # Set this to high, if you want EssentialsSpawn to handle the respawning.
 # Set this to highest, if you want to force EssentialsSpawn to handle the respawning.
+# Note: Changes will not apply until after the server is restarted.
 respawn-listener-priority: high
 
 # What priority should we use for handling spawning on joining the server?
 # See respawn-listener-priority for possible values.
-# Note: changing this may impact or break spawn-on-join functionality.
+# Note: Changing this may impact or break spawn-on-join functionality.
+# Note: Changes will not apply until after the server is restarted.
 spawn-join-listener-priority: high
 
 # When users die, should they respawn at their first home or bed, instead of the spawnpoint?
