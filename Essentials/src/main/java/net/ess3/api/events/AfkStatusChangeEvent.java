@@ -1,11 +1,13 @@
 package net.ess3.api.events;
 
 import net.ess3.api.IUser;
+import org.bukkit.event.HandlerList;
 
 /**
  * Fired when a player's AFK status changes.
  */
 public class AfkStatusChangeEvent extends StatusChangeEvent {
+    private static final HandlerList handlers = new HandlerList();
     private final Cause cause;
 
     @Deprecated
@@ -20,6 +22,15 @@ public class AfkStatusChangeEvent extends StatusChangeEvent {
 
     public Cause getCause() {
         return cause;
+    }
+
+    @Override
+    public HandlerList getHandlers() {
+        return handlers;
+    }
+
+    public static HandlerList getHandlerList() {
+        return handlers;
     }
 
     /**
