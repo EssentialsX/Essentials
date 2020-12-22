@@ -1,1 +1,2 @@
 ${full.version}
+${git.branch}

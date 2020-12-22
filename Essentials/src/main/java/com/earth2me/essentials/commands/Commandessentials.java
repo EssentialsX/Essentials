@@ -1,6 +1,7 @@
 package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.CommandSource;
+import com.earth2me.essentials.EssentialsUpdateChecker;
 import com.earth2me.essentials.EssentialsUpgrade;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.UserMap;
@@ -386,6 +387,61 @@ public class Commandessentials extends EssentialsCommand {
                 sender.sendMessage(tl("serverUnsupportedLimitedApi"));
                 break;
         }
+
+        sender.sendMessage(tl("versionFetching"));
+        server.getScheduler().runTaskAsynchronously(ess, () -> {
+
+            if (EssentialsUpdateChecker.isDevBuild()) {
+                final EssentialsUpdateChecker.UpdateToken devToken = EssentialsUpdateChecker.getDevToken().join();
+                switch (devToken.getBranchStatus()) {
+                    case IDENTICAL: {
+                        sender.sendMessage(tl("versionDevLatest"));
+                        break;
+                    }
+                    case BEHIND: {
+                        sender.sendMessage(tl("versionDevBehind", devToken.getDistance()));
+                        break;
+                    }
+                    case DIVERGED: {
+                        sender.sendMessage(tl(devToken.getDistance() == 0 ? "versionDevDivergedLatest" : "versionDevDiverged", devToken.getDistance()));
+                        sender.sendMessage(tl("versionDevDivergedBranch", EssentialsUpdateChecker.getVersionBranch()));
+                        break;
+                    }
+                    case AHEAD: //monkaW????
+                    case UNKNOWN: {
+                        sender.sendMessage(tl("versionCustom", EssentialsUpdateChecker.getBuildInfo()));
+                        break;
+                    }
+                    case ERROR: {
+                        sender.sendMessage(tl("versionError", EssentialsUpdateChecker.getBuildInfo()));
+                        break;
+                    }
+                }
+            } else {
+                final EssentialsUpdateChecker.UpdateToken releaseToken = EssentialsUpdateChecker.getReleaseToken().join();
+                switch (releaseToken.getBranchStatus()) {
+                    case IDENTICAL: {
+                        sender.sendMessage(tl("versionReleaseLatest"));
+                        break;
+                    }
+                    case BEHIND: {
+                        sender.sendMessage(tl("versionReleaseNew", EssentialsUpdateChecker.getLatestRelease()));
+                        //TODO download link? (https://github.com/EssentialsX/Website/issues/26)
+                        break;
+                    }
+                    case DIVERGED: //WhatChamp
+                    case AHEAD: //monkaW?
+                    case UNKNOWN: {
+                        sender.sendMessage(tl("versionCustom", EssentialsUpdateChecker.getBuildInfo()));
+                        break;
+                    }
+                    case ERROR: {
+                        sender.sendMessage(tl("versionError", EssentialsUpdateChecker.getBuildInfo()));
+                        break;
+                    }
+                }
+            }
+        });
     }
 
     @Override

@@ -36,6 +36,7 @@ def commitsSinceLastTag() {
 
 ext {
     GIT_COMMIT = grgit == null ? "unknown" : grgit.head().abbreviatedId
+    GIT_BRANCH = grgit == null ? "detached-head" : grgit.branch.current().name
     GIT_DEPTH = commitsSinceLastTag()
 
     fullVersion = "${version}".replace("-SNAPSHOT", "-dev+${GIT_DEPTH}-${GIT_COMMIT}")
@@ -88,8 +89,10 @@ subprojects {
     // Version Injection
     processResources {
         inputs.property('fullVersion', fullVersion)
+        inputs.property('gitBranch', GIT_BRANCH)
         filter(ReplaceTokens, beginToken: '${',
-                endToken: '}', tokens: ["full.version": fullVersion])
+                endToken: '}', tokens: ["full.version": fullVersion, "git.branch": GIT_BRANCH])
+
     }
 
     indra {
