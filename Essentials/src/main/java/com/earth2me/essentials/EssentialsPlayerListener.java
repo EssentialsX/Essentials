@@ -437,7 +437,6 @@ public class EssentialsPlayerListener implements Listener {
                                     break;
                                 }
                                 case AHEAD: //monkaW????
-                                case UNKNOWN:
                                 case ERROR: {
                                     user.sendMessage(tl("versionErrorPlayer"));
                                     break;
@@ -457,7 +456,6 @@ public class EssentialsPlayerListener implements Listener {
                                 }
                                 case DIVERGED: //WhatChamp
                                 case AHEAD: //monkaW????
-                                case UNKNOWN:
                                 case ERROR: {
                                     user.sendMessage(tl("versionErrorPlayer"));
                                     break;
