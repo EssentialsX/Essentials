@@ -360,7 +360,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
 
             metrics = new MetricsWrapper(this, 858, true);
 
-            getScheduler().runTaskAsynchronously(this, () -> {
+            runTaskAsynchronously(() -> {
                 LOGGER.log(Level.INFO, tl("versionFetching"));
                 if (EssentialsUpdateChecker.isDevBuild()) {
                     final EssentialsUpdateChecker.UpdateToken devToken = EssentialsUpdateChecker.getDevToken().join();

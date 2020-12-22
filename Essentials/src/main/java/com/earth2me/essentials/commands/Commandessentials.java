@@ -389,7 +389,7 @@ public class Commandessentials extends EssentialsCommand {
         }
 
         sender.sendMessage(tl("versionFetching"));
-        server.getScheduler().runTaskAsynchronously(ess, () -> {
+        ess.runTaskAsynchronously(() -> {
             if (EssentialsUpdateChecker.isDevBuild()) {
                 final EssentialsUpdateChecker.UpdateToken devToken = EssentialsUpdateChecker.getDevToken().join();
                 switch (devToken.getBranchStatus()) {
