@@ -44,10 +44,10 @@ import net.ess3.api.IEssentials;
 import net.ess3.api.IItemDb;
 import net.ess3.api.IJails;
 import net.ess3.api.ISettings;
+import net.ess3.nms.refl.providers.ReflKnownCommandsProvider;
 import net.ess3.nms.refl.providers.ReflServerStateProvider;
 import net.ess3.nms.refl.providers.ReflSpawnEggProvider;
 import net.ess3.nms.refl.providers.ReflSpawnerBlockProvider;
-import net.ess3.nms.refl.providers.ReflKnownCommandsProvider;
 import net.ess3.provider.ContainerProvider;
 import net.ess3.provider.KnownCommandsProvider;
 import net.ess3.provider.PotionMetaProvider;
@@ -360,6 +360,58 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
 
             metrics = new MetricsWrapper(this, 858, true);
 
+            getScheduler().runTaskAsynchronously(this, () -> {
+                LOGGER.log(Level.INFO, tl("versionFetching"));
+                if (EssentialsUpdateChecker.isDevBuild()) {
+                    final EssentialsUpdateChecker.UpdateToken devToken = EssentialsUpdateChecker.getDevToken().join();
+                    switch (devToken.getBranchStatus()) {
+                        case BEHIND: {
+                            LOGGER.log(Level.WARNING, tl("versionDevBehind", devToken.getDistance()));
+                            break;
+                        }
+                        case DIVERGED: {
+                            LOGGER.log(Level.WARNING, tl(devToken.getDistance() == 0 ? "versionDevDivergedLatest" : "versionDevDiverged", devToken.getDistance()));
+                            LOGGER.log(Level.WARNING, tl("versionDevDivergedBranch", EssentialsUpdateChecker.getVersionBranch()));
+                            break;
+                        }
+                        case AHEAD: //monkaW????
+                        case UNKNOWN: {
+                            LOGGER.log(Level.WARNING, tl("versionCustom", EssentialsUpdateChecker.getBuildInfo()));
+                            break;
+                        }
+                        case ERROR: {
+                            LOGGER.log(Level.WARNING, tl("versionError", EssentialsUpdateChecker.getBuildInfo()));
+                            break;
+                        }
+                        default: {
+                            break;
+                        }
+                    }
+                } else {
+                    final EssentialsUpdateChecker.UpdateToken releaseToken = EssentialsUpdateChecker.getReleaseToken().join();
+                    switch (releaseToken.getBranchStatus()) {
+                        case BEHIND: {
+                            LOGGER.log(Level.WARNING, tl("versionReleaseNew", EssentialsUpdateChecker.getLatestRelease()));
+                            //TODO download link? (https://github.com/EssentialsX/Website/issues/26)
+                            break;
+                        }
+                        case DIVERGED: //WhatChamp
+                        case AHEAD: //monkaW?
+                        case UNKNOWN: {
+                            LOGGER.log(Level.WARNING, tl("versionCustom", EssentialsUpdateChecker.getBuildInfo()));
+                            break;
+                        }
+                        case ERROR: {
+                            LOGGER.log(Level.WARNING, tl("versionError", EssentialsUpdateChecker.getBuildInfo()));
+                            break;
+                        }
+                        default: {
+                            break;
+                        }
+                    }
+                }
+            });
+
             final String timeroutput = execTimer.end();
             if (getSettings().isDebug()) {
                 LOGGER.log(Level.INFO, "Essentials load {0}", timeroutput);
@@ -490,7 +542,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
     @Override
     public List<String> onTabComplete(final CommandSender sender, final Command command, final String commandLabel, final String[] args) {
         return onTabCompleteEssentials(sender, command, commandLabel, args, Essentials.class.getClassLoader(),
-            "com.earth2me.essentials.commands.Command", "essentials.", null);
+                "com.earth2me.essentials.commands.Command", "essentials.", null);
     }
 
     @Override
@@ -600,10 +652,10 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
 
             if (bSenderBlock != null) {
                 if (getSettings().logCommandBlockCommands()) {
-                    Bukkit.getLogger().log(Level.INFO, "CommandBlock at {0},{1},{2} issued server command: /{3} {4}", new Object[] {bSenderBlock.getX(), bSenderBlock.getY(), bSenderBlock.getZ(), commandLabel, EssentialsCommand.getFinalArg(args, 0)});
+                    Bukkit.getLogger().log(Level.INFO, "CommandBlock at {0},{1},{2} issued server command: /{3} {4}", new Object[]{bSenderBlock.getX(), bSenderBlock.getY(), bSenderBlock.getZ(), commandLabel, EssentialsCommand.getFinalArg(args, 0)});
                 }
             } else if (user == null) {
-                Bukkit.getLogger().log(Level.INFO, "{0} issued server command: /{1} {2}", new Object[] {cSender.getName(), commandLabel, EssentialsCommand.getFinalArg(args, 0)});
+                Bukkit.getLogger().log(Level.INFO, "{0} issued server command: /{1} {2}", new Object[]{cSender.getName(), commandLabel, EssentialsCommand.getFinalArg(args, 0)});
             }
 
             final CommandSource sender = new CommandSource(cSender);
