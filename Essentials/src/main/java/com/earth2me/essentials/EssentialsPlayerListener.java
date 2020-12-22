@@ -419,6 +419,55 @@ public class EssentialsPlayerListener implements Listener {
                         final TextPager pager = new TextPager(output, true);
                         pager.showPage("1", null, "motd", user.getSource());
                     }
+
+                    if (!user.isAuthorized("essentials.updatecheck")) {
+                        return;
+                    }
+
+                    if (EssentialsUpdateChecker.isDevBuild()) {
+                        EssentialsUpdateChecker.getDevToken().thenAccept(token -> {
+                            switch (token.getBranchStatus()) {
+                                case BEHIND: {
+                                    user.sendMessage(tl("versionDevBehind", token.getDistance()));
+                                    break;
+                                }
+                                case DIVERGED: {
+                                    user.sendMessage(tl(token.getDistance() == 0 ? "versionDevDivergedLatest" : "versionDevDiverged", token.getDistance()));
+                                    user.sendMessage(tl("versionDevDivergedBranch", EssentialsUpdateChecker.getVersionBranch()));
+                                    break;
+                                }
+                                case AHEAD: //monkaW????
+                                case UNKNOWN:
+                                case ERROR: {
+                                    user.sendMessage(tl("versionErrorPlayer"));
+                                    break;
+                                }
+                                default: {
+                                    break;
+                                }
+                            }
+                        });
+                    } else {
+                        EssentialsUpdateChecker.getReleaseToken().thenAccept(token -> {
+                            switch (token.getBranchStatus()) {
+                                case BEHIND: {
+                                    user.sendMessage(tl("versionReleaseNew", EssentialsUpdateChecker.getLatestRelease()));
+                                    //TODO download link? (https://github.com/EssentialsX/Website/issues/26)
+                                    break;
+                                }
+                                case DIVERGED: //WhatChamp
+                                case AHEAD: //monkaW????
+                                case UNKNOWN:
+                                case ERROR: {
+                                    user.sendMessage(tl("versionErrorPlayer"));
+                                    break;
+                                }
+                                default: {
+                                    break;
+                                }
+                            }
+                        });
+                    }
                 }
             }
         }
