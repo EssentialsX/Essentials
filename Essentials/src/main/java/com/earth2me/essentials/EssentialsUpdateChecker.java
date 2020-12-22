@@ -150,7 +150,7 @@ public final class EssentialsUpdateChecker {
                         return new UpdateToken(BranchStatus.IDENTICAL, 0);
                     }
                     case "ahead": {
-                        return new UpdateToken(BranchStatus.AHEAD, obj.get("ahead_by").getAsInt());
+                        return new UpdateToken(BranchStatus.AHEAD, 0);
                     }
                     case "behind": {
                         return new UpdateToken(BranchStatus.BEHIND, obj.get("behind_by").getAsInt());

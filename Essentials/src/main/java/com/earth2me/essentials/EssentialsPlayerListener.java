@@ -431,12 +431,12 @@ public class EssentialsPlayerListener implements Listener {
                                     user.sendMessage(tl("versionDevBehind", token.getDistance()));
                                     break;
                                 }
+                                case AHEAD:
                                 case DIVERGED: {
                                     user.sendMessage(tl(token.getDistance() == 0 ? "versionDevDivergedLatest" : "versionDevDiverged", token.getDistance()));
                                     user.sendMessage(tl("versionDevDivergedBranch", EssentialsUpdateChecker.getVersionBranch()));
                                     break;
                                 }
-                                case AHEAD: //monkaW????
                                 case ERROR: {
                                     user.sendMessage(tl("versionErrorPlayer"));
                                     break;

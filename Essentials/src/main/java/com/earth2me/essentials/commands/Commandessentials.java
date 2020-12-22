@@ -401,12 +401,12 @@ public class Commandessentials extends EssentialsCommand {
                         sender.sendMessage(tl("versionDevBehind", devToken.getDistance()));
                         break;
                     }
+                    case AHEAD:
                     case DIVERGED: {
                         sender.sendMessage(tl(devToken.getDistance() == 0 ? "versionDevDivergedLatest" : "versionDevDiverged", devToken.getDistance()));
                         sender.sendMessage(tl("versionDevDivergedBranch", EssentialsUpdateChecker.getVersionBranch()));
                         break;
                     }
-                    case AHEAD: //monkaW????
                     case UNKNOWN: {
                         sender.sendMessage(tl("versionCustom", EssentialsUpdateChecker.getBuildInfo()));
                         break;

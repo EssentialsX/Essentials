@@ -369,12 +369,12 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
                             LOGGER.log(Level.WARNING, tl("versionDevBehind", devToken.getDistance()));
                             break;
                         }
+                        case AHEAD:
                         case DIVERGED: {
                             LOGGER.log(Level.WARNING, tl(devToken.getDistance() == 0 ? "versionDevDivergedLatest" : "versionDevDiverged", devToken.getDistance()));
                             LOGGER.log(Level.WARNING, tl("versionDevDivergedBranch", EssentialsUpdateChecker.getVersionBranch()));
                             break;
                         }
-                        case AHEAD: //monkaW????
                         case UNKNOWN: {
                             LOGGER.log(Level.WARNING, tl("versionCustom", EssentialsUpdateChecker.getBuildInfo()));
                             break;
