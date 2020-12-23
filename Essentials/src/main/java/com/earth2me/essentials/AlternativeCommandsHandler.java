@@ -39,7 +39,7 @@ public class AlternativeCommandsHandler {
             final List<Command> pluginCommands = altcommands.computeIfAbsent(commandName.toLowerCase(Locale.ENGLISH), k -> new ArrayList<>());
             boolean found = false;
             for (final Command pc2 : pluginCommands) {
-                // Safe cast, everything that's added comes from getPluginCommands which already preforms the cast check.
+                // Safe cast, everything that's added comes from getPluginCommands which already performs the cast check.
                 if (((PluginIdentifiableCommand) pc2).getPlugin().equals(plugin)) {
                     found = true;
                     break;
