@@ -38,7 +38,7 @@ public final class PlayerList {
             user.setDisplayNick();
             groupString.append(user.getDisplayName());
 
-            String strippedNick = FormatUtil.stripEssentialsFormat(user.getNickname());
+            final String strippedNick = FormatUtil.stripEssentialsFormat(user.getNickname());
             if (ess.getSettings().realNamesOnList() && strippedNick != null && !strippedNick.equals(user.getName())) {
                 groupString.append(" (").append(user.getName()).append(")");
             }
