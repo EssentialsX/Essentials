@@ -1,5 +1,6 @@
 package net.essentialsx.discord;
 
+import com.earth2me.essentials.utils.FormatUtil;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Activity;
@@ -35,7 +36,7 @@ public class EssentialsJDA {
     }
 
     public void sendMessage(String key, String message) {
-        getChannel(key).sendMessage(message).queue();
+        getChannel(key).sendMessage(FormatUtil.stripFormat(message)).queue();
     }
 
     public void startup() throws LoginException, InterruptedException {
