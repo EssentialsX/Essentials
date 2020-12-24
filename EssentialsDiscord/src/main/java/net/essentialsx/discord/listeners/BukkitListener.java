@@ -1,5 +1,6 @@
 package net.essentialsx.discord.listeners;
 
+import com.earth2me.essentials.utils.FormatUtil;
 import net.ess3.api.events.MuteStatusChangeEvent;
 import net.essentialsx.discord.EssentialsJDA;
 import net.essentialsx.api.v2.discord.events.DiscordMessageEvent;
@@ -58,7 +59,7 @@ public class BukkitListener implements Listener {
     }
 
     private void sendDiscordMessage(String type, String message) {
-        final DiscordMessageEvent discordMessageEvent = new DiscordMessageEvent(type, message);
+        final DiscordMessageEvent discordMessageEvent = new DiscordMessageEvent(type, FormatUtil.stripFormat(message));
         if (Bukkit.getServer().isPrimaryThread()) {
             Bukkit.getPluginManager().callEvent(discordMessageEvent);
         } else {
