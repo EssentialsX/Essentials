@@ -1,6 +1,8 @@
 dependencies {
     compileOnly project(':EssentialsX')
-    implementation 'net.dv8tion:JDA:4.2.0_222'
+    api('net.dv8tion:JDA:4.2.0_223') {
+        exclude module: 'opus-java'
+    }
 }
 
 repositories {
