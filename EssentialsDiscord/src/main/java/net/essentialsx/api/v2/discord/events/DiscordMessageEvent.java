@@ -1,10 +1,13 @@
-package net.essentialsx.discord.api.events;
+package net.essentialsx.api.v2.discord.events;
 
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * Fired before a message is about to be sent to a discord channel.
+ */
 public class DiscordMessageEvent extends Event implements Cancellable {
     private static final HandlerList handlers = new HandlerList();
 
@@ -12,6 +15,10 @@ public class DiscordMessageEvent extends Event implements Cancellable {
     private String type;
     private String message;
 
+    /**
+     * @param type
+     * @param message
+     */
     public DiscordMessageEvent(String type, String message) {
         this.type = type;
         this.message = message;

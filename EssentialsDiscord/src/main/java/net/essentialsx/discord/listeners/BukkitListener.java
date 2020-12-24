@@ -2,7 +2,7 @@ package net.essentialsx.discord.listeners;
 
 import net.ess3.api.events.MuteStatusChangeEvent;
 import net.essentialsx.discord.EssentialsJDA;
-import net.essentialsx.discord.api.events.DiscordMessageEvent;
+import net.essentialsx.api.v2.discord.events.DiscordMessageEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
