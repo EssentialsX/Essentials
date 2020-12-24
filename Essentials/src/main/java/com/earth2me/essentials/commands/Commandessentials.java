@@ -60,7 +60,8 @@ public class Commandessentials extends EssentialsCommand {
         "EssentialsGeoIP",
         "EssentialsProtect",
         "EssentialsSpawn",
-        "EssentialsXMPP"
+        "EssentialsXMPP",
+        "EssentialsDiscord"
     );
     private static final List<String> warnPlugins = Arrays.asList(
         "PermissionsEx",
