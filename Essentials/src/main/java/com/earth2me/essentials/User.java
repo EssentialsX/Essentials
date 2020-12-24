@@ -670,7 +670,10 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
 
     public void updateActivityOnChat(final boolean broadcast) {
         if (ess.getSettings().cancelAfkOnChat()) {
-            updateActivity(broadcast, AfkStatusChangeEvent.Cause.CHAT);
+            //Chat happens async, make sure we have a sync context
+            ess.scheduleSyncDelayedTask(() -> {
+                updateActivity(broadcast, AfkStatusChangeEvent.Cause.CHAT);
+            });
         }
     }
 
