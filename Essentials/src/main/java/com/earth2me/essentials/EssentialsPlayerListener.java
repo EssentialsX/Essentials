@@ -162,7 +162,7 @@ public class EssentialsPlayerListener implements Listener {
             }
         }
 
-        user.updateActivityOnInteract(true);
+        user.updateActivityOnChat(true);
         user.setDisplayNick();
     }
 
@@ -264,6 +264,8 @@ public class EssentialsPlayerListener implements Listener {
             event.setJoinMessage(null);
         }
     }
+
+
 
     private boolean hideJoinQuitMessages() {
         return ess.getSettings().hasJoinQuitMessagePlayerCount() && ess.getServer().getOnlinePlayers().size() > ess.getSettings().getJoinQuitMessagePlayerCount();
