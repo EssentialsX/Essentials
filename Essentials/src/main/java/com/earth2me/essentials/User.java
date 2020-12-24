@@ -27,13 +27,7 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import java.math.BigDecimal;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.UUID;
-import java.util.WeakHashMap;
+import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -1019,15 +1013,6 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
 
     public void setRequestType(TeleportRequestAcceptEvent.RequestType requestType) {
         this.requestType = requestType;
-    }
-
-    @Override
-    public Block getTargetBlock(int maxDistance) {
-        final Block block;
-        if (VersionUtil.getServerBukkitVersion().isLowerThan(VersionUtil.v1_13_2_R01) || (block = base.getTargetBlockExact(maxDistance)) == null) {
-            return base.getTargetBlock(null, maxDistance);
-        }
-        return block;
     }
 
     @Override
