@@ -41,7 +41,7 @@ channels:
 messages:
   chat: primary
 
-# Status message for the bot to display. The activity must be playing or listening.
+# Status message for the bot to display. The activity must be playing, listening, watching, or competing.
 status:
   activity: "playing"
   message: "Minecraft"

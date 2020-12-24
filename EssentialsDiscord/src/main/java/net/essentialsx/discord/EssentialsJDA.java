@@ -74,7 +74,7 @@ public class EssentialsJDA {
 
     public void updatePresence() {
         String activity = plugin.getSettings().getStatusActivity().trim().toUpperCase();
-        if (!activity.equals("DEFAULT") && !activity.equals("LISTENING") && !activity.equals("WATCHING")) {
+        if (!activity.equals("DEFAULT") && !activity.equals("LISTENING") && !activity.equals("WATCHING") && !activity.equals("COMPETING")) {
             activity = "DEFAULT";
         }
         jda.getPresence().setActivity(Activity.of(Activity.ActivityType.valueOf(activity), plugin.getSettings().getStatusMessage()));
