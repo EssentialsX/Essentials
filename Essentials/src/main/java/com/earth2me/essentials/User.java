@@ -1029,4 +1029,13 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
         }
         return block;
     }
+
+    @Override
+    public Block getTargetBlock(int maxDistance) {
+        final Block block;
+        if (VersionUtil.getServerBukkitVersion().isLowerThan(VersionUtil.v1_13_2_R01) || (block = base.getTargetBlockExact(maxDistance)) == null) {
+            return base.getTargetBlock(null, maxDistance);
+        }
+        return block;
+    }
 }
