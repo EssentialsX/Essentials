@@ -47,9 +47,9 @@ public class EssentialsDiscord extends JavaPlugin implements IEssentialsModule {
             return;
         }
 
-//        if (metrics == null) {
-//            metrics = new MetricsWrapper(this, 6969, false);
-//        }
+        //if (metrics == null) {
+        //    metrics = new MetricsWrapper(this, 6969, false);
+        //}
     }
 
     public void onReload() {
