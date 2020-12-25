@@ -15,31 +15,43 @@ token: "INSERT-TOKEN-HERE"
 
 # The ID of your server.
 # #TODO tutorial
-guild: 0
+guild: 000000000000000000
 
-# Text channels
-# Channels defined here can be used in the messages config section below
-# If the primary channel is not defined or invalid, the default channel of the server will be used.
+# Defined text channels
+# Channels defined here can be used for two different purposes;
+#
+# Firstly, channels defined here can be used to give players permission to see messages from said channel.
+# This can be done by give your players the permission node `essentials.discord.receive.<channel>`
+# For example, if you wanted to let a player see messages from the primary channel, you'd give them `essentials.discord.receive.primary`
+#
+# Secondly, channels defined here can be used in the section below to specify which channel a message goes to
+# If a defined channel id is invalid, the primary channel will be used as a fallback
+# If the primary channel is not defined or invalid, the default channel of the server will be used
+# If your server doesn't have any text channels, the plugin will be disabled
+# By default, two channels are defined; (You will need to replace the zeros with the actual channel id you want to use)
+# - primary, which will send basic join/leave/death/chat messages
+# - staff, which will send kick/mute messages
 channels:
-  primary: 0
-  # Used when a player is muted
-  mute: 0
-  # Used when a player chats
-  chat: 0
-  # Used when a player joins the game
-  join: 0
-  # Used when a player leaves the game
-  quit: 0
-  # Used when a player dies
-  death: 0
-  # Used when a player gets kicked
-  kick: 0
+  primary: 000000000000000000
+  staff: 000000000000000000
 
-
-# Determine which channels certain messages will be sent to from the above list of channels
+# Determine which discord channels certain messages will be sent to
+# You can either use the names of the channels listed above or just the id of a channel.
 # If an invalid channel is used, the primary channel will be used instead
+# To disable a message from showing, use 'none' as the channel name
 messages:
+  # Join messages sent when a player joins the minecraft server
+  join: primary
+  # Leave messages sent when a player leaves the minecraft server
+  leave: primary
+  # Chat messages sent when a player chats on the minecraft server
   chat: primary
+  # Death messages sent when a player dies on the minecraft server
+  death: primary
+  # Message sent when a player is kicked from the minecraft server
+  kick: staff
+  # Message sent when a player's mute state is changed on the minecraft server
+  mute: staff
 
 # Status message for the bot to display. The activity must be playing, listening, watching, or competing.
 status:

@@ -6,6 +6,7 @@ import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.TextChannel;
+import net.essentialsx.api.v2.discord.events.DiscordMessageEvent;
 import net.essentialsx.discord.listeners.BukkitListener;
 import net.essentialsx.discord.listeners.DiscordListener;
 import org.bukkit.Bukkit;
@@ -35,8 +36,8 @@ public class EssentialsJDA {
         return channel;
     }
 
-    public void sendMessage(String key, String message) {
-        getChannel(key).sendMessage(FormatUtil.stripFormat(message)).queue();
+    public void sendMessage(DiscordMessageEvent.MessageType messageType, String message) {
+        getChannel(messageType.getKey()).sendMessage(FormatUtil.stripFormat(message)).queue();
     }
 
     public void startup() throws LoginException, InterruptedException {
@@ -48,7 +49,7 @@ public class EssentialsJDA {
         }
 
         jda = JDABuilder.createDefault(plugin.getSettings().getBotToken())
-                .addEventListeners(new DiscordListener(plugin))
+                .addEventListeners(new DiscordListener(this))
                 .setContextEnabled(false)
                 .build()
                 .awaitReady();
@@ -69,6 +70,9 @@ public class EssentialsJDA {
         TextChannel channel = guild.getTextChannelById(plugin.getSettings().getPrimaryChannelId());
         if (channel == null) {
             channel = guild.getDefaultChannel();
+            if (channel == null || !channel.canTalk()) {
+                throw new RuntimeException("Bot cannot see or talk in any channel!");
+            }
         }
         primaryChannel = channel;
     }

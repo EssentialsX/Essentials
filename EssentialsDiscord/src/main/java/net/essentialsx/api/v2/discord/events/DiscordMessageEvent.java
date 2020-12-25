@@ -12,23 +12,23 @@ public class DiscordMessageEvent extends Event implements Cancellable {
     private static final HandlerList handlers = new HandlerList();
 
     private boolean cancelled = false;
-    private String type;
+    private MessageType type;
     private String message;
 
     /**
      * @param type
      * @param message
      */
-    public DiscordMessageEvent(String type, String message) {
+    public DiscordMessageEvent(MessageType type, String message) {
         this.type = type;
         this.message = message;
     }
 
-    public String getType() {
+    public MessageType getType() {
         return type;
     }
 
-    public void setType(String type) {
+    public void setType(MessageType type) {
         this.type = type;
     }
 
@@ -57,5 +57,27 @@ public class DiscordMessageEvent extends Event implements Cancellable {
 
     public static HandlerList getHandlerList() {
         return handlers;
+    }
+
+    /**
+     * Indicates the type of message being sent and its literal channel name used in the config.
+     */
+    public enum MessageType {
+        JOIN("join"),
+        LEAVE("leave"),
+        CHAT("chat"),
+        DEATH("death"),
+        KICK("kick"),
+        MUTE("mute");
+
+        private final String key;
+
+        MessageType(String key) {
+            this.key = key;
+        }
+
+        public String getKey() {
+            return key;
+        }
     }
 }

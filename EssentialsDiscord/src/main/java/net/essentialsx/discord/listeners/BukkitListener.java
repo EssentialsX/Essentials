@@ -2,8 +2,8 @@ package net.essentialsx.discord.listeners;
 
 import com.earth2me.essentials.utils.FormatUtil;
 import net.ess3.api.events.MuteStatusChangeEvent;
-import net.essentialsx.discord.EssentialsJDA;
 import net.essentialsx.api.v2.discord.events.DiscordMessageEvent;
+import net.essentialsx.discord.EssentialsJDA;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -29,41 +29,45 @@ public class BukkitListener implements Listener {
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onMute(MuteStatusChangeEvent event) {
         if (event.getValue()) {
-            sendDiscordMessage("mute", event.getAffected().getBase().getName() + " has been muted.");
+            sendDiscordMessage(DiscordMessageEvent.MessageType.MUTE, event.getAffected().getBase().getName() + " has been muted.");
         }
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onChat(AsyncPlayerChatEvent event) {
-        sendDiscordMessage("chat", event.getPlayer().getDisplayName() + ": " + event.getMessage());
+        sendDiscordMessage(DiscordMessageEvent.MessageType.CHAT, event.getPlayer().getDisplayName() + ": " + event.getMessage());
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onJoin(PlayerJoinEvent event) {
-        sendDiscordMessage("join", event.getPlayer().getName() + " has joined the server.");
+        sendDiscordMessage(DiscordMessageEvent.MessageType.JOIN, event.getPlayer().getName() + " has joined the server.");
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onQuit(PlayerQuitEvent event) {
-        sendDiscordMessage("quit", event.getPlayer().getName() + " has left the server.");
+        sendDiscordMessage(DiscordMessageEvent.MessageType.LEAVE, event.getPlayer().getName() + " has left the server.");
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onDeath(PlayerDeathEvent event) {
-        sendDiscordMessage("death", event.getEntity().getName() + " has died!");
+        sendDiscordMessage(DiscordMessageEvent.MessageType.DEATH, event.getEntity().getName() + " has died!");
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onKick(PlayerKickEvent event) {
-        sendDiscordMessage("kick", event.getPlayer().getName() + " has been kicked.");
+        sendDiscordMessage(DiscordMessageEvent.MessageType.KICK, event.getPlayer().getName() + " has been kicked.");
     }
 
-    private void sendDiscordMessage(String type, String message) {
-        final DiscordMessageEvent discordMessageEvent = new DiscordMessageEvent(type, FormatUtil.stripFormat(message));
+    private void sendDiscordMessage(DiscordMessageEvent.MessageType messageType, String message) {
+        if (jda.getPlugin().getSettings().getMessageChannel(messageType.getKey()).equalsIgnoreCase("none")) {
+            return;
+        }
+
+        final DiscordMessageEvent event = new DiscordMessageEvent(messageType, FormatUtil.stripFormat(message));
         if (Bukkit.getServer().isPrimaryThread()) {
-            Bukkit.getPluginManager().callEvent(discordMessageEvent);
+            Bukkit.getPluginManager().callEvent(event);
         } else {
-            Bukkit.getScheduler().runTask(jda.getPlugin(), () -> Bukkit.getPluginManager().callEvent(discordMessageEvent));
+            Bukkit.getScheduler().runTask(jda.getPlugin(), () -> Bukkit.getPluginManager().callEvent(event));
         }
     }
 }

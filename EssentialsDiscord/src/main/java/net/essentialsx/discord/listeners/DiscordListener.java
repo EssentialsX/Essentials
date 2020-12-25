@@ -2,13 +2,16 @@ package net.essentialsx.discord.listeners;
 
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
-import net.essentialsx.discord.EssentialsDiscord;
+import net.essentialsx.discord.EssentialsJDA;
+import org.bukkit.Bukkit;
 import org.jetbrains.annotations.NotNull;
 
-public class DiscordListener extends ListenerAdapter {
-    private final EssentialsDiscord plugin;
+import java.util.List;
 
-    public DiscordListener(EssentialsDiscord plugin) {
+public class DiscordListener extends ListenerAdapter {
+    private final EssentialsJDA plugin;
+
+    public DiscordListener(EssentialsJDA plugin) {
         this.plugin = plugin;
     }
 
@@ -18,6 +21,13 @@ public class DiscordListener extends ListenerAdapter {
             return;
         }
 
-        //TODO FIGURE OUT WHICH CHANNELS WE READ FROM AND HOW THE FUCK WE'RE DOING IT
+        final List<String> keys = plugin.getPlugin().getSettings().getKeysFromChannelId(event.getChannel().getIdLong());
+        if (keys == null || keys.size() == 0) {
+            return;
+        }
+
+        for (String group : keys) {
+            Bukkit.broadcast("[Discord] <" + event.getAuthor().getAsTag() + ">: " + event.getMessage().getContentDisplay(), "essentials.discord.receive." + group);
+        }
     }
 }
