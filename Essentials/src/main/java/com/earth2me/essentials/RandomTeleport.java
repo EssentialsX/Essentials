@@ -157,7 +157,7 @@ public class RandomTeleport implements IConf {
         final CompletableFuture<Location> future = new CompletableFuture<>();
         // Find an equally distributed offset by randomly rotating a point inside a rectangle about the origin
         final double rectX = RANDOM.nextDouble() * (maxRange - minRange) + minRange;
-        final double rectZ = RANDOM.nextDouble() * (maxRange + minRange) - minRange;
+        final double rectZ = RANDOM.nextDouble() * (maxRange - minRange) + minRange;
         final double offsetX;
         final double offsetZ;
         final int transform = RANDOM.nextInt(4);
@@ -165,14 +165,14 @@ public class RandomTeleport implements IConf {
             offsetX = rectX;
             offsetZ = rectZ;
         } else if (transform == 1) {
-            offsetX = -rectZ;
-            offsetZ = rectX;
+            offsetX = -rectX;
+            offsetZ = rectZ;
         } else if (transform == 2) {
             offsetX = -rectX;
             offsetZ = -rectZ;
         } else {
-            offsetX = rectZ;
-            offsetZ = -rectX;
+            offsetX = rectX;
+            offsetZ = -rectZ;
         }
         final Location location = new Location(
             center.getWorld(),
