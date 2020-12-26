@@ -5,6 +5,9 @@ import com.earth2me.essentials.api.IWarps;
 import com.earth2me.essentials.utils.NumberUtil;
 import com.earth2me.essentials.utils.StringUtil;
 import net.ess3.api.InvalidWorldException;
+import net.ess3.api.events.WarpModifyCause;
+import net.ess3.api.events.WarpModifyEvent;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Server;
 
@@ -32,8 +35,20 @@ public class Commandsetwarp extends EssentialsCommand {
             warpLoc = warps.getWarp(args[0]);
         } catch (final WarpNotFoundException | InvalidWorldException ignored) {
         }
-
-        if (warpLoc == null || user.isAuthorized("essentials.warp.overwrite." + StringUtil.safeString(args[0]))) {
+        WarpModifyEvent event;
+        if (warpLoc == null) {
+            event = new WarpModifyEvent(user, args[0], WarpModifyCause.CREATE);
+            if (event.isCancelled()) {
+                return;
+            }
+            Bukkit.getServer().getPluginManager().callEvent(event);
+            warps.setWarp(user, args[0], user.getLocation());
+        } else if (user.isAuthorized("essentials.warp.overwrite." + StringUtil.safeString(args[0]))) {
+            event = new WarpModifyEvent(user, args[0], WarpModifyCause.UPDATE);
+            if (event.isCancelled()) {
+                return;
+            }
+            Bukkit.getServer().getPluginManager().callEvent(event);
             warps.setWarp(user, args[0], user.getLocation());
         } else {
             throw new Exception(tl("warpOverwrite"));
