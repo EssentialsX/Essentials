@@ -48,7 +48,7 @@ public class DiscordSettings implements IConf {
     }
 
     public String getMessageChannel(String key) {
-        return config.getString("messages." + key, "none");
+        return config.getString("message-types." + key, "none");
     }
 
     public String getStatusActivity() {

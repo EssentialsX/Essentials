@@ -38,8 +38,9 @@ channels:
 # Determine which discord channels certain messages will be sent to
 # You can either use the names of the channels listed above or just the id of a channel.
 # If an invalid channel is used, the primary channel will be used instead
+#
 # To disable a message from showing, use 'none' as the channel name
-messages:
+message-types:
   # Join messages sent when a player joins the minecraft server
   join: primary
   # Leave messages sent when a player leaves the minecraft server
