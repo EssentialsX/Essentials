@@ -2,6 +2,8 @@ package net.essentialsx.discord;
 
 import com.earth2me.essentials.EssentialsConf;
 import com.earth2me.essentials.IConf;
+import net.dv8tion.jda.api.OnlineStatus;
+import net.dv8tion.jda.api.entities.Activity;
 import org.bukkit.configuration.ConfigurationSection;
 
 import java.io.File;
@@ -9,12 +11,17 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 public class DiscordSettings implements IConf {
     private final EssentialsConf config;
     private final EssentialsDiscord plugin;
+
     private final Map<String, Long> nameToChannelIdMap = new HashMap<>();
     private final Map<Long, List<String>> channelIdToNamesMap = new HashMap<>();
+
+    private OnlineStatus status;
+    private Activity statusActivity;
 
     public DiscordSettings(EssentialsDiscord plugin) {
         this.plugin = plugin;
@@ -51,12 +58,12 @@ public class DiscordSettings implements IConf {
         return config.getString("message-types." + key, "none");
     }
 
-    public String getStatusActivity() {
-        return config.getString("status.activity", "default");
+    public OnlineStatus getStatus() {
+        return status;
     }
 
-    public String getStatusMessage() {
-        return config.getString("status.message", "Minecraft");
+    public Activity getStatusActivity() {
+        return statusActivity;
     }
 
     @Override
@@ -75,6 +82,27 @@ public class DiscordSettings implements IConf {
                     channelIdToNamesMap.computeIfAbsent(value, o -> new ArrayList<>()).add(key);
                 }
             }
+        }
+
+        // Presence stuff
+        status = OnlineStatus.fromKey(config.getString("presence.status", "online"));
+        if (status == OnlineStatus.UNKNOWN) {
+            // Default invalid status to online
+            status = OnlineStatus.ONLINE;
+        }
+
+        final String activity = Objects.requireNonNull(config.getString("presence.activity", "default")).trim().toUpperCase().replace("CUSTOM", "CUSTOM_STATUS");
+        statusActivity = null;
+        Activity.ActivityType activityType = null;
+        try {
+            if (!activity.equals("NONE")) {
+                activityType = Activity.ActivityType.valueOf(activity);
+            }
+        } catch (IllegalArgumentException e) {
+            activityType = Activity.ActivityType.DEFAULT;
+        }
+        if (activityType != null) {
+            statusActivity = Activity.of(activityType, Objects.requireNonNull(config.getString("presence.message", "Minecraft")));
         }
 
         plugin.onReload();

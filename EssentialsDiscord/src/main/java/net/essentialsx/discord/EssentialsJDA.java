@@ -3,7 +3,6 @@ package net.essentialsx.discord;
 import com.earth2me.essentials.utils.FormatUtil;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
-import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.essentialsx.api.v2.discord.events.DiscordMessageEvent;
@@ -78,11 +77,7 @@ public class EssentialsJDA {
     }
 
     public void updatePresence() {
-        String activity = plugin.getSettings().getStatusActivity().trim().toUpperCase();
-        if (!activity.equals("DEFAULT") && !activity.equals("LISTENING") && !activity.equals("WATCHING") && !activity.equals("COMPETING")) {
-            activity = "DEFAULT";
-        }
-        jda.getPresence().setActivity(Activity.of(Activity.ActivityType.valueOf(activity), plugin.getSettings().getStatusMessage()));
+        jda.getPresence().setPresence(plugin.getSettings().getStatus(), plugin.getSettings().getStatusActivity());
     }
 
     public void shutdown() {

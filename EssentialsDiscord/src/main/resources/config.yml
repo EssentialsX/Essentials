@@ -54,7 +54,21 @@ message-types:
   # Message sent when a player's mute state is changed on the minecraft server
   mute: staff
 
-# Status message for the bot to display. The activity must be playing, listening, watching, or competing.
-status:
+# The presence of the bot, including its status, activity and status message
+presence:
+  # The online status of the bot. Must be one of the following;
+  # * "online" - Shows as green circle (Online)
+  # * "idle" - Shows as yellow half-circle (Away)
+  # * "dnd" - Shows as red circle (Do Not Disturb)
+  # * "invisible" - Makes the bot appear offline
+  status: online
+  # The activity of the bot to be prefixed before your message below. Must be one of the following;
+  # * "playing" - Shows up as "Playing <message>"
+  # * "listening" - Shows up as "Listening to <message>"
+  # * "watching" - Shows up as "Watching <message>"
+  # * "competing" - Shows up as "Competing in <message>"
+  # * "custom" - Just Shows the message defined below
+  # * "none" - Don't show any activity message
   activity: "playing"
+  # The activity status message
   message: "Minecraft"
