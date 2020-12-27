@@ -153,6 +153,42 @@ public class RandomTeleport implements IConf {
     }
 
     // Calculates a random location asynchronously.
+    //
+    // This picks a random point X, Z such that it is within a rectangle:
+    //   minRange <= X < maxRange
+    //   -minRange <= Z < maxRange
+    // It is then rotated by 0, 90, 180, or 270 degrees around 0, 0.
+    // In effect, the rectangle is placed in one of four positions,
+    // with the random point within it:
+    //
+    // -maxRange +----------+--------------------------------+
+    //           |          |                                |
+    //           |          |             Region             |
+    //           |          |               3                |
+    //           |          |                                |
+    // -minRange +          +---------------------+----------+
+    //           |          |                     |          |
+    //           |  Region  |                     |          |
+    //           |    2     |                     |          |
+    //           |          |                     |          |
+    //     Z   0 +          |          +          |          |
+    //           |          |                     |          |
+    //           |          |                     |  Region  |
+    //           |          |                     |    0     |
+    //           |          |                     |          |
+    //  minRange +----------+---------------------+          |
+    //           |                                |          |
+    //           |             Region             |          |
+    //           |               1                |          |
+    //           |                                |          |
+    //  maxRange +----------+----------+----------+----------+
+    //
+    //       -maxRange  -minRange      0       minRange   maxRange
+    //
+    //                                 X
+    //
+    // The rotated point is then offset by the specified center location
+    // to get the candidate random teleport location.
     private CompletableFuture<Location> calculateRandomLocation(final Location center, final double minRange, final double maxRange) {
         final CompletableFuture<Location> future = new CompletableFuture<>();
         // Find an equally distributed offset by randomly rotating a point inside a rectangle about the origin
