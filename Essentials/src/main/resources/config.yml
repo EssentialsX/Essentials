@@ -488,6 +488,11 @@ send-info-after-death: false
 # In addition, people with essentials.silentjoin.vanish will be vanished on join.
 allow-silent-join-quit: false
 
+# You can set fake vanish and unvanish messages here. These messages will be broadcasted when you enter or exit vaish.
+# You can mimic quit messages to make other players think that you logged off.
+fake-vanish-message: ""
+fake-unvanish-message: ""
+
 # You can set custom join and quit messages here. Set this to "none" to use the default Minecraft message,
 # or set this to "" to hide the message entirely.
 # You may use color codes, {USERNAME} for the player's name, and {PLAYER} for the player's displayname.

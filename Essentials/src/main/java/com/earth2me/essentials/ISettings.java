@@ -275,6 +275,14 @@ public interface ISettings extends IConf {
 
     boolean allowSilentJoinQuit();
 
+    boolean isFakeVanishMessage();
+
+    String getFakeVanishMessage();
+
+    boolean isFakeUnvanishMessage();
+
+    String getFakeUnvanishMessage();
+
     boolean isCustomJoinMessage();
 
     String getCustomJoinMessage();

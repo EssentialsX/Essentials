@@ -107,6 +107,10 @@ public class Settings implements net.ess3.api.ISettings {
     // #easteregg
     private long permissionsLagWarning;
     private boolean allowSilentJoin;
+    private String fakeVanishMessage;
+    private boolean isFakeVanishMessage;
+    private String fakeUnvanishMessage;
+    private boolean isFakeUnvanishMessage;
     private String customJoinMessage;
     private boolean isCustomJoinMessage;
     private String customQuitMessage;
@@ -626,6 +630,10 @@ public class Settings implements net.ess3.api.ISettings {
         economyLogUpdate = _isEcoLogUpdateEnabled();
         economyDisabled = _isEcoDisabled();
         allowSilentJoin = _allowSilentJoinQuit();
+        fakeVanishMessage = _getFakeVanishMessage();
+        isFakeVanishMessage = !fakeVanishMessage.equals("");
+        fakeUnvanishMessage = _getFakeUnvanishMessage();
+        isFakeUnvanishMessage = !fakeUnvanishMessage.equals("");
         customJoinMessage = _getCustomJoinMessage();
         isCustomJoinMessage = !customJoinMessage.equals("none");
         customQuitMessage = _getCustomQuitMessage();
@@ -1231,6 +1239,34 @@ public class Settings implements net.ess3.api.ISettings {
     @Override
     public boolean allowSilentJoinQuit() {
         return allowSilentJoin;
+    }
+
+    public String _getFakeVanishMessage() {
+        return FormatUtil.replaceFormat(config.getString("fake-vanish-message", ""));
+    }
+
+    @Override
+    public String getFakeVanishMessage() {
+        return fakeVanishMessage;
+    }
+
+    @Override
+    public boolean isFakeVanishMessage() {
+        return isFakeVanishMessage;
+    }
+
+    public String _getFakeUnvanishMessage() {
+        return FormatUtil.replaceFormat(config.getString("fake-unvanish-message", ""));
+    }
+
+    @Override
+    public String getFakeUnvanishMessage() {
+        return fakeUnvanishMessage;
+    }
+
+    @Override
+    public boolean isFakeUnvanishMessage() {
+        return isFakeUnvanishMessage;
     }
 
     public String _getCustomJoinMessage() {
