@@ -107,10 +107,10 @@ public class Settings implements net.ess3.api.ISettings {
     // #easteregg
     private long permissionsLagWarning;
     private boolean allowSilentJoin;
-    private String fakeVanishMessage;
-    private boolean isFakeVanishMessage;
-    private String fakeUnvanishMessage;
-    private boolean isFakeUnvanishMessage;
+    private String broadcastVanishMessage;
+    private boolean isBroadcastVanishMessage;
+    private String broadcastUnvanishMessage;
+    private boolean isBroadcastUnvanishMessage;
     private String customJoinMessage;
     private boolean isCustomJoinMessage;
     private String customQuitMessage;
@@ -630,10 +630,10 @@ public class Settings implements net.ess3.api.ISettings {
         economyLogUpdate = _isEcoLogUpdateEnabled();
         economyDisabled = _isEcoDisabled();
         allowSilentJoin = _allowSilentJoinQuit();
-        fakeVanishMessage = _getFakeVanishMessage();
-        isFakeVanishMessage = !fakeVanishMessage.equals("");
-        fakeUnvanishMessage = _getFakeUnvanishMessage();
-        isFakeUnvanishMessage = !fakeUnvanishMessage.equals("");
+        broadcastVanishMessage = _getBroadcastVanishMessage();
+        isBroadcastVanishMessage = !broadcastVanishMessage.equals("");
+        broadcastUnvanishMessage = _getBroadcastUnvanishMessage();
+        isBroadcastUnvanishMessage = !broadcastUnvanishMessage.equals("");
         customJoinMessage = _getCustomJoinMessage();
         isCustomJoinMessage = !customJoinMessage.equals("none");
         customQuitMessage = _getCustomQuitMessage();
@@ -1241,32 +1241,32 @@ public class Settings implements net.ess3.api.ISettings {
         return allowSilentJoin;
     }
 
-    public String _getFakeVanishMessage() {
-        return FormatUtil.replaceFormat(config.getString("fake-vanish-message", ""));
+    public String _getBroadcastVanishMessage() {
+        return FormatUtil.replaceFormat(config.getString("broadcast-vanish-message", ""));
     }
 
     @Override
-    public String getFakeVanishMessage() {
-        return fakeVanishMessage;
+    public String getBroadcastVanishMessage() {
+        return broadcastVanishMessage;
     }
 
     @Override
-    public boolean isFakeVanishMessage() {
-        return isFakeVanishMessage;
+    public boolean isBroadcastVanishMessage() {
+        return isBroadcastVanishMessage;
     }
 
-    public String _getFakeUnvanishMessage() {
-        return FormatUtil.replaceFormat(config.getString("fake-unvanish-message", ""));
-    }
-
-    @Override
-    public String getFakeUnvanishMessage() {
-        return fakeUnvanishMessage;
+    public String _getBroadcastUnvanishMessage() {
+        return FormatUtil.replaceFormat(config.getString("broadcast-unvanish-message", ""));
     }
 
     @Override
-    public boolean isFakeUnvanishMessage() {
-        return isFakeUnvanishMessage;
+    public String getBroadcastUnvanishMessage() {
+        return broadcastUnvanishMessage;
+    }
+
+    @Override
+    public boolean isBroadcastUnvanishMessage() {
+        return isBroadcastUnvanishMessage;
     }
 
     public String _getCustomJoinMessage() {
