@@ -44,15 +44,15 @@ public class Commandvanish extends EssentialsToggleCommand {
             user.sendMessage(tl("vanished"));
         }
 
-        Player player = user.getBase();
+        final Player player = user.getBase();
         if (enabled && ess.getSettings().isFakeVanishMessage()) {
-            String msg = ess.getSettings().getFakeVanishMessage()
+            final String msg = ess.getSettings().getFakeVanishMessage()
                     .replace("{PLAYER}", player.getDisplayName())
                     .replace("{USERNAME}", player.getName())
                     .replace("{ONLINE}", NumberFormat.getInstance().format(ess.getOnlinePlayers().size()));
             ess.getServer().broadcastMessage(msg);
         } else if (!enabled && ess.getSettings().isFakeUnvanishMessage()) {
-            String msg = ess.getSettings().getFakeUnvanishMessage()
+            final String msg = ess.getSettings().getFakeUnvanishMessage()
                     .replace("{PLAYER}", player.getDisplayName())
                     .replace("{USERNAME}", player.getName())
                     .replace("{ONLINE}", NumberFormat.getInstance().format(ess.getOnlinePlayers().size()));
