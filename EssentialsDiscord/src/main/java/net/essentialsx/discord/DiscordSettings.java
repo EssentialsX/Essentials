@@ -2,16 +2,17 @@ package net.essentialsx.discord;
 
 import com.earth2me.essentials.EssentialsConf;
 import com.earth2me.essentials.IConf;
+import com.earth2me.essentials.utils.FormatUtil;
 import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.entities.Activity;
 import org.bukkit.configuration.ConfigurationSection;
 
 import java.io.File;
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 public class DiscordSettings implements IConf {
     private final EssentialsConf config;
@@ -22,6 +23,8 @@ public class DiscordSettings implements IConf {
 
     private OnlineStatus status;
     private Activity statusActivity;
+
+    private MessageFormat discordToMcFormat = new MessageFormat("");
 
     public DiscordSettings(EssentialsDiscord plugin) {
         this.plugin = plugin;
@@ -66,6 +69,20 @@ public class DiscordSettings implements IConf {
         return statusActivity;
     }
 
+    public MessageFormat getDiscordToMcFormat() {
+        return discordToMcFormat;
+    }
+
+    private MessageFormat generateMessageFormat(String node, String defaultStr, boolean format, String... arguments) {
+        String pattern = config.getString("messages." + node);
+        pattern = pattern == null ? defaultStr : pattern;
+        pattern = FormatUtil.replaceFormat(pattern);
+        for (int i = 0; i < arguments.length; i++) {
+            pattern = pattern.replace("{" + arguments[i] + "}", "{" + i + "}");
+        }
+        return new MessageFormat(pattern);
+    }
+
     @Override
     public void reloadConfig() {
         config.load();
@@ -91,7 +108,8 @@ public class DiscordSettings implements IConf {
             status = OnlineStatus.ONLINE;
         }
 
-        final String activity = Objects.requireNonNull(config.getString("presence.activity", "default")).trim().toUpperCase().replace("CUSTOM", "CUSTOM_STATUS");
+        //noinspection ConstantConditions
+        final String activity = config.getString("presence.activity", "default").trim().toUpperCase().replace("CUSTOM", "CUSTOM_STATUS");
         statusActivity = null;
         Activity.ActivityType activityType = null;
         try {
@@ -102,8 +120,12 @@ public class DiscordSettings implements IConf {
             activityType = Activity.ActivityType.DEFAULT;
         }
         if (activityType != null) {
-            statusActivity = Activity.of(activityType, Objects.requireNonNull(config.getString("presence.message", "Minecraft")));
+            //noinspection ConstantConditions
+            statusActivity = Activity.of(activityType, config.getString("presence.message", "Minecraft"));
         }
+
+        discordToMcFormat = generateMessageFormat("discord-to-mc", "&6[#{channel}] &3{fullname}&7: &f{message}", true,
+                "channel", "username", "tag", "fullname", "nickname", "color", "message");
 
         plugin.onReload();
     }

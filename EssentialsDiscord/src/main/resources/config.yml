@@ -72,3 +72,17 @@ presence:
   activity: "playing"
   # The activity status message
   message: "Minecraft"
+
+# The following entries allow you to customize messages sent by the plugin
+# Each message has a description of how it is used along with placeholders that can be used
+messages:
+  # This is the message that is used to show discord chat to players in game.
+  # The follow placeholders can be used here:
+  # {channel} - The name of the discord channel the message was sent from
+  # {username} - The username of the user who sent the message
+  # {tag} - The four numbers displayed after their user's username
+  # {fullname} - Equivalent to typing "{username}#{tag}"
+  # {nickname} - The nickname of the user who sent the message. (Will return username if user has no nickname)
+  # {color} - (1.16+) The hex color code of the user on discord (their topmost role color). If the user doesn't have a role color, the placeholder is empty.
+  # {message} - The content of the message being sent
+  discord-to-mc: "&6[#{channel}] &3{fullname}&7: &f{message}"
