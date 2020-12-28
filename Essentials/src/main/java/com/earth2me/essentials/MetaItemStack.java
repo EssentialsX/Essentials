@@ -226,28 +226,26 @@ public class MetaItemStack {
             final BookMeta meta = (BookMeta) stack.getItemMeta();
             meta.setTitle(title);
             stack.setItemMeta(meta);
-        } else if (split.length > 1 && split[0].equalsIgnoreCase("power") && MaterialUtil.isFirework(stack.getType()) && hasMetaPermission(sender, "firework-power", false, true, ess)) {
-            final int power = NumberUtil.isInt(split[1]) ? Integer.parseInt(split[1]) : 0;
-            final FireworkMeta meta = (FireworkMeta) stack.getItemMeta();
-            meta.setPower(power > 3 ? 4 : power);
-            stack.setItemMeta(meta);
         } else if (split.length > 1 && split[0].equalsIgnoreCase("itemflags") && hasMetaPermission(sender, "itemflags", false, true, ess)) {
             addItemFlags(string);
         } else if (MaterialUtil.isFirework(stack.getType())) {
+            if (!split[0].equalsIgnoreCase("power")) {
+                parseEnchantmentStrings(sender, allowUnsafe, split, ess);
+            }
             //WARNING - Meta for fireworks will be ignored after this point.
             addFireworkMeta(sender, false, string, ess);
         } else if (MaterialUtil.isPotion(stack.getType())) {
+            if (!split[0].equalsIgnoreCase("power")) {
+                parseEnchantmentStrings(sender, allowUnsafe, split, ess);
+            }
             //WARNING - Meta for potions will be ignored after this point.
             addPotionMeta(sender, false, string, ess);
         } else if (MaterialUtil.isBanner(stack.getType())) {
-            if (stack.getType().toString().equals("SHIELD") && Enchantments.getByName(split[0]) != null) {
-                parseEnchantmentStrings(sender, allowUnsafe, split, ess);
-            } else {
-                //WARNING - Meta for banners will be ignored after this point.
-                addBannerMeta(sender, false, string, ess);
-            }
+            parseEnchantmentStrings(sender, allowUnsafe, split, ess);
+            //WARNING - Meta for banners will be ignored after this point.
+            addBannerMeta(sender, false, string, ess);
         } else if (split.length > 1 && (split[0].equalsIgnoreCase("color") || split[0].equalsIgnoreCase("colour")) && MaterialUtil.isLeatherArmor(stack.getType())) {
-            final String[] color = split[1].split("(\\||,)");
+            final String[] color = split[1].split("[|,]");
             if (color.length == 1 && (NumberUtil.isInt(color[0]) || color[0].startsWith("#"))) {
                 // Either integer or hexadecimal
                 final LeatherArmorMeta meta = (LeatherArmorMeta) stack.getItemMeta();
@@ -307,7 +305,15 @@ public class MetaItemStack {
                 return;
             }
 
-            if (split[0].equalsIgnoreCase("color") || split[0].equalsIgnoreCase("colour") || (allowShortName && split[0].equalsIgnoreCase("c"))) {
+            if (split[0].equalsIgnoreCase("power") || (allowShortName && split[0].equalsIgnoreCase("p"))) {
+                if (!hasMetaPermission(sender, "firework-power", false, true, ess)) {
+                    return;
+                }
+                final int power = NumberUtil.isInt(split[1]) ? Integer.parseInt(split[1]) : 0;
+                final FireworkMeta meta = (FireworkMeta) stack.getItemMeta();
+                meta.setPower(power > 3 ? 4 : power);
+                stack.setItemMeta(meta);
+            } else if (split[0].equalsIgnoreCase("color") || split[0].equalsIgnoreCase("colour") || (allowShortName && split[0].equalsIgnoreCase("c"))) {
                 if (validFirework) {
                     if (!hasMetaPermission(sender, "firework", true, true, ess)) {
                         throw new Exception(tl("noMetaFirework"));
