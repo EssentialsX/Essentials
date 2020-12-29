@@ -2,10 +2,12 @@ package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.utils.DateUtil;
 import net.ess3.api.events.VanishStatusChangeEvent;
 import org.bukkit.Server;
 import org.bukkit.entity.Player;
 
+import java.lang.management.ManagementFactory;
 import java.text.NumberFormat;
 
 import static com.earth2me.essentials.I18n.tl;
@@ -44,18 +46,26 @@ public class Commandvanish extends EssentialsToggleCommand {
             user.sendMessage(tl("vanished"));
         }
 
-        final Player player = user.getBase();
-        if (enabled && ess.getSettings().isBroadcastVanishMessage()) {
-            final String msg = ess.getSettings().getBroadcastVanishMessage()
-                    .replace("{PLAYER}", player.getDisplayName())
+        if (ess.getSettings().isFakeMessageOnVanish()) {
+            final Player player = user.getBase();
+            String msg;
+            if (enabled) {
+                if (ess.getSettings().isCustomQuitMessage()) {
+                    msg = ess.getSettings().getCustomQuitMessage();
+                } else {
+                    msg = "&e{USERNAME} left the game.";
+                }
+            } else {
+                if (ess.getSettings().isCustomJoinMessage()) {
+                    msg = ess.getSettings().getCustomJoinMessage();
+                } else {
+                    msg = "&e{USERNAME} joined the game.";
+                }
+            }
+            msg = msg.replace("{PLAYER}", player.getDisplayName())
                     .replace("{USERNAME}", player.getName())
-                    .replace("{ONLINE}", NumberFormat.getInstance().format(ess.getOnlinePlayers().size()));
-            ess.getServer().broadcastMessage(msg);
-        } else if (!enabled && ess.getSettings().isBroadcastUnvanishMessage()) {
-            final String msg = ess.getSettings().getBroadcastUnvanishMessage()
-                    .replace("{PLAYER}", player.getDisplayName())
-                    .replace("{USERNAME}", player.getName())
-                    .replace("{ONLINE}", NumberFormat.getInstance().format(ess.getOnlinePlayers().size()));
+                    .replace("{ONLINE}", NumberFormat.getInstance().format(ess.getOnlinePlayers().size()))
+                    .replace("{UPTIME}", DateUtil.formatDateDiff(ManagementFactory.getRuntimeMXBean().getStartTime()));
             ess.getServer().broadcastMessage(msg);
         }
 

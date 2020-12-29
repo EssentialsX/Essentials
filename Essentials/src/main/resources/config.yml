@@ -488,11 +488,9 @@ send-info-after-death: false
 # In addition, people with essentials.silentjoin.vanish will be vanished on join.
 allow-silent-join-quit: false
 
-# These messages will be broadcast when a player vanishes or unvanishes.
-# You can mimic quit messages to make other players think that you logged off.
-# You may use color codes, {USERNAME} for the player's name, and {PLAYER} for the player's displayname.
-broadcast-vanish-message: ""
-broadcast-unvanish-message: ""
+# Would you like to send a join/quit message when a player enters/exits vanish?
+# This can be used to make other players think that the vanishing player logged off.
+fake-message-vanish: false
 
 # You can set custom join and quit messages here. Set this to "none" to use the default Minecraft message,
 # or set this to "" to hide the message entirely.

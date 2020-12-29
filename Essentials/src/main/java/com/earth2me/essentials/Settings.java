@@ -107,10 +107,7 @@ public class Settings implements net.ess3.api.ISettings {
     // #easteregg
     private long permissionsLagWarning;
     private boolean allowSilentJoin;
-    private String broadcastVanishMessage;
-    private boolean isBroadcastVanishMessage;
-    private String broadcastUnvanishMessage;
-    private boolean isBroadcastUnvanishMessage;
+    private boolean isFakeMessageOnVanish;
     private String customJoinMessage;
     private boolean isCustomJoinMessage;
     private String customQuitMessage;
@@ -630,10 +627,7 @@ public class Settings implements net.ess3.api.ISettings {
         economyLogUpdate = _isEcoLogUpdateEnabled();
         economyDisabled = _isEcoDisabled();
         allowSilentJoin = _allowSilentJoinQuit();
-        broadcastVanishMessage = _getBroadcastVanishMessage();
-        isBroadcastVanishMessage = !broadcastVanishMessage.equals("");
-        broadcastUnvanishMessage = _getBroadcastUnvanishMessage();
-        isBroadcastUnvanishMessage = !broadcastUnvanishMessage.equals("");
+        isFakeMessageOnVanish = isFakeMessageOnVanish();
         customJoinMessage = _getCustomJoinMessage();
         isCustomJoinMessage = !customJoinMessage.equals("none");
         customQuitMessage = _getCustomQuitMessage();
@@ -1241,32 +1235,9 @@ public class Settings implements net.ess3.api.ISettings {
         return allowSilentJoin;
     }
 
-    public String _getBroadcastVanishMessage() {
-        return FormatUtil.replaceFormat(config.getString("broadcast-vanish-message", ""));
-    }
-
     @Override
-    public String getBroadcastVanishMessage() {
-        return broadcastVanishMessage;
-    }
-
-    @Override
-    public boolean isBroadcastVanishMessage() {
-        return isBroadcastVanishMessage;
-    }
-
-    public String _getBroadcastUnvanishMessage() {
-        return FormatUtil.replaceFormat(config.getString("broadcast-unvanish-message", ""));
-    }
-
-    @Override
-    public String getBroadcastUnvanishMessage() {
-        return broadcastUnvanishMessage;
-    }
-
-    @Override
-    public boolean isBroadcastUnvanishMessage() {
-        return isBroadcastUnvanishMessage;
+    public boolean isFakeMessageOnVanish() {
+        return config.getBoolean("fake-message-vanish", false);
     }
 
     public String _getCustomJoinMessage() {
