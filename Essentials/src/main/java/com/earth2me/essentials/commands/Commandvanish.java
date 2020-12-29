@@ -6,6 +6,7 @@ import com.earth2me.essentials.utils.DateUtil;
 import net.ess3.api.events.VanishStatusChangeEvent;
 import org.bukkit.Server;
 import org.bukkit.entity.Player;
+import org.bukkit.event.player.PlayerQuitEvent;
 
 import java.lang.management.ManagementFactory;
 import java.text.NumberFormat;
@@ -53,13 +54,13 @@ public class Commandvanish extends EssentialsToggleCommand {
                 if (ess.getSettings().isCustomQuitMessage()) {
                     msg = ess.getSettings().getCustomQuitMessage();
                 } else {
-                    msg = "&e{USERNAME} left the game.";
+                    msg = "&e{USERNAME} left the game";
                 }
             } else {
                 if (ess.getSettings().isCustomJoinMessage()) {
                     msg = ess.getSettings().getCustomJoinMessage();
                 } else {
-                    msg = "&e{USERNAME} joined the game.";
+                    msg = "&e{USERNAME} joined the game";
                 }
             }
             msg = msg.replace("{PLAYER}", player.getDisplayName())
