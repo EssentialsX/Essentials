@@ -1,5 +1,6 @@
 package net.essentialsx.discord.listeners;
 
+import com.earth2me.essentials.utils.FormatUtil;
 import com.vdurmont.emoji.EmojiParser;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
@@ -37,21 +38,27 @@ public class DiscordListener extends ListenerAdapter {
         final Member member = event.getMember();
         final Message message = event.getMessage();
 
-        final StringBuilder messageStr = new StringBuilder(message.getContentDisplay());
+        assert member != null; // Member will never be null
+
+        final StringBuilder messageBuilder = new StringBuilder(message.getContentDisplay());
         if (plugin.getPlugin().getSettings().isShowDiscordAttachments()) {
             for (final Message.Attachment attachment : message.getAttachments()) {
-                messageStr.append(" ").append(attachment.getUrl());
+                messageBuilder.append(" ").append(attachment.getUrl());
             }
         }
 
-        if (messageStr.toString().trim().length() == 0) {
+        // Don't send blank messages
+        if (messageBuilder.toString().trim().length() == 0) {
             return;
         }
 
-        assert member != null; // Member will never be null
+        // Apply or strip formatting
+        final String finalMessage = DiscordUtil.hasRoles(member, plugin.getPlugin().getSettings().getPermittedFormattingRoles()) ?
+                FormatUtil.replaceFormat(messageBuilder.toString().trim()) : FormatUtil.stripFormat(messageBuilder.toString().trim());
+
         final String formattedMessage = EmojiParser.parseToAliases(MessageUtil.formatMessage(plugin.getPlugin().getSettings().getDiscordToMcFormat(),
                 event.getChannel().getName(), user.getName(), user.getDiscriminator(), user.getAsTag(),
-                member.getEffectiveName(), DiscordUtil.getRoleColorFormat(member), messageStr.toString()), EmojiParser.FitzpatrickAction.REMOVE);
+                member.getEffectiveName(), DiscordUtil.getRoleColorFormat(member), finalMessage), EmojiParser.FitzpatrickAction.REMOVE);
 
         for (String group : keys) {
             Bukkit.broadcast(formattedMessage, "essentials.discord.receive." + group);

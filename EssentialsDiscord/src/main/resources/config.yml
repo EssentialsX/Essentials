@@ -58,6 +58,12 @@ message-types:
 # If this is set to false and a message from discord only contains an image/file and not any text, nothing will be sent.
 show-discord-attachments: true
 
+# A list of roles allowed to send minecraft color/formatting codes from discord to MC chat
+# You can either use the role's name or its id
+permit-formatting-roles:
+  - "Admins"
+  - "Color Codes"
+
 # The presence of the bot, including its status, activity and status message
 presence:
   # The online status of the bot. Must be one of the following;

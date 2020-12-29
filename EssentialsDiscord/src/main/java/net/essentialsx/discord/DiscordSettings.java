@@ -65,6 +65,10 @@ public class DiscordSettings implements IConf {
         return config.getBoolean("show-discord-attachments", true);
     }
 
+    public List<String> getPermittedFormattingRoles() {
+        return config.getStringList("permit-formatting-roles");
+    }
+
     public OnlineStatus getStatus() {
         return status;
     }
