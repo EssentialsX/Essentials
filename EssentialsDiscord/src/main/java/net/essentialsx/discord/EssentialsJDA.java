@@ -8,6 +8,7 @@ import net.dv8tion.jda.api.entities.TextChannel;
 import net.essentialsx.api.v2.discord.events.DiscordMessageEvent;
 import net.essentialsx.discord.listeners.BukkitListener;
 import net.essentialsx.discord.listeners.DiscordListener;
+import net.essentialsx.discord.util.DiscordUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.event.HandlerList;
 
@@ -35,8 +36,10 @@ public class EssentialsJDA {
         return channel;
     }
 
-    public void sendMessage(DiscordMessageEvent.MessageType messageType, String message) {
-        getChannel(messageType.getKey()).sendMessage(FormatUtil.stripFormat(message)).queue();
+    public void sendMessage(DiscordMessageEvent.MessageType messageType, String message, boolean groupMentions) {
+        getChannel(messageType.getKey()).sendMessage(FormatUtil.stripFormat(message))
+                .allowedMentions(groupMentions ? null : DiscordUtil.NO_GROUP_MENTIONS)
+                .queue();
     }
 
     public void startup() throws LoginException, InterruptedException {

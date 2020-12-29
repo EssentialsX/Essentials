@@ -2,13 +2,25 @@ package net.essentialsx.discord.util;
 
 import com.earth2me.essentials.utils.FormatUtil;
 import com.earth2me.essentials.utils.VersionUtil;
+import com.google.common.collect.ImmutableList;
 import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.Role;
 
 import java.awt.Color;
 import java.util.List;
 
 public final class DiscordUtil {
+    public final static List<Message.MentionType> NO_GROUP_MENTIONS;
+
+    static {
+        final ImmutableList.Builder<Message.MentionType> types = new ImmutableList.Builder<>();
+        types.add(Message.MentionType.USER);
+        types.add(Message.MentionType.CHANNEL);
+        types.add(Message.MentionType.EMOTE);
+        NO_GROUP_MENTIONS = types.build();
+    }
+
     private DiscordUtil() {
     }
 
