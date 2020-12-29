@@ -1,4 +1,4 @@
-package net.essentialsx.api.v2.discord.events;
+package net.essentialsx.api.v2.events.discord;
 
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;

@@ -5,7 +5,7 @@ import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.TextChannel;
-import net.essentialsx.api.v2.discord.events.DiscordMessageEvent;
+import net.essentialsx.api.v2.events.discord.DiscordMessageEvent;
 import net.essentialsx.discord.listeners.BukkitListener;
 import net.essentialsx.discord.listeners.DiscordListener;
 import net.essentialsx.discord.util.DiscordUtil;
