@@ -36,10 +36,21 @@ public class DiscordListener extends ListenerAdapter {
         final Member member = event.getMember();
         final Message message = event.getMessage();
 
+        final StringBuilder messageStr = new StringBuilder(message.getContentDisplay());
+        if (plugin.getPlugin().getSettings().isShowDiscordAttachments()) {
+            for (final Message.Attachment attachment : message.getAttachments()) {
+                messageStr.append(" ").append(attachment.getUrl());
+            }
+        }
+
+        if (messageStr.toString().trim().length() == 0) {
+            return;
+        }
+
         assert member != null; // Member will never be null
         final String formattedMessage = MessageUtil.formatMessage(plugin.getPlugin().getSettings().getDiscordToMcFormat(),
                 event.getChannel().getName(), user.getName(), user.getDiscriminator(), user.getAsTag(),
-                member.getEffectiveName(), DiscordUtil.getRoleColorFormat(member), message.getContentDisplay());
+                member.getEffectiveName(), DiscordUtil.getRoleColorFormat(member), messageStr.toString());
 
         for (String group : keys) {
             Bukkit.broadcast(formattedMessage, "essentials.discord.receive." + group);

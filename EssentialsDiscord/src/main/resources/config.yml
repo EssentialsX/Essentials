@@ -54,6 +54,10 @@ message-types:
   # Message sent when a player's mute state is changed on the minecraft server
   mute: staff
 
+# Whether or not links to attachments in discord messages should be displayed in chat or not
+# If this is set to false and a message from discord only contains an image/file and not any text, nothing will be sent.
+show-discord-attachments: true
+
 # The presence of the bot, including its status, activity and status message
 presence:
   # The online status of the bot. Must be one of the following;

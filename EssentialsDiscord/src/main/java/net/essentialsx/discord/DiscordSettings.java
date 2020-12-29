@@ -24,7 +24,7 @@ public class DiscordSettings implements IConf {
     private OnlineStatus status;
     private Activity statusActivity;
 
-    private MessageFormat discordToMcFormat = new MessageFormat("");
+    private MessageFormat discordToMcFormat;
 
     public DiscordSettings(EssentialsDiscord plugin) {
         this.plugin = plugin;
@@ -59,6 +59,10 @@ public class DiscordSettings implements IConf {
 
     public String getMessageChannel(String key) {
         return config.getString("message-types." + key, "none");
+    }
+
+    public boolean isShowDiscordAttachments() {
+        return config.getBoolean("show-discord-attachments", true);
     }
 
     public OnlineStatus getStatus() {
