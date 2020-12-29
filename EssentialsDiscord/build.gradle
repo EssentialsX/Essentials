@@ -3,6 +3,7 @@ dependencies {
     api('net.dv8tion:JDA:4.2.0_223') {
         exclude module: 'opus-java'
     }
+    api 'com.vdurmont:emoji-java:5.1.1'
 }
 
 repositories {
@@ -11,6 +12,7 @@ repositories {
 
 shadowJar {
     dependencies {
+        // JDA
         include(dependency('net.dv8tion:JDA'))
         include(dependency('com.neovisionaries:nv-websocket-client'))
         include(dependency('com.squareup.okhttp3:okhttp'))
@@ -20,7 +22,14 @@ shadowJar {
         include(dependency('com.fasterxml.jackson.core:jackson-databind'))
         include(dependency('com.fasterxml.jackson.core:jackson-core'))
         include(dependency('com.fasterxml.jackson.core:jackson-annotations'))
+
+        // Emoji
+        include(dependency('com.vdurmont:emoji-java'))
+        include(dependency('org.json:json'))
     }
+    minimize()
+
+    // JDA
     relocate 'net.dv8tion.jda', 'net.essentialsx.dep.net.dv8tion.jda'
     relocate 'com.neovisionaries.ws', 'net.essentialsx.dep.com.neovisionaries.ws'
     relocate 'okhttp3', 'net.essentialsx.dep.okhttp3'
@@ -31,5 +40,8 @@ shadowJar {
     relocate 'com.fasterxml.jackson.core', 'net.essentialsx.dep.com.fasterxml.jackson.core'
     relocate 'com.fasterxml.jackson.annotations', 'net.essentialsx.dep.com.fasterxml.jackson.annotations'
     relocate 'gnu.trove', 'net.essentialsx.dep.gnu.trove'
-    minimize()
+
+    // Emoji
+    relocate 'com.vdurmont.emoji', 'net.essentialsx.dep.com.vdurmont.emoji'
+    relocate 'org.json', 'net.essentialsx.dep.org.json'
 }

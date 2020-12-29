@@ -1,5 +1,6 @@
 package net.essentialsx.discord.listeners;
 
+import com.vdurmont.emoji.EmojiParser;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.User;
@@ -48,9 +49,9 @@ public class DiscordListener extends ListenerAdapter {
         }
 
         assert member != null; // Member will never be null
-        final String formattedMessage = MessageUtil.formatMessage(plugin.getPlugin().getSettings().getDiscordToMcFormat(),
+        final String formattedMessage = EmojiParser.parseToAliases(MessageUtil.formatMessage(plugin.getPlugin().getSettings().getDiscordToMcFormat(),
                 event.getChannel().getName(), user.getName(), user.getDiscriminator(), user.getAsTag(),
-                member.getEffectiveName(), DiscordUtil.getRoleColorFormat(member), messageStr.toString());
+                member.getEffectiveName(), DiscordUtil.getRoleColorFormat(member), messageStr.toString()), EmojiParser.FitzpatrickAction.REMOVE);
 
         for (String group : keys) {
             Bukkit.broadcast(formattedMessage, "essentials.discord.receive." + group);
