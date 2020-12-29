@@ -224,6 +224,56 @@ public class EssentialsUpgrade {
         LOGGER.info("Done converting kits.");
     }
 
+    public void convertCommandFilters() {
+        final CommandFilters commandFilters = ess.getCommandFilters();
+        final EssentialsConf config = commandFilters.getConfig();
+        if (doneFile.getBoolean("commandFiltersYml", false)) {
+            return;
+        }
+
+        LOGGER.info("Attempting to convert old command-cooldowns and -costs in config.yml to new command-filters.yml");
+
+        final ConfigurationSection commandCooldowns = ess.getSettings().getCommandCooldowns();
+        if (commandCooldowns != null) {
+            convertCommandCooldowns(commandCooldowns, config);
+        } else {
+            LOGGER.info("No command cooldowns found to migrate.");
+        }
+
+        final ConfigurationSection commandCosts = ess.getSettings().getCommandCosts();
+        if (commandCosts != null) {
+            convertCommandCosts(commandCosts, config);
+        } else {
+            LOGGER.info("No command costs found to migrate.");
+        }
+
+        config.save();
+        doneFile.setProperty("commandFiltersYml", true);
+        doneFile.save();
+        LOGGER.info("Done converting command filters.");
+    }
+
+    private void convertCommandCooldowns(ConfigurationSection commandCooldowns, EssentialsConf config) {
+        final boolean persistent = ess.getSettings().isCommandCooldownPersistent("dummy");
+        for (Map.Entry<String, Object> entry : commandCooldowns.getValues(false).entrySet()) {
+            LOGGER.info("Converting cooldown \"" + entry.getKey() + "\"");
+
+            final String key = entry.getKey().replace("\\.", "{dot}"); // Convert periods
+            config.set("filters." + key + ".pattern", entry.getKey());
+            config.set("filters." + key + ".cooldown", entry.getValue());
+            config.set("filters." + key + ".persistent-cooldown", persistent);
+        }
+    }
+
+    private void convertCommandCosts(ConfigurationSection commandCosts, EssentialsConf config) {
+        for (Map.Entry<String, Object> entry : commandCosts.getValues(false).entrySet()) {
+            LOGGER.info("Converting cost \"" + entry.getKey() + "\"");
+
+            config.set("filters." + entry.getKey() + ".pattern", entry.getKey());
+            config.set("filters." + entry.getKey() + ".cost", entry.getValue());
+        }
+    }
+
     private void moveMotdRulesToFile(final String name) {
         if (doneFile.getBoolean("move" + name + "ToFile", false)) {
             return;

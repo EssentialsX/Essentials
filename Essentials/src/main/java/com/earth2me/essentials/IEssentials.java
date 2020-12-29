@@ -68,6 +68,8 @@ public interface IEssentials extends Plugin {
 
     Kits getKits();
 
+    CommandFilters getCommandFilters();
+
     RandomTeleport getRandomTeleport();
 
     BukkitTask runTaskAsynchronously(Runnable run);

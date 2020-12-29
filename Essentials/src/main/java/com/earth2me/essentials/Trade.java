@@ -283,6 +283,13 @@ public class Trade {
             } catch (final ExecutionException e) {
                 throw (ChargeException) e.getCause();
             }
+        } else {
+            if (command != null && !command.isEmpty()) {
+                final CommandFilter cooldownFilter = ess.getCommandFilters().getCommandCooldown(user, command, true);
+                if (cooldownFilter != null) {
+                    cooldownFilter.applyCooldownTo(user);
+                }
+            }
         }
     }
 
@@ -362,17 +369,16 @@ public class Trade {
     public BigDecimal getCommandCost(final IUser user) {
         BigDecimal cost = BigDecimal.ZERO;
         if (command != null && !command.isEmpty()) {
-            cost = ess.getSettings().getCommandCost(command.charAt(0) == '/' ? command.substring(1) : command);
-            if (cost.signum() == 0 && fallbackTrade != null) {
+            final CommandFilter filter = ess.getCommandFilters().getCommandCost(user, command.charAt(0) == '/' ? command.substring(1) : command, true);
+            if (filter != null && filter.getCost().signum() != 0) {
+                cost = filter.getCost();
+            } else if (fallbackTrade != null) {
                 cost = fallbackTrade.getCommandCost(user);
             }
 
             if (ess.getSettings().isDebug()) {
                 ess.getLogger().log(Level.INFO, "calculated command (" + command + ") cost for " + user.getName() + " as " + cost);
             }
-        }
-        if (cost.signum() != 0 && (user.isAuthorized("essentials.nocommandcost.all") || user.isAuthorized("essentials.nocommandcost." + command))) {
-            return BigDecimal.ZERO;
         }
         return cost;
     }
