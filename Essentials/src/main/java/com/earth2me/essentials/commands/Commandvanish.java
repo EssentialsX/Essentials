@@ -6,7 +6,6 @@ import com.earth2me.essentials.utils.DateUtil;
 import net.ess3.api.events.VanishStatusChangeEvent;
 import org.bukkit.Server;
 import org.bukkit.entity.Player;
-import org.bukkit.event.player.PlayerQuitEvent;
 
 import java.lang.management.ManagementFactory;
 import java.text.NumberFormat;
