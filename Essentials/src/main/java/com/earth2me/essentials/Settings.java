@@ -1234,11 +1234,6 @@ public class Settings implements net.ess3.api.ISettings {
     }
 
     @Override
-    public boolean isVanishSilentQuit() {
-        return config.getBoolean("vanish-silent-quit", false);
-    }
-
-    @Override
     public boolean isFakeMessageOnVanish() {
         return config.getBoolean("fake-message-vanish", false);
     }

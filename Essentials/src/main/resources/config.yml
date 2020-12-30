@@ -488,9 +488,6 @@ send-info-after-death: false
 # In addition, people with essentials.silentjoin.vanish will be vanished on join.
 allow-silent-join-quit: false
 
-# Would you like to hide quit messages for vanished players?
-vanish-silent-quit: false
-
 # Would you like to send a join/quit message when a player enters/exits vanish?
 # This can be used to make other players think that the vanishing player logged off.
 fake-message-vanish: false
