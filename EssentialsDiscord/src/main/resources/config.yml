@@ -142,3 +142,27 @@ messages:
   # {username} - The username of the player being unmuted
   # {displayname} - The display name of the player being unmuted
   unmute: "{displayname} has been unmuted."
+  # This is the message sent to discord when a player joins the minecraft server
+  # The following placeholders can be used here:
+  # {username} - The name of the user joining
+  # {displayname} - The display name of the user joining
+  # {defaultmessage} - The full default join message used in game
+  join: ":exclamation: {displayname} has joined!"
+  # This is the message sent to discord when a player leaves the minecraft server
+  # The following placeholders can be used here:
+  # {username} - The name of the user leaving
+  # {displayname} - The display name of the user leaving
+  # {defaultmessage} - The full default leave message used in game
+  quit: ":exclamation: {displayname} has left!"
+  # This is the message sent to discord when a player dies
+  # The following placeholders can be used here:
+  # {username} - The name of the user who died
+  # {displayname} - The display name of the user who died
+  # {defaultmessage} - The full default death message used in game
+  death: ":skull: {displayname} has died!"
+  # This is the message sent to discord when a player is kicked from the server
+  # The following placeholders can be used here:
+  # {username} - The name of the user who got kicked
+  # {displayname} - The display name of the user who got kicked
+  # {reason} - The reason the player was kicked
+  kick: "{displayname} was kicked with reason: {reason}"

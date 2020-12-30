@@ -71,22 +71,26 @@ public class BukkitListener implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onJoin(PlayerJoinEvent event) {
-        sendDiscordMessage(DiscordMessageEvent.MessageType.JOIN, event.getPlayer().getName() + " has joined the server.", false);
+        sendDiscordMessage(DiscordMessageEvent.MessageType.JOIN, MessageUtil.formatMessage(jda.getSettings().getJoinFormat(),
+                event.getPlayer().getName(), event.getPlayer().getDisplayName(), event.getJoinMessage()), false);
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onQuit(PlayerQuitEvent event) {
-        sendDiscordMessage(DiscordMessageEvent.MessageType.LEAVE, event.getPlayer().getName() + " has left the server.", false);
+        sendDiscordMessage(DiscordMessageEvent.MessageType.LEAVE, MessageUtil.formatMessage(jda.getSettings().getQuitFormat(),
+                event.getPlayer().getName(), event.getPlayer().getDisplayName(), event.getQuitMessage()), false);
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onDeath(PlayerDeathEvent event) {
-        sendDiscordMessage(DiscordMessageEvent.MessageType.DEATH, event.getEntity().getName() + " has died!", false);
+        sendDiscordMessage(DiscordMessageEvent.MessageType.DEATH, MessageUtil.formatMessage(jda.getSettings().getDeathFormat(),
+                event.getEntity().getName(), event.getEntity().getDisplayName(), event.getDeathMessage()), false);
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onKick(PlayerKickEvent event) {
-        sendDiscordMessage(DiscordMessageEvent.MessageType.KICK, event.getPlayer().getName() + " has been kicked.", false);
+        sendDiscordMessage(DiscordMessageEvent.MessageType.KICK, MessageUtil.formatMessage(jda.getSettings().getKickFormat(),
+                event.getPlayer().getName(), event.getPlayer().getDisplayName(), event.getReason()), false);
     }
 
     private void sendDiscordMessage(DiscordMessageEvent.MessageType messageType, String message, boolean allowPing) {

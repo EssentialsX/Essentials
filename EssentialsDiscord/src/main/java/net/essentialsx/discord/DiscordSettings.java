@@ -31,6 +31,10 @@ public class DiscordSettings implements IConf {
     private MessageFormat permMuteFormat;
     private MessageFormat permMuteReasonFormat;
     private MessageFormat unmuteFormat;
+    private MessageFormat joinFormat;
+    private MessageFormat quitFormat;
+    private MessageFormat deathFormat;
+    private MessageFormat kickFormat;
 
     public DiscordSettings(EssentialsDiscord plugin) {
         this.plugin = plugin;
@@ -111,6 +115,22 @@ public class DiscordSettings implements IConf {
         return unmuteFormat;
     }
 
+    public MessageFormat getJoinFormat() {
+        return joinFormat;
+    }
+
+    public MessageFormat getQuitFormat() {
+        return quitFormat;
+    }
+
+    public MessageFormat getDeathFormat() {
+        return deathFormat;
+    }
+
+    public MessageFormat getKickFormat() {
+        return kickFormat;
+    }
+
     private MessageFormat generateMessageFormat(String node, String defaultStr, boolean format, String... arguments) {
         String pattern = config.getString("messages." + node);
         pattern = pattern == null ? defaultStr : pattern;
@@ -175,6 +195,14 @@ public class DiscordSettings implements IConf {
                 "username", "displayname", "controllername", "controllerdisplayname", "time", "reason");
         permMuteReasonFormat = generateMessageFormat("permanent-mute-reason", "{controllerdisplayname} permanently muted {displayname} with reason: {reason}", false,
                 "username", "displayname", "controllername", "controllerdisplayname", "reason");
+        joinFormat = generateMessageFormat("join", ":exclamation: {displayname} has joined!", false,
+                "username", "displayname", "defaultmessage");
+        quitFormat = generateMessageFormat("quit", ":exclamation: {displayname} has left!", false,
+                "username", "displayname", "defaultmessage");
+        deathFormat = generateMessageFormat("death", ":skull: {displayname} has died!", false,
+                "username", "displayname", "defaultmessage");
+        kickFormat = generateMessageFormat("kick", "{displayname} was kicked with reason: {reason}", false,
+                "username", "displayname", "reason");
 
         plugin.onReload();
     }
