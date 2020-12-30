@@ -86,7 +86,7 @@ presence:
 # The following entries allow you to customize messages sent by the plugin
 # Each message has a description of how it is used along with placeholders that can be used
 messages:
-  # This is the message that is used to show discord chat to players in game.
+  # This is the message that is used to show discord chat to players in game
   # Color/formatting codes and the follow placeholders can be used here:
   # {channel} - The name of the discord channel the message was sent from
   # {username} - The username of the user who sent the message
@@ -96,7 +96,8 @@ messages:
   # {color} - (1.16+) The hex color code of the user on discord (their topmost role color). If the user doesn't have a role color, the placeholder is empty.
   # {message} - The content of the message being sent
   discord-to-mc: "&6[#{channel}] &3{fullname}&7: &f{message}"
-  # This is the message that is use to relay minecraft chat in discord
+  # This is the message that is used to relay minecraft chat in discord
+  # The following placeholders can be used here:
   # {username} - The username of the player sending the message
   # {displayname} - The display name of the player sending the message (This would be their nickname)
   # {message} - The content of the message being sent
@@ -104,3 +105,40 @@ messages:
   # {prefix} - The prefix of the player sending the message
   # {suffix} - The suffix of the player sending the message
   mc-to-discord: "[{world}] {displayname} > {message}"
+  # This is the message sent to discord when a player is temporarily muted in minecraft
+  # The following placeholders can be used here:
+  # {username} - The username of the player being muted
+  # {displayname} - The display name of the player being muted
+  # {controllername} - The username of the user who muted the player
+  # {controllerdisplayname} - The display name of the user who muted the player
+  # {time} - The amount of time the player was muted for
+  temporary-mute: "{controllerdisplayname} muted {displayname} for {time}"
+  # This is the message sent to discord when a player is temporarily muted (with a reason specified) in minecraft
+  # The following placeholders can be used here:
+  # {username} - The username of the player being muted
+  # {displayname} - The display name of the player being muted
+  # {controllername} - The username of the user who muted the player
+  # {controllerdisplayname} - The display name of the user who muted the player
+  # {time} - The amount of time the player was muted for
+  # {reason} - The reason the player was muted for
+  temporary-mute-reason: "{controllerdisplayname} muted {displayname} for {time} with reason: {reason}"
+  # This is the message sent to discord when a player is permanently muted in minecraft
+  # The following placeholders can be used here:
+  # {username} - The username of the player being muted
+  # {displayname} - The display name of the player being muted
+  # {controllername} - The username of the user who muted the player
+  # {controllerdisplayname} - The display name of the user who muted the player
+  permanent-mute: "{controllerdisplayname} permanently muted {displayname}"
+  # This is the message sent to discord when a player is permanently muted (with a reason specified) in minecraft
+  # The following placeholders can be used here:
+  # {username} - The username of the player being muted
+  # {displayname} - The display name of the player being muted
+  # {controllername} - The username of the user who muted the player
+  # {controllerdisplayname} - The display name of the user who muted the player
+  # {reason} - The reason the player was muted for
+  permanent-mute-reason: "{controllerdisplayname} permanently muted {displayname} with reason: {reason}"
+  # This is the message sent to discord when a player is unmuted in minecraft
+  # The following placeholders can be used here:
+  # {username} - The username of the player being unmuted
+  # {displayname} - The display name of the player being unmuted
+  unmute: "{displayname} has been unmuted."

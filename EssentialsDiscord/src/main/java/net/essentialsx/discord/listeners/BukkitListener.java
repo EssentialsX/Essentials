@@ -1,5 +1,7 @@
 package net.essentialsx.discord.listeners;
 
+import com.earth2me.essentials.Console;
+import com.earth2me.essentials.utils.DateUtil;
 import com.earth2me.essentials.utils.FormatUtil;
 import net.ess3.api.events.MuteStatusChangeEvent;
 import net.essentialsx.api.v2.events.discord.DiscordMessageEvent;
@@ -14,6 +16,8 @@ import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+
+import java.text.MessageFormat;
 
 public class BukkitListener implements Listener {
     private final EssentialsJDA jda;
@@ -35,8 +39,23 @@ public class BukkitListener implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onMute(MuteStatusChangeEvent event) {
-        if (event.getValue()) {
-            sendDiscordMessage(DiscordMessageEvent.MessageType.MUTE, event.getAffected().getBase().getName() + " has been muted.", false);
+        if (!event.getValue()) {
+            sendDiscordMessage(DiscordMessageEvent.MessageType.MUTE, MessageUtil.formatMessage(jda.getSettings().getUnmuteFormat(),
+                    event.getAffected().getName(), event.getAffected().getDisplayName()), false);
+        } else if (event.getTimestamp().isPresent()) {
+            final boolean console = event.getController() == null;
+            final MessageFormat msg = event.getReason() == null ? jda.getSettings().getTempMuteFormat() : jda.getSettings().getTempMuteReasonFormat();
+            sendDiscordMessage(DiscordMessageEvent.MessageType.MUTE, MessageUtil.formatMessage(msg,
+                    event.getAffected().getName(), event.getAffected().getDisplayName(),
+                    console ? Console.NAME : event.getController().getName(), console ? Console.DISPLAY_NAME : event.getController().getDisplayName(),
+                    DateUtil.formatDateDiff(event.getTimestamp().get()), event.getReason()), false);
+        } else {
+            final boolean console = event.getController() == null;
+            final MessageFormat msg = event.getReason() == null ? jda.getSettings().getPermMuteFormat() : jda.getSettings().getPermMuteReasonFormat();
+            sendDiscordMessage(DiscordMessageEvent.MessageType.MUTE, MessageUtil.formatMessage(msg,
+                    event.getAffected().getName(), event.getAffected().getDisplayName(),
+                    console ? Console.NAME : event.getController().getName(), console ? Console.DISPLAY_NAME : event.getController().getDisplayName(),
+                    event.getReason()), false);
         }
     }
 

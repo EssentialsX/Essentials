@@ -69,6 +69,8 @@ public class EssentialsDiscord extends JavaPlugin implements IEssentialsModule {
 
     @Override
     public void onDisable() {
-        jda.shutdown();
+        if (jda != null) {
+            jda.shutdown();
+        }
     }
 }

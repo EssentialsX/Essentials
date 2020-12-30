@@ -26,6 +26,11 @@ public class DiscordSettings implements IConf {
 
     private MessageFormat discordToMcFormat;
     private MessageFormat mcToDiscordFormat;
+    private MessageFormat tempMuteFormat;
+    private MessageFormat tempMuteReasonFormat;
+    private MessageFormat permMuteFormat;
+    private MessageFormat permMuteReasonFormat;
+    private MessageFormat unmuteFormat;
 
     public DiscordSettings(EssentialsDiscord plugin) {
         this.plugin = plugin;
@@ -86,6 +91,26 @@ public class DiscordSettings implements IConf {
         return mcToDiscordFormat;
     }
 
+    public MessageFormat getTempMuteFormat() {
+        return tempMuteFormat;
+    }
+
+    public MessageFormat getTempMuteReasonFormat() {
+        return tempMuteReasonFormat;
+    }
+
+    public MessageFormat getPermMuteFormat() {
+        return permMuteFormat;
+    }
+
+    public MessageFormat getPermMuteReasonFormat() {
+        return permMuteReasonFormat;
+    }
+
+    public MessageFormat getUnmuteFormat() {
+        return unmuteFormat;
+    }
+
     private MessageFormat generateMessageFormat(String node, String defaultStr, boolean format, String... arguments) {
         String pattern = config.getString("messages." + node);
         pattern = pattern == null ? defaultStr : pattern;
@@ -141,6 +166,15 @@ public class DiscordSettings implements IConf {
                 "channel", "username", "tag", "fullname", "nickname", "color", "message");
         mcToDiscordFormat = generateMessageFormat("mc-to-discord", "[{world}] {displayname} > {message}", false,
                 "username", "displayname", "message", "world", "prefix", "suffix");
+        unmuteFormat = generateMessageFormat("unmute", "{displayname} has been unmuted.", false, "username", "displayname");
+        tempMuteFormat = generateMessageFormat("temporary-mute", "{controllerdisplayname} muted {displayname} for {time}", false,
+                "username", "displayname", "controllername", "controllerdisplayname", "time");
+        permMuteFormat = generateMessageFormat("permanent-mute", "{controllerdisplayname} permanently muted {displayname}", false,
+                "username", "displayname", "controllername", "controllerdisplayname");
+        tempMuteReasonFormat = generateMessageFormat("temporary-mute-reason", "{controllerdisplayname} muted {displayname} for {time} with reason: {reason}", false,
+                "username", "displayname", "controllername", "controllerdisplayname", "time", "reason");
+        permMuteReasonFormat = generateMessageFormat("permanent-mute-reason", "{controllerdisplayname} permanently muted {displayname} with reason: {reason}", false,
+                "username", "displayname", "controllername", "controllerdisplayname", "reason");
 
         plugin.onReload();
     }
