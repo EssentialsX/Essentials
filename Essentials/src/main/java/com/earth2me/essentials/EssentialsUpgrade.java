@@ -269,7 +269,7 @@ public class EssentialsUpgrade {
         for (Map.Entry<String, Object> entry : commandCosts.getValues(false).entrySet()) {
             LOGGER.info("Converting cost \"" + entry.getKey() + "\"");
 
-            config.set("filters." + entry.getKey() + ".pattern", entry.getKey());
+            config.set("filters." + entry.getKey() + ".command", entry.getKey());
             config.set("filters." + entry.getKey() + ".cost", entry.getValue());
         }
     }
