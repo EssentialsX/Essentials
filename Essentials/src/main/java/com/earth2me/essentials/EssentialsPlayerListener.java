@@ -211,7 +211,7 @@ public class EssentialsPlayerListener implements Listener {
     public void onPlayerQuit(final PlayerQuitEvent event) {
         final User user = ess.getUser(event.getPlayer());
 
-        if (hideJoinQuitMessages() || (ess.getSettings().allowSilentJoinQuit() && user.isAuthorized("essentials.silentquit"))) {
+        if (hideJoinQuitMessages() || (ess.getSettings().allowSilentJoinQuit() && user.isAuthorized("essentials.silentquit")) || (user.isVanished() && ess.getSettings().isVanishSilentQuit())) {
             event.setQuitMessage(null);
         } else if (ess.getSettings().isCustomQuitMessage() && event.getQuitMessage() != null) {
             final Player player = event.getPlayer();

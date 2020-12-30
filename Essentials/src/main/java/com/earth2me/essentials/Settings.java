@@ -107,7 +107,6 @@ public class Settings implements net.ess3.api.ISettings {
     // #easteregg
     private long permissionsLagWarning;
     private boolean allowSilentJoin;
-    private boolean isFakeMessageOnVanish;
     private String customJoinMessage;
     private boolean isCustomJoinMessage;
     private String customQuitMessage;
@@ -627,7 +626,6 @@ public class Settings implements net.ess3.api.ISettings {
         economyLogUpdate = _isEcoLogUpdateEnabled();
         economyDisabled = _isEcoDisabled();
         allowSilentJoin = _allowSilentJoinQuit();
-        isFakeMessageOnVanish = isFakeMessageOnVanish();
         customJoinMessage = _getCustomJoinMessage();
         isCustomJoinMessage = !customJoinMessage.equals("none");
         customQuitMessage = _getCustomQuitMessage();
@@ -1233,6 +1231,11 @@ public class Settings implements net.ess3.api.ISettings {
     @Override
     public boolean allowSilentJoinQuit() {
         return allowSilentJoin;
+    }
+
+    @Override
+    public boolean isVanishSilentQuit() {
+        return config.getBoolean("vanish-silent-quit", false);
     }
 
     @Override
