@@ -94,4 +94,8 @@ public class EssentialsJDA {
     public EssentialsDiscord getPlugin() {
         return plugin;
     }
+
+    public DiscordSettings getSettings() {
+        return plugin.getSettings();
+    }
 }

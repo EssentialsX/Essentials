@@ -4,6 +4,7 @@ import com.earth2me.essentials.utils.FormatUtil;
 import net.ess3.api.events.MuteStatusChangeEvent;
 import net.essentialsx.api.v2.events.discord.DiscordMessageEvent;
 import net.essentialsx.discord.EssentialsJDA;
+import net.essentialsx.discord.util.MessageUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -41,8 +42,12 @@ public class BukkitListener implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onChat(AsyncPlayerChatEvent event) {
-        sendDiscordMessage(DiscordMessageEvent.MessageType.CHAT, event.getPlayer().getDisplayName() + ": " + event.getMessage(),
-                event.getPlayer().hasPermission("essentials.discord.ping"));
+        Bukkit.getScheduler().runTask(jda.getPlugin(), () ->
+                sendDiscordMessage(DiscordMessageEvent.MessageType.CHAT, MessageUtil.formatMessage(jda.getSettings().getMcToDiscordFormat(),
+                        event.getPlayer().getName(), event.getPlayer().getDisplayName(), event.getMessage(),
+                        event.getPlayer().getWorld().getName(), jda.getPlugin().getEss().getPermissionsHandler().getPrefix(event.getPlayer()),
+                        jda.getPlugin().getEss().getPermissionsHandler().getSuffix(event.getPlayer())),
+                        event.getPlayer().hasPermission("essentials.discord.ping")));
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)

@@ -59,6 +59,10 @@ public class EssentialsDiscord extends JavaPlugin implements IEssentialsModule {
         }
     }
 
+    public IEssentials getEss() {
+        return ess;
+    }
+
     public DiscordSettings getSettings() {
         return settings;
     }

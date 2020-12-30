@@ -25,6 +25,7 @@ public class DiscordSettings implements IConf {
     private Activity statusActivity;
 
     private MessageFormat discordToMcFormat;
+    private MessageFormat mcToDiscordFormat;
 
     public DiscordSettings(EssentialsDiscord plugin) {
         this.plugin = plugin;
@@ -81,10 +82,14 @@ public class DiscordSettings implements IConf {
         return discordToMcFormat;
     }
 
+    public MessageFormat getMcToDiscordFormat() {
+        return mcToDiscordFormat;
+    }
+
     private MessageFormat generateMessageFormat(String node, String defaultStr, boolean format, String... arguments) {
         String pattern = config.getString("messages." + node);
         pattern = pattern == null ? defaultStr : pattern;
-        pattern = FormatUtil.replaceFormat(pattern);
+        pattern = format ? FormatUtil.replaceFormat(pattern) : FormatUtil.stripFormat(pattern);
         for (int i = 0; i < arguments.length; i++) {
             pattern = pattern.replace("{" + arguments[i] + "}", "{" + i + "}");
         }
@@ -134,6 +139,8 @@ public class DiscordSettings implements IConf {
 
         discordToMcFormat = generateMessageFormat("discord-to-mc", "&6[#{channel}] &3{fullname}&7: &f{message}", true,
                 "channel", "username", "tag", "fullname", "nickname", "color", "message");
+        mcToDiscordFormat = generateMessageFormat("mc-to-discord", "[{world}] {displayname} > {message}", false,
+                "username", "displayname", "message", "world", "prefix", "suffix");
 
         plugin.onReload();
     }

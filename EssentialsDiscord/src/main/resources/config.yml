@@ -87,7 +87,7 @@ presence:
 # Each message has a description of how it is used along with placeholders that can be used
 messages:
   # This is the message that is used to show discord chat to players in game.
-  # The follow placeholders can be used here:
+  # Color/formatting codes and the follow placeholders can be used here:
   # {channel} - The name of the discord channel the message was sent from
   # {username} - The username of the user who sent the message
   # {tag} - The four numbers displayed after their user's username
@@ -96,3 +96,11 @@ messages:
   # {color} - (1.16+) The hex color code of the user on discord (their topmost role color). If the user doesn't have a role color, the placeholder is empty.
   # {message} - The content of the message being sent
   discord-to-mc: "&6[#{channel}] &3{fullname}&7: &f{message}"
+  # This is the message that is use to relay minecraft chat in discord
+  # {username} - The username of the player sending the message
+  # {displayname} - The display name of the player sending the message (This would be their nickname)
+  # {message} - The content of the message being sent
+  # {world} - The name of the world the player sending the message is in
+  # {prefix} - The prefix of the player sending the message
+  # {suffix} - The suffix of the player sending the message
+  mc-to-discord: "[{world}] {displayname} > {message}"
