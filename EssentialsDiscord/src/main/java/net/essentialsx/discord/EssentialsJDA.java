@@ -59,6 +59,7 @@ public class EssentialsJDA {
 
         jda = JDABuilder.createDefault(plugin.getSettings().getBotToken())
                 .addEventListeners(new DiscordListener(this))
+                //.addEventListeners(new DiscordCommandDispatcher(this))
                 .setContextEnabled(false)
                 .build()
                 .awaitReady();
