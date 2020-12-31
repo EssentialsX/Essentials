@@ -8,6 +8,7 @@ import net.essentialsx.api.v2.events.discord.DiscordMessageEvent;
 import net.essentialsx.discord.EssentialsJDA;
 import net.essentialsx.discord.util.MessageUtil;
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -61,12 +62,13 @@ public class BukkitListener implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onChat(AsyncPlayerChatEvent event) {
+        final Player player = event.getPlayer();
         Bukkit.getScheduler().runTask(jda.getPlugin(), () ->
                 sendDiscordMessage(DiscordMessageEvent.MessageType.CHAT, MessageUtil.formatMessage(jda.getSettings().getMcToDiscordFormat(),
-                        event.getPlayer().getName(), event.getPlayer().getDisplayName(), MessageUtil.sanitizeDiscordMarkdown(event.getMessage()),
-                        event.getPlayer().getWorld().getName(), jda.getPlugin().getEss().getPermissionsHandler().getPrefix(event.getPlayer()),
-                        jda.getPlugin().getEss().getPermissionsHandler().getSuffix(event.getPlayer())),
-                        event.getPlayer().hasPermission("essentials.discord.ping")));
+                        player.getName(), player.getDisplayName(),
+                        player.hasPermission("essentials.discord.markdown") ? event.getMessage() : MessageUtil.sanitizeDiscordMarkdown(event.getMessage()),
+                        player.getWorld().getName(), jda.getPlugin().getEss().getPermissionsHandler().getPrefix(player),
+                        jda.getPlugin().getEss().getPermissionsHandler().getSuffix(player)), player.hasPermission("essentials.discord.ping")));
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
