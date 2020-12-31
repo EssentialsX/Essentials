@@ -24,6 +24,8 @@ public class DiscordSettings implements IConf {
     private OnlineStatus status;
     private Activity statusActivity;
 
+    private MessageFormat consoleFormat;
+
     private MessageFormat discordToMcFormat;
     private MessageFormat mcToDiscordFormat;
     private MessageFormat tempMuteFormat;
@@ -86,6 +88,16 @@ public class DiscordSettings implements IConf {
     public Activity getStatusActivity() {
         return statusActivity;
     }
+
+    public String getConsoleChannelDef() {
+        return config.getString("console.channel", "none");
+    }
+
+    public MessageFormat getConsoleFormat() {
+        return consoleFormat;
+    }
+
+    // Message formats
 
     public MessageFormat getDiscordToMcFormat() {
         return discordToMcFormat;
@@ -181,6 +193,9 @@ public class DiscordSettings implements IConf {
             //noinspection ConstantConditions
             statusActivity = Activity.of(activityType, config.getString("presence.message", "Minecraft"));
         }
+
+        consoleFormat = generateMessageFormat("console.format", "[{timestamp} {level}] {message}", false,
+                "timestamp", "level", "message");
 
         discordToMcFormat = generateMessageFormat("discord-to-mc", "&6[#{channel}] &3{fullname}&7: &f{message}", true,
                 "channel", "username", "tag", "fullname", "nickname", "color", "message");

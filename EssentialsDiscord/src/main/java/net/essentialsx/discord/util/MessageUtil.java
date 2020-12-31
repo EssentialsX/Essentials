@@ -7,10 +7,15 @@ public final class MessageUtil {
     }
 
     /**
-     * Sanitizes text coming from discord, regardless of the content sanitization done by JDA themselves.
+     * Sanitizes text going to discord of markdown.
      */
-    public static String sanitizeDiscordText(String message) {
-        return message.replace("", ""); //TODO
+    public static String sanitizeDiscordMarkdown(String message) {
+        return message.replace("*", "\\*")
+                .replace("~", "\\~")
+                .replace("_", "\\_")
+                .replace("`", "\\`")
+                .replace(">", "\\>")
+                .replace("|", "\\|");
     }
 
     /**

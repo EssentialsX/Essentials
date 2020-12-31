@@ -56,6 +56,7 @@ public class EssentialsDiscord extends JavaPlugin implements IEssentialsModule {
         if (jda != null) {
             jda.updatePresence();
             jda.updatePrimaryChannel();
+            jda.updateConsoleRelay();
         }
     }
 

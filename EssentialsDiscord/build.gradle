@@ -4,6 +4,8 @@ dependencies {
         exclude module: 'opus-java'
     }
     api 'com.vdurmont:emoji-java:5.1.1'
+    implementation 'club.minnced:discord-webhooks:0.5.4-rc'
+    compileOnly 'org.apache.logging.log4j:log4j-core:2.0-beta9'
 }
 
 repositories {
@@ -26,6 +28,9 @@ shadowJar {
         // Emoji
         include(dependency('com.vdurmont:emoji-java'))
         include(dependency('org.json:json'))
+
+        // discord-webhooks
+        include(dependency('club.minnced:discord-webhooks'))
     }
     minimize()
 
@@ -44,4 +49,7 @@ shadowJar {
     // Emoji
     relocate 'com.vdurmont.emoji', 'net.essentialsx.dep.com.vdurmont.emoji'
     relocate 'org.json', 'net.essentialsx.dep.org.json'
+
+    // discord-webhooks
+    relocate 'club.minnced.discord.webhook', 'net.essentialsx.dep.club.minnced.discord.webhook'
 }

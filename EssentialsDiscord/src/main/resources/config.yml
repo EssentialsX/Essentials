@@ -35,6 +35,19 @@ channels:
   primary: 000000000000000000
   staff: 000000000000000000
 
+# Console relay settings
+console:
+  # The channel id (or webhook url) the console output should be sent to
+  # If the channel id/webhook url is invalid or set to 'none', the console relay will be disabled
+  # Note: If you use a channel id the bot needs the "Manage Webhooks" permission in discord or else it will not work.
+  channel: 000000000000000000
+  # The format of the console message
+  # The following placeholders can be used;
+  # {timestamp} - Timestamp in HH:mm:ss format
+  # {level} - The console logging level
+  # {message} - The actual message being logged
+  format: "[{timestamp} {level}] {message}"
+
 # Determine which discord channels certain messages will be sent to
 # You can either use the names of the channels listed above or just the id of a channel.
 # If an invalid channel is used, the primary channel will be used instead
