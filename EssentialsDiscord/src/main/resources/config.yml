@@ -47,6 +47,8 @@ console:
   # {level} - The console logging level
   # {message} - The actual message being logged
   format: "[{timestamp} {level}] {message}"
+  # The username the console logger webhook will make
+  webhook-name: "EssX Console Relay"
 
 # Determine which discord channels certain messages will be sent to
 # You can either use the names of the channels listed above or just the id of a channel.

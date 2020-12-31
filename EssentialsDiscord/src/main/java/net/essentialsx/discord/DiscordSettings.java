@@ -97,6 +97,10 @@ public class DiscordSettings implements IConf {
         return consoleFormat;
     }
 
+    public String getConsoleWebhookName() {
+        return config.getString("console.webhook-name", "EssX Console Relay");
+    }
+
     // Message formats
 
     public MessageFormat getDiscordToMcFormat() {

@@ -2,6 +2,9 @@ package net.essentialsx.discord;
 
 import club.minnced.discord.webhook.WebhookClient;
 import club.minnced.discord.webhook.WebhookClientBuilder;
+import club.minnced.discord.webhook.send.AllowedMentions;
+import club.minnced.discord.webhook.send.WebhookMessage;
+import club.minnced.discord.webhook.send.WebhookMessageBuilder;
 import com.earth2me.essentials.utils.FormatUtil;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
@@ -41,6 +44,16 @@ public class EssentialsJDA {
             channel = primaryChannel;
         }
         return channel;
+    }
+
+    public WebhookMessage getWebhookMessage(String message) {
+        return new WebhookMessageBuilder()
+                .setAvatarUrl(jda.getSelfUser().getAvatarUrl())
+                .setAllowedMentions(AllowedMentions.none())
+                .setUsername(getSettings().getConsoleWebhookName())
+                .setContent(message)
+                .build();
+
     }
 
     public void sendMessage(DiscordMessageEvent.MessageType messageType, String message, boolean groupMentions) {

@@ -32,14 +32,14 @@ public class ConsoleInjector extends AbstractAppender {
             String curLine;
             while ((curLine = messageQueue.peek()) != null) {
                 if (buffer.length() + curLine.length() > Message.MAX_CONTENT_LENGTH - 2) {
-                    jda.getConsoleWebhook().send(buffer.toString());
+                    jda.getConsoleWebhook().send(jda.getWebhookMessage(buffer.toString()));
                     buffer = new StringBuilder();
                     continue;
                 }
                 buffer.append("\n").append(messageQueue.poll());
             }
             if (buffer.length() != 0) {
-                jda.getConsoleWebhook().send(buffer.toString());
+                jda.getConsoleWebhook().send(jda.getWebhookMessage(buffer.toString()));
             }
         }, 20, 40);
     }
