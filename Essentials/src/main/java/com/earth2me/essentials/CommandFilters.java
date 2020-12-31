@@ -6,7 +6,9 @@ import org.bukkit.configuration.MemoryConfiguration;
 
 import java.io.File;
 import java.math.BigDecimal;
-import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.EnumMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
@@ -19,7 +21,7 @@ public class CommandFilters implements IConf {
     private final IEssentials essentials;
     private final EssentialsConf config;
     private ConfigurationSection filters;
-    private Map<String, CommandFilter> commandFilters;
+    private Map<CommandFilter.Type, List<CommandFilter>> commandFilters;
 
     public CommandFilters(final IEssentials essentials) {
         this.essentials = essentials;
@@ -50,8 +52,8 @@ public class CommandFilters implements IConf {
         return null;
     }
 
-    private Map<String, CommandFilter> _getCommandFilters() {
-        final Map<String, CommandFilter> commandFilters = new HashMap<>();
+    private Map<CommandFilter.Type, List<CommandFilter>> _getCommandFilters() {
+        final Map<CommandFilter.Type, List<CommandFilter>> commandFilters = new EnumMap<>(CommandFilter.Type.class);
         for (final String name : filters.getKeys(false)) {
             if (!filters.isConfigurationSection(name)) {
                 EssentialsConf.LOGGER.warning("Invalid command filter '" + name + "'");
@@ -59,7 +61,7 @@ public class CommandFilters implements IConf {
             }
 
             final ConfigurationSection section = Objects.requireNonNull(filters.getConfigurationSection(name));
-            Pattern pattern = section.isString("pattern") ? compileRegex(section.getString("pattern")) : null;
+            final Pattern pattern = section.isString("pattern") ? compileRegex(section.getString("pattern")) : null;
             final String command = section.getString("command");
 
             if (pattern == null && command == null) {
@@ -70,11 +72,6 @@ public class CommandFilters implements IConf {
             if (pattern != null && command != null) {
                 EssentialsConf.LOGGER.warning("Invalid command filter '" + name + "', filter can't have both 'pattern' and 'command'!");
                 continue;
-            }
-
-            // Compile the command as a regex if the pattern hasn't been set, so pattern is always available.
-            if (pattern == null) {
-                pattern = compileRegex(command);
             }
 
             Integer cooldown = section.getInt("cooldown", -1);
@@ -88,7 +85,12 @@ public class CommandFilters implements IConf {
             final BigDecimal cost = EssentialsConf.toBigDecimal(section.getString("cost"), null);
 
             final String lowerName = name.toLowerCase(Locale.ENGLISH);
-            commandFilters.put(lowerName, new CommandFilter(lowerName, command, pattern, cooldown, persistentCooldown, cost));
+
+            if (pattern == null) {
+                commandFilters.computeIfAbsent(CommandFilter.Type.ESS, k -> new ArrayList<>()).add(new EssCommandFilter(lowerName, command, compileRegex(command), cooldown, persistentCooldown, cost));
+            } else {
+                commandFilters.computeIfAbsent(CommandFilter.Type.REGEX, k -> new ArrayList<>()).add(new RegexCommandFilter(lowerName, pattern, cooldown, persistentCooldown, cost));
+            }
         }
         config.save();
         return commandFilters;
@@ -116,28 +118,18 @@ public class CommandFilters implements IConf {
         return config;
     }
 
-    public CommandFilter getFilterByName(final String name) {
-        return commandFilters.get(name.toLowerCase(Locale.ENGLISH));
-    }
-
-    public CommandFilter getCommandCooldown(final IUser user, final String label, boolean essCommand) {
+    public CommandFilter getCommandCooldown(final IUser user, final String label, CommandFilter.Type type) {
         if (user.isAuthorized("essentials.commandcooldowns.bypass")) return null;
-        return getFilter(label, essCommand, filter -> filter.hasCooldown() && !user.isAuthorized("essentials.commandcooldowns.bypass." + filter.getName()));
+        return getFilter(label, type, filter -> filter.hasCooldown() && !user.isAuthorized("essentials.commandcooldowns.bypass." + filter.getName()));
     }
 
-    public CommandFilter getCommandCost(final IUser user, final String label, boolean essCommand) {
+    public CommandFilter getCommandCost(final IUser user, final String label, CommandFilter.Type type) {
         if (user.isAuthorized("essentials.nocommandcost.all")) return null;
-        return getFilter(label, essCommand, filter -> filter.hasCost() && !user.isAuthorized("essentials.nocommandcost." + filter.getName()));
+        return getFilter(label, type, filter -> filter.hasCost() && !user.isAuthorized("essentials.nocommandcost." + filter.getName()));
     }
 
-    private CommandFilter getFilter(final String label, boolean essCommand, Predicate<CommandFilter> filterPredicate) {
-        for (CommandFilter filter : commandFilters.values()) {
-            // When the label is an ess command, the filter must define a command entry.
-            if (essCommand && !filter.hasCommand()) continue;
-
-            // Same vice versa.
-            if (!essCommand && filter.hasCommand()) continue;
-
+    private CommandFilter getFilter(final String label, CommandFilter.Type type, Predicate<CommandFilter> filterPredicate) {
+        for (CommandFilter filter : commandFilters.get(type)) {
             if (!filterPredicate.test(filter)) continue;
 
             final boolean matches = filter.getPattern().matcher(label).matches();

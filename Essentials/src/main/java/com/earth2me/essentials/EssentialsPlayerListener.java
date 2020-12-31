@@ -603,18 +603,18 @@ public class EssentialsPlayerListener implements Listener {
             }
 
             if (!cooldownFound) {
-                final CommandFilter cooldownFilter = ess.getCommandFilters().getCommandCooldown(user, fullCommand, false);
+                final CommandFilter cooldownFilter = ess.getCommandFilters().getCommandCooldown(user, fullCommand, CommandFilter.Type.REGEX);
                 if (cooldownFilter != null) {
                     if (ess.getSettings().isDebug()) {
-                        ess.getLogger().info("Applying " + cooldownFilter.getCooldown() + "ms cooldown on /" + fullCommand + " for" + user.getName() + ".");
+                        ess.getLogger().info("Applying " + cooldownFilter.getCooldown() + "ms cooldown on /" + fullCommand + " for " + user.getName() + ".");
                     }
                     cooldownFilter.applyCooldownTo(user);
                 }
 
-                final CommandFilter costFilter = ess.getCommandFilters().getCommandCost(user, fullCommand, false);
+                final CommandFilter costFilter = ess.getCommandFilters().getCommandCost(user, fullCommand, CommandFilter.Type.REGEX);
                 if (costFilter != null) {
                     if (ess.getSettings().isDebug()) {
-                        ess.getLogger().info("Applying a cost of " + costFilter.getCost() + " on /" + fullCommand + " for" + user.getName() + ".");
+                        ess.getLogger().info("Applying a cost of " + costFilter.getCost() + " on /" + fullCommand + " for " + user.getName() + ".");
                     }
 
                     final BigDecimal cost = costFilter.getCost();

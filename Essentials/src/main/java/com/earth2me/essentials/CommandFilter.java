@@ -1,23 +1,28 @@
 package com.earth2me.essentials;
 
+import com.google.common.base.Preconditions;
 import net.ess3.api.IUser;
 
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.regex.Pattern;
 
-public class CommandFilter {
+public abstract class CommandFilter {
+
+    public enum Type {
+        REGEX,
+        ESS
+    }
 
     private final String name;
-    private final String command;
     private final Pattern pattern;
     private final Integer cooldown;
     private final boolean persistentCooldown;
     private final BigDecimal cost;
 
-    public CommandFilter(String name, String command, Pattern pattern, Integer cooldown, boolean persistentCooldown, BigDecimal cost) {
+    public CommandFilter(String name, Pattern pattern, Integer cooldown, boolean persistentCooldown, BigDecimal cost) {
+        Preconditions.checkNotNull(pattern);
         this.name = name;
-        this.command = command;
         this.pattern = pattern;
         this.cooldown = cooldown;
         this.persistentCooldown = persistentCooldown;
@@ -26,14 +31,6 @@ public class CommandFilter {
 
     public String getName() {
         return name;
-    }
-
-    public String getCommand() {
-        return command;
-    }
-
-    public boolean hasCommand() {
-        return command != null;
     }
 
     public Pattern getPattern() {

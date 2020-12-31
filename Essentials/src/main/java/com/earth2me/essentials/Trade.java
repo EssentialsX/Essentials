@@ -283,17 +283,14 @@ public class Trade {
             } catch (final ExecutionException e) {
                 throw (ChargeException) e.getCause();
             }
-        } else {
-            if (command != null && !command.isEmpty()) {
-                final CommandFilter cooldownFilter = ess.getCommandFilters().getCommandCooldown(user, command, true);
-                if (cooldownFilter != null) {
-                    cooldownFilter.applyCooldownTo(user);
-                }
-            }
         }
     }
 
     public void charge(final IUser user, final CompletableFuture<Boolean> future) {
+        charge(user, this.command, future);
+    }
+
+    public void charge(final IUser user, final String cooldownCommand, final CompletableFuture<Boolean> future) {
         if (ess.getSettings().isDebug()) {
             ess.getLogger().log(Level.INFO, "attempting to charge user " + user.getName());
         }
@@ -340,6 +337,20 @@ public class Trade {
         if (ess.getSettings().isDebug()) {
             ess.getLogger().log(Level.INFO, "charge user " + user.getName() + " completed");
         }
+
+        if (cooldownCommand != null && !cooldownCommand.isEmpty()) {
+            final CommandFilter cooldownFilter = ess.getCommandFilters().getCommandCooldown(user, cooldownCommand, CommandFilter.Type.ESS);
+            if (cooldownFilter != null) {
+                if (ess.getSettings().isDebug()) {
+                    ess.getLogger().info("Applying " + cooldownFilter.getCooldown() + "ms cooldown on /" + cooldownCommand + " for " + user.getName() + ".");
+                }
+                cooldownFilter.applyCooldownTo(user);
+            }
+        }
+    }
+
+    public String getCommand() {
+        return command;
     }
 
     public BigDecimal getMoney() {
@@ -369,7 +380,7 @@ public class Trade {
     public BigDecimal getCommandCost(final IUser user) {
         BigDecimal cost = BigDecimal.ZERO;
         if (command != null && !command.isEmpty()) {
-            final CommandFilter filter = ess.getCommandFilters().getCommandCost(user, command.charAt(0) == '/' ? command.substring(1) : command, true);
+            final CommandFilter filter = ess.getCommandFilters().getCommandCost(user, command.charAt(0) == '/' ? command.substring(1) : command, CommandFilter.Type.ESS);
             if (filter != null && filter.getCost().signum() != 0) {
                 cost = filter.getCost();
             } else if (fallbackTrade != null) {
