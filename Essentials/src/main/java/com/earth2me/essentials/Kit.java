@@ -164,13 +164,13 @@ public class Kit {
 
             boolean spew = false;
             final boolean allowUnsafe = ess.getSettings().allowUnsafeEnchantments();
-            final boolean currencyIsSuffix = ess.getSettings().isCurrencySymbolSuffixed();
             final boolean autoEquip = ess.getSettings().isKitAutoEquip();
             final List<ItemStack> itemList = new ArrayList<>();
             final List<String> commandQueue = new ArrayList<>();
             final List<String> moneyQueue = new ArrayList<>();
+            final String currencySymbol = ess.getSettings().getCurrencySymbol().isEmpty() ? "$" : ess.getSettings().getCurrencySymbol();
             for (final String kitItem : output.getLines()) {
-                if (!currencyIsSuffix ? kitItem.startsWith(ess.getSettings().getCurrencySymbol()) : kitItem.endsWith(ess.getSettings().getCurrencySymbol())) {
+                if (kitItem.startsWith("$") || kitItem.startsWith(currencySymbol)) {
                     moneyQueue.add(NumberUtil.sanitizeCurrencyString(kitItem, ess));
                     continue;
                 }

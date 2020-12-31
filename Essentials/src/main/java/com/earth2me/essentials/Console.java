@@ -6,8 +6,11 @@ import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import static com.earth2me.essentials.I18n.tl;
+
 public final class Console implements IMessageRecipient {
     public static final String NAME = "Console";
+    public static final String DISPLAY_NAME = tl("consoleName");
     private static Console instance; // Set in essentials
 
     private final IEssentials ess;
@@ -45,7 +48,7 @@ public final class Console implements IMessageRecipient {
 
     @Override
     public String getDisplayName() {
-        return Console.NAME;
+        return Console.DISPLAY_NAME;
     }
 
     @Override

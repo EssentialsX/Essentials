@@ -28,7 +28,7 @@ public class Commandhelpop extends EssentialsCommand {
 
     @Override
     public void run(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception {
-        sendMessage(server, Console.NAME, args);
+        sendMessage(server, Console.DISPLAY_NAME, args);
     }
 
     private String sendMessage(final Server server, final String from, final String[] args) throws Exception {
