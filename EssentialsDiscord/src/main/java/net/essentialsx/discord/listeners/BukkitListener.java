@@ -63,7 +63,7 @@ public class BukkitListener implements Listener {
     public void onChat(AsyncPlayerChatEvent event) {
         Bukkit.getScheduler().runTask(jda.getPlugin(), () ->
                 sendDiscordMessage(DiscordMessageEvent.MessageType.CHAT, MessageUtil.formatMessage(jda.getSettings().getMcToDiscordFormat(),
-                        event.getPlayer().getName(), event.getPlayer().getDisplayName(), event.getMessage(),
+                        event.getPlayer().getName(), event.getPlayer().getDisplayName(), MessageUtil.sanitizeDiscordMarkdown(event.getMessage()),
                         event.getPlayer().getWorld().getName(), jda.getPlugin().getEss().getPermissionsHandler().getPrefix(event.getPlayer()),
                         jda.getPlugin().getEss().getPermissionsHandler().getSuffix(event.getPlayer())),
                         event.getPlayer().hasPermission("essentials.discord.ping")));
