@@ -229,12 +229,12 @@ public class MetaItemStack {
         } else if (split.length > 1 && split[0].equalsIgnoreCase("itemflags") && hasMetaPermission(sender, "itemflags", false, true, ess)) {
             addItemFlags(string);
         } else if (MaterialUtil.isFirework(stack.getType())) {
-            if (!split[0].equalsIgnoreCase("power") && !parseEnchantmentStrings(sender, allowUnsafe, split, ess)) {
+            if (split[0].equalsIgnoreCase("power") || !parseEnchantmentStrings(sender, allowUnsafe, split, ess)) {
                 //WARNING - Meta for fireworks will be ignored after this point.
                 addFireworkMeta(sender, false, string, ess);
             }
         } else if (MaterialUtil.isPotion(stack.getType())) {
-            if (!split[0].equalsIgnoreCase("power") && !parseEnchantmentStrings(sender, allowUnsafe, split, ess)) {
+            if (split[0].equalsIgnoreCase("power") || !parseEnchantmentStrings(sender, allowUnsafe, split, ess)) {
                 //WARNING - Meta for potions will be ignored after this point.
                 addPotionMeta(sender, false, string, ess);
             }
