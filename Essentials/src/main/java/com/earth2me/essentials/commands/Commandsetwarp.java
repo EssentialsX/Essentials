@@ -44,10 +44,10 @@ public class Commandsetwarp extends EssentialsCommand {
             warps.setWarp(user, args[0], user.getLocation());
         } else if (user.isAuthorized("essentials.warp.overwrite." + StringUtil.safeString(args[0]))) {
             final WarpModifyEvent event = new WarpModifyEvent(user, args[0], WarpModifyCause.UPDATE);
+            Bukkit.getServer().getPluginManager().callEvent(event);
             if (event.isCancelled()) {
                 return;
             }
-            Bukkit.getServer().getPluginManager().callEvent(event);
             warps.setWarp(user, args[0], user.getLocation());
         } else {
             throw new Exception(tl("warpOverwrite"));
