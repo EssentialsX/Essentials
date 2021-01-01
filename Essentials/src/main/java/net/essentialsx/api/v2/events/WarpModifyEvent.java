@@ -1,4 +1,4 @@
-package net.ess3.api.events;
+package net.essentialsx.api.v2.events;
 
 import net.ess3.api.IUser;
 import org.bukkit.event.Cancellable;
@@ -56,5 +56,13 @@ public class WarpModifyEvent extends Event implements Cancellable {
 
     public String getWarpName() {
         return warpName;
+    }
+
+    /**
+     * The cause of why a warp was modified.
+     * Used by {@link WarpModifyEvent}.
+     */
+    public enum WarpModifyCause {
+        UPDATE, CREATE, DELETE
     }
 }
