@@ -89,6 +89,10 @@ public class DiscordSettings implements IConf {
         return statusActivity;
     }
 
+    public int getChatDiscordMaxLength() {
+        return config.getInt("chat.discord-max-length", 2000);
+    }
+
     public String getConsoleChannelDef() {
         return config.getString("console.channel", "none");
     }

@@ -10,6 +10,7 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.essentialsx.discord.EssentialsJDA;
 import net.essentialsx.discord.util.DiscordUtil;
 import net.essentialsx.discord.util.MessageUtil;
+import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
 import org.jetbrains.annotations.NotNull;
 
@@ -48,8 +49,8 @@ public class DiscordListener extends ListenerAdapter {
         }
 
         // Apply or strip formatting
-        final String finalMessage = DiscordUtil.hasRoles(member, plugin.getPlugin().getSettings().getPermittedFormattingRoles()) ?
-                FormatUtil.replaceFormat(messageBuilder.toString().trim()) : FormatUtil.stripFormat(messageBuilder.toString().trim());
+        final String finalMessage = StringUtils.abbreviate(DiscordUtil.hasRoles(member, plugin.getPlugin().getSettings().getPermittedFormattingRoles()) ?
+                FormatUtil.replaceFormat(messageBuilder.toString().trim()) : FormatUtil.stripFormat(messageBuilder.toString().trim()), plugin.getSettings().getChatDiscordMaxLength());
 
         // Don't send blank messages
         if (finalMessage.trim().length() == 0) {

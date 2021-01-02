@@ -35,7 +35,14 @@ channels:
   primary: 000000000000000000
   staff: 000000000000000000
 
+# Chat relay settings
+# General settings for discord to mc and mc to discord chat relays
+chat:
+  # The maximum amount of characters messages from discord should be before being truncated
+  discord-max-length: 2000
+
 # Console relay settings
+# The console relay will send every message that is sent to the console, to a discord channel
 console:
   # The channel id (or webhook url) the console output should be sent to
   # If the channel id/webhook url is invalid or set to 'none', the console relay will be disabled
