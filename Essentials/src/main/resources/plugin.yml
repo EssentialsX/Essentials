@@ -39,7 +39,7 @@ commands:
     aliases: [ebalancetop,baltop,ebaltop]
   ban:
     description: Bans a player.
-    usage: /<command> <player> [<reason>]
+    usage: /<command> <player> [<reason...>]
     aliases: [eban]
   banip:
     description: Bans an IP address.
@@ -59,7 +59,7 @@ commands:
     aliases: [ebreak]
   broadcast:
     description: Broadcasts a message to the entire server.
-    usage: /<command> <message>
+    usage: /<command> <message...>
     aliases: [bc,ebc,bcast,ebcast,ebroadcast,shout,eshout]
   broadcastworld:
     description: Broadcasts a message to a world.
@@ -79,7 +79,7 @@ commands:
     aliases: [ecartographytable, carttable, ecarttable]
   clearinventory:
     description: Clear all items in your inventory.
-    usage: /<command> [(<player>|*)] [(item[:<data>]|*|**) [<amount>]]
+    usage: /<command> [(<player>|*)] [(<item>|*|**) [<amount>]]
     aliases: [ci,eci,clean,eclean,clear,eclear,clearinvent,eclearinvent,eclearinventory]
   clearinventoryconfirmtoggle:
     description: Toggles whether you are prompted to confirm inventory clears.
@@ -102,7 +102,7 @@ commands:
     usage: /<alias> - Define in bukkit.yml
   delhome:
     description: Removes a home.
-    usage: /<command> [player:<player>] <homename>
+    usage: /<command> [player:<player>] [<homename>]
     aliases: [edelhome,remhome,eremhome,rmhome,ermhome]
   deljail:
     description: Removes a jail.
@@ -130,7 +130,7 @@ commands:
     aliases: [eeco,economy,eeconomy]
   enchant:
     description: Enchants the item the user is holding.
-    usage: /<command> <enchantment> [level]
+    usage: /<command> <enchantment> [<level>]
     aliases: [eenchant,enchantment,eenchantment]
   enderchest:
     description: Lets you see inside an enderchest.
@@ -162,7 +162,7 @@ commands:
     aliases: [efireball,fireentity,efireentity,fireskull,efireskull,projectile,eprojectile]
   firework:
     description: Allows you to modify a stack of fireworks.
-    usage: /<command> (power [<amount>]|fire [<amount>]|clear|<metaparam...>)
+    usage: /<command> (power [<amount>]|fire <amount>|clear|<metaparam...>)
     aliases: [efirework]
   gamemode:
     description: Change player gamemode.
@@ -182,7 +182,7 @@ commands:
     aliases: [egive]
   god:
     description: Enables your godly powers.
-    usage: /<command> [player] [(on|off)]
+    usage: /<command> [<player>] [(on|off)]
     aliases: [egod,godmode,egodmode,tgm,etgm]
   grindstone:
     description: Opens up a grindstone.
@@ -341,8 +341,8 @@ commands:
     usage: /<command> (clear|apply|effect:<effect> power:<power> duration:<duration>)
     aliases: [epotion,elixer,eelixer]
   powertool:
-    description: Assigns a command to the item in hand. {player} can be replaced by name of a clicked player.
-    usage: /<command> [(l:|a:|r:|c:|d:)][<command>] [<arguments...>]
+    description: Assigns a command to the item in hand. {player} will be replaced by name of a clicked player.
+    usage: /<command> [(l:|a:|r:|c:|d:)][<command...>]
     aliases: [epowertool,pt,ept]
   powertooltoggle:
     description: Enables or disables all current powertools.
@@ -354,7 +354,7 @@ commands:
     aliases: [playertime,eplayertime,eptime]
   pweather:
     description: Adjust a player's weather
-    usage: /<command> (list|reset|storm|sun|clear) ([<player>|*])
+    usage: /<command> (list|reset|storm|sun|clear) [(<player>|*)]
     aliases: [playerweather,eplayerweather,epweather]
   r:
     description: Quickly reply to the last player to message you.
@@ -370,7 +370,7 @@ commands:
     aliases: [erealname]
   recipe:
     description: Displays how to craft items.
-    usage: /<command> <item> [page]
+    usage: /<command> <item> [<page>]
     aliases: [formula,eformula,method,emethod,erecipe,recipes,erecipes]
   remove:
     description: Removes entities in your world.
@@ -378,7 +378,7 @@ commands:
     aliases: [eremove,butcher,ebutcher,killall,ekillall,mobkill,emobkill]
   repair:
     description: Repairs the durability of one or all items.
-    usage: /<command> ([hand|all])
+    usage: /<command> [(hand|all)]
     aliases: [fix,efix,erepair]
   rest:
     description: Rests you or the given player.
@@ -401,7 +401,7 @@ commands:
     usage: /<command> [player:<player>] [<homename>]
     aliases: [esethome,createhome,ecreatehome]
   setjail:
-    description: Creates a jail where you specified named [jailname].
+    description: Creates a new jail.
     usage: /<command> <jailname>
     aliases: [esetjail,createjail,ecreatejail]
   settpr:
@@ -470,7 +470,7 @@ commands:
     aliases: [etempbanip]
   thunder:
     description: Enable/disable thunder.
-    usage: /<command> (true|false) [duration]
+    usage: /<command> (true|false) [<duration>]
     aliases: [ethunder]
   time:
     description: Display/Change the world time. Defaults to current world.
@@ -478,7 +478,7 @@ commands:
     aliases: [day,eday,night,enight,etime]
   togglejail:
     description: Jails/Unjails a player, TPs them to the jail specified.
-    usage: /<command> <player> <jailname> [datediff]
+    usage: /<command> <player> <jailname> [<datediff>]
     aliases: [jail,ejail,tjail,etjail,etogglejail,unjail,eunjail]
   top:
     description: Teleport to the highest block at your current position.
@@ -486,7 +486,7 @@ commands:
     aliases: [etop]
   tp:
     description: Teleport to a player.
-    usage: /<command> <player> [otherplayer]
+    usage: /<command> <player> [<otherplayer>]
     aliases: [tele,etele,teleport,eteleport,etp,tp2p,etp2p]
   tpa:
     description: Request to teleport to the specified player.
@@ -498,7 +498,7 @@ commands:
     aliases: [etpaall]
   tpaccept:
     description: Accepts a teleport request.
-    usage: /<command> [player]
+    usage: /<command> [<player>]
     aliases: [etpaccept,tpyes,etpyes]
   tpahere:
     description: Request that the specified player teleport to you.
@@ -506,15 +506,15 @@ commands:
     aliases: [etpahere]
   tpall:
     description: Teleport all online players to another player.
-    usage: /<command> [player]
+    usage: /<command> [<player>]
     aliases: [etpall]
   tpauto:
     description: Automatically accept teleportation requests.
-    usage: /<command> [player]
+    usage: /<command> [<player>]
     aliases: [etpauto]
   tpacancel:
-    description: Cancel all outstanding teleport requests. Specify [player] to cancel requests with them.
-    usage: /<command> [player]
+    description: Cancel all outstanding teleport requests. Specify player to cancel requests with them.
+    usage: /<command> [<player>]
     aliases: [etpacancel]
   tpdeny:
     description: Reject a teleport request.
@@ -526,7 +526,7 @@ commands:
     aliases: [s,etphere]
   tpo:
     description: Teleport override for tptoggle.
-    usage: /<command> <player> [otherplayer]
+    usage: /<command> <player> [<otherplayer>]
     aliases: [etpo]
   tpohere:
     description: Teleport here override for tptoggle.
@@ -534,7 +534,7 @@ commands:
     aliases: [etpohere]
   tppos:
     description: Teleport to coordinates.
-    usage: /<command> <x> <y> <z> [yaw] [pitch] [world]
+    usage: /<command> <x> <y> <z> [<yaw>] [<pitch>] [<world>]
     aliases: [etppos]
   tpr:
     description: Teleport randomly.
@@ -574,7 +574,7 @@ commands:
     aliases: [ewarpinfo]
   weather:
     description: Sets the weather.
-    usage: /<command> (storm|sun) [duration]
+    usage: /<command> (storm|sun) [<duration>]
     aliases: [rain,erain,sky,esky,storm,estorm,sun,esun,eweather]
   whois:
     description: Determine the username behind a nickname.
