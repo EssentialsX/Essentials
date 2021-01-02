@@ -336,7 +336,7 @@ public class Settings implements net.ess3.api.ISettings {
                 } else if (section.isString(command)) {
                     final String costString = section.getString(command);
                     try {
-                        final double cost = Double.parseDouble(costString.trim().replace(getCurrencySymbol(), "").replaceAll("\\W", ""));
+                        final double cost = Double.parseDouble(costString.trim().replace("$", "").replace(getCurrencySymbol(), "").replaceAll("\\W", ""));
                         newSection.set(command.toLowerCase(Locale.ENGLISH), cost);
                     } catch (final NumberFormatException ex) {
                         ess.getLogger().warning("Invalid command cost for: " + command + " (" + costString + ")");
@@ -655,6 +655,7 @@ public class Settings implements net.ess3.api.ISettings {
         removeEffectsOnHeal = _isRemovingEffectsOnHeal();
         vanishingItemPolicy = _getVanishingItemsPolicy();
         bindingItemPolicy = _getBindingItemsPolicy();
+        currencySymbol = _getCurrencySymbol();
     }
 
     void _lateLoadItemSpawnBlacklist() {
@@ -756,11 +757,20 @@ public class Settings implements net.ess3.api.ISettings {
         return config.getString("locale", "");
     }
 
-    //This method should always only return one character due to the implementation of the calling methods
-    //If you need to use a string currency, for example "coins", use the translation key 'currency'.
+    private String currencySymbol = "$";
+
+    // A valid currency symbol value must be one non-integer character.
+    private String _getCurrencySymbol() {
+        String value = config.getString("currency-symbol", "$").trim();
+        if (value.length() != 1 || value.matches("\\d")) {
+            value = "$";
+        }
+        return value;
+    }
+
     @Override
     public String getCurrencySymbol() {
-        return config.getString("currency-symbol", "$").concat("$").substring(0, 1).replaceAll("[0-9]", "$");
+        return currencySymbol;
     }
 
     @Override
@@ -977,6 +987,11 @@ public class Settings implements net.ess3.api.ISettings {
 
     private boolean _cancelAfkOnInteract() {
         return config.getBoolean("cancel-afk-on-interact", true);
+    }
+
+    @Override
+    public boolean cancelAfkOnChat() {
+        return config.getBoolean("cancel-afk-on-chat", true);
     }
 
     @Override
@@ -1718,5 +1733,10 @@ public class Settings implements net.ess3.api.ISettings {
     @Override
     public boolean infoAfterDeath() {
         return config.getBoolean("send-info-after-death", false);
+    }
+
+    @Override
+    public boolean isRespawnAtBed() {
+        return config.getBoolean("respawn-at-home-bed", true);
     }
 }

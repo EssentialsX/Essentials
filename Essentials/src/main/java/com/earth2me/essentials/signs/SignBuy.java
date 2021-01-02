@@ -49,7 +49,7 @@ public class SignBuy extends EssentialsSign {
             throw new ChargeException("Inventory full"); //TODO: TL
         }
         charge.charge(player);
-        Trade.log("Sign", "Buy", "Interact", username, charge, username, items, sign.getBlock().getLocation(), ess);
+        Trade.log("Sign", "Buy", "Interact", username, charge, username, items, sign.getBlock().getLocation(), player.getMoney(), ess);
         return true;
     }
 }

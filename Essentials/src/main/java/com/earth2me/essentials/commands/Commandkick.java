@@ -4,6 +4,7 @@ import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.Console;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.FormatUtil;
+import net.essentialsx.api.v2.events.UserKickEvent;
 import org.bukkit.Server;
 
 import java.util.Collections;
@@ -24,8 +25,9 @@ public class Commandkick extends EssentialsCommand {
         }
 
         final User target = getPlayer(server, args, 0, true, false);
-        if (sender.isPlayer()) {
-            final User user = ess.getUser(sender.getPlayer());
+        final User user = sender.isPlayer() ? ess.getUser(sender.getPlayer()) : null;
+
+        if (user != null) {
             if (target.isHidden(sender.getPlayer()) && !user.canInteractVanished() && !sender.getPlayer().canSee(target.getBase())) {
                 throw new PlayerNotFoundException();
             }
@@ -38,6 +40,14 @@ public class Commandkick extends EssentialsCommand {
         String kickReason = args.length > 1 ? getFinalArg(args, 1) : tl("kickDefault");
         kickReason = FormatUtil.replaceFormat(kickReason.replace("\\n", "\n").replace("|", "\n"));
 
+        final UserKickEvent event = new UserKickEvent(user, target, kickReason);
+        ess.getServer().getPluginManager().callEvent(event);
+
+        if (event.isCancelled()) {
+            return;
+        }
+
+        kickReason = event.getReason();
         target.getBase().kickPlayer(kickReason);
         final String senderDisplayName = sender.isPlayer() ? sender.getPlayer().getDisplayName() : Console.DISPLAY_NAME;
 
