@@ -4,7 +4,7 @@ import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.Console;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.FormatUtil;
-import net.ess3.api.events.UserKickEvent;
+import net.essentialsx.api.v2.events.UserKickEvent;
 import org.bukkit.Server;
 
 import java.util.Collections;
