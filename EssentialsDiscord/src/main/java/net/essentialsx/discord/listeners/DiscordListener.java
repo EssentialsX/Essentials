@@ -47,14 +47,14 @@ public class DiscordListener extends ListenerAdapter {
             }
         }
 
-        // Don't send blank messages
-        if (messageBuilder.toString().trim().length() == 0) {
-            return;
-        }
-
         // Apply or strip formatting
         final String finalMessage = DiscordUtil.hasRoles(member, plugin.getPlugin().getSettings().getPermittedFormattingRoles()) ?
                 FormatUtil.replaceFormat(messageBuilder.toString().trim()) : FormatUtil.stripFormat(messageBuilder.toString().trim());
+
+        // Don't send blank messages
+        if (finalMessage.trim().length() == 0) {
+            return;
+        }
 
         final String formattedMessage = EmojiParser.parseToAliases(MessageUtil.formatMessage(plugin.getPlugin().getSettings().getDiscordToMcFormat(),
                 event.getChannel().getName(), user.getName(), user.getDiscriminator(), user.getAsTag(),
