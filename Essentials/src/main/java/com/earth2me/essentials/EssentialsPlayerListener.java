@@ -162,7 +162,7 @@ public class EssentialsPlayerListener implements Listener {
             }
         }
 
-        user.updateActivityOnInteract(true);
+        user.updateActivityOnChat(true);
         user.setDisplayNick();
     }
 

@@ -671,6 +671,15 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
         }
     }
 
+    public void updateActivityOnChat(final boolean broadcast) {
+        if (ess.getSettings().cancelAfkOnChat()) {
+            //Chat happens async, make sure we have a sync context
+            ess.scheduleSyncDelayedTask(() -> {
+                updateActivity(broadcast, AfkStatusChangeEvent.Cause.CHAT);
+            });
+        }
+    }
+
     public void checkActivity() {
         // Graceful time before the first afk check call. 
         if (System.currentTimeMillis() - lastActivity <= 10000) {
@@ -688,7 +697,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
 
             for (final User user : ess.getOnlineUsers()) {
                 if (user.isAuthorized("essentials.kick.notify")) {
-                    user.sendMessage(tl("playerKicked", Console.NAME, getName(), kickReason));
+                    user.sendMessage(tl("playerKicked", Console.DISPLAY_NAME, getName(), kickReason));
                 }
             }
         }
