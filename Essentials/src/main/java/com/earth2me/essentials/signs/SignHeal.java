@@ -30,7 +30,7 @@ public class SignHeal extends EssentialsSign {
         player.getBase().setFireTicks(0);
         player.sendMessage(tl("youAreHealed"));
         charge.charge(player);
-        Trade.log("Sign", "Heal", "Interact", username, null, username, charge, sign.getBlock().getLocation(), ess);
+        Trade.log("Sign", "Heal", "Interact", username, null, username, charge, sign.getBlock().getLocation(), player.getMoney(), ess);
         return true;
     }
 }
