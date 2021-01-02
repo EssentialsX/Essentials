@@ -1,8 +1,7 @@
 package com.earth2me.essentials;
 
 import org.bukkit.command.Command;
-import org.bukkit.command.PluginCommand;
-import org.bukkit.command.PluginCommandYamlParser;
+import org.bukkit.command.PluginIdentifiableCommand;
 import org.bukkit.plugin.Plugin;
 
 import java.util.ArrayList;
@@ -16,7 +15,7 @@ import java.util.logging.Logger;
 
 public class AlternativeCommandsHandler {
     private static final Logger LOGGER = Logger.getLogger("Essentials");
-    private final transient Map<String, List<PluginCommand>> altcommands = new HashMap<>();
+    private final transient Map<String, List<Command>> altcommands = new HashMap<>();
     private final transient Map<String, String> disabledList = new HashMap<>();
     private final transient IEssentials ess;
 
@@ -33,50 +32,48 @@ public class AlternativeCommandsHandler {
         if (plugin.getDescription().getMain().contains("com.earth2me.essentials")) {
             return;
         }
-        final List<Command> commands = PluginCommandYamlParser.parse(plugin);
-        final String pluginName = plugin.getDescription().getName().toLowerCase(Locale.ENGLISH);
+        for (final Map.Entry<String, Command> entry : getPluginCommands(plugin).entrySet()) {
+            final String commandName = entry.getKey().contains(":") ? entry.getKey().split(":")[1] : entry.getKey();
+            final Command command = entry.getValue();
 
-        for (final Command command : commands) {
-            final PluginCommand pc = (PluginCommand) command;
-            final List<String> labels = new ArrayList<>(pc.getAliases());
-            labels.add(pc.getName());
-
-            PluginCommand reg = ess.getServer().getPluginCommand(pluginName + ":" + pc.getName().toLowerCase(Locale.ENGLISH));
-            if (reg == null) {
-                reg = ess.getServer().getPluginCommand(pc.getName().toLowerCase(Locale.ENGLISH));
-            }
-            if (reg == null || !reg.getPlugin().equals(plugin)) {
-                continue;
-            }
-            for (final String label : labels) {
-                final List<PluginCommand> plugincommands = altcommands.computeIfAbsent(label.toLowerCase(Locale.ENGLISH), k -> new ArrayList<>());
-                boolean found = false;
-                for (final PluginCommand pc2 : plugincommands) {
-                    if (pc2.getPlugin().equals(plugin)) {
-                        found = true;
-                        break;
-                    }
+            final List<Command> pluginCommands = altcommands.computeIfAbsent(commandName.toLowerCase(Locale.ENGLISH), k -> new ArrayList<>());
+            boolean found = false;
+            for (final Command pc2 : pluginCommands) {
+                // Safe cast, everything that's added comes from getPluginCommands which already performs the cast check.
+                if (((PluginIdentifiableCommand) pc2).getPlugin().equals(plugin)) {
+                    found = true;
+                    break;
                 }
-                if (!found) {
-                    plugincommands.add(reg);
-                }
+            }
+            if (!found) {
+                pluginCommands.add(command);
             }
         }
     }
 
+    private Map<String, Command> getPluginCommands(Plugin plugin) {
+        final Map<String, Command> commands = new HashMap<>();
+        for (final Map.Entry<String, Command> entry : ess.getKnownCommandsProvider().getKnownCommands().entrySet()) {
+            if (entry.getValue() instanceof PluginIdentifiableCommand && ((PluginIdentifiableCommand) entry.getValue()).getPlugin().equals(plugin)) {
+                commands.put(entry.getKey(), entry.getValue());
+            }
+        }
+        return commands;
+    }
+
     public void removePlugin(final Plugin plugin) {
-        final Iterator<Map.Entry<String, List<PluginCommand>>> iterator = altcommands.entrySet().iterator();
+        final Iterator<Map.Entry<String, List<Command>>> iterator = altcommands.entrySet().iterator();
         while (iterator.hasNext()) {
-            final Map.Entry<String, List<PluginCommand>> entry = iterator.next();
-            entry.getValue().removeIf(pc -> pc.getPlugin() == null || pc.getPlugin().equals(plugin));
+            final Map.Entry<String, List<Command>> entry = iterator.next();
+            entry.getValue().removeIf(pc -> !(pc instanceof PluginIdentifiableCommand) || ((PluginIdentifiableCommand) pc).getPlugin().equals(plugin));
             if (entry.getValue().isEmpty()) {
                 iterator.remove();
             }
         }
     }
 
-    public PluginCommand getAlternative(final String label) {
-        final List<PluginCommand> commands = altcommands.get(label);
+    public Command getAlternative(final String label) {
+        final List<Command> commands = altcommands.get(label);
         if (commands == null || commands.isEmpty()) {
             return null;
         }
@@ -84,7 +81,7 @@ public class AlternativeCommandsHandler {
             return commands.get(0);
         }
         // return the first command that is not an alias
-        for (final PluginCommand command : commands) {
+        for (final Command command : commands) {
             if (command.getName().equalsIgnoreCase(label)) {
                 return command;
             }
@@ -93,12 +90,14 @@ public class AlternativeCommandsHandler {
         return commands.get(0);
     }
 
-    public void executed(final String label, final PluginCommand pc) {
-        final String altString = pc.getPlugin().getName() + ":" + pc.getLabel();
-        if (ess.getSettings().isDebug()) {
-            LOGGER.log(Level.INFO, "Essentials: Alternative command " + label + " found, using " + altString);
+    public void executed(final String label, final Command pc) {
+        if (pc instanceof PluginIdentifiableCommand) {
+            final String altString = ((PluginIdentifiableCommand) pc).getPlugin().getName() + ":" + pc.getLabel();
+            if (ess.getSettings().isDebug()) {
+                LOGGER.log(Level.INFO, "Essentials: Alternative command " + label + " found, using " + altString);
+            }
+            disabledList.put(label, altString);
         }
-        disabledList.put(label, altString);
     }
 
     public Map<String, String> disabledCommands() {
