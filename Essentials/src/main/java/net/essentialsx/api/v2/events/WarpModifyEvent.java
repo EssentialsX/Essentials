@@ -18,15 +18,16 @@ public class WarpModifyEvent extends Event implements Cancellable {
     private final Location newLocation;
     private final WarpModifyCause cause;
     private boolean cancelled;
+    
     /**
-     * @param issuer      the {@link IUser} issuing the command
-     * @param warpName    the name of the warp that's being altered
+     * @param user        the {@link IUser} who is modifing the warp.
+     * @param warpName    the name of the warp that's being altered.
      * @param oldLocation the old location before being modified. Null if {@link WarpModifyCause#CREATE}.
      * @param newLocation the new location after being modified. Null if {@link WarpModifyCause#DELETE}.
      * @param cause       the cause of change.
      */
-    public WarpModifyEvent(IUser issuer, String warpName, Location oldLocation, Location newLocation, WarpModifyCause cause) {
-        this.issuer = issuer;
+    public WarpModifyEvent(IUser user, String warpName, Location oldLocation, Location newLocation, WarpModifyCause cause) {
+        this.user = user;
         this.warpName = warpName;
         this.oldLocation = oldLocation;
         this.newLocation = newLocation;
@@ -43,8 +44,8 @@ public class WarpModifyEvent extends Event implements Cancellable {
         this.cancelled = cancel;
     }
 
-    public IUser getIssuer() {
-        return issuer;
+    public IUser getUser() {
+        return user;
     }
 
     public WarpModifyCause getCause() {
@@ -53,6 +54,22 @@ public class WarpModifyEvent extends Event implements Cancellable {
 
     public String getWarpName() {
         return warpName;
+    }
+
+    /**
+     * Gets the current location of the warp or null if it's being created.
+     * @return The warps new location or null.
+     */
+    public Location getOldLocation() {
+        return oldLocation;
+    }
+
+    /**
+     * Gets the new location this warp is being updated to, or null if it's being deleted.
+     * @return The warps new location or null.
+     */
+    public Location getNewLocation() {
+        return newLocation;
     }
     
     public HandlerList getHandlers() {
@@ -69,13 +86,5 @@ public class WarpModifyEvent extends Event implements Cancellable {
      */
     public enum WarpModifyCause {
         UPDATE, CREATE, DELETE
-    }
-
-    public Location getOldLocation() {
-        return oldLocation;
-    }
-
-    public Location getNewLocation() {
-        return newLocation;
     }
 }
