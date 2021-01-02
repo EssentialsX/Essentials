@@ -12,7 +12,7 @@ import org.bukkit.event.HandlerList;
  */
 public class WarpModifyEvent extends Event implements Cancellable {
     private static final HandlerList handlers = new HandlerList();
-    private final IUser issuer;
+    private final IUser user;
     private final String warpName;
     private final Location oldLocation;
     private final Location newLocation;
