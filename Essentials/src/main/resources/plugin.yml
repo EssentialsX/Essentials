@@ -11,10 +11,10 @@ api-version: "1.13"
 commands:
   afk:
     description: Marks you as away-from-keyboard.
-    usage: /<command> <player> [<message...>]
+    usage: /<command> [<player>] [<message...>]
     aliases: [eafk,away,eaway]
   antioch:
-    description: 'A little surprise for operators.'
+    description: A little surprise for operators.
     usage: /<command> [<message...>]
     aliases: [eantioch,grenade,egrenade,tnt,etnt]
   anvil:
