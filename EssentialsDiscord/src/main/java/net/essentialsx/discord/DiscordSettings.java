@@ -93,6 +93,10 @@ public class DiscordSettings implements IConf {
         return config.getInt("chat.discord-max-length", 2000);
     }
 
+    public boolean isChatFilterNewlines() {
+        return config.getBoolean("chat.filter-newlines", true);
+    }
+
     public String getConsoleChannelDef() {
         return config.getString("console.channel", "none");
     }

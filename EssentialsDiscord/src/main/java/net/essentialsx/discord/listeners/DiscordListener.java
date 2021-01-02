@@ -48,9 +48,15 @@ public class DiscordListener extends ListenerAdapter {
             }
         }
 
-        // Apply or strip formatting
-        final String finalMessage = StringUtils.abbreviate(DiscordUtil.hasRoles(member, plugin.getPlugin().getSettings().getPermittedFormattingRoles()) ?
-                FormatUtil.replaceFormat(messageBuilder.toString().trim()) : FormatUtil.stripFormat(messageBuilder.toString().trim()), plugin.getSettings().getChatDiscordMaxLength());
+        // Strip message
+        final String strippedMessage = StringUtils.abbreviate(
+                messageBuilder.toString()
+                        .replace(plugin.getSettings().isChatFilterNewlines() ? '\n' : ' ', ' ')
+                        .trim(), plugin.getSettings().getChatDiscordMaxLength());
+
+        // Apply or strip color formatting
+        final String finalMessage = DiscordUtil.hasRoles(member, plugin.getPlugin().getSettings().getPermittedFormattingRoles()) ?
+                FormatUtil.replaceFormat(strippedMessage) : FormatUtil.stripFormat(strippedMessage);
 
         // Don't send blank messages
         if (finalMessage.trim().length() == 0) {
