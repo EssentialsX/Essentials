@@ -5,11 +5,14 @@ import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
+/**
+ * Called when a user is kicked with the /kick command.
+ */
 public class UserKickEvent extends Event implements Cancellable {
     private static final HandlerList handlers = new HandlerList();
 
-    private IUser kicked;
-    private IUser kicker;
+    private final IUser kicked;
+    private final IUser kicker;
     private String reason;
     private boolean cancelled;
 
