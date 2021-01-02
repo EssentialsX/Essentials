@@ -379,6 +379,8 @@ public interface ISettings extends IConf {
 
     boolean infoAfterDeath();
 
+    boolean isRespawnAtBed();
+
     enum KeepInvPolicy {
         KEEP,
         DELETE,
