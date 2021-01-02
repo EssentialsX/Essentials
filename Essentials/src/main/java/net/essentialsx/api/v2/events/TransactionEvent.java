@@ -1,4 +1,4 @@
-package net.ess3.api.events;
+package net.essentialsx.api.v2.events;
 
 import com.earth2me.essentials.CommandSource;
 import net.ess3.api.IUser;
