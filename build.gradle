@@ -1,0 +1,178 @@
+buildscript  {
+    ext {
+        indraVersion = '1.2.1'
+    }
+}
+
+plugins {
+    id 'org.ajoberstar.grgit' version '4.1.0'
+    id 'net.kyori.indra' version "$indraVersion" apply false
+    id 'net.kyori.indra.checkstyle' version "$indraVersion" apply false
+    id 'net.kyori.indra.publishing' version "$indraVersion" apply false
+    id 'com.github.johnrengelman.shadow' version '6.1.0' apply false
+}
+
+import org.apache.tools.ant.filters.ReplaceTokens
+
+allprojects {
+    group = 'net.essentialsx'
+    version = '2.19.0-SNAPSHOT'
+}
+
+def commitsSinceLastTag() {
+    if (grgit == null) {
+        return 0
+    }
+    def tags = grgit.tag.list().stream().map({it.commit}).toList()
+    def commit = grgit.head()
+    def depth = 0
+    while (true) {
+        if (tags.contains(commit))
+            return depth
+        depth++
+        commit = grgit.resolve.toCommit(commit.parentIds.get(0))
+    }
+}
+
+ext {
+    GIT_COMMIT = grgit == null ? "unknown" : grgit.head().abbreviatedId
+    GIT_DEPTH = commitsSinceLastTag()
+
+    fullVersion = "${version}-${GIT_COMMIT}".replace("-SNAPSHOT", "-dev+${GIT_DEPTH}")
+
+    checkstyleVersion = '8.36.2'
+    spigotVersion = '1.16.4-R0.1-SNAPSHOT'
+    junit5Version = '5.7.0'
+    mockitoVersion = '3.2.0'
+}
+
+subprojects {
+    apply plugin: 'java'
+    apply plugin: 'net.kyori.indra'
+    apply plugin: 'net.kyori.indra.checkstyle'
+    apply plugin: 'net.kyori.indra.publishing'
+    apply plugin: 'com.github.johnrengelman.shadow'
+
+    repositories {
+        maven { url = 'https://hub.spigotmc.org/nexus/content/groups/public/' }
+        maven { url = 'https://papermc.io/repo/repository/maven-public/' }
+        maven {
+            url = 'https://jitpack.io'
+            content {
+                includeGroup "com.github.milkbowl"
+            }
+        }
+        maven {
+            url = 'https://repo.codemc.org/repository/maven-public'
+            content {
+                includeGroup "org.bstats"
+            }
+        }
+    }
+
+    dependencies {
+        testImplementation "org.junit.jupiter:junit-jupiter:${junit5Version}"
+        testImplementation "org.junit.vintage:junit-vintage-engine:${junit5Version}"
+        testImplementation "org.mockito:mockito-core:${mockitoVersion}"
+
+        if (project.name != "1_8Provider" && project.name != "PaperProvider" && project.name != "NMSReflectionProvider") { // These providers use their own bukkit versions
+            api "org.spigotmc:spigot-api:${spigotVersion}"
+        }
+    }
+
+    // Dependency caching
+    configurations.all {
+        resolutionStrategy.cacheChangingModulesFor 5, 'minutes'
+    }
+
+    // Version Injection
+    processResources {
+        inputs.property('fullVersion', fullVersion)
+        filter(ReplaceTokens, beginToken: '${',
+                endToken: '}', tokens: ["full.version": fullVersion])
+    }
+
+    indra {
+        checkstyle = "$checkstyleVersion"
+
+        github('EssentialsX', 'Essentials')
+        gpl3OnlyLicense()
+
+        publishReleasesTo('essx', 'https://repo.essentialsx.net/releases/')
+        publishSnapshotsTo('essx', 'https://repo.essentialsx.net/snapshots/')
+
+        configurePublications {
+            pom {
+                description = 'The essential plugin suite for Minecraft servers.'
+                url = 'https://essentialsx.net'
+                developers {
+                    developer {
+                        id = 'mdcfe'
+                        name = 'MD'
+                        email = 'md@n3fs.co.uk'
+                    }
+                    developer {
+                        id = 'pop4959'
+                    }
+                    developer {
+                        id = 'JRoy'
+                        name = 'Josh Roy'
+                    }
+                }
+                ciManagement {
+                    system = 'Jenkins'
+                    url = 'https://ci.ender.zone/job/EssentialsX'
+                }
+            }
+        }
+    }
+
+    compileJava {
+        options.compilerArgs.add('-Xlint:-deprecation')
+    }
+
+    javadoc {
+        title = "${project.name} API (v${rootProject.ext.fullVersion})"
+        options.links(
+                'https://hub.spigotmc.org/javadocs/spigot/'
+        )
+        options.addBooleanOption('Xdoclint:none', true)
+    }
+
+    // undo https://github.com/KyoriPowered/indra/blob/master/indra-common/src/main/kotlin/net/kyori/indra/IndraPlugin.kt#L57
+    archivesBaseName = project.name
+
+    tasks.withType(Jar) {
+        archiveVersion.set(fullVersion)
+    }
+}
+
+def outputTasks() {
+    [":EssentialsX:shadowJar", ":EssentialsXAntiBuild:jar", ":EssentialsXChat:jar",
+     ":EssentialsXGeoIP:shadowJar", ":EssentialsXProtect:jar", ":EssentialsXSpawn:jar",
+     ":EssentialsXXMPP:shadowJar"].stream().map({ tasks.findByPath(it) })
+}
+
+task copyToJars(type: Copy) {
+    dependsOn tasks.findByPath(":EssentialsX:processResources")
+
+    outputTasks().forEach {
+        from(it)
+    }
+
+    rename '(.*)-all.jar', '$1.jar'
+
+    into file('jars')
+}
+
+task cleanJars() {
+    delete file('jars')
+}
+
+task clean() {
+    dependsOn cleanJars
+}
+
+task build() {
+    dependsOn copyToJars
+}

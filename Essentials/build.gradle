@@ -1,0 +1,33 @@
+dependencies {
+    compileOnly('com.github.milkbowl:VaultAPI:1.7') {
+        exclude group: "org.bukkit", module: "bukkit"
+    }
+    compileOnly 'net.luckperms:api:5.0'
+
+    api 'io.papermc:paperlib:1.0.6'
+
+    api 'org.bstats:bstats-bukkit:1.8'
+
+    // Providers
+    api project(':providers:BaseProviders')
+    api project(':providers:PaperProvider')
+    api(project(':providers:NMSReflectionProvider')) {
+        exclude group: "org.bukkit", module: "bukkit"
+    }
+    api(project(':providers:1_8Provider')) {
+        exclude group: "org.bukkit", module: "bukkit"
+    }
+}
+
+shadowJar {
+    dependencies {
+        include (dependency('io.papermc:paperlib'))
+        include (dependency('org.bstats:bstats-bukkit'))
+        include (project(':providers:BaseProviders'))
+        include (project(':providers:PaperProvider'))
+        include (project(':providers:NMSReflectionProvider'))
+        include (project(':providers:1_8Provider'))
+    }
+    relocate 'io.papermc.lib', 'com.earth2me.essentials.paperlib'
+    relocate 'org.bstats.bukkit', 'com.earth2me.essentials.metrics'
+}
