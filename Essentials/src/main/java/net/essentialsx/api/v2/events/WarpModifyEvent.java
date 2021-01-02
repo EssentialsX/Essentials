@@ -18,8 +18,6 @@ public class WarpModifyEvent extends Event implements Cancellable {
     private final Location newLocation;
     private final WarpModifyCause cause;
     private boolean cancelled;
-
-
     /**
      * @param issuer      the {@link IUser} issuing the command
      * @param warpName    the name of the warp that's being altered
