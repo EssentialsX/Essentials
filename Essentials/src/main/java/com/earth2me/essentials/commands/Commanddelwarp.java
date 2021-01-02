@@ -23,13 +23,13 @@ public class Commanddelwarp extends EssentialsCommand {
             throw new NotEnoughArgumentsException();
         }
         //Check if warp exists before calling the event
-        Location location = ess.getWarps().getWarp(args[0]);
+        final Location location = ess.getWarps().getWarp(args[0]);
         if (location != null) {
             final WarpModifyEvent event = new WarpModifyEvent(sender.getUser(this.ess), args[0], location, null, WarpModifyEvent.WarpModifyCause.DELETE);
+            Bukkit.getServer().getPluginManager().callEvent(event);
             if (event.isCancelled()) {
                 return;
             }
-            Bukkit.getServer().getPluginManager().callEvent(event);
             ess.getWarps().removeWarp(args[0]);
         } else {
             throw new Exception(tl("warpNotExist"));

@@ -11,7 +11,6 @@ import org.bukkit.event.HandlerList;
  * Includes creation and deletion as described in {@link WarpModifyCause}.
  */
 public class WarpModifyEvent extends Event implements Cancellable {
-
     private static final HandlerList handlers = new HandlerList();
     private final IUser issuer;
     private final String warpName;
@@ -36,14 +35,6 @@ public class WarpModifyEvent extends Event implements Cancellable {
         this.cause = cause;
     }
 
-    public HandlerList getHandlers() {
-        return handlers;
-    }
-
-    public static HandlerList getHandlerList() {
-        return handlers;
-    }
-
     @Override
     public boolean isCancelled() {
         return cancelled;
@@ -64,6 +55,14 @@ public class WarpModifyEvent extends Event implements Cancellable {
 
     public String getWarpName() {
         return warpName;
+    }
+    
+    public HandlerList getHandlers() {
+        return handlers;
+    }
+
+    public static HandlerList getHandlerList() {
+        return handlers;
     }
 
     /**
