@@ -39,10 +39,10 @@ public class Commandkick extends EssentialsCommand {
         kickReason = FormatUtil.replaceFormat(kickReason.replace("\\n", "\n").replace("|", "\n"));
 
         target.getBase().kickPlayer(kickReason);
-        final String senderName = sender.isPlayer() ? sender.getPlayer().getDisplayName() : Console.NAME;
+        final String senderDisplayName = sender.isPlayer() ? sender.getPlayer().getDisplayName() : Console.DISPLAY_NAME;
 
-        server.getLogger().log(Level.INFO, tl("playerKicked", senderName, target.getName(), kickReason));
-        ess.broadcastMessage("essentials.kick.notify", tl("playerKicked", senderName, target.getName(), kickReason));
+        server.getLogger().log(Level.INFO, tl("playerKicked", senderDisplayName, target.getName(), kickReason));
+        ess.broadcastMessage("essentials.kick.notify", tl("playerKicked", senderDisplayName, target.getName(), kickReason));
     }
 
     @Override

@@ -47,12 +47,13 @@ public class Commandtempban extends EssentialsCommand {
         }
 
         final String senderName = sender.isPlayer() ? sender.getPlayer().getDisplayName() : Console.NAME;
+        final String senderDisplayName = sender.isPlayer() ? sender.getPlayer().getDisplayName() : Console.DISPLAY_NAME;
         ess.getServer().getBanList(BanList.Type.NAME).addBan(user.getName(), banReason, new Date(banTimestamp), senderName);
         final String expiry = DateUtil.formatDateDiff(banTimestamp);
 
-        user.getBase().kickPlayer(tl("tempBanned", expiry, senderName, banReason));
+        user.getBase().kickPlayer(tl("tempBanned", expiry, senderDisplayName, banReason));
 
-        final String message = tl("playerTempBanned", senderName, user.getName(), expiry, banReason);
+        final String message = tl("playerTempBanned", senderDisplayName, user.getName(), expiry, banReason);
         server.getLogger().log(Level.INFO, message);
         ess.broadcastMessage("essentials.ban.notify", message);
     }
