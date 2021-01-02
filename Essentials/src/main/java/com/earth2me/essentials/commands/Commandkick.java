@@ -40,7 +40,7 @@ public class Commandkick extends EssentialsCommand {
         String kickReason = args.length > 1 ? getFinalArg(args, 1) : tl("kickDefault");
         kickReason = FormatUtil.replaceFormat(kickReason.replace("\\n", "\n").replace("|", "\n"));
 
-        UserKickEvent event = new UserKickEvent(user, target, kickReason);
+        final UserKickEvent event = new UserKickEvent(user, target, kickReason);
         ess.getServer().getPluginManager().callEvent(event);
 
         if (event.isCancelled()) {
