@@ -1,6 +1,7 @@
 package net.essentialsx.api.v2.events;
 
 import net.ess3.api.IUser;
+import org.bukkit.Location;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
@@ -14,17 +15,24 @@ public class WarpModifyEvent extends Event implements Cancellable {
     private static final HandlerList handlers = new HandlerList();
     private final IUser issuer;
     private final String warpName;
+    private final Location oldLocation;
+    private final Location newLocation;
     private final WarpModifyCause cause;
     private boolean cancelled;
 
+
     /**
-     * @param issuer   the {@link IUser} issuing the command
-     * @param warpName the name of the warp that's being altered
-     * @param cause    the cause of change.
+     * @param issuer      the {@link IUser} issuing the command
+     * @param warpName    the name of the warp that's being altered
+     * @param oldLocation the old location before being modified. Null if {@link WarpModifyCause#CREATE}.
+     * @param newLocation the new location after being modified. Null if {@link WarpModifyCause#DELETE}.
+     * @param cause       the cause of change.
      */
-    public WarpModifyEvent(IUser issuer, String warpName, WarpModifyCause cause) {
+    public WarpModifyEvent(IUser issuer, String warpName, Location oldLocation, Location newLocation, WarpModifyCause cause) {
         this.issuer = issuer;
         this.warpName = warpName;
+        this.oldLocation = oldLocation;
+        this.newLocation = newLocation;
         this.cause = cause;
     }
 
@@ -64,5 +72,13 @@ public class WarpModifyEvent extends Event implements Cancellable {
      */
     public enum WarpModifyCause {
         UPDATE, CREATE, DELETE
+    }
+
+    public Location getOldLocation() {
+        return oldLocation;
+    }
+
+    public Location getNewLocation() {
+        return newLocation;
     }
 }
