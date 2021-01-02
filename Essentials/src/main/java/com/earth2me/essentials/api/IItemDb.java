@@ -9,7 +9,6 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.Locale;
 
 /**
  * Provides access to the current item alias registry.
@@ -29,7 +28,7 @@ public interface IItemDb {
      * @throws Exception if the item stack cannot be created
      */
     default ItemStack get(final String name, final int quantity) throws Exception {
-        final ItemStack stack = get(name.toLowerCase(Locale.ENGLISH));
+        final ItemStack stack = get(name);
         stack.setAmount(quantity);
         return stack;
     }
