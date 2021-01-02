@@ -6,6 +6,8 @@ dependencies {
 
     api 'io.papermc:paperlib:1.0.6'
 
+    api 'org.bstats:bstats-bukkit:1.8'
+
     // Providers
     api project(':providers:BaseProviders')
     api project(':providers:PaperProvider')
@@ -20,10 +22,12 @@ dependencies {
 shadowJar {
     dependencies {
         include (dependency('io.papermc:paperlib'))
+        include (dependency('org.bstats:bstats-bukkit'))
         include (project(':providers:BaseProviders'))
         include (project(':providers:PaperProvider'))
         include (project(':providers:NMSReflectionProvider'))
         include (project(':providers:1_8Provider'))
     }
     relocate 'io.papermc.lib', 'com.earth2me.essentials.paperlib'
+    relocate 'org.bstats.bukkit', 'com.earth2me.essentials.metrics'
 }
