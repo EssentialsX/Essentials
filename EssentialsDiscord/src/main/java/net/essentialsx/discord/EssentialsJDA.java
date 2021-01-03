@@ -57,7 +57,12 @@ public class EssentialsJDA {
     }
 
     public void sendMessage(DiscordMessageEvent.MessageType messageType, String message, boolean groupMentions) {
-        getChannel(messageType.getKey(), true).sendMessage(FormatUtil.stripFormat(message))
+        final TextChannel channel = getChannel(messageType.getKey(), true);
+        if (!channel.canTalk()) {
+            logger.warning("Cannot send message in channel: #" + channel.getName() + "Please ensure the bot has \"Send Messages\" permission in that channel!");
+            return;
+        }
+        channel.sendMessage(FormatUtil.stripFormat(message))
                 .allowedMentions(groupMentions ? null : DiscordUtil.NO_GROUP_MENTIONS)
                 .queue();
     }
