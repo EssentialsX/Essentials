@@ -164,7 +164,7 @@ public class EssentialsPlayerListener implements Listener {
             }
         }
 
-        user.updateActivityOnInteract(true);
+        user.updateActivityOnChat(true);
         user.setDisplayNick();
     }
 
@@ -830,7 +830,7 @@ public class EssentialsPlayerListener implements Listener {
         } else if (type == InventoryType.CHEST && top.getSize() == 9) {
             final User user = ess.getUser((Player) event.getWhoClicked());
             final InventoryHolder invHolder = top.getHolder();
-            if (invHolder instanceof HumanEntity && user.isInvSee()) {
+            if (invHolder instanceof HumanEntity && user.isInvSee() && event.getClick() != ClickType.MIDDLE) {
                 event.setCancelled(true);
                 refreshPlayer = user.getBase();
             }
