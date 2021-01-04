@@ -65,6 +65,7 @@ import net.ess3.provider.providers.FlatSpawnEggProvider;
 import net.ess3.provider.providers.LegacyPotionMetaProvider;
 import net.ess3.provider.providers.LegacySpawnEggProvider;
 import net.ess3.provider.providers.PaperContainerProvider;
+import net.ess3.provider.providers.PaperReflFormattedCommandAliasProvider;
 import net.ess3.provider.providers.PaperKnownCommandsProvider;
 import net.ess3.provider.providers.PaperRecipeBookListener;
 import net.ess3.provider.providers.PaperServerStateProvider;
@@ -333,7 +334,11 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
                 }
 
                 //Command Alias provider
-                formattedCommandAliasProvider = new ReflFormattedCommandAliasProvider(PaperLib.isPaper());
+                if (PaperLib.isPaper()) {
+                    formattedCommandAliasProvider = new PaperReflFormattedCommandAliasProvider();
+                } else {
+                    formattedCommandAliasProvider = new ReflFormattedCommandAliasProvider();
+                }
 
                 execTimer.mark("Init(Providers)");
                 reload();

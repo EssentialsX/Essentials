@@ -7,75 +7,46 @@ import org.bukkit.command.FormattedCommandAlias;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.List;
 
-public class ReflFormattedCommandAliasProvider implements FormattedCommandAliasProvider {
+public class ReflFormattedCommandAliasProvider extends FormattedCommandAliasProvider {
 
-    private final boolean paper;
+    protected final Class<? extends FormattedCommandAlias> formattedCommandAliasClass;
     private final Field formatStringsField;
-    private final Method buildCommandMethod;
 
-    public ReflFormattedCommandAliasProvider(boolean paper) {
-        this.paper = paper;
+    @SuppressWarnings("unchecked")
+    public ReflFormattedCommandAliasProvider() {
+        Class<? extends FormattedCommandAlias> formattedCommandAliasClass = null;
         Field formatStringsField = null;
-        Method buildCommandMethod = null;
         try {
-            @SuppressWarnings("unchecked")
-            final Class<? extends FormattedCommandAlias> formattedCommandAliasClass = (Class<? extends FormattedCommandAlias>) ReflUtil.getOBClass("command.FormattedCommandAlias");
+            formattedCommandAliasClass = (Class<? extends FormattedCommandAlias>) ReflUtil.getOBClass("command.FormattedCommandAlias");
             if (formattedCommandAliasClass != null) {
                 formatStringsField = ReflUtil.getFieldCached(formattedCommandAliasClass, "formatStrings");
-                if (paper) {
-                    buildCommandMethod = ReflUtil.getMethodCached(formattedCommandAliasClass, "buildCommand", CommandSender.class, String.class, String[].class);
-                } else {
-                    buildCommandMethod = ReflUtil.getMethodCached(formattedCommandAliasClass, "buildCommand", String.class, String[].class);
-                }
             }
         } catch (final Exception ex) {
             ex.printStackTrace();
         } finally {
+            this.formattedCommandAliasClass = formattedCommandAliasClass;
             this.formatStringsField = formatStringsField;
-            this.buildCommandMethod = buildCommandMethod;
         }
     }
 
     @Override
-    public List<String> createCommands(FormattedCommandAlias command, CommandSender sender, String[] args) {
-        final List<String> commands = new ArrayList<>();
-        if (buildCommandMethod == null || formatStringsField == null) return commands;
-
-        final String[] formatStrings;
+    public String[] getFormatStrings(FormattedCommandAlias command) {
         try {
-            formatStrings = (String[]) formatStringsField.get(command);
+            return (String[]) formatStringsField.get(command);
         } catch (ReflectiveOperationException ex) {
-            ex.printStackTrace();
-            return commands;
+            throw new RuntimeException(ex); // If this happens we have bigger problems...
         }
-
-        for (String formatString : formatStrings) {
-            final String cmd;
-            try {
-                cmd = buildCommand(command, sender, formatString, args);
-            } catch (Throwable th) {
-                continue; // Ignore, let server handle this.
-            }
-
-            if (cmd == null) continue;
-            commands.add(cmd.trim());
-        }
-        return commands;
     }
 
-    private String buildCommand(FormattedCommandAlias command, CommandSender sender, String formatString, String[] args) {
+    @Override
+    public String buildCommand(FormattedCommandAlias command, CommandSender sender, String formatString, String[] args) {
         try {
-            if (paper) {
-                return (String) buildCommandMethod.invoke(command, sender, formatString, args);
-            } else {
-                return (String) buildCommandMethod.invoke(command, formatString, args);
-            }
+            final Method buildCommandMethod = ReflUtil.getMethodCached(formattedCommandAliasClass, "buildCommand", String.class, String[].class);
+            if (buildCommandMethod == null) throw new ReflectiveOperationException("Method FormattedCommandAlias#buildCommand() not found");
+            return (String) buildCommandMethod.invoke(command, formatString, args);
         } catch (ReflectiveOperationException ex) {
-            ex.printStackTrace();
+            throw new RuntimeException(ex); // If this happens we have bigger problems...
         }
-        return null;
     }
 }

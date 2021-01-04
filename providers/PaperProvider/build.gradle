@@ -1,4 +1,5 @@
 dependencies {
     implementation project(':providers:BaseProviders')
+    implementation project(':providers:NMSReflectionProvider')
     compileOnly 'com.destroystokyo.paper:paper-api:1.16.3-R0.1-SNAPSHOT'
 }
