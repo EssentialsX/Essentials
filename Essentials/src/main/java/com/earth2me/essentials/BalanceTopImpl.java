@@ -2,6 +2,7 @@ package com.earth2me.essentials;
 
 import net.ess3.api.IEssentials;
 import net.essentialsx.api.v2.services.BalanceTop;
+import org.bukkit.plugin.ServicePriority;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -21,6 +22,7 @@ public class BalanceTopImpl implements BalanceTop {
 
     public BalanceTopImpl(IEssentials ess) {
         this.ess = ess;
+        ess.getServer().getServicesManager().register(BalanceTop.class, this, ess, ServicePriority.Normal);
     }
 
     private void calculateBalanceTopMap() {
@@ -78,5 +80,10 @@ public class BalanceTopImpl implements BalanceTop {
 
     public boolean isCacheLocked() {
         return cacheLock != null;
+    }
+
+    @Override
+    public String getName() {
+        return "BalanceTop";
     }
 }
