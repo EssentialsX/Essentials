@@ -291,7 +291,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
                 }
 
                 //Spawn Egg Providers
-                if (VersionUtil.getServerBukkitVersion().isLowerThanOrEqualTo(VersionUtil.v1_8_8_R01)) {
+                if (VersionUtil.getServerBukkitVersion().isLowerThan(VersionUtil.v1_9_R01)) {
                     spawnEggProvider = new LegacySpawnEggProvider();
                 } else if (VersionUtil.getServerBukkitVersion().isLowerThanOrEqualTo(VersionUtil.v1_12_2_R01)) {
                     spawnEggProvider = new ReflSpawnEggProvider();
@@ -300,7 +300,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
                 }
 
                 //Potion Meta Provider
-                if (VersionUtil.getServerBukkitVersion().isLowerThanOrEqualTo(VersionUtil.v1_8_8_R01)) {
+                if (VersionUtil.getServerBukkitVersion().isLowerThan(VersionUtil.v1_9_R01)) {
                     potionMetaProvider = new LegacyPotionMetaProvider();
                 } else {
                     potionMetaProvider = new BasePotionDataProvider();
@@ -504,10 +504,10 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
                                                 final ClassLoader classLoader, final String commandPath, final String permissionPrefix,
                                                 final IEssentialsModule module) {
         if (!getSettings().isCommandOverridden(command.getName()) && (!commandLabel.startsWith("e") || commandLabel.equalsIgnoreCase(command.getName()))) {
-            final PluginCommand pc = alternativeCommandsHandler.getAlternative(commandLabel);
-            if (pc != null) {
+            final Command pc = alternativeCommandsHandler.getAlternative(commandLabel);
+            if (pc instanceof PluginCommand) {
                 try {
-                    final TabCompleter completer = pc.getTabCompleter();
+                    final TabCompleter completer = ((PluginCommand) pc).getTabCompleter();
                     if (completer != null) {
                         return completer.onTabComplete(cSender, command, commandLabel, args);
                     }
@@ -580,7 +580,10 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
     public boolean onCommandEssentials(final CommandSender cSender, final Command command, final String commandLabel, final String[] args, final ClassLoader classLoader, final String commandPath, final String permissionPrefix, final IEssentialsModule module) {
         // Allow plugins to override the command via onCommand
         if (!getSettings().isCommandOverridden(command.getName()) && (!commandLabel.startsWith("e") || commandLabel.equalsIgnoreCase(command.getName()))) {
-            final PluginCommand pc = alternativeCommandsHandler.getAlternative(commandLabel);
+            if (getSettings().isDebug()) {
+                LOGGER.log(Level.INFO, "Searching for alternative to: " + commandLabel);
+            }
+            final Command pc = alternativeCommandsHandler.getAlternative(commandLabel);
             if (pc != null) {
                 alternativeCommandsHandler.executed(commandLabel, pc);
                 try {

@@ -680,11 +680,7 @@ public class EssentialsUpgrade {
     }
 
     private void updateBan(final String playerName, final String banReason, final Long banTimeout) {
-        if (banTimeout == 0) {
-            Bukkit.getBanList(BanList.Type.NAME).addBan(playerName, banReason, null, Console.NAME);
-        } else {
-            Bukkit.getBanList(BanList.Type.NAME).addBan(playerName, banReason, new Date(banTimeout), Console.NAME);
-        }
+        Bukkit.getBanList(BanList.Type.NAME).addBan(playerName, banReason, banTimeout == 0 ? null : new Date(banTimeout), Console.NAME);
     }
 
     private void repairUserMap() {

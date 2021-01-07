@@ -48,7 +48,7 @@ public class SignSell extends EssentialsSign {
         charge.isAffordableFor(player);
         money.pay(player, OverflowType.DROP);
         charge.charge(player);
-        Trade.log("Sign", "Sell", "Interact", username, charge, username, money, sign.getBlock().getLocation(), ess);
+        Trade.log("Sign", "Sell", "Interact", username, charge, username, money, sign.getBlock().getLocation(), player.getMoney(), ess);
         return true;
     }
 }

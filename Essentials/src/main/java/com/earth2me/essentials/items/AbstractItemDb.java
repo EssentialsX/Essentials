@@ -160,7 +160,7 @@ public abstract class AbstractItemDb implements IConf, net.ess3.api.IItemDb {
             }
         } else if (args[0].equalsIgnoreCase("blocks")) {
             for (final ItemStack stack : user.getBase().getInventory().getContents()) {
-                if (stack == null || stack.getType() == Material.AIR) {
+                if (stack == null || stack.getType() == Material.AIR || !stack.getType().isBlock()) {
                     continue;
                 }
                 is.add(stack.clone());

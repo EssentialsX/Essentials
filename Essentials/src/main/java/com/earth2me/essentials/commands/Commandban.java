@@ -41,6 +41,7 @@ public class Commandban extends EssentialsCommand {
         }
 
         final String senderName = sender.isPlayer() ? sender.getPlayer().getDisplayName() : Console.NAME;
+        final String senderDisplayName = sender.isPlayer() ? sender.getPlayer().getDisplayName() : Console.DISPLAY_NAME;
         final String banReason;
         if (args.length > 1) {
             banReason = FormatUtil.replaceFormat(getFinalArg(args, 1).replace("\\n", "\n").replace("|", "\n"));
@@ -50,16 +51,16 @@ public class Commandban extends EssentialsCommand {
 
         ess.getServer().getBanList(BanList.Type.NAME).addBan(user.getName(), banReason, null, senderName);
 
-        final String banDisplay = tl("banFormat", banReason, senderName);
+        final String banDisplay = tl("banFormat", banReason, senderDisplayName);
 
         user.getBase().kickPlayer(banDisplay);
-        server.getLogger().log(Level.INFO, tl("playerBanned", senderName, user.getName(), banDisplay));
+        server.getLogger().log(Level.INFO, tl("playerBanned", senderDisplayName, user.getName(), banDisplay));
 
         if (nomatch) {
             sender.sendMessage(tl("userUnknown", user.getName()));
         }
 
-        ess.broadcastMessage("essentials.ban.notify", tl("playerBanned", senderName, user.getName(), banReason));
+        ess.broadcastMessage("essentials.ban.notify", tl("playerBanned", senderDisplayName, user.getName(), banReason));
     }
 
     @Override
