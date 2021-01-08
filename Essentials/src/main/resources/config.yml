@@ -321,6 +321,9 @@ use-bukkit-permissions: true
 # removed from the /kit list when a player can no longer use it
 skip-used-one-time-kits-from-kit-list: false
 
+# When enabled, armor from kits will automatically be equipped as long as the player's armor slots are empty.
+kit-auto-equip: false
+
 # Determines the functionality of the /createkit command.
 # If this is true, /createkit will give the user a link with the kit code.
 # If this is false, /createkit will add the kit to the kits.yml config file directly.

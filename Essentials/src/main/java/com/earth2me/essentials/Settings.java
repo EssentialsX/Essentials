@@ -1529,6 +1529,11 @@ public class Settings implements net.ess3.api.ISettings {
     }
 
     @Override
+    public boolean isKitAutoEquip() {
+        return config.getBoolean("kit-auto-equip", false);
+    }
+
+    @Override
     public boolean isPastebinCreateKit() {
         return config.getBoolean("pastebin-createkit", false);
     }
