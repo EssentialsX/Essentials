@@ -37,7 +37,9 @@ public final class PlayerList {
             }
             user.setDisplayNick();
             groupString.append(user.getDisplayName());
-            if (ess.getSettings().realNamesOnList() && !ChatColor.stripColor(user.getDisplayName()).equals(user.getName())) {
+
+            final String strippedNick = FormatUtil.stripFormat(user.getNickname());
+            if (ess.getSettings().realNamesOnList() && strippedNick != null && !strippedNick.equals(user.getName())) {
                 groupString.append(" (").append(user.getName()).append(")");
             }
             groupString.append(ChatColor.WHITE.toString());

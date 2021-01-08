@@ -199,6 +199,8 @@ public interface ISettings extends IConf {
 
     boolean cancelAfkOnInteract();
 
+    boolean cancelAfkOnChat();
+
     boolean sleepIgnoresAfkPlayers();
 
     boolean isAfkListName();
@@ -378,6 +380,8 @@ public interface ISettings extends IConf {
     boolean isConfirmHomeOverwrite();
 
     boolean infoAfterDeath();
+
+    boolean isRespawnAtBed();
 
     enum KeepInvPolicy {
         KEEP,
