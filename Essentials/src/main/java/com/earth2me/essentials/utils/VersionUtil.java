@@ -70,6 +70,8 @@ public final class VersionUtil {
 
     private static BukkitVersion serverVersion = null;
     private static SupportStatus supportStatus = null;
+    // Used to find the specific class that caused a given support status
+    private static String supportStatusClass = null;
 
     private VersionUtil() {
     }
@@ -89,10 +91,12 @@ public final class VersionUtil {
                 try {
                     Class.forName(clazz);
                     if (!inverted) {
+                        supportStatusClass = entry.getKey();
                         return supportStatus = entry.getValue();
                     }
                 } catch (final ClassNotFoundException ignored) {
                     if (inverted) {
+                        supportStatusClass = entry.getKey();
                         return supportStatus = entry.getValue();
                     }
                 }
@@ -105,6 +109,10 @@ public final class VersionUtil {
             return supportStatus = PaperLib.isPaper() ? SupportStatus.FULL : SupportStatus.LIMITED;
         }
         return supportStatus;
+    }
+
+    public static String getSupportStatusClass() {
+        return supportStatusClass;
     }
 
     public static boolean isServerSupported() {

@@ -388,6 +388,10 @@ public class Commandessentials extends EssentialsCommand {
                 sender.sendMessage(tl("serverUnsupportedLimitedApi"));
                 break;
         }
+
+        if (VersionUtil.getSupportStatusClass() != null) {
+            sender.sendMessage(tl("serverUnsupportedClass", VersionUtil.getSupportStatusClass()));
+        }
     }
 
     @Override

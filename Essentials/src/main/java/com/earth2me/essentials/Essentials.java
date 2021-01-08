@@ -218,6 +218,10 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
                     break;
             }
 
+            if (VersionUtil.getSupportStatusClass() != null) {
+                getLogger().info(tl("serverUnsupportedClass", VersionUtil.getSupportStatusClass()));
+            }
+
             final PluginManager pm = getServer().getPluginManager();
             for (final Plugin plugin : pm.getPlugins()) {
                 if (plugin.getDescription().getName().startsWith("Essentials") && !plugin.getDescription().getVersion().equals(this.getDescription().getVersion()) && !plugin.getDescription().getName().equals("EssentialsAntiCheat")) {
