@@ -40,11 +40,11 @@ public final class VersionUtil {
         final ImmutableMap.Builder<String, SupportStatus> builder = new ImmutableMap.Builder<>();
 
         // Yatopia - Extremely volatile patch set;
-        //   * Messes with bungeecord UUIDs
+        //   * Messes with proxy-forwarded UUIDs
         //   * Frequent data corruptions
         builder.put("org.yatopiamc.yatopia.server.YatopiaConfig", SupportStatus.DANGEROUS_FORK);
 
-        // KibblePatcher - Dangerous bytecode editor snakeoil that's only use is to break plugins
+        // KibblePatcher - Dangerous bytecode editor snakeoil whose only use is to break plugins
         builder.put("net.kibblelands.server.FastMath", SupportStatus.DANGEROUS_FORK);
 
         // AirplaneLite - Yatopia sidestream;
@@ -56,10 +56,10 @@ public final class VersionUtil {
         //   * Potentially unsafe saving of nms.JsonList
         builder.put("io.akarin.server.Config", SupportStatus.DANGEROUS_FORK);
 
-        // Forge - Doesn't support bukkit
+        // Forge - Doesn't support Bukkit
         builder.put("net.minecraftforge.common.MinecraftForge", SupportStatus.UNSTABLE);
 
-        // Fabric - Doesn't support bukkit
+        // Fabric - Doesn't support Bukkit
         builder.put("net.fabricmc.loader.launch.knot.KnotServer", SupportStatus.UNSTABLE);
 
         // Misc translation layers that do not add NMS will be caught by this
