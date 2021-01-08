@@ -9,8 +9,8 @@
         <entry key="location-0" value="BUNDLED:(bundled):Sun Checks" />
         <entry key="location-1" value="BUNDLED:(bundled):Google Checks" />
         <entry key="location-2" value="PROJECT_RELATIVE:$PROJECT_DIR$/.checkstyle/checkstyle.xml:EssentialsX" />
-        <entry key="property-2.checkstyle.suppressions.file" value=".checkstyle/suppressions.xml" />
-        <entry key="scan-before-checkin" value="false" />
+        <entry key="property-2.configDirectory" value=".checkstyle/" />
+        <entry key="scan-before-checkin" value="true" />
         <entry key="scanscope" value="JavaOnly" />
         <entry key="suppress-errors" value="false" />
       </map>

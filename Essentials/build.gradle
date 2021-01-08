@@ -4,7 +4,9 @@ dependencies {
     }
     compileOnly 'net.luckperms:api:5.0'
 
-    api 'io.papermc:paperlib:1.0.6-SNAPSHOT'
+    api 'io.papermc:paperlib:1.0.6'
+
+    api 'org.bstats:bstats-bukkit:1.8'
 
     // Providers
     api project(':providers:BaseProviders')
@@ -20,10 +22,12 @@ dependencies {
 shadowJar {
     dependencies {
         include (dependency('io.papermc:paperlib'))
+        include (dependency('org.bstats:bstats-bukkit'))
         include (project(':providers:BaseProviders'))
         include (project(':providers:PaperProvider'))
         include (project(':providers:NMSReflectionProvider'))
         include (project(':providers:1_8Provider'))
     }
     relocate 'io.papermc.lib', 'com.earth2me.essentials.paperlib'
+    relocate 'org.bstats.bukkit', 'com.earth2me.essentials.metrics'
 }
