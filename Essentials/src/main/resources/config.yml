@@ -628,6 +628,10 @@ default-enabled-confirm-commands:
 # Whether or not to teleport a player back to their previous position after they have been freed from jail.
 teleport-back-when-freed-from-jail: true
 
+# Whether or not jail time should only be counted while the user is online.
+# If true, a jailed player's time will only decrement when they are online.
+jail-online-time: false
+
 # Set the timeout, in seconds for players to accept a tpa before the request is cancelled.
 # Set to 0 for no timeout.
 tpa-accept-cancellation: 120
