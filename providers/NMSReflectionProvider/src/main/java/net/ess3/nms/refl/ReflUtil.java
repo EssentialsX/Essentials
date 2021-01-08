@@ -35,7 +35,11 @@ public final class ReflUtil {
         if (nmsVersion == null) {
             final String name = Bukkit.getServer().getClass().getName();
             final String[] parts = name.split("\\.");
-            nmsVersion = parts[3];
+            if (parts.length > 3) {
+                return nmsVersion = parts[3];
+            }
+            // We're not on craftbukkit, return an empty string so we can silently fail
+            return nmsVersion = "";
         }
         return nmsVersion;
     }
