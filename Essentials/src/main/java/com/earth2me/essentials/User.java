@@ -15,6 +15,7 @@ import net.ess3.api.events.AfkStatusChangeEvent;
 import net.ess3.api.events.JailStatusChangeEvent;
 import net.ess3.api.events.MuteStatusChangeEvent;
 import net.ess3.api.events.UserBalanceUpdateEvent;
+import net.essentialsx.api.v2.events.TransactionEvent;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -199,6 +200,8 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
             reciever.setMoney(reciever.getMoney().add(value), cause);
             sendMessage(tl("moneySentTo", NumberUtil.displayCurrency(value, ess), reciever.getDisplayName()));
             reciever.sendMessage(tl("moneyRecievedFrom", NumberUtil.displayCurrency(value, ess), getDisplayName()));
+            final TransactionEvent transactionEvent = new TransactionEvent(this.getSource(), reciever, value);
+            ess.getServer().getPluginManager().callEvent(transactionEvent);
         } else {
             throw new ChargeException(tl("notEnoughMoney", NumberUtil.displayCurrency(value, ess)));
         }
@@ -504,7 +507,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
             }
         }
         super.setMoney(newBalance, true);
-        Trade.log("Update", "Set", "API", getName(), new Trade(newBalance, ess), null, null, null, ess);
+        Trade.log("Update", "Set", "API", getName(), new Trade(newBalance, ess), null, null, null, newBalance, ess);
     }
 
     public void updateMoneyCache(final BigDecimal value) {
@@ -665,6 +668,15 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
     public void updateActivityOnInteract(final boolean broadcast) {
         if (ess.getSettings().cancelAfkOnInteract()) {
             updateActivity(broadcast, AfkStatusChangeEvent.Cause.INTERACT);
+        }
+    }
+
+    public void updateActivityOnChat(final boolean broadcast) {
+        if (ess.getSettings().cancelAfkOnChat()) {
+            //Chat happens async, make sure we have a sync context
+            ess.scheduleSyncDelayedTask(() -> {
+                updateActivity(broadcast, AfkStatusChangeEvent.Cause.CHAT);
+            });
         }
     }
 

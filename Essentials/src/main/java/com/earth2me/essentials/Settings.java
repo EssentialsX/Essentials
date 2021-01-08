@@ -985,6 +985,11 @@ public class Settings implements net.ess3.api.ISettings {
     }
 
     @Override
+    public boolean cancelAfkOnChat() {
+        return config.getBoolean("cancel-afk-on-chat", true);
+    }
+
+    @Override
     public boolean sleepIgnoresAfkPlayers() {
         return sleepIgnoresAfkPlayers;
     }
@@ -1721,5 +1726,10 @@ public class Settings implements net.ess3.api.ISettings {
     @Override
     public boolean infoAfterDeath() {
         return config.getBoolean("send-info-after-death", false);
+    }
+
+    @Override
+    public boolean isRespawnAtBed() {
+        return config.getBoolean("respawn-at-home-bed", true);
     }
 }

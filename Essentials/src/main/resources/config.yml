@@ -453,6 +453,9 @@ cancel-afk-on-interact: true
 # Disable this to reduce server lag.
 cancel-afk-on-move: true
 
+# Should we automatically remove afk status when a player sends a chat message?
+cancel-afk-on-chat: true
+
 # Should AFK players be ignored when other players are trying to sleep?
 # When this setting is false, players won't be able to skip the night if some players are AFK.
 # Users with the permission node essentials.sleepingignored will always be ignored.
