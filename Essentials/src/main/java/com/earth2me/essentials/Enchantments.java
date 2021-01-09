@@ -289,7 +289,7 @@ public final class Enchantments {
             enchantment = Enchantment.getByName(name.toLowerCase());
         }   
         if (enchantment == null) {
-            enchatment = Enchantment.getByName(name);
+            enchantment = Enchantment.getByName(name);
         }
         if (enchantment == null) {
             enchantment = ENCHANTMENTS.get(name.toLowerCase(Locale.ENGLISH));
