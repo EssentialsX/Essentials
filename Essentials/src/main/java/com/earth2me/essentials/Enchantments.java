@@ -286,7 +286,7 @@ public final class Enchantments {
             enchatment = Enchantment.getByName(name);
         }
         if (enchantment == null) {
-            enchantment = Enchantment.getByName(name.toLowerCaseCase());
+            enchantment = Enchantment.getByName(name.toLowerCase());
         }        
         if (enchantment == null) {
             enchantment = Enchantment.getByName(name.toUpperCase());
