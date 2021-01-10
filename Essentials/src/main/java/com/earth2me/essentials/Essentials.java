@@ -626,16 +626,19 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
     public boolean onCommandEssentials(final CommandSender cSender, final Command command, final String commandLabel, final String[] args, final ClassLoader classLoader, final String commandPath, final String permissionPrefix, final IEssentialsModule module) {
         // Allow plugins to override the command via onCommand
         if (!getSettings().isCommandOverridden(command.getName()) && (!commandLabel.startsWith("e") || commandLabel.equalsIgnoreCase(command.getName()))) {
+            if (getSettings().isDebug()) {
+                LOGGER.log(Level.INFO, "Searching for alternative to: " + commandLabel);
+            }
             final Command pc = alternativeCommandsHandler.getAlternative(commandLabel);
             if (pc != null) {
                 alternativeCommandsHandler.executed(commandLabel, pc);
                 try {
-                    return pc.execute(cSender, commandLabel, args);
+                    pc.execute(cSender, commandLabel, args);
                 } catch (final Exception ex) {
                     Bukkit.getLogger().log(Level.SEVERE, ex.getMessage(), ex);
                     cSender.sendMessage(tl("internalError"));
-                    return true;
                 }
+                return true;
             }
         }
 

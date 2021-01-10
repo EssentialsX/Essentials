@@ -321,6 +321,9 @@ use-bukkit-permissions: true
 # removed from the /kit list when a player can no longer use it
 skip-used-one-time-kits-from-kit-list: false
 
+# When enabled, armor from kits will automatically be equipped as long as the player's armor slots are empty.
+kit-auto-equip: false
+
 # Determines the functionality of the /createkit command.
 # If this is true, /createkit will give the user a link with the kit code.
 # If this is false, /createkit will add the kit to the kits.yml config file directly.
@@ -449,6 +452,9 @@ cancel-afk-on-interact: true
 # Player will be removed from AFK on chat/command regardless of this setting.
 # Disable this to reduce server lag.
 cancel-afk-on-move: true
+
+# Should we automatically remove afk status when a player sends a chat message?
+cancel-afk-on-chat: true
 
 # Should AFK players be ignored when other players are trying to sleep?
 # When this setting is false, players won't be able to skip the night if some players are AFK.
@@ -621,6 +627,10 @@ default-enabled-confirm-commands:
 
 # Whether or not to teleport a player back to their previous position after they have been freed from jail.
 teleport-back-when-freed-from-jail: true
+
+# Whether or not jail time should only be counted while the user is online.
+# If true, a jailed player's time will only decrement when they are online.
+jail-online-time: false
 
 # Set the timeout, in seconds for players to accept a tpa before the request is cancelled.
 # Set to 0 for no timeout.

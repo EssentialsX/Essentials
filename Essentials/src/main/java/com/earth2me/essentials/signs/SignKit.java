@@ -53,7 +53,7 @@ public class SignKit extends EssentialsSign {
                 kit.expandItems(player);
 
                 charge.charge(player);
-                Trade.log("Sign", "Kit", "Interact", username, null, username, charge, sign.getBlock().getLocation(), ess);
+                Trade.log("Sign", "Kit", "Interact", username, null, username, charge, sign.getBlock().getLocation(), player.getMoney(), ess);
             } catch (final NoChargeException ex) {
                 return false;
             } catch (final Exception ex) {

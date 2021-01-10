@@ -57,7 +57,7 @@ public class SignWarp extends EssentialsSign {
         player.getAsyncTeleport().warp(player, warpName, charge, TeleportCause.PLUGIN, future);
         future.thenAccept(success -> {
             if (success) {
-                Trade.log("Sign", "Warp", "Interact", username, null, username, charge, sign.getBlock().getLocation(), ess);
+                Trade.log("Sign", "Warp", "Interact", username, null, username, charge, sign.getBlock().getLocation(), player.getMoney(), ess);
             }
         });
         future.exceptionally(e -> {
