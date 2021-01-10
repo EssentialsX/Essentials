@@ -342,7 +342,7 @@ public abstract class AbstractItemDb implements IConf, net.ess3.api.IItemDb {
                 if (!first) {
                     sb.append(","); // same thing as above.
                 }
-                sb.append(c.toString());
+                sb.append("#").append(Integer.toHexString(c.asRGB()));
                 first = false;
             }
             sb.append(" ");
@@ -356,7 +356,7 @@ public abstract class AbstractItemDb implements IConf, net.ess3.api.IItemDb {
                 if (!first) {
                     sb.append(","); // same thing as above.
                 }
-                sb.append(c.toString());
+                sb.append("#").append(Integer.toHexString(c.asRGB()));
                 first = false;
             }
             sb.append(" ");
