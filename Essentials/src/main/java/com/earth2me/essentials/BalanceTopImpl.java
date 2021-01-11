@@ -35,7 +35,7 @@ public class BalanceTopImpl implements BalanceTop {
                     // Don't list NPCs in output
                     continue;
                 }
-                if (!user.isAuthorized("essentials.balancetop.exclude")) {
+                if (!user.isBaltopExempt()) {
                     final BigDecimal userMoney = user.getMoney();
                     user.updateMoneyCache(userMoney);
                     newTotal = newTotal.add(userMoney);
