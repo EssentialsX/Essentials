@@ -4,6 +4,7 @@ import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.DateUtil;
 import com.earth2me.essentials.utils.EnumUtil;
+import com.google.common.collect.Iterables;
 import net.ess3.api.events.JailStatusChangeEvent;
 import org.bukkit.Server;
 import org.bukkit.Statistic;
@@ -31,7 +32,8 @@ public class Commandtogglejail extends EssentialsCommand {
 
         final User player = getPlayer(server, args, 0, true, true);
 
-        if (args.length >= 2 && !player.isJailed()) {
+        mainCommand:
+        if (!player.isJailed()) {
             if (!player.getBase().isOnline()) {
                 if (sender.isPlayer() && !ess.getUser(sender.getPlayer()).isAuthorized("essentials.togglejail.offline")) {
                     sender.sendMessage(tl("mayNotJailOffline"));
@@ -44,7 +46,14 @@ public class Commandtogglejail extends EssentialsCommand {
                 return;
             }
 
-            final String jailName = args[1];
+            final String jailName;
+            if (args.length > 1) {
+                jailName = args[1];
+            } else if (ess.getJails().getCount() == 1) {
+                jailName = Iterables.get(ess.getJails().getList(), 0);
+            } else {
+                break mainCommand;
+            }
             // Check if jail exists
             ess.getJails().getJail(jailName);
 
