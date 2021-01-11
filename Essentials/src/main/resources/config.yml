@@ -820,6 +820,12 @@ chat:
   # You can use permissions to control whether players can use formatting codes in their chat messages.
   # See https://essentialsx.net/wiki/Color-Permissions.html for more information.
 
+  # World aliases allow you to replace the world name with something different in the chat format.
+  # If you are using world aliases, make sure to remove the '#' at the start to allow the setting to be read.
+  world-aliases:
+  #  plots: "&dP&r"
+  #  creative: "&eC&r"
+
 ############################################################
 # +------------------------------------------------------+ #
 # |                 EssentialsX Protect                  | #

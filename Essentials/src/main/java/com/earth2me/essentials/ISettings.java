@@ -33,6 +33,8 @@ public interface ISettings extends IConf {
 
     String getChatFormat(String group);
 
+    String getWorldAlias(String world);
+
     int getChatRadius();
 
     int getNearRadius();
