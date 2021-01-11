@@ -260,6 +260,10 @@ commands:
     description: Obtains the specified kit or views all available kits.
     usage: /<command> [kit] [player]
     aliases: [ekit,kits,ekits]
+  kitreset:
+    description: Resets the cooldown on the specified kit.
+    usage: /<command> <kit> [player]
+    aliases: [ekitreset, kitr, resetkit, eresetkit]
   kittycannon:
     description: Throw an exploding kitten at your opponent.
     usage: /<command>
