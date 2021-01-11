@@ -8,8 +8,11 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class CustomItemResolver implements IItemDb.ItemResolver, IConf {
     private final EssentialsConf config;
@@ -37,6 +40,16 @@ public class CustomItemResolver implements IItemDb.ItemResolver, IConf {
     @Override
     public Collection<String> getNames() {
         return map.keySet();
+    }
+
+    public List<String> getAliasFor(String item) throws Exception {
+        final List<String> results = new ArrayList<>();
+        for (Map.Entry<String, String> entry : map.entrySet()) {
+            if (item.equalsIgnoreCase(ess.getItemDb().name(ess.getItemDb().get(entry.getValue())))) {
+                results.add(entry.getKey());
+            }
+        }
+        return results;
     }
 
     @Override
