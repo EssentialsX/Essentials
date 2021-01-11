@@ -111,7 +111,6 @@ public class Settings implements net.ess3.api.ISettings {
     private boolean isCustomJoinMessage;
     private String customQuitMessage;
     private boolean isCustomQuitMessage;
-    private boolean isCustomServerFullMessage;
     private List<String> spawnOnJoinGroups;
     private Map<Pattern, Long> commandCooldowns;
     private boolean npcsInBalanceRanking = false;
@@ -631,8 +630,6 @@ public class Settings implements net.ess3.api.ISettings {
         isCustomJoinMessage = !customJoinMessage.equals("none");
         customQuitMessage = _getCustomQuitMessage();
         isCustomQuitMessage = !customQuitMessage.equals("none");
-        isCustomServerFullMessage = _isCustomServerFullMessage();
-
         muteCommands = _getMuteCommands();
         spawnOnJoinGroups = _getSpawnOnJoinGroups();
         commandCooldowns = _getCommandCooldowns();
@@ -1281,10 +1278,6 @@ public class Settings implements net.ess3.api.ISettings {
 
     @Override
     public boolean isCustomServerFullMessage() {
-        return isCustomServerFullMessage;
-    }
-
-    private boolean _isCustomServerFullMessage() {
         return config.getBoolean("use-custom-server-full-message", true);
     }
 
