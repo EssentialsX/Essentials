@@ -71,6 +71,8 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
     private long lastNotifiedAboutMailsMs;
     private String lastHomeConfirmation;
     private long lastHomeConfirmationTimestamp;
+    private Boolean kickExemptCache = null;
+    private Boolean afkAutoCache = null;
 
     public User(final Player base, final IEssentials ess) {
         super(base, ess);
@@ -548,6 +550,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
             this.afkMessage = null;
             this.afkSince = 0;
         }
+        kickExemptCache = null;
         _setAfk(set);
         updateAfkListName();
     }
@@ -670,6 +673,8 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
             }
         }
         lastActivity = System.currentTimeMillis();
+        afkAutoCache = null;
+        kickExemptCache = null;
     }
 
     public void updateActivityOnMove(final boolean broadcast) {
@@ -702,10 +707,10 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
         final long autoafkkick = ess.getSettings().getAutoAfkKick();
         if (autoafkkick > 0
             && lastActivity > 0 && (lastActivity + (autoafkkick * 1000)) < System.currentTimeMillis()
-            && !isAuthorized("essentials.kick.exempt")
-            && !isAuthorized("essentials.afk.kickexempt")) {
+            && !isKickExempt()) {
             final String kickReason = tl("autoAfkKickReason", autoafkkick / 60.0);
             lastActivity = 0;
+            kickExemptCache = null;
             this.getBase().kickPlayer(kickReason);
 
             for (final User user : ess.getOnlineUsers()) {
@@ -715,8 +720,9 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
             }
         }
         final long autoafk = ess.getSettings().getAutoAfk();
-        if (!isAfk() && autoafk > 0 && lastActivity + autoafk * 1000 < System.currentTimeMillis() && isAuthorized("essentials.afk.auto")) {
+        if (!isAfk() && autoafk > 0 && lastActivity + autoafk * 1000 < System.currentTimeMillis() && isAfkAuto()) {
             setAfk(true, AfkStatusChangeEvent.Cause.ACTIVITY);
+            afkAutoCache = null;
             if (!isHidden()) {
                 setDisplayNick();
                 final String msg = tl("userIsAway", getDisplayName());
@@ -730,6 +736,20 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
                 }
             }
         }
+    }
+
+    private boolean isAfkAuto() {
+        if (afkAutoCache != null) {
+            return afkAutoCache;
+        }
+        return afkAutoCache = isAuthorized("essentials.afk.auto");
+    }
+
+    private boolean isKickExempt() {
+        if (kickExemptCache != null) {
+            return kickExemptCache;
+        }
+        return kickExemptCache = isAuthorized("essentials.kick.exempt") || isAuthorized("essentials.afk.kickexempt");
     }
 
     public Location getAfkPosition() {
