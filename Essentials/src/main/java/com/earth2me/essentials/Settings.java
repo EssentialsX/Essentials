@@ -1534,6 +1534,11 @@ public class Settings implements net.ess3.api.ISettings {
     }
 
     @Override
+    public boolean isKitAutoEquip() {
+        return config.getBoolean("kit-auto-equip", false);
+    }
+
+    @Override
     public boolean isPastebinCreateKit() {
         return config.getBoolean("pastebin-createkit", false);
     }
@@ -1608,6 +1613,11 @@ public class Settings implements net.ess3.api.ISettings {
     @Override
     public boolean isTeleportBackWhenFreedFromJail() {
         return teleportBackWhenFreedFromJail;
+    }
+
+    @Override
+    public boolean isJailOnlineTime() {
+        return config.getBoolean("jail-online-time", false);
     }
 
     private boolean _isCompassTowardsHomePerm() {

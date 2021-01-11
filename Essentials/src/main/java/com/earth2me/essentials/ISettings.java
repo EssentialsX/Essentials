@@ -333,6 +333,8 @@ public interface ISettings extends IConf {
 
     List<EssentialsSign> getUnprotectedSignNames();
 
+    boolean isKitAutoEquip();
+
     boolean isPastebinCreateKit();
 
     boolean isAllowBulkBuySell();
@@ -354,6 +356,8 @@ public interface ISettings extends IConf {
     boolean isConfirmCommandEnabledByDefault(String commandName);
 
     boolean isTeleportBackWhenFreedFromJail();
+
+    boolean isJailOnlineTime();
 
     boolean isCompassTowardsHomePerm();
 
