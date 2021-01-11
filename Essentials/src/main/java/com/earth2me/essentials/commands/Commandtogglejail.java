@@ -44,6 +44,10 @@ public class Commandtogglejail extends EssentialsCommand {
                 return;
             }
 
+            final String jailName = args[1];
+            // Check if jail exists
+            ess.getJails().getJail(jailName);
+
             final JailStatusChangeEvent event = new JailStatusChangeEvent(player, sender.isPlayer() ? ess.getUser(sender.getPlayer()) : null, true);
             ess.getServer().getPluginManager().callEvent(event);
 
@@ -63,7 +67,7 @@ public class Commandtogglejail extends EssentialsCommand {
                         player.setJailed(true);
                         player.sendMessage(tl("userJailed"));
                         player.setJail(null);
-                        player.setJail(args[1]);
+                        player.setJail(jailName);
                         if (args.length > 2) {
                             player.setJailTimeout(timeDiff);
                             player.setOnlineJailedTime(ess.getSettings().isJailOnlineTime() ? ((player.getBase().getStatistic(PLAY_ONE_TICK)) + (timeDiff / 50)) : 0);
@@ -72,10 +76,8 @@ public class Commandtogglejail extends EssentialsCommand {
                     }
                 });
                 if (player.getBase().isOnline()) {
-                    ess.getJails().sendToJail(player, args[1], future);
+                    ess.getJails().sendToJail(player, jailName, future);
                 } else {
-                    // Check if jail exists
-                    ess.getJails().getJail(args[1]);
                     future.complete(true);
                 }
             }
