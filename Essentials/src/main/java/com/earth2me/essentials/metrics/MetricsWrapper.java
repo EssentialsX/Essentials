@@ -1,6 +1,7 @@
 package com.earth2me.essentials.metrics;
 
 import com.earth2me.essentials.Essentials;
+import com.earth2me.essentials.EssentialsUpdateChecker;
 import com.earth2me.essentials.register.payment.Methods;
 import com.google.common.collect.ImmutableList;
 import org.bstats.bukkit.Metrics;
@@ -38,6 +39,7 @@ public class MetricsWrapper {
         checkForcedMetrics();
         addPermsChart();
         addEconomyChart();
+        addCustomChart(new Metrics.SimplePie("releaseBranch", EssentialsUpdateChecker::getVersionBranch));
 
         // bStats' backend currently doesn't support multi-line charts or advanced bar charts
         // These are included for when bStats is ready to accept this data
