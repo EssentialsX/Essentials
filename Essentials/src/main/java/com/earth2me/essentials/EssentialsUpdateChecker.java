@@ -57,7 +57,7 @@ public final class EssentialsUpdateChecker {
     }
 
     public static CompletableFuture<UpdateToken> getDevToken() {
-        if (cachedDev == null || ((System.currentTimeMillis() - lastFetchTime) > 300000)) {
+        if (cachedDev == null || ((System.currentTimeMillis() - lastFetchTime) > 1800000L)) {
             if (pendingDevFuture != null) {
                 return pendingDevFuture;
             }
@@ -73,7 +73,7 @@ public final class EssentialsUpdateChecker {
     }
 
     public static CompletableFuture<UpdateToken> getReleaseToken() {
-        if (cachedRelease == null || ((System.currentTimeMillis() - lastFetchTime) > 300000)) {
+        if (cachedRelease == null || ((System.currentTimeMillis() - lastFetchTime) > 1800000L)) {
             if (pendingReleaseFuture != null) {
                 return pendingReleaseFuture;
             }
