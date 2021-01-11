@@ -656,7 +656,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
     public void updateActivity(final boolean broadcast, final AfkStatusChangeEvent.Cause cause) {
         if (isAfk()) {
             setAfk(false, cause);
-            if (broadcast && !isHidden()) {
+            if (broadcast && !isHidden() && !isAfk()) {
                 setDisplayNick();
                 final String msg = tl("userIsNotAway", getDisplayName());
                 final String selfmsg = tl("userIsNotAwaySelf", getDisplayName());
