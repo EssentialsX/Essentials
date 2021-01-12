@@ -12,6 +12,8 @@ import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.Webhook;
 import net.essentialsx.api.v2.events.discord.DiscordMessageEvent;
+import net.essentialsx.discord.interactions.InteractionController;
+import net.essentialsx.discord.interactions.commands.ExecuteCommand;
 import net.essentialsx.discord.listeners.BukkitListener;
 import net.essentialsx.discord.listeners.DiscordListener;
 import net.essentialsx.discord.util.ConsoleInjector;
@@ -33,6 +35,7 @@ public class EssentialsJDA {
     private TextChannel primaryChannel;
     private WebhookClient consoleWebhook;
     private ConsoleInjector injector;
+    private InteractionController interactionController;
 
     public EssentialsJDA(EssentialsDiscord plugin) {
         this.plugin = plugin;
@@ -88,6 +91,9 @@ public class EssentialsJDA {
         if (guild == null) {
             throw new IllegalArgumentException("No guild configured!");
         }
+
+        interactionController = new InteractionController(this);
+        interactionController.registerCommand(new ExecuteCommand());
 
         updatePrimaryChannel();
 
@@ -160,6 +166,18 @@ public class EssentialsJDA {
         if (consoleWebhook != null && !consoleWebhook.isShutdown()) {
             consoleWebhook.close();
         }
+
+        if (interactionController != null) {
+            interactionController.shutdown();
+        }
+    }
+
+    public JDA getJda() {
+        return jda;
+    }
+
+    public Guild getGuild() {
+        return guild;
     }
 
     public EssentialsDiscord getPlugin() {
