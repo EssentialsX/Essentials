@@ -19,7 +19,8 @@ public class DiscordCommandDispatcher extends ListenerAdapter {
         if (jda.getConsoleWebhook() != null && jda.getSettings().getConsoleChannelDef().equals(event.getChannel().getId())
                 && !event.isWebhookMessage() && !event.getAuthor().isBot()) {
             Bukkit.getScheduler().runTask(jda.getPlugin(), () ->
-                    Bukkit.dispatchCommand(new DiscordCommandSender(jda, event.getMessage(), Bukkit.getConsoleSender()), event.getMessage().getContentRaw()));
+                    Bukkit.dispatchCommand(new DiscordCommandSender(jda, Bukkit.getConsoleSender(), message ->
+                            event.getMessage().reply(message).queue()), event.getMessage().getContentRaw()));
         }
     }
 }

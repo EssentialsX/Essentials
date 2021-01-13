@@ -82,6 +82,7 @@ public class EssentialsJDA {
                 .addEventListeners(new DiscordListener(this))
                 //.addEventListeners(new DiscordCommandDispatcher(this))
                 .setContextEnabled(false)
+                .setRawEventsEnabled(true)
                 .build()
                 .awaitReady();
         updatePresence();
@@ -93,7 +94,7 @@ public class EssentialsJDA {
         }
 
         interactionController = new InteractionController(this);
-        interactionController.registerCommand(new ExecuteCommand());
+        interactionController.registerCommand(new ExecuteCommand(this));
 
         updatePrimaryChannel();
 

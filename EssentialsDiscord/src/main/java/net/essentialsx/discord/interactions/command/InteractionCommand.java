@@ -6,7 +6,7 @@ import com.google.gson.JsonObject;
 import java.util.ArrayList;
 import java.util.List;
 
-public class InteractionCommand {
+public abstract class InteractionCommand {
     private final String name;
     private final String description;
     private final List<InteractionCommandArgument> arguments = new ArrayList<>();
@@ -14,6 +14,12 @@ public class InteractionCommand {
     public InteractionCommand(String name, String description) {
         this.name = name;
         this.description = description;
+    }
+
+    public abstract void onCommand(InteractionEvent event);
+
+    public String getName() {
+        return name;
     }
 
     public void addArgument(InteractionCommandArgument argument) {

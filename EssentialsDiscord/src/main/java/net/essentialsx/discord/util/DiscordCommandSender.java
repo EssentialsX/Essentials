@@ -1,7 +1,6 @@
 package net.essentialsx.discord.util;
 
 import com.earth2me.essentials.utils.FormatUtil;
-import net.dv8tion.jda.api.entities.Message;
 import net.essentialsx.discord.EssentialsJDA;
 import org.bukkit.Bukkit;
 import org.bukkit.Server;
@@ -25,10 +24,10 @@ public class DiscordCommandSender implements ConsoleCommandSender {
     private String responseBuffer = "";
     private long lastTime = System.currentTimeMillis();
 
-    public DiscordCommandSender(EssentialsJDA jda, Message commandMessage, ConsoleCommandSender sender) {
+    public DiscordCommandSender(EssentialsJDA jda, ConsoleCommandSender sender, CmdCallback callback) {
         task = Bukkit.getScheduler().runTaskTimerAsynchronously(jda.getPlugin(), () -> {
-            if (!responseBuffer.isEmpty() && System.currentTimeMillis() - lastTime >= 5000) {
-                commandMessage.reply(responseBuffer).queue();
+            if (!responseBuffer.isEmpty() && System.currentTimeMillis() - lastTime >= 2500) {
+                callback.onMessage(responseBuffer);
                 responseBuffer = "";
                 lastTime = System.currentTimeMillis();
                 return;
@@ -39,6 +38,10 @@ public class DiscordCommandSender implements ConsoleCommandSender {
             }
         }, 0, 20);
         this.sender = sender;
+    }
+
+    public interface CmdCallback {
+        void onMessage(String message);
     }
 
     @Override
