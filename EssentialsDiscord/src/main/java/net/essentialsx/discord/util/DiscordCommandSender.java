@@ -26,7 +26,7 @@ public class DiscordCommandSender implements ConsoleCommandSender {
 
     public DiscordCommandSender(EssentialsJDA jda, ConsoleCommandSender sender, CmdCallback callback) {
         task = Bukkit.getScheduler().runTaskTimerAsynchronously(jda.getPlugin(), () -> {
-            if (!responseBuffer.isEmpty() && System.currentTimeMillis() - lastTime >= 2500) {
+            if (!responseBuffer.isEmpty() && System.currentTimeMillis() - lastTime >= 1000) {
                 callback.onMessage(responseBuffer);
                 responseBuffer = "";
                 lastTime = System.currentTimeMillis();

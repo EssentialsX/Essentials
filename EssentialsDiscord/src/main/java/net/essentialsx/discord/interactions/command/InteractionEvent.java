@@ -7,11 +7,13 @@ import java.util.HashMap;
 
 public class InteractionEvent {
     private final String token;
+    private final String channelId;
     private final DataArray options;
     private final InteractionController controller;
 
-    public InteractionEvent(String token, DataArray options, InteractionController controller) {
+    public InteractionEvent(String token, String channelId, DataArray options, InteractionController controller) {
         this.token = token;
+        this.channelId = channelId;
         this.options = options;
         this.controller = controller;
     }
@@ -24,8 +26,11 @@ public class InteractionEvent {
         return (String) getArgument(key);
     }
 
+    public String getChannelId() {
+        return channelId;
+    }
+
     public Object getArgument(String key) {
-        final HashMap<?, ?> map;
         for (Object option : options) {
             final HashMap<?, ?> obj = (HashMap<?, ?>) option;
             if (obj.containsKey("name") && obj.containsKey("value") && obj.get("name").equals(key)) {

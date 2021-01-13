@@ -67,6 +67,7 @@ public class InteractionController extends ListenerAdapter {
         // We got to respond quick or else discord will never listen to us again!
         final String id = payload.getString("id");
         final String token = payload.getString("token");
+        final String channelId = payload.getString("channel_id");
         final DataObject data = payload.getObject("data");
         final DataArray options = data.getArray("options");
 
@@ -80,7 +81,7 @@ public class InteractionController extends ListenerAdapter {
                 response.close();
 
                 final InteractionCommand command = commandMap.get(data.getString("name"));
-                command.onCommand(new InteractionEvent(token, options, InteractionController.this));
+                command.onCommand(new InteractionEvent(token, channelId, options, InteractionController.this));
             } catch (IOException e) {
                 logger.severe("Error while responding to interaction: " + e.getMessage());
                 e.printStackTrace();
