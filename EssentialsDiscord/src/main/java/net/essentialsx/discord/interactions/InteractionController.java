@@ -18,7 +18,9 @@ import okhttp3.Response;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
@@ -30,14 +32,17 @@ public class InteractionController extends ListenerAdapter {
 
     private final String apiCallback = "https://discord.com/api/v8/interactions/{id}/{token}/callback";
     private final String apiRegister;
+    private final String apiDelete;
     private final String apiFollowup;
     private final RequestBody acknowledgePayload;
 
     private final Map<String, InteractionCommand> commandMap = new HashMap<>();
+    private final List<String> commandIds = new ArrayList<>();
 
     public InteractionController(EssentialsJDA jda) {
         this.jda = jda;
         this.apiRegister = "https://discord.com/api/v8/applications/" + jda.getJda().getSelfUser().getId() + "/guilds/" + jda.getGuild().getId() + "/commands";
+        this.apiDelete = "https://discord.com/api/v8/applications/" + jda.getJda().getSelfUser().getId() + "/guilds/" + jda.getGuild().getId() + "/commands/{id}";
         this.apiFollowup = "https://discord.com/api/webhooks/" + jda.getJda().getSelfUser().getId() + "/{token}";
         this.acknowledgePayload = RequestBody.create(JSON, "{\"type\": 2}");
 
@@ -122,13 +127,13 @@ public class InteractionController extends ListenerAdapter {
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 if (response.isSuccessful()) {
                     commandMap.put(command.getName(), command);
+                    //noinspection ConstantConditions
+                    final JsonObject responseObj = DiscordUtil.GSON.fromJson(response.body().string(), JsonObject.class);
+                    commandIds.add(responseObj.get("id").getAsString());
                     logger.info("Registered guild command: " + command.getName());
                     if (jda.isDebug()) {
-                        //noinspection ConstantConditions
-                        logger.info("Registration payload: " + response.body().string());
-                        return;
+                        logger.info("Registration payload: " + responseObj.toString());
                     }
-                    response.close();
                     return;
                 }
                 //noinspection ConstantConditions
@@ -144,15 +149,29 @@ public class InteractionController extends ListenerAdapter {
     }
 
     public void shutdown() {
+        for (String commandId : commandIds) {
+            try {
+                jda.getJda().getHttpClient().newCall(builder(apiDelete.replace("{id}", commandId)).delete().build()).execute();
+            } catch (IOException e) {
+                logger.severe("Error while deleting command: " + e.getMessage());
+                if (jda.isDebug()) {
+                    e.printStackTrace();
+                }
+            }
+        }
         commandMap.clear();
     }
 
     private Call post(String url, RequestBody body) {
-        return jda.getJda().getHttpClient().newCall(new Request.Builder()
-                .url(url)
-                .header("Authorization", jda.getJda().getToken())
-                .header("Content-Type", "application/json")
+        return jda.getJda().getHttpClient().newCall(builder(url)
                 .post(body)
                 .build());
+    }
+
+    private Request.Builder builder(String url) {
+        return new Request.Builder()
+                .url(url)
+                .header("Authorization", jda.getJda().getToken())
+                .header("Content-Type", "application/json");
     }
 }

@@ -20,7 +20,7 @@ import java.awt.Color;
 import java.util.List;
 
 public final class DiscordUtil {
-    private final static Gson GSON = new Gson();
+    public final static Gson GSON = new Gson();
     public final static List<Message.MentionType> NO_GROUP_MENTIONS;
     public final static JsonObject RAW_NO_GROUP_MENTIONS;
     private final static String WEBHOOK_NAME = "EssX Console Relay";

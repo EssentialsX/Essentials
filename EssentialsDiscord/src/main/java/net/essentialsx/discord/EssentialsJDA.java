@@ -153,6 +153,10 @@ public class EssentialsJDA {
     }
 
     public void shutdown() {
+        if (interactionController != null) {
+            interactionController.shutdown();
+        }
+
         if (jda != null) {
             jda.removeEventListener(jda.getRegisteredListeners());
             HandlerList.unregisterAll(plugin);
@@ -166,10 +170,6 @@ public class EssentialsJDA {
 
         if (consoleWebhook != null && !consoleWebhook.isShutdown()) {
             consoleWebhook.close();
-        }
-
-        if (interactionController != null) {
-            interactionController.shutdown();
         }
     }
 
