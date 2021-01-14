@@ -192,4 +192,8 @@ public class EssentialsJDA {
     public WebhookClient getConsoleWebhook() {
         return consoleWebhook;
     }
+
+    public boolean isDebug() {
+        return plugin.getEss().getSettings().isDebug();
+    }
 }

@@ -6,6 +6,8 @@ import club.minnced.discord.webhook.send.AllowedMentions;
 import com.earth2me.essentials.utils.FormatUtil;
 import com.earth2me.essentials.utils.VersionUtil;
 import com.google.common.collect.ImmutableList;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
@@ -18,7 +20,9 @@ import java.awt.Color;
 import java.util.List;
 
 public final class DiscordUtil {
+    private final static Gson GSON = new Gson();
     public final static List<Message.MentionType> NO_GROUP_MENTIONS;
+    public final static JsonObject RAW_NO_GROUP_MENTIONS;
     private final static String WEBHOOK_NAME = "EssX Console Relay";
 
     static {
@@ -27,6 +31,11 @@ public final class DiscordUtil {
         types.add(Message.MentionType.CHANNEL);
         types.add(Message.MentionType.EMOTE);
         NO_GROUP_MENTIONS = types.build();
+
+        final JsonObject allowMentions = new JsonObject();
+        allowMentions.add("parse", GSON.toJsonTree(ImmutableList.of("users")).getAsJsonArray());
+        allowMentions.add("users", GSON.toJsonTree(ImmutableList.of()).getAsJsonArray());
+        RAW_NO_GROUP_MENTIONS = allowMentions;
     }
 
     private DiscordUtil() {

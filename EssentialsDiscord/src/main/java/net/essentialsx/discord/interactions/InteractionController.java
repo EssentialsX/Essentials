@@ -1,7 +1,5 @@
 package net.essentialsx.discord.interactions;
 
-import com.google.common.collect.ImmutableList;
-import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import net.dv8tion.jda.api.events.RawGatewayEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
@@ -10,6 +8,7 @@ import net.dv8tion.jda.api.utils.data.DataObject;
 import net.essentialsx.discord.EssentialsJDA;
 import net.essentialsx.discord.interactions.command.InteractionCommand;
 import net.essentialsx.discord.interactions.command.InteractionEvent;
+import net.essentialsx.discord.util.DiscordUtil;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.MediaType;
@@ -27,21 +26,12 @@ public class InteractionController extends ListenerAdapter {
     private final static Logger logger = Logger.getLogger("EssentialsDiscord");
     private final static MediaType JSON = MediaType.parse("application/json; charset=utf-8");
 
-    private final static Gson GSON = new Gson();
-    private final static String CALLBACK_BASE = "https://discord.com/api/v8/interactions/{id}/{token}/callback";
-    private final static RequestBody ACK_EAT_REQ = RequestBody.create(JSON, "{\"type\": 2}");
-    private final static JsonObject ALLOWED_MENTIONS;
-
-    static {
-        final JsonObject allowMentions = new JsonObject();
-        allowMentions.add("parse", GSON.toJsonTree(ImmutableList.of("users")).getAsJsonArray());
-        allowMentions.add("users", GSON.toJsonTree(ImmutableList.of()).getAsJsonArray());
-        ALLOWED_MENTIONS = allowMentions;
-    }
-
     private final EssentialsJDA jda;
+
+    private final String apiCallback = "https://discord.com/api/v8/interactions/{id}/{token}/callback";
     private final String apiRegister;
     private final String apiFollowup;
+    private final RequestBody acknowledgePayload;
 
     private final Map<String, InteractionCommand> commandMap = new HashMap<>();
 
@@ -49,6 +39,7 @@ public class InteractionController extends ListenerAdapter {
         this.jda = jda;
         this.apiRegister = "https://discord.com/api/v8/applications/" + jda.getJda().getSelfUser().getId() + "/guilds/" + jda.getGuild().getId() + "/commands";
         this.apiFollowup = "https://discord.com/api/webhooks/" + jda.getJda().getSelfUser().getId() + "/{token}";
+        this.acknowledgePayload = RequestBody.create(JSON, "{\"type\": 2}");
 
         jda.getJda().addEventListener(this);
     }
@@ -73,8 +64,9 @@ public class InteractionController extends ListenerAdapter {
 
         new Thread(() -> {
             try {
-                final Response response = post(CALLBACK_BASE.replace("{id}", id).replace("{token}", token), ACK_EAT_REQ).execute();
+                final Response response = post(apiCallback.replace("{id}", id).replace("{token}", token), acknowledgePayload).execute();
                 if (!response.isSuccessful()) {
+                    //noinspection ConstantConditions
                     logger.info("Error while responding to interaction: " + response.body().string());
                     return;
                 }
@@ -84,7 +76,9 @@ public class InteractionController extends ListenerAdapter {
                 command.onCommand(new InteractionEvent(token, channelId, options, InteractionController.this));
             } catch (IOException e) {
                 logger.severe("Error while responding to interaction: " + e.getMessage());
-                e.printStackTrace();
+                if (jda.isDebug()) {
+                    e.printStackTrace();
+                }
             }
         }).start();
     }
@@ -99,13 +93,14 @@ public class InteractionController extends ListenerAdapter {
         final JsonObject body = new JsonObject();
         body.addProperty("type", 3);
         body.addProperty("content", message);
-        body.add("allowed_mentions", ALLOWED_MENTIONS);
+        body.add("allowed_mentions", DiscordUtil.RAW_NO_GROUP_MENTIONS);
         body.addProperty("flags", 1 << 6);
 
         post(apiFollowup.replace("{token}", interactionToken), RequestBody.create(JSON, body.toString())).enqueue(new Callback() {
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 if (!response.isSuccessful()) {
+                    //noinspection ConstantConditions
                     logger.info("Error while responding to interaction: " + response.body().string());
                     return;
                 }
@@ -122,21 +117,27 @@ public class InteractionController extends ListenerAdapter {
 
     public void registerCommand(InteractionCommand command) {
         final String commandJson = command.serialize().toString();
-        (post(apiRegister, RequestBody.create(JSON, commandJson))).enqueue(new Callback() {
+        post(apiRegister, RequestBody.create(JSON, commandJson)).enqueue(new Callback() {
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 if (response.isSuccessful()) {
-                    final JsonObject jsonObject = GSON.fromJson(response.body().string(), JsonObject.class);
-                    logger.info("Registered guild command: " + jsonObject.get("name").getAsString() + " (with id " + jsonObject.get("id").getAsString() + ")");
                     commandMap.put(command.getName(), command);
+                    logger.info("Registered guild command: " + command.getName());
+                    if (jda.isDebug()) {
+                        //noinspection ConstantConditions
+                        logger.info("Registration payload: " + response.body().string());
+                        return;
+                    }
+                    response.close();
                     return;
                 }
+                //noinspection ConstantConditions
                 logger.info("Error while registering command, raw response: " + response.body().string());
             }
 
             @Override
             public void onFailure(@NotNull Call call, @NotNull IOException e) {
-                logger.severe("Error while registering command: " + e.getMessage());
+                logger.severe("Error while registering command, " + command.getName() + ": " + e.getMessage());
                 e.printStackTrace();
             }
         });
