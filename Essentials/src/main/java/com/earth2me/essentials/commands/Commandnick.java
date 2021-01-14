@@ -104,7 +104,7 @@ public class Commandnick extends EssentialsLoopCommand {
             if (target.getBase().getName().equals(onlinePlayer.getName())) {
                 continue;
             }
-            final String matchNick = FormatUtil.stripFormat(onlinePlayer.getDisplayName().replace(ess.getSettings().getNicknamePrefix(), ""));
+            final String matchNick = FormatUtil.stripFormat(onlinePlayer.getDisplayName().substring(onlinePlayer.getDisplayName().lastIndexOf(ess.getSettings().getNicknamePrefix()) + 1 ));
             if (lowerNick.equals(matchNick.toLowerCase(Locale.ENGLISH)) || lowerNick.equals(onlinePlayer.getName().toLowerCase(Locale.ENGLISH))) {
                 return true;
             }
