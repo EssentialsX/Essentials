@@ -9,6 +9,8 @@ import net.essentialsx.discord.interactions.command.InteractionCommandArgumentTy
 import net.essentialsx.discord.interactions.command.InteractionEvent;
 import org.bukkit.Bukkit;
 
+import static com.earth2me.essentials.I18n.tl;
+
 public class MessageCommand extends InteractionCommand {
     private final EssentialsJDA jda;
 
@@ -30,7 +32,21 @@ public class MessageCommand extends InteractionCommand {
             return;
         }
 
+        if (user.isIgnoreMsg()) { //todo admin bypass this
+            event.replyEphemeral(tl("msgIgnore", user.getDisplayName()));
+            return;
+        }
+
+        if (user.isAfk()) {
+            if (user.getAfkMessage() != null) {
+                event.replyEphemeral(tl("userAFKWithMessage", user.getDisplayName(), user.getAfkMessage()));
+            } else {
+                event.replyEphemeral(tl("userAFK", user.getDisplayName()));
+            }
+        }
+
         final String message = event.getStringArgument("message");
-        user.sendMessage(message); //todo formatting/messagesender
+        event.replyEphemeral(tl("msgFormat", tl("meSender"), user.getDisplayName(), message));
+        user.sendMessage(tl("msgFormat", event.getQualifiedName(), tl("meRecipient"), message));
     }
 }
