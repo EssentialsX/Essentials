@@ -25,7 +25,24 @@ public final class MaterialUtil {
     private static final Set<Material> SIGN_POSTS;
     private static final Set<Material> WALL_SIGNS;
 
+    private static final Set<Material> HELMETS;
+    private static final Set<Material> CHESTPLATES;
+    private static final Set<Material> LEGGINGS;
+    private static final Set<Material> BOOTS;
+
     static {
+        HELMETS = EnumUtil.getAllMatching(Material.class, "LEATHER_HELMET", "CHAINMAIL_HELMET", "IRON_HELMET",
+                "GOLD_HELMET", "GOLDEN_HELMET", "DIAMOND_HELMET", "NETHERITE_HELMET", "TURTLE_HELMET");
+
+        CHESTPLATES = EnumUtil.getAllMatching(Material.class, "LEATHER_CHESTPLATE", "CHAINMAIL_CHESTPLATE",
+                "IRON_CHESTPLATE", "GOLD_CHESTPLATE", "GOLDEN_CHESTPLATE", "DIAMOND_CHESTPLATE", "NETHERITE_CHESTPLATE",
+                "ELYTRA");
+
+        LEGGINGS = EnumUtil.getAllMatching(Material.class, "LEATHER_LEGGINGS", "CHAINMAIL_LEGGINGS",
+                "IRON_LEGGINGS", "GOLD_LEGGINGS", "GOLDEN_LEGGINGS", "DIAMOND_LEGGINGS", "NETHERITE_LEGGINGS");
+
+        BOOTS = EnumUtil.getAllMatching(Material.class, "LEATHER_BOOTS", "CHAINMAIL_BOOTS", "IRON_BOOTS",
+                "GOLD_BOOTS", "GOLDEN_BOOTS", "DIAMOND_BOOTS", "NETHERITE_BOOTS");
 
         BEDS = EnumUtil.getAllMatching(Material.class, "BED", "BED_BLOCK", "WHITE_BED", "ORANGE_BED",
             "MAGENTA_BED", "LIGHT_BLUE_BED", "YELLOW_BED", "LIME_BED", "PINK_BED", "GRAY_BED",
@@ -69,6 +86,22 @@ public final class MaterialUtil {
     }
 
     private MaterialUtil() {
+    }
+
+    public static boolean isHelmet(final Material material) {
+        return HELMETS.contains(material);
+    }
+
+    public static boolean isChestplate(final Material material) {
+        return CHESTPLATES.contains(material);
+    }
+
+    public static boolean isLeggings(final Material material) {
+        return LEGGINGS.contains(material);
+    }
+
+    public static boolean isBoots(final Material material) {
+        return BOOTS.contains(material);
     }
 
     public static boolean isBed(final Material material) {

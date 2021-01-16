@@ -1282,6 +1282,11 @@ public class Settings implements net.ess3.api.ISettings {
     }
 
     @Override
+    public boolean isCustomServerFullMessage() {
+        return config.getBoolean("use-custom-server-full-message", true);
+    }
+
+    @Override
     public int getJoinQuitMessagePlayerCount() {
         return config.getInt("hide-join-quit-messages-above", -1);
     }
@@ -1541,6 +1546,11 @@ public class Settings implements net.ess3.api.ISettings {
     }
 
     @Override
+    public boolean isKitAutoEquip() {
+        return config.getBoolean("kit-auto-equip", false);
+    }
+
+    @Override
     public boolean isPastebinCreateKit() {
         return config.getBoolean("pastebin-createkit", false);
     }
@@ -1615,6 +1625,11 @@ public class Settings implements net.ess3.api.ISettings {
     @Override
     public boolean isTeleportBackWhenFreedFromJail() {
         return teleportBackWhenFreedFromJail;
+    }
+
+    @Override
+    public boolean isJailOnlineTime() {
+        return config.getBoolean("jail-online-time", false);
     }
 
     private boolean _isCompassTowardsHomePerm() {
