@@ -31,7 +31,7 @@ public class MessageCommand extends InteractionCommand {
             return;
         }
 
-        if (user.isIgnoreMsg()) { //todo admin bypass this
+        if (!getHidden && user.isIgnoreMsg()) {
             event.reply(tl("msgIgnore", user.getDisplayName()));
             return;
         }

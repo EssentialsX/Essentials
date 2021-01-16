@@ -107,8 +107,9 @@ commands:
     # List of user ids or role names/ids allowed to use this command (or '*' to allow anyone to access it)
     allowed-roles:
       - "*"
-    # List of user ids or role names/ids who can message vanished players. If '*' is used, all people on discord would
-    # be allowed to message vanished players (and therefore expose they are actually online)
+    # List of user ids or role names/ids who can message vanished players or players who disable messages. If '*' is
+    # used, all people on discord would be allowed to message vanished players (and therefore expose they are actually online)
+    # and message players who disable messages
     admin-roles:
       - "Admins"
       - "123456789012345678"
