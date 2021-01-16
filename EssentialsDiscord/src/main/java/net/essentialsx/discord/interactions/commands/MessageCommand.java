@@ -2,11 +2,13 @@ package net.essentialsx.discord.interactions.commands;
 
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.commands.PlayerNotFoundException;
+import com.earth2me.essentials.utils.FormatUtil;
 import net.essentialsx.discord.EssentialsJDA;
 import net.essentialsx.discord.interactions.command.InteractionCommand;
 import net.essentialsx.discord.interactions.command.InteractionCommandArgument;
 import net.essentialsx.discord.interactions.command.InteractionCommandArgumentType;
 import net.essentialsx.discord.interactions.command.InteractionEvent;
+import net.essentialsx.discord.util.DiscordUtil;
 import org.bukkit.Bukkit;
 
 import static com.earth2me.essentials.I18n.tl;
@@ -45,7 +47,8 @@ public class MessageCommand extends InteractionCommand {
             }
         }
 
-        final String message = event.getStringArgument("message");
+        final String message = DiscordUtil.hasRoles(event.getMember(), jda.getPlugin().getSettings().getPermittedFormattingRoles()) ?
+                FormatUtil.replaceFormat(event.getStringArgument("message")) : FormatUtil.stripFormat(event.getStringArgument("message"));
         event.replyEphemeral(tl("msgFormat", tl("meSender"), user.getDisplayName(), message));
         user.sendMessage(tl("msgFormat", event.getMember().getUser().getAsTag(), tl("meRecipient"), message));
     }
