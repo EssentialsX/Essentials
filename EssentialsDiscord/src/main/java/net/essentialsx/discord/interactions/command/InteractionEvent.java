@@ -1,19 +1,20 @@
 package net.essentialsx.discord.interactions.command;
 
+import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.utils.data.DataArray;
 import net.essentialsx.discord.interactions.InteractionController;
 
 import java.util.HashMap;
 
 public class InteractionEvent {
-    private final String qualifiedName;
+    private final Member member;
     private final String token;
     private final String channelId;
     private final DataArray options;
     private final InteractionController controller;
 
-    public InteractionEvent(String qualifiedName, String token, String channelId, DataArray options, InteractionController controller) {
-        this.qualifiedName = qualifiedName;
+    public InteractionEvent(Member member, String token, String channelId, DataArray options, InteractionController controller) {
+        this.member = member;
         this.token = token;
         this.channelId = channelId;
         this.options = options;
@@ -24,8 +25,8 @@ public class InteractionEvent {
         controller.sendEphemeralMessage(token, message);
     }
 
-    public String getQualifiedName() {
-        return qualifiedName;
+    public Member getMember() {
+        return member;
     }
 
     public String getStringArgument(String key) {

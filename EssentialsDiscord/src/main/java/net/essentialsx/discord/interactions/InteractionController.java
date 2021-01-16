@@ -2,6 +2,7 @@ package net.essentialsx.discord.interactions;
 
 import com.earth2me.essentials.utils.FormatUtil;
 import com.google.gson.JsonObject;
+import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.events.RawGatewayEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.utils.data.DataArray;
@@ -67,9 +68,7 @@ public class InteractionController extends ListenerAdapter {
         final String channelId = payload.getString("channel_id");
         final DataObject data = payload.getObject("data");
         final DataArray options = data.getArray("options");
-        final DataObject user = payload.getObject("member").getObject("user");
-        final String username = user.getString("username");
-        final String discriminator = user.getString("discriminator");
+        final Member member = jda.getGuild().getMemberById(payload.getObject("member").getObject("user").getString("id"));
 
         new Thread(() -> {
             try {
@@ -82,7 +81,7 @@ public class InteractionController extends ListenerAdapter {
                 response.close();
 
                 final InteractionCommand command = commandMap.get(data.getString("name"));
-                command.onCommand(new InteractionEvent(username + "#" + discriminator, token, channelId, options, InteractionController.this));
+                command.onCommand(new InteractionEvent(member, token, channelId, options, InteractionController.this));
             } catch (IOException e) {
                 logger.severe("Error while responding to interaction: " + e.getMessage());
                 if (jda.isDebug()) {

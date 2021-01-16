@@ -47,6 +47,6 @@ public class MessageCommand extends InteractionCommand {
 
         final String message = event.getStringArgument("message");
         event.replyEphemeral(tl("msgFormat", tl("meSender"), user.getDisplayName(), message));
-        user.sendMessage(tl("msgFormat", event.getQualifiedName(), tl("meRecipient"), message));
+        user.sendMessage(tl("msgFormat", event.getMember().getUser().getAsTag(), tl("meRecipient"), message));
     }
 }
