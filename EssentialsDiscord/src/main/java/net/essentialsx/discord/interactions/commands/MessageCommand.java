@@ -1,6 +1,7 @@
 package net.essentialsx.discord.interactions.commands;
 
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.commands.PlayerNotFoundException;
 import net.essentialsx.discord.EssentialsJDA;
 import net.essentialsx.discord.interactions.command.InteractionCommand;
 import net.essentialsx.discord.interactions.command.InteractionCommandArgument;
@@ -20,12 +21,15 @@ public class MessageCommand extends InteractionCommand {
 
     @Override
     public void onCommand(InteractionEvent event) {
-        //todo nickname
-        final User user = jda.getPlugin().getEss().getUser(Bukkit.getPlayer(event.getStringArgument("username")));
-        if (user == null || user.isVanished()) {
+        final boolean getHidden = false; //todo config for admins seeing hidden users
+        final User user;
+        try {
+            user = jda.getPlugin().getEss().matchUser(Bukkit.getServer(), null, event.getStringArgument("username"), getHidden, false);
+        } catch (PlayerNotFoundException e) {
             event.replyEphemeral("That user could not be found!");
             return;
         }
+
         final String message = event.getStringArgument("message");
         user.sendMessage(message); //todo formatting/messagesender
     }
