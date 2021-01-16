@@ -40,10 +40,12 @@ public class InteractionEvent {
     }
 
     public Object getArgument(String key) {
-        for (Object option : options) {
-            final HashMap<?, ?> obj = (HashMap<?, ?>) option;
-            if (obj.containsKey("name") && obj.containsKey("value") && obj.get("name").equals(key)) {
-                return obj.get("value");
+        if (options != null) {
+            for (Object option : options) {
+                final HashMap<?, ?> obj = (HashMap<?, ?>) option;
+                if (obj.containsKey("name") && obj.containsKey("value") && obj.get("name").equals(key)) {
+                    return obj.get("value");
+                }
             }
         }
         return null;

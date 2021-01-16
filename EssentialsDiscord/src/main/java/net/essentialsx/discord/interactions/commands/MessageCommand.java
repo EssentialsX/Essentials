@@ -22,7 +22,7 @@ public class MessageCommand extends InteractionCommand {
 
     @Override
     public void onCommand(InteractionEvent event) {
-        final boolean getHidden = DiscordUtil.hasRoles(event.getMember(), jda.getSettings().getCommandAdminSnowflakes(getName()));
+        final boolean getHidden = DiscordUtil.hasRoles(event.getMember(), getAdminSnowflakes());
         final User user;
         try {
             user = jda.getPlugin().getEss().matchUser(Bukkit.getServer(), null, event.getStringArgument("username"), getHidden, false);

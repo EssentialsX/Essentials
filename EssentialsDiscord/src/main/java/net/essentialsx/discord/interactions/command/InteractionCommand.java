@@ -46,6 +46,10 @@ public abstract class InteractionCommand {
         return name;
     }
 
+    public List<String> getAdminSnowflakes() {
+        return jda.getSettings().getCommandAdminSnowflakes(name);
+    }
+
     public void addArgument(InteractionCommandArgument argument) {
         arguments.add(argument);
     }

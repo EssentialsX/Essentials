@@ -14,6 +14,7 @@ import net.dv8tion.jda.api.entities.Webhook;
 import net.essentialsx.api.v2.events.discord.DiscordMessageEvent;
 import net.essentialsx.discord.interactions.InteractionController;
 import net.essentialsx.discord.interactions.commands.ExecuteCommand;
+import net.essentialsx.discord.interactions.commands.ListCommand;
 import net.essentialsx.discord.interactions.commands.MessageCommand;
 import net.essentialsx.discord.listeners.BukkitListener;
 import net.essentialsx.discord.listeners.DiscordListener;
@@ -97,6 +98,7 @@ public class EssentialsJDA {
         interactionController = new InteractionController(this);
         interactionController.registerCommand(new ExecuteCommand(this));
         interactionController.registerCommand(new MessageCommand(this));
+        interactionController.registerCommand(new ListCommand(this));
 
         updatePrimaryChannel();
 

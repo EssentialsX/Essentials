@@ -113,6 +113,21 @@ commands:
     admin-roles:
       - "Admins"
       - "123456789012345678"
+  list:
+    # Set to false if you do not want this command to show up on the discord command selector
+    # You must restart your server after changing this
+    enabled: true
+    # Whether or not the command should be hidden from other people in the channel
+    # If set to false, members of the discord will be able to see when you use this command
+    hide-command: true
+    # List of user ids or role names/ids allowed to use this command (or '*' to allow anyone to access it)
+    allowed-roles:
+      - "*"
+    # List of user ids or role names/ids who can see vanished players in the player list. If '*' is used, all people
+    # on discord would be allowed to see vanished players (and therefore expose they are actually online)
+    admin-roles:
+      - "Admins"
+      - "123456789012345678"
 
 # Whether or not links to attachments in discord messages should be displayed in chat or not
 # If this is set to false and a message from discord only contains an image/file and not any text, nothing will be sent

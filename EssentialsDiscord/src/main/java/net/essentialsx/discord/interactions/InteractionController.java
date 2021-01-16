@@ -63,7 +63,7 @@ public class InteractionController extends ListenerAdapter {
         final String token = payload.getString("token");
         final String channelId = payload.getString("channel_id");
         final DataObject data = payload.getObject("data");
-        final DataArray options = data.getArray("options");
+        final DataArray options = data.hasKey("options") ? data.getArray("options") : null;
 
         new Thread(() -> {
             try {
@@ -97,7 +97,7 @@ public class InteractionController extends ListenerAdapter {
      * @param isCommandEphemeral Whether the command should be sent as client-side only.
      */
     public void sendInteractionMessage(String interactionToken, String message, boolean isCommandEphemeral) {
-        message = FormatUtil.stripFormat(message);
+        message = FormatUtil.stripFormat(message).replace("§", ""); // Don't ask
 
         final JsonObject body = new JsonObject();
         body.addProperty("type", 3);
