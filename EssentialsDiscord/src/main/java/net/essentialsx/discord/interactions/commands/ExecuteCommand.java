@@ -9,11 +9,8 @@ import net.essentialsx.discord.util.DiscordCommandSender;
 import org.bukkit.Bukkit;
 
 public class ExecuteCommand extends InteractionCommand {
-    private final EssentialsJDA jda;
-
     public ExecuteCommand(EssentialsJDA jda) {
-        super("execute", "Executes a console command on the Minecraft Server.");
-        this.jda = jda;
+        super(jda, "execute", "Executes a console command on the Minecraft Server.");
         addArgument(new InteractionCommandArgument("command", "The command to be executed", InteractionCommandArgumentType.STRING, true));
     }
 
@@ -22,6 +19,6 @@ public class ExecuteCommand extends InteractionCommand {
         //TODO PERM CHECKS
 
         Bukkit.getScheduler().runTask(jda.getPlugin(), () ->
-                Bukkit.dispatchCommand(new DiscordCommandSender(jda, Bukkit.getConsoleSender(), event::replyEphemeral), event.getStringArgument("command")));
+                Bukkit.dispatchCommand(new DiscordCommandSender(jda, Bukkit.getConsoleSender(), event::reply), event.getStringArgument("command")));
     }
 }

@@ -109,6 +109,24 @@ public class DiscordSettings implements IConf {
         return config.getString("console.webhook-name", "EssX Console Relay");
     }
 
+    // General command settings
+
+    public boolean isCommandEnabled(String command) {
+        return config.getBoolean("commands." + command + ".enabled", true);
+    }
+
+    public boolean isCommandConsumed(String command) {
+        return config.getBoolean("commands." + command + ".hide-command", true);
+    }
+
+    public boolean isCommandEphemeral(String command) {
+        return config.getBoolean("commands." + command + ".hide-response", true);
+    }
+
+    public List<String> getCommandSnowflakes(String command) {
+        return config.getStringList("commands." + command + ".allowed-roles");
+    }
+
     // Message formats
 
     public MessageFormat getDiscordToMcFormat() {

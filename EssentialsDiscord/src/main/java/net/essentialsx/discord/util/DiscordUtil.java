@@ -14,7 +14,9 @@ import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.Webhook;
+import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
+import okhttp3.RequestBody;
 
 import java.awt.Color;
 import java.util.List;
@@ -23,6 +25,10 @@ public final class DiscordUtil {
     public final static Gson GSON = new Gson();
     public final static List<Message.MentionType> NO_GROUP_MENTIONS;
     public final static JsonObject RAW_NO_GROUP_MENTIONS;
+    public final static MediaType JSON_TYPE = MediaType.parse("application/json; charset=utf-8");
+    public final static RequestBody ACK_CONSUME = RequestBody.create(JSON_TYPE, "{\"type\": 2}");
+    public final static RequestBody ACK_SEND = RequestBody.create(JSON_TYPE, "{\"type\": 5}");
+
     private final static String WEBHOOK_NAME = "EssX Console Relay";
 
     static {
@@ -114,7 +120,7 @@ public final class DiscordUtil {
         for (String roleDefinition : roleDefinitions) {
             roleDefinition = roleDefinition.trim();
 
-            if (member.getId().equals(roleDefinition)) {
+            if (roleDefinition.equals("*") || member.getId().equals(roleDefinition)) {
                 return true;
             }
 

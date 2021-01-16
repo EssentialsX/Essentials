@@ -12,17 +12,19 @@ public class InteractionEvent {
     private final String channelId;
     private final DataArray options;
     private final InteractionController controller;
+    private final boolean isCommandEphemeral;
 
-    public InteractionEvent(Member member, String token, String channelId, DataArray options, InteractionController controller) {
+    public InteractionEvent(Member member, String token, String channelId, DataArray options, InteractionController controller, boolean isCommandEphemeral) {
         this.member = member;
         this.token = token;
         this.channelId = channelId;
         this.options = options;
         this.controller = controller;
+        this.isCommandEphemeral = isCommandEphemeral;
     }
 
-    public void replyEphemeral(String message) {
-        controller.sendEphemeralMessage(token, message);
+    public void reply(String message) {
+        controller.sendInteractionMessage(token, message, isCommandEphemeral);
     }
 
     public Member getMember() {

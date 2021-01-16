@@ -13,7 +13,6 @@ import net.essentialsx.discord.interactions.command.InteractionEvent;
 import net.essentialsx.discord.util.DiscordUtil;
 import okhttp3.Call;
 import okhttp3.Callback;
-import okhttp3.MediaType;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
@@ -28,7 +27,6 @@ import java.util.logging.Logger;
 
 public class InteractionController extends ListenerAdapter {
     private final static Logger logger = Logger.getLogger("EssentialsDiscord");
-    private final static MediaType JSON = MediaType.parse("application/json; charset=utf-8");
 
     private final EssentialsJDA jda;
 
@@ -36,7 +34,6 @@ public class InteractionController extends ListenerAdapter {
     private final String apiRegister;
     private final String apiDelete;
     private final String apiFollowup;
-    private final RequestBody acknowledgePayload;
 
     private final Map<String, InteractionCommand> commandMap = new HashMap<>();
     private final List<String> commandIds = new ArrayList<>();
@@ -46,7 +43,6 @@ public class InteractionController extends ListenerAdapter {
         this.apiRegister = "https://discord.com/api/v8/applications/" + jda.getJda().getSelfUser().getId() + "/guilds/" + jda.getGuild().getId() + "/commands";
         this.apiDelete = "https://discord.com/api/v8/applications/" + jda.getJda().getSelfUser().getId() + "/guilds/" + jda.getGuild().getId() + "/commands/{id}";
         this.apiFollowup = "https://discord.com/api/webhooks/" + jda.getJda().getSelfUser().getId() + "/{token}";
-        this.acknowledgePayload = RequestBody.create(JSON, "{\"type\": 2}");
 
         jda.getJda().addEventListener(this);
     }
@@ -68,11 +64,12 @@ public class InteractionController extends ListenerAdapter {
         final String channelId = payload.getString("channel_id");
         final DataObject data = payload.getObject("data");
         final DataArray options = data.getArray("options");
-        final Member member = jda.getGuild().getMemberById(payload.getObject("member").getObject("user").getString("id"));
 
         new Thread(() -> {
             try {
-                final Response response = post(apiCallback.replace("{id}", id).replace("{token}", token), acknowledgePayload).execute();
+                final InteractionCommand command = commandMap.get(data.getString("name"));
+                final Response response = post(apiCallback.replace("{id}", id).replace("{token}", token),
+                        command.isConsume() ? DiscordUtil.ACK_CONSUME : DiscordUtil.ACK_SEND).execute();
                 if (!response.isSuccessful()) {
                     //noinspection ConstantConditions
                     logger.info("Error while responding to interaction: " + response.body().string());
@@ -80,8 +77,9 @@ public class InteractionController extends ListenerAdapter {
                 }
                 response.close();
 
-                final InteractionCommand command = commandMap.get(data.getString("name"));
-                command.onCommand(new InteractionEvent(member, token, channelId, options, InteractionController.this));
+                final Member member = jda.getGuild().retrieveMemberById(payload.getObject("member").getObject("user").getString("id")).complete();
+                jda.getPlugin().getEss().scheduleSyncDelayedTask(() ->
+                        command.onPreCommand(new InteractionEvent(member, token, channelId, options, InteractionController.this, command.isEphemeral())));
             } catch (IOException e) {
                 logger.severe("Error while responding to interaction: " + e.getMessage());
                 if (jda.isDebug()) {
@@ -92,21 +90,24 @@ public class InteractionController extends ListenerAdapter {
     }
 
     /**
-     * Sends an client-side (ephemeral) message to the user who created the interaction.
+     * Sends a message in response to a user who created an interaction.
      *
-     * @param interactionToken The authorization token of the interaction.
-     * @param message          The message to be sent.
+     * @param interactionToken   The authorization token of the interaction.
+     * @param message            The message to be sent.
+     * @param isCommandEphemeral Whether the command should be sent as client-side only.
      */
-    public void sendEphemeralMessage(String interactionToken, String message) {
+    public void sendInteractionMessage(String interactionToken, String message, boolean isCommandEphemeral) {
         message = FormatUtil.stripFormat(message);
 
         final JsonObject body = new JsonObject();
         body.addProperty("type", 3);
         body.addProperty("content", message);
         body.add("allowed_mentions", DiscordUtil.RAW_NO_GROUP_MENTIONS);
-        body.addProperty("flags", 1 << 6);
+        if (isCommandEphemeral) {
+            body.addProperty("flags", 1 << 6);
+        }
 
-        post(apiFollowup.replace("{token}", interactionToken), RequestBody.create(JSON, body.toString())).enqueue(new Callback() {
+        post(apiFollowup.replace("{token}", interactionToken), RequestBody.create(DiscordUtil.JSON_TYPE, body.toString())).enqueue(new Callback() {
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 if (!response.isSuccessful()) {
@@ -126,8 +127,12 @@ public class InteractionController extends ListenerAdapter {
     }
 
     public void registerCommand(InteractionCommand command) {
+        if (!command.isEnabled()) {
+            return;
+        }
+
         final String commandJson = command.serialize().toString();
-        post(apiRegister, RequestBody.create(JSON, commandJson)).enqueue(new Callback() {
+        post(apiRegister, RequestBody.create(DiscordUtil.JSON_TYPE, commandJson)).enqueue(new Callback() {
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 if (response.isSuccessful()) {

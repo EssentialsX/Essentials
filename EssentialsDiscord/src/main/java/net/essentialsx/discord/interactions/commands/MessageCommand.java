@@ -14,11 +14,8 @@ import org.bukkit.Bukkit;
 import static com.earth2me.essentials.I18n.tl;
 
 public class MessageCommand extends InteractionCommand {
-    private final EssentialsJDA jda;
-
     public MessageCommand(EssentialsJDA jda) {
-        super("msg", "Messages a player on the Minecraft Server.");
-        this.jda = jda;
+        super(jda, "msg", "Messages a player on the Minecraft Server.");
         addArgument(new InteractionCommandArgument("username", "The player to send the message to", InteractionCommandArgumentType.STRING, true));
         addArgument(new InteractionCommandArgument("message", "The message to send to the player", InteractionCommandArgumentType.STRING, true));
     }
@@ -30,26 +27,26 @@ public class MessageCommand extends InteractionCommand {
         try {
             user = jda.getPlugin().getEss().matchUser(Bukkit.getServer(), null, event.getStringArgument("username"), getHidden, false);
         } catch (PlayerNotFoundException e) {
-            event.replyEphemeral("That user could not be found!");
+            event.reply("That user could not be found!");
             return;
         }
 
         if (user.isIgnoreMsg()) { //todo admin bypass this
-            event.replyEphemeral(tl("msgIgnore", user.getDisplayName()));
+            event.reply(tl("msgIgnore", user.getDisplayName()));
             return;
         }
 
         if (user.isAfk()) {
             if (user.getAfkMessage() != null) {
-                event.replyEphemeral(tl("userAFKWithMessage", user.getDisplayName(), user.getAfkMessage()));
+                event.reply(tl("userAFKWithMessage", user.getDisplayName(), user.getAfkMessage()));
             } else {
-                event.replyEphemeral(tl("userAFK", user.getDisplayName()));
+                event.reply(tl("userAFK", user.getDisplayName()));
             }
         }
 
         final String message = DiscordUtil.hasRoles(event.getMember(), jda.getPlugin().getSettings().getPermittedFormattingRoles()) ?
                 FormatUtil.replaceFormat(event.getStringArgument("message")) : FormatUtil.stripFormat(event.getStringArgument("message"));
-        event.replyEphemeral(tl("msgFormat", tl("meSender"), user.getDisplayName(), message));
+        event.reply(tl("msgFormat", tl("meSender"), user.getDisplayName(), message));
         user.sendMessage(tl("msgFormat", event.getMember().getUser().getAsTag(), tl("meRecipient"), message));
     }
 }

@@ -78,8 +78,38 @@ message-types:
   # Message sent when a player's mute state is changed on the minecraft server
   mute: staff
 
+# Settings pertaining to the varies commands registered by EssentialsX on Discord
+commands:
+  # The execute command allows for discord users to execute MC commands from discord
+  # MC commands executed by this will be ran as the console and you should therefore be careful to who you grant this to
+  execute:
+    # Set to false if you do not want this command to show up on the discord command selector
+    # You must restart your server after changing this
+    enabled: true
+    # Whether or not the command should be hidden from other people in the channel
+    # If set to false, members of the discord will be able to see the exact command you executed
+    hide-command: true
+    # Whether or not the command response should be hidden from other people in the channel
+    # If set to false, members of the discord will be able to the output of commands you execute
+    hide-response: true
+    # List of user ids or role names/ids allowed to use this command (or * to allow anyone to access it)
+    allowed-roles:
+      - "Admins"
+      - "123456789012345678"
+  # The msg command allows for discord users to message MC players from discord.
+  msg:
+    # Set to false if you do not want this command to show up on the discord command selector
+    # You must restart your server after changing this
+    enabled: true
+    # Whether or not the command should be hidden from other people in the channel
+    # If set to false, members of the discord will be able to see the target and content of your message
+    hide-command: true
+    # List of user ids or role names/ids allowed to use this command (or * to allow anyone to access it)
+    allowed-roles:
+      - "*"
+
 # Whether or not links to attachments in discord messages should be displayed in chat or not
-# If this is set to false and a message from discord only contains an image/file and not any text, nothing will be sent.
+# If this is set to false and a message from discord only contains an image/file and not any text, nothing will be sent
 show-discord-attachments: true
 
 # A list of roles allowed to send minecraft color/formatting codes from discord to MC
