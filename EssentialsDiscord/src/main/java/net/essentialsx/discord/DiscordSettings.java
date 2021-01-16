@@ -127,6 +127,10 @@ public class DiscordSettings implements IConf {
         return config.getStringList("commands." + command + ".allowed-roles");
     }
 
+    public List<String> getCommandAdminSnowflakes(String command) {
+        return config.getStringList("commands." + command + ".admin-roles");
+    }
+
     // Message formats
 
     public MessageFormat getDiscordToMcFormat() {

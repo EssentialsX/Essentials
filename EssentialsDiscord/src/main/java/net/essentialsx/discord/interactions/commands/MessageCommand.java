@@ -22,7 +22,7 @@ public class MessageCommand extends InteractionCommand {
 
     @Override
     public void onCommand(InteractionEvent event) {
-        final boolean getHidden = false; //todo config for admins seeing hidden users
+        final boolean getHidden = DiscordUtil.hasRoles(event.getMember(), jda.getSettings().getCommandAdminSnowflakes(getName()));
         final User user;
         try {
             user = jda.getPlugin().getEss().matchUser(Bukkit.getServer(), null, event.getStringArgument("username"), getHidden, false);
@@ -44,7 +44,7 @@ public class MessageCommand extends InteractionCommand {
             }
         }
 
-        final String message = DiscordUtil.hasRoles(event.getMember(), jda.getPlugin().getSettings().getPermittedFormattingRoles()) ?
+        final String message = DiscordUtil.hasRoles(event.getMember(), jda.getSettings().getPermittedFormattingRoles()) ?
                 FormatUtil.replaceFormat(event.getStringArgument("message")) : FormatUtil.stripFormat(event.getStringArgument("message"));
         event.reply(tl("msgFormat", tl("meSender"), user.getDisplayName(), message));
         user.sendMessage(tl("msgFormat", event.getMember().getUser().getAsTag(), tl("meRecipient"), message));
