@@ -110,9 +110,15 @@ public final class DiscordUtil {
      * @return true if member has role.
      */
     public static boolean hasRoles(Member member, List<String> roleDefinitions) {
-        for (Role role : member.getRoles()) {
-            for (String roleDefinition : roleDefinitions) {
-                roleDefinition = roleDefinition.trim();
+        final List<Role> roles = member.getRoles();
+        for (String roleDefinition : roleDefinitions) {
+            roleDefinition = roleDefinition.trim();
+
+            if (member.getId().equals(roleDefinition)) {
+                return true;
+            }
+
+            for (final Role role : roles){
                 if (role.getId().equals(roleDefinition) || role.getName().equalsIgnoreCase(roleDefinition)) {
                     return true;
                 }
