@@ -186,7 +186,6 @@ public class EssentialsJDA {
         if (closeInjector) {
             if (injector != null) {
                 injector.remove();
-                injector.stop();
                 injector = null;
             }
 
