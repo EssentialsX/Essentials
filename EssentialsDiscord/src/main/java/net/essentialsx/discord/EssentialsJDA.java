@@ -28,6 +28,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 
+import static com.earth2me.essentials.I18n.tl;
+
 public class EssentialsJDA {
     private final static Logger logger = Logger.getLogger("EssentialsDiscord");
     private final EssentialsDiscord plugin;
@@ -64,7 +66,7 @@ public class EssentialsJDA {
     public void sendMessage(DiscordMessageEvent.MessageType messageType, String message, boolean groupMentions) {
         final TextChannel channel = getChannel(messageType.getKey(), true);
         if (!channel.canTalk()) {
-            logger.warning("Cannot send message in channel: #" + channel.getName() + "Please ensure the bot has \"Send Messages\" permission in that channel!");
+            logger.warning(tl("discordNoSendPermission", channel.getName()));
             return;
         }
         channel.sendMessage(FormatUtil.stripFormat(message))
@@ -75,9 +77,9 @@ public class EssentialsJDA {
     public void startup() throws LoginException, InterruptedException {
         shutdown();
 
-        logger.log(Level.INFO, "Attempting to login to discord...");
+        logger.log(Level.INFO, tl("discordLoggingIn"));
         if (plugin.getSettings().getBotToken().replace("INSERT-TOKEN-HERE", "").trim().isEmpty()) {
-            throw new IllegalArgumentException("No token provided!");
+            throw new IllegalArgumentException(tl("discordErrorNoToken"));
         }
 
         jda = JDABuilder.createDefault(plugin.getSettings().getBotToken())
@@ -88,11 +90,11 @@ public class EssentialsJDA {
                 .build()
                 .awaitReady();
         updatePresence();
-        logger.log(Level.INFO, "Successfully logged in as " + jda.getSelfUser().getAsTag());
+        logger.log(Level.INFO, tl("discordLoggingInDone", jda.getSelfUser().getAsTag()));
 
         guild = jda.getGuildById(plugin.getSettings().getGuildId());
         if (guild == null) {
-            throw new IllegalArgumentException("No guild configured!");
+            throw new IllegalArgumentException(tl("discordErrorNoGuild"));
         }
 
         interactionController = new InteractionController(this);
@@ -112,7 +114,7 @@ public class EssentialsJDA {
         if (channel == null) {
             channel = guild.getDefaultChannel();
             if (channel == null || !channel.canTalk()) {
-                throw new RuntimeException("Bot cannot see or talk in any channel!");
+                throw new RuntimeException(tl("discordErrorNoPerms"));
             }
         }
         primaryChannel = channel;
@@ -135,13 +137,13 @@ public class EssentialsJDA {
             if (channel != null) {
                 final Webhook webhook = DiscordUtil.getAndCleanWebhook(channel);
                 if (webhook == null) {
-                    logger.info("Discord console logger has been disabled due to insufficient permissions! Please make sure your bot has the \"Manage Webhooks\" permission and run /essentials reload");
+                    logger.info(tl("discordErrorLoggerNoPerms"));
                     return;
                 }
                 webhookId = webhook.getIdLong();
                 webhookToken = webhook.getToken();
             } else if (!getSettings().getConsoleChannelDef().equals("none") && !getSettings().getConsoleChannelDef().startsWith("0")) {
-                logger.info("Discord console logger has been disabled due to an invalid channel definition! If you meant to disable it, ");
+                logger.info(tl("discordErrorLoggerInvalidChannel"));
                 return;
             } else {
                 // It's either not configured at all or knowingly disabled.
