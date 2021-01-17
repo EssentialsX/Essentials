@@ -109,6 +109,10 @@ public class DiscordSettings implements IConf {
         return config.getString("console.webhook-name", "EssX Console Relay");
     }
 
+    public boolean isConsoleCommandRelay() {
+        return config.getBoolean("console.command-relay", false);
+    }
+
     // General command settings
 
     public boolean isCommandEnabled(String command) {

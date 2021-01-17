@@ -11,12 +11,14 @@ import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.Webhook;
+import net.dv8tion.jda.api.hooks.EventListener;
 import net.essentialsx.api.v2.events.discord.DiscordMessageEvent;
 import net.essentialsx.discord.interactions.InteractionController;
 import net.essentialsx.discord.interactions.commands.ExecuteCommand;
 import net.essentialsx.discord.interactions.commands.ListCommand;
 import net.essentialsx.discord.interactions.commands.MessageCommand;
 import net.essentialsx.discord.listeners.BukkitListener;
+import net.essentialsx.discord.listeners.DiscordCommandDispatcher;
 import net.essentialsx.discord.listeners.DiscordListener;
 import net.essentialsx.discord.util.ConsoleInjector;
 import net.essentialsx.discord.util.DiscordUtil;
@@ -39,6 +41,7 @@ public class EssentialsJDA {
     private TextChannel primaryChannel;
     private WebhookClient consoleWebhook;
     private ConsoleInjector injector;
+    private DiscordCommandDispatcher commandDispatcher;
     private InteractionController interactionController;
 
     public EssentialsJDA(EssentialsDiscord plugin) {
@@ -84,7 +87,6 @@ public class EssentialsJDA {
 
         jda = JDABuilder.createDefault(plugin.getSettings().getBotToken())
                 .addEventListeners(new DiscordListener(this))
-                //.addEventListeners(new DiscordCommandDispatcher(this))
                 .setContextEnabled(false)
                 .setRawEventsEnabled(true)
                 .build()
@@ -132,6 +134,10 @@ public class EssentialsJDA {
         if (matcher.matches()) {
             webhookId = Long.parseUnsignedLong(matcher.group(1));
             webhookToken = matcher.group(2);
+            if (commandDispatcher != null) {
+                jda.removeEventListener(commandDispatcher);
+                commandDispatcher = null;
+            }
         } else {
             final TextChannel channel = getChannel(consoleDef, false);
             if (channel != null) {
@@ -142,19 +148,52 @@ public class EssentialsJDA {
                 }
                 webhookId = webhook.getIdLong();
                 webhookToken = webhook.getToken();
+                if (getSettings().isConsoleCommandRelay()) {
+                    if (commandDispatcher == null) {
+                        commandDispatcher = new DiscordCommandDispatcher(this);
+                        jda.addEventListener(commandDispatcher);
+                    }
+                    commandDispatcher.setChannelId(channel.getId());
+                } else if (commandDispatcher != null) {
+                    jda.removeEventListener(commandDispatcher);
+                    commandDispatcher = null;
+                }
             } else if (!getSettings().getConsoleChannelDef().equals("none") && !getSettings().getConsoleChannelDef().startsWith("0")) {
                 logger.info(tl("discordErrorLoggerInvalidChannel"));
+                shutdownConsoleRelay(true);
                 return;
             } else {
                 // It's either not configured at all or knowingly disabled.
+                shutdownConsoleRelay(true);
                 return;
             }
         }
 
+        shutdownConsoleRelay(false);
         consoleWebhook = DiscordUtil.getWebhookClient(webhookId, webhookToken, jda.getHttpClient());
         if (injector == null) {
             injector = new ConsoleInjector(this);
             injector.start();
+        }
+    }
+
+    private void shutdownConsoleRelay(final boolean closeInjector) {
+        if (consoleWebhook != null && !consoleWebhook.isShutdown()) {
+            consoleWebhook.close();
+        }
+        consoleWebhook = null;
+
+        if (closeInjector) {
+            if (injector != null) {
+                injector.remove();
+                injector.stop();
+                injector = null;
+            }
+
+            if (commandDispatcher != null) {
+                jda.removeEventListener(commandDispatcher);
+                commandDispatcher = null;
+            }
         }
     }
 
@@ -164,19 +203,16 @@ public class EssentialsJDA {
         }
 
         if (jda != null) {
-            jda.removeEventListener(jda.getRegisteredListeners());
+            for (Object obj : jda.getRegisteredListeners()) {
+                if (!(obj instanceof EventListener)) { // Yeah bro I wish I knew too :/
+                    jda.removeEventListener(obj);
+                }
+            }
             HandlerList.unregisterAll(plugin);
             jda.shutdown();
         }
 
-        if (injector != null) {
-            injector.remove();
-            injector.stop();
-        }
-
-        if (consoleWebhook != null && !consoleWebhook.isShutdown()) {
-            consoleWebhook.close();
-        }
+        shutdownConsoleRelay(true);
     }
 
     public JDA getJda() {
