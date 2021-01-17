@@ -27,7 +27,7 @@ public class MessageCommand extends InteractionCommand {
         try {
             user = jda.getPlugin().getEss().matchUser(Bukkit.getServer(), null, event.getStringArgument("username"), getHidden, false);
         } catch (PlayerNotFoundException e) {
-            event.reply("That user could not be found!");
+            event.reply(tl("errorWithMessage", e.getMessage()));
             return;
         }
 

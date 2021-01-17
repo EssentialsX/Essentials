@@ -140,8 +140,8 @@ public class InteractionController extends ListenerAdapter {
                     //noinspection ConstantConditions
                     final JsonObject responseObj = DiscordUtil.GSON.fromJson(response.body().string(), JsonObject.class);
                     commandIds.add(responseObj.get("id").getAsString());
-                    logger.info("Registered guild command: " + command.getName());
                     if (jda.isDebug()) {
+                        logger.info("Registered guild command: " + command.getName());
                         logger.info("Registration payload: " + responseObj.toString());
                     }
                     return;

@@ -8,17 +8,19 @@ import net.essentialsx.discord.interactions.command.InteractionEvent;
 import net.essentialsx.discord.util.DiscordCommandSender;
 import org.bukkit.Bukkit;
 
+import static com.earth2me.essentials.I18n.tl;
+
 public class ExecuteCommand extends InteractionCommand {
     public ExecuteCommand(EssentialsJDA jda) {
-        super(jda, "execute", "Executes a console command on the Minecraft Server.");
-        addArgument(new InteractionCommandArgument("command", "The command to be executed", InteractionCommandArgumentType.STRING, true));
+        super(jda, "execute", tl("discordCommandExecuteDescription"));
+        addArgument(new InteractionCommandArgument("command", tl("discordCommandExecuteArgumentCommand"), InteractionCommandArgumentType.STRING, true));
     }
 
     @Override
     public void onCommand(InteractionEvent event) {
-        //TODO PERM CHECKS
-
+        final String command = event.getStringArgument("command");
+        event.reply(tl("discordCommandExecuteReply", command));
         Bukkit.getScheduler().runTask(jda.getPlugin(), () ->
-                Bukkit.dispatchCommand(new DiscordCommandSender(jda, Bukkit.getConsoleSender(), event::reply), event.getStringArgument("command")));
+                Bukkit.dispatchCommand(new DiscordCommandSender(jda, Bukkit.getConsoleSender(), event::reply), command));
     }
 }

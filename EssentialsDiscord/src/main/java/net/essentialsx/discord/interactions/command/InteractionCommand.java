@@ -8,6 +8,8 @@ import net.essentialsx.discord.util.DiscordUtil;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.earth2me.essentials.I18n.tl;
+
 public abstract class InteractionCommand {
     protected final EssentialsJDA jda;
     private final String name;
@@ -34,7 +36,7 @@ public abstract class InteractionCommand {
 
     public final void onPreCommand(InteractionEvent event) {
         if (!DiscordUtil.hasRoles(event.getMember(), jda.getSettings().getCommandSnowflakes(name))) {
-            event.reply("You lack the sufficient permission to execute that command!");
+            event.reply(tl("noAccessCommand"));
             return;
         }
         onCommand(event);

@@ -19,8 +19,8 @@ import static com.earth2me.essentials.I18n.tl;
 public class ListCommand extends InteractionCommand {
 
     public ListCommand(EssentialsJDA jda) {
-        super(jda, "list", "Gets a list of online players");
-        addArgument(new InteractionCommandArgument("group", "(Optional) A specific group to limit your search by", InteractionCommandArgumentType.STRING, false));
+        super(jda, "list", tl("discordCommandListDescription"));
+        addArgument(new InteractionCommandArgument("group", tl("discordCommandListArgumentGroup"), InteractionCommandArgumentType.STRING, false));
     }
 
     @Override
