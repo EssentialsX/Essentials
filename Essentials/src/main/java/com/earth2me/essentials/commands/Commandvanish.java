@@ -6,8 +6,6 @@ import net.ess3.api.events.VanishStatusChangeEvent;
 import org.bukkit.Server;
 import org.bukkit.entity.Player;
 
-import java.text.NumberFormat;
-
 import static com.earth2me.essentials.I18n.tl;
 
 public class Commandvanish extends EssentialsToggleCommand {
@@ -45,18 +43,15 @@ public class Commandvanish extends EssentialsToggleCommand {
         }
 
         final Player player = user.getBase();
-        if (enabled && ess.getSettings().isBroadcastVanishMessage()) {
-            final String msg = ess.getSettings().getBroadcastVanishMessage()
-                    .replace("{PLAYER}", player.getDisplayName())
-                    .replace("{USERNAME}", player.getName())
-                    .replace("{ONLINE}", NumberFormat.getInstance().format(ess.getOnlinePlayers().size()));
-            ess.getServer().broadcastMessage(msg);
-        } else if (!enabled && ess.getSettings().isBroadcastUnvanishMessage()) {
-            final String msg = ess.getSettings().getBroadcastUnvanishMessage()
-                    .replace("{PLAYER}", player.getDisplayName())
-                    .replace("{USERNAME}", player.getName())
-                    .replace("{ONLINE}", NumberFormat.getInstance().format(ess.getOnlinePlayers().size()));
-            ess.getServer().broadcastMessage(msg);
+        boolean vanishBroadcast = ess.getSettings().vanishBroadcast();
+        if (vanishBroadcast) {
+            String broadcastMessage = "";
+            if (enabled) {
+                broadcastMessage = tl("vanishBroadcast", player.getName(), player.getDisplayName());
+            } else {
+                broadcastMessage = tl("unvanishBroadcast", player.getName(), player.getDisplayName());
+            }
+            ess.getServer().broadcastMessage(broadcastMessage);
         }
 
         if (!sender.isPlayer() || !sender.getPlayer().equals(user.getBase())) {
