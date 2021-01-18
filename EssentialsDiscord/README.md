@@ -64,6 +64,7 @@ click the blue "Copy" button right of your bot's icon.
 > `https://discord.com/api/oauth2/authorize?client_id=<CLIENT_ID>&permissions=0&scope=bot%20applications.commands`
 
 > For example, if my client id was `800593184077250570`, my url would look like;
+
 > `https://discord.com/api/oauth2/authorize?client_id=800593184077250570&permissions=0&scope=bot%20applications.commands`
 
 9. When you go to that link, select the server you want to add the bot to from the dropdown and then
