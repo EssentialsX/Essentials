@@ -9,6 +9,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class DiscordCommandDispatcher extends ListenerAdapter {
     private final EssentialsJDA jda;
+    private String channelId = null;
 
     public DiscordCommandDispatcher(EssentialsJDA jda) {
         this.jda = jda;
@@ -16,10 +17,15 @@ public class DiscordCommandDispatcher extends ListenerAdapter {
 
     @Override
     public void onGuildMessageReceived(@NotNull GuildMessageReceivedEvent event) {
-        if (jda.getConsoleWebhook() != null && jda.getSettings().getConsoleChannelDef().equals(event.getChannel().getId())
+        if (jda.getConsoleWebhook() != null && event.getChannel().getId().equals(channelId)
                 && !event.isWebhookMessage() && !event.getAuthor().isBot()) {
             Bukkit.getScheduler().runTask(jda.getPlugin(), () ->
-                    Bukkit.dispatchCommand(new DiscordCommandSender(jda, event.getMessage(), Bukkit.getConsoleSender()), event.getMessage().getContentRaw()));
+                    Bukkit.dispatchCommand(new DiscordCommandSender(jda, Bukkit.getConsoleSender(), message ->
+                            event.getMessage().reply(message).queue()), event.getMessage().getContentRaw()));
         }
+    }
+
+    public void setChannelId(String channelId) {
+        this.channelId = channelId;
     }
 }

@@ -6,19 +6,29 @@ import club.minnced.discord.webhook.send.AllowedMentions;
 import com.earth2me.essentials.utils.FormatUtil;
 import com.earth2me.essentials.utils.VersionUtil;
 import com.google.common.collect.ImmutableList;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.Webhook;
+import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
+import okhttp3.RequestBody;
 
 import java.awt.Color;
 import java.util.List;
 
 public final class DiscordUtil {
+    public final static Gson GSON = new Gson();
     public final static List<Message.MentionType> NO_GROUP_MENTIONS;
+    public final static JsonObject RAW_NO_GROUP_MENTIONS;
+    public final static MediaType JSON_TYPE = MediaType.parse("application/json; charset=utf-8");
+    public final static RequestBody ACK_CONSUME = RequestBody.create(JSON_TYPE, "{\"type\": 2}");
+    public final static RequestBody ACK_SEND = RequestBody.create(JSON_TYPE, "{\"type\": 5}");
+
     private final static String WEBHOOK_NAME = "EssX Console Relay";
 
     static {
@@ -27,6 +37,11 @@ public final class DiscordUtil {
         types.add(Message.MentionType.CHANNEL);
         types.add(Message.MentionType.EMOTE);
         NO_GROUP_MENTIONS = types.build();
+
+        final JsonObject allowMentions = new JsonObject();
+        allowMentions.add("parse", GSON.toJsonTree(ImmutableList.of("users")).getAsJsonArray());
+        allowMentions.add("users", GSON.toJsonTree(ImmutableList.of()).getAsJsonArray());
+        RAW_NO_GROUP_MENTIONS = allowMentions;
     }
 
     private DiscordUtil() {
@@ -101,9 +116,15 @@ public final class DiscordUtil {
      * @return true if member has role.
      */
     public static boolean hasRoles(Member member, List<String> roleDefinitions) {
-        for (Role role : member.getRoles()) {
-            for (String roleDefinition : roleDefinitions) {
-                roleDefinition = roleDefinition.trim();
+        final List<Role> roles = member.getRoles();
+        for (String roleDefinition : roleDefinitions) {
+            roleDefinition = roleDefinition.trim();
+
+            if (roleDefinition.equals("*") || member.getId().equals(roleDefinition)) {
+                return true;
+            }
+
+            for (final Role role : roles){
                 if (role.getId().equals(roleDefinition) || role.getName().equalsIgnoreCase(roleDefinition)) {
                     return true;
                 }

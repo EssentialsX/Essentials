@@ -39,7 +39,7 @@ public class EssentialsDiscord extends JavaPlugin implements IEssentialsModule {
         try {
             jda.startup();
         } catch (Exception e) {
-            logger.log(Level.SEVERE, "Error while logging into discord: " + e.getMessage());
+            logger.log(Level.SEVERE, tl("discordErrorLogin", e.getMessage()));
             if (ess.getSettings().isDebug()) {
                 e.printStackTrace();
             }

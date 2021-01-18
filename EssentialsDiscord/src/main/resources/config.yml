@@ -48,7 +48,7 @@ chat:
 console:
   # The channel id (or webhook url) the console output should be sent to
   # If the channel id/webhook url is invalid or set to 'none', the console relay will be disabled
-  # Note: If you use a channel id the bot needs the "Manage Webhooks" permission in discord or else it will not work.
+  # Note: If you use a channel id the bot needs the "Manage Webhooks" permission in discord or else it will not work
   channel: 000000000000000000
   # The format of the console message
   # The following placeholders can be used;
@@ -58,6 +58,12 @@ console:
   format: "[{timestamp} {level}] {message}"
   # The username the console logger webhook will make
   webhook-name: "EssX Console Relay"
+  # Set to true if all messages in the console relay channel should be treated as commands
+  # Note: Enabling this means everyone who can send messages in the console channel will be able to send commands as the
+  # console. It's recommended you stick to the /execute command which has role permission checks (See command configuration
+  # below)
+  # Note 2: This option is not supported if you use a webhook url above, you'll need to use /execute
+  command-relay: false
 
 # Determine which discord channels certain messages will be sent to
 # You can either use the names of the channels listed above or just the id of a channel.
@@ -78,12 +84,64 @@ message-types:
   # Message sent when a player's mute state is changed on the minecraft server
   mute: staff
 
+# Settings pertaining to the varies commands registered by EssentialsX on Discord
+commands:
+  # The execute command allows for discord users to execute MC commands from discord
+  # MC commands executed by this will be ran as the console and you should therefore be careful to who you grant this to
+  execute:
+    # Set to false if you do not want this command to show up on the discord command selector
+    # You must restart your server after changing this
+    enabled: true
+    # Whether or not the command should be hidden from other people in the channel
+    # If set to false, members of the discord will be able to see the exact command you executed
+    hide-command: true
+    # Whether or not the command response should be hidden from other people in the channel
+    # If set to false, members of the discord will be able to the output of commands you execute
+    hide-response: true
+    # List of user ids or role names/ids allowed to use this command (or * to allow anyone to access it)
+    allowed-roles:
+      - "Admins"
+      - "123456789012345678"
+  # The msg command allows for discord users to message MC players from discord.
+  msg:
+    # Set to false if you do not want this command to show up on the discord command selector
+    # You must restart your server after changing this
+    enabled: true
+    # Whether or not the command should be hidden from other people in the channel
+    # If set to false, members of the discord will be able to see the target and content of your message
+    hide-command: true
+    # List of user ids or role names/ids allowed to use this command (or '*' to allow anyone to access it)
+    allowed-roles:
+      - "*"
+    # List of user ids or role names/ids who can message vanished players or players who disable messages. If '*' is
+    # used, all people on discord would be allowed to message vanished players (and therefore expose they are actually online)
+    # and message players who disable messages
+    admin-roles:
+      - "Admins"
+      - "123456789012345678"
+  list:
+    # Set to false if you do not want this command to show up on the discord command selector
+    # You must restart your server after changing this
+    enabled: true
+    # Whether or not the command should be hidden from other people in the channel
+    # If set to false, members of the discord will be able to see when you use this command
+    hide-command: true
+    # List of user ids or role names/ids allowed to use this command (or '*' to allow anyone to access it)
+    allowed-roles:
+      - "*"
+    # List of user ids or role names/ids who can see vanished players in the player list. If '*' is used, all people
+    # on discord would be allowed to see vanished players (and therefore expose they are actually online)
+    admin-roles:
+      - "Admins"
+      - "123456789012345678"
+
 # Whether or not links to attachments in discord messages should be displayed in chat or not
-# If this is set to false and a message from discord only contains an image/file and not any text, nothing will be sent.
+# If this is set to false and a message from discord only contains an image/file and not any text, nothing will be sent
 show-discord-attachments: true
 
-# A list of roles allowed to send minecraft color/formatting codes from discord to MC chat
-# You can either use the role's name or its id
+# A list of roles allowed to send minecraft color/formatting codes from discord to MC
+# This applies to all aspects such as that discord->mc chat relay as well as commands
+# You can either use the role's name, its id, or just a user id
 permit-formatting-roles:
   - "Admins"
   - "Color Codes"
