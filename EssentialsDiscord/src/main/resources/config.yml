@@ -8,13 +8,12 @@
 # This config was generated for version ${full.version}.
 
 # You need to create a bot user in order to connect your server to Discord.
-# You can find instructions on this here: #TODO write up docs
+# You can find instructions on this here: https://github.com/EssentialsX/Essentials/blob/2.x/EssentialsDiscord/README.md
 
 # The token for your bot from the Discord Developers site.
 token: "INSERT-TOKEN-HERE"
 
 # The ID of your server.
-# #TODO tutorial
 guild: 000000000000000000
 
 # Defined text channels
@@ -37,6 +36,7 @@ channels:
 
 # Chat relay settings
 # General settings for discord to mc and mc to discord chat relays
+# To configure the channel minecraft chat is sent to, see the "message-types" section of the config
 chat:
   # The maximum amount of characters messages from discord should be before being truncated
   discord-max-length: 2000
@@ -141,7 +141,7 @@ show-discord-attachments: true
 
 # A list of roles allowed to send minecraft color/formatting codes from discord to MC
 # This applies to all aspects such as that discord->mc chat relay as well as commands
-# You can either use the role's name, its id, or just a user id
+# You can either use '*' (for everyone), a role/id, or just a user id
 permit-formatting-roles:
   - "Admins"
   - "Color Codes"
