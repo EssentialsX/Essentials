@@ -321,6 +321,9 @@ use-bukkit-permissions: true
 # removed from the /kit list when a player can no longer use it
 skip-used-one-time-kits-from-kit-list: false
 
+# When enabled, armor from kits will automatically be equipped as long as the player's armor slots are empty.
+kit-auto-equip: false
+
 # Determines the functionality of the /createkit command.
 # If this is true, /createkit will give the user a link with the kit code.
 # If this is false, /createkit will add the kit to the kits.yml config file directly.
@@ -497,6 +500,10 @@ allow-silent-join-quit: false
 custom-join-message: "none"
 custom-quit-message: "none"
 
+# Should Essentials override the vanilla "Server Full" message with its own from the language file?
+# Set to false to keep the vanilla message.
+use-custom-server-full-message: true
+
 # You can disable join and quit messages when the player count reaches a certain limit.
 # When the player count is below this number, join/quit messages will always be shown.
 # Set this to -1 to always show join and quit messages regardless of player count.
@@ -624,6 +631,10 @@ default-enabled-confirm-commands:
 
 # Whether or not to teleport a player back to their previous position after they have been freed from jail.
 teleport-back-when-freed-from-jail: true
+
+# Whether or not jail time should only be counted while the user is online.
+# If true, a jailed player's time will only decrement when they are online.
+jail-online-time: false
 
 # Set the timeout, in seconds for players to accept a tpa before the request is cancelled.
 # Set to 0 for no timeout.

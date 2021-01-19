@@ -34,7 +34,7 @@ public class SignSpawnmob extends EssentialsSign {
         }
 
         charge.charge(player);
-        Trade.log("Sign", "Spawnmob", "Interact", username, null, username, charge, sign.getBlock().getLocation(), ess);
+        Trade.log("Sign", "Spawnmob", "Interact", username, null, username, charge, sign.getBlock().getLocation(), player.getMoney(), ess);
         return true;
     }
 }
