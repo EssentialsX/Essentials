@@ -5,9 +5,9 @@ import net.essentialsx.api.v2.services.BalanceTop;
 import org.bukkit.plugin.ServicePriority;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -15,7 +15,7 @@ import java.util.concurrent.CompletableFuture;
 
 public class BalanceTopImpl implements BalanceTop {
     private final IEssentials ess;
-    private List<Map.Entry<String, BigDecimal>> topCache = new ArrayList<>();
+    private LinkedHashMap<UUID, BalanceTop.Entry> topCache = new LinkedHashMap<>();
     private BigDecimal balanceTopTotal = BigDecimal.ZERO;
     private long cacheAge = 0;
     private CompletableFuture<Void> cacheLock;
@@ -26,7 +26,7 @@ public class BalanceTopImpl implements BalanceTop {
     }
 
     private void calculateBalanceTopMap() {
-        final Map<String, BigDecimal> map = new HashMap<>();
+        final List<Entry> entries = new LinkedList<>();
         BigDecimal newTotal = BigDecimal.ZERO;
         for (UUID u : ess.getUserMap().getAllUniqueUsers()) {
             final User user = ess.getUserMap().getUser(u);
@@ -40,13 +40,16 @@ public class BalanceTopImpl implements BalanceTop {
                     user.updateMoneyCache(userMoney);
                     newTotal = newTotal.add(userMoney);
                     final String name = user.isHidden() ? user.getName() : user.getDisplayName();
-                    map.put(name, userMoney);
+                    entries.add(new BalanceTop.Entry(user.getBase().getUniqueId(), name, userMoney));
                 }
             }
         }
-        final List<Map.Entry<String, BigDecimal>> newTopCache = new ArrayList<>(map.entrySet());
-        newTopCache.sort((entry1, entry2) -> entry2.getValue().compareTo(entry1.getValue()));
-        topCache = newTopCache;
+        final LinkedHashMap<UUID, Entry> sortedMap = new LinkedHashMap<>();
+        entries.sort((entry1, entry2) -> entry2.getBalance().compareTo(entry1.getBalance()));
+        for (Entry entry : entries) {
+            sortedMap.put(entry.getUuid(), entry);
+        }
+        topCache = sortedMap;
         balanceTopTotal = newTotal;
         cacheAge = System.currentTimeMillis();
         cacheLock.complete(null);
@@ -64,8 +67,8 @@ public class BalanceTopImpl implements BalanceTop {
     }
 
     @Override
-    public List<Map.Entry<String, BigDecimal>> getBalanceTopCache() {
-        return Collections.unmodifiableList(topCache);
+    public Map<UUID, Entry> getBalanceTopCache() {
+        return Collections.unmodifiableMap(topCache);
     }
 
     @Override
