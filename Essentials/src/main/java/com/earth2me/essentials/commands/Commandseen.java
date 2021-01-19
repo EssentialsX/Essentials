@@ -44,18 +44,20 @@ public class Commandseen extends EssentialsCommand {
         }
 
         if (player == null) {
-            if (sender.isAuthorized("essentials.seen.ipsearch", ess) && FormatUtil.validIP(args[0])) {
-                if (ess.getServer().getBanList(BanList.Type.IP).isBanned(args[0])) {
+            if (!searchAccounts) {
+                if (sender.isAuthorized("essentials.seen.ipsearch", ess) && FormatUtil.validIP(args[0])) {
+                    if (ess.getServer().getBanList(BanList.Type.IP).isBanned(args[0])) {
+                        sender.sendMessage(tl("isIpBanned", args[0]));
+                    }
+                    seenIP(sender, args[0], args[0]);
+                    return;
+                } else if (ess.getServer().getBanList(BanList.Type.IP).isBanned(args[0])) {
                     sender.sendMessage(tl("isIpBanned", args[0]));
+                    return;
+                } else if (BanLookup.isBanned(ess, args[0])) {
+                    sender.sendMessage(tl("whoisBanned", showBan ? BanLookup.getBanEntry(ess, args[0]).getReason() : tl("true")));
+                    return;
                 }
-                seenIP(sender, args[0], args[0]);
-                return;
-            } else if (ess.getServer().getBanList(BanList.Type.IP).isBanned(args[0])) {
-                sender.sendMessage(tl("isIpBanned", args[0]));
-                return;
-            } else if (BanLookup.isBanned(ess, args[0])) {
-                sender.sendMessage(tl("whoisBanned", showBan ? BanLookup.getBanEntry(ess, args[0]).getReason() : tl("true")));
-                return;
             }
             ess.getScheduler().runTaskAsynchronously(ess, new Runnable() {
                 @Override
