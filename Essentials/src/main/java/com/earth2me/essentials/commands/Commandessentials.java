@@ -65,7 +65,7 @@ public class Commandessentials extends EssentialsCommand {
     private static final List<String> warnPlugins = Arrays.asList(
         "PermissionsEx",
         "GroupManager",
-        "bPremissions"
+        "bPermissions"
     );
     private transient TuneRunnable currentTune = null;
 
