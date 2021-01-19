@@ -55,7 +55,7 @@ public class Commanditemdb extends EssentialsCommand {
         }
 
         List<String> nameList = ess.getItemDb().nameList(itemStack);
-        nameList.addAll(ess.getCustomItemResolver().getAliasFor(ess.getItemDb().name(itemStack)));
+        nameList.addAll(ess.getCustomItemResolver().getAliasesFor(ess.getItemDb().name(itemStack)));
         Collections.sort(nameList);
 
         if (nameList.size() > 15) {

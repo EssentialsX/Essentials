@@ -42,7 +42,7 @@ public class CustomItemResolver implements IItemDb.ItemResolver, IConf {
         return map.keySet();
     }
 
-    public List<String> getAliasFor(String item) throws Exception {
+    public List<String> getAliasesFor(String item) throws Exception {
         final List<String> results = new ArrayList<>();
         for (Map.Entry<String, String> entry : map.entrySet()) {
             if (item.equalsIgnoreCase(ess.getItemDb().name(ess.getItemDb().get(entry.getValue())))) {
