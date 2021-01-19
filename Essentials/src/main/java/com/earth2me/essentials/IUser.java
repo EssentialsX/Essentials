@@ -57,6 +57,16 @@ public interface IUser {
     void requestTeleport(final User player, final boolean here);
 
     /**
+     * Returns whether this user has an outstanding teleport request to deal with.
+     *
+     * @deprecated The teleport request system has been moved into a multi-user teleport request queue.
+     * @see IUser#getNextTpaToken(boolean, boolean, boolean)
+     * @return whether there is a teleport request
+     */
+    @Deprecated
+    boolean hasOutstandingTeleportRequest();
+
+    /**
      * @deprecated This API is not asynchronous. Use {@link com.earth2me.essentials.api.IAsyncTeleport IAsyncTeleport} with {@link IUser#getAsyncTeleport()}
      */
     @Deprecated
@@ -88,6 +98,13 @@ public interface IUser {
     boolean inGroup(final String group);
 
     boolean canBuild();
+
+    /**
+     * @deprecated The teleport request system has been moved into a multi-user teleport request queue.
+     * @see IUser#getNextTpaToken(boolean, boolean, boolean)
+     */
+    @Deprecated
+    long getTeleportRequestTime();
 
     void enableInvulnerabilityAfterTeleport();
 
@@ -206,6 +223,20 @@ public interface IUser {
 
     Block getTargetBlock(int maxDistance);
 
+    /**
+     * Gets information about the last-made tpa request in the tpa queue of this {@link IUser}.
+     *
+     * The TPA Queue is Last In First Out queue which stores all the active pending teleport
+     * requests of this {@link IUser}. Timeout calculations are also done turning this the
+     * iteration process of this method, ensuring that teleport requests made past the timeout
+     * period are removed from queue and therefore not returned here. The maximum size of this
+     * queue is determined by {@link ISettings#getTpaMaxAmount()}.
+     *
+     * @param inform      true if the underlying {@link IUser} should be informed if a request expires during iteration.
+     * @param shallow     true if this method should not spend time validating time for all items in the queue and just return the first item in the queue.
+     * @param excludeHere true if /tphere requests should be ignored in fetching the next tpa token.
+     * @return A {@link TpaRequestToken} corresponding to the next available request or null if no valid request is present.
+     */
     TpaRequestToken getNextTpaToken(boolean inform, boolean shallow, boolean excludeHere);
 
     class TpaRequestToken {

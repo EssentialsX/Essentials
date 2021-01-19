@@ -315,6 +315,12 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
         teleportRequestQueue.put(token.getName(), token);
     }
 
+    @Override
+    @Deprecated
+    public boolean hasOutstandingTeleportRequest() {
+        return getNextTpaToken(false, false, false) != null;
+    }
+
     public Collection<String> getPendingTpaKeys() {
         return teleportRequestQueue.keySet();
     }
@@ -811,6 +817,13 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
             return true;
         }
         return ess.getPermissionsHandler().canBuild(base, getGroup());
+    }
+
+    @Override
+    @Deprecated
+    public long getTeleportRequestTime() {
+        final TpaRequestToken token = getNextTpaToken(false, false, false);
+        return token == null ? 0L : token.getTime();
     }
 
     public boolean isInvSee() {
