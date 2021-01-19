@@ -35,7 +35,7 @@ public class Commandtpaccept extends EssentialsCommand {
 
         if (args.length > 0) {
             if (excludeOthers) {
-                IUser.TpaRequestToken token;
+                IUser.TpaRequest token;
                 int count = 0;
                 while ((token = user.getNextTpaToken(true, true, true)) != null) {
                     try {
@@ -70,7 +70,7 @@ public class Commandtpaccept extends EssentialsCommand {
         }
     }
 
-    private void handleTeleport(final User user, final IUser.TpaRequestToken token, String commandLabel) throws Exception {
+    private void handleTeleport(final User user, final IUser.TpaRequest token, String commandLabel) throws Exception {
         if (token == null) {
             throw new Exception(tl("noPendingRequest"));
         }

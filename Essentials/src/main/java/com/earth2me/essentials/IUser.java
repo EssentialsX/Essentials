@@ -235,9 +235,9 @@ public interface IUser {
      * @param inform      true if the underlying {@link IUser} should be informed if a request expires during iteration.
      * @param shallow     true if this method should not spend time validating time for all items in the queue and just return the first item in the queue.
      * @param excludeHere true if /tphere requests should be ignored in fetching the next tpa token.
-     * @return A {@link TpaRequestToken} corresponding to the next available request or null if no valid request is present.
+     * @return A {@link TpaRequest} corresponding to the next available request or null if no valid request is present.
      */
-    TpaRequestToken getNextTpaToken(boolean inform, boolean shallow, boolean excludeHere);
+    TpaRequest getNextTpaToken(boolean inform, boolean shallow, boolean excludeHere);
 
     /**
      * Weather or not this {@link IUser} has any valid TPA request in queue.
@@ -248,14 +248,14 @@ public interface IUser {
      */
     boolean hasPendingTpaRequests(boolean inform, boolean excludeHere);
 
-    class TpaRequestToken {
+    class TpaRequest {
         private final String name;
         private final UUID requesterUuid;
         private boolean here;
         private Location location;
         private long time;
 
-        public TpaRequestToken(String name, UUID requesterUuid) {
+        public TpaRequest(String name, UUID requesterUuid) {
             this.name = name;
             this.requesterUuid = requesterUuid;
         }

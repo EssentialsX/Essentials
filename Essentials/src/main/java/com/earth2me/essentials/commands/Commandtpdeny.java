@@ -28,10 +28,10 @@ public class Commandtpdeny extends EssentialsCommand {
             throw new Exception(tl("noPendingRequest"));
         }
 
-        final IUser.TpaRequestToken denyToken;
+        final IUser.TpaRequest denyToken;
         if (args.length > 0) {
             if (excludeOthers) {
-                IUser.TpaRequestToken token;
+                IUser.TpaRequest token;
                 int count = 0;
                 while ((token = user.getNextTpaToken(false, true, true)) != null) {
                     final User player = ess.getUser(token.getRequesterUuid());

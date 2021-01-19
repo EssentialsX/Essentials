@@ -54,7 +54,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
     private final Map<User, BigDecimal> confirmingPayments = new WeakHashMap<>();
 
     // User teleport variables
-    private final transient LinkedHashMap<String, TpaRequestToken> teleportRequestQueue = new LinkedHashMap<>();
+    private final transient LinkedHashMap<String, TpaRequest> teleportRequestQueue = new LinkedHashMap<>();
 
     // User properties
     private transient boolean vanished;
@@ -296,7 +296,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
 
     @Override
     public void requestTeleport(final User player, final boolean here) {
-        final TpaRequestToken token = teleportRequestQueue.getOrDefault(player.getName(), new TpaRequestToken(player.getName(), player.getUUID()));
+        final TpaRequest token = teleportRequestQueue.getOrDefault(player.getName(), new TpaRequest(player.getName(), player.getUUID()));
         token.setTime(System.currentTimeMillis());
         token.setHere(here);
         token.setLocation(here ? player.getLocation() : this.getLocation());
@@ -305,7 +305,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
         teleportRequestQueue.remove(token.getName());
         if (teleportRequestQueue.size() >= ess.getSettings().getTpaMaxAmount()) {
             String lastKey = null;
-            for (Map.Entry<String, TpaRequestToken> entry : teleportRequestQueue.entrySet()) {
+            for (Map.Entry<String, TpaRequest> entry : teleportRequestQueue.entrySet()) {
                 lastKey = entry.getKey();
             }
             teleportRequestQueue.remove(lastKey);
@@ -331,17 +331,17 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
     }
 
     public boolean hasOutstandingTpaRequest(String playerUsername, boolean here) {
-        final TpaRequestToken token = getOutstandingTpaRequest(playerUsername, false);
+        final TpaRequest token = getOutstandingTpaRequest(playerUsername, false);
         return token != null && token.isHere() == here;
     }
 
-    public TpaRequestToken getOutstandingTpaRequest(String playerUsername, boolean inform) {
+    public TpaRequest getOutstandingTpaRequest(String playerUsername, boolean inform) {
         if (!teleportRequestQueue.containsKey(playerUsername)) {
             return null;
         }
 
         final long timeout = ess.getSettings().getTpaAcceptCancellation();
-        final TpaRequestToken token = teleportRequestQueue.get(playerUsername);
+        final TpaRequest token = teleportRequestQueue.get(playerUsername);
         if (timeout < 1 || System.currentTimeMillis() - token.getTime() <= timeout * 1000) {
             return token;
         }
@@ -352,21 +352,21 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
         return null;
     }
 
-    public TpaRequestToken removeTpaRequest(String playerUsername) {
+    public TpaRequest removeTpaRequest(String playerUsername) {
         return teleportRequestQueue.remove(playerUsername);
     }
 
     @Override
-    public TpaRequestToken getNextTpaToken(boolean inform, boolean shallow, boolean excludeHere) {
+    public TpaRequest getNextTpaToken(boolean inform, boolean shallow, boolean excludeHere) {
         if (teleportRequestQueue.size() == 0) {
             return null;
         }
 
         final long timeout = ess.getSettings().getTpaAcceptCancellation();
-        final Iterator<Map.Entry<String, TpaRequestToken>> iterator = teleportRequestQueue.entrySet().iterator();
-        TpaRequestToken nextToken = null;
+        final Iterator<Map.Entry<String, TpaRequest>> iterator = teleportRequestQueue.entrySet().iterator();
+        TpaRequest nextToken = null;
         while (iterator.hasNext()) {
-            final TpaRequestToken token = iterator.next().getValue();
+            final TpaRequest token = iterator.next().getValue();
             if (timeout < 1 || (System.currentTimeMillis() - token.getTime()) <= timeout * 1000) {
                 if (excludeHere && token.isHere()) {
                     continue;
@@ -822,7 +822,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
     @Override
     @Deprecated
     public long getTeleportRequestTime() {
-        final TpaRequestToken token = getNextTpaToken(false, false, false);
+        final TpaRequest token = getNextTpaToken(false, false, false);
         return token == null ? 0L : token.getTime();
     }
 
