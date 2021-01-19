@@ -201,6 +201,12 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
             Console.setInstance(this);
 
             switch (VersionUtil.getServerSupportStatus()) {
+                case NMS_CLEANROOM:
+                    getLogger().severe(tl("serverUnsupportedCleanroom"));
+                    break;
+                case DANGEROUS_FORK:
+                    getLogger().severe(tl("serverUnsupportedDangerous"));
+                    break;
                 case UNSTABLE:
                     getLogger().severe(tl("serverUnsupportedMods"));
                     break;
@@ -210,6 +216,10 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
                 case LIMITED:
                     getLogger().info(tl("serverUnsupportedLimitedApi"));
                     break;
+            }
+
+            if (VersionUtil.getSupportStatusClass() != null) {
+                getLogger().info(tl("serverUnsupportedClass", VersionUtil.getSupportStatusClass()));
             }
 
             final PluginManager pm = getServer().getPluginManager();

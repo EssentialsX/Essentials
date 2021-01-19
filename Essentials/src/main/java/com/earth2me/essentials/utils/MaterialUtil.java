@@ -16,6 +16,7 @@ public final class MaterialUtil {
     private static final Set<Material> BEDS;
     private static final Set<Material> BANNERS;
     private static final Set<Material> FIREWORKS;
+    private static final Set<Material> FIREWORK_CHARGE;
     private static final Set<Material> LEGACY_SKULLS;
     private static final Set<Material> LEATHER_ARMOR;
     private static final Set<Material> MOB_HEADS;
@@ -54,8 +55,9 @@ public final class MaterialUtil {
             "PINK_BANNER", "GRAY_BANNER", "LIGHT_GRAY_BANNER", "CYAN_BANNER", "PURPLE_BANNER",
             "BLUE_BANNER", "BROWN_BANNER", "GREEN_BANNER", "RED_BANNER", "BLACK_BANNER", "SHIELD");
 
-        FIREWORKS = EnumUtil.getAllMatching(Material.class, "FIREWORK", "FIREWORK_ROCKET",
-            "FIREWORK_CHARGE", "FIREWORK_STAR");
+        FIREWORKS = EnumUtil.getAllMatching(Material.class, "FIREWORK", "FIREWORK_ROCKET");
+
+        FIREWORK_CHARGE = EnumUtil.getAllMatching(Material.class, "FIREWORK_CHARGE", "FIREWORK_STAR");
 
         LEATHER_ARMOR = EnumUtil.getAllMatching(Material.class, "LEATHER_HELMET",
             "LEATHER_CHESTPLATE", "LEATHER_LEGGINGS", "LEATHER_BOOTS");
@@ -114,6 +116,10 @@ public final class MaterialUtil {
 
     public static boolean isFirework(final Material material) {
         return FIREWORKS.contains(material);
+    }
+
+    public static boolean isFireworkCharge(final Material material) {
+        return FIREWORK_CHARGE.contains(material);
     }
 
     public static boolean isLeatherArmor(final Material material) {

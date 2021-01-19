@@ -31,6 +31,7 @@ public class Commanddelwarp extends EssentialsCommand {
                 return;
             }
             ess.getWarps().removeWarp(args[0]);
+            sender.sendMessage(tl("deleteWarp", args[0]));
         } else {
             throw new Exception(tl("warpNotExist"));
         }
