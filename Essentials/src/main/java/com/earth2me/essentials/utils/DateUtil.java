@@ -18,7 +18,11 @@ public final class DateUtil {
         return timePattern.matcher(input).replaceFirst("").trim();
     }
 
-    public static long parseDateDiff(final String time, final boolean future) throws Exception {
+    public static long parseDateDiff(String time, boolean future) throws Exception {
+        return parseDateDiff(time, future, false);
+    }
+
+    public static long parseDateDiff(String time, boolean future, boolean emptyEpoch) throws Exception {
         final Matcher m = timePattern.matcher(time);
         int years = 0;
         int months = 0;
@@ -67,6 +71,11 @@ public final class DateUtil {
             throw new Exception(tl("illegalDate"));
         }
         final Calendar c = new GregorianCalendar();
+
+        if (emptyEpoch) {
+            c.setTimeInMillis(0);
+        }
+
         if (years > 0) {
             if (years > maxYears) {
                 years = maxYears;
