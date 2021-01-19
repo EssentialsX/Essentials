@@ -204,6 +204,12 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
             Console.setInstance(this);
 
             switch (VersionUtil.getServerSupportStatus()) {
+                case NMS_CLEANROOM:
+                    getLogger().severe(tl("serverUnsupportedCleanroom"));
+                    break;
+                case DANGEROUS_FORK:
+                    getLogger().severe(tl("serverUnsupportedDangerous"));
+                    break;
                 case UNSTABLE:
                     getLogger().severe(tl("serverUnsupportedMods"));
                     break;
@@ -213,6 +219,10 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
                 case LIMITED:
                     getLogger().info(tl("serverUnsupportedLimitedApi"));
                     break;
+            }
+
+            if (VersionUtil.getSupportStatusClass() != null) {
+                getLogger().info(tl("serverUnsupportedClass", VersionUtil.getSupportStatusClass()));
             }
 
             final PluginManager pm = getServer().getPluginManager();
@@ -587,12 +597,12 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
             if (pc != null) {
                 alternativeCommandsHandler.executed(commandLabel, pc);
                 try {
-                    return pc.execute(cSender, commandLabel, args);
+                    pc.execute(cSender, commandLabel, args);
                 } catch (final Exception ex) {
                     Bukkit.getLogger().log(Level.SEVERE, ex.getMessage(), ex);
                     cSender.sendMessage(tl("internalError"));
-                    return true;
                 }
+                return true;
             }
         }
 

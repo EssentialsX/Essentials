@@ -6,6 +6,7 @@ import com.earth2me.essentials.messaging.SimpleMessageRecipient;
 import com.earth2me.essentials.register.payment.Method;
 import com.earth2me.essentials.register.payment.Methods;
 import com.earth2me.essentials.utils.DateUtil;
+import com.earth2me.essentials.utils.EnumUtil;
 import com.earth2me.essentials.utils.FormatUtil;
 import com.earth2me.essentials.utils.NumberUtil;
 import com.earth2me.essentials.utils.VersionUtil;
@@ -18,6 +19,7 @@ import net.ess3.api.events.UserBalanceUpdateEvent;
 import net.essentialsx.api.v2.events.TransactionEvent;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.Statistic;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
@@ -41,6 +43,7 @@ import java.util.logging.Logger;
 import static com.earth2me.essentials.I18n.tl;
 
 public class User extends UserData implements Comparable<User>, IMessageRecipient, net.ess3.api.IUser {
+    private static final Statistic PLAY_ONE_TICK = EnumUtil.getStatistic("PLAY_ONE_MINUTE", "PLAY_ONE_TICK");
     private static final Logger logger = Logger.getLogger("Essentials");
     private final IMessageRecipient messageRecipient;
     private transient final AsyncTeleport teleport;
@@ -595,24 +598,34 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
 
     //Returns true if status expired during this check
     public boolean checkJailTimeout(final long currentTime) {
-        if (getJailTimeout() > 0 && getJailTimeout() < currentTime && isJailed()) {
-            final JailStatusChangeEvent event = new JailStatusChangeEvent(this, null, false);
-            ess.getServer().getPluginManager().callEvent(event);
+        if (getJailTimeout() > 0) {
 
-            if (!event.isCancelled()) {
-                setJailTimeout(0);
-                setJailed(false);
-                sendMessage(tl("haveBeenReleased"));
-                setJail(null);
-                if (ess.getSettings().isTeleportBackWhenFreedFromJail()) {
-                    final CompletableFuture<Boolean> future = new CompletableFuture<>();
-                    getAsyncTeleport().back(future);
-                    future.exceptionally(e -> {
-                        getAsyncTeleport().respawn(null, TeleportCause.PLUGIN, new CompletableFuture<>());
-                        return false;
-                    });
+            if (getOnlineJailedTime() > 0) {
+                if (getOnlineJailedTime() > getBase().getStatistic(PLAY_ONE_TICK)) {
+                    return false;
                 }
-                return true;
+            }
+
+            if (getJailTimeout() < currentTime && isJailed() ) {
+                final JailStatusChangeEvent event = new JailStatusChangeEvent(this, null, false);
+                ess.getServer().getPluginManager().callEvent(event);
+
+                if (!event.isCancelled()) {
+                    setJailTimeout(0);
+                    setOnlineJailedTime(0);
+                    setJailed(false);
+                    sendMessage(tl("haveBeenReleased"));
+                    setJail(null);
+                    if (ess.getSettings().isTeleportBackWhenFreedFromJail()) {
+                        final CompletableFuture<Boolean> future = new CompletableFuture<>();
+                        getAsyncTeleport().back(future);
+                        future.exceptionally(e -> {
+                            getAsyncTeleport().respawn(null, TeleportCause.PLUGIN, new CompletableFuture<>());
+                            return false;
+                        });
+                    }
+                    return true;
+                }
             }
         }
         return false;

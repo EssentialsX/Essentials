@@ -286,6 +286,12 @@ public final class Enchantments {
             enchantment = Enchantment.getByName(name.toUpperCase());
         }
         if (enchantment == null) {
+            enchantment = Enchantment.getByName(name.toLowerCase());
+        }   
+        if (enchantment == null) {
+            enchantment = Enchantment.getByName(name);
+        }
+        if (enchantment == null) {
             enchantment = ENCHANTMENTS.get(name.toLowerCase(Locale.ENGLISH));
         }
         if (enchantment == null) {
