@@ -321,6 +321,9 @@ use-bukkit-permissions: true
 # removed from the /kit list when a player can no longer use it
 skip-used-one-time-kits-from-kit-list: false
 
+# When enabled, armor from kits will automatically be equipped as long as the player's armor slots are empty.
+kit-auto-equip: false
+
 # Determines the functionality of the /createkit command.
 # If this is true, /createkit will give the user a link with the kit code.
 # If this is false, /createkit will add the kit to the kits.yml config file directly.
@@ -450,6 +453,9 @@ cancel-afk-on-interact: true
 # Disable this to reduce server lag.
 cancel-afk-on-move: true
 
+# Should we automatically remove afk status when a player sends a chat message?
+cancel-afk-on-chat: true
+
 # Should AFK players be ignored when other players are trying to sleep?
 # When this setting is false, players won't be able to skip the night if some players are AFK.
 # Users with the permission node essentials.sleepingignored will always be ignored.
@@ -493,6 +499,10 @@ allow-silent-join-quit: false
 # You may use color codes, {USERNAME} for the player's name, and {PLAYER} for the player's displayname.
 custom-join-message: "none"
 custom-quit-message: "none"
+
+# Should Essentials override the vanilla "Server Full" message with its own from the language file?
+# Set to false to keep the vanilla message.
+use-custom-server-full-message: true
 
 # You can disable join and quit messages when the player count reaches a certain limit.
 # When the player count is below this number, join/quit messages will always be shown.
@@ -621,6 +631,10 @@ default-enabled-confirm-commands:
 
 # Whether or not to teleport a player back to their previous position after they have been freed from jail.
 teleport-back-when-freed-from-jail: true
+
+# Whether or not jail time should only be counted while the user is online.
+# If true, a jailed player's time will only decrement when they are online.
+jail-online-time: false
 
 # Set the timeout, in seconds for players to accept a tpa before the request is cancelled.
 # Set to 0 for no timeout.
@@ -1039,11 +1053,13 @@ newbies:
 # Set this to lowest, if you want Multiverse to handle the respawning.
 # Set this to high, if you want EssentialsSpawn to handle the respawning.
 # Set this to highest, if you want to force EssentialsSpawn to handle the respawning.
+# Note: Changes will not apply until after the server is restarted.
 respawn-listener-priority: high
 
 # What priority should we use for handling spawning on joining the server?
 # See respawn-listener-priority for possible values.
-# Note: changing this may impact or break spawn-on-join functionality.
+# Note: Changing this may impact or break spawn-on-join functionality.
+# Note: Changes will not apply until after the server is restarted.
 spawn-join-listener-priority: high
 
 # When users die, should they respawn at their first home or bed, instead of the spawnpoint?

@@ -20,6 +20,9 @@ allprojects {
 }
 
 def commitsSinceLastTag() {
+    if (grgit == null) {
+        return 0
+    }
     def tags = grgit.tag.list().stream().map({it.commit}).toList()
     def commit = grgit.head()
     def depth = 0
@@ -32,13 +35,13 @@ def commitsSinceLastTag() {
 }
 
 ext {
-    GIT_COMMIT = grgit.head().abbreviatedId
+    GIT_COMMIT = grgit == null ? "unknown" : grgit.head().abbreviatedId
     GIT_DEPTH = commitsSinceLastTag()
 
     fullVersion = "${version}-${GIT_COMMIT}".replace("-SNAPSHOT", "-dev+${GIT_DEPTH}")
 
     checkstyleVersion = '8.36.2'
-    spigotVersion = '1.16.4-R0.1-SNAPSHOT'
+    spigotVersion = '1.16.5-R0.1-SNAPSHOT'
     junit5Version = '5.7.0'
     mockitoVersion = '3.2.0'
 }
@@ -57,6 +60,12 @@ subprojects {
             url = 'https://jitpack.io'
             content {
                 includeGroup "com.github.milkbowl"
+            }
+        }
+        maven {
+            url = 'https://repo.codemc.org/repository/maven-public'
+            content {
+                includeGroup "org.bstats"
             }
         }
     }

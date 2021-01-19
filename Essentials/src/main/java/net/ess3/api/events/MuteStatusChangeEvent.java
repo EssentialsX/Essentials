@@ -1,6 +1,7 @@
 package net.ess3.api.events;
 
 import net.ess3.api.IUser;
+import org.bukkit.event.HandlerList;
 
 import java.util.Optional;
 
@@ -8,6 +9,7 @@ import java.util.Optional;
  * Fired when a player's mute status is changed.
  */
 public class MuteStatusChangeEvent extends StatusChangeEvent {
+    private static final HandlerList handlers = new HandlerList();
     private final Long timestamp;
     private final String reason;
 
@@ -29,5 +31,14 @@ public class MuteStatusChangeEvent extends StatusChangeEvent {
      */
     public String getReason() {
         return reason;
+    }
+
+    @Override
+    public HandlerList getHandlers() {
+        return handlers;
+    }
+
+    public static HandlerList getHandlerList() {
+        return handlers;
     }
 }

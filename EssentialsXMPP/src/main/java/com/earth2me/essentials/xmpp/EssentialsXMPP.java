@@ -1,9 +1,9 @@
 package com.earth2me.essentials.xmpp;
 
 import com.earth2me.essentials.IEssentials;
-import com.earth2me.essentials.metrics.Metrics;
 import com.earth2me.essentials.metrics.MetricsWrapper;
 import net.ess3.api.IUser;
+import org.bstats.bukkit.Metrics;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
