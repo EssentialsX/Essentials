@@ -27,13 +27,14 @@ public class Commandseen extends EssentialsCommand {
 
     @Override
     protected void run(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception {
+        if (args.length < 1) {
+            throw new NotEnoughArgumentsException();
+        }
         final boolean showBan = sender.isAuthorized("essentials.seen.banreason", ess);
         final boolean showIp = sender.isAuthorized("essentials.seen.ip", ess);
         final boolean showLocation = sender.isAuthorized("essentials.seen.location", ess);
         final boolean searchAccounts = commandLabel.contains("alts") && sender.isAuthorized("essentials.seen.alts", ess);
-        if (args.length < 1) {
-            throw new NotEnoughArgumentsException();
-        }
+
         User player;
         // Check by uuid, if it fails check by name.
         try {
