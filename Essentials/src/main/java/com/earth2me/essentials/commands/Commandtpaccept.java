@@ -22,12 +22,19 @@ public class Commandtpaccept extends EssentialsCommand {
 
     @Override
     public void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception {
+        final boolean excludeOthers;
         if (args.length > 0) {
-            if (args[0].startsWith("*") || args[0].equalsIgnoreCase("all")) {
-                if (!user.hasPendingTpaRequests(true)) {
-                    throw new Exception(tl("noPendingRequest"));
-                }
+            excludeOthers = args[0].startsWith("*") || args[0].equalsIgnoreCase("all");
+        } else {
+            excludeOthers = false;
+        }
 
+        if (!user.hasPendingTpaRequests(true, excludeOthers)) {
+            throw new Exception(tl("noPendingRequest"));
+        }
+
+        if (args.length > 0) {
+            if (excludeOthers) {
                 IUser.TpaRequestToken token;
                 int count = 0;
                 while ((token = user.getNextTpaToken(true, true, true)) != null) {

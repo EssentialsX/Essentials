@@ -60,7 +60,7 @@ public interface IUser {
      * Returns whether this user has an outstanding teleport request to deal with.
      *
      * @deprecated The teleport request system has been moved into a multi-user teleport request queue.
-     * @see IUser#getNextTpaToken(boolean, boolean, boolean)
+     * @see IUser#hasPendingTpaRequests(boolean, boolean) 
      * @return whether there is a teleport request
      */
     @Deprecated
@@ -238,6 +238,15 @@ public interface IUser {
      * @return A {@link TpaRequestToken} corresponding to the next available request or null if no valid request is present.
      */
     TpaRequestToken getNextTpaToken(boolean inform, boolean shallow, boolean excludeHere);
+
+    /**
+     * Weather or not this {@link IUser} has any valid TPA request in queue.
+     *
+     * @param inform      true if the underlying {@link IUser} should be informed if a request expires during iteration.
+     * @param excludeHere true if /tphere requests should be ignored in checking if a tpa request is available.
+     * @return true if the user has an available pending request in queue.
+     */
+    boolean hasPendingTpaRequests(boolean inform, boolean excludeHere);
 
     class TpaRequestToken {
         private final String name;

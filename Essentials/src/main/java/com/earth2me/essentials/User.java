@@ -325,9 +325,9 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
         return teleportRequestQueue.keySet();
     }
 
-    public boolean hasPendingTpaRequests(boolean inform) {
-        getNextTpaToken(inform, false, false);
-        return !teleportRequestQueue.isEmpty();
+    @Override
+    public boolean hasPendingTpaRequests(boolean inform, boolean excludeHere) {
+        return getNextTpaToken(inform, false, excludeHere) != null;
     }
 
     public boolean hasOutstandingTpaRequest(String playerUsername, boolean here) {
