@@ -30,6 +30,7 @@ public class Commandseen extends EssentialsCommand {
         final boolean showBan = sender.isAuthorized("essentials.seen.banreason", ess);
         final boolean showIp = sender.isAuthorized("essentials.seen.ip", ess);
         final boolean showLocation = sender.isAuthorized("essentials.seen.location", ess);
+        final boolean searchAccounts = commandLabel.contains("alts") && sender.isAuthorized("essentials.seen.alts", ess);
         if (args.length < 1) {
             throw new NotEnoughArgumentsException();
         }
@@ -44,7 +45,10 @@ public class Commandseen extends EssentialsCommand {
 
         if (player == null) {
             if (sender.isAuthorized("essentials.seen.ipsearch", ess) && FormatUtil.validIP(args[0])) {
-                seenIP(sender, args[0]);
+                if (ess.getServer().getBanList(BanList.Type.IP).isBanned(args[0])) {
+                    sender.sendMessage(tl("isIpBanned", args[0]));
+                }
+                seenIP(sender, args[0], args[0]);
                 return;
             } else if (ess.getServer().getBanList(BanList.Type.IP).isBanned(args[0])) {
                 sender.sendMessage(tl("isIpBanned", args[0]));
@@ -73,16 +77,18 @@ public class Commandseen extends EssentialsCommand {
                 }
 
                 private void showUserSeen(final User user) throws Exception {
-                    showSeenMessage(sender, user, showBan, showIp, showLocation);
+                    showSeenMessage(sender, user, searchAccounts, showBan, showIp, showLocation);
                 }
             });
         } else {
-            showSeenMessage(sender, player, showBan, showIp, showLocation);
+            showSeenMessage(sender, player, searchAccounts, showBan, showIp, showLocation);
         }
     }
 
-    private void showSeenMessage(final CommandSource sender, final User player, final boolean showBan, final boolean showIp, final boolean showLocation) {
-        if (player.getBase().isOnline() && canInteractWith(sender, player)) {
+    private void showSeenMessage(final CommandSource sender, final User player, final boolean searchAccounts, final boolean showBan, final boolean showIp, final boolean showLocation) {
+        if (searchAccounts) {
+            seenIP(sender, player.getLastLoginAddress(), player.getDisplayName());
+        } else if (player.getBase().isOnline() && canInteractWith(sender, player)) {
             seenOnline(sender, player, showIp);
         } else {
             seenOffline(sender, player, showBan, showIp, showLocation);
@@ -183,14 +189,10 @@ public class Commandseen extends EssentialsCommand {
         }
     }
 
-    private void seenIP(final CommandSource sender, final String ipAddress) {
+    private void seenIP(final CommandSource sender, final String ipAddress, final String display) {
         final UserMap userMap = ess.getUserMap();
 
-        if (ess.getServer().getBanList(BanList.Type.IP).isBanned(ipAddress)) {
-            sender.sendMessage(tl("isIpBanned", ipAddress));
-        }
-
-        sender.sendMessage(tl("runningPlayerMatch", ipAddress));
+        sender.sendMessage(tl("runningPlayerMatch", display));
 
         ess.runTaskAsynchronously(() -> {
             final List<String> matches = new ArrayList<>();
