@@ -18,7 +18,7 @@ EssentialsXDiscord offers *essential* features you'd want from a Discord bridge 
 
 ## Table of Contents
 > * [Initial Setup](#initial-setup)
-> * [Bottom Text]()
+> * [Console Relay](#console-relay)
 
 ---
 
@@ -118,3 +118,28 @@ primary value in the channels section and once you've done that save the config 
 notice that chat and other messages start showing up in the channel you requested they be. Now that you
 completed the initial, go back up to the [Table Of Contents](#table-of-contents) to see what other cool things you can do!
 
+---
+
+## Console Relay
+The console relay is pretty self-explanatory: it relays everything on your console into discord channel of
+your choosing. The console relay is ridiculously easy to setup and if your server is already running, you don't
+need to reload it!
+
+0. This assumes you've already done the initial setup.
+
+1. Go to the discord server that your bot is in and find the channel you wish to use for console output.
+Right click on the channel and click "Copy ID". Save this id for the next step.
+> ![Copy ID](https://i.imgur.com/qvDfSLv.gif)
+> Find console channel -> Right Click -> `Copy ID`
+
+2. Now that you have that copied, open the EssentialsXDiscord config and find the `console` section. In that
+section, replace the zeros for the `channel` value with the channel id you copied from the last step. Once
+you paste it, make sure you save the config.
+> ![Paste ID](https://i.imgur.com/NicdpGw.gif)
+
+3. Finally, if your server is running, run `ess reload` from your console, otherwise start up your server. You
+should notice console output being directed to that channel!
+
+# TODO CUSTOMIZE
+
+---
