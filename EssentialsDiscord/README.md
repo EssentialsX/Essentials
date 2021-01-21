@@ -19,6 +19,8 @@ EssentialsXDiscord offers *essential* features you'd want from a Discord bridge 
 ## Table of Contents
 > * [Initial Setup](#initial-setup)
 > * [Console Relay](#console-relay)
+> * [Configuring Messages](#configuring-messages)
+> * [Discord Commands](#discord-commands)
 
 ---
 
@@ -87,7 +89,7 @@ it, make sure to save it for a later step.
 
 14. The other ID you need to copy is the ID of the channel you wish to be your primary channel.
 In other words, this will be the channel that, by default, receives messages for player chat/join/leave/death
-messages as well as mute/kicks. To see how to further configure message types, see [TODO Configuring Messages](#).
+messages as well as mute/kicks. To see how to further configure message types, see [Configuring Messages](#configuring-messages).
 > ![Primary Channel ID](https://i.imgur.com/uMODfiQ.gif)
 > Right click your 'primary' channel -> `Copy ID` -> Paste into Notepad for later step
 
@@ -138,8 +140,26 @@ you paste it, make sure you save the config.
 > ![Paste ID](https://i.imgur.com/NicdpGw.gif)
 
 3. Finally, if your server is running, run `ess reload` from your console, otherwise start up your server. You
-should notice console output being directed to that channel!
+should notice console output being directed to that channel! That is all you need if you're okay with the default
+settings. Otherwise, if you'd like to see what other options you can use to customize console output, stick around.
 
-# TODO CUSTOMIZE
+4. The first thing you can customize is the format of the message sent to discord. By default, the timestamp,
+level (info/warn/error/etc), and message are shown for each console message. Let's say you wanted to make the
+timestamp and level bold, since this message would be using discord markdown, we can just add \*\* to both sides of
+level and timestamp. Then once you've done that, just do `/ess reload` and you should see your changes on discord.
+> ![Bold Format](https://i.imgur.com/jD9mH14.gif)
+
+5. Next, you can also configure the name you wish the to show above console messages. By default, it's "EssX Console
+Relay" but can be switched to anything you want.
+> ![Change Name](https://i.imgur.com/xtrt1Jt.gif)
+
+6. Finally, you can also choose to enable an option to treat any message by a user in the console channel as a
+console command. This will mean that anyone who can send messages in your console channel **will be able to execute 
+commands as the console**. It is suggested that you stick to the regular `/execute` command 
+(see [Discord Commands](#discord-commands)) as those can be restricted to specific roles/users and are also not
+restricted to the console channel.
+> ![Command Relay](https://i.imgur.com/w3cfVUw.gif)
+
+7. That's all the options for the command relay!
 
 ---
