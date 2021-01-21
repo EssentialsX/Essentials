@@ -116,6 +116,10 @@ public final class DiscordUtil {
      * @return true if member has role.
      */
     public static boolean hasRoles(Member member, List<String> roleDefinitions) {
+        if (member.hasPermission(Permission.ADMINISTRATOR)) {
+            return true;
+        }
+
         final List<Role> roles = member.getRoles();
         for (String roleDefinition : roleDefinitions) {
             roleDefinition = roleDefinition.trim();
