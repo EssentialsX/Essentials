@@ -253,6 +253,7 @@ public class AsyncTeleport implements IAsyncTeleport {
         final TeleportWarmupEvent event = new TeleportWarmupEvent(teleportee, cause, target, delay);
         Bukkit.getServer().getPluginManager().callEvent(event);
         if (event.isCancelled()) {
+            future.complete(false);
             return;
         }
         delay = event.getDelay();
@@ -273,10 +274,12 @@ public class AsyncTeleport implements IAsyncTeleport {
         }
 
         if (cooldown(true, future)) {
+            future.complete(false);
             return;
         }
         if (delay <= 0 || teleportOwner.isAuthorized("essentials.teleport.timer.bypass") || teleportee.isAuthorized("essentials.teleport.timer.bypass")) {
             if (cooldown(false, future)) {
+                future.complete(false);
                 return;
             }
             nowAsync(teleportee, target, cause, future);
@@ -286,6 +289,7 @@ public class AsyncTeleport implements IAsyncTeleport {
                     return;
                 }
             }
+            future.complete(true);
             return;
         }
 
@@ -413,10 +417,15 @@ public class AsyncTeleport implements IAsyncTeleport {
             future.completeExceptionally(e);
             return;
         }
-        otherUser.sendMessage(tl("warpingTo", warp, loc.getWorld().getName(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ()));
-        if (!otherUser.equals(teleportOwner)) {
-            teleportOwner.sendMessage(tl("warpingTo", warp, loc.getWorld().getName(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ()));
-        }
+        final String finalWarp = warp;
+        future.thenAccept(success -> {
+            if (success) {
+                otherUser.sendMessage(tl("warpingTo", finalWarp, loc.getWorld().getName(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ()));
+                if (!otherUser.equals(teleportOwner)) {
+                    teleportOwner.sendMessage(tl("warpingTo", finalWarp, loc.getWorld().getName(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ()));
+                }
+            }
+        });
         teleport(otherUser, new LocationTarget(loc), chargeFor, cause, future);
     }
 

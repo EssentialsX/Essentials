@@ -985,6 +985,11 @@ public class Settings implements net.ess3.api.ISettings {
     }
 
     @Override
+    public boolean cancelAfkOnChat() {
+        return config.getBoolean("cancel-afk-on-chat", true);
+    }
+
+    @Override
     public boolean sleepIgnoresAfkPlayers() {
         return sleepIgnoresAfkPlayers;
     }
@@ -1272,6 +1277,11 @@ public class Settings implements net.ess3.api.ISettings {
     }
 
     @Override
+    public boolean isCustomServerFullMessage() {
+        return config.getBoolean("use-custom-server-full-message", true);
+    }
+
+    @Override
     public int getJoinQuitMessagePlayerCount() {
         return config.getInt("hide-join-quit-messages-above", -1);
     }
@@ -1524,6 +1534,11 @@ public class Settings implements net.ess3.api.ISettings {
     }
 
     @Override
+    public boolean isKitAutoEquip() {
+        return config.getBoolean("kit-auto-equip", false);
+    }
+
+    @Override
     public boolean isPastebinCreateKit() {
         return config.getBoolean("pastebin-createkit", false);
     }
@@ -1598,6 +1613,11 @@ public class Settings implements net.ess3.api.ISettings {
     @Override
     public boolean isTeleportBackWhenFreedFromJail() {
         return teleportBackWhenFreedFromJail;
+    }
+
+    @Override
+    public boolean isJailOnlineTime() {
+        return config.getBoolean("jail-online-time", false);
     }
 
     private boolean _isCompassTowardsHomePerm() {
@@ -1716,5 +1736,10 @@ public class Settings implements net.ess3.api.ISettings {
     @Override
     public boolean infoAfterDeath() {
         return config.getBoolean("send-info-after-death", false);
+    }
+
+    @Override
+    public boolean isRespawnAtBed() {
+        return config.getBoolean("respawn-at-home-bed", true);
     }
 }

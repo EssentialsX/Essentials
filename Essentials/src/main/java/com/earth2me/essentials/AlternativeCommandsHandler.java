@@ -92,7 +92,7 @@ public class AlternativeCommandsHandler {
 
     public void executed(final String label, final Command pc) {
         if (pc instanceof PluginIdentifiableCommand) {
-            final String altString = ((PluginIdentifiableCommand) pc).getPlugin().getName() + ":" + pc.getLabel();
+            final String altString = ((PluginIdentifiableCommand) pc).getPlugin().getName() + ":" + pc.getName();
             if (ess.getSettings().isDebug()) {
                 LOGGER.log(Level.INFO, "Essentials: Alternative command " + label + " found, using " + altString);
             }
