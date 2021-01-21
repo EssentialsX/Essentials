@@ -182,7 +182,8 @@ public class DiscordSettings implements IConf {
     }
 
     private MessageFormat generateMessageFormat(String node, String defaultStr, boolean format, String... arguments) {
-        String pattern = config.getString("messages." + node);
+        final String pathPrefix = node.startsWith(".") ? "" : "messages.";
+        String pattern = config.getString(pathPrefix + (pathPrefix.isEmpty() ? node.substring(1) : node));
         pattern = pattern == null ? defaultStr : pattern;
         pattern = format ? FormatUtil.replaceFormat(pattern) : FormatUtil.stripFormat(pattern);
         for (int i = 0; i < arguments.length; i++) {
@@ -232,7 +233,7 @@ public class DiscordSettings implements IConf {
             statusActivity = Activity.of(activityType, config.getString("presence.message", "Minecraft"));
         }
 
-        consoleFormat = generateMessageFormat("console.format", "[{timestamp} {level}] {message}", false,
+        consoleFormat = generateMessageFormat(".console.format", "[{timestamp} {level}] {message}", false,
                 "timestamp", "level", "message");
 
         discordToMcFormat = generateMessageFormat("discord-to-mc", "&6[#{channel}] &3{fullname}&7: &f{message}", true,
