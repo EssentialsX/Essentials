@@ -68,7 +68,7 @@ public class Trade {
         this.ess = ess;
     }
 
-    public static void log(final String type, final String subtype, final String event, final String sender, final Trade charge, final String receiver, final Trade pay, final Location loc, final IEssentials ess) {
+    public static void log(final String type, final String subtype, final String event, final String sender, final Trade charge, final String receiver, final Trade pay, final Location loc, final BigDecimal endBalance, final IEssentials ess) {
         //isEcoLogUpdateEnabled() - This refers to log entries with no location, ie API updates #EasterEgg
         //isEcoLogEnabled() - This refers to log entries with with location, ie /pay /sell and eco signs.
 
@@ -141,6 +141,13 @@ public class Trade {
             sb.append(loc.getBlockX()).append(",");
             sb.append(loc.getBlockY()).append(",");
             sb.append(loc.getBlockZ()).append(",");
+        }
+        
+        if (endBalance == null) {
+            sb.append(",");
+        } else {
+            sb.append(endBalance);
+            sb.append(",");
         }
         sb.append("\n");
         try {
