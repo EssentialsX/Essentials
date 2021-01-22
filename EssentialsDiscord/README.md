@@ -163,3 +163,39 @@ restricted to the console channel.
 7. That's all the options for the command relay!
 
 ---
+
+## Configuring Messages
+EssentialsXDiscord aims to keep its message-type system basic enough that simple things take little changes, while
+giving more fine grain control to those you want it.
+
+To give you a general overview of the system, EssentialsXDiscord allows you to define different channel IDs in the
+`channels` section of the config. By default, two channels are pre-populated in the `channels` section, `primary`
+and `staff`. If you only completed the initial setup, the `staff` channel definition is all zeros. This is fine in
+most situations however, as the message system will always fallback to the `primary` channel if a channel ID is
+invalid.
+
+Now on the to the types of messages you can receive themselves (which is where you're going to use these channel 
+definitions). In the `message-types` section of the config, you can see a list of message types (join/leave/chat/etc)
+on the left (as the key), and on the right there is a channel definition.
+
+For the sake of example lets say we want to send all chat messages to their own channel. We can do this by creating
+a new channel definition and setting the `chat` message type to said channel definition. Below are step-by-step 
+instructions for said example, you can follow along to get the gist of how to apply this to other use cases
+
+1. Find the channel on discord you want to only send chat messages to and then right click the channel and click
+"Copy ID".
+> ![Copy ID](https://i.imgur.com/ri7NZkD.gif)
+
+2. Next you need to create the actual channel definition, for this example we'll call it `chat`. You create a
+channel definition by adding a new entry to the `channels` section with the key as its name and the id as the one
+you copied in the last step.
+> ![New Def](https://i.imgur.com/dc7kIkl.gif)
+
+3. Finally, scroll down to the `message-types` section and change the `chat` message type to your newly created
+channel definition. Once you do that, save and either run `/ess reload` if your server is running or start your
+server.
+> ![Move](https://i.imgur.com/qPVWkWF.gif)
+
+4. That's all you need to know about the basics of the message system!
+
+---
