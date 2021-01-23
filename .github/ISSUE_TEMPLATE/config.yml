@@ -1,5 +1,11 @@
 blank_issues_enabled: false
 contact_links:
-  - name: MOSS Discord Server
+  - name: Create help request
+    url: https://github.com/EssentialsX/Essentials/discussions/new?category=q-a
+    about: Create a support ticket to get help from developers.
+  - name: View previous help requests
+    url: https://github.com/EssentialsX/Essentials/discussions/categories/q-a
+    about: Visit the help forum to search for existing help requests
+  - name: Ask the community on Discord
     url: https://discord.gg/casfFyh
-    about: Need help with using EssentialsX? Join the MOSS Discord server for help.
+    about: Join the MOSS Discord for community-powered EssentialsX support!
