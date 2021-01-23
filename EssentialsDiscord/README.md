@@ -201,3 +201,9 @@ server.
 4. That's all you need to know about the basics of the message system!
 
 ---
+
+## Discord Commands
+EssentialsXDiscord uses Discord's slash command system to let you type commands into discord without it being
+seen by other people in the server. 
+
+---
