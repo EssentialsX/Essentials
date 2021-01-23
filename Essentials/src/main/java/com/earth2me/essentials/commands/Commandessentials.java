@@ -65,7 +65,7 @@ public class Commandessentials extends EssentialsCommand {
     private static final List<String> warnPlugins = Arrays.asList(
         "PermissionsEx",
         "GroupManager",
-        "bPremissions"
+        "bPermissions"
     );
     private transient TuneRunnable currentTune = null;
 
@@ -372,6 +372,12 @@ public class Commandessentials extends EssentialsCommand {
         }
 
         switch (supportStatus) {
+            case NMS_CLEANROOM:
+                sender.sendMessage(tl("serverUnsupportedCleanroom"));
+                break;
+            case DANGEROUS_FORK:
+                sender.sendMessage(tl("serverUnsupportedDangerous"));
+                break;
             case UNSTABLE:
                 sender.sendMessage(tl("serverUnsupportedMods"));
                 break;
@@ -381,6 +387,10 @@ public class Commandessentials extends EssentialsCommand {
             case LIMITED:
                 sender.sendMessage(tl("serverUnsupportedLimitedApi"));
                 break;
+        }
+
+        if (VersionUtil.getSupportStatusClass() != null) {
+            sender.sendMessage(tl("serverUnsupportedClass", VersionUtil.getSupportStatusClass()));
         }
     }
 
