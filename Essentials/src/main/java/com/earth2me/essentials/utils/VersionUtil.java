@@ -2,10 +2,13 @@ package com.earth2me.essentials.utils;
 
 import com.google.common.base.Objects;
 import com.google.common.base.Preconditions;
+import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import io.papermc.lib.PaperLib;
+import net.ess3.nms.refl.ReflUtil;
 import org.bukkit.Bukkit;
 
+import java.util.Map;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -16,7 +19,6 @@ public final class VersionUtil {
     public static final BukkitVersion v1_8_8_R01 = BukkitVersion.fromString("1.8.8-R0.1-SNAPSHOT");
     public static final BukkitVersion v1_9_R01 = BukkitVersion.fromString("1.9-R0.1-SNAPSHOT");
     public static final BukkitVersion v1_9_4_R01 = BukkitVersion.fromString("1.9.4-R0.1-SNAPSHOT");
-    public static final BukkitVersion v1_10_R01 = BukkitVersion.fromString("1.10-R0.1-SNAPSHOT");
     public static final BukkitVersion v1_10_2_R01 = BukkitVersion.fromString("1.10.2-R0.1-SNAPSHOT");
     public static final BukkitVersion v1_11_R01 = BukkitVersion.fromString("1.11-R0.1-SNAPSHOT");
     public static final BukkitVersion v1_11_2_R01 = BukkitVersion.fromString("1.11.2-R0.1-SNAPSHOT");
@@ -28,12 +30,48 @@ public final class VersionUtil {
     public static final BukkitVersion v1_15_R01 = BukkitVersion.fromString("1.15-R0.1-SNAPSHOT");
     public static final BukkitVersion v1_15_2_R01 = BukkitVersion.fromString("1.15.2-R0.1-SNAPSHOT");
     public static final BukkitVersion v1_16_1_R01 = BukkitVersion.fromString("1.16.1-R0.1-SNAPSHOT");
-    public static final BukkitVersion v1_16_2_R01 = BukkitVersion.fromString("1.16.2-R0.1-SNAPSHOT");
     public static final BukkitVersion v1_16_5_R01 = BukkitVersion.fromString("1.16.5-R0.1-SNAPSHOT");
 
     private static final Set<BukkitVersion> supportedVersions = ImmutableSet.of(v1_8_8_R01, v1_9_4_R01, v1_10_2_R01, v1_11_2_R01, v1_12_2_R01, v1_13_2_R01, v1_14_4_R01, v1_15_2_R01, v1_16_5_R01);
 
+    private static final Map<String, SupportStatus> unsupportedServerClasses;
+
+    static {
+        final ImmutableMap.Builder<String, SupportStatus> builder = new ImmutableMap.Builder<>();
+
+        // Yatopia - Extremely volatile patch set;
+        //   * Messes with proxy-forwarded UUIDs
+        //   * Frequent data corruptions
+        builder.put("org.yatopiamc.yatopia.server.YatopiaConfig", SupportStatus.DANGEROUS_FORK);
+
+        // KibblePatcher - Dangerous bytecode editor snakeoil whose only use is to break plugins
+        builder.put("net.kibblelands.server.FastMath", SupportStatus.DANGEROUS_FORK);
+
+        // AirplaneLite - Yatopia sidestream;
+        //   * Attempts unsafe chunk concurrency
+        builder.put("gg.airplane.structs.ChunkMapMap", SupportStatus.DANGEROUS_FORK);
+        builder.put("gg.airplane.structs.ConcLong2ObjectOpenHashMap", SupportStatus.DANGEROUS_FORK);
+
+        // Akarin - Dangerous patch history;
+        //   * Potentially unsafe saving of nms.JsonList
+        builder.put("io.akarin.server.Config", SupportStatus.DANGEROUS_FORK);
+
+        // Forge - Doesn't support Bukkit
+        builder.put("net.minecraftforge.common.MinecraftForge", SupportStatus.UNSTABLE);
+
+        // Fabric - Doesn't support Bukkit
+        builder.put("net.fabricmc.loader.launch.knot.KnotServer", SupportStatus.UNSTABLE);
+
+        // Misc translation layers that do not add NMS will be caught by this
+        builder.put("!net.minecraft.server." + ReflUtil.getNMSVersion() + ".MinecraftServer", SupportStatus.NMS_CLEANROOM);
+
+        unsupportedServerClasses = builder.build();
+    }
+
     private static BukkitVersion serverVersion = null;
+    private static SupportStatus supportStatus = null;
+    // Used to find the specific class that caused a given support status
+    private static String supportStatusClass = null;
 
     private VersionUtil() {
     }
@@ -46,17 +84,35 @@ public final class VersionUtil {
     }
 
     public static SupportStatus getServerSupportStatus() {
-        try {
-            Class.forName("net.minecraftforge.common.MinecraftForge");
-            return SupportStatus.UNSTABLE;
-        } catch (final ClassNotFoundException ignored) {
-        }
+        if (supportStatus == null) {
+            for (Map.Entry<String, SupportStatus> entry : unsupportedServerClasses.entrySet()) {
+                final boolean inverted = entry.getKey().contains("!");
+                final String clazz = entry.getKey().replace("!", "");
+                try {
+                    Class.forName(clazz);
+                    if (!inverted) {
+                        supportStatusClass = entry.getKey();
+                        return supportStatus = entry.getValue();
+                    }
+                } catch (final ClassNotFoundException ignored) {
+                    if (inverted) {
+                        supportStatusClass = entry.getKey();
+                        return supportStatus = entry.getValue();
+                    }
+                }
+            }
 
-        if (!supportedVersions.contains(getServerBukkitVersion())) {
-            return SupportStatus.OUTDATED;
-        }
+            if (!supportedVersions.contains(getServerBukkitVersion())) {
+                return supportStatus = SupportStatus.OUTDATED;
+            }
 
-        return PaperLib.isPaper() ? SupportStatus.FULL : SupportStatus.LIMITED;
+            return supportStatus = PaperLib.isPaper() ? SupportStatus.FULL : SupportStatus.LIMITED;
+        }
+        return supportStatus;
+    }
+
+    public static String getSupportStatusClass() {
+        return supportStatusClass;
     }
 
     public static boolean isServerSupported() {
@@ -207,6 +263,8 @@ public final class VersionUtil {
     public enum SupportStatus {
         FULL(true),
         LIMITED(true),
+        DANGEROUS_FORK(false),
+        NMS_CLEANROOM(false),
         UNSTABLE(false),
         OUTDATED(false)
         ;
