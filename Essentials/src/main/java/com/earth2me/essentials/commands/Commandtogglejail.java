@@ -66,6 +66,7 @@ public class Commandtogglejail extends EssentialsCommand {
                         player.setJail(args[1]);
                         if (args.length > 2) {
                             player.setJailTimeout(timeDiff);
+                            // 50 MSPT (milliseconds per tick)
                             player.setOnlineJailedTime(ess.getSettings().isJailOnlineTime() ? ((player.getBase().getStatistic(PLAY_ONE_TICK)) + (timeDiff / 50)) : 0);
                         }
                         sender.sendMessage(timeDiff > 0 ? tl("playerJailedFor", player.getName(), DateUtil.formatDateDiff(finalDisplayTime)) : tl("playerJailed", player.getName()));
@@ -88,9 +89,12 @@ public class Commandtogglejail extends EssentialsCommand {
         }
 
         if (args.length >= 2 && player.isJailed() && args[1].equalsIgnoreCase(player.getJail())) {
-            final long timeDiff = DateUtil.parseDateDiff(getFinalArg(args, 2), true);
+            final String unparsedTime = getFinalArg(args, 2);
+            final long displayTimeDiff = DateUtil.parseDateDiff(unparsedTime, true);
+            final long timeDiff = DateUtil.parseDateDiff(unparsedTime, true, ess.getSettings().isJailOnlineTime());
             player.setJailTimeout(timeDiff);
-            sender.sendMessage(tl("jailSentenceExtended", DateUtil.formatDateDiff(timeDiff)));
+            player.setOnlineJailedTime(ess.getSettings().isJailOnlineTime() ? ((player.getBase().getStatistic(PLAY_ONE_TICK)) + (timeDiff / 50)) : 0);
+            sender.sendMessage(tl("jailSentenceExtended", DateUtil.formatDateDiff(displayTimeDiff)));
             return;
         }
 
