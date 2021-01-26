@@ -204,6 +204,43 @@ server.
 
 ## Discord Commands
 EssentialsXDiscord uses Discord's slash command system to let you type commands into discord without it being
-seen by other people in the server. 
+seen by other people in the server. With this system, you are able to execute console commands, message players,
+and see the current player list.
+
+For example, here's what the `/execute` command looks like by default:
+> ![/execute](https://i.imgur.com/yPN22bV.gif)
+
+As you can see, you can seamlessly run commands without people seeing the content of your commands or their
+response. Additionally, you can also delete the responses once you're done looking at them, so they don't clutter
+your chat.
+
+However, this is all configurable! In the `commands` section of the config, lies a ton of options to configure
+settings on a per-command basis. Below are explanations of what all the configuration options mean and how to use
+them.
+
+* `enabled`
+  * Default: `true`
+  * Description: `Whether or not the command should be enabled and therefore shown on discord. Note that you
+    must restart your minecraft server before this option takes effect.`
+* `hide-command`
+  * Default: `true`
+  * Description: `Whether other people should not be able to see what commands you execute. Setting to false
+    would allow people in the same channel as you to see exactly what command you execute. In the example below,
+    you can see how disabling this option shows a message of the user and the command they executed.`
+  * Example: ![Show Command](https://i.imgur.com/Q61iP4n.gif)
+* `hide-response`
+  * Default: `true`
+  * Description: `Whether other people should not be able to see the reponse of commands you execute. Setting to
+    false would allow people in the same channel as you to see all the reponses to the commands you execute. In
+    the example below, you can see how disabling this option shows the command reponses as normal messages and
+    the option to "Dismiss this Message" goes away.`
+  * Example: ![Show Response](https://i.imgur.com/yHVOYR0.gif)
+* `allowed-roles`
+  * Description: `A list of user ids or role names/ids that are allowed to use the command. You can also use '*'
+    in order to allow everyone to use the command.`
+* `admin-roles`
+  * `A list of user ids or role names/ids that have extra features in the command. For example, in the list
+    command, admin-roles allows people to see vanished players.`
+  
 
 ---
