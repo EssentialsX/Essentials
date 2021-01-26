@@ -20,7 +20,9 @@ EssentialsXDiscord offers *essential* features you'd want from a Discord bridge 
 > * [Initial Setup](#initial-setup)
 > * [Console Relay](#console-relay)
 > * [Configuring Messages](#configuring-messages)
+> * [Receive Discord Messages in Minecraft](#receive-discord-messages-in-minecraft)
 > * [Discord Commands](#discord-commands)
+> * [Misc Permissions](#misc-permissions)
 
 ---
 
@@ -202,6 +204,19 @@ server.
 
 ---
 
+## Receive Discord Messages in Minecraft
+After reading the [configuring messages section](#configuring-messages), you should now have a few discord
+channels defined in the `channels` of your config. You're probably wondering how you can let your players start
+to see messages from discord in minecraft chat. Say I defined a channel named `chat` in the `channels` section
+of your config, and I wanted to let players see discord messages from that channel in minecraft chat; This can
+be accomplished very simply by giving players the `essentials.discord.receive.chat` permission. This would relay
+all discord messages from the `chat` channel to players with that permission. Another example: say I have a staff
+channel in discord that I want only staff members in the minecraft server to see. Provided there is a `staff`
+channel defined in the `channels` section of the config, I can give staff members the
+`essentials.discord.receive.staff` permission, and they will start to see messages from that channel.
+
+---
+
 ## Discord Commands
 EssentialsXDiscord uses Discord's slash command system to let you type commands into discord without it being
 seen by other people in the server. With this system, you are able to execute console commands, message players,
@@ -241,6 +256,15 @@ them.
 * `admin-roles`
   * `A list of user ids or role names/ids that have extra features in the command. For example, in the list
     command, admin-roles allows people to see vanished players.`
-  
+
+---
+
+## Misc Permissions
+EssentialsXDiscord has a few miscellanies permissions that may be important to know about;
+
+* `essentials.discord.markdown` - Allows players to bypass the markdown filter, so that they can 
+bold/underline/italic/etc their minecraft chat messages for discord.
+* `essentials.discord.ping` - Allows players to bypass the ping filter, so that they can ping @everyone/@here
+from minecraft chat.
 
 ---
