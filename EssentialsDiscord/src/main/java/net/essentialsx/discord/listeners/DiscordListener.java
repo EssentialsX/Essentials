@@ -7,11 +7,11 @@ import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
+import net.ess3.api.IUser;
 import net.essentialsx.discord.EssentialsJDA;
 import net.essentialsx.discord.util.DiscordUtil;
 import net.essentialsx.discord.util.MessageUtil;
 import org.apache.commons.lang.StringUtils;
-import org.bukkit.Bukkit;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -67,8 +67,13 @@ public class DiscordListener extends ListenerAdapter {
                 event.getChannel().getName(), user.getName(), user.getDiscriminator(), user.getAsTag(),
                 member.getEffectiveName(), DiscordUtil.getRoleColorFormat(member), finalMessage), EmojiParser.FitzpatrickAction.REMOVE);
 
-        for (String group : keys) {
-            Bukkit.broadcast(formattedMessage, "essentials.discord.receive." + group);
+        for (IUser essUser : plugin.getPlugin().getEss().getOnlineUsers()) {
+            for (String group : keys) {
+                final String perm = "essentials.discord.receive." + group;
+                if (essUser.isPermissionSet(perm) && essUser.isAuthorized(perm)) {
+                    essUser.sendMessage(formattedMessage);
+                }
+            }
         }
     }
 }
