@@ -17,31 +17,44 @@ import java.util.Date;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
+import static com.earth2me.essentials.I18n.tl;
+
 @Plugin(name = "EssentialsX-ConsoleInjector", category = "Core", elementType = "appender", printObject = true)
 public class ConsoleInjector extends AbstractAppender {
+    private final static java.util.logging.Logger logger = java.util.logging.Logger.getLogger("EssentialsDiscord");
+
     private final EssentialsJDA jda;
     private final BlockingQueue<String> messageQueue = new LinkedBlockingQueue<>();
     private final SimpleDateFormat timestampFormat = new SimpleDateFormat("HH:mm:ss");
+    private final int taskId;
 
     public ConsoleInjector(EssentialsJDA jda) {
         super("EssentialsX-ConsoleInjector", null, null, false);
         this.jda = jda;
         ((Logger) LogManager.getRootLogger()).addAppender(this);
-        Bukkit.getScheduler().runTaskTimerAsynchronously(jda.getPlugin(), () -> {
+        taskId = Bukkit.getScheduler().runTaskTimerAsynchronously(jda.getPlugin(), () -> {
             StringBuilder buffer = new StringBuilder();
             String curLine;
             while ((curLine = messageQueue.peek()) != null) {
                 if (buffer.length() + curLine.length() > Message.MAX_CONTENT_LENGTH - 2) {
-                    jda.getConsoleWebhook().send(jda.getWebhookMessage(buffer.toString()));
+                    sendMessage(buffer.toString());
                     buffer = new StringBuilder();
                     continue;
                 }
                 buffer.append("\n").append(messageQueue.poll());
             }
             if (buffer.length() != 0) {
-                jda.getConsoleWebhook().send(jda.getWebhookMessage(buffer.toString()));
+                sendMessage(buffer.toString());
             }
-        }, 20, 40);
+        }, 20, 40).getTaskId();
+    }
+
+    private void sendMessage(String content) {
+        jda.getConsoleWebhook().send(jda.getWebhookMessage(content)).exceptionally(e -> {
+            logger.severe(tl("discordErrorWebhook"));
+            remove();
+            return null;
+        });
     }
 
     @Override
@@ -66,5 +79,7 @@ public class ConsoleInjector extends AbstractAppender {
 
     public void remove() {
         ((Logger) LogManager.getRootLogger()).removeAppender(this);
+        Bukkit.getScheduler().cancelTask(taskId);
+        messageQueue.clear();
     }
 }
