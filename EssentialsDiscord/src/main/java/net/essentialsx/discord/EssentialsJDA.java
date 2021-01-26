@@ -94,6 +94,10 @@ public class EssentialsJDA {
         updatePresence();
         logger.log(Level.INFO, tl("discordLoggingInDone", jda.getSelfUser().getAsTag()));
 
+        if (jda.getGuilds().isEmpty()) {
+            throw new IllegalArgumentException(tl("discordErrorNoGuildSize"));
+        }
+
         guild = jda.getGuildById(plugin.getSettings().getGuildId());
         if (guild == null) {
             throw new IllegalArgumentException(tl("discordErrorNoGuild"));

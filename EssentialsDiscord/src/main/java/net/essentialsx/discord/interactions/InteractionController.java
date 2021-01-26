@@ -25,6 +25,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
+import static com.earth2me.essentials.I18n.tl;
+
 public class InteractionController extends ListenerAdapter {
     private final static Logger logger = Logger.getLogger("EssentialsDiscord");
 
@@ -147,7 +149,13 @@ public class InteractionController extends ListenerAdapter {
                     return;
                 }
                 //noinspection ConstantConditions
-                logger.info("Error while registering command, raw response: " + response.body().string());
+                final JsonObject responseObj = DiscordUtil.GSON.fromJson(response.body().string(), JsonObject.class);
+                if (responseObj.has("code") && responseObj.get("code").getAsInt() == 50001) {
+                    logger.severe(tl("discordErrorCommand"));
+                    return;
+                }
+
+                logger.warning("Error while registering command, raw response: " + responseObj.toString());
             }
 
             @Override
