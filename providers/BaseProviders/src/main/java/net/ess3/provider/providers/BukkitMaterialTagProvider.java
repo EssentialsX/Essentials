@@ -25,7 +25,7 @@ public class BukkitMaterialTagProvider implements MaterialTagProvider {
             return false;
         }
 
-        Tag<Material> tag = getTag(tagName);
+        final Tag<Material> tag = getTag(tagName);
         return tag != null && tag.isTagged(material);
     }
 
