@@ -24,7 +24,7 @@ public class SignEnchant extends EssentialsSign {
         final String itemName = sign.getLine(1);
         final MaterialTagProvider tagProvider = ess.getMaterialTagProvider();
         try {
-            stack = itemName.equals("*") || itemName.equalsIgnoreCase("any") || tagProvider.tagExists(itemName) ? null : getItemStack(sign.getLine(1), 1, ess);
+            stack = itemName.equals("*") || itemName.equalsIgnoreCase("any") || (tagProvider != null && tagProvider.tagExists(itemName)) ? null : getItemStack(sign.getLine(1), 1, ess);
         } catch (final SignException e) {
             sign.setLine(1, "§c<item|any>");
             throw e;
@@ -69,7 +69,7 @@ public class SignEnchant extends EssentialsSign {
         final ItemStack playerHand = player.getBase().getItemInHand();
         final MaterialTagProvider tagProvider = ess.getMaterialTagProvider();
         final String itemName = sign.getLine(1);
-        final ItemStack search = itemName.equals("*") || itemName.equalsIgnoreCase("any") || (tagProvider.tagExists(itemName) && tagProvider.isTagged(itemName, playerHand.getType())) ? null : getItemStack(itemName, 1, ess);
+        final ItemStack search = itemName.equals("*") || itemName.equalsIgnoreCase("any") || (tagProvider != null && tagProvider.tagExists(itemName) && tagProvider.isTagged(itemName, playerHand.getType())) ? null : getItemStack(itemName, 1, ess);
         final Trade charge = getTrade(sign, 3, ess);
         charge.isAffordableFor(player);
         final String[] enchantLevel = sign.getLine(2).split(":");
