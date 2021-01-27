@@ -145,6 +145,8 @@ public interface IUser {
 
     void setJail(String jail);
 
+    String getFormattedJailTime();
+
     List<String> getMails();
 
     void addMail(String mail);

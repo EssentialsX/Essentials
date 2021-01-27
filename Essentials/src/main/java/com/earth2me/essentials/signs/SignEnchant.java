@@ -115,7 +115,7 @@ public class SignEnchant extends EssentialsSign {
         }
 
         charge.charge(player);
-        Trade.log("Sign", "Enchant", "Interact", username, charge, username, charge, sign.getBlock().getLocation(), ess);
+        Trade.log("Sign", "Enchant", "Interact", username, charge, username, charge, sign.getBlock().getLocation(), player.getMoney(), ess);
         player.getBase().updateInventory();
         return true;
     }

@@ -40,12 +40,13 @@ public class Commandme extends EssentialsCommand {
         message = FormatUtil.formatMessage(user, "essentials.chat", message);
 
         user.setDisplayNick();
-        final int radius = ess.getSettings().getChatRadius();
+        long radius = ess.getSettings().getChatRadius();
         final String toSend = tl("action", user.getDisplayName(), message);
         if (radius < 1) {
             ess.broadcastMessage(user, toSend);
             return;
         }
+        radius *= radius;
 
         final World world = user.getWorld();
         final Location loc = user.getLocation();

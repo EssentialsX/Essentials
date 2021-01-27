@@ -19,6 +19,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.command.PluginCommand;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -162,7 +163,7 @@ public class EssentialsPlayerListener implements Listener {
             }
         }
 
-        user.updateActivityOnInteract(true);
+        user.updateActivityOnChat(true);
         user.setDisplayNick();
     }
 
@@ -472,7 +473,9 @@ public class EssentialsPlayerListener implements Listener {
                 event.allow();
                 return;
             }
-            event.disallow(Result.KICK_FULL, tl("serverFull"));
+            if (ess.getSettings().isCustomServerFullMessage()) {
+                event.disallow(Result.KICK_FULL, tl("serverFull"));
+            }
         }
     }
 
@@ -782,8 +785,8 @@ public class EssentialsPlayerListener implements Listener {
             clickedInventory = event.getRawSlot() < top.getSize() ? top : event.getView().getBottomInventory();
         }
 
+        final User user = ess.getUser((Player) event.getWhoClicked());
         if (type == InventoryType.PLAYER) {
-            final User user = ess.getUser((Player) event.getWhoClicked());
             final InventoryHolder invHolder = top.getHolder();
             if (invHolder instanceof HumanEntity) {
                 final User invOwner = ess.getUser((Player) invHolder);
@@ -793,21 +796,18 @@ public class EssentialsPlayerListener implements Listener {
                 }
             }
         } else if (type == InventoryType.ENDER_CHEST) {
-            final User user = ess.getUser((Player) event.getWhoClicked());
             if (user.isEnderSee() && !user.isAuthorized("essentials.enderchest.modify")) {
                 event.setCancelled(true);
                 refreshPlayer = user.getBase();
             }
         } else if (type == InventoryType.WORKBENCH) {
-            final User user = ess.getUser((Player) event.getWhoClicked());
             if (user.isRecipeSee()) {
                 event.setCancelled(true);
                 refreshPlayer = user.getBase();
             }
         } else if (type == InventoryType.CHEST && top.getSize() == 9) {
-            final User user = ess.getUser((Player) event.getWhoClicked());
             final InventoryHolder invHolder = top.getHolder();
-            if (invHolder instanceof HumanEntity && user.isInvSee()) {
+            if (invHolder instanceof HumanEntity && user.isInvSee() && event.getClick() != ClickType.MIDDLE) {
                 event.setCancelled(true);
                 refreshPlayer = user.getBase();
             }
@@ -815,7 +815,8 @@ public class EssentialsPlayerListener implements Listener {
             if (ess.getSettings().isDirectHatAllowed() && event.getClick() == ClickType.LEFT && event.getSlot() == 39
                 && event.getCursor().getType() != Material.AIR && event.getCursor().getType().getMaxDurability() == 0
                 && !MaterialUtil.isSkull(event.getCursor().getType())
-                && ess.getUser(event.getWhoClicked()).isAuthorized("essentials.hat") && !ess.getUser(event.getWhoClicked()).isAuthorized("essentials.hat.prevent-type." + event.getCursor().getType().name().toLowerCase())) {
+                && user.isAuthorized("essentials.hat") && !user.isAuthorized("essentials.hat.prevent-type." + event.getCursor().getType().name().toLowerCase())
+                && !isPreventBindingHat(user, (PlayerInventory) clickedInventory)) {
                 event.setCancelled(true);
                 final PlayerInventory inv = (PlayerInventory) clickedInventory;
                 final ItemStack head = inv.getHelmet();
@@ -827,6 +828,14 @@ public class EssentialsPlayerListener implements Listener {
         if (refreshPlayer != null) {
             ess.scheduleSyncDelayedTask(refreshPlayer::updateInventory, 1);
         }
+    }
+
+    private boolean isPreventBindingHat(User user, PlayerInventory inventory) {
+        if (VersionUtil.getServerBukkitVersion().isHigherThan(VersionUtil.v1_9_4_R01)) {
+            final ItemStack head = inventory.getHelmet();
+            return head != null && head.getEnchantments().containsKey(Enchantment.BINDING_CURSE) && !user.isAuthorized("essentials.hat.ignore-binding");
+        }
+        return false;
     }
 
     @EventHandler(priority = EventPriority.MONITOR)

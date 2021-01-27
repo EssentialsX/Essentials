@@ -36,7 +36,6 @@ import com.earth2me.essentials.signs.SignPlayerListener;
 import com.earth2me.essentials.textreader.IText;
 import com.earth2me.essentials.textreader.KeywordReplacer;
 import com.earth2me.essentials.textreader.SimpleTextInput;
-import com.earth2me.essentials.utils.DateUtil;
 import com.earth2me.essentials.utils.VersionUtil;
 import io.papermc.lib.PaperLib;
 import net.ess3.api.Economy;
@@ -44,10 +43,10 @@ import net.ess3.api.IEssentials;
 import net.ess3.api.IItemDb;
 import net.ess3.api.IJails;
 import net.ess3.api.ISettings;
+import net.ess3.nms.refl.providers.ReflKnownCommandsProvider;
 import net.ess3.nms.refl.providers.ReflServerStateProvider;
 import net.ess3.nms.refl.providers.ReflSpawnEggProvider;
 import net.ess3.nms.refl.providers.ReflSpawnerBlockProvider;
-import net.ess3.nms.refl.providers.ReflKnownCommandsProvider;
 import net.ess3.provider.ContainerProvider;
 import net.ess3.provider.KnownCommandsProvider;
 import net.ess3.provider.MaterialTagProvider;
@@ -205,6 +204,12 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
             Console.setInstance(this);
 
             switch (VersionUtil.getServerSupportStatus()) {
+                case NMS_CLEANROOM:
+                    getLogger().severe(tl("serverUnsupportedCleanroom"));
+                    break;
+                case DANGEROUS_FORK:
+                    getLogger().severe(tl("serverUnsupportedDangerous"));
+                    break;
                 case UNSTABLE:
                     getLogger().severe(tl("serverUnsupportedMods"));
                     break;
@@ -214,6 +219,10 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
                 case LIMITED:
                     getLogger().info(tl("serverUnsupportedLimitedApi"));
                     break;
+            }
+
+            if (VersionUtil.getSupportStatusClass() != null) {
+                getLogger().info(tl("serverUnsupportedClass", VersionUtil.getSupportStatusClass()));
             }
 
             final PluginManager pm = getServer().getPluginManager();
@@ -289,7 +298,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
                 }
 
                 //Spawn Egg Providers
-                if (VersionUtil.getServerBukkitVersion().isLowerThanOrEqualTo(VersionUtil.v1_8_8_R01)) {
+                if (VersionUtil.getServerBukkitVersion().isLowerThan(VersionUtil.v1_9_R01)) {
                     spawnEggProvider = new LegacySpawnEggProvider();
                 } else if (VersionUtil.getServerBukkitVersion().isLowerThanOrEqualTo(VersionUtil.v1_12_2_R01)) {
                     spawnEggProvider = new ReflSpawnEggProvider();
@@ -298,7 +307,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
                 }
 
                 //Potion Meta Provider
-                if (VersionUtil.getServerBukkitVersion().isLowerThanOrEqualTo(VersionUtil.v1_8_8_R01)) {
+                if (VersionUtil.getServerBukkitVersion().isLowerThan(VersionUtil.v1_9_R01)) {
                     potionMetaProvider = new LegacyPotionMetaProvider();
                 } else {
                     potionMetaProvider = new BasePotionDataProvider();
@@ -507,10 +516,10 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
                                                 final ClassLoader classLoader, final String commandPath, final String permissionPrefix,
                                                 final IEssentialsModule module) {
         if (!getSettings().isCommandOverridden(command.getName()) && (!commandLabel.startsWith("e") || commandLabel.equalsIgnoreCase(command.getName()))) {
-            final PluginCommand pc = alternativeCommandsHandler.getAlternative(commandLabel);
-            if (pc != null) {
+            final Command pc = alternativeCommandsHandler.getAlternative(commandLabel);
+            if (pc instanceof PluginCommand) {
                 try {
-                    final TabCompleter completer = pc.getTabCompleter();
+                    final TabCompleter completer = ((PluginCommand) pc).getTabCompleter();
                     if (completer != null) {
                         return completer.onTabComplete(cSender, command, commandLabel, args);
                     }
@@ -583,16 +592,19 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
     public boolean onCommandEssentials(final CommandSender cSender, final Command command, final String commandLabel, final String[] args, final ClassLoader classLoader, final String commandPath, final String permissionPrefix, final IEssentialsModule module) {
         // Allow plugins to override the command via onCommand
         if (!getSettings().isCommandOverridden(command.getName()) && (!commandLabel.startsWith("e") || commandLabel.equalsIgnoreCase(command.getName()))) {
-            final PluginCommand pc = alternativeCommandsHandler.getAlternative(commandLabel);
+            if (getSettings().isDebug()) {
+                LOGGER.log(Level.INFO, "Searching for alternative to: " + commandLabel);
+            }
+            final Command pc = alternativeCommandsHandler.getAlternative(commandLabel);
             if (pc != null) {
                 alternativeCommandsHandler.executed(commandLabel, pc);
                 try {
-                    return pc.execute(cSender, commandLabel, args);
+                    pc.execute(cSender, commandLabel, args);
                 } catch (final Exception ex) {
                     Bukkit.getLogger().log(Level.SEVERE, ex.getMessage(), ex);
                     cSender.sendMessage(tl("internalError"));
-                    return true;
                 }
+                return true;
             }
         }
 
@@ -654,7 +666,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
 
             if (user != null && user.isJailed() && !user.isAuthorized(cmd, "essentials.jail.allow.")) {
                 if (user.getJailTimeout() > 0) {
-                    user.sendMessage(tl("playerJailedFor", user.getName(), DateUtil.formatDateDiff(user.getJailTimeout())));
+                    user.sendMessage(tl("playerJailedFor", user.getName(), user.getFormattedJailTime()));
                 } else {
                     user.sendMessage(tl("jailMessage"));
                 }

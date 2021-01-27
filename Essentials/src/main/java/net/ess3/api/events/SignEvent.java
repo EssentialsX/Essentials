@@ -6,13 +6,11 @@ import net.ess3.api.IUser;
 import org.bukkit.Bukkit;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
-import org.bukkit.event.HandlerList;
 
 /**
  * This handles common boilerplate for other SignEvent
  */
-public class SignEvent extends Event implements Cancellable {
-    private static final HandlerList handlers = new HandlerList();
+public abstract class SignEvent extends Event implements Cancellable {
     final ISign sign;
     final EssentialsSign essSign;
     final IUser user;
@@ -25,10 +23,6 @@ public class SignEvent extends Event implements Cancellable {
         this.user = user;
     }
 
-    public static HandlerList getHandlerList() {
-        return handlers;
-    }
-
     public ISign getSign() {
         return sign;
     }
@@ -39,11 +33,6 @@ public class SignEvent extends Event implements Cancellable {
 
     public IUser getUser() {
         return user;
-    }
-
-    @Override
-    public HandlerList getHandlers() {
-        return handlers;
     }
 
     @Override

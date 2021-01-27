@@ -43,7 +43,7 @@ public class SignInfo extends EssentialsSign {
         }
 
         charge.charge(player);
-        Trade.log("Sign", "Info", "Interact", username, null, username, charge, sign.getBlock().getLocation(), ess);
+        Trade.log("Sign", "Info", "Interact", username, null, username, charge, sign.getBlock().getLocation(), player.getMoney(), ess);
         return true;
     }
 }

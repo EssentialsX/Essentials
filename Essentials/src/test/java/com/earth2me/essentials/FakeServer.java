@@ -1399,4 +1399,8 @@ public class FakeServer implements Server {
         }
     }
 
+    @Override
+    public int getMaxWorldSize() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
 }

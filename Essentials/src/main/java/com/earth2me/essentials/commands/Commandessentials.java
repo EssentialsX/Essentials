@@ -65,7 +65,7 @@ public class Commandessentials extends EssentialsCommand {
     private static final List<String> warnPlugins = Arrays.asList(
         "PermissionsEx",
         "GroupManager",
-        "bPremissions"
+        "bPermissions"
     );
     private transient TuneRunnable currentTune = null;
 
@@ -134,18 +134,14 @@ public class Commandessentials extends EssentialsCommand {
 
     // Lists commands that are being handed over to other plugins.
     private void runCommands(final Server server, final CommandSource sender, final String commandLabel, final String[] args) {
-        final StringBuilder disabledCommands = new StringBuilder();
-        for (final Map.Entry<String, String> entry : ess.getAlternativeCommandsHandler().disabledCommands().entrySet()) {
-            if (disabledCommands.length() > 0) {
-                disabledCommands.append("\n");
-            }
-            disabledCommands.append(entry.getKey()).append(" => ").append(entry.getValue());
-        }
-        if (disabledCommands.length() > 0) {
-            sender.sendMessage(tl("blockList"));
-            sender.sendMessage(disabledCommands.toString());
-        } else {
+        if (ess.getAlternativeCommandsHandler().disabledCommands().size() == 0) {
             sender.sendMessage(tl("blockListEmpty"));
+            return;
+        }
+
+        sender.sendMessage(tl("blockList"));
+        for (final Map.Entry<String, String> entry : ess.getAlternativeCommandsHandler().disabledCommands().entrySet()) {
+            sender.sendMessage(entry.getKey() + " => " + entry.getValue());
         }
     }
 
@@ -376,6 +372,12 @@ public class Commandessentials extends EssentialsCommand {
         }
 
         switch (supportStatus) {
+            case NMS_CLEANROOM:
+                sender.sendMessage(tl("serverUnsupportedCleanroom"));
+                break;
+            case DANGEROUS_FORK:
+                sender.sendMessage(tl("serverUnsupportedDangerous"));
+                break;
             case UNSTABLE:
                 sender.sendMessage(tl("serverUnsupportedMods"));
                 break;
@@ -385,6 +387,10 @@ public class Commandessentials extends EssentialsCommand {
             case LIMITED:
                 sender.sendMessage(tl("serverUnsupportedLimitedApi"));
                 break;
+        }
+
+        if (VersionUtil.getSupportStatusClass() != null) {
+            sender.sendMessage(tl("serverUnsupportedClass", VersionUtil.getSupportStatusClass()));
         }
     }
 

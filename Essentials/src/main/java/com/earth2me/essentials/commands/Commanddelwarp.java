@@ -1,6 +1,9 @@
 package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.CommandSource;
+import net.essentialsx.api.v2.events.WarpModifyEvent;
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.Server;
 
 import java.util.ArrayList;
@@ -19,9 +22,19 @@ public class Commanddelwarp extends EssentialsCommand {
         if (args.length == 0) {
             throw new NotEnoughArgumentsException();
         }
-
-        ess.getWarps().removeWarp(args[0]);
-        sender.sendMessage(tl("deleteWarp", args[0]));
+        //Check if warp exists before calling the event
+        final Location location = ess.getWarps().getWarp(args[0]);
+        if (location != null) {
+            final WarpModifyEvent event = new WarpModifyEvent(sender.getUser(this.ess), args[0], location, null, WarpModifyEvent.WarpModifyCause.DELETE);
+            Bukkit.getServer().getPluginManager().callEvent(event);
+            if (event.isCancelled()) {
+                return;
+            }
+            ess.getWarps().removeWarp(args[0]);
+            sender.sendMessage(tl("deleteWarp", args[0]));
+        } else {
+            throw new Exception(tl("warpNotExist"));
+        }
     }
 
     @Override

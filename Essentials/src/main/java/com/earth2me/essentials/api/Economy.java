@@ -234,7 +234,7 @@ public class Economy {
         } catch (final MaxMoneyException ex) {
             //TODO: Update API to show max balance errors
         }
-        Trade.log("API", "Set", "API", user.getName(), new Trade(balance, ess), null, null, null, ess);
+        Trade.log("API", "Set", "API", user.getName(), new Trade(balance, ess), null, null, null, balance, ess);
     }
 
     /**
@@ -307,7 +307,7 @@ public class Economy {
         }
         final BigDecimal result = getMoneyExact(user).add(amount, MATH_CONTEXT);
         setMoney(user, result);
-        Trade.log("API", "Add", "API", user.getName(), new Trade(amount, ess), null, null, null, ess);
+        Trade.log("API", "Add", "API", user.getName(), new Trade(amount, ess), null, null, null, result, ess);
     }
 
     /**
@@ -342,7 +342,7 @@ public class Economy {
     public static void substract(final String name, final BigDecimal amount) throws UserDoesNotExistException, NoLoanPermittedException, ArithmeticException {
         final BigDecimal result = getMoneyExact(name).subtract(amount, MATH_CONTEXT);
         setMoney(name, result);
-        Trade.log("API", "Subtract", "API", name, new Trade(amount, ess), null, null, null, ess);
+        Trade.log("API", "Subtract", "API", name, new Trade(amount, ess), null, null, null, result, ess);
     }
 
     /**
@@ -376,7 +376,7 @@ public class Economy {
         }
         final BigDecimal result = getMoneyExact(user).subtract(amount, MATH_CONTEXT);
         setMoney(user, result);
-        Trade.log("API", "Subtract", "API", user.getName(), new Trade(amount, ess), null, null, null, ess);
+        Trade.log("API", "Subtract", "API", user.getName(), new Trade(amount, ess), null, null, null, result, ess);
     }
 
     /**
@@ -447,7 +447,7 @@ public class Economy {
         }
         final BigDecimal result = getMoneyExact(user).divide(amount, MATH_CONTEXT);
         setMoney(user, result);
-        Trade.log("API", "Divide", "API", user.getName(), new Trade(amount, ess), null, null, null, ess);
+        Trade.log("API", "Divide", "API", user.getName(), new Trade(amount, ess), null, null, null, result, ess);
     }
 
     /**
@@ -518,7 +518,7 @@ public class Economy {
         }
         final BigDecimal result = getMoneyExact(user).multiply(amount, MATH_CONTEXT);
         setMoney(user, result);
-        Trade.log("API", "Multiply", "API", user.getName(), new Trade(amount, ess), null, null, null, ess);
+        Trade.log("API", "Multiply", "API", user.getName(), new Trade(amount, ess), null, null, null, result, ess);
     }
 
     /**
@@ -535,7 +535,7 @@ public class Economy {
             throw new RuntimeException(noCallBeforeLoad);
         }
         setMoney(name, ess.getSettings().getStartingBalance());
-        Trade.log("API", "Reset", "API", name, new Trade(BigDecimal.ZERO, ess), null, null, null, ess);
+        Trade.log("API", "Reset", "API", name, new Trade(BigDecimal.ZERO, ess), null, null, null, ess.getSettings().getStartingBalance(), ess);
     }
 
     /**
@@ -567,7 +567,7 @@ public class Economy {
             throw new IllegalArgumentException("Economy user cannot be null");
         }
         setMoney(user, ess.getSettings().getStartingBalance());
-        Trade.log("API", "Reset", "API", user.getName(), new Trade(BigDecimal.ZERO, ess), null, null, null, ess);
+        Trade.log("API", "Reset", "API", user.getName(), new Trade(BigDecimal.ZERO, ess), null, null, null, ess.getSettings().getStartingBalance(), ess);
     }
 
     /**
