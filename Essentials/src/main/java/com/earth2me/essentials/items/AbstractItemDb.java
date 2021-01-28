@@ -18,6 +18,7 @@ import org.bukkit.inventory.meta.BannerMeta;
 import org.bukkit.inventory.meta.BlockStateMeta;
 import org.bukkit.inventory.meta.BookMeta;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
+import org.bukkit.inventory.meta.FireworkEffectMeta;
 import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
@@ -268,34 +269,14 @@ public abstract class AbstractItemDb implements IConf, net.ess3.api.IItemDb {
             final FireworkMeta fireworkMeta = (FireworkMeta) is.getItemMeta();
             if (fireworkMeta.hasEffects()) {
                 for (final FireworkEffect effect : fireworkMeta.getEffects()) {
-                    if (effect.getColors() != null && !effect.getColors().isEmpty()) {
-                        sb.append("color:");
-                        boolean first = true;
-                        for (final Color c : effect.getColors()) {
-                            if (!first) {
-                                sb.append(","); // same thing as above.
-                            }
-                            sb.append(c.toString());
-                            first = false;
-                        }
-                        sb.append(" ");
-                    }
-
-                    sb.append("shape:").append(effect.getType().name()).append(" ");
-                    if (effect.getFadeColors() != null && !effect.getFadeColors().isEmpty()) {
-                        sb.append("fade:");
-                        boolean first = true;
-                        for (final Color c : effect.getFadeColors()) {
-                            if (!first) {
-                                sb.append(","); // same thing as above.
-                            }
-                            sb.append(c.toString());
-                            first = false;
-                        }
-                        sb.append(" ");
-                    }
+                    serializeEffectMeta(sb, effect);
                 }
                 sb.append("power:").append(fireworkMeta.getPower()).append(" ");
+            }
+        } else if (MaterialUtil.isFireworkCharge(material)) {
+            final FireworkEffectMeta fireworkEffectMeta = (FireworkEffectMeta) is.getItemMeta();
+            if (fireworkEffectMeta.hasEffect()) {
+                serializeEffectMeta(sb, fireworkEffectMeta.getEffect());
             }
         } else if (MaterialUtil.isPotion(material)) {
             final Potion potion = Potion.fromItemStack(is);
@@ -351,6 +332,35 @@ public abstract class AbstractItemDb implements IConf, net.ess3.api.IItemDb {
         }
 
         return sb.toString().trim().replaceAll("§", "&");
+    }
+
+    private void serializeEffectMeta(StringBuilder sb, FireworkEffect effect) {
+        if (effect.getColors() != null && !effect.getColors().isEmpty()) {
+            sb.append("color:");
+            boolean first = true;
+            for (final Color c : effect.getColors()) {
+                if (!first) {
+                    sb.append(","); // same thing as above.
+                }
+                sb.append("#").append(Integer.toHexString(c.asRGB()));
+                first = false;
+            }
+            sb.append(" ");
+        }
+
+        sb.append("shape:").append(effect.getType().name()).append(" ");
+        if (effect.getFadeColors() != null && !effect.getFadeColors().isEmpty()) {
+            sb.append("fade:");
+            boolean first = true;
+            for (final Color c : effect.getFadeColors()) {
+                if (!first) {
+                    sb.append(","); // same thing as above.
+                }
+                sb.append("#").append(Integer.toHexString(c.asRGB()));
+                first = false;
+            }
+            sb.append(" ");
+        }
     }
 
     @Override
