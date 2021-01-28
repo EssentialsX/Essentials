@@ -757,7 +757,7 @@ public class Settings implements net.ess3.api.ISettings {
     // A valid currency symbol value must be one non-integer character.
     private String _getCurrencySymbol() {
         String value = config.getString("currency-symbol", "$").trim();
-        if (value.length() != 1 || value.matches("\\d")) {
+        if (value.length() > 1 || value.matches("\\d")) {
             value = "$";
         }
         return value;
