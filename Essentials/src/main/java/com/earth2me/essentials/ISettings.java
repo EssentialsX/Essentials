@@ -275,7 +275,7 @@ public interface ISettings extends IConf {
 
     boolean allowSilentJoinQuit();
 
-    boolean vanishBroadcast();
+    boolean isFakeVanishBroadcast();
 
     boolean isCustomJoinMessage();
 
