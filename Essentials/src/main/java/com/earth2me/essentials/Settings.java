@@ -1234,7 +1234,7 @@ public class Settings implements net.ess3.api.ISettings {
     }
 
     @Override
-    public boolean vanishBroadcast() {
+    public boolean isFakeVanishBroadcast() {
         return config.getBoolean("send-vanish-broadcast", false);
     }
 
