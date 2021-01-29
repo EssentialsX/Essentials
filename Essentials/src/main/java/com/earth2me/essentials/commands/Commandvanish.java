@@ -43,8 +43,7 @@ public class Commandvanish extends EssentialsToggleCommand {
         }
 
         final Player player = user.getBase();
-        final boolean vanishBroadcast = ess.getSettings().vanishBroadcast();
-        if (vanishBroadcast) {
+        if (ess.getSettings().isFakeVanishBroadcast()) {
             String broadcastMessage = "";
             if (enabled) {
                 broadcastMessage = tl("vanishBroadcast", player.getName(), player.getDisplayName());
