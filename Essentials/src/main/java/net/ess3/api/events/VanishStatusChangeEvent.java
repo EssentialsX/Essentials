@@ -29,10 +29,16 @@ public class VanishStatusChangeEvent extends StatusChangeEvent {
         return handlers;
     }
 
+    /**
+     * @return Is this vanish change event causing a fake join message.
+     */
     public boolean isFakeJoinMessage() {
         return fakeJoinMessage != null;
     }
 
+    /**
+     * @return The default fake join message from tl if isFakeJoinMessage returns true.
+     */
     public String getFakeJoinMessage() {
         if (isFakeJoinMessage()) {
             return tl("unvanishBroadcast", affected.getName(), affected.getDisplayName());
@@ -40,14 +46,23 @@ public class VanishStatusChangeEvent extends StatusChangeEvent {
         return null;
     }
 
+    /**
+     * @param message Sets the fake join message.
+     */
     public void setFakeJoinMessage(String message) {
         fakeJoinMessage = message;
     }
 
+    /**
+     * @return Is this vanish change event causing a fake leave message.
+     */
     public boolean isFakeLeaveMessage() {
         return fakeLeaveMessage != null;
     }
 
+    /**
+     * @return The default fake leave message from tl if isFakeLeaveMessage returns true.
+     */
     public String getFakeLeaveMessage() {
         if (isFakeLeaveMessage()) {
             return tl("vanishBroadcast", affected.getName(), affected.getDisplayName());
@@ -55,6 +70,9 @@ public class VanishStatusChangeEvent extends StatusChangeEvent {
         return null;
     }
 
+    /**
+     * @param message Sets the fake leave message.
+     */
     public void setFakeLeaveMessage(String message) {
         fakeLeaveMessage = message;
     }
