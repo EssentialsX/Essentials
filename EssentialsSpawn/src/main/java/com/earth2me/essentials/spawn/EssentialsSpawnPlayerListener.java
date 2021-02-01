@@ -44,27 +44,20 @@ class EssentialsSpawnPlayerListener implements Listener {
         if (VersionUtil.getServerBukkitVersion().isHigherThanOrEqualTo(VersionUtil.v1_16_1_R01) && event.isAnchorSpawn() && ess.getSettings().isRespawnAtAnchor()) {
             return;
         }
-
+        
         if (ess.getSettings().getRespawnAtHome()) {
-            final Location home;
+            final Location home = user.getHome(user.getLocation());
+            final Location bed = (ess.getSettings().isRespawnAtBed() && home == null) ? user.getBase().getBedSpawnLocation() : null;
 
-            Location bed = null;
-            if (ess.getSettings().isRespawnAtBed()) {
-                // cannot nuke this sync load due to the event being sync so it would hand either way
-                bed = user.getBase().getBedSpawnLocation();
-            }
-
-            if (bed != null) {
-                home = bed;
+            if(bed != null) {
+                event.setRespawnLocation(bed);
+                return;
             } else {
-                home = user.getHome(user.getLocation());
-            }
-
-            if (home != null) {
                 event.setRespawnLocation(home);
                 return;
             }
         }
+        
         final Location spawn = spawns.getSpawn(user.getGroup());
         if (spawn != null) {
             event.setRespawnLocation(spawn);
