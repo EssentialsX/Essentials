@@ -22,7 +22,7 @@ inputs:
 
 - type: textarea
   attributes:
-    label: `/ess version` output
+    label: "`/ess version` output"
     description: Run `/ess version` in the console, then copy and paste the full output of the command into this box.
     required: true
 - type: input
@@ -30,25 +30,26 @@ inputs:
     label: Server startup log
     description: Upload your server startup log (from the start of `latest.log` up to where it says "Done!") to either https://paste.gg or https://gist.github.com, save and then paste the link in this box.
     required: true
-    placeholder: Example: https://paste.gg/p/anonymous/109dd6a10a734a3aa430d5a351ea5210
+    placeholder: "Example: https://paste.gg/p/anonymous/109dd6a10a734a3aa430d5a351ea5210"
 - type: input
   attributes:
     label: EssentialsX config files
     description: Upload your EssentialsX `config.yml` (and any other relevant files like `kits.yml`) to either https://paste.gg or https://gist.github.com, save and then paste the link in this box. If you included those files in the same paste as your startup log, paste the same link here.
     required: true
-    placeholder: Example: https://paste.gg/p/anonymous/109dd6a10a734a3aa430d5a351ea5210
+    placeholder: "Example: https://paste.gg/p/anonymous/109dd6a10a734a3aa430d5a351ea5210"
 - type: input
   attributes:
     label: Error log (if applicable)
     description: If you are reporting a console error, upload any relevant log excerpts to either https://paste.gg or https://gist.github.com, save and the paste the link in this box. If you included those files in the same paste as your startup log, paste the same link here.
-    placeholder: Example: https://paste.gg/p/anonymous/109dd6a10a734a3aa430d5a351ea5210
+    placeholder: "Example: https://paste.gg/p/anonymous/109dd6a10a734a3aa430d5a351ea5210"
 
 - type: textarea
   attributes:
     label: Bug description
     description: Describe roughly what the bug is here.
     required: true
-    placeholder: Example: "When running /nuke after putting everyone into adventure mode, there aren't any explosions..."
+    placeholder: |
+      Example: "When running /nuke after putting everyone into adventure mode, there aren't any explosions..."
 - type: textarea
   attributes:
     label: Steps to reproduce
@@ -64,13 +65,15 @@ inputs:
     label: Expected behaviour
     description: Explain what you should expect to happen.
     required: true
-    placeholder: Example: "Everything should explode!"
+    placeholder: |
+      Example: "Everything should explode!"
 - type: textarea
   attributes:
     label: Actual behaviour
     description: Explain what actually happens.
     required: true
-    placeholder: Example: "Everything doesn't explode :("
+    placeholder: |
+      Example: "Everything doesn't explode :("
 
 - type: description
   attributes:
