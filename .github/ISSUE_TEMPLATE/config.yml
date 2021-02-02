@@ -8,10 +8,10 @@ contact_links:
     about: Suggest new features for EssentialsX!
   - name: View previous help requests
     url: https://github.com/EssentialsX/Essentials/discussions/categories/q-a
-    about: Visit the help forum to search for existing help requests
+    about: Visit the help forum to search for existing help requests.
   - name: Discuss existing feature suggestions
     url: https://github.com/EssentialsX/Essentials/discussions/categories/ideas-and-feature-suggestions
-    about: Visit the help forum to search for existing help requests
+    about: Visit the Feature Suggestions forum to discuss existing feature suggestions.
   - name: Get help from the community on Discord
     url: https://discord.gg/casfFyh
     about: Join the MOSS Discord for community-powered EssentialsX support!
