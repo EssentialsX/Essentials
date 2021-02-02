@@ -1,4 +1,4 @@
 /**
- * API Classes, Services, and Events provided by EssentialsX v2.x
+ * API classes, services, and events provided by EssentialsX 2.x.
  */
 package net.essentialsx.api.v2;

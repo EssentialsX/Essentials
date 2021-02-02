@@ -1,5 +1,5 @@
 /**
- * APIs that are registered with Bukkit's ServicesManager and can be accessed without touching Essentials internals.
+ * API services provided by EssentialsX. These are registered with Bukkit's ServicesManager, and can be accessed from there without getting an instance of EssentialsX first.
  *
  * @see org.bukkit.Server#getServicesManager()
  * @see org.bukkit.plugin.ServicesManager#load(java.lang.Class)
