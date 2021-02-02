@@ -1,7 +1,7 @@
 package net.essentialsx.api.v2.services;
 
 /**
- * Provides basic information about a service registered by EssentialsX.
+ * An EssentialsX service that provides basic information about itself.
  */
 public interface EssentialsService {
 }
