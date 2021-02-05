@@ -379,6 +379,11 @@ public class Settings implements net.ess3.api.ISettings {
         return config.getBoolean("socialspy-listen-muted-players", true);
     }
 
+    @Override
+    public boolean isSocialSpyMessages() {
+        return config.getBoolean("socialspy-messages", true);
+    }
+
     private Set<String> _getMuteCommands() {
         final Set<String> muteCommands = new HashSet<>();
         if (config.isList("mute-commands")) {
@@ -1274,6 +1279,11 @@ public class Settings implements net.ess3.api.ISettings {
     @Override
     public boolean isCustomQuitMessage() {
         return isCustomQuitMessage;
+    }
+
+    @Override
+    public boolean isCustomServerFullMessage() {
+        return config.getBoolean("use-custom-server-full-message", true);
     }
 
     @Override
