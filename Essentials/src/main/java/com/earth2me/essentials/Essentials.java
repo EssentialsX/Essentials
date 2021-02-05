@@ -49,6 +49,7 @@ import net.ess3.nms.refl.providers.ReflSpawnEggProvider;
 import net.ess3.nms.refl.providers.ReflSpawnerBlockProvider;
 import net.ess3.provider.ContainerProvider;
 import net.ess3.provider.KnownCommandsProvider;
+import net.ess3.provider.MaterialTagProvider;
 import net.ess3.provider.PotionMetaProvider;
 import net.ess3.provider.ProviderListener;
 import net.ess3.provider.ServerStateProvider;
@@ -57,12 +58,14 @@ import net.ess3.provider.SpawnerBlockProvider;
 import net.ess3.provider.SpawnerItemProvider;
 import net.ess3.provider.providers.BasePotionDataProvider;
 import net.ess3.provider.providers.BlockMetaSpawnerItemProvider;
+import net.ess3.provider.providers.BukkitMaterialTagProvider;
 import net.ess3.provider.providers.BukkitSpawnerBlockProvider;
 import net.ess3.provider.providers.FlatSpawnEggProvider;
 import net.ess3.provider.providers.LegacyPotionMetaProvider;
 import net.ess3.provider.providers.LegacySpawnEggProvider;
 import net.ess3.provider.providers.PaperContainerProvider;
 import net.ess3.provider.providers.PaperKnownCommandsProvider;
+import net.ess3.provider.providers.PaperMaterialTagProvider;
 import net.ess3.provider.providers.PaperRecipeBookListener;
 import net.ess3.provider.providers.PaperServerStateProvider;
 import org.bukkit.Bukkit;
@@ -136,6 +139,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
     private transient ContainerProvider containerProvider;
     private transient KnownCommandsProvider knownCommandsProvider;
     private transient ProviderListener recipeBookEventProvider;
+    private transient MaterialTagProvider materialTagProvider;
     private transient Kits kits;
     private transient RandomTeleport randomTeleport;
 
@@ -336,6 +340,11 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
                     knownCommandsProvider = new PaperKnownCommandsProvider();
                 } else {
                     knownCommandsProvider = new ReflKnownCommandsProvider();
+                }
+
+                //Material Tag Providers
+                if (VersionUtil.getServerBukkitVersion().isHigherThanOrEqualTo(VersionUtil.v1_13_0_R01)) {
+                    materialTagProvider = PaperLib.isPaper() ? new PaperMaterialTagProvider() : new BukkitMaterialTagProvider();
                 }
 
                 execTimer.mark("Init(Providers)");
@@ -1021,6 +1030,10 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
     @Override
     public ServerStateProvider getServerStateProvider() {
         return serverStateProvider;
+    }
+
+    public MaterialTagProvider getMaterialTagProvider() {
+        return materialTagProvider;
     }
 
     @Override

@@ -379,6 +379,11 @@ public class Settings implements net.ess3.api.ISettings {
         return config.getBoolean("socialspy-listen-muted-players", true);
     }
 
+    @Override
+    public boolean isSocialSpyMessages() {
+        return config.getBoolean("socialspy-messages", true);
+    }
+
     private Set<String> _getMuteCommands() {
         final Set<String> muteCommands = new HashSet<>();
         if (config.isList("mute-commands")) {

@@ -6,7 +6,6 @@ import com.earth2me.essentials.utils.FormatUtil;
 import net.ess3.api.events.NickChangeEvent;
 import org.bukkit.ChatColor;
 import org.bukkit.Server;
-import org.bukkit.entity.Player;
 
 import java.util.Collections;
 import java.util.List;
@@ -100,16 +99,18 @@ public class Commandnick extends EssentialsLoopCommand {
 
     private boolean nickInUse(final User target, final String nick) {
         final String lowerNick = FormatUtil.stripFormat(nick.toLowerCase(Locale.ENGLISH));
-        for (final Player onlinePlayer : ess.getOnlinePlayers()) {
+        for (final User onlinePlayer : ess.getOnlineUsers()) {
             if (target.getBase().getName().equals(onlinePlayer.getName())) {
                 continue;
             }
-            final String matchNick = FormatUtil.stripFormat(onlinePlayer.getDisplayName().replace(ess.getSettings().getNicknamePrefix(), ""));
-            if (lowerNick.equals(matchNick.toLowerCase(Locale.ENGLISH)) || lowerNick.equals(onlinePlayer.getName().toLowerCase(Locale.ENGLISH))) {
+
+            final String matchNick = FormatUtil.stripFormat(onlinePlayer.getNickname());
+            if ((matchNick != null && !matchNick.isEmpty() && lowerNick.equals(matchNick.toLowerCase(Locale.ENGLISH))) || lowerNick.equals(onlinePlayer.getName().toLowerCase(Locale.ENGLISH))) {
                 return true;
             }
         }
-        return ess.getUser(lowerNick) != null && ess.getUser(lowerNick) != target;
+        final User fetchedUser = ess.getUser(lowerNick);
+        return fetchedUser != null && fetchedUser != target;
     }
 
     private void setNickname(final Server server, final CommandSource sender, final User target, final String nickname) {
