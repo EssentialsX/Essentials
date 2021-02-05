@@ -342,7 +342,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
                     knownCommandsProvider = new ReflKnownCommandsProvider();
                 }
 
-                //Command Alias provider
+                // Command aliases provider
                 if (PaperLib.isPaper()) {
                     formattedCommandAliasProvider = new PaperReflFormattedCommandAliasProvider();
                 } else {
