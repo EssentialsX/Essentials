@@ -18,10 +18,8 @@ public class ReflFormattedCommandAliasProvider extends FormattedCommandAliasProv
         Class<? extends FormattedCommandAlias> formattedCommandAliasClass = null;
         Field formatStringsField = null;
         try {
-            formattedCommandAliasClass = (Class<? extends FormattedCommandAlias>) ReflUtil.getOBClass("command.FormattedCommandAlias");
-            if (formattedCommandAliasClass != null) {
-                formatStringsField = ReflUtil.getFieldCached(formattedCommandAliasClass, "formatStrings");
-            }
+            formattedCommandAliasClass = FormattedCommandAlias.class;
+            formatStringsField = ReflUtil.getFieldCached(formattedCommandAliasClass, "formatStrings");
         } catch (final Exception ex) {
             ex.printStackTrace();
         } finally {

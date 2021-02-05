@@ -59,10 +59,6 @@ public final class ReflUtil {
         return getClassCached("org.bukkit.craftbukkit." + getNMSVersion() + "." + className);
     }
 
-    public static Class<?> getOBClass(final String className) {
-        return getClassCached("org.bukkit." + className);
-    }
-
     public static Class<?> getClassCached(final String className) {
         if (classCache.containsKey(className)) {
             return classCache.get(className);
