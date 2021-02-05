@@ -201,6 +201,10 @@ socialspy-commands:
 # If so, they will be differentiated from those sent by normal players.
 socialspy-listen-muted-players: true
 
+# Whether social spy should spy on private messages or just the commands from the list above.
+# If false, social spy will only monitor commands from the list above.
+socialspy-messages: true
+
 # The following settings listen for when a player changes worlds.
 # If you use another plugin to control speed and flight, you should change these to false.
 
