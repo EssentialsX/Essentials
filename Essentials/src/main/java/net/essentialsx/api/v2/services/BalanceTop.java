@@ -10,8 +10,7 @@ import java.util.concurrent.CompletableFuture;
  * <p>
  * Note: Implementations of this class should be thread-safe and thus do not need to be called from the server thread.
  */
-public interface BalanceTop extends EssentialsService {
-
+public interface BalanceTop {
     /**
      * Re-calculates the balance top cache asynchronously.
      * <p>

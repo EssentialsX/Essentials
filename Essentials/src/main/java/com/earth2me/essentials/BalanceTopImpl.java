@@ -84,9 +84,4 @@ public class BalanceTopImpl implements BalanceTop {
     public boolean isCacheLocked() {
         return cacheLock != null;
     }
-
-    @Override
-    public String getName() {
-        return "BalanceTop";
-    }
 }

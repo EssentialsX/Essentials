@@ -596,6 +596,11 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
         return hidden || !player.canSee(getBase());
     }
 
+    @Override
+    public String getFormattedJailTime() {
+        return DateUtil.formatDateDiff(getOnlineJailedTime() > 0 ? (System.currentTimeMillis() - getJailTimeout()) : getJailTimeout());
+    }
+
     //Returns true if status expired during this check
     public boolean checkJailTimeout(final long currentTime) {
         if (getJailTimeout() > 0) {
