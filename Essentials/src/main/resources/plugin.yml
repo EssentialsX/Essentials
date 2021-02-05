@@ -263,7 +263,7 @@ commands:
   kitreset:
     description: Resets the cooldown on the specified kit.
     usage: /<command> <kit> [player]
-    aliases: [ekitreset, kitr, resetkit, eresetkit]
+    aliases: [ekitreset, kitr, ekitr, resetkit, eresetkit]
   kittycannon:
     description: Throw an exploding kitten at your opponent.
     usage: /<command>
