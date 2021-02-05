@@ -1282,6 +1282,11 @@ public class Settings implements net.ess3.api.ISettings {
     }
 
     @Override
+    public boolean isCustomServerFullMessage() {
+        return config.getBoolean("use-custom-server-full-message", true);
+    }
+
+    @Override
     public int getJoinQuitMessagePlayerCount() {
         return config.getInt("hide-join-quit-messages-above", -1);
     }
