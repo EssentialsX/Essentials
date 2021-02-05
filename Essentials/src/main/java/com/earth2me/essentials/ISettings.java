@@ -59,6 +59,8 @@ public interface ISettings extends IConf {
 
     boolean getSocialSpyListenMutedPlayers();
 
+    boolean isSocialSpyMessages();
+
     Set<String> getMuteCommands();
 
     /**
@@ -284,6 +286,8 @@ public interface ISettings extends IConf {
     boolean isCustomQuitMessage();
 
     String getCustomQuitMessage();
+
+    boolean isCustomServerFullMessage();
 
     boolean isNotifyNoNewMail();
 
