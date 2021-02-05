@@ -260,6 +260,10 @@ commands:
     description: Obtains the specified kit or views all available kits.
     usage: /<command> [kit] [player]
     aliases: [ekit,kits,ekits]
+  kitreset:
+    description: Resets the cooldown on the specified kit.
+    usage: /<command> <kit> [player]
+    aliases: [ekitreset, kitr, ekitr, resetkit, eresetkit]
   kittycannon:
     description: Throw an exploding kitten at your opponent.
     usage: /<command>
@@ -391,7 +395,7 @@ commands:
   seen:
     description: Shows the last logout time of a player.
     usage: /<command> <playername>
-    aliases: [eseen]
+    aliases: [eseen, ealts, alts]
   sell:
     description: Sells the item currently in your hand.
     usage: /<command> <<itemname>|<id>|hand|inventory|blocks> [-][amount]
