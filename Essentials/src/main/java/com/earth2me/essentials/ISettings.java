@@ -59,6 +59,8 @@ public interface ISettings extends IConf {
 
     boolean getSocialSpyListenMutedPlayers();
 
+    boolean isSocialSpyMessages();
+
     Set<String> getMuteCommands();
 
     /**
