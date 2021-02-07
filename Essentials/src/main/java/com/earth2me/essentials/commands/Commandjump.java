@@ -44,6 +44,11 @@ public class Commandjump extends EssentialsCommand {
             throw new Exception(tl("jumpError"), ex);
         }
 
+        //noinspection ConstantConditions
+        if (!loc.getWorld().getWorldBorder().isInside(loc) && !user.isAuthorized("essentials.jump.border")) {
+            throw new Exception(tl("jumpBorder"));
+        }
+
         final Trade charge = new Trade(this.getName(), ess);
         charge.isAffordableFor(user);
         user.getAsyncTeleport().teleport(loc, charge, TeleportCause.COMMAND, getNewExceptionFuture(user.getSource(), commandLabel));

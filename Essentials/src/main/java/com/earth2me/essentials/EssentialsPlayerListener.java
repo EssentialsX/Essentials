@@ -730,6 +730,12 @@ public class EssentialsPlayerListener implements Listener {
                     while (LocationUtil.isBlockDamaging(loc.getWorld(), loc.getBlockX(), loc.getBlockY() - 1, loc.getBlockZ())) {
                         loc.setY(loc.getY() + 1d);
                     }
+
+                    if (!loc.getWorld().getWorldBorder().isInside(loc) && !user.isAuthorized("essentials.jump.border")) {
+                        ess.showError(user.getSource(), new Exception(tl("jumpBorder")), "jump");
+                        return;
+                    }
+
                     PaperLib.teleportAsync(user.getBase(), loc, TeleportCause.PLUGIN);
                 }
             }
