@@ -212,4 +212,8 @@ public interface IUser {
     Map<User, BigDecimal> getConfirmingPayments();
 
     Block getTargetBlock(int maxDistance);
+
+    void setToggleShout(boolean toggleShout);
+
+    boolean isToggleShout();
 }

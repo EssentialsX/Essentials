@@ -2,6 +2,8 @@ package com.earth2me.essentials.chat;
 
 import com.earth2me.essentials.metrics.MetricsWrapper;
 import net.ess3.api.IEssentials;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -14,13 +16,13 @@ import java.util.logging.Level;
 import static com.earth2me.essentials.I18n.tl;
 
 public class EssentialsChat extends JavaPlugin {
-
+    private transient IEssentials ess;
     private transient MetricsWrapper metrics = null;
 
     @Override
     public void onEnable() {
         final PluginManager pluginManager = getServer().getPluginManager();
-        final IEssentials ess = (IEssentials) pluginManager.getPlugin("Essentials");
+        ess = (IEssentials) pluginManager.getPlugin("Essentials");
         if (!this.getDescription().getVersion().equals(ess.getDescription().getVersion())) {
             getLogger().log(Level.WARNING, tl("versionMismatchAll"));
         }
@@ -43,4 +45,9 @@ public class EssentialsChat extends JavaPlugin {
         }
     }
 
+    @Override
+    public boolean onCommand(final CommandSender sender, final Command command, final String commandLabel, final String[] args) {
+        metrics.markCommand(command.getName(), true);
+        return ess.onCommandEssentials(sender, command, commandLabel, args, EssentialsChat.class.getClassLoader(), "com.earth2me.essentials.chat.Command", "essentials.", null);
+    }
 }
