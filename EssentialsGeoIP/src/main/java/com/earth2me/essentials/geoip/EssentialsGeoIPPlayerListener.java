@@ -54,7 +54,8 @@ public class EssentialsGeoIPPlayerListener implements Listener, IConf {
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerJoin(final PlayerJoinEvent event) {
-        ess.runTaskAsynchronously(() -> delayedJoin(event.getPlayer()));
+        // Wait two ticks to ensure display name is loaded in.
+        ess.runTaskLaterAsynchronously(() -> delayedJoin(event.getPlayer()), 2);
     }
 
     private void delayedJoin(final Player player) {
