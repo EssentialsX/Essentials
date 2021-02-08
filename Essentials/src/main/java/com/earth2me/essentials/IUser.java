@@ -226,8 +226,8 @@ public interface IUser {
     /**
      * Gets information about the last-made tpa request in the tpa queue of this {@link IUser}.
      *
-     * The TPA Queue is Last In First Out queue which stores all the active pending teleport
-     * requests of this {@link IUser}. Timeout calculations are also done turning this the
+     * The TPA Queue is Last-In-First-Out queue which stores all the active pending teleport
+     * requests of this {@link IUser}. Timeout calculations are also done during the
      * iteration process of this method, ensuring that teleport requests made past the timeout
      * period are removed from queue and therefore not returned here. The maximum size of this
      * queue is determined by {@link ISettings#getTpaMaxAmount()}.
