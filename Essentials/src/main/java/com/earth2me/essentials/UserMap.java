@@ -132,9 +132,7 @@ public class UserMap extends CacheLoader<String, User> implements IConf {
                         names.put(keyName, uuid);
                         uuidMap.writeUUIDMap();
                     } else {
-                        if (ess.getSettings().isDebug()) {
-                            ess.getLogger().info("Found old UUID for " + name + " (" + uuid.toString() + "). Not adding to usermap.");
-                        }
+                        ess.getLogger().info("Found UUID " + uuid.toString() + " for player " + name + ", but player already has a UUID (" + names.get(keyName).toString() + "). Not replacing UUID in usermap.");
                     }
                 }
             }
