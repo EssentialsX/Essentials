@@ -13,6 +13,7 @@ import org.bukkit.entity.Player;
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -21,6 +22,7 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentSkipListMap;
 import java.util.concurrent.ConcurrentSkipListSet;
 import java.util.concurrent.ExecutionException;
+import java.util.logging.Level;
 import java.util.regex.Pattern;
 
 public class UserMap extends CacheLoader<String, User> implements IConf {
@@ -33,6 +35,8 @@ public class UserMap extends CacheLoader<String, User> implements IConf {
     private final UUIDMap uuidMap;
     private final transient Cache<String, User> users;
     private final Pattern validUserPattern = Pattern.compile("^[a-zA-Z0-9_]{2,16}$");
+
+    private static final String WARN_UUID_NOT_REPLACE = "Found UUID {0} for player {1}, but player already has a UUID ({2}). Not replacing UUID in usermap.";
 
     public UserMap(final IEssentials ess) {
         super();
@@ -132,7 +136,7 @@ public class UserMap extends CacheLoader<String, User> implements IConf {
                         names.put(keyName, uuid);
                         uuidMap.writeUUIDMap();
                     } else {
-                        ess.getLogger().info("Found UUID " + uuid.toString() + " for player " + name + ", but player already has a UUID (" + names.get(keyName).toString() + "). Not replacing UUID in usermap.");
+                        ess.getLogger().log(Level.INFO, MessageFormat.format(WARN_UUID_NOT_REPLACE, uuid.toString(), name, names.get(keyName).toString()), new RuntimeException());
                     }
                 }
             }

@@ -90,7 +90,7 @@ public class Economy {
             if (player != null) {
                 user = ess.getUser(player.getUniqueId());
                 if (user != null) {
-                    LOGGER.info(MessageFormat.format(WARN_PLAYER_UUID_NO_NAME, name, player.getUniqueId().toString()));
+                    LOGGER.log(Level.INFO, MessageFormat.format(WARN_PLAYER_UUID_NO_NAME, name, player.getUniqueId().toString()), new RuntimeException());
                 }
             }
         }
@@ -890,7 +890,7 @@ public class Economy {
             createNPCFile(name);
             return true;
         }
-        LOGGER.warning(MessageFormat.format(WARN_EXISTING_NPC_CREATE, name, user.getConfigUUID()));
+        LOGGER.log(Level.WARNING, MessageFormat.format(WARN_EXISTING_NPC_CREATE, name, user.getConfigUUID()), new RuntimeException());
         return false;
     }
 
