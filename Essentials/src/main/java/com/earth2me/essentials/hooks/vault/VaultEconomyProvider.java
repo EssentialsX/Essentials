@@ -1,4 +1,4 @@
-package net.essentialsx.api.v2.services;
+package com.earth2me.essentials.hooks.vault;
 
 import com.earth2me.essentials.Essentials;
 import com.earth2me.essentials.api.NoLoanPermittedException;
@@ -13,12 +13,16 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * A goddamn Vault Adapter, what more do you want?
+ * A goddamn Vault adapter, what more do you want?
+ * Provides access to the EssentialsX economy for plugins that use the Vault API.
+ * <p>
+ * Developer note: for accessing Essentials/Vault economy functions from EssentialsX code, see
+ * {@link com.earth2me.essentials.User}.
  */
-public class VaultAdapter implements Economy {
+public class VaultEconomyProvider implements Economy {
     private final Essentials ess;
 
-    public VaultAdapter(Essentials essentials) {
+    public VaultEconomyProvider(Essentials essentials) {
         this.ess = essentials;
     }
 

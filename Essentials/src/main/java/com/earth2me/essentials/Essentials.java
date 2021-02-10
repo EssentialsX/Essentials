@@ -68,7 +68,7 @@ import net.ess3.provider.providers.PaperKnownCommandsProvider;
 import net.ess3.provider.providers.PaperMaterialTagProvider;
 import net.ess3.provider.providers.PaperRecipeBookListener;
 import net.ess3.provider.providers.PaperServerStateProvider;
-import net.essentialsx.api.v2.services.VaultAdapter;
+import com.earth2me.essentials.hooks.vault.VaultEconomyProvider;
 import org.bukkit.Bukkit;
 import org.bukkit.Server;
 import org.bukkit.World;
@@ -193,8 +193,8 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
 
     @Override
     public void onLoad() {
-        // We got to use normal priority here as Vault registers theirs at low priority
-        getServer().getServicesManager().register(net.milkbowl.vault.economy.Economy.class, new VaultAdapter(this), this, ServicePriority.Normal);
+        // Vault registers their Essentials provider at low priority, so we have to use normal priority here
+        getServer().getServicesManager().register(net.milkbowl.vault.economy.Economy.class, new VaultEconomyProvider(this), this, ServicePriority.Normal);
     }
 
     @Override
