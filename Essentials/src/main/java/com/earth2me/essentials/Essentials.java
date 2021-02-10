@@ -68,6 +68,7 @@ import net.ess3.provider.providers.PaperKnownCommandsProvider;
 import net.ess3.provider.providers.PaperMaterialTagProvider;
 import net.ess3.provider.providers.PaperRecipeBookListener;
 import net.ess3.provider.providers.PaperServerStateProvider;
+import net.essentialsx.api.v2.services.VaultAdapter;
 import org.bukkit.Bukkit;
 import org.bukkit.Server;
 import org.bukkit.World;
@@ -91,6 +92,7 @@ import org.bukkit.plugin.InvalidDescriptionException;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
+import org.bukkit.plugin.ServicePriority;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.plugin.java.JavaPluginLoader;
 import org.bukkit.scheduler.BukkitScheduler;
@@ -187,6 +189,12 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
         jails = new Jails(this);
         registerListeners(server.getPluginManager());
         kits = new Kits(this);
+    }
+
+    @Override
+    public void onLoad() {
+        // We got to use normal priority here as Vault registers theirs at low priority
+        getServer().getServicesManager().register(net.milkbowl.vault.economy.Economy.class, new VaultAdapter(this), this, ServicePriority.Normal);
     }
 
     @Override
