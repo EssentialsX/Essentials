@@ -1,6 +1,7 @@
 package com.earth2me.essentials.register.payment.methods;
 
 import com.earth2me.essentials.register.payment.Method;
+import net.essentialsx.api.v2.services.VaultAdapter;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.RegisteredServiceProvider;
@@ -116,7 +117,10 @@ public class VaultEco implements Method {
     public boolean isCompatible(final Plugin plugin) {
         try {
             final RegisteredServiceProvider<Economy> ecoPlugin = plugin.getServer().getServicesManager().getRegistration(net.milkbowl.vault.economy.Economy.class);
-            return plugin.getName().equals("Vault") && ecoPlugin != null && !ecoPlugin.getProvider().getName().equals("Essentials Economy");
+            return plugin.getName().equals("Vault")
+                    && ecoPlugin != null
+                    && !ecoPlugin.getProvider().getName().equals("Essentials Economy")
+                    && !ecoPlugin.getProvider().getClass().equals(VaultAdapter.class);
         } catch (final LinkageError | Exception e) {
             return false;
         }
