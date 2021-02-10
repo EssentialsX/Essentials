@@ -310,7 +310,6 @@ public class Economy {
      * @param amount The money you want to add
      * @throws NoLoanPermittedException If the user is not allowed to have a negative balance
      * @throws ArithmeticException
-     * @deprecated Usernames can change, use {@link Economy#add(UUID, BigDecimal)} or {@link Economy#add(User, BigDecimal)}
      */
     public static void add(final User user, final BigDecimal amount) throws NoLoanPermittedException, ArithmeticException {
         if (user == null) {

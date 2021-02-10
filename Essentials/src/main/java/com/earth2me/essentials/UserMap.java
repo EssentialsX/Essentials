@@ -130,7 +130,7 @@ public class UserMap extends CacheLoader<String, User> implements IConf {
                 if (!names.containsKey(keyName)) {
                     names.put(keyName, uuid);
                     uuidMap.writeUUIDMap();
-                } else if (!names.get(keyName).equals(uuid)) {
+                } else if (!isUUIDMatch(uuid, keyName)) {
                     if (replace) {
                         ess.getLogger().info("Found new UUID for " + name + ". Replacing " + names.get(keyName).toString() + " with " + uuid.toString());
                         names.put(keyName, uuid);
@@ -141,6 +141,10 @@ public class UserMap extends CacheLoader<String, User> implements IConf {
                 }
             }
         }
+    }
+
+    public boolean isUUIDMatch(final UUID uuid, final String name) {
+        return names.get(name).equals(uuid);
     }
 
     @Override
