@@ -40,7 +40,6 @@ public class EssentialsPluginListener implements Listener, IConf {
         }
         ess.getPermissionsHandler().checkPermissions();
         ess.getAlternativeCommandsHandler().removePlugin(event.getPlugin());
-        EconomyLayers.onPluginDisable(event.getPlugin());
         if (EconomyLayers.onPluginDisable(event.getPlugin())) {
             final EconomyLayer layer = EconomyLayers.getSelectedLayer();
             if (layer != null) {
