@@ -14,6 +14,7 @@ import java.util.logging.Level;
 
 public class EssentialsPluginListener implements Listener, IConf {
     private final transient IEssentials ess;
+    private boolean serverLoaded = false;
 
     public EssentialsPluginListener(final IEssentials ess) {
         this.ess = ess;
@@ -40,7 +41,7 @@ public class EssentialsPluginListener implements Listener, IConf {
         }
         ess.getPermissionsHandler().checkPermissions();
         ess.getAlternativeCommandsHandler().removePlugin(event.getPlugin());
-        if (EconomyLayers.onPluginDisable(event.getPlugin())) {
+        if (EconomyLayers.onPluginDisable(event.getPlugin(), serverLoaded)) {
             final EconomyLayer layer = EconomyLayers.getSelectedLayer();
             if (layer != null) {
                 ess.getLogger().log(Level.INFO, "Essentials found a new compatible payment resolution method: " + layer.getName() + " (v" + layer.getPluginVersion() + ")!");
@@ -55,6 +56,7 @@ public class EssentialsPluginListener implements Listener, IConf {
         if (event.getType() != ServerLoadEvent.LoadType.STARTUP || EconomyLayers.getSelectedLayer() == null) {
             return;
         }
+        serverLoaded = true;
         EconomyLayers.onServerLoad();
     }
 

@@ -50,7 +50,7 @@ public final class EconomyLayers {
         return selectedLayer;
     }
 
-    public static boolean onPluginDisable(final Plugin plugin) {
+    public static boolean onPluginDisable(final Plugin plugin, final boolean serverStarted) {
         if (!availableLayers.containsKey(plugin.getName())) {
             return false;
         }
@@ -60,6 +60,9 @@ public final class EconomyLayers {
 
         if (selectedLayer.getPluginName().equals(plugin.getName())) {
             selectedLayer = availableLayers.isEmpty() ? null : availableLayers.values().iterator().next();
+            if (selectedLayer != null && serverStarted) {
+                selectedLayer.onServerLoad();
+            }
             return true;
         }
         return false;
