@@ -18,8 +18,8 @@ public final class EconomyLayers {
     }
 
     public static void init() {
-        if (selectedLayer != null) {
-            throw new IllegalStateException("The economy layer has already been selected!");
+        if (!registeredLayers.isEmpty()) {
+            throw new IllegalStateException("Economy layers have already been registered!");
         }
 
         registerLayer(new VaultLayer());
