@@ -41,7 +41,7 @@ public class EssentialsGeoIPPlayerListener implements Listener, IConf {
     private final File dataFolder;
     private final EssentialsConf config;
     private final transient IEssentials ess;
-    private DatabaseReader mmreader = null; // enable maxmind geoip2 reader
+    private DatabaseReader mmreader = null; // initialize maxmind geoip2 reader
     private File databaseFile;
 
     EssentialsGeoIPPlayerListener(final File dataFolder, final IEssentials ess) {
