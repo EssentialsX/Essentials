@@ -22,6 +22,8 @@ import com.earth2me.essentials.commands.IEssentialsCommand;
 import com.earth2me.essentials.commands.NoChargeException;
 import com.earth2me.essentials.commands.NotEnoughArgumentsException;
 import com.earth2me.essentials.commands.QuietAbortException;
+import com.earth2me.essentials.economy.EconomyLayers;
+import com.earth2me.essentials.hooks.vault.VaultEconomyProvider;
 import com.earth2me.essentials.items.AbstractItemDb;
 import com.earth2me.essentials.items.CustomItemResolver;
 import com.earth2me.essentials.items.FlatItemDb;
@@ -29,7 +31,6 @@ import com.earth2me.essentials.items.LegacyItemDb;
 import com.earth2me.essentials.metrics.MetricsWrapper;
 import com.earth2me.essentials.perm.PermissionsDefaults;
 import com.earth2me.essentials.perm.PermissionsHandler;
-import com.earth2me.essentials.register.payment.Methods;
 import com.earth2me.essentials.signs.SignBlockListener;
 import com.earth2me.essentials.signs.SignEntityListener;
 import com.earth2me.essentials.signs.SignPlayerListener;
@@ -68,7 +69,6 @@ import net.ess3.provider.providers.PaperKnownCommandsProvider;
 import net.ess3.provider.providers.PaperMaterialTagProvider;
 import net.ess3.provider.providers.PaperRecipeBookListener;
 import net.ess3.provider.providers.PaperServerStateProvider;
-import com.earth2me.essentials.hooks.vault.VaultEconomyProvider;
 import org.bukkit.Bukkit;
 import org.bukkit.Server;
 import org.bukkit.World;
@@ -146,8 +146,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
     private transient RandomTeleport randomTeleport;
 
     static {
-        // TODO: improve legacy code
-        Methods.init();
+        EconomyLayers.init();
     }
 
     public Essentials() {

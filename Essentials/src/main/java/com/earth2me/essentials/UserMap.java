@@ -144,7 +144,7 @@ public class UserMap extends CacheLoader<String, User> implements IConf {
     }
 
     public boolean isUUIDMatch(final UUID uuid, final String name) {
-        return names.get(name).equals(uuid);
+        return names.containsKey(name) && names.get(name).equals(uuid);
     }
 
     @Override
