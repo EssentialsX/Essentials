@@ -3,7 +3,9 @@ package com.earth2me.essentials.economy;
 import com.earth2me.essentials.economy.layers.VaultLayer;
 import org.bukkit.plugin.Plugin;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -11,7 +13,7 @@ import java.util.Map;
  */
 public final class EconomyLayers {
     private static final Map<String, EconomyLayer> registeredLayers = new HashMap<>();
-    private static final Map<String, EconomyLayer> availableLayers = new HashMap<>();
+    private static final List<String> availableLayers = new ArrayList<>();
     private static EconomyLayer selectedLayer = null;
 
     private EconomyLayers() {
@@ -40,7 +42,7 @@ public final class EconomyLayers {
 
         final EconomyLayer layer = registeredLayers.get(plugin.getName());
         layer.enable(plugin);
-        availableLayers.put(plugin.getName(), layer);
+        availableLayers.add(plugin.getName());
         if (selectedLayer != null) {
             return null;
         }
@@ -51,15 +53,15 @@ public final class EconomyLayers {
     }
 
     public static boolean onPluginDisable(final Plugin plugin, final boolean serverStarted) {
-        if (!availableLayers.containsKey(plugin.getName())) {
+        if (!availableLayers.contains(plugin.getName())) {
             return false;
         }
 
-        availableLayers.get(plugin.getName()).disable();
+        registeredLayers.get(plugin.getName()).disable();
         availableLayers.remove(plugin.getName());
 
         if (selectedLayer.getPluginName().equals(plugin.getName())) {
-            selectedLayer = availableLayers.isEmpty() ? null : availableLayers.values().iterator().next();
+            selectedLayer = availableLayers.isEmpty() ? null : registeredLayers.get(availableLayers.get(0));
             if (selectedLayer != null && serverStarted) {
                 selectedLayer.onServerLoad();
             }
@@ -76,7 +78,7 @@ public final class EconomyLayers {
         availableLayers.remove(getSelectedLayer().getPluginVersion());
         selectedLayer = null;
         if (!availableLayers.isEmpty()) {
-            selectedLayer = availableLayers.values().iterator().next();
+            selectedLayer = registeredLayers.get(availableLayers.get(0));
             onServerLoad();
         }
     }
