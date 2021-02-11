@@ -1,4 +1,4 @@
-package com.earth2me.essentials.hooks.vault;
+package com.earth2me.essentials.economy.vault;
 
 import com.earth2me.essentials.Essentials;
 import com.earth2me.essentials.api.NoLoanPermittedException;
