@@ -68,6 +68,7 @@ import net.ess3.provider.providers.PaperKnownCommandsProvider;
 import net.ess3.provider.providers.PaperMaterialTagProvider;
 import net.ess3.provider.providers.PaperRecipeBookListener;
 import net.ess3.provider.providers.PaperServerStateProvider;
+import net.essentialsx.api.v2.services.BalanceTop;
 import org.bukkit.Bukkit;
 import org.bukkit.Server;
 import org.bukkit.World;
@@ -127,6 +128,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
     private transient PermissionsHandler permissionsHandler;
     private transient AlternativeCommandsHandler alternativeCommandsHandler;
     private transient UserMap userMap;
+    private transient BalanceTopImpl balanceTop;
     private transient ExecuteTimer execTimer;
     private transient I18n i18n;
     private transient MetricsWrapper metrics;
@@ -181,6 +183,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
         LOGGER.log(Level.INFO, dataFolder.toString());
         settings = new Settings(this);
         userMap = new UserMap(this);
+        balanceTop = new BalanceTopImpl(this);
         permissionsHandler = new PermissionsHandler(this, false);
         Economy.setEss(this);
         confList = new ArrayList<>();
@@ -245,6 +248,9 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
                 userMap = new UserMap(this);
                 confList.add(userMap);
                 execTimer.mark("Init(Usermap)");
+
+                balanceTop = new BalanceTopImpl(this);
+                execTimer.mark("Init(BalanceTop)");
 
                 kits = new Kits(this);
                 confList.add(kits);
@@ -966,6 +972,11 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
     @Override
     public UserMap getUserMap() {
         return userMap;
+    }
+
+    @Override
+    public BalanceTop getBalanceTop() {
+        return balanceTop;
     }
 
     @Override
