@@ -54,7 +54,7 @@ public class EssentialsChatPlayerListenerLowest extends EssentialsChatPlayer {
 
         String format = ess.getSettings().getChatFormat(group);
         format = format.replace("{0}", group);
-        format = format.replace("{1}", world);
+        format = format.replace("{1}", ess.getSettings().getWorldAlias(world));
         format = format.replace("{2}", world.substring(0, 1).toUpperCase(Locale.ENGLISH));
         format = format.replace("{3}", team == null ? "" : team.getPrefix());
         format = format.replace("{4}", team == null ? "" : team.getSuffix());

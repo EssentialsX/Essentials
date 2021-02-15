@@ -1041,6 +1041,15 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
         this.lastHomeConfirmationTimestamp = System.currentTimeMillis();
     }
 
+    public boolean isBaltopExempt() {
+        if (getBase().isOnline()) {
+            final boolean exempt = isAuthorized("essentials.balancetop.exclude");
+            setBaltopExemptCache(exempt);
+            return exempt;
+        }
+        return isBaltopExcludeCache();
+    }
+
     @Override
     public Block getTargetBlock(int maxDistance) {
         final Block block;

@@ -11,4 +11,8 @@ shadowJar {
         include (dependency('javatar:javatar'))
         include (dependency('com.fasterxml.jackson.core:'))
     }
+
+    relocate 'com.maxmind', 'com.earth2me.essentials.geoip.libs.maxmind'
+    relocate 'com.ice.tar', 'com.earth2me.essentials.geoip.libs.javatar'
+    relocate 'com.fasterxml.jackson', 'com.earth2me.essentials.geoip.libs.jackson'
 }
