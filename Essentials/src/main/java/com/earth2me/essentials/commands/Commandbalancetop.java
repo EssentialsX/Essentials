@@ -97,7 +97,7 @@ public class Commandbalancetop extends EssentialsCommand {
 
             final boolean fresh = force || ess.getBalanceTop().isCacheLocked() || ess.getBalanceTop().getCacheAge() <= System.currentTimeMillis() - CACHETIME;
             final CompletableFuture<Void> future = fresh ? ess.getBalanceTop().calculateBalanceTopMapAsync() : CompletableFuture.completedFuture(null);
-            future.thenAccept(unused -> {
+            future.thenRun(() -> {
                 if (fresh) {
                     final SimpleTextInput newCache = new SimpleTextInput();
                     newCache.getLines().add(tl("serverTotal", NumberUtil.displayCurrency(ess.getBalanceTop().getBalanceTopTotal(), ess)));
