@@ -70,6 +70,7 @@ public abstract class UserData extends PlayerExtension implements IConf {
     private Boolean confirmPay;
     private Boolean confirmClear;
     private boolean lastMessageReplyRecipient;
+    private boolean baltopExemptCache;
 
     protected UserData(final Player base, final IEssentials ess) {
         super(base);
@@ -141,6 +142,7 @@ public abstract class UserData extends PlayerExtension implements IConf {
         confirmPay = _getConfirmPay();
         confirmClear = _getConfirmClear();
         lastMessageReplyRecipient = _getLastMessageReplyRecipient();
+        baltopExemptCache = _getBaltopExcludeCache();
     }
 
     private BigDecimal _getMoney() {
@@ -1025,6 +1027,20 @@ public abstract class UserData extends PlayerExtension implements IConf {
         this.lastMessageReplyRecipient = enabled;
         config.setProperty("last-message-reply-recipient", enabled);
         save();
+    }
+
+    public boolean _getBaltopExcludeCache() {
+        return config.getBoolean("baltop-exempt", false);
+    }
+
+    public boolean isBaltopExcludeCache() {
+        return baltopExemptCache;
+    }
+
+    public void setBaltopExemptCache(boolean baltopExempt) {
+        this.baltopExemptCache = baltopExempt;
+        config.setProperty("baltop-exempt", baltopExempt);
+        config.save();
     }
 
     public UUID getConfigUUID() {
