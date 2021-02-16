@@ -17,8 +17,8 @@ import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
 public final class EssentialsUpdateChecker {
-    private final static String REPO = "EssentialsX/Essentials";
-    private final static String BRANCH = "2.x";
+    private static final String REPO = "EssentialsX/Essentials";
+    private static final String BRANCH = "2.x";
 
     private static final String versionIdentifier;
     private static final String versionBranch;

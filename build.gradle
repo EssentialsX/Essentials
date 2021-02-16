@@ -88,6 +88,7 @@ subprojects {
 
     // Version Injection
     processResources {
+        // Always process resources if version string or git branch changes
         inputs.property('fullVersion', fullVersion)
         inputs.property('gitBranch', GIT_BRANCH)
         filter(ReplaceTokens, beginToken: '${',
