@@ -39,7 +39,7 @@ public class MetricsWrapper {
         checkForcedMetrics();
         addPermsChart();
         addEconomyChart();
-        addCustomChart(new Metrics.SimplePie("releaseBranch", EssentialsUpdateChecker::getVersionBranch));
+        addReleaseBranchChart();
 
         // bStats' backend currently doesn't support multi-line charts or advanced bar charts
         // These are included for when bStats is ready to accept this data
@@ -87,6 +87,10 @@ public class MetricsWrapper {
             result.put(plugin.getDescription().getVersion(), 1);
             return result;
         }));
+    }
+
+    private void addReleaseBranchChart() {
+        metrics.addCustomChart(new Metrics.SimplePie("releaseBranch", EssentialsUpdateChecker::getVersionBranch));
     }
 
     private void addCommandsChart() {
