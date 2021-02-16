@@ -372,53 +372,8 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
 
             runTaskAsynchronously(() -> {
                 LOGGER.log(Level.INFO, tl("versionFetching"));
-                if (EssentialsUpdateChecker.isDevBuild()) {
-                    final EssentialsUpdateChecker.UpdateToken devToken = EssentialsUpdateChecker.getDevToken().join();
-                    switch (devToken.getBranchStatus()) {
-                        case BEHIND: {
-                            LOGGER.log(Level.WARNING, tl("versionDevBehind", devToken.getDistance()));
-                            break;
-                        }
-                        case AHEAD:
-                        case DIVERGED: {
-                            LOGGER.log(Level.WARNING, tl(devToken.getDistance() == 0 ? "versionDevDivergedLatest" : "versionDevDiverged", devToken.getDistance()));
-                            LOGGER.log(Level.WARNING, tl("versionDevDivergedBranch", EssentialsUpdateChecker.getVersionBranch()));
-                            break;
-                        }
-                        case UNKNOWN: {
-                            LOGGER.log(Level.WARNING, tl("versionCustom", EssentialsUpdateChecker.getBuildInfo()));
-                            break;
-                        }
-                        case ERROR: {
-                            LOGGER.log(Level.WARNING, tl("versionError", EssentialsUpdateChecker.getBuildInfo()));
-                            break;
-                        }
-                        default: {
-                            break;
-                        }
-                    }
-                } else {
-                    final EssentialsUpdateChecker.UpdateToken releaseToken = EssentialsUpdateChecker.getReleaseToken().join();
-                    switch (releaseToken.getBranchStatus()) {
-                        case BEHIND: {
-                            LOGGER.log(Level.WARNING, tl("versionReleaseNew", EssentialsUpdateChecker.getLatestRelease()));
-                            //TODO download link? (https://github.com/EssentialsX/Website/issues/26)
-                            break;
-                        }
-                        case DIVERGED: //WhatChamp
-                        case AHEAD: //monkaW?
-                        case UNKNOWN: {
-                            LOGGER.log(Level.WARNING, tl("versionCustom", EssentialsUpdateChecker.getBuildInfo()));
-                            break;
-                        }
-                        case ERROR: {
-                            LOGGER.log(Level.WARNING, tl("versionError", EssentialsUpdateChecker.getBuildInfo()));
-                            break;
-                        }
-                        default: {
-                            break;
-                        }
-                    }
+                for (String str : EssentialsUpdateChecker.getVersionMethods(false, true)) {
+                    LOGGER.log(Level.WARNING, str);
                 }
             });
 

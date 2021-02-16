@@ -16,6 +16,8 @@ import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
+import static com.earth2me.essentials.I18n.tl;
+
 public final class EssentialsUpdateChecker {
     private static final String REPO = "EssentialsX/Essentials";
     private static final String BRANCH = "2.x";
@@ -169,6 +171,56 @@ public final class EssentialsUpdateChecker {
         } catch (IOException e) {
             e.printStackTrace();
             return new UpdateToken(BranchStatus.ERROR);
+        }
+    }
+
+    public static String[] getVersionMethods(final boolean sendLatestMessage, final boolean verboseErrors) {
+        if (EssentialsUpdateChecker.isDevBuild()) {
+            final EssentialsUpdateChecker.UpdateToken devToken = EssentialsUpdateChecker.getDevToken().join();
+            switch (devToken.getBranchStatus()) {
+                case IDENTICAL: {
+                    return sendLatestMessage ? new String[] {tl("versionDevLatest")} : new String[] {};
+                }
+                case BEHIND: {
+                    return new String[] {tl("versionDevBehind", devToken.getDistance())};
+                }
+                case AHEAD:
+                case DIVERGED: {
+                    return new String[] {tl(devToken.getDistance() == 0 ? "versionDevDivergedLatest" : "versionDevDiverged", devToken.getDistance()),
+                            tl("versionDevDivergedBranch", EssentialsUpdateChecker.getVersionBranch()) };
+                }
+                case UNKNOWN: {
+                    return verboseErrors ? new String[] {tl("versionCustom", EssentialsUpdateChecker.getBuildInfo())} : new String[] {};
+                }
+                case ERROR: {
+                    return new String[] {tl(verboseErrors ? "versionError" : "versionErrorPlayer", EssentialsUpdateChecker.getBuildInfo())};
+                }
+                default: {
+                    return new String[] {};
+                }
+            }
+        } else {
+            final EssentialsUpdateChecker.UpdateToken releaseToken = EssentialsUpdateChecker.getReleaseToken().join();
+            switch (releaseToken.getBranchStatus()) {
+                case IDENTICAL: {
+                    return sendLatestMessage ? new String[] {tl("versionReleaseLatest")} : new String[] {};
+                }
+                case BEHIND: {
+                    return new String[] {tl("versionReleaseNew", EssentialsUpdateChecker.getLatestRelease())};
+                    //TODO download link? (https://github.com/EssentialsX/Website/issues/26)
+                }
+                case DIVERGED: //WhatChamp
+                case AHEAD: //monkaW?
+                case UNKNOWN: {
+                    return verboseErrors ? new String[] {tl("versionCustom", EssentialsUpdateChecker.getBuildInfo())} : new String[] {};
+                }
+                case ERROR: {
+                    return new String[] {tl(verboseErrors ? "versionError" : "versionErrorPlayer", EssentialsUpdateChecker.getBuildInfo())};
+                }
+                default: {
+                    return new String[] {};
+                }
+            }
         }
     }
 
