@@ -97,21 +97,23 @@ public class SimpleMessageRecipient implements IMessageRecipient {
                 sendMessage(tl("msgFormat", tl("meSender"), recipient.getDisplayName(), message));
 
                 // Better Social Spy
-                final User senderUser = getUser(this);
-                final User recipientUser = getUser(recipient);
-                if (senderUser != null // not null if player.
-                    // Dont spy on chats involving socialspy exempt players
-                    && !senderUser.isAuthorized("essentials.chat.spy.exempt")
-                    && recipientUser != null && !recipientUser.isAuthorized("essentials.chat.spy.exempt")) {
-                    for (final User onlineUser : ess.getOnlineUsers()) {
-                        if (onlineUser.isSocialSpyEnabled()
-                            // Don't send socialspy messages to message sender/receiver to prevent spam
-                            && !onlineUser.equals(senderUser)
-                            && !onlineUser.equals(recipient)) {
-                            if (senderUser.isMuted() && ess.getSettings().getSocialSpyListenMutedPlayers()) {
-                                onlineUser.sendMessage(tl("socialMutedSpyPrefix") + tl("socialSpyMsgFormat", getDisplayName(), recipient.getDisplayName(), message));
-                            } else {
-                                onlineUser.sendMessage(tl("socialSpyPrefix") + tl("socialSpyMsgFormat", getDisplayName(), recipient.getDisplayName(), message));
+                if (ess.getSettings().isSocialSpyMessages()) {
+                    final User senderUser = getUser(this);
+                    final User recipientUser = getUser(recipient);
+                    if (senderUser != null // not null if player.
+                            // Dont spy on chats involving socialspy exempt players
+                            && !senderUser.isAuthorized("essentials.chat.spy.exempt")
+                            && recipientUser != null && !recipientUser.isAuthorized("essentials.chat.spy.exempt")) {
+                        for (final User onlineUser : ess.getOnlineUsers()) {
+                            if (onlineUser.isSocialSpyEnabled()
+                                    // Don't send socialspy messages to message sender/receiver to prevent spam
+                                    && !onlineUser.equals(senderUser)
+                                    && !onlineUser.equals(recipient)) {
+                                if (senderUser.isMuted() && ess.getSettings().getSocialSpyListenMutedPlayers()) {
+                                    onlineUser.sendMessage(tl("socialMutedSpyPrefix") + tl("socialSpyMsgFormat", getDisplayName(), recipient.getDisplayName(), message));
+                                } else {
+                                    onlineUser.sendMessage(tl("socialSpyPrefix") + tl("socialSpyMsgFormat", getDisplayName(), recipient.getDisplayName(), message));
+                                }
                             }
                         }
                     }

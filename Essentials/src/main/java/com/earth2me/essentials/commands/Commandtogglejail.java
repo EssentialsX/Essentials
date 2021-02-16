@@ -4,6 +4,7 @@ import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.DateUtil;
 import com.earth2me.essentials.utils.EnumUtil;
+import com.google.common.collect.Iterables;
 import net.ess3.api.events.JailStatusChangeEvent;
 import org.bukkit.Server;
 import org.bukkit.Statistic;
@@ -31,7 +32,8 @@ public class Commandtogglejail extends EssentialsCommand {
 
         final User player = getPlayer(server, args, 0, true, true);
 
-        if (args.length >= 2 && !player.isJailed()) {
+        mainCommand:
+        if (!player.isJailed()) {
             if (!player.getBase().isOnline()) {
                 if (sender.isPlayer() && !ess.getUser(sender.getPlayer()).isAuthorized("essentials.togglejail.offline")) {
                     sender.sendMessage(tl("mayNotJailOffline"));
@@ -43,6 +45,17 @@ public class Commandtogglejail extends EssentialsCommand {
                 sender.sendMessage(tl("mayNotJail"));
                 return;
             }
+
+            final String jailName;
+            if (args.length > 1) {
+                jailName = args[1];
+            } else if (ess.getJails().getCount() == 1) {
+                jailName = Iterables.get(ess.getJails().getList(), 0);
+            } else {
+                break mainCommand;
+            }
+            // Check if jail exists
+            ess.getJails().getJail(jailName);
 
             final JailStatusChangeEvent event = new JailStatusChangeEvent(player, sender.isPlayer() ? ess.getUser(sender.getPlayer()) : null, true);
             ess.getServer().getPluginManager().callEvent(event);
@@ -63,7 +76,7 @@ public class Commandtogglejail extends EssentialsCommand {
                         player.setJailed(true);
                         player.sendMessage(tl("userJailed"));
                         player.setJail(null);
-                        player.setJail(args[1]);
+                        player.setJail(jailName);
                         if (args.length > 2) {
                             player.setJailTimeout(timeDiff);
                             // 50 MSPT (milliseconds per tick)
@@ -73,10 +86,8 @@ public class Commandtogglejail extends EssentialsCommand {
                     }
                 });
                 if (player.getBase().isOnline()) {
-                    ess.getJails().sendToJail(player, args[1], future);
+                    ess.getJails().sendToJail(player, jailName, future);
                 } else {
-                    // Check if jail exists
-                    ess.getJails().getJail(args[1]);
                     future.complete(true);
                 }
             }
