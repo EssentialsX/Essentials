@@ -47,11 +47,6 @@ public final class VersionUtil {
         // KibblePatcher - Dangerous bytecode editor snakeoil whose only use is to break plugins
         builder.put("net.kibblelands.server.FastMath", SupportStatus.DANGEROUS_FORK);
 
-        // AirplaneLite - Yatopia sidestream;
-        //   * Attempts unsafe chunk concurrency
-        builder.put("gg.airplane.structs.ChunkMapMap", SupportStatus.DANGEROUS_FORK);
-        builder.put("gg.airplane.structs.ConcLong2ObjectOpenHashMap", SupportStatus.DANGEROUS_FORK);
-
         // Akarin - Dangerous patch history;
         //   * Potentially unsafe saving of nms.JsonList
         builder.put("io.akarin.server.Config", SupportStatus.DANGEROUS_FORK);
