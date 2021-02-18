@@ -1,6 +1,7 @@
 package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.CommandSource;
+import com.earth2me.essentials.utils.StringUtil;
 import com.earth2me.essentials.utils.VersionUtil;
 import org.bukkit.Material;
 import org.bukkit.Server;
@@ -52,10 +53,16 @@ public class Commanditemdb extends EssentialsCommand {
                 sender.sendMessage(tl("durability", Integer.toString(durability)));
             }
         }
-        final String itemNameList = ess.getItemDb().names(itemStack);
-        if (itemNameList != null) {
-            sender.sendMessage(tl("itemNames", ess.getItemDb().names(itemStack)));
+
+        List<String> nameList = ess.getItemDb().nameList(itemStack);
+        nameList.addAll(ess.getCustomItemResolver().getAliasesFor(ess.getItemDb().name(itemStack)));
+        Collections.sort(nameList);
+
+        if (nameList.size() > 15) {
+            nameList = nameList.subList(0, 14);
         }
+        final String itemNameList = StringUtil.joinList(", ", nameList);
+        sender.sendMessage(tl("itemNames", itemNameList));
     }
 
     @Override

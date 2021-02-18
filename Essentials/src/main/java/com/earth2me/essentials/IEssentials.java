@@ -4,11 +4,13 @@ import com.earth2me.essentials.api.IItemDb;
 import com.earth2me.essentials.api.IJails;
 import com.earth2me.essentials.api.IWarps;
 import com.earth2me.essentials.perm.PermissionsHandler;
+import net.ess3.provider.MaterialTagProvider;
 import net.ess3.provider.ContainerProvider;
 import net.ess3.provider.KnownCommandsProvider;
 import net.ess3.provider.ServerStateProvider;
 import net.ess3.provider.SpawnerBlockProvider;
 import net.ess3.provider.SpawnerItemProvider;
+import net.essentialsx.api.v2.services.BalanceTop;
 import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -94,6 +96,8 @@ public interface IEssentials extends Plugin {
 
     UserMap getUserMap();
 
+    BalanceTop getBalanceTop();
+
     EssentialsTimer getTimer();
 
     /**
@@ -114,6 +118,8 @@ public interface IEssentials extends Plugin {
     SpawnerBlockProvider getSpawnerBlockProvider();
 
     ServerStateProvider getServerStateProvider();
+
+    MaterialTagProvider getMaterialTagProvider();
 
     ContainerProvider getContainerProvider();
 

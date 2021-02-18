@@ -598,7 +598,11 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
 
     @Override
     public String getFormattedJailTime() {
-        return DateUtil.formatDateDiff(getOnlineJailedTime() > 0 ? (System.currentTimeMillis() - getJailTimeout()) : getJailTimeout());
+        return DateUtil.formatDateDiff(getOnlineJailedTime() > 0 ? getOnlineJailExpireTime() : getJailTimeout());
+    }
+
+    private long getOnlineJailExpireTime() {
+        return ((getOnlineJailedTime() - getBase().getStatistic(PLAY_ONE_TICK)) * 50) + System.currentTimeMillis();
     }
 
     //Returns true if status expired during this check
@@ -1039,6 +1043,15 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
 
     public void setLastHomeConfirmationTimestamp() {
         this.lastHomeConfirmationTimestamp = System.currentTimeMillis();
+    }
+
+    public boolean isBaltopExempt() {
+        if (getBase().isOnline()) {
+            final boolean exempt = isAuthorized("essentials.balancetop.exclude");
+            setBaltopExemptCache(exempt);
+            return exempt;
+        }
+        return isBaltopExcludeCache();
     }
 
     @Override
