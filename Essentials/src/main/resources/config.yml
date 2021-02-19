@@ -341,29 +341,29 @@ pastebin-createkit: false
 # Color is not an actual sign, it's for enabling using color codes on signs, when the correct permissions are given.
 
 enabledSigns:
-  #- anvil
+  #- color
   #- balance
   #- buy
-  #- cartography
-  #- color
   #- sell
   #- trade
   #- free
-  #- disposal
   #- warp
   #- kit
-  #- loom
   #- mail
   #- enchant
   #- gamemode
-  #- grindstone
   #- heal
   #- info
   #- spawnmob
-  #- smithing
   #- repair
   #- time
   #- weather
+  #- anvil
+  #- cartography
+  #- disposal
+  #- grindstone
+  #- loom
+  #- smithing
   #- workbench
 
 # How many times per second can Essentials signs be interacted with per player.
