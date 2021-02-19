@@ -53,18 +53,47 @@ public class Commandeditsign extends EssentialsCommand {
                     sign.update();
                     user.sendMessage(tl("editsignCommandClearLine", line + 1));
                 }
+            } else if (args[0].equalsIgnoreCase("copy") || args[0].equalsIgnoreCase("paste")) {
+                final boolean copy = args[0].equalsIgnoreCase("copy");
+                final String tlPrefix = copy ? "editsignCopy" : "editsignPaste";
+                final int line = args.length == 1 ? -1 : Integer.parseInt(args[1]) - 1;
+
+                if (line == -1) {
+                    for (int i = 0; i < 4; i++) {
+                        processSignCopyPaste(user, sign, i, copy);
+                    }
+                    user.sendMessage(tl(tlPrefix, commandLabel));
+                } else {
+                    processSignCopyPaste(user, sign, line, copy);
+                    user.sendMessage(tl(tlPrefix + "Line", line + 1, commandLabel));
+                }
+
+                if (!copy) {
+                    sign.update();
+                }
             } else {
                 throw new NotEnoughArgumentsException();
             }
         } catch (final IndexOutOfBoundsException e) {
-            throw new Exception(tl("editsignCommandNoLine"));
+            throw new Exception(tl("editsignCommandNoLine"), e);
         }
+    }
+
+    private void processSignCopyPaste(final User user, final Sign sign, final int index, final boolean copy) {
+        if (copy) {
+            // We use unformat here to prevent players from copying signs with colors that they do not have permission to use.
+            user.getSignCopy().set(index, FormatUtil.unformatString(user, "essentials.editsign", sign.getLine(index)));
+            return;
+        }
+
+        final String line = FormatUtil.formatString(user, "essentials.editsign", user.getSignCopy().get(index));
+        sign.setLine(index, line == null ? "" : line);
     }
 
     @Override
     protected List<String> getTabCompleteOptions(final Server server, final User user, final String commandLabel, final String[] args) {
         if (args.length == 1) {
-            return Lists.newArrayList("set", "clear");
+            return Lists.newArrayList("set", "clear", "copy", "paste");
         } else if (args.length == 2) {
             return Lists.newArrayList("1", "2", "3", "4");
         } else if (args.length == 3 && args[0].equalsIgnoreCase("set") && NumberUtil.isPositiveInt(args[1])) {
