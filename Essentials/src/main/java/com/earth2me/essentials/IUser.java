@@ -155,6 +155,8 @@ public interface IUser {
 
     void setJail(String jail);
 
+    String getFormattedJailTime();
+
     List<String> getMails();
 
     void addMail(String mail);
@@ -222,6 +224,10 @@ public interface IUser {
     Map<User, BigDecimal> getConfirmingPayments();
 
     Block getTargetBlock(int maxDistance);
+
+    void setToggleShout(boolean toggleShout);
+
+    boolean isToggleShout();
 
     /**
      * Gets information about the last-made tpa request in the tpa queue of this {@link IUser}.
