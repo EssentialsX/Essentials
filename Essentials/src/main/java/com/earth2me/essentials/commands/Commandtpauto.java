@@ -22,7 +22,7 @@ public class Commandtpauto extends EssentialsToggleCommand {
     }
 
     @Override
-    protected void togglePlayer(final CommandSource sender, final User user, Boolean enabled) {
+    void togglePlayer(final CommandSource sender, final User user, Boolean enabled) {
         if (enabled == null) {
             enabled = !user.isAutoTeleportEnabled();
         }

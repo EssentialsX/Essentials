@@ -108,8 +108,10 @@ public class Settings implements net.ess3.api.ISettings {
     private long permissionsLagWarning;
     private boolean allowSilentJoin;
     private String customJoinMessage;
+    private final Map<String, String> groupJoinMessages = Collections.synchronizedMap(new HashMap<>());
     private boolean isCustomJoinMessage;
     private String customQuitMessage;
+    private final Map<String, String> groupQuitMessages = Collections.synchronizedMap(new HashMap<>());
     private boolean isCustomQuitMessage;
     private List<String> spawnOnJoinGroups;
     private Map<Pattern, Long> commandCooldowns;
@@ -646,10 +648,8 @@ public class Settings implements net.ess3.api.ISettings {
         economyLogUpdate = _isEcoLogUpdateEnabled();
         economyDisabled = _isEcoDisabled();
         allowSilentJoin = _allowSilentJoinQuit();
-        customJoinMessage = _getCustomJoinMessage();
-        isCustomJoinMessage = !customJoinMessage.equals("none");
-        customQuitMessage = _getCustomQuitMessage();
-        isCustomQuitMessage = !customQuitMessage.equals("none");
+        isCustomJoinMessage = !getCustomJoinMessage("").equals("none");
+        isCustomQuitMessage = !getCustomQuitMessage("").equals("none");
         muteCommands = _getMuteCommands();
         spawnOnJoinGroups = _getSpawnOnJoinGroups();
         commandCooldowns = _getCommandCooldowns();
@@ -1268,14 +1268,18 @@ public class Settings implements net.ess3.api.ISettings {
     public boolean allowSilentJoinQuit() {
         return allowSilentJoin;
     }
-
-    public String _getCustomJoinMessage() {
-        return FormatUtil.replaceFormat(config.getString("custom-join-message", "none"));
-    }
-
+    
     @Override
-    public String getCustomJoinMessage() {
-        return customJoinMessage;
+    public String getCustomJoinMessage(final String group) {
+        String joinMessage = groupJoinMessages.get(group);
+        if (joinMessage == null) {
+            joinMessage = config.getString("group-custom-join-messages." + (group == null ? "Default" : group), config.getString("custom-join-message", "none"));
+            groupJoinMessages.put(group, joinMessage);
+        }
+        if (isDebug()) {
+            ess.getLogger().info(String.format("Found join message '%s' for group '%s'", joinMessage, group));
+        }
+        return joinMessage;
     }
 
     @Override
@@ -1283,13 +1287,17 @@ public class Settings implements net.ess3.api.ISettings {
         return isCustomJoinMessage;
     }
 
-    public String _getCustomQuitMessage() {
-        return FormatUtil.replaceFormat(config.getString("custom-quit-message", "none"));
-    }
-
     @Override
-    public String getCustomQuitMessage() {
-        return customQuitMessage;
+    public String getCustomQuitMessage(final String group) {
+        String quitMessage = groupQuitMessages.get(group);
+        if (quitMessage == null) {
+            quitMessage = config.getString("group-custom-quit-messages." + (group == null ? "Default" : group), config.getString("custom-quit-message", "none"));
+            groupQuitMessages.put(group, quitMessage);
+        }
+        if (isDebug()) {
+            ess.getLogger().info(String.format("Found quit message '%s' for group '%s'", quitMessage, group));
+        }
+        return quitMessage;
     }
 
     @Override

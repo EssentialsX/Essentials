@@ -347,6 +347,7 @@ enabledSigns:
   #- sell
   #- trade
   #- free
+  #- disposal
   #- warp
   #- kit
   #- mail
@@ -358,13 +359,6 @@ enabledSigns:
   #- repair
   #- time
   #- weather
-  #- anvil
-  #- cartography
-  #- disposal
-  #- grindstone
-  #- loom
-  #- smithing
-  #- workbench
 
 # How many times per second can Essentials signs be interacted with per player.
 # Values should be between 1-20, 20 being virtually no lag protection.
@@ -506,9 +500,17 @@ allow-silent-join-quit: false
 
 # You can set custom join and quit messages here. Set this to "none" to use the default Minecraft message,
 # or set this to "" to hide the message entirely.
+# You can also give certain groups their own join and quit message for more variety.
 # You may use color codes, {USERNAME} for the player's name, and {PLAYER} for the player's displayname.
 custom-join-message: "none"
 custom-quit-message: "none"
+
+
+
+group-custom-join-messages:
+  admin: "&4The admin &6&l{USERNAME}&r&4 joined the game."
+group-custom-quit-messages:
+  admin: "&4The admin &6&l{USERNAME}&r&4 left the game."
 
 # Should Essentials override the vanilla "Server Full" message with its own from the language file?
 # Set to false to keep the vanilla message.

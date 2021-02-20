@@ -43,13 +43,11 @@ import net.ess3.api.IEssentials;
 import net.ess3.api.IItemDb;
 import net.ess3.api.IJails;
 import net.ess3.api.ISettings;
-import net.ess3.nms.refl.providers.ReflFormattedCommandAliasProvider;
 import net.ess3.nms.refl.providers.ReflKnownCommandsProvider;
 import net.ess3.nms.refl.providers.ReflServerStateProvider;
 import net.ess3.nms.refl.providers.ReflSpawnEggProvider;
 import net.ess3.nms.refl.providers.ReflSpawnerBlockProvider;
 import net.ess3.provider.ContainerProvider;
-import net.ess3.provider.FormattedCommandAliasProvider;
 import net.ess3.provider.KnownCommandsProvider;
 import net.ess3.provider.MaterialTagProvider;
 import net.ess3.provider.PotionMetaProvider;
@@ -142,7 +140,6 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
     private transient ServerStateProvider serverStateProvider;
     private transient ContainerProvider containerProvider;
     private transient KnownCommandsProvider knownCommandsProvider;
-    private transient FormattedCommandAliasProvider formattedCommandAliasProvider;
     private transient ProviderListener recipeBookEventProvider;
     private transient MaterialTagProvider materialTagProvider;
     private transient Kits kits;
@@ -351,9 +348,6 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
                     knownCommandsProvider = new ReflKnownCommandsProvider();
                 }
 
-                // Command aliases provider
-                formattedCommandAliasProvider = new ReflFormattedCommandAliasProvider(PaperLib.isPaper());
-              
                 //Material Tag Providers
                 if (VersionUtil.getServerBukkitVersion().isHigherThanOrEqualTo(VersionUtil.v1_13_0_R01)) {
                     materialTagProvider = PaperLib.isPaper() ? new PaperMaterialTagProvider() : new BukkitMaterialTagProvider();
@@ -1061,11 +1055,6 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
     @Override
     public KnownCommandsProvider getKnownCommandsProvider() {
         return knownCommandsProvider;
-    }
-
-    @Override
-    public FormattedCommandAliasProvider getFormattedCommandAliasProvider() {
-        return formattedCommandAliasProvider;
     }
 
     private AbstractItemDb getItemDbFromConfig() {

@@ -48,9 +48,7 @@ public class EssentialsChatPlayerListenerNormal extends EssentialsChatPlayer {
             permission.append("essentials.chat.").append(chatStore.getType());
 
             if (user.isAuthorized(permission.toString())) {
-                if (event.getMessage().charAt(0) == ess.getSettings().getChatShout() || event.getMessage().charAt(0) == ess.getSettings().getChatQuestion()) {
-                    event.setMessage(event.getMessage().substring(1));
-                }
+                event.setMessage(event.getMessage().substring(1));
                 event.setFormat(tl(chatStore.getType() + "Format", event.getFormat()));
                 return;
             }

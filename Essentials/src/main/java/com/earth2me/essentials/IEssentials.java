@@ -6,7 +6,6 @@ import com.earth2me.essentials.api.IWarps;
 import com.earth2me.essentials.perm.PermissionsHandler;
 import net.ess3.provider.MaterialTagProvider;
 import net.ess3.provider.ContainerProvider;
-import net.ess3.provider.FormattedCommandAliasProvider;
 import net.ess3.provider.KnownCommandsProvider;
 import net.ess3.provider.ServerStateProvider;
 import net.ess3.provider.SpawnerBlockProvider;
@@ -125,6 +124,4 @@ public interface IEssentials extends Plugin {
     ContainerProvider getContainerProvider();
 
     KnownCommandsProvider getKnownCommandsProvider();
-
-    FormattedCommandAliasProvider getFormattedCommandAliasProvider();
 }

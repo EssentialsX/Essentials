@@ -18,8 +18,6 @@ import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
-import org.bukkit.command.Command;
-import org.bukkit.command.FormattedCommandAlias;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.HumanEntity;
@@ -218,11 +216,11 @@ public class EssentialsPlayerListener implements Listener {
             event.setQuitMessage(null);
         } else if (ess.getSettings().isCustomQuitMessage() && event.getQuitMessage() != null) {
             final Player player = event.getPlayer();
-            final String msg = ess.getSettings().getCustomQuitMessage()
+            final String msg = org.bukkit.ChatColor.translateAlternateColorCodes('&',ess.getSettings().getCustomQuitMessage(user.getGroup())
                 .replace("{PLAYER}", player.getDisplayName())
                 .replace("{USERNAME}", player.getName())
                 .replace("{ONLINE}", NumberFormat.getInstance().format(ess.getOnlinePlayers().size()))
-                .replace("{UPTIME}", DateUtil.formatDateDiff(ManagementFactory.getRuntimeMXBean().getStartTime()));
+                .replace("{UPTIME}", DateUtil.formatDateDiff(ManagementFactory.getRuntimeMXBean().getStartTime())));
 
             event.setQuitMessage(msg.isEmpty() ? null : msg);
         }
@@ -329,11 +327,11 @@ public class EssentialsPlayerListener implements Listener {
                 } else if (message == null || hideJoinQuitMessages()) {
                     //NOOP
                 } else if (ess.getSettings().isCustomJoinMessage()) {
-                    final String msg = ess.getSettings().getCustomJoinMessage()
+                    final String msg = org.bukkit.ChatColor.translateAlternateColorCodes('&',ess.getSettings().getCustomJoinMessage(user.getGroup())
                         .replace("{PLAYER}", player.getDisplayName()).replace("{USERNAME}", player.getName())
                         .replace("{UNIQUE}", NumberFormat.getInstance().format(ess.getUserMap().getUniqueUsers()))
                         .replace("{ONLINE}", NumberFormat.getInstance().format(ess.getOnlinePlayers().size()))
-                        .replace("{UPTIME}", DateUtil.formatDateDiff(ManagementFactory.getRuntimeMXBean().getStartTime()));
+                        .replace("{UPTIME}", DateUtil.formatDateDiff(ManagementFactory.getRuntimeMXBean().getStartTime())));
                     if (!msg.isEmpty()) {
                         ess.getServer().broadcastMessage(msg);
                     }
@@ -522,30 +520,9 @@ public class EssentialsPlayerListener implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onPlayerCommandPreprocess(final PlayerCommandPreprocessEvent event) {
-        final String cmd = event.getMessage().toLowerCase(Locale.ENGLISH).split(" ")[0].replace("/", "").toLowerCase(Locale.ENGLISH);
-        final int argStartIndex = event.getMessage().indexOf(" ");
-        final String args = argStartIndex == -1 ? "" // No arguments present
-                : event.getMessage().substring(argStartIndex); // arguments start at argStartIndex; substring from there.
-
-        // If the plugin command does not exist, check if it is an alias from commands.yml
-        if (ess.getServer().getPluginCommand(cmd) == null) {
-            final Command knownCommand = ess.getKnownCommandsProvider().getKnownCommands().get(cmd);
-            if (knownCommand instanceof FormattedCommandAlias) {
-                final FormattedCommandAlias command = (FormattedCommandAlias) knownCommand;
-                for (String fullCommand : ess.getFormattedCommandAliasProvider().createCommands(command, event.getPlayer(), args.split(" "))) {
-                    handlePlayerCommandPreprocess(event, fullCommand);
-                }
-                return;
-            }
-        }
-
-        // Handle the command given from the event.
-        handlePlayerCommandPreprocess(event, cmd + args);
-    }
-
-    public void handlePlayerCommandPreprocess(final PlayerCommandPreprocessEvent event, final String effectiveCommand) {
         final Player player = event.getPlayer();
-        final String cmd = effectiveCommand.toLowerCase(Locale.ENGLISH).split(" ")[0].replace("/", "").toLowerCase(Locale.ENGLISH);
+        final String cmd = event.getMessage().toLowerCase(Locale.ENGLISH).split(" ")[0].replace("/", "").toLowerCase(Locale.ENGLISH);
+
         final PluginCommand pluginCommand = ess.getServer().getPluginCommand(cmd);
 
         if (ess.getSettings().getSocialSpyCommands().contains(cmd) || ess.getSettings().getSocialSpyCommands().contains("*")) {
@@ -598,12 +575,12 @@ public class EssentialsPlayerListener implements Listener {
             user.updateActivityOnInteract(broadcast);
         }
 
-        if (ess.getSettings().isCommandCooldownsEnabled()
+        if (ess.getSettings().isCommandCooldownsEnabled() && pluginCommand != null
             && !user.isAuthorized("essentials.commandcooldowns.bypass")) {
-            final int argStartIndex = effectiveCommand.indexOf(" ");
+            final int argStartIndex = event.getMessage().indexOf(" ");
             final String args = argStartIndex == -1 ? "" // No arguments present
-                : " " + effectiveCommand.substring(argStartIndex); // arguments start at argStartIndex; substring from there.
-            final String fullCommand = pluginCommand == null ? effectiveCommand : pluginCommand.getName() + args;
+                : " " + event.getMessage().substring(argStartIndex); // arguments start at argStartIndex; substring from there.
+            final String fullCommand = pluginCommand.getName() + args;
 
             // Used to determine whether a user already has an existing cooldown
             // If so, no need to check for (and write) new ones.
