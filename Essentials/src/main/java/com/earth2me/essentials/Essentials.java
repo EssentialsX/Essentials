@@ -36,7 +36,6 @@ import com.earth2me.essentials.signs.SignPlayerListener;
 import com.earth2me.essentials.textreader.IText;
 import com.earth2me.essentials.textreader.KeywordReplacer;
 import com.earth2me.essentials.textreader.SimpleTextInput;
-import com.earth2me.essentials.utils.DateUtil;
 import com.earth2me.essentials.utils.VersionUtil;
 import io.papermc.lib.PaperLib;
 import net.ess3.api.Economy;
@@ -44,12 +43,15 @@ import net.ess3.api.IEssentials;
 import net.ess3.api.IItemDb;
 import net.ess3.api.IJails;
 import net.ess3.api.ISettings;
+import net.ess3.nms.refl.providers.ReflFormattedCommandAliasProvider;
+import net.ess3.nms.refl.providers.ReflKnownCommandsProvider;
 import net.ess3.nms.refl.providers.ReflServerStateProvider;
 import net.ess3.nms.refl.providers.ReflSpawnEggProvider;
 import net.ess3.nms.refl.providers.ReflSpawnerBlockProvider;
-import net.ess3.nms.refl.providers.ReflKnownCommandsProvider;
 import net.ess3.provider.ContainerProvider;
+import net.ess3.provider.FormattedCommandAliasProvider;
 import net.ess3.provider.KnownCommandsProvider;
+import net.ess3.provider.MaterialTagProvider;
 import net.ess3.provider.PotionMetaProvider;
 import net.ess3.provider.SerializationProvider;
 import net.ess3.provider.ProviderListener;
@@ -59,15 +61,18 @@ import net.ess3.provider.SpawnerBlockProvider;
 import net.ess3.provider.SpawnerItemProvider;
 import net.ess3.provider.providers.BasePotionDataProvider;
 import net.ess3.provider.providers.BlockMetaSpawnerItemProvider;
+import net.ess3.provider.providers.BukkitMaterialTagProvider;
 import net.ess3.provider.providers.BukkitSpawnerBlockProvider;
 import net.ess3.provider.providers.FlatSpawnEggProvider;
 import net.ess3.provider.providers.LegacyPotionMetaProvider;
 import net.ess3.provider.providers.LegacySpawnEggProvider;
 import net.ess3.provider.providers.PaperContainerProvider;
 import net.ess3.provider.providers.PaperKnownCommandsProvider;
+import net.ess3.provider.providers.PaperMaterialTagProvider;
 import net.ess3.provider.providers.PaperRecipeBookListener;
 import net.ess3.provider.providers.PaperSerializationProvider;
 import net.ess3.provider.providers.PaperServerStateProvider;
+import net.essentialsx.api.v2.services.BalanceTop;
 import org.bukkit.Bukkit;
 import org.bukkit.Server;
 import org.bukkit.World;
@@ -127,6 +132,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
     private transient PermissionsHandler permissionsHandler;
     private transient AlternativeCommandsHandler alternativeCommandsHandler;
     private transient UserMap userMap;
+    private transient BalanceTopImpl balanceTop;
     private transient ExecuteTimer execTimer;
     private transient I18n i18n;
     private transient MetricsWrapper metrics;
@@ -139,7 +145,9 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
     private transient ContainerProvider containerProvider;
     private transient SerializationProvider serializationProvider = null;
     private transient KnownCommandsProvider knownCommandsProvider;
+    private transient FormattedCommandAliasProvider formattedCommandAliasProvider;
     private transient ProviderListener recipeBookEventProvider;
+    private transient MaterialTagProvider materialTagProvider;
     private transient Kits kits;
     private transient RandomTeleport randomTeleport;
 
@@ -181,6 +189,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
         LOGGER.log(Level.INFO, dataFolder.toString());
         settings = new Settings(this);
         userMap = new UserMap(this);
+        balanceTop = new BalanceTopImpl(this);
         permissionsHandler = new PermissionsHandler(this, false);
         Economy.setEss(this);
         confList = new ArrayList<>();
@@ -245,6 +254,9 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
                 userMap = new UserMap(this);
                 confList.add(userMap);
                 execTimer.mark("Init(Usermap)");
+
+                balanceTop = new BalanceTopImpl(this);
+                execTimer.mark("Init(BalanceTop)");
 
                 kits = new Kits(this);
                 confList.add(kits);
@@ -341,6 +353,14 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
                     knownCommandsProvider = new PaperKnownCommandsProvider();
                 } else {
                     knownCommandsProvider = new ReflKnownCommandsProvider();
+                }
+
+                // Command aliases provider
+                formattedCommandAliasProvider = new ReflFormattedCommandAliasProvider(PaperLib.isPaper());
+              
+                //Material Tag Providers
+                if (VersionUtil.getServerBukkitVersion().isHigherThanOrEqualTo(VersionUtil.v1_13_0_R01)) {
+                    materialTagProvider = PaperLib.isPaper() ? new PaperMaterialTagProvider() : new BukkitMaterialTagProvider();
                 }
 
                 execTimer.mark("Init(Providers)");
@@ -662,7 +682,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
 
             if (user != null && user.isJailed() && !user.isAuthorized(cmd, "essentials.jail.allow.")) {
                 if (user.getJailTimeout() > 0) {
-                    user.sendMessage(tl("playerJailedFor", user.getName(), DateUtil.formatDateDiff(user.getJailTimeout())));
+                    user.sendMessage(tl("playerJailedFor", user.getName(), user.getFormattedJailTime()));
                 } else {
                     user.sendMessage(tl("jailMessage"));
                 }
@@ -965,6 +985,11 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
     }
 
     @Override
+    public BalanceTop getBalanceTop() {
+        return balanceTop;
+    }
+
+    @Override
     public I18n getI18n() {
         return i18n;
     }
@@ -1028,6 +1053,10 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
         return serverStateProvider;
     }
 
+    public MaterialTagProvider getMaterialTagProvider() {
+        return materialTagProvider;
+    }
+
     @Override
     public ContainerProvider getContainerProvider() {
         return containerProvider;
@@ -1041,6 +1070,11 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
     @Override
     public SerializationProvider getSerializationProvider() {
         return serializationProvider;
+    }
+
+    @Override
+    public FormattedCommandAliasProvider getFormattedCommandAliasProvider() {
+        return formattedCommandAliasProvider;
     }
 
     private AbstractItemDb getItemDbFromConfig() {
