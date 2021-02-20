@@ -68,7 +68,7 @@ public abstract class EssentialsToggleCommand extends EssentialsCommand {
     }
 
     // Make sure when implementing this method that all 3 Boolean states are handled, 'null' should toggle the existing state.
-    abstract void togglePlayer(CommandSource sender, User user, Boolean enabled) throws NotEnoughArgumentsException;
+    protected abstract void togglePlayer(CommandSource sender, User user, Boolean enabled) throws NotEnoughArgumentsException;
 
     @Override
     protected List<String> getTabCompleteOptions(final Server server, final User user, final String commandLabel, final String[] args) {

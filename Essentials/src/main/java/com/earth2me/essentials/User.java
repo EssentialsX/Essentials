@@ -72,6 +72,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
     private long lastNotifiedAboutMailsMs;
     private String lastHomeConfirmation;
     private long lastHomeConfirmationTimestamp;
+    private boolean toggleShout = false;
     private transient final List<String> signCopy = Lists.newArrayList("", "", "", "");
 
     public User(final Player base, final IEssentials ess) {
@@ -1067,5 +1068,15 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
             return base.getTargetBlock(null, maxDistance);
         }
         return block;
+    }
+
+    @Override
+    public void setToggleShout(boolean toggleShout) {
+        this.toggleShout = toggleShout;
+    }
+
+    @Override
+    public boolean isToggleShout() {
+        return toggleShout;
     }
 }
