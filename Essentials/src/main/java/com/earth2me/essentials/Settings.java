@@ -129,6 +129,7 @@ public class Settings implements net.ess3.api.ISettings {
     private Set<Predicate<String>> nickBlacklist;
     private double maxProjectileSpeed;
     private boolean removeEffectsOnHeal;
+    private Map<String, String> worldAliases;
 
     public Settings(final IEssentials ess) {
         this.ess = ess;
@@ -543,6 +544,20 @@ public class Settings implements net.ess3.api.ISettings {
     }
 
     @Override
+    public String getWorldAlias(String world) {
+        return worldAliases.getOrDefault(world.toLowerCase(), world);
+    }
+
+    private Map<String, String> _getWorldAliases() {
+        final Map<String, String> map = new HashMap<>();
+        final ConfigurationSection section = config.getConfigurationSection("");
+        for (String world : section.getKeys(false)) {
+            map.put(world.toLowerCase(), FormatUtil.replaceFormat(section.getString(world)));
+        }
+        return map;
+    }
+
+    @Override
     public boolean getAnnounceNewPlayers() {
         return !config.getString("newbies.announce-format", "-").isEmpty();
     }
@@ -656,6 +671,7 @@ public class Settings implements net.ess3.api.ISettings {
         vanishingItemPolicy = _getVanishingItemsPolicy();
         bindingItemPolicy = _getBindingItemsPolicy();
         currencySymbol = _getCurrencySymbol();
+        worldAliases = _getWorldAliases();
     }
 
     void _lateLoadItemSpawnBlacklist() {
@@ -762,7 +778,7 @@ public class Settings implements net.ess3.api.ISettings {
     // A valid currency symbol value must be one non-integer character.
     private String _getCurrencySymbol() {
         String value = config.getString("currency-symbol", "$").trim();
-        if (value.length() != 1 || value.matches("\\d")) {
+        if (value.length() > 1 || value.matches("\\d")) {
             value = "$";
         }
         return value;
