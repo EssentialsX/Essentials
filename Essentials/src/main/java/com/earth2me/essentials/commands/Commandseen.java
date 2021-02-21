@@ -27,12 +27,14 @@ public class Commandseen extends EssentialsCommand {
 
     @Override
     protected void run(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception {
-        final boolean showBan = sender.isAuthorized("essentials.seen.banreason", ess);
-        final boolean showIp = sender.isAuthorized("essentials.seen.ip", ess);
-        final boolean showLocation = sender.isAuthorized("essentials.seen.location", ess);
         if (args.length < 1) {
             throw new NotEnoughArgumentsException();
         }
+        final boolean showBan = sender.isAuthorized("essentials.seen.banreason", ess);
+        final boolean showIp = sender.isAuthorized("essentials.seen.ip", ess);
+        final boolean showLocation = sender.isAuthorized("essentials.seen.location", ess);
+        final boolean searchAccounts = commandLabel.contains("alts") && sender.isAuthorized("essentials.seen.alts", ess);
+
         User player;
         // Check by uuid, if it fails check by name.
         try {
@@ -43,15 +45,20 @@ public class Commandseen extends EssentialsCommand {
         }
 
         if (player == null) {
-            if (sender.isAuthorized("essentials.seen.ipsearch", ess) && FormatUtil.validIP(args[0])) {
-                seenIP(sender, args[0]);
-                return;
-            } else if (ess.getServer().getBanList(BanList.Type.IP).isBanned(args[0])) {
-                sender.sendMessage(tl("isIpBanned", args[0]));
-                return;
-            } else if (BanLookup.isBanned(ess, args[0])) {
-                sender.sendMessage(tl("whoisBanned", showBan ? BanLookup.getBanEntry(ess, args[0]).getReason() : tl("true")));
-                return;
+            if (!searchAccounts) {
+                if (sender.isAuthorized("essentials.seen.ipsearch", ess) && FormatUtil.validIP(args[0])) {
+                    if (ess.getServer().getBanList(BanList.Type.IP).isBanned(args[0])) {
+                        sender.sendMessage(tl("isIpBanned", args[0]));
+                    }
+                    seenIP(sender, args[0], args[0]);
+                    return;
+                } else if (ess.getServer().getBanList(BanList.Type.IP).isBanned(args[0])) {
+                    sender.sendMessage(tl("isIpBanned", args[0]));
+                    return;
+                } else if (BanLookup.isBanned(ess, args[0])) {
+                    sender.sendMessage(tl("whoisBanned", showBan ? BanLookup.getBanEntry(ess, args[0]).getReason() : tl("true")));
+                    return;
+                }
             }
             ess.getScheduler().runTaskAsynchronously(ess, new Runnable() {
                 @Override
@@ -73,16 +80,18 @@ public class Commandseen extends EssentialsCommand {
                 }
 
                 private void showUserSeen(final User user) throws Exception {
-                    showSeenMessage(sender, user, showBan, showIp, showLocation);
+                    showSeenMessage(sender, user, searchAccounts, showBan, showIp, showLocation);
                 }
             });
         } else {
-            showSeenMessage(sender, player, showBan, showIp, showLocation);
+            showSeenMessage(sender, player, searchAccounts, showBan, showIp, showLocation);
         }
     }
 
-    private void showSeenMessage(final CommandSource sender, final User player, final boolean showBan, final boolean showIp, final boolean showLocation) {
-        if (player.getBase().isOnline() && canInteractWith(sender, player)) {
+    private void showSeenMessage(final CommandSource sender, final User player, final boolean searchAccounts, final boolean showBan, final boolean showIp, final boolean showLocation) {
+        if (searchAccounts) {
+            seenIP(sender, player.getLastLoginAddress(), player.getDisplayName());
+        } else if (player.getBase().isOnline() && canInteractWith(sender, player)) {
             seenOnline(sender, player, showIp);
         } else {
             seenOffline(sender, player, showBan, showIp, showLocation);
@@ -93,10 +102,7 @@ public class Commandseen extends EssentialsCommand {
 
         user.setDisplayNick();
         sender.sendMessage(tl("seenOnline", user.getDisplayName(), DateUtil.formatDateDiff(user.getLastLogin())));
-
-        if (ess.getSettings().isDebug()) {
-            ess.getLogger().info("UUID: " + user.getBase().getUniqueId().toString());
-        }
+        sender.sendMessage(tl("whoisUuid", user.getBase().getUniqueId().toString()));
 
         final List<String> history = ess.getUserMap().getUserHistory(user.getBase().getUniqueId());
         if (history != null && history.size() > 1) {
@@ -107,7 +113,7 @@ public class Commandseen extends EssentialsCommand {
             sender.sendMessage(tl("whoisAFK", tl("true")));
         }
         if (user.isJailed()) {
-            sender.sendMessage(tl("whoisJail", user.getJailTimeout() > 0 ? DateUtil.formatDateDiff(user.getJailTimeout()) : tl("true")));
+            sender.sendMessage(tl("whoisJail", user.getJailTimeout() > 0 ? user.getFormattedJailTime() : tl("true")));
         }
         if (user.isMuted()) {
             final long muteTimeout = user.getMuteTimeout();
@@ -130,12 +136,9 @@ public class Commandseen extends EssentialsCommand {
         user.setDisplayNick();
         if (user.getLastLogout() > 0) {
             sender.sendMessage(tl("seenOffline", user.getName(), DateUtil.formatDateDiff(user.getLastLogout())));
+            sender.sendMessage(tl("whoisUuid", user.getBase().getUniqueId()));
         } else {
             sender.sendMessage(tl("userUnknown", user.getName()));
-        }
-
-        if (ess.getSettings().isDebug()) {
-            ess.getLogger().info("UUID: " + user.getBase().getUniqueId().toString());
         }
 
         final List<String> history = ess.getUserMap().getUserHistory(user.getBase().getUniqueId());
@@ -183,14 +186,10 @@ public class Commandseen extends EssentialsCommand {
         }
     }
 
-    private void seenIP(final CommandSource sender, final String ipAddress) {
+    private void seenIP(final CommandSource sender, final String ipAddress, final String display) {
         final UserMap userMap = ess.getUserMap();
 
-        if (ess.getServer().getBanList(BanList.Type.IP).isBanned(ipAddress)) {
-            sender.sendMessage(tl("isIpBanned", ipAddress));
-        }
-
-        sender.sendMessage(tl("runningPlayerMatch", ipAddress));
+        sender.sendMessage(tl("runningPlayerMatch", display));
 
         ess.runTaskAsynchronously(() -> {
             final List<String> matches = new ArrayList<>();

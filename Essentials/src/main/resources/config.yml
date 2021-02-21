@@ -201,6 +201,10 @@ socialspy-commands:
 # If so, they will be differentiated from those sent by normal players.
 socialspy-listen-muted-players: true
 
+# Whether social spy should spy on private messages or just the commands from the list above.
+# If false, social spy will only monitor commands from the list above.
+socialspy-messages: true
+
 # The following settings listen for when a player changes worlds.
 # If you use another plugin to control speed and flight, you should change these to false.
 
@@ -321,6 +325,9 @@ use-bukkit-permissions: true
 # removed from the /kit list when a player can no longer use it
 skip-used-one-time-kits-from-kit-list: false
 
+# When enabled, armor from kits will automatically be equipped as long as the player's armor slots are empty.
+kit-auto-equip: false
+
 # Determines the functionality of the /createkit command.
 # If this is true, /createkit will give the user a link with the kit code.
 # If this is false, /createkit will add the kit to the kits.yml config file directly.
@@ -340,7 +347,6 @@ enabledSigns:
   #- sell
   #- trade
   #- free
-  #- disposal
   #- warp
   #- kit
   #- mail
@@ -352,6 +358,13 @@ enabledSigns:
   #- repair
   #- time
   #- weather
+  #- anvil
+  #- cartography
+  #- disposal
+  #- grindstone
+  #- loom
+  #- smithing
+  #- workbench
 
 # How many times per second can Essentials signs be interacted with per player.
 # Values should be between 1-20, 20 being virtually no lag protection.
@@ -497,6 +510,10 @@ allow-silent-join-quit: false
 custom-join-message: "none"
 custom-quit-message: "none"
 
+# Should Essentials override the vanilla "Server Full" message with its own from the language file?
+# Set to false to keep the vanilla message.
+use-custom-server-full-message: true
+
 # You can disable join and quit messages when the player count reaches a certain limit.
 # When the player count is below this number, join/quit messages will always be shown.
 # Set this to -1 to always show join and quit messages regardless of player count.
@@ -624,6 +641,10 @@ default-enabled-confirm-commands:
 
 # Whether or not to teleport a player back to their previous position after they have been freed from jail.
 teleport-back-when-freed-from-jail: true
+
+# Whether or not jail time should only be counted while the user is online.
+# If true, a jailed player's time will only decrement when they are online.
+jail-online-time: false
 
 # Set the timeout, in seconds for players to accept a tpa before the request is cancelled.
 # Set to 0 for no timeout.
@@ -812,6 +833,12 @@ chat:
   
   # You can use permissions to control whether players can use formatting codes in their chat messages.
   # See https://essentialsx.net/wiki/Color-Permissions.html for more information.
+
+  # World aliases allow you to replace the world name with something different in the chat format.
+  # If you are using world aliases, make sure to remove the '#' at the start to allow the setting to be read.
+  world-aliases:
+  #  plots: "&dP&r"
+  #  creative: "&eC&r"
 
 ############################################################
 # +------------------------------------------------------+ #
