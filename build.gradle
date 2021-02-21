@@ -41,7 +41,7 @@ ext {
     fullVersion = "${version}-${GIT_COMMIT}".replace("-SNAPSHOT", "-dev+${GIT_DEPTH}")
 
     checkstyleVersion = '8.36.2'
-    spigotVersion = '1.16.4-R0.1-SNAPSHOT'
+    spigotVersion = '1.16.5-R0.1-SNAPSHOT'
     junit5Version = '5.7.0'
     mockitoVersion = '3.2.0'
 }

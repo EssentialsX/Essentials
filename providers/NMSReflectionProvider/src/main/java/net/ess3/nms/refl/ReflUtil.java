@@ -17,7 +17,6 @@ import java.util.regex.Pattern;
 
 public final class ReflUtil {
     public static final NMSVersion V1_12_R1 = NMSVersion.fromString("v1_12_R1");
-    public static final NMSVersion V1_8_R1 = NMSVersion.fromString("v1_8_R1");
     public static final NMSVersion V1_9_R1 = NMSVersion.fromString("v1_9_R1");
     public static final NMSVersion V1_11_R1 = NMSVersion.fromString("v1_11_R1");
     private static final Map<String, Class<?>> classCache = new HashMap<>();
@@ -36,7 +35,11 @@ public final class ReflUtil {
         if (nmsVersion == null) {
             final String name = Bukkit.getServer().getClass().getName();
             final String[] parts = name.split("\\.");
-            nmsVersion = parts[3];
+            if (parts.length > 3) {
+                return nmsVersion = parts[3];
+            }
+            // We're not on craftbukkit, return an empty string so we can silently fail
+            return nmsVersion = "";
         }
         return nmsVersion;
     }

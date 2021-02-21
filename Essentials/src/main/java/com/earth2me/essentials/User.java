@@ -10,6 +10,7 @@ import com.earth2me.essentials.utils.EnumUtil;
 import com.earth2me.essentials.utils.FormatUtil;
 import com.earth2me.essentials.utils.NumberUtil;
 import com.earth2me.essentials.utils.VersionUtil;
+import com.google.common.collect.Lists;
 import net.ess3.api.IEssentials;
 import net.ess3.api.MaxMoneyException;
 import net.ess3.api.events.AfkStatusChangeEvent;
@@ -71,6 +72,8 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
     private long lastNotifiedAboutMailsMs;
     private String lastHomeConfirmation;
     private long lastHomeConfirmationTimestamp;
+    private boolean toggleShout = false;
+    private transient final List<String> signCopy = Lists.newArrayList("", "", "", "");
 
     public User(final Player base, final IEssentials ess) {
         super(base, ess);
@@ -596,6 +599,15 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
         return hidden || !player.canSee(getBase());
     }
 
+    @Override
+    public String getFormattedJailTime() {
+        return DateUtil.formatDateDiff(getOnlineJailedTime() > 0 ? getOnlineJailExpireTime() : getJailTimeout());
+    }
+
+    private long getOnlineJailExpireTime() {
+        return ((getOnlineJailedTime() - getBase().getStatistic(PLAY_ONE_TICK)) * 50) + System.currentTimeMillis();
+    }
+
     //Returns true if status expired during this check
     public boolean checkJailTimeout(final long currentTime) {
         if (getJailTimeout() > 0) {
@@ -1036,6 +1048,19 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
         this.lastHomeConfirmationTimestamp = System.currentTimeMillis();
     }
 
+    public List<String> getSignCopy() {
+        return signCopy;
+    }
+
+    public boolean isBaltopExempt() {
+        if (getBase().isOnline()) {
+            final boolean exempt = isAuthorized("essentials.balancetop.exclude");
+            setBaltopExemptCache(exempt);
+            return exempt;
+        }
+        return isBaltopExcludeCache();
+    }
+
     @Override
     public Block getTargetBlock(int maxDistance) {
         final Block block;
@@ -1043,5 +1068,15 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
             return base.getTargetBlock(null, maxDistance);
         }
         return block;
+    }
+
+    @Override
+    public void setToggleShout(boolean toggleShout) {
+        this.toggleShout = toggleShout;
+    }
+
+    @Override
+    public boolean isToggleShout() {
+        return toggleShout;
     }
 }
