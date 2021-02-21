@@ -102,7 +102,7 @@ commands:
     usage: /<alias> - Define in bukkit.yml
   delhome:
     description: Removes a home.
-    usage: /<command> [player:<player>] [<homename>]
+    usage: /<command> [<player>:][<homename>]
     aliases: [edelhome,remhome,eremhome,rmhome,ermhome]
   deljail:
     description: Removes a jail.
@@ -206,7 +206,7 @@ commands:
     aliases: [ac,eac,amsg,eamsg,ehelpop]
   home:
     description: Teleport to your home.
-    usage: /<command> [player:<player>] [<homename>]
+    usage: /<command> [<player>:][<homename>]
     aliases: [ehome,homes,ehomes]
   ignore:
     description: Ignore or unignore other players.
@@ -402,7 +402,7 @@ commands:
     aliases: [esell]
   sethome:
     description: Set your home to your current location.
-    usage: /<command> [player:<player>] [<homename>]
+    usage: /<command> [<player>:][<homename>]
     aliases: [esethome,createhome,ecreatehome]
   setjail:
     description: Creates a new jail.
