@@ -201,6 +201,10 @@ socialspy-commands:
 # If so, they will be differentiated from those sent by normal players.
 socialspy-listen-muted-players: true
 
+# Whether social spy should spy on private messages or just the commands from the list above.
+# If false, social spy will only monitor commands from the list above.
+socialspy-messages: true
+
 # The following settings listen for when a player changes worlds.
 # If you use another plugin to control speed and flight, you should change these to false.
 
@@ -343,7 +347,6 @@ enabledSigns:
   #- sell
   #- trade
   #- free
-  #- disposal
   #- warp
   #- kit
   #- mail
@@ -355,6 +358,13 @@ enabledSigns:
   #- repair
   #- time
   #- weather
+  #- anvil
+  #- cartography
+  #- disposal
+  #- grindstone
+  #- loom
+  #- smithing
+  #- workbench
 
 # How many times per second can Essentials signs be interacted with per player.
 # Values should be between 1-20, 20 being virtually no lag protection.
@@ -499,6 +509,10 @@ allow-silent-join-quit: false
 # You may use color codes, {USERNAME} for the player's name, and {PLAYER} for the player's displayname.
 custom-join-message: "none"
 custom-quit-message: "none"
+
+# Should Essentials override the vanilla "Server Full" message with its own from the language file?
+# Set to false to keep the vanilla message.
+use-custom-server-full-message: true
 
 # You can disable join and quit messages when the player count reaches a certain limit.
 # When the player count is below this number, join/quit messages will always be shown.
@@ -819,6 +833,12 @@ chat:
   
   # You can use permissions to control whether players can use formatting codes in their chat messages.
   # See https://essentialsx.net/wiki/Color-Permissions.html for more information.
+
+  # World aliases allow you to replace the world name with something different in the chat format.
+  # If you are using world aliases, make sure to remove the '#' at the start to allow the setting to be read.
+  world-aliases:
+  #  plots: "&dP&r"
+  #  creative: "&eC&r"
 
 ############################################################
 # +------------------------------------------------------+ #

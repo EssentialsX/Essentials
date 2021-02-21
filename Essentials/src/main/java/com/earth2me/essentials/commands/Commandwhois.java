@@ -62,7 +62,7 @@ public class Commandwhois extends EssentialsCommand {
         } else {
             sender.sendMessage(tl("whoisAFK", tl("false")));
         }
-        sender.sendMessage(tl("whoisJail", user.isJailed() ? user.getJailTimeout() > 0 ? DateUtil.formatDateDiff(user.getJailTimeout()) : tl("true") : tl("false")));
+        sender.sendMessage(tl("whoisJail", user.isJailed() ? user.getJailTimeout() > 0 ? user.getFormattedJailTime() : tl("true") : tl("false")));
 
         final long muteTimeout = user.getMuteTimeout();
         if (!user.hasMuteReason()) {
