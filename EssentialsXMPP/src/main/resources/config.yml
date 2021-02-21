@@ -1,17 +1,33 @@
+# Settings for the XMPP server to connect to.
 xmpp:
+  # The server address to connect to, eg 'blabber.im'
   server: 'example.com'
-  user: 'name@example.com'
+  # The username to log in with. This is usually the half before the @ symbol.
+  user: 'username'
+  # The password to log in with.
   password: 'password'
-#  servicename: 'example.com'
-#  port: 5222
-#  sasl-enabled: false
+  # The service name. By default, EssentialsX XMPP will use the server address specified above.
+  # Only uncomment if you need to change this default.
+  #servicename: 'example.com'
+  # The port to connect to.
+  #port: 5222
+  # Whether or not to use SASL for login.
+  #sasl-enabled: false
+  # Whether to require the server to use TLS before logging in.
+  #require-server-tls: true
 
+# A list of XMPP users allowed to run console commands.
 op-users:
 #  - 'name@example.com'
 
+# Whether to enable the Smack debug GUI. This only works in graphical environments.
 debug: false
+
+# Whether to enable sending the server log over XMPP.
 log-enabled: false
-# Level is minimum level that should be send: info, warning, severe
+# The minimum log level message that should be sent over XMPP.
+# Possible values include: info, warning, severe
 log-level: warning
+# The users to send the server log to.
 log-users:
 #  - 'name@example.com'
