@@ -182,7 +182,8 @@ public final class EssentialsUpdateChecker {
                     return sendLatestMessage ? new String[] {tl("versionDevLatest")} : new String[] {};
                 }
                 case BEHIND: {
-                    return new String[] {tl("versionDevBehind", devToken.getDistance())};
+                    return new String[] {tl("versionDevBehind", devToken.getDistance()),
+                            tl("versionReleaseNewLink", "https://essentialsx.net/downloads.html")};
                 }
                 case AHEAD:
                 case DIVERGED: {
@@ -206,8 +207,8 @@ public final class EssentialsUpdateChecker {
                     return sendLatestMessage ? new String[] {tl("versionReleaseLatest")} : new String[] {};
                 }
                 case BEHIND: {
-                    return new String[] {tl("versionReleaseNew", EssentialsUpdateChecker.getLatestRelease())};
-                    //TODO download link? (https://github.com/EssentialsX/Website/issues/26)
+                    return new String[] {tl("versionReleaseNew", EssentialsUpdateChecker.getLatestRelease()),
+                            tl("versionReleaseNewLink", "https://essentialsx.net/downloads.html?branch=stable")};
                 }
                 case DIVERGED: //WhatChamp
                 case AHEAD: //monkaW?
