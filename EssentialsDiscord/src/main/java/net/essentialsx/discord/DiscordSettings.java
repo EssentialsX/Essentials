@@ -238,7 +238,7 @@ public class DiscordSettings implements IConf {
 
         discordToMcFormat = generateMessageFormat("discord-to-mc", "&6[#{channel}] &3{fullname}&7: &f{message}", true,
                 "channel", "username", "tag", "fullname", "nickname", "color", "message");
-        mcToDiscordFormat = generateMessageFormat("mc-to-discord", "[{world}] {displayname} > {message}", false,
+        mcToDiscordFormat = generateMessageFormat("mc-to-discord", "{displayname}: {message}", false,
                 "username", "displayname", "message", "world", "prefix", "suffix");
         unmuteFormat = generateMessageFormat("unmute", "{displayname} has been unmuted.", false, "username", "displayname");
         tempMuteFormat = generateMessageFormat("temporary-mute", "{controllerdisplayname} muted {displayname} for {time}", false,

@@ -186,7 +186,7 @@ messages:
   # {world} - The name of the world the player sending the message is in
   # {prefix} - The prefix of the player sending the message
   # {suffix} - The suffix of the player sending the message
-  mc-to-discord: "[{world}] {displayname} > {message}"
+  mc-to-discord: "{displayname}: {message}"
   # This is the message sent to discord when a player is temporarily muted in minecraft
   # The following placeholders can be used here:
   # {username} - The username of the player being muted
