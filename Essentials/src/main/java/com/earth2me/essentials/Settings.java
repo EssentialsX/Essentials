@@ -550,7 +550,11 @@ public class Settings implements net.ess3.api.ISettings {
 
     private Map<String, String> _getWorldAliases() {
         final Map<String, String> map = new HashMap<>();
-        final ConfigurationSection section = config.getConfigurationSection("");
+        final ConfigurationSection section = config.getConfigurationSection("chat.world-aliases");
+        if (section == null) {
+            return map;
+        }
+
         for (String world : section.getKeys(false)) {
             map.put(world.toLowerCase(), FormatUtil.replaceFormat(section.getString(world)));
         }
@@ -778,7 +782,7 @@ public class Settings implements net.ess3.api.ISettings {
     // A valid currency symbol value must be one non-integer character.
     private String _getCurrencySymbol() {
         String value = config.getString("currency-symbol", "$").trim();
-        if (value.length() != 1 || value.matches("\\d")) {
+        if (value.length() > 1 || value.matches("\\d")) {
             value = "$";
         }
         return value;

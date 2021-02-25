@@ -61,7 +61,14 @@ public class Commandafk extends EssentialsCommand {
         user.setDisplayNick();
         String msg = "";
         String selfmsg = "";
-        if (!user.toggleAfk(AfkStatusChangeEvent.Cause.COMMAND)) {
+
+        final boolean currentStatus = user.isAfk();
+        final boolean afterStatus = user.toggleAfk(AfkStatusChangeEvent.Cause.COMMAND);
+        if (currentStatus == afterStatus) {
+            return;
+        }
+
+        if (!afterStatus) {
             if (!user.isHidden()) {
                 msg = tl("userIsNotAway", user.getDisplayName());
                 selfmsg = tl("userIsNotAwaySelf", user.getDisplayName());
