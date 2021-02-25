@@ -11,11 +11,11 @@ import com.maxmind.geoip2.exception.GeoIp2Exception;
 import com.maxmind.geoip2.model.CityResponse;
 import com.maxmind.geoip2.model.CountryResponse;
 import net.ess3.api.IEssentials;
+import net.essentialsx.api.v2.events.AsyncUserDataLoadEvent;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerJoinEvent;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -53,9 +53,9 @@ public class EssentialsGeoIPPlayerListener implements Listener, IConf {
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
-    public void onPlayerJoin(final PlayerJoinEvent event) {
-        // Wait two ticks to ensure display name is loaded in.
-        ess.runTaskLaterAsynchronously(() -> delayedJoin(event.getPlayer()), 2);
+    public void onDataLoad(final AsyncUserDataLoadEvent event) {
+        // Already async so just jump right into it.
+        delayedJoin(event.getUser().getBase());
     }
 
     private void delayedJoin(final Player player) {
