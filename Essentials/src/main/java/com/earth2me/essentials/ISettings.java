@@ -283,11 +283,11 @@ public interface ISettings extends IConf {
 
     boolean isCustomJoinMessage();
 
-    String getCustomJoinMessage();
+    String getCustomJoinMessage(String group);
 
     boolean isCustomQuitMessage();
 
-    String getCustomQuitMessage();
+    String getCustomQuitMessage(String group);
 
     boolean isCustomServerFullMessage();
 
@@ -396,5 +396,6 @@ public interface ISettings extends IConf {
         DELETE,
         DROP
     }
+
 
 }
