@@ -184,7 +184,7 @@ public class AsyncTeleport implements IAsyncTeleport {
             targetLoc.setX(LocationUtil.getXInsideWorldBorder(targetLoc.getWorld(), targetLoc.getBlockX()));
             targetLoc.setZ(LocationUtil.getZInsideWorldBorder(targetLoc.getWorld(), targetLoc.getBlockZ()));
         }
-        PaperLib.getChunkAtAsync(targetLoc).thenAccept(chunk -> {
+        PaperLib.getChunkAtAsync(targetLoc.getWorld(), targetLoc.getBlockX() >> 4, targetLoc.getBlockZ() >> 4, true, true).thenAccept(chunk -> {
             Location loc = targetLoc;
             if (LocationUtil.isBlockUnsafeForUser(teleportee, chunk.getWorld(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ())) {
                 if (ess.getSettings().isTeleportSafetyEnabled()) {
