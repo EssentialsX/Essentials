@@ -160,6 +160,7 @@ public class AsyncTeleport implements IAsyncTeleport {
         final PreTeleportEvent event = new PreTeleportEvent(teleportee, cause, target);
         Bukkit.getServer().getPluginManager().callEvent(event);
         if (event.isCancelled()) {
+            future.complete(false);
             return;
         }
         teleportee.setLastLocation();
@@ -216,6 +217,9 @@ public class AsyncTeleport implements IAsyncTeleport {
                 }
             }
             future.complete(true);
+        }).exceptionally(th -> {
+            future.completeExceptionally(th);
+            return null;
         });
     }
 
@@ -398,6 +402,9 @@ public class AsyncTeleport implements IAsyncTeleport {
                 ess.getServer().getPluginManager().callEvent(pre);
                 nowAsync(teleportee, new LocationTarget(pre.getRespawnLocation()), cause, future);
             }
+        }).exceptionally(th -> {
+            future.completeExceptionally(th);
+            return null;
         });
     }
 
