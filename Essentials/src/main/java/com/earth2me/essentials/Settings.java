@@ -277,7 +277,12 @@ public class Settings implements net.ess3.api.ISettings {
         return disabledCommands.contains(label);
     }
 
-    private Set<String> getDisabledCommands() {
+    @Override
+    public Set<String> getDisabledCommands() {
+        return disabledCommands;
+    }
+
+    private Set<String> _getDisabledCommands() {
         final Set<String> disCommands = new HashSet<>();
         for (final String c : config.getStringList("disabled-commands")) {
             disCommands.add(c.toLowerCase(Locale.ENGLISH));
@@ -626,7 +631,7 @@ public class Settings implements net.ess3.api.ISettings {
         signUsePerSecond = _getSignUsePerSecond();
         chatFormats.clear();
         changeDisplayName = _changeDisplayName();
-        disabledCommands = getDisabledCommands();
+        disabledCommands = _getDisabledCommands();
         nicknamePrefix = _getNicknamePrefix();
         operatorColor = _getOperatorColor();
         changePlayerListName = _changePlayerListName();

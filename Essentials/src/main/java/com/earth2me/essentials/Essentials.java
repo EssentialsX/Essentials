@@ -350,10 +350,16 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
                 } else {
                     knownCommandsProvider = new ReflKnownCommandsProvider();
                 }
+                for (String command : settings.getDisabledCommands()) {
+                    final Command toDisable = this.getCommand(command);
+                    if (toDisable != null) {
+                        knownCommandsProvider.getKnownCommands().remove(toDisable.getName());
+                    }
+                }
 
                 // Command aliases provider
                 formattedCommandAliasProvider = new ReflFormattedCommandAliasProvider(PaperLib.isPaper());
-              
+
                 //Material Tag Providers
                 if (VersionUtil.getServerBukkitVersion().isHigherThanOrEqualTo(VersionUtil.v1_13_0_R01)) {
                     materialTagProvider = PaperLib.isPaper() ? new PaperMaterialTagProvider() : new BukkitMaterialTagProvider();
