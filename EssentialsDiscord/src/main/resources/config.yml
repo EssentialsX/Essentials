@@ -159,7 +159,6 @@ presence:
   # * "listening" - Shows up as "Listening to <message>"
   # * "watching" - Shows up as "Watching <message>"
   # * "competing" - Shows up as "Competing in <message>"
-  # * "custom" - Just shows the message defined below with no prefix
   # * "none" - Don't show any activity message
   activity: "playing"
   # The activity status message

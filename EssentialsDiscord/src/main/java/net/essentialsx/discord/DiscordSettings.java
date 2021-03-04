@@ -218,7 +218,7 @@ public class DiscordSettings implements IConf {
         }
 
         //noinspection ConstantConditions
-        final String activity = config.getString("presence.activity", "default").trim().toUpperCase().replace("CUSTOM", "CUSTOM_STATUS");
+        final String activity = config.getString("presence.activity", "default").trim().toUpperCase().replace("CUSTOM_STATUS", "DEFAULT");
         statusActivity = null;
         Activity.ActivityType activityType = null;
         try {
