@@ -68,6 +68,11 @@ subprojects {
                 includeGroup "org.bstats"
             }
         }
+        mavenCentral() {
+            content {
+                includeGroup "net.kyori"
+            }
+        }
     }
 
     dependencies {
