@@ -393,6 +393,8 @@ public interface ISettings extends IConf {
 
     boolean isRespawnAtBed();
 
+    boolean isUpdateCheckEnabled();
+
     enum KeepInvPolicy {
         KEEP,
         DELETE,

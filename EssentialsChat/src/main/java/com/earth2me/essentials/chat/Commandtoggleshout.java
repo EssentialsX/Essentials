@@ -1,14 +1,15 @@
-package com.earth2me.essentials.commands;
+package com.earth2me.essentials.chat;
 
 import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.commands.EssentialsToggleCommand;
 import org.bukkit.Server;
 
 import static com.earth2me.essentials.I18n.tl;
 
-public class Commandmsgtoggle extends EssentialsToggleCommand {
-    public Commandmsgtoggle() {
-        super("msgtoggle", "essentials.msgtoggle.others");
+public class Commandtoggleshout extends EssentialsToggleCommand {
+    public Commandtoggleshout() {
+        super("toggleshout", "essentials.toggleshout.others");
     }
 
     @Override
@@ -24,14 +25,14 @@ public class Commandmsgtoggle extends EssentialsToggleCommand {
     @Override
     protected void togglePlayer(final CommandSource sender, final User user, Boolean enabled) {
         if (enabled == null) {
-            enabled = !user.isIgnoreMsg();
+            enabled = !user.isToggleShout();
         }
 
-        user.setIgnoreMsg(enabled);
+        user.setToggleShout(enabled);
 
-        user.sendMessage(!enabled ? tl("msgEnabled") : tl("msgDisabled"));
+        user.sendMessage(enabled ? tl("shoutEnabled") : tl("shoutDisabled"));
         if (!sender.isPlayer() || !user.getBase().equals(sender.getPlayer())) {
-            sender.sendMessage(!enabled ? tl("msgEnabledFor", user.getDisplayName()) : tl("msgDisabledFor", user.getDisplayName()));
+            sender.sendMessage(enabled ? tl("shoutEnabledFor", user.getDisplayName()) : tl("shoutDisabledFor", user.getDisplayName()));
         }
     }
 }

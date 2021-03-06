@@ -111,6 +111,7 @@ public class XMPPManager extends Handler implements MessageListener, ChatManager
         final String serviceName = config.getString("xmpp.servicename", server);
         final String xmppuser = config.getString("xmpp.user");
         final String password = config.getString("xmpp.password");
+        final boolean requireTLS = config.getBoolean("xmpp.require-server-tls", false);
         final ConnectionConfiguration connConf = new ConnectionConfiguration(server, port, serviceName);
         final String stringBuilder = "Connecting to xmpp server " + server + ":" + port + " as user " + xmppuser + ".";
         logger.log(Level.INFO, stringBuilder);
@@ -118,6 +119,10 @@ public class XMPPManager extends Handler implements MessageListener, ChatManager
         connConf.setSendPresence(true);
         connConf.setReconnectionAllowed(true);
         connConf.setDebuggerEnabled(config.getBoolean("debug", false));
+        if (requireTLS) {
+            // "enabled" (TLS optional) is the default
+            connConf.setSecurityMode(ConnectionConfiguration.SecurityMode.required);
+        }
         connection = new XMPPConnection(connConf);
         try {
             connection.connect();
@@ -131,6 +136,10 @@ public class XMPPManager extends Handler implements MessageListener, ChatManager
             return true;
         } catch (final XMPPException ex) {
             logger.log(Level.WARNING, "Failed to connect to server: " + server, ex);
+            logger.log(Level.WARNING, "Connected: " + connection.isConnected());
+            logger.log(Level.WARNING, "Secure: " + connection.isSecureConnection());
+            logger.log(Level.WARNING, "Using TLS: " + connection.isUsingTLS());
+            logger.log(Level.WARNING, "Authenticated: " + connection.getSASLAuthentication().isAuthenticated());
             return false;
         }
     }

@@ -72,6 +72,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
     private long lastNotifiedAboutMailsMs;
     private String lastHomeConfirmation;
     private long lastHomeConfirmationTimestamp;
+    private boolean toggleShout = false;
     private transient final List<String> signCopy = Lists.newArrayList("", "", "", "");
 
     public User(final Player base, final IEssentials ess) {
@@ -667,7 +668,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
     public void updateActivity(final boolean broadcast, final AfkStatusChangeEvent.Cause cause) {
         if (isAfk()) {
             setAfk(false, cause);
-            if (broadcast && !isHidden()) {
+            if (broadcast && !isHidden() && !isAfk()) {
                 setDisplayNick();
                 final String msg = tl("userIsNotAway", getDisplayName());
                 final String selfmsg = tl("userIsNotAwaySelf", getDisplayName());
@@ -728,7 +729,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
         final long autoafk = ess.getSettings().getAutoAfk();
         if (!isAfk() && autoafk > 0 && lastActivity + autoafk * 1000 < System.currentTimeMillis() && isAuthorized("essentials.afk.auto")) {
             setAfk(true, AfkStatusChangeEvent.Cause.ACTIVITY);
-            if (!isHidden()) {
+            if (isAfk() && !isHidden()) {
                 setDisplayNick();
                 final String msg = tl("userIsAway", getDisplayName());
                 final String selfmsg = tl("userIsAwaySelf", getDisplayName());
@@ -1067,5 +1068,15 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
             return base.getTargetBlock(null, maxDistance);
         }
         return block;
+    }
+
+    @Override
+    public void setToggleShout(boolean toggleShout) {
+        this.toggleShout = toggleShout;
+    }
+
+    @Override
+    public boolean isToggleShout() {
+        return toggleShout;
     }
 }

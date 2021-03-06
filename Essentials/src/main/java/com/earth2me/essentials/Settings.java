@@ -550,7 +550,11 @@ public class Settings implements net.ess3.api.ISettings {
 
     private Map<String, String> _getWorldAliases() {
         final Map<String, String> map = new HashMap<>();
-        final ConfigurationSection section = config.getConfigurationSection("");
+        final ConfigurationSection section = config.getConfigurationSection("chat.world-aliases");
+        if (section == null) {
+            return map;
+        }
+
         for (String world : section.getKeys(false)) {
             map.put(world.toLowerCase(), FormatUtil.replaceFormat(section.getString(world)));
         }
@@ -1767,5 +1771,10 @@ public class Settings implements net.ess3.api.ISettings {
     @Override
     public boolean isRespawnAtBed() {
         return config.getBoolean("respawn-at-home-bed", true);
+    }
+
+    @Override
+    public boolean isUpdateCheckEnabled() {
+        return config.getBoolean("update-check", true);
     }
 }
