@@ -390,8 +390,6 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
             PermissionsDefaults.registerAllBackDefaults();
             PermissionsDefaults.registerAllHatDefaults();
 
-            metrics = new MetricsWrapper(this, 858, true);
-
             updateChecker = new UpdateChecker(this);
             runTaskAsynchronously(() -> {
                 LOGGER.log(Level.INFO, tl("versionFetching"));
@@ -399,6 +397,8 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
                     LOGGER.log(Level.WARNING, str);
                 }
             });
+
+            metrics = new MetricsWrapper(this, 858, true);
 
             execTimer.mark("Init(External)");
 
