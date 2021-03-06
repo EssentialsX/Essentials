@@ -5,6 +5,7 @@ import com.earth2me.essentials.craftbukkit.InventoryWorkaround;
 import com.earth2me.essentials.utils.EnumUtil;
 import com.earth2me.essentials.utils.LocationUtil;
 import com.earth2me.essentials.utils.StringUtil;
+import com.earth2me.essentials.utils.VersionUtil;
 import net.ess3.api.IEssentials;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -205,6 +206,11 @@ public final class SpawnMob {
                 final EntityEquipment invent = ((LivingEntity) spawned).getEquipment();
                 if (inputData.contains("noarmor") || inputData.contains("noarmour")) {
                     invent.clear();
+                } else if (inputData.contains("netherite") && VersionUtil.getServerBukkitVersion().isHigherThanOrEqualTo(VersionUtil.v1_16_1_R01)) {
+                    invent.setBoots(new ItemStack(Material.NETHERITE_BOOTS, 1));
+                    invent.setLeggings(new ItemStack(Material.NETHERITE_LEGGINGS, 1));
+                    invent.setChestplate(new ItemStack(Material.NETHERITE_CHESTPLATE, 1));
+                    invent.setHelmet(new ItemStack(Material.NETHERITE_HELMET, 1));
                 } else if (inputData.contains("diamond")) {
                     invent.setBoots(new ItemStack(Material.DIAMOND_BOOTS, 1));
                     invent.setLeggings(new ItemStack(Material.DIAMOND_LEGGINGS, 1));
