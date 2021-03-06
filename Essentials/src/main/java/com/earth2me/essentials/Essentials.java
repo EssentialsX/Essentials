@@ -36,6 +36,7 @@ import com.earth2me.essentials.signs.SignPlayerListener;
 import com.earth2me.essentials.textreader.IText;
 import com.earth2me.essentials.textreader.KeywordReplacer;
 import com.earth2me.essentials.textreader.SimpleTextInput;
+import com.earth2me.essentials.updatecheck.UpdateChecker;
 import com.earth2me.essentials.utils.VersionUtil;
 import io.papermc.lib.PaperLib;
 import net.ess3.api.Economy;
@@ -43,11 +44,13 @@ import net.ess3.api.IEssentials;
 import net.ess3.api.IItemDb;
 import net.ess3.api.IJails;
 import net.ess3.api.ISettings;
+import net.ess3.nms.refl.providers.ReflFormattedCommandAliasProvider;
 import net.ess3.nms.refl.providers.ReflKnownCommandsProvider;
 import net.ess3.nms.refl.providers.ReflServerStateProvider;
 import net.ess3.nms.refl.providers.ReflSpawnEggProvider;
 import net.ess3.nms.refl.providers.ReflSpawnerBlockProvider;
 import net.ess3.provider.ContainerProvider;
+import net.ess3.provider.FormattedCommandAliasProvider;
 import net.ess3.provider.KnownCommandsProvider;
 import net.ess3.provider.MaterialTagProvider;
 import net.ess3.provider.PotionMetaProvider;
@@ -68,6 +71,7 @@ import net.ess3.provider.providers.PaperKnownCommandsProvider;
 import net.ess3.provider.providers.PaperMaterialTagProvider;
 import net.ess3.provider.providers.PaperRecipeBookListener;
 import net.ess3.provider.providers.PaperServerStateProvider;
+import net.essentialsx.api.v2.services.BalanceTop;
 import org.bukkit.Bukkit;
 import org.bukkit.Server;
 import org.bukkit.World;
@@ -127,6 +131,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
     private transient PermissionsHandler permissionsHandler;
     private transient AlternativeCommandsHandler alternativeCommandsHandler;
     private transient UserMap userMap;
+    private transient BalanceTopImpl balanceTop;
     private transient ExecuteTimer execTimer;
     private transient I18n i18n;
     private transient MetricsWrapper metrics;
@@ -138,10 +143,12 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
     private transient ServerStateProvider serverStateProvider;
     private transient ContainerProvider containerProvider;
     private transient KnownCommandsProvider knownCommandsProvider;
+    private transient FormattedCommandAliasProvider formattedCommandAliasProvider;
     private transient ProviderListener recipeBookEventProvider;
     private transient MaterialTagProvider materialTagProvider;
     private transient Kits kits;
     private transient RandomTeleport randomTeleport;
+    private transient UpdateChecker updateChecker;
 
     static {
         // TODO: improve legacy code
@@ -181,6 +188,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
         LOGGER.log(Level.INFO, dataFolder.toString());
         settings = new Settings(this);
         userMap = new UserMap(this);
+        balanceTop = new BalanceTopImpl(this);
         permissionsHandler = new PermissionsHandler(this, false);
         Economy.setEss(this);
         confList = new ArrayList<>();
@@ -245,6 +253,9 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
                 userMap = new UserMap(this);
                 confList.add(userMap);
                 execTimer.mark("Init(Usermap)");
+
+                balanceTop = new BalanceTopImpl(this);
+                execTimer.mark("Init(BalanceTop)");
 
                 kits = new Kits(this);
                 confList.add(kits);
@@ -342,6 +353,9 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
                     knownCommandsProvider = new ReflKnownCommandsProvider();
                 }
 
+                // Command aliases provider
+                formattedCommandAliasProvider = new ReflFormattedCommandAliasProvider(PaperLib.isPaper());
+              
                 //Material Tag Providers
                 if (VersionUtil.getServerBukkitVersion().isHigherThanOrEqualTo(VersionUtil.v1_13_0_R01)) {
                     materialTagProvider = PaperLib.isPaper() ? new PaperMaterialTagProvider() : new BukkitMaterialTagProvider();
@@ -376,7 +390,17 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
             PermissionsDefaults.registerAllBackDefaults();
             PermissionsDefaults.registerAllHatDefaults();
 
+            updateChecker = new UpdateChecker(this);
+            runTaskAsynchronously(() -> {
+                LOGGER.log(Level.INFO, tl("versionFetching"));
+                for (String str : updateChecker.getVersionMessages(false, true)) {
+                    LOGGER.log(Level.WARNING, str);
+                }
+            });
+
             metrics = new MetricsWrapper(this, 858, true);
+
+            execTimer.mark("Init(External)");
 
             final String timeroutput = execTimer.end();
             if (getSettings().isDebug()) {
@@ -764,6 +788,11 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
         return randomTeleport;
     }
 
+    @Override
+    public UpdateChecker getUpdateChecker() {
+        return updateChecker;
+    }
+
     @Deprecated
     @Override
     public User getUser(final Object base) {
@@ -969,6 +998,11 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
     }
 
     @Override
+    public BalanceTop getBalanceTop() {
+        return balanceTop;
+    }
+
+    @Override
     public I18n getI18n() {
         return i18n;
     }
@@ -1044,6 +1078,11 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
     @Override
     public KnownCommandsProvider getKnownCommandsProvider() {
         return knownCommandsProvider;
+    }
+
+    @Override
+    public FormattedCommandAliasProvider getFormattedCommandAliasProvider() {
+        return formattedCommandAliasProvider;
     }
 
     private AbstractItemDb getItemDbFromConfig() {

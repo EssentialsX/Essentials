@@ -347,7 +347,6 @@ enabledSigns:
   #- sell
   #- trade
   #- free
-  #- disposal
   #- warp
   #- kit
   #- mail
@@ -359,6 +358,13 @@ enabledSigns:
   #- repair
   #- time
   #- weather
+  #- anvil
+  #- cartography
+  #- disposal
+  #- grindstone
+  #- loom
+  #- smithing
+  #- workbench
 
 # How many times per second can Essentials signs be interacted with per player.
 # Values should be between 1-20, 20 being virtually no lag protection.
@@ -667,6 +673,11 @@ log-command-block-commands: true
 
 # Set the maximum speed for projectiles spawned with /fireball.
 max-projectile-speed: 8
+
+# Should EssentialsX check for updates?
+# If set to true, EssentialsX will show notifications when a new version is available.
+# This uses the public GitHub API and no identifying information is sent or stored.
+update-check: true
 
 ############################################################
 # +------------------------------------------------------+ #
