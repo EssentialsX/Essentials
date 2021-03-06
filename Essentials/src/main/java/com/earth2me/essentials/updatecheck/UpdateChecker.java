@@ -183,6 +183,10 @@ public final class UpdateChecker {
     }
 
     public String[] getVersionMessages(final boolean sendLatestMessage, final boolean verboseErrors) {
+        if (!ess.getSettings().isUpdateCheckEnabled()) {
+            return new String[] {tl("versionCheckDisabled")};
+        }
+
         if (this.isDevBuild()) {
             final RemoteVersion latestDev = this.fetchLatestDev().join();
             switch (latestDev.getBranchStatus()) {
