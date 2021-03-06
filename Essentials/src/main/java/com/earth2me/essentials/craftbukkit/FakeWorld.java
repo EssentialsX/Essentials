@@ -305,6 +305,11 @@ public class FakeWorld implements World {
     }
 
     @Override
+    public long getGameTime() {
+        return 0;
+    }
+
+    @Override
     public boolean hasStorm() {
         throw new UnsupportedOperationException("Not supported yet.");
     }

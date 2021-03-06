@@ -14,6 +14,7 @@ import org.bukkit.entity.Player;
 import java.io.File;
 import java.math.BigDecimal;
 import java.math.MathContext;
+import java.text.MessageFormat;
 import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -23,9 +24,14 @@ import java.util.logging.Logger;
  */
 public class Economy {
     public static final MathContext MATH_CONTEXT = MathContext.DECIMAL128;
-    private static final Logger logger = Logger.getLogger("Essentials");
-    private static final String noCallBeforeLoad = "Essentials API is called before Essentials is loaded.";
+    private static final Logger LOGGER = Logger.getLogger("Essentials");
     private static IEssentials ess;
+
+    private static final String WARN_CALL_BEFORE_LOAD = "Essentials API is called before Essentials is loaded.";
+    private static final String WARN_EXISTING_NPC_CREATE = "Account creation was requested for NPC account {0}, but account already exists (UUID: {1}). Not creating an account.";
+    private static final String WARN_PLAYER_UUID_NO_NAME = "Found player {0} by UUID {1} but not by their actual name. They may have changed their username.";
+    private static final String WARN_NPC_RECREATE_1 = "Account creation was requested for NPC user {0}, but an account file with UUID {1} already exists.";
+    private static final String WARN_NPC_RECREATE_2 = "Essentials will create a new account as requested by the other plugin, but this is almost certainly a bug and should be reported.";
 
     protected Economy() {
     }
@@ -46,7 +52,12 @@ public class Economy {
             }
         }
         final UUID npcUUID = UUID.nameUUIDFromBytes(("NPC:" + name).getBytes(Charsets.UTF_8));
-        final EssentialsUserConf npcConfig = new EssentialsUserConf(name, npcUUID, new File(folder, npcUUID.toString() + ".yml"));
+        final File npcFile = new File(folder, npcUUID.toString() + ".yml");
+        if (npcFile.exists()) {
+            LOGGER.log(Level.SEVERE, MessageFormat.format(WARN_NPC_RECREATE_1, name, npcUUID.toString()), new RuntimeException());
+            LOGGER.log(Level.SEVERE, WARN_NPC_RECREATE_2);
+        }
+        final EssentialsUserConf npcConfig = new EssentialsUserConf(name, npcUUID, npcFile);
         npcConfig.load();
         npcConfig.setProperty("npc", true);
         npcConfig.setProperty("lastAccountName", name);
@@ -62,7 +73,7 @@ public class Economy {
 
     private static User getUserByName(final String name) {
         if (ess == null) {
-            throw new RuntimeException(noCallBeforeLoad);
+            throw new RuntimeException(WARN_CALL_BEFORE_LOAD);
         }
         if (name == null) {
             throw new IllegalArgumentException("Economy username cannot be null");
@@ -79,7 +90,7 @@ public class Economy {
             if (player != null) {
                 user = ess.getUser(player.getUniqueId());
                 if (user != null) {
-                    logger.info(String.format("[Economy] Found player %s by UUID %s but not by their actual name - they may have changed their username", name, player.getUniqueId().toString()));
+                    LOGGER.log(Level.INFO, MessageFormat.format(WARN_PLAYER_UUID_NO_NAME, name, player.getUniqueId().toString()), new RuntimeException());
                 }
             }
         }
@@ -89,7 +100,7 @@ public class Economy {
 
     private static User getUserByUUID(final UUID uuid) {
         if (ess == null) {
-            throw new RuntimeException(noCallBeforeLoad);
+            throw new RuntimeException(WARN_CALL_BEFORE_LOAD);
         }
         if (uuid == null) {
             throw new IllegalArgumentException("Economy uuid cannot be null");
@@ -174,7 +185,7 @@ public class Economy {
         try {
             setMoney(name, BigDecimal.valueOf(balance));
         } catch (final ArithmeticException e) {
-            logger.log(Level.WARNING, "Failed to set balance of " + name + " to " + balance + ": " + e.getMessage(), e);
+            LOGGER.log(Level.WARNING, "Failed to set balance of " + name + " to " + balance + ": " + e.getMessage(), e);
         }
     }
 
@@ -252,7 +263,7 @@ public class Economy {
         try {
             add(name, BigDecimal.valueOf(amount));
         } catch (final ArithmeticException e) {
-            logger.log(Level.WARNING, "Failed to add " + amount + " to balance of " + name + ": " + e.getMessage(), e);
+            LOGGER.log(Level.WARNING, "Failed to add " + amount + " to balance of " + name + ": " + e.getMessage(), e);
         }
     }
 
@@ -324,7 +335,7 @@ public class Economy {
         try {
             substract(name, BigDecimal.valueOf(amount));
         } catch (final ArithmeticException e) {
-            logger.log(Level.WARNING, "Failed to subtract " + amount + " of balance of " + name + ": " + e.getMessage(), e);
+            LOGGER.log(Level.WARNING, "Failed to subtract " + amount + " of balance of " + name + ": " + e.getMessage(), e);
         }
     }
 
@@ -393,7 +404,7 @@ public class Economy {
         try {
             divide(name, BigDecimal.valueOf(amount));
         } catch (final ArithmeticException e) {
-            logger.log(Level.WARNING, "Failed to divide balance of " + name + " by " + amount + ": " + e.getMessage(), e);
+            LOGGER.log(Level.WARNING, "Failed to divide balance of " + name + " by " + amount + ": " + e.getMessage(), e);
         }
     }
 
@@ -464,7 +475,7 @@ public class Economy {
         try {
             multiply(name, BigDecimal.valueOf(amount));
         } catch (final ArithmeticException e) {
-            logger.log(Level.WARNING, "Failed to multiply balance of " + name + " by " + amount + ": " + e.getMessage(), e);
+            LOGGER.log(Level.WARNING, "Failed to multiply balance of " + name + " by " + amount + ": " + e.getMessage(), e);
         }
     }
 
@@ -532,7 +543,7 @@ public class Economy {
     @Deprecated
     public static void resetBalance(final String name) throws UserDoesNotExistException, NoLoanPermittedException {
         if (ess == null) {
-            throw new RuntimeException(noCallBeforeLoad);
+            throw new RuntimeException(WARN_CALL_BEFORE_LOAD);
         }
         setMoney(name, ess.getSettings().getStartingBalance());
         Trade.log("API", "Reset", "API", name, new Trade(BigDecimal.ZERO, ess), null, null, null, ess.getSettings().getStartingBalance(), ess);
@@ -561,7 +572,7 @@ public class Economy {
      */
     public static void resetBalance(final User user) throws NoLoanPermittedException {
         if (ess == null) {
-            throw new RuntimeException(noCallBeforeLoad);
+            throw new RuntimeException(WARN_CALL_BEFORE_LOAD);
         }
         if (user == null) {
             throw new IllegalArgumentException("Economy user cannot be null");
@@ -582,7 +593,7 @@ public class Economy {
         try {
             return hasEnough(name, BigDecimal.valueOf(amount));
         } catch (final ArithmeticException e) {
-            logger.log(Level.WARNING, "Failed to compare balance of " + name + " with " + amount + ": " + e.getMessage(), e);
+            LOGGER.log(Level.WARNING, "Failed to compare balance of " + name + " with " + amount + ": " + e.getMessage(), e);
             return false;
         }
     }
@@ -643,7 +654,7 @@ public class Economy {
         try {
             return hasMore(name, BigDecimal.valueOf(amount));
         } catch (final ArithmeticException e) {
-            logger.log(Level.WARNING, "Failed to compare balance of " + name + " with " + amount + ": " + e.getMessage(), e);
+            LOGGER.log(Level.WARNING, "Failed to compare balance of " + name + " with " + amount + ": " + e.getMessage(), e);
             return false;
         }
     }
@@ -705,7 +716,7 @@ public class Economy {
         try {
             return hasLess(name, BigDecimal.valueOf(amount));
         } catch (final ArithmeticException e) {
-            logger.log(Level.WARNING, "Failed to compare balance of " + name + " with " + amount + ": " + e.getMessage(), e);
+            LOGGER.log(Level.WARNING, "Failed to compare balance of " + name + " with " + amount + ": " + e.getMessage(), e);
             return false;
         }
     }
@@ -812,7 +823,7 @@ public class Economy {
         try {
             return format(BigDecimal.valueOf(amount));
         } catch (final NumberFormatException e) {
-            logger.log(Level.WARNING, "Failed to display " + amount + ": " + e.getMessage(), e);
+            LOGGER.log(Level.WARNING, "Failed to display " + amount + ": " + e.getMessage(), e);
             return "NaN";
         }
     }
@@ -825,7 +836,7 @@ public class Economy {
      */
     public static String format(final BigDecimal amount) {
         if (ess == null) {
-            throw new RuntimeException(noCallBeforeLoad);
+            throw new RuntimeException(WARN_CALL_BEFORE_LOAD);
         }
         return NumberUtil.displayCurrency(amount, ess);
     }
@@ -879,6 +890,7 @@ public class Economy {
             createNPCFile(name);
             return true;
         }
+        LOGGER.log(Level.WARNING, MessageFormat.format(WARN_EXISTING_NPC_CREATE, name, user.getConfigUUID()), new RuntimeException());
         return false;
     }
 

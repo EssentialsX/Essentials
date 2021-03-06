@@ -33,7 +33,7 @@ public class EssentialsChatPlayerListenerLowest extends EssentialsChatPlayer {
             return;
         }
 
-        final ChatStore chatStore = new ChatStore(ess, user, getChatType(event.getMessage()));
+        final ChatStore chatStore = new ChatStore(ess, user, getChatType(user, event.getMessage()));
         setChatStore(event, chatStore);
 
         // This listener should apply the general chat formatting only...then return control back the event handler

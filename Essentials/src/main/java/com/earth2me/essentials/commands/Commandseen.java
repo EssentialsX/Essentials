@@ -102,10 +102,7 @@ public class Commandseen extends EssentialsCommand {
 
         user.setDisplayNick();
         sender.sendMessage(tl("seenOnline", user.getDisplayName(), DateUtil.formatDateDiff(user.getLastLogin())));
-
-        if (ess.getSettings().isDebug()) {
-            ess.getLogger().info("UUID: " + user.getBase().getUniqueId().toString());
-        }
+        sender.sendMessage(tl("whoisUuid", user.getBase().getUniqueId().toString()));
 
         final List<String> history = ess.getUserMap().getUserHistory(user.getBase().getUniqueId());
         if (history != null && history.size() > 1) {
@@ -139,12 +136,9 @@ public class Commandseen extends EssentialsCommand {
         user.setDisplayNick();
         if (user.getLastLogout() > 0) {
             sender.sendMessage(tl("seenOffline", user.getName(), DateUtil.formatDateDiff(user.getLastLogout())));
+            sender.sendMessage(tl("whoisUuid", user.getBase().getUniqueId()));
         } else {
             sender.sendMessage(tl("userUnknown", user.getName()));
-        }
-
-        if (ess.getSettings().isDebug()) {
-            ess.getLogger().info("UUID: " + user.getBase().getUniqueId().toString());
         }
 
         final List<String> history = ess.getUserMap().getUserHistory(user.getBase().getUniqueId());
