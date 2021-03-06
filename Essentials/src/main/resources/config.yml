@@ -674,6 +674,11 @@ log-command-block-commands: true
 # Set the maximum speed for projectiles spawned with /fireball.
 max-projectile-speed: 8
 
+# Should EssentialsX check for updates?
+# If set to true, EssentialsX will show notifications when a new version is available.
+# This uses the public GitHub API and no identifying information is sent or stored.
+update-check: true
+
 ############################################################
 # +------------------------------------------------------+ #
 # |                        Homes                         | #
