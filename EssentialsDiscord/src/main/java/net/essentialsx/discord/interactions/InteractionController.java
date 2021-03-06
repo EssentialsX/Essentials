@@ -44,7 +44,7 @@ public class InteractionController extends ListenerAdapter {
         this.jda = jda;
         this.apiRegister = "https://discord.com/api/v8/applications/" + jda.getJda().getSelfUser().getId() + "/guilds/" + jda.getGuild().getId() + "/commands";
         this.apiDelete = "https://discord.com/api/v8/applications/" + jda.getJda().getSelfUser().getId() + "/guilds/" + jda.getGuild().getId() + "/commands/{id}";
-        this.apiFollowup = "https://discord.com/api/webhooks/" + jda.getJda().getSelfUser().getId() + "/{token}";
+        this.apiFollowup = "https://discord.com/api/webhooks/" + jda.getJda().getSelfUser().getId() + "/{token}/messages/@original";
 
         jda.getJda().addEventListener(this);
     }
@@ -71,7 +71,7 @@ public class InteractionController extends ListenerAdapter {
             try {
                 final InteractionCommand command = commandMap.get(data.getString("name"));
                 final Response response = post(apiCallback.replace("{id}", id).replace("{token}", token),
-                        command.isConsume() ? DiscordUtil.ACK_CONSUME : DiscordUtil.ACK_SEND).execute();
+                        command.isEphemeral() ? DiscordUtil.ACK_DEFER_EPHEMERAL : DiscordUtil.ACK_DEFER).execute();
                 if (!response.isSuccessful()) {
                     //noinspection ConstantConditions
                     logger.info("Error while responding to interaction: " + response.body().string());
@@ -81,7 +81,7 @@ public class InteractionController extends ListenerAdapter {
 
                 final Member member = jda.getGuild().retrieveMemberById(payload.getObject("member").getObject("user").getString("id")).complete();
                 jda.getPlugin().getEss().scheduleSyncDelayedTask(() ->
-                        command.onPreCommand(new InteractionEvent(member, token, channelId, options, InteractionController.this, command.isEphemeral())));
+                        command.onPreCommand(new InteractionEvent(member, token, channelId, options, InteractionController.this)));
             } catch (IOException e) {
                 logger.severe("Error while responding to interaction: " + e.getMessage());
                 if (jda.isDebug()) {
@@ -94,22 +94,17 @@ public class InteractionController extends ListenerAdapter {
     /**
      * Sends a message in response to a user who created an interaction.
      *
-     * @param interactionToken   The authorization token of the interaction.
-     * @param message            The message to be sent.
-     * @param isCommandEphemeral Whether the command should be sent as client-side only.
+     * @param interactionToken The authorization token of the interaction.
+     * @param message          The message to be sent.
      */
-    public void sendInteractionMessage(String interactionToken, String message, boolean isCommandEphemeral) {
+    public void editInteractionResponse(String interactionToken, String message) {
         message = FormatUtil.stripFormat(message).replace("§", ""); // Don't ask
 
         final JsonObject body = new JsonObject();
-        body.addProperty("type", 3);
         body.addProperty("content", message);
         body.add("allowed_mentions", DiscordUtil.RAW_NO_GROUP_MENTIONS);
-        if (isCommandEphemeral) {
-            body.addProperty("flags", 1 << 6);
-        }
 
-        post(apiFollowup.replace("{token}", interactionToken), RequestBody.create(DiscordUtil.JSON_TYPE, body.toString())).enqueue(new Callback() {
+        patch(apiFollowup.replace("{token}", interactionToken), RequestBody.create(DiscordUtil.JSON_TYPE, body.toString())).enqueue(new Callback() {
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 if (!response.isSuccessful()) {
@@ -178,6 +173,12 @@ public class InteractionController extends ListenerAdapter {
             }
         }
         commandMap.clear();
+    }
+
+    private Call patch(String url, RequestBody body) {
+        return jda.getJda().getHttpClient().newCall(builder(url)
+                .patch(body)
+                .build());
     }
 
     private Call post(String url, RequestBody body) {

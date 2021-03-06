@@ -26,10 +26,6 @@ public abstract class InteractionCommand {
         return jda.getSettings().isCommandEnabled(name);
     }
 
-    public final boolean isConsume() {
-        return jda.getSettings().isCommandConsumed(name);
-    }
-
     public final boolean isEphemeral() {
         return jda.getSettings().isCommandEphemeral(name);
     }

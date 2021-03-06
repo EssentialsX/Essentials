@@ -26,8 +26,9 @@ public final class DiscordUtil {
     public final static List<Message.MentionType> NO_GROUP_MENTIONS;
     public final static JsonObject RAW_NO_GROUP_MENTIONS;
     public final static MediaType JSON_TYPE = MediaType.parse("application/json; charset=utf-8");
-    public final static RequestBody ACK_CONSUME = RequestBody.create(JSON_TYPE, "{\"type\": 2}");
-    public final static RequestBody ACK_SEND = RequestBody.create(JSON_TYPE, "{\"type\": 5}");
+    public final static int EPHEMERAL_FLAG = 1 << 6;
+    public final static RequestBody ACK_DEFER = RequestBody.create(JSON_TYPE, "{\"type\": 5}");
+    public final static RequestBody ACK_DEFER_EPHEMERAL = RequestBody.create(JSON_TYPE, "{\"type\": 5, \"data\":{\"flags\": " + EPHEMERAL_FLAG + "}}");
 
     private final static String WEBHOOK_NAME = "EssX Console Relay";
 
@@ -49,6 +50,7 @@ public final class DiscordUtil {
 
     /**
      * Creates a {@link WebhookClient}.
+     *
      * @param id     The id of the webhook.
      * @param token  The token of the webhook.
      * @param client The http client of the webhook.
@@ -64,6 +66,7 @@ public final class DiscordUtil {
 
     /**
      * Gets the webhook to be used for console relay or null if permissions are not available.
+     *
      * @param consoleChannel The channel to search for webhooks in.
      * @return The webhook to be used for console relay or null if unavailable.
      */
@@ -97,6 +100,7 @@ public final class DiscordUtil {
 
     /**
      * Gets the uppermost bukkit color code of a given member or an empty string if the server version is &lt; 1.16.
+     *
      * @param member The target member.
      * @return The bukkit color code or blank string.
      */
@@ -111,6 +115,7 @@ public final class DiscordUtil {
 
     /**
      * Checks is the supplied user has at least one of the supplied roles.
+     *
      * @param member          The member to check.
      * @param roleDefinitions A list with either the name or id of roles.
      * @return true if member has role.
@@ -128,7 +133,7 @@ public final class DiscordUtil {
                 return true;
             }
 
-            for (final Role role : roles){
+            for (final Role role : roles) {
                 if (role.getId().equals(roleDefinition) || role.getName().equalsIgnoreCase(roleDefinition)) {
                     return true;
                 }
