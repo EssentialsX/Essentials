@@ -5,7 +5,8 @@ import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
 /**
- * Called when Essentials has finished loading User display data such as their display name.
+ * Called during player login after the user's data has been loaded.
+ * This is useful for printing login messages once EssentialsX has updated a player's display name.
  */
 public class AsyncUserDataLoadEvent extends Event {
     private static final HandlerList handlers = new HandlerList();
