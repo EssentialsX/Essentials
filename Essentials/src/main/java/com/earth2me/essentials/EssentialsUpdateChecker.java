@@ -111,6 +111,7 @@ public final class EssentialsUpdateChecker {
                 pendingReleaseFuture = null;
                 lastFetchTime = System.currentTimeMillis();
             }).start();
+            return pendingReleaseFuture;
         }
         return CompletableFuture.completedFuture(cachedRelease);
     }
