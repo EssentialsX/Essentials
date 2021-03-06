@@ -394,7 +394,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
             runTaskAsynchronously(() -> {
                 getLogger().log(Level.INFO, tl("versionFetching"));
                 for (String str : updateChecker.getVersionMessages(false, true)) {
-                    getLogger().log(Level.WARNING, str);
+                    getLogger().log(getSettings().isUpdateCheckEnabled() ? Level.WARNING : Level.INFO, str);
                 }
             });
 
