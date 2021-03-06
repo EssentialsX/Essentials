@@ -1767,4 +1767,9 @@ public class Settings implements net.ess3.api.ISettings {
     public boolean isRespawnAtBed() {
         return config.getBoolean("respawn-at-home-bed", true);
     }
+
+    @Override
+    public boolean isUpdateCheckEnabled() {
+        return config.getBoolean("update-check", true);
+    }
 }
