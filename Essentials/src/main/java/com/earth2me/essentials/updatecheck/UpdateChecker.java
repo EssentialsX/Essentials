@@ -1,7 +1,6 @@
 package com.earth2me.essentials.updatecheck;
 
 import com.earth2me.essentials.Essentials;
-import com.earth2me.essentials.ISettings;
 import com.google.common.base.Charsets;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;

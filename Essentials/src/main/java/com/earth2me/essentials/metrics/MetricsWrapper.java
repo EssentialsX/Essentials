@@ -1,7 +1,6 @@
 package com.earth2me.essentials.metrics;
 
 import com.earth2me.essentials.Essentials;
-import com.earth2me.essentials.updatecheck.UpdateChecker;
 import com.earth2me.essentials.register.payment.Methods;
 import com.google.common.collect.ImmutableList;
 import org.bstats.bukkit.Metrics;
