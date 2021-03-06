@@ -26,11 +26,11 @@ public final class EssentialsUpdateChecker {
     private static final String versionBranch;
     private static final boolean devBuild;
     private static long lastFetchTime = 0;
-    private static CompletableFuture<UpdateToken> pendingDevFuture;
-    private static CompletableFuture<UpdateToken> pendingReleaseFuture;
+    private static CompletableFuture<RemoteVersion> pendingDevFuture;
+    private static CompletableFuture<RemoteVersion> pendingReleaseFuture;
     private static String latestRelease = null;
-    private static UpdateToken cachedDev = null;
-    private static UpdateToken cachedRelease = null;
+    private static RemoteVersion cachedDev = null;
+    private static RemoteVersion cachedRelease = null;
 
     static {
         String identifier = "INVALID";
@@ -61,7 +61,7 @@ public final class EssentialsUpdateChecker {
         return devBuild;
     }
 
-    public static CompletableFuture<UpdateToken> getDevToken() {
+    public static CompletableFuture<RemoteVersion> fetchLatestDev() {
         if (cachedDev == null || ((System.currentTimeMillis() - lastFetchTime) > 1800000L)) {
             if (pendingDevFuture != null) {
                 return pendingDevFuture;
@@ -77,7 +77,7 @@ public final class EssentialsUpdateChecker {
         return CompletableFuture.completedFuture(cachedDev);
     }
 
-    public static CompletableFuture<UpdateToken> getReleaseToken() {
+    public static CompletableFuture<RemoteVersion> fetchLatestRelease() {
         if (cachedRelease == null || ((System.currentTimeMillis() - lastFetchTime) > 1800000L)) {
             if (pendingReleaseFuture != null) {
                 return pendingReleaseFuture;
@@ -91,12 +91,12 @@ public final class EssentialsUpdateChecker {
 
                     if (connection.getResponseCode() == HttpURLConnection.HTTP_NOT_FOUND) {
                         // Locally built?
-                        pendingReleaseFuture.complete(cachedRelease = new UpdateToken(BranchStatus.UNKNOWN));
+                        pendingReleaseFuture.complete(cachedRelease = new RemoteVersion(BranchStatus.UNKNOWN));
                         break catchBlock;
                     }
                     if (connection.getResponseCode() == HttpURLConnection.HTTP_INTERNAL_ERROR) {
                         // Github is down
-                        pendingReleaseFuture.complete(new UpdateToken(BranchStatus.ERROR));
+                        pendingReleaseFuture.complete(new RemoteVersion(BranchStatus.ERROR));
                         break catchBlock;
                     }
 
@@ -105,11 +105,11 @@ public final class EssentialsUpdateChecker {
                         pendingReleaseFuture.complete(cachedRelease = fetchDistance(latestRelease, getVersionIdentifier()));
                     } catch (JsonSyntaxException | NumberFormatException e) {
                         e.printStackTrace();
-                        pendingReleaseFuture.complete(new UpdateToken(BranchStatus.ERROR));
+                        pendingReleaseFuture.complete(new RemoteVersion(BranchStatus.ERROR));
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
-                    pendingReleaseFuture.complete(new UpdateToken(BranchStatus.ERROR));
+                    pendingReleaseFuture.complete(new RemoteVersion(BranchStatus.ERROR));
                 }
                 pendingReleaseFuture = null;
                 lastFetchTime = System.currentTimeMillis();
@@ -135,63 +135,63 @@ public final class EssentialsUpdateChecker {
         return latestRelease;
     }
 
-    private static UpdateToken fetchDistance(final String head, final String hash) {
+    private static RemoteVersion fetchDistance(final String head, final String hash) {
         try {
             final HttpURLConnection connection = (HttpURLConnection) new URL("https://api.github.com/repos/" + REPO + "/compare/" + head + "..." + hash).openConnection();
             connection.connect();
 
             if (connection.getResponseCode() == HttpURLConnection.HTTP_NOT_FOUND) {
                 // Locally built?
-                return new UpdateToken(BranchStatus.UNKNOWN);
+                return new RemoteVersion(BranchStatus.UNKNOWN);
             }
             if (connection.getResponseCode() == HttpURLConnection.HTTP_INTERNAL_ERROR) {
                 // Github is down
-                return new UpdateToken(BranchStatus.ERROR);
+                return new RemoteVersion(BranchStatus.ERROR);
             }
 
             try (BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream(), Charsets.UTF_8))) {
                 final JsonObject obj = new Gson().fromJson(reader, JsonObject.class);
                 switch (obj.get("status").getAsString()) {
                     case "identical": {
-                        return new UpdateToken(BranchStatus.IDENTICAL, 0);
+                        return new RemoteVersion(BranchStatus.IDENTICAL, 0);
                     }
                     case "ahead": {
-                        return new UpdateToken(BranchStatus.AHEAD, 0);
+                        return new RemoteVersion(BranchStatus.AHEAD, 0);
                     }
                     case "behind": {
-                        return new UpdateToken(BranchStatus.BEHIND, obj.get("behind_by").getAsInt());
+                        return new RemoteVersion(BranchStatus.BEHIND, obj.get("behind_by").getAsInt());
                     }
                     case "diverged": {
-                        return new UpdateToken(BranchStatus.DIVERGED, obj.get("behind_by").getAsInt());
+                        return new RemoteVersion(BranchStatus.DIVERGED, obj.get("behind_by").getAsInt());
                     }
                     default: {
-                        return new UpdateToken(BranchStatus.UNKNOWN);
+                        return new RemoteVersion(BranchStatus.UNKNOWN);
                     }
                 }
             } catch (JsonSyntaxException | NumberFormatException e) {
                 e.printStackTrace();
-                return new UpdateToken(BranchStatus.ERROR);
+                return new RemoteVersion(BranchStatus.ERROR);
             }
         } catch (IOException e) {
             e.printStackTrace();
-            return new UpdateToken(BranchStatus.ERROR);
+            return new RemoteVersion(BranchStatus.ERROR);
         }
     }
 
     public static String[] getVersionMethods(final boolean sendLatestMessage, final boolean verboseErrors) {
         if (EssentialsUpdateChecker.isDevBuild()) {
-            final EssentialsUpdateChecker.UpdateToken devToken = EssentialsUpdateChecker.getDevToken().join();
-            switch (devToken.getBranchStatus()) {
+            final RemoteVersion latestDev = EssentialsUpdateChecker.fetchLatestDev().join();
+            switch (latestDev.getBranchStatus()) {
                 case IDENTICAL: {
                     return sendLatestMessage ? new String[] {tl("versionDevLatest")} : new String[] {};
                 }
                 case BEHIND: {
-                    return new String[] {tl("versionDevBehind", devToken.getDistance()),
+                    return new String[] {tl("versionDevBehind", latestDev.getDistance()),
                             tl("versionReleaseNewLink", "https://essentialsx.net/downloads.html")};
                 }
                 case AHEAD:
                 case DIVERGED: {
-                    return new String[] {tl(devToken.getDistance() == 0 ? "versionDevDivergedLatest" : "versionDevDiverged", devToken.getDistance()),
+                    return new String[] {tl(latestDev.getDistance() == 0 ? "versionDevDivergedLatest" : "versionDevDiverged", latestDev.getDistance()),
                             tl("versionDevDivergedBranch", EssentialsUpdateChecker.getVersionBranch()) };
                 }
                 case UNKNOWN: {
@@ -205,8 +205,8 @@ public final class EssentialsUpdateChecker {
                 }
             }
         } else {
-            final EssentialsUpdateChecker.UpdateToken releaseToken = EssentialsUpdateChecker.getReleaseToken().join();
-            switch (releaseToken.getBranchStatus()) {
+            final RemoteVersion latestRelease = EssentialsUpdateChecker.fetchLatestRelease().join();
+            switch (latestRelease.getBranchStatus()) {
                 case IDENTICAL: {
                     return sendLatestMessage ? new String[] {tl("versionReleaseLatest")} : new String[] {};
                 }
@@ -229,15 +229,15 @@ public final class EssentialsUpdateChecker {
         }
     }
 
-    public static class UpdateToken {
+    private static class RemoteVersion {
         private final BranchStatus branchStatus;
         private final int distance;
 
-        UpdateToken(BranchStatus branchStatus) {
+        RemoteVersion(BranchStatus branchStatus) {
             this(branchStatus, 0);
         }
 
-        UpdateToken(BranchStatus branchStatus, int distance) {
+        RemoteVersion(BranchStatus branchStatus, int distance) {
             this.branchStatus = branchStatus;
             this.distance = distance;
         }
@@ -251,7 +251,7 @@ public final class EssentialsUpdateChecker {
         }
     }
 
-    public enum BranchStatus {
+    private enum BranchStatus {
         IDENTICAL,
         AHEAD,
         BEHIND,
