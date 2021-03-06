@@ -1,6 +1,7 @@
 package net.ess3.api;
 
 import com.earth2me.essentials.items.CustomItemResolver;
+import com.earth2me.essentials.updatecheck.UpdateChecker;
 import net.ess3.provider.PotionMetaProvider;
 import net.ess3.provider.SpawnEggProvider;
 

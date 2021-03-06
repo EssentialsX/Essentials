@@ -1,7 +1,7 @@
 package com.earth2me.essentials.metrics;
 
 import com.earth2me.essentials.Essentials;
-import com.earth2me.essentials.EssentialsUpdateChecker;
+import com.earth2me.essentials.updatecheck.UpdateChecker;
 import com.earth2me.essentials.register.payment.Methods;
 import com.google.common.collect.ImmutableList;
 import org.bstats.bukkit.Metrics;
@@ -90,7 +90,7 @@ public class MetricsWrapper {
     }
 
     private void addReleaseBranchChart() {
-        metrics.addCustomChart(new Metrics.SimplePie("releaseBranch", EssentialsUpdateChecker::getVersionBranch));
+        metrics.addCustomChart(new Metrics.SimplePie("releaseBranch", ess.getUpdateChecker()::getVersionBranch));
     }
 
     private void addCommandsChart() {

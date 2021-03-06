@@ -1,7 +1,6 @@
 package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.CommandSource;
-import com.earth2me.essentials.EssentialsUpdateChecker;
 import com.earth2me.essentials.EssentialsUpgrade;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.UserMap;
@@ -395,7 +394,7 @@ public class Commandessentials extends EssentialsCommand {
 
         sender.sendMessage(tl("versionFetching"));
         ess.runTaskAsynchronously(() -> {
-            for (String str : EssentialsUpdateChecker.getVersionMethods(true, true)) {
+            for (String str : ess.getUpdateChecker().getVersionMessages(true, true)) {
                 sender.sendMessage(str);
             }
         });

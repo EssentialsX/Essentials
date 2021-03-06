@@ -36,6 +36,7 @@ import com.earth2me.essentials.signs.SignPlayerListener;
 import com.earth2me.essentials.textreader.IText;
 import com.earth2me.essentials.textreader.KeywordReplacer;
 import com.earth2me.essentials.textreader.SimpleTextInput;
+import com.earth2me.essentials.updatecheck.UpdateChecker;
 import com.earth2me.essentials.utils.VersionUtil;
 import io.papermc.lib.PaperLib;
 import net.ess3.api.Economy;
@@ -147,6 +148,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
     private transient MaterialTagProvider materialTagProvider;
     private transient Kits kits;
     private transient RandomTeleport randomTeleport;
+    private transient UpdateChecker updateChecker;
 
     static {
         // TODO: improve legacy code
@@ -390,12 +392,15 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
 
             metrics = new MetricsWrapper(this, 858, true);
 
+            updateChecker = new UpdateChecker(this);
             runTaskAsynchronously(() -> {
                 LOGGER.log(Level.INFO, tl("versionFetching"));
-                for (String str : EssentialsUpdateChecker.getVersionMethods(false, true)) {
+                for (String str : updateChecker.getVersionMessages(false, true)) {
                     LOGGER.log(Level.WARNING, str);
                 }
             });
+
+            execTimer.mark("Init(External)");
 
             final String timeroutput = execTimer.end();
             if (getSettings().isDebug()) {
@@ -781,6 +786,11 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
     @Override
     public RandomTeleport getRandomTeleport() {
         return randomTeleport;
+    }
+
+    @Override
+    public UpdateChecker getUpdateChecker() {
+        return updateChecker;
     }
 
     @Deprecated

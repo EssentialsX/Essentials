@@ -423,15 +423,13 @@ public class EssentialsPlayerListener implements Listener {
                         pager.showPage("1", null, "motd", user.getSource());
                     }
 
-                    if (!user.isAuthorized("essentials.updatecheck")) {
-                        return;
+                    if (user.isAuthorized("essentials.updatecheck")) {
+                        ess.runTaskAsynchronously(() -> {
+                            for (String str : ess.getUpdateChecker().getVersionMessages(false, false)) {
+                                user.sendMessage(str);
+                            }
+                        });
                     }
-
-                    ess.runTaskAsynchronously(() -> {
-                        for (String str : EssentialsUpdateChecker.getVersionMethods(false, false)) {
-                            user.sendMessage(str);
-                        }
-                    });
                 }
             }
         }

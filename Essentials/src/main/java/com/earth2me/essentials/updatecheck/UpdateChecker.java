@@ -1,5 +1,7 @@
-package com.earth2me.essentials;
+package com.earth2me.essentials.updatecheck;
 
+import com.earth2me.essentials.Essentials;
+import com.earth2me.essentials.ISettings;
 import com.google.common.base.Charsets;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
@@ -18,25 +20,28 @@ import java.util.stream.Collectors;
 
 import static com.earth2me.essentials.I18n.tl;
 
-public final class EssentialsUpdateChecker {
+public final class UpdateChecker {
     private static final String REPO = "EssentialsX/Essentials";
     private static final String BRANCH = "2.x";
 
-    private static final String versionIdentifier;
-    private static final String versionBranch;
-    private static final boolean devBuild;
-    private static long lastFetchTime = 0;
-    private static CompletableFuture<RemoteVersion> pendingDevFuture;
-    private static CompletableFuture<RemoteVersion> pendingReleaseFuture;
-    private static String latestRelease = null;
-    private static RemoteVersion cachedDev = null;
-    private static RemoteVersion cachedRelease = null;
+    private final Essentials ess;
+    private final String versionIdentifier;
+    private final String versionBranch;
+    private final boolean devBuild;
 
-    static {
+    private long lastFetchTime = 0;
+    private CompletableFuture<RemoteVersion> pendingDevFuture;
+    private CompletableFuture<RemoteVersion> pendingReleaseFuture;
+    private String latestRelease = null;
+    private RemoteVersion cachedDev = null;
+    private RemoteVersion cachedRelease = null;
+
+    public UpdateChecker(Essentials ess) {
         String identifier = "INVALID";
         String branch = "INVALID";
         boolean dev = false;
-        final InputStream inputStream = EssentialsUpdateChecker.class.getClassLoader().getResourceAsStream("release");
+
+        final InputStream inputStream = UpdateChecker.class.getClassLoader().getResourceAsStream("release");
         if (inputStream != null) {
             final List<String> versionStr = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8)).lines().collect(Collectors.toList());
             if (versionStr.size() == 2) {
@@ -49,19 +54,18 @@ public final class EssentialsUpdateChecker {
                 branch = versionStr.get(1);
             }
         }
-        versionIdentifier = identifier;
-        versionBranch = branch;
-        devBuild = dev;
+
+        this.ess = ess;
+        this.versionIdentifier = identifier;
+        this.versionBranch = branch;
+        this.devBuild = dev;
     }
 
-    private EssentialsUpdateChecker() {
-    }
-
-    public static boolean isDevBuild() {
+    public boolean isDevBuild() {
         return devBuild;
     }
 
-    public static CompletableFuture<RemoteVersion> fetchLatestDev() {
+    public CompletableFuture<RemoteVersion> fetchLatestDev() {
         if (cachedDev == null || ((System.currentTimeMillis() - lastFetchTime) > 1800000L)) {
             if (pendingDevFuture != null) {
                 return pendingDevFuture;
@@ -77,7 +81,7 @@ public final class EssentialsUpdateChecker {
         return CompletableFuture.completedFuture(cachedDev);
     }
 
-    public static CompletableFuture<RemoteVersion> fetchLatestRelease() {
+    public CompletableFuture<RemoteVersion> fetchLatestRelease() {
         if (cachedRelease == null || ((System.currentTimeMillis() - lastFetchTime) > 1800000L)) {
             if (pendingReleaseFuture != null) {
                 return pendingReleaseFuture;
@@ -119,23 +123,23 @@ public final class EssentialsUpdateChecker {
         return CompletableFuture.completedFuture(cachedRelease);
     }
 
-    public static String getVersionIdentifier() {
+    public String getVersionIdentifier() {
         return versionIdentifier;
     }
 
-    public static String getVersionBranch() {
+    public String getVersionBranch() {
         return versionBranch;
     }
 
-    public static String getBuildInfo() {
+    public String getBuildInfo() {
         return "id:'" + getVersionIdentifier() + "' branch:'" + getVersionBranch() + "' isDev:" + isDevBuild();
     }
 
-    public static String getLatestRelease() {
+    public String getLatestRelease() {
         return latestRelease;
     }
 
-    private static RemoteVersion fetchDistance(final String head, final String hash) {
+    private RemoteVersion fetchDistance(final String head, final String hash) {
         try {
             final HttpURLConnection connection = (HttpURLConnection) new URL("https://api.github.com/repos/" + REPO + "/compare/" + head + "..." + hash).openConnection();
             connection.connect();
@@ -178,9 +182,9 @@ public final class EssentialsUpdateChecker {
         }
     }
 
-    public static String[] getVersionMethods(final boolean sendLatestMessage, final boolean verboseErrors) {
-        if (EssentialsUpdateChecker.isDevBuild()) {
-            final RemoteVersion latestDev = EssentialsUpdateChecker.fetchLatestDev().join();
+    public String[] getVersionMessages(final boolean sendLatestMessage, final boolean verboseErrors) {
+        if (this.isDevBuild()) {
+            final RemoteVersion latestDev = this.fetchLatestDev().join();
             switch (latestDev.getBranchStatus()) {
                 case IDENTICAL: {
                     return sendLatestMessage ? new String[] {tl("versionDevLatest")} : new String[] {};
@@ -192,35 +196,35 @@ public final class EssentialsUpdateChecker {
                 case AHEAD:
                 case DIVERGED: {
                     return new String[] {tl(latestDev.getDistance() == 0 ? "versionDevDivergedLatest" : "versionDevDiverged", latestDev.getDistance()),
-                            tl("versionDevDivergedBranch", EssentialsUpdateChecker.getVersionBranch()) };
+                            tl("versionDevDivergedBranch", this.getVersionBranch()) };
                 }
                 case UNKNOWN: {
-                    return verboseErrors ? new String[] {tl("versionCustom", EssentialsUpdateChecker.getBuildInfo())} : new String[] {};
+                    return verboseErrors ? new String[] {tl("versionCustom", this.getBuildInfo())} : new String[] {};
                 }
                 case ERROR: {
-                    return new String[] {tl(verboseErrors ? "versionError" : "versionErrorPlayer", EssentialsUpdateChecker.getBuildInfo())};
+                    return new String[] {tl(verboseErrors ? "versionError" : "versionErrorPlayer", this.getBuildInfo())};
                 }
                 default: {
                     return new String[] {};
                 }
             }
         } else {
-            final RemoteVersion latestRelease = EssentialsUpdateChecker.fetchLatestRelease().join();
+            final RemoteVersion latestRelease = this.fetchLatestRelease().join();
             switch (latestRelease.getBranchStatus()) {
                 case IDENTICAL: {
                     return sendLatestMessage ? new String[] {tl("versionReleaseLatest")} : new String[] {};
                 }
                 case BEHIND: {
-                    return new String[] {tl("versionReleaseNew", EssentialsUpdateChecker.getLatestRelease()),
+                    return new String[] {tl("versionReleaseNew", this.getLatestRelease()),
                             tl("versionReleaseNewLink", "https://essentialsx.net/downloads.html?branch=stable")};
                 }
                 case DIVERGED: //WhatChamp
                 case AHEAD: //monkaW?
                 case UNKNOWN: {
-                    return verboseErrors ? new String[] {tl("versionCustom", EssentialsUpdateChecker.getBuildInfo())} : new String[] {};
+                    return verboseErrors ? new String[] {tl("versionCustom", this.getBuildInfo())} : new String[] {};
                 }
                 case ERROR: {
-                    return new String[] {tl(verboseErrors ? "versionError" : "versionErrorPlayer", EssentialsUpdateChecker.getBuildInfo())};
+                    return new String[] {tl(verboseErrors ? "versionError" : "versionErrorPlayer", this.getBuildInfo())};
                 }
                 default: {
                     return new String[] {};
