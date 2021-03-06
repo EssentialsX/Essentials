@@ -389,10 +389,16 @@ public class Commandessentials extends EssentialsCommand {
                 sender.sendMessage(tl("serverUnsupportedLimitedApi"));
                 break;
         }
-
         if (VersionUtil.getSupportStatusClass() != null) {
             sender.sendMessage(tl("serverUnsupportedClass", VersionUtil.getSupportStatusClass()));
         }
+
+        sender.sendMessage(tl("versionFetching"));
+        ess.runTaskAsynchronously(() -> {
+            for (String str : ess.getUpdateChecker().getVersionMessages(true, true)) {
+                sender.sendMessage(str);
+            }
+        });
     }
 
     @Override
