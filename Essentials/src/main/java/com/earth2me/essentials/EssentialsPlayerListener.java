@@ -12,6 +12,7 @@ import com.earth2me.essentials.utils.VersionUtil;
 import io.papermc.lib.PaperLib;
 import net.ess3.api.IEssentials;
 import net.ess3.api.events.AfkStatusChangeEvent;
+import net.essentialsx.api.v2.events.AsyncUserDataLoadEvent;
 import org.bukkit.BanEntry;
 import org.bukkit.BanList;
 import org.bukkit.GameMode;
@@ -305,6 +306,8 @@ public class EssentialsPlayerListener implements Listener {
                 user.setLastLogin(currentTime);
                 user.setDisplayNick();
                 updateCompass(user);
+
+                ess.runTaskAsynchronously(() -> ess.getServer().getPluginManager().callEvent(new AsyncUserDataLoadEvent(user)));
 
                 if (!ess.getVanishedPlayersNew().isEmpty() && !user.isAuthorized("essentials.vanish.see")) {
                     for (final String p : ess.getVanishedPlayersNew()) {
