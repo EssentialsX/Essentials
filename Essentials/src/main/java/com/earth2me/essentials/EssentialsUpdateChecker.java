@@ -7,12 +7,12 @@ import com.google.gson.JsonSyntaxException;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
-import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
@@ -36,15 +36,18 @@ public final class EssentialsUpdateChecker {
         String identifier = "INVALID";
         String branch = "INVALID";
         boolean dev = false;
-        final List<String> versionStr = new BufferedReader(new InputStreamReader(Objects.requireNonNull(EssentialsUpdateChecker.class.getClassLoader().getResourceAsStream("release")), StandardCharsets.UTF_8)).lines().collect(Collectors.toList());
-        if (versionStr.size() == 2) {
-            if (versionStr.get(0).matches("\\d+\\.\\d+\\.\\d+-dev\\+\\d\\d-[0-9a-f]{7,40}")) {
-                identifier = versionStr.get(0).split("-")[2];
-                dev = true;
-            } else {
-                identifier = versionStr.get(0);
+        final InputStream inputStream = EssentialsUpdateChecker.class.getClassLoader().getResourceAsStream("release");
+        if (inputStream != null) {
+            final List<String> versionStr = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8)).lines().collect(Collectors.toList());
+            if (versionStr.size() == 2) {
+                if (versionStr.get(0).matches("\\d+\\.\\d+\\.\\d+-dev\\+\\d\\d-[0-9a-f]{7,40}")) {
+                    identifier = versionStr.get(0).split("-")[2];
+                    dev = true;
+                } else {
+                    identifier = versionStr.get(0);
+                }
+                branch = versionStr.get(1);
             }
-            branch = versionStr.get(1);
         }
         versionIdentifier = identifier;
         versionBranch = branch;
