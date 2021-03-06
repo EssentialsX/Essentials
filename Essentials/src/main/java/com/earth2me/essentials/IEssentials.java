@@ -4,6 +4,7 @@ import com.earth2me.essentials.api.IItemDb;
 import com.earth2me.essentials.api.IJails;
 import com.earth2me.essentials.api.IWarps;
 import com.earth2me.essentials.perm.PermissionsHandler;
+import com.earth2me.essentials.updatecheck.UpdateChecker;
 import net.ess3.provider.MaterialTagProvider;
 import net.ess3.provider.ContainerProvider;
 import net.ess3.provider.FormattedCommandAliasProvider;
@@ -72,6 +73,8 @@ public interface IEssentials extends Plugin {
     Kits getKits();
 
     RandomTeleport getRandomTeleport();
+
+    UpdateChecker getUpdateChecker();
 
     BukkitTask runTaskAsynchronously(Runnable run);
 
