@@ -243,13 +243,6 @@ them.
     would allow people in the same channel as you to see exactly what command you execute. In the example below,
     you can see how disabling this option shows a message of the user and the command they executed.`
   * Example: ![Show Command](https://i.imgur.com/Q61iP4n.gif)
-* `hide-response`
-  * Default: `true`
-  * Description: `Whether other people should not be able to see the reponse of commands you execute. Setting to
-    false would allow people in the same channel as you to see all the reponses to the commands you execute. In
-    the example below, you can see how disabling this option shows the command reponses as normal messages and
-    the option to "Dismiss this Message" goes away.`
-  * Example: ![Show Response](https://i.imgur.com/yHVOYR0.gif)
 * `allowed-roles`
   * Description: `A list of user ids or role names/ids that are allowed to use the command. You can also use '*'
     in order to allow everyone to use the command.`
