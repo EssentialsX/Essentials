@@ -422,6 +422,14 @@ public class EssentialsPlayerListener implements Listener {
                         final TextPager pager = new TextPager(output, true);
                         pager.showPage("1", null, "motd", user.getSource());
                     }
+
+                    if (user.isAuthorized("essentials.updatecheck")) {
+                        ess.runTaskAsynchronously(() -> {
+                            for (String str : ess.getUpdateChecker().getVersionMessages(false, false)) {
+                                user.sendMessage(str);
+                            }
+                        });
+                    }
                 }
             }
         }
