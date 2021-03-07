@@ -82,8 +82,10 @@ public class BukkitListener implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onQuit(PlayerQuitEvent event) {
-        sendDiscordMessage(DiscordMessageEvent.MessageType.LEAVE, MessageUtil.formatMessage(jda.getSettings().getQuitFormat(),
-                event.getPlayer().getName(), event.getPlayer().getDisplayName(), event.getQuitMessage()), false);
+        if (event.getQuitMessage() != null) {
+            sendDiscordMessage(DiscordMessageEvent.MessageType.LEAVE, MessageUtil.formatMessage(jda.getSettings().getQuitFormat(),
+                    event.getPlayer().getName(), event.getPlayer().getDisplayName(), event.getQuitMessage()), false);
+        }
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
