@@ -4,6 +4,7 @@ import com.earth2me.essentials.Console;
 import com.earth2me.essentials.utils.DateUtil;
 import com.earth2me.essentials.utils.FormatUtil;
 import net.ess3.api.events.MuteStatusChangeEvent;
+import net.essentialsx.api.v2.events.AsyncUserDataLoadEvent;
 import net.essentialsx.api.v2.events.discord.DiscordMessageEvent;
 import net.essentialsx.discord.EssentialsJDA;
 import net.essentialsx.discord.util.MessageUtil;
@@ -14,7 +15,6 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
-import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
@@ -71,11 +71,11 @@ public class BukkitListener implements Listener {
                         jda.getPlugin().getEss().getPermissionsHandler().getSuffix(player)), player.hasPermission("essentials.discord.ping")));
     }
 
-    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-    public void onJoin(PlayerJoinEvent event) {
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void onJoin(AsyncUserDataLoadEvent event) {
         // Delay join to let nickname load
-        Bukkit.getScheduler().runTaskLater(jda.getPlugin(), () -> sendDiscordMessage(DiscordMessageEvent.MessageType.JOIN, MessageUtil.formatMessage(jda.getSettings().getJoinFormat(),
-                event.getPlayer().getName(), event.getPlayer().getDisplayName(), event.getJoinMessage()), false), 40);
+        sendDiscordMessage(DiscordMessageEvent.MessageType.JOIN, MessageUtil.formatMessage(jda.getSettings().getJoinFormat(),
+                event.getUser().getName(), event.getUser().getDisplayName(), event.getJoinMessage()), false);
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)

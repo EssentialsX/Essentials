@@ -307,7 +307,7 @@ public class EssentialsPlayerListener implements Listener {
                 user.setDisplayNick();
                 updateCompass(user);
 
-                ess.runTaskAsynchronously(() -> ess.getServer().getPluginManager().callEvent(new AsyncUserDataLoadEvent(user)));
+                ess.runTaskAsynchronously(() -> ess.getServer().getPluginManager().callEvent(new AsyncUserDataLoadEvent(user, message)));
 
                 if (!ess.getVanishedPlayersNew().isEmpty() && !user.isAuthorized("essentials.vanish.see")) {
                     for (final String p : ess.getVanishedPlayersNew()) {
