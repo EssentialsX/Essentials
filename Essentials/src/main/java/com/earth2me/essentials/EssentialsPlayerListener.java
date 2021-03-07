@@ -307,8 +307,6 @@ public class EssentialsPlayerListener implements Listener {
                 user.setDisplayNick();
                 updateCompass(user);
 
-                ess.runTaskAsynchronously(() -> ess.getServer().getPluginManager().callEvent(new AsyncUserDataLoadEvent(user, message)));
-
                 if (!ess.getVanishedPlayersNew().isEmpty() && !user.isAuthorized("essentials.vanish.see")) {
                     for (final String p : ess.getVanishedPlayersNew()) {
                         final Player toVanish = ess.getServer().getPlayerExact(p);
@@ -325,12 +323,14 @@ public class EssentialsPlayerListener implements Listener {
                     user.getBase().setSleepingIgnored(true);
                 }
 
+                final String effectiveMessage;
                 if (ess.getSettings().allowSilentJoinQuit() && (user.isAuthorized("essentials.silentjoin") || user.isAuthorized("essentials.silentjoin.vanish"))) {
                     if (user.isAuthorized("essentials.silentjoin.vanish")) {
                         user.setVanished(true);
                     }
+                    effectiveMessage = null;
                 } else if (message == null || hideJoinQuitMessages()) {
-                    //NOOP
+                    effectiveMessage = null;
                 } else if (ess.getSettings().isCustomJoinMessage()) {
                     final String msg = ess.getSettings().getCustomJoinMessage()
                         .replace("{PLAYER}", player.getDisplayName()).replace("{USERNAME}", player.getName())
@@ -340,9 +340,15 @@ public class EssentialsPlayerListener implements Listener {
                     if (!msg.isEmpty()) {
                         ess.getServer().broadcastMessage(msg);
                     }
+                    effectiveMessage = msg.isEmpty() ? null : msg;
                 } else if (ess.getSettings().allowSilentJoinQuit()) {
                     ess.getServer().broadcastMessage(message);
+                    effectiveMessage = message;
+                } else {
+                    effectiveMessage = message;
                 }
+
+                ess.runTaskAsynchronously(() -> ess.getServer().getPluginManager().callEvent(new AsyncUserDataLoadEvent(user, effectiveMessage)));
 
                 final int motdDelay = ess.getSettings().getMotdDelay() / 50;
                 final DelayMotdTask motdTask = new DelayMotdTask(user);

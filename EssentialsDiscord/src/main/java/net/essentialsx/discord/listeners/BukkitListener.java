@@ -74,8 +74,10 @@ public class BukkitListener implements Listener {
     @EventHandler(priority = EventPriority.MONITOR)
     public void onJoin(AsyncUserDataLoadEvent event) {
         // Delay join to let nickname load
-        sendDiscordMessage(DiscordMessageEvent.MessageType.JOIN, MessageUtil.formatMessage(jda.getSettings().getJoinFormat(),
-                event.getUser().getName(), event.getUser().getDisplayName(), event.getJoinMessage()), false);
+        if (event.getJoinMessage() != null) {
+            sendDiscordMessage(DiscordMessageEvent.MessageType.JOIN, MessageUtil.formatMessage(jda.getSettings().getJoinFormat(),
+                    event.getUser().getName(), event.getUser().getDisplayName(), event.getJoinMessage()), false);
+        }
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
