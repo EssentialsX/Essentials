@@ -20,10 +20,16 @@ public class AsyncUserDataLoadEvent extends Event {
         this.joinMessage = joinMessage;
     }
 
+    /**
+     * @return The user whose data has been loaded.
+     */
     public IUser getUser() {
         return user;
     }
 
+    /**
+     * @return The join message of this user who joined or null if none was displayed.
+     */
     public String getJoinMessage() {
         return joinMessage;
     }
