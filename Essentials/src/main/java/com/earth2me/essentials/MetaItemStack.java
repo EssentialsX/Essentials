@@ -238,6 +238,19 @@ public class MetaItemStack {
             final BookMeta meta = (BookMeta) stack.getItemMeta();
             meta.setTitle(title);
             stack.setItemMeta(meta);
+        } else if (split.length > 1 && split[0].startsWith("page") && split[0].length() > 4 && stack.getType() == WRITTEN_BOOK && hasMetaPermission(sender, "page", false, true, ess)) {
+            final int page = NumberUtil.isInt(split[0].substring(4)) ? (Integer.parseInt(split[0].substring(4)) - 1) : 0;
+            final BookMeta meta = (BookMeta) stack.getItemMeta();
+            final List<String> pages = meta.hasPages() ? new ArrayList<>(meta.getPages()) : new ArrayList<>();
+            final String content = FormatUtil.replaceFormat(split[1].replace('_', ' '));
+            if (page >= pages.size()) {
+                for (int i = 0; i <= page - pages.size(); i++) {
+                    pages.add("");
+                }
+            }
+            pages.set(page, content);
+            meta.setPages(pages);
+            stack.setItemMeta(meta);
         } else if (split.length > 1 && split[0].equalsIgnoreCase("power") && MaterialUtil.isFirework(stack.getType()) && hasMetaPermission(sender, "firework-power", false, true, ess)) {
             final int power = NumberUtil.isInt(split[1]) ? Integer.parseInt(split[1]) : 0;
             final FireworkMeta meta = (FireworkMeta) stack.getItemMeta();

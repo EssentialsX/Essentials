@@ -249,10 +249,16 @@ public abstract class AbstractItemDb implements IConf, net.ess3.api.IItemDb {
                 // Interesting as I didn't see a way to do pages or chapters.
                 final BookMeta bookMeta = (BookMeta) is.getItemMeta();
                 if (bookMeta.hasTitle()) {
-                    sb.append("title:").append(bookMeta.getTitle()).append(" ");
+                    sb.append("title:").append(bookMeta.getTitle().replace(' ', '_')).append(" ");
                 }
                 if (bookMeta.hasAuthor()) {
-                    sb.append("author:").append(bookMeta.getAuthor()).append(" ");
+                    sb.append("author:").append(bookMeta.getAuthor().replace(' ', '_')).append(" ");
+                }
+                if (bookMeta.hasPages()) {
+                    final List<String> pages = bookMeta.getPages();
+                    for (int i = 0; i < pages.size(); i++) {
+                        sb.append("page").append(i + 1).append(":").append(pages.get(i).replace(' ', '_')).append(" ");
+                    }
                 }
                 // Only other thing it could have is lore but that's done up there ^^^
                 break;
