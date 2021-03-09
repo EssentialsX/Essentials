@@ -11,6 +11,7 @@
 # You can find instructions on this here: https://github.com/EssentialsX/Essentials/blob/2.x/EssentialsDiscord/README.md
 
 # The token for your bot from the Discord Developers site.
+# Please make sure to use this site to add the bot to your server as it grants special permissions you may not be familiar with: https://essentialsx.net/discord.html
 token: "INSERT-TOKEN-HERE"
 
 # The ID of your server.
