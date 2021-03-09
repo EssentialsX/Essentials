@@ -53,12 +53,12 @@ public class VaultEconomyProvider implements Economy {
 
     @Override
     public String currencyNamePlural() {
-        return "";
+        return currencyNameSingular();
     }
 
     @Override
     public String currencyNameSingular() {
-        return "";
+        return ess.getSettings().getCurrencySymbol();
     }
 
     @SuppressWarnings("deprecation")
