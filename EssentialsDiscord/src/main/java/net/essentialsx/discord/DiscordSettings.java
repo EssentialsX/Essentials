@@ -89,6 +89,10 @@ public class DiscordSettings implements IConf {
         return statusActivity;
     }
 
+    public boolean isAlwaysReceivePrimary() {
+        return config.getBoolean("always-receive-primary", false);
+    }
+
     public int getChatDiscordMaxLength() {
         return config.getInt("chat.discord-max-length", 2000);
     }

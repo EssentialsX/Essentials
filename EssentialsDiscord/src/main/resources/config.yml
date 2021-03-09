@@ -35,6 +35,11 @@ channels:
   primary: 000000000000000000
   staff: 000000000000000000
 
+# Should all players receive discord messages from the primary channel, regardless of their permissions?
+# This is intended for use for people without permissions plugins. If you have a permissions plugin, please give your
+# players the essentials.discord.receive.primary permission.
+always-receive-primary: false
+
 # Chat relay settings
 # General settings for discord to mc and mc to discord chat relays
 # To configure the channel minecraft chat is sent to, see the "message-types" section of the config
