@@ -11,6 +11,7 @@
 # You can find instructions on this here: https://github.com/EssentialsX/Essentials/blob/2.x/EssentialsDiscord/README.md
 
 # The token for your bot from the Discord Developers site.
+# Please make sure to use this site to add the bot to your server as it grants special permissions you may not be familiar with: https://essentialsx.net/discord.html
 token: "INSERT-TOKEN-HERE"
 
 # The ID of your server.
@@ -33,6 +34,11 @@ guild: 000000000000000000
 channels:
   primary: 000000000000000000
   staff: 000000000000000000
+
+# Should all players receive discord messages from the primary channel, regardless of their permissions?
+# This is intended for use for people without permissions plugins. If you have a permissions plugin, please give your
+# players the essentials.discord.receive.primary permission.
+always-receive-primary: false
 
 # Chat relay settings
 # General settings for discord to mc and mc to discord chat relays
