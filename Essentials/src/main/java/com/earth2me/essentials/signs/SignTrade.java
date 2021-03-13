@@ -167,7 +167,7 @@ public class SignTrade extends EssentialsSign {
 
         if (split.length == 2 && amountNeeded) {
             final BigDecimal money = getMoney(split[0], ess);
-            BigDecimal amount = getBigDecimalPositive(split[1]);
+            BigDecimal amount = getBigDecimalPositive(split[1], ess);
             if (money != null && amount != null) {
                 amount = amount.subtract(amount.remainder(money));
                 if (amount.compareTo(MINTRANSACTION) < 0 || money.compareTo(MINTRANSACTION) < 0) {
@@ -225,7 +225,7 @@ public class SignTrade extends EssentialsSign {
         if (split.length == 2) {
             try {
                 final BigDecimal money = getMoney(split[0], ess);
-                final BigDecimal amount = notEmpty ? getBigDecimalPositive(split[1]) : getBigDecimal(split[1]);
+                final BigDecimal amount = notEmpty ? getBigDecimalPositive(split[1], ess) : getBigDecimal(split[1], ess);
                 if (money != null && amount != null) {
                     return new Trade(amountType == AmountType.COST ? money : amount, ess);
                 }
@@ -301,12 +301,12 @@ public class SignTrade extends EssentialsSign {
         final String[] split = line.split("[ :]+");
 
         if (split.length == 2) {
-            final BigDecimal amount = getBigDecimal(split[1]).add(value);
+            final BigDecimal amount = getBigDecimal(split[1], ess).add(value);
             setAmount(sign, index, amount, ess);
             return;
         }
         if (split.length == 3) {
-            final BigDecimal amount = getBigDecimal(split[2]).add(value);
+            final BigDecimal amount = getBigDecimal(split[2], ess).add(value);
             setAmount(sign, index, amount, ess);
             return;
         }
@@ -324,7 +324,7 @@ public class SignTrade extends EssentialsSign {
 
         if (split.length == 2) {
             final BigDecimal money = getMoney(split[0], ess);
-            final BigDecimal amount = getBigDecimal(split[1]);
+            final BigDecimal amount = getBigDecimal(split[1], ess);
             if (money != null && amount != null) {
                 final String newline = NumberUtil.shortCurrency(money, ess) + ":" + NumberUtil.shortCurrency(value, ess).substring(1);
                 validateSignLength(newline);
