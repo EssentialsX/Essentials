@@ -106,8 +106,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 import java.util.function.Predicate;
@@ -149,6 +151,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
     private transient Kits kits;
     private transient RandomTeleport randomTeleport;
     private transient UpdateChecker updateChecker;
+    private transient Map<String, IEssentialsCommand> commandMap = new HashMap<>();
 
     static {
         // TODO: improve legacy code
@@ -355,7 +358,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
 
                 // Command aliases provider
                 formattedCommandAliasProvider = new ReflFormattedCommandAliasProvider(PaperLib.isPaper());
-              
+
                 //Material Tag Providers
                 if (VersionUtil.getServerBukkitVersion().isHigherThanOrEqualTo(VersionUtil.v1_13_0_R01)) {
                     materialTagProvider = PaperLib.isPaper() ? new PaperMaterialTagProvider() : new BukkitMaterialTagProvider();
@@ -529,6 +532,13 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
         registerListeners(pm);
     }
 
+    private IEssentialsCommand loadCommand(final String fullPath, final IEssentialsModule module, final ClassLoader classLoader) throws Exception {
+        final IEssentialsCommand cmd = (IEssentialsCommand) classLoader.loadClass(fullPath).getDeclaredConstructor().newInstance();
+        cmd.setEssentials(this);
+        cmd.setEssentialsModule(module);
+        return cmd;
+    }
+
     @Override
     public List<String> onTabComplete(final CommandSender sender, final Command command, final String commandLabel, final String[] args) {
         return onTabCompleteEssentials(sender, command, commandLabel, args, Essentials.class.getClassLoader(),
@@ -567,16 +577,17 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
                 return Collections.emptyList();
             }
 
-            final IEssentialsCommand cmd;
-            try {
-                cmd = (IEssentialsCommand) classLoader.loadClass(commandPath + command.getName()).newInstance();
-                cmd.setEssentials(this);
-                cmd.setEssentialsModule(module);
-            } catch (final Exception ex) {
-                sender.sendMessage(tl("commandNotLoaded", commandLabel));
-                LOGGER.log(Level.SEVERE, tl("commandNotLoaded", commandLabel), ex);
-                return Collections.emptyList();
+            if (!commandMap.containsKey(command.getName())) {
+                try {
+                    commandMap.put(command.getName(), loadCommand(commandPath + command.getName(), module, classLoader));
+                } catch (final Exception ex) {
+                    sender.sendMessage(tl("commandNotLoaded", commandLabel));
+                    LOGGER.log(Level.SEVERE, tl("commandNotLoaded", commandLabel), ex);
+                    return Collections.emptyList();
+                }
             }
+
+            final IEssentialsCommand cmd = commandMap.get(command.getName());
 
             // Check authorization
             if (user != null && !user.isAuthorized(cmd, permissionPrefix)) {
@@ -670,16 +681,17 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
                 return true;
             }
 
-            final IEssentialsCommand cmd;
-            try {
-                cmd = (IEssentialsCommand) classLoader.loadClass(commandPath + command.getName()).newInstance();
-                cmd.setEssentials(this);
-                cmd.setEssentialsModule(module);
-            } catch (final Exception ex) {
-                sender.sendMessage(tl("commandNotLoaded", commandLabel));
-                LOGGER.log(Level.SEVERE, tl("commandNotLoaded", commandLabel), ex);
-                return true;
+            if (!commandMap.containsKey(command.getName())) {
+                try {
+                    commandMap.put(command.getName(), loadCommand(commandPath + command.getName(), module, classLoader));
+                } catch (final Exception ex) {
+                    sender.sendMessage(tl("commandNotLoaded", commandLabel));
+                    LOGGER.log(Level.SEVERE, tl("commandNotLoaded", commandLabel), ex);
+                    return true;
+                }
             }
+
+            final IEssentialsCommand cmd = commandMap.get(command.getName());
 
             // Check authorization
             if (user != null && !user.isAuthorized(cmd, permissionPrefix)) {
