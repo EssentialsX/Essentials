@@ -33,13 +33,16 @@ public class AsyncTimedTeleport implements Runnable {
     private int timer_task;
     private double timer_health;
 
+    AsyncTimedTeleport(final IUser user, final IEssentials ess, final AsyncTeleport teleport, final long delay, final IUser teleportUser, final ITarget target, final Trade chargeFor, final TeleportCause cause, final boolean respawn) {
+        this(user, ess, teleport, delay, null, teleportUser, target, chargeFor, cause, respawn);
+    }
+
     AsyncTimedTeleport(final IUser user, final IEssentials ess, final AsyncTeleport teleport, final long delay, final CompletableFuture<Boolean> future, final IUser teleportUser, final ITarget target, final Trade chargeFor, final TeleportCause cause, final boolean respawn) {
         this.teleportOwner = user;
         this.ess = ess;
         this.teleport = teleport;
         this.timer_started = System.currentTimeMillis();
         this.timer_delay = delay;
-        this.parentFuture = future;
         this.timer_health = teleportUser.getBase().getHealth();
         this.timer_initX = Math.round(teleportUser.getBase().getLocation().getX() * MOVE_CONSTANT);
         this.timer_initY = Math.round(teleportUser.getBase().getLocation().getY() * MOVE_CONSTANT);
@@ -52,6 +55,18 @@ public class AsyncTimedTeleport implements Runnable {
         this.timer_canMove = user.isAuthorized("essentials.teleport.timer.move");
 
         timer_task = ess.runTaskTimerAsynchronously(this, 20, 20).getTaskId();
+
+        if (future != null) {
+            this.parentFuture = future;
+            return;
+        }
+
+        final CompletableFuture<Boolean> cFuture = new CompletableFuture<>();
+        cFuture.exceptionally(e -> {
+            ess.showError(teleportOwner.getSource(), e, "\\ teleport");
+            return false;
+        });
+        this.parentFuture = cFuture;
     }
 
     @Override
@@ -103,6 +118,7 @@ public class AsyncTimedTeleport implements Runnable {
                         if (timer_chargeFor != null) {
                             timer_chargeFor.isAffordableFor(teleportOwner);
                         }
+
                         if (timer_respawn) {
                             teleport.respawnNow(teleportUser, timer_cause, parentFuture);
                         } else {
