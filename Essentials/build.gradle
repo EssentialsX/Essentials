@@ -8,6 +8,9 @@ dependencies {
 
     api 'org.bstats:bstats-bukkit:1.8'
 
+    api 'org.spongepowered:configurate-yaml:4.0.0'
+    implementation 'org.yaml:snakeyaml:1.+'
+
     // Providers
     api project(':providers:BaseProviders')
     api project(':providers:PaperProvider')
@@ -23,6 +26,10 @@ shadowJar {
     dependencies {
         include (dependency('io.papermc:paperlib'))
         include (dependency('org.bstats:bstats-bukkit'))
+        include (dependency('org.spongepowered:configurate-yaml'))
+        include (dependency('org.spongepowered:configurate-core'))
+        include (dependency('org.yaml:snakeyaml'))
+        include (dependency('io.leangen.geantyref:geantyref'))
         include (project(':providers:BaseProviders'))
         include (project(':providers:PaperProvider'))
         include (project(':providers:NMSReflectionProvider'))
@@ -30,4 +37,7 @@ shadowJar {
     }
     relocate 'io.papermc.lib', 'com.earth2me.essentials.paperlib'
     relocate 'org.bstats.bukkit', 'com.earth2me.essentials.metrics'
+    relocate 'org.spongepowered.configurate', 'com.earth2me.essentials.configurate'
+    relocate 'org.yaml.snakeyaml', 'com.earth2me.essentials.snakeyaml'
+    relocate 'io.leangen.geantyref', 'com.earth2me.essentials.geantyref'
 }
