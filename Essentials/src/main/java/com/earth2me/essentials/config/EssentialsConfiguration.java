@@ -3,14 +3,19 @@ package com.earth2me.essentials.config;
 import org.spongepowered.configurate.CommentedConfigurationNode;
 import org.spongepowered.configurate.ConfigurateException;
 import org.spongepowered.configurate.loader.ParsingException;
+import org.spongepowered.configurate.serialize.SerializationException;
+import org.spongepowered.configurate.yaml.NodeStyle;
 import org.spongepowered.configurate.yaml.YamlConfigurationLoader;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -21,7 +26,8 @@ public class EssentialsConfiguration {
     protected static final Logger LOGGER = Logger.getLogger("Essentials");
     private static final ExecutorService EXECUTOR_SERVICE = Executors.newSingleThreadExecutor();
     private final AtomicInteger pendingWrites = new AtomicInteger(0);
-    private Class<?> resourceClass = EssentialsConfiguration.class;
+    private final AtomicBoolean transaction = new AtomicBoolean(false);
+    protected Class<?> resourceClass = EssentialsConfiguration.class;
     private final File configFile;
     private final YamlConfigurationLoader loader;
     private final String templateName;
@@ -33,7 +39,7 @@ public class EssentialsConfiguration {
 
     public EssentialsConfiguration(final File configFile, final String templateName) {
         this.configFile = configFile;
-        this.loader = YamlConfigurationLoader.builder().file(configFile).build();
+        this.loader = YamlConfigurationLoader.builder().nodeStyle(NodeStyle.BLOCK).indent(2).file(configFile).build();
         this.templateName = templateName;
     }
 
@@ -43,7 +49,7 @@ public class EssentialsConfiguration {
             return;
         }
 
-        if (!configFile.getParentFile().exists()) {
+        if (configFile.getParentFile() != null && !configFile.getParentFile().exists()) {
             if (!configFile.getParentFile().mkdirs()) {
                 LOGGER.log(Level.SEVERE, tl("failedToCreateConfig", configFile.toString()));
                 return;
@@ -75,5 +81,46 @@ public class EssentialsConfiguration {
                 configurationNode = loader.createNode();
             }
         }
+    }
+
+    /**
+     * Begins a transaction.
+     *
+     * A transaction informs Essentials to pause the saving of data. This is should be used when
+     * bulk operations are being done and data shouldn't be saved until after the transaction has
+     * been completed.
+     */
+    public void startTransaction() {
+        transaction.set(true);
+    }
+
+    public void stopTransaction() {
+        transaction.set(false);
+        save();
+    }
+
+    public synchronized void save() {
+        if (!transaction.get()) {
+            delaySave();
+        }
+    }
+
+    public synchronized void blockingSave() {
+        try {
+            final Future<?> future = delaySave();
+            if (future != null) {
+                future.get();
+            }
+        } catch (final InterruptedException | ExecutionException e) {
+            LOGGER.log(Level.SEVERE, e.getMessage(), e);
+        }
+    }
+
+    private Future<?> delaySave() {
+        final CommentedConfigurationNode node = configurationNode.copy();
+
+        pendingWrites.incrementAndGet();
+
+        return EXECUTOR_SERVICE.submit(new ConfigurationSaveTask(loader, node, pendingWrites));
     }
 }
