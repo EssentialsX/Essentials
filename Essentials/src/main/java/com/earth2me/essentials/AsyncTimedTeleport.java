@@ -18,6 +18,7 @@ public class AsyncTimedTeleport implements Runnable {
     private final UUID timer_teleportee;
     private final long timer_started; // time this task was initiated
     private final long timer_delay; // how long to delay the teleportPlayer
+    private final CompletableFuture<Boolean> parentFuture;
     // note that I initially stored a clone of the location for reference, but...
     // when comparing locations, I got incorrect mismatches (rounding errors, looked like)
     // so, the X/Y/Z values are stored instead and rounded off
@@ -32,12 +33,13 @@ public class AsyncTimedTeleport implements Runnable {
     private int timer_task;
     private double timer_health;
 
-    AsyncTimedTeleport(final IUser user, final IEssentials ess, final AsyncTeleport teleport, final long delay, final IUser teleportUser, final ITarget target, final Trade chargeFor, final TeleportCause cause, final boolean respawn) {
+    AsyncTimedTeleport(final IUser user, final IEssentials ess, final AsyncTeleport teleport, final long delay, final CompletableFuture<Boolean> future, final IUser teleportUser, final ITarget target, final Trade chargeFor, final TeleportCause cause, final boolean respawn) {
         this.teleportOwner = user;
         this.ess = ess;
         this.teleport = teleport;
         this.timer_started = System.currentTimeMillis();
         this.timer_delay = delay;
+        this.parentFuture = future;
         this.timer_health = teleportUser.getBase().getHealth();
         this.timer_initX = Math.round(teleportUser.getBase().getLocation().getX() * MOVE_CONSTANT);
         this.timer_initY = Math.round(teleportUser.getBase().getLocation().getY() * MOVE_CONSTANT);
@@ -98,20 +100,15 @@ public class AsyncTimedTeleport implements Runnable {
                         cancelTimer(false);
                         teleportUser.sendMessage(tl("teleportationCommencing"));
 
-                        final CompletableFuture<Boolean> future = new CompletableFuture<>();
-                        future.exceptionally(e -> {
-                            ess.showError(teleportOwner.getSource(), e, "\\ teleport");
-                            return false;
-                        });
                         if (timer_chargeFor != null) {
                             timer_chargeFor.isAffordableFor(teleportOwner);
                         }
                         if (timer_respawn) {
-                            teleport.respawnNow(teleportUser, timer_cause, future);
+                            teleport.respawnNow(teleportUser, timer_cause, parentFuture);
                         } else {
-                            teleport.nowAsync(teleportUser, timer_teleportTarget, timer_cause, future);
+                            teleport.nowAsync(teleportUser, timer_teleportTarget, timer_cause, parentFuture);
                         }
-                        future.thenAccept(success -> {
+                        parentFuture.thenAccept(success -> {
                             if (timer_chargeFor != null) {
                                 try {
                                     timer_chargeFor.charge(teleportOwner);
