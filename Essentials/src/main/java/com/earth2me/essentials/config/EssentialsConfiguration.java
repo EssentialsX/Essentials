@@ -166,11 +166,6 @@ public class EssentialsConfiguration {
         return node.getDouble();
     }
 
-    public boolean isDouble(final String path) {
-        final CommentedConfigurationNode node = getInternal(path);
-        return node != null && node.raw() instanceof Double;
-    }
-
     public void setProperty(final String path, final float value) {
         setInternal(path, value);
     }
