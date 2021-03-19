@@ -1,5 +1,6 @@
 package com.earth2me.essentials;
 
+import com.earth2me.essentials.config.ConfigurateUtil;
 import com.earth2me.essentials.craftbukkit.BanLookup;
 import com.earth2me.essentials.settings.Spawns;
 import com.earth2me.essentials.storage.YamlStorageWriter;
@@ -11,7 +12,7 @@ import org.bukkit.BanList;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
-import org.bukkit.configuration.ConfigurationSection;
+import org.spongepowered.configurate.CommentedConfigurationNode;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
@@ -204,13 +205,13 @@ public class EssentialsUpgrade {
 
         LOGGER.info("Attempting to convert old kits in config.yml to new kits.yml");
 
-        final ConfigurationSection section = ess.getSettings().getKitSection();
+        final CommentedConfigurationNode section = ess.getSettings().getKitSection();
         if (section == null) {
             LOGGER.info("No kits found to migrate.");
             return;
         }
 
-        final Map<String, Object> legacyKits = ess.getSettings().getKitSection().getValues(true);
+        final Map<String, Object> legacyKits = ConfigurateUtil.getRawMap(section);
 
         for (final Map.Entry<String, Object> entry : legacyKits.entrySet()) {
             LOGGER.info("Converting " + entry.getKey());
