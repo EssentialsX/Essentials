@@ -6,6 +6,7 @@ import com.earth2me.essentials.utils.DateUtil;
 import com.google.common.base.Charsets;
 import com.google.common.io.CharStreams;
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import org.bukkit.Material;
 import org.bukkit.Server;
@@ -32,8 +33,8 @@ import static com.earth2me.essentials.I18n.tl;
 
 public class Commandcreatekit extends EssentialsCommand {
 
-    private static final String PASTE_URL = "https://hastebin.com/";
-    private static final String PASTE_UPLOAD_URL = PASTE_URL + "documents";
+    private static final String PASTE_URL = "https://paste.gg/";
+    private static final String PASTE_UPLOAD_URL = "https://api.paste.gg/v1/pastes";
     private static final Gson GSON = new Gson();
 
     private final ExecutorService executorService = Executors.newSingleThreadExecutor();
@@ -90,8 +91,19 @@ public class Commandcreatekit extends EssentialsCommand {
                 connection.setDoInput(true);
                 connection.setDoOutput(true);
                 connection.setRequestProperty("User-Agent", "EssentialsX plugin");
+                connection.setRequestProperty("Content-Type", "application/json");
+                final JsonObject body = new JsonObject();
+                final JsonArray files = new JsonArray();
+                final JsonObject file = new JsonObject();
+                final JsonObject content = new JsonObject();
+                content.addProperty("format", "text");
+                content.addProperty("value", contents);
+                file.add("content", content);
+                files.add(file);
+                body.add("files", files);
+
                 try (final OutputStream os = connection.getOutputStream()) {
-                    os.write(contents.getBytes(Charsets.UTF_8));
+                    os.write(body.toString().getBytes(Charsets.UTF_8));
                 }
                 // Error
                 if (connection.getResponseCode() >= 400) {
@@ -103,7 +115,7 @@ public class Commandcreatekit extends EssentialsCommand {
 
                 // Read URL
                 final JsonObject object = GSON.fromJson(new InputStreamReader(connection.getInputStream(), Charsets.UTF_8), JsonObject.class);
-                final String pasteUrl = PASTE_URL + object.get("key").getAsString();
+                final String pasteUrl = PASTE_URL + object.get("result").getAsJsonObject().get("id").getAsString();
                 connection.disconnect();
 
                 final String separator = tl("createKitSeparator");
