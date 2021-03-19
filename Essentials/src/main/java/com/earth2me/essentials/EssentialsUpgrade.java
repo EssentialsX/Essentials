@@ -1,6 +1,7 @@
 package com.earth2me.essentials;
 
 import com.earth2me.essentials.config.ConfigurateUtil;
+import com.earth2me.essentials.config.EssentialsConfiguration;
 import com.earth2me.essentials.craftbukkit.BanLookup;
 import com.earth2me.essentials.settings.Spawns;
 import com.earth2me.essentials.storage.YamlStorageWriter;
@@ -52,14 +53,14 @@ public class EssentialsUpgrade {
     private static final String PATTERN_CONFIG_NAME_REGEX = "(?mi)^lastAccountName:\\s*[\"\']?(\\w+)[\"\']?\\s*$";
     private static final Pattern PATTERN_CONFIG_NAME = Pattern.compile(PATTERN_CONFIG_NAME_REGEX);
     private final transient IEssentials ess;
-    private final transient EssentialsConf doneFile;
+    private final transient EssentialsConfiguration doneFile;
 
     EssentialsUpgrade(final IEssentials essentials) {
         ess = essentials;
         if (!ess.getDataFolder().exists()) {
             ess.getDataFolder().mkdirs();
         }
-        doneFile = new EssentialsConf(new File(ess.getDataFolder(), "upgrades-done.yml"));
+        doneFile = new EssentialsConfiguration(new File(ess.getDataFolder(), "upgrades-done.yml"));
         doneFile.load();
     }
 
