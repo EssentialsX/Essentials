@@ -393,20 +393,20 @@ public class EssentialsSign {
 
     protected final BigDecimal getMoney(final String line, final IEssentials ess) throws SignException {
         final boolean isMoney = line.matches("^[^0-9-\\.]?[\\.0-9]+[^0-9-\\.]?$");
-        return isMoney ? getBigDecimalPositive(NumberUtil.sanitizeCurrencyString(line, ess)) : null;
+        return isMoney ? getBigDecimalPositive(line, ess) : null;
     }
 
-    protected final BigDecimal getBigDecimalPositive(final String line) throws SignException {
-        final BigDecimal quantity = getBigDecimal(line);
+    protected final BigDecimal getBigDecimalPositive(final String line, final IEssentials ess) throws SignException {
+        final BigDecimal quantity = getBigDecimal(line, ess);
         if (quantity.compareTo(MINTRANSACTION) < 0) {
             throw new SignException(tl("moreThanZero"));
         }
         return quantity;
     }
 
-    protected final BigDecimal getBigDecimal(final String line) throws SignException {
+    protected final BigDecimal getBigDecimal(final String line, final IEssentials ess) throws SignException {
         try {
-            return new BigDecimal(line);
+            return new BigDecimal(NumberUtil.sanitizeCurrencyString(line, ess));
         } catch (final ArithmeticException | NumberFormatException ex) {
             throw new SignException(ex.getMessage(), ex);
         }
