@@ -1,5 +1,9 @@
 package com.earth2me.essentials.config;
 
+import net.ess3.api.InvalidWorldException;
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.World;
 import org.spongepowered.configurate.CommentedConfigurationNode;
 import org.spongepowered.configurate.ConfigurateException;
 import org.spongepowered.configurate.loader.ParsingException;
@@ -10,7 +14,11 @@ import org.spongepowered.configurate.yaml.YamlConfigurationLoader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.math.BigDecimal;
 import java.nio.file.Files;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -41,6 +49,195 @@ public class EssentialsConfiguration {
         this.configFile = configFile;
         this.loader = YamlConfigurationLoader.builder().nodeStyle(NodeStyle.BLOCK).indent(2).file(configFile).build();
         this.templateName = templateName;
+    }
+
+    public void setProperty(final String path, final Location location) {
+        //noinspection ConstantConditions
+        setInternal(path + ".world", location.getWorld().getName());
+        setInternal(path + ".x", location.getX());
+        setInternal(path + ".y", location.getY());
+        setInternal(path + ".z", location.getZ());
+        setInternal(path + ".yaw", location.getYaw());
+        setInternal(path + ".pitch", location.getPitch());
+    }
+
+    public Location getLocation(final String path) throws InvalidWorldException {
+        final String worldName = getString(path + ".world", null);
+        if (worldName == null || worldName.isEmpty()) {
+            return null;
+        }
+
+        final World world = Bukkit.getWorld(worldName);
+        if (world == null) {
+            throw new InvalidWorldException(worldName);
+        }
+        return new Location(world, getDouble(path + ".x", 0), getDouble(path + ".y", 0),
+                getDouble(path + ".z", 0), getFloat(path + ".yaw", 0), getFloat(path + ".pitch", 0));
+    }
+
+    public void setProperty(final String path, final List<?> list) {
+        setInternal(path, list);
+    }
+
+    public <T> List<T> getList(final String path, Class<T> type) {
+        final CommentedConfigurationNode node = getInternal(path);
+        if (node == null) {
+            return new ArrayList<>();
+        }
+        try {
+            final List<T> list = node.getList(type);
+            if (list == null) {
+                return new ArrayList<>();
+            }
+            return list;
+        } catch (SerializationException e) {
+            LOGGER.log(Level.SEVERE, e.getMessage(), e);
+            return new ArrayList<>();
+        }
+    }
+
+    public boolean isList(String path) {
+        final CommentedConfigurationNode node = getInternal(path);
+        return node != null && node.isList();
+    }
+
+    public void setProperty(final String path, final String value) {
+        setInternal(path, value);
+    }
+
+    public String getString(final String path, final String def) {
+        final CommentedConfigurationNode node = getInternal(path);
+        if (node == null) {
+            return def;
+        }
+        return node.getString();
+    }
+
+    public void setProperty(final String path, final boolean value) {
+        setInternal(path, value);
+    }
+
+    public boolean getBoolean(final String path, final boolean def) {
+        final CommentedConfigurationNode node = getInternal(path);
+        if (node == null) {
+            return def;
+        }
+        return node.getBoolean();
+    }
+
+    public boolean isBoolean(final String path) {
+        final CommentedConfigurationNode node = getInternal(path);
+        return node != null && node.raw() instanceof Boolean;
+    }
+
+    public void setProperty(final String path, final long value) {
+        setInternal(path, value);
+    }
+
+    public long getLong(final String path, final long def) {
+        final CommentedConfigurationNode node = getInternal(path);
+        if (node == null) {
+            return def;
+        }
+        return node.getLong();
+    }
+
+    public void setProperty(final String path, final int value) {
+        setInternal(path, value);
+    }
+
+    public int getInt(final String path, final int def) {
+        final CommentedConfigurationNode node = getInternal(path);
+        if (node == null) {
+            return def;
+        }
+        return node.getInt();
+    }
+
+    public void setProperty(final String path, final double value) {
+        setInternal(path, value);
+    }
+
+    public double getDouble(final String path, final double def) {
+        final CommentedConfigurationNode node = getInternal(path);
+        if (node == null) {
+            return def;
+        }
+        return node.getDouble();
+    }
+
+    public boolean isDouble(final String path) {
+        final CommentedConfigurationNode node = getInternal(path);
+        return node != null && node.raw() instanceof Double;
+    }
+
+    public void setProperty(final String path, final float value) {
+        setInternal(path, value);
+    }
+
+    public float getFloat(final String path, final float def) {
+        final CommentedConfigurationNode node = getInternal(path);
+        if (node == null) {
+            return def;
+        }
+        return node.getFloat();
+    }
+
+    public void setProperty(final String path, final BigDecimal value) {
+        setProperty(path, value.toString());
+    }
+
+    public BigDecimal getBigDecimal(final String path, final BigDecimal def) {
+        final CommentedConfigurationNode node = getInternal(path);
+        if (node == null) {
+            return def;
+        }
+        return ConfigurateUtil.toBigDecimal(node.getString(), def);
+    }
+
+    public Object get(final String path) {
+        final CommentedConfigurationNode node = getInternal(path);
+        return node == null ? null : node.raw();
+    }
+
+    public CommentedConfigurationNode getSection(final String path) {
+        final CommentedConfigurationNode node = configurationNode.node(toSplitRoot(path));
+        if (node.virtual()) {
+            return null;
+        }
+        return node;
+    }
+
+    public CommentedConfigurationNode newSection() {
+        return loader.createNode();
+    }
+
+    public Set<String> getKeys() {
+        return ConfigurateUtil.getKeys(configurationNode);
+    }
+
+    private void setInternal(final String path, final Object value) {
+        try {
+            configurationNode.node(toSplitRoot(path)).set(value);
+        } catch (SerializationException e) {
+            LOGGER.log(Level.SEVERE, e.getMessage(), e);
+        }
+    }
+
+    private CommentedConfigurationNode getInternal(final String path) {
+        final CommentedConfigurationNode node = configurationNode.node(toSplitRoot(path));
+        if (node.virtual()) {
+            return null;
+        }
+        return node;
+    }
+
+    public boolean hasProperty(final String path) {
+        return !configurationNode.node(toSplitRoot(path)).virtual();
+    }
+
+    public Object[] toSplitRoot(String node) {
+        return node.split("\\.");
     }
 
     public synchronized void load() {
@@ -107,10 +304,7 @@ public class EssentialsConfiguration {
 
     public synchronized void blockingSave() {
         try {
-            final Future<?> future = delaySave();
-            if (future != null) {
-                future.get();
-            }
+            delaySave().get();
         } catch (final InterruptedException | ExecutionException e) {
             LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
