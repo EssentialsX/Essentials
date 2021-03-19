@@ -211,6 +211,17 @@ public class EssentialsConfiguration {
         return ConfigurateUtil.getKeys(configurationNode);
     }
 
+    public void removeProperty(String path) {
+        final CommentedConfigurationNode node = getInternal(path);
+        if (node != null) {
+            try {
+                node.set(null);
+            } catch (SerializationException e) {
+                LOGGER.log(Level.SEVERE, e.getMessage(), e);
+            }
+        }
+    }
+
     private void setInternal(final String path, final Object value) {
         try {
             configurationNode.node(toSplitRoot(path)).set(value);
