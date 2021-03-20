@@ -87,7 +87,7 @@ public class EssentialsConfiguration {
 
     public Location getLocation(final String path) throws InvalidWorldException {
         final CommentedConfigurationNode node = path == null ? getRootNode() : getSection(path);
-        final String worldName = node.node("world").getString();
+        final String worldName = node == null ? null : node.node("world").getString();
         if (worldName == null || worldName.isEmpty()) {
             return null;
         }
