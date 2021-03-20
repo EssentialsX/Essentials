@@ -1,12 +1,15 @@
 package com.earth2me.essentials.config;
 
 import org.spongepowered.configurate.CommentedConfigurationNode;
+import org.spongepowered.configurate.serialize.SerializationException;
 
 import java.math.BigDecimal;
 import java.math.MathContext;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -48,6 +51,26 @@ public final class ConfigurateUtil {
             map.put(String.valueOf(entry.getKey()), entry.getValue().raw());
         }
         return map;
+    }
+
+    public static List<Map<?, ?>> getMapList(final CommentedConfigurationNode node) {
+        List<?> list = null;
+        try {
+            list = node.getList(Object.class);
+        } catch (SerializationException ignored) {
+        }
+        final List<Map<?, ?>> result = new ArrayList<>();
+
+        if (list == null) {
+            return result;
+        }
+
+        for (Object object : list) {
+            if (object instanceof Map) {
+                result.add((Map<?, ?>) object);
+            }
+        }
+        return result;
     }
 
     public static BigDecimal toBigDecimal(final String input, final BigDecimal def) {

@@ -41,7 +41,7 @@ public class EssentialsConfiguration {
     private final AtomicInteger pendingWrites = new AtomicInteger(0);
     private final AtomicBoolean transaction = new AtomicBoolean(false);
     private Class<?> resourceClass = EssentialsConfiguration.class;
-    private final File configFile;
+    protected final File configFile;
     private final YamlConfigurationLoader loader;
     private final String templateName;
     private CommentedConfigurationNode configurationNode;
@@ -314,11 +314,18 @@ public class EssentialsConfiguration {
             }
         }
 
-        if (!configFile.exists() && templateName != null) {
-            try (final InputStream is = resourceClass.getResourceAsStream(templateName)) {
-                Files.copy(is, configFile.toPath());
-            } catch (IOException e) {
-                LOGGER.log(Level.SEVERE, tl("failedToWriteConfig", configFile.toString()), e);
+        if (!configFile.exists()) {
+            if (legacyFileExists()) {
+                convertLegacyFile();
+            } else if (altFileExists()) {
+                convertAltFile();
+            } else if (templateName != null) {
+                try (final InputStream is = resourceClass.getResourceAsStream(templateName)) {
+                    LOGGER.log(Level.INFO, tl("creatingConfigFromTemplate", configFile.toString()));
+                    Files.copy(is, configFile.toPath());
+                } catch (IOException e) {
+                    LOGGER.log(Level.SEVERE, tl("failedToWriteConfig", configFile.toString()), e);
+                }
             }
         }
 
@@ -339,6 +346,22 @@ public class EssentialsConfiguration {
                 configurationNode = loader.createNode();
             }
         }
+    }
+
+    public boolean legacyFileExists() {
+        return false;
+    }
+
+    public void convertLegacyFile() {
+
+    }
+
+    public boolean altFileExists() {
+        return false;
+    }
+
+    public void convertAltFile() {
+
     }
 
     /**

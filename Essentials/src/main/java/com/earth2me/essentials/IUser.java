@@ -160,6 +160,7 @@ public interface IUser {
 
     void setIgnoreMsg(boolean ignoreMsg);
 
+    @Deprecated
     void setConfigProperty(String node, Object object);
 
     Set<String> getConfigKeys();

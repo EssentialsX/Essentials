@@ -1,5 +1,7 @@
 package com.earth2me.essentials;
 
+import com.earth2me.essentials.config.ConfigurateUtil;
+import com.earth2me.essentials.config.EssentialsUserConfiguration;
 import com.earth2me.essentials.utils.NumberUtil;
 import com.earth2me.essentials.utils.StringUtil;
 import com.google.common.collect.ImmutableMap;
@@ -8,9 +10,9 @@ import net.ess3.api.InvalidWorldException;
 import net.ess3.api.MaxMoneyException;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.spongepowered.configurate.CommentedConfigurationNode;
 
 import java.io.File;
 import java.math.BigDecimal;
@@ -32,7 +34,7 @@ import static com.earth2me.essentials.I18n.tl;
 
 public abstract class UserData extends PlayerExtension implements IConf {
     protected final transient IEssentials ess;
-    private final EssentialsUserConf config;
+    private final EssentialsUserConfiguration config;
     private BigDecimal money;
     private Map<String, Object> homes;
     private String nickname;
@@ -88,20 +90,20 @@ public abstract class UserData extends PlayerExtension implements IConf {
             filename = base.getName();
         }
 
-        config = new EssentialsUserConf(base.getName(), base.getUniqueId(), new File(folder, filename + ".yml"));
+        config = new EssentialsUserConfiguration(base.getName(), base.getUniqueId(), new File(folder, filename + ".yml"));
         reloadConfig();
     }
 
     public final void reset() {
-        config.forceSave();
+        config.blockingSave();
         config.getFile().delete();
-        if (config.username != null) {
-            ess.getUserMap().removeUser(config.username);
+        if (config.getUsername() != null) {
+            ess.getUserMap().removeUser(config.getUsername());
         }
     }
 
     public final void cleanup() {
-        config.cleanup();
+        config.blockingSave();
     }
 
     @Override
@@ -190,8 +192,9 @@ public abstract class UserData extends PlayerExtension implements IConf {
     }
 
     private Map<String, Object> _getHomes() {
-        if (config.isConfigurationSection("homes")) {
-            return config.getConfigurationSection("homes").getValues(false);
+        final CommentedConfigurationNode section = config.getSection("homes");
+        if (section != null) {
+            return ConfigurateUtil.getRawMap(section);
         }
         return new HashMap<>();
     }
@@ -208,7 +211,7 @@ public abstract class UserData extends PlayerExtension implements IConf {
 
     public Location getHome(final String name) throws Exception {
         final String search = getHomeName(name);
-        return config.getLocation("homes." + search, this.getBase().getServer());
+        return config.getLocation("homes." + search);
     }
 
     public Location getHome(final Location world) {
@@ -218,13 +221,13 @@ public abstract class UserData extends PlayerExtension implements IConf {
             }
             Location loc;
             for (final String home : getHomes()) {
-                loc = config.getLocation("homes." + home, this.getBase().getServer());
+                loc = config.getLocation("homes." + home);
                 if (world.getWorld() == loc.getWorld()) {
                     return loc;
                 }
 
             }
-            loc = config.getLocation("homes." + getHomes().get(0), this.getBase().getServer());
+            loc = config.getLocation("homes." + getHomes().get(0));
             return loc;
         } catch (final InvalidWorldException ex) {
             return null;
@@ -266,7 +269,7 @@ public abstract class UserData extends PlayerExtension implements IConf {
     }
 
     public String _getNickname() {
-        return config.getString("nickname");
+        return config.getString("nickname", null);
     }
 
     public String getNickname() {
@@ -281,7 +284,7 @@ public abstract class UserData extends PlayerExtension implements IConf {
 
     private Set<Material> _getUnlimited() {
         final Set<Material> retlist = new HashSet<>();
-        final List<String> configList = config.getStringList("unlimited");
+        final List<String> configList = config.getList("unlimited", String.class);
         for (final String s : configList) {
             final Material mat = Material.matchMaterial(s);
             if (mat != null) {
@@ -319,15 +322,16 @@ public abstract class UserData extends PlayerExtension implements IConf {
     }
 
     private Map<String, Object> _getPowertools() {
-        if (config.isConfigurationSection("powertools")) {
-            return config.getConfigurationSection("powertools").getValues(false);
+        final CommentedConfigurationNode node = config.getSection("powertools");
+        if (node != null) {
+            return ConfigurateUtil.getRawMap(node);
         }
         return new HashMap<>();
     }
 
     public void clearAllPowertools() {
         powertools.clear();
-        config.setProperty("powertools", powertools);
+        config.setRaw("powertools", powertools);
         config.save();
     }
 
@@ -347,7 +351,7 @@ public abstract class UserData extends PlayerExtension implements IConf {
         } else {
             powertools.put(stack.getType().name().toLowerCase(Locale.ENGLISH), commandList);
         }
-        config.setProperty("powertools", powertools);
+        config.setRaw("powertools", powertools);
         config.save();
     }
 
@@ -357,7 +361,7 @@ public abstract class UserData extends PlayerExtension implements IConf {
 
     private Location _getLastLocation() {
         try {
-            return config.getLocation("lastlocation", this.getBase().getServer());
+            return config.getLocation("lastlocation");
         } catch (final InvalidWorldException e) {
             return null;
         }
@@ -378,7 +382,7 @@ public abstract class UserData extends PlayerExtension implements IConf {
 
     private Location _getLogoutLocation() {
         try {
-            return config.getLocation("logoutlocation", this.getBase().getServer());
+            return config.getLocation("logoutlocation");
         } catch (final InvalidWorldException e) {
             return null;
         }
@@ -426,7 +430,7 @@ public abstract class UserData extends PlayerExtension implements IConf {
     }
 
     private String _getJail() {
-        return config.getString("jail");
+        return config.getString("jail", null);
     }
 
     public String getJail() {
@@ -445,7 +449,7 @@ public abstract class UserData extends PlayerExtension implements IConf {
     }
 
     private List<String> _getMails() {
-        return config.getStringList("mail");
+        return config.getList("mail", String.class);
     }
 
     public List<String> getMails() {
@@ -498,7 +502,7 @@ public abstract class UserData extends PlayerExtension implements IConf {
 
     public List<UUID> _getIgnoredPlayers() {
         final List<UUID> players = new ArrayList<>();
-        for (final String uuid : config.getStringList("ignore")) {
+        for (final String uuid : config.getList("ignore", String.class)) {
             try {
                 players.add(UUID.fromString(uuid));
             } catch (final IllegalArgumentException ignored) {
@@ -593,7 +597,7 @@ public abstract class UserData extends PlayerExtension implements IConf {
     }
 
     public String _getMuteReason() {
-        return config.getString("muteReason");
+        return config.getString("muteReason", null);
     }
 
     public String getMuteReason() {
@@ -742,7 +746,7 @@ public abstract class UserData extends PlayerExtension implements IConf {
     }
 
     private String _getGeoLocation() {
-        return config.getString("geolocation");
+        return config.getString("geolocation", null);
     }
 
     public String getGeoLocation() {
@@ -824,15 +828,14 @@ public abstract class UserData extends PlayerExtension implements IConf {
     }
 
     private Map<String, Long> _getKitTimestamps() {
-
-        if (config.isConfigurationSection("timestamps.kits")) {
-            final ConfigurationSection section = config.getConfigurationSection("timestamps.kits");
+        final Map<String, Object> node = ConfigurateUtil.getRawMap(config.getSection("timestamps.kits"));
+        if (!node.isEmpty()) {
             final Map<String, Long> timestamps = new HashMap<>();
-            for (final String command : section.getKeys(false)) {
-                if (section.isLong(command)) {
-                    timestamps.put(command.toLowerCase(Locale.ENGLISH), section.getLong(command));
-                } else if (section.isInt(command)) {
-                    timestamps.put(command.toLowerCase(Locale.ENGLISH), (long) section.getInt(command));
+            for (final Map.Entry<String, Object> entry : node.entrySet()) {
+                if (entry.getValue() instanceof Long) {
+                    timestamps.put(entry.getKey().toLowerCase(Locale.ENGLISH), (Long) entry.getValue());
+                } else if (entry.getValue() instanceof Integer) {
+                    timestamps.put(entry.getKey().toLowerCase(Locale.ENGLISH), Long.valueOf((Integer) entry.getValue()));
                 }
             }
             return timestamps;
@@ -851,55 +854,42 @@ public abstract class UserData extends PlayerExtension implements IConf {
     public void setKitTimestamp(String name, final long time) {
         name = name.replace('.', '_').replace('/', '_').toLowerCase(Locale.ENGLISH);
         kitTimestamps.put(name, time);
-        config.setProperty("timestamps.kits", kitTimestamps);
-        config.save();
-    }
-
-    public void setConfigProperty(String node, final Object object) {
-        final String prefix = "info.";
-        node = prefix + node;
-        if (object instanceof Map) {
-            config.setProperty(node, (Map) object);
-        } else if (object instanceof List) {
-            config.setProperty(node, (List<String>) object);
-        } else if (object instanceof Location) {
-            config.setProperty(node, (Location) object);
-        } else if (object instanceof ItemStack) {
-            config.setProperty(node, (ItemStack) object);
-        } else {
-            config.setProperty(node, object);
-        }
+        config.setRaw("timestamps.kits", kitTimestamps);
         config.save();
     }
 
     public Set<String> getConfigKeys() {
-        if (config.isConfigurationSection("info")) {
-            return config.getConfigurationSection("info").getKeys(true);
+        final Set<String> keys = ConfigurateUtil.getKeys(config.getSection("info"));
+        if (!keys.isEmpty()) {
+            return keys;
         }
         return new HashSet<>();
     }
 
     public Map<String, Object> getConfigMap() {
-        if (config.isConfigurationSection("info")) {
-            return config.getConfigurationSection("info").getValues(true);
+        final Map<String, Object> node = ConfigurateUtil.getRawMap(config.getSection("info"));
+        if (!node.isEmpty()) {
+            return node;
         }
         return new HashMap<>();
     }
 
     public Map<String, Object> getConfigMap(final String node) {
-        if (config.isConfigurationSection("info." + node)) {
-            return config.getConfigurationSection("info." + node).getValues(true);
+        final Map<String, Object> nodeMap = ConfigurateUtil.getRawMap(config.getSection("info." + node));
+        if (!nodeMap.isEmpty()) {
+            return nodeMap;
         }
         return new HashMap<>();
     }
 
     private Map<Pattern, Long> _getCommandCooldowns() {
-        if (!config.contains("timestamps.command-cooldowns")) {
+        final CommentedConfigurationNode node = config.getSection("timestamps.command-cooldowns");
+        if (node == null) {
             return null;
         }
 
         // See saveCommandCooldowns() for deserialization explanation
-        final List<Map<?, ?>> section = config.getMapList("timestamps.command-cooldowns");
+        final List<Map<?, ?>> section = ConfigurateUtil.getMapList(node);
         final HashMap<Pattern, Long> result = new HashMap<>();
         for (final Map<?, ?> map : section) {
             final Pattern pattern = Pattern.compile(map.get("pattern").toString());
@@ -1044,7 +1034,7 @@ public abstract class UserData extends PlayerExtension implements IConf {
     }
 
     public UUID getConfigUUID() {
-        return config.uuid;
+        return config.getUuid();
     }
 
     public void save() {
@@ -1057,5 +1047,9 @@ public abstract class UserData extends PlayerExtension implements IConf {
 
     public void stopTransaction() {
         config.stopTransaction();
+    }
+
+    public void setConfigProperty(String node, Object object) {
+        throw new UnsupportedOperationException("This method is unused in EssentialsX and is scheduled for removal. Please use another method!");
     }
 }
