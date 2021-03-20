@@ -1,8 +1,8 @@
 package com.earth2me.essentials.geoip;
 
-import com.earth2me.essentials.EssentialsConf;
 import com.earth2me.essentials.IConf;
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.config.EssentialsConfiguration;
 import com.ice.tar.TarEntry;
 import com.ice.tar.TarInputStream;
 import com.maxmind.geoip2.DatabaseReader;
@@ -39,7 +39,7 @@ import static com.earth2me.essentials.I18n.tl;
 public class EssentialsGeoIPPlayerListener implements Listener, IConf {
     private static final Logger logger = Logger.getLogger("EssentialsGeoIP");
     private final File dataFolder;
-    private final EssentialsConf config;
+    private final EssentialsConfiguration config;
     private final transient IEssentials ess;
     private DatabaseReader mmreader = null; // initialize maxmind geoip2 reader
     private File databaseFile;
@@ -47,8 +47,7 @@ public class EssentialsGeoIPPlayerListener implements Listener, IConf {
     EssentialsGeoIPPlayerListener(final File dataFolder, final IEssentials ess) {
         this.ess = ess;
         this.dataFolder = dataFolder;
-        this.config = new EssentialsConf(new File(dataFolder, "config.yml"));
-        config.setTemplateName("/config.yml", EssentialsGeoIP.class);
+        this.config = new EssentialsConfiguration(new File(dataFolder, "config.yml"), "/config.yml", EssentialsGeoIP.class);
         reloadConfig();
     }
 
@@ -130,13 +129,13 @@ public class EssentialsGeoIPPlayerListener implements Listener, IConf {
         config.load();
 
         // detect and update the old config.yml. migrate from legacy GeoIP to GeoIP2.
-        if (!config.isSet("enable-locale")) {
-            config.set("database.download-url", "https://download.maxmind.com/app/geoip_download?edition_id=GeoLite2-Country&license_key={LICENSEKEY}&suffix=tar.gz");
-            config.set("database.download-url-city", "https://download.maxmind.com/app/geoip_download?edition_id=GeoLite2-City&license_key={LICENSEKEY}&suffix=tar.gz");
-            config.set("database.license-key", "");
-            config.set("database.update.enable", true);
-            config.set("database.update.by-every-x-days", 30);
-            config.set("enable-locale", true);
+        if (!config.hasProperty("enable-locale")) {
+            config.setProperty("database.download-url", "https://download.maxmind.com/app/geoip_download?edition_id=GeoLite2-Country&license_key={LICENSEKEY}&suffix=tar.gz");
+            config.setProperty("database.download-url-city", "https://download.maxmind.com/app/geoip_download?edition_id=GeoLite2-City&license_key={LICENSEKEY}&suffix=tar.gz");
+            config.setProperty("database.license-key", "");
+            config.setProperty("database.update.enable", true);
+            config.setProperty("database.update.by-every-x-days", 30);
+            config.setProperty("enable-locale", true);
             config.save();
             // delete old GeoIP.dat fiiles
             final File oldDatFile = new File(dataFolder, "GeoIP.dat");
@@ -166,7 +165,7 @@ public class EssentialsGeoIPPlayerListener implements Listener, IConf {
         }
         try {
             // locale setting
-            if (config.getBoolean("enable-locale")) {
+            if (config.getBoolean("enable-locale", false)) {
                 // Get geolocation based on Essentials' locale. If the locale is not avaliable, use "en".
                 String locale = ess.getI18n().getCurrentLocale().toString().replace('_', '-');
                 // This fixes an inconsistency where Essentials uses "zh" but MaxMind expects "zh-CN".
@@ -186,9 +185,9 @@ public class EssentialsGeoIPPlayerListener implements Listener, IConf {
         try {
             String url;
             if (config.getBoolean("database.show-cities", false)) {
-                url = config.getString("database.download-url-city");
+                url = config.getString("database.download-url-city", null);
             } else {
-                url = config.getString("database.download-url");
+                url = config.getString("database.download-url", null);
             }
             if (url == null || url.isEmpty()) {
                 logger.log(Level.SEVERE, tl("geoIpUrlEmpty"));
