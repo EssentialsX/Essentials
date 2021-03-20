@@ -1081,6 +1081,10 @@ spawn-join-listener-priority: high
 # When users die, should they respawn at their first home or bed, instead of the spawnpoint?
 respawn-at-home: false
 
+# When users die, should they respawn at their bed instead of the spawnpoint?
+# The value of respawn-at-home (above) has to be true.
+respawn-at-home-bed: true
+
 # When users die, should EssentialsSpawn respect users' respawn anchors?
 respawn-at-anchor: false
 
