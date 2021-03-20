@@ -6,6 +6,8 @@ import org.bukkit.Location;
 import org.bukkit.World;
 import org.spongepowered.configurate.CommentedConfigurationNode;
 import org.spongepowered.configurate.ConfigurateException;
+import org.spongepowered.configurate.ConfigurationOptions;
+import org.spongepowered.configurate.loader.HeaderMode;
 import org.spongepowered.configurate.loader.ParsingException;
 import org.spongepowered.configurate.serialize.SerializationException;
 import org.spongepowered.configurate.yaml.NodeStyle;
@@ -49,8 +51,13 @@ public class EssentialsConfiguration {
     }
 
     public EssentialsConfiguration(final File configFile, final String templateName) {
+        this(configFile, templateName, null);
+    }
+
+    public EssentialsConfiguration(final File configFile, final String templateName, final String header) {
         this.configFile = configFile;
-        this.loader = YamlConfigurationLoader.builder().nodeStyle(NodeStyle.BLOCK).indent(2).file(configFile).build();
+        this.loader = YamlConfigurationLoader.builder().defaultOptions(ConfigurationOptions.defaults().header(header))
+                .headerMode(HeaderMode.PRESET).nodeStyle(NodeStyle.BLOCK).indent(2).file(configFile).build();
         this.templateName = templateName;
     }
 
