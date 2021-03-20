@@ -40,7 +40,7 @@ public class EssentialsConfiguration {
     private static final ExecutorService EXECUTOR_SERVICE = Executors.newSingleThreadExecutor();
     private final AtomicInteger pendingWrites = new AtomicInteger(0);
     private final AtomicBoolean transaction = new AtomicBoolean(false);
-    protected Class<?> resourceClass = EssentialsConfiguration.class;
+    private Class<?> resourceClass = EssentialsConfiguration.class;
     private final File configFile;
     private final YamlConfigurationLoader loader;
     private final String templateName;
@@ -51,7 +51,12 @@ public class EssentialsConfiguration {
     }
 
     public EssentialsConfiguration(final File configFile, final String templateName) {
-        this(configFile, templateName, null);
+        this(configFile, templateName, (String) null);
+    }
+
+    public EssentialsConfiguration(final File configFile, final String templateName, final Class<?> resourceClass) {
+        this(configFile, templateName, (String) null);
+        this.resourceClass = resourceClass;
     }
 
     public EssentialsConfiguration(final File configFile, final String templateName, final String header) {
