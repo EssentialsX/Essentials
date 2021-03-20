@@ -17,7 +17,10 @@ import java.io.InputStream;
 import java.math.BigDecimal;
 import java.nio.file.Files;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
@@ -51,6 +54,10 @@ public class EssentialsConfiguration {
         this.templateName = templateName;
     }
 
+    public CommentedConfigurationNode getRootNode() {
+        return configurationNode;
+    }
+
     public void setProperty(final String path, final Location location) {
         //noinspection ConstantConditions
         setInternal(path + ".world", location.getWorld().getName());
@@ -73,6 +80,27 @@ public class EssentialsConfiguration {
         }
         return new Location(world, getDouble(path + ".x", 0), getDouble(path + ".y", 0),
                 getDouble(path + ".z", 0), getFloat(path + ".yaw", 0), getFloat(path + ".pitch", 0));
+    }
+
+    public Map<String, Location> getLocationSectionMap(final String path) {
+        final CommentedConfigurationNode node = getSection(path);
+        final Map<String, Location> result = new HashMap<>();
+        for (final Map.Entry<String, CommentedConfigurationNode> entry : ConfigurateUtil.getMap(node).entrySet()) {
+            final CommentedConfigurationNode jailNode = entry.getValue();
+            final String worldName = jailNode.node("world").getString();
+            if (worldName == null || worldName.isEmpty()) {
+                continue;
+            }
+
+            final World world = Bukkit.getWorld(worldName);
+            if (world == null) {
+                LOGGER.log(Level.WARNING, "Invalid world name, " + worldName + ", for key " + entry.getKey());
+                continue;
+            }
+            result.put(entry.getKey().toLowerCase(Locale.ENGLISH), new Location(world, jailNode.node("x").getDouble(), jailNode.node("y").getDouble(),
+                    jailNode.node("z").getDouble(), jailNode.node("yaw").getFloat(), jailNode.node("pitch").getFloat()));
+        }
+        return result;
     }
 
     public void setProperty(final String path, final List<?> list) {
@@ -190,6 +218,10 @@ public class EssentialsConfiguration {
         return ConfigurateUtil.toBigDecimal(node.getString(), def);
     }
 
+    public void setRaw(final String path, final Object value) {
+        setInternal(path, value);
+    }
+
     public Object get(final String path) {
         final CommentedConfigurationNode node = getInternal(path);
         return node == null ? null : node.raw();
@@ -209,6 +241,10 @@ public class EssentialsConfiguration {
 
     public Set<String> getKeys() {
         return ConfigurateUtil.getKeys(configurationNode);
+    }
+
+    public Map<String, CommentedConfigurationNode> getMap() {
+        return ConfigurateUtil.getMap(configurationNode);
     }
 
     public void removeProperty(String path) {
@@ -298,8 +334,16 @@ public class EssentialsConfiguration {
     }
 
     public void stopTransaction() {
+        stopTransaction(false);
+    }
+
+    public void stopTransaction(final boolean blocking) {
         transaction.set(false);
-        save();
+        if (blocking) {
+            blockingSave();
+        } else {
+            save();
+        }
     }
 
     public synchronized void save() {
