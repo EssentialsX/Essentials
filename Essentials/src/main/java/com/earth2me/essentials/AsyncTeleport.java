@@ -299,7 +299,7 @@ public class AsyncTeleport implements IAsyncTeleport {
 
         cancel(false);
         warnUser(teleportee, delay);
-        initTimer((long) (delay * 1000.0), teleportee, target, cashCharge, cause, false);
+        initTimer((long) (delay * 1000.0), teleportee, target, cashCharge, cause, false, future);
     }
 
     private void teleportOther(final IUser teleporter, final IUser teleportee, final ITarget target, final Trade chargeFor, final TeleportCause cause, final CompletableFuture<Boolean> future) {
@@ -345,12 +345,13 @@ public class AsyncTeleport implements IAsyncTeleport {
                     return;
                 }
             }
+            future.complete(true);
             return;
         }
 
         cancel(false);
         warnUser(teleportee, delay);
-        initTimer((long) (delay * 1000.0), teleportee, target, cashCharge, cause, false);
+        initTimer((long) (delay * 1000.0), teleportee, target, cashCharge, cause, false, future);
     }
 
     @Override
@@ -381,12 +382,13 @@ public class AsyncTeleport implements IAsyncTeleport {
             if (chargeFor != null) {
                 chargeFor.charge(teleportOwner, future);
             }
+            future.complete(true);
             return;
         }
 
         cancel(false);
         warnUser(teleportOwner, delay);
-        initTimer((long) (delay * 1000.0), teleportOwner, null, chargeFor, cause, true);
+        initTimer((long) (delay * 1000.0), teleportOwner, null, chargeFor, cause, true, future);
     }
 
     void respawnNow(final IUser teleportee, final TeleportCause cause, final CompletableFuture<Boolean> future) {
@@ -466,8 +468,8 @@ public class AsyncTeleport implements IAsyncTeleport {
         }
     }
 
-    private void initTimer(final long delay, final IUser teleportUser, final ITarget target, final Trade chargeFor, final TeleportCause cause, final boolean respawn) {
-        timedTeleport = new AsyncTimedTeleport(teleportOwner, ess, this, delay, teleportUser, target, chargeFor, cause, respawn);
+    private void initTimer(final long delay, final IUser teleportUser, final ITarget target, final Trade chargeFor, final TeleportCause cause, final boolean respawn, CompletableFuture<Boolean> future) {
+        timedTeleport = new AsyncTimedTeleport(teleportOwner, ess, this, delay, future, teleportUser, target, chargeFor, cause, respawn);
     }
 
     public enum TeleportType {
