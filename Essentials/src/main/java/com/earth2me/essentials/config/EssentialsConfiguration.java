@@ -65,7 +65,12 @@ public class EssentialsConfiguration {
         return configurationNode;
     }
 
-    public void setProperty(final String path, final Location location) {
+    public File getFile() {
+        return configFile;
+    }
+
+    public void setProperty(String path, final Location location) {
+        path = path == null ? "" : path;
         //noinspection ConstantConditions
         setInternal(path + ".world", location.getWorld().getName());
         setInternal(path + ".x", location.getX());
@@ -76,7 +81,8 @@ public class EssentialsConfiguration {
     }
 
     public Location getLocation(final String path) throws InvalidWorldException {
-        final String worldName = getString(path + ".world", null);
+        final CommentedConfigurationNode node = path == null ? getRootNode() : getSection(path);
+        final String worldName = node.node("world").getString();
         if (worldName == null || worldName.isEmpty()) {
             return null;
         }
@@ -85,8 +91,8 @@ public class EssentialsConfiguration {
         if (world == null) {
             throw new InvalidWorldException(worldName);
         }
-        return new Location(world, getDouble(path + ".x", 0), getDouble(path + ".y", 0),
-                getDouble(path + ".z", 0), getFloat(path + ".yaw", 0), getFloat(path + ".pitch", 0));
+        return new Location(world, node.node("x").getDouble(0), node.node("y").getDouble(0),
+                node.node("z").getDouble(0), node.node("yaw").getFloat(0), node.node("pitch").getFloat(0));
     }
 
     public Map<String, Location> getLocationSectionMap(final String path) {
@@ -286,7 +292,8 @@ public class EssentialsConfiguration {
     }
 
     public Object[] toSplitRoot(String node) {
-        return node.split("\\.");
+        node = node.startsWith(".") ? node.substring(1) : node;
+        return node.contains(".") ? node.split("\\.") : new Object[]{node};
     }
 
     public synchronized void load() {
@@ -331,7 +338,7 @@ public class EssentialsConfiguration {
 
     /**
      * Begins a transaction.
-     *
+     * <p>
      * A transaction informs Essentials to pause the saving of data. This is should be used when
      * bulk operations are being done and data shouldn't be saved until after the transaction has
      * been completed.
