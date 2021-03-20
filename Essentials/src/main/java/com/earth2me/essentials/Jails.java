@@ -56,6 +56,7 @@ public class Jails implements net.ess3.api.IJails {
     public void reloadConfig() {
         synchronized (jails) {
             config.load();
+            jails.clear();
             final CommentedConfigurationNode jailsNode = config.getSection("jails");
             for (final Map.Entry<String, CommentedConfigurationNode> entry : ConfigurateUtil.getMap(jailsNode).entrySet()) {
                 final CommentedConfigurationNode jailNode = entry.getValue();

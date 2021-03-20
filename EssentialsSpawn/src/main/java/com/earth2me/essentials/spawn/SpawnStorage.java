@@ -27,6 +27,7 @@ public class SpawnStorage implements IEssentialsModule, IConf {
     public void reloadConfig() {
         synchronized (spawns) {
             config.load();
+            spawns.clear();
             // need to outsource this because transitive relocations :)
             spawns.putAll(config.getLocationSectionMap("spawns"));
         }
