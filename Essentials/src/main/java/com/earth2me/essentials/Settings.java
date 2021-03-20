@@ -352,7 +352,7 @@ public class Settings implements net.ess3.api.ISettings {
     public BigDecimal getCommandCost(String name) {
         name = name.replace('.', '_').replace('/', '_');
         if (commandCosts != null) {
-            return EssentialsConf.toBigDecimal(commandCosts.getString(name), BigDecimal.ZERO);
+            return ConfigurateUtil.toBigDecimal(commandCosts.getString(name), BigDecimal.ZERO);
         }
         return BigDecimal.ZERO;
     }
