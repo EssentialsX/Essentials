@@ -2,6 +2,7 @@ package com.earth2me.essentials;
 
 import com.earth2me.essentials.config.ConfigurateUtil;
 import com.earth2me.essentials.config.EssentialsConfiguration;
+import com.earth2me.essentials.config.EssentialsUserConfiguration;
 import com.earth2me.essentials.craftbukkit.BanLookup;
 import com.earth2me.essentials.utils.StringUtil;
 import com.google.common.base.Charsets;
@@ -92,7 +93,7 @@ public class EssentialsUpgrade {
             countFiles++;
 
             final String name = string.substring(0, string.length() - 4);
-            final EssentialsUserConf config;
+            final EssentialsUserConfiguration config;
             UUID uuid = null;
             try {
                 uuid = UUID.fromString(name);
@@ -130,7 +131,7 @@ public class EssentialsUpgrade {
 
                 if (uuid != null) {
                     conf.blockingSave();
-                    config = new EssentialsUserConf(name, uuid, new File(userdir, uuid + ".yml"));
+                    config = new EssentialsUserConfiguration(name, uuid, new File(userdir, uuid + ".yml"));
                     config.convertLegacyFile();
                     ess.getUserMap().trackUUID(uuid, name, false);
                     continue;
