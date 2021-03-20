@@ -37,7 +37,7 @@ shadowJar {
     }
     relocate 'io.papermc.lib', 'com.earth2me.essentials.paperlib'
     relocate 'org.bstats.bukkit', 'com.earth2me.essentials.metrics'
-    relocate 'org.spongepowered.configurate', 'com.earth2me.essentials.configurate'
-    relocate 'org.yaml.snakeyaml', 'com.earth2me.essentials.snakeyaml'
-    relocate 'io.leangen.geantyref', 'com.earth2me.essentials.geantyref'
+    relocate 'org.spongepowered.configurate', 'com.earth2me.essentials.libs.configurate'
+    relocate 'org.yaml.snakeyaml', 'com.earth2me.essentials.libs.snakeyaml'
+    relocate 'io.leangen.geantyref', 'com.earth2me.essentials.libs.geantyref'
 }
