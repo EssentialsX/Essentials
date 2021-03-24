@@ -4,10 +4,6 @@ on:
   push:
     branches:
     - 2.x
-    - mc/*
-  pull_request:
-    branches:
-    - 2.x
 
 jobs:
   build:
@@ -30,6 +26,7 @@ jobs:
       uses: actions/setup-java@v1
       with:
         java-version: 1.8
+
     - name: Build with Gradle
       run: |
         chmod +x gradlew
@@ -39,6 +36,7 @@ jobs:
       with:
         name: EssentialsX plugin jars
         path: jars/
+
     - name: Deploy to Maven repo
       if: ${{ success() && github.event_name == 'push' && github.repository == 'EssentialsX/Essentials' && github.ref == 'refs/heads/2.x' }}
       env:
