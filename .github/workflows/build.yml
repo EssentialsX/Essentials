@@ -34,15 +34,24 @@ jobs:
       run: |
         chmod +x gradlew
         ./gradlew build --stacktrace
-    - name: Upload Artifacts
+    - name: Archive plugin jars on GitHub
       uses: actions/upload-artifact@master
       with:
         name: EssentialsX plugin jars
         path: jars/
-    - name: Deploy with Gradle
+    - name: Deploy to Maven repo
       if: ${{ success() && github.event_name == 'push' && github.repository == 'EssentialsX/Essentials' && github.ref == 'refs/heads/2.x' }}
       env:
         ORG_GRADLE_PROJECT_essxUsername: ${{ secrets.ESSENTIALSX_DEPLOY_USERNAME }}
         ORG_GRADLE_PROJECT_essxPassword: ${{ secrets.ESSENTIALSX_DEPLOY_PASSWORD }}
       run: |
         ./gradlew publish
+
+    - name: Deploy Javadocs
+      if: ${{ success() && github.event_name == 'push' && github.repository == 'EssentialsX/Essentials' && github.ref == 'refs/heads/2.x' }}
+      uses: netlify/actions/cli@master
+      with:
+        args: deploy --dir=Essentials/build/docs/javadoc/ --prod --message="Deploy from GitHub Actions"
+      env:
+        NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_JD_AUTH_TOKEN }}
+        NETLIFY_SITE_ID: ${{ secrets.NETLIFY_JD_2X_SITE_ID }}
