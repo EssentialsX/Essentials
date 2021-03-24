@@ -99,11 +99,8 @@ commands:
     # You must restart your server after changing this
     enabled: true
     # Whether or not the command should be hidden from other people in the channel
-    # If set to false, members of the discord will be able to see the exact command you executed
+    # If set to false, members of the discord will be able to see the exact command you executed as well as its response
     hide-command: true
-    # Whether or not the command response should be hidden from other people in the channel
-    # If set to false, members of the discord will be able to the output of commands you execute
-    hide-response: true
     # List of user ids or role names/ids allowed to use this command (or * to allow anyone to access it)
     allowed-roles:
       - "Admins"
@@ -130,7 +127,7 @@ commands:
     # You must restart your server after changing this
     enabled: true
     # Whether or not the command should be hidden from other people in the channel
-    # If set to false, members of the discord will be able to see when you use this command
+    # If set to false, members of the discord will be able to see when you use this command as well as its response
     hide-command: true
     # List of user ids or role names/ids allowed to use this command (or '*' to allow anyone to access it)
     allowed-roles:
