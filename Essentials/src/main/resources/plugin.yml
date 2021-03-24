@@ -684,6 +684,9 @@ permissions:
   essentials.back.ondeath:
     default: false
     description: Players with this permission will have back location stored during death
+  essentials.updatecheck:
+    default: false
+    description: Players with this permission will receive a message on join if there are new updates
   essentials.exempt:
     default: false
     description: Parent permission to be exempt from many moderator actions
