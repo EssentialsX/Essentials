@@ -64,9 +64,14 @@ public class ConsoleInjector extends AbstractAppender {
         }
 
         // Ansi strip is for normal colors, normal strip is for 1.16 hex color codes as they are not formatted correctly
-        final String entry = FormatUtil.stripFormat(FormatUtil.stripAnsi(event.getMessage().getFormattedMessage())).trim();
+        String entry = FormatUtil.stripFormat(FormatUtil.stripAnsi(event.getMessage().getFormattedMessage())).trim();
         if (entry.isEmpty()) {
             return;
+        }
+
+        final String loggerName = event.getLoggerName();
+        if (!loggerName.isEmpty() && !loggerName.contains(".")) {
+            entry = "[" + event.getLoggerName() + "] " + entry;
         }
 
         //noinspection UnstableApiUsage
