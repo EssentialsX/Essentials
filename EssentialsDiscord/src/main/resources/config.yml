@@ -48,10 +48,6 @@ chat:
   discord-max-length: 2000
   # Whether or not new lines from discord should be filtered or not
   filter-newlines: true
-  # Whether or not the player's avatar should be shown as the profile picture in discord
-  show-avatar: false
-  # Whether or not the player's name should be shown as the bot name in discord
-  show-name: false
 
 # Console relay settings
 # The console relay will send every message that is sent to the console, to a discord channel
@@ -93,6 +89,11 @@ message-types:
   kick: staff
   # Message sent when a player's mute state is changed on the minecraft server
   mute: staff
+
+# Whether or not player messages should show their avatar as the profile picture in discord
+show-avatar: false
+# Whether or not player messages should show their name as the bot name in discord
+show-name: false
 
 # Settings pertaining to the varies commands registered by EssentialsX on Discord
 commands:

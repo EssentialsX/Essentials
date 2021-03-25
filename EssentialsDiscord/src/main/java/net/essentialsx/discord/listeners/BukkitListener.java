@@ -43,21 +43,21 @@ public class BukkitListener implements Listener {
     public void onMute(MuteStatusChangeEvent event) {
         if (!event.getValue()) {
             sendDiscordMessage(DiscordMessageEvent.MessageType.MUTE, MessageUtil.formatMessage(jda.getSettings().getUnmuteFormat(),
-                    event.getAffected().getName(), event.getAffected().getDisplayName()), false);
+                    event.getAffected().getName(), event.getAffected().getDisplayName()));
         } else if (event.getTimestamp().isPresent()) {
             final boolean console = event.getController() == null;
             final MessageFormat msg = event.getReason() == null ? jda.getSettings().getTempMuteFormat() : jda.getSettings().getTempMuteReasonFormat();
             sendDiscordMessage(DiscordMessageEvent.MessageType.MUTE, MessageUtil.formatMessage(msg,
                     event.getAffected().getName(), event.getAffected().getDisplayName(),
                     console ? Console.NAME : event.getController().getName(), console ? Console.DISPLAY_NAME : event.getController().getDisplayName(),
-                    DateUtil.formatDateDiff(event.getTimestamp().get()), event.getReason()), false);
+                    DateUtil.formatDateDiff(event.getTimestamp().get()), event.getReason()));
         } else {
             final boolean console = event.getController() == null;
             final MessageFormat msg = event.getReason() == null ? jda.getSettings().getPermMuteFormat() : jda.getSettings().getPermMuteReasonFormat();
             sendDiscordMessage(DiscordMessageEvent.MessageType.MUTE, MessageUtil.formatMessage(msg,
                     event.getAffected().getName(), event.getAffected().getDisplayName(),
                     console ? Console.NAME : event.getController().getName(), console ? Console.DISPLAY_NAME : event.getController().getDisplayName(),
-                    event.getReason()), false);
+                    event.getReason()));
         }
     }
 
@@ -70,8 +70,8 @@ public class BukkitListener implements Listener {
                         player.hasPermission("essentials.discord.markdown") ? event.getMessage() : MessageUtil.sanitizeDiscordMarkdown(event.getMessage()),
                         player.getWorld().getName(), FormatUtil.stripEssentialsFormat(jda.getPlugin().getEss().getPermissionsHandler().getPrefix(player)),
                         FormatUtil.stripEssentialsFormat(jda.getPlugin().getEss().getPermissionsHandler().getSuffix(player))), player.hasPermission("essentials.discord.ping"),
-                        jda.getSettings().isChatShowAvatar() ? AVATAR_URL.replace("{uuid}", player.getUniqueId().toString()) : null,
-                        jda.getSettings().isChatShowName() ? player.getName() : null));
+                        jda.getSettings().isShowAvatar() ? AVATAR_URL.replace("{uuid}", player.getUniqueId().toString()) : null,
+                        jda.getSettings().isShowName() ? player.getName() : null));
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
@@ -79,7 +79,9 @@ public class BukkitListener implements Listener {
         // Delay join to let nickname load
         if (event.getJoinMessage() != null) {
             sendDiscordMessage(DiscordMessageEvent.MessageType.JOIN, MessageUtil.formatMessage(jda.getSettings().getJoinFormat(),
-                    event.getUser().getName(), event.getUser().getDisplayName(), event.getJoinMessage()), false);
+                    event.getUser().getName(), event.getUser().getDisplayName(), event.getJoinMessage()), false,
+                    jda.getSettings().isShowAvatar() ? AVATAR_URL.replace("{uuid}", event.getUser().getBase().getUniqueId().toString()) : null,
+                    jda.getSettings().isShowName() ? event.getUser().getName() : null);
         }
     }
 
@@ -87,24 +89,28 @@ public class BukkitListener implements Listener {
     public void onQuit(PlayerQuitEvent event) {
         if (event.getQuitMessage() != null) {
             sendDiscordMessage(DiscordMessageEvent.MessageType.LEAVE, MessageUtil.formatMessage(jda.getSettings().getQuitFormat(),
-                    event.getPlayer().getName(), event.getPlayer().getDisplayName(), event.getQuitMessage()), false);
+                    event.getPlayer().getName(), event.getPlayer().getDisplayName(), event.getQuitMessage()), false,
+                    jda.getSettings().isShowAvatar() ? AVATAR_URL.replace("{uuid}", event.getPlayer().getUniqueId().toString()) : null,
+                    jda.getSettings().isShowName() ? event.getPlayer().getName() : null);
         }
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onDeath(PlayerDeathEvent event) {
         sendDiscordMessage(DiscordMessageEvent.MessageType.DEATH, MessageUtil.formatMessage(jda.getSettings().getDeathFormat(),
-                event.getEntity().getName(), event.getEntity().getDisplayName(), event.getDeathMessage()), false);
+                event.getEntity().getName(), event.getEntity().getDisplayName(), event.getDeathMessage()), false,
+                jda.getSettings().isShowAvatar() ? AVATAR_URL.replace("{uuid}", event.getEntity().getUniqueId().toString()) : null,
+                jda.getSettings().isShowName() ? event.getEntity().getName() : null);
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onKick(PlayerKickEvent event) {
         sendDiscordMessage(DiscordMessageEvent.MessageType.KICK, MessageUtil.formatMessage(jda.getSettings().getKickFormat(),
-                event.getPlayer().getName(), event.getPlayer().getDisplayName(), event.getReason()), false);
+                event.getPlayer().getName(), event.getPlayer().getDisplayName(), event.getReason()));
     }
 
-    private void sendDiscordMessage(final DiscordMessageEvent.MessageType messageType, final String message, final boolean allowPing) {
-        sendDiscordMessage(messageType, message, allowPing, null, null);
+    private void sendDiscordMessage(final DiscordMessageEvent.MessageType messageType, final String message) {
+        sendDiscordMessage(messageType, message, false, null, null);
     }
 
     private void sendDiscordMessage(final DiscordMessageEvent.MessageType messageType, final String message, final boolean allowPing, final String avatarUrl, final String name) {

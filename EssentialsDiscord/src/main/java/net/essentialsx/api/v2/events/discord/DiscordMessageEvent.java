@@ -136,17 +136,19 @@ public class DiscordMessageEvent extends Event implements Cancellable {
      * Indicates the type of message being sent and its literal channel name used in the config.
      */
     public enum MessageType {
-        JOIN("join"),
-        LEAVE("leave"),
-        CHAT("chat"),
-        DEATH("death"),
-        KICK("kick"),
-        MUTE("mute");
+        JOIN("join", true),
+        LEAVE("leave", true),
+        CHAT("chat", true),
+        DEATH("death", true),
+        KICK("kick", false),
+        MUTE("mute", false);
 
         private final String key;
+        private final boolean player;
 
-        MessageType(String key) {
+        MessageType(String key, boolean player) {
             this.key = key;
+            this.player = player;
         }
 
         /**
@@ -155,6 +157,14 @@ public class DiscordMessageEvent extends Event implements Cancellable {
          */
         public String getKey() {
             return key;
+        }
+
+        /**
+         * Checks if this message type should be beholden to player-specific config settings.
+         * @return true if message type should be beholden to player-specific config settings.
+         */
+        public boolean isPlayer() {
+            return player;
         }
     }
 }

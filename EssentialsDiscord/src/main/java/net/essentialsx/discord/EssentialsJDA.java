@@ -25,6 +25,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.event.HandlerList;
 
 import javax.security.auth.login.LoginException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
@@ -40,8 +42,8 @@ public class EssentialsJDA {
     private TextChannel primaryChannel;
     private WebhookClient consoleWebhook;
     private String lastConsoleId;
-    private WebhookClient chatWebhook;
-    private String lastChatId;
+    private final Map<DiscordMessageEvent.MessageType, String> typeToChannelId = new HashMap<>();
+    private final Map<String, WebhookClient> channelIdToWebhook = new HashMap<>();
     private ConsoleInjector injector;
     private DiscordCommandDispatcher commandDispatcher;
     private InteractionController interactionController;
@@ -76,15 +78,15 @@ public class EssentialsJDA {
 
         final String strippedContent = FormatUtil.stripFormat(message);
 
-        if (event.getType() == DiscordMessageEvent.MessageType.CHAT && chatWebhook != null) {
-            final String avatarUrl =
-                    (getSettings().isChatShowAvatar() && event.getAvatarUrl() != null) ? event.getAvatarUrl()
-                            : jda.getSelfUser().getAvatarUrl();
-            final String name =
-                    (getSettings().isChatShowName() && event.getName() != null) ? event.getName()
-                            : guild.getSelfMember().getEffectiveName();
-            chatWebhook.send(getWebhookMessage(strippedContent, avatarUrl, name, groupMentions));
-            return;
+        final String webhookChannelId = typeToChannelId.get(event.getType());
+        if (webhookChannelId != null) {
+            final WebhookClient client = channelIdToWebhook.get(webhookChannelId);
+            if (client != null) {
+                final String avatarUrl = event.getAvatarUrl() != null ? event.getAvatarUrl() : jda.getSelfUser().getAvatarUrl();
+                final String name = event.getName() != null ? event.getName() : guild.getSelfMember().getEffectiveName();
+                client.send(getWebhookMessage(strippedContent, avatarUrl, name, groupMentions));
+                return;
+            }
         }
 
         if (!channel.canTalk()) {
@@ -131,7 +133,7 @@ public class EssentialsJDA {
 
         updateConsoleRelay();
 
-        updateChatRelay();
+        updateTypesRelay();
 
         Bukkit.getPluginManager().registerEvents(new BukkitListener(this), plugin);
     }
@@ -151,30 +153,39 @@ public class EssentialsJDA {
         jda.getPresence().setPresence(plugin.getSettings().getStatus(), plugin.getSettings().getStatusActivity());
     }
 
-    public void updateChatRelay() {
-        if (!getSettings().isChatShowAvatar() && !getSettings().isChatShowName()) {
-            if (chatWebhook != null) {
-                chatWebhook.close();
-                chatWebhook = null;
+    public void updateTypesRelay() {
+        if (!getSettings().isShowAvatar() && !getSettings().isShowName()) {
+            for (WebhookClient webhook : channelIdToWebhook.values()) {
+                webhook.close();
             }
+            typeToChannelId.clear();
+            channelIdToWebhook.clear();
             return;
         }
 
-        final TextChannel channel = getChannel(DiscordMessageEvent.MessageType.CHAT.getKey(), true);
-
-        if (chatWebhook != null) {
-            if (channel.getId().equals(lastChatId)) {
-                return;
+        for (DiscordMessageEvent.MessageType type : DiscordMessageEvent.MessageType.values()) {
+            if (!type.isPlayer()) {
+                continue;
             }
-            chatWebhook.close();
-        }
 
-        final String webhookName = "EssX Chat Relay";
-        Webhook webhook = DiscordUtil.getAndCleanWebhooks(channel, webhookName).join();
-        webhook = webhook == null ? DiscordUtil.createWebhook(channel, webhookName).join() : webhook;
-        chatWebhook = webhook != null ? DiscordUtil.getWebhookClient(webhook.getIdLong(), webhook.getToken(), jda.getHttpClient()) : null;
-        if (webhook != null) {
-            lastChatId = channel.getId();
+            final TextChannel channel = getChannel(type.getKey(), true);
+            if (channel.getId().equals(typeToChannelId.get(type))) {
+                continue;
+            }
+
+            final String webhookName = "EssX Advanced Relay";
+            Webhook webhook = DiscordUtil.getAndCleanWebhooks(channel, webhookName).join();
+            webhook = webhook == null ? DiscordUtil.createWebhook(channel, webhookName).join() : webhook;
+            if (webhook == null) {
+                final WebhookClient current = channelIdToWebhook.get(channel.getId());
+                if (current != null) {
+                    current.close();
+                }
+                channelIdToWebhook.remove(channel.getId());
+                continue;
+            }
+            typeToChannelId.put(type, channel.getId());
+            channelIdToWebhook.put(channel.getId(), DiscordUtil.getWebhookClient(webhook.getIdLong(), webhook.getToken(), jda.getHttpClient()));
         }
     }
 

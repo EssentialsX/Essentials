@@ -101,14 +101,6 @@ public class DiscordSettings implements IConf {
         return config.getBoolean("chat.filter-newlines", true);
     }
 
-    public boolean isChatShowAvatar() {
-        return config.getBoolean("chat.show-avatar", false);
-    }
-
-    public boolean isChatShowName() {
-        return config.getBoolean("chat.show-name", false);
-    }
-
     public String getConsoleChannelDef() {
         return config.getString("console.channel", "none");
     }
@@ -123,6 +115,14 @@ public class DiscordSettings implements IConf {
 
     public boolean isConsoleCommandRelay() {
         return config.getBoolean("console.command-relay", false);
+    }
+
+    public boolean isShowAvatar() {
+        return config.getBoolean("show-avatar", false);
+    }
+
+    public boolean isShowName() {
+        return config.getBoolean("show-name", false);
     }
 
     // General command settings
