@@ -67,8 +67,8 @@ public class BukkitListener implements Listener {
                 sendDiscordMessage(DiscordMessageEvent.MessageType.CHAT, MessageUtil.formatMessage(jda.getSettings().getMcToDiscordFormat(),
                         player.getName(), player.getDisplayName(),
                         player.hasPermission("essentials.discord.markdown") ? event.getMessage() : MessageUtil.sanitizeDiscordMarkdown(event.getMessage()),
-                        player.getWorld().getName(), jda.getPlugin().getEss().getPermissionsHandler().getPrefix(player),
-                        jda.getPlugin().getEss().getPermissionsHandler().getSuffix(player)), player.hasPermission("essentials.discord.ping")));
+                        player.getWorld().getName(), FormatUtil.stripEssentialsFormat(jda.getPlugin().getEss().getPermissionsHandler().getPrefix(player)),
+                        FormatUtil.stripEssentialsFormat(jda.getPlugin().getEss().getPermissionsHandler().getSuffix(player))), player.hasPermission("essentials.discord.ping")));
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
