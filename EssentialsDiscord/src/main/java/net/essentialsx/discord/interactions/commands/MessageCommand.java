@@ -8,8 +8,11 @@ import net.essentialsx.discord.interactions.command.InteractionCommand;
 import net.essentialsx.discord.interactions.command.InteractionCommandArgument;
 import net.essentialsx.discord.interactions.command.InteractionCommandArgumentType;
 import net.essentialsx.discord.interactions.command.InteractionEvent;
+import net.essentialsx.discord.util.DiscordMessageRecipient;
 import net.essentialsx.discord.util.DiscordUtil;
 import org.bukkit.Bukkit;
+
+import java.util.concurrent.atomic.AtomicReference;
 
 import static com.earth2me.essentials.I18n.tl;
 
@@ -47,6 +50,11 @@ public class MessageCommand extends InteractionCommand {
         final String message = DiscordUtil.hasRoles(event.getMember(), jda.getSettings().getPermittedFormattingRoles()) ?
                 FormatUtil.replaceFormat(event.getStringArgument("message")) : FormatUtil.stripFormat(event.getStringArgument("message"));
         event.reply(tl("msgFormat", tl("meSender"), user.getDisplayName(), message));
+
         user.sendMessage(tl("msgFormat", event.getMember().getUser().getAsTag(), tl("meRecipient"), message));
+        // We use an atomic reference here so that java will garbage collect the recipient
+        final AtomicReference<DiscordMessageRecipient> ref = new AtomicReference<>(new DiscordMessageRecipient(event.getMember()));
+        jda.getPlugin().getEss().runTaskLaterAsynchronously(() -> ref.set(null), 6000); // Expires after 5 minutes
+        user.setReplyRecipient(ref.get());
     }
 }
