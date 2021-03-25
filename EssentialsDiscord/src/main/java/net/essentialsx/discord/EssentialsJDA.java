@@ -192,7 +192,11 @@ public class EssentialsJDA {
             }
         } else {
             final TextChannel channel = getChannel(consoleDef, false);
-            if (channel != null && !channel.getId().equals(lastConsoleId)) {
+            if (channel != null) {
+                if (channel.getId().equals(lastConsoleId)) {
+                    return;
+                }
+
                 final String webhookName = "EssX Console Relay";
                 Webhook webhook = DiscordUtil.getAndCleanWebhooks(channel, webhookName).join();
                 webhook = webhook == null ? DiscordUtil.createWebhook(channel, webhookName).join() : webhook;
