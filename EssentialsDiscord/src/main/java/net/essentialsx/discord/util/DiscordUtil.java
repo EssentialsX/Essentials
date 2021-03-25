@@ -20,6 +20,8 @@ import okhttp3.RequestBody;
 
 import java.awt.Color;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.function.Consumer;
 
 public final class DiscordUtil {
     public final static Gson GSON = new Gson();
@@ -29,8 +31,6 @@ public final class DiscordUtil {
     public final static int EPHEMERAL_FLAG = 1 << 6;
     public final static RequestBody ACK_DEFER = RequestBody.create(JSON_TYPE, "{\"type\": 5}");
     public final static RequestBody ACK_DEFER_EPHEMERAL = RequestBody.create(JSON_TYPE, "{\"type\": 5, \"data\":{\"flags\": " + EPHEMERAL_FLAG + "}}");
-
-    private final static String WEBHOOK_NAME = "EssX Console Relay";
 
     static {
         final ImmutableList.Builder<Message.MentionType> types = new ImmutableList.Builder<>();
@@ -65,37 +65,61 @@ public final class DiscordUtil {
     }
 
     /**
-     * Gets the webhook to be used for console relay or null if permissions are not available.
+     * Gets and cleans webhooks with the given name from channels other than the specified one.
      *
-     * @param consoleChannel The channel to search for webhooks in.
-     * @return The webhook to be used for console relay or null if unavailable.
+     * @param channel     The channel to search for webhooks in.
+     * @param webhookName The name of the webhook to validate it.
+     *
+     * @return A future which completes with the webhook by the given name in the given channel, if present, otherwise null.
      */
-    public static Webhook getAndCleanWebhook(TextChannel consoleChannel) {
-        final Member self = consoleChannel.getGuild().getSelfMember();
+    public static CompletableFuture<Webhook> getAndCleanWebhooks(final TextChannel channel, final String webhookName) {
+        final Member self = channel.getGuild().getSelfMember();
 
-        final List<Webhook> webhookList;
-        if (self.hasPermission(Permission.MANAGE_WEBHOOKS)) {
-            webhookList = consoleChannel.getGuild().retrieveWebhooks().complete();
-        } else if (self.hasPermission(consoleChannel, Permission.MANAGE_WEBHOOKS)) {
-            webhookList = consoleChannel.retrieveWebhooks().complete();
-        } else {
-            return null;
-        }
-
-        Webhook consoleWebhook = null;
-        for (Webhook webhook : webhookList) {
-            if (webhook.getName().equals(WEBHOOK_NAME)) {
-                if (!webhook.getChannel().equals(consoleChannel) || consoleWebhook != null) {
-                    webhook.delete().reason("EssX Webhook Cleanup").queue();
-                    continue;
+        final CompletableFuture<Webhook> future = new CompletableFuture<>();
+        final Consumer<List<Webhook>> consumer = webhooks -> {
+            boolean foundWebhook = false;
+            for (final Webhook webhook : webhooks) {
+                if (webhook.getName().equalsIgnoreCase(webhookName)) {
+                    if (foundWebhook || !webhook.getChannel().equals(channel)) {
+                        webhook.delete().reason("EssX Webhook Cleanup").queue();
+                        continue;
+                    }
+                    future.complete(webhook);
+                    foundWebhook = true;
                 }
-                consoleWebhook = webhook;
             }
+
+            if (!foundWebhook) {
+                future.complete(null);
+            }
+        };
+
+        if (self.hasPermission(Permission.MANAGE_WEBHOOKS)) {
+            channel.getGuild().retrieveWebhooks().queue(consumer);
+        } else if (self.hasPermission(channel, Permission.MANAGE_WEBHOOKS)) {
+            channel.retrieveWebhooks().queue(consumer);
+        } else {
+            return CompletableFuture.completedFuture(null);
         }
-        if (consoleWebhook == null) {
-            consoleWebhook = consoleChannel.createWebhook(WEBHOOK_NAME).complete();
+
+        return future;
+    }
+
+    /**
+     * Creates a webhook with the given name in the given channel.
+     *
+     * @param channel        The channel to search for webhooks in.
+     * @param webhookName    The name of the webhook to look for.
+     * @return A future which completes with the webhook by the given name in the given channel or null if no permissions.
+     */
+    public static CompletableFuture<Webhook> createWebhook(TextChannel channel, String webhookName) {
+        if (!channel.getGuild().getSelfMember().hasPermission(channel, Permission.MANAGE_WEBHOOKS)) {
+            return CompletableFuture.completedFuture(null);
         }
-        return consoleWebhook;
+
+        final CompletableFuture<Webhook> future = new CompletableFuture<>();
+        channel.createWebhook(webhookName).queue(future::complete);
+        return future;
     }
 
     /**

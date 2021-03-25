@@ -145,7 +145,9 @@ public class EssentialsJDA {
         } else {
             final TextChannel channel = getChannel(consoleDef, false);
             if (channel != null) {
-                final Webhook webhook = DiscordUtil.getAndCleanWebhook(channel);
+                final String webhookName = "EssX Console Relay";
+                Webhook webhook = DiscordUtil.getAndCleanWebhooks(channel, webhookName).join();
+                webhook = webhook == null ? DiscordUtil.createWebhook(channel, webhookName).join() : webhook;
                 if (webhook == null) {
                     logger.info(tl("discordErrorLoggerNoPerms"));
                     return;
