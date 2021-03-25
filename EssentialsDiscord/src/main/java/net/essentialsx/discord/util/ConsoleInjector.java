@@ -33,12 +33,12 @@ public class ConsoleInjector extends AbstractAppender {
         this.jda = jda;
         ((Logger) LogManager.getRootLogger()).addAppender(this);
         taskId = Bukkit.getScheduler().runTaskTimerAsynchronously(jda.getPlugin(), () -> {
-            StringBuilder buffer = new StringBuilder();
+            final StringBuilder buffer = new StringBuilder();
             String curLine;
             while ((curLine = messageQueue.peek()) != null) {
                 if (buffer.length() + curLine.length() > Message.MAX_CONTENT_LENGTH - 2) {
                     sendMessage(buffer.toString());
-                    buffer = new StringBuilder();
+                    buffer.setLength(0);
                     continue;
                 }
                 buffer.append("\n").append(messageQueue.poll());
