@@ -2,7 +2,6 @@ package net.essentialsx.discord;
 
 import club.minnced.discord.webhook.WebhookClient;
 import club.minnced.discord.webhook.WebhookClientBuilder;
-import club.minnced.discord.webhook.send.AllowedMentions;
 import club.minnced.discord.webhook.send.WebhookMessage;
 import club.minnced.discord.webhook.send.WebhookMessageBuilder;
 import com.earth2me.essentials.utils.FormatUtil;
@@ -40,6 +39,9 @@ public class EssentialsJDA {
     private Guild guild;
     private TextChannel primaryChannel;
     private WebhookClient consoleWebhook;
+    private String lastConsoleId;
+    private WebhookClient chatWebhook;
+    private String lastChatId;
     private ConsoleInjector injector;
     private DiscordCommandDispatcher commandDispatcher;
     private InteractionController interactionController;
@@ -57,22 +59,39 @@ public class EssentialsJDA {
     }
 
     public WebhookMessage getWebhookMessage(String message) {
-        return new WebhookMessageBuilder()
-                .setAvatarUrl(jda.getSelfUser().getAvatarUrl())
-                .setAllowedMentions(AllowedMentions.none())
-                .setUsername(getSettings().getConsoleWebhookName())
-                .setContent(message)
-                .build();
-
+        return getWebhookMessage(message, jda.getSelfUser().getAvatarUrl(), getSettings().getConsoleWebhookName(), false);
     }
 
-    public void sendMessage(DiscordMessageEvent.MessageType messageType, String message, boolean groupMentions) {
-        final TextChannel channel = getChannel(messageType.getKey(), true);
+    public WebhookMessage getWebhookMessage(String message, String avatarUrl, String name, boolean groupMentions) {
+        return new WebhookMessageBuilder()
+                .setAvatarUrl(avatarUrl)
+                .setAllowedMentions(groupMentions ? DiscordUtil.ALL_MENTIONS_WEBHOOK : DiscordUtil.NO_GROUP_MENTIONS_WEBHOOK)
+                .setUsername(name)
+                .setContent(message)
+                .build();
+    }
+
+    public void sendMessage(DiscordMessageEvent event, String message, boolean groupMentions) {
+        final TextChannel channel = getChannel(event.getType().getKey(), true);
+
+        final String strippedContent = FormatUtil.stripFormat(message);
+
+        if (event.getType() == DiscordMessageEvent.MessageType.CHAT && chatWebhook != null) {
+            final String avatarUrl =
+                    (getSettings().isChatShowAvatar() && event.getAvatarUrl() != null) ? event.getAvatarUrl()
+                            : jda.getSelfUser().getAvatarUrl();
+            final String name =
+                    (getSettings().isChatShowName() && event.getName() != null) ? event.getName()
+                            : guild.getSelfMember().getEffectiveName();
+            chatWebhook.send(getWebhookMessage(strippedContent, avatarUrl, name, groupMentions));
+            return;
+        }
+
         if (!channel.canTalk()) {
             logger.warning(tl("discordNoSendPermission", channel.getName()));
             return;
         }
-        channel.sendMessage(FormatUtil.stripFormat(message))
+        channel.sendMessage(strippedContent)
                 .allowedMentions(groupMentions ? null : DiscordUtil.NO_GROUP_MENTIONS)
                 .queue();
     }
@@ -112,6 +131,8 @@ public class EssentialsJDA {
 
         updateConsoleRelay();
 
+        updateChatRelay();
+
         Bukkit.getPluginManager().registerEvents(new BukkitListener(this), plugin);
     }
 
@@ -130,6 +151,33 @@ public class EssentialsJDA {
         jda.getPresence().setPresence(plugin.getSettings().getStatus(), plugin.getSettings().getStatusActivity());
     }
 
+    public void updateChatRelay() {
+        if (!getSettings().isChatShowAvatar() && !getSettings().isChatShowName()) {
+            if (chatWebhook != null) {
+                chatWebhook.close();
+                chatWebhook = null;
+            }
+            return;
+        }
+
+        final TextChannel channel = getChannel(DiscordMessageEvent.MessageType.CHAT.getKey(), true);
+
+        if (chatWebhook != null) {
+            if (channel.getId().equals(lastChatId)) {
+                return;
+            }
+            chatWebhook.close();
+        }
+
+        final String webhookName = "EssX Chat Relay";
+        Webhook webhook = DiscordUtil.getAndCleanWebhooks(channel, webhookName).join();
+        webhook = webhook == null ? DiscordUtil.createWebhook(channel, webhookName).join() : webhook;
+        chatWebhook = webhook != null ? DiscordUtil.getWebhookClient(webhook.getIdLong(), webhook.getToken(), jda.getHttpClient()) : null;
+        if (webhook != null) {
+            lastChatId = channel.getId();
+        }
+    }
+
     public void updateConsoleRelay() {
         final String consoleDef = getSettings().getConsoleChannelDef();
         final Matcher matcher = WebhookClientBuilder.WEBHOOK_PATTERN.matcher(consoleDef);
@@ -144,7 +192,7 @@ public class EssentialsJDA {
             }
         } else {
             final TextChannel channel = getChannel(consoleDef, false);
-            if (channel != null) {
+            if (channel != null && !channel.getId().equals(lastConsoleId)) {
                 final String webhookName = "EssX Console Relay";
                 Webhook webhook = DiscordUtil.getAndCleanWebhooks(channel, webhookName).join();
                 webhook = webhook == null ? DiscordUtil.createWebhook(channel, webhookName).join() : webhook;
@@ -154,6 +202,7 @@ public class EssentialsJDA {
                 }
                 webhookId = webhook.getIdLong();
                 webhookToken = webhook.getToken();
+                lastConsoleId = channel.getId();
                 if (getSettings().isConsoleCommandRelay()) {
                     if (commandDispatcher == null) {
                         commandDispatcher = new DiscordCommandDispatcher(this);

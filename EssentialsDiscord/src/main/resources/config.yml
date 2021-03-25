@@ -46,8 +46,12 @@ always-receive-primary: false
 chat:
   # The maximum amount of characters messages from discord should be before being truncated
   discord-max-length: 2000
-  # Whether or not new lines from discord should be filtered or not.
+  # Whether or not new lines from discord should be filtered or not
   filter-newlines: true
+  # Whether or not the player's avatar should be shown as the profile picture in discord
+  show-avatar: false
+  # Whether or not the player's name should be shown as the bot name in discord
+  show-name: false
 
 # Console relay settings
 # The console relay will send every message that is sent to the console, to a discord channel

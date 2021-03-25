@@ -21,6 +21,7 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import java.text.MessageFormat;
 
 public class BukkitListener implements Listener {
+    private final static String AVATAR_URL = "https://crafatar.com/avatars/{uuid}?overlay=true";
     private final EssentialsJDA jda;
 
     public BukkitListener(EssentialsJDA jda) {
@@ -33,7 +34,7 @@ public class BukkitListener implements Listener {
      */
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onDiscordMessage(DiscordMessageEvent event) {
-        jda.sendMessage(event.getType(), event.getMessage(), event.isAllowGroupMentions());
+        jda.sendMessage(event, event.getMessage(), event.isAllowGroupMentions());
     }
 
     // Bukkit Events
@@ -68,7 +69,9 @@ public class BukkitListener implements Listener {
                         player.getName(), player.getDisplayName(),
                         player.hasPermission("essentials.discord.markdown") ? event.getMessage() : MessageUtil.sanitizeDiscordMarkdown(event.getMessage()),
                         player.getWorld().getName(), FormatUtil.stripEssentialsFormat(jda.getPlugin().getEss().getPermissionsHandler().getPrefix(player)),
-                        FormatUtil.stripEssentialsFormat(jda.getPlugin().getEss().getPermissionsHandler().getSuffix(player))), player.hasPermission("essentials.discord.ping")));
+                        FormatUtil.stripEssentialsFormat(jda.getPlugin().getEss().getPermissionsHandler().getSuffix(player))), player.hasPermission("essentials.discord.ping"),
+                        jda.getSettings().isChatShowAvatar() ? AVATAR_URL.replace("{uuid}", player.getUniqueId().toString()) : null,
+                        jda.getSettings().isChatShowName() ? player.getName() : null));
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
@@ -100,12 +103,16 @@ public class BukkitListener implements Listener {
                 event.getPlayer().getName(), event.getPlayer().getDisplayName(), event.getReason()), false);
     }
 
-    private void sendDiscordMessage(DiscordMessageEvent.MessageType messageType, String message, boolean allowPing) {
+    private void sendDiscordMessage(final DiscordMessageEvent.MessageType messageType, final String message, final boolean allowPing) {
+        sendDiscordMessage(messageType, message, allowPing, null, null);
+    }
+
+    private void sendDiscordMessage(final DiscordMessageEvent.MessageType messageType, final String message, final boolean allowPing, final String avatarUrl, final String name) {
         if (jda.getPlugin().getSettings().getMessageChannel(messageType.getKey()).equalsIgnoreCase("none")) {
             return;
         }
 
-        final DiscordMessageEvent event = new DiscordMessageEvent(messageType, FormatUtil.stripFormat(message), allowPing);
+        final DiscordMessageEvent event = new DiscordMessageEvent(messageType, FormatUtil.stripFormat(message), allowPing, avatarUrl, name);
         if (Bukkit.getServer().isPrimaryThread()) {
             Bukkit.getPluginManager().callEvent(event);
         } else {

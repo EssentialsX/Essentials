@@ -26,6 +26,8 @@ import java.util.function.Consumer;
 public final class DiscordUtil {
     public final static Gson GSON = new Gson();
     public final static List<Message.MentionType> NO_GROUP_MENTIONS;
+    public final static AllowedMentions ALL_MENTIONS_WEBHOOK = AllowedMentions.all();
+    public final static AllowedMentions NO_GROUP_MENTIONS_WEBHOOK = new AllowedMentions().withParseEveryone(false).withParseRoles(false).withParseUsers(true);
     public final static JsonObject RAW_NO_GROUP_MENTIONS;
     public final static MediaType JSON_TYPE = MediaType.parse("application/json; charset=utf-8");
     public final static int EPHEMERAL_FLAG = 1 << 6;

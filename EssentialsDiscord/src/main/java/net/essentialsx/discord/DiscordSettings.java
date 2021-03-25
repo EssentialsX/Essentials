@@ -101,6 +101,14 @@ public class DiscordSettings implements IConf {
         return config.getBoolean("chat.filter-newlines", true);
     }
 
+    public boolean isChatShowAvatar() {
+        return config.getBoolean("chat.show-avatar", false);
+    }
+
+    public boolean isChatShowName() {
+        return config.getBoolean("chat.show-name", false);
+    }
+
     public String getConsoleChannelDef() {
         return config.getString("console.channel", "none");
     }

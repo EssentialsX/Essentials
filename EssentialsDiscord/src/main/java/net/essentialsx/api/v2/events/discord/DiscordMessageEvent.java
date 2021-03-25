@@ -15,15 +15,22 @@ public class DiscordMessageEvent extends Event implements Cancellable {
     private MessageType type;
     private String message;
     private boolean allowGroupMentions;
+    private String avatarUrl;
+    private String name;
 
     /**
-     * @param type    The message type/destination of this event.
-     * @param message The raw message content of this event.
+     * @param type               The message type/destination of this event.
+     * @param message            The raw message content of this event.
+     * @param allowGroupMentions If the message should allow the pinging of channels, users, or emotes.
+     * @param avatarUrl          The avatar url to use for this message (if supported) or null to use the default bot avatar.
+     * @param name               The name to use for this message (if supported) or null to use the default bot name.
      */
-    public DiscordMessageEvent(MessageType type, String message, boolean allowGroupMentions) {
+    public DiscordMessageEvent(final MessageType type, final String message, final boolean allowGroupMentions, final String avatarUrl, final String name) {
         this.type = type;
         this.message = message;
         this.allowGroupMentions = allowGroupMentions;
+        this.avatarUrl = avatarUrl;
+        this.name = name;
     }
 
     /**
@@ -72,6 +79,38 @@ public class DiscordMessageEvent extends Event implements Cancellable {
      */
     public void setAllowGroupMentions(boolean allowGroupMentions) {
         this.allowGroupMentions = allowGroupMentions;
+    }
+
+    /**
+     * Gets the avatar url to use for this message, or null if none is specified.
+     * @return The avatar url or null.
+     */
+    public String getAvatarUrl() {
+        return avatarUrl;
+    }
+
+    /**
+     * Sets the avatar url for this message, or null to use the bot's avatar.
+     * @param avatarUrl The avatar url or null.
+     */
+    public void setAvatarUrl(String avatarUrl) {
+        this.avatarUrl = avatarUrl;
+    }
+
+    /**
+     * Gets the name to use for this message, or null if none is specified.
+     * @return The name or null.
+     */
+    public String getName() {
+        return name;
+    }
+
+    /**
+     * Sets the name for this message, or null to use the bot's name.
+     * @param name The name or null.
+     */
+    public void setName(String name) {
+        this.name = name;
     }
 
     @Override
