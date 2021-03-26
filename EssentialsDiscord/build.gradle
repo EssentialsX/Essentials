@@ -1,15 +1,15 @@
 dependencies {
     compileOnly project(':EssentialsX')
-    api('net.dv8tion:JDA:4.2.0_223') {
+    api('net.dv8tion:JDA:4.2.0_250') {
         exclude module: 'opus-java'
     }
     api 'com.vdurmont:emoji-java:5.1.1'
-    implementation 'club.minnced:discord-webhooks:0.5.4-rc'
+    implementation 'club.minnced:discord-webhooks:0.5.6'
     compileOnly 'org.apache.logging.log4j:log4j-core:2.0-beta9'
 }
 
 repositories {
-    jcenter()
+    maven { url = 'https://m2.dv8tion.net/releases/' }
 }
 
 shadowJar {
