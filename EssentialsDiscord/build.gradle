@@ -43,7 +43,7 @@ shadowJar {
     relocate 'org.apache.commons.collections4', 'net.essentialsx.dep.org.apache.commons.collections4'
     relocate 'com.fasterxml.jackson.databind', 'net.essentialsx.dep.com.fasterxml.jackson.databind'
     relocate 'com.fasterxml.jackson.core', 'net.essentialsx.dep.com.fasterxml.jackson.core'
-    relocate 'com.fasterxml.jackson.annotations', 'net.essentialsx.dep.com.fasterxml.jackson.annotations'
+    relocate 'com.fasterxml.jackson.annotation', 'net.essentialsx.dep.com.fasterxml.jackson.annotation'
     relocate 'gnu.trove', 'net.essentialsx.dep.gnu.trove'
 
     // Emoji
