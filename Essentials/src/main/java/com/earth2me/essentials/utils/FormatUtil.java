@@ -20,7 +20,7 @@ public final class FormatUtil {
     //Pattern used to strip md_5 legacy hex hack
     private static final Pattern STRIP_RGB_PATTERN = Pattern.compile(ChatColor.COLOR_CHAR + "x((?:" + ChatColor.COLOR_CHAR + "[0-9a-fA-F]){6})");
     //Essentials '&' convention colour codes
-    private static final Pattern REPLACE_ALL_PATTERN = Pattern.compile("(&)?&([0-9a-fk-orxA-FK-ORX])");
+    private static final Pattern REPLACE_ALL_PATTERN = Pattern.compile("(&)?&([0-9a-fk-orA-FK-OR])");
     private static final Pattern REPLACE_ALL_RGB_PATTERN = Pattern.compile("(&)?&#([0-9a-fA-F]{6})");
     //Used to prepare xmpp output
     private static final Pattern LOGCOLOR_PATTERN = Pattern.compile("\\x1B\\[([0-9]{1,2}(;[0-9]{1,2})?)?[m|K]");
@@ -73,10 +73,6 @@ public final class FormatUtil {
             final boolean isEscaped = legacyMatcher.group(1) != null;
             if (!isEscaped) {
                 final char code = legacyMatcher.group(2).toLowerCase(Locale.ROOT).charAt(0);
-                if (code == 'x' && rgb) {
-                    legacyMatcher.appendReplacement(legacyBuilder, ChatColor.COLOR_CHAR + "$2");
-                    continue;
-                }
                 for (final ChatColor color : supported) {
                     if (color.getChar() == code) {
                         legacyMatcher.appendReplacement(legacyBuilder, ChatColor.COLOR_CHAR + "$2");
