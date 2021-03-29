@@ -520,6 +520,7 @@ public class Settings implements net.ess3.api.ISettings {
             mFormat = mFormat.replace("{PREFIX}", "{6}");
             mFormat = mFormat.replace("{SUFFIX}", "{7}");
             mFormat = mFormat.replace("{USERNAME}", "{8}");
+            mFormat = mFormat.replace("{NICKNAME}", "{9}");
             mFormat = "§r".concat(mFormat);
             chatFormats.put(group, mFormat);
         }
