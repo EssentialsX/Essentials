@@ -2,6 +2,7 @@ package com.earth2me.essentials.items;
 
 import com.earth2me.essentials.IConf;
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.utils.FormatUtil;
 import com.earth2me.essentials.utils.MaterialUtil;
 import com.earth2me.essentials.utils.VersionUtil;
 import net.ess3.api.IEssentials;
@@ -203,7 +204,7 @@ public abstract class AbstractItemDb implements IConf, net.ess3.api.IItemDb {
         if (is.hasItemMeta()) {
             final ItemMeta meta = is.getItemMeta();
             if (meta.hasDisplayName()) {
-                sb.append("name:").append(meta.getDisplayName().replaceAll(" ", "_")).append(" ");
+                sb.append("name:").append(FormatUtil.unformatString(meta.getDisplayName()).replaceAll(" ", "_")).append(" ");
             }
 
             if (meta.hasLore()) {
@@ -216,7 +217,7 @@ public abstract class AbstractItemDb implements IConf, net.ess3.api.IItemDb {
                         sb.append("|");
                     }
                     first = false;
-                    sb.append(s.replaceAll(" ", "_"));
+                    sb.append(FormatUtil.unformatString(s).replaceAll(" ", "_"));
                 }
                 sb.append(" ");
             }
