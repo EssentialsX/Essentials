@@ -430,6 +430,15 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
     }
 
     @Override
+    public String getFormattedNickname() {
+        final String rawNickname = getNickname();
+        if (rawNickname == null) {
+            return null;
+        }
+        return FormatUtil.replaceFormat(ess.getSettings().getNicknamePrefix() + rawNickname);
+    }
+
+    @Override
     public AsyncTeleport getAsyncTeleport() {
         return teleport;
     }
