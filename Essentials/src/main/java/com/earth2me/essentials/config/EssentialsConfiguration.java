@@ -40,6 +40,7 @@ public class EssentialsConfiguration {
     protected static final Logger LOGGER = Logger.getLogger("Essentials");
     private static final ExecutorService EXECUTOR_SERVICE = Executors.newSingleThreadExecutor();
     private static final TypeSerializerCollection SERIALIZERS = TypeSerializerCollection.builder()
+            .registerAll(TypeSerializerCollection.defaults())
             .register(BigDecimal.class, new BigDecimalTypeSerializer())
             .register(Location.class, new LocationTypeSerializer())
             .build();
