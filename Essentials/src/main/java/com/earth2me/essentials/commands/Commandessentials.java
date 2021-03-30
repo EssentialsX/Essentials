@@ -52,7 +52,8 @@ public class Commandessentials extends EssentialsCommand {
         "UltraPermissions",
         "PermissionsEx", // permissions (unsupported)
         "GroupManager", // permissions (unsupported)
-        "bPermissions" // permissions (unsupported)
+        "bPermissions", // permissions (unsupported)
+        "DiscordSRV" // potential for issues if EssentialsXDiscord is installed
     );
     private static final List<String> officialPlugins = Arrays.asList(
         "EssentialsAntiBuild",
