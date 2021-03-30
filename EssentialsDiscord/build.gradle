@@ -1,6 +1,6 @@
 dependencies {
     compileOnly project(':EssentialsX')
-    api('net.dv8tion:JDA:4.2.0_250') {
+    api('net.dv8tion:JDA:4.2.0_252') {
         exclude module: 'opus-java'
     }
     api 'com.vdurmont:emoji-java:5.1.1'
