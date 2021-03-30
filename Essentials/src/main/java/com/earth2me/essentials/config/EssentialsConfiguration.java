@@ -94,6 +94,10 @@ public class EssentialsConfiguration {
 
     public Location getLocation(final String path) throws InvalidWorldException {
         final CommentedConfigurationNode node = path == null ? getRootNode() : getSection(path);
+        if (node == null) {
+            return null;
+        }
+
         try {
             return node.get(Location.class);
         } catch (SerializationException e) {
