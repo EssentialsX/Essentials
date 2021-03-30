@@ -1,15 +1,16 @@
 package com.earth2me.essentials.config;
 
+import com.earth2me.essentials.config.serializers.BigDecimalTypeSerializer;
+import com.earth2me.essentials.config.serializers.LocationTypeSerializer;
 import net.ess3.api.InvalidWorldException;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.World;
 import org.spongepowered.configurate.CommentedConfigurationNode;
 import org.spongepowered.configurate.ConfigurateException;
 import org.spongepowered.configurate.ConfigurationOptions;
 import org.spongepowered.configurate.loader.HeaderMode;
 import org.spongepowered.configurate.loader.ParsingException;
 import org.spongepowered.configurate.serialize.SerializationException;
+import org.spongepowered.configurate.serialize.TypeSerializerCollection;
 import org.spongepowered.configurate.yaml.NodeStyle;
 import org.spongepowered.configurate.yaml.YamlConfigurationLoader;
 
@@ -38,6 +39,11 @@ import static com.earth2me.essentials.I18n.tl;
 public class EssentialsConfiguration {
     protected static final Logger LOGGER = Logger.getLogger("Essentials");
     private static final ExecutorService EXECUTOR_SERVICE = Executors.newSingleThreadExecutor();
+    private static final TypeSerializerCollection SERIALIZERS = TypeSerializerCollection.builder()
+            .register(BigDecimal.class, new BigDecimalTypeSerializer())
+            .register(Location.class, new LocationTypeSerializer())
+            .build();
+
     private final AtomicInteger pendingWrites = new AtomicInteger(0);
     private final AtomicBoolean transaction = new AtomicBoolean(false);
     private Class<?> resourceClass = EssentialsConfiguration.class;
@@ -61,8 +67,15 @@ public class EssentialsConfiguration {
 
     public EssentialsConfiguration(final File configFile, final String templateName, final String header) {
         this.configFile = configFile;
-        this.loader = YamlConfigurationLoader.builder().defaultOptions(ConfigurationOptions.defaults().header(header))
-                .headerMode(HeaderMode.PRESET).nodeStyle(NodeStyle.BLOCK).indent(2).file(configFile).build();
+        this.loader = YamlConfigurationLoader.builder()
+                .defaultOptions(ConfigurationOptions.defaults()
+                        .header(header)
+                        .serializers(SERIALIZERS))
+                .headerMode(HeaderMode.PRESET)
+                .nodeStyle(NodeStyle.BLOCK)
+                .indent(2)
+                .file(configFile)
+                .build();
         this.templateName = templateName;
     }
 
@@ -76,28 +89,16 @@ public class EssentialsConfiguration {
 
     public void setProperty(String path, final Location location) {
         path = path == null ? "" : path;
-        //noinspection ConstantConditions
-        setInternal(path + ".world", location.getWorld().getName());
-        setInternal(path + ".x", location.getX());
-        setInternal(path + ".y", location.getY());
-        setInternal(path + ".z", location.getZ());
-        setInternal(path + ".yaw", location.getYaw());
-        setInternal(path + ".pitch", location.getPitch());
+        setInternal(path, location);
     }
 
     public Location getLocation(final String path) throws InvalidWorldException {
         final CommentedConfigurationNode node = path == null ? getRootNode() : getSection(path);
-        final String worldName = node == null ? null : node.node("world").getString();
-        if (worldName == null || worldName.isEmpty()) {
+        try {
+            return node.get(Location.class);
+        } catch (SerializationException e) {
             return null;
         }
-
-        final World world = Bukkit.getWorld(worldName);
-        if (world == null) {
-            throw new InvalidWorldException(worldName);
-        }
-        return new Location(world, node.node("x").getDouble(0), node.node("y").getDouble(0),
-                node.node("z").getDouble(0), node.node("yaw").getFloat(0), node.node("pitch").getFloat(0));
     }
 
     public Map<String, Location> getLocationSectionMap(final String path) {
@@ -105,18 +106,11 @@ public class EssentialsConfiguration {
         final Map<String, Location> result = new HashMap<>();
         for (final Map.Entry<String, CommentedConfigurationNode> entry : ConfigurateUtil.getMap(node).entrySet()) {
             final CommentedConfigurationNode jailNode = entry.getValue();
-            final String worldName = jailNode.node("world").getString();
-            if (worldName == null || worldName.isEmpty()) {
-                continue;
+            try {
+                result.put(entry.getKey().toLowerCase(Locale.ENGLISH), jailNode.get(Location.class));
+            } catch (SerializationException e) {
+                LOGGER.log(Level.WARNING, "Error serializing key " + entry.getKey(), e);
             }
-
-            final World world = Bukkit.getWorld(worldName);
-            if (world == null) {
-                LOGGER.log(Level.WARNING, "Invalid world name, " + worldName + ", for key " + entry.getKey());
-                continue;
-            }
-            result.put(entry.getKey().toLowerCase(Locale.ENGLISH), new Location(world, jailNode.node("x").getDouble(), jailNode.node("y").getDouble(),
-                    jailNode.node("z").getDouble(), jailNode.node("yaw").getFloat(), jailNode.node("pitch").getFloat()));
         }
         return result;
     }
@@ -225,7 +219,7 @@ public class EssentialsConfiguration {
     }
 
     public void setProperty(final String path, final BigDecimal value) {
-        setProperty(path, value.toString());
+        setInternal(path, value);
     }
 
     public BigDecimal getBigDecimal(final String path, final BigDecimal def) {
@@ -233,7 +227,11 @@ public class EssentialsConfiguration {
         if (node == null) {
             return def;
         }
-        return ConfigurateUtil.toBigDecimal(node.getString(), def);
+        try {
+            return node.get(BigDecimal.class);
+        } catch (SerializationException e) {
+            return null;
+        }
     }
 
     public void setRaw(final String path, final Object value) {
