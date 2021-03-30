@@ -59,7 +59,6 @@ public abstract class UserData extends PlayerExtension implements IConf {
     private long lastLogout;
     private String lastLoginAddress;
     private boolean afk;
-    private boolean newplayer;
     private String geolocation;
     private boolean isSocialSpyEnabled;
     private boolean isNPC;
@@ -119,6 +118,7 @@ public abstract class UserData extends PlayerExtension implements IConf {
         jail = _getJail();
         mails = _getMails();
         teleportEnabled = _getTeleportEnabled();
+        autoTeleportEnabled = _getAutoTeleportEnabled();
         godmode = _getGodModeEnabled();
         muted = _getMuted();
         muteTimeout = _getMuteTimeout();
