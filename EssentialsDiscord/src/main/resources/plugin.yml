@@ -4,7 +4,7 @@ main: net.essentialsx.discord.EssentialsDiscord
 version: ${full.version}
 website: https://essentialsx.net/
 description: Provides integration between Minecraft and Discord servers.
-authors: [mdcfe]
+authors: [mdcfe, JRoy, pop4959, Glare]
 depend: [Essentials]
 softdepend: [EssentialsChat]
 api-version: 1.13
