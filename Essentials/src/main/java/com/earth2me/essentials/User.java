@@ -277,6 +277,8 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
                 final int id = material.getId();
                 if (isAuthorized("essentials.itemspawn.item-" + id)) return true;
             }
+
+            return false;
         }
 
         return isAuthorized("essentials.itemspawn.exempt") || !ess.getSettings().itemSpawnBlacklist().contains(material);
