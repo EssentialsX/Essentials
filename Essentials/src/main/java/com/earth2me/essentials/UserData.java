@@ -2,17 +2,17 @@ package com.earth2me.essentials;
 
 import com.earth2me.essentials.config.ConfigurateUtil;
 import com.earth2me.essentials.config.EssentialsUserConfiguration;
+import com.earth2me.essentials.config.holders.UserConfigHolder;
 import com.earth2me.essentials.utils.NumberUtil;
 import com.earth2me.essentials.utils.StringUtil;
 import com.google.common.collect.ImmutableMap;
 import net.ess3.api.IEssentials;
-import net.ess3.api.InvalidWorldException;
 import net.ess3.api.MaxMoneyException;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.spongepowered.configurate.CommentedConfigurationNode;
+import org.spongepowered.configurate.serialize.SerializationException;
 
 import java.io.File;
 import java.math.BigDecimal;
@@ -27,51 +27,19 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.UUID;
+import java.util.logging.Level;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 import static com.earth2me.essentials.I18n.tl;
 
 public abstract class UserData extends PlayerExtension implements IConf {
     protected final transient IEssentials ess;
     private final EssentialsUserConfiguration config;
+    private UserConfigHolder holder;
     private BigDecimal money;
-    private Map<String, Object> homes;
-    private String nickname;
-    private Set<Material> unlimited;
-    private Map<String, Object> powertools;
-    private Location lastLocation;
-    private Location logoutLocation;
-    private long lastTeleportTimestamp;
-    private long lastHealTimestamp;
-    private String jail;
-    private List<String> mails;
-    private boolean teleportEnabled;
-    private boolean autoTeleportEnabled;
-    private List<UUID> ignoredPlayers;
-    private boolean godmode;
-    private boolean muted;
-    private String muteReason;
-    private long muteTimeout;
-    private boolean jailed;
-    private long jailTimeout;
-    private long lastLogin;
-    private long lastLogout;
-    private String lastLoginAddress;
-    private boolean afk;
-    private String geolocation;
-    private boolean isSocialSpyEnabled;
-    private boolean isNPC;
-    private String lastAccountName = null;
-    private boolean arePowerToolsEnabled;
-    private Map<String, Long> kitTimestamps;
     // Pattern, Date. Pattern for less pattern creations
     private Map<Pattern, Long> commandCooldowns;
-    private boolean acceptingPay = true; // players accept pay by default
-    private Boolean confirmPay;
-    private Boolean confirmClear;
-    private boolean lastMessageReplyRecipient;
-    private boolean baltopExemptCache;
+    private Map<String, Long> kitTimestamps;
 
     protected UserData(final Player base, final IEssentials ess) {
         super(base);
@@ -108,43 +76,23 @@ public abstract class UserData extends PlayerExtension implements IConf {
     @Override
     public final void reloadConfig() {
         config.load();
+        try {
+            holder = config.getRootNode().get(UserConfigHolder.class);
+        } catch (SerializationException e) {
+            ess.getLogger().log(Level.SEVERE, "Error while reading user config: " + e.getMessage(), e);
+            throw new RuntimeException(e);
+        }
+        config.setSaveHook(() -> {
+            try {
+                config.getRootNode().set(UserConfigHolder.class, holder);
+            } catch (SerializationException e) {
+                ess.getLogger().log(Level.SEVERE, "Error while saving user config: " + e.getMessage(), e);
+                throw new RuntimeException(e);
+            }
+        });
         money = _getMoney();
-        unlimited = _getUnlimited();
-        powertools = _getPowertools();
-        homes = _getHomes();
-        lastLocation = _getLastLocation();
-        lastTeleportTimestamp = _getLastTeleportTimestamp();
-        lastHealTimestamp = _getLastHealTimestamp();
-        jail = _getJail();
-        mails = _getMails();
-        teleportEnabled = _getTeleportEnabled();
-        autoTeleportEnabled = _getAutoTeleportEnabled();
-        godmode = _getGodModeEnabled();
-        muted = _getMuted();
-        muteTimeout = _getMuteTimeout();
-        muteReason = _getMuteReason();
-        jailed = _getJailed();
-        jailTimeout = _getJailTimeout();
-        onlineJailed = _getOnlineJailedTime();
-        lastLogin = _getLastLogin();
-        lastLogout = _getLastLogout();
-        lastLoginAddress = _getLastLoginAddress();
-        afk = _getAfk();
-        geolocation = _getGeoLocation();
-        isSocialSpyEnabled = _isSocialSpyEnabled();
-        isNPC = _isNPC();
-        arePowerToolsEnabled = _arePowerToolsEnabled();
-        kitTimestamps = _getKitTimestamps();
-        nickname = _getNickname();
-        ignoredPlayers = _getIgnoredPlayers();
-        logoutLocation = _getLogoutLocation();
-        lastAccountName = _getLastAccountName();
         commandCooldowns = _getCommandCooldowns();
-        acceptingPay = _getAcceptingPay();
-        confirmPay = _getConfirmPay();
-        confirmClear = _getConfirmClear();
-        lastMessageReplyRecipient = _getLastMessageReplyRecipient();
-        baltopExemptCache = _getBaltopExcludeCache();
+        kitTimestamps = _getKitTimestamps();
     }
 
     private BigDecimal _getMoney() {
@@ -157,8 +105,8 @@ public abstract class UserData extends PlayerExtension implements IConf {
             result = BigDecimal.ZERO;
         }
 
-        if (config.hasProperty("money")) {
-            result = config.getBigDecimal("money", result);
+        if (holder.money() != null) {
+            result = holder.money();
         }
         if (result.compareTo(maxMoney) > 0) {
             result = maxMoney;
@@ -166,7 +114,9 @@ public abstract class UserData extends PlayerExtension implements IConf {
         if (result.compareTo(minMoney) < 0) {
             result = minMoney;
         }
-        return result;
+        holder.money(result);
+
+        return holder.money();
     }
 
     public BigDecimal getMoney() {
@@ -187,16 +137,8 @@ public abstract class UserData extends PlayerExtension implements IConf {
         if (money.compareTo(minMoney) < 0) {
             money = minMoney;
         }
-        config.setProperty("money", money);
+        holder.money(money);
         stopTransaction();
-    }
-
-    private Map<String, Object> _getHomes() {
-        final CommentedConfigurationNode section = config.getSection("homes");
-        if (section != null) {
-            return ConfigurateUtil.getRawMap(section);
-        }
-        return new HashMap<>();
     }
 
     private String getHomeName(String search) {
@@ -211,49 +153,43 @@ public abstract class UserData extends PlayerExtension implements IConf {
 
     public Location getHome(final String name) throws Exception {
         final String search = getHomeName(name);
-        return config.getLocation("homes." + search);
+        return holder.homes().get(search);
     }
 
     public Location getHome(final Location world) {
-        try {
-            if (getHomes().isEmpty()) {
-                return null;
-            }
-            Location loc;
-            for (final String home : getHomes()) {
-                loc = config.getLocation("homes." + home);
-                if (world.getWorld() == loc.getWorld()) {
-                    return loc;
-                }
-
-            }
-            loc = config.getLocation("homes." + getHomes().get(0));
-            return loc;
-        } catch (final InvalidWorldException ex) {
+        if (getHomes().isEmpty()) {
             return null;
         }
+        Location loc;
+        for (final String home : getHomes()) {
+            loc = holder.homes().get(home);
+            if (world.getWorld() == loc.getWorld()) {
+                return loc;
+            }
+
+        }
+        loc = holder.homes().get(getHomes().get(0));
+        return loc;
     }
 
     public List<String> getHomes() {
-        return new ArrayList<>(homes.keySet());
+        return new ArrayList<>(holder.homes().keySet());
     }
 
     public void setHome(String name, final Location loc) {
         //Invalid names will corrupt the yaml
         name = StringUtil.safeString(name);
-        homes.put(name, loc);
-        config.setProperty("homes." + name, loc);
+        holder.homes().put(name, loc);
         config.save();
     }
 
     public void delHome(final String name) throws Exception {
         String search = getHomeName(name);
-        if (!homes.containsKey(search)) {
+        if (!holder.homes().containsKey(search)) {
             search = StringUtil.safeString(search);
         }
-        if (homes.containsKey(search)) {
-            homes.remove(search);
-            config.removeProperty("homes." + search);
+        if (holder.homes().containsKey(search)) {
+            holder.homes().remove(search);
             config.save();
         } else {
             throw new Exception(tl("invalidHome", search));
@@ -261,254 +197,150 @@ public abstract class UserData extends PlayerExtension implements IConf {
     }
 
     public boolean hasHome() {
-        return config.hasProperty("home");
+        return !holder.homes().isEmpty();
     }
 
     public boolean hasHome(final String name) {
-        return config.hasProperty("homes." + name);
-    }
-
-    public String _getNickname() {
-        return config.getString("nickname", null);
+        return holder.homes().containsKey(name);
     }
 
     public String getNickname() {
-        return nickname;
+        return holder.nickname();
     }
 
     public void setNickname(final String nick) {
-        nickname = nick;
-        config.setProperty("nickname", nick);
+        holder.nickname(nick);
         config.save();
     }
 
-    private Set<Material> _getUnlimited() {
-        final Set<Material> retlist = new HashSet<>();
-        final List<String> configList = config.getList("unlimited", String.class);
-        for (final String s : configList) {
-            final Material mat = Material.matchMaterial(s);
-            if (mat != null) {
-                retlist.add(mat);
-            }
-        }
-
-        return retlist;
-    }
-
     public Set<Material> getUnlimited() {
-        return unlimited;
+        return holder.unlimited();
     }
 
     public boolean hasUnlimited(final ItemStack stack) {
-        return unlimited.contains(stack.getType());
+        return holder.unlimited().contains(stack.getType());
     }
 
     public void setUnlimited(final ItemStack stack, final boolean state) {
         final boolean wasUpdated;
         if (state) {
-            wasUpdated = unlimited.add(stack.getType());
+            wasUpdated = holder.unlimited().add(stack.getType());
         } else {
-            wasUpdated = unlimited.remove(stack.getType());
+            wasUpdated = holder.unlimited().remove(stack.getType());
         }
 
         if (wasUpdated) {
-            applyUnlimited();
+            config.save();
         }
-    }
-
-    private void applyUnlimited() {
-        config.setProperty("unlimited", unlimited.stream().map(Enum::name).collect(Collectors.toList()));
-        config.save();
-    }
-
-    private Map<String, Object> _getPowertools() {
-        final CommentedConfigurationNode node = config.getSection("powertools");
-        if (node != null) {
-            return ConfigurateUtil.getRawMap(node);
-        }
-        return new HashMap<>();
     }
 
     public void clearAllPowertools() {
-        powertools.clear();
-        config.setRaw("powertools", powertools);
+        holder.powertools().clear();
         config.save();
     }
 
-    @SuppressWarnings("unchecked")
     public List<String> getPowertool(final ItemStack stack) {
-        return (List<String>) powertools.get(stack.getType().name().toLowerCase(Locale.ENGLISH));
+        return getPowertool(stack.getType());
     }
 
-    @SuppressWarnings("unchecked")
     public List<String> getPowertool(final Material material) {
-        return (List<String>) powertools.get(material.name().toLowerCase(Locale.ENGLISH));
+        return holder.powertools().get(material.name().toLowerCase(Locale.ENGLISH));
     }
 
     public void setPowertool(final ItemStack stack, final List<String> commandList) {
         if (commandList == null || commandList.isEmpty()) {
-            powertools.remove(stack.getType().name().toLowerCase(Locale.ENGLISH));
+            holder.powertools().remove(stack.getType().name().toLowerCase(Locale.ENGLISH));
         } else {
-            powertools.put(stack.getType().name().toLowerCase(Locale.ENGLISH), commandList);
+            holder.powertools().put(stack.getType().name().toLowerCase(Locale.ENGLISH), commandList);
         }
-        config.setRaw("powertools", powertools);
         config.save();
     }
 
     public boolean hasPowerTools() {
-        return !powertools.isEmpty();
-    }
-
-    private Location _getLastLocation() {
-        try {
-            return config.getLocation("lastlocation");
-        } catch (final InvalidWorldException e) {
-            return null;
-        }
+        return !holder.powertools().isEmpty();
     }
 
     public Location getLastLocation() {
-        return lastLocation;
+        return holder.lastLocation();
     }
 
     public void setLastLocation(final Location loc) {
         if (loc == null || loc.getWorld() == null) {
             return;
         }
-        lastLocation = loc;
-        config.setProperty("lastlocation", loc);
+        holder.lastLocation(loc);
         config.save();
     }
 
-    private Location _getLogoutLocation() {
-        try {
-            return config.getLocation("logoutlocation");
-        } catch (final InvalidWorldException e) {
-            return null;
-        }
-    }
-
     public Location getLogoutLocation() {
-        return logoutLocation;
+        return holder.logoutLocation();
     }
 
     public void setLogoutLocation(final Location loc) {
         if (loc == null || loc.getWorld() == null) {
             return;
         }
-        logoutLocation = loc;
-        config.setProperty("logoutlocation", loc);
+        holder.logoutLocation(loc);
         config.save();
-    }
-
-    private long _getLastTeleportTimestamp() {
-        return config.getLong("timestamps.lastteleport", 0);
     }
 
     public long getLastTeleportTimestamp() {
-        return lastTeleportTimestamp;
+        return holder.timestamps().lastTeleport();
     }
 
     public void setLastTeleportTimestamp(final long time) {
-        lastTeleportTimestamp = time;
-        config.setProperty("timestamps.lastteleport", time);
+        holder.timestamps().lastTeleport(time);
         config.save();
-    }
-
-    private long _getLastHealTimestamp() {
-        return config.getLong("timestamps.lastheal", 0);
     }
 
     public long getLastHealTimestamp() {
-        return lastHealTimestamp;
+        return holder.timestamps().lastHeal();
     }
 
     public void setLastHealTimestamp(final long time) {
-        lastHealTimestamp = time;
-        config.setProperty("timestamps.lastheal", time);
+        holder.timestamps().lastHeal(time);
         config.save();
-    }
-
-    private String _getJail() {
-        return config.getString("jail", null);
     }
 
     public String getJail() {
-        return jail;
+        return holder.jail();
     }
 
     public void setJail(final String jail) {
-        if (jail == null || jail.isEmpty()) {
-            this.jail = null;
-            config.removeProperty("jail");
-        } else {
-            this.jail = jail;
-            config.setProperty("jail", jail);
-        }
+        holder.jail(jail);
         config.save();
     }
 
-    private List<String> _getMails() {
-        return config.getList("mail", String.class);
-    }
-
     public List<String> getMails() {
-        return mails;
+        return holder.mails();
     }
 
     public void setMails(List<String> mails) {
-        if (mails == null) {
-            config.removeProperty("mail");
-            mails = _getMails();
-        } else {
-            config.setProperty("mail", mails);
-        }
-        this.mails = mails;
+        holder.mails(mails);
         config.save();
     }
 
     public void addMail(final String mail) {
-        mails.add(mail);
-        setMails(mails);
-    }
-
-    private boolean _getTeleportEnabled() {
-        return config.getBoolean("teleportenabled", true);
+        holder.mails().add(mail);
+        config.save();
     }
 
     public boolean isTeleportEnabled() {
-        return teleportEnabled;
+        return holder.teleportEnabled();
     }
 
     public void setTeleportEnabled(final boolean set) {
-        teleportEnabled = set;
-        config.setProperty("teleportenabled", set);
+        holder.teleportEnabled(set);
         config.save();
-    }
-
-    private boolean _getAutoTeleportEnabled() {
-        return config.getBoolean("teleportauto", false);
     }
 
     public boolean isAutoTeleportEnabled() {
-        return autoTeleportEnabled;
+        return holder.teleportAuto();
     }
 
     public void setAutoTeleportEnabled(final boolean set) {
-        autoTeleportEnabled = set;
-        config.setProperty("teleportauto", set);
+        holder.teleportAuto(set);
         config.save();
-    }
-
-    public List<UUID> _getIgnoredPlayers() {
-        final List<UUID> players = new ArrayList<>();
-        for (final String uuid : config.getList("ignore", String.class)) {
-            try {
-                players.add(UUID.fromString(uuid));
-            } catch (final IllegalArgumentException ignored) {
-            }
-        }
-        return Collections.synchronizedList(players);
     }
 
     @Deprecated
@@ -525,17 +357,7 @@ public abstract class UserData extends PlayerExtension implements IConf {
     }
 
     public void setIgnoredPlayerUUIDs(final List<UUID> players) {
-        if (players == null || players.isEmpty()) {
-            ignoredPlayers = Collections.synchronizedList(new ArrayList<>());
-            config.removeProperty("ignore");
-        } else {
-            ignoredPlayers = players;
-            final List<String> uuids = new ArrayList<>();
-            for (final UUID uuid : players) {
-                uuids.add(uuid.toString());
-            }
-            config.setProperty("ignore", uuids);
-        }
+        holder.ignore(players);
         config.save();
     }
 
@@ -549,101 +371,75 @@ public abstract class UserData extends PlayerExtension implements IConf {
     }
 
     public boolean isIgnoredPlayer(final IUser user) {
-        return ignoredPlayers.contains(user.getBase().getUniqueId()) && !user.isIgnoreExempt();
+        return holder.ignore().contains(user.getBase().getUniqueId()) && !user.isIgnoreExempt();
+    }
+
+    public List<UUID> _getIgnoredPlayers() {
+        return holder.ignore();
     }
 
     public void setIgnoredPlayer(final IUser user, final boolean set) {
         final UUID uuid = user.getBase().getUniqueId();
         if (set) {
-            if (!ignoredPlayers.contains(uuid)) {
-                ignoredPlayers.add(uuid);
+            if (!holder.ignore().contains(uuid)) {
+                holder.ignore().add(uuid);
             }
         } else {
-            ignoredPlayers.remove(uuid);
+            holder.ignore().remove(uuid);
         }
-        setIgnoredPlayerUUIDs(ignoredPlayers);
-    }
-
-    private boolean _getGodModeEnabled() {
-        return config.getBoolean("godmode", false);
+        config.save();
     }
 
     public boolean isGodModeEnabled() {
-        return godmode;
+        return holder.godMode();
     }
 
     public void setGodModeEnabled(final boolean set) {
-        godmode = set;
-        config.setProperty("godmode", set);
+        holder.godMode(set);
         config.save();
-    }
-
-    public boolean _getMuted() {
-        return config.getBoolean("muted", false);
     }
 
     public boolean getMuted() {
-        return muted;
+        return holder.muted();
     }
 
     public boolean isMuted() {
-        return muted;
+        return getMuted();
     }
 
     public void setMuted(final boolean set) {
-        muted = set;
-        config.setProperty("muted", set);
+        holder.muted(set);
         config.save();
     }
 
-    public String _getMuteReason() {
-        return config.getString("muteReason", null);
-    }
-
     public String getMuteReason() {
-        return muteReason;
+        return holder.muteReason();
     }
 
     public void setMuteReason(final String reason) {
-        if (reason == null) {
-            config.removeProperty("muteReason");
-            muteReason = null;
-        } else {
-            muteReason = reason;
-            config.setProperty("muteReason", reason);
-        }
+        holder.muteReason(reason);
         config.save();
     }
 
     public boolean hasMuteReason() {
-        return muteReason != null;
-    }
-
-    private long _getMuteTimeout() {
-        return config.getLong("timestamps.mute", 0);
+        return holder.muteReason() != null;
     }
 
     public long getMuteTimeout() {
-        return muteTimeout;
+        return holder.timestamps().mute();
     }
 
     public void setMuteTimeout(final long time) {
-        muteTimeout = time;
-        config.setProperty("timestamps.mute", time);
+        holder.timestamps().mute(time);
         config.save();
     }
 
-    private boolean _getJailed() {
-        return config.getBoolean("jailed", false);
-    }
-
     public boolean isJailed() {
-        return jailed;
+        return holder.jailed();
     }
 
     public void setJailed(final boolean set) {
-        jailed = set;
-        config.setProperty("jailed", set);
+        holder.jailed(set);
         config.save();
     }
 
@@ -653,167 +449,101 @@ public abstract class UserData extends PlayerExtension implements IConf {
         return ret;
     }
 
-    private long _getJailTimeout() {
-        return config.getLong("timestamps.jail", 0);
-    }
-
     public long getJailTimeout() {
-        return jailTimeout;
+        return holder.timestamps().jail();
     }
 
     public void setJailTimeout(final long time) {
-        jailTimeout = time;
-        config.setProperty("timestamps.jail", time);
+        holder.timestamps().jail(time);
         config.save();
-    }
-
-    private long onlineJailed;
-
-    private long _getOnlineJailedTime() {
-        return config.getLong("timestamps.onlinejail", 0);
     }
 
     public long getOnlineJailedTime() {
-        return onlineJailed;
+        return holder.timestamps().onlineJail();
     }
 
     public void setOnlineJailedTime(long onlineJailed) {
-        this.onlineJailed = onlineJailed;
-        config.setProperty("timestamps.onlinejail", onlineJailed);
+        holder.timestamps().onlineJail(onlineJailed);
         config.save();
-    }
-
-    private long _getLastLogin() {
-        return config.getLong("timestamps.login", 0);
     }
 
     public long getLastLogin() {
-        return lastLogin;
+        return holder.timestamps().login();
     }
 
     public void setLastLogin(final long time) {
-        _setLastLogin(time);
+        holder.timestamps().login(time);
         if (base.getAddress() != null && base.getAddress().getAddress() != null) {
-            _setLastLoginAddress(base.getAddress().getAddress().getHostAddress());
+            holder.ipAddress(base.getAddress().getAddress().getHostAddress());
         }
         config.save();
-    }
-
-    private void _setLastLogin(final long time) {
-        lastLogin = time;
-        config.setProperty("timestamps.login", time);
-    }
-
-    private long _getLastLogout() {
-        return config.getLong("timestamps.logout", 0);
     }
 
     public long getLastLogout() {
-        return lastLogout;
+        return holder.timestamps().logout();
     }
 
     public void setLastLogout(final long time) {
-        lastLogout = time;
-        config.setProperty("timestamps.logout", time);
+        holder.timestamps().logout(time);
         config.save();
-    }
-
-    private String _getLastLoginAddress() {
-        return config.getString("ipAddress", "");
     }
 
     public String getLastLoginAddress() {
-        return lastLoginAddress;
-    }
-
-    private void _setLastLoginAddress(final String address) {
-        lastLoginAddress = address;
-        config.setProperty("ipAddress", address);
-    }
-
-    private boolean _getAfk() {
-        return config.getBoolean("afk", false);
+        return holder.ipAddress();
     }
 
     public boolean isAfk() {
-        return afk;
+        return holder.afk();
     }
 
     public void _setAfk(final boolean set) {
-        afk = set;
-        config.setProperty("afk", set);
+        holder.afk(set);
         config.save();
-    }
-
-    private String _getGeoLocation() {
-        return config.getString("geolocation", null);
     }
 
     public String getGeoLocation() {
-        return geolocation;
+        return holder.geolocation();
     }
 
     public void setGeoLocation(final String geolocation) {
-        if (geolocation == null || geolocation.isEmpty()) {
-            this.geolocation = null;
-            config.removeProperty("geolocation");
-        } else {
-            this.geolocation = geolocation;
-            config.setProperty("geolocation", geolocation);
-        }
+        holder.geolocation(geolocation);
         config.save();
-    }
-
-    private boolean _isSocialSpyEnabled() {
-        return config.getBoolean("socialspy", false);
     }
 
     public boolean isSocialSpyEnabled() {
-        return isSocialSpyEnabled;
+        return holder.socialSpy();
     }
 
     public void setSocialSpyEnabled(final boolean status) {
-        isSocialSpyEnabled = status;
-        config.setProperty("socialspy", status);
+        holder.socialSpy(status);
         config.save();
     }
 
-    private boolean _isNPC() {
-        return config.getBoolean("npc", false);
-    }
-
     public boolean isNPC() {
-        return isNPC;
+        return holder.npc();
     }
 
     public void setNPC(final boolean set) {
-        isNPC = set;
-        config.setProperty("npc", set);
+        holder.npc(set);
         config.save();
     }
 
     public String getLastAccountName() {
-        return lastAccountName;
+        return holder.lastAccountName();
     }
 
     public void setLastAccountName(final String lastAccountName) {
-        this.lastAccountName = lastAccountName;
-        config.setProperty("lastAccountName", lastAccountName);
+        holder.lastAccountName(lastAccountName);
         config.save();
         ess.getUserMap().trackUUID(getConfigUUID(), lastAccountName, true);
     }
 
-    public String _getLastAccountName() {
-        return config.getString("lastAccountName", null);
-    }
-
     public boolean arePowerToolsEnabled() {
-        return arePowerToolsEnabled;
+        return holder.powerToolsEnabled();
     }
 
     public void setPowerToolsEnabled(final boolean set) {
-        arePowerToolsEnabled = set;
-        config.setProperty("powertoolsenabled", set);
+        holder.powerToolsEnabled(set);
         config.save();
     }
 
@@ -823,12 +553,8 @@ public abstract class UserData extends PlayerExtension implements IConf {
         return ret;
     }
 
-    private boolean _arePowerToolsEnabled() {
-        return config.getBoolean("powertoolsenabled", true);
-    }
-
     private Map<String, Long> _getKitTimestamps() {
-        final Map<String, Object> node = ConfigurateUtil.getRawMap(config.getSection("timestamps.kits"));
+        final Map<String, Object> node = holder.timestamps().kits();
         if (!node.isEmpty()) {
             final Map<String, Long> timestamps = new HashMap<>();
             for (final Map.Entry<String, Object> entry : node.entrySet()) {
@@ -854,7 +580,6 @@ public abstract class UserData extends PlayerExtension implements IConf {
     public void setKitTimestamp(String name, final long time) {
         name = name.replace('.', '_').replace('/', '_').toLowerCase(Locale.ENGLISH);
         kitTimestamps.put(name, time);
-        config.setRaw("timestamps.kits", kitTimestamps);
         config.save();
     }
 
@@ -883,15 +608,11 @@ public abstract class UserData extends PlayerExtension implements IConf {
     }
 
     private Map<Pattern, Long> _getCommandCooldowns() {
-        final CommentedConfigurationNode node = config.getSection("timestamps.command-cooldowns");
-        if (node == null) {
-            return null;
-        }
-
         // See saveCommandCooldowns() for deserialization explanation
-        final List<Map<?, ?>> section = ConfigurateUtil.getMapList(node);
+        final List<Object> section = holder.timestamps().commandCooldowns();
         final HashMap<Pattern, Long> result = new HashMap<>();
-        for (final Map<?, ?> map : section) {
+        for (final Object obj : section) {
+            final Map<?, ?> map = (Map<?, ?>) obj;
             final Pattern pattern = Pattern.compile(map.get("pattern").toString());
             final long expiry = ((Number) map.get("expiry")).longValue();
             result.put(pattern, expiry);
@@ -959,77 +680,52 @@ public abstract class UserData extends PlayerExtension implements IConf {
                 .build();
             serialized.add(map);
         }
-        config.setProperty("timestamps.command-cooldowns", serialized);
+        holder.timestamps().commandCooldowns(serialized);
         save();
-    }
-
-    public boolean _getAcceptingPay() {
-        return config.getBoolean("acceptingPay", true);
     }
 
     public boolean isAcceptingPay() {
-        return acceptingPay;
+        return holder.acceptingPay();
     }
 
     public void setAcceptingPay(final boolean acceptingPay) {
-        this.acceptingPay = acceptingPay;
-        config.setProperty("acceptingPay", acceptingPay);
+        holder.acceptingPay(acceptingPay);
         save();
-    }
-
-    private Boolean _getConfirmPay() {
-        return (Boolean) config.get("confirm-pay");
     }
 
     public boolean isPromptingPayConfirm() {
-        return confirmPay != null ? confirmPay : ess.getSettings().isConfirmCommandEnabledByDefault("pay");
+        return holder.confirmPay() != null ? holder.confirmPay() : ess.getSettings().isConfirmCommandEnabledByDefault("pay");
     }
 
     public void setPromptingPayConfirm(final boolean prompt) {
-        this.confirmPay = prompt;
-        config.setProperty("confirm-pay", prompt);
+        holder.confirmPay(prompt);
         save();
-    }
-
-    private Boolean _getConfirmClear() {
-        return (Boolean) config.get("confirm-clear");
     }
 
     public boolean isPromptingClearConfirm() {
-        return confirmClear != null ? confirmClear : ess.getSettings().isConfirmCommandEnabledByDefault("clearinventory");
+        return holder.confirmClear() != null ? holder.confirmClear() : ess.getSettings().isConfirmCommandEnabledByDefault("clearinventory");
     }
 
     public void setPromptingClearConfirm(final boolean prompt) {
-        this.confirmClear = prompt;
-        config.setProperty("confirm-clear", prompt);
+        holder.confirmClear(prompt);
         save();
-    }
-
-    private boolean _getLastMessageReplyRecipient() {
-        return config.getBoolean("last-message-reply-recipient", ess.getSettings().isLastMessageReplyRecipient());
     }
 
     public boolean isLastMessageReplyRecipient() {
-        return this.lastMessageReplyRecipient;
+        return holder.lastMessageReplyRecipient() != null ? holder.lastMessageReplyRecipient() : ess.getSettings().isLastMessageReplyRecipient();
     }
 
     public void setLastMessageReplyRecipient(final boolean enabled) {
-        this.lastMessageReplyRecipient = enabled;
-        config.setProperty("last-message-reply-recipient", enabled);
+        holder.lastMessageReplyRecipient(enabled);
         save();
     }
 
-    public boolean _getBaltopExcludeCache() {
-        return config.getBoolean("baltop-exempt", false);
-    }
-
     public boolean isBaltopExcludeCache() {
-        return baltopExemptCache;
+        return holder.baltopExempt();
     }
 
     public void setBaltopExemptCache(boolean baltopExempt) {
-        this.baltopExemptCache = baltopExempt;
-        config.setProperty("baltop-exempt", baltopExempt);
+        holder.baltopExempt(baltopExempt);
         config.save();
     }
 

@@ -278,6 +278,16 @@ public class UserConfigHolder {
         this.acceptingPay = value;
     }
 
+    private @Nullable Boolean confirmPay;
+
+    public Boolean confirmPay() {
+        return this.confirmPay;
+    }
+
+    public void confirmPay(final Boolean value) {
+        this.confirmPay = value;
+    }
+
     private @Nullable Boolean confirmClear;
 
     public Boolean confirmClear() {
@@ -315,83 +325,75 @@ public class UserConfigHolder {
     }
 
     @ConfigSerializable
-    static class Timestamps {
-        private @MonotonicNonNull Long lastteleport;
+    public static class Timestamps {
+        private long lastteleport = 0L;
 
-        public Long lastTeleport() {
-            if (this.lastteleport == null) {
-                this.lastteleport = 0L;
-            }
+        public long lastTeleport() {
             return this.lastteleport;
         }
 
-        public void lastTeleport(final Long value) {
+        public void lastTeleport(final long value) {
             this.lastteleport = value;
         }
 
-        private @MonotonicNonNull Long lastheal;
+        private long lastheal = 0L;
 
-        public Long lastHeal() {
-            if (this.lastheal == null) {
-                this.lastheal = 0L;
-            }
+        public long lastHeal() {
             return this.lastheal;
         }
 
-        public void lastHeal(final Long value) {
+        public void lastHeal(final long value) {
             this.lastheal = value;
         }
 
-        private @MonotonicNonNull Long mute;
+        private long mute = 0L;
 
-        public Long mute() {
-            if (this.mute == null) {
-                this.mute = 0L;
-            }
+        public long mute() {
             return this.mute;
         }
 
-        public void mute(final Long value) {
+        public void mute(final long value) {
             this.mute = value;
         }
 
-        private @MonotonicNonNull Long jail;
+        private long jail = 0L;
 
-        public Long jail() {
-            if (this.jail == null) {
-                this.jail = 0L;
-            }
+        public long jail() {
             return this.jail;
         }
 
-        public void jail(final Long value) {
+        public void jail(final long value) {
             this.jail = value;
         }
 
-        private @MonotonicNonNull Long onlinejail;
+        private long onlinejail = 0L;
 
-        public Long onlineJail() {
-            if (this.onlinejail == null) {
-                this.onlinejail = 0L;
-            }
+        public long onlineJail() {
             return this.onlinejail;
         }
 
-        public void onlineJail(final Long value) {
+        public void onlineJail(final long value) {
             this.onlinejail = value;
         }
 
-        private @MonotonicNonNull Long logout;
+        private long logout = 0L;
 
-        public Long logout() {
-            if (this.logout == null) {
-                this.logout = 0L;
-            }
+        public long logout() {
             return this.logout;
         }
 
-        public void logout(final Long value) {
+        public void logout(final long value) {
             this.logout = value;
+        }
+
+        private long login = 0L;
+
+        public long login() {
+            return this.login;
+        }
+
+        public void login(final long value) {
+            this.login = value;
         }
 
         @DeleteOnEmpty

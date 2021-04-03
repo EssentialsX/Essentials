@@ -61,6 +61,7 @@ public class EssentialsConfiguration {
     private final YamlConfigurationLoader loader;
     private final String templateName;
     private CommentedConfigurationNode configurationNode;
+    private Runnable saveHook;
 
     public EssentialsConfiguration(final File configFile) {
         this(configFile, null);
@@ -400,6 +401,10 @@ public class EssentialsConfiguration {
         }
     }
 
+    public void setSaveHook(Runnable saveHook) {
+        this.saveHook = saveHook;
+    }
+
     public synchronized void save() {
         if (!transaction.get()) {
             delaySave();
@@ -415,6 +420,10 @@ public class EssentialsConfiguration {
     }
 
     private Future<?> delaySave() {
+        if (saveHook != null) {
+            saveHook.run();
+        }
+
         final CommentedConfigurationNode node = configurationNode.copy();
 
         pendingWrites.incrementAndGet();
