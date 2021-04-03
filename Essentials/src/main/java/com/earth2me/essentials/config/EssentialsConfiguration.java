@@ -4,8 +4,10 @@ import com.earth2me.essentials.config.annotations.DeleteOnEmpty;
 import com.earth2me.essentials.config.processors.DeleteOnEmptyProcessor;
 import com.earth2me.essentials.config.serializers.BigDecimalTypeSerializer;
 import com.earth2me.essentials.config.serializers.LocationTypeSerializer;
+import com.earth2me.essentials.config.serializers.MaterialTypeSerializer;
 import net.ess3.api.InvalidWorldException;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.spongepowered.configurate.CommentedConfigurationNode;
 import org.spongepowered.configurate.ConfigurateException;
 import org.spongepowered.configurate.ConfigurationOptions;
@@ -49,6 +51,7 @@ public class EssentialsConfiguration {
             .registerAnnotatedObjects(MAPPER_FACTORY)
             .register(BigDecimal.class, new BigDecimalTypeSerializer())
             .register(Location.class, new LocationTypeSerializer())
+            .register(Material.class, new MaterialTypeSerializer())
             .build();
 
     private final AtomicInteger pendingWrites = new AtomicInteger(0);

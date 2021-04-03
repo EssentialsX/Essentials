@@ -2,6 +2,7 @@ package com.earth2me.essentials.config.holders;
 
 import com.earth2me.essentials.config.annotations.DeleteOnEmpty;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
 import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
@@ -53,9 +54,9 @@ public class UserConfigHolder {
     }
 
     @DeleteOnEmpty
-    private @MonotonicNonNull Set<String> unlimited;
+    private @MonotonicNonNull Set<Material> unlimited;
 
-    public Set<String> unlimited() {
+    public Set<Material> unlimited() {
         if (this.unlimited == null) {
             this.unlimited = new HashSet<>();
         }
