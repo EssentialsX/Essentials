@@ -858,6 +858,30 @@ public abstract class UserData extends PlayerExtension implements IConf {
         config.save();
     }
 
+    public Set<String> getConfigKeys() {
+        final Set<String> keys = ConfigurateUtil.getKeys(config.getSection("info"));
+        if (!keys.isEmpty()) {
+            return keys;
+        }
+        return new HashSet<>();
+    }
+
+    public Map<String, Object> getConfigMap() {
+        final Map<String, Object> node = ConfigurateUtil.getRawMap(config.getSection("info"));
+        if (!node.isEmpty()) {
+            return node;
+        }
+        return new HashMap<>();
+    }
+
+    public Map<String, Object> getConfigMap(final String node) {
+        final Map<String, Object> nodeMap = ConfigurateUtil.getRawMap(config.getSection("info." + node));
+        if (!nodeMap.isEmpty()) {
+            return nodeMap;
+        }
+        return new HashMap<>();
+    }
+
     private Map<Pattern, Long> _getCommandCooldowns() {
         final CommentedConfigurationNode node = config.getSection("timestamps.command-cooldowns");
         if (node == null) {
