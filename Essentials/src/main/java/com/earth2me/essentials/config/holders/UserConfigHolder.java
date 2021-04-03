@@ -307,6 +307,12 @@ public class UserConfigHolder {
         this.baltopExempt = value;
     }
 
+    private @NonNull Timestamps timestamps = new Timestamps();
+
+    public Timestamps timestamps() {
+        return this.timestamps;
+    }
+
     @ConfigSerializable
     static class Timestamps {
         private @MonotonicNonNull Long lastteleport;
