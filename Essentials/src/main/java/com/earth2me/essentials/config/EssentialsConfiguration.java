@@ -1,5 +1,7 @@
 package com.earth2me.essentials.config;
 
+import com.earth2me.essentials.config.annotations.DeleteOnEmpty;
+import com.earth2me.essentials.config.processors.DeleteOnEmptyProcessor;
 import com.earth2me.essentials.config.serializers.BigDecimalTypeSerializer;
 import com.earth2me.essentials.config.serializers.LocationTypeSerializer;
 import net.ess3.api.InvalidWorldException;
@@ -9,6 +11,7 @@ import org.spongepowered.configurate.ConfigurateException;
 import org.spongepowered.configurate.ConfigurationOptions;
 import org.spongepowered.configurate.loader.HeaderMode;
 import org.spongepowered.configurate.loader.ParsingException;
+import org.spongepowered.configurate.objectmapping.ObjectMapper;
 import org.spongepowered.configurate.serialize.SerializationException;
 import org.spongepowered.configurate.serialize.TypeSerializerCollection;
 import org.spongepowered.configurate.yaml.NodeStyle;
@@ -39,8 +42,11 @@ import static com.earth2me.essentials.I18n.tl;
 public class EssentialsConfiguration {
     protected static final Logger LOGGER = Logger.getLogger("Essentials");
     private static final ExecutorService EXECUTOR_SERVICE = Executors.newSingleThreadExecutor();
-    private static final TypeSerializerCollection SERIALIZERS = TypeSerializerCollection.builder()
-            .registerAll(TypeSerializerCollection.defaults())
+    private static final ObjectMapper.Factory MAPPER_FACTORY = ObjectMapper.factoryBuilder()
+            .addProcessor(DeleteOnEmpty.class, (data, value) -> new DeleteOnEmptyProcessor())
+            .build();
+    private static final TypeSerializerCollection SERIALIZERS = TypeSerializerCollection.defaults().childBuilder()
+            .registerAnnotatedObjects(MAPPER_FACTORY)
             .register(BigDecimal.class, new BigDecimalTypeSerializer())
             .register(Location.class, new LocationTypeSerializer())
             .build();
