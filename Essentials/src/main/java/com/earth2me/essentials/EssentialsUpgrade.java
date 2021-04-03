@@ -146,6 +146,60 @@ public class EssentialsUpgrade {
         ess.getLogger().info("To rerun the conversion type /essentials uuidconvert");
     }
 
+    public void convertStupidNames() {
+        if (doneFile.getBoolean("updateUsersLegacyPathNames", false)) {
+            return;
+        }
+
+        LOGGER.info("Attempting to migrate legacy path names to Configurate");
+
+        final File userdataFolder = new File(ess.getDataFolder(), "userdata");
+        if (!userdataFolder.exists() || !userdataFolder.isDirectory()) {
+            return;
+        }
+        final File[] userFiles = userdataFolder.listFiles();
+
+        for (final File file : userFiles) {
+            if (!file.isFile() || !file.getName().endsWith(".yml")) {
+                continue;
+            }
+            final EssentialsConfiguration config = new EssentialsConfiguration(file);
+            try {
+                config.load();
+
+                if (config.hasProperty("muteReason")) {
+                    final String reason = config.getString("muteReason", null);
+                    config.removeProperty("muteReason");
+                    config.setProperty("mute-reason", reason);
+                }
+
+                if (config.hasProperty("ipAddress")) {
+                    final String ip = config.getString("ipAddress", null);
+                    config.removeProperty("ipAddress");
+                    config.setProperty("ip-address", ip);
+                }
+
+                if (config.hasProperty("lastAccountName")) {
+                    final String name = config.getString("lastAccountName", null);
+                    config.removeProperty("lastAccountName");
+                    config.setProperty("last-account-name", name);
+                }
+
+                if (config.hasProperty("acceptingPay")) {
+                    final boolean isPay = config.getBoolean("acceptingPay", true);
+                    config.removeProperty("acceptingPay");
+                    config.setProperty("accepting-pay", isPay);
+                }
+            } catch (final RuntimeException ex) {
+                LOGGER.log(Level.INFO, "File: " + file.toString());
+                throw ex;
+            }
+        }
+        doneFile.setProperty("updateUsersLegacyPathNames", true);
+        doneFile.save();
+        LOGGER.info("Done converting legacy path names to Configurate.");
+    }
+
     public void convertIgnoreList() {
         final Pattern pattern = Pattern.compile("^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$");
         if (doneFile.getBoolean("updateUsersIgnoreListUUID", false)) {
@@ -765,5 +819,6 @@ public class EssentialsUpgrade {
         warnMetrics();
         repairUserMap();
         convertIgnoreList();
+        convertStupidNames();
     }
 }
