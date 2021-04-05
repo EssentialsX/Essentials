@@ -541,6 +541,7 @@ public class Settings implements net.ess3.api.ISettings {
             mFormat = mFormat.replace("{PREFIX}", "{6}");
             mFormat = mFormat.replace("{SUFFIX}", "{7}");
             mFormat = mFormat.replace("{USERNAME}", "{8}");
+            mFormat = mFormat.replace("{NICKNAME}", "{9}");
             mFormat = "§r".concat(mFormat);
             chatFormats.put(group, mFormat);
         }
@@ -1786,5 +1787,10 @@ public class Settings implements net.ess3.api.ISettings {
     @Override
     public boolean isRespawnAtBed() {
         return config.getBoolean("respawn-at-home-bed", true);
+    }
+
+    @Override
+    public boolean isUpdateCheckEnabled() {
+        return config.getBoolean("update-check", true);
     }
 }
