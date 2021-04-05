@@ -13,6 +13,7 @@ import com.earth2me.essentials.utils.NumberUtil;
 import net.ess3.api.IEssentials;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.command.Command;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.MemoryConfiguration;
 import org.bukkit.event.EventPriority;
@@ -58,6 +59,7 @@ public class Settings implements net.ess3.api.ISettings {
     private boolean teleportSafety;
     private boolean forceDisableTeleportSafety;
     private Set<String> disabledCommands = new HashSet<>();
+    private final transient Map<String, Command> disabledBukkitCommands = new HashMap<>();
     private ConfigurationSection commandCosts;
     private Set<String> socialSpyCommands = new HashSet<>();
     private Set<String> muteCommands = new HashSet<>();
@@ -632,6 +634,19 @@ public class Settings implements net.ess3.api.ISettings {
         chatFormats.clear();
         changeDisplayName = _changeDisplayName();
         disabledCommands = _getDisabledCommands();
+
+        ess.getKnownCommandsProvider().getKnownCommands().putAll(disabledBukkitCommands);
+        disabledBukkitCommands.clear();
+        for (String command : disabledCommands) {
+            final Command toDisable = ess.getPluginCommand(command);
+            if (toDisable != null) {
+                final Command removed = ess.getKnownCommandsProvider().getKnownCommands().remove(toDisable.getName());
+                if (removed != null) {
+                    disabledBukkitCommands.put(command, removed);
+                }
+            }
+        }
+
         nicknamePrefix = _getNicknamePrefix();
         operatorColor = _getOperatorColor();
         changePlayerListName = _changePlayerListName();

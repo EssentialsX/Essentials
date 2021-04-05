@@ -105,10 +105,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 import java.util.function.Predicate;
@@ -121,7 +119,6 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
     private static final Logger LOGGER = Logger.getLogger("Essentials");
     private final transient TNTExplodeListener tntListener = new TNTExplodeListener(this);
     private final transient Set<String> vanishedPlayers = new LinkedHashSet<>();
-    private final transient Map<String, Command> disabledCommands = new HashMap<>();
     private transient ISettings settings;
     private transient Jails jails;
     private transient Warps warps;
@@ -352,17 +349,6 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
                     knownCommandsProvider = new PaperKnownCommandsProvider();
                 } else {
                     knownCommandsProvider = new ReflKnownCommandsProvider();
-                }
-                knownCommandsProvider.getKnownCommands().putAll(disabledCommands);
-                disabledCommands.clear();
-                for (String command : settings.getDisabledCommands()) {
-                    final Command toDisable = this.getCommand(command);
-                    if (toDisable != null) {
-                        final Command removed = knownCommandsProvider.getKnownCommands().remove(toDisable.getName());
-                        if (removed != null) {
-                            disabledCommands.put(command, removed);
-                        }
-                    }
                 }
 
                 // Command aliases provider
@@ -1080,6 +1066,11 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
     @Override
     public FormattedCommandAliasProvider getFormattedCommandAliasProvider() {
         return formattedCommandAliasProvider;
+    }
+
+    @Override
+    public PluginCommand getPluginCommand(final String cmd) {
+        return this.getCommand(cmd);
     }
 
     private AbstractItemDb getItemDbFromConfig() {
