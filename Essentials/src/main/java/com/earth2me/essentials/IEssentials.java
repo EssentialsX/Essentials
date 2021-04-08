@@ -13,10 +13,12 @@ import net.ess3.provider.KnownCommandsProvider;
 import net.ess3.provider.ServerStateProvider;
 import net.ess3.provider.SpawnerBlockProvider;
 import net.ess3.provider.SpawnerItemProvider;
+import net.ess3.provider.SyncCommandsProvider;
 import net.essentialsx.api.v2.services.BalanceTop;
 import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.PluginCommand;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitScheduler;
@@ -134,4 +136,8 @@ public interface IEssentials extends Plugin {
     KnownCommandsProvider getKnownCommandsProvider();
 
     FormattedCommandAliasProvider getFormattedCommandAliasProvider();
+
+    SyncCommandsProvider getSyncCommandsProvider();
+
+    PluginCommand getPluginCommand(String cmd);
 }
