@@ -1,6 +1,7 @@
 package com.earth2me.essentials.config.holders;
 
 import com.earth2me.essentials.config.annotations.DeleteOnEmpty;
+import com.earth2me.essentials.config.entities.CommandCooldown;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
@@ -397,30 +398,30 @@ public class UserConfigHolder {
         }
 
         @DeleteOnEmpty
-        private @MonotonicNonNull Map<String, Object> kits;
+        private @MonotonicNonNull Map<String, Long> kits;
 
-        public Map<String, Object> kits() {
+        public Map<String, Long> kits() {
             if (this.kits == null) {
                 this.kits = new HashMap<>();
             }
             return this.kits;
         }
 
-        public void kits(final Map<String, Object> value) {
+        public void kits(final Map<String, Long> value) {
             this.kits = value;
         }
 
         @DeleteOnEmpty
-        private @MonotonicNonNull List<Object> commandCooldowns;
+        private @MonotonicNonNull List<CommandCooldown> commandCooldowns;
 
-        public List<Object> commandCooldowns() {
+        public List<CommandCooldown> commandCooldowns() {
             if (this.commandCooldowns == null) {
                 this.commandCooldowns = new ArrayList<>();
             }
             return this.commandCooldowns;
         }
 
-        public void commandCooldowns(final List<Object> value) {
+        public void commandCooldowns(final List<CommandCooldown> value) {
             this.commandCooldowns = value;
         }
     }

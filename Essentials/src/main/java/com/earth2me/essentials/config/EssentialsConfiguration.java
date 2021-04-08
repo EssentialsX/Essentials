@@ -10,7 +10,6 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.spongepowered.configurate.CommentedConfigurationNode;
 import org.spongepowered.configurate.ConfigurateException;
-import org.spongepowered.configurate.ConfigurationOptions;
 import org.spongepowered.configurate.loader.HeaderMode;
 import org.spongepowered.configurate.loader.ParsingException;
 import org.spongepowered.configurate.objectmapping.ObjectMapper;
@@ -79,7 +78,7 @@ public class EssentialsConfiguration {
     public EssentialsConfiguration(final File configFile, final String templateName, final String header) {
         this.configFile = configFile;
         this.loader = YamlConfigurationLoader.builder()
-                .defaultOptions(ConfigurationOptions.defaults()
+                .defaultOptions(opts -> opts
                         .header(header)
                         .serializers(SERIALIZERS))
                 .headerMode(HeaderMode.PRESET)

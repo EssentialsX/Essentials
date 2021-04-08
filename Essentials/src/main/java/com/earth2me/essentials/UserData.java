@@ -2,10 +2,10 @@ package com.earth2me.essentials;
 
 import com.earth2me.essentials.config.ConfigurateUtil;
 import com.earth2me.essentials.config.EssentialsUserConfiguration;
+import com.earth2me.essentials.config.entities.CommandCooldown;
 import com.earth2me.essentials.config.holders.UserConfigHolder;
 import com.earth2me.essentials.utils.NumberUtil;
 import com.earth2me.essentials.utils.StringUtil;
-import com.google.common.collect.ImmutableMap;
 import net.ess3.api.IEssentials;
 import net.ess3.api.MaxMoneyException;
 import org.bukkit.Location;
@@ -17,14 +17,12 @@ import org.spongepowered.configurate.serialize.SerializationException;
 import java.io.File;
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
 import java.util.UUID;
 import java.util.logging.Level;
@@ -37,9 +35,6 @@ public abstract class UserData extends PlayerExtension implements IConf {
     private final EssentialsUserConfiguration config;
     private UserConfigHolder holder;
     private BigDecimal money;
-    // Pattern, Date. Pattern for less pattern creations
-    private Map<Pattern, Long> commandCooldowns;
-    private Map<String, Long> kitTimestamps;
 
     protected UserData(final Player base, final IEssentials ess) {
         super(base);
@@ -91,8 +86,6 @@ public abstract class UserData extends PlayerExtension implements IConf {
             }
         });
         money = _getMoney();
-        commandCooldowns = _getCommandCooldowns();
-        kitTimestamps = _getKitTimestamps();
     }
 
     private BigDecimal _getMoney() {
@@ -553,33 +546,17 @@ public abstract class UserData extends PlayerExtension implements IConf {
         return ret;
     }
 
-    private Map<String, Long> _getKitTimestamps() {
-        final Map<String, Object> node = holder.timestamps().kits();
-        if (!node.isEmpty()) {
-            final Map<String, Long> timestamps = new HashMap<>();
-            for (final Map.Entry<String, Object> entry : node.entrySet()) {
-                if (entry.getValue() instanceof Long) {
-                    timestamps.put(entry.getKey().toLowerCase(Locale.ENGLISH), (Long) entry.getValue());
-                } else if (entry.getValue() instanceof Integer) {
-                    timestamps.put(entry.getKey().toLowerCase(Locale.ENGLISH), Long.valueOf((Integer) entry.getValue()));
-                }
-            }
-            return timestamps;
-        }
-        return new HashMap<>();
-    }
-
     public long getKitTimestamp(String name) {
         name = name.replace('.', '_').replace('/', '_').toLowerCase(Locale.ENGLISH);
-        if (kitTimestamps != null && kitTimestamps.containsKey(name)) {
-            return kitTimestamps.get(name);
+        if (holder.timestamps().kits() != null && holder.timestamps().kits().containsKey(name)) {
+            return holder.timestamps().kits().get(name);
         }
         return 0L;
     }
 
     public void setKitTimestamp(String name, final long time) {
         name = name.replace('.', '_').replace('/', '_').toLowerCase(Locale.ENGLISH);
-        kitTimestamps.put(name, time);
+        holder.timestamps().kits().put(name, time);
         config.save();
     }
 
@@ -607,81 +584,47 @@ public abstract class UserData extends PlayerExtension implements IConf {
         return new HashMap<>();
     }
 
-    private Map<Pattern, Long> _getCommandCooldowns() {
-        // See saveCommandCooldowns() for deserialization explanation
-        final List<Object> section = holder.timestamps().commandCooldowns();
-        final HashMap<Pattern, Long> result = new HashMap<>();
-        for (final Object obj : section) {
-            final Map<?, ?> map = (Map<?, ?>) obj;
-            final Pattern pattern = Pattern.compile(map.get("pattern").toString());
-            final long expiry = ((Number) map.get("expiry")).longValue();
-            result.put(pattern, expiry);
-        }
-        return result;
+    public List<CommandCooldown> getCooldownsList() {
+        return holder.timestamps().commandCooldowns();
     }
 
     public Map<Pattern, Long> getCommandCooldowns() {
-        if (this.commandCooldowns == null) {
-            return Collections.emptyMap();
+        final Map<Pattern, Long> map = new HashMap<>();
+        for (final CommandCooldown c : getCooldownsList()) {
+            map.put(c.pattern(), c.value());
         }
-        return Collections.unmodifiableMap(this.commandCooldowns);
+        return map;
     }
 
     public Date getCommandCooldownExpiry(final String label) {
-        if (commandCooldowns != null) {
-            for (final Entry<Pattern, Long> entry : this.commandCooldowns.entrySet()) {
-                if (entry.getKey().matcher(label).matches()) {
-                    return new Date(entry.getValue());
-                }
+        for (CommandCooldown cooldown : getCooldownsList()) {
+            if (cooldown.pattern().matcher(label).matches()) {
+                return new Date(cooldown.value());
             }
         }
         return null;
     }
 
     public void addCommandCooldown(final Pattern pattern, final Date expiresAt, final boolean save) {
-        if (this.commandCooldowns == null) {
-            this.commandCooldowns = new HashMap<>();
-        }
-        this.commandCooldowns.put(pattern, expiresAt.getTime());
+        final CommandCooldown cooldown = new CommandCooldown();
+        cooldown.pattern(pattern);
+        cooldown.value(expiresAt.getTime());
+        holder.timestamps().commandCooldowns().add(cooldown);
         if (save) {
-            saveCommandCooldowns();
+            save();
         }
     }
 
     public boolean clearCommandCooldown(final Pattern pattern) {
-        if (this.commandCooldowns == null) {
+        if (holder.timestamps().commandCooldowns().isEmpty()) {
             return false; // false for no modification
         }
 
-        if (this.commandCooldowns.remove(pattern) != null) {
-            saveCommandCooldowns();
+        if (getCooldownsList().removeIf(cooldown -> cooldown.pattern().equals(pattern))) {
+            save();
             return true;
         }
         return false;
-    }
-
-    private void saveCommandCooldowns() {
-        // Serialization explanation:
-        //
-        // Serialization is done as a map list instead of a config section due to limitations.
-        // When serializing patterns (which commonly include full stops .) Bukkit/Essentials config framework
-        // interprets it as a path separator, thus it breaks up the regex into sub nodes causing invalid syntax.
-        // Thus each command cooldown is instead stored as a Map of {pattern: .., expiry: ..} to work around this.
-        final List<Object> serialized = new ArrayList<>();
-        for (final Entry<Pattern, Long> entry : this.commandCooldowns.entrySet()) {
-            // Don't save expired cooldowns
-            if (entry.getValue() < System.currentTimeMillis()) {
-                continue;
-            }
-
-            final Map<?, ?> map = ImmutableMap.builder()
-                .put("pattern", entry.getKey().pattern())
-                .put("expiry", entry.getValue())
-                .build();
-            serialized.add(map);
-        }
-        holder.timestamps().commandCooldowns(serialized);
-        save();
     }
 
     public boolean isAcceptingPay() {
