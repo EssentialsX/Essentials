@@ -8,7 +8,6 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.server.PluginDisableEvent;
 import org.bukkit.event.server.PluginEnableEvent;
-import org.bukkit.event.server.ServerLoadEvent;
 
 import java.util.logging.Level;
 
@@ -18,6 +17,15 @@ public class EssentialsPluginListener implements Listener, IConf {
 
     public EssentialsPluginListener(final IEssentials ess) {
         this.ess = ess;
+
+        // Run on first server tick
+        ess.scheduleSyncDelayedTask(() -> {
+            if (EconomyLayers.getSelectedLayer() == null || serverLoaded) {
+                return;
+            }
+            serverLoaded = true;
+            EconomyLayers.onServerLoad();
+        });
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
@@ -49,15 +57,6 @@ public class EssentialsPluginListener implements Listener, IConf {
                 ess.getLogger().log(Level.INFO, "Active payment resolution method has been disabled! Falling back to Essentials' default payment resolution system!");
             }
         }
-    }
-
-    @EventHandler(priority = EventPriority.MONITOR)
-    public void onServerLoad(final ServerLoadEvent event) {
-        if (event.getType() != ServerLoadEvent.LoadType.STARTUP || EconomyLayers.getSelectedLayer() == null) {
-            return;
-        }
-        serverLoaded = true;
-        EconomyLayers.onServerLoad();
     }
 
     @Override
