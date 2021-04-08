@@ -36,6 +36,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Predicate;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -50,6 +51,7 @@ public class Settings implements net.ess3.api.ISettings {
     private static final BigDecimal MINMONEY = new BigDecimal("-10000000000000");
     private final transient EssentialsConf config;
     private final transient IEssentials ess;
+    private final transient AtomicInteger reloadCount = new AtomicInteger(0);
     private final Map<String, String> chatFormats = Collections.synchronizedMap(new HashMap<>());
     private int chatRadius = 0;
     // #easteregg
@@ -282,6 +284,23 @@ public class Settings implements net.ess3.api.ISettings {
     @Override
     public Set<String> getDisabledCommands() {
         return disabledCommands;
+    }
+
+    private void _addAlternativeCommand(final String label, final Command current) {
+        Command cmd = ess.getAlternativeCommandsHandler().getAlternative(label);
+        if (cmd == null) {
+            for (final Map.Entry<String, Command> entry : ess.getKnownCommandsProvider().getKnownCommands().entrySet()) {
+                final String[] split = entry.getKey().split(":");
+                if (entry.getValue() != current && split[split.length - 1].equals(label)) {
+                    cmd = entry.getValue();
+                    break;
+                }
+            }
+        }
+
+        if (cmd != null) {
+            ess.getKnownCommandsProvider().getKnownCommands().put(label, cmd);
+        }
     }
 
     private Set<String> _getDisabledCommands() {
@@ -636,14 +655,49 @@ public class Settings implements net.ess3.api.ISettings {
         changeDisplayName = _changeDisplayName();
         disabledCommands = _getDisabledCommands();
 
-        ess.getKnownCommandsProvider().getKnownCommands().putAll(disabledBukkitCommands);
-        disabledBukkitCommands.clear();
-        for (String command : disabledCommands) {
-            final Command toDisable = ess.getPluginCommand(command);
-            if (toDisable != null) {
-                final Command removed = ess.getKnownCommandsProvider().getKnownCommands().remove(toDisable.getName());
-                if (removed != null) {
-                    disabledBukkitCommands.put(command, removed);
+        // This will be late loaded
+        if (ess.getKnownCommandsProvider() != null) {
+            boolean mapModified = false;
+            if (!disabledBukkitCommands.isEmpty()) {
+                if (isDebug()) {
+                    logger.log(Level.INFO, "Re-adding " + disabledBukkitCommands.size() + " disabled commands!");
+                }
+                ess.getKnownCommandsProvider().getKnownCommands().putAll(disabledBukkitCommands);
+                disabledBukkitCommands.clear();
+                mapModified = true;
+            }
+
+            for (final String command : disabledCommands) {
+                final Command toDisable = ess.getPluginCommand(command);
+                if (toDisable != null) {
+                    if (isDebug()) {
+                        logger.log(Level.INFO, "Attempting removal of " + command);
+                    }
+                    final Command removed = ess.getKnownCommandsProvider().getKnownCommands().remove(toDisable.getName());
+                    if (removed != null) {
+                        if (isDebug()) {
+                            logger.log(Level.INFO, "Adding command " + command + " to disabled map!");
+                        }
+                        disabledBukkitCommands.put(command, removed);
+                    }
+
+                    // This is 2 because Settings are reloaded twice in the startup lifecycle
+                    if (reloadCount.get() < 2) {
+                        ess.scheduleSyncDelayedTask(() -> _addAlternativeCommand(command, toDisable));
+                    } else {
+                        _addAlternativeCommand(command, toDisable);
+                    }
+                }
+            }
+
+            if (mapModified) {
+                if (isDebug()) {
+                    logger.log(Level.INFO, "Syncing commands");
+                }
+                if (reloadCount.get() < 2) {
+                    ess.scheduleSyncDelayedTask(() -> ess.getSyncCommandsProvider().syncCommands());
+                } else {
+                    ess.getSyncCommandsProvider().syncCommands();
                 }
             }
         }
@@ -697,6 +751,8 @@ public class Settings implements net.ess3.api.ISettings {
         bindingItemPolicy = _getBindingItemsPolicy();
         currencySymbol = _getCurrencySymbol();
         worldAliases = _getWorldAliases();
+
+        reloadCount.incrementAndGet();
     }
 
     void _lateLoadItemSpawnBlacklist() {
