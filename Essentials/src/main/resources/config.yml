@@ -830,6 +830,21 @@ chat:
   # For more information of chat formatting, check out the wiki: http://wiki.ess3.net/wiki/Chat_Formatting
   # Note: Using the {PREFIX} and {SUFFIX} placeholders along with {DISPLAYNAME} may cause double prefixes/suffixes to be shown in chat unless add-prefix-suffix is uncommented and set to false.
 
+  # Available placeholders:
+  # {MESSAGE} - The content of the chat message.
+  # {USERNAME} - The sender's username.
+  # {DISPLAYNAME} - The sender's display name.
+  # {NICKNAME} - The sender's Essentials nickname. If the sender has no nickname, the username is shown.
+  # {PREFIX} - The sender's prefix, supplied by a permissions plugin.
+  # {SUFFIX} - The sender's suffix, supplied by a permissions plugin.
+  # {GROUP} - The sender's primary group name, supplied by a permissions plugin.
+  # {WORLD} - The world alias of the sender's current world. See the world-aliases section below for details.
+  # {WORLDNAME} - The full name of the sender's current world.
+  # {SHORTWORLDNAME} - The first character of the sender's current world.
+  # {TEAMNAME} - The sender's scoreboard team name.
+  # {TEAMPREFIX} - The sender's scoreboard team prefix.
+  # {TEAMSUFFIX} - The sender's scoreboard team suffix.
+
   format: '<{DISPLAYNAME}> {MESSAGE}'
   #format: '&7[{GROUP}]&r {DISPLAYNAME}&7:&r {MESSAGE}'
   #format: '&7{PREFIX}&r {DISPLAYNAME}&r &7{SUFFIX}&r: {MESSAGE}'
@@ -1085,6 +1100,10 @@ spawn-join-listener-priority: high
 
 # When users die, should they respawn at their first home or bed, instead of the spawnpoint?
 respawn-at-home: false
+
+# When users die, should they respawn at their bed instead of the spawnpoint?
+# The value of respawn-at-home (above) has to be true.
+respawn-at-home-bed: true
 
 # When users die, should EssentialsSpawn respect users' respawn anchors?
 respawn-at-anchor: false

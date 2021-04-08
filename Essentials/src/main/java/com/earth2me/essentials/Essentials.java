@@ -49,6 +49,7 @@ import net.ess3.nms.refl.providers.ReflKnownCommandsProvider;
 import net.ess3.nms.refl.providers.ReflServerStateProvider;
 import net.ess3.nms.refl.providers.ReflSpawnEggProvider;
 import net.ess3.nms.refl.providers.ReflSpawnerBlockProvider;
+import net.ess3.nms.refl.providers.ReflSyncCommandsProvider;
 import net.ess3.provider.ContainerProvider;
 import net.ess3.provider.FormattedCommandAliasProvider;
 import net.ess3.provider.KnownCommandsProvider;
@@ -59,6 +60,7 @@ import net.ess3.provider.ServerStateProvider;
 import net.ess3.provider.SpawnEggProvider;
 import net.ess3.provider.SpawnerBlockProvider;
 import net.ess3.provider.SpawnerItemProvider;
+import net.ess3.provider.SyncCommandsProvider;
 import net.ess3.provider.providers.BasePotionDataProvider;
 import net.ess3.provider.providers.BlockMetaSpawnerItemProvider;
 import net.ess3.provider.providers.BukkitMaterialTagProvider;
@@ -146,6 +148,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
     private transient FormattedCommandAliasProvider formattedCommandAliasProvider;
     private transient ProviderListener recipeBookEventProvider;
     private transient MaterialTagProvider materialTagProvider;
+    private transient SyncCommandsProvider syncCommandsProvider;
     private transient Kits kits;
     private transient RandomTeleport randomTeleport;
     private transient UpdateChecker updateChecker;
@@ -355,11 +358,14 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
 
                 // Command aliases provider
                 formattedCommandAliasProvider = new ReflFormattedCommandAliasProvider(PaperLib.isPaper());
-              
-                //Material Tag Providers
+
+                // Material Tag Providers
                 if (VersionUtil.getServerBukkitVersion().isHigherThanOrEqualTo(VersionUtil.v1_13_0_R01)) {
                     materialTagProvider = PaperLib.isPaper() ? new PaperMaterialTagProvider() : new BukkitMaterialTagProvider();
                 }
+
+                // Sync Commands Provider
+                syncCommandsProvider = new ReflSyncCommandsProvider();
 
                 execTimer.mark("Init(Providers)");
                 reload();
@@ -564,6 +570,9 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
 
             // Check for disabled commands
             if (getSettings().isCommandDisabled(commandLabel)) {
+                if (getKnownCommandsProvider().getKnownCommands().containsKey(commandLabel)) {
+                    return getKnownCommandsProvider().getKnownCommands().get(commandLabel).tabComplete(cSender, commandLabel, args);
+                }
                 return Collections.emptyList();
             }
 
@@ -666,6 +675,9 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
 
             // Check for disabled commands
             if (getSettings().isCommandDisabled(commandLabel)) {
+                if (getKnownCommandsProvider().getKnownCommands().containsKey(commandLabel)) {
+                    return getKnownCommandsProvider().getKnownCommands().get(commandLabel).execute(cSender, commandLabel, args);
+                }
                 sender.sendMessage(tl("commandDisabled", commandLabel));
                 return true;
             }
@@ -1083,6 +1095,16 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
     @Override
     public FormattedCommandAliasProvider getFormattedCommandAliasProvider() {
         return formattedCommandAliasProvider;
+    }
+
+    @Override
+    public SyncCommandsProvider getSyncCommandsProvider() {
+        return syncCommandsProvider;
+    }
+
+    @Override
+    public PluginCommand getPluginCommand(final String cmd) {
+        return this.getCommand(cmd);
     }
 
     private AbstractItemDb getItemDbFromConfig() {

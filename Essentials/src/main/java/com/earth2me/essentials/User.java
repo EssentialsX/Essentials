@@ -288,6 +288,8 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
                 final int id = material.getId();
                 if (isAuthorized("essentials.itemspawn.item-" + id)) return true;
             }
+
+            return false;
         }
 
         return isAuthorized("essentials.itemspawn.exempt") || !ess.getSettings().itemSpawnBlacklist().contains(material);
@@ -488,6 +490,15 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
     @Override
     public String getDisplayName() {
         return super.getBase().getDisplayName() == null || (ess.getSettings().hideDisplayNameInVanish() && isHidden()) ? super.getBase().getName() : super.getBase().getDisplayName();
+    }
+
+    @Override
+    public String getFormattedNickname() {
+        final String rawNickname = getNickname();
+        if (rawNickname == null) {
+            return null;
+        }
+        return FormatUtil.replaceFormat(ess.getSettings().getNicknamePrefix() + rawNickname);
     }
 
     @Override
