@@ -10,6 +10,10 @@ public final class MessageUtil {
      * Sanitizes text going to discord of markdown.
      */
     public static String sanitizeDiscordMarkdown(String message) {
+        if (message == null) {
+            return null;
+        }
+
         return message.replace("*", "\\*")
                 .replace("~", "\\~")
                 .replace("_", "\\_")
