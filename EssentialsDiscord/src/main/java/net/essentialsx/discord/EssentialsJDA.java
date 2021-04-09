@@ -163,7 +163,7 @@ public class EssentialsJDA {
             return;
         }
 
-        for (DiscordMessageEvent.MessageType type : DiscordMessageEvent.MessageType.values()) {
+        for (DiscordMessageEvent.MessageType type : DiscordMessageEvent.MessageType.DefaultTypes.values()) {
             if (!type.isPlayer()) {
                 continue;
             }

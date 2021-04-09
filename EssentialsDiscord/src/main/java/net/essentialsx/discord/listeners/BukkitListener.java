@@ -42,14 +42,14 @@ public class BukkitListener implements Listener {
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onMute(MuteStatusChangeEvent event) {
         if (!event.getValue()) {
-            sendDiscordMessage(DiscordMessageEvent.MessageType.MUTE,
+            sendDiscordMessage(DiscordMessageEvent.MessageType.DefaultTypes.MUTE,
                     MessageUtil.formatMessage(jda.getSettings().getUnmuteFormat(),
                         MessageUtil.sanitizeDiscordMarkdown(event.getAffected().getName()),
                         MessageUtil.sanitizeDiscordMarkdown(event.getAffected().getDisplayName())));
         } else if (event.getTimestamp().isPresent()) {
             final boolean console = event.getController() == null;
             final MessageFormat msg = event.getReason() == null ? jda.getSettings().getTempMuteFormat() : jda.getSettings().getTempMuteReasonFormat();
-            sendDiscordMessage(DiscordMessageEvent.MessageType.MUTE,
+            sendDiscordMessage(DiscordMessageEvent.MessageType.DefaultTypes.MUTE,
                     MessageUtil.formatMessage(msg,
                             MessageUtil.sanitizeDiscordMarkdown(event.getAffected().getName()),
                             MessageUtil.sanitizeDiscordMarkdown(event.getAffected().getDisplayName()),
@@ -60,7 +60,7 @@ public class BukkitListener implements Listener {
         } else {
             final boolean console = event.getController() == null;
             final MessageFormat msg = event.getReason() == null ? jda.getSettings().getPermMuteFormat() : jda.getSettings().getPermMuteReasonFormat();
-            sendDiscordMessage(DiscordMessageEvent.MessageType.MUTE,
+            sendDiscordMessage(DiscordMessageEvent.MessageType.DefaultTypes.MUTE,
                     MessageUtil.formatMessage(msg,
                             MessageUtil.sanitizeDiscordMarkdown(event.getAffected().getName()),
                             MessageUtil.sanitizeDiscordMarkdown(event.getAffected().getDisplayName()),
@@ -74,7 +74,7 @@ public class BukkitListener implements Listener {
     public void onChat(AsyncPlayerChatEvent event) {
         final Player player = event.getPlayer();
         Bukkit.getScheduler().runTask(jda.getPlugin(), () ->
-                sendDiscordMessage(DiscordMessageEvent.MessageType.CHAT,
+                sendDiscordMessage(DiscordMessageEvent.MessageType.DefaultTypes.CHAT,
                         MessageUtil.formatMessage(jda.getSettings().getMcToDiscordFormat(),
                             MessageUtil.sanitizeDiscordMarkdown(player.getName()),
                             MessageUtil.sanitizeDiscordMarkdown(player.getDisplayName()),
@@ -91,7 +91,7 @@ public class BukkitListener implements Listener {
     public void onJoin(AsyncUserDataLoadEvent event) {
         // Delay join to let nickname load
         if (event.getJoinMessage() != null) {
-            sendDiscordMessage(DiscordMessageEvent.MessageType.JOIN,
+            sendDiscordMessage(DiscordMessageEvent.MessageType.DefaultTypes.JOIN,
                     MessageUtil.formatMessage(jda.getSettings().getJoinFormat(),
                             MessageUtil.sanitizeDiscordMarkdown(event.getUser().getName()),
                             MessageUtil.sanitizeDiscordMarkdown(event.getUser().getDisplayName()),
@@ -105,7 +105,7 @@ public class BukkitListener implements Listener {
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onQuit(PlayerQuitEvent event) {
         if (event.getQuitMessage() != null) {
-            sendDiscordMessage(DiscordMessageEvent.MessageType.LEAVE,
+            sendDiscordMessage(DiscordMessageEvent.MessageType.DefaultTypes.LEAVE,
                     MessageUtil.formatMessage(jda.getSettings().getQuitFormat(),
                             MessageUtil.sanitizeDiscordMarkdown(event.getPlayer().getName()),
                             MessageUtil.sanitizeDiscordMarkdown(event.getPlayer().getDisplayName()),
@@ -118,7 +118,7 @@ public class BukkitListener implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onDeath(PlayerDeathEvent event) {
-        sendDiscordMessage(DiscordMessageEvent.MessageType.DEATH,
+        sendDiscordMessage(DiscordMessageEvent.MessageType.DefaultTypes.DEATH,
                 MessageUtil.formatMessage(jda.getSettings().getDeathFormat(),
                         MessageUtil.sanitizeDiscordMarkdown(event.getEntity().getName()),
                         MessageUtil.sanitizeDiscordMarkdown(event.getEntity().getDisplayName()),
@@ -130,7 +130,7 @@ public class BukkitListener implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onKick(PlayerKickEvent event) {
-        sendDiscordMessage(DiscordMessageEvent.MessageType.KICK,
+        sendDiscordMessage(DiscordMessageEvent.MessageType.DefaultTypes.KICK,
                 MessageUtil.formatMessage(jda.getSettings().getKickFormat(),
                         MessageUtil.sanitizeDiscordMarkdown(event.getPlayer().getName()),
                         MessageUtil.sanitizeDiscordMarkdown(event.getPlayer().getDisplayName()),

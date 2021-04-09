@@ -135,18 +135,22 @@ public class DiscordMessageEvent extends Event implements Cancellable {
     /**
      * Indicates the type of message being sent and its literal channel name used in the config.
      */
-    public enum MessageType {
-        JOIN("join", true),
-        LEAVE("leave", true),
-        CHAT("chat", true),
-        DEATH("death", true),
-        KICK("kick", false),
-        MUTE("mute", false);
-
+    public final static class MessageType {
         private final String key;
         private final boolean player;
 
-        MessageType(String key, boolean player) {
+        /**
+         * Creates a {@link MessageType} which will send channels to the specified channel key.
+         * @param key The channel key definded in the {@code message-types} section of the config.
+         */
+        public MessageType(final String key) {
+            this(key, false);
+        }
+
+        /**
+         * Internal constructor used by EssentialsX Discord
+         */
+        private MessageType(String key, boolean player) {
             this.key = key;
             this.player = player;
         }
@@ -165,6 +169,32 @@ public class DiscordMessageEvent extends Event implements Cancellable {
          */
         public boolean isPlayer() {
             return player;
+        }
+
+        @Override
+        public String toString() {
+            return key;
+        }
+
+        /**
+         * Default {@link MessageType MessageTypes} provided and documented by EssentialsX Discord.
+         */
+        public static final class DefaultTypes {
+            public final static MessageType JOIN = new MessageType("join", true);
+            public final static MessageType LEAVE = new MessageType("leave", true);
+            public final static MessageType CHAT = new MessageType("chat", true);
+            public final static MessageType DEATH = new MessageType("death", true);
+            public final static MessageType KICK = new MessageType("kick", false);
+            public final static MessageType MUTE = new MessageType("mute", false);
+            private final static MessageType[] VALUES = new MessageType[]{JOIN, LEAVE, CHAT, DEATH, KICK, MUTE};
+
+            /**
+             * Gets an array of all the default {@link MessageType MessageTypes}.
+             * @return An array of all the default {@link MessageType MessageTypes}.
+             */
+            public static MessageType[] values() {
+                return VALUES;
+            }
         }
     }
 }
