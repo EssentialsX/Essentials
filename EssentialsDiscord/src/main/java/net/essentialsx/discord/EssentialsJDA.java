@@ -12,7 +12,10 @@ import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.Webhook;
 import net.dv8tion.jda.api.hooks.EventListener;
 import net.essentialsx.api.v2.events.discord.DiscordMessageEvent;
-import net.essentialsx.discord.interactions.InteractionController;
+import net.essentialsx.api.v2.services.discord.EssentialsDiscordAPI;
+import net.essentialsx.api.v2.services.discord.InteractionController;
+import net.essentialsx.api.v2.services.discord.InteractionException;
+import net.essentialsx.discord.interactions.InteractionControllerImpl;
 import net.essentialsx.discord.interactions.commands.ExecuteCommand;
 import net.essentialsx.discord.interactions.commands.ListCommand;
 import net.essentialsx.discord.interactions.commands.MessageCommand;
@@ -23,6 +26,7 @@ import net.essentialsx.discord.util.ConsoleInjector;
 import net.essentialsx.discord.util.DiscordUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.event.HandlerList;
+import org.bukkit.plugin.ServicePriority;
 
 import javax.security.auth.login.LoginException;
 import java.util.HashMap;
@@ -33,7 +37,7 @@ import java.util.regex.Matcher;
 
 import static com.earth2me.essentials.I18n.tl;
 
-public class EssentialsJDA {
+public class EssentialsJDA implements EssentialsDiscordAPI {
     private final static Logger logger = Logger.getLogger("EssentialsDiscord");
     private final EssentialsDiscord plugin;
 
@@ -46,7 +50,7 @@ public class EssentialsJDA {
     private final Map<String, WebhookClient> channelIdToWebhook = new HashMap<>();
     private ConsoleInjector injector;
     private DiscordCommandDispatcher commandDispatcher;
-    private InteractionController interactionController;
+    private InteractionControllerImpl interactionController;
 
     public EssentialsJDA(EssentialsDiscord plugin) {
         this.plugin = plugin;
@@ -124,10 +128,14 @@ public class EssentialsJDA {
             throw new IllegalArgumentException(tl("discordErrorNoGuild"));
         }
 
-        interactionController = new InteractionController(this);
-        interactionController.registerCommand(new ExecuteCommand(this));
-        interactionController.registerCommand(new MessageCommand(this));
-        interactionController.registerCommand(new ListCommand(this));
+        interactionController = new InteractionControllerImpl(this);
+        try {
+            interactionController.registerCommand(new ExecuteCommand(this));
+            interactionController.registerCommand(new MessageCommand(this));
+            interactionController.registerCommand(new ListCommand(this));
+        } catch (InteractionException ignored) {
+            // won't happen
+        }
 
         updatePrimaryChannel();
 
@@ -136,6 +144,13 @@ public class EssentialsJDA {
         updateTypesRelay();
 
         Bukkit.getPluginManager().registerEvents(new BukkitListener(this), plugin);
+
+        Bukkit.getServicesManager().register(EssentialsDiscordAPI.class, this, plugin, ServicePriority.Normal);
+    }
+
+    @Override
+    public InteractionController getInteractionController() {
+        return interactionController;
     }
 
     public void updatePrimaryChannel() {

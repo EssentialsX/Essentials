@@ -1,14 +1,11 @@
-package net.essentialsx.discord.interactions.command;
+package net.essentialsx.api.v2.services.discord;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import net.essentialsx.discord.EssentialsJDA;
-import net.essentialsx.discord.util.DiscordUtil;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static com.earth2me.essentials.I18n.tl;
 
 public abstract class InteractionCommand {
     protected final EssentialsJDA jda;
@@ -28,14 +25,6 @@ public abstract class InteractionCommand {
 
     public final boolean isEphemeral() {
         return jda.getSettings().isCommandEphemeral(name);
-    }
-
-    public final void onPreCommand(InteractionEvent event) {
-        if (!DiscordUtil.hasRoles(event.getMember(), jda.getSettings().getCommandSnowflakes(name))) {
-            event.reply(tl("noAccessCommand"));
-            return;
-        }
-        onCommand(event);
     }
 
     public abstract void onCommand(InteractionEvent event);

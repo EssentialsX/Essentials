@@ -1,10 +1,10 @@
 package net.essentialsx.discord.interactions.commands;
 
 import net.essentialsx.discord.EssentialsJDA;
-import net.essentialsx.discord.interactions.command.InteractionCommand;
-import net.essentialsx.discord.interactions.command.InteractionCommandArgument;
-import net.essentialsx.discord.interactions.command.InteractionCommandArgumentType;
-import net.essentialsx.discord.interactions.command.InteractionEvent;
+import net.essentialsx.api.v2.services.discord.InteractionCommand;
+import net.essentialsx.api.v2.services.discord.InteractionCommandArgument;
+import net.essentialsx.api.v2.services.discord.InteractionCommandArgumentType;
+import net.essentialsx.api.v2.services.discord.InteractionEvent;
 import net.essentialsx.discord.util.DiscordCommandSender;
 import org.bukkit.Bukkit;
 

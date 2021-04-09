@@ -7,9 +7,11 @@ import net.dv8tion.jda.api.events.RawGatewayEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.utils.data.DataArray;
 import net.dv8tion.jda.api.utils.data.DataObject;
+import net.essentialsx.api.v2.services.discord.InteractionController;
+import net.essentialsx.api.v2.services.discord.InteractionEvent;
+import net.essentialsx.api.v2.services.discord.InteractionException;
 import net.essentialsx.discord.EssentialsJDA;
-import net.essentialsx.discord.interactions.command.InteractionCommand;
-import net.essentialsx.discord.interactions.command.InteractionEvent;
+import net.essentialsx.api.v2.services.discord.InteractionCommand;
 import net.essentialsx.discord.util.DiscordUtil;
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -27,7 +29,7 @@ import java.util.logging.Logger;
 
 import static com.earth2me.essentials.I18n.tl;
 
-public class InteractionController extends ListenerAdapter {
+public class InteractionControllerImpl extends ListenerAdapter implements InteractionController {
     private final static Logger logger = Logger.getLogger("EssentialsDiscord");
 
     private final EssentialsJDA jda;
@@ -40,7 +42,7 @@ public class InteractionController extends ListenerAdapter {
     private final Map<String, InteractionCommand> commandMap = new HashMap<>();
     private final List<String> commandIds = new ArrayList<>();
 
-    public InteractionController(EssentialsJDA jda) {
+    public InteractionControllerImpl(EssentialsJDA jda) {
         this.jda = jda;
         this.apiRegister = "https://discord.com/api/v8/applications/" + jda.getJda().getSelfUser().getId() + "/guilds/" + jda.getGuild().getId() + "/commands";
         this.apiDelete = "https://discord.com/api/v8/applications/" + jda.getJda().getSelfUser().getId() + "/guilds/" + jda.getGuild().getId() + "/commands/{id}";
@@ -80,8 +82,14 @@ public class InteractionController extends ListenerAdapter {
                 response.close();
 
                 final Member member = jda.getGuild().retrieveMemberById(payload.getObject("member").getObject("user").getString("id")).complete();
-                jda.getPlugin().getEss().scheduleSyncDelayedTask(() ->
-                        command.onPreCommand(new InteractionEvent(member, token, channelId, options, InteractionController.this)));
+                jda.getPlugin().getEss().scheduleSyncDelayedTask(() -> {
+                    final InteractionEvent interactionEvent = new InteractionEvent(member, token, channelId, options, InteractionControllerImpl.this);
+                    if (!DiscordUtil.hasRoles(interactionEvent.getMember(), jda.getSettings().getCommandSnowflakes(command.getName()))) {
+                        interactionEvent.reply(tl("noAccessCommand"));
+                        return;
+                    }
+                    command.onCommand(interactionEvent);
+                });
             } catch (IOException e) {
                 logger.severe("Error while responding to interaction: " + e.getMessage());
                 if (jda.isDebug()) {
@@ -97,6 +105,7 @@ public class InteractionController extends ListenerAdapter {
      * @param interactionToken The authorization token of the interaction.
      * @param message          The message to be sent.
      */
+    @Override
     public void editInteractionResponse(String interactionToken, String message) {
         message = FormatUtil.stripFormat(message).replace("§", ""); // Don't ask
 
@@ -123,9 +132,19 @@ public class InteractionController extends ListenerAdapter {
         });
     }
 
-    public void registerCommand(InteractionCommand command) {
+    @Override
+    public InteractionCommand getCommand(String name) {
+        return commandMap.get(name);
+    }
+
+    @Override
+    public void registerCommand(InteractionCommand command) throws InteractionException {
         if (!command.isEnabled()) {
-            return;
+            throw new InteractionException("The given command has already been registered!");
+        }
+
+        if (commandMap.containsKey(command.getName())) {
+            throw new InteractionException("A command with that name is already registered!");
         }
 
         final String commandJson = command.serialize().toString();
@@ -139,7 +158,7 @@ public class InteractionController extends ListenerAdapter {
                     commandIds.add(responseObj.get("id").getAsString());
                     if (jda.isDebug()) {
                         logger.info("Registered guild command: " + command.getName());
-                        logger.info("Registration payload: " + responseObj.toString());
+                        logger.info("Registration payload: " + responseObj);
                     }
                     return;
                 }
@@ -150,7 +169,7 @@ public class InteractionController extends ListenerAdapter {
                     return;
                 }
 
-                logger.warning("Error while registering command, raw response: " + responseObj.toString());
+                logger.warning("Error while registering command, raw response: " + responseObj);
             }
 
             @Override

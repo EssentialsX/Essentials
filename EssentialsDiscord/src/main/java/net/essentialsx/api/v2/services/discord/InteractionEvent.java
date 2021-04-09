@@ -1,9 +1,8 @@
-package net.essentialsx.discord.interactions.command;
+package net.essentialsx.api.v2.services.discord;
 
 import com.google.common.base.Joiner;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.utils.data.DataArray;
-import net.essentialsx.discord.interactions.InteractionController;
 
 import java.util.ArrayList;
 import java.util.HashMap;

@@ -1,4 +1,4 @@
-package net.essentialsx.discord.interactions.command;
+package net.essentialsx.api.v2.services.discord;
 
 import com.google.gson.JsonObject;
 

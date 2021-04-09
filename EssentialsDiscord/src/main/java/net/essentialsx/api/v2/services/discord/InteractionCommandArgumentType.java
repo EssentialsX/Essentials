@@ -1,4 +1,4 @@
-package net.essentialsx.discord.interactions.command;
+package net.essentialsx.api.v2.services.discord;
 
 public enum InteractionCommandArgumentType {
     SUBCOMMAND(1),
