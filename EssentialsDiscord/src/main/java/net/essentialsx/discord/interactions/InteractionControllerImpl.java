@@ -2,16 +2,15 @@ package net.essentialsx.discord.interactions;
 
 import com.earth2me.essentials.utils.FormatUtil;
 import com.google.gson.JsonObject;
-import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.events.RawGatewayEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.utils.data.DataArray;
 import net.dv8tion.jda.api.utils.data.DataObject;
+import net.essentialsx.api.v2.services.discord.InteractionCommand;
 import net.essentialsx.api.v2.services.discord.InteractionController;
 import net.essentialsx.api.v2.services.discord.InteractionEvent;
 import net.essentialsx.api.v2.services.discord.InteractionException;
 import net.essentialsx.discord.EssentialsJDA;
-import net.essentialsx.api.v2.services.discord.InteractionCommand;
 import net.essentialsx.discord.util.DiscordUtil;
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -81,10 +80,19 @@ public class InteractionControllerImpl extends ListenerAdapter implements Intera
                 }
                 response.close();
 
-                final Member member = jda.getGuild().retrieveMemberById(payload.getObject("member").getObject("user").getString("id")).complete();
+                final InteractionMemberImpl member = new InteractionMemberImpl(jda.getGuild().retrieveMemberById(payload.getObject("member").getObject("user").getString("id")).complete());
+                final Map<String, Object> args = new HashMap<>();
+                if (options != null) {
+                    for (Object option : options) {
+                        final HashMap<?, ?> obj = (HashMap<?, ?>) option;
+                        if (obj.containsKey("name") && obj.containsKey("value")) {
+                            args.put((String) obj.get("name"), obj.get("value"));
+                        }
+                    }
+                }
                 jda.getPlugin().getEss().scheduleSyncDelayedTask(() -> {
-                    final InteractionEvent interactionEvent = new InteractionEvent(member, token, channelId, options, InteractionControllerImpl.this);
-                    if (!DiscordUtil.hasRoles(interactionEvent.getMember(), jda.getSettings().getCommandSnowflakes(command.getName()))) {
+                    final InteractionEvent interactionEvent = new InteractionEvent(member, token, channelId, args, InteractionControllerImpl.this);
+                    if (!member.hasRoles(jda.getSettings().getCommandSnowflakes(command.getName()))) {
                         interactionEvent.reply(tl("noAccessCommand"));
                         return;
                     }
@@ -139,15 +147,15 @@ public class InteractionControllerImpl extends ListenerAdapter implements Intera
 
     @Override
     public void registerCommand(InteractionCommand command) throws InteractionException {
-        if (!command.isEnabled()) {
-            throw new InteractionException("The given command has already been registered!");
+        if (command.isDisabled()) {
+            throw new InteractionException("The given command has been disabled!");
         }
 
         if (commandMap.containsKey(command.getName())) {
             throw new InteractionException("A command with that name is already registered!");
         }
 
-        final String commandJson = command.serialize().toString();
+        final String commandJson = command.serialize();
         post(apiRegister, RequestBody.create(DiscordUtil.JSON_TYPE, commandJson)).enqueue(new Callback() {
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {

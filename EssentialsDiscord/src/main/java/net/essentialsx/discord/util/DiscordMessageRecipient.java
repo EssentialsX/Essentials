@@ -2,20 +2,16 @@ package net.essentialsx.discord.util;
 
 import com.earth2me.essentials.messaging.IMessageRecipient;
 import com.earth2me.essentials.utils.FormatUtil;
-import net.dv8tion.jda.api.entities.Member;
-import net.dv8tion.jda.api.entities.PrivateChannel;
+import net.essentialsx.api.v2.services.discord.InteractionMember;
 import org.bukkit.entity.Player;
 
-import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import static com.earth2me.essentials.I18n.tl;
-
 public class DiscordMessageRecipient implements IMessageRecipient {
-    private final Member member;
+    private final InteractionMember member;
     private final AtomicBoolean died = new AtomicBoolean(false);
 
-    public DiscordMessageRecipient(Member member) {
+    public DiscordMessageRecipient(InteractionMember member) {
         this.member = member;
     }
 
@@ -37,24 +33,22 @@ public class DiscordMessageRecipient implements IMessageRecipient {
 
         final String cleanMessage = MessageUtil.sanitizeDiscordMarkdown(FormatUtil.stripFormat(message));
 
-        final CompletableFuture<PrivateChannel> future = member.getUser().openPrivateChannel().submit();
-        future.thenCompose(privateChannel -> privateChannel.sendMessage("**" + tl("replyFromDiscord", sender.getName()) + "** `" + cleanMessage + "`").submit())
-                .whenComplete((m, error) -> {
-                    if (error != null) {
-                        died.set(true);
-                    }
-                });
+        member.sendPrivateMessage(cleanMessage).thenAccept(success -> {
+            if (!success) {
+                died.set(true);
+            }
+        });
         return MessageResponse.SUCCESS;
     }
 
     @Override
     public String getName() {
-        return member.getUser().getAsTag();
+        return member.getTag();
     }
 
     @Override
     public String getDisplayName() {
-        return member.getUser().getAsTag();
+        return member.getTag();
     }
 
     @Override

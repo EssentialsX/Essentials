@@ -3,20 +3,19 @@ package net.essentialsx.discord.interactions.commands;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.commands.PlayerNotFoundException;
 import com.earth2me.essentials.utils.FormatUtil;
-import net.essentialsx.discord.EssentialsJDA;
-import net.essentialsx.api.v2.services.discord.InteractionCommand;
 import net.essentialsx.api.v2.services.discord.InteractionCommandArgument;
 import net.essentialsx.api.v2.services.discord.InteractionCommandArgumentType;
 import net.essentialsx.api.v2.services.discord.InteractionEvent;
+import net.essentialsx.discord.EssentialsJDA;
+import net.essentialsx.discord.interactions.InteractionCommandImpl;
 import net.essentialsx.discord.util.DiscordMessageRecipient;
-import net.essentialsx.discord.util.DiscordUtil;
 import org.bukkit.Bukkit;
 
 import java.util.concurrent.atomic.AtomicReference;
 
 import static com.earth2me.essentials.I18n.tl;
 
-public class MessageCommand extends InteractionCommand {
+public class MessageCommand extends InteractionCommandImpl {
     public MessageCommand(EssentialsJDA jda) {
         super(jda, "msg", "Messages a player on the Minecraft Server.");
         addArgument(new InteractionCommandArgument("username", "The player to send the message to", InteractionCommandArgumentType.STRING, true));
@@ -25,7 +24,7 @@ public class MessageCommand extends InteractionCommand {
 
     @Override
     public void onCommand(InteractionEvent event) {
-        final boolean getHidden = DiscordUtil.hasRoles(event.getMember(), getAdminSnowflakes());
+        final boolean getHidden = event.getMember().hasRoles(getAdminSnowflakes());
         final User user;
         try {
             user = jda.getPlugin().getEss().matchUser(Bukkit.getServer(), null, event.getStringArgument("username"), getHidden, false);
@@ -47,11 +46,11 @@ public class MessageCommand extends InteractionCommand {
             }
         }
 
-        final String message = DiscordUtil.hasRoles(event.getMember(), jda.getSettings().getPermittedFormattingRoles()) ?
+        final String message = event.getMember().hasRoles(jda.getSettings().getPermittedFormattingRoles()) ?
                 FormatUtil.replaceFormat(event.getStringArgument("message")) : FormatUtil.stripFormat(event.getStringArgument("message"));
         event.reply(tl("msgFormat", tl("meSender"), user.getDisplayName(), message));
 
-        user.sendMessage(tl("msgFormat", event.getMember().getUser().getAsTag(), tl("meRecipient"), message));
+        user.sendMessage(tl("msgFormat", event.getMember().getTag(), tl("meRecipient"), message));
         // We use an atomic reference here so that java will garbage collect the recipient
         final AtomicReference<DiscordMessageRecipient> ref = new AtomicReference<>(new DiscordMessageRecipient(event.getMember()));
         jda.getPlugin().getEss().runTaskLaterAsynchronously(() -> ref.set(null), 6000); // Expires after 5 minutes

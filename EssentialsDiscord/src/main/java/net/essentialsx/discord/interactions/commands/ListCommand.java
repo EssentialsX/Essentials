@@ -3,12 +3,11 @@ package net.essentialsx.discord.interactions.commands;
 import com.earth2me.essentials.IEssentials;
 import com.earth2me.essentials.PlayerList;
 import com.earth2me.essentials.User;
-import net.essentialsx.discord.EssentialsJDA;
-import net.essentialsx.api.v2.services.discord.InteractionCommand;
 import net.essentialsx.api.v2.services.discord.InteractionCommandArgument;
 import net.essentialsx.api.v2.services.discord.InteractionCommandArgumentType;
 import net.essentialsx.api.v2.services.discord.InteractionEvent;
-import net.essentialsx.discord.util.DiscordUtil;
+import net.essentialsx.discord.EssentialsJDA;
+import net.essentialsx.discord.interactions.InteractionCommandImpl;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,7 +15,7 @@ import java.util.Map;
 
 import static com.earth2me.essentials.I18n.tl;
 
-public class ListCommand extends InteractionCommand {
+public class ListCommand extends InteractionCommandImpl {
 
     public ListCommand(EssentialsJDA jda) {
         super(jda, "list", tl("discordCommandListDescription"));
@@ -25,7 +24,7 @@ public class ListCommand extends InteractionCommand {
 
     @Override
     public void onCommand(InteractionEvent event) {
-        final boolean showHidden = DiscordUtil.hasRoles(event.getMember(), getAdminSnowflakes());
+        final boolean showHidden = event.getMember().hasRoles(getAdminSnowflakes());
         final List<String> output = new ArrayList<>();
         final IEssentials ess = jda.getPlugin().getEss();
 
