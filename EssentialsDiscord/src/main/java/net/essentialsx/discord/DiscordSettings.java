@@ -14,6 +14,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
 
 public class DiscordSettings implements IConf {
     private final EssentialsConf config;
@@ -24,6 +27,8 @@ public class DiscordSettings implements IConf {
 
     private OnlineStatus status;
     private Activity statusActivity;
+
+    private Pattern discordFilter;
 
     private MessageFormat consoleFormat;
 
@@ -96,6 +101,10 @@ public class DiscordSettings implements IConf {
 
     public boolean isChatFilterNewlines() {
         return config.getBoolean("chat.filter-newlines", true);
+    }
+
+    public Pattern getDiscordFilter() {
+        return discordFilter;
     }
 
     public boolean isShowAllChat() {
@@ -275,6 +284,18 @@ public class DiscordSettings implements IConf {
         if (activityType != null) {
             //noinspection ConstantConditions
             statusActivity = Activity.of(activityType, config.getString("presence.message", "Minecraft"));
+        }
+
+        final String filter = config.getString("chat.discord-filter");
+        if (filter != null) {
+            try {
+                discordFilter = Pattern.compile(filter);
+            } catch (PatternSyntaxException e) {
+                plugin.getLogger().log(Level.WARNING, "Invalid pattern for \"chat.discord-filter\": " + e.getMessage());
+                discordFilter = null;
+            }
+        } else {
+            discordFilter = null;
         }
 
         consoleFormat = generateMessageFormat(getFormatString(".console.format"), "[{timestamp} {level}] {message}", false,

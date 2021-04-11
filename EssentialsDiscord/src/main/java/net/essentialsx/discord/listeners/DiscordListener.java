@@ -41,6 +41,10 @@ public class DiscordListener extends ListenerAdapter {
 
         assert member != null; // Member will never be null
 
+        if (plugin.getSettings().getDiscordFilter() != null && plugin.getSettings().getDiscordFilter().matcher(message.getContentDisplay()).find()) {
+            return;
+        }
+
         final StringBuilder messageBuilder = new StringBuilder(message.getContentDisplay());
         if (plugin.getPlugin().getSettings().isShowDiscordAttachments()) {
             for (final Message.Attachment attachment : message.getAttachments()) {
