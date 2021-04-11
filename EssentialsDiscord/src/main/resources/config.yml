@@ -193,6 +193,7 @@ messages:
   # {world} - The name of the world the player sending the message is in
   # {prefix} - The prefix of the player sending the message
   # {suffix} - The suffix of the player sending the message
+  # ... PlaceholderAPI placeholders are also supported here too!
   mc-to-discord: "{displayname}: {message}"
   # This is the message sent to discord when a player is temporarily muted in minecraft
   # The following placeholders can be used here:
@@ -236,18 +237,21 @@ messages:
   # {username} - The name of the user joining
   # {displayname} - The display name of the user joining
   # {defaultmessage} - The full default join message used in game
+  # ... PlaceholderAPI placeholders are also supported here too!
   join: ":exclamation: {displayname} has joined!"
   # This is the message sent to discord when a player leaves the minecraft server
   # The following placeholders can be used here:
   # {username} - The name of the user leaving
   # {displayname} - The display name of the user leaving
   # {defaultmessage} - The full default leave message used in game
+  # ... PlaceholderAPI placeholders are also supported here too!
   quit: ":exclamation: {displayname} has left!"
   # This is the message sent to discord when a player dies
   # The following placeholders can be used here:
   # {username} - The name of the user who died
   # {displayname} - The display name of the user who died
   # {defaultmessage} - The full default death message used in game
+  # ... PlaceholderAPI placeholders are also supported here too!
   death: ":skull: {displayname} has died!"
   # This is the message sent to discord when a player is kicked from the server
   # The following placeholders can be used here:

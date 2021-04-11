@@ -75,7 +75,7 @@ public class BukkitListener implements Listener {
         final Player player = event.getPlayer();
         Bukkit.getScheduler().runTask(jda.getPlugin(), () ->
                 sendDiscordMessage(DiscordMessageEvent.MessageType.DefaultTypes.CHAT,
-                        MessageUtil.formatMessage(jda.getSettings().getMcToDiscordFormat(),
+                        MessageUtil.formatMessage(jda.getSettings().getMcToDiscordFormat(player),
                             MessageUtil.sanitizeDiscordMarkdown(player.getName()),
                             MessageUtil.sanitizeDiscordMarkdown(player.getDisplayName()),
                             player.hasPermission("essentials.discord.markdown") ? event.getMessage() : MessageUtil.sanitizeDiscordMarkdown(event.getMessage()),
@@ -92,7 +92,7 @@ public class BukkitListener implements Listener {
         // Delay join to let nickname load
         if (event.getJoinMessage() != null) {
             sendDiscordMessage(DiscordMessageEvent.MessageType.DefaultTypes.JOIN,
-                    MessageUtil.formatMessage(jda.getSettings().getJoinFormat(),
+                    MessageUtil.formatMessage(jda.getSettings().getJoinFormat(event.getUser().getBase()),
                             MessageUtil.sanitizeDiscordMarkdown(event.getUser().getName()),
                             MessageUtil.sanitizeDiscordMarkdown(event.getUser().getDisplayName()),
                             MessageUtil.sanitizeDiscordMarkdown(event.getJoinMessage())),
@@ -106,7 +106,7 @@ public class BukkitListener implements Listener {
     public void onQuit(PlayerQuitEvent event) {
         if (event.getQuitMessage() != null) {
             sendDiscordMessage(DiscordMessageEvent.MessageType.DefaultTypes.LEAVE,
-                    MessageUtil.formatMessage(jda.getSettings().getQuitFormat(),
+                    MessageUtil.formatMessage(jda.getSettings().getQuitFormat(event.getPlayer()),
                             MessageUtil.sanitizeDiscordMarkdown(event.getPlayer().getName()),
                             MessageUtil.sanitizeDiscordMarkdown(event.getPlayer().getDisplayName()),
                             MessageUtil.sanitizeDiscordMarkdown(event.getQuitMessage())),
@@ -119,7 +119,7 @@ public class BukkitListener implements Listener {
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onDeath(PlayerDeathEvent event) {
         sendDiscordMessage(DiscordMessageEvent.MessageType.DefaultTypes.DEATH,
-                MessageUtil.formatMessage(jda.getSettings().getDeathFormat(),
+                MessageUtil.formatMessage(jda.getSettings().getDeathFormat(event.getEntity()),
                         MessageUtil.sanitizeDiscordMarkdown(event.getEntity().getName()),
                         MessageUtil.sanitizeDiscordMarkdown(event.getEntity().getDisplayName()),
                         MessageUtil.sanitizeDiscordMarkdown(event.getDeathMessage())),

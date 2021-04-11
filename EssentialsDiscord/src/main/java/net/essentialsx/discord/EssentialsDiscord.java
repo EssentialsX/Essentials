@@ -17,6 +17,7 @@ public class EssentialsDiscord extends JavaPlugin implements IEssentialsModule {
 
     private EssentialsJDA jda;
     private DiscordSettings settings;
+    private boolean isPAPI = false;
 
     @Override
     public void onEnable() {
@@ -28,6 +29,8 @@ public class EssentialsDiscord extends JavaPlugin implements IEssentialsModule {
         if (!getDescription().getVersion().equals(ess.getDescription().getVersion())) {
             getLogger().log(Level.WARNING, tl("versionMismatchAll"));
         }
+
+        isPAPI = getServer().getPluginManager().getPlugin("PlaceholderAPI") != null;
 
         settings = new DiscordSettings(this);
         ess.addReloadListener(settings);
@@ -67,6 +70,10 @@ public class EssentialsDiscord extends JavaPlugin implements IEssentialsModule {
 
     public DiscordSettings getSettings() {
         return settings;
+    }
+
+    public boolean isPAPI() {
+        return isPAPI;
     }
 
     @Override

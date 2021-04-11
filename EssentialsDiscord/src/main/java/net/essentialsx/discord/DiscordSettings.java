@@ -6,6 +6,7 @@ import com.earth2me.essentials.utils.FormatUtil;
 import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.entities.Activity;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.entity.Player;
 
 import java.io.File;
 import java.text.MessageFormat;
@@ -27,15 +28,11 @@ public class DiscordSettings implements IConf {
     private MessageFormat consoleFormat;
 
     private MessageFormat discordToMcFormat;
-    private MessageFormat mcToDiscordFormat;
     private MessageFormat tempMuteFormat;
     private MessageFormat tempMuteReasonFormat;
     private MessageFormat permMuteFormat;
     private MessageFormat permMuteReasonFormat;
     private MessageFormat unmuteFormat;
-    private MessageFormat joinFormat;
-    private MessageFormat quitFormat;
-    private MessageFormat deathFormat;
     private MessageFormat kickFormat;
 
     public DiscordSettings(EssentialsDiscord plugin) {
@@ -149,8 +146,16 @@ public class DiscordSettings implements IConf {
         return discordToMcFormat;
     }
 
-    public MessageFormat getMcToDiscordFormat() {
-        return mcToDiscordFormat;
+    public MessageFormat getMcToDiscordFormat(Player player) {
+        final String format = getFormatString("mc-to-discord");
+        final String filled;
+        if (plugin.isPAPI()) {
+            filled = me.clip.placeholderapi.PlaceholderAPI.setPlaceholders(player, format);
+        } else {
+            filled = format;
+        }
+        return generateMessageFormat(filled, "{displayname}: {message}", false,
+                "username", "displayname", "message", "world", "prefix", "suffix");
     }
 
     public MessageFormat getTempMuteFormat() {
@@ -173,31 +178,58 @@ public class DiscordSettings implements IConf {
         return unmuteFormat;
     }
 
-    public MessageFormat getJoinFormat() {
-        return joinFormat;
+    public MessageFormat getJoinFormat(Player player) {
+        final String format = getFormatString("join");
+        final String filled;
+        if (plugin.isPAPI()) {
+            filled = me.clip.placeholderapi.PlaceholderAPI.setPlaceholders(player, format);
+        } else {
+            filled = format;
+        }
+        return generateMessageFormat(filled, ":exclamation: {displayname} has joined!", false,
+                "username", "displayname", "defaultmessage");
     }
 
-    public MessageFormat getQuitFormat() {
-        return quitFormat;
+    public MessageFormat getQuitFormat(Player player) {
+        final String format = getFormatString("quit");
+        final String filled;
+        if (plugin.isPAPI()) {
+            filled = me.clip.placeholderapi.PlaceholderAPI.setPlaceholders(player, format);
+        } else {
+            filled = format;
+        }
+        return generateMessageFormat(filled, ":exclamation: {displayname} has left!", false,
+                "username", "displayname", "defaultmessage");
     }
 
-    public MessageFormat getDeathFormat() {
-        return deathFormat;
+    public MessageFormat getDeathFormat(Player player) {
+        final String format = getFormatString("death\"");
+        final String filled;
+        if (plugin.isPAPI()) {
+            filled = me.clip.placeholderapi.PlaceholderAPI.setPlaceholders(player, format);
+        } else {
+            filled = format;
+        }
+        return generateMessageFormat(filled, ":skull: {displayname} has died!", false,
+                "username", "displayname", "defaultmessage");
     }
 
     public MessageFormat getKickFormat() {
         return kickFormat;
     }
 
-    private MessageFormat generateMessageFormat(String node, String defaultStr, boolean format, String... arguments) {
+    private String getFormatString(String node) {
         final String pathPrefix = node.startsWith(".") ? "" : "messages.";
-        String pattern = config.getString(pathPrefix + (pathPrefix.isEmpty() ? node.substring(1) : node));
-        pattern = pattern == null ? defaultStr : pattern;
-        pattern = format ? FormatUtil.replaceFormat(pattern) : FormatUtil.stripFormat(pattern);
+        return config.getString(pathPrefix + (pathPrefix.isEmpty() ? node.substring(1) : node));
+    }
+
+    private MessageFormat generateMessageFormat(String content, String defaultStr, boolean format, String... arguments) {
+        content = content == null ? defaultStr : content;
+        content = format ? FormatUtil.replaceFormat(content) : FormatUtil.stripFormat(content);
         for (int i = 0; i < arguments.length; i++) {
-            pattern = pattern.replace("{" + arguments[i] + "}", "{" + i + "}");
+            content = content.replace("{" + arguments[i] + "}", "{" + i + "}");
         }
-        return new MessageFormat(pattern);
+        return new MessageFormat(content);
     }
 
     @Override
@@ -241,29 +273,21 @@ public class DiscordSettings implements IConf {
             statusActivity = Activity.of(activityType, config.getString("presence.message", "Minecraft"));
         }
 
-        consoleFormat = generateMessageFormat(".console.format", "[{timestamp} {level}] {message}", false,
+        consoleFormat = generateMessageFormat(getFormatString(".console.format"), "[{timestamp} {level}] {message}", false,
                 "timestamp", "level", "message");
 
-        discordToMcFormat = generateMessageFormat("discord-to-mc", "&6[#{channel}] &3{fullname}&7: &f{message}", true,
+        discordToMcFormat = generateMessageFormat(getFormatString("discord-to-mc"), "&6[#{channel}] &3{fullname}&7: &f{message}", true,
                 "channel", "username", "tag", "fullname", "nickname", "color", "message");
-        mcToDiscordFormat = generateMessageFormat("mc-to-discord", "{displayname}: {message}", false,
-                "username", "displayname", "message", "world", "prefix", "suffix");
-        unmuteFormat = generateMessageFormat("unmute", "{displayname} has been unmuted.", false, "username", "displayname");
-        tempMuteFormat = generateMessageFormat("temporary-mute", "{controllerdisplayname} muted {displayname} for {time}", false,
+        unmuteFormat = generateMessageFormat(getFormatString("unmute"), "{displayname} has been unmuted.", false, "username", "displayname");
+        tempMuteFormat = generateMessageFormat(getFormatString("temporary-mute"), "{controllerdisplayname} muted {displayname} for {time}", false,
                 "username", "displayname", "controllername", "controllerdisplayname", "time");
-        permMuteFormat = generateMessageFormat("permanent-mute", "{controllerdisplayname} permanently muted {displayname}", false,
+        permMuteFormat = generateMessageFormat(getFormatString("permanent-mute"), "{controllerdisplayname} permanently muted {displayname}", false,
                 "username", "displayname", "controllername", "controllerdisplayname");
-        tempMuteReasonFormat = generateMessageFormat("temporary-mute-reason", "{controllerdisplayname} muted {displayname} for {time} with reason: {reason}", false,
+        tempMuteReasonFormat = generateMessageFormat(getFormatString("temporary-mute-reason"), "{controllerdisplayname} muted {displayname} for {time} with reason: {reason}", false,
                 "username", "displayname", "controllername", "controllerdisplayname", "time", "reason");
-        permMuteReasonFormat = generateMessageFormat("permanent-mute-reason", "{controllerdisplayname} permanently muted {displayname} with reason: {reason}", false,
+        permMuteReasonFormat = generateMessageFormat(getFormatString("permanent-mute-reason"), "{controllerdisplayname} permanently muted {displayname} with reason: {reason}", false,
                 "username", "displayname", "controllername", "controllerdisplayname", "reason");
-        joinFormat = generateMessageFormat("join", ":exclamation: {displayname} has joined!", false,
-                "username", "displayname", "defaultmessage");
-        quitFormat = generateMessageFormat("quit", ":exclamation: {displayname} has left!", false,
-                "username", "displayname", "defaultmessage");
-        deathFormat = generateMessageFormat("death", ":skull: {displayname} has died!", false,
-                "username", "displayname", "defaultmessage");
-        kickFormat = generateMessageFormat("kick", "{displayname} was kicked with reason: {reason}", false,
+        kickFormat = generateMessageFormat(getFormatString("kick"), "{displayname} was kicked with reason: {reason}", false,
                 "username", "displayname", "reason");
 
         plugin.onReload();
