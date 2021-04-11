@@ -98,6 +98,10 @@ public class DiscordSettings implements IConf {
         return config.getBoolean("chat.filter-newlines", true);
     }
 
+    public boolean isShowAllChat() {
+        return config.getBoolean("chat.show-all-chat", false);
+    }
+
     public String getConsoleChannelDef() {
         return config.getString("console.channel", "none");
     }

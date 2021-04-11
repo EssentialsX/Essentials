@@ -48,6 +48,9 @@ chat:
   discord-max-length: 2000
   # Whether or not new lines from discord should be filtered or not
   filter-newlines: true
+  # Whether or not to show all mc chat messages that are not shown to all players.
+  # You should only need to enable this if you're not seeing all chat messages go through to discord.
+  show-all-chat: false
 
 # Console relay settings
 # The console relay will send every message that is sent to the console, to a discord channel

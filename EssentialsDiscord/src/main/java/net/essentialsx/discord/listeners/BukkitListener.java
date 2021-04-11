@@ -73,18 +73,22 @@ public class BukkitListener implements Listener {
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onChat(AsyncPlayerChatEvent event) {
         final Player player = event.getPlayer();
-        Bukkit.getScheduler().runTask(jda.getPlugin(), () ->
-                sendDiscordMessage(DiscordMessageEvent.MessageType.DefaultTypes.CHAT,
-                        MessageUtil.formatMessage(jda.getSettings().getMcToDiscordFormat(player),
+        Bukkit.getScheduler().runTask(jda.getPlugin(), () -> {
+            if (!jda.getSettings().isShowAllChat() && !event.getRecipients().containsAll(Bukkit.getOnlinePlayers())) {
+                return;
+            }
+            sendDiscordMessage(DiscordMessageEvent.MessageType.DefaultTypes.CHAT,
+                    MessageUtil.formatMessage(jda.getSettings().getMcToDiscordFormat(player),
                             MessageUtil.sanitizeDiscordMarkdown(player.getName()),
                             MessageUtil.sanitizeDiscordMarkdown(player.getDisplayName()),
                             player.hasPermission("essentials.discord.markdown") ? event.getMessage() : MessageUtil.sanitizeDiscordMarkdown(event.getMessage()),
                             MessageUtil.sanitizeDiscordMarkdown(player.getWorld().getName()),
                             MessageUtil.sanitizeDiscordMarkdown(FormatUtil.stripEssentialsFormat(jda.getPlugin().getEss().getPermissionsHandler().getPrefix(player))),
                             MessageUtil.sanitizeDiscordMarkdown(FormatUtil.stripEssentialsFormat(jda.getPlugin().getEss().getPermissionsHandler().getSuffix(player)))),
-                        player.hasPermission("essentials.discord.ping"),
-                        jda.getSettings().isShowAvatar() ? AVATAR_URL.replace("{uuid}", player.getUniqueId().toString()) : null,
-                        jda.getSettings().isShowName() ? MessageUtil.sanitizeDiscordMarkdown(player.getName()) : null));
+                    player.hasPermission("essentials.discord.ping"),
+                    jda.getSettings().isShowAvatar() ? AVATAR_URL.replace("{uuid}", player.getUniqueId().toString()) : null,
+                    jda.getSettings().isShowName() ? MessageUtil.sanitizeDiscordMarkdown(player.getName()) : null);
+        });
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
