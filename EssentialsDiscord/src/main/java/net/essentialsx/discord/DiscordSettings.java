@@ -203,7 +203,7 @@ public class DiscordSettings implements IConf {
     }
 
     public MessageFormat getDeathFormat(Player player) {
-        final String format = getFormatString("death\"");
+        final String format = getFormatString("death");
         final String filled;
         if (plugin.isPAPI()) {
             filled = me.clip.placeholderapi.PlaceholderAPI.setPlaceholders(player, format);
