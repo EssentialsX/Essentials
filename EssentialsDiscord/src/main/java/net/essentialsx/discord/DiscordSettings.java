@@ -149,7 +149,7 @@ public class DiscordSettings implements IConf {
     public MessageFormat getMcToDiscordFormat(Player player) {
         final String format = getFormatString("mc-to-discord");
         final String filled;
-        if (plugin.isPAPI()) {
+        if (plugin.isPAPI() && format != null) {
             filled = me.clip.placeholderapi.PlaceholderAPI.setPlaceholders(player, format);
         } else {
             filled = format;
@@ -181,7 +181,7 @@ public class DiscordSettings implements IConf {
     public MessageFormat getJoinFormat(Player player) {
         final String format = getFormatString("join");
         final String filled;
-        if (plugin.isPAPI()) {
+        if (plugin.isPAPI() && format != null) {
             filled = me.clip.placeholderapi.PlaceholderAPI.setPlaceholders(player, format);
         } else {
             filled = format;
@@ -193,7 +193,7 @@ public class DiscordSettings implements IConf {
     public MessageFormat getQuitFormat(Player player) {
         final String format = getFormatString("quit");
         final String filled;
-        if (plugin.isPAPI()) {
+        if (plugin.isPAPI() && format != null) {
             filled = me.clip.placeholderapi.PlaceholderAPI.setPlaceholders(player, format);
         } else {
             filled = format;
@@ -205,7 +205,7 @@ public class DiscordSettings implements IConf {
     public MessageFormat getDeathFormat(Player player) {
         final String format = getFormatString("death");
         final String filled;
-        if (plugin.isPAPI()) {
+        if (plugin.isPAPI() && format != null) {
             filled = me.clip.placeholderapi.PlaceholderAPI.setPlaceholders(player, format);
         } else {
             filled = format;
