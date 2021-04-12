@@ -204,7 +204,7 @@ public abstract class AbstractItemDb implements IConf, net.ess3.api.IItemDb {
         if (is.hasItemMeta()) {
             final ItemMeta meta = is.getItemMeta();
             if (meta.hasDisplayName()) {
-                sb.append("name:").append(FormatUtil.unformatString(meta.getDisplayName()).replaceAll(" ", "_")).append(" ");
+                sb.append("name:").append(FormatUtil.unformatString(meta.getDisplayName()).replace(" ", "_")).append(" ");
             }
 
             if (meta.hasLore()) {
@@ -217,7 +217,7 @@ public abstract class AbstractItemDb implements IConf, net.ess3.api.IItemDb {
                         sb.append("|");
                     }
                     first = false;
-                    sb.append(FormatUtil.unformatString(s).replaceAll(" ", "_"));
+                    sb.append(FormatUtil.unformatString(s).replace(" ", "_"));
                 }
                 sb.append(" ");
             }
