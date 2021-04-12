@@ -146,7 +146,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
     private transient PotionMetaProvider potionMetaProvider;
     private transient ServerStateProvider serverStateProvider;
     private transient ContainerProvider containerProvider;
-    private transient SerializationProvider serializationProvider = null;
+    private transient SerializationProvider serializationProvider;
     private transient KnownCommandsProvider knownCommandsProvider;
     private transient FormattedCommandAliasProvider formattedCommandAliasProvider;
     private transient ProviderListener recipeBookEventProvider;

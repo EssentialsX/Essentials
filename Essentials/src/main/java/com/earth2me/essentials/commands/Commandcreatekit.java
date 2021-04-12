@@ -62,17 +62,17 @@ public class Commandcreatekit extends EssentialsCommand {
         final ItemStack[] items = user.getBase().getInventory().getContents();
         final List<String> list = new ArrayList<>();
 
-        boolean usePaperSerial = ess.getSettings().isUseBetterKits();
+        boolean useSerializationProvider = ess.getSettings().isUseBetterKits();
 
-        if (usePaperSerial && ess.getSerializationProvider() == null) {
+        if (useSerializationProvider && ess.getSerializationProvider() == null) {
             ess.showError(user.getSource(), new Exception(tl("createKitUnsupported")), commandLabel);
-            usePaperSerial = false;
+            useSerializationProvider = false;
         }
 
         for (ItemStack is : items) {
             if (is != null && is.getType() != null && is.getType() != Material.AIR) {
                 final String serialized;
-                if (usePaperSerial) {
+                if (useSerializationProvider) {
                     serialized = "@" + Base64Coder.encodeLines(ess.getSerializationProvider().serializeItem(is));
                 } else {
                     serialized = ess.getItemDb().serialize(is);

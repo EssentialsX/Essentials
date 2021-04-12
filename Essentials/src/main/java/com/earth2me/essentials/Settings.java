@@ -1647,7 +1647,7 @@ public class Settings implements net.ess3.api.ISettings {
 
     @Override
     public boolean isUseBetterKits() {
-        return config.getBoolean("use-paper-serialization-in-createkit", false);
+        return config.getBoolean("use-nbt-serialization-in-createkit", false);
     }
 
     @Override
