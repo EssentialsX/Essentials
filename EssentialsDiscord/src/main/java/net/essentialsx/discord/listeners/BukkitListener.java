@@ -87,7 +87,7 @@ public class BukkitListener implements Listener {
                             MessageUtil.sanitizeDiscordMarkdown(FormatUtil.stripEssentialsFormat(jda.getPlugin().getEss().getPermissionsHandler().getSuffix(player)))),
                     player.hasPermission("essentials.discord.ping"),
                     jda.getSettings().isShowAvatar() ? AVATAR_URL.replace("{uuid}", player.getUniqueId().toString()) : null,
-                    jda.getSettings().isShowName() ? MessageUtil.sanitizeDiscordMarkdown(player.getName()) : null);
+                    jda.getSettings().isShowName() ? player.getName() : null);
         });
     }
 
@@ -102,7 +102,7 @@ public class BukkitListener implements Listener {
                             MessageUtil.sanitizeDiscordMarkdown(event.getJoinMessage())),
                     false,
                     jda.getSettings().isShowAvatar() ? AVATAR_URL.replace("{uuid}", event.getUser().getBase().getUniqueId().toString()) : null,
-                    jda.getSettings().isShowName() ? MessageUtil.sanitizeDiscordMarkdown(event.getUser().getName()) : null);
+                    jda.getSettings().isShowName() ? event.getUser().getName() : null);
         }
     }
 
@@ -116,7 +116,7 @@ public class BukkitListener implements Listener {
                             MessageUtil.sanitizeDiscordMarkdown(event.getQuitMessage())),
                     false,
                     jda.getSettings().isShowAvatar() ? AVATAR_URL.replace("{uuid}", event.getPlayer().getUniqueId().toString()) : null,
-                    jda.getSettings().isShowName() ? MessageUtil.sanitizeDiscordMarkdown(event.getPlayer().getName()) : null);
+                    jda.getSettings().isShowName() ? event.getPlayer().getName() : null);
         }
     }
 
@@ -129,7 +129,7 @@ public class BukkitListener implements Listener {
                         MessageUtil.sanitizeDiscordMarkdown(event.getDeathMessage())),
                 false,
                 jda.getSettings().isShowAvatar() ? AVATAR_URL.replace("{uuid}", event.getEntity().getUniqueId().toString()) : null,
-                jda.getSettings().isShowName() ? MessageUtil.sanitizeDiscordMarkdown(event.getEntity().getName()) : null);
+                jda.getSettings().isShowName() ? event.getEntity().getName() : null);
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
