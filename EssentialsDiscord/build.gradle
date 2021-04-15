@@ -26,6 +26,7 @@ shadowJar {
         include(dependency('com.fasterxml.jackson.core:jackson-databind'))
         include(dependency('com.fasterxml.jackson.core:jackson-core'))
         include(dependency('com.fasterxml.jackson.core:jackson-annotations'))
+        include(dependency('org.slf4j:slf4j-api'))
 
         // Emoji
         include(dependency('com.vdurmont:emoji-java'))
