@@ -15,8 +15,12 @@ import org.apache.commons.lang.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class DiscordListener extends ListenerAdapter {
+    private final static Logger logger = Logger.getLogger("EssentialsDiscord");
+
     private final EssentialsJDA plugin;
 
     public DiscordListener(EssentialsJDA plugin) {
@@ -32,6 +36,9 @@ public class DiscordListener extends ListenerAdapter {
         // Get list of channel names that have this channel id mapped
         final List<String> keys = plugin.getPlugin().getSettings().getKeysFromChannelId(event.getChannel().getIdLong());
         if (keys == null || keys.size() == 0) {
+            if (plugin.isDebug()) {
+                logger.log(Level.INFO, "Skipping message due to no channel keys for id " + event.getChannel().getIdLong() + "!");
+            }
             return;
         }
 
@@ -42,6 +49,9 @@ public class DiscordListener extends ListenerAdapter {
         assert member != null; // Member will never be null
 
         if (plugin.getSettings().getDiscordFilter() != null && plugin.getSettings().getDiscordFilter().matcher(message.getContentDisplay()).find()) {
+            if (plugin.isDebug()) {
+                logger.log(Level.INFO, "Skipping message " + message.getId() + " with content, \"" + message.getContentDisplay() + "\" as it matched the filter!");
+            }
             return;
         }
 
@@ -64,6 +74,9 @@ public class DiscordListener extends ListenerAdapter {
 
         // Don't send blank messages
         if (finalMessage.trim().length() == 0) {
+            if (plugin.isDebug()) {
+                logger.log(Level.INFO, "Skipping finalized empty message " + message.getId());
+            }
             return;
         }
 
