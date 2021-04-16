@@ -57,8 +57,15 @@ public class EssentialsJDA implements EssentialsDiscordAPI {
     }
 
     public TextChannel getChannel(String key, boolean primaryFallback) {
-        TextChannel channel = guild.getTextChannelById(plugin.getSettings().getChannelId(key));
+        final long resolvedId = getSettings().getChannelId(getSettings().getMessageChannel(key));
+        if (isDebug()) {
+            logger.log(Level.INFO, "Channel definition " + key + " resolved as " + resolvedId);
+        }
+        TextChannel channel = guild.getTextChannelById(resolvedId);
         if (channel == null && primaryFallback) {
+            if (isDebug()) {
+                logger.log(Level.WARNING, "Resolved channel id " + resolvedId + " was not found! Falling back to primary channel.");
+            }
             channel = primaryChannel;
         }
         return channel;
