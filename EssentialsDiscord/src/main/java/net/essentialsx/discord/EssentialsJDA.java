@@ -57,7 +57,13 @@ public class EssentialsJDA implements EssentialsDiscordAPI {
     }
 
     public TextChannel getChannel(String key, boolean primaryFallback) {
-        final long resolvedId = getSettings().getChannelId(getSettings().getMessageChannel(key));
+        long resolvedId;
+        try {
+            resolvedId = Long.parseLong(key);
+        } catch (NumberFormatException ignored) {
+            resolvedId = getSettings().getChannelId(getSettings().getMessageChannel(key));
+        }
+
         if (isDebug()) {
             logger.log(Level.INFO, "Channel definition " + key + " resolved as " + resolvedId);
         }
