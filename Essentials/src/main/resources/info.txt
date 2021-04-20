@@ -36,21 +36,29 @@ Minecraft colors:
 &&o &oItalic&r   &&r &rReset
 
 #Tags
-&6Player's Display name:&r {PLAYER}
+&6Player's Display name:&r {PLAYER}, {DISPLAYNAME}
 &6Player's user name:&r {USERNAME}
-&6IP:&r {IP}
-&6Address:&r {ADDRESS}
-&6Balance:&r {BALANCE}
-&6Unread mails:&r {MAILS}
-&6Current world:&r {WORLD}
-&6Worlds list:&r {WORLDS}
-&6Number of online players:&r {ONLINE}
+&6Player's nickname:&r {NICKNAME}
+&6Player's prefix:&r {PREFIX}
+&6Player's suffix:&r {SUFFIX}
+&6Player's primary group:&r {GROUP}
+&6Player's balance:&r {BALANCE}
+&6Player's unread mails:&r {MAILS}
+&6Player's playtime:&r {PLAYTIME}
+&6Player's coordinates:&r {COORDS}
+&6Player's current world:&r {WORLD}, {WORLDNAME}
+&6Number of online, non-hidden players:&r {ONLINE}
 &6Number of unique players who joined the server:&r {UNIQUE}
+&6Worlds list:&r {WORLDS}
 &6Player list:&r {PLAYERLIST}
 &6Time of server:&r {TIME}
 &6Date of server:&r {DATE}
 &6Time of world PM/AM:&r {WORLDTIME12}
 &6Time of world:&r {WORLDTIME24}
 &6Date of world:&r {WORLDDATE}
+&6TPS:&r {TPS}
+&6Uptime:&r {UPTIME}
+&6IP:&r {IP}
+&6Address:&r {ADDRESS}
 &6Plugin list:&r {PLUGINS}
 &6Version of CraftBukkit:&r {VERSION}
