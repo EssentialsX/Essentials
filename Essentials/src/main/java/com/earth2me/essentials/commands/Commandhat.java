@@ -28,7 +28,7 @@ public class Commandhat extends EssentialsCommand {
     protected void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception {
         if (args.length == 0 || (!args[0].contains("rem") && !args[0].contains("off") && !args[0].equalsIgnoreCase("0"))) {
             final ItemStack hand = user.getItemInHand();
-            if (hand == null || hand.getType() == Material.AIR) {
+            if (hand == null || hand.getType() == Material.AIR || isIllegalItem(hand)) {
                 user.sendMessage(tl("hatFail"));
                 return;
             }
@@ -57,7 +57,7 @@ public class Commandhat extends EssentialsCommand {
 
         final PlayerInventory inv = user.getBase().getInventory();
         final ItemStack head = inv.getHelmet();
-        if (head == null || head.getType() == Material.AIR) {
+        if (head == null || head.getType() == Material.AIR || isIllegalItem(head)) {
             user.sendMessage(tl("hatEmpty"));
         } else if (VersionUtil.getServerBukkitVersion().isHigherThan(VersionUtil.v1_9_4_R01) && head.getEnchantments().containsKey(Enchantment.BINDING_CURSE) && !user.isAuthorized("essentials.hat.ignore-binding")) {
             user.sendMessage(tl("hatCurse"));
@@ -76,5 +76,14 @@ public class Commandhat extends EssentialsCommand {
         } else {
             return Collections.emptyList();
         }
+    }
+
+    private boolean isIllegalItem(ItemStack item) {
+        try {
+            item.getItemMeta();
+        } catch (Exception e) {
+            return true;
+        }
+        return false;
     }
 }
