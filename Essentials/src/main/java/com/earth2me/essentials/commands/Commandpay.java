@@ -50,7 +50,7 @@ public class Commandpay extends EssentialsLoopCommand {
         }
         loopOfflinePlayersConsumer(server, user.getSource(), false, user.isAuthorized("essentials.pay.multiple"), args[0], player -> {
             try {
-                if (player.getBase() != null && !player.getBase().isOnline() && !canPayOffline) {
+                if (player.getBase() != null && (!player.getBase().isOnline() || player.isHidden(user.getBase())) && !canPayOffline) {
                     user.sendMessage(tl("payOffline"));
                     return;
                 }
