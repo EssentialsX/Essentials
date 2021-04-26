@@ -39,6 +39,11 @@ jobs:
       with:
         name: EssentialsX plugin jars
         path: jars/
+    - name: Upload Tests
+      uses: actions/upload-artifact@master
+      with:
+        name: Tests
+        path: Essentials/build/reports/tests/
     - name: Deploy with Gradle
       if: ${{ success() && github.event_name == 'push' && github.repository == 'EssentialsX/Essentials' && github.ref == 'refs/heads/2.x' }}
       env:
