@@ -1,5 +1,5 @@
 name: Report bug
-about: Report a bug in EssentialsX.
+description: Report a bug in EssentialsX.
 labels: 'bug: unconfirmed'
 body:
 - type: markdown
