@@ -6,6 +6,7 @@ import com.earth2me.essentials.config.entities.CommandCooldown;
 import com.earth2me.essentials.config.holders.UserConfigHolder;
 import com.earth2me.essentials.utils.NumberUtil;
 import com.earth2me.essentials.utils.StringUtil;
+import io.leangen.geantyref.TypeToken;
 import net.ess3.api.IEssentials;
 import net.ess3.api.MaxMoneyException;
 import org.bukkit.Location;
@@ -72,7 +73,7 @@ public abstract class UserData extends PlayerExtension implements IConf {
     public final void reloadConfig() {
         config.load();
         try {
-            holder = config.getRootNode().get(UserConfigHolder.class);
+            holder = config.getRootNode().get(TypeToken.get(UserConfigHolder.class));
         } catch (SerializationException e) {
             ess.getLogger().log(Level.SEVERE, "Error while reading user config: " + e.getMessage(), e);
             throw new RuntimeException(e);
