@@ -674,6 +674,7 @@ public class Settings implements net.ess3.api.ISettings {
                     } else {
                         _addAlternativeCommand(command, toDisable);
                     }
+                    mapModified = true;
                 }
             }
 
