@@ -36,12 +36,12 @@ jobs:
         ./gradlew build --stacktrace
     - name: Upload Artifacts
       uses: actions/upload-artifact@master
-      if: ${{ always() }}
       with:
         name: EssentialsX plugin jars
         path: jars/
     - name: Upload Tests
       uses: actions/upload-artifact@master
+      if: ${{ always() }}
       with:
         name: Tests
         path: Essentials/build/reports/tests/
