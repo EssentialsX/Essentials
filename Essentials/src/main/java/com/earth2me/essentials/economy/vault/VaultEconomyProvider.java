@@ -4,6 +4,7 @@ import com.earth2me.essentials.Essentials;
 import com.earth2me.essentials.api.NoLoanPermittedException;
 import com.earth2me.essentials.api.UserDoesNotExistException;
 import com.earth2me.essentials.utils.NumberUtil;
+import net.ess3.api.MaxMoneyException;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.economy.EconomyResponse;
 import org.bukkit.OfflinePlayer;
@@ -169,6 +170,8 @@ public class VaultEconomyProvider implements Economy {
             return new EconomyResponse(0, 0, EconomyResponse.ResponseType.FAILURE, "User does not exist!");
         } catch (NoLoanPermittedException e) {
             return new EconomyResponse(0, getBalance(playerName), EconomyResponse.ResponseType.FAILURE, "Loan was not permitted!");
+        } catch (MaxMoneyException e) {
+            return new EconomyResponse(0, getBalance(playerName), EconomyResponse.ResponseType.FAILURE, "User goes over maximum money limit!");
         }
     }
 
@@ -188,6 +191,8 @@ public class VaultEconomyProvider implements Economy {
             return new EconomyResponse(0, 0, EconomyResponse.ResponseType.FAILURE, "User does not exist!");
         } catch (NoLoanPermittedException e) {
             return new EconomyResponse(0, getBalance(player), EconomyResponse.ResponseType.FAILURE, "Loan was not permitted!");
+        } catch (MaxMoneyException e) {
+            return new EconomyResponse(0, getBalance(player), EconomyResponse.ResponseType.FAILURE, "User goes over maximum money limit!");
         }
     }
 
@@ -218,6 +223,8 @@ public class VaultEconomyProvider implements Economy {
             return new EconomyResponse(0, 0, EconomyResponse.ResponseType.FAILURE, "User does not exist!");
         } catch (NoLoanPermittedException e) {
             return new EconomyResponse(0, getBalance(playerName), EconomyResponse.ResponseType.FAILURE, "Loan was not permitted!");
+        } catch (MaxMoneyException e) {
+            return new EconomyResponse(0, getBalance(playerName), EconomyResponse.ResponseType.FAILURE, "User goes over maximum money limit!");
         }
     }
 
@@ -237,6 +244,8 @@ public class VaultEconomyProvider implements Economy {
             return new EconomyResponse(0, 0, EconomyResponse.ResponseType.FAILURE, "User does not exist!");
         } catch (NoLoanPermittedException e) {
             return new EconomyResponse(0, getBalance(player), EconomyResponse.ResponseType.FAILURE, "Loan was not permitted!");
+        } catch (MaxMoneyException e) {
+            return new EconomyResponse(0, getBalance(player), EconomyResponse.ResponseType.FAILURE, "User goes over maximum money limit!");
         }
     }
 
