@@ -10,6 +10,7 @@ dependencies {
 
     api 'org.spongepowered:configurate-yaml:4.0.0'
     implementation 'org.yaml:snakeyaml:1.+'
+    implementation 'org.checkerframework:checker-qual:3.7.1'
 
     // Providers
     api project(':providers:BaseProviders')
@@ -40,4 +41,5 @@ shadowJar {
     relocate 'org.spongepowered.configurate', 'com.earth2me.essentials.libs.configurate'
     relocate 'org.yaml.snakeyaml', 'com.earth2me.essentials.libs.snakeyaml'
     relocate 'io.leangen.geantyref', 'com.earth2me.essentials.libs.geantyref'
+    relocate 'org.checkerframework', 'come.earth2me.essentials.libs.checkerframework'
 }
