@@ -6,7 +6,6 @@ import com.earth2me.essentials.utils.StringUtil;
 import net.ess3.api.InvalidNameException;
 import net.ess3.api.InvalidWorldException;
 import org.bukkit.Location;
-import org.bukkit.Server;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -25,10 +24,8 @@ public class Warps implements IConf, net.ess3.api.IWarps {
     private static final Logger logger = Logger.getLogger("Essentials");
     private final Map<StringIgnoreCase, EssentialsConfiguration> warpPoints = new HashMap<>();
     private final File warpsFolder;
-    private final Server server;
 
-    public Warps(final Server server, final File dataFolder) {
-        this.server = server;
+    public Warps(final File dataFolder) {
         warpsFolder = new File(dataFolder, "warps");
         if (!warpsFolder.exists()) {
             warpsFolder.mkdirs();

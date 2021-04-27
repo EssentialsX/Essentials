@@ -266,7 +266,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
             upgrade.afterSettings();
             execTimer.mark("Upgrade2");
 
-            warps = new Warps(getServer(), this.getDataFolder());
+            warps = new Warps(this.getDataFolder());
             confList.add(warps);
             execTimer.mark("Init(Warp)");
 
