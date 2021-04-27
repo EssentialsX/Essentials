@@ -4,7 +4,6 @@ import com.earth2me.essentials.utils.FormatUtil;
 import com.google.common.base.Splitter;
 import net.dv8tion.jda.api.entities.Message;
 import net.essentialsx.discord.EssentialsJDA;
-import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.core.LogEvent;
 import org.apache.logging.log4j.core.Logger;
@@ -59,7 +58,7 @@ public class ConsoleInjector extends AbstractAppender {
 
     @Override
     public void append(LogEvent event) {
-        if (event.getLevel().intLevel() > Level.INFO.intLevel()) {
+        if (event.getLevel().intLevel() > jda.getSettings().getConsoleLogLevel().intLevel()) {
             return;
         }
 

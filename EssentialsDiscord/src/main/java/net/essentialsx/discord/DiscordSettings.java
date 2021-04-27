@@ -5,6 +5,7 @@ import com.earth2me.essentials.IConf;
 import com.earth2me.essentials.utils.FormatUtil;
 import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.entities.Activity;
+import org.apache.logging.log4j.Level;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
@@ -14,7 +15,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
@@ -31,6 +31,7 @@ public class DiscordSettings implements IConf {
     private Pattern discordFilter;
 
     private MessageFormat consoleFormat;
+    private Level consoleLogLevel;
 
     private MessageFormat discordToMcFormat;
     private MessageFormat tempMuteFormat;
@@ -125,6 +126,10 @@ public class DiscordSettings implements IConf {
 
     public boolean isConsoleCommandRelay() {
         return config.getBoolean("console.command-relay", false);
+    }
+
+    public Level getConsoleLogLevel() {
+        return consoleLogLevel;
     }
 
     public boolean isShowAvatar() {
@@ -313,12 +318,14 @@ public class DiscordSettings implements IConf {
             try {
                 discordFilter = Pattern.compile(filter);
             } catch (PatternSyntaxException e) {
-                plugin.getLogger().log(Level.WARNING, "Invalid pattern for \"chat.discord-filter\": " + e.getMessage());
+                plugin.getLogger().log(java.util.logging.Level.WARNING, "Invalid pattern for \"chat.discord-filter\": " + e.getMessage());
                 discordFilter = null;
             }
         } else {
             discordFilter = null;
         }
+
+        consoleLogLevel = Level.toLevel(config.getString("console.log-level"), Level.INFO);
 
         consoleFormat = generateMessageFormat(getFormatString(".console.format"), "[{timestamp} {level}] {message}", false,
                 "timestamp", "level", "message");

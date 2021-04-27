@@ -75,6 +75,18 @@ console:
   # console. It's recommended you stick to the /execute command which has role permission checks (See command configuration below).
   # Note 2: This option is not supported if you use a webhook url above, you'll need to use /execute in discord.
   command-relay: false
+  # What log level should be the maximum sent to the console relay.
+  # The following are the available log levels in order of least to greatest.
+  # Changing the log level will send all log levels above it to the console relay.
+  # For example, setting this to 'info' will display log messages with info, warn, error, and fatal levels.
+  # Log Levels;
+  # - fatal
+  # - error
+  # - warn
+  # - info
+  # - debug
+  # - trace
+  log-level: info
 
 # Determine which discord channels certain messages will be sent to.
 # You can either use the names of the channels listed above or just the id of a channel.
