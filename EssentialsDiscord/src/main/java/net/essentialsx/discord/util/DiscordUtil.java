@@ -3,6 +3,7 @@ package net.essentialsx.discord.util;
 import club.minnced.discord.webhook.WebhookClient;
 import club.minnced.discord.webhook.WebhookClientBuilder;
 import club.minnced.discord.webhook.send.AllowedMentions;
+import com.earth2me.essentials.utils.DownsampleUtil;
 import com.earth2me.essentials.utils.FormatUtil;
 import com.earth2me.essentials.utils.VersionUtil;
 import com.google.common.collect.ImmutableList;
@@ -132,11 +133,16 @@ public final class DiscordUtil {
      */
     public static String getRoleColorFormat(Member member) {
         final Color color = member.getColor();
-        if (color != null && VersionUtil.getServerBukkitVersion().isHigherThanOrEqualTo(VersionUtil.v1_16_1_R01)) {
+
+        if (color == null) {
+            return "";
+        }
+
+        if (VersionUtil.getServerBukkitVersion().isHigherThanOrEqualTo(VersionUtil.v1_16_1_R01)) {
             // Essentials' FormatUtil allows us to not have to use bungee's chatcolor since bukkit's own one doesn't support rgb
             return FormatUtil.replaceFormat("&#" + Integer.toHexString(color.getRGB()).substring(2));
         }
-        return "";
+        return FormatUtil.replaceFormat("&" + DownsampleUtil.nearestTo(color.getRGB()));
     }
 
     /**
