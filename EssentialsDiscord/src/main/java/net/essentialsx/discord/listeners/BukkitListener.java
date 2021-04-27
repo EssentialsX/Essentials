@@ -3,6 +3,7 @@ package net.essentialsx.discord.listeners;
 import com.earth2me.essentials.Console;
 import com.earth2me.essentials.utils.DateUtil;
 import com.earth2me.essentials.utils.FormatUtil;
+import net.ess3.api.events.AfkStatusChangeEvent;
 import net.ess3.api.events.MuteStatusChangeEvent;
 import net.essentialsx.api.v2.events.AsyncUserDataLoadEvent;
 import net.essentialsx.api.v2.events.discord.DiscordMessageEvent;
@@ -130,6 +131,24 @@ public class BukkitListener implements Listener {
                 false,
                 jda.getSettings().isShowAvatar() ? AVATAR_URL.replace("{uuid}", event.getEntity().getUniqueId().toString()) : null,
                 jda.getSettings().isShowName() ? event.getEntity().getName() : null);
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
+    public void onAfk(AfkStatusChangeEvent event) {
+        final MessageFormat format;
+        if (event.getValue()) {
+            format = jda.getSettings().getAfkFormat(event.getAffected().getBase());
+        } else {
+            format = jda.getSettings().getUnAfkFormat(event.getAffected().getBase());
+        }
+
+        sendDiscordMessage(DiscordMessageEvent.MessageType.DefaultTypes.AFK,
+                MessageUtil.formatMessage(format,
+                        MessageUtil.sanitizeDiscordMarkdown(event.getAffected().getName()),
+                        MessageUtil.sanitizeDiscordMarkdown(event.getAffected().getDisplayName())),
+                false,
+                jda.getSettings().isShowAvatar() ? AVATAR_URL.replace("{uuid}", event.getAffected().getBase().getUniqueId().toString()) : null,
+                jda.getSettings().isShowName() ? event.getAffected().getName() : null);
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)

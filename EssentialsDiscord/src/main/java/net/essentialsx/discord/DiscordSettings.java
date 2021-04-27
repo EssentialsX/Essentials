@@ -227,6 +227,30 @@ public class DiscordSettings implements IConf {
                 "username", "displayname", "defaultmessage");
     }
 
+    public MessageFormat getAfkFormat(Player player) {
+        final String format = getFormatString("afk");
+        final String filled;
+        if (plugin.isPAPI() && format != null) {
+            filled = me.clip.placeholderapi.PlaceholderAPI.setPlaceholders(player, format);
+        } else {
+            filled = format;
+        }
+        return generateMessageFormat(filled, ":person_walking: {displayname} is now AFK!", false,
+                "username", "displayname");
+    }
+
+    public MessageFormat getUnAfkFormat(Player player) {
+        final String format = getFormatString("un-afk");
+        final String filled;
+        if (plugin.isPAPI() && format != null) {
+            filled = me.clip.placeholderapi.PlaceholderAPI.setPlaceholders(player, format);
+        } else {
+            filled = format;
+        }
+        return generateMessageFormat(filled, ":keyboard: {displayname} is no longer AFK!", false,
+                "username", "displayname");
+    }
+
     public MessageFormat getKickFormat() {
         return kickFormat;
     }
@@ -270,7 +294,6 @@ public class DiscordSettings implements IConf {
             status = OnlineStatus.ONLINE;
         }
 
-        //noinspection ConstantConditions
         final String activity = config.getString("presence.activity", "default").trim().toUpperCase().replace("CUSTOM_STATUS", "DEFAULT");
         statusActivity = null;
         Activity.ActivityType activityType = null;
@@ -282,7 +305,6 @@ public class DiscordSettings implements IConf {
             activityType = Activity.ActivityType.DEFAULT;
         }
         if (activityType != null) {
-            //noinspection ConstantConditions
             statusActivity = Activity.of(activityType, config.getString("presence.message", "Minecraft"));
         }
 

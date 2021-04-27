@@ -90,6 +90,8 @@ message-types:
   chat: primary
   # Death messages sent when a player dies on the minecraft server.
   death: primary
+  # AFK status change messages sent when a player's afk status changes.
+  afk: primary
   # Message sent when a player is kicked from the minecraft server.
   kick: staff
   # Message sent when a player's mute state is changed on the minecraft server.
@@ -258,6 +260,18 @@ messages:
   # {defaultmessage} - The full default death message used in game
   # ... PlaceholderAPI placeholders are also supported here too!
   death: ":skull: {displayname} has died!"
+  # This is the message sent to discord when a player becomes afk.
+  # The following placeholders can be used here:
+  # {username} - The name of the user who became afk
+  # {displayname} - The display name of the user who became afk
+  # ... PlaceholderAPI placeholders are also supported here too!
+  afk: ":person_walking: {displayname} is now AFK!"
+  # This is the message sent to discord when a player is no longer afk.
+  # The following placeholders can be used here:
+  # {username} - The name of the user who is no longer afk
+  # {displayname} - The display name of the user who is no longer afk
+  # ... PlaceholderAPI placeholders are also supported here too!
+  un-afk: ":keyboard: {displayname} is no longer AFK!"
   # This is the message sent to discord when a player is kicked from the server.
   # The following placeholders can be used here:
   # {username} - The name of the user who got kicked

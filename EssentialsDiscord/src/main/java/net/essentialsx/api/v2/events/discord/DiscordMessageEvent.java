@@ -184,9 +184,10 @@ public class DiscordMessageEvent extends Event implements Cancellable {
             public final static MessageType LEAVE = new MessageType("leave", true);
             public final static MessageType CHAT = new MessageType("chat", true);
             public final static MessageType DEATH = new MessageType("death", true);
+            public final static MessageType AFK = new MessageType("afk", true);
             public final static MessageType KICK = new MessageType("kick", false);
             public final static MessageType MUTE = new MessageType("mute", false);
-            private final static MessageType[] VALUES = new MessageType[]{JOIN, LEAVE, CHAT, DEATH, KICK, MUTE};
+            private final static MessageType[] VALUES = new MessageType[]{JOIN, LEAVE, CHAT, DEATH, AFK, KICK, MUTE};
 
             /**
              * Gets an array of all the default {@link MessageType MessageTypes}.
