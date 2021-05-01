@@ -7,11 +7,10 @@ import org.bukkit.Server;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import java.util.Locale;
-
 import static com.earth2me.essentials.I18n.tl;
 
 public class Commanditemname extends EssentialsCommand {
+    public static final String PERM_PREFIX = "essentials.itemname.prevent-type.";
 
     public Commanditemname() {
         super("itemname");
@@ -20,8 +19,9 @@ public class Commanditemname extends EssentialsCommand {
     @Override
     protected void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception {
         final ItemStack item = user.getBase().getItemInHand();
-        if (item.getType() == Material.AIR) {
-            user.sendMessage(tl("itemnameInvalidItem", item.getType().toString().toLowerCase(Locale.ENGLISH).replace('_', ' ')));
+        final String preventPerm = PERM_PREFIX + item.getType().name().toLowerCase();
+        if (item.getType() == Material.AIR || (user.isPermissionSet(preventPerm) && user.isAuthorized(preventPerm))) {
+            user.sendMessage(tl("itemnameInvalidItem"));
             return;
         }
 
