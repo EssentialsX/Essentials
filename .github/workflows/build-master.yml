@@ -51,6 +51,7 @@ jobs:
         mv Essentials/build/docs/javadoc/ javadocs/
         cp EssentialsAntiBuild/build/docs/javadoc/ javadocs/EssentialsAntiBuild/
         cp EssentialsChat/build/docs/javadoc/ javadocs/EssentialsChat/
+        cp EssentialsDiscord/build/docs/javadoc/ javadocs/EssentialsDiscord/
         cp EssentialsGeoIP/build/docs/javadoc/ javadocs/EssentialsGeoIP/
         cp EssentialsProtect/build/docs/javadoc/ javadocs/EssentialsProtect/
         cp EssentialsSpawn/build/docs/javadoc/ javadocs/EssentialsSpawn/
