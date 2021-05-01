@@ -646,6 +646,8 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
                             getAsyncTeleport().respawn(null, TeleportCause.PLUGIN, new CompletableFuture<>());
                             return false;
                         });
+                    } else if (ess.getSettings().isTeleportToSpawnWhenFreedFromJail()) {
+                        getAsyncTeleport().respawn(null, TeleportCause.PLUGIN, new CompletableFuture<>());
                     }
                     return true;
                 }

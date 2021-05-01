@@ -363,6 +363,8 @@ public interface ISettings extends IConf {
 
     boolean isTeleportBackWhenFreedFromJail();
 
+    boolean isTeleportToSpawnWhenFreedFromJail();
+
     boolean isJailOnlineTime();
 
     boolean isCompassTowardsHomePerm();

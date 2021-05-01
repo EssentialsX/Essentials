@@ -122,19 +122,23 @@ public class Commandtogglejail extends EssentialsCommand {
                 player.setJailTimeout(0);
                 player.sendMessage(tl("jailReleasedPlayerNotify"));
                 player.setJail(null);
-                if (player.getBase().isOnline() && ess.getSettings().isTeleportBackWhenFreedFromJail()) {
+                if (player.getBase().isOnline()) {
                     final CompletableFuture<Boolean> future = getNewExceptionFuture(sender, commandLabel);
-                    player.getAsyncTeleport().back(future);
                     future.thenAccept(success -> {
                         if (success) {
                             sender.sendMessage(tl("jailReleased", player.getName()));
                         }
                     });
-                    future.exceptionally(e -> {
-                        player.getAsyncTeleport().respawn(null, PlayerTeleportEvent.TeleportCause.PLUGIN, new CompletableFuture<>());
-                        sender.sendMessage(tl("jailReleased", player.getName()));
-                        return false;
-                    });
+                    if (ess.getSettings().isTeleportBackWhenFreedFromJail()) {
+                        player.getAsyncTeleport().back(future);
+                        future.exceptionally(e -> {
+                            player.getAsyncTeleport().respawn(null, PlayerTeleportEvent.TeleportCause.PLUGIN, new CompletableFuture<>());
+                            sender.sendMessage(tl("jailReleased", player.getName()));
+                            return false;
+                        });
+                    } else if (ess.getSettings().isTeleportToSpawnWhenFreedFromJail()) {
+                        player.getAsyncTeleport().respawn(null, PlayerTeleportEvent.TeleportCause.PLUGIN, future);
+                    }
                     return;
                 }
                 sender.sendMessage(tl("jailReleased", player.getName()));

@@ -1719,6 +1719,11 @@ public class Settings implements net.ess3.api.ISettings {
     }
 
     @Override
+    public boolean isTeleportToSpawnWhenFreedFromJail() {
+        return config.getBoolean("teleport-to-spawn-when-freed-from-jail", false);
+    }
+
+    @Override
     public boolean isJailOnlineTime() {
         return config.getBoolean("jail-online-time", false);
     }
