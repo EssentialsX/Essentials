@@ -9,4 +9,11 @@ public interface EssentialsDiscordAPI {
      * @return the {@link InteractionController} instance.
      */
     InteractionController getInteractionController();
+
+    /**
+     * Gets unstable API that is subject to change at any time.
+     * @return {@link Unsafe the unsafe} instance.
+     * @see Unsafe
+     */
+    Unsafe getUnsafe();
 }

@@ -15,6 +15,7 @@ import net.essentialsx.api.v2.events.discord.DiscordMessageEvent;
 import net.essentialsx.api.v2.services.discord.EssentialsDiscordAPI;
 import net.essentialsx.api.v2.services.discord.InteractionController;
 import net.essentialsx.api.v2.services.discord.InteractionException;
+import net.essentialsx.api.v2.services.discord.Unsafe;
 import net.essentialsx.discord.interactions.InteractionControllerImpl;
 import net.essentialsx.discord.interactions.commands.ExecuteCommand;
 import net.essentialsx.discord.interactions.commands.ListCommand;
@@ -40,6 +41,7 @@ import static com.earth2me.essentials.I18n.tl;
 public class EssentialsJDA implements EssentialsDiscordAPI {
     private final static Logger logger = Logger.getLogger("EssentialsDiscord");
     private final EssentialsDiscord plugin;
+    private final Unsafe unsafe = this::getJda;
 
     private JDA jda;
     private Guild guild;
@@ -314,6 +316,11 @@ public class EssentialsJDA implements EssentialsDiscordAPI {
 
     public JDA getJda() {
         return jda;
+    }
+
+    @Override
+    public Unsafe getUnsafe() {
+        return unsafe;
     }
 
     public Guild getGuild() {
