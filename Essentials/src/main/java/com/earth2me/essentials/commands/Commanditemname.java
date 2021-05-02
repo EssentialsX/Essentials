@@ -19,8 +19,7 @@ public class Commanditemname extends EssentialsCommand {
     @Override
     protected void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception {
         final ItemStack item = user.getBase().getItemInHand();
-        final String preventPerm = PERM_PREFIX + item.getType().name().toLowerCase();
-        if (item.getType() == Material.AIR || (user.isPermissionSet(preventPerm) && user.isAuthorized(preventPerm))) {
+        if (item.getType() == Material.AIR || user.isAuthorizedStrict(PERM_PREFIX + item.getType().name().toLowerCase())) {
             user.sendMessage(tl("itemnameInvalidItem"));
             return;
         }

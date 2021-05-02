@@ -26,6 +26,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
+import org.bukkit.permissions.PermissionAttachmentInfo;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
@@ -115,6 +116,18 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
     @Override
     public boolean isPermissionSet(final String node) {
         return isPermSetCheck(node);
+    }
+
+    /**
+     * Checks if the given permission is explicitly defined and returns its value.
+     */
+    public boolean isAuthorizedStrict(final String node) {
+        for (final PermissionAttachmentInfo perm : base.getEffectivePermissions()) {
+            if (perm.getPermission().equalsIgnoreCase(node)) {
+                return perm.getValue();
+            }
+        }
+        return false;
     }
 
     private boolean isAuthorizedCheck(final String node) {
