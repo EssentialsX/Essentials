@@ -19,7 +19,14 @@ public class Commanditemname extends EssentialsCommand {
     @Override
     protected void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception {
         final ItemStack item = user.getBase().getItemInHand();
-        if (item.getType() == Material.AIR || user.isAuthorizedStrict(PERM_PREFIX + item.getType().name().toLowerCase())) {
+        if (item.getType() == Material.AIR) {
+            user.sendMessage(tl("itemnameInvalidItem"));
+            return;
+        }
+
+        final Boolean wildcard = user.isAuthorizedStrict(PERM_PREFIX + "*");
+        final Boolean material = user.isAuthorizedStrict(PERM_PREFIX + item.getType().name().toLowerCase());
+        if ((wildcard && material == null) || (wildcard && material)) {
             user.sendMessage(tl("itemnameInvalidItem"));
             return;
         }

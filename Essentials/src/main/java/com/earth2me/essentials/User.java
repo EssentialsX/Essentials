@@ -119,15 +119,15 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
     }
 
     /**
-     * Checks if the given permission is explicitly defined and returns its value.
+     * Checks if the given permission is explicitly defined and returns its value, otherwise null.
      */
-    public boolean isAuthorizedStrict(final String node) {
+    public Boolean isAuthorizedStrict(final String node) {
         for (final PermissionAttachmentInfo perm : base.getEffectivePermissions()) {
             if (perm.getPermission().equalsIgnoreCase(node)) {
                 return perm.getValue();
             }
         }
-        return false;
+        return null;
     }
 
     private boolean isAuthorizedCheck(final String node) {

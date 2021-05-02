@@ -33,7 +33,9 @@ public class Commandhat extends EssentialsCommand {
                 return;
             }
 
-            if (user.isAuthorizedStrict(PERM_PREFIX + hand.getType().name().toLowerCase())) {
+            final Boolean wildcard = user.isAuthorizedStrict(PERM_PREFIX + "*");
+            final Boolean material = user.isAuthorizedStrict(PERM_PREFIX + hand.getType().name().toLowerCase());
+            if ((wildcard && material == null) || (wildcard && material)) {
                 user.sendMessage(tl("hatFail"));
                 return;
             }
