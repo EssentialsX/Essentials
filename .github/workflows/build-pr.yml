@@ -1,13 +1,14 @@
-name: Build EssentialsX
+name: Build Pull Request
 
 on:
   push:
     branches:
-    - 2.x
-    - mc/*
+    - mc/* # MC version updates
+    - pr/* # PR rebases
   pull_request:
     branches:
     - 2.x
+    - mc/*
 
 jobs:
   build:
@@ -30,19 +31,13 @@ jobs:
       uses: actions/setup-java@v1
       with:
         java-version: 1.8
+
     - name: Build with Gradle
       run: |
         chmod +x gradlew
         ./gradlew build --stacktrace
-    - name: Upload Artifacts
+    - name: Archive plugin jars on GitHub
       uses: actions/upload-artifact@master
       with:
         name: EssentialsX plugin jars
         path: jars/
-    - name: Deploy with Gradle
-      if: ${{ success() && github.event_name == 'push' && github.repository == 'EssentialsX/Essentials' && github.ref == 'refs/heads/2.x' }}
-      env:
-        ORG_GRADLE_PROJECT_essxUsername: ${{ secrets.ESSENTIALSX_DEPLOY_USERNAME }}
-        ORG_GRADLE_PROJECT_essxPassword: ${{ secrets.ESSENTIALSX_DEPLOY_PASSWORD }}
-      run: |
-        ./gradlew publish

@@ -14,6 +14,10 @@ public class SignWeather extends EssentialsSign {
 
     @Override
     protected boolean onSignCreate(final ISign sign, final User player, final String username, final IEssentials ess) throws SignException {
+        if (sign.getLine(1).isEmpty() && sign.getLine(2).isEmpty() && sign.getLine(3).isEmpty()) {
+            return true;
+        }
+
         validateTrade(sign, 2, ess);
         final String timeString = sign.getLine(1);
         if ("Sun".equalsIgnoreCase(timeString)) {
@@ -30,6 +34,15 @@ public class SignWeather extends EssentialsSign {
 
     @Override
     protected boolean onSignInteract(final ISign sign, final User player, final String username, final IEssentials ess) throws SignException, ChargeException {
+        if (sign.getLine(1).isEmpty() && sign.getLine(2).isEmpty() && sign.getLine(3).isEmpty()) {
+            if (player.getWorld().hasStorm()) {
+                player.sendMessage(tl("weatherSignStorm"));
+            } else {
+                player.sendMessage(tl("weatherSignSun"));
+            }
+            return true;
+        }
+
         final Trade charge = getTrade(sign, 2, ess);
         charge.isAffordableFor(player);
         final String weatherString = sign.getLine(1);
