@@ -24,9 +24,9 @@ public class Commanditemname extends EssentialsCommand {
             return;
         }
 
-        final Boolean wildcard = user.isAuthorizedStrict(PERM_PREFIX + "*");
         final Boolean material = user.isAuthorizedStrict(PERM_PREFIX + item.getType().name().toLowerCase());
-        if ((wildcard && material == null) || (wildcard && material)) {
+        final Boolean wildcard = user.isAuthorizedStrict(PERM_PREFIX + "*");
+        if (((wildcard != null && wildcard) && material == null) || ((wildcard != null && wildcard) && material) || ((wildcard == null || !wildcard) && (material != null && material))) {
             user.sendMessage(tl("itemnameInvalidItem"));
             return;
         }
