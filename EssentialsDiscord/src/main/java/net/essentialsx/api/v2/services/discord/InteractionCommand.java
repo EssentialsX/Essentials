@@ -68,8 +68,10 @@ public interface InteractionCommand {
         cmdObject.addProperty("name", getName());
         cmdObject.addProperty("description", getDescription());
         final JsonArray optionsArray = new JsonArray();
-        for (InteractionCommandArgument argument : getArguments()) {
-            optionsArray.add(argument.serialize());
+        if (getArguments() != null) {
+            for (InteractionCommandArgument argument : getArguments()) {
+                optionsArray.add(argument.serialize());
+            }
         }
         cmdObject.add("options", optionsArray);
         return cmdObject.toString();
