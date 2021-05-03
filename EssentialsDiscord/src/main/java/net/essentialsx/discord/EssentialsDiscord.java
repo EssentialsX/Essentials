@@ -37,17 +37,16 @@ public class EssentialsDiscord extends JavaPlugin implements IEssentialsModule {
 
         if (jda == null) {
             jda = new EssentialsJDA(this);
-        }
-
-        try {
-            jda.startup();
-        } catch (Exception e) {
-            logger.log(Level.SEVERE, tl("discordErrorLogin", e.getMessage()));
-            if (ess.getSettings().isDebug()) {
-                e.printStackTrace();
+            try {
+                jda.startup();
+            } catch (Exception e) {
+                logger.log(Level.SEVERE, tl("discordErrorLogin", e.getMessage()));
+                if (ess.getSettings().isDebug()) {
+                    e.printStackTrace();
+                }
+                setEnabled(false);
+                return;
             }
-            setEnabled(false);
-            return;
         }
 
         if (metrics == null) {
