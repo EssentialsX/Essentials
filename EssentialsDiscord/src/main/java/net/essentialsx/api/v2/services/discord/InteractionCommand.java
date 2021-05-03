@@ -42,12 +42,6 @@ public interface InteractionCommand {
     List<InteractionCommandArgument> getArguments();
 
     /**
-     * Gets the list of discord 'snowflakes' (user/role ids) granted 'elevated' privilege by the implementation.
-     * @return the list of admin snowflakes.
-     */
-    List<String> getAdminSnowflakes();
-
-    /**
      * Called when an interaction command is received from discord.
      * @param event The event which caused this command to be executed.
      */
