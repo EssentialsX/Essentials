@@ -35,6 +35,8 @@ public interface InteractionCommand {
 
     /**
      * Gets the list of arguments registered to this command.
+     * <p>
+     * Note: Arguments can only be registered before the command itself is registered, others will be ignored.
      * @return the list of arguments.
      */
     List<InteractionCommandArgument> getArguments();
@@ -44,14 +46,6 @@ public interface InteractionCommand {
      * @return the list of admin snowflakes.
      */
     List<String> getAdminSnowflakes();
-
-    /**
-     * Registers an argument with this command.
-     * <p>
-     * Note: Arguments can only be registered before the command itself is registered, others will be ignored.
-     * @param argument The argument to register.
-     */
-    void addArgument(InteractionCommandArgument argument);
 
     /**
      * Called when an interaction command is received from discord.

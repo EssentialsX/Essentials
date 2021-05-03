@@ -49,7 +49,6 @@ public abstract class InteractionCommandImpl implements InteractionCommand {
         return jda.getSettings().getCommandAdminSnowflakes(name);
     }
 
-    @Override
     public void addArgument(InteractionCommandArgument argument) {
         arguments.add(argument);
     }
