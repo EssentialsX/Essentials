@@ -49,12 +49,12 @@ jobs:
       if: ${{ success() && github.event_name == 'push' && github.repository == 'EssentialsX/Essentials' && github.ref == 'refs/heads/2.x' }}
       run: |
         mv Essentials/build/docs/javadoc/ javadocs/
-        cp EssentialsAntiBuild/build/docs/javadoc/ javadocs/EssentialsAntiBuild/
-        cp EssentialsChat/build/docs/javadoc/ javadocs/EssentialsChat/
-        cp EssentialsGeoIP/build/docs/javadoc/ javadocs/EssentialsGeoIP/
-        cp EssentialsProtect/build/docs/javadoc/ javadocs/EssentialsProtect/
-        cp EssentialsSpawn/build/docs/javadoc/ javadocs/EssentialsSpawn/
-        cp EssentialsXMPP/build/docs/javadoc/ javadocs/EssentialsXMPP/
+        cp -r EssentialsAntiBuild/build/docs/javadoc/ javadocs/EssentialsAntiBuild/
+        cp -r EssentialsChat/build/docs/javadoc/ javadocs/EssentialsChat/
+        cp -r EssentialsGeoIP/build/docs/javadoc/ javadocs/EssentialsGeoIP/
+        cp -r EssentialsProtect/build/docs/javadoc/ javadocs/EssentialsProtect/
+        cp -r EssentialsSpawn/build/docs/javadoc/ javadocs/EssentialsSpawn/
+        cp -r EssentialsXMPP/build/docs/javadoc/ javadocs/EssentialsXMPP/
 
     - name: Deploy Javadocs
       if: ${{ success() && github.event_name == 'push' && github.repository == 'EssentialsX/Essentials' && github.ref == 'refs/heads/2.x' }}
