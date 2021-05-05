@@ -60,7 +60,7 @@ jobs:
       if: ${{ success() && github.event_name == 'push' && github.repository == 'EssentialsX/Essentials' && github.ref == 'refs/heads/2.x' }}
       uses: netlify/actions/cli@master
       with:
-        args: deploy --dir=javadocs/ --prod --message="Deploy from GitHub Actions"
+        args: deploy --dir=javadocs/ --prod --message="GitHubActionsDeploy"
       env:
         NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_JD_AUTH_TOKEN }}
         NETLIFY_SITE_ID: ${{ secrets.NETLIFY_JD_2X_SITE_ID }}
