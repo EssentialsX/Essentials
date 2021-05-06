@@ -84,6 +84,7 @@ import org.bukkit.command.BlockCommandSender;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.PluginCommand;
+import org.bukkit.command.PluginIdentifiableCommand;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
@@ -574,7 +575,10 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
             // Check for disabled commands
             if (getSettings().isCommandDisabled(commandLabel)) {
                 if (getKnownCommandsProvider().getKnownCommands().containsKey(commandLabel)) {
-                    return getKnownCommandsProvider().getKnownCommands().get(commandLabel).tabComplete(cSender, commandLabel, args);
+                    final Command newCmd = getKnownCommandsProvider().getKnownCommands().get(commandLabel);
+                    if (!(newCmd instanceof PluginIdentifiableCommand) || ((PluginIdentifiableCommand) newCmd).getPlugin() != this) {
+                        return newCmd.tabComplete(cSender, commandLabel, args);
+                    }
                 }
                 return Collections.emptyList();
             }
@@ -679,7 +683,10 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
             // Check for disabled commands
             if (getSettings().isCommandDisabled(commandLabel)) {
                 if (getKnownCommandsProvider().getKnownCommands().containsKey(commandLabel)) {
-                    return getKnownCommandsProvider().getKnownCommands().get(commandLabel).execute(cSender, commandLabel, args);
+                    final Command newCmd = getKnownCommandsProvider().getKnownCommands().get(commandLabel);
+                    if (!(newCmd instanceof PluginIdentifiableCommand) || ((PluginIdentifiableCommand) newCmd).getPlugin() != this) {
+                        return newCmd.execute(cSender, commandLabel, args);
+                    }
                 }
                 sender.sendMessage(tl("commandDisabled", commandLabel));
                 return true;
