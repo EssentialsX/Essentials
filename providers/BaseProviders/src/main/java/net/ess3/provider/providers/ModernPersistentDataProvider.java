@@ -18,15 +18,23 @@ public class ModernPersistentDataProvider implements PersistentDataProvider {
     @Override
     public void set(ItemStack itemStack, String key, String value) {
         final ItemMeta im = itemStack.getItemMeta();
+        if (itemStack == null || im == null || key == null || value == null) {
+            return;
+        }
+
         im.getPersistentDataContainer().set(new NamespacedKey(plugin, key), PersistentDataType.STRING, value);
         itemStack.setItemMeta(im);
     }
 
     @Override
     public String getString(ItemStack itemStack, String key) {
+        if (itemStack == null || itemStack.getItemMeta() == null || key == null) {
+            return null;
+        }
+
         try {
             return itemStack.getItemMeta().getPersistentDataContainer().get(new NamespacedKey(plugin, key), PersistentDataType.STRING);
-        } catch (NullPointerException | IllegalArgumentException ignored) {
+        } catch (IllegalArgumentException ignored) {
             return null;
         }
     }
