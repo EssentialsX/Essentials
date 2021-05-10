@@ -17,9 +17,13 @@ public class Commandsettpr extends EssentialsCommand {
 
     @Override
     protected void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception {
+        if (args.length == 0) {
+            throw new NotEnoughArgumentsException();
+        }
+
         final RandomTeleport randomTeleport = ess.getRandomTeleport();
         randomTeleport.getCachedLocations().clear();
-        if (args.length == 0 || "center".equalsIgnoreCase(args[0])) {
+        if ("center".equalsIgnoreCase(args[0])) {
             randomTeleport.setCenter(user.getLocation());
             user.sendMessage(tl("settpr"));
         } else if (args.length > 1) {
@@ -29,6 +33,8 @@ public class Commandsettpr extends EssentialsCommand {
                 randomTeleport.setMaxRange(Double.parseDouble(args[1]));
             }
             user.sendMessage(tl("settprValue", args[0].toLowerCase(), args[1].toLowerCase()));
+        } else {
+            throw new NotEnoughArgumentsException();
         }
     }
 
