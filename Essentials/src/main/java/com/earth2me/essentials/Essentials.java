@@ -111,8 +111,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 import java.util.function.Predicate;
@@ -155,6 +157,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
     private transient Kits kits;
     private transient RandomTeleport randomTeleport;
     private transient UpdateChecker updateChecker;
+    private transient Map<String, IEssentialsCommand> commandMap = new HashMap<>();
 
     static {
         EconomyLayers.init();
@@ -543,6 +546,21 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
         registerListeners(pm);
     }
 
+    private IEssentialsCommand loadCommand(final String path, final String name, final IEssentialsModule module, final ClassLoader classLoader) throws Exception {
+        if (commandMap.containsKey(name)) {
+            return commandMap.get(name);
+        }
+        final IEssentialsCommand cmd = (IEssentialsCommand) classLoader.loadClass(path + name).getDeclaredConstructor().newInstance();
+        cmd.setEssentials(this);
+        cmd.setEssentialsModule(module);
+        commandMap.put(name, cmd);
+        return cmd;
+    }
+
+    public Map<String, IEssentialsCommand> getCommandMap() {
+        return commandMap;
+    }
+
     @Override
     public List<String> onTabComplete(final CommandSender sender, final Command command, final String commandLabel, final String[] args) {
         return onTabCompleteEssentials(sender, command, commandLabel, args, Essentials.class.getClassLoader(),
@@ -589,9 +607,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
 
             final IEssentialsCommand cmd;
             try {
-                cmd = (IEssentialsCommand) classLoader.loadClass(commandPath + command.getName()).newInstance();
-                cmd.setEssentials(this);
-                cmd.setEssentialsModule(module);
+                cmd = loadCommand(commandPath, command.getName(), module, classLoader);
             } catch (final Exception ex) {
                 sender.sendMessage(tl("commandNotLoaded", commandLabel));
                 LOGGER.log(Level.SEVERE, tl("commandNotLoaded", commandLabel), ex);
@@ -698,9 +714,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
 
             final IEssentialsCommand cmd;
             try {
-                cmd = (IEssentialsCommand) classLoader.loadClass(commandPath + command.getName()).newInstance();
-                cmd.setEssentials(this);
-                cmd.setEssentialsModule(module);
+                cmd = loadCommand(commandPath, command.getName(), module, classLoader);
             } catch (final Exception ex) {
                 sender.sendMessage(tl("commandNotLoaded", commandLabel));
                 LOGGER.log(Level.SEVERE, tl("commandNotLoaded", commandLabel), ex);
@@ -734,8 +748,16 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
             } catch (final NoChargeException | QuietAbortException ex) {
                 return true;
             } catch (final NotEnoughArgumentsException ex) {
-                sender.sendMessage(command.getDescription());
-                sender.sendMessage(command.getUsage().replaceAll("<command>", commandLabel));
+                sender.sendMessage(tl("commandHelpLine1", commandLabel));
+                sender.sendMessage(tl("commandHelpLine2", command.getDescription()));
+                sender.sendMessage(tl("commandHelpLine3"));
+                if (!cmd.getUsageStrings().isEmpty()) {
+                    for (Map.Entry<String, String> usage : cmd.getUsageStrings().entrySet()) {
+                        sender.sendMessage(tl("commandHelpLineUsage", usage.getKey().replace("<command>", commandLabel), usage.getValue()));
+                    }
+                } else {
+                    sender.sendMessage(command.getUsage());
+                }
                 if (!ex.getMessage().isEmpty()) {
                     sender.sendMessage(ex.getMessage());
                 }
