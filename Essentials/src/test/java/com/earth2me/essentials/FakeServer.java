@@ -189,7 +189,7 @@ public class FakeServer implements Server {
 
             @Override
             public int scheduleSyncDelayedTask(final Plugin plugin, final Runnable r) {
-                throw new UnsupportedOperationException("Not supported yet.");
+                return -1;
             }
 
             @Override
