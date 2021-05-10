@@ -1,9 +1,29 @@
 package com.earth2me.essentials.utils;
 
 /**
- * Most of this code was "borrowed" from KyoriPowered/Adventure and is subject to their MIT license.
+ * Most of this code was "borrowed" from KyoriPowered/Adventure and is subject to their MIT license;
  *
- * You can read their license here: https://github.com/KyoriPowered/adventure/blob/master/license.txt
+ * MIT License
+ *
+ * Copyright (c) 2017-2020 KyoriPowered
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
  */
 public final class DownsampleUtil {
     private final static NamedTextColor[] VALUES = new NamedTextColor[] {new NamedTextColor("0", 0x000000), new NamedTextColor("1", 0x0000aa), new NamedTextColor("2", 0x00aa00), new NamedTextColor("3", 0x00aaaa), new NamedTextColor("4", 0xaa0000), new NamedTextColor("5", 0xaa00aa), new NamedTextColor("6", 0xffaa00), new NamedTextColor("7", 0xaaaaaa), new NamedTextColor("8", 0x555555), new NamedTextColor("9", 0x5555ff), new NamedTextColor("a", 0x55ff55), new NamedTextColor("b", 0x55ffff), new NamedTextColor("c", 0xff5555), new NamedTextColor("d", 0xff55ff), new NamedTextColor("e", 0xffff55), new NamedTextColor("f", 0xffffff)};
