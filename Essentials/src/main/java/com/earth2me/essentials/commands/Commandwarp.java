@@ -35,17 +35,15 @@ public class Commandwarp extends EssentialsCommand {
             warpList(user.getSource(), args, user);
             throw new NoChargeException();
         }
-        if (args.length > 0) {
-            //TODO: Remove 'otherplayers' permission.
-            User otherUser = null;
-            if (args.length == 2 && (user.isAuthorized("essentials.warp.otherplayers") || user.isAuthorized("essentials.warp.others"))) {
-                otherUser = getPlayer(server, user, args, 1);
-                warpUser(user, otherUser, args[0], commandLabel);
-                throw new NoChargeException();
-            }
-            warpUser(user, user, args[0], commandLabel);
+
+        //TODO: Remove 'otherplayers' permission.
+        if (args.length == 2 && (user.isAuthorized("essentials.warp.otherplayers") || user.isAuthorized("essentials.warp.others"))) {
+            final User otherUser = getPlayer(server, user, args, 1);
+            warpUser(user, otherUser, args[0], commandLabel);
             throw new NoChargeException();
         }
+        warpUser(user, user, args[0], commandLabel);
+        throw new NoChargeException();
     }
 
     @Override

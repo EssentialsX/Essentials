@@ -35,7 +35,7 @@ commands:
     aliases: [bal,ebal,ebalance,money,emoney]
   balancetop:
     description: Gets the top balance values.
-    usage: /<command> <page>
+    usage: /<command> [page]
     aliases: [ebalancetop,baltop,ebaltop]
   ban:
     description: Bans a player.
@@ -43,7 +43,7 @@ commands:
     aliases: [eban]
   banip:
     description: Bans an IP address.
-    usage: /<command> <address>
+    usage: /<command> <address> [reason]
     aliases: [ebanip]
   beezooka:
     description: Throw an exploding bee at your opponent.
@@ -87,7 +87,7 @@ commands:
     aliases: [eclearinventoryconfirmtoggle, clearinventoryconfirmoff, eclearinventoryconfirmoff, clearconfirmoff, eclearconfirmoff, clearconfirmon, eclearconfirmon, clearconfirm, eclearconfirm]
   condense:
     description: Condenses items into a more compact blocks.
-    usage: /<command> [<itemname>|<id>|hand|inventory]
+    usage: /<command> [itemname]
     aliases: [econdense,compact,ecompact,blocks,eblocks,toblocks,etoblocks]
   compass:
     description: Describes your current bearing.
@@ -170,7 +170,7 @@ commands:
     aliases: [adventure,eadventure,adventuremode,eadventuremode,creative,ecreative,eecreative,creativemode,ecreativemode,egamemode,gm,egm,gma,egma,gmc,egmc,gms,egms,gmt,egmt,survival,esurvival,survivalmode,esurvivalmode,gmsp,sp,egmsp,spec,spectator]
   gc:
     description: Reports memory, uptime and tick info.
-    usage: /<command> [all]
+    usage: /<command>
     aliases: [lag,elag,egc,mem,emem,memory,ememory,uptime,euptime,tps,etps,entities,eentities]
   getpos:
     description: Get your current coordinates or those of a player.
@@ -330,7 +330,7 @@ commands:
     aliases: [epay]
   paytoggle:
     description: Toggles whether you are accepting payments.
-    usage: /<command>
+    usage: /<command> [player]
     aliases: [epaytoggle, payoff, epayoff, payon, epayon]
   payconfirmtoggle:
     description: Toggles whether you are prompted to confirm payments.
@@ -398,7 +398,7 @@ commands:
     aliases: [eseen, ealts, alts]
   sell:
     description: Sells the item currently in your hand.
-    usage: /<command> <<itemname>|<id>|hand|inventory|blocks> [-][amount]
+    usage: /<command> <<itemname>|<id>|hand|inventory|blocks> [amount]
     aliases: [esell]
   sethome:
     description: Set your home to your current location.
@@ -466,11 +466,11 @@ commands:
     aliases: [esuicide]
   tempban:
     description: Temporary ban a user.
-    usage: /<command> <playername> <datediff> <reason>
+    usage: /<command> <playername> <datediff> [reason]
     aliases: [etempban]
   tempbanip:
     description: Temporarily ban an IP Address.
-    usage: /<command> <playername> <datediff> <reason>
+    usage: /<command> <playername> <datediff> [reason]
     aliases: [etempbanip]
   thunder:
     description: Enable/disable thunder.
@@ -510,11 +510,11 @@ commands:
     aliases: [etpahere]
   tpall:
     description: Teleport all online players to another player.
-    usage: /<command> <player>
+    usage: /<command> [player]
     aliases: [etpall]
   tpauto:
     description: Automatically accept teleportation requests.
-    usage: /<command> <player>
+    usage: /<command> [player]
     aliases: [etpauto]
   tpacancel:
     description: Cancel all outstanding teleport requests. Specify [player] to cancel requests with them.
