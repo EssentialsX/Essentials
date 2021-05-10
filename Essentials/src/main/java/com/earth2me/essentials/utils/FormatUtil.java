@@ -148,16 +148,27 @@ public final class FormatUtil {
         return builder.toString();
     }
 
-    public static String unformatString(final IUser user, final String permBase, String message) {
+    public static String unformatString(final String message) {
         if (message == null) {
             return null;
         }
-        final EnumSet<ChatColor> supported = getSupported(user, permBase);
+        return unformatString(message, EnumSet.allOf(ChatColor.class), true);
+    }
 
-        // RGB Codes
+    public static String unformatString(final IUser user, final String permBase, final String message) {
+        if (message == null) {
+            return null;
+        }
+        return unformatString(message, getSupported(user, permBase), user.isAuthorized(permBase + ".rgb"));
+    }
+
+    public static String unformatString(String message, final EnumSet<ChatColor> supported, boolean rgb) {
+        if (message == null) {
+            return null;
+        }
+
         final StringBuffer rgbBuilder = new StringBuffer();
         final Matcher rgbMatcher = STRIP_RGB_PATTERN.matcher(message);
-        final boolean rgb = user.isAuthorized(permBase + ".rgb");
         while (rgbMatcher.find()) {
             final String code = rgbMatcher.group(1).replace(String.valueOf(ChatColor.COLOR_CHAR), "");
             if (rgb) {
