@@ -9,9 +9,12 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 
 import java.util.List;
+import java.util.Map;
 
 public interface IEssentialsCommand {
     String getName();
+
+    Map<String, String> getUsageStrings();
 
     void run(Server server, User user, String commandLabel, Command cmd, String[] args) throws Exception;
 
