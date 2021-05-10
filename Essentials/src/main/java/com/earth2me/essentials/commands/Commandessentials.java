@@ -58,11 +58,11 @@ public class Commandessentials extends EssentialsCommand {
     private static final List<String> officialPlugins = Arrays.asList(
         "EssentialsAntiBuild",
         "EssentialsChat",
+        "EssentialsDiscord",
         "EssentialsGeoIP",
         "EssentialsProtect",
         "EssentialsSpawn",
-        "EssentialsXMPP",
-        "EssentialsDiscord"
+        "EssentialsXMPP"
     );
     private static final List<String> warnPlugins = Arrays.asList(
         "PermissionsEx",
