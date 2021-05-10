@@ -16,6 +16,8 @@ import java.util.Locale;
  * seamless upgrades.
  */
 public class ReflPersistentDataProvider implements PersistentDataProvider {
+    private static final String PDC_ROOT_TAG = "PublicBukkitValues";
+    private static final String ROOT_TAG = "tag";
     private final String namespace;
     private final MethodHandle itemHandleGetterHandle;
     private final MethodHandle getTagHandle;
@@ -74,8 +76,8 @@ public class ReflPersistentDataProvider implements PersistentDataProvider {
         if (itemRootTag == null) {
             return null;
         }
-        final Object tagCompound = getCompoundHandle.invoke(itemRootTag, "tag");
-        final Object publicBukkitValuesCompound = getCompoundHandle.invoke(tagCompound, "PublicBukkitValues");
+        final Object tagCompound = getCompoundHandle.invoke(itemRootTag, ROOT_TAG);
+        final Object publicBukkitValuesCompound = getCompoundHandle.invoke(tagCompound, PDC_ROOT_TAG);
         return (String) getStringHandle.invoke(publicBukkitValuesCompound, key);
     }
 
@@ -86,15 +88,15 @@ public class ReflPersistentDataProvider implements PersistentDataProvider {
             itemRootTag = newCompoundHandle.invoke();
             tagSetterHandle.invoke(nmsItem, itemRootTag);
         }
-        final Object tagCompound = getCompoundHandle.invoke(itemRootTag, "tag");
-        final Object publicBukkitValuesCompound = getCompoundHandle.invoke(tagCompound, "PublicBukkitValues");
+        final Object tagCompound = getCompoundHandle.invoke(itemRootTag, ROOT_TAG);
+        final Object publicBukkitValuesCompound = getCompoundHandle.invoke(tagCompound, PDC_ROOT_TAG);
         if (value == null) {
             removeHandle.invoke(publicBukkitValuesCompound, key);
         } else {
             setStringHandle.invoke(publicBukkitValuesCompound, key, value);
         }
-        setCompoundHandle.invoke(tagCompound, "PublicBukkitValues", publicBukkitValuesCompound);
-        setCompoundHandle.invoke(itemRootTag, "tag", tagCompound);
+        setCompoundHandle.invoke(tagCompound, PDC_ROOT_TAG, publicBukkitValuesCompound);
+        setCompoundHandle.invoke(itemRootTag, ROOT_TAG, tagCompound);
     }
 
     @Override
