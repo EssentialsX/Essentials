@@ -17,10 +17,10 @@ public class ModernPersistentDataProvider implements PersistentDataProvider {
 
     @Override
     public void set(ItemStack itemStack, String key, String value) {
-        final ItemMeta im = itemStack.getItemMeta();
-        if (itemStack == null || im == null || key == null || value == null) {
+        if (itemStack == null || itemStack.getItemMeta() == null || key == null || value == null) {
             return;
         }
+        final ItemMeta im = itemStack.getItemMeta();
 
         im.getPersistentDataContainer().set(new NamespacedKey(plugin, key), PersistentDataType.STRING, value);
         itemStack.setItemMeta(im);
