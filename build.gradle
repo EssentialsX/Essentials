@@ -19,6 +19,7 @@ allprojects {
     version = '2.19.0-SNAPSHOT'
 }
 
+@SuppressWarnings('GrMethodMayBeStatic')
 def commitsSinceLastTag() {
     if (grgit == null) {
         return 0
