@@ -139,6 +139,7 @@ subprojects {
 
     compileJava {
         options.compilerArgs.add('-Xlint:-deprecation')
+        options.release = 8
     }
 
     javadoc {
