@@ -270,7 +270,7 @@ public class VaultEconomyProvider implements Economy {
 
     @Override
     public boolean createPlayerAccount(OfflinePlayer player) {
-        if (hasAccount(player) || ess.getUserMap().isUUIDMatch(player.getUniqueId(), player.getName())) {
+        if (hasAccount(player)) {
             return false;
         }
 
