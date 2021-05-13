@@ -44,7 +44,7 @@ def commitsSinceLastTag() {
 
 project.ext {
     GIT_COMMIT = !indraGit.isPresent() ? "unknown" : indraGit.commit().abbreviate(7).name()
-    GIT_BRANCH = !indraGit.isPresent() ? "detached-head" : indraGit.branch().getName()
+    GIT_BRANCH = !indraGit.isPresent() ? "detached-head" : indraGit.git().getRepository().getBranch()
     GIT_DEPTH = commitsSinceLastTag()
 
     fullVersion = "${version}".replace("-SNAPSHOT", "-dev+${GIT_DEPTH}-${GIT_COMMIT}")
