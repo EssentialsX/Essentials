@@ -35,7 +35,6 @@ jobs:
 
     - name: Build with Gradle
       run: |
-        ESSX_TARGET_BRANCH=${{ github.head_ref }}
         chmod +x gradlew
         ./gradlew build --stacktrace
     - name: Archive plugin jars on GitHub
