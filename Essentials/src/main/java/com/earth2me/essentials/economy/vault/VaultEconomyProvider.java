@@ -308,9 +308,9 @@ public class VaultEconomyProvider implements Economy {
 
         // Loading a v4 UUID that we somehow didn't track, mark it as a normal player and hope for the best, vault sucks :/
         try {
-            ess.getUserMap().load(player.getUniqueId().toString());
+            ess.getUserMap().load(player);
             return true;
-        } catch (Exception e) {
+        } catch (UserDoesNotExistException e) {
             e.printStackTrace();
             return false;
         }

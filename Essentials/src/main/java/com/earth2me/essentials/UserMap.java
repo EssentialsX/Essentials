@@ -1,5 +1,6 @@
 package com.earth2me.essentials;
 
+import com.earth2me.essentials.api.UserDoesNotExistException;
 import com.earth2me.essentials.utils.StringUtil;
 import com.google.common.base.Charsets;
 import com.google.common.cache.Cache;
@@ -170,7 +171,7 @@ public class UserMap extends CacheLoader<String, User> implements IConf {
         throw new Exception("User not found!");
     }
 
-    public User load(final org.bukkit.OfflinePlayer player) throws Exception {
+    public User load(final org.bukkit.OfflinePlayer player) throws UserDoesNotExistException {
         if (player == null) {
             throw new IllegalArgumentException();
         }
@@ -191,7 +192,7 @@ public class UserMap extends CacheLoader<String, User> implements IConf {
             return user;
         }
 
-        throw new Exception("User not found!");
+        throw new UserDoesNotExistException("User not found!");
     }
 
     @Override
