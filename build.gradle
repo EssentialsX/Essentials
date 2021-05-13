@@ -34,11 +34,11 @@ def commitsSinceLastTag() {
     while (true) {
         for (tag in tags) {
             if (walk.parseCommit(tag.getLeaf().getObjectId()) == commit) {
+                walk.dispose()
+                indraGit.git().close()
                 return depth
             }
         }
-        if (tags.contains(commit))
-            return depth
         depth++
         commit = walk.parseCommit(commit.getParents()[0])
     }
