@@ -1,6 +1,7 @@
 package com.earth2me.essentials.economy.vault;
 
 import com.earth2me.essentials.Essentials;
+import com.earth2me.essentials.EssentialsUserConf;
 import com.earth2me.essentials.api.NoLoanPermittedException;
 import com.earth2me.essentials.api.UserDoesNotExistException;
 import com.earth2me.essentials.utils.NumberUtil;
@@ -9,9 +10,13 @@ import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.economy.EconomyResponse;
 import org.bukkit.OfflinePlayer;
 
+import java.io.File;
 import java.math.BigDecimal;
+import java.text.MessageFormat;
 import java.util.Collections;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * A goddamn Vault adapter, what more do you want?
@@ -21,6 +26,10 @@ import java.util.List;
  * {@link com.earth2me.essentials.User}.
  */
 public class VaultEconomyProvider implements Economy {
+    private static final Logger LOGGER = Logger.getLogger("Essentials");
+    private static final String WARN_NPC_RECREATE_1 = "Account creation was requested for NPC user {0}, but an account file with UUID {1} already exists.";
+    private static final String WARN_NPC_RECREATE_2 = "Essentials will create a new account as requested by the other plugin, but this is almost certainly a bug and should be reported.";
+
     private final Essentials ess;
 
     public VaultEconomyProvider(Essentials essentials) {
@@ -270,12 +279,41 @@ public class VaultEconomyProvider implements Economy {
 
     @Override
     public boolean createPlayerAccount(OfflinePlayer player) {
-        if (hasAccount(player) || ess.getUserMap().isUUIDMatch(player.getUniqueId(), player.getName())) {
+        if (hasAccount(player)) {
             return false;
         }
 
-        ess.getUserMap().trackUUID(player.getUniqueId(), player.getName(), false);
-        return true;
+        // This is a UUID generated from a seed that is 100% an NPC or offline mode user.
+        if (player.getUniqueId().version() == 3) {
+            final File folder = new File(ess.getDataFolder(), "userdata");
+            if (!folder.exists()) {
+                if (!folder.mkdirs()) {
+                    throw new RuntimeException("Error while creating userdata directory!");
+                }
+            }
+            final File npcFile = new File(folder, player.getUniqueId() + ".yml");
+            if (npcFile.exists()) {
+                LOGGER.log(Level.SEVERE, MessageFormat.format(WARN_NPC_RECREATE_1, player.getName(), player.getUniqueId().toString()), new RuntimeException());
+                LOGGER.log(Level.SEVERE, WARN_NPC_RECREATE_2);
+            }
+            final EssentialsUserConf npcConfig = new EssentialsUserConf(player.getName(), player.getUniqueId(), npcFile);
+            npcConfig.load();
+            npcConfig.setProperty("npc", true);
+            npcConfig.setProperty("lastAccountName", player.getName());
+            npcConfig.setProperty("money", ess.getSettings().getStartingBalance());
+            npcConfig.forceSave();
+            ess.getUserMap().trackUUID(player.getUniqueId(), player.getName(), false);
+            return true;
+        }
+
+        // Loading a v4 UUID that we somehow didn't track, mark it as a normal player and hope for the best, vault sucks :/
+        try {
+            ess.getUserMap().load(player);
+            return true;
+        } catch (UserDoesNotExistException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     @Override

@@ -1,5 +1,6 @@
 package com.earth2me.essentials;
 
+import com.earth2me.essentials.api.UserDoesNotExistException;
 import com.earth2me.essentials.utils.StringUtil;
 import com.google.common.base.Charsets;
 import com.google.common.cache.Cache;
@@ -168,6 +169,30 @@ public class UserMap extends CacheLoader<String, User> implements IConf {
         }
 
         throw new Exception("User not found!");
+    }
+
+    public User load(final org.bukkit.OfflinePlayer player) throws UserDoesNotExistException {
+        if (player == null) {
+            throw new IllegalArgumentException("Player cannot be null!");
+        }
+
+        if (player instanceof Player) {
+            final User user = new User((Player) player, ess);
+            trackUUID(player.getUniqueId(), player.getName(), true);
+            return user;
+        }
+
+        final File userFile = getUserFileFromID(player.getUniqueId());
+
+        if (userFile.exists()) {
+            final OfflinePlayer essPlayer = new OfflinePlayer(player.getUniqueId(), ess.getServer());
+            final User user = new User(essPlayer, ess);
+            essPlayer.setName(user.getLastAccountName());
+            trackUUID(player.getUniqueId(), user.getName(), false);
+            return user;
+        }
+
+        throw new UserDoesNotExistException("User not found!");
     }
 
     @Override
