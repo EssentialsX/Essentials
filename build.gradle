@@ -48,6 +48,7 @@ def commitsSinceLastTag() {
 def headBranchName() {
     def branch = System.env.ESSX_TARGET_BRANCH
     println(branch)
+    println(System.getenv("GITHUB_HEAD_REF"))
 
     if (branch != null) {
         return branch
