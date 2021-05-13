@@ -23,25 +23,30 @@ import java.util.Map;
 import static com.earth2me.essentials.I18n.tl;
 
 public class Commandrecipe extends EssentialsCommand {
-
     private static final Material FIREWORK_ROCKET = EnumUtil.getMaterial("FIREWORK_ROCKET", "FIREWORK");
     private static final Material FIREWORK_STAR = EnumUtil.getMaterial("FIREWORK_STAR", "FIREWORK_CHARGE");
     private static final Material GUNPOWDER = EnumUtil.getMaterial("GUNPOWDER", "SULPHUR");
+    private final boolean unsupported;
 
     public Commandrecipe() {
         super("recipe");
-    }
-
-    @Override
-    public void run(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception {
         // On versions at or above 1.12, we need recipe book API
+        boolean unsupported = false;
         if (VersionUtil.getServerBukkitVersion().isHigherThanOrEqualTo(VersionUtil.v1_12_0_R01)) {
             try {
                 Class.forName("com.destroystokyo.paper.event.player.PlayerRecipeBookClickEvent");
             } catch (final ClassNotFoundException e) {
-                sender.sendMessage(tl("unsupportedFeature"));
-                return;
+                unsupported = true;
             }
+        }
+        this.unsupported = unsupported;
+    }
+
+    @Override
+    public void run(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception {
+        if (unsupported) {
+            sender.sendMessage(tl("unsupportedFeature"));
+            return;
         }
 
         if (args.length < 1) {
