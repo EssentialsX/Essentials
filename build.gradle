@@ -13,6 +13,8 @@ plugins {
 }
 
 import org.apache.tools.ant.filters.ReplaceTokens
+import org.eclipse.jgit.lib.Ref
+import org.eclipse.jgit.lib.Repository
 import org.eclipse.jgit.revwalk.RevWalk
 
 allprojects {
@@ -42,10 +44,24 @@ def commitsSinceLastTag() {
     }
 }
 
+@SuppressWarnings('GrMethodMayBeStatic')
+def headBranchName() {
+    if (!indraGit.isPresent()) {
+        return "detached-head"
+    }
+
+    Ref ref = indraGit.git().getRepository().exactRef('HEAD')?.target
+    if (ref == null) {
+        return "detached-head"
+    }
+
+    return Repository.shortenRefName(ref.name)
+}
+
 project.ext {
     GIT_COMMIT = !indraGit.isPresent() ? "unknown" : indraGit.commit().abbreviate(7).name()
-    GIT_BRANCH = !indraGit.isPresent() ? "detached-head" : indraGit.branchName()
     GIT_DEPTH = commitsSinceLastTag()
+    GIT_BRANCH = headBranchName()
 
     fullVersion = "${version}".replace("-SNAPSHOT", "-dev+${GIT_DEPTH}-${GIT_COMMIT}")
 
