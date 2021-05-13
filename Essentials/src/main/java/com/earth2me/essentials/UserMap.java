@@ -170,6 +170,30 @@ public class UserMap extends CacheLoader<String, User> implements IConf {
         throw new Exception("User not found!");
     }
 
+    public User load(final org.bukkit.OfflinePlayer player) throws Exception {
+        if (player == null) {
+            throw new IllegalArgumentException();
+        }
+
+        if (player instanceof Player) {
+            final User user = new User((Player) player, ess);
+            trackUUID(player.getUniqueId(), player.getName(), true);
+            return user;
+        }
+
+        final File userFile = getUserFileFromID(player.getUniqueId());
+
+        if (userFile.exists()) {
+            final OfflinePlayer essPlayer = new OfflinePlayer(player.getUniqueId(), ess.getServer());
+            final User user = new User(essPlayer, ess);
+            essPlayer.setName(user.getLastAccountName());
+            trackUUID(player.getUniqueId(), user.getName(), false);
+            return user;
+        }
+
+        throw new Exception("User not found!");
+    }
+
     @Override
     public void reloadConfig() {
         getUUIDMap().forceWriteUUIDMap();
