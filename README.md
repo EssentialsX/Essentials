@@ -24,7 +24,7 @@ EssentialsX is almost a completely drop-in replacement for Essentials. However, 
 
 * **If you have an unsupported permissions plugin but still wish to use wildcards, enable `use-bukkit-permissions` in the configuration.** Otherwise, the plugin will fall back to config-based permissions.
 
-* **EssentialsX requires Java 8 or higher.** On older versions, the plugin may not work properly.
+* **EssentialsX requires Java 16 or higher.** On older versions, the plugin may not work properly.
 
 * **EssentialsX supports Minecraft versions 1.8.8, 1.9.4, 1.10.2, 1.11.2, 1.12.2, 1.13.2, 1.14.4, 1.15.2, and 1.16.5.**
 
