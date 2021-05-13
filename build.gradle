@@ -1,18 +1,19 @@
 buildscript  {
     ext {
-        indraVersion = '1.2.1'
+        indraVersion = '2.0.3'
     }
 }
 
 plugins {
-    id 'org.ajoberstar.grgit' version '4.1.0'
     id 'net.kyori.indra' version "$indraVersion" apply false
+    id 'net.kyori.indra.git' version "$indraVersion"
     id 'net.kyori.indra.checkstyle' version "$indraVersion" apply false
     id 'net.kyori.indra.publishing' version "$indraVersion" apply false
     id 'com.github.johnrengelman.shadow' version '6.1.0' apply false
 }
 
 import org.apache.tools.ant.filters.ReplaceTokens
+import org.eclipse.jgit.revwalk.RevWalk
 
 allprojects {
     group = 'net.essentialsx'
@@ -21,23 +22,29 @@ allprojects {
 
 @SuppressWarnings('GrMethodMayBeStatic')
 def commitsSinceLastTag() {
-    if (grgit == null) {
-        return 0
+    if (indraGit == null || !indraGit.isPresent() || indraGit.tags().isEmpty()) {
+        return -1
     }
-    def tags = grgit.tag.list().stream().map({it.commit}).toList()
-    def commit = grgit.head()
+    def tags = indraGit.tags()
     def depth = 0
+    def walk = new RevWalk(indraGit.git().getRepository())
+    def commit = walk.parseCommit(indraGit.commit())
     while (true) {
+        for (tag in tags) {
+            if (walk.parseCommit(tag.getLeaf().getObjectId()) == commit) {
+                return depth
+            }
+        }
         if (tags.contains(commit))
             return depth
         depth++
-        commit = grgit.resolve.toCommit(commit.parentIds.get(0))
+        commit = walk.parseCommit(commit.getParents()[0])
     }
 }
 
-ext {
-    GIT_COMMIT = grgit == null ? "unknown" : grgit.head().abbreviatedId
-    GIT_BRANCH = grgit == null ? "detached-head" : grgit.branch.current().name
+project.ext {
+    GIT_COMMIT = !indraGit.isPresent() ? "unknown" : indraGit.commit().abbreviate(7).name()
+    GIT_BRANCH = !indraGit.isPresent() ? "detached-head" : indraGit.branch().getName()
     GIT_DEPTH = commitsSinceLastTag()
 
     fullVersion = "${version}".replace("-SNAPSHOT", "-dev+${GIT_DEPTH}-${GIT_COMMIT}")
@@ -103,7 +110,7 @@ subprojects {
     }
 
     indra {
-        checkstyle = "$checkstyleVersion"
+        checkstyle "$checkstyleVersion"
 
         github('EssentialsX', 'Essentials')
         gpl3OnlyLicense()
@@ -139,6 +146,7 @@ subprojects {
 
     compileJava {
         options.compilerArgs.add('-Xlint:-deprecation')
+        //noinspection GroovyAssignabilityCheck
         options.release = 8
     }
 
