@@ -46,6 +46,8 @@ def commitsSinceLastTag() {
 
 @SuppressWarnings('GrMethodMayBeStatic')
 def headBranchName() {
+    println(System.getenv("BASE"))
+
     if (!indraGit.isPresent()) {
         return "detached-head"
     }
