@@ -48,6 +48,10 @@ def commitsSinceLastTag() {
 def headBranchName() {
     println(System.getenv("BASE"))
 
+    if (System.getenv("BASE") != null) {
+        return System.getenv("BASE")
+    }
+
     if (!indraGit.isPresent()) {
         return "detached-head"
     }
