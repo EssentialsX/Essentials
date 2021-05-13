@@ -9,6 +9,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import net.ess3.api.IEssentials;
+import org.bukkit.ChatColor;
 import org.bukkit.Server;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -20,13 +21,17 @@ import org.bukkit.util.StringUtil;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.MissingResourceException;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static com.earth2me.essentials.I18n.tl;
 
@@ -40,12 +45,42 @@ public abstract class EssentialsCommand implements IEssentialsCommand {
      * Common date diffs, for use in tab completion
      */
     protected static final List<String> COMMON_DATE_DIFFS = ImmutableList.of("1m", "15m", "1h", "3h", "12h", "1d", "1w", "1mo", "1y");
+    private static final Pattern ARGUMENT_PATTERN = Pattern.compile("([ :>])(([\\[<])[A-Za-z |]+[>\\]])");
+
     private final transient String name;
+    private final transient Map<String, String> usageStrings = new LinkedHashMap<>();
     protected transient IEssentials ess;
     protected transient IEssentialsModule module;
 
     protected EssentialsCommand(final String name) {
         this.name = name;
+        int i = 1;
+        try {
+            // This is not actually infinite, it will throw an unchecked exception if a resource key is missing
+            //noinspection InfiniteLoopStatement
+            while (true) {
+                final String baseKey = name + "CommandUsage" + i;
+                addUsageString(tl(baseKey), tl(baseKey + "Description"));
+                i++;
+            }
+        } catch (MissingResourceException ignored) {
+        }
+    }
+
+    private void addUsageString(final String usage, final String description) {
+        final StringBuffer buffer = new StringBuffer();
+        final Matcher matcher = ARGUMENT_PATTERN.matcher(usage);
+        while (matcher.find()) {
+            final String color = matcher.group(3).equals("<") ? tl("commandArgumentRequired") : tl("commandArgumentOptional");
+            matcher.appendReplacement(buffer, "$1" + color + matcher.group(2).replace("|", ChatColor.RED + "|" + color) + ChatColor.RESET);
+        }
+        matcher.appendTail(buffer);
+        usageStrings.put(buffer.toString(), description);
+    }
+
+    @Override
+    public Map<String, String> getUsageStrings() {
+        return usageStrings;
     }
 
     public static String getFinalArg(final String[] args, final int start) {
