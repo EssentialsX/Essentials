@@ -1,6 +1,7 @@
 package com.earth2me.essentials;
 
-import com.earth2me.essentials.register.payment.Methods;
+import com.earth2me.essentials.economy.EconomyLayer;
+import com.earth2me.essentials.economy.EconomyLayers;
 import net.ess3.api.IEssentials;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -12,9 +13,19 @@ import java.util.logging.Level;
 
 public class EssentialsPluginListener implements Listener, IConf {
     private final transient IEssentials ess;
+    private boolean serverLoaded = false;
 
     public EssentialsPluginListener(final IEssentials ess) {
         this.ess = ess;
+
+        // Run on first server tick
+        ess.scheduleSyncDelayedTask(() -> {
+            if (EconomyLayers.getSelectedLayer() == null || serverLoaded) {
+                return;
+            }
+            serverLoaded = true;
+            EconomyLayers.onServerLoad();
+        });
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
@@ -25,8 +36,9 @@ public class EssentialsPluginListener implements Listener, IConf {
         ess.getPermissionsHandler().setUseSuperperms(ess.getSettings().useBukkitPermissions());
         ess.getPermissionsHandler().checkPermissions();
         ess.getAlternativeCommandsHandler().addPlugin(event.getPlugin());
-        if (!Methods.hasMethod() && Methods.setMethod(ess.getServer().getPluginManager())) {
-            ess.getLogger().log(Level.INFO, "Payment method found (" + Methods.getMethod().getLongName() + " version: " + Methods.getMethod().getVersion() + ")");
+        final EconomyLayer layer = EconomyLayers.onPluginEnable(event.getPlugin());
+        if (layer != null) {
+            ess.getLogger().log(Level.INFO, "Essentials found a compatible payment resolution method: " + layer.getName() + " (v" + layer.getPluginVersion() + ")!");
         }
     }
 
@@ -37,10 +49,13 @@ public class EssentialsPluginListener implements Listener, IConf {
         }
         ess.getPermissionsHandler().checkPermissions();
         ess.getAlternativeCommandsHandler().removePlugin(event.getPlugin());
-        // Check to see if the plugin thats being disabled is the one we are using
-        if (Methods.hasMethod() && Methods.checkDisabled(event.getPlugin())) {
-            Methods.reset();
-            ess.getLogger().log(Level.INFO, "Payment method was disabled. No longer accepting payments.");
+        if (EconomyLayers.onPluginDisable(event.getPlugin(), serverLoaded)) {
+            final EconomyLayer layer = EconomyLayers.getSelectedLayer();
+            if (layer != null) {
+                ess.getLogger().log(Level.INFO, "Essentials found a new compatible payment resolution method: " + layer.getName() + " (v" + layer.getPluginVersion() + ")!");
+            } else {
+                ess.getLogger().log(Level.INFO, "Active payment resolution method has been disabled! Falling back to Essentials' default payment resolution system!");
+            }
         }
     }
 
