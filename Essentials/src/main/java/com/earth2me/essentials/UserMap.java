@@ -173,7 +173,7 @@ public class UserMap extends CacheLoader<String, User> implements IConf {
 
     public User load(final org.bukkit.OfflinePlayer player) throws UserDoesNotExistException {
         if (player == null) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("Player cannot be null!");
         }
 
         if (player instanceof Player) {
