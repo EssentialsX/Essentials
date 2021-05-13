@@ -46,10 +46,10 @@ def commitsSinceLastTag() {
 
 @SuppressWarnings('GrMethodMayBeStatic')
 def headBranchName() {
-    println(System.getenv("BASE"))
+    println(System.getenv("ESSX_TARGET_BRANCH"))
 
-    if (System.getenv("BASE") != null) {
-        return System.getenv("BASE")
+    if (System.getenv("ESSX_TARGET_BRANCH") != null) {
+        return System.getenv("ESSX_TARGET_BRANCH")
     }
 
     if (!indraGit.isPresent()) {

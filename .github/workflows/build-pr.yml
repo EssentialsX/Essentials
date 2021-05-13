@@ -22,7 +22,7 @@ jobs:
         fetch-depth: 0
     - name: Set Pull Request Branch
       run: |
-        export BASE=${{ env.BASE }}
+        ESSX_TARGET_BRANCH=${{ env.BASE }}
         echo "Targeting: ${BASE}"
       env:
         BASE: ${{ github.head_ref }}
