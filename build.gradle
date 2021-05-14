@@ -9,7 +9,7 @@ plugins {
     id 'net.kyori.indra.git' version "$indraVersion"
     id 'net.kyori.indra.checkstyle' version "$indraVersion" apply false
     id 'net.kyori.indra.publishing' version "$indraVersion" apply false
-    id 'com.github.johnrengelman.shadow' version '6.1.0' apply false
+    id 'com.github.johnrengelman.shadow' version '7.0.0' apply false
 }
 
 import org.apache.tools.ant.filters.ReplaceTokens
