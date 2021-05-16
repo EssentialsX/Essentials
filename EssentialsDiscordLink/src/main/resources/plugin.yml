@@ -1,0 +1,9 @@
+name: EssentialsDiscordLink
+main: net.essentialsx.discordlink.EssentialsDiscordLink
+# Note to developers: This next line cannot change, or the automatic versioning system will break.
+version: ${full.version}
+website: https://essentialsx.net/
+description: EssentialsXDiscord addon which
+authors: [JRoy]
+depend: [EssentialsDiscord]
+api-version: 1.13

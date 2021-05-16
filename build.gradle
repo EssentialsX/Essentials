@@ -164,7 +164,8 @@ def outputTasks() {
      ":EssentialsXProtect:jar",
      ":EssentialsXSpawn:jar",
      ":EssentialsXXMPP:shadowJar",
-     ":EssentialsXDiscord:shadowJar"
+     ":EssentialsXDiscord:shadowJar",
+     ":EssentialsXDiscordLink:shadowJar"
     ].stream().map({ tasks.findByPath(it) })
 }
 
