@@ -7,3 +7,12 @@ description: EssentialsXDiscord addon which
 authors: [JRoy]
 depend: [EssentialsDiscord]
 api-version: 1.13
+commands:
+  link:
+    description: Generates a code to link your minecraft account to discord
+    usage: /<command>
+    aliases: [elink, discordlink, ediscordlink]
+  unlink:
+    description: Unlinks your minecraft account from any associated discord account
+    usage: /<command>
+    aliases: [eunlink, discordunlink, ediscordunlink]
