@@ -46,7 +46,7 @@ public class Commandunlimited extends EssentialsCommand {
         if (items.isEmpty()) {
             output.append(tl("none"));
         }
-        final StringJoiner joiner = new StringJoiner(",");
+        final StringJoiner joiner = new StringJoiner(", ");
         for (final Material material : items) {
             joiner.add(material.toString().toLowerCase(Locale.ENGLISH).replace("_", ""));
         }
