@@ -8,11 +8,13 @@ import net.essentialsx.api.v2.services.discord.InteractionEvent;
 
 import java.util.List;
 
+import static com.earth2me.essentials.I18n.tl;
+
 public class LinkInteractionCommand implements InteractionCommand {
     private final List<InteractionCommandArgument> arguments;
 
     public LinkInteractionCommand() {
-        this.arguments = ImmutableList.of(new InteractionCommandArgument("code", "The code associated with your minecraft account as provided in game", InteractionCommandArgumentType.STRING, true));
+        this.arguments = ImmutableList.of(new InteractionCommandArgument("code", tl("discordCommandLinkArgumentCode"), InteractionCommandArgumentType.STRING, true));
     }
 
     @Override
@@ -37,7 +39,7 @@ public class LinkInteractionCommand implements InteractionCommand {
 
     @Override
     public String getDescription() {
-        return "Links your discord account with a minecraft account.";
+        return tl("discordCommandLinkDescription");
     }
 
     @Override

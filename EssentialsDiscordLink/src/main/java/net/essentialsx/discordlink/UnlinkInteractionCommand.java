@@ -6,6 +6,8 @@ import net.essentialsx.api.v2.services.discord.InteractionEvent;
 
 import java.util.List;
 
+import static com.earth2me.essentials.I18n.tl;
+
 public class UnlinkInteractionCommand implements InteractionCommand {
     @Override
     public void onCommand(InteractionEvent event) {
@@ -29,7 +31,7 @@ public class UnlinkInteractionCommand implements InteractionCommand {
 
     @Override
     public String getDescription() {
-        return "Unlinks any associated minecraft account from this discord account.";
+        return tl("discordCommandUnlinkDescription");
     }
 
     @Override
