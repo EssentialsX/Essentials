@@ -162,12 +162,14 @@ subprojects {
                 }
             }
         }
+
+        javaVersions {
+            target 8
+        }
     }
 
     compileJava {
         options.compilerArgs.add('-Xlint:-deprecation')
-        //noinspection GroovyAssignabilityCheck
-        options.release = 8
     }
 
     javadoc {
