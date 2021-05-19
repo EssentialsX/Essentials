@@ -1,7 +1,6 @@
 package net.essentialsx.discordlink;
 
 import com.earth2me.essentials.IEssentials;
-import com.earth2me.essentials.IEssentialsModule;
 import com.earth2me.essentials.metrics.MetricsWrapper;
 import net.essentialsx.api.v2.services.discord.EssentialsDiscordAPI;
 import net.essentialsx.api.v2.services.discord.InteractionException;
@@ -10,12 +9,13 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import static com.earth2me.essentials.I18n.tl;
 
-public class EssentialsDiscordLink extends JavaPlugin implements IEssentialsModule {
+public class EssentialsDiscordLink extends JavaPlugin {
     private final static Logger logger = Logger.getLogger("EssentialsDiscordLink");
     private transient IEssentials ess;
     private transient EssentialsDiscord essDiscord;
@@ -23,6 +23,7 @@ public class EssentialsDiscordLink extends JavaPlugin implements IEssentialsModu
 
     private EssentialsDiscordAPI api;
     private DiscordLinkSettings settings;
+    private AccountStorage accounts;
 
     @Override
     public void onEnable() {
@@ -40,11 +41,19 @@ public class EssentialsDiscordLink extends JavaPlugin implements IEssentialsModu
 
         settings = new DiscordLinkSettings();
         ess.addReloadListener(settings);
+        try {
+            accounts = new AccountStorage(this);
+        } catch (IOException e) {
+            logger.log(Level.SEVERE, "Unable to create link accounts file", e);
+            setEnabled(false);
+            return;
+        }
 
         if (!(api.getInteractionController().getCommand("link") instanceof LinkInteractionCommand)) {
             try {
-                api.getInteractionController().registerCommand(new LinkInteractionCommand());
-                api.getInteractionController().registerCommand(new UnlinkInteractionCommand());
+                api.getInteractionController().registerCommand(new AccountInteractionCommand(accounts));
+                api.getInteractionController().registerCommand(new LinkInteractionCommand(accounts));
+                api.getInteractionController().registerCommand(new UnlinkInteractionCommand(accounts));
             } catch (InteractionException e) {
                 e.printStackTrace();
                 setEnabled(false);
@@ -58,8 +67,19 @@ public class EssentialsDiscordLink extends JavaPlugin implements IEssentialsModu
     }
 
     @Override
+    public void onDisable() {
+        if (accounts != null) {
+            accounts.shutdown();
+        }
+    }
+
+    public IEssentials getEss() {
+        return ess;
+    }
+
+    @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         metrics.markCommand(command.getName(), true);
-        return ess.onCommandEssentials(sender, command, label, args, EssentialsDiscordLink.class.getClassLoader(), "net.essentialsx.discordlink.Command", "essentials.", this);
+        return ess.onCommandEssentials(sender, command, label, args, EssentialsDiscordLink.class.getClassLoader(), "net.essentialsx.discordlink.Command", "essentials.", accounts);
     }
 }

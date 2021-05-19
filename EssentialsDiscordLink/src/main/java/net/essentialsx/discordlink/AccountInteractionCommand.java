@@ -7,24 +7,16 @@ import net.essentialsx.api.v2.services.discord.InteractionCommandArgumentType;
 import net.essentialsx.api.v2.services.discord.InteractionEvent;
 
 import java.util.List;
-import java.util.UUID;
 
 import static com.earth2me.essentials.I18n.tl;
 
-public class LinkInteractionCommand implements InteractionCommand {
+public class AccountInteractionCommand implements InteractionCommand {
     private final List<InteractionCommandArgument> arguments;
     private final AccountStorage accounts;
 
-    public LinkInteractionCommand(final AccountStorage accounts) {
-        this.arguments = ImmutableList.of(new InteractionCommandArgument("code", tl("discordCommandLinkArgumentCode"), InteractionCommandArgumentType.STRING, true));
+    public AccountInteractionCommand(AccountStorage accounts) {
+        this.arguments = ImmutableList.of(new InteractionCommandArgument("user", tl("discordCommandAccountArgumentUser"), InteractionCommandArgumentType.USER, false));
         this.accounts = accounts;
-    }
-
-    @Override
-    public void onCommand(InteractionEvent event) {
-        final String code = event.getStringArgument("code");
-        accounts.add(UUID.randomUUID(), event.getMember().getId());
-        event.reply("linked");
     }
 
     @Override
@@ -39,17 +31,22 @@ public class LinkInteractionCommand implements InteractionCommand {
 
     @Override
     public String getName() {
-        return "link";
+        return "account";
     }
 
     @Override
     public String getDescription() {
-        return tl("discordCommandLinkDescription");
+        return tl("discordCommandAccountDescription");
     }
 
     @Override
     public List<InteractionCommandArgument> getArguments() {
         return arguments;
     }
-}
 
+    @Override
+    public void onCommand(InteractionEvent event) {
+        final String accountId = event.getMember().getId();
+        event.reply("uuid " + accounts.getUUID(accountId));
+    }
+}

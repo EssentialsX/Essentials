@@ -9,9 +9,19 @@ import java.util.List;
 import static com.earth2me.essentials.I18n.tl;
 
 public class UnlinkInteractionCommand implements InteractionCommand {
+    private final AccountStorage accounts;
+
+    public UnlinkInteractionCommand(final AccountStorage accounts) {
+        this.accounts = accounts;
+    }
+
     @Override
     public void onCommand(InteractionEvent event) {
-
+        if (accounts.getUUID(event.getMember().getId()) == null) {
+            event.reply("no account!");
+            return;
+        }
+        accounts.remove(event.getMember().getId());
     }
 
     @Override
