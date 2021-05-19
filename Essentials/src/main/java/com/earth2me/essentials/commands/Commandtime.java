@@ -80,7 +80,7 @@ public class Commandtime extends EssentialsCommand {
             }
         }
 
-        final StringJoiner joiner = new StringJoiner(",");
+        final StringJoiner joiner = new StringJoiner(", ");
         for (final World world : worlds) {
             long time = world.getTime();
             if (!add) {
