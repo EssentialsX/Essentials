@@ -283,8 +283,9 @@ public class VaultEconomyProvider implements Economy {
             return false;
         }
 
-        // This is a UUID generated from a seed that is 100% an NPC or offline mode user.
-        if (player.getUniqueId().version() == 3) {
+        // String based UUIDs are version 3 and are used for NPC and OfflinePlayers
+        // Citizens uses v2 UUIDs, yeah I don't know either!
+        if (player.getUniqueId().version() == 3 || player.getUniqueId().version() == 2) {
             final File folder = new File(ess.getDataFolder(), "userdata");
             if (!folder.exists()) {
                 if (!folder.mkdirs()) {
