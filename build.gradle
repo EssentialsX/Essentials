@@ -1,43 +1,71 @@
 buildscript  {
     ext {
-        indraVersion = '1.2.1'
+        indraVersion = '2.0.4'
     }
 }
 
 plugins {
-    id 'org.ajoberstar.grgit' version '4.1.0'
     id 'net.kyori.indra' version "$indraVersion" apply false
+    id 'net.kyori.indra.git' version "$indraVersion"
     id 'net.kyori.indra.checkstyle' version "$indraVersion" apply false
     id 'net.kyori.indra.publishing' version "$indraVersion" apply false
-    id 'com.github.johnrengelman.shadow' version '6.1.0' apply false
+    id 'com.github.johnrengelman.shadow' version '7.0.0' apply false
 }
 
 import org.apache.tools.ant.filters.ReplaceTokens
+import org.eclipse.jgit.lib.Ref
+import org.eclipse.jgit.lib.Repository
+import org.eclipse.jgit.revwalk.RevWalk
 
 allprojects {
     group = 'net.essentialsx'
     version = '2.19.0-SNAPSHOT'
 }
 
+@SuppressWarnings('GrMethodMayBeStatic')
 def commitsSinceLastTag() {
-    if (grgit == null) {
-        return 0
+    if (indraGit == null || !indraGit.isPresent() || indraGit.tags().isEmpty()) {
+        return -1
     }
-    def tags = grgit.tag.list().stream().map({it.commit}).toList()
-    def commit = grgit.head()
+    def tags = indraGit.tags()
     def depth = 0
+    def walk = new RevWalk(indraGit.git().getRepository())
+    def commit = walk.parseCommit(indraGit.commit())
     while (true) {
-        if (tags.contains(commit))
-            return depth
+        for (tag in tags) {
+            if (walk.parseCommit(tag.getLeaf().getObjectId()) == commit) {
+                walk.dispose()
+                indraGit.git().close()
+                return depth
+            }
+        }
         depth++
-        commit = grgit.resolve.toCommit(commit.parentIds.get(0))
+        commit = walk.parseCommit(commit.getParents()[0])
     }
 }
 
-ext {
-    GIT_COMMIT = grgit == null ? "unknown" : grgit.head().abbreviatedId
-    GIT_BRANCH = grgit == null ? "detached-head" : grgit.branch.current().name
+@SuppressWarnings('GrMethodMayBeStatic')
+def headBranchName() {
+    if (System.getenv("GITHUB_HEAD_REF") != null) {
+        return System.getenv("GITHUB_HEAD_REF")
+    }
+
+    if (!indraGit.isPresent()) {
+        return "detached-head"
+    }
+
+    Ref ref = indraGit.git().getRepository().exactRef('HEAD')?.target
+    if (ref == null) {
+        return "detached-head"
+    }
+
+    return Repository.shortenRefName(ref.name)
+}
+
+project.ext {
+    GIT_COMMIT = !indraGit.isPresent() ? "unknown" : indraGit.commit().abbreviate(7).name()
     GIT_DEPTH = commitsSinceLastTag()
+    GIT_BRANCH = headBranchName()
 
     fullVersion = "${version}".replace("-SNAPSHOT", "-dev+${GIT_DEPTH}-${GIT_COMMIT}")
 
@@ -104,7 +132,7 @@ subprojects {
     }
 
     indra {
-        checkstyle = "$checkstyleVersion"
+        checkstyle "$checkstyleVersion"
 
         github('EssentialsX', 'Essentials')
         gpl3OnlyLicense()
@@ -135,6 +163,10 @@ subprojects {
                     url = 'https://ci.ender.zone/job/EssentialsX'
                 }
             }
+        }
+
+        javaVersions {
+            target 8
         }
     }
 
