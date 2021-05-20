@@ -91,6 +91,7 @@ public class AccountStorage implements IEssentialsModule {
         synchronized (uuidToDiscordIdMap) {
             try {
                 if (!writeService.awaitTermination(10, TimeUnit.SECONDS)) {
+                    logger.log(Level.SEVERE, "Timed out while saving!");
                     writeService.shutdownNow();
                 }
             } catch (InterruptedException e) {
