@@ -1,6 +1,8 @@
 package net.essentialsx.discord.interactions;
 
 import com.earth2me.essentials.utils.FormatUtil;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import net.dv8tion.jda.api.events.RawGatewayEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
@@ -40,6 +42,8 @@ public class InteractionControllerImpl extends ListenerAdapter implements Intera
 
     private final Map<String, InteractionCommand> commandMap = new HashMap<>();
     private final List<String> commandIds = new ArrayList<>();
+    private final Map<String, InteractionCommand> batchRegistrationQueue = new HashMap<>();
+    private boolean initialBatchRegistration = false;
 
     public InteractionControllerImpl(EssentialsJDA jda) {
         this.jda = jda;
@@ -145,6 +149,71 @@ public class InteractionControllerImpl extends ListenerAdapter implements Intera
         return commandMap.get(name);
     }
 
+    public void processBatchRegistration() {
+        if (!initialBatchRegistration && !batchRegistrationQueue.isEmpty()) {
+            initialBatchRegistration = true;
+            final JsonArray commandList = new JsonArray();
+            for (final InteractionCommand cmd : batchRegistrationQueue.values()) {
+                commandList.add(cmd.serialize());
+            }
+            put(apiRegister, RequestBody.create(DiscordUtil.JSON_TYPE, commandList.toString())).enqueue(new Callback() {
+                @Override
+                public void onResponse(Call call, Response response) throws IOException {
+                    if (response.isSuccessful()) {
+                        //noinspection ConstantConditions
+                        final JsonArray responseObj = DiscordUtil.GSON.fromJson(response.body().string(), JsonArray.class);
+                        if (jda.isDebug()) {
+                            logger.info("Registration payload: " + responseObj);
+                        }
+                        for (final JsonElement e : responseObj) {
+                            final JsonObject cmd = e.getAsJsonObject();
+                            final String cmdName = cmd.get("name").getAsString();
+                            commandMap.put(cmdName, batchRegistrationQueue.get(cmdName));
+                            commandIds.add(cmd.get("id").getAsString());
+                            batchRegistrationQueue.remove(cmdName);
+                            if (jda.isDebug()) {
+                                logger.info("Registered guild command: " + cmdName);
+                            }
+                        }
+
+                        if (!batchRegistrationQueue.isEmpty()) {
+                            logger.warning(batchRegistrationQueue.size() + " commands lost to registration!");
+                            if (jda.isDebug()) {
+                                logger.info("Registration payload: " + responseObj);
+                            }
+                            batchRegistrationQueue.clear();
+                        }
+                        return;
+                    }
+
+                    if (!batchRegistrationQueue.isEmpty()) {
+                        logger.warning(batchRegistrationQueue.size() + " commands lost to registration!");
+                        batchRegistrationQueue.clear();
+                    }
+
+                    //noinspection ConstantConditions
+                    final JsonObject responseObj = DiscordUtil.GSON.fromJson(response.body().string(), JsonObject.class);
+                    if (responseObj.has("code") && responseObj.get("code").getAsInt() == 50001) {
+                        logger.severe(tl("discordErrorCommand"));
+                        if (jda.isDebug()) {
+                            logger.info("Registration payload: " + responseObj);
+                        }
+                        return;
+                    }
+
+                    logger.warning("Error while registering command, raw response: " + responseObj);
+                }
+
+                @Override
+                public void onFailure(Call call, IOException e) {
+                    logger.severe("Error while registering command: " + e.getMessage());
+                    e.printStackTrace();
+                    batchRegistrationQueue.clear();
+                }
+            });
+        }
+    }
+
     @Override
     public void registerCommand(InteractionCommand command) throws InteractionException {
         if (command.isDisabled()) {
@@ -155,8 +224,16 @@ public class InteractionControllerImpl extends ListenerAdapter implements Intera
             throw new InteractionException("A command with that name is already registered!");
         }
 
-        final String commandJson = command.serialize();
-        post(apiRegister, RequestBody.create(DiscordUtil.JSON_TYPE, commandJson)).enqueue(new Callback() {
+        final JsonObject commandJson = command.serialize();
+        if (!initialBatchRegistration) {
+            if (jda.isDebug()) {
+                logger.info("Marked guild command for batch registration: " + command.getName());
+            }
+            batchRegistrationQueue.put(command.getName(), command);
+            return;
+        }
+
+        post(apiRegister, RequestBody.create(DiscordUtil.JSON_TYPE, commandJson.toString())).enqueue(new Callback() {
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 if (response.isSuccessful()) {
@@ -205,6 +282,12 @@ public class InteractionControllerImpl extends ListenerAdapter implements Intera
     private Call patch(String url, RequestBody body) {
         return jda.getJda().getHttpClient().newCall(builder(url)
                 .patch(body)
+                .build());
+    }
+
+    private Call put(String url, RequestBody body) {
+        return jda.getJda().getHttpClient().newCall(builder(url)
+                .put(body)
                 .build());
     }
 
