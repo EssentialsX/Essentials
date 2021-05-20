@@ -51,7 +51,7 @@ public interface InteractionCommand {
      * Serializes this command into a JSON representation to be sent to Discord.
      * @return the json representation of this command.
      */
-    default String serialize() {
+    default JsonObject serialize() {
         final JsonObject cmdObject = new JsonObject();
         cmdObject.addProperty("name", getName());
         cmdObject.addProperty("description", getDescription());
@@ -62,6 +62,6 @@ public interface InteractionCommand {
             }
         }
         cmdObject.add("options", optionsArray);
-        return cmdObject.toString();
+        return cmdObject;
     }
 }

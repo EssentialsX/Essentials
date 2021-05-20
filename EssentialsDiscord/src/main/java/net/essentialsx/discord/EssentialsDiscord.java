@@ -3,6 +3,7 @@ package net.essentialsx.discord;
 import com.earth2me.essentials.IEssentials;
 import com.earth2me.essentials.IEssentialsModule;
 import com.earth2me.essentials.metrics.MetricsWrapper;
+import net.essentialsx.discord.interactions.InteractionControllerImpl;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.logging.Level;
@@ -39,6 +40,7 @@ public class EssentialsDiscord extends JavaPlugin implements IEssentialsModule {
             jda = new EssentialsJDA(this);
             try {
                 jda.startup();
+                ess.scheduleSyncDelayedTask(() -> ((InteractionControllerImpl) jda.getInteractionController()).processBatchRegistration());
             } catch (Exception e) {
                 logger.log(Level.SEVERE, tl("discordErrorLogin", e.getMessage()));
                 if (ess.getSettings().isDebug()) {
