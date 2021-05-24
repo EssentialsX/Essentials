@@ -11,9 +11,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -23,7 +24,8 @@ public class AccountStorage implements IEssentialsModule {
     private final EssentialsDiscordLink ess;
     private final File accountFile;
     private final ConcurrentHashMap<String, String> uuidToDiscordIdMap = new ConcurrentHashMap<>();
-    private final ExecutorService writeService = Executors.newSingleThreadExecutor();
+    private final AtomicBoolean mapDirty = new AtomicBoolean(false);
+    private final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
 
     public AccountStorage(final EssentialsDiscordLink ess) throws IOException {
         this.ess = ess;
@@ -32,8 +34,28 @@ public class AccountStorage implements IEssentialsModule {
             if (!accountFile.getParentFile().exists() && !accountFile.getParentFile().mkdirs() && !accountFile.createNewFile()) {
                 throw new IOException("Unable to create account file!");
             }
-
         }
+
+        executorService.scheduleAtFixedRate(() -> {
+            if (!mapDirty.compareAndSet(true, false)) {
+                return;
+            }
+
+            if (ess.getEss().getSettings().isDebug()) {
+                logger.log(Level.INFO, "Saving linked discord accounts to disk...");
+            }
+
+            final Map<String, String> clone;
+            synchronized (uuidToDiscordIdMap) {
+                clone = new HashMap<>(uuidToDiscordIdMap);
+            }
+            try (final Writer writer = new FileWriter(accountFile)) {
+                gson.toJson(clone, writer);
+            } catch (IOException e) {
+                logger.log(Level.SEVERE, "Failed to save link accounts!", e);
+                mapDirty.set(true); // mark the map as dirty and pray it fixes itself :D
+            }
+        }, 0, 10, TimeUnit.SECONDS);
     }
 
     public void add(final UUID uuid, final String discordId) {
@@ -76,28 +98,19 @@ public class AccountStorage implements IEssentialsModule {
     }
 
     public void queueSave() {
-        synchronized (uuidToDiscordIdMap) {
-            final Map<String, String> clone = new HashMap<>(uuidToDiscordIdMap);
-            writeService.submit(() -> {
-                try (final Writer writer = new FileWriter(accountFile)) {
-                    gson.toJson(clone, writer);
-                } catch (IOException e) {
-                    logger.log(Level.SEVERE, "Failed to save link accounts!", e);
-                }
-            });
-        }
+        mapDirty.set(true);
     }
 
     public void shutdown() {
         synchronized (uuidToDiscordIdMap) {
             try {
-                if (!writeService.awaitTermination(10, TimeUnit.SECONDS)) {
+                if (!executorService.awaitTermination(10, TimeUnit.SECONDS)) {
                     logger.log(Level.SEVERE, "Timed out while saving!");
-                    writeService.shutdownNow();
+                    executorService.shutdownNow();
                 }
             } catch (InterruptedException e) {
                 logger.log(Level.SEVERE, "Failed to shutdown link accounts save!", e);
-                writeService.shutdownNow();
+                executorService.shutdownNow();
             }
         }
     }
