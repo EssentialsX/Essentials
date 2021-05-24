@@ -5,6 +5,7 @@ import net.essentialsx.api.v2.services.discord.InteractionCommand;
 import net.essentialsx.api.v2.services.discord.InteractionCommandArgument;
 import net.essentialsx.api.v2.services.discord.InteractionCommandArgumentType;
 import net.essentialsx.api.v2.services.discord.InteractionEvent;
+import net.essentialsx.api.v2.services.discord.InteractionMember;
 
 import java.util.List;
 
@@ -46,7 +47,8 @@ public class AccountInteractionCommand implements InteractionCommand {
 
     @Override
     public void onCommand(InteractionEvent event) {
-        final String accountId = event.getMember().getId();
+        final InteractionMember userArg = event.getUserArgument("user");
+        final String accountId = userArg == null ? event.getMember().getId() : userArg.getId();
         event.reply("uuid " + accounts.getUUID(accountId));
     }
 }
