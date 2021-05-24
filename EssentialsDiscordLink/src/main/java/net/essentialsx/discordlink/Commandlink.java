@@ -4,6 +4,8 @@ import com.earth2me.essentials.User;
 import com.earth2me.essentials.commands.EssentialsCommand;
 import org.bukkit.Server;
 
+import static com.earth2me.essentials.I18n.tl;
+
 public class Commandlink extends EssentialsCommand {
     public Commandlink() {
         super("link");
@@ -14,7 +16,7 @@ public class Commandlink extends EssentialsCommand {
         final AccountLinkManager manager = (AccountLinkManager) module;
         try {
             final String code = manager.createCode(user.getBase().getUniqueId());
-            user.sendMessage("To link this minecraft account to a discord account, type /link " + code + " in discord in order to link this account.");
+            user.sendMessage(tl("discordLinkLinked", "/link " + code));
         } catch (final IllegalArgumentException e) {
             user.sendMessage(e.getMessage());
         }

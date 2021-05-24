@@ -47,6 +47,7 @@ public class AccountInteractionCommand implements InteractionCommand {
 
     @Override
     public void onCommand(InteractionEvent event) {
+        //todo we probably want to design this command in a way that actually does something
         final InteractionMember userArg = event.getUserArgument("user");
         final String accountId = userArg == null ? event.getMember().getId() : userArg.getId();
         event.reply("uuid " + accounts.getUUID(accountId));

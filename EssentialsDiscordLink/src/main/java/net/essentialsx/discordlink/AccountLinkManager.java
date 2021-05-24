@@ -9,6 +9,8 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ThreadLocalRandom;
 
+import static com.earth2me.essentials.I18n.tl;
+
 public class AccountLinkManager implements IEssentialsModule {
     private static final char[] CODE_CHARACTERS = "abcdefghijklmnopqrstuvwxyz0123456789".toCharArray();
 
@@ -33,7 +35,7 @@ public class AccountLinkManager implements IEssentialsModule {
     public String createCode(final UUID uuid) throws IllegalArgumentException {
         final Optional<Map.Entry<String, UUID>> prevCode = codeToUuidMap.entrySet().stream().filter(stringUUIDEntry -> stringUUIDEntry.getValue().equals(uuid)).findFirst();
         if (prevCode.isPresent()) {
-            throw new IllegalArgumentException("You already have a link code. Type /link " + prevCode.get().getKey() + " in discord in order to link this account.");
+            throw new IllegalArgumentException(tl("discordLinkPending", "/link " + prevCode.get().getKey()));
         }
 
         final String code = generateCode();

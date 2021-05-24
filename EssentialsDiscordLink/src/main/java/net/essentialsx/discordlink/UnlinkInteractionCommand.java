@@ -18,10 +18,10 @@ public class UnlinkInteractionCommand implements InteractionCommand {
     @Override
     public void onCommand(InteractionEvent event) {
         if (!accounts.removeAccount(event.getMember().getId())) {
-            event.reply("You do not currently have a minecraft account linked to this discord account!");
+            event.reply(tl("discordCommandUnlinkInvalidCode"));
             return;
         }
-        event.reply("Unlinked this discord account from all associated minecraft accounts.");
+        event.reply(tl("discordCommandUnlinkUnlinked"));
     }
 
     @Override

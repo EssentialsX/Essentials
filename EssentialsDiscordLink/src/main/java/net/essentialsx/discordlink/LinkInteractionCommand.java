@@ -23,18 +23,18 @@ public class LinkInteractionCommand implements InteractionCommand {
     @Override
     public void onCommand(InteractionEvent event) {
         if (accounts.isLinked(event.getMember().getId())) {
-            event.reply("You already have an account linked, to unlink your current account do /unlink");
+            event.reply(tl("discordCommandLinkHasAccount"));
             return;
         }
 
         final UUID uuid = accounts.getPendingUUID(event.getStringArgument("code"));
         if (uuid == null) {
-            event.reply("Invalid Code!");
+            event.reply(tl("discordCommandLinkInvalidCode"));
             return;
         }
 
         accounts.registerAccount(uuid, event.getMember().getId());
-        event.reply("Successfully linked your account!");
+        event.reply(tl("discordCommandLinkLinked"));
     }
 
     @Override
