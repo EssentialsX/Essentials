@@ -123,10 +123,6 @@ public class InteractionEvent {
      */
     public InteractionMember getUserArgument(String key) {
         final Object value = getArgument(key);
-        if (value == null) {
-            return null;
-        }
-
         if (value instanceof InteractionMember) {
             return (InteractionMember) value;
         }
@@ -141,10 +137,6 @@ public class InteractionEvent {
      */
     public InteractionChannel getChannelArgument(String key) {
         final Object value = getArgument(key);
-        if (value == null) {
-            return null;
-        }
-
         if (value instanceof InteractionChannel) {
             return (InteractionChannel) value;
         }
