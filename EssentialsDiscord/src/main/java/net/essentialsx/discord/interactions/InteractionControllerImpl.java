@@ -89,8 +89,21 @@ public class InteractionControllerImpl extends ListenerAdapter implements Intera
                 if (options != null) {
                     for (Object option : options) {
                         final HashMap<?, ?> obj = (HashMap<?, ?>) option;
-                        if (obj.containsKey("name") && obj.containsKey("value")) {
-                            args.put((String) obj.get("name"), obj.get("value"));
+                        if (obj.containsKey("name") && obj.containsKey("value") && obj.containsKey("type")) {
+                            switch ((Integer) obj.get("type")) {
+                                case 6: {
+                                    args.put((String) obj.get("name"), new InteractionMemberImpl(jda.getGuild().retrieveMemberById((String) obj.get("value")).complete()));
+                                    break;
+                                }
+                                case 7: {
+                                    args.put((String) obj.get("name"), new InteractionChannelImpl(jda.getGuild().getGuildChannelById((String) obj.get("value"))));
+                                    break;
+                                }
+                                default: {
+                                    args.put((String) obj.get("name"), obj.get("value"));
+                                    break;
+                                }
+                            }
                         }
                     }
                 }

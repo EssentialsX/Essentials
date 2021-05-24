@@ -46,6 +46,10 @@ public class InteractionMemberImpl implements InteractionMember {
         return DiscordUtil.hasRoles(member, roleDefinitions);
     }
 
+    public Member getJdaObject() {
+        return member;
+    }
+
     @Override
     public CompletableFuture<Boolean> sendPrivateMessage(String content) {
         final CompletableFuture<Boolean> future = new CompletableFuture<>();
