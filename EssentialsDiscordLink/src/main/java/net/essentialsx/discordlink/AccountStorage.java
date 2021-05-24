@@ -6,6 +6,7 @@ import com.google.gson.Gson;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.Writer;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -78,8 +79,8 @@ public class AccountStorage implements IEssentialsModule {
         synchronized (uuidToDiscordIdMap) {
             final Map<String, String> clone = new HashMap<>(uuidToDiscordIdMap);
             writeService.submit(() -> {
-                try {
-                    gson.toJson(clone, new FileWriter(accountFile));
+                try (final Writer writer = new FileWriter(accountFile)) {
+                    gson.toJson(clone, writer);
                 } catch (IOException e) {
                     logger.log(Level.SEVERE, "Failed to save link accounts!", e);
                 }

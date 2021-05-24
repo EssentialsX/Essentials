@@ -22,6 +22,7 @@ public class UnlinkInteractionCommand implements InteractionCommand {
             return;
         }
         accounts.remove(event.getMember().getId());
+        event.reply("unlinked!");
     }
 
     @Override
