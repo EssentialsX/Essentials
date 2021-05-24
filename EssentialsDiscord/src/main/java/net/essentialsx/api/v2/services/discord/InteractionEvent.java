@@ -4,6 +4,7 @@ import com.google.common.base.Joiner;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 /**
@@ -66,6 +67,89 @@ public class InteractionEvent {
         } else {
             return value.toString();
         }
+    }
+
+    /**
+     * Helper method to get the Integer representation of the argument by the given key or null if none by that key is present.
+     * @param key The key of the argument to lookup.
+     * @return the integer value or null
+     */
+    public Integer getIntegerArgument(String key) {
+        final Object value = getArgument(key);
+        if (value == null) {
+            return null;
+        }
+
+        if (value instanceof Integer) {
+            return (Integer) value;
+        }
+
+        try {
+            return Integer.parseInt(value.toString());
+        } catch (NumberFormatException ignored) {
+            return null;
+        }
+    }
+
+    /**
+     * Helper method to get the Boolean representation of the argument by the given key or null if none by that key is present.
+     * @param key The key of the argument to lookup.
+     * @return the boolean value or null
+     */
+    public Boolean getBooleanArgument(String key) {
+        final Object value = getArgument(key);
+        if (value == null) {
+            return null;
+        }
+
+        if (value instanceof Boolean) {
+            return (Boolean) value;
+        }
+
+        switch (value.toString().toLowerCase(Locale.ROOT)) {
+            case "true":
+                return true;
+            case "false":
+                return false;
+            default:
+                return null;
+        }
+    }
+
+    /**
+     * Helper method to get the user representation of the argument by the given key or null if none by that key is present.
+     * @param key The key of the argument to lookup.
+     * @return the user value or null
+     */
+    public InteractionMember getUserArgument(String key) {
+        final Object value = getArgument(key);
+        if (value == null) {
+            return null;
+        }
+
+        if (value instanceof InteractionMember) {
+            return (InteractionMember) value;
+        }
+
+        return null;
+    }
+
+    /**
+     * Helper method to get the channel representation of the argument by the given key or null if none by that key is present.
+     * @param key The key of the argument to lookup.
+     * @return the channel value or null
+     */
+    public InteractionChannel getChannelArgument(String key) {
+        final Object value = getArgument(key);
+        if (value == null) {
+            return null;
+        }
+
+        if (value instanceof InteractionChannel) {
+            return (InteractionChannel) value;
+        }
+
+        return null;
     }
 
     /**
