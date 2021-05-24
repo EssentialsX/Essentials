@@ -33,10 +33,11 @@ public class AccountStorage implements IEssentialsModule {
     public AccountStorage(final EssentialsDiscordLink ess) throws IOException {
         this.ess = ess;
         this.accountFile = new File(ess.getDataFolder(), "accounts.json");
-        if (!accountFile.exists()) {
-            if (!accountFile.getParentFile().exists() && !accountFile.getParentFile().mkdirs() && !accountFile.createNewFile()) {
-                throw new IOException("Unable to create account file!");
-            }
+        if (!ess.getDataFolder().exists() && !ess.getDataFolder().mkdirs()) {
+            throw new IOException("Unable to create account file!");
+        }
+        if (!accountFile.exists() && !accountFile.createNewFile()) {
+            throw new IOException("Unable to create account file!");
         }
         try (final Reader reader = new FileReader(accountFile)) {
             //noinspection UnstableApiUsage
