@@ -22,9 +22,7 @@ import okhttp3.Response;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
@@ -37,18 +35,15 @@ public class InteractionControllerImpl extends ListenerAdapter implements Intera
 
     private final String apiCallback = "https://discord.com/api/v8/interactions/{id}/{token}/callback";
     private final String apiRegister;
-    private final String apiDelete;
     private final String apiFollowup;
 
     private final Map<String, InteractionCommand> commandMap = new HashMap<>();
-    private final List<String> commandIds = new ArrayList<>();
     private final Map<String, InteractionCommand> batchRegistrationQueue = new HashMap<>();
     private boolean initialBatchRegistration = false;
 
     public InteractionControllerImpl(EssentialsJDA jda) {
         this.jda = jda;
         this.apiRegister = "https://discord.com/api/v8/applications/" + jda.getJda().getSelfUser().getId() + "/guilds/" + jda.getGuild().getId() + "/commands";
-        this.apiDelete = "https://discord.com/api/v8/applications/" + jda.getJda().getSelfUser().getId() + "/guilds/" + jda.getGuild().getId() + "/commands/{id}";
         this.apiFollowup = "https://discord.com/api/webhooks/" + jda.getJda().getSelfUser().getId() + "/{token}/messages/@original";
 
         jda.getJda().addEventListener(this);
@@ -182,7 +177,6 @@ public class InteractionControllerImpl extends ListenerAdapter implements Intera
                             final JsonObject cmd = e.getAsJsonObject();
                             final String cmdName = cmd.get("name").getAsString();
                             commandMap.put(cmdName, batchRegistrationQueue.get(cmdName));
-                            commandIds.add(cmd.get("id").getAsString());
                             batchRegistrationQueue.remove(cmdName);
                             if (jda.isDebug()) {
                                 logger.info("Registered guild command: " + cmdName);
@@ -253,7 +247,6 @@ public class InteractionControllerImpl extends ListenerAdapter implements Intera
                     commandMap.put(command.getName(), command);
                     //noinspection ConstantConditions
                     final JsonObject responseObj = DiscordUtil.GSON.fromJson(response.body().string(), JsonObject.class);
-                    commandIds.add(responseObj.get("id").getAsString());
                     if (jda.isDebug()) {
                         logger.info("Registered guild command: " + command.getName());
                         logger.info("Registration payload: " + responseObj);
@@ -279,14 +272,12 @@ public class InteractionControllerImpl extends ListenerAdapter implements Intera
     }
 
     public void shutdown() {
-        for (String commandId : commandIds) {
-            try {
-                jda.getJda().getHttpClient().newCall(builder(apiDelete.replace("{id}", commandId)).delete().build()).execute();
-            } catch (IOException e) {
-                logger.severe("Error while deleting command: " + e.getMessage());
-                if (jda.isDebug()) {
-                    e.printStackTrace();
-                }
+        try {
+            put(apiRegister, RequestBody.create(DiscordUtil.JSON_TYPE, "[]")).execute();
+        } catch (IOException e) {
+            logger.severe("Error while deleting commands: " + e.getMessage());
+            if (jda.isDebug()) {
+                e.printStackTrace();
             }
         }
         commandMap.clear();
