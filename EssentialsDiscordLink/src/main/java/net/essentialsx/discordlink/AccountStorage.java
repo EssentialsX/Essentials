@@ -1,11 +1,14 @@
 package net.essentialsx.discordlink;
 
 import com.earth2me.essentials.IEssentialsModule;
+import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
 
 import java.io.File;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.Reader;
 import java.io.Writer;
 import java.util.HashMap;
 import java.util.Map;
@@ -23,7 +26,7 @@ public class AccountStorage implements IEssentialsModule {
     private final Gson gson = new Gson();
     private final EssentialsDiscordLink ess;
     private final File accountFile;
-    private final ConcurrentHashMap<String, String> uuidToDiscordIdMap = new ConcurrentHashMap<>();
+    private final ConcurrentHashMap<String, String> uuidToDiscordIdMap;
     private final AtomicBoolean mapDirty = new AtomicBoolean(false);
     private final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
 
@@ -34,6 +37,11 @@ public class AccountStorage implements IEssentialsModule {
             if (!accountFile.getParentFile().exists() && !accountFile.getParentFile().mkdirs() && !accountFile.createNewFile()) {
                 throw new IOException("Unable to create account file!");
             }
+        }
+        try (final Reader reader = new FileReader(accountFile)) {
+            //noinspection UnstableApiUsage
+            final Map<String, String> map = gson.fromJson(reader, new TypeToken<Map<String, String>>() {}.getType());
+            uuidToDiscordIdMap = map == null ? new ConcurrentHashMap<>() : new ConcurrentHashMap<>(map);
         }
 
         executorService.scheduleAtFixedRate(() -> {
