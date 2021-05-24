@@ -118,7 +118,12 @@ public class AccountStorage implements IEssentialsModule {
                     logger.log(Level.SEVERE, "Timed out while saving!");
                     executorService.shutdownNow();
                 }
-            } catch (InterruptedException e) {
+                if (mapDirty.get()) {
+                    try (final Writer writer = new FileWriter(accountFile)) {
+                        gson.toJson(uuidToDiscordIdMap, writer);
+                    }
+                }
+            } catch (InterruptedException | IOException e) {
                 logger.log(Level.SEVERE, "Failed to shutdown link accounts save!", e);
                 executorService.shutdownNow();
             }
