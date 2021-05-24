@@ -9,20 +9,19 @@ import java.util.List;
 import static com.earth2me.essentials.I18n.tl;
 
 public class UnlinkInteractionCommand implements InteractionCommand {
-    private final AccountStorage accounts;
+    private final AccountLinkManager accounts;
 
-    public UnlinkInteractionCommand(final AccountStorage accounts) {
+    public UnlinkInteractionCommand(final AccountLinkManager accounts) {
         this.accounts = accounts;
     }
 
     @Override
     public void onCommand(InteractionEvent event) {
-        if (accounts.getUUID(event.getMember().getId()) == null) {
-            event.reply("no account!");
+        if (!accounts.removeAccount(event.getMember().getId())) {
+            event.reply("You do not currently have a minecraft account linked to this discord account!");
             return;
         }
-        accounts.remove(event.getMember().getId());
-        event.reply("unlinked!");
+        event.reply("Unlinked this discord account from all associated minecraft accounts.");
     }
 
     @Override

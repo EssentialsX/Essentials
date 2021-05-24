@@ -13,9 +13,9 @@ import static com.earth2me.essentials.I18n.tl;
 
 public class AccountInteractionCommand implements InteractionCommand {
     private final List<InteractionCommandArgument> arguments;
-    private final AccountStorage accounts;
+    private final AccountLinkManager accounts;
 
-    public AccountInteractionCommand(AccountStorage accounts) {
+    public AccountInteractionCommand(AccountLinkManager accounts) {
         this.arguments = ImmutableList.of(new InteractionCommandArgument("user", tl("discordCommandAccountArgumentUser"), InteractionCommandArgumentType.USER, false));
         this.accounts = accounts;
     }

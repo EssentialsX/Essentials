@@ -24,6 +24,7 @@ public class EssentialsDiscordLink extends JavaPlugin {
     private EssentialsDiscordAPI api;
     private DiscordLinkSettings settings;
     private AccountStorage accounts;
+    private AccountLinkManager linkManager;
 
     @Override
     public void onEnable() {
@@ -43,6 +44,7 @@ public class EssentialsDiscordLink extends JavaPlugin {
         ess.addReloadListener(settings);
         try {
             accounts = new AccountStorage(this);
+            linkManager = new AccountLinkManager(this, accounts);
         } catch (IOException e) {
             logger.log(Level.SEVERE, "Unable to create link accounts file", e);
             setEnabled(false);
@@ -51,9 +53,9 @@ public class EssentialsDiscordLink extends JavaPlugin {
 
         if (!(api.getInteractionController().getCommand("link") instanceof LinkInteractionCommand)) {
             try {
-                api.getInteractionController().registerCommand(new AccountInteractionCommand(accounts));
-                api.getInteractionController().registerCommand(new LinkInteractionCommand(accounts));
-                api.getInteractionController().registerCommand(new UnlinkInteractionCommand(accounts));
+                api.getInteractionController().registerCommand(new AccountInteractionCommand(linkManager));
+                api.getInteractionController().registerCommand(new LinkInteractionCommand(linkManager));
+                api.getInteractionController().registerCommand(new UnlinkInteractionCommand(linkManager));
             } catch (InteractionException e) {
                 e.printStackTrace();
                 setEnabled(false);
@@ -62,7 +64,7 @@ public class EssentialsDiscordLink extends JavaPlugin {
         }
 
         if (metrics == null) {
-            //TODO
+            metrics = new MetricsWrapper(this, 11462, false);
         }
     }
 
@@ -79,7 +81,6 @@ public class EssentialsDiscordLink extends JavaPlugin {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        metrics.markCommand(command.getName(), true);
-        return ess.onCommandEssentials(sender, command, label, args, EssentialsDiscordLink.class.getClassLoader(), "net.essentialsx.discordlink.Command", "essentials.", accounts);
+        return ess.onCommandEssentials(sender, command, label, args, EssentialsDiscordLink.class.getClassLoader(), "net.essentialsx.discordlink.Command", "essentials.", linkManager);
     }
 }

@@ -13,18 +13,28 @@ import static com.earth2me.essentials.I18n.tl;
 
 public class LinkInteractionCommand implements InteractionCommand {
     private final List<InteractionCommandArgument> arguments;
-    private final AccountStorage accounts;
+    private final AccountLinkManager accounts;
 
-    public LinkInteractionCommand(final AccountStorage accounts) {
+    public LinkInteractionCommand(final AccountLinkManager accounts) {
         this.arguments = ImmutableList.of(new InteractionCommandArgument("code", tl("discordCommandLinkArgumentCode"), InteractionCommandArgumentType.STRING, true));
         this.accounts = accounts;
     }
 
     @Override
     public void onCommand(InteractionEvent event) {
-        final String code = event.getStringArgument("code");
-        accounts.add(UUID.randomUUID(), event.getMember().getId());
-        event.reply("linked");
+        if (accounts.isLinked(event.getMember().getId())) {
+            event.reply("You already have an account linked, to unlink your current account do /unlink");
+            return;
+        }
+
+        final UUID uuid = accounts.getPendingUUID(event.getStringArgument("code"));
+        if (uuid == null) {
+            event.reply("Invalid Code!");
+            return;
+        }
+
+        accounts.registerAccount(uuid, event.getMember().getId());
+        event.reply("Successfully linked your account!");
     }
 
     @Override

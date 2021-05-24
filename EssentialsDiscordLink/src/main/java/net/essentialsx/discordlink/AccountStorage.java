@@ -1,6 +1,5 @@
 package net.essentialsx.discordlink;
 
-import com.earth2me.essentials.IEssentialsModule;
 import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
 
@@ -21,7 +20,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class AccountStorage implements IEssentialsModule {
+public class AccountStorage {
     private final static Logger logger = Logger.getLogger("EssentialsDiscordLink");
     private final Gson gson = new Gson();
     private final EssentialsDiscordLink ess;
@@ -75,17 +74,19 @@ public class AccountStorage implements IEssentialsModule {
         }
     }
 
-    public void remove(final UUID uuid) {
+    public boolean remove(final UUID uuid) {
         synchronized (uuidToDiscordIdMap) {
-            uuidToDiscordIdMap.remove(uuid.toString());
+            final boolean success = uuidToDiscordIdMap.remove(uuid.toString()) != null;
             queueSave();
+            return success;
         }
     }
 
-    public void remove(final String discordId) {
+    public boolean remove(final String discordId) {
         synchronized (uuidToDiscordIdMap) {
-            uuidToDiscordIdMap.values().removeIf(discordId::equals);
+            final boolean success = uuidToDiscordIdMap.values().removeIf(discordId::equals);
             queueSave();
+            return success;
         }
     }
 
