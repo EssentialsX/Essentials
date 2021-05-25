@@ -1,6 +1,7 @@
 package net.essentialsx.discordlink;
 
 import com.earth2me.essentials.IEssentialsModule;
+import net.ess3.api.IUser;
 
 import java.util.Map;
 import java.util.Optional;
@@ -51,6 +52,14 @@ public class AccountLinkManager implements IEssentialsModule {
 
     public String getDiscordId(final UUID uuid) {
         return storage.getDiscordId(uuid);
+    }
+
+    public IUser getUser(final String discordId) {
+        final UUID uuid = getUUID(discordId);
+        if (uuid == null) {
+            return null;
+        }
+        return ess.getEss().getUser(uuid);
     }
 
     public UUID getUUID(final String discordId) {

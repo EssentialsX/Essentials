@@ -1,6 +1,7 @@
 package net.essentialsx.discordlink;
 
 import com.google.common.collect.ImmutableList;
+import net.ess3.api.IUser;
 import net.essentialsx.api.v2.services.discord.InteractionCommand;
 import net.essentialsx.api.v2.services.discord.InteractionCommandArgument;
 import net.essentialsx.api.v2.services.discord.InteractionCommandArgumentType;
@@ -47,9 +48,18 @@ public class AccountInteractionCommand implements InteractionCommand {
 
     @Override
     public void onCommand(InteractionEvent event) {
-        //todo we probably want to design this command in a way that actually does something
         final InteractionMember userArg = event.getUserArgument("user");
-        final String accountId = userArg == null ? event.getMember().getId() : userArg.getId();
-        event.reply("uuid " + accounts.getUUID(accountId));
+        final InteractionMember effectiveUser = userArg == null ? event.getMember() : userArg;
+        final IUser user = accounts.getUser(effectiveUser.getId());
+        if (user == null) {
+            event.reply(tl(event.getMember().getId().equals(effectiveUser.getId()) ? "discordCommandAccountResponseNotLinked" : "discordCommandAccountResponseNotLinkedOther", effectiveUser.getAsMention()));
+            return;
+        }
+
+        if (event.getMember().getId().equals(effectiveUser.getId())) {
+            event.reply(tl("discordCommandAccountResponseLinked", user.getName()));
+            return;
+        }
+        event.reply(tl("discordCommandAccountResponseLinkedOther", effectiveUser.getAsMention(), user.getName()));
     }
 }
