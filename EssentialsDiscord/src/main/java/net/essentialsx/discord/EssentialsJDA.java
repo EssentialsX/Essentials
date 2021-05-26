@@ -15,8 +15,10 @@ import net.essentialsx.api.v2.events.discord.DiscordMessageEvent;
 import net.essentialsx.api.v2.services.discord.EssentialsDiscordAPI;
 import net.essentialsx.api.v2.services.discord.InteractionController;
 import net.essentialsx.api.v2.services.discord.InteractionException;
+import net.essentialsx.api.v2.services.discord.InteractionMember;
 import net.essentialsx.api.v2.services.discord.Unsafe;
 import net.essentialsx.discord.interactions.InteractionControllerImpl;
+import net.essentialsx.discord.interactions.InteractionMemberImpl;
 import net.essentialsx.discord.interactions.commands.ExecuteCommand;
 import net.essentialsx.discord.interactions.commands.ListCommand;
 import net.essentialsx.discord.interactions.commands.MessageCommand;
@@ -32,6 +34,7 @@ import org.bukkit.plugin.ServicePriority;
 import javax.security.auth.login.LoginException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
@@ -312,6 +315,12 @@ public class EssentialsJDA implements EssentialsDiscordAPI {
         }
 
         shutdownConsoleRelay(true);
+    }
+
+    public CompletableFuture<InteractionMember> getMemberById(final String id) {
+        final CompletableFuture<InteractionMember> future = new CompletableFuture<>();
+        getGuild().retrieveMemberById(id).queue(member -> future.complete(new InteractionMemberImpl(member)));
+        return future;
     }
 
     public JDA getJda() {

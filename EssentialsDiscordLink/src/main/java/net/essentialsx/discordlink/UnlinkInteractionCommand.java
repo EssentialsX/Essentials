@@ -17,7 +17,7 @@ public class UnlinkInteractionCommand implements InteractionCommand {
 
     @Override
     public void onCommand(InteractionEvent event) {
-        if (!accounts.removeAccount(event.getMember().getId())) {
+        if (!accounts.removeAccount(event.getMember())) {
             event.reply(tl("discordCommandUnlinkInvalidCode"));
             return;
         }

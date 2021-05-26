@@ -40,7 +40,7 @@ public class EssentialsDiscordLink extends JavaPlugin {
 
         api = getServer().getServicesManager().load(EssentialsDiscordAPI.class);
 
-        settings = new DiscordLinkSettings();
+        settings = new DiscordLinkSettings(this);
         ess.addReloadListener(settings);
         try {
             accounts = new AccountStorage(this);
@@ -50,6 +50,8 @@ public class EssentialsDiscordLink extends JavaPlugin {
             setEnabled(false);
             return;
         }
+
+        getServer().getPluginManager().registerEvents(new LinkBukkitListener(this), this);
 
         if (!(api.getInteractionController().getCommand("link") instanceof LinkInteractionCommand)) {
             try {
@@ -77,6 +79,18 @@ public class EssentialsDiscordLink extends JavaPlugin {
 
     public IEssentials getEss() {
         return ess;
+    }
+
+    public EssentialsDiscordAPI getApi() {
+        return api;
+    }
+
+    public DiscordLinkSettings getSettings() {
+        return settings;
+    }
+
+    public AccountLinkManager getLinkManager() {
+        return linkManager;
     }
 
     @Override

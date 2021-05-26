@@ -18,7 +18,7 @@ public class Commandlink extends EssentialsCommand {
             final String code = manager.createCode(user.getBase().getUniqueId());
             user.sendMessage(tl("discordLinkLinked", "/link " + code));
         } catch (final IllegalArgumentException e) {
-            user.sendMessage(e.getMessage());
+            user.sendMessage(tl("discordLinkPending", "/link " + e.getMessage()));
         }
     }
 }

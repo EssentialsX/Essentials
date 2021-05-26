@@ -2,6 +2,8 @@ package net.essentialsx.discordlink;
 
 import com.earth2me.essentials.IEssentialsModule;
 import net.ess3.api.IUser;
+import net.essentialsx.api.v2.services.discord.InteractionMember;
+import net.essentialsx.discord.EssentialsJDA;
 
 import java.util.Map;
 import java.util.Optional;
@@ -9,8 +11,6 @@ import java.util.Random;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ThreadLocalRandom;
-
-import static com.earth2me.essentials.I18n.tl;
 
 public class AccountLinkManager implements IEssentialsModule {
     private static final char[] CODE_CHARACTERS = "abcdefghijklmnopqrstuvwxyz0123456789".toCharArray();
@@ -34,20 +34,23 @@ public class AccountLinkManager implements IEssentialsModule {
     }
 
     public String createCode(final UUID uuid) throws IllegalArgumentException {
-        final Optional<Map.Entry<String, UUID>> prevCode = codeToUuidMap.entrySet().stream().filter(stringUUIDEntry -> stringUUIDEntry.getValue().equals(uuid)).findFirst();
-        if (prevCode.isPresent()) {
-            throw new IllegalArgumentException(tl("discordLinkPending", "/link " + prevCode.get().getKey()));
+        synchronized (codeToUuidMap) {
+            final Optional<Map.Entry<String, UUID>> prevCode = codeToUuidMap.entrySet().stream().filter(stringUUIDEntry -> stringUUIDEntry.getValue().equals(uuid)).findFirst();
+            if (prevCode.isPresent()) {
+                throw new IllegalArgumentException(prevCode.get().getKey());
+            }
+
+            final String code = generateCode();
+
+            codeToUuidMap.put(code, uuid);
+            return code;
         }
-
-        final String code = generateCode();
-
-        // This isn't a race condition as MC commands are executed on a single thread. If that changes, so should this.
-        codeToUuidMap.put(code, uuid);
-        return code;
     }
 
     public UUID getPendingUUID(final String code) {
-        return codeToUuidMap.remove(code);
+        synchronized (codeToUuidMap) {
+            return codeToUuidMap.remove(code);
+        }
     }
 
     public String getDiscordId(final UUID uuid) {
@@ -66,16 +69,27 @@ public class AccountLinkManager implements IEssentialsModule {
         return storage.getUUID(discordId);
     }
 
-    public boolean removeAccount(final String discordId) {
-        return storage.remove(discordId);
+    public boolean removeAccount(final InteractionMember member) {
+        final UUID uuid = getUUID(member.getId());
+        if (storage.remove(member.getId())) {
+            ess.getServer().getPluginManager().callEvent(new UserLinkStatusChangeEvent(ess.getEss().getUser(uuid), member, false));
+            return true;
+        }
+        return false;
     }
 
-    public boolean removeAccount(final UUID uuid) {
-        return storage.remove(uuid);
+    public boolean removeAccount(final IUser user) {
+        final String id = getDiscordId(user.getBase().getUniqueId());
+        if (storage.remove(user.getBase().getUniqueId())) {
+            ((EssentialsJDA) ess.getApi()).getMemberById(id).thenAccept(member -> ess.getServer().getPluginManager().callEvent(new UserLinkStatusChangeEvent(user, member, false)));
+            return true;
+        }
+        return false;
     }
 
-    public void registerAccount(final UUID uuid, final String discordId) {
-        storage.add(uuid, discordId);
+    public void registerAccount(final UUID uuid, final InteractionMember member) {
+        storage.add(uuid, member.getId());
+        ess.getServer().getPluginManager().callEvent(new UserLinkStatusChangeEvent(ess.getEss().getUser(uuid), member, true));
     }
 
     private String generateCode() {

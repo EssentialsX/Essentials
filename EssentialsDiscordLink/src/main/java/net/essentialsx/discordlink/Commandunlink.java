@@ -12,9 +12,9 @@ public class Commandunlink extends EssentialsCommand {
     }
 
     @Override
-    protected void run(Server server, User user, String commandLabel, String[] args) throws Exception {
+    protected void run(Server server, User user, String commandLabel, String[] args) {
         final AccountLinkManager manager = (AccountLinkManager) module;
-        if (!manager.removeAccount(user.getBase().getUniqueId())) {
+        if (!manager.removeAccount(user)) {
             user.sendMessage(tl("discordLinkNoAccount"));
             return;
         }

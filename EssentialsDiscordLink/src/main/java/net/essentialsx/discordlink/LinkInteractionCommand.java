@@ -33,7 +33,7 @@ public class LinkInteractionCommand implements InteractionCommand {
             return;
         }
 
-        accounts.registerAccount(uuid, event.getMember().getId());
+        accounts.registerAccount(uuid, event.getMember());
         event.reply(tl("discordCommandLinkLinked"));
     }
 
