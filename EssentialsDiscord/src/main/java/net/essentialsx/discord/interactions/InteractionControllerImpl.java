@@ -56,7 +56,7 @@ public class InteractionControllerImpl extends ListenerAdapter implements Intera
         }
 
         final DataObject payload = event.getPayload();
-        if (!payload.hasKey("data") || !payload.getObject("data").hasKey("name") || !commandMap.containsKey(payload.getObject("data").getString("name"))) {
+        if (payload.getInt("type") != 2 || !payload.hasKey("data") || !payload.getObject("data").hasKey("name") || !commandMap.containsKey(payload.getObject("data").getString("name"))) {
             return;
         }
 
