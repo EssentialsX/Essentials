@@ -220,7 +220,7 @@ public class MetaItemStack {
             } else {
                 throw new Exception(tl("onlyPlayerSkulls"));
             }
-        } else if (split.length > 1 && split[0].equalsIgnoreCase("book") && stack.getType() == WRITTEN_BOOK && (hasMetaPermission(sender, "book", true, true, ess) || hasMetaPermission(sender, "chapter-" + split[1].toLowerCase(Locale.ENGLISH), true, true, ess))) {
+        } else if (split.length > 1 && split[0].equalsIgnoreCase("book") && MaterialUtil.isEditableBook(stack.getType()) && (hasMetaPermission(sender, "book",true, true, ess) || hasMetaPermission(sender, "chapter-" + split[1].toLowerCase(Locale.ENGLISH), true, true, ess))) {
             final BookMeta meta = (BookMeta) stack.getItemMeta();
             final IText input = new BookInput("book", true, ess);
             final BookPager pager = new BookPager(input);
@@ -237,6 +237,23 @@ public class MetaItemStack {
             final String title = FormatUtil.replaceFormat(split[1].replace('_', ' '));
             final BookMeta meta = (BookMeta) stack.getItemMeta();
             meta.setTitle(title);
+            stack.setItemMeta(meta);
+        } else if (split.length > 1 && split[0].startsWith("page") && split[0].length() > 4 && MaterialUtil.isEditableBook(stack.getType()) && hasMetaPermission(sender, "page", false, true, ess)) {
+            final int page = NumberUtil.isInt(split[0].substring(4)) ? (Integer.parseInt(split[0].substring(4)) - 1) : 0;
+            final BookMeta meta = (BookMeta) stack.getItemMeta();
+            final List<String> pages = meta.hasPages() ? new ArrayList<>(meta.getPages()) : new ArrayList<>();
+            final List<String> lines = new ArrayList<>();
+            for (final String line : split[1].split("(?<!\\\\)\\|")) {
+                lines.add(FormatUtil.replaceFormat(line.replace('_', ' ').replace("\\|", "|")));
+            }
+            final String content = String.join("\n", lines);
+            if (page >= pages.size()) {
+                for (int i = 0; i <= page - pages.size(); i++) {
+                    pages.add("");
+                }
+            }
+            pages.set(page, content);
+            meta.setPages(pages);
             stack.setItemMeta(meta);
         } else if (split.length > 1 && split[0].equalsIgnoreCase("power") && MaterialUtil.isFirework(stack.getType()) && hasMetaPermission(sender, "firework-power", false, true, ess)) {
             final int power = NumberUtil.isInt(split[1]) ? Integer.parseInt(split[1]) : 0;
