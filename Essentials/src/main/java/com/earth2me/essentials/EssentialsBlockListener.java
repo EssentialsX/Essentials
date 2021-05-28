@@ -1,6 +1,5 @@
 package com.earth2me.essentials;
 
-import com.earth2me.essentials.utils.LocationUtil;
 import com.earth2me.essentials.utils.MaterialUtil;
 import net.ess3.api.IEssentials;
 import org.bukkit.GameMode;
@@ -24,15 +23,9 @@ public class EssentialsBlockListener implements Listener {
 
     @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
     public void onBlockPlace(final BlockPlaceEvent event) {
-        // Do not rely on getItemInHand();
-        // http://leaky.bukkit.org/issues/663
-        final ItemStack is = LocationUtil.convertBlockToItem(event.getBlockPlaced());
+        final ItemStack is = event.getItemInHand();
 
-        if (is == null) {
-            return;
-        }
-
-        if (is.getType() == MaterialUtil.SPAWNER && event.getItemInHand() != null && event.getPlayer() != null && event.getItemInHand().getType() == MaterialUtil.SPAWNER) {
+        if (is.getType() == MaterialUtil.SPAWNER && ess.getPersistentDataProvider().getString(is, "convert") != null) {
             final BlockState blockState = event.getBlockPlaced().getState();
             if (blockState instanceof CreatureSpawner) {
                 final CreatureSpawner spawner = (CreatureSpawner) blockState;
@@ -48,15 +41,10 @@ public class EssentialsBlockListener implements Listener {
 
         final User user = ess.getUser(event.getPlayer());
         if (user.hasUnlimited(is) && user.getBase().getGameMode() == GameMode.SURVIVAL) {
-            class UnlimitedItemSpawnTask implements Runnable {
-                @Override
-                public void run() {
-                    user.getBase().getInventory().addItem(is);
-                    user.getBase().updateInventory();
-                }
-            }
-
-            ess.scheduleSyncDelayedTask(new UnlimitedItemSpawnTask());
+            ess.scheduleSyncDelayedTask(() -> {
+                user.getBase().getInventory().addItem(is);
+                user.getBase().updateInventory();
+            });
         }
     }
 }
