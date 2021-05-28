@@ -77,6 +77,11 @@ public class PermissionsHandler implements IPermissionsHandler {
     }
 
     @Override
+    public TriState isPermissionSetExact(Player base, String node) {
+        return handler.isPermissionSetExact(base, node);
+    }
+
+    @Override
     public String getPrefix(final Player base) {
         final long start = System.nanoTime();
         String prefix = handler.getPrefix(base);

@@ -5,6 +5,7 @@ import com.earth2me.essentials.economy.EconomyLayer;
 import com.earth2me.essentials.economy.EconomyLayers;
 import com.earth2me.essentials.messaging.IMessageRecipient;
 import com.earth2me.essentials.messaging.SimpleMessageRecipient;
+import com.earth2me.essentials.perm.TriState;
 import com.earth2me.essentials.utils.DateUtil;
 import com.earth2me.essentials.utils.EnumUtil;
 import com.earth2me.essentials.utils.FormatUtil;
@@ -26,7 +27,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
-import org.bukkit.permissions.PermissionAttachmentInfo;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
@@ -119,19 +119,14 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
     }
 
     /**
-     * Checks if the given permission is explicitly defined and returns its value, otherwise null.
+     * Checks if the given permission is explicitly defined and returns its value, otherwise
+     * {@link com.earth2me.essentials.perm.TriState#UNSET}.
      */
-    public Boolean isAuthorizedStrict(final String node) {
-        for (final PermissionAttachmentInfo perm : base.getEffectivePermissions()) {
-            if (perm.getPermission().equalsIgnoreCase(node)) {
-                return perm.getValue();
-            }
-        }
-        return null;
+    public TriState isAuthorizedExact(final String node) {
+        return isAuthorizedExactCheck(node);
     }
 
     private boolean isAuthorizedCheck(final String node) {
-
         if (base instanceof OfflinePlayer) {
             return false;
         }
@@ -164,6 +159,24 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
             }
 
             return false;
+        }
+    }
+
+    private TriState isAuthorizedExactCheck(final String node) {
+        if (base instanceof OfflinePlayer) {
+            return TriState.UNSET;
+        }
+
+        try {
+            return ess.getPermissionsHandler().isPermissionSetExact(base, node);
+        } catch (final Exception ex) {
+            if (ess.getSettings().isDebug()) {
+                ess.getLogger().log(Level.SEVERE, "Permission System Error: " + ess.getPermissionsHandler().getName() + " returned: " + ex.getMessage(), ex);
+            } else {
+                ess.getLogger().log(Level.SEVERE, "Permission System Error: " + ess.getPermissionsHandler().getName() + " returned: " + ex.getMessage());
+            }
+
+            return TriState.UNSET;
         }
     }
 
@@ -714,7 +727,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
     }
 
     public void checkActivity() {
-        // Graceful time before the first afk check call. 
+        // Graceful time before the first afk check call.
         if (System.currentTimeMillis() - lastActivity <= 10000) {
             return;
         }

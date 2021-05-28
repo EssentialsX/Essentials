@@ -1,6 +1,7 @@
 package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.perm.TriState;
 import com.earth2me.essentials.utils.FormatUtil;
 import org.bukkit.Material;
 import org.bukkit.Server;
@@ -24,9 +25,9 @@ public class Commanditemname extends EssentialsCommand {
             return;
         }
 
-        final Boolean material = user.isAuthorizedStrict(PERM_PREFIX + item.getType().name().toLowerCase());
-        final Boolean wildcard = user.isAuthorizedStrict(PERM_PREFIX + "*");
-        if (((wildcard != null && wildcard) && material == null) || ((wildcard != null && wildcard) && material) || ((wildcard == null || !wildcard) && (material != null && material))) {
+        final TriState wildcard = user.isAuthorizedExact(PERM_PREFIX + "*");
+        final TriState material = user.isAuthorizedExact(PERM_PREFIX + item.getType().name().toLowerCase());
+        if ((wildcard == TriState.TRUE && material != TriState.FALSE) || ((wildcard != TriState.TRUE) && material == TriState.TRUE)) {
             user.sendMessage(tl("itemnameInvalidItem"));
             return;
         }

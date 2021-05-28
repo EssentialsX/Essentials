@@ -2,6 +2,7 @@ package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.craftbukkit.InventoryWorkaround;
+import com.earth2me.essentials.perm.TriState;
 import com.earth2me.essentials.utils.VersionUtil;
 import com.google.common.collect.Lists;
 import org.bukkit.Material;
@@ -33,9 +34,9 @@ public class Commandhat extends EssentialsCommand {
                 return;
             }
 
-            final Boolean wildcard = user.isAuthorizedStrict(PERM_PREFIX + "*");
-            final Boolean material = user.isAuthorizedStrict(PERM_PREFIX + hand.getType().name().toLowerCase());
-            if (((wildcard != null && wildcard) && material == null) || ((wildcard != null && wildcard) && material) || ((wildcard == null || !wildcard) && (material != null && material))) {
+            final TriState wildcard = user.isAuthorizedExact(PERM_PREFIX + "*");
+            final TriState material = user.isAuthorizedExact(PERM_PREFIX + hand.getType().name().toLowerCase());
+            if ((wildcard == TriState.TRUE && material != TriState.FALSE) || ((wildcard != TriState.TRUE) && material == TriState.TRUE)) {
                 user.sendMessage(tl("hatFail"));
                 return;
             }
