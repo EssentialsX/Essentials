@@ -5,7 +5,7 @@ import com.earth2me.essentials.economy.EconomyLayer;
 import com.earth2me.essentials.economy.EconomyLayers;
 import com.earth2me.essentials.messaging.IMessageRecipient;
 import com.earth2me.essentials.messaging.SimpleMessageRecipient;
-import com.earth2me.essentials.perm.TriState;
+import com.earth2me.essentials.utils.TriState;
 import com.earth2me.essentials.utils.DateUtil;
 import com.earth2me.essentials.utils.EnumUtil;
 import com.earth2me.essentials.utils.FormatUtil;
@@ -120,7 +120,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
 
     /**
      * Checks if the given permission is explicitly defined and returns its value, otherwise
-     * {@link com.earth2me.essentials.perm.TriState#UNSET}.
+     * {@link TriState#UNSET}.
      */
     public TriState isAuthorizedExact(final String node) {
         return isAuthorizedExactCheck(node);

@@ -1,6 +1,6 @@
 package com.earth2me.essentials.perm.impl;
 
-import com.earth2me.essentials.perm.TriState;
+import com.earth2me.essentials.utils.TriState;
 import net.ess3.api.IEssentials;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;

@@ -1,7 +1,7 @@
 package com.earth2me.essentials.perm.impl;
 
 import com.earth2me.essentials.perm.IPermissionsHandler;
-import com.earth2me.essentials.perm.TriState;
+import com.earth2me.essentials.utils.TriState;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permission;

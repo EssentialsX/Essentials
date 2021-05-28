@@ -7,6 +7,7 @@ import com.earth2me.essentials.perm.impl.GenericVaultHandler;
 import com.earth2me.essentials.perm.impl.LuckPermsHandler;
 import com.earth2me.essentials.perm.impl.ModernVaultHandler;
 import com.earth2me.essentials.perm.impl.SuperpermsHandler;
+import com.earth2me.essentials.utils.TriState;
 import com.google.common.collect.ImmutableSet;
 import org.bukkit.entity.Player;
 

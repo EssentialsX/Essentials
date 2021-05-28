@@ -1,5 +1,6 @@
 package com.earth2me.essentials.perm;
 
+import com.earth2me.essentials.utils.TriState;
 import org.bukkit.entity.Player;
 
 import java.util.List;

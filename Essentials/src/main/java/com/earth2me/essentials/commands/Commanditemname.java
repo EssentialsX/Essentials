@@ -1,7 +1,7 @@
 package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.User;
-import com.earth2me.essentials.perm.TriState;
+import com.earth2me.essentials.utils.TriState;
 import com.earth2me.essentials.utils.FormatUtil;
 import org.bukkit.Material;
 import org.bukkit.Server;
