@@ -727,7 +727,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
     }
 
     public void checkActivity() {
-        // Graceful time before the first afk check call.
+        // Graceful time before the first afk check call. 
         if (System.currentTimeMillis() - lastActivity <= 10000) {
             return;
         }
