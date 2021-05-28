@@ -72,7 +72,7 @@ This PR closes #nnnn.
 <!-- Type the OS you have used below. -->
 OS: 
 
-<!-- Type the JDK version (from java --version) you have used below. -->
+<!-- Type the JDK version (from java -version) you have used below. -->
 Java version:  
 
 <!--
