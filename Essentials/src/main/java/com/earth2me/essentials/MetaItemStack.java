@@ -242,7 +242,11 @@ public class MetaItemStack {
             final int page = NumberUtil.isInt(split[0].substring(4)) ? (Integer.parseInt(split[0].substring(4)) - 1) : 0;
             final BookMeta meta = (BookMeta) stack.getItemMeta();
             final List<String> pages = meta.hasPages() ? new ArrayList<>(meta.getPages()) : new ArrayList<>();
-            final String content = FormatUtil.replaceFormat(split[1].replace('_', ' '));
+            final List<String> lines = new ArrayList<>();
+            for (final String line : split[1].split("(?<!\\\\)\\|")) {
+                lines.add(FormatUtil.replaceFormat(line.replace('_', ' ').replace("\\|", "|")));
+            }
+            final String content = String.join("\n", lines);
             if (page >= pages.size()) {
                 for (int i = 0; i <= page - pages.size(); i++) {
                     pages.add("");
