@@ -246,6 +246,7 @@ public abstract class AbstractItemDb implements IConf, net.ess3.api.IItemDb {
 
         switch (material) {
             case WRITTEN_BOOK:
+            case WRITABLE_BOOK:
                 // Everything from http://wiki.ess3.net/wiki/Item_Meta#Books in that order.
                 // Interesting as I didn't see a way to do pages or chapters.
                 final BookMeta bookMeta = (BookMeta) is.getItemMeta();
