@@ -31,17 +31,17 @@ public class Commandbook extends EssentialsCommand {
 
             if (args.length > 1 && args[0].equalsIgnoreCase("author")) {
                 if (user.isAuthorized("essentials.book.author") && (isAuthor(bmeta, player) || user.isAuthorized("essentials.book.others"))) {
-                    bmeta.setAuthor(args[1]);
+                    bmeta.setAuthor(args[1].replace('_', ' '));
                     item.setItemMeta(bmeta);
-                    user.sendMessage(tl("bookAuthorSet", getFinalArg(args, 1)));
+                    user.sendMessage(tl("bookAuthorSet", getFinalArg(args, 1).replace('_', ' ')));
                 } else {
                     throw new Exception(tl("denyChangeAuthor"));
                 }
             } else if (args.length > 1 && args[0].equalsIgnoreCase("title")) {
                 if (user.isAuthorized("essentials.book.title") && (isAuthor(bmeta, player) || user.isAuthorized("essentials.book.others"))) {
-                    bmeta.setTitle(args[1]);
+                    bmeta.setTitle(args[1].replace('_', ' '));
                     item.setItemMeta(bmeta);
-                    user.sendMessage(tl("bookTitleSet", getFinalArg(args, 1)));
+                    user.sendMessage(tl("bookTitleSet", getFinalArg(args, 1).replace('_', ' ')));
                 } else {
                     throw new Exception(tl("denyChangeTitle"));
                 }
