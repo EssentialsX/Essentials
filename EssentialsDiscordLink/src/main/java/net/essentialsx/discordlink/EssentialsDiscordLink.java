@@ -5,6 +5,9 @@ import com.earth2me.essentials.metrics.MetricsWrapper;
 import net.essentialsx.api.v2.services.discord.EssentialsDiscordAPI;
 import net.essentialsx.api.v2.services.discord.InteractionException;
 import net.essentialsx.discord.EssentialsDiscord;
+import net.essentialsx.discordlink.commands.discord.AccountInteractionCommand;
+import net.essentialsx.discordlink.commands.discord.LinkInteractionCommand;
+import net.essentialsx.discordlink.commands.discord.UnlinkInteractionCommand;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -95,6 +98,6 @@ public class EssentialsDiscordLink extends JavaPlugin {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        return ess.onCommandEssentials(sender, command, label, args, EssentialsDiscordLink.class.getClassLoader(), "net.essentialsx.discordlink.Command", "essentials.", linkManager);
+        return ess.onCommandEssentials(sender, command, label, args, EssentialsDiscordLink.class.getClassLoader(), "net.essentialsx.discordlink.commands.bukkit.Command", "essentials.", linkManager);
     }
 }

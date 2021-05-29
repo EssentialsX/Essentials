@@ -1,7 +1,8 @@
-package net.essentialsx.discordlink;
+package net.essentialsx.discordlink.commands.bukkit;
 
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.commands.EssentialsCommand;
+import net.essentialsx.discordlink.AccountLinkManager;
 import org.bukkit.Server;
 
 import static com.earth2me.essentials.I18n.tl;

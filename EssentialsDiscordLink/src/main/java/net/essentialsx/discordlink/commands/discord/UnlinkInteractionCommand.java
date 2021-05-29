@@ -1,8 +1,9 @@
-package net.essentialsx.discordlink;
+package net.essentialsx.discordlink.commands.discord;
 
 import net.essentialsx.api.v2.services.discord.InteractionCommand;
 import net.essentialsx.api.v2.services.discord.InteractionCommandArgument;
 import net.essentialsx.api.v2.services.discord.InteractionEvent;
+import net.essentialsx.discordlink.AccountLinkManager;
 
 import java.util.List;
 
