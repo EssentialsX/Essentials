@@ -8,6 +8,7 @@ import io.papermc.lib.PaperLib;
 import net.ess3.nms.refl.ReflUtil;
 import org.bukkit.Bukkit;
 
+import java.lang.reflect.Method;
 import java.util.Map;
 import java.util.Set;
 import java.util.regex.Matcher;
@@ -43,6 +44,12 @@ public final class VersionUtil {
         //   * Messes with proxy-forwarded UUIDs
         //   * Frequent data corruptions
         builder.put("org.yatopiamc.yatopia.server.YatopiaConfig", SupportStatus.DANGEROUS_FORK);
+        builder.put("net.yatopia.api.event.PlayerAttackEntityEvent", SupportStatus.DANGEROUS_FORK);
+        builder.put("org.bukkit.plugin.SimplePluginManager#getPluginLoaders", SupportStatus.DANGEROUS_FORK);
+        builder.put("org.bukkit.Bukkit#getLastTickTime", SupportStatus.DANGEROUS_FORK);
+        builder.put("brand:Yatopia", SupportStatus.DANGEROUS_FORK);
+        // Yatopia downstream(s) which attempt to do tricky things :)
+        builder.put("brand:Hyalus", SupportStatus.DANGEROUS_FORK);
 
         // KibblePatcher - Dangerous bytecode editor snakeoil whose only use is to break plugins
         builder.put("net.kibblelands.server.FastMath", SupportStatus.DANGEROUS_FORK);
@@ -81,10 +88,36 @@ public final class VersionUtil {
     public static SupportStatus getServerSupportStatus() {
         if (supportStatus == null) {
             for (Map.Entry<String, SupportStatus> entry : unsupportedServerClasses.entrySet()) {
+
+                if (entry.getKey().startsWith("brand:")) {
+                    if (Bukkit.getName().equalsIgnoreCase(entry.getKey().replaceFirst("brand:", ""))) {
+                        supportStatusClass = entry.getKey();
+                        return supportStatus = entry.getValue();
+                    }
+                    continue;
+                }
+
                 final boolean inverted = entry.getKey().contains("!");
-                final String clazz = entry.getKey().replace("!", "");
+                final String clazz = entry.getKey().replace("!", "").split("#")[0];
+                String method = "";
+                if (entry.getKey().contains("#")) {
+                    method = entry.getKey().split("#")[1];
+                }
                 try {
-                    Class.forName(clazz);
+                    final Class<?> lolClass = Class.forName(clazz);
+
+                    if (!method.isEmpty()) {
+                        for (final Method mth : lolClass.getDeclaredMethods()) {
+                            if (mth.getName().equals(method)) {
+                                if (!inverted) {
+                                    supportStatusClass = entry.getKey();
+                                    return supportStatus = entry.getValue();
+                                }
+                            }
+                        }
+                        continue;
+                    }
+
                     if (!inverted) {
                         supportStatusClass = entry.getKey();
                         return supportStatus = entry.getValue();

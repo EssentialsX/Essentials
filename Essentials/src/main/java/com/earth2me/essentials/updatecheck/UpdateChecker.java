@@ -44,7 +44,7 @@ public final class UpdateChecker {
         if (inputStream != null) {
             final List<String> versionStr = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8)).lines().collect(Collectors.toList());
             if (versionStr.size() == 2) {
-                if (versionStr.get(0).matches("\\d+\\.\\d+\\.\\d+-dev\\+\\d+-[0-9a-f]{7,40}")) {
+                if (versionStr.get(0).matches("\\d+\\.\\d+\\.\\d+-(?:dev|rc|beta|alpha)\\+\\d+-[0-9a-f]{7,40}")) {
                     identifier = versionStr.get(0).split("-")[2];
                     dev = true;
                 } else {

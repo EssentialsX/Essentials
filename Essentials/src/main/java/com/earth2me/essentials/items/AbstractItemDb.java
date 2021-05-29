@@ -29,6 +29,7 @@ import org.bukkit.potion.Potion;
 import org.bukkit.potion.PotionEffect;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -208,18 +209,7 @@ public abstract class AbstractItemDb implements IConf, net.ess3.api.IItemDb {
             }
 
             if (meta.hasLore()) {
-                sb.append("lore:");
-                boolean first = true;
-                for (final String s : meta.getLore()) {
-                    // Add | before the line if it's not the first one. Easy but weird way
-                    // to do this since we need each line separated by |
-                    if (!first) {
-                        sb.append("|");
-                    }
-                    first = false;
-                    sb.append(FormatUtil.unformatString(s).replace(" ", "_"));
-                }
-                sb.append(" ");
+                sb.append("lore:").append(serializeLines(meta.getLore())).append(" ");
             }
 
             if (meta.hasEnchants()) {
@@ -246,14 +236,23 @@ public abstract class AbstractItemDb implements IConf, net.ess3.api.IItemDb {
 
         switch (material) {
             case WRITTEN_BOOK:
+            case WRITABLE_BOOK:
                 // Everything from http://wiki.ess3.net/wiki/Item_Meta#Books in that order.
                 // Interesting as I didn't see a way to do pages or chapters.
                 final BookMeta bookMeta = (BookMeta) is.getItemMeta();
                 if (bookMeta.hasTitle()) {
-                    sb.append("title:").append(bookMeta.getTitle()).append(" ");
+                    sb.append("title:").append(FormatUtil.unformatString(bookMeta.getTitle()).replace(' ', '_')).append(" ");
                 }
                 if (bookMeta.hasAuthor()) {
-                    sb.append("author:").append(bookMeta.getAuthor()).append(" ");
+                    sb.append("author:").append(FormatUtil.unformatString(bookMeta.getAuthor()).replace(' ', '_')).append(" ");
+                }
+                if (bookMeta.hasPages()) {
+                    final List<String> pages = bookMeta.getPages();
+                    for (int i = 0; i < pages.size(); i++) {
+                        sb.append("page").append(i + 1).append(":");
+                        sb.append(serializeLines(Arrays.asList(pages.get(i).split("\n"))));
+                        sb.append(" ");
+                    }
                 }
                 // Only other thing it could have is lore but that's done up there ^^^
                 break;
@@ -362,6 +361,21 @@ public abstract class AbstractItemDb implements IConf, net.ess3.api.IItemDb {
             }
             sb.append(" ");
         }
+    }
+
+    private String serializeLines(Iterable<String> lines) {
+        final StringBuilder sb = new StringBuilder();
+        boolean first = true;
+        for (final String line : lines) {
+            // Add | before the line if it's not the first one. Easy but weird way
+            // to do this since we need each line separated by |
+            if (!first) {
+                sb.append("|");
+            }
+            first = false;
+            sb.append(FormatUtil.unformatString(line).replace(" ", "_").replace("|", "\\|"));
+        }
+        return sb.toString();
     }
 
     @Override

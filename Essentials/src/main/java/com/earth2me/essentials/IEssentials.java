@@ -3,12 +3,14 @@ package com.earth2me.essentials;
 import com.earth2me.essentials.api.IItemDb;
 import com.earth2me.essentials.api.IJails;
 import com.earth2me.essentials.api.IWarps;
+import com.earth2me.essentials.commands.IEssentialsCommand;
 import com.earth2me.essentials.perm.PermissionsHandler;
 import com.earth2me.essentials.updatecheck.UpdateChecker;
-import net.ess3.provider.MaterialTagProvider;
 import net.ess3.provider.ContainerProvider;
 import net.ess3.provider.FormattedCommandAliasProvider;
 import net.ess3.provider.KnownCommandsProvider;
+import net.ess3.provider.MaterialTagProvider;
+import net.ess3.provider.PersistentDataProvider;
 import net.ess3.provider.ServerStateProvider;
 import net.ess3.provider.SpawnerBlockProvider;
 import net.ess3.provider.SpawnerItemProvider;
@@ -25,6 +27,7 @@ import org.bukkit.scheduler.BukkitTask;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import java.util.function.Predicate;
 
@@ -32,6 +35,8 @@ public interface IEssentials extends Plugin {
     void addReloadListener(IConf listener);
 
     void reload();
+
+    Map<String, IEssentialsCommand> getCommandMap();
 
     List<String> onTabCompleteEssentials(CommandSender sender, Command command, String commandLabel, String[] args, ClassLoader classLoader, String commandPath, String permissionPrefix, IEssentialsModule module);
 
@@ -134,6 +139,8 @@ public interface IEssentials extends Plugin {
     FormattedCommandAliasProvider getFormattedCommandAliasProvider();
 
     SyncCommandsProvider getSyncCommandsProvider();
+
+    PersistentDataProvider getPersistentDataProvider();
 
     PluginCommand getPluginCommand(String cmd);
 }

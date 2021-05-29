@@ -12,6 +12,7 @@ import com.earth2me.essentials.utils.VersionUtil;
 import com.google.common.base.Charsets;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
+import org.bukkit.ChatColor;
 import org.bukkit.Server;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
@@ -324,6 +325,7 @@ public class Commandessentials extends EssentialsCommand {
         }
 
         sender.sendMessage(tl(serverMessageKey, "Server", server.getBukkitVersion() + " " + server.getVersion()));
+        sender.sendMessage(tl(serverMessageKey, "Brand", server.getName()));
         sender.sendMessage(tl("versionOutputFine", "EssentialsX", essVer));
 
         for (final Plugin plugin : pm.getPlugins()) {
@@ -373,23 +375,23 @@ public class Commandessentials extends EssentialsCommand {
 
         switch (supportStatus) {
             case NMS_CLEANROOM:
-                sender.sendMessage(tl("serverUnsupportedCleanroom"));
+                sender.sendMessage(ChatColor.DARK_RED + tl("serverUnsupportedCleanroom"));
                 break;
             case DANGEROUS_FORK:
-                sender.sendMessage(tl("serverUnsupportedDangerous"));
+                sender.sendMessage(ChatColor.DARK_RED + tl("serverUnsupportedDangerous"));
                 break;
             case UNSTABLE:
-                sender.sendMessage(tl("serverUnsupportedMods"));
+                sender.sendMessage(ChatColor.DARK_RED + tl("serverUnsupportedMods"));
                 break;
             case OUTDATED:
-                sender.sendMessage(tl("serverUnsupported"));
+                sender.sendMessage(ChatColor.RED + tl("serverUnsupported"));
                 break;
             case LIMITED:
-                sender.sendMessage(tl("serverUnsupportedLimitedApi"));
+                sender.sendMessage(ChatColor.RED + tl("serverUnsupportedLimitedApi"));
                 break;
         }
         if (VersionUtil.getSupportStatusClass() != null) {
-            sender.sendMessage(tl("serverUnsupportedClass", VersionUtil.getSupportStatusClass()));
+            sender.sendMessage(ChatColor.RED + tl("serverUnsupportedClass", VersionUtil.getSupportStatusClass()));
         }
 
         sender.sendMessage(tl("versionFetching"));

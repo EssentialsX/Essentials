@@ -22,6 +22,8 @@ import com.earth2me.essentials.commands.IEssentialsCommand;
 import com.earth2me.essentials.commands.NoChargeException;
 import com.earth2me.essentials.commands.NotEnoughArgumentsException;
 import com.earth2me.essentials.commands.QuietAbortException;
+import com.earth2me.essentials.economy.EconomyLayers;
+import com.earth2me.essentials.economy.vault.VaultEconomyProvider;
 import com.earth2me.essentials.items.AbstractItemDb;
 import com.earth2me.essentials.items.CustomItemResolver;
 import com.earth2me.essentials.items.FlatItemDb;
@@ -29,7 +31,6 @@ import com.earth2me.essentials.items.LegacyItemDb;
 import com.earth2me.essentials.metrics.MetricsWrapper;
 import com.earth2me.essentials.perm.PermissionsDefaults;
 import com.earth2me.essentials.perm.PermissionsHandler;
-import com.earth2me.essentials.register.payment.Methods;
 import com.earth2me.essentials.signs.SignBlockListener;
 import com.earth2me.essentials.signs.SignEntityListener;
 import com.earth2me.essentials.signs.SignPlayerListener;
@@ -46,6 +47,7 @@ import net.ess3.api.IJails;
 import net.ess3.api.ISettings;
 import net.ess3.nms.refl.providers.ReflFormattedCommandAliasProvider;
 import net.ess3.nms.refl.providers.ReflKnownCommandsProvider;
+import net.ess3.nms.refl.providers.ReflPersistentDataProvider;
 import net.ess3.nms.refl.providers.ReflServerStateProvider;
 import net.ess3.nms.refl.providers.ReflSpawnEggProvider;
 import net.ess3.nms.refl.providers.ReflSpawnerBlockProvider;
@@ -54,6 +56,7 @@ import net.ess3.provider.ContainerProvider;
 import net.ess3.provider.FormattedCommandAliasProvider;
 import net.ess3.provider.KnownCommandsProvider;
 import net.ess3.provider.MaterialTagProvider;
+import net.ess3.provider.PersistentDataProvider;
 import net.ess3.provider.PotionMetaProvider;
 import net.ess3.provider.ProviderListener;
 import net.ess3.provider.ServerStateProvider;
@@ -68,6 +71,7 @@ import net.ess3.provider.providers.BukkitSpawnerBlockProvider;
 import net.ess3.provider.providers.FlatSpawnEggProvider;
 import net.ess3.provider.providers.LegacyPotionMetaProvider;
 import net.ess3.provider.providers.LegacySpawnEggProvider;
+import net.ess3.provider.providers.ModernPersistentDataProvider;
 import net.ess3.provider.providers.PaperContainerProvider;
 import net.ess3.provider.providers.PaperKnownCommandsProvider;
 import net.ess3.provider.providers.PaperMaterialTagProvider;
@@ -98,6 +102,7 @@ import org.bukkit.plugin.InvalidDescriptionException;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
+import org.bukkit.plugin.ServicePriority;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.plugin.java.JavaPluginLoader;
 import org.bukkit.scheduler.BukkitScheduler;
@@ -109,8 +114,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 import java.util.function.Predicate;
@@ -150,13 +157,14 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
     private transient ProviderListener recipeBookEventProvider;
     private transient MaterialTagProvider materialTagProvider;
     private transient SyncCommandsProvider syncCommandsProvider;
+    private transient PersistentDataProvider persistentDataProvider;
     private transient Kits kits;
     private transient RandomTeleport randomTeleport;
     private transient UpdateChecker updateChecker;
+    private transient Map<String, IEssentialsCommand> commandMap = new HashMap<>();
 
     static {
-        // TODO: improve legacy code
-        Methods.init();
+        EconomyLayers.init();
     }
 
     public Essentials() {
@@ -199,6 +207,17 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
         jails = new Jails(this);
         registerListeners(server.getPluginManager());
         kits = new Kits(this);
+    }
+
+    @Override
+    public void onLoad() {
+        try {
+            // Vault registers their Essentials provider at low priority, so we have to use normal priority here
+            Class.forName("net.milkbowl.vault.economy.Economy");
+            getServer().getServicesManager().register(net.milkbowl.vault.economy.Economy.class, new VaultEconomyProvider(this), this, ServicePriority.Normal);
+        } catch (final ClassNotFoundException ignored) {
+            // Probably safer than fetching for the plugin as bukkit may not have marked it as enabled at this point in time
+        }
     }
 
     @Override
@@ -334,7 +353,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
                     serverStateProvider = new PaperServerStateProvider();
                     containerProvider = new PaperContainerProvider();
                 } else {
-                    serverStateProvider = new ReflServerStateProvider(getLogger());
+                    serverStateProvider = new ReflServerStateProvider();
                 }
 
                 //Event Providers
@@ -367,6 +386,12 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
 
                 // Sync Commands Provider
                 syncCommandsProvider = new ReflSyncCommandsProvider();
+
+                if (VersionUtil.getServerBukkitVersion().isHigherThanOrEqualTo(VersionUtil.v1_14_4_R01)) {
+                    persistentDataProvider = new ModernPersistentDataProvider(this);
+                } else {
+                    persistentDataProvider = new ReflPersistentDataProvider(this);
+                }
 
                 execTimer.mark("Init(Providers)");
                 reload();
@@ -536,6 +561,21 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
         registerListeners(pm);
     }
 
+    private IEssentialsCommand loadCommand(final String path, final String name, final IEssentialsModule module, final ClassLoader classLoader) throws Exception {
+        if (commandMap.containsKey(name)) {
+            return commandMap.get(name);
+        }
+        final IEssentialsCommand cmd = (IEssentialsCommand) classLoader.loadClass(path + name).getDeclaredConstructor().newInstance();
+        cmd.setEssentials(this);
+        cmd.setEssentialsModule(module);
+        commandMap.put(name, cmd);
+        return cmd;
+    }
+
+    public Map<String, IEssentialsCommand> getCommandMap() {
+        return commandMap;
+    }
+
     @Override
     public List<String> onTabComplete(final CommandSender sender, final Command command, final String commandLabel, final String[] args) {
         return onTabCompleteEssentials(sender, command, commandLabel, args, Essentials.class.getClassLoader(),
@@ -582,9 +622,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
 
             final IEssentialsCommand cmd;
             try {
-                cmd = (IEssentialsCommand) classLoader.loadClass(commandPath + command.getName()).newInstance();
-                cmd.setEssentials(this);
-                cmd.setEssentialsModule(module);
+                cmd = loadCommand(commandPath, command.getName(), module, classLoader);
             } catch (final Exception ex) {
                 sender.sendMessage(tl("commandNotLoaded", commandLabel));
                 LOGGER.log(Level.SEVERE, tl("commandNotLoaded", commandLabel), ex);
@@ -691,9 +729,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
 
             final IEssentialsCommand cmd;
             try {
-                cmd = (IEssentialsCommand) classLoader.loadClass(commandPath + command.getName()).newInstance();
-                cmd.setEssentials(this);
-                cmd.setEssentialsModule(module);
+                cmd = loadCommand(commandPath, command.getName(), module, classLoader);
             } catch (final Exception ex) {
                 sender.sendMessage(tl("commandNotLoaded", commandLabel));
                 LOGGER.log(Level.SEVERE, tl("commandNotLoaded", commandLabel), ex);
@@ -727,8 +763,16 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
             } catch (final NoChargeException | QuietAbortException ex) {
                 return true;
             } catch (final NotEnoughArgumentsException ex) {
-                sender.sendMessage(command.getDescription());
-                sender.sendMessage(command.getUsage().replaceAll("<command>", commandLabel));
+                sender.sendMessage(tl("commandHelpLine1", commandLabel));
+                sender.sendMessage(tl("commandHelpLine2", command.getDescription()));
+                sender.sendMessage(tl("commandHelpLine3"));
+                if (!cmd.getUsageStrings().isEmpty()) {
+                    for (Map.Entry<String, String> usage : cmd.getUsageStrings().entrySet()) {
+                        sender.sendMessage(tl("commandHelpLineUsage", usage.getKey().replace("<command>", commandLabel), usage.getValue()));
+                    }
+                } else {
+                    sender.sendMessage(command.getUsage());
+                }
                 if (!ex.getMessage().isEmpty()) {
                     sender.sendMessage(ex.getMessage());
                 }
@@ -1107,6 +1151,11 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
     @Override
     public SyncCommandsProvider getSyncCommandsProvider() {
         return syncCommandsProvider;
+    }
+
+    @Override
+    public PersistentDataProvider getPersistentDataProvider() {
+        return persistentDataProvider;
     }
 
     @Override

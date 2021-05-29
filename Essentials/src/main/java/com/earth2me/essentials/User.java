@@ -1,10 +1,11 @@
 package com.earth2me.essentials;
 
 import com.earth2me.essentials.commands.IEssentialsCommand;
+import com.earth2me.essentials.economy.EconomyLayer;
+import com.earth2me.essentials.economy.EconomyLayers;
 import com.earth2me.essentials.messaging.IMessageRecipient;
 import com.earth2me.essentials.messaging.SimpleMessageRecipient;
-import com.earth2me.essentials.register.payment.Method;
-import com.earth2me.essentials.register.payment.Methods;
+import com.earth2me.essentials.utils.TriState;
 import com.earth2me.essentials.utils.DateUtil;
 import com.earth2me.essentials.utils.EnumUtil;
 import com.earth2me.essentials.utils.FormatUtil;
@@ -117,8 +118,15 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
         return isPermSetCheck(node);
     }
 
-    private boolean isAuthorizedCheck(final String node) {
+    /**
+     * Checks if the given permission is explicitly defined and returns its value, otherwise
+     * {@link TriState#UNSET}.
+     */
+    public TriState isAuthorizedExact(final String node) {
+        return isAuthorizedExactCheck(node);
+    }
 
+    private boolean isAuthorizedCheck(final String node) {
         if (base instanceof OfflinePlayer) {
             return false;
         }
@@ -151,6 +159,24 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
             }
 
             return false;
+        }
+    }
+
+    private TriState isAuthorizedExactCheck(final String node) {
+        if (base instanceof OfflinePlayer) {
+            return TriState.UNSET;
+        }
+
+        try {
+            return ess.getPermissionsHandler().isPermissionSetExact(base, node);
+        } catch (final Exception ex) {
+            if (ess.getSettings().isDebug()) {
+                ess.getLogger().log(Level.SEVERE, "Permission System Error: " + ess.getPermissionsHandler().getName() + " returned: " + ex.getMessage(), ex);
+            } else {
+                ess.getLogger().log(Level.SEVERE, "Permission System Error: " + ess.getPermissionsHandler().getName() + " returned: " + ex.getMessage());
+            }
+
+            return TriState.UNSET;
         }
     }
 
@@ -485,16 +511,9 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
             }
             return BigDecimal.ZERO;
         }
-        if (Methods.hasMethod()) {
-            try {
-                final Method method = Methods.getMethod();
-                if (!method.hasAccount(this.getName())) {
-                    throw new Exception();
-                }
-                final Method.MethodAccount account = Methods.getMethod().getAccount(this.getName());
-                return BigDecimal.valueOf(account.balance());
-            } catch (final Exception ignored) {
-            }
+        final EconomyLayer layer = EconomyLayers.getSelectedLayer();
+        if (layer != null && (layer.hasAccount(getBase()) || layer.createPlayerAccount(getBase()))) {
+            return layer.getBalance(getBase());
         }
         return super.getMoney();
     }
@@ -512,31 +531,22 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
         ess.getServer().getPluginManager().callEvent(updateEvent);
         final BigDecimal newBalance = updateEvent.getNewBalance();
 
-        if (Methods.hasMethod()) {
-            try {
-                final Method method = Methods.getMethod();
-                if (!method.hasAccount(this.getName())) {
-                    throw new Exception();
-                }
-                final Method.MethodAccount account = Methods.getMethod().getAccount(this.getName());
-                account.set(newBalance.doubleValue());
-            } catch (final Exception ignored) {
-            }
+        final EconomyLayer layer = EconomyLayers.getSelectedLayer();
+        if (layer != null && (layer.hasAccount(getBase()) || layer.createPlayerAccount(getBase()))) {
+            layer.set(getBase(), newBalance);
         }
         super.setMoney(newBalance, true);
         Trade.log("Update", "Set", "API", getName(), new Trade(newBalance, ess), null, null, null, newBalance, ess);
     }
 
     public void updateMoneyCache(final BigDecimal value) {
-        if (ess.getSettings().isEcoDisabled()) {
+        if (ess.getSettings().isEcoDisabled() || !EconomyLayers.isLayerSelected() || super.getMoney().equals(value)) {
             return;
         }
-        if (Methods.hasMethod() && !super.getMoney().equals(value)) {
-            try {
-                super.setMoney(value, false);
-            } catch (final MaxMoneyException ex) {
-                // We don't want to throw any errors here, just updating a cache
-            }
+        try {
+            super.setMoney(value, false);
+        } catch (final MaxMoneyException ex) {
+            // We don't want to throw any errors here, just updating a cache
         }
     }
 
@@ -629,7 +639,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
                 }
             }
 
-            if (getJailTimeout() < currentTime && isJailed() ) {
+            if (getJailTimeout() < currentTime && isJailed()) {
                 final JailStatusChangeEvent event = new JailStatusChangeEvent(this, null, false);
                 ess.getServer().getPluginManager().callEvent(event);
 
@@ -724,9 +734,9 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
 
         final long autoafkkick = ess.getSettings().getAutoAfkKick();
         if (autoafkkick > 0
-            && lastActivity > 0 && (lastActivity + (autoafkkick * 1000)) < System.currentTimeMillis()
-            && !isAuthorized("essentials.kick.exempt")
-            && !isAuthorized("essentials.afk.kickexempt")) {
+                && lastActivity > 0 && (lastActivity + (autoafkkick * 1000)) < System.currentTimeMillis()
+                && !isAuthorized("essentials.kick.exempt")
+                && !isAuthorized("essentials.afk.kickexempt")) {
             final String kickReason = tl("autoAfkKickReason", autoafkkick / 60.0);
             lastActivity = 0;
             this.getBase().kickPlayer(kickReason);
