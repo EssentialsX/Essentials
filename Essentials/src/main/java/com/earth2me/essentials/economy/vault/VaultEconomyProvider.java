@@ -1,9 +1,9 @@
 package com.earth2me.essentials.economy.vault;
 
 import com.earth2me.essentials.Essentials;
-import com.earth2me.essentials.EssentialsUserConf;
 import com.earth2me.essentials.api.NoLoanPermittedException;
 import com.earth2me.essentials.api.UserDoesNotExistException;
+import com.earth2me.essentials.config.EssentialsUserConfiguration;
 import com.earth2me.essentials.utils.NumberUtil;
 import com.google.common.base.Charsets;
 import net.ess3.api.MaxMoneyException;
@@ -303,12 +303,12 @@ public class VaultEconomyProvider implements Economy {
                 LOGGER.log(Level.SEVERE, MessageFormat.format(WARN_NPC_RECREATE_1, player.getName(), player.getUniqueId().toString()), new RuntimeException());
                 LOGGER.log(Level.SEVERE, WARN_NPC_RECREATE_2);
             }
-            final EssentialsUserConf npcConfig = new EssentialsUserConf(player.getName(), player.getUniqueId(), npcFile);
+            final EssentialsUserConfiguration npcConfig = new EssentialsUserConfiguration(player.getName(), player.getUniqueId(), npcFile);
             npcConfig.load();
             npcConfig.setProperty("npc", true);
             npcConfig.setProperty("lastAccountName", player.getName());
             npcConfig.setProperty("money", ess.getSettings().getStartingBalance());
-            npcConfig.forceSave();
+            npcConfig.blockingSave();
             ess.getUserMap().trackUUID(player.getUniqueId(), player.getName(), false);
             return true;
         }
