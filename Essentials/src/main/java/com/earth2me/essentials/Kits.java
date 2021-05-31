@@ -62,6 +62,8 @@ public class Kits implements IConf {
         name = name.replace('.', '_').replace('/', '_');
         if (getKits() != null) {
             final CommentedConfigurationNode kits = getKits();
+            // Other parts of the codebase/3rd party plugins expect us to lowercase kit names here.
+            // This isn't strictly needed for the future of Essentials, but for compatibility it's here.
             final CommentedConfigurationNode kitSection = kits.node(name.toLowerCase());
             if (!kitSection.virtual() && kitSection.isMap()) {
                 return ConfigurateUtil.getRawMap(kitSection);
