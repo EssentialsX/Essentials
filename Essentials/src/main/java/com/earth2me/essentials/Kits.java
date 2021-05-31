@@ -62,11 +62,6 @@ public class Kits implements IConf {
         name = name.replace('.', '_').replace('/', '_');
         if (getKits() != null) {
             final CommentedConfigurationNode kits = getKits();
-            // For some reason, YAML doesn't sees keys as always lowercase even if they aren't defined like that.
-            // Workaround is to toLowercase when getting from the config, but showing normally elsewhere.
-            // ODDLY ENOUGH when you get the configuration section for ALL kits, it will return the proper
-            // case of each kit. But when you check for each kit's configuration section, it won't return the kit
-            // you just found if you don't toLowercase it.
             final CommentedConfigurationNode kitSection = kits.node(name.toLowerCase());
             if (!kitSection.virtual() && kitSection.isMap()) {
                 return ConfigurateUtil.getRawMap(kitSection);
