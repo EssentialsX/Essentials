@@ -197,7 +197,7 @@ public class EssentialsUpgrade {
         }
         doneFile.setProperty("updateUsersLegacyPathNames", true);
         doneFile.save();
-        LOGGER.info("Done converting legacy path names to Configurate.");
+        LOGGER.info("Done converting legacy userdata keys to Configurate.");
     }
 
     public void convertIgnoreList() {
