@@ -146,7 +146,7 @@ public class EssentialsUpgrade {
         ess.getLogger().info("To rerun the conversion type /essentials uuidconvert");
     }
 
-    public void convertStupidNames() {
+    public void convertStupidCamelCaseUserdataKeys() {
         if (doneFile.getBoolean("updateUsersLegacyPathNames", false)) {
             return;
         }
@@ -819,6 +819,6 @@ public class EssentialsUpgrade {
         warnMetrics();
         repairUserMap();
         convertIgnoreList();
-        convertStupidNames();
+        convertStupidCamelCaseUserdataKeys();
     }
 }
