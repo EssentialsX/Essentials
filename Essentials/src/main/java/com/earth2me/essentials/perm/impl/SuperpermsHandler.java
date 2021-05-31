@@ -1,9 +1,11 @@
 package com.earth2me.essentials.perm.impl;
 
 import com.earth2me.essentials.perm.IPermissionsHandler;
+import com.earth2me.essentials.utils.TriState;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permission;
+import org.bukkit.permissions.PermissionAttachmentInfo;
 import org.bukkit.plugin.Plugin;
 
 import java.util.Arrays;
@@ -99,6 +101,16 @@ public class SuperpermsHandler implements IPermissionsHandler {
     @Override
     public boolean isPermissionSet(final Player base, final String node) {
         return base.isPermissionSet(node);
+    }
+
+    @Override
+    public TriState isPermissionSetExact(Player base, String node) {
+        for (final PermissionAttachmentInfo perm : base.getEffectivePermissions()) {
+            if (perm.getPermission().equalsIgnoreCase(node)) {
+                return perm.getValue() ? TriState.TRUE : TriState.FALSE;
+            }
+        }
+        return TriState.UNSET;
     }
 
     @Override
