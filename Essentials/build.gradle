@@ -41,5 +41,5 @@ shadowJar {
     relocate 'org.spongepowered.configurate', 'com.earth2me.essentials.libs.configurate'
     relocate 'org.yaml.snakeyaml', 'com.earth2me.essentials.libs.snakeyaml'
     relocate 'io.leangen.geantyref', 'com.earth2me.essentials.libs.geantyref'
-    relocate 'org.checkerframework', 'come.earth2me.essentials.libs.checkerframework'
+    relocate 'org.checkerframework', 'com.earth2me.essentials.libs.checkerframework'
 }
