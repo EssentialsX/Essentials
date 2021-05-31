@@ -151,7 +151,7 @@ public class EssentialsUpgrade {
             return;
         }
 
-        LOGGER.info("Attempting to migrate legacy path names to Configurate");
+        LOGGER.info("Attempting to migrate legacy userdata keys to Configurate");
 
         final File userdataFolder = new File(ess.getDataFolder(), "userdata");
         if (!userdataFolder.exists() || !userdataFolder.isDirectory()) {
