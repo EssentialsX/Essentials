@@ -167,6 +167,7 @@ subprojects {
 
         javaVersions {
             target 8
+            minimumToolchain 16
         }
     }
 

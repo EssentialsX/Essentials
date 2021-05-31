@@ -47,6 +47,7 @@ import net.ess3.api.IJails;
 import net.ess3.api.ISettings;
 import net.ess3.nms.refl.providers.ReflFormattedCommandAliasProvider;
 import net.ess3.nms.refl.providers.ReflKnownCommandsProvider;
+import net.ess3.nms.refl.providers.ReflPersistentDataProvider;
 import net.ess3.nms.refl.providers.ReflServerStateProvider;
 import net.ess3.nms.refl.providers.ReflSpawnEggProvider;
 import net.ess3.nms.refl.providers.ReflSpawnerBlockProvider;
@@ -55,6 +56,7 @@ import net.ess3.provider.ContainerProvider;
 import net.ess3.provider.FormattedCommandAliasProvider;
 import net.ess3.provider.KnownCommandsProvider;
 import net.ess3.provider.MaterialTagProvider;
+import net.ess3.provider.PersistentDataProvider;
 import net.ess3.provider.PotionMetaProvider;
 import net.ess3.provider.ProviderListener;
 import net.ess3.provider.ServerStateProvider;
@@ -69,6 +71,7 @@ import net.ess3.provider.providers.BukkitSpawnerBlockProvider;
 import net.ess3.provider.providers.FlatSpawnEggProvider;
 import net.ess3.provider.providers.LegacyPotionMetaProvider;
 import net.ess3.provider.providers.LegacySpawnEggProvider;
+import net.ess3.provider.providers.ModernPersistentDataProvider;
 import net.ess3.provider.providers.PaperContainerProvider;
 import net.ess3.provider.providers.PaperKnownCommandsProvider;
 import net.ess3.provider.providers.PaperMaterialTagProvider;
@@ -153,6 +156,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
     private transient ProviderListener recipeBookEventProvider;
     private transient MaterialTagProvider materialTagProvider;
     private transient SyncCommandsProvider syncCommandsProvider;
+    private transient PersistentDataProvider persistentDataProvider;
     private transient Kits kits;
     private transient RandomTeleport randomTeleport;
     private transient UpdateChecker updateChecker;
@@ -347,7 +351,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
                 serverStateProvider = new PaperServerStateProvider();
                 containerProvider = new PaperContainerProvider();
             } else {
-                serverStateProvider = new ReflServerStateProvider(getLogger());
+                serverStateProvider = new ReflServerStateProvider();
             }
 
             //Event Providers
@@ -380,6 +384,12 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
 
             // Sync Commands Provider
             syncCommandsProvider = new ReflSyncCommandsProvider();
+
+            if (VersionUtil.getServerBukkitVersion().isHigherThanOrEqualTo(VersionUtil.v1_14_4_R01)) {
+                persistentDataProvider = new ModernPersistentDataProvider(this);
+            } else {
+                persistentDataProvider = new ReflPersistentDataProvider(this);
+            }
 
             execTimer.mark("Init(Providers)");
             reload();
@@ -1130,6 +1140,11 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
     @Override
     public SyncCommandsProvider getSyncCommandsProvider() {
         return syncCommandsProvider;
+    }
+
+    @Override
+    public PersistentDataProvider getPersistentDataProvider() {
+        return persistentDataProvider;
     }
 
     @Override
