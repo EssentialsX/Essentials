@@ -19,7 +19,6 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -560,30 +559,6 @@ public abstract class UserData extends PlayerExtension implements IConf {
         config.save();
     }
 
-    public Set<String> getConfigKeys() {
-        final Set<String> keys = ConfigurateUtil.getKeys(config.getSection("info"));
-        if (!keys.isEmpty()) {
-            return keys;
-        }
-        return new HashSet<>();
-    }
-
-    public Map<String, Object> getConfigMap() {
-        final Map<String, Object> node = ConfigurateUtil.getRawMap(config.getSection("info"));
-        if (!node.isEmpty()) {
-            return node;
-        }
-        return new HashMap<>();
-    }
-
-    public Map<String, Object> getConfigMap(final String node) {
-        final Map<String, Object> nodeMap = ConfigurateUtil.getRawMap(config.getSection("info." + node));
-        if (!nodeMap.isEmpty()) {
-            return nodeMap;
-        }
-        return new HashMap<>();
-    }
-
     public List<CommandCooldown> getCooldownsList() {
         return holder.timestamps().commandCooldowns();
     }
@@ -689,6 +664,23 @@ public abstract class UserData extends PlayerExtension implements IConf {
     }
 
     public void setConfigProperty(String node, Object object) {
-        throw new UnsupportedOperationException("This method is unused in EssentialsX and is scheduled for removal. Please use another method!");
+        setConfigPropertyRaw("info." + node, object);
+    }
+
+    public void setConfigPropertyRaw(String node, Object object) {
+        config.setRaw(node, object);
+        config.save();
+    }
+
+    public Set<String> getConfigKeys() {
+        return ConfigurateUtil.getKeys(config.getSection("info"));
+    }
+
+    public Map<String, Object> getConfigMap() {
+        return ConfigurateUtil.getRawMap(config.getSection("info"));
+    }
+
+    public Map<String, Object> getConfigMap(final String node) {
+        return ConfigurateUtil.getRawMap(config.getSection("info." + node));
     }
 }
