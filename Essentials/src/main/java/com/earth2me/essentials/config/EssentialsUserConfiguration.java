@@ -10,7 +10,7 @@ import java.util.UUID;
 import java.util.logging.Level;
 
 public class EssentialsUserConfiguration extends EssentialsConfiguration {
-    private final String username;
+    private String username;
     private final UUID uuid;
 
     public EssentialsUserConfiguration(final String username, final UUID uuid, final File configFile) {
@@ -25,6 +25,10 @@ public class EssentialsUserConfiguration extends EssentialsConfiguration {
 
     public UUID getUuid() {
         return uuid;
+    }
+
+    public void setUsername(final String username) {
+        this.username = username;
     }
 
     @Override

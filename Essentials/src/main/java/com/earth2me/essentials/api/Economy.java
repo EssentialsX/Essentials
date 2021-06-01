@@ -95,6 +95,10 @@ public class Economy {
             }
         }
 
+        if (user == null) {
+            user = getUserByUUID(UUID.nameUUIDFromBytes(("NPC:" + name).getBytes(Charsets.UTF_8)));
+        }
+
         return user;
     }
 

@@ -660,7 +660,7 @@ public class FakeServer implements Server {
                     case "testPlayer2":
                         return UUID.fromString("2c9ebe1a-9098-43fd-bc0c-a369b76817ba");
                     case "npc1":
-                        return null;
+                        return UUID.fromString("f4a37409-5c40-3b2c-9cd6-57d3c5abdc76");
                 }
                 throw new UnsupportedOperationException("Not supported yet.");
             }

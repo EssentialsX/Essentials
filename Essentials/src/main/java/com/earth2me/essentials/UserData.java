@@ -6,6 +6,7 @@ import com.earth2me.essentials.config.entities.CommandCooldown;
 import com.earth2me.essentials.config.holders.UserConfigHolder;
 import com.earth2me.essentials.utils.NumberUtil;
 import com.earth2me.essentials.utils.StringUtil;
+import com.google.common.base.Charsets;
 import net.ess3.api.IEssentials;
 import net.ess3.api.MaxMoneyException;
 import org.bukkit.Location;
@@ -53,6 +54,10 @@ public abstract class UserData extends PlayerExtension implements IConf {
 
         config = new EssentialsUserConfiguration(base.getName(), base.getUniqueId(), new File(folder, filename + ".yml"));
         reloadConfig();
+
+        if (config.getUsername() == null) {
+            config.setUsername(getLastAccountName());
+        }
     }
 
     public final void reset() {
@@ -60,6 +65,10 @@ public abstract class UserData extends PlayerExtension implements IConf {
         config.getFile().delete();
         if (config.getUsername() != null) {
             ess.getUserMap().removeUser(config.getUsername());
+            if (isNPC()) {
+                final String uuid = UUID.nameUUIDFromBytes(("NPC:" + config.getUsername()).getBytes(Charsets.UTF_8)).toString();
+                ess.getUserMap().removeUserUUID(uuid);
+            }
         }
     }
 
