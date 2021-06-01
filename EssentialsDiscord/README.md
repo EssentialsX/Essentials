@@ -61,7 +61,7 @@ click the blue "Copy" button right of your bot's icon. Make sure to save it for 
 > ![Copy Token](https://i.imgur.com/OqpaSQH.gif)
 > `Copy` -> Paste into Notepad for later step
    
-9. Next up is adding your bot to your discord server. First, goto [essentialsx.net/discord.html](https://essentialsx.net/discord.html)
+7. Next up is adding your bot to your discord server. First, goto [essentialsx.net/discord.html](https://essentialsx.net/discord.html)
 and paste your Client ID you copied from step 2 into the text box on that page. Once you do that, click
 the "Authorize" button next to the text box. This will redirect you to Discord's authorization website 
 to chose which server to add the bot to. Note for advanced users: Please use the `essentialsx.net` website above 
@@ -70,34 +70,34 @@ scope to work, so please just use the link above even if you think you know what
 > ![OAuth Link Gen](https://i.imgur.com/u6MFJgQ.gif)
 > Paste Client ID -> `Authorize`
 
-10. Once on the Discord authorization website, select the server from the "Select a server" dropdown 
+8. Once on the Discord authorization website, select the server from the "Select a server" dropdown 
 that you want to add the bot to. Then click the "Authorize" button. You may be prompted to confirm
 you are not a bot, proceed with that like you would any other captcha.
 > ![Authorize](https://i.imgur.com/KXkESqC.gif)
 > Select Server -> `Authorize`
 
-11. For the next few steps, you're going to need to do some stuff in discord, so start up your
+9. For the next few steps, you're going to need to do some stuff in discord, so start up your
 Discord desktop/web client. 
 
-12. Once in your Discord client, you'll need to enable developer mode. Do this by going into the 
+10. Once in your Discord client, you'll need to enable developer mode. Do this by going into the 
 Settings, then go to the "Appearance" tab and check on the "Developer Mode" at the bottom of the
 page. Once you've checked "Developer Mode" on, click the `X` at the top right to exit Settings.
 > ![Developer Mode](https://i.imgur.com/CrW31Up.gif)
 > `User Settings` -> `Appearance` -> Check `Developer Mode` -> Exit Settings
 
-13. Next is copying a few IDs. First up, you'll want to copy the server (aka guild) id. Do this by
+11. Next is copying a few IDs. First up, you'll want to copy the server (aka guild) id. Do this by
 finding the server you added the bot to, right click its icon, and click "Copy ID". Once you copied
 it, make sure to save it for a later step.
 > ![Guild ID](https://i.imgur.com/0mg2yT3.gif)
 > Right click server -> `Copy ID` -> Paste into Notepad for later step
 
-14. The other ID you need to copy is the ID of the channel you wish to be your primary channel.
+12. The other ID you need to copy is the ID of the channel you wish to be your primary channel.
 In other words, this will be the channel that, by default, receives messages for player chat/join/leave/death
 messages as well as mute/kicks. To see how to further configure message types, see [Configuring Messages](#configuring-messages).
 > ![Primary Channel ID](https://i.imgur.com/uMODfiQ.gif)
 > Right click your 'primary' channel -> `Copy ID` -> Paste into Notepad for later step
 
-15. You've successfully copied all the necessary IDs needed for a basic setup. Next up is generating the
+13. You've successfully copied all the necessary IDs needed for a basic setup. Next up is generating the
 default config for EssentialsXDiscord, so you can start setting it up! Do this by putting the
 EssentialsXDiscord jar (you can download it [here](https://essentialsx.net/downloads.html) if you do not
 already have one) in your plugins folder, starting your server, and then stopping it as soon as it finishes
@@ -105,22 +105,22 @@ starting up.
 > ![Start/Stop Server](https://i.imgur.com/JQX6hqM.gif)
 > Drag EssentialsXDiscord jar into plugins folder -> Start Server -> Stop Server
 
-16. Now you can start to configure the plugin with all the stuff you copied from earlier. Open the config
+14. Now you can start to configure the plugin with all the stuff you copied from earlier. Open the config
 for EssentialsXDiscord located at `plugins/EssentialsDiscord/config.yml`. When you open the config, the
 first thing to configure is your bot's token. Replace `INSERT-TOKEN-HERE` in the config with the token you
 copied earlier from step 6.
 > ![Paste Token](https://i.imgur.com/EnD31Wg.gif)
 > Re-Copy Token from Step 6 -> Paste as token value 
 
-17. Next, is the guild id, replace the zeros for the guild value in the config with the guild id you copied
+15. Next, is the guild id, replace the zeros for the guild value in the config with the guild id you copied
 from step 13.
 > ![Paste Guild](https://i.imgur.com/YxkHykd.gif)
 
-18. Finally, you'll need to paste the primary channel id you copied from step 14 and paste it as the
+16. Finally, you'll need to paste the primary channel id you copied from step 14 and paste it as the
 primary value in the channels section and once you've done that save the config file!
 > ![Paste Primary](https://i.imgur.com/4xaHMfO.gif)
 
-19. Congratulations, you've completed the initial setup guide! When you start up your server, you should
+17. Congratulations, you've completed the initial setup guide! When you start up your server, you should
 notice that chat and other messages start showing up in the channel you requested they be. Now that you
 completed the initial, go back up to the [Table Of Contents](#table-of-contents) to see what other cool things you can do!
 
