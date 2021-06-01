@@ -5,6 +5,8 @@ import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.UUID;
+
 /**
  * Fired before a message is about to be sent to a discord channel.
  */
@@ -17,6 +19,7 @@ public class DiscordMessageEvent extends Event implements Cancellable {
     private boolean allowGroupMentions;
     private String avatarUrl;
     private String name;
+    private final UUID uuid;
 
     /**
      * @param type               The message type/destination of this event.
@@ -24,13 +27,15 @@ public class DiscordMessageEvent extends Event implements Cancellable {
      * @param allowGroupMentions If the message should allow the pinging of channels, users, or emotes.
      * @param avatarUrl          The avatar url to use for this message (if supported) or null to use the default bot avatar.
      * @param name               The name to use for this message (if supported) or null to use the default bot name.
+     * @param uuid               The UUID of the player which caused this event or null if this wasn't a player triggered event.
      */
-    public DiscordMessageEvent(final MessageType type, final String message, final boolean allowGroupMentions, final String avatarUrl, final String name) {
+    public DiscordMessageEvent(final MessageType type, final String message, final boolean allowGroupMentions, final String avatarUrl, final String name, final UUID uuid) {
         this.type = type;
         this.message = message;
         this.allowGroupMentions = allowGroupMentions;
         this.avatarUrl = avatarUrl;
         this.name = name;
+        this.uuid = uuid;
     }
 
     /**
@@ -111,6 +116,14 @@ public class DiscordMessageEvent extends Event implements Cancellable {
      */
     public void setName(String name) {
         this.name = name;
+    }
+
+    /**
+     * Gets the UUID of the player which caused this event, or null if it wasn't a player triggered event.
+     * @return The UUID or null.
+     */
+    public UUID getUUID() {
+        return uuid;
     }
 
     @Override

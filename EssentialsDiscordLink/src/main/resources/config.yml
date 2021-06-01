@@ -16,3 +16,6 @@ link-policy: none
 
 # The discord url that will be shown when a player when told to link their account
 discord-url: "https://discord.gg/invite-code"
+
+# Whether or not discord messages from unlinked members be ignored and not sent to minecraft.
+block-unlinked-chat: false

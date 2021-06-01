@@ -1,6 +1,10 @@
-package net.essentialsx.discordlink;
+package net.essentialsx.discordlink.listeners;
 
 import net.essentialsx.api.v2.events.AsyncUserDataLoadEvent;
+import net.essentialsx.api.v2.events.discord.DiscordMessageEvent;
+import net.essentialsx.discordlink.DiscordLinkSettings;
+import net.essentialsx.discordlink.EssentialsDiscordLink;
+import net.essentialsx.discordlink.UserLinkStatusChangeEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -99,6 +103,13 @@ public class LinkBukkitListener implements Listener {
                 code = e.getMessage();
             }
             event.getUser().sendMessage(tl("discordLinkLoginPrompt", "/link " + code, ess.getSettings().getInviteUrl()));
+        }
+    }
+
+    @EventHandler(priority = EventPriority.HIGH)
+    public void onDiscordMessage(final DiscordMessageEvent event) {
+        if (ess.getSettings().isBlockUnlinkedChat() && event.getType() == DiscordMessageEvent.MessageType.DefaultTypes.CHAT && !ess.getLinkManager().isLinked(event.getUUID())) {
+            event.setCancelled(true);
         }
     }
 

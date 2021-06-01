@@ -8,6 +8,7 @@ import net.essentialsx.discord.EssentialsDiscord;
 import net.essentialsx.discordlink.commands.discord.AccountInteractionCommand;
 import net.essentialsx.discordlink.commands.discord.LinkInteractionCommand;
 import net.essentialsx.discordlink.commands.discord.UnlinkInteractionCommand;
+import net.essentialsx.discordlink.listeners.LinkBukkitListener;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
