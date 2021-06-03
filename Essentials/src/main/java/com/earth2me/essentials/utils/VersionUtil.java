@@ -94,6 +94,7 @@ public final class VersionUtil {
                         supportStatusClass = entry.getKey();
                         return supportStatus = entry.getValue();
                     }
+                    continue;
                 }
 
                 final boolean inverted = entry.getKey().contains("!");

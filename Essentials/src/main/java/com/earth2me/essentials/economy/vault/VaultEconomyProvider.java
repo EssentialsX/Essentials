@@ -5,6 +5,7 @@ import com.earth2me.essentials.EssentialsUserConf;
 import com.earth2me.essentials.api.NoLoanPermittedException;
 import com.earth2me.essentials.api.UserDoesNotExistException;
 import com.earth2me.essentials.utils.NumberUtil;
+import com.google.common.base.Charsets;
 import net.ess3.api.MaxMoneyException;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.economy.EconomyResponse;
@@ -15,6 +16,7 @@ import java.math.BigDecimal;
 import java.text.MessageFormat;
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -74,7 +76,11 @@ public class VaultEconomyProvider implements Economy {
     @SuppressWarnings("deprecation")
     @Override
     public boolean hasAccount(String playerName) {
-        return com.earth2me.essentials.api.Economy.playerExists(playerName);
+        if (com.earth2me.essentials.api.Economy.playerExists(playerName)) {
+            return true;
+        }
+        // We may not have the player name in the usermap, let's double check an NPC account with this name doesn't exist.
+        return com.earth2me.essentials.api.Economy.playerExists(UUID.nameUUIDFromBytes(("NPC:" + playerName).getBytes(Charsets.UTF_8)));
     }
 
     @Override
