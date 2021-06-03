@@ -353,7 +353,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
                     serverStateProvider = new PaperServerStateProvider();
                     containerProvider = new PaperContainerProvider();
                 } else {
-                    serverStateProvider = new ReflServerStateProvider(getLogger());
+                    serverStateProvider = new ReflServerStateProvider();
                 }
 
                 //Event Providers
