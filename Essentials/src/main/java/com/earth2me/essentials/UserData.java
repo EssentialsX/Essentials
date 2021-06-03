@@ -2,6 +2,7 @@ package com.earth2me.essentials;
 
 import com.earth2me.essentials.utils.NumberUtil;
 import com.earth2me.essentials.utils.StringUtil;
+import com.google.common.base.Charsets;
 import com.google.common.collect.ImmutableMap;
 import net.ess3.api.IEssentials;
 import net.ess3.api.InvalidWorldException;
@@ -90,6 +91,10 @@ public abstract class UserData extends PlayerExtension implements IConf {
 
         config = new EssentialsUserConf(base.getName(), base.getUniqueId(), new File(folder, filename + ".yml"));
         reloadConfig();
+
+        if (config.username == null) {
+            config.setUsername(getLastAccountName());
+        }
     }
 
     public final void reset() {
@@ -97,6 +102,10 @@ public abstract class UserData extends PlayerExtension implements IConf {
         config.getFile().delete();
         if (config.username != null) {
             ess.getUserMap().removeUser(config.username);
+            if (isNPC()) {
+                final String uuid = UUID.nameUUIDFromBytes(("NPC:" + config.username).getBytes(Charsets.UTF_8)).toString();
+                ess.getUserMap().removeUserUUID(uuid);
+            }
         }
     }
 
