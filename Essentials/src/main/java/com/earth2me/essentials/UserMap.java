@@ -219,6 +219,10 @@ public class UserMap extends CacheLoader<String, User> implements IConf {
         names.remove(StringUtil.safeString(name));
     }
 
+    public void removeUserUUID(final String uuid) {
+        users.invalidate(uuid);
+    }
+
     public Set<UUID> getAllUniqueUsers() {
         return Collections.unmodifiableSet(keys);
     }

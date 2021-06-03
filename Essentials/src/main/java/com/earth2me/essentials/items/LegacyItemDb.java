@@ -191,6 +191,7 @@ public class LegacyItemDb extends AbstractItemDb {
             if (metaData == 0) metaData = EntityType.PIG.getTypeId();
             try {
                 retval = ess.getSpawnerItemProvider().setEntityType(retval, EntityType.fromId(metaData));
+                ess.getPersistentDataProvider().set(retval, "convert", "true");
             } catch (final IllegalArgumentException e) {
                 throw new Exception("Can't spawn entity ID " + metaData + " from mob spawners.");
             }
