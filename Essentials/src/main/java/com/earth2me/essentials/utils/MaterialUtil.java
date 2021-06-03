@@ -15,6 +15,7 @@ public final class MaterialUtil {
     public static final Material SPAWNER = EnumUtil.getMaterial("MOB_SPAWNER", "SPAWNER");
     private static final Set<Material> BEDS;
     private static final Set<Material> BANNERS;
+    private static final Set<Material> EDITABLE_BOOKS;
     private static final Set<Material> FIREWORKS;
     private static final Set<Material> FIREWORK_CHARGE;
     private static final Set<Material> LEGACY_SKULLS;
@@ -54,6 +55,8 @@ public final class MaterialUtil {
             "ORANGE_BANNER", "MAGENTA_BANNER", "LIGHT_BLUE_BANNER", "YELLOW_BANNER", "LIME_BANNER",
             "PINK_BANNER", "GRAY_BANNER", "LIGHT_GRAY_BANNER", "CYAN_BANNER", "PURPLE_BANNER",
             "BLUE_BANNER", "BROWN_BANNER", "GREEN_BANNER", "RED_BANNER", "BLACK_BANNER", "SHIELD");
+
+        EDITABLE_BOOKS = EnumUtil.getAllMatching(Material.class, "WRITTEN_BOOK", "WRITABLE_BOOK", "BOOK_AND_QUILL");
 
         FIREWORKS = EnumUtil.getAllMatching(Material.class, "FIREWORK", "FIREWORK_ROCKET");
 
@@ -152,6 +155,10 @@ public final class MaterialUtil {
 
     public static boolean isWallSign(final Material material) {
         return WALL_SIGNS.contains(material);
+    }
+
+    public static boolean isEditableBook(final Material material) {
+        return EDITABLE_BOOKS.contains(material);
     }
 
     public static boolean isSign(final Material material) {

@@ -6,13 +6,12 @@ import net.ess3.provider.ServerStateProvider;
 import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
 import java.lang.invoke.MethodType;
-import java.util.logging.Logger;
 
 public class ReflServerStateProvider implements ServerStateProvider {
     private final Object nmsServer;
     private final MethodHandle nmsIsRunning;
 
-    public ReflServerStateProvider(final Logger logger) {
+    public ReflServerStateProvider() {
         Object serverObject = null;
         MethodHandle isRunning = null;
         final Class<?> nmsClass = ReflUtil.getNMSClass("MinecraftServer");

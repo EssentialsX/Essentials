@@ -7,10 +7,11 @@ import com.earth2me.essentials.commands.IEssentialsCommand;
 import com.earth2me.essentials.commands.PlayerNotFoundException;
 import com.earth2me.essentials.perm.PermissionsHandler;
 import com.earth2me.essentials.updatecheck.UpdateChecker;
-import net.ess3.provider.MaterialTagProvider;
 import net.ess3.provider.ContainerProvider;
 import net.ess3.provider.FormattedCommandAliasProvider;
 import net.ess3.provider.KnownCommandsProvider;
+import net.ess3.provider.MaterialTagProvider;
+import net.ess3.provider.PersistentDataProvider;
 import net.ess3.provider.ServerStateProvider;
 import net.ess3.provider.SpawnerBlockProvider;
 import net.ess3.provider.SpawnerItemProvider;
@@ -146,6 +147,8 @@ public interface IEssentials extends Plugin {
     FormattedCommandAliasProvider getFormattedCommandAliasProvider();
 
     SyncCommandsProvider getSyncCommandsProvider();
+
+    PersistentDataProvider getPersistentDataProvider();
 
     PluginCommand getPluginCommand(String cmd);
 }
