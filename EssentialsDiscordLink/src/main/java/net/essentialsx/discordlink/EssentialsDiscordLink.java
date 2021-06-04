@@ -2,6 +2,7 @@ package net.essentialsx.discordlink;
 
 import com.earth2me.essentials.IEssentials;
 import com.earth2me.essentials.metrics.MetricsWrapper;
+import com.google.common.collect.ImmutableSet;
 import net.essentialsx.api.v2.services.discord.EssentialsDiscordAPI;
 import net.essentialsx.api.v2.services.discord.InteractionException;
 import net.essentialsx.discord.EssentialsDiscord;
@@ -14,6 +15,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -68,6 +70,8 @@ public class EssentialsDiscordLink extends JavaPlugin {
                 return;
             }
         }
+
+        ess.getPermissionsHandler().registerContext("essentials:linked", player -> Collections.singleton(String.valueOf(linkManager.isLinked(player.getUniqueId()))), () -> ImmutableSet.of("true", "false"));
 
         if (metrics == null) {
             metrics = new MetricsWrapper(this, 11462, false);
