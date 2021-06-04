@@ -1,7 +1,5 @@
 package net.essentialsx.api.v2.services.discord;
 
-import com.google.gson.JsonObject;
-
 /**
  * Represents an argument for a command to be shown to the discord client.
  */
@@ -26,15 +24,34 @@ public class InteractionCommandArgument {
     }
 
     /**
-     * Serializes this argument into its JSON representation.
-     * @return a {@link JsonObject} of this argument.
+     * Gets the name of this argument.
+     * @return the name of the argument.
      */
-    public JsonObject serialize() {
-        final JsonObject object = new JsonObject();
-        object.addProperty("type", type.getId());
-        object.addProperty("name", name);
-        object.addProperty("description", description);
-        object.addProperty("required", required);
-        return object;
+    public String getName() {
+        return name;
+    }
+
+    /**
+     * Gets the description of this argument.
+     * @return the description of the argument.
+     */
+    public String getDescription() {
+        return description;
+    }
+
+    /**
+     * Gets the type of this argument.
+     * @return the argument type.
+     */
+    public InteractionCommandArgumentType getType() {
+        return type;
+    }
+
+    /**
+     * Whether or not this argument is required or not.
+     * @return true if the argument is required.
+     */
+    public boolean isRequired() {
+        return required;
     }
 }

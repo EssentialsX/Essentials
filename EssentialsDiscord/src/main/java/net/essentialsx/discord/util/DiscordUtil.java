@@ -7,17 +7,13 @@ import com.earth2me.essentials.utils.DownsampleUtil;
 import com.earth2me.essentials.utils.FormatUtil;
 import com.earth2me.essentials.utils.VersionUtil;
 import com.google.common.collect.ImmutableList;
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.Webhook;
-import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
-import okhttp3.RequestBody;
 
 import java.awt.Color;
 import java.util.List;
@@ -25,15 +21,9 @@ import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
 
 public final class DiscordUtil {
-    public final static Gson GSON = new Gson();
     public final static List<Message.MentionType> NO_GROUP_MENTIONS;
     public final static AllowedMentions ALL_MENTIONS_WEBHOOK = AllowedMentions.all();
     public final static AllowedMentions NO_GROUP_MENTIONS_WEBHOOK = new AllowedMentions().withParseEveryone(false).withParseRoles(false).withParseUsers(true);
-    public final static JsonObject RAW_NO_GROUP_MENTIONS;
-    public final static MediaType JSON_TYPE = MediaType.parse("application/json; charset=utf-8");
-    public final static int EPHEMERAL_FLAG = 1 << 6;
-    public final static RequestBody ACK_DEFER = RequestBody.create(JSON_TYPE, "{\"type\": 5}");
-    public final static RequestBody ACK_DEFER_EPHEMERAL = RequestBody.create(JSON_TYPE, "{\"type\": 5, \"data\":{\"flags\": " + EPHEMERAL_FLAG + "}}");
 
     static {
         final ImmutableList.Builder<Message.MentionType> types = new ImmutableList.Builder<>();
@@ -41,11 +31,6 @@ public final class DiscordUtil {
         types.add(Message.MentionType.CHANNEL);
         types.add(Message.MentionType.EMOTE);
         NO_GROUP_MENTIONS = types.build();
-
-        final JsonObject allowMentions = new JsonObject();
-        allowMentions.add("parse", GSON.toJsonTree(ImmutableList.of("users")).getAsJsonArray());
-        allowMentions.add("users", GSON.toJsonTree(ImmutableList.of()).getAsJsonArray());
-        RAW_NO_GROUP_MENTIONS = allowMentions;
     }
 
     private DiscordUtil() {

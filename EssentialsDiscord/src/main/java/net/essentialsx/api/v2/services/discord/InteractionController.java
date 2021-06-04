@@ -17,11 +17,4 @@ public interface InteractionController {
      * @throws InteractionException if a command with that name was already registered or if the given command was already registered.
      */
     void registerCommand(InteractionCommand command) throws InteractionException;
-
-    /**
-     * Edits the response an interaction with the given token to the given message. Should only be used internally.
-     * @param interactionToken The token of the interaction
-     * @param message          The new message of the interaction.
-     */
-    void editInteractionResponse(String interactionToken, String message);
 }
