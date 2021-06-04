@@ -69,8 +69,10 @@ public class InteractionControllerImpl extends ListenerAdapter implements Intera
             final List<CommandData> list = new ArrayList<>();
             for (final InteractionCommand command : batchRegistrationQueue.values()) {
                 final CommandData data = new CommandData(command.getName(), command.getDescription());
-                for (final InteractionCommandArgument argument : command.getArguments()) {
-                    data.addOption(OptionType.valueOf(argument.getType().name()), argument.getName(), argument.getDescription(), argument.isRequired());
+                if (command.getArguments() != null) {
+                    for (final InteractionCommandArgument argument : command.getArguments()) {
+                        data.addOption(OptionType.valueOf(argument.getType().name()), argument.getName(), argument.getDescription(), argument.isRequired());
+                    }
                 }
                 list.add(data);
             }
@@ -120,8 +122,10 @@ public class InteractionControllerImpl extends ListenerAdapter implements Intera
         }
 
         final CommandData data = new CommandData(command.getName(), command.getDescription());
-        for (final InteractionCommandArgument argument : command.getArguments()) {
-            data.addOption(OptionType.valueOf(argument.getType().name()), argument.getName(), argument.getDescription(), argument.isRequired());
+        if (command.getArguments() != null) {
+            for (final InteractionCommandArgument argument : command.getArguments()) {
+                data.addOption(OptionType.valueOf(argument.getType().name()), argument.getName(), argument.getDescription(), argument.isRequired());
+            }
         }
 
         jda.getGuild().upsertCommand(data).queue(success -> {
