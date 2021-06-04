@@ -8,8 +8,7 @@ public enum InteractionCommandArgumentType {
     INTEGER(4),
     BOOLEAN(5),
     USER(6),
-    CHANNEL(7),
-    ROLE(8);
+    CHANNEL(7);
 
     private final int id;
     InteractionCommandArgumentType(int id) {

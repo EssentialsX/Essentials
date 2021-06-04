@@ -1,8 +1,5 @@
 package net.essentialsx.api.v2.services.discord;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-
 import java.util.List;
 
 /**
@@ -46,22 +43,4 @@ public interface InteractionCommand {
      * @param event The event which caused this command to be executed.
      */
     void onCommand(InteractionEvent event);
-
-    /**
-     * Serializes this command into a JSON representation to be sent to Discord.
-     * @return the json representation of this command.
-     */
-    default JsonObject serialize() {
-        final JsonObject cmdObject = new JsonObject();
-        cmdObject.addProperty("name", getName());
-        cmdObject.addProperty("description", getDescription());
-        final JsonArray optionsArray = new JsonArray();
-        if (getArguments() != null) {
-            for (InteractionCommandArgument argument : getArguments()) {
-                optionsArray.add(argument.serialize());
-            }
-        }
-        cmdObject.add("options", optionsArray);
-        return cmdObject;
-    }
 }

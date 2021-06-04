@@ -1,6 +1,7 @@
 dependencies {
     compileOnly project(':EssentialsX')
-    implementation('net.dv8tion:JDA:4.2.1_262') {
+    implementation('net.dv8tion:JDA:4.2.1_268') {
+        //noinspection GroovyAssignabilityCheck
         exclude module: 'opus-java'
     }
     implementation 'com.vdurmont:emoji-java:5.1.1'
