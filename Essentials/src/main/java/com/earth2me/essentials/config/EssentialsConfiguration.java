@@ -305,7 +305,7 @@ public class EssentialsConfiguration {
     }
 
     public boolean hasProperty(final String path) {
-        return !configurationNode.node(toSplitRoot(path)).virtual();
+        return !configurationNode.node(toSplitRoot(path)).isNull();
     }
 
     public Object[] toSplitRoot(String node) {
