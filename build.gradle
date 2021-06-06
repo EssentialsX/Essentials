@@ -46,8 +46,10 @@ def commitsSinceLastTag() {
 
 @SuppressWarnings('GrMethodMayBeStatic')
 def headBranchName() {
-    if (System.getenv("GITHUB_HEAD_REF") != null) {
+    if (System.getenv("GITHUB_HEAD_REF") != null && !System.getenv("GITHUB_HEAD_REF").isEmpty()) {
         return System.getenv("GITHUB_HEAD_REF")
+    } else if (System.getenv("GITHUB_REF") != null && !System.getenv("GITHUB_REF").isEmpty()) {
+        return System.getenv("GITHUB_REF").replaceFirst("refs/heads/", "")
     }
 
     if (!indraGit.isPresent()) {
