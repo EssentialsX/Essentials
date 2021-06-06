@@ -11,7 +11,6 @@ import com.google.gson.JsonObject;
 import org.bukkit.Material;
 import org.bukkit.Server;
 import org.bukkit.inventory.ItemStack;
-import org.spongepowered.configurate.BasicConfigurationNode;
 import org.spongepowered.configurate.ConfigurationNode;
 import org.spongepowered.configurate.yaml.NodeStyle;
 import org.spongepowered.configurate.yaml.YamlConfigurationLoader;
@@ -70,19 +69,17 @@ public class Commandcreatekit extends EssentialsCommand {
     private void uploadPaste(final CommandSource sender, final String kitName, final long delay, final List<String> list) {
         executorService.submit(() -> {
             try {
-                final ConfigurationNode config = BasicConfigurationNode.root();
+                final StringWriter sw = new StringWriter();
+                final YamlConfigurationLoader loader = YamlConfigurationLoader.builder().sink(() -> new BufferedWriter(sw)).indent(2).nodeStyle(NodeStyle.BLOCK).build();
+
+                final ConfigurationNode config = loader.createNode();
                 config.node("kits", kitName, "delay").set(delay);
                 config.node("kits", kitName, "items").set(list);
 
-                final StringWriter sw = new StringWriter();
-
-                final YamlConfigurationLoader loader = YamlConfigurationLoader.builder().sink(() -> new BufferedWriter(sw)).indent(2).nodeStyle(NodeStyle.BLOCK).build();
+                sw.append("# Copy the kit code below into the kits section in your config.yml file\n");
                 loader.save(config);
 
-                String fileContents = "# Copy the kit code below into the kits section in your config.yml file\n";
-                fileContents += sw.toString();
-                sw.flush();
-                sw.close();
+                final String fileContents = sw.toString();
 
                 final HttpURLConnection connection = (HttpURLConnection) new URL(PASTE_UPLOAD_URL).openConnection();
                 connection.setRequestMethod("POST");
