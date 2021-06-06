@@ -63,7 +63,7 @@ public class Settings implements net.ess3.api.ISettings {
     private boolean forceDisableTeleportSafety;
     private Set<String> disabledCommands = new HashSet<>();
     private final transient Map<String, Command> disabledBukkitCommands = new HashMap<>();
-    private CommentedConfigurationNode commandCosts;
+    private Map<String, BigDecimal> commandCosts;
     private Set<String> socialSpyCommands = new HashSet<>();
     private Set<String> muteCommands = new HashSet<>();
     private String nicknamePrefix = "~";
@@ -342,10 +342,10 @@ public class Settings implements net.ess3.api.ISettings {
         return getCommandCost(cmd.getName());
     }
 
-    private CommentedConfigurationNode _getCommandCosts() {
+    private Map<String, BigDecimal> _getCommandCosts() {
         final Map<String, CommentedConfigurationNode> section = ConfigurateUtil.getMap(config.getSection("command-costs"));
         if (!section.isEmpty()) {
-            final CommentedConfigurationNode newSection = config.newSection();
+            final Map<String, BigDecimal> newMap = new HashMap<>();
             for (Map.Entry<String, CommentedConfigurationNode> entry : section.entrySet()) {
                 final String command = entry.getKey();
                 final CommentedConfigurationNode node = entry.getValue();
@@ -354,14 +354,14 @@ public class Settings implements net.ess3.api.ISettings {
                 }
                 try {
                     if (ConfigurateUtil.isDouble(node)) {
-                        newSection.node(command.toLowerCase(Locale.ENGLISH)).set(node.getDouble());
+                        newMap.put(command.toLowerCase(Locale.ENGLISH), BigDecimal.valueOf(node.getDouble()));
                     } else if (ConfigurateUtil.isInt(node)) {
-                        newSection.node(command.toLowerCase(Locale.ENGLISH)).set((double) node.getInt());
+                        newMap.put(command.toLowerCase(Locale.ENGLISH), BigDecimal.valueOf(node.getInt()));
                     } else if (ConfigurateUtil.isString(node)) {
                         final String costString = node.getString();
                         //noinspection ConstantConditions
                         final double cost = Double.parseDouble(costString.trim().replace("$", "").replace(getCurrencySymbol(), "").replaceAll("\\W", ""));
-                        newSection.node(command.toLowerCase(Locale.ENGLISH)).set(cost);
+                        newMap.put(command.toLowerCase(Locale.ENGLISH), BigDecimal.valueOf(cost));
                     } else {
                         ess.getLogger().warning("Invalid command cost for: " + command);
                     }
@@ -369,7 +369,7 @@ public class Settings implements net.ess3.api.ISettings {
                     ess.getLogger().warning("Invalid command cost for: " + command);
                 }
             }
-            return newSection;
+            return newMap;
         }
         return null;
     }
@@ -377,8 +377,8 @@ public class Settings implements net.ess3.api.ISettings {
     @Override
     public BigDecimal getCommandCost(String name) {
         name = name.replace('.', '_').replace('/', '_');
-        if (commandCosts != null) {
-            return ConfigurateUtil.toBigDecimal(commandCosts.getString(name), BigDecimal.ZERO);
+        if (commandCosts != null && commandCosts.containsKey(name)) {
+            return commandCosts.get(name);
         }
         return BigDecimal.ZERO;
     }
