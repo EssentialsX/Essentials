@@ -1089,6 +1089,11 @@ public class Settings implements net.ess3.api.ISettings {
         return config.getBoolean("sleep-ignores-afk-players", true);
     }
 
+    @Override
+    public boolean sleepIgnoresVanishedPlayers() {
+        return config.getBoolean("sleep-ignores-vanished-player", true);
+    }
+
     public String _getAfkListName() {
         return FormatUtil.replaceFormat(config.getString("afk-list-name", "none"));
     }
