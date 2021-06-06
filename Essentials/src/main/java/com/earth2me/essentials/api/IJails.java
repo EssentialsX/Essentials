@@ -77,7 +77,7 @@ public interface IJails extends IConf {
     void setJail(String jailName, Location loc) throws Exception;
 
     /**
-     * Beings a transaction
+     * Begins a transaction
      */
     void startTransaction();
 
