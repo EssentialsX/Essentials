@@ -17,6 +17,10 @@ public final class ConfigurateUtil {
     private ConfigurateUtil() {
     }
 
+    public static Set<String> getRootNodeKeys(final EssentialsConfiguration config) {
+        return getKeys(config.getRootNode());
+    }
+
     public static Set<String> getKeys(final CommentedConfigurationNode node) {
         if (node == null || !node.isMap()) {
             return Collections.emptySet();

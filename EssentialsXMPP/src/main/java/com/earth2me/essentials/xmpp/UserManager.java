@@ -37,7 +37,7 @@ public class UserManager implements IConf {
     }
 
     final String getUserByAddress(final String search) {
-        final Set<String> usernames = ConfigurateUtil.getKeys(users.getRootNode());
+        final Set<String> usernames = ConfigurateUtil.getRootNodeKeys(users);
         for (final String username : usernames) {
             final String address = users.getString(username + "." + ADDRESS, null);
             if (search.equalsIgnoreCase(address)) {
@@ -68,7 +68,7 @@ public class UserManager implements IConf {
     public final void reloadConfig() {
         users.load();
         spyusers.clear();
-        final Set<String> keys = ConfigurateUtil.getKeys(users.getRootNode());
+        final Set<String> keys = ConfigurateUtil.getRootNodeKeys(users);
         for (final String key : keys) {
             if (isSpy(key)) {
                 final String address = getAddress(key);
