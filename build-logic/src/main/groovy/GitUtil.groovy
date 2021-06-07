@@ -21,7 +21,6 @@ final class GitUtil {
             for (tag in tags) {
                 if (walk.parseCommit(tag.getLeaf().getObjectId()) == commit) {
                     walk.dispose()
-                    indraGit.git().close()
                     return depth
                 }
             }
