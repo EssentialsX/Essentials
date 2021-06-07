@@ -1,6 +1,7 @@
 package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.CommandSource;
+import com.earth2me.essentials.ISettings;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.DateUtil;
 import com.earth2me.essentials.utils.EnumUtil;
@@ -129,14 +130,14 @@ public class Commandtogglejail extends EssentialsCommand {
                             sender.sendMessage(tl("jailReleased", player.getName()));
                         }
                     });
-                    if (ess.getSettings().isTeleportBackWhenFreedFromJail()) {
+                    if (ess.getSettings().getTeleportWhenFreePolicy() == ISettings.TeleportWhenFreePolicy.BACK) {
                         player.getAsyncTeleport().back(future);
                         future.exceptionally(e -> {
                             player.getAsyncTeleport().respawn(null, PlayerTeleportEvent.TeleportCause.PLUGIN, new CompletableFuture<>());
                             sender.sendMessage(tl("jailReleased", player.getName()));
                             return false;
                         });
-                    } else if (ess.getSettings().isTeleportToSpawnWhenFreedFromJail()) {
+                    } else if (ess.getSettings().getTeleportWhenFreePolicy() == ISettings.TeleportWhenFreePolicy.SPAWN) {
                         player.getAsyncTeleport().respawn(null, PlayerTeleportEvent.TeleportCause.PLUGIN, future);
                     }
                     return;
