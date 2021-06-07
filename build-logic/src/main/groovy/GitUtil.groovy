@@ -21,8 +21,6 @@ final class GitUtil {
             for (tag in tags) {
                 if (walk.parseCommit(tag.getLeaf().getObjectId()) == commit) {
                     walk.dispose()
-                    // todo: is this call to close needed?
-                    // 'close() called when useCnt is already zero for Repository[Essentials/.git]'
                     indraGit.git().close()
                     return depth
                 }
