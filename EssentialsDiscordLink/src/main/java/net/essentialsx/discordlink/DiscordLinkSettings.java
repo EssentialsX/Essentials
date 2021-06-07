@@ -1,20 +1,19 @@
 package net.essentialsx.discordlink;
 
-import com.earth2me.essentials.EssentialsConf;
 import com.earth2me.essentials.IConf;
+import com.earth2me.essentials.config.EssentialsConfiguration;
 
 import java.io.File;
 
 public class DiscordLinkSettings implements IConf {
     private final EssentialsDiscordLink plugin;
-    private final EssentialsConf config;
+    private final EssentialsConfiguration config;
 
     private LinkPolicy linkPolicy;
 
     public DiscordLinkSettings(EssentialsDiscordLink plugin) {
         this.plugin = plugin;
-        this.config = new EssentialsConf(new File(plugin.getDataFolder(), "config.yml"));
-        config.setTemplateName("/config.yml", EssentialsDiscordLink.class);
+        this.config = new EssentialsConfiguration(new File(plugin.getDataFolder(), "config.yml"), "/config.yml", EssentialsDiscordLink.class);
         reloadConfig();
     }
 
@@ -35,13 +34,13 @@ public class DiscordLinkSettings implements IConf {
         FREEZE,
         NONE;
 
-        static LinkPolicy fromName(final String name, final LinkPolicy def) {
+        static LinkPolicy fromName(final String name) {
             for (LinkPolicy policy : values()) {
                 if (policy.name().equalsIgnoreCase(name)) {
                     return policy;
                 }
             }
-            return def;
+            return LinkPolicy.NONE;
         }
     }
 
@@ -49,6 +48,6 @@ public class DiscordLinkSettings implements IConf {
     public void reloadConfig() {
         config.load();
 
-        linkPolicy = LinkPolicy.fromName(config.getString("link-policy"), LinkPolicy.NONE);
+        linkPolicy = LinkPolicy.fromName(config.getString("link-policy", null));
     }
 }

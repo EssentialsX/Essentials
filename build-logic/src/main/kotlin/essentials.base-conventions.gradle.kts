@@ -18,7 +18,9 @@ dependencies {
     testImplementation("org.mockito", "mockito-core", mockitoVersion)
 
     if (project.name != "1_8Provider" && project.name != "PaperProvider" && project.name != "NMSReflectionProvider") { // These providers use their own bukkit versions
-        api("org.spigotmc", "spigot-api", spigotVersion)
+        api("org.spigotmc", "spigot-api", spigotVersion) {
+            exclude(group = "org.yaml", module = "snakeyaml")
+        }
     }
 }
 

@@ -2,6 +2,7 @@ package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.config.ConfigurateUtil;
 import org.bukkit.Server;
 
 import java.util.ArrayList;
@@ -58,7 +59,7 @@ public class Commandkitreset extends EssentialsCommand {
     @Override
     protected List<String> getTabCompleteOptions(Server server, CommandSource sender, String commandLabel, String[] args) {
         if (args.length == 1) {
-            return new ArrayList<>(ess.getKits().getKits().getKeys(false));
+            return new ArrayList<>(ConfigurateUtil.getKeys(ess.getKits().getKits()));
         } else if (args.length == 2 && sender.isAuthorized("essentials.kitreset.others", ess)) {
             return getPlayers(server, sender);
         } else {

@@ -1,12 +1,12 @@
 package net.essentialsx.discord;
 
-import com.earth2me.essentials.EssentialsConf;
 import com.earth2me.essentials.IConf;
+import com.earth2me.essentials.config.ConfigurateUtil;
+import com.earth2me.essentials.config.EssentialsConfiguration;
 import com.earth2me.essentials.utils.FormatUtil;
 import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.entities.Activity;
 import org.apache.logging.log4j.Level;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
 import java.io.File;
@@ -19,7 +19,7 @@ import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
 public class DiscordSettings implements IConf {
-    private final EssentialsConf config;
+    private final EssentialsConfiguration config;
     private final EssentialsDiscord plugin;
 
     private final Map<String, Long> nameToChannelIdMap = new HashMap<>();
@@ -43,8 +43,7 @@ public class DiscordSettings implements IConf {
 
     public DiscordSettings(EssentialsDiscord plugin) {
         this.plugin = plugin;
-        this.config = new EssentialsConf(new File(plugin.getDataFolder(), "config.yml"));
-        config.setTemplateName("/config.yml", EssentialsDiscord.class);
+        this.config = new EssentialsConfiguration(new File(plugin.getDataFolder(), "config.yml"), "/config.yml", EssentialsDiscord.class);
         reloadConfig();
     }
 
@@ -81,7 +80,7 @@ public class DiscordSettings implements IConf {
     }
 
     public List<String> getPermittedFormattingRoles() {
-        return config.getStringList("permit-formatting-roles");
+        return config.getList("permit-formatting-roles", String.class);
     }
 
     public OnlineStatus getStatus() {
@@ -151,11 +150,11 @@ public class DiscordSettings implements IConf {
     }
 
     public List<String> getCommandSnowflakes(String command) {
-        return config.getStringList("commands." + command + ".allowed-roles");
+        return config.getList("commands." + command + ".allowed-roles", String.class);
     }
 
     public List<String> getCommandAdminSnowflakes(String command) {
-        return config.getStringList("commands." + command + ".admin-roles");
+        return config.getList("commands." + command + ".admin-roles", String.class);
     }
 
     // Message formats
@@ -262,7 +261,7 @@ public class DiscordSettings implements IConf {
 
     private String getFormatString(String node) {
         final String pathPrefix = node.startsWith(".") ? "" : "messages.";
-        return config.getString(pathPrefix + (pathPrefix.isEmpty() ? node.substring(1) : node));
+        return config.getString(pathPrefix + (pathPrefix.isEmpty() ? node.substring(1) : node), null);
     }
 
     private MessageFormat generateMessageFormat(String content, String defaultStr, boolean format, String... arguments) {
@@ -281,14 +280,12 @@ public class DiscordSettings implements IConf {
         // Build channel maps
         nameToChannelIdMap.clear();
         channelIdToNamesMap.clear();
-        final ConfigurationSection section = config.getConfigurationSection("channels");
-        if (section != null) {
-            for (String key : section.getKeys(false)) {
-                if (section.isLong(key)) {
-                    final long value = section.getLong(key);
-                    nameToChannelIdMap.put(key, value);
-                    channelIdToNamesMap.computeIfAbsent(value, o -> new ArrayList<>()).add(key);
-                }
+        final Map<String, Object> section = ConfigurateUtil.getRawMap(config, "channels");
+        for (Map.Entry<String, Object> entry : section.entrySet()) {
+            if (entry.getValue() instanceof Long) {
+                final long value = (long) entry.getValue();
+                nameToChannelIdMap.put(entry.getKey(), value);
+                channelIdToNamesMap.computeIfAbsent(value, o -> new ArrayList<>()).add(entry.getKey());
             }
         }
 
@@ -313,7 +310,7 @@ public class DiscordSettings implements IConf {
             statusActivity = Activity.of(activityType, config.getString("presence.message", "Minecraft"));
         }
 
-        final String filter = config.getString("chat.discord-filter");
+        final String filter = config.getString("chat.discord-filter", null);
         if (filter != null) {
             try {
                 discordFilter = Pattern.compile(filter);
@@ -325,7 +322,7 @@ public class DiscordSettings implements IConf {
             discordFilter = null;
         }
 
-        consoleLogLevel = Level.toLevel(config.getString("console.log-level"), Level.INFO);
+        consoleLogLevel = Level.toLevel(config.getString("console.log-level", null), Level.INFO);
 
         consoleFormat = generateMessageFormat(getFormatString(".console.format"), "[{timestamp} {level}] {message}", false,
                 "timestamp", "level", "message");
