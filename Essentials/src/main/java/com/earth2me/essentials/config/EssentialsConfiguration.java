@@ -1,6 +1,7 @@
 package com.earth2me.essentials.config;
 
 import com.earth2me.essentials.config.annotations.DeleteOnEmpty;
+import com.earth2me.essentials.config.entities.LazyLocation;
 import com.earth2me.essentials.config.processors.DeleteOnEmptyProcessor;
 import com.earth2me.essentials.config.serializers.BigDecimalTypeSerializer;
 import com.earth2me.essentials.config.serializers.LocationTypeSerializer;
@@ -49,7 +50,7 @@ public class EssentialsConfiguration {
     private static final TypeSerializerCollection SERIALIZERS = TypeSerializerCollection.defaults().childBuilder()
             .registerAnnotatedObjects(MAPPER_FACTORY)
             .register(BigDecimal.class, new BigDecimalTypeSerializer())
-            .register(Location.class, new LocationTypeSerializer())
+            .register(LazyLocation.class, new LocationTypeSerializer())
             .register(Material.class, new MaterialTypeSerializer())
             .build();
 
