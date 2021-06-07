@@ -154,7 +154,7 @@ public class DiscordMessageEvent extends Event implements Cancellable {
 
         /**
          * Creates a {@link MessageType} which will send channels to the specified channel key.
-         * @param key The channel key definded in the {@code message-types} section of the config.
+         * @param key The channel key defined in the {@code message-types} section of the config.
          */
         public MessageType(final String key) {
             this(key, false);

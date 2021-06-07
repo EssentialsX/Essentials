@@ -23,6 +23,7 @@ EssentialsXDiscord offers *essential* features you'd want from a Discord bridge 
 > * [Receive Discord Messages in Minecraft](#receive-discord-messages-in-minecraft)
 > * [Discord Commands](#discord-commands)
 > * [Misc Permissions](#misc-permissions)
+> * [Developer API](#developer-api)
 
 ---
 
@@ -259,5 +260,15 @@ EssentialsXDiscord has a few miscellanies permissions that may be important to k
 bold/underline/italic/etc their minecraft chat messages for discord.
 * `essentials.discord.ping` - Allows players to bypass the ping filter, so that they can ping @everyone/@here
 from minecraft chat.
+
+---
+
+## Developer API
+EssentialsXDiscord has a pretty extensive API which allows any third party plugin to build
+their own integrations into it.
+
+### Sending Messages to Discord
+EssentialsXDiscord organizes the types of messages that can be sent into certain channels
+
 
 ---

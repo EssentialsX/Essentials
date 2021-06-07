@@ -18,8 +18,11 @@
 
 # Build files
 .gradle/
-jars/
+/jars/
 out/
 build/
 target/
 *.class
+
+# Run directory
+/run/

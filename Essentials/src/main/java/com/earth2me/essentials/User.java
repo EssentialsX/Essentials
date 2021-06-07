@@ -890,6 +890,9 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
             if (isAuthorized("essentials.vanish.effect")) {
                 this.getBase().addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, Integer.MAX_VALUE, 1, false));
             }
+            if (ess.getSettings().sleepIgnoresVanishedPlayers()) {
+                getBase().setSleepingIgnored(true);
+            }
         } else {
             for (final Player p : ess.getOnlinePlayers()) {
                 p.showPlayer(getBase());
@@ -898,6 +901,9 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
             ess.getVanishedPlayersNew().remove(getName());
             if (isAuthorized("essentials.vanish.effect")) {
                 this.getBase().removePotionEffect(PotionEffectType.INVISIBILITY);
+            }
+            if (ess.getSettings().sleepIgnoresVanishedPlayers() && !isAuthorized("essentials.sleepingignored")) {
+                getBase().setSleepingIgnored(false);
             }
         }
     }
