@@ -1,8 +1,9 @@
 package com.earth2me.essentials;
 
+import com.earth2me.essentials.config.ConfigurateUtil;
+import com.earth2me.essentials.config.EssentialsConfiguration;
+import com.earth2me.essentials.config.EssentialsUserConfiguration;
 import com.earth2me.essentials.craftbukkit.BanLookup;
-import com.earth2me.essentials.settings.Spawns;
-import com.earth2me.essentials.storage.YamlStorageWriter;
 import com.earth2me.essentials.utils.StringUtil;
 import com.google.common.base.Charsets;
 import com.google.common.collect.Maps;
@@ -11,7 +12,7 @@ import org.bukkit.BanList;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
-import org.bukkit.configuration.ConfigurationSection;
+import org.spongepowered.configurate.CommentedConfigurationNode;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
@@ -51,14 +52,14 @@ public class EssentialsUpgrade {
     private static final String PATTERN_CONFIG_NAME_REGEX = "(?mi)^lastAccountName:\\s*[\"\']?(\\w+)[\"\']?\\s*$";
     private static final Pattern PATTERN_CONFIG_NAME = Pattern.compile(PATTERN_CONFIG_NAME_REGEX);
     private final transient IEssentials ess;
-    private final transient EssentialsConf doneFile;
+    private final transient EssentialsConfiguration doneFile;
 
     EssentialsUpgrade(final IEssentials essentials) {
         ess = essentials;
         if (!ess.getDataFolder().exists()) {
             ess.getDataFolder().mkdirs();
         }
-        doneFile = new EssentialsConf(new File(ess.getDataFolder(), "upgrades-done.yml"));
+        doneFile = new EssentialsConfiguration(new File(ess.getDataFolder(), "upgrades-done.yml"));
         doneFile.load();
     }
 
@@ -92,13 +93,13 @@ public class EssentialsUpgrade {
             countFiles++;
 
             final String name = string.substring(0, string.length() - 4);
-            final EssentialsUserConf config;
+            final EssentialsUserConfiguration config;
             UUID uuid = null;
             try {
                 uuid = UUID.fromString(name);
             } catch (final IllegalArgumentException ex) {
                 final File file = new File(userdir, string);
-                final EssentialsConf conf = new EssentialsConf(file);
+                final EssentialsConfiguration conf = new EssentialsConfiguration(file);
                 conf.load();
                 conf.setProperty("lastAccountName", name);
                 conf.save();
@@ -129,8 +130,8 @@ public class EssentialsUpgrade {
                 }
 
                 if (uuid != null) {
-                    conf.forceSave();
-                    config = new EssentialsUserConf(name, uuid, new File(userdir, uuid + ".yml"));
+                    conf.blockingSave();
+                    config = new EssentialsUserConfiguration(name, uuid, new File(userdir, uuid + ".yml"));
                     config.convertLegacyFile();
                     ess.getUserMap().trackUUID(uuid, name, false);
                     continue;
@@ -143,6 +144,60 @@ public class EssentialsUpgrade {
         ess.getLogger().info("Converted " + countFiles + "/" + countFiles + ".  Conversion complete.");
         ess.getLogger().info("Converted via cache: " + countEssCache + " :: Converted via lookup: " + countBukkit + " :: Failed to convert: " + countFails);
         ess.getLogger().info("To rerun the conversion type /essentials uuidconvert");
+    }
+
+    public void convertStupidCamelCaseUserdataKeys() {
+        if (doneFile.getBoolean("updateUsersLegacyPathNames", false)) {
+            return;
+        }
+
+        LOGGER.info("Attempting to migrate legacy userdata keys to Configurate");
+
+        final File userdataFolder = new File(ess.getDataFolder(), "userdata");
+        if (!userdataFolder.exists() || !userdataFolder.isDirectory()) {
+            return;
+        }
+        final File[] userFiles = userdataFolder.listFiles();
+
+        for (final File file : userFiles) {
+            if (!file.isFile() || !file.getName().endsWith(".yml")) {
+                continue;
+            }
+            final EssentialsConfiguration config = new EssentialsConfiguration(file);
+            try {
+                config.load();
+
+                if (config.hasProperty("muteReason")) {
+                    final String reason = config.getString("muteReason", null);
+                    config.removeProperty("muteReason");
+                    config.setProperty("mute-reason", reason);
+                }
+
+                if (config.hasProperty("ipAddress")) {
+                    final String ip = config.getString("ipAddress", null);
+                    config.removeProperty("ipAddress");
+                    config.setProperty("ip-address", ip);
+                }
+
+                if (config.hasProperty("lastAccountName")) {
+                    final String name = config.getString("lastAccountName", null);
+                    config.removeProperty("lastAccountName");
+                    config.setProperty("last-account-name", name);
+                }
+
+                if (config.hasProperty("acceptingPay")) {
+                    final boolean isPay = config.getBoolean("acceptingPay", true);
+                    config.removeProperty("acceptingPay");
+                    config.setProperty("accepting-pay", isPay);
+                }
+            } catch (final RuntimeException ex) {
+                LOGGER.log(Level.INFO, "File: " + file.toString());
+                throw ex;
+            }
+        }
+        doneFile.setProperty("updateUsersLegacyPathNames", true);
+        doneFile.save();
+        LOGGER.info("Done converting legacy userdata keys to Configurate.");
     }
 
     public void convertIgnoreList() {
@@ -163,12 +218,12 @@ public class EssentialsUpgrade {
             if (!file.isFile() || !file.getName().endsWith(".yml")) {
                 continue;
             }
-            final EssentialsConf config = new EssentialsConf(file);
+            final EssentialsConfiguration config = new EssentialsConfiguration(file);
             try {
                 config.load();
                 if (config.hasProperty("ignore")) {
                     final List<String> migratedIgnores = new ArrayList<>();
-                    for (final String name : Collections.synchronizedList(config.getStringList("ignore"))) {
+                    for (final String name : Collections.synchronizedList(config.getList("ignore", String.class))) {
                         if (name == null) {
                             continue;
                         }
@@ -183,7 +238,7 @@ public class EssentialsUpgrade {
                     }
                     config.removeProperty("ignore");
                     config.setProperty("ignore", migratedIgnores);
-                    config.forceSave();
+                    config.blockingSave();
                 }
             } catch (final RuntimeException ex) {
                 LOGGER.log(Level.INFO, "File: " + file.toString());
@@ -197,24 +252,24 @@ public class EssentialsUpgrade {
 
     public void convertKits() {
         final Kits kits = ess.getKits();
-        final EssentialsConf config = kits.getConfig();
+        final EssentialsConfiguration config = kits.getConfig();
         if (doneFile.getBoolean("kitsyml", false)) {
             return;
         }
 
         LOGGER.info("Attempting to convert old kits in config.yml to new kits.yml");
 
-        final ConfigurationSection section = ess.getSettings().getKitSection();
+        final CommentedConfigurationNode section = ess.getSettings().getKitSection();
         if (section == null) {
             LOGGER.info("No kits found to migrate.");
             return;
         }
 
-        final Map<String, Object> legacyKits = ess.getSettings().getKitSection().getValues(true);
+        final Map<String, Object> legacyKits = ConfigurateUtil.getRawMap(section);
 
         for (final Map.Entry<String, Object> entry : legacyKits.entrySet()) {
             LOGGER.info("Converting " + entry.getKey());
-            config.set("kits." + entry.getKey(), entry.getValue());
+            config.setRaw("kits." + entry.getKey(), entry.getValue());
         }
 
         config.save();
@@ -236,9 +291,9 @@ public class EssentialsUpgrade {
             if (!configFile.exists()) {
                 return;
             }
-            final EssentialsConf conf = new EssentialsConf(configFile);
+            final EssentialsConfiguration conf = new EssentialsConfiguration(configFile);
             conf.load();
-            final List<String> lines = conf.getStringList(name);
+            final List<String> lines = conf.getList(name, String.class);
             if (lines != null && !lines.isEmpty()) {
                 if (!file.createNewFile()) {
                     throw new IOException("Failed to create file " + file);
@@ -312,12 +367,12 @@ public class EssentialsUpgrade {
             if (!file.isFile() || !file.getName().endsWith(".yml")) {
                 continue;
             }
-            final EssentialsConf config = new EssentialsConf(file);
+            final EssentialsConfiguration config = new EssentialsConfiguration(file);
             try {
                 config.load();
                 if (config.hasProperty("powertools")) {
-                    final Map<String, Object> powertools = config.getConfigurationSection("powertools").getValues(false);
-                    if (powertools == null) {
+                    final Map<String, Object> powertools = ConfigurateUtil.getRawMap(config.getSection("powertools"));
+                    if (powertools.isEmpty()) {
                         continue;
                     }
                     for (final Map.Entry<String, Object> entry : powertools.entrySet()) {
@@ -327,7 +382,8 @@ public class EssentialsUpgrade {
                             powertools.put(entry.getKey(), temp);
                         }
                     }
-                    config.forceSave();
+                    config.setRaw("powertools", powertools);
+                    config.blockingSave();
                 }
             } catch (final RuntimeException ex) {
                 LOGGER.log(Level.INFO, "File: " + file.toString());
@@ -352,39 +408,37 @@ public class EssentialsUpgrade {
             if (!file.isFile() || !file.getName().endsWith(".yml")) {
                 continue;
             }
-            final EssentialsConf config = new EssentialsConf(file);
+            final EssentialsConfiguration config = new EssentialsConfiguration(file);
             try {
 
                 config.load();
                 if (config.hasProperty("home") && config.hasProperty("home.default")) {
-                    final String defworld = (String) config.getProperty("home.default");
-                    final Location defloc = getFakeLocation(config, "home.worlds." + defworld);
+                    final String defworld = config.getString("home.default", null);
+                    final Location defloc = getFakeLocation(config.getRootNode(), "home.worlds." + defworld);
                     if (defloc != null) {
                         config.setProperty("homes.home", defloc);
                     }
 
-                    final Set<String> worlds = config.getConfigurationSection("home.worlds").getKeys(false);
+                    final Set<String> worlds = ConfigurateUtil.getKeys(config.getSection("home.worlds"));
                     Location loc;
                     String worldName;
 
-                    if (worlds == null) {
+                    if (worlds.isEmpty()) {
                         continue;
                     }
                     for (final String world : worlds) {
                         if (defworld.equalsIgnoreCase(world)) {
                             continue;
                         }
-                        loc = getFakeLocation(config, "home.worlds." + world);
+                        loc = getFakeLocation(config.getRootNode(), "home.worlds." + world);
                         if (loc == null) {
                             continue;
                         }
                         worldName = loc.getWorld().getName().toLowerCase(Locale.ENGLISH);
-                        if (worldName != null && !worldName.isEmpty()) {
-                            config.setProperty("homes." + worldName, loc);
-                        }
+                        config.setProperty("homes." + worldName, loc);
                     }
                     config.removeProperty("home");
-                    config.forceSave();
+                    config.blockingSave();
                 }
 
             } catch (final RuntimeException ex) {
@@ -441,7 +495,7 @@ public class EssentialsUpgrade {
         return null;
     }
 
-    public Location getFakeLocation(final EssentialsConf config, final String path) {
+    public Location getFakeLocation(final CommentedConfigurationNode config, final String path) {
         final String worldName = config.getString((path != null ? path + "." : "") + "world");
         if (worldName == null || worldName.isEmpty()) {
             return null;
@@ -450,7 +504,8 @@ public class EssentialsUpgrade {
         if (world == null) {
             return null;
         }
-        return new Location(world, config.getDouble((path != null ? path + "." : "") + "x", 0), config.getDouble((path != null ? path + "." : "") + "y", 0), config.getDouble((path != null ? path + "." : "") + "z", 0), (float) config.getDouble((path != null ? path + "." : "") + "yaw", 0), (float) config.getDouble((path != null ? path + "." : "") + "pitch", 0));
+        return new Location(world, config.node("x").getDouble(0), config.node("y").getDouble(0),
+                config.node("z").getDouble(0), config.node("yaw").getFloat(0), config.node("pitch").getFloat(0));
     }
 
     private void deleteOldItemsCsv() {
@@ -493,22 +548,18 @@ public class EssentialsUpgrade {
         final File configFile = new File(ess.getDataFolder(), "spawn.yml");
         if (configFile.exists()) {
 
-            final EssentialsConf config = new EssentialsConf(configFile);
+            final EssentialsConfiguration config = new EssentialsConfiguration(configFile);
             try {
                 config.load();
                 if (!config.hasProperty("spawns")) {
-                    final Spawns spawns = new Spawns();
-                    final Set<String> keys = config.getKeys(false);
-                    for (final String group : keys) {
-                        final Location loc = getFakeLocation(config, group);
-                        spawns.getSpawns().put(group.toLowerCase(Locale.ENGLISH), loc);
+                    for (final Map.Entry<String, CommentedConfigurationNode> entry : config.getMap().entrySet()) {
+                        final Location loc = getFakeLocation(entry.getValue(), entry.getKey());
+                        config.setProperty(entry.getKey(), loc);
                     }
                     if (!configFile.renameTo(new File(ess.getDataFolder(), "spawn.yml.old"))) {
                         throw new Exception(tl("fileRenameError", "spawn.yml"));
                     }
-                    try (final PrintWriter writer = new PrintWriter(configFile)) {
-                        new YamlStorageWriter(writer).save(spawns);
-                    }
+                    config.blockingSave();
                 }
             } catch (final Exception ex) {
                 Bukkit.getLogger().log(Level.SEVERE, ex.getMessage(), ex);
@@ -525,22 +576,18 @@ public class EssentialsUpgrade {
         final File configFile = new File(ess.getDataFolder(), "jail.yml");
         if (configFile.exists()) {
 
-            final EssentialsConf config = new EssentialsConf(configFile);
+            final EssentialsConfiguration config = new EssentialsConfiguration(configFile);
             try {
                 config.load();
                 if (!config.hasProperty("jails")) {
-                    final com.earth2me.essentials.settings.Jails jails = new com.earth2me.essentials.settings.Jails();
-                    final Set<String> keys = config.getKeys(false);
-                    for (final String jailName : keys) {
-                        final Location loc = getFakeLocation(config, jailName);
-                        jails.getJails().put(jailName.toLowerCase(Locale.ENGLISH), loc);
+                    for (final Map.Entry<String, CommentedConfigurationNode> entry : config.getMap().entrySet()) {
+                        final Location loc = getFakeLocation(entry.getValue(), entry.getKey());
+                        config.setProperty(entry.getKey(), loc);
                     }
                     if (!configFile.renameTo(new File(ess.getDataFolder(), "jail.yml.old"))) {
                         throw new Exception(tl("fileRenameError", "jail.yml"));
                     }
-                    try (final PrintWriter writer = new PrintWriter(configFile)) {
-                        new YamlStorageWriter(writer).save(jails);
-                    }
+                    config.blockingSave();
                 }
             } catch (final Exception ex) {
                 Bukkit.getLogger().log(Level.SEVERE, ex.getMessage(), ex);
@@ -641,23 +688,23 @@ public class EssentialsUpgrade {
 
             countFiles++;
             final File pFile = new File(userdir, string);
-            final EssentialsConf conf = new EssentialsConf(pFile);
+            final EssentialsConfiguration conf = new EssentialsConfiguration(pFile);
             conf.load();
 
-            String banReason;
+            final String banReason;
             long banTimeout;
 
-            try {
-                banReason = conf.getConfigurationSection("ban").getString("reason");
-            } catch (final NullPointerException n) {
+            if (conf.hasProperty("ban.reason")) {
+                banReason = conf.getString("ban.reason", null);
+            } else {
                 banReason = null;
             }
 
-            final String playerName = conf.getString("lastAccountName");
+            final String playerName = conf.getString("lastAccountName", null);
             if (playerName != null && playerName.length() > 1 && banReason != null && banReason.length() > 1) {
                 try {
-                    if (conf.getConfigurationSection("ban").contains("timeout")) {
-                        banTimeout = Long.parseLong(conf.getConfigurationSection("ban").getString("timeout"));
+                    if (conf.hasProperty("ban.timeout")) {
+                        banTimeout = Long.parseLong(conf.getString("ban.timeout", null));
                     } else {
                         banTimeout = 0L;
                     }
@@ -772,5 +819,6 @@ public class EssentialsUpgrade {
         warnMetrics();
         repairUserMap();
         convertIgnoreList();
+        convertStupidCamelCaseUserdataKeys();
     }
 }
