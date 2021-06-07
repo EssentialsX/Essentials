@@ -480,6 +480,11 @@ cancel-afk-on-chat: true
 # Users with the permission node essentials.sleepingignored will always be ignored.
 sleep-ignores-afk-players: true
 
+# Should vanished players be ignored when other players are trying to sleep?
+# When this setting is false, player's won't be able to skip the night if vanished players are not sleeping.
+# Users with the permission node essentials.sleepingignored will always be ignored.
+sleep-ignores-vanished-player: true
+
 # Set the player's list name when they are AFK. This is none by default which specifies that Essentials 
 # should not interfere with the AFK player's list name.
 # You may use color codes, use {USERNAME} the player's name or {PLAYER} for the player's displayname.
