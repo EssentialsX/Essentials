@@ -1,10 +1,12 @@
 package com.earth2me.essentials;
 
 import com.earth2me.essentials.commands.NotEnoughArgumentsException;
+import com.earth2me.essentials.config.ConfigurateUtil;
+import com.earth2me.essentials.config.EssentialsConfiguration;
 import com.earth2me.essentials.utils.VersionUtil;
 import org.bukkit.Material;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
+import org.spongepowered.configurate.CommentedConfigurationNode;
 
 import java.io.File;
 import java.math.BigDecimal;
@@ -13,11 +15,10 @@ import java.util.Locale;
 import static com.earth2me.essentials.I18n.tl;
 
 public class Worth implements IConf {
-    private final EssentialsConf config;
+    private final EssentialsConfiguration config;
 
     public Worth(final File dataFolder) {
-        config = new EssentialsConf(new File(dataFolder, "worth.yml"));
-        config.setTemplateName("/worth.yml");
+        config = new EssentialsConfiguration(new File(dataFolder, "worth.yml"), "/worth.yml");
         config.load();
     }
 
@@ -39,8 +40,8 @@ public class Worth implements IConf {
 
         // Check for matches with data value 0
         if (result.signum() < 0) {
-            final ConfigurationSection itemNameMatch = config.getConfigurationSection("worth." + itemname);
-            if (itemNameMatch != null && itemNameMatch.getKeys(false).size() == 1) {
+            final CommentedConfigurationNode itemNameMatch = config.getSection("worth." + itemname);
+            if (itemNameMatch != null && ConfigurateUtil.getKeys(itemNameMatch).size() == 1) {
                 result = config.getBigDecimal("worth." + itemname + ".0", BigDecimal.ONE.negate());
             }
         }
