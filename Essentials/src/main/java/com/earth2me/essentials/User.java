@@ -901,7 +901,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
             if (isAuthorized("essentials.vanish.effect")) {
                 this.getBase().removePotionEffect(PotionEffectType.INVISIBILITY);
             }
-            if (ess.getSettings().sleepIgnoresVanishedPlayers()) {
+            if (ess.getSettings().sleepIgnoresVanishedPlayers() && !isAuthorized("essentials.sleepingignored")) {
                 getBase().setSleepingIgnored(false);
             }
         }
