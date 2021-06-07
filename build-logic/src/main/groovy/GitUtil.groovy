@@ -31,13 +31,13 @@ final class GitUtil {
     }
 
     static String headBranchName(Project project) {
-        def indraGit = project.extensions.findByType(IndraGitExtension.class)
         if (System.getenv("GITHUB_HEAD_REF") != null && !System.getenv("GITHUB_HEAD_REF").isEmpty()) {
             return System.getenv("GITHUB_HEAD_REF")
         } else if (System.getenv("GITHUB_REF") != null && !System.getenv("GITHUB_REF").isEmpty()) {
             return System.getenv("GITHUB_REF").replaceFirst("refs/heads/", "")
         }
 
+        def indraGit = project.extensions.findByType(IndraGitExtension.class)
         if (!indraGit.isPresent()) {
             return "detached-head"
         }
