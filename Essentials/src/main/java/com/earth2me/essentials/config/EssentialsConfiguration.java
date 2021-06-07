@@ -103,26 +103,26 @@ public class EssentialsConfiguration {
         setInternal(path, location);
     }
 
-    public Location getLocation(final String path) throws InvalidWorldException {
+    public LazyLocation getLocation(final String path) throws InvalidWorldException {
         final CommentedConfigurationNode node = path == null ? getRootNode() : getSection(path);
         if (node == null) {
             return null;
         }
 
         try {
-            return node.get(Location.class);
+            return node.get(LazyLocation.class);
         } catch (SerializationException e) {
             return null;
         }
     }
 
-    public Map<String, Location> getLocationSectionMap(final String path) {
+    public Map<String, LazyLocation> getLocationSectionMap(final String path) {
         final CommentedConfigurationNode node = getSection(path);
-        final Map<String, Location> result = new HashMap<>();
+        final Map<String, LazyLocation> result = new HashMap<>();
         for (final Map.Entry<String, CommentedConfigurationNode> entry : ConfigurateUtil.getMap(node).entrySet()) {
             final CommentedConfigurationNode jailNode = entry.getValue();
             try {
-                result.put(entry.getKey().toLowerCase(Locale.ENGLISH), jailNode.get(Location.class));
+                result.put(entry.getKey().toLowerCase(Locale.ENGLISH), jailNode.get(LazyLocation.class));
             } catch (SerializationException e) {
                 LOGGER.log(Level.WARNING, "Error serializing key " + entry.getKey(), e);
             }
