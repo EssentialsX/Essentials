@@ -223,4 +223,8 @@ public interface IUser {
     void setToggleShout(boolean toggleShout);
 
     boolean isToggleShout();
+
+    boolean isFreeze();
+
+    void setFreeze(boolean freeze);
 }
