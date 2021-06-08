@@ -1708,11 +1708,17 @@ public class Settings implements net.ess3.api.ISettings {
             return config.getBoolean("teleport-back-when-freed-from-jail", true) ? TeleportWhenFreePolicy.BACK : TeleportWhenFreePolicy.OFF;
         }
 
-        try {
-            return TeleportWhenFreePolicy.valueOf(config.getString("teleport-when-freed", "back"));
-        } catch (IllegalArgumentException e) {
-            return TeleportWhenFreePolicy.BACK;
+if (config.hasProperty("teleport-when-freed")) {
+            // snakeyaml more like cursedyaml
+            final String value = config.getString("teleport-when-freed", "back").replace("false", "off");
+            try {
+                return TeleportWhenFreePolicy.valueOf(value.toUpperCase(Locale.ROOT));
+            } catch (IllegalArgumentException e) {
+                throw new RuntimeException("Invalid value \"" + value + "\" for config option \"teleport-when-freed\"!", e);
+            }
         }
+
+        return TeleportWhenFreePolicy.BACK;
     }
 
     @Override
