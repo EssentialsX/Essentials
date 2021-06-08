@@ -47,4 +47,8 @@ shadowJar {
     relocate 'org.yaml.snakeyaml', 'com.earth2me.essentials.libs.snakeyaml'
     relocate 'io.leangen.geantyref', 'com.earth2me.essentials.libs.geantyref'
     relocate 'org.checkerframework', 'com.earth2me.essentials.libs.checkerframework'
+
+    minimize {
+        include(dependency('org.checkerframework:checker-qual'))
+    }
 }
