@@ -1708,7 +1708,7 @@ public class Settings implements net.ess3.api.ISettings {
             return config.getBoolean("teleport-back-when-freed-from-jail", true) ? TeleportWhenFreePolicy.BACK : TeleportWhenFreePolicy.OFF;
         }
 
-if (config.hasProperty("teleport-when-freed")) {
+        if (config.hasProperty("teleport-when-freed")) {
             // snakeyaml more like cursedyaml
             final String value = config.getString("teleport-when-freed", "back").replace("false", "off");
             try {
