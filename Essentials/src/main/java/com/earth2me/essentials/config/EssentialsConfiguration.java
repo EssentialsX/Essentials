@@ -2,10 +2,12 @@ package com.earth2me.essentials.config;
 
 import com.earth2me.essentials.config.annotations.DeleteIfIncomplete;
 import com.earth2me.essentials.config.annotations.DeleteOnEmpty;
+import com.earth2me.essentials.config.entities.CommandCooldown;
 import com.earth2me.essentials.config.entities.LazyLocation;
 import com.earth2me.essentials.config.processors.DeleteIfIncompleteProcessor;
 import com.earth2me.essentials.config.processors.DeleteOnEmptyProcessor;
 import com.earth2me.essentials.config.serializers.BigDecimalTypeSerializer;
+import com.earth2me.essentials.config.serializers.CommandCooldownSerializer;
 import com.earth2me.essentials.config.serializers.LocationTypeSerializer;
 import com.earth2me.essentials.config.serializers.MaterialTypeSerializer;
 import net.ess3.api.InvalidWorldException;
@@ -55,6 +57,7 @@ public class EssentialsConfiguration {
             .register(BigDecimal.class, new BigDecimalTypeSerializer())
             .register(LazyLocation.class, new LocationTypeSerializer())
             .register(Material.class, new MaterialTypeSerializer())
+            .register(CommandCooldown.class, new CommandCooldownSerializer())
             .build();
 
     private final AtomicInteger pendingWrites = new AtomicInteger(0);

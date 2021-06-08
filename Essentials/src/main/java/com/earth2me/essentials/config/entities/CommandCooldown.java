@@ -1,11 +1,9 @@
 package com.earth2me.essentials.config.entities;
 
 import com.earth2me.essentials.config.processors.DeleteIfIncompleteProcessor;
-import org.spongepowered.configurate.objectmapping.ConfigSerializable;
 
 import java.util.regex.Pattern;
 
-@ConfigSerializable
 public class CommandCooldown implements DeleteIfIncompleteProcessor.IncompleteEntity {
     private Pattern pattern;
 
