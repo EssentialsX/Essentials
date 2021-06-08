@@ -1,6 +1,9 @@
 package com.earth2me.essentials.config;
 
+import com.earth2me.essentials.config.annotations.DeleteIfIncomplete;
 import com.earth2me.essentials.config.annotations.DeleteOnEmpty;
+import com.earth2me.essentials.config.entities.LazyLocation;
+import com.earth2me.essentials.config.processors.DeleteIfIncompleteProcessor;
 import com.earth2me.essentials.config.processors.DeleteOnEmptyProcessor;
 import com.earth2me.essentials.config.serializers.BigDecimalTypeSerializer;
 import com.earth2me.essentials.config.serializers.LocationTypeSerializer;
@@ -45,11 +48,12 @@ public class EssentialsConfiguration {
     private static final ExecutorService EXECUTOR_SERVICE = Executors.newSingleThreadExecutor();
     private static final ObjectMapper.Factory MAPPER_FACTORY = ObjectMapper.factoryBuilder()
             .addProcessor(DeleteOnEmpty.class, (data, value) -> new DeleteOnEmptyProcessor())
+            .addProcessor(DeleteIfIncomplete.class, (data, value) -> new DeleteIfIncompleteProcessor())
             .build();
     private static final TypeSerializerCollection SERIALIZERS = TypeSerializerCollection.defaults().childBuilder()
             .registerAnnotatedObjects(MAPPER_FACTORY)
             .register(BigDecimal.class, new BigDecimalTypeSerializer())
-            .register(Location.class, new LocationTypeSerializer())
+            .register(LazyLocation.class, new LocationTypeSerializer())
             .register(Material.class, new MaterialTypeSerializer())
             .build();
 
@@ -99,29 +103,29 @@ public class EssentialsConfiguration {
 
     public void setProperty(String path, final Location location) {
         path = path == null ? "" : path;
-        setInternal(path, location);
+        setInternal(path, LazyLocation.fromLocation(location));
     }
 
-    public Location getLocation(final String path) throws InvalidWorldException {
+    public LazyLocation getLocation(final String path) throws InvalidWorldException {
         final CommentedConfigurationNode node = path == null ? getRootNode() : getSection(path);
         if (node == null) {
             return null;
         }
 
         try {
-            return node.get(Location.class);
+            return node.get(LazyLocation.class);
         } catch (SerializationException e) {
             return null;
         }
     }
 
-    public Map<String, Location> getLocationSectionMap(final String path) {
+    public Map<String, LazyLocation> getLocationSectionMap(final String path) {
         final CommentedConfigurationNode node = getSection(path);
-        final Map<String, Location> result = new HashMap<>();
+        final Map<String, LazyLocation> result = new HashMap<>();
         for (final Map.Entry<String, CommentedConfigurationNode> entry : ConfigurateUtil.getMap(node).entrySet()) {
             final CommentedConfigurationNode jailNode = entry.getValue();
             try {
-                result.put(entry.getKey().toLowerCase(Locale.ENGLISH), jailNode.get(Location.class));
+                result.put(entry.getKey().toLowerCase(Locale.ENGLISH), jailNode.get(LazyLocation.class));
             } catch (SerializationException e) {
                 LOGGER.log(Level.WARNING, "Error serializing key " + entry.getKey(), e);
             }

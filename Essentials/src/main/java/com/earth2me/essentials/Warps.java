@@ -54,7 +54,12 @@ public class Warps implements IConf, net.ess3.api.IWarps {
         if (conf == null) {
             throw new WarpNotFoundException();
         }
-        return conf.getLocation(null);
+
+        final Location loc = conf.getLocation(null).location();
+        if (loc == null) {
+            throw new WarpNotFoundException();
+        }
+        return loc;
     }
 
     @Override
