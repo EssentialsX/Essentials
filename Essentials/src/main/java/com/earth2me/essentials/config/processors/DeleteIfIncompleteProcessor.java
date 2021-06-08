@@ -5,7 +5,9 @@ import org.spongepowered.configurate.objectmapping.meta.Processor;
 import org.spongepowered.configurate.serialize.SerializationException;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class DeleteIfIncompleteProcessor implements Processor<Object> {
     @Override
@@ -28,6 +30,18 @@ public class DeleteIfIncompleteProcessor implements Processor<Object> {
                 }
                 if (modified) {
                     destination.set(newList);
+                }
+            } else if (value instanceof Map<?, ?>) {
+                boolean modified = false;
+                final Map<?, ?> newMap = new HashMap<>((Map<?, ?>) value);
+                for (final Map.Entry<?, ?> entry : newMap.entrySet()) {
+                    if (entry.getValue() instanceof IncompleteEntity && ((IncompleteEntity) entry.getValue()).isIncomplete()) {
+                        newMap.remove(entry.getKey());
+                        modified = true;
+                    }
+                }
+                if (modified) {
+                    destination.set(newMap);
                 }
             }
         } catch (final SerializationException e) {
