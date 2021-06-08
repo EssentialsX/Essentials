@@ -1,5 +1,6 @@
 package com.earth2me.essentials.config.holders;
 
+import com.earth2me.essentials.config.annotations.DeleteIfIncomplete;
 import com.earth2me.essentials.config.annotations.DeleteOnEmpty;
 import com.earth2me.essentials.config.entities.CommandCooldown;
 import com.earth2me.essentials.config.entities.LazyLocation;
@@ -413,6 +414,7 @@ public class UserConfigHolder {
         }
 
         @DeleteOnEmpty
+        @DeleteIfIncomplete
         private @MonotonicNonNull List<CommandCooldown> commandCooldowns;
 
         public List<CommandCooldown> commandCooldowns() {

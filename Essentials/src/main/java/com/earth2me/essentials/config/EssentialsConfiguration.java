@@ -1,7 +1,9 @@
 package com.earth2me.essentials.config;
 
+import com.earth2me.essentials.config.annotations.DeleteIfIncomplete;
 import com.earth2me.essentials.config.annotations.DeleteOnEmpty;
 import com.earth2me.essentials.config.entities.LazyLocation;
+import com.earth2me.essentials.config.processors.DeleteIfIncompleteProcessor;
 import com.earth2me.essentials.config.processors.DeleteOnEmptyProcessor;
 import com.earth2me.essentials.config.serializers.BigDecimalTypeSerializer;
 import com.earth2me.essentials.config.serializers.LocationTypeSerializer;
@@ -46,6 +48,7 @@ public class EssentialsConfiguration {
     private static final ExecutorService EXECUTOR_SERVICE = Executors.newSingleThreadExecutor();
     private static final ObjectMapper.Factory MAPPER_FACTORY = ObjectMapper.factoryBuilder()
             .addProcessor(DeleteOnEmpty.class, (data, value) -> new DeleteOnEmptyProcessor())
+            .addProcessor(DeleteIfIncomplete.class, (data, value) -> new DeleteIfIncompleteProcessor())
             .build();
     private static final TypeSerializerCollection SERIALIZERS = TypeSerializerCollection.defaults().childBuilder()
             .registerAnnotatedObjects(MAPPER_FACTORY)
