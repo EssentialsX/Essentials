@@ -100,7 +100,7 @@ public class EssentialsConfiguration {
 
     public void setProperty(String path, final Location location) {
         path = path == null ? "" : path;
-        setInternal(path, location);
+        setInternal(path, LazyLocation.fromLocation(location));
     }
 
     public LazyLocation getLocation(final String path) throws InvalidWorldException {
