@@ -126,7 +126,7 @@ public class Warps implements IConf, net.ess3.api.IWarps {
                         final EssentialsConfiguration conf = new EssentialsConfiguration(listOfFile);
                         conf.load();
                         final String name = conf.getString("name", null);
-                        if (name != null) {
+                        if (name != null && conf.hasProperty("world")) {
                             warpPoints.put(new StringIgnoreCase(name), conf);
                         }
                     } catch (final Exception ex) {

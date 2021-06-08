@@ -105,7 +105,6 @@ public class EssentialsConfiguration {
     }
 
     public void setProperty(String path, final Location location) {
-        path = path == null ? "" : path;
         setInternal(path, LazyLocation.fromLocation(location));
     }
 
@@ -265,7 +264,7 @@ public class EssentialsConfiguration {
     }
 
     public CommentedConfigurationNode getSection(final String path) {
-        final CommentedConfigurationNode node = configurationNode.node(toSplitRoot(path));
+        final CommentedConfigurationNode node = toSplitRoot(path, configurationNode);
         if (node.virtual()) {
             return null;
         }
@@ -297,14 +296,14 @@ public class EssentialsConfiguration {
 
     private void setInternal(final String path, final Object value) {
         try {
-            configurationNode.node(toSplitRoot(path)).set(value);
+            toSplitRoot(path, configurationNode).set(value);
         } catch (SerializationException e) {
             LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
     }
 
     private CommentedConfigurationNode getInternal(final String path) {
-        final CommentedConfigurationNode node = configurationNode.node(toSplitRoot(path));
+        final CommentedConfigurationNode node = toSplitRoot(path, configurationNode);
         if (node.virtual()) {
             return null;
         }
@@ -312,12 +311,15 @@ public class EssentialsConfiguration {
     }
 
     public boolean hasProperty(final String path) {
-        return !configurationNode.node(toSplitRoot(path)).isNull();
+        return !toSplitRoot(path, configurationNode).isNull();
     }
 
-    public Object[] toSplitRoot(String node) {
-        node = node.startsWith(".") ? node.substring(1) : node;
-        return node.contains(".") ? node.split("\\.") : new Object[]{node};
+    public CommentedConfigurationNode toSplitRoot(String path, final CommentedConfigurationNode node) {
+        if (path == null) {
+            return node;
+        }
+        path = path.startsWith(".") ? path.substring(1) : path;
+        return node.node(path.contains(".") ? path.split("\\.") : new Object[]{path});
     }
 
     public synchronized void load() {
