@@ -1,11 +1,10 @@
 package com.earth2me.essentials.config.entities;
 
-import org.spongepowered.configurate.objectmapping.ConfigSerializable;
+import com.earth2me.essentials.config.processors.DeleteIfIncompleteProcessor;
 
 import java.util.regex.Pattern;
 
-@ConfigSerializable
-public class CommandCooldown {
+public class CommandCooldown implements DeleteIfIncompleteProcessor.IncompleteEntity {
     private Pattern pattern;
 
     public Pattern pattern() {
@@ -24,5 +23,10 @@ public class CommandCooldown {
 
     public void value(final Long value) {
         this.value = value;
+    }
+
+    @Override
+    public boolean isIncomplete() {
+        return value == null || pattern == null;
     }
 }

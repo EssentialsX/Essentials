@@ -3,7 +3,6 @@ package com.earth2me.essentials;
 import junit.framework.TestCase;
 import net.ess3.api.MaxMoneyException;
 import org.bukkit.Location;
-import org.bukkit.World.Environment;
 import org.bukkit.plugin.InvalidDescriptionException;
 
 import java.io.IOException;
@@ -16,8 +15,7 @@ public class UserTest extends TestCase {
 
     public UserTest(final String testName) {
         super(testName);
-        server = new FakeServer();
-        server.createWorld("testWorld", Environment.NORMAL);
+        server = FakeServer.getServer();
         ess = new Essentials(server);
         try {
             ess.setupForTesting(server);
@@ -43,6 +41,7 @@ public class UserTest extends TestCase {
     public void testHome() {
         final User user = ess.getUser(base1);
         final Location loc = base1.getLocation();
+        loc.setWorld(server.getWorlds().get(0));
         user.setHome("home", loc);
         final OfflinePlayer base2 = server.createPlayer(base1.getName());
         final User user2 = ess.getUser(base2);

@@ -40,7 +40,7 @@ public class RandomTeleport implements IConf {
 
     public Location getCenter() {
         try {
-            final Location center = config.getLocation("center");
+            final Location center = config.getLocation("center").location();
             if (center != null) {
                 return center;
             }
