@@ -6,7 +6,6 @@ import com.earth2me.essentials.commands.IEssentialsCommand;
 import com.earth2me.essentials.commands.NoChargeException;
 import net.ess3.api.Economy;
 import net.ess3.api.MaxMoneyException;
-import org.bukkit.World.Environment;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.InvalidDescriptionException;
 import org.junit.Assert;
@@ -22,8 +21,7 @@ public class EconomyTest {
     private final FakeServer server;
 
     public EconomyTest() {
-        this.server = new FakeServer();
-        server.createWorld("testWorld", Environment.NORMAL);
+        this.server = FakeServer.getServer();
         ess = new Essentials(server);
         try {
             ess.setupForTesting(server);
