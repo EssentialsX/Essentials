@@ -3,6 +3,7 @@ package com.earth2me.essentials;
 import com.earth2me.essentials.utils.EnumUtil;
 import com.earth2me.essentials.utils.VersionUtil;
 import net.ess3.nms.refl.ReflUtil;
+import org.bukkit.entity.Axolotl;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Fox;
@@ -34,6 +35,8 @@ public final class MobCompat {
     public static final EntityType STRAY = getEntityType("STRAY");
     public static final EntityType FOX = getEntityType("FOX");
     public static final EntityType PHANTOM = getEntityType("PHANTOM");
+    public static final EntityType AXOLOTL = getEntityType("AXOLOTL");
+    public static final EntityType GOAT = getEntityType("GOAT");
 
     // Constants for mobs that have changed since earlier versions
     public static final EntityType CAT = getEntityType("CAT", "OCELOT");
@@ -149,6 +152,15 @@ public final class MobCompat {
         }
         if (entity instanceof Fox) {
             ((Fox) entity).setFoxType(Fox.Type.valueOf(type));
+        }
+    }
+
+    public static void setAxolotlVariant(final Entity entity, final String variant) {
+        if (VersionUtil.getServerBukkitVersion().isLowerThan(VersionUtil.v1_17_R01)) {
+            return;
+        }
+        if (entity instanceof Axolotl) {
+            ((Axolotl) entity).setVariant(Axolotl.Variant.valueOf(variant));
         }
     }
 
