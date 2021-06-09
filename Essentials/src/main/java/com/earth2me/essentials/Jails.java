@@ -2,11 +2,10 @@ package com.earth2me.essentials;
 
 import com.earth2me.essentials.config.ConfigurateUtil;
 import com.earth2me.essentials.config.EssentialsConfiguration;
+import com.earth2me.essentials.config.entities.LazyLocation;
 import net.ess3.api.IEssentials;
 import net.ess3.api.IUser;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.World;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -44,7 +43,7 @@ public class Jails implements net.ess3.api.IJails {
     private static transient boolean enabled = false;
     private final IEssentials ess;
     private final EssentialsConfiguration config;
-    private final Map<String, Location> jails = new HashMap<>();
+    private final Map<String, LazyLocation> jails = new HashMap<>();
 
     public Jails(final IEssentials ess) {
         this.ess = ess;
@@ -60,17 +59,11 @@ public class Jails implements net.ess3.api.IJails {
             final CommentedConfigurationNode jailsNode = config.getSection("jails");
             for (final Map.Entry<String, CommentedConfigurationNode> entry : ConfigurateUtil.getMap(jailsNode).entrySet()) {
                 final CommentedConfigurationNode jailNode = entry.getValue();
-                final String worldName = jailNode.node("world").getString();
-                if (worldName == null || worldName.isEmpty()) {
+                final String worldId = jailNode.node("world").getString();
+                if (worldId == null || worldId.isEmpty()) {
                     continue;
                 }
-
-                final World world = Bukkit.getWorld(worldName);
-                if (world == null) {
-                    LOGGER.log(Level.WARNING, "Invalid world name, " + worldName + ", for jail name " + entry.getKey());
-                    continue;
-                }
-                jails.put(entry.getKey().toLowerCase(Locale.ENGLISH), new Location(world, jailNode.node("x").getDouble(), jailNode.node("y").getDouble(),
+                jails.put(entry.getKey().toLowerCase(Locale.ENGLISH), new LazyLocation(worldId, jailNode.node("x").getDouble(), jailNode.node("y").getDouble(),
                         jailNode.node("z").getDouble(), jailNode.node("yaw").getFloat(), jailNode.node("pitch").getFloat()));
             }
             checkRegister();
@@ -119,7 +112,11 @@ public class Jails implements net.ess3.api.IJails {
             if (!jails.containsKey(jailName)) {
                 throw new Exception(tl("jailNotExist"));
             }
-            return jails.get(jailName);
+            final Location location = jails.get(jailName).location();
+            if (location == null) {
+                throw new Exception(tl("jailWorldNotExist"));
+            }
+            return location;
         }
     }
 
@@ -160,7 +157,7 @@ public class Jails implements net.ess3.api.IJails {
         synchronized (jails) {
             if (jails.containsKey(jail)) {
                 if (user.getBase().isOnline()) {
-                    user.getTeleport().now(jails.get(jail), false, TeleportCause.COMMAND);
+                    user.getTeleport().now(getJail(jail), false, TeleportCause.COMMAND);
                 }
                 user.setJail(jail);
             }
@@ -177,7 +174,7 @@ public class Jails implements net.ess3.api.IJails {
         synchronized (jails) {
             if (jails.containsKey(jail)) {
                 if (user.getBase().isOnline()) {
-                    user.getAsyncTeleport().now(jails.get(jail), false, TeleportCause.COMMAND, future);
+                    user.getAsyncTeleport().now(getJail(jail), false, TeleportCause.COMMAND, future);
                     future.thenAccept(success -> user.setJail(jail));
                     return;
                 }
@@ -190,7 +187,7 @@ public class Jails implements net.ess3.api.IJails {
     public void setJail(String jailName, final Location loc) throws Exception {
         jailName = jailName.toLowerCase(Locale.ENGLISH);
         synchronized (jails) {
-            jails.put(jailName, loc);
+            jails.put(jailName, LazyLocation.fromLocation(loc));
             config.setProperty("jails." + jailName, loc);
             config.save();
         }
