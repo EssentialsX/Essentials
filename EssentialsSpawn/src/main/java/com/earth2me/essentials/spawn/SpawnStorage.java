@@ -51,6 +51,9 @@ public class SpawnStorage implements IEssentialsModule, IConf {
         group = group.toLowerCase(Locale.ENGLISH);
         synchronized (spawns) {
             if (!spawns.containsKey(group)) {
+                if (spawns.containsKey("default")) {
+                    return spawns.get("default").location();
+                }
                 return getWorldSpawn();
             }
             return spawns.get(group).location();
