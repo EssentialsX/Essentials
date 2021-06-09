@@ -312,16 +312,16 @@ public abstract class UserData extends PlayerExtension implements IConf {
     }
 
     public List<String> getMails() {
-        return holder.mails();
+        return holder.mail();
     }
 
     public void setMails(List<String> mails) {
-        holder.mails(mails);
+        holder.mail(mails);
         config.save();
     }
 
     public void addMail(final String mail) {
-        holder.mails().add(mail);
+        holder.mail().add(mail);
         config.save();
     }
 
