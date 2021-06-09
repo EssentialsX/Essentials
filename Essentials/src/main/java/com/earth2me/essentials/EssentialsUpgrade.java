@@ -8,6 +8,7 @@ import com.earth2me.essentials.utils.StringUtil;
 import com.google.common.base.Charsets;
 import com.google.common.collect.Maps;
 import net.ess3.api.IEssentials;
+import net.essentialsx.api.v2.services.mail.MailMessage;
 import org.bukkit.BanList;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -144,6 +145,45 @@ public class EssentialsUpgrade {
         ess.getLogger().info("Converted " + countFiles + "/" + countFiles + ".  Conversion complete.");
         ess.getLogger().info("Converted via cache: " + countEssCache + " :: Converted via lookup: " + countBukkit + " :: Failed to convert: " + countFails);
         ess.getLogger().info("To rerun the conversion type /essentials uuidconvert");
+    }
+
+    public void convertMailList() {
+        if (doneFile.getBoolean("updateUsersMailList", false)) {
+            return;
+        }
+
+        final File userdataFolder = new File(ess.getDataFolder(), "userdata");
+        if (!userdataFolder.exists() || !userdataFolder.isDirectory()) {
+            return;
+        }
+        final File[] userFiles = userdataFolder.listFiles();
+        for (File file : userFiles) {
+            if (!file.isFile() || !file.getName().endsWith(".yml")) {
+                continue;
+            }
+            final EssentialsConf config = new EssentialsConf(file);
+            try {
+                config.load();
+                if (config.hasProperty("mail") && config.isList("mail")) {
+                    final ArrayList<MailMessage> messages = new ArrayList<>();
+                    for (String mailStr : Collections.synchronizedList(config.getStringList("mail"))) {
+                        if (mailStr == null) {
+                            continue;
+                        }
+                        messages.add(new MailMessage(false, true, null, null, 0L, 0L, mailStr));
+                    }
+                    config.removeProperty("mail");
+                    config.setProperty("mail", messages);
+                    config.forceSave();
+                }
+            } catch (RuntimeException ex) {
+                LOGGER.log(Level.INFO, "File: " + file);
+                throw ex;
+            }
+        }
+        doneFile.setProperty("updateUsersMailList", true);
+        doneFile.save();
+        LOGGER.info("Done converting mail list.");
     }
 
     public void convertStupidCamelCaseUserdataKeys() {
@@ -820,5 +860,6 @@ public class EssentialsUpgrade {
         repairUserMap();
         convertIgnoreList();
         convertStupidCamelCaseUserdataKeys();
+        convertMailList();
     }
 }

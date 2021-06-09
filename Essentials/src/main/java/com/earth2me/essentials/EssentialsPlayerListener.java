@@ -358,8 +358,7 @@ public class EssentialsPlayerListener implements Listener {
                 }
 
                 if (!ess.getSettings().isCommandDisabled("mail") && user.isAuthorized("essentials.mail")) {
-                    final List<String> mail = user.getMails();
-                    if (mail.isEmpty()) {
+                    if (user.getUnreadMailAmount() == 0) {
                         if (ess.getSettings().isNotifyNoNewMail()) {
                             user.sendMessage(tl("noNewMail")); // Only notify if they want us to.
                         }

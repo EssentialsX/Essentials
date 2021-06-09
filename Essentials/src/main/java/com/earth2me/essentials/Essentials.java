@@ -78,6 +78,7 @@ import net.ess3.provider.providers.PaperMaterialTagProvider;
 import net.ess3.provider.providers.PaperRecipeBookListener;
 import net.ess3.provider.providers.PaperServerStateProvider;
 import net.essentialsx.api.v2.services.BalanceTop;
+import net.essentialsx.api.v2.services.mail.Mail;
 import org.bukkit.Bukkit;
 import org.bukkit.Server;
 import org.bukkit.World;
@@ -142,6 +143,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
     private transient UserMap userMap;
     private transient BalanceTopImpl balanceTop;
     private transient ExecuteTimer execTimer;
+    private transient Mail mail;
     private transient I18n i18n;
     private transient MetricsWrapper metrics;
     private transient EssentialsTimer timer;
@@ -198,6 +200,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
         LOGGER.log(Level.INFO, tl("usingTempFolderForTesting"));
         LOGGER.log(Level.INFO, dataFolder.toString());
         settings = new Settings(this);
+        mail = new MailImpl(this);
         userMap = new UserMap(this);
         balanceTop = new BalanceTopImpl(this);
         permissionsHandler = new PermissionsHandler(this, false);
@@ -270,6 +273,9 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
             settings = new Settings(this);
             confList.add(settings);
             execTimer.mark("Settings");
+
+            mail = new MailImpl(this);
+            execTimer.mark("Init(Mail)");
 
             userMap = new UserMap(this);
             confList.add(userMap);
@@ -1062,6 +1068,11 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
     @Override
     public EssentialsTimer getTimer() {
         return timer;
+    }
+
+    @Override
+    public Mail getMail() {
+        return mail;
     }
 
     @Override
