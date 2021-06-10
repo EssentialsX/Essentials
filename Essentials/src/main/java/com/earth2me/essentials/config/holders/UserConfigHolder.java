@@ -113,17 +113,17 @@ public class UserConfigHolder {
     }
 
     @DeleteOnEmpty
-    private @MonotonicNonNull List<String> mails;
+    private @MonotonicNonNull List<String> mail;
 
-    public List<String> mails() {
-        if (this.mails == null) {
-            this.mails = new ArrayList<>();
+    public List<String> mail() {
+        if (this.mail == null) {
+            this.mail = new ArrayList<>();
         }
-        return this.mails;
+        return this.mail;
     }
 
-    public void mails(final List<String> value) {
-        this.mails = value;
+    public void mail(final List<String> value) {
+        this.mail = value;
     }
 
     private boolean teleportenabled = true;
