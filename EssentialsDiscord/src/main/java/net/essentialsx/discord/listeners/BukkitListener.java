@@ -6,6 +6,7 @@ import com.earth2me.essentials.utils.FormatUtil;
 import net.ess3.api.events.AfkStatusChangeEvent;
 import net.ess3.api.events.MuteStatusChangeEvent;
 import net.essentialsx.api.v2.events.AsyncUserDataLoadEvent;
+import net.essentialsx.api.v2.events.discord.DiscordChatMessageEvent;
 import net.essentialsx.api.v2.events.discord.DiscordMessageEvent;
 import net.essentialsx.discord.EssentialsJDA;
 import net.essentialsx.discord.util.MessageUtil;
@@ -76,14 +77,18 @@ public class BukkitListener implements Listener {
     public void onChat(AsyncPlayerChatEvent event) {
         final Player player = event.getPlayer();
         Bukkit.getScheduler().runTask(jda.getPlugin(), () -> {
-            if (!jda.getSettings().isShowAllChat() && !event.getRecipients().containsAll(Bukkit.getOnlinePlayers())) {
+            final DiscordChatMessageEvent chatEvent = new DiscordChatMessageEvent(event.getPlayer(), event.getMessage());
+            chatEvent.setCancelled(!jda.getSettings().isShowAllChat() && !event.getRecipients().containsAll(Bukkit.getOnlinePlayers()));
+            Bukkit.getPluginManager().callEvent(chatEvent);
+            if (chatEvent.isCancelled()) {
                 return;
             }
+
             sendDiscordMessage(DiscordMessageEvent.MessageType.DefaultTypes.CHAT,
                     MessageUtil.formatMessage(jda.getSettings().getMcToDiscordFormat(player),
                             MessageUtil.sanitizeDiscordMarkdown(player.getName()),
                             MessageUtil.sanitizeDiscordMarkdown(player.getDisplayName()),
-                            player.hasPermission("essentials.discord.markdown") ? event.getMessage() : MessageUtil.sanitizeDiscordMarkdown(event.getMessage()),
+                            player.hasPermission("essentials.discord.markdown") ? chatEvent.getMessage() : MessageUtil.sanitizeDiscordMarkdown(chatEvent.getMessage()),
                             MessageUtil.sanitizeDiscordMarkdown(player.getWorld().getName()),
                             MessageUtil.sanitizeDiscordMarkdown(FormatUtil.stripEssentialsFormat(jda.getPlugin().getEss().getPermissionsHandler().getPrefix(player))),
                             MessageUtil.sanitizeDiscordMarkdown(FormatUtil.stripEssentialsFormat(jda.getPlugin().getEss().getPermissionsHandler().getSuffix(player)))),
