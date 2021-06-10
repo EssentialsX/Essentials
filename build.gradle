@@ -3,12 +3,12 @@ plugins {
 }
 
 group = "net.essentialsx"
-version = "2.19.0-SNAPSHOT"
+version = "2.18.2"
 
 project.ext {
     GIT_COMMIT = !indraGit.isPresent() ? "unknown" : indraGit.commit().abbreviate(7).name()
     GIT_DEPTH = GitUtil.commitsSinceLastTag(project)
     GIT_BRANCH = GitUtil.headBranchName(project)
 
-    FULL_VERSION = "${version}".replace("-SNAPSHOT", "-dev+${GIT_DEPTH}-${GIT_COMMIT}")
+    FULL_VERSION = version
 }
