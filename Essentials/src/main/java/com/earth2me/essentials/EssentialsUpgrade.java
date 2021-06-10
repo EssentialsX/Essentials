@@ -161,12 +161,12 @@ public class EssentialsUpgrade {
             if (!file.isFile() || !file.getName().endsWith(".yml")) {
                 continue;
             }
-            final EssentialsConf config = new EssentialsConf(file);
+            final EssentialsConfiguration config = new EssentialsConfiguration(file);
             try {
                 config.load();
                 if (config.hasProperty("mail") && config.isList("mail")) {
                     final ArrayList<MailMessage> messages = new ArrayList<>();
-                    for (String mailStr : Collections.synchronizedList(config.getStringList("mail"))) {
+                    for (String mailStr : Collections.synchronizedList(config.getList("mail", String.class))) {
                         if (mailStr == null) {
                             continue;
                         }
@@ -174,7 +174,7 @@ public class EssentialsUpgrade {
                     }
                     config.removeProperty("mail");
                     config.setProperty("mail", messages);
-                    config.forceSave();
+                    config.blockingSave();
                 }
             } catch (RuntimeException ex) {
                 LOGGER.log(Level.INFO, "File: " + file);
