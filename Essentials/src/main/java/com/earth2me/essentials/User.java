@@ -395,7 +395,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
 
     @Override
     public TpaRequest getNextTpaToken(boolean inform, boolean shallow, boolean excludeHere) {
-        if (teleportRequestQueue.size() == 0) {
+        if (teleportRequestQueue.isEmpty()) {
             return null;
         }
 
