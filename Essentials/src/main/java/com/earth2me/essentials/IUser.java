@@ -253,7 +253,7 @@ public interface IUser {
     TpaRequest getNextTpaToken(boolean inform, boolean shallow, boolean excludeHere);
 
     /**
-     * Weather or not this {@link IUser} has any valid TPA request in queue.
+     * Whether or not this {@link IUser} has any valid TPA requests in queue.
      *
      * @param inform      true if the underlying {@link IUser} should be informed if a request expires during iteration.
      * @param excludeHere true if /tpahere requests should be ignored in checking if a tpa request is available.
