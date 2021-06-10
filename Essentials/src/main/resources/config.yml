@@ -471,6 +471,11 @@ cancel-afk-on-chat: true
 # Users with the permission node essentials.sleepingignored will always be ignored.
 sleep-ignores-afk-players: true
 
+# Should vanished players be ignored when other players are trying to sleep?
+# When this setting is false, player's won't be able to skip the night if vanished players are not sleeping.
+# Users with the permission node essentials.sleepingignored will always be ignored.
+sleep-ignores-vanished-player: true
+
 # Set the player's list name when they are AFK. This is none by default which specifies that Essentials 
 # should not interfere with the AFK player's list name.
 # You may use color codes, use {USERNAME} the player's name or {PLAYER} for the player's displayname.
@@ -639,8 +644,10 @@ default-enabled-confirm-commands:
 #- pay
 #- clearinventory
 
-# Whether or not to teleport a player back to their previous position after they have been freed from jail.
-teleport-back-when-freed-from-jail: true
+# Where should Essentials teleport players when they are freed from jail?
+# You can set to "back" to have them teleported to where they were before they were jailed, "spawn" to have them
+# teleport to spawn, or "off" to not have them teleport.
+teleport-when-freed: back
 
 # Whether or not jail time should only be counted while the user is online.
 # If true, a jailed player's time will only decrement when they are online.

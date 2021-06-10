@@ -1,9 +1,10 @@
 package com.earth2me.essentials;
 
-import com.earth2me.essentials.storage.AsyncStorageObjectHolder;
+import com.earth2me.essentials.config.ConfigurateUtil;
+import com.earth2me.essentials.config.EssentialsConfiguration;
+import com.earth2me.essentials.config.entities.LazyLocation;
 import net.ess3.api.IEssentials;
 import net.ess3.api.IUser;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
@@ -23,26 +24,50 @@ import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import org.bukkit.plugin.PluginManager;
+import org.spongepowered.configurate.CommentedConfigurationNode;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import static com.earth2me.essentials.I18n.tl;
 
-public class Jails extends AsyncStorageObjectHolder<com.earth2me.essentials.settings.Jails> implements net.ess3.api.IJails {
-    private static final transient Logger LOGGER = Bukkit.getLogger();
+public class Jails implements net.ess3.api.IJails {
+    private static final transient Logger LOGGER = Logger.getLogger("Essentials");
     private static transient boolean enabled = false;
+    private final IEssentials ess;
+    private final EssentialsConfiguration config;
+    private final Map<String, LazyLocation> jails = new HashMap<>();
 
     public Jails(final IEssentials ess) {
-        super(ess, com.earth2me.essentials.settings.Jails.class);
+        this.ess = ess;
+        this.config = new EssentialsConfiguration(new File(ess.getDataFolder(), "jail.yml"));
         reloadConfig();
+    }
+
+    @Override
+    public void reloadConfig() {
+        synchronized (jails) {
+            config.load();
+            jails.clear();
+            final CommentedConfigurationNode jailsNode = config.getSection("jails");
+            for (final Map.Entry<String, CommentedConfigurationNode> entry : ConfigurateUtil.getMap(jailsNode).entrySet()) {
+                final CommentedConfigurationNode jailNode = entry.getValue();
+                final String worldId = jailNode.node("world").getString();
+                if (worldId == null || worldId.isEmpty()) {
+                    continue;
+                }
+                jails.put(entry.getKey().toLowerCase(Locale.ENGLISH), new LazyLocation(worldId, jailNode.node("x").getDouble(), jailNode.node("y").getDouble(),
+                        jailNode.node("z").getDouble(), jailNode.node("yaw").getFloat(), jailNode.node("pitch").getFloat()));
+            }
+            checkRegister();
+        }
     }
 
     private void registerListeners() {
@@ -53,21 +78,6 @@ public class Jails extends AsyncStorageObjectHolder<com.earth2me.essentials.sett
         if (ess.getSettings().isDebug()) {
             LOGGER.log(Level.INFO, "Registering Jail listener");
         }
-    }
-
-    @Override
-    public File getStorageFile() {
-        return new File(ess.getDataFolder(), "jail.yml");
-    }
-
-    @Override
-    public void finishRead() {
-        checkRegister();
-    }
-
-    @Override
-    public void finishWrite() {
-        checkRegister();
     }
 
     public void resetListener() {
@@ -82,92 +92,104 @@ public class Jails extends AsyncStorageObjectHolder<com.earth2me.essentials.sett
     }
 
     @Override
-    public Location getJail(final String jailName) throws Exception {
-        acquireReadLock();
-        try {
-            if (getData().getJails() == null || jailName == null || !getData().getJails().containsKey(jailName.toLowerCase(Locale.ENGLISH))) {
+    public void startTransaction() {
+        config.startTransaction();
+    }
+
+    @Override
+    public void stopTransaction(final boolean blocking) {
+        config.stopTransaction(blocking);
+    }
+
+    @Override
+    public Location getJail(String jailName) throws Exception {
+        if (jailName == null) {
+            throw new Exception(tl("jailNotExist"));
+        }
+
+        jailName = jailName.toLowerCase(Locale.ENGLISH);
+        synchronized (jails) {
+            if (!jails.containsKey(jailName)) {
                 throw new Exception(tl("jailNotExist"));
             }
-            final Location loc = getData().getJails().get(jailName.toLowerCase(Locale.ENGLISH));
-            if (loc == null || loc.getWorld() == null) {
-                throw new Exception(tl("jailNotExist"));
+            final Location location = jails.get(jailName).location();
+            if (location == null) {
+                throw new Exception(tl("jailWorldNotExist"));
             }
-            return loc;
-        } finally {
-            unlock();
+            return location;
         }
     }
 
     @Override
     public Collection<String> getList() throws Exception {
-        acquireReadLock();
-        try {
-            if (getData().getJails() == null) {
-                return Collections.emptyList();
-            }
-            return new ArrayList<>(getData().getJails().keySet());
-        } finally {
-            unlock();
+        synchronized (jails) {
+            return new ArrayList<>(jails.keySet());
         }
     }
 
     @Override
-    public void removeJail(final String jail) throws Exception {
-        acquireWriteLock();
-        try {
-            if (getData().getJails() == null) {
-                return;
+    public void removeJail(String jail) throws Exception {
+        if (jail == null) {
+            return;
+        }
+
+        jail = jail.toLowerCase(Locale.ENGLISH);
+        synchronized (jails) {
+            if (jails.remove(jail) != null) {
+                config.getSection("jails").node(jail).set(null);
+                config.save();
             }
-            getData().getJails().remove(jail.toLowerCase(Locale.ENGLISH));
-        } finally {
-            unlock();
         }
     }
 
     /**
      * @deprecated This method does not use asynchronous teleportation. Use {@link Jails#sendToJail(IUser, String, CompletableFuture)}
      */
+    @SuppressWarnings("deprecation")
     @Override
     @Deprecated
-    public void sendToJail(final IUser user, final String jail) throws Exception {
-        acquireReadLock();
-        try {
-            if (user.getBase().isOnline()) {
-                final Location loc = getJail(jail);
-                user.getTeleport().now(loc, false, TeleportCause.COMMAND);
+    public void sendToJail(final IUser user, String jail) throws Exception {
+        if (jail == null || jail.isEmpty()) {
+            return;
+        }
+
+        jail = jail.toLowerCase(Locale.ENGLISH);
+        synchronized (jails) {
+            if (jails.containsKey(jail)) {
+                if (user.getBase().isOnline()) {
+                    user.getTeleport().now(getJail(jail), false, TeleportCause.COMMAND);
+                }
+                user.setJail(jail);
             }
-            user.setJail(jail);
-        } finally {
-            unlock();
         }
     }
 
     @Override
-    public void sendToJail(final IUser user, final String jail, final CompletableFuture<Boolean> future) throws Exception {
-        acquireReadLock();
-        try {
-            if (user.getBase().isOnline()) {
-                final Location loc = getJail(jail);
-                user.getAsyncTeleport().now(loc, false, TeleportCause.COMMAND, future);
-                future.thenAccept(success -> user.setJail(jail));
-                return;
+    public void sendToJail(final IUser user, final String jailName, final CompletableFuture<Boolean> future) throws Exception {
+        if (jailName == null || jailName.isEmpty()) {
+            return;
+        }
+
+        final String jail = jailName.toLowerCase(Locale.ENGLISH);
+        synchronized (jails) {
+            if (jails.containsKey(jail)) {
+                if (user.getBase().isOnline()) {
+                    user.getAsyncTeleport().now(getJail(jail), false, TeleportCause.COMMAND, future);
+                    future.thenAccept(success -> user.setJail(jail));
+                    return;
+                }
+                user.setJail(jail);
             }
-            user.setJail(jail);
-        } finally {
-            unlock();
         }
     }
 
     @Override
-    public void setJail(final String jailName, final Location loc) throws Exception {
-        acquireWriteLock();
-        try {
-            if (getData().getJails() == null) {
-                getData().setJails(new HashMap<>());
-            }
-            getData().getJails().put(jailName.toLowerCase(Locale.ENGLISH), loc);
-        } finally {
-            unlock();
+    public void setJail(String jailName, final Location loc) throws Exception {
+        jailName = jailName.toLowerCase(Locale.ENGLISH);
+        synchronized (jails) {
+            jails.put(jailName, LazyLocation.fromLocation(loc));
+            config.setProperty("jails." + jailName, loc);
+            config.save();
         }
     }
 

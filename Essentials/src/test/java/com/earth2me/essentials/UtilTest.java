@@ -4,7 +4,6 @@ import com.earth2me.essentials.utils.DateUtil;
 import com.earth2me.essentials.utils.LocationUtil;
 import com.earth2me.essentials.utils.VersionUtil;
 import junit.framework.TestCase;
-import org.bukkit.World.Environment;
 import org.bukkit.plugin.InvalidDescriptionException;
 
 import java.io.IOException;
@@ -16,8 +15,7 @@ import java.util.Set;
 public class UtilTest extends TestCase {
 
     public UtilTest() {
-        final FakeServer server = new FakeServer();
-        server.createWorld("testWorld", Environment.NORMAL);
+        final FakeServer server = FakeServer.getServer();
         final Essentials ess = new Essentials(server);
         try {
             ess.setupForTesting(server);

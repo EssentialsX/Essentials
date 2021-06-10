@@ -1,10 +1,10 @@
 package com.earth2me.essentials.items;
 
 import com.earth2me.essentials.Essentials;
-import com.earth2me.essentials.EssentialsConf;
 import com.earth2me.essentials.IConf;
+import com.earth2me.essentials.config.ConfigurateUtil;
+import com.earth2me.essentials.config.EssentialsConfiguration;
 import net.ess3.api.IItemDb;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.inventory.ItemStack;
 
 import java.io.File;
@@ -15,14 +15,13 @@ import java.util.List;
 import java.util.Map;
 
 public class CustomItemResolver implements IItemDb.ItemResolver, IConf {
-    private final EssentialsConf config;
+    private final EssentialsConfiguration config;
     private final Essentials ess;
     private final HashMap<String, String> map = new HashMap<>();
 
     public CustomItemResolver(final Essentials ess) {
-        config = new EssentialsConf(new File(ess.getDataFolder(), "custom_items.yml"));
+        config = new EssentialsConfiguration(new File(ess.getDataFolder(), "custom_items.yml"), "/custom_items.yml");
         this.ess = ess;
-        config.setTemplateName("/custom_items.yml");
     }
 
     @Override
@@ -57,18 +56,20 @@ public class CustomItemResolver implements IItemDb.ItemResolver, IConf {
         map.clear();
         config.load();
 
-        final ConfigurationSection section = config.getConfigurationSection("aliases");
-        if (section == null || section.getKeys(false).isEmpty()) {
+        final Map<String, Object> section = ConfigurateUtil.getRawMap(config.getSection("aliases"));
+        if (section.isEmpty()) {
             ess.getLogger().warning("No aliases found in custom_items.yml.");
             return;
         }
 
-        for (final String alias : section.getKeys(false)) {
-            if (!section.isString(alias)) continue;
-            final String target = section.getString(alias);
+        for (final Map.Entry<String, Object> alias : section.entrySet()) {
+            if (!(alias.getValue() instanceof String)) {
+                continue;
+            }
+            final String target = (String) alias.getValue();
 
-            if (target != null && !section.contains(target) && existsInItemDb(target)) {
-                map.put(alias, target);
+            if (existsInItemDb(target)) {
+                map.put(alias.getKey(), target);
             }
         }
     }
@@ -89,7 +90,7 @@ public class CustomItemResolver implements IItemDb.ItemResolver, IConf {
     }
 
     private void save() {
-        config.setProperty("aliases", map);
+        config.setRaw("aliases", map);
         config.save();
     }
 

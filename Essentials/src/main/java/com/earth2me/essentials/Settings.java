@@ -2,6 +2,8 @@ package com.earth2me.essentials;
 
 import com.earth2me.essentials.api.IItemDb;
 import com.earth2me.essentials.commands.IEssentialsCommand;
+import com.earth2me.essentials.config.ConfigurateUtil;
+import com.earth2me.essentials.config.EssentialsConfiguration;
 import com.earth2me.essentials.signs.EssentialsSign;
 import com.earth2me.essentials.signs.Signs;
 import com.earth2me.essentials.textreader.IText;
@@ -14,10 +16,9 @@ import net.ess3.api.IEssentials;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
-import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.MemoryConfiguration;
 import org.bukkit.event.EventPriority;
 import org.bukkit.inventory.ItemStack;
+import org.spongepowered.configurate.CommentedConfigurationNode;
 
 import java.io.File;
 import java.math.BigDecimal;
@@ -49,7 +50,7 @@ public class Settings implements net.ess3.api.ISettings {
     private static final Logger logger = Logger.getLogger("Essentials");
     private static final BigDecimal MAXMONEY = new BigDecimal("10000000000000");
     private static final BigDecimal MINMONEY = new BigDecimal("-10000000000000");
-    private final transient EssentialsConf config;
+    private final transient EssentialsConfiguration config;
     private final transient IEssentials ess;
     private final transient AtomicInteger reloadCount = new AtomicInteger(0);
     private final Map<String, String> chatFormats = Collections.synchronizedMap(new HashMap<>());
@@ -62,7 +63,7 @@ public class Settings implements net.ess3.api.ISettings {
     private boolean forceDisableTeleportSafety;
     private Set<String> disabledCommands = new HashSet<>();
     private final transient Map<String, Command> disabledBukkitCommands = new HashMap<>();
-    private ConfigurationSection commandCosts;
+    private Map<String, BigDecimal> commandCosts;
     private Set<String> socialSpyCommands = new HashSet<>();
     private Set<String> muteCommands = new HashSet<>();
     private String nicknamePrefix = "~";
@@ -121,11 +122,10 @@ public class Settings implements net.ess3.api.ISettings {
     private NumberFormat currencyFormat;
     private List<EssentialsSign> unprotectedSigns = Collections.emptyList();
     private List<String> defaultEnabledConfirmCommands;
-    private boolean teleportBackWhenFreedFromJail;
+    private TeleportWhenFreePolicy teleportWhenFreePolicy;
     private boolean isCompassTowardsHomePerm;
     private boolean isAllowWorldInBroadcastworld;
     private String itemDbType; // #EasterEgg - admins can manually switch items provider if they want
-    private boolean forceEnableRecipe; // https://github.com/EssentialsX/Essentials/issues/1397
     private boolean allowOldIdSigns;
     private boolean isWaterSafe;
     private boolean isSafeUsermap;
@@ -137,8 +137,7 @@ public class Settings implements net.ess3.api.ISettings {
 
     public Settings(final IEssentials ess) {
         this.ess = ess;
-        config = new EssentialsConf(new File(ess.getDataFolder(), "config.yml"));
-        config.setTemplateName("/config.yml");
+        config = new EssentialsConfiguration(new File(ess.getDataFolder(), "config.yml"), "/config.yml");
         reloadConfig();
     }
 
@@ -159,8 +158,8 @@ public class Settings implements net.ess3.api.ISettings {
 
     @Override
     public Set<String> getMultipleHomes() {
-        final ConfigurationSection section = config.getConfigurationSection("sethome-multiple");
-        return section == null ? null : section.getKeys(false);
+        final CommentedConfigurationNode section = config.getSection("sethome-multiple");
+        return section == null ? null : ConfigurateUtil.getKeys(section);
     }
 
     @Override
@@ -305,10 +304,10 @@ public class Settings implements net.ess3.api.ISettings {
 
     private Set<String> _getDisabledCommands() {
         final Set<String> disCommands = new HashSet<>();
-        for (final String c : config.getStringList("disabled-commands")) {
+        for (final String c : config.getList("disabled-commands", String.class)) {
             disCommands.add(c.toLowerCase(Locale.ENGLISH));
         }
-        for (final String c : config.getKeys(false)) {
+        for (final String c : config.getKeys()) {
             if (c.startsWith("disable-")) {
                 disCommands.add(c.substring(8).toLowerCase(Locale.ENGLISH));
             }
@@ -318,7 +317,7 @@ public class Settings implements net.ess3.api.ISettings {
 
     @Override
     public boolean isPlayerCommand(final String label) {
-        for (final String c : config.getStringList("player-commands")) {
+        for (final String c : config.getList("player-commands", String.class)) {
             if (!c.equalsIgnoreCase(label)) {
                 continue;
             }
@@ -329,7 +328,7 @@ public class Settings implements net.ess3.api.ISettings {
 
     @Override
     public boolean isCommandOverridden(final String name) {
-        for (final String c : config.getStringList("overridden-commands")) {
+        for (final String c : config.getList("overridden-commands", String.class)) {
             if (!c.equalsIgnoreCase(name)) {
                 continue;
             }
@@ -343,32 +342,34 @@ public class Settings implements net.ess3.api.ISettings {
         return getCommandCost(cmd.getName());
     }
 
-    private ConfigurationSection _getCommandCosts() {
-        if (config.isConfigurationSection("command-costs")) {
-            final ConfigurationSection section = config.getConfigurationSection("command-costs");
-            final ConfigurationSection newSection = new MemoryConfiguration();
-            for (final String command : section.getKeys(false)) {
+    private Map<String, BigDecimal> _getCommandCosts() {
+        final Map<String, CommentedConfigurationNode> section = ConfigurateUtil.getMap(config.getSection("command-costs"));
+        if (!section.isEmpty()) {
+            final Map<String, BigDecimal> newMap = new HashMap<>();
+            for (Map.Entry<String, CommentedConfigurationNode> entry : section.entrySet()) {
+                final String command = entry.getKey();
+                final CommentedConfigurationNode node = entry.getValue();
                 if (command.charAt(0) == '/') {
                     ess.getLogger().warning("Invalid command cost. '" + command + "' should not start with '/'.");
                 }
-                if (section.isDouble(command)) {
-                    newSection.set(command.toLowerCase(Locale.ENGLISH), section.getDouble(command));
-                } else if (section.isInt(command)) {
-                    newSection.set(command.toLowerCase(Locale.ENGLISH), (double) section.getInt(command));
-                } else if (section.isString(command)) {
-                    final String costString = section.getString(command);
-                    try {
+                try {
+                    if (ConfigurateUtil.isDouble(node)) {
+                        newMap.put(command.toLowerCase(Locale.ENGLISH), BigDecimal.valueOf(node.getDouble()));
+                    } else if (ConfigurateUtil.isInt(node)) {
+                        newMap.put(command.toLowerCase(Locale.ENGLISH), BigDecimal.valueOf(node.getInt()));
+                    } else if (ConfigurateUtil.isString(node)) {
+                        final String costString = node.getString();
+                        //noinspection ConstantConditions
                         final double cost = Double.parseDouble(costString.trim().replace("$", "").replace(getCurrencySymbol(), "").replaceAll("\\W", ""));
-                        newSection.set(command.toLowerCase(Locale.ENGLISH), cost);
-                    } catch (final NumberFormatException ex) {
-                        ess.getLogger().warning("Invalid command cost for: " + command + " (" + costString + ")");
+                        newMap.put(command.toLowerCase(Locale.ENGLISH), BigDecimal.valueOf(cost));
+                    } else {
+                        ess.getLogger().warning("Invalid command cost for: " + command);
                     }
-
-                } else {
+                } catch (final Exception ex) {
                     ess.getLogger().warning("Invalid command cost for: " + command);
                 }
             }
-            return newSection;
+            return newMap;
         }
         return null;
     }
@@ -376,8 +377,8 @@ public class Settings implements net.ess3.api.ISettings {
     @Override
     public BigDecimal getCommandCost(String name) {
         name = name.replace('.', '_').replace('/', '_');
-        if (commandCosts != null) {
-            return EssentialsConf.toBigDecimal(commandCosts.getString(name), BigDecimal.ZERO);
+        if (commandCosts != null && commandCosts.containsKey(name)) {
+            return commandCosts.get(name);
         }
         return BigDecimal.ZERO;
     }
@@ -386,7 +387,7 @@ public class Settings implements net.ess3.api.ISettings {
         final Set<String> socialspyCommands = new HashSet<>();
 
         if (config.isList("socialspy-commands")) {
-            for (final String c : config.getStringList("socialspy-commands")) {
+            for (final String c : config.getList("socialspy-commands", String.class)) {
                 socialspyCommands.add(c.toLowerCase(Locale.ENGLISH));
             }
         } else {
@@ -414,7 +415,7 @@ public class Settings implements net.ess3.api.ISettings {
     private Set<String> _getMuteCommands() {
         final Set<String> muteCommands = new HashSet<>();
         if (config.isList("mute-commands")) {
-            for (final String s : config.getStringList("mute-commands")) {
+            for (final String s : config.getList("mute-commands", String.class)) {
                 muteCommands.add(s.toLowerCase(Locale.ENGLISH));
             }
         }
@@ -447,23 +448,8 @@ public class Settings implements net.ess3.api.ISettings {
     }
 
     @Override
-    public ConfigurationSection getKits() {
-        return ess.getKits().getKits();
-    }
-
-    @Override
-    public Map<String, Object> getKit(final String name) {
-        return ess.getKits().getKit(name);
-    }
-
-    @Override
-    public void addKit(final String name, final List<String> lines, final long delay) {
-        ess.getKits().addKit(name, lines, delay);
-    }
-
-    @Override
-    public ConfigurationSection getKitSection() {
-        return config.getConfigurationSection("kits");
+    public CommentedConfigurationNode getKitSection() {
+        return config.getSection("kits");
     }
 
     @Override
@@ -577,13 +563,13 @@ public class Settings implements net.ess3.api.ISettings {
 
     private Map<String, String> _getWorldAliases() {
         final Map<String, String> map = new HashMap<>();
-        final ConfigurationSection section = config.getConfigurationSection("chat.world-aliases");
+        final CommentedConfigurationNode section = config.getSection("chat.world-aliases");
         if (section == null) {
             return map;
         }
 
-        for (String world : section.getKeys(false)) {
-            map.put(world.toLowerCase(), FormatUtil.replaceFormat(section.getString(world)));
+        for (Map.Entry<String, CommentedConfigurationNode> entry : ConfigurateUtil.getMap(section).entrySet()) {
+            map.put(entry.getKey().toLowerCase(), FormatUtil.replaceFormat(entry.getValue().getString()));
         }
         return map;
     }
@@ -615,8 +601,9 @@ public class Settings implements net.ess3.api.ISettings {
 
     @Override
     public Map<String, Object> getListGroupConfig() {
-        if (config.isConfigurationSection("list")) {
-            final Map<String, Object> values = config.getConfigurationSection("list").getValues(false);
+        final CommentedConfigurationNode node = config.getSection("list");
+        if (node.isMap()) {
+            final Map<String, Object> values = ConfigurateUtil.getRawMap(node);
             if (!values.isEmpty()) {
                 return values;
             }
@@ -633,7 +620,7 @@ public class Settings implements net.ess3.api.ISettings {
     @Override
     public void reloadConfig() {
         config.load();
-        noGodWorlds = new HashSet<>(config.getStringList("no-god-in-worlds"));
+        noGodWorlds = new HashSet<>(config.getList("no-god-in-worlds", String.class));
         enabledSigns = _getEnabledSigns();
         teleportSafety = _isTeleportSafetyEnabled();
         forceDisableTeleportSafety = _isForceDisableTeleportSafety();
@@ -737,7 +724,7 @@ public class Settings implements net.ess3.api.ISettings {
         currencyFormat = _getCurrencyFormat();
         unprotectedSigns = _getUnprotectedSign();
         defaultEnabledConfirmCommands = _getDefaultEnabledConfirmCommands();
-        teleportBackWhenFreedFromJail = _isTeleportBackWhenFreedFromJail();
+        teleportWhenFreePolicy = _getTeleportWhenFreePolicy();
         isCompassTowardsHomePerm = _isCompassTowardsHomePerm();
         isAllowWorldInBroadcastworld = _isAllowWorldInBroadcastworld();
         itemDbType = _getItemDbType();
@@ -767,6 +754,7 @@ public class Settings implements net.ess3.api.ISettings {
 
     private List<Material> _getItemSpawnBlacklist() {
         final List<Material> epItemSpwn = new ArrayList<>();
+        //noinspection deprecation
         final IItemDb itemDb = ess.getItemDb();
         if (itemDb == null || !itemDb.isReady()) {
             logger.log(Level.FINE, "Skipping item spawn blacklist read; item DB not yet loaded.");
@@ -797,7 +785,7 @@ public class Settings implements net.ess3.api.ISettings {
 
         final List<EssentialsSign> newSigns = new ArrayList<>();
 
-        for (String signName : config.getStringList("enabledSigns")) {
+        for (String signName : config.getList("enabledSigns", String.class)) {
             signName = signName.trim().toUpperCase(Locale.ENGLISH);
             if (signName.isEmpty()) {
                 continue;
@@ -1099,6 +1087,11 @@ public class Settings implements net.ess3.api.ISettings {
 
     private boolean _sleepIgnoresAfkPlayers() {
         return config.getBoolean("sleep-ignores-afk-players", true);
+    }
+
+    @Override
+    public boolean sleepIgnoresVanishedPlayers() {
+        return config.getBoolean("sleep-ignores-vanished-player", true);
     }
 
     public String _getAfkListName() {
@@ -1458,12 +1451,12 @@ public class Settings implements net.ess3.api.ISettings {
 
     public List<String> _getSpawnOnJoinGroups() {
         final List<String> def = Collections.emptyList();
-        if (config.isSet("spawn-on-join")) {
+        if (config.hasProperty("spawn-on-join")) {
             if (config.isList("spawn-on-join")) {
-                return new ArrayList<>(config.getStringList("spawn-on-join"));
+                return new ArrayList<>(config.getList("spawn-on-join", String.class));
             } else if (config.isBoolean("spawn-on-join")) { // List of [*] to make all groups go to spawn on join.
                 // This also maintains backwards compatibility with initial impl of single boolean value.
-                return config.getBoolean("spawn-on-join") ? Collections.singletonList("*") : def;
+                return config.getBoolean("spawn-on-join", true) ? Collections.singletonList("*") : def;
             }
             // Take whatever the value is, convert to string and add it to a list as a single value.
             final String val = config.get("spawn-on-join").toString();
@@ -1479,7 +1472,7 @@ public class Settings implements net.ess3.api.ISettings {
     }
 
     @Override
-    public boolean isUserInSpawnOnJoinGroup(final IUser user) {
+    public boolean isUserInSpawnOnJoinGroup(@SuppressWarnings("deprecation") final IUser user) {
         for (final String group : this.spawnOnJoinGroups) {
             if (group.equals("*") || user.inGroup(group)) {
                 return true;
@@ -1494,12 +1487,14 @@ public class Settings implements net.ess3.api.ISettings {
     }
 
     private Map<Pattern, Long> _getCommandCooldowns() {
-        if (!config.isConfigurationSection("command-cooldowns")) {
+        final CommentedConfigurationNode section = config.getSection("command-cooldowns");
+        if (section == null) {
             return null;
         }
-        final ConfigurationSection section = config.getConfigurationSection("command-cooldowns");
         final Map<Pattern, Long> result = new LinkedHashMap<>();
-        for (String cmdEntry : section.getKeys(false)) {
+        for (Map.Entry<String, Object> entry : ConfigurateUtil.getRawMap(section).entrySet()) {
+            String cmdEntry = entry.getKey();
+            Object value = entry.getValue();
             Pattern pattern = null;
 
             /* ================================
@@ -1517,14 +1512,13 @@ public class Settings implements net.ess3.api.ISettings {
                     cmdEntry = cmdEntry.substring(1);
                 }
                 final String cmd = cmdEntry
-                    .replaceAll("\\*", ".*"); // Wildcards are accepted as asterisk * as known universally.
+                        .replaceAll("\\*", ".*"); // Wildcards are accepted as asterisk * as known universally.
                 pattern = Pattern.compile(cmd + "( .*)?"); // This matches arguments, if present, to "ignore" them from the feature.
             }
 
             /* ================================
              * >> Process cooldown value
              * ================================ */
-            Object value = section.get(cmdEntry);
             if (value instanceof String) {
                 try {
                     value = Double.parseDouble(value.toString());
@@ -1592,7 +1586,7 @@ public class Settings implements net.ess3.api.ISettings {
     private NumberFormat _getCurrencyFormat() {
         final String currencyFormatString = config.getString("currency-format", "#,##0.00");
 
-        final String symbolLocaleString = config.getString("currency-symbol-format-locale");
+        final String symbolLocaleString = config.getString("currency-symbol-format-locale", null);
         final DecimalFormatSymbols decimalFormatSymbols;
         if (symbolLocaleString != null) {
             decimalFormatSymbols = DecimalFormatSymbols.getInstance(Locale.forLanguageTag(symbolLocaleString));
@@ -1622,7 +1616,7 @@ public class Settings implements net.ess3.api.ISettings {
     private List<EssentialsSign> _getUnprotectedSign() {
         final List<EssentialsSign> newSigns = new ArrayList<>();
 
-        for (String signName : config.getStringList("unprotected-sign-names")) {
+        for (String signName : config.getList("unprotected-sign-names", String.class)) {
             signName = signName.trim().toUpperCase(Locale.ENGLISH);
             if (signName.isEmpty()) {
                 continue;
@@ -1692,7 +1686,7 @@ public class Settings implements net.ess3.api.ISettings {
     }
 
     private List<String> _getDefaultEnabledConfirmCommands() {
-        final List<String> commands = config.getStringList("default-enabled-confirm-commands");
+        final List<String> commands = config.getList("default-enabled-confirm-commands", String.class);
         for (int i = 0; i < commands.size(); i++) {
             commands.set(i, commands.get(i).toLowerCase());
         }
@@ -1709,13 +1703,27 @@ public class Settings implements net.ess3.api.ISettings {
         return getDefaultEnabledConfirmCommands().contains(commandName.toLowerCase());
     }
 
-    private boolean _isTeleportBackWhenFreedFromJail() {
-        return config.getBoolean("teleport-back-when-freed-from-jail", true);
+    private TeleportWhenFreePolicy _getTeleportWhenFreePolicy() {
+        if (config.hasProperty("teleport-back-when-freed-from-jail")) {
+            return config.getBoolean("teleport-back-when-freed-from-jail", true) ? TeleportWhenFreePolicy.BACK : TeleportWhenFreePolicy.OFF;
+        }
+
+        if (config.hasProperty("teleport-when-freed")) {
+            // snakeyaml more like cursedyaml
+            final String value = config.getString("teleport-when-freed", "back").replace("false", "off");
+            try {
+                return TeleportWhenFreePolicy.valueOf(value.toUpperCase(Locale.ROOT));
+            } catch (IllegalArgumentException e) {
+                throw new RuntimeException("Invalid value \"" + value + "\" for config option \"teleport-when-freed\"!", e);
+            }
+        }
+
+        return TeleportWhenFreePolicy.BACK;
     }
 
     @Override
-    public boolean isTeleportBackWhenFreedFromJail() {
-        return teleportBackWhenFreedFromJail;
+    public TeleportWhenFreePolicy getTeleportWhenFreePolicy() {
+        return teleportWhenFreePolicy;
     }
 
     @Override
@@ -1792,7 +1800,7 @@ public class Settings implements net.ess3.api.ISettings {
     private Set<Predicate<String>> _getNickBlacklist() {
         final Set<Predicate<String>> blacklist = new HashSet<>();
 
-        config.getStringList("nick-blacklist").forEach(entry -> {
+        config.getList("nick-blacklist", String.class).forEach(entry -> {
             try {
                 blacklist.add(Pattern.compile(entry).asPredicate());
             } catch (final PatternSyntaxException e) {

@@ -2,16 +2,15 @@ package com.earth2me.essentials;
 
 import com.earth2me.essentials.commands.IEssentialsCommand;
 import com.earth2me.essentials.commands.NoChargeException;
-import org.bukkit.World.Environment;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.InvalidDescriptionException;
 import org.junit.Test;
 
 import java.io.IOException;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.fail;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertEquals;
 
 public class MessagingTest {
 
@@ -20,8 +19,7 @@ public class MessagingTest {
     private final FakeServer server;
 
     public MessagingTest() {
-        server = new FakeServer();
-        server.createWorld("testWorld", Environment.NORMAL);
+        server = FakeServer.getServer();
         ess = new Essentials(server);
         try {
             ess.setupForTesting(server);

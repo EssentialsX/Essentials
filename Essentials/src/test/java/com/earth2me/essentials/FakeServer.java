@@ -81,16 +81,21 @@ import java.util.concurrent.Future;
 import java.util.function.Consumer;
 import java.util.logging.Logger;
 
-@SuppressWarnings({"NullableProblems", "ConstantConditions", "Contract"})
-public class FakeServer implements Server {
+@SuppressWarnings({"NullableProblems", "ConstantConditions"})
+public final class FakeServer implements Server {
     private final List<World> worlds = new ArrayList<>();
     private final PluginManager pluginManager = new FakePluginManager();
     private final List<Player> players = new ArrayList<>();
 
-    FakeServer() {
+    private FakeServer() {
+        createWorld("testWorld", Environment.NORMAL);
+    }
+
+    public static FakeServer getServer() {
         if (Bukkit.getServer() == null) {
-            Bukkit.setServer(this);
+            Bukkit.setServer(new FakeServer());
         }
+        return (FakeServer) Bukkit.getServer();
     }
 
     @Override
@@ -428,6 +433,16 @@ public class FakeServer implements Server {
     }
 
     @Override
+    public World getWorld(final UUID uuid) {
+        for (final World world : worlds) {
+            if (world.getUID().equals(uuid)) {
+                return world;
+            }
+        }
+        return null;
+    }
+
+    @Override
     public void reload() {
     }
 
@@ -498,11 +513,6 @@ public class FakeServer implements Server {
 
     @Override
     public boolean getOnlineMode() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public World getWorld(final UUID uuid) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 

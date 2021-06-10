@@ -69,6 +69,9 @@ public class Commandspawn extends EssentialsCommand {
 
     private void respawn(final CommandSource sender, final User teleportOwner, final User teleportee, final Trade charge, final String commandLabel, final CompletableFuture<Boolean> future) throws Exception {
         final Location spawn = ((SpawnStorage) this.module).getSpawn(teleportee.getGroup());
+        if (spawn == null) {
+            return;
+        }
         sender.sendMessage(tl("teleporting", spawn.getWorld().getName(), spawn.getBlockX(), spawn.getBlockY(), spawn.getBlockZ()));
         future.exceptionally(e -> {
             showError(sender.getSender(), e, commandLabel);

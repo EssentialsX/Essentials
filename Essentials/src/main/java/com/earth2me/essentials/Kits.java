@@ -1,8 +1,10 @@
 package com.earth2me.essentials;
 
+import com.earth2me.essentials.config.ConfigurateUtil;
+import com.earth2me.essentials.config.EssentialsConfiguration;
 import com.earth2me.essentials.utils.NumberUtil;
-import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.MemoryConfiguration;
+import org.spongepowered.configurate.CommentedConfigurationNode;
+import org.spongepowered.configurate.serialize.SerializationException;
 
 import java.io.File;
 import java.math.BigDecimal;
@@ -14,13 +16,11 @@ import static com.earth2me.essentials.I18n.capitalCase;
 import static com.earth2me.essentials.I18n.tl;
 
 public class Kits implements IConf {
-
-    private final EssentialsConf config;
-    private ConfigurationSection kits;
+    private final EssentialsConfiguration config;
+    private CommentedConfigurationNode kits;
 
     public Kits(final IEssentials essentials) {
-        config = new EssentialsConf(new File(essentials.getDataFolder(), "kits.yml"));
-        config.setTemplateName("/kits.yml");
+        config = new EssentialsConfiguration(new File(essentials.getDataFolder(), "kits.yml"), "/kits.yml");
 
         reloadConfig();
     }
@@ -31,13 +31,18 @@ public class Kits implements IConf {
         kits = _getKits();
     }
 
-    private ConfigurationSection _getKits() {
-        if (config.isConfigurationSection("kits")) {
-            final ConfigurationSection section = config.getConfigurationSection("kits");
-            final ConfigurationSection newSection = new MemoryConfiguration();
-            for (final String kitItem : section.getKeys(false)) {
-                if (section.isConfigurationSection(kitItem)) {
-                    newSection.set(kitItem.toLowerCase(Locale.ENGLISH), section.getConfigurationSection(kitItem));
+    private CommentedConfigurationNode _getKits() {
+        final CommentedConfigurationNode section = config.getSection("kits");
+        if (section != null) {
+            final CommentedConfigurationNode newSection = config.newSection();
+            for (final String kitItem : ConfigurateUtil.getKeys(section)) {
+                final CommentedConfigurationNode kitSection = section.node(kitItem);
+                if (kitSection.isMap()) {
+                    try {
+                        newSection.node(kitItem.toLowerCase(Locale.ENGLISH)).set(kitSection);
+                    } catch (SerializationException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
             return newSection;
@@ -45,25 +50,23 @@ public class Kits implements IConf {
         return null;
     }
 
-    public EssentialsConf getConfig() {
+    public EssentialsConfiguration getConfig() {
         return config;
     }
 
-    public ConfigurationSection getKits() {
+    public CommentedConfigurationNode getKits() {
         return kits;
     }
 
     public Map<String, Object> getKit(String name) {
         name = name.replace('.', '_').replace('/', '_');
         if (getKits() != null) {
-            final ConfigurationSection kits = getKits();
-            // For some reason, YAML doesn't sees keys as always lowercase even if they aren't defined like that.
-            // Workaround is to toLowercase when getting from the config, but showing normally elsewhere.
-            // ODDLY ENOUGH when you get the configuration section for ALL kits, it will return the proper
-            // case of each kit. But when you check for each kit's configuration section, it won't return the kit
-            // you just found if you don't toLowercase it.
-            if (kits.isConfigurationSection(name.toLowerCase())) {
-                return kits.getConfigurationSection(name.toLowerCase()).getValues(true);
+            final CommentedConfigurationNode kits = getKits();
+            // Other parts of the codebase/3rd party plugins expect us to lowercase kit names here.
+            // This isn't strictly needed for the future of Essentials, but for compatibility it's here.
+            final CommentedConfigurationNode kitSection = kits.node(name.toLowerCase());
+            if (!kitSection.virtual() && kitSection.isMap()) {
+                return ConfigurateUtil.getRawMap(kitSection);
             }
         }
 
@@ -72,13 +75,11 @@ public class Kits implements IConf {
 
     // Tries to find an existing kit name that matches the given name, ignoring case. Returns null if no match.
     public String matchKit(final String name) {
-        if (config.isConfigurationSection("kits")) {
-            final ConfigurationSection section = config.getConfigurationSection("kits");
-            if (section != null) {
-                for (final String kitName : section.getKeys(false)) {
-                    if (kitName.equalsIgnoreCase(name)) {
-                        return kitName;
-                    }
+        final CommentedConfigurationNode section = config.getSection("kits");
+        if (section != null) {
+            for (final String kitName : ConfigurateUtil.getKeys(section)) {
+                if (kitName.equalsIgnoreCase(name)) {
+                    return kitName;
                 }
             }
         }
@@ -87,23 +88,23 @@ public class Kits implements IConf {
 
     public void addKit(final String name, final List<String> lines, final long delay) {
         // Will overwrite but w/e
-        config.set("kits." + name + ".delay", delay);
-        config.set("kits." + name + ".items", lines);
+        config.setProperty("kits." + name + ".delay", delay);
+        config.setProperty("kits." + name + ".items", lines);
         kits = _getKits();
         config.save();
     }
 
     public void removeKit(final String name) {
-        config.set("kits." + name, null);
+        config.removeProperty("kits." + name);
         kits = _getKits();
         config.save();
     }
 
     public String listKits(final net.ess3.api.IEssentials ess, final User user) throws Exception {
         try {
-            final ConfigurationSection kits = config.getConfigurationSection("kits");
+            final CommentedConfigurationNode kits = config.getSection("kits");
             final StringBuilder list = new StringBuilder();
-            for (final String kitItem : kits.getKeys(false)) {
+            for (final String kitItem : ConfigurateUtil.getKeys(kits)) {
                 if (user == null) {
                     list.append(" ").append(capitalCase(kitItem));
                 } else if (user.isAuthorized("essentials.kits." + kitItem.toLowerCase(Locale.ENGLISH))) {
