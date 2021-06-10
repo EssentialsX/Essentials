@@ -238,7 +238,7 @@ public interface IUser {
 
     /**
      * Gets information about the most recent tpa request in the tpa queue of this {@link IUser}.
-     *
+     * <p>
      * The TPA Queue is Last-In-First-Out queue which stores all the active pending teleport
      * requests of this {@link IUser}. Timeout calculations are also done during the
      * iteration process of this method, ensuring that teleport requests made past the timeout
