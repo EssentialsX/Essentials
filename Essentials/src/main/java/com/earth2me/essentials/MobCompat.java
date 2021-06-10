@@ -34,6 +34,8 @@ public final class MobCompat {
     public static final EntityType STRAY = getEntityType("STRAY");
     public static final EntityType FOX = getEntityType("FOX");
     public static final EntityType PHANTOM = getEntityType("PHANTOM");
+    public static final EntityType AXOLOTL = getEntityType("AXOLOTL");
+    public static final EntityType GOAT = getEntityType("GOAT");
 
     // Constants for mobs that have changed since earlier versions
     public static final EntityType CAT = getEntityType("CAT", "OCELOT");
