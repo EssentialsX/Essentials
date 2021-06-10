@@ -54,7 +54,12 @@ public class Warps implements IConf, net.ess3.api.IWarps {
         if (conf == null) {
             throw new WarpNotFoundException();
         }
-        return conf.getLocation(null);
+
+        final Location loc = conf.getLocation(null).location();
+        if (loc == null) {
+            throw new WarpNotFoundException();
+        }
+        return loc;
     }
 
     @Override
@@ -121,7 +126,7 @@ public class Warps implements IConf, net.ess3.api.IWarps {
                         final EssentialsConfiguration conf = new EssentialsConfiguration(listOfFile);
                         conf.load();
                         final String name = conf.getString("name", null);
-                        if (name != null) {
+                        if (name != null && conf.hasProperty("world")) {
                             warpPoints.put(new StringIgnoreCase(name), conf);
                         }
                     } catch (final Exception ex) {

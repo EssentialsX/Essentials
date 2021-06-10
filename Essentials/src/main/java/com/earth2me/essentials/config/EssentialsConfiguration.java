@@ -1,8 +1,13 @@
 package com.earth2me.essentials.config;
 
+import com.earth2me.essentials.config.annotations.DeleteIfIncomplete;
 import com.earth2me.essentials.config.annotations.DeleteOnEmpty;
+import com.earth2me.essentials.config.entities.CommandCooldown;
+import com.earth2me.essentials.config.entities.LazyLocation;
+import com.earth2me.essentials.config.processors.DeleteIfIncompleteProcessor;
 import com.earth2me.essentials.config.processors.DeleteOnEmptyProcessor;
 import com.earth2me.essentials.config.serializers.BigDecimalTypeSerializer;
+import com.earth2me.essentials.config.serializers.CommandCooldownSerializer;
 import com.earth2me.essentials.config.serializers.LocationTypeSerializer;
 import com.earth2me.essentials.config.serializers.MaterialTypeSerializer;
 import net.ess3.api.InvalidWorldException;
@@ -45,12 +50,14 @@ public class EssentialsConfiguration {
     private static final ExecutorService EXECUTOR_SERVICE = Executors.newSingleThreadExecutor();
     private static final ObjectMapper.Factory MAPPER_FACTORY = ObjectMapper.factoryBuilder()
             .addProcessor(DeleteOnEmpty.class, (data, value) -> new DeleteOnEmptyProcessor())
+            .addProcessor(DeleteIfIncomplete.class, (data, value) -> new DeleteIfIncompleteProcessor())
             .build();
     private static final TypeSerializerCollection SERIALIZERS = TypeSerializerCollection.defaults().childBuilder()
             .registerAnnotatedObjects(MAPPER_FACTORY)
             .register(BigDecimal.class, new BigDecimalTypeSerializer())
-            .register(Location.class, new LocationTypeSerializer())
+            .register(LazyLocation.class, new LocationTypeSerializer())
             .register(Material.class, new MaterialTypeSerializer())
+            .register(CommandCooldown.class, new CommandCooldownSerializer())
             .build();
 
     private final AtomicInteger pendingWrites = new AtomicInteger(0);
@@ -98,30 +105,29 @@ public class EssentialsConfiguration {
     }
 
     public void setProperty(String path, final Location location) {
-        path = path == null ? "" : path;
-        setInternal(path, location);
+        setInternal(path, LazyLocation.fromLocation(location));
     }
 
-    public Location getLocation(final String path) throws InvalidWorldException {
+    public LazyLocation getLocation(final String path) throws InvalidWorldException {
         final CommentedConfigurationNode node = path == null ? getRootNode() : getSection(path);
         if (node == null) {
             return null;
         }
 
         try {
-            return node.get(Location.class);
+            return node.get(LazyLocation.class);
         } catch (SerializationException e) {
             return null;
         }
     }
 
-    public Map<String, Location> getLocationSectionMap(final String path) {
+    public Map<String, LazyLocation> getLocationSectionMap(final String path) {
         final CommentedConfigurationNode node = getSection(path);
-        final Map<String, Location> result = new HashMap<>();
+        final Map<String, LazyLocation> result = new HashMap<>();
         for (final Map.Entry<String, CommentedConfigurationNode> entry : ConfigurateUtil.getMap(node).entrySet()) {
             final CommentedConfigurationNode jailNode = entry.getValue();
             try {
-                result.put(entry.getKey().toLowerCase(Locale.ENGLISH), jailNode.get(Location.class));
+                result.put(entry.getKey().toLowerCase(Locale.ENGLISH), jailNode.get(LazyLocation.class));
             } catch (SerializationException e) {
                 LOGGER.log(Level.WARNING, "Error serializing key " + entry.getKey(), e);
             }
@@ -258,7 +264,7 @@ public class EssentialsConfiguration {
     }
 
     public CommentedConfigurationNode getSection(final String path) {
-        final CommentedConfigurationNode node = configurationNode.node(toSplitRoot(path));
+        final CommentedConfigurationNode node = toSplitRoot(path, configurationNode);
         if (node.virtual()) {
             return null;
         }
@@ -290,14 +296,14 @@ public class EssentialsConfiguration {
 
     private void setInternal(final String path, final Object value) {
         try {
-            configurationNode.node(toSplitRoot(path)).set(value);
+            toSplitRoot(path, configurationNode).set(value);
         } catch (SerializationException e) {
             LOGGER.log(Level.SEVERE, e.getMessage(), e);
         }
     }
 
     private CommentedConfigurationNode getInternal(final String path) {
-        final CommentedConfigurationNode node = configurationNode.node(toSplitRoot(path));
+        final CommentedConfigurationNode node = toSplitRoot(path, configurationNode);
         if (node.virtual()) {
             return null;
         }
@@ -305,12 +311,15 @@ public class EssentialsConfiguration {
     }
 
     public boolean hasProperty(final String path) {
-        return !configurationNode.node(toSplitRoot(path)).isNull();
+        return !toSplitRoot(path, configurationNode).isNull();
     }
 
-    public Object[] toSplitRoot(String node) {
-        node = node.startsWith(".") ? node.substring(1) : node;
-        return node.contains(".") ? node.split("\\.") : new Object[]{node};
+    public CommentedConfigurationNode toSplitRoot(String path, final CommentedConfigurationNode node) {
+        if (path == null) {
+            return node;
+        }
+        path = path.startsWith(".") ? path.substring(1) : path;
+        return node.node(path.contains(".") ? path.split("\\.") : new Object[]{path});
     }
 
     public synchronized void load() {

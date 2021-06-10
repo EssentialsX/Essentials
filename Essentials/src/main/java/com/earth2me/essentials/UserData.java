@@ -3,6 +3,7 @@ package com.earth2me.essentials;
 import com.earth2me.essentials.config.ConfigurateUtil;
 import com.earth2me.essentials.config.EssentialsUserConfiguration;
 import com.earth2me.essentials.config.entities.CommandCooldown;
+import com.earth2me.essentials.config.entities.LazyLocation;
 import com.earth2me.essentials.config.holders.UserConfigHolder;
 import com.earth2me.essentials.utils.NumberUtil;
 import com.earth2me.essentials.utils.StringUtil;
@@ -154,23 +155,21 @@ public abstract class UserData extends PlayerExtension implements IConf {
 
     public Location getHome(final String name) throws Exception {
         final String search = getHomeName(name);
-        return holder.homes().get(search);
+        return holder.homes().get(search).location();
     }
 
     public Location getHome(final Location world) {
         if (getHomes().isEmpty()) {
             return null;
         }
-        Location loc;
         for (final String home : getHomes()) {
-            loc = holder.homes().get(home);
-            if (world.getWorld() == loc.getWorld()) {
+            final Location loc = holder.homes().get(home).location();
+            if (loc != null && world.getWorld() == loc.getWorld()) {
                 return loc;
             }
 
         }
-        loc = holder.homes().get(getHomes().get(0));
-        return loc;
+        return holder.homes().get(getHomes().get(0)).location();
     }
 
     public List<String> getHomes() {
@@ -180,7 +179,7 @@ public abstract class UserData extends PlayerExtension implements IConf {
     public void setHome(String name, final Location loc) {
         //Invalid names will corrupt the yaml
         name = StringUtil.safeString(name);
-        holder.homes().put(name, loc);
+        holder.homes().put(name, LazyLocation.fromLocation(loc));
         config.save();
     }
 
@@ -262,7 +261,7 @@ public abstract class UserData extends PlayerExtension implements IConf {
     }
 
     public Location getLastLocation() {
-        return holder.lastLocation();
+        return holder.lastLocation().location();
     }
 
     public void setLastLocation(final Location loc) {
@@ -274,7 +273,7 @@ public abstract class UserData extends PlayerExtension implements IConf {
     }
 
     public Location getLogoutLocation() {
-        return holder.logoutLocation();
+        return holder.logoutLocation().location();
     }
 
     public void setLogoutLocation(final Location loc) {
@@ -313,16 +312,16 @@ public abstract class UserData extends PlayerExtension implements IConf {
     }
 
     public List<String> getMails() {
-        return holder.mails();
+        return holder.mail();
     }
 
     public void setMails(List<String> mails) {
-        holder.mails(mails);
+        holder.mail(mails);
         config.save();
     }
 
     public void addMail(final String mail) {
-        holder.mails().add(mail);
+        holder.mail().add(mail);
         config.save();
     }
 
@@ -575,6 +574,10 @@ public abstract class UserData extends PlayerExtension implements IConf {
     public Map<Pattern, Long> getCommandCooldowns() {
         final Map<Pattern, Long> map = new HashMap<>();
         for (final CommandCooldown c : getCooldownsList()) {
+            if (c == null) {
+                // stupid solution to stupid problem
+                continue;
+            }
             map.put(c.pattern(), c.value());
         }
         return map;
@@ -582,6 +585,10 @@ public abstract class UserData extends PlayerExtension implements IConf {
 
     public Date getCommandCooldownExpiry(final String label) {
         for (CommandCooldown cooldown : getCooldownsList()) {
+            if (cooldown == null) {
+                // stupid solution to stupid problem
+                continue;
+            }
             if (cooldown.pattern().matcher(label).matches()) {
                 return new Date(cooldown.value());
             }

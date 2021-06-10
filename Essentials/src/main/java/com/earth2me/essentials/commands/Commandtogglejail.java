@@ -1,6 +1,7 @@
 package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.CommandSource;
+import com.earth2me.essentials.ISettings;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.DateUtil;
 import com.earth2me.essentials.utils.EnumUtil;
@@ -122,19 +123,23 @@ public class Commandtogglejail extends EssentialsCommand {
                 player.setJailTimeout(0);
                 player.sendMessage(tl("jailReleasedPlayerNotify"));
                 player.setJail(null);
-                if (player.getBase().isOnline() && ess.getSettings().isTeleportBackWhenFreedFromJail()) {
+                if (player.getBase().isOnline()) {
                     final CompletableFuture<Boolean> future = getNewExceptionFuture(sender, commandLabel);
-                    player.getAsyncTeleport().back(future);
                     future.thenAccept(success -> {
                         if (success) {
                             sender.sendMessage(tl("jailReleased", player.getName()));
                         }
                     });
-                    future.exceptionally(e -> {
-                        player.getAsyncTeleport().respawn(null, PlayerTeleportEvent.TeleportCause.PLUGIN, new CompletableFuture<>());
-                        sender.sendMessage(tl("jailReleased", player.getName()));
-                        return false;
-                    });
+                    if (ess.getSettings().getTeleportWhenFreePolicy() == ISettings.TeleportWhenFreePolicy.BACK) {
+                        player.getAsyncTeleport().back(future);
+                        future.exceptionally(e -> {
+                            player.getAsyncTeleport().respawn(null, PlayerTeleportEvent.TeleportCause.PLUGIN, new CompletableFuture<>());
+                            sender.sendMessage(tl("jailReleased", player.getName()));
+                            return false;
+                        });
+                    } else if (ess.getSettings().getTeleportWhenFreePolicy() == ISettings.TeleportWhenFreePolicy.SPAWN) {
+                        player.getAsyncTeleport().respawn(null, PlayerTeleportEvent.TeleportCause.PLUGIN, future);
+                    }
                     return;
                 }
                 sender.sendMessage(tl("jailReleased", player.getName()));

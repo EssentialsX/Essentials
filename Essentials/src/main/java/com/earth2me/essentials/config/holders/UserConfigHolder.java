@@ -1,7 +1,9 @@
 package com.earth2me.essentials.config.holders;
 
+import com.earth2me.essentials.config.annotations.DeleteIfIncomplete;
 import com.earth2me.essentials.config.annotations.DeleteOnEmpty;
 import com.earth2me.essentials.config.entities.CommandCooldown;
+import com.earth2me.essentials.config.entities.LazyLocation;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.checkerframework.checker.nullness.qual.MonotonicNonNull;
@@ -31,16 +33,16 @@ public class UserConfigHolder {
     }
 
     @DeleteOnEmpty
-    private @MonotonicNonNull Map<String, Location> homes;
+    private @MonotonicNonNull Map<String, LazyLocation> homes;
 
-    public Map<String, Location> homes() {
+    public Map<String, LazyLocation> homes() {
         if (this.homes == null) {
             this.homes = new HashMap<>();
         }
         return this.homes;
     }
 
-    public void homes(final Map<String, Location> value) {
+    public void homes(final Map<String, LazyLocation> value) {
         this.homes = value;
     }
 
@@ -74,9 +76,9 @@ public class UserConfigHolder {
         return this.powertools;
     }
 
-    private @MonotonicNonNull Location lastlocation;
+    private @MonotonicNonNull LazyLocation lastlocation;
 
-    public Location lastLocation() {
+    public LazyLocation lastLocation() {
         return this.lastlocation;
     }
 
@@ -84,12 +86,12 @@ public class UserConfigHolder {
         if (value == null || value.getWorld() == null) {
             return;
         }
-        this.lastlocation = value;
+        this.lastlocation = LazyLocation.fromLocation(value);
     }
 
-    private @MonotonicNonNull Location logoutlocation;
+    private @MonotonicNonNull LazyLocation logoutlocation;
 
-    public Location logoutLocation() {
+    public LazyLocation logoutLocation() {
         return this.logoutlocation;
     }
 
@@ -97,7 +99,7 @@ public class UserConfigHolder {
         if (value == null || value.getWorld() == null) {
             return;
         }
-        this.logoutlocation = value;
+        this.logoutlocation = LazyLocation.fromLocation(value);
     }
 
     private @Nullable String jail;
@@ -111,17 +113,17 @@ public class UserConfigHolder {
     }
 
     @DeleteOnEmpty
-    private @MonotonicNonNull List<String> mails;
+    private @MonotonicNonNull List<String> mail;
 
-    public List<String> mails() {
-        if (this.mails == null) {
-            this.mails = new ArrayList<>();
+    public List<String> mail() {
+        if (this.mail == null) {
+            this.mail = new ArrayList<>();
         }
-        return this.mails;
+        return this.mail;
     }
 
-    public void mails(final List<String> value) {
-        this.mails = value;
+    public void mail(final List<String> value) {
+        this.mail = value;
     }
 
     private boolean teleportenabled = true;
@@ -412,6 +414,7 @@ public class UserConfigHolder {
         }
 
         @DeleteOnEmpty
+        @DeleteIfIncomplete
         private @MonotonicNonNull List<CommandCooldown> commandCooldowns;
 
         public List<CommandCooldown> commandCooldowns() {

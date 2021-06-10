@@ -13,8 +13,7 @@ dependencies {
     api 'org.bstats:bstats-bukkit:1.8'
 
     implementation 'org.spongepowered:configurate-yaml:4.1.1'
-    implementation 'org.yaml:snakeyaml:1.+'
-    testImplementation 'org.checkerframework:checker-qual:3.7.1'
+    implementation 'org.checkerframework:checker-qual:3.14.0'
 
     // Providers
     api project(':providers:BaseProviders')
@@ -35,6 +34,7 @@ shadowJar {
         include (dependency('org.spongepowered:configurate-core'))
         include (dependency('org.yaml:snakeyaml'))
         include (dependency('io.leangen.geantyref:geantyref'))
+        include (dependency('org.checkerframework:checker-qual'))
         include (project(':providers:BaseProviders'))
         include (project(':providers:PaperProvider'))
         include (project(':providers:NMSReflectionProvider'))
@@ -45,4 +45,9 @@ shadowJar {
     relocate 'org.spongepowered.configurate', 'com.earth2me.essentials.libs.configurate'
     relocate 'org.yaml.snakeyaml', 'com.earth2me.essentials.libs.snakeyaml'
     relocate 'io.leangen.geantyref', 'com.earth2me.essentials.libs.geantyref'
+    relocate 'org.checkerframework', 'com.earth2me.essentials.libs.checkerframework'
+
+    minimize {
+        include(dependency('org.checkerframework:checker-qual'))
+    }
 }

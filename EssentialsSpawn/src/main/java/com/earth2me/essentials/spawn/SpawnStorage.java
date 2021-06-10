@@ -3,6 +3,7 @@ package com.earth2me.essentials.spawn;
 import com.earth2me.essentials.IConf;
 import com.earth2me.essentials.IEssentialsModule;
 import com.earth2me.essentials.config.EssentialsConfiguration;
+import com.earth2me.essentials.config.entities.LazyLocation;
 import net.ess3.api.IEssentials;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -15,7 +16,7 @@ import java.util.Map;
 public class SpawnStorage implements IEssentialsModule, IConf {
     private final IEssentials ess;
     private final EssentialsConfiguration config;
-    private final Map<String, Location> spawns = new HashMap<>();
+    private final Map<String, LazyLocation> spawns = new HashMap<>();
 
     SpawnStorage(final IEssentials ess) {
         this.ess = ess;
@@ -36,7 +37,7 @@ public class SpawnStorage implements IEssentialsModule, IConf {
     void setSpawn(final Location loc, String group) {
         group = group.toLowerCase(Locale.ENGLISH);
         synchronized (spawns) {
-            spawns.put(group, loc);
+            spawns.put(group, LazyLocation.fromLocation(loc));
             config.setProperty("spawns." + group, loc);
             config.save();
         }
@@ -50,9 +51,12 @@ public class SpawnStorage implements IEssentialsModule, IConf {
         group = group.toLowerCase(Locale.ENGLISH);
         synchronized (spawns) {
             if (!spawns.containsKey(group)) {
+                if (spawns.containsKey("default")) {
+                    return spawns.get("default").location();
+                }
                 return getWorldSpawn();
             }
-            return spawns.get(group);
+            return spawns.get(group).location();
         }
     }
 

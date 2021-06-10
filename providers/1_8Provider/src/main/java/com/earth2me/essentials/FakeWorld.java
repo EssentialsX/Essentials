@@ -42,10 +42,12 @@ import java.util.UUID;
 public class FakeWorld implements World {
     private final String name;
     private final Environment env;
+    private final UUID uid;
 
     public FakeWorld(final String string, final Environment environment) {
         this.name = string;
         this.env = environment;
+        this.uid = UUID.randomUUID();
     }
 
     @Override
@@ -266,7 +268,7 @@ public class FakeWorld implements World {
 
     @Override
     public UUID getUID() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return uid;
     }
 
     @Override
