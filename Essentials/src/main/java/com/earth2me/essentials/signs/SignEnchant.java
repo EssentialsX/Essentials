@@ -5,6 +5,7 @@ import com.earth2me.essentials.Enchantments;
 import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.User;
 import net.ess3.api.IEssentials;
+import net.ess3.provider.MaterialTagProvider;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 
@@ -20,8 +21,10 @@ public class SignEnchant extends EssentialsSign {
     @Override
     protected boolean onSignCreate(final ISign sign, final User player, final String username, final IEssentials ess) throws SignException, ChargeException {
         final ItemStack stack;
+        final String itemName = sign.getLine(1);
+        final MaterialTagProvider tagProvider = ess.getMaterialTagProvider();
         try {
-            stack = sign.getLine(1).equals("*") || sign.getLine(1).equalsIgnoreCase("any") ? null : getItemStack(sign.getLine(1), 1, ess);
+            stack = itemName.equals("*") || itemName.equalsIgnoreCase("any") || (tagProvider != null && tagProvider.tagExists(itemName)) ? null : getItemStack(sign.getLine(1), 1, ess);
         } catch (final SignException e) {
             sign.setLine(1, "§c<item|any>");
             throw e;
@@ -63,7 +66,10 @@ public class SignEnchant extends EssentialsSign {
 
     @Override
     protected boolean onSignInteract(final ISign sign, final User player, final String username, final IEssentials ess) throws SignException, ChargeException {
-        final ItemStack search = sign.getLine(1).equals("*") || sign.getLine(1).equalsIgnoreCase("any") ? null : getItemStack(sign.getLine(1), 1, ess);
+        final ItemStack playerHand = player.getBase().getItemInHand();
+        final MaterialTagProvider tagProvider = ess.getMaterialTagProvider();
+        final String itemName = sign.getLine(1);
+        final ItemStack search = itemName.equals("*") || itemName.equalsIgnoreCase("any") || (tagProvider != null && tagProvider.tagExists(itemName) && tagProvider.isTagged(itemName, playerHand.getType())) ? null : getItemStack(itemName, 1, ess);
         final Trade charge = getTrade(sign, 3, ess);
         charge.isAffordableFor(player);
         final String[] enchantLevel = sign.getLine(2).split(":");
@@ -80,7 +86,6 @@ public class SignEnchant extends EssentialsSign {
             }
         }
 
-        final ItemStack playerHand = player.getBase().getItemInHand();
         if (playerHand == null || playerHand.getAmount() != 1 || (playerHand.containsEnchantment(enchantment) && playerHand.getEnchantmentLevel(enchantment) == level)) {
             throw new SignException(tl("missingItems", 1, sign.getLine(1)));
         }
@@ -110,7 +115,7 @@ public class SignEnchant extends EssentialsSign {
         }
 
         charge.charge(player);
-        Trade.log("Sign", "Enchant", "Interact", username, charge, username, charge, sign.getBlock().getLocation(), ess);
+        Trade.log("Sign", "Enchant", "Interact", username, charge, username, charge, sign.getBlock().getLocation(), player.getMoney(), ess);
         player.getBase().updateInventory();
         return true;
     }

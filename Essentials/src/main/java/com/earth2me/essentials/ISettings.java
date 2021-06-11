@@ -4,8 +4,8 @@ import com.earth2me.essentials.commands.IEssentialsCommand;
 import com.earth2me.essentials.signs.EssentialsSign;
 import com.earth2me.essentials.textreader.IText;
 import org.bukkit.Material;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.event.EventPriority;
+import org.spongepowered.configurate.CommentedConfigurationNode;
 
 import java.math.BigDecimal;
 import java.text.NumberFormat;
@@ -33,6 +33,8 @@ public interface ISettings extends IConf {
 
     String getChatFormat(String group);
 
+    String getWorldAlias(String world);
+
     int getChatRadius();
 
     int getNearRadius();
@@ -59,28 +61,12 @@ public interface ISettings extends IConf {
 
     boolean getSocialSpyListenMutedPlayers();
 
+    boolean isSocialSpyMessages();
+
     Set<String> getMuteCommands();
 
-    /**
-     * @Deprecated in favor of {@link Kits#getKits()}
-     */
     @Deprecated
-    ConfigurationSection getKits();
-
-    /**
-     * @Deprecated in favor of {@link Kits#getKit(String)}
-     */
-    @Deprecated
-    Map<String, Object> getKit(String kit);
-
-    /**
-     * @Deprecated in favor of {@link Kits#addKit(String, List, long)}}
-     */
-    @Deprecated
-    void addKit(String name, List<String> lines, long delay);
-
-    @Deprecated
-    ConfigurationSection getKitSection();
+    CommentedConfigurationNode getKitSection();
 
     boolean isSkippingUsedOneTimeKitsFromKitList();
 
@@ -137,6 +123,8 @@ public interface ISettings extends IConf {
     boolean isCommandDisabled(final IEssentialsCommand cmd);
 
     boolean isCommandDisabled(String label);
+
+    Set<String> getDisabledCommands();
 
     boolean isCommandOverridden(String name);
 
@@ -199,7 +187,11 @@ public interface ISettings extends IConf {
 
     boolean cancelAfkOnInteract();
 
+    boolean cancelAfkOnChat();
+
     boolean sleepIgnoresAfkPlayers();
+
+    boolean sleepIgnoresVanishedPlayers();
 
     boolean isAfkListName();
 
@@ -283,6 +275,8 @@ public interface ISettings extends IConf {
 
     String getCustomQuitMessage();
 
+    boolean isCustomServerFullMessage();
+
     boolean isNotifyNoNewMail();
 
     boolean isDropItemsIfFull();
@@ -329,6 +323,8 @@ public interface ISettings extends IConf {
 
     List<EssentialsSign> getUnprotectedSignNames();
 
+    boolean isKitAutoEquip();
+
     boolean isPastebinCreateKit();
 
     boolean isAllowBulkBuySell();
@@ -349,7 +345,9 @@ public interface ISettings extends IConf {
 
     boolean isConfirmCommandEnabledByDefault(String commandName);
 
-    boolean isTeleportBackWhenFreedFromJail();
+    TeleportWhenFreePolicy getTeleportWhenFreePolicy();
+
+    boolean isJailOnlineTime();
 
     boolean isCompassTowardsHomePerm();
 
@@ -377,10 +375,20 @@ public interface ISettings extends IConf {
 
     boolean infoAfterDeath();
 
+    boolean isRespawnAtBed();
+
+    boolean isUpdateCheckEnabled();
+
     enum KeepInvPolicy {
         KEEP,
         DELETE,
         DROP
+    }
+
+    enum TeleportWhenFreePolicy {
+        SPAWN,
+        BACK,
+        OFF
     }
 
 }

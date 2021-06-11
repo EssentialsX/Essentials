@@ -43,8 +43,18 @@ public class Commandpay extends EssentialsLoopCommand {
             throw new Exception(tl("minimumPayAmount", NumberUtil.displayCurrencyExactly(ess.getSettings().getMinimumPayAmount(), ess)));
         }
         final AtomicBoolean informToConfirm = new AtomicBoolean(false);
-        loopOnlinePlayersConsumer(server, user.getSource(), false, user.isAuthorized("essentials.pay.multiple"), args[0], player -> {
+        final boolean canPayOffline = user.isAuthorized("essentials.pay.offline");
+        if (!canPayOffline && args[0].equals("**")) {
+            user.sendMessage(tl("payOffline"));
+            return;
+        }
+        loopOfflinePlayersConsumer(server, user.getSource(), false, user.isAuthorized("essentials.pay.multiple"), args[0], player -> {
             try {
+                if (player.getBase() != null && (!player.getBase().isOnline() || player.isHidden(user.getBase())) && !canPayOffline) {
+                    user.sendMessage(tl("payOffline"));
+                    return;
+                }
+
                 if (!player.isAcceptingPay() || (ess.getSettings().isPayExcludesIgnoreList() && player.isIgnoredPlayer(user))) {
                     user.sendMessage(tl("notAcceptingPay", player.getDisplayName()));
                     return;
@@ -62,7 +72,7 @@ public class Commandpay extends EssentialsLoopCommand {
                 }
                 user.payUser(player, amount, UserBalanceUpdateEvent.Cause.COMMAND_PAY);
                 user.getConfirmingPayments().remove(player);
-                Trade.log("Command", "Pay", "Player", user.getName(), new Trade(amount, ess), player.getName(), new Trade(amount, ess), user.getLocation(), ess);
+                Trade.log("Command", "Pay", "Player", user.getName(), new Trade(amount, ess), player.getName(), new Trade(amount, ess), user.getLocation(), user.getMoney(), ess);
             } catch (final MaxMoneyException ex) {
                 user.sendMessage(tl("maxMoney"));
                 try {

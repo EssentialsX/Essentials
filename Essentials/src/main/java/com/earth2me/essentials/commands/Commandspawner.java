@@ -52,7 +52,7 @@ public class Commandspawner extends EssentialsCommand {
             throw new Exception(tl("noPermToSpawnMob"));
         }
 
-        if (args.length > 1 && NumberUtil.isInt(args[1])) {
+        if (args.length > 1 && NumberUtil.isInt(args[1]) && user.isAuthorized("essentials.spawner.delay")) {
             delay = Integer.parseInt(args[1]);
         }
         final Trade charge = new Trade("spawner-" + mob.name.toLowerCase(Locale.ENGLISH), ess);

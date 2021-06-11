@@ -1,8 +1,8 @@
 package com.earth2me.essentials.api;
 
-import com.earth2me.essentials.EssentialsUserConf;
 import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.config.EssentialsUserConfiguration;
 import com.earth2me.essentials.utils.NumberUtil;
 import com.earth2me.essentials.utils.StringUtil;
 import com.google.common.base.Charsets;
@@ -14,6 +14,7 @@ import org.bukkit.entity.Player;
 import java.io.File;
 import java.math.BigDecimal;
 import java.math.MathContext;
+import java.text.MessageFormat;
 import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -23,9 +24,14 @@ import java.util.logging.Logger;
  */
 public class Economy {
     public static final MathContext MATH_CONTEXT = MathContext.DECIMAL128;
-    private static final Logger logger = Logger.getLogger("Essentials");
-    private static final String noCallBeforeLoad = "Essentials API is called before Essentials is loaded.";
+    private static final Logger LOGGER = Logger.getLogger("Essentials");
     private static IEssentials ess;
+
+    private static final String WARN_CALL_BEFORE_LOAD = "Essentials API is called before Essentials is loaded.";
+    private static final String WARN_EXISTING_NPC_CREATE = "Account creation was requested for NPC account {0}, but account already exists (UUID: {1}). Not creating an account.";
+    private static final String WARN_PLAYER_UUID_NO_NAME = "Found player {0} by UUID {1} but not by their actual name. They may have changed their username.";
+    private static final String WARN_NPC_RECREATE_1 = "Account creation was requested for NPC user {0}, but an account file with UUID {1} already exists.";
+    private static final String WARN_NPC_RECREATE_2 = "Essentials will create a new account as requested by the other plugin, but this is almost certainly a bug and should be reported.";
 
     protected Economy() {
     }
@@ -46,12 +52,17 @@ public class Economy {
             }
         }
         final UUID npcUUID = UUID.nameUUIDFromBytes(("NPC:" + name).getBytes(Charsets.UTF_8));
-        final EssentialsUserConf npcConfig = new EssentialsUserConf(name, npcUUID, new File(folder, npcUUID.toString() + ".yml"));
+        final File npcFile = new File(folder, npcUUID.toString() + ".yml");
+        if (npcFile.exists()) {
+            LOGGER.log(Level.SEVERE, MessageFormat.format(WARN_NPC_RECREATE_1, name, npcUUID.toString()), new RuntimeException());
+            LOGGER.log(Level.SEVERE, WARN_NPC_RECREATE_2);
+        }
+        final EssentialsUserConfiguration npcConfig = new EssentialsUserConfiguration(name, npcUUID, npcFile);
         npcConfig.load();
         npcConfig.setProperty("npc", true);
         npcConfig.setProperty("lastAccountName", name);
         npcConfig.setProperty("money", ess.getSettings().getStartingBalance());
-        npcConfig.forceSave();
+        npcConfig.blockingSave();
         ess.getUserMap().trackUUID(npcUUID, name, false);
     }
 
@@ -62,7 +73,7 @@ public class Economy {
 
     private static User getUserByName(final String name) {
         if (ess == null) {
-            throw new RuntimeException(noCallBeforeLoad);
+            throw new RuntimeException(WARN_CALL_BEFORE_LOAD);
         }
         if (name == null) {
             throw new IllegalArgumentException("Economy username cannot be null");
@@ -79,9 +90,13 @@ public class Economy {
             if (player != null) {
                 user = ess.getUser(player.getUniqueId());
                 if (user != null) {
-                    logger.info(String.format("[Economy] Found player %s by UUID %s but not by their actual name - they may have changed their username", name, player.getUniqueId().toString()));
+                    LOGGER.log(Level.INFO, MessageFormat.format(WARN_PLAYER_UUID_NO_NAME, name, player.getUniqueId().toString()), new RuntimeException());
                 }
             }
+        }
+
+        if (user == null) {
+            user = getUserByUUID(UUID.nameUUIDFromBytes(("NPC:" + name).getBytes(Charsets.UTF_8)));
         }
 
         return user;
@@ -89,7 +104,7 @@ public class Economy {
 
     private static User getUserByUUID(final UUID uuid) {
         if (ess == null) {
-            throw new RuntimeException(noCallBeforeLoad);
+            throw new RuntimeException(WARN_CALL_BEFORE_LOAD);
         }
         if (uuid == null) {
             throw new IllegalArgumentException("Economy uuid cannot be null");
@@ -167,14 +182,15 @@ public class Economy {
      * @param balance The balance you want to set
      * @throws UserDoesNotExistException If a user by that name does not exists
      * @throws NoLoanPermittedException  If the user is not allowed to have a negative balance
+     * @throws MaxMoneyException         If this transaction has but the user over the maximum amount of money
      * @deprecated Use {@link Economy#setMoney(UUID, BigDecimal)} or {@link Economy#setMoney(User, BigDecimal)}
      */
     @Deprecated
-    public static void setMoney(final String name, final double balance) throws UserDoesNotExistException, NoLoanPermittedException {
+    public static void setMoney(final String name, final double balance) throws UserDoesNotExistException, NoLoanPermittedException, MaxMoneyException {
         try {
             setMoney(name, BigDecimal.valueOf(balance));
         } catch (final ArithmeticException e) {
-            logger.log(Level.WARNING, "Failed to set balance of " + name + " to " + balance + ": " + e.getMessage(), e);
+            LOGGER.log(Level.WARNING, "Failed to set balance of " + name + " to " + balance + ": " + e.getMessage(), e);
         }
     }
 
@@ -185,10 +201,11 @@ public class Economy {
      * @param balance The balance you want to set
      * @throws UserDoesNotExistException If a user by that name does not exist
      * @throws NoLoanPermittedException  If the user is not allowed to have a negative balance
+     * @throws MaxMoneyException         If this transaction has but the user over the maximum amount of money
      * @deprecated Usernames can change use {@link Economy#setMoney(UUID, BigDecimal)} or {@link Economy#setMoney(User, BigDecimal)}
      */
     @Deprecated
-    public static void setMoney(final String name, final BigDecimal balance) throws UserDoesNotExistException, NoLoanPermittedException {
+    public static void setMoney(final String name, final BigDecimal balance) throws UserDoesNotExistException, NoLoanPermittedException, MaxMoneyException {
         final User user = getUserByName(name);
         if (user == null) {
             throw new UserDoesNotExistException(name);
@@ -203,8 +220,9 @@ public class Economy {
      * @param balance The balance you want to set
      * @throws UserDoesNotExistException If a user by that uuid does not exist
      * @throws NoLoanPermittedException  If the user is not allowed to have a negative balance
+     * @throws MaxMoneyException         If this transaction has but the user over the maximum amount of money
      */
-    public static void setMoney(final UUID uuid, final BigDecimal balance) throws NoLoanPermittedException, UserDoesNotExistException {
+    public static void setMoney(final UUID uuid, final BigDecimal balance) throws NoLoanPermittedException, UserDoesNotExistException, MaxMoneyException {
         final User user = getUserByUUID(uuid);
         if (user == null) {
             throw new UserDoesNotExistException(uuid);
@@ -218,8 +236,9 @@ public class Economy {
      * @param user    User
      * @param balance The balance you want to set
      * @throws NoLoanPermittedException If the user is not allowed to have a negative balance
+     * @throws MaxMoneyException        If this transaction has but the user over the maximum amount of money
      */
-    public static void setMoney(final User user, final BigDecimal balance) throws NoLoanPermittedException {
+    public static void setMoney(final User user, final BigDecimal balance) throws NoLoanPermittedException, MaxMoneyException {
         if (user == null) {
             throw new IllegalArgumentException("Economy user cannot be null");
         }
@@ -229,12 +248,8 @@ public class Economy {
         if (balance.signum() < 0 && !user.isAuthorized("essentials.eco.loan")) {
             throw new NoLoanPermittedException();
         }
-        try {
-            user.setMoney(balance, UserBalanceUpdateEvent.Cause.API);
-        } catch (final MaxMoneyException ex) {
-            //TODO: Update API to show max balance errors
-        }
-        Trade.log("API", "Set", "API", user.getName(), new Trade(balance, ess), null, null, null, ess);
+        user.setMoney(balance, UserBalanceUpdateEvent.Cause.API);
+        Trade.log("API", "Set", "API", user.getName(), new Trade(balance, ess), null, null, null, balance, ess);
     }
 
     /**
@@ -246,13 +261,14 @@ public class Economy {
      * @param amount The money you want to add
      * @throws UserDoesNotExistException If a user by that name does not exists
      * @throws NoLoanPermittedException  If the user is not allowed to have a negative balance
+     * @throws MaxMoneyException         If this transaction has but the user over the maximum amount of money
      */
     @Deprecated
-    public static void add(final String name, final double amount) throws UserDoesNotExistException, NoLoanPermittedException {
+    public static void add(final String name, final double amount) throws UserDoesNotExistException, NoLoanPermittedException, MaxMoneyException {
         try {
             add(name, BigDecimal.valueOf(amount));
         } catch (final ArithmeticException e) {
-            logger.log(Level.WARNING, "Failed to add " + amount + " to balance of " + name + ": " + e.getMessage(), e);
+            LOGGER.log(Level.WARNING, "Failed to add " + amount + " to balance of " + name + ": " + e.getMessage(), e);
         }
     }
 
@@ -263,11 +279,11 @@ public class Economy {
      * @param amount The amount of money to be added to the user's account
      * @throws UserDoesNotExistException If a user by that name does not exist
      * @throws NoLoanPermittedException  If the user is not allowed to have a negative balance
-     * @throws ArithmeticException
+     * @throws MaxMoneyException         If this transaction has but the user over the maximum amount of money
      * @deprecated Usernames can change, use {@link Economy#add(UUID, BigDecimal)} or {@link Economy#add(User, BigDecimal)}
      */
     @Deprecated
-    public static void add(final String name, final BigDecimal amount) throws UserDoesNotExistException, NoLoanPermittedException, ArithmeticException {
+    public static void add(final String name, final BigDecimal amount) throws UserDoesNotExistException, NoLoanPermittedException, ArithmeticException, MaxMoneyException {
         final User user = getUserByName(name);
         if (user == null) {
             throw new UserDoesNotExistException(name);
@@ -282,9 +298,9 @@ public class Economy {
      * @param amount The money you want to add
      * @throws UserDoesNotExistException If a user by that uuid does not exist
      * @throws NoLoanPermittedException  If the user is not allowed to have a negative balance
-     * @throws ArithmeticException
+     * @throws MaxMoneyException         If this transaction has but the user over the maximum amount of money
      */
-    public static void add(final UUID uuid, final BigDecimal amount) throws NoLoanPermittedException, ArithmeticException, UserDoesNotExistException {
+    public static void add(final UUID uuid, final BigDecimal amount) throws NoLoanPermittedException, ArithmeticException, UserDoesNotExistException, MaxMoneyException {
         final User user = getUserByUUID(uuid);
         if (user == null) {
             throw new UserDoesNotExistException(uuid);
@@ -298,16 +314,15 @@ public class Economy {
      * @param user   User
      * @param amount The money you want to add
      * @throws NoLoanPermittedException If the user is not allowed to have a negative balance
-     * @throws ArithmeticException
-     * @deprecated Usernames can change, use {@link Economy#add(UUID, BigDecimal)} or {@link Economy#add(User, BigDecimal)}
+     * @throws MaxMoneyException        If this transaction has but the user over the maximum amount of money
      */
-    public static void add(final User user, final BigDecimal amount) throws NoLoanPermittedException, ArithmeticException {
+    public static void add(final User user, final BigDecimal amount) throws NoLoanPermittedException, ArithmeticException, MaxMoneyException {
         if (user == null) {
             throw new IllegalArgumentException("Economy user cannot be null");
         }
         final BigDecimal result = getMoneyExact(user).add(amount, MATH_CONTEXT);
         setMoney(user, result);
-        Trade.log("API", "Add", "API", user.getName(), new Trade(amount, ess), null, null, null, ess);
+        Trade.log("API", "Add", "API", user.getName(), new Trade(amount, ess), null, null, null, result, ess);
     }
 
     /**
@@ -317,14 +332,15 @@ public class Economy {
      * @param amount The money you want to subtract
      * @throws UserDoesNotExistException If a user by that name does not exists
      * @throws NoLoanPermittedException  If the user is not allowed to have a negative balance
+     * @throws MaxMoneyException         If this transaction has but the user over the maximum amount of money
      * @deprecated Use {@link Economy#subtract(UUID, BigDecimal)} or {@link Economy#subtract(User, BigDecimal)}
      */
     @Deprecated
-    public static void subtract(final String name, final double amount) throws UserDoesNotExistException, NoLoanPermittedException {
+    public static void subtract(final String name, final double amount) throws UserDoesNotExistException, NoLoanPermittedException, MaxMoneyException {
         try {
             substract(name, BigDecimal.valueOf(amount));
         } catch (final ArithmeticException e) {
-            logger.log(Level.WARNING, "Failed to subtract " + amount + " of balance of " + name + ": " + e.getMessage(), e);
+            LOGGER.log(Level.WARNING, "Failed to subtract " + amount + " of balance of " + name + ": " + e.getMessage(), e);
         }
     }
 
@@ -335,14 +351,14 @@ public class Economy {
      * @param amount The money you want to subtract
      * @throws UserDoesNotExistException If a user by that name does not exist
      * @throws NoLoanPermittedException  If the user is not allowed to have a negative balance
-     * @throws ArithmeticException
+     * @throws MaxMoneyException         If this transaction has but the user over the maximum amount of money
      * @deprecated Usernames can change, use {@link Economy#subtract(UUID, BigDecimal)} or {@link Economy#subtract(User, BigDecimal)}
      */
     @Deprecated
-    public static void substract(final String name, final BigDecimal amount) throws UserDoesNotExistException, NoLoanPermittedException, ArithmeticException {
+    public static void substract(final String name, final BigDecimal amount) throws UserDoesNotExistException, NoLoanPermittedException, ArithmeticException, MaxMoneyException {
         final BigDecimal result = getMoneyExact(name).subtract(amount, MATH_CONTEXT);
         setMoney(name, result);
-        Trade.log("API", "Subtract", "API", name, new Trade(amount, ess), null, null, null, ess);
+        Trade.log("API", "Subtract", "API", name, new Trade(amount, ess), null, null, null, result, ess);
     }
 
     /**
@@ -352,9 +368,9 @@ public class Economy {
      * @param amount The money you want to subtract
      * @throws UserDoesNotExistException If a user by that UUID does not exist
      * @throws NoLoanPermittedException  If the user is not allowed to have a negative balance
-     * @throws ArithmeticException
+     * @throws MaxMoneyException         If this transaction has but the user over the maximum amount of money
      */
-    public static void subtract(final UUID uuid, final BigDecimal amount) throws NoLoanPermittedException, ArithmeticException, UserDoesNotExistException {
+    public static void subtract(final UUID uuid, final BigDecimal amount) throws NoLoanPermittedException, ArithmeticException, UserDoesNotExistException, MaxMoneyException {
         final User user = getUserByUUID(uuid);
         if (user == null) {
             throw new UserDoesNotExistException(uuid);
@@ -368,15 +384,15 @@ public class Economy {
      * @param user   User
      * @param amount The money you want to subtract
      * @throws NoLoanPermittedException If the user is not allowed to have a negative balance
-     * @throws ArithmeticException
+     * @throws MaxMoneyException        If this transaction has but the user over the maximum amount of money
      */
-    public static void subtract(final User user, final BigDecimal amount) throws NoLoanPermittedException, ArithmeticException {
+    public static void subtract(final User user, final BigDecimal amount) throws NoLoanPermittedException, ArithmeticException, MaxMoneyException {
         if (user == null) {
             throw new IllegalArgumentException("Economy user cannot be null");
         }
         final BigDecimal result = getMoneyExact(user).subtract(amount, MATH_CONTEXT);
         setMoney(user, result);
-        Trade.log("API", "Subtract", "API", user.getName(), new Trade(amount, ess), null, null, null, ess);
+        Trade.log("API", "Subtract", "API", user.getName(), new Trade(amount, ess), null, null, null, result, ess);
     }
 
     /**
@@ -386,14 +402,15 @@ public class Economy {
      * @param amount The balance is divided by this value
      * @throws UserDoesNotExistException If a user by that name does not exists
      * @throws NoLoanPermittedException  If the user is not allowed to have a negative balance
+     * @throws MaxMoneyException         If this transaction has but the user over the maximum amount of money
      * @deprecated Use {@link Economy#divide(UUID, BigDecimal)} or {@link Economy#divide(User, BigDecimal)}
      */
     @Deprecated
-    public static void divide(final String name, final double amount) throws UserDoesNotExistException, NoLoanPermittedException {
+    public static void divide(final String name, final double amount) throws UserDoesNotExistException, NoLoanPermittedException, MaxMoneyException {
         try {
             divide(name, BigDecimal.valueOf(amount));
         } catch (final ArithmeticException e) {
-            logger.log(Level.WARNING, "Failed to divide balance of " + name + " by " + amount + ": " + e.getMessage(), e);
+            LOGGER.log(Level.WARNING, "Failed to divide balance of " + name + " by " + amount + ": " + e.getMessage(), e);
         }
     }
 
@@ -404,11 +421,11 @@ public class Economy {
      * @param amount The balance is divided by this value
      * @throws UserDoesNotExistException If a user by that name does not exist
      * @throws NoLoanPermittedException  If the user is not allowed to have a negative balance
-     * @throws ArithmeticException
+     * @throws MaxMoneyException         If this transaction has but the user over the maximum amount of money
      * @deprecated Usernames can change, use {@link Economy#divide(UUID, BigDecimal)} or {@link Economy#divide(User, BigDecimal)}
      */
     @Deprecated
-    public static void divide(final String name, final BigDecimal amount) throws UserDoesNotExistException, NoLoanPermittedException, ArithmeticException {
+    public static void divide(final String name, final BigDecimal amount) throws UserDoesNotExistException, NoLoanPermittedException, ArithmeticException, MaxMoneyException {
         final User user = getUserByName(name);
         if (user == null) {
             throw new UserDoesNotExistException(name);
@@ -423,9 +440,9 @@ public class Economy {
      * @param amount The balance is divided by this value
      * @throws UserDoesNotExistException If a user by that UUID does not exist
      * @throws NoLoanPermittedException  If the user is not allowed to have a negative balance
-     * @throws ArithmeticException
+     * @throws MaxMoneyException         If this transaction has but the user over the maximum amount of money
      */
-    public static void divide(final UUID uuid, final BigDecimal amount) throws NoLoanPermittedException, ArithmeticException, UserDoesNotExistException {
+    public static void divide(final UUID uuid, final BigDecimal amount) throws NoLoanPermittedException, ArithmeticException, UserDoesNotExistException, MaxMoneyException {
         final User user = getUserByUUID(uuid);
         if (user == null) {
             throw new UserDoesNotExistException(uuid);
@@ -439,15 +456,15 @@ public class Economy {
      * @param user   Name of the user
      * @param amount The balance is divided by this value
      * @throws NoLoanPermittedException If the user is not allowed to have a negative balance
-     * @throws ArithmeticException
+     * @throws MaxMoneyException        If this transaction has but the user over the maximum amount of money
      */
-    public static void divide(final User user, final BigDecimal amount) throws NoLoanPermittedException, ArithmeticException {
+    public static void divide(final User user, final BigDecimal amount) throws NoLoanPermittedException, ArithmeticException, MaxMoneyException {
         if (user == null) {
             throw new IllegalArgumentException("Economy user cannot be null");
         }
         final BigDecimal result = getMoneyExact(user).divide(amount, MATH_CONTEXT);
         setMoney(user, result);
-        Trade.log("API", "Divide", "API", user.getName(), new Trade(amount, ess), null, null, null, ess);
+        Trade.log("API", "Divide", "API", user.getName(), new Trade(amount, ess), null, null, null, result, ess);
     }
 
     /**
@@ -457,14 +474,15 @@ public class Economy {
      * @param amount The balance is multiplied by this value
      * @throws UserDoesNotExistException If a user by that name does not exists
      * @throws NoLoanPermittedException  If the user is not allowed to have a negative balance
+     * @throws MaxMoneyException         If this transaction has but the user over the maximum amount of money
      * @deprecated Use {@link Economy#multiply(UUID, BigDecimal)} or {@link Economy#multiply(User, BigDecimal)}
      */
     @Deprecated
-    public static void multiply(final String name, final double amount) throws UserDoesNotExistException, NoLoanPermittedException {
+    public static void multiply(final String name, final double amount) throws UserDoesNotExistException, NoLoanPermittedException, MaxMoneyException {
         try {
             multiply(name, BigDecimal.valueOf(amount));
         } catch (final ArithmeticException e) {
-            logger.log(Level.WARNING, "Failed to multiply balance of " + name + " by " + amount + ": " + e.getMessage(), e);
+            LOGGER.log(Level.WARNING, "Failed to multiply balance of " + name + " by " + amount + ": " + e.getMessage(), e);
         }
     }
 
@@ -475,11 +493,11 @@ public class Economy {
      * @param amount The balance is multiplied by the this value
      * @throws UserDoesNotExistException If a user by that name does not exist
      * @throws NoLoanPermittedException  If the user is not allowed to have a negative balance
-     * @throws ArithmeticException
+     * @throws MaxMoneyException         If this transaction has but the user over the maximum amount of money
      * @deprecated Usernames can change, use {@link Economy#multiply(UUID, BigDecimal)} or {@link Economy#multiply(User, BigDecimal)}
      */
     @Deprecated
-    public static void multiply(final String name, final BigDecimal amount) throws UserDoesNotExistException, NoLoanPermittedException, ArithmeticException {
+    public static void multiply(final String name, final BigDecimal amount) throws UserDoesNotExistException, NoLoanPermittedException, ArithmeticException, MaxMoneyException {
         final User user = getUserByName(name);
         if (user == null) {
             throw new UserDoesNotExistException(name);
@@ -494,9 +512,9 @@ public class Economy {
      * @param amount The balance is multiplied by the this value
      * @throws UserDoesNotExistException If a user by that uuid does not exist
      * @throws NoLoanPermittedException  If the user is not allowed to have a negative balance
-     * @throws ArithmeticException
+     * @throws MaxMoneyException         If this transaction has but the user over the maximum amount of money
      */
-    public static void multiply(final UUID uuid, final BigDecimal amount) throws NoLoanPermittedException, ArithmeticException, UserDoesNotExistException {
+    public static void multiply(final UUID uuid, final BigDecimal amount) throws NoLoanPermittedException, ArithmeticException, UserDoesNotExistException, MaxMoneyException {
         final User user = getUserByUUID(uuid);
         if (user == null) {
             throw new UserDoesNotExistException(uuid);
@@ -510,15 +528,15 @@ public class Economy {
      * @param user   Name of the user
      * @param amount The balance is multiplied by the this value
      * @throws NoLoanPermittedException If the user is not allowed to have a negative balance
-     * @throws ArithmeticException
+     * @throws MaxMoneyException        If this transaction has but the user over the maximum amount of money
      */
-    public static void multiply(final User user, final BigDecimal amount) throws NoLoanPermittedException, ArithmeticException {
+    public static void multiply(final User user, final BigDecimal amount) throws NoLoanPermittedException, ArithmeticException, MaxMoneyException {
         if (user == null) {
             throw new IllegalArgumentException("Economy user cannot be null");
         }
         final BigDecimal result = getMoneyExact(user).multiply(amount, MATH_CONTEXT);
         setMoney(user, result);
-        Trade.log("API", "Multiply", "API", user.getName(), new Trade(amount, ess), null, null, null, ess);
+        Trade.log("API", "Multiply", "API", user.getName(), new Trade(amount, ess), null, null, null, result, ess);
     }
 
     /**
@@ -527,15 +545,16 @@ public class Economy {
      * @param name Name of the user
      * @throws UserDoesNotExistException If a user by that name does not exists
      * @throws NoLoanPermittedException  If the user is not allowed to have a negative balance
+     * @throws MaxMoneyException         If this transaction has but the user over the maximum amount of money
      * @deprecated Usernames can change, use {@link Economy#resetBalance(UUID)} or {@link Economy#resetBalance(User)}
      */
     @Deprecated
-    public static void resetBalance(final String name) throws UserDoesNotExistException, NoLoanPermittedException {
+    public static void resetBalance(final String name) throws UserDoesNotExistException, NoLoanPermittedException, MaxMoneyException {
         if (ess == null) {
-            throw new RuntimeException(noCallBeforeLoad);
+            throw new RuntimeException(WARN_CALL_BEFORE_LOAD);
         }
         setMoney(name, ess.getSettings().getStartingBalance());
-        Trade.log("API", "Reset", "API", name, new Trade(BigDecimal.ZERO, ess), null, null, null, ess);
+        Trade.log("API", "Reset", "API", name, new Trade(BigDecimal.ZERO, ess), null, null, null, ess.getSettings().getStartingBalance(), ess);
     }
 
     /**
@@ -544,8 +563,9 @@ public class Economy {
      * @param uuid UUID of the user
      * @throws UserDoesNotExistException If a user by that UUID does not exists
      * @throws NoLoanPermittedException  If the user is not allowed to have a negative balance
+     * @throws MaxMoneyException         If this transaction has but the user over the maximum amount of money
      */
-    public static void resetBalance(final UUID uuid) throws NoLoanPermittedException, UserDoesNotExistException {
+    public static void resetBalance(final UUID uuid) throws NoLoanPermittedException, UserDoesNotExistException, MaxMoneyException {
         final User user = getUserByUUID(uuid);
         if (user == null) {
             throw new UserDoesNotExistException(uuid);
@@ -558,16 +578,17 @@ public class Economy {
      *
      * @param user User
      * @throws NoLoanPermittedException If the user is not allowed to have a negative balance
+     * @throws MaxMoneyException        If this transaction has but the user over the maximum amount of money
      */
-    public static void resetBalance(final User user) throws NoLoanPermittedException {
+    public static void resetBalance(final User user) throws NoLoanPermittedException, MaxMoneyException {
         if (ess == null) {
-            throw new RuntimeException(noCallBeforeLoad);
+            throw new RuntimeException(WARN_CALL_BEFORE_LOAD);
         }
         if (user == null) {
             throw new IllegalArgumentException("Economy user cannot be null");
         }
         setMoney(user, ess.getSettings().getStartingBalance());
-        Trade.log("API", "Reset", "API", user.getName(), new Trade(BigDecimal.ZERO, ess), null, null, null, ess);
+        Trade.log("API", "Reset", "API", user.getName(), new Trade(BigDecimal.ZERO, ess), null, null, null, ess.getSettings().getStartingBalance(), ess);
     }
 
     /**
@@ -582,7 +603,7 @@ public class Economy {
         try {
             return hasEnough(name, BigDecimal.valueOf(amount));
         } catch (final ArithmeticException e) {
-            logger.log(Level.WARNING, "Failed to compare balance of " + name + " with " + amount + ": " + e.getMessage(), e);
+            LOGGER.log(Level.WARNING, "Failed to compare balance of " + name + " with " + amount + ": " + e.getMessage(), e);
             return false;
         }
     }
@@ -643,7 +664,7 @@ public class Economy {
         try {
             return hasMore(name, BigDecimal.valueOf(amount));
         } catch (final ArithmeticException e) {
-            logger.log(Level.WARNING, "Failed to compare balance of " + name + " with " + amount + ": " + e.getMessage(), e);
+            LOGGER.log(Level.WARNING, "Failed to compare balance of " + name + " with " + amount + ": " + e.getMessage(), e);
             return false;
         }
     }
@@ -705,7 +726,7 @@ public class Economy {
         try {
             return hasLess(name, BigDecimal.valueOf(amount));
         } catch (final ArithmeticException e) {
-            logger.log(Level.WARNING, "Failed to compare balance of " + name + " with " + amount + ": " + e.getMessage(), e);
+            LOGGER.log(Level.WARNING, "Failed to compare balance of " + name + " with " + amount + ": " + e.getMessage(), e);
             return false;
         }
     }
@@ -812,7 +833,7 @@ public class Economy {
         try {
             return format(BigDecimal.valueOf(amount));
         } catch (final NumberFormatException e) {
-            logger.log(Level.WARNING, "Failed to display " + amount + ": " + e.getMessage(), e);
+            LOGGER.log(Level.WARNING, "Failed to display " + amount + ": " + e.getMessage(), e);
             return "NaN";
         }
     }
@@ -825,7 +846,7 @@ public class Economy {
      */
     public static String format(final BigDecimal amount) {
         if (ess == null) {
-            throw new RuntimeException(noCallBeforeLoad);
+            throw new RuntimeException(WARN_CALL_BEFORE_LOAD);
         }
         return NumberUtil.displayCurrency(amount, ess);
     }
@@ -879,6 +900,7 @@ public class Economy {
             createNPCFile(name);
             return true;
         }
+        LOGGER.log(Level.WARNING, MessageFormat.format(WARN_EXISTING_NPC_CREATE, name, user.getConfigUUID()), new RuntimeException());
         return false;
     }
 

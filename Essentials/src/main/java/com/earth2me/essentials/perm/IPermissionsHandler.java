@@ -1,5 +1,6 @@
 package com.earth2me.essentials.perm;
 
+import com.earth2me.essentials.utils.TriState;
 import org.bukkit.entity.Player;
 
 import java.util.List;
@@ -19,6 +20,8 @@ public interface IPermissionsHandler {
 
     // Does not check for * permissions
     boolean isPermissionSet(Player base, String node);
+
+    TriState isPermissionSetExact(Player base, String node);
 
     String getPrefix(Player base);
 

@@ -1,5 +1,20 @@
 blank_issues_enabled: false
 contact_links:
-  - name: MOSS Discord Server
+  - name: View common issues
+    url: https://github.com/EssentialsX/Essentials/issues/3956
+    about: Check the list of known common issues to see if it solves your problem.
+  - name: Check past help requests
+    url: https://github.com/EssentialsX/Essentials/discussions/categories/q-a
+    about: Visit the Q&A forum to search for previous help requests.
+  - name: Check past feature suggestions
+    url: https://github.com/EssentialsX/Essentials/discussions/categories/ideas-and-feature-suggestions
+    about: Visit the Feature Suggestions forum to view and discuss existing feature suggestions.
+  - name: Create help request
+    url: https://github.com/EssentialsX/Essentials/discussions/new?category=q-a
+    about: Create a support ticket to get help from developers.
+  - name: Suggest a feature
+    url: https://github.com/EssentialsX/Essentials/discussions/new?category=ideas-and-feature-suggestions
+    about: Suggest new features for EssentialsX!
+  - name: Get help from the community on Discord
     url: https://discord.gg/casfFyh
-    about: Need help with using EssentialsX? Join the MOSS Discord server for help.
+    about: Join the MOSS Discord for community-powered EssentialsX support!

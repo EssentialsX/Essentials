@@ -7,12 +7,15 @@ import com.earth2me.essentials.textreader.IText;
 import com.earth2me.essentials.textreader.KeywordReplacer;
 import com.earth2me.essentials.textreader.SimpleTextInput;
 import com.earth2me.essentials.utils.DateUtil;
+import com.earth2me.essentials.utils.MaterialUtil;
 import com.earth2me.essentials.utils.NumberUtil;
+import com.earth2me.essentials.utils.VersionUtil;
 import net.ess3.api.IEssentials;
 import net.ess3.api.events.KitClaimEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -71,6 +74,10 @@ public class Kit {
     public void setTime(final User user) throws Exception {
         final Calendar time = new GregorianCalendar();
         user.setKitTimestamp(kitName, time.getTimeInMillis());
+    }
+
+    public void resetTime(final User user) {
+        user.setKitTimestamp(kitName, 0);
     }
 
     public void chargeUser(final User user) throws Exception {
@@ -162,12 +169,13 @@ public class Kit {
 
             boolean spew = false;
             final boolean allowUnsafe = ess.getSettings().allowUnsafeEnchantments();
-            final boolean currencyIsSuffix = ess.getSettings().isCurrencySymbolSuffixed();
+            final boolean autoEquip = ess.getSettings().isKitAutoEquip();
             final List<ItemStack> itemList = new ArrayList<>();
             final List<String> commandQueue = new ArrayList<>();
             final List<String> moneyQueue = new ArrayList<>();
+            final String currencySymbol = ess.getSettings().getCurrencySymbol().isEmpty() ? "$" : ess.getSettings().getCurrencySymbol();
             for (final String kitItem : output.getLines()) {
-                if (!currencyIsSuffix ? kitItem.startsWith(ess.getSettings().getCurrencySymbol()) : kitItem.endsWith(ess.getSettings().getCurrencySymbol())) {
+                if (kitItem.startsWith("$") || kitItem.startsWith(currencySymbol)) {
                     moneyQueue.add(NumberUtil.sanitizeCurrencyString(kitItem, ess));
                     continue;
                 }
@@ -192,6 +200,25 @@ public class Kit {
                 if (parts.length > 2) {
                     // We pass a null sender here because kits should not do perm checks
                     metaStack.parseStringMeta(null, allowUnsafe, parts, 2, ess);
+                }
+
+                if (autoEquip) {
+                    final ItemStack stack = metaStack.getItemStack();
+                    final Material material = stack.getType();
+                    final PlayerInventory inventory = user.getBase().getInventory();
+                    if (MaterialUtil.isHelmet(material) && isEmptyStack(inventory.getHelmet())) {
+                        inventory.setHelmet(stack);
+                        continue;
+                    } else if (MaterialUtil.isChestplate(material) && isEmptyStack(inventory.getChestplate())) {
+                        inventory.setChestplate(stack);
+                        continue;
+                    } else if (MaterialUtil.isLeggings(material) && isEmptyStack(inventory.getLeggings())) {
+                        inventory.setLeggings(stack);
+                        continue;
+                    } else if (MaterialUtil.isBoots(material) && isEmptyStack(inventory.getBoots())) {
+                        inventory.setBoots(stack);
+                        continue;
+                    }
                 }
 
                 itemList.add(metaStack.getItemStack());
@@ -252,5 +279,9 @@ public class Kit {
             throw new Exception(tl("kitError2"), e);
         }
         return true;
+    }
+
+    private boolean isEmptyStack(ItemStack stack) {
+        return stack == null || stack.getType() == Material.AIR || (VersionUtil.getServerBukkitVersion().isHigherThanOrEqualTo(VersionUtil.v1_14_4_R01) && stack.getType().isAir());
     }
 }

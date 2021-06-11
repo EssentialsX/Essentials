@@ -1,5 +1,6 @@
 package com.earth2me.essentials.api;
 
+import com.earth2me.essentials.IConf;
 import net.ess3.api.IUser;
 import org.bukkit.Location;
 
@@ -12,7 +13,7 @@ import java.util.concurrent.CompletableFuture;
  * @deprecated External plugins should use {@link net.ess3.api.IJails} instead of this interface in case future APIs are added.
  */
 @Deprecated
-public interface IJails extends IReload {
+public interface IJails extends IConf {
     /**
      * Gets the location of the jail with the given name
      *
@@ -74,4 +75,14 @@ public interface IJails extends IReload {
      * @throws Exception
      */
     void setJail(String jailName, Location loc) throws Exception;
+
+    /**
+     * Begins a transaction
+     */
+    void startTransaction();
+
+    /**
+     * Ends the current transaction and saves the state
+     */
+    void stopTransaction(boolean blocking);
 }

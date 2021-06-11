@@ -88,7 +88,9 @@ public class I18n implements net.ess3.api.II18n {
                 return localeBundle.getString(string);
             }
         } catch (final MissingResourceException ex) {
-            Logger.getLogger("Essentials").log(Level.WARNING, String.format("Missing translation key \"%s\" in translation file %s", ex.getKey(), localeBundle.getLocale().toString()), ex);
+            if (ess == null || ess.getSettings().isDebug()) {
+                Logger.getLogger("Essentials").log(Level.WARNING, String.format("Missing translation key \"%s\" in translation file %s", ex.getKey(), localeBundle.getLocale().toString()), ex);
+            }
             return defaultBundle.getString(string);
         }
     }

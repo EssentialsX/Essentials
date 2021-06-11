@@ -32,36 +32,30 @@ public class AlternativeCommandsHandler {
         if (plugin.getDescription().getMain().contains("com.earth2me.essentials")) {
             return;
         }
-        final List<Command> commands = getPluginCommands(plugin);
-        final String pluginName = plugin.getDescription().getName().toLowerCase(Locale.ENGLISH);
+        for (final Map.Entry<String, Command> entry : getPluginCommands(plugin).entrySet()) {
+            final String commandName = entry.getKey().contains(":") ? entry.getKey().split(":")[1] : entry.getKey();
+            final Command command = entry.getValue();
 
-        for (final Command command : commands) {
-            final List<String> labels = new ArrayList<>(command.getAliases());
-            labels.add(command.getName());
-
-            for (final String label : labels) {
-                final List<Command> plugincommands = altcommands.computeIfAbsent(label.toLowerCase(Locale.ENGLISH), k -> new ArrayList<>());
-                boolean found = false;
-                for (final Command pc2 : plugincommands) {
-                    if (pc2 instanceof PluginIdentifiableCommand) {
-                        if (((PluginIdentifiableCommand) pc2).getPlugin().equals(plugin)) {
-                            found = true;
-                            break;
-                        }
-                    }
+            final List<Command> pluginCommands = altcommands.computeIfAbsent(commandName.toLowerCase(Locale.ENGLISH), k -> new ArrayList<>());
+            boolean found = false;
+            for (final Command pc2 : pluginCommands) {
+                // Safe cast, everything that's added comes from getPluginCommands which already performs the cast check.
+                if (((PluginIdentifiableCommand) pc2).getPlugin().equals(plugin)) {
+                    found = true;
+                    break;
                 }
-                if (!found) {
-                    plugincommands.add(command);
-                }
+            }
+            if (!found) {
+                pluginCommands.add(command);
             }
         }
     }
 
-    private List<Command> getPluginCommands(Plugin plugin) {
-        final List<Command> commands = new ArrayList<>();
-        for (Command cmd : ess.getKnownCommandsProvider().getKnownCommands().values()) {
-            if (cmd instanceof PluginIdentifiableCommand && ((PluginIdentifiableCommand) cmd).getPlugin().getName().equals(plugin.getName())) {
-                commands.add(cmd);
+    private Map<String, Command> getPluginCommands(Plugin plugin) {
+        final Map<String, Command> commands = new HashMap<>();
+        for (final Map.Entry<String, Command> entry : ess.getKnownCommandsProvider().getKnownCommands().entrySet()) {
+            if (entry.getValue() instanceof PluginIdentifiableCommand && ((PluginIdentifiableCommand) entry.getValue()).getPlugin().equals(plugin)) {
+                commands.put(entry.getKey(), entry.getValue());
             }
         }
         return commands;
@@ -98,7 +92,7 @@ public class AlternativeCommandsHandler {
 
     public void executed(final String label, final Command pc) {
         if (pc instanceof PluginIdentifiableCommand) {
-            final String altString = ((PluginIdentifiableCommand) pc).getPlugin().getName() + ":" + pc.getLabel();
+            final String altString = ((PluginIdentifiableCommand) pc).getPlugin().getName() + ":" + pc.getName();
             if (ess.getSettings().isDebug()) {
                 LOGGER.log(Level.INFO, "Essentials: Alternative command " + label + " found, using " + altString);
             }

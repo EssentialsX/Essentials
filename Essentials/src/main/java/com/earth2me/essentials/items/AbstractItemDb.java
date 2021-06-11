@@ -2,6 +2,7 @@ package com.earth2me.essentials.items;
 
 import com.earth2me.essentials.IConf;
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.utils.FormatUtil;
 import com.earth2me.essentials.utils.MaterialUtil;
 import com.earth2me.essentials.utils.VersionUtil;
 import net.ess3.api.IEssentials;
@@ -18,6 +19,7 @@ import org.bukkit.inventory.meta.BannerMeta;
 import org.bukkit.inventory.meta.BlockStateMeta;
 import org.bukkit.inventory.meta.BookMeta;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
+import org.bukkit.inventory.meta.FireworkEffectMeta;
 import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
@@ -27,6 +29,7 @@ import org.bukkit.potion.Potion;
 import org.bukkit.potion.PotionEffect;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -160,7 +163,7 @@ public abstract class AbstractItemDb implements IConf, net.ess3.api.IItemDb {
             }
         } else if (args[0].equalsIgnoreCase("blocks")) {
             for (final ItemStack stack : user.getBase().getInventory().getContents()) {
-                if (stack == null || stack.getType() == Material.AIR) {
+                if (stack == null || stack.getType() == Material.AIR || !stack.getType().isBlock()) {
                     continue;
                 }
                 is.add(stack.clone());
@@ -202,22 +205,11 @@ public abstract class AbstractItemDb implements IConf, net.ess3.api.IItemDb {
         if (is.hasItemMeta()) {
             final ItemMeta meta = is.getItemMeta();
             if (meta.hasDisplayName()) {
-                sb.append("name:").append(meta.getDisplayName().replaceAll(" ", "_")).append(" ");
+                sb.append("name:").append(FormatUtil.unformatString(meta.getDisplayName()).replace(" ", "_")).append(" ");
             }
 
             if (meta.hasLore()) {
-                sb.append("lore:");
-                boolean first = true;
-                for (final String s : meta.getLore()) {
-                    // Add | before the line if it's not the first one. Easy but weird way
-                    // to do this since we need each line separated by |
-                    if (!first) {
-                        sb.append("|");
-                    }
-                    first = false;
-                    sb.append(s.replaceAll(" ", "_"));
-                }
-                sb.append(" ");
+                sb.append("lore:").append(serializeLines(meta.getLore())).append(" ");
             }
 
             if (meta.hasEnchants()) {
@@ -244,14 +236,23 @@ public abstract class AbstractItemDb implements IConf, net.ess3.api.IItemDb {
 
         switch (material) {
             case WRITTEN_BOOK:
+            case WRITABLE_BOOK:
                 // Everything from http://wiki.ess3.net/wiki/Item_Meta#Books in that order.
                 // Interesting as I didn't see a way to do pages or chapters.
                 final BookMeta bookMeta = (BookMeta) is.getItemMeta();
                 if (bookMeta.hasTitle()) {
-                    sb.append("title:").append(bookMeta.getTitle()).append(" ");
+                    sb.append("title:").append(FormatUtil.unformatString(bookMeta.getTitle()).replace(' ', '_')).append(" ");
                 }
                 if (bookMeta.hasAuthor()) {
-                    sb.append("author:").append(bookMeta.getAuthor()).append(" ");
+                    sb.append("author:").append(FormatUtil.unformatString(bookMeta.getAuthor()).replace(' ', '_')).append(" ");
+                }
+                if (bookMeta.hasPages()) {
+                    final List<String> pages = bookMeta.getPages();
+                    for (int i = 0; i < pages.size(); i++) {
+                        sb.append("page").append(i + 1).append(":");
+                        sb.append(serializeLines(Arrays.asList(pages.get(i).split("\n"))));
+                        sb.append(" ");
+                    }
                 }
                 // Only other thing it could have is lore but that's done up there ^^^
                 break;
@@ -268,34 +269,14 @@ public abstract class AbstractItemDb implements IConf, net.ess3.api.IItemDb {
             final FireworkMeta fireworkMeta = (FireworkMeta) is.getItemMeta();
             if (fireworkMeta.hasEffects()) {
                 for (final FireworkEffect effect : fireworkMeta.getEffects()) {
-                    if (effect.getColors() != null && !effect.getColors().isEmpty()) {
-                        sb.append("color:");
-                        boolean first = true;
-                        for (final Color c : effect.getColors()) {
-                            if (!first) {
-                                sb.append(","); // same thing as above.
-                            }
-                            sb.append(c.toString());
-                            first = false;
-                        }
-                        sb.append(" ");
-                    }
-
-                    sb.append("shape:").append(effect.getType().name()).append(" ");
-                    if (effect.getFadeColors() != null && !effect.getFadeColors().isEmpty()) {
-                        sb.append("fade:");
-                        boolean first = true;
-                        for (final Color c : effect.getFadeColors()) {
-                            if (!first) {
-                                sb.append(","); // same thing as above.
-                            }
-                            sb.append(c.toString());
-                            first = false;
-                        }
-                        sb.append(" ");
-                    }
+                    serializeEffectMeta(sb, effect);
                 }
                 sb.append("power:").append(fireworkMeta.getPower()).append(" ");
+            }
+        } else if (MaterialUtil.isFireworkCharge(material)) {
+            final FireworkEffectMeta fireworkEffectMeta = (FireworkEffectMeta) is.getItemMeta();
+            if (fireworkEffectMeta.hasEffect()) {
+                serializeEffectMeta(sb, fireworkEffectMeta.getEffect());
             }
         } else if (MaterialUtil.isPotion(material)) {
             final Potion potion = Potion.fromItemStack(is);
@@ -351,6 +332,50 @@ public abstract class AbstractItemDb implements IConf, net.ess3.api.IItemDb {
         }
 
         return sb.toString().trim().replaceAll("§", "&");
+    }
+
+    private void serializeEffectMeta(StringBuilder sb, FireworkEffect effect) {
+        if (effect.getColors() != null && !effect.getColors().isEmpty()) {
+            sb.append("color:");
+            boolean first = true;
+            for (final Color c : effect.getColors()) {
+                if (!first) {
+                    sb.append(","); // same thing as above.
+                }
+                sb.append("#").append(Integer.toHexString(c.asRGB()));
+                first = false;
+            }
+            sb.append(" ");
+        }
+
+        sb.append("shape:").append(effect.getType().name()).append(" ");
+        if (effect.getFadeColors() != null && !effect.getFadeColors().isEmpty()) {
+            sb.append("fade:");
+            boolean first = true;
+            for (final Color c : effect.getFadeColors()) {
+                if (!first) {
+                    sb.append(","); // same thing as above.
+                }
+                sb.append("#").append(Integer.toHexString(c.asRGB()));
+                first = false;
+            }
+            sb.append(" ");
+        }
+    }
+
+    private String serializeLines(Iterable<String> lines) {
+        final StringBuilder sb = new StringBuilder();
+        boolean first = true;
+        for (final String line : lines) {
+            // Add | before the line if it's not the first one. Easy but weird way
+            // to do this since we need each line separated by |
+            if (!first) {
+                sb.append("|");
+            }
+            first = false;
+            sb.append(FormatUtil.unformatString(line).replace(" ", "_").replace("|", "\\|"));
+        }
+        return sb.toString();
     }
 
     @Override

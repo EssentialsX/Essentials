@@ -1,6 +1,5 @@
 package com.earth2me.essentials;
 
-import com.earth2me.essentials.craftbukkit.FakeWorld;
 import org.bukkit.BanList;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
@@ -56,6 +55,8 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginLoader;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.RegisteredListener;
+import org.bukkit.plugin.RegisteredServiceProvider;
+import org.bukkit.plugin.ServicePriority;
 import org.bukkit.plugin.ServicesManager;
 import org.bukkit.plugin.UnknownDependencyException;
 import org.bukkit.plugin.messaging.Messenger;
@@ -80,15 +81,21 @@ import java.util.concurrent.Future;
 import java.util.function.Consumer;
 import java.util.logging.Logger;
 
-public class FakeServer implements Server {
+@SuppressWarnings({"NullableProblems", "ConstantConditions"})
+public final class FakeServer implements Server {
     private final List<World> worlds = new ArrayList<>();
     private final PluginManager pluginManager = new FakePluginManager();
-    private List<Player> players = new ArrayList<>();
+    private final List<Player> players = new ArrayList<>();
 
-    FakeServer() {
+    private FakeServer() {
+        createWorld("testWorld", Environment.NORMAL);
+    }
+
+    public static FakeServer getServer() {
         if (Bukkit.getServer() == null) {
-            Bukkit.setServer(this);
+            Bukkit.setServer(new FakeServer());
         }
+        return (FakeServer) Bukkit.getServer();
     }
 
     @Override
@@ -104,10 +111,6 @@ public class FakeServer implements Server {
     @Override
     public Collection<? extends Player> getOnlinePlayers() {
         return players;
-    }
-
-    public void setOnlinePlayers(final List<Player> players) {
-        this.players = players;
     }
 
     @Override
@@ -191,7 +194,7 @@ public class FakeServer implements Server {
 
             @Override
             public int scheduleSyncDelayedTask(final Plugin plugin, final Runnable r) {
-                throw new UnsupportedOperationException("Not supported yet.");
+                return -1;
             }
 
             @Override
@@ -355,7 +358,57 @@ public class FakeServer implements Server {
 
     @Override
     public ServicesManager getServicesManager() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return new ServicesManager() {
+            @Override
+            public <T> void register(Class<T> service, T provider, Plugin plugin, ServicePriority priority) {
+
+            }
+
+            @Override
+            public void unregisterAll(Plugin plugin) {
+
+            }
+
+            @Override
+            public void unregister(Class<?> service, Object provider) {
+
+            }
+
+            @Override
+            public void unregister(Object provider) {
+
+            }
+
+            @Override
+            public <T> T load(Class<T> service) {
+                return null;
+            }
+
+            @Override
+            public <T> RegisteredServiceProvider<T> getRegistration(Class<T> service) {
+                return null;
+            }
+
+            @Override
+            public List<RegisteredServiceProvider<?>> getRegistrations(Plugin plugin) {
+                return null;
+            }
+
+            @Override
+            public <T> Collection<RegisteredServiceProvider<T>> getRegistrations(Class<T> service) {
+                return null;
+            }
+
+            @Override
+            public Collection<Class<?>> getKnownServices() {
+                return null;
+            }
+
+            @Override
+            public <T> boolean isProvidedFor(Class<T> service) {
+                return false;
+            }
+        };
     }
 
     @Override
@@ -369,16 +422,20 @@ public class FakeServer implements Server {
         return w;
     }
 
-    public World createWorld(final String string, final Environment e, final long l) {
-        final World w = new FakeWorld(string, e);
-        worlds.add(w);
-        return w;
-    }
-
     @Override
     public World getWorld(final String string) {
         for (final World world : worlds) {
             if (world.getName().equalsIgnoreCase(string)) {
+                return world;
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public World getWorld(final UUID uuid) {
+        for (final World world : worlds) {
+            if (world.getUID().equals(uuid)) {
                 return world;
             }
         }
@@ -456,15 +513,6 @@ public class FakeServer implements Server {
 
     @Override
     public boolean getOnlineMode() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    public World getWorld(final long l) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public World getWorld(final UUID uuid) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
@@ -622,7 +670,7 @@ public class FakeServer implements Server {
                     case "testPlayer2":
                         return UUID.fromString("2c9ebe1a-9098-43fd-bc0c-a369b76817ba");
                     case "npc1":
-                        return null;
+                        return UUID.fromString("f4a37409-5c40-3b2c-9cd6-57d3c5abdc76");
                 }
                 throw new UnsupportedOperationException("Not supported yet.");
             }

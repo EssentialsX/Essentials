@@ -6,9 +6,12 @@ import com.earth2me.essentials.PlayerList;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.DateUtil;
 import com.earth2me.essentials.utils.DescParseTickFormat;
+import com.earth2me.essentials.utils.EnumUtil;
+import com.earth2me.essentials.utils.FormatUtil;
 import com.earth2me.essentials.utils.NumberUtil;
 import net.ess3.api.IEssentials;
 import org.bukkit.Location;
+import org.bukkit.Statistic;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
@@ -34,8 +37,13 @@ enum KeywordType {
     PLAYER(KeywordCachable.CACHEABLE),
     DISPLAYNAME(KeywordCachable.CACHEABLE),
     USERNAME(KeywordCachable.NOTCACHEABLE),
+    NICKNAME(KeywordCachable.CACHEABLE),
+    PREFIX(KeywordCachable.CACHEABLE),
+    SUFFIX(KeywordCachable.CACHEABLE),
+    GROUP(KeywordCachable.CACHEABLE),
     BALANCE(KeywordCachable.CACHEABLE),
     MAILS(KeywordCachable.CACHEABLE),
+    PLAYTIME(KeywordCachable.CACHEABLE),
     WORLD(KeywordCachable.CACHEABLE),
     WORLDNAME(KeywordCachable.CACHEABLE),
     ONLINE(KeywordCachable.CACHEABLE),
@@ -83,6 +91,7 @@ enum KeywordCachable {
 }
 
 public class KeywordReplacer implements IText {
+    private static final Statistic PLAY_ONE_TICK = EnumUtil.getStatistic("PLAY_ONE_MINUTE", "PLAY_ONE_TICK");
     private static final Pattern KEYWORD = Pattern.compile("\\{([^\\{\\}]+)\\}");
     private static final Pattern KEYWORDSPLIT = Pattern.compile("\\:");
     private final transient IText input;
@@ -188,6 +197,29 @@ public class KeywordReplacer implements IText {
                             replacer = user.getName();
                         }
                         break;
+                    case NICKNAME:
+                        if (user != null) {
+                            final String nickname = user.getFormattedNickname();
+                            replacer = nickname == null ? user.getName() : nickname;
+                        }
+                        break;
+                    case PREFIX:
+                        if (user != null) {
+                            final String prefix = FormatUtil.replaceFormat(ess.getPermissionsHandler().getPrefix(user.getBase()));
+                            replacer = prefix == null ? "" : prefix;
+                        }
+                        break;
+                    case SUFFIX:
+                        if (user != null) {
+                            final String suffix = FormatUtil.replaceFormat(ess.getPermissionsHandler().getSuffix(user.getBase()));
+                            replacer = suffix == null ? "" : suffix;
+                        }
+                        break;
+                    case GROUP:
+                        if (user != null) {
+                            replacer = user.getGroup();
+                        }
+                        break;
                     case BALANCE:
                         if (user != null) {
                             replacer = NumberUtil.displayCurrency(user.getMoney(), ess);
@@ -196,6 +228,12 @@ public class KeywordReplacer implements IText {
                     case MAILS:
                         if (user != null) {
                             replacer = Integer.toString(user.getMails().size());
+                        }
+                        break;
+                    case PLAYTIME:
+                        if (user != null) {
+                            final long playtimeMs = System.currentTimeMillis() - (user.getBase().getStatistic(PLAY_ONE_TICK) * 50L);
+                            replacer = DateUtil.formatDateDiff(playtimeMs);
                         }
                         break;
                     case WORLD:

@@ -12,6 +12,7 @@ import com.earth2me.essentials.utils.VersionUtil;
 import com.google.common.base.Charsets;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
+import org.bukkit.ChatColor;
 import org.bukkit.Server;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
@@ -65,7 +66,7 @@ public class Commandessentials extends EssentialsCommand {
     private static final List<String> warnPlugins = Arrays.asList(
         "PermissionsEx",
         "GroupManager",
-        "bPremissions"
+        "bPermissions"
     );
     private transient TuneRunnable currentTune = null;
 
@@ -134,18 +135,14 @@ public class Commandessentials extends EssentialsCommand {
 
     // Lists commands that are being handed over to other plugins.
     private void runCommands(final Server server, final CommandSource sender, final String commandLabel, final String[] args) {
-        final StringBuilder disabledCommands = new StringBuilder();
-        for (final Map.Entry<String, String> entry : ess.getAlternativeCommandsHandler().disabledCommands().entrySet()) {
-            if (disabledCommands.length() > 0) {
-                disabledCommands.append("\n");
-            }
-            disabledCommands.append(entry.getKey()).append(" => ").append(entry.getValue());
-        }
-        if (disabledCommands.length() > 0) {
-            sender.sendMessage(tl("blockList"));
-            sender.sendMessage(disabledCommands.toString());
-        } else {
+        if (ess.getAlternativeCommandsHandler().disabledCommands().size() == 0) {
             sender.sendMessage(tl("blockListEmpty"));
+            return;
+        }
+
+        sender.sendMessage(tl("blockList"));
+        for (final Map.Entry<String, String> entry : ess.getAlternativeCommandsHandler().disabledCommands().entrySet()) {
+            sender.sendMessage(entry.getKey() + " => " + entry.getValue());
         }
     }
 
@@ -328,6 +325,7 @@ public class Commandessentials extends EssentialsCommand {
         }
 
         sender.sendMessage(tl(serverMessageKey, "Server", server.getBukkitVersion() + " " + server.getVersion()));
+        sender.sendMessage(tl(serverMessageKey, "Brand", server.getName()));
         sender.sendMessage(tl("versionOutputFine", "EssentialsX", essVer));
 
         for (final Plugin plugin : pm.getPlugins()) {
@@ -376,16 +374,32 @@ public class Commandessentials extends EssentialsCommand {
         }
 
         switch (supportStatus) {
+            case NMS_CLEANROOM:
+                sender.sendMessage(ChatColor.DARK_RED + tl("serverUnsupportedCleanroom"));
+                break;
+            case DANGEROUS_FORK:
+                sender.sendMessage(ChatColor.DARK_RED + tl("serverUnsupportedDangerous"));
+                break;
             case UNSTABLE:
-                sender.sendMessage(tl("serverUnsupportedMods"));
+                sender.sendMessage(ChatColor.DARK_RED + tl("serverUnsupportedMods"));
                 break;
             case OUTDATED:
-                sender.sendMessage(tl("serverUnsupported"));
+                sender.sendMessage(ChatColor.RED + tl("serverUnsupported"));
                 break;
             case LIMITED:
-                sender.sendMessage(tl("serverUnsupportedLimitedApi"));
+                sender.sendMessage(ChatColor.RED + tl("serverUnsupportedLimitedApi"));
                 break;
         }
+        if (VersionUtil.getSupportStatusClass() != null) {
+            sender.sendMessage(ChatColor.RED + tl("serverUnsupportedClass", VersionUtil.getSupportStatusClass()));
+        }
+
+        sender.sendMessage(tl("versionFetching"));
+        ess.runTaskAsynchronously(() -> {
+            for (String str : ess.getUpdateChecker().getVersionMessages(true, true)) {
+                sender.sendMessage(str);
+            }
+        });
     }
 
     @Override

@@ -1,0 +1,50 @@
+name: Build Pull Request
+
+on:
+  push:
+    branches:
+    - mc/* # MC version updates
+    - pr/* # PR rebases
+  pull_request:
+    branches:
+    - 2.x
+    - mc/*
+
+jobs:
+  build:
+    name: Build and upload
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Git repo
+      uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+
+    - name: Restore Gradle cache
+      uses: actions/cache@v2
+      with:
+        path: ~/.gradle/caches
+        key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
+        restore-keys: |
+          ${{ runner.os }}-gradle-
+
+    - name: Set up JDK 16
+      uses: actions/setup-java@v2
+      with:
+        distribution: 'adopt'
+        java-version: 16
+
+    - name: Validate Gradle Wrapper
+      uses: gradle/wrapper-validation-action@v1
+
+    - name: Build with Gradle
+      run: |
+        chmod +x gradlew
+        ./gradlew build --stacktrace
+
+    - name: Archive plugin jars on GitHub
+      uses: actions/upload-artifact@master
+      with:
+        name: EssentialsX plugin jars
+        path: jars/

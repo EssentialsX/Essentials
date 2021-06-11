@@ -1,8 +1,9 @@
 package com.earth2me.essentials.spawn;
 
+import com.earth2me.essentials.IConf;
 import com.earth2me.essentials.IEssentialsModule;
-import com.earth2me.essentials.settings.Spawns;
-import com.earth2me.essentials.storage.AsyncStorageObjectHolder;
+import com.earth2me.essentials.config.EssentialsConfiguration;
+import com.earth2me.essentials.config.entities.LazyLocation;
 import net.ess3.api.IEssentials;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -12,58 +13,50 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
-public class SpawnStorage extends AsyncStorageObjectHolder<Spawns> implements IEssentialsModule {
+public class SpawnStorage implements IEssentialsModule, IConf {
+    private final IEssentials ess;
+    private final EssentialsConfiguration config;
+    private final Map<String, LazyLocation> spawns = new HashMap<>();
+
     SpawnStorage(final IEssentials ess) {
-        super(ess, Spawns.class);
+        this.ess = ess;
+        this.config = new EssentialsConfiguration(new File(ess.getDataFolder(), "spawn.yml"));
         reloadConfig();
     }
 
     @Override
-    public File getStorageFile() {
-        return new File(ess.getDataFolder(), "spawn.yml");
-    }
-
-    @Override
-    public void finishRead() {
-    }
-
-    @Override
-    public void finishWrite() {
-    }
-
-    void setSpawn(final Location loc, final String group) {
-        acquireWriteLock();
-        try {
-            if (getData().getSpawns() == null) {
-                getData().setSpawns(new HashMap<>());
-            }
-            getData().getSpawns().put(group.toLowerCase(Locale.ENGLISH), loc);
-        } finally {
-            unlock();
-        }
-
-        if ("default".equalsIgnoreCase(group)) {
-            loc.getWorld().setSpawnLocation(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ());
+    public void reloadConfig() {
+        synchronized (spawns) {
+            config.load();
+            spawns.clear();
+            // need to outsource this because transitive relocations :)
+            spawns.putAll(config.getLocationSectionMap("spawns"));
         }
     }
 
-    Location getSpawn(final String group) {
-        acquireReadLock();
-        try {
-            if (getData().getSpawns() == null || group == null) {
+    void setSpawn(final Location loc, String group) {
+        group = group.toLowerCase(Locale.ENGLISH);
+        synchronized (spawns) {
+            spawns.put(group, LazyLocation.fromLocation(loc));
+            config.setProperty("spawns." + group, loc);
+            config.save();
+        }
+    }
+
+    Location getSpawn(String group) {
+        if (group == null) {
+            return getWorldSpawn();
+        }
+
+        group = group.toLowerCase(Locale.ENGLISH);
+        synchronized (spawns) {
+            if (!spawns.containsKey(group)) {
+                if (spawns.containsKey("default")) {
+                    return spawns.get("default").location();
+                }
                 return getWorldSpawn();
             }
-            final Map<String, Location> spawnMap = getData().getSpawns();
-            String groupName = group.toLowerCase(Locale.ENGLISH);
-            if (!spawnMap.containsKey(groupName)) {
-                groupName = "default";
-            }
-            if (!spawnMap.containsKey(groupName)) {
-                return getWorldSpawn();
-            }
-            return spawnMap.get(groupName);
-        } finally {
-            unlock();
+            return spawns.get(group).location();
         }
     }
 
