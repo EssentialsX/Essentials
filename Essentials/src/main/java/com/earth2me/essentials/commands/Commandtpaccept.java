@@ -37,7 +37,7 @@ public class Commandtpaccept extends EssentialsCommand {
             if (excludeOthers) {
                 IUser.TpaRequest token;
                 int count = 0;
-                while ((token = user.getNextTpaToken(true, true, true)) != null) {
+                while ((token = user.getNextTpaRequest(true, true, true)) != null) {
                     try {
                         handleTeleport(user, token, commandLabel);
                         count++;
@@ -54,7 +54,7 @@ public class Commandtpaccept extends EssentialsCommand {
             handleTeleport(user, user.getOutstandingTpaRequest(getPlayer(server, user, args, 0).getName(), true), commandLabel);
         } else {
             user.sendMessage(tl("requestAccepted"));
-            handleTeleport(user, user.getNextTpaToken(true, false, false), commandLabel);
+            handleTeleport(user, user.getNextTpaRequest(true, false, false), commandLabel);
         }
         throw new NoChargeException();
     }

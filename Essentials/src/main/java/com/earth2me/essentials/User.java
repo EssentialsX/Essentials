@@ -355,7 +355,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
     @Override
     @Deprecated
     public boolean hasOutstandingTeleportRequest() {
-        return getNextTpaToken(false, false, false) != null;
+        return getNextTpaRequest(false, false, false) != null;
     }
 
     public Collection<String> getPendingTpaKeys() {
@@ -364,7 +364,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
 
     @Override
     public boolean hasPendingTpaRequests(boolean inform, boolean excludeHere) {
-        return getNextTpaToken(inform, false, excludeHere) != null;
+        return getNextTpaRequest(inform, false, excludeHere) != null;
     }
 
     public boolean hasOutstandingTpaRequest(String playerUsername, boolean here) {
@@ -394,7 +394,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
     }
 
     @Override
-    public TpaRequest getNextTpaToken(boolean inform, boolean shallow, boolean excludeHere) {
+    public TpaRequest getNextTpaRequest(boolean inform, boolean performExpirations, boolean excludeHere) {
         if (teleportRequestQueue.isEmpty()) {
             return null;
         }
@@ -408,7 +408,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
                 if (excludeHere && token.isHere()) {
                     continue;
                 }
-                if (shallow) {
+                if (performExpirations) {
                     return token;
                 } else if (nextToken == null) {
                     nextToken = token;
@@ -880,7 +880,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
     @Override
     @Deprecated
     public long getTeleportRequestTime() {
-        final TpaRequest token = getNextTpaToken(false, false, false);
+        final TpaRequest token = getNextTpaRequest(false, false, false);
         return token == null ? 0L : token.getTime();
     }
 

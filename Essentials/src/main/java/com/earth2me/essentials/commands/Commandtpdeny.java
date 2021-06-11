@@ -33,7 +33,7 @@ public class Commandtpdeny extends EssentialsCommand {
             if (excludeOthers) {
                 IUser.TpaRequest token;
                 int count = 0;
-                while ((token = user.getNextTpaToken(false, true, true)) != null) {
+                while ((token = user.getNextTpaRequest(false, true, true)) != null) {
                     final User player = ess.getUser(token.getRequesterUuid());
                     if (player != null && player.getBase().isOnline()) {
                         player.sendMessage(tl("requestDeniedFrom", user.getDisplayName()));
@@ -47,7 +47,7 @@ public class Commandtpdeny extends EssentialsCommand {
             }
             denyToken = user.getOutstandingTpaRequest(getPlayer(server, user, args, 0).getName(), false);
         } else {
-            denyToken = user.getNextTpaToken(false, true, false);
+            denyToken = user.getNextTpaRequest(false, true, false);
         }
 
         final User player = ess.getUser(denyToken.getRequesterUuid());
