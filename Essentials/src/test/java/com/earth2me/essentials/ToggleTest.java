@@ -3,7 +3,6 @@ package com.earth2me.essentials;
 import com.earth2me.essentials.commands.IEssentialsCommand;
 import com.earth2me.essentials.commands.NoChargeException;
 import junit.framework.TestCase;
-import org.bukkit.World.Environment;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.InvalidDescriptionException;
 
@@ -16,8 +15,7 @@ public class ToggleTest extends TestCase {
 
     public ToggleTest(final String testName) {
         super(testName);
-        server = new FakeServer();
-        server.createWorld("testWorld", Environment.NORMAL);
+        server = FakeServer.getServer();
         ess = new Essentials(server);
         try {
             ess.setupForTesting(server);

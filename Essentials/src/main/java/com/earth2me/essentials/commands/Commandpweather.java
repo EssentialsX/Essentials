@@ -70,7 +70,7 @@ public class Commandpweather extends EssentialsLoopCommand {
             throw new NotEnoughArgumentsException(tl("pWeatherInvalidAlias"));
         }
 
-        final StringJoiner joiner = new StringJoiner(",");
+        final StringJoiner joiner = new StringJoiner(", ");
         loopOnlinePlayersConsumer(server, sender, false, true, args.length > 1 ? args[1] : sender.getSelfSelector(), player -> {
             setUserWeather(player, weather);
             joiner.add(player.getName());

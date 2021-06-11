@@ -1,6 +1,5 @@
 package com.earth2me.essentials;
 
-import com.earth2me.essentials.craftbukkit.FakeWorld;
 import org.bukkit.BanList;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
@@ -82,16 +81,21 @@ import java.util.concurrent.Future;
 import java.util.function.Consumer;
 import java.util.logging.Logger;
 
-@SuppressWarnings({"NullableProblems", "ConstantConditions", "Contract"})
-public class FakeServer implements Server {
+@SuppressWarnings({"NullableProblems", "ConstantConditions"})
+public final class FakeServer implements Server {
     private final List<World> worlds = new ArrayList<>();
     private final PluginManager pluginManager = new FakePluginManager();
     private final List<Player> players = new ArrayList<>();
 
-    FakeServer() {
+    private FakeServer() {
+        createWorld("testWorld", Environment.NORMAL);
+    }
+
+    public static FakeServer getServer() {
         if (Bukkit.getServer() == null) {
-            Bukkit.setServer(this);
+            Bukkit.setServer(new FakeServer());
         }
+        return (FakeServer) Bukkit.getServer();
     }
 
     @Override
@@ -190,7 +194,7 @@ public class FakeServer implements Server {
 
             @Override
             public int scheduleSyncDelayedTask(final Plugin plugin, final Runnable r) {
-                throw new UnsupportedOperationException("Not supported yet.");
+                return -1;
             }
 
             @Override
@@ -429,6 +433,16 @@ public class FakeServer implements Server {
     }
 
     @Override
+    public World getWorld(final UUID uuid) {
+        for (final World world : worlds) {
+            if (world.getUID().equals(uuid)) {
+                return world;
+            }
+        }
+        return null;
+    }
+
+    @Override
     public void reload() {
     }
 
@@ -499,11 +513,6 @@ public class FakeServer implements Server {
 
     @Override
     public boolean getOnlineMode() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public World getWorld(final UUID uuid) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
@@ -661,7 +670,7 @@ public class FakeServer implements Server {
                     case "testPlayer2":
                         return UUID.fromString("2c9ebe1a-9098-43fd-bc0c-a369b76817ba");
                     case "npc1":
-                        return null;
+                        return UUID.fromString("f4a37409-5c40-3b2c-9cd6-57d3c5abdc76");
                 }
                 throw new UnsupportedOperationException("Not supported yet.");
             }

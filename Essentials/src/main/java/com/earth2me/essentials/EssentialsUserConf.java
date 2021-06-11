@@ -11,13 +11,17 @@ import java.util.UUID;
 import java.util.logging.Level;
 
 public class EssentialsUserConf extends EssentialsConf {
-    public final String username;
+    public String username;
     public final UUID uuid;
 
     public EssentialsUserConf(final String username, final UUID uuid, final File configFile) {
         super(configFile);
         this.username = username;
         this.uuid = uuid;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     @Override

@@ -1,7 +1,6 @@
 # This file stores custom item aliases.
-# We recommend you use the `/itemdb alias` command to manage these.
-
 # NOTE: If you try and alias an item to another entry in this file, the alias won't work.
+
 aliases:
   bluepaint: blue_dye
   snad: sand

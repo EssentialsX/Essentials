@@ -1,8 +1,8 @@
 package com.earth2me.essentials.xmpp;
 
 import com.earth2me.essentials.Console;
-import com.earth2me.essentials.EssentialsConf;
 import com.earth2me.essentials.IConf;
+import com.earth2me.essentials.config.EssentialsConfiguration;
 import com.earth2me.essentials.utils.FormatUtil;
 import net.ess3.api.IUser;
 import org.bukkit.entity.Player;
@@ -37,7 +37,7 @@ import static com.earth2me.essentials.I18n.tl;
 public class XMPPManager extends Handler implements MessageListener, ChatManagerListener, IConf {
     private static final Logger logger = Logger.getLogger("EssentialsXMPP");
     private static final SimpleFormatter formatter = new SimpleFormatter();
-    private final transient EssentialsConf config;
+    private final transient EssentialsConfiguration config;
     private final transient Map<String, Chat> chats = Collections.synchronizedMap(new HashMap<>());
     private final transient Set<LogRecord> logrecords = Collections.synchronizedSet(new HashSet<>());
     private final transient IEssentialsXMPP parent;
@@ -52,8 +52,7 @@ public class XMPPManager extends Handler implements MessageListener, ChatManager
     XMPPManager(final IEssentialsXMPP parent) {
         super();
         this.parent = parent;
-        config = new EssentialsConf(new File(parent.getDataFolder(), "config.yml"));
-        config.setTemplateName("/config.yml", EssentialsXMPP.class);
+        config = new EssentialsConfiguration(new File(parent.getDataFolder(), "config.yml"), "/config.yml", EssentialsXMPP.class);
         reloadConfig();
     }
 
@@ -102,15 +101,16 @@ public class XMPPManager extends Handler implements MessageListener, ChatManager
     }
 
     private boolean connect() {
-        final String server = config.getString("xmpp.server");
+        final String server = config.getString("xmpp.server", null);
         if (server == null || server.equals("example.com")) {
             logger.log(Level.WARNING, tl("xmppNotConfigured"));
             return false;
         }
         final int port = config.getInt("xmpp.port", 5222);
         final String serviceName = config.getString("xmpp.servicename", server);
-        final String xmppuser = config.getString("xmpp.user");
-        final String password = config.getString("xmpp.password");
+        final String xmppuser = config.getString("xmpp.user", null);
+        final String password = config.getString("xmpp.password", null);
+        final boolean requireTLS = config.getBoolean("xmpp.require-server-tls", false);
         final ConnectionConfiguration connConf = new ConnectionConfiguration(server, port, serviceName);
         final String stringBuilder = "Connecting to xmpp server " + server + ":" + port + " as user " + xmppuser + ".";
         logger.log(Level.INFO, stringBuilder);
@@ -118,6 +118,10 @@ public class XMPPManager extends Handler implements MessageListener, ChatManager
         connConf.setSendPresence(true);
         connConf.setReconnectionAllowed(true);
         connConf.setDebuggerEnabled(config.getBoolean("debug", false));
+        if (requireTLS) {
+            // "enabled" (TLS optional) is the default
+            connConf.setSecurityMode(ConnectionConfiguration.SecurityMode.required);
+        }
         connection = new XMPPConnection(connConf);
         try {
             connection.connect();
@@ -131,6 +135,10 @@ public class XMPPManager extends Handler implements MessageListener, ChatManager
             return true;
         } catch (final XMPPException ex) {
             logger.log(Level.WARNING, "Failed to connect to server: " + server, ex);
+            logger.log(Level.WARNING, "Connected: " + connection.isConnected());
+            logger.log(Level.WARNING, "Secure: " + connection.isSecureConnection());
+            logger.log(Level.WARNING, "Using TLS: " + connection.isUsingTLS());
+            logger.log(Level.WARNING, "Authenticated: " + connection.getSASLAuthentication().isAuthenticated());
             return false;
         }
     }
@@ -198,7 +206,7 @@ public class XMPPManager extends Handler implements MessageListener, ChatManager
         }
         if (config.getBoolean("log-enabled", false)) {
             logger.addHandler(this);
-            logUsers = config.getStringList("log-users");
+            logUsers = config.getList("log-users", String.class);
             final String level = config.getString("log-level", "info");
             try {
                 logLevel = Level.parse(level.toUpperCase(Locale.ENGLISH));
@@ -319,7 +327,7 @@ public class XMPPManager extends Handler implements MessageListener, ChatManager
     }
 
     private void sendCommand(final Chat chat, final String message) {
-        if (config.getStringList("op-users").contains(StringUtils.parseBareAddress(chat.getParticipant()))) {
+        if (config.getList("op-users", String.class).contains(StringUtils.parseBareAddress(chat.getParticipant()))) {
             parent.getServer().getScheduler().runTask(parent, () -> {
                 try {
                     parent.getServer().dispatchCommand(Console.getInstance().getCommandSender(), message.substring(1));
@@ -339,7 +347,7 @@ public class XMPPManager extends Handler implements MessageListener, ChatManager
     }
 
     public boolean isConfigValid() {
-        final String server = config.getString("xmpp.server");
+        final String server = config.getString("xmpp.server", null);
         return server != null && !server.equals("example.com");
     }
 }

@@ -33,7 +33,7 @@ public class EssentialsChatPlayerListenerLowest extends EssentialsChatPlayer {
             return;
         }
 
-        final ChatStore chatStore = new ChatStore(ess, user, getChatType(event.getMessage()));
+        final ChatStore chatStore = new ChatStore(ess, user, getChatType(user, event.getMessage()));
         setChatStore(event, chatStore);
 
         // This listener should apply the general chat formatting only...then return control back the event handler
@@ -46,6 +46,8 @@ public class EssentialsChatPlayerListenerLowest extends EssentialsChatPlayer {
 
         final String group = user.getGroup();
         final String world = user.getWorld().getName();
+        final String username = user.getName();
+        final String nickname = user.getFormattedNickname();
 
         final Player player = user.getBase();
         final String prefix = FormatUtil.replaceFormat(ess.getPermissionsHandler().getPrefix(player));
@@ -61,7 +63,8 @@ public class EssentialsChatPlayerListenerLowest extends EssentialsChatPlayer {
         format = format.replace("{5}", team == null ? "" : team.getDisplayName());
         format = format.replace("{6}", prefix);
         format = format.replace("{7}", suffix);
-        format = format.replace("{8}", player.getName());
+        format = format.replace("{8}", username);
+        format = format.replace("{9}", nickname == null ? username : nickname);
         synchronized (format) {
             event.setFormat(format);
         }
