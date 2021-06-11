@@ -7,6 +7,7 @@ import com.earth2me.essentials.craftbukkit.BanLookup;
 import com.earth2me.essentials.utils.StringUtil;
 import com.google.common.base.Charsets;
 import com.google.common.collect.Maps;
+import com.google.common.reflect.TypeToken;
 import net.ess3.api.IEssentials;
 import net.essentialsx.api.v2.services.mail.MailMessage;
 import org.bukkit.BanList;
@@ -172,8 +173,10 @@ public class EssentialsUpgrade {
                         }
                         messages.add(new MailMessage(false, true, null, null, 0L, 0L, mailStr));
                     }
+
                     config.removeProperty("mail");
-                    config.setProperty("mail", messages);
+                    //noinspection UnstableApiUsage
+                    config.setExplicitList("mail", messages, new TypeToken<List<MailMessage>>() {}.getType());
                     config.blockingSave();
                 }
             } catch (RuntimeException ex) {

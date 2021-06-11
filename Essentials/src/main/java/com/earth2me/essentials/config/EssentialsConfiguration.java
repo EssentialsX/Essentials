@@ -28,6 +28,7 @@ import org.spongepowered.configurate.yaml.YamlConfigurationLoader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Type;
 import java.math.BigDecimal;
 import java.nio.file.Files;
 import java.util.ArrayList;
@@ -140,6 +141,14 @@ public class EssentialsConfiguration {
 
     public void setProperty(final String path, final List<?> list) {
         setInternal(path, list);
+    }
+
+    public <T> void setExplicitList(final String path, final List<T> list, final Type type) {
+        try {
+            toSplitRoot(path, configurationNode).set(type, list);
+        } catch (SerializationException e) {
+            LOGGER.log(Level.SEVERE, e.getMessage(), e);
+        }
     }
 
     public <T> List<T> getList(final String path, Class<T> type) {
