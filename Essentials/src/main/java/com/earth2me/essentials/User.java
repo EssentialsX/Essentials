@@ -410,6 +410,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
                 if (excludeHere && token.isHere()) {
                     continue;
                 }
+
                 if (performExpirations) {
                     return token;
                 } else if (nextToken == null) {
