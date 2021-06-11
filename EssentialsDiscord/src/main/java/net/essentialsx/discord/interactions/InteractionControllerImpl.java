@@ -48,6 +48,11 @@ public class InteractionControllerImpl extends ListenerAdapter implements Intera
 
         final InteractionCommand command = commandMap.get(event.getName());
 
+        if (command.isDisabled()) {
+            event.reply(tl("discordErrorCommandDisabled")).setEphemeral(true).queue();
+            return;
+        }
+
         event.deferReply(command.isEphemeral()).queue(null, failure -> logger.log(Level.SEVERE, "Error while deferring discord command", failure));
 
         final InteractionEvent interactionEvent = new InteractionEventImpl(event);
