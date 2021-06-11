@@ -19,6 +19,7 @@ public final class ReflUtil {
     public static final NMSVersion V1_12_R1 = NMSVersion.fromString("v1_12_R1");
     public static final NMSVersion V1_9_R1 = NMSVersion.fromString("v1_9_R1");
     public static final NMSVersion V1_11_R1 = NMSVersion.fromString("v1_11_R1");
+    public static final NMSVersion V1_17_R1 = NMSVersion.fromString("v1_17_R1");
     private static final Map<String, Class<?>> classCache = new HashMap<>();
     private static final Table<Class<?>, String, Method> methodCache = HashBasedTable.create();
     private static final Table<Class<?>, MethodParams, Method> methodParamCache = HashBasedTable.create();
@@ -52,7 +53,7 @@ public final class ReflUtil {
     }
 
     public static Class<?> getNMSClass(final String className) {
-        return getClassCached("net.minecraft.server." + getNMSVersion() + "." + className);
+        return getClassCached("net.minecraft.server" + (ReflUtil.getNmsVersionObject().isLowerThan(ReflUtil.V1_17_R1) ? "." + getNMSVersion() : "") + "." + className);
     }
 
     public static Class<?> getOBCClass(final String className) {

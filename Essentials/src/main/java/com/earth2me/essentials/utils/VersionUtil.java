@@ -66,7 +66,11 @@ public final class VersionUtil {
         builder.put("net.fabricmc.loader.launch.knot.KnotServer", SupportStatus.UNSTABLE);
 
         // Misc translation layers that do not add NMS will be caught by this
-        builder.put("!net.minecraft.server." + ReflUtil.getNMSVersion() + ".MinecraftServer", SupportStatus.NMS_CLEANROOM);
+        if (ReflUtil.getNmsVersionObject().isHigherThanOrEqualTo(ReflUtil.V1_17_R1)) {
+            builder.put("!net.minecraft.server.MinecraftServer", SupportStatus.NMS_CLEANROOM);
+        } else {
+            builder.put("!net.minecraft.server." + ReflUtil.getNMSVersion() + ".MinecraftServer", SupportStatus.NMS_CLEANROOM);
+        }
 
         unsupportedServerClasses = builder.build();
     }
