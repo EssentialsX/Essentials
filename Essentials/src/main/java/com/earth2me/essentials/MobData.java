@@ -187,9 +187,8 @@ public enum MobData {
     RAID_LEADER("leader", MobCompat.RAIDER, Data.RAID_LEADER, true),
     TROPICAL_FISH_BODY_COLOR("fish_body_color", Arrays.stream(DyeColor.values()).map(color -> color.name().toLowerCase(Locale.ENGLISH) + "body").collect(Collectors.toList()), MobCompat.TROPICAL_FISH, Data.FISH_BODY_COLOR, true),
     TROPICAL_FISH_PATTERN_COLOR("fish_pattern_color", Arrays.stream(DyeColor.values()).map(color -> color.name().toLowerCase(Locale.ENGLISH) + "pattern").collect(Collectors.toList()), MobCompat.TROPICAL_FISH, Data.FISH_PATTERN_COLOR, true),
-    // todo: probably needs MobCompat
     COLORABLE_AXOLOTL("", Arrays.stream(Axolotl.Variant.values()).map(color -> color.name().toLowerCase(Locale.ENGLISH)).collect(Collectors.toList()), MobCompat.AXOLOTL, Data.COLORABLE, true),
-    SCREAMING_GOAT("", MobCompat.GOAT, Data.GOAT_SCREAMING, true),
+    SCREAMING_GOAT("screaming", MobCompat.GOAT, Data.GOAT_SCREAMING, true),
     ;
 
     public static final Logger logger = Logger.getLogger("Essentials");
@@ -390,6 +389,10 @@ public enum MobData {
                 case "fox":
                     MobCompat.setFoxType(spawned, split[1]);
                     break;
+                case "axolotl": {
+                    MobCompat.setAxolotlVariant(spawned, split[1]);
+                    break;
+                }
             }
         } else {
             logger.warning("Unknown mob data type: " + this.toString());
