@@ -43,6 +43,7 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.WeakHashMap;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -405,7 +406,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
         TpaRequest nextToken = null;
         while (iterator.hasNext()) {
             final TpaRequest token = iterator.next().getValue();
-            if (timeout < 1 || (System.currentTimeMillis() - token.getTime()) <= timeout * 1000) {
+            if (timeout < 1 || (System.currentTimeMillis() - token.getTime()) <= TimeUnit.SECONDS.toMillis(timeout)) {
                 if (excludeHere && token.isHere()) {
                     continue;
                 }
