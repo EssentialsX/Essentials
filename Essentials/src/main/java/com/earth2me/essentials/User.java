@@ -29,6 +29,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.math.BigDecimal;
 import java.util.Calendar;
@@ -372,7 +373,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
         return token != null && token.isHere() == here;
     }
 
-    public TpaRequest getOutstandingTpaRequest(String playerUsername, boolean inform) {
+    public @Nullable TpaRequest getOutstandingTpaRequest(String playerUsername, boolean inform) {
         if (!teleportRequestQueue.containsKey(playerUsername)) {
             return null;
         }
