@@ -122,7 +122,7 @@ public class Settings implements net.ess3.api.ISettings {
     private NumberFormat currencyFormat;
     private List<EssentialsSign> unprotectedSigns = Collections.emptyList();
     private List<String> defaultEnabledConfirmCommands;
-    private boolean teleportBackWhenFreedFromJail;
+    private TeleportWhenFreePolicy teleportWhenFreePolicy;
     private boolean isCompassTowardsHomePerm;
     private boolean isAllowWorldInBroadcastworld;
     private String itemDbType; // #EasterEgg - admins can manually switch items provider if they want
@@ -724,7 +724,7 @@ public class Settings implements net.ess3.api.ISettings {
         currencyFormat = _getCurrencyFormat();
         unprotectedSigns = _getUnprotectedSign();
         defaultEnabledConfirmCommands = _getDefaultEnabledConfirmCommands();
-        teleportBackWhenFreedFromJail = _isTeleportBackWhenFreedFromJail();
+        teleportWhenFreePolicy = _getTeleportWhenFreePolicy();
         isCompassTowardsHomePerm = _isCompassTowardsHomePerm();
         isAllowWorldInBroadcastworld = _isAllowWorldInBroadcastworld();
         itemDbType = _getItemDbType();
@@ -1708,13 +1708,27 @@ public class Settings implements net.ess3.api.ISettings {
         return getDefaultEnabledConfirmCommands().contains(commandName.toLowerCase());
     }
 
-    private boolean _isTeleportBackWhenFreedFromJail() {
-        return config.getBoolean("teleport-back-when-freed-from-jail", true);
+    private TeleportWhenFreePolicy _getTeleportWhenFreePolicy() {
+        if (config.hasProperty("teleport-back-when-freed-from-jail")) {
+            return config.getBoolean("teleport-back-when-freed-from-jail", true) ? TeleportWhenFreePolicy.BACK : TeleportWhenFreePolicy.OFF;
+        }
+
+        if (config.hasProperty("teleport-when-freed")) {
+            // snakeyaml more like cursedyaml
+            final String value = config.getString("teleport-when-freed", "back").replace("false", "off");
+            try {
+                return TeleportWhenFreePolicy.valueOf(value.toUpperCase(Locale.ROOT));
+            } catch (IllegalArgumentException e) {
+                throw new RuntimeException("Invalid value \"" + value + "\" for config option \"teleport-when-freed\"!", e);
+            }
+        }
+
+        return TeleportWhenFreePolicy.BACK;
     }
 
     @Override
-    public boolean isTeleportBackWhenFreedFromJail() {
-        return teleportBackWhenFreedFromJail;
+    public TeleportWhenFreePolicy getTeleportWhenFreePolicy() {
+        return teleportWhenFreePolicy;
     }
 
     @Override

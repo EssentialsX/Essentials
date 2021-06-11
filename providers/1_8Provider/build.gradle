@@ -5,3 +5,7 @@ plugins {
 dependencies {
     api project(':providers:NMSReflectionProvider')
 }
+
+essentials {
+    injectBukkitApi.set(false)
+}

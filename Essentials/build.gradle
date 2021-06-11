@@ -13,8 +13,7 @@ dependencies {
     api 'org.bstats:bstats-bukkit:1.8'
 
     implementation 'org.spongepowered:configurate-yaml:4.1.1'
-    implementation 'org.yaml:snakeyaml:1.+'
-    implementation 'org.checkerframework:checker-qual:3.7.1'
+    implementation 'org.checkerframework:checker-qual:3.14.0'
 
     // Providers
     api project(':providers:BaseProviders')

@@ -653,8 +653,10 @@ default-enabled-confirm-commands:
 #- pay
 #- clearinventory
 
-# Whether or not to teleport a player back to their previous position after they have been freed from jail.
-teleport-back-when-freed-from-jail: true
+# Where should Essentials teleport players when they are freed from jail?
+# You can set to "back" to have them teleported to where they were before they were jailed, "spawn" to have them
+# teleport to spawn, or "off" to not have them teleport.
+teleport-when-freed: back
 
 # Whether or not jail time should only be counted while the user is online.
 # If true, a jailed player's time will only decrement when they are online.
