@@ -265,7 +265,8 @@ from minecraft chat.
 
 ## Developer API
 EssentialsXDiscord has a pretty extensive API which allows any third party plugin to build
-their own integrations into it.
+their own integrations into it. Outside the specific examples below, you can also view
+javadocs for EssentialsXDiscord [here](https://jd-v2.essentialsx.net/EssentialsDiscord).
 
 ### Sending Messages to Discord
 EssentialsXDiscord organizes the types of messages that can be sent along with their 
@@ -273,16 +274,169 @@ destination on discord under the `message-types` section of the `config.yml`. Th
 EssentialsXDiscord API uses `message-types` to resolve the channel id you want to send your
 message to.
 
-#### Using Built-In Message Channels
+#### Using a built-in message channel
 EssentialsXDiscord defines a few built in `message-types` which you may fit your use case
 already (such as sending a message to the mc->discord chat relay channel). The list of 
 built-in message types can be found at [`DiscordMessageEvent.MessageType.DefaultTypes`](https://github.com/EssentialsX/Essentials/blob/2.x/EssentialsDiscord/src/main/java/net/essentialsx/api/v2/events/discord/DiscordMessageEvent.java#L195-L203).
 
 Here is an example of what sending a message to the built-in chat channel would look like:
 ```java
+// The built in channel you want to send your message to, in this case the chat channel.
 final MessageType channel = DiscordMessageEvent.MessageType.DefaultTypes.CHAT;
-final DiscordMessageEvent event = new DiscordMessageEvent(channel, "My Epic Message", allowPing, null, null, null);
+// Set to true if your message should be allowed to ping @everyone, @here, or roles.
+// If you are sending user-generated content, you probably should keep this as false.
+final boolean allowGroupMentions = false;
+// Construct and call the actual event
+final DiscordMessageEvent event = new DiscordMessageEvent(channel, "My Epic Message", allowGroupMentions);
 Bukkit.getPluginManager().callEvent(event);
+```
+
+#### Using your own message channel
+If you want to create your own message type to allow your users to explicitly separate your
+messages from our other built-in ones, you can do that also by creating a new
+[`DiscordMessageEvent.MessageType`](https://github.com/EssentialsX/Essentials/blob/module/discord/EssentialsDiscord/src/main/java/net/essentialsx/api/v2/events/discord/DiscordMessageEvent.java#L159-L161).
+The key provided in the constructor should be the key you'd like your users to use in the
+`message-types` section of our config. You *can* also put a discord channel ID as the
+key if you'd like to have your users define the channel id in your config rather than ours.
+
+Here is an example of what sending a message using your own message type:
+```java
+public class CustomTypeExample {
+    // Create a new message type for the user to define in our config.
+    // Unless you're putting a discord channel id as the type key, it's probably 
+    // a good idea to store this object so you don't create it every time.
+    private final DiscordMessageEvent.MessageType type = new DiscordMessageEvent.MessageType("my-awesome-channel");
+    
+    @EventHandler()
+    public void onAwesomeEvent(AwesomeEvent event) {
+      // Set to true if your message should be allowed to ping @everyone, @here, or roles.
+      // If you are sending user-generated content, you probably should keep this as false.
+      final boolean allowGroupMentions = false;
+      // Construct and call the actual event
+      final DiscordMessageEvent event = new DiscordMessageEvent(type, "The player, " + event.getPlayer() + ", did something awesome!", allowPing);
+      Bukkit.getPluginManager().callEvent(event);
+    }
+}
+```
+
+### Prevent certain messages from being sent as chat
+Depending on how your plugin sends certain types of chat messages to players, there may be
+times when EssentialsxDiscord accidentally broadcasts a message that was only intended for a
+small group of people. In order for your plugin to stop this from happening you have to
+listen to `DiscordChatMessageEvent`.
+
+Here is an example of how a staff chat plugin would cancel a message:
+```java
+public class StaffChatExample {
+    private final StaffChatPlugin plugin = ...;
+    
+    @EventHandler()
+    public void onDiscordChatMessage(DiscordChatMessageEvent event) {
+      // Checks if the player is in staff chat mode in this theoretical plugin.
+      if (plugin.isPlayerInStaffChat(event.getPlayer()) || 
+              // or we could check if their message started with a # if we use that
+              // to indicate typing in a specific channel.
+              event.getMessage().startsWith("#")) {
+          event.setCanceled(true);
+      }
+    }
+}
+```
+
+### Registering a Discord slash command
+EssentialsXDiscord also allows you to register slash commands directly with discord itself
+in order to provide your users with a way to interface with your plugins on discord!
+
+To start writing slash commands, the first thing you'll need to do is create a slash command
+class. For the sake of this tutorial, I'm going to use an economy plugin as the
+hypothetical plugin creating this slash command.
+
+For this slash command, I'll create a simple command to a string (for player name) and
+check their balance.
+```java
+public class BalanceSlashCommand extends InteractionCommand {
+    private final MyEconomyPlugin plugin = ...;
+    
+    @Override
+    public void onCommand(InteractionEvent event) {
+        // The name of the argument here has to be the same you used in getArguments()
+        final String playerName = event.getStringArgument("player");
+        final Player player = Bukkit.getPlayerExact(playerName);
+        if (player == null) {
+            event.reply("A player by that name could not be found!");
+            return;
+        }
+        
+        final int balance = plugin.getBalance(player);
+        
+        // It is important you reply to the InteractionEvent at least once as discord
+        // will show your bot is 'thinking' until you do so.
+        event.reply("The balance of " + player.getName() + " is $" + balance);
+    }
+    
+    @Override
+    public String getName() {
+        // This should return the name of the command as you want it to appear in discord.
+        // This method should never return different values.
+        return "balance";
+    }
+
+    @Override
+    public String getDescription() {
+        // This should return the description of the command as you want it 
+        // to appear in discord.
+        // This method should never return different values.
+        return "Checks the balance of the given player";
+    }
+    
+    @Override
+    public List<InteractionCommandArgument> getArguments() {
+        // Should return a list of arguments that will be used in your command.
+        // If you don't want any arguments, you can return null here.
+        return List.of(
+                new InteractionCommandArgument(
+                        // This should be the name of the command argument.
+                        // Keep it a single world, all lower case.
+                        "player", 
+                        // This is the description of the argument.
+                        "The player to check the balance of", 
+                        // This is the type of the argument you'd like to receive from
+                        // discord.
+                        InteractionCommandArgumentType.STRING,
+                        // Should be set to true if the argument is required to send
+                        // the command from discord.
+                        true));
+    }
+    
+    @Override
+    public boolean isEphemeral() {
+        // Whether or not the command and response should be hidden to other users on discord.
+        // Return true here in order to hide command/responses from other discord users.
+        return false;
+    }
+    
+    @Override
+    public boolean isDisabled() {
+        // Whether or not the command should be prevented from being registered/executed.
+        // Return true here in order to mark the command as disabled.
+        return false;
+    }
+}
+```
+
+Once you have created your slash command, it's now time to register it. It is best 
+practice to register them in your plugin's `onEnable` so your commands make it in the
+initial batch of commands sent to discord.
+
+You can register your command with EssentialsXDiscord by doing the following:
+```java
+public class MyEconomyPlugin {
+    @Override
+    public void onEnable() {
+      final EssentialsDiscordAPI api = Bukkit.getServicesManager().load(EssentialsDiscordAPI.class);
+      api.getInteractionController().registerCommand(new BalanceSlashCommand());
+    }
+}
 ```
 
 ---
