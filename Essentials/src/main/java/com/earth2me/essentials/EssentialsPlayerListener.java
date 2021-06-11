@@ -6,18 +6,22 @@ import com.earth2me.essentials.textreader.KeywordReplacer;
 import com.earth2me.essentials.textreader.TextInput;
 import com.earth2me.essentials.textreader.TextPager;
 import com.earth2me.essentials.utils.DateUtil;
+import com.earth2me.essentials.utils.FormatUtil;
 import com.earth2me.essentials.utils.LocationUtil;
 import com.earth2me.essentials.utils.MaterialUtil;
 import com.earth2me.essentials.utils.VersionUtil;
 import io.papermc.lib.PaperLib;
 import net.ess3.api.IEssentials;
 import net.ess3.api.events.AfkStatusChangeEvent;
+import net.essentialsx.api.v2.events.AsyncUserDataLoadEvent;
 import org.bukkit.BanEntry;
 import org.bukkit.BanList;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
+import org.bukkit.command.Command;
+import org.bukkit.command.FormattedCommandAlias;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.HumanEntity;
@@ -220,7 +224,9 @@ public class EssentialsPlayerListener implements Listener {
                 .replace("{PLAYER}", player.getDisplayName())
                 .replace("{USERNAME}", player.getName())
                 .replace("{ONLINE}", NumberFormat.getInstance().format(ess.getOnlinePlayers().size()))
-                .replace("{UPTIME}", DateUtil.formatDateDiff(ManagementFactory.getRuntimeMXBean().getStartTime()));
+                .replace("{UPTIME}", DateUtil.formatDateDiff(ManagementFactory.getRuntimeMXBean().getStartTime()))
+                .replace("{PREFIX}", FormatUtil.replaceFormat(ess.getPermissionsHandler().getPrefix(player)))
+                .replace("{SUFFIX}", FormatUtil.replaceFormat(ess.getPermissionsHandler().getSuffix(player)));
 
             event.setQuitMessage(msg.isEmpty() ? null : msg);
         }
@@ -304,6 +310,8 @@ public class EssentialsPlayerListener implements Listener {
                 user.setDisplayNick();
                 updateCompass(user);
 
+                ess.runTaskAsynchronously(() -> ess.getServer().getPluginManager().callEvent(new AsyncUserDataLoadEvent(user)));
+
                 if (!ess.getVanishedPlayersNew().isEmpty() && !user.isAuthorized("essentials.vanish.see")) {
                     for (final String p : ess.getVanishedPlayersNew()) {
                         final Player toVanish = ess.getServer().getPlayerExact(p);
@@ -331,7 +339,9 @@ public class EssentialsPlayerListener implements Listener {
                         .replace("{PLAYER}", player.getDisplayName()).replace("{USERNAME}", player.getName())
                         .replace("{UNIQUE}", NumberFormat.getInstance().format(ess.getUserMap().getUniqueUsers()))
                         .replace("{ONLINE}", NumberFormat.getInstance().format(ess.getOnlinePlayers().size()))
-                        .replace("{UPTIME}", DateUtil.formatDateDiff(ManagementFactory.getRuntimeMXBean().getStartTime()));
+                        .replace("{UPTIME}", DateUtil.formatDateDiff(ManagementFactory.getRuntimeMXBean().getStartTime()))
+                        .replace("{PREFIX}", FormatUtil.replaceFormat(ess.getPermissionsHandler().getPrefix(player)))
+                        .replace("{SUFFIX}", FormatUtil.replaceFormat(ess.getPermissionsHandler().getSuffix(player)));
                     if (!msg.isEmpty()) {
                         ess.getServer().broadcastMessage(msg);
                     }
@@ -419,6 +429,14 @@ public class EssentialsPlayerListener implements Listener {
                         final IText output = new KeywordReplacer(input, user.getSource(), ess);
                         final TextPager pager = new TextPager(output, true);
                         pager.showPage("1", null, "motd", user.getSource());
+                    }
+
+                    if (user.isAuthorized("essentials.updatecheck")) {
+                        ess.runTaskAsynchronously(() -> {
+                            for (String str : ess.getUpdateChecker().getVersionMessages(false, false)) {
+                                user.sendMessage(str);
+                            }
+                        });
                     }
                 }
             }
@@ -520,9 +538,30 @@ public class EssentialsPlayerListener implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onPlayerCommandPreprocess(final PlayerCommandPreprocessEvent event) {
-        final Player player = event.getPlayer();
         final String cmd = event.getMessage().toLowerCase(Locale.ENGLISH).split(" ")[0].replace("/", "").toLowerCase(Locale.ENGLISH);
+        final int argStartIndex = event.getMessage().indexOf(" ");
+        final String args = argStartIndex == -1 ? "" // No arguments present
+                : event.getMessage().substring(argStartIndex); // arguments start at argStartIndex; substring from there.
 
+        // If the plugin command does not exist, check if it is an alias from commands.yml
+        if (ess.getServer().getPluginCommand(cmd) == null) {
+            final Command knownCommand = ess.getKnownCommandsProvider().getKnownCommands().get(cmd);
+            if (knownCommand instanceof FormattedCommandAlias) {
+                final FormattedCommandAlias command = (FormattedCommandAlias) knownCommand;
+                for (String fullCommand : ess.getFormattedCommandAliasProvider().createCommands(command, event.getPlayer(), args.split(" "))) {
+                    handlePlayerCommandPreprocess(event, fullCommand);
+                }
+                return;
+            }
+        }
+
+        // Handle the command given from the event.
+        handlePlayerCommandPreprocess(event, cmd + args);
+    }
+
+    public void handlePlayerCommandPreprocess(final PlayerCommandPreprocessEvent event, final String effectiveCommand) {
+        final Player player = event.getPlayer();
+        final String cmd = effectiveCommand.toLowerCase(Locale.ENGLISH).split(" ")[0].replace("/", "").toLowerCase(Locale.ENGLISH);
         final PluginCommand pluginCommand = ess.getServer().getPluginCommand(cmd);
 
         if (ess.getSettings().getSocialSpyCommands().contains(cmd) || ess.getSettings().getSocialSpyCommands().contains("*")) {
@@ -575,12 +614,12 @@ public class EssentialsPlayerListener implements Listener {
             user.updateActivityOnInteract(broadcast);
         }
 
-        if (ess.getSettings().isCommandCooldownsEnabled() && pluginCommand != null
+        if (ess.getSettings().isCommandCooldownsEnabled()
             && !user.isAuthorized("essentials.commandcooldowns.bypass")) {
-            final int argStartIndex = event.getMessage().indexOf(" ");
+            final int argStartIndex = effectiveCommand.indexOf(" ");
             final String args = argStartIndex == -1 ? "" // No arguments present
-                : " " + event.getMessage().substring(argStartIndex); // arguments start at argStartIndex; substring from there.
-            final String fullCommand = pluginCommand.getName() + args;
+                : " " + effectiveCommand.substring(argStartIndex); // arguments start at argStartIndex; substring from there.
+            final String fullCommand = pluginCommand == null ? effectiveCommand : pluginCommand.getName() + args;
 
             // Used to determine whether a user already has an existing cooldown
             // If so, no need to check for (and write) new ones.

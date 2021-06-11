@@ -1,3 +1,7 @@
+plugins {
+    id("essentials.shadow-module")
+}
+
 dependencies {
     compileOnly project(':EssentialsX')
     implementation 'com.maxmind.geoip2:geoip2:2.12.0'
@@ -11,4 +15,8 @@ shadowJar {
         include (dependency('javatar:javatar'))
         include (dependency('com.fasterxml.jackson.core:'))
     }
+
+    relocate 'com.maxmind', 'com.earth2me.essentials.geoip.libs.maxmind'
+    relocate 'com.ice.tar', 'com.earth2me.essentials.geoip.libs.javatar'
+    relocate 'com.fasterxml.jackson', 'com.earth2me.essentials.geoip.libs.jackson'
 }

@@ -160,6 +160,7 @@ public class AsyncTeleport implements IAsyncTeleport {
         final PreTeleportEvent event = new PreTeleportEvent(teleportee, cause, target);
         Bukkit.getServer().getPluginManager().callEvent(event);
         if (event.isCancelled()) {
+            future.complete(false);
             return;
         }
         teleportee.setLastLocation();
@@ -183,7 +184,7 @@ public class AsyncTeleport implements IAsyncTeleport {
             targetLoc.setX(LocationUtil.getXInsideWorldBorder(targetLoc.getWorld(), targetLoc.getBlockX()));
             targetLoc.setZ(LocationUtil.getZInsideWorldBorder(targetLoc.getWorld(), targetLoc.getBlockZ()));
         }
-        PaperLib.getChunkAtAsync(targetLoc).thenAccept(chunk -> {
+        PaperLib.getChunkAtAsync(targetLoc.getWorld(), targetLoc.getBlockX() >> 4, targetLoc.getBlockZ() >> 4, true, true).thenAccept(chunk -> {
             Location loc = targetLoc;
             if (LocationUtil.isBlockUnsafeForUser(teleportee, chunk.getWorld(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ())) {
                 if (ess.getSettings().isTeleportSafetyEnabled()) {
@@ -216,6 +217,9 @@ public class AsyncTeleport implements IAsyncTeleport {
                 }
             }
             future.complete(true);
+        }).exceptionally(th -> {
+            future.completeExceptionally(th);
+            return null;
         });
     }
 
@@ -295,7 +299,7 @@ public class AsyncTeleport implements IAsyncTeleport {
 
         cancel(false);
         warnUser(teleportee, delay);
-        initTimer((long) (delay * 1000.0), teleportee, target, cashCharge, cause, false);
+        initTimer((long) (delay * 1000.0), teleportee, target, cashCharge, cause, false, future);
     }
 
     private void teleportOther(final IUser teleporter, final IUser teleportee, final ITarget target, final Trade chargeFor, final TeleportCause cause, final CompletableFuture<Boolean> future) {
@@ -341,12 +345,13 @@ public class AsyncTeleport implements IAsyncTeleport {
                     return;
                 }
             }
+            future.complete(true);
             return;
         }
 
         cancel(false);
         warnUser(teleportee, delay);
-        initTimer((long) (delay * 1000.0), teleportee, target, cashCharge, cause, false);
+        initTimer((long) (delay * 1000.0), teleportee, target, cashCharge, cause, false, future);
     }
 
     @Override
@@ -377,12 +382,13 @@ public class AsyncTeleport implements IAsyncTeleport {
             if (chargeFor != null) {
                 chargeFor.charge(teleportOwner, future);
             }
+            future.complete(true);
             return;
         }
 
         cancel(false);
         warnUser(teleportOwner, delay);
-        initTimer((long) (delay * 1000.0), teleportOwner, null, chargeFor, cause, true);
+        initTimer((long) (delay * 1000.0), teleportOwner, null, chargeFor, cause, true, future);
     }
 
     void respawnNow(final IUser teleportee, final TeleportCause cause, final CompletableFuture<Boolean> future) {
@@ -398,6 +404,9 @@ public class AsyncTeleport implements IAsyncTeleport {
                 ess.getServer().getPluginManager().callEvent(pre);
                 nowAsync(teleportee, new LocationTarget(pre.getRespawnLocation()), cause, future);
             }
+        }).exceptionally(th -> {
+            future.completeExceptionally(th);
+            return null;
         });
     }
 
@@ -459,8 +468,8 @@ public class AsyncTeleport implements IAsyncTeleport {
         }
     }
 
-    private void initTimer(final long delay, final IUser teleportUser, final ITarget target, final Trade chargeFor, final TeleportCause cause, final boolean respawn) {
-        timedTeleport = new AsyncTimedTeleport(teleportOwner, ess, this, delay, teleportUser, target, chargeFor, cause, respawn);
+    private void initTimer(final long delay, final IUser teleportUser, final ITarget target, final Trade chargeFor, final TeleportCause cause, final boolean respawn, CompletableFuture<Boolean> future) {
+        timedTeleport = new AsyncTimedTeleport(teleportOwner, ess, this, delay, future, teleportUser, target, chargeFor, cause, respawn);
     }
 
     public enum TeleportType {

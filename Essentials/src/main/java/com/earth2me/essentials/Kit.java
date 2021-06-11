@@ -9,6 +9,7 @@ import com.earth2me.essentials.textreader.SimpleTextInput;
 import com.earth2me.essentials.utils.DateUtil;
 import com.earth2me.essentials.utils.MaterialUtil;
 import com.earth2me.essentials.utils.NumberUtil;
+import com.earth2me.essentials.utils.VersionUtil;
 import net.ess3.api.IEssentials;
 import net.ess3.api.events.KitClaimEvent;
 import org.bukkit.Bukkit;
@@ -73,6 +74,10 @@ public class Kit {
     public void setTime(final User user) throws Exception {
         final Calendar time = new GregorianCalendar();
         user.setKitTimestamp(kitName, time.getTimeInMillis());
+    }
+
+    public void resetTime(final User user) {
+        user.setKitTimestamp(kitName, 0);
     }
 
     public void chargeUser(final User user) throws Exception {
@@ -277,6 +282,6 @@ public class Kit {
     }
 
     private boolean isEmptyStack(ItemStack stack) {
-        return stack == null || stack.getType().isAir();
+        return stack == null || stack.getType() == Material.AIR || (VersionUtil.getServerBukkitVersion().isHigherThanOrEqualTo(VersionUtil.v1_14_4_R01) && stack.getType().isAir());
     }
 }

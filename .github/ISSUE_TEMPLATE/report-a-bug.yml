@@ -1,0 +1,93 @@
+name: Report bug
+description: Report a bug in EssentialsX.
+labels: 'bug: unconfirmed'
+body:
+- type: markdown
+  attributes:
+    value: |
+      Thanks for taking the time to report an EssentialsX bug! Fill out the form below to provide us with info to help fix the bug.
+      Only use this if you're 100% sure you've found a bug and can reproduce it. If you're looking for general help with EssentialsX, try the Q&A forum or MOSS Discord server.
+- type: dropdown
+  attributes:
+    label: Type of bug
+    description: What type of bug is this? Choose all that apply.
+    multiple: true
+    options:
+      - Performance issue or memory leak
+      - Data loss
+      - Exploit
+      - Compatibility issue
+      - Error in console
+      - Other unexpected behaviour
+  validations:
+    required: true
+
+- type: textarea
+  attributes:
+    label: "`/ess version` output"
+    description: Run `/ess version` in the console, then copy and paste the full output of the command into this box.
+  validations:
+    required: true
+- type: input
+  attributes:
+    label: Server startup log
+    description: Upload your server startup log (from the start of `latest.log` up to where it says "Done!") to either https://paste.gg or https://gist.github.com, save and then paste the link in this box.
+    placeholder: "Example: https://paste.gg/p/anonymous/109dd6a10a734a3aa430d5a351ea5210"
+  validations:
+    required: true
+- type: input
+  attributes:
+    label: EssentialsX config files
+    description: Upload your EssentialsX `config.yml` (and any other relevant files like `kits.yml`) to either https://paste.gg or https://gist.github.com, save and then paste the link in this box. If you included those files in the same paste as your startup log, paste the same link here.
+    placeholder: "Example: https://paste.gg/p/anonymous/109dd6a10a734a3aa430d5a351ea5210"
+  validations:
+    required: true
+- type: input
+  attributes:
+    label: Error log (if applicable)
+    description: If you are reporting a console error, upload any relevant log excerpts to either https://paste.gg or https://gist.github.com, save and the paste the link in this box. If you included those files in the same paste as your startup log, paste the same link here.
+    placeholder: "Example: https://paste.gg/p/anonymous/109dd6a10a734a3aa430d5a351ea5210"
+
+- type: textarea
+  attributes:
+    label: Bug description
+    description: Describe roughly what the bug is here.
+    placeholder: |
+      Example: "When running /nuke after putting everyone into adventure mode, there aren't any explosions..."
+  validations:
+    required: true
+- type: textarea
+  attributes:
+    label: Steps to reproduce
+    description: Provide an example of how to trigger the bug.
+    placeholder: |
+      Example:
+      1. Have at least 3 people online
+      2. Run `/gma *` to put everyone into adventure mode
+      3. Run `/nuke`
+  validations:
+    required: true
+- type: textarea
+  attributes:
+    label: Expected behaviour
+    description: Explain what you should expect to happen.
+    placeholder: |
+      Example: "Everything should explode!"
+  validations:
+    required: true
+- type: textarea
+  attributes:
+    label: Actual behaviour
+    description: Explain what actually happens.
+    placeholder: |
+      Example: "Everything doesn't explode :("
+  validations:
+    required: true
+
+- type: markdown
+  attributes:
+    value: |
+      In the text box below, you can attach any relevant screenshots, files and links to Timings/spark profiler reports.
+      You can also include a link to a heapdump if necessary, but please make sure you don't include any private player data in the heapdump.
+      If you suspect this issue is related to a prior issue/PR/commit, please mention it here.
+

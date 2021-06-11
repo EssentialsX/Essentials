@@ -2,6 +2,7 @@ package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.Kit;
+import com.earth2me.essentials.config.ConfigurateUtil;
 import com.google.common.collect.Lists;
 import org.bukkit.Server;
 
@@ -37,7 +38,7 @@ public class Commanddelkit extends EssentialsCommand {
     @Override
     protected List<String> getTabCompleteOptions(final Server server, final CommandSource sender, final String commandLabel, final String[] args) {
         if (args.length == 1) {
-            return Lists.newArrayList(ess.getKits().getKits().getKeys(false));
+            return Lists.newArrayList(ConfigurateUtil.getKeys(ess.getKits().getKits()));
         }
         return Collections.emptyList();
     }

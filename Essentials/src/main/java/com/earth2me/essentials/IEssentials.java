@@ -3,15 +3,23 @@ package com.earth2me.essentials;
 import com.earth2me.essentials.api.IItemDb;
 import com.earth2me.essentials.api.IJails;
 import com.earth2me.essentials.api.IWarps;
+import com.earth2me.essentials.commands.IEssentialsCommand;
 import com.earth2me.essentials.perm.PermissionsHandler;
+import com.earth2me.essentials.updatecheck.UpdateChecker;
 import net.ess3.provider.ContainerProvider;
+import net.ess3.provider.FormattedCommandAliasProvider;
 import net.ess3.provider.KnownCommandsProvider;
+import net.ess3.provider.MaterialTagProvider;
+import net.ess3.provider.PersistentDataProvider;
 import net.ess3.provider.ServerStateProvider;
 import net.ess3.provider.SpawnerBlockProvider;
 import net.ess3.provider.SpawnerItemProvider;
+import net.ess3.provider.SyncCommandsProvider;
+import net.essentialsx.api.v2.services.BalanceTop;
 import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.PluginCommand;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitScheduler;
@@ -19,6 +27,7 @@ import org.bukkit.scheduler.BukkitTask;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import java.util.function.Predicate;
 
@@ -26,6 +35,8 @@ public interface IEssentials extends Plugin {
     void addReloadListener(IConf listener);
 
     void reload();
+
+    Map<String, IEssentialsCommand> getCommandMap();
 
     List<String> onTabCompleteEssentials(CommandSender sender, Command command, String commandLabel, String[] args, ClassLoader classLoader, String commandPath, String permissionPrefix, IEssentialsModule module);
 
@@ -70,6 +81,8 @@ public interface IEssentials extends Plugin {
 
     RandomTeleport getRandomTeleport();
 
+    UpdateChecker getUpdateChecker();
+
     BukkitTask runTaskAsynchronously(Runnable run);
 
     BukkitTask runTaskLaterAsynchronously(Runnable run, long delay);
@@ -94,6 +107,8 @@ public interface IEssentials extends Plugin {
 
     UserMap getUserMap();
 
+    BalanceTop getBalanceTop();
+
     EssentialsTimer getTimer();
 
     /**
@@ -115,7 +130,17 @@ public interface IEssentials extends Plugin {
 
     ServerStateProvider getServerStateProvider();
 
+    MaterialTagProvider getMaterialTagProvider();
+
     ContainerProvider getContainerProvider();
 
     KnownCommandsProvider getKnownCommandsProvider();
+
+    FormattedCommandAliasProvider getFormattedCommandAliasProvider();
+
+    SyncCommandsProvider getSyncCommandsProvider();
+
+    PersistentDataProvider getPersistentDataProvider();
+
+    PluginCommand getPluginCommand(String cmd);
 }

@@ -2,6 +2,7 @@ package com.earth2me.essentials;
 
 import com.earth2me.essentials.api.IAsyncTeleport;
 import com.earth2me.essentials.commands.IEssentialsCommand;
+import com.earth2me.essentials.config.entities.CommandCooldown;
 import net.ess3.api.ITeleport;
 import net.ess3.api.MaxMoneyException;
 import net.ess3.api.events.AfkStatusChangeEvent;
@@ -145,6 +146,8 @@ public interface IUser {
 
     void setJail(String jail);
 
+    String getFormattedJailTime();
+
     List<String> getMails();
 
     void addMail(String mail);
@@ -158,6 +161,7 @@ public interface IUser {
 
     void setIgnoreMsg(boolean ignoreMsg);
 
+    @Deprecated
     void setConfigProperty(String node, Object object);
 
     Set<String> getConfigKeys();
@@ -166,7 +170,10 @@ public interface IUser {
 
     Map<String, Object> getConfigMap(String node);
 
+    @Deprecated
     Map<Pattern, Long> getCommandCooldowns();
+
+    List<CommandCooldown> getCooldownsList();
 
     Date getCommandCooldownExpiry(String label);
 
@@ -184,6 +191,8 @@ public interface IUser {
     String getName();
 
     String getDisplayName();
+
+    String getFormattedNickname();
 
     String getAfkMessage();
 
@@ -210,4 +219,8 @@ public interface IUser {
     Map<User, BigDecimal> getConfirmingPayments();
 
     Block getTargetBlock(int maxDistance);
+
+    void setToggleShout(boolean toggleShout);
+
+    boolean isToggleShout();
 }

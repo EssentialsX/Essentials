@@ -1,17 +1,17 @@
 package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.utils.TriState;
 import com.earth2me.essentials.utils.FormatUtil;
 import org.bukkit.Material;
 import org.bukkit.Server;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import java.util.Locale;
-
 import static com.earth2me.essentials.I18n.tl;
 
 public class Commanditemname extends EssentialsCommand {
+    public static final String PERM_PREFIX = "essentials.itemname.prevent-type.";
 
     public Commanditemname() {
         super("itemname");
@@ -21,7 +21,14 @@ public class Commanditemname extends EssentialsCommand {
     protected void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception {
         final ItemStack item = user.getBase().getItemInHand();
         if (item.getType() == Material.AIR) {
-            user.sendMessage(tl("itemnameInvalidItem", item.getType().toString().toLowerCase(Locale.ENGLISH).replace('_', ' ')));
+            user.sendMessage(tl("itemnameInvalidItem"));
+            return;
+        }
+
+        final TriState wildcard = user.isAuthorizedExact(PERM_PREFIX + "*");
+        final TriState material = user.isAuthorizedExact(PERM_PREFIX + item.getType().name().toLowerCase());
+        if ((wildcard == TriState.TRUE && material != TriState.FALSE) || ((wildcard != TriState.TRUE) && material == TriState.TRUE)) {
+            user.sendMessage(tl("itemnameInvalidItem"));
             return;
         }
 

@@ -72,7 +72,7 @@ public class Commandptime extends EssentialsLoopCommand {
             }
         }
 
-        final StringJoiner joiner = new StringJoiner(",");
+        final StringJoiner joiner = new StringJoiner(", ");
         loopOnlinePlayersConsumer(server, sender, false, true, args.length > 1 ? args[1] : sender.getSelfSelector(), player -> {
             setUserTime(player, ticks, !fixed);
             joiner.add(player.getName());

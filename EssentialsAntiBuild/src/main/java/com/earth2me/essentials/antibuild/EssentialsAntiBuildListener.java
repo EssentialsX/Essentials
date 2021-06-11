@@ -100,6 +100,11 @@ public class EssentialsAntiBuildListener implements Listener {
         final Block block = event.getBlockPlaced();
         final Material type = block.getType();
 
+        // Happens with blocks like eyes of ender, we shouldn't treat state changes as a block place.
+        if (type.equals(event.getBlockReplacedState().getType())) {
+            return;
+        }
+
         if (prot.getSettingBool(AntiBuildConfig.disable_build) && !user.canBuild() && !metaPermCheck(user, "place", block)) {
             if (ess.getSettings().warnOnBuildDisallow()) {
                 user.sendMessage(tl("antiBuildPlace", EssentialsAntiBuild.getNameForType(type)));

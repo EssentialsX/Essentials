@@ -201,6 +201,10 @@ socialspy-commands:
 # If so, they will be differentiated from those sent by normal players.
 socialspy-listen-muted-players: true
 
+# Whether social spy should spy on private messages or just the commands from the list above.
+# If false, social spy will only monitor commands from the list above.
+socialspy-messages: true
+
 # The following settings listen for when a player changes worlds.
 # If you use another plugin to control speed and flight, you should change these to false.
 
@@ -343,7 +347,6 @@ enabledSigns:
   #- sell
   #- trade
   #- free
-  #- disposal
   #- warp
   #- kit
   #- mail
@@ -355,6 +358,13 @@ enabledSigns:
   #- repair
   #- time
   #- weather
+  #- anvil
+  #- cartography
+  #- disposal
+  #- grindstone
+  #- loom
+  #- smithing
+  #- workbench
 
 # How many times per second can Essentials signs be interacted with per player.
 # Values should be between 1-20, 20 being virtually no lag protection.
@@ -461,6 +471,11 @@ cancel-afk-on-chat: true
 # Users with the permission node essentials.sleepingignored will always be ignored.
 sleep-ignores-afk-players: true
 
+# Should vanished players be ignored when other players are trying to sleep?
+# When this setting is false, player's won't be able to skip the night if vanished players are not sleeping.
+# Users with the permission node essentials.sleepingignored will always be ignored.
+sleep-ignores-vanished-player: true
+
 # Set the player's list name when they are AFK. This is none by default which specifies that Essentials 
 # should not interfere with the AFK player's list name.
 # You may use color codes, use {USERNAME} the player's name or {PLAYER} for the player's displayname.
@@ -496,7 +511,7 @@ allow-silent-join-quit: false
 
 # You can set custom join and quit messages here. Set this to "none" to use the default Minecraft message,
 # or set this to "" to hide the message entirely.
-# You may use color codes, {USERNAME} for the player's name, and {PLAYER} for the player's displayname.
+# You may use color codes, {USERNAME} for the player's name, {PLAYER} for the player's displayname, {PREFIX} for the player's prefix, and {SUFFIX} for the player's suffix.
 custom-join-message: "none"
 custom-quit-message: "none"
 
@@ -629,8 +644,10 @@ default-enabled-confirm-commands:
 #- pay
 #- clearinventory
 
-# Whether or not to teleport a player back to their previous position after they have been freed from jail.
-teleport-back-when-freed-from-jail: true
+# Where should Essentials teleport players when they are freed from jail?
+# You can set to "back" to have them teleported to where they were before they were jailed, "spawn" to have them
+# teleport to spawn, or "off" to not have them teleport.
+teleport-when-freed: back
 
 # Whether or not jail time should only be counted while the user is online.
 # If true, a jailed player's time will only decrement when they are online.
@@ -663,6 +680,11 @@ log-command-block-commands: true
 
 # Set the maximum speed for projectiles spawned with /fireball.
 max-projectile-speed: 8
+
+# Should EssentialsX check for updates?
+# If set to true, EssentialsX will show notifications when a new version is available.
+# This uses the public GitHub API and no identifying information is sent or stored.
+update-check: true
 
 ############################################################
 # +------------------------------------------------------+ #
@@ -810,6 +832,21 @@ chat:
   # For more information of chat formatting, check out the wiki: http://wiki.ess3.net/wiki/Chat_Formatting
   # Note: Using the {PREFIX} and {SUFFIX} placeholders along with {DISPLAYNAME} may cause double prefixes/suffixes to be shown in chat unless add-prefix-suffix is uncommented and set to false.
 
+  # Available placeholders:
+  # {MESSAGE} - The content of the chat message.
+  # {USERNAME} - The sender's username.
+  # {DISPLAYNAME} - The sender's display name.
+  # {NICKNAME} - The sender's Essentials nickname. If the sender has no nickname, the username is shown.
+  # {PREFIX} - The sender's prefix, supplied by a permissions plugin.
+  # {SUFFIX} - The sender's suffix, supplied by a permissions plugin.
+  # {GROUP} - The sender's primary group name, supplied by a permissions plugin.
+  # {WORLD} - The world alias of the sender's current world. See the world-aliases section below for details.
+  # {WORLDNAME} - The full name of the sender's current world.
+  # {SHORTWORLDNAME} - The first character of the sender's current world.
+  # {TEAMNAME} - The sender's scoreboard team name.
+  # {TEAMPREFIX} - The sender's scoreboard team prefix.
+  # {TEAMSUFFIX} - The sender's scoreboard team suffix.
+
   format: '<{DISPLAYNAME}> {MESSAGE}'
   #format: '&7[{GROUP}]&r {DISPLAYNAME}&7:&r {MESSAGE}'
   #format: '&7{PREFIX}&r {DISPLAYNAME}&r &7{SUFFIX}&r: {MESSAGE}'
@@ -823,6 +860,12 @@ chat:
   
   # You can use permissions to control whether players can use formatting codes in their chat messages.
   # See https://essentialsx.net/wiki/Color-Permissions.html for more information.
+
+  # World aliases allow you to replace the world name with something different in the chat format.
+  # If you are using world aliases, make sure to remove the '#' at the start to allow the setting to be read.
+  world-aliases:
+  #  plots: "&dP&r"
+  #  creative: "&eC&r"
 
 ############################################################
 # +------------------------------------------------------+ #
@@ -1059,6 +1102,10 @@ spawn-join-listener-priority: high
 
 # When users die, should they respawn at their first home or bed, instead of the spawnpoint?
 respawn-at-home: false
+
+# When users die, should they respawn at their bed instead of the spawnpoint?
+# The value of respawn-at-home (above) has to be true.
+respawn-at-home-bed: true
 
 # When users die, should EssentialsSpawn respect users' respawn anchors?
 respawn-at-anchor: false

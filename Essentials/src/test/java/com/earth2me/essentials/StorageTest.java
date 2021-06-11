@@ -2,7 +2,6 @@ package com.earth2me.essentials;
 
 import org.bukkit.Location;
 import org.bukkit.World;
-import org.bukkit.World.Environment;
 import org.bukkit.plugin.InvalidDescriptionException;
 import org.junit.Assert;
 import org.junit.Test;
@@ -15,8 +14,8 @@ public class StorageTest {
     private final World world;
 
     public StorageTest() {
-        server = new FakeServer();
-        world = server.createWorld("testWorld", Environment.NORMAL);
+        server = FakeServer.getServer();
+        world = server.getWorld("testWorld");
         ess = new Essentials(server);
         try {
             ess.setupForTesting(server);

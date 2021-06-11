@@ -2,6 +2,7 @@ package com.earth2me.essentials.protect;
 
 import com.earth2me.essentials.User;
 import net.ess3.api.IEssentials;
+import org.bukkit.Material;
 import org.bukkit.entity.Creeper;
 import org.bukkit.entity.EnderCrystal;
 import org.bukkit.entity.EnderDragon;
@@ -69,7 +70,8 @@ public class EssentialsProtectEntityListener implements Listener {
                 event.setCancelled(true);
                 return;
             }
-            if (prot.getSettingBool(ProtectConfig.prevent_tnt_explosion) && cause == DamageCause.BLOCK_EXPLOSION && !(target instanceof Player && shouldBeDamaged(user, "tnt"))) {
+            final EntityDamageByBlockEvent edbEvent = (EntityDamageByBlockEvent) event;
+            if (prot.getSettingBool(ProtectConfig.prevent_tnt_explosion) && edbEvent.getDamager() != null && edbEvent.getDamager().getType() == Material.TNT && cause == DamageCause.BLOCK_EXPLOSION && !(target instanceof Player && shouldBeDamaged(user, "tnt"))) {
                 event.setCancelled(true);
                 return;
             }

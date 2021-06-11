@@ -1,23 +1,29 @@
----
-name: Bug fix
-about: Use this if your PR fixes a bug in EssentialsX.
-labels: 'type: bugfix'
----
+<!--
 
-<!-- EssentialsX bug fix submission guide
+EssentialsX bug fix submission guide
+====================================
 
 NOTE: Failure to fill out this template properly may result in your PR being
       delayed or ignored without warning.
 
-Don't type between any arrows in the template, as this text will be hidden.
-This includes this header block and any other explanatory text blocks.
+NOTE: Don't type between any arrows in the template, as this text will be
+      hidden. This includes this header block and any other explanation text
+      blocks.
 
 Want to discuss your PR before submitting it? Join the EssentialsX Development
 server: https://discord.gg/CUN7qVb
 
+
+EssentialsX is GPL
+------------------
+
 By contributing to EssentialsX, you agree to license your code under the
 GNU General Public License version 3, which can be found at the link below:
 https://github.com/EssentialsX/Essentials/blob/2.x/LICENSE
+
+
+Instructions
+------------
 
 If you are submitting a bug fix, please follow the following steps:
 
@@ -34,14 +40,15 @@ If you are submitting a bug fix, please follow the following steps:
       Copy and paste any logs into https://gist.github.com/, then paste a
       link to them in the relevant parts of the template. Do not use Hastebin
       or Pastebin, as this can cause issues with future reviews.
-      **DO NOT drag logs into this text box!**
+      
+      DO NOT drag logs directly into this text box, as we cannot read these!
 
 3.  If you are fixing a performance issue, please include a link to a
     Timings and/or profiler report, both before and after your PR.
 
 4.  If you are fixing a visual bug, such as in commands, please include
     screenshots so that we can more easily review the proposed fix.
-    (You may drag screenshots directly into this box.)
+    (You can drag screenshots into the bottom of the editor.)
 
 -->
 
@@ -61,17 +68,21 @@ This PR fixes #nnnn.
 
 
 **Environments tested:**    
-<!--
-    Below this line, put an "x" inside the box for the environments you have
-    tested this bug fix on, and if relevant alter the OS and Java version
-    accordingly. If this feature does not apply to an environment, strike
-    through the environment using ~~strikethrough~~. If you have tested on
-    other environments, add a new line with relevant details.
--->
 
-- [ ] [Latest](https://papermc.io/downloads) Paper Version (any OS, any Java 8+ version)
-- [ ] CraftBukkit/Spigot/Paper 1.12.2 (any OS, any Java 8+ version)
-- [ ] CraftBukkit 1.8.8 (any OS, any Java 8+ version)
+<!-- Type the OS you have used below. -->
+OS: 
+
+<!-- Type the JDK version (from java -version) you have used below. -->
+Java version:  
+
+<!--
+    Put an "x" inside the boxes for the server software you have tested this 
+    bug fix on. If this feature does not apply to a server, strike through the server software using ~~strikethrough~~. If you have tested on other
+    environments, add a new line with relevant details.
+-->
+- [ ] Most recent Paper version (1.XX.Y, git-Paper-BUILD)
+- [ ] CraftBukkit/Spigot/Paper 1.12.2
+- [ ] CraftBukkit 1.8.8
 
 
 **Demonstration:**    
@@ -80,3 +91,4 @@ This PR fixes #nnnn.
     necessary. If you have created or used a test case plugin, please link to a
     download of the plugin, source code and exact version used where possible.
 -->
+

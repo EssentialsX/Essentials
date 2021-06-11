@@ -1,7 +1,8 @@
 package com.earth2me.essentials.metrics;
 
 import com.earth2me.essentials.Essentials;
-import com.earth2me.essentials.register.payment.Methods;
+import com.earth2me.essentials.economy.EconomyLayer;
+import com.earth2me.essentials.economy.EconomyLayers;
 import com.google.common.collect.ImmutableList;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
@@ -38,6 +39,7 @@ public class MetricsWrapper {
         checkForcedMetrics();
         addPermsChart();
         addEconomyChart();
+        addReleaseBranchChart();
 
         // bStats' backend currently doesn't support multi-line charts or advanced bar charts
         // These are included for when bStats is ready to accept this data
@@ -68,9 +70,10 @@ public class MetricsWrapper {
         metrics.addCustomChart(new Metrics.DrilldownPie("econPlugin", () -> {
             final Map<String, Map<String, Integer>> result = new HashMap<>();
             final Map<String, Integer> backend = new HashMap<>();
-            if (Methods.hasMethod()) {
-                backend.put(Methods.getMethod().getBackend(), 1);
-                result.put(Methods.getMethod().getName(), backend);
+            final EconomyLayer layer = EconomyLayers.getSelectedLayer();
+            if (layer != null) {
+                backend.put(layer.getBackendName(), 1);
+                result.put(layer.getPluginName(), backend);
             } else {
                 backend.put("Essentials", 1);
                 result.put("Essentials", backend);
@@ -85,6 +88,10 @@ public class MetricsWrapper {
             result.put(plugin.getDescription().getVersion(), 1);
             return result;
         }));
+    }
+
+    private void addReleaseBranchChart() {
+        metrics.addCustomChart(new Metrics.SimplePie("releaseBranch", ess.getUpdateChecker()::getVersionBranch));
     }
 
     private void addCommandsChart() {
