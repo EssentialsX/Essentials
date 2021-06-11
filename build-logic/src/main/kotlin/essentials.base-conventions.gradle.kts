@@ -8,7 +8,7 @@ plugins {
 }
 
 val checkstyleVersion = "8.36.2"
-val spigotVersion = "1.16.5-R0.1-SNAPSHOT"
+val spigotVersion = "1.17-R0.1-SNAPSHOT"
 val junit5Version = "5.7.0"
 val mockitoVersion = "3.2.0"
 

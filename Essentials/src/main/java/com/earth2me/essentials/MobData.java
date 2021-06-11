@@ -6,10 +6,12 @@ import com.earth2me.essentials.utils.StringUtil;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Ageable;
+import org.bukkit.entity.Axolotl;
 import org.bukkit.entity.Creeper;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.ExperienceOrb;
+import org.bukkit.entity.Goat;
 import org.bukkit.entity.Horse;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Phantom;
@@ -359,6 +361,8 @@ public enum MobData {
                     break;
                 }
             }
+        } else if (this.value.equals(Data.GOAT_SCREAMING)) {
+            ((Goat) spawned).setScreaming(true);
         } else if (this.value instanceof String) {
             final String[] split = ((String) this.value).split(":");
             switch (split[0]) {
