@@ -312,16 +312,16 @@ public abstract class UserData extends PlayerExtension implements IConf {
     }
 
     public List<String> getMails() {
-        return holder.mails();
+        return holder.mail();
     }
 
     public void setMails(List<String> mails) {
-        holder.mails(mails);
+        holder.mail(mails);
         config.save();
     }
 
     public void addMail(final String mail) {
-        holder.mails().add(mail);
+        holder.mail().add(mail);
         config.save();
     }
 
@@ -574,6 +574,10 @@ public abstract class UserData extends PlayerExtension implements IConf {
     public Map<Pattern, Long> getCommandCooldowns() {
         final Map<Pattern, Long> map = new HashMap<>();
         for (final CommandCooldown c : getCooldownsList()) {
+            if (c == null) {
+                // stupid solution to stupid problem
+                continue;
+            }
             map.put(c.pattern(), c.value());
         }
         return map;
@@ -581,6 +585,10 @@ public abstract class UserData extends PlayerExtension implements IConf {
 
     public Date getCommandCooldownExpiry(final String label) {
         for (CommandCooldown cooldown : getCooldownsList()) {
+            if (cooldown == null) {
+                // stupid solution to stupid problem
+                continue;
+            }
             if (cooldown.pattern().matcher(label).matches()) {
                 return new Date(cooldown.value());
             }

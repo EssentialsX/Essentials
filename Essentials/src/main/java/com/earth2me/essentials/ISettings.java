@@ -345,7 +345,7 @@ public interface ISettings extends IConf {
 
     boolean isConfirmCommandEnabledByDefault(String commandName);
 
-    boolean isTeleportBackWhenFreedFromJail();
+    TeleportWhenFreePolicy getTeleportWhenFreePolicy();
 
     boolean isJailOnlineTime();
 
@@ -383,6 +383,12 @@ public interface ISettings extends IConf {
         KEEP,
         DELETE,
         DROP
+    }
+
+    enum TeleportWhenFreePolicy {
+        SPAWN,
+        BACK,
+        OFF
     }
 
 }
