@@ -268,7 +268,21 @@ EssentialsXDiscord has a pretty extensive API which allows any third party plugi
 their own integrations into it.
 
 ### Sending Messages to Discord
-EssentialsXDiscord organizes the types of messages that can be sent into certain channels
+EssentialsXDiscord organizes the types of messages that can be sent along with their 
+destination on discord under the `message-types` section of the `config.yml`. The 
+EssentialsXDiscord API uses `message-types` to resolve the channel id you want to send your
+message to.
 
+#### Using Built-In Message Channels
+EssentialsXDiscord defines a few built in `message-types` which you may fit your use case
+already (such as sending a message to the mc->discord chat relay channel). The list of 
+built-in message types can be found at [`DiscordMessageEvent.MessageType.DefaultTypes`](https://github.com/EssentialsX/Essentials/blob/2.x/EssentialsDiscord/src/main/java/net/essentialsx/api/v2/events/discord/DiscordMessageEvent.java#L195-L203).
+
+Here is an example of what sending a message to the built-in chat channel would look like:
+```java
+final MessageType channel = DiscordMessageEvent.MessageType.DefaultTypes.CHAT;
+final DiscordMessageEvent event = new DiscordMessageEvent(channel, "My Epic Message", allowPing, null, null, null);
+Bukkit.getPluginManager().callEvent(event);
+```
 
 ---
