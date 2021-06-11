@@ -70,22 +70,22 @@ public class Commandtpaccept extends EssentialsCommand {
         }
     }
 
-    private void handleTeleport(final User user, final IUser.TpaRequest token, String commandLabel) throws Exception {
-        if (token == null) {
+    private void handleTeleport(final User user, final IUser.TpaRequest request, String commandLabel) throws Exception {
+        if (request == null) {
             throw new Exception(tl("noPendingRequest"));
         }
-        final User requester = ess.getUser(token.getRequesterUuid());
+        final User requester = ess.getUser(request.getRequesterUuid());
 
         if (!requester.getBase().isOnline()) {
-            user.removeTpaRequest(token.getName());
+            user.removeTpaRequest(request.getName());
             throw new Exception(tl("noPendingRequest"));
         }
 
-        if (token.isHere() && ((!requester.isAuthorized("essentials.tpahere") && !requester.isAuthorized("essentials.tpaall")) || (user.getWorld() != requester.getWorld() && ess.getSettings().isWorldTeleportPermissions() && !user.isAuthorized("essentials.worlds." + user.getWorld().getName())))) {
+        if (request.isHere() && ((!requester.isAuthorized("essentials.tpahere") && !requester.isAuthorized("essentials.tpaall")) || (user.getWorld() != requester.getWorld() && ess.getSettings().isWorldTeleportPermissions() && !user.isAuthorized("essentials.worlds." + user.getWorld().getName())))) {
             throw new Exception(tl("noPendingRequest"));
         }
 
-        if (!token.isHere() && (!requester.isAuthorized("essentials.tpa") || (user.getWorld() != requester.getWorld() && ess.getSettings().isWorldTeleportPermissions() && !user.isAuthorized("essentials.worlds." + requester.getWorld().getName())))) {
+        if (!request.isHere() && (!requester.isAuthorized("essentials.tpa") || (user.getWorld() != requester.getWorld() && ess.getSettings().isWorldTeleportPermissions() && !user.isAuthorized("essentials.worlds." + requester.getWorld().getName())))) {
             throw new Exception(tl("noPendingRequest"));
         }
 
@@ -97,8 +97,8 @@ public class Commandtpaccept extends EssentialsCommand {
             user.sendMessage(tl("pendingTeleportCancelled"));
             return false;
         });
-        if (token.isHere()) {
-            final Location loc = token.getLocation();
+        if (request.isHere()) {
+            final Location loc = request.getLocation();
             final AsyncTeleport teleport = requester.getAsyncTeleport();
             teleport.setTpType(AsyncTeleport.TeleportType.TPA);
             future.thenAccept(success -> {
@@ -112,6 +112,6 @@ public class Commandtpaccept extends EssentialsCommand {
             teleport.setTpType(AsyncTeleport.TeleportType.TPA);
             teleport.teleport(user.getBase(), charge, TeleportCause.COMMAND, future);
         }
-        user.removeTpaRequest(token.getName());
+        user.removeTpaRequest(request.getName());
     }
 }
