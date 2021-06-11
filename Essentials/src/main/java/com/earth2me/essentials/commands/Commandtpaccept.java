@@ -4,6 +4,8 @@ import com.earth2me.essentials.AsyncTeleport;
 import com.earth2me.essentials.IUser;
 import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.User;
+import net.essentialsx.api.v2.events.TeleportRequestAcceptEvent;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Server;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
@@ -87,6 +89,15 @@ public class Commandtpaccept extends EssentialsCommand {
 
         if (!request.isHere() && (!requester.isAuthorized("essentials.tpa") || (user.getWorld() != requester.getWorld() && ess.getSettings().isWorldTeleportPermissions() && !user.isAuthorized("essentials.worlds." + requester.getWorld().getName())))) {
             throw new Exception(tl("noPendingRequest"));
+        }
+
+        final TeleportRequestAcceptEvent event = new TeleportRequestAcceptEvent(user, requester, request);
+        Bukkit.getPluginManager().callEvent(event);
+        if (event.isCancelled()) {
+            if (ess.getSettings().isDebug()) {
+                logger.info("TPA accept canceled by api for " + user.getName());
+            }
+            return;
         }
 
         final Trade charge = new Trade(this.getName(), ess);
