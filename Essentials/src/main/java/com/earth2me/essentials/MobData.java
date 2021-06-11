@@ -3,10 +3,12 @@ package com.earth2me.essentials;
 import com.earth2me.essentials.craftbukkit.InventoryWorkaround;
 import com.earth2me.essentials.utils.EnumUtil;
 import com.earth2me.essentials.utils.StringUtil;
+import com.earth2me.essentials.utils.VersionUtil;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Ageable;
 import org.bukkit.entity.Axolotl;
+import org.bukkit.entity.ChestedHorse;
 import org.bukkit.entity.Creeper;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
@@ -274,6 +276,12 @@ public enum MobData {
             ((Ageable) spawned).setAdult();
         } else if (this.value.equals(Data.BABY)) {
             ((Ageable) spawned).setBaby();
+        } else if (this.value.equals(Data.CHEST)) {
+            if (VersionUtil.getServerBukkitVersion().isHigherThanOrEqualTo(VersionUtil.v1_11_R01)) {
+                ((ChestedHorse) spawned).setCarryingChest(true);
+            } else {
+                ((Horse) spawned).setCarryingChest(true);
+            }
         } else if (this.value.equals(Data.ADULTZOMBIE)) {
             ((Zombie) spawned).setBaby(false);
         } else if (this.value.equals(Data.BABYZOMBIE)) {
