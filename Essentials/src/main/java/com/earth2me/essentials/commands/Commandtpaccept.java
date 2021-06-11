@@ -24,7 +24,7 @@ public class Commandtpaccept extends EssentialsCommand {
     public void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception {
         final boolean excludeOthers;
         if (args.length > 0) {
-            excludeOthers = args[0].startsWith("*") || args[0].equalsIgnoreCase("all");
+            excludeOthers = args[0].equals("*") || args[0].equalsIgnoreCase("all");
         } else {
             excludeOthers = false;
         }
