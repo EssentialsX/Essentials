@@ -1858,4 +1858,9 @@ public class Settings implements net.ess3.api.ISettings {
     public boolean isUpdateCheckEnabled() {
         return config.getBoolean("update-check", true);
     }
+
+    @Override
+    public boolean showZeroBaltop() {
+        return config.getBoolean("show-zero-baltop", true);
+    }
 }
