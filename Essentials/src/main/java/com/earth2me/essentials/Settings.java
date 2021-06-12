@@ -1860,7 +1860,7 @@ public class Settings implements net.ess3.api.ISettings {
     }
 
     @Override
-    public boolean showZeroTopBal() {
-        return config.getBoolean("show-zero-topbal", true);
+    public boolean showZeroBaltop() {
+        return config.getBoolean("show-zero-baltop", true);
     }
 }

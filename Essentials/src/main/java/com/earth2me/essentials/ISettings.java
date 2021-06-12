@@ -379,7 +379,7 @@ public interface ISettings extends IConf {
 
     boolean isUpdateCheckEnabled();
 
-    boolean showZeroTopBal();
+    boolean showZeroBaltop();
 
     enum KeepInvPolicy {
         KEEP,

@@ -781,9 +781,10 @@ minimum-pay-amount: 0.001
 # Enable this to block users who try to /pay another user which ignore them.
 pay-excludes-ignore-list: false
 
-# Show users with a balance of zero in /balacetop.
-# NOTE: This may not apply right away, run '/balancetop force' if it doesn't.
-show-zero-topbal: true
+# Whether or not users with a balance less than or equal to $0 should be shown in balance-top.
+# Setting to false will not show people with balances <= 0 in balance-top.
+# NOTE: After reloading the config, you must also run '/baltop force' for this to appear
+show-zero-baltop: true
 
 # The format of currency, excluding symbols. See currency-symbol-format-locale for symbol configuration.
 #
