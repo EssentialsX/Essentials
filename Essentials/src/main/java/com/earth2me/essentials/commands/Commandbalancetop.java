@@ -14,7 +14,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-//import java.math.BigDecimal;
 import java.util.concurrent.CompletableFuture;
 
 import static com.earth2me.essentials.I18n.tl;
