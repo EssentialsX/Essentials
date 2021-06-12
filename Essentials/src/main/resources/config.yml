@@ -5,7 +5,7 @@
 ############################################################
 
 # This is the config file for EssentialsX.
-# This config was generated for version ${full.version}.
+# This config was generated for version 2.19.0-dev+157-fa87c74.
 
 # If you want to use special characters in this document, such as accented letters, you MUST save the file as UTF-8, not ANSI.
 # If you receive an error when Essentials loads, ensure that:
@@ -780,6 +780,10 @@ minimum-pay-amount: 0.001
 
 # Enable this to block users who try to /pay another user which ignore them.
 pay-excludes-ignore-list: false
+
+# Show users with a balance of zero in /balacetop
+# NOTE: This only applies after a server restart or after running /balancetop force!
+show-zero-topbal: true
 
 # The format of currency, excluding symbols. See currency-symbol-format-locale for symbol configuration.
 #

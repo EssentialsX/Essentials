@@ -14,6 +14,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+//import java.math.BigDecimal;
 import java.util.concurrent.CompletableFuture;
 
 import static com.earth2me.essentials.I18n.tl;
@@ -103,7 +104,9 @@ public class Commandbalancetop extends EssentialsCommand {
                     newCache.getLines().add(tl("serverTotal", NumberUtil.displayCurrency(ess.getBalanceTop().getBalanceTopTotal(), ess)));
                     int pos = 1;
                     for (final Map.Entry<UUID, BalanceTop.Entry> entry : ess.getBalanceTop().getBalanceTopCache().entrySet()) {
-                        newCache.getLines().add(tl("balanceTopLine", pos, entry.getValue().getDisplayName(), NumberUtil.displayCurrency(entry.getValue().getBalance(), ess)));
+                        if (ess.getSettings().showZeroTopBal() || entry.getValue().getBalance().intValue() > 0) {
+                            newCache.getLines().add(tl("balanceTopLine", pos, entry.getValue().getDisplayName(), NumberUtil.displayCurrency(entry.getValue().getBalance(), ess)));
+                        }
                         pos++;
                     }
                     cache = newCache;
