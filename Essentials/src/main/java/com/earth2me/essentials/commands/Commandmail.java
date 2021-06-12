@@ -281,8 +281,6 @@ public class Commandmail extends EssentialsCommand {
             }
         } else if (args.length == 3 && args[0].equalsIgnoreCase("sendtemp") && user.isAuthorized("essentials.mail.sendtemp")) {
             return COMMON_DATE_DIFFS;
-        } else if ((args.length > 2 && args[0].equalsIgnoreCase("send") && user.isAuthorized("essentials.mail.send")) || (args.length > 1 && args[0].equalsIgnoreCase("sendall") && user.isAuthorized("essentials.mail.sendall"))) {
-            return null; // Use vanilla handler
         } else {
             return Collections.emptyList();
         }
