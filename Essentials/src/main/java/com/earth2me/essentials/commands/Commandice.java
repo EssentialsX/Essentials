@@ -8,6 +8,9 @@ import net.ess3.api.IUser;
 import net.ess3.api.MaxMoneyException;
 import org.bukkit.Server;
 
+import java.util.Collections;
+import java.util.List;
+
 import static com.earth2me.essentials.I18n.tl;
 
 public class Commandice extends EssentialsLoopCommand {
@@ -43,5 +46,14 @@ public class Commandice extends EssentialsLoopCommand {
     private void freezePlayer(final IUser user) {
         user.getBase().setFreezeTicks(user.getBase().getMaxFreezeTicks());
         user.sendMessage(tl("ice"));
+    }
+
+    @Override
+    protected List<String> getTabCompleteOptions(Server server, CommandSource sender, String commandLabel, String[] args) {
+        if (args.length == 1 && sender.isAuthorized("essentials.ice.others", ess)) {
+            return getPlayers(server, sender);
+        } else {
+            return Collections.emptyList();
+        }
     }
 }
