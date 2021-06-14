@@ -602,7 +602,7 @@ public class Settings implements net.ess3.api.ISettings {
     @Override
     public Map<String, Object> getListGroupConfig() {
         final CommentedConfigurationNode node = config.getSection("list");
-        if (node.isMap()) {
+        if (node != null && node.isMap()) {
             final Map<String, Object> values = ConfigurateUtil.getRawMap(node);
             if (!values.isEmpty()) {
                 return values;
