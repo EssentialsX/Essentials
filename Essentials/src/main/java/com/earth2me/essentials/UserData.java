@@ -156,7 +156,8 @@ public abstract class UserData extends PlayerExtension implements IConf {
 
     public Location getHome(final String name) throws Exception {
         final String search = getHomeName(name);
-        return holder.homes().get(search).location();
+        final LazyLocation loc = holder.homes().get(search);
+        return loc != null ? loc.location() : null;
     }
 
     public Location getHome(final Location world) {
