@@ -25,7 +25,7 @@ public class BalanceTopImpl implements BalanceTop {
         ess.getServer().getServicesManager().register(BalanceTop.class, this, ess, ServicePriority.Normal);
     }
 
-    private void calculateBalanceTopMap() {
+    private void calculateBalanceTopMap(boolean withZeroBalanced) {
         final List<Entry> entries = new LinkedList<>();
         BigDecimal newTotal = BigDecimal.ZERO;
         for (UUID u : ess.getUserMap().getAllUniqueUsers()) {
@@ -35,8 +35,11 @@ public class BalanceTopImpl implements BalanceTop {
                     // Don't list NPCs in output
                     continue;
                 }
-                if (!user.isBaltopExempt()) {
-                    final BigDecimal userMoney = user.getMoney();
+                if (user.isBaltopExempt()) {
+                    continue;
+                }
+                final BigDecimal userMoney = user.getMoney();
+                if (withZeroBalanced || userMoney.compareTo(BigDecimal.ZERO) > 0) {
                     user.updateMoneyCache(userMoney);
                     newTotal = newTotal.add(userMoney);
                     final String name = user.isHidden() ? user.getName() : user.getDisplayName();
@@ -57,13 +60,18 @@ public class BalanceTopImpl implements BalanceTop {
     }
 
     @Override
-    public CompletableFuture<Void> calculateBalanceTopMapAsync() {
+    public CompletableFuture<Void> calculateBalanceTopMapAsync(boolean withZeroBalanced) {
         if (cacheLock != null) {
             return cacheLock;
         }
         cacheLock = new CompletableFuture<>();
-        ess.runTaskAsynchronously(this::calculateBalanceTopMap);
+        ess.runTaskAsynchronously(() -> calculateBalanceTopMap(withZeroBalanced));
         return cacheLock;
+    }
+
+    @Override
+    public CompletableFuture<Void> calculateBalanceTopMapAsync() {
+        return calculateBalanceTopMapAsync(true);
     }
 
     @Override

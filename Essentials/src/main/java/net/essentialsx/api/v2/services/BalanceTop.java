@@ -24,6 +24,19 @@ public interface BalanceTop {
     CompletableFuture<Void> calculateBalanceTopMapAsync();
 
     /**
+     * Re-calculates the balance top cache asynchronously.
+     * <p>
+     * This method will return a {@link CompletableFuture CompletableFuture&lt;Void&gt;} which
+     * will be completed upon the recalculation of the balance top map.
+     * After which you should run {@link BalanceTop#getBalanceTopCache()}
+     * to get the newly updated cache
+     *
+     * @param withZeroBalanced Whether to count players with a balance equal to or less than zero.
+     * @return A future which completes after the balance top cache has been calculated.
+     */
+    CompletableFuture<Void> calculateBalanceTopMapAsync(boolean withZeroBalanced);
+
+    /**
      * Gets the balance top cache or an empty list if one has not been calculated yet. The balance top cache is a {@link Map}
      * which maps the UUID of the player to a {@link BalanceTop.Entry} object which stores the user's display name and balance.
      * The returned map is sorted by greatest to least wealth.
