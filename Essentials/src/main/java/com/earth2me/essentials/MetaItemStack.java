@@ -220,7 +220,7 @@ public class MetaItemStack {
             } else {
                 throw new Exception(tl("onlyPlayerSkulls"));
             }
-        } else if (split.length > 1 && split[0].equalsIgnoreCase("book") && stack.getType() == WRITTEN_BOOK && (hasMetaPermission(sender, "book", true, true, ess) || hasMetaPermission(sender, "chapter-" + split[1].toLowerCase(Locale.ENGLISH), true, true, ess))) {
+        } else if (split.length > 1 && split[0].equalsIgnoreCase("book") && MaterialUtil.isEditableBook(stack.getType()) && (hasMetaPermission(sender, "book",true, true, ess) || hasMetaPermission(sender, "chapter-" + split[1].toLowerCase(Locale.ENGLISH), true, true, ess))) {
             final BookMeta meta = (BookMeta) stack.getItemMeta();
             final IText input = new BookInput("book", true, ess);
             final BookPager pager = new BookPager(input);
@@ -238,6 +238,23 @@ public class MetaItemStack {
             final BookMeta meta = (BookMeta) stack.getItemMeta();
             meta.setTitle(title);
             stack.setItemMeta(meta);
+        } else if (split.length > 1 && split[0].startsWith("page") && split[0].length() > 4 && MaterialUtil.isEditableBook(stack.getType()) && hasMetaPermission(sender, "page", false, true, ess)) {
+            final int page = NumberUtil.isInt(split[0].substring(4)) ? (Integer.parseInt(split[0].substring(4)) - 1) : 0;
+            final BookMeta meta = (BookMeta) stack.getItemMeta();
+            final List<String> pages = meta.hasPages() ? new ArrayList<>(meta.getPages()) : new ArrayList<>();
+            final List<String> lines = new ArrayList<>();
+            for (final String line : split[1].split("(?<!\\\\)\\|")) {
+                lines.add(FormatUtil.replaceFormat(line.replace('_', ' ').replace("\\|", "|")));
+            }
+            final String content = String.join("\n", lines);
+            if (page >= pages.size()) {
+                for (int i = 0; i <= page - pages.size(); i++) {
+                    pages.add("");
+                }
+            }
+            pages.set(page, content);
+            meta.setPages(pages);
+            stack.setItemMeta(meta);
         } else if (split.length > 1 && split[0].equalsIgnoreCase("power") && MaterialUtil.isFirework(stack.getType()) && hasMetaPermission(sender, "firework-power", false, true, ess)) {
             final int power = NumberUtil.isInt(split[1]) ? Integer.parseInt(split[1]) : 0;
             final FireworkMeta meta = (FireworkMeta) stack.getItemMeta();
@@ -246,22 +263,27 @@ public class MetaItemStack {
         } else if (split.length > 1 && split[0].equalsIgnoreCase("itemflags") && hasMetaPermission(sender, "itemflags", false, true, ess)) {
             addItemFlags(string);
         } else if (MaterialUtil.isFirework(stack.getType())) {
-            //WARNING - Meta for fireworks will be ignored after this point.
-            addFireworkMeta(sender, false, string, ess);
+            if (!parseEnchantmentStrings(sender, allowUnsafe, split, ess)) {
+                //WARNING - Meta for fireworks will be ignored after this point.
+                addFireworkMeta(sender, false, string, ess);
+            }
         } else if (MaterialUtil.isFireworkCharge(stack.getType())) {
-            addChargeMeta(sender, false, string, ess);
+            if (!parseEnchantmentStrings(sender, allowUnsafe, split, ess)) {
+                //WARNING - Meta for fireworks will be ignored after this point.
+                addChargeMeta(sender, false, string, ess);
+            }
         } else if (MaterialUtil.isPotion(stack.getType())) {
-            //WARNING - Meta for potions will be ignored after this point.
-            addPotionMeta(sender, false, string, ess);
+            if (split[0].equalsIgnoreCase("power") || !parseEnchantmentStrings(sender, allowUnsafe, split, ess)) {
+                //WARNING - Meta for potions will be ignored after this point.
+                addPotionMeta(sender, false, string, ess);
+            }
         } else if (MaterialUtil.isBanner(stack.getType())) {
-            if (stack.getType().toString().equals("SHIELD") && Enchantments.getByName(split[0]) != null) {
-                parseEnchantmentStrings(sender, allowUnsafe, split, ess);
-            } else {
+            if (!parseEnchantmentStrings(sender, allowUnsafe, split, ess)) {
                 //WARNING - Meta for banners will be ignored after this point.
                 addBannerMeta(sender, false, string, ess);
             }
         } else if (split.length > 1 && (split[0].equalsIgnoreCase("color") || split[0].equalsIgnoreCase("colour")) && MaterialUtil.isLeatherArmor(stack.getType())) {
-            final String[] color = split[1].split("(\\||,)");
+            final String[] color = split[1].split("[|,]");
             if (color.length == 1 && (NumberUtil.isInt(color[0]) || color[0].startsWith("#"))) {
                 // Either integer or hexadecimal
                 final LeatherArmorMeta meta = (LeatherArmorMeta) stack.getItemMeta();
@@ -523,25 +545,27 @@ public class MetaItemStack {
         }
     }
 
-    private void parseEnchantmentStrings(final CommandSource sender, final boolean allowUnsafe, final String[] split, final IEssentials ess) throws Exception {
+    private boolean parseEnchantmentStrings(final CommandSource sender, final boolean allowUnsafe, final String[] split, final IEssentials ess) throws Exception {
         final Enchantment enchantment = Enchantments.getByName(split[0]);
-        if (enchantment == null || !hasMetaPermission(sender, "enchantments." + enchantment.getName().toLowerCase(Locale.ENGLISH), false, false, ess)) {
-            return;
+        if (enchantment == null) {
+            return false;
         }
-
-        int level = -1;
-        if (split.length > 1) {
-            try {
-                level = Integer.parseInt(split[1]);
-            } catch (final NumberFormatException ex) {
-                level = -1;
+        if (hasMetaPermission(sender, "enchantments." + enchantment.getName().toLowerCase(Locale.ENGLISH), false, false, ess)) {
+            int level = -1;
+            if (split.length > 1) {
+                try {
+                    level = Integer.parseInt(split[1]);
+                } catch (final NumberFormatException ex) {
+                    level = -1;
+                }
             }
-        }
 
-        if (level < 0 || (!allowUnsafe && level > enchantment.getMaxLevel())) {
-            level = enchantment.getMaxLevel();
+            if (level < 0 || (!allowUnsafe && level > enchantment.getMaxLevel())) {
+                level = enchantment.getMaxLevel();
+            }
+            addEnchantment(sender, allowUnsafe, enchantment, level);
         }
-        addEnchantment(sender, allowUnsafe, enchantment, level);
+        return true;
     }
 
     public void addEnchantment(final CommandSource sender, final boolean allowUnsafe, final Enchantment enchantment, final int level) throws Exception {

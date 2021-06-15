@@ -5,7 +5,7 @@ import com.earth2me.essentials.api.UserDoesNotExistException;
 import com.earth2me.essentials.commands.IEssentialsCommand;
 import com.earth2me.essentials.commands.NoChargeException;
 import net.ess3.api.Economy;
-import org.bukkit.World.Environment;
+import net.ess3.api.MaxMoneyException;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.InvalidDescriptionException;
 import org.junit.Assert;
@@ -21,8 +21,7 @@ public class EconomyTest {
     private final FakeServer server;
 
     public EconomyTest() {
-        this.server = new FakeServer();
-        server.createWorld("testWorld", Environment.NORMAL);
+        this.server = FakeServer.getServer();
         ess = new Essentials(server);
         try {
             ess.setupForTesting(server);
@@ -66,7 +65,7 @@ public class EconomyTest {
             Assert.assertEquals("Divide money", 5.0, Economy.getMoney(PLAYERNAME), 0);
             Economy.setMoney(PLAYERNAME, 10.0);
             Assert.assertEquals("Set money", 10.0, Economy.getMoney(PLAYERNAME), 0);
-        } catch (final NoLoanPermittedException | UserDoesNotExistException ex) {
+        } catch (final NoLoanPermittedException | UserDoesNotExistException | MaxMoneyException ex) {
             Assert.fail(ex.getMessage());
         }
 
@@ -84,7 +83,7 @@ public class EconomyTest {
             Assert.assertEquals("Reset balance", 0.0, Economy.getMoney(PLAYERNAME), 0);
             Economy.subtract(PLAYERNAME, 5.0);
             Assert.fail("Did not throw exception");
-        } catch (final NoLoanPermittedException ignored) {
+        } catch (final NoLoanPermittedException | MaxMoneyException ignored) {
         } catch (final UserDoesNotExistException ex) {
             Assert.fail(ex.getMessage());
         }
@@ -92,7 +91,7 @@ public class EconomyTest {
         try {
             Economy.resetBalance("UnknownPlayer");
             Assert.fail("Did not throw exception");
-        } catch (final NoLoanPermittedException ex) {
+        } catch (final NoLoanPermittedException | MaxMoneyException ex) {
             Assert.fail(ex.getMessage());
         } catch (final UserDoesNotExistException ignored) {
         }

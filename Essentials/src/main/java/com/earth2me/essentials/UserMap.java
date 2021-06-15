@@ -1,5 +1,6 @@
 package com.earth2me.essentials;
 
+import com.earth2me.essentials.api.UserDoesNotExistException;
 import com.earth2me.essentials.utils.StringUtil;
 import com.google.common.base.Charsets;
 import com.google.common.cache.Cache;
@@ -8,6 +9,7 @@ import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import com.google.common.util.concurrent.UncheckedExecutionException;
 import net.ess3.api.IEssentials;
+import net.ess3.api.MaxMoneyException;
 import org.bukkit.entity.Player;
 
 import java.io.File;
@@ -130,7 +132,7 @@ public class UserMap extends CacheLoader<String, User> implements IConf {
                 if (!names.containsKey(keyName)) {
                     names.put(keyName, uuid);
                     uuidMap.writeUUIDMap();
-                } else if (!names.get(keyName).equals(uuid)) {
+                } else if (!isUUIDMatch(uuid, keyName)) {
                     if (replace) {
                         ess.getLogger().info("Found new UUID for " + name + ". Replacing " + names.get(keyName).toString() + " with " + uuid.toString());
                         names.put(keyName, uuid);
@@ -141,6 +143,10 @@ public class UserMap extends CacheLoader<String, User> implements IConf {
                 }
             }
         }
+    }
+
+    public boolean isUUIDMatch(final UUID uuid, final String name) {
+        return names.containsKey(name) && names.get(name).equals(uuid);
     }
 
     @Override
@@ -166,6 +172,50 @@ public class UserMap extends CacheLoader<String, User> implements IConf {
         throw new Exception("User not found!");
     }
 
+    public User load(final org.bukkit.OfflinePlayer player) throws UserDoesNotExistException {
+        if (player == null) {
+            throw new IllegalArgumentException("Player cannot be null!");
+        }
+
+        if (player instanceof Player) {
+            if (ess.getSettings().isDebug()) {
+                ess.getLogger().info("Loading online OfflinePlayer into user map...");
+            }
+            final User user = new User((Player) player, ess);
+            trackUUID(player.getUniqueId(), player.getName(), true);
+            return user;
+        }
+
+        final File userFile = getUserFileFromID(player.getUniqueId());
+        if (ess.getSettings().isDebug()) {
+            ess.getLogger().info("Loading OfflinePlayer into user map. Has data: " + userFile.exists() + " for " + player);
+        }
+
+        final OfflinePlayer essPlayer = new OfflinePlayer(player.getUniqueId(), ess.getServer());
+        final User user = new User(essPlayer, ess);
+        if (userFile.exists()) {
+            essPlayer.setName(user.getLastAccountName());
+        } else {
+            if (ess.getSettings().isDebug()) {
+                ess.getLogger().info("OfflinePlayer usermap load saving user data for " + player);
+            }
+
+            // this code makes me sad
+            user.startTransaction();
+            try {
+                user.setMoney(ess.getSettings().getStartingBalance());
+            } catch (MaxMoneyException e) {
+                // Shouldn't happen as it would be an illegal configuration state
+                throw new RuntimeException(e);
+            }
+            user.setLastAccountName(user.getName());
+            user.stopTransaction();
+        }
+
+        trackUUID(player.getUniqueId(), user.getName(), false);
+        return user;
+    }
+
     @Override
     public void reloadConfig() {
         getUUIDMap().forceWriteUUIDMap();
@@ -188,6 +238,10 @@ public class UserMap extends CacheLoader<String, User> implements IConf {
         }
         names.remove(name);
         names.remove(StringUtil.safeString(name));
+    }
+
+    public void removeUserUUID(final String uuid) {
+        users.invalidate(uuid);
     }
 
     public Set<UUID> getAllUniqueUsers() {

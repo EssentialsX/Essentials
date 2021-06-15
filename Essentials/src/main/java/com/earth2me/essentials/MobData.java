@@ -95,11 +95,13 @@ public enum MobData {
     ALL_BLACK_CAT("allblack", MobCompat.CAT, MobCompat.CatType.BLACK, true),
     BABY_ZOMBIE("baby", EntityType.ZOMBIE.getEntityClass(), Data.BABYZOMBIE, true),
     ADULT_ZOMBIE("adult", EntityType.ZOMBIE.getEntityClass(), Data.ADULTZOMBIE, true),
+    NETHERITE_SWORD_ZOMBIE("netheritesword", EntityType.ZOMBIE.getEntityClass(), EnumUtil.getMaterial("NETHERITE_SWORD"), true),
     DIAMOND_SWORD_ZOMBIE("diamondsword", EntityType.ZOMBIE.getEntityClass(), Material.DIAMOND_SWORD, true),
     GOLD_SWORD_ZOMBIE("goldsword", EntityType.ZOMBIE.getEntityClass(), EnumUtil.getMaterial("GOLDEN_SWORD", "GOLD_SWORD"), true),
     IRON_SWORD_ZOMBIE("ironsword", EntityType.ZOMBIE.getEntityClass(), Material.IRON_SWORD, true),
     STONE_SWORD_ZOMBIE("stonesword", EntityType.ZOMBIE.getEntityClass(), Material.STONE_SWORD, false),
     SWORD_ZOMBIE("sword", EntityType.ZOMBIE.getEntityClass(), Material.STONE_SWORD, true),
+    NETHERITE_SWORD_SKELETON("netheritesword", EntityType.SKELETON, EnumUtil.getMaterial("NETHERITE_SWORD"), true),
     DIAMOND_SWORD_SKELETON("diamondsword", EntityType.SKELETON, Material.DIAMOND_SWORD, true),
     GOLD_SWORD_SKELETON("goldsword", EntityType.SKELETON, EnumUtil.getMaterial("GOLDEN_SWORD", "GOLD_SWORD"), true),
     IRON_SWORD_SKELETON("ironsword", EntityType.SKELETON, Material.IRON_SWORD, true),
@@ -258,6 +260,10 @@ public enum MobData {
     }
 
     public void setData(final Entity spawned, final Player target, final String rawData) throws Exception {
+        if (value == null) {
+            return;
+        }
+
         if (this.value.equals(Data.ANGRY)) {
             ((Wolf) spawned).setAngry(true);
         } else if (this.value.equals(Data.ADULT)) {

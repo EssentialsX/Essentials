@@ -152,6 +152,7 @@ public class FlatItemDb extends AbstractItemDb {
         final EntityType entity = data.getEntity();
         if (entity != null && material.toString().contains("SPAWNER")) {
             ess.getSpawnerItemProvider().setEntityType(stack, entity);
+            ess.getPersistentDataProvider().set(stack, "convert", "true");
         }
 
         return stack;

@@ -85,6 +85,9 @@ class EssentialsSpawnPlayerListener implements Listener {
                 if (ess.getSettings().isUserInSpawnOnJoinGroup(user) && !user.isAuthorized("essentials.spawn-on-join.exempt")) {
                     ess.scheduleSyncDelayedTask(() -> {
                         final Location spawn = spawns.getSpawn(user.getGroup());
+                        if (spawn == null) {
+                            return;
+                        }
                         final CompletableFuture<Boolean> future = new CompletableFuture<>();
                         future.exceptionally(e -> {
                             ess.showError(user.getSource(), e, "spawn-on-join");
