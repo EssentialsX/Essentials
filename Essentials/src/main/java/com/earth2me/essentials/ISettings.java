@@ -44,7 +44,7 @@ public interface ISettings extends IConf {
     char getChatQuestion();
 
     @Deprecated
-    ConfigurationSection getCommandCosts();
+    Map<String, BigDecimal> getCommandCosts();
 
     @Deprecated
     BigDecimal getCommandCost(IEssentialsCommand cmd);
@@ -318,7 +318,7 @@ public interface ISettings extends IConf {
     boolean isWorldChangeSpeedResetEnabled();
 
     @Deprecated
-    ConfigurationSection getCommandCooldowns();
+    CommentedConfigurationNode getCommandCooldowns();
 
     @Deprecated
     long getCommandCooldownMs(String label);

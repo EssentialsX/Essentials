@@ -1492,11 +1492,8 @@ public class Settings implements net.ess3.api.ISettings {
     }
 
     @Override
-    public ConfigurationSection getCommandCooldowns() {
-        if (config.isConfigurationSection("command-cooldowns")) {
-            return config.getConfigurationSection("command-cooldowns");
-        }
-        return null;
+    public CommentedConfigurationNode getCommandCooldowns() {
+        return config.getSection("command-cooldowns");
     }
 
     private Map<Pattern, Long> _getCommandCooldowns() {

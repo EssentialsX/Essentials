@@ -24,6 +24,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.security.DigestInputStream;
 import java.security.MessageDigest;
@@ -287,14 +288,14 @@ public class EssentialsUpgrade {
 
         LOGGER.info("Attempting to convert old command-cooldowns and -costs in config.yml to new command-filters.yml");
 
-        final ConfigurationSection commandCooldowns = ess.getSettings().getCommandCooldowns();
+        final CommentedConfigurationNode commandCooldowns = ess.getSettings().getCommandCooldowns();
         if (commandCooldowns != null) {
             convertCommandCooldowns(commandCooldowns, config);
         } else {
             LOGGER.info("No command cooldowns found to migrate.");
         }
 
-        final ConfigurationSection commandCosts = ess.getSettings().getCommandCosts();
+        final Map<String, BigDecimal> commandCosts = ess.getSettings().getCommandCosts();
         if (commandCosts != null) {
             convertCommandCosts(commandCosts, config);
         } else {
@@ -307,9 +308,9 @@ public class EssentialsUpgrade {
         LOGGER.info("Done converting command filters.");
     }
 
-    private void convertCommandCooldowns(ConfigurationSection commandCooldowns, EssentialsConf config) {
+    private void convertCommandCooldowns(CommentedConfigurationNode commandCooldowns, EssentialsConf config) {
         final boolean persistent = ess.getSettings().isCommandCooldownPersistent("dummy");
-        for (Map.Entry<String, Object> entry : commandCooldowns.getValues(false).entrySet()) {
+        for (Map.Entry<String, Object> entry : ConfigurateUtil.getRawMap(commandCooldowns).entrySet()) {
             LOGGER.info("Converting cooldown \"" + entry.getKey() + "\"");
 
             final String key = entry.getKey().replace("\\.", "{dot}"); // Convert periods
@@ -319,12 +320,12 @@ public class EssentialsUpgrade {
         }
     }
 
-    private void convertCommandCosts(ConfigurationSection commandCosts, EssentialsConf config) {
-        for (Map.Entry<String, Object> entry : commandCosts.getValues(false).entrySet()) {
+    private void convertCommandCosts(Map<String, BigDecimal> commandCosts, EssentialsConf config) {
+        for (Map.Entry<String, BigDecimal> entry : commandCosts.entrySet()) {
             LOGGER.info("Converting cost \"" + entry.getKey() + "\"");
 
             config.set("filters." + entry.getKey() + ".command", entry.getKey());
-            config.set("filters." + entry.getKey() + ".cost", entry.getValue());
+            config.set("filters." + entry.getKey() + ".cost", entry.getValue().toString());
         }
     }
 
