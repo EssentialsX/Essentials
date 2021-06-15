@@ -47,7 +47,16 @@ public final class ReflUtil {
 
     public static NMSVersion getNmsVersionObject() {
         if (nmsVersionObject == null) {
-            nmsVersionObject = NMSVersion.fromString(getNMSVersion());
+            try {
+                nmsVersionObject = NMSVersion.fromString(getNMSVersion());
+            } catch (final IllegalArgumentException e) {
+                try {
+                    Class.forName("org.bukkit.craftbukkit.CraftServer");
+                    nmsVersionObject = new NMSVersion(99, 99, 99); // Mojang Dev Mappings
+                } catch (final ClassNotFoundException ignored) {
+                    throw e;
+                }
+            }
         }
         return nmsVersionObject;
     }
@@ -57,7 +66,7 @@ public final class ReflUtil {
     }
 
     public static Class<?> getOBCClass(final String className) {
-        return getClassCached("org.bukkit.craftbukkit." + getNMSVersion() + "." + className);
+        return getClassCached("org.bukkit.craftbukkit" + (getNmsVersionObject().getMajor() == 99 ? "" : ("." + getNMSVersion())) + "." + className);
     }
 
     public static Class<?> getClassCached(final String className) {
