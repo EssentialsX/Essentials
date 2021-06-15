@@ -1,7 +1,5 @@
 package com.earth2me.essentials.config.serializers;
 
-import org.checkerframework.checker.nullness.qual.Nullable;
-import org.spongepowered.configurate.ConfigurationOptions;
 import org.spongepowered.configurate.serialize.ScalarSerializer;
 import org.spongepowered.configurate.serialize.SerializationException;
 
@@ -52,10 +50,5 @@ public class BigDecimalTypeSerializer extends ScalarSerializer<BigDecimal> {
     @Override
     protected Object serialize(BigDecimal item, Predicate<Class<?>> typeSupported) {
         return item.toString();
-    }
-
-    @Override
-    public @Nullable BigDecimal emptyValue(Type specificType, ConfigurationOptions options) {
-        return BigDecimal.ZERO;
     }
 }
