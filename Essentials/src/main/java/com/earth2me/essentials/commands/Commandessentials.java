@@ -12,9 +12,12 @@ import com.earth2me.essentials.utils.VersionUtil;
 import com.google.common.base.Charsets;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.Server;
 import org.bukkit.Sound;
+import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginDescriptionFile;
@@ -29,6 +32,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 import static com.earth2me.essentials.I18n.tl;
 
@@ -107,6 +111,9 @@ public class Commandessentials extends EssentialsCommand {
             case "cleanup":
                 runCleanup(server, sender, commandLabel, args);
                 break;
+            case "homecleanup":
+                runHomeCleanup(server, sender, commandLabel, args);
+                break;
             case "uuidconvert":
                 runUUIDConvert(server, sender, commandLabel, args);
                 break;
@@ -130,7 +137,7 @@ public class Commandessentials extends EssentialsCommand {
 
     // Displays the command's usage.
     private void showUsage(final CommandSource sender) throws Exception {
-        throw new NotEnoughArgumentsException("/<command> <reload/debug/commands>");
+        throw new NotEnoughArgumentsException("/<command> <commands/cleanup/debug/homecleanup/reload/reset/version>");
     }
 
     // Lists commands that are being handed over to other plugins.
@@ -253,7 +260,78 @@ public class Commandessentials extends EssentialsCommand {
             }
             sender.sendMessage(tl("cleaned"));
         });
+    }
 
+    private void runHomeCleanup(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception {
+        if (args.length < 2) {
+            sender.sendMessage("This sub-command will permanently delete all homes in non-existent/unloaded worlds, or inside a specified world");
+            sender.sendMessage("Use \"invalid\" to delete homes inside non-existent/unloaded worlds.");
+            sender.sendMessage("Use \"world <worldname>\" to delete homes inside a specific world.");
+            throw new Exception("/<command> homecleanup (invalid | world <world>)");
+        }
+
+        final UserMap userMap = ess.getUserMap();
+        final String method = args[1];
+
+        switch (method) {
+            case "invalid":
+                sender.sendMessage(tl("cleaningInvalidHomes"));
+                ess.runTaskAsynchronously(() -> {
+                    for (final UUID u : userMap.getAllUniqueUsers()) {
+                        final User user = ess.getUserMap().getUser(u);
+                        if (user == null) {
+                            continue;
+                        }
+                        for (String homeName : user.getHomes()) {
+                            try {
+                                if (user.getHome(homeName) == null) {
+                                    user.delHome(homeName);
+                                }
+                            } catch (Exception e) {
+                                ess.getLogger().info("Unable to delete home " + homeName + " for " + user.getName());
+                            }
+                        }
+                    }
+                    sender.sendMessage(tl("cleanedInvalidHomes"));
+                });
+                break;
+            case "world":
+                if (args.length < 3) {
+                    sender.sendMessage("Provide a world name to delete homes inside a specific world.");
+                    throw new Exception("/<command> homecleanup (invalid | world <world>)");
+                }
+
+                final String worldName = args[2];
+                if (Bukkit.getWorld(worldName) == null) {
+                    sender.sendMessage("The world \"" + worldName + "\" does not exist.");
+                    throw new Exception("/<command> homecleanup (invalid | world <world>)");
+                }
+
+                sender.sendMessage(tl("cleaningWorldHomes", worldName));
+                ess.runTaskAsynchronously(() -> {
+                    for (final UUID u : userMap.getAllUniqueUsers()) {
+                        final User user = ess.getUserMap().getUser(u);
+                        if (user == null) {
+                            continue;
+                        }
+                        for (String homeName : user.getHomes()) {
+                            try {
+                                final Location home = user.getHome(homeName);
+                                if (home != null && home.getWorld() != null && home.getWorld().getName().equals(worldName)) {
+                                    user.delHome(homeName);
+                                }
+                            } catch (Exception e) {
+                                ess.getLogger().info("Unable to delete home " + homeName + " for " + user.getName());
+                            }
+                        }
+                    }
+                    sender.sendMessage(tl("cleanedWorldHomes", worldName));
+                });
+                break;
+            default:
+                sender.sendMessage("Invalid arguments.");
+                throw new Exception("/<command> homecleanup (invalid | world <world>)");
+        }
     }
 
     // Forces a rerun of userdata UUID conversion.
@@ -406,12 +484,13 @@ public class Commandessentials extends EssentialsCommand {
     protected List<String> getTabCompleteOptions(final Server server, final CommandSource sender, final String commandLabel, final String[] args) {
         if (args.length == 1) {
             final List<String> options = Lists.newArrayList();
-            options.add("debug");
             options.add("commands");
-            options.add("version");
+            options.add("cleanup");
+            options.add("debug");
+            options.add("homecleanup");
             options.add("reload");
             options.add("reset");
-            options.add("cleanup");
+            options.add("version");
             //options.add("uuidconvert");
             //options.add("uuidtest");
             //options.add("nya");
@@ -436,6 +515,13 @@ public class Commandessentials extends EssentialsCommand {
                     return COMMON_DURATIONS;
                 } else if (args.length == 3 || args.length == 4) {
                     return Lists.newArrayList("-1", "0");
+                }
+                break;
+            case "homecleanup":
+                if (args.length == 2) {
+                    return Lists.newArrayList("invalid", "world");
+                } else if (args.length == 3 && args[1].equalsIgnoreCase("world")) {
+                    return Bukkit.getWorlds().stream().map(World::getName).collect(Collectors.toList());
                 }
                 break;
             case "uuidconvert":
