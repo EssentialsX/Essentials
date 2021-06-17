@@ -12,7 +12,6 @@ import com.earth2me.essentials.utils.VersionUtil;
 import com.google.common.base.Charsets;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Server;
@@ -302,7 +301,7 @@ public class Commandessentials extends EssentialsCommand {
                 }
 
                 final String worldName = args[2];
-                if (Bukkit.getWorld(worldName) == null) {
+                if (server.getWorld(worldName) == null) {
                     sender.sendMessage("The world \"" + worldName + "\" does not exist.");
                     throw new Exception("/<command> homecleanup (invalid | world <world>)");
                 }
@@ -521,7 +520,7 @@ public class Commandessentials extends EssentialsCommand {
                 if (args.length == 2) {
                     return Lists.newArrayList("invalid", "world");
                 } else if (args.length == 3 && args[1].equalsIgnoreCase("world")) {
-                    return Bukkit.getWorlds().stream().map(World::getName).collect(Collectors.toList());
+                    return server.getWorlds().stream().map(World::getName).collect(Collectors.toList());
                 }
                 break;
             case "uuidconvert":
