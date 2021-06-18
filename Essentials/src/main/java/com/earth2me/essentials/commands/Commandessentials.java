@@ -41,7 +41,7 @@ public class Commandessentials extends EssentialsCommand {
     private static final Sound NOTE_HARP = EnumUtil.valueOf(Sound.class, "BLOCK_NOTE_BLOCK_HARP", "BLOCK_NOTE_HARP", "NOTE_PIANO");
     private static final Sound MOO_SOUND = EnumUtil.valueOf(Sound.class, "COW_IDLE", "ENTITY_COW_MILK");
 
-    private static final String HOMECLEANUP_USAGE = "/<command> homecleanup (all | invalid | world <world>)";
+    private static final String HOMES_USAGE = "/<command> homes (fix | delete [world])";
 
     private static final String NYAN_TUNE = "1D#,1E,2F#,,2A#,1E,1D#,1E,2F#,2B,2D#,2E,2D#,2A#,2B,,2F#,,1D#,1E,2F#,2B,2C#,2A#,2B,2C#,2E,2D#,2E,2C#,,2F#,,2G#,,1D,1D#,,1C#,1D,1C#,1B,,1B,,1C#,,1D,,1D,1C#,1B,1C#,1D#,2F#,2G#,1D#,2F#,1C#,1D#,1B,1C#,1B,1D#,,2F#,,2G#,1D#,2F#,1C#,1D#,1B,1D,1D#,1D,1C#,1B,1C#,1D,,1B,1C#,1D#,2F#,1C#,1D,1C#,1B,1C#,,1B,,1C#,,2F#,,2G#,,1D,1D#,,1C#,1D,1C#,1B,,1B,,1C#,,1D,,1D,1C#,1B,1C#,1D#,2F#,2G#,1D#,2F#,1C#,1D#,1B,1C#,1B,1D#,,2F#,,2G#,1D#,2F#,1C#,1D#,1B,1D,1D#,1D,1C#,1B,1C#,1D,,1B,1C#,1D#,2F#,1C#,1D,1C#,1B,1C#,,1B,,1B,,1B,,1F#,1G#,1B,,1F#,1G#,1B,1C#,1D#,1B,1E,1D#,1E,2F#,1B,,1B,,1F#,1G#,1B,1E,1D#,1C#,1B,,,,1F#,1B,,1F#,1G#,1B,,1F#,1G#,1B,1B,1C#,1D#,1B,1F#,1G#,1F#,1B,,1B,1A#,1B,1F#,1G#,1B,1E,1D#,1E,2F#,1B,,1A#,,1B,,1F#,1G#,1B,,1F#,1G#,1B,1C#,1D#,1B,1E,1D#,1E,2F#,1B,,1B,,1F#,1G#,1B,1F#,1E,1D#,1C#,1B,,,,1F#,1B,,1F#,1G#,1B,,1F#,1G#,1B,1B,1C#,1D#,1B,1F#,1G#,1F#,1B,,1B,1A#,1B,1F#,1G#,1B,1E,1D#,1E,2F#,1B,,1A#,,1B,,1F#,1G#,1B,,1F#,1G#,1B,1C#,1D#,1B,1E,1D#,1E,2F#,1B,,1B,,1F#,1G#,1B,1F#,1E,1D#,1C#,1B,,,,1F#,1B,,1F#,1G#,1B,,1F#,1G#,1B,1B,1C#,1D#,1B,1F#,1G#,1F#,1B,,1B,1A#,1B,1F#,1G#,1B,1E,1D#,1E,2F#,1B,,1A#,,1B,,1F#,1G#,1B,,1F#,1G#,1B,1C#,1D#,1B,1E,1D#,1E,2F#,1B,,1B,,1F#,1G#,1B,1F#,1E,1D#,1C#,1B,,,,1F#,1B,,1F#,1G#,1B,,1F#,1G#,1B,1B,1C#,1D#,1B,1F#,1G#,1F#,1B,,1B,1A#,1B,1F#,1G#,1B,1E,1D#,1E,2F#,1B,,1A#,,1B,,1F#,1G#,1B,,1F#,1G#,1B,1C#,1D#,1B,1E,1D#,1E,2F#,1B,,1B,,1F#,1G#,1B,1F#,1E,1D#,1C#,1B,,,,1F#,1B,,1F#,1G#,1B,,1F#,1G#,1B,1B,1C#,1D#,1B,1F#,1G#,1F#,1B,,1B,1A#,1B,1F#,1G#,1B,1E,1D#,1E,2F#,1B,,1B,,";
     private static final String[] CONSOLE_MOO = new String[] {"         (__)", "         (oo)", "   /------\\/", "  / |    ||", " *  /\\---/\\", "    ~~   ~~", "....\"Have you mooed today?\"..."};
@@ -112,14 +112,14 @@ public class Commandessentials extends EssentialsCommand {
             case "cleanup":
                 runCleanup(server, sender, commandLabel, args);
                 break;
-            case "homecleanup":
-                runHomeCleanup(server, sender, commandLabel, args);
-                break;
             case "uuidconvert":
                 runUUIDConvert(server, sender, commandLabel, args);
                 break;
             case "uuidtest":
                 runUUIDTest(server, sender, commandLabel, args);
+                break;
+            case "homes":
+                runHomes(server, sender, commandLabel, args);
                 break;
 
             // "#EasterEgg"
@@ -138,7 +138,7 @@ public class Commandessentials extends EssentialsCommand {
 
     // Displays the command's usage.
     private void showUsage(final CommandSource sender) throws Exception {
-        throw new NotEnoughArgumentsException("/<command> <commands/cleanup/debug/homecleanup/reload/reset/version>");
+        throw new NotEnoughArgumentsException("/<command> <commands/cleanup/debug/homes/reload/reset/version>");
     }
 
     // Lists commands that are being handed over to other plugins.
@@ -263,40 +263,19 @@ public class Commandessentials extends EssentialsCommand {
         });
     }
 
-    private void runHomeCleanup(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception {
+    private void runHomes(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception {
         if (args.length < 2) {
-            sender.sendMessage("This sub-command will permanently delete user homes based on a number of options:");
-            sender.sendMessage("Use \"all\" to delete all existing homes.");
-            sender.sendMessage("Use \"invalid\" to delete homes inside non-existent/unloaded worlds.");
-            sender.sendMessage("Use \"world <worldname>\" to delete homes inside a specific world.");
-            throw new Exception(HOMECLEANUP_USAGE);
+            sender.sendMessage("This sub-command provides a utility to mass-delete homes based on user options:");
+            sender.sendMessage("Use \"fix\" to delete all homes inside non-existent or unloaded worlds.");
+            sender.sendMessage("Use \"delete\" to delete all existing homes");
+            sender.sendMessage("Use \"delete <worldname>\" to delete all homes inside a specific world.");
+            throw new Exception(HOMES_USAGE);
         }
 
         final UserMap userMap = ess.getUserMap();
-        final String method = args[1];
-
-        switch (method) {
-            case "all":
-                sender.sendMessage(tl("cleaningAllHomes"));
-                ess.runTaskAsynchronously(() -> {
-                    for (final UUID u : userMap.getAllUniqueUsers()) {
-                        final User user = ess.getUserMap().getUser(u);
-                        if (user == null) {
-                            continue;
-                        }
-                        for (String homeName : user.getHomes()) {
-                            try {
-                                user.delHome(homeName);
-                            } catch (Exception e) {
-                                ess.getLogger().info("Unable to delete home " + homeName + " for " + user.getName());
-                            }
-                        }
-                    }
-                    sender.sendMessage(tl("cleanedAllHomes"));
-                });
-                break;
-            case "invalid":
-                sender.sendMessage(tl("cleaningInvalidHomes"));
+        switch (args[1]) {
+            case "fix":
+                sender.sendMessage(tl("fixingHomes"));
                 ess.runTaskAsynchronously(() -> {
                     for (final UUID u : userMap.getAllUniqueUsers()) {
                         final User user = ess.getUserMap().getUser(u);
@@ -313,22 +292,16 @@ public class Commandessentials extends EssentialsCommand {
                             }
                         }
                     }
-                    sender.sendMessage(tl("cleanedInvalidHomes"));
+                    sender.sendMessage(tl("fixedHomes"));
                 });
                 break;
-            case "world":
-                if (args.length < 3) {
-                    sender.sendMessage("Provide a world name to delete homes inside a specific world.");
-                    throw new Exception(HOMECLEANUP_USAGE);
+            case "delete":
+                final boolean filterByWorld = args.length >= 3;
+                if (filterByWorld && server.getWorld(args[2]) == null) {
+                    sender.sendMessage("The world \"" + args[2] + "\" does not exist.");
+                    throw new Exception(HOMES_USAGE);
                 }
-
-                final String worldName = args[2];
-                if (server.getWorld(worldName) == null) {
-                    sender.sendMessage("The world \"" + worldName + "\" does not exist.");
-                    throw new Exception(HOMECLEANUP_USAGE);
-                }
-
-                sender.sendMessage(tl("cleaningWorldHomes", worldName));
+                sender.sendMessage(filterByWorld ? tl("deletingHomesWorld", args[2]) : tl("deletingHomes"));
                 ess.runTaskAsynchronously(() -> {
                     for (final UUID u : userMap.getAllUniqueUsers()) {
                         final User user = ess.getUserMap().getUser(u);
@@ -338,7 +311,7 @@ public class Commandessentials extends EssentialsCommand {
                         for (String homeName : user.getHomes()) {
                             try {
                                 final Location home = user.getHome(homeName);
-                                if (home != null && home.getWorld() != null && home.getWorld().getName().equals(worldName)) {
+                                if (!filterByWorld || (home != null && home.getWorld() != null && home.getWorld().getName().equals(args[2]))) {
                                     user.delHome(homeName);
                                 }
                             } catch (Exception e) {
@@ -346,12 +319,12 @@ public class Commandessentials extends EssentialsCommand {
                             }
                         }
                     }
-                    sender.sendMessage(tl("cleanedWorldHomes", worldName));
+                    sender.sendMessage(filterByWorld ? tl("deletedHomesWorld", args[2]) : tl("deletedHomes"));
                 });
                 break;
             default:
                 sender.sendMessage("Invalid arguments.");
-                throw new Exception(HOMECLEANUP_USAGE);
+                throw new Exception(HOMES_USAGE);
         }
     }
 
@@ -508,7 +481,7 @@ public class Commandessentials extends EssentialsCommand {
             options.add("commands");
             options.add("cleanup");
             options.add("debug");
-            options.add("homecleanup");
+            options.add("homes");
             options.add("reload");
             options.add("reset");
             options.add("version");
@@ -538,10 +511,10 @@ public class Commandessentials extends EssentialsCommand {
                     return Lists.newArrayList("-1", "0");
                 }
                 break;
-            case "homecleanup":
+            case "homes":
                 if (args.length == 2) {
-                    return Lists.newArrayList("all", "invalid", "world");
-                } else if (args.length == 3 && args[1].equalsIgnoreCase("world")) {
+                    return Lists.newArrayList("fix", "delete");
+                } else if (args.length == 3 && args[1].equalsIgnoreCase("delete")) {
                     return server.getWorlds().stream().map(World::getName).collect(Collectors.toList());
                 }
                 break;
