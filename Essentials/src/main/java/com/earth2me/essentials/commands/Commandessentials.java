@@ -91,12 +91,10 @@ public class Commandessentials extends EssentialsCommand {
             case "verbose":
                 runDebug(server, sender, commandLabel, args);
                 break;
-
             case "ver":
             case "version":
                 runVersion(server, sender, commandLabel, args);
                 break;
-
             case "cmd":
             case "commands":
                 runCommands(server, sender, commandLabel, args);
@@ -112,14 +110,14 @@ public class Commandessentials extends EssentialsCommand {
             case "cleanup":
                 runCleanup(server, sender, commandLabel, args);
                 break;
+            case "homes":
+                runHomes(server, sender, commandLabel, args);
+                break;
             case "uuidconvert":
                 runUUIDConvert(server, sender, commandLabel, args);
                 break;
             case "uuidtest":
                 runUUIDTest(server, sender, commandLabel, args);
-                break;
-            case "homes":
-                runHomes(server, sender, commandLabel, args);
                 break;
 
             // "#EasterEgg"
@@ -138,7 +136,7 @@ public class Commandessentials extends EssentialsCommand {
 
     // Displays the command's usage.
     private void showUsage(final CommandSource sender) throws Exception {
-        throw new NotEnoughArgumentsException("/<command> <commands/cleanup/debug/homes/reload/reset/version>");
+        throw new NotEnoughArgumentsException();
     }
 
     // Lists commands that are being handed over to other plugins.
@@ -267,7 +265,7 @@ public class Commandessentials extends EssentialsCommand {
         if (args.length < 2) {
             sender.sendMessage("This sub-command provides a utility to mass-delete homes based on user options:");
             sender.sendMessage("Use \"fix\" to delete all homes inside non-existent or unloaded worlds.");
-            sender.sendMessage("Use \"delete\" to delete all existing homes");
+            sender.sendMessage("Use \"delete\" to delete all existing homes.");
             sender.sendMessage("Use \"delete <worldname>\" to delete all homes inside a specific world.");
             throw new Exception(HOMES_USAGE);
         }
@@ -298,8 +296,7 @@ public class Commandessentials extends EssentialsCommand {
             case "delete":
                 final boolean filterByWorld = args.length >= 3;
                 if (filterByWorld && server.getWorld(args[2]) == null) {
-                    sender.sendMessage("The world \"" + args[2] + "\" does not exist.");
-                    throw new Exception(HOMES_USAGE);
+                    throw new Exception(tl("invalidWorld"));
                 }
                 sender.sendMessage(filterByWorld ? tl("deletingHomesWorld", args[2]) : tl("deletingHomes"));
                 ess.runTaskAsynchronously(() -> {
@@ -323,7 +320,6 @@ public class Commandessentials extends EssentialsCommand {
                 });
                 break;
             default:
-                sender.sendMessage("Invalid arguments.");
                 throw new Exception(HOMES_USAGE);
         }
     }
@@ -478,13 +474,13 @@ public class Commandessentials extends EssentialsCommand {
     protected List<String> getTabCompleteOptions(final Server server, final CommandSource sender, final String commandLabel, final String[] args) {
         if (args.length == 1) {
             final List<String> options = Lists.newArrayList();
-            options.add("commands");
-            options.add("cleanup");
-            options.add("debug");
-            options.add("homes");
             options.add("reload");
-            options.add("reset");
             options.add("version");
+            options.add("commands");
+            options.add("debug");
+            options.add("reset");
+            options.add("cleanup");
+            options.add("homes");
             //options.add("uuidconvert");
             //options.add("uuidtest");
             //options.add("nya");
