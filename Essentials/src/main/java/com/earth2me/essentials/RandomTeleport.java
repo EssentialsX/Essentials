@@ -1,6 +1,7 @@
 package com.earth2me.essentials;
 
 import com.earth2me.essentials.config.EssentialsConfiguration;
+import com.earth2me.essentials.config.entities.LazyLocation;
 import com.earth2me.essentials.utils.LocationUtil;
 import com.earth2me.essentials.utils.VersionUtil;
 import io.papermc.lib.PaperLib;
@@ -40,9 +41,9 @@ public class RandomTeleport implements IConf {
 
     public Location getCenter() {
         try {
-            final Location center = config.getLocation("center").location();
-            if (center != null) {
-                return center;
+            final LazyLocation center = config.getLocation("center");
+            if (center != null && center.location() != null) {
+                return center.location();
             }
         } catch (final InvalidWorldException ignored) {
         }
