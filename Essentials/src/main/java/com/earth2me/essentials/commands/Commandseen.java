@@ -12,6 +12,7 @@ import org.bukkit.BanList;
 import org.bukkit.Location;
 import org.bukkit.Server;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -102,7 +103,12 @@ public class Commandseen extends EssentialsCommand {
 
         user.setDisplayNick();
         sender.sendMessage(tl("seenOnline", user.getDisplayName(), DateUtil.formatDateDiff(user.getLastLogin())));
-        sender.sendMessage(tl("whoisUuid", user.getBase().getUniqueId().toString()));
+        if (!sender.isPlayer() || ess.getUser(sender.getPlayer()).isAuthorized("essentials.seen.since")) {
+            sender.sendMessage(tl("whoisFirstSeen", DateUtil.formatDateDiff(user.getBase().getFirstPlayed()), new SimpleDateFormat("yyyy/MM/dd, HH:mm").format(user.getBase().getFirstPlayed())));
+        }
+        if (!sender.isPlayer() || ess.getUser(sender.getPlayer()).isAuthorized("essentials.seen.uuid")) {
+            sender.sendMessage(tl("whoisUuid", user.getBase().getUniqueId().toString()));
+        }
 
         final List<String> history = ess.getUserMap().getUserHistory(user.getBase().getUniqueId());
         if (history != null && history.size() > 1) {
@@ -136,7 +142,12 @@ public class Commandseen extends EssentialsCommand {
         user.setDisplayNick();
         if (user.getLastLogout() > 0) {
             sender.sendMessage(tl("seenOffline", user.getName(), DateUtil.formatDateDiff(user.getLastLogout())));
-            sender.sendMessage(tl("whoisUuid", user.getBase().getUniqueId()));
+            if (!sender.isPlayer() || ess.getUser(sender.getPlayer()).isAuthorized("essentials.seen.first")) {
+                sender.sendMessage(tl("whoisFirstSeen", DateUtil.formatDateDiff(user.getBase().getFirstPlayed()), new SimpleDateFormat("yyyy/MM/dd, HH:mm").format(user.getBase().getFirstPlayed())));
+            }
+            if (!sender.isPlayer() || ess.getUser(sender.getPlayer()).isAuthorized("essentials.seen.uuid")) {
+                sender.sendMessage(tl("whoisUuid", user.getBase().getUniqueId()));
+            }
         } else {
             sender.sendMessage(tl("userUnknown", user.getName()));
         }

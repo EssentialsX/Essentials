@@ -9,6 +9,7 @@ import com.earth2me.essentials.utils.NumberUtil;
 import org.bukkit.Server;
 import org.bukkit.Statistic;
 
+import java.text.SimpleDateFormat;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
@@ -40,6 +41,7 @@ public class Commandwhois extends EssentialsCommand {
         sender.sendMessage(tl("whoisHunger", user.getBase().getFoodLevel(), user.getBase().getSaturation()));
         sender.sendMessage(tl("whoisExp", SetExpFix.getTotalExperience(user.getBase()), user.getBase().getLevel()));
         sender.sendMessage(tl("whoisLocation", user.getLocation().getWorld().getName(), user.getLocation().getBlockX(), user.getLocation().getBlockY(), user.getLocation().getBlockZ()));
+        sender.sendMessage(tl("whoisFirstSeen", DateUtil.formatDateDiff(user.getBase().getFirstPlayed()), new SimpleDateFormat("yyyy/MM/dd, HH:mm").format(user.getBase().getFirstPlayed())));
         final long playtimeMs = System.currentTimeMillis() - (user.getBase().getStatistic(PLAY_ONE_TICK) * 50);
         sender.sendMessage(tl("whoisPlaytime", DateUtil.formatDateDiff(playtimeMs)));
         if (!ess.getSettings().isEcoDisabled()) {
