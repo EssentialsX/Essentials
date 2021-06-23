@@ -262,7 +262,8 @@ public abstract class UserData extends PlayerExtension implements IConf {
     }
 
     public Location getLastLocation() {
-        return holder.lastLocation().location();
+        final LazyLocation lastLocation = holder.lastLocation();
+        return lastLocation != null ? lastLocation.location() : null;
     }
 
     public void setLastLocation(final Location loc) {
