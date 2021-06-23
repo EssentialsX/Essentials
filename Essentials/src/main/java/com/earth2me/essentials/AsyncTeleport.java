@@ -164,10 +164,6 @@ public class AsyncTeleport implements IAsyncTeleport {
             return;
         }
 
-        if (teleportee.isAuthorized("essentials.back.onteleport")) {
-            teleportee.setLastLocation();
-        }
-
         if (!ess.getSettings().isForcePassengerTeleport() && !teleportee.getBase().isEmpty()) {
             if (!ess.getSettings().isTeleportPassengerDismount()) {
                 future.completeExceptionally(new Exception(tl("passengerTeleportFail")));
@@ -180,6 +176,10 @@ public class AsyncTeleport implements IAsyncTeleport {
                 future.completeExceptionally(e);
                 return;
             }
+        }
+
+        if (teleportee.isAuthorized("essentials.back.onteleport")) {
+            teleportee.setLastLocation();
         }
 
         final Location targetLoc = target.getLocation();
