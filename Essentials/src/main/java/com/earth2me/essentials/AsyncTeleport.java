@@ -163,7 +163,10 @@ public class AsyncTeleport implements IAsyncTeleport {
             future.complete(false);
             return;
         }
-        teleportee.setLastLocation();
+
+        if (teleportee.isAuthorized("essentials.back.onteleport")) {
+            teleportee.setLastLocation();
+        }
 
         if (!ess.getSettings().isForcePassengerTeleport() && !teleportee.getBase().isEmpty()) {
             if (!ess.getSettings().isTeleportPassengerDismount()) {
@@ -178,7 +181,7 @@ public class AsyncTeleport implements IAsyncTeleport {
                 return;
             }
         }
-        teleportee.setLastLocation();
+
         final Location targetLoc = target.getLocation();
         if (ess.getSettings().isTeleportSafetyEnabled() && LocationUtil.isBlockOutsideWorldBorder(targetLoc.getWorld(), targetLoc.getBlockX(), targetLoc.getBlockZ())) {
             targetLoc.setX(LocationUtil.getXInsideWorldBorder(targetLoc.getWorld(), targetLoc.getBlockX()));
