@@ -262,7 +262,8 @@ public abstract class UserData extends PlayerExtension implements IConf {
     }
 
     public Location getLastLocation() {
-        return holder.lastLocation().location();
+        final LazyLocation lastLocation = holder.lastLocation();
+        return lastLocation != null ? lastLocation.location() : null;
     }
 
     public void setLastLocation(final Location loc) {
@@ -601,6 +602,9 @@ public abstract class UserData extends PlayerExtension implements IConf {
         final CommandCooldown cooldown = new CommandCooldown();
         cooldown.pattern(pattern);
         cooldown.value(expiresAt.getTime());
+        if (cooldown.isIncomplete()) {
+            return;
+        }
         holder.timestamps().commandCooldowns().add(cooldown);
         if (save) {
             save();

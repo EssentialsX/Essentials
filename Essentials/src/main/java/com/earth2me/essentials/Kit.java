@@ -16,6 +16,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
+import org.yaml.snakeyaml.external.biz.base64Coder.Base64Coder;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -185,6 +186,15 @@ public class Kit {
                     final String name = user.getName();
                     command = command.replace("{player}", name);
                     commandQueue.add(command);
+                    continue;
+                }
+
+                if (kitItem.startsWith("@")) {
+                    if (ess.getSerializationProvider() == null) {
+                        ess.getLogger().log(Level.WARNING, tl("kitError3", kitName, user.getName()));
+                        continue;
+                    }
+                    itemList.add(ess.getSerializationProvider().deserializeItem(Base64Coder.decodeLines(kitItem.substring(1))));
                     continue;
                 }
 

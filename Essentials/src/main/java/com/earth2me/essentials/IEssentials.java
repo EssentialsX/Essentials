@@ -13,6 +13,7 @@ import net.ess3.provider.KnownCommandsProvider;
 import net.ess3.provider.MaterialTagProvider;
 import net.ess3.provider.PersistentDataProvider;
 import net.ess3.provider.ServerStateProvider;
+import net.ess3.provider.SerializationProvider;
 import net.ess3.provider.SpawnerBlockProvider;
 import net.ess3.provider.SpawnerItemProvider;
 import net.ess3.provider.SyncCommandsProvider;
@@ -143,6 +144,8 @@ public interface IEssentials extends Plugin {
     ContainerProvider getContainerProvider();
 
     KnownCommandsProvider getKnownCommandsProvider();
+
+    SerializationProvider getSerializationProvider();
 
     FormattedCommandAliasProvider getFormattedCommandAliasProvider();
 
