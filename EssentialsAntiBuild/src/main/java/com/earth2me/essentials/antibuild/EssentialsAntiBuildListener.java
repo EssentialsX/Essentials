@@ -393,7 +393,6 @@ public class EssentialsAntiBuildListener implements Listener {
             if (prot.getSettingBool(AntiBuildConfig.disable_use) && !user.canBuild()) {
                 if (!metaPermCheck(user, "pickup", item.getType(), item.getDurability())) {
                     event.setCancelled(true);
-                    event.getItem().setPickupDelay(50);
                 }
             }
         }
@@ -409,7 +408,6 @@ public class EssentialsAntiBuildListener implements Listener {
             if (prot.getSettingBool(AntiBuildConfig.disable_use) && !user.canBuild()) {
                 if (!metaPermCheck(user, "pickup", item.getType(), item.getDurability())) {
                     event.setCancelled(true);
-                    event.getItem().setPickupDelay(50);
                 }
             }
         }
