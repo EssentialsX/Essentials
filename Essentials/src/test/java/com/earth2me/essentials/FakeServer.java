@@ -561,6 +561,16 @@ public final class FakeServer implements Server {
     }
 
     @Override
+    public boolean isWhitelistEnforced() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public void setWhitelistEnforced(boolean value) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
     public Set<org.bukkit.OfflinePlayer> getWhitelistedPlayers() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
