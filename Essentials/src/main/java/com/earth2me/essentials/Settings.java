@@ -1641,6 +1641,11 @@ public class Settings implements net.ess3.api.ISettings {
     }
 
     @Override
+    public boolean isUseBetterKits() {
+        return config.getBoolean("use-nbt-serialization-in-createkit", false);
+    }
+
+    @Override
     public boolean isAllowBulkBuySell() {
         return config.getBoolean("allow-bulk-buy-sell", false);
     }
