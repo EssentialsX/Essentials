@@ -8,7 +8,6 @@ import org.bukkit.Material;
 import org.bukkit.Server;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
@@ -52,10 +51,11 @@ public class Commandpowertool extends EssentialsCommand {
         }
 
         final String itemName = itemStack.getType().toString().toLowerCase(Locale.ENGLISH).replaceAll("_", " ");
-        List<String> powertools = user.getPowertool(itemStack);
+        final List<String> powertools = user.getPowertool(itemStack) != null ? user.getPowertool(itemStack) : Lists.newArrayList();
+
         if (command != null && !command.isEmpty()) {
             if (command.equalsIgnoreCase("l:")) {
-                if (powertools == null || powertools.isEmpty()) {
+                if (powertools.isEmpty()) {
                     throw new Exception(tl("powerToolListEmpty", itemName));
                 } else {
                     sender.sendMessage(tl("powerToolList", StringUtil.joinList(powertools), itemName));
@@ -79,20 +79,16 @@ public class Commandpowertool extends EssentialsCommand {
                     if (powertools.contains(command)) {
                         throw new Exception(tl("powerToolAlreadySet", command, itemName));
                     }
-                } else if (powertools != null && !powertools.isEmpty()) {
+                } else if (!powertools.isEmpty()) {
                     // Replace all commands with this one
                     powertools.clear();
-                } else {
-                    powertools = new ArrayList<>();
                 }
 
                 powertools.add(command);
                 sender.sendMessage(tl("powerToolAttach", StringUtil.joinList(powertools), itemName));
             }
         } else {
-            if (powertools != null) {
-                powertools.clear();
-            }
+            powertools.clear();
             sender.sendMessage(tl("powerToolRemoveAll", itemName));
         }
 
