@@ -3,7 +3,7 @@ package net.essentialsx.api.v2.services.discord;
 import java.util.List;
 
 /**
- * Represents a command to be registered with the discord client.
+ * Represents a command to be registered with the Discord client.
  */
 public interface InteractionCommand {
     /**
@@ -39,7 +39,7 @@ public interface InteractionCommand {
     List<InteractionCommandArgument> getArguments();
 
     /**
-     * Called when an interaction command is received from discord.
+     * Called when an interaction command is received from Discord.
      * @param event The event which caused this command to be executed.
      */
     void onCommand(InteractionEvent event);

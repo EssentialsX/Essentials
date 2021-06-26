@@ -1,7 +1,7 @@
 package net.essentialsx.api.v2.services.discord;
 
 /**
- * A class which provides numerous methods to interact with discord slash commands.
+ * A class which provides numerous methods to interact with Discord slash commands.
  */
 public interface InteractionController {
     /**
@@ -12,7 +12,7 @@ public interface InteractionController {
     InteractionCommand getCommand(String name);
 
     /**
-     * Registers the given slash command with discord.
+     * Registers the given slash command with Discord.
      * @param command The slash command to be registered.
      * @throws InteractionException if a command with that name was already registered or if the given command was already registered.
      */

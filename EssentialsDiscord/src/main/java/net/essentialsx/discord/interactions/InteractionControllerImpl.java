@@ -92,7 +92,7 @@ public class InteractionControllerImpl extends ListenerAdapter implements Intera
                 }
 
                 if (!batchRegistrationQueue.isEmpty()) {
-                    logger.warning(batchRegistrationQueue.size() + " discord commands were lost during command registration!");
+                    logger.warning(batchRegistrationQueue.size() + " Discord commands were lost during command registration!");
                     if (jda.isDebug()) {
                         logger.warning("Lost commands: " + batchRegistrationQueue.keySet());
                     }

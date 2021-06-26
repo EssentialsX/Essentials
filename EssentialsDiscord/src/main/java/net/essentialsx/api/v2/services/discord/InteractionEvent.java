@@ -1,7 +1,7 @@
 package net.essentialsx.api.v2.services.discord;
 
 /**
- * A class which provides information about what triggered an interaction event.
+ * Represents a triggered interaction event.
  */
 public interface InteractionEvent {
     /**
@@ -17,14 +17,14 @@ public interface InteractionEvent {
     InteractionMember getMember();
 
     /**
-     * Helper method to get the String representation of the argument by the given key or null if none by that key is present.
+     * Get the value of the argument matching the given key represented as a String, or null if no argument by that name is present. 
      * @param key The key of the argument to lookup.
      * @return the string value or null.
      */
     String getStringArgument(String key);
 
     /**
-     * Helper method to get the Long representation of the argument by the given key or null if none by that key is present.
+     * Get the Long representation of the argument by the given key or null if none by that key is present.
      * @param key The key of the argument to lookup.
      * @return the long value or null
      */
@@ -52,8 +52,8 @@ public interface InteractionEvent {
     InteractionChannel getChannelArgument(String key);
 
     /**
-     * Gets the channel id where this interaction occurred.
-     * @return the channel id.
+     * Gets the channel ID where this interaction occurred.
+     * @return the channel ID.
      */
     String getChannelId();
 }

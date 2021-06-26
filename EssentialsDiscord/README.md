@@ -1,17 +1,17 @@
-# EssentialsXDiscord
+# EssentialsX Discord
 
-EssentialsXDiscord is an EssentialX module that brings a simple, lightweight, easy-to-use, and bloat-free
-Discord to Minecraft bridge.
+EssentialsX Discord is a module that brings a simple, lightweight, easy-to-use, and bloat-free
+bridge between Discord and Minecraft.
 
-EssentialsXDiscord offers *essential* features you'd want from a Discord bridge such as;
+EssentialsXDiscord offers *essential* features you'd want from a Discord bridge such as:
 * MC Chat -> Discord Channel
 * Discord Channel -> MC Chat
 * Basic MC -> Discord Event Monitoring (Join/Leave/Death/Mute)
 * MC Console -> Discord Relay
 * Discord Slash Commands 
-  * /execute - Execute console commands from discord
-  * /msg - Message minecraft players from discord
-  * /list - Same as /list from EssentialsX
+  * /execute - Execute console commands from Discord
+  * /msg - Message Minecraft players from Discord
+  * /list - List players currently online on Minecraft
 * & more...
 
 ---
@@ -62,12 +62,13 @@ click the blue "Copy" button right of your bot's icon. Make sure to save it for 
 > ![Copy Token](https://i.imgur.com/OqpaSQH.gif)
 > `Copy` -> Paste into Notepad for later step
    
-7. Next up is adding your bot to your discord server. First, goto [essentialsx.net/discord.html](https://essentialsx.net/discord.html)
+7. Next up is adding your bot to your Discord server. First, go to [essentialsx.net/discord.html](https://essentialsx.net/discord.html)
 and paste your Client ID you copied from step 2 into the text box on that page. Once you do that, click
 the "Authorize" button next to the text box. This will redirect you to Discord's authorization website 
-to chose which server to add the bot to. Note for advanced users: Please use the `essentialsx.net` website above 
-even if you think you already know how to invite bots. Bots for EssentialsXDiscord require more than just the `bot`
-scope to work, so please just use the link above even if you think you know what you're doing.
+to chose which server to add the bot to.
+Note for advanced users: **Please use the `essentialsx.net` website above even if you think you already know how
+to invite bots.** Bots for EssentialsX Discord require more than just the `bot` scope to work, so please just use
+the link above even if you think you know what you're doing.
 > ![OAuth Link Gen](https://i.imgur.com/u6MFJgQ.gif)
 > Paste Client ID -> `Authorize`
 
@@ -77,10 +78,10 @@ you are not a bot, proceed with that like you would any other captcha.
 > ![Authorize](https://i.imgur.com/KXkESqC.gif)
 > Select Server -> `Authorize`
 
-9. For the next few steps, you're going to need to do some stuff in discord, so start up your
+9. For the next few steps, you're going to need to do some stuff in Discord, so start up your
 Discord desktop/web client. 
 
-10. Once in your Discord client, you'll need to enable developer mode. Do this by going into the 
+10. Once in your Discord client, you'll need to enable Developer Mode. Do this by going into the 
 Settings, then go to the "Appearance" tab and check on the "Developer Mode" at the bottom of the
 page. Once you've checked "Developer Mode" on, click the `X` at the top right to exit Settings.
 > ![Developer Mode](https://i.imgur.com/CrW31Up.gif)
@@ -99,25 +100,25 @@ messages as well as mute/kicks. To see how to further configure message types, s
 > Right click your 'primary' channel -> `Copy ID` -> Paste into Notepad for later step
 
 13. You've successfully copied all the necessary IDs needed for a basic setup. Next up is generating the
-default config for EssentialsXDiscord, so you can start setting it up! Do this by putting the
-EssentialsXDiscord jar (you can download it [here](https://essentialsx.net/downloads.html) if you do not
+default config for EssentialsX Discord, so you can start setting it up! Do this by putting the
+EssentialsX Discord jar (you can download it [here](https://essentialsx.net/downloads.html) if you do not
 already have one) in your plugins folder, starting your server, and then stopping it as soon as it finishes
 starting up.
 > ![Start/Stop Server](https://i.imgur.com/JQX6hqM.gif)
 > Drag EssentialsXDiscord jar into plugins folder -> Start Server -> Stop Server
 
 14. Now you can start to configure the plugin with all the stuff you copied from earlier. Open the config
-for EssentialsXDiscord located at `plugins/EssentialsDiscord/config.yml`. When you open the config, the
+for EssentialsX Discord located at `plugins/EssentialsDiscord/config.yml`. When you open the config, the
 first thing to configure is your bot's token. Replace `INSERT-TOKEN-HERE` in the config with the token you
 copied earlier from step 6.
 > ![Paste Token](https://i.imgur.com/EnD31Wg.gif)
 > Re-Copy Token from Step 6 -> Paste as token value 
 
-15. Next, is the guild id, replace the zeros for the guild value in the config with the guild id you copied
+15. Next is the guild ID. Replace the zeros for the guild value in the config with the guild ID you copied
 from step 13.
 > ![Paste Guild](https://i.imgur.com/YxkHykd.gif)
 
-16. Finally, you'll need to paste the primary channel id you copied from step 14 and paste it as the
+16. Finally, you'll need to paste the primary channel ID you copied from step 14 and paste it as the
 primary value in the channels section and once you've done that save the config file!
 > ![Paste Primary](https://i.imgur.com/4xaHMfO.gif)
 
@@ -128,19 +129,19 @@ completed the initial, go back up to the [Table Of Contents](#table-of-contents)
 ---
 
 ## Console Relay
-The console relay is pretty self-explanatory: it relays everything on your console into discord channel of
+The console relay is pretty self-explanatory: it relays everything on your console into a Discord channel of
 your choosing. The console relay is ridiculously easy to setup and if your server is already running, you don't
 need to reload it!
 
 0. This assumes you've already done the initial setup.
 
-1. Go to the discord server that your bot is in and find the channel you wish to use for console output.
-Right click on the channel and click "Copy ID". Save this id for the next step.
+1. Go to the Discord server that your bot is in and find the channel you wish to use for console output.
+Right click on the channel and click "Copy ID". Save this ID for the next step.
 > ![Copy ID](https://i.imgur.com/qvDfSLv.gif)
 > Find console channel -> Right Click -> `Copy ID`
 
-2. Now that you have that copied, open the EssentialsXDiscord config and find the `console` section. In that
-section, replace the zeros for the `channel` value with the channel id you copied from the last step. Once
+2. Now that you have that copied, open the EssentialsX Discord config and find the `console` section. In that
+section, replace the zeros for the `channel` value with the channel ID you copied from the last step. Once
 you paste it, make sure you save the config.
 > ![Paste ID](https://i.imgur.com/NicdpGw.gif)
 
@@ -148,10 +149,10 @@ you paste it, make sure you save the config.
 should notice console output being directed to that channel! That is all you need if you're okay with the default
 settings. Otherwise, if you'd like to see what other options you can use to customize console output, stick around.
 
-4. The first thing you can customize is the format of the message sent to discord. By default, the timestamp,
+4. The first thing you can customize is the format of the message sent to Discord. By default, the timestamp,
 level (info/warn/error/etc), and message are shown for each console message. Let's say you wanted to make the
-timestamp and level bold, since this message would be using discord markdown, we can just add \*\* to both sides of
-level and timestamp. Then once you've done that, just do `/ess reload` and you should see your changes on discord.
+timestamp and level bold: since this message would be using Discord's markdown, we can just add \*\* to both sides of
+level and timestamp. Then once you've done that, just do `/ess reload` and you should see your changes on Discord.
 > ![Bold Format](https://i.imgur.com/jD9mH14.gif)
 
 5. Next, you can also configure the name you wish the to show above console messages. By default, it's "EssX Console
@@ -170,10 +171,10 @@ restricted to the console channel.
 ---
 
 ## Configuring Messages
-EssentialsXDiscord aims to keep its message-type system basic enough that simple things take little changes, while
+EssentialsX Discord aims to keep its message-type system basic enough that simple things take little changes, while
 giving more fine grain control to those you want it.
 
-To give you a general overview of the system, EssentialsXDiscord allows you to define different channel IDs in the
+To give you a general overview of the system, EssentialsX Discord allows you to define different channel IDs in the
 `channels` section of the config. By default, two channels are pre-populated in the `channels` section, `primary`
 and `staff`. If you only completed the initial setup, the `staff` channel definition is all zeros. This is fine in
 most situations however, as the message system will always fallback to the `primary` channel if a channel ID is
@@ -187,12 +188,12 @@ For the sake of example lets say we want to send all chat messages to their own 
 a new channel definition and setting the `chat` message type to said channel definition. Below are step-by-step 
 instructions for said example, you can follow along to get the gist of how to apply this to other use cases
 
-1. Find the channel on discord you want to only send chat messages to and then right click the channel and click
+1. Find the channel on Discord you want to only send chat messages to, and then right click the channel and click
 "Copy ID".
 > ![Copy ID](https://i.imgur.com/ri7NZkD.gif)
 
 2. Next you need to create the actual channel definition, for this example we'll call it `chat`. You create a
-channel definition by adding a new entry to the `channels` section with the key as its name and the id as the one
+channel definition by adding a new entry to the `channels` section with the key as its name and the ID as the one
 you copied in the last step.
 > ![New Def](https://i.imgur.com/dc7kIkl.gif)
 
@@ -206,20 +207,20 @@ server.
 ---
 
 ## Receive Discord Messages in Minecraft
-After reading the [configuring messages section](#configuring-messages), you should now have a few discord
+After reading the [configuring messages section](#configuring-messages), you should now have a few Discord
 channels defined in the `channels` of your config. You're probably wondering how you can let your players start
-to see messages from discord in minecraft chat. Say I defined a channel named `chat` in the `channels` section
-of your config, and I wanted to let players see discord messages from that channel in minecraft chat; This can
+to see messages from Discord in Minecraft chat. Say I defined a channel named `chat` in the `channels` section
+of your config, and I wanted to let players see Discord messages from that channel in Minecraft chat; This can
 be accomplished very simply by giving players the `essentials.discord.receive.chat` permission. This would relay
-all discord messages from the `chat` channel to players with that permission. Another example: say I have a staff
-channel in discord that I want only staff members in the minecraft server to see. Provided there is a `staff`
+all Discord messages from the `chat` channel to players with that permission. Another example: say I have a staff
+channel in Discord that I want only staff members in the Minecraft server to see. Provided there is a `staff`
 channel defined in the `channels` section of the config, I can give staff members the
 `essentials.discord.receive.staff` permission, and they will start to see messages from that channel.
 
 ---
 
 ## Discord Commands
-EssentialsXDiscord uses Discord's slash command system to let you type commands into discord without it being
+EssentialsX Discord uses Discord's slash command system to let you type commands into Discord without it being
 seen by other people in the server. With this system, you are able to execute console commands, message players,
 and see the current player list.
 
@@ -236,8 +237,8 @@ them.
 
 * `enabled`
   * Default: `true`
-  * Description: `Whether or not the command should be enabled and therefore shown on discord. Note that you
-    must restart your minecraft server before this option takes effect.`
+  * Description: `Whether or not the command should be enabled and therefore shown on Discord. Note that you
+    must restart your Minecraft server before this option takes effect.`
 * `hide-command`
   * Default: `true`
   * Description: `Whether other people should not be able to see what commands you execute. Setting to false
@@ -245,38 +246,38 @@ them.
     you can see how disabling this option shows a message of the user and the command they executed.`
   * Example: ![Show Command](https://i.imgur.com/Q61iP4n.gif)
 * `allowed-roles`
-  * Description: `A list of user ids or role names/ids that are allowed to use the command. You can also use '*'
+  * Description: `A list of user IDs or role names/IDs that are allowed to use the command. You can also use '*'
     in order to allow everyone to use the command.`
 * `admin-roles`
-  * `A list of user ids or role names/ids that have extra features in the command. For example, in the list
+  * `A list of user IDs or role names/IDs that have extra features in the command. For example, in the list
     command, admin-roles allows people to see vanished players.`
 
 ---
 
 ## Misc Permissions
-EssentialsXDiscord has a few miscellanies permissions that may be important to know about;
+EssentialsX Discord has a few other permissions that may be important to know about:
 
-* `essentials.discord.markdown` - Allows players to bypass the markdown filter, so that they can 
-bold/underline/italic/etc their minecraft chat messages for discord.
+* `essentials.discord.markdown` - Allows players to bypass the Markdown filter, so that they can 
+bold/underline/italic/etc their Minecraft chat messages for Discord.
 * `essentials.discord.ping` - Allows players to bypass the ping filter, so that they can ping @everyone/@here
-from minecraft chat.
+from Minecraft chat.
 
 ---
 
 ## Developer API
-EssentialsXDiscord has a pretty extensive API which allows any third party plugin to build
+EssentialsX Discord has a pretty extensive API which allows any third party plugin to build
 their own integrations into it. Outside the specific examples below, you can also view
-javadocs for EssentialsXDiscord [here](https://jd-v2.essentialsx.net/EssentialsDiscord).
+javadocs for EssentialsX Discord [here](https://jd-v2.essentialsx.net/EssentialsDiscord).
 
 ### Sending Messages to Discord
-EssentialsXDiscord organizes the types of messages that can be sent along with their 
-destination on discord under the `message-types` section of the `config.yml`. The 
-EssentialsXDiscord API uses `message-types` to resolve the channel id you want to send your
+EssentialsX Discord organizes the types of messages that can be sent along with their 
+destination on Discord under the `message-types` section of the `config.yml`. The 
+EssentialsX Discord API uses `message-types` to resolve the channel id you want to send your
 message to.
 
 #### Using a built-in message channel
-EssentialsXDiscord defines a few built in `message-types` which you may fit your use case
-already (such as sending a message to the mc->discord chat relay channel). The list of 
+EssentialsX Discord defines a few built in `message-types` which you may fit your use case
+already (such as sending a message to the MC->Discord chat relay channel). The list of 
 built-in message types can be found at [`DiscordMessageEvent.MessageType.DefaultTypes`](https://github.com/EssentialsX/Essentials/blob/2.x/EssentialsDiscord/src/main/java/net/essentialsx/api/v2/events/discord/DiscordMessageEvent.java#L195-L203).
 
 Here is an example of what sending a message to the built-in chat channel would look like:
@@ -296,7 +297,7 @@ If you want to create your own message type to allow your users to explicitly se
 messages from our other built-in ones, you can do that also by creating a new
 [`DiscordMessageEvent.MessageType`](https://github.com/EssentialsX/Essentials/blob/module/discord/EssentialsDiscord/src/main/java/net/essentialsx/api/v2/events/discord/DiscordMessageEvent.java#L159-L161).
 The key provided in the constructor should be the key you'd like your users to use in the
-`message-types` section of our config. You *can* also put a discord channel ID as the
+`message-types` section of our config. You *can* also put a Discord channel ID as the
 key if you'd like to have your users define the channel id in your config rather than ours.
 
 Here is an example of what sending a message using your own message type:
@@ -321,7 +322,7 @@ public class CustomTypeExample {
 
 ### Prevent certain messages from being sent as chat
 Depending on how your plugin sends certain types of chat messages to players, there may be
-times when EssentialsxDiscord accidentally broadcasts a message that was only intended for a
+times when EssentialsX Discord accidentally broadcasts a message that was only intended for a
 small group of people. In order for your plugin to stop this from happening you have to
 listen to `DiscordChatMessageEvent`.
 
@@ -344,8 +345,8 @@ public class StaffChatExample {
 ```
 
 ### Registering a Discord slash command
-EssentialsXDiscord also allows you to register slash commands directly with discord itself
-in order to provide your users with a way to interface with your plugins on discord!
+EssentialsX Discord also allows you to register slash commands directly with Discord itself
+in order to provide your users with a way to interface with your plugins on Discord!
 
 To start writing slash commands, the first thing you'll need to do is create a slash command
 class. For the sake of this tutorial, I'm going to use an economy plugin as the
@@ -426,9 +427,9 @@ public class BalanceSlashCommand extends InteractionCommand {
 
 Once you have created your slash command, it's now time to register it. It is best 
 practice to register them in your plugin's `onEnable` so your commands make it in the
-initial batch of commands sent to discord.
+initial batch of commands sent to Discord.
 
-You can register your command with EssentialsXDiscord by doing the following:
+You can register your command with EssentialsX Discord by doing the following:
 ```java
 public class MyEconomyPlugin {
     @Override

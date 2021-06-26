@@ -1,7 +1,7 @@
 package net.essentialsx.api.v2.services.discord;
 
 /**
- * A class which provides numerous methods to interact with EssentialsXDiscord.
+ * A class which provides numerous methods to interact with EssentialsX Discord.
  */
 public interface EssentialsDiscordAPI {
     /**

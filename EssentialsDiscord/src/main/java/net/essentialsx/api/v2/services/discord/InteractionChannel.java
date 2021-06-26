@@ -11,8 +11,8 @@ public interface InteractionChannel {
     String getName();
 
     /**
-     * Gets the id of this channel.
-     * @return this channel's id.
+     * Gets the ID of this channel.
+     * @return this channel's ID.
      */
     String getId();
 }

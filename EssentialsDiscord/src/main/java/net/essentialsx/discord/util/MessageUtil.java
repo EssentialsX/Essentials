@@ -7,7 +7,7 @@ public final class MessageUtil {
     }
 
     /**
-     * Sanitizes text going to discord of markdown.
+     * Sanitizes text to be sent to Discord, escaping any Markdown syntax.
      */
     public static String sanitizeDiscordMarkdown(String message) {
         if (message == null) {

@@ -1,7 +1,7 @@
 package net.essentialsx.api.v2.services.discord;
 
 /**
- * Represents an argument for a command to be shown to the discord client.
+ * Represents an argument for a command to be shown to Discord users.
  */
 public class InteractionCommandArgument {
     private final String name;
@@ -11,10 +11,10 @@ public class InteractionCommandArgument {
 
     /**
      * Builds a command argument.
-     * @param name        The name of the argument to be shown to the discord client.
-     * @param description A brief description of the argument to be shown to the discord client.
+     * @param name        The name of the argument to be shown to the Discord client.
+     * @param description A brief description of the argument to be shown to the Discord client.
      * @param type        The type of argument.
-     * @param required    Whether or not the argument is required in order to send the command in the discord client.
+     * @param required    Whether or not the argument is required in order to send the command in the Discord client.
      */
     public InteractionCommandArgument(String name, String description, InteractionCommandArgumentType type, boolean required) {
         this.name = name;

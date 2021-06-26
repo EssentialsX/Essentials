@@ -7,8 +7,8 @@ import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Fired before a chat message is about to be sent to a discord channel.
- * Should be used to block chat messages (such as staff channels) from appearing in discord.
+ * Fired before a chat message is about to be sent to a Discord channel.
+ * Should be used to block chat messages (such as staff channels) from appearing in Discord.
  */
 public class DiscordChatMessageEvent extends Event implements Cancellable {
     private static final HandlerList handlers = new HandlerList();
@@ -43,7 +43,7 @@ public class DiscordChatMessageEvent extends Event implements Cancellable {
     }
 
     /**
-     * Sets the message of this event, and thus the chat message relayed to discord.
+     * Sets the message of this event, and thus the chat message relayed to Discord.
      * @param message the new message.
      */
     public void setMessage(String message) {

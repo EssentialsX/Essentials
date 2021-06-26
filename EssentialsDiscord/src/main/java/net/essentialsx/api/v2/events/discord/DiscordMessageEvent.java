@@ -34,7 +34,7 @@ public class DiscordMessageEvent extends Event implements Cancellable {
      * @param type               The message type/destination of this event.
      * @param message            The raw message content of this event.
      * @param allowGroupMentions If the message should allow the pinging of channels, users, or emotes.
-     * @param avatarUrl          The avatar url to use for this message (if supported) or null to use the default bot avatar.
+     * @param avatarUrl          The avatar URL to use for this message (if supported) or null to use the default bot avatar.
      * @param name               The name to use for this message (if supported) or null to use the default bot name.
      * @param uuid               The UUID of the player which caused this event or null if this wasn't a player triggered event.
      */
@@ -64,7 +64,7 @@ public class DiscordMessageEvent extends Event implements Cancellable {
     }
 
     /**
-     * Gets the raw message content that is about to be sent to discord.
+     * Gets the raw message content that is about to be sent to Discord.
      * @return The raw message.
      */
     public String getMessage() {
@@ -72,7 +72,7 @@ public class DiscordMessageEvent extends Event implements Cancellable {
     }
 
     /**
-     * Sets the raw message content to be sent to discord
+     * Sets the raw message content to be sent to Discord.
      * @param message The new message content.
      */
     public void setMessage(String message) {
@@ -96,16 +96,16 @@ public class DiscordMessageEvent extends Event implements Cancellable {
     }
 
     /**
-     * Gets the avatar url to use for this message, or null if none is specified.
-     * @return The avatar url or null.
+     * Gets the avatar URL to use for this message, or null if none is specified.
+     * @return The avatar URL or null.
      */
     public String getAvatarUrl() {
         return avatarUrl;
     }
 
     /**
-     * Sets the avatar url for this message, or null to use the bot's avatar.
-     * @param avatarUrl The avatar url or null.
+     * Sets the avatar URL for this message, or null to use the bot's avatar.
+     * @param avatarUrl The avatar URL or null.
      */
     public void setAvatarUrl(String avatarUrl) {
         this.avatarUrl = avatarUrl;

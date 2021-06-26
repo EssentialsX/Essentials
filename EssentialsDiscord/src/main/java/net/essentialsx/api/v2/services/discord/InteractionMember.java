@@ -34,8 +34,8 @@ public interface InteractionMember {
     String getEffectiveName();
 
     /**
-     * Gets the id of this member.
-     * @return this member's id.
+     * Gets the ID of this member.
+     * @return this member's ID.
      */
     String getId();
 
