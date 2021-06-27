@@ -95,7 +95,7 @@ public class Commandtpaccept extends EssentialsCommand {
         Bukkit.getPluginManager().callEvent(event);
         if (event.isCancelled()) {
             if (ess.getSettings().isDebug()) {
-                logger.info("TPA accept canceled by api for " + user.getName());
+                logger.info("TPA accept cancelled by API for " + user.getName() + " (requested by " + requester.getName() + ")");
             }
             return;
         }
