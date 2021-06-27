@@ -248,7 +248,7 @@ public interface IUser {
      *
      * @param inform             true if the underlying {@link IUser} should be informed if a request expires during iteration.
      * @param performExpirations true if this method should not spend time validating time for all items in the queue and just return the first item in the queue.
-     * @param excludeHere        true if /tphere requests should be ignored in fetching the next tpa token.
+     * @param excludeHere        true if /tphere requests should be ignored in fetching the next tpa request.
      * @return A {@link TpaRequest} corresponding to the next available request or null if no valid request is present.
      */
     @Nullable TpaRequest getNextTpaRequest(boolean inform, boolean performExpirations, boolean excludeHere);

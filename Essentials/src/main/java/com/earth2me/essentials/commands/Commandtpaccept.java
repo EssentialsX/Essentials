@@ -37,16 +37,16 @@ public class Commandtpaccept extends EssentialsCommand {
 
         if (args.length > 0) {
             if (excludeHere) {
-                IUser.TpaRequest token;
+                IUser.TpaRequest request;
                 int count = 0;
-                while ((token = user.getNextTpaRequest(true, true, true)) != null) {
+                while ((request = user.getNextTpaRequest(true, true, true)) != null) {
                     try {
-                        handleTeleport(user, token, commandLabel);
+                        handleTeleport(user, request, commandLabel);
                         count++;
                     } catch (Exception e) {
                         ess.showError(user.getSource(), e, commandLabel);
                     } finally {
-                        user.removeTpaRequest(token.getName());
+                        user.removeTpaRequest(request.getName());
                     }
                 }
                 user.sendMessage(tl("requestAcceptedAll", count));

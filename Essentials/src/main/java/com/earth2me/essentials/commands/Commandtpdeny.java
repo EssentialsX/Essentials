@@ -28,36 +28,36 @@ public class Commandtpdeny extends EssentialsCommand {
             throw new Exception(tl("noPendingRequest"));
         }
 
-        final IUser.TpaRequest denyToken;
+        final IUser.TpaRequest denyRequest;
         if (args.length > 0) {
             if (excludeOthers) {
-                IUser.TpaRequest token;
+                IUser.TpaRequest request;
                 int count = 0;
-                while ((token = user.getNextTpaRequest(false, true, true)) != null) {
-                    final User player = ess.getUser(token.getRequesterUuid());
+                while ((request = user.getNextTpaRequest(false, true, true)) != null) {
+                    final User player = ess.getUser(request.getRequesterUuid());
                     if (player != null && player.getBase().isOnline()) {
                         player.sendMessage(tl("requestDeniedFrom", user.getDisplayName()));
                     }
 
-                    user.removeTpaRequest(token.getName());
+                    user.removeTpaRequest(request.getName());
                     count++;
                 }
                 user.sendMessage(tl("requestDeniedAll", count));
                 return;
             }
-            denyToken = user.getOutstandingTpaRequest(getPlayer(server, user, args, 0).getName(), false);
+            denyRequest = user.getOutstandingTpaRequest(getPlayer(server, user, args, 0).getName(), false);
         } else {
-            denyToken = user.getNextTpaRequest(false, true, false);
+            denyRequest = user.getNextTpaRequest(false, true, false);
         }
 
-        final User player = ess.getUser(denyToken.getRequesterUuid());
+        final User player = ess.getUser(denyRequest.getRequesterUuid());
         if (player == null || !player.getBase().isOnline()) {
             throw new Exception(tl("noPendingRequest"));
         }
 
         user.sendMessage(tl("requestDenied"));
         player.sendMessage(tl("requestDeniedFrom", user.getDisplayName()));
-        user.removeTpaRequest(denyToken.getName());
+        user.removeTpaRequest(denyRequest.getName());
     }
 
     @Override

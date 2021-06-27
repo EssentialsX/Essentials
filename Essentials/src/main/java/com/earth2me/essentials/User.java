@@ -335,13 +335,13 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
 
     @Override
     public void requestTeleport(final User player, final boolean here) {
-        final TpaRequest token = teleportRequestQueue.getOrDefault(player.getName(), new TpaRequest(player.getName(), player.getUUID()));
-        token.setTime(System.currentTimeMillis());
-        token.setHere(here);
-        token.setLocation(here ? player.getLocation() : this.getLocation());
+        final TpaRequest request = teleportRequestQueue.getOrDefault(player.getName(), new TpaRequest(player.getName(), player.getUUID()));
+        request.setTime(System.currentTimeMillis());
+        request.setHere(here);
+        request.setLocation(here ? player.getLocation() : this.getLocation());
 
         // Handle max queue size
-        teleportRequestQueue.remove(token.getName());
+        teleportRequestQueue.remove(request.getName());
         if (teleportRequestQueue.size() >= ess.getSettings().getTpaMaxAmount()) {
             String lastKey = null;
             for (Map.Entry<String, TpaRequest> entry : teleportRequestQueue.entrySet()) {
@@ -351,7 +351,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
         }
 
         // Add request to queue
-        teleportRequestQueue.put(token.getName(), token);
+        teleportRequestQueue.put(request.getName(), request);
     }
 
     @Override
@@ -370,8 +370,8 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
     }
 
     public boolean hasOutstandingTpaRequest(String playerUsername, boolean here) {
-        final TpaRequest token = getOutstandingTpaRequest(playerUsername, false);
-        return token != null && token.isHere() == here;
+        final TpaRequest request = getOutstandingTpaRequest(playerUsername, false);
+        return request != null && request.isHere() == here;
     }
 
     public @Nullable TpaRequest getOutstandingTpaRequest(String playerUsername, boolean inform) {
@@ -380,13 +380,13 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
         }
 
         final long timeout = ess.getSettings().getTpaAcceptCancellation();
-        final TpaRequest token = teleportRequestQueue.get(playerUsername);
-        if (timeout < 1 || System.currentTimeMillis() - token.getTime() <= timeout * 1000) {
-            return token;
+        final TpaRequest request = teleportRequestQueue.get(playerUsername);
+        if (timeout < 1 || System.currentTimeMillis() - request.getTime() <= timeout * 1000) {
+            return request;
         }
         teleportRequestQueue.remove(playerUsername);
         if (inform) {
-            sendMessage(tl("requestTimedOutFrom", ess.getUser(token.getRequesterUuid()).getDisplayName()));
+            sendMessage(tl("requestTimedOutFrom", ess.getUser(request.getRequesterUuid()).getDisplayName()));
         }
         return null;
     }
@@ -403,27 +403,27 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
 
         final long timeout = ess.getSettings().getTpaAcceptCancellation();
         final Iterator<Map.Entry<String, TpaRequest>> iterator = teleportRequestQueue.entrySet().iterator();
-        TpaRequest nextToken = null;
+        TpaRequest nextRequest = null;
         while (iterator.hasNext()) {
-            final TpaRequest token = iterator.next().getValue();
-            if (timeout < 1 || (System.currentTimeMillis() - token.getTime()) <= TimeUnit.SECONDS.toMillis(timeout)) {
-                if (excludeHere && token.isHere()) {
+            final TpaRequest request = iterator.next().getValue();
+            if (timeout < 1 || (System.currentTimeMillis() - request.getTime()) <= TimeUnit.SECONDS.toMillis(timeout)) {
+                if (excludeHere && request.isHere()) {
                     continue;
                 }
 
                 if (performExpirations) {
-                    return token;
-                } else if (nextToken == null) {
-                    nextToken = token;
+                    return request;
+                } else if (nextRequest == null) {
+                    nextRequest = request;
                 }
             } else {
                 if (inform) {
-                    sendMessage(tl("requestTimedOutFrom", ess.getUser(token.getRequesterUuid()).getDisplayName()));
+                    sendMessage(tl("requestTimedOutFrom", ess.getUser(request.getRequesterUuid()).getDisplayName()));
                 }
                 iterator.remove();
             }
         }
-        return nextToken;
+        return nextRequest;
     }
 
     public String getNick() {
@@ -885,8 +885,8 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
     @Override
     @Deprecated
     public long getTeleportRequestTime() {
-        final TpaRequest token = getNextTpaRequest(false, false, false);
-        return token == null ? 0L : token.getTime();
+        final TpaRequest request = getNextTpaRequest(false, false, false);
+        return request == null ? 0L : request.getTime();
     }
 
     public boolean isInvSee() {
