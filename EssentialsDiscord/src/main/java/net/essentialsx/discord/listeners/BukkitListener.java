@@ -24,7 +24,7 @@ import java.text.MessageFormat;
 import java.util.UUID;
 
 public class BukkitListener implements Listener {
-    private final static String AVATAR_URL = "https://crafatar.com/avatars/{uuid}?overlay=true";
+    private final static String AVATAR_URL = "https://crafthead.net/helm/{uuid}";
     private final JDADiscordService jda;
 
     public BukkitListener(JDADiscordService jda) {
