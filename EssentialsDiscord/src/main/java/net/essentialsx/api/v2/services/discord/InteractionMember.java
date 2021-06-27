@@ -34,6 +34,12 @@ public interface InteractionMember {
     String getEffectiveName();
 
     /**
+     * Gets the nickname of this member or null if they do not have one.
+     * @return this member's nickname or null.
+     */
+    String getNickname();
+
+    /**
      * Gets the ID of this member.
      * @return this member's ID.
      */

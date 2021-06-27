@@ -32,6 +32,11 @@ public class InteractionMemberImpl implements InteractionMember {
     }
 
     @Override
+    public String getNickname() {
+        return member.getNickname();
+    }
+
+    @Override
     public String getId() {
         return member.getId();
     }
