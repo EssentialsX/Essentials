@@ -11,6 +11,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 
 import static com.earth2me.essentials.I18n.tl;
 
@@ -68,6 +69,34 @@ public class Commanditemlore extends EssentialsCommand {
     protected List<String> getTabCompleteOptions(final Server server, final User user, final String commandLabel, final String[] args) {
         if (args.length == 1) {
             return Lists.newArrayList("add", "set", "clear");
+        } else if (args.length == 2) {
+            switch (args[0].toLowerCase(Locale.ENGLISH)) {
+                case "set": {
+                    final ItemStack item = user.getBase().getItemInHand();
+                    if (!item.getType().name().contains("AIR") && item.hasItemMeta() && item.getItemMeta().hasLore()) {
+                        final List<String> lineNumbers = new ArrayList<>();
+                        for (int i = 1; i <= item.getItemMeta().getLore().size(); i++) {
+                            lineNumbers.add(String.valueOf(i));
+                        }
+                        return lineNumbers;
+                    }
+                    return Collections.emptyList();
+                }
+                case "clear":
+                case "add":
+                default: {
+                    return Collections.emptyList();
+                }
+            }
+        } else if (args.length == 3) {
+            if (args[0].equalsIgnoreCase("set") && NumberUtil.isInt(args[1])) {
+                final int i = Integer.parseInt(args[1]);
+                final ItemStack item = user.getBase().getItemInHand();
+                if (!item.getType().name().contains("AIR") && item.hasItemMeta() && item.getItemMeta().hasLore() && item.getItemMeta().getLore().size() >= i) {
+                    return Lists.newArrayList(FormatUtil.unformatString(user, "essentials.itemlore", item.getItemMeta().getLore().get(i - 1)));
+                }
+            }
+            return Collections.emptyList();
         } else {
             return Collections.emptyList();
         }
