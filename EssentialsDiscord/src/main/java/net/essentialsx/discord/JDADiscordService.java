@@ -10,7 +10,9 @@ import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.Webhook;
+import net.dv8tion.jda.api.events.ShutdownEvent;
 import net.dv8tion.jda.api.hooks.EventListener;
+import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.essentialsx.api.v2.events.discord.DiscordMessageEvent;
 import net.essentialsx.api.v2.services.discord.DiscordService;
 import net.essentialsx.api.v2.services.discord.InteractionController;
@@ -30,10 +32,15 @@ import org.bukkit.Bukkit;
 import org.bukkit.event.HandlerList;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.ServicePriority;
+import org.jetbrains.annotations.NotNull;
 
 import javax.security.auth.login.LoginException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
@@ -340,16 +347,38 @@ public class JDADiscordService implements DiscordService {
         }
 
         if (jda != null) {
+            shutdownConsoleRelay(true);
+
+            // Unregister leftover jda listeners
             for (Object obj : jda.getRegisteredListeners()) {
                 if (!(obj instanceof EventListener)) { // Yeah bro I wish I knew too :/
                     jda.removeEventListener(obj);
                 }
             }
-            HandlerList.unregisterAll(plugin);
-            jda.shutdown();
-        }
 
-        shutdownConsoleRelay(true);
+            // Unregister Bukkit Events
+            HandlerList.unregisterAll(plugin);
+
+            // Creates a future which will be completed when JDA fully shutdowns
+            final CompletableFuture<Void> future = new CompletableFuture<>();
+            jda.addEventListener(new ListenerAdapter() {
+                @Override
+                public void onShutdown(@NotNull ShutdownEvent event) {
+                    future.complete(null);
+                }
+            });
+
+            // Tell JDA to wrap it up
+            jda.shutdown();
+            try {
+                // Wait for JDA to wrap it up
+                future.get(5, TimeUnit.SECONDS);
+            } catch (InterruptedException | ExecutionException | TimeoutException e) {
+                logger.warning("JDA took longer than expected to shutdown, this may have caused some problems.");
+            } finally {
+                jda = null;
+            }
+        }
     }
 
     public JDA getJda() {
