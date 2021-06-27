@@ -297,16 +297,31 @@ If you want to create your own message type to allow your users to explicitly se
 messages from our other built-in ones, you can do that also by creating a new
 [`MessageType`](https://github.com/EssentialsX/Essentials/blob/2.x/EssentialsDiscord/src/main/java/net/essentialsx/api/v2/services/discord/MessageType.java).
 The key provided in the constructor should be the key you'd like your users to use in the
-`message-types` section of our config. You *can* also put a Discord channel ID as the
-key if you'd like to have your users define the channel id in your config rather than ours.
+`message-types` section of our config. This key should also be all lowercase and may contain
+numbers or dashes. You *can* also put a Discord channel ID as the key if you'd like to
+have your users define the channel id in your config rather than ours. Once you create the
+`MessageType`, you will also need to register it with Essentialsx Discord by calling
+[`DiscordService#registerMessageType`](https://github.com/EssentialsX/Essentials/blob/2.x/EssentialsDiscord/src/main/java/net/essentialsx/api/v2/services/discord/DiscordService.java#L24-L30).
 
 Here is an example of what sending a message using your own message type:
 ```java
 public class CustomTypeExample {
-    // Create a new message type for the user to define in our config.
-    // Unless you're putting a discord channel id as the type key, it's probably 
-    // a good idea to store this object so you don't create it every time.
-    private final MessageType type = new MessageType("my-awesome-channel");
+    private final DiscordService api;
+    private final MessageType type;
+    
+    public CustomTypeExample(final Plugin plugin) {
+      // Gets the the EssentialsX Discord API service so we can register our type and
+      // send a message with it later.
+      api = Bukkit.getServicesManager().load(DiscordService.class);
+      
+      // Create a new message type for the user to define in our config.
+      // Unless you're putting a discord channel id as the type key, it's probably 
+      // a good idea to store this object so you don't create it every time.
+      type = new MessageType("my-awesome-channel");
+      
+      // Registers the type we just created with EssentialsX Discord.
+      api.registerMessageType(plugin, type);
+    }
     
     @EventHandler()
     public void onAwesomeEvent(AwesomeEvent event) {
@@ -314,7 +329,6 @@ public class CustomTypeExample {
       // If you are sending user-generated content, you probably should keep this as false.
       final boolean allowGroupMentions = false;
       // Send the actual message
-      final DiscordService api = Bukkit.getServicesManager().load(DiscordService.class);
       api.sendMessage(type, "The player, " + event.getPlayer() + ", did something awesome!", allowPing);
     }
 }

@@ -28,6 +28,7 @@ import net.essentialsx.discord.util.ConsoleInjector;
 import net.essentialsx.discord.util.DiscordUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.event.HandlerList;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.ServicePriority;
 
 import javax.security.auth.login.LoginException;
@@ -49,6 +50,7 @@ public class JDADiscordService implements DiscordService {
     private TextChannel primaryChannel;
     private WebhookClient consoleWebhook;
     private String lastConsoleId;
+    private final Map<String, MessageType> registeredTypes = new HashMap<>();
     private final Map<MessageType, String> typeToChannelId = new HashMap<>();
     private final Map<String, WebhookClient> channelIdToWebhook = new HashMap<>();
     private ConsoleInjector injector;
@@ -57,6 +59,9 @@ public class JDADiscordService implements DiscordService {
 
     public JDADiscordService(EssentialsDiscord plugin) {
         this.plugin = plugin;
+        for (final MessageType type : MessageType.DefaultTypes.values()) {
+            registerMessageType(plugin, type);
+        }
     }
 
     public TextChannel getChannel(String key, boolean primaryFallback) {
@@ -165,7 +170,28 @@ public class JDADiscordService implements DiscordService {
     }
 
     @Override
+    public boolean isRegistered(String key) {
+        return registeredTypes.containsKey(key);
+    }
+
+    @Override
+    public void registerMessageType(Plugin plugin, MessageType type) {
+        if (!type.getKey().matches("^[a-z0-9-]*$")) {
+            throw new IllegalArgumentException("MessageType key must match \"^[a-z0-9-]*$\"");
+        }
+
+        if (registeredTypes.containsKey(type.getKey())) {
+            throw new IllegalArgumentException("A MessageType with that key is already registered!");
+        }
+
+        registeredTypes.put(type.getKey(), type);
+    }
+
+    @Override
     public void sendMessage(MessageType type, String message, boolean allowGroupMentions) {
+        if (!registeredTypes.containsKey(type.getKey())) {
+            logger.warning("Sending message to channel \"" + type.getKey() + "\" which is an unregistered type! If you are a plugin author, you should be registering your MessageType before using them.");
+        }
         final DiscordMessageEvent event = new DiscordMessageEvent(type, FormatUtil.stripFormat(message), allowGroupMentions);
         if (Bukkit.getServer().isPrimaryThread()) {
             Bukkit.getPluginManager().callEvent(event);

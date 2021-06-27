@@ -9,6 +9,8 @@ public final class MessageType {
 
     /**
      * Creates a {@link MessageType} which will send channels to the specified channel key.
+     * <p>
+     * The message type key may only contain: lowercase letters, numbers, and dashes.
      * @param key The channel key defined in the {@code message-types} section of the config.
      */
     public MessageType(final String key) {
