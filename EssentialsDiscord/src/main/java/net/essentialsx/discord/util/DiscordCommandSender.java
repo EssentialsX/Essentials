@@ -1,7 +1,7 @@
 package net.essentialsx.discord.util;
 
 import com.earth2me.essentials.utils.FormatUtil;
-import net.essentialsx.discord.EssentialsJDA;
+import net.essentialsx.discord.JDADiscordService;
 import org.bukkit.Bukkit;
 import org.bukkit.Server;
 import org.bukkit.command.ConsoleCommandSender;
@@ -24,7 +24,7 @@ public class DiscordCommandSender implements ConsoleCommandSender {
     private String responseBuffer = "";
     private long lastTime = System.currentTimeMillis();
 
-    public DiscordCommandSender(EssentialsJDA jda, ConsoleCommandSender sender, CmdCallback callback) {
+    public DiscordCommandSender(JDADiscordService jda, ConsoleCommandSender sender, CmdCallback callback) {
         task = Bukkit.getScheduler().runTaskTimerAsynchronously(jda.getPlugin(), () -> {
             if (!responseBuffer.isEmpty() && System.currentTimeMillis() - lastTime >= 1000) {
                 callback.onMessage(responseBuffer);

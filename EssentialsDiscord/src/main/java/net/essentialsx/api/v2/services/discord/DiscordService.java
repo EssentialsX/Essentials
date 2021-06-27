@@ -3,7 +3,7 @@ package net.essentialsx.api.v2.services.discord;
 /**
  * A class which provides numerous methods to interact with EssentialsX Discord.
  */
-public interface EssentialsDiscordAPI {
+public interface DiscordService {
     /**
      * Gets the {@link InteractionController} instance.
      * @return the {@link InteractionController} instance.

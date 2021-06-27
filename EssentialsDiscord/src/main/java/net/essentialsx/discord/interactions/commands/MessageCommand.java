@@ -6,7 +6,7 @@ import com.earth2me.essentials.utils.FormatUtil;
 import net.essentialsx.api.v2.services.discord.InteractionCommandArgument;
 import net.essentialsx.api.v2.services.discord.InteractionCommandArgumentType;
 import net.essentialsx.api.v2.services.discord.InteractionEvent;
-import net.essentialsx.discord.EssentialsJDA;
+import net.essentialsx.discord.JDADiscordService;
 import net.essentialsx.discord.interactions.InteractionCommandImpl;
 import net.essentialsx.discord.util.DiscordMessageRecipient;
 import org.bukkit.Bukkit;
@@ -16,7 +16,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import static com.earth2me.essentials.I18n.tl;
 
 public class MessageCommand extends InteractionCommandImpl {
-    public MessageCommand(EssentialsJDA jda) {
+    public MessageCommand(JDADiscordService jda) {
         super(jda, "msg", "Messages a player on the Minecraft Server.");
         addArgument(new InteractionCommandArgument("username", "The player to send the message to", InteractionCommandArgumentType.STRING, true));
         addArgument(new InteractionCommandArgument("message", "The message to send to the player", InteractionCommandArgumentType.STRING, true));

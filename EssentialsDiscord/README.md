@@ -431,10 +431,14 @@ initial batch of commands sent to Discord.
 
 You can register your command with EssentialsX Discord by doing the following:
 ```java
+...
+import net.essentialsx.api.v2.services.discord.DiscordService;
+...
+
 public class MyEconomyPlugin {
     @Override
     public void onEnable() {
-      final EssentialsDiscordAPI api = Bukkit.getServicesManager().load(EssentialsDiscordAPI.class);
+      final DiscordService api = Bukkit.getServicesManager().load(DiscordService.class);
       api.getInteractionController().registerCommand(new BalanceSlashCommand());
     }
 }

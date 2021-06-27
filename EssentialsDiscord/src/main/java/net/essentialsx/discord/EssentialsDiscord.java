@@ -16,7 +16,7 @@ public class EssentialsDiscord extends JavaPlugin implements IEssentialsModule {
     private transient IEssentials ess;
     private transient MetricsWrapper metrics = null;
 
-    private EssentialsJDA jda;
+    private JDADiscordService jda;
     private DiscordSettings settings;
     private boolean isPAPI = false;
 
@@ -37,7 +37,7 @@ public class EssentialsDiscord extends JavaPlugin implements IEssentialsModule {
         ess.addReloadListener(settings);
 
         if (jda == null) {
-            jda = new EssentialsJDA(this);
+            jda = new JDADiscordService(this);
             try {
                 jda.startup();
                 ess.scheduleSyncDelayedTask(() -> ((InteractionControllerImpl) jda.getInteractionController()).processBatchRegistration());

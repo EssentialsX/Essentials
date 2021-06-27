@@ -8,7 +8,7 @@ import net.ess3.api.events.MuteStatusChangeEvent;
 import net.essentialsx.api.v2.events.AsyncUserDataLoadEvent;
 import net.essentialsx.api.v2.events.discord.DiscordChatMessageEvent;
 import net.essentialsx.api.v2.events.discord.DiscordMessageEvent;
-import net.essentialsx.discord.EssentialsJDA;
+import net.essentialsx.discord.JDADiscordService;
 import net.essentialsx.discord.util.MessageUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -25,9 +25,9 @@ import java.util.UUID;
 
 public class BukkitListener implements Listener {
     private final static String AVATAR_URL = "https://crafatar.com/avatars/{uuid}?overlay=true";
-    private final EssentialsJDA jda;
+    private final JDADiscordService jda;
 
-    public BukkitListener(EssentialsJDA jda) {
+    public BukkitListener(JDADiscordService jda) {
         this.jda = jda;
     }
 

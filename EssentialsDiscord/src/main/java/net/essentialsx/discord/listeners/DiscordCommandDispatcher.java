@@ -2,16 +2,16 @@ package net.essentialsx.discord.listeners;
 
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
-import net.essentialsx.discord.EssentialsJDA;
+import net.essentialsx.discord.JDADiscordService;
 import net.essentialsx.discord.util.DiscordCommandSender;
 import org.bukkit.Bukkit;
 import org.jetbrains.annotations.NotNull;
 
 public class DiscordCommandDispatcher extends ListenerAdapter {
-    private final EssentialsJDA jda;
+    private final JDADiscordService jda;
     private String channelId = null;
 
-    public DiscordCommandDispatcher(EssentialsJDA jda) {
+    public DiscordCommandDispatcher(JDADiscordService jda) {
         this.jda = jda;
     }
 

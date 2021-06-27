@@ -6,7 +6,7 @@ import com.earth2me.essentials.User;
 import net.essentialsx.api.v2.services.discord.InteractionCommandArgument;
 import net.essentialsx.api.v2.services.discord.InteractionCommandArgumentType;
 import net.essentialsx.api.v2.services.discord.InteractionEvent;
-import net.essentialsx.discord.EssentialsJDA;
+import net.essentialsx.discord.JDADiscordService;
 import net.essentialsx.discord.interactions.InteractionCommandImpl;
 
 import java.util.ArrayList;
@@ -17,7 +17,7 @@ import static com.earth2me.essentials.I18n.tl;
 
 public class ListCommand extends InteractionCommandImpl {
 
-    public ListCommand(EssentialsJDA jda) {
+    public ListCommand(JDADiscordService jda) {
         super(jda, "list", tl("discordCommandListDescription"));
         addArgument(new InteractionCommandArgument("group", tl("discordCommandListArgumentGroup"), InteractionCommandArgumentType.STRING, false));
     }

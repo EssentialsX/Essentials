@@ -12,7 +12,7 @@ import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.Webhook;
 import net.dv8tion.jda.api.hooks.EventListener;
 import net.essentialsx.api.v2.events.discord.DiscordMessageEvent;
-import net.essentialsx.api.v2.services.discord.EssentialsDiscordAPI;
+import net.essentialsx.api.v2.services.discord.DiscordService;
 import net.essentialsx.api.v2.services.discord.InteractionController;
 import net.essentialsx.api.v2.services.discord.InteractionException;
 import net.essentialsx.api.v2.services.discord.Unsafe;
@@ -38,7 +38,7 @@ import java.util.regex.Matcher;
 
 import static com.earth2me.essentials.I18n.tl;
 
-public class EssentialsJDA implements EssentialsDiscordAPI {
+public class JDADiscordService implements DiscordService {
     private final static Logger logger = Logger.getLogger("EssentialsDiscord");
     private final EssentialsDiscord plugin;
     private final Unsafe unsafe = this::getJda;
@@ -54,7 +54,7 @@ public class EssentialsJDA implements EssentialsDiscordAPI {
     private DiscordCommandDispatcher commandDispatcher;
     private InteractionControllerImpl interactionController;
 
-    public EssentialsJDA(EssentialsDiscord plugin) {
+    public JDADiscordService(EssentialsDiscord plugin) {
         this.plugin = plugin;
     }
 
@@ -160,7 +160,7 @@ public class EssentialsJDA implements EssentialsDiscordAPI {
 
         Bukkit.getPluginManager().registerEvents(new BukkitListener(this), plugin);
 
-        Bukkit.getServicesManager().register(EssentialsDiscordAPI.class, this, plugin, ServicePriority.Normal);
+        Bukkit.getServicesManager().register(DiscordService.class, this, plugin, ServicePriority.Normal);
     }
 
     @Override
