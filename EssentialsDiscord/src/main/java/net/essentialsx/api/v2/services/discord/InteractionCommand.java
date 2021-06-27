@@ -40,7 +40,7 @@ public interface InteractionCommand {
 
     /**
      * Called when an interaction command is received from Discord.
-     * @param event The event which caused this command to be executed.
+     * @param event The {@link InteractionEvent} which caused this command to be executed.
      */
     void onCommand(InteractionEvent event);
 }
