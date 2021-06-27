@@ -4,7 +4,7 @@ import com.earth2me.essentials.AsyncTeleport;
 import com.earth2me.essentials.IUser;
 import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.User;
-import net.essentialsx.api.v2.events.TeleportRequestAcceptEvent;
+import net.essentialsx.api.v2.events.TeleportRequestResponseEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Server;
@@ -91,7 +91,7 @@ public class Commandtpaccept extends EssentialsCommand {
             throw new Exception(tl("noPendingRequest"));
         }
 
-        final TeleportRequestAcceptEvent event = new TeleportRequestAcceptEvent(user, requester, request);
+        final TeleportRequestResponseEvent event = new TeleportRequestResponseEvent(user, requester, request, true);
         Bukkit.getPluginManager().callEvent(event);
         if (event.isCancelled()) {
             if (ess.getSettings().isDebug()) {

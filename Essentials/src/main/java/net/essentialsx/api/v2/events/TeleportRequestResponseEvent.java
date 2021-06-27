@@ -6,25 +6,27 @@ import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
 /**
- * Called when a player accepts a teleport.
+ * Called when a player accepts or denies a teleport.
  */
-public class TeleportRequestAcceptEvent extends Event implements Cancellable {
+public class TeleportRequestResponseEvent extends Event implements Cancellable {
     private static final HandlerList handlers = new HandlerList();
 
     private final net.ess3.api.IUser requestee;
     private final net.ess3.api.IUser requester;
     private final IUser.TpaRequest tpaRequest;
+    private final boolean accept;
     private boolean canceled = false;
 
-    public TeleportRequestAcceptEvent(net.ess3.api.IUser requestee, net.ess3.api.IUser requester, IUser.TpaRequest tpaRequest) {
+    public TeleportRequestResponseEvent(net.ess3.api.IUser requestee, net.ess3.api.IUser requester, IUser.TpaRequest tpaRequest, boolean accept) {
         this.requestee = requestee;
         this.requester = requester;
         this.tpaRequest = tpaRequest;
+        this.accept = accept;
     }
 
     /**
-     * Gets the user who is accepting this teleport request.
-     * @return the user accepting the request.
+     * Gets the user who is accepting/denying this teleport request.
+     * @return the user accepting/denying the request.
      */
     public net.ess3.api.IUser getRequestee() {
         return requestee;
@@ -44,6 +46,14 @@ public class TeleportRequestAcceptEvent extends Event implements Cancellable {
      */
     public IUser.TpaRequest getTpaRequest() {
         return tpaRequest;
+    }
+
+    /**
+     * Whether or not this request has been accepted or denied.
+     * @return true if accepted otherwise false.
+     */
+    public boolean isAccept() {
+        return accept;
     }
 
     @Override

@@ -2,6 +2,8 @@ package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.IUser;
 import com.earth2me.essentials.User;
+import net.essentialsx.api.v2.events.TeleportRequestResponseEvent;
+import org.bukkit.Bukkit;
 import org.bukkit.Server;
 
 import java.util.ArrayList;
@@ -35,6 +37,16 @@ public class Commandtpdeny extends EssentialsCommand {
                 int count = 0;
                 while ((request = user.getNextTpaRequest(false, true, true)) != null) {
                     final User player = ess.getUser(request.getRequesterUuid());
+
+                    final TeleportRequestResponseEvent event = new TeleportRequestResponseEvent(user, player, request, false);
+                    Bukkit.getPluginManager().callEvent(event);
+                    if (event.isCancelled()) {
+                        if (ess.getSettings().isDebug()) {
+                            logger.info("TPA deny cancelled by API for " + user.getName() + " (requested by " + player.getName() + ")");
+                        }
+                        continue;
+                    }
+
                     if (player != null && player.getBase().isOnline()) {
                         player.sendMessage(tl("requestDeniedFrom", user.getDisplayName()));
                     }
@@ -53,6 +65,15 @@ public class Commandtpdeny extends EssentialsCommand {
         final User player = ess.getUser(denyRequest.getRequesterUuid());
         if (player == null || !player.getBase().isOnline()) {
             throw new Exception(tl("noPendingRequest"));
+        }
+
+        final TeleportRequestResponseEvent event = new TeleportRequestResponseEvent(user, player, denyRequest, false);
+        Bukkit.getPluginManager().callEvent(event);
+        if (event.isCancelled()) {
+            if (ess.getSettings().isDebug()) {
+                logger.info("TPA deny cancelled by API for " + user.getName() + " (requested by " + player.getName() + ")");
+            }
+            return;
         }
 
         user.sendMessage(tl("requestDenied"));
