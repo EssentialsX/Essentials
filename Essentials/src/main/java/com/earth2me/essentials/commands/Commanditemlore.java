@@ -2,6 +2,7 @@ package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.FormatUtil;
+import com.earth2me.essentials.utils.MaterialUtil;
 import com.earth2me.essentials.utils.NumberUtil;
 import com.google.common.collect.Lists;
 import org.bukkit.Server;
@@ -24,7 +25,7 @@ public class Commanditemlore extends EssentialsCommand {
     @Override
     protected void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception {
         final ItemStack item = user.getBase().getItemInHand();
-        if (item.getType().name().contains("AIR")) {
+        if (MaterialUtil.isAir(item.getType())) {
             throw new Exception(tl("itemloreInvalidItem"));
         }
 
@@ -73,7 +74,7 @@ public class Commanditemlore extends EssentialsCommand {
             switch (args[0].toLowerCase(Locale.ENGLISH)) {
                 case "set": {
                     final ItemStack item = user.getBase().getItemInHand();
-                    if (!item.getType().name().contains("AIR") && item.hasItemMeta() && item.getItemMeta().hasLore()) {
+                    if (!MaterialUtil.isAir(item.getType()) && item.hasItemMeta() && item.getItemMeta().hasLore()) {
                         final List<String> lineNumbers = new ArrayList<>();
                         for (int i = 1; i <= item.getItemMeta().getLore().size(); i++) {
                             lineNumbers.add(String.valueOf(i));
@@ -92,7 +93,7 @@ public class Commanditemlore extends EssentialsCommand {
             if (args[0].equalsIgnoreCase("set") && NumberUtil.isInt(args[1])) {
                 final int i = Integer.parseInt(args[1]);
                 final ItemStack item = user.getBase().getItemInHand();
-                if (!item.getType().name().contains("AIR") && item.hasItemMeta() && item.getItemMeta().hasLore() && item.getItemMeta().getLore().size() >= i) {
+                if (!MaterialUtil.isAir(item.getType()) && item.hasItemMeta() && item.getItemMeta().hasLore() && item.getItemMeta().getLore().size() >= i) {
                     return Lists.newArrayList(FormatUtil.unformatString(user, "essentials.itemlore", item.getItemMeta().getLore().get(i - 1)));
                 }
             }
