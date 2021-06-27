@@ -271,6 +271,17 @@ public class JDADiscordService implements DiscordService {
         } else {
             final TextChannel channel = getChannel(consoleDef, false);
             if (channel != null) {
+                if (getSettings().isConsoleCommandRelay()) {
+                    if (commandDispatcher == null) {
+                        commandDispatcher = new DiscordCommandDispatcher(this);
+                        jda.addEventListener(commandDispatcher);
+                    }
+                    commandDispatcher.setChannelId(channel.getId());
+                } else if (commandDispatcher != null) {
+                    jda.removeEventListener(commandDispatcher);
+                    commandDispatcher = null;
+                }
+
                 if (channel.getId().equals(lastConsoleId)) {
                     return;
                 }
@@ -285,16 +296,6 @@ public class JDADiscordService implements DiscordService {
                 webhookId = webhook.getIdLong();
                 webhookToken = webhook.getToken();
                 lastConsoleId = channel.getId();
-                if (getSettings().isConsoleCommandRelay()) {
-                    if (commandDispatcher == null) {
-                        commandDispatcher = new DiscordCommandDispatcher(this);
-                        jda.addEventListener(commandDispatcher);
-                    }
-                    commandDispatcher.setChannelId(channel.getId());
-                } else if (commandDispatcher != null) {
-                    jda.removeEventListener(commandDispatcher);
-                    commandDispatcher = null;
-                }
             } else if (!getSettings().getConsoleChannelDef().equals("none") && !getSettings().getConsoleChannelDef().startsWith("0")) {
                 logger.info(tl("discordErrorLoggerInvalidChannel"));
                 shutdownConsoleRelay(true);
