@@ -52,6 +52,11 @@ public class TeleportRequestAcceptEvent extends Event implements Cancellable {
     }
 
     @Override
+    /**
+     * Sets whether or not to cancel this teleport request.
+     * Note that cancelling this event will not show a message to users about the cancellation.
+     * @param cancel whether or not to cancel this teleport request.
+     */
     public void setCancelled(boolean cancel) {
         this.canceled = cancel;
     }
