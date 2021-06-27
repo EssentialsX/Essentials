@@ -1,6 +1,7 @@
 package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.utils.FormatUtil;
 import com.earth2me.essentials.craftbukkit.InventoryWorkaround;
 import com.earth2me.essentials.utils.EnumUtil;
 import com.google.common.collect.Lists;
@@ -31,17 +32,19 @@ public class Commandbook extends EssentialsCommand {
 
             if (args.length > 1 && args[0].equalsIgnoreCase("author")) {
                 if (user.isAuthorized("essentials.book.author") && (isAuthor(bmeta, player) || user.isAuthorized("essentials.book.others"))) {
-                    bmeta.setAuthor(args[1]);
+                    final String newAuthor = FormatUtil.formatString(user, "essentials.book.author", getFinalArg(args, 1)).trim();
+                    bmeta.setAuthor(newAuthor);
                     item.setItemMeta(bmeta);
-                    user.sendMessage(tl("bookAuthorSet", getFinalArg(args, 1)));
+                    user.sendMessage(tl("bookAuthorSet", newAuthor));
                 } else {
                     throw new Exception(tl("denyChangeAuthor"));
                 }
             } else if (args.length > 1 && args[0].equalsIgnoreCase("title")) {
                 if (user.isAuthorized("essentials.book.title") && (isAuthor(bmeta, player) || user.isAuthorized("essentials.book.others"))) {
-                    bmeta.setTitle(args[1]);
+                    final String newTitle = FormatUtil.formatString(user, "essentials.book.title", getFinalArg(args, 1)).trim();
+                    bmeta.setTitle(newTitle);
                     item.setItemMeta(bmeta);
-                    user.sendMessage(tl("bookTitleSet", getFinalArg(args, 1)));
+                    user.sendMessage(tl("bookTitleSet", newTitle));
                 } else {
                     throw new Exception(tl("denyChangeTitle"));
                 }

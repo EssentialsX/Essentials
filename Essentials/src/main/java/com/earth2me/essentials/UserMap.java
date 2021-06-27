@@ -9,6 +9,7 @@ import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import com.google.common.util.concurrent.UncheckedExecutionException;
 import net.ess3.api.IEssentials;
+import net.ess3.api.MaxMoneyException;
 import org.bukkit.entity.Player;
 
 import java.io.File;
@@ -177,22 +178,42 @@ public class UserMap extends CacheLoader<String, User> implements IConf {
         }
 
         if (player instanceof Player) {
+            if (ess.getSettings().isDebug()) {
+                ess.getLogger().info("Loading online OfflinePlayer into user map...");
+            }
             final User user = new User((Player) player, ess);
             trackUUID(player.getUniqueId(), player.getName(), true);
             return user;
         }
 
         final File userFile = getUserFileFromID(player.getUniqueId());
-
-        if (userFile.exists()) {
-            final OfflinePlayer essPlayer = new OfflinePlayer(player.getUniqueId(), ess.getServer());
-            final User user = new User(essPlayer, ess);
-            essPlayer.setName(user.getLastAccountName());
-            trackUUID(player.getUniqueId(), user.getName(), false);
-            return user;
+        if (ess.getSettings().isDebug()) {
+            ess.getLogger().info("Loading OfflinePlayer into user map. Has data: " + userFile.exists() + " for " + player);
         }
 
-        throw new UserDoesNotExistException("User not found!");
+        final OfflinePlayer essPlayer = new OfflinePlayer(player.getUniqueId(), ess.getServer());
+        final User user = new User(essPlayer, ess);
+        if (userFile.exists()) {
+            essPlayer.setName(user.getLastAccountName());
+        } else {
+            if (ess.getSettings().isDebug()) {
+                ess.getLogger().info("OfflinePlayer usermap load saving user data for " + player);
+            }
+
+            // this code makes me sad
+            user.startTransaction();
+            try {
+                user.setMoney(ess.getSettings().getStartingBalance());
+            } catch (MaxMoneyException e) {
+                // Shouldn't happen as it would be an illegal configuration state
+                throw new RuntimeException(e);
+            }
+            user.setLastAccountName(user.getName());
+            user.stopTransaction();
+        }
+
+        trackUUID(player.getUniqueId(), user.getName(), false);
+        return user;
     }
 
     @Override
@@ -217,6 +238,10 @@ public class UserMap extends CacheLoader<String, User> implements IConf {
         }
         names.remove(name);
         names.remove(StringUtil.safeString(name));
+    }
+
+    public void removeUserUUID(final String uuid) {
+        users.invalidate(uuid);
     }
 
     public Set<UUID> getAllUniqueUsers() {

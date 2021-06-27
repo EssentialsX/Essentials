@@ -1,5 +1,7 @@
 package com.earth2me.essentials;
 
+import com.earth2me.essentials.config.EssentialsConfiguration;
+import com.earth2me.essentials.config.entities.LazyLocation;
 import com.earth2me.essentials.utils.LocationUtil;
 import com.earth2me.essentials.utils.VersionUtil;
 import io.papermc.lib.PaperLib;
@@ -21,15 +23,13 @@ public class RandomTeleport implements IConf {
     private static final Random RANDOM = new Random();
     private static final int HIGHEST_BLOCK_Y_OFFSET = VersionUtil.getServerBukkitVersion().isHigherThanOrEqualTo(VersionUtil.v1_15_R01) ? 1 : 0;
     private final IEssentials essentials;
-    private final EssentialsConf config;
+    private final EssentialsConfiguration config;
     private final ConcurrentLinkedQueue<Location> cachedLocations = new ConcurrentLinkedQueue<>();
 
     public RandomTeleport(final IEssentials essentials) {
         this.essentials = essentials;
-        final File file = new File(essentials.getDataFolder(), "tpr.yml");
-        config = new EssentialsConf(file);
-        config.setTemplateName("/tpr.yml");
-        config.options().copyHeader(true);
+        config = new EssentialsConfiguration(new File(essentials.getDataFolder(), "tpr.yml"), "/tpr.yml",
+                "Configuration for the random teleport command.\nSome settings may be defaulted, and can be changed via the /settpr command in-game.");
         reloadConfig();
     }
 
@@ -41,9 +41,9 @@ public class RandomTeleport implements IConf {
 
     public Location getCenter() {
         try {
-            final Location center = config.getLocation("center", essentials.getServer());
-            if (center != null) {
-                return center;
+            final LazyLocation center = config.getLocation("center");
+            if (center != null && center.location() != null) {
+                return center.location();
             }
         } catch (final InvalidWorldException ignored) {
         }
@@ -77,7 +77,7 @@ public class RandomTeleport implements IConf {
     }
 
     public Set<Biome> getExcludedBiomes() {
-        final List<String> biomeNames = config.getStringList("excluded-biomes");
+        final List<String> biomeNames = config.getList("excluded-biomes", String.class);
         final Set<Biome> excludedBiomes = new HashSet<>();
         for (final String biomeName : biomeNames) {
             try {

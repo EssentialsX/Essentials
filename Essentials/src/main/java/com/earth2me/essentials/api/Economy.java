@@ -1,8 +1,8 @@
 package com.earth2me.essentials.api;
 
-import com.earth2me.essentials.EssentialsUserConf;
 import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.config.EssentialsUserConfiguration;
 import com.earth2me.essentials.utils.NumberUtil;
 import com.earth2me.essentials.utils.StringUtil;
 import com.google.common.base.Charsets;
@@ -57,12 +57,12 @@ public class Economy {
             LOGGER.log(Level.SEVERE, MessageFormat.format(WARN_NPC_RECREATE_1, name, npcUUID.toString()), new RuntimeException());
             LOGGER.log(Level.SEVERE, WARN_NPC_RECREATE_2);
         }
-        final EssentialsUserConf npcConfig = new EssentialsUserConf(name, npcUUID, npcFile);
+        final EssentialsUserConfiguration npcConfig = new EssentialsUserConfiguration(name, npcUUID, npcFile);
         npcConfig.load();
         npcConfig.setProperty("npc", true);
         npcConfig.setProperty("lastAccountName", name);
         npcConfig.setProperty("money", ess.getSettings().getStartingBalance());
-        npcConfig.forceSave();
+        npcConfig.blockingSave();
         ess.getUserMap().trackUUID(npcUUID, name, false);
     }
 
@@ -93,6 +93,10 @@ public class Economy {
                     LOGGER.log(Level.INFO, MessageFormat.format(WARN_PLAYER_UUID_NO_NAME, name, player.getUniqueId().toString()), new RuntimeException());
                 }
             }
+        }
+
+        if (user == null) {
+            user = getUserByUUID(UUID.nameUUIDFromBytes(("NPC:" + name).getBytes(Charsets.UTF_8)));
         }
 
         return user;

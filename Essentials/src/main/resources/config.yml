@@ -331,8 +331,17 @@ kit-auto-equip: false
 # Determines the functionality of the /createkit command.
 # If this is true, /createkit will give the user a link with the kit code.
 # If this is false, /createkit will add the kit to the kits.yml config file directly.
-#
+# Default is false.
 pastebin-createkit: false
+
+# Determines if /createkit will generate kits using NBT item serialization.
+# If this is true, /createkit will store items as NBT; otherwise, it will use Essentials' human-readable item format.
+# By using NBT serialization, /createkit can store items with complex metadata such as shulker boxes and weapons with custom attributes.
+# WARNING: This option only works on 1.15.2+ Paper servers, and it will bypass any custom serializers from other plugins such as Magic.
+# WARNING: When creating kits via /createkit with this option enabled, you will not be able to downgrade your server with these kit items.
+# This option only affects /createkit - you can still create kits by hand in `kits.yml` using Essentials' human-readable item format.
+# Default is false.
+use-nbt-serialization-in-createkit: false
 
 # Essentials Sign Control
 # See http://wiki.ess3.net/wiki/Sign_Tutorial for instructions on how to use these.
@@ -470,6 +479,11 @@ cancel-afk-on-chat: true
 # When this setting is false, players won't be able to skip the night if some players are AFK.
 # Users with the permission node essentials.sleepingignored will always be ignored.
 sleep-ignores-afk-players: true
+
+# Should vanished players be ignored when other players are trying to sleep?
+# When this setting is false, player's won't be able to skip the night if vanished players are not sleeping.
+# Users with the permission node essentials.sleepingignored will always be ignored.
+sleep-ignores-vanished-player: true
 
 # Set the player's list name when they are AFK. This is none by default which specifies that Essentials 
 # should not interfere with the AFK player's list name.
@@ -639,8 +653,10 @@ default-enabled-confirm-commands:
 #- pay
 #- clearinventory
 
-# Whether or not to teleport a player back to their previous position after they have been freed from jail.
-teleport-back-when-freed-from-jail: true
+# Where should Essentials teleport players when they are freed from jail?
+# You can set to "back" to have them teleported to where they were before they were jailed, "spawn" to have them
+# teleport to spawn, or "off" to not have them teleport.
+teleport-when-freed: back
 
 # Whether or not jail time should only be counted while the user is online.
 # If true, a jailed player's time will only decrement when they are online.
@@ -773,6 +789,11 @@ minimum-pay-amount: 0.001
 
 # Enable this to block users who try to /pay another user which ignore them.
 pay-excludes-ignore-list: false
+
+# Whether or not users with a balance less than or equal to $0 should be shown in balance-top.
+# Setting to false will not show people with balances <= 0 in balance-top.
+# NOTE: After reloading the config, you must also run '/baltop force' for this to appear
+show-zero-baltop: true
 
 # The format of currency, excluding symbols. See currency-symbol-format-locale for symbol configuration.
 #

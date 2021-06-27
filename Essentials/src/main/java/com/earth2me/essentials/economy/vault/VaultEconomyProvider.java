@@ -1,10 +1,11 @@
 package com.earth2me.essentials.economy.vault;
 
 import com.earth2me.essentials.Essentials;
-import com.earth2me.essentials.EssentialsUserConf;
 import com.earth2me.essentials.api.NoLoanPermittedException;
 import com.earth2me.essentials.api.UserDoesNotExistException;
+import com.earth2me.essentials.config.EssentialsUserConfiguration;
 import com.earth2me.essentials.utils.NumberUtil;
+import com.google.common.base.Charsets;
 import net.ess3.api.MaxMoneyException;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.economy.EconomyResponse;
@@ -15,6 +16,7 @@ import java.math.BigDecimal;
 import java.text.MessageFormat;
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -74,7 +76,11 @@ public class VaultEconomyProvider implements Economy {
     @SuppressWarnings("deprecation")
     @Override
     public boolean hasAccount(String playerName) {
-        return com.earth2me.essentials.api.Economy.playerExists(playerName);
+        if (com.earth2me.essentials.api.Economy.playerExists(playerName)) {
+            return true;
+        }
+        // We may not have the player name in the usermap, let's double check an NPC account with this name doesn't exist.
+        return com.earth2me.essentials.api.Economy.playerExists(UUID.nameUUIDFromBytes(("NPC:" + playerName).getBytes(Charsets.UTF_8)));
     }
 
     @Override
@@ -297,18 +303,21 @@ public class VaultEconomyProvider implements Economy {
                 LOGGER.log(Level.SEVERE, MessageFormat.format(WARN_NPC_RECREATE_1, player.getName(), player.getUniqueId().toString()), new RuntimeException());
                 LOGGER.log(Level.SEVERE, WARN_NPC_RECREATE_2);
             }
-            final EssentialsUserConf npcConfig = new EssentialsUserConf(player.getName(), player.getUniqueId(), npcFile);
+            final EssentialsUserConfiguration npcConfig = new EssentialsUserConfiguration(player.getName(), player.getUniqueId(), npcFile);
             npcConfig.load();
             npcConfig.setProperty("npc", true);
             npcConfig.setProperty("lastAccountName", player.getName());
             npcConfig.setProperty("money", ess.getSettings().getStartingBalance());
-            npcConfig.forceSave();
+            npcConfig.blockingSave();
             ess.getUserMap().trackUUID(player.getUniqueId(), player.getName(), false);
             return true;
         }
 
         // Loading a v4 UUID that we somehow didn't track, mark it as a normal player and hope for the best, vault sucks :/
         try {
+            if (ess.getSettings().isDebug()) {
+                LOGGER.info("Vault requested a player account creation for a v4 UUID: " + player);
+            }
             ess.getUserMap().load(player);
             return true;
         } catch (UserDoesNotExistException e) {
