@@ -17,9 +17,9 @@ import static com.earth2me.essentials.I18n.tl;
 
 public class MessageCommand extends InteractionCommandImpl {
     public MessageCommand(JDADiscordService jda) {
-        super(jda, "msg", "Messages a player on the Minecraft Server.");
-        addArgument(new InteractionCommandArgument("username", "The player to send the message to", InteractionCommandArgumentType.STRING, true));
-        addArgument(new InteractionCommandArgument("message", "The message to send to the player", InteractionCommandArgumentType.STRING, true));
+        super(jda, "msg", tl("discordCommandMessageDescription"));
+        addArgument(new InteractionCommandArgument("username", tl("discordCommandMessageArgumentUsername"), InteractionCommandArgumentType.STRING, true));
+        addArgument(new InteractionCommandArgument("message", tl("discordCommandMessageArgumentMessage"), InteractionCommandArgumentType.STRING, true));
     }
 
     @Override
