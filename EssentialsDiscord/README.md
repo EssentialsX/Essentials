@@ -3,7 +3,7 @@
 EssentialsX Discord is a module that brings a simple, lightweight, easy-to-use, and bloat-free
 bridge between Discord and Minecraft.
 
-EssentialsXDiscord offers *essential* features you'd want from a Discord bridge such as:
+EssentialsX Discord offers *essential* features you'd want from a Discord bridge such as:
 * MC Chat -> Discord Channel
 * Discord Channel -> MC Chat
 * Basic MC -> Discord Event Monitoring (Join/Leave/Death/Mute)
