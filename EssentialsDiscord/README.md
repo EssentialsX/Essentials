@@ -358,6 +358,8 @@ public class StaffChatExample {
 }
 ```
 
+Additionally, you can also look at [TownyChat's EssentialsX Discord hook](https://github.com/TownyAdvanced/TownyChat/commit/5bee9611aa4200e3cde1a28af48c25caa4aec649).
+
 ### Registering a Discord slash command
 EssentialsX Discord also allows you to register slash commands directly with Discord itself
 in order to provide your users with a way to interface with your plugins on Discord!
