@@ -199,97 +199,97 @@ presence:
 messages:
   # This is the message that is used to show discord chat to players in game.
   # Color/formatting codes and the follow placeholders can be used here:
-  # {channel} - The name of the discord channel the message was sent from
-  # {username} - The username of the user who sent the message
-  # {tag} - The four numbers displayed after their user's username
-  # {fullname} - Equivalent to typing "{username}#{tag}"
-  # {nickname} - The nickname of the user who sent the message. (Will return username if user has no nickname)
-  # {color} - The minecraft color representive of the user's topmost role color on discord. If the user doesn't have a role color, the placeholder is empty.
-  # {message} - The content of the message being sent
+  # - {channel}: The name of the discord channel the message was sent from
+  # - {username}: The username of the user who sent the message
+  # - {tag}: The four numbers displayed after their user's username
+  # - {fullname}: Equivalent to typing "{username}#{tag}"
+  # - {nickname}: The nickname of the user who sent the message. (Will return username if user has no nickname)
+  # - {color}: The minecraft color representative of the user's topmost role color on discord. If the user doesn't have a role color, the placeholder is empty.
+  # - {message}: The content of the message being sent
   discord-to-mc: "&6[#{channel}] &3{fullname}&7: &f{message}"
   # This is the message that is used to relay minecraft chat in discord.
   # The following placeholders can be used here:
-  # {username} - The username of the player sending the message
-  # {displayname} - The display name of the player sending the message (This would be their nickname)
-  # {message} - The content of the message being sent
-  # {world} - The name of the world the player sending the message is in
-  # {prefix} - The prefix of the player sending the message
-  # {suffix} - The suffix of the player sending the message
+  # - {username}: The username of the player sending the message
+  # - {displayname}: The display name of the player sending the message (This would be their nickname)
+  # - {message}: The content of the message being sent
+  # - {world}: The name of the world the player sending the message is in
+  # - {prefix}: The prefix of the player sending the message
+  # - {suffix}: The suffix of the player sending the message
   # ... PlaceholderAPI placeholders are also supported here too!
   mc-to-discord: "{displayname}: {message}"
   # This is the message sent to discord when a player is temporarily muted in minecraft.
   # The following placeholders can be used here:
-  # {username} - The username of the player being muted
-  # {displayname} - The display name of the player being muted
-  # {controllername} - The username of the user who muted the player
-  # {controllerdisplayname} - The display name of the user who muted the player
-  # {time} - The amount of time the player was muted for
+  # - {username}: The username of the player being muted
+  # - {displayname}: The display name of the player being muted
+  # - {controllername}: The username of the user who muted the player
+  # - {controllerdisplayname}: The display name of the user who muted the player
+  # - {time}: The amount of time the player was muted for
   temporary-mute: "{controllerdisplayname} muted {displayname} for {time}"
   # This is the message sent to discord when a player is temporarily muted (with a reason specified) in minecraft.
   # The following placeholders can be used here:
-  # {username} - The username of the player being muted
-  # {displayname} - The display name of the player being muted
-  # {controllername} - The username of the user who muted the player
-  # {controllerdisplayname} - The display name of the user who muted the player
-  # {time} - The amount of time the player was muted for
-  # {reason} - The reason the player was muted for
+  # - {username}: The username of the player being muted
+  # - {displayname}: The display name of the player being muted
+  # - {controllername}: The username of the user who muted the player
+  # - {controllerdisplayname}: The display name of the user who muted the player
+  # - {time}: The amount of time the player was muted for
+  # - {reason}: The reason the player was muted for
   temporary-mute-reason: "{controllerdisplayname} muted {displayname} for {time} with reason: {reason}"
   # This is the message sent to discord when a player is permanently muted in minecraft.
   # The following placeholders can be used here:
-  # {username} - The username of the player being muted
-  # {displayname} - The display name of the player being muted
-  # {controllername} - The username of the user who muted the player
-  # {controllerdisplayname} - The display name of the user who muted the player
+  # - {username}: The username of the player being muted
+  # - {displayname}: The display name of the player being muted
+  # - {controllername}: The username of the user who muted the player
+  # - {controllerdisplayname}: The display name of the user who muted the player
   permanent-mute: "{controllerdisplayname} permanently muted {displayname}"
   # This is the message sent to discord when a player is permanently muted (with a reason specified) in minecraft.
   # The following placeholders can be used here:
-  # {username} - The username of the player being muted
-  # {displayname} - The display name of the player being muted
-  # {controllername} - The username of the user who muted the player
-  # {controllerdisplayname} - The display name of the user who muted the player
-  # {reason} - The reason the player was muted for
+  # - {username}: The username of the player being muted
+  # - {displayname}: The display name of the player being muted
+  # - {controllername}: The username of the user who muted the player
+  # - {controllerdisplayname}: The display name of the user who muted the player
+  # - {reason}: The reason the player was muted for
   permanent-mute-reason: "{controllerdisplayname} permanently muted {displayname} with reason: {reason}"
   # This is the message sent to discord when a player is unmuted in minecraft.
   # The following placeholders can be used here:
-  # {username} - The username of the player being unmuted
-  # {displayname} - The display name of the player being unmuted
+  # - {username}: The username of the player being unmuted
+  # - {displayname}: The display name of the player being unmuted
   unmute: "{displayname} has been unmuted."
   # This is the message sent to discord when a player joins the minecraft server.
   # The following placeholders can be used here:
-  # {username} - The name of the user joining
-  # {displayname} - The display name of the user joining
-  # {defaultmessage} - The full default join message used in game
+  # - {username}: The name of the user joining
+  # - {displayname}: The display name of the user joining
+  # - {defaultmessage}: The full default join message used in game
   # ... PlaceholderAPI placeholders are also supported here too!
   join: ":exclamation: {displayname} has joined!"
   # This is the message sent to discord when a player leaves the minecraft server.
   # The following placeholders can be used here:
-  # {username} - The name of the user leaving
-  # {displayname} - The display name of the user leaving
-  # {defaultmessage} - The full default leave message used in game
+  # - {username}: The name of the user leaving
+  # - {displayname}: The display name of the user leaving
+  # - {defaultmessage}: The full default leave message used in game
   # ... PlaceholderAPI placeholders are also supported here too!
   quit: ":exclamation: {displayname} has left!"
   # This is the message sent to discord when a player dies.
   # The following placeholders can be used here:
-  # {username} - The name of the user who died
-  # {displayname} - The display name of the user who died
-  # {defaultmessage} - The full default death message used in game
+  # - {username}: The name of the user who died
+  # - {displayname}: The display name of the user who died
+  # - {defaultmessage}: The full default death message used in game
   # ... PlaceholderAPI placeholders are also supported here too!
   death: ":skull: {displayname} has died!"
   # This is the message sent to discord when a player becomes afk.
   # The following placeholders can be used here:
-  # {username} - The name of the user who became afk
-  # {displayname} - The display name of the user who became afk
+  # - {username}: The name of the user who became afk
+  # - {displayname}: The display name of the user who became afk
   # ... PlaceholderAPI placeholders are also supported here too!
   afk: ":person_walking: {displayname} is now AFK!"
   # This is the message sent to discord when a player is no longer afk.
   # The following placeholders can be used here:
-  # {username} - The name of the user who is no longer afk
-  # {displayname} - The display name of the user who is no longer afk
+  # - {username}: The name of the user who is no longer afk
+  # - {displayname}: The display name of the user who is no longer afk
   # ... PlaceholderAPI placeholders are also supported here too!
   un-afk: ":keyboard: {displayname} is no longer AFK!"
   # This is the message sent to discord when a player is kicked from the server.
   # The following placeholders can be used here:
-  # {username} - The name of the user who got kicked
-  # {displayname} - The display name of the user who got kicked
-  # {reason} - The reason the player was kicked
+  # - {username}: The name of the user who got kicked
+  # - {displayname}: The display name of the user who got kicked
+  # - {reason}: The reason the player was kicked
   kick: "{displayname} was kicked with reason: {reason}"
