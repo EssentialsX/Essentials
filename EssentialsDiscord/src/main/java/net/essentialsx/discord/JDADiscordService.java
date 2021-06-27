@@ -15,6 +15,7 @@ import net.essentialsx.api.v2.events.discord.DiscordMessageEvent;
 import net.essentialsx.api.v2.services.discord.DiscordService;
 import net.essentialsx.api.v2.services.discord.InteractionController;
 import net.essentialsx.api.v2.services.discord.InteractionException;
+import net.essentialsx.api.v2.services.discord.MessageType;
 import net.essentialsx.api.v2.services.discord.Unsafe;
 import net.essentialsx.discord.interactions.InteractionControllerImpl;
 import net.essentialsx.discord.interactions.commands.ExecuteCommand;
@@ -48,7 +49,7 @@ public class JDADiscordService implements DiscordService {
     private TextChannel primaryChannel;
     private WebhookClient consoleWebhook;
     private String lastConsoleId;
-    private final Map<DiscordMessageEvent.MessageType, String> typeToChannelId = new HashMap<>();
+    private final Map<MessageType, String> typeToChannelId = new HashMap<>();
     private final Map<String, WebhookClient> channelIdToWebhook = new HashMap<>();
     private ConsoleInjector injector;
     private DiscordCommandDispatcher commandDispatcher;
@@ -164,6 +165,16 @@ public class JDADiscordService implements DiscordService {
     }
 
     @Override
+    public void sendMessage(MessageType type, String message, boolean allowGroupMentions) {
+        final DiscordMessageEvent event = new DiscordMessageEvent(type, FormatUtil.stripFormat(message), allowGroupMentions);
+        if (Bukkit.getServer().isPrimaryThread()) {
+            Bukkit.getPluginManager().callEvent(event);
+        } else {
+            Bukkit.getScheduler().runTask(plugin, () -> Bukkit.getPluginManager().callEvent(event));
+        }
+    }
+
+    @Override
     public InteractionController getInteractionController() {
         return interactionController;
     }
@@ -193,7 +204,7 @@ public class JDADiscordService implements DiscordService {
             return;
         }
 
-        for (DiscordMessageEvent.MessageType type : DiscordMessageEvent.MessageType.DefaultTypes.values()) {
+        for (MessageType type : MessageType.DefaultTypes.values()) {
             if (!type.isPlayer()) {
                 continue;
             }

@@ -278,24 +278,24 @@ message to.
 #### Using a built-in message channel
 EssentialsX Discord defines a few built in `message-types` which you may fit your use case
 already (such as sending a message to the MC->Discord chat relay channel). The list of 
-built-in message types can be found at [`DiscordMessageEvent.MessageType.DefaultTypes`](https://github.com/EssentialsX/Essentials/blob/2.x/EssentialsDiscord/src/main/java/net/essentialsx/api/v2/events/discord/DiscordMessageEvent.java#L195-L203).
+built-in message types can be found at [`MessageType.DefaultTypes`](https://github.com/EssentialsX/Essentials/blob/2.x/EssentialsDiscord/src/main/java/net/essentialsx/api/v2/services/discord/MessageType.java#L47-L67).
 
 Here is an example of what sending a message to the built-in chat channel would look like:
 ```java
 // The built in channel you want to send your message to, in this case the chat channel.
-final MessageType channel = DiscordMessageEvent.MessageType.DefaultTypes.CHAT;
+final MessageType channel = MessageType.DefaultTypes.CHAT;
 // Set to true if your message should be allowed to ping @everyone, @here, or roles.
 // If you are sending user-generated content, you probably should keep this as false.
 final boolean allowGroupMentions = false;
-// Construct and call the actual event
-final DiscordMessageEvent event = new DiscordMessageEvent(channel, "My Epic Message", allowGroupMentions);
-Bukkit.getPluginManager().callEvent(event);
+// Send the actual message
+final DiscordService api = Bukkit.getServicesManager().load(DiscordService.class);
+api.sendMessage(channel, "My Epic Message", allowGroupMentions);
 ```
 
 #### Using your own message channel
 If you want to create your own message type to allow your users to explicitly separate your
 messages from our other built-in ones, you can do that also by creating a new
-[`DiscordMessageEvent.MessageType`](https://github.com/EssentialsX/Essentials/blob/module/discord/EssentialsDiscord/src/main/java/net/essentialsx/api/v2/events/discord/DiscordMessageEvent.java#L159-L161).
+[`MessageType`](https://github.com/EssentialsX/Essentials/blob/2.x/EssentialsDiscord/src/main/java/net/essentialsx/api/v2/services/discord/MessageType.java).
 The key provided in the constructor should be the key you'd like your users to use in the
 `message-types` section of our config. You *can* also put a Discord channel ID as the
 key if you'd like to have your users define the channel id in your config rather than ours.
@@ -306,16 +306,16 @@ public class CustomTypeExample {
     // Create a new message type for the user to define in our config.
     // Unless you're putting a discord channel id as the type key, it's probably 
     // a good idea to store this object so you don't create it every time.
-    private final DiscordMessageEvent.MessageType type = new DiscordMessageEvent.MessageType("my-awesome-channel");
+    private final MessageType type = new MessageType("my-awesome-channel");
     
     @EventHandler()
     public void onAwesomeEvent(AwesomeEvent event) {
       // Set to true if your message should be allowed to ping @everyone, @here, or roles.
       // If you are sending user-generated content, you probably should keep this as false.
       final boolean allowGroupMentions = false;
-      // Construct and call the actual event
-      final DiscordMessageEvent event = new DiscordMessageEvent(type, "The player, " + event.getPlayer() + ", did something awesome!", allowPing);
-      Bukkit.getPluginManager().callEvent(event);
+      // Send the actual message
+      final DiscordService api = Bukkit.getServicesManager().load(DiscordService.class);
+      api.sendMessage(type, "The player, " + event.getPlayer() + ", did something awesome!", allowPing);
     }
 }
 ```
