@@ -5,7 +5,7 @@ package net.essentialsx.api.v2.services.discord;
  */
 public interface InteractionEvent {
     /**
-     * Creates/Appends the initial response message.
+     * Appends the given string to the initial response message and creates one if it doesn't exist.
      * @param message The message to append.
      */
     void reply(String message);
