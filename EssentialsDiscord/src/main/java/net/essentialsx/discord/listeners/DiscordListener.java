@@ -29,7 +29,11 @@ public class DiscordListener extends ListenerAdapter {
 
     @Override
     public void onGuildMessageReceived(@NotNull GuildMessageReceivedEvent event) {
-        if (event.isWebhookMessage() || event.getAuthor().isBot()) {
+        if (event.getAuthor().isBot() && !event.isWebhookMessage() && (!plugin.getSettings().isShowBotMessages() || event.getAuthor().getId().equals(plugin.getJda().getSelfUser().getId()))) {
+            return;
+        }
+
+        if (event.isWebhookMessage() && (!plugin.getSettings().isShowWebhookMessages() || DiscordUtil.ACTIVE_WEBHOOKS.contains(event.getAuthor().getId()))) {
             return;
         }
 

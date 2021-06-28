@@ -18,12 +18,14 @@ import okhttp3.OkHttpClient;
 import java.awt.Color;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.Consumer;
 
 public final class DiscordUtil {
     public final static List<Message.MentionType> NO_GROUP_MENTIONS;
     public final static AllowedMentions ALL_MENTIONS_WEBHOOK = AllowedMentions.all();
     public final static AllowedMentions NO_GROUP_MENTIONS_WEBHOOK = new AllowedMentions().withParseEveryone(false).withParseRoles(false).withParseUsers(true);
+    public final static CopyOnWriteArrayList<String> ACTIVE_WEBHOOKS = new CopyOnWriteArrayList<>();
 
     static {
         final ImmutableList.Builder<Message.MentionType> types = new ImmutableList.Builder<>();
@@ -69,9 +71,11 @@ public final class DiscordUtil {
             for (final Webhook webhook : webhooks) {
                 if (webhook.getName().equalsIgnoreCase(webhookName)) {
                     if (foundWebhook || !webhook.getChannel().equals(channel)) {
+                        ACTIVE_WEBHOOKS.remove(webhook.getId());
                         webhook.delete().reason("EssX Webhook Cleanup").queue();
                         continue;
                     }
+                    ACTIVE_WEBHOOKS.addIfAbsent(webhook.getId());
                     future.complete(webhook);
                     foundWebhook = true;
                 }
@@ -106,7 +110,10 @@ public final class DiscordUtil {
         }
 
         final CompletableFuture<Webhook> future = new CompletableFuture<>();
-        channel.createWebhook(webhookName).queue(future::complete);
+        channel.createWebhook(webhookName).queue(webhook -> {
+            future.complete(webhook);
+            ACTIVE_WEBHOOKS.addIfAbsent(webhook.getId());
+        });
         return future;
     }
 

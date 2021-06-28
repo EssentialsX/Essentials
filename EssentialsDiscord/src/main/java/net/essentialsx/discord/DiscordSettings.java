@@ -107,6 +107,14 @@ public class DiscordSettings implements IConf {
         return discordFilter;
     }
 
+    public boolean isShowWebhookMessages() {
+        return config.getBoolean("chat.show-webhook-messages", false);
+    }
+
+    public boolean isShowBotMessages() {
+        return config.getBoolean("chat.show-bot-messages", false);
+    }
+
     public boolean isShowAllChat() {
         return config.getBoolean("chat.show-all-chat", false);
     }

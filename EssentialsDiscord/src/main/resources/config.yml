@@ -54,6 +54,10 @@ chat:
   # A regex pattern which will not send matching messages through to Discord.
   # By default, this will ignore messages starting with '!' and '?'.
   discord-filter: "^[!?]"
+  # Whether or not webhook messages from Discord should be shown in Minecraft.
+  show-webhook-messages: false
+  # Whether or not bot messages from Discord should be shown in Minecraft.
+  show-bot-messages: false
   # Whether or not to show all Minecraft chat messages that are not shown to all players.
   # You shouldn't need to enable this unless you're not seeing all chat messages go through to Discord.
   show-all-chat: false
