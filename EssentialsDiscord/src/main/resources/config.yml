@@ -23,8 +23,8 @@ guild: 000000000000000000
 # Channels defined here can be used for two different purposes:
 #
 # Firstly, channels defined here can be used to give players permission to see messages from said channel.
-# This can be done by give your players the permission node `essentials.discord.receive.<channel>`.
-# For example, if you wanted to let a player see messages from the primary channel, you'd give them `essentials.discord.receive.primary`.
+# This can be done by give your players the permission node "essentials.discord.receive.<channel>".
+# For example, if you wanted to let a player see messages from the primary channel, you'd give them "essentials.discord.receive.primary".
 #
 # Secondly, channels defined here can be used in the section below to specify which channel a message goes to.
 # If a defined channel ID is invalid, the primary channel will be used as a fallback.
@@ -39,7 +39,7 @@ channels:
   staff: 000000000000000000
 
 # Should all players receive Discord messages from the primary channel, regardless of their permissions?
-# This is intended for use for people without permissions plugins. If you have a permissions plugin, please give your
+# This is intended for use for people without permission plugins. If you have a permission plugin, please give your
 # players the essentials.discord.receive.primary permission.
 always-receive-primary: false
 
@@ -81,7 +81,7 @@ console:
   # The following is a list of available log levels in order of lowest to highest.
   # Changing the log level will send all log levels above it to the console relay.
   # For example, setting this to 'info' will display log messages with info, warn, error, and fatal levels.
-  # Log Levels;
+  # Log Levels:
   # - fatal
   # - error
   # - warn

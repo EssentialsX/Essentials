@@ -20,7 +20,7 @@ public interface InteractionMember {
     String getDiscriminator();
 
     /**
-     * Gets this member's tag and discriminator split by a {@code #}.
+     * Gets this member's name and discriminator split by a {@code #}.
      * @return this member's tag.
      */
     default String getTag() {
