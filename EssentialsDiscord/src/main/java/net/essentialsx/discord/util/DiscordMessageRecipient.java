@@ -7,6 +7,8 @@ import org.bukkit.entity.Player;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import static com.earth2me.essentials.I18n.tl;
+
 public class DiscordMessageRecipient implements IMessageRecipient {
     private final InteractionMember member;
     private final AtomicBoolean died = new AtomicBoolean(false);
@@ -33,7 +35,7 @@ public class DiscordMessageRecipient implements IMessageRecipient {
 
         final String cleanMessage = MessageUtil.sanitizeDiscordMarkdown(FormatUtil.stripFormat(message));
 
-        member.sendPrivateMessage(cleanMessage).thenAccept(success -> {
+        member.sendPrivateMessage(tl("replyFromDiscord", sender.getName(), cleanMessage)).thenAccept(success -> {
             if (!success) {
                 died.set(true);
             }
