@@ -21,6 +21,6 @@ public class ExecuteCommand extends InteractionCommandImpl {
         final String command = event.getStringArgument("command");
         event.reply(tl("discordCommandExecuteReply", command));
         Bukkit.getScheduler().runTask(jda.getPlugin(), () ->
-                Bukkit.dispatchCommand(new DiscordCommandSender(jda, Bukkit.getConsoleSender(), event::reply), command));
+                Bukkit.dispatchCommand(new DiscordCommandSender(jda, Bukkit.getConsoleSender(), event::reply).getSender(), command));
     }
 }
