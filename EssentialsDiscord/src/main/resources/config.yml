@@ -71,7 +71,7 @@ console:
   # - {message}: The actual message being logged
   format: "[{timestamp} {level}] {message}"
   # The name of the webhook that will be created, if a channel ID is provided.
-  webhook-name: "EssX Console Relay"
+  webhook-name: "Essentials Console Relay"
   # Set to true if all messages in the console relay channel should be treated as commands.
   # Note: Enabling this means everyone who can send messages in the console channel will be able to send commands as the
   # console. It's recommended you stick to the /execute command which has role permission checks (see command configuration below).
@@ -201,8 +201,8 @@ messages:
   # Color/formatting codes and the follow placeholders can be used here:
   # - {channel}: The name of the discord channel the message was sent from
   # - {username}: The username of the user who sent the message
-  # - {tag}: The four numbers displayed after their user's username
-  # - {fullname}: Equivalent to typing "{username}#{tag}"
+  # - {discriminator}: The four numbers displayed after the user's name
+  # - {fullname}: Equivalent to typing "{username}#{discriminator}"
   # - {nickname}: The nickname of the user who sent the message. (Will return username if user has no nickname)
   # - {color}: The minecraft color representative of the user's topmost role color on discord. If the user doesn't have a role color, the placeholder is empty.
   # - {message}: The content of the message being sent
@@ -224,7 +224,7 @@ messages:
   # - {controllername}: The username of the user who muted the player
   # - {controllerdisplayname}: The display name of the user who muted the player
   # - {time}: The amount of time the player was muted for
-  temporary-mute: "{controllerdisplayname} muted {displayname} for {time}"
+  temporary-mute: "{controllerdisplayname} has muted player {displayname} for {time}."
   # This is the message sent to discord when a player is temporarily muted (with a reason specified) in minecraft.
   # The following placeholders can be used here:
   # - {username}: The username of the player being muted
@@ -233,14 +233,14 @@ messages:
   # - {controllerdisplayname}: The display name of the user who muted the player
   # - {time}: The amount of time the player was muted for
   # - {reason}: The reason the player was muted for
-  temporary-mute-reason: "{controllerdisplayname} muted {displayname} for {time} with reason: {reason}"
+  temporary-mute-reason: "{controllerdisplayname} has muted player {displayname} for {time}. Reason: {reason}."
   # This is the message sent to discord when a player is permanently muted in minecraft.
   # The following placeholders can be used here:
   # - {username}: The username of the player being muted
   # - {displayname}: The display name of the player being muted
   # - {controllername}: The username of the user who muted the player
   # - {controllerdisplayname}: The display name of the user who muted the player
-  permanent-mute: "{controllerdisplayname} permanently muted {displayname}"
+  permanent-mute: "{controllerdisplayname} has muted player {displayname}."
   # This is the message sent to discord when a player is permanently muted (with a reason specified) in minecraft.
   # The following placeholders can be used here:
   # - {username}: The username of the player being muted
@@ -248,33 +248,33 @@ messages:
   # - {controllername}: The username of the user who muted the player
   # - {controllerdisplayname}: The display name of the user who muted the player
   # - {reason}: The reason the player was muted for
-  permanent-mute-reason: "{controllerdisplayname} permanently muted {displayname} with reason: {reason}"
+  permanent-mute-reason: "{controllerdisplayname} has permanently muted player {displayname}. Reason: {reason}."
   # This is the message sent to discord when a player is unmuted in minecraft.
   # The following placeholders can be used here:
   # - {username}: The username of the player being unmuted
   # - {displayname}: The display name of the player being unmuted
-  unmute: "{displayname} has been unmuted."
+  unmute: "{displayname} unmuted."
   # This is the message sent to discord when a player joins the minecraft server.
   # The following placeholders can be used here:
   # - {username}: The name of the user joining
   # - {displayname}: The display name of the user joining
-  # - {defaultmessage}: The full default join message used in game
+  # - {joinmessage}: The full default join message used in game
   # ... PlaceholderAPI placeholders are also supported here too!
-  join: ":exclamation: {displayname} has joined!"
+  join: ":arrow_right: {displayname} has joined!"
   # This is the message sent to discord when a player leaves the minecraft server.
   # The following placeholders can be used here:
   # - {username}: The name of the user leaving
   # - {displayname}: The display name of the user leaving
-  # - {defaultmessage}: The full default leave message used in game
+  # - {quitmessage}: The full default leave message used in game
   # ... PlaceholderAPI placeholders are also supported here too!
-  quit: ":exclamation: {displayname} has left!"
+  quit: ":arrow_left: {displayname} has left!"
   # This is the message sent to discord when a player dies.
   # The following placeholders can be used here:
   # - {username}: The name of the user who died
   # - {displayname}: The display name of the user who died
-  # - {defaultmessage}: The full default death message used in game
+  # - {deathmessage}: The full default death message used in game
   # ... PlaceholderAPI placeholders are also supported here too!
-  death: ":skull: {displayname} has died!"
+  death: ":skull: {deathmessage}"
   # This is the message sent to discord when a player becomes afk.
   # The following placeholders can be used here:
   # - {username}: The name of the user who became afk

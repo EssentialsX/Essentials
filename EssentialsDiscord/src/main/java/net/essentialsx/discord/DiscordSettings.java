@@ -120,7 +120,7 @@ public class DiscordSettings implements IConf {
     }
 
     public String getConsoleWebhookName() {
-        return config.getString("console.webhook-name", "EssX Console Relay");
+        return config.getString("console.webhook-name", "Essentials Console Relay");
     }
 
     public boolean isConsoleCommandRelay() {
@@ -203,8 +203,8 @@ public class DiscordSettings implements IConf {
         } else {
             filled = format;
         }
-        return generateMessageFormat(filled, ":exclamation: {displayname} has joined!", false,
-                "username", "displayname", "defaultmessage");
+        return generateMessageFormat(filled, ":arrow_right: {displayname} has joined!", false,
+                "username", "displayname", "joinmessage");
     }
 
     public MessageFormat getQuitFormat(Player player) {
@@ -215,8 +215,8 @@ public class DiscordSettings implements IConf {
         } else {
             filled = format;
         }
-        return generateMessageFormat(filled, ":exclamation: {displayname} has left!", false,
-                "username", "displayname", "defaultmessage");
+        return generateMessageFormat(filled, ":arrow_left: {displayname} has left!", false,
+                "username", "displayname", "quitmessage");
     }
 
     public MessageFormat getDeathFormat(Player player) {
@@ -227,8 +227,8 @@ public class DiscordSettings implements IConf {
         } else {
             filled = format;
         }
-        return generateMessageFormat(filled, ":skull: {displayname} has died!", false,
-                "username", "displayname", "defaultmessage");
+        return generateMessageFormat(filled, ":skull: {deathmessage}", false,
+                "username", "displayname", "deathmessage");
     }
 
     public MessageFormat getAfkFormat(Player player) {
@@ -328,15 +328,15 @@ public class DiscordSettings implements IConf {
                 "timestamp", "level", "message");
 
         discordToMcFormat = generateMessageFormat(getFormatString("discord-to-mc"), "&6[#{channel}] &3{fullname}&7: &f{message}", true,
-                "channel", "username", "tag", "fullname", "nickname", "color", "message");
-        unmuteFormat = generateMessageFormat(getFormatString("unmute"), "{displayname} has been unmuted.", false, "username", "displayname");
-        tempMuteFormat = generateMessageFormat(getFormatString("temporary-mute"), "{controllerdisplayname} muted {displayname} for {time}", false,
+                "channel", "username", "discriminator", "fullname", "nickname", "color", "message");
+        unmuteFormat = generateMessageFormat(getFormatString("unmute"), "{displayname} unmuted.", false, "username", "displayname");
+        tempMuteFormat = generateMessageFormat(getFormatString("temporary-mute"), "{controllerdisplayname} has muted player {displayname} for {time}.", false,
                 "username", "displayname", "controllername", "controllerdisplayname", "time");
-        permMuteFormat = generateMessageFormat(getFormatString("permanent-mute"), "{controllerdisplayname} permanently muted {displayname}", false,
+        permMuteFormat = generateMessageFormat(getFormatString("permanent-mute"), "{controllerdisplayname} permanently muted {displayname}.", false,
                 "username", "displayname", "controllername", "controllerdisplayname");
-        tempMuteReasonFormat = generateMessageFormat(getFormatString("temporary-mute-reason"), "{controllerdisplayname} muted {displayname} for {time} with reason: {reason}", false,
+        tempMuteReasonFormat = generateMessageFormat(getFormatString("temporary-mute-reason"), "{controllerdisplayname} has muted player {displayname} for {time}. Reason: {reason}.", false,
                 "username", "displayname", "controllername", "controllerdisplayname", "time", "reason");
-        permMuteReasonFormat = generateMessageFormat(getFormatString("permanent-mute-reason"), "{controllerdisplayname} permanently muted {displayname} with reason: {reason}", false,
+        permMuteReasonFormat = generateMessageFormat(getFormatString("permanent-mute-reason"), "{controllerdisplayname} has muted player {displayname}. Reason: {reason}.", false,
                 "username", "displayname", "controllername", "controllerdisplayname", "reason");
         kickFormat = generateMessageFormat(getFormatString("kick"), "{displayname} was kicked with reason: {reason}", false,
                 "username", "displayname", "reason");
