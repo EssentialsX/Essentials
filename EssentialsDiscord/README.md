@@ -66,9 +66,8 @@ click the blue "Copy" button right of your bot's icon. Make sure to save it for 
 and paste your Client ID you copied from step 2 into the text box on that page. Once you do that, click
 the "Authorize" button next to the text box. This will redirect you to Discord's authorization website 
 to chose which server to add the bot to.
-Note for advanced users: **Please use the `essentialsx.net` website above even if you think you already know how
-to invite bots.** Bots for EssentialsX Discord require more than just the `bot` scope to work, so please just use
-the link above even if you think you know what you're doing.
+Note for advanced users: **Please use the `essentialsx.net` link above even if you already know how
+to invite bots.** EssentialsX Discord requires more than just the `bot` scope to work.
 > ![OAuth Link Gen](https://i.imgur.com/u6MFJgQ.gif)
 > Paste Client ID -> `Authorize`
 
