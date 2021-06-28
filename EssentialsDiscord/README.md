@@ -39,7 +39,7 @@ then click "Create".
 
 2. Once you create the application, you'll be directed to its overview. From this screen, you'll
 need to copy your "Client ID"/"Application ID" and save it for a later step. To copy your 
-client id, click the upper-left most blue "Copy" button. Make sure to save it for a later step.
+Client ID, click the upper-left most blue "Copy" button. Make sure to save it for a later step.
 > ![Copy Client ID](https://i.imgur.com/W3OMTu5.gif)
 > `Copy` -> Paste into Notepad for later step
 
