@@ -9,7 +9,6 @@ import com.earth2me.essentials.textreader.SimpleTextInput;
 import com.earth2me.essentials.utils.DateUtil;
 import com.earth2me.essentials.utils.MaterialUtil;
 import com.earth2me.essentials.utils.NumberUtil;
-import com.earth2me.essentials.utils.VersionUtil;
 import net.ess3.api.IEssentials;
 import net.ess3.api.events.KitClaimEvent;
 import org.bukkit.Bukkit;
@@ -292,6 +291,6 @@ public class Kit {
     }
 
     private boolean isEmptyStack(ItemStack stack) {
-        return stack == null || stack.getType() == Material.AIR || (VersionUtil.getServerBukkitVersion().isHigherThanOrEqualTo(VersionUtil.v1_14_4_R01) && stack.getType().isAir());
+        return stack == null || MaterialUtil.isAir(stack.getType());
     }
 }
