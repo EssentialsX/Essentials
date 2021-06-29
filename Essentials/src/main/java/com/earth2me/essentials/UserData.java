@@ -11,6 +11,7 @@ import com.google.common.base.Charsets;
 import net.ess3.api.IEssentials;
 import net.ess3.api.MaxMoneyException;
 import net.essentialsx.api.v2.services.mail.MailMessage;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -322,7 +323,8 @@ public abstract class UserData extends PlayerExtension implements IConf {
         final List<String> list = new ArrayList<>();
         if (getMailAmount() != 0) {
             for (MailMessage mail : getMailMessages()) {
-                list.add(mail.getMessage());
+                // I hate this code btw
+                list.add(mail.isLegacy() ? mail.getMessage() : ChatColor.GOLD + "[" + ChatColor.RESET + mail.getSenderUsername() + ChatColor.GOLD + "] " + ChatColor.RESET + mail.getMessage());
             }
         }
         return list;
