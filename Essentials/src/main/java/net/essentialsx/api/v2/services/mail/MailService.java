@@ -5,7 +5,7 @@ import net.ess3.api.IUser;
 /**
  * This interface provides access to core Essentials mailing functions, allowing API users to send messages to {@link IUser IUser's }.
  */
-public interface Mail {
+public interface MailService {
     /**
      * Sends a message from the specified {@link MailSender sender} to the specified {@link IUser recipient}.
      * @param recipient The {@link IUser} which to send the message to.

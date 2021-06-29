@@ -1,7 +1,7 @@
 package com.earth2me.essentials;
 
 import net.ess3.api.IUser;
-import net.essentialsx.api.v2.services.mail.Mail;
+import net.essentialsx.api.v2.services.mail.MailService;
 import net.essentialsx.api.v2.services.mail.MailMessage;
 import net.essentialsx.api.v2.services.mail.MailSender;
 import org.bukkit.plugin.ServicePriority;
@@ -12,11 +12,11 @@ import java.util.Date;
 
 import static com.earth2me.essentials.I18n.tl;
 
-public class MailImpl implements Mail {
+public class MailServiceImpl implements MailService {
     private final transient ThreadLocal<SimpleDateFormat> df = ThreadLocal.withInitial(() -> new SimpleDateFormat("yyyy/MM/dd HH:mm"));
 
-    public MailImpl(IEssentials ess) {
-        ess.getServer().getServicesManager().register(Mail.class, this, ess, ServicePriority.Normal);
+    public MailServiceImpl(IEssentials ess) {
+        ess.getServer().getServicesManager().register(MailService.class, this, ess, ServicePriority.Normal);
     }
 
     @Override
