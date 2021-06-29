@@ -75,7 +75,7 @@ console:
   # - {message}: The actual message being logged
   format: "[{timestamp} {level}] {message}"
   # The name of the webhook that will be created, if a channel ID is provided.
-  webhook-name: "Essentials Console Relay"
+  webhook-name: "EssentialsX Console Relay"
   # Set to true if all messages in the console relay channel should be treated as commands.
   # Note: Enabling this means everyone who can send messages in the console channel will be able to send commands as the
   # console. It's recommended you stick to the /execute command which has role permission checks (see command configuration below).

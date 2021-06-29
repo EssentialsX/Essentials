@@ -30,7 +30,7 @@ EssentialsX Discord offers *essential* features you'd want from a Discord bridge
 ## Initial Setup
 
 0. Before starting your server, there are a few steps you have to take. First, you must create a new
-discord bot at [discord.com/developers/applications](https://discord.com/developers/applications/).
+Discord bot at [discord.com/developers/applications](https://discord.com/developers/applications/).
 
 1. Once on that page, click on "New Application" button on the top right, give your bot a name, and
 then click "Create".

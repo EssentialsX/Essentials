@@ -46,7 +46,7 @@ public interface InteractionMember {
     String getId();
 
     /**
-     * Checks if this member has the administrator permission on discord.
+     * Checks if this member has the administrator permission on Discord.
      * @return true if this user has administrative permissions.
      */
     boolean isAdmin();
