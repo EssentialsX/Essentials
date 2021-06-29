@@ -13,7 +13,7 @@ public interface InteractionCommand {
     boolean isDisabled();
 
     /**
-     * Whether or not the command is ephemeral and if its usage/replies should be private for the user on in discord client.
+     * Whether or not the command is ephemeral and if its usage/replies should be private for the user on in Discord client.
      * @return true if the command is ephemeral.
      */
     boolean isEphemeral();

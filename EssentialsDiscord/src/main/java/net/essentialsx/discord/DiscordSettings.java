@@ -128,7 +128,7 @@ public class DiscordSettings implements IConf {
     }
 
     public String getConsoleWebhookName() {
-        return config.getString("console.webhook-name", "Essentials Console Relay");
+        return config.getString("console.webhook-name", "EssentialsX Console Relay");
     }
 
     public boolean isConsoleCommandRelay() {

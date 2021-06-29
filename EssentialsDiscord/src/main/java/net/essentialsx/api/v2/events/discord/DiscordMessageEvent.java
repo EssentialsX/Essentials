@@ -9,7 +9,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.UUID;
 
 /**
- * Fired before a message is about to be sent to a discord channel.
+ * Fired before a message is about to be sent to a Discord channel.
  */
 public class DiscordMessageEvent extends Event implements Cancellable {
     private static final HandlerList handlers = new HandlerList();
