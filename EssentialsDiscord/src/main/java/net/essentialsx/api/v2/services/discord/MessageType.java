@@ -21,6 +21,9 @@ public final class MessageType {
      * Internal constructor used by EssentialsX Discord
      */
     private MessageType(String key, boolean player) {
+        if (!key.matches("^[a-z0-9-]*$")) {
+            throw new IllegalArgumentException("Key must match \"^[a-z0-9-]*$\"");
+        }
         this.key = key;
         this.player = player;
     }
