@@ -16,6 +16,7 @@ import net.ess3.api.events.AfkStatusChangeEvent;
 import net.essentialsx.api.v2.events.AsyncUserDataLoadEvent;
 import org.bukkit.BanEntry;
 import org.bukkit.BanList;
+import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -267,7 +268,7 @@ public class EssentialsPlayerListener implements Listener {
         final String joinMessage = event.getJoinMessage();
         ess.runTaskAsynchronously(() -> delayedJoin(event.getPlayer(), joinMessage));
 
-        if (hideJoinQuitMessages() || ess.getSettings().allowSilentJoinQuit() || ess.getSettings().isCustomJoinMessage()) {
+        if (hideJoinQuitMessages() || ess.getSettings().isCustomNewUsernameMessage() || ess.getSettings().allowSilentJoinQuit() || ess.getSettings().isCustomJoinMessage()) {
             event.setJoinMessage(null);
         }
     }
@@ -305,10 +306,15 @@ public class EssentialsPlayerListener implements Listener {
 
                 user.startTransaction();
 
+                final String lastAccountName = user.getLastAccountName(); // For comparison
                 user.setLastAccountName(user.getBase().getName());
                 user.setLastLogin(currentTime);
                 user.setDisplayNick();
                 updateCompass(user);
+
+                // Check for new username. If they don't want the message, let's just say it's false.
+                final boolean newUsername = ess.getSettings().isCustomNewUsernameMessage() && lastAccountName != null && !lastAccountName.equals(user.getBase().getName());
+                final String newUsernameMessage = ess.getSettings().getCustomNewUsernameMessage().replace("{OLDUSERNAME}", lastAccountName == null ? "" : lastAccountName);
 
                 ess.runTaskAsynchronously(() -> ess.getServer().getPluginManager().callEvent(new AsyncUserDataLoadEvent(user)));
 
@@ -341,12 +347,15 @@ public class EssentialsPlayerListener implements Listener {
                         .replace("{ONLINE}", NumberFormat.getInstance().format(ess.getOnlinePlayers().size()))
                         .replace("{UPTIME}", DateUtil.formatDateDiff(ManagementFactory.getRuntimeMXBean().getStartTime()))
                         .replace("{PREFIX}", FormatUtil.replaceFormat(ess.getPermissionsHandler().getPrefix(player)))
-                        .replace("{SUFFIX}", FormatUtil.replaceFormat(ess.getPermissionsHandler().getSuffix(player)));
+                        .replace("{SUFFIX}", FormatUtil.replaceFormat(ess.getPermissionsHandler().getSuffix(player)))
+                        .replace("{OLDUSERNAME}", FormatUtil.replaceFormat(newUsername ? newUsernameMessage : ""));
                     if (!msg.isEmpty()) {
                         ess.getServer().broadcastMessage(msg);
                     }
                 } else if (ess.getSettings().allowSilentJoinQuit()) {
                     ess.getServer().broadcastMessage(message);
+                } else if (ess.getSettings().isCustomNewUsernameMessage()) {
+                    ess.getServer().broadcastMessage(ChatColor.YELLOW + String.format("%s%s joined the game", user.getBase().getName(), newUsername ? " " + newUsernameMessage : ""));
                 }
 
                 final int motdDelay = ess.getSettings().getMotdDelay() / 50;
