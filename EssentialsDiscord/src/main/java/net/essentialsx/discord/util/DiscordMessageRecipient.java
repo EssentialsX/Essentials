@@ -5,6 +5,7 @@ import com.earth2me.essentials.utils.FormatUtil;
 import net.essentialsx.api.v2.services.discord.InteractionMember;
 import org.bukkit.entity.Player;
 
+import java.util.UUID;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import static com.earth2me.essentials.I18n.tl;
@@ -46,6 +47,11 @@ public class DiscordMessageRecipient implements IMessageRecipient {
     @Override
     public String getName() {
         return member.getTag();
+    }
+
+    @Override
+    public UUID getUUID() {
+        return null;
     }
 
     @Override

@@ -18,6 +18,7 @@ import net.ess3.provider.SpawnerBlockProvider;
 import net.ess3.provider.SpawnerItemProvider;
 import net.ess3.provider.SyncCommandsProvider;
 import net.essentialsx.api.v2.services.BalanceTop;
+import net.essentialsx.api.v2.services.mail.MailService;
 import org.bukkit.Server;
 import org.bukkit.World;
 import org.bukkit.command.Command;
@@ -119,6 +120,8 @@ public interface IEssentials extends Plugin {
     BalanceTop getBalanceTop();
 
     EssentialsTimer getTimer();
+
+    MailService getMail();
 
     /**
      * Get a list of players who are vanished.
