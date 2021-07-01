@@ -1,10 +1,12 @@
 package com.earth2me.essentials;
 
 import com.earth2me.essentials.utils.FormatUtil;
+import com.earth2me.essentials.utils.NumberUtil;
 import org.bukkit.ChatColor;
 import org.bukkit.Server;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -126,5 +128,89 @@ public final class PlayerList {
     public static String outputFormat(final String group, final String message) {
         return tl("listGroupTag", FormatUtil.replaceFormat(group)) +
             message;
+    }
+
+    public static List<String> prepareGroupedList(final IEssentials ess, final String commandLabel, final Map<String, List<User>> playerList) {
+        final List<String> output = new ArrayList<>();
+
+        final Set<String> configGroups = ess.getSettings().getListGroupConfig().keySet();
+        final List<String> asterisk = new ArrayList<>();
+
+        // Loop through the custom defined groups and display them
+        for (final String oConfigGroup : configGroups) {
+            final String groupValue = ess.getSettings().getListGroupConfig().get(oConfigGroup).toString().trim();
+            final String configGroup = oConfigGroup.toLowerCase();
+
+            // If the group value is an asterisk, then skip it, and handle it later
+            if (groupValue.equals("*")) {
+                asterisk.add(oConfigGroup);
+                continue;
+            }
+
+            // If the group value is hidden, we don't need to display it
+            if (groupValue.equalsIgnoreCase("hidden")) {
+                playerList.remove(configGroup);
+                continue;
+            }
+
+            final List<User> outputUserList;
+            final List<User> matchedList = playerList.get(configGroup);
+
+            // If the group value is an int, then we might need to truncate it
+            if (NumberUtil.isInt(groupValue)) {
+                if (matchedList != null && !matchedList.isEmpty()) {
+                    playerList.remove(configGroup);
+                    outputUserList = new ArrayList<>(matchedList);
+                    final int limit = Integer.parseInt(groupValue);
+                    if (matchedList.size() > limit) {
+                        output.add(outputFormat(oConfigGroup, tl("groupNumber", matchedList.size(), commandLabel, FormatUtil.stripFormat(configGroup))));
+                    } else {
+                        output.add(outputFormat(oConfigGroup, listUsers(ess, outputUserList, ", ")));
+                    }
+                    continue;
+                }
+            }
+
+            outputUserList = getMergedList(ess, playerList, configGroup);
+
+            // If we have no users, than we don't need to continue parsing this group
+            if (outputUserList.isEmpty()) {
+                continue;
+            }
+
+            output.add(outputFormat(oConfigGroup, listUsers(ess, outputUserList, ", ")));
+        }
+
+        final Set<String> var = playerList.keySet();
+        String[] onlineGroups = var.toArray(new String[0]);
+        Arrays.sort(onlineGroups, String.CASE_INSENSITIVE_ORDER);
+
+        // If we have an asterisk group, then merge all remaining groups
+        if (!asterisk.isEmpty()) {
+            final List<User> asteriskUsers = new ArrayList<>();
+            for (final String onlineGroup : onlineGroups) {
+                asteriskUsers.addAll(playerList.get(onlineGroup));
+            }
+            for (final String key : asterisk) {
+                playerList.put(key, asteriskUsers);
+            }
+            onlineGroups = asterisk.toArray(new String[0]);
+        }
+
+        // If we have any groups remaining after the custom groups loop through and display them
+        for (final String onlineGroup : onlineGroups) {
+            final List<User> users = playerList.get(onlineGroup);
+            String groupName = asterisk.isEmpty() ? users.get(0).getGroup() : onlineGroup;
+
+            if (ess.getPermissionsHandler().getName().equals("ConfigPermissions")) {
+                groupName = tl("connectedPlayers");
+            }
+            if (users == null || users.isEmpty()) {
+                continue;
+            }
+
+            output.add(outputFormat(groupName, listUsers(ess, users, ", ")));
+        }
+        return output;
     }
 }

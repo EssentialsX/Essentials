@@ -3,5 +3,5 @@
 <suppressions>
     <suppress files=".*[\\/]test[\\/]java[\\/].*" checks="RequireExplicitVisibilityModifier"/>
     <!-- TODO: don't suppress I-prefixed API interfaces under com.earth2me.essentials -->
-    <suppress files="(com[\\/]earth2me[\\/]essentials[\\/]|net[\\/]ess3[\\/])(?:[^\\/]+$|(?!api)[^\\/]+[\\/])" checks="MissingJavadoc(Method|Type)"/>
+    <suppress files="(com[\\/]earth2me[\\/]essentials[\\/]|net[\\/]ess3[\\/]|net[\\/]essentialsx[\\/])(?:[^\\/]+$|(?!api)[^\\/]+[\\/])" checks="MissingJavadoc(Method|Type)"/>
 </suppressions>
