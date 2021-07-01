@@ -25,7 +25,8 @@ public class CustomItemResolver implements IItemDb.ItemResolver, IConf {
     }
 
     @Override
-    public ItemStack apply(final String item) {
+    public ItemStack apply(String item) {
+        item = item.toLowerCase();
         if (map.containsKey(item)) {
             try {
                 return ess.getItemDb().get(map.get(item));
@@ -62,19 +63,21 @@ public class CustomItemResolver implements IItemDb.ItemResolver, IConf {
             return;
         }
 
-        for (final Map.Entry<String, Object> alias : section.entrySet()) {
-            if (!(alias.getValue() instanceof String)) {
+        for (final Map.Entry<String, Object> entry : section.entrySet()) {
+            if (!(entry.getValue() instanceof String)) {
                 continue;
             }
-            final String target = (String) alias.getValue();
+            final String alias = entry.getKey().toLowerCase();
+            final String target = (String) entry.getValue();
 
             if (existsInItemDb(target)) {
-                map.put(alias.getKey(), target);
+                map.put(alias, target);
             }
         }
     }
 
-    public void setAlias(final String alias, final String target) {
+    public void setAlias(String alias, final String target) {
+        alias = alias.toLowerCase();
         if (map.containsKey(alias) && map.get(alias).equalsIgnoreCase(target)) {
             return;
         }
@@ -84,7 +87,7 @@ public class CustomItemResolver implements IItemDb.ItemResolver, IConf {
     }
 
     public void removeAlias(final String alias) {
-        if (map.remove(alias) != null) {
+        if (map.remove(alias.toLowerCase()) != null) {
             save();
         }
     }
