@@ -6,12 +6,15 @@ import com.earth2me.essentials.config.entities.CommandCooldown;
 import net.ess3.api.ITeleport;
 import net.ess3.api.MaxMoneyException;
 import net.ess3.api.events.AfkStatusChangeEvent;
+import net.essentialsx.api.v2.services.mail.MailMessage;
+import net.essentialsx.api.v2.services.mail.MailSender;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -148,9 +151,21 @@ public interface IUser {
 
     String getFormattedJailTime();
 
+    @Deprecated
     List<String> getMails();
 
+    @Deprecated
     void addMail(String mail);
+
+    void sendMail(MailSender sender, String message);
+
+    void sendMail(MailSender sender, String message, long expireAt);
+
+    ArrayList<MailMessage> getMailMessages();
+
+    void setMailList(ArrayList<MailMessage> messages);
+
+    int getMailAmount();
 
     boolean isAfk();
 
