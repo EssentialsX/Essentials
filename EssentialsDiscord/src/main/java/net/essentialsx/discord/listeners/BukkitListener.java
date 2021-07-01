@@ -10,6 +10,7 @@ import net.essentialsx.api.v2.events.discord.DiscordChatMessageEvent;
 import net.essentialsx.api.v2.events.discord.DiscordMessageEvent;
 import net.essentialsx.api.v2.services.discord.MessageType;
 import net.essentialsx.discord.JDADiscordService;
+import net.essentialsx.discord.util.DiscordUtil;
 import net.essentialsx.discord.util.MessageUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -177,15 +178,6 @@ public class BukkitListener implements Listener {
     }
 
     private void sendDiscordMessage(final MessageType messageType, final String message, final boolean allowPing, final String avatarUrl, final String name, final UUID uuid) {
-        if (jda.getPlugin().getSettings().getMessageChannel(messageType.getKey()).equalsIgnoreCase("none")) {
-            return;
-        }
-
-        final DiscordMessageEvent event = new DiscordMessageEvent(messageType, FormatUtil.stripFormat(message), allowPing, avatarUrl, name, uuid);
-        if (Bukkit.getServer().isPrimaryThread()) {
-            Bukkit.getPluginManager().callEvent(event);
-        } else {
-            Bukkit.getScheduler().runTask(jda.getPlugin(), () -> Bukkit.getPluginManager().callEvent(event));
-        }
+        DiscordUtil.dispatchDiscordMessage(jda, messageType, message, allowPing, avatarUrl, name, uuid);
     }
 }

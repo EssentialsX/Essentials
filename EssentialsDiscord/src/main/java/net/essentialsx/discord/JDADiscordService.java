@@ -172,6 +172,7 @@ public class JDADiscordService implements DiscordService {
         updateTypesRelay();
 
         Bukkit.getPluginManager().registerEvents(new BukkitListener(this), plugin);
+        getPlugin().getEss().scheduleSyncDelayedTask(() -> DiscordUtil.dispatchDiscordMessage(JDADiscordService.this, MessageType.DefaultTypes.SERVER_START, getSettings().getStartMessage(), true, null, null, null));
 
         Bukkit.getServicesManager().register(DiscordService.class, this, plugin, ServicePriority.Normal);
     }
@@ -347,6 +348,9 @@ public class JDADiscordService implements DiscordService {
         }
 
         if (jda != null) {
+            sendMessage(MessageType.DefaultTypes.SERVER_STOP, getSettings().getStopMessage(), true);
+            DiscordUtil.dispatchDiscordMessage(JDADiscordService.this, MessageType.DefaultTypes.SERVER_STOP, getSettings().getStopMessage(), true, null, null, null);
+
             shutdownConsoleRelay(true);
 
             // Unregister leftover jda listeners

@@ -263,6 +263,14 @@ public class DiscordSettings implements IConf {
                 "username", "displayname");
     }
 
+    public String getStartMessage() {
+        return config.getString("messages.server-start", ":white_check_mark: The server has started!");
+    }
+
+    public String getStopMessage() {
+        return config.getString("messages.server-stop", ":octagonal_sign: The server has stopped!");
+    }
+
     public MessageFormat getKickFormat() {
         return kickFormat;
     }
