@@ -277,6 +277,7 @@ public class DiscordSettings implements IConf {
         content = format ? FormatUtil.replaceFormat(content) : FormatUtil.stripFormat(content);
         for (int i = 0; i < arguments.length; i++) {
             content = content.replace("{" + arguments[i] + "}", "{" + i + "}");
+            content = content.replace("{" + arguments[i].toUpperCase() + "}", "{" + i + "}");
         }
         return new MessageFormat(content);
     }
