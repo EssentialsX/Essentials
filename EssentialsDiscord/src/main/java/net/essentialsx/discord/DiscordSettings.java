@@ -275,10 +275,12 @@ public class DiscordSettings implements IConf {
     private MessageFormat generateMessageFormat(String content, String defaultStr, boolean format, String... arguments) {
         content = content == null ? defaultStr : content;
         content = format ? FormatUtil.replaceFormat(content) : FormatUtil.stripFormat(content);
+        content = content.replace("'", "''");
         for (int i = 0; i < arguments.length; i++) {
             content = content.replace("{" + arguments[i] + "}", "{" + i + "}");
             content = content.replace("{" + arguments[i].toUpperCase() + "}", "{" + i + "}");
         }
+        content = content.replaceAll("\\{([^0-9]+)}", "'{$1}'");
         return new MessageFormat(content);
     }
 
