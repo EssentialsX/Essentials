@@ -13,10 +13,15 @@ import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.Webhook;
+import net.essentialsx.api.v2.events.discord.DiscordMessageEvent;
+import net.essentialsx.api.v2.services.discord.MessageType;
+import net.essentialsx.discord.JDADiscordService;
 import okhttp3.OkHttpClient;
+import org.bukkit.Bukkit;
 
 import java.awt.Color;
 import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.Consumer;
@@ -164,5 +169,25 @@ public final class DiscordUtil {
             }
         }
         return false;
+    }
+
+    public static void dispatchDiscordMessage(final JDADiscordService jda, final MessageType messageType, final String message, final boolean allowPing, final String avatarUrl, final String name, final UUID uuid) {
+        if (jda.getPlugin().getSettings().getMessageChannel(messageType.getKey()).equalsIgnoreCase("none")) {
+            return;
+        }
+
+        final DiscordMessageEvent event = new DiscordMessageEvent(messageType, FormatUtil.stripFormat(message), allowPing, avatarUrl, name, uuid);
+
+        // If the server is stopping, we cannot dispatch events.
+        if (messageType == MessageType.DefaultTypes.SERVER_STOP) {
+            jda.sendMessage(event, event.getMessage(), event.isAllowGroupMentions());
+            return;
+        }
+
+        if (Bukkit.getServer().isPrimaryThread()) {
+            Bukkit.getPluginManager().callEvent(event);
+        } else {
+            Bukkit.getScheduler().runTask(jda.getPlugin(), () -> Bukkit.getPluginManager().callEvent(event));
+        }
     }
 }
