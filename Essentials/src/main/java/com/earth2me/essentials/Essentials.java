@@ -21,6 +21,7 @@ import com.earth2me.essentials.commands.EssentialsCommand;
 import com.earth2me.essentials.commands.IEssentialsCommand;
 import com.earth2me.essentials.commands.NoChargeException;
 import com.earth2me.essentials.commands.NotEnoughArgumentsException;
+import com.earth2me.essentials.commands.PlayerNotFoundException;
 import com.earth2me.essentials.commands.QuietAbortException;
 import com.earth2me.essentials.economy.EconomyLayers;
 import com.earth2me.essentials.economy.vault.VaultEconomyProvider;
@@ -38,6 +39,7 @@ import com.earth2me.essentials.textreader.IText;
 import com.earth2me.essentials.textreader.KeywordReplacer;
 import com.earth2me.essentials.textreader.SimpleTextInput;
 import com.earth2me.essentials.updatecheck.UpdateChecker;
+import com.earth2me.essentials.utils.FormatUtil;
 import com.earth2me.essentials.utils.VersionUtil;
 import io.papermc.lib.PaperLib;
 import net.ess3.api.Economy;
@@ -118,6 +120,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
@@ -893,6 +896,94 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
             }
         }
         return user;
+    }
+
+    @Override
+    public User matchUser(final Server server, final User sourceUser, final String searchTerm, final Boolean getHidden, final boolean getOffline) throws PlayerNotFoundException {
+        final User user;
+        Player exPlayer;
+
+        try {
+            exPlayer = server.getPlayer(UUID.fromString(searchTerm));
+        } catch (final IllegalArgumentException ex) {
+            if (getOffline) {
+                exPlayer = server.getPlayerExact(searchTerm);
+            } else {
+                exPlayer = server.getPlayer(searchTerm);
+            }
+        }
+
+        if (exPlayer != null) {
+            user = getUser(exPlayer);
+        } else {
+            user = getUser(searchTerm);
+        }
+
+        if (user != null) {
+            if (!getOffline && !user.getBase().isOnline()) {
+                throw new PlayerNotFoundException();
+            }
+
+            if (getHidden || canInteractWith(sourceUser, user)) {
+                return user;
+            } else { // not looking for hidden and cannot interact (i.e is hidden)
+                if (getOffline && user.getName().equalsIgnoreCase(searchTerm)) { // if looking for offline and got an exact match
+                    return user;
+                }
+            }
+            throw new PlayerNotFoundException();
+        }
+        final List<Player> matches = server.matchPlayer(searchTerm);
+
+        if (matches.isEmpty()) {
+            final String matchText = searchTerm.toLowerCase(Locale.ENGLISH);
+            for (final User userMatch : getOnlineUsers()) {
+                if (getHidden || canInteractWith(sourceUser, userMatch)) {
+                    final String displayName = FormatUtil.stripFormat(userMatch.getDisplayName()).toLowerCase(Locale.ENGLISH);
+                    if (displayName.contains(matchText)) {
+                        return userMatch;
+                    }
+                }
+            }
+        } else {
+            for (final Player player : matches) {
+                final User userMatch = getUser(player);
+                if (userMatch.getDisplayName().startsWith(searchTerm) && (getHidden || canInteractWith(sourceUser, userMatch))) {
+                    return userMatch;
+                }
+            }
+            final User userMatch = getUser(matches.get(0));
+            if (getHidden || canInteractWith(sourceUser, userMatch)) {
+                return userMatch;
+            }
+        }
+        throw new PlayerNotFoundException();
+    }
+
+    @Override
+    public boolean canInteractWith(final CommandSource interactor, final User interactee) {
+        if (interactor == null) {
+            return !interactee.isHidden();
+        }
+
+        if (interactor.isPlayer()) {
+            return canInteractWith(getUser(interactor.getPlayer()), interactee);
+        }
+
+        return true; // console
+    }
+
+    @Override
+    public boolean canInteractWith(final User interactor, final User interactee) {
+        if (interactor == null) {
+            return !interactee.isHidden();
+        }
+
+        if (interactor.equals(interactee)) {
+            return true;
+        }
+
+        return interactor.getBase().canSee(interactee.getBase());
     }
 
     //This will create a new user if there is not a match.
