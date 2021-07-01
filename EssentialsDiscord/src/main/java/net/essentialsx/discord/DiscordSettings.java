@@ -330,7 +330,7 @@ public class DiscordSettings implements IConf {
         }
 
         final String filter = config.getString("chat.discord-filter", null);
-        if (filter != null) {
+        if (filter != null && !filter.trim().isEmpty()) {
             try {
                 discordFilter = Pattern.compile(filter);
             } catch (PatternSyntaxException e) {
