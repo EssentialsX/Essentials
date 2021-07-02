@@ -4,6 +4,8 @@ import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.EssentialsUpgrade;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.UserMap;
+import com.earth2me.essentials.economy.EconomyLayer;
+import com.earth2me.essentials.economy.EconomyLayers;
 import com.earth2me.essentials.utils.DateUtil;
 import com.earth2me.essentials.utils.EnumUtil;
 import com.earth2me.essentials.utils.FloatUtil;
@@ -430,6 +432,17 @@ public class Commandessentials extends EssentialsCommand {
 
             if (name.equals("Vault")) isVaultInstalled = true;
         }
+
+        final String layer;
+        if (ess.getSettings().isEcoDisabled()) {
+            layer = "Disabled";
+        } else if (EconomyLayers.isLayerSelected()) {
+            final EconomyLayer economyLayer = EconomyLayers.getSelectedLayer();
+            layer = economyLayer.getName() + " (" + economyLayer.getBackendName() + ")";
+        } else {
+            layer = "None";
+        }
+        sender.sendMessage(tl("versionOutputEconLayer", layer));
 
         if (isMismatched) {
             sender.sendMessage(tl("versionMismatchAll"));

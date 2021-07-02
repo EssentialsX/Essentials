@@ -331,6 +331,8 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
             confList.add(jails);
             execTimer.mark("Init(Jails)");
 
+            EconomyLayers.onEnable(this);
+
             //Spawner item provider only uses one but it's here for legacy...
             spawnerItemProvider = new BlockMetaSpawnerItemProvider();
 
