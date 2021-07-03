@@ -26,6 +26,12 @@ public class EssentialsPluginListener implements Listener, IConf {
         ess.getPermissionsHandler().setUseSuperperms(ess.getSettings().useBukkitPermissions());
         ess.getPermissionsHandler().checkPermissions();
         ess.getAlternativeCommandsHandler().addPlugin(event.getPlugin());
+        if (EconomyLayers.isServerStarted()) {
+            final EconomyLayer layer = EconomyLayers.onPluginEnable(event.getPlugin());
+            if (layer != null) {
+                ess.getLogger().log(Level.INFO, "Essentials found a compatible payment resolution method: " + layer.getName() + " (v" + layer.getPluginVersion() + ")!");
+            }
+        }
     }
 
     @EventHandler(priority = EventPriority.MONITOR)

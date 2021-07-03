@@ -48,6 +48,10 @@ public final class EconomyLayers {
         });
     }
 
+    public static boolean isServerStarted() {
+        return serverStarted;
+    }
+
     public static EconomyLayer getSelectedLayer() {
         return selectedLayer;
     }
