@@ -18,6 +18,8 @@ import java.util.Map;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
+import static com.earth2me.essentials.I18n.tl;
+
 public class DiscordSettings implements IConf {
     private final EssentialsConfiguration config;
     private final EssentialsDiscord plugin;
@@ -306,6 +308,11 @@ public class DiscordSettings implements IConf {
 
     @Override
     public void reloadConfig() {
+        if (plugin.isInvalidStartup()) {
+            plugin.getLogger().warning(tl("discordReloadInvalid"));
+            return;
+        }
+
         config.load();
 
         // Build channel maps

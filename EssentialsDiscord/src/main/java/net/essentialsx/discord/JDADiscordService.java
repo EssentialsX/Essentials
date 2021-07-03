@@ -63,6 +63,7 @@ public class JDADiscordService implements DiscordService {
     private ConsoleInjector injector;
     private DiscordCommandDispatcher commandDispatcher;
     private InteractionControllerImpl interactionController;
+    private boolean invalidStartup = false;
 
     public JDADiscordService(EssentialsDiscord plugin) {
         this.plugin = plugin;
@@ -148,11 +149,13 @@ public class JDADiscordService implements DiscordService {
         logger.log(Level.INFO, tl("discordLoggingInDone", jda.getSelfUser().getAsTag()));
 
         if (jda.getGuilds().isEmpty()) {
+            invalidStartup = true;
             throw new IllegalArgumentException(tl("discordErrorNoGuildSize"));
         }
 
         guild = jda.getGuildById(plugin.getSettings().getGuildId());
         if (guild == null) {
+            invalidStartup = true;
             throw new IllegalArgumentException(tl("discordErrorNoGuild"));
         }
 
@@ -348,8 +351,10 @@ public class JDADiscordService implements DiscordService {
         }
 
         if (jda != null) {
-            sendMessage(MessageType.DefaultTypes.SERVER_STOP, getSettings().getStopMessage(), true);
-            DiscordUtil.dispatchDiscordMessage(JDADiscordService.this, MessageType.DefaultTypes.SERVER_STOP, getSettings().getStopMessage(), true, null, null, null);
+            if (!invalidStartup) {
+                sendMessage(MessageType.DefaultTypes.SERVER_STOP, getSettings().getStopMessage(), true);
+                DiscordUtil.dispatchDiscordMessage(JDADiscordService.this, MessageType.DefaultTypes.SERVER_STOP, getSettings().getStopMessage(), true, null, null, null);
+            }
 
             shutdownConsoleRelay(true);
 
@@ -408,6 +413,10 @@ public class JDADiscordService implements DiscordService {
 
     public WebhookClient getConsoleWebhook() {
         return consoleWebhook;
+    }
+
+    public boolean isInvalidStartup() {
+        return invalidStartup;
     }
 
     public boolean isDebug() {
