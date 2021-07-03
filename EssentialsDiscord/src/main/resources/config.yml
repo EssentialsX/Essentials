@@ -128,6 +128,14 @@ avatar-url: "https://crafthead.net/helm/{uuid}"
 # Whether or not player messages should show their name as the bot name in Discord.
 show-name: false
 
+# Whether or not fake join and leave messages should be sent to Discord when a player toggles vanish in Minecraft.
+# Fake join/leave messages will be sent the same as real join and leave messages (and to the same channel).
+vanish-fake-join-leave: true
+
+# Whether or not messages from vanished players should be sent to discord.
+# This affects join, leave, death, and afk message types by default.
+vanish-hide-messages: true
+
 # Settings pertaining to the varies commands registered by EssentialsX on Discord.
 commands:
   # The execute command allows for discord users to execute MC commands from Discord.
