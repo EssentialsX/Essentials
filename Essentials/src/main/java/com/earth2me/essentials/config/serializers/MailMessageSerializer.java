@@ -13,7 +13,7 @@ import java.util.UUID;
 public class MailMessageSerializer implements TypeSerializer<MailMessage> {
     @Override
     public MailMessage deserialize(Type type, ConfigurationNode node) throws SerializationException {
-        final boolean legacy = !node.node("legacy").isNull() && node.node("legacy").getBoolean(false);
+        final boolean legacy = node.node("legacy").getBoolean(true);
 
         return new MailMessage(node.node("read").getBoolean(false),
                 legacy,
