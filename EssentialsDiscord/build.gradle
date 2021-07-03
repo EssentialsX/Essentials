@@ -1,0 +1,58 @@
+plugins {
+    id("essentials.shadow-module")
+}
+
+dependencies {
+    compileOnly project(':EssentialsX')
+    implementation('net.dv8tion:JDA:4.3.0_277') {
+        //noinspection GroovyAssignabilityCheck
+        exclude module: 'opus-java'
+    }
+    implementation 'com.vdurmont:emoji-java:5.1.1'
+    implementation 'club.minnced:discord-webhooks:0.5.6'
+    compileOnly 'org.apache.logging.log4j:log4j-core:2.0-beta9'
+    compileOnly 'me.clip:placeholderapi:2.10.9'
+}
+
+shadowJar {
+    dependencies {
+        // JDA
+        include(dependency('net.dv8tion:JDA'))
+        include(dependency('com.neovisionaries:nv-websocket-client'))
+        include(dependency('com.squareup.okhttp3:okhttp'))
+        include(dependency('com.squareup.okio:okio'))
+        include(dependency('org.apache.commons:commons-collections4'))
+        include(dependency('net.sf.trove4j:trove4j'))
+        include(dependency('com.fasterxml.jackson.core:jackson-databind'))
+        include(dependency('com.fasterxml.jackson.core:jackson-core'))
+        include(dependency('com.fasterxml.jackson.core:jackson-annotations'))
+        include(dependency('org.slf4j:slf4j-api'))
+
+        // Emoji
+        include(dependency('com.vdurmont:emoji-java'))
+        include(dependency('org.json:json'))
+
+        // discord-webhooks
+        include(dependency('club.minnced:discord-webhooks'))
+    }
+    minimize()
+
+    // JDA
+    relocate 'net.dv8tion.jda', 'net.essentialsx.dep.net.dv8tion.jda'
+    relocate 'com.neovisionaries.ws', 'net.essentialsx.dep.com.neovisionaries.ws'
+    relocate 'okhttp3', 'net.essentialsx.dep.okhttp3'
+    relocate 'okio', 'net.essentialsx.dep.okio'
+    relocate 'com.iwebpp.crypto', 'net.essentialsx.dep.com.iwebpp.crypto'
+    relocate 'org.apache.commons.collections4', 'net.essentialsx.dep.org.apache.commons.collections4'
+    relocate 'com.fasterxml.jackson.databind', 'net.essentialsx.dep.com.fasterxml.jackson.databind'
+    relocate 'com.fasterxml.jackson.core', 'net.essentialsx.dep.com.fasterxml.jackson.core'
+    relocate 'com.fasterxml.jackson.annotation', 'net.essentialsx.dep.com.fasterxml.jackson.annotation'
+    relocate 'gnu.trove', 'net.essentialsx.dep.gnu.trove'
+
+    // Emoji
+    relocate 'com.vdurmont.emoji', 'net.essentialsx.dep.com.vdurmont.emoji'
+    relocate 'org.json', 'net.essentialsx.dep.org.json'
+
+    // discord-webhooks
+    relocate 'club.minnced.discord.webhook', 'net.essentialsx.dep.club.minnced.discord.webhook'
+}

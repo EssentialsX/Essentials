@@ -83,6 +83,10 @@ public final class VersionUtil {
     private VersionUtil() {
     }
 
+    public static boolean isPaper() {
+        return PaperLib.isPaper();
+    }
+
     public static BukkitVersion getServerBukkitVersion() {
         if (serverVersion == null) {
             serverVersion = BukkitVersion.fromString(Bukkit.getServer().getBukkitVersion());

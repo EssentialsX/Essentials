@@ -9,8 +9,10 @@ import com.earth2me.essentials.config.processors.DeleteOnEmptyProcessor;
 import com.earth2me.essentials.config.serializers.BigDecimalTypeSerializer;
 import com.earth2me.essentials.config.serializers.CommandCooldownSerializer;
 import com.earth2me.essentials.config.serializers.LocationTypeSerializer;
+import com.earth2me.essentials.config.serializers.MailMessageSerializer;
 import com.earth2me.essentials.config.serializers.MaterialTypeSerializer;
 import net.ess3.api.InvalidWorldException;
+import net.essentialsx.api.v2.services.mail.MailMessage;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.spongepowered.configurate.CommentedConfigurationNode;
@@ -26,6 +28,7 @@ import org.spongepowered.configurate.yaml.YamlConfigurationLoader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Type;
 import java.math.BigDecimal;
 import java.nio.file.Files;
 import java.util.ArrayList;
@@ -58,6 +61,7 @@ public class EssentialsConfiguration {
             .register(LazyLocation.class, new LocationTypeSerializer())
             .register(Material.class, new MaterialTypeSerializer())
             .register(CommandCooldown.class, new CommandCooldownSerializer())
+            .register(MailMessage.class, new MailMessageSerializer())
             .build();
 
     private final AtomicInteger pendingWrites = new AtomicInteger(0);
@@ -137,6 +141,14 @@ public class EssentialsConfiguration {
 
     public void setProperty(final String path, final List<?> list) {
         setInternal(path, list);
+    }
+
+    public <T> void setExplicitList(final String path, final List<T> list, final Type type) {
+        try {
+            toSplitRoot(path, configurationNode).set(type, list);
+        } catch (SerializationException e) {
+            LOGGER.log(Level.SEVERE, e.getMessage(), e);
+        }
     }
 
     public <T> List<T> getList(final String path, Class<T> type) {

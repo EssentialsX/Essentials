@@ -282,7 +282,11 @@ public final class Enchantments {
         }
         Enchantment enchantment = null;
         if (isFlat) { // 1.13+ only
-            enchantment = Enchantment.getByKey(NamespacedKey.minecraft(name.toLowerCase()));
+            try {
+                enchantment = Enchantment.getByKey(NamespacedKey.minecraft(name.toLowerCase()));
+            } catch (IllegalArgumentException ignored) {
+                // NamespacedKey throws IAE if key does not match regex
+            }
         }
 
         if (enchantment == null) {
