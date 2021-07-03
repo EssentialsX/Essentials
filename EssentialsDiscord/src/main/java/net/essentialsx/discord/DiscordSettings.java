@@ -263,6 +263,14 @@ public class DiscordSettings implements IConf {
                 "username", "displayname");
     }
 
+    public String getStartMessage() {
+        return config.getString("messages.server-start", ":white_check_mark: The server has started!");
+    }
+
+    public String getStopMessage() {
+        return config.getString("messages.server-stop", ":octagonal_sign: The server has stopped!");
+    }
+
     public MessageFormat getKickFormat() {
         return kickFormat;
     }
@@ -275,9 +283,12 @@ public class DiscordSettings implements IConf {
     private MessageFormat generateMessageFormat(String content, String defaultStr, boolean format, String... arguments) {
         content = content == null ? defaultStr : content;
         content = format ? FormatUtil.replaceFormat(content) : FormatUtil.stripFormat(content);
+        content = content.replace("'", "''");
         for (int i = 0; i < arguments.length; i++) {
             content = content.replace("{" + arguments[i] + "}", "{" + i + "}");
+            content = content.replace("{" + arguments[i].toUpperCase() + "}", "{" + i + "}");
         }
+        content = content.replaceAll("\\{([^0-9]+)}", "'{$1}'");
         return new MessageFormat(content);
     }
 
@@ -319,7 +330,7 @@ public class DiscordSettings implements IConf {
         }
 
         final String filter = config.getString("chat.discord-filter", null);
-        if (filter != null) {
+        if (filter != null && !filter.trim().isEmpty()) {
             try {
                 discordFilter = Pattern.compile(filter);
             } catch (PatternSyntaxException e) {

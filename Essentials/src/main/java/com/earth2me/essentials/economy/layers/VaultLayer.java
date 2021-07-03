@@ -34,7 +34,7 @@ public class VaultLayer implements EconomyLayer {
 
     @Override
     public boolean withdraw(OfflinePlayer player, BigDecimal amount) {
-        return false;
+        return adapter.withdrawPlayer(player, amount.doubleValue()).transactionSuccess();
     }
 
     @Override

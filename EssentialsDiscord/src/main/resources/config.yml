@@ -110,6 +110,10 @@ message-types:
   death: primary
   # AFK status change messages sent when a player's AFK status changes.
   afk: primary
+  # Message sent when the server starts up.
+  server-start: primary
+  # Message sent when the server shuts down.
+  server-stop: primary
   # Message sent when a player is kicked from the Minecraft server.
   kick: staff
   # Message sent when a player's mute state is changed on the Minecraft server.
@@ -279,6 +283,10 @@ messages:
   # - {deathmessage}: The full default death message used in game
   # ... PlaceholderAPI placeholders are also supported here too!
   death: ":skull: {deathmessage}"
+  # This is the message sent to discord when the server starts.
+  server-start: ":white_check_mark: The server has started!"
+  # This is the message sent to discord when the server stops.
+  server-stop: ":octagonal_sign: The server has stopped!"
   # This is the message sent to discord when a player becomes afk.
   # The following placeholders can be used here:
   # - {username}: The name of the user who became afk
