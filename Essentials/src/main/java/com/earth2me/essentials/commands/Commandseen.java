@@ -141,7 +141,7 @@ public class Commandseen extends EssentialsCommand {
         if (user.getLastLogout() > 0) {
             sender.sendMessage(tl("seenOffline", user.getName(), DateUtil.formatDateDiff(user.getLastLogout())));
             if (!sender.isPlayer() || ess.getUser(sender.getPlayer()).isAuthorized("essentials.seen.joined")) {
-                sender.sendMessage(tl("whoisJoined", DateUtil.formatDateDiff(user.getBase().getFirstPlayed()), new SimpleDateFormat("yyyy/MM/dd, HH:mm").format(user.getBase().getFirstPlayed())));
+                sender.sendMessage(tl("whoisJoined", DateUtil.formatDateDiff(user.getBase().getFirstPlayed()), new SimpleDateFormat("yyyy/MM/dd HH:mm").format(user.getBase().getFirstPlayed())));
             }
             sender.sendMessage(tl("whoisUuid", user.getBase().getUniqueId()));
         } else {
