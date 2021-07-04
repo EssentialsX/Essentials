@@ -160,12 +160,18 @@ public class JDADiscordService implements DiscordService {
         }
 
         interactionController = new InteractionControllerImpl(this);
+        // Each will throw an exception if disabled
         try {
             interactionController.registerCommand(new ExecuteCommand(this));
+        } catch (InteractionException ignored) {
+        }
+        try {
             interactionController.registerCommand(new MessageCommand(this));
+        } catch (InteractionException ignored) {
+        }
+        try {
             interactionController.registerCommand(new ListCommand(this));
         } catch (InteractionException ignored) {
-            // won't happen
         }
 
         updatePrimaryChannel();
