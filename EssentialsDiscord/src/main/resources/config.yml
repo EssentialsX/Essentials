@@ -1,0 +1,307 @@
+#############################################################
+# +-------------------------------------------------------+ #
+# |                  EssentialsX Discord                  | #
+# +-------------------------------------------------------+ #
+#############################################################
+
+# This is the config file for EssentialsX Discord.
+# This config was generated for version ${full.version}.
+
+# You need to create a bot user in order to connect your server to Discord.
+# You can find instructions on this here: https://essentialsx.net/discord-tutorial
+
+# The token for your bot from the Discord Developers site.
+# Please make sure to use this site to add the bot to your server as it grants special permissions you may not be familiar with: https://essentialsx.net/discord.html
+token: "INSERT-TOKEN-HERE"
+
+# The ID of your server.
+guild: 000000000000000000
+
+# Defined text channels
+# =====================
+# 
+# Channels defined here can be used for two different purposes:
+#
+# Firstly, channels defined here can be used to give players permission to see messages from said channel.
+# This can be done by give your players the permission node "essentials.discord.receive.<channel>".
+# For example, if you wanted to let a player see messages from the primary channel, you'd give them "essentials.discord.receive.primary".
+#
+# Secondly, channels defined here can be used in the section below to specify which channel a message goes to.
+# If a defined channel ID is invalid, the primary channel will be used as a fallback.
+# If the primary channel is not defined or invalid, the default channel of the server will be used.
+# If your server doesn't have any text channels, the plugin will be disabled.
+# By default, two channels are defined:
+# - primary, which will send basic join/leave/death/chat messages
+# - staff, which will send kick/mute messages
+# (note: you will need to replace the zeros with the actual channel ID you want to use)
+channels:
+  primary: 000000000000000000
+  staff: 000000000000000000
+
+# Should all players receive Discord messages from the primary channel, regardless of their permissions?
+# This is intended for use for people without permission plugins. If you have a permission plugin, please give your
+# players the essentials.discord.receive.primary permission.
+always-receive-primary: false
+
+# Chat relay settings
+# General settings for chat relays between Minecraft and Discord.
+# To configure the channel Minecraft chat is sent to, see the "message-types" section of the config.
+chat:
+  # The maximum amount of characters messages from Discord should be before being truncated.
+  discord-max-length: 2000
+  # Whether or not new lines from Discord should be filtered or not.
+  filter-newlines: true
+  # A regex pattern which will not send matching messages through to Discord.
+  # By default, this will ignore messages starting with '!' and '?'.
+  discord-filter: "^[!?]"
+  # Whether or not webhook messages from Discord should be shown in Minecraft.
+  show-webhook-messages: false
+  # Whether or not bot messages from Discord should be shown in Minecraft.
+  show-bot-messages: false
+  # Whether or not to show all Minecraft chat messages that are not shown to all players.
+  # You shouldn't need to enable this unless you're not seeing all chat messages go through to Discord.
+  show-all-chat: false
+
+# Console relay settings
+# The console relay sends every message shown in the console to a Discord channel.
+console:
+  # The channel ID (or webhook URL) to send the console output to.
+  # If the channel ID/webhook URL is invalid or set to 'none', the console relay will be disabled.
+  # Note: If you use a channel ID, the bot must have the "Manage Webhooks" permission in Discord or else the console relay will not work.
+  channel: 000000000000000000
+  # The format of the console message. The following placeholders can be used:
+  # - {timestamp}: Timestamp in HH:mm:ss format
+  # - {level}: The console logging level
+  # - {message}: The actual message being logged
+  format: "[{timestamp} {level}] {message}"
+  # The name of the webhook that will be created, if a channel ID is provided.
+  webhook-name: "EssentialsX Console Relay"
+  # Set to true if all messages in the console relay channel should be treated as commands.
+  # Note: Enabling this means everyone who can send messages in the console channel will be able to send commands as the
+  # console. It's recommended you stick to the /execute command which has role permission checks (see command configuration below).
+  # Note 2: This option requires a channel ID and is not supported if you specify a webhook URL above. You'll need to use /execute in Discord if you use a webhook URL.
+  command-relay: false
+  # The maximum log level of messages to send to the console relay.
+  # The following is a list of available log levels in order of lowest to highest.
+  # Changing the log level will send all log levels above it to the console relay.
+  # For example, setting this to 'info' will display log messages with info, warn, error, and fatal levels.
+  # Log Levels:
+  # - fatal
+  # - error
+  # - warn
+  # - info
+  # - debug
+  # - trace
+  log-level: info
+
+# Configure which Discord channels different messages will be sent to.
+# You can either use the names of the channels listed above or just the id of a channel.
+# If an invalid channel is used, the primary channel will be used instead.
+#
+# To disable a message from showing, use 'none' as the channel name.
+message-types:
+  # Join messages sent when a player joins the Minecraft server.
+  join: primary
+  # Leave messages sent when a player leaves the Minecraft server.
+  leave: primary
+  # Chat messages sent when a player chats on the Minecraft server.
+  chat: primary
+  # Death messages sent when a player dies on the Minecraft server.
+  death: primary
+  # AFK status change messages sent when a player's AFK status changes.
+  afk: primary
+  # Message sent when the server starts up.
+  server-start: primary
+  # Message sent when the server shuts down.
+  server-stop: primary
+  # Message sent when a player is kicked from the Minecraft server.
+  kick: staff
+  # Message sent when a player's mute state is changed on the Minecraft server.
+  mute: staff
+
+# Whether or not player messages should show their avatar as the profile picture in Discord.
+show-avatar: false
+# Whether or not player messages should show their name as the bot name in Discord.
+show-name: false
+
+# Settings pertaining to the varies commands registered by EssentialsX on Discord.
+commands:
+  # The execute command allows for discord users to execute MC commands from Discord.
+  # MC commands executed by this will be ran as the console and you should therefore be careful to who you grant this to.
+  execute:
+    # Set to false if you do not want this command to show up on the Discord command selector.
+    # You must restart your server after changing this.
+    enabled: true
+    # Whether or not the command should be hidden from other people in the channel.
+    # If set to false, members of the Discord guild will be able to see the exact command you executed as well as its response.
+    hide-command: true
+    # List of user IDs or role names/IDs allowed to use this command (or * to allow anyone to access it).
+    allowed-roles:
+      - "Admins"
+      - "123456789012345678"
+  # The msg command allows for Discord users to message MC players from Discord.
+  msg:
+    # Set to false if you do not want this command to show up on the Discord command selector.
+    # You must restart your server after changing this.
+    enabled: true
+    # Whether or not the command should be hidden from other people in the channel.
+    # If set to false, members of the Discord guild will be able to see the target and content of your message.
+    hide-command: true
+    # List of user IDs or role names/IDs allowed to use this command (or '*' to allow anyone to access it).
+    allowed-roles:
+      - "*"
+    # List of user IDs or role names/IDs who can message vanished players or players who disable messages. If '*' is
+    # used, all people on Discord would be allowed to message vanished players (and therefore expose they are actually online)
+    # and message players who disable messages.
+    admin-roles:
+      - "Admins"
+      - "123456789012345678"
+  # The list command allows Discord users to see a list of players currently online on Minecraft.
+  list:
+    # Set to false if you do not want this command to show up on the Discord command selector.
+    # You must restart your server after changing this.
+    enabled: true
+    # Whether or not the command should be hidden from other people in the channel.
+    # If set to false, members of the Discord guild will be able to see when you use this command as well as its response.
+    hide-command: true
+    # List of user IDs or role names/IDs allowed to use this command (or '*' to allow anyone to access it).
+    allowed-roles:
+      - "*"
+    # List of user IDs or role names/IDs who can see vanished players in the player list. If '*' is used, all people
+    # on Discord would be allowed to see vanished players (and therefore expose they are actually online).
+    admin-roles:
+      - "Admins"
+      - "123456789012345678"
+
+# Whether or not links to attachments in Discord messages should be displayed in chat or not.
+# If this is set to false and a message from Discord only contains an image/file and not any text, nothing will be sent.
+show-discord-attachments: true
+
+# A list of roles allowed to send Minecraft color/formatting codes from Discord to MC.
+# This applies to all aspects such as that Discord->MC chat relay as well as commands.
+# You can either use '*' (for everyone), a role name/ID, or a user ID.
+permit-formatting-roles:
+  - "Admins"
+  - "Color Codes"
+
+# The presence of the bot, including its status, activity and status message.
+presence:
+  # The online status of the bot. Must be one of the following:
+  # - "online": Shows as green circle (Online)
+  # - "idle": Shows as yellow half-circle (Away)
+  # - "dnd": Shows as red circle (Do Not Disturb)
+  # - "invisible": Makes the bot appear offline
+  status: online
+  # The activity of the bot to be prefixed before your message below. Must be one of the following;
+  # - "playing": Shows up as "Playing <message>"
+  # - "listening": Shows up as "Listening to <message>"
+  # - "watching": Shows up as "Watching <message>"
+  # - "competing": Shows up as "Competing in <message>"
+  # - "none": Don't show any activity message
+  activity: "playing"
+  # The activity status message.
+  message: "Minecraft"
+
+# The following entries allow you to customize the formatting of messages sent by the plugin.
+# Each message has a description of how it is used along with placeholders that can be used.
+messages:
+  # This is the message that is used to show discord chat to players in game.
+  # Color/formatting codes and the follow placeholders can be used here:
+  # - {channel}: The name of the discord channel the message was sent from
+  # - {username}: The username of the user who sent the message
+  # - {discriminator}: The four numbers displayed after the user's name
+  # - {fullname}: Equivalent to typing "{username}#{discriminator}"
+  # - {nickname}: The nickname of the user who sent the message. (Will return username if user has no nickname)
+  # - {color}: The minecraft color representative of the user's topmost role color on discord. If the user doesn't have a role color, the placeholder is empty.
+  # - {message}: The content of the message being sent
+  discord-to-mc: "&6[#{channel}] &3{fullname}&7: &f{message}"
+  # This is the message that is used to relay minecraft chat in discord.
+  # The following placeholders can be used here:
+  # - {username}: The username of the player sending the message
+  # - {displayname}: The display name of the player sending the message (This would be their nickname)
+  # - {message}: The content of the message being sent
+  # - {world}: The name of the world the player sending the message is in
+  # - {prefix}: The prefix of the player sending the message
+  # - {suffix}: The suffix of the player sending the message
+  # ... PlaceholderAPI placeholders are also supported here too!
+  mc-to-discord: "{displayname}: {message}"
+  # This is the message sent to discord when a player is temporarily muted in minecraft.
+  # The following placeholders can be used here:
+  # - {username}: The username of the player being muted
+  # - {displayname}: The display name of the player being muted
+  # - {controllername}: The username of the user who muted the player
+  # - {controllerdisplayname}: The display name of the user who muted the player
+  # - {time}: The amount of time the player was muted for
+  temporary-mute: "{controllerdisplayname} has muted player {displayname} for {time}."
+  # This is the message sent to discord when a player is temporarily muted (with a reason specified) in minecraft.
+  # The following placeholders can be used here:
+  # - {username}: The username of the player being muted
+  # - {displayname}: The display name of the player being muted
+  # - {controllername}: The username of the user who muted the player
+  # - {controllerdisplayname}: The display name of the user who muted the player
+  # - {time}: The amount of time the player was muted for
+  # - {reason}: The reason the player was muted for
+  temporary-mute-reason: "{controllerdisplayname} has muted player {displayname} for {time}. Reason: {reason}."
+  # This is the message sent to discord when a player is permanently muted in minecraft.
+  # The following placeholders can be used here:
+  # - {username}: The username of the player being muted
+  # - {displayname}: The display name of the player being muted
+  # - {controllername}: The username of the user who muted the player
+  # - {controllerdisplayname}: The display name of the user who muted the player
+  permanent-mute: "{controllerdisplayname} has muted player {displayname}."
+  # This is the message sent to discord when a player is permanently muted (with a reason specified) in minecraft.
+  # The following placeholders can be used here:
+  # - {username}: The username of the player being muted
+  # - {displayname}: The display name of the player being muted
+  # - {controllername}: The username of the user who muted the player
+  # - {controllerdisplayname}: The display name of the user who muted the player
+  # - {reason}: The reason the player was muted for
+  permanent-mute-reason: "{controllerdisplayname} has permanently muted player {displayname}. Reason: {reason}."
+  # This is the message sent to discord when a player is unmuted in minecraft.
+  # The following placeholders can be used here:
+  # - {username}: The username of the player being unmuted
+  # - {displayname}: The display name of the player being unmuted
+  unmute: "{displayname} unmuted."
+  # This is the message sent to discord when a player joins the minecraft server.
+  # The following placeholders can be used here:
+  # - {username}: The name of the user joining
+  # - {displayname}: The display name of the user joining
+  # - {joinmessage}: The full default join message used in game
+  # ... PlaceholderAPI placeholders are also supported here too!
+  join: ":arrow_right: {displayname} has joined!"
+  # This is the message sent to discord when a player leaves the minecraft server.
+  # The following placeholders can be used here:
+  # - {username}: The name of the user leaving
+  # - {displayname}: The display name of the user leaving
+  # - {quitmessage}: The full default leave message used in game
+  # ... PlaceholderAPI placeholders are also supported here too!
+  quit: ":arrow_left: {displayname} has left!"
+  # This is the message sent to discord when a player dies.
+  # The following placeholders can be used here:
+  # - {username}: The name of the user who died
+  # - {displayname}: The display name of the user who died
+  # - {deathmessage}: The full default death message used in game
+  # ... PlaceholderAPI placeholders are also supported here too!
+  death: ":skull: {deathmessage}"
+  # This is the message sent to discord when the server starts.
+  server-start: ":white_check_mark: The server has started!"
+  # This is the message sent to discord when the server stops.
+  server-stop: ":octagonal_sign: The server has stopped!"
+  # This is the message sent to discord when a player becomes afk.
+  # The following placeholders can be used here:
+  # - {username}: The name of the user who became afk
+  # - {displayname}: The display name of the user who became afk
+  # ... PlaceholderAPI placeholders are also supported here too!
+  afk: ":person_walking: {displayname} is now AFK!"
+  # This is the message sent to discord when a player is no longer afk.
+  # The following placeholders can be used here:
+  # - {username}: The name of the user who is no longer afk
+  # - {displayname}: The display name of the user who is no longer afk
+  # ... PlaceholderAPI placeholders are also supported here too!
+  un-afk: ":keyboard: {displayname} is no longer AFK!"
+  # This is the message sent to discord when a player is kicked from the server.
+  # The following placeholders can be used here:
+  # - {username}: The name of the user who got kicked
+  # - {displayname}: The display name of the user who got kicked
+  # - {reason}: The reason the player was kicked
+  kick: "{displayname} was kicked with reason: {reason}"

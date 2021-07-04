@@ -633,7 +633,7 @@ public class Settings implements net.ess3.api.ISettings {
         getFreezeAfkPlayers = _getFreezeAfkPlayers();
         sleepIgnoresAfkPlayers = _sleepIgnoresAfkPlayers();
         afkListName = _getAfkListName();
-        isAfkListName = !afkListName.equalsIgnoreCase("none");
+        isAfkListName = afkListName != null && !afkListName.equalsIgnoreCase("none");
         broadcastAfkMessage = _broadcastAfkMessage();
         itemSpawnBl = _getItemSpawnBlacklist();
         loginAttackDelay = _getLoginAttackDelay();
@@ -1638,6 +1638,11 @@ public class Settings implements net.ess3.api.ISettings {
     @Override
     public boolean isPastebinCreateKit() {
         return config.getBoolean("pastebin-createkit", false);
+    }
+
+    @Override
+    public boolean isUseBetterKits() {
+        return config.getBoolean("use-nbt-serialization-in-createkit", false);
     }
 
     @Override

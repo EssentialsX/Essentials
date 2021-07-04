@@ -4,6 +4,7 @@ import com.earth2me.essentials.api.IItemDb;
 import com.earth2me.essentials.api.IJails;
 import com.earth2me.essentials.api.IWarps;
 import com.earth2me.essentials.commands.IEssentialsCommand;
+import com.earth2me.essentials.commands.PlayerNotFoundException;
 import com.earth2me.essentials.perm.PermissionsHandler;
 import com.earth2me.essentials.updatecheck.UpdateChecker;
 import net.ess3.provider.ContainerProvider;
@@ -12,10 +13,13 @@ import net.ess3.provider.KnownCommandsProvider;
 import net.ess3.provider.MaterialTagProvider;
 import net.ess3.provider.PersistentDataProvider;
 import net.ess3.provider.ServerStateProvider;
+import net.ess3.provider.SerializationProvider;
 import net.ess3.provider.SpawnerBlockProvider;
 import net.ess3.provider.SpawnerItemProvider;
 import net.ess3.provider.SyncCommandsProvider;
 import net.essentialsx.api.v2.services.BalanceTop;
+import net.essentialsx.api.v2.services.mail.MailService;
+import org.bukkit.Server;
 import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -50,6 +54,12 @@ public interface IEssentials extends Plugin {
     User getUser(String base);
 
     User getUser(Player base);
+
+    User matchUser(Server server, User sourceUser, String searchTerm, Boolean getHidden, boolean getOffline) throws PlayerNotFoundException;
+
+    boolean canInteractWith(CommandSource interactor, User interactee);
+
+    boolean canInteractWith(User interactor, User interactee);
 
     I18n getI18n();
 
@@ -111,6 +121,8 @@ public interface IEssentials extends Plugin {
 
     EssentialsTimer getTimer();
 
+    MailService getMail();
+
     /**
      * Get a list of players who are vanished.
      *
@@ -135,6 +147,8 @@ public interface IEssentials extends Plugin {
     ContainerProvider getContainerProvider();
 
     KnownCommandsProvider getKnownCommandsProvider();
+
+    SerializationProvider getSerializationProvider();
 
     FormattedCommandAliasProvider getFormattedCommandAliasProvider();
 

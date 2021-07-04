@@ -5,11 +5,11 @@ import com.earth2me.essentials.economy.EconomyLayer;
 import com.earth2me.essentials.economy.EconomyLayers;
 import com.earth2me.essentials.messaging.IMessageRecipient;
 import com.earth2me.essentials.messaging.SimpleMessageRecipient;
-import com.earth2me.essentials.utils.TriState;
 import com.earth2me.essentials.utils.DateUtil;
 import com.earth2me.essentials.utils.EnumUtil;
 import com.earth2me.essentials.utils.FormatUtil;
 import com.earth2me.essentials.utils.NumberUtil;
+import com.earth2me.essentials.utils.TriState;
 import com.earth2me.essentials.utils.VersionUtil;
 import com.google.common.collect.Lists;
 import net.ess3.api.IEssentials;
@@ -19,6 +19,7 @@ import net.ess3.api.events.JailStatusChangeEvent;
 import net.ess3.api.events.MuteStatusChangeEvent;
 import net.ess3.api.events.UserBalanceUpdateEvent;
 import net.essentialsx.api.v2.events.TransactionEvent;
+import net.essentialsx.api.v2.services.mail.MailSender;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Statistic;
@@ -115,7 +116,11 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
 
     @Override
     public boolean isPermissionSet(final String node) {
-        return isPermSetCheck(node);
+        final boolean result = isPermSetCheck(node);
+        if (ess.getSettings().isDebug()) {
+            ess.getLogger().log(Level.INFO, "checking if " + base.getName() + " has " + node + " (set-explicit) - " + result);
+        }
+        return result;
     }
 
     /**
@@ -984,6 +989,11 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
     }
 
     @Override
+    public UUID getUUID() {
+        return getBase().getUniqueId();
+    }
+
+    @Override
     public boolean isReachable() {
         return getBase().isOnline();
     }
@@ -1050,12 +1060,28 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
         }
     }
 
+    @Override
+    public void sendMail(MailSender sender, String message) {
+        sendMail(sender, message, 0);
+    }
+
+    @Override
+    public void sendMail(MailSender sender, String message, long expireAt) {
+        ess.getMail().sendMail(this, sender, message, expireAt);
+    }
+
+    @Override
+    @Deprecated
+    public void addMail(String mail) {
+        ess.getMail().sendLegacyMail(this, mail);
+    }
+
     public void notifyOfMail() {
-        final List<String> mails = getMails();
-        if (mails != null && !mails.isEmpty()) {
+        final int unread = getUnreadMailAmount();
+        if (unread != 0) {
             final int notifyPlayerOfMailCooldown = ess.getSettings().getNotifyPlayerOfMailCooldown() * 1000;
             if (System.currentTimeMillis() - lastNotifiedAboutMailsMs >= notifyPlayerOfMailCooldown) {
-                sendMessage(tl("youHaveNewMail", mails.size()));
+                sendMessage(tl("youHaveNewMail", unread));
                 lastNotifiedAboutMailsMs = System.currentTimeMillis();
             }
         }
