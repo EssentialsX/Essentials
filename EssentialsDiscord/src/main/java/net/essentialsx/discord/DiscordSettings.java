@@ -121,6 +121,10 @@ public class DiscordSettings implements IConf {
         return config.getBoolean("chat.show-all-chat", false);
     }
 
+    public List<String> getRelayToConsoleList() {
+        return config.getList("chat.relay-to-console", String.class);
+    }
+
     public String getConsoleChannelDef() {
         return config.getString("console.channel", "none");
     }

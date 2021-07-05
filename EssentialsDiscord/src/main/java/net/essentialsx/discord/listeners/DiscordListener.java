@@ -88,12 +88,20 @@ public class DiscordListener extends ListenerAdapter {
                 event.getChannel().getName(), user.getName(), user.getDiscriminator(), user.getAsTag(),
                 member.getEffectiveName(), DiscordUtil.getRoleColorFormat(member), finalMessage, DiscordUtil.getRoleFormat(member)), EmojiParser.FitzpatrickAction.REMOVE);
 
+        for (final String group : keys) {
+            if (plugin.getSettings().getRelayToConsoleList().contains(group)) {
+                logger.info(formattedMessage);
+                break;
+            }
+        }
+
         for (IUser essUser : plugin.getPlugin().getEss().getOnlineUsers()) {
             for (String group : keys) {
                 final String perm = "essentials.discord.receive." + group;
                 final boolean primaryOverride = plugin.getSettings().isAlwaysReceivePrimary() && group.equalsIgnoreCase("primary");
                 if (primaryOverride || (essUser.isPermissionSet(perm) && essUser.isAuthorized(perm))) {
                     essUser.sendMessage(formattedMessage);
+                    break;
                 }
             }
         }
