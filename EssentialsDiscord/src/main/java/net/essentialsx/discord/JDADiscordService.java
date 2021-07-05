@@ -5,6 +5,7 @@ import club.minnced.discord.webhook.WebhookClientBuilder;
 import club.minnced.discord.webhook.send.WebhookMessage;
 import club.minnced.discord.webhook.send.WebhookMessageBuilder;
 import com.earth2me.essentials.utils.FormatUtil;
+import com.earth2me.essentials.utils.VersionUtil;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Guild;
@@ -13,6 +14,8 @@ import net.dv8tion.jda.api.entities.Webhook;
 import net.dv8tion.jda.api.events.ShutdownEvent;
 import net.dv8tion.jda.api.hooks.EventListener;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
+import net.ess3.nms.refl.providers.AchievementListenerProvider;
+import net.ess3.nms.refl.providers.AdvancementListenerProvider;
 import net.essentialsx.api.v2.events.discord.DiscordMessageEvent;
 import net.essentialsx.api.v2.services.discord.DiscordService;
 import net.essentialsx.api.v2.services.discord.InteractionController;
@@ -181,6 +184,17 @@ public class JDADiscordService implements DiscordService {
         updateTypesRelay();
 
         Bukkit.getPluginManager().registerEvents(new BukkitListener(this), plugin);
+
+        try {
+            if (VersionUtil.getServerBukkitVersion().isHigherThanOrEqualTo(VersionUtil.v1_12_0_R01)) {
+                Bukkit.getPluginManager().registerEvents(new AdvancementListenerProvider(), plugin);
+            } else {
+                Bukkit.getPluginManager().registerEvents(new AchievementListenerProvider(), plugin);
+            }
+        } catch (final Throwable e) {
+            logger.log(Level.WARNING, "Error while loading the achievement/advancement listener. You will not receive achievement/advancement notifications on Discord.", e);
+        }
+
         getPlugin().getEss().scheduleSyncDelayedTask(() -> DiscordUtil.dispatchDiscordMessage(JDADiscordService.this, MessageType.DefaultTypes.SERVER_START, getSettings().getStartMessage(), true, null, null, null));
 
         Bukkit.getServicesManager().register(DiscordService.class, this, plugin, ServicePriority.Normal);

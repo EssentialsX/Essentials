@@ -277,6 +277,18 @@ public class DiscordSettings implements IConf {
                 "username", "displayname");
     }
 
+    public MessageFormat getAdvancementFormat(Player player) {
+        final String format = getFormatString("advancement");
+        final String filled;
+        if (plugin.isPAPI() && format != null) {
+            filled = me.clip.placeholderapi.PlaceholderAPI.setPlaceholders(player, format);
+        } else {
+            filled = format;
+        }
+        return generateMessageFormat(filled, ":medal: {displayname} has completed the advancement **{advancement}**!", false,
+                "username", "displayname", "advancement");
+    }
+
     public String getStartMessage() {
         return config.getString("messages.server-start", ":white_check_mark: The server has started!");
     }
