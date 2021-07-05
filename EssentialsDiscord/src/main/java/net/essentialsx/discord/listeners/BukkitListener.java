@@ -3,6 +3,7 @@ package net.essentialsx.discord.listeners;
 import com.earth2me.essentials.Console;
 import com.earth2me.essentials.utils.DateUtil;
 import com.earth2me.essentials.utils.FormatUtil;
+import com.earth2me.essentials.utils.VersionUtil;
 import net.ess3.api.IUser;
 import net.ess3.api.events.AfkStatusChangeEvent;
 import net.ess3.api.events.MuteStatusChangeEvent;
@@ -17,6 +18,7 @@ import net.essentialsx.discord.util.DiscordUtil;
 import net.essentialsx.discord.util.MessageUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.GameRule;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -148,6 +150,21 @@ public class BukkitListener implements Listener {
         if (isVanishHide(event.getEntity())) {
             return;
         }
+
+        final Boolean showDeathMessages;
+        if (VersionUtil.getServerBukkitVersion().isHigherThan(VersionUtil.v1_12_2_R01)) {
+            showDeathMessages = event.getEntity().getWorld().getGameRuleValue(GameRule.SHOW_DEATH_MESSAGES);
+        } else {
+            if (!event.getEntity().getWorld().isGameRule("showDeathMessages")) {
+                showDeathMessages = null;
+            } else {
+                showDeathMessages = event.getEntity().getWorld().getGameRuleValue("showDeathMessages").equals("true");
+            }
+        }
+        if ((showDeathMessages != null && !showDeathMessages) || event.getDeathMessage() == null || event.getDeathMessage().trim().isEmpty()) {
+            return;
+        }
+
         sendDiscordMessage(MessageType.DefaultTypes.DEATH,
                 MessageUtil.formatMessage(jda.getSettings().getDeathFormat(event.getEntity()),
                         MessageUtil.sanitizeDiscordMarkdown(event.getEntity().getName()),
