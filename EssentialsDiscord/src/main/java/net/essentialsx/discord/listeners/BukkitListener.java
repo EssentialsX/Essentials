@@ -7,6 +7,7 @@ import net.ess3.api.IUser;
 import net.ess3.api.events.AfkStatusChangeEvent;
 import net.ess3.api.events.MuteStatusChangeEvent;
 import net.ess3.api.events.VanishStatusChangeEvent;
+import net.ess3.provider.AbstractAchievementEvent;
 import net.essentialsx.api.v2.events.AsyncUserDataLoadEvent;
 import net.essentialsx.api.v2.events.discord.DiscordChatMessageEvent;
 import net.essentialsx.api.v2.events.discord.DiscordMessageEvent;
@@ -179,6 +180,23 @@ public class BukkitListener implements Listener {
                 jda.getSettings().isShowAvatar() ? jda.getSettings().getAvatarURL().replace("{uuid}", event.getAffected().getBase().getUniqueId().toString()) : null,
                 jda.getSettings().isShowName() ? event.getAffected().getName() : null,
                 event.getAffected().getBase().getUniqueId());
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void onAdvancement(AbstractAchievementEvent event) {
+        if (isVanishHide(event.getPlayer())) {
+            return;
+        }
+
+        sendDiscordMessage(MessageType.DefaultTypes.ADVANCEMENT,
+                MessageUtil.formatMessage(jda.getSettings().getAdvancementFormat(event.getPlayer()),
+                        MessageUtil.sanitizeDiscordMarkdown(event.getPlayer().getName()),
+                        MessageUtil.sanitizeDiscordMarkdown(event.getPlayer().getDisplayName()),
+                        event.getName()),
+                false,
+                jda.getSettings().isShowAvatar() ? AVATAR_URL.replace("{uuid}", event.getPlayer().getUniqueId().toString()) : null,
+                jda.getSettings().isShowName() ? event.getPlayer().getName() : null,
+                event.getPlayer().getUniqueId());
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
