@@ -208,6 +208,10 @@ commands:
     description: Teleport to your home.
     usage: /<command> [player:][name]
     aliases: [ehome,homes,ehomes]
+  ice:
+    description: Cools a player off.
+    usage: /<command> [player]
+    aliases: [eice, efreeze]
   ignore:
     description: Ignore or unignore other players.
     usage: /<command> <player>
@@ -282,7 +286,7 @@ commands:
     aliases: [eloom]
   mail:
     description: Manages inter-player, intra-server mail.
-    usage: /<command> [read|clear|send [to] [message]|sendall [message]]
+    usage: /<command> [read|clear|clear [number]|send [to] [message]|sendtemp [to] [expire time] [message]|sendall [message]]
     aliases: [email,eemail,memo,ememo]
   me:
     description: Describes an action in the context of the player.

@@ -4,6 +4,8 @@ import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.EssentialsUpgrade;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.UserMap;
+import com.earth2me.essentials.economy.EconomyLayer;
+import com.earth2me.essentials.economy.EconomyLayers;
 import com.earth2me.essentials.utils.DateUtil;
 import com.earth2me.essentials.utils.EnumUtil;
 import com.earth2me.essentials.utils.FloatUtil;
@@ -58,11 +60,13 @@ public class Commandessentials extends EssentialsCommand {
         "UltraPermissions",
         "PermissionsEx", // permissions (unsupported)
         "GroupManager", // permissions (unsupported)
-        "bPermissions" // permissions (unsupported)
+        "bPermissions", // permissions (unsupported)
+        "DiscordSRV" // potential for issues if EssentialsXDiscord is installed
     );
     private static final List<String> officialPlugins = Arrays.asList(
         "EssentialsAntiBuild",
         "EssentialsChat",
+        "EssentialsDiscord",
         "EssentialsGeoIP",
         "EssentialsProtect",
         "EssentialsSpawn",
@@ -428,6 +432,17 @@ public class Commandessentials extends EssentialsCommand {
 
             if (name.equals("Vault")) isVaultInstalled = true;
         }
+
+        final String layer;
+        if (ess.getSettings().isEcoDisabled()) {
+            layer = "Disabled";
+        } else if (EconomyLayers.isLayerSelected()) {
+            final EconomyLayer economyLayer = EconomyLayers.getSelectedLayer();
+            layer = economyLayer.getName() + " (" + economyLayer.getBackendName() + ")";
+        } else {
+            layer = "None";
+        }
+        sender.sendMessage(tl("versionOutputEconLayer", layer));
 
         if (isMismatched) {
             sender.sendMessage(tl("versionMismatchAll"));

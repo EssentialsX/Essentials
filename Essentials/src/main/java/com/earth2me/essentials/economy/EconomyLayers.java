@@ -1,12 +1,15 @@
 package com.earth2me.essentials.economy;
 
+import com.earth2me.essentials.Essentials;
 import com.earth2me.essentials.economy.layers.VaultLayer;
+import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
 
 /**
  * Abstraction layer for economy abstraction layers.
@@ -15,6 +18,7 @@ public final class EconomyLayers {
     private static final Map<String, EconomyLayer> registeredLayers = new HashMap<>();
     private static final List<String> availableLayers = new ArrayList<>();
     private static EconomyLayer selectedLayer = null;
+    private static boolean serverStarted = false;
 
     private EconomyLayers() {
     }
@@ -25,6 +29,27 @@ public final class EconomyLayers {
         }
 
         registerLayer(new VaultLayer());
+    }
+
+    public static void onEnable(final Essentials ess) {
+        ess.scheduleSyncDelayedTask(() -> {
+            serverStarted = true;
+            for (final Plugin plugin : Bukkit.getPluginManager().getPlugins()) {
+                if (!plugin.isEnabled()) {
+                    continue;
+                }
+                final EconomyLayer layer = onPluginEnable(plugin);
+                if (layer != null) {
+                    ess.getLogger().log(Level.INFO, "Essentials found a compatible payment resolution method: " + layer.getName() + " (v" + layer.getPluginVersion() + ")!");
+                }
+            }
+
+            onServerLoad();
+        });
+    }
+
+    public static boolean isServerStarted() {
+        return serverStarted;
     }
 
     public static EconomyLayer getSelectedLayer() {
@@ -52,7 +77,7 @@ public final class EconomyLayers {
         return selectedLayer;
     }
 
-    public static boolean onPluginDisable(final Plugin plugin, final boolean serverStarted) {
+    public static boolean onPluginDisable(final Plugin plugin) {
         if (!availableLayers.contains(plugin.getName())) {
             return false;
         }
@@ -75,7 +100,7 @@ public final class EconomyLayers {
             return;
         }
 
-        availableLayers.remove(getSelectedLayer().getPluginVersion());
+        availableLayers.remove(getSelectedLayer().getPluginName());
         selectedLayer = null;
         if (!availableLayers.isEmpty()) {
             selectedLayer = registeredLayers.get(availableLayers.get(0));

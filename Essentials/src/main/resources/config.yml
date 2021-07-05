@@ -331,8 +331,17 @@ kit-auto-equip: false
 # Determines the functionality of the /createkit command.
 # If this is true, /createkit will give the user a link with the kit code.
 # If this is false, /createkit will add the kit to the kits.yml config file directly.
-#
+# Default is false.
 pastebin-createkit: false
+
+# Determines if /createkit will generate kits using NBT item serialization.
+# If this is true, /createkit will store items as NBT; otherwise, it will use Essentials' human-readable item format.
+# By using NBT serialization, /createkit can store items with complex metadata such as shulker boxes and weapons with custom attributes.
+# WARNING: This option only works on 1.15.2+ Paper servers, and it will bypass any custom serializers from other plugins such as Magic.
+# WARNING: When creating kits via /createkit with this option enabled, you will not be able to downgrade your server with these kit items.
+# This option only affects /createkit - you can still create kits by hand in `kits.yml` using Essentials' human-readable item format.
+# Default is false.
+use-nbt-serialization-in-createkit: false
 
 # Essentials Sign Control
 # See http://wiki.ess3.net/wiki/Sign_Tutorial for instructions on how to use these.

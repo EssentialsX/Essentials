@@ -45,6 +45,13 @@ public final class ConfigurateUtil {
         return map;
     }
 
+    public static Map<String, Object> getRawMap(final EssentialsConfiguration config, final String key) {
+        if (config == null || key == null) {
+            return Collections.emptyMap();
+        }
+        return getRawMap(config.getSection(key));
+    }
+
     public static Map<String, Object> getRawMap(final CommentedConfigurationNode node) {
         if (node == null || !node.isMap()) {
             return Collections.emptyMap();
