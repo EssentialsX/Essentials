@@ -8,7 +8,6 @@ import com.earth2me.essentials.textreader.KeywordReplacer;
 import com.earth2me.essentials.textreader.SimpleTextPager;
 import com.earth2me.essentials.utils.VersionUtil;
 import net.ess3.api.IEssentials;
-import net.essentialsx.api.v2.events.UserTeleportSpawnEvent;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
@@ -94,11 +93,6 @@ class EssentialsSpawnPlayerListener implements Listener {
                             ess.showError(user.getSource(), e, "spawn-on-join");
                             return false;
                         });
-                        final UserTeleportSpawnEvent spawnEvent = new UserTeleportSpawnEvent(user, user.getGroup(), spawn);
-                        ess.getServer().getPluginManager().callEvent(spawnEvent);
-                        if (spawnEvent.isCancelled()) {
-                            return;
-                        }
                         user.getAsyncTeleport().nowUnsafe(spawn, TeleportCause.PLUGIN, future);
                     });
                 }
@@ -162,11 +156,6 @@ class EssentialsSpawnPlayerListener implements Listener {
                     logger.log(Level.WARNING, tl("teleportNewPlayerError"), e);
                     return false;
                 });
-                final UserTeleportSpawnEvent spawnEvent = new UserTeleportSpawnEvent(user, user.getGroup(), spawn);
-                ess.getServer().getPluginManager().callEvent(spawnEvent);
-                if (spawnEvent.isCancelled()) {
-                    return;
-                }
                 user.getAsyncTeleport().now(spawn, false, TeleportCause.PLUGIN, future);
             }
         }
