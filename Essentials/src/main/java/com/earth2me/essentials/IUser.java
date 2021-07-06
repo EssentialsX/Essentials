@@ -259,7 +259,7 @@ public interface IUser {
      * requests of this {@link IUser}. Timeout calculations are also done during the
      * iteration process of this method, ensuring that teleport requests made past the timeout
      * period are removed from queue and therefore not returned here. The maximum size of this
-     * queue is determined by {@link ISettings#getTpaMaxAmount()}.
+     * queue is determined by {@link ISettings#getTpaMaxRequests()}.
      *
      * @param inform             true if the underlying {@link IUser} should be informed if a request expires during iteration.
      * @param performExpirations true if this method should not spend time validating time for all items in the queue and just return the first item in the queue.

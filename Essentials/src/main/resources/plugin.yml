@@ -505,8 +505,8 @@ commands:
     usage: /<command> <player>
     aliases: [etpaall]
   tpaccept:
-    description: Accepts most recent teleport request or one from a specific player or all tpahere requests.
-    usage: /<command> [*|player]
+    description: Accepts teleport requests.
+    usage: /<command> [player|*]
     aliases: [etpaccept,tpyes,etpyes]
   tpahere:
     description: Request that the specified player teleport to you.
@@ -525,8 +525,8 @@ commands:
     usage: /<command> [player]
     aliases: [etpacancel]
   tpdeny:
-    description: Rejects most recent teleport request or one from a specific player or all tpa requests.
-    usage: /<command> [*|player]
+    description: Rejects teleport requests.
+    usage: /<command> [player|*]
     aliases: [etpdeny,tpno,etpno]
   tphere:
     description: Teleport a player to you.

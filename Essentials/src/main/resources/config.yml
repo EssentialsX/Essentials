@@ -666,10 +666,10 @@ jail-online-time: false
 # Set to 0 for no timeout.
 tpa-accept-cancellation: 120
 
-# The maximum amount of simultaneous tpa requests that can be pending for any given user.
-# Once at this threshold, any new tpa requests will bump the oldest tpa requests out of queue.
+# The maximum number of simultaneous tpa requests that can be pending for any player.
+# Once past this threshold, old requests will instantly time out.
 # Defaults to 15.
-tpa-max-amount: 15
+tpa-max-requests: 15
 
 # Allow players to set hats by clicking on their helmet slot.
 allow-direct-hat: true

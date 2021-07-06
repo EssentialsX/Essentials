@@ -1233,8 +1233,8 @@ public class Settings implements net.ess3.api.ISettings {
     }
 
     @Override
-    public int getTpaMaxAmount() {
-        return config.getInt("tpa-max-amount", 15);
+    public int getTpaMaxRequests() {
+        return config.getInt("tpa-max-requests", 15);
     }
 
     private long _getTeleportInvulnerability() {
