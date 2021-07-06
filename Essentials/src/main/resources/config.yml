@@ -524,11 +524,11 @@ allow-silent-join-quit: false
 custom-join-message: "none"
 custom-quit-message: "none"
 
-# Indicates whether we should show a user's old username when they join after a name change.
-# This only shows if what we stored last differs from what they joined as.
-# To enable, set custom-new-username-message to a string, and use {OLDUSERNAME} to indicate their old name.
-# Then, put {OLDUSERNAME} in the custom-join-message string above.
-# It will be replaced with whatever is below.
+# This message will be shown if a user has joined with a new username
+# This only shows up if they have joined before, but they have since changed their username
+# This will be displayed INSTEAD OF custom-join-message, so if you intend to keep them similar, make sure they match
+# Additionally, this only shows up if a custom-join-message is set, so set something!
+# All custom-x-message placeholders are supported here, and you can use {OLDUSERNAME} to indicate the old username.
 custom-new-username-message: "none"
 
 # Should Essentials override the vanilla "Server Full" message with its own from the language file?

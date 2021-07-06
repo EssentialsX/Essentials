@@ -340,7 +340,7 @@ public class EssentialsPlayerListener implements Listener {
                 } else if (message == null || hideJoinQuitMessages()) {
                     effectiveMessage = null;
                 } else if (ess.getSettings().isCustomJoinMessage()) {
-                    final String msg = ess.getSettings().getCustomJoinMessage()
+                    final String msg = (newUsername ? ess.getSettings().getCustomNewUsernameMessage() : ess.getSettings().getCustomJoinMessage())
                         .replace("{PLAYER}", player.getDisplayName()).replace("{USERNAME}", player.getName())
                         .replace("{UNIQUE}", NumberFormat.getInstance().format(ess.getUserMap().getUniqueUsers()))
                         .replace("{ONLINE}", NumberFormat.getInstance().format(ess.getOnlinePlayers().size()))
