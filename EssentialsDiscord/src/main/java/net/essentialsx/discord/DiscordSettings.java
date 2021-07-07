@@ -147,6 +147,10 @@ public class DiscordSettings implements IConf {
         return config.getBoolean("show-name", false);
     }
 
+    public String getAvatarURL() {
+        return config.getString("avatar-url", "https://crafthead.net/helm/{uuid}");
+    }
+
     // General command settings
 
     public boolean isCommandEnabled(String command) {
