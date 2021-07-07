@@ -275,6 +275,10 @@ public interface ISettings extends IConf {
 
     String getCustomQuitMessage();
 
+    String getCustomNewUsernameMessage();
+
+    boolean isCustomNewUsernameMessage();
+
     boolean isCustomServerFullMessage();
 
     boolean isNotifyNoNewMail();

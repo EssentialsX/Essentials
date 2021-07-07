@@ -513,7 +513,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
                 user.sendMessage(tl("unvanishedReload"));
             }
             if (stopping) {
-                user.setLastLocation();
+                user.setLogoutLocation();
                 if (!user.isHidden()) {
                     user.setLastLogout(System.currentTimeMillis());
                 }
