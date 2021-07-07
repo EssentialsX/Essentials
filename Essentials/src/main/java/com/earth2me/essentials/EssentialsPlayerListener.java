@@ -305,10 +305,14 @@ public class EssentialsPlayerListener implements Listener {
 
                 user.startTransaction();
 
+                final String lastAccountName = user.getLastAccountName(); // For comparison
                 user.setLastAccountName(user.getBase().getName());
                 user.setLastLogin(currentTime);
                 user.setDisplayNick();
                 updateCompass(user);
+
+                // Check for new username. If they don't want the message, let's just say it's false.
+                final boolean newUsername = ess.getSettings().isCustomNewUsernameMessage() && lastAccountName != null && !lastAccountName.equals(user.getBase().getName());
 
                 if (!ess.getVanishedPlayersNew().isEmpty() && !user.isAuthorized("essentials.vanish.see")) {
                     for (final String p : ess.getVanishedPlayersNew()) {
@@ -335,13 +339,14 @@ public class EssentialsPlayerListener implements Listener {
                 } else if (message == null || hideJoinQuitMessages()) {
                     effectiveMessage = null;
                 } else if (ess.getSettings().isCustomJoinMessage()) {
-                    final String msg = ess.getSettings().getCustomJoinMessage()
+                    final String msg = (newUsername ? ess.getSettings().getCustomNewUsernameMessage() : ess.getSettings().getCustomJoinMessage())
                         .replace("{PLAYER}", player.getDisplayName()).replace("{USERNAME}", player.getName())
                         .replace("{UNIQUE}", NumberFormat.getInstance().format(ess.getUserMap().getUniqueUsers()))
                         .replace("{ONLINE}", NumberFormat.getInstance().format(ess.getOnlinePlayers().size()))
                         .replace("{UPTIME}", DateUtil.formatDateDiff(ManagementFactory.getRuntimeMXBean().getStartTime()))
                         .replace("{PREFIX}", FormatUtil.replaceFormat(ess.getPermissionsHandler().getPrefix(player)))
-                        .replace("{SUFFIX}", FormatUtil.replaceFormat(ess.getPermissionsHandler().getSuffix(player)));
+                        .replace("{SUFFIX}", FormatUtil.replaceFormat(ess.getPermissionsHandler().getSuffix(player)))
+                        .replace("{OLDUSERNAME}", lastAccountName);
                     if (!msg.isEmpty()) {
                         ess.getServer().broadcastMessage(msg);
                     }

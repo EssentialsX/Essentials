@@ -116,6 +116,8 @@ public class Settings implements net.ess3.api.ISettings {
     private boolean isCustomJoinMessage;
     private String customQuitMessage;
     private boolean isCustomQuitMessage;
+    private String customNewUsernameMessage;
+    private boolean isCustomNewUsernameMessage;
     private List<String> spawnOnJoinGroups;
     private Map<Pattern, Long> commandCooldowns;
     private boolean npcsInBalanceRanking = false;
@@ -717,6 +719,8 @@ public class Settings implements net.ess3.api.ISettings {
         isCustomJoinMessage = !customJoinMessage.equals("none");
         customQuitMessage = _getCustomQuitMessage();
         isCustomQuitMessage = !customQuitMessage.equals("none");
+        customNewUsernameMessage = _getCustomNewUsernameMessage();
+        isCustomNewUsernameMessage = !customNewUsernameMessage.equals("none");
         muteCommands = _getMuteCommands();
         spawnOnJoinGroups = _getSpawnOnJoinGroups();
         commandCooldowns = _getCommandCooldowns();
@@ -1370,6 +1374,20 @@ public class Settings implements net.ess3.api.ISettings {
     @Override
     public boolean isCustomQuitMessage() {
         return isCustomQuitMessage;
+    }
+
+    public String _getCustomNewUsernameMessage() {
+        return FormatUtil.replaceFormat(config.getString("custom-new-username-message", "none"));
+    }
+
+    @Override
+    public String getCustomNewUsernameMessage() {
+        return customNewUsernameMessage;
+    }
+
+    @Override
+    public boolean isCustomNewUsernameMessage() {
+        return isCustomNewUsernameMessage;
     }
 
     @Override
