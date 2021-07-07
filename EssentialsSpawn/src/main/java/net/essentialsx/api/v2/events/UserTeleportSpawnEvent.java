@@ -24,9 +24,7 @@ public class UserTeleportSpawnEvent extends Event implements Cancellable {
     }
 
     /**
-     * Returns the user who is being teleported
-     *
-     * @return The teleportee.
+     * @return The user who is being teleported to spawn.
      */
     public IUser getUser() {
         return user;
