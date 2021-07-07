@@ -40,9 +40,8 @@ public class UserTeleportSpawnEvent extends Event implements Cancellable {
     }
 
     /**
-     * Returns the location the user is teleporting to.
-     *
-     * @return Teleportation destination location.
+     * The spawn location of the {@link #getUser() user's} {@link #getSpawnGroup() group}.
+     * @return The spawn location of the user's group.
      */
     public Location getSpawnLocation() {
         return target;
