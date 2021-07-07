@@ -520,7 +520,15 @@ allow-silent-join-quit: false
 
 # You can set custom join and quit messages here. Set this to "none" to use the default Minecraft message,
 # or set this to "" to hide the message entirely.
-# You may use color codes, {USERNAME} for the player's name, {PLAYER} for the player's displayname, {PREFIX} for the player's prefix, and {SUFFIX} for the player's suffix.
+
+# Available placeholders:
+# {PLAYER} - The player's displayname. 
+# {USERNAME} - The player's username.
+# {PREFIX} - The player's prefix.
+# {SUFFIX} - The player's suffix.
+# {ONLINE} - The number of players online.
+# {UNIQUE} - The number of unique players to join the server.
+# {UPTIME} - The amount of time the server has been online.
 custom-join-message: "none"
 custom-quit-message: "none"
 
