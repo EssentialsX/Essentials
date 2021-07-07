@@ -109,16 +109,24 @@ public class BukkitListener implements Listener {
     @EventHandler(priority = EventPriority.MONITOR)
     public void onJoin(AsyncUserDataLoadEvent event) {
         // Delay join to let nickname load
-        if (event.getJoinMessage() != null && !isVanishHide(event.getUser())) {
+        if (!isSilentJoinQuit(event.getUser(), "join") && !isVanishHide(event.getUser())) {
             sendJoinQuitMessage(event.getUser().getBase(), event.getJoinMessage(), true);
         }
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onQuit(PlayerQuitEvent event) {
-        if (event.getQuitMessage() != null && !isVanishHide(event.getPlayer())) {
+        if (!isSilentJoinQuit(event.getPlayer(), "quit") && !isVanishHide(event.getPlayer())) {
             sendJoinQuitMessage(event.getPlayer(), event.getQuitMessage(), false);
         }
+    }
+
+    public boolean isSilentJoinQuit(final Player player, final String type) {
+        return isSilentJoinQuit(jda.getPlugin().getEss().getUser(player), type);
+    }
+
+    public boolean isSilentJoinQuit(final IUser user, final String type) {
+        return jda.getPlugin().getEss().getSettings().allowSilentJoinQuit() && user.isAuthorized("essentials.silent" + type);
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
