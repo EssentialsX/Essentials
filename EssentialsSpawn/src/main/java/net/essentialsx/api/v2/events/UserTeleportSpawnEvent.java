@@ -7,7 +7,7 @@ import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
 /**
- * Called when a user is teleported home via the /spawn command.
+ * Called before a user is teleported to spawn via the /spawn command.
  */
 public class UserTeleportSpawnEvent extends Event implements Cancellable {
     private static final HandlerList handlers = new HandlerList();
