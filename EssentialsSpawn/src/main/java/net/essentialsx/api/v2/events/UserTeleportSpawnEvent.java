@@ -13,12 +13,14 @@ public class UserTeleportSpawnEvent extends Event implements Cancellable {
     private static final HandlerList handlers = new HandlerList();
 
     private final IUser user;
+    private final IUser controller;
     private final String spawnGroup;
     private final Location target;
     private boolean cancelled = false;
 
-    public UserTeleportSpawnEvent(final IUser user, final String spawnGroup, final Location target) {
+    public UserTeleportSpawnEvent(final IUser user, final IUser controller, final String spawnGroup, final Location target) {
         this.user = user;
+        this.controller = controller;
         this.spawnGroup = spawnGroup;
         this.target = target;
     }
@@ -28,6 +30,13 @@ public class UserTeleportSpawnEvent extends Event implements Cancellable {
      */
     public IUser getUser() {
         return user;
+    }
+
+    /**
+     * @return The user who caused teleport to spawn or null if there is none
+     */
+    public IUser getController() {
+        return controller;
     }
 
     /**
@@ -55,7 +64,6 @@ public class UserTeleportSpawnEvent extends Event implements Cancellable {
     public void setCancelled(final boolean cancelled) {
         this.cancelled = cancelled;
     }
-
 
     @Override
     public HandlerList getHandlers() {
