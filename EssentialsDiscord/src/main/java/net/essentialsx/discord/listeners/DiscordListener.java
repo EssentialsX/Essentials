@@ -86,7 +86,7 @@ public class DiscordListener extends ListenerAdapter {
 
         final String formattedMessage = EmojiParser.parseToAliases(MessageUtil.formatMessage(plugin.getPlugin().getSettings().getDiscordToMcFormat(),
                 event.getChannel().getName(), user.getName(), user.getDiscriminator(), user.getAsTag(),
-                member.getEffectiveName(), DiscordUtil.getRoleColorFormat(member), finalMessage), EmojiParser.FitzpatrickAction.REMOVE);
+                member.getEffectiveName(), DiscordUtil.getRoleColorFormat(member), finalMessage, DiscordUtil.getRoleFormat(member)), EmojiParser.FitzpatrickAction.REMOVE);
 
         for (IUser essUser : plugin.getPlugin().getEss().getOnlineUsers()) {
             for (String group : keys) {
