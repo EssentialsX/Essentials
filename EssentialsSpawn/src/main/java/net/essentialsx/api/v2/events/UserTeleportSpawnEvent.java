@@ -31,9 +31,8 @@ public class UserTeleportSpawnEvent extends Event implements Cancellable {
     }
 
     /**
-     * Return the group of spawn
-     *
-     * @return Name of group
+     * The {@link #getUser() user's} group used to determine their spawn location.
+     * @return The user's group.
      */
     public String getSpawnGroup() {
         return spawnGroup;
