@@ -73,7 +73,7 @@ public class ConsoleInjector extends AbstractAppender {
         }
 
         //noinspection UnstableApiUsage
-        messageQueue.addAll(Splitter.fixedLength(Message.MAX_CONTENT_LENGTH).splitToList(
+        messageQueue.addAll(Splitter.fixedLength(Message.MAX_CONTENT_LENGTH - 2).splitToList(
                 MessageUtil.formatMessage(jda.getSettings().getConsoleFormat(),
                         TimeFormat.TIME_LONG.format(Instant.now()),
                         event.getLevel().name(),
