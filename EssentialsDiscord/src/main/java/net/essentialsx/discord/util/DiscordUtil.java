@@ -122,6 +122,22 @@ public final class DiscordUtil {
     }
 
     /**
+     * Gets the highest role of a given member or an empty string if the member has no roles.
+     *
+     * @param member The target member.
+     * @return The highest role or blank string.
+     */
+    public static String getRoleFormat(Member member) {
+        final List<Role> roles = member.getRoles();
+
+        if (roles.isEmpty()) {
+            return "";
+        }
+
+        return roles.get(0).getName();
+    }
+
+    /**
      * Gets the uppermost bukkit color code of a given member or an empty string if the server version is &lt; 1.16.
      *
      * @param member The target member.
