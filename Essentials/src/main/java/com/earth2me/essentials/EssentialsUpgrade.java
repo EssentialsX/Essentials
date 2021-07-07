@@ -189,7 +189,7 @@ public class EssentialsUpgrade {
     }
 
     public void convertStupidCamelCaseUserdataKeys() {
-        if (doneFile.getBoolean("updateUsersLegacyPathNames", false)) {
+        if (doneFile.getBoolean("updateUsersStupidLegacyPathNames", false)) {
             return;
         }
 
@@ -232,12 +232,13 @@ public class EssentialsUpgrade {
                     config.removeProperty("acceptingPay");
                     config.setProperty("accepting-pay", isPay);
                 }
+                config.blockingSave();
             } catch (final RuntimeException ex) {
                 LOGGER.log(Level.INFO, "File: " + file.toString());
                 throw ex;
             }
         }
-        doneFile.setProperty("updateUsersLegacyPathNames", true);
+        doneFile.setProperty("updateUsersStupidLegacyPathNames", true);
         doneFile.save();
         LOGGER.info("Done converting legacy userdata keys to Configurate.");
     }

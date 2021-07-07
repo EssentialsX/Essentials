@@ -2,8 +2,8 @@ package com.earth2me.essentials.utils;
 
 import net.ess3.api.IUser;
 import org.bukkit.ChatColor;
+import org.bukkit.Color;
 
-import java.awt.Color;
 import java.util.EnumSet;
 import java.util.Locale;
 import java.util.Set;
@@ -129,7 +129,9 @@ public final class FormatUtil {
         if (hexColor.length() != 6) {
             throw new NumberFormatException("Invalid hex length");
         }
-        Color.decode("#" + hexColor);
+
+        //noinspection ResultOfMethodCallIgnored
+        Color.fromRGB(Integer.decode("#" + hexColor));
         final StringBuilder assembledColorCode = new StringBuilder();
         assembledColorCode.append(ChatColor.COLOR_CHAR + "x");
         for (final char curChar : hexColor.toCharArray()) {

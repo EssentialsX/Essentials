@@ -331,6 +331,8 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
             confList.add(jails);
             execTimer.mark("Init(Jails)");
 
+            EconomyLayers.onEnable(this);
+
             //Spawner item provider only uses one but it's here for legacy...
             spawnerItemProvider = new BlockMetaSpawnerItemProvider();
 
@@ -511,7 +513,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
                 user.sendMessage(tl("unvanishedReload"));
             }
             if (stopping) {
-                user.setLastLocation();
+                user.setLogoutLocation();
                 if (!user.isHidden()) {
                     user.setLastLogout(System.currentTimeMillis());
                 }
