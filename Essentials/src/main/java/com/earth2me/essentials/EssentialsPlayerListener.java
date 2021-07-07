@@ -313,7 +313,6 @@ public class EssentialsPlayerListener implements Listener {
 
                 // Check for new username. If they don't want the message, let's just say it's false.
                 final boolean newUsername = ess.getSettings().isCustomNewUsernameMessage() && lastAccountName != null && !lastAccountName.equals(user.getBase().getName());
-                final String newUsernameMessage = ess.getSettings().getCustomNewUsernameMessage().replace("{OLDUSERNAME}", lastAccountName == null ? "" : lastAccountName);
 
                 if (!ess.getVanishedPlayersNew().isEmpty() && !user.isAuthorized("essentials.vanish.see")) {
                     for (final String p : ess.getVanishedPlayersNew()) {
@@ -347,7 +346,7 @@ public class EssentialsPlayerListener implements Listener {
                         .replace("{UPTIME}", DateUtil.formatDateDiff(ManagementFactory.getRuntimeMXBean().getStartTime()))
                         .replace("{PREFIX}", FormatUtil.replaceFormat(ess.getPermissionsHandler().getPrefix(player)))
                         .replace("{SUFFIX}", FormatUtil.replaceFormat(ess.getPermissionsHandler().getSuffix(player)))
-                        .replace("{OLDUSERNAME}", FormatUtil.replaceFormat(newUsername ? newUsernameMessage : ""));
+                        .replace("{OLDUSERNAME}", lastAccountName);
                     if (!msg.isEmpty()) {
                         ess.getServer().broadcastMessage(msg);
                     }
