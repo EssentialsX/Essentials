@@ -121,6 +121,8 @@ message-types:
 
 # Whether or not player messages should show their avatar as the profile picture in Discord.
 show-avatar: false
+# What api to use for the avatars in discord. Replace "{uuid}" with the uuid of the player.
+avatar-url: https://crafthead.net/helm/{uuid}
 # Whether or not player messages should show their name as the bot name in Discord.
 show-name: false
 
