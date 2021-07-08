@@ -252,7 +252,7 @@ public class JDADiscordService implements DiscordService {
     }
 
     public void updateTypesRelay() {
-        if (!getSettings().isShowAvatar() && !getSettings().isShowName()) {
+        if (!getSettings().isShowAvatar() && !getSettings().isShowName() && !getSettings().isShowDisplayName()) {
             for (WebhookClient webhook : channelIdToWebhook.values()) {
                 webhook.close();
             }
