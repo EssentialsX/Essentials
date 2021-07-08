@@ -346,7 +346,7 @@ public class EssentialsPlayerListener implements Listener {
                         .replace("{UPTIME}", DateUtil.formatDateDiff(ManagementFactory.getRuntimeMXBean().getStartTime()))
                         .replace("{PREFIX}", FormatUtil.replaceFormat(ess.getPermissionsHandler().getPrefix(player)))
                         .replace("{SUFFIX}", FormatUtil.replaceFormat(ess.getPermissionsHandler().getSuffix(player)))
-                        .replace("{OLDUSERNAME}", lastAccountName);
+                        .replace("{OLDUSERNAME}", lastAccountName == null ? "" : lastAccountName);
                     if (!msg.isEmpty()) {
                         ess.getServer().broadcastMessage(msg);
                     }
