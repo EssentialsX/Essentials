@@ -153,6 +153,10 @@ public class DiscordSettings implements IConf {
         return config.getBoolean("show-name", false);
     }
 
+    public boolean isShowDisplayName() {
+        return config.getBoolean("show-displayname", false);
+    }
+
     public String getAvatarURL() {
         return config.getString("avatar-url", "https://crafthead.net/helm/{uuid}");
     }

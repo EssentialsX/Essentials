@@ -134,6 +134,9 @@ show-avatar: false
 avatar-url: "https://crafthead.net/helm/{uuid}"
 # Whether or not player messages should show their name as the bot name in Discord.
 show-name: false
+# Whether or not player messages should show their display-name/nickname as the bot name in Discord.
+# You must disable show-name for this option to work.
+show-displayname: false
 
 # Whether or not fake join and leave messages should be sent to Discord when a player toggles vanish in Minecraft.
 # Fake join/leave messages will be sent the same as real join and leave messages (and to the same channel).
