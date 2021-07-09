@@ -33,7 +33,7 @@ public class UserTeleportSpawnEvent extends Event implements Cancellable {
     }
 
     /**
-     * @return The user who caused teleport to spawn or null if there is none
+     * @return The user who caused teleport to spawn or null if the teleport was caused by the console.
      */
     public IUser getController() {
         return controller;
