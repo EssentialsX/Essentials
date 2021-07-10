@@ -49,11 +49,19 @@ public class TeleportRequestResponseEvent extends Event implements Cancellable {
     }
 
     /**
-     * Whether or not this request has been accepted or denied.
-     * @return true if accepted otherwise false.
+     * Whether or not the request has been accepted.
+     * @return true if accepted, false if denied.
      */
     public boolean isAccept() {
         return accept;
+    }
+
+    /**
+     * Whether or not the request has been denied.
+     * @return true if denied, false if accepted.
+     */
+    public boolean isDeny() {
+        return !isAccept();
     }
 
     @Override

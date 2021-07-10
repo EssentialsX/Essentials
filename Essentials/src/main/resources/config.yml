@@ -668,8 +668,8 @@ tpa-accept-cancellation: 120
 
 # The maximum number of simultaneous tpa requests that can be pending for any player.
 # Once past this threshold, old requests will instantly time out.
-# Defaults to 15.
-tpa-max-requests: 15
+# Defaults to 5.
+tpa-max-requests: 5
 
 # Allow players to set hats by clicking on their helmet slot.
 allow-direct-hat: true
