@@ -36,6 +36,10 @@ public class EssentialsDiscord extends JavaPlugin implements IEssentialsModule {
         settings = new DiscordSettings(this);
         ess.addReloadListener(settings);
 
+        if (metrics == null) {
+            metrics = new MetricsWrapper(this, 9824, false);
+        }
+
         if (jda == null) {
             jda = new JDADiscordService(this);
             try {
@@ -46,23 +50,22 @@ public class EssentialsDiscord extends JavaPlugin implements IEssentialsModule {
                 if (ess.getSettings().isDebug()) {
                     e.printStackTrace();
                 }
-                setEnabled(false);
-                return;
+                jda.shutdown();
             }
-        }
-
-        if (metrics == null) {
-            metrics = new MetricsWrapper(this, 9824, false);
         }
     }
 
     public void onReload() {
-        if (jda != null) {
+        if (jda != null && !jda.isInvalidStartup()) {
             jda.updatePresence();
             jda.updatePrimaryChannel();
             jda.updateConsoleRelay();
             jda.updateTypesRelay();
         }
+    }
+
+    public boolean isInvalidStartup() {
+        return jda != null && jda.isInvalidStartup();
     }
 
     public IEssentials getEss() {
@@ -79,7 +82,7 @@ public class EssentialsDiscord extends JavaPlugin implements IEssentialsModule {
 
     @Override
     public void onDisable() {
-        if (jda != null) {
+        if (jda != null && !jda.isInvalidStartup()) {
             jda.shutdown();
         }
     }

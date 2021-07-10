@@ -51,8 +51,8 @@ chat:
   discord-max-length: 2000
   # Whether or not new lines from Discord should be filtered or not.
   filter-newlines: true
-  # A regex pattern which will not send matching messages through to Discord.
-  # By default, this will ignore messages starting with '!' and '?'.
+  # A regex pattern which will ignore matching incoming messages from Discord.
+  # By default, this will ignore messages starting with '!' or '?'.
   discord-filter: "^[!?]"
   # Whether or not webhook messages from Discord should be shown in Minecraft.
   show-webhook-messages: false
@@ -61,6 +61,11 @@ chat:
   # Whether or not to show all Minecraft chat messages that are not shown to all players.
   # You shouldn't need to enable this unless you're not seeing all chat messages go through to Discord.
   show-all-chat: false
+  # A list of Discord channels which should be logged to console.
+  # If you want to use the channels below, remember to uncomment the line by removing the '#' before the '-'.
+  relay-to-console:
+    #- primary
+    #- chat
 
 # Console relay settings
 # The console relay sends every message shown in the console to a Discord channel.
@@ -110,6 +115,8 @@ message-types:
   death: primary
   # AFK status change messages sent when a player's AFK status changes.
   afk: primary
+  # Achievement/advancement messages sent when a player is awarded an achievement/advancement.
+  advancement: primary
   # Message sent when the server starts up.
   server-start: primary
   # Message sent when the server shuts down.
@@ -127,10 +134,21 @@ show-avatar: false
 avatar-url: "https://crafthead.net/helm/{uuid}"
 # Whether or not player messages should show their name as the bot name in Discord.
 show-name: false
+# Whether or not player messages should show their display-name/nickname as the bot name in Discord.
+# You must disable show-name for this option to work.
+show-displayname: false
+
+# Whether or not fake join and leave messages should be sent to Discord when a player toggles vanish in Minecraft.
+# Fake join/leave messages will be sent the same as real join and leave messages (and to the same channel).
+vanish-fake-join-leave: true
+
+# Whether or not messages from vanished players should be sent to Discord.
+# This affects join, leave, death, and afk message types by default.
+vanish-hide-messages: true
 
 # Settings pertaining to the varies commands registered by EssentialsX on Discord.
 commands:
-  # The execute command allows for discord users to execute MC commands from Discord.
+  # The execute command allows for Discord users to execute MC commands from Discord.
   # MC commands executed by this will be ran as the console and you should therefore be careful to who you grant this to.
   execute:
     # Set to false if you do not want this command to show up on the Discord command selector.
@@ -209,18 +227,18 @@ presence:
 # The following entries allow you to customize the formatting of messages sent by the plugin.
 # Each message has a description of how it is used along with placeholders that can be used.
 messages:
-  # This is the message that is used to show discord chat to players in game.
+  # This is the message that is used to show Discord chat to players in game.
   # Color/formatting codes and the follow placeholders can be used here:
-  # - {channel}: The name of the discord channel the message was sent from
+  # - {channel}: The name of the Discord channel the message was sent from
   # - {username}: The username of the user who sent the message
   # - {discriminator}: The four numbers displayed after the user's name
   # - {fullname}: Equivalent to typing "{username}#{discriminator}"
   # - {nickname}: The nickname of the user who sent the message. (Will return username if user has no nickname)
   # - {role}: The name of the user's topmost role on Discord. If the user doesn't have a role, the placeholder is empty.
-  # - {color}: The minecraft color representative of the user's topmost role color on discord. If the user doesn't have a role color, the placeholder is empty.
+  # - {color}: The minecraft color representative of the user's topmost role color on Discord. If the user doesn't have a role color, the placeholder is empty.
   # - {message}: The content of the message being sent
   discord-to-mc: "&6[#{channel}] &3{fullname}&7: &f{message}"
-  # This is the message that is used to relay minecraft chat in discord.
+  # This is the message that is used to relay minecraft chat in Discord.
   # The following placeholders can be used here:
   # - {username}: The username of the player sending the message
   # - {displayname}: The display name of the player sending the message (This would be their nickname)
@@ -230,7 +248,7 @@ messages:
   # - {suffix}: The suffix of the player sending the message
   # ... PlaceholderAPI placeholders are also supported here too!
   mc-to-discord: "{displayname}: {message}"
-  # This is the message sent to discord when a player is temporarily muted in minecraft.
+  # This is the message sent to Discord when a player is temporarily muted in minecraft.
   # The following placeholders can be used here:
   # - {username}: The username of the player being muted
   # - {displayname}: The display name of the player being muted
@@ -238,7 +256,7 @@ messages:
   # - {controllerdisplayname}: The display name of the user who muted the player
   # - {time}: The amount of time the player was muted for
   temporary-mute: "{controllerdisplayname} has muted player {displayname} for {time}."
-  # This is the message sent to discord when a player is temporarily muted (with a reason specified) in minecraft.
+  # This is the message sent to Discord when a player is temporarily muted (with a reason specified) in minecraft.
   # The following placeholders can be used here:
   # - {username}: The username of the player being muted
   # - {displayname}: The display name of the player being muted
@@ -247,14 +265,14 @@ messages:
   # - {time}: The amount of time the player was muted for
   # - {reason}: The reason the player was muted for
   temporary-mute-reason: "{controllerdisplayname} has muted player {displayname} for {time}. Reason: {reason}."
-  # This is the message sent to discord when a player is permanently muted in minecraft.
+  # This is the message sent to Discord when a player is permanently muted in minecraft.
   # The following placeholders can be used here:
   # - {username}: The username of the player being muted
   # - {displayname}: The display name of the player being muted
   # - {controllername}: The username of the user who muted the player
   # - {controllerdisplayname}: The display name of the user who muted the player
   permanent-mute: "{controllerdisplayname} has muted player {displayname}."
-  # This is the message sent to discord when a player is permanently muted (with a reason specified) in minecraft.
+  # This is the message sent to Discord when a player is permanently muted (with a reason specified) in minecraft.
   # The following placeholders can be used here:
   # - {username}: The username of the player being muted
   # - {displayname}: The display name of the player being muted
@@ -262,49 +280,56 @@ messages:
   # - {controllerdisplayname}: The display name of the user who muted the player
   # - {reason}: The reason the player was muted for
   permanent-mute-reason: "{controllerdisplayname} has permanently muted player {displayname}. Reason: {reason}."
-  # This is the message sent to discord when a player is unmuted in minecraft.
+  # This is the message sent to Discord when a player is unmuted in minecraft.
   # The following placeholders can be used here:
   # - {username}: The username of the player being unmuted
   # - {displayname}: The display name of the player being unmuted
   unmute: "{displayname} unmuted."
-  # This is the message sent to discord when a player joins the minecraft server.
+  # This is the message sent to Discord when a player joins the minecraft server.
   # The following placeholders can be used here:
   # - {username}: The name of the user joining
   # - {displayname}: The display name of the user joining
   # - {joinmessage}: The full default join message used in game
   # ... PlaceholderAPI placeholders are also supported here too!
   join: ":arrow_right: {displayname} has joined!"
-  # This is the message sent to discord when a player leaves the minecraft server.
+  # This is the message sent to Discord when a player leaves the minecraft server.
   # The following placeholders can be used here:
   # - {username}: The name of the user leaving
   # - {displayname}: The display name of the user leaving
   # - {quitmessage}: The full default leave message used in game
   # ... PlaceholderAPI placeholders are also supported here too!
   quit: ":arrow_left: {displayname} has left!"
-  # This is the message sent to discord when a player dies.
+  # This is the message sent to Discord when a player dies.
   # The following placeholders can be used here:
   # - {username}: The name of the user who died
   # - {displayname}: The display name of the user who died
   # - {deathmessage}: The full default death message used in game
   # ... PlaceholderAPI placeholders are also supported here too!
   death: ":skull: {deathmessage}"
-  # This is the message sent to discord when the server starts.
-  server-start: ":white_check_mark: The server has started!"
-  # This is the message sent to discord when the server stops.
-  server-stop: ":octagonal_sign: The server has stopped!"
-  # This is the message sent to discord when a player becomes afk.
+  # This is the message sent to Discord when a player becomes afk.
   # The following placeholders can be used here:
   # - {username}: The name of the user who became afk
   # - {displayname}: The display name of the user who became afk
   # ... PlaceholderAPI placeholders are also supported here too!
   afk: ":person_walking: {displayname} is now AFK!"
-  # This is the message sent to discord when a player is no longer afk.
+  # This is the message sent to Discord when a player is no longer afk.
   # The following placeholders can be used here:
   # - {username}: The name of the user who is no longer afk
   # - {displayname}: The display name of the user who is no longer afk
   # ... PlaceholderAPI placeholders are also supported here too!
   un-afk: ":keyboard: {displayname} is no longer AFK!"
-  # This is the message sent to discord when a player is kicked from the server.
+  # This is the message sent to Discord when a player is awarded an advancement.
+  # The following placeholders can be used here:
+  # - {username}: The name of the user who was awarded the advancement.
+  # - {displayname}: The display name of the user who was awarded the advancement.
+  # - {advancement}: The name of the advancement.
+  # ... PlaceholderAPI placeholders are also supported here too!
+  advancement: ":medal: {displayname} has completed the advancement **{advancement}**!"
+  # This is the message sent to Discord when the server starts.
+  server-start: ":white_check_mark: The server has started!"
+  # This is the message sent to Discord when the server stops.
+  server-stop: ":octagonal_sign: The server has stopped!"
+  # This is the message sent to Discord when a player is kicked from the server.
   # The following placeholders can be used here:
   # - {username}: The name of the user who got kicked
   # - {displayname}: The display name of the user who got kicked
