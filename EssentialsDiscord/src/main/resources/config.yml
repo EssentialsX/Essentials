@@ -121,6 +121,10 @@ message-types:
 
 # Whether or not player messages should show their avatar as the profile picture in Discord.
 show-avatar: false
+# The URL which should be used to get the avatars of users when "show-avatar" is set to true.
+# Any URL in here should only return a proper JPEG/PNG image and nothing else.
+# To include the UUID of the player in this URL, use "{uuid}".
+avatar-url: "https://crafthead.net/helm/{uuid}"
 # Whether or not player messages should show their name as the bot name in Discord.
 show-name: false
 
@@ -212,6 +216,7 @@ messages:
   # - {discriminator}: The four numbers displayed after the user's name
   # - {fullname}: Equivalent to typing "{username}#{discriminator}"
   # - {nickname}: The nickname of the user who sent the message. (Will return username if user has no nickname)
+  # - {role}: The name of the user's topmost role on Discord. If the user doesn't have a role, the placeholder is empty.
   # - {color}: The minecraft color representative of the user's topmost role color on discord. If the user doesn't have a role color, the placeholder is empty.
   # - {message}: The content of the message being sent
   discord-to-mc: "&6[#{channel}] &3{fullname}&7: &f{message}"
