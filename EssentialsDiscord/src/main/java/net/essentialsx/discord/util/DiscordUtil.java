@@ -52,6 +52,7 @@ public final class DiscordUtil {
      */
     public static WebhookClient getWebhookClient(long id, String token, OkHttpClient client) {
         return new WebhookClientBuilder(id, token)
+                .setWait(false)
                 .setAllowedMentions(AllowedMentions.none())
                 .setHttpClient(client)
                 .setDaemon(true)
