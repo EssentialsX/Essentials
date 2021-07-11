@@ -190,7 +190,7 @@ public final class DiscordUtil {
             return;
         }
 
-        final DiscordMessageEvent event = new DiscordMessageEvent(messageType, FormatUtil.stripFormat(message), allowPing, avatarUrl, name, uuid);
+        final DiscordMessageEvent event = new DiscordMessageEvent(messageType, FormatUtil.stripFormat(message), allowPing, avatarUrl, FormatUtil.stripFormat(name), uuid);
 
         // If the server is stopping, we cannot dispatch events.
         if (messageType == MessageType.DefaultTypes.SERVER_STOP) {
