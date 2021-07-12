@@ -103,6 +103,8 @@ public class Commandessentials extends EssentialsCommand {
             case "commands":
                 runCommands(server, sender, commandLabel, args);
                 break;
+            case "dump":
+                runDump(server, sender, commandLabel, args);
 
             // Data commands
             case "reload":
@@ -154,6 +156,11 @@ public class Commandessentials extends EssentialsCommand {
         for (final Map.Entry<String, String> entry : ess.getAlternativeCommandsHandler().disabledCommands().entrySet()) {
             sender.sendMessage(entry.getKey() + " => " + entry.getValue());
         }
+    }
+
+    // Generates a paste of useful information
+    private void runDump(Server server, CommandSource sender, String commandLabel, String[] args) {
+
     }
 
     // Resets the given player's user data.
