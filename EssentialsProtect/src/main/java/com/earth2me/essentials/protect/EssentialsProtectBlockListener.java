@@ -154,4 +154,3 @@ public class EssentialsProtectBlockListener implements Listener {
         event.setCancelled(prot.getSettingBool(PreventConfig.disable_piston_change));
     }
 }
-}
