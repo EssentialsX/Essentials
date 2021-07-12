@@ -36,7 +36,7 @@ public class EssentialsProtectBlockListener_1_16_R1 implements Listener {
         }
     }
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-    public void PistonOut(BlockPistonExtendEvent event) {
+    public void onBlockPistonExtend(BlockPistonExtendEvent event) {
         event.setCancelled(prot.getSettingBool(ProtectConfig.disable_piston_change));
     }
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
