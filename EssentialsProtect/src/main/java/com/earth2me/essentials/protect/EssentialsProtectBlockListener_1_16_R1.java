@@ -40,7 +40,7 @@ public class EssentialsProtectBlockListener_1_16_R1 implements Listener {
         event.setCancelled(prot.getSettingBool(ProtectConfig.disable_piston_change));
     }
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-    public void PistonIn(BlockPistonRetractEvent event) {
+    public void onBlockPistonRetract(BlockPistonRetractEvent event) {
         event.setCancelled(prot.getSettingBool(PreventConfig.disable_piston_change));
     }
 }
