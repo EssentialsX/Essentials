@@ -44,7 +44,7 @@ public final class FormatUtil {
         if (input == null) {
             return null;
         }
-        return stripColor(input, REPLACE_ALL_PATTERN);
+        return stripColor(stripColor(input, REPLACE_ALL_PATTERN), REPLACE_ALL_RGB_PATTERN);
     }
 
     public static String stripAnsi(final String input) {

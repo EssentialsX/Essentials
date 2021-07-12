@@ -52,6 +52,7 @@ public final class DiscordUtil {
      */
     public static WebhookClient getWebhookClient(long id, String token, OkHttpClient client) {
         return new WebhookClientBuilder(id, token)
+                .setWait(false)
                 .setAllowedMentions(AllowedMentions.none())
                 .setHttpClient(client)
                 .setDaemon(true)
@@ -122,17 +123,32 @@ public final class DiscordUtil {
     }
 
     /**
+     * Gets the highest role of a given member or an empty string if the member has no roles.
+     *
+     * @param member The target member.
+     * @return The highest role or blank string.
+     */
+    public static String getRoleFormat(Member member) {
+        final List<Role> roles = member.getRoles();
+
+        if (roles.isEmpty()) {
+            return "";
+        }
+
+        return roles.get(0).getName();
+    }
+
+    /**
      * Gets the uppermost bukkit color code of a given member or an empty string if the server version is &lt; 1.16.
      *
      * @param member The target member.
      * @return The bukkit color code or blank string.
      */
     public static String getRoleColorFormat(Member member) {
-        final int rawColor = member.getColorRaw();
-
-        if (rawColor == Role.DEFAULT_COLOR_RAW) {
+        if (member.getColorRaw() == Role.DEFAULT_COLOR_RAW) {
             return "";
         }
+        final int rawColor = 0xff000000 | member.getColorRaw();
 
         if (VersionUtil.getServerBukkitVersion().isHigherThanOrEqualTo(VersionUtil.v1_16_1_R01)) {
             // Essentials' FormatUtil allows us to not have to use bungee's chatcolor since bukkit's own one doesn't support rgb
@@ -175,7 +191,7 @@ public final class DiscordUtil {
             return;
         }
 
-        final DiscordMessageEvent event = new DiscordMessageEvent(messageType, FormatUtil.stripFormat(message), allowPing, avatarUrl, name, uuid);
+        final DiscordMessageEvent event = new DiscordMessageEvent(messageType, FormatUtil.stripFormat(message), allowPing, avatarUrl, FormatUtil.stripFormat(name), uuid);
 
         // If the server is stopping, we cannot dispatch events.
         if (messageType == MessageType.DefaultTypes.SERVER_STOP) {

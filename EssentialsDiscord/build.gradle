@@ -4,7 +4,7 @@ plugins {
 
 dependencies {
     compileOnly project(':EssentialsX')
-    implementation('net.dv8tion:JDA:4.3.0_277') {
+    implementation('net.dv8tion:JDA:4.3.0_293') {
         //noinspection GroovyAssignabilityCheck
         exclude module: 'opus-java'
     }

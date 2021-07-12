@@ -25,7 +25,6 @@ public class Commandtp extends EssentialsCommand {
         switch (args.length) {
             case 0:
                 throw new NotEnoughArgumentsException();
-
             case 1:
                 final User player = getPlayer(server, user, args, 0, false, true);
 
@@ -33,8 +32,11 @@ public class Commandtp extends EssentialsCommand {
                     throw new Exception(tl("teleportDisabled", player.getDisplayName()));
                 }
 
-                if (!player.getBase().isOnline() && user.isAuthorized("essentials.tpoffline")) {
-                    throw new Exception(tl("teleportOffline", player.getDisplayName()));
+                if (!player.getBase().isOnline()) {
+                    if (user.isAuthorized("essentials.tpoffline")) {
+                        throw new Exception(tl("teleportOffline", player.getDisplayName()));
+                    }
+                    throw new PlayerNotFoundException();
                 }
 
                 if (user.getWorld() != player.getWorld() && ess.getSettings().isWorldTeleportPermissions() && !user.isAuthorized("essentials.worlds." + player.getWorld().getName())) {

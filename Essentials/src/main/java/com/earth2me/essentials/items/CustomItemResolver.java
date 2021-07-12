@@ -44,9 +44,11 @@ public class CustomItemResolver implements IItemDb.ItemResolver, IConf {
 
     public List<String> getAliasesFor(String item) throws Exception {
         final List<String> results = new ArrayList<>();
-        for (Map.Entry<String, String> entry : map.entrySet()) {
-            if (item.equalsIgnoreCase(ess.getItemDb().name(ess.getItemDb().get(entry.getValue())))) {
-                results.add(entry.getKey());
+        if (item != null) {
+            for (Map.Entry<String, String> entry : map.entrySet()) {
+                if (item.equalsIgnoreCase(ess.getItemDb().name(ess.getItemDb().get(entry.getValue())))) {
+                    results.add(entry.getKey());
+                }
             }
         }
         return results;
