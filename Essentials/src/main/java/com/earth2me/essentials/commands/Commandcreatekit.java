@@ -82,7 +82,7 @@ public class Commandcreatekit extends EssentialsCommand {
 
                 final String fileContents = sw.toString();
 
-                final CompletableFuture<String> future = PasteUtil.createPaste(Collections.singletonList(fileContents));
+                final CompletableFuture<String> future = PasteUtil.createPaste(Collections.singletonList(new PasteUtil.PasteFile("kit_" + kitName + ".yml", fileContents)));
                 future.thenAccept(url -> {
                     if (url != null) {
                         final String separator = tl("createKitSeparator");

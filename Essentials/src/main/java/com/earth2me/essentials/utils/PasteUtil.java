@@ -25,7 +25,7 @@ public final class PasteUtil {
     private PasteUtil() {
     }
 
-    public static CompletableFuture<String> createPaste(List<String> pages) {
+    public static CompletableFuture<String> createPaste(List<PasteFile> pages) {
         final CompletableFuture<String> future = new CompletableFuture<>();
         PASTE_EXECUTOR_SERVICE.submit(() -> {
             try {
@@ -37,11 +37,12 @@ public final class PasteUtil {
                 connection.setRequestProperty("Content-Type", "application/json");
                 final JsonObject body = new JsonObject();
                 final JsonArray files = new JsonArray();
-                for (final String page : pages) {
+                for (final PasteFile page : pages) {
                     final JsonObject file = new JsonObject();
                     final JsonObject content = new JsonObject();
+                    file.addProperty("name", page.getName());
                     content.addProperty("format", "text");
-                    content.addProperty("value", page);
+                    content.addProperty("value", page.getContents());
                     file.add("content", content);
                     files.add(file);
                 }
@@ -68,5 +69,23 @@ public final class PasteUtil {
             }
         });
         return future;
+    }
+
+    public static class PasteFile {
+        private final String name;
+        private final String contents;
+
+        public PasteFile(String name, String contents) {
+            this.name = name;
+            this.contents = contents;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public String getContents() {
+            return contents;
+        }
     }
 }
