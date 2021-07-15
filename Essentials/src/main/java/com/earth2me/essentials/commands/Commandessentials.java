@@ -38,6 +38,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -212,7 +213,10 @@ public class Commandessentials extends EssentialsCommand {
         essData.add("economy-layer", econLayer);
         final JsonArray addons = new JsonArray();
         final JsonArray plugins = new JsonArray();
-        for (final Plugin plugin : Bukkit.getPluginManager().getPlugins()) {
+        final ArrayList<Plugin> alphabetical = new ArrayList<>();
+        Collections.addAll(alphabetical, Bukkit.getPluginManager().getPlugins());
+        alphabetical.sort(Comparator.comparing(o -> o.getName().toUpperCase(Locale.ENGLISH)));
+        for (final Plugin plugin : alphabetical) {
             final JsonObject pluginData = new JsonObject();
             final PluginDescriptionFile info = plugin.getDescription();
             final String name = info.getName();
