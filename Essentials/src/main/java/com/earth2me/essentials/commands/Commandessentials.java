@@ -295,7 +295,7 @@ public class Commandessentials extends EssentialsCommand {
             final CompletableFuture<String> future = PasteUtil.createPaste(files);
             future.thenAccept(url -> {
                 if (url != null) {
-                    sender.sendMessage(tl("dumpUrl", url));
+                    sender.sendMessage(tl("dumpUrl", "https://essentialsx.net/dump.html#" + url.split("/")[3]));
                 }
                 files.clear();
             });
