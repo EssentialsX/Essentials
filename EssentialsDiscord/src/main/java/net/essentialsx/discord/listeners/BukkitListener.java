@@ -100,7 +100,7 @@ public class BukkitListener implements Listener {
                             MessageUtil.sanitizeDiscordMarkdown(FormatUtil.stripEssentialsFormat(jda.getPlugin().getEss().getPermissionsHandler().getPrefix(player))),
                             MessageUtil.sanitizeDiscordMarkdown(FormatUtil.stripEssentialsFormat(jda.getPlugin().getEss().getPermissionsHandler().getSuffix(player)))),
                     player.hasPermission("essentials.discord.ping"),
-                    jda.getSettings().isShowAvatar() ? jda.getSettings().getAvatarURL().replace("{uuid}", player.getUniqueId().toString()) : null,
+                    jda.getSettings().isShowAvatar() ? jda.getSettings().getAvatarURL().replace("{uuid}", player.getUniqueId().toString()).replace("{name}", player.getName()) : null,
                     jda.getSettings().isShowName() ? player.getName() : (jda.getSettings().isShowDisplayName() ? player.getDisplayName() : null),
                     player.getUniqueId());
         });
@@ -148,7 +148,7 @@ public class BukkitListener implements Listener {
                         MessageUtil.sanitizeDiscordMarkdown(player.getDisplayName()),
                         MessageUtil.sanitizeDiscordMarkdown(message),
                         false,
-                        jda.getSettings().isShowAvatar() ? jda.getSettings().getAvatarURL().replace("{uuid}", player.getUniqueId().toString()) : null,
+                        jda.getSettings().isShowAvatar() ? jda.getSettings().getAvatarURL().replace("{uuid}", player.getUniqueId().toString()).replace("{name}", player.getName()) : null,
                         jda.getSettings().isShowName() ? player.getName() : (jda.getSettings().isShowDisplayName() ? player.getDisplayName() : null),
                         player.getUniqueId()));
     }
@@ -179,7 +179,7 @@ public class BukkitListener implements Listener {
                         MessageUtil.sanitizeDiscordMarkdown(event.getEntity().getDisplayName()),
                         MessageUtil.sanitizeDiscordMarkdown(event.getDeathMessage())),
                 false,
-                jda.getSettings().isShowAvatar() ? jda.getSettings().getAvatarURL().replace("{uuid}", event.getEntity().getUniqueId().toString()) : null,
+                jda.getSettings().isShowAvatar() ? jda.getSettings().getAvatarURL().replace("{uuid}", event.getEntity().getUniqueId().toString()).replace("{name}", event.getEntity().getName()) : null,
                 jda.getSettings().isShowName() ? event.getEntity().getName() : (jda.getSettings().isShowDisplayName() ? event.getEntity().getDisplayName() : null),
                 event.getEntity().getUniqueId());
     }
@@ -202,7 +202,7 @@ public class BukkitListener implements Listener {
                         MessageUtil.sanitizeDiscordMarkdown(event.getAffected().getName()),
                         MessageUtil.sanitizeDiscordMarkdown(event.getAffected().getDisplayName())),
                 false,
-                jda.getSettings().isShowAvatar() ? jda.getSettings().getAvatarURL().replace("{uuid}", event.getAffected().getBase().getUniqueId().toString()) : null,
+                jda.getSettings().isShowAvatar() ? jda.getSettings().getAvatarURL().replace("{uuid}", event.getAffected().getBase().getUniqueId().toString()).replace("{name}", event.getAffected().getBase().getName()) : null,
                 jda.getSettings().isShowName() ? event.getAffected().getName() : (jda.getSettings().isShowDisplayName() ? event.getAffected().getDisplayName() : null),
                 event.getAffected().getBase().getUniqueId());
     }
@@ -219,7 +219,7 @@ public class BukkitListener implements Listener {
                         MessageUtil.sanitizeDiscordMarkdown(event.getPlayer().getDisplayName()),
                         event.getName()),
                 false,
-                jda.getSettings().isShowAvatar() ? jda.getSettings().getAvatarURL().replace("{uuid}", event.getPlayer().getUniqueId().toString()) : null,
+                jda.getSettings().isShowAvatar() ? jda.getSettings().getAvatarURL().replace("{uuid}", event.getPlayer().getUniqueId().toString()).replace("{name}", event.getPlayer().getName()) : null,
                 jda.getSettings().isShowName() ? event.getPlayer().getName() : (jda.getSettings().isShowDisplayName() ? event.getPlayer().getDisplayName() : null),
                 event.getPlayer().getUniqueId());
     }
