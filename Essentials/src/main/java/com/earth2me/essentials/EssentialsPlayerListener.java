@@ -32,6 +32,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
+import org.bukkit.event.player.PlayerAdvancementDoneEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerBucketEmptyEvent;
@@ -999,6 +1000,12 @@ public class EssentialsPlayerListener implements Listener {
             return command != null
                 && (command.getPlugin() == ess || command.getPlugin().getClass().getName().startsWith("com.earth2me.essentials"))
                 && (ess.getSettings().isCommandOverridden(label) || (ess.getAlternativeCommandsHandler().getAlternative(label) == null));
+        }
+        @EventHandler(priority = EventPriority.HIGHEST)
+    public void onVanishedAdvancement(final PlayerAdvancementDoneEvent event){
+        final User user = ess.getUser(event.getPlayer());
+        if (user.isVanished()) {
+            event.message(null);
         }
     }
 }
