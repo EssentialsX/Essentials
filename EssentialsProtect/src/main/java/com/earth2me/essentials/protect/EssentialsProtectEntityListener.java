@@ -257,4 +257,11 @@ public class EssentialsProtectEntityListener implements Listener {
             event.setCancelled(true);
         }
     }
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    public void onPrimedTntSpawn(final EntitySpawnEvent event) {
+        if (prot.getSettingBool(ProtectConfig.prevent_tnt_spawn)){
+            if(e.getEntityType() == EntityType.PRIMED_TNT){
+                e.setCancelled(true);
+        }
+    }
 }
