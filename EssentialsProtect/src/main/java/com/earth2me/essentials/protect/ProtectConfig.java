@@ -18,6 +18,7 @@ public enum ProtectConfig {
     prevent_fire_spread("protect.prevent.fire-spread", true),
     prevent_flint_fire("protect.prevent.flint-fire", false),
     prevent_lava_fire_spread("protect.prevent.lava-fire-spread", true),
+    disable_piston_change("protect.prevent.piston-change", false),
     prevent_lightning_fire_spread("protect.prevent.lightning-fire-spread", true),
     prevent_water_flow("protect.prevent.water-flow", false),
     prevent_lava_flow("protect.prevent.lava-flow", false),
@@ -60,7 +61,8 @@ public enum ProtectConfig {
     prevent_villager_to_witch("protect.prevent.transformation.witch", false),
     prevent_pig_transformation("protect.prevent.transformation.zombie-pigman", false),
     prevent_zombie_drowning("protect.prevent.transformation.drowned", false),
-    prevent_mooshroom_switching("protect.prevent.transformation.mooshroom", false);
+    prevent_mooshroom_switching("protect.prevent.transformation.mooshroom", false),
+    prevent_lingering_potion("protect.prevent.lingering.potion",false);
     private final String configName;
     private final String defValueString;
     private final boolean defValueBoolean;
