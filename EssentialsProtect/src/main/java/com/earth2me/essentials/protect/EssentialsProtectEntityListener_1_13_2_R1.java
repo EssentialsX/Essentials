@@ -8,6 +8,7 @@ import org.bukkit.entity.Villager;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.AreaEffectCloudApplyEvent;
 import org.bukkit.event.entity.EntityTransformEvent;
 
 public class EssentialsProtectEntityListener_1_13_2_R1 implements Listener {
@@ -36,6 +37,12 @@ public class EssentialsProtectEntityListener_1_13_2_R1 implements Listener {
                 event.setCancelled(true);
             }
         } else if (reason == EntityTransformEvent.TransformReason.DROWNED && prot.getSettingBool(ProtectConfig.prevent_zombie_drowning)) {
+            event.setCancelled(true);
+        }
+    }
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    public void onAreaEffectCloud(final AreaEffectCloudApplyEvent event) {
+        if (prot.getSettingBool(ProtectConfig.prevent_lingering_potion)){
             event.setCancelled(true);
         }
     }
