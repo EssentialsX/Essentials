@@ -33,6 +33,7 @@ import org.bukkit.event.entity.EntityTargetEvent.TargetReason;
 import org.bukkit.event.entity.ExplosionPrimeEvent;
 import org.bukkit.event.hanging.HangingBreakByEntityEvent;
 import org.bukkit.event.hanging.HangingBreakEvent;
+import org.bukkit.event.entity.LingeringPotionSplashEvent
 
 import java.util.Locale;
 
@@ -254,6 +255,13 @@ public class EssentialsProtectEntityListener implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onPaintingBreak(final HangingBreakByEntityEvent event) {
         if ((event.getCause() == HangingBreakEvent.RemoveCause.ENTITY) && ((event.getRemover() instanceof Creeper) && prot.getSettingBool(ProtectConfig.prevent_creeper_explosion) || (((event.getRemover() instanceof Fireball) || (event.getRemover() instanceof SmallFireball)) && prot.getSettingBool(ProtectConfig.prevent_fireball_explosion)) || ((event.getRemover() instanceof TNTPrimed) && prot.getSettingBool(ProtectConfig.prevent_tnt_explosion)) || ((event.getRemover() instanceof WitherSkull) && prot.getSettingBool(ProtectConfig.prevent_witherskull_explosion)))) {
+            event.setCancelled(true);
+        }
+    }
+
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    public void onLingeringPotion(final LingeringPotionSplashEvent event) {
+        if (prot.getSettingBool(ProtectConfig.prevent_lingering_potion)) {
             event.setCancelled(true);
         }
     }
