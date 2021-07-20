@@ -4,6 +4,7 @@ import org.bukkit.entity.Creeper;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.MushroomCow;
 import org.bukkit.entity.Pig;
+import org.bukkit.event.entity.AreaEffectCloudApplyEvent;
 import org.bukkit.entity.Villager;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -39,4 +40,11 @@ public class EssentialsProtectEntityListener_1_13_2_R1 implements Listener {
             event.setCancelled(true);
         }
     }
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    public void onAreaEffectCloud(final AreaEffectCloudApplyEvent event) {
+        if (prot.getSettingBool(ProtectConfig.prevent_lingering_potion)){
+            event.setCancelled(true);
+        }
+    }
 }
+
