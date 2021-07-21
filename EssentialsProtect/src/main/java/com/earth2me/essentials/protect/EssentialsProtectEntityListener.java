@@ -9,6 +9,7 @@ import org.bukkit.entity.EnderDragon;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Fireball;
+import org.bukkit.event.entity.EntitySpawnEvent;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.entity.SmallFireball;
@@ -256,5 +257,14 @@ public class EssentialsProtectEntityListener implements Listener {
         if ((event.getCause() == HangingBreakEvent.RemoveCause.ENTITY) && ((event.getRemover() instanceof Creeper) && prot.getSettingBool(ProtectConfig.prevent_creeper_explosion) || (((event.getRemover() instanceof Fireball) || (event.getRemover() instanceof SmallFireball)) && prot.getSettingBool(ProtectConfig.prevent_fireball_explosion)) || ((event.getRemover() instanceof TNTPrimed) && prot.getSettingBool(ProtectConfig.prevent_tnt_explosion)) || ((event.getRemover() instanceof WitherSkull) && prot.getSettingBool(ProtectConfig.prevent_witherskull_explosion)))) {
             event.setCancelled(true);
         }
+    }
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    public void onPrimedTNTSpawn(final EntitySpawnEvent event) {
+        if (prot.getSettingBool(ProtectConfig.prevent_primed_tnt)){
+            if (event.getEntity().getType().equals(EntityType.PRIMED_TNT)){
+                event.setCancelled(true);
+            }
+        }
+
     }
 }
