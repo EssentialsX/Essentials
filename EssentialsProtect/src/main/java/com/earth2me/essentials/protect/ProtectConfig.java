@@ -60,7 +60,8 @@ public enum ProtectConfig {
     prevent_villager_to_witch("protect.prevent.transformation.witch", false),
     prevent_pig_transformation("protect.prevent.transformation.zombie-pigman", false),
     prevent_zombie_drowning("protect.prevent.transformation.drowned", false),
-    prevent_mooshroom_switching("protect.prevent.transformation.mooshroom", false);
+    prevent_mooshroom_switching("protect.prevent.transformation.mooshroom", false),
+    prevent_primed_tnt("protect.prevent.primed.tnt",false);
     private final String configName;
     private final String defValueString;
     private final boolean defValueBoolean;
