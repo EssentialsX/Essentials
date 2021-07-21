@@ -157,6 +157,21 @@ public class EssentialsProtectEntityListener implements Listener {
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    public void onNameTagAttack(final EntityDamageByEntityEvent event) {
+        if (prot.getSettingBool(ProtectConfig.prevent_damage_named_entity)) {
+            if (event.getDamager().getType().equals(EntityType.PLAYER)) {
+                if (!event.getEntity().getType().equals(EntityType.PLAYER)) {
+                    if (event.getEntity().getCustomName() != null) {
+                        if (event.getEntity().isCustomNameVisible()) {
+                            event.setCancelled(true);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onEntityExplode(final EntityExplodeEvent event) {
         if (event.getEntity() == null) {
             return;
