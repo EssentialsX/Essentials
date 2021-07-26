@@ -289,6 +289,11 @@ public class Settings implements net.ess3.api.ISettings {
         return disabledCommands;
     }
 
+    @Override
+    public boolean isVerboseCommandUsages() {
+        return config.getBoolean("verbose-command-usages", true);
+    }
+
     private void _addAlternativeCommand(final String label, final Command current) {
         Command cmd = ess.getAlternativeCommandsHandler().getAlternative(label);
         if (cmd == null) {
