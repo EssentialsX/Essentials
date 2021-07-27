@@ -669,24 +669,25 @@ public class Settings implements net.ess3.api.ISettings {
             }
 
             for (final String command : disabledCommands) {
-                final Command toDisable = ess.getPluginCommand(command);
+                final String effectiveAlias = command.toLowerCase(Locale.ENGLISH);
+                final Command toDisable = ess.getPluginCommand(effectiveAlias);
                 if (toDisable != null) {
                     if (isDebug()) {
-                        logger.log(Level.INFO, "Attempting removal of " + command);
+                        logger.log(Level.INFO, "Attempting removal of " + effectiveAlias);
                     }
-                    final Command removed = ess.getKnownCommandsProvider().getKnownCommands().remove(toDisable.getName());
+                    final Command removed = ess.getKnownCommandsProvider().getKnownCommands().remove(effectiveAlias);
                     if (removed != null) {
                         if (isDebug()) {
-                            logger.log(Level.INFO, "Adding command " + command + " to disabled map!");
+                            logger.log(Level.INFO, "Adding command " + effectiveAlias + " to disabled map!");
                         }
-                        disabledBukkitCommands.put(command, removed);
+                        disabledBukkitCommands.put(effectiveAlias, removed);
                     }
 
                     // This is 2 because Settings are reloaded twice in the startup lifecycle
                     if (reloadCount.get() < 2) {
-                        ess.scheduleSyncDelayedTask(() -> _addAlternativeCommand(command, toDisable));
+                        ess.scheduleSyncDelayedTask(() -> _addAlternativeCommand(effectiveAlias, toDisable));
                     } else {
-                        _addAlternativeCommand(command, toDisable);
+                        _addAlternativeCommand(effectiveAlias, toDisable);
                     }
                     mapModified = true;
                 }
