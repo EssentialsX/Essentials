@@ -249,7 +249,13 @@ public class Commandessentials extends EssentialsCommand {
             boolean kits = false;
             boolean log = false;
             for (final String arg : args) {
-                if (arg.equalsIgnoreCase("config")) {
+                if (arg.equals("*")) {
+                    config = true;
+                    discord = true;
+                    kits = true;
+                    log = true;
+                    break;
+                } else if (arg.equalsIgnoreCase("config")) {
                     config = true;
                 } else if (arg.equalsIgnoreCase("discord")) {
                     discord = true;
@@ -690,8 +696,12 @@ public class Commandessentials extends EssentialsCommand {
                 }
                 break;
             case "dump":
-                final List<String> list = Lists.newArrayList("config", "kits", "log", "discord");
+                final List<String> list = Lists.newArrayList("config", "kits", "log", "discord", "*");
                 for (String arg : args) {
+                    if (arg.equals("*")) {
+                        list.clear();
+                        return list;
+                    }
                     list.remove(arg.toLowerCase(Locale.ENGLISH));
                 }
                 return list;
