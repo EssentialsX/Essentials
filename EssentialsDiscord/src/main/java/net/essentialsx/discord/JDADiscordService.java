@@ -183,6 +183,10 @@ public class JDADiscordService implements DiscordService {
 
         updateTypesRelay();
 
+        // We will see you in the future :balloon:
+        // DiscordUtil.cleanWebhooks(guild, DiscordUtil.CONSOLE_RELAY_NAME);
+        // DiscordUtil.cleanWebhooks(guild, DiscordUtil.ADVANCED_RELAY_NAME);
+
         Bukkit.getPluginManager().registerEvents(new BukkitListener(this), plugin);
 
         try {
@@ -271,9 +275,7 @@ public class JDADiscordService implements DiscordService {
                 continue;
             }
 
-            final String webhookName = "EssX Advanced Relay";
-            Webhook webhook = DiscordUtil.getAndCleanWebhooks(channel, webhookName).join();
-            webhook = webhook == null ? DiscordUtil.createWebhook(channel, webhookName).join() : webhook;
+            final Webhook webhook = DiscordUtil.getOrCreateWebhook(channel, DiscordUtil.ADVANCED_RELAY_NAME).join();
             if (webhook == null) {
                 final WebhookClient current = channelIdToWebhook.get(channel.getId());
                 if (current != null) {
@@ -317,9 +319,7 @@ public class JDADiscordService implements DiscordService {
                     return;
                 }
 
-                final String webhookName = "EssX Console Relay";
-                Webhook webhook = DiscordUtil.getAndCleanWebhooks(channel, webhookName).join();
-                webhook = webhook == null ? DiscordUtil.createWebhook(channel, webhookName).join() : webhook;
+                final Webhook webhook = DiscordUtil.getOrCreateWebhook(channel, DiscordUtil.CONSOLE_RELAY_NAME).join();
                 if (webhook == null) {
                     logger.info(tl("discordErrorLoggerNoPerms"));
                     return;
