@@ -72,7 +72,7 @@ import java.util.regex.Pattern;
 
 import static com.earth2me.essentials.I18n.tl;
 
-public class EssentialsPlayerListener implements Listener {
+public class EssentialsPlayerListener implements Listener, FakeAccessor {
     private static final Logger LOGGER = Logger.getLogger("Essentials");
     private final transient IEssentials ess;
 
@@ -1000,5 +1000,10 @@ public class EssentialsPlayerListener implements Listener {
                 && (command.getPlugin() == ess || command.getPlugin().getClass().getName().startsWith("com.earth2me.essentials"))
                 && (ess.getSettings().isCommandOverridden(label) || (ess.getAlternativeCommandsHandler().getAlternative(label) == null));
         }
+    }
+
+    @Override
+    public void getUser(Player player) {
+        ess.getUser(player);
     }
 }
