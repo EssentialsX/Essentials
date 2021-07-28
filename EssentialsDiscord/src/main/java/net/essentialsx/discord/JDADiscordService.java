@@ -212,8 +212,8 @@ public class JDADiscordService implements DiscordService {
 
     @Override
     public void registerMessageType(Plugin plugin, MessageType type) {
-        if (!type.getKey().matches("^[a-z0-9-]*$")) {
-            throw new IllegalArgumentException("MessageType key must match \"^[a-z0-9-]*$\"");
+        if (!type.getKey().matches("^[a-z][a-z0-9-]*$")) {
+            throw new IllegalArgumentException("MessageType key must match \"^[a-z][a-z0-9-]*$\"");
         }
 
         if (registeredTypes.containsKey(type.getKey())) {
