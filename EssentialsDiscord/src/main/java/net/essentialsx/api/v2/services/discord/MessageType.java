@@ -58,11 +58,12 @@ public final class MessageType {
         public final static MessageType CHAT = new MessageType("chat", true);
         public final static MessageType DEATH = new MessageType("death", true);
         public final static MessageType AFK = new MessageType("afk", true);
+        public final static MessageType ADVANCEMENT = new MessageType("advancement", true);
         public final static MessageType SERVER_START = new MessageType("server-start", false);
         public final static MessageType SERVER_STOP = new MessageType("server-stop", false);
         public final static MessageType KICK = new MessageType("kick", false);
         public final static MessageType MUTE = new MessageType("mute", false);
-        private final static MessageType[] VALUES = new MessageType[]{JOIN, LEAVE, CHAT, DEATH, AFK, SERVER_START, SERVER_STOP, KICK, MUTE};
+        private final static MessageType[] VALUES = new MessageType[]{JOIN, LEAVE, CHAT, DEATH, AFK, ADVANCEMENT, SERVER_START, SERVER_STOP, KICK, MUTE};
 
         /**
          * Gets an array of all the default {@link MessageType MessageTypes}.

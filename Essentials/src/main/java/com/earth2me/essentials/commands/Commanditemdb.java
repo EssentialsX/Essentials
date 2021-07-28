@@ -7,6 +7,7 @@ import org.bukkit.Material;
 import org.bukkit.Server;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -55,9 +56,13 @@ public class Commanditemdb extends EssentialsCommand {
         }
 
         List<String> nameList = ess.getItemDb().nameList(itemStack);
+        nameList = nameList != null ? new ArrayList<>(nameList) : new ArrayList<>();
         nameList.addAll(ess.getCustomItemResolver().getAliasesFor(ess.getItemDb().name(itemStack)));
-        Collections.sort(nameList);
+        if (nameList.isEmpty()) {
+            return;
+        }
 
+        Collections.sort(nameList);
         if (nameList.size() > 15) {
             nameList = nameList.subList(0, 14);
         }

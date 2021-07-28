@@ -277,7 +277,8 @@ public abstract class UserData extends PlayerExtension implements IConf {
     }
 
     public Location getLogoutLocation() {
-        return holder.logoutLocation().location();
+        final LazyLocation logoutLocation = holder.logoutLocation();
+        return logoutLocation != null ? logoutLocation.location() : null;
     }
 
     public void setLogoutLocation(final Location loc) {
