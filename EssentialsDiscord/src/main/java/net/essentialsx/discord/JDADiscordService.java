@@ -31,6 +31,7 @@ import net.essentialsx.discord.listeners.DiscordCommandDispatcher;
 import net.essentialsx.discord.listeners.DiscordListener;
 import net.essentialsx.discord.util.ConsoleInjector;
 import net.essentialsx.discord.util.DiscordUtil;
+import org.apache.commons.lang.math.NumberUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.event.HandlerList;
 import org.bukkit.plugin.Plugin;
@@ -224,7 +225,7 @@ public class JDADiscordService implements DiscordService {
 
     @Override
     public void sendMessage(MessageType type, String message, boolean allowGroupMentions) {
-        if (!registeredTypes.containsKey(type.getKey())) {
+        if (!registeredTypes.containsKey(type.getKey()) && !NumberUtils.isDigits(type.getKey())) {
             logger.warning("Sending message to channel \"" + type.getKey() + "\" which is an unregistered type! If you are a plugin author, you should be registering your MessageType before using them.");
         }
         final DiscordMessageEvent event = new DiscordMessageEvent(type, FormatUtil.stripFormat(message), allowGroupMentions);
