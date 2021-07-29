@@ -31,6 +31,7 @@ import net.essentialsx.discord.listeners.DiscordCommandDispatcher;
 import net.essentialsx.discord.listeners.DiscordListener;
 import net.essentialsx.discord.util.ConsoleInjector;
 import net.essentialsx.discord.util.DiscordUtil;
+import org.apache.commons.lang.math.NumberUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.event.HandlerList;
 import org.bukkit.plugin.Plugin;
@@ -183,6 +184,10 @@ public class JDADiscordService implements DiscordService {
 
         updateTypesRelay();
 
+        // We will see you in the future :balloon:
+        // DiscordUtil.cleanWebhooks(guild, DiscordUtil.CONSOLE_RELAY_NAME);
+        // DiscordUtil.cleanWebhooks(guild, DiscordUtil.ADVANCED_RELAY_NAME);
+
         Bukkit.getPluginManager().registerEvents(new BukkitListener(this), plugin);
 
         try {
@@ -207,8 +212,8 @@ public class JDADiscordService implements DiscordService {
 
     @Override
     public void registerMessageType(Plugin plugin, MessageType type) {
-        if (!type.getKey().matches("^[a-z0-9-]*$")) {
-            throw new IllegalArgumentException("MessageType key must match \"^[a-z0-9-]*$\"");
+        if (!type.getKey().matches("^[a-z][a-z0-9-]*$")) {
+            throw new IllegalArgumentException("MessageType key must match \"^[a-z][a-z0-9-]*$\"");
         }
 
         if (registeredTypes.containsKey(type.getKey())) {
@@ -220,7 +225,7 @@ public class JDADiscordService implements DiscordService {
 
     @Override
     public void sendMessage(MessageType type, String message, boolean allowGroupMentions) {
-        if (!registeredTypes.containsKey(type.getKey())) {
+        if (!registeredTypes.containsKey(type.getKey()) && !NumberUtils.isDigits(type.getKey())) {
             logger.warning("Sending message to channel \"" + type.getKey() + "\" which is an unregistered type! If you are a plugin author, you should be registering your MessageType before using them.");
         }
         final DiscordMessageEvent event = new DiscordMessageEvent(type, FormatUtil.stripFormat(message), allowGroupMentions);
@@ -271,9 +276,7 @@ public class JDADiscordService implements DiscordService {
                 continue;
             }
 
-            final String webhookName = "EssX Advanced Relay";
-            Webhook webhook = DiscordUtil.getAndCleanWebhooks(channel, webhookName).join();
-            webhook = webhook == null ? DiscordUtil.createWebhook(channel, webhookName).join() : webhook;
+            final Webhook webhook = DiscordUtil.getOrCreateWebhook(channel, DiscordUtil.ADVANCED_RELAY_NAME).join();
             if (webhook == null) {
                 final WebhookClient current = channelIdToWebhook.get(channel.getId());
                 if (current != null) {
@@ -317,9 +320,7 @@ public class JDADiscordService implements DiscordService {
                     return;
                 }
 
-                final String webhookName = "EssX Console Relay";
-                Webhook webhook = DiscordUtil.getAndCleanWebhooks(channel, webhookName).join();
-                webhook = webhook == null ? DiscordUtil.createWebhook(channel, webhookName).join() : webhook;
+                final Webhook webhook = DiscordUtil.getOrCreateWebhook(channel, DiscordUtil.CONSOLE_RELAY_NAME).join();
                 if (webhook == null) {
                     logger.info(tl("discordErrorLoggerNoPerms"));
                     return;
