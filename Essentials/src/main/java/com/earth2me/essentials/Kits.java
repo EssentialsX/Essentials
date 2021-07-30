@@ -3,11 +3,16 @@ package com.earth2me.essentials;
 import com.earth2me.essentials.config.ConfigurateUtil;
 import com.earth2me.essentials.config.EssentialsConfiguration;
 import com.earth2me.essentials.utils.NumberUtil;
+import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.InvalidConfigurationException;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.spongepowered.configurate.CommentedConfigurationNode;
 import org.spongepowered.configurate.serialize.SerializationException;
 
 import java.io.File;
+import java.io.IOException;
 import java.math.BigDecimal;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -16,11 +21,13 @@ import static com.earth2me.essentials.I18n.capitalCase;
 import static com.earth2me.essentials.I18n.tl;
 
 public class Kits implements IConf {
+    private final IEssentials ess;
     private final EssentialsConfiguration config;
     private CommentedConfigurationNode kits;
 
     public Kits(final IEssentials essentials) {
-        config = new EssentialsConfiguration(new File(essentials.getDataFolder(), "kits.yml"), "/kits.yml");
+        this.ess = essentials;
+        this.config = new EssentialsConfiguration(new File(essentials.getDataFolder(), "kits.yml"), "/kits.yml");
 
         reloadConfig();
     }
@@ -34,7 +41,7 @@ public class Kits implements IConf {
     private CommentedConfigurationNode _getKits() {
         final CommentedConfigurationNode section = config.getSection("kits");
         if (section != null) {
-            final CommentedConfigurationNode newSection = config.newSection();
+            final CommentedConfigurationNode newSection = CommentedConfigurationNode.root();
             for (final String kitItem : ConfigurateUtil.getKeys(section)) {
                 final CommentedConfigurationNode kitSection = section.node(kitItem);
                 if (kitSection.isMap()) {
@@ -42,6 +49,40 @@ public class Kits implements IConf {
                         newSection.node(kitItem.toLowerCase(Locale.ENGLISH)).set(kitSection);
                     } catch (SerializationException e) {
                         e.printStackTrace();
+                    }
+                }
+            }
+
+            File kitsFolder = new File(this.ess.getDataFolder(), "kits");
+            if(!kitsFolder.exists()) {
+                kitsFolder.mkdirs();
+            } else {
+                File[] kitsFiles = kitsFolder.listFiles();
+                int numFiles = kitsFiles.length;
+
+                for(int i = 0; i < numFiles; i++) {
+                    File f = kitsFiles[i];
+                    if(f.getName().endsWith(".yml")) {
+                        EssentialsConfiguration essConfig = new EssentialsConfiguration(new File(ess.getDataFolder(), "kits" + File.separator + f.getName()), "/kits.yml");
+                        essConfig.load();
+                        if(essConfig.hasProperty("kits")){
+                            final CommentedConfigurationNode kits = essConfig.getSection("kits");
+
+                            if(!kits.isNull()) {
+                                for (final String kitItem : ConfigurateUtil.getKeys(kits)) {
+                                    final CommentedConfigurationNode kitSection = kits.node(kitItem);
+                                    if (kitSection.isMap()) {
+                                        try {
+                                            newSection.node(kitItem.toLowerCase(Locale.ENGLISH)).set(kitSection);
+                                        } catch (SerializationException e) {
+                                            e.printStackTrace();
+                                        }
+                                    }
+                                }
+                            }
+                        } else {
+                            ess.getLogger().info("File in kits folder not loaded because \"kits\" section could not be found. Please see proper formatting for kit files. File: " + f.getName());
+                        }
                     }
                 }
             }
