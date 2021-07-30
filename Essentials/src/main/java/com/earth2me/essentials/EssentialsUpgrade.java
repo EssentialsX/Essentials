@@ -321,31 +321,6 @@ public class EssentialsUpgrade {
         LOGGER.info("Done converting kits.");
     }
 
-    public void migrateKitsToFolder() {
-        if (doneFile.getBoolean("migrateKitsToFolder", false)) {
-            return;
-        }
-        File kitsFolder = new File(this.ess.getDataFolder(), "kits");
-        if(!kitsFolder.exists()) {
-            kitsFolder.mkdirs();
-        }
-
-        File kitsFile = new File(ess.getDataFolder(), "kits.yml");
-        boolean renamed = kitsFile.renameTo(new File(ess.getDataFolder(), "kits" + File.separator + "kits.yml"));
-
-        if(renamed) {
-            doneFile.setProperty("migrateKitsToFolder", true);
-            doneFile.save();
-            LOGGER.info("Migration of kits.yml to kits folder was successful.");
-        } else {
-            doneFile.setProperty("migrateKitsToFolder", false);
-            doneFile.save();
-            LOGGER.info("The file 'kits.yml' already exists in your 'kits' folder. Aborting migration until existing kits file is renamed.");
-            LOGGER.info("Migration of kits.yml to kits folder aborted.");
-        }
-
-    }
-
     private void moveMotdRulesToFile(final String name) {
         if (doneFile.getBoolean("move" + name + "ToFile", false)) {
             return;
@@ -889,6 +864,5 @@ public class EssentialsUpgrade {
         convertIgnoreList();
         convertStupidCamelCaseUserdataKeys();
         convertMailList();
-        migrateKitsToFolder();
     }
 }
