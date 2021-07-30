@@ -27,7 +27,7 @@ public class Kits implements IConf {
 
     public Kits(final IEssentials essentials) {
         this.ess = essentials;
-        this.config = new EssentialsConfiguration(new File(essentials.getDataFolder(), "kits.yml"), "/kits.yml");
+        this.config = new EssentialsConfiguration(new File(essentials.getDataFolder(), "kits" + File.separator + "kits.yml"), "/kits.yml");
 
         reloadConfig();
     }
@@ -39,58 +39,39 @@ public class Kits implements IConf {
     }
 
     private CommentedConfigurationNode _getKits() {
-        final CommentedConfigurationNode section = config.getSection("kits");
-        if (section != null) {
-            final CommentedConfigurationNode newSection = CommentedConfigurationNode.root();
-            for (final String kitItem : ConfigurateUtil.getKeys(section)) {
-                final CommentedConfigurationNode kitSection = section.node(kitItem);
-                if (kitSection.isMap()) {
-                    try {
-                        newSection.node(kitItem.toLowerCase(Locale.ENGLISH)).set(kitSection);
-                    } catch (SerializationException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
+        final CommentedConfigurationNode newSection = CommentedConfigurationNode.root();
+        File kitsFolder = new File(this.ess.getDataFolder(), "kits");
+        if(kitsFolder.mkdirs()) {
+            ess.getLogger().info("Kits folder created");
+        }
 
-            if(ess.getConfig().contains("use-kits-subfolder") && ess.getConfig().getBoolean("use-kits-subfolder")){
-                File kitsFolder = new File(this.ess.getDataFolder(), "kits");
-                if(!kitsFolder.exists()) {
-                    kitsFolder.mkdirs();
-                } else {
-                    File[] kitsFiles = kitsFolder.listFiles();
-                    int numFiles = kitsFiles.length;
+        File[] kitsFiles = kitsFolder.listFiles();
+        for (File f : kitsFiles) {
+            if (f.getName().endsWith(".yml")) {
+                EssentialsConfiguration essConfig = new EssentialsConfiguration(new File(ess.getDataFolder(), "kits" + File.separator + f.getName()), "/kits.yml");
+                essConfig.load();
+                if (essConfig.hasProperty("kits")) {
+                    final CommentedConfigurationNode kits = essConfig.getSection("kits");
 
-                    for(int i = 0; i < numFiles; i++) {
-                        File f = kitsFiles[i];
-                        if(f.getName().endsWith(".yml")) {
-                            EssentialsConfiguration essConfig = new EssentialsConfiguration(new File(ess.getDataFolder(), "kits" + File.separator + f.getName()), "/kits.yml");
-                            essConfig.load();
-                            if(essConfig.hasProperty("kits")){
-                                final CommentedConfigurationNode kits = essConfig.getSection("kits");
-
-                                if(!kits.isNull()) {
-                                    for (final String kitItem : ConfigurateUtil.getKeys(kits)) {
-                                        final CommentedConfigurationNode kitSection = kits.node(kitItem);
-                                        if (kitSection.isMap()) {
-                                            try {
-                                                newSection.node(kitItem.toLowerCase(Locale.ENGLISH)).set(kitSection);
-                                            } catch (SerializationException e) {
-                                                e.printStackTrace();
-                                            }
-                                        }
-                                    }
+                    if (!kits.isNull()) {
+                        for (final String kitItem : ConfigurateUtil.getKeys(kits)) {
+                            final CommentedConfigurationNode kitSection = kits.node(kitItem);
+                            if (kitSection.isMap()) {
+                                try {
+                                    newSection.node(kitItem.toLowerCase(Locale.ENGLISH)).set(kitSection);
+                                } catch (SerializationException e) {
+                                    e.printStackTrace();
                                 }
-                            } else {
-                                ess.getLogger().info("File in kits folder not loaded because \"kits\" section could not be found. Please see proper formatting for kit files. File: " + f.getName());
                             }
                         }
                     }
+                } else {
+                    ess.getLogger().info("File in kits folder not loaded because \"kits\" section could not be found. Please see proper formatting for kit files. File: " + f.getName());
                 }
             }
-            return newSection;
         }
-        return null;
+
+        return newSection;
     }
 
     public EssentialsConfiguration getConfig() {
