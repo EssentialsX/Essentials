@@ -3,16 +3,11 @@ package com.earth2me.essentials;
 import com.earth2me.essentials.config.ConfigurateUtil;
 import com.earth2me.essentials.config.EssentialsConfiguration;
 import com.earth2me.essentials.utils.NumberUtil;
-import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.InvalidConfigurationException;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.spongepowered.configurate.CommentedConfigurationNode;
 import org.spongepowered.configurate.serialize.SerializationException;
 
 import java.io.File;
-import java.io.IOException;
 import java.math.BigDecimal;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -38,54 +33,44 @@ public class Kits implements IConf {
         kits = _getKits();
     }
 
-    private CommentedConfigurationNode _getKits() {
-        final CommentedConfigurationNode section = config.getSection("kits");
-        final CommentedConfigurationNode newSection = CommentedConfigurationNode.root();
+    private void addKitSectionToNode(final String kitName, final CommentedConfigurationNode kitSection, final CommentedConfigurationNode destination) {
+        if (kitSection.isMap()) {
+            try {
+                destination.node(kitName.toLowerCase(Locale.ENGLISH)).set(kitSection);
+            } catch (SerializationException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
-        // Read kits.yml in main Essentials data folder
-        if (section != null) {
-            for (final String kitItem : ConfigurateUtil.getKeys(section)) {
-                final CommentedConfigurationNode kitSection = section.node(kitItem);
-                if (kitSection.isMap()) {
-                    try {
-                        newSection.node(kitItem.toLowerCase(Locale.ENGLISH)).set(kitSection);
-                    } catch (SerializationException e) {
-                        e.printStackTrace();
-                    }
-                }
+    private CommentedConfigurationNode _getKits() {
+        final CommentedConfigurationNode newSection = config.newSection();
+
+        // Kits from kits.yml file
+        final CommentedConfigurationNode fileKits = config.getSection("kits");
+        if (fileKits != null) {
+            for (final String kitItem : ConfigurateUtil.getKeys(fileKits)) {
+                addKitSectionToNode(kitItem, fileKits.node(kitItem), newSection);
             }
         }
 
-        // Read kits folder
-        File kitsFolder = new File(this.ess.getDataFolder(), "kits");
-        if(!kitsFolder.exists()) {
-            kitsFolder.mkdirs();
-        } else {
-            File[] kitsFiles = kitsFolder.listFiles();
-            int numFiles = kitsFiles.length;
+        // Kits from kits subdirectory
+        final File kitsFolder = new File(this.ess.getDataFolder(), "kits");
+        if (!kitsFolder.exists() || !kitsFolder.isDirectory()) {
+            return newSection;
+        }
 
-            for(int i = 0; i < numFiles; i++) {
-                File f = kitsFiles[i];
-                if(f.getName().endsWith(".yml")) {
-                    EssentialsConfiguration essConfig = new EssentialsConfiguration(new File(ess.getDataFolder(), "kits" + File.separator + f.getName()), "/kits.yml");
-                    essConfig.load();
-                    if(essConfig.hasProperty("kits")){
-                        final CommentedConfigurationNode kits = essConfig.getSection("kits");
+        final File[] kitsFiles = kitsFolder.listFiles();
 
-                        if(!kits.isNull()) {
-                            for (final String kitItem : ConfigurateUtil.getKeys(kits)) {
-                                final CommentedConfigurationNode kitSection = kits.node(kitItem);
-                                if (kitSection.isMap()) {
-                                    try {
-                                        newSection.node(kitItem.toLowerCase(Locale.ENGLISH)).set(kitSection);
-                                    } catch (SerializationException e) {
-                                        e.printStackTrace();
-                                    }
-                                }
-                            }
-                        }
-                    } else {
-                        ess.getLogger().info("File in kits folder not loaded because \"kits\" section could not be found. Please see proper formatting for kit files. File: " + f.getName());
+        //noinspection ConstantConditions - will not be null, conditions checked above.
+        for (final File kitFile : kitsFiles) {
+            if (kitFile.getName().endsWith(".yml")) {
+                final EssentialsConfiguration kitConfig = new EssentialsConfiguration(kitFile);
+                kitConfig.load();
+                final CommentedConfigurationNode kits = kitConfig.getSection("kits");
+                if (kits != null) {
+                    for (final String kitItem : ConfigurateUtil.getKeys(kits)) {
+                        addKitSectionToNode(kitItem, kits.node(kitItem), newSection);
                     }
                 }
             }
