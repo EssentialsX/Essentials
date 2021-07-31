@@ -17,6 +17,7 @@ import java.util.Locale;
 import static com.earth2me.essentials.I18n.tl;
 
 public class Commandwhois extends EssentialsCommand {
+    private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy/MM/dd HH:mm");
     // For some reason, in 1.13 PLAY_ONE_MINUTE = ticks played = what used to be PLAY_ONE_TICK
     // https://hub.spigotmc.org/stash/projects/SPIGOT/repos/bukkit/commits/b848d8ce633871b52115247b089029749c02f579
     private static final Statistic PLAY_ONE_TICK = EnumUtil.getStatistic("PLAY_ONE_MINUTE", "PLAY_ONE_TICK");
@@ -36,7 +37,7 @@ public class Commandwhois extends EssentialsCommand {
         sender.sendMessage(tl("whoisTop", user.getName()));
         user.setDisplayNick();
         sender.sendMessage(tl("whoisNick", user.getDisplayName()));
-        sender.sendMessage(tl("whoisJoined", DateUtil.formatDateDiff(user.getBase().getFirstPlayed()), new SimpleDateFormat("yyyy/MM/dd HH:mm").format(user.getBase().getFirstPlayed())));
+        sender.sendMessage(tl("whoisJoined", DateUtil.formatDateDiff(user.getBase().getFirstPlayed()), DATE_FORMAT.format(user.getBase().getFirstPlayed())));
         sender.sendMessage(tl("whoisUuid", user.getBase().getUniqueId().toString()));
         sender.sendMessage(tl("whoisHealth", user.getBase().getHealth()));
         sender.sendMessage(tl("whoisHunger", user.getBase().getFoodLevel(), user.getBase().getSaturation()));

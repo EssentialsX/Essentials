@@ -22,6 +22,8 @@ import java.util.UUID;
 import static com.earth2me.essentials.I18n.tl;
 
 public class Commandseen extends EssentialsCommand {
+    private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy/MM/dd HH:mm");
+
     public Commandseen() {
         super("seen");
     }
@@ -104,7 +106,7 @@ public class Commandseen extends EssentialsCommand {
         user.setDisplayNick();
         sender.sendMessage(tl("seenOnline", user.getDisplayName(), DateUtil.formatDateDiff(user.getLastLogin())));
         if (!sender.isPlayer() || ess.getUser(sender.getPlayer()).isAuthorized("essentials.seen.joined")) {
-            sender.sendMessage(tl("whoisJoined", DateUtil.formatDateDiff(user.getBase().getFirstPlayed()), new SimpleDateFormat("yyyy/MM/dd HH:mm").format(user.getBase().getFirstPlayed())));
+            sender.sendMessage(tl("whoisJoined", DateUtil.formatDateDiff(user.getBase().getFirstPlayed()), DATE_FORMAT.format(user.getBase().getFirstPlayed())));
         }
         sender.sendMessage(tl("whoisUuid", user.getBase().getUniqueId().toString()));
 
@@ -141,7 +143,7 @@ public class Commandseen extends EssentialsCommand {
         if (user.getLastLogout() > 0) {
             sender.sendMessage(tl("seenOffline", user.getName(), DateUtil.formatDateDiff(user.getLastLogout())));
             if (!sender.isPlayer() || ess.getUser(sender.getPlayer()).isAuthorized("essentials.seen.joined")) {
-                sender.sendMessage(tl("whoisJoined", DateUtil.formatDateDiff(user.getBase().getFirstPlayed()), new SimpleDateFormat("yyyy/MM/dd HH:mm").format(user.getBase().getFirstPlayed())));
+                sender.sendMessage(tl("whoisJoined", DateUtil.formatDateDiff(user.getBase().getFirstPlayed()), DATE_FORMAT.format(user.getBase().getFirstPlayed())));
             }
             sender.sendMessage(tl("whoisUuid", user.getBase().getUniqueId()));
         } else {
