@@ -21,6 +21,7 @@ import com.earth2me.essentials.commands.EssentialsCommand;
 import com.earth2me.essentials.commands.IEssentialsCommand;
 import com.earth2me.essentials.commands.NoChargeException;
 import com.earth2me.essentials.commands.NotEnoughArgumentsException;
+import com.earth2me.essentials.commands.PlayerNotFoundException;
 import com.earth2me.essentials.commands.QuietAbortException;
 import com.earth2me.essentials.economy.EconomyLayers;
 import com.earth2me.essentials.economy.vault.VaultEconomyProvider;
@@ -38,6 +39,7 @@ import com.earth2me.essentials.textreader.IText;
 import com.earth2me.essentials.textreader.KeywordReplacer;
 import com.earth2me.essentials.textreader.SimpleTextInput;
 import com.earth2me.essentials.updatecheck.UpdateChecker;
+import com.earth2me.essentials.utils.FormatUtil;
 import com.earth2me.essentials.utils.VersionUtil;
 import io.papermc.lib.PaperLib;
 import net.ess3.api.Economy;
@@ -58,6 +60,7 @@ import net.ess3.provider.KnownCommandsProvider;
 import net.ess3.provider.MaterialTagProvider;
 import net.ess3.provider.PersistentDataProvider;
 import net.ess3.provider.PotionMetaProvider;
+import net.ess3.provider.SerializationProvider;
 import net.ess3.provider.ProviderListener;
 import net.ess3.provider.ServerStateProvider;
 import net.ess3.provider.SpawnEggProvider;
@@ -76,8 +79,10 @@ import net.ess3.provider.providers.PaperContainerProvider;
 import net.ess3.provider.providers.PaperKnownCommandsProvider;
 import net.ess3.provider.providers.PaperMaterialTagProvider;
 import net.ess3.provider.providers.PaperRecipeBookListener;
+import net.ess3.provider.providers.PaperSerializationProvider;
 import net.ess3.provider.providers.PaperServerStateProvider;
 import net.essentialsx.api.v2.services.BalanceTop;
+import net.essentialsx.api.v2.services.mail.MailService;
 import org.bukkit.Bukkit;
 import org.bukkit.Server;
 import org.bukkit.World;
@@ -116,6 +121,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
@@ -142,6 +148,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
     private transient UserMap userMap;
     private transient BalanceTopImpl balanceTop;
     private transient ExecuteTimer execTimer;
+    private transient MailService mail;
     private transient I18n i18n;
     private transient MetricsWrapper metrics;
     private transient EssentialsTimer timer;
@@ -151,6 +158,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
     private transient PotionMetaProvider potionMetaProvider;
     private transient ServerStateProvider serverStateProvider;
     private transient ContainerProvider containerProvider;
+    private transient SerializationProvider serializationProvider;
     private transient KnownCommandsProvider knownCommandsProvider;
     private transient FormattedCommandAliasProvider formattedCommandAliasProvider;
     private transient ProviderListener recipeBookEventProvider;
@@ -198,6 +206,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
         LOGGER.log(Level.INFO, tl("usingTempFolderForTesting"));
         LOGGER.log(Level.INFO, dataFolder.toString());
         settings = new Settings(this);
+        mail = new MailServiceImpl(this);
         userMap = new UserMap(this);
         balanceTop = new BalanceTopImpl(this);
         permissionsHandler = new PermissionsHandler(this, false);
@@ -271,6 +280,9 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
             confList.add(settings);
             execTimer.mark("Settings");
 
+            mail = new MailServiceImpl(this);
+            execTimer.mark("Init(Mail)");
+
             userMap = new UserMap(this);
             confList.add(userMap);
             execTimer.mark("Init(Usermap)");
@@ -319,6 +331,8 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
             confList.add(jails);
             execTimer.mark("Init(Jails)");
 
+            EconomyLayers.onEnable(this);
+
             //Spawner item provider only uses one but it's here for legacy...
             spawnerItemProvider = new BlockMetaSpawnerItemProvider();
 
@@ -350,6 +364,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
             if (PaperLib.isPaper() && VersionUtil.getServerBukkitVersion().isHigherThanOrEqualTo(VersionUtil.v1_15_2_R01)) {
                 serverStateProvider = new PaperServerStateProvider();
                 containerProvider = new PaperContainerProvider();
+                serializationProvider = new PaperSerializationProvider();
             } else {
                 serverStateProvider = new ReflServerStateProvider();
             }
@@ -498,7 +513,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
                 user.sendMessage(tl("unvanishedReload"));
             }
             if (stopping) {
-                user.setLastLocation();
+                user.setLogoutLocation();
                 if (!user.isHidden()) {
                     user.setLastLogout(System.currentTimeMillis());
                 }
@@ -891,6 +906,94 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
         return user;
     }
 
+    @Override
+    public User matchUser(final Server server, final User sourceUser, final String searchTerm, final Boolean getHidden, final boolean getOffline) throws PlayerNotFoundException {
+        final User user;
+        Player exPlayer;
+
+        try {
+            exPlayer = server.getPlayer(UUID.fromString(searchTerm));
+        } catch (final IllegalArgumentException ex) {
+            if (getOffline) {
+                exPlayer = server.getPlayerExact(searchTerm);
+            } else {
+                exPlayer = server.getPlayer(searchTerm);
+            }
+        }
+
+        if (exPlayer != null) {
+            user = getUser(exPlayer);
+        } else {
+            user = getUser(searchTerm);
+        }
+
+        if (user != null) {
+            if (!getOffline && !user.getBase().isOnline()) {
+                throw new PlayerNotFoundException();
+            }
+
+            if (getHidden || canInteractWith(sourceUser, user)) {
+                return user;
+            } else { // not looking for hidden and cannot interact (i.e is hidden)
+                if (getOffline && user.getName().equalsIgnoreCase(searchTerm)) { // if looking for offline and got an exact match
+                    return user;
+                }
+            }
+            throw new PlayerNotFoundException();
+        }
+        final List<Player> matches = server.matchPlayer(searchTerm);
+
+        if (matches.isEmpty()) {
+            final String matchText = searchTerm.toLowerCase(Locale.ENGLISH);
+            for (final User userMatch : getOnlineUsers()) {
+                if (getHidden || canInteractWith(sourceUser, userMatch)) {
+                    final String displayName = FormatUtil.stripFormat(userMatch.getDisplayName()).toLowerCase(Locale.ENGLISH);
+                    if (displayName.contains(matchText)) {
+                        return userMatch;
+                    }
+                }
+            }
+        } else {
+            for (final Player player : matches) {
+                final User userMatch = getUser(player);
+                if (userMatch.getDisplayName().startsWith(searchTerm) && (getHidden || canInteractWith(sourceUser, userMatch))) {
+                    return userMatch;
+                }
+            }
+            final User userMatch = getUser(matches.get(0));
+            if (getHidden || canInteractWith(sourceUser, userMatch)) {
+                return userMatch;
+            }
+        }
+        throw new PlayerNotFoundException();
+    }
+
+    @Override
+    public boolean canInteractWith(final CommandSource interactor, final User interactee) {
+        if (interactor == null) {
+            return !interactee.isHidden();
+        }
+
+        if (interactor.isPlayer()) {
+            return canInteractWith(getUser(interactor.getPlayer()), interactee);
+        }
+
+        return true; // console
+    }
+
+    @Override
+    public boolean canInteractWith(final User interactor, final User interactee) {
+        if (interactor == null) {
+            return !interactee.isHidden();
+        }
+
+        if (interactor.equals(interactee)) {
+            return true;
+        }
+
+        return interactor.getBase().canSee(interactee.getBase());
+    }
+
     //This will create a new user if there is not a match.
     @Override
     public User getUser(final Player base) {
@@ -1065,6 +1168,11 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
     }
 
     @Override
+    public MailService getMail() {
+        return mail;
+    }
+
+    @Override
     public List<String> getVanishedPlayers() {
         return Collections.unmodifiableList(new ArrayList<>(vanishedPlayers));
     }
@@ -1130,6 +1238,11 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
     @Override
     public KnownCommandsProvider getKnownCommandsProvider() {
         return knownCommandsProvider;
+    }
+
+    @Override
+    public SerializationProvider getSerializationProvider() {
+        return serializationProvider;
     }
 
     @Override

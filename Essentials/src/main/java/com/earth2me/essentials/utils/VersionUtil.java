@@ -32,8 +32,10 @@ public final class VersionUtil {
     public static final BukkitVersion v1_15_2_R01 = BukkitVersion.fromString("1.15.2-R0.1-SNAPSHOT");
     public static final BukkitVersion v1_16_1_R01 = BukkitVersion.fromString("1.16.1-R0.1-SNAPSHOT");
     public static final BukkitVersion v1_16_5_R01 = BukkitVersion.fromString("1.16.5-R0.1-SNAPSHOT");
+    public static final BukkitVersion v1_17_R01 = BukkitVersion.fromString("1.17-R0.1-SNAPSHOT");
+    public static final BukkitVersion v1_17_1_R01 = BukkitVersion.fromString("1.17.1-R0.1-SNAPSHOT");
 
-    private static final Set<BukkitVersion> supportedVersions = ImmutableSet.of(v1_8_8_R01, v1_9_4_R01, v1_10_2_R01, v1_11_2_R01, v1_12_2_R01, v1_13_2_R01, v1_14_4_R01, v1_15_2_R01, v1_16_5_R01);
+    private static final Set<BukkitVersion> supportedVersions = ImmutableSet.of(v1_8_8_R01, v1_9_4_R01, v1_10_2_R01, v1_11_2_R01, v1_12_2_R01, v1_13_2_R01, v1_14_4_R01, v1_15_2_R01, v1_16_5_R01, v1_17_1_R01);
 
     private static final Map<String, SupportStatus> unsupportedServerClasses;
 
@@ -65,7 +67,11 @@ public final class VersionUtil {
         builder.put("net.fabricmc.loader.launch.knot.KnotServer", SupportStatus.UNSTABLE);
 
         // Misc translation layers that do not add NMS will be caught by this
-        builder.put("!net.minecraft.server." + ReflUtil.getNMSVersion() + ".MinecraftServer", SupportStatus.NMS_CLEANROOM);
+        if (ReflUtil.getNmsVersionObject().isHigherThanOrEqualTo(ReflUtil.V1_17_R1)) {
+            builder.put("!net.minecraft.server.MinecraftServer", SupportStatus.NMS_CLEANROOM);
+        } else {
+            builder.put("!net.minecraft.server." + ReflUtil.getNMSVersion() + ".MinecraftServer", SupportStatus.NMS_CLEANROOM);
+        }
 
         unsupportedServerClasses = builder.build();
     }
@@ -76,6 +82,10 @@ public final class VersionUtil {
     private static String supportStatusClass = null;
 
     private VersionUtil() {
+    }
+
+    public static boolean isPaper() {
+        return PaperLib.isPaper();
     }
 
     public static BukkitVersion getServerBukkitVersion() {

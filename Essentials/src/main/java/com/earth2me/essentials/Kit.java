@@ -9,13 +9,13 @@ import com.earth2me.essentials.textreader.SimpleTextInput;
 import com.earth2me.essentials.utils.DateUtil;
 import com.earth2me.essentials.utils.MaterialUtil;
 import com.earth2me.essentials.utils.NumberUtil;
-import com.earth2me.essentials.utils.VersionUtil;
 import net.ess3.api.IEssentials;
 import net.ess3.api.events.KitClaimEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
+import org.yaml.snakeyaml.external.biz.base64Coder.Base64Coder;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -188,6 +188,15 @@ public class Kit {
                     continue;
                 }
 
+                if (kitItem.startsWith("@")) {
+                    if (ess.getSerializationProvider() == null) {
+                        ess.getLogger().log(Level.WARNING, tl("kitError3", kitName, user.getName()));
+                        continue;
+                    }
+                    itemList.add(ess.getSerializationProvider().deserializeItem(Base64Coder.decodeLines(kitItem.substring(1))));
+                    continue;
+                }
+
                 final String[] parts = kitItem.split(" +");
                 final ItemStack parseStack = ess.getItemDb().get(parts[0], parts.length > 1 ? Integer.parseInt(parts[1]) : 1);
 
@@ -282,6 +291,6 @@ public class Kit {
     }
 
     private boolean isEmptyStack(ItemStack stack) {
-        return stack == null || stack.getType() == Material.AIR || (VersionUtil.getServerBukkitVersion().isHigherThanOrEqualTo(VersionUtil.v1_14_4_R01) && stack.getType().isAir());
+        return stack == null || MaterialUtil.isAir(stack.getType());
     }
 }

@@ -19,6 +19,7 @@ public final class ReflUtil {
     public static final NMSVersion V1_12_R1 = NMSVersion.fromString("v1_12_R1");
     public static final NMSVersion V1_9_R1 = NMSVersion.fromString("v1_9_R1");
     public static final NMSVersion V1_11_R1 = NMSVersion.fromString("v1_11_R1");
+    public static final NMSVersion V1_17_R1 = NMSVersion.fromString("v1_17_R1");
     private static final Map<String, Class<?>> classCache = new HashMap<>();
     private static final Table<Class<?>, String, Method> methodCache = HashBasedTable.create();
     private static final Table<Class<?>, MethodParams, Method> methodParamCache = HashBasedTable.create();
@@ -46,17 +47,30 @@ public final class ReflUtil {
 
     public static NMSVersion getNmsVersionObject() {
         if (nmsVersionObject == null) {
-            nmsVersionObject = NMSVersion.fromString(getNMSVersion());
+            try {
+                nmsVersionObject = NMSVersion.fromString(getNMSVersion());
+            } catch (final IllegalArgumentException e) {
+                try {
+                    Class.forName("org.bukkit.craftbukkit.CraftServer");
+                    nmsVersionObject = new NMSVersion(99, 99, 99); // Mojang Dev Mappings
+                } catch (final ClassNotFoundException ignored) {
+                    throw e;
+                }
+            }
         }
         return nmsVersionObject;
     }
 
+    public static boolean isMojMap() {
+        return getNmsVersionObject().getMajor() == 99;
+    }
+
     public static Class<?> getNMSClass(final String className) {
-        return getClassCached("net.minecraft.server." + getNMSVersion() + "." + className);
+        return getClassCached("net.minecraft.server" + (ReflUtil.getNmsVersionObject().isLowerThan(ReflUtil.V1_17_R1) ? "." + getNMSVersion() : "") + "." + className);
     }
 
     public static Class<?> getOBCClass(final String className) {
-        return getClassCached("org.bukkit.craftbukkit." + getNMSVersion() + "." + className);
+        return getClassCached("org.bukkit.craftbukkit" + (getNmsVersionObject().getMajor() == 99 ? "" : ("." + getNMSVersion())) + "." + className);
     }
 
     public static Class<?> getClassCached(final String className) {

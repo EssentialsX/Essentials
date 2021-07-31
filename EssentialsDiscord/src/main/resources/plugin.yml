@@ -1,0 +1,10 @@
+name: EssentialsDiscord
+main: net.essentialsx.discord.EssentialsDiscord
+# Note to developers: This next line cannot change, or the automatic versioning system will break.
+version: ${full.version}
+website: https://essentialsx.net/
+description: Provides integration between Minecraft and Discord servers.
+authors: [mdcfe, JRoy, pop4959, Glare]
+depend: [Essentials]
+softdepend: [EssentialsChat, PlaceholderAPI]
+api-version: 1.13

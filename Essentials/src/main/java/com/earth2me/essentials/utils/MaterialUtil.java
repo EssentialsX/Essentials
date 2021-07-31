@@ -169,6 +169,10 @@ public final class MaterialUtil {
         return isPlayerHead(material, -1) || isMobHead(material, -1);
     }
 
+    public static boolean isAir(final Material material) {
+        return material == Material.AIR || (VersionUtil.getServerBukkitVersion().isHigherThanOrEqualTo(VersionUtil.v1_14_4_R01) && material.isAir());
+    }
+
     public static Material convertFromLegacy(final int id, final byte damage) {
         for (final Material material : EnumSet.allOf(Material.class)) {
             if (material.getId() == id) {

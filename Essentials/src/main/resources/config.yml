@@ -331,8 +331,17 @@ kit-auto-equip: false
 # Determines the functionality of the /createkit command.
 # If this is true, /createkit will give the user a link with the kit code.
 # If this is false, /createkit will add the kit to the kits.yml config file directly.
-#
+# Default is false.
 pastebin-createkit: false
+
+# Determines if /createkit will generate kits using NBT item serialization.
+# If this is true, /createkit will store items as NBT; otherwise, it will use Essentials' human-readable item format.
+# By using NBT serialization, /createkit can store items with complex metadata such as shulker boxes and weapons with custom attributes.
+# WARNING: This option only works on 1.15.2+ Paper servers, and it will bypass any custom serializers from other plugins such as Magic.
+# WARNING: When creating kits via /createkit with this option enabled, you will not be able to downgrade your server with these kit items.
+# This option only affects /createkit - you can still create kits by hand in `kits.yml` using Essentials' human-readable item format.
+# Default is false.
+use-nbt-serialization-in-createkit: false
 
 # Essentials Sign Control
 # See http://wiki.ess3.net/wiki/Sign_Tutorial for instructions on how to use these.
@@ -511,9 +520,33 @@ allow-silent-join-quit: false
 
 # You can set custom join and quit messages here. Set this to "none" to use the default Minecraft message,
 # or set this to "" to hide the message entirely.
-# You may use color codes, {USERNAME} for the player's name, {PLAYER} for the player's displayname, {PREFIX} for the player's prefix, and {SUFFIX} for the player's suffix.
+
+# Available placeholders:
+# {PLAYER} - The player's displayname. 
+# {USERNAME} - The player's username.
+# {PREFIX} - The player's prefix.
+# {SUFFIX} - The player's suffix.
+# {ONLINE} - The number of players online.
+# {UNIQUE} - The number of unique players to join the server.
+# {UPTIME} - The amount of time the server has been online.
 custom-join-message: "none"
 custom-quit-message: "none"
+
+# You can set a custom join message for users who join with a new username here.
+# This message will only be used if a user has joined before and have since changed their username.
+# This will be displayed INSTEAD OF custom-join-message, so if you intend to keep them similar, make sure they match.
+# Set this to "none" to use the the "custom-join-message" above for every join.
+
+# Available placeholders:
+# {PLAYER} - The player's displayname. 
+# {USERNAME} - The player's username.
+# {OLDUSERNAME} - The player's old username.
+# {PREFIX} - The player's prefix.
+# {SUFFIX} - The player's suffix.
+# {ONLINE} - The number of players online.
+# {UNIQUE} - The number of unique players to join the server.
+# {UPTIME} - The amount of time the server has been online.
+custom-new-username-message: "none"
 
 # Should Essentials override the vanilla "Server Full" message with its own from the language file?
 # Set to false to keep the vanilla message.

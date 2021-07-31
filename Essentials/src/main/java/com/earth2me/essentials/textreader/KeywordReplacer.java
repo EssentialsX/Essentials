@@ -227,7 +227,7 @@ public class KeywordReplacer implements IText {
                         break;
                     case MAILS:
                         if (user != null) {
-                            replacer = Integer.toString(user.getMails().size());
+                            replacer = Integer.toString(user.getMailAmount());
                         }
                         break;
                     case PLAYTIME:

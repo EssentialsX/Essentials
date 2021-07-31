@@ -10,6 +10,8 @@ import com.earth2me.essentials.utils.StringUtil;
 import com.google.common.base.Charsets;
 import net.ess3.api.IEssentials;
 import net.ess3.api.MaxMoneyException;
+import net.essentialsx.api.v2.services.mail.MailMessage;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -275,7 +277,8 @@ public abstract class UserData extends PlayerExtension implements IConf {
     }
 
     public Location getLogoutLocation() {
-        return holder.logoutLocation().location();
+        final LazyLocation logoutLocation = holder.logoutLocation();
+        return logoutLocation != null ? logoutLocation.location() : null;
     }
 
     public void setLogoutLocation(final Location loc) {
@@ -313,17 +316,59 @@ public abstract class UserData extends PlayerExtension implements IConf {
         config.save();
     }
 
+    /**
+     * @deprecated Mails are no longer just strings, this method is therefore misleading.
+     */
+    @Deprecated
     public List<String> getMails() {
-        return holder.mail();
+        final List<String> list = new ArrayList<>();
+        if (getMailAmount() != 0) {
+            for (MailMessage mail : getMailMessages()) {
+                // I hate this code btw
+                list.add(mail.isLegacy() ? mail.getMessage() : ChatColor.GOLD + "[" + ChatColor.RESET + mail.getSenderUsername() + ChatColor.GOLD + "] " + ChatColor.RESET + mail.getMessage());
+            }
+        }
+        return list;
     }
 
+    /**
+     * @deprecated This method does not support the new mail system and will fail at runtime.
+     */
+    @Deprecated
     public void setMails(List<String> mails) {
-        holder.mail(mails);
-        config.save();
+        throw new UnsupportedOperationException("UserData#setMails(List<String>) is deprecated and can no longer be used. Please tell the plugin author to update this!");
     }
 
-    public void addMail(final String mail) {
-        holder.mail().add(mail);
+    public int getMailAmount() {
+        return holder.mail() == null ? 0 : holder.mail().size();
+    }
+
+    public int getUnreadMailAmount() {
+        if (holder.mail() == null || holder.mail().isEmpty()) {
+            return 0;
+        }
+
+        int unread = 0;
+        for (MailMessage element : holder.mail()) {
+            if (!element.isRead()) {
+                unread++;
+            }
+        }
+        return unread;
+    }
+
+    /**
+     * @deprecated This method does not support the new mail system and should not be used.
+     */
+    @Deprecated
+    abstract void addMail(final String mail);
+
+    public ArrayList<MailMessage> getMailMessages() {
+        return new ArrayList<>(holder.mail());
+    }
+
+    public void setMailList(ArrayList<MailMessage> messages) {
+        holder.mail(messages);
         config.save();
     }
 

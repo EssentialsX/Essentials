@@ -14,6 +14,7 @@ import org.bukkit.inventory.ItemStack;
 import org.spongepowered.configurate.ConfigurationNode;
 import org.spongepowered.configurate.yaml.NodeStyle;
 import org.spongepowered.configurate.yaml.YamlConfigurationLoader;
+import org.yaml.snakeyaml.external.biz.base64Coder.Base64Coder;
 
 import java.io.BufferedWriter;
 import java.io.InputStreamReader;
@@ -51,9 +52,22 @@ public class Commandcreatekit extends EssentialsCommand {
         final String kitname = args[0];
         final ItemStack[] items = user.getBase().getInventory().getContents();
         final List<String> list = new ArrayList<>();
-        for (final ItemStack is : items) {
+
+        boolean useSerializationProvider = ess.getSettings().isUseBetterKits();
+
+        if (useSerializationProvider && ess.getSerializationProvider() == null) {
+            ess.showError(user.getSource(), new Exception(tl("createKitUnsupported")), commandLabel);
+            useSerializationProvider = false;
+        }
+
+        for (ItemStack is : items) {
             if (is != null && is.getType() != null && is.getType() != Material.AIR) {
-                final String serialized = ess.getItemDb().serialize(is);
+                final String serialized;
+                if (useSerializationProvider) {
+                    serialized = "@" + Base64Coder.encodeLines(ess.getSerializationProvider().serializeItem(is));
+                } else {
+                    serialized = ess.getItemDb().serialize(is);
+                }
                 list.add(serialized);
             }
         }

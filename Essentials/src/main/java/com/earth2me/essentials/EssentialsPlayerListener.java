@@ -72,7 +72,7 @@ import java.util.regex.Pattern;
 
 import static com.earth2me.essentials.I18n.tl;
 
-public class EssentialsPlayerListener implements Listener {
+public class EssentialsPlayerListener implements Listener, FakeAccessor {
     private static final Logger LOGGER = Logger.getLogger("Essentials");
     private final transient IEssentials ess;
 
@@ -305,12 +305,14 @@ public class EssentialsPlayerListener implements Listener {
 
                 user.startTransaction();
 
+                final String lastAccountName = user.getLastAccountName(); // For comparison
                 user.setLastAccountName(user.getBase().getName());
                 user.setLastLogin(currentTime);
                 user.setDisplayNick();
                 updateCompass(user);
 
-                ess.runTaskAsynchronously(() -> ess.getServer().getPluginManager().callEvent(new AsyncUserDataLoadEvent(user)));
+                // Check for new username. If they don't want the message, let's just say it's false.
+                final boolean newUsername = ess.getSettings().isCustomNewUsernameMessage() && lastAccountName != null && !lastAccountName.equals(user.getBase().getName());
 
                 if (!ess.getVanishedPlayersNew().isEmpty() && !user.isAuthorized("essentials.vanish.see")) {
                     for (final String p : ess.getVanishedPlayersNew()) {
@@ -328,26 +330,35 @@ public class EssentialsPlayerListener implements Listener {
                     user.getBase().setSleepingIgnored(true);
                 }
 
+                final String effectiveMessage;
                 if (ess.getSettings().allowSilentJoinQuit() && (user.isAuthorized("essentials.silentjoin") || user.isAuthorized("essentials.silentjoin.vanish"))) {
                     if (user.isAuthorized("essentials.silentjoin.vanish")) {
                         user.setVanished(true);
                     }
+                    effectiveMessage = null;
                 } else if (message == null || hideJoinQuitMessages()) {
-                    //NOOP
+                    effectiveMessage = null;
                 } else if (ess.getSettings().isCustomJoinMessage()) {
-                    final String msg = ess.getSettings().getCustomJoinMessage()
+                    final String msg = (newUsername ? ess.getSettings().getCustomNewUsernameMessage() : ess.getSettings().getCustomJoinMessage())
                         .replace("{PLAYER}", player.getDisplayName()).replace("{USERNAME}", player.getName())
                         .replace("{UNIQUE}", NumberFormat.getInstance().format(ess.getUserMap().getUniqueUsers()))
                         .replace("{ONLINE}", NumberFormat.getInstance().format(ess.getOnlinePlayers().size()))
                         .replace("{UPTIME}", DateUtil.formatDateDiff(ManagementFactory.getRuntimeMXBean().getStartTime()))
                         .replace("{PREFIX}", FormatUtil.replaceFormat(ess.getPermissionsHandler().getPrefix(player)))
-                        .replace("{SUFFIX}", FormatUtil.replaceFormat(ess.getPermissionsHandler().getSuffix(player)));
+                        .replace("{SUFFIX}", FormatUtil.replaceFormat(ess.getPermissionsHandler().getSuffix(player)))
+                        .replace("{OLDUSERNAME}", lastAccountName == null ? "" : lastAccountName);
                     if (!msg.isEmpty()) {
                         ess.getServer().broadcastMessage(msg);
                     }
+                    effectiveMessage = msg.isEmpty() ? null : msg;
                 } else if (ess.getSettings().allowSilentJoinQuit()) {
                     ess.getServer().broadcastMessage(message);
+                    effectiveMessage = message;
+                } else {
+                    effectiveMessage = message;
                 }
+
+                ess.runTaskAsynchronously(() -> ess.getServer().getPluginManager().callEvent(new AsyncUserDataLoadEvent(user, effectiveMessage)));
 
                 final int motdDelay = ess.getSettings().getMotdDelay() / 50;
                 final DelayMotdTask motdTask = new DelayMotdTask(user);
@@ -358,8 +369,7 @@ public class EssentialsPlayerListener implements Listener {
                 }
 
                 if (!ess.getSettings().isCommandDisabled("mail") && user.isAuthorized("essentials.mail")) {
-                    final List<String> mail = user.getMails();
-                    if (mail.isEmpty()) {
+                    if (user.getUnreadMailAmount() == 0) {
                         if (ess.getSettings().isNotifyNoNewMail()) {
                             user.sendMessage(tl("noNewMail")); // Only notify if they want us to.
                         }
@@ -990,5 +1000,10 @@ public class EssentialsPlayerListener implements Listener {
                 && (command.getPlugin() == ess || command.getPlugin().getClass().getName().startsWith("com.earth2me.essentials"))
                 && (ess.getSettings().isCommandOverridden(label) || (ess.getAlternativeCommandsHandler().getAlternative(label) == null));
         }
+    }
+
+    @Override
+    public void getUser(Player player) {
+        ess.getUser(player);
     }
 }
