@@ -140,6 +140,7 @@ public class JDADiscordService implements DiscordService {
 
         logger.log(Level.INFO, tl("discordLoggingIn"));
         if (plugin.getSettings().getBotToken().replace("INSERT-TOKEN-HERE", "").trim().isEmpty()) {
+            invalidStartup = true;
             throw new IllegalArgumentException(tl("discordErrorNoToken"));
         }
 
