@@ -343,15 +343,6 @@ pastebin-createkit: false
 # Default is false.
 use-nbt-serialization-in-createkit: false
 
-# Enables the creation and use of the "Essentials/kits" subfolder.
-# If true, a folder will be created (if not already) where you can store kits files in if you desire to separate kits
-# into multiple files for organization or storage efficiency purposes. The kit files in the subfolder must follow the
-# same format as the normal kits.yml file. The primary kits.yml file must still remain in the main directory.
-# If false, only the kits.yml file will be read. If you have an "Essentials/kits" subfolder, all of the included files
-# in that kits directory will be ignored.
-# Default is false.
-use-kits-subfolder: false
-
 # Essentials Sign Control
 # See http://wiki.ess3.net/wiki/Sign_Tutorial for instructions on how to use these.
 # To enable signs, remove # symbol. To disable all signs, comment/remove each sign.
