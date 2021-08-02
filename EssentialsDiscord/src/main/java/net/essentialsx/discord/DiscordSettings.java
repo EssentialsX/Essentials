@@ -234,7 +234,7 @@ public class DiscordSettings implements IConf {
             filled = format;
         }
         return generateMessageFormat(filled, ":arrow_right: {displayname} has joined!", false,
-                "username", "displayname", "joinmessage");
+                "username", "displayname", "joinmessage", "online", "unique");
     }
 
     public MessageFormat getQuitFormat(Player player) {
@@ -246,7 +246,7 @@ public class DiscordSettings implements IConf {
             filled = format;
         }
         return generateMessageFormat(filled, ":arrow_left: {displayname} has left!", false,
-                "username", "displayname", "quitmessage");
+                "username", "displayname", "quitmessage", "online");
     }
 
     public MessageFormat getDeathFormat(Player player) {

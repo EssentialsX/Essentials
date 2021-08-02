@@ -147,10 +147,12 @@ public class BukkitListener implements Listener {
                         MessageUtil.sanitizeDiscordMarkdown(player.getName()),
                         MessageUtil.sanitizeDiscordMarkdown(player.getDisplayName()),
                         MessageUtil.sanitizeDiscordMarkdown(message),
+                        jda.getPlugin().getEss().getOnlinePlayers().size() - (join ? 0 : 1),
+                        jda.getPlugin().getEss().getUserMap().getUniqueUsers()),
                         false,
                         jda.getSettings().isShowAvatar() ? jda.getSettings().getAvatarURL().replace("{uuid}", player.getUniqueId().toString()) : null,
                         jda.getSettings().isShowName() ? player.getName() : (jda.getSettings().isShowDisplayName() ? player.getDisplayName() : null),
-                        player.getUniqueId()));
+                        player.getUniqueId());
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
@@ -166,6 +168,7 @@ public class BukkitListener implements Listener {
             if (!event.getEntity().getWorld().isGameRule("showDeathMessages")) {
                 showDeathMessages = null;
             } else {
+                //noinspection deprecation
                 showDeathMessages = event.getEntity().getWorld().getGameRuleValue("showDeathMessages").equals("true");
             }
         }
