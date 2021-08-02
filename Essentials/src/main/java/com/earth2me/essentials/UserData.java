@@ -621,7 +621,7 @@ public abstract class UserData extends PlayerExtension implements IConf {
     public Map<Pattern, Long> getCommandCooldowns() {
         final Map<Pattern, Long> map = new HashMap<>();
         for (final CommandCooldown c : getCooldownsList()) {
-            if (c == null) {
+            if (c == null || c.isIncomplete()) {
                 // stupid solution to stupid problem
                 continue;
             }
@@ -632,7 +632,7 @@ public abstract class UserData extends PlayerExtension implements IConf {
 
     public Date getCommandCooldownExpiry(final String label) {
         for (CommandCooldown cooldown : getCooldownsList()) {
-            if (cooldown == null) {
+            if (cooldown == null || cooldown.isIncomplete()) {
                 // stupid solution to stupid problem
                 continue;
             }
@@ -661,7 +661,7 @@ public abstract class UserData extends PlayerExtension implements IConf {
             return false; // false for no modification
         }
 
-        if (getCooldownsList().removeIf(cooldown -> cooldown.pattern().equals(pattern))) {
+        if (getCooldownsList().removeIf(cooldown -> cooldown != null && !cooldown.isIncomplete() && cooldown.pattern().equals(pattern))) {
             save();
             return true;
         }
