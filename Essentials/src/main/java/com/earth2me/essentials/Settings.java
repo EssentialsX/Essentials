@@ -1014,6 +1014,11 @@ public class Settings implements net.ess3.api.ISettings {
     }
 
     @Override
+    public boolean changeTabCompleteName() {
+        return config.getBoolean("change-tab-complete-name", false);
+    }
+
+    @Override
     public boolean useBukkitPermissions() {
         return config.getBoolean("use-bukkit-permissions", false);
     }
