@@ -226,7 +226,7 @@ public abstract class EssentialsCommand implements IEssentialsCommand {
         final List<String> players = Lists.newArrayList();
         for (final User user : ess.getOnlineUsers()) {
             if (canInteractWith(interactor, user)) {
-                players.add(ess.getSettings().changeTabCompleteName() ? user.getDisplayName() : user.getName());
+                players.add(ess.getSettings().changeTabCompleteName() ? ChatColor.stripColor(user.getDisplayName()) : user.getName());
             }
         }
         return players;
@@ -240,7 +240,7 @@ public abstract class EssentialsCommand implements IEssentialsCommand {
         final List<String> players = Lists.newArrayList();
         for (final User user : ess.getOnlineUsers()) {
             if (canInteractWith(interactor, user)) {
-                players.add(ess.getSettings().changeTabCompleteName() ? user.getDisplayName() : user.getName());
+                players.add(ess.getSettings().changeTabCompleteName() ? ChatColor.stripColor(user.getDisplayName()) : user.getName());
             }
         }
         return players;
