@@ -8,6 +8,7 @@ import com.earth2me.essentials.utils.DateUtil;
 import com.earth2me.essentials.utils.FormatUtil;
 import org.bukkit.Server;
 
+import java.util.Collections;
 import java.util.List;
 
 import static com.earth2me.essentials.I18n.tl;
@@ -60,7 +61,7 @@ public class Commandmsg extends EssentialsLoopCommand {
         if (args.length == 1) {
             return getPlayers(server, sender);
         } else {
-            return null; // It's a chat message, use the default chat handler
+            return Collections.emptyList(); // It's a chat message, send an empty list.
         }
     }
 }
