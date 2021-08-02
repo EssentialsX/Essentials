@@ -22,6 +22,9 @@ public class MaterialTypeSerializer extends ScalarSerializer<Material> {
 
     @Override
     protected Object serialize(Material item, Predicate<Class<?>> typeSupported) {
+        if (item == null) {
+            return null;
+        }
         return item.name();
     }
 }
