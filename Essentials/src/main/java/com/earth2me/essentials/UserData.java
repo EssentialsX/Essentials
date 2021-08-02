@@ -161,6 +161,15 @@ public abstract class UserData extends PlayerExtension implements IConf {
         return loc != null ? loc.location() : null;
     }
 
+    public boolean hasValidHomes() {
+        for (final LazyLocation loc : holder.homes().values()) {
+            if (loc != null && loc.location() != null) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public Location getHome(final Location world) {
         if (getHomes().isEmpty()) {
             return null;
