@@ -4,60 +4,61 @@ import com.earth2me.essentials.config.ConfigurateUtil;
 import com.earth2me.essentials.config.EssentialsConfiguration;
 import com.earth2me.essentials.utils.NumberUtil;
 import org.spongepowered.configurate.CommentedConfigurationNode;
-import org.spongepowered.configurate.serialize.SerializationException;
 
 import java.io.File;
 import java.math.BigDecimal;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 
 import static com.earth2me.essentials.I18n.capitalCase;
 import static com.earth2me.essentials.I18n.tl;
 
 public class Kits implements IConf {
     private final IEssentials ess;
-    private final EssentialsConfiguration config;
-    private CommentedConfigurationNode kits;
+    private final EssentialsConfiguration rootConfig;
+    private final Map<String, EssentialsConfiguration> kitToConfigMap = new HashMap<>();
+    private final Map<String, CommentedConfigurationNode> kitToItemsMap = new HashMap<>();
 
     public Kits(final IEssentials essentials) {
         this.ess = essentials;
-        this.config = new EssentialsConfiguration(new File(essentials.getDataFolder(), "kits.yml"), "/kits.yml");
+        this.rootConfig = new EssentialsConfiguration(new File(essentials.getDataFolder(), "kits.yml"), "/kits.yml");
 
         reloadConfig();
     }
 
     @Override
     public void reloadConfig() {
-        config.load();
-        kits = _getKits();
+        rootConfig.load();
+        parseKits();
     }
 
-    private void addKitSectionToNode(final String kitName, final CommentedConfigurationNode kitSection, final CommentedConfigurationNode destination) {
+    private void parseKit(final String kitName, final CommentedConfigurationNode kitSection, final EssentialsConfiguration parentConfig) {
         if (kitSection.isMap()) {
-            try {
-                destination.node(kitName.toLowerCase(Locale.ENGLISH)).set(kitSection);
-            } catch (SerializationException e) {
-                e.printStackTrace();
-            }
+            final String effectiveKitName = kitName.toLowerCase(Locale.ENGLISH);
+            kitToConfigMap.put(effectiveKitName, parentConfig);
+            kitToItemsMap.put(effectiveKitName, kitSection);
         }
     }
 
-    private CommentedConfigurationNode _getKits() {
-        final CommentedConfigurationNode newSection = config.newSection();
+    private void parseKits() {
+        kitToConfigMap.clear();
+        kitToItemsMap.clear();
 
         // Kits from kits.yml file
-        final CommentedConfigurationNode fileKits = config.getSection("kits");
+        final CommentedConfigurationNode fileKits = rootConfig.getSection("kits");
         if (fileKits != null) {
-            for (final String kitItem : ConfigurateUtil.getKeys(fileKits)) {
-                addKitSectionToNode(kitItem, fileKits.node(kitItem), newSection);
+            for (final Map.Entry<String, CommentedConfigurationNode> kitEntry : ConfigurateUtil.getMap(fileKits).entrySet()) {
+                parseKit(kitEntry.getKey(), kitEntry.getValue(), rootConfig);
             }
         }
 
         // Kits from kits subdirectory
         final File kitsFolder = new File(this.ess.getDataFolder(), "kits");
         if (!kitsFolder.exists() || !kitsFolder.isDirectory()) {
-            return newSection;
+            return;
         }
 
         final File[] kitsFiles = kitsFolder.listFiles();
@@ -69,63 +70,73 @@ public class Kits implements IConf {
                 kitConfig.load();
                 final CommentedConfigurationNode kits = kitConfig.getSection("kits");
                 if (kits != null) {
-                    for (final String kitItem : ConfigurateUtil.getKeys(kits)) {
-                        addKitSectionToNode(kitItem, kits.node(kitItem), newSection);
+                    for (final Map.Entry<String, CommentedConfigurationNode> kitEntry : ConfigurateUtil.getMap(kits).entrySet()) {
+                        parseKit(kitEntry.getKey(), kitEntry.getValue(), kitConfig);
                     }
                 }
             }
         }
-        return newSection;
     }
 
     /**
      * Should be used for EssentialsUpgrade conversions <b>only</b>.
      */
-    public EssentialsConfiguration getConfig() {
-        return config;
+    public EssentialsConfiguration getRootConfig() {
+        return rootConfig;
     }
 
-    public CommentedConfigurationNode getKits() {
-        return kits;
+    public Set<String> getKitKeys() {
+        return kitToItemsMap.keySet();
     }
 
     public Map<String, Object> getKit(String name) {
-        name = name.replace('.', '_').replace('/', '_');
-        final CommentedConfigurationNode kitSection = kits.node(name.toLowerCase());
-        if (!kitSection.virtual() && kitSection.isMap()) {
-            return ConfigurateUtil.getRawMap(kitSection);
+        if (name != null) {
+            name = name.replace('.', '_').replace('/', '_');
+            if (kitToItemsMap.containsKey(name)) {
+                return ConfigurateUtil.getRawMap(kitToItemsMap.get(name));
+            }
         }
         return null;
     }
 
     // Tries to find an existing kit name that matches the given name, ignoring case. Returns null if no match.
     public String matchKit(final String name) {
-        for (final String kitName : ConfigurateUtil.getKeys(kits)) {
-            if (kitName.equalsIgnoreCase(name)) {
-                return kitName;
+        if (name != null) {
+            for (final String kitName : kitToItemsMap.keySet()) {
+                if (kitName.equalsIgnoreCase(name)) {
+                    return kitName;
+                }
             }
         }
         return null;
     }
 
-    public void addKit(final String name, final List<String> lines, final long delay) {
+    public void addKit(String name, final List<String> lines, final long delay) {
+        name = name.replace('.', '_').replace('/', '_').toLowerCase(Locale.ENGLISH);
         // Will overwrite but w/e
-        config.setProperty("kits." + name + ".delay", delay);
-        config.setProperty("kits." + name + ".items", lines);
-        kits = _getKits();
-        config.save();
+        rootConfig.setProperty("kits." + name + ".delay", delay);
+        rootConfig.setProperty("kits." + name + ".items", lines);
+        parseKits();
+        rootConfig.save();
     }
 
-    public void removeKit(final String name) {
+    public void removeKit(String name) {
+        name = name.replace('.', '_').replace('/', '_').toLowerCase(Locale.ENGLISH);
+        if (!kitToConfigMap.containsKey(name) || !kitToItemsMap.containsKey(name)) {
+            return;
+        }
+
+        final EssentialsConfiguration config = kitToConfigMap.get(name);
         config.removeProperty("kits." + name);
-        kits = _getKits();
-        config.save();
+
+        config.blockingSave();
+        parseKits();
     }
 
     public String listKits(final net.ess3.api.IEssentials ess, final User user) throws Exception {
         try {
             final StringBuilder list = new StringBuilder();
-            for (final String kitItem : ConfigurateUtil.getKeys(kits)) {
+            for (final String kitItem : kitToItemsMap.keySet()) {
                 if (user == null) {
                     list.append(" ").append(capitalCase(kitItem));
                 } else if (user.isAuthorized("essentials.kits." + kitItem.toLowerCase(Locale.ENGLISH))) {

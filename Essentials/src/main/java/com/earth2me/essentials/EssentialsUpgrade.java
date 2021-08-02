@@ -295,7 +295,7 @@ public class EssentialsUpgrade {
 
     public void convertKits() {
         final Kits kits = ess.getKits();
-        final EssentialsConfiguration config = kits.getConfig();
+        final EssentialsConfiguration config = kits.getRootConfig();
         if (doneFile.getBoolean("kitsyml", false)) {
             return;
         }
