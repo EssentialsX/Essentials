@@ -78,6 +78,9 @@ public class Kits implements IConf {
         return newSection;
     }
 
+    /**
+     * Should be used for EssentialsUpgrade conversions <b>only</b>.
+     */
     public EssentialsConfiguration getConfig() {
         return config;
     }
@@ -88,27 +91,18 @@ public class Kits implements IConf {
 
     public Map<String, Object> getKit(String name) {
         name = name.replace('.', '_').replace('/', '_');
-        if (getKits() != null) {
-            final CommentedConfigurationNode kits = getKits();
-            // Other parts of the codebase/3rd party plugins expect us to lowercase kit names here.
-            // This isn't strictly needed for the future of Essentials, but for compatibility it's here.
-            final CommentedConfigurationNode kitSection = kits.node(name.toLowerCase());
-            if (!kitSection.virtual() && kitSection.isMap()) {
-                return ConfigurateUtil.getRawMap(kitSection);
-            }
+        final CommentedConfigurationNode kitSection = kits.node(name.toLowerCase());
+        if (!kitSection.virtual() && kitSection.isMap()) {
+            return ConfigurateUtil.getRawMap(kitSection);
         }
-
         return null;
     }
 
     // Tries to find an existing kit name that matches the given name, ignoring case. Returns null if no match.
     public String matchKit(final String name) {
-        final CommentedConfigurationNode section = config.getSection("kits");
-        if (section != null) {
-            for (final String kitName : ConfigurateUtil.getKeys(section)) {
-                if (kitName.equalsIgnoreCase(name)) {
-                    return kitName;
-                }
+        for (final String kitName : ConfigurateUtil.getKeys(kits)) {
+            if (kitName.equalsIgnoreCase(name)) {
+                return kitName;
             }
         }
         return null;
@@ -130,7 +124,6 @@ public class Kits implements IConf {
 
     public String listKits(final net.ess3.api.IEssentials ess, final User user) throws Exception {
         try {
-            final CommentedConfigurationNode kits = config.getSection("kits");
             final StringBuilder list = new StringBuilder();
             for (final String kitItem : ConfigurateUtil.getKeys(kits)) {
                 if (user == null) {
