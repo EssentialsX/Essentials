@@ -21,6 +21,11 @@ public class InteractionRoleImpl implements InteractionRole {
     }
 
     @Override
+    public boolean isPublicRole() {
+        return role.isPublicRole();
+    }
+
+    @Override
     public int getColorRaw() {
         return role.getColorRaw();
     }
