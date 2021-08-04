@@ -11,10 +11,16 @@ public interface InteractionRole {
     String getName();
 
     /**
-     * Whether this role is mentionable.
-     * @return true if the role is mentionable.
+     * Whether this role is managed by an external integration.
+     * @return true if the role is managed.
      */
     boolean isManaged();
+
+    /**
+     * Whether this role is the default role given to all users (@everyone).
+     * @return true if this is the default role.
+     */
+    boolean isPublicRole();
 
     /**
      * Gets the raw RGB color value of this role.
