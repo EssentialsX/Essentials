@@ -14,6 +14,8 @@ public interface IPermissionsHandler {
 
     List<String> getGroups(Player base);
 
+    List<String> getGroups();
+
     boolean canBuild(Player base, String group);
 
     boolean inGroup(Player base, String group);
