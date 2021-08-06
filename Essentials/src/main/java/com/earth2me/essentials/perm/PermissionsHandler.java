@@ -56,6 +56,17 @@ public class PermissionsHandler implements IPermissionsHandler {
     }
 
     @Override
+    public List<String> getGroups() {
+        final long start = System.nanoTime();
+        List<String> groups = handler.getGroups();
+        if (groups == null || groups.isEmpty()) {
+            groups = Collections.singletonList(defaultGroup);
+        }
+        checkPermLag(start, "Getting all groups");
+        return Collections.unmodifiableList(groups);
+    }
+
+    @Override
     public boolean canBuild(final Player base, final String group) {
         return handler.canBuild(base, group);
     }

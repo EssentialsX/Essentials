@@ -42,6 +42,11 @@ public abstract class AbstractVaultHandler extends SuperpermsHandler {
     }
 
     @Override
+    public List<String> getGroups() {
+        return Arrays.asList(perms.getGroups());
+    }
+
+    @Override
     public boolean inGroup(final Player base, final String group) {
         return perms.playerInGroup(base, group);
     }
