@@ -65,6 +65,20 @@ public interface InteractionMember {
     boolean hasRoles(List<String> roleDefinitions);
 
     /**
+     * Returns true if the user has the specified {@link InteractionRole role}.
+     * @param role The role to check for.
+     * @return true if the member has the specified role.
+     */
+    boolean hasRole(InteractionRole role);
+
+    /**
+     * Returns true if the user has a role by the specified ID.
+     * @param roleId The role id to check for.
+     * @return true if the member has a role by the specified ID.
+     */
+    boolean hasRole(String roleId);
+
+    /**
      * Sends a private message to this member with the given content.
      * @param content The message to send.
      * @return A future which will complete a boolean stating the success of the message.
