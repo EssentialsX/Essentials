@@ -16,6 +16,11 @@ public class InteractionRoleImpl implements InteractionRole {
     }
 
     @Override
+    public String getAsMention() {
+        return role.getAsMention();
+    }
+
+    @Override
     public boolean isManaged() {
         return role.isManaged();
     }
@@ -35,6 +40,11 @@ public class InteractionRoleImpl implements InteractionRole {
         return role.getColorRaw() == Role.DEFAULT_COLOR_RAW;
     }
 
+    @Override
+    public boolean canInteract() {
+        return role.getGuild().getSelfMember().canInteract(role);
+    }
+
     public Role getJdaObject() {
         return role;
     }
@@ -42,5 +52,10 @@ public class InteractionRoleImpl implements InteractionRole {
     @Override
     public String getId() {
         return role.getId();
+    }
+
+    @Override
+    public String toString() {
+        return "InteractionRoleImpl{name=" + getName() + ",id=" + getId() + "}";
     }
 }
