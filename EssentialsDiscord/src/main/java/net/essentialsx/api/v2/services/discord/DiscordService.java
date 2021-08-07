@@ -1,5 +1,7 @@
 package net.essentialsx.api.v2.services.discord;
 
+import net.essentialsx.api.v2.events.discord.DiscordChatMessageEvent;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
 /**
@@ -13,6 +15,16 @@ public interface DiscordService {
      * @param allowGroupMentions Whether the message should allow the pinging of roles, @here, or @everyone.
      */
     void sendMessage(final MessageType type, final String message, final boolean allowGroupMentions);
+
+    /**
+     * Sends a chat messages to the {@link MessageType.DefaultTypes#CHAT default chat channel} with the same format
+     * used for regular chat messages specified in the EssentialsX Discord configuration.
+     * <p>
+     * Note: Messages sent with this method will not fire a {@link DiscordChatMessageEvent}.
+     * @param player      The player who send the message.
+     * @param chatMessage The chat message the player has sent.
+     */
+    void sendChatMessage(final Player player, final String chatMessage);
 
     /**
      * Checks if a {@link MessageType} by the given key is already registered.
