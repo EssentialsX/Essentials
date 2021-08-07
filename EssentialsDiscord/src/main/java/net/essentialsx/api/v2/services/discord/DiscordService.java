@@ -10,7 +10,7 @@ public interface DiscordService {
      * Sends a message to a message type channel.
      * @param type               The message type/destination of this message.
      * @param message            The exact message to be sent.
-     * @param allowGroupMentions Whether or not the message should allow the pinging of roles, users, or emotes.
+     * @param allowGroupMentions Whether the message should allow the pinging of roles, @here, or @everyone.
      */
     void sendMessage(final MessageType type, final String message, final boolean allowGroupMentions);
 
