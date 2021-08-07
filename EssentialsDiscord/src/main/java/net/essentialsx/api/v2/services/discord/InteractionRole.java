@@ -11,6 +11,12 @@ public interface InteractionRole {
     String getName();
 
     /**
+     * Gets the mention of this role.
+     * @return this role's mention.
+     */
+    String getAsMention();
+
+    /**
      * Whether this role is managed by an external integration.
      * @return true if the role is managed.
      */
@@ -33,6 +39,12 @@ public interface InteractionRole {
      * @return true if the role has no color.
      */
     boolean isDefaultColor();
+
+    /**
+     * Whether this role can be given to other members by the current logged in bot.
+     * @return true if this role can be interacted with by the current bot user.
+     */
+    boolean canInteract();
 
     /**
      * Gets the ID of this role.
