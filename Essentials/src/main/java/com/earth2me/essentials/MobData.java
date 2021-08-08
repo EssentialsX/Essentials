@@ -7,7 +7,6 @@ import com.earth2me.essentials.utils.VersionUtil;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Ageable;
-import org.bukkit.entity.Axolotl;
 import org.bukkit.entity.ChestedHorse;
 import org.bukkit.entity.Creeper;
 import org.bukkit.entity.Entity;
@@ -189,7 +188,14 @@ public enum MobData {
     RAID_LEADER("leader", MobCompat.RAIDER, Data.RAID_LEADER, true),
     TROPICAL_FISH_BODY_COLOR("fish_body_color", Arrays.stream(DyeColor.values()).map(color -> color.name().toLowerCase(Locale.ENGLISH) + "body").collect(Collectors.toList()), MobCompat.TROPICAL_FISH, Data.FISH_BODY_COLOR, true),
     TROPICAL_FISH_PATTERN_COLOR("fish_pattern_color", Arrays.stream(DyeColor.values()).map(color -> color.name().toLowerCase(Locale.ENGLISH) + "pattern").collect(Collectors.toList()), MobCompat.TROPICAL_FISH, Data.FISH_PATTERN_COLOR, true),
-    COLORABLE_AXOLOTL("", Arrays.stream(Axolotl.Variant.values()).map(color -> color.name().toLowerCase(Locale.ENGLISH)).collect(Collectors.toList()), MobCompat.AXOLOTL, Data.COLORABLE, true),
+    LUCY_AXOLOTL("lucy", MobCompat.AXOLOTL, "axolotl:LUCY", true),
+    LEUCISTIC_AXOLOTL("leucistic", MobCompat.AXOLOTL, "axolotl:LUCY", false),
+    PINK_AXOLOTL("pink", MobCompat.AXOLOTL, "axolotl:LUCY", false),
+    WILD_AXOLOTL("wild", MobCompat.AXOLOTL, "axolotl:WILD", true),
+    BROWN_AXOLOTL("brown", MobCompat.AXOLOTL, "axolotl:WILD", false),
+    GOLD_AXOLOTL("gold", MobCompat.AXOLOTL, "axolotl:GOLD", true),
+    CYAN_AXOLOTL("cyan", MobCompat.AXOLOTL, "axolotl:CYAN", true),
+    BLUE_AXOLOTL("blue", MobCompat.AXOLOTL, "axolotl:BLUE", true),
     SCREAMING_GOAT("screaming", MobCompat.GOAT, Data.GOAT_SCREAMING, true),
     ;
 

@@ -81,7 +81,7 @@ public class Commandhome extends EssentialsCommand {
                     } else {
                         showError(user.getBase(), new Exception(tl("noHomeSetPlayer")), commandLabel);
                     }
-                } else if (homes.isEmpty() || finalPlayer.getHome(homes.get(0)) == null) {
+                } else if (homes.isEmpty() || !finalPlayer.hasValidHomes()) {
                     showError(user.getBase(), new Exception(tl("noHomeSetPlayer")), commandLabel);
                 } else if (homes.size() == 1 && finalPlayer.equals(user)) {
                     try {
