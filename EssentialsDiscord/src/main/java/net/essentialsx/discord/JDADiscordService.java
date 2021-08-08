@@ -4,6 +4,7 @@ import club.minnced.discord.webhook.WebhookClient;
 import club.minnced.discord.webhook.WebhookClientBuilder;
 import club.minnced.discord.webhook.send.WebhookMessage;
 import club.minnced.discord.webhook.send.WebhookMessageBuilder;
+import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.FormatUtil;
 import com.earth2me.essentials.utils.VersionUtil;
 import net.dv8tion.jda.api.JDA;
@@ -31,8 +32,10 @@ import net.essentialsx.discord.listeners.DiscordCommandDispatcher;
 import net.essentialsx.discord.listeners.DiscordListener;
 import net.essentialsx.discord.util.ConsoleInjector;
 import net.essentialsx.discord.util.DiscordUtil;
+import net.essentialsx.discord.util.MessageUtil;
 import org.apache.commons.lang.math.NumberUtils;
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.ServicePriority;
@@ -235,6 +238,24 @@ public class JDADiscordService implements DiscordService {
         } else {
             Bukkit.getScheduler().runTask(plugin, () -> Bukkit.getPluginManager().callEvent(event));
         }
+    }
+
+    @Override
+    public void sendChatMessage(final Player player, final String chatMessage) {
+        final User user = getPlugin().getEss().getUser(player);
+
+        final String formattedMessage = MessageUtil.formatMessage(getSettings().getMcToDiscordFormat(player),
+                MessageUtil.sanitizeDiscordMarkdown(player.getName()),
+                MessageUtil.sanitizeDiscordMarkdown(player.getDisplayName()),
+                user.isAuthorized("essentials.discord.markdown") ? chatMessage : MessageUtil.sanitizeDiscordMarkdown(chatMessage),
+                MessageUtil.sanitizeDiscordMarkdown(player.getWorld().getName()),
+                MessageUtil.sanitizeDiscordMarkdown(FormatUtil.stripEssentialsFormat(getPlugin().getEss().getPermissionsHandler().getPrefix(player))),
+                MessageUtil.sanitizeDiscordMarkdown(FormatUtil.stripEssentialsFormat(getPlugin().getEss().getPermissionsHandler().getSuffix(player))));
+
+        final String avatarUrl = getSettings().isShowAvatar() ? getSettings().getAvatarURL().replace("{uuid}", player.getUniqueId().toString()).replace("{name}", player.getName()) : null;
+        final String name = getSettings().isShowName() ? player.getName() : (getSettings().isShowDisplayName() ? player.getDisplayName() : null);
+
+        DiscordUtil.dispatchDiscordMessage(this, MessageType.DefaultTypes.CHAT, formattedMessage, user.isAuthorized("essentials.discord.ping"), avatarUrl, name, player.getUniqueId());
     }
 
     @Override
