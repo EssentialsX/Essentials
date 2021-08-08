@@ -252,7 +252,7 @@ public class JDADiscordService implements DiscordService {
                 MessageUtil.sanitizeDiscordMarkdown(FormatUtil.stripEssentialsFormat(getPlugin().getEss().getPermissionsHandler().getPrefix(player))),
                 MessageUtil.sanitizeDiscordMarkdown(FormatUtil.stripEssentialsFormat(getPlugin().getEss().getPermissionsHandler().getSuffix(player))));
 
-        final String avatarUrl = getSettings().isShowAvatar() ? getSettings().getAvatarURL().replace("{uuid}", player.getUniqueId().toString()).replace("{name}", player.getName()) : null;
+        final String avatarUrl = DiscordUtil.getAvatarUrl(this, player);
         final String name = getSettings().isShowName() ? player.getName() : (getSettings().isShowDisplayName() ? player.getDisplayName() : null);
 
         DiscordUtil.dispatchDiscordMessage(this, MessageType.DefaultTypes.CHAT, formattedMessage, user.isAuthorized("essentials.discord.ping"), avatarUrl, name, player.getUniqueId());

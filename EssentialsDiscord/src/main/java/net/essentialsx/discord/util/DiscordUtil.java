@@ -19,6 +19,7 @@ import net.essentialsx.api.v2.services.discord.MessageType;
 import net.essentialsx.discord.JDADiscordService;
 import okhttp3.OkHttpClient;
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 
 import java.util.List;
 import java.util.UUID;
@@ -192,6 +193,10 @@ public final class DiscordUtil {
             }
         }
         return false;
+    }
+
+    public static String getAvatarUrl(final JDADiscordService jda, final Player player) {
+        return jda.getSettings().getAvatarURL().replace("{uuid}", player.getUniqueId().toString()).replace("{name}", player.getName());
     }
 
     public static void dispatchDiscordMessage(final JDADiscordService jda, final MessageType messageType, final String message, final boolean allowPing, final String avatarUrl, final String name, final UUID uuid) {
