@@ -32,6 +32,9 @@ public class Commandunlimited extends EssentialsCommand {
             user.sendMessage(getList(target));
         } else if (args[0].equalsIgnoreCase("clear")) {
             for (final Material m : new HashSet<>(target.getUnlimited())) {
+                if (m == null) {
+                    continue;
+                }
                 toggleUnlimited(user, target, m.toString());
             }
         } else {
@@ -48,6 +51,9 @@ public class Commandunlimited extends EssentialsCommand {
         }
         final StringJoiner joiner = new StringJoiner(", ");
         for (final Material material : items) {
+            if (material == null) {
+                continue;
+            }
             joiner.add(material.toString().toLowerCase(Locale.ENGLISH).replace("_", ""));
         }
         output.append(joiner.toString());
