@@ -2,7 +2,6 @@ package net.essentialsx.discord.listeners;
 
 import com.earth2me.essentials.Console;
 import com.earth2me.essentials.utils.DateUtil;
-import com.earth2me.essentials.utils.FormatUtil;
 import com.earth2me.essentials.utils.VersionUtil;
 import net.ess3.api.IUser;
 import net.ess3.api.events.AfkStatusChangeEvent;
@@ -91,18 +90,7 @@ public class BukkitListener implements Listener {
                 return;
             }
 
-            sendDiscordMessage(MessageType.DefaultTypes.CHAT,
-                    MessageUtil.formatMessage(jda.getSettings().getMcToDiscordFormat(player),
-                            MessageUtil.sanitizeDiscordMarkdown(player.getName()),
-                            MessageUtil.sanitizeDiscordMarkdown(player.getDisplayName()),
-                            player.hasPermission("essentials.discord.markdown") ? chatEvent.getMessage() : MessageUtil.sanitizeDiscordMarkdown(chatEvent.getMessage()),
-                            MessageUtil.sanitizeDiscordMarkdown(player.getWorld().getName()),
-                            MessageUtil.sanitizeDiscordMarkdown(FormatUtil.stripEssentialsFormat(jda.getPlugin().getEss().getPermissionsHandler().getPrefix(player))),
-                            MessageUtil.sanitizeDiscordMarkdown(FormatUtil.stripEssentialsFormat(jda.getPlugin().getEss().getPermissionsHandler().getSuffix(player)))),
-                    player.hasPermission("essentials.discord.ping"),
-                    jda.getSettings().isShowAvatar() ? jda.getSettings().getAvatarURL().replace("{uuid}", player.getUniqueId().toString()) : null,
-                    jda.getSettings().isShowName() ? player.getName() : (jda.getSettings().isShowDisplayName() ? player.getDisplayName() : null),
-                    player.getUniqueId());
+            jda.sendChatMessage(player, chatEvent.getMessage());
         });
     }
 

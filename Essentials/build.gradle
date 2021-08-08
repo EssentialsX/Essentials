@@ -10,8 +10,6 @@ dependencies {
 
     api 'io.papermc:paperlib:1.0.6'
 
-    api 'org.bstats:bstats-bukkit:1.8'
-
     implementation 'org.spongepowered:configurate-yaml:4.1.1'
     implementation 'org.checkerframework:checker-qual:3.14.0'
 
