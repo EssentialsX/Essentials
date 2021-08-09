@@ -388,6 +388,14 @@ public class EssentialsPlayerListener implements Listener, FakeAccessor {
                     }
                 }
 
+                if (user.isAuthorized("essentials.updatecheck")) {
+                    ess.runTaskAsynchronously(() -> {
+                        for (String str : ess.getUpdateChecker().getVersionMessages(false, false)) {
+                            user.sendMessage(str);
+                        }
+                    });
+                }
+
                 if (user.isAuthorized("essentials.fly.safelogin")) {
                     user.getBase().setFallDistance(0);
                     if (LocationUtil.shouldFly(user.getLocation())) {
@@ -451,14 +459,6 @@ public class EssentialsPlayerListener implements Listener, FakeAccessor {
                         final IText output = new KeywordReplacer(input, user.getSource(), ess);
                         final TextPager pager = new TextPager(output, true);
                         pager.showPage("1", null, "motd", user.getSource());
-                    }
-
-                    if (user.isAuthorized("essentials.updatecheck")) {
-                        ess.runTaskAsynchronously(() -> {
-                            for (String str : ess.getUpdateChecker().getVersionMessages(false, false)) {
-                                user.sendMessage(str);
-                            }
-                        });
                     }
                 }
             }
