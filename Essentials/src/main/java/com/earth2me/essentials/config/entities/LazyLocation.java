@@ -10,15 +10,17 @@ import java.util.UUID;
  * Represents a Location but doesn't parse the location until it is requested via {@link LazyLocation#location()}.
  */
 public class LazyLocation {
-    private final String world;
+    private String world;
+    private String worldName;
     private final double x;
     private final double y;
     private final double z;
     private final float yaw;
     private final float pitch;
 
-    public LazyLocation(String world, double x, double y, double z, float yaw, float pitch) {
-        this.world = world;
+    public LazyLocation(String worldId, String worldName, double x, double y, double z, float yaw, float pitch) {
+        this.world = worldId;
+        this.worldName = worldName;
         this.x = x;
         this.y = y;
         this.z = z;
@@ -28,6 +30,10 @@ public class LazyLocation {
 
     public String world() {
         return world;
+    }
+
+    public String worldName() {
+        return worldName;
     }
 
     public double x() {
@@ -67,14 +73,22 @@ public class LazyLocation {
             world = Bukkit.getWorld(this.world);
         }
 
+        if (world == null && this.worldName != null && !this.worldName.isEmpty()) {
+            world = Bukkit.getWorld(this.worldName);
+        }
+
         if (world == null) {
             return null;
         }
+
+        this.world = world.getUID().toString();
+        this.worldName = world.getName();
 
         return new Location(world, x, y, z, yaw, pitch);
     }
 
     public static LazyLocation fromLocation(final Location location) {
-        return new LazyLocation(location.getWorld().getUID().toString(), location.getX(), location.getY(), location.getZ(), location.getYaw(), location.getPitch());
+        //noinspection ConstantConditions
+        return new LazyLocation(location.getWorld().getUID().toString(), location.getWorld().getName(), location.getX(), location.getY(), location.getZ(), location.getYaw(), location.getPitch());
     }
 }
