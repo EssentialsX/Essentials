@@ -10,6 +10,7 @@ import com.earth2me.essentials.perm.impl.ModernVaultHandler;
 import com.earth2me.essentials.perm.impl.SuperpermsHandler;
 import com.earth2me.essentials.utils.TriState;
 import com.google.common.collect.ImmutableSet;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
 import java.util.Arrays;
@@ -34,7 +35,7 @@ public class PermissionsHandler implements IPermissionsHandler {
     }
 
     @Override
-    public String getGroup(final Player base) {
+    public String getGroup(final OfflinePlayer base) {
         final long start = System.nanoTime();
         String group = handler.getGroup(base);
         if (group == null) {
@@ -45,7 +46,7 @@ public class PermissionsHandler implements IPermissionsHandler {
     }
 
     @Override
-    public List<String> getGroups(final Player base) {
+    public List<String> getGroups(final OfflinePlayer base) {
         final long start = System.nanoTime();
         List<String> groups = handler.getGroups(base);
         if (groups == null || groups.isEmpty()) {
@@ -64,6 +65,22 @@ public class PermissionsHandler implements IPermissionsHandler {
         }
         checkPermLag(start, "Getting all groups");
         return Collections.unmodifiableList(groups);
+    }
+
+    @Override
+    public boolean addToGroup(OfflinePlayer base, String group) {
+        final long start = System.nanoTime();
+        final boolean result = handler.addToGroup(base, group);
+        checkPermLag(start, String.format("Adding group to %s", base.getName()));
+        return result;
+    }
+
+    @Override
+    public boolean removeFromGroup(OfflinePlayer base, String group) {
+        final long start = System.nanoTime();
+        final boolean result = handler.removeFromGroup(base, group);
+        checkPermLag(start, String.format("Removing group from %s", base.getName()));
+        return result;
     }
 
     @Override
