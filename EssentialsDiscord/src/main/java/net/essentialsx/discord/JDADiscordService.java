@@ -248,7 +248,7 @@ public class JDADiscordService implements DiscordService {
                 MessageUtil.sanitizeDiscordMarkdown(player.getName()),
                 MessageUtil.sanitizeDiscordMarkdown(player.getDisplayName()),
                 user.isAuthorized("essentials.discord.markdown") ? chatMessage : MessageUtil.sanitizeDiscordMarkdown(chatMessage),
-                MessageUtil.sanitizeDiscordMarkdown(player.getWorld().getName()),
+                MessageUtil.sanitizeDiscordMarkdown(getPlugin().getEss().getSettings().getWorldAlias(player.getWorld().getName())),
                 MessageUtil.sanitizeDiscordMarkdown(FormatUtil.stripEssentialsFormat(getPlugin().getEss().getPermissionsHandler().getPrefix(player))),
                 MessageUtil.sanitizeDiscordMarkdown(FormatUtil.stripEssentialsFormat(getPlugin().getEss().getPermissionsHandler().getSuffix(player))));
 
