@@ -86,6 +86,8 @@ console:
   # console. It's recommended you stick to the /execute command which has role permission checks (see command configuration below).
   # Note 2: This option requires a channel ID and is not supported if you specify a webhook URL above. You'll need to use /execute in Discord if you use a webhook URL.
   command-relay: false
+  # Set to true if bots/webhooks should be able to send commands through the command relay.
+  bot-command-relay: false
   # The maximum log level of messages to send to the console relay.
   # The following is a list of available log levels in order of lowest to highest.
   # Changing the log level will send all log levels above it to the console relay.
