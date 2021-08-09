@@ -133,6 +133,7 @@ show-avatar: false
 # The URL which should be used to get the avatars of users when "show-avatar" is set to true.
 # Any URL in here should only return a proper JPEG/PNG image and nothing else.
 # To include the UUID of the player in this URL, use "{uuid}".
+# To include the name of the player in this URL, use "{name}".
 avatar-url: "https://crafthead.net/helm/{uuid}"
 # Whether or not player messages should show their name as the bot name in Discord.
 show-name: false
