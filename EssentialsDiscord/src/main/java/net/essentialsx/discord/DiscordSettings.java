@@ -141,6 +141,10 @@ public class DiscordSettings implements IConf {
         return config.getBoolean("console.command-relay", false);
     }
 
+    public boolean isConsoleBotCommandRelay() {
+        return config.getBoolean("console.bot-command-relay", false);
+    }
+
     public Level getConsoleLogLevel() {
         return consoleLogLevel;
     }
