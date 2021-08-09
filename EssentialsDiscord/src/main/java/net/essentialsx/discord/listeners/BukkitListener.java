@@ -134,7 +134,9 @@ public class BukkitListener implements Listener {
                 MessageUtil.formatMessage(join ? jda.getSettings().getJoinFormat(player) : jda.getSettings().getQuitFormat(player),
                         MessageUtil.sanitizeDiscordMarkdown(player.getName()),
                         MessageUtil.sanitizeDiscordMarkdown(player.getDisplayName()),
-                        MessageUtil.sanitizeDiscordMarkdown(message)),
+                        MessageUtil.sanitizeDiscordMarkdown(message),
+                        jda.getPlugin().getEss().getOnlinePlayers().size() - (join ? 0 : 1),
+                        jda.getPlugin().getEss().getUserMap().getUniqueUsers()),
                         player);
     }
 
