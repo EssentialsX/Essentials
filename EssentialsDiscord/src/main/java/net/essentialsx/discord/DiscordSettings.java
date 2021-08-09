@@ -250,7 +250,7 @@ public class DiscordSettings implements IConf {
             filled = format;
         }
         return generateMessageFormat(filled, ":arrow_left: {displayname} has left!", false,
-                "username", "displayname", "quitmessage", "online");
+                "username", "displayname", "quitmessage", "online", "unique");
     }
 
     public MessageFormat getDeathFormat(Player player) {
