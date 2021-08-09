@@ -134,11 +134,8 @@ public class BukkitListener implements Listener {
                 MessageUtil.formatMessage(join ? jda.getSettings().getJoinFormat(player) : jda.getSettings().getQuitFormat(player),
                         MessageUtil.sanitizeDiscordMarkdown(player.getName()),
                         MessageUtil.sanitizeDiscordMarkdown(player.getDisplayName()),
-                        MessageUtil.sanitizeDiscordMarkdown(message),
-                        false,
-                        jda.getSettings().isShowAvatar() ? jda.getSettings().getAvatarURL().replace("{uuid}", player.getUniqueId().toString()) : null,
-                        jda.getSettings().isShowName() ? player.getName() : (jda.getSettings().isShowDisplayName() ? player.getDisplayName() : null),
-                        player.getUniqueId()));
+                        MessageUtil.sanitizeDiscordMarkdown(message)),
+                        player);
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
@@ -154,6 +151,7 @@ public class BukkitListener implements Listener {
             if (!event.getEntity().getWorld().isGameRule("showDeathMessages")) {
                 showDeathMessages = null;
             } else {
+                //noinspection deprecation
                 showDeathMessages = event.getEntity().getWorld().getGameRuleValue("showDeathMessages").equals("true");
             }
         }
@@ -166,10 +164,7 @@ public class BukkitListener implements Listener {
                         MessageUtil.sanitizeDiscordMarkdown(event.getEntity().getName()),
                         MessageUtil.sanitizeDiscordMarkdown(event.getEntity().getDisplayName()),
                         MessageUtil.sanitizeDiscordMarkdown(event.getDeathMessage())),
-                false,
-                jda.getSettings().isShowAvatar() ? jda.getSettings().getAvatarURL().replace("{uuid}", event.getEntity().getUniqueId().toString()) : null,
-                jda.getSettings().isShowName() ? event.getEntity().getName() : (jda.getSettings().isShowDisplayName() ? event.getEntity().getDisplayName() : null),
-                event.getEntity().getUniqueId());
+                event.getEntity());
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
@@ -189,10 +184,7 @@ public class BukkitListener implements Listener {
                 MessageUtil.formatMessage(format,
                         MessageUtil.sanitizeDiscordMarkdown(event.getAffected().getName()),
                         MessageUtil.sanitizeDiscordMarkdown(event.getAffected().getDisplayName())),
-                false,
-                jda.getSettings().isShowAvatar() ? jda.getSettings().getAvatarURL().replace("{uuid}", event.getAffected().getBase().getUniqueId().toString()) : null,
-                jda.getSettings().isShowName() ? event.getAffected().getName() : (jda.getSettings().isShowDisplayName() ? event.getAffected().getDisplayName() : null),
-                event.getAffected().getBase().getUniqueId());
+                event.getAffected().getBase());
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
@@ -206,10 +198,7 @@ public class BukkitListener implements Listener {
                         MessageUtil.sanitizeDiscordMarkdown(event.getPlayer().getName()),
                         MessageUtil.sanitizeDiscordMarkdown(event.getPlayer().getDisplayName()),
                         event.getName()),
-                false,
-                jda.getSettings().isShowAvatar() ? jda.getSettings().getAvatarURL().replace("{uuid}", event.getPlayer().getUniqueId().toString()) : null,
-                jda.getSettings().isShowName() ? event.getPlayer().getName() : (jda.getSettings().isShowDisplayName() ? event.getPlayer().getDisplayName() : null),
-                event.getPlayer().getUniqueId());
+                event.getPlayer());
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
@@ -233,10 +222,27 @@ public class BukkitListener implements Listener {
     }
 
     private void sendDiscordMessage(final MessageType messageType, final String message) {
-        sendDiscordMessage(messageType, message, false, null, null, null);
+        sendDiscordMessage(messageType, message, null);
     }
 
-    private void sendDiscordMessage(final MessageType messageType, final String message, final boolean allowPing, final String avatarUrl, final String name, final UUID uuid) {
-        DiscordUtil.dispatchDiscordMessage(jda, messageType, message, allowPing, avatarUrl, name, uuid);
+    private void sendDiscordMessage(final MessageType messageType, final String message, final Player player) {
+        String avatarUrl = null;
+        String name = null;
+        UUID uuid = null;
+        if (player != null) {
+            if (jda.getSettings().isShowAvatar()) {
+                avatarUrl = DiscordUtil.getAvatarUrl(jda, player);
+            }
+
+            if (jda.getSettings().isShowName()) {
+                name = player.getName();
+            } else if (jda.getSettings().isShowDisplayName()) {
+                name = player.getDisplayName();
+            }
+
+            uuid = player.getUniqueId();
+        }
+
+        DiscordUtil.dispatchDiscordMessage(jda, messageType, message, false, avatarUrl, name, uuid);
     }
 }
