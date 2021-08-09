@@ -293,6 +293,8 @@ messages:
   # - {username}: The name of the user joining
   # - {displayname}: The display name of the user joining
   # - {joinmessage}: The full default join message used in game
+  # - {online}: The amount of players online
+  # - {unique}: The amount of unique players to ever join the server
   # ... PlaceholderAPI placeholders are also supported here too!
   join: ":arrow_right: {displayname} has joined!"
   # This is the message sent to Discord when a player leaves the minecraft server.
@@ -300,6 +302,8 @@ messages:
   # - {username}: The name of the user leaving
   # - {displayname}: The display name of the user leaving
   # - {quitmessage}: The full default leave message used in game
+  # - {online}: The amount of players online
+  # - {unique}: The amount of unique players to ever join the server
   # ... PlaceholderAPI placeholders are also supported here too!
   quit: ":arrow_left: {displayname} has left!"
   # This is the message sent to Discord when a player dies.
