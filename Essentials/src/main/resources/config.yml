@@ -669,6 +669,7 @@ allow-selling-named-items: false
 
 # Delay for the MOTD display for players on join, in milliseconds.
 # This has no effect if the MOTD command or permission are disabled.
+# This can also be set to -1 to completely disable the join MOTD all together.
 delay-motd: 0
 
 # A list of commands that should have their complementary confirm commands enabled by default.
