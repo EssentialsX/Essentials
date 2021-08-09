@@ -138,7 +138,7 @@ public final class DiscordUtil {
      * @return The highest role or blank string.
      */
     public static String getRoleFormat(Member member) {
-        final List<Role> roles = member == null ? null :member.getRoles();
+        final List<Role> roles = member == null ? null : member.getRoles();
 
         if (roles == null || roles.isEmpty()) {
             return "";
