@@ -138,9 +138,9 @@ public final class DiscordUtil {
      * @return The highest role or blank string.
      */
     public static String getRoleFormat(Member member) {
-        final List<Role> roles = member.getRoles();
+        final List<Role> roles = member == null ? null : member.getRoles();
 
-        if (roles.isEmpty()) {
+        if (roles == null || roles.isEmpty()) {
             return "";
         }
 
@@ -154,7 +154,7 @@ public final class DiscordUtil {
      * @return The bukkit color code or blank string.
      */
     public static String getRoleColorFormat(Member member) {
-        if (member.getColorRaw() == Role.DEFAULT_COLOR_RAW) {
+        if (member == null || member.getColorRaw() == Role.DEFAULT_COLOR_RAW) {
             return "";
         }
         final int rawColor = 0xff000000 | member.getColorRaw();
