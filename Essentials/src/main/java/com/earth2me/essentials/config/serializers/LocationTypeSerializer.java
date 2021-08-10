@@ -21,6 +21,7 @@ public class LocationTypeSerializer implements TypeSerializer<LazyLocation> {
 
         return new LazyLocation(
                 worldValue,
+                node.node("world-name").getString(""),
                 node.node("x").getDouble(),
                 node.node("y").getDouble(),
                 node.node("z").getDouble(),
@@ -36,6 +37,7 @@ public class LocationTypeSerializer implements TypeSerializer<LazyLocation> {
         }
 
         node.node("world").set(String.class, value.world());
+        node.node("world-name").set(String.class, value.worldName());
         node.node("x").set(Double.class, value.x());
         node.node("y").set(Double.class, value.y());
         node.node("z").set(Double.class, value.z());

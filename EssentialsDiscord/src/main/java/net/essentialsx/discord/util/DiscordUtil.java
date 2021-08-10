@@ -19,6 +19,7 @@ import net.essentialsx.api.v2.services.discord.MessageType;
 import net.essentialsx.discord.JDADiscordService;
 import okhttp3.OkHttpClient;
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 
 import java.util.List;
 import java.util.UUID;
@@ -137,9 +138,9 @@ public final class DiscordUtil {
      * @return The highest role or blank string.
      */
     public static String getRoleFormat(Member member) {
-        final List<Role> roles = member.getRoles();
+        final List<Role> roles = member == null ? null : member.getRoles();
 
-        if (roles.isEmpty()) {
+        if (roles == null || roles.isEmpty()) {
             return "";
         }
 
@@ -153,7 +154,7 @@ public final class DiscordUtil {
      * @return The bukkit color code or blank string.
      */
     public static String getRoleColorFormat(Member member) {
-        if (member.getColorRaw() == Role.DEFAULT_COLOR_RAW) {
+        if (member == null || member.getColorRaw() == Role.DEFAULT_COLOR_RAW) {
             return "";
         }
         final int rawColor = 0xff000000 | member.getColorRaw();
@@ -192,6 +193,10 @@ public final class DiscordUtil {
             }
         }
         return false;
+    }
+
+    public static String getAvatarUrl(final JDADiscordService jda, final Player player) {
+        return jda.getSettings().getAvatarURL().replace("{uuid}", player.getUniqueId().toString()).replace("{name}", player.getName());
     }
 
     public static void dispatchDiscordMessage(final JDADiscordService jda, final MessageType messageType, final String message, final boolean allowPing, final String avatarUrl, final String name, final UUID uuid) {
