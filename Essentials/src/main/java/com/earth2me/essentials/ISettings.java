@@ -129,6 +129,8 @@ public interface ISettings extends IConf {
 
     Set<String> getDisabledCommands();
 
+    boolean isVerboseCommandUsages();
+
     boolean isCommandOverridden(String name);
 
     boolean isDebug();

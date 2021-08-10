@@ -81,10 +81,10 @@ you are not a bot, proceed with that like you would any other captcha.
 Discord desktop/web client. 
 
 10. Once in your Discord client, you'll need to enable Developer Mode. Do this by going into the 
-Settings, then go to the "Appearance" tab and check on the "Developer Mode" at the bottom of the
+Settings, then go to the "Advanced" tab and check on the "Developer Mode" at the bottom of the
 page. Once you've checked "Developer Mode" on, click the `X` at the top right to exit Settings.
-> ![Developer Mode](https://i.imgur.com/CrW31Up.gif)
-> `User Settings` -> `Appearance` -> Check `Developer Mode` -> Exit Settings
+> ![Developer Mode](https://i.imgur.com/f0Dmxcd.gif)
+> `User Settings` -> `Advanced` -> Check `Developer Mode` -> Exit Settings
 
 11. Next is copying a few IDs. First up, you'll want to copy the server (aka guild) id. Do this by
 finding the server you added the bot to, right click its icon, and click "Copy ID". Once you copied
