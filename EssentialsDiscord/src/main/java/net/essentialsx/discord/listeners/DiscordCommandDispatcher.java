@@ -19,7 +19,7 @@ public class DiscordCommandDispatcher extends ListenerAdapter {
     @Override
     public void onGuildMessageReceived(@NotNull GuildMessageReceivedEvent event) {
         if (jda.getConsoleWebhook() != null && event.getChannel().getId().equals(channelId)) {
-            if ((event.isWebhookMessage() || event.getAuthor().isBot()) && (!jda.getSettings().isConsoleBotCommandRelay() || DiscordUtil.ACTIVE_WEBHOOKS.contains(event.getAuthor().getId()))) {
+            if ((event.isWebhookMessage() || event.getAuthor().isBot()) && (!jda.getSettings().isConsoleBotCommandRelay() || DiscordUtil.ACTIVE_WEBHOOKS.contains(event.getAuthor().getId()) || event.getAuthor().getId().equals(event.getGuild().getSelfMember().getId()))) {
                 return;
             }
 
