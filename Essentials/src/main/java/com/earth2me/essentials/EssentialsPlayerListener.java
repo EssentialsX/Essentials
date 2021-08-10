@@ -368,7 +368,7 @@ public class EssentialsPlayerListener implements Listener, FakeAccessor {
 
                 ess.runTaskAsynchronously(() -> ess.getServer().getPluginManager().callEvent(new AsyncUserDataLoadEvent(user, effectiveMessage)));
 
-                if (ess.getSettings().getMotdDelay() < 0) {
+                if (ess.getSettings().getMotdDelay() >= 0) {
                     final int motdDelay = ess.getSettings().getMotdDelay() / 50;
                     final DelayMotdTask motdTask = new DelayMotdTask(user);
                     if (motdDelay > 0) {
