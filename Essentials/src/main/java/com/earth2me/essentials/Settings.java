@@ -48,8 +48,8 @@ import static com.earth2me.essentials.I18n.tl;
 
 public class Settings implements net.ess3.api.ISettings {
     private static final Logger logger = Logger.getLogger("Essentials");
-    private static final BigDecimal MAXMONEY = new BigDecimal("10000000000000");
-    private static final BigDecimal MINMONEY = new BigDecimal("-10000000000000");
+    private static final BigDecimal DEFAULT_MAX_MONEY = new BigDecimal("10000000000000");
+    private static final BigDecimal DEFAULT_MIN_MONEY = new BigDecimal("-10000000000000");
     private final transient EssentialsConfiguration config;
     private final transient IEssentials ess;
     private final transient AtomicInteger reloadCount = new AtomicInteger(0);
@@ -62,6 +62,8 @@ public class Settings implements net.ess3.api.ISettings {
     private boolean teleportSafety;
     private boolean forceDisableTeleportSafety;
     private Set<String> disabledCommands = new HashSet<>();
+    private List<String> overriddenCommands = Collections.emptyList();
+    private List<String> playerCommands = Collections.emptyList();
     private final transient Map<String, Command> disabledBukkitCommands = new HashMap<>();
     private Map<String, BigDecimal> commandCosts;
     private Set<String> socialSpyCommands = new HashSet<>();
@@ -76,8 +78,8 @@ public class Settings implements net.ess3.api.ISettings {
     private boolean configDebug = false;
     // #easteregg
     private boolean economyDisabled = false;
-    private BigDecimal maxMoney = MAXMONEY;
-    private BigDecimal minMoney = MINMONEY;
+    private BigDecimal maxMoney = DEFAULT_MAX_MONEY;
+    private BigDecimal minMoney = DEFAULT_MIN_MONEY;
     private boolean economyLog = false;
     // #easteregg
     private boolean economyLogUpdate = false;
@@ -287,6 +289,11 @@ public class Settings implements net.ess3.api.ISettings {
         return disabledCommands;
     }
 
+    @Override
+    public boolean isVerboseCommandUsages() {
+        return config.getBoolean("verbose-command-usages", true);
+    }
+
     private void _addAlternativeCommand(final String label, final Command current) {
         Command cmd = ess.getAlternativeCommandsHandler().getAlternative(label);
         if (cmd == null) {
@@ -317,9 +324,13 @@ public class Settings implements net.ess3.api.ISettings {
         return disCommands;
     }
 
+    private List<String> _getPlayerCommands() {
+        return config.getList("player-commands", String.class);
+    }
+
     @Override
     public boolean isPlayerCommand(final String label) {
-        for (final String c : config.getList("player-commands", String.class)) {
+        for (final String c : playerCommands) {
             if (!c.equalsIgnoreCase(label)) {
                 continue;
             }
@@ -328,9 +339,13 @@ public class Settings implements net.ess3.api.ISettings {
         return false;
     }
 
+    private List<String> _getOverriddenCommands() {
+        return config.getList("overridden-commands", String.class);
+    }
+
     @Override
     public boolean isCommandOverridden(final String name) {
-        for (final String c : config.getList("overridden-commands", String.class)) {
+        for (final String c : overriddenCommands) {
             if (!c.equalsIgnoreCase(name)) {
                 continue;
             }
@@ -643,6 +658,8 @@ public class Settings implements net.ess3.api.ISettings {
         chatFormats.clear();
         changeDisplayName = _changeDisplayName();
         disabledCommands = _getDisabledCommands();
+        overriddenCommands = _getOverriddenCommands();
+        playerCommands = _getPlayerCommands();
 
         // This will be late loaded
         if (ess.getKnownCommandsProvider() != null) {
@@ -657,24 +674,25 @@ public class Settings implements net.ess3.api.ISettings {
             }
 
             for (final String command : disabledCommands) {
-                final Command toDisable = ess.getPluginCommand(command);
+                final String effectiveAlias = command.toLowerCase(Locale.ENGLISH);
+                final Command toDisable = ess.getPluginCommand(effectiveAlias);
                 if (toDisable != null) {
                     if (isDebug()) {
-                        logger.log(Level.INFO, "Attempting removal of " + command);
+                        logger.log(Level.INFO, "Attempting removal of " + effectiveAlias);
                     }
-                    final Command removed = ess.getKnownCommandsProvider().getKnownCommands().remove(toDisable.getName());
+                    final Command removed = ess.getKnownCommandsProvider().getKnownCommands().remove(effectiveAlias);
                     if (removed != null) {
                         if (isDebug()) {
-                            logger.log(Level.INFO, "Adding command " + command + " to disabled map!");
+                            logger.log(Level.INFO, "Adding command " + effectiveAlias + " to disabled map!");
                         }
-                        disabledBukkitCommands.put(command, removed);
+                        disabledBukkitCommands.put(effectiveAlias, removed);
                     }
 
                     // This is 2 because Settings are reloaded twice in the startup lifecycle
                     if (reloadCount.get() < 2) {
-                        ess.scheduleSyncDelayedTask(() -> _addAlternativeCommand(command, toDisable));
+                        ess.scheduleSyncDelayedTask(() -> _addAlternativeCommand(effectiveAlias, toDisable));
                     } else {
-                        _addAlternativeCommand(command, toDisable);
+                        _addAlternativeCommand(effectiveAlias, toDisable);
                     }
                     mapModified = true;
                 }
@@ -934,7 +952,7 @@ public class Settings implements net.ess3.api.ISettings {
     }
 
     private BigDecimal _getMaxMoney() {
-        return config.getBigDecimal("max-money", MAXMONEY);
+        return config.getBigDecimal("max-money", DEFAULT_MAX_MONEY);
     }
 
     @Override
@@ -943,7 +961,7 @@ public class Settings implements net.ess3.api.ISettings {
     }
 
     private BigDecimal _getMinMoney() {
-        BigDecimal min = config.getBigDecimal("min-money", MINMONEY);
+        BigDecimal min = config.getBigDecimal("min-money", DEFAULT_MIN_MONEY);
         if (min.signum() > 0) {
             min = min.negate();
         }

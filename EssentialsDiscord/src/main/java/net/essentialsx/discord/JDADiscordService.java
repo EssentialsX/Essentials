@@ -4,6 +4,7 @@ import club.minnced.discord.webhook.WebhookClient;
 import club.minnced.discord.webhook.WebhookClientBuilder;
 import club.minnced.discord.webhook.send.WebhookMessage;
 import club.minnced.discord.webhook.send.WebhookMessageBuilder;
+import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.FormatUtil;
 import com.earth2me.essentials.utils.VersionUtil;
 import net.dv8tion.jda.api.JDA;
@@ -31,7 +32,10 @@ import net.essentialsx.discord.listeners.DiscordCommandDispatcher;
 import net.essentialsx.discord.listeners.DiscordListener;
 import net.essentialsx.discord.util.ConsoleInjector;
 import net.essentialsx.discord.util.DiscordUtil;
+import net.essentialsx.discord.util.MessageUtil;
+import org.apache.commons.lang.math.NumberUtils;
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.ServicePriority;
@@ -139,6 +143,7 @@ public class JDADiscordService implements DiscordService {
 
         logger.log(Level.INFO, tl("discordLoggingIn"));
         if (plugin.getSettings().getBotToken().replace("INSERT-TOKEN-HERE", "").trim().isEmpty()) {
+            invalidStartup = true;
             throw new IllegalArgumentException(tl("discordErrorNoToken"));
         }
 
@@ -183,6 +188,10 @@ public class JDADiscordService implements DiscordService {
 
         updateTypesRelay();
 
+        // We will see you in the future :balloon:
+        // DiscordUtil.cleanWebhooks(guild, DiscordUtil.CONSOLE_RELAY_NAME);
+        // DiscordUtil.cleanWebhooks(guild, DiscordUtil.ADVANCED_RELAY_NAME);
+
         Bukkit.getPluginManager().registerEvents(new BukkitListener(this), plugin);
 
         try {
@@ -207,8 +216,8 @@ public class JDADiscordService implements DiscordService {
 
     @Override
     public void registerMessageType(Plugin plugin, MessageType type) {
-        if (!type.getKey().matches("^[a-z0-9-]*$")) {
-            throw new IllegalArgumentException("MessageType key must match \"^[a-z0-9-]*$\"");
+        if (!type.getKey().matches("^[a-z][a-z0-9-]*$")) {
+            throw new IllegalArgumentException("MessageType key must match \"^[a-z][a-z0-9-]*$\"");
         }
 
         if (registeredTypes.containsKey(type.getKey())) {
@@ -220,7 +229,7 @@ public class JDADiscordService implements DiscordService {
 
     @Override
     public void sendMessage(MessageType type, String message, boolean allowGroupMentions) {
-        if (!registeredTypes.containsKey(type.getKey())) {
+        if (!registeredTypes.containsKey(type.getKey()) && !NumberUtils.isDigits(type.getKey())) {
             logger.warning("Sending message to channel \"" + type.getKey() + "\" which is an unregistered type! If you are a plugin author, you should be registering your MessageType before using them.");
         }
         final DiscordMessageEvent event = new DiscordMessageEvent(type, FormatUtil.stripFormat(message), allowGroupMentions);
@@ -229,6 +238,24 @@ public class JDADiscordService implements DiscordService {
         } else {
             Bukkit.getScheduler().runTask(plugin, () -> Bukkit.getPluginManager().callEvent(event));
         }
+    }
+
+    @Override
+    public void sendChatMessage(final Player player, final String chatMessage) {
+        final User user = getPlugin().getEss().getUser(player);
+
+        final String formattedMessage = MessageUtil.formatMessage(getSettings().getMcToDiscordFormat(player),
+                MessageUtil.sanitizeDiscordMarkdown(player.getName()),
+                MessageUtil.sanitizeDiscordMarkdown(player.getDisplayName()),
+                user.isAuthorized("essentials.discord.markdown") ? chatMessage : MessageUtil.sanitizeDiscordMarkdown(chatMessage),
+                MessageUtil.sanitizeDiscordMarkdown(getPlugin().getEss().getSettings().getWorldAlias(player.getWorld().getName())),
+                MessageUtil.sanitizeDiscordMarkdown(FormatUtil.stripEssentialsFormat(getPlugin().getEss().getPermissionsHandler().getPrefix(player))),
+                MessageUtil.sanitizeDiscordMarkdown(FormatUtil.stripEssentialsFormat(getPlugin().getEss().getPermissionsHandler().getSuffix(player))));
+
+        final String avatarUrl = DiscordUtil.getAvatarUrl(this, player);
+        final String name = getSettings().isShowName() ? player.getName() : (getSettings().isShowDisplayName() ? player.getDisplayName() : null);
+
+        DiscordUtil.dispatchDiscordMessage(this, MessageType.DefaultTypes.CHAT, formattedMessage, user.isAuthorized("essentials.discord.ping"), avatarUrl, name, player.getUniqueId());
     }
 
     @Override
@@ -271,9 +298,7 @@ public class JDADiscordService implements DiscordService {
                 continue;
             }
 
-            final String webhookName = "EssX Advanced Relay";
-            Webhook webhook = DiscordUtil.getAndCleanWebhooks(channel, webhookName).join();
-            webhook = webhook == null ? DiscordUtil.createWebhook(channel, webhookName).join() : webhook;
+            final Webhook webhook = DiscordUtil.getOrCreateWebhook(channel, DiscordUtil.ADVANCED_RELAY_NAME).join();
             if (webhook == null) {
                 final WebhookClient current = channelIdToWebhook.get(channel.getId());
                 if (current != null) {
@@ -317,9 +342,7 @@ public class JDADiscordService implements DiscordService {
                     return;
                 }
 
-                final String webhookName = "EssX Console Relay";
-                Webhook webhook = DiscordUtil.getAndCleanWebhooks(channel, webhookName).join();
-                webhook = webhook == null ? DiscordUtil.createWebhook(channel, webhookName).join() : webhook;
+                final Webhook webhook = DiscordUtil.getOrCreateWebhook(channel, DiscordUtil.CONSOLE_RELAY_NAME).join();
                 if (webhook == null) {
                     logger.info(tl("discordErrorLoggerNoPerms"));
                     return;

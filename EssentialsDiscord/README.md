@@ -81,10 +81,10 @@ you are not a bot, proceed with that like you would any other captcha.
 Discord desktop/web client. 
 
 10. Once in your Discord client, you'll need to enable Developer Mode. Do this by going into the 
-Settings, then go to the "Appearance" tab and check on the "Developer Mode" at the bottom of the
+Settings, then go to the "Advanced" tab and check on the "Developer Mode" at the bottom of the
 page. Once you've checked "Developer Mode" on, click the `X` at the top right to exit Settings.
-> ![Developer Mode](https://i.imgur.com/CrW31Up.gif)
-> `User Settings` -> `Appearance` -> Check `Developer Mode` -> Exit Settings
+> ![Developer Mode](https://i.imgur.com/f0Dmxcd.gif)
+> `User Settings` -> `Advanced` -> Check `Developer Mode` -> Exit Settings
 
 11. Next is copying a few IDs. First up, you'll want to copy the server (aka guild) id. Do this by
 finding the server you added the bot to, right click its icon, and click "Copy ID". Once you copied
@@ -96,7 +96,7 @@ it, make sure to save it for a later step.
 In other words, this will be the channel that, by default, receives messages for player chat/join/leave/death
 messages as well as mute/kicks. To see how to further configure message types, see [Configuring Messages](#configuring-messages).
 > ![Primary Channel ID](https://i.imgur.com/uMODfiQ.gif)
-> Right click your 'primary' channel -> `Copy ID` -> Paste into Notepad for later step
+> Right-click your 'primary' channel -> `Copy ID` -> Paste into Notepad for later step
 
 13. You've successfully copied all the necessary IDs needed for a basic setup. Next up is generating the
 default config for EssentialsX Discord, so you can start setting it up! Do this by putting the
@@ -129,13 +129,13 @@ completed the initial, go back up to the [Table Of Contents](#table-of-contents)
 
 ## Console Relay
 The console relay is pretty self-explanatory: it relays everything on your console into a Discord channel of
-your choosing. The console relay is ridiculously easy to setup and if your server is already running, you don't
+your choosing. The console relay is ridiculously easy to set up and if your server is already running, you don't
 need to reload it!
 
 0. This assumes you've already done the initial setup.
 
 1. Go to the Discord server that your bot is in and find the channel you wish to use for console output.
-Right click on the channel and click "Copy ID". Save this ID for the next step.
+Right-click on the channel and click "Copy ID". Save this ID for the next step.
 > ![Copy ID](https://i.imgur.com/qvDfSLv.gif)
 > Find console channel -> Right Click -> `Copy ID`
 
@@ -149,9 +149,9 @@ should notice console output being directed to that channel! That is all you nee
 settings. Otherwise, if you'd like to see what other options you can use to customize console output, stick around.
 
 4. The first thing you can customize is the format of the message sent to Discord. By default, the timestamp,
-level (info/warn/error/etc), and message are shown for each console message. Let's say you wanted to make the
+level (info/warn/error/etc.), and message are shown for each console message. Let's say you wanted to make the
 timestamp and level bold: since this message would be using Discord's markdown, we can just add \*\* to both sides of
-level and timestamp. Then once you've done that, just do `/ess reload` and you should see your changes on Discord.
+level and timestamp. Then, once you've done that, just do `/ess reload` and you should see your changes on Discord.
 > ![Bold Format](https://i.imgur.com/jD9mH14.gif)
 
 5. Next, you can also configure the name you wish the to show above console messages. By default, it's "EssX Console
@@ -179,15 +179,15 @@ and `staff`. If you only completed the initial setup, the `staff` channel defini
 most situations however, as the message system will always fallback to the `primary` channel if a channel ID is
 invalid.
 
-Now on the to the types of messages you can receive themselves (which is where you're going to use these channel 
-definitions). In the `message-types` section of the config, you can see a list of message types (join/leave/chat/etc)
+Now on to the types of messages you can receive themselves (which is where you're going to use these channel 
+definitions). In the `message-types` section of the config, you can see a list of message types (join/leave/chat/etc.)
 on the left (as the key), and on the right there is a channel definition.
 
 For the sake of example lets say we want to send all chat messages to their own channel. We can do this by creating
 a new channel definition and setting the `chat` message type to said channel definition. Below are step-by-step 
 instructions for said example, you can follow along to get the gist of how to apply this to other use cases
 
-1. Find the channel on Discord you want to only send chat messages to, and then right click the channel and click
+1. Find the channel on Discord you want to only send chat messages to, and then right-click the channel and click
 "Copy ID".
 > ![Copy ID](https://i.imgur.com/ri7NZkD.gif)
 
@@ -257,7 +257,7 @@ them.
 EssentialsX Discord has a few other permissions that may be important to know about:
 
 * `essentials.discord.markdown` - Allows players to bypass the Markdown filter, so that they can 
-bold/underline/italic/etc their Minecraft chat messages for Discord.
+bold/underline/italic/etc. their Minecraft chat messages for Discord.
 * `essentials.discord.ping` - Allows players to bypass the ping filter, so that they can ping @everyone/@here
 from Minecraft chat.
 
@@ -281,7 +281,7 @@ built-in message types can be found at [`MessageType.DefaultTypes`](https://gith
 
 Here is an example of what sending a message to the built-in chat channel would look like:
 ```java
-// The built in channel you want to send your message to, in this case the chat channel.
+// The built-in channel you want to send your message to, in this case the chat channel.
 final MessageType channel = MessageType.DefaultTypes.CHAT;
 // Set to true if your message should be allowed to ping @everyone, @here, or roles.
 // If you are sending user-generated content, you probably should keep this as false.
@@ -309,13 +309,13 @@ public class CustomTypeExample {
     private final MessageType type;
     
     public CustomTypeExample(final Plugin plugin) {
-      // Gets the the EssentialsX Discord API service so we can register our type and
+      // Gets the EssentialsX Discord API service, so we can register our type and
       // send a message with it later.
       api = Bukkit.getServicesManager().load(DiscordService.class);
       
       // Create a new message type for the user to define in our config.
       // Unless you're putting a discord channel id as the type key, it's probably 
-      // a good idea to store this object so you don't create it every time.
+      // a good idea to store this object, so you don't create it every time.
       type = new MessageType("my-awesome-channel");
       
       // Registers the type we just created with EssentialsX Discord.
@@ -426,14 +426,14 @@ public class BalanceSlashCommand extends InteractionCommand {
     
     @Override
     public boolean isEphemeral() {
-        // Whether or not the command and response should be hidden to other users on discord.
+        // Whether the command and response should be hidden to other users on discord.
         // Return true here in order to hide command/responses from other discord users.
         return false;
     }
     
     @Override
     public boolean isDisabled() {
-        // Whether or not the command should be prevented from being registered/executed.
+        // Whether the command should be prevented from being registered/executed.
         // Return true here in order to mark the command as disabled.
         return false;
     }
