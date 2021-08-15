@@ -34,6 +34,7 @@ import java.lang.management.ManagementFactory;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -177,6 +178,12 @@ public class Commandessentials extends EssentialsCommand {
 
         final JsonObject dump = new JsonObject();
 
+        final JsonObject meta = new JsonObject();
+        meta.addProperty("timestamp", Instant.now().toEpochMilli());
+        meta.addProperty("sender", sender.getPlayer() != null ? sender.getPlayer().getName() : null);
+        meta.addProperty("senderUuid", sender.getPlayer() != null ? sender.getPlayer().getUniqueId().toString() : null);
+        dump.add("meta", meta);
+
         final JsonObject serverData = new JsonObject();
         serverData.addProperty("bukkit-version", Bukkit.getBukkitVersion());
         serverData.addProperty("server-version", Bukkit.getVersion());
@@ -223,10 +230,15 @@ public class Commandessentials extends EssentialsCommand {
 
             pluginData.addProperty("name", name);
             pluginData.addProperty("version", info.getVersion());
+            pluginData.addProperty("description", info.getDescription());
             pluginData.addProperty("main", info.getMain());
             pluginData.addProperty("enabled", plugin.isEnabled());
-            pluginData.addProperty("official", officialPlugins.contains(name));
+            pluginData.addProperty("official", plugin == ess || officialPlugins.contains(name));
             pluginData.addProperty("unsupported", warnPlugins.contains(name));
+
+            final JsonArray authors = new JsonArray();
+            info.getAuthors().forEach(authors::add);
+            pluginData.add("authors", authors);
 
             if (name.startsWith("Essentials") && !name.equals("Essentials")) {
                 addons.add(pluginData);
