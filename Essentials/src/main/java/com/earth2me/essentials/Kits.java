@@ -31,6 +31,10 @@ public class Kits implements IConf {
         kits = _getKits();
     }
 
+    public File getFile() {
+        return config.getFile();
+    }
+
     private CommentedConfigurationNode _getKits() {
         final CommentedConfigurationNode section = config.getSection("kits");
         if (section != null) {

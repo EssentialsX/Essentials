@@ -49,6 +49,9 @@ hide-displayname-in-vanish: true
 # Disable this if you have any other plugin, that modifies the displayname of a user.
 change-displayname: true
 
+# This option will cause Essentials to show players' displaynames instead of usernames when tab completing Essentials commands.
+change-tab-complete-name: false
+
 # When this option is enabled, the (tab) player list will be updated with the displayname.
 # The value of change-displayname (above) has to be true.
 #change-playerlist: true
@@ -169,6 +172,10 @@ overridden-commands:
 disabled-commands:
 #  - nick
 #  - clear
+
+# Whether or not Essentials should show detailed command usages.
+# If set to false, Essentials will collapse all usages in to one single usage message.
+verbose-command-usages: true
 
 # These commands will be shown to players with socialSpy enabled.
 # You can add commands from other plugins you may want to track or
@@ -520,9 +527,33 @@ allow-silent-join-quit: false
 
 # You can set custom join and quit messages here. Set this to "none" to use the default Minecraft message,
 # or set this to "" to hide the message entirely.
-# You may use color codes, {USERNAME} for the player's name, {PLAYER} for the player's displayname, {PREFIX} for the player's prefix, and {SUFFIX} for the player's suffix.
+
+# Available placeholders:
+# {PLAYER} - The player's displayname. 
+# {USERNAME} - The player's username.
+# {PREFIX} - The player's prefix.
+# {SUFFIX} - The player's suffix.
+# {ONLINE} - The number of players online.
+# {UNIQUE} - The number of unique players to join the server.
+# {UPTIME} - The amount of time the server has been online.
 custom-join-message: "none"
 custom-quit-message: "none"
+
+# You can set a custom join message for users who join with a new username here.
+# This message will only be used if a user has joined before and have since changed their username.
+# This will be displayed INSTEAD OF custom-join-message, so if you intend to keep them similar, make sure they match.
+# Set this to "none" to use the the "custom-join-message" above for every join.
+
+# Available placeholders:
+# {PLAYER} - The player's displayname. 
+# {USERNAME} - The player's username.
+# {OLDUSERNAME} - The player's old username.
+# {PREFIX} - The player's prefix.
+# {SUFFIX} - The player's suffix.
+# {ONLINE} - The number of players online.
+# {UNIQUE} - The number of unique players to join the server.
+# {UPTIME} - The amount of time the server has been online.
+custom-new-username-message: "none"
 
 # Should Essentials override the vanilla "Server Full" message with its own from the language file?
 # Set to false to keep the vanilla message.
@@ -645,6 +676,7 @@ allow-selling-named-items: false
 
 # Delay for the MOTD display for players on join, in milliseconds.
 # This has no effect if the MOTD command or permission are disabled.
+# This can also be set to -1 to completely disable the join MOTD all together.
 delay-motd: 0
 
 # A list of commands that should have their complementary confirm commands enabled by default.

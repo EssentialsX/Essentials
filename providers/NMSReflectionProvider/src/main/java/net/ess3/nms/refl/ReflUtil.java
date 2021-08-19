@@ -61,6 +61,10 @@ public final class ReflUtil {
         return nmsVersionObject;
     }
 
+    public static boolean isMojMap() {
+        return getNmsVersionObject().getMajor() == 99;
+    }
+
     public static Class<?> getNMSClass(final String className) {
         return getClassCached("net.minecraft.server" + (ReflUtil.getNmsVersionObject().isLowerThan(ReflUtil.V1_17_R1) ? "." + getNMSVersion() : "") + "." + className);
     }

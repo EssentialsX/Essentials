@@ -39,8 +39,15 @@ public class BalanceTopImpl implements BalanceTop {
                     final BigDecimal userMoney = user.getMoney();
                     user.updateMoneyCache(userMoney);
                     newTotal = newTotal.add(userMoney);
-                    final String name = user.isHidden() ? user.getName() : user.getDisplayName();
-                    entries.add(new BalanceTop.Entry(user.getBase().getUniqueId(), name, userMoney));
+                    final String name;
+                    if (user.getBase() instanceof OfflinePlayer) {
+                        name = user.getLastAccountName();
+                    } else if (user.isHidden()) {
+                        name = user.getName();
+                    } else {
+                        name = user.getDisplayName();
+                    }
+                    entries.add(new BalanceTop.Entry(user.getUUID(), name, userMoney));
                 }
             }
         }

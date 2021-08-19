@@ -20,6 +20,10 @@ public class SimpleTextInput implements IText {
     public SimpleTextInput() {
     }
 
+    public void addLine(String line) {
+        lines.add(line);
+    }
+
     @Override
     public List<String> getLines() {
         return lines;
