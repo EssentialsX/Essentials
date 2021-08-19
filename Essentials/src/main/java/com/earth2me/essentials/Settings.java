@@ -146,6 +146,11 @@ public class Settings implements net.ess3.api.ISettings {
     }
 
     @Override
+    public File getConfigFile() {
+        return config.getFile();
+    }
+
+    @Override
     public boolean getRespawnAtHome() {
         return config.getBoolean("respawn-at-home", false);
     }
