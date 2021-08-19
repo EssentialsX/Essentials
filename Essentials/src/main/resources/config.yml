@@ -49,6 +49,9 @@ hide-displayname-in-vanish: true
 # Disable this if you have any other plugin, that modifies the displayname of a user.
 change-displayname: true
 
+# This option will cause Essentials to show players' displaynames instead of usernames when tab completing Essentials commands.
+change-tab-complete-name: false
+
 # When this option is enabled, the (tab) player list will be updated with the displayname.
 # The value of change-displayname (above) has to be true.
 #change-playerlist: true

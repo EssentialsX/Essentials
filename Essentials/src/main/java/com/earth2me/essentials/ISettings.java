@@ -172,6 +172,8 @@ public interface ISettings extends IConf {
 
     boolean changePlayerListName();
 
+    boolean changeTabCompleteName();
+
     boolean isPlayerCommand(String string);
 
     boolean useBukkitPermissions();
