@@ -314,10 +314,16 @@ public class Commandessentials extends EssentialsCommand {
                 }
             }
 
-            final CompletableFuture<String> future = PasteUtil.createPaste(files);
-            future.thenAccept(url -> {
-                if (url != null) {
-                    sender.sendMessage(tl("dumpUrl", "https://essentialsx.net/dump.html#" + url.split("/")[3]));
+            final CompletableFuture<PasteUtil.PasteResult> future = PasteUtil.createPaste(files);
+            future.thenAccept(result -> {
+                if (result != null) {
+                    final String dumpUrl = "https://essentialsx.net/dump.html?id=" + result.getPasteId();
+                    sender.sendMessage(tl("dumpUrl", dumpUrl));
+                    sender.sendMessage(tl("dumpDeleteKey", result.getDeletionKey()));
+                    if (sender.isPlayer()) {
+                        ess.getLogger().info(tl("dumpConsoleUrl", dumpUrl));
+                        ess.getLogger().info(tl("dumpDeleteKey", result.getDeletionKey()));
+                    }
                 }
                 files.clear();
             });

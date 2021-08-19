@@ -82,16 +82,16 @@ public class Commandcreatekit extends EssentialsCommand {
 
                 final String fileContents = sw.toString();
 
-                final CompletableFuture<String> future = PasteUtil.createPaste(Collections.singletonList(new PasteUtil.PasteFile("kit_" + kitName + ".yml", fileContents)));
-                future.thenAccept(url -> {
-                    if (url != null) {
+                final CompletableFuture<PasteUtil.PasteResult> future = PasteUtil.createPaste(Collections.singletonList(new PasteUtil.PasteFile("kit_" + kitName + ".yml", fileContents)));
+                future.thenAccept(result -> {
+                    if (result != null) {
                         final String separator = tl("createKitSeparator");
                         final String delayFormat = delay <= 0 ? "0" : DateUtil.formatDateDiff(System.currentTimeMillis() + (delay * 1000));
                         sender.sendMessage(separator);
-                        sender.sendMessage(tl("createKitSuccess", kitName, delayFormat, url));
+                        sender.sendMessage(tl("createKitSuccess", kitName, delayFormat, result.getPasteUrl()));
                         sender.sendMessage(separator);
                         if (ess.getSettings().isDebug()) {
-                            ess.getLogger().info(sender.getSender().getName() + " created a kit: " + url);
+                            ess.getLogger().info(sender.getSender().getName() + " created a kit: " + result.getPasteUrl());
                         }
                     }
                 });

@@ -4,7 +4,9 @@ import com.google.common.base.Charsets;
 import com.google.common.io.CharStreams;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.io.InputStreamReader;
 import java.io.OutputStream;
@@ -25,8 +27,14 @@ public final class PasteUtil {
     private PasteUtil() {
     }
 
-    public static CompletableFuture<String> createPaste(List<PasteFile> pages) {
-        final CompletableFuture<String> future = new CompletableFuture<>();
+    /**
+     * Creates an anonymous paste containing the provided files.
+     *
+     * @param pages The files to include in the paste.
+     * @return The result of the paste, including the paste URL and deletion key.
+     */
+    public static CompletableFuture<PasteResult> createPaste(List<PasteFile> pages) {
+        final CompletableFuture<PasteResult> future = new CompletableFuture<>();
         PASTE_EXECUTOR_SERVICE.submit(() -> {
             try {
                 final HttpURLConnection connection = (HttpURLConnection) new URL(PASTE_UPLOAD_URL).openConnection();
@@ -60,10 +68,13 @@ public final class PasteUtil {
 
                 // Read URL
                 final JsonObject object = GSON.fromJson(new InputStreamReader(connection.getInputStream(), Charsets.UTF_8), JsonObject.class);
-                final String pasteUrl = PASTE_URL + object.get("result").getAsJsonObject().get("id").getAsString();
+                final String pasteId = object.get("result").getAsJsonObject().get("id").getAsString();
+                final String pasteUrl = PASTE_URL + pasteId;
+                final JsonElement deletionKey = object.get("result").getAsJsonObject().get("deletion_key");
                 connection.disconnect();
 
-                future.complete(pasteUrl);
+                final PasteResult result = new PasteResult(pasteId, pasteUrl, deletionKey != null ? deletionKey.getAsString() : null);
+                future.complete(result);
             } catch (Exception e) {
                 future.completeExceptionally(e);
             }
@@ -75,7 +86,7 @@ public final class PasteUtil {
         private final String name;
         private final String contents;
 
-        public PasteFile(String name, String contents) {
+        public PasteFile(final String name, final String contents) {
             this.name = name;
             this.contents = contents;
         }
@@ -88,4 +99,29 @@ public final class PasteUtil {
             return contents;
         }
     }
+
+    public static class PasteResult {
+        private final String pasteId;
+        private final String pasteUrl;
+        private final @Nullable String deletionKey;
+
+        protected PasteResult(String pasteId, final String pasteUrl, final @Nullable String deletionKey) {
+            this.pasteId = pasteId;
+            this.pasteUrl = pasteUrl;
+            this.deletionKey = deletionKey;
+        }
+
+        public String getPasteUrl() {
+            return pasteUrl;
+        }
+
+        public @Nullable String getDeletionKey() {
+            return deletionKey;
+        }
+
+        public String getPasteId() {
+            return pasteId;
+        }
+    }
+
 }
