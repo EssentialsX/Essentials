@@ -10,10 +10,14 @@ import com.earth2me.essentials.utils.DateUtil;
 import com.earth2me.essentials.utils.EnumUtil;
 import com.earth2me.essentials.utils.FloatUtil;
 import com.earth2me.essentials.utils.NumberUtil;
+import com.earth2me.essentials.utils.PasteUtil;
 import com.earth2me.essentials.utils.VersionUtil;
 import com.google.common.base.Charsets;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Server;
@@ -25,13 +29,22 @@ import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import java.io.IOException;
+import java.lang.management.ManagementFactory;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.time.Instant;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
@@ -103,6 +116,9 @@ public class Commandessentials extends EssentialsCommand {
             case "commands":
                 runCommands(server, sender, commandLabel, args);
                 break;
+            case "dump":
+                runDump(server, sender, commandLabel, args);
+                break;
 
             // Data commands
             case "reload":
@@ -154,6 +170,168 @@ public class Commandessentials extends EssentialsCommand {
         for (final Map.Entry<String, String> entry : ess.getAlternativeCommandsHandler().disabledCommands().entrySet()) {
             sender.sendMessage(entry.getKey() + " => " + entry.getValue());
         }
+    }
+
+    // Generates a paste of useful information
+    private void runDump(Server server, CommandSource sender, String commandLabel, String[] args) {
+        sender.sendMessage(tl("dumpCreating"));
+
+        final JsonObject dump = new JsonObject();
+
+        final JsonObject meta = new JsonObject();
+        meta.addProperty("timestamp", Instant.now().toEpochMilli());
+        meta.addProperty("sender", sender.getPlayer() != null ? sender.getPlayer().getName() : null);
+        meta.addProperty("senderUuid", sender.getPlayer() != null ? sender.getPlayer().getUniqueId().toString() : null);
+        dump.add("meta", meta);
+
+        final JsonObject serverData = new JsonObject();
+        serverData.addProperty("bukkit-version", Bukkit.getBukkitVersion());
+        serverData.addProperty("server-version", Bukkit.getVersion());
+        serverData.addProperty("server-brand", Bukkit.getName());
+        final JsonObject supportStatus = new JsonObject();
+        final VersionUtil.SupportStatus status = VersionUtil.getServerSupportStatus();
+        supportStatus.addProperty("status", status.name());
+        supportStatus.addProperty("supported", status.isSupported());
+        supportStatus.addProperty("trigger", VersionUtil.getSupportStatusClass());
+        serverData.add("support-status", supportStatus);
+        dump.add("server-data", serverData);
+
+        final JsonObject environment = new JsonObject();
+        environment.addProperty("java-version", System.getProperty("java.version"));
+        environment.addProperty("operating-system", System.getProperty("os.name"));
+        environment.addProperty("uptime", DateUtil.formatDateDiff(ManagementFactory.getRuntimeMXBean().getStartTime()));
+        environment.addProperty("allocated-memory", (Runtime.getRuntime().totalMemory() / 1024 / 1024) + "MB");
+        dump.add("environment", environment);
+
+        final JsonObject essData = new JsonObject();
+        essData.addProperty("version", ess.getDescription().getVersion());
+        final JsonObject updateData = new JsonObject();
+        updateData.addProperty("id", ess.getUpdateChecker().getVersionIdentifier());
+        updateData.addProperty("branch", ess.getUpdateChecker().getVersionBranch());
+        updateData.addProperty("dev", ess.getUpdateChecker().isDevBuild());
+        essData.add("update-data", updateData);
+        final JsonObject econLayer = new JsonObject();
+        econLayer.addProperty("enabled", !ess.getSettings().isEcoDisabled());
+        econLayer.addProperty("selected-layer", EconomyLayers.isLayerSelected());
+        final EconomyLayer layer = EconomyLayers.getSelectedLayer();
+        econLayer.addProperty("name", layer == null ? "null" : layer.getName());
+        econLayer.addProperty("layer-version", layer == null ? "null" : layer.getPluginVersion());
+        econLayer.addProperty("backend-name", layer == null ? "null" : layer.getBackendName());
+        essData.add("economy-layer", econLayer);
+        final JsonArray addons = new JsonArray();
+        final JsonArray plugins = new JsonArray();
+        final ArrayList<Plugin> alphabetical = new ArrayList<>();
+        Collections.addAll(alphabetical, Bukkit.getPluginManager().getPlugins());
+        alphabetical.sort(Comparator.comparing(o -> o.getName().toUpperCase(Locale.ENGLISH)));
+        for (final Plugin plugin : alphabetical) {
+            final JsonObject pluginData = new JsonObject();
+            final PluginDescriptionFile info = plugin.getDescription();
+            final String name = info.getName();
+
+            pluginData.addProperty("name", name);
+            pluginData.addProperty("version", info.getVersion());
+            pluginData.addProperty("description", info.getDescription());
+            pluginData.addProperty("main", info.getMain());
+            pluginData.addProperty("enabled", plugin.isEnabled());
+            pluginData.addProperty("official", plugin == ess || officialPlugins.contains(name));
+            pluginData.addProperty("unsupported", warnPlugins.contains(name));
+
+            final JsonArray authors = new JsonArray();
+            info.getAuthors().forEach(authors::add);
+            pluginData.add("authors", authors);
+
+            if (name.startsWith("Essentials") && !name.equals("Essentials")) {
+                addons.add(pluginData);
+            }
+            plugins.add(pluginData);
+        }
+        essData.add("addons", addons);
+        dump.add("ess-data", essData);
+        dump.add("plugins", plugins);
+
+        final List<PasteUtil.PasteFile> files = new ArrayList<>();
+        files.add(new PasteUtil.PasteFile("dump.json", dump.toString()));
+
+        final Plugin essDiscord = Bukkit.getPluginManager().getPlugin("EssentialsDiscord");
+
+        // Further operations will be heavy IO
+        ess.runTaskAsynchronously(() -> {
+            boolean config = false;
+            boolean discord = false;
+            boolean kits = false;
+            boolean log = false;
+            for (final String arg : args) {
+                if (arg.equals("*")) {
+                    config = true;
+                    discord = true;
+                    kits = true;
+                    log = true;
+                    break;
+                } else if (arg.equalsIgnoreCase("config")) {
+                    config = true;
+                } else if (arg.equalsIgnoreCase("discord")) {
+                    discord = true;
+                } else if (arg.equalsIgnoreCase("kits")) {
+                    kits = true;
+                } else if (arg.equalsIgnoreCase("log")) {
+                    log = true;
+                }
+            }
+
+            if (config) {
+                try {
+                    files.add(new PasteUtil.PasteFile("config.yml", new String(Files.readAllBytes(ess.getSettings().getConfigFile().toPath()), StandardCharsets.UTF_8)));
+                } catch (IOException e) {
+                    sender.sendMessage(tl("dumpErrorUpload", "config.yml", e.getMessage()));
+                }
+            }
+
+            if (discord && essDiscord != null && essDiscord.isEnabled()) {
+                try {
+                    files.add(new PasteUtil.PasteFile("discord-config.yml",
+                            new String(Files.readAllBytes(essDiscord.getDataFolder().toPath().resolve("config.yml")), StandardCharsets.UTF_8)
+                                    .replaceAll("[MN][A-Za-z\\d]{23}\\.[\\w-]{6}\\.[\\w-]{27}", "<censored token>")));
+                } catch (IOException e) {
+                    sender.sendMessage(tl("dumpErrorUpload", "discord-config.yml", e.getMessage()));
+                }
+            }
+
+            if (kits) {
+                try {
+                    files.add(new PasteUtil.PasteFile("kits.yml", new String(Files.readAllBytes(ess.getKits().getFile().toPath()), StandardCharsets.UTF_8)));
+                } catch (IOException e) {
+                    sender.sendMessage(tl("dumpErrorUpload", "kits.yml", e.getMessage()));
+                }
+            }
+
+            if (log) {
+                try {
+                    files.add(new PasteUtil.PasteFile("latest.log", new String(Files.readAllBytes(Paths.get("logs", "latest.log")), StandardCharsets.UTF_8)
+                            .replaceAll("(?m)^\\[\\d\\d:\\d\\d:\\d\\d] \\[.+/(?:DEBUG|TRACE)]: .+\\s(?:[A-Za-z.]+:.+\\s(?:\\t.+\\s)*)?\\s*(?:\"[A-Za-z]+\" : .+[\\s}\\]]+)*", "")
+                            .replaceAll("(?:[0-9]{1,3}\\.){3}[0-9]{1,3}", "<censored ip address>")));
+                } catch (IOException e) {
+                    sender.sendMessage(tl("dumpErrorUpload", "latest.log", e.getMessage()));
+                }
+            }
+
+            final CompletableFuture<PasteUtil.PasteResult> future = PasteUtil.createPaste(files);
+            future.thenAccept(result -> {
+                if (result != null) {
+                    final String dumpUrl = "https://essentialsx.net/dump.html?id=" + result.getPasteId();
+                    sender.sendMessage(tl("dumpUrl", dumpUrl));
+                    sender.sendMessage(tl("dumpDeleteKey", result.getDeletionKey()));
+                    if (sender.isPlayer()) {
+                        ess.getLogger().info(tl("dumpConsoleUrl", dumpUrl));
+                        ess.getLogger().info(tl("dumpDeleteKey", result.getDeletionKey()));
+                    }
+                }
+                files.clear();
+            });
+            future.exceptionally(throwable -> {
+                sender.sendMessage(tl("dumpError", throwable.getMessage()));
+                return null;
+            });
+        });
     }
 
     // Resets the given player's user data.
@@ -491,6 +669,7 @@ public class Commandessentials extends EssentialsCommand {
             final List<String> options = Lists.newArrayList();
             options.add("reload");
             options.add("version");
+            options.add("dump");
             options.add("commands");
             options.add("debug");
             options.add("reset");
@@ -534,6 +713,16 @@ public class Commandessentials extends EssentialsCommand {
                     return Lists.newArrayList("ignoreUFCache");
                 }
                 break;
+            case "dump":
+                final List<String> list = Lists.newArrayList("config", "kits", "log", "discord", "*");
+                for (String arg : args) {
+                    if (arg.equals("*")) {
+                        list.clear();
+                        return list;
+                    }
+                    list.remove(arg.toLowerCase(Locale.ENGLISH));
+                }
+                return list;
         }
 
         return Collections.emptyList();

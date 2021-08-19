@@ -173,6 +173,10 @@ disabled-commands:
 #  - nick
 #  - clear
 
+# Whether or not Essentials should show detailed command usages.
+# If set to false, Essentials will collapse all usages in to one single usage message.
+verbose-command-usages: true
+
 # These commands will be shown to players with socialSpy enabled.
 # You can add commands from other plugins you may want to track or
 # remove commands that are used for something you dont want to spy on.
@@ -672,6 +676,7 @@ allow-selling-named-items: false
 
 # Delay for the MOTD display for players on join, in milliseconds.
 # This has no effect if the MOTD command or permission are disabled.
+# This can also be set to -1 to completely disable the join MOTD all together.
 delay-motd: 0
 
 # A list of commands that should have their complementary confirm commands enabled by default.
