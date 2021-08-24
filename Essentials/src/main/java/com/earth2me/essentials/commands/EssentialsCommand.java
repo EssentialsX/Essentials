@@ -4,6 +4,7 @@ import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.IEssentialsModule;
 import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.utils.FormatUtil;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -226,7 +227,7 @@ public abstract class EssentialsCommand implements IEssentialsCommand {
         final List<String> players = Lists.newArrayList();
         for (final User user : ess.getOnlineUsers()) {
             if (canInteractWith(interactor, user)) {
-                players.add(user.getName());
+                players.add(ess.getSettings().changeTabCompleteName() ? FormatUtil.stripFormat(user.getDisplayName()) : user.getName());
             }
         }
         return players;
@@ -240,7 +241,7 @@ public abstract class EssentialsCommand implements IEssentialsCommand {
         final List<String> players = Lists.newArrayList();
         for (final User user : ess.getOnlineUsers()) {
             if (canInteractWith(interactor, user)) {
-                players.add(user.getName());
+                players.add(ess.getSettings().changeTabCompleteName() ? FormatUtil.stripFormat(user.getDisplayName()) : user.getName());
             }
         }
         return players;
