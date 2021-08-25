@@ -69,7 +69,7 @@ public abstract class EssentialsCommand implements IEssentialsCommand {
         final Matcher matcher = ARGUMENT_PATTERN.matcher(usage);
         while (matcher.find()) {
             final String color = matcher.group(3).equals("<") ? tl("commandArgumentRequired") : tl("commandArgumentOptional");
-            matcher.appendReplacement(buffer, "$1" + color + matcher.group(2).replace("|", ChatColor.RED + "|" + color) + ChatColor.RESET);
+            matcher.appendReplacement(buffer, "$1" + color + matcher.group(2).replace("|", tl("commandArgumentOr") + "|" + color) + ChatColor.RESET);
         }
         matcher.appendTail(buffer);
         usageStrings.put(buffer.toString(), description);
