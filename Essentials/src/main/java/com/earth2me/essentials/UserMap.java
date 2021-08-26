@@ -95,13 +95,13 @@ public class UserMap extends CacheLoader<String, User> implements IConf {
     public User getUser(final String name) {
         final String sanitizedName = StringUtil.safeString(name);
         try {
-            ess.getLogger().warning("Looking up username " + name + "...");
+            ess.getLogger().warning("Looking up username " + name + " (" + sanitizedName + ") ...");
             if (names.containsKey(sanitizedName)) {
                 final UUID uuid = names.get(sanitizedName);
                 return getUser(uuid);
             }
 
-            ess.getLogger().warning(name + " has no known usermap entry");
+            ess.getLogger().warning(name + "(" + sanitizedName + ") has no known usermap entry");
 
             final File userFile = getUserFileFromString(sanitizedName);
             if (userFile.exists()) {
