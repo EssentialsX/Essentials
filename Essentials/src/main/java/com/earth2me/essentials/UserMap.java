@@ -122,6 +122,16 @@ public class UserMap extends CacheLoader<String, User> implements IConf {
                 return legacyCacheGet(uuid);
             }
         } catch (final ExecutionException | UncheckedExecutionException ex) {
+            if (uuid.version() == 2) { // Citizens
+                return null;
+            }
+
+            for (StackTraceElement element : ex.getStackTrace()) {
+                if (element.getClassName().contains("extendedclip")) { // PAPI
+                    return null;
+                }
+            }
+
             ess.getLogger().log(Level.WARNING, ex, () -> "Exception while getting user for " + uuid);
             return null;
         }
