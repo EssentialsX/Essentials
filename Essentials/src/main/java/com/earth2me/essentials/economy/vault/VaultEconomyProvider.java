@@ -307,7 +307,7 @@ public class VaultEconomyProvider implements Economy {
             final EssentialsUserConfiguration npcConfig = new EssentialsUserConfiguration(player.getName(), player.getUniqueId(), npcFile);
             npcConfig.load();
             npcConfig.setProperty("npc", true);
-            npcConfig.setProperty("lastAccountName", player.getName());
+            npcConfig.setProperty("last-account-name", player.getName());
             npcConfig.setProperty("money", ess.getSettings().getStartingBalance());
             npcConfig.blockingSave();
             ess.getUserMap().trackUUID(player.getUniqueId(), player.getName(), false);

@@ -60,7 +60,7 @@ public class Economy {
         final EssentialsUserConfiguration npcConfig = new EssentialsUserConfiguration(name, npcUUID, npcFile);
         npcConfig.load();
         npcConfig.setProperty("npc", true);
-        npcConfig.setProperty("lastAccountName", name);
+        npcConfig.setProperty("last-account-name", name);
         npcConfig.setProperty("money", ess.getSettings().getStartingBalance());
         npcConfig.blockingSave();
         ess.getUserMap().trackUUID(npcUUID, name, false);
