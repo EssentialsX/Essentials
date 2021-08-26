@@ -95,10 +95,13 @@ public class UserMap extends CacheLoader<String, User> implements IConf {
     public User getUser(final String name) {
         final String sanitizedName = StringUtil.safeString(name);
         try {
+            ess.getLogger().warning("Looking up username " + name + " (" + sanitizedName + ") ...");
             if (names.containsKey(sanitizedName)) {
                 final UUID uuid = names.get(sanitizedName);
                 return getUser(uuid);
             }
+
+            ess.getLogger().warning(name + "(" + sanitizedName + ") has no known usermap entry");
 
             final File userFile = getUserFileFromString(sanitizedName);
             if (userFile.exists()) {
@@ -122,6 +125,16 @@ public class UserMap extends CacheLoader<String, User> implements IConf {
                 return legacyCacheGet(uuid);
             }
         } catch (final ExecutionException | UncheckedExecutionException ex) {
+            if (uuid.version() == 2) { // Citizens
+                return null;
+            }
+
+            for (StackTraceElement element : ex.getStackTrace()) {
+                if (element.getClassName().contains("extendedclip")) { // PAPI
+                    return null;
+                }
+            }
+
             ess.getLogger().log(Level.WARNING, ex, () -> "Exception while getting user for " + uuid);
             return null;
         }
