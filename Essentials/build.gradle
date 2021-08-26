@@ -10,7 +10,7 @@ dependencies {
 
     api 'io.papermc:paperlib:1.0.6'
 
-    implementation 'org.spongepowered:configurate-yaml:4.1.1'
+    implementation 'org.spongepowered:configurate-yaml:4.1.2'
     implementation 'org.checkerframework:checker-qual:3.14.0'
 
     // Providers
