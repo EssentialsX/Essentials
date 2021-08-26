@@ -43,7 +43,6 @@ public class UserMap extends CacheLoader<String, User> implements IConf {
     public UserMap(final IEssentials ess) {
         super();
         this.ess = ess;
-        ess.getLogger().info("Usermap debug logging build");
         uuidMap = new UUIDMap(ess);
         //RemovalListener<UUID, User> remListener = new UserMapRemovalListener();
         //users = CacheBuilder.newBuilder().maximumSize(ess.getSettings().getMaxUserCacheCount()).softValues().removalListener(remListener).build(this);
@@ -95,7 +94,10 @@ public class UserMap extends CacheLoader<String, User> implements IConf {
     public User getUser(final String name) {
         final String sanitizedName = StringUtil.safeString(name);
         try {
-            ess.getLogger().warning("Looking up username " + name + " (" + sanitizedName + ") ...");
+            if (ess.getSettings().isDebug()) {
+                ess.getLogger().warning("Looking up username " + name + " (" + sanitizedName + ") ...");
+            }
+
             if (names.containsKey(sanitizedName)) {
                 final UUID uuid = names.get(sanitizedName);
                 return getUser(uuid);
@@ -125,16 +127,6 @@ public class UserMap extends CacheLoader<String, User> implements IConf {
                 return legacyCacheGet(uuid);
             }
         } catch (final ExecutionException | UncheckedExecutionException ex) {
-            if (uuid.version() == 2) { // Citizens
-                return null;
-            }
-
-            for (StackTraceElement element : ex.getStackTrace()) {
-                if (element.getClassName().contains("extendedclip")) { // PAPI
-                    return null;
-                }
-            }
-
             ess.getLogger().log(Level.WARNING, ex, () -> "Exception while getting user for " + uuid);
             return null;
         }
