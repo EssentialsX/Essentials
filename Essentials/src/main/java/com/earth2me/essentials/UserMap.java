@@ -116,7 +116,9 @@ public class UserMap extends CacheLoader<String, User> implements IConf {
             }
             return null;
         } catch (final UncheckedExecutionException ex) {
-            ess.getLogger().log(Level.WARNING, ex, () -> String.format("Exception while getting user for %s (%s)", name, sanitizedName));
+            if (ess.getSettings().isDebug()) {
+                ess.getLogger().log(Level.WARNING, ex, () -> String.format("Exception while getting user for %s (%s)", name, sanitizedName));
+            }
             return null;
         }
     }
@@ -129,7 +131,9 @@ public class UserMap extends CacheLoader<String, User> implements IConf {
                 return legacyCacheGet(uuid);
             }
         } catch (final ExecutionException | UncheckedExecutionException ex) {
-            ess.getLogger().log(Level.WARNING, ex, () -> "Exception while getting user for " + uuid);
+            if (ess.getSettings().isDebug()) {
+                ess.getLogger().log(Level.WARNING, ex, () -> "Exception while getting user for " + uuid);
+            }
             return null;
         }
     }
