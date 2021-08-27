@@ -7,6 +7,7 @@ import com.earth2me.essentials.craftbukkit.BanLookup;
 import com.earth2me.essentials.utils.StringUtil;
 import com.google.common.base.Charsets;
 import com.google.common.collect.Maps;
+import com.google.common.io.Files;
 import com.google.gson.reflect.TypeToken;
 import net.ess3.api.IEssentials;
 import net.essentialsx.api.v2.services.mail.MailMessage;
@@ -26,6 +27,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.security.DigestInputStream;
 import java.security.MessageDigest;
@@ -234,13 +236,113 @@ public class EssentialsUpgrade {
                 }
                 config.blockingSave();
             } catch (final RuntimeException ex) {
-                LOGGER.log(Level.INFO, "File: " + file.toString());
+                LOGGER.log(Level.INFO, "File: " + file);
                 throw ex;
             }
         }
         doneFile.setProperty("updateUsersStupidLegacyPathNames", true);
         doneFile.save();
         LOGGER.info("Done converting legacy userdata keys to Configurate.");
+    }
+
+    /**
+     * Essentials decided when adding its initial support for UUIDs, it wanted an implementation which would cause
+     * eternal pain and suffering for any person who dared touch any of the code in the future. This code that was made
+     * was so bad, it managed to somehow not maintain any actual UUID support for any external integrations/plugins.
+     * Up until 2.19.0 and 2.18.0 respectively, our Vault integration and entire Economy system was entirely based off
+     * username strings, and thanks to Vault being a flawed standard, for some reason exposes account create to third
+     * party plugins rather than letting the implementation handle it. That doesn't seem like a huge problem at the
+     * surface, but there was one small problem: whoever made the Vault integration for Essentials suffered a stroke in
+     * the process of creating it. The implementation for the createAccount method, regardless of whether it was an
+     * actual player or an NPC account (which the Vault spec NEVER accounted for but plugins just have to guess when
+     * to support them), it would always create an NPC account. This caused any plugin integrating with Vault, creating
+     * NPC accounts for pretty much every single player on the server. It still, to this day, amazes me how nobody saw
+     * this code and didn't die without rewriting it; Or how everybody simply didn't stop using this plugin because how
+     * awful that godforsaken code was. Anyways, this upgrade does its best to delete NPC accounts created by the
+     * horrible economy code, as any operation which loads all user data into memory will load all these NPC accounts
+     * and spam the console with warnings.
+     */
+    public void purgeBrokenNpcAccounts() {
+        if (doneFile.getBoolean("updatePurgeBrokenNpcAccounts", false)) {
+            return;
+        }
+
+        LOGGER.info("#=#=#=#=#=#=#=#=#=#=#=#=#=#+#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#+#=#=#=#=#=#=#");
+        LOGGER.info("EssentialsX is about to purge NPC accounts which were incorrectly created.");
+        LOGGER.info("Only NPC accounts with the default starting balance will be deleted. If they");
+        LOGGER.info("turn out to be actually valid NPC accounts, they will be re-created.");
+        LOGGER.info("Any files deleted here will be backed up to the userdata-npc-backup folder in");
+        LOGGER.info("the Essentials plugin folder in case a file was deleted incorrectly.");
+        LOGGER.info("Please report any file which is incorrectly deleted to GitHub:");
+        LOGGER.info("https://github.com/EssentialsX/Essentials/issues/new/choose");
+        LOGGER.info("");
+        LOGGER.info("NOTE: This will take several minutes if you have a lot of userdata files!");
+        LOGGER.info("#=#=#=#=#=#=#=#=#=#=#=#=#=#+#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#+#=#=#=#=#=#=#");
+
+        final File userdataFolder = new File(ess.getDataFolder(), "userdata");
+        if (!userdataFolder.exists() || !userdataFolder.isDirectory()) {
+            return;
+        }
+        final File backupFolder = new File(ess.getDataFolder(), "userdata-npc-backup");
+        if (backupFolder.exists() || !backupFolder.mkdir()) {
+            LOGGER.info("Skipping NPC purge due to backup folder existing or error while making folder.");
+            return;
+        }
+
+        int movedAccounts = 0;
+        int totalAccounts = 0;
+
+        final File[] userFiles = userdataFolder.listFiles();
+        for (final File file : userFiles) {
+            if (!file.isFile() || !file.getName().endsWith(".yml")) {
+                continue;
+            }
+            final EssentialsConfiguration config = new EssentialsConfiguration(file);
+            try {
+                totalAccounts++;
+                config.load();
+
+                if (config.getKeys().size() > 4) {
+                    continue;
+                }
+
+                if (!config.getBoolean("npc", false)) {
+                    continue;
+                }
+
+                final BigDecimal money = config.getBigDecimal("money", null);
+                if (money == null || money.compareTo(ess.getSettings().getStartingBalance()) != 0) {
+                    continue;
+                }
+
+                if (config.getKeys().size() == 4 && !config.hasProperty("last-account-name") && config.hasProperty("mail")) {
+                    continue;
+                }
+
+                try {
+                    //noinspection UnstableApiUsage
+                    Files.move(file, new File(backupFolder, file.getName()));
+                    movedAccounts++;
+                } catch (IOException e) {
+                    LOGGER.log(Level.SEVERE, "Error while moving NPC file", e);
+                }
+            } catch (final RuntimeException ex) {
+                LOGGER.log(Level.INFO, "File: " + file);
+                throw ex;
+            }
+        }
+        doneFile.setProperty("updatePurgeBrokenNpcAccounts", true);
+        doneFile.save();
+
+        LOGGER.info("#=#=#=#=#=#=#=#=#=#=#=#=#=#+#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#+#=#=#=#=#=#=#");
+        LOGGER.info("EssentialsX has finished purging NPC accounts");
+        LOGGER.info("");
+        LOGGER.info("Deleted Accounts: " + movedAccounts);
+        LOGGER.info("Total Accounts Processed: " + totalAccounts);
+        LOGGER.info("");
+        LOGGER.info("Please report any file which is incorrectly deleted to GitHub:");
+        LOGGER.info("https://github.com/EssentialsX/Essentials/issues/new/choose");
+        LOGGER.info("#=#=#=#=#=#=#=#=#=#=#=#=#=#+#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#+#=#=#=#=#=#=#");
     }
 
     public void convertIgnoreList() {
@@ -284,7 +386,7 @@ public class EssentialsUpgrade {
                     config.blockingSave();
                 }
             } catch (final RuntimeException ex) {
-                LOGGER.log(Level.INFO, "File: " + file.toString());
+                LOGGER.log(Level.INFO, "File: " + file);
                 throw ex;
             }
         }
@@ -429,7 +531,7 @@ public class EssentialsUpgrade {
                     config.blockingSave();
                 }
             } catch (final RuntimeException ex) {
-                LOGGER.log(Level.INFO, "File: " + file.toString());
+                LOGGER.log(Level.INFO, "File: " + file);
                 throw ex;
             }
         }
@@ -485,7 +587,7 @@ public class EssentialsUpgrade {
                 }
 
             } catch (final RuntimeException ex) {
-                LOGGER.log(Level.INFO, "File: " + file.toString());
+                LOGGER.log(Level.INFO, "File: " + file);
                 throw ex;
             }
         }
@@ -574,7 +676,7 @@ public class EssentialsUpgrade {
 
                 final BigInteger hash = new BigInteger(1, digest.digest());
                 if (oldconfigs.contains(hash) && !file.delete()) {
-                    throw new IOException("Could not delete file " + file.toString());
+                    throw new IOException("Could not delete file " + file);
                 }
                 doneFile.setProperty("deleteOldItemsCsv", true);
                 doneFile.save();
@@ -864,5 +966,6 @@ public class EssentialsUpgrade {
         convertIgnoreList();
         convertStupidCamelCaseUserdataKeys();
         convertMailList();
+        purgeBrokenNpcAccounts();
     }
 }
