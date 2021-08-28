@@ -192,7 +192,7 @@ public class Kit {
 
                 if (kitItem.startsWith("@")) {
                     if (ess.getSerializationProvider() == null) {
-                        ess.getLogger().log(Level.WARNING, () -> tl("kitError3", kitName, user.getName()));
+                        ess.getLogger().log(Level.WARNING, tl("kitError3", kitName, user.getName()));
                         continue;
                     }
                     stack = ess.getSerializationProvider().deserializeItem(Base64Coder.decodeLines(kitItem.substring(1)));
