@@ -41,6 +41,11 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
@@ -263,6 +268,7 @@ public class EssentialsUpgrade {
      * and spam the console with warnings.
      */
     public void purgeBrokenNpcAccounts() {
+        final ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
         if (doneFile.getBoolean("updatePurgeBrokenNpcAccounts", false)) {
             return;
         }
@@ -289,8 +295,12 @@ public class EssentialsUpgrade {
             return;
         }
 
-        int movedAccounts = 0;
-        int totalAccounts = 0;
+        final AtomicInteger movedAccounts = new AtomicInteger(0);
+        final AtomicInteger totalAccounts = new AtomicInteger(0);
+
+        final ScheduledFuture<?> feedbackTask = executor.scheduleWithFixedDelay(
+                () -> LOGGER.info("Scanned " + totalAccounts.get() + ", moved " + movedAccounts.get() + " accounts..."),
+                10, 15, TimeUnit.SECONDS);
 
         final File[] userFiles = userdataFolder.listFiles();
         for (final File file : userFiles) {
@@ -299,7 +309,7 @@ public class EssentialsUpgrade {
             }
             final EssentialsConfiguration config = new EssentialsConfiguration(file);
             try {
-                totalAccounts++;
+                totalAccounts.incrementAndGet();
                 config.load();
 
                 if (config.getKeys().size() > 4) {
@@ -322,7 +332,7 @@ public class EssentialsUpgrade {
                 try {
                     //noinspection UnstableApiUsage
                     Files.move(file, new File(backupFolder, file.getName()));
-                    movedAccounts++;
+                    movedAccounts.incrementAndGet();
                 } catch (IOException e) {
                     LOGGER.log(Level.SEVERE, "Error while moving NPC file", e);
                 }
@@ -331,6 +341,7 @@ public class EssentialsUpgrade {
                 throw ex;
             }
         }
+        feedbackTask.cancel(false);
         doneFile.setProperty("updatePurgeBrokenNpcAccounts", true);
         doneFile.save();
 
