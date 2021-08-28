@@ -52,7 +52,7 @@ public class Economy {
             }
         }
         final UUID npcUUID = UUID.nameUUIDFromBytes(("NPC:" + name).getBytes(Charsets.UTF_8));
-        final File npcFile = new File(folder, npcUUID.toString() + ".yml");
+        final File npcFile = new File(folder, npcUUID + ".yml");
         if (npcFile.exists()) {
             LOGGER.log(Level.SEVERE, MessageFormat.format(WARN_NPC_RECREATE_1, name, npcUUID.toString()), new RuntimeException());
             LOGGER.log(Level.SEVERE, WARN_NPC_RECREATE_2);
@@ -60,7 +60,7 @@ public class Economy {
         final EssentialsUserConfiguration npcConfig = new EssentialsUserConfiguration(name, npcUUID, npcFile);
         npcConfig.load();
         npcConfig.setProperty("npc", true);
-        npcConfig.setProperty("lastAccountName", name);
+        npcConfig.setProperty("last-account-name", name);
         npcConfig.setProperty("money", ess.getSettings().getStartingBalance());
         npcConfig.blockingSave();
         ess.getUserMap().trackUUID(npcUUID, name, false);
@@ -96,7 +96,7 @@ public class Economy {
         }
 
         if (user == null) {
-            user = getUserByUUID(UUID.nameUUIDFromBytes(("NPC:" + name).getBytes(Charsets.UTF_8)));
+            user = getUserByUUID(UUID.nameUUIDFromBytes(("NPC:" + StringUtil.safeString(name)).getBytes(Charsets.UTF_8)));
         }
 
         return user;
