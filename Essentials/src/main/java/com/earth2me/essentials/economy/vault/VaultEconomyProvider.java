@@ -5,6 +5,7 @@ import com.earth2me.essentials.api.NoLoanPermittedException;
 import com.earth2me.essentials.api.UserDoesNotExistException;
 import com.earth2me.essentials.config.EssentialsUserConfiguration;
 import com.earth2me.essentials.utils.NumberUtil;
+import com.earth2me.essentials.utils.StringUtil;
 import com.google.common.base.Charsets;
 import net.ess3.api.MaxMoneyException;
 import net.milkbowl.vault.economy.Economy;
@@ -80,7 +81,7 @@ public class VaultEconomyProvider implements Economy {
             return true;
         }
         // We may not have the player name in the usermap, let's double check an NPC account with this name doesn't exist.
-        return com.earth2me.essentials.api.Economy.playerExists(UUID.nameUUIDFromBytes(("NPC:" + playerName).getBytes(Charsets.UTF_8)));
+        return com.earth2me.essentials.api.Economy.playerExists(UUID.nameUUIDFromBytes(("NPC:" + StringUtil.safeString(playerName)).getBytes(Charsets.UTF_8)));
     }
 
     @Override
@@ -306,7 +307,7 @@ public class VaultEconomyProvider implements Economy {
             final EssentialsUserConfiguration npcConfig = new EssentialsUserConfiguration(player.getName(), player.getUniqueId(), npcFile);
             npcConfig.load();
             npcConfig.setProperty("npc", true);
-            npcConfig.setProperty("lastAccountName", player.getName());
+            npcConfig.setProperty("last-account-name", player.getName());
             npcConfig.setProperty("money", ess.getSettings().getStartingBalance());
             npcConfig.blockingSave();
             ess.getUserMap().trackUUID(player.getUniqueId(), player.getName(), false);

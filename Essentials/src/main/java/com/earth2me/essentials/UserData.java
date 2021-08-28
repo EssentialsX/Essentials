@@ -69,7 +69,7 @@ public abstract class UserData extends PlayerExtension implements IConf {
         if (config.getUsername() != null) {
             ess.getUserMap().removeUser(config.getUsername());
             if (isNPC()) {
-                final String uuid = UUID.nameUUIDFromBytes(("NPC:" + config.getUsername()).getBytes(Charsets.UTF_8)).toString();
+                final String uuid = UUID.nameUUIDFromBytes(("NPC:" + StringUtil.safeString(config.getUsername())).getBytes(Charsets.UTF_8)).toString();
                 ess.getUserMap().removeUserUUID(uuid);
             }
         }
