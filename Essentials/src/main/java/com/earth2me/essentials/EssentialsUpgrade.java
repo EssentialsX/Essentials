@@ -268,41 +268,57 @@ public class EssentialsUpgrade {
      * and spam the console with warnings.
      */
     public void purgeBrokenNpcAccounts() {
-        final ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
         if (doneFile.getBoolean("updatePurgeBrokenNpcAccounts", false)) {
             return;
         }
-
-        LOGGER.info("#=#=#=#=#=#=#=#=#=#=#=#=#=#+#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#+#=#=#=#=#=#=#");
-        LOGGER.info("EssentialsX is about to purge NPC accounts which were incorrectly created.");
-        LOGGER.info("Only NPC accounts with the default starting balance will be deleted. If they");
-        LOGGER.info("turn out to be actually valid NPC accounts, they will be re-created.");
-        LOGGER.info("Any files deleted here will be backed up to the userdata-npc-backup folder in");
-        LOGGER.info("the Essentials plugin folder in case a file was deleted incorrectly.");
-        LOGGER.info("Please report any file which is incorrectly deleted to GitHub:");
-        LOGGER.info("https://github.com/EssentialsX/Essentials/issues/new/choose");
-        LOGGER.info("");
-        LOGGER.info("NOTE: This will take several minutes if you have a lot of userdata files!");
-        LOGGER.info("#=#=#=#=#=#=#=#=#=#=#=#=#=#+#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#+#=#=#=#=#=#=#");
 
         final File userdataFolder = new File(ess.getDataFolder(), "userdata");
         if (!userdataFolder.exists() || !userdataFolder.isDirectory()) {
             return;
         }
-        final File backupFolder = new File(ess.getDataFolder(), "userdata-npc-backup");
-        if (backupFolder.exists() || !backupFolder.mkdir()) {
-            LOGGER.info("Skipping NPC purge due to backup folder existing or error while making folder.");
+        final File[] userFiles = userdataFolder.listFiles();
+        if (userFiles.length == 0) {
             return;
         }
+        final File backupFolder = new File(ess.getDataFolder(), "userdata-npc-backup");
+        if (backupFolder.exists()) {
+            LOGGER.info("NPC backup folder already exists; skipping NPC purge.");
+            LOGGER.info("To finish purging broken NPC accounts, rename the \"plugins/Essentials/userdata-npc-backup\" folder and restart your server.");
+            return;
+        } else if (!backupFolder.mkdir()) {
+            LOGGER.info("Skipping NPC purge due to error creating backup folder.");
+            return;
+        }
+
+        LOGGER.info("#===========================================================================#");
+        LOGGER.info(" EssentialsX will now purge any NPC accounts which were incorrectly created.");
+        LOGGER.info(" Only NPC accounts with the default starting balance will be deleted. If");
+        LOGGER.info(" they turn out to be valid NPC accounts, they will be re-created as needed.");
+        LOGGER.info(" Any files deleted here will be backed up to the ");
+        LOGGER.info(" \"plugins/Essentials/userdata-npc-backup\" folder. If you notice any files");
+        LOGGER.info(" have been purged incorrectly, you should restore it from the backup and");
+        LOGGER.info(" report it to us on GitHub:");
+        LOGGER.info(" https://github.com/EssentialsX/Essentials/issues/new/choose");
+        LOGGER.info("");
+        LOGGER.info(" NOTE: This is a one-time process and will take several minutes if you have");
+        LOGGER.info(" a lot of userdata files! If you interrupt this process, EssentialsX will");
+        LOGGER.info(" skip the process until you rename or remove the backup folder.");
+        LOGGER.info("#===========================================================================#");
+
+        final int totalUserFiles = userFiles.length;
+        LOGGER.info("Found ~" + totalUserFiles + " files under \"plugins/Essentials/userdata\"...");
 
         final AtomicInteger movedAccounts = new AtomicInteger(0);
         final AtomicInteger totalAccounts = new AtomicInteger(0);
 
-        final ScheduledFuture<?> feedbackTask = executor.scheduleWithFixedDelay(
-                () -> LOGGER.info("Scanned " + totalAccounts.get() + ", moved " + movedAccounts.get() + " accounts..."),
-                10, 15, TimeUnit.SECONDS);
+        // Less spammy feedback for greater userdata counts: 100 files -> 5 seconds, 1k -> 7s, 10k -> 9s, 100k -> 11s, 1m -> 14s
+        final long feedbackInterval = Math.min(15, 1 + Math.round(2.1 * Math.log10(userFiles.length)));
 
-        final File[] userFiles = userdataFolder.listFiles();
+        final ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
+        final ScheduledFuture<?> feedbackTask = executor.scheduleWithFixedDelay(
+                () -> LOGGER.info("Scanned " + totalAccounts.get() + "/" + totalUserFiles + " accounts; moved " + movedAccounts.get() + " accounts"),
+                5, feedbackInterval, TimeUnit.SECONDS);
+
         for (final File file : userFiles) {
             if (!file.isFile() || !file.getName().endsWith(".yml")) {
                 continue;
@@ -338,22 +354,28 @@ public class EssentialsUpgrade {
                 }
             } catch (final RuntimeException ex) {
                 LOGGER.log(Level.INFO, "File: " + file);
+                feedbackTask.cancel(false);
+                executor.shutdown();
                 throw ex;
             }
         }
         feedbackTask.cancel(false);
+        executor.shutdown();
         doneFile.setProperty("updatePurgeBrokenNpcAccounts", true);
         doneFile.save();
 
-        LOGGER.info("#=#=#=#=#=#=#=#=#=#=#=#=#=#+#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#+#=#=#=#=#=#=#");
-        LOGGER.info("EssentialsX has finished purging NPC accounts");
+        LOGGER.info("#===========================================================================#");
+        LOGGER.info(" EssentialsX has finished purging NPC accounts.");
         LOGGER.info("");
-        LOGGER.info("Deleted Accounts: " + movedAccounts);
-        LOGGER.info("Total Accounts Processed: " + totalAccounts);
+        LOGGER.info(" Deleted accounts: " + movedAccounts);
+        LOGGER.info(" Total accounts processed: " + totalAccounts);
         LOGGER.info("");
-        LOGGER.info("Please report any file which is incorrectly deleted to GitHub:");
-        LOGGER.info("https://github.com/EssentialsX/Essentials/issues/new/choose");
-        LOGGER.info("#=#=#=#=#=#=#=#=#=#=#=#=#=#+#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#=#+#=#=#=#=#=#=#");
+        LOGGER.info(" Purged accounts have been backed up to");
+        LOGGER.info(" \"plugins/Essentials/userdata-npc-backup\", and can be restored from there");
+        LOGGER.info(" if needed. Please report any files which have been incorrectly deleted");
+        LOGGER.info(" to us on GitHub:");
+        LOGGER.info(" https://github.com/EssentialsX/Essentials/issues/new/choose");
+        LOGGER.info("#===========================================================================#");
     }
 
     public void convertIgnoreList() {
