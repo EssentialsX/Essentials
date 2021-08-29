@@ -311,7 +311,7 @@ public class EssentialsUpgrade {
         final AtomicInteger movedAccounts = new AtomicInteger(0);
         final AtomicInteger totalAccounts = new AtomicInteger(0);
 
-        // Less spammy feedback for greater userdata counts: 100 files -> 5 seconds, 1k -> 7s, 10k -> 9s, 100k -> 11s, 1m -> 14s
+        // Less spammy feedback for greater userdata counts, eg 100 files -> 5 seconds, 1k -> 7s, 10k -> 9s, 100k -> 11s, 1m -> 14s
         final long feedbackInterval = Math.min(15, 1 + Math.round(2.1 * Math.log10(userFiles.length)));
 
         final ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
