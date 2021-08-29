@@ -16,7 +16,9 @@ import com.google.common.base.Charsets;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import com.google.gson.JsonArray;
+import com.google.gson.JsonNull;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonPrimitive;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -237,7 +239,9 @@ public class Commandessentials extends EssentialsCommand {
             pluginData.addProperty("unsupported", warnPlugins.contains(name));
 
             final JsonArray authors = new JsonArray();
-            info.getAuthors().forEach(authors::add);
+            for (final String author : info.getAuthors()) {
+                authors.add(author == null ? JsonNull.INSTANCE : new JsonPrimitive(author));
+            }
             pluginData.add("authors", authors);
 
             if (name.startsWith("Essentials") && !name.equals("Essentials")) {
