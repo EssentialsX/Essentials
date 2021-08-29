@@ -251,7 +251,15 @@ public class EssentialsUpgrade {
     }
 
     /**
-     * Essentials decided when adding its initial support for UUIDs, it wanted an implementation which would cause
+     * This migration cleans up unused files left behind by the chaos resulting from Vault's questionable economy
+     * integration, and upstream Essentials' rushed and untested 1.7.10 UUID support.
+     * Both of these have been fixed in EssentialsX as of 2.18.x and 2.19.x respectively, but the leftover userdata
+     * files can reach into the tens of thousands and can cause excessive memory and storage usage, so this migration
+     * relocates these files to a backup folder to be removed by the server owner at a later date.
+     * <p>
+     * To quote JRoy, who suffered immensely while trying to debug and fix various related issues:
+     * <p>
+     * "Essentials decided when adding its initial support for UUIDs, it wanted an implementation which would cause
      * eternal pain and suffering for any person who dared touch any of the code in the future. This code that was made
      * was so bad, it managed to somehow not maintain any actual UUID support for any external integrations/plugins.
      * Up until 2.19.0 and 2.18.0 respectively, our Vault integration and entire Economy system was entirely based off
@@ -265,7 +273,7 @@ public class EssentialsUpgrade {
      * this code and didn't die without rewriting it; Or how everybody simply didn't stop using this plugin because how
      * awful that godforsaken code was. Anyways, this upgrade does its best to delete NPC accounts created by the
      * horrible economy code, as any operation which loads all user data into memory will load all these NPC accounts
-     * and spam the console with warnings.
+     * and spam the console with warnings."
      */
     public void purgeBrokenNpcAccounts() {
         if (doneFile.getBoolean("updatePurgeBrokenNpcAccounts", false)) {
