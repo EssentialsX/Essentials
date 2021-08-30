@@ -28,7 +28,7 @@ public class ReflOnlineModeProvider {
         }
 
         try {
-            return ((boolean) spigotBungeeGetter.invoke() && (paperBungeeGetter == null || (boolean) paperBungeeGetter.invoke())) ? "Bungee Mode" : "Offline Mode";
+            return Bukkit.getOnlineMode() ? "Online Mode" : ((boolean) spigotBungeeGetter.invoke() && (paperBungeeGetter == null || (boolean) paperBungeeGetter.invoke())) ? "Bungee Mode" : "Offline Mode";
         } catch (Throwable ignored) {
             return "Unknown";
         }
