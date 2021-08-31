@@ -70,6 +70,9 @@ tasks {
     withType<Jar> {
         archiveVersion.set(rootProject.ext["FULL_VERSION"] as String)
     }
+    withType<Sign> {
+        onlyIf { project.hasProperty("forceSign") }
+    }
 }
 
 // Dependency caching
