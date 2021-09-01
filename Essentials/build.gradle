@@ -42,7 +42,7 @@ shadowJar {
         include (project(':providers:1_8Provider'))
     }
     relocate 'io.papermc.lib', 'com.earth2me.essentials.paperlib'
-    relocate 'org.bstats', 'com.earth2me.essentials.metrics'
+    relocate 'org.bstats', 'com.earth2me.essentials.libs.bstats'
     relocate 'org.spongepowered.configurate', 'com.earth2me.essentials.libs.configurate'
     relocate 'org.yaml.snakeyaml', 'com.earth2me.essentials.libs.snakeyaml'
     relocate 'io.leangen.geantyref', 'com.earth2me.essentials.libs.geantyref'
