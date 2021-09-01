@@ -32,6 +32,11 @@ afterEvaluate {
             api("org.spigotmc", "spigot-api", spigotVersion)
         }
     }
+    if (baseExtension.injectBstats.get()) {
+        dependencies {
+            implementation("org.bstats", "bstats-bukkit", "1.8")
+        }
+    }
 }
 
 tasks {
@@ -64,6 +69,9 @@ tasks {
     }
     withType<Jar> {
         archiveVersion.set(rootProject.ext["FULL_VERSION"] as String)
+    }
+    withType<Sign> {
+        onlyIf { project.hasProperty("forceSign") }
     }
 }
 

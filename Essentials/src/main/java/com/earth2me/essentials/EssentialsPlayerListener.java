@@ -66,15 +66,18 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
 
 import static com.earth2me.essentials.I18n.tl;
 
-public class EssentialsPlayerListener implements Listener {
+public class EssentialsPlayerListener implements Listener, FakeAccessor {
     private static final Logger LOGGER = Logger.getLogger("Essentials");
     private final transient IEssentials ess;
+    private final ConcurrentHashMap<UUID, Integer> pendingMotdTasks = new ConcurrentHashMap<>();
 
     public EssentialsPlayerListener(final IEssentials parent) {
         this.ess = parent;
@@ -215,6 +218,11 @@ public class EssentialsPlayerListener implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerQuit(final PlayerQuitEvent event) {
         final User user = ess.getUser(event.getPlayer());
+
+        final Integer pendingId = pendingMotdTasks.remove(user.getUUID());
+        if (pendingId != null) {
+            ess.getScheduler().cancelTask(pendingId);
+        }
 
         if (hideJoinQuitMessages() || (ess.getSettings().allowSilentJoinQuit() && user.isAuthorized("essentials.silentquit"))) {
             event.setQuitMessage(null);
@@ -360,12 +368,14 @@ public class EssentialsPlayerListener implements Listener {
 
                 ess.runTaskAsynchronously(() -> ess.getServer().getPluginManager().callEvent(new AsyncUserDataLoadEvent(user, effectiveMessage)));
 
-                final int motdDelay = ess.getSettings().getMotdDelay() / 50;
-                final DelayMotdTask motdTask = new DelayMotdTask(user);
-                if (motdDelay > 0) {
-                    ess.scheduleSyncDelayedTask(motdTask, motdDelay);
-                } else {
-                    motdTask.run();
+                if (ess.getSettings().getMotdDelay() >= 0) {
+                    final int motdDelay = ess.getSettings().getMotdDelay() / 50;
+                    final DelayMotdTask motdTask = new DelayMotdTask(user);
+                    if (motdDelay > 0) {
+                        pendingMotdTasks.put(user.getUUID(), ess.scheduleSyncDelayedTask(motdTask, motdDelay));
+                    } else {
+                        motdTask.run();
+                    }
                 }
 
                 if (!ess.getSettings().isCommandDisabled("mail") && user.isAuthorized("essentials.mail")) {
@@ -376,6 +386,14 @@ public class EssentialsPlayerListener implements Listener {
                     } else {
                         user.notifyOfMail();
                     }
+                }
+
+                if (user.isAuthorized("essentials.updatecheck")) {
+                    ess.runTaskAsynchronously(() -> {
+                        for (String str : ess.getUpdateChecker().getVersionMessages(false, false)) {
+                            user.sendMessage(str);
+                        }
+                    });
                 }
 
                 if (user.isAuthorized("essentials.fly.safelogin")) {
@@ -419,6 +437,8 @@ public class EssentialsPlayerListener implements Listener {
 
                 @Override
                 public void run() {
+                    pendingMotdTasks.remove(user.getUUID());
+
                     IText tempInput = null;
 
                     if (!ess.getSettings().isCommandDisabled("motd")) {
@@ -439,14 +459,6 @@ public class EssentialsPlayerListener implements Listener {
                         final IText output = new KeywordReplacer(input, user.getSource(), ess);
                         final TextPager pager = new TextPager(output, true);
                         pager.showPage("1", null, "motd", user.getSource());
-                    }
-
-                    if (user.isAuthorized("essentials.updatecheck")) {
-                        ess.runTaskAsynchronously(() -> {
-                            for (String str : ess.getUpdateChecker().getVersionMessages(false, false)) {
-                                user.sendMessage(str);
-                            }
-                        });
                     }
                 }
             }
@@ -1000,5 +1012,10 @@ public class EssentialsPlayerListener implements Listener {
                 && (command.getPlugin() == ess || command.getPlugin().getClass().getName().startsWith("com.earth2me.essentials"))
                 && (ess.getSettings().isCommandOverridden(label) || (ess.getAlternativeCommandsHandler().getAlternative(label) == null));
         }
+    }
+
+    @Override
+    public void getUser(Player player) {
+        ess.getUser(player);
     }
 }

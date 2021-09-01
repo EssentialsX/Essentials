@@ -9,6 +9,7 @@ tasks {
     runServer {
         minecraftVersion(RUN_PAPER_MINECRAFT_VERSION)
         runDirectory(rootProject.file("run"))
+        javaLauncher.set(javaToolchains.launcherFor(java.toolchain))
         if (project.name != "EssentialsX") {
             pluginJars.from(rootProject.project(":EssentialsX").the<EssentialsModuleExtension>().archiveFile)
         }
