@@ -33,7 +33,8 @@ public class AlternativeCommandsHandler {
             return;
         }
         for (final Map.Entry<String, Command> entry : getPluginCommands(plugin).entrySet()) {
-            final String commandName = entry.getKey().contains(":") ? entry.getKey().split(":")[1] : entry.getKey();
+            final String[] commandSplit = entry.getKey().split(":", 2);
+            final String commandName = commandSplit.length > 1 ? commandSplit[1] : entry.getKey();
             final Command command = entry.getValue();
 
             final List<Command> pluginCommands = altcommands.computeIfAbsent(commandName.toLowerCase(Locale.ENGLISH), k -> new ArrayList<>());
