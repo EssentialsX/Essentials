@@ -22,24 +22,10 @@ body:
   validations:
     required: true
 
-- type: textarea
-  attributes:
-    label: "`/ess version` output"
-    description: Run `/ess version` in the console, then copy and paste the full output of the command into this box.
-  validations:
-    required: true
 - type: input
   attributes:
-    label: Server startup log
-    description: Upload your server startup log (from the start of `latest.log` up to where it says "Done!") to either https://paste.gg or https://gist.github.com, save and then paste the link in this box.
-    placeholder: "Example: https://paste.gg/p/anonymous/109dd6a10a734a3aa430d5a351ea5210"
-  validations:
-    required: true
-- type: input
-  attributes:
-    label: EssentialsX config files
-    description: Upload your EssentialsX `config.yml` (and any other relevant files like `kits.yml`) to either https://paste.gg or https://gist.github.com, save and then paste the link in this box. If you included those files in the same paste as your startup log, paste the same link here.
-    placeholder: "Example: https://paste.gg/p/anonymous/109dd6a10a734a3aa430d5a351ea5210"
+    label: "`/ess dump *` output"
+    description: Run `/ess dump *` in the console, then copy and paste the link from the output of the command into this box. (If this command doesn't work, you should [update EssentialsX](https://essentialsx.net/downloads.html) and try again.)
   validations:
     required: true
 - type: input
