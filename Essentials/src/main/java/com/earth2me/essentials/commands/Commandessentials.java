@@ -190,6 +190,7 @@ public class Commandessentials extends EssentialsCommand {
         serverData.addProperty("bukkit-version", Bukkit.getBukkitVersion());
         serverData.addProperty("server-version", Bukkit.getVersion());
         serverData.addProperty("server-brand", Bukkit.getName());
+        serverData.addProperty("online-mode", ess.getOnlineModeProvider().getOnlineModeString());
         final JsonObject supportStatus = new JsonObject();
         final VersionUtil.SupportStatus status = VersionUtil.getServerSupportStatus();
         supportStatus.addProperty("status", status.name());
