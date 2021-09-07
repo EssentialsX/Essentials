@@ -266,7 +266,7 @@ public class Commandessentials extends EssentialsCommand {
             boolean kits = false;
             boolean log = false;
             for (final String arg : args) {
-                if (arg.equals("*")) {
+                if (arg.equals("*") || arg.equalsIgnoreCase("all")) {
                     config = true;
                     discord = true;
                     kits = true;
