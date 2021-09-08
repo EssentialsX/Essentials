@@ -719,7 +719,7 @@ public class Commandessentials extends EssentialsCommand {
                 }
                 break;
             case "dump":
-                final List<String> list = Lists.newArrayList("config", "kits", "log", "discord", "*", "all");
+                final List<String> list = Lists.newArrayList("config", "kits", "log", "discord", "all");
                 for (String arg : args) {
                     if (arg.equals("*") || arg.equalsIgnoreCase("all")) {
                         list.clear();
