@@ -266,7 +266,7 @@ public class Commandessentials extends EssentialsCommand {
             boolean kits = false;
             boolean log = false;
             for (final String arg : args) {
-                if (arg.equals("*")) {
+                if (arg.equals("*") || arg.equalsIgnoreCase("all")) {
                     config = true;
                     discord = true;
                     kits = true;
@@ -719,9 +719,9 @@ public class Commandessentials extends EssentialsCommand {
                 }
                 break;
             case "dump":
-                final List<String> list = Lists.newArrayList("config", "kits", "log", "discord", "*");
+                final List<String> list = Lists.newArrayList("config", "kits", "log", "discord", "all");
                 for (String arg : args) {
-                    if (arg.equals("*")) {
+                    if (arg.equals("*") || arg.equalsIgnoreCase("all")) {
                         list.clear();
                         return list;
                     }
