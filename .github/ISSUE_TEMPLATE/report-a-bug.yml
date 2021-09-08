@@ -24,8 +24,8 @@ body:
 
 - type: input
   attributes:
-    label: "`/ess dump *` output"
-    description: Run `/ess dump *` in the console, then copy and paste the link from the output of the command into this box. (If this command doesn't work, you should [update EssentialsX](https://essentialsx.net/downloads.html) and try again.)
+    label: "`/ess dump all` output"
+    description: Run `/ess dump all` in the console, then copy and paste the link from the output of the command into this box. (If this command doesn't work, you should [update EssentialsX](https://essentialsx.net/downloads.html) and try again.)
   validations:
     required: true
 - type: input
