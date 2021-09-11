@@ -9,6 +9,7 @@ import net.ess3.api.events.MuteStatusChangeEvent;
 import net.ess3.api.events.VanishStatusChangeEvent;
 import net.ess3.provider.AbstractAchievementEvent;
 import net.essentialsx.api.v2.events.AsyncUserDataLoadEvent;
+import net.essentialsx.api.v2.events.UserActionEvent;
 import net.essentialsx.api.v2.events.discord.DiscordChatMessageEvent;
 import net.essentialsx.api.v2.events.discord.DiscordMessageEvent;
 import net.essentialsx.api.v2.services.discord.MessageType;
@@ -201,6 +202,20 @@ public class BukkitListener implements Listener {
                         MessageUtil.sanitizeDiscordMarkdown(event.getPlayer().getDisplayName()),
                         event.getName()),
                 event.getPlayer());
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void onAction(UserActionEvent event) {
+        if (isVanishHide(event.getUser())) {
+            return;
+        }
+
+        sendDiscordMessage(MessageType.DefaultTypes.ACTION,
+                MessageUtil.formatMessage(jda.getSettings().getActionFormat(event.getUser().getBase()),
+                        MessageUtil.sanitizeDiscordMarkdown(event.getUser().getName()),
+                        MessageUtil.sanitizeDiscordMarkdown(event.getUser().getDisplayName()),
+                        event.getMessage()),
+                event.getUser().getBase());
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
