@@ -2,6 +2,7 @@ package com.earth2me.essentials;
 
 import com.earth2me.essentials.utils.VersionUtil;
 import net.ess3.api.IEssentials;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
@@ -11,20 +12,12 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
+import org.bukkit.entity.Tameable;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.EntityCombustByEntityEvent;
-import org.bukkit.event.entity.EntityCombustEvent;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.entity.EntityRegainHealthEvent;
+import org.bukkit.event.entity.*;
 import org.bukkit.event.entity.EntityRegainHealthEvent.RegainReason;
-import org.bukkit.event.entity.EntityShootBowEvent;
-import org.bukkit.event.entity.EntityTargetEvent;
-import org.bukkit.event.entity.FoodLevelChangeEvent;
-import org.bukkit.event.entity.PlayerDeathEvent;
-import org.bukkit.event.entity.PotionSplashEvent;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
@@ -48,6 +41,7 @@ public class EssentialsEntityListener implements Listener {
     public void onEntityDamage(final EntityDamageByEntityEvent event) {
         final Entity eAttack = event.getDamager();
         final Entity eDefend = event.getEntity();
+        event.setCancelled(shouldTameablesCancel(eDefend, eAttack));
         if (eAttack instanceof Player) {
             final User attacker = ess.getUser((Player) eAttack);
             if (eDefend instanceof Player) {
@@ -96,6 +90,79 @@ public class EssentialsEntityListener implements Listener {
         if (attacker.arePowerToolsEnabled()) {
             onPlayerVsPlayerPowertool(event, defender, attacker);
         }
+    }
+
+    private boolean canUserDealDamage(final User attacker) {
+        if (ess.getSettings().getLoginAttackDelay() > 0 && (System.currentTimeMillis() < (attacker.getLastLogin() + ess.getSettings().getLoginAttackDelay())) && !attacker.isAuthorized("essentials.pvpdelay.exempt")) {
+            return false;
+        }
+
+        if (attacker.hasInvulnerabilityAfterTeleport()) {
+            return false;
+        }
+
+        if (attacker.isGodModeEnabled() && !attacker.isAuthorized("essentials.god.pvp")) {
+            return false;
+        }
+
+        if (attacker.isHidden() && !attacker.isAuthorized("essentials.vanish.pvp")) {
+            return false;
+        }
+
+        return true;
+    }
+
+    private boolean shouldDefend(final User defender) {
+        if(defender.hasInvulnerabilityAfterTeleport()) {
+            return true;
+        }
+        if(defender.isGodModeEnabled()) {
+            return true;
+        }
+        return false;
+    }
+
+    private boolean shouldTameablesCancel(final Entity defending, final Entity attacking) {
+        if(!(attacking instanceof Tameable || defending instanceof Tameable)) return false;
+        User attacker = null;
+        boolean validAttacker = false;
+        Tameable tameable;
+        if(attacking instanceof Tameable) {
+            tameable = (Tameable) attacking;
+            if(tameable.getOwner() != null) {
+                if(Bukkit.getPlayer(tameable.getOwner().getUniqueId()) != null) {
+                    attacker = ess.getUser((Player)tameable.getOwner());
+                    validAttacker = canUserDealDamage(attacker);
+                    if(attacker.isGodModeEnabled() && )
+                }
+            } else {
+                return false;
+            }
+        } else if (attacking instanceof Player) {
+            attacker = ess.getUser((Player) attacking);
+            validAttacker = canUserDealDamage(attacker);
+        }
+        if(defending instanceof Tameable) {
+            tameable = (Tameable) defending;
+            if(tameable.getOwner() != null) {
+                if(Bukkit.getPlayer(tameable.getOwner().getUniqueId()) != null) {
+                    if(shouldDefend(ess.getUser(tameable.getOwner().getUniqueId()))) {
+                        return true;
+                    }
+                    if(validAttacker) {
+                        if(!((Player)tameable.getOwner()).equals(attacker.getBase())) {
+                            return false;
+                        }
+                    }
+                }
+            } else {
+                return true;
+            }
+        } else if (validAttacker && (defending instanceof Player)) {
+            if(attacker.getBase().equals(defending)) return false;
+            if(shouldDefend(ess.getUser((Player) defending))) return true;
+        }
+        return false;
     }
 
     private void onPlayerVsPlayerPowertool(final EntityDamageByEntityEvent event, final Player defender, final User attacker) {
