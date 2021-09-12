@@ -20,6 +20,7 @@ import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
+import org.bukkit.block.data.type.Bed;
 import org.bukkit.command.Command;
 import org.bukkit.command.FormattedCommandAlias;
 import org.bukkit.command.PluginCommand;
@@ -738,12 +739,14 @@ public class EssentialsPlayerListener implements Listener, FakeAccessor {
         switch (event.getAction()) {
             case RIGHT_CLICK_BLOCK:
                 if (!event.isCancelled() && MaterialUtil.isBed(event.getClickedBlock().getType()) && ess.getSettings().getUpdateBedAtDaytime()) {
-                    final User player = ess.getUser(event.getPlayer());
-                    if (player.isAuthorized("essentials.sethome.bed") && player.getWorld().getEnvironment().equals(World.Environment.NORMAL)) {
-                        player.getBase().setBedSpawnLocation(event.getClickedBlock().getLocation());
-                        // In 1.15 and above, vanilla sends its own bed spawn message.
-                        if (VersionUtil.getServerBukkitVersion().isLowerThan(VersionUtil.v1_15_R01)) {
-                            player.sendMessage(tl("bedSet", player.getLocation().getWorld().getName(), player.getLocation().getBlockX(), player.getLocation().getBlockY(), player.getLocation().getBlockZ()));
+                    if(!((Bed)event.getClickedBlock()).isOccupied()) {
+                        final User player = ess.getUser(event.getPlayer());
+                        if (player.isAuthorized("essentials.sethome.bed") && player.getWorld().getEnvironment().equals(World.Environment.NORMAL)) {
+                            player.getBase().setBedSpawnLocation(event.getClickedBlock().getLocation());
+                            // In 1.15 and above, vanilla sends its own bed spawn message.
+                            if (VersionUtil.getServerBukkitVersion().isLowerThan(VersionUtil.v1_15_R01)) {
+                                player.sendMessage(tl("bedSet", player.getLocation().getWorld().getName(), player.getLocation().getBlockX(), player.getLocation().getBlockY(), player.getLocation().getBlockZ()));
+                            }
                         }
                     }
                 }
