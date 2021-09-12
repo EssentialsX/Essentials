@@ -133,7 +133,6 @@ public class EssentialsEntityListener implements Listener {
                 if(Bukkit.getPlayer(tameable.getOwner().getUniqueId()) != null) {
                     attacker = ess.getUser((Player)tameable.getOwner());
                     validAttacker = canUserDealDamage(attacker);
-                    if(attacker.isGodModeEnabled() && )
                 }
             } else {
                 return false;
