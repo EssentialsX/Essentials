@@ -46,7 +46,7 @@ public class EssentialsUserConfiguration extends EssentialsConfiguration {
             LOGGER.log(Level.WARNING, "Failed to migrate user: " + username, ex);
         }
 
-        setProperty("lastAccountName", username);
+        setProperty("last-account-name", username);
     }
 
     private File getAltFile() {
