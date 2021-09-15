@@ -8,7 +8,7 @@ import org.bukkit.event.HandlerList;
 import java.util.Collection;
 
 /**
- * Called when a user run's the /me command.
+ * Called when a user runs the /me command.
  */
 public class UserActionEvent extends Event {
     private static final HandlerList handlers = new HandlerList();
