@@ -7,6 +7,7 @@ import org.bukkit.Material;
 import org.bukkit.event.EventPriority;
 import org.spongepowered.configurate.CommentedConfigurationNode;
 
+import java.io.File;
 import java.math.BigDecimal;
 import java.text.NumberFormat;
 import java.util.List;
@@ -17,6 +18,8 @@ import java.util.function.Predicate;
 import java.util.regex.Pattern;
 
 public interface ISettings extends IConf {
+    File getConfigFile();
+
     boolean areSignsDisabled();
 
     IText getAnnounceNewPlayerFormat();
@@ -168,6 +171,8 @@ public interface ISettings extends IConf {
     boolean changeDisplayName();
 
     boolean changePlayerListName();
+
+    boolean changeTabCompleteName();
 
     boolean isPlayerCommand(String string);
 

@@ -301,6 +301,18 @@ public class DiscordSettings implements IConf {
                 "username", "displayname", "advancement");
     }
 
+    public MessageFormat getActionFormat(Player player) {
+        final String format = getFormatString("action");
+        final String filled;
+        if (plugin.isPAPI() && format != null) {
+            filled = me.clip.placeholderapi.PlaceholderAPI.setPlaceholders(player, format);
+        } else {
+            filled = format;
+        }
+        return generateMessageFormat(filled, ":person_biking: {displayname} *{action}*", false,
+                "username", "displayname", "action");
+    }
+
     public String getStartMessage() {
         return config.getString("messages.server-start", ":white_check_mark: The server has started!");
     }

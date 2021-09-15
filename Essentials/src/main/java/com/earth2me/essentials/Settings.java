@@ -146,6 +146,11 @@ public class Settings implements net.ess3.api.ISettings {
     }
 
     @Override
+    public File getConfigFile() {
+        return config.getFile();
+    }
+
+    @Override
     public boolean getRespawnAtHome() {
         return config.getBoolean("respawn-at-home", false);
     }
@@ -1017,6 +1022,11 @@ public class Settings implements net.ess3.api.ISettings {
     @Override
     public boolean changePlayerListName() {
         return changePlayerListName;
+    }
+
+    @Override
+    public boolean changeTabCompleteName() {
+        return config.getBoolean("change-tab-complete-name", false);
     }
 
     @Override

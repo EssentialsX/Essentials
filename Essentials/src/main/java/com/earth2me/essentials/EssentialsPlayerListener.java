@@ -751,6 +751,9 @@ public class EssentialsPlayerListener implements Listener, FakeAccessor {
         switch (event.getAction()) {
             case RIGHT_CLICK_BLOCK:
                 if (!event.isCancelled() && MaterialUtil.isBed(event.getClickedBlock().getType()) && ess.getSettings().getUpdateBedAtDaytime()) {
+                    if (VersionUtil.getServerBukkitVersion().isHigherThanOrEqualTo(VersionUtil.v1_13_2_R01) && ((org.bukkit.block.data.type.Bed) event.getClickedBlock().getBlockData()).isOccupied()) {
+                        break;
+                    }
                     final User player = ess.getUser(event.getPlayer());
                     if (player.isAuthorized("essentials.sethome.bed") && player.getWorld().getEnvironment().equals(World.Environment.NORMAL)) {
                         player.getBase().setBedSpawnLocation(event.getClickedBlock().getLocation());
