@@ -119,6 +119,8 @@ message-types:
   afk: primary
   # Achievement/advancement messages sent when a player is awarded an achievement/advancement.
   advancement: primary
+  # Action messages sent when a player runs the /me or /action commands.
+  action: primary
   # Message sent when the server starts up.
   server-start: primary
   # Message sent when the server shuts down.
@@ -332,6 +334,13 @@ messages:
   # - {advancement}: The name of the advancement.
   # ... PlaceholderAPI placeholders are also supported here too!
   advancement: ":medal: {displayname} has completed the advancement **{advancement}**!"
+  # This is the message sent to Discord when a player runs the /me or /action command.
+  # The following placeholders can be used here:
+  # - {username}: The name of the user who ran the command
+  # - {displayname}: The display name of the user who ran the command
+  # - {action}: The action (message) the user used in the command.
+  # ... PlaceholderAPI placeholders are also supported here too!
+  action: ":person_biking: {displayname} *{action}*"
   # This is the message sent to Discord when the server starts.
   server-start: ":white_check_mark: The server has started!"
   # This is the message sent to Discord when the server stops.
