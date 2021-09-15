@@ -14,6 +14,9 @@ dependencyResolutionManagement {
         maven("https://repo.extendedclip.com/content/repositories/placeholderapi/") {
             content { includeGroup("me.clip") }
         }
+        maven("https://libraries.minecraft.net/") {
+            content { includeGroup("com.mojang") }
+        }
         mavenCentral {
             content { includeGroup("net.kyori") }
         }
