@@ -14,6 +14,7 @@ import io.papermc.lib.PaperLib;
 import net.ess3.api.IEssentials;
 import net.ess3.api.events.AfkStatusChangeEvent;
 import net.ess3.provider.CommandSendListenerProvider;
+import net.ess3.provider.providers.BukkitCommandSendListenerProvider;
 import net.ess3.provider.providers.PaperCommandSendListenerProvider;
 import net.essentialsx.api.v2.events.AsyncUserDataLoadEvent;
 import org.bukkit.BanEntry;
@@ -137,7 +138,7 @@ public class EssentialsPlayerListener implements Listener, FakeAccessor {
         if (isPaperCommandSendEvent()) {
             ess.getServer().getPluginManager().registerEvents(new PaperCommandSendListenerProvider(new CommandSendFilter()), ess);
         } else if (isCommandSendEvent()) {
-            ess.getServer().getPluginManager().registerEvents(new PaperCommandSendListenerProvider(new CommandSendFilter()), ess);
+            ess.getServer().getPluginManager().registerEvents(new BukkitCommandSendListenerProvider(new CommandSendFilter()), ess);
         }
     }
 
