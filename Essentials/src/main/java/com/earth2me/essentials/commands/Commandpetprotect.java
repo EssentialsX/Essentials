@@ -32,9 +32,9 @@ public class Commandpetprotect extends EssentialsToggleCommand {
         if (!petEvent.isCancelled()) {
             user.setPetProtectionEnabled(enabled);
 
-            user.sendMessage(tl("petProtection", enabled ? tl("enabled") : tl("disabled")));
+            user.sendMessage(tl("petprotect", enabled ? tl("enabled") : tl("disabled")));
             if (!sender.isPlayer() || !sender.getPlayer().equals(user.getBase())) {
-                sender.sendMessage(tl("petProtection", tl(enabled ? "petProtectionEnabledFor" : "petProtectionDisabledFor", user.getDisplayName())));
+                sender.sendMessage(tl("petprotect", tl(enabled ? "petprotectnEnabledFor" : "petprotectDisabledFor", user.getDisplayName())));
             }
         }
     }

@@ -340,6 +340,10 @@ commands:
     description: Toggles whether you are prompted to confirm payments.
     usage: /<command>
     aliases: [epayconfirmtoggle, payconfirmoff, epayconfirmoff, payconfirmon, epayconfirmon, payconfirm, epayconfirm]
+  petprotect:
+    description: Protect your own pets from nasty players.
+    usage: /<command> [player] [on|off]
+    aliases: [epetprotect,petprotection,epetprotection,epets,etpp,tpp,petpro,epetpro]
   ping:
     description: Pong!
     usage: /<command>

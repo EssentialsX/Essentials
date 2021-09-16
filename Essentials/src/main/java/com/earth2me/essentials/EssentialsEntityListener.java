@@ -162,7 +162,7 @@ public class EssentialsEntityListener implements Listener {
                         return true;
                     }
                     if(validAttacker) {
-                        if(!(tameable.getOwner()).equals(attacker.getBase())) {
+                        if((tameable.getOwner()).equals(attacker.getBase())) {
                             return false;
                         }
                     }
