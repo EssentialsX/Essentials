@@ -455,6 +455,13 @@ public abstract class UserData extends PlayerExtension implements IConf {
         config.save();
     }
 
+    public boolean isPetProtectionEnabled() {return holder.petProtection();}
+
+    public void setPetProtectionEnabled(final boolean set) {
+        holder.petProtection(set);
+        config.save();
+    }
+
     public boolean getMuted() {
         return holder.muted();
     }

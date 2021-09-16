@@ -218,6 +218,8 @@ public interface ISettings extends IConf {
 
     Set<String> getNoGodWorlds();
 
+    Set<String> getNoPetProtectionWorlds();
+
     boolean getUpdateBedAtDaytime();
 
     boolean allowUnsafeEnchantments();

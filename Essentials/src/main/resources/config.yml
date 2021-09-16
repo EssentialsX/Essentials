@@ -568,6 +568,10 @@ hide-join-quit-messages-above: -1
 no-god-in-worlds:
 #  - world_nether
 
+# Add worlds to this list, if you want to automatically disable pet protection from other players there.
+no-pet-protection-in-worlds:
+#  - world_nether
+
 # Set to true to enable per-world permissions for teleporting between worlds with essentials commands.
 # This applies to /world, /back, /tp[a|o][here|all], but not warps.
 # Give someone permission to teleport to a world with essentials.worlds.<worldname>

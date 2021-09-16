@@ -101,7 +101,7 @@ public class EssentialsEntityListener implements Listener {
         }
     }
 
-    private boolean canUserDealDamage(final User attacker) {
+    private boolean canUserDealDamageToOtherPet(final User attacker) {
         if (ess.getSettings().getLoginAttackDelay() > 0 && (System.currentTimeMillis() < (attacker.getLastLogin() + ess.getSettings().getLoginAttackDelay())) && !attacker.isAuthorized("essentials.pvpdelay.exempt")) {
             return false;
         }
@@ -128,7 +128,7 @@ public class EssentialsEntityListener implements Listener {
         if(defender.isGodModeEnabled()) {
             return true;
         }
-        return false;
+        return defender.isPetProtectionEnabled();
     }
 
     private boolean shouldTameablesCancel(final Entity defending, final Entity attacking) {
@@ -141,15 +141,19 @@ public class EssentialsEntityListener implements Listener {
             if(tameable.getOwner() != null) {
                 if(Bukkit.getPlayer(tameable.getOwner().getUniqueId()) != null) {
                     attacker = ess.getUser((Player)tameable.getOwner());
-                    validAttacker = canUserDealDamage(attacker);
                 }
             } else {
                 return false;
             }
         } else if (attacking instanceof Player) {
             attacker = ess.getUser((Player) attacking);
-            validAttacker = canUserDealDamage(attacker);
         }
+        assert attacker != null;
+        if (attacker.isAuthorized("essentials.petprotection.bypass")) {
+            return false;
+        }
+        validAttacker = canUserDealDamageToOtherPet(attacker);
+
         if(defending instanceof Tameable) {
             tameable = (Tameable) defending;
             if(tameable.getOwner() != null) {
@@ -158,7 +162,7 @@ public class EssentialsEntityListener implements Listener {
                         return true;
                     }
                     if(validAttacker) {
-                        if(!((Player)tameable.getOwner()).equals(attacker.getBase())) {
+                        if(!(tameable.getOwner()).equals(attacker.getBase())) {
                             return false;
                         }
                     }

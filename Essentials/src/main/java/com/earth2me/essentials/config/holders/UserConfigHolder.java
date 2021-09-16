@@ -171,6 +171,16 @@ public class UserConfigHolder {
         this.godmode = value;
     }
 
+    private boolean petprotection = false;
+
+    public boolean petProtection() {
+        return this.petprotection;
+    }
+
+    public void petProtection(final boolean value) {
+        this.petprotection = value;
+    }
+
     private boolean muted = false;
 
     public boolean muted() {

@@ -798,6 +798,19 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
     }
 
     @Override
+    public boolean isPetProtectionEnabled() {
+        if (super.isPetProtectionEnabled()) {
+            if(!ess.getSettings().getNoPetProtectionWorlds().contains(this.getLocation().getWorld().getName())) {
+                return true;
+            }
+        }
+        if(isAfk()) {
+            return ess.getSettings().getFreezeAfkPlayers();
+        }
+        return false;
+    }
+
+    @Override
     public String getGroup() {
         final String result = ess.getPermissionsHandler().getGroup(base);
         if (ess.getSettings().isDebug()) {

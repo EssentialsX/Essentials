@@ -102,6 +102,7 @@ public class Settings implements net.ess3.api.ISettings {
     private KeepInvPolicy vanishingItemPolicy;
     private KeepInvPolicy bindingItemPolicy;
     private Set<String> noGodWorlds = new HashSet<>();
+    private Set<String> noPetProtectionWorlds = new HashSet<>();
     private boolean registerBackInListener;
     private boolean disableItemPickupWhileAfk;
     private long teleportInvulnerabilityTime;
@@ -643,6 +644,7 @@ public class Settings implements net.ess3.api.ISettings {
     public void reloadConfig() {
         config.load();
         noGodWorlds = new HashSet<>(config.getList("no-god-in-worlds", String.class));
+        noPetProtectionWorlds = new HashSet<>(config.getList("no-pet-protection-in-worlds", String.class));
         enabledSigns = _getEnabledSigns();
         teleportSafety = _isTeleportSafetyEnabled();
         forceDisableTeleportSafety = _isForceDisableTeleportSafety();
@@ -1185,6 +1187,11 @@ public class Settings implements net.ess3.api.ISettings {
     @Override
     public Set<String> getNoGodWorlds() {
         return noGodWorlds;
+    }
+
+    @Override
+    public Set<String> getNoPetProtectionWorlds() {
+        return noPetProtectionWorlds;
     }
 
     @Override
