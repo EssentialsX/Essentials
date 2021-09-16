@@ -128,7 +128,7 @@ public class EssentialsEntityListener implements Listener {
         if(defender.isGodModeEnabled()) {
             return true;
         }
-        return false;
+        return defender.isPetProtectionEnabled();
     }
 
     private boolean shouldTameablesCancel(final Entity defending, final Entity attacking) {
@@ -148,9 +148,10 @@ public class EssentialsEntityListener implements Listener {
         } else if (attacking instanceof Player) {
             attacker = ess.getUser((Player) attacking);
         }
-        assert attacker != null;
-        if (attacker.isAuthorized("essentials.petprotection.bypass")) {
-            return false;
+        if(attacker != null) {
+            if (attacker.isAuthorized("essentials.petprotection.bypass")) {
+                return false;
+            }
         }
         validAttacker = canUserDealDamageToOtherPet(attacker);
 
@@ -161,7 +162,7 @@ public class EssentialsEntityListener implements Listener {
                     if(shouldDefend(ess.getUser(tameable.getOwner().getUniqueId()))) {
                         return true;
                     }
-                    if(validAttacker) {
+                    if(validAttacker && attacker != null) {
                         if((tameable.getOwner()).equals(attacker.getBase())) {
                             return false;
                         }
@@ -170,7 +171,7 @@ public class EssentialsEntityListener implements Listener {
             } else {
                 return true;
             }
-        } else if (validAttacker && (defending instanceof Player)) {
+        } else if (attacker != null && validAttacker && (defending instanceof Player)) {
             if(attacker.getBase().equals(defending)) return false;
             if(shouldDefend(ess.getUser((Player) defending))) return true;
         }
