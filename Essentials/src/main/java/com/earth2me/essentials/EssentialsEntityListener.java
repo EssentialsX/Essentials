@@ -128,7 +128,7 @@ public class EssentialsEntityListener implements Listener {
         if(defender.isGodModeEnabled()) {
             return true;
         }
-        return defender.isPetProtectionEnabled();
+        return false;
     }
 
     private boolean shouldTameablesCancel(final Entity defending, final Entity attacking) {

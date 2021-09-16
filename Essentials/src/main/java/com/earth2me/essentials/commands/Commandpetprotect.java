@@ -34,7 +34,7 @@ public class Commandpetprotect extends EssentialsToggleCommand {
 
             user.sendMessage(tl("petprotect", enabled ? tl("enabled") : tl("disabled")));
             if (!sender.isPlayer() || !sender.getPlayer().equals(user.getBase())) {
-                sender.sendMessage(tl("petprotect", tl(enabled ? "petprotectnEnabledFor" : "petprotectDisabledFor", user.getDisplayName())));
+                sender.sendMessage(tl("petprotect", tl(enabled ? "petprotectEnabledFor" : "petprotectDisabledFor", user.getDisplayName())));
             }
         }
     }
