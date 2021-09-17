@@ -33,6 +33,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
+import java.util.UUID;
 
 import static com.earth2me.essentials.I18n.tl;
 
@@ -159,10 +160,11 @@ public class EssentialsEntityListener implements Listener {
         if(defending instanceof Tameable && validAttacker) {
             tameable = (Tameable) defending;
             if(tameable.getOwner() != null) {
-                if(Bukkit.getPlayer(tameable.getOwner().getUniqueId()) != null) {
-                    if(ess.getUser(tameable.getOwner().getUniqueId()).getBase().equals(attacking)) {
+                UUID ownerUuid = tameable.getOwner().getUniqueId();
+                if(Bukkit.getPlayer(ownerUuid) != null) {
+                    if(ess.getUser(ownerUuid).getBase().equals(attacking)) {
                         return false;
-                    } else if(shouldDefend(ess.getUser(tameable.getOwner().getUniqueId()))) {
+                    } else if(shouldDefend(ess.getUser(ownerUuid))) {
                         return true;
                     }
                 }
