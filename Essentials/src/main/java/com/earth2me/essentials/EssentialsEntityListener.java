@@ -169,7 +169,8 @@ public class EssentialsEntityListener implements Listener {
             }
         } else if (attacker != null && defending != null) {
             if(attacker.getBase().equals(defending)) return false;
-        } else if(defending instanceof Player) {
+        }
+        if(defending instanceof Player && attacker != null) {
             if(attacker.getBase().equals(defending)) return false;
             if(shouldDefend(ess.getUser((Player) defending))) return true;
         }
