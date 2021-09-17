@@ -160,7 +160,9 @@ public class EssentialsEntityListener implements Listener {
             tameable = (Tameable) defending;
             if(tameable.getOwner() != null) {
                 if(Bukkit.getPlayer(tameable.getOwner().getUniqueId()) != null) {
-                    if(shouldDefend(ess.getUser(tameable.getOwner().getUniqueId()))) {
+                    if(ess.getUser(tameable.getOwner().getUniqueId()).getBase().equals(attacking)) {
+                        return false;
+                    } else if(shouldDefend(ess.getUser(tameable.getOwner().getUniqueId()))) {
                         return true;
                     }
                 }
