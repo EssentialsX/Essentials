@@ -67,6 +67,10 @@ public class ConsoleInjector extends AbstractAppender {
             return;
         }
 
+        if (jda.getSettings().getConsoleFilter() != null && jda.getSettings().getConsoleFilter().matcher(entry).find()) {
+            return;
+        }
+
         final String loggerName = event.getLoggerName();
         if (!loggerName.isEmpty() && !loggerName.contains(".")) {
             entry = "[" + event.getLoggerName() + "] " + entry;

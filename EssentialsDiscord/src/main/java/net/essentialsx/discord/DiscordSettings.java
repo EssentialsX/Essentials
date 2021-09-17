@@ -34,6 +34,7 @@ public class DiscordSettings implements IConf {
 
     private MessageFormat consoleFormat;
     private Level consoleLogLevel;
+    private Pattern consoleFilter;
 
     private MessageFormat discordToMcFormat;
     private MessageFormat tempMuteFormat;
@@ -147,6 +148,10 @@ public class DiscordSettings implements IConf {
 
     public Level getConsoleLogLevel() {
         return consoleLogLevel;
+    }
+
+    public Pattern getConsoleFilter() {
+        return consoleFilter;
     }
 
     public boolean isShowAvatar() {
@@ -397,6 +402,17 @@ public class DiscordSettings implements IConf {
         }
 
         consoleLogLevel = Level.toLevel(config.getString("console.log-level", null), Level.INFO);
+        final String conFilter = config.getString("console.console-filter", null);
+        if (conFilter != null && !conFilter.trim().isEmpty()) {
+            try {
+                consoleFilter = Pattern.compile(conFilter);
+            } catch (PatternSyntaxException e) {
+                plugin.getLogger().log(java.util.logging.Level.WARNING, "Invalid pattern for \"console.log-level\": " + e.getMessage());
+                consoleFilter = null;
+            }
+        } else {
+            consoleFilter = null;
+        }
 
         consoleFormat = generateMessageFormat(getFormatString(".console.format"), "[{timestamp} {level}] {message}", false,
                 "timestamp", "level", "message");

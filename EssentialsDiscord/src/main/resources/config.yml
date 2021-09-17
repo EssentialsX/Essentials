@@ -100,6 +100,8 @@ console:
   # - debug
   # - trace
   log-level: info
+  # A regex pattern which will not sending matching console messages to Discord.
+  console-filter: ""
 
 # Configure which Discord channels different messages will be sent to.
 # You can either use the names of the channels listed above or just the id of a channel.
