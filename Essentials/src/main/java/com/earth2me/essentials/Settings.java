@@ -226,6 +226,11 @@ public class Settings implements net.ess3.api.ISettings {
         return chatQuestion;
     }
 
+    @Override
+    public boolean isChatQuestionEnabled() {
+        return config.getBoolean("chat.question-enabled", true);
+    }
+
     public boolean _isTeleportSafetyEnabled() {
         return config.getBoolean("teleport-safety", true);
     }

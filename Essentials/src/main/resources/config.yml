@@ -921,6 +921,9 @@ chat:
   #  plots: "&dP&r"
   #  creative: "&eC&r"
 
+  # Whether chat questions should be enabled or not.
+  question-enabled: true
+
 ############################################################
 # +------------------------------------------------------+ #
 # |                 EssentialsX Protect                  | #
