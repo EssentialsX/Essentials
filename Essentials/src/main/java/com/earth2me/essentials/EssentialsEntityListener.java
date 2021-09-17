@@ -151,27 +151,23 @@ public class EssentialsEntityListener implements Listener {
         if(attacker != null) {
             if (attacker.isAuthorized("essentials.petprotection.bypass")) {
                 return false;
+            } else {
+                validAttacker = canUserDealDamageToOtherPet(attacker);
             }
-            validAttacker = canUserDealDamageToOtherPet(attacker);
         }
 
-        if(defending instanceof Tameable) {
+        if(defending instanceof Tameable && validAttacker) {
             tameable = (Tameable) defending;
             if(tameable.getOwner() != null) {
                 if(Bukkit.getPlayer(tameable.getOwner().getUniqueId()) != null) {
                     if(shouldDefend(ess.getUser(tameable.getOwner().getUniqueId()))) {
                         return true;
                     }
-                    if(validAttacker && attacker != null) {
-                        if((tameable.getOwner()).equals(attacker.getBase())) {
-                            return false;
-                        }
-                    }
                 }
             } else {
                 return false;
             }
-        } else if (attacker != null && validAttacker) {
+        } else if (attacker != null && defending != null) {
             if(attacker.getBase().equals(defending)) return false;
         } else if(defending instanceof Player) {
             if(attacker.getBase().equals(defending)) return false;
