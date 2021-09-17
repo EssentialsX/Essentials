@@ -152,8 +152,8 @@ public class EssentialsEntityListener implements Listener {
             if (attacker.isAuthorized("essentials.petprotection.bypass")) {
                 return false;
             }
+            validAttacker = canUserDealDamageToOtherPet(attacker);
         }
-        validAttacker = canUserDealDamageToOtherPet(attacker);
 
         if(defending instanceof Tameable) {
             tameable = (Tameable) defending;
@@ -173,7 +173,7 @@ public class EssentialsEntityListener implements Listener {
             }
         } else if (attacker != null && validAttacker) {
             if(attacker.getBase().equals(defending)) return false;
-        } else if(defending instanceof Player)) {
+        } else if(defending instanceof Player) {
             if(attacker.getBase().equals(defending)) return false;
             if(shouldDefend(ess.getUser((Player) defending))) return true;
         }
