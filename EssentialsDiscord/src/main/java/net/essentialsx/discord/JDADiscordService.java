@@ -4,8 +4,10 @@ import club.minnced.discord.webhook.WebhookClient;
 import club.minnced.discord.webhook.WebhookClientBuilder;
 import club.minnced.discord.webhook.send.WebhookMessage;
 import club.minnced.discord.webhook.send.WebhookMessageBuilder;
+import com.earth2me.essentials.IEssentialsModule;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.FormatUtil;
+import com.earth2me.essentials.utils.NumberUtil;
 import com.earth2me.essentials.utils.VersionUtil;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
@@ -54,7 +56,7 @@ import java.util.regex.Matcher;
 
 import static com.earth2me.essentials.I18n.tl;
 
-public class JDADiscordService implements DiscordService {
+public class JDADiscordService implements DiscordService, IEssentialsModule {
     private final static Logger logger = Logger.getLogger("EssentialsDiscord");
     private final EssentialsDiscord plugin;
     private final Unsafe unsafe = this::getJda;
@@ -80,12 +82,14 @@ public class JDADiscordService implements DiscordService {
     }
 
     public TextChannel getChannel(String key, boolean primaryFallback) {
-        long resolvedId;
-        try {
-            resolvedId = Long.parseLong(key);
-        } catch (NumberFormatException ignored) {
-            resolvedId = getSettings().getChannelId(getSettings().getMessageChannel(key));
+        if (NumberUtil.isLong(key)) {
+            return getDefinedChannel(key, primaryFallback);
         }
+        return getDefinedChannel(getSettings().getMessageChannel(key), primaryFallback);
+    }
+
+    public TextChannel getDefinedChannel(String key, boolean primaryFallback) {
+        final long resolvedId = getSettings().getChannelId(key);
 
         if (isDebug()) {
             logger.log(Level.INFO, "Channel definition " + key + " resolved as " + resolvedId);
