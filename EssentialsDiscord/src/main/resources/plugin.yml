@@ -12,4 +12,4 @@ commands:
   discordbroadcast:
     description: Broadcasts a message to the specified Discord channel.
     usage: /<command> <channel> <msg>
-    aliases: [dbroadcast, dbc, dbcast, edbroadcast, edbc, edbcast]
+    aliases: [dbroadcast, dbc, dbcast, ediscordbroadcast, edbroadcast, edbc, edbcast]
