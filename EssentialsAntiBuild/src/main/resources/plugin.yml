@@ -5,7 +5,7 @@ main: com.earth2me.essentials.antibuild.EssentialsAntiBuild
 version: ${full.version}
 website: https://essentialsx.net/
 description: Provides build protection.
-authors: [Zenexer, ementalo, Aelux, Brettflan, KimKandor, snowleo, ceulemans, Xeology, KHobbits, Iaccidentally]
+authors: [Zenexer, ementalo, Aelux, Brettflan, KimKandor, snowleo, ceulemans, Xeology, KHobbits, Iaccidentally, drtshock, mdcfe]
 depend: [Essentials]
 api-version: "1.13"
 
