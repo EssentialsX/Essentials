@@ -11,12 +11,14 @@ import com.earth2me.essentials.utils.NumberUtil;
 import com.earth2me.essentials.utils.VersionUtil;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
+import net.dv8tion.jda.api.entities.Emote;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.Webhook;
 import net.dv8tion.jda.api.events.ShutdownEvent;
 import net.dv8tion.jda.api.hooks.EventListener;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
+import net.dv8tion.jda.api.utils.cache.CacheFlag;
 import net.ess3.nms.refl.providers.AchievementListenerProvider;
 import net.ess3.nms.refl.providers.AdvancementListenerProvider;
 import net.essentialsx.api.v2.events.discord.DiscordMessageEvent;
@@ -53,6 +55,7 @@ import java.util.concurrent.TimeoutException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static com.earth2me.essentials.I18n.tl;
 
@@ -153,8 +156,9 @@ public class JDADiscordService implements DiscordService, IEssentialsModule {
 
         jda = JDABuilder.createDefault(plugin.getSettings().getBotToken())
                 .addEventListeners(new DiscordListener(this))
+                .enableCache(CacheFlag.EMOTE)
+                .disableCache(CacheFlag.MEMBER_OVERRIDES, CacheFlag.VOICE_STATE)
                 .setContextEnabled(false)
-                .setRawEventsEnabled(true)
                 .build()
                 .awaitReady();
         updatePresence();
@@ -185,6 +189,9 @@ public class JDADiscordService implements DiscordService, IEssentialsModule {
             interactionController.registerCommand(new ListCommand(this));
         } catch (InteractionException ignored) {
         }
+
+        // Load emotes into cache, JDA will handle updates from here on out.
+        guild.retrieveEmotes().queue();
 
         updatePrimaryChannel();
 
@@ -276,6 +283,13 @@ public class JDADiscordService implements DiscordService, IEssentialsModule {
             }
         }
         primaryChannel = channel;
+    }
+
+    public String parseMessageEmotes(String message) {
+        for (final Emote emote : guild.getEmoteCache()) {
+            message = message.replaceAll(":" + Pattern.quote(emote.getName()) + ":", emote.getAsMention());
+        }
+        return message;
     }
 
     public void updatePresence() {

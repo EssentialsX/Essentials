@@ -4,12 +4,14 @@ import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.commands.EssentialsCommand;
 import com.earth2me.essentials.commands.NotEnoughArgumentsException;
 import com.vdurmont.emoji.EmojiParser;
+import net.dv8tion.jda.api.entities.Emote;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.essentialsx.discord.JDADiscordService;
 import net.essentialsx.discord.util.DiscordUtil;
 import net.essentialsx.discord.util.MessageUtil;
 import org.bukkit.Server;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -45,7 +47,7 @@ public class Commanddiscordbroadcast extends EssentialsCommand {
             throw new Exception(tl("discordNoSendPermission", channel.getName()));
         }
 
-        channel.sendMessage(message)
+        channel.sendMessage(jda.parseMessageEmotes(message))
                 .allowedMentions(sender.isAuthorized("essentials.discordbroadcast.ping", ess) ? null : DiscordUtil.NO_GROUP_MENTIONS)
                 .queue();
 
@@ -59,6 +61,20 @@ public class Commanddiscordbroadcast extends EssentialsCommand {
             final List<String> channels = jda.getSettings().getChannelNames();
             channels.removeIf(s -> !sender.isAuthorized("essentials.discordbroadcast." + s, ess));
             return channels;
+        } else {
+            final String curArg = args[args.length - 1];
+            if (!curArg.isEmpty() && curArg.charAt(0) == ':' && (curArg.length() == 1 || curArg.charAt(curArg.length() - 1) != ':')) {
+                final JDADiscordService jda = (JDADiscordService) module;
+                if (jda.getGuild().getEmoteCache().isEmpty()) {
+                    return Collections.emptyList();
+                }
+
+                final List<String> completions = new ArrayList<>();
+                for (final Emote emote : jda.getGuild().getEmoteCache()) {
+                    completions.add(":" + emote.getName() + ":");
+                }
+                return completions;
+            }
         }
         return Collections.emptyList();
     }
