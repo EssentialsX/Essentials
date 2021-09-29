@@ -722,6 +722,18 @@ public abstract class UserData extends PlayerExtension implements IConf {
         config.save();
     }
 
+    public boolean isShouting() {
+        if (holder.shouting() == null) {
+            holder.shouting(ess.getSettings().isShoutDefault());
+        }
+        return holder.shouting();
+    }
+
+    public void setShouting(boolean shouting) {
+        holder.shouting(shouting);
+        config.save();
+    }
+
     public UUID getConfigUUID() {
         return config.getUuid();
     }

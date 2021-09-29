@@ -227,6 +227,16 @@ public class Settings implements net.ess3.api.ISettings {
     }
 
     @Override
+    public boolean isShoutDefault() {
+        return config.getBoolean("chat.shout-default", false);
+    }
+
+    @Override
+    public boolean isPersistShout() {
+        return config.getBoolean("chat.persist-shout", false);
+    }
+
+    @Override
     public boolean isChatQuestionEnabled() {
         return config.getBoolean("chat.question-enabled", true);
     }
