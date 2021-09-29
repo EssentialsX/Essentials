@@ -16,3 +16,9 @@ commands:
 permissions:
   essentials.chat.local:
     default: true
+  essentials.chat.receive.local:
+    default: true
+  essentials.chat.receive.shout:
+    default: true
+  essentials.chat.receive.question:
+    default: true

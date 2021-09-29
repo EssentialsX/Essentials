@@ -50,15 +50,16 @@ public class EssentialsChatPlayerListenerNormal extends EssentialsChatPlayer {
                     event.setCancelled(true);
                     return;
                 }
+                event.getRecipients().removeIf(player -> !ess.getUser(player).isAuthorized("essentials.chat.receive.local"));
             } else {
-                final StringBuilder permission = new StringBuilder();
-                permission.append("essentials.chat.").append(chatStore.getType());
+                final String permission = "essentials.chat." + chatStore.getType();
 
-                if (user.isAuthorized(permission.toString())) {
+                if (user.isAuthorized(permission)) {
                     if (event.getMessage().charAt(0) == ess.getSettings().getChatShout() || event.getMessage().charAt(0) == ess.getSettings().getChatQuestion()) {
                         event.setMessage(event.getMessage().substring(1));
                     }
                     event.setFormat(tl(chatStore.getType() + "Format", event.getFormat()));
+                    event.getRecipients().removeIf(player -> !ess.getUser(player).isAuthorized("essentials.chat.receive." + chatStore.getType()));
                     return;
                 }
 
