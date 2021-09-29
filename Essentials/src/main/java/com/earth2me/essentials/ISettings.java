@@ -46,6 +46,10 @@ public interface ISettings extends IConf {
 
     char getChatQuestion();
 
+    boolean isShoutDefault();
+
+    boolean isPersistShout();
+
     boolean isChatQuestionEnabled();
 
     BigDecimal getCommandCost(IEssentialsCommand cmd);
