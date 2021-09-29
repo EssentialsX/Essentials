@@ -43,21 +43,29 @@ public class EssentialsChatPlayerListenerNormal extends EssentialsChatPlayer {
         final User user = chatStore.getUser();
         chatStore.setRadius(radius);
 
-        if (event.getMessage().length() > 1 && chatStore.getType().length() > 0) {
-            final StringBuilder permission = new StringBuilder();
-            permission.append("essentials.chat.").append(chatStore.getType());
-
-            if (user.isAuthorized(permission.toString())) {
-                if (event.getMessage().charAt(0) == ess.getSettings().getChatShout() || event.getMessage().charAt(0) == ess.getSettings().getChatQuestion()) {
-                    event.setMessage(event.getMessage().substring(1));
+        if (event.getMessage().length() > 1) {
+            if (chatStore.getType().isEmpty()) {
+                if (!user.isAuthorized("essentials.chat.local")) {
+                    user.sendMessage(tl("notAllowedToLocal"));
+                    event.setCancelled(true);
+                    return;
                 }
-                event.setFormat(tl(chatStore.getType() + "Format", event.getFormat()));
+            } else {
+                final StringBuilder permission = new StringBuilder();
+                permission.append("essentials.chat.").append(chatStore.getType());
+
+                if (user.isAuthorized(permission.toString())) {
+                    if (event.getMessage().charAt(0) == ess.getSettings().getChatShout() || event.getMessage().charAt(0) == ess.getSettings().getChatQuestion()) {
+                        event.setMessage(event.getMessage().substring(1));
+                    }
+                    event.setFormat(tl(chatStore.getType() + "Format", event.getFormat()));
+                    return;
+                }
+
+                user.sendMessage(tl("notAllowedTo" + chatStore.getType().substring(0, 1).toUpperCase(Locale.ENGLISH) + chatStore.getType().substring(1)));
+                event.setCancelled(true);
                 return;
             }
-
-            user.sendMessage(tl("notAllowedTo" + chatStore.getType().substring(0, 1).toUpperCase(Locale.ENGLISH) + chatStore.getType().substring(1)));
-            event.setCancelled(true);
-            return;
         }
 
         final Location loc = user.getLocation();
