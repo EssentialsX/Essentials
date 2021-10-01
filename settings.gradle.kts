@@ -6,7 +6,10 @@ dependencyResolutionManagement {
             content { includeGroup("com.github.milkbowl") }
         }
         maven("https://repo.codemc.org/repository/maven-public") {
-            content { includeGroup("org.bstats") }
+            content {
+                includeGroup("org.bstats")
+                includeGroup("net.tnemc")
+            }
         }
         maven("https://m2.dv8tion.net/releases/") {
             content { includeGroup("net.dv8tion") }

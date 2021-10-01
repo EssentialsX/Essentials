@@ -891,6 +891,16 @@ public class Settings implements net.ess3.api.ISettings {
         return config.getBoolean("currency-symbol-suffix", false);
     }
 
+    @Override
+    public String getCurrencySingular() {
+        return config.getString("currency-singular", "Dollar");
+    }
+
+    @Override
+    public String getCurrencyPlural() {
+        return config.getString("currency-plural", "Dollars");
+    }
+
     // #easteregg
     @Override
     @Deprecated

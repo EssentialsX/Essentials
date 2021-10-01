@@ -54,6 +54,10 @@ public interface ISettings extends IConf {
 
     boolean isCurrencySymbolSuffixed();
 
+    String getCurrencySingular();
+
+    String getCurrencyPlural();
+
     int getOversizedStackSize();
 
     int getDefaultStackSize();

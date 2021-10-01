@@ -1,6 +1,7 @@
 package com.earth2me.essentials.economy;
 
 import com.earth2me.essentials.Essentials;
+import com.earth2me.essentials.economy.layers.ReserveLayer;
 import com.earth2me.essentials.economy.layers.VaultLayer;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
@@ -28,6 +29,7 @@ public final class EconomyLayers {
             throw new IllegalStateException("Economy layers have already been registered!");
         }
 
+        registerLayer(new ReserveLayer());
         registerLayer(new VaultLayer());
     }
 

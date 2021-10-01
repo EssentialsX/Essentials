@@ -24,6 +24,7 @@ import com.earth2me.essentials.commands.NotEnoughArgumentsException;
 import com.earth2me.essentials.commands.PlayerNotFoundException;
 import com.earth2me.essentials.commands.QuietAbortException;
 import com.earth2me.essentials.economy.EconomyLayers;
+import com.earth2me.essentials.economy.reserve.ReserveEconomyProvider;
 import com.earth2me.essentials.economy.vault.VaultEconomyProvider;
 import com.earth2me.essentials.items.AbstractItemDb;
 import com.earth2me.essentials.items.CustomItemResolver;
@@ -271,6 +272,10 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
                 if (plugin.getDescription().getName().startsWith("Essentials") && !plugin.getDescription().getVersion().equals(this.getDescription().getVersion()) && !plugin.getDescription().getName().equals("EssentialsAntiCheat")) {
                     getLogger().warning(tl("versionMismatch", plugin.getDescription().getName()));
                 }
+            }
+
+            if (pm.isPluginEnabled("Reserve")) {
+                ReserveEconomyProvider.register(this);
             }
 
             final EssentialsUpgrade upgrade = new EssentialsUpgrade(this);
