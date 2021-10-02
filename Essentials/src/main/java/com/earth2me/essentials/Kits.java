@@ -20,7 +20,7 @@ public class Kits implements IConf {
     private final IEssentials ess;
     private final EssentialsConfiguration rootConfig;
     private final Map<String, EssentialsConfiguration> kitToConfigMap = new HashMap<>();
-    private final Map<String, CommentedConfigurationNode> kitToItemsMap = new HashMap<>();
+    private final Map<String, Map<String, Object>> kitMap = new HashMap<>();
 
     public Kits(final IEssentials essentials) {
         this.ess = essentials;
@@ -35,17 +35,21 @@ public class Kits implements IConf {
         parseKits();
     }
 
+    public File getFile() {
+        return rootConfig.getFile();
+    }
+
     private void parseKit(final String kitName, final CommentedConfigurationNode kitSection, final EssentialsConfiguration parentConfig) {
         if (kitSection.isMap()) {
             final String effectiveKitName = kitName.toLowerCase(Locale.ENGLISH);
             kitToConfigMap.put(effectiveKitName, parentConfig);
-            kitToItemsMap.put(effectiveKitName, kitSection);
+            kitMap.put(effectiveKitName, ConfigurateUtil.getRawMap(kitSection));
         }
     }
 
     private void parseKits() {
         kitToConfigMap.clear();
-        kitToItemsMap.clear();
+        kitMap.clear();
 
         // Kits from kits.yml file
         final CommentedConfigurationNode fileKits = rootConfig.getSection("kits");
@@ -86,15 +90,12 @@ public class Kits implements IConf {
     }
 
     public Set<String> getKitKeys() {
-        return kitToItemsMap.keySet();
+        return kitMap.keySet();
     }
 
-    public Map<String, Object> getKit(String name) {
+    public Map<String, Object> getKit(final String name) {
         if (name != null) {
-            name = name.replace('.', '_').replace('/', '_');
-            if (kitToItemsMap.containsKey(name)) {
-                return ConfigurateUtil.getRawMap(kitToItemsMap.get(name));
-            }
+            return kitMap.get(name.replace('.', '_').replace('/', '_'));
         }
         return null;
     }
@@ -102,7 +103,7 @@ public class Kits implements IConf {
     // Tries to find an existing kit name that matches the given name, ignoring case. Returns null if no match.
     public String matchKit(final String name) {
         if (name != null) {
-            for (final String kitName : kitToItemsMap.keySet()) {
+            for (final String kitName : kitMap.keySet()) {
                 if (kitName.equalsIgnoreCase(name)) {
                     return kitName;
                 }
@@ -122,7 +123,7 @@ public class Kits implements IConf {
 
     public void removeKit(String name) {
         name = name.replace('.', '_').replace('/', '_').toLowerCase(Locale.ENGLISH);
-        if (!kitToConfigMap.containsKey(name) || !kitToItemsMap.containsKey(name)) {
+        if (!kitToConfigMap.containsKey(name) || !kitMap.containsKey(name)) {
             return;
         }
 
@@ -136,7 +137,7 @@ public class Kits implements IConf {
     public String listKits(final net.ess3.api.IEssentials ess, final User user) throws Exception {
         try {
             final StringBuilder list = new StringBuilder();
-            for (final String kitItem : kitToItemsMap.keySet()) {
+            for (final String kitItem : kitMap.keySet()) {
                 if (user == null) {
                     list.append(" ").append(capitalCase(kitItem));
                 } else if (user.isAuthorized("essentials.kits." + kitItem.toLowerCase(Locale.ENGLISH))) {

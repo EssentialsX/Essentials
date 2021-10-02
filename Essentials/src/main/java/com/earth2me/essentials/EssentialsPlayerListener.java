@@ -13,6 +13,9 @@ import com.earth2me.essentials.utils.VersionUtil;
 import io.papermc.lib.PaperLib;
 import net.ess3.api.IEssentials;
 import net.ess3.api.events.AfkStatusChangeEvent;
+import net.ess3.provider.CommandSendListenerProvider;
+import net.ess3.provider.providers.BukkitCommandSendListenerProvider;
+import net.ess3.provider.providers.PaperCommandSendListenerProvider;
 import net.essentialsx.api.v2.events.AsyncUserDataLoadEvent;
 import org.bukkit.BanEntry;
 import org.bukkit.BanList;
@@ -37,7 +40,6 @@ import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerBucketEmptyEvent;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
-import org.bukkit.event.player.PlayerCommandSendEvent;
 import org.bukkit.event.player.PlayerEggThrowEvent;
 import org.bukkit.event.player.PlayerFishEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -66,6 +68,9 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Predicate;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
@@ -75,6 +80,7 @@ import static com.earth2me.essentials.I18n.tl;
 public class EssentialsPlayerListener implements Listener, FakeAccessor {
     private static final Logger LOGGER = Logger.getLogger("Essentials");
     private final transient IEssentials ess;
+    private final ConcurrentHashMap<UUID, Integer> pendingMotdTasks = new ConcurrentHashMap<>();
 
     public EssentialsPlayerListener(final IEssentials parent) {
         this.ess = parent;
@@ -92,6 +98,15 @@ public class EssentialsPlayerListener implements Listener, FakeAccessor {
     private static boolean isCommandSendEvent() {
         try {
             Class.forName("org.bukkit.event.player.PlayerCommandSendEvent");
+            return true;
+        } catch (final ClassNotFoundException ignored) {
+            return false;
+        }
+    }
+
+    private static boolean isPaperCommandSendEvent() {
+        try {
+            Class.forName("com.destroystokyo.paper.event.brigadier.AsyncPlayerSendCommandsEvent");
             return true;
         } catch (final ClassNotFoundException ignored) {
             return false;
@@ -120,8 +135,10 @@ public class EssentialsPlayerListener implements Listener, FakeAccessor {
             ess.getServer().getPluginManager().registerEvents(new PickupListenerPre1_12(), ess);
         }
 
-        if (isCommandSendEvent()) {
-            ess.getServer().getPluginManager().registerEvents(new CommandSendListener(), ess);
+        if (isPaperCommandSendEvent()) {
+            ess.getServer().getPluginManager().registerEvents(new PaperCommandSendListenerProvider(new CommandSendFilter()), ess);
+        } else if (isCommandSendEvent()) {
+            ess.getServer().getPluginManager().registerEvents(new BukkitCommandSendListenerProvider(new CommandSendFilter()), ess);
         }
     }
 
@@ -215,6 +232,11 @@ public class EssentialsPlayerListener implements Listener, FakeAccessor {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerQuit(final PlayerQuitEvent event) {
         final User user = ess.getUser(event.getPlayer());
+
+        final Integer pendingId = pendingMotdTasks.remove(user.getUUID());
+        if (pendingId != null) {
+            ess.getScheduler().cancelTask(pendingId);
+        }
 
         if (hideJoinQuitMessages() || (ess.getSettings().allowSilentJoinQuit() && user.isAuthorized("essentials.silentquit"))) {
             event.setQuitMessage(null);
@@ -360,12 +382,14 @@ public class EssentialsPlayerListener implements Listener, FakeAccessor {
 
                 ess.runTaskAsynchronously(() -> ess.getServer().getPluginManager().callEvent(new AsyncUserDataLoadEvent(user, effectiveMessage)));
 
-                final int motdDelay = ess.getSettings().getMotdDelay() / 50;
-                final DelayMotdTask motdTask = new DelayMotdTask(user);
-                if (motdDelay > 0) {
-                    ess.scheduleSyncDelayedTask(motdTask, motdDelay);
-                } else {
-                    motdTask.run();
+                if (ess.getSettings().getMotdDelay() >= 0) {
+                    final int motdDelay = ess.getSettings().getMotdDelay() / 50;
+                    final DelayMotdTask motdTask = new DelayMotdTask(user);
+                    if (motdDelay > 0) {
+                        pendingMotdTasks.put(user.getUUID(), ess.scheduleSyncDelayedTask(motdTask, motdDelay));
+                    } else {
+                        motdTask.run();
+                    }
                 }
 
                 if (!ess.getSettings().isCommandDisabled("mail") && user.isAuthorized("essentials.mail")) {
@@ -376,6 +400,14 @@ public class EssentialsPlayerListener implements Listener, FakeAccessor {
                     } else {
                         user.notifyOfMail();
                     }
+                }
+
+                if (user.isAuthorized("essentials.updatecheck")) {
+                    ess.runTaskAsynchronously(() -> {
+                        for (String str : ess.getUpdateChecker().getVersionMessages(false, false)) {
+                            user.sendMessage(str);
+                        }
+                    });
                 }
 
                 if (user.isAuthorized("essentials.fly.safelogin")) {
@@ -419,6 +451,8 @@ public class EssentialsPlayerListener implements Listener, FakeAccessor {
 
                 @Override
                 public void run() {
+                    pendingMotdTasks.remove(user.getUUID());
+
                     IText tempInput = null;
 
                     if (!ess.getSettings().isCommandDisabled("motd")) {
@@ -439,14 +473,6 @@ public class EssentialsPlayerListener implements Listener, FakeAccessor {
                         final IText output = new KeywordReplacer(input, user.getSource(), ess);
                         final TextPager pager = new TextPager(output, true);
                         pager.showPage("1", null, "motd", user.getSource());
-                    }
-
-                    if (user.isAuthorized("essentials.updatecheck")) {
-                        ess.runTaskAsynchronously(() -> {
-                            for (String str : ess.getUpdateChecker().getVersionMessages(false, false)) {
-                                user.sendMessage(str);
-                            }
-                        });
                     }
                 }
             }
@@ -726,6 +752,9 @@ public class EssentialsPlayerListener implements Listener, FakeAccessor {
         switch (event.getAction()) {
             case RIGHT_CLICK_BLOCK:
                 if (!event.isCancelled() && MaterialUtil.isBed(event.getClickedBlock().getType()) && ess.getSettings().getUpdateBedAtDaytime()) {
+                    if (VersionUtil.getServerBukkitVersion().isHigherThanOrEqualTo(VersionUtil.v1_13_2_R01) && ((org.bukkit.block.data.type.Bed) event.getClickedBlock().getBlockData()).isOccupied()) {
+                        break;
+                    }
                     final User player = ess.getUser(event.getPlayer());
                     if (player.isAuthorized("essentials.sethome.bed") && player.getWorld().getEnvironment().equals(World.Environment.NORMAL)) {
                         player.getBase().setBedSpawnLocation(event.getClickedBlock().getLocation());
@@ -960,15 +989,14 @@ public class EssentialsPlayerListener implements Listener, FakeAccessor {
         }
     }
 
-    private final class CommandSendListener implements Listener {
-        @EventHandler(priority = EventPriority.NORMAL)
-        public void onCommandSend(final PlayerCommandSendEvent event) {
-            final User user = ess.getUser(event.getPlayer());
-
+    private final class CommandSendFilter implements CommandSendListenerProvider.Filter {
+        @Override
+        public Predicate<String> apply(Player player) {
+            final User user = ess.getUser(player);
             final Set<PluginCommand> checked = new HashSet<>();
             final Set<PluginCommand> toRemove = new HashSet<>();
 
-            event.getCommands().removeIf(label -> {
+            return label -> {
                 if (isEssentialsCommand(label)) {
                     final PluginCommand command = ess.getServer().getPluginCommand(label);
                     if (!checked.contains(command)) {
@@ -980,25 +1008,21 @@ public class EssentialsPlayerListener implements Listener, FakeAccessor {
                     return toRemove.contains(command);
                 }
                 return false;
-            });
-
-            if (ess.getSettings().isDebug()) {
-                ess.getLogger().info("Removed commands: " + toRemove.toString());
-            }
+            };
         }
 
         /**
          * Returns true if all of the following are true:
          * - The command is a plugin command
-         * - The plugin command is from a plugin in an essentials-controlled package
+         * - The plugin command is from an official EssentialsX plugin or addon
          * - There is no known alternative OR the alternative is overridden by Essentials
          */
         private boolean isEssentialsCommand(final String label) {
             final PluginCommand command = ess.getServer().getPluginCommand(label);
 
             return command != null
-                && (command.getPlugin() == ess || command.getPlugin().getClass().getName().startsWith("com.earth2me.essentials"))
-                && (ess.getSettings().isCommandOverridden(label) || (ess.getAlternativeCommandsHandler().getAlternative(label) == null));
+                    && (command.getPlugin() == ess || command.getPlugin().getClass().getName().startsWith("com.earth2me.essentials") || command.getPlugin().getClass().getName().startsWith("net.essentialsx"))
+                    && (ess.getSettings().isCommandOverridden(label) || (ess.getAlternativeCommandsHandler().getAlternative(label) == null));
         }
     }
 

@@ -49,6 +49,9 @@ hide-displayname-in-vanish: true
 # Disable this if you have any other plugin, that modifies the displayname of a user.
 change-displayname: true
 
+# This option will cause Essentials to show players' displaynames instead of usernames when tab completing Essentials commands.
+change-tab-complete-name: false
+
 # When this option is enabled, the (tab) player list will be updated with the displayname.
 # The value of change-displayname (above) has to be true.
 #change-playerlist: true
@@ -169,6 +172,10 @@ overridden-commands:
 disabled-commands:
 #  - nick
 #  - clear
+
+# Whether or not Essentials should show detailed command usages.
+# If set to false, Essentials will collapse all usages in to one single usage message.
+verbose-command-usages: true
 
 # These commands will be shown to players with socialSpy enabled.
 # You can add commands from other plugins you may want to track or
@@ -669,6 +676,7 @@ allow-selling-named-items: false
 
 # Delay for the MOTD display for players on join, in milliseconds.
 # This has no effect if the MOTD command or permission are disabled.
+# This can also be set to -1 to completely disable the join MOTD all together.
 delay-motd: 0
 
 # A list of commands that should have their complementary confirm commands enabled by default.

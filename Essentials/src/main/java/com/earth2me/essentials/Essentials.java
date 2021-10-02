@@ -49,6 +49,7 @@ import net.ess3.api.IJails;
 import net.ess3.api.ISettings;
 import net.ess3.nms.refl.providers.ReflFormattedCommandAliasProvider;
 import net.ess3.nms.refl.providers.ReflKnownCommandsProvider;
+import net.ess3.nms.refl.providers.ReflOnlineModeProvider;
 import net.ess3.nms.refl.providers.ReflPersistentDataProvider;
 import net.ess3.nms.refl.providers.ReflServerStateProvider;
 import net.ess3.nms.refl.providers.ReflSpawnEggProvider;
@@ -165,6 +166,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
     private transient MaterialTagProvider materialTagProvider;
     private transient SyncCommandsProvider syncCommandsProvider;
     private transient PersistentDataProvider persistentDataProvider;
+    private transient ReflOnlineModeProvider onlineModeProvider;
     private transient Kits kits;
     private transient RandomTeleport randomTeleport;
     private transient UpdateChecker updateChecker;
@@ -405,6 +407,8 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
             } else {
                 persistentDataProvider = new ReflPersistentDataProvider(this);
             }
+
+            onlineModeProvider = new ReflOnlineModeProvider();
 
             execTimer.mark("Init(Providers)");
             reload();
@@ -767,15 +771,16 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
             } catch (final NoChargeException | QuietAbortException ex) {
                 return true;
             } catch (final NotEnoughArgumentsException ex) {
-                sender.sendMessage(tl("commandHelpLine1", commandLabel));
-                sender.sendMessage(tl("commandHelpLine2", command.getDescription()));
-                sender.sendMessage(tl("commandHelpLine3"));
-                if (!cmd.getUsageStrings().isEmpty()) {
+                if (getSettings().isVerboseCommandUsages() && !cmd.getUsageStrings().isEmpty()) {
+                    sender.sendMessage(tl("commandHelpLine1", commandLabel));
+                    sender.sendMessage(tl("commandHelpLine2", command.getDescription()));
+                    sender.sendMessage(tl("commandHelpLine3"));
                     for (Map.Entry<String, String> usage : cmd.getUsageStrings().entrySet()) {
                         sender.sendMessage(tl("commandHelpLineUsage", usage.getKey().replace("<command>", commandLabel), usage.getValue()));
                     }
                 } else {
-                    sender.sendMessage(command.getUsage());
+                    sender.sendMessage(command.getDescription());
+                    sender.sendMessage(command.getUsage().replace("<command>", commandLabel));
                 }
                 if (!ex.getMessage().isEmpty()) {
                     sender.sendMessage(ex.getMessage());
@@ -1258,6 +1263,11 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
     @Override
     public PersistentDataProvider getPersistentDataProvider() {
         return persistentDataProvider;
+    }
+
+    @Override
+    public ReflOnlineModeProvider getOnlineModeProvider() {
+        return onlineModeProvider;
     }
 
     @Override
