@@ -9,7 +9,7 @@ import org.bukkit.Server;
 import org.bukkit.Statistic;
 
 import com.earth2me.essentials.CommandSource;
-import com.earth2me.essentials.User;
+import com.earth2me.essentials.IUser;
 import com.earth2me.essentials.utils.DateUtil;
 import com.earth2me.essentials.utils.EnumUtil;
 
@@ -24,10 +24,10 @@ public class Commandplaytime extends EssentialsCommand {
 
     @Override
     protected void run(Server server, CommandSource sender, String commandLabel, String[] args) throws Exception {
-        final User target;
+        final IUser target;
         
-        if (args.length > 0) {
-            target = getPlayer(server, sender, args, 0, false, false);
+        if (args.length > 0 && sender.isAuthorized("essentials.playtime.others", ess)) {
+            target = getPlayer(server, sender, args, 0);
         } else if (sender.isPlayer()) {
             target = sender.getUser(ess);
         } else {
