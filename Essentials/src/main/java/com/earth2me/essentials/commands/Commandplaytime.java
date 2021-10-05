@@ -14,7 +14,6 @@ import com.earth2me.essentials.utils.DateUtil;
 import com.earth2me.essentials.utils.EnumUtil;
 
 public class Commandplaytime extends EssentialsCommand {
-
     // For some reason, in 1.13 PLAY_ONE_MINUTE = ticks played = what used to be PLAY_ONE_TICK
     // https://hub.spigotmc.org/stash/projects/SPIGOT/repos/bukkit/commits/b848d8ce633871b52115247b089029749c02f579
     private static final Statistic PLAY_ONE_TICK = EnumUtil.getStatistic("PLAY_ONE_MINUTE", "PLAY_ONE_TICK");
@@ -27,13 +26,10 @@ public class Commandplaytime extends EssentialsCommand {
     protected void run(Server server, CommandSource sender, String commandLabel, String[] args) throws Exception {
         final User target;
         
-        if (args.length >= 1) {
-            target = this.getPlayer(server, sender, args[0]);
-            if (target == null) {
-                throw new PlayerNotFoundException();
-            }
+        if (args.length > 0) {
+            target = getPlayer(server, sender, args, 0, false, false);
         } else if (sender.isPlayer()) {
-            target = ess.getUser(sender.getPlayer());
+            target = sender.getUser(ess);
         } else {
             throw new NotEnoughArgumentsException();
         }
@@ -44,7 +40,7 @@ public class Commandplaytime extends EssentialsCommand {
     
     @Override
     protected List<String> getTabCompleteOptions(final Server server, final CommandSource sender, final String commandLabel, final String[] args) {
-        if (args.length == 1) {
+        if (args.length == 1 && sender.isAuthorized("essentials.playtime.others", ess)) {
             return getPlayers(server, sender);
         } else {
             return Collections.emptyList();
