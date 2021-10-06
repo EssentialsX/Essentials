@@ -38,7 +38,7 @@ public class Commandplaytime extends EssentialsCommand {
         }
 
         final long playtimeMs = System.currentTimeMillis() - (target.getBase().getStatistic(PLAY_ONE_TICK) * 50);
-        sender.sendMessage(tl("playtime", target.getDisplayName(), DateUtil.formatDateDiff(playtimeMs)));
+        sender.sendMessage(tl(key, target.getDisplayName(), DateUtil.formatDateDiff(playtimeMs)));
     }
     
     @Override
