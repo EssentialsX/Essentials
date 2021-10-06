@@ -25,11 +25,14 @@ public class Commandplaytime extends EssentialsCommand {
     @Override
     protected void run(Server server, CommandSource sender, String commandLabel, String[] args) throws Exception {
         final IUser target;
+        final String key;
         
         if (args.length > 0 && sender.isAuthorized("essentials.playtime.others", ess)) {
             target = getPlayer(server, sender, args, 0);
+            key = "playtimeOther";
         } else if (sender.isPlayer()) {
             target = sender.getUser(ess);
+            key = "playtime";
         } else {
             throw new NotEnoughArgumentsException();
         }
