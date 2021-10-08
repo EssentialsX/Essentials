@@ -3,7 +3,6 @@ package com.earth2me.essentials.commands;
 import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.Kit;
 import com.earth2me.essentials.User;
-import com.earth2me.essentials.config.ConfigurateUtil;
 import com.earth2me.essentials.utils.StringUtil;
 import org.bukkit.Server;
 
@@ -101,7 +100,7 @@ public class Commandkit extends EssentialsCommand {
         if (args.length == 1) {
             final List<String> options = new ArrayList<>();
             // TODO: Move all of this to its own method
-            for (final String kitName : ConfigurateUtil.getKeys(ess.getKits().getKits())) {
+            for (final String kitName : ess.getKits().getKitKeys()) {
                 if (!user.isAuthorized("essentials.kits." + kitName)) { // Only check perm, not time or money
                     continue;
                 }
@@ -118,7 +117,7 @@ public class Commandkit extends EssentialsCommand {
     @Override
     protected List<String> getTabCompleteOptions(final Server server, final CommandSource sender, final String commandLabel, final String[] args) {
         if (args.length == 1) {
-            return new ArrayList<>(ConfigurateUtil.getKeys(ess.getKits().getKits())); // TODO: Move this to its own method
+            return new ArrayList<>(ess.getKits().getKitKeys()); // TODO: Move this to its own method
         } else if (args.length == 2) {
             return getPlayers(server, sender);
         } else {
