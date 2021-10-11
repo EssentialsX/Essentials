@@ -69,6 +69,10 @@ public class DiscordSettings implements IConf {
         }
     }
 
+    public List<String> getChannelNames() {
+        return new ArrayList<>(nameToChannelIdMap.keySet());
+    }
+
     public List<String> getKeysFromChannelId(long channelId) {
         return channelIdToNamesMap.get(channelId);
     }
