@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
+import java.util.logging.Level;
 
 import static com.earth2me.essentials.I18n.tl;
 
@@ -83,7 +84,6 @@ public class Commandtogglejail extends EssentialsCommand {
                             // 50 MSPT (milliseconds per tick)
                             player.setOnlineJailedTime(ess.getSettings().isJailOnlineTime() ? ((player.getBase().getStatistic(PLAY_ONE_TICK)) + (timeDiff / 50)) : 0);
                         }
-                        sender.sendMessage(timeDiff > 0 ? tl("playerJailedFor", player.getName(), DateUtil.formatDateDiff(finalDisplayTime)) : tl("playerJailed", player.getName()));
                     }
                 });
                 if (player.getBase().isOnline()) {
@@ -91,6 +91,10 @@ public class Commandtogglejail extends EssentialsCommand {
                 } else {
                     future.complete(true);
                 }
+
+                final String notifyMessage = timeDiff > 0 ? tl("jailNotifyJailedFor", player.getName(), DateUtil.formatDateDiff(finalDisplayTime), sender.getSender().getName()) : tl("jailNotifyJailed", player.getName(), sender.getSender().getName());
+                server.getLogger().log(Level.INFO, notifyMessage);
+                ess.broadcastMessage("essentials.jail.notify", notifyMessage);
             }
             return;
         }
@@ -106,7 +110,10 @@ public class Commandtogglejail extends EssentialsCommand {
             final long timeDiff = DateUtil.parseDateDiff(unparsedTime, true, ess.getSettings().isJailOnlineTime());
             player.setJailTimeout(timeDiff);
             player.setOnlineJailedTime(ess.getSettings().isJailOnlineTime() ? ((player.getBase().getStatistic(PLAY_ONE_TICK)) + (timeDiff / 50)) : 0);
-            sender.sendMessage(tl("jailSentenceExtended", DateUtil.formatDateDiff(displayTimeDiff)));
+
+            final String notifyMessage = tl("jailNotifySentenceExtended", player.getName(), DateUtil.formatDateDiff(displayTimeDiff), sender.getSender().getName());
+            server.getLogger().log(Level.INFO, notifyMessage);
+            ess.broadcastMessage("essentials.jail.notify", notifyMessage);
             return;
         }
 
@@ -127,14 +134,18 @@ public class Commandtogglejail extends EssentialsCommand {
                     final CompletableFuture<Boolean> future = getNewExceptionFuture(sender, commandLabel);
                     future.thenAccept(success -> {
                         if (success) {
-                            sender.sendMessage(tl("jailReleased", player.getName()));
+                            final String notifyMessage = tl("jailNotifyReleased", player.getName(), sender.getSender().getName());
+                            server.getLogger().log(Level.INFO, notifyMessage);
+                            ess.broadcastMessage("essentials.jail.notify", notifyMessage);
                         }
                     });
                     if (ess.getSettings().getTeleportWhenFreePolicy() == ISettings.TeleportWhenFreePolicy.BACK) {
                         player.getAsyncTeleport().back(future);
                         future.exceptionally(e -> {
                             player.getAsyncTeleport().respawn(null, PlayerTeleportEvent.TeleportCause.PLUGIN, new CompletableFuture<>());
-                            sender.sendMessage(tl("jailReleased", player.getName()));
+                            final String notifyMessage = tl("jailNotifyReleased", player.getName(), sender.getSender().getName());
+                            server.getLogger().log(Level.INFO, notifyMessage);
+                            ess.broadcastMessage("essentials.jail.notify", notifyMessage);
                             return false;
                         });
                     } else if (ess.getSettings().getTeleportWhenFreePolicy() == ISettings.TeleportWhenFreePolicy.SPAWN) {
@@ -142,7 +153,9 @@ public class Commandtogglejail extends EssentialsCommand {
                     }
                     return;
                 }
-                sender.sendMessage(tl("jailReleased", player.getName()));
+                final String notifyMessage = tl("jailNotifyReleased", player.getName(), sender.getSender().getName());
+                server.getLogger().log(Level.INFO, notifyMessage);
+                ess.broadcastMessage("essentials.jail.notify", notifyMessage);
             }
         }
     }
