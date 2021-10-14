@@ -106,8 +106,8 @@ public class Commandseen extends EssentialsCommand {
             sender.sendMessage(tl("whoisUuid", user.getBase().getUniqueId().toString()));
         }
 
-        final List<String> history = ess.getUserMap().getUserHistory(user.getBase().getUniqueId());
-        if (history != null && history.size() > 1) {
+        final List<String> history = user.getPastUsernames();
+        if (history != null && !history.isEmpty()) {
             sender.sendMessage(tl("seenAccounts", StringUtil.joinListSkip(", ", user.getName(), history)));
         }
 
@@ -145,8 +145,8 @@ public class Commandseen extends EssentialsCommand {
             sender.sendMessage(tl("userUnknown", user.getName()));
         }
 
-        final List<String> history = ess.getUserMap().getUserHistory(user.getBase().getUniqueId());
-        if (history != null && history.size() > 1) {
+        final List<String> history = user.getPastUsernames();
+        if (history != null && !history.isEmpty()) {
             sender.sendMessage(tl("seenAccounts", StringUtil.joinListSkip(", ", user.getName(), history)));
         }
 

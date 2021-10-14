@@ -238,4 +238,8 @@ public interface IUser {
     void setToggleShout(boolean toggleShout);
 
     boolean isToggleShout();
+
+    List<String> getPastUsernames();
+
+    void addPastUsername(String username);
 }

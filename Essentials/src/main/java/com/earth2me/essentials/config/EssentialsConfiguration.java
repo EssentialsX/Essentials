@@ -421,6 +421,10 @@ public class EssentialsConfiguration {
         }
     }
 
+    public boolean isTransaction() {
+        return transaction.get();
+    }
+
     public void setSaveHook(Runnable saveHook) {
         this.saveHook = saveHook;
     }

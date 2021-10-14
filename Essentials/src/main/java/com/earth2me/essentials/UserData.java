@@ -589,6 +589,11 @@ public abstract class UserData extends PlayerExtension implements IConf {
     }
 
     public void setLastAccountName(final String lastAccountName) {
+        if (getLastAccountName() != null && !getLastAccountName().equals(lastAccountName)) {
+            final List<String> usernames = holder.pastUsernames();
+            usernames.add(0, getLastAccountName());
+            holder.pastUsernames(usernames);
+        }
         holder.lastAccountName(lastAccountName);
         config.save();
         ess.getUserMap().trackUUID(getConfigUUID(), lastAccountName, true);
@@ -719,6 +724,17 @@ public abstract class UserData extends PlayerExtension implements IConf {
 
     public void setBaltopExemptCache(boolean baltopExempt) {
         holder.baltopExempt(baltopExempt);
+        config.save();
+    }
+
+    public List<String> getPastUsernames() {
+        return holder.pastUsernames();
+    }
+
+    public void addPastUsername(String username) {
+        final List<String> usernames = holder.pastUsernames();
+        usernames.add(0, username);
+        holder.pastUsernames(usernames);
         config.save();
     }
 

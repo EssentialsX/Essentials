@@ -322,6 +322,20 @@ public class UserConfigHolder {
         this.baltopExempt = value;
     }
 
+    @DeleteOnEmpty
+    private @MonotonicNonNull List<String> pastUsernames;
+
+    public List<String> pastUsernames() {
+        if (this.pastUsernames == null) {
+            this.pastUsernames = new ArrayList<>();
+        }
+        return this.pastUsernames;
+    }
+
+    public void pastUsernames(List<String> value) {
+        this.pastUsernames = value;
+    }
+
     private @NonNull Timestamps timestamps = new Timestamps();
 
     public Timestamps timestamps() {
