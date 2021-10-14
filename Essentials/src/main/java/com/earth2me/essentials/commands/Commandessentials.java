@@ -1,7 +1,6 @@
 package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.CommandSource;
-import com.earth2me.essentials.EssentialsUpgrade;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.UserMap;
 import com.earth2me.essentials.economy.EconomyLayer;
@@ -12,7 +11,6 @@ import com.earth2me.essentials.utils.FloatUtil;
 import com.earth2me.essentials.utils.NumberUtil;
 import com.earth2me.essentials.utils.PasteUtil;
 import com.earth2me.essentials.utils.VersionUtil;
-import com.google.common.base.Charsets;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import com.google.gson.JsonArray;
@@ -134,12 +132,6 @@ public class Commandessentials extends EssentialsCommand {
                 break;
             case "homes":
                 runHomes(server, sender, commandLabel, args);
-                break;
-            case "uuidconvert":
-                runUUIDConvert(server, sender, commandLabel, args);
-                break;
-            case "uuidtest":
-                runUUIDTest(server, sender, commandLabel, args);
                 break;
 
             // "#EasterEgg"
@@ -511,54 +503,6 @@ public class Commandessentials extends EssentialsCommand {
         }
     }
 
-    // Forces a rerun of userdata UUID conversion.
-    private void runUUIDConvert(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception {
-        sender.sendMessage("Starting Essentials UUID userdata conversion; this may lag the server.");
-
-        final Boolean ignoreUFCache = args.length > 2 && args[1].toLowerCase(Locale.ENGLISH).contains("ignore");
-        EssentialsUpgrade.uuidFileConvert(ess, ignoreUFCache);
-
-        sender.sendMessage("UUID conversion complete. Check your server log for more information.");
-    }
-
-    // Looks up various UUIDs for a user.
-    private void runUUIDTest(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception {
-        if (args.length < 2) {
-            throw new Exception("/<command> uuidtest <name>");
-        }
-        final String name = args[1];
-        sender.sendMessage("Looking up UUID for " + name);
-
-        UUID onlineUUID = null;
-
-        for (final Player player : ess.getOnlinePlayers()) {
-            if (player.getName().equalsIgnoreCase(name)) {
-                onlineUUID = player.getUniqueId();
-                break;
-            }
-        }
-
-        final UUID essUUID = ess.getUserMap().getUser(name).getConfigUUID();
-
-        final org.bukkit.OfflinePlayer player = ess.getServer().getOfflinePlayer(name);
-        final UUID bukkituuid = player.getUniqueId();
-        sender.sendMessage("Bukkit Lookup: " + bukkituuid.toString());
-
-        if (onlineUUID != null && onlineUUID != bukkituuid) {
-            sender.sendMessage("Online player: " + onlineUUID.toString());
-        }
-
-        if (essUUID != null && essUUID != bukkituuid) {
-            sender.sendMessage("Essentials config: " + essUUID.toString());
-        }
-
-        final UUID npcuuid = UUID.nameUUIDFromBytes(("NPC:" + name).getBytes(Charsets.UTF_8));
-        sender.sendMessage("NPC UUID: " + npcuuid.toString());
-
-        final UUID offlineuuid = UUID.nameUUIDFromBytes(("OfflinePlayer:" + name).getBytes(Charsets.UTF_8));
-        sender.sendMessage("Offline Mode UUID: " + offlineuuid.toString());
-    }
-
     // Displays versions of EssentialsX and related plugins.
     private void runVersion(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception {
         if (sender.isPlayer() && !ess.getUser(sender.getPlayer()).isAuthorized("essentials.version")) return;
@@ -681,7 +625,6 @@ public class Commandessentials extends EssentialsCommand {
             options.add("cleanup");
             options.add("homes");
             //options.add("uuidconvert");
-            //options.add("uuidtest");
             //options.add("nya");
             //options.add("moo");
             return options;
@@ -694,7 +637,6 @@ public class Commandessentials extends EssentialsCommand {
                 }
                 break;
             case "reset":
-            case "uuidtest":
                 if (args.length == 2) {
                     return getPlayers(server, sender);
                 }
@@ -711,11 +653,6 @@ public class Commandessentials extends EssentialsCommand {
                     return Lists.newArrayList("fix", "delete");
                 } else if (args.length == 3 && args[1].equalsIgnoreCase("delete")) {
                     return server.getWorlds().stream().map(World::getName).collect(Collectors.toList());
-                }
-                break;
-            case "uuidconvert":
-                if (args.length == 2) {
-                    return Lists.newArrayList("ignoreUFCache");
                 }
                 break;
             case "dump":
