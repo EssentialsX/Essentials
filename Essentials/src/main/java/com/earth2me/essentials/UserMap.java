@@ -13,12 +13,8 @@ import net.ess3.api.MaxMoneyException;
 import org.bukkit.entity.Player;
 
 import java.io.File;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.text.MessageFormat;
-import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentSkipListMap;
@@ -28,12 +24,9 @@ import java.util.logging.Level;
 import java.util.regex.Pattern;
 
 public class UserMap extends CacheLoader<String, User> implements IConf {
-    private static boolean legacy = false;
-    private static Method getLegacy;
     private final transient IEssentials ess;
     private final transient ConcurrentSkipListSet<UUID> keys = new ConcurrentSkipListSet<>();
     private final transient ConcurrentSkipListMap<String, UUID> names = new ConcurrentSkipListMap<>();
-    private final transient ConcurrentSkipListMap<UUID, ArrayList<String>> history = new ConcurrentSkipListMap<>();
     private final UUIDMap uuidMap;
     private final transient Cache<String, User> users;
     private final Pattern validUserPattern = Pattern.compile("^[a-zA-Z0-9_]{2,16}$");
@@ -44,34 +37,23 @@ public class UserMap extends CacheLoader<String, User> implements IConf {
         super();
         this.ess = ess;
         uuidMap = new UUIDMap(ess);
-        //RemovalListener<UUID, User> remListener = new UserMapRemovalListener();
-        //users = CacheBuilder.newBuilder().maximumSize(ess.getSettings().getMaxUserCacheCount()).softValues().removalListener(remListener).build(this);
         final CacheBuilder<Object, Object> cacheBuilder = CacheBuilder.newBuilder();
         final int maxCount = ess.getSettings().getMaxUserCacheCount();
-        try {
-            cacheBuilder.maximumSize(maxCount);
-        } catch (final NoSuchMethodError nsme) {
-            legacy = true;
-            legacyMaximumSize(cacheBuilder, maxCount);
-        }
+        cacheBuilder.maximumSize(maxCount);
         cacheBuilder.softValues();
-        if (!legacy) {
-            users = cacheBuilder.build(this);
-        } else {
-            users = legacyBuild(cacheBuilder);
-        }
+        users = cacheBuilder.build(this);
     }
 
     private void loadAllUsersAsync(final IEssentials ess) {
         ess.runTaskAsynchronously(() -> {
             synchronized (users) {
-                final File userdir = new File(ess.getDataFolder(), "userdata");
-                if (!userdir.exists()) {
+                final File userDir = new File(ess.getDataFolder(), "userdata");
+                if (!userDir.exists()) {
                     return;
                 }
                 keys.clear();
                 users.invalidateAll();
-                for (final String string : userdir.list()) {
+                for (final String string : userDir.list()) {
                     if (!string.endsWith(".yml")) {
                         continue;
                     }
@@ -82,7 +64,7 @@ public class UserMap extends CacheLoader<String, User> implements IConf {
                         //Ignore these users till they rejoin.
                     }
                 }
-                uuidMap.loadAllUsers(names, history);
+                uuidMap.loadAllUsers(names);
             }
         });
     }
@@ -125,11 +107,7 @@ public class UserMap extends CacheLoader<String, User> implements IConf {
 
     public User getUser(final UUID uuid) {
         try {
-            if (!legacy) {
-                return ((LoadingCache<String, User>) users).get(uuid.toString());
-            } else {
-                return legacyCacheGet(uuid);
-            }
+            return ((LoadingCache<String, User>) users).get(uuid.toString());
         } catch (final ExecutionException | UncheckedExecutionException ex) {
             if (ess.getSettings().isDebug()) {
                 ess.getLogger().log(Level.WARNING, ex, () -> "Exception while getting user for " + uuid);
@@ -270,29 +248,9 @@ public class UserMap extends CacheLoader<String, User> implements IConf {
         return names;
     }
 
-    protected ConcurrentSkipListMap<UUID, ArrayList<String>> getHistory() {
-        return history;
-    }
-
-    public List<String> getUserHistory(final UUID uuid) {
-        return history.get(uuid);
-    }
-
     public UUIDMap getUUIDMap() {
         return uuidMap;
     }
-    //  class UserMapRemovalListener implements RemovalListener
-    //  {
-    //      @Override
-    //      public void onRemoval(final RemovalNotification notification)
-    //      {
-    //          Object value = notification.getValue();
-    //          if (value != null)
-    //          {
-    //              ((User)value).cleanup();
-    //          }
-    //      }
-    //  }
 
     private File getUserFileFromID(final UUID uuid) {
         final File userFolder = new File(ess.getDataFolder(), "userdata");
@@ -315,9 +273,7 @@ public class UserMap extends CacheLoader<String, User> implements IConf {
             return null;
         }
         final org.bukkit.OfflinePlayer offlinePlayer = ess.getServer().getOfflinePlayer(name);
-        if (offlinePlayer == null) {
-            return null;
-        }
+
         final UUID uuid;
         try {
             uuid = offlinePlayer.getUniqueId();
@@ -331,53 +287,5 @@ public class UserMap extends CacheLoader<String, User> implements IConf {
             names.put(name, uuid);
             return getUser(uuid);
         }
-    }
-
-    private User legacyCacheGet(final UUID uuid) {
-        if (getLegacy == null) {
-            final Class<?> usersClass = users.getClass();
-            for (final Method m : usersClass.getDeclaredMethods()) {
-                if (m.getName().equals("get")) {
-                    getLegacy = m;
-                    getLegacy.setAccessible(true);
-                    break;
-                }
-            }
-        }
-        try {
-            return (User) getLegacy.invoke(users, uuid.toString());
-        } catch (final IllegalAccessException | InvocationTargetException e) {
-            return null;
-        }
-    }
-
-    private void legacyMaximumSize(final CacheBuilder builder, final int maxCount) {
-        try {
-            final Method maxSizeLegacy = builder.getClass().getDeclaredMethod("maximumSize", Integer.TYPE);
-            maxSizeLegacy.setAccessible(true);
-            maxSizeLegacy.invoke(builder, maxCount);
-        } catch (final NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @SuppressWarnings("unchecked")
-    private Cache<String, User> legacyBuild(final CacheBuilder builder) {
-        Method build = null;
-        for (final Method method : builder.getClass().getDeclaredMethods()) {
-            if (method.getName().equals("build")) {
-                build = method;
-                break;
-            }
-        }
-        Cache<String, User> legacyUsers;
-        try {
-            assert build != null;
-            build.setAccessible(true);
-            legacyUsers = (Cache<String, User>) build.invoke(builder, this);
-        } catch (final IllegalAccessException | InvocationTargetException e) {
-            legacyUsers = null;
-        }
-        return legacyUsers;
     }
 }

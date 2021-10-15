@@ -9,7 +9,6 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -45,7 +44,7 @@ public class UUIDMap {
         writeScheduler.scheduleWithFixedDelay(writeTaskRunnable, 5, 5, TimeUnit.SECONDS);
     }
 
-    public void loadAllUsers(final ConcurrentSkipListMap<String, UUID> names, final ConcurrentSkipListMap<UUID, ArrayList<String>> history) {
+    public void loadAllUsers(final ConcurrentSkipListMap<String, UUID> names) {
         try {
             if (!userList.exists()) {
                 userList.createNewFile();
@@ -60,7 +59,6 @@ public class UUIDMap {
             }
 
             names.clear();
-            history.clear();
             loading = true;
 
             try (final BufferedReader reader = new BufferedReader(new FileReader(userList))) {
@@ -74,16 +72,6 @@ public class UUIDMap {
                             final String name = values[0];
                             final UUID uuid = UUID.fromString(values[1]);
                             names.put(name, uuid);
-                            if (!history.containsKey(uuid)) {
-                                final ArrayList<String> list = new ArrayList<>();
-                                list.add(name);
-                                history.put(uuid, list);
-                            } else {
-                                final ArrayList<String> list = history.get(uuid);
-                                if (!list.contains(name)) {
-                                    list.add(name);
-                                }
-                            }
                         }
                     }
                 }
