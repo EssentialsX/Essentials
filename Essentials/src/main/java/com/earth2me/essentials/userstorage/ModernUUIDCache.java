@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -22,7 +23,7 @@ public class ModernUUIDCache {
     private final IEssentials ess;
 
     /**
-     * We use a name to uuid map for offline caching due to the following senerio:
+     * We use a name to uuid map for offline caching due to the following scenario:
      * * JRoy and mdcfeYT420 play on a server
      * * mdcfeYT420 changes his name to mdcfe
      * * mdcfe doesn't log in the server for 31 days
@@ -37,21 +38,27 @@ public class ModernUUIDCache {
      * caching the {@code last-account-name} value.
      */
     private final ConcurrentHashMap<String, UUID> nameToUuidMap = new ConcurrentHashMap<>();
+    private final CopyOnWriteArraySet<UUID> uuidCache = new CopyOnWriteArraySet<>();
 
     private final ScheduledExecutorService writeExecutor = Executors.newSingleThreadScheduledExecutor();
-    private final AtomicBoolean pendingWrite = new AtomicBoolean(false);
+    private final AtomicBoolean pendingNameWrite = new AtomicBoolean(false);
+    private final AtomicBoolean pendingUuidWrite = new AtomicBoolean(false);
     private final File nameToUuidFile;
+    private final File uuidCacheFile;
 
     public ModernUUIDCache(final IEssentials ess) {
         this.ess = ess;
         this.nameToUuidFile = new File(ess.getDataFolder(), "usermap.bin");
+        this.uuidCacheFile = new File(ess.getDataFolder(), "uuids.bin");
         loadCache();
         writeExecutor.scheduleWithFixedDelay(() -> {
-            if (!pendingWrite.compareAndSet(true, false)) {
-                return;
+            if (pendingNameWrite.compareAndSet(true, false)) {
+                saveNameToUuidCache();
             }
 
-            saveCache();
+            if (pendingUuidWrite.compareAndSet(true, false)) {
+                saveUuidCache();
+            }
         }, 5, 5, TimeUnit.SECONDS);
     }
 
@@ -65,7 +72,7 @@ public class ModernUUIDCache {
             }
 
             if (ess.getSettings().isDebug()) {
-                ess.getLogger().log(Level.INFO, "Loading UUID cache from disk...");
+                ess.getLogger().log(Level.INFO, "Loading Name->UUID cache from disk...");
             }
 
             nameToUuidMap.clear();
@@ -74,13 +81,55 @@ public class ModernUUIDCache {
                 nameToUuidMap.put(dis.readUTF(), new UUID(dis.readLong(), dis.readLong()));
             }
         } catch (IOException e) {
+            ess.getLogger().log(Level.SEVERE, "Error while loading Name->UUID cache", e);
+        }
+
+        try {
+            if (!uuidCacheFile.exists()) {
+                if (!uuidCacheFile.createNewFile()) {
+                    throw new RuntimeException("Error while creating uuids.bin");
+                }
+                return;
+            }
+
+            if (ess.getSettings().isDebug()) {
+                ess.getLogger().log(Level.INFO, "Loading UUID cache from disk...");
+            }
+
+            uuidCache.clear();
+
+            try (final DataInputStream dis = new DataInputStream(new FileInputStream(uuidCacheFile))) {
+                uuidCache.add(new UUID(dis.readLong(), dis.readLong()));
+            }
+        } catch (IOException e) {
             ess.getLogger().log(Level.SEVERE, "Error while loading UUID cache", e);
         }
     }
 
-    private void saveCache() {
+    private void saveUuidCache() {
         if (ess.getSettings().isDebug()) {
             ess.getLogger().log(Level.INFO, "Saving UUID cache to disk...");
+        }
+
+        try {
+            final File tmpMap = File.createTempFile("uuids", ".tmp.bin", ess.getDataFolder());
+
+            try (final DataOutputStream dos = new DataOutputStream(new FileOutputStream(tmpMap))) {
+                for (final UUID uuid: uuidCache) {
+                    dos.writeLong(uuid.getMostSignificantBits());
+                    dos.writeLong(uuid.getLeastSignificantBits());
+                }
+            }
+            //noinspection UnstableApiUsage
+            Files.move(tmpMap, uuidCacheFile);
+        } catch (IOException e) {
+            ess.getLogger().log(Level.SEVERE, "Error while saving UUID cache", e);
+        }
+    }
+
+    private void saveNameToUuidCache() {
+        if (ess.getSettings().isDebug()) {
+            ess.getLogger().log(Level.INFO, "Saving Name->UUID cache to disk...");
         }
 
         try {
@@ -97,12 +146,15 @@ public class ModernUUIDCache {
             //noinspection UnstableApiUsage
             Files.move(tmpMap, nameToUuidFile);
         } catch (IOException e) {
-            ess.getLogger().log(Level.SEVERE, "Error while saving UUID cache", e);
+            ess.getLogger().log(Level.SEVERE, "Error while saving Name->UUID cache", e);
         }
     }
 
     public void shutdown() {
-        writeExecutor.submit(this::saveCache);
+        writeExecutor.submit(() -> {
+            saveNameToUuidCache();
+            saveUuidCache();
+        });
         writeExecutor.shutdown();
     }
 }
