@@ -5,15 +5,18 @@ import com.earth2me.essentials.User;
 import com.earth2me.essentials.api.Economy;
 import com.earth2me.essentials.api.NoLoanPermittedException;
 import com.earth2me.essentials.api.UserDoesNotExistException;
+import com.earth2me.essentials.utils.StringUtil;
+import com.google.common.base.Charsets;
 import net.ess3.api.MaxMoneyException;
 import net.tnemc.core.Reserve;
 import net.tnemc.core.economy.EconomyAPI;
-import net.tnemc.core.economy.currency.Currency;
 import net.tnemc.core.economy.response.AccountResponse;
 import net.tnemc.core.economy.response.EconomyResponse;
 import net.tnemc.core.economy.response.GeneralResponse;
 import net.tnemc.core.economy.response.HoldingsResponse;
+import org.bukkit.Bukkit;
 import org.bukkit.World;
+import org.bukkit.entity.Player;
 
 import java.math.BigDecimal;
 import java.util.UUID;
@@ -43,11 +46,24 @@ public class ReserveEconomyProvider implements EconomyAPI {
      */
     @Override
     public String version() {
-        return "0.1.4.6";
+        return "0.1.5.4";
     }
 
     //This is our method to convert UUID -> username for use with Essentials' create account methods.
     private User getUser(String identifier) throws UserDoesNotExistException {
+
+        try {
+            final UUID id = UUID.fromString(identifier);
+            final User user = ess.getUser(id);
+
+            if(user == null) {
+                throw new UserDoesNotExistException(identifier);
+            }
+            return user;
+        } catch(Exception ignore) {
+            //We aren't using a UUID
+        }
+
         final User user = ess.getUser(identifier);
 
         if(user == null) {
@@ -119,8 +135,8 @@ public class ReserveEconomyProvider implements EconomyAPI {
     }
 
     /**
-     * Checks to see if a {@link Currency} exists with this name.
-     * @param name The name of the {@link Currency} to search for.
+     * Checks to see if a name of the currency exists with this name.
+     * @param name The name of the name of the currency to search for.
      * @return True if the currency exists, else false.
      */
     @Override
@@ -129,9 +145,9 @@ public class ReserveEconomyProvider implements EconomyAPI {
     }
 
     /**
-     * Checks to see if a {@link Currency} exists with this name.
-     * @param name The name of the {@link Currency} to search for.
-     * @param world The name of the {@link World} to check for this {@link Currency} in.
+     * Checks to see if a name of the currency exists with this name.
+     * @param name The name of the name of the currency to search for.
+     * @param world The name of the {@link World} to check for this name of the currency in.
      * @return True if the currency exists, else false.
      */
     @Override
@@ -149,6 +165,10 @@ public class ReserveEconomyProvider implements EconomyAPI {
         if (Economy.playerExists(identifier)) {
             return GeneralResponse.SUCCESS;
         }
+
+        if(Economy.playerExists(UUID.nameUUIDFromBytes(("NPC:" + StringUtil.safeString(identifier)).getBytes(Charsets.UTF_8)))) {
+            return GeneralResponse.SUCCESS;
+        }
         return AccountResponse.DOESNT_EXIST;
     }
 
@@ -159,7 +179,10 @@ public class ReserveEconomyProvider implements EconomyAPI {
      */
     @Override
     public EconomyResponse hasAccountDetail(UUID identifier) {
-        return hasAccountDetail(identifier);
+        if (Economy.playerExists(identifier)) {
+            return GeneralResponse.SUCCESS;
+        }
+        return AccountResponse.DOESNT_EXIST;
     }
 
     /**
@@ -183,7 +206,20 @@ public class ReserveEconomyProvider implements EconomyAPI {
      */
     @Override
     public EconomyResponse createAccountDetail(UUID identifier) {
-        return createAccountDetail(identifier);
+
+        if (hasAccount(identifier)) {
+            return AccountResponse.ALREADY_EXISTS;
+        }
+
+        final Player player = Bukkit.getPlayer(identifier);
+        if (player != null) {
+
+            final User user = ess.getUser(player);
+            if(user != null) {
+                return AccountResponse.CREATED;
+            }
+        }
+        return GeneralResponse.FAILED;
     }
 
     /**
@@ -210,7 +246,17 @@ public class ReserveEconomyProvider implements EconomyAPI {
      */
     @Override
     public EconomyResponse deleteAccountDetail(UUID identifier) {
-        return deleteAccountDetail(identifier);
+        try {
+            final User user = ess.getUser(identifier);
+            if(user != null) {
+                Economy.resetBalance(user);
+            } else {
+                return AccountResponse.DOESNT_EXIST;
+            }
+        } catch (NoLoanPermittedException | MaxMoneyException ignore) {
+            return GeneralResponse.FAILED;
+        }
+        return GeneralResponse.SUCCESS;
     }
 
     /**
@@ -232,7 +278,7 @@ public class ReserveEconomyProvider implements EconomyAPI {
      */
     @Override
     public boolean isAccessor(String identifier, UUID accessor) {
-        return isAccessor(identifier, accessor);
+        return isAccessor(identifier, accessor.toString());
     }
 
     /**
@@ -243,7 +289,7 @@ public class ReserveEconomyProvider implements EconomyAPI {
      */
     @Override
     public boolean isAccessor(UUID identifier, String accessor) {
-        return isAccessor(identifier, accessor);
+        return isAccessor(identifier.toString(), accessor);
     }
 
     /**
@@ -254,7 +300,7 @@ public class ReserveEconomyProvider implements EconomyAPI {
      */
     @Override
     public boolean isAccessor(UUID identifier, UUID accessor) {
-        return isAccessor(identifier, accessor);
+        return isAccessor(identifier.toString(), accessor.toString());
     }
 
     /**
@@ -279,7 +325,7 @@ public class ReserveEconomyProvider implements EconomyAPI {
      */
     @Override
     public EconomyResponse canWithdrawDetail(String identifier, UUID accessor) {
-        return canWithdrawDetail(identifier, accessor);
+        return canWithdrawDetail(identifier, accessor.toString());
     }
 
     /**
@@ -290,7 +336,7 @@ public class ReserveEconomyProvider implements EconomyAPI {
      */
     @Override
     public EconomyResponse canWithdrawDetail(UUID identifier, String accessor) {
-        return canWithdrawDetail(identifier, accessor);
+        return canWithdrawDetail(identifier.toString(), accessor);
     }
 
     /**
@@ -301,7 +347,7 @@ public class ReserveEconomyProvider implements EconomyAPI {
      */
     @Override
     public EconomyResponse canWithdrawDetail(UUID identifier, UUID accessor) {
-        return canWithdrawDetail(identifier, accessor);
+        return canWithdrawDetail(identifier.toString(), accessor.toString());
     }
 
     /**
@@ -326,7 +372,7 @@ public class ReserveEconomyProvider implements EconomyAPI {
      */
     @Override
     public EconomyResponse canDepositDetail(String identifier, UUID accessor) {
-        return canDepositDetail(identifier, accessor);
+        return canDepositDetail(identifier, accessor.toString());
     }
 
     /**
@@ -337,7 +383,7 @@ public class ReserveEconomyProvider implements EconomyAPI {
      */
     @Override
     public EconomyResponse canDepositDetail(UUID identifier, String accessor) {
-        return canDepositDetail(identifier, accessor);
+        return canDepositDetail(identifier.toString(), accessor);
     }
 
     /**
@@ -348,7 +394,7 @@ public class ReserveEconomyProvider implements EconomyAPI {
      */
     @Override
     public EconomyResponse canDepositDetail(UUID identifier, UUID accessor) {
-        return canDepositDetail(identifier, accessor);
+        return canDepositDetail(identifier.toString(), accessor.toString());
     }
 
     /**
@@ -408,7 +454,7 @@ public class ReserveEconomyProvider implements EconomyAPI {
      * Used to get the balance of an account.
      * @param identifier The identifier of the account that is associated with this call.
      * @param world The name of the {@link World} associated with the balance.
-     * @param currency The {@link Currency} associated with the balance.
+     * @param currency The name of the currency associated with the balance.
      * @return The balance of the account.
      */
     @Override
@@ -420,7 +466,7 @@ public class ReserveEconomyProvider implements EconomyAPI {
      * Used to get the balance of an account.
      * @param identifier The identifier of the account that is associated with this call.
      * @param world The name of the {@link World} associated with the balance.
-     * @param currency The {@link Currency} associated with the balance.
+     * @param currency The name of the currency associated with the balance.
      * @return The balance of the account.
      */
     @Override
@@ -487,7 +533,7 @@ public class ReserveEconomyProvider implements EconomyAPI {
      * @param identifier The identifier of the account that is associated with this call.
      * @param amount The amount you wish to use for this check.
      * @param world The name of the {@link World} associated with the amount.
-     * @param currency The {@link Currency} associated with the balance.
+     * @param currency The name of the currency associated with the balance.
      * @return True if the account has at least the specified amount of funds, otherwise false.
      */
     @Override
@@ -500,7 +546,7 @@ public class ReserveEconomyProvider implements EconomyAPI {
      * @param identifier The identifier of the account that is associated with this call.
      * @param amount The amount you wish to use for this check.
      * @param world The name of the {@link World} associated with the amount.
-     * @param currency The {@link Currency} associated with the balance.
+     * @param currency The name of the currency associated with the balance.
      * @return True if the account has at least the specified amount of funds, otherwise false.
      */
     @Override
@@ -535,7 +581,7 @@ public class ReserveEconomyProvider implements EconomyAPI {
      */
     @Override
     public EconomyResponse setHoldingsDetail(UUID identifier, BigDecimal amount) {
-        return setHoldingsDetail(identifier, amount);
+        return setHoldingsDetail(identifier.toString(), amount);
     }
 
     /**
@@ -567,7 +613,7 @@ public class ReserveEconomyProvider implements EconomyAPI {
      * @param identifier The identifier of the account that is associated with this call.
      * @param amount The amount you wish to set this accounts's funds to.
      * @param world The name of the {@link World} associated with the amount.
-     * @param currency The {@link Currency} associated with the balance.
+     * @param currency The name of the currency associated with the balance.
      * @return The {@link EconomyResponse} for this action.
      */
     @Override
@@ -580,7 +626,7 @@ public class ReserveEconomyProvider implements EconomyAPI {
      * @param identifier The identifier of the account that is associated with this call.
      * @param amount The amount you wish to set this accounts's funds to.
      * @param world The name of the {@link World} associated with the amount.
-     * @param currency The {@link Currency} associated with the balance.
+     * @param currency The name of the currency associated with the balance.
      * @return The {@link EconomyResponse} for this action.
      */
     @Override
@@ -618,7 +664,7 @@ public class ReserveEconomyProvider implements EconomyAPI {
      */
     @Override
     public EconomyResponse addHoldingsDetail(UUID identifier, BigDecimal amount) {
-        return addHoldingsDetail(identifier, amount);
+        return addHoldingsDetail(identifier.toString(), amount);
     }
 
     /**
@@ -650,7 +696,7 @@ public class ReserveEconomyProvider implements EconomyAPI {
      * @param identifier The identifier of the account that is associated with this call.
      * @param amount The amount you wish to add to this account.
      * @param world The name of the {@link World} associated with the amount.
-     * @param currency The {@link Currency} associated with the balance.
+     * @param currency The name of the currency associated with the balance.
      * @return The {@link EconomyResponse} for this action.
      */
     @Override
@@ -663,7 +709,7 @@ public class ReserveEconomyProvider implements EconomyAPI {
      * @param identifier The identifier of the account that is associated with this call.
      * @param amount The amount you wish to add to this account.
      * @param world The name of the {@link World} associated with the amount.
-     * @param currency The {@link Currency} associated with the balance.
+     * @param currency The name of the currency associated with the balance.
      * @return The {@link EconomyResponse} for this action.
      */
     @Override
@@ -695,7 +741,7 @@ public class ReserveEconomyProvider implements EconomyAPI {
      */
     @Override
     public EconomyResponse canAddHoldingsDetail(UUID identifier, BigDecimal amount) {
-        return canAddHoldingsDetail(identifier, amount);
+        return canAddHoldingsDetail(identifier.toString(), amount);
     }
 
     /**
@@ -730,7 +776,7 @@ public class ReserveEconomyProvider implements EconomyAPI {
      * @param identifier The identifier of the account that is associated with this call.
      * @param amount The amount you wish to add to this account.
      * @param world The name of the {@link World} associated with the amount.
-     * @param currency The {@link Currency} associated with the balance.
+     * @param currency The name of the currency associated with the balance.
      * @return The {@link EconomyResponse} for this action.
      */
     @Override
@@ -744,7 +790,7 @@ public class ReserveEconomyProvider implements EconomyAPI {
      * @param identifier The identifier of the account that is associated with this call.
      * @param amount The amount you wish to add to this account.
      * @param world The name of the {@link World} associated with the amount.
-     * @param currency The {@link Currency} associated with the balance.
+     * @param currency The name of the currency associated with the balance.
      * @return The {@link EconomyResponse} for this action.
      */
     @Override
@@ -783,7 +829,7 @@ public class ReserveEconomyProvider implements EconomyAPI {
      */
     @Override
     public EconomyResponse removeHoldingsDetail(UUID identifier, BigDecimal amount) {
-        return removeHoldingsDetail(identifier, amount);
+        return removeHoldingsDetail(identifier.toString(), amount);
     }
 
     /**
@@ -815,7 +861,7 @@ public class ReserveEconomyProvider implements EconomyAPI {
      * @param identifier The identifier of the account that is associated with this call.
      * @param amount The amount you wish to remove from this account.
      * @param world The name of the {@link World} associated with the amount.
-     * @param currency The {@link Currency} associated with the balance.
+     * @param currency The name of the currency associated with the balance.
      * @return The {@link EconomyResponse} for this action.
      */
     @Override
@@ -828,7 +874,7 @@ public class ReserveEconomyProvider implements EconomyAPI {
      * @param identifier The identifier of the account that is associated with this call.
      * @param amount The amount you wish to remove from this account.
      * @param world The name of the {@link World} associated with the amount.
-     * @param currency The {@link Currency} associated with the balance.
+     * @param currency The name of the currency associated with the balance.
      * @return The {@link EconomyResponse} for this action.
      */
     @Override
@@ -860,7 +906,7 @@ public class ReserveEconomyProvider implements EconomyAPI {
      */
     @Override
     public EconomyResponse canRemoveHoldingsDetail(UUID identifier, BigDecimal amount) {
-        return canRemoveHoldingsDetail(identifier, amount);
+        return canRemoveHoldingsDetail(identifier.toString(), amount);
     }
 
     /**
@@ -895,7 +941,7 @@ public class ReserveEconomyProvider implements EconomyAPI {
      * @param identifier The identifier of the account that is associated with this call.
      * @param amount The amount you wish to remove from this account.
      * @param world The name of the {@link World} associated with the amount.
-     * @param currency The {@link Currency} associated with the balance.
+     * @param currency The name of the currency associated with the balance.
      * @return The {@link EconomyResponse} that would be returned with the corresponding removeHoldingsDetail method.
      */
     @Override
@@ -909,7 +955,7 @@ public class ReserveEconomyProvider implements EconomyAPI {
      * @param identifier The identifier of the account that is associated with this call.
      * @param amount The amount you wish to remove from this account.
      * @param world The name of the {@link World} associated with the amount.
-     * @param currency The {@link Currency} associated with the balance.
+     * @param currency The name of the currency associated with the balance.
      * @return The {@link EconomyResponse} that would be returned with the corresponding removeHoldingsDetail method.
      */
     @Override
@@ -942,7 +988,7 @@ public class ReserveEconomyProvider implements EconomyAPI {
      * Formats a monetary amount into a more text-friendly version.
      * @param amount The amount of currency to format.
      * @param world The {@link World} in which this format operation is occurring.
-     * @param currency The {@link Currency} associated with the balance.
+     * @param currency The name of the currency associated with the balance.
      * @return The formatted amount.
      */
     @Override

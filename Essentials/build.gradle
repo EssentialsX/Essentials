@@ -8,7 +8,7 @@ dependencies {
     }
     compileOnly 'net.luckperms:api:5.0'
 
-    compileOnly 'net.tnemc:Reserve:0.1.5.2'
+    compileOnly 'net.tnemc:Reserve:0.1.5.4'
 
     api 'io.papermc:paperlib:1.0.6'
 
