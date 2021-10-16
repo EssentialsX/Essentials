@@ -562,7 +562,10 @@ public class ReserveEconomyProvider implements EconomyAPI {
      */
     @Override
     public EconomyResponse setHoldingsDetail(String identifier, BigDecimal amount) {
-        if (!hasAccount(identifier) && !createAccount(identifier)) return AccountResponse.CREATION_FAILED;
+        if (!hasAccount(identifier) && !createAccount(identifier)) {
+            return AccountResponse.CREATION_FAILED;
+        }
+
         try {
             Economy.setMoney(getUser(identifier), amount);
             return GeneralResponse.SUCCESS;
@@ -581,7 +584,17 @@ public class ReserveEconomyProvider implements EconomyAPI {
      */
     @Override
     public EconomyResponse setHoldingsDetail(UUID identifier, BigDecimal amount) {
-        return setHoldingsDetail(identifier.toString(), amount);
+        if (!hasAccount(identifier) && !createAccount(identifier)) {
+            return AccountResponse.CREATION_FAILED;
+        }
+        try {
+            Economy.setMoney(identifier, amount);
+            return GeneralResponse.SUCCESS;
+        } catch (UserDoesNotExistException ignore) {
+            return AccountResponse.DOESNT_EXIST;
+        } catch (NoLoanPermittedException | MaxMoneyException ignore) {
+            return GeneralResponse.FAILED;
+        }
     }
 
     /**
@@ -642,9 +655,13 @@ public class ReserveEconomyProvider implements EconomyAPI {
      */
     @Override
     public EconomyResponse addHoldingsDetail(String identifier, BigDecimal amount) {
-        if (!hasAccount(identifier) && !createAccount(identifier)) return AccountResponse.CREATION_FAILED;
-        if (getHoldings(identifier).add(amount).compareTo(ess.getSettings().getMaxMoney()) > 0)
+        if (!hasAccount(identifier) && !createAccount(identifier)) {
+            return AccountResponse.CREATION_FAILED;
+        }
+
+        if (getHoldings(identifier).add(amount).compareTo(ess.getSettings().getMaxMoney()) > 0) {
             return HoldingsResponse.MAX_HOLDINGS;
+        }
 
         try {
             Economy.add(getUser(identifier), amount);
@@ -664,7 +681,22 @@ public class ReserveEconomyProvider implements EconomyAPI {
      */
     @Override
     public EconomyResponse addHoldingsDetail(UUID identifier, BigDecimal amount) {
-        return addHoldingsDetail(identifier.toString(), amount);
+        if (!hasAccount(identifier) && !createAccount(identifier)) {
+            return AccountResponse.CREATION_FAILED;
+        }
+
+        if (getHoldings(identifier).add(amount).compareTo(ess.getSettings().getMaxMoney()) > 0) {
+            return HoldingsResponse.MAX_HOLDINGS;
+        }
+
+        try {
+            Economy.add(identifier, amount);
+            return GeneralResponse.SUCCESS;
+        } catch (UserDoesNotExistException ignore) {
+            return AccountResponse.DOESNT_EXIST;
+        } catch (NoLoanPermittedException | MaxMoneyException ignore) {
+            return GeneralResponse.FAILED;
+        }
     }
 
     /**
@@ -727,8 +759,9 @@ public class ReserveEconomyProvider implements EconomyAPI {
     @Override
     public EconomyResponse canAddHoldingsDetail(String identifier, BigDecimal amount) {
         if (!hasAccount(identifier) && !createAccount(identifier)) return AccountResponse.CREATION_FAILED;
-        if (getHoldings(identifier).add(amount).compareTo(ess.getSettings().getMaxMoney()) > 0)
+        if (getHoldings(identifier).add(amount).compareTo(ess.getSettings().getMaxMoney()) > 0) {
             return HoldingsResponse.MAX_HOLDINGS;
+        }
         return GeneralResponse.SUCCESS;
     }
 
@@ -741,7 +774,11 @@ public class ReserveEconomyProvider implements EconomyAPI {
      */
     @Override
     public EconomyResponse canAddHoldingsDetail(UUID identifier, BigDecimal amount) {
-        return canAddHoldingsDetail(identifier.toString(), amount);
+        if (!hasAccount(identifier) && !createAccount(identifier)) return AccountResponse.CREATION_FAILED;
+        if (getHoldings(identifier).add(amount).compareTo(ess.getSettings().getMaxMoney()) > 0) {
+            return HoldingsResponse.MAX_HOLDINGS;
+        }
+        return GeneralResponse.SUCCESS;
     }
 
     /**
@@ -807,9 +844,13 @@ public class ReserveEconomyProvider implements EconomyAPI {
      */
     @Override
     public EconomyResponse removeHoldingsDetail(String identifier, BigDecimal amount) {
-        if (!hasAccount(identifier) && !createAccount(identifier)) return AccountResponse.CREATION_FAILED;
-        if (getHoldings(identifier).subtract(amount).compareTo(ess.getSettings().getMinMoney()) < 0)
+        if (!hasAccount(identifier) && !createAccount(identifier)) {
+            return AccountResponse.CREATION_FAILED;
+        }
+
+        if (getHoldings(identifier).subtract(amount).compareTo(ess.getSettings().getMinMoney()) < 0) {
             return HoldingsResponse.MIN_HOLDINGS;
+        }
 
         try {
             Economy.subtract(getUser(identifier), amount);
@@ -829,7 +870,22 @@ public class ReserveEconomyProvider implements EconomyAPI {
      */
     @Override
     public EconomyResponse removeHoldingsDetail(UUID identifier, BigDecimal amount) {
-        return removeHoldingsDetail(identifier.toString(), amount);
+        if (!hasAccount(identifier) && !createAccount(identifier)) {
+            return AccountResponse.CREATION_FAILED;
+        }
+
+        if (getHoldings(identifier).subtract(amount).compareTo(ess.getSettings().getMinMoney()) < 0) {
+            return HoldingsResponse.MIN_HOLDINGS;
+        }
+
+        try {
+            Economy.subtract(identifier, amount);
+            return GeneralResponse.SUCCESS;
+        } catch (UserDoesNotExistException ignore) {
+            return AccountResponse.DOESNT_EXIST;
+        } catch (NoLoanPermittedException | MaxMoneyException ignore) {
+            return GeneralResponse.FAILED;
+        }
     }
 
     /**
@@ -892,8 +948,9 @@ public class ReserveEconomyProvider implements EconomyAPI {
     @Override
     public EconomyResponse canRemoveHoldingsDetail(String identifier, BigDecimal amount) {
         if (!hasAccount(identifier) && !createAccount(identifier)) return AccountResponse.CREATION_FAILED;
-        if (getHoldings(identifier).subtract(amount).compareTo(ess.getSettings().getMinMoney()) < 0)
+        if (getHoldings(identifier).subtract(amount).compareTo(ess.getSettings().getMinMoney()) < 0) {
             return HoldingsResponse.MIN_HOLDINGS;
+        }
         return GeneralResponse.SUCCESS;
     }
 
@@ -906,7 +963,11 @@ public class ReserveEconomyProvider implements EconomyAPI {
      */
     @Override
     public EconomyResponse canRemoveHoldingsDetail(UUID identifier, BigDecimal amount) {
-        return canRemoveHoldingsDetail(identifier.toString(), amount);
+        if (!hasAccount(identifier) && !createAccount(identifier)) return AccountResponse.CREATION_FAILED;
+        if (getHoldings(identifier).subtract(amount).compareTo(ess.getSettings().getMinMoney()) < 0) {
+            return HoldingsResponse.MIN_HOLDINGS;
+        }
+        return GeneralResponse.SUCCESS;
     }
 
     /**
