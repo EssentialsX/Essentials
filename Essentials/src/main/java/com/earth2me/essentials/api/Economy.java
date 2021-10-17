@@ -64,6 +64,7 @@ public class Economy {
         npcConfig.setProperty("money", ess.getSettings().getStartingBalance());
         npcConfig.blockingSave();
         // This will load the NPC into the UserMap + UUID cache
+        ess.getUsers().addCachedNpcName(npcUUID, name);
         ess.getUsers().getUser(npcUUID);
     }
 

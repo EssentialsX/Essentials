@@ -199,6 +199,11 @@ public class ModernUUIDCache {
         }
     }
 
+    public void blockingSave() {
+        saveUuidCache();
+        saveNameToUuidCache();
+    }
+
     public static void writeUuidCache(final File file, Set<UUID> uuids) throws IOException {
         try (final DataOutputStream dos = new DataOutputStream(new FileOutputStream(file))) {
             for (final UUID uuid: uuids) {

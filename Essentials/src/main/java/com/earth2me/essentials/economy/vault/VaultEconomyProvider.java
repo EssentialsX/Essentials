@@ -312,6 +312,7 @@ public class VaultEconomyProvider implements Economy {
             npcConfig.setProperty("money", ess.getSettings().getStartingBalance());
             npcConfig.blockingSave();
             // This will load the NPC into the UserMap + UUID cache
+            ess.getUsers().addCachedNpcName(player.getUniqueId(), player.getName());
             ess.getUsers().getUser(player.getUniqueId());
             return true;
         }

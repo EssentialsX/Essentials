@@ -86,6 +86,14 @@ public class ModernUserMap extends CacheLoader<UUID, User> {
         return user;
     }
 
+    public void addCachedNpcName(final UUID uuid, final String name) {
+        if (uuid == null || name == null) {
+            return;
+        }
+
+        uuidCache.updateCache(uuid, name);
+    }
+
     @Override
     public User load(final UUID uuid) throws Exception {
         final User user = loadUncachedUser(uuid);
@@ -127,6 +135,10 @@ public class ModernUserMap extends CacheLoader<UUID, User> {
 
     public Map<String, UUID> getNameCache() {
         return uuidCache.getNameCache();
+    }
+
+    public void blockingSave() {
+        uuidCache.blockingSave();
     }
 
     public void invalidate(final UUID uuid) {
