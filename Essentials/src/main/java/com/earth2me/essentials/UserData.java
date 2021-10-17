@@ -43,19 +43,11 @@ public abstract class UserData extends PlayerExtension implements IConf {
         super(base);
         this.ess = ess;
         final File folder = new File(ess.getDataFolder(), "userdata");
-        if (!folder.exists()) {
-            folder.mkdirs();
+        if (!folder.exists() && !folder.mkdirs()) {
+            throw new RuntimeException("Unable to create userdata folder!");
         }
 
-        String filename;
-        try {
-            filename = base.getUniqueId().toString();
-        } catch (final Throwable ex) {
-            ess.getLogger().warning("Falling back to old username system for " + base.getName());
-            filename = base.getName();
-        }
-
-        config = new EssentialsUserConfiguration(base.getName(), base.getUniqueId(), new File(folder, filename + ".yml"));
+        config = new EssentialsUserConfiguration(base.getName(), base.getUniqueId(), new File(folder, base.getUniqueId() + ".yml"));
         reloadConfig();
 
         if (config.getUsername() == null) {
@@ -65,7 +57,9 @@ public abstract class UserData extends PlayerExtension implements IConf {
 
     public final void reset() {
         config.blockingSave();
-        config.getFile().delete();
+        if (!config.getFile().delete()) {
+            ess.getLogger().warning("Unable to delete data file for " + config.getFile().getName());
+        }
         if (config.getUsername() != null) {
             ess.getUserMap().removeUser(config.getUsername());
             if (isNPC()) {

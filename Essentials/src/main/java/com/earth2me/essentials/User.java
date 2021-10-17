@@ -90,9 +90,8 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
         this.messageRecipient = new SimpleMessageRecipient(ess, this);
     }
 
-    User update(final Player base) {
+    public void update(final Player base) {
         setBase(base);
-        return this;
     }
 
     @Override

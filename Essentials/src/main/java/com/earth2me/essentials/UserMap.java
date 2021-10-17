@@ -69,10 +69,6 @@ public class UserMap extends CacheLoader<String, User> implements IConf {
         });
     }
 
-    public boolean userExists(final UUID uuid) {
-        return keys.contains(uuid);
-    }
-
     public User getUser(final String name) {
         final String sanitizedName = StringUtil.safeString(name);
         try {

@@ -1,5 +1,6 @@
 package com.earth2me.essentials.userstorage;
 
+import com.earth2me.essentials.utils.StringUtil;
 import com.google.common.io.Files;
 import net.ess3.api.IEssentials;
 
@@ -9,7 +10,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Collections;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArraySet;
@@ -60,6 +63,34 @@ public class ModernUUIDCache {
                 saveUuidCache();
             }
         }, 5, 5, TimeUnit.SECONDS);
+    }
+
+    public UUID getCachedUUID(final String name) {
+        return nameToUuidMap.get(getSanitizedName(name));
+    }
+
+    public Set<UUID> getCachedUUIDs() {
+        return Collections.unmodifiableSet(uuidCache);
+    }
+
+    public int getCacheSize() {
+        return uuidCache.size();
+    }
+
+    public String getSanitizedName(final String name) {
+        return ess.getSettings().isSafeUsermap() ? StringUtil.safeString(name) : name;
+    }
+
+    public void updateCache(final UUID uuid, final String name) {
+        if (uuidCache.add(uuid)) {
+            pendingUuidWrite.set(true);
+        }
+        if (name != null) {
+            final UUID replacedUuid = nameToUuidMap.put(getSanitizedName(name), uuid);
+            if (uuid.equals(replacedUuid)) {
+                pendingNameWrite.set(true);
+            }
+        }
     }
 
     private void loadCache() {
@@ -155,6 +186,13 @@ public class ModernUUIDCache {
             saveNameToUuidCache();
             saveUuidCache();
         });
+        try {
+            if (!writeExecutor.awaitTermination(30, TimeUnit.SECONDS)) {
+                ess.getLogger().log(Level.SEVERE, "UUID cache took too long to save!");
+            }
+        } catch (InterruptedException e) {
+            ess.getLogger().log(Level.SEVERE, "Error while shutting down UUID cache", e);
+        }
         writeExecutor.shutdown();
     }
 }

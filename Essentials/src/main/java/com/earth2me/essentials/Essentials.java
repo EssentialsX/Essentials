@@ -39,6 +39,7 @@ import com.earth2me.essentials.textreader.IText;
 import com.earth2me.essentials.textreader.KeywordReplacer;
 import com.earth2me.essentials.textreader.SimpleTextInput;
 import com.earth2me.essentials.updatecheck.UpdateChecker;
+import com.earth2me.essentials.userstorage.ModernUserMap;
 import com.earth2me.essentials.utils.FormatUtil;
 import com.earth2me.essentials.utils.VersionUtil;
 import io.papermc.lib.PaperLib;
@@ -145,7 +146,8 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
     private transient CustomItemResolver customItemResolver;
     private transient PermissionsHandler permissionsHandler;
     private transient AlternativeCommandsHandler alternativeCommandsHandler;
-    private transient UserMap userMap;
+    private transient UserMap legacyUserMap;
+    private transient ModernUserMap userMap;
     private transient BalanceTopImpl balanceTop;
     private transient ExecuteTimer execTimer;
     private transient MailService mail;
@@ -208,7 +210,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
         LOGGER.log(Level.INFO, dataFolder.toString());
         settings = new Settings(this);
         mail = new MailServiceImpl(this);
-        userMap = new UserMap(this);
+        userMap = new ModernUserMap(this);
         balanceTop = new BalanceTopImpl(this);
         permissionsHandler = new PermissionsHandler(this, false);
         Economy.setEss(this);
@@ -284,8 +286,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
             mail = new MailServiceImpl(this);
             execTimer.mark("Init(Mail)");
 
-            userMap = new UserMap(this);
-            confList.add(userMap);
+            userMap = new ModernUserMap(this);
             execTimer.mark("Init(Usermap)");
 
             balanceTop = new BalanceTopImpl(this);
@@ -541,7 +542,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
 
         Economy.setEss(null);
         Trade.closeLog();
-        getUserMap().getUUIDMap().shutdown();
+        getUsers().shutdown();
 
         HandlerList.unregisterAll(this);
     }
@@ -1152,7 +1153,13 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
     }
 
     @Override
+    @Deprecated
     public UserMap getUserMap() {
+        return legacyUserMap;
+    }
+
+    @Override
+    public ModernUserMap getUsers() {
         return userMap;
     }
 
