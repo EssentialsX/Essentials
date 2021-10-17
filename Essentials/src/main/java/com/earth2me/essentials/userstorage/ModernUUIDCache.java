@@ -225,17 +225,8 @@ public class ModernUUIDCache {
     }
 
     public void shutdown() {
-        writeExecutor.submit(() -> {
-            saveNameToUuidCache();
-            saveUuidCache();
-        });
-        try {
-            if (!writeExecutor.awaitTermination(30, TimeUnit.SECONDS)) {
-                ess.getLogger().log(Level.SEVERE, "UUID cache took too long to save!");
-            }
-        } catch (InterruptedException e) {
-            ess.getLogger().log(Level.SEVERE, "Error while shutting down UUID cache", e);
-        }
-        writeExecutor.shutdown();
+        writeExecutor.shutdownNow();
+        saveUuidCache();
+        saveNameToUuidCache();
     }
 }
