@@ -139,7 +139,9 @@ public class ModernUUIDCache {
             nameToUuidMap.clear();
 
             try (final DataInputStream dis = new DataInputStream(new FileInputStream(nameToUuidFile))) {
-                nameToUuidMap.put(dis.readUTF(), new UUID(dis.readLong(), dis.readLong()));
+                while (dis.available() > 0) {
+                    nameToUuidMap.put(dis.readUTF(), new UUID(dis.readLong(), dis.readLong()));
+                }
             }
         } catch (IOException e) {
             ess.getLogger().log(Level.SEVERE, "Error while loading Name->UUID cache", e);
@@ -160,7 +162,9 @@ public class ModernUUIDCache {
             uuidCache.clear();
 
             try (final DataInputStream dis = new DataInputStream(new FileInputStream(uuidCacheFile))) {
-                uuidCache.add(new UUID(dis.readLong(), dis.readLong()));
+                while (dis.available() > 0) {
+                    uuidCache.add(new UUID(dis.readLong(), dis.readLong()));
+                }
             }
         } catch (IOException e) {
             ess.getLogger().log(Level.SEVERE, "Error while loading UUID cache", e);
