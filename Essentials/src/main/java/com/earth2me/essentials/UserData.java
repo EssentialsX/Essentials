@@ -61,10 +61,10 @@ public abstract class UserData extends PlayerExtension implements IConf {
             ess.getLogger().warning("Unable to delete data file for " + config.getFile().getName());
         }
         if (config.getUsername() != null) {
-            ess.getUserMap().removeUser(config.getUsername());
+            ess.getUsers().invalidate(config.getUuid());
             if (isNPC()) {
-                final String uuid = UUID.nameUUIDFromBytes(("NPC:" + StringUtil.safeString(config.getUsername())).getBytes(Charsets.UTF_8)).toString();
-                ess.getUserMap().removeUserUUID(uuid);
+                final String name = ess.getSettings().isSafeUsermap() ? StringUtil.safeString(config.getUsername()) : config.getUsername();
+                ess.getUsers().invalidate(UUID.nameUUIDFromBytes(("NPC:" + name).getBytes(Charsets.UTF_8)));
             }
         }
     }
@@ -590,7 +590,6 @@ public abstract class UserData extends PlayerExtension implements IConf {
         }
         holder.lastAccountName(lastAccountName);
         config.save();
-        ess.getUserMap().trackUUID(getConfigUUID(), lastAccountName, true);
     }
 
     public boolean arePowerToolsEnabled() {

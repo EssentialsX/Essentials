@@ -4,6 +4,7 @@ import com.earth2me.essentials.config.ConfigurateUtil;
 import com.earth2me.essentials.config.EssentialsConfiguration;
 import com.earth2me.essentials.config.EssentialsUserConfiguration;
 import com.earth2me.essentials.craftbukkit.BanLookup;
+import com.earth2me.essentials.userstorage.ModernUUIDCache;
 import com.earth2me.essentials.utils.StringUtil;
 import com.google.common.base.Charsets;
 import com.google.common.io.Files;
@@ -93,7 +94,6 @@ public class EssentialsUpgrade {
             final int showProgress = countFiles % 250;
 
             if (showProgress == 0) {
-                ess.getUserMap().getUUIDMap().forceWriteUUIDMap();
                 ess.getLogger().info("Converted " + countFiles + "/" + userdir.list().length);
             }
 
@@ -103,7 +103,8 @@ public class EssentialsUpgrade {
             final EssentialsUserConfiguration config;
             UUID uuid = null;
             try {
-                uuid = UUID.fromString(name);
+                //noinspection ResultOfMethodCallIgnored
+                UUID.fromString(name);
             } catch (final IllegalArgumentException ex) {
                 final File file = new File(userdir, string);
                 final EssentialsConfiguration conf = new EssentialsConfiguration(file);
@@ -115,6 +116,7 @@ public class EssentialsUpgrade {
 
                 final String uuidString = conf.getString(uuidConf, null);
 
+                //noinspection ConstantConditions
                 for (int i = 0; i < 4; i++) {
                     try {
                         uuid = UUID.fromString(uuidString);
@@ -122,7 +124,7 @@ public class EssentialsUpgrade {
                         break;
                     } catch (final Exception ex2) {
                         if (conf.getBoolean("npc", false)) {
-                            uuid = UUID.nameUUIDFromBytes(("NPC:" + name).getBytes(Charsets.UTF_8));
+                            uuid = UUID.nameUUIDFromBytes(("NPC:" + (ess.getSettings().isSafeUsermap() ? StringUtil.safeString(name) : name)).getBytes(Charsets.UTF_8));
                             break;
                         }
 
@@ -130,23 +132,24 @@ public class EssentialsUpgrade {
                         uuid = player.getUniqueId();
                     }
 
+                    //noinspection ConstantConditions
                     if (uuid != null) {
                         countBukkit++;
                         break;
                     }
                 }
 
+                //noinspection ConstantConditions
                 if (uuid != null) {
                     conf.blockingSave();
                     config = new EssentialsUserConfiguration(name, uuid, new File(userdir, uuid + ".yml"));
                     config.convertLegacyFile();
-                    ess.getUserMap().trackUUID(uuid, name, false);
+                    ess.getUsers().loadUncachedUser(uuid);
                     continue;
                 }
                 countFails++;
             }
         }
-        ess.getUserMap().getUUIDMap().forceWriteUUIDMap();
 
         ess.getLogger().info("Converted " + countFiles + "/" + countFiles + ".  Conversion complete.");
         ess.getLogger().info("Converted via cache: " + countEssCache + " :: Converted via lookup: " + countBukkit + " :: Failed to convert: " + countFails);
@@ -918,6 +921,8 @@ public class EssentialsUpgrade {
             return;
         }
 
+        final File usermapFile = new File(ess.getDataFolder(), "usermap.bin");
+        final File uidsFile = new File(ess.getDataFolder(), "uuids.bin");
         final File userdataFolder = new File(ess.getDataFolder(), "userdata");
 
         if (!userdataFolder.isDirectory() || usermapFile.exists() || uidsFile.exists()) {
@@ -926,10 +931,6 @@ public class EssentialsUpgrade {
             doneFile.save();
             return;
         }
-        final File[] files = userdataFolder.listFiles(YML_FILTER);
-
-        final DecimalFormat format = new DecimalFormat("#0.00");
-        final Map<String, UUID> names = Maps.newHashMap();
 
         try {
             if (!usermapFile.createNewFile() || !uidsFile.createNewFile()) {

@@ -11,6 +11,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
@@ -90,6 +91,31 @@ public class ModernUUIDCache {
             if (uuid.equals(replacedUuid)) {
                 pendingNameWrite.set(true);
             }
+        }
+    }
+
+    public void removeCache(final UUID uuid) {
+        if (uuid == null) {
+            return;
+        }
+
+        if (uuidCache.remove(uuid)) {
+            pendingUuidWrite.set(true);
+        }
+
+        final Set<String> toRemove = new HashSet<>();
+        for (final Map.Entry<String, UUID> entry : nameToUuidMap.entrySet()) {
+            if (uuid.equals(entry.getValue())) {
+                toRemove.add(entry.getKey());
+            }
+        }
+
+        for (final String name : toRemove) {
+            nameToUuidMap.remove(name);
+        }
+
+        if (!toRemove.isEmpty()) {
+            pendingNameWrite.set(true);
         }
     }
 
@@ -178,7 +204,7 @@ public class ModernUUIDCache {
         }
     }
 
-    public static void writeNameUuidMap(File file, Map<String, UUID> nameToUuidMap) throws IOException {
+    public static void writeNameUuidMap(final File file, final Map<String, UUID> nameToUuidMap) throws IOException {
         try (final DataOutputStream dos = new DataOutputStream(new FileOutputStream(file))) {
             for (final Map.Entry<String, UUID> entry : nameToUuidMap.entrySet()) {
                 dos.writeUTF(entry.getKey());

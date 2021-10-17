@@ -2,7 +2,6 @@ package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.User;
-import com.earth2me.essentials.UserMap;
 import com.earth2me.essentials.economy.EconomyLayer;
 import com.earth2me.essentials.economy.EconomyLayers;
 import com.earth2me.essentials.utils.DateUtil;
@@ -399,12 +398,11 @@ public class Commandessentials extends EssentialsCommand {
         final long daysArg = Long.parseLong(args[1]);
         final double moneyArg = args.length >= 3 ? FloatUtil.parseDouble(args[2].replaceAll("[^0-9\\.]", "")) : 0;
         final int homesArg = args.length >= 4 && NumberUtil.isInt(args[3]) ? Integer.parseInt(args[3]) : 0;
-        final UserMap userMap = ess.getUserMap();
 
         ess.runTaskAsynchronously(() -> {
             final long currTime = System.currentTimeMillis();
-            for (final UUID u : userMap.getAllUniqueUsers()) {
-                final User user = ess.getUserMap().getUser(u);
+            for (final UUID u : ess.getUsers().getAllUserUUIDs()) {
+                final User user = ess.getUsers().loadUncachedUser(u);
                 if (user == null) {
                     continue;
                 }
@@ -449,13 +447,12 @@ public class Commandessentials extends EssentialsCommand {
             throw new Exception(HOMES_USAGE);
         }
 
-        final UserMap userMap = ess.getUserMap();
         switch (args[1]) {
             case "fix":
                 sender.sendMessage(tl("fixingHomes"));
                 ess.runTaskAsynchronously(() -> {
-                    for (final UUID u : userMap.getAllUniqueUsers()) {
-                        final User user = ess.getUserMap().getUser(u);
+                    for (final UUID u : ess.getUsers().getAllUserUUIDs()) {
+                        final User user = ess.getUsers().loadUncachedUser(u);
                         if (user == null) {
                             continue;
                         }
@@ -479,8 +476,8 @@ public class Commandessentials extends EssentialsCommand {
                 }
                 sender.sendMessage(filterByWorld ? tl("deletingHomesWorld", args[2]) : tl("deletingHomes"));
                 ess.runTaskAsynchronously(() -> {
-                    for (final UUID u : userMap.getAllUniqueUsers()) {
-                        final User user = ess.getUserMap().getUser(u);
+                    for (final UUID u : ess.getUsers().getAllUserUUIDs()) {
+                        final User user = ess.getUsers().loadUncachedUser(u);
                         if (user == null) {
                             continue;
                         }

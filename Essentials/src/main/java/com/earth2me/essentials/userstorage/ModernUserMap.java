@@ -60,6 +60,8 @@ public class ModernUserMap extends CacheLoader<UUID, User> {
         if (user == null) {
             ess.getLogger().log(Level.INFO, "Essentials created a User for " + base.getName() + " (" + base.getUniqueId() + ") for non Bukkit type: " + base.getClass().getName());
             user = new User(base, ess);
+            uuidCache.updateCache(user.getUUID(), user.getName());
+            userCache.put(user.getUUID(), user);
         } else if (!base.equals(user.getBase())) {
             ess.getLogger().log(Level.INFO, "Essentials updated the underlying Player object for " + user.getUUID());
             user.update(base);
@@ -120,6 +122,11 @@ public class ModernUserMap extends CacheLoader<UUID, User> {
         }
 
         return null;
+    }
+
+    public void invalidate(final UUID uuid) {
+        userCache.invalidate(uuid);
+        uuidCache.removeCache(uuid);
     }
 
     private File getUserFile(final UUID uuid) {

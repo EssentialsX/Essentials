@@ -11,6 +11,7 @@ import net.ess3.api.MaxMoneyException;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.economy.EconomyResponse;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.entity.Player;
 
 import java.io.File;
 import java.math.BigDecimal;
@@ -81,7 +82,7 @@ public class VaultEconomyProvider implements Economy {
             return true;
         }
         // We may not have the player name in the usermap, let's double check an NPC account with this name doesn't exist.
-        return com.earth2me.essentials.api.Economy.playerExists(UUID.nameUUIDFromBytes(("NPC:" + StringUtil.safeString(playerName)).getBytes(Charsets.UTF_8)));
+        return com.earth2me.essentials.api.Economy.playerExists(UUID.nameUUIDFromBytes(("NPC:" + (ess.getSettings().isSafeUsermap() ? StringUtil.safeString(playerName) : playerName)).getBytes(Charsets.UTF_8)));
     }
 
     @Override
@@ -310,21 +311,26 @@ public class VaultEconomyProvider implements Economy {
             npcConfig.setProperty("last-account-name", player.getName());
             npcConfig.setProperty("money", ess.getSettings().getStartingBalance());
             npcConfig.blockingSave();
-            ess.getUserMap().trackUUID(player.getUniqueId(), player.getName(), false);
+            // This will load the NPC into the UserMap + UUID cache
+            ess.getUsers().getUser(player.getUniqueId());
             return true;
         }
 
         // Loading a v4 UUID that we somehow didn't track, mark it as a normal player and hope for the best, vault sucks :/
-        try {
-            if (ess.getSettings().isDebug()) {
-                LOGGER.info("Vault requested a player account creation for a v4 UUID: " + player);
-            }
-            ess.getUserMap().load(player);
-            return true;
-        } catch (UserDoesNotExistException e) {
-            e.printStackTrace();
-            return false;
+        if (ess.getSettings().isDebug()) {
+            LOGGER.info("Vault requested a player account creation for a v4 UUID: " + player);
         }
+
+        final Player userPlayer;
+        if (player instanceof Player) {
+            userPlayer = (Player) player;
+        } else {
+            final com.earth2me.essentials.OfflinePlayer essPlayer = new com.earth2me.essentials.OfflinePlayer(player.getUniqueId(), ess.getServer());
+            essPlayer.setName(player.getName());
+            userPlayer = essPlayer;
+        }
+        ess.getUsers().getUser(userPlayer);
+        return true;
     }
 
     @Override

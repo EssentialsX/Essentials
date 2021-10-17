@@ -45,7 +45,7 @@ public class Economy {
 
     private static void createNPCFile(String name) {
         final File folder = new File(ess.getDataFolder(), "userdata");
-        name = StringUtil.safeString(name);
+        name = ess.getSettings().isSafeUsermap() ? StringUtil.safeString(name) : name;
         if (!folder.exists()) {
             if (!folder.mkdirs()) {
                 throw new RuntimeException("Error while creating userdata directory!");
@@ -63,7 +63,8 @@ public class Economy {
         npcConfig.setProperty("last-account-name", name);
         npcConfig.setProperty("money", ess.getSettings().getStartingBalance());
         npcConfig.blockingSave();
-        ess.getUserMap().trackUUID(npcUUID, name, false);
+        // This will load the NPC into the UserMap + UUID cache
+        ess.getUsers().getUser(npcUUID);
     }
 
     private static void deleteNPC(final String name) {
@@ -96,7 +97,7 @@ public class Economy {
         }
 
         if (user == null) {
-            user = getUserByUUID(UUID.nameUUIDFromBytes(("NPC:" + StringUtil.safeString(name)).getBytes(Charsets.UTF_8)));
+            user = getUserByUUID(UUID.nameUUIDFromBytes(("NPC:" + (ess.getSettings().isSafeUsermap() ? StringUtil.safeString(name) : name)).getBytes(Charsets.UTF_8)));
         }
 
         return user;
