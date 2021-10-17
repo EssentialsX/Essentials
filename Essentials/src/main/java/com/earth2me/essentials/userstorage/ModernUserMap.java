@@ -33,6 +33,10 @@ public class ModernUserMap extends CacheLoader<UUID, User> {
         return uuidCache.getCachedUUIDs();
     }
 
+    public long getCachedCount() {
+        return userCache.size();
+    }
+
     public int getUserCount() {
         return uuidCache.getCacheSize();
     }

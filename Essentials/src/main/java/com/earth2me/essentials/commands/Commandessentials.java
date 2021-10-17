@@ -132,6 +132,9 @@ public class Commandessentials extends EssentialsCommand {
             case "homes":
                 runHomes(server, sender, commandLabel, args);
                 break;
+            case "usermap":
+                runUserMap(sender, args);
+                break;
 
             // "#EasterEgg"
             case "nya":
@@ -497,6 +500,20 @@ public class Commandessentials extends EssentialsCommand {
                 break;
             default:
                 throw new Exception(HOMES_USAGE);
+        }
+    }
+
+    // Gets information about cached users
+    private void runUserMap(final CommandSource sender, final String[] args) {
+        if (!sender.isAuthorized("essentials.usermap", ess)) {
+            return;
+        }
+
+        sender.sendMessage(tl("usermapSize", ess.getUsers().getCachedCount(), ess.getUsers().getUserCount(), ess.getSettings().getMaxUserCacheCount()));
+        if (args.length > 1 && args[1].equals("full")) {
+            for (final Map.Entry<String, UUID> entry : ess.getUsers().getNameCache().entrySet()) {
+                sender.sendMessage(tl("usermapEntry", entry.getKey(), entry.getValue().toString()));
+            }
         }
     }
 
