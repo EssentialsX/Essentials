@@ -9,6 +9,7 @@ import net.ess3.api.IEssentials;
 import org.bukkit.entity.Player;
 
 import java.io.File;
+import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
@@ -122,6 +123,10 @@ public class ModernUserMap extends CacheLoader<UUID, User> {
         }
 
         return null;
+    }
+
+    public Map<String, UUID> getNameCache() {
+        return uuidCache.getNameCache();
     }
 
     public void invalidate(final UUID uuid) {

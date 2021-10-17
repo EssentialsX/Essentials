@@ -146,6 +146,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
     private transient CustomItemResolver customItemResolver;
     private transient PermissionsHandler permissionsHandler;
     private transient AlternativeCommandsHandler alternativeCommandsHandler;
+    @Deprecated
     private transient UserMap legacyUserMap;
     private transient ModernUserMap userMap;
     private transient BalanceTopImpl balanceTop;

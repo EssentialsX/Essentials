@@ -74,6 +74,10 @@ public class ModernUUIDCache {
         return Collections.unmodifiableSet(uuidCache);
     }
 
+    public Map<String, UUID> getNameCache() {
+        return Collections.unmodifiableMap(nameToUuidMap);
+    }
+
     public int getCacheSize() {
         return uuidCache.size();
     }
