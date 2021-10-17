@@ -6,7 +6,6 @@ import com.earth2me.essentials.config.EssentialsUserConfiguration;
 import com.earth2me.essentials.craftbukkit.BanLookup;
 import com.earth2me.essentials.utils.StringUtil;
 import com.google.common.base.Charsets;
-import com.google.common.collect.Maps;
 import com.google.common.io.Files;
 import com.google.gson.reflect.TypeToken;
 import net.ess3.api.IEssentials;
@@ -31,10 +30,10 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.security.DigestInputStream;
 import java.security.MessageDigest;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
@@ -48,7 +47,6 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static com.earth2me.essentials.I18n.tl;
@@ -915,15 +913,17 @@ public class EssentialsUpgrade {
         Bukkit.getBanList(BanList.Type.NAME).addBan(playerName, banReason, banTimeout == 0 ? null : new Date(banTimeout), Console.NAME);
     }
 
-    private void repairUserMap() {
-        if (doneFile.getBoolean("userMapRepaired", false)) {
+    public void generateUidCache() {
+        if (doneFile.getBoolean("newUidCacheGenerated", false)) {
             return;
         }
-        ess.getLogger().info("Starting usermap repair");
 
         final File userdataFolder = new File(ess.getDataFolder(), "userdata");
-        if (!userdataFolder.isDirectory()) {
+
+        if (!userdataFolder.isDirectory() || usermapFile.exists() || uidsFile.exists()) {
             ess.getLogger().warning("Missing userdata folder, aborting");
+            doneFile.setProperty("newUidCacheGenerated", true);
+            doneFile.save();
             return;
         }
         final File[] files = userdataFolder.listFiles(YML_FILTER);
@@ -931,58 +931,48 @@ public class EssentialsUpgrade {
         final DecimalFormat format = new DecimalFormat("#0.00");
         final Map<String, UUID> names = Maps.newHashMap();
 
-        for (int index = 0; index < files.length; index++) {
-            final File file = files[index];
-            try {
-                UUID uuid = null;
-                final String filename = file.getName();
-                final String configData = new String(java.nio.file.Files.readAllBytes(file.toPath()), Charsets.UTF_8);
-
-                if (filename.length() > 36) {
-                    try {
-                        // ".yml" ending has 4 chars...
-                        uuid = UUID.fromString(filename.substring(0, filename.length() - 4));
-                    } catch (final IllegalArgumentException ignored) {
-                    }
-                }
-
-                final Matcher uuidMatcher = PATTERN_CONFIG_UUID.matcher(configData);
-                if (uuidMatcher.find()) {
-                    try {
-                        uuid = UUID.fromString(uuidMatcher.group(1));
-                    } catch (final IllegalArgumentException ignored) {
-                    }
-                }
-
-                if (uuid == null) {
-                    // Don't import
-                    continue;
-                }
-
-                final Matcher nameMatcher = PATTERN_CONFIG_NAME.matcher(configData);
-                if (nameMatcher.find()) {
-                    final String username = nameMatcher.group(1);
-                    if (username != null && username.length() > 0) {
-                        names.put(StringUtil.safeString(username), uuid);
-                    }
-                }
-
-                if (index % 1000 == 0) {
-                    ess.getLogger().info("Reading: " + format.format((100d * (double) index) / files.length)
-                        + "%");
-                }
-            } catch (final IOException e) {
-                ess.getLogger().log(Level.SEVERE, "Error while reading file: ", e);
+        try {
+            if (!usermapFile.createNewFile() || !uidsFile.createNewFile()) {
+                ess.getLogger().warning("Couldn't create usermap.bin or uuids.bin, aborting");
                 return;
             }
+
+            final Set<UUID> uuids = new HashSet<>();
+            final Map<String, UUID> nameToUuidMap = new HashMap<>();
+
+            final File[] files = userdataFolder.listFiles(YML_FILTER);
+            if (files != null) {
+                for (final File file : files) {
+                    try {
+                        final String fileName = file.getName();
+                        final UUID uuid = UUID.fromString(fileName.substring(0, fileName.length() - 4));
+                        final EssentialsConfiguration config = new EssentialsConfiguration(file);
+                        config.load();
+                        String name = config.getString("last-account-name", null);
+                        name = ess.getSettings().isSafeUsermap() ? StringUtil.safeString(name) : name;
+
+                        uuids.add(uuid);
+                        if (name != null) {
+                            nameToUuidMap.put(name, uuid);
+                        }
+                    } catch (IllegalArgumentException | IndexOutOfBoundsException ignored) {
+                    }
+                }
+            }
+
+            if (!nameToUuidMap.isEmpty()) {
+                ModernUUIDCache.writeNameUuidMap(usermapFile, nameToUuidMap);
+            }
+
+            if (!uuids.isEmpty()) {
+                ModernUUIDCache.writeUuidCache(uidsFile, uuids);
+            }
+
+            doneFile.setProperty("newUidCacheGenerated", true);
+            doneFile.save();
+        } catch (final IOException e) {
+            ess.getLogger().log(Level.SEVERE, "Error while generating initial uuids/names cache", e);
         }
-
-        ess.getUserMap().getNames().putAll(names);
-        ess.getUserMap().reloadConfig();
-
-        doneFile.setProperty("userMapRepaired", true);
-        doneFile.save();
-        ess.getLogger().info("Completed usermap repair.");
     }
 
     public void beforeSettings() {
@@ -991,6 +981,10 @@ public class EssentialsUpgrade {
         }
         moveMotdRulesToFile("motd");
         moveMotdRulesToFile("rules");
+    }
+
+    public void preModules() {
+        generateUidCache();
     }
 
     public void afterSettings() {
@@ -1003,7 +997,6 @@ public class EssentialsUpgrade {
         uuidFileChange();
         banFormatChange();
         warnMetrics();
-        repairUserMap();
         convertIgnoreList();
         convertStupidCamelCaseUserdataKeys();
         convertMailList();

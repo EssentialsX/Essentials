@@ -283,6 +283,9 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
             confList.add(settings);
             execTimer.mark("Settings");
 
+            upgrade.preModules();
+            execTimer.mark("Upgrade2");
+
             mail = new MailServiceImpl(this);
             execTimer.mark("Init(Mail)");
 
@@ -298,7 +301,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
             execTimer.mark("Kits");
 
             upgrade.afterSettings();
-            execTimer.mark("Upgrade2");
+            execTimer.mark("Upgrade3");
 
             warps = new Warps(this.getDataFolder());
             confList.add(warps);

@@ -145,12 +145,7 @@ public class ModernUUIDCache {
         try {
             final File tmpMap = File.createTempFile("uuids", ".tmp.bin", ess.getDataFolder());
 
-            try (final DataOutputStream dos = new DataOutputStream(new FileOutputStream(tmpMap))) {
-                for (final UUID uuid: uuidCache) {
-                    dos.writeLong(uuid.getMostSignificantBits());
-                    dos.writeLong(uuid.getLeastSignificantBits());
-                }
-            }
+            writeUuidCache(tmpMap, uuidCache);
             //noinspection UnstableApiUsage
             Files.move(tmpMap, uuidCacheFile);
         } catch (IOException e) {
@@ -166,18 +161,31 @@ public class ModernUUIDCache {
         try {
             final File tmpMap = File.createTempFile("usermap", ".tmp.bin", ess.getDataFolder());
 
-            try (final DataOutputStream dos = new DataOutputStream(new FileOutputStream(tmpMap))) {
-                for (final Map.Entry<String, UUID> entry : nameToUuidMap.entrySet()) {
-                    dos.writeUTF(entry.getKey());
-                    final UUID uuid = entry.getValue();
-                    dos.writeLong(uuid.getMostSignificantBits());
-                    dos.writeLong(uuid.getLeastSignificantBits());
-                }
-            }
+            writeNameUuidMap(tmpMap, nameToUuidMap);
             //noinspection UnstableApiUsage
             Files.move(tmpMap, nameToUuidFile);
         } catch (IOException e) {
             ess.getLogger().log(Level.SEVERE, "Error while saving Name->UUID cache", e);
+        }
+    }
+
+    public static void writeUuidCache(final File file, Set<UUID> uuids) throws IOException {
+        try (final DataOutputStream dos = new DataOutputStream(new FileOutputStream(file))) {
+            for (final UUID uuid: uuids) {
+                dos.writeLong(uuid.getMostSignificantBits());
+                dos.writeLong(uuid.getLeastSignificantBits());
+            }
+        }
+    }
+
+    public static void writeNameUuidMap(File file, Map<String, UUID> nameToUuidMap) throws IOException {
+        try (final DataOutputStream dos = new DataOutputStream(new FileOutputStream(file))) {
+            for (final Map.Entry<String, UUID> entry : nameToUuidMap.entrySet()) {
+                dos.writeUTF(entry.getKey());
+                final UUID uuid = entry.getValue();
+                dos.writeLong(uuid.getMostSignificantBits());
+                dos.writeLong(uuid.getLeastSignificantBits());
+            }
         }
     }
 
