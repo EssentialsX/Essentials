@@ -291,6 +291,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
             execTimer.mark("Init(Mail)");
 
             userMap = new ModernUserMap(this);
+            legacyUserMap = new UserMap(userMap);
             execTimer.mark("Init(Usermap)");
 
             balanceTop = new BalanceTopImpl(this);
