@@ -48,6 +48,9 @@ public abstract class UserData extends PlayerExtension implements IConf {
         }
 
         config = new EssentialsUserConfiguration(base.getName(), base.getUniqueId(), new File(folder, base.getUniqueId() + ".yml"));
+        config.setSaveHook(() -> {
+            config.setRootHolder(UserConfigHolder.class, holder);
+        });
         reloadConfig();
 
         if (config.getUsername() == null) {
@@ -82,14 +85,6 @@ public abstract class UserData extends PlayerExtension implements IConf {
             ess.getLogger().log(Level.SEVERE, "Error while reading user config: " + e.getMessage(), e);
             throw new RuntimeException(e);
         }
-        config.setSaveHook(() -> {
-            try {
-                config.getRootNode().set(UserConfigHolder.class, holder);
-            } catch (SerializationException e) {
-                ess.getLogger().log(Level.SEVERE, "Error while saving user config: " + e.getMessage(), e);
-                throw new RuntimeException(e);
-            }
-        });
         money = _getMoney();
     }
 

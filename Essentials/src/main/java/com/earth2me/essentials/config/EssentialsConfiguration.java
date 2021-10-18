@@ -104,6 +104,15 @@ public class EssentialsConfiguration {
         return configurationNode;
     }
 
+    public void setRootHolder(final Class<?> holderClass, final Object holder) {
+        try {
+            getRootNode().set(holderClass, holder);
+        } catch (SerializationException e) {
+            LOGGER.log(Level.SEVERE, "Error while saving user config: " + e.getMessage(), e);
+            throw new RuntimeException(e);
+        }
+    }
+
     public File getFile() {
         return configFile;
     }
@@ -367,10 +376,10 @@ public class EssentialsConfiguration {
         } catch (final ParsingException e) {
             final File broken = new File(configFile.getAbsolutePath() + ".broken." + System.currentTimeMillis());
             if (configFile.renameTo(broken)) {
-                LOGGER.log(Level.SEVERE, "The file " + configFile.toString() + " is broken, it has been renamed to " + broken.toString(), e.getCause());
+                LOGGER.log(Level.SEVERE, "The file " + configFile + " is broken, it has been renamed to " + broken, e.getCause());
                 return;
             }
-            LOGGER.log(Level.SEVERE, "The file " + configFile.toString() + " is broken. A backup file has failed to be created", e.getCause());
+            LOGGER.log(Level.SEVERE, "The file " + configFile + " is broken. A backup file has failed to be created", e.getCause());
         } catch (final ConfigurateException e) {
             LOGGER.log(Level.SEVERE, e.getMessage(), e);
         } finally {
