@@ -61,8 +61,8 @@ import net.ess3.provider.KnownCommandsProvider;
 import net.ess3.provider.MaterialTagProvider;
 import net.ess3.provider.PersistentDataProvider;
 import net.ess3.provider.PotionMetaProvider;
-import net.ess3.provider.SerializationProvider;
 import net.ess3.provider.ProviderListener;
+import net.ess3.provider.SerializationProvider;
 import net.ess3.provider.ServerStateProvider;
 import net.ess3.provider.SpawnEggProvider;
 import net.ess3.provider.SpawnerBlockProvider;
@@ -103,7 +103,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.world.WorldLoadEvent;
-import org.bukkit.event.world.WorldUnloadEvent;
 import org.bukkit.plugin.InvalidDescriptionException;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginDescriptionFile;
@@ -1303,25 +1302,6 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
         @EventHandler(priority = EventPriority.LOW)
         public void onWorldLoad(final WorldLoadEvent event) {
             PermissionsDefaults.registerBackDefaultFor(event.getWorld());
-
-            ess.getJails().reloadConfig();
-            ess.getWarps().reloadConfig();
-            for (final IConf iConf : ((Essentials) ess).confList) {
-                if (iConf instanceof IEssentialsModule) {
-                    iConf.reloadConfig();
-                }
-            }
-        }
-
-        @EventHandler(priority = EventPriority.LOW)
-        public void onWorldUnload(final WorldUnloadEvent event) {
-            ess.getJails().reloadConfig();
-            ess.getWarps().reloadConfig();
-            for (final IConf iConf : ((Essentials) ess).confList) {
-                if (iConf instanceof IEssentialsModule) {
-                    iConf.reloadConfig();
-                }
-            }
         }
 
         @Override
