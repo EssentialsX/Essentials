@@ -344,6 +344,10 @@ commands:
     description: Pong!
     usage: /<command>
     aliases: [echo,eecho,eping,pong,epong]
+  playtime:
+    description: Shows a player's time played in game
+    usage: /<command> [player]
+    aliases: [eplaytime]
   potion:
     description: Adds custom potion effects to a potion.
     usage: /<command> <clear|apply|effect:<effect> power:<power> duration:<duration>>
