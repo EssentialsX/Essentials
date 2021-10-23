@@ -4,8 +4,13 @@ import com.earth2me.essentials.IEssentials;
 import com.earth2me.essentials.IEssentialsModule;
 import com.earth2me.essentials.metrics.MetricsWrapper;
 import net.essentialsx.discord.interactions.InteractionControllerImpl;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -85,5 +90,18 @@ public class EssentialsDiscord extends JavaPlugin implements IEssentialsModule {
         if (jda != null && !jda.isInvalidStartup()) {
             jda.shutdown();
         }
+    }
+
+    @Override
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
+        return ess.onCommandEssentials(sender, command, label, args, EssentialsDiscord.class.getClassLoader(), "net.essentialsx.discord.commands.Command",
+                "essentials.", jda);
+    }
+
+    @Nullable
+    @Override
+    public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, @NotNull String[] args) {
+        return ess.onTabCompleteEssentials(sender, command, alias, args, EssentialsDiscord.class.getClassLoader(),
+                "net.essentialsx.discord.commands.Command", "essentials.", jda);
     }
 }
