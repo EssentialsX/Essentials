@@ -31,7 +31,7 @@ public class DiscordSettings implements IConf {
     private OnlineStatus status;
     private Activity statusActivity;
 
-    private Pattern discordFilter;
+    private List<Pattern> discordFilter;
 
     private MessageFormat consoleFormat;
     private Level consoleLogLevel;
@@ -111,7 +111,7 @@ public class DiscordSettings implements IConf {
         return config.getBoolean("chat.filter-newlines", true);
     }
 
-    public Pattern getDiscordFilter() {
+    public List<Pattern> getDiscordFilters() {
         return discordFilter;
     }
 
@@ -394,16 +394,30 @@ public class DiscordSettings implements IConf {
             statusActivity = Activity.of(activityType, config.getString("presence.message", "Minecraft"));
         }
 
-        final String filter = config.getString("chat.discord-filter", null);
-        if (filter != null && !filter.trim().isEmpty()) {
+        if (config.isList("chat.discord-filter")) {
+            final List<Pattern> filters = new ArrayList<>();
+            for (final String chatFilterString : config.getList("chat.discord-filter", String.class)) {
+                if (chatFilterString != null && !chatFilterString.trim().isEmpty()) {
+                    try {
+                        filters.add(Pattern.compile(chatFilterString));
+                    } catch (PatternSyntaxException e) {
+                        plugin.getLogger().log(java.util.logging.Level.WARNING, "Invalid pattern for \"chat.discord-filter\": " + e.getMessage());
+                    }
+                }
+            }
+            discordFilter = Collections.unmodifiableList(filters);
+        } else {
             try {
-                discordFilter = Pattern.compile(filter);
+                final String chatFilter = config.getString("chat.discord-filter", null);
+                if (chatFilter != null && !chatFilter.trim().isEmpty()) {
+                    discordFilter = Collections.singletonList(Pattern.compile(chatFilter));
+                } else {
+                    discordFilter = Collections.emptyList();
+                }
             } catch (PatternSyntaxException e) {
                 plugin.getLogger().log(java.util.logging.Level.WARNING, "Invalid pattern for \"chat.discord-filter\": " + e.getMessage());
-                discordFilter = null;
+                discordFilter = Collections.emptyList();
             }
-        } else {
-            discordFilter = null;
         }
 
         consoleLogLevel = Level.toLevel(config.getString("console.log-level", null), Level.INFO);
