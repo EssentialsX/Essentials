@@ -21,6 +21,7 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.utils.cache.CacheFlag;
 import net.ess3.nms.refl.providers.AchievementListenerProvider;
 import net.ess3.nms.refl.providers.AdvancementListenerProvider;
+import net.ess3.provider.providers.PaperAdvancementListenerProvider;
 import net.essentialsx.api.v2.events.discord.DiscordMessageEvent;
 import net.essentialsx.api.v2.services.discord.DiscordService;
 import net.essentialsx.api.v2.services.discord.InteractionController;
@@ -207,7 +208,12 @@ public class JDADiscordService implements DiscordService, IEssentialsModule {
 
         try {
             if (VersionUtil.getServerBukkitVersion().isHigherThanOrEqualTo(VersionUtil.v1_12_0_R01)) {
-                Bukkit.getPluginManager().registerEvents(new AdvancementListenerProvider(), plugin);
+                try {
+                    Class.forName("io.papermc.paper.advancement.AdvancementDisplay");
+                    Bukkit.getPluginManager().registerEvents(new PaperAdvancementListenerProvider(), plugin);
+                } catch (ClassNotFoundException e) {
+                    Bukkit.getPluginManager().registerEvents(new AdvancementListenerProvider(), plugin);
+                }
             } else {
                 Bukkit.getPluginManager().registerEvents(new AchievementListenerProvider(), plugin);
             }

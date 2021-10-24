@@ -22,6 +22,9 @@ dependencies {
         exclude group: "org.bukkit", module: "bukkit"
     }
     api(project(':providers:1_8Provider')) {
+        exclude group: "org.spigotmc", module: "spigot"
+    }
+    api(project(':providers:1_12Provider')) {
         exclude group: "org.bukkit", module: "bukkit"
     }
 }
@@ -40,6 +43,7 @@ shadowJar {
         include (project(':providers:PaperProvider'))
         include (project(':providers:NMSReflectionProvider'))
         include (project(':providers:1_8Provider'))
+        include (project(':providers:1_12Provider'))
     }
     relocate 'io.papermc.lib', 'com.earth2me.essentials.paperlib'
     relocate 'org.bstats', 'com.earth2me.essentials.libs.bstats'

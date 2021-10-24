@@ -17,6 +17,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Pattern;
 
 public class DiscordListener extends ListenerAdapter {
     private final static Logger logger = Logger.getLogger("EssentialsDiscord");
@@ -51,11 +52,15 @@ public class DiscordListener extends ListenerAdapter {
         final String effectiveName = member == null ? event.getAuthor().getName() : member.getEffectiveName();
         final Message message = event.getMessage();
 
-        if (plugin.getSettings().getDiscordFilter() != null && plugin.getSettings().getDiscordFilter().matcher(message.getContentDisplay()).find()) {
-            if (plugin.isDebug()) {
-                logger.log(Level.INFO, "Skipping message " + message.getId() + " with content, \"" + message.getContentDisplay() + "\" as it matched the filter!");
+        if (!plugin.getSettings().getDiscordFilters().isEmpty()) {
+            for (final Pattern pattern : plugin.getSettings().getDiscordFilters()) {
+                if (pattern.matcher(message.getContentDisplay()).find()) {
+                    if (plugin.isDebug()) {
+                        logger.log(Level.INFO, "Skipping message " + message.getId() + " with content, \"" + message.getContentDisplay() + "\" as it matched the filter!");
+                    }
+                    return;
+                }
             }
-            return;
         }
 
         final StringBuilder messageBuilder = new StringBuilder(message.getContentDisplay());
