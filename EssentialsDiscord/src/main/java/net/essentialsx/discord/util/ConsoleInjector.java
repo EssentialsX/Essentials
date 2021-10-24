@@ -15,6 +15,7 @@ import org.bukkit.Bukkit;
 import java.time.Instant;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.regex.Pattern;
 
 import static com.earth2me.essentials.I18n.tl;
 
@@ -65,6 +66,14 @@ public class ConsoleInjector extends AbstractAppender {
         String entry = FormatUtil.stripFormat(FormatUtil.stripAnsi(event.getMessage().getFormattedMessage())).trim();
         if (entry.isEmpty()) {
             return;
+        }
+
+        if (!jda.getSettings().getConsoleFilters().isEmpty()) {
+            for (final Pattern pattern : jda.getSettings().getConsoleFilters()) {
+                if (pattern.matcher(entry).find()) {
+                    return;
+                }
+            }
         }
 
         final String loggerName = event.getLoggerName();
