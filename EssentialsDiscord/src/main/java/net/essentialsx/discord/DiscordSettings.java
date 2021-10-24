@@ -69,6 +69,10 @@ public class DiscordSettings implements IConf {
         }
     }
 
+    public List<String> getChannelNames() {
+        return new ArrayList<>(nameToChannelIdMap.keySet());
+    }
+
     public List<String> getKeysFromChannelId(long channelId) {
         return channelIdToNamesMap.get(channelId);
     }
@@ -139,6 +143,10 @@ public class DiscordSettings implements IConf {
 
     public boolean isConsoleCommandRelay() {
         return config.getBoolean("console.command-relay", false);
+    }
+
+    public boolean isConsoleBotCommandRelay() {
+        return config.getBoolean("console.bot-command-relay", false);
     }
 
     public Level getConsoleLogLevel() {
@@ -234,7 +242,7 @@ public class DiscordSettings implements IConf {
             filled = format;
         }
         return generateMessageFormat(filled, ":arrow_right: {displayname} has joined!", false,
-                "username", "displayname", "joinmessage");
+                "username", "displayname", "joinmessage", "online", "unique");
     }
 
     public MessageFormat getQuitFormat(Player player) {
@@ -246,7 +254,7 @@ public class DiscordSettings implements IConf {
             filled = format;
         }
         return generateMessageFormat(filled, ":arrow_left: {displayname} has left!", false,
-                "username", "displayname", "quitmessage");
+                "username", "displayname", "quitmessage", "online", "unique");
     }
 
     public MessageFormat getDeathFormat(Player player) {
@@ -295,6 +303,18 @@ public class DiscordSettings implements IConf {
         }
         return generateMessageFormat(filled, ":medal: {displayname} has completed the advancement **{advancement}**!", false,
                 "username", "displayname", "advancement");
+    }
+
+    public MessageFormat getActionFormat(Player player) {
+        final String format = getFormatString("action");
+        final String filled;
+        if (plugin.isPAPI() && format != null) {
+            filled = me.clip.placeholderapi.PlaceholderAPI.setPlaceholders(player, format);
+        } else {
+            filled = format;
+        }
+        return generateMessageFormat(filled, ":person_biking: {displayname} *{action}*", false,
+                "username", "displayname", "action");
     }
 
     public String getStartMessage() {

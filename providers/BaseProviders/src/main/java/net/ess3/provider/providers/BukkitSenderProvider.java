@@ -1,7 +1,5 @@
 package net.ess3.provider.providers;
 
-import net.md_5.bungee.api.chat.BaseComponent;
-import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
@@ -60,27 +58,13 @@ public class BukkitSenderProvider implements CommandSender {
 
     @Override
     public Spigot spigot() {
-        return new Spigot() {
-            @Override
-            public void sendMessage(BaseComponent component) {
-                BukkitSenderProvider.this.sendMessage(component.toLegacyText());
-            }
-
-            @Override
-            public void sendMessage(BaseComponent... components) {
-                sendMessage(new TextComponent(components));
-            }
-
-            @Override
-            public void sendMessage(UUID sender, BaseComponent... components) {
-                sendMessage(components);
-            }
-
-            @Override
-            public void sendMessage(UUID sender, BaseComponent component) {
-                sendMessage(component);
-            }
-        };
+        try {
+            Class.forName("org.bukkit.command.CommandSender$Spigot");
+            return ModernCommandSenderSpigotCreator.stupidDumbHackToMakeTheJvmHappy(this);
+        } catch (ClassNotFoundException ignored) {
+            //noinspection ConstantConditions
+            return null;
+        }
     }
 
     @Override
