@@ -6,6 +6,7 @@ import net.essentialsx.discord.JDADiscordService;
 import net.essentialsx.discord.util.DiscordCommandSender;
 import net.essentialsx.discord.util.DiscordUtil;
 import org.bukkit.Bukkit;
+import org.bukkit.command.CommandException;
 import org.jetbrains.annotations.NotNull;
 
 public class DiscordCommandDispatcher extends ListenerAdapter {
@@ -23,9 +24,21 @@ public class DiscordCommandDispatcher extends ListenerAdapter {
                 return;
             }
 
-            Bukkit.getScheduler().runTask(jda.getPlugin(), () ->
+            final String command = event.getMessage().getContentRaw();
+            Bukkit.getScheduler().runTask(jda.getPlugin(), () -> {
+                try {
                     Bukkit.dispatchCommand(new DiscordCommandSender(jda, Bukkit.getConsoleSender(), message ->
-                            event.getMessage().reply(message).queue()).getSender(), event.getMessage().getContentRaw()));
+                            event.getMessage().reply(message).queue()).getSender(), command);
+                } catch (CommandException e) {
+                    // Check if this is a vanilla command, in which case we have to use a vanilla command sender :(
+                    if (e.getMessage().contains("a vanilla command listener") || (e.getCause() != null && e.getCause().getMessage().contains("a vanilla command listener"))) {
+                        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command);
+                        return;
+                    }
+                    // Something unrelated, should error out here
+                    throw e;
+                }
+            });
         }
     }
 

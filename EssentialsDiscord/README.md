@@ -179,7 +179,9 @@ and `staff`. If you only completed the initial setup, the `staff` channel defini
 most situations however, as the message system will always fallback to the `primary` channel if a channel ID is
 invalid.
 
-Now on to the types of messages you can receive themselves (which is where you're going to use these channel 
+**Note:** If you do not define a `primary` channel, the default channel of your server will be used.
+
+Now on to the types of messages you can receive themselves (which is where you're going to use these channel
 definitions). In the `message-types` section of the config, you can see a list of message types (join/leave/chat/etc.)
 on the left (as the key), and on the right there is a channel definition.
 

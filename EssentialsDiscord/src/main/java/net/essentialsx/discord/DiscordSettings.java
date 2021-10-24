@@ -69,6 +69,10 @@ public class DiscordSettings implements IConf {
         }
     }
 
+    public List<String> getChannelNames() {
+        return new ArrayList<>(nameToChannelIdMap.keySet());
+    }
+
     public List<String> getKeysFromChannelId(long channelId) {
         return channelIdToNamesMap.get(channelId);
     }
@@ -299,6 +303,18 @@ public class DiscordSettings implements IConf {
         }
         return generateMessageFormat(filled, ":medal: {displayname} has completed the advancement **{advancement}**!", false,
                 "username", "displayname", "advancement");
+    }
+
+    public MessageFormat getActionFormat(Player player) {
+        final String format = getFormatString("action");
+        final String filled;
+        if (plugin.isPAPI() && format != null) {
+            filled = me.clip.placeholderapi.PlaceholderAPI.setPlaceholders(player, format);
+        } else {
+            filled = format;
+        }
+        return generateMessageFormat(filled, ":person_biking: {displayname} *{action}*", false,
+                "username", "displayname", "action");
     }
 
     public String getStartMessage() {

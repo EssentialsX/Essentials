@@ -5,7 +5,7 @@ main: com.earth2me.essentials.xmpp.EssentialsXMPP
 version: ${full.version}
 website: http://ess.khhq.net/wiki/XMPP
 description: Provides XMPP communication.
-authors: [snowleo]
+authors: [snowleo, SupaHam, mdcfe]
 depend: [Essentials]
 api-version: 1.13
 commands:
