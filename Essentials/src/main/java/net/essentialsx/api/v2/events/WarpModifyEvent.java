@@ -23,7 +23,7 @@ public class WarpModifyEvent extends Event implements Cancellable {
     /**
      * @param user        the {@link IUser} who is modifing the warp.
      * @param warpName    the name of the warp that's being altered.
-     * @param oldLocation the old location before being modified. Null if {@link WarpModifyCause#CREATE}.
+     * @param oldLocation the old location before being modified. Null if {@link WarpModifyCause#CREATE} or if the previous location's world is not loaded.
      * @param newLocation the new location after being modified. Null if {@link WarpModifyCause#DELETE}.
      * @param cause       the cause of change.
      */
@@ -58,7 +58,7 @@ public class WarpModifyEvent extends Event implements Cancellable {
     }
 
     /**
-     * Gets the current location of the warp or null if it's being created.
+     * Gets the current location of the warp or null if it's being created or if the previous location's world is not loaded.
      * @return The warps new location or null.
      */
     public Location getOldLocation() {

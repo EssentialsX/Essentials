@@ -7,9 +7,9 @@ import com.earth2me.essentials.utils.EnumUtil;
 import com.earth2me.essentials.utils.FormatUtil;
 import com.earth2me.essentials.utils.MaterialUtil;
 import com.earth2me.essentials.utils.NumberUtil;
+import com.earth2me.essentials.utils.VersionUtil;
 import com.google.common.base.Joiner;
 import net.ess3.api.IEssentials;
-import net.ess3.nms.refl.ReflUtil;
 import org.bukkit.Color;
 import org.bukkit.DyeColor;
 import org.bukkit.FireworkEffect;
@@ -525,14 +525,14 @@ public class MetaItemStack {
                 }
                 pmeta.addCustomEffect(pEffect, true);
                 stack.setItemMeta(pmeta);
-                if (ReflUtil.getNmsVersionObject().isHigherThanOrEqualTo(ReflUtil.V1_9_R1)) {
+                if (VersionUtil.getServerBukkitVersion().isHigherThanOrEqualTo(VersionUtil.v1_9_R01)) {
                     if (isSplashPotion && stack.getType() != Material.SPLASH_POTION) {
                         stack.setType(Material.SPLASH_POTION);
                     } else if (!isSplashPotion && stack.getType() != Material.POTION) {
                         stack.setType(Material.POTION);
                     }
                 } else {
-                    final Potion potion = Potion.fromItemStack(stack);
+                    final Potion potion = Potion.fromDamage(stack.getDurability());
                     potion.setSplash(isSplashPotion);
                     potion.apply(stack);
                 }
