@@ -57,6 +57,7 @@ import net.ess3.nms.refl.providers.ReflSpawnerBlockProvider;
 import net.ess3.nms.refl.providers.ReflSyncCommandsProvider;
 import net.ess3.provider.ContainerProvider;
 import net.ess3.provider.FormattedCommandAliasProvider;
+import net.ess3.provider.ItemUnbreakableProvider;
 import net.ess3.provider.KnownCommandsProvider;
 import net.ess3.provider.MaterialTagProvider;
 import net.ess3.provider.PersistentDataProvider;
@@ -73,8 +74,10 @@ import net.ess3.provider.providers.BlockMetaSpawnerItemProvider;
 import net.ess3.provider.providers.BukkitMaterialTagProvider;
 import net.ess3.provider.providers.BukkitSpawnerBlockProvider;
 import net.ess3.provider.providers.FlatSpawnEggProvider;
+import net.ess3.provider.providers.LegacyItemUnbreakableProvider;
 import net.ess3.provider.providers.LegacyPotionMetaProvider;
 import net.ess3.provider.providers.LegacySpawnEggProvider;
+import net.ess3.provider.providers.ModernItemUnbreakableProvider;
 import net.ess3.provider.providers.ModernPersistentDataProvider;
 import net.ess3.provider.providers.PaperContainerProvider;
 import net.ess3.provider.providers.PaperKnownCommandsProvider;
@@ -166,6 +169,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
     private transient SyncCommandsProvider syncCommandsProvider;
     private transient PersistentDataProvider persistentDataProvider;
     private transient ReflOnlineModeProvider onlineModeProvider;
+    private transient ItemUnbreakableProvider unbreakableProvider;
     private transient Kits kits;
     private transient RandomTeleport randomTeleport;
     private transient UpdateChecker updateChecker;
@@ -408,6 +412,12 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
             }
 
             onlineModeProvider = new ReflOnlineModeProvider();
+
+            if (VersionUtil.getServerBukkitVersion().isHigherThanOrEqualTo(VersionUtil.v1_11_2_R01)) {
+                unbreakableProvider = new ModernItemUnbreakableProvider();
+            } else {
+                unbreakableProvider = new LegacyItemUnbreakableProvider();
+            }
 
             execTimer.mark("Init(Providers)");
             reload();
@@ -1267,6 +1277,11 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
     @Override
     public ReflOnlineModeProvider getOnlineModeProvider() {
         return onlineModeProvider;
+    }
+
+    @Override
+    public ItemUnbreakableProvider getItemUnbreakableProvider() {
+        return unbreakableProvider;
     }
 
     @Override
