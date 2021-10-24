@@ -12,6 +12,7 @@ import org.bukkit.entity.Player;
 import java.io.File;
 import java.text.MessageFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -34,7 +35,7 @@ public class DiscordSettings implements IConf {
 
     private MessageFormat consoleFormat;
     private Level consoleLogLevel;
-    private Pattern consoleFilter;
+    private List<Pattern> consoleFilter;
 
     private MessageFormat discordToMcFormat;
     private MessageFormat tempMuteFormat;
@@ -154,7 +155,7 @@ public class DiscordSettings implements IConf {
         return consoleLogLevel;
     }
 
-    public Pattern getConsoleFilter() {
+    public List<Pattern> getConsoleFilters() {
         return consoleFilter;
     }
 
@@ -406,16 +407,31 @@ public class DiscordSettings implements IConf {
         }
 
         consoleLogLevel = Level.toLevel(config.getString("console.log-level", null), Level.INFO);
-        final String conFilter = config.getString("console.console-filter", null);
-        if (conFilter != null && !conFilter.trim().isEmpty()) {
+
+        if (config.isList("console.console-filter")) {
+            final List<Pattern> filters = new ArrayList<>();
+            for (final String filterString : config.getList("console.console-filter", String.class)) {
+                if (filterString != null && !filterString.trim().isEmpty()) {
+                    try {
+                        filters.add(Pattern.compile(filterString));
+                    } catch (PatternSyntaxException e) {
+                        plugin.getLogger().log(java.util.logging.Level.WARNING, "Invalid pattern for \"console.log-level\": " + e.getMessage());
+                    }
+                }
+            }
+            consoleFilter = Collections.unmodifiableList(filters);
+        } else {
             try {
-                consoleFilter = Pattern.compile(conFilter);
+                final String cFilter = config.getString("console.console-filter", null);
+                if (cFilter != null && !cFilter.trim().isEmpty()) {
+                    consoleFilter = Collections.singletonList(Pattern.compile(cFilter));
+                } else {
+                    consoleFilter = Collections.emptyList();
+                }
             } catch (PatternSyntaxException e) {
                 plugin.getLogger().log(java.util.logging.Level.WARNING, "Invalid pattern for \"console.log-level\": " + e.getMessage());
-                consoleFilter = null;
+                consoleFilter = Collections.emptyList();
             }
-        } else {
-            consoleFilter = null;
         }
 
         consoleFormat = generateMessageFormat(getFormatString(".console.format"), "[{timestamp} {level}] {message}", false,

@@ -100,7 +100,9 @@ console:
   # - debug
   # - trace
   log-level: info
-  # A regex pattern which will not sending matching console messages to Discord.
+  # Blocks any console message from sending to Discord if it matches this regex pattern.
+  # This is useful if you want to ignore certain messages from the console.
+  # Can also be a list of regex patterns in addition to a single regex pattern.
   console-filter: ""
 
 # Configure which Discord channels different messages will be sent to.
