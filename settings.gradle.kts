@@ -49,4 +49,5 @@ sequenceOf(
 include(":providers:BaseProviders")
 include(":providers:NMSReflectionProvider")
 include(":providers:PaperProvider")
+include(":providers:1_8Provider")
 include(":providers:1_12Provider")
