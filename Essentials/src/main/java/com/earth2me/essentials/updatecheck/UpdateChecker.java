@@ -147,8 +147,8 @@ public final class UpdateChecker {
                 // Locally built?
                 return new RemoteVersion(BranchStatus.UNKNOWN);
             }
-            if (connection.getResponseCode() == HttpURLConnection.HTTP_INTERNAL_ERROR) {
-                // Github is down
+            if (connection.getResponseCode() == HttpURLConnection.HTTP_INTERNAL_ERROR || connection.getResponseCode() == HttpURLConnection.HTTP_FORBIDDEN) {
+                // GitHub is down or we hit a local rate limit
                 return new RemoteVersion(BranchStatus.ERROR);
             }
 
