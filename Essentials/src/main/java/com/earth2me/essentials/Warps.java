@@ -39,6 +39,11 @@ public class Warps implements IConf, net.ess3.api.IWarps {
     }
 
     @Override
+    public boolean isWarp(String name) {
+        return warpPoints.containsKey(new StringIgnoreCase(name));
+    }
+
+    @Override
     public Collection<String> getList() {
         final List<String> keys = new ArrayList<>();
         for (final StringIgnoreCase stringIgnoreCase : warpPoints.keySet()) {

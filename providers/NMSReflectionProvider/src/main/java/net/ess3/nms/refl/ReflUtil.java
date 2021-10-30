@@ -17,7 +17,6 @@ import java.util.regex.Pattern;
 
 public final class ReflUtil {
     public static final NMSVersion V1_12_R1 = NMSVersion.fromString("v1_12_R1");
-    public static final NMSVersion V1_9_R1 = NMSVersion.fromString("v1_9_R1");
     public static final NMSVersion V1_11_R1 = NMSVersion.fromString("v1_11_R1");
     public static final NMSVersion V1_17_R1 = NMSVersion.fromString("v1_17_R1");
     private static final Map<String, Class<?>> classCache = new HashMap<>();

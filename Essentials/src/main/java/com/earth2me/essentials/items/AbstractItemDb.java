@@ -279,7 +279,7 @@ public abstract class AbstractItemDb implements IConf, net.ess3.api.IItemDb {
                 serializeEffectMeta(sb, fireworkEffectMeta.getEffect());
             }
         } else if (MaterialUtil.isPotion(material)) {
-            final Potion potion = Potion.fromItemStack(is);
+            final Potion potion = Potion.fromDamage(is.getDurability());
             for (final PotionEffect e : potion.getEffects()) {
                 // long but needs to be effect:speed power:2 duration:120 in that order.
                 sb.append("splash:").append(potion.isSplash()).append(" ").append("effect:").append(e.getType().getName().toLowerCase()).append(" ").append("power:").append(e.getAmplifier()).append(" ").append("duration:").append(e.getDuration() / 20).append(" ");
