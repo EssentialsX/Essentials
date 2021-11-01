@@ -89,7 +89,7 @@ console:
   # Set to true if bots/webhooks should be able to send commands through the command relay.
   bot-command-relay: false
   # The maximum log level of messages to send to the console relay.
-  # The following is a list of available log levels in order of lowest to highest.
+  # The following is a list of available log levels in order of highest to lowest.
   # Changing the log level will send all log levels above it to the console relay.
   # For example, setting this to 'info' will display log messages with info, warn, error, and fatal levels.
   # Log Levels:
@@ -135,6 +135,7 @@ message-types:
   mute: staff
 
 # Whether or not player messages should show their avatar as the profile picture in Discord.
+# The bot will require the "Manage Webhooks" permission in the defined channels in order to use this feature.
 show-avatar: false
 # The URL which should be used to get the avatars of users when "show-avatar" is set to true.
 # Any URL in here should only return a proper JPEG/PNG image and nothing else.
@@ -237,7 +238,7 @@ presence:
 # Each message has a description of how it is used along with placeholders that can be used.
 messages:
   # This is the message that is used to show Discord chat to players in game.
-  # Color/formatting codes and the follow placeholders can be used here:
+  # Color/formatting codes and the following placeholders can be used here:
   # - {channel}: The name of the Discord channel the message was sent from
   # - {username}: The username of the user who sent the message
   # - {discriminator}: The four numbers displayed after the user's name
