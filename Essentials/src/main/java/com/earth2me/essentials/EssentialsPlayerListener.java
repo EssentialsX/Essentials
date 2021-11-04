@@ -535,21 +535,16 @@ public class EssentialsPlayerListener implements Listener, FakeAccessor {
 
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void onPlayerTeleport(final PlayerTeleportEvent event) {
-        final boolean backListener = ess.getSettings().registerBackInListener();
-        final boolean teleportInvulnerability = ess.getSettings().isTeleportInvulnerability();
-        if (backListener || teleportInvulnerability) {
-            final Player player = event.getPlayer();
-            if (player.hasMetadata("NPC")) {
-                return;
-            }
-            final User user = ess.getUser(player);
-            //There is TeleportCause.COMMMAND but plugins have to actively pass the cause in on their teleports.
-            if (user.isAuthorized("essentials.back.onteleport") && backListener && (event.getCause() == TeleportCause.PLUGIN || event.getCause() == TeleportCause.COMMAND)) {
-                user.setLastLocation();
-            }
-            if (teleportInvulnerability && (event.getCause() == TeleportCause.PLUGIN || event.getCause() == TeleportCause.COMMAND)) {
-                user.enableInvulnerabilityAfterTeleport();
-            }
+        final Player player = event.getPlayer();
+        if (player.hasMetadata("NPC") || !(event.getCause() == TeleportCause.PLUGIN || event.getCause() == TeleportCause.COMMAND)) {
+            return;
+        }
+        final User user = ess.getUser(player);
+        if (ess.getSettings().registerBackInListener() && user.isAuthorized("essentials.back.onteleport") && !player.hasMetadata("ess_ignore_teleport")) {
+            user.setLastLocation();
+        }
+        if (ess.getSettings().isTeleportInvulnerability()) {
+            user.enableInvulnerabilityAfterTeleport();
         }
     }
 
