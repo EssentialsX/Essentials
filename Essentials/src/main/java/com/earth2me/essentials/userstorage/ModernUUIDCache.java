@@ -33,7 +33,7 @@ public class ModernUUIDCache {
      * * mdcfe doesn't log in the server for 31 days
      * * JRoy changes his name to mdcfeYT420
      * * mdcfeYT420 (previously JRoy) logs in the server
-     * * In a UUID->Name based map, multiple uuids now point to the same map
+     * In a UUID->Name based map, multiple uuids now point to the same map
      * preventing any command which allows for offline players to resolve a
      * single uuid from a name.
      *
