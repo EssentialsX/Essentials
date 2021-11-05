@@ -102,13 +102,14 @@ public class Commandseen extends EssentialsCommand {
 
         user.setDisplayNick();
         sender.sendMessage(tl("seenOnline", user.getDisplayName(), DateUtil.formatDateDiff(user.getLastLogin())));
-        if (sender.isAuthorized("essentials.seen.uuid", ess)) {
-            sender.sendMessage(tl("whoisUuid", user.getBase().getUniqueId().toString()));
-        }
 
         final List<String> history = ess.getUserMap().getUserHistory(user.getBase().getUniqueId());
         if (history != null && history.size() > 1) {
             sender.sendMessage(tl("seenAccounts", StringUtil.joinListSkip(", ", user.getName(), history)));
+        }
+
+        if (sender.isAuthorized("essentials.seen.uuid", ess)) {
+            sender.sendMessage(tl("whoisUuid", user.getBase().getUniqueId().toString()));
         }
 
         if (user.isAfk()) {
