@@ -42,7 +42,7 @@ public final class PlayerList {
 
             final String strippedNick = FormatUtil.stripFormat(user.getNickname());
             if (ess.getSettings().realNamesOnList() && strippedNick != null && !strippedNick.equals(user.getName())) {
-                groupString.append(" (").append(user.getName()).append(")");
+                groupString.append(" ").append(tl("listRealName",user.getName()));
             }
             groupString.append(ChatColor.WHITE.toString());
         }
