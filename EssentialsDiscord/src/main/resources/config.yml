@@ -17,6 +17,9 @@ token: "INSERT-TOKEN-HERE"
 # The ID of your server.
 guild: 000000000000000000
 
+# The Discord invite URL that will be shown when a player when using the /discord command or in other areas.
+discord-url: "https://discord.gg/invite-code"
+
 # Defined text channels
 # =====================
 # 
