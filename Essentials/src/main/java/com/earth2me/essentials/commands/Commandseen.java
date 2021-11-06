@@ -12,6 +12,7 @@ import org.bukkit.BanList;
 import org.bukkit.Location;
 import org.bukkit.Server;
 
+import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -133,6 +134,14 @@ public class Commandseen extends EssentialsCommand {
         if (showIp) {
             sender.sendMessage(tl("whoisIPAddress", user.getBase().getAddress().getAddress().toString()));
         }
+        final long firstPlayed = user.getBase().getFirstPlayed();
+        final long lastPlayed = user.getBase().getLastPlayed();
+        if (firstPlayed != 0L) {
+            sender.sendMessage(tl("whoisFirstPlayed", formatTime(firstPlayed)));
+        }
+        if (lastPlayed != 0L) {
+            sender.sendMessage(tl("whoisLastPlayed", formatTime(lastPlayed)));
+        }
     }
 
     private void seenOffline(final CommandSource sender, final User user, final boolean showBan, final boolean showIp, final boolean showLocation) {
@@ -189,6 +198,14 @@ public class Commandseen extends EssentialsCommand {
                 sender.sendMessage(tl("whoisLocation", loc.getWorld().getName(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ()));
             }
         }
+        final long firstPlayed = user.getBase().getFirstPlayed();
+        final long lastPlayed = user.getBase().getLastPlayed();
+        if (firstPlayed != 0L) {
+            sender.sendMessage(tl("whoisFirstPlayed", formatTime(firstPlayed)));
+        }
+        if (lastPlayed != 0L) {
+            sender.sendMessage(tl("whoisLastPlayed", formatTime(lastPlayed)));
+        }
     }
 
     private void seenIP(final CommandSource sender, final String ipAddress, final String display) {
@@ -220,6 +237,12 @@ public class Commandseen extends EssentialsCommand {
 
         });
 
+    }
+
+    private String formatTime(long time) {
+        final Date date = new Date(time);
+        final DateFormat formatter = DateFormat.getDateTimeInstance(DateFormat.LONG, DateFormat.SHORT);
+        return formatter.format(date);
     }
 
     @Override
