@@ -30,6 +30,7 @@ public final class LocationUtil {
     private static final Set<Material> LAVA_TYPES = EnumUtil.getAllMatching(Material.class,
         "FLOWING_LAVA", "LAVA", "STATIONARY_LAVA");
     private static final Material PORTAL = EnumUtil.getMaterial("NETHER_PORTAL", "PORTAL");
+    private static final Material LIGHT = EnumUtil.getMaterial("LIGHT");
     // The player can stand inside these materials
     private static final Set<Material> HOLLOW_MATERIALS = EnumSet.noneOf(Material.class);
     private static final Set<Material> TRANSPARENT_MATERIALS = EnumSet.noneOf(Material.class);
@@ -47,6 +48,11 @@ public final class LocationUtil {
 
         // Barrier is transparent, but solid
         HOLLOW_MATERIALS.remove(Material.BARRIER);
+
+        // Light blocks can be passed through and are not considered transparent for some reason
+        if (LIGHT != null) {
+            HOLLOW_MATERIALS.add(LIGHT);
+        }
     }
 
     static {
