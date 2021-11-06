@@ -39,6 +39,10 @@ public class RandomTeleport implements IConf {
         cachedLocations.clear();
     }
 
+    public boolean isLogTprs() {
+        return config.getBoolean("log-tprs", false);
+    }
+
     public Location getCenter() {
         try {
             final LazyLocation center = config.getLocation("center");

@@ -597,7 +597,9 @@ public class EssentialsPlayerListener implements Listener, FakeAccessor {
 
         if (ess.getSettings().getSocialSpyCommands().contains(cmd) || ess.getSettings().getSocialSpyCommands().contains("*")) {
             if (pluginCommand == null
-                || (!pluginCommand.getName().equals("msg") && !pluginCommand.getName().equals("r"))) { // /msg and /r are handled in SimpleMessageRecipient
+                || (!pluginCommand.getName().equals("msg") && !pluginCommand.getName().equals("r")) // /msg and /r are handled in SimpleMessageRecipient
+                || (!pluginCommand.getName().equals("tpr")) // /tpr is handled in Commandtpr
+                ) {
                 final User user = ess.getUser(player);
                 if (!user.isAuthorized("essentials.chat.spy.exempt")) {
                     for (final User spyer : ess.getOnlineUsers()) {

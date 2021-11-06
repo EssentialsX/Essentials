@@ -34,6 +34,19 @@ public class Commandtpr extends EssentialsCommand {
             user.getAsyncTeleport().teleport(location, charge, PlayerTeleportEvent.TeleportCause.COMMAND, future);
             future.thenAccept(success -> {
                 if (success) {
+                    if (ess.getRandomTeleport().isLogTprs()) {
+                        ess.getLogger().info(tl("socialSpyTprFormatLog", user.getName(), location.getWorld(), location.getBlockX(), location.getBlockY(), location.getBlockZ()));
+                    }
+
+                    if (ess.getSettings().getSocialSpyCommands().contains(getName())) {
+                        final String message = tl("socialSpyTprFormat", user.getDisplayName(), location.getWorld(), location.getBlockX(), location.getBlockY(), location.getBlockZ());
+                        for (final User spyer : ess.getOnlineUsers()) {
+                            if (spyer.isSocialSpyEnabled() && !user.getBase().equals(spyer.getBase())) {
+                                spyer.sendMessage(message);
+                            }
+                        }
+                    }
+
                     user.sendMessage(tl("tprSuccess"));
                 }
             });
