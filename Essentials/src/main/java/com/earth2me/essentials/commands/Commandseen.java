@@ -241,7 +241,7 @@ public class Commandseen extends EssentialsCommand {
 
     private String formatTime(long time) {
         final Date date = new Date(time);
-        final DateFormat formatter = DateFormat.getDateTimeInstance(DateFormat.LONG, DateFormat.SHORT);
+        final DateFormat formatter = DateFormat.getDateTimeInstance(DateFormat.LONG, DateFormat.SHORT, ess.getI18n().getCurrentLocale());
         return formatter.format(date);
     }
 
