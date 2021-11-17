@@ -63,7 +63,7 @@ public class Commandsethome extends EssentialsCommand {
             return;
         }
 
-        UserCreateHomeEvent event = new UserCreateHomeEvent(user, name, location);
+        final UserCreateHomeEvent event = new UserCreateHomeEvent(user, name, location);
         server.getPluginManager().callEvent(event);
         if (event.isCancelled())
             return;
