@@ -4,6 +4,7 @@ import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.LocationUtil;
 import com.earth2me.essentials.utils.NumberUtil;
+import net.ess3.api.events.UserCreateHomeEvent;
 import org.bukkit.Location;
 import org.bukkit.Server;
 
@@ -61,6 +62,11 @@ public class Commandsethome extends EssentialsCommand {
             user.sendMessage(tl("homeConfirmation", name));
             return;
         }
+
+        UserCreateHomeEvent event = new UserCreateHomeEvent(user, name, location);
+        server.getPluginManager().callEvent(event);
+        if (event.isCancelled())
+            return;
 
         usersHome.setHome(name, location);
         user.sendMessage(tl("homeSet", user.getLocation().getWorld().getName(), user.getLocation().getBlockX(), user.getLocation().getBlockY(), user.getLocation().getBlockZ(), name));
