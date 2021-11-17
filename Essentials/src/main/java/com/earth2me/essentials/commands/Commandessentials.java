@@ -291,7 +291,7 @@ public class Commandessentials extends EssentialsCommand {
                 }
             }
 
-            if (discord && essDiscord != null && essDiscord.isEnabled()) {
+            if (discord && essDiscord != null) {
                 try {
                     files.add(new PasteUtil.PasteFile("discord-config.yml",
                             new String(Files.readAllBytes(essDiscord.getDataFolder().toPath().resolve("config.yml")), StandardCharsets.UTF_8)
