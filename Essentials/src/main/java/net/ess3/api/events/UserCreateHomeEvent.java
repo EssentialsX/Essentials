@@ -6,6 +6,11 @@ import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
+/**
+ * Called when a user sets a home via the /sethome command.
+ *
+ * This is called before the actual home is created.
+ */
 public class UserCreateHomeEvent extends Event implements Cancellable {
     private static final HandlerList handlers = new HandlerList();
 
