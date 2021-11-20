@@ -59,6 +59,10 @@ public class DiscordSettings implements IConf {
         return config.getLong("guild", 0);
     }
 
+    public String getDiscordUrl() {
+        return config.getString("discord-url", "https://discord.gg/invite-code");
+    }
+
     public long getPrimaryChannelId() {
         return config.getLong("channels.primary", 0);
     }
