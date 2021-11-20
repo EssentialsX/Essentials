@@ -19,42 +19,21 @@ public class Commandtpdeny extends EssentialsCommand {
 
     @Override
     public void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception {
-        final boolean excludeOthers;
+        final boolean denyAll;
         if (args.length > 0) {
-            excludeOthers = args[0].equals("*") || args[0].equalsIgnoreCase("all");
+            denyAll = args[0].equals("*") || args[0].equalsIgnoreCase("all");
         } else {
-            excludeOthers = false;
+            denyAll = false;
         }
 
-        if (!user.hasPendingTpaRequests(false, excludeOthers)) {
+        if (!user.hasPendingTpaRequests(false, false)) {
             throw new Exception(tl("noPendingRequest"));
         }
 
         final IUser.TpaRequest denyRequest;
         if (args.length > 0) {
-            if (excludeOthers) {
-                IUser.TpaRequest request;
-                int count = 0;
-                while ((request = user.getNextTpaRequest(false, true, true)) != null) {
-                    final User player = ess.getUser(request.getRequesterUuid());
-
-                    final TeleportRequestResponseEvent event = new TeleportRequestResponseEvent(user, player, request, false);
-                    Bukkit.getPluginManager().callEvent(event);
-                    if (event.isCancelled()) {
-                        if (ess.getSettings().isDebug()) {
-                            logger.info("TPA deny cancelled by API for " + user.getName() + " (requested by " + player.getName() + ")");
-                        }
-                        continue;
-                    }
-
-                    if (player != null && player.getBase().isOnline()) {
-                        player.sendMessage(tl("requestDeniedFrom", user.getDisplayName()));
-                    }
-
-                    user.removeTpaRequest(request.getName());
-                    count++;
-                }
-                user.sendMessage(tl("requestDeniedAll", count));
+            if (denyAll) {
+                denyAllRequests(user);
                 return;
             }
             denyRequest = user.getOutstandingTpaRequest(getPlayer(server, user, args, 0).getName(), false);
@@ -62,23 +41,52 @@ public class Commandtpdeny extends EssentialsCommand {
             denyRequest = user.getNextTpaRequest(false, true, false);
         }
 
+        if (denyRequest == null) {
+            throw new Exception(tl("noPendingRequest"));
+        }
+
         final User player = ess.getUser(denyRequest.getRequesterUuid());
         if (player == null || !player.getBase().isOnline()) {
             throw new Exception(tl("noPendingRequest"));
         }
 
-        final TeleportRequestResponseEvent event = new TeleportRequestResponseEvent(user, player, denyRequest, false);
-        Bukkit.getPluginManager().callEvent(event);
-        if (event.isCancelled()) {
-            if (ess.getSettings().isDebug()) {
-                logger.info("TPA deny cancelled by API for " + user.getName() + " (requested by " + player.getName() + ")");
-            }
+        if (sendEvent(user, player, denyRequest)) {
             return;
         }
 
         user.sendMessage(tl("requestDenied"));
         player.sendMessage(tl("requestDeniedFrom", user.getDisplayName()));
         user.removeTpaRequest(denyRequest.getName());
+    }
+
+    private void denyAllRequests(User user) {
+        IUser.TpaRequest request;
+        int count = 0;
+        while ((request = user.getNextTpaRequest(false, true, false)) != null) {
+            final User player = ess.getUser(request.getRequesterUuid());
+
+            if (sendEvent(user, player, request)) {
+                continue;
+            }
+
+            if (player != null && player.getBase().isOnline()) {
+                player.sendMessage(tl("requestDeniedFrom", user.getDisplayName()));
+            }
+
+            user.removeTpaRequest(request.getName());
+            count++;
+        }
+        user.sendMessage(tl("requestDeniedAll", count));
+    }
+
+    private boolean sendEvent(User user, User player, IUser.TpaRequest request) {
+        final TeleportRequestResponseEvent event = new TeleportRequestResponseEvent(user, player, request, false);
+        Bukkit.getPluginManager().callEvent(event);
+        final boolean cancelled = event.isCancelled();
+        if (cancelled && ess.getSettings().isDebug()) {
+            logger.info("TPA deny cancelled by API for " + user.getName() + " (requested by " + player.getName() + ")");
+        }
+        return event.isCancelled();
     }
 
     @Override

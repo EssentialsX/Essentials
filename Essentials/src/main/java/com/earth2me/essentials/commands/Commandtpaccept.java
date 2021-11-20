@@ -24,32 +24,20 @@ public class Commandtpaccept extends EssentialsCommand {
 
     @Override
     public void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception {
-        final boolean excludeHere;
+        final boolean acceptAll;
         if (args.length > 0) {
-            excludeHere = args[0].equals("*") || args[0].equalsIgnoreCase("all");
+            acceptAll = args[0].equals("*") || args[0].equalsIgnoreCase("all");
         } else {
-            excludeHere = false;
+            acceptAll = false;
         }
 
-        if (!user.hasPendingTpaRequests(true, excludeHere)) {
+        if (!user.hasPendingTpaRequests(true, acceptAll)) {
             throw new Exception(tl("noPendingRequest"));
         }
 
         if (args.length > 0) {
-            if (excludeHere) {
-                IUser.TpaRequest request;
-                int count = 0;
-                while ((request = user.getNextTpaRequest(true, true, true)) != null) {
-                    try {
-                        handleTeleport(user, request, commandLabel);
-                        count++;
-                    } catch (Exception e) {
-                        ess.showError(user.getSource(), e, commandLabel);
-                    } finally {
-                        user.removeTpaRequest(request.getName());
-                    }
-                }
-                user.sendMessage(tl("requestAcceptedAll", count));
+            if (acceptAll) {
+                acceptAllRequests(user, commandLabel);
                 throw new NoChargeException();
             }
             user.sendMessage(tl("requestAccepted"));
@@ -59,6 +47,22 @@ public class Commandtpaccept extends EssentialsCommand {
             handleTeleport(user, user.getNextTpaRequest(true, false, false), commandLabel);
         }
         throw new NoChargeException();
+    }
+
+    private void acceptAllRequests(final User user, final String commandLabel) throws Exception {
+        IUser.TpaRequest request;
+        int count = 0;
+        while ((request = user.getNextTpaRequest(true, true, true)) != null) {
+            try {
+                handleTeleport(user, request, commandLabel);
+                count++;
+            } catch (Exception e) {
+                ess.showError(user.getSource(), e, commandLabel);
+            } finally {
+                user.removeTpaRequest(request.getName());
+            }
+        }
+        user.sendMessage(tl("requestAcceptedAll", count));
     }
 
     @Override

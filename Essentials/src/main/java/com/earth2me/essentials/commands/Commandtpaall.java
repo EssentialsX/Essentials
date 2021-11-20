@@ -19,17 +19,17 @@ public class Commandtpaall extends EssentialsCommand {
     public void run(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception {
         if (args.length < 1) {
             if (sender.isPlayer()) {
-                teleportAAllPlayers(sender, ess.getUser(sender.getPlayer()));
+                tpaAll(sender, ess.getUser(sender.getPlayer()));
                 return;
             }
             throw new NotEnoughArgumentsException();
         }
 
         final User target = getPlayer(server, sender, args, 0);
-        teleportAAllPlayers(sender, target);
+        tpaAll(sender, target);
     }
 
-    private void teleportAAllPlayers(final CommandSource sender, final User target) {
+    private void tpaAll(final CommandSource sender, final User target) {
         sender.sendMessage(tl("teleportAAll"));
         for (final User player : ess.getOnlineUsers()) {
             if (target == player) {
