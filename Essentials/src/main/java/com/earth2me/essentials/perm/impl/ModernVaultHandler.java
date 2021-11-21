@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Objects;
 
 public class ModernVaultHandler extends AbstractVaultHandler {
-    private final List<String> supportedPlugins = Arrays.asList("PermissionsEx", "LuckPerms");
+    private final List<String> supportedPlugins = Arrays.asList("PermissionsEx", "LuckPerms", "PowerRanks");
 
     @Override
     protected boolean emulateWildcards() {
