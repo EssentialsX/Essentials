@@ -116,7 +116,7 @@ indra {
 
     javaVersions {
         target(8)
-        minimumToolchain(16)
+        minimumToolchain(17)
     }
 }
 
