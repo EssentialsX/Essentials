@@ -15,8 +15,9 @@ import java.util.List;
 import static com.earth2me.essentials.I18n.tl;
 
 public class Commanditemname extends EssentialsCommand {
-    public static final String PERM_PREFIX = "essentials.itemname.prevent-type.";
-
+    public static final String PREVENT_PERM_PREFIX = "essentials.itemname.prevent-type.";
+    public static final String ALLOW_PERM_PREFIX = "essentials.itemname.allow-type.";
+    
     public Commanditemname() {
         super("itemname");
     }
@@ -29,9 +30,12 @@ public class Commanditemname extends EssentialsCommand {
             return;
         }
 
-        final TriState wildcard = user.isAuthorizedExact(PERM_PREFIX + "*");
-        final TriState material = user.isAuthorizedExact(PERM_PREFIX + item.getType().name().toLowerCase());
-        if ((wildcard == TriState.TRUE && material != TriState.FALSE) || ((wildcard != TriState.TRUE) && material == TriState.TRUE)) {
+        final TriState wildcard = user.isAuthorizedExact(PREVENT_PERM_PREFIX + "*");
+        final TriState material = user.isAuthorizedExact(PREVENT_PERM_PREFIX + item.getType().name().toLowerCase());
+        final TriState wildcardAllowed = user.isAuthorizedExact(ALLOW_PERM_PREFIX + "*");
+        final TriState allowed = user.isAuthorizedExact(ALLOW_PERM_PREFIX + item.getType().name().toLowerCase());
+        if (((wildcard == TriState.TRUE && material != TriState.FALSE) || ((wildcard != TriState.TRUE) && material == TriState.TRUE))
+            && (allowed != TriState.TRUE && wildcardAllowed != TriState.TRUE)) {
             user.sendMessage(tl("itemnameInvalidItem"));
             return;
         }
