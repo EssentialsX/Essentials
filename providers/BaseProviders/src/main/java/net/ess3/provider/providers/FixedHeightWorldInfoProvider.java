@@ -11,7 +11,7 @@ public class FixedHeightWorldInfoProvider implements WorldInfoProvider {
 
     @Override
     public int getMaxSafeHeight(World world) {
-        return world.getEnvironment() == World.Environment.NETHER ? 127 : 255;
+        return world.getEnvironment() == World.Environment.NETHER ? 128 : 256;
     }
 
     @Override

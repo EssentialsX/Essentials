@@ -48,7 +48,7 @@ public class RandomTeleport implements IConf {
         } catch (final InvalidWorldException ignored) {
         }
         final Location center = ess.getServer().getWorlds().get(0).getWorldBorder().getCenter();
-        center.setY(center.getWorld().getHighestBlockYAt(center) + 1);
+        center.setY(center.getWorld().getHighestBlockYAt(center) + HIGHEST_BLOCK_Y_OFFSET);
         setCenter(center);
         return center;
     }
