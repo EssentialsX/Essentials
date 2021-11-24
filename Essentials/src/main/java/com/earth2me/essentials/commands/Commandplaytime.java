@@ -1,17 +1,17 @@
 package com.earth2me.essentials.commands;
 
-import static com.earth2me.essentials.I18n.tl;
+import com.earth2me.essentials.CommandSource;
+import com.earth2me.essentials.utils.DateUtil;
+import com.earth2me.essentials.utils.EnumUtil;
+import net.ess3.api.IUser;
+import org.bukkit.Bukkit;
+import org.bukkit.Server;
+import org.bukkit.Statistic;
 
 import java.util.Collections;
 import java.util.List;
 
-import org.bukkit.Server;
-import org.bukkit.Statistic;
-
-import com.earth2me.essentials.CommandSource;
-import com.earth2me.essentials.IUser;
-import com.earth2me.essentials.utils.DateUtil;
-import com.earth2me.essentials.utils.EnumUtil;
+import static com.earth2me.essentials.I18n.tl;
 
 public class Commandplaytime extends EssentialsCommand {
     // For some reason, in 1.13 PLAY_ONE_MINUTE = ticks played = what used to be PLAY_ONE_TICK
@@ -24,21 +24,32 @@ public class Commandplaytime extends EssentialsCommand {
 
     @Override
     protected void run(Server server, CommandSource sender, String commandLabel, String[] args) throws Exception {
-        final IUser target;
+        String displayName;
+        long playtime;
         final String key;
         
         if (args.length > 0 && sender.isAuthorized("essentials.playtime.others", ess)) {
-            target = getPlayer(server, sender, args, 0);
+            try {
+                final IUser user = getPlayer(server, sender, args, 0);
+                displayName = user.getDisplayName();
+                playtime = user.getBase().getStatistic(PLAY_ONE_TICK);
+            } catch (PlayerNotFoundException ignored) {
+                final IUser user = getPlayer(server, sender, args, 0, true);
+                displayName = user.getName();
+                playtime = Bukkit.getOfflinePlayer(user.getBase().getUniqueId()).getStatistic(PLAY_ONE_TICK);
+            }
             key = "playtimeOther";
         } else if (sender.isPlayer()) {
-            target = sender.getUser(ess);
+            //noinspection ConstantConditions
+            displayName = sender.getPlayer().getDisplayName();
+            playtime = sender.getPlayer().getStatistic(PLAY_ONE_TICK);
             key = "playtime";
         } else {
             throw new NotEnoughArgumentsException();
         }
 
-        final long playtimeMs = System.currentTimeMillis() - (target.getBase().getStatistic(PLAY_ONE_TICK) * 50);
-        sender.sendMessage(tl(key, DateUtil.formatDateDiff(playtimeMs), target.getDisplayName()));
+        final long playtimeMs = System.currentTimeMillis() - (playtime * 50L);
+        sender.sendMessage(tl(key, DateUtil.formatDateDiff(playtimeMs), displayName));
     }
     
     @Override
