@@ -79,7 +79,7 @@ public final class DiscordUtil {
         final CompletableFuture<Webhook> future = new CompletableFuture<>();
         channel.retrieveWebhooks().queue(webhooks -> {
             for (final Webhook webhook : webhooks) {
-                if (webhook.getName().equals(webhookName)) {
+                if (webhook.getName().equals(webhookName) && webhook.getToken() != null) {
                     ACTIVE_WEBHOOKS.addIfAbsent(webhook.getId());
                     future.complete(webhook);
                     return;
