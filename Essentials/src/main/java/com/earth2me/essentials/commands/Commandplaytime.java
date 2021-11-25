@@ -3,6 +3,7 @@ package com.earth2me.essentials.commands;
 import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.utils.DateUtil;
 import com.earth2me.essentials.utils.EnumUtil;
+import com.earth2me.essentials.utils.VersionUtil;
 import net.ess3.api.IUser;
 import org.bukkit.Bukkit;
 import org.bukkit.Server;
@@ -33,7 +34,11 @@ public class Commandplaytime extends EssentialsCommand {
                 final IUser user = getPlayer(server, sender, args, 0);
                 displayName = user.getDisplayName();
                 playtime = user.getBase().getStatistic(PLAY_ONE_TICK);
-            } catch (PlayerNotFoundException ignored) {
+            } catch (PlayerNotFoundException e) {
+                // The ability to get the statistics of offline players is only available in 1.15.2+
+                if (VersionUtil.getServerBukkitVersion().isLowerThan(VersionUtil.v1_15_2_R01)) {
+                    throw e;
+                }
                 final IUser user = getPlayer(server, sender, args, 0, true);
                 displayName = user.getName();
                 playtime = Bukkit.getOfflinePlayer(user.getBase().getUniqueId()).getStatistic(PLAY_ONE_TICK);
