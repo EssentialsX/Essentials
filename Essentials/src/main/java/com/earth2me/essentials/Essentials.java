@@ -47,6 +47,7 @@ import net.ess3.api.IEssentials;
 import net.ess3.api.IItemDb;
 import net.ess3.api.IJails;
 import net.ess3.api.ISettings;
+import net.ess3.nms.refl.providers.ReflDataWorldInfoProvider;
 import net.ess3.nms.refl.providers.ReflFormattedCommandAliasProvider;
 import net.ess3.nms.refl.providers.ReflKnownCommandsProvider;
 import net.ess3.nms.refl.providers.ReflOnlineModeProvider;
@@ -81,7 +82,7 @@ import net.ess3.provider.providers.LegacyPotionMetaProvider;
 import net.ess3.provider.providers.LegacySpawnEggProvider;
 import net.ess3.provider.providers.ModernItemUnbreakableProvider;
 import net.ess3.provider.providers.ModernPersistentDataProvider;
-import net.ess3.provider.providers.ModernWorldInfoProvider;
+import net.ess3.provider.providers.ModernDataWorldInfoProvider;
 import net.ess3.provider.providers.PaperContainerProvider;
 import net.ess3.provider.providers.PaperKnownCommandsProvider;
 import net.ess3.provider.providers.PaperMaterialTagProvider;
@@ -424,7 +425,9 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
             }
 
             if (VersionUtil.getServerBukkitVersion().isHigherThanOrEqualTo(VersionUtil.v1_17_1_R01)) {
-                worldInfoProvider = new ModernWorldInfoProvider();
+                worldInfoProvider = new ModernDataWorldInfoProvider();
+            } else if (VersionUtil.getServerBukkitVersion().isHigherThanOrEqualTo(VersionUtil.v1_16_5_R01)) {
+                worldInfoProvider = new ReflDataWorldInfoProvider();
             } else {
                 worldInfoProvider = new FixedHeightWorldInfoProvider();
             }

@@ -97,7 +97,7 @@ public final class LocationUtil {
     }
 
     public static boolean isBlockAboveAir(IEssentials ess, final World world, final int x, final int y, final int z) {
-        return y > ess.getWorldInfoProvider().getMaxSafeHeight(world) || HOLLOW_MATERIALS.contains(world.getBlockAt(x, y - 1, z).getType());
+        return y > ess.getWorldInfoProvider().getMaxHeight(world) || HOLLOW_MATERIALS.contains(world.getBlockAt(x, y - 1, z).getType());
     }
 
     public static boolean isBlockOutsideWorldBorder(final World world, final int x, final int z) {
@@ -203,8 +203,9 @@ public final class LocationUtil {
             throw new Exception(tl("destinationNotSet"));
         }
         final World world = loc.getWorld();
-        final int worldMinY = ess.getWorldInfoProvider().getMinSafeHeight(world);
-        final int worldMaxY = ess.getWorldInfoProvider().getMaxSafeHeight(world);
+        final int worldMinY = ess.getWorldInfoProvider().getMinHeight(world);
+        final int worldLogicalY = ess.getWorldInfoProvider().getLogicalHeight(world);
+        final int worldMaxY = loc.getBlockY() < worldLogicalY ? worldLogicalY : ess.getWorldInfoProvider().getMaxHeight(world);
         int x = loc.getBlockX();
         int y = (int) Math.round(loc.getY());
         int z = loc.getBlockZ();
