@@ -217,7 +217,7 @@ public class EssentialsPlayerListener implements Listener, FakeAccessor {
             to.setY(from.getY());
             to.setZ(from.getZ());
             try {
-                event.setTo(LocationUtil.getSafeDestination(to));
+                event.setTo(LocationUtil.getSafeDestination(ess, to));
             } catch (final Exception ex) {
                 event.setTo(to);
             }
@@ -412,7 +412,7 @@ public class EssentialsPlayerListener implements Listener, FakeAccessor {
 
                 if (user.isAuthorized("essentials.fly.safelogin")) {
                     user.getBase().setFallDistance(0);
-                    if (LocationUtil.shouldFly(user.getLocation())) {
+                    if (LocationUtil.shouldFly(ess, user.getLocation())) {
                         user.getBase().setAllowFlight(true);
                         user.getBase().setFlying(true);
                         if (ess.getSettings().isSendFlyEnableOnJoin()) {

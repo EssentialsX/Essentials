@@ -17,7 +17,9 @@ public class ReflServerStateProvider implements ServerStateProvider {
         final Class<?> nmsClass = ReflUtil.getNMSClass("MinecraftServer");
         try {
             serverObject = nmsClass.getMethod("getServer").invoke(null);
-            isRunning = MethodHandles.lookup().findVirtual(nmsClass, "isRunning", MethodType.methodType(boolean.class));
+            isRunning = MethodHandles.lookup().findVirtual(nmsClass,
+                    ReflUtil.getNmsVersionObject().isHigherThanOrEqualTo(ReflUtil.V1_18_R1) ? "v" : "isRunning", //TODO jmp said he may make this better
+                    MethodType.methodType(boolean.class));
         } catch (final Exception e) {
             e.printStackTrace();
         }
