@@ -34,8 +34,9 @@ public final class VersionUtil {
     public static final BukkitVersion v1_16_5_R01 = BukkitVersion.fromString("1.16.5-R0.1-SNAPSHOT");
     public static final BukkitVersion v1_17_R01 = BukkitVersion.fromString("1.17-R0.1-SNAPSHOT");
     public static final BukkitVersion v1_17_1_R01 = BukkitVersion.fromString("1.17.1-R0.1-SNAPSHOT");
+    public static final BukkitVersion v1_18_R01 = BukkitVersion.fromString("1.18-R0.1-SNAPSHOT");
 
-    private static final Set<BukkitVersion> supportedVersions = ImmutableSet.of(v1_8_8_R01, v1_9_4_R01, v1_10_2_R01, v1_11_2_R01, v1_12_2_R01, v1_13_2_R01, v1_14_4_R01, v1_15_2_R01, v1_16_5_R01, v1_17_1_R01);
+    private static final Set<BukkitVersion> supportedVersions = ImmutableSet.of(v1_8_8_R01, v1_9_4_R01, v1_10_2_R01, v1_11_2_R01, v1_12_2_R01, v1_13_2_R01, v1_14_4_R01, v1_15_2_R01, v1_16_5_R01, v1_17_1_R01, v1_18_R01);
 
     private static final Map<String, SupportStatus> unsupportedServerClasses;
 
@@ -158,20 +159,22 @@ public final class VersionUtil {
     }
 
     public static final class BukkitVersion implements Comparable<BukkitVersion> {
-        private static final Pattern VERSION_PATTERN = Pattern.compile("^(\\d+)\\.(\\d+)\\.?([0-9]*)?(?:-pre(\\d))?(?:-?R?([\\d.]+))?(?:-SNAPSHOT)?");
+        private static final Pattern VERSION_PATTERN = Pattern.compile("^(\\d+)\\.(\\d+)\\.?([0-9]*)?(?:-pre(\\d))?(?:-rc(\\d+))?(?:-?R?([\\d.]+))?(?:-SNAPSHOT)?");
 
         private final int major;
         private final int minor;
-        private final int prerelease;
+        private final int preRelease;
+        private final int releaseCandidate;
         private final int patch;
         private final double revision;
 
-        private BukkitVersion(final int major, final int minor, final int patch, final double revision, final int prerelease) {
+        private BukkitVersion(final int major, final int minor, final int patch, final double revision, final int preRelease, final int releaseCandidate) {
             this.major = major;
             this.minor = minor;
             this.patch = patch;
             this.revision = revision;
-            this.prerelease = prerelease;
+            this.preRelease = preRelease;
+            this.releaseCandidate = releaseCandidate;
         }
 
         public static BukkitVersion fromString(final String string) {
@@ -185,18 +188,20 @@ public final class VersionUtil {
                 Preconditions.checkArgument(matcher.matches(), string + " is not in valid version format. e.g. 1.8.8-R0.1");
             }
 
-            return from(matcher.group(1), matcher.group(2), matcher.group(3), matcher.groupCount() < 5 ? "" : matcher.group(5), matcher.group(4));
+            return from(matcher.group(1), matcher.group(2), matcher.group(3), matcher.group(6), matcher.group(4), matcher.group(5));
         }
 
-        private static BukkitVersion from(final String major, final String minor, String patch, String revision, String prerelease) {
+        private static BukkitVersion from(final String major, final String minor, String patch, String revision, String preRelease, String releaseCandidate) {
             if (patch == null || patch.isEmpty()) patch = "0";
             if (revision == null || revision.isEmpty()) revision = "0";
-            if (prerelease == null || prerelease.isEmpty()) prerelease = "-1";
+            if (preRelease == null || preRelease.isEmpty()) preRelease = "-1";
+            if (releaseCandidate == null || releaseCandidate.isEmpty()) releaseCandidate = "-1";
             return new BukkitVersion(Integer.parseInt(major),
                 Integer.parseInt(minor),
                 Integer.parseInt(patch),
                 Double.parseDouble(revision),
-                Integer.parseInt(prerelease));
+                Integer.parseInt(preRelease),
+                Integer.parseInt(releaseCandidate));
         }
 
         public boolean isHigherThan(final BukkitVersion o) {
@@ -232,7 +237,11 @@ public final class VersionUtil {
         }
 
         public int getPrerelease() {
-            return prerelease;
+            return preRelease;
+        }
+
+        public int getReleaseCandidate() {
+            return releaseCandidate;
         }
 
         @Override
@@ -248,12 +257,12 @@ public final class VersionUtil {
                 minor == that.minor &&
                 patch == that.patch &&
                 revision == that.revision &&
-                prerelease == that.prerelease;
+                preRelease == that.preRelease;
         }
 
         @Override
         public int hashCode() {
-            return Objects.hashCode(major, minor, patch, revision, prerelease);
+            return Objects.hashCode(major, minor, patch, revision, preRelease, releaseCandidate);
         }
 
         @Override
@@ -262,8 +271,11 @@ public final class VersionUtil {
             if (patch != 0) {
                 sb.append(".").append(patch);
             }
-            if (prerelease != -1) {
-                sb.append("-pre").append(prerelease);
+            if (preRelease != -1) {
+                sb.append("-pre").append(preRelease);
+            }
+            if (releaseCandidate != -1) {
+                sb.append("-rc").append(releaseCandidate);
             }
             return sb.append("-R").append(revision).toString();
         }
@@ -285,12 +297,18 @@ public final class VersionUtil {
                     } else if (patch > o.patch) {
                         return 1;
                     } else { // equal patch
-                        if (prerelease < o.prerelease) {
+                        if (preRelease < o.preRelease) {
                             return -1;
-                        } else if (prerelease > o.prerelease) {
+                        } else if (preRelease > o.preRelease) {
                             return 1;
                         } else { // equal prerelease
-                            return Double.compare(revision, o.revision);
+                            if (releaseCandidate < o.releaseCandidate) {
+                                return -1;
+                            } else if (releaseCandidate > o.releaseCandidate) {
+                                return 1;
+                            } else { // equal release candidate
+                                return Double.compare(revision, o.revision);
+                            }
                         }
                     }
                 }
