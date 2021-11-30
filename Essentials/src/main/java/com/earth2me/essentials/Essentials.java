@@ -47,6 +47,7 @@ import net.ess3.api.IEssentials;
 import net.ess3.api.IItemDb;
 import net.ess3.api.IJails;
 import net.ess3.api.ISettings;
+import net.ess3.nms.refl.providers.ReflDataWorldInfoProvider;
 import net.ess3.nms.refl.providers.ReflFormattedCommandAliasProvider;
 import net.ess3.nms.refl.providers.ReflKnownCommandsProvider;
 import net.ess3.nms.refl.providers.ReflOnlineModeProvider;
@@ -69,16 +70,19 @@ import net.ess3.provider.SpawnEggProvider;
 import net.ess3.provider.SpawnerBlockProvider;
 import net.ess3.provider.SpawnerItemProvider;
 import net.ess3.provider.SyncCommandsProvider;
+import net.ess3.provider.WorldInfoProvider;
 import net.ess3.provider.providers.BasePotionDataProvider;
 import net.ess3.provider.providers.BlockMetaSpawnerItemProvider;
 import net.ess3.provider.providers.BukkitMaterialTagProvider;
 import net.ess3.provider.providers.BukkitSpawnerBlockProvider;
+import net.ess3.provider.providers.FixedHeightWorldInfoProvider;
 import net.ess3.provider.providers.FlatSpawnEggProvider;
 import net.ess3.provider.providers.LegacyItemUnbreakableProvider;
 import net.ess3.provider.providers.LegacyPotionMetaProvider;
 import net.ess3.provider.providers.LegacySpawnEggProvider;
 import net.ess3.provider.providers.ModernItemUnbreakableProvider;
 import net.ess3.provider.providers.ModernPersistentDataProvider;
+import net.ess3.provider.providers.ModernDataWorldInfoProvider;
 import net.ess3.provider.providers.PaperContainerProvider;
 import net.ess3.provider.providers.PaperKnownCommandsProvider;
 import net.ess3.provider.providers.PaperMaterialTagProvider;
@@ -170,6 +174,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
     private transient PersistentDataProvider persistentDataProvider;
     private transient ReflOnlineModeProvider onlineModeProvider;
     private transient ItemUnbreakableProvider unbreakableProvider;
+    private transient WorldInfoProvider worldInfoProvider;
     private transient Kits kits;
     private transient RandomTeleport randomTeleport;
     private transient UpdateChecker updateChecker;
@@ -417,6 +422,14 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
                 unbreakableProvider = new ModernItemUnbreakableProvider();
             } else {
                 unbreakableProvider = new LegacyItemUnbreakableProvider();
+            }
+
+            if (VersionUtil.getServerBukkitVersion().isHigherThanOrEqualTo(VersionUtil.v1_17_1_R01)) {
+                worldInfoProvider = new ModernDataWorldInfoProvider();
+            } else if (VersionUtil.getServerBukkitVersion().isHigherThanOrEqualTo(VersionUtil.v1_16_5_R01)) {
+                worldInfoProvider = new ReflDataWorldInfoProvider();
+            } else {
+                worldInfoProvider = new FixedHeightWorldInfoProvider();
             }
 
             execTimer.mark("Init(Providers)");
@@ -1282,6 +1295,11 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
     @Override
     public ItemUnbreakableProvider getItemUnbreakableProvider() {
         return unbreakableProvider;
+    }
+
+    @Override
+    public WorldInfoProvider getWorldInfoProvider() {
+        return worldInfoProvider;
     }
 
     @Override
