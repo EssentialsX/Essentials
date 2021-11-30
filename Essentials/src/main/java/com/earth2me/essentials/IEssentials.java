@@ -19,6 +19,7 @@ import net.ess3.provider.SerializationProvider;
 import net.ess3.provider.SpawnerBlockProvider;
 import net.ess3.provider.SpawnerItemProvider;
 import net.ess3.provider.SyncCommandsProvider;
+import net.ess3.provider.WorldInfoProvider;
 import net.essentialsx.api.v2.services.BalanceTop;
 import net.essentialsx.api.v2.services.mail.MailService;
 import org.bukkit.Server;
@@ -161,6 +162,8 @@ public interface IEssentials extends Plugin {
     ReflOnlineModeProvider getOnlineModeProvider();
 
     ItemUnbreakableProvider getItemUnbreakableProvider();
+
+    WorldInfoProvider getWorldInfoProvider();
 
     PluginCommand getPluginCommand(String cmd);
 }
