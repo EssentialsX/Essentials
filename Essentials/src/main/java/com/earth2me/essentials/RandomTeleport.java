@@ -177,7 +177,7 @@ public class RandomTeleport implements IConf {
         final Location location = new Location(
             center.getWorld(),
             center.getX() + offsetX,
-            ess.getWorldInfoProvider().getMaxSafeHeight(center.getWorld()),
+            ess.getWorldInfoProvider().getMaxHeight(center.getWorld()),
             center.getZ() + offsetZ,
             360 * RANDOM.nextFloat() - 180,
             0
@@ -195,7 +195,7 @@ public class RandomTeleport implements IConf {
 
     // Returns an appropriate elevation for a given location in the nether, or -1 if none is found
     private double getNetherYAt(final Location location) {
-        for (int y = 32; y < ess.getWorldInfoProvider().getMaxSafeHeight(location.getWorld()); ++y) {
+        for (int y = 32; y < ess.getWorldInfoProvider().getMaxHeight(location.getWorld()); ++y) {
             if (!LocationUtil.isBlockUnsafe(ess, location.getWorld(), location.getBlockX(), y, location.getBlockZ())) {
                 return y;
             }
@@ -204,6 +204,6 @@ public class RandomTeleport implements IConf {
     }
 
     private boolean isValidRandomLocation(final Location location) {
-        return location.getBlockY() > ess.getWorldInfoProvider().getMinSafeHeight(location.getWorld()) && !this.getExcludedBiomes().contains(location.getBlock().getBiome());
+        return location.getBlockY() > ess.getWorldInfoProvider().getMinHeight(location.getWorld()) && !this.getExcludedBiomes().contains(location.getBlock().getBiome());
     }
 }
