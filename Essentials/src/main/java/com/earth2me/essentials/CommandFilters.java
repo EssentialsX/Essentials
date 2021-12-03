@@ -1,8 +1,9 @@
 package com.earth2me.essentials;
 
+import com.earth2me.essentials.config.ConfigurateUtil;
+import com.earth2me.essentials.config.EssentialsConfiguration;
 import net.ess3.api.IUser;
-import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.MemoryConfiguration;
+import org.spongepowered.configurate.CommentedConfigurationNode;
 
 import java.io.File;
 import java.math.BigDecimal;
@@ -11,7 +12,6 @@ import java.util.EnumMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.Objects;
 import java.util.function.Predicate;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
@@ -19,14 +19,12 @@ import java.util.regex.PatternSyntaxException;
 public class CommandFilters implements IConf {
 
     private final IEssentials essentials;
-    private final EssentialsConf config;
-    private ConfigurationSection filters;
+    private final EssentialsConfiguration config;
     private Map<CommandFilter.Type, List<CommandFilter>> commandFilters;
 
     public CommandFilters(final IEssentials essentials) {
         this.essentials = essentials;
-        config = new EssentialsConf(new File(essentials.getDataFolder(), "command-filters.yml"));
-        config.setTemplateName("/command-filters.yml");
+        config = new EssentialsConfiguration(new File(essentials.getDataFolder(), "command-filters.yml"), "/command-filters.yml");
 
         reloadConfig();
     }
@@ -34,65 +32,46 @@ public class CommandFilters implements IConf {
     @Override
     public void reloadConfig() {
         config.load();
-        filters = _getCommandFilterSection();
-        commandFilters = _getCommandFilters();
+        commandFilters = parseCommandFilters(config);
     }
 
-    private ConfigurationSection _getCommandFilterSection() {
-        if (config.isConfigurationSection("filters")) {
-            final ConfigurationSection section = config.getConfigurationSection("filters");
-            final ConfigurationSection newSection = new MemoryConfiguration();
-            for (final String filterItem : section.getKeys(false)) {
-                if (section.isConfigurationSection(filterItem)) {
-                    newSection.set(filterItem.toLowerCase(Locale.ENGLISH), section.getConfigurationSection(filterItem));
-                }
-            }
-            return newSection;
-        }
-        return null;
-    }
-
-    private Map<CommandFilter.Type, List<CommandFilter>> _getCommandFilters() {
+    private Map<CommandFilter.Type, List<CommandFilter>> parseCommandFilters(EssentialsConfiguration config) {
         final Map<CommandFilter.Type, List<CommandFilter>> commandFilters = new EnumMap<>(CommandFilter.Type.class);
-        for (final String name : filters.getKeys(false)) {
-            if (!filters.isConfigurationSection(name)) {
-                EssentialsConf.LOGGER.warning("Invalid command filter '" + name + "'");
-                continue;
-            }
-
-            final ConfigurationSection section = Objects.requireNonNull(filters.getConfigurationSection(name));
-            final Pattern pattern = section.isString("pattern") ? compileRegex(section.getString("pattern")) : null;
-            final String command = section.getString("command");
+        final CommentedConfigurationNode filterSection = config.getSection("filters");
+        for (final String filterItem : ConfigurateUtil.getKeys(filterSection)) {
+            final CommentedConfigurationNode section = filterSection.node(filterItem);
+            final String patternString = section.node("pattern").getString();
+            final Pattern pattern = patternString == null ? null : compileRegex(patternString);
+            final String command = section.node("command").getString();
 
             if (pattern == null && command == null) {
-                EssentialsConf.LOGGER.warning("Invalid command filter '" + name + "', filter must either define 'pattern' or 'command'!");
+                EssentialsConf.LOGGER.warning("Invalid command filter '" + filterItem + "', filter must either define 'pattern' or 'command'!");
                 continue;
             }
 
             if (pattern != null && command != null) {
-                EssentialsConf.LOGGER.warning("Invalid command filter '" + name + "', filter can't have both 'pattern' and 'command'!");
+                EssentialsConf.LOGGER.warning("Invalid command filter '" + filterItem + "', filter can't have both 'pattern' and 'command'!");
                 continue;
             }
 
-            Integer cooldown = section.getInt("cooldown", -1);
+            Integer cooldown = section.node("cooldown").getInt(-1);
             if (cooldown < 0) {
                 cooldown = null;
             } else {
                 cooldown *= 1000; // Convert to milliseconds
             }
 
-            final boolean persistentCooldown = section.getBoolean("persistent-cooldown", true);
-            final BigDecimal cost = EssentialsConf.toBigDecimal(section.getString("cost"), null);
+            final boolean persistentCooldown = section.node("persistent-cooldown").getBoolean(true);
+            final BigDecimal cost = EssentialsConf.toBigDecimal(section.node("cost").getString(), null);
 
-            final String lowerName = name.toLowerCase(Locale.ENGLISH);
+            final String filterItemName = filterItem.toLowerCase(Locale.ENGLISH);
 
             if (pattern == null) {
-                commandFilters.computeIfAbsent(CommandFilter.Type.ESS, k -> new ArrayList<>()).add(new EssCommandFilter(lowerName, command, compileRegex(command), cooldown, persistentCooldown, cost));
+                commandFilters.computeIfAbsent(CommandFilter.Type.ESS, k -> new ArrayList<>()).add(new EssCommandFilter(filterItemName, command, compileRegex(command), cooldown, persistentCooldown, cost));
             } else {
-                commandFilters.computeIfAbsent(CommandFilter.Type.REGEX, k -> new ArrayList<>()).add(new RegexCommandFilter(lowerName, pattern, cooldown, persistentCooldown, cost));
+                commandFilters.computeIfAbsent(CommandFilter.Type.REGEX, k -> new ArrayList<>()).add(new RegexCommandFilter(filterItemName, pattern, cooldown, persistentCooldown, cost));
             }
         }
-        config.save();
         return commandFilters;
     }
 
@@ -114,7 +93,7 @@ public class CommandFilters implements IConf {
         }
     }
 
-    public EssentialsConf getConfig() {
+    public EssentialsConfiguration getConfig() {
         return config;
     }
 
