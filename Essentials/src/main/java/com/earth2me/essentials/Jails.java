@@ -63,7 +63,7 @@ public class Jails implements net.ess3.api.IJails {
                 if (worldId == null || worldId.isEmpty()) {
                     continue;
                 }
-                jails.put(entry.getKey().toLowerCase(Locale.ENGLISH), new LazyLocation(worldId, jailNode.node("x").getDouble(), jailNode.node("y").getDouble(),
+                jails.put(entry.getKey().toLowerCase(Locale.ENGLISH), new LazyLocation(worldId, jailNode.node("world-name").getString(""), jailNode.node("x").getDouble(), jailNode.node("y").getDouble(),
                         jailNode.node("z").getDouble(), jailNode.node("yaw").getFloat(), jailNode.node("pitch").getFloat()));
             }
             checkRegister();

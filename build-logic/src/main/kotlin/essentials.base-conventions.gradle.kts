@@ -10,7 +10,7 @@ plugins {
 val baseExtension = extensions.create<EssentialsBaseExtension>("essentials", project)
 
 val checkstyleVersion = "8.36.2"
-val spigotVersion = "1.16.5-R0.1-SNAPSHOT"
+val spigotVersion = "1.18-R0.1-SNAPSHOT"
 val junit5Version = "5.7.0"
 val mockitoVersion = "3.2.0"
 
@@ -30,6 +30,11 @@ afterEvaluate {
     if (baseExtension.injectBukkitApi.get()) {
         dependencies {
             api("org.spigotmc", "spigot-api", spigotVersion)
+        }
+    }
+    if (baseExtension.injectBstats.get()) {
+        dependencies {
+            implementation("org.bstats", "bstats-bukkit", "1.8")
         }
     }
 }
@@ -64,6 +69,9 @@ tasks {
     }
     withType<Jar> {
         archiveVersion.set(rootProject.ext["FULL_VERSION"] as String)
+    }
+    withType<Sign> {
+        onlyIf { project.hasProperty("forceSign") }
     }
 }
 
@@ -108,7 +116,7 @@ indra {
 
     javaVersions {
         target(8)
-        minimumToolchain(16)
+        minimumToolchain(17)
     }
 }
 

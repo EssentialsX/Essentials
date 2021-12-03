@@ -12,14 +12,26 @@ public class AsyncUserDataLoadEvent extends Event {
     private static final HandlerList handlers = new HandlerList();
 
     private final IUser user;
+    private final String joinMessage;
 
-    public AsyncUserDataLoadEvent(IUser user) {
+    public AsyncUserDataLoadEvent(IUser user, String joinMessage) {
         super(true);
         this.user = user;
+        this.joinMessage = joinMessage;
     }
 
+    /**
+     * @return The user whose data has been loaded.
+     */
     public IUser getUser() {
         return user;
+    }
+
+    /**
+     * @return The join message of this user who joined or null if none was displayed.
+     */
+    public String getJoinMessage() {
+        return joinMessage;
     }
 
     @Override

@@ -145,7 +145,7 @@ public class Teleport implements ITeleport {
             teleportee.getBase().eject();
         }
 
-        if (LocationUtil.isBlockUnsafeForUser(teleportee, loc.getWorld(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ())) {
+        if (LocationUtil.isBlockUnsafeForUser(ess, teleportee, loc.getWorld(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ())) {
             if (ess.getSettings().isTeleportSafetyEnabled()) {
                 if (ess.getSettings().isForceDisableTeleportSafety()) {
                     PaperLib.teleportAsync(teleportee.getBase(), loc, cause);

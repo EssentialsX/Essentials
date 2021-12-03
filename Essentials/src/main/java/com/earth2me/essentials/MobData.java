@@ -3,13 +3,16 @@ package com.earth2me.essentials;
 import com.earth2me.essentials.craftbukkit.InventoryWorkaround;
 import com.earth2me.essentials.utils.EnumUtil;
 import com.earth2me.essentials.utils.StringUtil;
+import com.earth2me.essentials.utils.VersionUtil;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Ageable;
+import org.bukkit.entity.ChestedHorse;
 import org.bukkit.entity.Creeper;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.ExperienceOrb;
+import org.bukkit.entity.Goat;
 import org.bukkit.entity.Horse;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Phantom;
@@ -185,6 +188,15 @@ public enum MobData {
     RAID_LEADER("leader", MobCompat.RAIDER, Data.RAID_LEADER, true),
     TROPICAL_FISH_BODY_COLOR("fish_body_color", Arrays.stream(DyeColor.values()).map(color -> color.name().toLowerCase(Locale.ENGLISH) + "body").collect(Collectors.toList()), MobCompat.TROPICAL_FISH, Data.FISH_BODY_COLOR, true),
     TROPICAL_FISH_PATTERN_COLOR("fish_pattern_color", Arrays.stream(DyeColor.values()).map(color -> color.name().toLowerCase(Locale.ENGLISH) + "pattern").collect(Collectors.toList()), MobCompat.TROPICAL_FISH, Data.FISH_PATTERN_COLOR, true),
+    LUCY_AXOLOTL("lucy", MobCompat.AXOLOTL, "axolotl:LUCY", true),
+    LEUCISTIC_AXOLOTL("leucistic", MobCompat.AXOLOTL, "axolotl:LUCY", false),
+    PINK_AXOLOTL("pink", MobCompat.AXOLOTL, "axolotl:LUCY", false),
+    WILD_AXOLOTL("wild", MobCompat.AXOLOTL, "axolotl:WILD", true),
+    BROWN_AXOLOTL("brown", MobCompat.AXOLOTL, "axolotl:WILD", false),
+    GOLD_AXOLOTL("gold", MobCompat.AXOLOTL, "axolotl:GOLD", true),
+    CYAN_AXOLOTL("cyan", MobCompat.AXOLOTL, "axolotl:CYAN", true),
+    BLUE_AXOLOTL("blue", MobCompat.AXOLOTL, "axolotl:BLUE", true),
+    SCREAMING_GOAT("screaming", MobCompat.GOAT, Data.GOAT_SCREAMING, true),
     ;
 
     public static final Logger logger = Logger.getLogger("Essentials");
@@ -270,6 +282,12 @@ public enum MobData {
             ((Ageable) spawned).setAdult();
         } else if (this.value.equals(Data.BABY)) {
             ((Ageable) spawned).setBaby();
+        } else if (this.value.equals(Data.CHEST)) {
+            if (VersionUtil.getServerBukkitVersion().isHigherThanOrEqualTo(VersionUtil.v1_11_R01)) {
+                ((ChestedHorse) spawned).setCarryingChest(true);
+            } else {
+                ((Horse) spawned).setCarryingChest(true);
+            }
         } else if (this.value.equals(Data.ADULTZOMBIE)) {
             ((Zombie) spawned).setBaby(false);
         } else if (this.value.equals(Data.BABYZOMBIE)) {
@@ -356,6 +374,8 @@ public enum MobData {
                     break;
                 }
             }
+        } else if (this.value.equals(Data.GOAT_SCREAMING)) {
+            ((Goat) spawned).setScreaming(true);
         } else if (this.value instanceof String) {
             final String[] split = ((String) this.value).split(":");
             switch (split[0]) {
@@ -383,6 +403,10 @@ public enum MobData {
                 case "fox":
                     MobCompat.setFoxType(spawned, split[1]);
                     break;
+                case "axolotl": {
+                    MobCompat.setAxolotlVariant(spawned, split[1]);
+                    break;
+                }
             }
         } else {
             logger.warning("Unknown mob data type: " + this.toString());
@@ -406,5 +430,6 @@ public enum MobData {
         RAID_LEADER,
         FISH_BODY_COLOR,
         FISH_PATTERN_COLOR,
+        GOAT_SCREAMING,
     }
 }

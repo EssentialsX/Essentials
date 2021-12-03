@@ -163,7 +163,6 @@ public class AsyncTeleport implements IAsyncTeleport {
             future.complete(false);
             return;
         }
-        teleportee.setLastLocation();
 
         if (!ess.getSettings().isForcePassengerTeleport() && !teleportee.getBase().isEmpty()) {
             if (!ess.getSettings().isTeleportPassengerDismount()) {
@@ -178,15 +177,19 @@ public class AsyncTeleport implements IAsyncTeleport {
                 return;
             }
         }
-        teleportee.setLastLocation();
+
+        if (teleportee.isAuthorized("essentials.back.onteleport")) {
+            teleportee.setLastLocation();
+        }
+
         final Location targetLoc = target.getLocation();
-        if (ess.getSettings().isTeleportSafetyEnabled() && LocationUtil.isBlockOutsideWorldBorder(targetLoc.getWorld(), targetLoc.getBlockX(), targetLoc.getBlockZ())) {
+        if (ess.getSettings().isTeleportSafetyEnabled() && !ess.getSettings().isForceDisableTeleportSafety() && LocationUtil.isBlockOutsideWorldBorder(targetLoc.getWorld(), targetLoc.getBlockX(), targetLoc.getBlockZ())) {
             targetLoc.setX(LocationUtil.getXInsideWorldBorder(targetLoc.getWorld(), targetLoc.getBlockX()));
             targetLoc.setZ(LocationUtil.getZInsideWorldBorder(targetLoc.getWorld(), targetLoc.getBlockZ()));
         }
         PaperLib.getChunkAtAsync(targetLoc.getWorld(), targetLoc.getBlockX() >> 4, targetLoc.getBlockZ() >> 4, true, true).thenAccept(chunk -> {
             Location loc = targetLoc;
-            if (LocationUtil.isBlockUnsafeForUser(teleportee, chunk.getWorld(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ())) {
+            if (LocationUtil.isBlockUnsafeForUser(ess, teleportee, chunk.getWorld(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ())) {
                 if (ess.getSettings().isTeleportSafetyEnabled()) {
                     if (ess.getSettings().isForceDisableTeleportSafety()) {
                         //The chunk we're teleporting to is 100% going to be loaded here, no need to teleport async.

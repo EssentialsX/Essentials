@@ -9,4 +9,5 @@ dependencies {
 
 essentials {
     injectBukkitApi.set(false)
+    injectBstats.set(false)
 }

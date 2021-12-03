@@ -9,13 +9,13 @@ import com.earth2me.essentials.textreader.SimpleTextInput;
 import com.earth2me.essentials.utils.DateUtil;
 import com.earth2me.essentials.utils.MaterialUtil;
 import com.earth2me.essentials.utils.NumberUtil;
-import com.earth2me.essentials.utils.VersionUtil;
 import net.ess3.api.IEssentials;
 import net.ess3.api.events.KitClaimEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
+import org.yaml.snakeyaml.external.biz.base64Coder.Base64Coder;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -188,22 +188,33 @@ public class Kit {
                     continue;
                 }
 
-                final String[] parts = kitItem.split(" +");
-                final ItemStack parseStack = ess.getItemDb().get(parts[0], parts.length > 1 ? Integer.parseInt(parts[1]) : 1);
+                final ItemStack stack;
 
-                if (parseStack.getType() == Material.AIR) {
-                    continue;
-                }
+                if (kitItem.startsWith("@")) {
+                    if (ess.getSerializationProvider() == null) {
+                        ess.getLogger().log(Level.WARNING, tl("kitError3", kitName, user.getName()));
+                        continue;
+                    }
+                    stack = ess.getSerializationProvider().deserializeItem(Base64Coder.decodeLines(kitItem.substring(1)));
+                } else {
+                    final String[] parts = kitItem.split(" +");
+                    final ItemStack parseStack = ess.getItemDb().get(parts[0], parts.length > 1 ? Integer.parseInt(parts[1]) : 1);
 
-                final MetaItemStack metaStack = new MetaItemStack(parseStack);
+                    if (parseStack.getType() == Material.AIR) {
+                        continue;
+                    }
 
-                if (parts.length > 2) {
-                    // We pass a null sender here because kits should not do perm checks
-                    metaStack.parseStringMeta(null, allowUnsafe, parts, 2, ess);
+                    final MetaItemStack metaStack = new MetaItemStack(parseStack);
+
+                    if (parts.length > 2) {
+                        // We pass a null sender here because kits should not do perm checks
+                        metaStack.parseStringMeta(null, allowUnsafe, parts, 2, ess);
+                    }
+
+                    stack = metaStack.getItemStack();
                 }
 
                 if (autoEquip) {
-                    final ItemStack stack = metaStack.getItemStack();
                     final Material material = stack.getType();
                     final PlayerInventory inventory = user.getBase().getInventory();
                     if (MaterialUtil.isHelmet(material) && isEmptyStack(inventory.getHelmet())) {
@@ -221,7 +232,7 @@ public class Kit {
                     }
                 }
 
-                itemList.add(metaStack.getItemStack());
+                itemList.add(stack);
             }
 
             final Map<Integer, ItemStack> overfilled;
@@ -282,6 +293,6 @@ public class Kit {
     }
 
     private boolean isEmptyStack(ItemStack stack) {
-        return stack == null || stack.getType() == Material.AIR || (VersionUtil.getServerBukkitVersion().isHigherThanOrEqualTo(VersionUtil.v1_14_4_R01) && stack.getType().isAir());
+        return stack == null || MaterialUtil.isAir(stack.getType());
     }
 }

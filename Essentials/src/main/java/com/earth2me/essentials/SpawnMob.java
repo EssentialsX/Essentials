@@ -103,7 +103,7 @@ public final class SpawnMob {
 
     // This method spawns a mob at loc, owned by target
     public static void spawnmob(final IEssentials ess, final Server server, final CommandSource sender, final User target, final Location loc, final List<String> parts, final List<String> data, int mobCount) throws Exception {
-        final Location sloc = LocationUtil.getSafeDestination(loc);
+        final Location sloc = LocationUtil.getSafeDestination(ess, loc);
 
         for (final String part : parts) {
             final Mob mob = Mob.fromName(part);

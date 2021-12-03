@@ -6,7 +6,7 @@ version: ${full.version}
 website: https://essentialsx.net/
 description: Provides an essential, core set of commands for Bukkit.
 softdepend: [Vault, LuckPerms]
-authors: [Zenexer, ementalo, Aelux, Brettflan, KimKandor, snowleo, ceulemans, Xeology, KHobbits, md_5, Iaccidentally, drtshock, vemacs, SupaHam, md678685]
+authors: [Zenexer, ementalo, Aelux, Brettflan, KimKandor, snowleo, ceulemans, Xeology, KHobbits, md_5, Iaccidentally, drtshock, vemacs, SupaHam, mdcfe, JRoy, pop4959]
 api-version: "1.13"
 commands:
   afk:
@@ -208,6 +208,10 @@ commands:
     description: Teleport to your home.
     usage: /<command> [player:][name]
     aliases: [ehome,homes,ehomes]
+  ice:
+    description: Cools a player off.
+    usage: /<command> [player]
+    aliases: [eice, efreeze]
   ignore:
     description: Ignore or unignore other players.
     usage: /<command> <player>
@@ -282,7 +286,7 @@ commands:
     aliases: [eloom]
   mail:
     description: Manages inter-player, intra-server mail.
-    usage: /<command> [read|clear|send [to] [message]|sendall [message]]
+    usage: /<command> [read|clear|clear [number]|send [to] [message]|sendtemp [to] [expire time] [message]|sendall [message]]
     aliases: [email,eemail,memo,ememo]
   me:
     description: Describes an action in the context of the player.
@@ -340,6 +344,10 @@ commands:
     description: Pong!
     usage: /<command>
     aliases: [echo,eecho,eping,pong,epong]
+  playtime:
+    description: Shows a player's time played in game
+    usage: /<command> [player]
+    aliases: [eplaytime]
   potion:
     description: Adds custom potion effects to a potion.
     usage: /<command> <clear|apply|effect:<effect> power:<power> duration:<duration>>
@@ -621,6 +629,7 @@ permissions:
     children:
       essentials.seen.ip: true
       essentials.seen.location: true
+      essentials.seen.uuid: true
   essentials.keepinv:
     default: false
     description: Controls whether players keep their inventory on death.

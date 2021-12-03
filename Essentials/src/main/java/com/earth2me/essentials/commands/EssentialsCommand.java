@@ -14,7 +14,6 @@ import org.bukkit.Server;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.PluginIdentifiableCommand;
-import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.util.StringUtil;
 
@@ -23,10 +22,8 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.MissingResourceException;
-import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -72,7 +69,7 @@ public abstract class EssentialsCommand implements IEssentialsCommand {
         final Matcher matcher = ARGUMENT_PATTERN.matcher(usage);
         while (matcher.find()) {
             final String color = matcher.group(3).equals("<") ? tl("commandArgumentRequired") : tl("commandArgumentOptional");
-            matcher.appendReplacement(buffer, "$1" + color + matcher.group(2).replace("|", ChatColor.RED + "|" + color) + ChatColor.RESET);
+            matcher.appendReplacement(buffer, "$1" + color + matcher.group(2).replace("|", tl("commandArgumentOr") + "|" + color) + ChatColor.RESET);
         }
         matcher.appendTail(buffer);
         usageStrings.put(buffer.toString(), description);
@@ -94,16 +91,8 @@ public abstract class EssentialsCommand implements IEssentialsCommand {
         return bldr.toString();
     }
 
-    private static boolean canInteractWith(final User interactor, final User interactee) {
-        if (interactor == null) {
-            return !interactee.isHidden();
-        }
-
-        if (interactor.equals(interactee)) {
-            return true;
-        }
-
-        return interactor.getBase().canSee(interactee.getBase());
+    private boolean canInteractWith(final User interactor, final User interactee) {
+        return ess.canInteractWith(interactor, interactee);
     }
 
     @Override
@@ -123,11 +112,15 @@ public abstract class EssentialsCommand implements IEssentialsCommand {
 
     // Get online players - only show vanished if source has permission
     protected User getPlayer(final Server server, final CommandSource sender, final String[] args, final int pos) throws PlayerNotFoundException, NotEnoughArgumentsException {
+        return getPlayer(server, sender, args, pos, false);
+    }
+
+    protected User getPlayer(final Server server, final CommandSource sender, final String[] args, final int pos, final boolean getOffline) throws PlayerNotFoundException, NotEnoughArgumentsException {
         if (sender.isPlayer()) {
             final User user = ess.getUser(sender.getPlayer());
-            return getPlayer(server, user, args, pos);
+            return getPlayer(server, user, args, pos, getOffline);
         }
-        return getPlayer(server, args, pos, true, false);
+        return getPlayer(server, args, pos, true, getOffline);
     }
 
     // Get online players - only show vanished if source has permission
@@ -141,7 +134,11 @@ public abstract class EssentialsCommand implements IEssentialsCommand {
 
     // Get online players - only show vanished if source has permission
     protected User getPlayer(final Server server, final User user, final String[] args, final int pos) throws PlayerNotFoundException, NotEnoughArgumentsException {
-        return getPlayer(server, user, args, pos, user.canInteractVanished(), false);
+        return getPlayer(server, user, args, pos, false);
+    }
+
+    protected User getPlayer(final Server server, final User user, final String[] args, final int pos, final boolean getOffline) throws PlayerNotFoundException, NotEnoughArgumentsException {
+        return getPlayer(server, user, args, pos, user.canInteractVanished(), getOffline);
     }
 
     // Get online or offline players, this method allows for raw access
@@ -165,64 +162,7 @@ public abstract class EssentialsCommand implements IEssentialsCommand {
     }
 
     private User getPlayer(final Server server, final User sourceUser, final String searchTerm, final boolean getHidden, final boolean getOffline) throws PlayerNotFoundException {
-        final User user;
-        Player exPlayer;
-
-        try {
-            exPlayer = server.getPlayer(UUID.fromString(searchTerm));
-        } catch (final IllegalArgumentException ex) {
-            if (getOffline) {
-                exPlayer = server.getPlayerExact(searchTerm);
-            } else {
-                exPlayer = server.getPlayer(searchTerm);
-            }
-        }
-
-        if (exPlayer != null) {
-            user = ess.getUser(exPlayer);
-        } else {
-            user = ess.getUser(searchTerm);
-        }
-
-        if (user != null) {
-            if (!getOffline && !user.getBase().isOnline()) {
-                throw new PlayerNotFoundException();
-            }
-
-            if (getHidden || canInteractWith(sourceUser, user)) {
-                return user;
-            } else { // not looking for hidden and cannot interact (i.e is hidden)
-                if (getOffline && user.getName().equalsIgnoreCase(searchTerm)) { // if looking for offline and got an exact match
-                    return user;
-                }
-            }
-            throw new PlayerNotFoundException();
-        }
-        final List<Player> matches = server.matchPlayer(searchTerm);
-
-        if (matches.isEmpty()) {
-            final String matchText = searchTerm.toLowerCase(Locale.ENGLISH);
-            for (final User userMatch : ess.getOnlineUsers()) {
-                if (getHidden || canInteractWith(sourceUser, userMatch)) {
-                    final String displayName = FormatUtil.stripFormat(userMatch.getDisplayName()).toLowerCase(Locale.ENGLISH);
-                    if (displayName.contains(matchText)) {
-                        return userMatch;
-                    }
-                }
-            }
-        } else {
-            for (final Player player : matches) {
-                final User userMatch = ess.getUser(player);
-                if (userMatch.getDisplayName().startsWith(searchTerm) && (getHidden || canInteractWith(sourceUser, userMatch))) {
-                    return userMatch;
-                }
-            }
-            final User userMatch = ess.getUser(matches.get(0));
-            if (getHidden || canInteractWith(sourceUser, userMatch)) {
-                return userMatch;
-            }
-        }
-        throw new PlayerNotFoundException();
+        return ess.matchUser(server, sourceUser, searchTerm, getHidden, getOffline);
     }
 
     @Override
@@ -284,15 +224,7 @@ public abstract class EssentialsCommand implements IEssentialsCommand {
     }
 
     boolean canInteractWith(final CommandSource interactor, final User interactee) {
-        if (interactor == null) {
-            return !interactee.isHidden();
-        }
-
-        if (interactor.isPlayer()) {
-            return canInteractWith(ess.getUser(interactor.getPlayer()), interactee);
-        }
-
-        return true; // console
+        return ess.canInteractWith(interactor, interactee);
     }
 
     /**
@@ -303,7 +235,7 @@ public abstract class EssentialsCommand implements IEssentialsCommand {
         final List<String> players = Lists.newArrayList();
         for (final User user : ess.getOnlineUsers()) {
             if (canInteractWith(interactor, user)) {
-                players.add(user.getName());
+                players.add(ess.getSettings().changeTabCompleteName() ? FormatUtil.stripFormat(user.getDisplayName()) : user.getName());
             }
         }
         return players;
@@ -317,7 +249,7 @@ public abstract class EssentialsCommand implements IEssentialsCommand {
         final List<String> players = Lists.newArrayList();
         for (final User user : ess.getOnlineUsers()) {
             if (canInteractWith(interactor, user)) {
-                players.add(user.getName());
+                players.add(ess.getSettings().changeTabCompleteName() ? FormatUtil.stripFormat(user.getDisplayName()) : user.getName());
             }
         }
         return players;

@@ -1,6 +1,7 @@
 package com.earth2me.essentials;
 
 import com.earth2me.essentials.config.EssentialsConfiguration;
+import com.earth2me.essentials.config.entities.LazyLocation;
 import com.earth2me.essentials.utils.LocationUtil;
 import com.earth2me.essentials.utils.VersionUtil;
 import io.papermc.lib.PaperLib;
@@ -21,12 +22,12 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 public class RandomTeleport implements IConf {
     private static final Random RANDOM = new Random();
     private static final int HIGHEST_BLOCK_Y_OFFSET = VersionUtil.getServerBukkitVersion().isHigherThanOrEqualTo(VersionUtil.v1_15_R01) ? 1 : 0;
-    private final IEssentials essentials;
+    private final IEssentials ess;
     private final EssentialsConfiguration config;
     private final ConcurrentLinkedQueue<Location> cachedLocations = new ConcurrentLinkedQueue<>();
 
     public RandomTeleport(final IEssentials essentials) {
-        this.essentials = essentials;
+        this.ess = essentials;
         config = new EssentialsConfiguration(new File(essentials.getDataFolder(), "tpr.yml"), "/tpr.yml",
                 "Configuration for the random teleport command.\nSome settings may be defaulted, and can be changed via the /settpr command in-game.");
         reloadConfig();
@@ -40,14 +41,14 @@ public class RandomTeleport implements IConf {
 
     public Location getCenter() {
         try {
-            final Location center = config.getLocation("center").location();
-            if (center != null) {
-                return center;
+            final LazyLocation center = config.getLocation("center");
+            if (center != null && center.location() != null) {
+                return center.location();
             }
         } catch (final InvalidWorldException ignored) {
         }
-        final Location center = essentials.getServer().getWorlds().get(0).getWorldBorder().getCenter();
-        center.setY(center.getWorld().getHighestBlockYAt(center) + 1);
+        final Location center = ess.getServer().getWorlds().get(0).getWorldBorder().getCenter();
+        center.setY(center.getWorld().getHighestBlockYAt(center) + HIGHEST_BLOCK_Y_OFFSET);
         setCenter(center);
         return center;
     }
@@ -123,7 +124,7 @@ public class RandomTeleport implements IConf {
 
     // Prompts caching random valid locations, up to a maximum number of attempts
     public void cacheRandomLocations(final Location center, final double minRange, final double maxRange) {
-        essentials.getServer().getScheduler().scheduleSyncDelayedTask(essentials, () -> {
+        ess.getServer().getScheduler().scheduleSyncDelayedTask(ess, () -> {
             for (int i = 0; i < this.getFindAttempts(); ++i) {
                 calculateRandomLocation(center, minRange, maxRange).thenAccept(location -> {
                     if (isValidRandomLocation(location)) {
@@ -176,7 +177,7 @@ public class RandomTeleport implements IConf {
         final Location location = new Location(
             center.getWorld(),
             center.getX() + offsetX,
-            center.getWorld().getMaxHeight(),
+            ess.getWorldInfoProvider().getMaxHeight(center.getWorld()),
             center.getZ() + offsetZ,
             360 * RANDOM.nextFloat() - 180,
             0
@@ -194,8 +195,8 @@ public class RandomTeleport implements IConf {
 
     // Returns an appropriate elevation for a given location in the nether, or -1 if none is found
     private double getNetherYAt(final Location location) {
-        for (int y = 32; y < location.getWorld().getMaxHeight() / 2; ++y) {
-            if (!LocationUtil.isBlockUnsafe(location.getWorld(), location.getBlockX(), y, location.getBlockZ())) {
+        for (int y = 32; y < ess.getWorldInfoProvider().getMaxHeight(location.getWorld()); ++y) {
+            if (!LocationUtil.isBlockUnsafe(ess, location.getWorld(), location.getBlockX(), y, location.getBlockZ())) {
                 return y;
             }
         }
@@ -203,6 +204,6 @@ public class RandomTeleport implements IConf {
     }
 
     private boolean isValidRandomLocation(final Location location) {
-        return location.getBlockY() > 0 && !this.getExcludedBiomes().contains(location.getBlock().getBiome());
+        return location.getBlockY() > ess.getWorldInfoProvider().getMinHeight(location.getWorld()) && !this.getExcludedBiomes().contains(location.getBlock().getBiome());
     }
 }

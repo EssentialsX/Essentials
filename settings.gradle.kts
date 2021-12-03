@@ -8,6 +8,15 @@ dependencyResolutionManagement {
         maven("https://repo.codemc.org/repository/maven-public") {
             content { includeGroup("org.bstats") }
         }
+        maven("https://m2.dv8tion.net/releases/") {
+            content { includeGroup("net.dv8tion") }
+        }
+        maven("https://repo.extendedclip.com/content/repositories/placeholderapi/") {
+            content { includeGroup("me.clip") }
+        }
+        maven("https://libraries.minecraft.net/") {
+            content { includeGroup("com.mojang") }
+        }
         mavenCentral {
             content { includeGroup("net.kyori") }
         }
@@ -26,6 +35,7 @@ sequenceOf(
     "",
     "AntiBuild",
     "Chat",
+    "Discord",
     "GeoIP",
     "Protect",
     "Spawn",
@@ -40,3 +50,4 @@ include(":providers:BaseProviders")
 include(":providers:NMSReflectionProvider")
 include(":providers:PaperProvider")
 include(":providers:1_8Provider")
+include(":providers:1_12Provider")

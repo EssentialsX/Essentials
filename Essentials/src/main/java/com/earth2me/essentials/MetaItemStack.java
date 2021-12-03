@@ -7,9 +7,9 @@ import com.earth2me.essentials.utils.EnumUtil;
 import com.earth2me.essentials.utils.FormatUtil;
 import com.earth2me.essentials.utils.MaterialUtil;
 import com.earth2me.essentials.utils.NumberUtil;
+import com.earth2me.essentials.utils.VersionUtil;
 import com.google.common.base.Joiner;
 import net.ess3.api.IEssentials;
-import net.ess3.nms.refl.ReflUtil;
 import org.bukkit.Color;
 import org.bukkit.DyeColor;
 import org.bukkit.FireworkEffect;
@@ -33,7 +33,6 @@ import org.bukkit.potion.Potion;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -48,9 +47,6 @@ import static com.earth2me.essentials.I18n.tl;
 public class MetaItemStack {
     private static final Map<String, DyeColor> colorMap = new HashMap<>();
     private static final Map<String, FireworkEffect.Type> fireworkShape = new HashMap<>();
-    private static int bukkitUnbreakableSupport = -1;
-    private static Method spigotMethod;
-    private static Method setUnbreakableMethod;
     private static boolean useNewSkullMethod = true;
 
     static {
@@ -212,7 +208,7 @@ public class MetaItemStack {
             stack.setItemMeta(meta);
         } else if (split[0].equalsIgnoreCase("unbreakable") && hasMetaPermission(sender, "unbreakable", false, true, ess)) {
             final boolean value = split.length <= 1 || Boolean.parseBoolean(split[1]);
-            setUnbreakable(stack, value);
+            setUnbreakable(ess, stack, value);
         } else if (split.length > 1 && (split[0].equalsIgnoreCase("player") || split[0].equalsIgnoreCase("owner")) && hasMetaPermission(sender, "head", false, true, ess)) {
             if (MaterialUtil.isPlayerHead(stack.getType(), stack.getDurability())) {
                 final String owner = split[1];
@@ -529,14 +525,14 @@ public class MetaItemStack {
                 }
                 pmeta.addCustomEffect(pEffect, true);
                 stack.setItemMeta(pmeta);
-                if (ReflUtil.getNmsVersionObject().isHigherThanOrEqualTo(ReflUtil.V1_9_R1)) {
+                if (VersionUtil.getServerBukkitVersion().isHigherThanOrEqualTo(VersionUtil.v1_9_R01)) {
                     if (isSplashPotion && stack.getType() != Material.SPLASH_POTION) {
                         stack.setType(Material.SPLASH_POTION);
                     } else if (!isSplashPotion && stack.getType() != Material.POTION) {
                         stack.setType(Material.POTION);
                     }
                 } else {
-                    final Potion potion = Potion.fromItemStack(stack);
+                    final Potion potion = Potion.fromDamage(stack.getDurability());
                     potion.setSplash(isSplashPotion);
                     potion.apply(stack);
                 }
@@ -686,35 +682,9 @@ public class MetaItemStack {
         }
     }
 
-    private void setUnbreakable(final ItemStack is, final boolean unbreakable) {
+    private void setUnbreakable(final IEssentials ess, final ItemStack is, final boolean unbreakable) {
         final ItemMeta meta = is.getItemMeta();
-        try {
-            if (bukkitUnbreakableSupport == -1) {
-                try {
-                    ItemMeta.class.getDeclaredMethod("setUnbreakable", boolean.class);
-                    bukkitUnbreakableSupport = 1;
-                } catch (final NoSuchMethodException | SecurityException ex) {
-                    bukkitUnbreakableSupport = 0;
-                }
-            }
-
-            if (bukkitUnbreakableSupport == 1) {
-                meta.setUnbreakable(unbreakable);
-            } else {
-                if (spigotMethod == null) {
-                    spigotMethod = meta.getClass().getDeclaredMethod("spigot");
-                    spigotMethod.setAccessible(true);
-                }
-                final Object itemStackSpigot = spigotMethod.invoke(meta);
-                if (setUnbreakableMethod == null) {
-                    setUnbreakableMethod = itemStackSpigot.getClass().getDeclaredMethod("setUnbreakable", Boolean.TYPE);
-                    setUnbreakableMethod.setAccessible(true);
-                }
-                setUnbreakableMethod.invoke(itemStackSpigot, unbreakable);
-            }
-            is.setItemMeta(meta);
-        } catch (final Throwable t) {
-            t.printStackTrace();
-        }
+        ess.getItemUnbreakableProvider().setUnbreakable(meta, unbreakable);
+        is.setItemMeta(meta);
     }
 }
