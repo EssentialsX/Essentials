@@ -17,6 +17,9 @@ token: "INSERT-TOKEN-HERE"
 # The ID of your server.
 guild: 000000000000000000
 
+# The Discord invite URL that will be shown when a player when using the /discord command or in other areas.
+discord-url: "https://discord.gg/invite-code"
+
 # Defined text channels
 # =====================
 # 
@@ -89,7 +92,7 @@ console:
   # Set to true if bots/webhooks should be able to send commands through the command relay.
   bot-command-relay: false
   # The maximum log level of messages to send to the console relay.
-  # The following is a list of available log levels in order of lowest to highest.
+  # The following is a list of available log levels in order of highest to lowest.
   # Changing the log level will send all log levels above it to the console relay.
   # For example, setting this to 'info' will display log messages with info, warn, error, and fatal levels.
   # Log Levels:
@@ -100,6 +103,10 @@ console:
   # - debug
   # - trace
   log-level: info
+  # Blocks any console message from sending to Discord if it matches this regex pattern.
+  # This is useful if you want to ignore certain messages from the console.
+  # Can also be a list of regex patterns in addition to a single regex pattern.
+  console-filter: ""
 
 # Configure which Discord channels different messages will be sent to.
 # You can either use the names of the channels listed above or just the id of a channel.
@@ -119,6 +126,8 @@ message-types:
   afk: primary
   # Achievement/advancement messages sent when a player is awarded an achievement/advancement.
   advancement: primary
+  # Action messages sent when a player runs the /me or /action commands.
+  action: primary
   # Message sent when the server starts up.
   server-start: primary
   # Message sent when the server shuts down.
@@ -129,6 +138,7 @@ message-types:
   mute: staff
 
 # Whether or not player messages should show their avatar as the profile picture in Discord.
+# The bot will require the "Manage Webhooks" permission in the defined channels in order to use this feature.
 show-avatar: false
 # The URL which should be used to get the avatars of users when "show-avatar" is set to true.
 # Any URL in here should only return a proper JPEG/PNG image and nothing else.
@@ -231,7 +241,7 @@ presence:
 # Each message has a description of how it is used along with placeholders that can be used.
 messages:
   # This is the message that is used to show Discord chat to players in game.
-  # Color/formatting codes and the follow placeholders can be used here:
+  # Color/formatting codes and the following placeholders can be used here:
   # - {channel}: The name of the Discord channel the message was sent from
   # - {username}: The username of the user who sent the message
   # - {discriminator}: The four numbers displayed after the user's name
@@ -332,6 +342,13 @@ messages:
   # - {advancement}: The name of the advancement.
   # ... PlaceholderAPI placeholders are also supported here too!
   advancement: ":medal: {displayname} has completed the advancement **{advancement}**!"
+  # This is the message sent to Discord when a player runs the /me or /action command.
+  # The following placeholders can be used here:
+  # - {username}: The name of the user who ran the command
+  # - {displayname}: The display name of the user who ran the command
+  # - {action}: The action (message) the user used in the command.
+  # ... PlaceholderAPI placeholders are also supported here too!
+  action: ":person_biking: {displayname} *{action}*"
   # This is the message sent to Discord when the server starts.
   server-start: ":white_check_mark: The server has started!"
   # This is the message sent to Discord when the server stops.

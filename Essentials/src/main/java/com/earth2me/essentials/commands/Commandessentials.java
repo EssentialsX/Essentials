@@ -16,7 +16,9 @@ import com.google.common.base.Charsets;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import com.google.gson.JsonArray;
+import com.google.gson.JsonNull;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonPrimitive;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -188,6 +190,7 @@ public class Commandessentials extends EssentialsCommand {
         serverData.addProperty("bukkit-version", Bukkit.getBukkitVersion());
         serverData.addProperty("server-version", Bukkit.getVersion());
         serverData.addProperty("server-brand", Bukkit.getName());
+        serverData.addProperty("online-mode", ess.getOnlineModeProvider().getOnlineModeString());
         final JsonObject supportStatus = new JsonObject();
         final VersionUtil.SupportStatus status = VersionUtil.getServerSupportStatus();
         supportStatus.addProperty("status", status.name());
@@ -237,7 +240,9 @@ public class Commandessentials extends EssentialsCommand {
             pluginData.addProperty("unsupported", warnPlugins.contains(name));
 
             final JsonArray authors = new JsonArray();
-            info.getAuthors().forEach(authors::add);
+            for (final String author : info.getAuthors()) {
+                authors.add(author == null ? JsonNull.INSTANCE : new JsonPrimitive(author));
+            }
             pluginData.add("authors", authors);
 
             if (name.startsWith("Essentials") && !name.equals("Essentials")) {
@@ -261,7 +266,7 @@ public class Commandessentials extends EssentialsCommand {
             boolean kits = false;
             boolean log = false;
             for (final String arg : args) {
-                if (arg.equals("*")) {
+                if (arg.equals("*") || arg.equalsIgnoreCase("all")) {
                     config = true;
                     discord = true;
                     kits = true;
@@ -286,11 +291,11 @@ public class Commandessentials extends EssentialsCommand {
                 }
             }
 
-            if (discord && essDiscord != null && essDiscord.isEnabled()) {
+            if (discord && essDiscord != null) {
                 try {
                     files.add(new PasteUtil.PasteFile("discord-config.yml",
                             new String(Files.readAllBytes(essDiscord.getDataFolder().toPath().resolve("config.yml")), StandardCharsets.UTF_8)
-                                    .replaceAll("[MN][A-Za-z\\d]{23}\\.[\\w-]{6}\\.[\\w-]{27}", "<censored token>")));
+                                    .replaceAll("[A-Za-z\\d]{24}\\.[\\w-]{6}\\.[\\w-]{27}", "<censored token>")));
                 } catch (IOException e) {
                     sender.sendMessage(tl("dumpErrorUpload", "discord-config.yml", e.getMessage()));
                 }
@@ -714,9 +719,9 @@ public class Commandessentials extends EssentialsCommand {
                 }
                 break;
             case "dump":
-                final List<String> list = Lists.newArrayList("config", "kits", "log", "discord", "*");
+                final List<String> list = Lists.newArrayList("config", "kits", "log", "discord", "all");
                 for (String arg : args) {
-                    if (arg.equals("*")) {
+                    if (arg.equals("*") || arg.equalsIgnoreCase("all")) {
                         list.clear();
                         return list;
                     }

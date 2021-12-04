@@ -102,11 +102,14 @@ public class Commandseen extends EssentialsCommand {
 
         user.setDisplayNick();
         sender.sendMessage(tl("seenOnline", user.getDisplayName(), DateUtil.formatDateDiff(user.getLastLogin())));
-        sender.sendMessage(tl("whoisUuid", user.getBase().getUniqueId().toString()));
 
         final List<String> history = ess.getUserMap().getUserHistory(user.getBase().getUniqueId());
         if (history != null && history.size() > 1) {
             sender.sendMessage(tl("seenAccounts", StringUtil.joinListSkip(", ", user.getName(), history)));
+        }
+
+        if (sender.isAuthorized("essentials.seen.uuid", ess)) {
+            sender.sendMessage(tl("whoisUuid", user.getBase().getUniqueId().toString()));
         }
 
         if (user.isAfk()) {
@@ -136,14 +139,16 @@ public class Commandseen extends EssentialsCommand {
         user.setDisplayNick();
         if (user.getLastLogout() > 0) {
             sender.sendMessage(tl("seenOffline", user.getName(), DateUtil.formatDateDiff(user.getLastLogout())));
-            sender.sendMessage(tl("whoisUuid", user.getBase().getUniqueId()));
+            final List<String> history = ess.getUserMap().getUserHistory(user.getBase().getUniqueId());
+            if (history != null && history.size() > 1) {
+                sender.sendMessage(tl("seenAccounts", StringUtil.joinListSkip(", ", user.getName(), history)));
+            }
+
+            if (sender.isAuthorized("essentials.seen.uuid", ess)) {
+                sender.sendMessage(tl("whoisUuid", user.getBase().getUniqueId()));
+            }
         } else {
             sender.sendMessage(tl("userUnknown", user.getName()));
-        }
-
-        final List<String> history = ess.getUserMap().getUserHistory(user.getBase().getUniqueId());
-        if (history != null && history.size() > 1) {
-            sender.sendMessage(tl("seenAccounts", StringUtil.joinListSkip(", ", user.getName(), history)));
         }
 
         if (BanLookup.isBanned(ess, user)) {

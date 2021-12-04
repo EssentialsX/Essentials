@@ -13,6 +13,9 @@ import com.earth2me.essentials.utils.VersionUtil;
 import io.papermc.lib.PaperLib;
 import net.ess3.api.IEssentials;
 import net.ess3.api.events.AfkStatusChangeEvent;
+import net.ess3.provider.CommandSendListenerProvider;
+import net.ess3.provider.providers.BukkitCommandSendListenerProvider;
+import net.ess3.provider.providers.PaperCommandSendListenerProvider;
 import net.essentialsx.api.v2.events.AsyncUserDataLoadEvent;
 import org.bukkit.BanEntry;
 import org.bukkit.BanList;
@@ -37,7 +40,6 @@ import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerBucketEmptyEvent;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
-import org.bukkit.event.player.PlayerCommandSendEvent;
 import org.bukkit.event.player.PlayerEggThrowEvent;
 import org.bukkit.event.player.PlayerFishEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -68,6 +70,7 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Predicate;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
@@ -101,6 +104,15 @@ public class EssentialsPlayerListener implements Listener, FakeAccessor {
         }
     }
 
+    private static boolean isPaperCommandSendEvent() {
+        try {
+            Class.forName("com.destroystokyo.paper.event.brigadier.AsyncPlayerSendCommandsEvent");
+            return true;
+        } catch (final ClassNotFoundException ignored) {
+            return false;
+        }
+    }
+
     private static boolean isArrowPickupEvent() {
         try {
             Class.forName("org.bukkit.event.player.PlayerPickupArrowEvent");
@@ -123,8 +135,10 @@ public class EssentialsPlayerListener implements Listener, FakeAccessor {
             ess.getServer().getPluginManager().registerEvents(new PickupListenerPre1_12(), ess);
         }
 
-        if (isCommandSendEvent()) {
-            ess.getServer().getPluginManager().registerEvents(new CommandSendListener(), ess);
+        if (isPaperCommandSendEvent()) {
+            ess.getServer().getPluginManager().registerEvents(new PaperCommandSendListenerProvider(new CommandSendFilter()), ess);
+        } else if (isCommandSendEvent()) {
+            ess.getServer().getPluginManager().registerEvents(new BukkitCommandSendListenerProvider(new CommandSendFilter()), ess);
         }
     }
 
@@ -203,7 +217,7 @@ public class EssentialsPlayerListener implements Listener, FakeAccessor {
             to.setY(from.getY());
             to.setZ(from.getZ());
             try {
-                event.setTo(LocationUtil.getSafeDestination(to));
+                event.setTo(LocationUtil.getSafeDestination(ess, to));
             } catch (final Exception ex) {
                 event.setTo(to);
             }
@@ -398,7 +412,7 @@ public class EssentialsPlayerListener implements Listener, FakeAccessor {
 
                 if (user.isAuthorized("essentials.fly.safelogin")) {
                     user.getBase().setFallDistance(0);
-                    if (LocationUtil.shouldFly(user.getLocation())) {
+                    if (LocationUtil.shouldFly(ess, user.getLocation())) {
                         user.getBase().setAllowFlight(true);
                         user.getBase().setFlying(true);
                         if (ess.getSettings().isSendFlyEnableOnJoin()) {
@@ -521,21 +535,16 @@ public class EssentialsPlayerListener implements Listener, FakeAccessor {
 
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void onPlayerTeleport(final PlayerTeleportEvent event) {
-        final boolean backListener = ess.getSettings().registerBackInListener();
-        final boolean teleportInvulnerability = ess.getSettings().isTeleportInvulnerability();
-        if (backListener || teleportInvulnerability) {
-            final Player player = event.getPlayer();
-            if (player.hasMetadata("NPC")) {
-                return;
-            }
-            final User user = ess.getUser(player);
-            //There is TeleportCause.COMMMAND but plugins have to actively pass the cause in on their teleports.
-            if (user.isAuthorized("essentials.back.onteleport") && backListener && (event.getCause() == TeleportCause.PLUGIN || event.getCause() == TeleportCause.COMMAND)) {
-                user.setLastLocation();
-            }
-            if (teleportInvulnerability && (event.getCause() == TeleportCause.PLUGIN || event.getCause() == TeleportCause.COMMAND)) {
-                user.enableInvulnerabilityAfterTeleport();
-            }
+        final Player player = event.getPlayer();
+        if (player.hasMetadata("NPC") || !(event.getCause() == TeleportCause.PLUGIN || event.getCause() == TeleportCause.COMMAND)) {
+            return;
+        }
+        final User user = ess.getUser(player);
+        if (ess.getSettings().registerBackInListener() && user.isAuthorized("essentials.back.onteleport") && !player.hasMetadata("ess_ignore_teleport")) {
+            user.setLastLocation();
+        }
+        if (ess.getSettings().isTeleportInvulnerability()) {
+            user.enableInvulnerabilityAfterTeleport();
         }
     }
 
@@ -738,6 +747,9 @@ public class EssentialsPlayerListener implements Listener, FakeAccessor {
         switch (event.getAction()) {
             case RIGHT_CLICK_BLOCK:
                 if (!event.isCancelled() && MaterialUtil.isBed(event.getClickedBlock().getType()) && ess.getSettings().getUpdateBedAtDaytime()) {
+                    if (VersionUtil.getServerBukkitVersion().isHigherThanOrEqualTo(VersionUtil.v1_13_2_R01) && ((org.bukkit.block.data.type.Bed) event.getClickedBlock().getBlockData()).isOccupied()) {
+                        break;
+                    }
                     final User player = ess.getUser(event.getPlayer());
                     if (player.isAuthorized("essentials.sethome.bed") && player.getWorld().getEnvironment().equals(World.Environment.NORMAL)) {
                         player.getBase().setBedSpawnLocation(event.getClickedBlock().getLocation());
@@ -972,15 +984,14 @@ public class EssentialsPlayerListener implements Listener, FakeAccessor {
         }
     }
 
-    private final class CommandSendListener implements Listener {
-        @EventHandler(priority = EventPriority.NORMAL)
-        public void onCommandSend(final PlayerCommandSendEvent event) {
-            final User user = ess.getUser(event.getPlayer());
-
+    private final class CommandSendFilter implements CommandSendListenerProvider.Filter {
+        @Override
+        public Predicate<String> apply(Player player) {
+            final User user = ess.getUser(player);
             final Set<PluginCommand> checked = new HashSet<>();
             final Set<PluginCommand> toRemove = new HashSet<>();
 
-            event.getCommands().removeIf(label -> {
+            return label -> {
                 if (isEssentialsCommand(label)) {
                     final PluginCommand command = ess.getServer().getPluginCommand(label);
                     if (!checked.contains(command)) {
@@ -992,25 +1003,21 @@ public class EssentialsPlayerListener implements Listener, FakeAccessor {
                     return toRemove.contains(command);
                 }
                 return false;
-            });
-
-            if (ess.getSettings().isDebug()) {
-                ess.getLogger().info("Removed commands: " + toRemove.toString());
-            }
+            };
         }
 
         /**
          * Returns true if all of the following are true:
          * - The command is a plugin command
-         * - The plugin command is from a plugin in an essentials-controlled package
+         * - The plugin command is from an official EssentialsX plugin or addon
          * - There is no known alternative OR the alternative is overridden by Essentials
          */
         private boolean isEssentialsCommand(final String label) {
             final PluginCommand command = ess.getServer().getPluginCommand(label);
 
             return command != null
-                && (command.getPlugin() == ess || command.getPlugin().getClass().getName().startsWith("com.earth2me.essentials"))
-                && (ess.getSettings().isCommandOverridden(label) || (ess.getAlternativeCommandsHandler().getAlternative(label) == null));
+                    && (command.getPlugin() == ess || command.getPlugin().getClass().getName().startsWith("com.earth2me.essentials") || command.getPlugin().getClass().getName().startsWith("net.essentialsx"))
+                    && (ess.getSettings().isCommandOverridden(label) || (ess.getAlternativeCommandsHandler().getAlternative(label) == null));
         }
     }
 

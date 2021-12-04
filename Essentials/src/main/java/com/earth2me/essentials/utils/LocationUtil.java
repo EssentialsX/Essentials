@@ -1,6 +1,7 @@
 package com.earth2me.essentials.utils;
 
 import com.earth2me.essentials.IEssentials;
+import com.google.common.primitives.Ints;
 import net.ess3.api.IUser;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -30,6 +31,7 @@ public final class LocationUtil {
     private static final Set<Material> LAVA_TYPES = EnumUtil.getAllMatching(Material.class,
         "FLOWING_LAVA", "LAVA", "STATIONARY_LAVA");
     private static final Material PORTAL = EnumUtil.getMaterial("NETHER_PORTAL", "PORTAL");
+    private static final Material LIGHT = EnumUtil.getMaterial("LIGHT");
     // The player can stand inside these materials
     private static final Set<Material> HOLLOW_MATERIALS = EnumSet.noneOf(Material.class);
     private static final Set<Material> TRANSPARENT_MATERIALS = EnumSet.noneOf(Material.class);
@@ -47,6 +49,11 @@ public final class LocationUtil {
 
         // Barrier is transparent, but solid
         HOLLOW_MATERIALS.remove(Material.BARRIER);
+
+        // Light blocks can be passed through and are not considered transparent for some reason
+        if (LIGHT != null) {
+            HOLLOW_MATERIALS.add(LIGHT);
+        }
     }
 
     static {
@@ -89,8 +96,8 @@ public final class LocationUtil {
         return block.getLocation();
     }
 
-    public static boolean isBlockAboveAir(final World world, final int x, final int y, final int z) {
-        return y > world.getMaxHeight() || HOLLOW_MATERIALS.contains(world.getBlockAt(x, y - 1, z).getType());
+    public static boolean isBlockAboveAir(IEssentials ess, final World world, final int x, final int y, final int z) {
+        return y > ess.getWorldInfoProvider().getMaxHeight(world) || HOLLOW_MATERIALS.contains(world.getBlockAt(x, y - 1, z).getType());
     }
 
     public static boolean isBlockOutsideWorldBorder(final World world, final int x, final int z) {
@@ -125,7 +132,7 @@ public final class LocationUtil {
         return z;
     }
 
-    public static boolean isBlockUnsafeForUser(final IUser user, final World world, final int x, final int y, final int z) {
+    public static boolean isBlockUnsafeForUser(IEssentials ess, final IUser user, final World world, final int x, final int y, final int z) {
         if (user.getBase().isOnline() && world.equals(user.getBase().getWorld()) && (user.getBase().getGameMode() == GameMode.CREATIVE || user.getBase().getGameMode() == GameMode.SPECTATOR || user.isGodModeEnabled()) && user.getBase().getAllowFlight()) {
             return false;
         }
@@ -133,14 +140,14 @@ public final class LocationUtil {
         if (isBlockDamaging(world, x, y, z)) {
             return true;
         }
-        if (isBlockAboveAir(world, x, y, z)) {
+        if (isBlockAboveAir(ess, world, x, y, z)) {
             return true;
         }
         return isBlockOutsideWorldBorder(world, x, z);
     }
 
-    public static boolean isBlockUnsafe(final World world, final int x, final int y, final int z) {
-        return isBlockDamaging(world, x, y, z) || isBlockAboveAir(world, x, y, z);
+    public static boolean isBlockUnsafe(IEssentials ess, final World world, final int x, final int y, final int z) {
+        return isBlockDamaging(world, x, y, z) || isBlockAboveAir(ess, world, x, y, z);
     }
 
     public static boolean isBlockDamaging(final World world, final int x, final int y, final int z) {
@@ -178,7 +185,7 @@ public final class LocationUtil {
 
     public static Location getSafeDestination(final IEssentials ess, final IUser user, final Location loc) throws Exception {
         if (user.getBase().isOnline() && (ess == null || !ess.getSettings().isAlwaysTeleportSafety()) && (user.getBase().getGameMode() == GameMode.CREATIVE || user.getBase().getGameMode() == GameMode.SPECTATOR || user.isGodModeEnabled())) {
-            if (shouldFly(loc) && user.getBase().getAllowFlight()) {
+            if (shouldFly(ess, loc) && user.getBase().getAllowFlight()) {
                 user.getBase().setFlying(true);
             }
             // ess can be null if old deprecated method is calling it.
@@ -188,14 +195,17 @@ public final class LocationUtil {
                 return loc;
             }
         }
-        return getSafeDestination(loc);
+        return getSafeDestination(ess, loc);
     }
 
-    public static Location getSafeDestination(final Location loc) throws Exception {
+    public static Location getSafeDestination(IEssentials ess, final Location loc) throws Exception {
         if (loc == null || loc.getWorld() == null) {
             throw new Exception(tl("destinationNotSet"));
         }
         final World world = loc.getWorld();
+        final int worldMinY = ess.getWorldInfoProvider().getMinHeight(world);
+        final int worldLogicalY = ess.getWorldInfoProvider().getLogicalHeight(world);
+        final int worldMaxY = loc.getBlockY() < worldLogicalY ? worldLogicalY : ess.getWorldInfoProvider().getMaxHeight(world);
         int x = loc.getBlockX();
         int y = (int) Math.round(loc.getY());
         int z = loc.getBlockZ();
@@ -206,42 +216,43 @@ public final class LocationUtil {
         final int origX = x;
         final int origY = y;
         final int origZ = z;
-        while (isBlockAboveAir(world, x, y, z)) {
+        while (isBlockAboveAir(ess, world, x, y, z)) {
             y -= 1;
             if (y < 0) {
                 y = origY;
                 break;
             }
         }
-        if (isBlockUnsafe(world, x, y, z)) {
+        if (isBlockUnsafe(ess, world, x, y, z)) {
             x = Math.round(loc.getX()) == origX ? x - 1 : x + 1;
             z = Math.round(loc.getZ()) == origZ ? z - 1 : z + 1;
         }
         int i = 0;
-        while (isBlockUnsafe(world, x, y, z)) {
+        while (isBlockUnsafe(ess, world, x, y, z)) {
             i++;
             if (i >= VOLUME.length) {
                 x = origX;
-                y = origY + RADIUS;
+                y = Ints.constrainToRange(origY + RADIUS, worldMinY, worldMaxY);
                 z = origZ;
                 break;
             }
             x = origX + VOLUME[i].x;
-            y = origY + VOLUME[i].y;
+            y = Ints.constrainToRange(origY + VOLUME[i].y, worldMinY, worldMaxY);
             z = origZ + VOLUME[i].z;
         }
-        while (isBlockUnsafe(world, x, y, z)) {
+        while (isBlockUnsafe(ess, world, x, y, z)) {
             y += 1;
-            if (y >= world.getMaxHeight()) {
+            if (y >= worldMaxY) {
                 x += 1;
                 break;
             }
         }
-        while (isBlockUnsafe(world, x, y, z)) {
+        while (isBlockUnsafe(ess, world, x, y, z)) {
             y -= 1;
-            if (y <= 1) {
+            if (y <= worldMinY + 1) {
                 x += 1;
-                y = world.getHighestBlockYAt(x, z);
+                // Allow spawning at the top of the world, but not above the nether roof
+                y = Math.min(world.getHighestBlockYAt(x, z) + 1, worldMaxY);
                 if (x - 48 > loc.getBlockX()) {
                     throw new Exception(tl("holeInFloor"));
                 }
@@ -250,13 +261,13 @@ public final class LocationUtil {
         return new Location(world, x + 0.5, y, z + 0.5, loc.getYaw(), loc.getPitch());
     }
 
-    public static boolean shouldFly(final Location loc) {
+    public static boolean shouldFly(IEssentials ess, final Location loc) {
         final World world = loc.getWorld();
         final int x = loc.getBlockX();
         int y = (int) Math.round(loc.getY());
         final int z = loc.getBlockZ();
         int count = 0;
-        while (LocationUtil.isBlockUnsafe(world, x, y, z) && y > -1) {
+        while (LocationUtil.isBlockUnsafe(ess, world, x, y, z) && y >= ess.getWorldInfoProvider().getMinHeight(world)) {
             y--;
             count++;
             if (count > 2) {

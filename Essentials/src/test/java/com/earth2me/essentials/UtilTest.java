@@ -200,29 +200,41 @@ public class UtilTest extends TestCase {
         assertEquals(v.getPatch(), 2);
         assertEquals(v.getRevision(), 0.1);
         assertEquals(v.getPrerelease(), -1);
+        assertEquals(v.getReleaseCandidate(), -1);
         v = VersionUtil.BukkitVersion.fromString("1.9-R1.4"); // not real
         assertEquals(v.getMajor(), 1);
         assertEquals(v.getMinor(), 9);
         assertEquals(v.getPatch(), 0);
         assertEquals(v.getRevision(), 1.4);
         assertEquals(v.getPrerelease(), -1);
+        assertEquals(v.getReleaseCandidate(), -1);
         v = VersionUtil.BukkitVersion.fromString("1.14-pre5");
         assertEquals(v.getMajor(), 1);
         assertEquals(v.getMinor(), 14);
         assertEquals(v.getPatch(), 0);
         assertEquals(v.getRevision(), 0.0);
         assertEquals(v.getPrerelease(), 5);
+        assertEquals(v.getReleaseCandidate(), -1);
         v = VersionUtil.BukkitVersion.fromString("1.13.2-pre1-R0.1"); // not real
         assertEquals(v.getMajor(), 1);
         assertEquals(v.getMinor(), 13);
         assertEquals(v.getPatch(), 2);
         assertEquals(v.getRevision(), 0.1);
         assertEquals(v.getPrerelease(), 1);
+        assertEquals(v.getReleaseCandidate(), -1);
         v = VersionUtil.BukkitVersion.fromString("1.14.3-SNAPSHOT");
         assertEquals(v.getMajor(), 1);
         assertEquals(v.getMinor(), 14);
         assertEquals(v.getPatch(), 3);
         assertEquals(v.getRevision(), 0.0);
         assertEquals(v.getPrerelease(), -1);
+        assertEquals(v.getReleaseCandidate(), -1);
+        v = VersionUtil.BukkitVersion.fromString("1.18-rc3-R0.1-SNAPSHOT");
+        assertEquals(v.getMajor(), 1);
+        assertEquals(v.getMinor(), 18);
+        assertEquals(v.getPatch(), 0);
+        assertEquals(v.getRevision(), 0.1);
+        assertEquals(v.getPrerelease(), -1);
+        assertEquals(v.getReleaseCandidate(), 3);
     }
 }

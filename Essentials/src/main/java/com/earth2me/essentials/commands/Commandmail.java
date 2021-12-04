@@ -152,7 +152,19 @@ public class Commandmail extends EssentialsCommand {
             if (!user.isAuthorized("essentials.mail.sendall")) {
                 throw new Exception(tl("noPerm", "essentials.mail.sendall"));
             }
-            ess.runTaskAsynchronously(new SendAll(user, FormatUtil.formatMessage(user, "essentials.mail", StringUtil.sanitizeString(FormatUtil.stripFormat(getFinalArg(args, 1))))));
+            ess.runTaskAsynchronously(new SendAll(user,
+                    FormatUtil.formatMessage(user, "essentials.mail",
+                            StringUtil.sanitizeString(FormatUtil.stripFormat(getFinalArg(args, 1)))), 0));
+            user.sendMessage(tl("mailSent"));
+            return;
+        }
+        if (args.length >= 3 && "sendtempall".equalsIgnoreCase(args[0])) {
+            if (!user.isAuthorized("essentials.mail.sendtempall")) {
+                throw new Exception(tl("noPerm", "essentials.mail.sendtempall"));
+            }
+            ess.runTaskAsynchronously(new SendAll(user,
+                    FormatUtil.formatMessage(user, "essentials.mail",
+                            StringUtil.sanitizeString(FormatUtil.stripFormat(getFinalArg(args, 2)))), DateUtil.parseDateDiff(args[1], true)));
             user.sendMessage(tl("mailSent"));
             return;
         }
@@ -213,7 +225,12 @@ public class Commandmail extends EssentialsCommand {
             sender.sendMessage(tl("mailSent"));
             return;
         } else if (args.length >= 2 && "sendall".equalsIgnoreCase(args[0])) {
-            ess.runTaskAsynchronously(new SendAll(Console.getInstance(), FormatUtil.replaceFormat(getFinalArg(args, 1))));
+            ess.runTaskAsynchronously(new SendAll(Console.getInstance(), FormatUtil.replaceFormat(getFinalArg(args, 1)), 0));
+            sender.sendMessage(tl("mailSent"));
+            return;
+        } else if (args.length >= 3 && "sendtempall".equalsIgnoreCase(args[0])) {
+            final long dateDiff = DateUtil.parseDateDiff(args[1], true);
+            ess.runTaskAsynchronously(new SendAll(Console.getInstance(), FormatUtil.replaceFormat(getFinalArg(args, 2)), dateDiff));
             sender.sendMessage(tl("mailSent"));
             return;
         } else if (args.length >= 2) {
@@ -232,12 +249,14 @@ public class Commandmail extends EssentialsCommand {
     }
 
     private class SendAll implements Runnable {
-        IMessageRecipient messageRecipient;
-        String message;
+        private final IMessageRecipient messageRecipient;
+        private final String message;
+        private final long dateDiff;
 
-        SendAll(IMessageRecipient messageRecipient, String message) {
+        SendAll(IMessageRecipient messageRecipient, String message, long dateDiff) {
             this.messageRecipient = messageRecipient;
             this.message = message;
+            this.dateDiff = dateDiff;
         }
 
         @Override
@@ -245,7 +264,7 @@ public class Commandmail extends EssentialsCommand {
             for (UUID userid : ess.getUserMap().getAllUniqueUsers()) {
                 final User user = ess.getUserMap().getUser(userid);
                 if (user != null) {
-                    user.sendMail(messageRecipient, message);
+                    user.sendMail(messageRecipient, message, dateDiff);
                 }
             }
         }
@@ -264,38 +283,47 @@ public class Commandmail extends EssentialsCommand {
             if (user.isAuthorized("essentials.mail.sendall")) {
                 options.add("sendall");
             }
+            if (user.isAuthorized("essentials.mail.sendtempall")) {
+                options.add("sendtempall");
+            }
             return options;
-        } else if (args.length == 2 && ((args[0].equalsIgnoreCase("send") && user.isAuthorized("essentials.mail.send")) || (args[0].equalsIgnoreCase("sendtemp") && user.isAuthorized("essentials.mail.sendtemp")))) {
-            return getPlayers(server, user);
-        } else if (args.length == 2 && args[0].equalsIgnoreCase("read")) {
-            final ArrayList<MailMessage> mail = user.getMailMessages();
-            final int pages = mail != null ? (mail.size() / 9 + (mail.size() % 9 > 0 ? 1 : 0)) : 0;
-            if (pages == 0) {
-                return Lists.newArrayList("0");
-            } else {
-                final List<String> options = Lists.newArrayList("1");
-                if (pages > 1) {
-                    options.add(String.valueOf(pages));
+        } else if (args.length == 2) {
+            if ((args[0].equalsIgnoreCase("send") && user.isAuthorized("essentials.mail.send")) || (args[0].equalsIgnoreCase("sendtemp") && user.isAuthorized("essentials.mail.sendtemp"))) {
+                return getPlayers(server, user);
+            } else if (args[0].equalsIgnoreCase("sendtempall") && user.isAuthorized("essentials.mail.sendtempall")) {
+                return COMMON_DATE_DIFFS;
+            } else if (args[0].equalsIgnoreCase("read")) {
+                final ArrayList<MailMessage> mail = user.getMailMessages();
+                final int pages = mail != null ? (mail.size() / 9 + (mail.size() % 9 > 0 ? 1 : 0)) : 0;
+                if (pages == 0) {
+                    return Lists.newArrayList("0");
+                } else {
+                    final List<String> options = Lists.newArrayList("1");
+                    if (pages > 1) {
+                        options.add(String.valueOf(pages));
+                    }
+                    return options;
                 }
-                return options;
             }
         } else if (args.length == 3 && args[0].equalsIgnoreCase("sendtemp") && user.isAuthorized("essentials.mail.sendtemp")) {
             return COMMON_DATE_DIFFS;
-        } else {
-            return Collections.emptyList();
         }
+        return Collections.emptyList();
     }
 
     @Override
     protected List<String> getTabCompleteOptions(final Server server, final CommandSource sender, final String commandLabel, final String[] args) {
         if (args.length == 1) {
-            return Lists.newArrayList("send", "sendall");
-        } else if (args.length == 2 && (args[0].equalsIgnoreCase("send") || args[0].equalsIgnoreCase("sendtemp"))) {
-            return getPlayers(server, sender);
+            return Lists.newArrayList("send", "sendall", "sendtemp", "sendtempall");
+        } else if (args.length == 2) {
+            if (args[0].equalsIgnoreCase("send") || args[0].equalsIgnoreCase("sendtemp")) {
+                return getPlayers(server, sender);
+            } else if (args[0].equalsIgnoreCase("sendtempall")) {
+                return COMMON_DATE_DIFFS;
+            }
         } else if (args.length == 3 && args[0].equalsIgnoreCase("sendtemp")) {
             return COMMON_DATE_DIFFS;
-        } else {
-            return Collections.emptyList();
         }
+        return Collections.emptyList();
     }
 }

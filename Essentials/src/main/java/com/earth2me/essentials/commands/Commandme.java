@@ -4,6 +4,7 @@ import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.DateUtil;
 import com.earth2me.essentials.utils.FormatUtil;
+import net.essentialsx.api.v2.events.UserActionEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Server;
@@ -44,6 +45,7 @@ public class Commandme extends EssentialsCommand {
         final String toSend = tl("action", user.getDisplayName(), message);
         if (radius < 1) {
             ess.broadcastMessage(user, toSend);
+            ess.getServer().getPluginManager().callEvent(new UserActionEvent(user, message, Collections.unmodifiableCollection(ess.getServer().getOnlinePlayers())));
             return;
         }
         radius *= radius;
@@ -86,6 +88,7 @@ public class Commandme extends EssentialsCommand {
         for (final Player onlinePlayer : outList) {
             onlinePlayer.sendMessage(toSend);
         }
+        ess.getServer().getPluginManager().callEvent(new UserActionEvent(user, message, Collections.unmodifiableCollection(outList)));
     }
 
     @Override

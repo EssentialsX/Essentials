@@ -12,6 +12,7 @@ import org.bukkit.entity.Player;
 import java.io.File;
 import java.text.MessageFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -30,10 +31,11 @@ public class DiscordSettings implements IConf {
     private OnlineStatus status;
     private Activity statusActivity;
 
-    private Pattern discordFilter;
+    private List<Pattern> discordFilter;
 
     private MessageFormat consoleFormat;
     private Level consoleLogLevel;
+    private List<Pattern> consoleFilter;
 
     private MessageFormat discordToMcFormat;
     private MessageFormat tempMuteFormat;
@@ -57,6 +59,10 @@ public class DiscordSettings implements IConf {
         return config.getLong("guild", 0);
     }
 
+    public String getDiscordUrl() {
+        return config.getString("discord-url", "https://discord.gg/invite-code");
+    }
+
     public long getPrimaryChannelId() {
         return config.getLong("channels.primary", 0);
     }
@@ -67,6 +73,10 @@ public class DiscordSettings implements IConf {
         } catch (NumberFormatException ignored) {
             return nameToChannelIdMap.getOrDefault(key, 0L);
         }
+    }
+
+    public List<String> getChannelNames() {
+        return new ArrayList<>(nameToChannelIdMap.keySet());
     }
 
     public List<String> getKeysFromChannelId(long channelId) {
@@ -105,7 +115,7 @@ public class DiscordSettings implements IConf {
         return config.getBoolean("chat.filter-newlines", true);
     }
 
-    public Pattern getDiscordFilter() {
+    public List<Pattern> getDiscordFilters() {
         return discordFilter;
     }
 
@@ -147,6 +157,10 @@ public class DiscordSettings implements IConf {
 
     public Level getConsoleLogLevel() {
         return consoleLogLevel;
+    }
+
+    public List<Pattern> getConsoleFilters() {
+        return consoleFilter;
     }
 
     public boolean isShowAvatar() {
@@ -301,6 +315,18 @@ public class DiscordSettings implements IConf {
                 "username", "displayname", "advancement");
     }
 
+    public MessageFormat getActionFormat(Player player) {
+        final String format = getFormatString("action");
+        final String filled;
+        if (plugin.isPAPI() && format != null) {
+            filled = me.clip.placeholderapi.PlaceholderAPI.setPlaceholders(player, format);
+        } else {
+            filled = format;
+        }
+        return generateMessageFormat(filled, ":person_biking: {displayname} *{action}*", false,
+                "username", "displayname", "action");
+    }
+
     public String getStartMessage() {
         return config.getString("messages.server-start", ":white_check_mark: The server has started!");
     }
@@ -372,19 +398,59 @@ public class DiscordSettings implements IConf {
             statusActivity = Activity.of(activityType, config.getString("presence.message", "Minecraft"));
         }
 
-        final String filter = config.getString("chat.discord-filter", null);
-        if (filter != null && !filter.trim().isEmpty()) {
+        if (config.isList("chat.discord-filter")) {
+            final List<Pattern> filters = new ArrayList<>();
+            for (final String chatFilterString : config.getList("chat.discord-filter", String.class)) {
+                if (chatFilterString != null && !chatFilterString.trim().isEmpty()) {
+                    try {
+                        filters.add(Pattern.compile(chatFilterString));
+                    } catch (PatternSyntaxException e) {
+                        plugin.getLogger().log(java.util.logging.Level.WARNING, "Invalid pattern for \"chat.discord-filter\": " + e.getMessage());
+                    }
+                }
+            }
+            discordFilter = Collections.unmodifiableList(filters);
+        } else {
             try {
-                discordFilter = Pattern.compile(filter);
+                final String chatFilter = config.getString("chat.discord-filter", null);
+                if (chatFilter != null && !chatFilter.trim().isEmpty()) {
+                    discordFilter = Collections.singletonList(Pattern.compile(chatFilter));
+                } else {
+                    discordFilter = Collections.emptyList();
+                }
             } catch (PatternSyntaxException e) {
                 plugin.getLogger().log(java.util.logging.Level.WARNING, "Invalid pattern for \"chat.discord-filter\": " + e.getMessage());
-                discordFilter = null;
+                discordFilter = Collections.emptyList();
             }
-        } else {
-            discordFilter = null;
         }
 
         consoleLogLevel = Level.toLevel(config.getString("console.log-level", null), Level.INFO);
+
+        if (config.isList("console.console-filter")) {
+            final List<Pattern> filters = new ArrayList<>();
+            for (final String filterString : config.getList("console.console-filter", String.class)) {
+                if (filterString != null && !filterString.trim().isEmpty()) {
+                    try {
+                        filters.add(Pattern.compile(filterString));
+                    } catch (PatternSyntaxException e) {
+                        plugin.getLogger().log(java.util.logging.Level.WARNING, "Invalid pattern for \"console.log-level\": " + e.getMessage());
+                    }
+                }
+            }
+            consoleFilter = Collections.unmodifiableList(filters);
+        } else {
+            try {
+                final String cFilter = config.getString("console.console-filter", null);
+                if (cFilter != null && !cFilter.trim().isEmpty()) {
+                    consoleFilter = Collections.singletonList(Pattern.compile(cFilter));
+                } else {
+                    consoleFilter = Collections.emptyList();
+                }
+            } catch (PatternSyntaxException e) {
+                plugin.getLogger().log(java.util.logging.Level.WARNING, "Invalid pattern for \"console.log-level\": " + e.getMessage());
+                consoleFilter = Collections.emptyList();
+            }
+        }
 
         consoleFormat = generateMessageFormat(getFormatString(".console.format"), "[{timestamp} {level}] {message}", false,
                 "timestamp", "level", "message");
