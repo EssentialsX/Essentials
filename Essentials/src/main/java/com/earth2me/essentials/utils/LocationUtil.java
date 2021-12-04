@@ -267,7 +267,7 @@ public final class LocationUtil {
         int y = (int) Math.round(loc.getY());
         final int z = loc.getBlockZ();
         int count = 0;
-        while (LocationUtil.isBlockUnsafe(ess, world, x, y, z) && y > -1) {
+        while (LocationUtil.isBlockUnsafe(ess, world, x, y, z) && y >= ess.getWorldInfoProvider().getMinHeight(world)) {
             y--;
             count++;
             if (count > 2) {
