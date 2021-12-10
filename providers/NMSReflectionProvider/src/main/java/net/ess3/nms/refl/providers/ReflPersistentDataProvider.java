@@ -12,7 +12,7 @@ import java.lang.reflect.Field;
 import java.util.Locale;
 
 /**
- * Stores persistent data on 1.18-1.13 in a manner that's consistent with PDC on 1.14+ to enable 
+ * Stores persistent data on 1.8-1.13 in a manner that's consistent with PDC on 1.14+ to enable
  * seamless upgrades.
  */
 public class ReflPersistentDataProvider implements PersistentDataProvider {
