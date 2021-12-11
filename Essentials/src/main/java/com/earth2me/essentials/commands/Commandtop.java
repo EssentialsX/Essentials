@@ -22,13 +22,14 @@ public class Commandtop extends EssentialsCommand {
         final int topZ = user.getLocation().getBlockZ();
         final float pitch = user.getLocation().getPitch();
         final float yaw = user.getLocation().getYaw();
-        final Location loc = LocationUtil.getSafeDestination(new Location(user.getWorld(), topX, user.getWorld().getMaxHeight(), topZ, yaw, pitch));
+        final Location unsafe = new Location(user.getWorld(), topX, ess.getWorldInfoProvider().getMaxHeight(user.getWorld()), topZ, yaw, pitch);
+        final Location safe = LocationUtil.getSafeDestination(ess, unsafe);
         final CompletableFuture<Boolean> future = new CompletableFuture<>();
         future.thenAccept(success -> {
             if (success) {
-                user.sendMessage(tl("teleportTop", loc.getWorld().getName(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ()));
+                user.sendMessage(tl("teleportTop", safe.getWorld().getName(), safe.getBlockX(), safe.getBlockY(), safe.getBlockZ()));
             }
         });
-        user.getAsyncTeleport().teleport(loc, new Trade(this.getName(), ess), TeleportCause.COMMAND, getNewExceptionFuture(user.getSource(), commandLabel));
+        user.getAsyncTeleport().teleport(safe, new Trade(this.getName(), ess), TeleportCause.COMMAND, getNewExceptionFuture(user.getSource(), commandLabel));
     }
 }

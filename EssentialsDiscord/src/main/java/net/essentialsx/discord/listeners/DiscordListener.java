@@ -17,6 +17,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Pattern;
 
 public class DiscordListener extends ListenerAdapter {
     private final static Logger logger = Logger.getLogger("EssentialsDiscord");
@@ -48,15 +49,18 @@ public class DiscordListener extends ListenerAdapter {
 
         final User user = event.getAuthor();
         final Member member = event.getMember();
+        final String effectiveName = member == null ? event.getAuthor().getName() : member.getEffectiveName();
         final Message message = event.getMessage();
 
-        assert member != null; // Member will never be null
-
-        if (plugin.getSettings().getDiscordFilter() != null && plugin.getSettings().getDiscordFilter().matcher(message.getContentDisplay()).find()) {
-            if (plugin.isDebug()) {
-                logger.log(Level.INFO, "Skipping message " + message.getId() + " with content, \"" + message.getContentDisplay() + "\" as it matched the filter!");
+        if (!plugin.getSettings().getDiscordFilters().isEmpty()) {
+            for (final Pattern pattern : plugin.getSettings().getDiscordFilters()) {
+                if (pattern.matcher(message.getContentDisplay()).find()) {
+                    if (plugin.isDebug()) {
+                        logger.log(Level.INFO, "Skipping message " + message.getId() + " with content, \"" + message.getContentDisplay() + "\" as it matched the filter!");
+                    }
+                    return;
+                }
             }
-            return;
         }
 
         final StringBuilder messageBuilder = new StringBuilder(message.getContentDisplay());
@@ -73,7 +77,7 @@ public class DiscordListener extends ListenerAdapter {
                         .trim(), plugin.getSettings().getChatDiscordMaxLength());
 
         // Apply or strip color formatting
-        final String finalMessage = DiscordUtil.hasRoles(member, plugin.getPlugin().getSettings().getPermittedFormattingRoles()) ?
+        final String finalMessage = member == null || DiscordUtil.hasRoles(member, plugin.getPlugin().getSettings().getPermittedFormattingRoles()) ?
                 FormatUtil.replaceFormat(strippedMessage) : FormatUtil.stripFormat(strippedMessage);
 
         // Don't send blank messages
@@ -86,7 +90,14 @@ public class DiscordListener extends ListenerAdapter {
 
         final String formattedMessage = EmojiParser.parseToAliases(MessageUtil.formatMessage(plugin.getPlugin().getSettings().getDiscordToMcFormat(),
                 event.getChannel().getName(), user.getName(), user.getDiscriminator(), user.getAsTag(),
-                member.getEffectiveName(), DiscordUtil.getRoleColorFormat(member), finalMessage), EmojiParser.FitzpatrickAction.REMOVE);
+                effectiveName, DiscordUtil.getRoleColorFormat(member), finalMessage, DiscordUtil.getRoleFormat(member)), EmojiParser.FitzpatrickAction.REMOVE);
+
+        for (final String group : keys) {
+            if (plugin.getSettings().getRelayToConsoleList().contains(group)) {
+                logger.info(formattedMessage);
+                break;
+            }
+        }
 
         for (IUser essUser : plugin.getPlugin().getEss().getOnlineUsers()) {
             for (String group : keys) {
@@ -94,6 +105,7 @@ public class DiscordListener extends ListenerAdapter {
                 final boolean primaryOverride = plugin.getSettings().isAlwaysReceivePrimary() && group.equalsIgnoreCase("primary");
                 if (primaryOverride || (essUser.isPermissionSet(perm) && essUser.isAuthorized(perm))) {
                     essUser.sendMessage(formattedMessage);
+                    break;
                 }
             }
         }

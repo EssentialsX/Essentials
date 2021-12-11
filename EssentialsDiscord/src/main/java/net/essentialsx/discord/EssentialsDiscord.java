@@ -4,8 +4,13 @@ import com.earth2me.essentials.IEssentials;
 import com.earth2me.essentials.IEssentialsModule;
 import com.earth2me.essentials.metrics.MetricsWrapper;
 import net.essentialsx.discord.interactions.InteractionControllerImpl;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -36,6 +41,10 @@ public class EssentialsDiscord extends JavaPlugin implements IEssentialsModule {
         settings = new DiscordSettings(this);
         ess.addReloadListener(settings);
 
+        if (metrics == null) {
+            metrics = new MetricsWrapper(this, 9824, false);
+        }
+
         if (jda == null) {
             jda = new JDADiscordService(this);
             try {
@@ -46,23 +55,22 @@ public class EssentialsDiscord extends JavaPlugin implements IEssentialsModule {
                 if (ess.getSettings().isDebug()) {
                     e.printStackTrace();
                 }
-                setEnabled(false);
-                return;
+                jda.shutdown();
             }
-        }
-
-        if (metrics == null) {
-            metrics = new MetricsWrapper(this, 9824, false);
         }
     }
 
     public void onReload() {
-        if (jda != null) {
+        if (jda != null && !jda.isInvalidStartup()) {
             jda.updatePresence();
             jda.updatePrimaryChannel();
             jda.updateConsoleRelay();
             jda.updateTypesRelay();
         }
+    }
+
+    public boolean isInvalidStartup() {
+        return jda != null && jda.isInvalidStartup();
     }
 
     public IEssentials getEss() {
@@ -79,8 +87,21 @@ public class EssentialsDiscord extends JavaPlugin implements IEssentialsModule {
 
     @Override
     public void onDisable() {
-        if (jda != null) {
+        if (jda != null && !jda.isInvalidStartup()) {
             jda.shutdown();
         }
+    }
+
+    @Override
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
+        return ess.onCommandEssentials(sender, command, label, args, EssentialsDiscord.class.getClassLoader(), "net.essentialsx.discord.commands.Command",
+                "essentials.", jda);
+    }
+
+    @Nullable
+    @Override
+    public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, @NotNull String[] args) {
+        return ess.onTabCompleteEssentials(sender, command, alias, args, EssentialsDiscord.class.getClassLoader(),
+                "net.essentialsx.discord.commands.Command", "essentials.", jda);
     }
 }

@@ -5,6 +5,6 @@ main: com.earth2me.essentials.geoip.EssentialsGeoIP
 version: ${full.version}
 website: https://essentialsx.net/
 description: Shows the country or city of a user on login and /whois.
-authors: [Zenexer, ementalo, Aelux, Brettflan, KimKandor, snowleo, ceulemans, Xeology, kjiang]
+authors: [Zenexer, ementalo, Aelux, Brettflan, KimKandor, snowleo, ceulemans, Xeology, kjiang, pop4959]
 depend: [Essentials]
 api-version: 1.13

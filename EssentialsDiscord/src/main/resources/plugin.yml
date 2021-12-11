@@ -8,3 +8,12 @@ authors: [mdcfe, JRoy, pop4959, Glare]
 depend: [Essentials]
 softdepend: [EssentialsChat, PlaceholderAPI]
 api-version: 1.13
+commands:
+  discordbroadcast:
+    description: Broadcasts a message to the specified Discord channel.
+    usage: /<command> <channel> <msg>
+    aliases: [dbroadcast, dbc, dbcast, ediscordbroadcast, edbroadcast, edbc, edbcast]
+  discord:
+    description: Sends the discord invite link to the player.
+    usage: /<command>
+    aliases: [ediscord]

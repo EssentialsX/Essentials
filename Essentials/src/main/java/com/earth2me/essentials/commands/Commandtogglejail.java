@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
+import java.util.logging.Level;
 
 import static com.earth2me.essentials.I18n.tl;
 
@@ -84,6 +85,10 @@ public class Commandtogglejail extends EssentialsCommand {
                             player.setOnlineJailedTime(ess.getSettings().isJailOnlineTime() ? ((player.getBase().getStatistic(PLAY_ONE_TICK)) + (timeDiff / 50)) : 0);
                         }
                         sender.sendMessage(timeDiff > 0 ? tl("playerJailedFor", player.getName(), DateUtil.formatDateDiff(finalDisplayTime)) : tl("playerJailed", player.getName()));
+
+                        final String notifyMessage = timeDiff > 0 ? tl("jailNotifyJailedFor", player.getName(), DateUtil.formatDateDiff(finalDisplayTime), sender.getSender().getName()) : tl("jailNotifyJailed", player.getName(), sender.getSender().getName());
+                        server.getLogger().log(Level.INFO, notifyMessage);
+                        ess.broadcastMessage("essentials.jail.notify", notifyMessage);
                     }
                 });
                 if (player.getBase().isOnline()) {
@@ -107,6 +112,10 @@ public class Commandtogglejail extends EssentialsCommand {
             player.setJailTimeout(timeDiff);
             player.setOnlineJailedTime(ess.getSettings().isJailOnlineTime() ? ((player.getBase().getStatistic(PLAY_ONE_TICK)) + (timeDiff / 50)) : 0);
             sender.sendMessage(tl("jailSentenceExtended", DateUtil.formatDateDiff(displayTimeDiff)));
+
+            final String notifyMessage = tl("jailNotifySentenceExtended", player.getName(), DateUtil.formatDateDiff(displayTimeDiff), sender.getSender().getName());
+            server.getLogger().log(Level.INFO, notifyMessage);
+            ess.broadcastMessage("essentials.jail.notify", notifyMessage);
             return;
         }
 

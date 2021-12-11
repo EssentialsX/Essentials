@@ -9,6 +9,10 @@
 # {PLAYER} will show the player's displayname instead of username.
 # 'delay' refers to the cooldown between how often you can use each kit, measured in seconds.
 # Set delay to -1 for a one time kit.
+#
+# In addition, you can also organize your kits into separate files under the `kits` subdirectory.
+# Essentials will treat all .yml files in the `kits` subdirectory as kits files, and will add any kits from those files along with the kits in `kits.yml`.
+# Any file in the `kits` subdirectory must be formatted in the same way as this file. This allows you to define multiple kits in each file.
 # For more information, visit http://wiki.ess3.net/wiki/Kits
 kits:
   tools:

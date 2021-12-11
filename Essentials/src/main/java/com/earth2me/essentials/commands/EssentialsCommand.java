@@ -4,6 +4,7 @@ import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.IEssentialsModule;
 import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.utils.FormatUtil;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -68,7 +69,7 @@ public abstract class EssentialsCommand implements IEssentialsCommand {
         final Matcher matcher = ARGUMENT_PATTERN.matcher(usage);
         while (matcher.find()) {
             final String color = matcher.group(3).equals("<") ? tl("commandArgumentRequired") : tl("commandArgumentOptional");
-            matcher.appendReplacement(buffer, "$1" + color + matcher.group(2).replace("|", ChatColor.RED + "|" + color) + ChatColor.RESET);
+            matcher.appendReplacement(buffer, "$1" + color + matcher.group(2).replace("|", tl("commandArgumentOr") + "|" + color) + ChatColor.RESET);
         }
         matcher.appendTail(buffer);
         usageStrings.put(buffer.toString(), description);
@@ -111,11 +112,15 @@ public abstract class EssentialsCommand implements IEssentialsCommand {
 
     // Get online players - only show vanished if source has permission
     protected User getPlayer(final Server server, final CommandSource sender, final String[] args, final int pos) throws PlayerNotFoundException, NotEnoughArgumentsException {
+        return getPlayer(server, sender, args, pos, false);
+    }
+
+    protected User getPlayer(final Server server, final CommandSource sender, final String[] args, final int pos, final boolean getOffline) throws PlayerNotFoundException, NotEnoughArgumentsException {
         if (sender.isPlayer()) {
             final User user = ess.getUser(sender.getPlayer());
-            return getPlayer(server, user, args, pos);
+            return getPlayer(server, user, args, pos, getOffline);
         }
-        return getPlayer(server, args, pos, true, false);
+        return getPlayer(server, args, pos, true, getOffline);
     }
 
     // Get online players - only show vanished if source has permission
@@ -129,7 +134,11 @@ public abstract class EssentialsCommand implements IEssentialsCommand {
 
     // Get online players - only show vanished if source has permission
     protected User getPlayer(final Server server, final User user, final String[] args, final int pos) throws PlayerNotFoundException, NotEnoughArgumentsException {
-        return getPlayer(server, user, args, pos, user.canInteractVanished(), false);
+        return getPlayer(server, user, args, pos, false);
+    }
+
+    protected User getPlayer(final Server server, final User user, final String[] args, final int pos, final boolean getOffline) throws PlayerNotFoundException, NotEnoughArgumentsException {
+        return getPlayer(server, user, args, pos, user.canInteractVanished(), getOffline);
     }
 
     // Get online or offline players, this method allows for raw access
@@ -226,7 +235,7 @@ public abstract class EssentialsCommand implements IEssentialsCommand {
         final List<String> players = Lists.newArrayList();
         for (final User user : ess.getOnlineUsers()) {
             if (canInteractWith(interactor, user)) {
-                players.add(user.getName());
+                players.add(ess.getSettings().changeTabCompleteName() ? FormatUtil.stripFormat(user.getDisplayName()) : user.getName());
             }
         }
         return players;
@@ -240,7 +249,7 @@ public abstract class EssentialsCommand implements IEssentialsCommand {
         final List<String> players = Lists.newArrayList();
         for (final User user : ess.getOnlineUsers()) {
             if (canInteractWith(interactor, user)) {
-                players.add(user.getName());
+                players.add(ess.getSettings().changeTabCompleteName() ? FormatUtil.stripFormat(user.getDisplayName()) : user.getName());
             }
         }
         return players;

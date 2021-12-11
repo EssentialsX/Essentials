@@ -25,7 +25,7 @@ public class DiscordMessageEvent extends Event implements Cancellable {
     /**
      * @param type               The message type/destination of this event.
      * @param message            The raw message content of this event.
-     * @param allowGroupMentions Whether or not the message should allow the pinging of roles, users, or emotes.
+     * @param allowGroupMentions Whether the message should allow the pinging of roles, @here, or @everyone.
      */
     public DiscordMessageEvent(final MessageType type, final String message, final boolean allowGroupMentions) {
         this(type, message, allowGroupMentions, null, null, null);
@@ -34,7 +34,7 @@ public class DiscordMessageEvent extends Event implements Cancellable {
     /**
      * @param type               The message type/destination of this event.
      * @param message            The raw message content of this event.
-     * @param allowGroupMentions Whether or not the message should allow the pinging of roles, users, or emotes.
+     * @param allowGroupMentions Whether the message should allow the pinging of roles, @here, or @everyone.
      * @param avatarUrl          The avatar URL to use for this message (if supported) or null to use the default bot avatar.
      * @param name               The name to use for this message (if supported) or null to use the default bot name.
      * @param uuid               The UUID of the player which caused this event or null if this wasn't a player triggered event.

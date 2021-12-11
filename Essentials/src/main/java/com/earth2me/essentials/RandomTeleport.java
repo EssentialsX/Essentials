@@ -26,12 +26,12 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 public class RandomTeleport implements IConf {
     private static final Random RANDOM = new Random();
     private static final int HIGHEST_BLOCK_Y_OFFSET = VersionUtil.getServerBukkitVersion().isHigherThanOrEqualTo(VersionUtil.v1_15_R01) ? 1 : 0;
-    private final IEssentials essentials;
+    private final IEssentials ess;
     private final EssentialsConfiguration config;
     private final Map<String, ConcurrentLinkedQueue<Location>> cachedLocations = new HashMap<>();
 
     public RandomTeleport(final IEssentials essentials) {
-        this.essentials = essentials;
+        this.ess = essentials;
         config = new EssentialsConfiguration(new File(essentials.getDataFolder(), "tpr.yml"), "/tpr.yml",
                 "Configuration for the random teleport command.\nUse the /settpr command in-game to set random teleport locations.");
         reloadConfig();
@@ -49,7 +49,7 @@ public class RandomTeleport implements IConf {
             if (center != null && center.location() != null) {
                 final double minRange = config.getDouble("min-range", Double.MIN_VALUE);
                 final double maxRange = config.getDouble("max-range", Double.MIN_VALUE);
-                for (World world : essentials.getServer().getWorlds()) {
+                for (World world : ess.getServer().getWorlds()) {
                     setCenter(world.getName(), center.location());
                     if (minRange != Double.MIN_VALUE) {
                         setMinRange(world.getName(), minRange);
@@ -72,7 +72,7 @@ public class RandomTeleport implements IConf {
             }
         } catch (final InvalidWorldException ignored) {
         }
-        final Location center = essentials.getServer().getWorlds().get(0).getWorldBorder().getCenter();
+        final Location center = ess.getServer().getWorlds().get(0).getWorldBorder().getCenter();
         center.setY(center.getWorld().getHighestBlockYAt(center) + HIGHEST_BLOCK_Y_OFFSET);
         setCenter(name, center);
         return center;
@@ -166,7 +166,7 @@ public class RandomTeleport implements IConf {
 
     // Prompts caching random valid locations, up to a maximum number of attempts.
     public void cacheRandomLocations(final String name) {
-        essentials.getServer().getScheduler().scheduleSyncDelayedTask(essentials, () -> {
+        ess.getServer().getScheduler().scheduleSyncDelayedTask(ess, () -> {
             for (int i = 0; i < this.getFindAttempts(); ++i) {
                 calculateRandomLocation(getCenter(name), getMinRange(name), getMaxRange(name)).thenAccept(location -> {
                     if (isValidRandomLocation(location)) {
@@ -217,12 +217,12 @@ public class RandomTeleport implements IConf {
             offsetZ = -rectX;
         }
         final Location location = new Location(
-                center.getWorld(),
-                center.getX() + offsetX,
-                center.getWorld().getMaxHeight(),
-                center.getZ() + offsetZ,
-                360 * RANDOM.nextFloat() - 180,
-                0
+            center.getWorld(),
+            center.getX() + offsetX,
+            ess.getWorldInfoProvider().getMaxHeight(center.getWorld()),
+            center.getZ() + offsetZ,
+            360 * RANDOM.nextFloat() - 180,
+            0
         );
         PaperLib.getChunkAtAsync(location).thenAccept(chunk -> {
             if (World.Environment.NETHER.equals(center.getWorld().getEnvironment())) {
@@ -237,8 +237,8 @@ public class RandomTeleport implements IConf {
 
     // Returns an appropriate elevation for a given location in the nether, or MIN_VALUE if none is found
     private double getNetherYAt(final Location location) {
-        for (int y = 32; y < location.getWorld().getMaxHeight() / 2; ++y) {
-            if (!LocationUtil.isBlockUnsafe(location.getWorld(), location.getBlockX(), y, location.getBlockZ())) {
+        for (int y = 32; y < ess.getWorldInfoProvider().getMaxHeight(location.getWorld()); ++y) {
+            if (!LocationUtil.isBlockUnsafe(ess, location.getWorld(), location.getBlockX(), y, location.getBlockZ())) {
                 return y;
             }
         }
@@ -246,11 +246,10 @@ public class RandomTeleport implements IConf {
     }
 
     private boolean isValidRandomLocation(final Location location) {
-        final int minHeight = VersionUtil.getServerBukkitVersion().isHigherThanOrEqualTo(VersionUtil.v1_17_R01) ? location.getWorld().getMinHeight() : 0;
-        return location.getBlockY() >= minHeight && !this.getExcludedBiomes().contains(location.getBlock().getBiome());
+        return location.getBlockY() > ess.getWorldInfoProvider().getMinHeight(location.getWorld()) && !this.getExcludedBiomes().contains(location.getBlock().getBiome());
     }
 
-    private String locationKey(String name, String key) {
+    private String locationKey(final String name, final String key) {
         return "locations." + name + "." + key;
     }
 }

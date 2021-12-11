@@ -6,7 +6,7 @@ version: ${full.version}
 website: https://essentialsx.net/
 description: Provides an essential, core set of commands for Bukkit.
 softdepend: [Vault, LuckPerms]
-authors: [Zenexer, ementalo, Aelux, Brettflan, KimKandor, snowleo, ceulemans, Xeology, KHobbits, md_5, Iaccidentally, drtshock, vemacs, SupaHam, md678685]
+authors: [Zenexer, ementalo, Aelux, Brettflan, KimKandor, snowleo, ceulemans, Xeology, KHobbits, md_5, Iaccidentally, drtshock, vemacs, SupaHam, mdcfe, JRoy, pop4959]
 api-version: "1.13"
 commands:
   afk:
@@ -344,6 +344,10 @@ commands:
     description: Pong!
     usage: /<command>
     aliases: [echo,eecho,eping,pong,epong]
+  playtime:
+    description: Shows a player's time played in game
+    usage: /<command> [player]
+    aliases: [eplaytime]
   potion:
     description: Adds custom potion effects to a potion.
     usage: /<command> <clear|apply|effect:<effect> power:<power> duration:<duration>>
@@ -505,8 +509,8 @@ commands:
     usage: /<command> <player>
     aliases: [etpaall]
   tpaccept:
-    description: Accepts a teleport request.
-    usage: /<command> [otherplayer]
+    description: Accepts teleport requests.
+    usage: /<command> [player|*]
     aliases: [etpaccept,tpyes,etpyes]
   tpahere:
     description: Request that the specified player teleport to you.
@@ -525,8 +529,8 @@ commands:
     usage: /<command> [player]
     aliases: [etpacancel]
   tpdeny:
-    description: Reject a teleport request.
-    usage: /<command>
+    description: Rejects teleport requests.
+    usage: /<command> [player|*]
     aliases: [etpdeny,tpno,etpno]
   tphere:
     description: Teleport a player to you.
@@ -625,6 +629,7 @@ permissions:
     children:
       essentials.seen.ip: true
       essentials.seen.location: true
+      essentials.seen.uuid: true
   essentials.keepinv:
     default: false
     description: Controls whether players keep their inventory on death.

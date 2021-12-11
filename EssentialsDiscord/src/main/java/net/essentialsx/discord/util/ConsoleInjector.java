@@ -3,6 +3,7 @@ package net.essentialsx.discord.util;
 import com.earth2me.essentials.utils.FormatUtil;
 import com.google.common.base.Splitter;
 import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.utils.TimeFormat;
 import net.essentialsx.discord.JDADiscordService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.core.LogEvent;
@@ -11,10 +12,10 @@ import org.apache.logging.log4j.core.appender.AbstractAppender;
 import org.apache.logging.log4j.core.config.plugins.Plugin;
 import org.bukkit.Bukkit;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.time.Instant;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.regex.Pattern;
 
 import static com.earth2me.essentials.I18n.tl;
 
@@ -24,7 +25,6 @@ public class ConsoleInjector extends AbstractAppender {
 
     private final JDADiscordService jda;
     private final BlockingQueue<String> messageQueue = new LinkedBlockingQueue<>();
-    private final SimpleDateFormat timestampFormat = new SimpleDateFormat("HH:mm:ss");
     private final int taskId;
 
     public ConsoleInjector(JDADiscordService jda) {
@@ -68,15 +68,23 @@ public class ConsoleInjector extends AbstractAppender {
             return;
         }
 
+        if (!jda.getSettings().getConsoleFilters().isEmpty()) {
+            for (final Pattern pattern : jda.getSettings().getConsoleFilters()) {
+                if (pattern.matcher(entry).find()) {
+                    return;
+                }
+            }
+        }
+
         final String loggerName = event.getLoggerName();
         if (!loggerName.isEmpty() && !loggerName.contains(".")) {
             entry = "[" + event.getLoggerName() + "] " + entry;
         }
 
         //noinspection UnstableApiUsage
-        messageQueue.addAll(Splitter.fixedLength(Message.MAX_CONTENT_LENGTH).splitToList(
+        messageQueue.addAll(Splitter.fixedLength(Message.MAX_CONTENT_LENGTH - 2).splitToList(
                 MessageUtil.formatMessage(jda.getSettings().getConsoleFormat(),
-                        timestampFormat.format(new Date()),
+                        TimeFormat.TIME_LONG.format(Instant.now()),
                         event.getLevel().name(),
                         MessageUtil.sanitizeDiscordMarkdown(entry))));
     }
