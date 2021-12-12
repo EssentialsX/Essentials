@@ -23,6 +23,7 @@ import net.dv8tion.jda.api.utils.cache.CacheFlag;
 import net.ess3.nms.refl.providers.AchievementListenerProvider;
 import net.ess3.nms.refl.providers.AdvancementListenerProvider;
 import net.ess3.provider.providers.PaperAdvancementListenerProvider;
+import net.essentialsx.api.v2.ChatType;
 import net.essentialsx.api.v2.events.discord.DiscordMessageEvent;
 import net.essentialsx.api.v2.services.discord.DiscordService;
 import net.essentialsx.api.v2.services.discord.InteractionController;
@@ -40,12 +41,15 @@ import net.essentialsx.discord.interactions.commands.MessageCommand;
 import net.essentialsx.discord.listeners.BukkitListener;
 import net.essentialsx.discord.listeners.DiscordCommandDispatcher;
 import net.essentialsx.discord.listeners.DiscordListener;
+import net.essentialsx.discord.listeners.EssentialsChatListener;
+import net.essentialsx.discord.listeners.BukkitChatListener;
 import net.essentialsx.discord.util.ConsoleInjector;
 import net.essentialsx.discord.util.DiscordUtil;
 import net.essentialsx.discord.util.MessageUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
+import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.ServicePriority;
 import org.jetbrains.annotations.NotNull;
@@ -83,6 +87,7 @@ public class JDADiscordService implements DiscordService, IEssentialsModule {
     private ConsoleInjector injector;
     private DiscordCommandDispatcher commandDispatcher;
     private InteractionControllerImpl interactionController;
+    private Listener chatListener;
     private boolean invalidStartup = false;
 
     public JDADiscordService(EssentialsDiscord plugin) {
@@ -214,6 +219,8 @@ public class JDADiscordService implements DiscordService, IEssentialsModule {
 
         Bukkit.getPluginManager().registerEvents(new BukkitListener(this), plugin);
 
+        updateListener();
+
         try {
             if (VersionUtil.getServerBukkitVersion().isHigherThanOrEqualTo(VersionUtil.v1_12_0_R01)) {
                 try {
@@ -267,9 +274,14 @@ public class JDADiscordService implements DiscordService, IEssentialsModule {
 
     @Override
     public void sendChatMessage(final Player player, final String chatMessage) {
+        sendChatMessage(ChatType.UNKNOWN, player, chatMessage);
+    }
+
+    @Override
+    public void sendChatMessage(ChatType chatType, Player player, String chatMessage) {
         final User user = getPlugin().getEss().getUser(player);
 
-        final String formattedMessage = MessageUtil.formatMessage(getSettings().getMcToDiscordFormat(player),
+        final String formattedMessage = MessageUtil.formatMessage(getSettings().getMcToDiscordFormat(player, chatType),
                 MessageUtil.sanitizeDiscordMarkdown(player.getName()),
                 MessageUtil.sanitizeDiscordMarkdown(player.getDisplayName()),
                 user.isAuthorized("essentials.discord.markdown") ? chatMessage : MessageUtil.sanitizeDiscordMarkdown(chatMessage),
@@ -287,7 +299,20 @@ public class JDADiscordService implements DiscordService, IEssentialsModule {
                 FormatUtil.stripEssentialsFormat(getPlugin().getEss().getPermissionsHandler().getSuffix(player)),
                 guild.getMember(jda.getSelfUser()).getEffectiveName());
 
-        DiscordUtil.dispatchDiscordMessage(this, MessageType.DefaultTypes.CHAT, formattedMessage, user.isAuthorized("essentials.discord.ping"), avatarUrl, formattedName, player.getUniqueId());
+        DiscordUtil.dispatchDiscordMessage(this, chatTypeToMessageType(chatType), formattedMessage, user.isAuthorized("essentials.discord.ping"), avatarUrl, formattedName, player.getUniqueId());
+    }
+
+    private MessageType chatTypeToMessageType(ChatType chatType) {
+        switch (chatType) {
+            case SHOUT:
+                return MessageType.DefaultTypes.SHOUT;
+            case QUESTION:
+                return MessageType.DefaultTypes.QUESTION;
+            case LOCAL:
+                return MessageType.DefaultTypes.LOCAL;
+            default:
+                return MessageType.DefaultTypes.CHAT;
+        }
     }
 
     @Override
@@ -316,6 +341,19 @@ public class JDADiscordService implements DiscordService, IEssentialsModule {
             message = message.replaceAll(":" + Pattern.quote(emote.getName()) + ":", emote.getAsMention());
         }
         return message;
+    }
+
+    public void updateListener() {
+        if (chatListener != null) {
+            HandlerList.unregisterAll(chatListener);
+            chatListener = null;
+        }
+
+        chatListener = getSettings().isUseEssentialsEvents() && plugin.isEssentialsChat()
+            ? new EssentialsChatListener(this)
+            : new BukkitChatListener(this);
+
+        Bukkit.getPluginManager().registerEvents(chatListener, plugin);
     }
 
     public void updatePresence() {
