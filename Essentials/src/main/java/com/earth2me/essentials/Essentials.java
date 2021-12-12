@@ -749,7 +749,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
             if (getSettings().isCommandDisabled(commandLabel)) {
                 if (getKnownCommandsProvider().getKnownCommands().containsKey(commandLabel)) {
                     final Command newCmd = getKnownCommandsProvider().getKnownCommands().get(commandLabel);
-                    if (!(newCmd instanceof PluginIdentifiableCommand) || ((PluginIdentifiableCommand) newCmd).getPlugin() != this) {
+                    if (!(newCmd instanceof PluginIdentifiableCommand) || !isEssentialsPlugin(((PluginIdentifiableCommand) newCmd).getPlugin())) {
                         return newCmd.execute(cSender, commandLabel, args);
                     }
                 }
@@ -822,6 +822,10 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
             LOGGER.log(Level.SEVERE, tl("commandFailed", commandLabel), ex);
             return true;
         }
+    }
+
+    private boolean isEssentialsPlugin(Plugin plugin) {
+        return plugin.getDescription().getMain().contains("com.earth2me.essentials") || plugin.getDescription().getMain().contains("net.essentialsx");
     }
 
     public void cleanupOpenInventories() {
