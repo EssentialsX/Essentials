@@ -7,6 +7,10 @@ import com.earth2me.essentials.User;
 import com.earth2me.essentials.chat.EssentialsChat;
 import com.earth2me.essentials.utils.FormatUtil;
 import net.ess3.api.events.LocalChatSpyEvent;
+import net.essentialsx.api.v2.ChatType;
+import net.essentialsx.api.v2.events.chat.ChatEvent;
+import net.essentialsx.api.v2.events.chat.GlobalChatEvent;
+import net.essentialsx.api.v2.events.chat.LocalChatEvent;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Server;
@@ -97,7 +101,7 @@ public abstract class AbstractChatHandler {
 
         // Local, shout and question chat types are only enabled when there's a valid radius
         if (chat.getRadius() > 0 && event.getMessage().length() > 0) {
-            if (chat.getType().isEmpty()) {
+            if (chat.getType() == ChatType.UNKNOWN) {
                 if (user.isToggleShout() && event.getMessage().charAt(0) == ess.getSettings().getChatShout()) {
                     event.setMessage(event.getMessage().substring(1));
                 }
@@ -106,7 +110,7 @@ public abstract class AbstractChatHandler {
                 if (event.getMessage().charAt(0) == ess.getSettings().getChatShout() || (event.getMessage().charAt(0) == ess.getSettings().getChatQuestion() && ess.getSettings().isChatQuestionEnabled())) {
                     event.setMessage(event.getMessage().substring(1));
                 }
-                format = tl(chat.getType() + "Format", format);
+                format = tl(chat.getType().key() + "Format", format);
             }
         }
 
@@ -140,7 +144,7 @@ public abstract class AbstractChatHandler {
         final User user = chat.getUser();
 
         if (event.getMessage().length() > 0) {
-            if (chat.getType().isEmpty()) {
+            if (chat.getType() == ChatType.UNKNOWN) {
                 if (!user.isAuthorized("essentials.chat.local")) {
                     user.sendMessage(tl("notAllowedToLocal"));
                     event.setCancelled(true);
@@ -149,15 +153,18 @@ public abstract class AbstractChatHandler {
 
                 event.getRecipients().removeIf(player -> !ess.getUser(player).isAuthorized("essentials.chat.receive.local"));
             } else {
-                final String permission = "essentials.chat." + chat.getType();
+                final String permission = "essentials.chat." + chat.getType().key();
 
                 if (user.isAuthorized(permission)) {
-                    event.getRecipients().removeIf(player -> !ess.getUser(player).isAuthorized("essentials.chat.receive." + chat.getType()));
-                    return;
+                    event.getRecipients().removeIf(player -> !ess.getUser(player).isAuthorized("essentials.chat.receive." + chat.getType().key()));
+
+                    callChatEvent(event, chat.getType(), null);
+                } else {
+                    final String chatType = chat.getType().name();
+                    user.sendMessage(tl("notAllowedTo" + chatType.charAt(0) + chatType.substring(1).toLowerCase(Locale.ENGLISH)));
+                    event.setCancelled(true);
                 }
 
-                user.sendMessage(tl("notAllowedTo" + chat.getType().substring(0, 1).toUpperCase(Locale.ENGLISH) + chat.getType().substring(1)));
-                event.setCancelled(true);
                 return;
             }
         }
@@ -201,6 +208,12 @@ public abstract class AbstractChatHandler {
             }
         }
 
+        callChatEvent(event, ChatType.LOCAL, chat.getRadius());
+
+        if (event.isCancelled()) {
+            return;
+        }
+
         if (outList.size() < 2) {
             user.sendMessage(tl("localNoOne"));
         }
@@ -220,6 +233,28 @@ public abstract class AbstractChatHandler {
                 onlinePlayer.sendMessage(String.format(spyEvent.getFormat(), user.getDisplayName(), spyEvent.getMessage()));
             }
         }
+    }
+
+    /**
+     * Re-create type-based chat event from the base chat event, call it and mirror changes back to the base chat event.
+     * @param event Event based on which a type-based event will be created, and to which changes will be applied.
+     * @param chatType Chat type which determines which event will be created and called.
+     * @param radius If chat is a local chat, this is a non-squared radius used to calculate recipients, otherwise {@code null}.
+     */
+    protected void callChatEvent(final AsyncPlayerChatEvent event, final ChatType chatType, final Long radius) {
+        final ChatEvent chatEvent;
+
+        if (chatType == ChatType.LOCAL) {
+            chatEvent = new LocalChatEvent(event.isAsynchronous(), event.getPlayer(), event.getFormat(), event.getMessage(), event.getRecipients(), radius);
+        } else {
+            chatEvent = new GlobalChatEvent(event.isAsynchronous(), chatType, event.getPlayer(), event.getFormat(), event.getMessage(), event.getRecipients());
+        }
+
+        server.getPluginManager().callEvent(chatEvent);
+
+        event.setFormat(chatEvent.getFormat());
+        event.setMessage(chatEvent.getMessage());
+        event.setCancelled(chatEvent.isCancelled());
     }
 
     /**
@@ -265,24 +300,24 @@ public abstract class AbstractChatHandler {
         return event.isAsynchronous();
     }
 
-    String getChatType(final User user, final String message) {
+    ChatType getChatType(final User user, final String message) {
         if (message.length() == 0) {
             //Ignore empty chat events generated by plugins
-            return "";
+            return ChatType.UNKNOWN;
         }
 
         final char prefix = message.charAt(0);
         if (prefix == ess.getSettings().getChatShout()) {
             if (user.isToggleShout()) {
-                return "";
+                return ChatType.UNKNOWN;
             }
-            return message.length() > 1 ? "shout" : "";
+            return message.length() > 1 ? ChatType.SHOUT : ChatType.UNKNOWN;
         } else if (ess.getSettings().isChatQuestionEnabled() && prefix == ess.getSettings().getChatQuestion()) {
-            return message.length() > 1 ? "question" : "";
+            return message.length() > 1 ? ChatType.QUESTION : ChatType.UNKNOWN;
         } else if (user.isToggleShout()) {
-            return message.length() > 1 ? "shout" : "";
+            return message.length() > 1 ? ChatType.SHOUT : ChatType.UNKNOWN;
         } else {
-            return "";
+            return ChatType.UNKNOWN;
         }
     }
 
