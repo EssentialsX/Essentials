@@ -3,6 +3,7 @@ package net.essentialsx.discord.interactions;
 import com.earth2me.essentials.utils.FormatUtil;
 import com.google.common.base.Joiner;
 import net.dv8tion.jda.api.MessageBuilder;
+import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 import net.essentialsx.api.v2.services.discord.InteractionChannel;
@@ -33,7 +34,7 @@ public class InteractionEventImpl implements InteractionEvent {
     public void reply(String message) {
         message = FormatUtil.stripFormat(message).replace("§", ""); // Don't ask
         replyBuffer.add(message);
-        event.getHook().editOriginal(new MessageBuilder().setContent(Joiner.on('\n').join(replyBuffer)).setAllowedMentions(DiscordUtil.NO_GROUP_MENTIONS).build())
+        event.getHook().editOriginal(new MessageBuilder().setContent(Joiner.on('\n').join(replyBuffer).substring(0, Message.MAX_CONTENT_LENGTH)).setAllowedMentions(DiscordUtil.NO_GROUP_MENTIONS).build())
                 .queue(null, error -> logger.log(Level.SEVERE, "Error while editing command interaction response", error));
     }
 
