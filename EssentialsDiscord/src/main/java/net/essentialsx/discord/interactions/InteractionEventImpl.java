@@ -34,7 +34,12 @@ public class InteractionEventImpl implements InteractionEvent {
     public void reply(String message) {
         message = FormatUtil.stripFormat(message).replace("§", ""); // Don't ask
         replyBuffer.add(message);
-        event.getHook().editOriginal(new MessageBuilder().setContent(Joiner.on('\n').join(replyBuffer).substring(0, Message.MAX_CONTENT_LENGTH)).setAllowedMentions(DiscordUtil.NO_GROUP_MENTIONS).build())
+        String reply = Joiner.on('\n').join(replyBuffer);
+        reply = reply.substring(0, Math.min(Message.MAX_CONTENT_LENGTH, reply.length()));
+        event.getHook().editOriginal(
+                new MessageBuilder()
+                        .setContent(reply)
+                        .setAllowedMentions(DiscordUtil.NO_GROUP_MENTIONS).build())
                 .queue(null, error -> logger.log(Level.SEVERE, "Error while editing command interaction response", error));
     }
 
