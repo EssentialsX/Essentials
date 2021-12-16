@@ -37,7 +37,7 @@ public class ModernUUIDCache {
      * preventing any command which allows for offline players to resolve a
      * single uuid from a name.
      *
-     * This map is baked by a file-based cache. If this cache is missing, a new
+     * This map is backed by a file-based cache. If this cache is missing, a new
      * one is populated by iterating over all files in the userdata folder and
      * caching the {@code last-account-name} value.
      */
