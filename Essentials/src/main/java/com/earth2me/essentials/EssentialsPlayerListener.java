@@ -540,7 +540,7 @@ public class EssentialsPlayerListener implements Listener, FakeAccessor {
             return;
         }
         final User user = ess.getUser(player);
-        if (ess.getSettings().registerBackInListener() && user.isAuthorized("essentials.back.onteleport") && !player.hasMetadata("ess_ignore_teleport")) {
+        if (ess.getSettings().registerBackInListener() && user.isAuthorized("essentials.back.onteleport")) {
             user.setLastLocation();
         }
         if (ess.getSettings().isTeleportInvulnerability()) {
