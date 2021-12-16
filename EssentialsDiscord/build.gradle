@@ -9,7 +9,7 @@ dependencies {
     }
     implementation 'com.vdurmont:emoji-java:5.1.1'
     implementation 'club.minnced:discord-webhooks:0.7.2'
-    compileOnly 'org.apache.logging.log4j:log4j-core:2.0-beta9'
+    compileOnly 'org.apache.logging.log4j:log4j-core:2.15.0'
     compileOnly 'me.clip:placeholderapi:2.10.9'
 }
 
