@@ -137,7 +137,7 @@ public final class MaterialUtil {
             return true;
         }
 
-        return VersionUtil.getServerBukkitVersion().isLowerThan(VersionUtil.v1_13_0_R01) && LEGACY_SKULLS.contains(stack.getType()) && stack.getDurability() == 3;
+        return PRE_FLATTEN && LEGACY_SKULLS.contains(stack.getType()) && stack.getDurability() == 3;
     }
 
     public static boolean isPotion(final Material material) {
