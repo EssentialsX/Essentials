@@ -4,6 +4,7 @@ import com.earth2me.essentials.ChargeException;
 import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.Trade.OverflowType;
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.utils.VersionUtil;
 import net.ess3.api.MaxMoneyException;
 import org.bukkit.Material;
 import org.bukkit.Server;
@@ -153,6 +154,8 @@ public class Commandcondense extends EssentialsCommand {
             return null;
         }
 
+        final boolean legacy = VersionUtil.getServerBukkitVersion().isLowerThan(VersionUtil.v1_13_0_R01);
+
         boolean match = true;
         final Iterator<ItemStack> iter = inputList.iterator();
         while (iter.hasNext()) {
@@ -161,8 +164,7 @@ public class Commandcondense extends EssentialsCommand {
                 iter.remove();
                 continue;
             }
-
-            if (inputSlot.getDurability() == Short.MAX_VALUE) {
+            if (legacy && inputSlot.getDurability() == Short.MAX_VALUE) {
                 inputSlot.setDurability((short) 0);
             }
             if (!inputSlot.isSimilar(stack)) {

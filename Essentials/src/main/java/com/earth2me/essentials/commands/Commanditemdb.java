@@ -1,6 +1,7 @@
 package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.CommandSource;
+import com.earth2me.essentials.utils.MaterialUtil;
 import com.earth2me.essentials.utils.StringUtil;
 import com.earth2me.essentials.utils.VersionUtil;
 import org.bukkit.Material;
@@ -49,7 +50,7 @@ public class Commanditemdb extends EssentialsCommand {
 
         if (itemHeld && itemStack.getType() != Material.AIR) {
             final int maxuses = itemStack.getType().getMaxDurability();
-            final int durability = (maxuses + 1) - itemStack.getDurability();
+            final int durability = (maxuses + 1) - MaterialUtil.getDamage(itemStack);
             if (maxuses != 0) {
                 sender.sendMessage(tl("durability", Integer.toString(durability)));
             }

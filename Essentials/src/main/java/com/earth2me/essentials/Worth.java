@@ -30,13 +30,15 @@ public class Worth implements IConf {
      * @return The price from the config.
      */
     public BigDecimal getPrice(final IEssentials ess, final ItemStack itemStack) {
-        BigDecimal result;
+        BigDecimal result = BigDecimal.ONE.negate();
 
         final String itemname = itemStack.getType().toString().toLowerCase(Locale.ENGLISH).replace("_", "");
 
-        // Check for matches with data value from stack
-        // Note that we always default to BigDecimal.ONE.negate(), equivalent to -1
-        result = config.getBigDecimal("worth." + itemname + "." + itemStack.getDurability(), BigDecimal.ONE.negate());
+        if (VersionUtil.getServerBukkitVersion().isLowerThan(VersionUtil.v1_13_0_R01)) {
+            // Check for matches with data value from stack
+            // Note that we always default to BigDecimal.ONE.negate(), equivalent to -1
+            result = config.getBigDecimal("worth." + itemname + "." + itemStack.getDurability(), BigDecimal.ONE.negate());
+        }
 
         // Check for matches with data value 0
         if (result.signum() < 0) {
