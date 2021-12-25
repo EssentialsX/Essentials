@@ -454,11 +454,20 @@ remove-god-on-disconnect: false
 # Set to -1 for no timeout.
 auto-afk: 300
 
-# Auto-AFK Kick
-# After this timeout in seconds, the user will be kicked from the server.
-# essentials.afk.kickexempt node overrides this feature.
+# Auto-AFK Actions Time
+# After this timeout in seconds, the actions defined in auto-afk-actions will be executed.
+# essentials.afk.actionsexempt node overrides this feature.
 # Set to -1 for no timeout.
-auto-afk-kick: -1
+auto-afk-actions-timeout: -1
+
+# Auto-AFK Actions
+# The actions to execute after the auto-afk-actions-timeout.
+# Available placeholders:
+# {PLAYER} - The player's displayname.
+# {USERNAME} - The player's username.
+# {WORLDNAME} - The full name of the player's current world.
+auto-afk-actions:
+  - "kick {USERNAME}"
 
 # Set this to true, if you want to freeze the player, if the player is AFK.
 # Other players or monsters can't push the player out of AFK mode then.

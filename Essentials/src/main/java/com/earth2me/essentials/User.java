@@ -20,6 +20,7 @@ import net.ess3.api.events.MuteStatusChangeEvent;
 import net.ess3.api.events.UserBalanceUpdateEvent;
 import net.essentialsx.api.v2.events.TransactionEvent;
 import net.essentialsx.api.v2.services.mail.MailSender;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Statistic;
@@ -804,19 +805,19 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
             return;
         }
 
-        final long autoafkkick = ess.getSettings().getAutoAfkKick();
-        if (autoafkkick > 0
-                && lastActivity > 0 && (lastActivity + (autoafkkick * 1000)) < System.currentTimeMillis()
-                && !isAuthorized("essentials.kick.exempt")
-                && !isAuthorized("essentials.afk.kickexempt")) {
-            final String kickReason = tl("autoAfkKickReason", autoafkkick / 60.0);
+        final long autoafkActionTimeout = ess.getSettings().getAutoAfkActionsTimout();
+        if (autoafkActionTimeout > 0
+                && lastActivity > 0 && (lastActivity + (autoafkActionTimeout * 1000)) < System.currentTimeMillis()
+                && !isAuthorized("essentials.afk.kickexempt")
+                && !isAuthorized("essentials.afk.actionsexempt")) {
             lastActivity = 0;
-            this.getBase().kickPlayer(kickReason);
 
-            for (final User user : ess.getOnlineUsers()) {
-                if (user.isAuthorized("essentials.kick.notify")) {
-                    user.sendMessage(tl("playerKicked", Console.DISPLAY_NAME, getName(), kickReason));
-                }
+            for (String action : ess.getSettings().getAutoAfkActions()){
+                action = action.replace("{PLAYER}",getDisplayName());
+                action = action.replace("{USERNAME}",getName());
+                action = action.replace("{WORLDNAME}"
+                        ,getLocation()==null||getLocation().getWorld()==null?"":getLocation().getWorld().getName());
+                Bukkit.dispatchCommand(Bukkit.getConsoleSender(),action);
             }
         }
         final long autoafk = ess.getSettings().getAutoAfk();

@@ -138,6 +138,7 @@ public class Settings implements net.ess3.api.ISettings {
     private double maxProjectileSpeed;
     private boolean removeEffectsOnHeal;
     private Map<String, String> worldAliases;
+    private List<String> autoAfkActions;
 
     public Settings(final IEssentials ess) {
         this.ess = ess;
@@ -766,7 +767,7 @@ public class Settings implements net.ess3.api.ISettings {
         bindingItemPolicy = _getBindingItemsPolicy();
         currencySymbol = _getCurrencySymbol();
         worldAliases = _getWorldAliases();
-
+        autoAfkActions = _getAutoAfkActions();
         reloadCount.incrementAndGet();
     }
 
@@ -1076,8 +1077,17 @@ public class Settings implements net.ess3.api.ISettings {
     }
 
     @Override
-    public long getAutoAfkKick() {
-        return config.getLong("auto-afk-kick", -1);
+    public long getAutoAfkActionsTimout() {
+        return config.getLong("auto-afk-actions-timeout", -1);
+    }
+
+    @Override
+    public List<String> getAutoAfkActions() {
+        return autoAfkActions;
+    }
+
+    public List<String> _getAutoAfkActions() {
+        return config.getList("auto-afk-actions", String.class);
     }
 
     @Override

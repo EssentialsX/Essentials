@@ -186,7 +186,9 @@ public interface ISettings extends IConf {
 
     long getAutoAfk();
 
-    long getAutoAfkKick();
+    long getAutoAfkActionsTimout();
+
+    List<String> getAutoAfkActions();
 
     boolean getFreezeAfkPlayers();
 
