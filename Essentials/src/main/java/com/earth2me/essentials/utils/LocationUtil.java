@@ -275,7 +275,7 @@ public final class LocationUtil {
             }
         }
 
-        //If not then check if player is in the void
+        // If not then check if player is in the void
         return y < ess.getWorldInfoProvider().getMinHeight(world);
     }
 
