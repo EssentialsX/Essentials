@@ -119,4 +119,11 @@ public final class NumberUtil {
         }
         return Integer.parseInt(sInt) > 0;
     }
+
+    /**
+     * Backport from Guava.
+     */
+    public static int constrainToRange(int value, int min, int max) {
+        return Math.min(Math.max(value, min), max);
+    }
 }
