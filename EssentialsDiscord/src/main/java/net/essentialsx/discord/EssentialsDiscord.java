@@ -36,6 +36,13 @@ public class EssentialsDiscord extends JavaPlugin implements IEssentialsModule {
             getLogger().log(Level.WARNING, tl("versionMismatchAll"));
         }
 
+        // JDK-8274349 - Mitigation for a regression in Java 17 on 1 core systems which was fixed in 17.0.2
+        final String[] javaVersion = System.getProperty("java.version").split("\\.");
+        if (Runtime.getRuntime().availableProcessors() <= 1 && javaVersion[0].startsWith("17") && (javaVersion.length < 2 || (javaVersion[1].equals("0") && javaVersion[2].startsWith("1")))) {
+            logger.log(Level.INFO, "Essentials is mitigating JDK-8274349");
+            System.setProperty("java.util.concurrent.ForkJoinPool.common.parallelism", "1");
+        }
+
         isPAPI = getServer().getPluginManager().getPlugin("PlaceholderAPI") != null;
 
         settings = new DiscordSettings(this);
