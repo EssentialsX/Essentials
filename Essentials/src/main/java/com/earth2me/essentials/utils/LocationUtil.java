@@ -266,7 +266,7 @@ public final class LocationUtil {
         int y = (int) Math.round(loc.getY());
         final int z = loc.getBlockZ();
         int count = 0;
-        //Check whether more than 2 unsafe block are below player.
+        // Check whether more than 2 unsafe block are below player.
         while (LocationUtil.isBlockUnsafe(ess, world, x, y, z) && y >= ess.getWorldInfoProvider().getMinHeight(world)) {
             y--;
             count++;
@@ -275,7 +275,7 @@ public final class LocationUtil {
             }
         }
 
-        //If not then check if player is not in void
+        //If not then check if player is in the void
         return y < ess.getWorldInfoProvider().getMinHeight(world);
     }
 
