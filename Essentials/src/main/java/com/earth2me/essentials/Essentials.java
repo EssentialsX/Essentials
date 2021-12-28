@@ -260,8 +260,6 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
 
             Console.setInstance(this);
 
-            bukkitAudience = BukkitAudiences.create(this);
-
             switch (VersionUtil.getServerSupportStatus()) {
                 case NMS_CLEANROOM:
                     getLogger().severe(tlLiteral("serverUnsupportedCleanroom"));
@@ -605,6 +603,8 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
 
         final PluginManager pm = getServer().getPluginManager();
         registerListeners(pm);
+
+        bukkitAudience = BukkitAudiences.create(this);
     }
 
     private IEssentialsCommand loadCommand(final String path, final String name, final IEssentialsModule module, final ClassLoader classLoader) throws Exception {

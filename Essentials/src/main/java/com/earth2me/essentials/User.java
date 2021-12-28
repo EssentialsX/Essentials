@@ -1026,13 +1026,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
 
     @Override
     public void sendComponent(ComponentLike component) {
-        System.out.println("AYO " + AdventureUtil.LEGACY_SERIALIZER.serialize(component.asComponent()));
-        System.out.println("DUMBASS FUCKING PLAYER " + base.getClass().getName());
         ess.getBukkitAudience().player(base).sendMessage(component);
-        System.out.println("hello");
-        ess.getBukkitAudience().console().sendMessage(component);
-        ess.getBukkitAudience().console().sendMessage(Component.text("chatting"));
-        ess.getBukkitAudience().player(base).sendMessage(Component.text("chatting"));
     }
 
     @Override
@@ -1047,12 +1041,10 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
     @Override
     public void sendTl(String tlKey, Object... args) {
         final String translation = playerTl(tlKey, args);
-        System.out.println("TROLLING " + translation);
         if (!translation.startsWith("MM||")) {
             sendMessage(translation);
             return;
         }
-        System.out.println("CHATTING");
         sendComponent(MiniMessage.miniMessage().parse(translation.substring(4)));
     }
 
