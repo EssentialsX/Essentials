@@ -1,8 +1,6 @@
 package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.CommandSource;
-import com.earth2me.essentials.textreader.KeywordReplacer;
-import com.earth2me.essentials.textreader.SimpleTextInput;
 import com.earth2me.essentials.utils.FormatUtil;
 import org.bukkit.Server;
 
@@ -17,6 +15,6 @@ public class Commandbroadcast extends EssentialsCommand {
             throw new NotEnoughArgumentsException();
         }
 
-        ess.broadcastTl("broadcast", new KeywordReplacer(new SimpleTextInput(FormatUtil.replaceFormat(getFinalArg(args, 0)).replace("\\n", "\n")), sender, ess).getLines().get(0), sender.getDisplayName());
+        ess.broadcastTl("broadcast", FormatUtil.replaceFormat(getFinalArg(args, 0)).replace("\\n", "\n"), sender.getDisplayName());
     }
 }

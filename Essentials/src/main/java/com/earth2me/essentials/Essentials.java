@@ -1153,22 +1153,22 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
     }
 
     @Override
-    public void broadcastTl(String tlKey, Object... args) {
-        broadcastTl(null, tlKey, args);
+    public void broadcastTl(final String tlKey, final Object... args) {
+        broadcastTl(null, null, true, tlKey, args);
     }
 
     @Override
-    public void broadcastTl(IUser sender, String tlKey, Object... args) {
-        broadcastTl(sender, (Predicate<IUser>) null, tlKey, args);
+    public void broadcastTl(final IUser sender, final String tlKey, final Object... args) {
+        broadcastTl(sender, null, false, tlKey, args);
     }
 
     @Override
-    public void broadcastTl(IUser sender, String permission, String tlKey, Object... args) {
-        broadcastTl(sender, u -> !u.isAuthorized(permission), tlKey, args);
+    public void broadcastTl(final IUser sender, final String permission, final String tlKey, final Object... args) {
+        broadcastTl(sender, u -> !u.isAuthorized(permission), false, tlKey, args);
     }
 
     @Override
-    public void broadcastTl(IUser sender, Predicate<IUser> shouldExclude, String tlKey, Object... args) {
+    public void broadcastTl(final IUser sender, final Predicate<IUser> shouldExclude, final boolean parseKeywords, final String tlKey, final Object... args) {
         if (sender != null && sender.isHidden()) {
             return;
         }
@@ -1182,7 +1182,15 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
                 continue;
             }
 
-            user.sendTl(tlKey, args);
+            final Object[] processedArgs;
+            // FUCK THIS STUPID BULLSHIT
+            if (parseKeywords) {
+                processedArgs = I18n.mutateArgs(args, s -> new KeywordReplacer(new SimpleTextInput(s), new CommandSource(user.getBase()), this, false).getLines().get(0));
+            } else {
+                processedArgs = args;
+            }
+
+            user.sendTl(tlKey, processedArgs);
         }
     }
 

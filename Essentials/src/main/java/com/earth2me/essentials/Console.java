@@ -8,11 +8,11 @@ import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
-import static com.earth2me.essentials.I18n.tl;
+import static com.earth2me.essentials.I18n.tlLiteral;
 
 public final class Console implements IMessageRecipient {
     public static final String NAME = "Console";
-    public static final String DISPLAY_NAME = tl("consoleName");
+    public static final String DISPLAY_NAME = tlLiteral("consoleName");
     private static Console instance; // Set in essentials
 
     private final IEssentials ess;

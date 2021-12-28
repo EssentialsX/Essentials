@@ -23,6 +23,7 @@ import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.PropertyResourceBundle;
 import java.util.ResourceBundle;
+import java.util.function.Function;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
@@ -152,22 +153,26 @@ public class I18n implements net.ess3.api.II18n {
 
         final Object[] processedArgs;
         if (miniMessage) {
-            final Object[] args = new Object[objects.length];
-            for (int i = 0; i < objects.length; i++) {
-                final Object object = objects[i];
-                // MessageFormat will format these itself, troll face.
-                if (object instanceof Number || object instanceof Date) {
-                    args[i] = object;
-                } else {
-                    args[i] = object != null ? MiniMessage.miniMessage().escapeTokens(object.toString()) : null;
-                }
-            }
-            processedArgs = args;
+            processedArgs = mutateArgs(objects, s -> MiniMessage.miniMessage().escapeTokens(s));
         } else {
             processedArgs = objects;
         }
 
         return messageFormat.format(processedArgs).replace(' ', ' '); // replace nbsp with a space
+    }
+
+    public static Object[] mutateArgs(final Object[] objects, final Function<String, String> mutator) {
+        final Object[] args = new Object[objects.length];
+        for (int i = 0; i < objects.length; i++) {
+            final Object object = objects[i];
+            // MessageFormat will format these itself, troll face.
+            if (object instanceof Number || object instanceof Date || object == null) {
+                args[i] = object;
+                continue;
+            }
+            args[i] = mutator.apply(object.toString());
+        }
+        return args;
     }
 
     public void updateLocale(final String loc) {

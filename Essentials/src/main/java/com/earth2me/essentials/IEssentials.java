@@ -83,7 +83,7 @@ public interface IEssentials extends Plugin {
 
     void broadcastTl(IUser sender, String tlKey, Object... args);
 
-    void broadcastTl(IUser sender, Predicate<IUser> shouldExclude, String tlKey, Object... args);
+    void broadcastTl(IUser sender, Predicate<IUser> shouldExclude, boolean parseKeywords, String tlKey, Object... args);
 
     void broadcastTl(IUser sender, String permission, String tlKey, Object... args);
 
