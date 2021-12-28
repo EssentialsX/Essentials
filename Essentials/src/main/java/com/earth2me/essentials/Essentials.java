@@ -1168,6 +1168,11 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
     }
 
     @Override
+    public void broadcastTl(IUser sender, Predicate<IUser> shouldExclude, String tlKey, Object... args) {
+        broadcastTl(sender, shouldExclude, false, tlKey, args);
+    }
+
+    @Override
     public void broadcastTl(final IUser sender, final Predicate<IUser> shouldExclude, final boolean parseKeywords, final String tlKey, final Object... args) {
         if (sender != null && sender.isHidden()) {
             return;
