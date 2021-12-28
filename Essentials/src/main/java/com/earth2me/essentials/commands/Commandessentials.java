@@ -6,7 +6,6 @@ import com.earth2me.essentials.User;
 import com.earth2me.essentials.UserMap;
 import com.earth2me.essentials.economy.EconomyLayer;
 import com.earth2me.essentials.economy.EconomyLayers;
-import com.earth2me.essentials.utils.AdventureUtil;
 import com.earth2me.essentials.utils.DateUtil;
 import com.earth2me.essentials.utils.EnumUtil;
 import com.earth2me.essentials.utils.FloatUtil;
@@ -21,8 +20,8 @@ import com.google.gson.JsonNull;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 import net.ess3.api.TranslatableException;
+import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Server;
 import org.bukkit.Sound;
@@ -652,23 +651,23 @@ public class Commandessentials extends EssentialsCommand {
 
         switch (supportStatus) {
             case NMS_CLEANROOM:
-                sender.sendComponent(ess, sender.tlComponent(ess, "serverUnsupportedCleanroom").color(AdventureUtil.asAdventure(ChatColor.DARK_RED)));
+                sender.sendComponent(ess, sender.tlComponent(ess, "serverUnsupportedCleanroom").color(NamedTextColor.DARK_RED));
                 break;
             case DANGEROUS_FORK:
-                sender.sendComponent(ess, sender.tlComponent(ess, "serverUnsupportedDangerous").color(AdventureUtil.asAdventure(ChatColor.DARK_RED)));
+                sender.sendComponent(ess, sender.tlComponent(ess, "serverUnsupportedDangerous").color(NamedTextColor.DARK_RED));
                 break;
             case UNSTABLE:
-                sender.sendComponent(ess, sender.tlComponent(ess, "serverUnsupportedMods").color(AdventureUtil.asAdventure(ChatColor.DARK_RED)));
+                sender.sendComponent(ess, sender.tlComponent(ess, "serverUnsupportedMods").color(NamedTextColor.DARK_RED));
                 break;
             case OUTDATED:
-                sender.sendComponent(ess, sender.tlComponent(ess, "serverUnsupported").color(AdventureUtil.asAdventure(ChatColor.RED)));
+                sender.sendComponent(ess, sender.tlComponent(ess, "serverUnsupported").color(NamedTextColor.RED));
                 break;
             case LIMITED:
-                sender.sendComponent(ess, sender.tlComponent(ess, "serverUnsupportedLimitedApi").color(AdventureUtil.asAdventure(ChatColor.RED)));
+                sender.sendComponent(ess, sender.tlComponent(ess, "serverUnsupportedLimitedApi").color(NamedTextColor.RED));
                 break;
         }
         if (VersionUtil.getSupportStatusClass() != null) {
-            sender.sendComponent(ess, sender.tlComponent(ess, "serverUnsupportedClass").color(AdventureUtil.asAdventure(ChatColor.RED)));
+            sender.sendComponent(ess, sender.tlComponent(ess, "serverUnsupportedClass").color(NamedTextColor.RED));
         }
 
         sender.sendTl(ess, "versionFetching");
