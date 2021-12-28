@@ -1,6 +1,8 @@
 package com.earth2me.essentials;
 
 import net.ess3.api.IEssentials;
+import net.kyori.adventure.text.minimessage.MiniMessage;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -13,6 +15,7 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.nio.charset.StandardCharsets;
 import java.text.MessageFormat;
+import java.util.Date;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Locale;
@@ -28,11 +31,12 @@ public class I18n implements net.ess3.api.II18n {
     private static final String MESSAGES = "messages";
     private static final Pattern NODOUBLEMARK = Pattern.compile("''");
     private static final ResourceBundle NULL_BUNDLE = new ResourceBundle() {
+        @SuppressWarnings("NullableProblems")
         public Enumeration<String> getKeys() {
             return null;
         }
 
-        protected Object handleGetObject(final String key) {
+        protected Object handleGetObject(final @NotNull String key) {
             return null;
         }
     };
@@ -41,7 +45,7 @@ public class I18n implements net.ess3.api.II18n {
     private final transient ResourceBundle defaultBundle;
     private final transient IEssentials ess;
     private transient Locale currentLocale = defaultLocale;
-    private transient ResourceBundle customBundle;
+    private transient Map<Locale, ResourceBundle> loadedBundles = new HashMap<>();
     private transient ResourceBundle localeBundle;
     private transient Map<String, MessageFormat> messageFormatCache = new HashMap<>();
 
@@ -49,15 +53,26 @@ public class I18n implements net.ess3.api.II18n {
         this.ess = ess;
         defaultBundle = ResourceBundle.getBundle(MESSAGES, Locale.ENGLISH, new UTF8PropertiesControl());
         localeBundle = defaultBundle;
-        customBundle = NULL_BUNDLE;
     }
 
     public static String tl(final String string, final Object... objects) {
+        return tlLiteral(string, objects);
+    }
+
+    public static String tlLiteral(final String string, final Object... objects) {
+        if (instance == null) {
+            return "";
+        }
+
+        return tlLocale(instance.currentLocale, string, objects);
+    }
+
+    public static String tlLocale(final Locale locale, final String string, final Object... objects) {
         if (instance == null) {
             return "";
         }
         if (objects.length == 0) {
-            return NODOUBLEMARK.matcher(instance.translate(string)).replaceAll("'");
+            return NODOUBLEMARK.matcher(instance.translate(locale, string)).replaceAll("'");
         } else {
             return instance.format(string, objects);
         }
@@ -80,10 +95,30 @@ public class I18n implements net.ess3.api.II18n {
         return currentLocale;
     }
 
-    private String translate(final String string) {
+    private ResourceBundle getBundle(final Locale locale) {
+        if (loadedBundles.containsKey(locale)) {
+            return loadedBundles.get(locale);
+        }
+
+        ResourceBundle bundle;
+        try {
+            bundle = ResourceBundle.getBundle(MESSAGES, locale, new FileResClassLoader(I18n.class.getClassLoader(), ess), new UTF8PropertiesControl());
+        } catch (MissingResourceException ex) {
+            try {
+                bundle = ResourceBundle.getBundle(MESSAGES, locale, new UTF8PropertiesControl());
+            } catch (MissingResourceException ex2) {
+                bundle = NULL_BUNDLE;
+            }
+        }
+
+        loadedBundles.put(locale, bundle);
+        return bundle;
+    }
+
+    private String translate(final Locale locale, final String string) {
         try {
             try {
-                return customBundle.getString(string);
+                return getBundle(locale).getString(string);
             } catch (final MissingResourceException ex) {
                 return localeBundle.getString(string);
             }
@@ -96,35 +131,51 @@ public class I18n implements net.ess3.api.II18n {
     }
 
     public String format(final String string, final Object... objects) {
-        String format = translate(string);
+        return format(currentLocale, string, objects);
+    }
+
+    public String format(final Locale locale, final String string, final Object... objects) {
+        String format = translate(locale, string);
+        final boolean miniMessage = format.startsWith("MM||");
+
         MessageFormat messageFormat = messageFormatCache.get(format);
         if (messageFormat == null) {
             try {
                 messageFormat = new MessageFormat(format);
             } catch (final IllegalArgumentException e) {
                 ess.getLogger().log(Level.SEVERE, "Invalid Translation key for '" + string + "': " + e.getMessage());
-                format = format.replaceAll("\\{(\\D*?)\\}", "\\[$1\\]");
+                format = format.replaceAll("\\{(\\D*?)}", "\\[$1\\]");
                 messageFormat = new MessageFormat(format);
             }
             messageFormatCache.put(format, messageFormat);
         }
-        return messageFormat.format(objects).replace(' ', ' '); // replace nbsp with a space
+
+        final Object[] processedArgs;
+        if (miniMessage) {
+            final Object[] args = new Object[objects.length];
+            for (int i = 0; i < objects.length; i++) {
+                final Object object = objects[i];
+                // MessageFormat will format these itself, troll face.
+                if (object instanceof Number || object instanceof Date) {
+                    args[i] = object;
+                } else {
+                    args[i] = object != null ? MiniMessage.miniMessage().escapeTokens(object.toString()) : null;
+                }
+            }
+            processedArgs = args;
+        } else {
+            processedArgs = objects;
+        }
+
+        return messageFormat.format(processedArgs).replace(' ', ' '); // replace nbsp with a space
     }
 
     public void updateLocale(final String loc) {
         if (loc != null && !loc.isEmpty()) {
-            final String[] parts = loc.split("[_\\.]");
-            if (parts.length == 1) {
-                currentLocale = new Locale(parts[0]);
-            }
-            if (parts.length == 2) {
-                currentLocale = new Locale(parts[0], parts[1]);
-            }
-            if (parts.length == 3) {
-                currentLocale = new Locale(parts[0], parts[1], parts[2]);
-            }
+            currentLocale = getLocale(loc);
         }
         ResourceBundle.clearCache();
+        loadedBundles.clear();
         messageFormatCache = new HashMap<>();
         Logger.getLogger("Essentials").log(Level.INFO, String.format("Using locale %s", currentLocale.toString()));
 
@@ -133,12 +184,23 @@ public class I18n implements net.ess3.api.II18n {
         } catch (final MissingResourceException ex) {
             localeBundle = NULL_BUNDLE;
         }
+    }
 
-        try {
-            customBundle = ResourceBundle.getBundle(MESSAGES, currentLocale, new FileResClassLoader(I18n.class.getClassLoader(), ess), new UTF8PropertiesControl());
-        } catch (final MissingResourceException ex) {
-            customBundle = NULL_BUNDLE;
+    public static Locale getLocale(final String loc) {
+        if (loc == null || loc.isEmpty()) {
+            return instance.currentLocale;
         }
+        final String[] parts = loc.split("[_.]");
+        if (parts.length == 1) {
+            return new Locale(parts[0]);
+        }
+        if (parts.length == 2) {
+            return new Locale(parts[0], parts[1]);
+        }
+        if (parts.length == 3) {
+            return new Locale(parts[0], parts[1], parts[2]);
+        }
+        return instance.currentLocale;
     }
 
     /**

@@ -75,6 +75,8 @@ public interface ISettings extends IConf {
 
     String getLocale();
 
+    boolean isPerPlayerLocale();
+
     String getNewbieSpawn();
 
     String getNicknamePrefix();

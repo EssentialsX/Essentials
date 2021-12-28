@@ -445,6 +445,13 @@ debug: false
 # For more information, visit http://wiki.ess3.net/wiki/Locale
 #locale: en
 
+# Should EssentialsX use player's language instead of the server's when sending messages?
+# This is useful if you want to use a different language for your server than for your players.
+# For example, if you have your server set to English and a player who speaks French, you can set this to true
+# and EssentialsX will send messages in French to the player and messages in the console as English.
+# If a player's language is not known, the server's language (or one defined above) will be used.
+per-player-locale: false
+
 # Turn off god mode when people leave the server.
 remove-god-on-disconnect: false
 

@@ -1,7 +1,14 @@
 dependencyResolutionManagement {
     repositories {
-        maven("https://hub.spigotmc.org/nexus/content/groups/public/")
-        maven("https://papermc.io/repo/repository/maven-public/")
+        mavenCentral {
+            content {
+                includeGroup("net.kyori")
+                includeGroup("org.apache.logging.log4j")
+            }
+        }
+        maven("https://oss.sonatype.org/content/repositories/snapshots/") {
+            content { includeGroup("net.kyori") }
+        }
         maven("https://jitpack.io") {
             content { includeGroup("com.github.milkbowl") }
         }
@@ -17,10 +24,13 @@ dependencyResolutionManagement {
         maven("https://libraries.minecraft.net/") {
             content { includeGroup("com.mojang") }
         }
-        mavenCentral {
-            content { includeGroup("net.kyori") }
-            content { includeGroup("org.apache.logging.log4j") }
+        maven("https://hub.spigotmc.org/nexus/content/groups/public/") {
+            content {
+                includeGroup("org.spigotmc")
+                includeGroup("net.md_5")
+            }
         }
+        maven("https://papermc.io/repo/repository/maven-public/")
     }
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
 }

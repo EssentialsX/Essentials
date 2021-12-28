@@ -47,6 +47,7 @@ import net.ess3.api.IEssentials;
 import net.ess3.api.IItemDb;
 import net.ess3.api.IJails;
 import net.ess3.api.ISettings;
+import net.ess3.api.TranslatableException;
 import net.ess3.nms.refl.providers.ReflDataWorldInfoProvider;
 import net.ess3.nms.refl.providers.ReflFormattedCommandAliasProvider;
 import net.ess3.nms.refl.providers.ReflKnownCommandsProvider;
@@ -62,6 +63,7 @@ import net.ess3.provider.ItemUnbreakableProvider;
 import net.ess3.provider.KnownCommandsProvider;
 import net.ess3.provider.MaterialTagProvider;
 import net.ess3.provider.PersistentDataProvider;
+import net.ess3.provider.PlayerLocaleProvider;
 import net.ess3.provider.PotionMetaProvider;
 import net.ess3.provider.ProviderListener;
 import net.ess3.provider.SerializationProvider;
@@ -78,11 +80,13 @@ import net.ess3.provider.providers.BukkitSpawnerBlockProvider;
 import net.ess3.provider.providers.FixedHeightWorldInfoProvider;
 import net.ess3.provider.providers.FlatSpawnEggProvider;
 import net.ess3.provider.providers.LegacyItemUnbreakableProvider;
+import net.ess3.provider.providers.LegacyPlayerLocaleProvider;
 import net.ess3.provider.providers.LegacyPotionMetaProvider;
 import net.ess3.provider.providers.LegacySpawnEggProvider;
+import net.ess3.provider.providers.ModernDataWorldInfoProvider;
 import net.ess3.provider.providers.ModernItemUnbreakableProvider;
 import net.ess3.provider.providers.ModernPersistentDataProvider;
-import net.ess3.provider.providers.ModernDataWorldInfoProvider;
+import net.ess3.provider.providers.ModernPlayerLocaleProvider;
 import net.ess3.provider.providers.PaperContainerProvider;
 import net.ess3.provider.providers.PaperKnownCommandsProvider;
 import net.ess3.provider.providers.PaperMaterialTagProvider;
@@ -91,6 +95,7 @@ import net.ess3.provider.providers.PaperSerializationProvider;
 import net.ess3.provider.providers.PaperServerStateProvider;
 import net.essentialsx.api.v2.services.BalanceTop;
 import net.essentialsx.api.v2.services.mail.MailService;
+import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import org.bukkit.Bukkit;
 import org.bukkit.Server;
 import org.bukkit.World;
@@ -136,12 +141,14 @@ import java.util.function.Predicate;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import static com.earth2me.essentials.I18n.tl;
+import static com.earth2me.essentials.I18n.tlLiteral;
+import static com.earth2me.essentials.I18n.tlLocale;
 
 public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
     private static final Logger LOGGER = Logger.getLogger("Essentials");
     private final transient TNTExplodeListener tntListener = new TNTExplodeListener(this);
     private final transient Set<String> vanishedPlayers = new LinkedHashSet<>();
+    private final transient Map<String, IEssentialsCommand> commandMap = new HashMap<>();
     private transient ISettings settings;
     private transient Jails jails;
     private transient Warps warps;
@@ -175,10 +182,11 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
     private transient ReflOnlineModeProvider onlineModeProvider;
     private transient ItemUnbreakableProvider unbreakableProvider;
     private transient WorldInfoProvider worldInfoProvider;
+    private transient PlayerLocaleProvider playerLocaleProvider;
     private transient Kits kits;
     private transient RandomTeleport randomTeleport;
     private transient UpdateChecker updateChecker;
-    private transient Map<String, IEssentialsCommand> commandMap = new HashMap<>();
+    private transient BukkitAudiences bukkitAudience;
 
     static {
         EconomyLayers.init();
@@ -213,7 +221,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
         i18n.updateLocale("en");
         Console.setInstance(this);
 
-        LOGGER.log(Level.INFO, tl("usingTempFolderForTesting"));
+        LOGGER.log(Level.INFO, tlLiteral("usingTempFolderForTesting"));
         LOGGER.log(Level.INFO, dataFolder.toString());
         settings = new Settings(this);
         mail = new MailServiceImpl(this);
@@ -252,32 +260,34 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
 
             Console.setInstance(this);
 
+            bukkitAudience = BukkitAudiences.create(this);
+
             switch (VersionUtil.getServerSupportStatus()) {
                 case NMS_CLEANROOM:
-                    getLogger().severe(tl("serverUnsupportedCleanroom"));
+                    getLogger().severe(tlLiteral("serverUnsupportedCleanroom"));
                     break;
                 case DANGEROUS_FORK:
-                    getLogger().severe(tl("serverUnsupportedDangerous"));
+                    getLogger().severe(tlLiteral("serverUnsupportedDangerous"));
                     break;
                 case UNSTABLE:
-                    getLogger().severe(tl("serverUnsupportedMods"));
+                    getLogger().severe(tlLiteral("serverUnsupportedMods"));
                     break;
                 case OUTDATED:
-                    getLogger().severe(tl("serverUnsupported"));
+                    getLogger().severe(tlLiteral("serverUnsupported"));
                     break;
                 case LIMITED:
-                    getLogger().info(tl("serverUnsupportedLimitedApi"));
+                    getLogger().info(tlLiteral("serverUnsupportedLimitedApi"));
                     break;
             }
 
             if (VersionUtil.getSupportStatusClass() != null) {
-                getLogger().info(tl("serverUnsupportedClass", VersionUtil.getSupportStatusClass()));
+                getLogger().info(tlLiteral("serverUnsupportedClass", VersionUtil.getSupportStatusClass()));
             }
 
             final PluginManager pm = getServer().getPluginManager();
             for (final Plugin plugin : pm.getPlugins()) {
                 if (plugin.getDescription().getName().startsWith("Essentials") && !plugin.getDescription().getVersion().equals(this.getDescription().getVersion()) && !plugin.getDescription().getName().equals("EssentialsAntiCheat")) {
-                    getLogger().warning(tl("versionMismatch", plugin.getDescription().getName()));
+                    getLogger().warning(tlLiteral("versionMismatch", plugin.getDescription().getName()));
                 }
             }
 
@@ -432,6 +442,12 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
                 worldInfoProvider = new FixedHeightWorldInfoProvider();
             }
 
+            if (VersionUtil.getServerBukkitVersion().isHigherThanOrEqualTo(VersionUtil.v1_12_2_R01)) {
+                playerLocaleProvider = new ModernPlayerLocaleProvider();
+            } else {
+                playerLocaleProvider = new LegacyPlayerLocaleProvider();
+            }
+
             execTimer.mark("Init(Providers)");
             reload();
 
@@ -454,8 +470,8 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
 
             updateChecker = new UpdateChecker(this);
             runTaskAsynchronously(() -> {
-                getLogger().log(Level.INFO, tl("versionFetching"));
-                for (String str : updateChecker.getVersionMessages(false, true)) {
+                getLogger().log(Level.INFO, tlLiteral("versionFetching"));
+                for (String str : updateChecker.getVersionMessages(false, true, new CommandSource(Bukkit.getConsoleSender()))) {
                     getLogger().log(getSettings().isUpdateCheckEnabled() ? Level.WARNING : Level.INFO, str);
                 }
             });
@@ -530,13 +546,13 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
     public void onDisable() {
         final boolean stopping = getServerStateProvider().isStopping();
         if (!stopping) {
-            LOGGER.log(Level.SEVERE, tl("serverReloading"));
+            LOGGER.log(Level.SEVERE, tlLiteral("serverReloading"));
         }
         getBackup().setPendingShutdown(true);
         for (final User user : getOnlineUsers()) {
             if (user.isVanished()) {
                 user.setVanished(false);
-                user.sendMessage(tl("unvanishedReload"));
+                user.sendTl("unvanishedReload");
             }
             if (stopping) {
                 user.setLogoutLocation();
@@ -550,7 +566,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
         }
         cleanupOpenInventories();
         if (getBackup().getTaskLock() != null && !getBackup().getTaskLock().isDone()) {
-            LOGGER.log(Level.SEVERE, tl("backupInProgress"));
+            LOGGER.log(Level.SEVERE, tlLiteral("backupInProgress"));
             getBackup().getTaskLock().join();
         }
         if (i18n != null) {
@@ -582,8 +598,8 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
         for (final String commandName : this.getDescription().getCommands().keySet()) {
             final Command command = this.getCommand(commandName);
             if (command != null) {
-                command.setDescription(tl(commandName + "CommandDescription"));
-                command.setUsage(tl(commandName + "CommandUsage"));
+                command.setDescription(tlLiteral(commandName + "CommandDescription"));
+                command.setUsage(tlLiteral(commandName + "CommandUsage"));
             }
         }
 
@@ -654,8 +670,8 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
             try {
                 cmd = loadCommand(commandPath, command.getName(), module, classLoader);
             } catch (final Exception ex) {
-                sender.sendMessage(tl("commandNotLoaded", commandLabel));
-                LOGGER.log(Level.SEVERE, tl("commandNotLoaded", commandLabel), ex);
+                sender.sendTl(this, "commandNotLoaded", commandLabel);
+                LOGGER.log(Level.SEVERE, tlLiteral("commandNotLoaded", commandLabel), ex);
                 return Collections.emptyList();
             }
 
@@ -678,11 +694,11 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
             } catch (final Exception ex) {
                 showError(sender, ex, commandLabel);
                 // Tab completion shouldn't fail
-                LOGGER.log(Level.SEVERE, tl("commandFailed", commandLabel), ex);
+                LOGGER.log(Level.SEVERE, tlLiteral("commandFailed", commandLabel), ex);
                 return Collections.emptyList();
             }
         } catch (final Throwable ex) {
-            LOGGER.log(Level.SEVERE, tl("commandFailed", commandLabel), ex);
+            LOGGER.log(Level.SEVERE, tlLiteral("commandFailed", commandLabel), ex);
             return Collections.emptyList();
         }
     }
@@ -707,7 +723,11 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
                     pc.execute(cSender, commandLabel, args);
                 } catch (final Exception ex) {
                     Bukkit.getLogger().log(Level.SEVERE, ex.getMessage(), ex);
-                    cSender.sendMessage(tl("internalError"));
+                    if (cSender instanceof Player) {
+                        cSender.sendMessage(tlLocale(I18n.getLocale(getPlayerLocaleProvider().getLocale((Player) cSender)), "internalError"));
+                    } else {
+                        cSender.sendMessage(tlLiteral("internalError"));
+                    }
                 }
                 return true;
             }
@@ -753,7 +773,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
                         return newCmd.execute(cSender, commandLabel, args);
                     }
                 }
-                sender.sendMessage(tl("commandDisabled", commandLabel));
+                sender.sendTl(this, "commandDisabled", commandLabel);
                 return true;
             }
 
@@ -761,23 +781,23 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
             try {
                 cmd = loadCommand(commandPath, command.getName(), module, classLoader);
             } catch (final Exception ex) {
-                sender.sendMessage(tl("commandNotLoaded", commandLabel));
-                LOGGER.log(Level.SEVERE, tl("commandNotLoaded", commandLabel), ex);
+                sender.sendTl(this, "commandNotLoaded", commandLabel);
+                LOGGER.log(Level.SEVERE, tlLiteral("commandNotLoaded", commandLabel), ex);
                 return true;
             }
 
             // Check authorization
             if (user != null && !user.isAuthorized(cmd, permissionPrefix)) {
-                LOGGER.log(Level.INFO, tl("deniedAccessCommand", user.getName()));
-                user.sendMessage(tl("noAccessCommand"));
+                LOGGER.log(Level.INFO, tlLiteral("deniedAccessCommand", user.getName()));
+                user.sendTl("noAccessCommand");
                 return true;
             }
 
             if (user != null && user.isJailed() && !user.isAuthorized(cmd, "essentials.jail.allow.")) {
                 if (user.getJailTimeout() > 0) {
-                    user.sendMessage(tl("playerJailedFor", user.getName(), user.getFormattedJailTime()));
+                    user.sendTl("playerJailedFor", user.getName(), user.getFormattedJailTime());
                 } else {
-                    user.sendMessage(tl("jailMessage"));
+                    user.sendTl("jailMessage");
                 }
                 return true;
             }
@@ -794,11 +814,11 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
                 return true;
             } catch (final NotEnoughArgumentsException ex) {
                 if (getSettings().isVerboseCommandUsages() && !cmd.getUsageStrings().isEmpty()) {
-                    sender.sendMessage(tl("commandHelpLine1", commandLabel));
-                    sender.sendMessage(tl("commandHelpLine2", command.getDescription()));
-                    sender.sendMessage(tl("commandHelpLine3"));
+                    sender.sendTl(this, "commandHelpLine1", commandLabel);
+                    sender.sendTl(this, "commandHelpLine2", command.getDescription());
+                    sender.sendTl(this, "commandHelpLine3");
                     for (Map.Entry<String, String> usage : cmd.getUsageStrings().entrySet()) {
-                        sender.sendMessage(tl("commandHelpLineUsage", usage.getKey().replace("<command>", commandLabel), usage.getValue()));
+                        sender.sendTl(this, "commandHelpLineUsage", usage.getKey().replace("<command>", commandLabel), usage.getValue());
                     }
                 } else {
                     sender.sendMessage(command.getDescription());
@@ -819,7 +839,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
                 return true;
             }
         } catch (final Throwable ex) {
-            LOGGER.log(Level.SEVERE, tl("commandFailed", commandLabel), ex);
+            LOGGER.log(Level.SEVERE, tlLiteral("commandFailed", commandLabel), ex);
             return true;
         }
     }
@@ -845,9 +865,13 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
 
     @Override
     public void showError(final CommandSource sender, final Throwable exception, final String commandLabel) {
-        sender.sendMessage(tl("errorWithMessage", exception.getMessage()));
+        if (exception instanceof TranslatableException) {
+            sender.sendTl(this, ((TranslatableException) exception).getTlKey(), ((TranslatableException) exception).getArgs());
+        } else {
+            sender.sendTl(this, "errorWithMessage", exception.getMessage());
+        }
         if (getSettings().isDebug()) {
-            LOGGER.log(Level.INFO, tl("errorCallingCommand", commandLabel), exception);
+            LOGGER.log(Level.INFO, tlLiteral("errorCallingCommand", commandLabel), exception);
         }
     }
 
@@ -1084,12 +1108,12 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
 
     @Override
     public int broadcastMessage(final String message) {
-        return broadcastMessage(null, null, message, true, u -> false);
+        return broadcastMessage(null, null, message, true, null);
     }
 
     @Override
     public int broadcastMessage(final IUser sender, final String message) {
-        return broadcastMessage(sender, null, message, false, u -> false);
+        return broadcastMessage(sender, null, message, false, null);
     }
 
     @Override
@@ -1099,7 +1123,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
 
     @Override
     public int broadcastMessage(final String permission, final String message) {
-        return broadcastMessage(null, permission, message, false, u -> false);
+        return broadcastMessage(null, permission, message, false, null);
     }
 
     private int broadcastMessage(final IUser sender, final String permission, final String message, final boolean keywords, final Predicate<IUser> shouldExclude) {
@@ -1113,7 +1137,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
         for (final Player player : players) {
             final User user = getUser(player);
             if ((permission == null && (sender == null || !user.isIgnoredPlayer(sender))) || (permission != null && user.isAuthorized(permission))) {
-                if (shouldExclude.test(user)) {
+                if (shouldExclude != null && shouldExclude.test(user)) {
                     continue;
                 }
                 if (keywords) {
@@ -1126,6 +1150,40 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
         }
 
         return players.size();
+    }
+
+    @Override
+    public void broadcastTl(String tlKey, Object... args) {
+        broadcastTl(null, tlKey, args);
+    }
+
+    @Override
+    public void broadcastTl(IUser sender, String tlKey, Object... args) {
+        broadcastTl(sender, (Predicate<IUser>) null, tlKey, args);
+    }
+
+    @Override
+    public void broadcastTl(IUser sender, String permission, String tlKey, Object... args) {
+        broadcastTl(sender, u -> !u.isAuthorized(permission), tlKey, args);
+    }
+
+    @Override
+    public void broadcastTl(IUser sender, Predicate<IUser> shouldExclude, String tlKey, Object... args) {
+        if (sender != null && sender.isHidden()) {
+            return;
+        }
+
+        for (final User user : getOnlineUsers()) {
+            if (sender != null && user.isIgnoredPlayer(sender)) {
+                continue;
+            }
+
+            if (shouldExclude != null && shouldExclude.test(user)) {
+                continue;
+            }
+
+            user.sendTl(tlKey, args);
+        }
     }
 
     @Override
@@ -1307,8 +1365,17 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
     }
 
     @Override
+    public PlayerLocaleProvider getPlayerLocaleProvider() {
+        return playerLocaleProvider;
+    }
+
+    @Override
     public PluginCommand getPluginCommand(final String cmd) {
         return this.getCommand(cmd);
+    }
+
+    public BukkitAudiences getBukkitAudience() {
+        return bukkitAudience;
     }
 
     private AbstractItemDb getItemDbFromConfig() {
