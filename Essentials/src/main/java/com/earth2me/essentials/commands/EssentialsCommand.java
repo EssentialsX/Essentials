@@ -1,6 +1,7 @@
 package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.CommandSource;
+import com.earth2me.essentials.I18n;
 import com.earth2me.essentials.IEssentialsModule;
 import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.User;
@@ -14,6 +15,7 @@ import org.bukkit.Server;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.PluginIdentifiableCommand;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.util.StringUtil;
 
@@ -30,7 +32,8 @@ import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static com.earth2me.essentials.I18n.tl;
+import static com.earth2me.essentials.I18n.tlLiteral;
+import static com.earth2me.essentials.I18n.tlLocale;
 
 public abstract class EssentialsCommand implements IEssentialsCommand {
     protected static final Logger logger = Logger.getLogger("Essentials");
@@ -57,7 +60,7 @@ public abstract class EssentialsCommand implements IEssentialsCommand {
             //noinspection InfiniteLoopStatement
             while (true) {
                 final String baseKey = name + "CommandUsage" + i;
-                addUsageString(tl(baseKey), tl(baseKey + "Description"));
+                addUsageString(tlLiteral(baseKey), tlLiteral(baseKey + "Description"));
                 i++;
             }
         } catch (MissingResourceException ignored) {
@@ -68,8 +71,8 @@ public abstract class EssentialsCommand implements IEssentialsCommand {
         final StringBuffer buffer = new StringBuffer();
         final Matcher matcher = ARGUMENT_PATTERN.matcher(usage);
         while (matcher.find()) {
-            final String color = matcher.group(3).equals("<") ? tl("commandArgumentRequired") : tl("commandArgumentOptional");
-            matcher.appendReplacement(buffer, "$1" + color + matcher.group(2).replace("|", tl("commandArgumentOr") + "|" + color) + ChatColor.RESET);
+            final String color = matcher.group(3).equals("<") ? tlLiteral("commandArgumentRequired") : tlLiteral("commandArgumentOptional");
+            matcher.appendReplacement(buffer, "$1" + color + matcher.group(2).replace("|", tlLiteral("commandArgumentOr") + "|" + color) + ChatColor.RESET);
         }
         matcher.appendTail(buffer);
         usageStrings.put(buffer.toString(), description);
@@ -183,7 +186,7 @@ public abstract class EssentialsCommand implements IEssentialsCommand {
     }
 
     protected void run(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception {
-        throw new Exception(tl("onlyPlayers", commandLabel));
+        throw new Exception(tlLiteral("onlyPlayers", commandLabel));
     }
 
     @Override
@@ -332,9 +335,13 @@ public abstract class EssentialsCommand implements IEssentialsCommand {
 
     @Override
     public void showError(final CommandSender sender, final Throwable throwable, final String commandLabel) {
-        sender.sendMessage(tl("errorWithMessage", throwable.getMessage()));
+        if (sender instanceof Player) {
+            sender.sendMessage(tlLocale(I18n.getLocale(ess.getPlayerLocaleProvider().getLocale((Player) sender)), "errorWithMessage", throwable.getMessage()));
+        } else {
+            sender.sendMessage(tlLiteral("errorWithMessage", throwable.getMessage()));
+        }
         if (ess.getSettings().isDebug()) {
-            logger.log(Level.INFO, tl("errorCallingCommand", commandLabel), throwable);
+            logger.log(Level.INFO, tlLiteral("errorCallingCommand", commandLabel), throwable);
             throwable.printStackTrace();
         }
     }

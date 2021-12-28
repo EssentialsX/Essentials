@@ -46,7 +46,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import static com.earth2me.essentials.I18n.tl;
+import static com.earth2me.essentials.I18n.tlLiteral;
 
 public class EssentialsConfiguration {
     protected static final Logger LOGGER = Logger.getLogger("Essentials");
@@ -342,7 +342,7 @@ public class EssentialsConfiguration {
 
         if (configFile.getParentFile() != null && !configFile.getParentFile().exists()) {
             if (!configFile.getParentFile().mkdirs()) {
-                LOGGER.log(Level.SEVERE, tl("failedToCreateConfig", configFile.toString()));
+                LOGGER.log(Level.SEVERE, tlLiteral("failedToCreateConfig", configFile.toString()));
                 return;
             }
         }
@@ -354,10 +354,10 @@ public class EssentialsConfiguration {
                 convertAltFile();
             } else if (templateName != null) {
                 try (final InputStream is = resourceClass.getResourceAsStream(templateName)) {
-                    LOGGER.log(Level.INFO, tl("creatingConfigFromTemplate", configFile.toString()));
+                    LOGGER.log(Level.INFO, tlLiteral("creatingConfigFromTemplate", configFile.toString()));
                     Files.copy(is, configFile.toPath());
                 } catch (IOException e) {
-                    LOGGER.log(Level.SEVERE, tl("failedToWriteConfig", configFile.toString()), e);
+                    LOGGER.log(Level.SEVERE, tlLiteral("failedToWriteConfig", configFile.toString()), e);
                 }
             }
         }

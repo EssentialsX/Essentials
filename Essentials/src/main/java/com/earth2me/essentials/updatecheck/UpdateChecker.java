@@ -1,5 +1,6 @@
 package com.earth2me.essentials.updatecheck;
 
+import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.Essentials;
 import com.google.common.base.Charsets;
 import com.google.gson.Gson;
@@ -16,8 +17,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
-
-import static com.earth2me.essentials.I18n.tl;
 
 public final class UpdateChecker {
     private static final String REPO = "EssentialsX/Essentials";
@@ -181,31 +180,31 @@ public final class UpdateChecker {
         }
     }
 
-    public String[] getVersionMessages(final boolean sendLatestMessage, final boolean verboseErrors) {
+    public String[] getVersionMessages(final boolean sendLatestMessage, final boolean verboseErrors, final CommandSource source) {
         if (!ess.getSettings().isUpdateCheckEnabled()) {
-            return new String[] {tl("versionCheckDisabled")};
+            return new String[] {source.tl(ess, "versionCheckDisabled")};
         }
 
         if (this.isDevBuild()) {
             final RemoteVersion latestDev = this.fetchLatestDev().join();
             switch (latestDev.getBranchStatus()) {
                 case IDENTICAL: {
-                    return sendLatestMessage ? new String[] {tl("versionDevLatest")} : new String[] {};
+                    return sendLatestMessage ? new String[] {source.tl(ess, "versionDevLatest")} : new String[] {};
                 }
                 case BEHIND: {
-                    return new String[] {tl("versionDevBehind", latestDev.getDistance()),
-                            tl("versionReleaseNewLink", "https://essentialsx.net/downloads.html")};
+                    return new String[] {source.tl(ess, "versionDevBehind", latestDev.getDistance()),
+                            source.tl(ess, "versionReleaseNewLink", "https://essentialsx.net/downloads.html")};
                 }
                 case AHEAD:
                 case DIVERGED: {
-                    return new String[] {tl(latestDev.getDistance() == 0 ? "versionDevDivergedLatest" : "versionDevDiverged", latestDev.getDistance()),
-                            tl("versionDevDivergedBranch", this.getVersionBranch()) };
+                    return new String[] {source.tl(ess, latestDev.getDistance() == 0 ? "versionDevDivergedLatest" : "versionDevDiverged", latestDev.getDistance()),
+                            source.tl(ess, "versionDevDivergedBranch", this.getVersionBranch()) };
                 }
                 case UNKNOWN: {
-                    return verboseErrors ? new String[] {tl("versionCustom", this.getBuildInfo())} : new String[] {};
+                    return verboseErrors ? new String[] {source.tl(ess, "versionCustom", this.getBuildInfo())} : new String[] {};
                 }
                 case ERROR: {
-                    return new String[] {tl(verboseErrors ? "versionError" : "versionErrorPlayer", this.getBuildInfo())};
+                    return new String[] {source.tl(ess, verboseErrors ? "versionError" : "versionErrorPlayer", this.getBuildInfo())};
                 }
                 default: {
                     return new String[] {};
@@ -215,19 +214,19 @@ public final class UpdateChecker {
             final RemoteVersion latestRelease = this.fetchLatestRelease().join();
             switch (latestRelease.getBranchStatus()) {
                 case IDENTICAL: {
-                    return sendLatestMessage ? new String[] {tl("versionReleaseLatest")} : new String[] {};
+                    return sendLatestMessage ? new String[] {source.tl(ess, "versionReleaseLatest")} : new String[] {};
                 }
                 case BEHIND: {
-                    return new String[] {tl("versionReleaseNew", this.getLatestRelease()),
-                            tl("versionReleaseNewLink", "https://essentialsx.net/downloads.html?branch=stable")};
+                    return new String[] {source.tl(ess, "versionReleaseNew", this.getLatestRelease()),
+                            source.tl(ess, "versionReleaseNewLink", "https://essentialsx.net/downloads.html?branch=stable")};
                 }
                 case DIVERGED: //WhatChamp
                 case AHEAD: //monkaW?
                 case UNKNOWN: {
-                    return verboseErrors ? new String[] {tl("versionCustom", this.getBuildInfo())} : new String[] {};
+                    return verboseErrors ? new String[] {source.tl(ess, "versionCustom", this.getBuildInfo())} : new String[] {};
                 }
                 case ERROR: {
-                    return new String[] {tl(verboseErrors ? "versionError" : "versionErrorPlayer", this.getBuildInfo())};
+                    return new String[] {source.tl(ess, verboseErrors ? "versionError" : "versionErrorPlayer", this.getBuildInfo())};
                 }
                 default: {
                     return new String[] {};

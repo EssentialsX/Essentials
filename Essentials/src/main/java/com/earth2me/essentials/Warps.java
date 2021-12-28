@@ -5,6 +5,7 @@ import com.earth2me.essentials.config.EssentialsConfiguration;
 import com.earth2me.essentials.utils.StringUtil;
 import net.ess3.api.InvalidNameException;
 import net.ess3.api.InvalidWorldException;
+import net.ess3.api.TranslatableException;
 import org.bukkit.Location;
 
 import java.io.File;
@@ -18,7 +19,7 @@ import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import static com.earth2me.essentials.I18n.tl;
+import static com.earth2me.essentials.I18n.tlLiteral;
 
 public class Warps implements IConf, net.ess3.api.IWarps {
     private static final Logger logger = Logger.getLogger("Essentials");
@@ -79,7 +80,7 @@ public class Warps implements IConf, net.ess3.api.IWarps {
         if (conf == null) {
             final File confFile = new File(warpsFolder, filename + ".yml");
             if (confFile.exists()) {
-                throw new Exception(tl("similarWarpExist"));
+                throw new Exception(user == null ? tlLiteral("similarWarpExist") : user.playerTl("similarWarpExist"));
             }
             conf = new EssentialsConfiguration(confFile);
             conf.load();
@@ -111,10 +112,10 @@ public class Warps implements IConf, net.ess3.api.IWarps {
     public void removeWarp(final String name) throws Exception {
         final EssentialsConfiguration conf = warpPoints.get(new StringIgnoreCase(name));
         if (conf == null) {
-            throw new Exception(tl("warpNotExist"));
+            throw new TranslatableException("warpNotExist");
         }
         if (!conf.getFile().delete()) {
-            throw new Exception(tl("warpDeleteError"));
+            throw new TranslatableException("warpDeleteError");
         }
         warpPoints.remove(new StringIgnoreCase(name));
     }
@@ -135,7 +136,7 @@ public class Warps implements IConf, net.ess3.api.IWarps {
                             warpPoints.put(new StringIgnoreCase(name), conf);
                         }
                     } catch (final Exception ex) {
-                        logger.log(Level.WARNING, tl("loadWarpError", filename), ex);
+                        logger.log(Level.WARNING, tlLiteral("loadWarpError", filename), ex);
                     }
                 }
             }

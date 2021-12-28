@@ -37,8 +37,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
 
-import static com.earth2me.essentials.I18n.tl;
-
 public abstract class AbstractItemDb implements IConf, net.ess3.api.IItemDb {
 
     protected final IEssentials ess;
@@ -173,7 +171,7 @@ public abstract class AbstractItemDb implements IConf, net.ess3.api.IItemDb {
         }
 
         if (is.isEmpty() || is.get(0).getType() == Material.AIR) {
-            throw new Exception(tl("itemSellAir"));
+            throw new Exception(user.playerTl("itemSellAir"));
         }
 
         return is;

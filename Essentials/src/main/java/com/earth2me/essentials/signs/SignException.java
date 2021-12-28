@@ -1,11 +1,14 @@
 package com.earth2me.essentials.signs;
 
-public class SignException extends Exception {
-    public SignException(final String message) {
-        super(message);
+import net.ess3.api.TranslatableException;
+
+public class SignException extends TranslatableException {
+    public SignException(final String message, final Object... args) {
+        super(message, args);
     }
 
-    public SignException(final String message, final Throwable throwable) {
-        super(message, throwable);
+    public SignException(final Throwable cause, final String message, final Object... args) {
+        super(message, args);
+        setCause(cause);
     }
 }

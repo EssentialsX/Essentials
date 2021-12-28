@@ -1,12 +1,11 @@
 package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.User;
+import net.ess3.api.TranslatableException;
 import org.bukkit.Material;
 import org.bukkit.Server;
 import org.bukkit.block.Block;
 import org.bukkit.event.block.BlockBreakEvent;
-
-import static com.earth2me.essentials.I18n.tl;
 
 public class Commandbreak extends EssentialsCommand {
     public Commandbreak() {
@@ -22,7 +21,7 @@ public class Commandbreak extends EssentialsCommand {
             throw new NoChargeException();
         }
         if (block.getType() == Material.BEDROCK && !user.isAuthorized("essentials.break.bedrock")) {
-            throw new Exception(tl("noBreakBedrock"));
+            throw new TranslatableException("noBreakBedrock");
         }
         //final List<ItemStack> list = (List<ItemStack>)block.getDrops();
         //final BlockBreakEvent event = new BlockBreakEvent(block, user.getBase(), list);

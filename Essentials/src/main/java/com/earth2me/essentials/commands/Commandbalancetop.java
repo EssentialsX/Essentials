@@ -17,7 +17,7 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
-import static com.earth2me.essentials.I18n.tl;
+import static com.earth2me.essentials.I18n.tlLiteral;
 
 public class Commandbalancetop extends EssentialsCommand {
     public static final int MINUSERS = 50;
@@ -32,7 +32,7 @@ public class Commandbalancetop extends EssentialsCommand {
         final Calendar cal = Calendar.getInstance();
         cal.setTimeInMillis(ess.getBalanceTop().getCacheAge());
         final DateFormat format = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT);
-        sender.sendMessage(tl("balanceTop", format.format(cal.getTime())));
+        sender.sendTl(ess, "balanceTop", format.format(cal.getTime()));
         new TextPager(cache).showPage(Integer.toString(page), null, "balancetop", sender);
     }
 
@@ -57,7 +57,7 @@ public class Commandbalancetop extends EssentialsCommand {
 
         // If there are less than 50 users in our usermap, there is no need to display a warning as these calculations should be done quickly
         if (ess.getUserMap().getUniqueUsers() > MINUSERS) {
-            sender.sendMessage(tl("orderBalances", ess.getUserMap().getUniqueUsers()));
+            sender.sendTl(ess, "orderBalances", ess.getUserMap().getUniqueUsers());
         }
 
         ess.runTaskAsynchronously(new Viewer(sender, page, force));
@@ -101,11 +101,11 @@ public class Commandbalancetop extends EssentialsCommand {
             future.thenRun(() -> {
                 if (fresh) {
                     final SimpleTextInput newCache = new SimpleTextInput();
-                    newCache.getLines().add(tl("serverTotal", NumberUtil.displayCurrency(ess.getBalanceTop().getBalanceTopTotal(), ess)));
+                    newCache.getLines().add(tlLiteral("serverTotal", NumberUtil.displayCurrency(ess.getBalanceTop().getBalanceTopTotal(), ess)));
                     int pos = 1;
                     for (final Map.Entry<UUID, BalanceTop.Entry> entry : ess.getBalanceTop().getBalanceTopCache().entrySet()) {
                         if (ess.getSettings().showZeroBaltop() || entry.getValue().getBalance().compareTo(BigDecimal.ZERO) > 0) {
-                            newCache.getLines().add(tl("balanceTopLine", pos, entry.getValue().getDisplayName(), NumberUtil.displayCurrency(entry.getValue().getBalance(), ess)));
+                            newCache.getLines().add(tlLiteral("balanceTopLine", pos, entry.getValue().getDisplayName(), NumberUtil.displayCurrency(entry.getValue().getBalance(), ess)));
                         }
                         pos++;
                     }

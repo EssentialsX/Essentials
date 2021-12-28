@@ -21,7 +21,7 @@ public class SignHeal extends EssentialsSign {
     @Override
     protected boolean onSignInteract(final ISign sign, final User player, final String username, final IEssentials ess) throws SignException, ChargeException {
         if (player.getBase().getHealth() == 0) {
-            throw new SignException(tl("healDead"));
+            throw new SignException("healDead");
         }
         final Trade charge = getTrade(sign, 1, ess);
         charge.isAffordableFor(player);

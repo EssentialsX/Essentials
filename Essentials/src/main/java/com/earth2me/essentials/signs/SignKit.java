@@ -9,8 +9,6 @@ import net.ess3.api.IEssentials;
 
 import java.util.Locale;
 
-import static com.earth2me.essentials.I18n.tl;
-
 public class SignKit extends EssentialsSign {
     public SignKit() {
         super("Kit");
@@ -29,7 +27,7 @@ public class SignKit extends EssentialsSign {
             try {
                 ess.getKits().getKit(kitName);
             } catch (final Exception ex) {
-                throw new SignException(ex.getMessage(), ex);
+                throw new SignException(ex, ex.getMessage());
             }
             final String group = sign.getLine(2);
             if ("Everyone".equalsIgnoreCase(group) || "Everybody".equalsIgnoreCase(group)) {
@@ -57,14 +55,14 @@ public class SignKit extends EssentialsSign {
             } catch (final NoChargeException ex) {
                 return false;
             } catch (final Exception ex) {
-                throw new SignException(ex.getMessage(), ex);
+                throw new SignException(ex, ex.getMessage());
             }
             return true;
         } else {
             if (group.isEmpty()) {
-                throw new SignException(tl("noKitPermission", "essentials.kits." + kitName));
+                throw new SignException("noKitPermission", "essentials.kits." + kitName);
             } else {
-                throw new SignException(tl("noKitGroup", group));
+                throw new SignException("noKitGroup", group);
             }
         }
     }

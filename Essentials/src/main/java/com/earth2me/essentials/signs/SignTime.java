@@ -29,7 +29,7 @@ public class SignTime extends EssentialsSign {
             sign.setLine(1, "§2Night");
             return true;
         }
-        throw new SignException(tl("onlyDayNight"));
+        throw new SignException("onlyDayNight");
     }
 
     @Override
@@ -56,6 +56,6 @@ public class SignTime extends EssentialsSign {
             Trade.log("Sign", "TimeNight", "Interact", username, null, username, charge, sign.getBlock().getLocation(), player.getMoney(), ess);
             return true;
         }
-        throw new SignException(tl("onlyDayNight"));
+        throw new SignException("onlyDayNight");
     }
 }

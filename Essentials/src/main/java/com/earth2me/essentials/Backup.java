@@ -12,7 +12,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import static com.earth2me.essentials.I18n.tl;
+import static com.earth2me.essentials.I18n.tlLiteral;
 
 public class Backup implements Runnable {
     private static final Logger LOGGER = Logger.getLogger("Essentials");
@@ -81,7 +81,7 @@ public class Backup implements Runnable {
             taskLock.complete(new Object());
             return;
         }
-        LOGGER.log(Level.INFO, tl("backupStarted"));
+        LOGGER.log(Level.INFO, tlLiteral("backupStarted"));
         final CommandSender cs = server.getConsoleSender();
         server.dispatchCommand(cs, "save-all");
         server.dispatchCommand(cs, "save-off");
@@ -120,7 +120,7 @@ public class Backup implements Runnable {
                         }
                         active = false;
                         taskLock.complete(new Object());
-                        LOGGER.log(Level.INFO, tl("backupFinished"));
+                        LOGGER.log(Level.INFO, tlLiteral("backupFinished"));
                     }
                 }
 

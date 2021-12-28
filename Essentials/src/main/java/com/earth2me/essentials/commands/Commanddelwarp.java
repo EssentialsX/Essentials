@@ -1,6 +1,7 @@
 package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.CommandSource;
+import net.ess3.api.TranslatableException;
 import net.essentialsx.api.v2.events.WarpModifyEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -9,8 +10,6 @@ import org.bukkit.Server;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
-import static com.earth2me.essentials.I18n.tl;
 
 public class Commanddelwarp extends EssentialsCommand {
     public Commanddelwarp() {
@@ -37,9 +36,9 @@ public class Commanddelwarp extends EssentialsCommand {
                 return;
             }
             ess.getWarps().removeWarp(args[0]);
-            sender.sendMessage(tl("deleteWarp", args[0]));
+            sender.sendTl(ess, "deleteWarp", args[0]);
         } else {
-            throw new Exception(tl("warpNotExist"));
+            throw new TranslatableException("warpNotExist");
         }
     }
 

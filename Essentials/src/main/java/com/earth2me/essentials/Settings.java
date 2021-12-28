@@ -44,7 +44,7 @@ import java.util.logging.Logger;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
-import static com.earth2me.essentials.I18n.tl;
+import static com.earth2me.essentials.I18n.tlLiteral;
 
 public class Settings implements net.ess3.api.ISettings {
     private static final Logger logger = Logger.getLogger("Essentials");
@@ -796,7 +796,7 @@ public class Settings implements net.ess3.api.ISettings {
                 final ItemStack iStack = itemDb.get(itemName);
                 epItemSpwn.add(iStack.getType());
             } catch (final Exception ex) {
-                logger.log(Level.SEVERE, tl("unknownItemInList", itemName, "item-spawn-blacklist"), ex);
+                logger.log(Level.SEVERE, tlLiteral("unknownItemInList", itemName, "item-spawn-blacklist"), ex);
             }
         }
         return epItemSpwn;
@@ -824,7 +824,7 @@ public class Settings implements net.ess3.api.ISettings {
             try {
                 newSigns.add(Signs.valueOf(signName).getSign());
             } catch (final Exception ex) {
-                logger.log(Level.SEVERE, tl("unknownItemInList", signName, "enabledSigns"));
+                logger.log(Level.SEVERE, tlLiteral("unknownItemInList", signName, "enabledSigns"));
                 continue;
             }
             signsEnabled = true;
@@ -868,6 +868,11 @@ public class Settings implements net.ess3.api.ISettings {
     @Override
     public String getLocale() {
         return config.getString("locale", "");
+    }
+
+    @Override
+    public boolean isPerPlayerLocale() {
+        return config.getBoolean("per-player-locale", false);
     }
 
     private String currencySymbol = "$";
@@ -938,7 +943,7 @@ public class Settings implements net.ess3.api.ISettings {
             }
 
             if (mat == null) {
-                logger.log(Level.SEVERE, tl("unknownItemInList", itemName, configName));
+                logger.log(Level.SEVERE, tlLiteral("unknownItemInList", itemName, configName));
             } else {
                 list.add(mat);
             }
@@ -1675,7 +1680,7 @@ public class Settings implements net.ess3.api.ISettings {
             try {
                 newSigns.add(Signs.valueOf(signName).getSign());
             } catch (final Exception ex) {
-                logger.log(Level.SEVERE, tl("unknownItemInList", signName, "unprotected-sign-names"));
+                logger.log(Level.SEVERE, tlLiteral("unknownItemInList", signName, "unprotected-sign-names"));
             }
         }
         return newSigns;

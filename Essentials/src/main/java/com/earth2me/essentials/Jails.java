@@ -5,6 +5,7 @@ import com.earth2me.essentials.config.EssentialsConfiguration;
 import com.earth2me.essentials.config.entities.LazyLocation;
 import net.ess3.api.IEssentials;
 import net.ess3.api.IUser;
+import net.ess3.api.TranslatableException;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
@@ -36,7 +37,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import static com.earth2me.essentials.I18n.tl;
+import static com.earth2me.essentials.I18n.tlLiteral;
 
 public class Jails implements net.ess3.api.IJails {
     private static final transient Logger LOGGER = Logger.getLogger("Essentials");
@@ -104,17 +105,17 @@ public class Jails implements net.ess3.api.IJails {
     @Override
     public Location getJail(String jailName) throws Exception {
         if (jailName == null) {
-            throw new Exception(tl("jailNotExist"));
+            throw new TranslatableException("jailNotExist");
         }
 
         jailName = jailName.toLowerCase(Locale.ENGLISH);
         synchronized (jails) {
             if (!jails.containsKey(jailName)) {
-                throw new Exception(tl("jailNotExist"));
+                throw new TranslatableException("jailNotExist");
             }
             final Location location = jails.get(jailName).location();
             if (location == null) {
-                throw new Exception(tl("jailWorldNotExist"));
+                throw new TranslatableException("jailWorldNotExist");
             }
             return location;
         }
@@ -268,9 +269,9 @@ public class Jails implements net.ess3.api.IJails {
                 event.setRespawnLocation(getJail(user.getJail()));
             } catch (final Exception ex) {
                 if (ess.getSettings().isDebug()) {
-                    LOGGER.log(Level.INFO, tl("returnPlayerToJailError", user.getName(), ex.getLocalizedMessage()), ex);
+                    LOGGER.log(Level.INFO, tlLiteral("returnPlayerToJailError", user.getName(), ex.getLocalizedMessage()), ex);
                 } else {
-                    LOGGER.log(Level.INFO, tl("returnPlayerToJailError", user.getName(), ex.getLocalizedMessage()));
+                    LOGGER.log(Level.INFO, tlLiteral("returnPlayerToJailError", user.getName(), ex.getLocalizedMessage()));
                 }
             }
         }
@@ -286,12 +287,12 @@ public class Jails implements net.ess3.api.IJails {
                 event.setTo(getJail(user.getJail()));
             } catch (final Exception ex) {
                 if (ess.getSettings().isDebug()) {
-                    LOGGER.log(Level.INFO, tl("returnPlayerToJailError", user.getName(), ex.getLocalizedMessage()), ex);
+                    LOGGER.log(Level.INFO, tlLiteral("returnPlayerToJailError", user.getName(), ex.getLocalizedMessage()), ex);
                 } else {
-                    LOGGER.log(Level.INFO, tl("returnPlayerToJailError", user.getName(), ex.getLocalizedMessage()));
+                    LOGGER.log(Level.INFO, tlLiteral("returnPlayerToJailError", user.getName(), ex.getLocalizedMessage()));
                 }
             }
-            user.sendMessage(tl("jailMessage"));
+            user.sendTl("jailMessage");
         }
 
         @EventHandler(priority = EventPriority.HIGHEST)
@@ -306,13 +307,13 @@ public class Jails implements net.ess3.api.IJails {
             final CompletableFuture<Boolean> future = new CompletableFuture<>();
             future.exceptionally(ex -> {
                 if (ess.getSettings().isDebug()) {
-                    LOGGER.log(Level.INFO, tl("returnPlayerToJailError", user.getName(), ex.getLocalizedMessage()), ex);
+                    LOGGER.log(Level.INFO, tlLiteral("returnPlayerToJailError", user.getName(), ex.getLocalizedMessage()), ex);
                 } else {
-                    LOGGER.log(Level.INFO, tl("returnPlayerToJailError", user.getName(), ex.getLocalizedMessage()));
+                    LOGGER.log(Level.INFO, tlLiteral("returnPlayerToJailError", user.getName(), ex.getLocalizedMessage()));
                 }
                 return false;
             });
-            future.thenAccept(success -> user.sendMessage(tl("jailMessage")));
+            future.thenAccept(success -> user.sendTl("jailMessage"));
 
             try {
                 sendToJail(user, user.getJail(), future);
