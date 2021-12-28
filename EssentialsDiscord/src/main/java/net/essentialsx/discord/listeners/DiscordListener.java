@@ -8,12 +8,17 @@ import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.ess3.api.IUser;
+import net.essentialsx.api.v2.events.discord.DiscordRelayEvent;
 import net.essentialsx.discord.JDADiscordService;
+import net.essentialsx.discord.interactions.InteractionChannelImpl;
+import net.essentialsx.discord.interactions.InteractionMemberImpl;
 import net.essentialsx.discord.util.DiscordUtil;
 import net.essentialsx.discord.util.MessageUtil;
 import org.apache.commons.lang.StringUtils;
+import org.bukkit.Bukkit;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -88,7 +93,7 @@ public class DiscordListener extends ListenerAdapter {
             return;
         }
 
-        final String formattedMessage = EmojiParser.parseToAliases(MessageUtil.formatMessage(plugin.getPlugin().getSettings().getDiscordToMcFormat(),
+        String formattedMessage = EmojiParser.parseToAliases(MessageUtil.formatMessage(plugin.getPlugin().getSettings().getDiscordToMcFormat(),
                 event.getChannel().getName(), user.getName(), user.getDiscriminator(), user.getAsTag(),
                 effectiveName, DiscordUtil.getRoleColorFormat(member), finalMessage, DiscordUtil.getRoleFormat(member)), EmojiParser.FitzpatrickAction.REMOVE);
 
@@ -97,6 +102,18 @@ public class DiscordListener extends ListenerAdapter {
                 logger.info(formattedMessage);
                 break;
             }
+        }
+
+        // Do not create the event specific objects if there are no listeners
+        if (DiscordRelayEvent.getHandlerList().getRegisteredListeners().length != 0) {
+            final DiscordRelayEvent relayEvent = new DiscordRelayEvent(
+                    new InteractionMemberImpl(member), new InteractionChannelImpl(event.getChannel()),
+                    Collections.unmodifiableList(keys), event.getMessage().getContentRaw(), formattedMessage);
+            Bukkit.getPluginManager().callEvent(relayEvent);
+            if (relayEvent.isCancelled()) {
+                return;
+            }
+            formattedMessage = relayEvent.getFormattedMessage();
         }
 
         for (IUser essUser : plugin.getPlugin().getEss().getOnlineUsers()) {
