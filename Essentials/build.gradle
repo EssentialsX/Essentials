@@ -13,11 +13,9 @@ dependencies {
     implementation 'org.spongepowered:configurate-yaml:4.1.2'
     implementation 'org.checkerframework:checker-qual:3.21.0'
 
-    implementation 'net.kyori:adventure-api:4.9.3'
+    implementation 'net.kyori:adventure-api:4.10.0-SNAPSHOT'
     implementation 'net.kyori:adventure-platform-bukkit:4.0.1'
-    implementation('net.kyori:adventure-text-minimessage:4.10.0-SNAPSHOT') {
-        setTransitive(false)
-    }
+    implementation('net.kyori:adventure-text-minimessage:4.10.0-SNAPSHOT')
 
     // Providers
     api project(':providers:BaseProviders')
@@ -53,6 +51,7 @@ shadowJar {
         include (dependency('net.kyori:adventure-nbt'))
         include (dependency('net.kyori:adventure-text-serializer-bungeecord'))
         include (dependency('net.kyori:adventure-text-serializer-gson'))
+        include (dependency('net.kyori:adventure-text-serializer-gson-legacy-impl'))
         include (dependency('net.kyori:adventure-text-serializer-legacy'))
         include (dependency('net.kyori:adventure-text-minimessage'))
         include (project(':providers:BaseProviders'))

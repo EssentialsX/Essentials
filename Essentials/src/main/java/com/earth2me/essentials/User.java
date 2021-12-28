@@ -1029,6 +1029,10 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
         System.out.println("AYO " + AdventureUtil.LEGACY_SERIALIZER.serialize(component.asComponent()));
         System.out.println("DUMBASS FUCKING PLAYER " + base.getClass().getName());
         ess.getBukkitAudience().player(base).sendMessage(component);
+        System.out.println("hello");
+        ess.getBukkitAudience().console().sendMessage(component);
+        ess.getBukkitAudience().console().sendMessage(Component.text("chatting"));
+        ess.getBukkitAudience().player(base).sendMessage(Component.text("chatting"));
     }
 
     @Override
