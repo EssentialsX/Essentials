@@ -45,9 +45,9 @@ public class I18n implements net.ess3.api.II18n {
     private final transient ResourceBundle defaultBundle;
     private final transient IEssentials ess;
     private transient Locale currentLocale = defaultLocale;
-    private transient Map<Locale, ResourceBundle> loadedBundles = new HashMap<>();
+    private final transient Map<Locale, ResourceBundle> loadedBundles = new HashMap<>();
     private transient ResourceBundle localeBundle;
-    private transient Map<String, MessageFormat> messageFormatCache = new HashMap<>();
+    private final transient Map<Locale, Map<String, MessageFormat>> messageFormatCache = new HashMap<>();
 
     public I18n(final IEssentials ess) {
         this.ess = ess;
@@ -138,7 +138,7 @@ public class I18n implements net.ess3.api.II18n {
         String format = translate(locale, string);
         final boolean miniMessage = format.startsWith("MM||");
 
-        MessageFormat messageFormat = messageFormatCache.get(format);
+        MessageFormat messageFormat = messageFormatCache.computeIfAbsent(locale, l -> new HashMap<>()).get(format);
         if (messageFormat == null) {
             try {
                 messageFormat = new MessageFormat(format);
@@ -147,7 +147,7 @@ public class I18n implements net.ess3.api.II18n {
                 format = format.replaceAll("\\{(\\D*?)}", "\\[$1\\]");
                 messageFormat = new MessageFormat(format);
             }
-            messageFormatCache.put(format, messageFormat);
+            messageFormatCache.get(locale).put(format, messageFormat);
         }
 
         final Object[] processedArgs;
@@ -176,7 +176,7 @@ public class I18n implements net.ess3.api.II18n {
         }
         ResourceBundle.clearCache();
         loadedBundles.clear();
-        messageFormatCache = new HashMap<>();
+        messageFormatCache.clear();
         Logger.getLogger("Essentials").log(Level.INFO, String.format("Using locale %s", currentLocale.toString()));
 
         try {
@@ -269,6 +269,14 @@ public class I18n implements net.ess3.api.II18n {
                 }
             }
             return bundle;
+        }
+
+        @Override
+        public Locale getFallbackLocale(String baseName, Locale locale) {
+            if (baseName == null || locale == null) {
+                throw new NullPointerException();
+            }
+            return null;
         }
     }
 }
