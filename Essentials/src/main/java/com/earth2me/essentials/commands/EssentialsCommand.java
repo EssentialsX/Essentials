@@ -1,7 +1,6 @@
 package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.CommandSource;
-import com.earth2me.essentials.I18n;
 import com.earth2me.essentials.IEssentialsModule;
 import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.User;
@@ -15,7 +14,6 @@ import org.bukkit.Server;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.PluginIdentifiableCommand;
-import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.util.StringUtil;
 
@@ -27,13 +25,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.concurrent.CompletableFuture;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static com.earth2me.essentials.I18n.tlLiteral;
-import static com.earth2me.essentials.I18n.tlLocale;
 
 public abstract class EssentialsCommand implements IEssentialsCommand {
     protected static final Logger logger = Logger.getLogger("Essentials");
@@ -335,15 +331,7 @@ public abstract class EssentialsCommand implements IEssentialsCommand {
 
     @Override
     public void showError(final CommandSender sender, final Throwable throwable, final String commandLabel) {
-        if (sender instanceof Player) {
-            sender.sendMessage(tlLocale(I18n.getLocale(ess.getPlayerLocaleProvider().getLocale((Player) sender)), "errorWithMessage", throwable.getMessage()));
-        } else {
-            sender.sendMessage(tlLiteral("errorWithMessage", throwable.getMessage()));
-        }
-        if (ess.getSettings().isDebug()) {
-            logger.log(Level.INFO, tlLiteral("errorCallingCommand", commandLabel), throwable);
-            throwable.printStackTrace();
-        }
+        ess.showError(new CommandSource(sender), throwable, commandLabel);
     }
 
     public CompletableFuture<Boolean> getNewExceptionFuture(final CommandSource sender, final String commandLabel) {
