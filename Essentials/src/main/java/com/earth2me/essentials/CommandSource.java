@@ -35,7 +35,7 @@ public class CommandSource {
         }
 
         final String translation = tlLiteral(tlKey, args);
-        if (!translation.startsWith("MM||")) {
+        if (!translation.startsWith(I18n.MINI_MESSAGE_PREFIX)) {
             sendMessage(translation);
             return;
         }
@@ -56,7 +56,7 @@ public class CommandSource {
             return getUser(ess).tlComponent(tlKey, args);
         }
         final String translation = tlLiteral(tlKey, args);
-        if (!translation.startsWith("MM||")) {
+        if (!translation.startsWith(I18n.MINI_MESSAGE_PREFIX)) {
             return AdventureUtil.toComponent(translation);
         }
         return MiniMessage.miniMessage().parse(translation.substring(4));

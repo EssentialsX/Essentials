@@ -30,6 +30,7 @@ import java.util.regex.Pattern;
 
 public class I18n implements net.ess3.api.II18n {
     private static final String MESSAGES = "messages";
+    public static final String MINI_MESSAGE_PREFIX = "MM||";
     private static final Pattern NODOUBLEMARK = Pattern.compile("''");
     private static final ResourceBundle NULL_BUNDLE = new ResourceBundle() {
         @SuppressWarnings("NullableProblems")
@@ -137,7 +138,7 @@ public class I18n implements net.ess3.api.II18n {
 
     public String format(final Locale locale, final String string, final Object... objects) {
         String format = translate(locale, string);
-        final boolean miniMessage = format.startsWith("MM||");
+        final boolean miniMessage = format.startsWith(MINI_MESSAGE_PREFIX);
 
         MessageFormat messageFormat = messageFormatCache.computeIfAbsent(locale, l -> new HashMap<>()).get(format);
         if (messageFormat == null) {
