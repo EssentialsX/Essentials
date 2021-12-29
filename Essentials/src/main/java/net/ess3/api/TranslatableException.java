@@ -10,8 +10,15 @@ public class TranslatableException extends Exception {
     private final Object[] args;
 
     public TranslatableException(String tlKey, Object... args) {
+        this(null, tlKey, args);
+    }
+
+    public TranslatableException(Throwable cause, String tlKey, Object... args) {
         this.tlKey = tlKey;
         this.args = args;
+        if (cause != null) {
+            initCause(cause);
+        }
     }
 
     /**

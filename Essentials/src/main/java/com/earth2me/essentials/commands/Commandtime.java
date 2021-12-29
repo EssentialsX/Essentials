@@ -69,14 +69,14 @@ public class Commandtime extends EssentialsCommand {
         }
 
         // Start updating world times, we have what we need
-        if (!sender.isAuthorized("essentials.time.set", ess)) {
+        if (!sender.isAuthorized("essentials.time.set")) {
             throw new Exception(tl("timeSetPermission"));
         }
 
         for (final World world : worlds) {
             if (!canUpdateWorld(sender, world)) {
                 //We can ensure that this is User as the console has all permissions (for essentials commands).
-                throw new Exception(tl("timeSetWorldPermission", sender.getUser(ess).getBase().getWorld().getName()));
+                throw new Exception(tl("timeSetWorldPermission", sender.getUser().getBase().getWorld().getName()));
             }
         }
 
@@ -135,11 +135,11 @@ public class Commandtime extends EssentialsCommand {
 
     private boolean canUpdateAll(final CommandSource sender) {
         return !ess.getSettings().isWorldTimePermissions() // First check if per world permissions are enabled, if not, return true.
-            || sender.isAuthorized("essentials.time.world.all", ess);
+            || sender.isAuthorized("essentials.time.world.all");
     }
 
     private boolean canUpdateWorld(final CommandSource sender, final World world) {
-        return canUpdateAll(sender) || sender.isAuthorized("essentials.time.world." + normalizeWorldName(world), ess);
+        return canUpdateAll(sender) || sender.isAuthorized("essentials.time.world." + normalizeWorldName(world));
     }
 
     private String normalizeWorldName(final World world) {
@@ -149,7 +149,7 @@ public class Commandtime extends EssentialsCommand {
     @Override
     protected List<String> getTabCompleteOptions(final Server server, final CommandSource sender, final String commandLabel, final String[] args) {
         if (args.length == 1) {
-            if (sender.isAuthorized("essentials.time.set", ess)) {
+            if (sender.isAuthorized("essentials.time.set")) {
                 return subCommands;
             } else {
                 return Collections.emptyList();
@@ -165,11 +165,11 @@ public class Commandtime extends EssentialsCommand {
         } else if (args.length == 3 && (args[0].equalsIgnoreCase("set") || args[0].equalsIgnoreCase("add"))) {
             final List<String> worlds = Lists.newArrayList();
             for (final World world : server.getWorlds()) {
-                if (sender.isAuthorized("essentials.time.world." + normalizeWorldName(world), ess)) {
+                if (sender.isAuthorized("essentials.time.world." + normalizeWorldName(world))) {
                     worlds.add(world.getName());
                 }
             }
-            if (sender.isAuthorized("essentials.time.world.all", ess)) {
+            if (sender.isAuthorized("essentials.time.world.all")) {
                 worlds.add("*");
             }
             return worlds;

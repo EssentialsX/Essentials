@@ -30,10 +30,10 @@ public class Commandseen extends EssentialsCommand {
         if (args.length < 1) {
             throw new NotEnoughArgumentsException();
         }
-        final boolean showBan = sender.isAuthorized("essentials.seen.banreason", ess);
-        final boolean showIp = sender.isAuthorized("essentials.seen.ip", ess);
-        final boolean showLocation = sender.isAuthorized("essentials.seen.location", ess);
-        final boolean searchAccounts = commandLabel.contains("alts") && sender.isAuthorized("essentials.seen.alts", ess);
+        final boolean showBan = sender.isAuthorized("essentials.seen.banreason");
+        final boolean showIp = sender.isAuthorized("essentials.seen.ip");
+        final boolean showLocation = sender.isAuthorized("essentials.seen.location");
+        final boolean searchAccounts = commandLabel.contains("alts") && sender.isAuthorized("essentials.seen.alts");
 
         User player;
         // Check by uuid, if it fails check by name.
@@ -46,7 +46,7 @@ public class Commandseen extends EssentialsCommand {
 
         if (player == null) {
             if (!searchAccounts) {
-                if (sender.isAuthorized("essentials.seen.ipsearch", ess) && FormatUtil.validIP(args[0])) {
+                if (sender.isAuthorized("essentials.seen.ipsearch") && FormatUtil.validIP(args[0])) {
                     if (ess.getServer().getBanList(BanList.Type.IP).isBanned(args[0])) {
                         sender.sendMessage(tl("isIpBanned", args[0]));
                     }
@@ -108,7 +108,7 @@ public class Commandseen extends EssentialsCommand {
             sender.sendMessage(tl("seenAccounts", StringUtil.joinListSkip(", ", user.getName(), history)));
         }
 
-        if (sender.isAuthorized("essentials.seen.uuid", ess)) {
+        if (sender.isAuthorized("essentials.seen.uuid")) {
             sender.sendMessage(tl("whoisUuid", user.getBase().getUniqueId().toString()));
         }
 
@@ -144,7 +144,7 @@ public class Commandseen extends EssentialsCommand {
                 sender.sendMessage(tl("seenAccounts", StringUtil.joinListSkip(", ", user.getName(), history)));
             }
 
-            if (sender.isAuthorized("essentials.seen.uuid", ess)) {
+            if (sender.isAuthorized("essentials.seen.uuid")) {
                 sender.sendMessage(tl("whoisUuid", user.getBase().getUniqueId()));
             }
         } else {

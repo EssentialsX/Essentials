@@ -62,7 +62,7 @@ public class Commandspawn extends EssentialsCommand {
 
     @Override
     protected List<String> getTabCompleteOptions(final Server server, final CommandSource sender, final String commandLabel, final String[] args) {
-        if (args.length == 1 && sender.isAuthorized("essentials.spawn.others", ess)) {
+        if (args.length == 1 && sender.isAuthorized("essentials.spawn.others")) {
             return getPlayers(server, sender);
         }
         return Collections.emptyList();

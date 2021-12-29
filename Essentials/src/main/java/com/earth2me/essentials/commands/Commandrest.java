@@ -26,11 +26,11 @@ public class Commandrest extends EssentialsLoopCommand {
         if (args.length == 0 && !sender.isPlayer()) {
             throw new NotEnoughArgumentsException();
         }
-        if (args.length > 0 && sender.isAuthorized("essentials.rest.others", ess)) {
+        if (args.length > 0 && sender.isAuthorized("essentials.rest.others")) {
             loopOnlinePlayers(server, sender, false, true, args[0], null);
             return;
         }
-        restPlayer(sender.getUser(ess));
+        restPlayer(sender.getUser());
     }
 
     @Override
@@ -46,7 +46,7 @@ public class Commandrest extends EssentialsLoopCommand {
 
     @Override
     protected List<String> getTabCompleteOptions(final Server server, final CommandSource sender, final String commandLabel, final String[] args) {
-        if (args.length == 1 && sender.isAuthorized("essentials.rest.others", ess)) {
+        if (args.length == 1 && sender.isAuthorized("essentials.rest.others")) {
             return getPlayers(server, sender);
         } else {
             return Collections.emptyList();

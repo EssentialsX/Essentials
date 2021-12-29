@@ -182,29 +182,29 @@ public final class UpdateChecker {
 
     public String[] getVersionMessages(final boolean sendLatestMessage, final boolean verboseErrors, final CommandSource source) {
         if (!ess.getSettings().isUpdateCheckEnabled()) {
-            return new String[] {source.tl(ess, "versionCheckDisabled")};
+            return new String[] {source.tl("versionCheckDisabled")};
         }
 
         if (this.isDevBuild()) {
             final RemoteVersion latestDev = this.fetchLatestDev().join();
             switch (latestDev.getBranchStatus()) {
                 case IDENTICAL: {
-                    return sendLatestMessage ? new String[] {source.tl(ess, "versionDevLatest")} : new String[] {};
+                    return sendLatestMessage ? new String[] {source.tl("versionDevLatest")} : new String[] {};
                 }
                 case BEHIND: {
-                    return new String[] {source.tl(ess, "versionDevBehind", latestDev.getDistance()),
-                            source.tl(ess, "versionReleaseNewLink", "https://essentialsx.net/downloads.html")};
+                    return new String[] {source.tl("versionDevBehind", latestDev.getDistance()),
+                            source.tl("versionReleaseNewLink", "https://essentialsx.net/downloads.html")};
                 }
                 case AHEAD:
                 case DIVERGED: {
-                    return new String[] {source.tl(ess, latestDev.getDistance() == 0 ? "versionDevDivergedLatest" : "versionDevDiverged", latestDev.getDistance()),
-                            source.tl(ess, "versionDevDivergedBranch", this.getVersionBranch()) };
+                    return new String[] {source.tl(latestDev.getDistance() == 0 ? "versionDevDivergedLatest" : "versionDevDiverged", latestDev.getDistance()),
+                            source.tl("versionDevDivergedBranch", this.getVersionBranch()) };
                 }
                 case UNKNOWN: {
-                    return verboseErrors ? new String[] {source.tl(ess, "versionCustom", this.getBuildInfo())} : new String[] {};
+                    return verboseErrors ? new String[] {source.tl("versionCustom", this.getBuildInfo())} : new String[] {};
                 }
                 case ERROR: {
-                    return new String[] {source.tl(ess, verboseErrors ? "versionError" : "versionErrorPlayer", this.getBuildInfo())};
+                    return new String[] {source.tl(verboseErrors ? "versionError" : "versionErrorPlayer", this.getBuildInfo())};
                 }
                 default: {
                     return new String[] {};
@@ -214,19 +214,19 @@ public final class UpdateChecker {
             final RemoteVersion latestRelease = this.fetchLatestRelease().join();
             switch (latestRelease.getBranchStatus()) {
                 case IDENTICAL: {
-                    return sendLatestMessage ? new String[] {source.tl(ess, "versionReleaseLatest")} : new String[] {};
+                    return sendLatestMessage ? new String[] {source.tl("versionReleaseLatest")} : new String[] {};
                 }
                 case BEHIND: {
-                    return new String[] {source.tl(ess, "versionReleaseNew", this.getLatestRelease()),
-                            source.tl(ess, "versionReleaseNewLink", "https://essentialsx.net/downloads.html?branch=stable")};
+                    return new String[] {source.tl("versionReleaseNew", this.getLatestRelease()),
+                            source.tl("versionReleaseNewLink", "https://essentialsx.net/downloads.html?branch=stable")};
                 }
                 case DIVERGED: //WhatChamp
                 case AHEAD: //monkaW?
                 case UNKNOWN: {
-                    return verboseErrors ? new String[] {source.tl(ess, "versionCustom", this.getBuildInfo())} : new String[] {};
+                    return verboseErrors ? new String[] {source.tl("versionCustom", this.getBuildInfo())} : new String[] {};
                 }
                 case ERROR: {
-                    return new String[] {source.tl(ess, verboseErrors ? "versionError" : "versionErrorPlayer", this.getBuildInfo())};
+                    return new String[] {source.tl(verboseErrors ? "versionError" : "versionErrorPlayer", this.getBuildInfo())};
                 }
                 default: {
                     return new String[] {};

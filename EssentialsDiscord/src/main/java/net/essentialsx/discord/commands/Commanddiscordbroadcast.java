@@ -28,12 +28,12 @@ public class Commanddiscordbroadcast extends EssentialsCommand {
             throw new NotEnoughArgumentsException();
         }
 
-        if (!sender.isAuthorized("essentials.discordbroadcast." + args[0], ess)) {
+        if (!sender.isAuthorized("essentials.discordbroadcast." + args[0])) {
             throw new Exception(tl("discordbroadcastPermission", args[0]));
         }
 
         String message = getFinalArg(args, 1);
-        if (!sender.isAuthorized("essentials.discordbroadcast.markdown", ess)) {
+        if (!sender.isAuthorized("essentials.discordbroadcast.markdown")) {
             message = MessageUtil.sanitizeDiscordMarkdown(message);
         }
 
@@ -48,7 +48,7 @@ public class Commanddiscordbroadcast extends EssentialsCommand {
         }
 
         channel.sendMessage(jda.parseMessageEmotes(message))
-                .allowedMentions(sender.isAuthorized("essentials.discordbroadcast.ping", ess) ? null : DiscordUtil.NO_GROUP_MENTIONS)
+                .allowedMentions(sender.isAuthorized("essentials.discordbroadcast.ping") ? null : DiscordUtil.NO_GROUP_MENTIONS)
                 .queue();
 
         sender.sendMessage(tl("discordbroadcastSent", "#" + EmojiParser.parseToAliases(channel.getName())));
@@ -59,7 +59,7 @@ public class Commanddiscordbroadcast extends EssentialsCommand {
         if (args.length == 1) {
             final JDADiscordService jda = (JDADiscordService) module;
             final List<String> channels = jda.getSettings().getChannelNames();
-            channels.removeIf(s -> !sender.isAuthorized("essentials.discordbroadcast." + s, ess));
+            channels.removeIf(s -> !sender.isAuthorized("essentials.discordbroadcast." + s));
             return channels;
         } else {
             final String curArg = args[args.length - 1];

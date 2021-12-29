@@ -66,7 +66,7 @@ public class Commandfeed extends EssentialsLoopCommand {
 
     @Override
     protected List<String> getTabCompleteOptions(final Server server, final CommandSource sender, final String commandLabel, final String[] args) {
-        if (args.length == 1 && sender.isAuthorized("essentials.feed.others", ess)) {
+        if (args.length == 1 && sender.isAuthorized("essentials.feed.others")) {
             return getPlayers(server, sender);
         } else {
             return Collections.emptyList();

@@ -43,7 +43,7 @@ public class Commandlist extends EssentialsCommand {
     @Override
     protected List<String> getTabCompleteOptions(final Server server, final CommandSource sender, final String commandLabel, final String[] args) {
         if (args.length == 1) {
-            return new ArrayList<>(PlayerList.getPlayerLists(ess, sender.getUser(ess), false).keySet());
+            return new ArrayList<>(PlayerList.getPlayerLists(ess, sender.getUser(), false).keySet());
         } else {
             return Collections.emptyList();
         }

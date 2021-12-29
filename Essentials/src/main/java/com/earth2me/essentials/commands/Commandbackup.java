@@ -21,6 +21,6 @@ public class Commandbackup extends EssentialsCommand {
             throw new TranslatableException("backupDisabled");
         }
         backup.run();
-        sender.sendTl(ess, "backupStarted");
+        sender.sendTl("backupStarted");
     }
 }

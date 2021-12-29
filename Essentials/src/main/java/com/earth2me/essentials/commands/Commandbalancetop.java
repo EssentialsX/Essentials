@@ -32,7 +32,7 @@ public class Commandbalancetop extends EssentialsCommand {
         final Calendar cal = Calendar.getInstance();
         cal.setTimeInMillis(ess.getBalanceTop().getCacheAge());
         final DateFormat format = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT);
-        sender.sendTl(ess, "balanceTop", format.format(cal.getTime()));
+        sender.sendTl("balanceTop", format.format(cal.getTime()));
         new TextPager(cache).showPage(Integer.toString(page), null, "balancetop", sender);
     }
 
@@ -57,7 +57,7 @@ public class Commandbalancetop extends EssentialsCommand {
 
         // If there are less than 50 users in our usermap, there is no need to display a warning as these calculations should be done quickly
         if (ess.getUserMap().getUniqueUsers() > MINUSERS) {
-            sender.sendTl(ess, "orderBalances", ess.getUserMap().getUniqueUsers());
+            sender.sendTl("orderBalances", ess.getUserMap().getUniqueUsers());
         }
 
         ess.runTaskAsynchronously(new Viewer(sender, page, force));

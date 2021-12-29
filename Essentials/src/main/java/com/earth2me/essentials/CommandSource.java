@@ -10,9 +10,11 @@ import org.bukkit.entity.Player;
 import static com.earth2me.essentials.I18n.tlLiteral;
 
 public class CommandSource {
+    protected Essentials ess;
     protected CommandSender sender;
 
-    public CommandSource(final CommandSender base) {
+    public CommandSource(final Essentials ess, final CommandSender base) {
+        this.ess = ess;
         this.sender = base;
     }
 
@@ -27,10 +29,10 @@ public class CommandSource {
         return null;
     }
 
-    public void sendTl(final IEssentials ess, final String tlKey, final Object... args) {
+    public void sendTl(final String tlKey, final Object... args) {
         if (isPlayer()) {
             //noinspection ConstantConditions
-            getUser(ess).sendTl(tlKey, args);
+            getUser().sendTl(tlKey, args);
             return;
         }
 
@@ -39,21 +41,21 @@ public class CommandSource {
             sendMessage(translation);
             return;
         }
-        sendComponent(ess, MiniMessage.miniMessage().parse(translation.substring(4)));
+        sendComponent(MiniMessage.miniMessage().parse(translation.substring(4)));
     }
 
-    public String tl(final IEssentials ess, final String tlKey, final Object... args) {
+    public String tl(final String tlKey, final Object... args) {
         if (isPlayer()) {
             //noinspection ConstantConditions
-            return getUser(ess).playerTl(tlKey, args);
+            return getUser().playerTl(tlKey, args);
         }
         return tlLiteral(tlKey, args);
     }
 
-    public Component tlComponent(final IEssentials ess, final String tlKey, final Object... args) {
+    public Component tlComponent(final String tlKey, final Object... args) {
         if (isPlayer()) {
             //noinspection ConstantConditions
-            return getUser(ess).tlComponent(tlKey, args);
+            return getUser().tlComponent(tlKey, args);
         }
         final String translation = tlLiteral(tlKey, args);
         if (!translation.startsWith(I18n.MINI_MESSAGE_PREFIX)) {
@@ -62,12 +64,12 @@ public class CommandSource {
         return MiniMessage.miniMessage().parse(translation.substring(4));
     }
 
-    public void sendComponent(final IEssentials ess, final Component component) {
-        final BukkitAudiences audiences = ((Essentials) ess).getBukkitAudience();
+    public void sendComponent(final Component component) {
+        final BukkitAudiences audiences = ess.getBukkitAudience();
         audiences.sender(sender).sendMessage(component);
     }
 
-    public final net.ess3.api.IUser getUser(final IEssentials ess) {
+    public final net.ess3.api.IUser getUser() {
         if (sender instanceof Player) {
             return ess.getUser((Player) sender);
         }
@@ -88,9 +90,9 @@ public class CommandSource {
         }
     }
 
-    public boolean isAuthorized(final String permission, final IEssentials ess) {
+    public boolean isAuthorized(final String permission) {
         //noinspection ConstantConditions
-        return !(sender instanceof Player) || getUser(ess).isAuthorized(permission);
+        return !(sender instanceof Player) || getUser().isAuthorized(permission);
     }
 
     public String getSelfSelector() {

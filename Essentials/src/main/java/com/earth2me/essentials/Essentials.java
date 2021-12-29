@@ -469,7 +469,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
             updateChecker = new UpdateChecker(this);
             runTaskAsynchronously(() -> {
                 getLogger().log(Level.INFO, tlLiteral("versionFetching"));
-                for (String str : updateChecker.getVersionMessages(false, true, new CommandSource(Bukkit.getConsoleSender()))) {
+                for (String str : updateChecker.getVersionMessages(false, true, new CommandSource(this, Bukkit.getConsoleSender()))) {
                     getLogger().log(getSettings().isUpdateCheckEnabled() ? Level.WARNING : Level.INFO, str);
                 }
             });
@@ -653,7 +653,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
                 user = getUser((Player) cSender);
             }
 
-            final CommandSource sender = new CommandSource(cSender);
+            final CommandSource sender = new CommandSource(this, cSender);
 
             // Check for disabled commands
             if (getSettings().isCommandDisabled(commandLabel)) {
@@ -670,7 +670,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
             try {
                 cmd = loadCommand(commandPath, command.getName(), module, classLoader);
             } catch (final Exception ex) {
-                sender.sendTl(this, "commandNotLoaded", commandLabel);
+                sender.sendTl("commandNotLoaded", commandLabel);
                 LOGGER.log(Level.SEVERE, tlLiteral("commandNotLoaded", commandLabel), ex);
                 return Collections.emptyList();
             }
@@ -752,7 +752,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
                 Bukkit.getLogger().log(Level.INFO, "{0} issued server command: /{1} {2}", new Object[] {cSender.getName(), commandLabel, EssentialsCommand.getFinalArg(args, 0)});
             }
 
-            final CommandSource sender = new CommandSource(cSender);
+            final CommandSource sender = new CommandSource(this, cSender);
 
             // New mail notification
             if (user != null && !getSettings().isCommandDisabled("mail") && !command.getName().equals("mail") && user.isAuthorized("essentials.mail")) {
@@ -773,7 +773,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
                         return newCmd.execute(cSender, commandLabel, args);
                     }
                 }
-                sender.sendTl(this, "commandDisabled", commandLabel);
+                sender.sendTl("commandDisabled", commandLabel);
                 return true;
             }
 
@@ -781,7 +781,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
             try {
                 cmd = loadCommand(commandPath, command.getName(), module, classLoader);
             } catch (final Exception ex) {
-                sender.sendTl(this, "commandNotLoaded", commandLabel);
+                sender.sendTl("commandNotLoaded", commandLabel);
                 LOGGER.log(Level.SEVERE, tlLiteral("commandNotLoaded", commandLabel), ex);
                 return true;
             }
@@ -814,11 +814,11 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
                 return true;
             } catch (final NotEnoughArgumentsException ex) {
                 if (getSettings().isVerboseCommandUsages() && !cmd.getUsageStrings().isEmpty()) {
-                    sender.sendTl(this, "commandHelpLine1", commandLabel);
-                    sender.sendTl(this, "commandHelpLine2", command.getDescription());
-                    sender.sendTl(this, "commandHelpLine3");
+                    sender.sendTl("commandHelpLine1", commandLabel);
+                    sender.sendTl("commandHelpLine2", command.getDescription());
+                    sender.sendTl("commandHelpLine3");
                     for (Map.Entry<String, String> usage : cmd.getUsageStrings().entrySet()) {
-                        sender.sendTl(this, "commandHelpLineUsage", usage.getKey().replace("<command>", commandLabel), usage.getValue());
+                        sender.sendTl("commandHelpLineUsage", usage.getKey().replace("<command>", commandLabel), usage.getValue());
                     }
                 } else {
                     sender.sendMessage(command.getDescription());
@@ -866,9 +866,9 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
     @Override
     public void showError(final CommandSource sender, final Throwable exception, final String commandLabel) {
         if (exception instanceof TranslatableException) {
-            sender.sendTl(this, ((TranslatableException) exception).getTlKey(), ((TranslatableException) exception).getArgs());
+            sender.sendTl(((TranslatableException) exception).getTlKey(), ((TranslatableException) exception).getArgs());
         } else {
-            sender.sendTl(this, "errorWithMessage", exception.getMessage());
+            sender.sendTl("errorWithMessage", exception.getMessage());
         }
         if (getSettings().isDebug()) {
             LOGGER.log(Level.INFO, tlLiteral("errorCallingCommand", commandLabel), exception);
@@ -1141,7 +1141,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
                     continue;
                 }
                 if (keywords) {
-                    broadcast = new KeywordReplacer(broadcast, new CommandSource(player), this, false);
+                    broadcast = new KeywordReplacer(broadcast, new CommandSource(this, player), this, false);
                 }
                 for (final String messageText : broadcast.getLines()) {
                     user.sendMessage(messageText);
@@ -1190,7 +1190,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
             final Object[] processedArgs;
             // FUCK THIS STUPID BULLSHIT
             if (parseKeywords) {
-                processedArgs = I18n.mutateArgs(args, s -> new KeywordReplacer(new SimpleTextInput(s), new CommandSource(user.getBase()), this, false).getLines().get(0));
+                processedArgs = I18n.mutateArgs(args, s -> new KeywordReplacer(new SimpleTextInput(s), new CommandSource(this, user.getBase()), this, false).getLines().get(0));
             } else {
                 processedArgs = args;
             }

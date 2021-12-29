@@ -33,7 +33,7 @@ public class Commandwarpinfo extends EssentialsCommand {
             if (ess.getSettings().getPerWarpPermission() && sender.isPlayer()) {
                 final List<String> list = new ArrayList<>();
                 for (String curWarp : ess.getWarps().getList()) {
-                    if (sender.isAuthorized("essentials.warps." + curWarp, ess)) {
+                    if (sender.isAuthorized("essentials.warps." + curWarp)) {
                         list.add(curWarp);
                     }
                 }

@@ -1,6 +1,7 @@
 package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.CommandSource;
+import com.earth2me.essentials.Essentials;
 import com.earth2me.essentials.IEssentialsModule;
 import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.User;
@@ -331,7 +332,7 @@ public abstract class EssentialsCommand implements IEssentialsCommand {
 
     @Override
     public void showError(final CommandSender sender, final Throwable throwable, final String commandLabel) {
-        ess.showError(new CommandSource(sender), throwable, commandLabel);
+        ess.showError(new CommandSource((Essentials) ess, sender), throwable, commandLabel);
     }
 
     public CompletableFuture<Boolean> getNewExceptionFuture(final CommandSource sender, final String commandLabel) {

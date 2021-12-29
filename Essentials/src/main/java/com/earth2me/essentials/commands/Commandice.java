@@ -29,12 +29,12 @@ public class Commandice extends EssentialsLoopCommand {
             throw new NotEnoughArgumentsException();
         }
 
-        if (args.length > 0 && sender.isAuthorized("essentials.ice.others", ess)) {
+        if (args.length > 0 && sender.isAuthorized("essentials.ice.others")) {
             loopOnlinePlayers(server, sender, false, true, args[0], null);
             return;
         }
         //noinspection ConstantConditions
-        freezePlayer(sender.getUser(ess));
+        freezePlayer(sender.getUser());
     }
 
     @Override
@@ -50,7 +50,7 @@ public class Commandice extends EssentialsLoopCommand {
 
     @Override
     protected List<String> getTabCompleteOptions(Server server, CommandSource sender, String commandLabel, String[] args) {
-        if (args.length == 1 && sender.isAuthorized("essentials.ice.others", ess)) {
+        if (args.length == 1 && sender.isAuthorized("essentials.ice.others")) {
             return getPlayers(server, sender);
         } else {
             return Collections.emptyList();

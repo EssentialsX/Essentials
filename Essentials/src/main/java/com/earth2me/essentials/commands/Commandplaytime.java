@@ -12,8 +12,6 @@ import org.bukkit.Statistic;
 import java.util.Collections;
 import java.util.List;
 
-import static com.earth2me.essentials.I18n.tl;
-
 public class Commandplaytime extends EssentialsCommand {
     // For some reason, in 1.13 PLAY_ONE_MINUTE = ticks played = what used to be PLAY_ONE_TICK
     // https://hub.spigotmc.org/stash/projects/SPIGOT/repos/bukkit/commits/b848d8ce633871b52115247b089029749c02f579
@@ -29,7 +27,7 @@ public class Commandplaytime extends EssentialsCommand {
         long playtime;
         final String key;
         
-        if (args.length > 0 && sender.isAuthorized("essentials.playtime.others", ess)) {
+        if (args.length > 0 && sender.isAuthorized("essentials.playtime.others")) {
             try {
                 final IUser user = getPlayer(server, sender, args, 0);
                 displayName = user.getDisplayName();
@@ -54,12 +52,12 @@ public class Commandplaytime extends EssentialsCommand {
         }
 
         final long playtimeMs = System.currentTimeMillis() - (playtime * 50L);
-        sender.sendMessage(tl(key, DateUtil.formatDateDiff(playtimeMs), displayName));
+        sender.sendTl(key, DateUtil.formatDateDiff(playtimeMs), displayName);
     }
     
     @Override
     protected List<String> getTabCompleteOptions(final Server server, final CommandSource sender, final String commandLabel, final String[] args) {
-        if (args.length == 1 && sender.isAuthorized("essentials.playtime.others", ess)) {
+        if (args.length == 1 && sender.isAuthorized("essentials.playtime.others")) {
             return getPlayers(server, sender);
         } else {
             return Collections.emptyList();

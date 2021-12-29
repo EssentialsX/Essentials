@@ -165,11 +165,11 @@ public class Commandessentials extends EssentialsCommand {
     // Lists commands that are being handed over to other plugins.
     private void runCommands(final Server server, final CommandSource sender, final String commandLabel, final String[] args) {
         if (ess.getAlternativeCommandsHandler().disabledCommands().size() == 0) {
-            sender.sendTl(ess, "blockListEmpty");
+            sender.sendTl("blockListEmpty");
             return;
         }
 
-        sender.sendTl(ess, "blockList");
+        sender.sendTl("blockList");
         for (final Map.Entry<String, String> entry : ess.getAlternativeCommandsHandler().disabledCommands().entrySet()) {
             sender.sendMessage(entry.getKey() + " => " + entry.getValue());
         }
@@ -177,7 +177,7 @@ public class Commandessentials extends EssentialsCommand {
 
     // Generates a paste of useful information
     private void runDump(Server server, CommandSource sender, String commandLabel, String[] args) {
-        sender.sendTl(ess, "dumpCreating");
+        sender.sendTl("dumpCreating");
 
         final JsonObject dump = new JsonObject();
 
@@ -288,7 +288,7 @@ public class Commandessentials extends EssentialsCommand {
                 try {
                     files.add(new PasteUtil.PasteFile("config.yml", new String(Files.readAllBytes(ess.getSettings().getConfigFile().toPath()), StandardCharsets.UTF_8)));
                 } catch (IOException e) {
-                    sender.sendTl(ess, "dumpErrorUpload", "config.yml", e.getMessage());
+                    sender.sendTl("dumpErrorUpload", "config.yml", e.getMessage());
                 }
             }
 
@@ -298,7 +298,7 @@ public class Commandessentials extends EssentialsCommand {
                             new String(Files.readAllBytes(essDiscord.getDataFolder().toPath().resolve("config.yml")), StandardCharsets.UTF_8)
                                     .replaceAll("[A-Za-z\\d]{24}\\.[\\w-]{6}\\.[\\w-]{27}", "<censored token>")));
                 } catch (IOException e) {
-                    sender.sendTl(ess, "dumpErrorUpload", "discord-config.yml", e.getMessage());
+                    sender.sendTl("dumpErrorUpload", "discord-config.yml", e.getMessage());
                 }
             }
 
@@ -306,7 +306,7 @@ public class Commandessentials extends EssentialsCommand {
                 try {
                     files.add(new PasteUtil.PasteFile("kits.yml", new String(Files.readAllBytes(ess.getKits().getFile().toPath()), StandardCharsets.UTF_8)));
                 } catch (IOException e) {
-                    sender.sendTl(ess, "dumpErrorUpload", "kits.yml", e.getMessage());
+                    sender.sendTl("dumpErrorUpload", "kits.yml", e.getMessage());
                 }
             }
 
@@ -316,7 +316,7 @@ public class Commandessentials extends EssentialsCommand {
                             .replaceAll("(?m)^\\[\\d\\d:\\d\\d:\\d\\d] \\[.+/(?:DEBUG|TRACE)]: .+\\s(?:[A-Za-z.]+:.+\\s(?:\\t.+\\s)*)?\\s*(?:\"[A-Za-z]+\" : .+[\\s}\\]]+)*", "")
                             .replaceAll("(?:[0-9]{1,3}\\.){3}[0-9]{1,3}", "<censored ip address>")));
                 } catch (IOException e) {
-                    sender.sendTl(ess, "dumpErrorUpload", "latest.log", e.getMessage());
+                    sender.sendTl("dumpErrorUpload", "latest.log", e.getMessage());
                 }
             }
 
@@ -324,8 +324,8 @@ public class Commandessentials extends EssentialsCommand {
             future.thenAccept(result -> {
                 if (result != null) {
                     final String dumpUrl = "https://essentialsx.net/dump.html?id=" + result.getPasteId();
-                    sender.sendTl(ess, "dumpUrl", dumpUrl);
-                    sender.sendTl(ess, "dumpDeleteKey", result.getDeletionKey());
+                    sender.sendTl("dumpUrl", dumpUrl);
+                    sender.sendTl("dumpDeleteKey", result.getDeletionKey());
                     if (sender.isPlayer()) {
                         ess.getLogger().info(tlLiteral("dumpConsoleUrl", dumpUrl));
                         ess.getLogger().info(tlLiteral("dumpDeleteKey", result.getDeletionKey()));
@@ -334,7 +334,7 @@ public class Commandessentials extends EssentialsCommand {
                 files.clear();
             });
             future.exceptionally(throwable -> {
-                sender.sendTl(ess, "dumpError", throwable.getMessage());
+                sender.sendTl("dumpError", throwable.getMessage());
                 return null;
             });
         });
@@ -359,7 +359,7 @@ public class Commandessentials extends EssentialsCommand {
     // Reloads all reloadable configs.
     private void runReload(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception {
         ess.reload();
-        sender.sendTl(ess, "essentialsReload", ess.getDescription().getVersion());
+        sender.sendTl("essentialsReload", ess.getDescription().getVersion());
     }
 
     // Pop tarts.
@@ -403,7 +403,7 @@ public class Commandessentials extends EssentialsCommand {
             throw new Exception("/<command> cleanup <days> [money] [homes]");
         }
 
-        sender.sendTl(ess, "cleaning");
+        sender.sendTl("cleaning");
 
         final long daysArg = Long.parseLong(args[1]);
         final double moneyArg = args.length >= 3 ? FloatUtil.parseDouble(args[2].replaceAll("[^0-9.]", "")) : 0;
@@ -445,7 +445,7 @@ public class Commandessentials extends EssentialsCommand {
 
                 user.reset();
             }
-            sender.sendTl(ess, "cleaned");
+            sender.sendTl("cleaned");
         });
     }
 
@@ -461,7 +461,7 @@ public class Commandessentials extends EssentialsCommand {
         final UserMap userMap = ess.getUserMap();
         switch (args[1]) {
             case "fix":
-                sender.sendTl(ess, "fixingHomes");
+                sender.sendTl("fixingHomes");
                 ess.runTaskAsynchronously(() -> {
                     for (final UUID u : userMap.getAllUniqueUsers()) {
                         final User user = ess.getUserMap().getUser(u);
@@ -478,7 +478,7 @@ public class Commandessentials extends EssentialsCommand {
                             }
                         }
                     }
-                    sender.sendTl(ess, "fixedHomes");
+                    sender.sendTl("fixedHomes");
                 });
                 break;
             case "delete":
@@ -487,9 +487,9 @@ public class Commandessentials extends EssentialsCommand {
                     throw new TranslatableException("invalidWorld");
                 }
                 if (filterByWorld) {
-                    sender.sendTl(ess, "deletingHomesWorld", args[2]);
+                    sender.sendTl("deletingHomesWorld", args[2]);
                 } else {
-                    sender.sendTl(ess, "deletingHomes");
+                    sender.sendTl("deletingHomes");
                 }
                 ess.runTaskAsynchronously(() -> {
                     for (final UUID u : userMap.getAllUniqueUsers()) {
@@ -510,9 +510,9 @@ public class Commandessentials extends EssentialsCommand {
                     }
 
                     if (filterByWorld) {
-                        sender.sendTl(ess, "deletedHomesWorld", args[2]);
+                        sender.sendTl("deletedHomesWorld", args[2]);
                     } else {
-                        sender.sendTl(ess, "deletedHomes");
+                        sender.sendTl("deletedHomes");
                     }
                 });
                 break;
@@ -589,9 +589,9 @@ public class Commandessentials extends EssentialsCommand {
             serverMessageKey = "versionOutputWarn";
         }
 
-        sender.sendTl(ess, serverMessageKey, "Server", server.getBukkitVersion() + " " + server.getVersion());
-        sender.sendTl(ess, serverMessageKey, "Brand", server.getName());
-        sender.sendTl(ess, "versionOutputFine", "EssentialsX", essVer);
+        sender.sendTl(serverMessageKey, "Server", server.getBukkitVersion() + " " + server.getVersion());
+        sender.sendTl(serverMessageKey, "Brand", server.getName());
+        sender.sendTl("versionOutputFine", "EssentialsX", essVer);
 
         for (final Plugin plugin : pm.getPlugins()) {
             final PluginDescriptionFile desc = plugin.getDescription();
@@ -604,22 +604,22 @@ public class Commandessentials extends EssentialsCommand {
 
                     if (!version.equalsIgnoreCase(essVer)) {
                         isMismatched = true;
-                        sender.sendTl(ess, "versionOutputWarn", name, version);
+                        sender.sendTl("versionOutputWarn", name, version);
                     } else {
-                        sender.sendTl(ess, "versionOutputFine", name, version);
+                        sender.sendTl("versionOutputFine", name, version);
                     }
                 } else {
-                    sender.sendTl(ess, "versionOutputUnsupported", name, version);
+                    sender.sendTl("versionOutputUnsupported", name, version);
                     isUnsupported = true;
                 }
             }
 
             if (versionPlugins.contains(name)) {
                 if (warnPlugins.contains(name)) {
-                    sender.sendTl(ess, "versionOutputUnsupported", name, version);
+                    sender.sendTl("versionOutputUnsupported", name, version);
                     isUnsupported = true;
                 } else {
-                    sender.sendTl(ess, "versionOutputFine", name, version);
+                    sender.sendTl("versionOutputFine", name, version);
                 }
             }
 
@@ -635,42 +635,42 @@ public class Commandessentials extends EssentialsCommand {
         } else {
             layer = "None";
         }
-        sender.sendTl(ess, "versionOutputEconLayer", layer);
+        sender.sendTl("versionOutputEconLayer", layer);
 
         if (isMismatched) {
-            sender.sendTl(ess, "versionMismatchAll");
+            sender.sendTl("versionMismatchAll");
         }
 
         if (!isVaultInstalled) {
-            sender.sendTl(ess, "versionOutputVaultMissing");
+            sender.sendTl("versionOutputVaultMissing");
         }
 
         if (isUnsupported) {
-            sender.sendTl(ess, "versionOutputUnsupportedPlugins");
+            sender.sendTl("versionOutputUnsupportedPlugins");
         }
 
         switch (supportStatus) {
             case NMS_CLEANROOM:
-                sender.sendComponent(ess, sender.tlComponent(ess, "serverUnsupportedCleanroom").color(NamedTextColor.DARK_RED));
+                sender.sendComponent(sender.tlComponent("serverUnsupportedCleanroom").color(NamedTextColor.DARK_RED));
                 break;
             case DANGEROUS_FORK:
-                sender.sendComponent(ess, sender.tlComponent(ess, "serverUnsupportedDangerous").color(NamedTextColor.DARK_RED));
+                sender.sendComponent(sender.tlComponent("serverUnsupportedDangerous").color(NamedTextColor.DARK_RED));
                 break;
             case UNSTABLE:
-                sender.sendComponent(ess, sender.tlComponent(ess, "serverUnsupportedMods").color(NamedTextColor.DARK_RED));
+                sender.sendComponent(sender.tlComponent("serverUnsupportedMods").color(NamedTextColor.DARK_RED));
                 break;
             case OUTDATED:
-                sender.sendComponent(ess, sender.tlComponent(ess, "serverUnsupported").color(NamedTextColor.RED));
+                sender.sendComponent(sender.tlComponent("serverUnsupported").color(NamedTextColor.RED));
                 break;
             case LIMITED:
-                sender.sendComponent(ess, sender.tlComponent(ess, "serverUnsupportedLimitedApi").color(NamedTextColor.RED));
+                sender.sendComponent(sender.tlComponent("serverUnsupportedLimitedApi").color(NamedTextColor.RED));
                 break;
         }
         if (VersionUtil.getSupportStatusClass() != null) {
-            sender.sendComponent(ess, sender.tlComponent(ess, "serverUnsupportedClass").color(NamedTextColor.RED));
+            sender.sendComponent(sender.tlComponent("serverUnsupportedClass").color(NamedTextColor.RED));
         }
 
-        sender.sendTl(ess, "versionFetching");
+        sender.sendTl("versionFetching");
         ess.runTaskAsynchronously(() -> {
             for (String str : ess.getUpdateChecker().getVersionMessages(true, true, sender)) {
                 sender.sendMessage(str);

@@ -21,8 +21,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import static com.earth2me.essentials.I18n.tl;
-
 public class Commandcondense extends EssentialsCommand {
     private final Map<ItemStack, SimpleRecipe> condenseList = new HashMap<>();
 
@@ -56,9 +54,9 @@ public class Commandcondense extends EssentialsCommand {
         user.getBase().updateInventory();
 
         if (didConvert) {
-            user.sendMessage(tl("itemsConverted"));
+            user.sendTl("itemsConverted");
         } else {
-            user.sendMessage(tl("itemsNotConverted"));
+            user.sendTl("itemsNotConverted");
             throw new NoChargeException();
         }
     }

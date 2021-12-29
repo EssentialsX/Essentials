@@ -242,7 +242,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
         setMoney(getMoney().add(value), cause);
         sendTl("addedToAccount", NumberUtil.displayCurrency(value, ess));
         if (initiator != null) {
-            initiator.sendTl(ess, "addedToOthersAccount", NumberUtil.displayCurrency(value, ess), this.getDisplayName(), NumberUtil.displayCurrency(getMoney(), ess));
+            initiator.sendTl("addedToOthersAccount", NumberUtil.displayCurrency(value, ess), this.getDisplayName(), NumberUtil.displayCurrency(getMoney(), ess));
         }
     }
 
@@ -289,7 +289,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
         }
         sendTl("takenFromAccount", NumberUtil.displayCurrency(value, ess));
         if (initiator != null) {
-            initiator.sendTl(ess, "takenFromOthersAccount", NumberUtil.displayCurrency(value, ess), this.getDisplayName(), NumberUtil.displayCurrency(getMoney(), ess));
+            initiator.sendTl("takenFromOthersAccount", NumberUtil.displayCurrency(value, ess), this.getDisplayName(), NumberUtil.displayCurrency(getMoney(), ess));
         }
     }
 
@@ -1085,7 +1085,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
 
     @Override
     public CommandSource getSource() {
-        return new CommandSource(getBase());
+        return new CommandSource(ess, getBase());
     }
 
     @Override

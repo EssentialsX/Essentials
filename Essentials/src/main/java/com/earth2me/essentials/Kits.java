@@ -161,7 +161,7 @@ public class Kits implements IConf {
             }
             return list.toString().trim();
         } catch (final Exception ex) {
-            throw new TranslatableException("kitError").setCause(ex);
+            throw new TranslatableException(ex, "kitError");
         }
 
     }

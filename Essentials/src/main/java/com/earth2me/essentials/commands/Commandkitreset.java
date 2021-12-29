@@ -59,7 +59,7 @@ public class Commandkitreset extends EssentialsCommand {
     protected List<String> getTabCompleteOptions(Server server, CommandSource sender, String commandLabel, String[] args) {
         if (args.length == 1) {
             return new ArrayList<>(ess.getKits().getKitKeys());
-        } else if (args.length == 2 && sender.isAuthorized("essentials.kitreset.others", ess)) {
+        } else if (args.length == 2 && sender.isAuthorized("essentials.kitreset.others")) {
             return getPlayers(server, sender);
         } else {
             return Collections.emptyList();

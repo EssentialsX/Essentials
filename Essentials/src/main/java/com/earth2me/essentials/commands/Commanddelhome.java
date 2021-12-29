@@ -3,14 +3,13 @@ package com.earth2me.essentials.commands;
 import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.IUser;
 import com.earth2me.essentials.User;
+import net.ess3.api.TranslatableException;
 import org.bukkit.Server;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
-
-import static com.earth2me.essentials.I18n.tl;
 
 public class Commanddelhome extends EssentialsCommand {
     public Commanddelhome() {
@@ -45,17 +44,17 @@ public class Commanddelhome extends EssentialsCommand {
         }
 
         if (name.equalsIgnoreCase("bed")) {
-            throw new Exception(tl("invalidHomeName"));
+            throw new TranslatableException("invalidHomeName");
         }
 
         user.delHome(name.toLowerCase(Locale.ENGLISH));
-        sender.sendMessage(tl("deleteHome", name));
+        sender.sendTl("deleteHome", name);
     }
 
     @Override
     protected List<String> getTabCompleteOptions(final Server server, final CommandSource sender, final String commandLabel, final String[] args) {
-        final IUser user = sender.getUser(ess);
-        final boolean canDelOthers = sender.isAuthorized("essentials.delhome.others", ess);
+        final IUser user = sender.getUser();
+        final boolean canDelOthers = sender.isAuthorized("essentials.delhome.others");
         if (args.length == 1) {
             final List<String> homes = user == null ? new ArrayList<>() : user.getHomes();
             if (canDelOthers) {

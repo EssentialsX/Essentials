@@ -5,6 +5,7 @@ import com.earth2me.essentials.utils.FormatUtil;
 import com.earth2me.essentials.utils.MaterialUtil;
 import com.earth2me.essentials.utils.NumberUtil;
 import com.google.common.collect.Lists;
+import net.ess3.api.TranslatableException;
 import org.bukkit.Server;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -13,8 +14,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
-
-import static com.earth2me.essentials.I18n.tl;
 
 public class Commanditemlore extends EssentialsCommand {
 
@@ -26,7 +25,7 @@ public class Commanditemlore extends EssentialsCommand {
     protected void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception {
         final ItemStack item = user.getBase().getItemInHand();
         if (MaterialUtil.isAir(item.getType())) {
-            throw new Exception(tl("itemloreInvalidItem"));
+            throw new TranslatableException("itemloreInvalidItem");
         }
 
         if (args.length == 0) {
@@ -40,14 +39,14 @@ public class Commanditemlore extends EssentialsCommand {
             lore.add(line);
             im.setLore(lore);
             item.setItemMeta(im);
-            user.sendMessage(tl("itemloreSuccess", line));
+            user.sendTl("itemloreSuccess", line);
         } else if (args[0].equalsIgnoreCase("clear")) {
             im.setLore(new ArrayList<>());
             item.setItemMeta(im);
-            user.sendMessage(tl("itemloreClear"));
+            user.sendTl("itemloreClear");
         } else if (args[0].equalsIgnoreCase("set") && args.length > 2 && NumberUtil.isInt(args[1])) {
             if (!im.hasLore()) {
-                throw new Exception(tl("itemloreNoLore"));
+                throw new TranslatableException("itemloreNoLore");
             }
 
             final int line = Integer.parseInt(args[1]);
@@ -56,11 +55,11 @@ public class Commanditemlore extends EssentialsCommand {
             try {
                 lore.set(line - 1, newLine);
             } catch (final Exception e) {
-                throw new Exception(tl("itemloreNoLine", line), e);
+                throw new TranslatableException(e, "itemloreNoLine", line);
             }
             im.setLore(lore);
             item.setItemMeta(im);
-            user.sendMessage(tl("itemloreSuccessLore", line, newLine));
+            user.sendTl("itemloreSuccessLore", line, newLine);
         } else {
             throw new NotEnoughArgumentsException();
         }

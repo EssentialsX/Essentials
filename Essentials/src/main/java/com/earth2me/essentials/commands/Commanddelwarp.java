@@ -30,13 +30,13 @@ public class Commanddelwarp extends EssentialsCommand {
                 // World is unloaded/deleted
                 location = null;
             }
-            final WarpModifyEvent event = new WarpModifyEvent(sender.getUser(this.ess), args[0], location, null, WarpModifyEvent.WarpModifyCause.DELETE);
+            final WarpModifyEvent event = new WarpModifyEvent(sender.getUser(), args[0], location, null, WarpModifyEvent.WarpModifyCause.DELETE);
             Bukkit.getServer().getPluginManager().callEvent(event);
             if (event.isCancelled()) {
                 return;
             }
             ess.getWarps().removeWarp(args[0]);
-            sender.sendTl(ess, "deleteWarp", args[0]);
+            sender.sendTl("deleteWarp", args[0]);
         } else {
             throw new TranslatableException("warpNotExist");
         }

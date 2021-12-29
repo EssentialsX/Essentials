@@ -36,7 +36,7 @@ public class Commandback extends EssentialsCommand {
 
     private void parseOthers(final Server server, final CommandSource sender, final String[] args, final String commandLabel) throws Exception {
         final User player = getPlayer(server, args, 0, true, false);
-        sender.sendTl(ess, "backOther", player.getName());
+        sender.sendTl("backOther", player.getName());
         teleportBack(sender, player, commandLabel);
     }
 

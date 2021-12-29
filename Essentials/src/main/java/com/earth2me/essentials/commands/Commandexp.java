@@ -22,7 +22,7 @@ public class Commandexp extends EssentialsLoopCommand {
 
     @Override
     public void run(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception {
-        final IUser user = sender.getUser(ess);
+        final IUser user = sender.getUser();
         if (args.length == 0 || (args.length < 2 && user == null)) {
             if (user == null) {
                 throw new NotEnoughArgumentsException();

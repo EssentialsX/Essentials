@@ -140,7 +140,7 @@ public class Commandspeed extends EssentialsCommand {
             return types;
         } else if (args.length == 2) {
             return speeds;
-        } else if (args.length == 3 && sender.isAuthorized("essentials.speed.others", ess)) {
+        } else if (args.length == 3 && sender.isAuthorized("essentials.speed.others")) {
             return getPlayers(server, sender);
         } else {
             return Collections.emptyList();

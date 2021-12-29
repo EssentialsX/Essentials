@@ -45,7 +45,7 @@ public class Commandpweather extends EssentialsLoopCommand {
 
             if (args.length == 1 || sender.isPlayer()) { // /pweather get
                 if (sender.isPlayer()) {
-                    getUserWeather(sender, sender.getUser(ess));
+                    getUserWeather(sender, sender.getUser());
                     return;
                 }
                 throw new NotEnoughArgumentsException(); // We cannot imply the target for console
@@ -60,7 +60,7 @@ public class Commandpweather extends EssentialsLoopCommand {
             }
         }
 
-        if (args.length > 1 && !sender.isAuthorized("essentials.pweather.others", ess) && !args[1].equalsIgnoreCase(sender.getSelfSelector())) {
+        if (args.length > 1 && !sender.isAuthorized("essentials.pweather.others") && !args[1].equalsIgnoreCase(sender.getSelfSelector())) {
             sender.sendMessage(tl("pWeatherOthersPermission"));
             return;
         }

@@ -32,7 +32,7 @@ public class Commandmute extends EssentialsCommand {
             user = ess.getUser(new OfflinePlayer(args[0], ess.getServer()));
         }
         if (!user.getBase().isOnline() && sender.isPlayer()) {
-            if (!sender.isAuthorized("essentials.mute.offline", ess)) {
+            if (!sender.isAuthorized("essentials.mute.offline")) {
                 throw new Exception(tl("muteExemptOffline"));
             }
         } else if (user.isAuthorized("essentials.mute.exempt")) {

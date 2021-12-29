@@ -18,9 +18,9 @@ public class Commandlightning extends EssentialsLoopCommand {
 
     @Override
     public void run(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception {
-        if (args.length == 0 || !sender.isAuthorized("essentials.lightning.others", ess)) {
+        if (args.length == 0 || !sender.isAuthorized("essentials.lightning.others")) {
             if (sender.isPlayer()) {
-                sender.getPlayer().getWorld().strikeLightning(sender.getUser(ess).getTargetBlock(600).getLocation());
+                sender.getPlayer().getWorld().strikeLightning(sender.getUser().getTargetBlock(600).getLocation());
                 return;
             }
             throw new NotEnoughArgumentsException();

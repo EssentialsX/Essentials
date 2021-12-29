@@ -11,8 +11,6 @@ import org.bukkit.potion.PotionEffect;
 import java.util.Collections;
 import java.util.List;
 
-import static com.earth2me.essentials.I18n.tl;
-
 public class Commandheal extends EssentialsLoopCommand {
     public Commandheal() {
         super("heal");
@@ -47,7 +45,7 @@ public class Commandheal extends EssentialsLoopCommand {
             final Player player = user.getBase();
 
             if (player.getHealth() == 0) {
-                throw new PlayerExemptException(tl("healDead"));
+                throw new PlayerExemptException("healDead");
             }
 
             final double amount = player.getMaxHealth() - player.getHealth();
@@ -65,13 +63,13 @@ public class Commandheal extends EssentialsLoopCommand {
             player.setHealth(newAmount);
             player.setFoodLevel(20);
             player.setFireTicks(0);
-            user.sendMessage(tl("heal"));
+            user.sendTl("heal");
             if (ess.getSettings().isRemovingEffectsOnHeal()) {
                 for (final PotionEffect effect : player.getActivePotionEffects()) {
                     player.removePotionEffect(effect.getType());
                 }
             }
-            sender.sendMessage(tl("healOther", user.getDisplayName()));
+            sender.sendTl("healOther", user.getDisplayName());
         } catch (final QuietAbortException e) {
             //Handle Quietly
         }
@@ -79,7 +77,7 @@ public class Commandheal extends EssentialsLoopCommand {
 
     @Override
     protected List<String> getTabCompleteOptions(final Server server, final CommandSource sender, final String commandLabel, final String[] args) {
-        if (args.length == 1 && sender.isAuthorized("essentials.heal.others", ess)) {
+        if (args.length == 1 && sender.isAuthorized("essentials.heal.others")) {
             return getPlayers(server, sender);
         } else {
             return Collections.emptyList();

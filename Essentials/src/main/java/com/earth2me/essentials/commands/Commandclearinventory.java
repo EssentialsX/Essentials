@@ -19,8 +19,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 
-import static com.earth2me.essentials.I18n.tl;
-
 public class Commandclearinventory extends EssentialsCommand {
 
     private static final int BASE_AMOUNT = 100000;
@@ -57,7 +55,7 @@ public class Commandclearinventory extends EssentialsCommand {
         }
 
         if (allowAll && args.length > 0 && args[0].contentEquals("*")) {
-            sender.sendMessage(tl("inventoryClearingFromAll"));
+            sender.sendTl("inventoryClearingFromAll");
             offset = 1;
             players = ess.getOnlinePlayers();
         } else if (allowOthers && args.length > 0 && args[0].trim().length() > 2) {
@@ -74,7 +72,7 @@ public class Commandclearinventory extends EssentialsCommand {
         if (senderUser != null && senderUser.isPromptingClearConfirm()) {
             if (!formattedCommand.equals(previousClearCommand)) {
                 senderUser.setConfirmingClearCommand(formattedCommand);
-                senderUser.sendMessage(tl("confirmClear", formattedCommand));
+                senderUser.sendTl("confirmClear", formattedCommand);
                 return;
             }
         }
@@ -116,13 +114,13 @@ public class Commandclearinventory extends EssentialsCommand {
 
         if (type == ClearHandlerType.ALL_EXCEPT_ARMOR) {
             if (showExtended) {
-                sender.sendMessage(tl("inventoryClearingAllItems", player.getDisplayName()));
+                sender.sendTl("inventoryClearingAllItems", player.getDisplayName());
             }
             InventoryWorkaround.clearInventoryNoArmor(player.getInventory());
             InventoryWorkaround.setItemInOffHand(player, null);
         } else if (type == ClearHandlerType.ALL_INCLUDING_ARMOR) {
             if (showExtended) {
-                sender.sendMessage(tl("inventoryClearingAllArmor", player.getDisplayName()));
+                sender.sendTl("inventoryClearingAllArmor", player.getDisplayName());
             }
             InventoryWorkaround.clearInventoryNoArmor(player.getInventory());
             InventoryWorkaround.setItemInOffHand(player, null);
@@ -139,16 +137,16 @@ public class Commandclearinventory extends EssentialsCommand {
                     final ItemStack removedStack = player.getInventory().removeItem(stack).get(0);
                     final int removedAmount = BASE_AMOUNT - removedStack.getAmount() + InventoryWorkaround.clearItemInOffHand(player, stack);
                     if (removedAmount > 0 || showExtended) {
-                        sender.sendMessage(tl("inventoryClearingStack", removedAmount, stack.getType().toString().toLowerCase(Locale.ENGLISH), player.getDisplayName()));
+                        sender.sendTl("inventoryClearingStack", removedAmount, stack.getType().toString().toLowerCase(Locale.ENGLISH), player.getDisplayName());
                     }
                 } else {
                     stack.setAmount(amount < 0 ? 1 : amount);
                     if (player.getInventory().containsAtLeast(stack, amount)) {
-                        sender.sendMessage(tl("inventoryClearingStack", amount, stack.getType().toString().toLowerCase(Locale.ENGLISH), player.getDisplayName()));
+                        sender.sendTl("inventoryClearingStack", amount, stack.getType().toString().toLowerCase(Locale.ENGLISH), player.getDisplayName());
                         player.getInventory().removeItem(stack);
                     } else {
                         if (showExtended) {
-                            sender.sendMessage(tl("inventoryClearFail", player.getDisplayName(), amount, stack.getType().toString().toLowerCase(Locale.ENGLISH)));
+                            sender.sendTl("inventoryClearFail", player.getDisplayName(), amount, stack.getType().toString().toLowerCase(Locale.ENGLISH));
                         }
                     }
                 }
