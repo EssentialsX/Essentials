@@ -33,8 +33,6 @@ public final class MaterialUtil {
     private static final Set<Material> LEGGINGS;
     private static final Set<Material> BOOTS;
 
-    private static final boolean PRE_FLATTEN = VersionUtil.getServerBukkitVersion().isLowerThan(VersionUtil.v1_13_0_R01);
-
     static {
         HELMETS = EnumUtil.getAllMatching(Material.class, "LEATHER_HELMET", "CHAINMAIL_HELMET", "IRON_HELMET",
                 "GOLD_HELMET", "GOLDEN_HELMET", "DIAMOND_HELMET", "NETHERITE_HELMET", "TURTLE_HELMET");
@@ -137,7 +135,7 @@ public final class MaterialUtil {
             return true;
         }
 
-        return PRE_FLATTEN && LEGACY_SKULLS.contains(stack.getType()) && stack.getDurability() == 3;
+        return VersionUtil.PRE_FLATTENING && LEGACY_SKULLS.contains(stack.getType()) && stack.getDurability() == 3;
     }
 
     public static boolean isPotion(final Material material) {
@@ -169,7 +167,7 @@ public final class MaterialUtil {
     }
 
     public static int getDamage(final ItemStack stack) {
-        if (PRE_FLATTEN) {
+        if (VersionUtil.PRE_FLATTENING) {
             return stack.getDurability();
         }
         if (stack.getItemMeta() instanceof Damageable) {
@@ -179,7 +177,7 @@ public final class MaterialUtil {
     }
 
     public static void setDamage(final ItemStack stack, final int damage) {
-        if (PRE_FLATTEN) {
+        if (VersionUtil.PRE_FLATTENING) {
             stack.setDurability((short) damage);
         } else {
             if (stack.getItemMeta() instanceof Damageable) {

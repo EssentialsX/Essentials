@@ -69,7 +69,7 @@ public class EssentialsAntiBuildListener implements Listener {
             }
             return false;
         }
-        if (VersionUtil.getServerBukkitVersion().isLowerThan(VersionUtil.v1_13_0_R01)) {
+        if (VersionUtil.PRE_FLATTENING) {
             return metaPermCheck(user, action, block.getType(), block.getData());
         }
         return metaPermCheck(user, action, block.getType());
@@ -82,7 +82,7 @@ public class EssentialsAntiBuildListener implements Listener {
             }
             return false;
         }
-        if (VersionUtil.getServerBukkitVersion().isLowerThan(VersionUtil.v1_13_0_R01)) {
+        if (VersionUtil.PRE_FLATTENING) {
             return metaPermCheck(user, action, item.getType(), item.getDurability());
         }
         return metaPermCheck(user, action, item.getType());
@@ -97,7 +97,7 @@ public class EssentialsAntiBuildListener implements Listener {
         final String blockPerm = "essentials.build." + action + "." + material;
         final String dataPerm = blockPerm + ":" + data;
 
-        if (VersionUtil.getServerBukkitVersion().isLowerThan(VersionUtil.v1_13_0_R01)) {
+        if (VersionUtil.PRE_FLATTENING) {
             if (user.getBase().isPermissionSet(dataPerm)) {
                 return user.isAuthorized(dataPerm);
             } else {

@@ -282,7 +282,7 @@ public abstract class AbstractItemDb implements IConf, net.ess3.api.IItemDb {
         } else if (MaterialUtil.isPotion(material)) {
             final boolean splash;
             final Collection<PotionEffect> effects;
-            if (VersionUtil.getServerBukkitVersion().isLowerThan(VersionUtil.v1_13_0_R01)) {
+            if (VersionUtil.PRE_FLATTENING) {
                 final Potion potion = Potion.fromDamage(is.getDurability());
                 splash = potion.isSplash();
                 effects = potion.getEffects();

@@ -97,7 +97,7 @@ public class Trade {
             if (charge.getItemStack() != null) {
                 sb.append(charge.getItemStack().getAmount()).append(",");
                 sb.append(charge.getItemStack().getType()).append(",");
-                if (VersionUtil.getServerBukkitVersion().isLowerThan(VersionUtil.v1_13_0_R01)) {
+                if (VersionUtil.PRE_FLATTENING) {
                     sb.append(charge.getItemStack().getDurability());
                 }
             }
@@ -123,7 +123,7 @@ public class Trade {
             if (pay.getItemStack() != null) {
                 sb.append(pay.getItemStack().getAmount()).append(",");
                 sb.append(pay.getItemStack().getType()).append(",");
-                if (VersionUtil.getServerBukkitVersion().isLowerThan(VersionUtil.v1_13_0_R01)) {
+                if (VersionUtil.PRE_FLATTENING) {
                     sb.append(pay.getItemStack().getDurability());
                 }
             }

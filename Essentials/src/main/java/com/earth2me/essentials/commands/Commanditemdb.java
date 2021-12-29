@@ -37,7 +37,7 @@ public class Commanditemdb extends EssentialsCommand {
 
         String itemId = "none";
 
-        if (VersionUtil.getServerBukkitVersion().isLowerThan(VersionUtil.v1_13_0_R01)) {
+        if (VersionUtil.PRE_FLATTENING) {
             itemId = itemStack.getType().getId() + ":" + itemStack.getDurability();
         }
 

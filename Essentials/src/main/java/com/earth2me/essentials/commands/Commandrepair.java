@@ -124,7 +124,7 @@ public class Commandrepair extends EssentialsCommand {
 
     private Trade getCharge(final Material material) {
         final String itemName = material.toString().toLowerCase(Locale.ENGLISH);
-        if (VersionUtil.getServerBukkitVersion().isLowerThan(VersionUtil.v1_13_0_R01)) {
+        if (VersionUtil.PRE_FLATTENING) {
             final int itemId = material.getId();
             return new Trade("repair-" + itemName.replace('_', '-'), new Trade("repair-" + itemId, new Trade("repair-item", ess), ess), ess);
         } else {

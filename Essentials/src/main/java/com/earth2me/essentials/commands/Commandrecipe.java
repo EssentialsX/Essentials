@@ -111,14 +111,13 @@ public class Commandrecipe extends EssentialsCommand {
             final InventoryView view = user.getBase().openWorkbench(null, true);
             final String[] recipeShape = recipe.getShape();
             final Map<Character, ItemStack> ingredientMap = recipe.getIngredientMap();
-            final boolean legacy = VersionUtil.getServerBukkitVersion().isLowerThan(VersionUtil.v1_13_0_R01);
             for (int j = 0; j < recipeShape.length; j++) {
                 for (int k = 0; k < recipeShape[j].length(); k++) {
                     final ItemStack item = ingredientMap.get(recipeShape[j].toCharArray()[k]);
                     if (item == null) {
                         continue;
                     }
-                    if (legacy && item.getDurability() == Short.MAX_VALUE) {
+                    if (VersionUtil.PRE_FLATTENING && item.getDurability() == Short.MAX_VALUE) {
                         item.setDurability((short) 0);
                     }
                     view.getTopInventory().setItem(j * 3 + k + 1, item);
@@ -158,10 +157,9 @@ public class Commandrecipe extends EssentialsCommand {
             final User user = ess.getUser(sender.getPlayer());
             user.setRecipeSee(true);
             final InventoryView view = user.getBase().openWorkbench(null, true);
-            final boolean legacy = VersionUtil.getServerBukkitVersion().isLowerThan(VersionUtil.v1_13_0_R01);
             for (int i = 0; i < ingredients.size(); i++) {
                 final ItemStack item = ingredients.get(i);
-                if (legacy && item.getDurability() == Short.MAX_VALUE) {
+                if (VersionUtil.PRE_FLATTENING && item.getDurability() == Short.MAX_VALUE) {
                     item.setDurability((short) 0);
                 }
                 view.setItem(i + 1, item);

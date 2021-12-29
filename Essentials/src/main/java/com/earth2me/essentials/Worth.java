@@ -34,7 +34,7 @@ public class Worth implements IConf {
 
         final String itemname = itemStack.getType().toString().toLowerCase(Locale.ENGLISH).replace("_", "");
 
-        if (VersionUtil.getServerBukkitVersion().isLowerThan(VersionUtil.v1_13_0_R01)) {
+        if (VersionUtil.PRE_FLATTENING) {
             // Check for matches with data value from stack
             // Note that we always default to BigDecimal.ONE.negate(), equivalent to -1
             result = config.getBigDecimal("worth." + itemname + "." + itemStack.getDurability(), BigDecimal.ONE.negate());
@@ -142,7 +142,7 @@ public class Worth implements IConf {
         String path = "worth." + itemStack.getType().toString().toLowerCase(Locale.ENGLISH).replace("_", "");
 
         // Spigot 1.13+ throws an exception if a 1.13+ plugin even *attempts* to do set data.
-        if (VersionUtil.getServerBukkitVersion().isLowerThan(VersionUtil.v1_13_0_R01) && itemStack.getType().getData() == null) {
+        if (VersionUtil.PRE_FLATTENING && itemStack.getType().getData() == null) {
             // Bukkit-bug: getDurability still contains the correct value, while getData().getData() is 0.
             path = path + "." + itemStack.getDurability();
         }
