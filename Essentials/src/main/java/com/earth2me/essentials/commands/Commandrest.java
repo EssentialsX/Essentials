@@ -10,8 +10,6 @@ import org.bukkit.Statistic;
 import java.util.Collections;
 import java.util.List;
 
-import static com.earth2me.essentials.I18n.tl;
-
 public class Commandrest extends EssentialsLoopCommand {
     public Commandrest() {
         super("rest");
@@ -20,7 +18,7 @@ public class Commandrest extends EssentialsLoopCommand {
     @Override
     public void run(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception {
         if (VersionUtil.getServerBukkitVersion().isLowerThan(VersionUtil.v1_13_0_R01)) {
-            sender.sendMessage(tl("unsupportedFeature"));
+            sender.sendTl("unsupportedFeature");
             return;
         }
         if (args.length == 0 && !sender.isPlayer()) {
@@ -36,12 +34,12 @@ public class Commandrest extends EssentialsLoopCommand {
     @Override
     protected void updatePlayer(final Server server, final CommandSource sender, final User player, final String[] args) throws PlayerExemptException {
         restPlayer(player);
-        sender.sendMessage(tl("restOther", player.getDisplayName()));
+        sender.sendTl("restOther", player.getDisplayName());
     }
 
     private void restPlayer(final IUser user) {
         user.getBase().setStatistic(Statistic.TIME_SINCE_REST, 0);
-        user.sendMessage(tl("rest"));
+        user.sendTl("rest");
     }
 
     @Override

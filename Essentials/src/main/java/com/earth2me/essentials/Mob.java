@@ -15,7 +15,7 @@ import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import static com.earth2me.essentials.I18n.tl;
+import static com.earth2me.essentials.I18n.tlLiteral;
 
 // Suffixes can be appended on the end of a mob name to make it plural
 // Entities without a suffix, will default to 's'
@@ -166,7 +166,7 @@ public enum Mob {
     public Entity spawn(final World world, final Server server, final Location loc) throws MobException {
         final Entity entity = world.spawn(loc, this.bukkitType.getEntityClass());
         if (entity == null) {
-            logger.log(Level.WARNING, tl("unableToSpawnMob"));
+            logger.log(Level.WARNING, tlLiteral("unableToSpawnMob"));
             throw new MobException();
         }
         return entity;

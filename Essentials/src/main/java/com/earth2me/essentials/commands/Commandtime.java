@@ -4,6 +4,7 @@ import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.utils.DescParseTickFormat;
 import com.earth2me.essentials.utils.NumberUtil;
 import com.google.common.collect.Lists;
+import net.ess3.api.TranslatableException;
 import org.bukkit.Server;
 import org.bukkit.World;
 
@@ -17,8 +18,6 @@ import java.util.Locale;
 import java.util.Set;
 import java.util.StringJoiner;
 import java.util.TreeSet;
-
-import static com.earth2me.essentials.I18n.tl;
 
 public class Commandtime extends EssentialsCommand {
     private final List<String> subCommands = Arrays.asList("add", "set");
@@ -70,13 +69,13 @@ public class Commandtime extends EssentialsCommand {
 
         // Start updating world times, we have what we need
         if (!sender.isAuthorized("essentials.time.set")) {
-            throw new Exception(tl("timeSetPermission"));
+            throw new TranslatableException("timeSetPermission");
         }
 
         for (final World world : worlds) {
             if (!canUpdateWorld(sender, world)) {
                 //We can ensure that this is User as the console has all permissions (for essentials commands).
-                throw new Exception(tl("timeSetWorldPermission", sender.getUser().getBase().getWorld().getName()));
+                throw new TranslatableException("timeSetWorldPermission", sender.getUser().getBase().getWorld().getName());
             }
         }
 
@@ -90,7 +89,7 @@ public class Commandtime extends EssentialsCommand {
             joiner.add(world.getName());
         }
 
-        sender.sendMessage(tl(add ? "timeWorldAdd" : "timeWorldSet", DescParseTickFormat.formatTicks(timeTick), joiner.toString()));
+        sender.sendTl(add ? "timeWorldAdd" : "timeWorldSet", DescParseTickFormat.formatTicks(timeTick), joiner.toString());
     }
 
     private void getWorldsTime(final CommandSource sender, final Collection<World> worlds) {
@@ -101,7 +100,7 @@ public class Commandtime extends EssentialsCommand {
         }
 
         for (final World world : worlds) {
-            sender.sendMessage(tl("timeWorldCurrent", world.getName(), DescParseTickFormat.format(world.getTime())));
+            sender.sendTl("timeWorldCurrent", world.getName(), DescParseTickFormat.format(world.getTime()));
         }
     }
 
@@ -128,7 +127,7 @@ public class Commandtime extends EssentialsCommand {
         } else if (selector.equalsIgnoreCase("*") || selector.equalsIgnoreCase("all")) { // If that fails, Is the argument something like "*" or "all"?
             worlds.addAll(server.getWorlds());
         } else { // We failed to understand the world target...
-            throw new Exception(tl("invalidWorld"));
+            throw new TranslatableException("invalidWorld");
         }
         return worlds;
     }

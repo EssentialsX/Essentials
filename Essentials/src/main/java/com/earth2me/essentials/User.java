@@ -1056,6 +1056,11 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
         return tlLiteral(tlKey, args);
     }
 
+    @Override
+    public String tlSender(String tlKey, Object... args) {
+        return playerTl(tlKey, args);
+    }
+
     public Locale getPlayerLocale(final String locale) {
         if (locale.equals(lastLocaleString)) {
             return playerLocale;

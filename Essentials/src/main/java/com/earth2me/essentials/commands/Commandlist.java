@@ -35,7 +35,7 @@ public class Commandlist extends EssentialsCommand {
 
     // Output the standard /list output, when no group is specified
     private void sendGroupedList(final CommandSource sender, final String commandLabel, final Map<String, List<User>> playerList) {
-        for (final String str : PlayerList.prepareGroupedList(ess, commandLabel, playerList)) {
+        for (final String str : PlayerList.prepareGroupedList(ess, sender, commandLabel, playerList)) {
             sender.sendMessage(str);
         }
     }

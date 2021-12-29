@@ -13,8 +13,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
-import static com.earth2me.essentials.I18n.tl;
-
 public class Commandexp extends EssentialsLoopCommand {
     public Commandexp() {
         super("exp");
@@ -39,7 +37,7 @@ public class Commandexp extends EssentialsLoopCommand {
         }
 
         if (!cmd.hasPermission(user)) {
-            user.sendMessage(tl("noAccessSubCommand", "/" + commandLabel + " " + cmd.name().toLowerCase(Locale.ENGLISH)));
+            user.sendTl("noAccessSubCommand", "/" + commandLabel + " " + cmd.name().toLowerCase(Locale.ENGLISH));
             return;
         }
 
@@ -99,7 +97,7 @@ public class Commandexp extends EssentialsLoopCommand {
     }
 
     private void showExp(final CommandSource sender, final IUser target) {
-        sender.sendMessage(tl("exp", target.getDisplayName(), SetExpFix.getTotalExperience(target.getBase()), target.getBase().getLevel(), SetExpFix.getExpUntilNextLevel(target.getBase())));
+        sender.sendTl("exp", target.getDisplayName(), SetExpFix.getTotalExperience(target.getBase()), target.getBase().getLevel(), SetExpFix.getExpUntilNextLevel(target.getBase()));
     }
 
     //TODO: Limit who can give negative exp?
@@ -131,7 +129,7 @@ public class Commandexp extends EssentialsLoopCommand {
             amount = 0L;
         }
         SetExpFix.setTotalExperience(target.getBase(), (int) amount);
-        sender.sendMessage(tl("expSet", target.getDisplayName(), amount));
+        sender.sendTl("expSet", target.getDisplayName(), amount);
     }
 
     @Override

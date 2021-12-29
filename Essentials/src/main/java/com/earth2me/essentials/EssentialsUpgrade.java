@@ -51,7 +51,7 @@ import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static com.earth2me.essentials.I18n.tl;
+import static com.earth2me.essentials.I18n.tlLiteral;
 
 public class EssentialsUpgrade {
     private final static Logger LOGGER = Logger.getLogger("Essentials");
@@ -494,7 +494,7 @@ public class EssentialsUpgrade {
             doneFile.setProperty("move" + name + "ToFile", true);
             doneFile.save();
         } catch (final IOException e) {
-            LOGGER.log(Level.SEVERE, tl("upgradingFilesError"), e);
+            LOGGER.log(Level.SEVERE, tlLiteral("upgradingFilesError"), e);
         }
     }
 
@@ -529,10 +529,10 @@ public class EssentialsUpgrade {
         bWriter.close();
         if (needUpdate) {
             if (!file.renameTo(new File(file.getParentFile(), file.getName().concat("." + System.currentTimeMillis() + ".upgradebackup")))) {
-                throw new Exception(tl("configFileMoveError"));
+                throw new Exception(tlLiteral("configFileMoveError"));
             }
             if (!tempFile.renameTo(file)) {
-                throw new Exception(tl("configFileRenameError"));
+                throw new Exception(tlLiteral("configFileRenameError"));
             }
         } else {
             tempFile.delete();
@@ -657,15 +657,15 @@ public class EssentialsUpgrade {
             final File tmpFile = new File(listOfFile.getParentFile(), sanitizedFilename + ".tmp");
             final File newFile = new File(listOfFile.getParentFile(), sanitizedFilename);
             if (!listOfFile.renameTo(tmpFile)) {
-                LOGGER.log(Level.WARNING, tl("userdataMoveError", filename, sanitizedFilename));
+                LOGGER.log(Level.WARNING, tlLiteral("userdataMoveError", filename, sanitizedFilename));
                 continue;
             }
             if (newFile.exists()) {
-                LOGGER.log(Level.WARNING, tl("duplicatedUserdata", filename, sanitizedFilename));
+                LOGGER.log(Level.WARNING, tlLiteral("duplicatedUserdata", filename, sanitizedFilename));
                 continue;
             }
             if (!tmpFile.renameTo(newFile)) {
-                LOGGER.log(Level.WARNING, tl("userdataMoveBackError", sanitizedFilename, sanitizedFilename));
+                LOGGER.log(Level.WARNING, tlLiteral("userdataMoveBackError", sanitizedFilename, sanitizedFilename));
             }
         }
         doneFile.setProperty("sanitizeAllUserFilenames", true);
@@ -743,7 +743,7 @@ public class EssentialsUpgrade {
                         config.setProperty(entry.getKey(), loc);
                     }
                     if (!configFile.renameTo(new File(ess.getDataFolder(), "spawn.yml.old"))) {
-                        throw new Exception(tl("fileRenameError", "spawn.yml"));
+                        throw new Exception(tlLiteral("fileRenameError", "spawn.yml"));
                     }
                     config.blockingSave();
                 }
@@ -771,7 +771,7 @@ public class EssentialsUpgrade {
                         config.setProperty(entry.getKey(), loc);
                     }
                     if (!configFile.renameTo(new File(ess.getDataFolder(), "jail.yml.old"))) {
-                        throw new Exception(tl("fileRenameError", "jail.yml"));
+                        throw new Exception(tlLiteral("fileRenameError", "jail.yml"));
                     }
                     config.blockingSave();
                 }

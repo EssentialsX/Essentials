@@ -9,8 +9,6 @@ import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import java.util.Collections;
 import java.util.List;
 
-import static com.earth2me.essentials.I18n.tl;
-
 public class Commandtpall extends EssentialsCommand {
     public Commandtpall() {
         super("tpall");
@@ -31,7 +29,7 @@ public class Commandtpall extends EssentialsCommand {
     }
 
     private void teleportAllPlayers(final Server server, final CommandSource sender, final User target, final String label) {
-        sender.sendMessage(tl("teleportAll"));
+        sender.sendTl("teleportAll");
         final Location loc = target.getLocation();
         for (final User player : ess.getOnlineUsers()) {
             if (target == player) {

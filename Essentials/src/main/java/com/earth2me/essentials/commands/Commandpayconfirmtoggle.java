@@ -3,8 +3,6 @@ package com.earth2me.essentials.commands;
 import com.earth2me.essentials.User;
 import org.bukkit.Server;
 
-import static com.earth2me.essentials.I18n.tl;
-
 public class Commandpayconfirmtoggle extends EssentialsCommand {
 
     public Commandpayconfirmtoggle() {
@@ -20,7 +18,7 @@ public class Commandpayconfirmtoggle extends EssentialsCommand {
             confirmingPay = false;
         }
         user.setPromptingPayConfirm(confirmingPay);
-        user.sendMessage(confirmingPay ? tl("payConfirmToggleOn") : tl("payConfirmToggleOff"));
+        user.sendTl(confirmingPay ? "payConfirmToggleOn" : "payConfirmToggleOff");
         user.getConfirmingPayments().clear(); // Clear any outstanding confirmations.
     }
 }

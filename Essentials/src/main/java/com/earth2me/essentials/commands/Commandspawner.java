@@ -7,6 +7,7 @@ import com.earth2me.essentials.utils.EnumUtil;
 import com.earth2me.essentials.utils.LocationUtil;
 import com.earth2me.essentials.utils.NumberUtil;
 import com.earth2me.essentials.utils.StringUtil;
+import net.ess3.api.TranslatableException;
 import net.ess3.provider.SpawnerBlockProvider;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -14,8 +15,6 @@ import org.bukkit.Server;
 import org.bukkit.block.CreatureSpawner;
 
 import java.util.Locale;
-
-import static com.earth2me.essentials.I18n.tl;
 
 public class Commandspawner extends EssentialsCommand {
 
@@ -28,13 +27,13 @@ public class Commandspawner extends EssentialsCommand {
     @Override
     protected void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception {
         if (args.length < 1 || args[0].length() < 2) {
-            throw new NotEnoughArgumentsException(tl("mobsAvailable", StringUtil.joinList(Mob.getMobList())));
+            throw new NotEnoughArgumentsException(user.playerTl("mobsAvailable", StringUtil.joinList(Mob.getMobList())));
         }
 
         final Location target = LocationUtil.getTarget(user.getBase());
 
         if (target.getBlock().getType() != MOB_SPAWNER) {
-            throw new Exception(tl("mobSpawnTarget"));
+            throw new TranslatableException("mobSpawnTarget");
         }
 
         final String name = args[0];
@@ -42,14 +41,14 @@ public class Commandspawner extends EssentialsCommand {
 
         final Mob mob = Mob.fromName(name);
         if (mob == null) {
-            throw new Exception(tl("invalidMob"));
+            throw new TranslatableException("invalidMob");
         }
 
         if (ess.getSettings().getProtectPreventSpawn(mob.getType().toString().toLowerCase(Locale.ENGLISH))) {
-            throw new Exception(tl("disabledToSpawnMob"));
+            throw new TranslatableException("disabledToSpawnMob");
         }
         if (!user.isAuthorized("essentials.spawner." + mob.name.toLowerCase(Locale.ENGLISH))) {
-            throw new Exception(tl("noPermToSpawnMob"));
+            throw new TranslatableException("noPermToSpawnMob");
         }
 
         if (args.length > 1 && NumberUtil.isInt(args[1]) && user.isAuthorized("essentials.spawner.delay")) {
@@ -70,10 +69,10 @@ public class Commandspawner extends EssentialsCommand {
             spawner.setDelay(delay);
             spawner.update();
         } catch (final Throwable ex) {
-            throw new Exception(tl("mobSpawnError"), ex);
+            throw new TranslatableException(ex, "mobSpawnError");
         }
         charge.charge(user);
-        user.sendMessage(tl("setSpawner", mob.name));
+        user.sendTl("setSpawner", mob.name);
 
     }
 }

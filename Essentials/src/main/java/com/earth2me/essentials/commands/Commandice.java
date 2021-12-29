@@ -11,8 +11,6 @@ import org.bukkit.Server;
 import java.util.Collections;
 import java.util.List;
 
-import static com.earth2me.essentials.I18n.tl;
-
 public class Commandice extends EssentialsLoopCommand {
     public Commandice() {
         super("ice");
@@ -21,7 +19,7 @@ public class Commandice extends EssentialsLoopCommand {
     @Override
     protected void run(Server server, CommandSource sender, String commandLabel, String[] args) throws Exception {
         if (VersionUtil.getServerBukkitVersion().isLowerThan(VersionUtil.v1_17_R01)) {
-            sender.sendMessage(tl("unsupportedFeature"));
+            sender.sendTl("unsupportedFeature");
             return;
         }
 
@@ -40,12 +38,12 @@ public class Commandice extends EssentialsLoopCommand {
     @Override
     protected void updatePlayer(Server server, CommandSource sender, User user, String[] args) throws NotEnoughArgumentsException, PlayerExemptException, ChargeException, MaxMoneyException {
         freezePlayer(user);
-        user.sendMessage(tl("iceOther", user.getDisplayName()));
+        user.sendTl("iceOther", user.getDisplayName());
     }
 
     private void freezePlayer(final IUser user) {
         user.getBase().setFreezeTicks(user.getBase().getMaxFreezeTicks());
-        user.sendMessage(tl("ice"));
+        user.sendTl("ice");
     }
 
     @Override

@@ -3,6 +3,7 @@ package com.earth2me.essentials.commands;
 import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.FormatUtil;
+import net.ess3.api.TranslatableException;
 import net.ess3.api.events.NickChangeEvent;
 import org.bukkit.ChatColor;
 import org.bukkit.Server;
@@ -11,8 +12,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import java.util.function.Predicate;
-
-import static com.earth2me.essentials.I18n.tl;
 
 public class Commandnick extends EssentialsLoopCommand {
     public Commandnick() {
@@ -25,12 +24,12 @@ public class Commandnick extends EssentialsLoopCommand {
             throw new NotEnoughArgumentsException();
         }
         if (!ess.getSettings().changeDisplayName()) {
-            throw new Exception(tl("nickDisplayName"));
+            throw new TranslatableException("nickDisplayName");
         }
 
         if (args.length > 1 && user.isAuthorized("essentials.nick.others")) {
             loopOfflinePlayers(server, user.getSource(), false, true, args[0], formatNickname(user, args[1]).split(" "));
-            user.sendMessage(tl("nickChanged"));
+            user.sendTl("nickChanged");
         } else {
             updatePlayer(server, user.getSource(), user, formatNickname(user, args[0]).split(" "));
         }
@@ -42,10 +41,10 @@ public class Commandnick extends EssentialsLoopCommand {
             throw new NotEnoughArgumentsException();
         }
         if (!ess.getSettings().changeDisplayName()) {
-            throw new Exception(tl("nickDisplayName"));
+            throw new TranslatableException("nickDisplayName");
         }
         loopOfflinePlayers(server, sender, false, true, args[0], formatNickname(null, args[1]).split(" "));
-        sender.sendMessage(tl("nickChanged"));
+        sender.sendTl("nickChanged");
     }
 
     @Override
@@ -53,33 +52,33 @@ public class Commandnick extends EssentialsLoopCommand {
         final String nick = args[0];
         if ("off".equalsIgnoreCase(nick)) {
             setNickname(server, sender, target, null);
-            target.sendMessage(tl("nickNoMore"));
+            target.sendTl("nickNoMore");
         } else if (target.getName().equalsIgnoreCase(nick)) {
             setNickname(server, sender, target, nick);
             if (!target.getDisplayName().equalsIgnoreCase(target.getDisplayName())) {
-                target.sendMessage(tl("nickNoMore"));
+                target.sendTl("nickNoMore");
             }
-            target.sendMessage(tl("nickSet", target.getDisplayName()));
+            target.sendTl("nickSet", target.getDisplayName());
         } else if (nickInUse(target, nick)) {
-            throw new NotEnoughArgumentsException(tl("nickInUse"));
+            throw new NotEnoughArgumentsException(sender.tl("nickInUse"));
         } else {
             setNickname(server, sender, target, nick);
-            target.sendMessage(tl("nickSet", target.getDisplayName()));
+            target.sendTl("nickSet", target.getDisplayName());
         }
     }
 
     private String formatNickname(final User user, final String nick) throws Exception {
         final String newNick = user == null ? FormatUtil.replaceFormat(nick) : FormatUtil.formatString(user, "essentials.nick", nick);
         if (!newNick.matches("^[a-zA-Z_0-9" + ChatColor.COLOR_CHAR + "]+$") && user != null && !user.isAuthorized("essentials.nick.allowunsafe")) {
-            throw new Exception(tl("nickNamesAlpha"));
+            throw new TranslatableException("nickNamesAlpha");
         } else if (getNickLength(newNick) > ess.getSettings().getMaxNickLength()) {
-            throw new Exception(tl("nickTooLong"));
+            throw new TranslatableException("nickTooLong");
         } else if (FormatUtil.stripFormat(newNick).length() < 1) {
-            throw new Exception(tl("nickNamesAlpha"));
+            throw new TranslatableException("nickNamesAlpha");
         } else if (user != null && user.isAuthorized("essentials.nick.changecolors") && !user.isAuthorized("essentials.nick.changecolors.bypass") && !FormatUtil.stripFormat(newNick).equals(user.getName())) {
-            throw new Exception(tl("nickNamesOnlyColorChanges"));
+            throw new TranslatableException("nickNamesOnlyColorChanges");
         } else if (user != null && !user.isAuthorized("essentials.nick.blacklist.bypass") && isNickBanned(newNick)) {
-            throw new Exception(tl("nickNameBlacklist", nick));
+            throw new TranslatableException("nickNameBlacklist", nick);
         }
         return newNick;
     }

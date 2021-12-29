@@ -4,6 +4,7 @@ import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.FormatUtil;
 import com.earth2me.essentials.utils.NumberUtil;
 import com.google.common.collect.Lists;
+import net.ess3.api.TranslatableException;
 import org.bukkit.ChatColor;
 import org.bukkit.Server;
 import org.bukkit.block.Block;
@@ -11,8 +12,6 @@ import org.bukkit.block.Sign;
 
 import java.util.Collections;
 import java.util.List;
-
-import static com.earth2me.essentials.I18n.tl;
 
 public class Commandeditsign extends EssentialsCommand {
     public Commandeditsign() {
@@ -27,7 +26,7 @@ public class Commandeditsign extends EssentialsCommand {
 
         final Block target = user.getTargetBlock(5); //5 is a good number
         if (!(target.getState() instanceof Sign)) {
-            throw new Exception(tl("editsignCommandTarget"));
+            throw new TranslatableException("editsignCommandTarget");
         }
         final Sign sign = (Sign) target.getState();
         try {
@@ -35,23 +34,23 @@ public class Commandeditsign extends EssentialsCommand {
                 final int line = Integer.parseInt(args[1]) - 1;
                 final String text = FormatUtil.formatString(user, "essentials.editsign", getFinalArg(args, 2)).trim();
                 if (ChatColor.stripColor(text).length() > 15 && !user.isAuthorized("essentials.editsign.unlimited")) {
-                    throw new Exception(tl("editsignCommandLimit"));
+                    throw new TranslatableException("editsignCommandLimit");
                 }
                 sign.setLine(line, text);
                 sign.update();
-                user.sendMessage(tl("editsignCommandSetSuccess", line + 1, text));
+                user.sendTl("editsignCommandSetSuccess", line + 1, text);
             } else if (args[0].equalsIgnoreCase("clear")) {
                 if (args.length == 1) {
                     for (int i = 0; i < 4; i++) { // A whole one line of line savings!
                         sign.setLine(i, "");
                     }
                     sign.update();
-                    user.sendMessage(tl("editsignCommandClear"));
+                    user.sendTl("editsignCommandClear");
                 } else {
                     final int line = Integer.parseInt(args[1]) - 1;
                     sign.setLine(line, "");
                     sign.update();
-                    user.sendMessage(tl("editsignCommandClearLine", line + 1));
+                    user.sendTl("editsignCommandClearLine", line + 1);
                 }
             } else if (args[0].equalsIgnoreCase("copy") || args[0].equalsIgnoreCase("paste")) {
                 final boolean copy = args[0].equalsIgnoreCase("copy");
@@ -62,10 +61,10 @@ public class Commandeditsign extends EssentialsCommand {
                     for (int i = 0; i < 4; i++) {
                         processSignCopyPaste(user, sign, i, copy);
                     }
-                    user.sendMessage(tl(tlPrefix, commandLabel));
+                    user.sendTl(tlPrefix, commandLabel);
                 } else {
                     processSignCopyPaste(user, sign, line, copy);
-                    user.sendMessage(tl(tlPrefix + "Line", line + 1, commandLabel));
+                    user.sendTl(tlPrefix + "Line", line + 1, commandLabel);
                 }
 
                 if (!copy) {
@@ -75,7 +74,7 @@ public class Commandeditsign extends EssentialsCommand {
                 throw new NotEnoughArgumentsException();
             }
         } catch (final IndexOutOfBoundsException e) {
-            throw new Exception(tl("editsignCommandNoLine"), e);
+            throw new TranslatableException(e, "editsignCommandNoLine");
         }
     }
 

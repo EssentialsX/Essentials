@@ -4,6 +4,7 @@ import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.LocationUtil;
 import com.earth2me.essentials.utils.NumberUtil;
+import net.ess3.api.TranslatableException;
 import org.bukkit.Location;
 import org.bukkit.Server;
 
@@ -11,8 +12,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
-
-import static com.earth2me.essentials.I18n.tl;
 
 public class Commandsethome extends EssentialsCommand {
     public Commandsethome() {
@@ -47,23 +46,23 @@ public class Commandsethome extends EssentialsCommand {
             name = "home";
         }
         if ("bed".equals(name) || NumberUtil.isInt(name)) {
-            throw new NoSuchFieldException(tl("invalidHomeName"));
+            throw new TranslatableException("invalidHomeName");
         }
 
         final Location location = user.getLocation();
         if ((!ess.getSettings().isTeleportSafetyEnabled() || !ess.getSettings().isForceDisableTeleportSafety()) && LocationUtil.isBlockUnsafeForUser(ess, usersHome, location.getWorld(), location.getBlockX(), location.getBlockY(), location.getBlockZ())) {
-            throw new Exception(tl("unsafeTeleportDestination", location.getWorld().getName(), location.getBlockX(), location.getBlockY(), location.getBlockZ()));
+            throw new TranslatableException("unsafeTeleportDestination", location.getWorld().getName(), location.getBlockX(), location.getBlockY(), location.getBlockZ());
         }
 
         if (ess.getSettings().isConfirmHomeOverwrite() && usersHome.hasHome(name) && (!name.equals(usersHome.getLastHomeConfirmation()) || name.equals(usersHome.getLastHomeConfirmation()) && System.currentTimeMillis() - usersHome.getLastHomeConfirmationTimestamp() > TimeUnit.MINUTES.toMillis(2))) {
             usersHome.setLastHomeConfirmation(name);
             usersHome.setLastHomeConfirmationTimestamp();
-            user.sendMessage(tl("homeConfirmation", name));
+            user.sendTl("homeConfirmation", name);
             return;
         }
 
         usersHome.setHome(name, location);
-        user.sendMessage(tl("homeSet", user.getLocation().getWorld().getName(), user.getLocation().getBlockX(), user.getLocation().getBlockY(), user.getLocation().getBlockZ(), name));
+        user.sendTl("homeSet", user.getLocation().getWorld().getName(), user.getLocation().getBlockX(), user.getLocation().getBlockY(), user.getLocation().getBlockZ(), name);
         usersHome.setLastHomeConfirmation(null);
 
     }
@@ -75,7 +74,7 @@ public class Commandsethome extends EssentialsCommand {
                 if (usersHome.getHomes().contains(name)) {
                     return false;
                 }
-                throw new Exception(tl("maxHomes", ess.getSettings().getHomeLimit(user)));
+                throw new TranslatableException("maxHomes", ess.getSettings().getHomeLimit(user));
             }
             return limit == 1;
         }

@@ -4,6 +4,7 @@ import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.NumberUtil;
 import com.google.common.collect.Lists;
+import net.ess3.api.TranslatableException;
 import net.ess3.api.events.UserBalanceUpdateEvent;
 import org.bukkit.ChatColor;
 import org.bukkit.Server;
@@ -16,7 +17,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.logging.Level;
 
-import static com.earth2me.essentials.I18n.tl;
+import static com.earth2me.essentials.I18n.tlLiteral;
 
 public class Commandsell extends EssentialsCommand {
     public Commandsell() {
@@ -31,9 +32,9 @@ public class Commandsell extends EssentialsCommand {
         }
 
         if (args[0].equalsIgnoreCase("hand") && !user.isAuthorized("essentials.sell.hand")) {
-            throw new Exception(tl("sellHandPermission"));
+            throw new TranslatableException("sellHandPermission");
         } else if ((args[0].equalsIgnoreCase("inventory") || args[0].equalsIgnoreCase("invent") || args[0].equalsIgnoreCase("all")) && !user.isAuthorized("essentials.sell.bulk")) {
-            throw new Exception(tl("sellBulkPermission"));
+            throw new TranslatableException("sellBulkPermission");
         }
 
         final List<ItemStack> is = ess.getItemDb().getMatching(user, args);
@@ -49,7 +50,7 @@ public class Commandsell extends EssentialsCommand {
                         notSold.add(stack);
                         continue;
                     }
-                    throw new Exception(tl("cannotSellNamedItem"));
+                    throw new TranslatableException("cannotSellNamedItem");
                 }
             }
             try {
@@ -76,14 +77,14 @@ public class Commandsell extends EssentialsCommand {
                     names.add(stack.getItemMeta().getDisplayName());
                 }
             }
-            ess.showError(user.getSource(), new Exception(tl("cannotSellTheseNamedItems", String.join(ChatColor.RESET + ", ", names))), commandLabel);
+            ess.showError(user.getSource(), new TranslatableException("cannotSellTheseNamedItems", String.join(ChatColor.RESET + ", ", names)), commandLabel);
         }
         if (count != 1) {
             final String totalWorthStr = NumberUtil.displayCurrency(totalWorth, ess);
             if (args[0].equalsIgnoreCase("blocks")) {
-                user.sendMessage(tl("totalWorthBlocks", totalWorthStr, totalWorthStr));
+                user.sendTl("totalWorthBlocks", totalWorthStr, totalWorthStr);
             } else {
-                user.sendMessage(tl("totalWorthAll", totalWorthStr, totalWorthStr));
+                user.sendTl("totalWorthAll", totalWorthStr, totalWorthStr);
             }
         }
     }
@@ -93,12 +94,12 @@ public class Commandsell extends EssentialsCommand {
         final BigDecimal worth = ess.getWorth().getPrice(ess, is);
 
         if (worth == null) {
-            throw new Exception(tl("itemCannotBeSold"));
+            throw new TranslatableException("itemCannotBeSold");
         }
 
         if (amount <= 0) {
             if (!isBulkSell) {
-                user.sendMessage(tl("itemSold", NumberUtil.displayCurrency(BigDecimal.ZERO, ess), BigDecimal.ZERO, is.getType().toString().toLowerCase(Locale.ENGLISH), NumberUtil.displayCurrency(worth, ess)));
+                user.sendTl("itemSold", NumberUtil.displayCurrency(BigDecimal.ZERO, ess), BigDecimal.ZERO, is.getType().toString().toLowerCase(Locale.ENGLISH), NumberUtil.displayCurrency(worth, ess));
             }
             return BigDecimal.ZERO;
         }
@@ -116,8 +117,8 @@ public class Commandsell extends EssentialsCommand {
         user.getBase().updateInventory();
         Trade.log("Command", "Sell", "Item", user.getName(), new Trade(ris, ess), user.getName(), new Trade(result, ess), user.getLocation(), user.getMoney(), ess);
         user.giveMoney(result, null, UserBalanceUpdateEvent.Cause.COMMAND_SELL);
-        user.sendMessage(tl("itemSold", NumberUtil.displayCurrency(result, ess), amount, is.getType().toString().toLowerCase(Locale.ENGLISH), NumberUtil.displayCurrency(worth, ess)));
-        logger.log(Level.INFO, tl("itemSoldConsole", user.getName(), is.getType().toString().toLowerCase(Locale.ENGLISH), NumberUtil.displayCurrency(result, ess), amount, NumberUtil.displayCurrency(worth, ess), user.getDisplayName()));
+        user.sendTl("itemSold", NumberUtil.displayCurrency(result, ess), amount, is.getType().toString().toLowerCase(Locale.ENGLISH), NumberUtil.displayCurrency(worth, ess));
+        logger.log(Level.INFO, tlLiteral("itemSoldConsole", user.getName(), is.getType().toString().toLowerCase(Locale.ENGLISH), NumberUtil.displayCurrency(result, ess), amount, NumberUtil.displayCurrency(worth, ess), user.getDisplayName()));
         return result;
     }
 

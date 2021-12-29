@@ -13,8 +13,6 @@ import java.util.List;
 import java.util.PriorityQueue;
 import java.util.Queue;
 
-import static com.earth2me.essentials.I18n.tl;
-
 public class Commandnear extends EssentialsCommand {
     public Commandnear() {
         super("near");
@@ -52,14 +50,14 @@ public class Commandnear extends EssentialsCommand {
         radius = Math.abs(radius);
 
         if (radius > maxRadius && !user.isAuthorized("essentials.near.maxexempt")) {
-            user.sendMessage(tl("radiusTooBig", maxRadius));
+            user.sendTl("radiusTooBig", maxRadius);
             radius = maxRadius;
         }
 
         if (otherUser == null || !user.isAuthorized("essentials.near.others")) {
             otherUser = user;
         }
-        user.sendMessage(tl("nearbyPlayers", getLocal(otherUser, radius)));
+        user.sendTl("nearbyPlayers", getLocal(user.getSource(), otherUser, radius));
     }
 
     @Override
@@ -75,10 +73,10 @@ public class Commandnear extends EssentialsCommand {
             } catch (final NumberFormatException ignored) {
             }
         }
-        sender.sendMessage(tl("nearbyPlayers", getLocal(otherUser, radius)));
+        sender.sendTl("nearbyPlayers", getLocal(sender, otherUser, radius));
     }
 
-    private String getLocal(final User user, final long radius) {
+    private String getLocal(final CommandSource source, final User user, final long radius) {
         final Location loc = user.getLocation();
         final World world = loc.getWorld();
         final StringBuilder output = new StringBuilder();
@@ -112,7 +110,7 @@ public class Commandnear extends EssentialsCommand {
             output.append(nearbyPlayer.getDisplayName()).append(ChatColor.WHITE + "(" + ChatColor.RED).append((long) nearbyPlayer.getLocation().distance(loc)).append("m" + ChatColor.WHITE + ")");
         }
 
-        return output.length() > 1 ? output.toString() : tl("none");
+        return output.length() > 1 ? output.toString() : source.tl("none");
     }
 
     @Override

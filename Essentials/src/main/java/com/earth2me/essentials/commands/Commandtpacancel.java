@@ -1,9 +1,8 @@
 package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.User;
+import net.ess3.api.TranslatableException;
 import org.bukkit.Server;
-
-import static com.earth2me.essentials.I18n.tl;
 
 public class Commandtpacancel extends EssentialsCommand {
 
@@ -33,14 +32,14 @@ public class Commandtpacancel extends EssentialsCommand {
                 }
             }
             if (cancellations > 0) {
-                user.sendMessage(tl("teleportRequestAllCancelled", cancellations));
+                user.sendTl("teleportRequestAllCancelled", cancellations);
             } else {
-                throw new Exception(tl("noPendingRequest"));
+                throw new TranslatableException("noPendingRequest");
             }
         } else {
             final User targetPlayer = getPlayer(server, user, args, 0);
             if (cancelTeleportRequest(targetPlayer, user)) {
-                user.sendMessage(tl("teleportRequestSpecificCancelled", targetPlayer.getName()));
+                user.sendTl("teleportRequestSpecificCancelled", targetPlayer.getName());
             }
         }
     }

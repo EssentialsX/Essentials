@@ -5,6 +5,7 @@ import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.MaterialUtil;
 import com.earth2me.essentials.utils.NumberUtil;
 import com.google.common.collect.Lists;
+import net.ess3.api.TranslatableException;
 import org.bukkit.DyeColor;
 import org.bukkit.FireworkEffect;
 import org.bukkit.Server;
@@ -16,8 +17,6 @@ import org.bukkit.util.Vector;
 
 import java.util.Collections;
 import java.util.List;
-
-import static com.earth2me.essentials.I18n.tl;
 
 //This command has quite a complicated syntax, in theory it has 4 seperate syntaxes which are all variable:
 //
@@ -49,21 +48,21 @@ public class Commandfirework extends EssentialsCommand {
 
         final ItemStack stack = user.getItemInHand();
         if (!MaterialUtil.isFirework(stack.getType())) {
-            throw new Exception(tl("holdFirework"));
+            throw new TranslatableException("holdFirework");
         }
 
         if (args[0].equalsIgnoreCase("clear")) {
             final FireworkMeta fmeta = (FireworkMeta) stack.getItemMeta();
             fmeta.clearEffects();
             stack.setItemMeta(fmeta);
-            user.sendMessage(tl("fireworkEffectsCleared"));
+            user.sendTl("fireworkEffectsCleared");
         } else if (args.length > 1 && (args[0].equalsIgnoreCase("power") || args[0].equalsIgnoreCase("p"))) {
             final FireworkMeta fmeta = (FireworkMeta) stack.getItemMeta();
             try {
                 final int power = Integer.parseInt(args[1]);
                 fmeta.setPower(power > 3 ? 4 : power);
             } catch (final NumberFormatException e) {
-                throw new Exception(tl("invalidFireworkFormat", args[1], args[0]));
+                throw new TranslatableException("invalidFireworkFormat", args[1], args[0]);
             }
             stack.setItemMeta(fmeta);
         } else if ((args[0].equalsIgnoreCase("fire") || args[0].equalsIgnoreCase("f")) && user.isAuthorized("essentials.firework.fire")) {
@@ -75,7 +74,7 @@ public class Commandfirework extends EssentialsCommand {
                     amount = Integer.parseInt(args[1]);
                     if (amount > serverLimit) {
                         amount = serverLimit;
-                        user.sendMessage(tl("mobSpawnLimit"));
+                        user.sendTl("mobSpawnLimit");
                     }
                 } else {
                     direction = true;
@@ -99,7 +98,7 @@ public class Commandfirework extends EssentialsCommand {
                 try {
                     mStack.addFireworkMeta(user.getSource(), true, arg, ess);
                 } catch (final Exception e) {
-                    user.sendMessage(tl("fireworkSyntax"));
+                    user.sendTl("fireworkSyntax");
                     throw e;
                 }
             }
@@ -108,13 +107,13 @@ public class Commandfirework extends EssentialsCommand {
                 final FireworkMeta fmeta = (FireworkMeta) mStack.getItemStack().getItemMeta();
                 final FireworkEffect effect = mStack.getFireworkBuilder().build();
                 if (fmeta.getEffects().size() > 0 && !user.isAuthorized("essentials.firework.multiple")) {
-                    throw new Exception(tl("multipleCharges"));
+                    throw new TranslatableException("multipleCharges");
                 }
                 fmeta.addEffect(effect);
                 stack.setItemMeta(fmeta);
             } else {
-                user.sendMessage(tl("fireworkSyntax"));
-                throw new Exception(tl("fireworkColor"));
+                user.sendTl("fireworkSyntax");
+                throw new TranslatableException("fireworkColor");
             }
         }
     }

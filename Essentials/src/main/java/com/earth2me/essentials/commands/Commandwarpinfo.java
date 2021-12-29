@@ -8,8 +8,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import static com.earth2me.essentials.I18n.tl;
-
 public class Commandwarpinfo extends EssentialsCommand {
 
     public Commandwarpinfo() {
@@ -23,8 +21,8 @@ public class Commandwarpinfo extends EssentialsCommand {
         }
         final String name = args[0];
         final Location loc = ess.getWarps().getWarp(name);
-        sender.sendMessage(tl("warpInfo", name));
-        sender.sendMessage(tl("whoisLocation", loc.getWorld().getName(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ()));
+        sender.sendTl("warpInfo", name);
+        sender.sendTl("whoisLocation", loc.getWorld().getName(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ());
     }
 
     @Override

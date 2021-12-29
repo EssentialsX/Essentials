@@ -7,6 +7,7 @@ import com.earth2me.essentials.utils.StringUtil;
 import com.earth2me.essentials.utils.VersionUtil;
 import com.google.common.collect.Lists;
 import net.ess3.api.IUser;
+import net.ess3.api.TranslatableException;
 import org.bukkit.Material;
 import org.bukkit.Server;
 import org.bukkit.inventory.ItemStack;
@@ -15,8 +16,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
-
-import static com.earth2me.essentials.I18n.tl;
 
 public class Commandrepair extends EssentialsCommand {
     public Commandrepair() {
@@ -40,11 +39,11 @@ public class Commandrepair extends EssentialsCommand {
     public void repairHand(final User user) throws Exception {
         final ItemStack item = user.getItemInHand();
         if (item == null || item.getType().isBlock() || item.getDurability() == 0) {
-            throw new Exception(tl("repairInvalidType"));
+            throw new TranslatableException("repairInvalidType");
         }
 
         if (!item.getEnchantments().isEmpty() && !ess.getSettings().getRepairEnchanted() && !user.isAuthorized("essentials.repair.enchanted")) {
-            throw new Exception(tl("repairEnchanted"));
+            throw new TranslatableException("repairEnchanted");
         }
 
         final String itemName = item.getType().toString().toLowerCase(Locale.ENGLISH);
@@ -56,7 +55,7 @@ public class Commandrepair extends EssentialsCommand {
 
         charge.charge(user);
         user.getBase().updateInventory();
-        user.sendMessage(tl("repair", itemName.replace('_', ' ')));
+        user.sendTl("repair", itemName.replace('_', ' '));
     }
 
     public void repairAll(final User user) throws Exception {
@@ -69,20 +68,20 @@ public class Commandrepair extends EssentialsCommand {
 
         user.getBase().updateInventory();
         if (repaired.isEmpty()) {
-            throw new Exception(tl("repairNone"));
+            throw new TranslatableException("repairNone");
         } else {
-            user.sendMessage(tl("repair", StringUtil.joinList(repaired)));
+            user.sendTl("repair", StringUtil.joinList(repaired));
         }
     }
 
     private void repairItem(final ItemStack item) throws Exception {
         final Material material = item.getType();
         if (material.isBlock() || material.getMaxDurability() < 1) {
-            throw new Exception(tl("repairInvalidType"));
+            throw new TranslatableException("repairInvalidType");
         }
 
         if (item.getDurability() == 0) {
-            throw new Exception(tl("repairAlreadyFixed"));
+            throw new TranslatableException("repairAlreadyFixed");
         }
 
         item.setDurability((short) 0);

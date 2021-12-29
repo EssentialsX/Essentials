@@ -6,6 +6,7 @@ import com.earth2me.essentials.commands.NotEnoughArgumentsException;
 import com.vdurmont.emoji.EmojiParser;
 import net.dv8tion.jda.api.entities.Emote;
 import net.dv8tion.jda.api.entities.TextChannel;
+import net.ess3.api.TranslatableException;
 import net.essentialsx.discord.JDADiscordService;
 import net.essentialsx.discord.util.DiscordUtil;
 import net.essentialsx.discord.util.MessageUtil;
@@ -29,7 +30,7 @@ public class Commanddiscordbroadcast extends EssentialsCommand {
         }
 
         if (!sender.isAuthorized("essentials.discordbroadcast." + args[0])) {
-            throw new Exception(tl("discordbroadcastPermission", args[0]));
+            throw new TranslatableException("discordbroadcastPermission", args[0]);
         }
 
         String message = getFinalArg(args, 1);
@@ -40,11 +41,11 @@ public class Commanddiscordbroadcast extends EssentialsCommand {
         final JDADiscordService jda = (JDADiscordService) module;
         final TextChannel channel = jda.getDefinedChannel(args[0], false);
         if (channel == null) {
-            throw new Exception(tl("discordbroadcastInvalidChannel", args[0]));
+            throw new TranslatableException("discordbroadcastInvalidChannel", args[0]);
         }
 
         if (!channel.canTalk()) {
-            throw new Exception(tl("discordNoSendPermission", channel.getName()));
+            throw new TranslatableException("discordNoSendPermission", channel.getName());
         }
 
         channel.sendMessage(jda.parseMessageEmotes(message))

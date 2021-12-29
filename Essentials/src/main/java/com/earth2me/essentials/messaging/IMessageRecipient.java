@@ -16,6 +16,23 @@ public interface IMessageRecipient extends MailSender {
     void sendMessage(String message);
 
     /**
+     * Sends a translated message to this recipient.
+     *
+     * @param tlKey key
+     * @param args  arguments
+     */
+    void sendTl(String tlKey, Object... args);
+
+    /**
+     * Translates a message.
+     *
+     * @param tlKey key
+     * @param args  arguments
+     * @return translated message
+     */
+    String tlSender(String tlKey, Object... args);
+
+    /**
      * This method is called when this {@link IMessageRecipient} is sending a message to another {@link IMessageRecipient}.
      * <p>
      * The {@link MessageResponse} that is returned is used to determine what exactly should happen in the {@link #sendMessage(IMessageRecipient,

@@ -5,6 +5,7 @@ import com.earth2me.essentials.craftbukkit.InventoryWorkaround;
 import com.earth2me.essentials.utils.EnumUtil;
 import com.earth2me.essentials.utils.MaterialUtil;
 import com.google.common.collect.Lists;
+import net.ess3.api.TranslatableException;
 import org.bukkit.Material;
 import org.bukkit.Server;
 import org.bukkit.inventory.ItemStack;
@@ -14,8 +15,6 @@ import org.bukkit.scheduler.BukkitRunnable;
 import java.util.Collections;
 import java.util.List;
 import java.util.regex.Pattern;
-
-import static com.earth2me.essentials.I18n.tl;
 
 public class Commandskull extends EssentialsCommand {
 
@@ -31,7 +30,7 @@ public class Commandskull extends EssentialsCommand {
         final String owner;
         if (args.length > 0 && user.isAuthorized("essentials.skull.others")) {
             if (!NAME_PATTERN.matcher(args[0]).matches()) {
-                throw new IllegalArgumentException(tl("alphaNames"));
+                throw new TranslatableException("alphaNames");
             }
             owner = args[0];
         } else {
@@ -49,11 +48,11 @@ public class Commandskull extends EssentialsCommand {
             metaSkull = (SkullMeta) itemSkull.getItemMeta();
             spawn = true;
         } else {
-            throw new Exception(tl("invalidSkull"));
+            throw new TranslatableException("invalidSkull");
         }
 
         if (metaSkull.hasOwner() && !user.isAuthorized("essentials.skull.modify")) {
-            throw new Exception(tl("noPermissionSkull"));
+            throw new TranslatableException("noPermissionSkull");
         }
 
         editSkull(user, itemSkull, metaSkull, owner, spawn);
@@ -72,10 +71,10 @@ public class Commandskull extends EssentialsCommand {
                         stack.setItemMeta(skullMeta);
                         if (spawn) {
                             InventoryWorkaround.addItems(user.getBase().getInventory(), stack);
-                            user.sendMessage(tl("givenSkull", owner));
+                            user.sendTl("givenSkull", owner);
                             return;
                         }
-                        user.sendMessage(tl("skullChanged", owner));
+                        user.sendTl("skullChanged", owner);
                     }
                 }.runTask(ess);
             }

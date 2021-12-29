@@ -4,6 +4,7 @@ import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.NumberUtil;
 import com.google.common.collect.Lists;
+import net.ess3.api.TranslatableException;
 import org.bukkit.Server;
 import org.bukkit.inventory.ItemStack;
 
@@ -11,8 +12,6 @@ import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
-
-import static com.earth2me.essentials.I18n.tl;
 
 public class Commandworth extends EssentialsCommand {
     public Commandworth() {
@@ -47,10 +46,10 @@ public class Commandworth extends EssentialsCommand {
         if (count > 1) {
             final String totalWorthStr = NumberUtil.displayCurrency(totalWorth, ess);
             if (args.length > 0 && args[0].equalsIgnoreCase("blocks")) {
-                user.sendMessage(tl("totalSellableBlocks", totalWorthStr, totalWorthStr));
+                user.sendTl("totalSellableBlocks", totalWorthStr, totalWorthStr);
                 return;
             }
-            user.sendMessage(tl("totalSellableAll", totalWorthStr, totalWorthStr));
+            user.sendTl("totalSellableAll", totalWorthStr, totalWorthStr);
         }
     }
 
@@ -79,7 +78,7 @@ public class Commandworth extends EssentialsCommand {
 
         final BigDecimal worth = ess.getWorth().getPrice(ess, is);
         if (worth == null) {
-            throw new Exception(tl("itemCannotBeSold"));
+            throw new TranslatableException("itemCannotBeSold");
         }
 
         if (amount < 0) {
@@ -87,7 +86,11 @@ public class Commandworth extends EssentialsCommand {
         }
 
         final BigDecimal result = worth.multiply(BigDecimal.valueOf(amount));
-        sender.sendMessage(is.getDurability() != 0 ? tl("worthMeta", is.getType().toString().toLowerCase(Locale.ENGLISH).replace("_", ""), is.getDurability(), NumberUtil.displayCurrency(result, ess), amount, NumberUtil.displayCurrency(worth, ess)) : tl("worth", is.getType().toString().toLowerCase(Locale.ENGLISH).replace("_", ""), NumberUtil.displayCurrency(result, ess), amount, NumberUtil.displayCurrency(worth, ess)));
+        if (is.getDurability() != 0) {
+            sender.sendTl("worthMeta", is.getType().toString().toLowerCase(Locale.ENGLISH).replace("_", ""), is.getDurability(), NumberUtil.displayCurrency(result, ess), amount, NumberUtil.displayCurrency(worth, ess));
+        } else {
+            sender.sendTl("worth", is.getType().toString().toLowerCase(Locale.ENGLISH).replace("_", ""), NumberUtil.displayCurrency(result, ess), amount, NumberUtil.displayCurrency(worth, ess));
+        }
         return result;
     }
 

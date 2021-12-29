@@ -5,6 +5,7 @@ import com.earth2me.essentials.utils.EnumUtil;
 import com.earth2me.essentials.utils.NumberUtil;
 import com.earth2me.essentials.utils.VersionUtil;
 import net.ess3.api.IEssentials;
+import net.ess3.api.TranslatableException;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
@@ -20,8 +21,6 @@ import java.util.Map;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import static com.earth2me.essentials.I18n.tl;
 
 public class LegacyItemDb extends AbstractItemDb {
     protected static final Logger LOGGER = Logger.getLogger("Essentials");
@@ -169,12 +168,12 @@ public class LegacyItemDb extends AbstractItemDb {
         }
 
         if (itemid < 1) {
-            throw new Exception(tl("unknownItemName", itemname));
+            throw new TranslatableException("unknownItemName", itemname);
         }
 
         final ItemData data = legacyIds.get(itemid);
         if (data == null) {
-            throw new Exception(tl("unknownItemId", itemid));
+            throw new TranslatableException("unknownItemId", itemid);
         }
 
         final Material mat = getFromLegacy(itemid, (byte) metaData);
