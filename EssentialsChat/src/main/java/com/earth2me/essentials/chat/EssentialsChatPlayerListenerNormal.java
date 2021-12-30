@@ -18,8 +18,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.logging.Level;
 
-import static com.earth2me.essentials.I18n.tl;
-
 public class EssentialsChatPlayerListenerNormal extends EssentialsChatPlayer {
     EssentialsChatPlayerListenerNormal(final Server server, final IEssentials ess, final Map<AsyncPlayerChatEvent, ChatStore> chatStorage) {
         super(server, ess, chatStorage);
@@ -51,11 +49,11 @@ public class EssentialsChatPlayerListenerNormal extends EssentialsChatPlayer {
                 if (event.getMessage().charAt(0) == ess.getSettings().getChatShout() || event.getMessage().charAt(0) == ess.getSettings().getChatQuestion()) {
                     event.setMessage(event.getMessage().substring(1));
                 }
-                event.setFormat(tl(chatStore.getType() + "Format", event.getFormat()));
+                event.setFormat(user.playerTl(chatStore.getType() + "Format", event.getFormat()));
                 return;
             }
 
-            user.sendMessage(tl("notAllowedTo" + chatStore.getType().substring(0, 1).toUpperCase(Locale.ENGLISH) + chatStore.getType().substring(1)));
+            user.sendTl("notAllowedTo" + chatStore.getType().substring(0, 1).toUpperCase(Locale.ENGLISH) + chatStore.getType().substring(1));
             event.setCancelled(true);
             return;
         }
@@ -80,7 +78,7 @@ public class EssentialsChatPlayerListenerNormal extends EssentialsChatPlayer {
         }
 
         final String format = event.getFormat();
-        event.setFormat(tl("chatTypeLocal").concat(event.getFormat()));
+        event.setFormat(user.playerTl("chatTypeLocal").concat(event.getFormat()));
 
         final Iterator<Player> it = outList.iterator();
         while (it.hasNext()) {
@@ -107,7 +105,7 @@ public class EssentialsChatPlayerListenerNormal extends EssentialsChatPlayer {
         }
 
         if (outList.size() < 2) {
-            user.sendMessage(tl("localNoOne"));
+            user.sendTl("localNoOne");
         }
 
         final LocalChatSpyEvent spyEvent = new LocalChatSpyEvent(event.isAsynchronous(), event.getPlayer(), format, event.getMessage(), spyList);
