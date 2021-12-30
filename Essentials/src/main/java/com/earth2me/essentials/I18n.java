@@ -57,12 +57,6 @@ public class I18n implements net.ess3.api.II18n {
         localeBundle = defaultBundle;
     }
 
-    /*
-    public static String tl(final String string, final Object... objects) {
-        return tlLiteral(string, objects);
-    }
-     */
-
     public static String tlLiteral(final String string, final Object... objects) {
         if (instance == null) {
             return "";
