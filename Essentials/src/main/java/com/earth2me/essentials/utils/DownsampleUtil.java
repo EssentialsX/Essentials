@@ -1,7 +1,9 @@
 package com.earth2me.essentials.utils;
 
+import net.kyori.adventure.util.HSVLike;
+
 /**
- * Most of this code was "borrowed" from KyoriPowered/Adventure and is subject to their MIT license;
+ * Most of this code was "borrowed" from KyoriPowered/adventure and is subject to their MIT license;
  *
  * MIT License
  *
@@ -77,66 +79,6 @@ public final class DownsampleUtil {
 
         private int blue() {
             return value & 0xff;
-        }
-    }
-
-    private static final class HSVLike {
-        private final float h;
-        private final float s;
-        private final float v;
-
-        private HSVLike(float h, float s, float v) {
-            this.h = h;
-            this.s = s;
-            this.v = v;
-        }
-
-        public float h() {
-            return this.h;
-        }
-
-        public float s() {
-            return this.s;
-        }
-
-        public float v() {
-            return this.v;
-        }
-
-        static HSVLike fromRGB(final int red, final int green, final int blue) {
-            final float r = red / 255.0f;
-            final float g = green / 255.0f;
-            final float b = blue / 255.0f;
-
-            final float min = Math.min(r, Math.min(g, b));
-            final float max = Math.max(r, Math.max(g, b)); // v
-            final float delta = max - min;
-
-            final float s;
-            if(max != 0) {
-                s = delta / max; // s
-            } else {
-                // r = g = b = 0
-                s = 0;
-            }
-            if(s == 0) { // s = 0, h is undefined
-                return new HSVLike(0, s, max);
-            }
-
-            float h;
-            if(r == max) {
-                h = (g - b) / delta; // between yellow & magenta
-            } else if(g == max) {
-                h = 2 + (b - r) / delta; // between cyan & yellow
-            } else {
-                h = 4 + (r - g) / delta; // between magenta & cyan
-            }
-            h *= 60; // degrees
-            if(h < 0) {
-                h += 360;
-            }
-
-            return new HSVLike(h / 360.0f, s, max);
         }
     }
 }
