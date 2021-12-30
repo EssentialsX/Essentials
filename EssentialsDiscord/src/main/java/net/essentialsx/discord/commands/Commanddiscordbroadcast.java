@@ -16,8 +16,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import static com.earth2me.essentials.I18n.tl;
-
 public class Commanddiscordbroadcast extends EssentialsCommand {
     public Commanddiscordbroadcast() {
         super("discordbroadcast");
@@ -52,7 +50,7 @@ public class Commanddiscordbroadcast extends EssentialsCommand {
                 .allowedMentions(sender.isAuthorized("essentials.discordbroadcast.ping") ? null : DiscordUtil.NO_GROUP_MENTIONS)
                 .queue();
 
-        sender.sendMessage(tl("discordbroadcastSent", "#" + EmojiParser.parseToAliases(channel.getName())));
+        sender.sendTl("discordbroadcastSent", "#" + EmojiParser.parseToAliases(channel.getName()));
     }
 
     @Override

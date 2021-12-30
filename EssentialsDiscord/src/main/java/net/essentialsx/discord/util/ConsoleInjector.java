@@ -17,7 +17,7 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.regex.Pattern;
 
-import static com.earth2me.essentials.I18n.tl;
+import static com.earth2me.essentials.I18n.tlLiteral;
 
 @Plugin(name = "EssentialsX-ConsoleInjector", category = "Core", elementType = "appender", printObject = true)
 public class ConsoleInjector extends AbstractAppender {
@@ -50,7 +50,7 @@ public class ConsoleInjector extends AbstractAppender {
 
     private void sendMessage(String content) {
         jda.getConsoleWebhook().send(jda.getWebhookMessage(content)).exceptionally(e -> {
-            logger.severe(tl("discordErrorWebhook"));
+            logger.severe(tlLiteral("discordErrorWebhook"));
             remove();
             return null;
         });

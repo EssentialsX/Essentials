@@ -19,7 +19,7 @@ import java.util.Map;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
-import static com.earth2me.essentials.I18n.tl;
+import static com.earth2me.essentials.I18n.tlLiteral;
 
 public class DiscordSettings implements IConf {
     private final EssentialsConfiguration config;
@@ -359,7 +359,7 @@ public class DiscordSettings implements IConf {
     @Override
     public void reloadConfig() {
         if (plugin.isInvalidStartup()) {
-            plugin.getLogger().warning(tl("discordReloadInvalid"));
+            plugin.getLogger().warning(tlLiteral("discordReloadInvalid"));
             return;
         }
 

@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import static com.earth2me.essentials.I18n.tl;
+import static com.earth2me.essentials.I18n.tlLiteral;
 
 public class EssentialsDiscord extends JavaPlugin implements IEssentialsModule {
     private final static Logger logger = Logger.getLogger("EssentialsDiscord");
@@ -33,7 +33,7 @@ public class EssentialsDiscord extends JavaPlugin implements IEssentialsModule {
             return;
         }
         if (!getDescription().getVersion().equals(ess.getDescription().getVersion())) {
-            getLogger().log(Level.WARNING, tl("versionMismatchAll"));
+            getLogger().log(Level.WARNING, tlLiteral("versionMismatchAll"));
         }
 
         // JDK-8274349 - Mitigation for a regression in Java 17 on 1 core systems which was fixed in 17.0.2
@@ -58,7 +58,7 @@ public class EssentialsDiscord extends JavaPlugin implements IEssentialsModule {
                 jda.startup();
                 ess.scheduleSyncDelayedTask(() -> ((InteractionControllerImpl) jda.getInteractionController()).processBatchRegistration());
             } catch (Exception e) {
-                logger.log(Level.SEVERE, tl("discordErrorLogin", e.getMessage()));
+                logger.log(Level.SEVERE, tlLiteral("discordErrorLogin", e.getMessage()));
                 if (ess.getSettings().isDebug()) {
                     e.printStackTrace();
                 }

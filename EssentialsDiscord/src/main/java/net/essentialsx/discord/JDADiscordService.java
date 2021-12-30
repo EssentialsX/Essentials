@@ -58,7 +58,7 @@ import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static com.earth2me.essentials.I18n.tl;
+import static com.earth2me.essentials.I18n.tlLiteral;
 
 public class JDADiscordService implements DiscordService, IEssentialsModule {
     private final static Logger logger = Logger.getLogger("EssentialsDiscord");
@@ -138,7 +138,7 @@ public class JDADiscordService implements DiscordService, IEssentialsModule {
         }
 
         if (!channel.canTalk()) {
-            logger.warning(tl("discordNoSendPermission", channel.getName()));
+            logger.warning(tlLiteral("discordNoSendPermission", channel.getName()));
             return;
         }
         channel.sendMessage(strippedContent)
@@ -150,9 +150,9 @@ public class JDADiscordService implements DiscordService, IEssentialsModule {
         shutdown();
 
         invalidStartup = true;
-        logger.log(Level.INFO, tl("discordLoggingIn"));
+        logger.log(Level.INFO, tlLiteral("discordLoggingIn"));
         if (plugin.getSettings().getBotToken().replace("INSERT-TOKEN-HERE", "").trim().isEmpty()) {
-            throw new IllegalArgumentException(tl("discordErrorNoToken"));
+            throw new IllegalArgumentException(tlLiteral("discordErrorNoToken"));
         }
 
         jda = JDABuilder.createDefault(plugin.getSettings().getBotToken())
@@ -164,17 +164,17 @@ public class JDADiscordService implements DiscordService, IEssentialsModule {
                 .awaitReady();
         invalidStartup = false;
         updatePresence();
-        logger.log(Level.INFO, tl("discordLoggingInDone", jda.getSelfUser().getAsTag()));
+        logger.log(Level.INFO, tlLiteral("discordLoggingInDone", jda.getSelfUser().getAsTag()));
 
         if (jda.getGuilds().isEmpty()) {
             invalidStartup = true;
-            throw new IllegalArgumentException(tl("discordErrorNoGuildSize"));
+            throw new IllegalArgumentException(tlLiteral("discordErrorNoGuildSize"));
         }
 
         guild = jda.getGuildById(plugin.getSettings().getGuildId());
         if (guild == null) {
             invalidStartup = true;
-            throw new IllegalArgumentException(tl("discordErrorNoGuild"));
+            throw new IllegalArgumentException(tlLiteral("discordErrorNoGuild"));
         }
 
         interactionController = new InteractionControllerImpl(this);
@@ -286,13 +286,13 @@ public class JDADiscordService implements DiscordService, IEssentialsModule {
         if (channel == null) {
             channel = guild.getDefaultChannel();
             if (channel == null) {
-                throw new RuntimeException(tl("discordErrorNoPerms"));
+                throw new RuntimeException(tlLiteral("discordErrorNoPerms"));
             }
-            logger.warning(tl("discordErrorNoPrimary", channel.getName()));
+            logger.warning(tlLiteral("discordErrorNoPrimary", channel.getName()));
         }
 
         if (!channel.canTalk()) {
-            throw new RuntimeException(tl("discordErrorNoPrimaryPerms", channel.getName()));
+            throw new RuntimeException(tlLiteral("discordErrorNoPrimaryPerms", channel.getName()));
         }
         primaryChannel = channel;
     }
@@ -374,14 +374,14 @@ public class JDADiscordService implements DiscordService, IEssentialsModule {
 
                 final Webhook webhook = DiscordUtil.getOrCreateWebhook(channel, DiscordUtil.CONSOLE_RELAY_NAME).join();
                 if (webhook == null) {
-                    logger.info(tl("discordErrorLoggerNoPerms"));
+                    logger.info(tlLiteral("discordErrorLoggerNoPerms"));
                     return;
                 }
                 webhookId = webhook.getIdLong();
                 webhookToken = webhook.getToken();
                 lastConsoleId = channel.getId();
             } else if (!getSettings().getConsoleChannelDef().equals("none") && !getSettings().getConsoleChannelDef().startsWith("0")) {
-                logger.info(tl("discordErrorLoggerInvalidChannel"));
+                logger.info(tlLiteral("discordErrorLoggerInvalidChannel"));
                 shutdownConsoleRelay(true);
                 return;
             } else {
