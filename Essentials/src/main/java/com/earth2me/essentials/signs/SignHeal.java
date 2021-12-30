@@ -5,8 +5,6 @@ import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.User;
 import net.ess3.api.IEssentials;
 
-import static com.earth2me.essentials.I18n.tl;
-
 public class SignHeal extends EssentialsSign {
     public SignHeal() {
         super("Heal");
@@ -28,7 +26,7 @@ public class SignHeal extends EssentialsSign {
         player.getBase().setHealth(20);
         player.getBase().setFoodLevel(20);
         player.getBase().setFireTicks(0);
-        player.sendMessage(tl("youAreHealed"));
+        player.sendTl("youAreHealed");
         charge.charge(player);
         Trade.log("Sign", "Heal", "Interact", username, null, username, charge, sign.getBlock().getLocation(), player.getMoney(), ess);
         return true;

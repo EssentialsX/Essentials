@@ -5,7 +5,7 @@ import net.kyori.adventure.text.flattener.ComponentFlattener;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 
 public final class AdventureUtil {
-    public static final LegacyComponentSerializer LEGACY_SERIALIZER;
+    private static final LegacyComponentSerializer LEGACY_SERIALIZER;
 
     static {
         final LegacyComponentSerializer.Builder builder = LegacyComponentSerializer.builder().flattener(ComponentFlattener.basic()).useUnusualXRepeatedCharacterHexFormat();

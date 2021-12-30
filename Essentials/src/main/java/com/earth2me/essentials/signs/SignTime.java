@@ -6,8 +6,6 @@ import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.DescParseTickFormat;
 import net.ess3.api.IEssentials;
 
-import static com.earth2me.essentials.I18n.tl;
-
 public class SignTime extends EssentialsSign {
     public SignTime() {
         super("Time");
@@ -35,7 +33,7 @@ public class SignTime extends EssentialsSign {
     @Override
     protected boolean onSignInteract(final ISign sign, final User player, final String username, final IEssentials ess) throws SignException, ChargeException {
         if (sign.getLine(1).isEmpty() && sign.getLine(2).isEmpty() && sign.getLine(3).isEmpty()) {
-            player.sendMessage(tl("timeWorldCurrentSign", DescParseTickFormat.format(player.getWorld().getTime())));
+            player.sendTl("timeWorldCurrentSign", DescParseTickFormat.format(player.getWorld().getTime()));
             return true;
         }
 
