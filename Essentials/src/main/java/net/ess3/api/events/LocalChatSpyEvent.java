@@ -8,7 +8,7 @@ import org.bukkit.event.HandlerList;
 import java.util.IllegalFormatException;
 import java.util.Set;
 
-import static com.earth2me.essentials.I18n.tl;
+import static com.earth2me.essentials.I18n.tlLiteral;
 
 /**
  * Fired when a player uses local chat.
@@ -23,7 +23,7 @@ public class LocalChatSpyEvent extends Event implements Cancellable {
 
     public LocalChatSpyEvent(final boolean async, final Player who, final String format, final String message, final Set<Player> players) {
         super(async);
-        this.format = tl("chatTypeLocal").concat(tl("chatTypeSpy")).concat(format);
+        this.format = tlLiteral("chatTypeLocal").concat(tlLiteral("chatTypeSpy")).concat(format);
         this.message = message;
         recipients = players;
         player = who;

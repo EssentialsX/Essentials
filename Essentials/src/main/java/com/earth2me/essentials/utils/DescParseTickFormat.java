@@ -10,7 +10,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TimeZone;
 
-import static com.earth2me.essentials.I18n.tl;
+import static com.earth2me.essentials.I18n.tlLiteral;
 
 /**
  * This utility class is used for converting between the ingame time in ticks to ingame time as a friendly string. Note
@@ -194,7 +194,7 @@ public final class DescParseTickFormat {
 
     // ============================================
     public static String format(final long ticks) {
-        return tl("timeFormat", format24(ticks), format12(ticks), formatTicks(ticks));
+        return tlLiteral("timeFormat", format24(ticks), format12(ticks), formatTicks(ticks));
     }
 
     public static String formatTicks(final long ticks) {
