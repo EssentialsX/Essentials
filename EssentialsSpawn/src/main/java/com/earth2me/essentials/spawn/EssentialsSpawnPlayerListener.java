@@ -21,7 +21,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import static com.earth2me.essentials.I18n.tl;
+import static com.earth2me.essentials.I18n.tlLiteral;
 
 class EssentialsSpawnPlayerListener implements Listener {
     private static final Logger logger = Logger.getLogger("EssentialsSpawn");
@@ -153,7 +153,7 @@ class EssentialsSpawnPlayerListener implements Listener {
             if (spawn != null) {
                 final CompletableFuture<Boolean> future = new CompletableFuture<>();
                 future.exceptionally(e -> {
-                    logger.log(Level.WARNING, tl("teleportNewPlayerError"), e);
+                    logger.log(Level.WARNING, tlLiteral("teleportNewPlayerError"), e);
                     return false;
                 });
                 user.getAsyncTeleport().now(spawn, false, TeleportCause.PLUGIN, future);
