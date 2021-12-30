@@ -138,7 +138,7 @@ public class EconomyTest {
         try {
             runCommand("pay", user1, PLAYERNAME2 + " -123");
         } catch (final Exception e) {
-            Assert.assertEquals(I18n.tl("payMustBePositive"), e.getMessage());
+            Assert.assertEquals(I18n.tlLiteral("payMustBePositive"), e.getMessage());
         }
     }
 }
