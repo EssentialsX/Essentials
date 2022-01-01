@@ -84,9 +84,13 @@ public final class LocationUtil {
     }
 
     public static Location getTarget(final LivingEntity entity) throws Exception {
+        return getTarget(entity, 300);
+    }
+
+    public static Location getTarget(final LivingEntity entity, final int maxDistance) throws Exception {
         Block block = null;
         try {
-            block = entity.getTargetBlock(TRANSPARENT_MATERIALS, 300);
+            block = entity.getTargetBlock(TRANSPARENT_MATERIALS, maxDistance);
         } catch (final NoSuchMethodError ignored) {
         } // failing now :(
         if (block == null) {
