@@ -96,9 +96,8 @@ public final class UpdateChecker {
                         // Locally built?
                         pendingReleaseFuture.complete(cachedRelease = new RemoteVersion(BranchStatus.UNKNOWN));
                         break catchBlock;
-                    }
-                    if (connection.getResponseCode() == HttpURLConnection.HTTP_INTERNAL_ERROR) {
-                        // Github is down
+                    } else if (connection.getResponseCode() == HttpURLConnection.HTTP_INTERNAL_ERROR || connection.getResponseCode() == HttpURLConnection.HTTP_FORBIDDEN) {
+                        // GitHub is down or rate limit exceeded
                         pendingReleaseFuture.complete(new RemoteVersion(BranchStatus.ERROR));
                         break catchBlock;
                     }
@@ -146,8 +145,7 @@ public final class UpdateChecker {
             if (connection.getResponseCode() == HttpURLConnection.HTTP_NOT_FOUND) {
                 // Locally built?
                 return new RemoteVersion(BranchStatus.UNKNOWN);
-            }
-            if (connection.getResponseCode() == HttpURLConnection.HTTP_INTERNAL_ERROR || connection.getResponseCode() == HttpURLConnection.HTTP_FORBIDDEN) {
+            } else if (connection.getResponseCode() == HttpURLConnection.HTTP_INTERNAL_ERROR || connection.getResponseCode() == HttpURLConnection.HTTP_FORBIDDEN) {
                 // GitHub is down or we hit a local rate limit
                 return new RemoteVersion(BranchStatus.ERROR);
             }
