@@ -773,7 +773,9 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
             setAfk(false, cause);
             if (broadcast && !isHidden() && !isAfk()) {
                 setDisplayNick();
-                ess.broadcastTl(this, u -> u == this, "userIsNotAway", getDisplayName());
+                if (ess.getSettings().broadcastAfkMessage()) {
+                    ess.broadcastTl(this, u -> u == this, "userIsNotAway", getDisplayName());
+                }
                 sendTl("userIsNotAwaySelf", getDisplayName());
             }
         }
@@ -826,7 +828,9 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
             setAfk(true, AfkStatusChangeEvent.Cause.ACTIVITY);
             if (isAfk() && !isHidden()) {
                 setDisplayNick();
-                ess.broadcastTl(this, u -> u == this, "userIsAway", getDisplayName());
+                if (ess.getSettings().broadcastAfkMessage()) {
+                    ess.broadcastTl(this, u -> u == this, "userIsAway", getDisplayName());
+                }
                 sendTl("userIsAwaySelf", getDisplayName());
             }
         }
