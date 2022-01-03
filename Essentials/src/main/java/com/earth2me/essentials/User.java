@@ -1045,6 +1045,10 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
     @Override
     public void sendTl(String tlKey, Object... args) {
         final String translation = playerTl(tlKey, args);
+        if (translation.trim().isEmpty()) {
+            return;
+        }
+
         if (!translation.startsWith(I18n.MINI_MESSAGE_PREFIX)) {
             sendMessage(translation);
             return;
