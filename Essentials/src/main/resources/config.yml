@@ -460,6 +460,11 @@ auto-afk: 300
 # Set to -1 for no timeout.
 auto-afk-kick: -1
 
+# Auto-AFK Actions
+# Actions to execute when a player is afk.
+# essentials.afk.actionsexempt node overrides this feature.
+auto-afk-actions:
+#  spawn {USERNAME} : 10 # After 10 seconds that the user is afk execute the command /spawn {USERNAME}
 
 # Set this to true, if you want to freeze the player, if the player is AFK.
 # Other players or monsters can't push the player out of AFK mode then.

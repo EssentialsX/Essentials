@@ -138,6 +138,7 @@ public class Settings implements net.ess3.api.ISettings {
     private double maxProjectileSpeed;
     private boolean removeEffectsOnHeal;
     private Map<String, String> worldAliases;
+    private Map<Integer,List<String>> autoAfkActions;
 
     public Settings(final IEssentials ess) {
         this.ess = ess;
@@ -1086,6 +1087,42 @@ public class Settings implements net.ess3.api.ISettings {
         return autoAfkActions;
     }
 
+    @Override
+    public boolean isAutoAfkActionsEnabled() {
+        return autoAfkActions != null;
+    }
+
+    public Map<Integer,List<String>> _getAutoAfkActions() {
+        final CommentedConfigurationNode section = config.getSection("auto-afk-actions");
+        if (section == null) {
+            return null;
+        }
+        final Map<Integer,List<String>> result = new HashMap<>();
+        for (Map.Entry<String, Object> entry : ConfigurateUtil.getRawMap(section).entrySet()) {
+            final String cmdEntry = entry.getKey();
+            Object value = entry.getValue();
+
+            if (value instanceof String) {
+                try {
+                    value = Double.parseDouble(value.toString());
+                } catch (final NumberFormatException ignored) {
+                }
+            }
+            if (!(value instanceof Number)) {
+                ess.getLogger().warning("Afk action error: '" + value + "' is not a valid delay");
+                continue;
+            }
+            final double delay = ((Number) value).doubleValue();
+            if (delay < 1) {
+                ess.getLogger().warning("Afk action with very short " + delay + " delay.");
+            }
+
+            if (!result.containsKey((int)delay)){
+                result.put((int)delay,new ArrayList<>());
+            }
+            result.get((int)delay).add(cmdEntry);
+        }
+        return result;
     }
 
     @Override

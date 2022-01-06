@@ -5,6 +5,9 @@ import com.earth2me.essentials.economy.EconomyLayer;
 import com.earth2me.essentials.economy.EconomyLayers;
 import com.earth2me.essentials.messaging.IMessageRecipient;
 import com.earth2me.essentials.messaging.SimpleMessageRecipient;
+import com.earth2me.essentials.textreader.IText;
+import com.earth2me.essentials.textreader.KeywordReplacer;
+import com.earth2me.essentials.textreader.SimpleTextInput;
 import com.earth2me.essentials.utils.DateUtil;
 import com.earth2me.essentials.utils.EnumUtil;
 import com.earth2me.essentials.utils.FormatUtil;
@@ -86,6 +89,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
     private transient long lastThrottledAction;
     private transient long lastActivity = System.currentTimeMillis();
     private transient long teleportInvulnerabilityTimestamp = 0;
+    private transient int afkActionTime = 0;
     private String confirmingClearCommand;
     private long lastNotifiedAboutMailsMs;
     private String lastHomeConfirmation;
@@ -642,6 +646,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
             afkPosition = null;
             this.afkMessage = null;
             this.afkSince = 0;
+            this.afkActionTime = 0;
         }
         _setAfk(set);
         updateAfkListName();
@@ -805,6 +810,17 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
             return;
         }
 
+        if (ess.getSettings().isAutoAfkActionsEnabled() && lastActivity > 0){
+            afkActionTime++;
+            if (ess.getSettings().getAutoAfkActions().containsKey(afkActionTime)
+                    && !isAuthorized("essentials.afk.actionsexempt")) {
+                final IText input = new SimpleTextInput(ess.getSettings().getAutoAfkActions().get(afkActionTime));
+                final IText output = new KeywordReplacer(input, getSource(), ess);
+                for (String action : output.getLines()) {
+                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(), action);
+                }
+            }
+        }
         final long autoafkkick = ess.getSettings().getAutoAfkKick();
         if (autoafkkick > 0
                 && lastActivity > 0 && (lastActivity + (autoafkkick * 1000)) < System.currentTimeMillis()
