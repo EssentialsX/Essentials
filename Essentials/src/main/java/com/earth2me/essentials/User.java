@@ -805,19 +805,19 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
             return;
         }
 
-        final long autoafkActionTimeout = ess.getSettings().getAutoAfkActionsTimout();
-        if (autoafkActionTimeout > 0
-                && lastActivity > 0 && (lastActivity + (autoafkActionTimeout * 1000)) < System.currentTimeMillis()
-                && !isAuthorized("essentials.afk.kickexempt")
-                && !isAuthorized("essentials.afk.actionsexempt")) {
+        final long autoafkkick = ess.getSettings().getAutoAfkKick();
+        if (autoafkkick > 0
+                && lastActivity > 0 && (lastActivity + (autoafkkick * 1000)) < System.currentTimeMillis()
+                && !isAuthorized("essentials.kick.exempt")
+                && !isAuthorized("essentials.afk.kickexempt")) {
+            final String kickReason = tl("autoAfkKickReason", autoafkkick / 60.0);
             lastActivity = 0;
+            this.getBase().kickPlayer(kickReason);
 
-            for (String action : ess.getSettings().getAutoAfkActions()){
-                action = action.replace("{PLAYER}",getDisplayName());
-                action = action.replace("{USERNAME}",getName());
-                action = action.replace("{WORLDNAME}"
-                        ,getLocation()==null||getLocation().getWorld()==null?"":getLocation().getWorld().getName());
-                Bukkit.dispatchCommand(Bukkit.getConsoleSender(),action);
+            for (final User user : ess.getOnlineUsers()) {
+                if (user.isAuthorized("essentials.kick.notify")) {
+                    user.sendMessage(tl("playerKicked", Console.DISPLAY_NAME, getName(), kickReason));
+                }
             }
         }
         final long autoafk = ess.getSettings().getAutoAfk();
