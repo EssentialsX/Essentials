@@ -115,8 +115,8 @@ public class SignTrade extends EssentialsSign {
                     return true;
                 }
 
-                final Map<Integer, ItemStack> withdraw1 = stored1.pay(player, OverflowType.RETURN);
-                final Map<Integer, ItemStack> withdraw2 = stored2.pay(player, OverflowType.RETURN);
+                final Map<Integer, ItemStack> withdraw1 = stored1.pay(player, OverflowType.DROP);
+                final Map<Integer, ItemStack> withdraw2 = stored2.pay(player, OverflowType.DROP);
 
                 if (withdraw1 == null && withdraw2 == null) {
                     Trade.log("Sign", "Trade", "Break", signOwner.substring(2), stored2, username, stored1, sign.getBlock().getLocation(), player.getMoney(), ess);
