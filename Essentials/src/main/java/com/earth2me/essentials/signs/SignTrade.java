@@ -205,7 +205,9 @@ public class SignTrade extends EssentialsSign {
             if (!(split[1].equalsIgnoreCase("exp") || split[1].equalsIgnoreCase("xp")) && getItemStack(split[1], stackamount, ess).getType() == Material.AIR) {
                 throw new SignException(tl("moreThanZero"));
             }
-            sign.setLine(index, stackamount + " " + split[1] + ":" + amount);
+            final String newline = stackamount + " " + split[1] + ":" + amount;
+            validateSignLength(newline);
+            sign.setLine(index, newline);
             return;
         }
         throw new SignException(tl("invalidSignLine", index + 1));
