@@ -8,6 +8,7 @@ import net.ess3.api.events.UserBalanceUpdateEvent;
 import org.bukkit.ChatColor;
 import org.bukkit.Server;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.permissions.PermissionAttachmentInfo;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -90,7 +91,12 @@ public class Commandsell extends EssentialsCommand {
 
     private BigDecimal sellItem(final User user, final ItemStack is, final String[] args, final boolean isBulkSell) throws Exception {
         final int amount = ess.getWorth().getAmount(ess, user, is, args, isBulkSell);
-        final BigDecimal worth = ess.getWorth().getPrice(ess, is);
+        final BigDecimal multiplier = calculateMultiplier(user);
+        BigDecimal worth = ess.getWorth().getPrice(ess, is);
+
+        if (worth != null && multiplier.compareTo(BigDecimal.ZERO) > 0) {
+            worth = worth.multiply(multiplier);
+        }
 
         if (worth == null) {
             throw new Exception(tl("itemCannotBeSold"));
@@ -103,7 +109,7 @@ public class Commandsell extends EssentialsCommand {
             return BigDecimal.ZERO;
         }
 
-        final BigDecimal result = worth.multiply(BigDecimal.valueOf(amount));
+        BigDecimal result = worth.multiply(BigDecimal.valueOf(amount));
 
         //TODO: Prices for Enchantments
         final ItemStack ris = is.clone();
@@ -118,7 +124,28 @@ public class Commandsell extends EssentialsCommand {
         user.giveMoney(result, null, UserBalanceUpdateEvent.Cause.COMMAND_SELL);
         user.sendMessage(tl("itemSold", NumberUtil.displayCurrency(result, ess), amount, is.getType().toString().toLowerCase(Locale.ENGLISH), NumberUtil.displayCurrency(worth, ess)));
         logger.log(Level.INFO, tl("itemSoldConsole", user.getName(), is.getType().toString().toLowerCase(Locale.ENGLISH), NumberUtil.displayCurrency(result, ess), amount, NumberUtil.displayCurrency(worth, ess), user.getDisplayName()));
+
         return result;
+    }
+
+    //Check permissions for multipliers and take the max
+    private BigDecimal calculateMultiplier(User user) {
+        double max = 0;
+
+        for (PermissionAttachmentInfo perm : user.getBase().getEffectivePermissions()) {
+            final String permission = perm.getPermission();
+            if (permission.startsWith("essentials.sell.multiplier.")) {
+                try {
+                    double value = Double.parseDouble(permission.substring(27));
+                    if (value > max) {
+                        max = value;
+                    }
+                } catch (NumberFormatException e) {
+                    logger.log(Level.WARNING, user.getName() + " has an invalid number in their multiplier permissions: " + permission + "! Correct format: essentials.sell.multiplier.(number)");
+                }
+            }
+        }
+            return BigDecimal.valueOf(max);
     }
 
     @Override
