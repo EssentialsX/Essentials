@@ -100,6 +100,7 @@ public class Commandcondense extends EssentialsCommand {
                 final Trade add = new Trade(result, ess);
                 remove.charge(user);
                 add.pay(user, OverflowType.DROP);
+                if (result.getType().equals(Material.HONEY_BLOCK)) user.getBase().getInventory().addItem(new ItemStack(Material.GLASS_BOTTLE, input.getAmount()));
                 return true;
             }
         }
