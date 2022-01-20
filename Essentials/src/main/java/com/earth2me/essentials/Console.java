@@ -71,7 +71,7 @@ public final class Console implements IMessageRecipient {
             sendMessage(translation);
             return;
         }
-        ((Essentials) ess).getBukkitAudience().sender(getCommandSender()).sendMessage(MiniMessage.miniMessage().parse(translation.substring(4)));
+        ((Essentials) ess).getBukkitAudience().sender(getCommandSender()).sendMessage(MiniMessage.miniMessage().deserialize(translation.substring(4)));
     }
 
     @Override

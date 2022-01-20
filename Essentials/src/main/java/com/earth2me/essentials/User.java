@@ -1039,7 +1039,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
         if (!translation.startsWith(I18n.MINI_MESSAGE_PREFIX)) {
             return AdventureUtil.toComponent(translation);
         }
-        return MiniMessage.miniMessage().parse(translation.substring(4));
+        return MiniMessage.miniMessage().deserialize(translation.substring(4));
     }
 
     @Override
@@ -1053,7 +1053,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
             sendMessage(translation);
             return;
         }
-        sendComponent(MiniMessage.miniMessage().parse(translation.substring(4)));
+        sendComponent(MiniMessage.miniMessage().deserialize(translation.substring(4)));
     }
 
     @Override

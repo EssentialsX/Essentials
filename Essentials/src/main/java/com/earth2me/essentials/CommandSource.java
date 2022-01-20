@@ -41,7 +41,7 @@ public class CommandSource {
             sendMessage(translation);
             return;
         }
-        sendComponent(MiniMessage.miniMessage().parse(translation.substring(4)));
+        sendComponent(MiniMessage.miniMessage().deserialize(translation.substring(4)));
     }
 
     public String tl(final String tlKey, final Object... args) {
@@ -61,7 +61,7 @@ public class CommandSource {
         if (!translation.startsWith(I18n.MINI_MESSAGE_PREFIX)) {
             return AdventureUtil.toComponent(translation);
         }
-        return MiniMessage.miniMessage().parse(translation.substring(4));
+        return MiniMessage.miniMessage().deserialize(translation.substring(4));
     }
 
     public void sendComponent(final Component component) {
