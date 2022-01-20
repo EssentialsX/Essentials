@@ -395,6 +395,7 @@ public interface ISettings extends IConf {
     boolean isUpdateCheckEnabled();
 
     boolean showZeroBaltop();
+    BigDecimal getMultiplier(final User user);
 
     enum KeepInvPolicy {
         KEEP,
