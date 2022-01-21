@@ -1919,4 +1919,9 @@ public class Settings implements net.ess3.api.ISettings {
     public boolean showZeroBaltop() {
         return config.getBoolean("show-zero-baltop", true);
     }
+
+    @Override
+    public int getMaxItemLore() {
+        return config.getInt("max-item-lore", 10);
+    }
 }
