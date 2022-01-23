@@ -1922,6 +1922,6 @@ public class Settings implements net.ess3.api.ISettings {
 
     @Override
     public int getMaxItemLore() {
-        return config.getInt("max-item-lore", 10);
+        return config.getInt("max-itemlore-lines", 10);
     }
 }
