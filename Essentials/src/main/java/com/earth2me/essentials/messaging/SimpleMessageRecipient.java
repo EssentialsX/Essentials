@@ -158,7 +158,7 @@ public class SimpleMessageRecipient implements IMessageRecipient {
             }
         }
         // Display the formatted message to this recipient.
-        sendMessage(tl("msgFormatOut", sender.getDisplayName(), tl("meRecipient"), message));
+        sendMessage(tl("msgFormat", sender.getDisplayName(), tl("meRecipient"), message));
 
         if (isLastMessageReplyRecipient) {
             // If this recipient doesn't have a reply recipient, initiate by setting the first
