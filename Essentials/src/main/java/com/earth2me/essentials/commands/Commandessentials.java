@@ -258,6 +258,7 @@ public class Commandessentials extends EssentialsCommand {
         files.add(new PasteUtil.PasteFile("dump.json", dump.toString()));
 
         final Plugin essDiscord = Bukkit.getPluginManager().getPlugin("EssentialsDiscord");
+        final Plugin essSpawn = Bukkit.getPluginManager().getPlugin("EssentialsSpawn");
 
         // Further operations will be heavy IO
         ess.runTaskAsynchronously(() -> {
@@ -265,12 +266,18 @@ public class Commandessentials extends EssentialsCommand {
             boolean discord = false;
             boolean kits = false;
             boolean log = false;
+            boolean worth = false;
+            boolean tpr = false;
+            boolean spawns = false;
             for (final String arg : args) {
                 if (arg.equals("*") || arg.equalsIgnoreCase("all")) {
                     config = true;
                     discord = true;
                     kits = true;
                     log = true;
+                    worth = true;
+                    tpr = true;
+                    spawns = true;
                     break;
                 } else if (arg.equalsIgnoreCase("config")) {
                     config = true;
@@ -280,6 +287,12 @@ public class Commandessentials extends EssentialsCommand {
                     kits = true;
                 } else if (arg.equalsIgnoreCase("log")) {
                     log = true;
+                } else if (arg.equalsIgnoreCase("worth")) {
+                    worth = true;
+                } else if (arg.equalsIgnoreCase("tpr")) {
+                    tpr = true;
+                } else if (arg.equalsIgnoreCase("spawns")) {
+                    spawns = true;
                 }
             }
 
@@ -316,6 +329,30 @@ public class Commandessentials extends EssentialsCommand {
                             .replaceAll("(?:[0-9]{1,3}\\.){3}[0-9]{1,3}", "<censored ip address>")));
                 } catch (IOException e) {
                     sender.sendMessage(tl("dumpErrorUpload", "latest.log", e.getMessage()));
+                }
+            }
+
+            if (worth) {
+                try {
+                    files.add(new PasteUtil.PasteFile("worth.yml", new String(Files.readAllBytes(ess.getWorth().getFile().toPath()), StandardCharsets.UTF_8)));
+                } catch (IOException e) {
+                    sender.sendMessage(tl("dumpErrorUpload", "worth.yml", e.getMessage()));
+                }
+            }
+
+            if (tpr) {
+                try {
+                    files.add(new PasteUtil.PasteFile("tpr.yml", new String(Files.readAllBytes(ess.getRandomTeleport().getFile().toPath()), StandardCharsets.UTF_8)));
+                } catch (IOException e) {
+                    sender.sendMessage(tl("dumpErrorUpload", "tpr.yml", e.getMessage()));
+                }
+            }
+
+            if (spawns && essSpawn != null) {
+                try {
+                    files.add(new PasteUtil.PasteFile("spawn.yml", new String(Files.readAllBytes(ess.getDataFolder().toPath().resolve("spawn.yml")), StandardCharsets.UTF_8)));
+                } catch (IOException e) {
+                    sender.sendMessage(tl("dumpErrorUpload", "spawn.yml", e.getMessage()));
                 }
             }
 
@@ -719,7 +756,7 @@ public class Commandessentials extends EssentialsCommand {
                 }
                 break;
             case "dump":
-                final List<String> list = Lists.newArrayList("config", "kits", "log", "discord", "all");
+                final List<String> list = Lists.newArrayList("config", "kits", "log", "discord", "worth", "tpr", "spawns", "all");
                 for (String arg : args) {
                     if (arg.equals("*") || arg.equalsIgnoreCase("all")) {
                         list.clear();
