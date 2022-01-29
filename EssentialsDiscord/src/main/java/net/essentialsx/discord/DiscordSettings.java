@@ -472,7 +472,7 @@ public class DiscordSettings implements IConf {
                 activityType = Activity.ActivityType.valueOf(activity);
             }
         } catch (IllegalArgumentException e) {
-            activityType = Activity.ActivityType.DEFAULT;
+            activityType = Activity.ActivityType.PLAYING;
         }
         if (activityType != null) {
             statusActivity = Activity.of(activityType, config.getString("presence.message", "Minecraft"));

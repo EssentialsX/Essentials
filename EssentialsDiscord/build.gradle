@@ -4,12 +4,14 @@ plugins {
 
 dependencies {
     compileOnly project(':EssentialsX')
-    implementation('net.dv8tion:JDA:4.4.1_353') {
+    implementation('net.dv8tion:JDA:5.0.0-beta.12') {
         exclude(module: 'opus-java')
     }
-    implementation 'com.vdurmont:emoji-java:5.1.1'
-    implementation 'club.minnced:discord-webhooks:0.7.2'
-    compileOnly 'org.apache.logging.log4j:log4j-core:2.15.0'
+    implementation 'com.github.MinnDevelopment:emoji-java:v6.1.0'
+    implementation('club.minnced:discord-webhooks:0.8.2') {
+        exclude(module: 'okhttp')
+    }
+    compileOnly 'org.apache.logging.log4j:log4j-core:2.17.1'
     compileOnly 'me.clip:placeholderapi:2.10.9'
 }
 
@@ -28,7 +30,7 @@ shadowJar {
         include(dependency('org.slf4j:slf4j-api'))
 
         // Emoji
-        include(dependency('com.vdurmont:emoji-java'))
+        include(dependency('com.github.MinnDevelopment:emoji-java'))
         include(dependency('org.json:json'))
 
         // discord-webhooks
