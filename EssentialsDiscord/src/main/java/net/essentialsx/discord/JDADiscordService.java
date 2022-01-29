@@ -11,14 +11,15 @@ import com.earth2me.essentials.utils.NumberUtil;
 import com.earth2me.essentials.utils.VersionUtil;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
-import net.dv8tion.jda.api.entities.Emote;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Role;
-import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.Webhook;
-import net.dv8tion.jda.api.events.ShutdownEvent;
+import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
+import net.dv8tion.jda.api.entities.emoji.RichCustomEmoji;
+import net.dv8tion.jda.api.events.session.ShutdownEvent;
 import net.dv8tion.jda.api.hooks.EventListener;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
+import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.utils.cache.CacheFlag;
 import net.ess3.nms.refl.providers.AchievementListenerProvider;
 import net.ess3.nms.refl.providers.AdvancementListenerProvider;
@@ -154,7 +155,7 @@ public class JDADiscordService implements DiscordService, IEssentialsModule {
             return;
         }
         channel.sendMessage(strippedContent)
-                .allowedMentions(groupMentions ? null : DiscordUtil.NO_GROUP_MENTIONS)
+                .setAllowedMentions(groupMentions ? null : DiscordUtil.NO_GROUP_MENTIONS)
                 .queue();
     }
 
@@ -169,7 +170,8 @@ public class JDADiscordService implements DiscordService, IEssentialsModule {
 
         jda = JDABuilder.createDefault(plugin.getSettings().getBotToken())
                 .addEventListeners(new DiscordListener(this))
-                .enableCache(CacheFlag.EMOTE)
+                .enableIntents(GatewayIntent.MESSAGE_CONTENT)
+                .enableCache(CacheFlag.EMOJI)
                 .disableCache(CacheFlag.MEMBER_OVERRIDES, CacheFlag.VOICE_STATE)
                 .setContextEnabled(false)
                 .build()
@@ -205,7 +207,7 @@ public class JDADiscordService implements DiscordService, IEssentialsModule {
         }
 
         // Load emotes into cache, JDA will handle updates from here on out.
-        guild.retrieveEmotes().queue();
+        guild.retrieveEmojis().queue();
 
         updatePrimaryChannel();
 
@@ -323,10 +325,10 @@ public class JDADiscordService implements DiscordService, IEssentialsModule {
     public void updatePrimaryChannel() {
         TextChannel channel = guild.getTextChannelById(plugin.getSettings().getPrimaryChannelId());
         if (channel == null) {
-            channel = guild.getDefaultChannel();
-            if (channel == null) {
+            if (!(guild.getDefaultChannel() instanceof TextChannel)) {
                 throw new RuntimeException(tl("discordErrorNoPerms"));
             }
+            channel = (TextChannel) guild.getDefaultChannel();
             logger.warning(tl("discordErrorNoPrimary", channel.getName()));
         }
 
@@ -337,7 +339,7 @@ public class JDADiscordService implements DiscordService, IEssentialsModule {
     }
 
     public String parseMessageEmotes(String message) {
-        for (final Emote emote : guild.getEmoteCache()) {
+        for (final RichCustomEmoji emote : guild.getEmojiCache()) {
             message = message.replaceAll(":" + Pattern.quote(emote.getName()) + ":", emote.getAsMention());
         }
         return message;
@@ -483,7 +485,7 @@ public class JDADiscordService implements DiscordService, IEssentialsModule {
 
             shutdownConsoleRelay(true);
 
-            for (WebhookClient webhook : channelIdToWebhook.values()) {
+            for (WrappedWebhookClient webhook : channelIdToWebhook.values()) {
                 webhook.close();
             }
 
