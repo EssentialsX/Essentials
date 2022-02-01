@@ -7,6 +7,7 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.ComponentLike;
 import org.bukkit.Bukkit;
 import org.bukkit.command.ConsoleCommandSender;
+import org.jetbrains.annotations.NotNull;
 
 public class PaperCommandSender extends BukkitSenderProvider {
     public PaperCommandSender(ConsoleCommandSender base, MessageHook hook) {
@@ -75,5 +76,10 @@ public class PaperCommandSender extends BukkitSenderProvider {
 
     public void sendDumbComponent(Component message) {
         sendMessage(Bukkit.getUnsafe().legacyComponentSerializer().serialize(message));
+    }
+
+    @Override
+    public @NotNull Component name() {
+        return base.name();
     }
 }
