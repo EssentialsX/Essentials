@@ -12,7 +12,7 @@ import java.util.Set;
 import java.util.UUID;
 
 public class BukkitSenderProvider implements CommandSender {
-    private final ConsoleCommandSender base;
+    protected final ConsoleCommandSender base;
     private final MessageHook hook;
 
     public BukkitSenderProvider(ConsoleCommandSender base, MessageHook hook) {
