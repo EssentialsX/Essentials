@@ -6,12 +6,40 @@ import net.kyori.adventure.identity.Identified;
 import net.kyori.adventure.identity.Identity;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.ComponentLike;
+import org.bukkit.Bukkit;
+import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.function.Consumer;
+
 public class PaperCommandSender extends BukkitSenderProvider {
+    private static final boolean SHOULD_MAKE_JMP_HAPPY;
+
+    static {
+        boolean jmpHappy;
+        try {
+            Bukkit.createCommandSender(component -> {});
+            jmpHappy = true;
+        } catch (NoSuchMethodError ignored) {
+            jmpHappy = false;
+        }
+        SHOULD_MAKE_JMP_HAPPY = jmpHappy;
+    }
+
     public PaperCommandSender(ConsoleCommandSender base, MessageHook hook) {
         super(base, hook);
+    }
+
+    public static boolean shouldMakeJmpHappy() {
+        return SHOULD_MAKE_JMP_HAPPY;
+    }
+
+    public static CommandSender createCommandSender(Consumer<String> consumer) {
+        if (!shouldMakeJmpHappy()) {
+            return null;
+        }
+        return Bukkit.createCommandSender(component -> consumer.accept(PaperComponents.legacySectionSerializer().serialize(component)));
     }
 
     @Override
