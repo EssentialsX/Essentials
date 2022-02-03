@@ -39,7 +39,7 @@ public class DiscordCommandSender {
 
     private CommandSender getCustomSender(final ConsoleCommandSender consoleSender, final BukkitSenderProvider.MessageHook hook) {
         if (VersionUtil.isPaper() && VersionUtil.getServerBukkitVersion().isHigherThanOrEqualTo(VersionUtil.v1_16_5_R01)) {
-            if (PaperCommandSender.shouldMakeJmpHappy()) {
+            if (PaperCommandSender.forwardingSenderAvailable()) {
                 return PaperCommandSender.createCommandSender(hook::sendMessage);
             }
             return new PaperCommandSender(consoleSender, hook);
