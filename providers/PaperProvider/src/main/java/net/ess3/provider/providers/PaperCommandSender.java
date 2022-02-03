@@ -14,7 +14,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.function.Consumer;
 
 public class PaperCommandSender extends BukkitSenderProvider {
-    private static final boolean SHOULD_MAKE_JMP_HAPPY;
+    private static final boolean FORWARDING_SENDER_AVAILABLE;
 
     static {
         boolean jmpHappy;
@@ -24,19 +24,19 @@ public class PaperCommandSender extends BukkitSenderProvider {
         } catch (NoSuchMethodError ignored) {
             jmpHappy = false;
         }
-        SHOULD_MAKE_JMP_HAPPY = jmpHappy;
+        FORWARDING_SENDER_AVAILABLE = jmpHappy;
     }
 
     public PaperCommandSender(ConsoleCommandSender base, MessageHook hook) {
         super(base, hook);
     }
 
-    public static boolean shouldMakeJmpHappy() {
-        return SHOULD_MAKE_JMP_HAPPY;
+    public static boolean forwardingSenderAvailable() {
+        return FORWARDING_SENDER_AVAILABLE;
     }
 
     public static CommandSender createCommandSender(Consumer<String> consumer) {
-        if (!shouldMakeJmpHappy()) {
+        if (!forwardingSenderAvailable()) {
             return null;
         }
         return Bukkit.createCommandSender(component -> consumer.accept(PaperComponents.legacySectionSerializer().serialize(component)));
