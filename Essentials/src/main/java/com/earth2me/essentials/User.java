@@ -351,8 +351,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
         teleportRequestQueue.remove(request.getName());
         if (teleportRequestQueue.size() >= ess.getSettings().getTpaMaxRequests()) {
             final List<String> keys = new ArrayList<>(teleportRequestQueue.keySet());
-            Collections.reverse(keys);
-            teleportRequestQueue.remove(keys.get(0));
+            teleportRequestQueue.remove(keys.get(keys.size() - 1));
         }
 
         // Add request to queue
