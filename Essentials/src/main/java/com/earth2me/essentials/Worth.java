@@ -149,6 +149,10 @@ public class Worth implements IConf {
         config.save();
     }
 
+    public File getFile() {
+        return config.getFile();
+    }
+
     @Override
     public void reloadConfig() {
         config.load();
