@@ -61,7 +61,7 @@ public class Commandbanip extends EssentialsCommand {
                 player.kickPlayer(banDisplay);
             }
         }
-        
+
         ess.broadcastTl(null, u -> !u.isAuthorized("essentials.banip.notify"), "playerBanIpAddress", senderDisplayName, ipAddress, banReason);
     }
 
