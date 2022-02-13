@@ -66,6 +66,7 @@ import net.ess3.provider.PotionMetaProvider;
 import net.ess3.provider.ProviderListener;
 import net.ess3.provider.SerializationProvider;
 import net.ess3.provider.ServerStateProvider;
+import net.ess3.provider.SignDataProvider;
 import net.ess3.provider.SpawnEggProvider;
 import net.ess3.provider.SpawnerBlockProvider;
 import net.ess3.provider.SpawnerItemProvider;
@@ -80,9 +81,10 @@ import net.ess3.provider.providers.FlatSpawnEggProvider;
 import net.ess3.provider.providers.LegacyItemUnbreakableProvider;
 import net.ess3.provider.providers.LegacyPotionMetaProvider;
 import net.ess3.provider.providers.LegacySpawnEggProvider;
+import net.ess3.provider.providers.ModernDataWorldInfoProvider;
 import net.ess3.provider.providers.ModernItemUnbreakableProvider;
 import net.ess3.provider.providers.ModernPersistentDataProvider;
-import net.ess3.provider.providers.ModernDataWorldInfoProvider;
+import net.ess3.provider.providers.ModernSignDataProvider;
 import net.ess3.provider.providers.PaperContainerProvider;
 import net.ess3.provider.providers.PaperKnownCommandsProvider;
 import net.ess3.provider.providers.PaperMaterialTagProvider;
@@ -175,6 +177,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
     private transient ReflOnlineModeProvider onlineModeProvider;
     private transient ItemUnbreakableProvider unbreakableProvider;
     private transient WorldInfoProvider worldInfoProvider;
+    private transient SignDataProvider signDataProvider;
     private transient Kits kits;
     private transient RandomTeleport randomTeleport;
     private transient UpdateChecker updateChecker;
@@ -430,6 +433,10 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
                 worldInfoProvider = new ReflDataWorldInfoProvider();
             } else {
                 worldInfoProvider = new FixedHeightWorldInfoProvider();
+            }
+
+            if (VersionUtil.getServerBukkitVersion().isHigherThanOrEqualTo(VersionUtil.v1_14_4_R01)) {
+                signDataProvider = new ModernSignDataProvider(this);
             }
 
             execTimer.mark("Init(Providers)");
@@ -1304,6 +1311,11 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
     @Override
     public WorldInfoProvider getWorldInfoProvider() {
         return worldInfoProvider;
+    }
+
+    @Override
+    public SignDataProvider getSignDataProvider() {
+        return signDataProvider;
     }
 
     @Override

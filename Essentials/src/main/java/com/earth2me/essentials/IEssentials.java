@@ -14,8 +14,9 @@ import net.ess3.provider.ItemUnbreakableProvider;
 import net.ess3.provider.KnownCommandsProvider;
 import net.ess3.provider.MaterialTagProvider;
 import net.ess3.provider.PersistentDataProvider;
-import net.ess3.provider.ServerStateProvider;
 import net.ess3.provider.SerializationProvider;
+import net.ess3.provider.ServerStateProvider;
+import net.ess3.provider.SignDataProvider;
 import net.ess3.provider.SpawnerBlockProvider;
 import net.ess3.provider.SpawnerItemProvider;
 import net.ess3.provider.SyncCommandsProvider;
@@ -164,6 +165,8 @@ public interface IEssentials extends Plugin {
     ItemUnbreakableProvider getItemUnbreakableProvider();
 
     WorldInfoProvider getWorldInfoProvider();
+
+    SignDataProvider getSignDataProvider();
 
     PluginCommand getPluginCommand(String cmd);
 }

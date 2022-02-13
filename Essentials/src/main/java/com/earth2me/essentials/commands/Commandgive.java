@@ -5,6 +5,7 @@ import com.earth2me.essentials.MetaItemStack;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.craftbukkit.InventoryWorkaround;
 import com.earth2me.essentials.utils.NumberUtil;
+import com.earth2me.essentials.utils.VersionUtil;
 import com.google.common.collect.Lists;
 import org.bukkit.Material;
 import org.bukkit.Server;
@@ -37,7 +38,7 @@ public class Commandgive extends EssentialsLoopCommand {
         }
 
         try {
-            if (args.length > 3 && NumberUtil.isInt(args[2]) && NumberUtil.isInt(args[3])) {
+            if (args.length > 3 && VersionUtil.PRE_FLATTENING && NumberUtil.isInt(args[2]) && NumberUtil.isInt(args[3])) {
                 stack.setAmount(Integer.parseInt(args[2]));
                 stack.setDurability(Short.parseShort(args[3]));
             } else if (args.length > 2 && Integer.parseInt(args[2]) > 0) {
