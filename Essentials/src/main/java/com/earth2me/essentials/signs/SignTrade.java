@@ -19,7 +19,7 @@ import static com.earth2me.essentials.I18n.tl;
 
 //TODO: TL exceptions
 public class SignTrade extends EssentialsSign {
-    private static int MAX_STOCK_LINE_LENGTH = 15;
+    private static final int MAX_STOCK_LINE_LENGTH = 15;
 
     public SignTrade() {
         super("Trade");
@@ -35,7 +35,7 @@ public class SignTrade extends EssentialsSign {
             throw new SignException("You cannot trade for the same item type.");
         }
         trade.isAffordableFor(player);
-        sign.setLine(3, "§8" + username);
+        setOwner(ess, player, sign, 3, "§8");
         trade.charge(player);
         Trade.log("Sign", "Trade", "Create", username, trade, username, null, sign.getBlock().getLocation(), player.getMoney(), ess);
         return true;
@@ -43,7 +43,7 @@ public class SignTrade extends EssentialsSign {
 
     @Override
     protected boolean onSignInteract(final ISign sign, final User player, final String username, final IEssentials ess) throws SignException, ChargeException, MaxMoneyException {
-        if (sign.getLine(3).substring(2).equalsIgnoreCase(username)) {
+        if (isOwner(ess, player, sign, 3, "§8")) {
             final Trade store = rechargeSign(sign, ess, player);
             final Trade stored;
             try {
@@ -102,7 +102,7 @@ public class SignTrade extends EssentialsSign {
     protected boolean onSignBreak(final ISign sign, final User player, final String username, final IEssentials ess) throws SignException, MaxMoneyException {
         final String signOwner = sign.getLine(3);
 
-        final boolean isOwner = signOwner.length() > 3 && signOwner.substring(2).equalsIgnoreCase(username);
+        final boolean isOwner = isOwner(ess, player, sign, 3, "§8");
         final boolean canBreak = isOwner || player.isAuthorized("essentials.signs.trade.override");
         final boolean canCollect = isOwner || player.isAuthorized("essentials.signs.trade.override.collect");
 
@@ -238,27 +238,26 @@ public class SignTrade extends EssentialsSign {
         }
 
         if (split.length == 3) {
+            final int stackAmount = getIntegerPositive(split[0]);
             if (split[1].equalsIgnoreCase("exp") || split[1].equalsIgnoreCase("xp")) {
-                final int stackamount = getIntegerPositive(split[0]);
                 int amount = getInteger(split[2]);
                 if (amountType == AmountType.ROUNDED) {
-                    amount -= amount % stackamount;
+                    amount -= amount % stackAmount;
                 }
-                if (notEmpty && (amount < 1 || stackamount < 1)) {
+                if (notEmpty && (amount < 1 || stackAmount < 1)) {
                     throw new SignException(tl("tradeSignEmpty"));
                 }
-                return new Trade(amountType == AmountType.COST ? stackamount : amount, ess);
+                return new Trade(amountType == AmountType.COST ? stackAmount : amount, ess);
             } else {
-                final int stackamount = getIntegerPositive(split[0]);
-                final ItemStack item = getItemStack(split[1], stackamount, allowId, ess);
+                final ItemStack item = getItemStack(split[1], stackAmount, allowId, ess);
                 int amount = getInteger(split[2]);
                 if (amountType == AmountType.ROUNDED) {
-                    amount -= amount % stackamount;
+                    amount -= amount % stackAmount;
                 }
-                if (notEmpty && (amount < 1 || stackamount < 1 || item.getType() == Material.AIR || amount < stackamount)) {
+                if (notEmpty && (amount < 1 || stackAmount < 1 || item.getType() == Material.AIR || amount < stackAmount)) {
                     throw new SignException(tl("tradeSignEmpty"));
                 }
-                item.setAmount(amountType == AmountType.COST ? stackamount : amount);
+                item.setAmount(amountType == AmountType.COST ? stackAmount : amount);
                 return new Trade(item, ess);
             }
         }
@@ -337,20 +336,18 @@ public class SignTrade extends EssentialsSign {
         }
 
         if (split.length == 3) {
+            final int stackAmount = getIntegerPositive(split[0]);
             if (split[1].equalsIgnoreCase("exp") || split[1].equalsIgnoreCase("xp")) {
-                final int stackamount = getIntegerPositive(split[0]);
-                final String newline = stackamount + " " + split[1] + ":" + value.intValueExact();
+                final String newline = stackAmount + " " + split[1] + ":" + value.intValueExact();
                 validateSignLength(newline);
                 sign.setLine(index, newline);
-                return;
             } else {
-                final int stackamount = getIntegerPositive(split[0]);
-                getItemStack(split[1], stackamount, ess);
-                final String newline = stackamount + " " + split[1] + ":" + value.intValueExact();
+                getItemStack(split[1], stackAmount, ess);
+                final String newline = stackAmount + " " + split[1] + ":" + value.intValueExact();
                 validateSignLength(newline);
                 sign.setLine(index, newline);
-                return;
             }
+            return;
         }
         throw new SignException(tl("invalidSignLine", index + 1));
     }

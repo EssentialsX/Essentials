@@ -110,6 +110,10 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
         setBase(base);
     }
 
+    public IEssentials getEssentials() {
+        return ess;
+    }
+
     @Override
     public boolean isAuthorized(final IEssentialsCommand cmd) {
         return isAuthorized(cmd, "essentials.");
