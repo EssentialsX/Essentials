@@ -116,8 +116,8 @@ public class SignTrade extends EssentialsSign {
                     return true;
                 }
 
-                final Map<Integer, ItemStack> withdraw1 = stored1.pay(player, OverflowType.RETURN);
-                final Map<Integer, ItemStack> withdraw2 = stored2.pay(player, OverflowType.RETURN);
+                final Map<Integer, ItemStack> withdraw1 = stored1.pay(player, OverflowType.DROP);
+                final Map<Integer, ItemStack> withdraw2 = stored2.pay(player, OverflowType.DROP);
 
                 if (withdraw1 == null && withdraw2 == null) {
                     Trade.log("Sign", "Trade", "Break", signOwner.substring(2), stored2, username, stored1, sign.getBlock().getLocation(), player.getMoney(), ess);
@@ -206,7 +206,9 @@ public class SignTrade extends EssentialsSign {
             if (!(split[1].equalsIgnoreCase("exp") || split[1].equalsIgnoreCase("xp")) && getItemStack(split[1], stackamount, ess).getType() == Material.AIR) {
                 throw new SignException(tl("moreThanZero"));
             }
-            sign.setLine(index, stackamount + " " + split[1] + ":" + amount);
+            final String newline = stackamount + " " + split[1] + ":" + amount;
+            validateSignLength(newline);
+            sign.setLine(index, newline);
             return;
         }
         throw new SignException(tl("invalidSignLine", index + 1));
