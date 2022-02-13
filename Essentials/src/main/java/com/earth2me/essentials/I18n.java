@@ -150,7 +150,7 @@ public class I18n implements net.ess3.api.II18n {
 
         final Object[] processedArgs;
         if (miniMessage) {
-            processedArgs = mutateArgs(objects, s -> MiniMessage.miniMessage().escapeTokens(s));
+            processedArgs = mutateArgs(objects, s -> MiniMessage.miniMessage().escapeTags(s));
         } else {
             processedArgs = objects;
         }
