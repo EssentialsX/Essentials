@@ -1,5 +1,6 @@
 package com.earth2me.essentials.craftbukkit;
 
+import com.earth2me.essentials.utils.VersionUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -15,15 +16,13 @@ import java.util.Map;
 /*
  * This class can be removed when https://github.com/Bukkit/CraftBukkit/pull/193 is accepted to CraftBukkit
  */
-
 public final class InventoryWorkaround {
     /*
     Spigot 1.9, for whatever reason, decided to merge the armor and main player inventories without providing a way
     to access the main inventory. There's lots of ugly code in here to work around that.
      */
     private static final int USABLE_PLAYER_INV_SIZE = 36;
-    // Hot-ish code so cache
-    private static Boolean hasMainHandSupport = null;
+    private static final boolean IS_OFFHAND = VersionUtil.getServerBukkitVersion().isHigherThanOrEqualTo(VersionUtil.v1_9_R01);
 
     private InventoryWorkaround() {
     }
@@ -201,87 +200,45 @@ public final class InventoryWorkaround {
 
     @SuppressWarnings("deprecation")
     public static void setItemInMainHand(final Player p, final ItemStack item) {
-        if (hasMainHandSupport == null) {
-            try {
-                p.getInventory().setItemInMainHand(item);
-                hasMainHandSupport = true;
-            } catch (final Throwable e) {
-                p.setItemInHand(item);
-                hasMainHandSupport = false;
-            }
+        if (IS_OFFHAND) {
+            p.getInventory().setItemInMainHand(item);
         } else {
-            if (hasMainHandSupport) {
-                p.getInventory().setItemInMainHand(item);
-            } else {
-                p.setItemInHand(item);
-            }
+            p.setItemInHand(item);
         }
     }
 
     @SuppressWarnings("deprecation")
     public static void setItemInMainHand(final EntityEquipment invent, final ItemStack item) {
-        if (hasMainHandSupport == null) {
-            try {
-                invent.setItemInMainHand(item);
-                hasMainHandSupport = true;
-            } catch (final Throwable e) {
-                invent.setItemInHand(item);
-                hasMainHandSupport = false;
-            }
+        if (IS_OFFHAND) {
+            invent.setItemInMainHand(item);
         } else {
-            if (hasMainHandSupport) {
-                invent.setItemInMainHand(item);
-            } else {
-                invent.setItemInHand(item);
-            }
+            invent.setItemInHand(item);
         }
     }
 
     @SuppressWarnings("deprecation")
     public static void setItemInMainHandDropChance(final EntityEquipment invent, final float chance) {
-        if (hasMainHandSupport == null) {
-            try {
-                invent.setItemInMainHandDropChance(chance);
-                hasMainHandSupport = true;
-            } catch (final Throwable e) {
-                invent.setItemInHandDropChance(chance);
-                hasMainHandSupport = false;
-            }
+        if (IS_OFFHAND) {
+            invent.setItemInMainHandDropChance(chance);
         } else {
-            if (hasMainHandSupport) {
-                invent.setItemInMainHandDropChance(chance);
-            } else {
-                invent.setItemInHandDropChance(chance);
-            }
+            invent.setItemInHandDropChance(chance);
         }
     }
 
     public static void setItemInOffHand(final Player p, final ItemStack item) {
-        // This assumes that all builds that support a main hand also support an off hand.
-        if (hasMainHandSupport == null || hasMainHandSupport) {
-            try {
-                p.getInventory().setItemInOffHand(item);
-                hasMainHandSupport = true;
-            } catch (final Throwable e) {
-                hasMainHandSupport = false;
-            }
+        if (IS_OFFHAND) {
+            p.getInventory().setItemInOffHand(item);
         }
     }
 
     public static int clearItemInOffHand(final Player p, final ItemStack item) {
-        // This should be added because if `/clear` itself is not initilized it will return an Error: null.
-        if (hasMainHandSupport == null || hasMainHandSupport) {
-            try {
-                int removedAmount = 0;
-                if (p.getInventory().getItemInOffHand().getType().equals(item.getType())) {
-                    removedAmount = p.getInventory().getItemInOffHand().getAmount();
-                    p.getInventory().setItemInOffHand(null);
-                }
-                hasMainHandSupport = true;
-                return removedAmount;
-            } catch (final Throwable e) {
-                hasMainHandSupport = false;
+        if (IS_OFFHAND) {
+            int removedAmount = 0;
+            if (p.getInventory().getItemInOffHand().getType().equals(item.getType())) {
+                removedAmount = p.getInventory().getItemInOffHand().getAmount();
+                p.getInventory().setItemInOffHand(null);
             }
+            return removedAmount;
         }
         return 0;
     }
