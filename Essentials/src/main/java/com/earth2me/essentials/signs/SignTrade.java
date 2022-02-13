@@ -5,6 +5,7 @@ import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.Trade.OverflowType;
 import com.earth2me.essentials.Trade.TradeType;
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.utils.MaterialUtil;
 import com.earth2me.essentials.utils.NumberUtil;
 import net.ess3.api.IEssentials;
 import net.ess3.api.MaxMoneyException;
@@ -83,7 +84,7 @@ public class SignTrade extends EssentialsSign {
 
     private Trade rechargeSign(final ISign sign, final IEssentials ess, final User player) throws SignException, ChargeException {
         final Trade trade = getTrade(sign, 2, AmountType.COST, false, true, ess);
-        if (trade.getItemStack() != null && player.getBase().getItemInHand() != null && trade.getItemStack().getType() == player.getBase().getItemInHand().getType() && trade.getItemStack().getDurability() == player.getBase().getItemInHand().getDurability() && trade.getItemStack().getEnchantments().equals(player.getBase().getItemInHand().getEnchantments())) {
+        if (trade.getItemStack() != null && player.getBase().getItemInHand() != null && trade.getItemStack().getType() == player.getBase().getItemInHand().getType() && MaterialUtil.getDamage(trade.getItemStack()) == MaterialUtil.getDamage(player.getBase().getItemInHand()) && trade.getItemStack().getEnchantments().equals(player.getBase().getItemInHand().getEnchantments())) {
             final int amount = trade.getItemStack().getAmount();
             if (player.getBase().getInventory().containsAtLeast(trade.getItemStack(), amount)) {
                 final ItemStack stack = player.getBase().getItemInHand().clone();
@@ -115,8 +116,8 @@ public class SignTrade extends EssentialsSign {
                     return true;
                 }
 
-                final Map<Integer, ItemStack> withdraw1 = stored1.pay(player, OverflowType.RETURN);
-                final Map<Integer, ItemStack> withdraw2 = stored2.pay(player, OverflowType.RETURN);
+                final Map<Integer, ItemStack> withdraw1 = stored1.pay(player, OverflowType.DROP);
+                final Map<Integer, ItemStack> withdraw2 = stored2.pay(player, OverflowType.DROP);
 
                 if (withdraw1 == null && withdraw2 == null) {
                     Trade.log("Sign", "Trade", "Break", signOwner.substring(2), stored2, username, stored1, sign.getBlock().getLocation(), player.getMoney(), ess);
@@ -205,7 +206,9 @@ public class SignTrade extends EssentialsSign {
             if (!(split[1].equalsIgnoreCase("exp") || split[1].equalsIgnoreCase("xp")) && getItemStack(split[1], stackamount, ess).getType() == Material.AIR) {
                 throw new SignException(tl("moreThanZero"));
             }
-            sign.setLine(index, stackamount + " " + split[1] + ":" + amount);
+            final String newline = stackamount + " " + split[1] + ":" + amount;
+            validateSignLength(newline);
+            sign.setLine(index, newline);
             return;
         }
         throw new SignException(tl("invalidSignLine", index + 1));

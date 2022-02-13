@@ -3,6 +3,8 @@ package com.earth2me.essentials.utils;
 import org.bukkit.Bukkit;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.material.MaterialData;
 
 import java.lang.reflect.InvocationTargetException;
@@ -11,7 +13,6 @@ import java.util.EnumSet;
 import java.util.Set;
 
 public final class MaterialUtil {
-
     public static final Material SPAWNER = EnumUtil.getMaterial("MOB_SPAWNER", "SPAWNER");
     private static final Set<Material> BEDS;
     private static final Set<Material> BANNERS;
@@ -129,20 +130,12 @@ public final class MaterialUtil {
         return LEATHER_ARMOR.contains(material);
     }
 
-    public static boolean isMobHead(final Material material, final int durability) {
-        if (MOB_HEADS.contains(material)) {
+    public static boolean isPlayerHead(final ItemStack stack) {
+        if (PLAYER_HEADS.contains(stack.getType())) {
             return true;
         }
 
-        return LEGACY_SKULLS.contains(material) && (durability != 3);
-    }
-
-    public static boolean isPlayerHead(final Material material, final int durability) {
-        if (PLAYER_HEADS.contains(material)) {
-            return true;
-        }
-
-        return LEGACY_SKULLS.contains(material) && durability == 3;
+        return VersionUtil.PRE_FLATTENING && LEGACY_SKULLS.contains(stack.getType()) && stack.getDurability() == 3;
     }
 
     public static boolean isPotion(final Material material) {
@@ -166,11 +159,33 @@ public final class MaterialUtil {
     }
 
     public static boolean isSkull(final Material material) {
-        return isPlayerHead(material, -1) || isMobHead(material, -1);
+        return PLAYER_HEADS.contains(material) || LEGACY_SKULLS.contains(material);
     }
 
     public static boolean isAir(final Material material) {
         return material == Material.AIR || (VersionUtil.getServerBukkitVersion().isHigherThanOrEqualTo(VersionUtil.v1_14_4_R01) && material.isAir());
+    }
+
+    public static int getDamage(final ItemStack stack) {
+        if (VersionUtil.PRE_FLATTENING) {
+            return stack.getDurability();
+        }
+        if (stack.getItemMeta() instanceof Damageable) {
+            return ((Damageable) stack.getItemMeta()).getDamage();
+        }
+        return 0;
+    }
+
+    public static void setDamage(final ItemStack stack, final int damage) {
+        if (VersionUtil.PRE_FLATTENING) {
+            stack.setDurability((short) damage);
+        } else {
+            if (stack.getItemMeta() instanceof Damageable) {
+                final Damageable damageable = (Damageable) stack.getItemMeta();
+                damageable.setDamage(damage);
+                stack.setItemMeta(damageable);
+            }
+        }
     }
 
     public static Material convertFromLegacy(final int id, final byte damage) {

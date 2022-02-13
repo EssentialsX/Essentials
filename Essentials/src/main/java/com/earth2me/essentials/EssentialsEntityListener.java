@@ -1,5 +1,6 @@
 package com.earth2me.essentials;
 
+import com.earth2me.essentials.utils.MaterialUtil;
 import com.earth2me.essentials.utils.VersionUtil;
 import net.ess3.api.IEssentials;
 import org.bukkit.Location;
@@ -198,7 +199,7 @@ public class EssentialsEntityListener implements Listener {
             final ISettings.KeepInvPolicy bind = ess.getSettings().getBindingItemsPolicy();
             if (VersionUtil.getServerBukkitVersion().isHigherThanOrEqualTo(VersionUtil.v1_11_2_R01) && (vanish != ISettings.KeepInvPolicy.KEEP || bind != ISettings.KeepInvPolicy.KEEP)) {
                 for (final ItemStack stack : event.getEntity().getInventory()) {
-                    if (stack != null) {
+                    if (stack != null && !MaterialUtil.isAir(stack.getType())) {
                         if (stack.getEnchantments().containsKey(Enchantment.VANISHING_CURSE)) {
                             if (vanish == ISettings.KeepInvPolicy.DELETE) {
                                 event.getEntity().getInventory().remove(stack);
@@ -217,10 +218,12 @@ public class EssentialsEntityListener implements Listener {
                         }
                     }
                 }
+
+                // Now check armor
                 final ItemStack[] armor = event.getEntity().getInventory().getArmorContents();
                 for (int i = 0; i < armor.length; i++) {
                     final ItemStack stack = armor[i];
-                    if (stack != null) {
+                    if (stack != null && !MaterialUtil.isAir(stack.getType())) {
                         if (stack.getEnchantments().containsKey(Enchantment.VANISHING_CURSE)) {
                             if (vanish == ISettings.KeepInvPolicy.DELETE) {
                                 armor[i] = null;
@@ -244,6 +247,24 @@ public class EssentialsEntityListener implements Listener {
                     }
                 }
                 event.getEntity().getInventory().setArmorContents(armor);
+
+                // Now check offhand
+                if (VersionUtil.getServerBukkitVersion().isHigherThanOrEqualTo(VersionUtil.v1_9_R01)) {
+                    final ItemStack stack = event.getEntity().getInventory().getItemInOffHand();
+                    //noinspection ConstantConditions
+                    if (stack != null && !MaterialUtil.isAir(stack.getType())) {
+                        final boolean isVanish = stack.getEnchantments().containsKey(Enchantment.VANISHING_CURSE);
+                        final boolean isBind = stack.getEnchantments().containsKey(Enchantment.BINDING_CURSE);
+                        if (isVanish || isBind) {
+                            event.getEntity().getInventory().setItemInOffHand(null);
+                            if ((isVanish && vanish == ISettings.KeepInvPolicy.DROP) || (isBind && bind == ISettings.KeepInvPolicy.DROP)) {
+                                if (!event.getDrops().contains(stack)) {
+                                    event.getDrops().add(stack);
+                                }
+                            }
+                        }
+                    }
+                }
             }
         }
     }

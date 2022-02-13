@@ -210,7 +210,7 @@ public class MetaItemStack {
             final boolean value = split.length <= 1 || Boolean.parseBoolean(split[1]);
             setUnbreakable(ess, stack, value);
         } else if (split.length > 1 && (split[0].equalsIgnoreCase("player") || split[0].equalsIgnoreCase("owner")) && hasMetaPermission(sender, "head", false, true, ess)) {
-            if (MaterialUtil.isPlayerHead(stack.getType(), stack.getDurability())) {
+            if (MaterialUtil.isPlayerHead(stack)) {
                 final String owner = split[1];
                 setSkullOwner(ess, stack, owner);
             } else {
