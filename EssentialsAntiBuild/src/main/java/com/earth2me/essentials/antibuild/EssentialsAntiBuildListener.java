@@ -69,7 +69,23 @@ public class EssentialsAntiBuildListener implements Listener {
             }
             return false;
         }
-        return metaPermCheck(user, action, block.getType(), block.getData());
+        if (VersionUtil.PRE_FLATTENING) {
+            return metaPermCheck(user, action, block.getType(), block.getData());
+        }
+        return metaPermCheck(user, action, block.getType());
+    }
+
+    private boolean metaPermCheck(final User user, final String action, final ItemStack item) {
+        if (item == null) {
+            if (ess.getSettings().isDebug()) {
+                logger.log(Level.INFO, "AntiBuild permission check failed, invalid item.");
+            }
+            return false;
+        }
+        if (VersionUtil.PRE_FLATTENING) {
+            return metaPermCheck(user, action, item.getType(), item.getDurability());
+        }
+        return metaPermCheck(user, action, item.getType());
     }
 
     public boolean metaPermCheck(final User user, final String action, final Material material) {
@@ -81,7 +97,7 @@ public class EssentialsAntiBuildListener implements Listener {
         final String blockPerm = "essentials.build." + action + "." + material;
         final String dataPerm = blockPerm + ":" + data;
 
-        if (VersionUtil.getServerBukkitVersion().isLowerThan(VersionUtil.v1_13_0_R01)) {
+        if (VersionUtil.PRE_FLATTENING) {
             if (user.getBase().isPermissionSet(dataPerm)) {
                 return user.isAuthorized(dataPerm);
             } else {
@@ -322,7 +338,7 @@ public class EssentialsAntiBuildListener implements Listener {
         }
 
         if (prot.getSettingBool(AntiBuildConfig.disable_use) && !user.canBuild()) {
-            if (event.hasItem() && !metaPermCheck(user, "interact", item.getType(), item.getDurability())) {
+            if (event.hasItem() && !metaPermCheck(user, "interact", item)) {
                 event.setCancelled(true);
                 if (ess.getSettings().warnOnBuildDisallow()) {
                     user.sendMessage(tl("antiBuildUse", item.getType().toString()));
@@ -347,7 +363,7 @@ public class EssentialsAntiBuildListener implements Listener {
             final ItemStack item = event.getRecipe().getResult();
 
             if (prot.getSettingBool(AntiBuildConfig.disable_use) && !user.canBuild()) {
-                if (!metaPermCheck(user, "craft", item.getType(), item.getDurability())) {
+                if (!metaPermCheck(user, "craft", item)) {
                     event.setCancelled(true);
                     if (ess.getSettings().warnOnBuildDisallow()) {
                         user.sendMessage(tl("antiBuildCraft", item.getType().toString()));
@@ -364,7 +380,7 @@ public class EssentialsAntiBuildListener implements Listener {
         final ItemStack item = event.getItemDrop().getItemStack();
 
         if (prot.getSettingBool(AntiBuildConfig.disable_use) && !user.canBuild()) {
-            if (!metaPermCheck(user, "drop", item.getType(), item.getDurability())) {
+            if (!metaPermCheck(user, "drop", item)) {
                 event.setCancelled(true);
                 user.getBase().updateInventory();
                 if (ess.getSettings().warnOnBuildDisallow()) {
@@ -391,7 +407,7 @@ public class EssentialsAntiBuildListener implements Listener {
             final ItemStack item = event.getItem().getItemStack();
 
             if (prot.getSettingBool(AntiBuildConfig.disable_use) && !user.canBuild()) {
-                if (!metaPermCheck(user, "pickup", item.getType(), item.getDurability())) {
+                if (!metaPermCheck(user, "pickup", item)) {
                     event.setCancelled(true);
                 }
             }
@@ -406,7 +422,7 @@ public class EssentialsAntiBuildListener implements Listener {
             final ItemStack item = event.getItem().getItemStack();
 
             if (prot.getSettingBool(AntiBuildConfig.disable_use) && !user.canBuild()) {
-                if (!metaPermCheck(user, "pickup", item.getType(), item.getDurability())) {
+                if (!metaPermCheck(user, "pickup", item)) {
                     event.setCancelled(true);
                 }
             }
