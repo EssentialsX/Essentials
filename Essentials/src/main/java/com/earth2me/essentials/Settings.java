@@ -1212,6 +1212,11 @@ public class Settings implements net.ess3.api.ISettings {
         return registerBackInListener;
     }
 
+    @Override
+    public int getMaxTreeCommandRange() {
+        return config.getInt("tree-command-range-limit", 300);
+    }
+
     private boolean _registerBackInListener() {
         return config.getBoolean("register-back-in-listener", false);
     }
