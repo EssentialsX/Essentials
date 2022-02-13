@@ -2,6 +2,7 @@ package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.utils.MaterialUtil;
 import com.earth2me.essentials.utils.NumberUtil;
 import com.google.common.collect.Lists;
 import net.ess3.api.TranslatableException;
@@ -86,8 +87,8 @@ public class Commandworth extends EssentialsCommand {
         }
 
         final BigDecimal result = worth.multiply(BigDecimal.valueOf(amount));
-        if (is.getDurability() != 0) {
-            sender.sendTl("worthMeta", is.getType().toString().toLowerCase(Locale.ENGLISH).replace("_", ""), is.getDurability(), NumberUtil.displayCurrency(result, ess), amount, NumberUtil.displayCurrency(worth, ess));
+        if (MaterialUtil.getDamage(is) != 0) {
+            sender.sendTl("worthMeta", is.getType().toString().toLowerCase(Locale.ENGLISH).replace("_", ""), MaterialUtil.getDamage(is), NumberUtil.displayCurrency(result, ess), amount, NumberUtil.displayCurrency(worth, ess));
         } else {
             sender.sendTl("worth", is.getType().toString().toLowerCase(Locale.ENGLISH).replace("_", ""), NumberUtil.displayCurrency(result, ess), amount, NumberUtil.displayCurrency(worth, ess));
         }

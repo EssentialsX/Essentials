@@ -230,6 +230,8 @@ public interface ISettings extends IConf {
 
     boolean isWorldHomePermissions();
 
+    int getMaxTreeCommandRange();
+
     boolean registerBackInListener();
 
     boolean getDisableItemPickupWhileAfk();

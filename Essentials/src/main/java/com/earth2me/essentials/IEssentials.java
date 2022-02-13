@@ -17,6 +17,7 @@ import net.ess3.provider.PersistentDataProvider;
 import net.ess3.provider.PlayerLocaleProvider;
 import net.ess3.provider.SerializationProvider;
 import net.ess3.provider.ServerStateProvider;
+import net.ess3.provider.SignDataProvider;
 import net.ess3.provider.SpawnerBlockProvider;
 import net.ess3.provider.SpawnerItemProvider;
 import net.ess3.provider.SyncCommandsProvider;
@@ -175,6 +176,8 @@ public interface IEssentials extends Plugin {
     ItemUnbreakableProvider getItemUnbreakableProvider();
 
     WorldInfoProvider getWorldInfoProvider();
+
+    SignDataProvider getSignDataProvider();
 
     PlayerLocaleProvider getPlayerLocaleProvider();
 

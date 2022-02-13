@@ -68,6 +68,7 @@ import net.ess3.provider.PotionMetaProvider;
 import net.ess3.provider.ProviderListener;
 import net.ess3.provider.SerializationProvider;
 import net.ess3.provider.ServerStateProvider;
+import net.ess3.provider.SignDataProvider;
 import net.ess3.provider.SpawnEggProvider;
 import net.ess3.provider.SpawnerBlockProvider;
 import net.ess3.provider.SpawnerItemProvider;
@@ -87,6 +88,7 @@ import net.ess3.provider.providers.ModernDataWorldInfoProvider;
 import net.ess3.provider.providers.ModernItemUnbreakableProvider;
 import net.ess3.provider.providers.ModernPersistentDataProvider;
 import net.ess3.provider.providers.ModernPlayerLocaleProvider;
+import net.ess3.provider.providers.ModernSignDataProvider;
 import net.ess3.provider.providers.PaperContainerProvider;
 import net.ess3.provider.providers.PaperKnownCommandsProvider;
 import net.ess3.provider.providers.PaperMaterialTagProvider;
@@ -183,6 +185,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
     private transient ItemUnbreakableProvider unbreakableProvider;
     private transient WorldInfoProvider worldInfoProvider;
     private transient PlayerLocaleProvider playerLocaleProvider;
+    private transient SignDataProvider signDataProvider;
     private transient Kits kits;
     private transient RandomTeleport randomTeleport;
     private transient UpdateChecker updateChecker;
@@ -438,6 +441,10 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
                 worldInfoProvider = new ReflDataWorldInfoProvider();
             } else {
                 worldInfoProvider = new FixedHeightWorldInfoProvider();
+            }
+
+            if (VersionUtil.getServerBukkitVersion().isHigherThanOrEqualTo(VersionUtil.v1_14_4_R01)) {
+                signDataProvider = new ModernSignDataProvider(this);
             }
 
             if (VersionUtil.getServerBukkitVersion().isHigherThanOrEqualTo(VersionUtil.v1_12_2_R01)) {
@@ -1380,6 +1387,11 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
     @Override
     public PlayerLocaleProvider getPlayerLocaleProvider() {
         return playerLocaleProvider;
+    }
+
+    @Override
+    public SignDataProvider getSignDataProvider() {
+        return signDataProvider;
     }
 
     @Override
