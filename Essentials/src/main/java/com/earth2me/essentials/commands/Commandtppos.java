@@ -26,9 +26,9 @@ public class Commandtppos extends EssentialsCommand {
             throw new NotEnoughArgumentsException();
         }
 
-        final double x = args[0].startsWith("~") ? user.getLocation().getX() + (args[0].length() > 1 ? Integer.parseInt(args[0].substring(1)) : 0) : Integer.parseInt(args[0]);
-        final double y = args[1].startsWith("~") ? user.getLocation().getY() + (args[1].length() > 1 ? Integer.parseInt(args[1].substring(1)) : 0) : Integer.parseInt(args[1]);
-        final double z = args[2].startsWith("~") ? user.getLocation().getZ() + (args[2].length() > 1 ? Integer.parseInt(args[2].substring(1)) : 0) : Integer.parseInt(args[2]);
+        final double x = args[0].startsWith("~") ? user.getLocation().getX() + (args[0].length() > 1 ? Double.parseDouble(args[0].substring(1)) : 0) : Double.parseDouble(args[0]);
+        final double y = args[1].startsWith("~") ? user.getLocation().getY() + (args[1].length() > 1 ? Double.parseDouble(args[1].substring(1)) : 0) : Double.parseDouble(args[1]);
+        final double z = args[2].startsWith("~") ? user.getLocation().getZ() + (args[2].length() > 1 ? Double.parseDouble(args[2].substring(1)) : 0) : Double.parseDouble(args[2]);
         final Location loc = new Location(user.getWorld(), x, y, z, user.getLocation().getYaw(), user.getLocation().getPitch());
         if (args.length == 4) {
             final World w = ess.getWorld(args[3]);
