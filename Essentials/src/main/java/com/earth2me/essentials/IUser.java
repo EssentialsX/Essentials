@@ -261,12 +261,12 @@ public interface IUser {
      * period are removed from queue and therefore not returned here. The maximum size of this
      * queue is determined by {@link ISettings#getTpaMaxRequests()}.
      *
-     * @param inform             true if the underlying {@link IUser} should be informed if a request expires during iteration.
-     * @param performExpirations true if this method should not spend time validating time for all items in the queue and just return the first item in the queue.
-     * @param excludeHere        true if /tphere requests should be ignored in fetching the next tpa request.
+     * @param inform            true if the underlying {@link IUser} should be informed if a request expires during iteration.
+     * @param ignoreExpirations true if this method should not process expirations for the entire queue and stop execution on the first unexpired request.
+     * @param excludeHere       true if /tphere requests should be ignored in fetching the next tpa request.
      * @return A {@link TpaRequest} corresponding to the next available request or null if no valid request is present.
      */
-    @Nullable TpaRequest getNextTpaRequest(boolean inform, boolean performExpirations, boolean excludeHere);
+    @Nullable TpaRequest getNextTpaRequest(boolean inform, boolean ignoreExpirations, boolean excludeHere);
 
     /**
      * Whether or not this {@link IUser} has any valid TPA requests in queue.
