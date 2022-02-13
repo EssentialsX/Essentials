@@ -252,4 +252,8 @@ public class RandomTeleport implements IConf {
     private String locationKey(final String name, final String key) {
         return "locations." + name + "." + key;
     }
+
+    public File getFile() {
+        return config.getFile();
+    }
 }
