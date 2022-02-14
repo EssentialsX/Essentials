@@ -663,7 +663,7 @@ public class EssentialsPlayerListener implements Listener, FakeAccessor {
                 if (entry.getValue() <= System.currentTimeMillis()) {
                     user.clearCommandCooldown(entry.getKey());
                     // Don't break in case there are other command cooldowns left to clear.
-                } else if (entry.getKey().matcher(fullCommand).matches() ) {
+                } else if (entry.getKey().matcher(fullCommand).matches()) {
                     // User's current cooldown hasn't expired, inform and terminate cooldown code.
                     if (entry.getValue() > System.currentTimeMillis()) {
                         final String commandCooldownTime = DateUtil.formatDateDiff(entry.getValue());
