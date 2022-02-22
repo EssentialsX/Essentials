@@ -83,7 +83,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
     private boolean recipeSee = false;
     private boolean enderSee = false;
     private boolean ignoreMsg = false;
-    private boolean toggleShout = false;
+    private Boolean toggleShout = false;
 
     // User afk variables
     private String afkMessage;
@@ -1266,10 +1266,16 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
     @Override
     public void setToggleShout(boolean toggleShout) {
         this.toggleShout = toggleShout;
+        if (ess.getSettings().isPersistShout()) {
+            setShouting(toggleShout);
+        }
     }
 
     @Override
     public boolean isToggleShout() {
-        return toggleShout;
+        if (ess.getSettings().isPersistShout()) {
+            return toggleShout = isShouting();
+        }
+        return toggleShout == null ? toggleShout = ess.getSettings().isShoutDefault() : toggleShout;
     }
 }
