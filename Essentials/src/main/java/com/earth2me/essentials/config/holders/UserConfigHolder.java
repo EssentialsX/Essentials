@@ -322,6 +322,16 @@ public class UserConfigHolder {
         this.baltopExempt = value;
     }
 
+    private @MonotonicNonNull Boolean shouting;
+
+    public Boolean shouting() {
+        return shouting;
+    }
+
+    public void shouting(final Boolean value) {
+        this.shouting = value;
+    }
+
     @DeleteOnEmpty
     private @MonotonicNonNull List<String> pastUsernames;
 

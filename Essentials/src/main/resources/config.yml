@@ -921,6 +921,15 @@ chat:
   #  plots: "&dP&r"
   #  creative: "&eC&r"
 
+  # Whether players should be placed into shout mode by default.
+  shout-default: false
+
+  # Whether a player's shout mode should persist restarts.
+  persist-shout: false
+
+  # Whether chat questions should be enabled or not.
+  question-enabled: true
+
 ############################################################
 # +------------------------------------------------------+ #
 # |                 EssentialsX Protect                  | #
