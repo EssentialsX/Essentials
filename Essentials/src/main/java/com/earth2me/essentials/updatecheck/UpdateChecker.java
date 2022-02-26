@@ -142,14 +142,16 @@ public final class UpdateChecker {
         return latestRelease;
     }
 
-    private HttpURLConnection tryRequestWithFallback(final String mainUrl, final String fallbackUrl) throws IOException {
-        HttpURLConnection connection = (HttpURLConnection) new URL(mainUrl).openConnection();
+    private HttpURLConnection tryRequestWithFallback(final String githubUrl, final String fallbackUrl) throws IOException {
+        HttpURLConnection connection = (HttpURLConnection) new URL(githubUrl).openConnection();
         try {
             connection.connect();
             if (connection.getResponseCode() != HttpURLConnection.HTTP_INTERNAL_ERROR && connection.getResponseCode() != HttpURLConnection.HTTP_FORBIDDEN) {
+                // Connection succeeded without any errors from GitHub's side.
                 return connection;
             }
         } catch (IOException e) {
+            // Connection failed, GitHub's down or we hit a ratelimit, so use the fallback URL
             connection = (HttpURLConnection) new URL(fallbackUrl).openConnection();
             connection.connect();
             // If the fallback fails, let the failure bubble up
