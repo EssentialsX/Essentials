@@ -150,12 +150,14 @@ public final class UpdateChecker {
                 // Connection succeeded without any errors from GitHub's side.
                 return connection;
             }
-        } catch (IOException e) {
-            // Connection failed, GitHub's down or we hit a ratelimit, so use the fallback URL
-            connection = (HttpURLConnection) new URL(fallbackUrl).openConnection();
-            connection.connect();
-            // If the fallback fails, let the failure bubble up
+        } catch (IOException ignored) {
         }
+
+        // Connection failed, GitHub's down or we hit a ratelimit, so use the fallback URL
+        // If the fallback fails, let the exception or error status bubble up
+        connection = (HttpURLConnection) new URL(fallbackUrl).openConnection();
+        connection.connect();
+
         return connection;
     }
 
