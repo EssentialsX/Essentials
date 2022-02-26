@@ -146,10 +146,13 @@ public final class UpdateChecker {
         HttpURLConnection connection = (HttpURLConnection) new URL(mainUrl).openConnection();
         try {
             connection.connect();
+            if (connection.getResponseCode() != HttpURLConnection.HTTP_INTERNAL_ERROR && connection.getResponseCode() != HttpURLConnection.HTTP_FORBIDDEN) {
+                return connection;
+            }
         } catch (IOException e) {
             connection = (HttpURLConnection) new URL(fallbackUrl).openConnection();
             connection.connect();
-            // If the fallback fails, let the exception bubble up
+            // If the fallback fails, let the failure bubble up
         }
         return connection;
     }
