@@ -23,11 +23,11 @@ public final class UpdateChecker {
     private static final String REPO = "EssentialsX/Essentials";
     private static final String BRANCH = "2.x";
 
+    private static final String LATEST_RELEASE_URL = "https://api.github.com/repos/" + REPO + "/releases/latest";
     private static final String LATEST_RELEASE_PROXY_URL = "https://webapi.essentialsx.net/api/v1/github/essx-v2/releases/latest";
-    private static final String LATEST_RELEASE_FALLBACK_URL = "https://api.github.com/repos/" + REPO + "/releases/latest";
     // 0 = base for comparison, 1 = head for comparison - *not* the same as what this class calls them
+    private static final String DISTANCE_URL = "https://api.github.com/repos/EssentialsX/Essentials/compare/{0}...{1}";
     private static final String DISTANCE_PROXY_URL = "https://webapi.essentialsx.net/api/v1/github/essx-v2/compare/{0}/{1}";
-    private static final String DISTANCE_FALLBACK_URL = "https://api.github.com/repos/EssentialsX/Essentials/compare/{0}...{1}";
 
     private final Essentials ess;
     private final String versionIdentifier;
@@ -95,7 +95,7 @@ public final class UpdateChecker {
             new Thread(() -> {
                 catchBlock:
                 try {
-                    final HttpURLConnection connection = tryRequestWithFallback(LATEST_RELEASE_PROXY_URL, LATEST_RELEASE_FALLBACK_URL);
+                    final HttpURLConnection connection = tryRequestWithFallback(LATEST_RELEASE_URL, LATEST_RELEASE_PROXY_URL);
 
                     if (connection.getResponseCode() == HttpURLConnection.HTTP_NOT_FOUND) {
                         // Locally built?
@@ -182,7 +182,7 @@ public final class UpdateChecker {
 
     private RemoteVersion fetchDistance(final String head, final String hash) {
         try {
-            final HttpURLConnection connection = tryRequestWithFallback(MessageFormat.format(DISTANCE_PROXY_URL, head, hash), MessageFormat.format(DISTANCE_FALLBACK_URL, head, hash));
+            final HttpURLConnection connection = tryRequestWithFallback(MessageFormat.format(DISTANCE_URL, head, hash), MessageFormat.format(DISTANCE_PROXY_URL, head, hash));
 
             if (connection.getResponseCode() == HttpURLConnection.HTTP_NOT_FOUND) {
                 // Locally built?
