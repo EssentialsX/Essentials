@@ -121,4 +121,4 @@ indra {
 }
 
 // undo https://github.com/KyoriPowered/indra/blob/master/indra-common/src/main/kotlin/net/kyori/indra/IndraPlugin.kt#L57
-convention.getPlugin<BasePluginConvention>().archivesBaseName = project.name
+extensions.getByType<BasePluginExtension>().archivesName.set(project.name)
