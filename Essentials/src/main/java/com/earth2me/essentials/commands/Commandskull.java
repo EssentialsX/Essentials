@@ -42,7 +42,7 @@ public class Commandskull extends EssentialsCommand {
         final SkullMeta metaSkull;
         boolean spawn = false;
 
-        if (itemSkull != null && MaterialUtil.isPlayerHead(itemSkull.getType(), itemSkull.getDurability())) {
+        if (itemSkull != null && MaterialUtil.isPlayerHead(itemSkull)) {
             metaSkull = (SkullMeta) itemSkull.getItemMeta();
         } else if (user.isAuthorized("essentials.skull.spawn")) {
             itemSkull = new ItemStack(SKULL_ITEM, 1, (byte) 3);

@@ -23,6 +23,7 @@ import org.bukkit.inventory.meta.FireworkEffectMeta;
 import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
+import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.potion.Potion;
@@ -279,12 +280,22 @@ public abstract class AbstractItemDb implements IConf, net.ess3.api.IItemDb {
                 serializeEffectMeta(sb, fireworkEffectMeta.getEffect());
             }
         } else if (MaterialUtil.isPotion(material)) {
-            final Potion potion = Potion.fromDamage(is.getDurability());
-            for (final PotionEffect e : potion.getEffects()) {
-                // long but needs to be effect:speed power:2 duration:120 in that order.
-                sb.append("splash:").append(potion.isSplash()).append(" ").append("effect:").append(e.getType().getName().toLowerCase()).append(" ").append("power:").append(e.getAmplifier()).append(" ").append("duration:").append(e.getDuration() / 20).append(" ");
+            final boolean splash;
+            final Collection<PotionEffect> effects;
+            if (VersionUtil.PRE_FLATTENING) {
+                final Potion potion = Potion.fromDamage(is.getDurability());
+                splash = potion.isSplash();
+                effects = potion.getEffects();
+            } else {
+                splash = is.getType() == Material.SPLASH_POTION;
+                effects = ((PotionMeta) is.getItemMeta()).getCustomEffects();
             }
-        } else if (MaterialUtil.isPlayerHead(material, is.getData().getData())) {
+
+            for (final PotionEffect e : effects) {
+                // long but needs to be effect:speed power:2 duration:120 in that order.
+                sb.append("splash:").append(splash).append(" ").append("effect:").append(e.getType().getName().toLowerCase()).append(" ").append("power:").append(e.getAmplifier()).append(" ").append("duration:").append(e.getDuration() / 20).append(" ");
+            }
+        } else if (MaterialUtil.isPlayerHead(is)) {
             // item stack with meta
             final SkullMeta skullMeta = (SkullMeta) is.getItemMeta();
             if (skullMeta != null && skullMeta.hasOwner()) {

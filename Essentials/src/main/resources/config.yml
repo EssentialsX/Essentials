@@ -593,6 +593,9 @@ repair-enchanted: true
 # Warning: Mixing and overleveling some enchantments can cause issues with clients, servers and plugins.
 unsafe-enchantments: false
 
+# The maximum range from the player that the /tree and /bigtree commands can spawn trees.
+tree-command-range-limit: 300
+
 #Do you want Essentials to keep track of previous location for /back in the teleport listener?
 #If you set this to true any plugin that uses teleport will have the previous location registered.
 register-back-in-listener: false
@@ -917,6 +920,15 @@ chat:
   world-aliases:
   #  plots: "&dP&r"
   #  creative: "&eC&r"
+
+  # Whether players should be placed into shout mode by default.
+  shout-default: false
+
+  # Whether a player's shout mode should persist restarts.
+  persist-shout: false
+
+  # Whether chat questions should be enabled or not.
+  question-enabled: true
 
 ############################################################
 # +------------------------------------------------------+ #

@@ -46,6 +46,12 @@ public interface ISettings extends IConf {
 
     char getChatQuestion();
 
+    boolean isShoutDefault();
+
+    boolean isPersistShout();
+
+    boolean isChatQuestionEnabled();
+
     BigDecimal getCommandCost(IEssentialsCommand cmd);
 
     BigDecimal getCommandCost(String label);
@@ -227,6 +233,8 @@ public interface ISettings extends IConf {
     boolean isWorldTeleportPermissions();
 
     boolean isWorldHomePermissions();
+
+    int getMaxTreeCommandRange();
 
     boolean registerBackInListener();
 
