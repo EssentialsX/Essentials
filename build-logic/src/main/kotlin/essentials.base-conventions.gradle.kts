@@ -10,7 +10,7 @@ plugins {
 val baseExtension = extensions.create<EssentialsBaseExtension>("essentials", project)
 
 val checkstyleVersion = "8.36.2"
-val spigotVersion = "1.18.1-R0.1-SNAPSHOT"
+val spigotVersion = "1.18.2-R0.1-SNAPSHOT"
 val junit5Version = "5.7.0"
 val mockitoVersion = "3.2.0"
 
@@ -121,4 +121,4 @@ indra {
 }
 
 // undo https://github.com/KyoriPowered/indra/blob/master/indra-common/src/main/kotlin/net/kyori/indra/IndraPlugin.kt#L57
-convention.getPlugin<BasePluginConvention>().archivesBaseName = project.name
+extensions.getByType<BasePluginExtension>().archivesName.set(project.name)
