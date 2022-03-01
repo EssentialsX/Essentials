@@ -136,6 +136,7 @@ public class Settings implements net.ess3.api.ISettings {
     private boolean logCommandBlockCommands;
     private Set<Predicate<String>> nickBlacklist;
     private double maxProjectileSpeed;
+    private boolean signEditSideEffects;
     private boolean removeEffectsOnHeal;
     private Map<String, String> worldAliases;
 
@@ -776,6 +777,7 @@ public class Settings implements net.ess3.api.ISettings {
         logCommandBlockCommands = _logCommandBlockCommands();
         nickBlacklist = _getNickBlacklist();
         maxProjectileSpeed = _getMaxProjectileSpeed();
+        signEditSideEffects = _isSignEditSideEffects();
         removeEffectsOnHeal = _isRemovingEffectsOnHeal();
         vanishingItemPolicy = _getVanishingItemsPolicy();
         bindingItemPolicy = _getBindingItemsPolicy();
@@ -1899,6 +1901,15 @@ public class Settings implements net.ess3.api.ISettings {
     @Override
     public double getMaxProjectileSpeed() {
         return maxProjectileSpeed;
+    }
+
+    private boolean _isSignEditSideEffects() {
+        return config.getBoolean("sign-edit-side-effects", true);
+    }
+
+    @Override
+    public boolean isSignEditSideEffects() {
+        return signEditSideEffects;
     }
 
     private boolean _isRemovingEffectsOnHeal() {
