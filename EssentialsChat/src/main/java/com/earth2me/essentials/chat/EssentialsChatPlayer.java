@@ -36,10 +36,15 @@ public abstract class EssentialsChatPlayer implements Listener {
         }
 
         final char prefix = message.charAt(0);
-        if (prefix == ess.getSettings().getChatShout() || user.isToggleShout()) {
+        if (prefix == ess.getSettings().getChatShout()) {
+            if (user.isToggleShout()) {
+                return "";
+            }
             return message.length() > 1 ? "shout" : "";
-        } else if (prefix == ess.getSettings().getChatQuestion()) {
+        } else if (ess.getSettings().isChatQuestionEnabled() && prefix == ess.getSettings().getChatQuestion()) {
             return message.length() > 1 ? "question" : "";
+        } else if (user.isToggleShout()) {
+            return message.length() > 1 ? "shout" : "";
         } else {
             return "";
         }

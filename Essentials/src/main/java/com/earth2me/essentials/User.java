@@ -38,10 +38,11 @@ import org.bukkit.potion.PotionEffectType;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.GregorianCalendar;
-import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
@@ -94,7 +95,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
     private long lastNotifiedAboutMailsMs;
     private String lastHomeConfirmation;
     private long lastHomeConfirmationTimestamp;
-    private boolean toggleShout = false;
+    private Boolean toggleShout;
     private transient final List<String> signCopy = Lists.newArrayList("", "", "", "");
 
     public User(final Player base, final IEssentials ess) {
@@ -112,6 +113,10 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
 
     void update(final Player base) {
         setBase(base);
+    }
+
+    public IEssentials getEssentials() {
+        return ess;
     }
 
     @Override
@@ -323,7 +328,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
             if (isAuthorized("essentials.itemspawn.item-all") || isAuthorized("essentials.itemspawn.item-" + name))
                 return true;
 
-            if (VersionUtil.getServerBukkitVersion().isLowerThan(VersionUtil.v1_13_0_R01)) {
+            if (VersionUtil.PRE_FLATTENING) {
                 final int id = material.getId();
                 if (isAuthorized("essentials.itemspawn.item-" + id)) return true;
             }
@@ -354,11 +359,8 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
         // Handle max queue size
         teleportRequestQueue.remove(request.getName());
         if (teleportRequestQueue.size() >= ess.getSettings().getTpaMaxRequests()) {
-            String lastKey = null;
-            for (Map.Entry<String, TpaRequest> entry : teleportRequestQueue.entrySet()) {
-                lastKey = entry.getKey();
-            }
-            teleportRequestQueue.remove(lastKey);
+            final List<String> keys = new ArrayList<>(teleportRequestQueue.keySet());
+            teleportRequestQueue.remove(keys.get(keys.size() - 1));
         }
 
         // Add request to queue
@@ -407,22 +409,24 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
     }
 
     @Override
-    public TpaRequest getNextTpaRequest(boolean inform, boolean performExpirations, boolean excludeHere) {
+    public TpaRequest getNextTpaRequest(boolean inform, boolean ignoreExpirations, boolean excludeHere) {
         if (teleportRequestQueue.isEmpty()) {
             return null;
         }
 
         final long timeout = ess.getSettings().getTpaAcceptCancellation();
-        final Iterator<Map.Entry<String, TpaRequest>> iterator = teleportRequestQueue.entrySet().iterator();
+        final List<String> keys = new ArrayList<>(teleportRequestQueue.keySet());
+        Collections.reverse(keys);
+
         TpaRequest nextRequest = null;
-        while (iterator.hasNext()) {
-            final TpaRequest request = iterator.next().getValue();
+        for (final String key : keys) {
+            final TpaRequest request = teleportRequestQueue.get(key);
             if (timeout < 1 || (System.currentTimeMillis() - request.getTime()) <= TimeUnit.SECONDS.toMillis(timeout)) {
                 if (excludeHere && request.isHere()) {
                     continue;
                 }
 
-                if (performExpirations) {
+                if (ignoreExpirations) {
                     return request;
                 } else if (nextRequest == null) {
                     nextRequest = request;
@@ -431,7 +435,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
                 if (inform) {
                     sendMessage(tl("requestTimedOutFrom", ess.getUser(request.getRequesterUuid()).getDisplayName()));
                 }
-                iterator.remove();
+                teleportRequestQueue.remove(key);
             }
         }
         return nextRequest;
@@ -1215,10 +1219,16 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
     @Override
     public void setToggleShout(boolean toggleShout) {
         this.toggleShout = toggleShout;
+        if (ess.getSettings().isPersistShout()) {
+            setShouting(toggleShout);
+        }
     }
 
     @Override
     public boolean isToggleShout() {
-        return toggleShout;
+        if (ess.getSettings().isPersistShout()) {
+            return toggleShout = isShouting();
+        }
+        return toggleShout == null ? toggleShout = ess.getSettings().isShoutDefault() : toggleShout;
     }
 }

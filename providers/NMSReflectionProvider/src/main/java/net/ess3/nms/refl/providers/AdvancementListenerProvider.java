@@ -11,6 +11,7 @@ import org.bukkit.event.player.PlayerAdvancementDoneEvent;
 import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
 import java.lang.invoke.MethodType;
+import java.lang.reflect.Method;
 
 public class AdvancementListenerProvider implements Listener {
     private final Object language;
@@ -25,10 +26,12 @@ public class AdvancementListenerProvider implements Listener {
         } else {
             languageClass = ReflUtil.getNMSClass("LocaleLanguage");
         }
-        final MethodHandles.Lookup lookup = MethodHandles.lookup();
+
         //noinspection ConstantConditions
-        language = lookup.findStatic(languageClass, ReflUtil.isMojMap() ? "getInstance" : "a", MethodType.methodType(languageClass)).invoke();
-        languageGetOrDefault = lookup.findVirtual(languageClass, ReflUtil.isMojMap() ? "getOrDefault" : "a", MethodType.methodType(String.class, String.class));
+        final Method iWishICouldUseMethodHandles = languageClass.getDeclaredMethod(ReflUtil.isMojMap() ? "getInstance" : "a");
+        iWishICouldUseMethodHandles.setAccessible(true);
+        language = iWishICouldUseMethodHandles.invoke(null);
+        languageGetOrDefault = MethodHandles.lookup().findVirtual(languageClass, ReflUtil.isMojMap() ? "getOrDefault" : "a", MethodType.methodType(String.class, String.class));
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
