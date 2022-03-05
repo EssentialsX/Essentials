@@ -13,3 +13,12 @@ commands:
     description: Toggles whether you are talking in shout mode
     usage: /<command> [player] [on|off]
     aliases: [etoggleshout]
+permissions:
+  essentials.chat.local:
+    default: true
+  essentials.chat.receive.local:
+    default: true
+  essentials.chat.receive.shout:
+    default: true
+  essentials.chat.receive.question:
+    default: true
