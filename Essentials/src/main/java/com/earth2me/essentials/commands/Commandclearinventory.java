@@ -130,7 +130,7 @@ public class Commandclearinventory extends EssentialsCommand {
         } else {
             for (final Item item : items) {
                 final ItemStack stack = new ItemStack(item.getMaterial());
-                if (VersionUtil.getServerBukkitVersion().isLowerThan(VersionUtil.v1_13_0_R01)) {
+                if (VersionUtil.PRE_FLATTENING) {
                     stack.setDurability(item.getData());
                 }
                 // amount -1 means all items will be cleared
