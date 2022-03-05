@@ -26,7 +26,7 @@ EssentialsX is almost a completely drop-in replacement for Essentials. However, 
 
 * **EssentialsX requires Java 8 or higher.** On older versions, the plugin may not work properly.
 
-* **EssentialsX supports Minecraft versions 1.8.8, 1.9.4, 1.10.2, 1.11.2, 1.12.2, 1.13.2, 1.14.4, 1.15.2, 1.16.5, 1.17.1, and 1.18.1.**
+* **EssentialsX supports Minecraft versions 1.8.8, 1.9.4, 1.10.2, 1.11.2, 1.12.2, 1.13.2, 1.14.4, 1.15.2, 1.16.5, 1.17.1, and 1.18.2.**
 
 
 Support
@@ -65,7 +65,7 @@ To add EssentialsX to your build system, you should use the following artifacts:
 
 | Type           | Group ID        | Artifact ID | Version         |
 |:---------------|:----------------|:------------|:----------------|
-| Latest release | net.essentialsx | EssentialsX | 2.19.2          |
+| Latest release | net.essentialsx | EssentialsX | 2.19.3          |
 | Snapshots      | net.essentialsx | EssentialsX | 2.19.3-SNAPSHOT |
 | Older releases | net.ess3        | EssentialsX | 2.18.2          |
 
