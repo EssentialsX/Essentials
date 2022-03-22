@@ -195,6 +195,10 @@ public class BukkitListener implements Listener {
         if (isVanishHide(event.getPlayer())) {
             return;
         }
+        
+        if (event.getPlayer().getWorld().getGameRuleValue(GameRule.ANNOUNCE_ADVANCEMENTS) == false) { 
+            return;
+        }
 
         sendDiscordMessage(MessageType.DefaultTypes.ADVANCEMENT,
                 MessageUtil.formatMessage(jda.getSettings().getAdvancementFormat(event.getPlayer()),
