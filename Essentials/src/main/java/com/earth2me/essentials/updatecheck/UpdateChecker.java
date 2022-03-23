@@ -75,11 +75,11 @@ public final class UpdateChecker {
                 return pendingDevFuture;
             }
             pendingDevFuture = new CompletableFuture<>();
-            new Thread(() -> {
+            ess.runTaskAsynchronously(() -> {
                 pendingDevFuture.complete(cachedDev = fetchDistance(BRANCH, getVersionIdentifier()));
                 pendingDevFuture = null;
                 lastFetchTime = System.currentTimeMillis();
-            }).start();
+            });
             return pendingDevFuture;
         }
         return CompletableFuture.completedFuture(cachedDev);
@@ -91,7 +91,7 @@ public final class UpdateChecker {
                 return pendingReleaseFuture;
             }
             pendingReleaseFuture = new CompletableFuture<>();
-            new Thread(() -> {
+            ess.runTaskAsynchronously(() -> {
                 catchBlock:
                 try {
                     final HttpURLConnection connection = tryRequestWithFallback(LATEST_RELEASE_URL, LATEST_RELEASE_PROXY_URL);
@@ -119,7 +119,7 @@ public final class UpdateChecker {
                 }
                 pendingReleaseFuture = null;
                 lastFetchTime = System.currentTimeMillis();
-            }).start();
+            });
             return pendingReleaseFuture;
         }
         return CompletableFuture.completedFuture(cachedRelease);

@@ -31,6 +31,7 @@ import java.util.Set;
 import static com.earth2me.essentials.I18n.tlLiteral;
 
 public class EssentialsSign {
+    private static final String SIGN_OWNER_KEY = "sign-owner";
     protected static final BigDecimal MINTRANSACTION = new BigDecimal("0.01");
     private static final Set<Material> EMPTY_SET = new HashSet<>();
     protected transient final String signName;
@@ -166,19 +167,20 @@ public class EssentialsSign {
             return;
         }
         final Sign sign = (Sign) signProvider.getBlock().getState();
-        ess.getSignDataProvider().setSignData(sign, "owner", user.getUUID().toString());
+        ess.getSignDataProvider().setSignData(sign, SIGN_OWNER_KEY, user.getUUID().toString());
     }
 
     public boolean isOwner(final IEssentials ess, final User user, final ISign signProvider, final int nameIndex, final String namePrefix) {
         final Sign sign = (Sign) signProvider.getBlock().getState();
-        if (ess.getSignDataProvider() == null || ess.getSignDataProvider().getSignData(sign, "owner") == null) {
-            if (ess.getSignDataProvider() != null) {
-                ess.getSignDataProvider().setSignData(sign, "owner", user.getUUID().toString());
+        if (ess.getSignDataProvider() == null || ess.getSignDataProvider().getSignData(sign, SIGN_OWNER_KEY) == null) {
+            final boolean isLegacyOwner = FormatUtil.stripFormat(signProvider.getLine(nameIndex)).equalsIgnoreCase(getUsername(user));
+            if (ess.getSignDataProvider() != null && isLegacyOwner) {
+                ess.getSignDataProvider().setSignData(sign, SIGN_OWNER_KEY, user.getUUID().toString());
             }
-            return FormatUtil.stripFormat(signProvider.getLine(nameIndex)).equalsIgnoreCase(getUsername(user));
+            return isLegacyOwner;
         }
 
-        if (user.getUUID().toString().equals(ess.getSignDataProvider().getSignData(sign, "owner"))) {
+        if (user.getUUID().toString().equals(ess.getSignDataProvider().getSignData(sign, SIGN_OWNER_KEY))) {
             signProvider.setLine(nameIndex, namePrefix + getUsername(user));
             return true;
         }
