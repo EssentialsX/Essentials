@@ -1,5 +1,6 @@
 package com.earth2me.essentials;
 
+import com.earth2me.essentials.items.transform.PluginItemTransformer;
 import com.earth2me.essentials.textreader.BookInput;
 import com.earth2me.essentials.textreader.BookPager;
 import com.earth2me.essentials.textreader.IText;
@@ -53,6 +54,7 @@ import java.util.regex.Pattern;
 public class MetaItemStack {
     private static final Map<String, DyeColor> colorMap = new HashMap<>();
     private static final Map<String, FireworkEffect.Type> fireworkShape = new HashMap<>();
+    private static final transient Map<String, PluginItemTransformer> itemTransformers = new HashMap<>();
     private static boolean useNewSkullMethod = true;
 
     static {
@@ -82,6 +84,32 @@ public class MetaItemStack {
 
     public MetaItemStack(final ItemStack stack) {
         this.stack = stack.clone();
+    }
+
+    /**
+     * Registers an item transformer, belonging to a plugin, that can manipulate certain item metadata.
+     * @param key the key for the transformer.
+     * @param itemTransformer the actual transformer.
+     */
+    public static void registerItemTransformer(final String key, final PluginItemTransformer itemTransformer) {
+        //Warn people if they're trying to register over top of someone else.
+        if (itemTransformers.containsKey(key)) {
+            Essentials.getWrappedLogger().log(Level.WARNING, String.format("Plugin transformer registered to \"%s\" attempted to register already existing item transformer \"%s\" belonging to \"%s\"!",
+                    itemTransformer.getPlugin().getName(),
+                    key,
+                    itemTransformers.get(key).getPlugin().getName()));
+            return;
+        }
+
+        itemTransformers.put(key, itemTransformer);
+    }
+
+    /**
+     * Unregisters a certain item transformer under key "key".
+     * @param key the transformer key.
+     */
+    public static void unregisterItemTransformer(final String key) {
+        itemTransformers.remove(key);
     }
 
     private static void setSkullOwner(final IEssentials ess, final ItemStack stack, final String owner) {
@@ -358,8 +386,25 @@ public class MetaItemStack {
             armorMeta.setTrim(new ArmorTrim(material, pattern));
 
             stack.setItemMeta(armorMeta);
+        } else if (split.length > 1 && itemTransformers.containsKey(split[0])) {
+            transformItem(split[0], split[1]);
         } else {
             parseEnchantmentStrings(sender, allowUnsafe, split, ess);
+        }
+    }
+
+    private void transformItem(final String key, final String data){
+        final PluginItemTransformer transformer = itemTransformers.get(key);
+
+        //Ignore, the plugin is disabled.
+        if (!transformer.getPlugin().isEnabled()) {
+            return;
+        }
+
+        try {
+            stack = transformer.apply(data, stack);
+        } catch(final Throwable thr) {
+            Essentials.getWrappedLogger().log(Level.SEVERE, String.format("Error applying data \"%s\" to itemstack! Plugin: %s, Key: %s", data, transformer.getPlugin().getName(), key), thr);
         }
     }
 
