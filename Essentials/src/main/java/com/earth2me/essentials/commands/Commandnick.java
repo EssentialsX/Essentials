@@ -63,6 +63,9 @@ public class Commandnick extends EssentialsLoopCommand {
     }
 
     private String formatNickname(final User user, final String nick) throws Exception {
+        if("off".equalsIgnoreCase(nick)) {
+            return nick;
+        }
         final String newNick = user == null ? FormatUtil.replaceFormat(nick) : FormatUtil.formatString(user, "essentials.nick", nick);
         if (!newNick.matches("^[a-zA-Z_0-9" + ChatColor.COLOR_CHAR + "]+$") && user != null && !user.isAuthorized("essentials.nick.allowunsafe")) {
             throw new Exception(tl("nickNamesAlpha"));
