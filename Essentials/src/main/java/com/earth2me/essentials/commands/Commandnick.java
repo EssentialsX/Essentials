@@ -63,9 +63,6 @@ public class Commandnick extends EssentialsLoopCommand {
     }
 
     private String formatNickname(final User user, final String nick) throws Exception {
-        if("off".equalsIgnoreCase(nick)) {
-            return nick;
-        }
         final String newNick = user == null ? FormatUtil.replaceFormat(nick) : FormatUtil.formatString(user, "essentials.nick", nick);
         if (!newNick.matches("^[a-zA-Z_0-9" + ChatColor.COLOR_CHAR + "]+$") && user != null && !user.isAuthorized("essentials.nick.allowunsafe")) {
             throw new Exception(tl("nickNamesAlpha"));
@@ -73,7 +70,7 @@ public class Commandnick extends EssentialsLoopCommand {
             throw new Exception(tl("nickTooLong"));
         } else if (FormatUtil.stripFormat(newNick).length() < 1) {
             throw new Exception(tl("nickNamesAlpha"));
-        } else if (user != null && user.isAuthorized("essentials.nick.changecolors") && !user.isAuthorized("essentials.nick.changecolors.bypass") && !FormatUtil.stripFormat(newNick).equals(user.getName())) {
+        } else if (user != null && user.isAuthorized("essentials.nick.changecolors") && !user.isAuthorized("essentials.nick.changecolors.bypass") && !FormatUtil.stripFormat(newNick).equals(user.getName()) && !nick.equalsIgnoreCase("off")) {
             throw new Exception(tl("nickNamesOnlyColorChanges"));
         } else if (user != null && !user.isAuthorized("essentials.nick.blacklist.bypass") && isNickBanned(newNick)) {
             throw new Exception(tl("nickNameBlacklist", nick));
