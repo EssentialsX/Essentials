@@ -324,9 +324,12 @@ public class Commandmail extends EssentialsCommand {
             if (user.isAuthorized("essentials.mail.sendtempall")) {
                 options.add("sendtempall");
             }
+            if (user.isAuthorized("essentials.mail.clearall")){
+                options.add("clearall");
+            }
             return options;
         } else if (args.length == 2) {
-            if ((args[0].equalsIgnoreCase("send") && user.isAuthorized("essentials.mail.send")) || (args[0].equalsIgnoreCase("sendtemp") && user.isAuthorized("essentials.mail.sendtemp"))) {
+            if ((args[0].equalsIgnoreCase("send") && user.isAuthorized("essentials.mail.send")) || (args[0].equalsIgnoreCase("sendtemp") && user.isAuthorized("essentials.mail.sendtemp")) || (args[0].equalsIgnoreCase("clear"))) {
                 return getPlayers(server, user);
             } else if (args[0].equalsIgnoreCase("sendtempall") && user.isAuthorized("essentials.mail.sendtempall")) {
                 return COMMON_DATE_DIFFS;
@@ -364,6 +367,7 @@ public class Commandmail extends EssentialsCommand {
         }
         return Collections.emptyList();
     }
+
     private class ClearAll implements Runnable {
         @Override
         public void run() {
