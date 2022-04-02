@@ -168,7 +168,7 @@ public class Commandmail extends EssentialsCommand {
             user.sendMessage(tl("mailSent"));
             return;
         }
-        if (args.length >= 1 && "clear".equalsIgnoreCase(args[0])) {
+        if (args.length == 1 && "clear".equalsIgnoreCase(args[0]) || (args.length >= 1 && "clear".equalsIgnoreCase(args[0]) && NumberUtil.isPositiveInt(args[1]))) {
             final ArrayList<MailMessage> mails = user.getMailMessages();
             if (mails == null || mails.size() == 0) {
                 user.sendMessage(tl("noMail"));
@@ -194,6 +194,30 @@ public class Commandmail extends EssentialsCommand {
             user.sendMessage(tl("mailCleared"));
             return;
         }
+        if (args.length >= 2 && "clear".equalsIgnoreCase(args[0])) {
+            final User u;
+            if (!user.isAuthorized("essentials.mail.clear.others")){
+                throw new Exception(tl("noPerm", "essentials.mail.clear.others"));
+            }
+            try {
+                u = getPlayer(server, args[1], true, true);
+            } catch (final PlayerNotFoundException e) {
+                throw new Exception(tl("playerNeverOnServer", args[1]));
+            }
+            u.setMailList(null);
+            user.sendMessage(tl("mailClearedPlayer", u.getDisplayName()));
+            return;
+        }
+        if (args.length >= 1 && "clearall".equalsIgnoreCase(args[0])){
+            if (!user.isAuthorized("essentials.mail.clearall")) {
+                throw new Exception(tl("noPerm", "essentials.mail.clearall"));
+            }
+
+            ess.runTaskAsynchronously(new ClearAll());
+            user.sendMessage(tl("mailClearedAll"));
+            return;
+
+        }
         throw new NotEnoughArgumentsException();
     }
 
@@ -201,8 +225,22 @@ public class Commandmail extends EssentialsCommand {
     protected void run(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception {
         if (args.length >= 1 && "read".equalsIgnoreCase(args[0])) {
             throw new Exception(tl("onlyPlayers", commandLabel + " read"));
-        } else if (args.length >= 1 && "clear".equalsIgnoreCase(args[0])) {
+        } else if (args.length == 1 && "clear".equalsIgnoreCase(args[0])) {
             throw new Exception(tl("onlyPlayers", commandLabel + " clear"));
+        } else if (args.length >= 1 && "clearall".equalsIgnoreCase(args[0])){
+            ess.runTaskAsynchronously(new ClearAll());
+            sender.sendMessage(tl("mailClearedAll"));
+            return;
+        } else if (args.length >= 2 && "clear".equalsIgnoreCase(args[0])) {
+            final User u;
+            try {
+                u = getPlayer(server, args[1], true, true);
+            } catch (final PlayerNotFoundException e) {
+                throw new Exception(tl("playerNeverOnServer", args[1]));
+            }
+            u.setMailList(null);
+            sender.sendMessage(tl("mailClearedPlayer", u.getDisplayName()));
+            return;
         } else if (args.length >= 3 && "send".equalsIgnoreCase(args[0])) {
             final User u;
             try {
@@ -314,9 +352,9 @@ public class Commandmail extends EssentialsCommand {
     @Override
     protected List<String> getTabCompleteOptions(final Server server, final CommandSource sender, final String commandLabel, final String[] args) {
         if (args.length == 1) {
-            return Lists.newArrayList("send", "sendall", "sendtemp", "sendtempall");
+            return Lists.newArrayList("send", "sendall", "sendtemp", "sendtempall", "clearall", "clear");
         } else if (args.length == 2) {
-            if (args[0].equalsIgnoreCase("send") || args[0].equalsIgnoreCase("sendtemp")) {
+            if (args[0].equalsIgnoreCase("send") || args[0].equalsIgnoreCase("sendtemp") || args[0].equalsIgnoreCase("clear")) {
                 return getPlayers(server, sender);
             } else if (args[0].equalsIgnoreCase("sendtempall")) {
                 return COMMON_DATE_DIFFS;
@@ -326,4 +364,17 @@ public class Commandmail extends EssentialsCommand {
         }
         return Collections.emptyList();
     }
+    private class ClearAll implements Runnable {
+        @Override
+        public void run() {
+            for (UUID userid : ess.getUserMap().getAllUniqueUsers()) {
+                final User user = ess.getUserMap().getUser(userid);
+                if (user != null) {
+                    user.setMailList(null);
+                }
+            }
+        }
+    }
 }
+
+
