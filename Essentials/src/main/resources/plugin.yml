@@ -279,7 +279,7 @@ commands:
   list:
     description: List all online players.
     usage: /<command> [group]
-    aliases: [elist,online,eonline,playerlist,eplayerlist,plist,eplist,who,ewho]
+    aliases: [elist,online,eonline,playerlist,eplayerlist,plist,eplist,who,ewho,ls,els]
   loom:
     description: Opens up a loom.
     usage: /<command>
