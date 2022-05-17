@@ -1,5 +1,7 @@
 package com.earth2me.essentials.perm;
 
+import com.earth2me.essentials.Essentials;
+import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.TriState;
 import org.bukkit.entity.Player;
 
@@ -27,11 +29,11 @@ public interface IPermissionsHandler {
 
     String getSuffix(Player base);
 
-    void registerContext(String context, Function<Player, Iterable<String>> calculator, Supplier<Iterable<String>> suggestions);
+    void registerContext(String context, Function<User, Iterable<String>> calculator, Supplier<Iterable<String>> suggestions);
 
     void unregisterContexts();
 
     String getBackendName();
 
-    boolean tryProvider();
+    boolean tryProvider(Essentials ess);
 }

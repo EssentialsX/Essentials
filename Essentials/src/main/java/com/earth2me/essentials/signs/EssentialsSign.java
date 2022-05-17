@@ -5,6 +5,7 @@ import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.MetaItemStack;
 import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.utils.FormatUtil;
 import com.earth2me.essentials.utils.MaterialUtil;
 import com.earth2me.essentials.utils.NumberUtil;
 import net.ess3.api.IEssentials;
@@ -30,6 +31,7 @@ import java.util.Set;
 import static com.earth2me.essentials.I18n.tl;
 
 public class EssentialsSign {
+    private static final String SIGN_OWNER_KEY = "sign-owner";
     protected static final BigDecimal MINTRANSACTION = new BigDecimal("0.01");
     private static final Set<Material> EMPTY_SET = new HashSet<>();
     protected transient final String signName;
@@ -60,15 +62,15 @@ public class EssentialsSign {
     }
 
     /**
-     * @deprecated, use {@link #isValidSign(IEssentials, ISign)} if possible
+     * @deprecated use {@link #isValidSign(IEssentials, ISign)} if possible
      */
     @Deprecated
     public static boolean isValidSign(final ISign sign) {
-        return sign.getLine(0).matches("§1\\[.*\\]");
+        return sign.getLine(0).matches("§1\\[.*]");
     }
 
     public static boolean isValidSign(final IEssentials ess, final ISign sign) {
-        if (!sign.getLine(0).matches("§1\\[.*\\]"))
+        if (!sign.getLine(0).matches("§1\\[.*]"))
             return false;
 
         // Validate that the sign is actually an essentials sign
@@ -119,6 +121,7 @@ public class EssentialsSign {
         } catch (final ChargeException | SignException ex) {
             showError(ess, user.getSource(), ex, signName);
         }
+        setOwnerData(ess, user, sign);
         // Return true, so the player sees the wrong sign.
         return true;
     }
@@ -152,6 +155,36 @@ public class EssentialsSign {
     public String getUsername(final User user) {
         // Truncate username to ensure it can fit on a sign
         return user.getName().substring(0, Math.min(user.getName().length(), 13));
+    }
+
+    public void setOwner(final IEssentials ess, final User user, final ISign signProvider, final int nameIndex, final String namePrefix) {
+        setOwnerData(ess, user, signProvider);
+        signProvider.setLine(nameIndex, namePrefix + getUsername(user));
+    }
+
+    public void setOwnerData(final IEssentials ess, final User user, final ISign signProvider) {
+        if (ess.getSignDataProvider() == null) {
+            return;
+        }
+        final Sign sign = (Sign) signProvider.getBlock().getState();
+        ess.getSignDataProvider().setSignData(sign, SIGN_OWNER_KEY, user.getUUID().toString());
+    }
+
+    public boolean isOwner(final IEssentials ess, final User user, final ISign signProvider, final int nameIndex, final String namePrefix) {
+        final Sign sign = (Sign) signProvider.getBlock().getState();
+        if (ess.getSignDataProvider() == null || ess.getSignDataProvider().getSignData(sign, SIGN_OWNER_KEY) == null) {
+            final boolean isLegacyOwner = FormatUtil.stripFormat(signProvider.getLine(nameIndex)).equalsIgnoreCase(getUsername(user));
+            if (ess.getSignDataProvider() != null && isLegacyOwner) {
+                ess.getSignDataProvider().setSignData(sign, SIGN_OWNER_KEY, user.getUUID().toString());
+            }
+            return isLegacyOwner;
+        }
+
+        if (user.getUUID().toString().equals(ess.getSignDataProvider().getSignData(sign, SIGN_OWNER_KEY))) {
+            signProvider.setLine(nameIndex, namePrefix + getUsername(user));
+            return true;
+        }
+        return false;
     }
 
     protected final boolean onSignInteract(final Block block, final Player player, final IEssentials ess) {
@@ -392,7 +425,7 @@ public class EssentialsSign {
     }
 
     protected final BigDecimal getMoney(final String line, final IEssentials ess) throws SignException {
-        final boolean isMoney = line.matches("^[^0-9-\\.]?[\\.0-9]+[^0-9-\\.]?$");
+        final boolean isMoney = line.matches("^[^0-9-.]?[.0-9]+[^0-9-.]?$");
         return isMoney ? getBigDecimalPositive(line, ess) : null;
     }
 
@@ -531,6 +564,7 @@ public class EssentialsSign {
         @Override
         public final void setLine(final int index, final String text) {
             sign.setLine(index, text);
+            updateSign();
         }
 
         @Override

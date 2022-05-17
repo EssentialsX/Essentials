@@ -1,6 +1,7 @@
 package com.earth2me.essentials.perm;
 
 import com.earth2me.essentials.Essentials;
+import com.earth2me.essentials.User;
 import com.earth2me.essentials.perm.impl.AbstractVaultHandler;
 import com.earth2me.essentials.perm.impl.ConfigPermissionsHandler;
 import com.earth2me.essentials.perm.impl.GenericVaultHandler;
@@ -105,7 +106,7 @@ public class PermissionsHandler implements IPermissionsHandler {
     }
 
     @Override
-    public void registerContext(final String context, final Function<Player, Iterable<String>> calculator, final Supplier<Iterable<String>> suggestions) {
+    public void registerContext(final String context, final Function<User, Iterable<String>> calculator, final Supplier<Iterable<String>> suggestions) {
         handler.registerContext(context, calculator, suggestions);
     }
 
@@ -120,7 +121,7 @@ public class PermissionsHandler implements IPermissionsHandler {
     }
 
     @Override
-    public boolean tryProvider() {
+    public boolean tryProvider(Essentials ess) {
         return true;
     }
 
@@ -135,7 +136,7 @@ public class PermissionsHandler implements IPermissionsHandler {
         for (final Class<? extends IPermissionsHandler> providerClass : providerClazz) {
             try {
                 final IPermissionsHandler provider = providerClass.newInstance();
-                if (provider.tryProvider()) {
+                if (provider.tryProvider(ess)) {
                     if (provider.getClass().isInstance(this.handler)) {
                         return;
                     }
@@ -170,7 +171,7 @@ public class PermissionsHandler implements IPermissionsHandler {
             if (enabledPermsPlugin == null) enabledPermsPlugin = "generic";
             ess.getLogger().info("Using Vault based permissions (" + enabledPermsPlugin + ")");
         } else if (handler.getClass() == SuperpermsHandler.class) {
-            if (handler.tryProvider()) {
+            if (handler.tryProvider(ess)) {
                 ess.getLogger().warning("Detected supported permissions plugin " +
                     ((SuperpermsHandler) handler).getEnabledPermsPlugin() + " without Vault installed.");
                 ess.getLogger().warning("Features such as chat prefixes/suffixes and group-related functionality will not " +
@@ -199,11 +200,11 @@ public class PermissionsHandler implements IPermissionsHandler {
     }
 
     private void initContexts() {
-        registerContext("essentials:afk", player -> Collections.singleton(String.valueOf(ess.getUser(player).isAfk())), () -> ImmutableSet.of("true", "false"));
-        registerContext("essentials:muted", player -> Collections.singleton(String.valueOf(ess.getUser(player).isMuted())), () -> ImmutableSet.of("true", "false"));
-        registerContext("essentials:vanished", player -> Collections.singleton(String.valueOf(ess.getUser(player).isHidden())), () -> ImmutableSet.of("true", "false"));
-        registerContext("essentials:jailed", player -> Collections.singleton(String.valueOf(ess.getUser(player).isJailed())), () -> ImmutableSet.of("true", "false"));
-        registerContext("essentials:jail", player -> Optional.ofNullable(ess.getUser(player).getJail()).map(Arrays::asList).orElse(Collections.emptyList()), () -> {
+        registerContext("essentials:afk", user -> Collections.singleton(String.valueOf(user.isAfk())), () -> ImmutableSet.of("true", "false"));
+        registerContext("essentials:muted", user -> Collections.singleton(String.valueOf(user.isMuted())), () -> ImmutableSet.of("true", "false"));
+        registerContext("essentials:vanished", user -> Collections.singleton(String.valueOf(user.isHidden())), () -> ImmutableSet.of("true", "false"));
+        registerContext("essentials:jailed", user -> Collections.singleton(String.valueOf(user.isJailed())), () -> ImmutableSet.of("true", "false"));
+        registerContext("essentials:jail", user -> Optional.ofNullable(user.getJail()).map(Arrays::asList).orElse(Collections.emptyList()), () -> {
             try {
                 return ess.getJails().getList();
             } catch (final Exception e) {
