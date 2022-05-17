@@ -208,7 +208,7 @@ public final class UpdateChecker {
 
     public String[] getVersionMessages(final boolean sendLatestMessage, final boolean verboseErrors) {
         if (!ess.getSettings().isUpdateCheckEnabled()) {
-            return new String[] {tl("versionCheckDisabled")};
+            return new String[] {""};
         }
 
         if (this.isDevBuild()) {
