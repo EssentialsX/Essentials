@@ -308,7 +308,7 @@ public class AsyncTeleport implements IAsyncTeleport {
     private void teleportOther(final IUser teleporter, final IUser teleportee, final ITarget target, final Trade chargeFor, final TeleportCause cause, final CompletableFuture<Boolean> future) {
         double delay = ess.getSettings().getTeleportDelay();
 
-        final TeleportWarmupEvent event = new TeleportWarmupEvent(teleportee, cause, target, delay);
+        final TeleportWarmupEvent event = new TeleportWarmupEvent(teleporter, teleportee, cause, target, delay);
         Bukkit.getServer().getPluginManager().callEvent(event);
         if (event.isCancelled()) {
             return;
