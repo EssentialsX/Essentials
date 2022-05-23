@@ -69,7 +69,7 @@ public class Commandnick extends EssentialsLoopCommand {
             throw new TranslatableException("nickTooLong");
         } else if (FormatUtil.stripFormat(newNick).length() < 1) {
             throw new TranslatableException("nickNamesAlpha");
-        } else if (user != null && user.isAuthorized("essentials.nick.changecolors") && !user.isAuthorized("essentials.nick.changecolors.bypass") && !FormatUtil.stripFormat(newNick).equals(user.getName())) {
+        } else if (user != null && user.isAuthorized("essentials.nick.changecolors") && !user.isAuthorized("essentials.nick.changecolors.bypass") && !FormatUtil.stripFormat(newNick).equals(user.getName()) && !nick.equalsIgnoreCase("off")) {
             throw new TranslatableException("nickNamesOnlyColorChanges");
         } else if (user != null && !user.isAuthorized("essentials.nick.blacklist.bypass") && isNickBanned(newNick)) {
             throw new TranslatableException("nickNameBlacklist", nick);
