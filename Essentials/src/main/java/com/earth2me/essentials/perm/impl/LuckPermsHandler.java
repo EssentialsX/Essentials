@@ -70,7 +70,7 @@ public class LuckPermsHandler extends ModernVaultHandler {
             // If the player doesn't exist in the UserMap, just skip
             // Ess will cause performance problems for permissions checks if it attempts to
             // perform i/o to load the user data otherwise.
-            if (!ess.getUserMap().userExists(target.getUniqueId())) {
+            if (!ess.getUsers().getAllUserUUIDs().contains(target.getUniqueId())) {
                 return;
             }
 
