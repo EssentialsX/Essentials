@@ -10,10 +10,7 @@ import com.earth2me.essentials.utils.NumberUtil;
 import com.earth2me.essentials.utils.VersionUtil;
 import com.google.common.base.Joiner;
 import net.ess3.api.IEssentials;
-import org.bukkit.Color;
-import org.bukkit.DyeColor;
-import org.bukkit.FireworkEffect;
-import org.bukkit.Material;
+import org.bukkit.*;
 import org.bukkit.block.Banner;
 import org.bukkit.block.banner.PatternType;
 import org.bukkit.enchantments.Enchantment;
@@ -45,6 +42,8 @@ import java.util.regex.Pattern;
 import static com.earth2me.essentials.I18n.tl;
 
 public class MetaItemStack {
+    private static final String DEFAULT_BOOK_AUTHOR = Bukkit.getConsoleSender().getName();
+
     private static final Map<String, DyeColor> colorMap = new HashMap<>();
     private static final Map<String, FireworkEffect.Type> fireworkShape = new HashMap<>();
     private static boolean useNewSkullMethod = true;
@@ -216,10 +215,19 @@ public class MetaItemStack {
             } else {
                 throw new Exception(tl("onlyPlayerSkulls"));
             }
-        } else if (split.length > 1 && split[0].equalsIgnoreCase("book") && MaterialUtil.isEditableBook(stack.getType()) && (hasMetaPermission(sender, "book",true, true, ess) || hasMetaPermission(sender, "chapter-" + split[1].toLowerCase(Locale.ENGLISH), true, true, ess))) {
+        } else if (split.length > 1 && split[0].equalsIgnoreCase("book") && MaterialUtil.isEditableBook(stack.getType()) && (hasMetaPermission(sender, "book", true, true, ess) || hasMetaPermission(sender, "chapter-" + split[1].toLowerCase(Locale.ENGLISH), true, true, ess))) {
             final BookMeta meta = (BookMeta) stack.getItemMeta();
             final IText input = new BookInput("book", true, ess);
             final BookPager pager = new BookPager(input);
+
+            // This fix only applies to written books.
+            if (stack.getType() == WRITTEN_BOOK) {
+                // Written books require an author and a title. https://bugs.mojang.com/browse/MC-59153
+                meta.setAuthor(DEFAULT_BOOK_AUTHOR);
+                // The book's title cannot be longer than 32 characters.
+                final String title = split[1];
+                meta.setTitle(title.length() > 32 ? title.substring(0, 32) : title);
+            }
 
             final List<String> pages = pager.getPages(split[1]);
             meta.setPages(pages);
@@ -286,9 +294,9 @@ public class MetaItemStack {
                 final String input = color[0];
                 if (input.startsWith("#")) { // Hex
                     meta.setColor(Color.fromRGB(
-                        Integer.valueOf(input.substring(1, 3), 16),
-                        Integer.valueOf(input.substring(3, 5), 16),
-                        Integer.valueOf(input.substring(5, 7), 16)));
+                            Integer.valueOf(input.substring(1, 3), 16),
+                            Integer.valueOf(input.substring(3, 5), 16),
+                            Integer.valueOf(input.substring(5, 7), 16)));
                 } else { // Int
                     meta.setColor(Color.fromRGB(Integer.parseInt(input)));
                 }
