@@ -10,7 +10,11 @@ import com.earth2me.essentials.utils.NumberUtil;
 import com.earth2me.essentials.utils.VersionUtil;
 import com.google.common.base.Joiner;
 import net.ess3.api.IEssentials;
-import org.bukkit.*;
+import org.apache.commons.lang.StringUtils;
+import org.bukkit.Color;
+import org.bukkit.DyeColor;
+import org.bukkit.FireworkEffect;
+import org.bukkit.Material;
 import org.bukkit.block.Banner;
 import org.bukkit.block.banner.PatternType;
 import org.bukkit.enchantments.Enchantment;
@@ -42,8 +46,6 @@ import java.util.regex.Pattern;
 import static com.earth2me.essentials.I18n.tl;
 
 public class MetaItemStack {
-    private static final String DEFAULT_BOOK_AUTHOR = Bukkit.getConsoleSender().getName();
-
     private static final Map<String, DyeColor> colorMap = new HashMap<>();
     private static final Map<String, FireworkEffect.Type> fireworkShape = new HashMap<>();
     private static boolean useNewSkullMethod = true;
@@ -219,16 +221,18 @@ public class MetaItemStack {
             final BookMeta meta = (BookMeta) stack.getItemMeta();
             final IText input = new BookInput("book", true, ess);
             final BookPager pager = new BookPager(input);
-
             // This fix only applies to written books.
             if (stack.getType() == WRITTEN_BOOK) {
                 // Written books require an author and a title. https://bugs.mojang.com/browse/MC-59153
-                meta.setAuthor(DEFAULT_BOOK_AUTHOR);
-                // The book's title cannot be longer than 32 characters.
-                final String title = split[1];
-                meta.setTitle(title.length() > 32 ? title.substring(0, 32) : title);
+                if (!meta.hasAuthor()) {
+                    meta.setAuthor(sender.getDisplayName());
+                }
+                if (!meta.hasTitle()) {
+                    final String title = StringUtils.capitalize(split[1].toLowerCase(Locale.ROOT));
+                    // The book's title cannot be longer than 32 characters.
+                    meta.setTitle(title.length() > 32 ? title.substring(0, 32) : title);
+                }
             }
-
             final List<String> pages = pager.getPages(split[1]);
             meta.setPages(pages);
             stack.setItemMeta(meta);
