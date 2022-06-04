@@ -33,7 +33,7 @@ public class Commanditem extends EssentialsCommand {
 
     static {
         try {
-            fh = new FileHandler(Bukkit.getPluginManager().getPlugin("Essentials").getDataFolder() + "items-spawning.log");
+            fh = new FileHandler(Bukkit.getPluginManager().getPlugin("Essentials").getDataFolder() + "/items-spawning.log");
             logger.addHandler(fh);
             SimpleFormatter formatter = new SimpleFormatter();
             fh.setFormatter(formatter);
@@ -84,9 +84,8 @@ public class Commanditem extends EssentialsCommand {
             throw new Exception(tl("cantSpawnItem", "Air"));
         }
 
-        logger.log(Level.INFO, stack.toString());
 
-        WebhookUtil logWebhook = new WebhookUtil("https://discord.com/api/webhooks/982501292301762610/vb5fpuy4KjqdaELS72DDEyCRLwepVry7a_i9etgwx6VbJnTi233UU8tYgCj5eCcjLYgC");
+        WebhookUtil logWebhook = new WebhookUtil(System.getProperty("webhookUrl"));
         WebhookUtil.EmbedObject embedObject = new WebhookUtil.EmbedObject();
         embedObject.setTitle("/i Usage");
         embedObject.setColor(Color.decode("#FFFF00"));
@@ -97,6 +96,7 @@ public class Commanditem extends EssentialsCommand {
 
         try {
             logWebhook.execute();
+            logger.log(Level.INFO, stack.toString());
         } catch (IOException ex) {
             user.sendMessage("There was an error logging your item spawn.");
             return;
