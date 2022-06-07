@@ -7,6 +7,7 @@ import org.bukkit.entity.Axolotl;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Fox;
+import org.bukkit.entity.Frog;
 import org.bukkit.entity.Llama;
 import org.bukkit.entity.MushroomCow;
 import org.bukkit.entity.Ocelot;
@@ -37,6 +38,7 @@ public final class MobCompat {
     public static final EntityType PHANTOM = getEntityType("PHANTOM");
     public static final EntityType AXOLOTL = getEntityType("AXOLOTL");
     public static final EntityType GOAT = getEntityType("GOAT");
+    public static final EntityType FROG = getEntityType("FROG");
 
     // Constants for mobs that have changed since earlier versions
     public static final EntityType CAT = getEntityType("CAT", "OCELOT");
@@ -161,6 +163,15 @@ public final class MobCompat {
         }
         if (entity instanceof Axolotl) {
             ((Axolotl) entity).setVariant(Axolotl.Variant.valueOf(variant));
+        }
+    }
+
+    public static void setFrogVariant(final Entity entity, final String variant) {
+        if (VersionUtil.getServerBukkitVersion().isLowerThan(VersionUtil.v1_19_R01)) {
+            return;
+        }
+        if (entity instanceof Frog) {
+            ((Frog) entity).setVariant(Frog.Variant.valueOf(variant));
         }
     }
 
