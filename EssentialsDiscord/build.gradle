@@ -54,4 +54,7 @@ shadowJar {
 
     // discord-webhooks
     relocate 'club.minnced.discord.webhook', 'net.essentialsx.dep.club.minnced.discord.webhook'
+
+    // Lang3 from Main Module
+    relocate 'org.apache.commons.lang3', 'com.earth2me.essentials.libs.commons.lang3'
 }
