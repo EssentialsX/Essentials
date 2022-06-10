@@ -66,7 +66,7 @@ To add EssentialsX to your build system, you should use the following artifacts:
 | Type           | Group ID          | Artifact ID   | Version           |
 |:---------------|:------------------|:--------------|:------------------|
 | Latest release | `net.essentialsx` | `EssentialsX` | `2.19.4`          |
-| Snapshots      | `net.essentialsx` | `EssentialsX` | `2.20.0-SNAPSHOT` |
+| Snapshots      | `net.essentialsx` | `EssentialsX` | `2.19.5-SNAPSHOT` |
 | Older releases | `net.ess3`        | `EssentialsX` | `2.18.2`          |
 
 Note: up until `2.18.2`, EssentialsX used the `net.ess3` group ID, but starting with `2.19.0` snapshots, the group ID is now `net.essentialsx`.
