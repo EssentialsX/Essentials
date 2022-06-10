@@ -13,24 +13,26 @@ GitHub issues and discussions. Check the list of
 ["open to PR" issues](https://github.com/EssentialsX/Essentials/issues?q=is%3Aissue+is%3Aopen+sort%3Aupdated-desc+label%3A%22status%3A+open+to+PR%22)
 and [feature request discussions](https://github.com/EssentialsX/Essentials/discussions/categories/ideas-and-feature-suggestions)
 before you start working on your changes. If you don't see your desired feature listed,
-[open a feature request](https://github.com/EssentialsX/Essentials/issues/new/choose) and wait for a response, else you
-may end up wasting your time on a feature that we aren't in a position to accept.
+[open a feature request](https://github.com/EssentialsX/Essentials/issues/new/choose) and wait for a response, otherwise
+you may end up wasting your time on a feature that we aren't in a position to accept.
 
-#### Keep it simple
+#### Keep it focused
 
-Please try to keep feature PRs small. Your PR should ideally contain one feature, or a few closely-linked features. If
-you submit several unrelated features in one PR, the PR will not be accepted.
+Please try to keep feature PRs focused around one feature. Your PR should ideally contain
+one feature, or a few closely-linked features. If you submit several unrelated features 
+in one PR, the PR will not be accepted.
 
 ### Fixing bugs
 
 If you're opening a PR to fix a bug, please ensure a bug report has been filed - search the
 [issue tracker](https://github.com/EssentialsX/Essentials/issues?q=is%3Aissue+is%3Aopen+sort%3Aupdated-desc+label%3A%22bug%3A+confirmed%22%2C%22bug%3A+unconfirmed%22%2C%22bug%3A+upstream%22)
-for an existing report, and if you can't see a bug report,
+for an existing report, and if you can't find a bug report,
 [create one](https://github.com/EssentialsX/Essentials/issues/new/choose) before you submit your PR.
 
 #### Unconfirmed bugs
 
-You may find a bug report with the label `bug: unconfirmed`. This means the EssentialsX team hasn't been able to confirm
+You may find a bug report with the label `bug: unconfirmed`. This means the EssentialsX team hasn't had the time
+to review the bug report yet or hasn't been able to confirm
 whether the reported issue is actually a bug in EssentialsX. You can help us by following the steps in the report and
 posting whether you are able to replicate this issue, ideally on the latest versions of EssentialsX and Paper. This will
 help us confirm issues and prioritise PRs accordingly.
@@ -39,7 +41,7 @@ help us confirm issues and prioritise PRs accordingly.
 
 You may also find bug reports with the `bug: upstream` label. This label means the issue is caused by a bug in *another
 project*, not EssentialsX. This includes bugs in CraftBukkit/Spigot and bugs in other plugins. It may be appropriate to
-mitigate an issue in EssentialsX, but please check with us before you submit a PR.
+mitigate an issue in EssentialsX, but please check with us in the [EssentialsX Development Discord server](https://discord.gg/CUN7qVb) before you submit a PR.
 
 ### Making your changes
 

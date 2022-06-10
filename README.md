@@ -50,7 +50,7 @@ To build EssentialsX, you need JDK 8 or higher installed on your system.
 Clone this repository, then run the following command:
 
 * On Linux or macOS: `./gradlew build`
-* On Windows: `.\gradlew.bat build`
+* On Windows: `gradlew build`
 
 You can then find builds of EssentialsX modules in the `jars/` directory.
 
@@ -59,7 +59,7 @@ You can then find builds of EssentialsX modules in the `jars/` directory.
 You can also run a test server from your development environment using the following command:
 
 * On Linux or macOS: `./gradlew build :runServer`
-* On Windows: `.\gradlew.bat build :runServer`
+* On Windows: `gradlew build :runServer`
 
 Note the `:` - without it, you will run several servers at once, which will likely crash Gradle.
 
