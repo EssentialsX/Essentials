@@ -17,7 +17,7 @@ import java.util.Map;
 import java.util.logging.Level;
 
 public class EssentialsProtect extends JavaPlugin implements IProtect {
-    private final static LoggerProvider LOGGER = EssentialsLogger.getLoggerProvider("EssentialsProtect");
+    private static LoggerProvider LOGGER;
     private final Map<ProtectConfig, Boolean> settingsBoolean = new EnumMap<>(ProtectConfig.class);
     private final Map<ProtectConfig, String> settingsString = new EnumMap<>(ProtectConfig.class);
     private final Map<ProtectConfig, List<Material>> settingsList = new EnumMap<>(ProtectConfig.class);
@@ -27,6 +27,8 @@ public class EssentialsProtect extends JavaPlugin implements IProtect {
 
     @Override
     public void onEnable() {
+        LOGGER = EssentialsLogger.getLoggerProvider("EssentialsProtect");
+
         final PluginManager pm = this.getServer().getPluginManager();
         final Plugin essPlugin = pm.getPlugin("Essentials");
         if (essPlugin == null || !essPlugin.isEnabled()) {

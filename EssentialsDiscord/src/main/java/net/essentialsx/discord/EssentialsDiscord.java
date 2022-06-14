@@ -18,7 +18,7 @@ import java.util.logging.Level;
 import static com.earth2me.essentials.I18n.tl;
 
 public class EssentialsDiscord extends JavaPlugin implements IEssentialsModule {
-    protected final static LoggerProvider LOGGER = EssentialsLogger.getLoggerProvider("EssentialsDiscord");
+    protected static LoggerProvider LOGGER;
     private transient IEssentials ess;
     private transient MetricsWrapper metrics = null;
 
@@ -33,6 +33,8 @@ public class EssentialsDiscord extends JavaPlugin implements IEssentialsModule {
             setEnabled(false);
             return;
         }
+        LOGGER = EssentialsLogger.getLoggerProvider("EssentialsDiscord");
+
         if (!getDescription().getVersion().equals(ess.getDescription().getVersion())) {
             LOGGER.log(Level.WARNING, tl("versionMismatchAll"));
         }
