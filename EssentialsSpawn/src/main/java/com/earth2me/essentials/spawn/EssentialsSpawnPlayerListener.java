@@ -1,5 +1,6 @@
 package com.earth2me.essentials.spawn;
 
+import com.earth2me.essentials.EssentialsLogger;
 import com.earth2me.essentials.Kit;
 import com.earth2me.essentials.OfflinePlayer;
 import com.earth2me.essentials.User;
@@ -8,6 +9,7 @@ import com.earth2me.essentials.textreader.KeywordReplacer;
 import com.earth2me.essentials.textreader.SimpleTextPager;
 import com.earth2me.essentials.utils.VersionUtil;
 import net.ess3.api.IEssentials;
+import net.ess3.provider.LoggerProvider;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
@@ -19,12 +21,11 @@ import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.CompletableFuture;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import static com.earth2me.essentials.I18n.tl;
 
 class EssentialsSpawnPlayerListener implements Listener {
-    private static final Logger logger = Logger.getLogger("EssentialsSpawn");
+    private static final LoggerProvider logger = EssentialsLogger.getLoggerProvider("EssentialsSpawn");
     private final transient IEssentials ess;
     private final transient SpawnStorage spawns;
 

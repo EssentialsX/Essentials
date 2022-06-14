@@ -1,8 +1,10 @@
 package com.earth2me.essentials.antibuild;
 
+import com.earth2me.essentials.EssentialsLogger;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.VersionUtil;
 import net.ess3.api.IEssentials;
+import net.ess3.provider.LoggerProvider;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.ArmorStand;
@@ -33,12 +35,11 @@ import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import static com.earth2me.essentials.I18n.tl;
 
 public class EssentialsAntiBuildListener implements Listener {
-    private static final Logger logger = Logger.getLogger("EssentialsAntiBuild");
+    private final static LoggerProvider logger = EssentialsLogger.getLoggerProvider("EssentialsAntiBuild");
     final private transient IAntiBuild prot;
     final private transient IEssentials ess;
 

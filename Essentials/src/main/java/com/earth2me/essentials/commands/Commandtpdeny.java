@@ -1,5 +1,6 @@
 package com.earth2me.essentials.commands;
 
+import com.earth2me.essentials.EssentialsLogger;
 import com.earth2me.essentials.IUser;
 import com.earth2me.essentials.User;
 import net.essentialsx.api.v2.events.TeleportRequestResponseEvent;
@@ -84,7 +85,7 @@ public class Commandtpdeny extends EssentialsCommand {
         Bukkit.getPluginManager().callEvent(event);
         final boolean cancelled = event.isCancelled();
         if (cancelled && ess.getSettings().isDebug()) {
-            logger.info("TPA deny cancelled by API for " + user.getName() + " (requested by " + player.getName() + ")");
+            EssentialsLogger.info("TPA deny cancelled by API for " + user.getName() + " (requested by " + player.getName() + ")");
         }
         return event.isCancelled();
     }

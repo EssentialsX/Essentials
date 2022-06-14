@@ -325,7 +325,7 @@ public class Teleport implements ITeleport {
             now(teleportee, new LocationTarget(bed), cause);
         } else {
             if (ess.getSettings().isDebug()) {
-                ess.getLogger().info("Could not find bed spawn, forcing respawn event.");
+                EssentialsLogger.info("Could not find bed spawn, forcing respawn event.");
             }
             final PlayerRespawnEvent pre = new PlayerRespawnEvent(player, player.getWorld().getSpawnLocation(), false);
             ess.getServer().getPluginManager().callEvent(pre);

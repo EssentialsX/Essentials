@@ -1,6 +1,7 @@
 package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.CommandSource;
+import com.earth2me.essentials.EssentialsLogger;
 import com.earth2me.essentials.IEssentialsModule;
 import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.User;
@@ -26,14 +27,12 @@ import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.concurrent.CompletableFuture;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static com.earth2me.essentials.I18n.tl;
 
 public abstract class EssentialsCommand implements IEssentialsCommand {
-    protected static final Logger logger = Logger.getLogger("Essentials");
     /**
      * Common time durations (in seconds), for use in tab completion.
      */
@@ -316,7 +315,7 @@ public abstract class EssentialsCommand implements IEssentialsCommand {
 
         final int numArgs = args.length - index - 1;
         if (ess.getSettings().isDebug()) {
-            ess.getLogger().info(numArgs + " " + index + " " + Arrays.toString(args));
+            EssentialsLogger.info(numArgs + " " + index + " " + Arrays.toString(args));
         }
         String[] effectiveArgs = new String[numArgs];
         System.arraycopy(args, index, effectiveArgs, 0, numArgs);
@@ -324,7 +323,7 @@ public abstract class EssentialsCommand implements IEssentialsCommand {
             effectiveArgs = new String[] {""};
         }
         if (ess.getSettings().isDebug()) {
-            ess.getLogger().info(command + " -- " + Arrays.toString(effectiveArgs));
+            EssentialsLogger.info(command + " -- " + Arrays.toString(effectiveArgs));
         }
 
         return command.tabComplete(sender.getSender(), label, effectiveArgs);
@@ -334,7 +333,7 @@ public abstract class EssentialsCommand implements IEssentialsCommand {
     public void showError(final CommandSender sender, final Throwable throwable, final String commandLabel) {
         sender.sendMessage(tl("errorWithMessage", throwable.getMessage()));
         if (ess.getSettings().isDebug()) {
-            logger.log(Level.INFO, tl("errorCallingCommand", commandLabel), throwable);
+            EssentialsLogger.log(Level.INFO, tl("errorCallingCommand", commandLabel), throwable);
             throwable.printStackTrace();
         }
     }

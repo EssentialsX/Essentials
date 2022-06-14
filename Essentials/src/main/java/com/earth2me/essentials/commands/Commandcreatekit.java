@@ -1,6 +1,7 @@
 package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.CommandSource;
+import com.earth2me.essentials.EssentialsLogger;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.DateUtil;
 import com.earth2me.essentials.utils.PasteUtil;
@@ -91,18 +92,18 @@ public class Commandcreatekit extends EssentialsCommand {
                         sender.sendMessage(tl("createKitSuccess", kitName, delayFormat, result.getPasteUrl()));
                         sender.sendMessage(separator);
                         if (ess.getSettings().isDebug()) {
-                            ess.getLogger().info(sender.getSender().getName() + " created a kit: " + result.getPasteUrl());
+                            EssentialsLogger.info(sender.getSender().getName() + " created a kit: " + result.getPasteUrl());
                         }
                     }
                 });
                 future.exceptionally(throwable -> {
                     sender.sendMessage(tl("createKitFailed", kitName));
-                    ess.getLogger().log(Level.SEVERE, "Error creating kit: ", throwable);
+                    EssentialsLogger.log(Level.SEVERE, "Error creating kit: ", throwable);
                     return null;
                 });
             } catch (Exception e) {
                 sender.sendMessage(tl("createKitFailed", kitName));
-                ess.getLogger().log(Level.SEVERE, "Error creating kit: ", e);
+                EssentialsLogger.log(Level.SEVERE, "Error creating kit: ", e);
             }
         });
     }

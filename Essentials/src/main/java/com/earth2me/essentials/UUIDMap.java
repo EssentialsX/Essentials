@@ -52,7 +52,7 @@ public class UUIDMap {
             }
 
             if (ess.getSettings().isDebug()) {
-                ess.getLogger().log(Level.INFO, "Reading usermap from disk");
+                EssentialsLogger.log(Level.INFO, "Reading usermap from disk");
             }
 
             if (loading) {
@@ -100,7 +100,7 @@ public class UUIDMap {
 
     public void forceWriteUUIDMap() {
         if (ess.getSettings().isDebug()) {
-            ess.getLogger().log(Level.INFO, "Forcing usermap write to disk");
+            EssentialsLogger.log(Level.INFO, "Forcing usermap write to disk");
         }
         pendingWrite = true;
         writeTaskRunnable.run();

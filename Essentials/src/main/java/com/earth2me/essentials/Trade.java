@@ -22,7 +22,6 @@ import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import static com.earth2me.essentials.I18n.tl;
 
@@ -80,7 +79,7 @@ public class Trade {
             try {
                 fw = new FileWriter(new File(ess.getDataFolder(), "trade.log"), true);
             } catch (final IOException ex) {
-                Logger.getLogger("Essentials").log(Level.SEVERE, null, ex);
+                EssentialsLogger.log(Level.SEVERE, null, ex);
             }
         }
         final StringBuilder sb = new StringBuilder();
@@ -159,7 +158,7 @@ public class Trade {
             fw.write(sb.toString());
             fw.flush();
         } catch (final IOException ex) {
-            Logger.getLogger("Essentials").log(Level.SEVERE, null, ex);
+            EssentialsLogger.log(Level.SEVERE, null, ex);
         }
     }
 
@@ -168,7 +167,7 @@ public class Trade {
             try {
                 fw.close();
             } catch (final IOException ex) {
-                Logger.getLogger("Essentials").log(Level.SEVERE, null, ex);
+                EssentialsLogger.log(Level.SEVERE, null, ex);
             }
             fw = null;
         }
@@ -190,7 +189,7 @@ public class Trade {
 
     public void isAffordableFor(final IUser user, final CompletableFuture<Boolean> future) {
         if (ess.getSettings().isDebug()) {
-            ess.getLogger().log(Level.INFO, "checking if " + user.getName() + " can afford charge.");
+            EssentialsLogger.log(Level.INFO, "checking if " + user.getName() + " can afford charge.");
         }
 
         if (getMoney() != null && getMoney().signum() > 0 && !user.canAfford(getMoney())) {
@@ -221,7 +220,7 @@ public class Trade {
     public Map<Integer, ItemStack> pay(final IUser user, final OverflowType type) throws MaxMoneyException {
         if (getMoney() != null && getMoney().signum() > 0) {
             if (ess.getSettings().isDebug()) {
-                ess.getLogger().log(Level.INFO, "paying user " + user.getName() + " via trade " + getMoney().toPlainString());
+                EssentialsLogger.log(Level.INFO, "paying user " + user.getName() + " via trade " + getMoney().toPlainString());
             }
             user.giveMoney(getMoney());
         }
@@ -233,7 +232,7 @@ public class Trade {
                 switch (type) {
                     case ABORT:
                         if (ess.getSettings().isDebug()) {
-                            ess.getLogger().log(Level.INFO, "abort paying " + user.getName() + " itemstack " + getItemStack().toString() + " due to lack of inventory space ");
+                            EssentialsLogger.log(Level.INFO, "abort paying " + user.getName() + " itemstack " + getItemStack().toString() + " due to lack of inventory space ");
                         }
 
                         return overFlow;
@@ -244,7 +243,7 @@ public class Trade {
                         user.getBase().updateInventory();
 
                         if (ess.getSettings().isDebug()) {
-                            ess.getLogger().log(Level.INFO, "paying " + user.getName() + " partial itemstack " + getItemStack().toString() + " with overflow " + returnStack.get(0).toString());
+                            EssentialsLogger.log(Level.INFO, "paying " + user.getName() + " partial itemstack " + getItemStack().toString() + " with overflow " + returnStack.get(0).toString());
                         }
 
                         return returnStack;
@@ -269,12 +268,12 @@ public class Trade {
                             }
                         }
                         if (ess.getSettings().isDebug()) {
-                            ess.getLogger().log(Level.INFO, "paying " + user.getName() + " partial itemstack " + getItemStack().toString() + " and dropping overflow " + leftOver.get(0).toString());
+                            EssentialsLogger.log(Level.INFO, "paying " + user.getName() + " partial itemstack " + getItemStack().toString() + " and dropping overflow " + leftOver.get(0).toString());
                         }
                         break;
                 }
             } else if (ess.getSettings().isDebug()) {
-                ess.getLogger().log(Level.INFO, "paying " + user.getName() + " itemstack " + getItemStack().toString());
+                EssentialsLogger.log(Level.INFO, "paying " + user.getName() + " itemstack " + getItemStack().toString());
             }
             user.getBase().updateInventory();
         }
@@ -300,11 +299,11 @@ public class Trade {
 
     public void charge(final IUser user, final CompletableFuture<Boolean> future) {
         if (ess.getSettings().isDebug()) {
-            ess.getLogger().log(Level.INFO, "attempting to charge user " + user.getName());
+            EssentialsLogger.log(Level.INFO, "attempting to charge user " + user.getName());
         }
         if (getMoney() != null) {
             if (ess.getSettings().isDebug()) {
-                ess.getLogger().log(Level.INFO, "charging user " + user.getName() + " money " + getMoney().toPlainString());
+                EssentialsLogger.log(Level.INFO, "charging user " + user.getName() + " money " + getMoney().toPlainString());
             }
             if (!user.canAfford(getMoney()) && getMoney().signum() > 0) {
                 future.completeExceptionally(new ChargeException(tl("notEnoughMoney", NumberUtil.displayCurrency(getMoney(), ess))));
@@ -314,7 +313,7 @@ public class Trade {
         }
         if (getItemStack() != null) {
             if (ess.getSettings().isDebug()) {
-                ess.getLogger().log(Level.INFO, "charging user " + user.getName() + " itemstack " + getItemStack().toString());
+                EssentialsLogger.log(Level.INFO, "charging user " + user.getName() + " itemstack " + getItemStack().toString());
             }
             if (!user.getBase().getInventory().containsAtLeast(getItemStack(), getItemStack().getAmount())) {
                 future.completeExceptionally(new ChargeException(tl("missingItems", getItemStack().getAmount(), getItemStack().getType().toString().toLowerCase(Locale.ENGLISH).replace("_", " "))));
@@ -333,7 +332,7 @@ public class Trade {
         }
         if (getExperience() != null) {
             if (ess.getSettings().isDebug()) {
-                ess.getLogger().log(Level.INFO, "charging user " + user.getName() + " exp " + getExperience());
+                EssentialsLogger.log(Level.INFO, "charging user " + user.getName() + " exp " + getExperience());
             }
             final int experience = SetExpFix.getTotalExperience(user.getBase());
             if (experience < getExperience() && getExperience() > 0) {
@@ -343,7 +342,7 @@ public class Trade {
             SetExpFix.setTotalExperience(user.getBase(), experience - getExperience());
         }
         if (ess.getSettings().isDebug()) {
-            ess.getLogger().log(Level.INFO, "charge user " + user.getName() + " completed");
+            EssentialsLogger.log(Level.INFO, "charge user " + user.getName() + " completed");
         }
     }
 
@@ -380,7 +379,7 @@ public class Trade {
             }
 
             if (ess.getSettings().isDebug()) {
-                ess.getLogger().log(Level.INFO, "calculated command (" + command + ") cost for " + user.getName() + " as " + cost);
+                EssentialsLogger.log(Level.INFO, "calculated command (" + command + ") cost for " + user.getName() + " as " + cost);
             }
         }
         if (cost.signum() != 0 && (user.isAuthorized("essentials.nocommandcost.all") || user.isAuthorized("essentials.nocommandcost." + command))) {

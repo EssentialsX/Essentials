@@ -13,7 +13,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import static com.earth2me.essentials.I18n.tl;
 
@@ -107,7 +106,6 @@ public enum Mob {
     GLOW_SQUID("GlowSquid", Enemies.FRIENDLY, "GLOW_SQUID"),
     ;
 
-    public static final Logger logger = Logger.getLogger("Essentials");
     private static final Map<String, Mob> hashMap = new HashMap<>();
     private static final Map<EntityType, Mob> bukkitMap = new HashMap<>();
 
@@ -166,7 +164,7 @@ public enum Mob {
     public Entity spawn(final World world, final Server server, final Location loc) throws MobException {
         final Entity entity = world.spawn(loc, this.bukkitType.getEntityClass());
         if (entity == null) {
-            logger.log(Level.WARNING, tl("unableToSpawnMob"));
+            EssentialsLogger.log(Level.WARNING, tl("unableToSpawnMob"));
             throw new MobException();
         }
         return entity;

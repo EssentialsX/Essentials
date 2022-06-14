@@ -1,5 +1,6 @@
 package com.earth2me.essentials.items;
 
+import com.earth2me.essentials.EssentialsLogger;
 import com.earth2me.essentials.ManagedFile;
 import com.earth2me.essentials.utils.EnumUtil;
 import com.earth2me.essentials.utils.MaterialUtil;
@@ -23,13 +24,11 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 import static com.earth2me.essentials.I18n.tl;
 
 public class FlatItemDb extends AbstractItemDb {
-    protected static final Logger LOGGER = Logger.getLogger("Essentials");
     private static final Gson gson = new Gson();
 
     // Maps primary name to ItemData
@@ -54,7 +53,7 @@ public class FlatItemDb extends AbstractItemDb {
         }
 
         this.rebuild();
-        LOGGER.info(String.format("Loaded %s items from items.json.", listNames().size()));
+        EssentialsLogger.info(String.format("Loaded %s items from items.json.", listNames().size()));
     }
 
     private void rebuild() {
@@ -100,7 +99,7 @@ public class FlatItemDb extends AbstractItemDb {
             if (valid) {
                 allAliases.add(key);
             } else {
-                LOGGER.warning(String.format("Failed to add item: \"%s\": %s", key, element.toString()));
+                EssentialsLogger.warning(String.format("Failed to add item: \"%s\": %s", key, element.toString()));
             }
         }
     }

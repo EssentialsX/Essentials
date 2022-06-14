@@ -1,7 +1,9 @@
 package com.earth2me.essentials.protect;
 
+import com.earth2me.essentials.EssentialsLogger;
 import com.earth2me.essentials.metrics.MetricsWrapper;
 import com.earth2me.essentials.utils.VersionUtil;
+import net.ess3.provider.LoggerProvider;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
@@ -15,6 +17,7 @@ import java.util.Map;
 import java.util.logging.Level;
 
 public class EssentialsProtect extends JavaPlugin implements IProtect {
+    private final static LoggerProvider LOGGER = EssentialsLogger.getLoggerProvider("EssentialsProtect");
     private final Map<ProtectConfig, Boolean> settingsBoolean = new EnumMap<>(ProtectConfig.class);
     private final Map<ProtectConfig, String> settingsString = new EnumMap<>(ProtectConfig.class);
     private final Map<ProtectConfig, List<Material>> settingsList = new EnumMap<>(ProtectConfig.class);
@@ -39,7 +42,7 @@ public class EssentialsProtect extends JavaPlugin implements IProtect {
     }
 
     private void initialize(final PluginManager pm, final Plugin essPlugin) {
-        getLogger().log(Level.INFO, "Continuing to enable Protect.");
+        LOGGER.log(Level.INFO, "Continuing to enable Protect.");
         ess = new EssentialsConnect(essPlugin, this);
 
         final EssentialsProtectBlockListener blockListener = new EssentialsProtectBlockListener(this);
@@ -72,14 +75,14 @@ public class EssentialsProtect extends JavaPlugin implements IProtect {
         for (final Player player : getServer().getOnlinePlayers()) {
             player.sendMessage("Essentials Protect is in emergency mode. Check your log for errors.");
         }
-        getLogger().log(Level.SEVERE, "Essentials not installed or failed to load. Essentials Protect is in emergency mode now.");
+        LOGGER.log(Level.SEVERE, "Essentials not installed or failed to load. Essentials Protect is in emergency mode now.");
     }
 
     void disableEmergencyMode() {
         final PluginManager pm = this.getServer().getPluginManager();
         final Plugin essPlugin = pm.getPlugin("Essentials");
         if (essPlugin == null || !essPlugin.isEnabled()) {
-            getLogger().log(Level.SEVERE, "Tried to disable emergency mode, but Essentials still isn't enabled!");
+            LOGGER.log(Level.SEVERE, "Tried to disable emergency mode, but Essentials still isn't enabled!");
             return;
         }
 
@@ -88,7 +91,7 @@ public class EssentialsProtect extends JavaPlugin implements IProtect {
         for (final Player player : getServer().getOnlinePlayers()) {
             player.sendMessage("Essentials Protect is no longer in emergency mode.");
         }
-        getLogger().log(Level.SEVERE, "Essentials was loaded late! Essentials Protect is no longer in emergency mode.");
+        LOGGER.log(Level.SEVERE, "Essentials was loaded late! Essentials Protect is no longer in emergency mode.");
 
         initialize(pm, essPlugin);
     }

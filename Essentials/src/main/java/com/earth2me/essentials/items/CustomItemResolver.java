@@ -1,6 +1,7 @@
 package com.earth2me.essentials.items;
 
 import com.earth2me.essentials.Essentials;
+import com.earth2me.essentials.EssentialsLogger;
 import com.earth2me.essentials.IConf;
 import com.earth2me.essentials.config.ConfigurateUtil;
 import com.earth2me.essentials.config.EssentialsConfiguration;
@@ -61,7 +62,7 @@ public class CustomItemResolver implements IItemDb.ItemResolver, IConf {
 
         final Map<String, Object> section = ConfigurateUtil.getRawMap(config.getSection("aliases"));
         if (section.isEmpty()) {
-            ess.getLogger().warning("No aliases found in custom_items.yml.");
+            EssentialsLogger.warning("No aliases found in custom_items.yml.");
             return;
         }
 

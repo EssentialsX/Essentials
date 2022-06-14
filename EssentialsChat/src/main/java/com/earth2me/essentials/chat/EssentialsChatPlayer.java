@@ -1,18 +1,19 @@
 package com.earth2me.essentials.chat;
 
 import com.earth2me.essentials.ChargeException;
+import com.earth2me.essentials.EssentialsLogger;
 import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.User;
 import net.ess3.api.IEssentials;
+import net.ess3.provider.LoggerProvider;
 import org.bukkit.Server;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 
 import java.util.Map;
-import java.util.logging.Logger;
 
 public abstract class EssentialsChatPlayer implements Listener {
-    static final Logger logger = Logger.getLogger("EssentialsChat");
+    static final LoggerProvider logger = EssentialsLogger.getLoggerProvider("EssentialsChat");
     final transient IEssentials ess;
     final transient Server server;
     private final transient Map<AsyncPlayerChatEvent, ChatStore> chatStorage;

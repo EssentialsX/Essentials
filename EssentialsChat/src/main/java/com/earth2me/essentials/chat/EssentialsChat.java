@@ -1,5 +1,6 @@
 package com.earth2me.essentials.chat;
 
+import com.earth2me.essentials.EssentialsLogger;
 import com.earth2me.essentials.metrics.MetricsWrapper;
 import net.ess3.api.IEssentials;
 import org.bukkit.command.Command;
@@ -24,7 +25,7 @@ public class EssentialsChat extends JavaPlugin {
         final PluginManager pluginManager = getServer().getPluginManager();
         ess = (IEssentials) pluginManager.getPlugin("Essentials");
         if (!this.getDescription().getVersion().equals(ess.getDescription().getVersion())) {
-            getLogger().log(Level.WARNING, tl("versionMismatchAll"));
+            EssentialsLogger.getLoggerProvider("EssentialsChat").log(Level.WARNING, tl("versionMismatchAll"));
         }
         if (!ess.isEnabled()) {
             this.setEnabled(false);

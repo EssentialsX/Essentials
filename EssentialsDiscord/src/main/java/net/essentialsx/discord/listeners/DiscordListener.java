@@ -1,5 +1,6 @@
 package net.essentialsx.discord.listeners;
 
+import com.earth2me.essentials.EssentialsLogger;
 import com.earth2me.essentials.utils.FormatUtil;
 import com.vdurmont.emoji.EmojiParser;
 import net.dv8tion.jda.api.entities.Member;
@@ -8,6 +9,7 @@ import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.ess3.api.IUser;
+import net.ess3.provider.LoggerProvider;
 import net.essentialsx.api.v2.events.discord.DiscordRelayEvent;
 import net.essentialsx.discord.JDADiscordService;
 import net.essentialsx.discord.interactions.InteractionChannelImpl;
@@ -21,11 +23,10 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Collections;
 import java.util.List;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.regex.Pattern;
 
 public class DiscordListener extends ListenerAdapter {
-    private final static Logger logger = Logger.getLogger("EssentialsDiscord");
+    private final static LoggerProvider logger = EssentialsLogger.getLoggerProvider("EssentialsDiscord");
 
     private final JDADiscordService plugin;
 

@@ -1,19 +1,20 @@
 package com.earth2me.essentials.antibuild;
 
+import com.earth2me.essentials.EssentialsLogger;
 import com.earth2me.essentials.IConf;
 import com.earth2me.essentials.User;
 import net.ess3.api.IEssentials;
+import net.ess3.provider.LoggerProvider;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
 import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import static com.earth2me.essentials.I18n.tl;
 
 class EssentialsConnect {
-    private static final Logger logger = Logger.getLogger("EssentialsAntiBuild");
+    private final static LoggerProvider logger = EssentialsLogger.getLoggerProvider("EssentialsAntiBuild");
     private final transient IEssentials ess;
     private final transient IAntiBuild protect;
 

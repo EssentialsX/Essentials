@@ -1,5 +1,6 @@
 package com.earth2me.essentials.spawn;
 
+import com.earth2me.essentials.EssentialsLogger;
 import com.earth2me.essentials.metrics.MetricsWrapper;
 import net.ess3.api.IEssentials;
 import org.bukkit.Location;
@@ -25,7 +26,7 @@ public class EssentialsSpawn extends JavaPlugin implements IEssentialsSpawn {
         final PluginManager pluginManager = getServer().getPluginManager();
         ess = (IEssentials) pluginManager.getPlugin("Essentials");
         if (!this.getDescription().getVersion().equals(ess.getDescription().getVersion())) {
-            getLogger().log(Level.WARNING, tl("versionMismatchAll"));
+            EssentialsLogger.getLoggerProvider("EssentialsSpawn").log(Level.WARNING, tl("versionMismatchAll"));
         }
         if (!ess.isEnabled()) {
             this.setEnabled(false);

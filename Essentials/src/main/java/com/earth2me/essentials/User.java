@@ -48,13 +48,11 @@ import java.util.WeakHashMap;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import static com.earth2me.essentials.I18n.tl;
 
 public class User extends UserData implements Comparable<User>, IMessageRecipient, net.ess3.api.IUser {
     private static final Statistic PLAY_ONE_TICK = EnumUtil.getStatistic("PLAY_ONE_MINUTE", "PLAY_ONE_TICK");
-    private static final Logger logger = Logger.getLogger("Essentials");
 
     // User modules
     private final IMessageRecipient messageRecipient;
@@ -129,7 +127,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
     public boolean isAuthorized(final String node) {
         final boolean result = isAuthorizedCheck(node);
         if (ess.getSettings().isDebug()) {
-            ess.getLogger().log(Level.INFO, "checking if " + base.getName() + " has " + node + " - " + result);
+            EssentialsLogger.log(Level.INFO, "checking if " + base.getName() + " has " + node + " - " + result);
         }
         return result;
     }
@@ -138,7 +136,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
     public boolean isPermissionSet(final String node) {
         final boolean result = isPermSetCheck(node);
         if (ess.getSettings().isDebug()) {
-            ess.getLogger().log(Level.INFO, "checking if " + base.getName() + " has " + node + " (set-explicit) - " + result);
+            EssentialsLogger.log(Level.INFO, "checking if " + base.getName() + " has " + node + " (set-explicit) - " + result);
         }
         return result;
     }
@@ -160,9 +158,9 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
             return ess.getPermissionsHandler().hasPermission(base, node);
         } catch (final Exception ex) {
             if (ess.getSettings().isDebug()) {
-                ess.getLogger().log(Level.SEVERE, "Permission System Error: " + ess.getPermissionsHandler().getName() + " returned: " + ex.getMessage(), ex);
+                EssentialsLogger.log(Level.SEVERE, "Permission System Error: " + ess.getPermissionsHandler().getName() + " returned: " + ex.getMessage(), ex);
             } else {
-                ess.getLogger().log(Level.SEVERE, "Permission System Error: " + ess.getPermissionsHandler().getName() + " returned: " + ex.getMessage());
+                EssentialsLogger.log(Level.SEVERE, "Permission System Error: " + ess.getPermissionsHandler().getName() + " returned: " + ex.getMessage());
             }
 
             return false;
@@ -178,9 +176,9 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
             return ess.getPermissionsHandler().isPermissionSet(base, node);
         } catch (final Exception ex) {
             if (ess.getSettings().isDebug()) {
-                ess.getLogger().log(Level.SEVERE, "Permission System Error: " + ess.getPermissionsHandler().getName() + " returned: " + ex.getMessage(), ex);
+                EssentialsLogger.log(Level.SEVERE, "Permission System Error: " + ess.getPermissionsHandler().getName() + " returned: " + ex.getMessage(), ex);
             } else {
-                ess.getLogger().log(Level.SEVERE, "Permission System Error: " + ess.getPermissionsHandler().getName() + " returned: " + ex.getMessage());
+                EssentialsLogger.log(Level.SEVERE, "Permission System Error: " + ess.getPermissionsHandler().getName() + " returned: " + ex.getMessage());
             }
 
             return false;
@@ -196,9 +194,9 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
             return ess.getPermissionsHandler().isPermissionSetExact(base, node);
         } catch (final Exception ex) {
             if (ess.getSettings().isDebug()) {
-                ess.getLogger().log(Level.SEVERE, "Permission System Error: " + ess.getPermissionsHandler().getName() + " returned: " + ex.getMessage(), ex);
+                EssentialsLogger.log(Level.SEVERE, "Permission System Error: " + ess.getPermissionsHandler().getName() + " returned: " + ex.getMessage(), ex);
             } else {
-                ess.getLogger().log(Level.SEVERE, "Permission System Error: " + ess.getPermissionsHandler().getName() + " returned: " + ex.getMessage());
+                EssentialsLogger.log(Level.SEVERE, "Permission System Error: " + ess.getPermissionsHandler().getName() + " returned: " + ex.getMessage());
             }
 
             return TriState.UNSET;
@@ -281,7 +279,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
         try {
             setMoney(getMoney().subtract(value), cause);
         } catch (final MaxMoneyException ex) {
-            ess.getLogger().log(Level.WARNING, "Invalid call to takeMoney, total balance can't be more than the max-money limit.", ex);
+            EssentialsLogger.log(Level.WARNING, "Invalid call to takeMoney, total balance can't be more than the max-money limit.", ex);
         }
         sendMessage(tl("takenFromAccount", NumberUtil.displayCurrency(value, ess)));
         if (initiator != null) {
@@ -520,7 +518,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
                     this.getBase().setPlayerListName(name);
                 } catch (final IllegalArgumentException e) {
                     if (ess.getSettings().isDebug()) {
-                        logger.log(Level.INFO, "Playerlist for " + name + " was not updated. Name clashed with another online player.");
+                        EssentialsLogger.log(Level.INFO, "Playerlist for " + name + " was not updated. Name clashed with another online player.");
                     }
                 }
             }
@@ -569,7 +567,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
         final BigDecimal value = _getMoney();
         final long elapsed = System.nanoTime() - start;
         if (elapsed > ess.getSettings().getEconomyLagWarning()) {
-            ess.getLogger().log(Level.INFO, "Lag Notice - Slow Economy Response - Request took over {0}ms!", elapsed / 1000000.0);
+            EssentialsLogger.log(Level.INFO, "Lag Notice - Slow Economy Response - Request took over " + elapsed / 1000000.0 + "ms!");
         }
         return value;
     }
@@ -582,7 +580,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
     private BigDecimal _getMoney() {
         if (ess.getSettings().isEcoDisabled()) {
             if (ess.getSettings().isDebug()) {
-                ess.getLogger().info("Internal economy functions disabled, aborting balance check.");
+                EssentialsLogger.info("Internal economy functions disabled, aborting balance check.");
             }
             return BigDecimal.ZERO;
         }
@@ -596,7 +594,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
     public void setMoney(final BigDecimal value, final UserBalanceUpdateEvent.Cause cause) throws MaxMoneyException {
         if (ess.getSettings().isEcoDisabled()) {
             if (ess.getSettings().isDebug()) {
-                ess.getLogger().info("Internal economy functions disabled, aborting balance change.");
+                EssentialsLogger.info("Internal economy functions disabled, aborting balance change.");
             }
             return;
         }
@@ -871,7 +869,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
     public String getGroup() {
         final String result = ess.getPermissionsHandler().getGroup(base);
         if (ess.getSettings().isDebug()) {
-            ess.getLogger().log(Level.INFO, "looking up groupname of " + base.getName() + " - " + result);
+            EssentialsLogger.log(Level.INFO, "looking up groupname of " + base.getName() + " - " + result);
         }
         return result;
     }
@@ -880,7 +878,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
     public boolean inGroup(final String group) {
         final boolean result = ess.getPermissionsHandler().inGroup(base, group);
         if (ess.getSettings().isDebug()) {
-            ess.getLogger().log(Level.INFO, "checking if " + base.getName() + " is in group " + group + " - " + result);
+            EssentialsLogger.log(Level.INFO, "checking if " + base.getName() + " is in group " + group + " - " + result);
         }
         return result;
     }

@@ -1,5 +1,6 @@
 package com.earth2me.essentials.textreader;
 
+import com.earth2me.essentials.EssentialsLogger;
 import com.earth2me.essentials.User;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
@@ -15,12 +16,10 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import static com.earth2me.essentials.I18n.tl;
 
 public class HelpInput implements IText {
-    private static final Logger logger = Logger.getLogger("Essentials");
     private final transient List<String> lines = new ArrayList<>();
     private final transient List<String> chapters = new ArrayList<>();
     private final transient Map<String, Integer> bookmarks = new HashMap<>();
@@ -121,7 +120,7 @@ public class HelpInput implements IText {
             } catch (final NullPointerException ignored) {
             } catch (final Exception ex) {
                 if (!reported) {
-                    logger.log(Level.WARNING, tl("commandHelpFailedForPlugin", pluginNameLow), ex);
+                    EssentialsLogger.log(Level.WARNING, tl("commandHelpFailedForPlugin", pluginNameLow), ex);
                 }
                 reported = true;
             }

@@ -4,6 +4,7 @@ import club.minnced.discord.webhook.WebhookClient;
 import club.minnced.discord.webhook.WebhookClientBuilder;
 import club.minnced.discord.webhook.send.WebhookMessage;
 import club.minnced.discord.webhook.send.WebhookMessageBuilder;
+import com.earth2me.essentials.EssentialsLogger;
 import com.earth2me.essentials.IEssentialsModule;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.FormatUtil;
@@ -21,6 +22,7 @@ import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.utils.cache.CacheFlag;
 import net.ess3.nms.refl.providers.AchievementListenerProvider;
 import net.ess3.nms.refl.providers.AdvancementListenerProvider;
+import net.ess3.provider.LoggerProvider;
 import net.ess3.provider.providers.PaperAdvancementListenerProvider;
 import net.essentialsx.api.v2.events.discord.DiscordMessageEvent;
 import net.essentialsx.api.v2.services.discord.DiscordService;
@@ -54,14 +56,13 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static com.earth2me.essentials.I18n.tl;
 
 public class JDADiscordService implements DiscordService, IEssentialsModule {
-    private final static Logger logger = Logger.getLogger("EssentialsDiscord");
+    private final static LoggerProvider logger = EssentialsLogger.getLoggerProvider("EssentialsDiscord");
     private final EssentialsDiscord plugin;
     private final Unsafe unsafe = this::getJda;
 

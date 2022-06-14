@@ -20,6 +20,7 @@ import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
 import static com.earth2me.essentials.I18n.tl;
+import static net.essentialsx.discord.EssentialsDiscord.LOGGER;
 
 public class DiscordSettings implements IConf {
     private final EssentialsConfiguration config;
@@ -359,7 +360,7 @@ public class DiscordSettings implements IConf {
     @Override
     public void reloadConfig() {
         if (plugin.isInvalidStartup()) {
-            plugin.getLogger().warning(tl("discordReloadInvalid"));
+            LOGGER.warning(tl("discordReloadInvalid"));
             return;
         }
 
@@ -405,7 +406,7 @@ public class DiscordSettings implements IConf {
                     try {
                         filters.add(Pattern.compile(chatFilterString));
                     } catch (PatternSyntaxException e) {
-                        plugin.getLogger().log(java.util.logging.Level.WARNING, "Invalid pattern for \"chat.discord-filter\": " + e.getMessage());
+                        LOGGER.log(java.util.logging.Level.WARNING, "Invalid pattern for \"chat.discord-filter\": " + e.getMessage());
                     }
                 }
             }
@@ -419,7 +420,7 @@ public class DiscordSettings implements IConf {
                     discordFilter = Collections.emptyList();
                 }
             } catch (PatternSyntaxException e) {
-                plugin.getLogger().log(java.util.logging.Level.WARNING, "Invalid pattern for \"chat.discord-filter\": " + e.getMessage());
+                LOGGER.log(java.util.logging.Level.WARNING, "Invalid pattern for \"chat.discord-filter\": " + e.getMessage());
                 discordFilter = Collections.emptyList();
             }
         }
@@ -433,7 +434,7 @@ public class DiscordSettings implements IConf {
                     try {
                         filters.add(Pattern.compile(filterString));
                     } catch (PatternSyntaxException e) {
-                        plugin.getLogger().log(java.util.logging.Level.WARNING, "Invalid pattern for \"console.log-level\": " + e.getMessage());
+                        LOGGER.log(java.util.logging.Level.WARNING, "Invalid pattern for \"console.log-level\": " + e.getMessage());
                     }
                 }
             }
@@ -447,7 +448,7 @@ public class DiscordSettings implements IConf {
                     consoleFilter = Collections.emptyList();
                 }
             } catch (PatternSyntaxException e) {
-                plugin.getLogger().log(java.util.logging.Level.WARNING, "Invalid pattern for \"console.log-level\": " + e.getMessage());
+                LOGGER.log(java.util.logging.Level.WARNING, "Invalid pattern for \"console.log-level\": " + e.getMessage());
                 consoleFilter = Collections.emptyList();
             }
         }

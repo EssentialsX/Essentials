@@ -1,8 +1,10 @@
 package net.essentialsx.discord;
 
+import com.earth2me.essentials.EssentialsLogger;
 import com.earth2me.essentials.IEssentials;
 import com.earth2me.essentials.IEssentialsModule;
 import com.earth2me.essentials.metrics.MetricsWrapper;
+import net.ess3.provider.LoggerProvider;
 import net.essentialsx.discord.interactions.InteractionControllerImpl;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -12,12 +14,11 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import static com.earth2me.essentials.I18n.tl;
 
 public class EssentialsDiscord extends JavaPlugin implements IEssentialsModule {
-    private final static Logger logger = Logger.getLogger("EssentialsDiscord");
+    protected final static LoggerProvider LOGGER = EssentialsLogger.getLoggerProvider("EssentialsDiscord");
     private transient IEssentials ess;
     private transient MetricsWrapper metrics = null;
 
@@ -33,13 +34,13 @@ public class EssentialsDiscord extends JavaPlugin implements IEssentialsModule {
             return;
         }
         if (!getDescription().getVersion().equals(ess.getDescription().getVersion())) {
-            getLogger().log(Level.WARNING, tl("versionMismatchAll"));
+            LOGGER.log(Level.WARNING, tl("versionMismatchAll"));
         }
 
         // JDK-8274349 - Mitigation for a regression in Java 17 on 1 core systems which was fixed in 17.0.2
         final String[] javaVersion = System.getProperty("java.version").split("\\.");
         if (Runtime.getRuntime().availableProcessors() <= 1 && javaVersion[0].startsWith("17") && (javaVersion.length < 2 || (javaVersion[1].equals("0") && javaVersion[2].startsWith("1")))) {
-            logger.log(Level.INFO, "Essentials is mitigating JDK-8274349");
+            LOGGER.log(Level.INFO, "Essentials is mitigating JDK-8274349");
             System.setProperty("java.util.concurrent.ForkJoinPool.common.parallelism", "1");
         }
 
@@ -58,7 +59,7 @@ public class EssentialsDiscord extends JavaPlugin implements IEssentialsModule {
                 jda.startup();
                 ess.scheduleSyncDelayedTask(() -> ((InteractionControllerImpl) jda.getInteractionController()).processBatchRegistration());
             } catch (Exception e) {
-                logger.log(Level.SEVERE, tl("discordErrorLogin", e.getMessage()));
+                LOGGER.log(Level.SEVERE, tl("discordErrorLogin", e.getMessage()));
                 if (ess.getSettings().isDebug()) {
                     e.printStackTrace();
                 }

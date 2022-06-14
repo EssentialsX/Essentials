@@ -95,7 +95,7 @@ public class UserMap extends CacheLoader<String, User> implements IConf {
         final String sanitizedName = StringUtil.safeString(name);
         try {
             if (ess.getSettings().isDebug()) {
-                ess.getLogger().warning("Looking up username " + name + " (" + sanitizedName + ") ...");
+                EssentialsLogger.warning("Looking up username " + name + " (" + sanitizedName + ") ...");
             }
 
             if (names.containsKey(sanitizedName)) {
@@ -104,12 +104,12 @@ public class UserMap extends CacheLoader<String, User> implements IConf {
             }
 
             if (ess.getSettings().isDebug()) {
-                ess.getLogger().warning(name + "(" + sanitizedName + ") has no known usermap entry");
+                EssentialsLogger.warning(name + "(" + sanitizedName + ") has no known usermap entry");
             }
 
             final File userFile = getUserFileFromString(sanitizedName);
             if (userFile.exists()) {
-                ess.getLogger().info("Importing user " + name + " to usermap.");
+                EssentialsLogger.info("Importing user " + name + " to usermap.");
                 final User user = new User(new OfflinePlayer(sanitizedName, ess.getServer()), ess);
                 trackUUID(user.getBase().getUniqueId(), user.getName(), true);
                 return user;
@@ -117,7 +117,7 @@ public class UserMap extends CacheLoader<String, User> implements IConf {
             return null;
         } catch (final UncheckedExecutionException ex) {
             if (ess.getSettings().isDebug()) {
-                ess.getLogger().log(Level.WARNING, ex, () -> String.format("Exception while getting user for %s (%s)", name, sanitizedName));
+                EssentialsLogger.log(Level.WARNING, "Exception while getting user for " + name + " (" + sanitizedName + ")", ex);
             }
             return null;
         }
@@ -132,7 +132,7 @@ public class UserMap extends CacheLoader<String, User> implements IConf {
             }
         } catch (final ExecutionException | UncheckedExecutionException ex) {
             if (ess.getSettings().isDebug()) {
-                ess.getLogger().log(Level.WARNING, ex, () -> "Exception while getting user for " + uuid);
+                EssentialsLogger.log(Level.WARNING, "Exception while getting user for " + uuid, ex);
             }
             return null;
         }
@@ -148,11 +148,11 @@ public class UserMap extends CacheLoader<String, User> implements IConf {
                     uuidMap.writeUUIDMap();
                 } else if (!isUUIDMatch(uuid, keyName)) {
                     if (replace) {
-                        ess.getLogger().info("Found new UUID for " + name + ". Replacing " + names.get(keyName).toString() + " with " + uuid.toString());
+                        EssentialsLogger.info("Found new UUID for " + name + ". Replacing " + names.get(keyName).toString() + " with " + uuid.toString());
                         names.put(keyName, uuid);
                         uuidMap.writeUUIDMap();
                     } else {
-                        ess.getLogger().log(Level.INFO, MessageFormat.format(WARN_UUID_NOT_REPLACE, uuid.toString(), name, names.get(keyName).toString()), new RuntimeException());
+                        EssentialsLogger.log(Level.INFO, MessageFormat.format(WARN_UUID_NOT_REPLACE, uuid.toString(), name, names.get(keyName).toString()), new RuntimeException());
                     }
                 }
             }
@@ -193,7 +193,7 @@ public class UserMap extends CacheLoader<String, User> implements IConf {
 
         if (player instanceof Player) {
             if (ess.getSettings().isDebug()) {
-                ess.getLogger().info("Loading online OfflinePlayer into user map...");
+                EssentialsLogger.info("Loading online OfflinePlayer into user map...");
             }
             final User user = new User((Player) player, ess);
             trackUUID(player.getUniqueId(), player.getName(), true);
@@ -202,7 +202,7 @@ public class UserMap extends CacheLoader<String, User> implements IConf {
 
         final File userFile = getUserFileFromID(player.getUniqueId());
         if (ess.getSettings().isDebug()) {
-            ess.getLogger().info("Loading OfflinePlayer into user map. Has data: " + userFile.exists() + " for " + player);
+            EssentialsLogger.info("Loading OfflinePlayer into user map. Has data: " + userFile.exists() + " for " + player);
         }
 
         final OfflinePlayer essPlayer = new OfflinePlayer(player.getUniqueId(), ess.getServer());
@@ -211,7 +211,7 @@ public class UserMap extends CacheLoader<String, User> implements IConf {
             essPlayer.setName(user.getLastAccountName());
         } else {
             if (ess.getSettings().isDebug()) {
-                ess.getLogger().info("OfflinePlayer usermap load saving user data for " + player);
+                EssentialsLogger.info("OfflinePlayer usermap load saving user data for " + player);
             }
 
             // this code makes me sad
@@ -242,7 +242,7 @@ public class UserMap extends CacheLoader<String, User> implements IConf {
 
     public void removeUser(final String name) {
         if (names == null) {
-            ess.getLogger().warning("Name collection is null, cannot remove user.");
+            EssentialsLogger.warning("Name collection is null, cannot remove user.");
             return;
         }
         final UUID uuid = names.get(name);
@@ -308,7 +308,7 @@ public class UserMap extends CacheLoader<String, User> implements IConf {
     public User getUserFromBukkit(String name) {
         name = StringUtil.safeString(name);
         if (ess.getSettings().isDebug()) {
-            ess.getLogger().warning("Using potentially blocking Bukkit UUID lookup for: " + name);
+            EssentialsLogger.warning("Using potentially blocking Bukkit UUID lookup for: " + name);
         }
         // Don't attempt to look up entirely invalid usernames
         if (name == null || !validUserPattern.matcher(name).matches()) {

@@ -51,7 +51,7 @@ public abstract class UserData extends PlayerExtension implements IConf {
         try {
             filename = base.getUniqueId().toString();
         } catch (final Throwable ex) {
-            ess.getLogger().warning("Falling back to old username system for " + base.getName());
+            EssentialsLogger.warning("Falling back to old username system for " + base.getName());
             filename = base.getName();
         }
 
@@ -85,14 +85,14 @@ public abstract class UserData extends PlayerExtension implements IConf {
         try {
             holder = config.getRootNode().get(UserConfigHolder.class);
         } catch (SerializationException e) {
-            ess.getLogger().log(Level.SEVERE, "Error while reading user config: " + e.getMessage(), e);
+            EssentialsLogger.log(Level.SEVERE, "Error while reading user config: " + e.getMessage(), e);
             throw new RuntimeException(e);
         }
         config.setSaveHook(() -> {
             try {
                 config.getRootNode().set(UserConfigHolder.class, holder);
             } catch (SerializationException e) {
-                ess.getLogger().log(Level.SEVERE, "Error while saving user config: " + e.getMessage(), e);
+                EssentialsLogger.log(Level.SEVERE, "Error while saving user config: " + e.getMessage(), e);
                 throw new RuntimeException(e);
             }
         });

@@ -1,5 +1,6 @@
 package com.earth2me.essentials.geoip;
 
+import com.earth2me.essentials.EssentialsLogger;
 import com.earth2me.essentials.IConf;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.config.EssentialsConfiguration;
@@ -11,6 +12,7 @@ import com.maxmind.geoip2.exception.GeoIp2Exception;
 import com.maxmind.geoip2.model.CityResponse;
 import com.maxmind.geoip2.model.CountryResponse;
 import net.ess3.api.IEssentials;
+import net.ess3.provider.LoggerProvider;
 import net.essentialsx.api.v2.events.AsyncUserDataLoadEvent;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -31,13 +33,12 @@ import java.net.URLConnection;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.zip.GZIPInputStream;
 
 import static com.earth2me.essentials.I18n.tl;
 
 public class EssentialsGeoIPPlayerListener implements Listener, IConf {
-    private static final Logger logger = Logger.getLogger("EssentialsGeoIP");
+    private static final LoggerProvider logger = EssentialsLogger.getLoggerProvider("EssentialsGeoIP");
     private final File dataFolder;
     private final EssentialsConfiguration config;
     private final transient IEssentials ess;

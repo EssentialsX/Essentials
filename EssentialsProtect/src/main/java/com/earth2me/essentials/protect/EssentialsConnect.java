@@ -1,16 +1,17 @@
 package com.earth2me.essentials.protect;
 
+import com.earth2me.essentials.EssentialsLogger;
 import com.earth2me.essentials.IConf;
 import net.ess3.api.IEssentials;
+import net.ess3.provider.LoggerProvider;
 import org.bukkit.plugin.Plugin;
 
 import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import static com.earth2me.essentials.I18n.tl;
 
 class EssentialsConnect {
-    private static final Logger logger = Logger.getLogger("EssentialsProtect");
+    private static final LoggerProvider logger = EssentialsLogger.getLoggerProvider("EssentialsProtect");
     private final IEssentials ess;
     private final IProtect protect;
 
