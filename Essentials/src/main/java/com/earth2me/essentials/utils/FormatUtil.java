@@ -59,7 +59,7 @@ public final class FormatUtil {
         if (input == null) {
             return null;
         }
-        return stripColor(input, LOGCOLOR_PATTERN);
+        return stripColor(input, PAPER_CONTROL_PATTERN);
     }
 
     //This is the general permission sensitive message format function, checks for urls.
