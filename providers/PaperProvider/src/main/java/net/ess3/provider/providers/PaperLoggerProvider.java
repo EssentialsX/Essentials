@@ -24,6 +24,8 @@ public class PaperLoggerProvider implements LoggerProvider {
             logger.warn(component, throwable);
         } else if (level == Level.INFO) {
             logger.info(component, throwable);
+        } else if (level == Level.FINE) {
+            logger.trace(component, throwable);
         } else {
             throw new IllegalArgumentException("Unknown level: " + level);
         }
