@@ -217,6 +217,10 @@ public class EssentialsPlayerListener implements Listener, FakeAccessor {
             to.setY(from.getY());
             to.setZ(from.getZ());
             try {
+                if (event.getPlayer().getAllowFlight()) {
+                    // Don't teleport to a safe location here, they are either a god or flying
+                    throw new Exception();
+                }
                 event.setTo(LocationUtil.getSafeDestination(ess, to));
             } catch (final Exception ex) {
                 event.setTo(to);
