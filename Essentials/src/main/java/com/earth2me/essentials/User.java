@@ -92,6 +92,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
     private long lastHomeConfirmationTimestamp;
     private Boolean toggleShout;
     private transient final List<String> signCopy = Lists.newArrayList("", "", "", "");
+    private transient long lastVanishTime = System.currentTimeMillis();
 
     public User(final Player base, final IEssentials ess) {
         super(base, ess);
@@ -964,6 +965,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
                 }
             }
             setHidden(true);
+            lastVanishTime = System.currentTimeMillis();
             ess.getVanishedPlayersNew().add(getName());
             this.getBase().setMetadata("vanished", new FixedMetadataValue(ess, true));
             if (isAuthorized("essentials.vanish.effect")) {
@@ -1188,6 +1190,10 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
             return exempt;
         }
         return isBaltopExcludeCache();
+    }
+
+    public long getLastVanishTime() {
+        return lastVanishTime;
     }
 
     @Override
