@@ -1,6 +1,7 @@
 package net.essentialsx.discord.listeners;
 
 import com.earth2me.essentials.utils.FormatUtil;
+import com.earth2me.essentials.utils.StringUtil;
 import com.vdurmont.emoji.EmojiParser;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
@@ -14,7 +15,6 @@ import net.essentialsx.discord.interactions.InteractionChannelImpl;
 import net.essentialsx.discord.interactions.InteractionMemberImpl;
 import net.essentialsx.discord.util.DiscordUtil;
 import net.essentialsx.discord.util.MessageUtil;
-import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
 import org.jetbrains.annotations.NotNull;
 
@@ -76,7 +76,7 @@ public class DiscordListener extends ListenerAdapter {
         }
 
         // Strip message
-        final String strippedMessage = StringUtils.abbreviate(
+        final String strippedMessage = StringUtil.abbreviate(
                 messageBuilder.toString()
                         .replace(plugin.getSettings().isChatFilterNewlines() ? '\n' : ' ', ' ')
                         .trim(), plugin.getSettings().getChatDiscordMaxLength());
