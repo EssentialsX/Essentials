@@ -9,6 +9,7 @@ import net.essentialsx.api.v2.services.discord.InteractionEvent;
 import net.essentialsx.discord.JDADiscordService;
 import net.essentialsx.discord.interactions.InteractionCommandImpl;
 import net.essentialsx.discord.util.DiscordMessageRecipient;
+import net.essentialsx.discord.util.MessageUtil;
 import org.bukkit.Bukkit;
 
 import java.util.concurrent.atomic.AtomicReference;
@@ -34,21 +35,21 @@ public class MessageCommand extends InteractionCommandImpl {
         }
 
         if (!getHidden && user.isIgnoreMsg()) {
-            event.reply(tl("msgIgnore", user.getDisplayName()));
+            event.reply(tl("msgIgnore", MessageUtil.sanitizeDiscordMarkdown(user.getDisplayName())));
             return;
         }
 
         if (user.isAfk()) {
             if (user.getAfkMessage() != null) {
-                event.reply(tl("userAFKWithMessage", user.getDisplayName(), user.getAfkMessage()));
+                event.reply(tl("userAFKWithMessage", MessageUtil.sanitizeDiscordMarkdown(user.getDisplayName()), MessageUtil.sanitizeDiscordMarkdown(user.getAfkMessage())));
             } else {
-                event.reply(tl("userAFK", user.getDisplayName()));
+                event.reply(tl("userAFK", MessageUtil.sanitizeDiscordMarkdown(user.getDisplayName())));
             }
         }
 
         final String message = event.getMember().hasRoles(jda.getSettings().getPermittedFormattingRoles()) ?
                 FormatUtil.replaceFormat(event.getStringArgument("message")) : FormatUtil.stripFormat(event.getStringArgument("message"));
-        event.reply(tl("msgFormat", tl("meSender"), user.getDisplayName(), message));
+        event.reply(tl("msgFormat", tl("meSender"), MessageUtil.sanitizeDiscordMarkdown(user.getDisplayName()), MessageUtil.sanitizeDiscordMarkdown(message)));
 
         user.sendMessage(tl("msgFormat", event.getMember().getTag(), tl("meRecipient"), message));
         // We use an atomic reference here so that java will garbage collect the recipient
