@@ -401,7 +401,7 @@ public class AsyncTeleport implements IAsyncTeleport {
                 nowAsync(teleportee, new LocationTarget(location), cause, future);
             } else {
                 if (ess.getSettings().isDebug()) {
-                    EssentialsLogger.info("Could not find bed spawn, forcing respawn event.");
+                    EssentialsLogger.getLogger().info("Could not find bed spawn, forcing respawn event.");
                 }
                 final PlayerRespawnEvent pre = new PlayerRespawnEvent(player, player.getWorld().getSpawnLocation(), false);
                 ess.getServer().getPluginManager().callEvent(pre);

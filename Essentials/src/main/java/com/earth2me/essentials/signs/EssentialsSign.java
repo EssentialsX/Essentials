@@ -108,7 +108,7 @@ public class EssentialsSign {
         ess.getServer().getPluginManager().callEvent(signEvent);
         if (signEvent.isCancelled()) {
             if (ess.getSettings().isDebug()) {
-                EssentialsLogger.info("SignCreateEvent cancelled for sign " + signEvent.getEssentialsSign().getName());
+                EssentialsLogger.getLogger().info("SignCreateEvent cancelled for sign " + signEvent.getEssentialsSign().getName());
             }
             return false;
         }
@@ -130,7 +130,7 @@ public class EssentialsSign {
     public String getSuccessName(final IEssentials ess) {
         final String successName = getSuccessName();
         if (successName == null) {
-            EssentialsLogger.severe("signFormatSuccess message must use the {0} argument.");
+            EssentialsLogger.getLogger().severe("signFormatSuccess message must use the {0} argument.");
         }
         return successName;
     }

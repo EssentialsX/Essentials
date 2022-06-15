@@ -85,7 +85,7 @@ public class Commandtpdeny extends EssentialsCommand {
         Bukkit.getPluginManager().callEvent(event);
         final boolean cancelled = event.isCancelled();
         if (cancelled && ess.getSettings().isDebug()) {
-            EssentialsLogger.info("TPA deny cancelled by API for " + user.getName() + " (requested by " + player.getName() + ")");
+            EssentialsLogger.getLogger().info("TPA deny cancelled by API for " + user.getName() + " (requested by " + player.getName() + ")");
         }
         return event.isCancelled();
     }

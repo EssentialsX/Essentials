@@ -41,7 +41,7 @@ public class SignPlayerListener implements Listener {
                 targetBlock = ess.getUser(event.getPlayer()).getTargetBlock(5);
             } catch (final IllegalStateException ex) {
                 if (ess.getSettings().isDebug()) {
-                    EssentialsLogger.log(Level.WARNING, ex.getMessage(), ex);
+                    EssentialsLogger.getLogger().log(Level.WARNING, ex.getMessage(), ex);
                 }
             }
             block = targetBlock;

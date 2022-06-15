@@ -120,7 +120,7 @@ public class HelpInput implements IText {
             } catch (final NullPointerException ignored) {
             } catch (final Exception ex) {
                 if (!reported) {
-                    EssentialsLogger.log(Level.WARNING, tl("commandHelpFailedForPlugin", pluginNameLow), ex);
+                    EssentialsLogger.getLogger().log(Level.WARNING, tl("commandHelpFailedForPlugin", pluginNameLow), ex);
                 }
                 reported = true;
             }

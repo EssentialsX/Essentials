@@ -407,7 +407,7 @@ public enum MobData {
                 }
             }
         } else {
-            EssentialsLogger.warning("Unknown mob data type: " + this.toString());
+            EssentialsLogger.getLogger().warning("Unknown mob data type: " + this.toString());
         }
     }
 

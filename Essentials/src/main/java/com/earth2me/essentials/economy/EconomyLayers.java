@@ -41,7 +41,7 @@ public final class EconomyLayers {
                 }
                 final EconomyLayer layer = onPluginEnable(plugin);
                 if (layer != null) {
-                    EssentialsLogger.log(Level.INFO, "Essentials found a compatible payment resolution method: " + layer.getName() + " (v" + layer.getPluginVersion() + ")!");
+                    EssentialsLogger.getLogger().log(Level.INFO, "Essentials found a compatible payment resolution method: " + layer.getName() + " (v" + layer.getPluginVersion() + ")!");
                 }
             }
 

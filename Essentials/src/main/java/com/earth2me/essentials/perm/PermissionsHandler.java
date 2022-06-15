@@ -170,18 +170,18 @@ public class PermissionsHandler implements IPermissionsHandler {
         if (handler instanceof AbstractVaultHandler) {
             String enabledPermsPlugin = ((AbstractVaultHandler) handler).getEnabledPermsPlugin();
             if (enabledPermsPlugin == null) enabledPermsPlugin = "generic";
-            EssentialsLogger.info("Using Vault based permissions (" + enabledPermsPlugin + ")");
+            EssentialsLogger.getLogger().info("Using Vault based permissions (" + enabledPermsPlugin + ")");
         } else if (handler.getClass() == SuperpermsHandler.class) {
             if (handler.tryProvider(ess)) {
-                EssentialsLogger.warning("Detected supported permissions plugin " +
+                EssentialsLogger.getLogger().warning("Detected supported permissions plugin " +
                     ((SuperpermsHandler) handler).getEnabledPermsPlugin() + " without Vault installed.");
-                EssentialsLogger.warning("Features such as chat prefixes/suffixes and group-related functionality will not " +
+                EssentialsLogger.getLogger().warning("Features such as chat prefixes/suffixes and group-related functionality will not " +
                     "work until you install Vault.");
             }
-            EssentialsLogger.info("Using superperms-based permissions.");
+            EssentialsLogger.getLogger().info("Using superperms-based permissions.");
         } else if (handler.getClass() == ConfigPermissionsHandler.class) {
-            EssentialsLogger.info("Using config file enhanced permissions.");
-            EssentialsLogger.info("Permissions listed in as player-commands will be given to all users.");
+            EssentialsLogger.getLogger().info("Using config file enhanced permissions.");
+            EssentialsLogger.getLogger().info("Permissions listed in as player-commands will be given to all users.");
         }
     }
 
@@ -196,7 +196,7 @@ public class PermissionsHandler implements IPermissionsHandler {
     private void checkPermLag(final long start, final String summary) {
         final long elapsed = System.nanoTime() - start;
         if (elapsed > ess.getSettings().getPermissionsLagWarning()) {
-            EssentialsLogger.log(Level.WARNING, String.format("Permissions lag notice with (%s). Response took %fms. Summary: %s", getName(), elapsed / 1000000.0, summary));
+            EssentialsLogger.getLogger().log(Level.WARNING, String.format("Permissions lag notice with (%s). Response took %fms. Summary: %s", getName(), elapsed / 1000000.0, summary));
         }
     }
 

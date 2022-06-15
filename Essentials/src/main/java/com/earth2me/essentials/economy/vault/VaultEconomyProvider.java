@@ -300,8 +300,8 @@ public class VaultEconomyProvider implements Economy {
             }
             final File npcFile = new File(folder, player.getUniqueId() + ".yml");
             if (npcFile.exists()) {
-                EssentialsLogger.log(Level.SEVERE, MessageFormat.format(WARN_NPC_RECREATE_1, player.getName(), player.getUniqueId().toString()), new RuntimeException());
-                EssentialsLogger.log(Level.SEVERE, WARN_NPC_RECREATE_2);
+                EssentialsLogger.getLogger().log(Level.SEVERE, MessageFormat.format(WARN_NPC_RECREATE_1, player.getName(), player.getUniqueId().toString()), new RuntimeException());
+                EssentialsLogger.getLogger().log(Level.SEVERE, WARN_NPC_RECREATE_2);
             }
             final EssentialsUserConfiguration npcConfig = new EssentialsUserConfiguration(player.getName(), player.getUniqueId(), npcFile);
             npcConfig.load();
@@ -316,7 +316,7 @@ public class VaultEconomyProvider implements Economy {
         // Loading a v4 UUID that we somehow didn't track, mark it as a normal player and hope for the best, vault sucks :/
         try {
             if (ess.getSettings().isDebug()) {
-                EssentialsLogger.info("Vault requested a player account creation for a v4 UUID: " + player);
+                EssentialsLogger.getLogger().info("Vault requested a player account creation for a v4 UUID: " + player);
             }
             ess.getUserMap().load(player);
             return true;

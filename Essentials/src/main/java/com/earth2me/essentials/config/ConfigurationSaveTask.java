@@ -31,7 +31,7 @@ public class ConfigurationSaveTask implements Runnable {
             try {
                 loader.save(node);
             } catch (ConfigurateException e) {
-                EssentialsLogger.log(Level.SEVERE, e.getMessage(), e);
+                EssentialsLogger.getLogger().log(Level.SEVERE, e.getMessage(), e);
             } finally {
                 pendingWrites.decrementAndGet();
             }

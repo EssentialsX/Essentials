@@ -62,7 +62,7 @@ public class CustomItemResolver implements IItemDb.ItemResolver, IConf {
 
         final Map<String, Object> section = ConfigurateUtil.getRawMap(config.getSection("aliases"));
         if (section.isEmpty()) {
-            EssentialsLogger.warning("No aliases found in custom_items.yml.");
+            EssentialsLogger.getLogger().warning("No aliases found in custom_items.yml.");
             return;
         }
 

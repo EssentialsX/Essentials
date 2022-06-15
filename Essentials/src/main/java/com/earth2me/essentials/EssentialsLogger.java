@@ -9,7 +9,6 @@ import org.bukkit.plugin.Plugin;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public final class EssentialsLogger {
@@ -46,27 +45,11 @@ public final class EssentialsLogger {
         return getLoggerProvider(plugin);
     }
 
-    public static void setLoggerProvider(LoggerProvider loggerProvider) {
-        EssentialsLogger.loggerProvider = loggerProvider;
+    public static Logger setLoggerProvider(LoggerProvider loggerProvider) {
+        return EssentialsLogger.loggerProvider = loggerProvider;
     }
 
-    public static void log(Level level, String message, Throwable throwable) {
-        loggerProvider.log(level, message, throwable);
-    }
-
-    public static void log(Level level, String message) {
-        log(level, message, null);
-    }
-
-    public static void info(final String message) {
-        log(Level.INFO, message);
-    }
-
-    public static void warning(final String message) {
-        log(Level.WARNING, message);
-    }
-
-    public static void severe(final String message) {
-        log(Level.SEVERE, message);
+    public static LoggerProvider getLogger() {
+        return loggerProvider;
     }
 }

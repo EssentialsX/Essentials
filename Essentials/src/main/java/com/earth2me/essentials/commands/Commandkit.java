@@ -88,7 +88,7 @@ public class Commandkit extends EssentialsCommand {
 
             } catch (final NoChargeException ex) {
                 if (ess.getSettings().isDebug()) {
-                    EssentialsLogger.log(Level.INFO, "Soft kit error, abort spawning " + kit.getName(), ex);
+                    EssentialsLogger.getLogger().log(Level.INFO, "Soft kit error, abort spawning " + kit.getName(), ex);
                 }
             } catch (final Exception ex) {
                 ess.showError(userFrom.getSource(), ex, "\\ kit: " + kit.getName());

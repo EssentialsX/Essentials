@@ -92,7 +92,7 @@ public class Commandbalancetop extends EssentialsCommand {
         public void run() {
             if (ess.getSettings().isEcoDisabled()) {
                 if (ess.getSettings().isDebug()) {
-                    EssentialsLogger.info("Internal economy functions disabled, aborting baltop.");
+                    EssentialsLogger.getLogger().info("Internal economy functions disabled, aborting baltop.");
                 }
                 return;
             }

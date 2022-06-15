@@ -45,7 +45,7 @@ public class BookInput implements IText {
                         length = input.read(buffer);
                     }
                 }
-                EssentialsLogger.info("File " + filename + ".txt does not exist. Creating one for you.");
+                EssentialsLogger.getLogger().info("File " + filename + ".txt does not exist. Creating one for you.");
             }
         }
         if (!file.exists()) {

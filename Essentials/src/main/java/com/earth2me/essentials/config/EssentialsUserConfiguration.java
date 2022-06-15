@@ -44,7 +44,7 @@ public class EssentialsUserConfiguration extends EssentialsConfiguration {
             //noinspection UnstableApiUsage
             Files.move(file, new File(configFile.getParentFile(), uuid + ".yml"));
         } catch (final IOException ex) {
-            EssentialsLogger.log(Level.WARNING, "Failed to migrate user: " + username, ex);
+            EssentialsLogger.getLogger().log(Level.WARNING, "Failed to migrate user: " + username, ex);
         }
 
         setProperty("last-account-name", username);
@@ -69,7 +69,7 @@ public class EssentialsUserConfiguration extends EssentialsConfiguration {
             //noinspection UnstableApiUsage
             Files.move(getAltFile(), new File(configFile.getParentFile(), uuid + ".yml"));
         } catch (final IOException ex) {
-            EssentialsLogger.log(Level.WARNING, "Failed to migrate user: " + username, ex);
+            EssentialsLogger.getLogger().log(Level.WARNING, "Failed to migrate user: " + username, ex);
         }
     }
 }

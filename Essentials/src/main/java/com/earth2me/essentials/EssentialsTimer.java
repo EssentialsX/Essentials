@@ -63,7 +63,7 @@ public class EssentialsTimer implements Runnable {
                 user.setLastOnlineActivity(currentTime);
                 user.checkActivity();
             } catch (final Exception e) {
-                EssentialsLogger.log(Level.WARNING, "EssentialsTimer Error:", e);
+                EssentialsLogger.getLogger().log(Level.WARNING, "EssentialsTimer Error:", e);
             }
         }
 

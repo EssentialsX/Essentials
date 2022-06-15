@@ -315,7 +315,7 @@ public abstract class EssentialsCommand implements IEssentialsCommand {
 
         final int numArgs = args.length - index - 1;
         if (ess.getSettings().isDebug()) {
-            EssentialsLogger.info(numArgs + " " + index + " " + Arrays.toString(args));
+            EssentialsLogger.getLogger().info(numArgs + " " + index + " " + Arrays.toString(args));
         }
         String[] effectiveArgs = new String[numArgs];
         System.arraycopy(args, index, effectiveArgs, 0, numArgs);
@@ -323,7 +323,7 @@ public abstract class EssentialsCommand implements IEssentialsCommand {
             effectiveArgs = new String[] {""};
         }
         if (ess.getSettings().isDebug()) {
-            EssentialsLogger.info(command + " -- " + Arrays.toString(effectiveArgs));
+            EssentialsLogger.getLogger().info(command + " -- " + Arrays.toString(effectiveArgs));
         }
 
         return command.tabComplete(sender.getSender(), label, effectiveArgs);
@@ -333,7 +333,7 @@ public abstract class EssentialsCommand implements IEssentialsCommand {
     public void showError(final CommandSender sender, final Throwable throwable, final String commandLabel) {
         sender.sendMessage(tl("errorWithMessage", throwable.getMessage()));
         if (ess.getSettings().isDebug()) {
-            EssentialsLogger.log(Level.INFO, tl("errorCallingCommand", commandLabel), throwable);
+            EssentialsLogger.getLogger().log(Level.INFO, tl("errorCallingCommand", commandLabel), throwable);
             throwable.printStackTrace();
         }
     }

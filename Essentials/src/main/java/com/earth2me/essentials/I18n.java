@@ -88,7 +88,7 @@ public class I18n implements net.ess3.api.II18n {
             }
         } catch (final MissingResourceException ex) {
             if (ess == null || ess.getSettings().isDebug()) {
-                EssentialsLogger.log(Level.WARNING, String.format("Missing translation key \"%s\" in translation file %s", ex.getKey(), localeBundle.getLocale().toString()), ex);
+                EssentialsLogger.getLogger().log(Level.WARNING, String.format("Missing translation key \"%s\" in translation file %s", ex.getKey(), localeBundle.getLocale().toString()), ex);
             }
             return defaultBundle.getString(string);
         }
@@ -101,7 +101,7 @@ public class I18n implements net.ess3.api.II18n {
             try {
                 messageFormat = new MessageFormat(format);
             } catch (final IllegalArgumentException e) {
-                EssentialsLogger.log(Level.SEVERE, "Invalid Translation key for '" + string + "': " + e.getMessage());
+                EssentialsLogger.getLogger().log(Level.SEVERE, "Invalid Translation key for '" + string + "': " + e.getMessage());
                 format = format.replaceAll("\\{(\\D*?)\\}", "\\[$1\\]");
                 messageFormat = new MessageFormat(format);
             }
@@ -125,7 +125,7 @@ public class I18n implements net.ess3.api.II18n {
         }
         ResourceBundle.clearCache();
         messageFormatCache = new HashMap<>();
-        EssentialsLogger.log(Level.INFO, "Using locale " + currentLocale.toString());
+        EssentialsLogger.getLogger().log(Level.INFO, "Using locale " + currentLocale.toString());
         try {
             localeBundle = ResourceBundle.getBundle(MESSAGES, currentLocale, new UTF8PropertiesControl());
         } catch (final MissingResourceException ex) {

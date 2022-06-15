@@ -118,7 +118,7 @@ public class LegacyItemDb extends AbstractItemDb {
             nameList.sort(LengthCompare.INSTANCE);
         }
 
-        EssentialsLogger.info(String.format("Loaded %s items from items.csv.", listNames().size()));
+        EssentialsLogger.getLogger().info(String.format("Loaded %s items from items.csv.", listNames().size()));
 
         ready = true;
     }

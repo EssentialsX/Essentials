@@ -155,7 +155,7 @@ public class KeywordReplacer implements IText {
         execTimer.mark("Text Replace");
         final String timeroutput = execTimer.end();
         if (ess.getSettings().isDebug()) {
-            EssentialsLogger.log(Level.INFO, "Keyword Replacer " + timeroutput);
+            EssentialsLogger.getLogger().log(Level.INFO, "Keyword Replacer " + timeroutput);
         }
     }
 

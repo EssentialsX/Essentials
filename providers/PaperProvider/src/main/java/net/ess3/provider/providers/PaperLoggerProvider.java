@@ -8,15 +8,16 @@ import org.bukkit.plugin.Plugin;
 
 import java.util.logging.Level;
 
-public class PaperLoggerProvider implements LoggerProvider {
+public class PaperLoggerProvider extends LoggerProvider {
     private final ComponentLogger logger;
 
     public PaperLoggerProvider(final Plugin plugin) {
+        super(plugin.getComponentLogger().getName());
         this.logger = plugin.getComponentLogger();
     }
 
     @Override
-    public void log(Level level, String message, Throwable throwable) {
+    protected void doTheLog(Level level, String message, Throwable throwable) {
         final Component component = LegacyComponentSerializer.legacySection().deserialize(message);
         if (level == Level.SEVERE) {
             logger.error(component, throwable);
@@ -32,7 +33,7 @@ public class PaperLoggerProvider implements LoggerProvider {
     }
 
     @Override
-    public void log(Level level, String message) {
+    protected void doTheLog(Level level, String message) {
         final Component component = LegacyComponentSerializer.legacySection().deserialize(message);
         if (level == Level.SEVERE) {
             logger.error(component);
@@ -40,6 +41,8 @@ public class PaperLoggerProvider implements LoggerProvider {
             logger.warn(component);
         } else if (level == Level.INFO) {
             logger.info(component);
+        } else if (level == Level.FINE) {
+            logger.trace(component);
         } else {
             throw new IllegalArgumentException("Unknown level: " + level);
         }
