@@ -7,7 +7,6 @@ import com.earth2me.essentials.utils.StringUtil;
 import com.earth2me.essentials.utils.VersionUtil;
 import net.ess3.api.IEssentials;
 import net.ess3.api.TranslatableException;
-import org.apache.commons.lang.StringUtils;
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
