@@ -196,6 +196,9 @@ public enum MobData {
     CYAN_AXOLOTL("cyan", MobCompat.AXOLOTL, "axolotl:CYAN", true),
     BLUE_AXOLOTL("blue", MobCompat.AXOLOTL, "axolotl:BLUE", true),
     SCREAMING_GOAT("screaming", MobCompat.GOAT, Data.GOAT_SCREAMING, true),
+    TEMPERATE_FROG("temperate", MobCompat.FROG, "frog:TEMPERATE", true),
+    WARM_FROG("warm", MobCompat.FROG, "frog:WARM", true),
+    COLD_FROG("cold", MobCompat.FROG, "frog:COLD", true),
     ;
 
     public static final Logger logger = Logger.getLogger("Essentials");
@@ -404,6 +407,10 @@ public enum MobData {
                     break;
                 case "axolotl": {
                     MobCompat.setAxolotlVariant(spawned, split[1]);
+                    break;
+                }
+                case "frog": {
+                    MobCompat.setFrogVariant(spawned, split[1]);
                     break;
                 }
             }
