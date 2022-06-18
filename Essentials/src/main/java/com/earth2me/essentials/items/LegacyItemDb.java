@@ -3,9 +3,9 @@ package com.earth2me.essentials.items;
 import com.earth2me.essentials.ManagedFile;
 import com.earth2me.essentials.utils.EnumUtil;
 import com.earth2me.essentials.utils.NumberUtil;
+import com.earth2me.essentials.utils.StringUtil;
 import com.earth2me.essentials.utils.VersionUtil;
 import net.ess3.api.IEssentials;
-import org.apache.commons.lang.StringUtils;
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
@@ -68,10 +68,10 @@ public class LegacyItemDb extends AbstractItemDb {
             final Matcher matcher = csvSplitPattern.matcher(line);
             while (matcher.find()) {
                 String match = matcher.group(1);
-                if (StringUtils.stripToNull(match) == null) {
+                if (StringUtil.stripToNull(match) == null) {
                     continue;
                 }
-                match = StringUtils.strip(match.trim(), "\"");
+                match = StringUtil.strip(match.trim(), "\"");
                 switch (col) {
                     case 0:
                         itemName = match.toLowerCase(Locale.ENGLISH);
@@ -83,7 +83,7 @@ public class LegacyItemDb extends AbstractItemDb {
                         data = Short.parseShort(match);
                         break;
                     case 3:
-                        nbt = StringUtils.stripToNull(match);
+                        nbt = StringUtil.stripToNull(match);
                         break;
                     default:
                         continue;
