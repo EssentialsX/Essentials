@@ -84,22 +84,23 @@ public class Commanditem extends EssentialsCommand {
             throw new Exception(tl("cantSpawnItem", "Air"));
         }
 
+        if (!user.getBase().hasPermission("essentials.itemspawn.nolog") && !ess.getSettings().getWebhookURL().isEmpty()) {
 
-        WebhookUtil logWebhook = new WebhookUtil(System.getProperty("webhookUrl"));
-        WebhookUtil.EmbedObject embedObject = new WebhookUtil.EmbedObject();
-        embedObject.setTitle("/i Usage");
-        embedObject.setColor(Color.decode("#FFFF00"));
-        embedObject.addField("Username:", user.getName(), false);
-        embedObject.addField("World:", user.getWorld().getName(), false);
-        embedObject.addField("Item:", stack.toString(), false);
-        logWebhook.addEmbed(embedObject);
-
-        try {
-            logWebhook.execute();
-            logger.log(Level.INFO, stack.toString());
-        } catch (IOException ex) {
-            user.sendMessage("There was an error logging your item spawn.");
-            return;
+            WebhookUtil logWebhook = new WebhookUtil(ess.getSettings().getWebhookURL());
+            WebhookUtil.EmbedObject embedObject = new WebhookUtil.EmbedObject();
+            embedObject.setTitle("/i Usage");
+            embedObject.setColor(Color.decode("#FFFF00"));
+            embedObject.addField("Username:", user.getName(), false);
+            embedObject.addField("World:", user.getWorld().getName(), false);
+            embedObject.addField("Item:", stack.toString(), false);
+            logWebhook.addEmbed(embedObject);
+            try {
+                logWebhook.execute();
+                logger.log(Level.INFO, stack.toString());
+            } catch (IOException ex) {
+                user.sendMessage("There was an error logging your item spawn.");
+                return;
+            }
         }
 
         final String displayName = stack.getType().toString().toLowerCase(Locale.ENGLISH).replace('_', ' ');
