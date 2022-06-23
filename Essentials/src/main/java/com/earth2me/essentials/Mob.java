@@ -104,6 +104,11 @@ public enum Mob {
     AXOLOTL("Axolotl", Enemies.FRIENDLY, "AXOLOTL"),
     GOAT("Goat", Enemies.NEUTRAL, "GOAT"),
     GLOW_SQUID("GlowSquid", Enemies.FRIENDLY, "GLOW_SQUID"),
+    ALLAY("Allay", Enemies.FRIENDLY, "ALLAY"),
+    FROG("Frog", Enemies.FRIENDLY, "FROG"),
+    TADPOLE("Tadpole", Enemies.FRIENDLY, "TADPOLE"),
+    WARDEN("Warden", Enemies.ENEMY, "WARDEN"),
+    CHEST_BOAT("ChestBoat", Enemies.NEUTRAL, "CHEST_BOAT"),
     ;
 
     private static final Map<String, Mob> hashMap = new HashMap<>();
