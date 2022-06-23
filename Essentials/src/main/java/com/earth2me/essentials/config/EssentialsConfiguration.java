@@ -108,7 +108,7 @@ public class EssentialsConfiguration {
         try {
             getRootNode().set(holderClass, holder);
         } catch (SerializationException e) {
-            LOGGER.log(Level.SEVERE, "Error while saving user config: " + e.getMessage(), e);
+            LOGGER.log(Level.SEVERE, "Error while saving user config: " + configFile.getName(), e);
             throw new RuntimeException(e);
         }
     }
