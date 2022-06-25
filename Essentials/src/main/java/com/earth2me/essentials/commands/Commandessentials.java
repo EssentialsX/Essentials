@@ -4,6 +4,7 @@ import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.economy.EconomyLayer;
 import com.earth2me.essentials.economy.EconomyLayers;
+import com.earth2me.essentials.userstorage.ModernUserMap;
 import com.earth2me.essentials.utils.DateUtil;
 import com.earth2me.essentials.utils.EnumUtil;
 import com.earth2me.essentials.utils.FloatUtil;
@@ -546,10 +547,25 @@ public class Commandessentials extends EssentialsCommand {
             return;
         }
 
-        sender.sendMessage(tl("usermapSize", ess.getUsers().getCachedCount(), ess.getUsers().getUserCount(), ess.getSettings().getMaxUserCacheCount()));
-        if (args.length > 1 && args[1].equals("full")) {
-            for (final Map.Entry<String, UUID> entry : ess.getUsers().getNameCache().entrySet()) {
-                sender.sendMessage(tl("usermapEntry", entry.getKey(), entry.getValue().toString()));
+        final ModernUserMap userMap = ess.getUsers();
+        sender.sendMessage(tl("usermapSize", userMap.getCachedCount(), userMap.getUserCount(), ess.getSettings().getMaxUserCacheCount()));
+        if (args.length > 1) {
+            if (args[1].equals("full")) {
+                for (final Map.Entry<String, UUID> entry : userMap.getNameCache().entrySet()) {
+                    sender.sendMessage(tl("usermapEntry", entry.getKey(), entry.getValue().toString()));
+                }
+            } else {
+                try {
+                    final UUID uuid = UUID.fromString(args[1]);
+                    for (final Map.Entry<String, UUID> entry : userMap.getNameCache().entrySet()) {
+                        if (entry.getValue().equals(uuid)) {
+                            sender.sendMessage(tl("usermapEntry", entry.getKey(), args[1]));
+                        }
+                    }
+                } catch (IllegalArgumentException ignored) {
+                    final String sanitizedName = userMap.getSanitizedName(args[1]);
+                    sender.sendMessage(tl("usermapEntry", sanitizedName, userMap.getNameCache().get(sanitizedName).toString()));
+                }
             }
         }
     }

@@ -141,6 +141,10 @@ public class ModernUserMap extends CacheLoader<UUID, User> {
         return uuidCache.getNameCache();
     }
 
+    public String getSanitizedName(final String name) {
+        return uuidCache.getSanitizedName(name);
+    }
+
     public void blockingSave() {
         uuidCache.blockingSave();
     }
