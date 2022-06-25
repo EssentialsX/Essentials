@@ -91,8 +91,12 @@ public class ModernUUIDCache {
             pendingUuidWrite.set(true);
         }
         if (name != null) {
-            final UUID replacedUuid = nameToUuidMap.put(getSanitizedName(name), uuid);
+            final String sanitizedName = getSanitizedName(name);
+            final UUID replacedUuid = nameToUuidMap.put(sanitizedName, uuid);
             if (!uuid.equals(replacedUuid)) {
+                if (ess.getSettings().isDebug()) {
+                    ess.getLogger().log(Level.WARNING, "Replaced UUID during cache update for " + sanitizedName + ": " + replacedUuid + " -> " + uuid);
+                }
                 pendingNameWrite.set(true);
             }
         }
@@ -124,6 +128,8 @@ public class ModernUUIDCache {
     }
 
     private void loadCache() {
+        final boolean debug = ess.getSettings().isDebug();
+
         try {
             if (!nameToUuidFile.exists()) {
                 if (!nameToUuidFile.createNewFile()) {
@@ -132,7 +138,7 @@ public class ModernUUIDCache {
                 return;
             }
 
-            if (ess.getSettings().isDebug()) {
+            if (debug) {
                 ess.getLogger().log(Level.INFO, "Loading Name->UUID cache from disk...");
             }
 
@@ -140,7 +146,12 @@ public class ModernUUIDCache {
 
             try (final DataInputStream dis = new DataInputStream(new FileInputStream(nameToUuidFile))) {
                 while (dis.available() > 0) {
-                    nameToUuidMap.put(dis.readUTF(), new UUID(dis.readLong(), dis.readLong()));
+                    final String username = dis.readUTF();
+                    final UUID uuid = new UUID(dis.readLong(), dis.readLong());
+                    final UUID previous = nameToUuidMap.put(username, uuid);
+                    if (previous != null && debug) {
+                        ess.getLogger().log(Level.WARNING, "Replaced UUID during cache load for " + username + ": " + previous + " -> " + uuid);
+                    }
                 }
             }
         } catch (IOException e) {
@@ -155,7 +166,7 @@ public class ModernUUIDCache {
                 return;
             }
 
-            if (ess.getSettings().isDebug()) {
+            if (debug) {
                 ess.getLogger().log(Level.INFO, "Loading UUID cache from disk...");
             }
 
@@ -163,7 +174,11 @@ public class ModernUUIDCache {
 
             try (final DataInputStream dis = new DataInputStream(new FileInputStream(uuidCacheFile))) {
                 while (dis.available() > 0) {
-                    uuidCache.add(new UUID(dis.readLong(), dis.readLong()));
+                    final UUID uuid = new UUID(dis.readLong(), dis.readLong());
+                    if (uuidCache.contains(uuid) && debug) {
+                        ess.getLogger().log(Level.WARNING, "UUID " + uuid + " duplicated in cache");
+                    }
+                    uuidCache.add(uuid);
                 }
             }
         } catch (IOException e) {
