@@ -92,7 +92,7 @@ public class ModernUUIDCache {
         }
         if (name != null) {
             final UUID replacedUuid = nameToUuidMap.put(getSanitizedName(name), uuid);
-            if (uuid.equals(replacedUuid)) {
+            if (!uuid.equals(replacedUuid)) {
                 pendingNameWrite.set(true);
             }
         }
