@@ -25,7 +25,6 @@ import java.util.PropertyResourceBundle;
 import java.util.ResourceBundle;
 import java.util.function.Function;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.regex.Pattern;
 
 public class I18n implements net.ess3.api.II18n {
@@ -122,7 +121,7 @@ public class I18n implements net.ess3.api.II18n {
             }
         } catch (final MissingResourceException ex) {
             if (ess == null || ess.getSettings().isDebug()) {
-                Logger.getLogger("Essentials").log(Level.WARNING, String.format("Missing translation key \"%s\" in translation file %s", ex.getKey(), localeBundle.getLocale().toString()), ex);
+                ess.getLogger().log(Level.WARNING, String.format("Missing translation key \"%s\" in translation file %s", ex.getKey(), localeBundle.getLocale().toString()), ex);
             }
             return defaultBundle.getString(string);
         }
@@ -179,7 +178,7 @@ public class I18n implements net.ess3.api.II18n {
         ResourceBundle.clearCache();
         loadedBundles.clear();
         messageFormatCache.clear();
-        Logger.getLogger("Essentials").log(Level.INFO, String.format("Using locale %s", currentLocale.toString()));
+        ess.getLogger().log(Level.INFO, String.format("Using locale %s", currentLocale.toString()));
 
         try {
             localeBundle = ResourceBundle.getBundle(MESSAGES, currentLocale, new UTF8PropertiesControl());

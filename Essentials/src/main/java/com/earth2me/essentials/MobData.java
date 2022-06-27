@@ -36,7 +36,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Random;
-import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 public enum MobData {
@@ -201,7 +200,6 @@ public enum MobData {
     COLD_FROG("cold", MobCompat.FROG, "frog:COLD", true),
     ;
 
-    public static final Logger logger = Logger.getLogger("Essentials");
     final private String nickname;
     final private List<String> suggestions;
     final private Object type;
@@ -415,7 +413,7 @@ public enum MobData {
                 }
             }
         } else {
-            logger.warning("Unknown mob data type: " + this.toString());
+            Essentials.getWrappedLogger().warning("Unknown mob data type: " + this.toString());
         }
     }
 

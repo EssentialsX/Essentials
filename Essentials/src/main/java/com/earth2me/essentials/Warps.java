@@ -17,12 +17,10 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import static com.earth2me.essentials.I18n.tlLiteral;
 
 public class Warps implements IConf, net.ess3.api.IWarps {
-    private static final Logger logger = Logger.getLogger("Essentials");
     private final Map<StringIgnoreCase, EssentialsConfiguration> warpPoints = new HashMap<>();
     private final File warpsFolder;
 
@@ -136,7 +134,7 @@ public class Warps implements IConf, net.ess3.api.IWarps {
                             warpPoints.put(new StringIgnoreCase(name), conf);
                         }
                     } catch (final Exception ex) {
-                        logger.log(Level.WARNING, tlLiteral("loadWarpError", filename), ex);
+                        Essentials.getWrappedLogger().log(Level.WARNING, tlLiteral("loadWarpError", filename), ex);
                     }
                 }
             }

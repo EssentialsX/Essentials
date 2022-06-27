@@ -24,11 +24,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 public class FlatItemDb extends AbstractItemDb {
-    protected static final Logger LOGGER = Logger.getLogger("Essentials");
     private static final Gson gson = new Gson();
 
     // Maps primary name to ItemData
@@ -53,7 +51,7 @@ public class FlatItemDb extends AbstractItemDb {
         }
 
         this.rebuild();
-        LOGGER.info(String.format("Loaded %s items from items.json.", listNames().size()));
+        ess.getLogger().info(String.format("Loaded %s items from items.json.", listNames().size()));
     }
 
     private void rebuild() {
@@ -99,7 +97,7 @@ public class FlatItemDb extends AbstractItemDb {
             if (valid) {
                 allAliases.add(key);
             } else {
-                LOGGER.warning(String.format("Failed to add item: \"%s\": %s", key, element.toString()));
+                ess.getLogger().warning(String.format("Failed to add item: \"%s\": %s", key, element.toString()));
             }
         }
     }
@@ -114,7 +112,7 @@ public class FlatItemDb extends AbstractItemDb {
         }
 
         id = id.toLowerCase();
-        final String[] split = id.split(":");
+        final String[] split = id.split("(?<!^minecraft):");
 
         final ItemData data = getByName(split[0]);
 

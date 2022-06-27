@@ -9,16 +9,16 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 
 import java.util.Map;
-import java.util.logging.Logger;
 
 public abstract class EssentialsChatPlayer implements Listener {
-    static final Logger logger = Logger.getLogger("EssentialsChat");
     final transient IEssentials ess;
+    final transient EssentialsChat essChat;
     final transient Server server;
     private final transient Map<AsyncPlayerChatEvent, ChatStore> chatStorage;
 
-    EssentialsChatPlayer(final Server server, final IEssentials ess, final Map<AsyncPlayerChatEvent, ChatStore> chatStorage) {
+    EssentialsChatPlayer(final Server server, final IEssentials ess, final EssentialsChat essChat, final Map<AsyncPlayerChatEvent, ChatStore> chatStorage) {
         this.ess = ess;
+        this.essChat = essChat;
         this.server = server;
         this.chatStorage = chatStorage;
     }

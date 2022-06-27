@@ -18,12 +18,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class LegacyItemDb extends AbstractItemDb {
-    protected static final Logger LOGGER = Logger.getLogger("Essentials");
     private final transient Map<String, Integer> items = new HashMap<>();
     private final transient Map<ItemData, List<String>> names = new HashMap<>();
     private final transient Map<ItemData, String> primaryName = new HashMap<>();
@@ -118,7 +116,7 @@ public class LegacyItemDb extends AbstractItemDb {
             nameList.sort(LengthCompare.INSTANCE);
         }
 
-        LOGGER.info(String.format("Loaded %s items from items.csv.", listNames().size()));
+        ess.getLogger().info(String.format("Loaded %s items from items.csv.", listNames().size()));
 
         ready = true;
     }

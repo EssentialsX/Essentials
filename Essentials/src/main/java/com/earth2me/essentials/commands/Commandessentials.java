@@ -413,7 +413,7 @@ public class Commandessentials extends EssentialsCommand {
     private void runMoo(final Server server, final CommandSource sender, final String command, final String[] args) {
         if (args.length == 2 && args[1].equals("moo")) {
             for (final String s : CONSOLE_MOO) {
-                logger.info(s);
+                ess.getLogger().info(s);
             }
             for (final Player player : ess.getOnlinePlayers()) {
                 player.sendMessage(PLAYER_MOO);

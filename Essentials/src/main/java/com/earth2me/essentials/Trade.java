@@ -22,7 +22,6 @@ import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class Trade {
     private static FileWriter fw = null;
@@ -78,7 +77,7 @@ public class Trade {
             try {
                 fw = new FileWriter(new File(ess.getDataFolder(), "trade.log"), true);
             } catch (final IOException ex) {
-                Logger.getLogger("Essentials").log(Level.SEVERE, null, ex);
+                Essentials.getWrappedLogger().log(Level.SEVERE, null, ex);
             }
         }
         final StringBuilder sb = new StringBuilder();
@@ -157,7 +156,7 @@ public class Trade {
             fw.write(sb.toString());
             fw.flush();
         } catch (final IOException ex) {
-            Logger.getLogger("Essentials").log(Level.SEVERE, null, ex);
+            Essentials.getWrappedLogger().log(Level.SEVERE, null, ex);
         }
     }
 
@@ -166,7 +165,7 @@ public class Trade {
             try {
                 fw.close();
             } catch (final IOException ex) {
-                Logger.getLogger("Essentials").log(Level.SEVERE, null, ex);
+                Essentials.getWrappedLogger().log(Level.SEVERE, null, ex);
             }
             fw = null;
         }

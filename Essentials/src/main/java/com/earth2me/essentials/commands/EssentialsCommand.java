@@ -26,14 +26,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.concurrent.CompletableFuture;
-import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static com.earth2me.essentials.I18n.tlLiteral;
 
 public abstract class EssentialsCommand implements IEssentialsCommand {
-    protected static final Logger logger = Logger.getLogger("Essentials");
     /**
      * Common time durations (in seconds), for use in tab completion.
      */

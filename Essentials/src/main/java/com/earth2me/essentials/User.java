@@ -52,14 +52,12 @@ import java.util.WeakHashMap;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import static com.earth2me.essentials.I18n.tlLiteral;
 import static com.earth2me.essentials.I18n.tlLocale;
 
 public class User extends UserData implements Comparable<User>, IMessageRecipient, net.ess3.api.IUser {
     private static final Statistic PLAY_ONE_TICK = EnumUtil.getStatistic("PLAY_ONE_MINUTE", "PLAY_ONE_TICK");
-    private static final Logger logger = Logger.getLogger("Essentials");
 
     // User modules
     private final IMessageRecipient messageRecipient;
@@ -534,7 +532,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
                     this.getBase().setPlayerListName(name);
                 } catch (final IllegalArgumentException e) {
                     if (ess.getSettings().isDebug()) {
-                        logger.log(Level.INFO, "Playerlist for " + name + " was not updated. Name clashed with another online player.");
+                        ess.getLogger().log(Level.INFO, "Playerlist for " + name + " was not updated. Name clashed with another online player.");
                     }
                 }
             }

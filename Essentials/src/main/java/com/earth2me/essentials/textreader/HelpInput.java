@@ -15,10 +15,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class HelpInput implements IText {
-    private static final Logger logger = Logger.getLogger("Essentials");
     private final transient List<String> lines = new ArrayList<>();
     private final transient List<String> chapters = new ArrayList<>();
     private final transient Map<String, Integer> bookmarks = new HashMap<>();
@@ -119,7 +117,7 @@ public class HelpInput implements IText {
             } catch (final NullPointerException ignored) {
             } catch (final Exception ex) {
                 if (!reported) {
-                    logger.log(Level.WARNING, user.playerTl("commandHelpFailedForPlugin", pluginNameLow), ex);
+                    ess.getLogger().log(Level.WARNING, user.playerTl("commandHelpFailedForPlugin", pluginNameLow), ex);
                 }
                 reported = true;
             }

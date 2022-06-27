@@ -1,5 +1,6 @@
 package com.earth2me.essentials.antibuild;
 
+import com.earth2me.essentials.EssentialsLogger;
 import com.earth2me.essentials.metrics.MetricsWrapper;
 import org.bukkit.Material;
 import org.bukkit.plugin.Plugin;
@@ -9,6 +10,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Logger;
 
 public class EssentialsAntiBuild extends JavaPlugin implements IAntiBuild {
     private final transient Map<AntiBuildConfig, Boolean> settingsBoolean = new EnumMap<>(AntiBuildConfig.class);
@@ -34,6 +36,16 @@ public class EssentialsAntiBuild extends JavaPlugin implements IAntiBuild {
 
         if (metrics == null) {
             metrics = new MetricsWrapper(this, 3813, false);
+        }
+    }
+
+    @Override
+    public Logger getLogger() {
+        try {
+            return EssentialsLogger.getLoggerProvider(this);
+        } catch (Throwable ignored) {
+            // In case Essentials isn't installed/loaded
+            return super.getLogger();
         }
     }
 
