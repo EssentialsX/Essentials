@@ -110,7 +110,7 @@ public class ModernUserMap extends CacheLoader<UUID, User> {
 
     /**
      * Gets a User by the given UUID in the cache, if present, otherwise loads the user without placing them in the cache.
-     * Ideally to be used when running operations on all stored.
+     * Ideally to be used when running operations on all stored users.
      */
     public User loadUncachedUser(final UUID uuid) {
         User user = userCache.getIfPresent(uuid);
