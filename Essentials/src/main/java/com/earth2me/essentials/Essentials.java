@@ -72,6 +72,7 @@ import net.ess3.provider.SpawnerBlockProvider;
 import net.ess3.provider.SpawnerItemProvider;
 import net.ess3.provider.SyncCommandsProvider;
 import net.ess3.provider.WorldInfoProvider;
+import net.ess3.provider.providers.BaseLoggerProvider;
 import net.ess3.provider.providers.BasePotionDataProvider;
 import net.ess3.provider.providers.BlockMetaSpawnerItemProvider;
 import net.ess3.provider.providers.BukkitMaterialTagProvider;
@@ -93,7 +94,6 @@ import net.ess3.provider.providers.PaperSerializationProvider;
 import net.ess3.provider.providers.PaperServerStateProvider;
 import net.essentialsx.api.v2.services.BalanceTop;
 import net.essentialsx.api.v2.services.mail.MailService;
-import org.bukkit.Bukkit;
 import org.bukkit.Server;
 import org.bukkit.World;
 import org.bukkit.block.Block;
@@ -141,7 +141,8 @@ import java.util.logging.Logger;
 import static com.earth2me.essentials.I18n.tl;
 
 public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
-    private static final Logger LOGGER = Logger.getLogger("Essentials");
+    private static final Logger BUKKIT_LOGGER = Logger.getLogger("Essentials");
+    private static Logger LOGGER = null;
     private final transient TNTExplodeListener tntListener = new TNTExplodeListener(this);
     private final transient Set<String> vanishedPlayers = new LinkedHashSet<>();
     private transient ISettings settings;
@@ -204,6 +205,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
     }
 
     public void setupForTesting(final Server server) throws IOException, InvalidDescriptionException {
+        LOGGER = new BaseLoggerProvider(BUKKIT_LOGGER);
         final File dataFolder = File.createTempFile("essentialstest", "");
         if (!dataFolder.delete()) {
             throw new IOException();
@@ -244,9 +246,11 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
     @Override
     public void onEnable() {
         try {
-            if (LOGGER != this.getLogger()) {
-                LOGGER.setParent(this.getLogger());
+            if (BUKKIT_LOGGER != super.getLogger()) {
+                BUKKIT_LOGGER.setParent(super.getLogger());
             }
+            LOGGER = EssentialsLogger.getLoggerProvider(this);
+
             execTimer = new ExecuteTimer();
             execTimer.start();
             i18n = new I18n(this);
@@ -485,6 +489,24 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
     }
 
     @Override
+    public Logger getLogger() {
+        if (LOGGER != null) {
+            return LOGGER;
+        }
+
+        return super.getLogger();
+    }
+
+    // Returns our provider logger if available
+    public static Logger getWrappedLogger() {
+        if (LOGGER != null) {
+            return LOGGER;
+        }
+
+        return BUKKIT_LOGGER;
+    }
+
+    @Override
     public void saveConfig() {
         // We don't use any of the bukkit config writing, as this breaks our config file formatting.
     }
@@ -632,7 +654,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
                         return completer.onTabComplete(cSender, command, commandLabel, args);
                     }
                 } catch (final Exception ex) {
-                    Bukkit.getLogger().log(Level.SEVERE, ex.getMessage(), ex);
+                    LOGGER.log(Level.SEVERE, ex.getMessage(), ex);
                 }
             }
         }
@@ -713,7 +735,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
                 try {
                     pc.execute(cSender, commandLabel, args);
                 } catch (final Exception ex) {
-                    Bukkit.getLogger().log(Level.SEVERE, ex.getMessage(), ex);
+                    LOGGER.log(Level.SEVERE, ex.getMessage(), ex);
                     cSender.sendMessage(tl("internalError"));
                 }
                 return true;
@@ -733,10 +755,10 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
 
             if (bSenderBlock != null) {
                 if (getSettings().logCommandBlockCommands()) {
-                    Bukkit.getLogger().log(Level.INFO, "CommandBlock at {0},{1},{2} issued server command: /{3} {4}", new Object[] {bSenderBlock.getX(), bSenderBlock.getY(), bSenderBlock.getZ(), commandLabel, EssentialsCommand.getFinalArg(args, 0)});
+                    LOGGER.log(Level.INFO, "CommandBlock at {0},{1},{2} issued server command: /{3} {4}", new Object[] {bSenderBlock.getX(), bSenderBlock.getY(), bSenderBlock.getZ(), commandLabel, EssentialsCommand.getFinalArg(args, 0)});
                 }
             } else if (user == null) {
-                Bukkit.getLogger().log(Level.INFO, "{0} issued server command: /{1} {2}", new Object[] {cSender.getName(), commandLabel, EssentialsCommand.getFinalArg(args, 0)});
+                LOGGER.log(Level.INFO, "{0} issued server command: /{1} {2}", new Object[] {cSender.getName(), commandLabel, EssentialsCommand.getFinalArg(args, 0)});
             }
 
             final CommandSource sender = new CommandSource(cSender);

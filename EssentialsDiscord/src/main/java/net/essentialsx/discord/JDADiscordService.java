@@ -60,7 +60,7 @@ import java.util.regex.Pattern;
 import static com.earth2me.essentials.I18n.tl;
 
 public class JDADiscordService implements DiscordService, IEssentialsModule {
-    private final static Logger logger = Logger.getLogger("EssentialsDiscord");
+    private final static Logger logger = EssentialsDiscord.getWrappedLogger();
     private final EssentialsDiscord plugin;
     private final Unsafe unsafe = this::getJda;
 

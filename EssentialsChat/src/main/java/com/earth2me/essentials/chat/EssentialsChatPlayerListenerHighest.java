@@ -9,8 +9,8 @@ import org.bukkit.event.player.AsyncPlayerChatEvent;
 import java.util.Map;
 
 public class EssentialsChatPlayerListenerHighest extends EssentialsChatPlayer {
-    EssentialsChatPlayerListenerHighest(final Server server, final IEssentials ess, final Map<AsyncPlayerChatEvent, ChatStore> chatStorage) {
-        super(server, ess, chatStorage);
+    EssentialsChatPlayerListenerHighest(final Server server, final IEssentials ess, final EssentialsChat essChat, final Map<AsyncPlayerChatEvent, ChatStore> chatStorage) {
+        super(server, ess, essChat, chatStorage);
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
