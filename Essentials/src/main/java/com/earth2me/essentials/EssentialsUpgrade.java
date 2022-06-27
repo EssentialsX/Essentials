@@ -47,7 +47,6 @@ import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Level;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static com.earth2me.essentials.I18n.tl;
