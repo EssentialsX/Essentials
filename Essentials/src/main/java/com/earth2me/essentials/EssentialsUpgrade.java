@@ -720,7 +720,7 @@ public class EssentialsUpgrade {
                 doneFile.setProperty("deleteOldItemsCsv", true);
                 doneFile.save();
             } catch (final IOException ex) {
-                Essentials.getWrappedLogger().log(Level.SEVERE, ex.getMessage(), ex);
+                ess.getLogger().log(Level.SEVERE, ex.getMessage(), ex);
             }
         }
     }
@@ -746,7 +746,7 @@ public class EssentialsUpgrade {
                     config.blockingSave();
                 }
             } catch (final Exception ex) {
-                Essentials.getWrappedLogger().log(Level.SEVERE, ex.getMessage(), ex);
+                ess.getLogger().log(Level.SEVERE, ex.getMessage(), ex);
             }
         }
         doneFile.setProperty("updateSpawnsToNewSpawnsConfig", true);
@@ -774,7 +774,7 @@ public class EssentialsUpgrade {
                     config.blockingSave();
                 }
             } catch (final Exception ex) {
-                Essentials.getWrappedLogger().log(Level.SEVERE, ex.getMessage(), ex);
+                ess.getLogger().log(Level.SEVERE, ex.getMessage(), ex);
             }
         }
         doneFile.setProperty("updateJailsToNewJailsConfig", true);
