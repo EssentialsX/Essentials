@@ -113,7 +113,7 @@ public class FlatItemDb extends AbstractItemDb {
         }
 
         id = id.toLowerCase();
-        final String[] split = id.split(":");
+        final String[] split = id.split("(?<!^minecraft):");
 
         final ItemData data = getByName(split[0]);
 
