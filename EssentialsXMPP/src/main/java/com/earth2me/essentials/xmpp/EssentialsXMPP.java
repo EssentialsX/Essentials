@@ -74,10 +74,10 @@ public class EssentialsXMPP extends JavaPlugin implements IEssentialsXMPP {
 
     public static Logger getWrappedLogger() {
         try {
-            return EssentialsLogger.getLoggerProvider("EssentialsDiscord");
+            return EssentialsLogger.getLoggerProvider("EssentialsXMPP");
         } catch (Throwable ignored) {
             // In case Essentials isn't installed/loaded
-            return Logger.getLogger("EssentialsDiscord");
+            return Logger.getLogger("EssentialsXMPP");
         }
     }
 

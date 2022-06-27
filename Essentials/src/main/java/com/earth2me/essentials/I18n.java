@@ -125,7 +125,7 @@ public class I18n implements net.ess3.api.II18n {
         }
         ResourceBundle.clearCache();
         messageFormatCache = new HashMap<>();
-        Essentials.getWrappedLogger().log(Level.INFO, String.format("Using locale %s", currentLocale.toString()));
+        ess.getLogger().log(Level.INFO, String.format("Using locale %s", currentLocale.toString()));
 
         try {
             localeBundle = ResourceBundle.getBundle(MESSAGES, currentLocale, new UTF8PropertiesControl());

@@ -68,10 +68,10 @@ public class EssentialsSpawn extends JavaPlugin implements IEssentialsSpawn {
 
     public static Logger getWrappedLogger() {
         try {
-            return EssentialsLogger.getLoggerProvider("EssentialsDiscord");
+            return EssentialsLogger.getLoggerProvider("EssentialsSpawn");
         } catch (Throwable ignored) {
             // In case Essentials isn't installed/loaded
-            return Logger.getLogger("EssentialsDiscord");
+            return Logger.getLogger("EssentialsSpawn");
         }
     }
 
