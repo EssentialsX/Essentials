@@ -1,6 +1,7 @@
 package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.CommandSource;
+import com.earth2me.essentials.EssentialsUpgrade;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.economy.EconomyLayer;
 import com.earth2me.essentials.economy.EconomyLayers;
@@ -29,6 +30,7 @@ import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import java.io.File;
 import java.io.IOException;
 import java.lang.management.ManagementFactory;
 import java.nio.charset.StandardCharsets;
@@ -40,12 +42,15 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Supplier;
+import java.util.logging.Level;
 import java.util.stream.Collectors;
 
 import static com.earth2me.essentials.I18n.tl;
@@ -554,6 +559,50 @@ public class Commandessentials extends EssentialsCommand {
                 for (final Map.Entry<String, UUID> entry : userMap.getNameCache().entrySet()) {
                     sender.sendMessage(tl("usermapEntry", entry.getKey(), entry.getValue().toString()));
                 }
+            } else if (args[1].equals("purge")) {
+                final boolean seppuku = args.length > 2 && args[2].equals("iknowwhatimdoing");
+
+                sender.sendMessage(tl("usermapPurge", String.valueOf(seppuku)));
+
+                final Set<UUID> uuids = new HashSet<>(ess.getUsers().getAllUserUUIDs());
+                ess.runTaskAsynchronously(() -> {
+                    final File userdataFolder = new File(ess.getDataFolder(), "userdata");
+                    final File backupFolder = new File(ess.getDataFolder(), "userdata-npc-backup-boogaloo");
+
+                    if (!userdataFolder.isDirectory()) {
+                        ess.getLogger().warning("Missing userdata folder, aborting usermap purge.");
+                        return;
+                    }
+
+                    if (seppuku && !backupFolder.mkdir()) {
+                        ess.getLogger().warning("Unable to create backup folder, aborting usermap purge.");
+                        return;
+                    }
+
+                    int total = 0;
+                    final File[] files = userdataFolder.listFiles(EssentialsUpgrade.YML_FILTER);
+                    if (files != null) {
+                        for (final File file : files) {
+                            try {
+                                final String fileName = file.getName();
+                                final UUID uuid = UUID.fromString(fileName.substring(0, fileName.length() - 4));
+                                if (!uuids.contains(uuid)) {
+                                    total++;
+                                    ess.getLogger().warning("Found orphaned userdata file: " + file.getName());
+                                    if (seppuku) {
+                                        try {
+                                            com.google.common.io.Files.move(file, new File(backupFolder, file.getName()));
+                                        } catch (IOException e) {
+                                            ess.getLogger().log(Level.WARNING, "Unable to move orphaned userdata file: " + file.getName(), e);
+                                        }
+                                    }
+                                }
+                            } catch (IllegalArgumentException ignored) {
+                            }
+                        }
+                    }
+                    ess.getLogger().info("Found " + total + " orphaned userdata files.");
+                });
             } else {
                 try {
                     final UUID uuid = UUID.fromString(args[1]);
