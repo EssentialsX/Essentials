@@ -245,7 +245,6 @@ public class ModernUUIDCache {
 
     public void shutdown() {
         writeExecutor.shutdownNow();
-        saveUuidCache();
-        saveNameToUuidCache();
+        blockingSave();
     }
 }

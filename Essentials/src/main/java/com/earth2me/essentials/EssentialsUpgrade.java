@@ -917,7 +917,7 @@ public class EssentialsUpgrade {
     }
 
     public void generateUidCache() {
-        if (doneFile.getBoolean("newUidCacheGenerated", false)) {
+        if (doneFile.getBoolean("newUidCacheBuilt", false)) {
             return;
         }
 
@@ -927,7 +927,7 @@ public class EssentialsUpgrade {
 
         if (!userdataFolder.isDirectory() || usermapFile.exists() || uidsFile.exists()) {
             ess.getLogger().warning("Missing userdata folder, aborting");
-            doneFile.setProperty("newUidCacheGenerated", true);
+            doneFile.setProperty("newUidCacheBuilt", true);
             doneFile.save();
             return;
         }
@@ -952,8 +952,19 @@ public class EssentialsUpgrade {
                         String name = config.getString("last-account-name", null);
                         name = ess.getSettings().isSafeUsermap() ? StringUtil.safeString(name) : name;
 
-                        uuids.add(uuid);
                         if (name != null) {
+                            if (nameToUuidMap.containsKey(name)) {
+                                final UUID oldUuid = nameToUuidMap.get(name);
+                                if (oldUuid.version() <= uuid.version()) {
+                                    ess.getLogger().warning("New UUID found for " + name + ": " + uuid + " (old: " + oldUuid + "). Replacing.");
+                                    uuids.remove(oldUuid);
+                                } else {
+                                    ess.getLogger().warning("Found UUID for " + name + ": " + uuid + " (old: " + oldUuid + "). Skipping.");
+                                    continue;
+                                }
+                            }
+
+                            uuids.add(uuid);
                             nameToUuidMap.put(name, uuid);
                         }
                     } catch (IllegalArgumentException | IndexOutOfBoundsException ignored) {
@@ -969,7 +980,7 @@ public class EssentialsUpgrade {
                 ModernUUIDCache.writeUuidCache(uidsFile, uuids);
             }
 
-            doneFile.setProperty("newUidCacheGenerated", true);
+            doneFile.setProperty("newUidCacheBuilt", true);
             doneFile.save();
         } catch (final IOException e) {
             ess.getLogger().log(Level.SEVERE, "Error while generating initial uuids/names cache", e);
