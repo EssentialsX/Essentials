@@ -138,7 +138,7 @@ public class MetaItemStack {
             return true;
         } catch (final Throwable npe) {
             if (ess.getSettings().isDebug()) {
-                EssentialsLogger.getLogger().log(Level.INFO, "Itemstack is invalid", npe);
+                ess.getLogger().log(Level.INFO, "Itemstack is invalid", npe);
             }
             return false;
         }
@@ -150,7 +150,7 @@ public class MetaItemStack {
                 stack = ess.getServer().getUnsafe().modifyItemStack(stack, Joiner.on(' ').join(Arrays.asList(string).subList(fromArg, string.length)));
             } catch (final NullPointerException npe) {
                 if (ess.getSettings().isDebug()) {
-                    EssentialsLogger.getLogger().log(Level.INFO, "Itemstack is invalid", npe);
+                    ess.getLogger().log(Level.INFO, "Itemstack is invalid", npe);
                 }
             } catch (final NoSuchMethodError nsme) {
                 throw new Exception(tl("noMetaJson"), nsme);

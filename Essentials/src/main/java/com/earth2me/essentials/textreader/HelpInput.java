@@ -1,6 +1,5 @@
 package com.earth2me.essentials.textreader;
 
-import com.earth2me.essentials.EssentialsLogger;
 import com.earth2me.essentials.User;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
@@ -120,7 +119,7 @@ public class HelpInput implements IText {
             } catch (final NullPointerException ignored) {
             } catch (final Exception ex) {
                 if (!reported) {
-                    EssentialsLogger.getLogger().log(Level.WARNING, tl("commandHelpFailedForPlugin", pluginNameLow), ex);
+                    ess.getLogger().log(Level.WARNING, tl("commandHelpFailedForPlugin", pluginNameLow), ex);
                 }
                 reported = true;
             }

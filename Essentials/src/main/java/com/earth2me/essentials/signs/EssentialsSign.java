@@ -2,7 +2,6 @@ package com.earth2me.essentials.signs;
 
 import com.earth2me.essentials.ChargeException;
 import com.earth2me.essentials.CommandSource;
-import com.earth2me.essentials.EssentialsLogger;
 import com.earth2me.essentials.MetaItemStack;
 import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.User;
@@ -108,7 +107,7 @@ public class EssentialsSign {
         ess.getServer().getPluginManager().callEvent(signEvent);
         if (signEvent.isCancelled()) {
             if (ess.getSettings().isDebug()) {
-                EssentialsLogger.getLogger().info("SignCreateEvent cancelled for sign " + signEvent.getEssentialsSign().getName());
+                ess.getLogger().info("SignCreateEvent cancelled for sign " + signEvent.getEssentialsSign().getName());
             }
             return false;
         }
@@ -130,7 +129,7 @@ public class EssentialsSign {
     public String getSuccessName(final IEssentials ess) {
         final String successName = getSuccessName();
         if (successName == null) {
-            EssentialsLogger.getLogger().severe("signFormatSuccess message must use the {0} argument.");
+            ess.getLogger().severe("signFormatSuccess message must use the {0} argument.");
         }
         return successName;
     }

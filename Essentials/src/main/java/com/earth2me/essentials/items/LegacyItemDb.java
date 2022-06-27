@@ -1,6 +1,5 @@
 package com.earth2me.essentials.items;
 
-import com.earth2me.essentials.EssentialsLogger;
 import com.earth2me.essentials.ManagedFile;
 import com.earth2me.essentials.utils.EnumUtil;
 import com.earth2me.essentials.utils.NumberUtil;
@@ -118,7 +117,7 @@ public class LegacyItemDb extends AbstractItemDb {
             nameList.sort(LengthCompare.INSTANCE);
         }
 
-        EssentialsLogger.getLogger().info(String.format("Loaded %s items from items.csv.", listNames().size()));
+        ess.getLogger().info(String.format("Loaded %s items from items.csv.", listNames().size()));
 
         ready = true;
     }

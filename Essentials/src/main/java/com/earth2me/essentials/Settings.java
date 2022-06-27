@@ -385,7 +385,7 @@ public class Settings implements net.ess3.api.ISettings {
                 final String command = entry.getKey();
                 final CommentedConfigurationNode node = entry.getValue();
                 if (command.charAt(0) == '/') {
-                    EssentialsLogger.getLogger().warning("Invalid command cost. '" + command + "' should not start with '/'.");
+                    ess.getLogger().warning("Invalid command cost. '" + command + "' should not start with '/'.");
                 }
                 try {
                     if (ConfigurateUtil.isDouble(node)) {
@@ -398,10 +398,10 @@ public class Settings implements net.ess3.api.ISettings {
                         final double cost = Double.parseDouble(costString.trim().replace("$", "").replace(getCurrencySymbol(), "").replaceAll("\\W", ""));
                         newMap.put(command.toLowerCase(Locale.ENGLISH), BigDecimal.valueOf(cost));
                     } else {
-                        EssentialsLogger.getLogger().warning("Invalid command cost for: " + command);
+                        ess.getLogger().warning("Invalid command cost for: " + command);
                     }
                 } catch (final Exception ex) {
-                    EssentialsLogger.getLogger().warning("Invalid command cost for: " + command);
+                    ess.getLogger().warning("Invalid command cost for: " + command);
                 }
             }
             return newMap;
@@ -586,7 +586,7 @@ public class Settings implements net.ess3.api.ISettings {
             chatFormats.put(group, mFormat);
         }
         if (isDebug()) {
-            EssentialsLogger.getLogger().info(String.format("Found format '%s' for group '%s'", mFormat, group));
+            ess.getLogger().info(String.format("Found format '%s' for group '%s'", mFormat, group));
         }
         return mFormat;
     }
@@ -684,7 +684,7 @@ public class Settings implements net.ess3.api.ISettings {
             boolean mapModified = false;
             if (!disabledBukkitCommands.isEmpty()) {
                 if (isDebug()) {
-                    EssentialsLogger.getLogger().log(Level.INFO, "Re-adding " + disabledBukkitCommands.size() + " disabled commands!");
+                    ess.getLogger().log(Level.INFO, "Re-adding " + disabledBukkitCommands.size() + " disabled commands!");
                 }
                 ess.getKnownCommandsProvider().getKnownCommands().putAll(disabledBukkitCommands);
                 disabledBukkitCommands.clear();
@@ -696,12 +696,12 @@ public class Settings implements net.ess3.api.ISettings {
                 final Command toDisable = ess.getPluginCommand(effectiveAlias);
                 if (toDisable != null) {
                     if (isDebug()) {
-                        EssentialsLogger.getLogger().log(Level.INFO, "Attempting removal of " + effectiveAlias);
+                        ess.getLogger().log(Level.INFO, "Attempting removal of " + effectiveAlias);
                     }
                     final Command removed = ess.getKnownCommandsProvider().getKnownCommands().remove(effectiveAlias);
                     if (removed != null) {
                         if (isDebug()) {
-                            EssentialsLogger.getLogger().log(Level.INFO, "Adding command " + effectiveAlias + " to disabled map!");
+                            ess.getLogger().log(Level.INFO, "Adding command " + effectiveAlias + " to disabled map!");
                         }
                         disabledBukkitCommands.put(effectiveAlias, removed);
                     }
@@ -718,7 +718,7 @@ public class Settings implements net.ess3.api.ISettings {
 
             if (mapModified) {
                 if (isDebug()) {
-                    EssentialsLogger.getLogger().log(Level.INFO, "Syncing commands");
+                    ess.getLogger().log(Level.INFO, "Syncing commands");
                 }
                 if (reloadCount.get() < 2) {
                     ess.scheduleSyncDelayedTask(() -> ess.getSyncCommandsProvider().syncCommands());
@@ -797,7 +797,7 @@ public class Settings implements net.ess3.api.ISettings {
         //noinspection deprecation
         final IItemDb itemDb = ess.getItemDb();
         if (itemDb == null || !itemDb.isReady()) {
-            EssentialsLogger.getLogger().log(Level.FINE, "Skipping item spawn blacklist read; item DB not yet loaded.");
+            ess.getLogger().log(Level.FINE, "Skipping item spawn blacklist read; item DB not yet loaded.");
             return epItemSpwn;
         }
         for (String itemName : config.getString("item-spawn-blacklist", "").split(",")) {
@@ -809,7 +809,7 @@ public class Settings implements net.ess3.api.ISettings {
                 final ItemStack iStack = itemDb.get(itemName);
                 epItemSpwn.add(iStack.getType());
             } catch (final Exception ex) {
-                EssentialsLogger.getLogger().log(Level.SEVERE, tl("unknownItemInList", itemName, "item-spawn-blacklist"), ex);
+                ess.getLogger().log(Level.SEVERE, tl("unknownItemInList", itemName, "item-spawn-blacklist"), ex);
             }
         }
         return epItemSpwn;
@@ -837,7 +837,7 @@ public class Settings implements net.ess3.api.ISettings {
             try {
                 newSigns.add(Signs.valueOf(signName).getSign());
             } catch (final Exception ex) {
-                EssentialsLogger.getLogger().log(Level.SEVERE, tl("unknownItemInList", signName, "enabledSigns"));
+                ess.getLogger().log(Level.SEVERE, tl("unknownItemInList", signName, "enabledSigns"));
                 continue;
             }
             signsEnabled = true;
@@ -951,7 +951,7 @@ public class Settings implements net.ess3.api.ISettings {
             }
 
             if (mat == null) {
-                EssentialsLogger.getLogger().log(Level.SEVERE, tl("unknownItemInList", itemName, configName));
+                ess.getLogger().log(Level.SEVERE, tl("unknownItemInList", itemName, configName));
             } else {
                 list.add(mat);
             }
@@ -1573,7 +1573,7 @@ public class Settings implements net.ess3.api.ISettings {
                 try {
                     pattern = Pattern.compile(cmdEntry.substring(1));
                 } catch (final PatternSyntaxException e) {
-                    EssentialsLogger.getLogger().warning("Command cooldown error: " + e.getMessage());
+                    ess.getLogger().warning("Command cooldown error: " + e.getMessage());
                 }
             } else {
                 // Escape above Regex
@@ -1595,12 +1595,12 @@ public class Settings implements net.ess3.api.ISettings {
                 }
             }
             if (!(value instanceof Number)) {
-                EssentialsLogger.getLogger().warning("Command cooldown error: '" + value + "' is not a valid cooldown");
+                ess.getLogger().warning("Command cooldown error: '" + value + "' is not a valid cooldown");
                 continue;
             }
             final double cooldown = ((Number) value).doubleValue();
             if (cooldown < 1) {
-                EssentialsLogger.getLogger().warning("Command cooldown with very short " + cooldown + " cooldown.");
+                ess.getLogger().warning("Command cooldown with very short " + cooldown + " cooldown.");
             }
 
             result.put(pattern, (long) cooldown * 1000); // convert to milliseconds
@@ -1626,7 +1626,7 @@ public class Settings implements net.ess3.api.ISettings {
                 // Check if label matches current pattern (command-cooldown in config)
                 final boolean matches = entry.getKey().matcher(label).matches();
                 if (isDebug()) {
-                    EssentialsLogger.getLogger().info(String.format("Checking command '%s' against cooldown '%s': %s", label, entry.getKey(), matches));
+                    ess.getLogger().info(String.format("Checking command '%s' against cooldown '%s': %s", label, entry.getKey(), matches));
                 }
 
                 if (matches) {
@@ -1693,7 +1693,7 @@ public class Settings implements net.ess3.api.ISettings {
             try {
                 newSigns.add(Signs.valueOf(signName).getSign());
             } catch (final Exception ex) {
-                EssentialsLogger.getLogger().log(Level.SEVERE, tl("unknownItemInList", signName, "unprotected-sign-names"));
+                ess.getLogger().log(Level.SEVERE, tl("unknownItemInList", signName, "unprotected-sign-names"));
             }
         }
         return newSigns;
@@ -1878,7 +1878,7 @@ public class Settings implements net.ess3.api.ISettings {
             try {
                 blacklist.add(Pattern.compile(entry).asPredicate());
             } catch (final PatternSyntaxException e) {
-                EssentialsLogger.getLogger().warning("Invalid nickname blacklist regex: " + entry);
+                ess.getLogger().warning("Invalid nickname blacklist regex: " + entry);
             }
         });
 

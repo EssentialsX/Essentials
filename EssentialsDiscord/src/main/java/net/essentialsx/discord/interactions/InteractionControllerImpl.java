@@ -1,6 +1,5 @@
 package net.essentialsx.discord.interactions;
 
-import com.earth2me.essentials.EssentialsLogger;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.exceptions.ErrorResponseException;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
@@ -8,12 +7,12 @@ import net.dv8tion.jda.api.interactions.commands.Command;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.requests.ErrorResponse;
-import net.ess3.provider.LoggerProvider;
 import net.essentialsx.api.v2.services.discord.InteractionCommand;
 import net.essentialsx.api.v2.services.discord.InteractionCommandArgument;
 import net.essentialsx.api.v2.services.discord.InteractionController;
 import net.essentialsx.api.v2.services.discord.InteractionEvent;
 import net.essentialsx.api.v2.services.discord.InteractionException;
+import net.essentialsx.discord.EssentialsDiscord;
 import net.essentialsx.discord.JDADiscordService;
 import net.essentialsx.discord.util.DiscordUtil;
 import org.jetbrains.annotations.NotNull;
@@ -24,12 +23,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import static com.earth2me.essentials.I18n.tl;
 
 public class InteractionControllerImpl extends ListenerAdapter implements InteractionController {
-    private final static LoggerProvider logger = EssentialsLogger.getLoggerProvider("EssentialsDiscord");
-
+    private static final Logger logger = EssentialsDiscord.getWrappedLogger();
     private final JDADiscordService jda;
 
     private final Map<String, InteractionCommand> commandMap = new ConcurrentHashMap<>();

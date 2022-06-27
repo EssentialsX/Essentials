@@ -1,7 +1,6 @@
 package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.CommandSource;
-import com.earth2me.essentials.EssentialsLogger;
 import com.earth2me.essentials.Kit;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.StringUtil;
@@ -88,7 +87,7 @@ public class Commandkit extends EssentialsCommand {
 
             } catch (final NoChargeException ex) {
                 if (ess.getSettings().isDebug()) {
-                    EssentialsLogger.getLogger().log(Level.INFO, "Soft kit error, abort spawning " + kit.getName(), ex);
+                    ess.getLogger().log(Level.INFO, "Soft kit error, abort spawning " + kit.getName(), ex);
                 }
             } catch (final Exception ex) {
                 ess.showError(userFrom.getSource(), ex, "\\ kit: " + kit.getName());

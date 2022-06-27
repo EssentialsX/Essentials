@@ -79,7 +79,7 @@ public class Backup implements Runnable {
             taskLock.complete(new Object());
             return;
         }
-        EssentialsLogger.getLogger().log(Level.INFO, tl("backupStarted"));
+        ess.getLogger().log(Level.INFO, tl("backupStarted"));
         final CommandSender cs = server.getConsoleSender();
         server.dispatchCommand(cs, "save-all");
         server.dispatchCommand(cs, "save-off");
@@ -97,17 +97,17 @@ public class Backup implements Runnable {
                             do {
                                 line = reader.readLine();
                                 if (line != null) {
-                                    EssentialsLogger.getLogger().log(Level.INFO, line);
+                                    ess.getLogger().log(Level.INFO, line);
                                 }
                             } while (line != null);
                         }
                     } catch (final IOException ex) {
-                        EssentialsLogger.getLogger().log(Level.SEVERE, null, ex);
+                        ess.getLogger().log(Level.SEVERE, null, ex);
                     }
                 });
                 child.waitFor();
             } catch (final InterruptedException | IOException ex) {
-                EssentialsLogger.getLogger().log(Level.SEVERE, null, ex);
+                ess.getLogger().log(Level.SEVERE, null, ex);
             } finally {
                 class BackupEnableSaveTask implements Runnable {
                     @Override
@@ -118,7 +118,7 @@ public class Backup implements Runnable {
                         }
                         active = false;
                         taskLock.complete(new Object());
-                        EssentialsLogger.getLogger().log(Level.INFO, tl("backupFinished"));
+                        ess.getLogger().log(Level.INFO, tl("backupFinished"));
                     }
                 }
 

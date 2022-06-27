@@ -108,7 +108,7 @@ public class EssentialsEntityListener implements Listener {
                         @Override
                         public void run() {
                             attacker.getBase().chat("/" + command);
-                            EssentialsLogger.getLogger().log(Level.INFO, String.format("[PT] %s issued server command: /%s", attacker.getName(), command));
+                            ess.getLogger().log(Level.INFO, String.format("[PT] %s issued server command: /%s", attacker.getName(), command));
                         }
                     }
 

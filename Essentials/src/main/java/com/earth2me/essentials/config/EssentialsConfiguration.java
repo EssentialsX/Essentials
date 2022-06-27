@@ -1,6 +1,6 @@
 package com.earth2me.essentials.config;
 
-import com.earth2me.essentials.EssentialsLogger;
+import com.earth2me.essentials.Essentials;
 import com.earth2me.essentials.config.annotations.DeleteIfIncomplete;
 import com.earth2me.essentials.config.annotations.DeleteOnEmpty;
 import com.earth2me.essentials.config.entities.CommandCooldown;
@@ -132,7 +132,7 @@ public class EssentialsConfiguration {
             try {
                 result.put(entry.getKey().toLowerCase(Locale.ENGLISH), jailNode.get(LazyLocation.class));
             } catch (SerializationException e) {
-                EssentialsLogger.getLogger().log(Level.WARNING, "Error serializing key " + entry.getKey(), e);
+                Essentials.getWrappedLogger().log(Level.WARNING, "Error serializing key " + entry.getKey(), e);
             }
         }
         return result;
@@ -146,7 +146,7 @@ public class EssentialsConfiguration {
         try {
             toSplitRoot(path, configurationNode).set(type, list);
         } catch (SerializationException e) {
-            EssentialsLogger.getLogger().log(Level.SEVERE, e.getMessage(), e);
+            Essentials.getWrappedLogger().log(Level.SEVERE, e.getMessage(), e);
         }
     }
 
@@ -162,7 +162,7 @@ public class EssentialsConfiguration {
             }
             return list;
         } catch (SerializationException e) {
-            EssentialsLogger.getLogger().log(Level.SEVERE, e.getMessage(), e);
+            Essentials.getWrappedLogger().log(Level.SEVERE, e.getMessage(), e);
             return new ArrayList<>();
         }
     }
@@ -300,7 +300,7 @@ public class EssentialsConfiguration {
             try {
                 node.set(null);
             } catch (SerializationException e) {
-                EssentialsLogger.getLogger().log(Level.SEVERE, e.getMessage(), e);
+                Essentials.getWrappedLogger().log(Level.SEVERE, e.getMessage(), e);
             }
         }
     }
@@ -309,7 +309,7 @@ public class EssentialsConfiguration {
         try {
             toSplitRoot(path, configurationNode).set(value);
         } catch (SerializationException e) {
-            EssentialsLogger.getLogger().log(Level.SEVERE, e.getMessage(), e);
+            Essentials.getWrappedLogger().log(Level.SEVERE, e.getMessage(), e);
         }
     }
 
@@ -335,13 +335,13 @@ public class EssentialsConfiguration {
 
     public synchronized void load() {
         if (pendingWrites.get() != 0) {
-            EssentialsLogger.getLogger().log(Level.INFO, "Parsing config file " + configFile + " has been aborted due to " + pendingWrites.get() + " current pending write(s).");
+            Essentials.getWrappedLogger().log(Level.INFO, "Parsing config file {0} has been aborted due to {1} current pending write(s).", new Object[]{configFile, pendingWrites.get()});
             return;
         }
 
         if (configFile.getParentFile() != null && !configFile.getParentFile().exists()) {
             if (!configFile.getParentFile().mkdirs()) {
-                EssentialsLogger.getLogger().log(Level.SEVERE, tl("failedToCreateConfig", configFile.toString()));
+                Essentials.getWrappedLogger().log(Level.SEVERE, tl("failedToCreateConfig", configFile.toString()));
                 return;
             }
         }
@@ -353,10 +353,10 @@ public class EssentialsConfiguration {
                 convertAltFile();
             } else if (templateName != null) {
                 try (final InputStream is = resourceClass.getResourceAsStream(templateName)) {
-                    EssentialsLogger.getLogger().log(Level.INFO, tl("creatingConfigFromTemplate", configFile.toString()));
+                    Essentials.getWrappedLogger().log(Level.INFO, tl("creatingConfigFromTemplate", configFile.toString()));
                     Files.copy(is, configFile.toPath());
                 } catch (IOException e) {
-                    EssentialsLogger.getLogger().log(Level.SEVERE, tl("failedToWriteConfig", configFile.toString()), e);
+                    Essentials.getWrappedLogger().log(Level.SEVERE, tl("failedToWriteConfig", configFile.toString()), e);
                 }
             }
         }
@@ -366,12 +366,12 @@ public class EssentialsConfiguration {
         } catch (final ParsingException e) {
             final File broken = new File(configFile.getAbsolutePath() + ".broken." + System.currentTimeMillis());
             if (configFile.renameTo(broken)) {
-                EssentialsLogger.getLogger().log(Level.SEVERE, "The file " + configFile.toString() + " is broken, it has been renamed to " + broken.toString(), e.getCause());
+                Essentials.getWrappedLogger().log(Level.SEVERE, "The file " + configFile.toString() + " is broken, it has been renamed to " + broken.toString(), e.getCause());
                 return;
             }
-            EssentialsLogger.getLogger().log(Level.SEVERE, "The file " + configFile.toString() + " is broken. A backup file has failed to be created", e.getCause());
+            Essentials.getWrappedLogger().log(Level.SEVERE, "The file " + configFile.toString() + " is broken. A backup file has failed to be created", e.getCause());
         } catch (final ConfigurateException e) {
-            EssentialsLogger.getLogger().log(Level.SEVERE, e.getMessage(), e);
+            Essentials.getWrappedLogger().log(Level.SEVERE, e.getMessage(), e);
         } finally {
             // Something is wrong! We need a node! I hope the backup worked!
             if (configurationNode == null) {
@@ -434,7 +434,7 @@ public class EssentialsConfiguration {
         try {
             delaySave().get();
         } catch (final InterruptedException | ExecutionException e) {
-            EssentialsLogger.getLogger().log(Level.SEVERE, e.getMessage(), e);
+            Essentials.getWrappedLogger().log(Level.SEVERE, e.getMessage(), e);
         }
     }
 

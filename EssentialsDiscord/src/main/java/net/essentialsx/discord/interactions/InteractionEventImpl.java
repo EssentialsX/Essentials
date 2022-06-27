@@ -1,27 +1,27 @@
 package net.essentialsx.discord.interactions;
 
-import com.earth2me.essentials.EssentialsLogger;
 import com.earth2me.essentials.utils.FormatUtil;
 import com.google.common.base.Joiner;
 import net.dv8tion.jda.api.MessageBuilder;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.interactions.commands.OptionMapping;
-import net.ess3.provider.LoggerProvider;
 import net.essentialsx.api.v2.services.discord.InteractionChannel;
 import net.essentialsx.api.v2.services.discord.InteractionEvent;
 import net.essentialsx.api.v2.services.discord.InteractionMember;
+import net.essentialsx.discord.EssentialsDiscord;
 import net.essentialsx.discord.util.DiscordUtil;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * A class which provides information about what triggered an interaction event.
  */
 public class InteractionEventImpl implements InteractionEvent {
-    private final static LoggerProvider logger = EssentialsLogger.getLoggerProvider("EssentialsDiscord");
+    private final static Logger logger = EssentialsDiscord.getWrappedLogger();
     private final SlashCommandEvent event;
     private final InteractionMember member;
     private final List<String> replyBuffer = new ArrayList<>();

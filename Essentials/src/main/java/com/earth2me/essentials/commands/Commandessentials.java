@@ -1,7 +1,6 @@
 package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.CommandSource;
-import com.earth2me.essentials.EssentialsLogger;
 import com.earth2me.essentials.EssentialsUpgrade;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.UserMap;
@@ -364,8 +363,8 @@ public class Commandessentials extends EssentialsCommand {
                     sender.sendMessage(tl("dumpUrl", dumpUrl));
                     sender.sendMessage(tl("dumpDeleteKey", result.getDeletionKey()));
                     if (sender.isPlayer()) {
-                        EssentialsLogger.getLogger().info(tl("dumpConsoleUrl", dumpUrl));
-                        EssentialsLogger.getLogger().info(tl("dumpDeleteKey", result.getDeletionKey()));
+                        ess.getLogger().info(tl("dumpConsoleUrl", dumpUrl));
+                        ess.getLogger().info(tl("dumpDeleteKey", result.getDeletionKey()));
                     }
                 }
                 files.clear();
@@ -413,7 +412,7 @@ public class Commandessentials extends EssentialsCommand {
     private void runMoo(final Server server, final CommandSource sender, final String command, final String[] args) {
         if (args.length == 2 && args[1].equals("moo")) {
             for (final String s : CONSOLE_MOO) {
-                EssentialsLogger.getLogger().info(s);
+                ess.getLogger().info(s);
             }
             for (final Player player : ess.getOnlinePlayers()) {
                 player.sendMessage(PLAYER_MOO);
@@ -477,7 +476,7 @@ public class Commandessentials extends EssentialsCommand {
                 }
 
                 if (ess.getSettings().isDebug()) {
-                    EssentialsLogger.getLogger().info("Deleting user: " + user.getName() + " Money: " + moneyCount + " Homes: " + homeCount + " Last seen: " + DateUtil.formatDateDiff(lastLog));
+                    ess.getLogger().info("Deleting user: " + user.getName() + " Money: " + moneyCount + " Homes: " + homeCount + " Last seen: " + DateUtil.formatDateDiff(lastLog));
                 }
 
                 user.reset();
@@ -511,7 +510,7 @@ public class Commandessentials extends EssentialsCommand {
                                     user.delHome(homeName);
                                 }
                             } catch (Exception e) {
-                                EssentialsLogger.getLogger().info("Unable to delete home " + homeName + " for " + user.getName());
+                                ess.getLogger().info("Unable to delete home " + homeName + " for " + user.getName());
                             }
                         }
                     }
@@ -537,7 +536,7 @@ public class Commandessentials extends EssentialsCommand {
                                     user.delHome(homeName);
                                 }
                             } catch (Exception e) {
-                                EssentialsLogger.getLogger().info("Unable to delete home " + homeName + " for " + user.getName());
+                                ess.getLogger().info("Unable to delete home " + homeName + " for " + user.getName());
                             }
                         }
                     }

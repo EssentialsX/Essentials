@@ -29,7 +29,7 @@ public class EssentialsPluginListener implements Listener, IConf {
         if (EconomyLayers.isServerStarted()) {
             final EconomyLayer layer = EconomyLayers.onPluginEnable(event.getPlugin());
             if (layer != null) {
-                EssentialsLogger.getLogger().log(Level.INFO, "Essentials found a compatible payment resolution method: " + layer.getName() + " (v" + layer.getPluginVersion() + ")!");
+                ess.getLogger().log(Level.INFO, "Essentials found a compatible payment resolution method: " + layer.getName() + " (v" + layer.getPluginVersion() + ")!");
             }
         }
     }
@@ -44,9 +44,9 @@ public class EssentialsPluginListener implements Listener, IConf {
         if (EconomyLayers.onPluginDisable(event.getPlugin())) {
             final EconomyLayer layer = EconomyLayers.getSelectedLayer();
             if (layer != null) {
-                EssentialsLogger.getLogger().log(Level.INFO, "Essentials found a new compatible payment resolution method: " + layer.getName() + " (v" + layer.getPluginVersion() + ")!");
+                ess.getLogger().log(Level.INFO, "Essentials found a new compatible payment resolution method: " + layer.getName() + " (v" + layer.getPluginVersion() + ")!");
             } else {
-                EssentialsLogger.getLogger().log(Level.INFO, "Active payment resolution method has been disabled! Falling back to Essentials' default payment resolution system!");
+                ess.getLogger().log(Level.INFO, "Active payment resolution method has been disabled! Falling back to Essentials' default payment resolution system!");
             }
         }
     }

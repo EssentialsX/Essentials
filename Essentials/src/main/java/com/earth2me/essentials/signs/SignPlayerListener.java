@@ -1,6 +1,5 @@
 package com.earth2me.essentials.signs;
 
-import com.earth2me.essentials.EssentialsLogger;
 import com.earth2me.essentials.utils.MaterialUtil;
 import net.ess3.api.IEssentials;
 import org.bukkit.Material;
@@ -41,7 +40,7 @@ public class SignPlayerListener implements Listener {
                 targetBlock = ess.getUser(event.getPlayer()).getTargetBlock(5);
             } catch (final IllegalStateException ex) {
                 if (ess.getSettings().isDebug()) {
-                    EssentialsLogger.getLogger().log(Level.WARNING, ex.getMessage(), ex);
+                    ess.getLogger().log(Level.WARNING, ex.getMessage(), ex);
                 }
             }
             block = targetBlock;

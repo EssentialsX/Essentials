@@ -1,7 +1,6 @@
 package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.AsyncTeleport;
-import com.earth2me.essentials.EssentialsLogger;
 import com.earth2me.essentials.IUser;
 import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.User;
@@ -100,7 +99,7 @@ public class Commandtpaccept extends EssentialsCommand {
         Bukkit.getPluginManager().callEvent(event);
         if (event.isCancelled()) {
             if (ess.getSettings().isDebug()) {
-                EssentialsLogger.getLogger().info("TPA accept cancelled by API for " + user.getName() + " (requested by " + requester.getName() + ")");
+                ess.getLogger().info("TPA accept cancelled by API for " + user.getName() + " (requested by " + requester.getName() + ")");
             }
             return;
         }

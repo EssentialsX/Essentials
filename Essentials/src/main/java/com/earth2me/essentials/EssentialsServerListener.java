@@ -37,13 +37,13 @@ public class EssentialsServerListener implements Listener {
             setSampleText = ReflUtil.getMethodCached(ServerListPingEvent.class, "setSampleText", List.class);
             getSampleText = ReflUtil.getMethodCached(ServerListPingEvent.class, "getSampleText");
             if (setSampleText != null && getSampleText != null) {
-                EssentialsLogger.getLogger().info("ServerListPingEvent: Paper 1.12.2 setSampleText API");
+                ess.getLogger().info("ServerListPingEvent: Paper 1.12.2 setSampleText API");
                 isPaperSample = true;
                 return;
             }
         }
 
-        EssentialsLogger.getLogger().info("ServerListPingEvent: Spigot iterator API");
+        ess.getLogger().info("ServerListPingEvent: Spigot iterator API");
         isPaperSample = false;
     }
 
@@ -56,7 +56,7 @@ public class EssentialsServerListener implements Listener {
                 setSampleText.invoke(event, playerNames);
             } catch (final IllegalAccessException | InvocationTargetException | ClassCastException e) {
                 if (!unsupportedLogged && shouldWarnSLPECaller(e)) {
-                    EssentialsLogger.getLogger().log(Level.WARNING, "Unable to hide players from server list ping "
+                    ess.getLogger().log(Level.WARNING, "Unable to hide players from server list ping "
                         + "using Paper 1.12 method!", e);
                     unsupportedLogged = true;
                 }
@@ -80,7 +80,7 @@ public class EssentialsServerListener implements Listener {
                 }
             } catch (final UnsupportedOperationException e) {
                 if (!unsupportedLogged && shouldWarnSLPECaller(e)) {
-                    EssentialsLogger.getLogger().log(Level.WARNING, "Could not hide vanished players while handling " + event.getClass().getName(), e);
+                    ess.getLogger().log(Level.WARNING, "Could not hide vanished players while handling " + event.getClass().getName(), e);
                     unsupportedLogged = true;
                 }
             }

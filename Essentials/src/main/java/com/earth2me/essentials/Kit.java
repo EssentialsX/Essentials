@@ -147,7 +147,7 @@ public class Kit {
             }
             throw new Exception("Invalid item list");
         } catch (final Exception e) {
-            EssentialsLogger.getLogger().log(Level.WARNING, "Error parsing kit " + kitName + ": " + e.getMessage());
+            ess.getLogger().log(Level.WARNING, "Error parsing kit " + kitName + ": " + e.getMessage());
             throw new Exception(tl("kitError2"), e);
         }
     }
@@ -192,7 +192,7 @@ public class Kit {
 
                 if (kitItem.startsWith("@")) {
                     if (ess.getSerializationProvider() == null) {
-                        EssentialsLogger.getLogger().log(Level.WARNING, tl("kitError3", kitName, user.getName()));
+                        ess.getLogger().log(Level.WARNING, tl("kitError3", kitName, user.getName()));
                         continue;
                     }
                     stack = ess.getSerializationProvider().deserializeItem(Base64Coder.decodeLines(kitItem.substring(1)));
@@ -286,7 +286,7 @@ public class Kit {
             }
         } catch (final Exception e) {
             user.getBase().updateInventory();
-            EssentialsLogger.getLogger().log(Level.WARNING, e.getMessage());
+            ess.getLogger().log(Level.WARNING, e.getMessage());
             throw new Exception(tl("kitError2"), e);
         }
         return true;

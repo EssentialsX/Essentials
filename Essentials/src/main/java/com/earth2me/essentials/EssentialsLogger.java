@@ -12,7 +12,6 @@ import java.util.Map;
 import java.util.logging.Logger;
 
 public final class EssentialsLogger {
-    private static LoggerProvider loggerProvider;
     private final static Map<String, LoggerProvider> loggerProviders = new HashMap<>();
 
     private EssentialsLogger() {
@@ -43,13 +42,5 @@ public final class EssentialsLogger {
             throw new IllegalArgumentException("Plugin not found: " + pluginName);
         }
         return getLoggerProvider(plugin);
-    }
-
-    public static Logger setLoggerProvider(LoggerProvider loggerProvider) {
-        return EssentialsLogger.loggerProvider = loggerProvider;
-    }
-
-    public static LoggerProvider getLogger() {
-        return loggerProvider;
     }
 }

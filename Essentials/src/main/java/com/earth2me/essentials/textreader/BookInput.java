@@ -1,6 +1,5 @@
 package com.earth2me.essentials.textreader;
 
-import com.earth2me.essentials.EssentialsLogger;
 import net.ess3.api.IEssentials;
 
 import java.io.BufferedReader;
@@ -45,7 +44,7 @@ public class BookInput implements IText {
                         length = input.read(buffer);
                     }
                 }
-                EssentialsLogger.getLogger().info("File " + filename + ".txt does not exist. Creating one for you.");
+                ess.getLogger().info("File " + filename + ".txt does not exist. Creating one for you.");
             }
         }
         if (!file.exists()) {

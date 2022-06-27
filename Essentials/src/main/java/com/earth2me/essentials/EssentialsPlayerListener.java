@@ -164,7 +164,7 @@ public class EssentialsPlayerListener implements Listener, FakeAccessor {
                 user.sendMessage(user.hasMuteReason() ? tl("voiceSilencedReasonTime", dateDiff, user.getMuteReason()) : tl("voiceSilencedTime", dateDiff));
             }
 
-            EssentialsLogger.getLogger().info(tl("mutedUserSpeaks", user.getName(), event.getMessage()));
+            ess.getLogger().info(tl("mutedUserSpeaks", user.getName(), event.getMessage()));
         }
         try {
             final Iterator<Player> it = event.getRecipients().iterator();
@@ -176,9 +176,9 @@ public class EssentialsPlayerListener implements Listener, FakeAccessor {
             }
         } catch (final UnsupportedOperationException ex) {
             if (ess.getSettings().isDebug()) {
-                EssentialsLogger.getLogger().log(Level.INFO, "Ignore could not block chat due to custom chat plugin event.", ex);
+                ess.getLogger().log(Level.INFO, "Ignore could not block chat due to custom chat plugin event.", ex);
             } else {
-                EssentialsLogger.getLogger().info("Ignore could not block chat due to custom chat plugin event.");
+                ess.getLogger().info("Ignore could not block chat due to custom chat plugin event.");
             }
         }
 
@@ -196,7 +196,7 @@ public class EssentialsPlayerListener implements Listener, FakeAccessor {
             event.getHandlers().unregister(this);
 
             if (ess.getSettings().isDebug()) {
-                EssentialsLogger.getLogger().log(Level.INFO, "Unregistering move listener");
+                ess.getLogger().log(Level.INFO, "Unregistering move listener");
             }
 
             return;
@@ -344,7 +344,7 @@ public class EssentialsPlayerListener implements Listener, FakeAccessor {
                         if (toVanish != null && toVanish.isOnline()) {
                             user.getBase().hidePlayer(toVanish);
                             if (ess.getSettings().isDebug()) {
-                                EssentialsLogger.getLogger().info("Hiding vanished player: " + p);
+                                ess.getLogger().info("Hiding vanished player: " + p);
                             }
                         }
                     }
@@ -430,12 +430,12 @@ public class EssentialsPlayerListener implements Listener, FakeAccessor {
 
                 if (user.isSocialSpyEnabled() && !user.isAuthorized("essentials.socialspy")) {
                     user.setSocialSpyEnabled(false);
-                    EssentialsLogger.getLogger().log(Level.INFO, "Set socialspy to false for " + user.getName() + " because they had it enabled without permission.");
+                    ess.getLogger().log(Level.INFO, "Set socialspy to false for {0} because they had it enabled without permission.", user.getName());
                 }
 
                 if (user.isGodModeEnabled() && !user.isAuthorized("essentials.god")) {
                     user.setGodModeEnabled(false);
-                    EssentialsLogger.getLogger().log(Level.INFO, "Set god mode to false for " + user.getName() + " because they had it enabled without permission.");
+                    ess.getLogger().log(Level.INFO, "Set god mode to false for {0} because they had it enabled without permission.", user.getName());
                 }
 
                 user.setConfirmingClearCommand(null);
@@ -462,9 +462,9 @@ public class EssentialsPlayerListener implements Listener, FakeAccessor {
                             tempInput = new TextInput(user.getSource(), "motd", true, ess);
                         } catch (final IOException ex) {
                             if (ess.getSettings().isDebug()) {
-                                EssentialsLogger.getLogger().log(Level.WARNING, ex.getMessage(), ex);
+                                ess.getLogger().log(Level.WARNING, ex.getMessage(), ex);
                             } else {
-                                EssentialsLogger.getLogger().log(Level.WARNING, ex.getMessage());
+                                ess.getLogger().log(Level.WARNING, ex.getMessage());
                             }
                         }
                     }
@@ -624,7 +624,7 @@ public class EssentialsPlayerListener implements Listener, FakeAccessor {
             } else {
                 player.sendMessage(user.hasMuteReason() ? tl("voiceSilencedReasonTime", dateDiff, user.getMuteReason()) : tl("voiceSilencedTime", dateDiff));
             }
-            EssentialsLogger.getLogger().info(tl("mutedUserSpeaks", player.getName(), event.getMessage()));
+            ess.getLogger().info(tl("mutedUserSpeaks", player.getName(), event.getMessage()));
             return;
         }
 
@@ -681,7 +681,7 @@ public class EssentialsPlayerListener implements Listener, FakeAccessor {
 
                 if (cooldownEntry != null) {
                     if (ess.getSettings().isDebug()) {
-                        EssentialsLogger.getLogger().info("Applying " + cooldownEntry.getValue() + "ms cooldown on /" + fullCommand + " for" + user.getName() + ".");
+                        ess.getLogger().info("Applying " + cooldownEntry.getValue() + "ms cooldown on /" + fullCommand + " for" + user.getName() + ".");
                     }
                     final Date expiry = new Date(System.currentTimeMillis() + cooldownEntry.getValue());
                     user.addCommandCooldown(cooldownEntry.getKey(), expiry, ess.getSettings().isCommandCooldownPersistent(fullCommand));
@@ -812,7 +812,7 @@ public class EssentialsPlayerListener implements Listener, FakeAccessor {
             ess.scheduleSyncDelayedTask(new DelayedClickJumpTask());
         } catch (final Exception ex) {
             if (ess.getSettings().isDebug()) {
-                EssentialsLogger.getLogger().log(Level.WARNING, ex.getMessage(), ex);
+                ess.getLogger().log(Level.WARNING, ex.getMessage(), ex);
             }
         }
     }
@@ -836,7 +836,7 @@ public class EssentialsPlayerListener implements Listener, FakeAccessor {
                     @Override
                     public void run() {
                         user.getBase().chat("/" + command);
-                        EssentialsLogger.getLogger().log(Level.INFO, String.format("[PT] %s issued server command: /%s", user.getName(), command));
+                        ess.getLogger().log(Level.INFO, String.format("[PT] %s issued server command: /%s", user.getName(), command));
                     }
                 }
 

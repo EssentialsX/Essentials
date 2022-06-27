@@ -1,7 +1,6 @@
 package com.earth2me.essentials.economy;
 
 import com.earth2me.essentials.Essentials;
-import com.earth2me.essentials.EssentialsLogger;
 import com.earth2me.essentials.economy.layers.VaultLayer;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
@@ -41,7 +40,7 @@ public final class EconomyLayers {
                 }
                 final EconomyLayer layer = onPluginEnable(plugin);
                 if (layer != null) {
-                    EssentialsLogger.getLogger().log(Level.INFO, "Essentials found a compatible payment resolution method: " + layer.getName() + " (v" + layer.getPluginVersion() + ")!");
+                    ess.getLogger().log(Level.INFO, "Essentials found a compatible payment resolution method: " + layer.getName() + " (v" + layer.getPluginVersion() + ")!");
                 }
             }
 

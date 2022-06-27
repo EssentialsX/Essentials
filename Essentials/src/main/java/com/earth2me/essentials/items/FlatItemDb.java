@@ -1,6 +1,5 @@
 package com.earth2me.essentials.items;
 
-import com.earth2me.essentials.EssentialsLogger;
 import com.earth2me.essentials.ManagedFile;
 import com.earth2me.essentials.utils.EnumUtil;
 import com.earth2me.essentials.utils.MaterialUtil;
@@ -53,7 +52,7 @@ public class FlatItemDb extends AbstractItemDb {
         }
 
         this.rebuild();
-        EssentialsLogger.getLogger().info(String.format("Loaded %s items from items.json.", listNames().size()));
+        ess.getLogger().info(String.format("Loaded %s items from items.json.", listNames().size()));
     }
 
     private void rebuild() {
@@ -99,7 +98,7 @@ public class FlatItemDb extends AbstractItemDb {
             if (valid) {
                 allAliases.add(key);
             } else {
-                EssentialsLogger.getLogger().warning(String.format("Failed to add item: \"%s\": %s", key, element.toString()));
+                ess.getLogger().warning(String.format("Failed to add item: \"%s\": %s", key, element.toString()));
             }
         }
     }
@@ -114,7 +113,7 @@ public class FlatItemDb extends AbstractItemDb {
         }
 
         id = id.toLowerCase();
-        final String[] split = id.split(":");
+        final String[] split = id.split("(?<!^minecraft):");
 
         final ItemData data = getByName(split[0]);
 

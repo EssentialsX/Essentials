@@ -74,7 +74,7 @@ public class Jails implements net.ess3.api.IJails {
         final JailListener blockListener = new JailListener();
         pluginManager.registerEvents(blockListener, ess);
         if (ess.getSettings().isDebug()) {
-            EssentialsLogger.getLogger().log(Level.INFO, "Registering Jail listener");
+            ess.getLogger().log(Level.INFO, "Registering Jail listener");
         }
     }
 
@@ -266,9 +266,9 @@ public class Jails implements net.ess3.api.IJails {
                 event.setRespawnLocation(getJail(user.getJail()));
             } catch (final Exception ex) {
                 if (ess.getSettings().isDebug()) {
-                    EssentialsLogger.getLogger().log(Level.INFO, tl("returnPlayerToJailError", user.getName(), ex.getLocalizedMessage()), ex);
+                    ess.getLogger().log(Level.INFO, tl("returnPlayerToJailError", user.getName(), ex.getLocalizedMessage()), ex);
                 } else {
-                    EssentialsLogger.getLogger().log(Level.INFO, tl("returnPlayerToJailError", user.getName(), ex.getLocalizedMessage()));
+                    ess.getLogger().log(Level.INFO, tl("returnPlayerToJailError", user.getName(), ex.getLocalizedMessage()));
                 }
             }
         }
@@ -284,9 +284,9 @@ public class Jails implements net.ess3.api.IJails {
                 event.setTo(getJail(user.getJail()));
             } catch (final Exception ex) {
                 if (ess.getSettings().isDebug()) {
-                    EssentialsLogger.getLogger().log(Level.INFO, tl("returnPlayerToJailError", user.getName(), ex.getLocalizedMessage()), ex);
+                    ess.getLogger().log(Level.INFO, tl("returnPlayerToJailError", user.getName(), ex.getLocalizedMessage()), ex);
                 } else {
-                    EssentialsLogger.getLogger().log(Level.INFO, tl("returnPlayerToJailError", user.getName(), ex.getLocalizedMessage()));
+                    ess.getLogger().log(Level.INFO, tl("returnPlayerToJailError", user.getName(), ex.getLocalizedMessage()));
                 }
             }
             user.sendMessage(tl("jailMessage"));
@@ -304,9 +304,9 @@ public class Jails implements net.ess3.api.IJails {
             final CompletableFuture<Boolean> future = new CompletableFuture<>();
             future.exceptionally(ex -> {
                 if (ess.getSettings().isDebug()) {
-                    EssentialsLogger.getLogger().log(Level.INFO, tl("returnPlayerToJailError", user.getName(), ex.getLocalizedMessage()), ex);
+                    ess.getLogger().log(Level.INFO, tl("returnPlayerToJailError", user.getName(), ex.getLocalizedMessage()), ex);
                 } else {
-                    EssentialsLogger.getLogger().log(Level.INFO, tl("returnPlayerToJailError", user.getName(), ex.getLocalizedMessage()));
+                    ess.getLogger().log(Level.INFO, tl("returnPlayerToJailError", user.getName(), ex.getLocalizedMessage()));
                 }
                 return false;
             });

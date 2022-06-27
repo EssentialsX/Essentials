@@ -169,7 +169,7 @@ public enum Mob {
     public Entity spawn(final World world, final Server server, final Location loc) throws MobException {
         final Entity entity = world.spawn(loc, this.bukkitType.getEntityClass());
         if (entity == null) {
-            EssentialsLogger.getLogger().log(Level.WARNING, tl("unableToSpawnMob"));
+            Essentials.getWrappedLogger().log(Level.WARNING, tl("unableToSpawnMob"));
             throw new MobException();
         }
         return entity;

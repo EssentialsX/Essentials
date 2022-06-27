@@ -1,7 +1,6 @@
 package com.earth2me.essentials.perm;
 
 import com.earth2me.essentials.Essentials;
-import com.earth2me.essentials.EssentialsLogger;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.perm.impl.AbstractVaultHandler;
 import com.earth2me.essentials.perm.impl.ConfigPermissionsHandler;
@@ -170,18 +169,18 @@ public class PermissionsHandler implements IPermissionsHandler {
         if (handler instanceof AbstractVaultHandler) {
             String enabledPermsPlugin = ((AbstractVaultHandler) handler).getEnabledPermsPlugin();
             if (enabledPermsPlugin == null) enabledPermsPlugin = "generic";
-            EssentialsLogger.getLogger().info("Using Vault based permissions (" + enabledPermsPlugin + ")");
+            ess.getLogger().info("Using Vault based permissions (" + enabledPermsPlugin + ")");
         } else if (handler.getClass() == SuperpermsHandler.class) {
             if (handler.tryProvider(ess)) {
-                EssentialsLogger.getLogger().warning("Detected supported permissions plugin " +
+                ess.getLogger().warning("Detected supported permissions plugin " +
                     ((SuperpermsHandler) handler).getEnabledPermsPlugin() + " without Vault installed.");
-                EssentialsLogger.getLogger().warning("Features such as chat prefixes/suffixes and group-related functionality will not " +
+                ess.getLogger().warning("Features such as chat prefixes/suffixes and group-related functionality will not " +
                     "work until you install Vault.");
             }
-            EssentialsLogger.getLogger().info("Using superperms-based permissions.");
+            ess.getLogger().info("Using superperms-based permissions.");
         } else if (handler.getClass() == ConfigPermissionsHandler.class) {
-            EssentialsLogger.getLogger().info("Using config file enhanced permissions.");
-            EssentialsLogger.getLogger().info("Permissions listed in as player-commands will be given to all users.");
+            ess.getLogger().info("Using config file enhanced permissions.");
+            ess.getLogger().info("Permissions listed in as player-commands will be given to all users.");
         }
     }
 
@@ -196,7 +195,7 @@ public class PermissionsHandler implements IPermissionsHandler {
     private void checkPermLag(final long start, final String summary) {
         final long elapsed = System.nanoTime() - start;
         if (elapsed > ess.getSettings().getPermissionsLagWarning()) {
-            EssentialsLogger.getLogger().log(Level.WARNING, String.format("Permissions lag notice with (%s). Response took %fms. Summary: %s", getName(), elapsed / 1000000.0, summary));
+            ess.getLogger().log(Level.WARNING, String.format("Permissions lag notice with (%s). Response took %fms. Summary: %s", getName(), elapsed / 1000000.0, summary));
         }
     }
 

@@ -1,7 +1,6 @@
 package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.CommandSource;
-import com.earth2me.essentials.EssentialsLogger;
 import com.earth2me.essentials.IEssentialsModule;
 import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.User;
@@ -315,7 +314,7 @@ public abstract class EssentialsCommand implements IEssentialsCommand {
 
         final int numArgs = args.length - index - 1;
         if (ess.getSettings().isDebug()) {
-            EssentialsLogger.getLogger().info(numArgs + " " + index + " " + Arrays.toString(args));
+            ess.getLogger().info(numArgs + " " + index + " " + Arrays.toString(args));
         }
         String[] effectiveArgs = new String[numArgs];
         System.arraycopy(args, index, effectiveArgs, 0, numArgs);
@@ -323,7 +322,7 @@ public abstract class EssentialsCommand implements IEssentialsCommand {
             effectiveArgs = new String[] {""};
         }
         if (ess.getSettings().isDebug()) {
-            EssentialsLogger.getLogger().info(command + " -- " + Arrays.toString(effectiveArgs));
+            ess.getLogger().info(command + " -- " + Arrays.toString(effectiveArgs));
         }
 
         return command.tabComplete(sender.getSender(), label, effectiveArgs);
@@ -333,7 +332,7 @@ public abstract class EssentialsCommand implements IEssentialsCommand {
     public void showError(final CommandSender sender, final Throwable throwable, final String commandLabel) {
         sender.sendMessage(tl("errorWithMessage", throwable.getMessage()));
         if (ess.getSettings().isDebug()) {
-            EssentialsLogger.getLogger().log(Level.INFO, tl("errorCallingCommand", commandLabel), throwable);
+            ess.getLogger().log(Level.INFO, tl("errorCallingCommand", commandLabel), throwable);
             throwable.printStackTrace();
         }
     }

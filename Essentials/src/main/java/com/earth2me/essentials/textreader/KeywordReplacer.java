@@ -1,7 +1,6 @@
 package com.earth2me.essentials.textreader;
 
 import com.earth2me.essentials.CommandSource;
-import com.earth2me.essentials.EssentialsLogger;
 import com.earth2me.essentials.ExecuteTimer;
 import com.earth2me.essentials.PlayerList;
 import com.earth2me.essentials.User;
@@ -155,7 +154,7 @@ public class KeywordReplacer implements IText {
         execTimer.mark("Text Replace");
         final String timeroutput = execTimer.end();
         if (ess.getSettings().isDebug()) {
-            EssentialsLogger.getLogger().log(Level.INFO, "Keyword Replacer " + timeroutput);
+            ess.getLogger().log(Level.INFO, "Keyword Replacer " + timeroutput);
         }
     }
 

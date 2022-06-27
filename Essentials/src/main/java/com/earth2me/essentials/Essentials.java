@@ -141,8 +141,8 @@ import java.util.logging.Logger;
 import static com.earth2me.essentials.I18n.tl;
 
 public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
-    private static Logger LOGGER;
     private static final Logger BUKKIT_LOGGER = Logger.getLogger("Essentials");
+    private static Logger LOGGER = null;
     private final transient TNTExplodeListener tntListener = new TNTExplodeListener(this);
     private final transient Set<String> vanishedPlayers = new LinkedHashSet<>();
     private transient ISettings settings;
@@ -205,7 +205,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
     }
 
     public void setupForTesting(final Server server) throws IOException, InvalidDescriptionException {
-        LOGGER = EssentialsLogger.setLoggerProvider(new BaseLoggerProvider(BUKKIT_LOGGER));
+        LOGGER = new BaseLoggerProvider(BUKKIT_LOGGER);
         final File dataFolder = File.createTempFile("essentialstest", "");
         if (!dataFolder.delete()) {
             throw new IOException();
@@ -218,8 +218,8 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
         i18n.updateLocale("en");
         Console.setInstance(this);
 
-        EssentialsLogger.getLogger().log(Level.INFO, tl("usingTempFolderForTesting"));
-        EssentialsLogger.getLogger().log(Level.INFO, dataFolder.toString());
+        LOGGER.log(Level.INFO, tl("usingTempFolderForTesting"));
+        LOGGER.log(Level.INFO, dataFolder.toString());
         settings = new Settings(this);
         mail = new MailServiceImpl(this);
         userMap = new UserMap(this);
@@ -246,11 +246,10 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
     @Override
     public void onEnable() {
         try {
-            if (BUKKIT_LOGGER != this.getLogger()) {
-                BUKKIT_LOGGER.setParent(this.getLogger());
+            if (BUKKIT_LOGGER != super.getLogger()) {
+                BUKKIT_LOGGER.setParent(super.getLogger());
             }
-
-            LOGGER = EssentialsLogger.setLoggerProvider(EssentialsLogger.getLoggerProvider(this));
+            LOGGER = EssentialsLogger.getLoggerProvider(this);
 
             execTimer = new ExecuteTimer();
             execTimer.start();
@@ -262,30 +261,30 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
 
             switch (VersionUtil.getServerSupportStatus()) {
                 case NMS_CLEANROOM:
-                    EssentialsLogger.getLogger().severe(tl("serverUnsupportedCleanroom"));
+                    getLogger().severe(tl("serverUnsupportedCleanroom"));
                     break;
                 case DANGEROUS_FORK:
-                    EssentialsLogger.getLogger().severe(tl("serverUnsupportedDangerous"));
+                    getLogger().severe(tl("serverUnsupportedDangerous"));
                     break;
                 case UNSTABLE:
-                    EssentialsLogger.getLogger().severe(tl("serverUnsupportedMods"));
+                    getLogger().severe(tl("serverUnsupportedMods"));
                     break;
                 case OUTDATED:
-                    EssentialsLogger.getLogger().severe(tl("serverUnsupported"));
+                    getLogger().severe(tl("serverUnsupported"));
                     break;
                 case LIMITED:
-                    EssentialsLogger.getLogger().info(tl("serverUnsupportedLimitedApi"));
+                    getLogger().info(tl("serverUnsupportedLimitedApi"));
                     break;
             }
 
             if (VersionUtil.getSupportStatusClass() != null) {
-                EssentialsLogger.getLogger().info(tl("serverUnsupportedClass", VersionUtil.getSupportStatusClass()));
+                getLogger().info(tl("serverUnsupportedClass", VersionUtil.getSupportStatusClass()));
             }
 
             final PluginManager pm = getServer().getPluginManager();
             for (final Plugin plugin : pm.getPlugins()) {
                 if (plugin.getDescription().getName().startsWith("Essentials") && !plugin.getDescription().getVersion().equals(this.getDescription().getVersion()) && !plugin.getDescription().getName().equals("EssentialsAntiCheat")) {
-                    EssentialsLogger.getLogger().warning(tl("versionMismatch", plugin.getDescription().getName()));
+                    getLogger().warning(tl("versionMismatch", plugin.getDescription().getName()));
                 }
             }
 
@@ -466,9 +465,9 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
 
             updateChecker = new UpdateChecker(this);
             runTaskAsynchronously(() -> {
-                EssentialsLogger.getLogger().log(Level.INFO, tl("versionFetching"));
+                getLogger().log(Level.INFO, tl("versionFetching"));
                 for (String str : updateChecker.getVersionMessages(false, true)) {
-                    EssentialsLogger.getLogger().log(getSettings().isUpdateCheckEnabled() ? Level.WARNING : Level.INFO, str);
+                    getLogger().log(getSettings().isUpdateCheckEnabled() ? Level.WARNING : Level.INFO, str);
                 }
             });
 
@@ -478,7 +477,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
 
             final String timeroutput = execTimer.end();
             if (getSettings().isDebug()) {
-                EssentialsLogger.getLogger().log(Level.INFO, "Essentials load " + timeroutput);
+                LOGGER.log(Level.INFO, "Essentials load {0}", timeroutput);
             }
         } catch (final NumberFormatException ex) {
             handleCrash(ex);
@@ -490,6 +489,24 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
     }
 
     @Override
+    public Logger getLogger() {
+        if (LOGGER != null) {
+            return LOGGER;
+        }
+
+        return super.getLogger();
+    }
+
+    // Returns our provider logger if available
+    public static Logger getWrappedLogger() {
+        if (LOGGER != null) {
+            return LOGGER;
+        }
+
+        return BUKKIT_LOGGER;
+    }
+
+    @Override
     public void saveConfig() {
         // We don't use any of the bukkit config writing, as this breaks our config file formatting.
     }
@@ -498,7 +515,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
         HandlerList.unregisterAll(this);
 
         if (getSettings().isDebug()) {
-            EssentialsLogger.getLogger().log(Level.INFO, "Registering Listeners");
+            LOGGER.log(Level.INFO, "Registering Listeners");
         }
 
         final EssentialsPluginListener pluginListener = new EssentialsPluginListener(this);
@@ -542,7 +559,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
     public void onDisable() {
         final boolean stopping = getServerStateProvider().isStopping();
         if (!stopping) {
-            EssentialsLogger.getLogger().log(Level.SEVERE, tl("serverReloading"));
+            LOGGER.log(Level.SEVERE, tl("serverReloading"));
         }
         getBackup().setPendingShutdown(true);
         for (final User user : getOnlineUsers()) {
@@ -562,7 +579,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
         }
         cleanupOpenInventories();
         if (getBackup().getTaskLock() != null && !getBackup().getTaskLock().isDone()) {
-            EssentialsLogger.getLogger().log(Level.SEVERE, tl("backupInProgress"));
+            LOGGER.log(Level.SEVERE, tl("backupInProgress"));
             getBackup().getTaskLock().join();
         }
         if (i18n != null) {
@@ -637,7 +654,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
                         return completer.onTabComplete(cSender, command, commandLabel, args);
                     }
                 } catch (final Exception ex) {
-                    EssentialsLogger.getLogger().log(Level.SEVERE, ex.getMessage(), ex);
+                    LOGGER.log(Level.SEVERE, ex.getMessage(), ex);
                 }
             }
         }
@@ -667,7 +684,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
                 cmd = loadCommand(commandPath, command.getName(), module, classLoader);
             } catch (final Exception ex) {
                 sender.sendMessage(tl("commandNotLoaded", commandLabel));
-                EssentialsLogger.getLogger().log(Level.SEVERE, tl("commandNotLoaded", commandLabel), ex);
+                LOGGER.log(Level.SEVERE, tl("commandNotLoaded", commandLabel), ex);
                 return Collections.emptyList();
             }
 
@@ -690,11 +707,11 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
             } catch (final Exception ex) {
                 showError(sender, ex, commandLabel);
                 // Tab completion shouldn't fail
-                EssentialsLogger.getLogger().log(Level.SEVERE, tl("commandFailed", commandLabel), ex);
+                LOGGER.log(Level.SEVERE, tl("commandFailed", commandLabel), ex);
                 return Collections.emptyList();
             }
         } catch (final Throwable ex) {
-            EssentialsLogger.getLogger().log(Level.SEVERE, tl("commandFailed", commandLabel), ex);
+            LOGGER.log(Level.SEVERE, tl("commandFailed", commandLabel), ex);
             return Collections.emptyList();
         }
     }
@@ -710,7 +727,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
         // Allow plugins to override the command via onCommand
         if (!getSettings().isCommandOverridden(command.getName()) && (!commandLabel.startsWith("e") || commandLabel.equalsIgnoreCase(command.getName()))) {
             if (getSettings().isDebug()) {
-                EssentialsLogger.getLogger().log(Level.INFO, "Searching for alternative to: " + commandLabel);
+                LOGGER.log(Level.INFO, "Searching for alternative to: " + commandLabel);
             }
             final Command pc = alternativeCommandsHandler.getAlternative(commandLabel);
             if (pc != null) {
@@ -718,7 +735,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
                 try {
                     pc.execute(cSender, commandLabel, args);
                 } catch (final Exception ex) {
-                    EssentialsLogger.getLogger().log(Level.SEVERE, ex.getMessage(), ex);
+                    LOGGER.log(Level.SEVERE, ex.getMessage(), ex);
                     cSender.sendMessage(tl("internalError"));
                 }
                 return true;
@@ -738,10 +755,10 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
 
             if (bSenderBlock != null) {
                 if (getSettings().logCommandBlockCommands()) {
-                    EssentialsLogger.getLogger().log(Level.INFO, "CommandBlock at " + bSenderBlock.getX() + "," + bSenderBlock.getY() + "," + bSenderBlock.getZ() + " issued server command: /" + commandLabel + " " + EssentialsCommand.getFinalArg(args, 0));
+                    LOGGER.log(Level.INFO, "CommandBlock at {0},{1},{2} issued server command: /{3} {4}", new Object[] {bSenderBlock.getX(), bSenderBlock.getY(), bSenderBlock.getZ(), commandLabel, EssentialsCommand.getFinalArg(args, 0)});
                 }
             } else if (user == null) {
-                EssentialsLogger.getLogger().log(Level.INFO, cSender.getName() + " issued server command: /" + commandLabel + " " + EssentialsCommand.getFinalArg(args, 0));
+                LOGGER.log(Level.INFO, "{0} issued server command: /{1} {2}", new Object[] {cSender.getName(), commandLabel, EssentialsCommand.getFinalArg(args, 0)});
             }
 
             final CommandSource sender = new CommandSource(cSender);
@@ -774,13 +791,13 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
                 cmd = loadCommand(commandPath, command.getName(), module, classLoader);
             } catch (final Exception ex) {
                 sender.sendMessage(tl("commandNotLoaded", commandLabel));
-                EssentialsLogger.getLogger().log(Level.SEVERE, tl("commandNotLoaded", commandLabel), ex);
+                LOGGER.log(Level.SEVERE, tl("commandNotLoaded", commandLabel), ex);
                 return true;
             }
 
             // Check authorization
             if (user != null && !user.isAuthorized(cmd, permissionPrefix)) {
-                EssentialsLogger.getLogger().log(Level.INFO, tl("deniedAccessCommand", user.getName()));
+                LOGGER.log(Level.INFO, tl("deniedAccessCommand", user.getName()));
                 user.sendMessage(tl("noAccessCommand"));
                 return true;
             }
@@ -831,7 +848,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
                 return true;
             }
         } catch (final Throwable ex) {
-            EssentialsLogger.getLogger().log(Level.SEVERE, tl("commandFailed", commandLabel), ex);
+            LOGGER.log(Level.SEVERE, tl("commandFailed", commandLabel), ex);
             return true;
         }
     }
@@ -859,7 +876,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
     public void showError(final CommandSource sender, final Throwable exception, final String commandLabel) {
         sender.sendMessage(tl("errorWithMessage", exception.getMessage()));
         if (getSettings().isDebug()) {
-            EssentialsLogger.getLogger().log(Level.INFO, tl("errorCallingCommand", commandLabel), exception);
+            LOGGER.log(Level.INFO, tl("errorCallingCommand", commandLabel), exception);
         }
     }
 
@@ -1045,7 +1062,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
         }
 
         if (userMap == null) {
-            EssentialsLogger.getLogger().log(Level.WARNING, "Essentials userMap not initialized");
+            LOGGER.log(Level.WARNING, "Essentials userMap not initialized");
             return null;
         }
 
@@ -1053,7 +1070,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
 
         if (user == null) {
             if (getSettings().isDebug()) {
-                EssentialsLogger.getLogger().log(Level.INFO, "Constructing new userfile from base player " + base.getName());
+                LOGGER.log(Level.INFO, "Constructing new userfile from base player {0}", base.getName());
             }
             user = new User(base, this);
         } else {
@@ -1064,7 +1081,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
 
     private void handleCrash(final Throwable exception) {
         final PluginManager pm = getServer().getPluginManager();
-        EssentialsLogger.getLogger().log(Level.SEVERE, exception.toString());
+        LOGGER.log(Level.SEVERE, exception.toString());
         exception.printStackTrace();
         pm.registerEvents(new Listener() {
             @EventHandler(priority = EventPriority.LOW)

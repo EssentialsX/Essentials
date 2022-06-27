@@ -133,7 +133,7 @@ public class Warps implements IConf, net.ess3.api.IWarps {
                             warpPoints.put(new StringIgnoreCase(name), conf);
                         }
                     } catch (final Exception ex) {
-                        EssentialsLogger.getLogger().log(Level.WARNING, tl("loadWarpError", filename), ex);
+                        Essentials.getWrappedLogger().log(Level.WARNING, tl("loadWarpError", filename), ex);
                     }
                 }
             }
