@@ -12,6 +12,7 @@ import net.essentialsx.api.v2.services.discord.InteractionCommandArgument;
 import net.essentialsx.api.v2.services.discord.InteractionController;
 import net.essentialsx.api.v2.services.discord.InteractionEvent;
 import net.essentialsx.api.v2.services.discord.InteractionException;
+import net.essentialsx.discord.EssentialsDiscord;
 import net.essentialsx.discord.JDADiscordService;
 import net.essentialsx.discord.util.DiscordUtil;
 import org.jetbrains.annotations.NotNull;
@@ -27,8 +28,7 @@ import java.util.logging.Logger;
 import static com.earth2me.essentials.I18n.tl;
 
 public class InteractionControllerImpl extends ListenerAdapter implements InteractionController {
-    private final static Logger logger = Logger.getLogger("EssentialsDiscord");
-
+    private static final Logger logger = EssentialsDiscord.getWrappedLogger();
     private final JDADiscordService jda;
 
     private final Map<String, InteractionCommand> commandMap = new ConcurrentHashMap<>();

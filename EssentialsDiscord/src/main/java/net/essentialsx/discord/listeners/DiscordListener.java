@@ -10,6 +10,7 @@ import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.ess3.api.IUser;
 import net.essentialsx.api.v2.events.discord.DiscordRelayEvent;
+import net.essentialsx.discord.EssentialsDiscord;
 import net.essentialsx.discord.JDADiscordService;
 import net.essentialsx.discord.interactions.InteractionChannelImpl;
 import net.essentialsx.discord.interactions.InteractionMemberImpl;
@@ -25,7 +26,7 @@ import java.util.logging.Logger;
 import java.util.regex.Pattern;
 
 public class DiscordListener extends ListenerAdapter {
-    private final static Logger logger = Logger.getLogger("EssentialsDiscord");
+    private final static Logger logger = EssentialsDiscord.getWrappedLogger();
 
     private final JDADiscordService plugin;
 

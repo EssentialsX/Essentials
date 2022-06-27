@@ -1,5 +1,6 @@
 package com.earth2me.essentials.xmpp;
 
+import com.earth2me.essentials.EssentialsLogger;
 import com.earth2me.essentials.IEssentials;
 import com.earth2me.essentials.metrics.MetricsWrapper;
 import net.ess3.api.IUser;
@@ -13,6 +14,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.util.List;
 import java.util.Locale;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import static com.earth2me.essentials.I18n.tl;
 
@@ -57,6 +59,25 @@ public class EssentialsXMPP extends JavaPlugin implements IEssentialsXMPP {
         if (metrics == null) {
             metrics = new MetricsWrapper(this, 3818, true);
             metrics.addCustomChart(new SimplePie("config-valid", () -> xmpp.isConfigValid() ? "yes" : "no"));
+        }
+    }
+
+    @Override
+    public Logger getLogger() {
+        try {
+            return EssentialsLogger.getLoggerProvider(this);
+        } catch (Throwable ignored) {
+            // In case Essentials isn't installed/loaded
+            return super.getLogger();
+        }
+    }
+
+    public static Logger getWrappedLogger() {
+        try {
+            return EssentialsLogger.getLoggerProvider("EssentialsXMPP");
+        } catch (Throwable ignored) {
+            // In case Essentials isn't installed/loaded
+            return Logger.getLogger("EssentialsXMPP");
         }
     }
 

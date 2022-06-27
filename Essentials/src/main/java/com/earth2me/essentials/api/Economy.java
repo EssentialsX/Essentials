@@ -17,14 +17,12 @@ import java.math.MathContext;
 import java.text.MessageFormat;
 import java.util.UUID;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * You should use Vault instead of directly using this class.
  */
 public class Economy {
     public static final MathContext MATH_CONTEXT = MathContext.DECIMAL128;
-    private static final Logger LOGGER = Logger.getLogger("Essentials");
     private static IEssentials ess;
 
     private static final String WARN_CALL_BEFORE_LOAD = "Essentials API is called before Essentials is loaded.";
@@ -54,8 +52,8 @@ public class Economy {
         final UUID npcUUID = UUID.nameUUIDFromBytes(("NPC:" + name).getBytes(Charsets.UTF_8));
         final File npcFile = new File(folder, npcUUID + ".yml");
         if (npcFile.exists()) {
-            LOGGER.log(Level.SEVERE, MessageFormat.format(WARN_NPC_RECREATE_1, name, npcUUID.toString()), new RuntimeException());
-            LOGGER.log(Level.SEVERE, WARN_NPC_RECREATE_2);
+            ess.getLogger().log(Level.SEVERE, MessageFormat.format(WARN_NPC_RECREATE_1, name, npcUUID.toString()), new RuntimeException());
+            ess.getLogger().log(Level.SEVERE, WARN_NPC_RECREATE_2);
         }
         final EssentialsUserConfiguration npcConfig = new EssentialsUserConfiguration(name, npcUUID, npcFile);
         npcConfig.load();
@@ -92,7 +90,7 @@ public class Economy {
             if (player != null) {
                 user = ess.getUser(player.getUniqueId());
                 if (user != null) {
-                    LOGGER.log(Level.INFO, MessageFormat.format(WARN_PLAYER_UUID_NO_NAME, name, player.getUniqueId().toString()), new RuntimeException());
+                    ess.getLogger().log(Level.INFO, MessageFormat.format(WARN_PLAYER_UUID_NO_NAME, name, player.getUniqueId().toString()), new RuntimeException());
                 }
             }
         }
@@ -192,7 +190,7 @@ public class Economy {
         try {
             setMoney(name, BigDecimal.valueOf(balance));
         } catch (final ArithmeticException e) {
-            LOGGER.log(Level.WARNING, "Failed to set balance of " + name + " to " + balance + ": " + e.getMessage(), e);
+            ess.getLogger().log(Level.WARNING, "Failed to set balance of " + name + " to " + balance + ": " + e.getMessage(), e);
         }
     }
 
@@ -270,7 +268,7 @@ public class Economy {
         try {
             add(name, BigDecimal.valueOf(amount));
         } catch (final ArithmeticException e) {
-            LOGGER.log(Level.WARNING, "Failed to add " + amount + " to balance of " + name + ": " + e.getMessage(), e);
+            ess.getLogger().log(Level.WARNING, "Failed to add " + amount + " to balance of " + name + ": " + e.getMessage(), e);
         }
     }
 
@@ -342,7 +340,7 @@ public class Economy {
         try {
             substract(name, BigDecimal.valueOf(amount));
         } catch (final ArithmeticException e) {
-            LOGGER.log(Level.WARNING, "Failed to subtract " + amount + " of balance of " + name + ": " + e.getMessage(), e);
+            ess.getLogger().log(Level.WARNING, "Failed to subtract " + amount + " of balance of " + name + ": " + e.getMessage(), e);
         }
     }
 
@@ -412,7 +410,7 @@ public class Economy {
         try {
             divide(name, BigDecimal.valueOf(amount));
         } catch (final ArithmeticException e) {
-            LOGGER.log(Level.WARNING, "Failed to divide balance of " + name + " by " + amount + ": " + e.getMessage(), e);
+            ess.getLogger().log(Level.WARNING, "Failed to divide balance of " + name + " by " + amount + ": " + e.getMessage(), e);
         }
     }
 
@@ -484,7 +482,7 @@ public class Economy {
         try {
             multiply(name, BigDecimal.valueOf(amount));
         } catch (final ArithmeticException e) {
-            LOGGER.log(Level.WARNING, "Failed to multiply balance of " + name + " by " + amount + ": " + e.getMessage(), e);
+            ess.getLogger().log(Level.WARNING, "Failed to multiply balance of " + name + " by " + amount + ": " + e.getMessage(), e);
         }
     }
 
@@ -605,7 +603,7 @@ public class Economy {
         try {
             return hasEnough(name, BigDecimal.valueOf(amount));
         } catch (final ArithmeticException e) {
-            LOGGER.log(Level.WARNING, "Failed to compare balance of " + name + " with " + amount + ": " + e.getMessage(), e);
+            ess.getLogger().log(Level.WARNING, "Failed to compare balance of " + name + " with " + amount + ": " + e.getMessage(), e);
             return false;
         }
     }
@@ -666,7 +664,7 @@ public class Economy {
         try {
             return hasMore(name, BigDecimal.valueOf(amount));
         } catch (final ArithmeticException e) {
-            LOGGER.log(Level.WARNING, "Failed to compare balance of " + name + " with " + amount + ": " + e.getMessage(), e);
+            ess.getLogger().log(Level.WARNING, "Failed to compare balance of " + name + " with " + amount + ": " + e.getMessage(), e);
             return false;
         }
     }
@@ -728,7 +726,7 @@ public class Economy {
         try {
             return hasLess(name, BigDecimal.valueOf(amount));
         } catch (final ArithmeticException e) {
-            LOGGER.log(Level.WARNING, "Failed to compare balance of " + name + " with " + amount + ": " + e.getMessage(), e);
+            ess.getLogger().log(Level.WARNING, "Failed to compare balance of " + name + " with " + amount + ": " + e.getMessage(), e);
             return false;
         }
     }
@@ -835,7 +833,7 @@ public class Economy {
         try {
             return format(BigDecimal.valueOf(amount));
         } catch (final NumberFormatException e) {
-            LOGGER.log(Level.WARNING, "Failed to display " + amount + ": " + e.getMessage(), e);
+            ess.getLogger().log(Level.WARNING, "Failed to display " + amount + ": " + e.getMessage(), e);
             return "NaN";
         }
     }
@@ -902,7 +900,7 @@ public class Economy {
             createNPCFile(name);
             return true;
         }
-        LOGGER.log(Level.WARNING, MessageFormat.format(WARN_EXISTING_NPC_CREATE, name, user.getConfigUUID()), new RuntimeException());
+        ess.getLogger().log(Level.WARNING, MessageFormat.format(WARN_EXISTING_NPC_CREATE, name, user.getConfigUUID()), new RuntimeException());
         return false;
     }
 

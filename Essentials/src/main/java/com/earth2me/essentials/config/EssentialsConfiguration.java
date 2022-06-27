@@ -1,5 +1,6 @@
 package com.earth2me.essentials.config;
 
+import com.earth2me.essentials.Essentials;
 import com.earth2me.essentials.config.annotations.DeleteIfIncomplete;
 import com.earth2me.essentials.config.annotations.DeleteOnEmpty;
 import com.earth2me.essentials.config.entities.CommandCooldown;
@@ -44,12 +45,10 @@ import java.util.concurrent.Future;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import static com.earth2me.essentials.I18n.tl;
 
 public class EssentialsConfiguration {
-    protected static final Logger LOGGER = Logger.getLogger("Essentials");
     private static final ExecutorService EXECUTOR_SERVICE = Executors.newSingleThreadExecutor();
     private static final ObjectMapper.Factory MAPPER_FACTORY = ObjectMapper.factoryBuilder()
             .addProcessor(DeleteOnEmpty.class, (data, value) -> new DeleteOnEmptyProcessor())
@@ -142,7 +141,7 @@ public class EssentialsConfiguration {
             try {
                 result.put(entry.getKey().toLowerCase(Locale.ENGLISH), jailNode.get(LazyLocation.class));
             } catch (SerializationException e) {
-                LOGGER.log(Level.WARNING, "Error serializing key " + entry.getKey(), e);
+                Essentials.getWrappedLogger().log(Level.WARNING, "Error serializing key " + entry.getKey(), e);
             }
         }
         return result;
@@ -156,7 +155,7 @@ public class EssentialsConfiguration {
         try {
             toSplitRoot(path, configurationNode).set(type, list);
         } catch (SerializationException e) {
-            LOGGER.log(Level.SEVERE, e.getMessage(), e);
+            Essentials.getWrappedLogger().log(Level.SEVERE, e.getMessage(), e);
         }
     }
 
@@ -172,7 +171,7 @@ public class EssentialsConfiguration {
             }
             return list;
         } catch (SerializationException e) {
-            LOGGER.log(Level.SEVERE, e.getMessage(), e);
+            Essentials.getWrappedLogger().log(Level.SEVERE, e.getMessage(), e);
             return new ArrayList<>();
         }
     }
@@ -310,7 +309,7 @@ public class EssentialsConfiguration {
             try {
                 node.set(null);
             } catch (SerializationException e) {
-                LOGGER.log(Level.SEVERE, e.getMessage(), e);
+                Essentials.getWrappedLogger().log(Level.SEVERE, e.getMessage(), e);
             }
         }
     }
@@ -319,7 +318,7 @@ public class EssentialsConfiguration {
         try {
             toSplitRoot(path, configurationNode).set(value);
         } catch (SerializationException e) {
-            LOGGER.log(Level.SEVERE, e.getMessage(), e);
+            Essentials.getWrappedLogger().log(Level.SEVERE, e.getMessage(), e);
         }
     }
 
@@ -345,13 +344,13 @@ public class EssentialsConfiguration {
 
     public synchronized void load() {
         if (pendingWrites.get() != 0) {
-            LOGGER.log(Level.INFO, "Parsing config file {0} has been aborted due to {1} current pending write(s).", new Object[]{configFile, pendingWrites.get()});
+            Essentials.getWrappedLogger().log(Level.INFO, "Parsing config file {0} has been aborted due to {1} current pending write(s).", new Object[]{configFile, pendingWrites.get()});
             return;
         }
 
         if (configFile.getParentFile() != null && !configFile.getParentFile().exists()) {
             if (!configFile.getParentFile().mkdirs()) {
-                LOGGER.log(Level.SEVERE, tl("failedToCreateConfig", configFile.toString()));
+                Essentials.getWrappedLogger().log(Level.SEVERE, tl("failedToCreateConfig", configFile.toString()));
                 return;
             }
         }
@@ -363,10 +362,10 @@ public class EssentialsConfiguration {
                 convertAltFile();
             } else if (templateName != null) {
                 try (final InputStream is = resourceClass.getResourceAsStream(templateName)) {
-                    LOGGER.log(Level.INFO, tl("creatingConfigFromTemplate", configFile.toString()));
+                    Essentials.getWrappedLogger().log(Level.INFO, tl("creatingConfigFromTemplate", configFile.toString()));
                     Files.copy(is, configFile.toPath());
                 } catch (IOException e) {
-                    LOGGER.log(Level.SEVERE, tl("failedToWriteConfig", configFile.toString()), e);
+                    Essentials.getWrappedLogger().log(Level.SEVERE, tl("failedToWriteConfig", configFile.toString()), e);
                 }
             }
         }
@@ -376,12 +375,12 @@ public class EssentialsConfiguration {
         } catch (final ParsingException e) {
             final File broken = new File(configFile.getAbsolutePath() + ".broken." + System.currentTimeMillis());
             if (configFile.renameTo(broken)) {
-                LOGGER.log(Level.SEVERE, "The file " + configFile + " is broken, it has been renamed to " + broken, e.getCause());
+                Essentials.getWrappedLogger().log(Level.SEVERE, "The file " + configFile + " is broken, it has been renamed to " + broken, e.getCause());
                 return;
             }
-            LOGGER.log(Level.SEVERE, "The file " + configFile + " is broken. A backup file has failed to be created", e.getCause());
+            Essentials.getWrappedLogger().log(Level.SEVERE, "The file " + configFile + " is broken. A backup file has failed to be created", e.getCause());
         } catch (final ConfigurateException e) {
-            LOGGER.log(Level.SEVERE, e.getMessage(), e);
+            Essentials.getWrappedLogger().log(Level.SEVERE, e.getMessage(), e);
         } finally {
             // Something is wrong! We need a node! I hope the backup worked!
             if (configurationNode == null) {
@@ -448,7 +447,7 @@ public class EssentialsConfiguration {
         try {
             delaySave().get();
         } catch (final InterruptedException | ExecutionException e) {
-            LOGGER.log(Level.SEVERE, e.getMessage(), e);
+            Essentials.getWrappedLogger().log(Level.SEVERE, e.getMessage(), e);
         }
     }
 
