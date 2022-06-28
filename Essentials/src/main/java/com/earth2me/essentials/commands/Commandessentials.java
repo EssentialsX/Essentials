@@ -269,6 +269,7 @@ public class Commandessentials extends EssentialsCommand {
             boolean worth = false;
             boolean tpr = false;
             boolean spawns = false;
+            boolean commands = false;
             for (final String arg : args) {
                 if (arg.equals("*") || arg.equalsIgnoreCase("all")) {
                     config = true;
@@ -278,6 +279,7 @@ public class Commandessentials extends EssentialsCommand {
                     worth = true;
                     tpr = true;
                     spawns = true;
+                    commands = true;
                     break;
                 } else if (arg.equalsIgnoreCase("config")) {
                     config = true;
@@ -293,6 +295,8 @@ public class Commandessentials extends EssentialsCommand {
                     tpr = true;
                 } else if (arg.equalsIgnoreCase("spawns")) {
                     spawns = true;
+                } else if (arg.equalsIgnoreCase("commands")) {
+                    commands = true;
                 }
             }
 
@@ -353,6 +357,14 @@ public class Commandessentials extends EssentialsCommand {
                     files.add(new PasteUtil.PasteFile("spawn.yml", new String(Files.readAllBytes(ess.getDataFolder().toPath().resolve("spawn.yml")), StandardCharsets.UTF_8)));
                 } catch (IOException e) {
                     sender.sendMessage(tl("dumpErrorUpload", "spawn.yml", e.getMessage()));
+                }
+            }
+
+            if (commands) {
+                try {
+                    files.add(new PasteUtil.PasteFile("commands.yml", new String(Files.readAllBytes(Paths.get("commands.yml")), StandardCharsets.UTF_8)));
+                } catch (IOException e) {
+                    sender.sendMessage(tl("dumpErrorUpload", "commands.yml", e.getMessage()));
                 }
             }
 
@@ -756,7 +768,7 @@ public class Commandessentials extends EssentialsCommand {
                 }
                 break;
             case "dump":
-                final List<String> list = Lists.newArrayList("config", "kits", "log", "discord", "worth", "tpr", "spawns", "all");
+                final List<String> list = Lists.newArrayList("config", "kits", "log", "discord", "worth", "tpr", "spawns", "commands", "all");
                 for (String arg : args) {
                     if (arg.equals("*") || arg.equalsIgnoreCase("all")) {
                         list.clear();
