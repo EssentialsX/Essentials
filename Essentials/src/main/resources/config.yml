@@ -1174,10 +1174,11 @@ respawn-at-home-bed: true
 # When users die, should EssentialsSpawn respect users' respawn anchors?
 respawn-at-anchor: false
 
-# When users die, should they respawn randomly?
-# The value of respawn-random-location will be the name of the location (set with /settpr) to teleport from.
-random-respawn: false
-random-respawn-location: world
+# If configured, users will spawn at the random spawn location instead of the newbies spawnpoint.
+random-spawn-location: "none"
+
+# If configured, when users die, they will respawn at the random respawn location.
+random-respawn-location: "none"
 
 # Teleport all joining players to the spawnpoint
 spawn-on-join: false

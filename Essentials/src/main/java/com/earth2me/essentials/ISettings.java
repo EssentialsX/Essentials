@@ -101,7 +101,7 @@ public interface ISettings extends IConf {
 
     boolean getRespawnAtHome();
 
-    boolean isRandomRespawn();
+    String getRandomSpawnLocation();
 
     String getRandomRespawnLocation();
 

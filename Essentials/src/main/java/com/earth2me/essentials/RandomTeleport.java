@@ -64,6 +64,10 @@ public class RandomTeleport implements IConf {
         }
     }
 
+    public boolean hasLocation(final String name) {
+        return config.hasProperty("locations." + name);
+    }
+
     public Location getCenter(final String name) {
         try {
             final LazyLocation center = config.getLocation(locationKey(name, "center"));

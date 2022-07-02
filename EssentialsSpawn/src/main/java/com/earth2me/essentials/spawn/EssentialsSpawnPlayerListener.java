@@ -2,7 +2,6 @@ package com.earth2me.essentials.spawn;
 
 import com.earth2me.essentials.Kit;
 import com.earth2me.essentials.OfflinePlayer;
-import com.earth2me.essentials.RandomTeleport;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.textreader.IText;
 import com.earth2me.essentials.textreader.KeywordReplacer;
@@ -66,13 +65,9 @@ class EssentialsSpawnPlayerListener implements Listener {
                 event.setRespawnLocation(home);
                 return;
             }
-        } else if (ess.getSettings().isRandomRespawn()) {
-            final String name = ess.getSettings().getRandomRespawnLocation();
-            final RandomTeleport randomTeleport = ess.getRandomTeleport();
-            randomTeleport.getRandomLocation(name).thenAccept(location -> {
-                final CompletableFuture<Boolean> future = new CompletableFuture<>();
-                user.getAsyncTeleport().now(location, false, PlayerTeleportEvent.TeleportCause.COMMAND, future);
-            });
+        }
+        if (tryRandomTeleport(user, ess.getSettings().getRandomRespawnLocation())) {
+            return;
         }
         final Location spawn = spawns.getSpawn(user.getGroup());
         if (spawn != null) {
@@ -112,7 +107,9 @@ class EssentialsSpawnPlayerListener implements Listener {
 
         final User user = ess.getUser(player);
 
-        if (!"none".equalsIgnoreCase(ess.getSettings().getNewbieSpawn())) {
+        final boolean spawnRandomly = tryRandomTeleport(user, ess.getSettings().getRandomSpawnLocation());
+
+        if (!spawnRandomly && !"none".equalsIgnoreCase(ess.getSettings().getNewbieSpawn())) {
             ess.scheduleSyncDelayedTask(new NewPlayerTeleport(user), 1L);
         }
 
@@ -168,5 +165,16 @@ class EssentialsSpawnPlayerListener implements Listener {
                 user.getAsyncTeleport().now(spawn, false, TeleportCause.PLUGIN, future);
             }
         }
+    }
+
+    private boolean tryRandomTeleport(final User user, final String name) {
+        if (!ess.getRandomTeleport().hasLocation(name)) {
+            return false;
+        }
+        ess.getRandomTeleport().getRandomLocation(name).thenAccept(location -> {
+            final CompletableFuture<Boolean> future = new CompletableFuture<>();
+            user.getAsyncTeleport().now(location, false, PlayerTeleportEvent.TeleportCause.PLUGIN, future);
+        });
+        return true;
     }
 }
