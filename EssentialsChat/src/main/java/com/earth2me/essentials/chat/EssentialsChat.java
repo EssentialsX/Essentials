@@ -1,5 +1,6 @@
 package com.earth2me.essentials.chat;
 
+import com.earth2me.essentials.EssentialsLogger;
 import com.earth2me.essentials.metrics.MetricsWrapper;
 import net.ess3.api.IEssentials;
 import org.bukkit.command.Command;
@@ -12,6 +13,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import static com.earth2me.essentials.I18n.tl;
 
@@ -33,15 +35,25 @@ public class EssentialsChat extends JavaPlugin {
 
         final Map<AsyncPlayerChatEvent, ChatStore> chatStore = Collections.synchronizedMap(new HashMap<>());
 
-        final EssentialsChatPlayerListenerLowest playerListenerLowest = new EssentialsChatPlayerListenerLowest(getServer(), ess, chatStore);
-        final EssentialsChatPlayerListenerNormal playerListenerNormal = new EssentialsChatPlayerListenerNormal(getServer(), ess, chatStore);
-        final EssentialsChatPlayerListenerHighest playerListenerHighest = new EssentialsChatPlayerListenerHighest(getServer(), ess, chatStore);
+        final EssentialsChatPlayerListenerLowest playerListenerLowest = new EssentialsChatPlayerListenerLowest(getServer(), ess, this, chatStore);
+        final EssentialsChatPlayerListenerNormal playerListenerNormal = new EssentialsChatPlayerListenerNormal(getServer(), ess, this, chatStore);
+        final EssentialsChatPlayerListenerHighest playerListenerHighest = new EssentialsChatPlayerListenerHighest(getServer(), ess, this, chatStore);
         pluginManager.registerEvents(playerListenerLowest, this);
         pluginManager.registerEvents(playerListenerNormal, this);
         pluginManager.registerEvents(playerListenerHighest, this);
 
         if (metrics == null) {
             metrics = new MetricsWrapper(this, 3814, false);
+        }
+    }
+
+    @Override
+    public Logger getLogger() {
+        try {
+            return EssentialsLogger.getLoggerProvider(this);
+        } catch (Throwable ignored) {
+            // In case Essentials isn't installed/loaded
+            return super.getLogger();
         }
     }
 

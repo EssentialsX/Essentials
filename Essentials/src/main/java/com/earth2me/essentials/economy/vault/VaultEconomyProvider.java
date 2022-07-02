@@ -19,7 +19,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * A goddamn Vault adapter, what more do you want?
@@ -29,7 +28,6 @@ import java.util.logging.Logger;
  * {@link com.earth2me.essentials.User}.
  */
 public class VaultEconomyProvider implements Economy {
-    private static final Logger LOGGER = Logger.getLogger("Essentials");
     private static final String WARN_NPC_RECREATE_1 = "Account creation was requested for NPC user {0}, but an account file with UUID {1} already exists.";
     private static final String WARN_NPC_RECREATE_2 = "Essentials will create a new account as requested by the other plugin, but this is almost certainly a bug and should be reported.";
 
@@ -301,8 +299,8 @@ public class VaultEconomyProvider implements Economy {
             }
             final File npcFile = new File(folder, player.getUniqueId() + ".yml");
             if (npcFile.exists()) {
-                LOGGER.log(Level.SEVERE, MessageFormat.format(WARN_NPC_RECREATE_1, player.getName(), player.getUniqueId().toString()), new RuntimeException());
-                LOGGER.log(Level.SEVERE, WARN_NPC_RECREATE_2);
+                ess.getLogger().log(Level.SEVERE, MessageFormat.format(WARN_NPC_RECREATE_1, player.getName(), player.getUniqueId().toString()), new RuntimeException());
+                ess.getLogger().log(Level.SEVERE, WARN_NPC_RECREATE_2);
             }
             final EssentialsUserConfiguration npcConfig = new EssentialsUserConfiguration(player.getName(), player.getUniqueId(), npcFile);
             npcConfig.load();
@@ -317,7 +315,7 @@ public class VaultEconomyProvider implements Economy {
         // Loading a v4 UUID that we somehow didn't track, mark it as a normal player and hope for the best, vault sucks :/
         try {
             if (ess.getSettings().isDebug()) {
-                LOGGER.info("Vault requested a player account creation for a v4 UUID: " + player);
+                ess.getLogger().info("Vault requested a player account creation for a v4 UUID: " + player);
             }
             ess.getUserMap().load(player);
             return true;

@@ -1,5 +1,6 @@
 package com.earth2me.essentials.protect;
 
+import com.earth2me.essentials.EssentialsLogger;
 import com.earth2me.essentials.metrics.MetricsWrapper;
 import com.earth2me.essentials.utils.VersionUtil;
 import org.bukkit.Material;
@@ -13,6 +14,7 @@ import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class EssentialsProtect extends JavaPlugin implements IProtect {
     private final Map<ProtectConfig, Boolean> settingsBoolean = new EnumMap<>(ProtectConfig.class);
@@ -35,6 +37,16 @@ public class EssentialsProtect extends JavaPlugin implements IProtect {
 
         if (metrics == null) {
             metrics = new MetricsWrapper(this, 3816, false);
+        }
+    }
+
+    @Override
+    public Logger getLogger() {
+        try {
+            return EssentialsLogger.getLoggerProvider(this);
+        } catch (Throwable ignored) {
+            // In case Essentials isn't installed/loaded
+            return super.getLogger();
         }
     }
 

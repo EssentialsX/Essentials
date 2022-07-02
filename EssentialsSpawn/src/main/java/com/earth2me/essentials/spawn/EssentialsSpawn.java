@@ -1,5 +1,6 @@
 package com.earth2me.essentials.spawn;
 
+import com.earth2me.essentials.EssentialsLogger;
 import com.earth2me.essentials.metrics.MetricsWrapper;
 import net.ess3.api.IEssentials;
 import org.bukkit.Location;
@@ -12,6 +13,7 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import static com.earth2me.essentials.I18n.tl;
 
@@ -51,6 +53,25 @@ public class EssentialsSpawn extends JavaPlugin implements IEssentialsSpawn {
 
         if (metrics == null) {
             metrics = new MetricsWrapper(this, 3817, true);
+        }
+    }
+
+    @Override
+    public Logger getLogger() {
+        try {
+            return EssentialsLogger.getLoggerProvider(this);
+        } catch (Throwable ignored) {
+            // In case Essentials isn't installed/loaded
+            return super.getLogger();
+        }
+    }
+
+    public static Logger getWrappedLogger() {
+        try {
+            return EssentialsLogger.getLoggerProvider("EssentialsSpawn");
+        } catch (Throwable ignored) {
+            // In case Essentials isn't installed/loaded
+            return Logger.getLogger("EssentialsSpawn");
         }
     }
 
