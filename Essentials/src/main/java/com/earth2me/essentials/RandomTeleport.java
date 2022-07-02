@@ -8,6 +8,7 @@ import com.earth2me.essentials.utils.VersionUtil;
 import io.papermc.lib.PaperLib;
 import net.ess3.api.InvalidWorldException;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Biome;
 
@@ -241,8 +242,12 @@ public class RandomTeleport implements IConf {
 
     // Returns an appropriate elevation for a given location in the nether, or MIN_VALUE if none is found
     private double getNetherYAt(final Location location) {
-        for (int y = 32; y < ess.getWorldInfoProvider().getMaxHeight(location.getWorld()); ++y) {
-            if (!LocationUtil.isBlockUnsafe(ess, location.getWorld(), location.getBlockX(), y, location.getBlockZ())) {
+        final World world = location.getWorld();
+        for (int y = 32; y < ess.getWorldInfoProvider().getMaxHeight(world); ++y) {
+            if (Material.BEDROCK.equals(world.getBlockAt(location.getBlockX(), y, location.getBlockZ()).getType())) {
+                break;
+            }
+            if (!LocationUtil.isBlockUnsafe(ess, world, location.getBlockX(), y, location.getBlockZ())) {
                 return y;
             }
         }
