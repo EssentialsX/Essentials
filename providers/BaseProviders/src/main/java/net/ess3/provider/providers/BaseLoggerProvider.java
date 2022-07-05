@@ -1,6 +1,7 @@
 package net.ess3.provider.providers;
 
 import net.ess3.provider.LoggerProvider;
+import org.bukkit.plugin.Plugin;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -8,8 +9,8 @@ import java.util.logging.Logger;
 public class BaseLoggerProvider extends LoggerProvider {
     private final Logger logger;
 
-    public BaseLoggerProvider(final Logger logger) {
-        super(logger.getName());
+    public BaseLoggerProvider(final Plugin plugin, final Logger logger) {
+        super(plugin);
         this.logger = logger;
     }
 

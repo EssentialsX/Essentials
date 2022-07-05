@@ -12,7 +12,7 @@ public class PaperLoggerProvider extends LoggerProvider {
     private final ComponentLogger logger;
 
     public PaperLoggerProvider(final Plugin plugin) {
-        super(plugin.getComponentLogger().getName());
+        super(plugin);
         this.logger = plugin.getComponentLogger();
     }
 

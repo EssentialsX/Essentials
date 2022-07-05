@@ -13,7 +13,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import static com.earth2me.essentials.I18n.tl;
 
@@ -23,6 +22,7 @@ public class EssentialsChat extends JavaPlugin {
 
     @Override
     public void onEnable() {
+        EssentialsLogger.updatePluginLogger(this);
         final PluginManager pluginManager = getServer().getPluginManager();
         ess = (IEssentials) pluginManager.getPlugin("Essentials");
         if (!this.getDescription().getVersion().equals(ess.getDescription().getVersion())) {
@@ -44,16 +44,6 @@ public class EssentialsChat extends JavaPlugin {
 
         if (metrics == null) {
             metrics = new MetricsWrapper(this, 3814, false);
-        }
-    }
-
-    @Override
-    public Logger getLogger() {
-        try {
-            return EssentialsLogger.getLoggerProvider(this);
-        } catch (Throwable ignored) {
-            // In case Essentials isn't installed/loaded
-            return super.getLogger();
         }
     }
 
