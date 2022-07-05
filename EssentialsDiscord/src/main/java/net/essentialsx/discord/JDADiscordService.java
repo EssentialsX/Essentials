@@ -38,7 +38,6 @@ import net.essentialsx.discord.listeners.DiscordListener;
 import net.essentialsx.discord.util.ConsoleInjector;
 import net.essentialsx.discord.util.DiscordUtil;
 import net.essentialsx.discord.util.MessageUtil;
-import org.apache.commons.lang.math.NumberUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
@@ -61,7 +60,7 @@ import java.util.regex.Pattern;
 import static com.earth2me.essentials.I18n.tl;
 
 public class JDADiscordService implements DiscordService, IEssentialsModule {
-    private final static Logger logger = Logger.getLogger("EssentialsDiscord");
+    private final static Logger logger = EssentialsDiscord.getWrappedLogger();
     private final EssentialsDiscord plugin;
     private final Unsafe unsafe = this::getJda;
 
@@ -247,7 +246,7 @@ public class JDADiscordService implements DiscordService, IEssentialsModule {
 
     @Override
     public void sendMessage(MessageType type, String message, boolean allowGroupMentions) {
-        if (!registeredTypes.containsKey(type.getKey()) && !NumberUtils.isDigits(type.getKey())) {
+        if (!registeredTypes.containsKey(type.getKey()) && !NumberUtil.isLong(type.getKey())) {
             logger.warning("Sending message to channel \"" + type.getKey() + "\" which is an unregistered type! If you are a plugin author, you should be registering your MessageType before using them.");
         }
         final DiscordMessageEvent event = new DiscordMessageEvent(type, FormatUtil.stripFormat(message), allowGroupMentions);

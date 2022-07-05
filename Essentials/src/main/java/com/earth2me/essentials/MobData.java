@@ -35,7 +35,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Random;
-import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 import static com.earth2me.essentials.I18n.tl;
@@ -197,9 +196,11 @@ public enum MobData {
     CYAN_AXOLOTL("cyan", MobCompat.AXOLOTL, "axolotl:CYAN", true),
     BLUE_AXOLOTL("blue", MobCompat.AXOLOTL, "axolotl:BLUE", true),
     SCREAMING_GOAT("screaming", MobCompat.GOAT, Data.GOAT_SCREAMING, true),
+    TEMPERATE_FROG("temperate", MobCompat.FROG, "frog:TEMPERATE", true),
+    WARM_FROG("warm", MobCompat.FROG, "frog:WARM", true),
+    COLD_FROG("cold", MobCompat.FROG, "frog:COLD", true),
     ;
 
-    public static final Logger logger = Logger.getLogger("Essentials");
     final private String nickname;
     final private List<String> suggestions;
     final private Object type;
@@ -407,9 +408,13 @@ public enum MobData {
                     MobCompat.setAxolotlVariant(spawned, split[1]);
                     break;
                 }
+                case "frog": {
+                    MobCompat.setFrogVariant(spawned, split[1]);
+                    break;
+                }
             }
         } else {
-            logger.warning("Unknown mob data type: " + this.toString());
+            Essentials.getWrappedLogger().warning("Unknown mob data type: " + this.toString());
         }
     }
 

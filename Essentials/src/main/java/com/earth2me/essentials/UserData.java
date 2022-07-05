@@ -85,14 +85,14 @@ public abstract class UserData extends PlayerExtension implements IConf {
         try {
             holder = config.getRootNode().get(UserConfigHolder.class);
         } catch (SerializationException e) {
-            ess.getLogger().log(Level.SEVERE, "Error while reading user config: " + e.getMessage(), e);
+            ess.getLogger().log(Level.SEVERE, "Error while reading user config: " + config.getFile().getName(), e);
             throw new RuntimeException(e);
         }
         config.setSaveHook(() -> {
             try {
                 config.getRootNode().set(UserConfigHolder.class, holder);
             } catch (SerializationException e) {
-                ess.getLogger().log(Level.SEVERE, "Error while saving user config: " + e.getMessage(), e);
+                ess.getLogger().log(Level.SEVERE, "Error while saving user config: " + config.getFile().getName(), e);
                 throw new RuntimeException(e);
             }
         });
