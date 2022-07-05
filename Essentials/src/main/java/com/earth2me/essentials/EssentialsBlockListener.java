@@ -43,7 +43,7 @@ public class EssentialsBlockListener implements Listener {
         final User user = ess.getUser(event.getPlayer());
         if (user.hasUnlimited(is) && user.getBase().getGameMode() == GameMode.SURVIVAL) {
             ess.scheduleSyncDelayedTask(() -> {
-                if(is.getType() != Material.AIR) {
+                if(is != null && is.getType() != null && !MaterialUtil.isAir(is.getType())) {
                     final ItemStack cloneIs = is.clone();
                     cloneIs.setAmount(1);
                     user.getBase().getInventory().addItem(cloneIs);
