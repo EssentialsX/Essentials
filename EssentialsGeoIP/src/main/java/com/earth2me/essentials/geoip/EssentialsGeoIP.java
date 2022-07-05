@@ -17,6 +17,7 @@ public class EssentialsGeoIP extends JavaPlugin {
 
     @Override
     public void onEnable() {
+        EssentialsLogger.updatePluginLogger(this);
         final PluginManager pm = getServer().getPluginManager();
         final IEssentials ess = (IEssentials) pm.getPlugin("Essentials");
         if (!this.getDescription().getVersion().equals(ess.getDescription().getVersion())) {
@@ -36,16 +37,6 @@ public class EssentialsGeoIP extends JavaPlugin {
 
         if (metrics == null) {
             metrics = new MetricsWrapper(this, 3815, false);
-        }
-    }
-
-    @Override
-    public Logger getLogger() {
-        try {
-            return EssentialsLogger.getLoggerProvider(this);
-        } catch (Throwable ignored) {
-            // In case Essentials isn't installed/loaded
-            return super.getLogger();
         }
     }
 

@@ -27,6 +27,7 @@ public class EssentialsDiscord extends JavaPlugin implements IEssentialsModule {
 
     @Override
     public void onEnable() {
+        EssentialsLogger.updatePluginLogger(this);
         ess = (IEssentials) getServer().getPluginManager().getPlugin("Essentials");
         if (ess == null || !ess.isEnabled()) {
             setEnabled(false);
@@ -64,16 +65,6 @@ public class EssentialsDiscord extends JavaPlugin implements IEssentialsModule {
                 }
                 jda.shutdown();
             }
-        }
-    }
-
-    @Override
-    public Logger getLogger() {
-        try {
-            return EssentialsLogger.getLoggerProvider(this);
-        } catch (Throwable ignored) {
-            // In case Essentials isn't installed/loaded
-            return super.getLogger();
         }
     }
 
