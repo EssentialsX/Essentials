@@ -15,8 +15,8 @@ import java.util.Locale;
 import java.util.Map;
 
 public class EssentialsChatPlayerListenerLowest extends EssentialsChatPlayer {
-    EssentialsChatPlayerListenerLowest(final Server server, final IEssentials ess, final Map<AsyncPlayerChatEvent, ChatStore> chatStorage) {
-        super(server, ess, chatStorage);
+    EssentialsChatPlayerListenerLowest(final Server server, final IEssentials ess, final EssentialsChat essChat, final Map<AsyncPlayerChatEvent, ChatStore> chatStorage) {
+        super(server, ess, essChat, chatStorage);
     }
 
     @EventHandler(priority = EventPriority.LOWEST)

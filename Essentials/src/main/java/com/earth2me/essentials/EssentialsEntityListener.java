@@ -30,13 +30,11 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.regex.Pattern;
 
 import static com.earth2me.essentials.I18n.tl;
 
 public class EssentialsEntityListener implements Listener {
-    private static final Logger LOGGER = Logger.getLogger("Essentials");
     private static final transient Pattern powertoolPlayer = Pattern.compile("\\{player\\}");
     private final IEssentials ess;
 
@@ -110,7 +108,7 @@ public class EssentialsEntityListener implements Listener {
                         @Override
                         public void run() {
                             attacker.getBase().chat("/" + command);
-                            LOGGER.log(Level.INFO, String.format("[PT] %s issued server command: /%s", attacker.getName(), command));
+                            ess.getLogger().log(Level.INFO, String.format("[PT] %s issued server command: /%s", attacker.getName(), command));
                         }
                     }
 

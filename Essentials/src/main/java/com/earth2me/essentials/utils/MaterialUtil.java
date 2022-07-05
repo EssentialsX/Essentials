@@ -82,13 +82,15 @@ public final class MaterialUtil {
             "ACACIA_SIGN", "BIRCH_SIGN",
             "DARK_OAK_SIGN", "JUNGLE_SIGN",
             "OAK_SIGN", "SPRUCE_SIGN",
-            "CRIMSON_SIGN", "WARPED_SIGN");
+            "CRIMSON_SIGN", "WARPED_SIGN",
+            "MANGROVE_SIGN");
 
         WALL_SIGNS = EnumUtil.getAllMatching(Material.class, "WALL_SIGN",
             "ACACIA_WALL_SIGN", "BIRCH_WALL_SIGN",
             "DARK_OAK_WALL_SIGN", "JUNGLE_WALL_SIGN",
             "OAK_WALL_SIGN", "SPRUCE_WALL_SIGN",
-            "CRIMSON_WALL_SIGN", "WARPED_WALL_SIGN");
+            "CRIMSON_WALL_SIGN", "WARPED_WALL_SIGN",
+            "MANGROVE_WALL_SIGN");
     }
 
     private MaterialUtil() {

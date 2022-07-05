@@ -1,7 +1,6 @@
 package com.earth2me.essentials;
 
 import com.google.common.io.Files;
-import org.bukkit.Bukkit;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -90,7 +89,7 @@ public class UUIDMap {
             }
             loading = false;
         } catch (final IOException ex) {
-            Bukkit.getLogger().log(Level.SEVERE, ex.getMessage(), ex);
+            Essentials.getWrappedLogger().log(Level.SEVERE, ex.getMessage(), ex);
         }
     }
 
@@ -147,9 +146,9 @@ public class UUIDMap {
                         Files.move(configFile, new File(endFile.getParentFile(), "usermap.bak.csv"));
                     }
                 } catch (final Exception ex2) {
-                    Bukkit.getLogger().log(Level.SEVERE, ex2.getMessage(), ex2);
+                    Essentials.getWrappedLogger().log(Level.SEVERE, ex2.getMessage(), ex2);
                 }
-                Bukkit.getLogger().log(Level.WARNING, ex.getMessage(), ex);
+                Essentials.getWrappedLogger().log(Level.WARNING, ex.getMessage(), ex);
             }
         }
     }
