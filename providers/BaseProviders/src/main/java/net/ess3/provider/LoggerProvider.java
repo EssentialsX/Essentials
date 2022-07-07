@@ -1,11 +1,14 @@
 package net.ess3.provider;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.PluginLogger;
 
-public abstract class LoggerProvider extends Logger {
-    public LoggerProvider(final String name) {
-        super(name, null);
+import java.util.logging.Level;
+import java.util.logging.LogRecord;
+
+public abstract class LoggerProvider extends PluginLogger {
+    public LoggerProvider(final Plugin plugin) {
+        super(plugin);
     }
 
     protected abstract void doTheLog(Level level, String message, Throwable throwable);
@@ -20,6 +23,11 @@ public abstract class LoggerProvider extends Logger {
     @Override
     public void log(Level level, String msg, Throwable thrown) {
         doTheLog(level, msg, thrown);
+    }
+
+    @Override
+    public void log(LogRecord logRecord) {
+        doTheLog(logRecord.getLevel(), logRecord.getMessage(), logRecord.getThrown());
     }
 
     @Override

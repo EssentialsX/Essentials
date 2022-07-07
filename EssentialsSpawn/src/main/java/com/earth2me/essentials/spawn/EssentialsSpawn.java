@@ -24,6 +24,7 @@ public class EssentialsSpawn extends JavaPlugin implements IEssentialsSpawn {
 
     @Override
     public void onEnable() {
+        EssentialsLogger.updatePluginLogger(this);
         final PluginManager pluginManager = getServer().getPluginManager();
         ess = (IEssentials) pluginManager.getPlugin("Essentials");
         if (!this.getDescription().getVersion().equals(ess.getDescription().getVersion())) {
@@ -53,16 +54,6 @@ public class EssentialsSpawn extends JavaPlugin implements IEssentialsSpawn {
 
         if (metrics == null) {
             metrics = new MetricsWrapper(this, 3817, true);
-        }
-    }
-
-    @Override
-    public Logger getLogger() {
-        try {
-            return EssentialsLogger.getLoggerProvider(this);
-        } catch (Throwable ignored) {
-            // In case Essentials isn't installed/loaded
-            return super.getLogger();
         }
     }
 
