@@ -24,7 +24,7 @@ import java.util.logging.Logger;
 import static com.earth2me.essentials.I18n.tl;
 
 class EssentialsSpawnPlayerListener implements Listener {
-    private static final Logger logger = Logger.getLogger("EssentialsSpawn");
+    private static final Logger logger = EssentialsSpawn.getWrappedLogger();
     private final transient IEssentials ess;
     private final transient SpawnStorage spawns;
 

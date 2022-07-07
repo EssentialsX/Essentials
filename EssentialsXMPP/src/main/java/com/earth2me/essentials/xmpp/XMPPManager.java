@@ -35,7 +35,7 @@ import java.util.logging.SimpleFormatter;
 import static com.earth2me.essentials.I18n.tl;
 
 public class XMPPManager extends Handler implements MessageListener, ChatManagerListener, IConf {
-    private static final Logger logger = Logger.getLogger("EssentialsXMPP");
+    private static final Logger logger = EssentialsXMPP.getWrappedLogger();
     private static final SimpleFormatter formatter = new SimpleFormatter();
     private final transient EssentialsConfiguration config;
     private final transient Map<String, Chat> chats = Collections.synchronizedMap(new HashMap<>());

@@ -9,6 +9,7 @@ import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 import net.essentialsx.api.v2.services.discord.InteractionChannel;
 import net.essentialsx.api.v2.services.discord.InteractionEvent;
 import net.essentialsx.api.v2.services.discord.InteractionMember;
+import net.essentialsx.discord.EssentialsDiscord;
 import net.essentialsx.discord.util.DiscordUtil;
 
 import java.util.ArrayList;
@@ -20,7 +21,7 @@ import java.util.logging.Logger;
  * A class which provides information about what triggered an interaction event.
  */
 public class InteractionEventImpl implements InteractionEvent {
-    private final static Logger logger = Logger.getLogger("EssentialsDiscord");
+    private final static Logger logger = EssentialsDiscord.getWrappedLogger();
     private final SlashCommandEvent event;
     private final InteractionMember member;
     private final List<String> replyBuffer = new ArrayList<>();

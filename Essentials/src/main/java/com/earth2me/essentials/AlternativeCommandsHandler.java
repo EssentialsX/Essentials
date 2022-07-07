@@ -11,10 +11,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class AlternativeCommandsHandler {
-    private static final Logger LOGGER = Logger.getLogger("Essentials");
     private final transient Map<String, List<Command>> altcommands = new HashMap<>();
     private final transient Map<String, String> disabledList = new HashMap<>();
     private final transient IEssentials ess;
@@ -95,7 +93,7 @@ public class AlternativeCommandsHandler {
         if (pc instanceof PluginIdentifiableCommand) {
             final String altString = ((PluginIdentifiableCommand) pc).getPlugin().getName() + ":" + pc.getName();
             if (ess.getSettings().isDebug()) {
-                LOGGER.log(Level.INFO, "Essentials: Alternative command " + label + " found, using " + altString);
+                ess.getLogger().log(Level.INFO, "Essentials: Alternative command " + label + " found, using " + altString);
             }
             disabledList.put(label, altString);
         }

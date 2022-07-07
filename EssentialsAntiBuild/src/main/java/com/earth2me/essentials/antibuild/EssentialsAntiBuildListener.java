@@ -33,12 +33,10 @@ import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import static com.earth2me.essentials.I18n.tl;
 
 public class EssentialsAntiBuildListener implements Listener {
-    private static final Logger logger = Logger.getLogger("EssentialsAntiBuild");
     final private transient IAntiBuild prot;
     final private transient IEssentials ess;
 
@@ -65,7 +63,7 @@ public class EssentialsAntiBuildListener implements Listener {
     private boolean metaPermCheck(final User user, final String action, final Block block) {
         if (block == null) {
             if (ess.getSettings().isDebug()) {
-                logger.log(Level.INFO, "AntiBuild permission check failed, invalid block.");
+                prot.getLogger().log(Level.INFO, "AntiBuild permission check failed, invalid block.");
             }
             return false;
         }
@@ -78,7 +76,7 @@ public class EssentialsAntiBuildListener implements Listener {
     private boolean metaPermCheck(final User user, final String action, final ItemStack item) {
         if (item == null) {
             if (ess.getSettings().isDebug()) {
-                logger.log(Level.INFO, "AntiBuild permission check failed, invalid item.");
+                prot.getLogger().log(Level.INFO, "AntiBuild permission check failed, invalid item.");
             }
             return false;
         }
@@ -102,7 +100,7 @@ public class EssentialsAntiBuildListener implements Listener {
                 return user.isAuthorized(dataPerm);
             } else {
                 if (ess.getSettings().isDebug()) {
-                    logger.log(Level.INFO, "DataValue perm on " + user.getName() + " is not directly set: " + dataPerm);
+                    prot.getLogger().log(Level.INFO, "DataValue perm on " + user.getName() + " is not directly set: " + dataPerm);
                 }
             }
         }

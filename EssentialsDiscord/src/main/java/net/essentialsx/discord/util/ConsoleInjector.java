@@ -4,6 +4,7 @@ import com.earth2me.essentials.utils.FormatUtil;
 import com.google.common.base.Splitter;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.utils.TimeFormat;
+import net.essentialsx.discord.EssentialsDiscord;
 import net.essentialsx.discord.JDADiscordService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.core.LogEvent;
@@ -21,7 +22,7 @@ import static com.earth2me.essentials.I18n.tl;
 
 @Plugin(name = "EssentialsX-ConsoleInjector", category = "Core", elementType = "appender", printObject = true)
 public class ConsoleInjector extends AbstractAppender {
-    private final static java.util.logging.Logger logger = java.util.logging.Logger.getLogger("EssentialsDiscord");
+    private final static java.util.logging.Logger logger = EssentialsDiscord.getWrappedLogger();
 
     private final JDADiscordService jda;
     private final BlockingQueue<String> messageQueue = new LinkedBlockingQueue<>();
@@ -62,8 +63,8 @@ public class ConsoleInjector extends AbstractAppender {
             return;
         }
 
-        // Ansi strip is for normal colors, normal strip is for 1.16 hex color codes as they are not formatted correctly
-        String entry = FormatUtil.stripFormat(FormatUtil.stripAnsi(event.getMessage().getFormattedMessage())).trim();
+        // Ansi strip is for normal colors, normal strip is for 1.16 hex color codes as they are not formatted correctly, adventure strip is for magic color char strip
+        String entry = FormatUtil.stripPaper(FormatUtil.stripFormat(FormatUtil.stripAnsi(event.getMessage().getFormattedMessage()))).trim();
         if (entry.isEmpty()) {
             return;
         }
