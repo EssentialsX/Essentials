@@ -19,7 +19,7 @@ dependencies {
 
     // Providers
     api project(':providers:BaseProviders')
-    api project(':providers:PaperProvider')
+    api project(path: ':providers:PaperProvider', configuration: 'shadow')
     api(project(':providers:NMSReflectionProvider')) {
         exclude group: "org.bukkit", module: "bukkit"
     }
@@ -55,7 +55,7 @@ shadowJar {
         include (dependency('net.kyori:adventure-text-serializer-legacy'))
         include (dependency('net.kyori:adventure-text-minimessage'))
         include (project(':providers:BaseProviders'))
-        include (project(':providers:PaperProvider'))
+        include (project(path: ':providers:PaperProvider', configuration: 'shadow'))
         include (project(':providers:NMSReflectionProvider'))
         include (project(':providers:1_8Provider'))
         include (project(':providers:1_12Provider'))
@@ -67,6 +67,7 @@ shadowJar {
     relocate 'io.leangen.geantyref', 'com.earth2me.essentials.libs.geantyref'
     relocate 'org.checkerframework', 'com.earth2me.essentials.libs.checkerframework'
     relocate 'net.kyori', 'com.earth2me.essentials.libs.kyori'
+    relocate 'net.essentialsx.temp.adventure', 'net.kyori.adventure'
 
     minimize {
         include(dependency('org.checkerframework:checker-qual'))
