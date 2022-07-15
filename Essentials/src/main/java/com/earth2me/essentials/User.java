@@ -463,7 +463,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
         } else if (nick.equalsIgnoreCase(getName())) {
             nickname = nick;
         } else {
-            nickname = FormatUtil.replaceFormat(ess.getSettings().getNicknamePrefix()) + nick;
+            nickname = isAuthorized("essentials.nick.prefix.bypass") ? nick : FormatUtil.replaceFormat(ess.getSettings().getNicknamePrefix()) + nick;
             suffix = "§r";
         }
 
