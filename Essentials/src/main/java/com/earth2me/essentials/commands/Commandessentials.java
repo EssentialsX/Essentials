@@ -4,6 +4,7 @@ import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.EssentialsUpgrade;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.UserMap;
+import com.earth2me.essentials.craftbukkit.Inventories;
 import com.earth2me.essentials.economy.EconomyLayer;
 import com.earth2me.essentials.economy.EconomyLayers;
 import com.earth2me.essentials.utils.DateUtil;
@@ -22,10 +23,12 @@ import com.google.gson.JsonPrimitive;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.Server;
 import org.bukkit.Sound;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
@@ -142,6 +145,10 @@ public class Commandessentials extends EssentialsCommand {
                 runUUIDTest(server, sender, commandLabel, args);
                 break;
 
+            case "itemtest":
+                runItemTest(server, sender, commandLabel, args);
+                break;
+
             // "#EasterEgg"
             case "nya":
             case "nyan":
@@ -154,6 +161,17 @@ public class Commandessentials extends EssentialsCommand {
                 showUsage(sender);
                 break;
         }
+    }
+
+    public void runItemTest(Server server, CommandSource sender, String commandLabel, String[] args) {
+        final Player player = sender.getPlayer();
+
+        if (args.length == 2) {
+            player.getInventory().setItem(Integer.parseInt(args[1]), new ItemStack(Material.DIRT));
+            return;
+        }
+
+        System.out.println(Inventories.addItem(player, 42, false, new ItemStack(Material.DIAMOND_SWORD, 1), new ItemStack(Material.DIRT, 64 * 4)));
     }
 
     // Displays the command's usage.
