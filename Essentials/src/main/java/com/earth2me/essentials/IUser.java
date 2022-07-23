@@ -94,6 +94,15 @@ public interface IUser {
      */
     boolean isHidden();
 
+    /**
+     * Whether the user was hidden before leaving the server.
+     *
+     * @return true if the user was hidden.
+     */
+    boolean isLeavingHidden();
+
+    void setLeavingHidden(boolean leavingHidden);
+
     void setHidden(boolean vanish);
 
     boolean isGodModeEnabled();

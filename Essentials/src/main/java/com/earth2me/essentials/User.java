@@ -68,6 +68,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
     // User properties
     private transient boolean vanished;
     private boolean hidden = false;
+    private boolean leavingHidden = false;
     private boolean rightClickJump = false;
     private boolean invSee = false;
     private boolean recipeSee = false;
@@ -679,6 +680,16 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
     @Override
     public boolean isHidden() {
         return hidden;
+    }
+
+    @Override
+    public boolean isLeavingHidden() {
+        return leavingHidden;
+    }
+
+    @Override
+    public void setLeavingHidden(boolean leavingHidden) {
+        this.leavingHidden = leavingHidden;
     }
 
     @Override
