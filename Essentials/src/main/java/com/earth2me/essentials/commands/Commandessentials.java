@@ -164,6 +164,10 @@ public class Commandessentials extends EssentialsCommand {
     }
 
     public void runItemTest(Server server, CommandSource sender, String commandLabel, String[] args) {
+        if (!sender.isAuthorized("essentials.itemtest", ess)) {
+            return;
+        }
+
         final Player player = sender.getPlayer();
 
         if (args.length == 2) {
