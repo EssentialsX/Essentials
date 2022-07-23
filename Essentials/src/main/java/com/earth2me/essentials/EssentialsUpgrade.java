@@ -936,7 +936,7 @@ public class EssentialsUpgrade {
                 return;
             }
 
-            final Set<UUID> uuids = new HashSet<>();
+            final Map<UUID, Long> uuids = new HashMap<>();
             final Map<String, UUID> nameToUuidMap = new HashMap<>();
 
             final File[] files = userdataFolder.listFiles(YML_FILTER);
@@ -949,11 +949,12 @@ public class EssentialsUpgrade {
                         config.load();
                         String name = config.getString("last-account-name", null);
                         name = ess.getSettings().isSafeUsermap() ? StringUtil.safeString(name) : name;
+                        final long time = config.getLong("timestamps.logout", 0L);
 
                         if (name != null) {
                             if (nameToUuidMap.containsKey(name)) {
                                 final UUID oldUuid = nameToUuidMap.get(name);
-                                if (oldUuid.version() <= uuid.version()) {
+                                if (oldUuid.version() < uuid.version() || (oldUuid.version() == uuid.version() && uuids.get(oldUuid) < time)) {
                                     ess.getLogger().warning("New UUID found for " + name + ": " + uuid + " (old: " + oldUuid + "). Replacing.");
                                     uuids.remove(oldUuid);
                                 } else {
@@ -962,7 +963,7 @@ public class EssentialsUpgrade {
                                 }
                             }
 
-                            uuids.add(uuid);
+                            uuids.put(uuid, config.getLong("timestamps.logout", 0L));
                             nameToUuidMap.put(name, uuid);
                         }
                     } catch (IllegalArgumentException | IndexOutOfBoundsException ignored) {
@@ -975,7 +976,7 @@ public class EssentialsUpgrade {
             }
 
             if (!uuids.isEmpty()) {
-                ModernUUIDCache.writeUuidCache(uidsFile, uuids);
+                ModernUUIDCache.writeUuidCache(uidsFile, uuids.keySet());
             }
 
             doneFile.setProperty("newUidCacheBuilt", true);
