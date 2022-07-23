@@ -268,6 +268,7 @@ public class EssentialsPlayerListener implements Listener, FakeAccessor {
             user.setGodModeEnabled(false);
         }
         if (user.isVanished()) {
+            user.setLeavingHidden(true);
             user.setVanished(false);
         }
         user.setLogoutLocation();
@@ -342,6 +343,7 @@ public class EssentialsPlayerListener implements Listener, FakeAccessor {
                 user.setLastLogin(currentTime);
                 user.setDisplayNick();
                 updateCompass(user);
+                user.setLeavingHidden(false);
 
                 // Check for new username. If they don't want the message, let's just say it's false.
                 final boolean newUsername = ess.getSettings().isCustomNewUsernameMessage() && lastAccountName != null && !lastAccountName.equals(user.getBase().getName());
