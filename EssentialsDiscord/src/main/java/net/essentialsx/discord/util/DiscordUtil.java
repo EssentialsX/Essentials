@@ -5,6 +5,7 @@ import club.minnced.discord.webhook.WebhookClientBuilder;
 import club.minnced.discord.webhook.send.AllowedMentions;
 import com.earth2me.essentials.utils.DownsampleUtil;
 import com.earth2me.essentials.utils.FormatUtil;
+import com.earth2me.essentials.utils.NumberUtil;
 import com.earth2me.essentials.utils.VersionUtil;
 import com.google.common.collect.ImmutableList;
 import net.dv8tion.jda.api.Permission;
@@ -181,13 +182,14 @@ public final class DiscordUtil {
         final List<Role> roles = member.getRoles();
         for (String roleDefinition : roleDefinitions) {
             roleDefinition = roleDefinition.trim();
+            final boolean id = NumberUtil.isNumeric(roleDefinition);
 
             if (roleDefinition.equals("*") || member.getId().equals(roleDefinition)) {
                 return true;
             }
 
             for (final Role role : roles) {
-                if (role.getId().equals(roleDefinition) || role.getName().equalsIgnoreCase(roleDefinition)) {
+                if (role.getId().equals(roleDefinition) || (!id && role.getName().equalsIgnoreCase(roleDefinition))) {
                     return true;
                 }
             }
