@@ -74,7 +74,7 @@ public class LuckPermsHandler extends ModernVaultHandler {
                 return;
             }
 
-            final User user = ess.getUser(target);
+            final User user = ess.getUsers().loadUncachedUser(target.getUniqueId());
             for (Calculator calculator : this.calculators) {
                 calculator.function.apply(user).forEach(value -> consumer.accept(calculator.id, value));
             }
