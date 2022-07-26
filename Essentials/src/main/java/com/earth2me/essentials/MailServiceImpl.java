@@ -50,4 +50,22 @@ public class MailServiceImpl implements MailService {
         final String expire = mail.getTimeExpire() != 0 ? "Timed" : "";
         return tlLiteral((mail.isRead() ? "mailFormatNewRead" : "mailFormatNew") + expire, df.get().format(new Date(mail.getTimeSent())), mail.getSenderUsername(), message);
     }
+
+    @Override
+    public String getMailTlKey(MailMessage message) {
+        if (message.isLegacy()) {
+            return "mailMessage";
+        }
+
+        final String expire = message.getTimeExpire() != 0 ? "Timed" : "";
+        return (message.isRead() ? "mailFormatNewRead" : "mailFormatNew") + expire;
+    }
+
+    @Override
+    public Object[] getMailTlArgs(MailMessage message) {
+        if (message.isLegacy()) {
+            return new Object[] {message.getMessage()};
+        }
+        return new Object[] {df.get().format(new Date(message.getTimeSent())), message.getSenderUsername(), message.getMessage()};
+    }
 }

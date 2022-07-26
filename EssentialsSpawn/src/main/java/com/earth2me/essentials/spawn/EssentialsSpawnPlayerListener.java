@@ -5,7 +5,6 @@ import com.earth2me.essentials.OfflinePlayer;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.textreader.IText;
 import com.earth2me.essentials.textreader.KeywordReplacer;
-import com.earth2me.essentials.textreader.SimpleTextPager;
 import com.earth2me.essentials.utils.VersionUtil;
 import net.ess3.api.IEssentials;
 import org.bukkit.Location;
@@ -115,9 +114,8 @@ class EssentialsSpawnPlayerListener implements Listener {
             //This method allows for multiple line player announce messages using multiline yaml syntax #EasterEgg
             if (ess.getSettings().getAnnounceNewPlayers()) {
                 final IText output = new KeywordReplacer(ess.getSettings().getAnnounceNewPlayerFormat(), user.getSource(), ess);
-                final SimpleTextPager pager = new SimpleTextPager(output);
 
-                for (final String line : pager.getLines()) {
+                for (final String line : output.getLines()) {
                     ess.broadcastMessage(user, line);
                 }
             }

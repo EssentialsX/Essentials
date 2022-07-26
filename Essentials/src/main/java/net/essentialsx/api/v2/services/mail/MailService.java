@@ -40,4 +40,16 @@ public interface MailService {
      * @return The formatted message to be sent to the recipient.
      */
     String getMailLine(MailMessage message);
+
+    /**
+     * Helper method to get the translation key for a given {@link MailMessage}.
+     * @return the translation key.
+     */
+    String getMailTlKey(MailMessage message);
+
+    /**
+     * Helper method to get the translation arguments for a given {@link MailMessage}.
+     * @return the translation arguments.
+     */
+    Object[] getMailTlArgs(MailMessage message);
 }

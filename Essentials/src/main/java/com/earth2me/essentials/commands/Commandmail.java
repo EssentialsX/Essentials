@@ -4,8 +4,8 @@ import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.Console;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.messaging.IMessageRecipient;
-import com.earth2me.essentials.textreader.SimpleTextInput;
-import com.earth2me.essentials.textreader.TextPager;
+import com.earth2me.essentials.textreader.SimpleTextPager;
+import com.earth2me.essentials.textreader.SimpleTranslatableText;
 import com.earth2me.essentials.utils.DateUtil;
 import com.earth2me.essentials.utils.FormatUtil;
 import com.earth2me.essentials.utils.NumberUtil;
@@ -38,7 +38,7 @@ public class Commandmail extends EssentialsCommand {
                 throw new NoChargeException();
             }
 
-            final SimpleTextInput input = new SimpleTextInput();
+            final SimpleTranslatableText input = new SimpleTranslatableText();
             final ListIterator<MailMessage> iterator = mail.listIterator();
             while (iterator.hasNext()) {
                 final MailMessage mailObj = iterator.next();
@@ -46,7 +46,7 @@ public class Commandmail extends EssentialsCommand {
                     iterator.remove();
                     continue;
                 }
-                input.addLine(ess.getMail().getMailLine(mailObj));
+                input.addLine(ess.getMail().getMailTlKey(mailObj), ess.getMail().getMailTlArgs(mailObj));
                 iterator.set(new MailMessage(true, mailObj.isLegacy(), mailObj.getSenderUsername(),
                         mailObj.getSenderUUID(), mailObj.getTimeSent(), mailObj.getTimeExpire(), mailObj.getMessage()));
             }
@@ -56,8 +56,8 @@ public class Commandmail extends EssentialsCommand {
                 throw new NoChargeException();
             }
 
-            final TextPager pager = new TextPager(input);
-            pager.showPage(args.length > 1 ? args[1] : null, null, commandLabel + " " + args[0], user.getSource());
+            final SimpleTextPager pager = new SimpleTextPager(input);
+            pager.showPage(user.getSource(), args.length > 1 ? args[1] : null, commandLabel + " " + args[0]);
 
             user.sendTl("mailClear");
             user.setMailList(mail);
