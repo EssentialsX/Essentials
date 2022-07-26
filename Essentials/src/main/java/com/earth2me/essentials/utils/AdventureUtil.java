@@ -36,7 +36,7 @@ public final class AdventureUtil {
         Matcher matcher = HEX_PATTERN.matcher(text);
         while (matcher.find()) {
             final String code = matcher.group(1).replace(String.valueOf(KEZZ_MAJOR_CHAR), "");
-            matcher.appendReplacement(buffer, "&#" + code);
+            matcher.appendReplacement(buffer, "<#" + code + ">");
         }
         matcher.appendTail(buffer);
 
