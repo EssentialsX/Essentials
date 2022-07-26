@@ -2,6 +2,7 @@ package com.earth2me.essentials;
 
 import com.earth2me.essentials.messaging.IMessageRecipient;
 import com.earth2me.essentials.messaging.SimpleMessageRecipient;
+import com.earth2me.essentials.utils.AdventureUtil;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
@@ -67,11 +68,11 @@ public final class Console implements IMessageRecipient {
     @Override
     public void sendTl(String tlKey, Object... args) {
         final String translation = tlLiteral(tlKey, args);
-        if (!translation.startsWith(I18n.MINI_MESSAGE_PREFIX)) {
+        if (!translation.startsWith(AdventureUtil.MINI_MESSAGE_PREFIX)) {
             sendMessage(translation);
             return;
         }
-        ((Essentials) ess).getBukkitAudience().sender(getCommandSender()).sendMessage(MiniMessage.miniMessage().deserialize(translation.substring(4)));
+        ((Essentials) ess).getBukkitAudience().sender(getCommandSender()).sendMessage(MiniMessage.miniMessage().deserialize(translation.substring(AdventureUtil.MINI_MESSAGE_PREFIX.length())));
     }
 
     @Override

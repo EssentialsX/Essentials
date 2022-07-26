@@ -1,5 +1,6 @@
 package com.earth2me.essentials;
 
+import com.earth2me.essentials.utils.AdventureUtil;
 import net.ess3.api.IEssentials;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.jetbrains.annotations.NotNull;
@@ -29,7 +30,7 @@ import java.util.regex.Pattern;
 
 public class I18n implements net.ess3.api.II18n {
     private static final String MESSAGES = "messages";
-    public static final String MINI_MESSAGE_PREFIX = "MM||";
+    private static Object[] EMPTY_ARGS = new Object[0];
     private static final Pattern NODOUBLEMARK = Pattern.compile("''");
     private static final ResourceBundle NULL_BUNDLE = new ResourceBundle() {
         @SuppressWarnings("NullableProblems")
@@ -133,7 +134,7 @@ public class I18n implements net.ess3.api.II18n {
 
     public String format(final Locale locale, final String string, final Object... objects) {
         String format = translate(locale, string);
-        final boolean miniMessage = format.startsWith(MINI_MESSAGE_PREFIX);
+        final boolean miniMessage = format.startsWith(AdventureUtil.MINI_MESSAGE_PREFIX);
 
         MessageFormat messageFormat = messageFormatCache.computeIfAbsent(locale, l -> new HashMap<>()).get(format);
         if (messageFormat == null) {
@@ -149,7 +150,7 @@ public class I18n implements net.ess3.api.II18n {
 
         final Object[] processedArgs;
         if (miniMessage) {
-            processedArgs = mutateArgs(objects, s -> MiniMessage.miniMessage().escapeTags(s));
+            processedArgs = mutateArgs(objects, s -> AdventureUtil.minifyLegacy(MiniMessage.miniMessage().escapeTags(s.replace('§', AdventureUtil.KEZZ_MAJOR_CHAR))));
         } else {
             processedArgs = objects;
         }

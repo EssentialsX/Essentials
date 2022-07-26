@@ -1064,10 +1064,10 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
     @Override
     public Component tlComponent(String tlKey, Object... args) {
         final String translation = playerTl(tlKey, args);
-        if (!translation.startsWith(I18n.MINI_MESSAGE_PREFIX)) {
+        if (!translation.startsWith(AdventureUtil.MINI_MESSAGE_PREFIX)) {
             return AdventureUtil.toComponent(translation);
         }
-        return MiniMessage.miniMessage().deserialize(translation.substring(4));
+        return MiniMessage.miniMessage().deserialize(translation.substring(AdventureUtil.MINI_MESSAGE_PREFIX.length()));
     }
 
     @Override
@@ -1077,11 +1077,11 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
             return;
         }
 
-        if (!translation.startsWith(I18n.MINI_MESSAGE_PREFIX)) {
+        if (!translation.startsWith(AdventureUtil.MINI_MESSAGE_PREFIX)) {
             sendMessage(translation);
             return;
         }
-        sendComponent(MiniMessage.miniMessage().deserialize(translation.substring(4)));
+        sendComponent(MiniMessage.miniMessage().deserialize(translation.substring(AdventureUtil.MINI_MESSAGE_PREFIX.length())));
     }
 
     @Override

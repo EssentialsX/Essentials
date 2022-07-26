@@ -37,11 +37,11 @@ public class CommandSource {
         }
 
         final String translation = tlLiteral(tlKey, args);
-        if (!translation.startsWith(I18n.MINI_MESSAGE_PREFIX)) {
+        if (!translation.startsWith(AdventureUtil.MINI_MESSAGE_PREFIX)) {
             sendMessage(translation);
             return;
         }
-        sendComponent(MiniMessage.miniMessage().deserialize(translation.substring(4)));
+        sendComponent(MiniMessage.miniMessage().deserialize(translation.substring(AdventureUtil.MINI_MESSAGE_PREFIX.length())));
     }
 
     public String tl(final String tlKey, final Object... args) {
@@ -58,10 +58,10 @@ public class CommandSource {
             return getUser().tlComponent(tlKey, args);
         }
         final String translation = tlLiteral(tlKey, args);
-        if (!translation.startsWith(I18n.MINI_MESSAGE_PREFIX)) {
+        if (!translation.startsWith(AdventureUtil.MINI_MESSAGE_PREFIX)) {
             return AdventureUtil.toComponent(translation);
         }
-        return MiniMessage.miniMessage().deserialize(translation.substring(4));
+        return MiniMessage.miniMessage().deserialize(translation.substring(AdventureUtil.MINI_MESSAGE_PREFIX.length()));
     }
 
     public void sendComponent(final Component component) {
