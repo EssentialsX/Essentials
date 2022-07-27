@@ -30,7 +30,6 @@ import java.util.regex.Pattern;
 
 public class I18n implements net.ess3.api.II18n {
     private static final String MESSAGES = "messages";
-    private static Object[] EMPTY_ARGS = new Object[0];
     private static final Pattern NODOUBLEMARK = Pattern.compile("''");
     private static final ResourceBundle NULL_BUNDLE = new ResourceBundle() {
         @SuppressWarnings("NullableProblems")
@@ -150,7 +149,7 @@ public class I18n implements net.ess3.api.II18n {
 
         final Object[] processedArgs;
         if (miniMessage) {
-            processedArgs = mutateArgs(objects, s -> AdventureUtil.minifyLegacy(MiniMessage.miniMessage().escapeTags(s.replace('§', AdventureUtil.KEZZ_MAJOR_CHAR))));
+            processedArgs = mutateArgs(objects, s -> AdventureUtil.minifyLegacy(MiniMessage.miniMessage().escapeTags(s.replace('§', AdventureUtil.KEZZ_MAGIC_CHAR))));
         } else {
             processedArgs = objects;
         }

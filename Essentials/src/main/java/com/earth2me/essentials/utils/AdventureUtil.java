@@ -10,9 +10,9 @@ import java.util.regex.Pattern;
 public final class AdventureUtil {
     private static final LegacyComponentSerializer LEGACY_SERIALIZER;
     public static final String MINI_MESSAGE_PREFIX = "MM||";
-    public static final char KEZZ_MAJOR_CHAR = 0x7f;
-    private static final Pattern NAMED_PATTERN = Pattern.compile(KEZZ_MAJOR_CHAR + "[0-9a-fk-orA-FK-OR]");
-    private static final Pattern HEX_PATTERN = Pattern.compile(KEZZ_MAJOR_CHAR + "x((?:" + KEZZ_MAJOR_CHAR + "[0-9a-fA-F]){6})");
+    public static final char KEZZ_MAGIC_CHAR = 0x7f;
+    private static final Pattern NAMED_PATTERN = Pattern.compile(KEZZ_MAGIC_CHAR + "[0-9a-fk-orA-FK-OR]");
+    private static final Pattern HEX_PATTERN = Pattern.compile(KEZZ_MAGIC_CHAR + "x((?:" + KEZZ_MAGIC_CHAR + "[0-9a-fA-F]){6})");
     private static final String LOOKUP = "0123456789abcdefklmnor";
     private static final String[] MINI_TAGS = new String[] {"black", "dark_blue", "dark_green", "dark_aqua", "dark_red", "dark_purple", "gold", "gray", "dark_gray", "blue", "green", "aqua", "red", "light_purple", "yellow", "white", "obf", "b", "st", "u", "i", "reset"};
 
@@ -35,7 +35,7 @@ public final class AdventureUtil {
         StringBuffer buffer = new StringBuffer();
         Matcher matcher = HEX_PATTERN.matcher(text);
         while (matcher.find()) {
-            final String code = matcher.group(1).replace(String.valueOf(KEZZ_MAJOR_CHAR), "");
+            final String code = matcher.group(1).replace(String.valueOf(KEZZ_MAGIC_CHAR), "");
             matcher.appendReplacement(buffer, "<#" + code + ">");
         }
         matcher.appendTail(buffer);
