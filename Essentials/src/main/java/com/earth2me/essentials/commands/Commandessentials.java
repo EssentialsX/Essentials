@@ -363,6 +363,8 @@ public class Commandessentials extends EssentialsCommand {
             if (commands) {
                 try {
                     files.add(new PasteUtil.PasteFile("commands.yml", new String(Files.readAllBytes(Paths.get("commands.yml")), StandardCharsets.UTF_8)));
+                    files.add(new PasteUtil.PasteFile("commandmap.json", ess.getKnownCommandsProvider().getKnownCommands().toString()));
+                    files.add(new PasteUtil.PasteFile("commandoverride.json", ess.getAlternativeCommandsHandler().disabledCommands().toString()));
                 } catch (IOException e) {
                     sender.sendMessage(tl("dumpErrorUpload", "commands.yml", e.getMessage()));
                 }
