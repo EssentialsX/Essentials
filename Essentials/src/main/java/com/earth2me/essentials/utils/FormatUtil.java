@@ -27,6 +27,7 @@ public final class FormatUtil {
     private static final Pattern URL_PATTERN = Pattern.compile("((?:(?:https?)://)?[\\w-_\\.]{2,})\\.([a-zA-Z]{2,3}(?:/\\S+)?)");
     //Used to strip ANSI control codes from console
     private static final Pattern ANSI_CONTROL_PATTERN = Pattern.compile("\u001B(?:\\[0?m|\\[38;2(?:;\\d{1,3}){3}m|\\[([0-9]{1,2}[;m]?){3})");
+    private static final Pattern PAPER_CONTROL_PATTERN = Pattern.compile("(?i)" + (char) 0x7f + "[0-9A-FK-ORX]");
 
     private FormatUtil() {
     }
@@ -52,6 +53,13 @@ public final class FormatUtil {
             return null;
         }
         return stripColor(input, ANSI_CONTROL_PATTERN);
+    }
+
+    public static String stripPaper(final String input) {
+        if (input == null) {
+            return null;
+        }
+        return stripColor(input, PAPER_CONTROL_PATTERN);
     }
 
     //This is the general permission sensitive message format function, checks for urls.

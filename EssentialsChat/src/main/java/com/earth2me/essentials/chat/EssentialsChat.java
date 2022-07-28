@@ -1,5 +1,6 @@
 package com.earth2me.essentials.chat;
 
+import com.earth2me.essentials.EssentialsLogger;
 import com.earth2me.essentials.metrics.MetricsWrapper;
 import net.ess3.api.IEssentials;
 import org.bukkit.command.Command;
@@ -21,6 +22,7 @@ public class EssentialsChat extends JavaPlugin {
 
     @Override
     public void onEnable() {
+        EssentialsLogger.updatePluginLogger(this);
         final PluginManager pluginManager = getServer().getPluginManager();
         ess = (IEssentials) pluginManager.getPlugin("Essentials");
         if (!this.getDescription().getVersion().equals(ess.getDescription().getVersion())) {
@@ -33,9 +35,9 @@ public class EssentialsChat extends JavaPlugin {
 
         final Map<AsyncPlayerChatEvent, ChatStore> chatStore = Collections.synchronizedMap(new HashMap<>());
 
-        final EssentialsChatPlayerListenerLowest playerListenerLowest = new EssentialsChatPlayerListenerLowest(getServer(), ess, chatStore);
-        final EssentialsChatPlayerListenerNormal playerListenerNormal = new EssentialsChatPlayerListenerNormal(getServer(), ess, chatStore);
-        final EssentialsChatPlayerListenerHighest playerListenerHighest = new EssentialsChatPlayerListenerHighest(getServer(), ess, chatStore);
+        final EssentialsChatPlayerListenerLowest playerListenerLowest = new EssentialsChatPlayerListenerLowest(getServer(), ess, this, chatStore);
+        final EssentialsChatPlayerListenerNormal playerListenerNormal = new EssentialsChatPlayerListenerNormal(getServer(), ess, this, chatStore);
+        final EssentialsChatPlayerListenerHighest playerListenerHighest = new EssentialsChatPlayerListenerHighest(getServer(), ess, this, chatStore);
         pluginManager.registerEvents(playerListenerLowest, this);
         pluginManager.registerEvents(playerListenerNormal, this);
         pluginManager.registerEvents(playerListenerHighest, this);
