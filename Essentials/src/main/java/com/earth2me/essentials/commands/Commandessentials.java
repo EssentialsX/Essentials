@@ -25,6 +25,7 @@ import org.bukkit.Location;
 import org.bukkit.Server;
 import org.bukkit.Sound;
 import org.bukkit.World;
+import org.bukkit.command.Command;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginDescriptionFile;
@@ -42,6 +43,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -260,6 +262,9 @@ public class Commandessentials extends EssentialsCommand {
         final Plugin essDiscord = Bukkit.getPluginManager().getPlugin("EssentialsDiscord");
         final Plugin essSpawn = Bukkit.getPluginManager().getPlugin("EssentialsSpawn");
 
+        final Map<String, Command> knowCommandsCopy = new HashMap<>(ess.getKnownCommandsProvider().getKnownCommands());
+        final Map<String, String> disabledCommandsCopy = new HashMap<>(ess.getAlternativeCommandsHandler().disabledCommands());
+
         // Further operations will be heavy IO
         ess.runTaskAsynchronously(() -> {
             boolean config = false;
@@ -363,8 +368,8 @@ public class Commandessentials extends EssentialsCommand {
             if (commands) {
                 try {
                     files.add(new PasteUtil.PasteFile("commands.yml", new String(Files.readAllBytes(Paths.get("commands.yml")), StandardCharsets.UTF_8)));
-                    files.add(new PasteUtil.PasteFile("commandmap.json", ess.getKnownCommandsProvider().getKnownCommands().toString()));
-                    files.add(new PasteUtil.PasteFile("commandoverride.json", ess.getAlternativeCommandsHandler().disabledCommands().toString()));
+                    files.add(new PasteUtil.PasteFile("commandmap.json", knowCommandsCopy.toString()));
+                    files.add(new PasteUtil.PasteFile("commandoverride.json", disabledCommandsCopy.toString()));
                 } catch (IOException e) {
                     sender.sendMessage(tl("dumpErrorUpload", "commands.yml", e.getMessage()));
                 }
