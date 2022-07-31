@@ -86,13 +86,26 @@ public final class Inventories {
         return leftover;
     }
 
-    private static InventoryData parseInventoryData(final Inventory inventory, final ItemStack[] items, final int maxStack, final boolean allowArmor) {
+    public static ItemStack[] getInventory(final Player player, final boolean includeArmor) {
+        final ItemStack[] items = new ItemStack[41];
+        for (int i = 0; i < items.length; i++) {
+            if (!includeArmor && isArmorSlot(i)) {
+                continue;
+            }
+
+            items[i] = player.getInventory().getItem(i);
+        }
+
+        return items;
+    }
+
+    private static InventoryData parseInventoryData(final Inventory inventory, final ItemStack[] items, final int maxStack, final boolean includeArmor) {
         final ItemStack[] inventoryContents = inventory.getContents();
         final List<Integer> emptySlots = new ArrayList<>();
         final HashMap<ItemStack, List<Integer>> partialSlots = new HashMap<>();
 
         for (int i = 0; i < inventoryContents.length; i++) {
-            if (!allowArmor && isArmorSlot(i)) {
+            if (!includeArmor && isArmorSlot(i)) {
                 continue;
             }
 
