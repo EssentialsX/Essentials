@@ -99,6 +99,11 @@ public final class Inventories {
         return items;
     }
 
+    public static int removeItem(final Player player, final ItemStack item, final boolean includeArmor) {
+        // i forget how this works
+        return Integer.MAX_VALUE;
+    }
+
     private static InventoryData parseInventoryData(final Inventory inventory, final ItemStack[] items, final int maxStack, final boolean includeArmor) {
         final ItemStack[] inventoryContents = inventory.getContents();
         final List<Integer> emptySlots = new ArrayList<>();
