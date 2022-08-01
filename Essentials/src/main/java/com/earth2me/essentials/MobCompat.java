@@ -187,7 +187,7 @@ public final class MobCompat {
         } else {
             return;
         }
-        if (VersionUtil.getServerBukkitVersion().isLowerThan(VersionUtil.v1_19_1_R01)) {
+        if (VersionUtil.getServerBukkitVersion().isLowerThan(VersionUtil.v1_19_R01)) {
             //noinspection deprecation
             boat.setWoodType(TreeSpecies.valueOf(variant.getTreeSpecies()));
         } else {
