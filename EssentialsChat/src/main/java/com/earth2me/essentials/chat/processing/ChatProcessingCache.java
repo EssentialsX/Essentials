@@ -20,24 +20,38 @@ public class ChatProcessingCache {
             .expireAfterWrite(5, TimeUnit.MINUTES)
             .build();
 
-    public IntermediateChat getIntermediateChat(Player player) {
+    public IntermediateChat getIntermediateChat(final Player player) {
         return intermediateChats.get(player);
     }
 
-    public void setIntermediateChat(Player player, IntermediateChat intermediateChat) {
+    public void setIntermediateChat(final Player player, final IntermediateChat intermediateChat) {
         intermediateChats.put(player, intermediateChat);
     }
 
-    public IntermediateChat clearIntermediateChat(Player player) {
+    public IntermediateChat clearIntermediateChat(final Player player) {
         return intermediateChats.remove(player);
     }
 
-    public ProcessedChat getProcessedChat(Player player) {
+    public ProcessedChat getProcessedChat(final Player player) {
         return processedChats.getIfPresent(player);
     }
 
-    public void setProcessedChat(Player player, ProcessedChat chat) {
+    public void setProcessedChat(final Player player, final ProcessedChat chat) {
         processedChats.put(player, chat);
+    }
+
+    public ProcessedChat clearProcessedChat(final Player player) {
+        final ProcessedChat chat = processedChats.getIfPresent(player);
+        processedChats.invalidate(player);
+        return chat;
+    }
+
+    public Chat getIntermediateOrElseProcessedChat(final Player player) {
+        final IntermediateChat chat = getIntermediateChat(player);
+        if (chat != null) {
+            return chat;
+        }
+        return getProcessedChat(player);
     }
 
     public static abstract class Chat {
@@ -51,11 +65,11 @@ public class ChatProcessingCache {
             this.originalMessage = originalMessage;
         }
 
-        User getUser() {
+        public User getUser() {
             return user;
         }
 
-        String getType() {
+        public String getType() {
             return type;
         }
 
@@ -63,23 +77,29 @@ public class ChatProcessingCache {
             return originalMessage;
         }
 
-        final String getLongType() {
+        public final String getLongType() {
             return type.length() == 0 ? "chat" : "chat-" + type;
         }
     }
 
     public static class ProcessedChat extends Chat {
         private final String message;
+        private final String format;
         private final Trade charge;
 
         public ProcessedChat(final IEssentials ess, final IntermediateChat sourceChat) {
             super(sourceChat.getUser(), sourceChat.getType(), sourceChat.getOriginalMessage());
+            this.message = sourceChat.messageResult;
+            this.format = sourceChat.formatResult;
             this.charge = new Trade(getLongType(), ess);
-            this.message = sourceChat.modifiedMessage;
         }
 
         public String getMessage() {
             return message;
+        }
+
+        public String getFormat() {
+            return format;
         }
 
         public Trade getCharge() {
@@ -88,7 +108,8 @@ public class ChatProcessingCache {
     }
 
     public static class IntermediateChat extends Chat {
-        private String modifiedMessage;
+        private String messageResult;
+        private String formatResult;
         private long radius;
 
         public IntermediateChat(final User user, final String type, final String originalMessage) {
@@ -100,15 +121,24 @@ public class ChatProcessingCache {
         }
 
         void setRadius(final long radius) {
+            // TODO: use or remove
             this.radius = radius;
         }
 
-        public String getModifiedMessage() {
-            return modifiedMessage;
+        public String getMessageResult() {
+            return messageResult;
         }
 
-        public void setModifiedMessage(String modifiedMessage) {
-            this.modifiedMessage = modifiedMessage;
+        public void setMessageResult(String messageResult) {
+            this.messageResult = messageResult;
+        }
+
+        public String getFormatResult() {
+            return formatResult;
+        }
+
+        public void setFormatResult(String formatResult) {
+            this.formatResult = formatResult;
         }
     }
 

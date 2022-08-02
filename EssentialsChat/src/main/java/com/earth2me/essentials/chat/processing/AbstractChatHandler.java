@@ -29,7 +29,7 @@ public abstract class AbstractChatHandler {
     protected final Essentials ess;
     protected final EssentialsChat essChat;
     protected final Server server;
-    private final ChatProcessingCache cache;
+    protected final ChatProcessingCache cache;
 
     protected AbstractChatHandler(Essentials ess, EssentialsChat essChat) {
         this.ess = ess;
@@ -87,7 +87,8 @@ public abstract class AbstractChatHandler {
             event.setFormat(format);
         }
 
-        chat.setModifiedMessage(String.format(format, player.getDisplayName(), event.getMessage()));
+        chat.setFormatResult(format);
+        chat.setMessageResult(event.getMessage());
     }
 
     // Local chat recipients logic, handled at NORMAL level
@@ -103,9 +104,8 @@ public abstract class AbstractChatHandler {
         }
         radius *= radius;
 
-        final ChatProcessingCache.IntermediateChat chatStore = cache.getIntermediateChat(event.getPlayer());
+        final ChatProcessingCache.Chat chatStore = cache.getIntermediateOrElseProcessedChat(event.getPlayer());
         final User user = chatStore.getUser();
-        chatStore.setRadius(radius);
 
         if (event.getMessage().length() > 1) {
             if (chatStore.getType().isEmpty()) {
@@ -124,6 +124,7 @@ public abstract class AbstractChatHandler {
                 final String permission = "essentials.chat." + chatStore.getType();
 
                 if (user.isAuthorized(permission)) {
+                    // TODO: move this formatting over to handleChatFormat to avoid breaking signing
                     if (event.getMessage().charAt(0) == ess.getSettings().getChatShout() || (event.getMessage().charAt(0) == ess.getSettings().getChatQuestion() && ess.getSettings().isChatQuestionEnabled())) {
                         event.setMessage(event.getMessage().substring(1));
                     }
@@ -140,11 +141,6 @@ public abstract class AbstractChatHandler {
 
         final Location loc = user.getLocation();
         final World world = loc.getWorld();
-
-        // TODO: why here, why again in highest? who did this? why? pay for your crimes
-        if (!charge(event, chatStore)) {
-            return;
-        }
 
         final Set<Player> outList = event.getRecipients();
         final Set<Player> spyList = new HashSet<>();
@@ -172,7 +168,7 @@ public abstract class AbstractChatHandler {
                     abort = true;
                 } else {
                     final double delta = playerLoc.distanceSquared(loc);
-                    if (delta > chatStore.getRadius()) {
+                    if (delta > radius) {
                         abort = true;
                     }
                 }
@@ -199,12 +195,16 @@ public abstract class AbstractChatHandler {
         }
     }
 
-    // Finalising the intermediate stages of chat processing, handled at HIGHEST level
-    protected void handleChatComplete(AsyncPlayerChatEvent event) {
+    // Finalising the intermediate stages of chat processing, handled at HIGHEST level during previews
+    protected void handleChatPostFormat(AsyncPlayerChatEvent event) {
         final ChatProcessingCache.IntermediateChat intermediateChat = cache.clearIntermediateChat(event.getPlayer());
         if (isAborted(event) || intermediateChat == null) {
             return;
         }
+
+        // in case of modifications by other plugins during the preview
+        intermediateChat.setFormatResult(event.getFormat());
+        intermediateChat.setMessageResult(event.getMessage());
 
         final ChatProcessingCache.ProcessedChat processed = new ChatProcessingCache.ProcessedChat(ess, intermediateChat);
         cache.setProcessedChat(event.getPlayer(), processed);
@@ -217,6 +217,8 @@ public abstract class AbstractChatHandler {
 
         // This file should handle charging the user for the action before returning control back
         charge(event, cache.getProcessedChat(event.getPlayer()));
+
+        cache.clearProcessedChat(event.getPlayer());
     }
 
     boolean isAborted(final AsyncPlayerChatEvent event) {
@@ -260,6 +262,7 @@ public abstract class AbstractChatHandler {
     }
 
     protected interface ChatListener extends Listener {
+        @SuppressWarnings("unused")
         void onPlayerChat(AsyncPlayerChatEvent event);
     }
 
