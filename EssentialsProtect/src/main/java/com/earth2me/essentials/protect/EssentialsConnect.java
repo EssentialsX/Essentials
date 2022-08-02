@@ -5,18 +5,16 @@ import net.ess3.api.IEssentials;
 import org.bukkit.plugin.Plugin;
 
 import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import static com.earth2me.essentials.I18n.tl;
 
 class EssentialsConnect {
-    private static final Logger logger = Logger.getLogger("EssentialsProtect");
     private final IEssentials ess;
     private final IProtect protect;
 
     EssentialsConnect(final Plugin essPlugin, final Plugin essProtect) {
         if (!essProtect.getDescription().getVersion().equals(essPlugin.getDescription().getVersion())) {
-            logger.log(Level.WARNING, tl("versionMismatchAll"));
+            essProtect.getLogger().log(Level.WARNING, tl("versionMismatchAll"));
         }
         ess = (IEssentials) essPlugin;
         protect = (IProtect) essProtect;

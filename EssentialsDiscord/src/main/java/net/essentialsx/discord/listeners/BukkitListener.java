@@ -120,7 +120,7 @@ public class BukkitListener implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onVanishStatusChange(VanishStatusChangeEvent event) {
-        if (!jda.getSettings().isVanishFakeJoinLeave()) {
+        if (!jda.getSettings().isVanishFakeJoinLeave() || event.getAffected().isLeavingHidden()) {
             return;
         }
         if (event.getValue()) {
@@ -235,7 +235,7 @@ public class BukkitListener implements Listener {
     }
 
     private boolean isVanishHide(final IUser user) {
-        return jda.getSettings().isVanishHideMessages() && user.isHidden();
+        return jda.getSettings().isVanishHideMessages() && (user.isHidden() || user.isLeavingHidden());
     }
 
     private void sendDiscordMessage(final MessageType messageType, final String message) {
