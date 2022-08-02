@@ -19,6 +19,7 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.Sign;
 import org.bukkit.block.data.type.WallSign;
+import org.bukkit.command.Command;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.SignChangeEvent;
 import org.bukkit.inventory.ItemStack;
@@ -45,7 +46,7 @@ public class EssentialsSign {
         if (MaterialUtil.isSignPost(sign.getType()) && isValidSign(new BlockSign(sign))) {
             return true;
         }
-        final BlockFace[] directions = new BlockFace[] {BlockFace.NORTH, BlockFace.EAST, BlockFace.SOUTH, BlockFace.WEST};
+        final BlockFace[] directions = new BlockFace[]{BlockFace.NORTH, BlockFace.EAST, BlockFace.SOUTH, BlockFace.WEST};
         for (final BlockFace blockFace : directions) {
             final Block signBlock = block.getRelative(blockFace);
             if (MaterialUtil.isWallSign(signBlock.getType())) {
@@ -410,12 +411,16 @@ public class EssentialsSign {
     }
 
     protected final ItemStack getItemMeta(final ItemStack item, final String meta, final IEssentials ess) throws SignException {
+        return this.getItemMeta(null, item, meta, ess);
+    }
+
+    protected final ItemStack getItemMeta(final CommandSource source, final ItemStack item, final String meta, final IEssentials ess) throws SignException {
         ItemStack stack = item;
         try {
             if (!meta.isEmpty()) {
                 final MetaItemStack metaStack = new MetaItemStack(stack);
                 final boolean allowUnsafe = ess.getSettings().allowUnsafeEnchantments();
-                metaStack.addStringMeta(null, allowUnsafe, meta, ess);
+                metaStack.addStringMeta(source, allowUnsafe, meta, ess);
                 stack = metaStack.getItemStack();
             }
         } catch (final Exception ex) {

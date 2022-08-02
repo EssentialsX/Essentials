@@ -10,7 +10,7 @@ import com.earth2me.essentials.utils.NumberUtil;
 import com.earth2me.essentials.utils.VersionUtil;
 import com.google.common.base.Joiner;
 import net.ess3.api.IEssentials;
-import org.apache.commons.lang.StringUtils;
+import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.DyeColor;
 import org.bukkit.FireworkEffect;
@@ -18,6 +18,7 @@ import org.bukkit.Material;
 import org.bukkit.block.Banner;
 import org.bukkit.block.banner.PatternType;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BannerMeta;
@@ -221,15 +222,14 @@ public class MetaItemStack {
             final BookMeta meta = (BookMeta) stack.getItemMeta();
             final IText input = new BookInput("book", true, ess);
             final BookPager pager = new BookPager(input);
-            // This fix only applies to written books.
+            // This fix only applies to written books - which require an author and a title. https://bugs.mojang.com/browse/MC-59153
             if (stack.getType() == WRITTEN_BOOK) {
-                // Written books require an author and a title. https://bugs.mojang.com/browse/MC-59153
                 if (!meta.hasAuthor()) {
-                    meta.setAuthor(sender.getDisplayName());
+                    // The sender can be null when this method is called from {@link  com.earth2me.essentials.signs.EssentialsSign#getItemMeta(ItemStack, String, IEssentials)}
+                    meta.setAuthor(sender == null ? Bukkit.getConsoleSender().getName() : sender.getPlayer().getName());
                 }
                 if (!meta.hasTitle()) {
-                    final String title = StringUtils.capitalize(split[1].toLowerCase(Locale.ROOT));
-                    // The book's title cannot be longer than 32 characters.
+                    final String title = FormatUtil.replaceFormat(split[1].replace('_', ' '));
                     meta.setTitle(title.length() > 32 ? title.substring(0, 32) : title);
                 }
             }
