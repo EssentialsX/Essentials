@@ -2,6 +2,10 @@ plugins {
     id("essentials.module-conventions")
 }
 
+essentials {
+    injectPlaceholderApi = true
+}
+
 dependencies {
     compileOnly project(':EssentialsX')
 }

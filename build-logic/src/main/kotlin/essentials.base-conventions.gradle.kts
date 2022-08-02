@@ -13,6 +13,8 @@ val checkstyleVersion = "8.36.2"
 val spigotVersion = "1.19.1-R0.1-SNAPSHOT"
 val junit5Version = "5.7.0"
 val mockitoVersion = "3.2.0"
+val bstatsVersion = "1.8"
+val placeholderApiVersion = "2.11.2"
 
 dependencies {
     testImplementation("org.junit.jupiter", "junit-jupiter", junit5Version)
@@ -34,7 +36,12 @@ afterEvaluate {
     }
     if (baseExtension.injectBstats.get()) {
         dependencies {
-            implementation("org.bstats", "bstats-bukkit", "1.8")
+            implementation("org.bstats", "bstats-bukkit", bstatsVersion)
+        }
+    }
+    if (baseExtension.injectPlaceholderApi.get()) {
+        dependencies {
+            compileOnly("me.clip", "placeholderapi", placeholderApiVersion)
         }
     }
 }

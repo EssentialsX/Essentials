@@ -6,6 +6,7 @@ import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.chat.EssentialsChat;
 import com.earth2me.essentials.utils.FormatUtil;
+import me.clip.placeholderapi.PlaceholderAPI;
 import net.ess3.api.events.LocalChatSpyEvent;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -28,12 +29,14 @@ public abstract class AbstractChatHandler {
 
     protected final Essentials ess;
     protected final EssentialsChat essChat;
+    protected final boolean isPapi;
     protected final Server server;
     protected final ChatProcessingCache cache;
 
     protected AbstractChatHandler(Essentials ess, EssentialsChat essChat) {
         this.ess = ess;
         this.essChat = essChat;
+        this.isPapi = essChat.getServer().getPluginManager().getPlugin("PlaceholderAPI") != null;
         this.server = ess.getServer();
         this.cache = new ChatProcessingCache();
     }
@@ -83,6 +86,9 @@ public abstract class AbstractChatHandler {
         format = format.replace("{7}", suffix);
         format = format.replace("{8}", username);
         format = format.replace("{9}", nickname == null ? username : nickname);
+        if (isPapi) {
+            format = PlaceholderAPI.setPlaceholders(event.getPlayer(), format);
+        }
         synchronized (format) {
             event.setFormat(format);
         }
