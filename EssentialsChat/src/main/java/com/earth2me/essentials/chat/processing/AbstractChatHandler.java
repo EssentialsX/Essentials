@@ -15,6 +15,9 @@ import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
+import org.bukkit.event.server.PluginDisableEvent;
+import org.bukkit.event.server.PluginEnableEvent;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.scoreboard.Team;
 
 import java.util.HashSet;
@@ -29,16 +32,17 @@ public abstract class AbstractChatHandler {
 
     protected final Essentials ess;
     protected final EssentialsChat essChat;
-    protected final boolean isPapi;
     protected final Server server;
     protected final ChatProcessingCache cache;
+    protected boolean isPapi;
 
     protected AbstractChatHandler(Essentials ess, EssentialsChat essChat) {
         this.ess = ess;
         this.essChat = essChat;
-        this.isPapi = essChat.getServer().getPluginManager().getPlugin("PlaceholderAPI") != null;
         this.server = ess.getServer();
         this.cache = new ChatProcessingCache();
+        final Plugin papi = essChat.getServer().getPluginManager().getPlugin("PlaceholderAPI");
+        this.isPapi = papi != null && papi.isEnabled();
     }
 
     // The initial chat formatting logic, handled at LOWEST priority
@@ -270,6 +274,20 @@ public abstract class AbstractChatHandler {
     protected interface ChatListener extends Listener {
         @SuppressWarnings("unused")
         void onPlayerChat(AsyncPlayerChatEvent event);
+    }
+
+    private class PluginListener implements Listener {
+        void onPluginEnable(PluginEnableEvent event) {
+            if (event.getPlugin().getName().equals("PlaceholderAPI")) {
+                isPapi = true;
+            }
+        }
+
+        void onPluginDisable(PluginDisableEvent event) {
+            if (event.getPlugin().getName().equals("PlaceholderAPI")) {
+                isPapi = false;
+            }
+        }
     }
 
 }
