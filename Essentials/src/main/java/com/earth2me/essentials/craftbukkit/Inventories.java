@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Predicate;
 
 public final class Inventories {
     private static final int HELM_SLOT = 39;
@@ -90,6 +91,7 @@ public final class Inventories {
         final ItemStack[] items = new ItemStack[41];
         for (int i = 0; i < items.length; i++) {
             if (!includeArmor && isArmorSlot(i)) {
+                items[i] = null;
                 continue;
             }
 
@@ -99,9 +101,42 @@ public final class Inventories {
         return items;
     }
 
-    public static int removeItem(final Player player, final ItemStack item, final boolean includeArmor) {
+    public static int removeItem(final Player player, final ItemStack toRemove, final boolean includeArmor) {
+        return removeItem(player, itemStack -> itemStack.equals(toRemove), includeArmor);
+    }
+
+    public static int removeItem(final Player player, final Predicate<ItemStack> removePredicate, final boolean includeArmor) {
+        final ItemStack[] items = player.getInventory().getContents();
+        for (int i = 0; i < items.length; i++) {
+            if (!includeArmor && isArmorSlot(i)) {
+                continue;
+            }
+
+            final ItemStack item = items[i];
+            if (item == null || MaterialUtil.isAir(item.getType())) {
+                continue;
+            }
+
+            if (removePredicate.test(item)) {
+                item.setAmount(0);
+                player.getInventory().setItem(i, item);
+            }
+        }
+
         // i forget how this works
         return Integer.MAX_VALUE;
+    }
+
+    public static void clearSlot(final Player player, final int slot) {
+        final ItemStack item = player.getInventory().getItem(slot);
+        if (item != null && !MaterialUtil.isAir(item.getType())) {
+            item.setAmount(0);
+            player.getInventory().setItem(slot, item);
+        }
+    }
+
+    public static void setSlot(final Player inventory, final int slot, final ItemStack item) {
+        inventory.getInventory().setItem(slot, item);
     }
 
     private static InventoryData parseInventoryData(final Inventory inventory, final ItemStack[] items, final int maxStack, final boolean includeArmor) {
