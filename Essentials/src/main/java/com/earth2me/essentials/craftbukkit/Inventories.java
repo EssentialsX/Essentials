@@ -7,6 +7,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -30,7 +31,8 @@ public final class Inventories {
         return addItem(player, maxStack, false, items);
     }
 
-    public static Map<Integer, ItemStack> addItem(final Player player, final int maxStack, final boolean allowArmor, final ItemStack... items) {
+    public static Map<Integer, ItemStack> addItem(final Player player, final int maxStack, final boolean allowArmor, ItemStack... items) {
+        items = normalizeItems(items);
         final Map<Integer, ItemStack> leftover = new HashMap<>();
         final InventoryData inventoryData = parseInventoryData(player.getInventory(), items, maxStack, allowArmor);
         System.out.println(inventoryData.getEmptySlots());
@@ -101,11 +103,11 @@ public final class Inventories {
         return items;
     }
 
-    public static int removeItem(final Player player, final ItemStack toRemove, final boolean includeArmor) {
-        return removeItem(player, itemStack -> itemStack.equals(toRemove), includeArmor);
+    public static void removeItem(final Player player, final ItemStack toRemove, final boolean includeArmor) {
+        removeItem(player, itemStack -> itemStack.equals(toRemove), includeArmor);
     }
 
-    public static int removeItem(final Player player, final Predicate<ItemStack> removePredicate, final boolean includeArmor) {
+    public static void removeItem(final Player player, final Predicate<ItemStack> removePredicate, final boolean includeArmor) {
         final ItemStack[] items = player.getInventory().getContents();
         for (int i = 0; i < items.length; i++) {
             if (!includeArmor && isArmorSlot(i)) {
@@ -122,9 +124,6 @@ public final class Inventories {
                 player.getInventory().setItem(i, item);
             }
         }
-
-        // i forget how this works
-        return Integer.MAX_VALUE;
     }
 
     public static void clearSlot(final Player player, final int slot) {
@@ -137,6 +136,38 @@ public final class Inventories {
 
     public static void setSlot(final Player inventory, final int slot, final ItemStack item) {
         inventory.getInventory().setItem(slot, item);
+    }
+
+    private static ItemStack[] normalizeItems(final ItemStack[] items) {
+        System.out.println(Arrays.toString(items));
+        if (items.length <= 1) {
+            return items;
+        }
+
+        final ItemStack[] normalizedItems = new ItemStack[items.length];
+        int nextNormalizedIndex = 0;
+        inputLoop:
+        for (final ItemStack item : items) {
+            if (item == null || MaterialUtil.isAir(item.getType())) {
+                continue;
+            }
+
+            for (int j = 0; j < nextNormalizedIndex; j++) {
+                final ItemStack normalizedItem = normalizedItems[j];
+                if (normalizedItem == null || MaterialUtil.isAir(normalizedItem.getType())) {
+                    continue;
+                }
+
+                if (item.isSimilar(normalizedItem)) {
+                    normalizedItem.setAmount(normalizedItem.getAmount() + item.getAmount());
+                    continue inputLoop;
+                }
+            }
+            normalizedItems[nextNormalizedIndex++] = item;
+        }
+
+        System.out.println(Arrays.toString(normalizedItems));
+        return normalizedItems;
     }
 
     private static InventoryData parseInventoryData(final Inventory inventory, final ItemStack[] items, final int maxStack, final boolean includeArmor) {

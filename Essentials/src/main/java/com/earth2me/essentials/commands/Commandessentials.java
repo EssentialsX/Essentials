@@ -180,7 +180,7 @@ public class Commandessentials extends EssentialsCommand {
                 break;
             }
             case "overfill": {
-                sender.sendMessage(Inventories.addItem(player, 42, false, new ItemStack(Material.DIAMOND_SWORD, 1), new ItemStack(Material.DIRT, 64 * 4)).toString());
+                sender.sendMessage(Inventories.addItem(player, 42, false, new ItemStack(Material.DIAMOND_SWORD, 1), new ItemStack(Material.DIRT, 32), new ItemStack(Material.DIRT, 32)).toString());
                 break;
             }
             case "remove": {
