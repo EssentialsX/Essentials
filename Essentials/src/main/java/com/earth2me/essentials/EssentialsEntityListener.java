@@ -1,7 +1,6 @@
 package com.earth2me.essentials;
 
 import com.earth2me.essentials.craftbukkit.Inventories;
-import com.earth2me.essentials.utils.MaterialUtil;
 import com.earth2me.essentials.utils.VersionUtil;
 import net.ess3.api.IEssentials;
 import org.bukkit.Location;
@@ -197,26 +196,23 @@ public class EssentialsEntityListener implements Listener {
             final ISettings.KeepInvPolicy vanish = ess.getSettings().getVanishingItemsPolicy();
             final ISettings.KeepInvPolicy bind = ess.getSettings().getBindingItemsPolicy();
             if (VersionUtil.getServerBukkitVersion().isHigherThanOrEqualTo(VersionUtil.v1_11_2_R01) && (vanish != ISettings.KeepInvPolicy.KEEP || bind != ISettings.KeepInvPolicy.KEEP)) {
-                for (final ItemStack stack : Inventories.getInventory(user.getBase(), true)) {
-                    if (stack != null && !MaterialUtil.isAir(stack.getType())) {
-                        if (stack.getEnchantments().containsKey(Enchantment.VANISHING_CURSE)) {
-                            if (vanish == ISettings.KeepInvPolicy.DELETE) {
-                                event.getEntity().getInventory().remove(stack);
-                            } else if (vanish == ISettings.KeepInvPolicy.DROP) {
-                                event.getDrops().add(stack);
-                                event.getEntity().getInventory().remove(stack);
-                            }
+                Inventories.removeItem(user.getBase(), stack -> {
+                    if (vanish != ISettings.KeepInvPolicy.KEEP && stack.getEnchantments().containsKey(Enchantment.VANISHING_CURSE)) {
+                        if (vanish == ISettings.KeepInvPolicy.DROP) {
+                            event.getDrops().add(stack.clone());
                         }
-                        if (stack.getEnchantments().containsKey(Enchantment.BINDING_CURSE)) {
-                            if (bind == ISettings.KeepInvPolicy.DELETE) {
-                                event.getEntity().getInventory().remove(stack);
-                            } else if (bind == ISettings.KeepInvPolicy.DROP) {
-                                event.getEntity().getInventory().remove(stack);
-                                event.getDrops().add(stack);
-                            }
-                        }
+                        return true;
                     }
-                }
+
+                    if (bind != ISettings.KeepInvPolicy.KEEP && stack.getEnchantments().containsKey(Enchantment.BINDING_CURSE)) {
+                        if (bind == ISettings.KeepInvPolicy.DROP) {
+                            event.getDrops().add(stack.clone());
+                        }
+                        return true;
+                    }
+
+                    return false;
+                }, true);
             }
         }
     }
