@@ -164,18 +164,36 @@ public class Commandessentials extends EssentialsCommand {
     }
 
     public void runItemTest(Server server, CommandSource sender, String commandLabel, String[] args) {
-        if (!sender.isAuthorized("essentials.itemtest", ess)) {
+        if (!sender.isAuthorized("essentials.itemtest", ess) || args.length < 2 || !sender.isPlayer()) {
             return;
         }
 
         final Player player = sender.getPlayer();
+        assert player != null;
 
-        if (args.length == 2) {
-            player.getInventory().setItem(Integer.parseInt(args[1]), new ItemStack(Material.DIRT));
-            return;
+        switch (args[1]) {
+            case "slot": {
+                if (args.length < 3) {
+                    return;
+                }
+                player.getInventory().setItem(Integer.parseInt(args[2]), new ItemStack(Material.DIRT));
+                break;
+            }
+            case "overfill": {
+                sender.sendMessage(Inventories.addItem(player, 42, false, new ItemStack(Material.DIAMOND_SWORD, 1), new ItemStack(Material.DIRT, 64 * 4)).toString());
+                break;
+            }
+            case "remove": {
+                if (args.length < 3) {
+                    return;
+                }
+                Inventories.removeItem(player, new ItemStack(Material.PUMPKIN, 1), Boolean.parseBoolean(args[2]));
+                break;
+            }
+            default: {
+                break;
+            }
         }
-
-        System.out.println(Inventories.addItem(player, 42, false, new ItemStack(Material.DIAMOND_SWORD, 1), new ItemStack(Material.DIRT, 64 * 4)));
     }
 
     // Displays the command's usage.
