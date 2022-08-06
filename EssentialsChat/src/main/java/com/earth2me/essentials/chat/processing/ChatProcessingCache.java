@@ -58,6 +58,7 @@ public class ChatProcessingCache {
         private final User user;
         private final String type;
         private final String originalMessage;
+        protected long radius;
 
         protected Chat(User user, String type, String originalMessage) {
             this.user = user;
@@ -75,6 +76,10 @@ public class ChatProcessingCache {
 
         public String getOriginalMessage() {
             return originalMessage;
+        }
+
+        public long getRadius() {
+            return radius;
         }
 
         public final String getLongType() {
@@ -110,18 +115,12 @@ public class ChatProcessingCache {
     public static class IntermediateChat extends Chat {
         private String messageResult;
         private String formatResult;
-        private long radius;
 
         public IntermediateChat(final User user, final String type, final String originalMessage) {
             super(user, type, originalMessage);
         }
 
-        long getRadius() {
-            return radius;
-        }
-
-        void setRadius(final long radius) {
-            // TODO: use or remove
+        public void setRadius(final long radius) {
             this.radius = radius;
         }
 

@@ -38,7 +38,13 @@ public abstract class AbstractChatHandler {
         this.cache = new ChatProcessingCache();
     }
 
-    // The initial chat formatting logic, handled at LOWEST priority
+    // Chat formatting logic (config and chat types), handled at LOWEST priority
+
+    /**
+     * Apply chat formatting from config and from translations according to chat type.
+     * <p>
+     * Handled at {@link org.bukkit.event.EventPriority#LOWEST} on both preview and chat events.
+     */
     protected void handleChatFormat(AsyncPlayerChatEvent event) {
         if (isAborted(event)) {
             return;
@@ -51,8 +57,15 @@ public abstract class AbstractChatHandler {
             return;
         }
 
-        final ChatProcessingCache.IntermediateChat chat = new ChatProcessingCache.IntermediateChat(user, getChatType(user, event.getMessage()), event.getMessage());
-        cache.setIntermediateChat(event.getPlayer(), chat);
+        // Reuse cached IntermediateChat if available
+        ChatProcessingCache.IntermediateChat chat = cache.getIntermediateChat(event.getPlayer());
+        if (chat == null) {
+            chat = new ChatProcessingCache.IntermediateChat(user, getChatType(user, event.getMessage()), event.getMessage());
+            cache.setIntermediateChat(event.getPlayer(), chat);
+        }
+
+        final long configRadius = ess.getSettings().getChatRadius();
+        chat.setRadius(Math.max(configRadius, 0));
 
         // This listener should apply the general chat formatting only...then return control back the event handler
         event.setMessage(FormatUtil.formatMessage(user, "essentials.chat", event.getMessage()));
@@ -83,57 +96,69 @@ public abstract class AbstractChatHandler {
         format = format.replace("{7}", suffix);
         format = format.replace("{8}", username);
         format = format.replace("{9}", nickname == null ? username : nickname);
+
+        // Local, shout and question chat types are only enabled when there's a valid radius
+        if (chat.getRadius() > 0 && event.getMessage().length() > 1) {
+            if (chat.getType().isEmpty()) {
+                if (user.isToggleShout() && event.getMessage().charAt(0) == ess.getSettings().getChatShout()) {
+                    event.setMessage(event.getMessage().substring(1));
+                }
+                format = tl("chatTypeLocal").concat(format);
+            } else {
+                if (event.getMessage().charAt(0) == ess.getSettings().getChatShout() || (event.getMessage().charAt(0) == ess.getSettings().getChatQuestion() && ess.getSettings().isChatQuestionEnabled())) {
+                    event.setMessage(event.getMessage().substring(1));
+                }
+                format = tl(chat.getType() + "Format", format);
+            }
+        }
+
+        // Long live pointless synchronized blocks!
         synchronized (format) {
             event.setFormat(format);
         }
 
-        chat.setFormatResult(format);
+        chat.setFormatResult(event.getFormat());
         chat.setMessageResult(event.getMessage());
     }
 
-    // Local chat recipients logic, handled at NORMAL level
+    /**
+     * Handle the recipient filtering and permissions checks for local chat, if enabled.
+     * <p>
+     * Runs at {@link org.bukkit.event.EventPriority#NORMAL} priority on submitted chat events only.
+     */
     protected void handleChatRecipients(AsyncPlayerChatEvent event) {
         if (isAborted(event)) {
             return;
         }
 
-        // This file should handle detection of the local chat features; if local chat is enabled, we need to handle it here
-        long radius = ess.getSettings().getChatRadius();
-        if (radius < 1) {
+        final ChatProcessingCache.Chat chat = cache.getIntermediateOrElseProcessedChat(event.getPlayer());
+
+        // If local chat is enabled, handle the recipients here; else we have nothing to do
+        if (chat.getRadius() < 1) {
             return;
         }
-        radius *= radius;
+        final long radiusSquared = chat.getRadius() * chat.getRadius();
 
-        final ChatProcessingCache.Chat chatStore = cache.getIntermediateOrElseProcessedChat(event.getPlayer());
-        final User user = chatStore.getUser();
+        final User user = chat.getUser();
 
         if (event.getMessage().length() > 1) {
-            if (chatStore.getType().isEmpty()) {
+            if (chat.getType().isEmpty()) {
                 if (!user.isAuthorized("essentials.chat.local")) {
                     user.sendMessage(tl("notAllowedToLocal"));
                     event.setCancelled(true);
                     return;
                 }
 
-                if (user.isToggleShout() && event.getMessage().length() > 1 && event.getMessage().charAt(0) == ess.getSettings().getChatShout()) {
-                    event.setMessage(event.getMessage().substring(1));
-                }
-
                 event.getRecipients().removeIf(player -> !ess.getUser(player).isAuthorized("essentials.chat.receive.local"));
             } else {
-                final String permission = "essentials.chat." + chatStore.getType();
+                final String permission = "essentials.chat." + chat.getType();
 
                 if (user.isAuthorized(permission)) {
-                    // TODO: move this formatting over to handleChatFormat to avoid breaking signing
-                    if (event.getMessage().charAt(0) == ess.getSettings().getChatShout() || (event.getMessage().charAt(0) == ess.getSettings().getChatQuestion() && ess.getSettings().isChatQuestionEnabled())) {
-                        event.setMessage(event.getMessage().substring(1));
-                    }
-                    event.setFormat(tl(chatStore.getType() + "Format", event.getFormat()));
-                    event.getRecipients().removeIf(player -> !ess.getUser(player).isAuthorized("essentials.chat.receive." + chatStore.getType()));
+                    event.getRecipients().removeIf(player -> !ess.getUser(player).isAuthorized("essentials.chat.receive." + chat.getType()));
                     return;
                 }
 
-                user.sendMessage(tl("notAllowedTo" + chatStore.getType().substring(0, 1).toUpperCase(Locale.ENGLISH) + chatStore.getType().substring(1)));
+                user.sendMessage(tl("notAllowedTo" + chat.getType().substring(0, 1).toUpperCase(Locale.ENGLISH) + chat.getType().substring(1)));
                 event.setCancelled(true);
                 return;
             }
@@ -154,9 +179,6 @@ public abstract class AbstractChatHandler {
             return;
         }
 
-        final String format = event.getFormat();
-        event.setFormat(tl("chatTypeLocal").concat(event.getFormat()));
-
         final Iterator<Player> it = outList.iterator();
         while (it.hasNext()) {
             final Player onlinePlayer = it.next();
@@ -168,7 +190,7 @@ public abstract class AbstractChatHandler {
                     abort = true;
                 } else {
                     final double delta = playerLoc.distanceSquared(loc);
-                    if (delta > radius) {
+                    if (delta > radiusSquared) {
                         abort = true;
                     }
                 }
@@ -185,7 +207,14 @@ public abstract class AbstractChatHandler {
             user.sendMessage(tl("localNoOne"));
         }
 
-        final LocalChatSpyEvent spyEvent = new LocalChatSpyEvent(event.isAsynchronous(), event.getPlayer(), format, event.getMessage(), spyList);
+        // Strip local chat prefix to preserve API behaviour
+        final String localPrefix = tl("chatTypeLocal");
+        String baseFormat = event.getFormat();
+        if (event.getFormat().startsWith(localPrefix)) {
+            baseFormat = baseFormat.substring(localPrefix.length());
+        }
+
+        final LocalChatSpyEvent spyEvent = new LocalChatSpyEvent(event.isAsynchronous(), event.getPlayer(), baseFormat, event.getMessage(), spyList);
         server.getPluginManager().callEvent(spyEvent);
 
         if (!spyEvent.isCancelled()) {
@@ -195,7 +224,12 @@ public abstract class AbstractChatHandler {
         }
     }
 
-    // Finalising the intermediate stages of chat processing, handled at HIGHEST level during previews
+    /**
+     * Finalise the formatting stage of chat processing.
+     * <p>
+     * Handled at {@link org.bukkit.event.EventPriority#HIGHEST} during previews, and immediately after
+     * {@link #handleChatFormat(AsyncPlayerChatEvent)} when previews are not available.
+     */
     protected void handleChatPostFormat(AsyncPlayerChatEvent event) {
         final ChatProcessingCache.IntermediateChat intermediateChat = cache.clearIntermediateChat(event.getPlayer());
         if (isAborted(event) || intermediateChat == null) {
@@ -210,6 +244,9 @@ public abstract class AbstractChatHandler {
         cache.setProcessedChat(event.getPlayer(), processed);
     }
 
+    /**
+     * Run costs for chat and clean up the cached {@link com.earth2me.essentials.chat.processing.ChatProcessingCache.ProcessedChat}
+     */
     protected void handleChatSubmit(AsyncPlayerChatEvent event) {
         if (isAborted(event)) {
             return;
