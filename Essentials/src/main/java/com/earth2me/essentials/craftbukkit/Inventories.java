@@ -23,6 +23,62 @@ public final class Inventories {
     private Inventories() {
     }
 
+    public static boolean hasSpace(final Player player, final int maxStack, final boolean includeArmor, ItemStack... items) {
+        items = normalizeItems(cloneItems(items));
+        final InventoryData inventoryData = parseInventoryData(player.getInventory(), items, maxStack, includeArmor);
+        System.out.println(inventoryData.getEmptySlots());
+        System.out.println(inventoryData.getPartialSlots());
+
+        final List<Integer> emptySlots = inventoryData.getEmptySlots();
+        for (final ItemStack item : items) {
+            if (item == null || MaterialUtil.isAir(item.getType())) {
+                continue;
+            }
+
+            final int itemMax = Math.max(maxStack, item.getMaxStackSize());
+            final List<Integer> partialSlots = inventoryData.getPartialSlots().get(item);
+            while (true) {
+                if (partialSlots == null || partialSlots.isEmpty()) {
+                    if (emptySlots.isEmpty()) {
+                        return false;
+                    }
+
+                    final int slot = emptySlots.remove(0);
+                    if (slot == HELM_SLOT && !MaterialUtil.isHelmet(item.getType())) {
+                        continue;
+                    } else if (slot == CHEST_SLOT && !MaterialUtil.isChestplate(item.getType())) {
+                        continue;
+                    } else if (slot == LEG_SLOT && !MaterialUtil.isLeggings(item.getType())) {
+                        continue;
+                    } else if (slot == BOOT_SLOT && !MaterialUtil.isBoots(item.getType())) {
+                        continue;
+                    }
+
+                    if (item.getAmount() > itemMax) {
+                        item.setAmount(item.getAmount() - itemMax);
+                    } else {
+                        break;
+                    }
+                } else {
+                    final int slot = partialSlots.remove(0);
+                    final ItemStack existing = player.getInventory().getItem(slot);
+
+                    final int amount = item.getAmount();
+                    //noinspection ConstantConditions
+                    final int existingAmount = existing.getAmount();
+
+                    if (amount + existingAmount <= itemMax) {
+                        break;
+                    } else {
+                        item.setAmount(amount + existingAmount - itemMax);
+                    }
+                }
+            }
+        }
+
+        return true;
+    }
+
     public static Map<Integer, ItemStack> addItem(final Player player, final ItemStack... items) {
         return addItem(player, 0, false, items);
     }
@@ -32,7 +88,7 @@ public final class Inventories {
     }
 
     public static Map<Integer, ItemStack> addItem(final Player player, final int maxStack, final boolean allowArmor, ItemStack... items) {
-        items = normalizeItems(items);
+        items = normalizeItems(cloneItems(items));
         final Map<Integer, ItemStack> leftover = new HashMap<>();
         final InventoryData inventoryData = parseInventoryData(player.getInventory(), items, maxStack, allowArmor);
         System.out.println(inventoryData.getEmptySlots());
@@ -55,6 +111,15 @@ public final class Inventories {
                     }
 
                     final int slot = emptySlots.remove(0);
+                    if (slot == HELM_SLOT && !MaterialUtil.isHelmet(item.getType())) {
+                        continue;
+                    } else if (slot == CHEST_SLOT && !MaterialUtil.isChestplate(item.getType())) {
+                        continue;
+                    } else if (slot == LEG_SLOT && !MaterialUtil.isLeggings(item.getType())) {
+                        continue;
+                    } else if (slot == BOOT_SLOT && !MaterialUtil.isBoots(item.getType())) {
+                        continue;
+                    }
 
                     if (item.getAmount() > itemMax) {
                         final ItemStack split = item.clone();
@@ -168,6 +233,20 @@ public final class Inventories {
 
         System.out.println(Arrays.toString(normalizedItems));
         return normalizedItems;
+    }
+
+    private static ItemStack[] cloneItems(final ItemStack[] items) {
+        final ItemStack[] clonedItems = new ItemStack[items.length];
+        for (int i = 0; i < items.length; i++) {
+            final ItemStack item = items[i];
+            if (item == null || MaterialUtil.isAir(item.getType())) {
+                continue;
+            }
+
+            clonedItems[i] = item.clone();
+        }
+
+        return clonedItems;
     }
 
     private static InventoryData parseInventoryData(final Inventory inventory, final ItemStack[] items, final int maxStack, final boolean includeArmor) {

@@ -183,6 +183,23 @@ public class Commandessentials extends EssentialsCommand {
                 sender.sendMessage(Inventories.addItem(player, 42, false, new ItemStack(Material.DIAMOND_SWORD, 1), new ItemStack(Material.DIRT, 32), new ItemStack(Material.DIRT, 32)).toString());
                 break;
             }
+            case "overfill2": {
+                if (args.length < 4) {
+                    return;
+                }
+                final boolean armor = Boolean.parseBoolean(args[2]);
+                final boolean add = Boolean.parseBoolean(args[3]);
+                final ItemStack[] items = new ItemStack[]{new ItemStack(Material.DIAMOND_SWORD, 1), new ItemStack(Material.DIRT, 32), new ItemStack(Material.DIRT, 32), new ItemStack(Material.DIAMOND_HELMET, 4), new ItemStack(Material.CHAINMAIL_LEGGINGS, 1)};
+                if (Inventories.hasSpace(player, 0, armor, items)) {
+                    if (add) {
+                        sender.sendMessage(Inventories.addItem(player, 0, armor, items).toString());
+                    }
+                    sender.sendMessage("SO MUCH SPACE!");
+                } else {
+                    sender.sendMessage("No space!");
+                }
+                break;
+            }
             case "remove": {
                 if (args.length < 3) {
                     return;
