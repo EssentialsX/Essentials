@@ -18,7 +18,7 @@ public class SignedChatHandler extends AbstractChatHandler {
     }
 
     public boolean tryRegisterListeners() {
-        if (VersionUtil.getServerBukkitVersion().isLowerThan(VersionUtil.v1_19_1_R01)) {
+        if (VersionUtil.getServerBukkitVersion().isLowerThan(VersionUtil.v1_19_2_R01)) {
             return false;
         }
 
