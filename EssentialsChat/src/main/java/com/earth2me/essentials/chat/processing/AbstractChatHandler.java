@@ -38,8 +38,6 @@ public abstract class AbstractChatHandler {
         this.cache = new ChatProcessingCache();
     }
 
-    // Chat formatting logic (config and chat types), handled at LOWEST priority
-
     /**
      * Apply chat formatting from config and from translations according to chat type.
      * <p>
