@@ -263,6 +263,14 @@ public final class Enchantments {
         } catch (final IllegalArgumentException ignored) {
         }
 
+        try { // 1.19
+            final Enchantment swiftSneak = Enchantment.getByName("SWIFT_SNEAK");
+            if (swiftSneak != null) {
+                ENCHANTMENTS.put("swiftsneak", swiftSneak);
+            }
+        } catch (final IllegalArgumentException ignored) {
+        }
+
         try {
             final Class<?> namespacedKeyClass = Class.forName("org.bukkit.NamespacedKey");
             final Class<?> enchantmentClass = Class.forName("org.bukkit.enchantments.Enchantment");

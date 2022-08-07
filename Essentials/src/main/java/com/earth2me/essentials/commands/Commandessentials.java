@@ -78,7 +78,12 @@ public class Commandessentials extends EssentialsCommand {
         "PermissionsEx", // permissions (unsupported)
         "GroupManager", // permissions (unsupported)
         "bPermissions", // permissions (unsupported)
-        "DiscordSRV" // potential for issues if EssentialsXDiscord is installed
+        "DiscordSRV", // potential for issues if EssentialsXDiscord is installed
+
+        // Brain-dead chat signing bypass that break EssentialsChat
+        "AntiPopup",
+        "NoChatReports",
+        "NoEncryption"
     );
     private static final List<String> officialPlugins = Arrays.asList(
         "EssentialsAntiBuild",
@@ -92,7 +97,12 @@ public class Commandessentials extends EssentialsCommand {
     private static final List<String> warnPlugins = Arrays.asList(
         "PermissionsEx",
         "GroupManager",
-        "bPermissions"
+        "bPermissions",
+
+        // Brain-dead chat signing bypass that break EssentialsChat
+        "AntiPopup",
+        "NoChatReports",
+        "NoEncryption"
     );
     private transient TuneRunnable currentTune = null;
 
@@ -701,6 +711,9 @@ public class Commandessentials extends EssentialsCommand {
                 break;
             case DANGEROUS_FORK:
                 sender.sendMessage(ChatColor.DARK_RED + tl("serverUnsupportedDangerous"));
+                break;
+            case STUPID_PLUGIN:
+                sender.sendMessage(ChatColor.DARK_RED + tl("serverUnsupportedDumbPlugins"));
                 break;
             case UNSTABLE:
                 sender.sendMessage(ChatColor.DARK_RED + tl("serverUnsupportedMods"));
