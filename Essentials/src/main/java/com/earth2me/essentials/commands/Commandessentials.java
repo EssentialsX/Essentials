@@ -6,6 +6,7 @@ import com.earth2me.essentials.User;
 import com.earth2me.essentials.UserMap;
 import com.earth2me.essentials.economy.EconomyLayer;
 import com.earth2me.essentials.economy.EconomyLayers;
+import com.earth2me.essentials.utils.CommandMapUtil;
 import com.earth2me.essentials.utils.DateUtil;
 import com.earth2me.essentials.utils.EnumUtil;
 import com.earth2me.essentials.utils.FloatUtil;
@@ -25,6 +26,7 @@ import org.bukkit.Location;
 import org.bukkit.Server;
 import org.bukkit.Sound;
 import org.bukkit.World;
+import org.bukkit.command.Command;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginDescriptionFile;
@@ -42,6 +44,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -270,6 +273,9 @@ public class Commandessentials extends EssentialsCommand {
         final Plugin essDiscord = Bukkit.getPluginManager().getPlugin("EssentialsDiscord");
         final Plugin essSpawn = Bukkit.getPluginManager().getPlugin("EssentialsSpawn");
 
+        final Map<String, Command> knownCommandsCopy = new HashMap<>(ess.getKnownCommandsProvider().getKnownCommands());
+        final Map<String, String> disabledCommandsCopy = new HashMap<>(ess.getAlternativeCommandsHandler().disabledCommands());
+
         // Further operations will be heavy IO
         ess.runTaskAsynchronously(() -> {
             boolean config = false;
@@ -279,6 +285,7 @@ public class Commandessentials extends EssentialsCommand {
             boolean worth = false;
             boolean tpr = false;
             boolean spawns = false;
+            boolean commands = false;
             for (final String arg : args) {
                 if (arg.equals("*") || arg.equalsIgnoreCase("all")) {
                     config = true;
@@ -288,6 +295,7 @@ public class Commandessentials extends EssentialsCommand {
                     worth = true;
                     tpr = true;
                     spawns = true;
+                    commands = true;
                     break;
                 } else if (arg.equalsIgnoreCase("config")) {
                     config = true;
@@ -303,6 +311,8 @@ public class Commandessentials extends EssentialsCommand {
                     tpr = true;
                 } else if (arg.equalsIgnoreCase("spawns")) {
                     spawns = true;
+                } else if (arg.equalsIgnoreCase("commands")) {
+                    commands = true;
                 }
             }
 
@@ -363,6 +373,16 @@ public class Commandessentials extends EssentialsCommand {
                     files.add(new PasteUtil.PasteFile("spawn.yml", new String(Files.readAllBytes(ess.getDataFolder().toPath().resolve("spawn.yml")), StandardCharsets.UTF_8)));
                 } catch (IOException e) {
                     sender.sendMessage(tl("dumpErrorUpload", "spawn.yml", e.getMessage()));
+                }
+            }
+
+            if (commands) {
+                try {
+                    files.add(new PasteUtil.PasteFile("commands.yml", new String(Files.readAllBytes(Paths.get("commands.yml")), StandardCharsets.UTF_8)));
+                    files.add(new PasteUtil.PasteFile("commandmap.json", CommandMapUtil.toJsonPretty(ess, knownCommandsCopy)));
+                    files.add(new PasteUtil.PasteFile("commandoverride.json", disabledCommandsCopy.toString()));
+                } catch (IOException e) {
+                    sender.sendMessage(tl("dumpErrorUpload", "commands.yml", e.getMessage()));
                 }
             }
 
@@ -769,7 +789,7 @@ public class Commandessentials extends EssentialsCommand {
                 }
                 break;
             case "dump":
-                final List<String> list = Lists.newArrayList("config", "kits", "log", "discord", "worth", "tpr", "spawns", "all");
+                final List<String> list = Lists.newArrayList("config", "kits", "log", "discord", "worth", "tpr", "spawns", "commands", "all");
                 for (String arg : args) {
                     if (arg.equals("*") || arg.equalsIgnoreCase("all")) {
                         list.clear();
