@@ -82,7 +82,6 @@ public class Commandessentials extends EssentialsCommand {
         "DiscordSRV", // potential for issues if EssentialsXDiscord is installed
 
         // Brain-dead chat signing bypass that break EssentialsChat
-        "AntiPopup",
         "NoChatReports",
         "NoEncryption"
     );
@@ -101,7 +100,6 @@ public class Commandessentials extends EssentialsCommand {
         "bPermissions",
 
         // Brain-dead chat signing bypass that break EssentialsChat
-        "AntiPopup",
         "NoChatReports",
         "NoEncryption"
     );

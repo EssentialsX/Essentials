@@ -62,7 +62,6 @@ public final class VersionUtil {
         builder.put("net.kibblelands.server.FastMath", SupportStatus.DANGEROUS_FORK);
 
         // Brain-dead chat signing bypass that break EssentialsChat
-        builder.put("screw.microsoft.antipopup.AntiPopup", SupportStatus.STUPID_PLUGIN);
         builder.put("ml.tcoded.nochatreports.NoChatReportsSpigot", SupportStatus.STUPID_PLUGIN);
         builder.put("me.doclic.noencryption.NoEncryption", SupportStatus.STUPID_PLUGIN);
 
