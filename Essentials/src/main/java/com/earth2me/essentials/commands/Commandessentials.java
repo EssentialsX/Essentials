@@ -6,6 +6,7 @@ import com.earth2me.essentials.User;
 import com.earth2me.essentials.UserMap;
 import com.earth2me.essentials.economy.EconomyLayer;
 import com.earth2me.essentials.economy.EconomyLayers;
+import com.earth2me.essentials.utils.CommandMapUtil;
 import com.earth2me.essentials.utils.DateUtil;
 import com.earth2me.essentials.utils.EnumUtil;
 import com.earth2me.essentials.utils.FloatUtil;
@@ -272,7 +273,7 @@ public class Commandessentials extends EssentialsCommand {
         final Plugin essDiscord = Bukkit.getPluginManager().getPlugin("EssentialsDiscord");
         final Plugin essSpawn = Bukkit.getPluginManager().getPlugin("EssentialsSpawn");
 
-        final Map<String, Command> knowCommandsCopy = new HashMap<>(ess.getKnownCommandsProvider().getKnownCommands());
+        final Map<String, Command> knownCommandsCopy = new HashMap<>(ess.getKnownCommandsProvider().getKnownCommands());
         final Map<String, String> disabledCommandsCopy = new HashMap<>(ess.getAlternativeCommandsHandler().disabledCommands());
 
         // Further operations will be heavy IO
@@ -378,7 +379,7 @@ public class Commandessentials extends EssentialsCommand {
             if (commands) {
                 try {
                     files.add(new PasteUtil.PasteFile("commands.yml", new String(Files.readAllBytes(Paths.get("commands.yml")), StandardCharsets.UTF_8)));
-                    files.add(new PasteUtil.PasteFile("commandmap.json", knowCommandsCopy.toString()));
+                    files.add(new PasteUtil.PasteFile("commandmap.json", CommandMapUtil.toJsonPretty(ess, knownCommandsCopy)));
                     files.add(new PasteUtil.PasteFile("commandoverride.json", disabledCommandsCopy.toString()));
                 } catch (IOException e) {
                     sender.sendMessage(tl("dumpErrorUpload", "commands.yml", e.getMessage()));
