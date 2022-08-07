@@ -81,7 +81,8 @@ public class Commandessentials extends EssentialsCommand {
         "bPermissions", // permissions (unsupported)
         "DiscordSRV", // potential for issues if EssentialsXDiscord is installed
 
-        // Brain-dead chat signing bypass that break EssentialsChat
+        // Chat signing bypass plugins that can potentially break EssentialsChat
+        "AntiPopup",
         "NoChatReports",
         "NoEncryption"
     );
