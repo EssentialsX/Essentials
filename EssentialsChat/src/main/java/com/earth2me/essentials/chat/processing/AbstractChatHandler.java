@@ -96,7 +96,7 @@ public abstract class AbstractChatHandler {
         format = format.replace("{9}", nickname == null ? username : nickname);
 
         // Local, shout and question chat types are only enabled when there's a valid radius
-        if (chat.getRadius() > 0 && event.getMessage().length() > 1) {
+        if (chat.getRadius() > 0 && event.getMessage().length() > 0) {
             if (chat.getType().isEmpty()) {
                 if (user.isToggleShout() && event.getMessage().charAt(0) == ess.getSettings().getChatShout()) {
                     event.setMessage(event.getMessage().substring(1));
@@ -139,7 +139,7 @@ public abstract class AbstractChatHandler {
 
         final User user = chat.getUser();
 
-        if (event.getMessage().length() > 1) {
+        if (event.getMessage().length() > 0) {
             if (chat.getType().isEmpty()) {
                 if (!user.isAuthorized("essentials.chat.local")) {
                     user.sendMessage(tl("notAllowedToLocal"));
