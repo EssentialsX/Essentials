@@ -126,10 +126,13 @@ public class SimpleMessageRecipient implements IMessageRecipient {
                 }
                 break;
         }
-        // If the message was a success, set this sender's reply-recipient to the current recipient.
-        if (messageResponse.isSuccess()) {
-            setReplyRecipient(recipient);
+
+        if (!messageResponse.isSuccess()) {
+            return messageResponse;
         }
+
+        // If the message was a success, set this sender's reply-recipient to the current recipient.
+        setReplyRecipient(recipient);
 
         final PrivateMessageSentEvent sentEvent = new PrivateMessageSentEvent(parent, recipient, message, messageResponse);
         ess.getServer().getPluginManager().callEvent(sentEvent);
