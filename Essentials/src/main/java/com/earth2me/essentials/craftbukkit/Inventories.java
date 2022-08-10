@@ -43,17 +43,7 @@ public final class Inventories {
                         return false;
                     }
 
-                    final int slot = emptySlots.remove(0);
-                    if (slot == HELM_SLOT && !MaterialUtil.isHelmet(item.getType())) {
-                        continue;
-                    } else if (slot == CHEST_SLOT && !MaterialUtil.isChestplate(item.getType())) {
-                        continue;
-                    } else if (slot == LEG_SLOT && !MaterialUtil.isLeggings(item.getType())) {
-                        continue;
-                    } else if (slot == BOOT_SLOT && !MaterialUtil.isBoots(item.getType())) {
-                        continue;
-                    }
-
+                    emptySlots.remove(0);
                     if (item.getAmount() > itemMax) {
                         item.setAmount(item.getAmount() - itemMax);
                     } else {
@@ -61,10 +51,13 @@ public final class Inventories {
                     }
                 } else {
                     final int slot = partialSlots.remove(0);
-                    final ItemStack existing = player.getInventory().getItem(slot);
+                    ItemStack existing = player.getInventory().getItem(slot);
+                    if (existing == null || MaterialUtil.isAir(existing.getType())) {
+                        existing = item.clone();
+                        existing.setAmount(0);
+                    }
 
                     final int amount = item.getAmount();
-                    //noinspection ConstantConditions
                     final int existingAmount = existing.getAmount();
 
                     if (amount + existingAmount <= itemMax) {
@@ -111,16 +104,6 @@ public final class Inventories {
                     }
 
                     final int slot = emptySlots.remove(0);
-                    if (slot == HELM_SLOT && !MaterialUtil.isHelmet(item.getType())) {
-                        continue;
-                    } else if (slot == CHEST_SLOT && !MaterialUtil.isChestplate(item.getType())) {
-                        continue;
-                    } else if (slot == LEG_SLOT && !MaterialUtil.isLeggings(item.getType())) {
-                        continue;
-                    } else if (slot == BOOT_SLOT && !MaterialUtil.isBoots(item.getType())) {
-                        continue;
-                    }
-
                     if (item.getAmount() > itemMax) {
                         final ItemStack split = item.clone();
                         split.setAmount(itemMax);
@@ -132,10 +115,13 @@ public final class Inventories {
                     }
                 } else {
                     final int slot = partialSlots.remove(0);
-                    final ItemStack existing = player.getInventory().getItem(slot);
+                    ItemStack existing = player.getInventory().getItem(slot);
+                    if (existing == null || MaterialUtil.isAir(existing.getType())) {
+                        existing = item.clone();
+                        existing.setAmount(0);
+                    }
 
                     final int amount = item.getAmount();
-                    //noinspection ConstantConditions
                     final int existingAmount = existing.getAmount();
 
                     if (amount + existingAmount <= itemMax) {
@@ -270,6 +256,45 @@ public final class Inventories {
                 }
             }
         }
+
+        // Convert empty armor slots to partial slots if we have armor items in the inventory, otherwise remove them from the empty slots.
+        if (includeArmor) {
+            ItemStack helm = null;
+            ItemStack chest = null;
+            ItemStack legs = null;
+            ItemStack boots = null;
+            for (final ItemStack item : items) {
+                if (item == null || MaterialUtil.isAir(item.getType())) {
+                    continue;
+                }
+                if (helm == null && MaterialUtil.isHelmet(item.getType())) {
+                    helm = item;
+                    if (emptySlots.contains(HELM_SLOT)) {
+                        partialSlots.computeIfAbsent(helm, k -> new ArrayList<>()).add(HELM_SLOT);
+                    }
+                } else if (chest == null && MaterialUtil.isChestplate(item.getType())) {
+                    chest = item;
+                    if (emptySlots.contains(CHEST_SLOT)) {
+                        partialSlots.computeIfAbsent(chest, k -> new ArrayList<>()).add(CHEST_SLOT);
+                    }
+                } else if (legs == null && MaterialUtil.isLeggings(item.getType())) {
+                    legs = item;
+                    if (emptySlots.contains(LEG_SLOT)) {
+                        partialSlots.computeIfAbsent(legs, k -> new ArrayList<>()).add(LEG_SLOT);
+                    }
+                } else if (boots == null && MaterialUtil.isBoots(item.getType())) {
+                    boots = item;
+                    if (emptySlots.contains(BOOT_SLOT)) {
+                        partialSlots.computeIfAbsent(boots, k -> new ArrayList<>()).add(BOOT_SLOT);
+                    }
+                }
+            }
+            emptySlots.remove((Object) HELM_SLOT);
+            emptySlots.remove((Object) CHEST_SLOT);
+            emptySlots.remove((Object) LEG_SLOT);
+            emptySlots.remove((Object) BOOT_SLOT);
+        }
+
         return new InventoryData(emptySlots, partialSlots);
     }
 
