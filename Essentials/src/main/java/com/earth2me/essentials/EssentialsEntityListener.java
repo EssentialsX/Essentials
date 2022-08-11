@@ -196,7 +196,7 @@ public class EssentialsEntityListener implements Listener {
             final ISettings.KeepInvPolicy vanish = ess.getSettings().getVanishingItemsPolicy();
             final ISettings.KeepInvPolicy bind = ess.getSettings().getBindingItemsPolicy();
             if (VersionUtil.getServerBukkitVersion().isHigherThanOrEqualTo(VersionUtil.v1_11_2_R01) && (vanish != ISettings.KeepInvPolicy.KEEP || bind != ISettings.KeepInvPolicy.KEEP)) {
-                Inventories.removeItem(user.getBase(), stack -> {
+                Inventories.removeItems(user.getBase(), stack -> {
                     if (vanish != ISettings.KeepInvPolicy.KEEP && stack.getEnchantments().containsKey(Enchantment.VANISHING_CURSE)) {
                         if (vanish == ISettings.KeepInvPolicy.DROP) {
                             event.getDrops().add(stack.clone());
