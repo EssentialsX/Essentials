@@ -216,7 +216,7 @@ public class Commandessentials extends EssentialsCommand {
                 if (args.length < 3) {
                     return;
                 }
-                Inventories.removeItem(player, new ItemStack(Material.PUMPKIN, 1), Boolean.parseBoolean(args[2]));
+                Inventories.removeItemExact(player, new ItemStack(Material.PUMPKIN, 1), Boolean.parseBoolean(args[2]));
                 break;
             }
             default: {

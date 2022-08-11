@@ -23,6 +23,21 @@ public final class Inventories {
     private Inventories() {
     }
 
+    public static boolean containsAtLeast(final Player player, final ItemStack item, int amount) {
+        for (final ItemStack invItem : player.getInventory().getContents()) {
+            if (invItem == null || MaterialUtil.isAir(invItem.getType())) {
+                continue;
+            }
+            if (invItem.isSimilar(item)) {
+                amount -= invItem.getAmount();
+                if (amount <= 0) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
     public static boolean hasSpace(final Player player, final int maxStack, final boolean includeArmor, ItemStack... items) {
         items = normalizeItems(cloneItems(items));
         final InventoryData inventoryData = parseInventoryData(player.getInventory(), items, maxStack, includeArmor);
@@ -154,11 +169,16 @@ public final class Inventories {
         return items;
     }
 
-    public static void removeItem(final Player player, final ItemStack toRemove, final boolean includeArmor) {
-        removeItem(player, itemStack -> itemStack.equals(toRemove), includeArmor);
+    public static void removeItemExact(final Player player, final ItemStack toRemove, final boolean includeArmor) {
+        removeItems(player, itemStack -> itemStack.equals(toRemove), includeArmor);
     }
 
-    public static void removeItem(final Player player, final Predicate<ItemStack> removePredicate, final boolean includeArmor) {
+    public static int removeItemSimilar(final Player player, final ItemStack toRemove, final boolean includeArmor) {
+        return removeItems(player, itemStack -> itemStack.isSimilar(toRemove), includeArmor);
+    }
+
+    public static int removeItems(final Player player, final Predicate<ItemStack> removePredicate, final boolean includeArmor) {
+        int removedAmount = 0;
         final ItemStack[] items = player.getInventory().getContents();
         for (int i = 0; i < items.length; i++) {
             if (!includeArmor && isArmorSlot(i)) {
@@ -171,10 +191,46 @@ public final class Inventories {
             }
 
             if (removePredicate.test(item)) {
+                removedAmount += item.getAmount();
                 item.setAmount(0);
                 player.getInventory().setItem(i, item);
             }
         }
+        return removedAmount;
+    }
+
+    public static boolean removeItemAmount(final Player player, final ItemStack toRemove, int amount) {
+        final List<Integer> clearSlots = new ArrayList<>();
+        final ItemStack[] items = player.getInventory().getContents();
+
+        for (int i = 0; i < items.length; i++) {
+            final ItemStack item = items[i];
+            if (item == null || MaterialUtil.isAir(item.getType())) {
+                continue;
+            }
+
+            if (item.isSimilar(toRemove)) {
+                if (item.getAmount() >= amount) {
+                    item.setAmount(item.getAmount() - amount);
+                    player.getInventory().setItem(i, item);
+                    for (final int slot : clearSlots) {
+                        clearSlot(player, slot);
+                    }
+                    return true;
+                } else {
+                    amount -= item.getAmount();
+                    clearSlots.add(i);
+                }
+
+                if (amount == 0) {
+                    for (final int slot : clearSlots) {
+                        clearSlot(player, slot);
+                    }
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     public static void clearSlot(final Player player, final int slot) {
