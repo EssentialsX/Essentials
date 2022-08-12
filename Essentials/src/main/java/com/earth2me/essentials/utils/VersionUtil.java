@@ -36,8 +36,9 @@ public final class VersionUtil {
     public static final BukkitVersion v1_17_1_R01 = BukkitVersion.fromString("1.17.1-R0.1-SNAPSHOT");
     public static final BukkitVersion v1_18_2_R01 = BukkitVersion.fromString("1.18.2-R0.1-SNAPSHOT");
     public static final BukkitVersion v1_19_R01 = BukkitVersion.fromString("1.19-R0.1-SNAPSHOT");
+    public static final BukkitVersion v1_19_2_R01 = BukkitVersion.fromString("1.19.2-R0.1-SNAPSHOT");
 
-    private static final Set<BukkitVersion> supportedVersions = ImmutableSet.of(v1_8_8_R01, v1_9_4_R01, v1_10_2_R01, v1_11_2_R01, v1_12_2_R01, v1_13_2_R01, v1_14_4_R01, v1_15_2_R01, v1_16_5_R01, v1_17_1_R01, v1_18_2_R01, v1_19_R01);
+    private static final Set<BukkitVersion> supportedVersions = ImmutableSet.of(v1_8_8_R01, v1_9_4_R01, v1_10_2_R01, v1_11_2_R01, v1_12_2_R01, v1_13_2_R01, v1_14_4_R01, v1_15_2_R01, v1_16_5_R01, v1_17_1_R01, v1_18_2_R01, v1_19_2_R01);
 
     public static final boolean PRE_FLATTENING = VersionUtil.getServerBukkitVersion().isLowerThan(VersionUtil.v1_13_0_R01);
 
@@ -59,6 +60,10 @@ public final class VersionUtil {
 
         // KibblePatcher - Dangerous bytecode editor snakeoil whose only use is to break plugins
         builder.put("net.kibblelands.server.FastMath", SupportStatus.DANGEROUS_FORK);
+
+        // Brain-dead chat signing bypass that break EssentialsChat
+        builder.put("ml.tcoded.nochatreports.NoChatReportsSpigot", SupportStatus.STUPID_PLUGIN);
+        builder.put("me.doclic.noencryption.NoEncryption", SupportStatus.STUPID_PLUGIN);
 
         // Akarin - Dangerous patch history;
         //   * Potentially unsafe saving of nms.JsonList
@@ -323,6 +328,7 @@ public final class VersionUtil {
         FULL(true),
         LIMITED(true),
         DANGEROUS_FORK(false),
+        STUPID_PLUGIN(false),
         NMS_CLEANROOM(false),
         UNSTABLE(false),
         OUTDATED(false)
