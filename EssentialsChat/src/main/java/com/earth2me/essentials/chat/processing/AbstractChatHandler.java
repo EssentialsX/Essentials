@@ -22,7 +22,7 @@ import java.util.Locale;
 import java.util.Set;
 import java.util.logging.Level;
 
-import static com.earth2me.essentials.I18n.tl;
+import static com.earth2me.essentials.I18n.tlLiteral;
 
 public abstract class AbstractChatHandler {
 
@@ -101,12 +101,12 @@ public abstract class AbstractChatHandler {
                 if (user.isToggleShout() && event.getMessage().charAt(0) == ess.getSettings().getChatShout()) {
                     event.setMessage(event.getMessage().substring(1));
                 }
-                format = tl("chatTypeLocal").concat(format);
+                format = tlLiteral("chatTypeLocal").concat(format);
             } else {
                 if (event.getMessage().charAt(0) == ess.getSettings().getChatShout() || (event.getMessage().charAt(0) == ess.getSettings().getChatQuestion() && ess.getSettings().isChatQuestionEnabled())) {
                     event.setMessage(event.getMessage().substring(1));
                 }
-                format = tl(chat.getType() + "Format", format);
+                format = tlLiteral(chat.getType() + "Format", format);
             }
         }
 
@@ -142,7 +142,7 @@ public abstract class AbstractChatHandler {
         if (event.getMessage().length() > 0) {
             if (chat.getType().isEmpty()) {
                 if (!user.isAuthorized("essentials.chat.local")) {
-                    user.sendMessage(tl("notAllowedToLocal"));
+                    user.sendTl("notAllowedToLocal");
                     event.setCancelled(true);
                     return;
                 }
@@ -156,7 +156,7 @@ public abstract class AbstractChatHandler {
                     return;
                 }
 
-                user.sendMessage(tl("notAllowedTo" + chat.getType().substring(0, 1).toUpperCase(Locale.ENGLISH) + chat.getType().substring(1)));
+                user.sendTl("notAllowedTo" + chat.getType().substring(0, 1).toUpperCase(Locale.ENGLISH) + chat.getType().substring(1));
                 event.setCancelled(true);
                 return;
             }
@@ -202,11 +202,11 @@ public abstract class AbstractChatHandler {
         }
 
         if (outList.size() < 2) {
-            user.sendMessage(tl("localNoOne"));
+            user.sendTl("localNoOne");
         }
 
         // Strip local chat prefix to preserve API behaviour
-        final String localPrefix = tl("chatTypeLocal");
+        final String localPrefix = tlLiteral("chatTypeLocal");
         String baseFormat = event.getFormat();
         if (event.getFormat().startsWith(localPrefix)) {
             baseFormat = baseFormat.substring(localPrefix.length());

@@ -1,7 +1,6 @@
 package com.earth2me.essentials.chat.processing;
 
 import com.earth2me.essentials.Essentials;
-import com.earth2me.essentials.I18n;
 import com.earth2me.essentials.chat.EssentialsChat;
 import com.earth2me.essentials.utils.VersionUtil;
 import org.bukkit.event.EventHandler;
@@ -10,6 +9,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.AsyncPlayerChatPreviewEvent;
 import org.bukkit.plugin.PluginManager;
+
+import static com.earth2me.essentials.I18n.tlLiteral;
 
 public class SignedChatHandler extends AbstractChatHandler {
 
@@ -25,11 +26,11 @@ public class SignedChatHandler extends AbstractChatHandler {
         try {
             final Class<?> previewClass = Class.forName("org.bukkit.event.player.AsyncPlayerChatPreviewEvent");
             if (!AsyncPlayerChatEvent.class.isAssignableFrom(previewClass)) {
-                essChat.getLogger().severe(I18n.tl("essChatNoSecureMsg", essChat.getDescription().getVersion()));
+                essChat.getLogger().severe(tlLiteral("essChatNoSecureMsg", essChat.getDescription().getVersion()));
                 return false;
             }
         } catch (ClassNotFoundException e) {
-            essChat.getLogger().severe(I18n.tl("essChatNoSecureMsg", essChat.getDescription().getVersion()));
+            essChat.getLogger().severe(tlLiteral("essChatNoSecureMsg", essChat.getDescription().getVersion()));
             return false;
         }
 

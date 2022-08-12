@@ -382,7 +382,7 @@ public class Commandessentials extends EssentialsCommand {
                     files.add(new PasteUtil.PasteFile("commandmap.json", CommandMapUtil.toJsonPretty(ess, knownCommandsCopy)));
                     files.add(new PasteUtil.PasteFile("commandoverride.json", disabledCommandsCopy.toString()));
                 } catch (IOException e) {
-                    sender.sendMessage(tl("dumpErrorUpload", "commands.yml", e.getMessage()));
+                    sender.sendTl("dumpErrorUpload", "commands.yml", e.getMessage());
                 }
             }
 
@@ -723,7 +723,7 @@ public class Commandessentials extends EssentialsCommand {
                 sender.sendComponent(sender.tlComponent("serverUnsupportedDangerous").color(NamedTextColor.DARK_RED));
                 break;
             case STUPID_PLUGIN:
-                sender.sendMessage(ChatColor.DARK_RED + tl("serverUnsupportedDumbPlugins"));
+                sender.sendComponent(sender.tlComponent("serverUnsupportedDumbPlugins").color(NamedTextColor.DARK_RED));
                 break;
             case UNSTABLE:
                 sender.sendComponent(sender.tlComponent("serverUnsupportedMods").color(NamedTextColor.DARK_RED));

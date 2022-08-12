@@ -277,7 +277,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
                     getLogger().severe(tlLiteral("serverUnsupportedDangerous"));
                     break;
                 case STUPID_PLUGIN:
-                    getLogger().severe(tl("serverUnsupportedDumbPlugins"));
+                    getLogger().severe(tlLiteral("serverUnsupportedDumbPlugins"));
                     break;
                 case UNSTABLE:
                     getLogger().severe(tlLiteral("serverUnsupportedMods"));
