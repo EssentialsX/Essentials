@@ -3,7 +3,9 @@ package com.earth2me.essentials;
 import com.earth2me.essentials.utils.EnumUtil;
 import com.earth2me.essentials.utils.VersionUtil;
 import net.ess3.nms.refl.ReflUtil;
+import org.bukkit.TreeSpecies;
 import org.bukkit.entity.Axolotl;
+import org.bukkit.entity.Boat;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Fox;
@@ -175,6 +177,24 @@ public final class MobCompat {
         }
     }
 
+    public static void setBoatVariant(final Entity entity, final BoatVariant variant) {
+        if (VersionUtil.getServerBukkitVersion().isLowerThan(VersionUtil.v1_9_R01)) {
+            return;
+        }
+        final Boat boat;
+        if (entity instanceof Boat) {
+            boat = (Boat) entity;
+        } else {
+            return;
+        }
+        if (VersionUtil.getServerBukkitVersion().isLowerThan(VersionUtil.v1_19_R01)) {
+            //noinspection deprecation
+            boat.setWoodType(TreeSpecies.valueOf(variant.getTreeSpecies()));
+        } else {
+            boat.setBoatType(Boat.Type.valueOf(variant.getBoatType()));
+        }
+    }
+
     public enum CatType {
         // These are (loosely) Mojang names for the cats
         SIAMESE("SIAMESE", "SIAMESE_CAT"),
@@ -239,4 +259,34 @@ public final class MobCompat {
         }
     }
 
+    public enum BoatVariant {
+        // Mappings for TreeSpecies names
+        ACACIA("ACACIA", "ACACIA"),
+        BIRCH("BIRCH", "BIRCH"),
+        DARKOAK("DARK_OAK", "DARK_OAK"),
+        GENERIC("GENERIC", "OAK"),
+        JUNGLE("JUNGLE", "JUNGLE"),
+        REDWOOD("REDWOOD", "SPRUCE"),
+        // Mappings for Boat.Type names (falling back to GENERIC where undefined)
+        OAK("GENERIC", "OAK"),
+        SPRUCE("REDWOOD", "SPRUCE"),
+        MANGROVE("GENERIC", "MANGROVE"),
+        ;
+
+        private final String treeSpecies;
+        private final String boatType;
+
+        BoatVariant(final String treeSpecies, final String boatType) {
+            this.treeSpecies = treeSpecies;
+            this.boatType = boatType;
+        }
+
+        public String getTreeSpecies() {
+            return treeSpecies;
+        }
+
+        public String getBoatType() {
+            return boatType;
+        }
+    }
 }
