@@ -52,8 +52,8 @@ public class LocalChatSpyEvent extends Event implements Cancellable {
     }
 
     /**
-     * Gets the format to use to display this chat message. When this event finishes execution, the first format
-     * parameter is the {@link Player#getDisplayName()} and the second parameter is {@link #getMessage()}
+     * Gets the format to use to display this chat message to spy recipients. When this event finishes execution, the
+     * first format parameter is the {@link Player#getDisplayName()} and the second parameter is {@link #getMessage()}
      *
      * @return {@link String#format(String, Object...)} compatible format string
      */
@@ -62,8 +62,8 @@ public class LocalChatSpyEvent extends Event implements Cancellable {
     }
 
     /**
-     * Sets the format to use to display this chat message. When this event finishes execution, the first format
-     * parameter is the {@link Player#getDisplayName()} and the second parameter is {@link #getMessage()}
+     * Sets the format to use to display this chat message to spy recipients. When this event finishes execution, the
+     * first format parameter is the {@link Player#getDisplayName()} and the second parameter is {@link #getMessage()}
      *
      * @param format {@link String#format(String, Object...)} compatible format string
      * @throws IllegalFormatException if the underlying API throws the exception
