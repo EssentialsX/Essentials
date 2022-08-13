@@ -1067,17 +1067,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
             return null;
         }
 
-        User user = userMap.getUser(base.getUniqueId());
-
-        if (user == null) {
-            if (getSettings().isDebug()) {
-                LOGGER.log(Level.INFO, "Constructing new userfile from base player " + base.getName());
-            }
-            user = new User(base, this);
-        } else {
-            user.update(base);
-        }
-        return user;
+        return userMap.getUser(base);
     }
 
     private void handleCrash(final Throwable exception) {
