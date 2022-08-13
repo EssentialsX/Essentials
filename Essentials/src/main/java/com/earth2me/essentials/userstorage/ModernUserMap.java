@@ -57,19 +57,7 @@ public class ModernUserMap extends CacheLoader<UUID, User> {
     }
 
     public User getUser(final Player base) {
-        if (base == null) {
-            return null;
-        }
-
-        User user = getUser(base.getUniqueId());
-        if (user == null) {
-            ess.getLogger().log(Level.INFO, "Essentials created a User for " + base.getName() + " (" + base.getUniqueId() + ") for non Bukkit type: " + base.getClass().getName());
-            user = new User(base, ess);
-        } else if (!base.equals(user.getBase())) {
-            ess.getLogger().log(Level.INFO, "Essentials updated the underlying Player object for " + user.getUUID());
-            user.update(base);
-        }
-        uuidCache.updateCache(user.getUUID(), user.getName());
+        final User user = loadUncachedUser(base);
         userCache.put(user.getUUID(), user);
         return user;
     }
@@ -106,6 +94,24 @@ public class ModernUserMap extends CacheLoader<UUID, User> {
         }
 
         throw new Exception("User not found!");
+    }
+
+    public User loadUncachedUser(final Player base) {
+        if (base == null) {
+            return null;
+        }
+
+        User user = getUser(base.getUniqueId());
+        if (user == null) {
+            ess.getLogger().log(Level.INFO, "Essentials created a User for " + base.getName() + " (" + base.getUniqueId() + ") for non Bukkit type: " + base.getClass().getName());
+            user = new User(base, ess);
+        } else if (!base.equals(user.getBase())) {
+            ess.getLogger().log(Level.INFO, "Essentials updated the underlying Player object for " + user.getUUID());
+            user.update(base);
+        }
+        uuidCache.updateCache(user.getUUID(), user.getName());
+
+        return user;
     }
 
     /**

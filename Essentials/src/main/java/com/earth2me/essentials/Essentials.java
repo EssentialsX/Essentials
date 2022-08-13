@@ -1067,7 +1067,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
             return null;
         }
 
-        return userMap.getUser(base);
+        return userMap.loadUncachedUser(base);
     }
 
     private void handleCrash(final Throwable exception) {
