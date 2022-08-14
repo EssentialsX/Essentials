@@ -921,6 +921,9 @@ chat:
   #  plots: "&dP&r"
   #  creative: "&eC&r"
 
+  # Whether all messages sent by player be turned into system messages, stopping them from being used for reporting.
+  onlySystemMessages: false
+
   # Whether players should be placed into shout mode by default.
   shout-default: false
 

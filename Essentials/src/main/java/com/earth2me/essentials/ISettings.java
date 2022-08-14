@@ -38,6 +38,8 @@ public interface ISettings extends IConf {
 
     String getWorldAlias(String world);
 
+    boolean isOnlySystemMessages();
+
     int getChatRadius();
 
     int getNearRadius();

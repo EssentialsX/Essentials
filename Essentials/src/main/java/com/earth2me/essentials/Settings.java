@@ -136,6 +136,7 @@ public class Settings implements net.ess3.api.ISettings {
     private double maxProjectileSpeed;
     private boolean removeEffectsOnHeal;
     private Map<String, String> worldAliases;
+    private boolean onlySystemMessages;
 
     public Settings(final IEssentials ess) {
         this.ess = ess;
@@ -610,6 +611,15 @@ public class Settings implements net.ess3.api.ISettings {
     }
 
     @Override
+    public boolean isOnlySystemMessages() {
+        return onlySystemMessages;
+    }
+
+    private boolean _isOnlySystemMessages() {
+        return config.getBoolean("chat.onlySystemMessages", false);
+    }
+
+    @Override
     public boolean getAnnounceNewPlayers() {
         return !config.getString("newbies.announce-format", "-").isEmpty();
     }
@@ -779,6 +789,7 @@ public class Settings implements net.ess3.api.ISettings {
         bindingItemPolicy = _getBindingItemsPolicy();
         currencySymbol = _getCurrencySymbol();
         worldAliases = _getWorldAliases();
+        onlySystemMessages = _isOnlySystemMessages();
 
         reloadCount.incrementAndGet();
     }
