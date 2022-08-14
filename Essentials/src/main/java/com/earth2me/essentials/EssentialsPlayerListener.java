@@ -308,6 +308,7 @@ public class EssentialsPlayerListener implements Listener, FakeAccessor {
 
         ess.getBackup().onPlayerJoin();
         final User dUser = ess.getUser(player);
+        dUser.update(player);
 
         dUser.startTransaction();
         if (dUser.isNPC()) {
@@ -527,6 +528,7 @@ public class EssentialsPlayerListener implements Listener, FakeAccessor {
     public void onPlayerLogin(final PlayerLoginEvent event) {
         if (event.getResult() == Result.KICK_FULL) {
             final User kfuser = ess.getUser(event.getPlayer());
+            kfuser.update(event.getPlayer());
             if (kfuser.isAuthorized("essentials.joinfullserver")) {
                 event.allow();
                 return;
