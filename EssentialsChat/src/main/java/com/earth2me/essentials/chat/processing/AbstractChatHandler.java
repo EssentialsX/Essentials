@@ -254,6 +254,15 @@ public abstract class AbstractChatHandler {
         charge(event, cache.getProcessedChat(event.getPlayer()));
 
         cache.clearProcessedChat(event.getPlayer());
+
+        // Stop message reporting
+        String message = event.getFormat()
+                .replace("%1$s", event.getPlayer().getDisplayName())
+                .replace("%2$s", event.getMessage());
+        for (Player player : event.getRecipients()) {
+            player.sendMessage(message);
+        }
+        event.getRecipients().clear();
     }
 
     boolean isAborted(final AsyncPlayerChatEvent event) {
