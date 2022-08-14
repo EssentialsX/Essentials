@@ -54,7 +54,7 @@ public class ChatProcessingCache {
         return getProcessedChat(player);
     }
 
-    public static abstract class Chat {
+    public abstract static class Chat {
         private final User user;
         private final String type;
         private final String originalMessage;
@@ -96,6 +96,7 @@ public class ChatProcessingCache {
             super(sourceChat.getUser(), sourceChat.getType(), sourceChat.getOriginalMessage());
             this.message = sourceChat.messageResult;
             this.format = sourceChat.formatResult;
+            this.radius = sourceChat.radius;
             this.charge = new Trade(getLongType(), ess);
         }
 
