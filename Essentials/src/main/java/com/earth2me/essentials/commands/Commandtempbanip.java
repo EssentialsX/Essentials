@@ -71,7 +71,7 @@ public class Commandtempbanip extends EssentialsCommand {
 
         final String message = tl("playerTempBanIpAddress", senderDisplayName, ipAddress,
                 DateUtil.formatDateDiff(banTimestamp), banReason);
-        server.getLogger().log(Level.INFO, message);
+        ess.getLogger().log(Level.INFO, message);
         ess.broadcastMessage("essentials.banip.notify", message);
     }
 
