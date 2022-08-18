@@ -192,7 +192,7 @@ public final class VersionUtil {
                 if (!Bukkit.getName().equals("Essentials Fake Server")) {
                     throw new IllegalArgumentException(string + " is not in valid version format. e.g. 1.8.8-R0.1");
                 }
-                matcher = VERSION_PATTERN.matcher(v1_14_R01.toString());
+                matcher = VERSION_PATTERN.matcher(v1_16_1_R01.toString());
                 Preconditions.checkArgument(matcher.matches(), string + " is not in valid version format. e.g. 1.8.8-R0.1");
             }
 
