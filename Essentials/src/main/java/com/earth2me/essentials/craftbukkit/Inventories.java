@@ -5,6 +5,7 @@ import com.earth2me.essentials.utils.VersionUtil;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -23,9 +24,20 @@ public final class Inventories {
     private Inventories() {
     }
 
+    public static ItemStack getItemInHand(final Player player) {
+        if (!IS_OFFHAND) {
+            //noinspection deprecation
+            return player.getInventory().getItemInHand();
+        } else {
+            final PlayerInventory inventory = player.getInventory();
+            final ItemStack main = inventory.getItemInMainHand();
+            return !isEmpty(main) ? main : inventory.getItemInOffHand();
+        }
+    }
+
     public static boolean containsAtLeast(final Player player, final ItemStack item, int amount) {
         for (final ItemStack invItem : player.getInventory().getContents()) {
-            if (invItem == null || MaterialUtil.isAir(invItem.getType())) {
+            if (isEmpty(invItem)) {
                 continue;
             }
             if (invItem.isSimilar(item)) {
@@ -46,7 +58,7 @@ public final class Inventories {
 
         final List<Integer> emptySlots = inventoryData.getEmptySlots();
         for (final ItemStack item : items) {
-            if (item == null || MaterialUtil.isAir(item.getType())) {
+            if (isEmpty(item)) {
                 continue;
             }
 
@@ -67,7 +79,7 @@ public final class Inventories {
                 } else {
                     final int slot = partialSlots.remove(0);
                     ItemStack existing = player.getInventory().getItem(slot);
-                    if (existing == null || MaterialUtil.isAir(existing.getType())) {
+                    if (isEmpty(existing)) {
                         existing = item.clone();
                         existing.setAmount(0);
                     }
@@ -105,7 +117,7 @@ public final class Inventories {
         final List<Integer> emptySlots = inventoryData.getEmptySlots();
         for (int i = 0; i < items.length; i++) {
             final ItemStack item = items[i];
-            if (item == null || MaterialUtil.isAir(item.getType())) {
+            if (isEmpty(item)) {
                 continue;
             }
 
@@ -131,7 +143,7 @@ public final class Inventories {
                 } else {
                     final int slot = partialSlots.remove(0);
                     ItemStack existing = player.getInventory().getItem(slot);
-                    if (existing == null || MaterialUtil.isAir(existing.getType())) {
+                    if (isEmpty(existing)) {
                         existing = item.clone();
                         existing.setAmount(0);
                     }
@@ -186,7 +198,7 @@ public final class Inventories {
             }
 
             final ItemStack item = items[i];
-            if (item == null || MaterialUtil.isAir(item.getType())) {
+            if (isEmpty(item)) {
                 continue;
             }
 
@@ -205,7 +217,7 @@ public final class Inventories {
 
         for (int i = 0; i < items.length; i++) {
             final ItemStack item = items[i];
-            if (item == null || MaterialUtil.isAir(item.getType())) {
+            if (isEmpty(item)) {
                 continue;
             }
 
@@ -235,7 +247,7 @@ public final class Inventories {
 
     public static void clearSlot(final Player player, final int slot) {
         final ItemStack item = player.getInventory().getItem(slot);
-        if (item != null && !MaterialUtil.isAir(item.getType())) {
+        if (!isEmpty(item)) {
             item.setAmount(0);
             player.getInventory().setItem(slot, item);
         }
@@ -255,13 +267,13 @@ public final class Inventories {
         int nextNormalizedIndex = 0;
         inputLoop:
         for (final ItemStack item : items) {
-            if (item == null || MaterialUtil.isAir(item.getType())) {
+            if (isEmpty(item)) {
                 continue;
             }
 
             for (int j = 0; j < nextNormalizedIndex; j++) {
                 final ItemStack normalizedItem = normalizedItems[j];
-                if (normalizedItem == null || MaterialUtil.isAir(normalizedItem.getType())) {
+                if (isEmpty(normalizedItem)) {
                     continue;
                 }
 
@@ -281,7 +293,7 @@ public final class Inventories {
         final ItemStack[] clonedItems = new ItemStack[items.length];
         for (int i = 0; i < items.length; i++) {
             final ItemStack item = items[i];
-            if (item == null || MaterialUtil.isAir(item.getType())) {
+            if (isEmpty(item)) {
                 continue;
             }
 
@@ -302,7 +314,7 @@ public final class Inventories {
             }
 
             final ItemStack invItem = inventoryContents[i];
-            if (invItem == null || MaterialUtil.isAir(invItem.getType())) {
+            if (isEmpty(invItem)) {
                 emptySlots.add(i);
             } else {
                 for (final ItemStack newItem : items) {
@@ -320,7 +332,7 @@ public final class Inventories {
             ItemStack legs = null;
             ItemStack boots = null;
             for (final ItemStack item : items) {
-                if (item == null || MaterialUtil.isAir(item.getType())) {
+                if (isEmpty(item)) {
                     continue;
                 }
                 if (helm == null && MaterialUtil.isHelmet(item.getType())) {
@@ -352,6 +364,10 @@ public final class Inventories {
         }
 
         return new InventoryData(emptySlots, partialSlots);
+    }
+
+    private static boolean isEmpty(final ItemStack stack) {
+        return stack == null || MaterialUtil.isAir(stack.getType());
     }
 
     private static boolean isArmorSlot(final int slot) {

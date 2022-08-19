@@ -5,6 +5,7 @@ import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.Trade.OverflowType;
 import com.earth2me.essentials.Trade.TradeType;
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.craftbukkit.Inventories;
 import com.earth2me.essentials.utils.MaterialUtil;
 import com.earth2me.essentials.utils.NumberUtil;
 import net.ess3.api.IEssentials;
@@ -86,7 +87,7 @@ public class SignTrade extends EssentialsSign {
         final Trade trade = getTrade(sign, 2, AmountType.COST, false, true, ess);
         if (trade.getItemStack() != null && player.getBase().getItemInHand() != null && trade.getItemStack().getType() == player.getBase().getItemInHand().getType() && MaterialUtil.getDamage(trade.getItemStack()) == MaterialUtil.getDamage(player.getBase().getItemInHand()) && trade.getItemStack().getEnchantments().equals(player.getBase().getItemInHand().getEnchantments())) {
             final int amount = trade.getItemStack().getAmount();
-            if (player.getBase().getInventory().containsAtLeast(trade.getItemStack(), amount)) {
+            if (Inventories.containsAtLeast(player.getBase(), trade.getItemStack(), amount)) {
                 final ItemStack stack = player.getBase().getItemInHand().clone();
                 stack.setAmount(amount);
                 final Trade store = new Trade(stack, ess);
