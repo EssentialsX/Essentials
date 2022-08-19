@@ -54,7 +54,7 @@ public class Commandkick extends EssentialsCommand {
 
         final String tlKey = "playerKicked";
         final Object[] objects = {senderDisplayName, target.getName(), kickReason};
-        server.getLogger().log(Level.INFO, tlLiteral(tlKey, objects));
+        ess.getLogger().log(Level.INFO, tlLiteral(tlKey, objects));
         ess.broadcastTl(null, "essentials.kick.notify", tlKey, objects);
     }
 

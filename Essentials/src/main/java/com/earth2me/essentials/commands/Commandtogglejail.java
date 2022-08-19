@@ -97,7 +97,7 @@ public class Commandtogglejail extends EssentialsCommand {
                             sender.sendTl("playerJailed", player.getName());
                         }
 
-                        server.getLogger().log(Level.INFO, tlLiteral(tlKey, objects));
+                        ess.getLogger().log(Level.INFO, tlLiteral(tlKey, objects));
                         ess.broadcastTl(null, "essentials.jail.notify", tlKey, objects);
                     }
                 });
@@ -125,7 +125,7 @@ public class Commandtogglejail extends EssentialsCommand {
 
             final String tlKey = "jailNotifySentenceExtended";
             final Object[] objects = new Object[]{player.getName(), DateUtil.formatDateDiff(displayTimeDiff), sender.getSender().getName()};
-            server.getLogger().log(Level.INFO, tlLiteral(tlKey, objects));
+            ess.getLogger().log(Level.INFO, tlLiteral(tlKey, objects));
             ess.broadcastTl(null, "essentials.jail.notify", tlKey, objects);
             return;
         }

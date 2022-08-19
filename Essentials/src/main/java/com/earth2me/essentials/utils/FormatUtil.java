@@ -226,11 +226,11 @@ public final class FormatUtil {
         final EnumSet<ChatColor> strip = EnumSet.complementOf(supported);
 
         final boolean rgb = user.isAuthorized(permBase + ".rgb");
-        if (!supported.isEmpty() || rgb) {
-            message = replaceColor(message, supported, rgb);
-        }
         if (!strip.isEmpty()) {
             message = stripColor(message, strip);
+        }
+        if (!supported.isEmpty() || rgb) {
+            message = replaceColor(message, supported, rgb);
         }
         return message;
     }

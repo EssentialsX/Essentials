@@ -41,7 +41,7 @@ public class Commandunbanip extends EssentialsCommand {
 
         ess.getServer().getBanList(BanList.Type.IP).pardon(ipAddress);
         final String senderDisplayName = sender.isPlayer() ? sender.getPlayer().getDisplayName() : Console.DISPLAY_NAME;
-        server.getLogger().log(Level.INFO, tlLiteral("playerUnbanIpAddress", senderDisplayName, ipAddress));
+        ess.getLogger().log(Level.INFO, tlLiteral("playerUnbanIpAddress", senderDisplayName, ipAddress));
 
         ess.broadcastTl((IUser) null, "essentials.banip.notify", "playerUnbanIpAddress", senderDisplayName, ipAddress);
     }

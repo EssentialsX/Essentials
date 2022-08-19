@@ -116,7 +116,7 @@ public class Commandmute extends EssentialsCommand {
                     objects = new Object[]{sender.getSender().getName(), user.getName(), muteTime};
                 }
 
-                server.getLogger().log(Level.INFO, tlLiteral(tlKey, objects));
+                ess.getLogger().log(Level.INFO, tlLiteral(tlKey, objects));
                 ess.broadcastTl(null, "essentials.mute.notify", tlKey, objects);
             } else {
                 sender.sendTl("unmutedPlayer", user.getDisplayName());

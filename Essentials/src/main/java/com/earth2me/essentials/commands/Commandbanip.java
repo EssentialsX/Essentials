@@ -54,7 +54,7 @@ public class Commandbanip extends EssentialsCommand {
         final String banDisplay = tlLiteral("banFormat", banReason, senderDisplayName);
 
         ess.getServer().getBanList(BanList.Type.IP).addBan(ipAddress, banReason, null, senderName);
-        server.getLogger().log(Level.INFO, tlLiteral("playerBanIpAddress", senderDisplayName, ipAddress, banReason));
+        ess.getLogger().log(Level.INFO, tlLiteral("playerBanIpAddress", senderDisplayName, ipAddress, banReason));
 
         for (final Player player : ess.getServer().getOnlinePlayers()) {
             if (player.getAddress().getAddress().getHostAddress().equalsIgnoreCase(ipAddress)) {
