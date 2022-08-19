@@ -3,6 +3,7 @@ package com.earth2me.essentials.craftbukkit;
 import com.earth2me.essentials.utils.MaterialUtil;
 import com.earth2me.essentials.utils.VersionUtil;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
@@ -32,6 +33,33 @@ public final class Inventories {
             final PlayerInventory inventory = player.getInventory();
             final ItemStack main = inventory.getItemInMainHand();
             return !isEmpty(main) ? main : inventory.getItemInOffHand();
+        }
+    }
+
+    public static void setItemInMainHand(final Player player, final ItemStack stack) {
+        if (IS_OFFHAND) {
+            player.getInventory().setItemInMainHand(stack);
+        } else {
+            //noinspection deprecation
+            player.setItemInHand(stack);
+        }
+    }
+
+    public static void setItemInMainHand(final EntityEquipment entityEquipment, final ItemStack stack) {
+        if (IS_OFFHAND) {
+            entityEquipment.setItemInMainHand(stack);
+        } else {
+            //noinspection deprecation
+            entityEquipment.setItemInHand(stack);
+        }
+    }
+
+    public static void setItemInMainHandDropChance(final EntityEquipment entityEquipment, final float chance) {
+        if (IS_OFFHAND) {
+            entityEquipment.setItemInMainHandDropChance(chance);
+        } else {
+            //noinspection deprecation
+            entityEquipment.setItemInHandDropChance(chance);
         }
     }
 
