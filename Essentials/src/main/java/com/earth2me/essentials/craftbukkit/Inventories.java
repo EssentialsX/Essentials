@@ -29,11 +29,18 @@ public final class Inventories {
         if (!IS_OFFHAND) {
             //noinspection deprecation
             return player.getInventory().getItemInHand();
-        } else {
-            final PlayerInventory inventory = player.getInventory();
-            final ItemStack main = inventory.getItemInMainHand();
-            return !isEmpty(main) ? main : inventory.getItemInOffHand();
         }
+        final PlayerInventory inventory = player.getInventory();
+        final ItemStack main = inventory.getItemInMainHand();
+        return !isEmpty(main) ? main : inventory.getItemInOffHand();
+    }
+
+    public static ItemStack getItemInMainHand(final Player player) {
+        if (!IS_OFFHAND) {
+            //noinspection deprecation
+            return player.getInventory().getItemInHand();
+        }
+        return player.getInventory().getItemInMainHand();
     }
 
     public static void setItemInMainHand(final Player player, final ItemStack stack) {
