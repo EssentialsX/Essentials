@@ -44,7 +44,7 @@ public class SignedChatHandler extends AbstractChatHandler {
 
     private void handleChatApplyPreview(AsyncPlayerChatEvent event) {
         final ChatProcessingCache.ProcessedChat chat = cache.getProcessedChat(event.getPlayer());
-        if (chat == null) {
+        if (!isPlayerChat(event) || chat == null) {
             handleChatFormat(event);
             handleChatPostFormat(event);
         } else {
