@@ -300,7 +300,7 @@ public class Trade {
                 future.completeExceptionally(new ChargeException(tl("missingItems", getItemStack().getAmount(), getItemStack().getType().toString().toLowerCase(Locale.ENGLISH).replace("_", " "))));
                 return;
             }
-            Inventories.removeItemExact(user.getBase(), getItemStack(), true);
+            Inventories.removeItemAmount(user.getBase(), getItemStack(), getItemStack().getAmount());
             user.getBase().updateInventory();
         }
         if (command != null) {

@@ -113,7 +113,7 @@ public class Commandsell extends EssentialsCommand {
             // This should never happen.
             throw new IllegalStateException("Trying to remove more items than are available.");
         }
-        Inventories.removeItemExact(user.getBase(), ris, false);
+        Inventories.removeItemAmount(user.getBase(), ris, ris.getAmount());
         user.getBase().updateInventory();
         Trade.log("Command", "Sell", "Item", user.getName(), new Trade(ris, ess), user.getName(), new Trade(result, ess), user.getLocation(), user.getMoney(), ess);
         user.giveMoney(result, null, UserBalanceUpdateEvent.Cause.COMMAND_SELL);
