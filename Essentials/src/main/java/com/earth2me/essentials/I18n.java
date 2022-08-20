@@ -16,14 +16,19 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.nio.charset.StandardCharsets;
 import java.text.MessageFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.PropertyResourceBundle;
 import java.util.ResourceBundle;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.function.Function;
 import java.util.logging.Level;
 import java.util.regex.Pattern;
@@ -31,6 +36,7 @@ import java.util.regex.Pattern;
 public class I18n implements net.ess3.api.II18n {
     private static final String MESSAGES = "messages";
     private static final Pattern NODOUBLEMARK = Pattern.compile("''");
+    private static final ExecutorService BUNDLE_LOADER_EXECUTOR = Executors.newFixedThreadPool(2);
     private static final ResourceBundle NULL_BUNDLE = new ResourceBundle() {
         @SuppressWarnings("NullableProblems")
         public Enumeration<String> getKeys() {
@@ -46,7 +52,8 @@ public class I18n implements net.ess3.api.II18n {
     private final transient ResourceBundle defaultBundle;
     private final transient IEssentials ess;
     private transient Locale currentLocale = defaultLocale;
-    private final transient Map<Locale, ResourceBundle> loadedBundles = new HashMap<>();
+    private final transient Map<Locale, ResourceBundle> loadedBundles = new ConcurrentHashMap<>();
+    private final transient List<Locale> loadingBundles = new ArrayList<>();
     private transient ResourceBundle localeBundle;
     private final transient Map<Locale, Map<String, MessageFormat>> messageFormatCache = new HashMap<>();
 
@@ -95,21 +102,31 @@ public class I18n implements net.ess3.api.II18n {
     private ResourceBundle getBundle(final Locale locale) {
         if (loadedBundles.containsKey(locale)) {
             return loadedBundles.get(locale);
-        }
+        } else {
+            synchronized (loadingBundles) {
+                if (!loadingBundles.contains(locale)) {
+                    loadingBundles.add(locale);
+                    BUNDLE_LOADER_EXECUTOR.submit(() -> {
+                        ResourceBundle bundle;
+                        try {
+                            bundle = ResourceBundle.getBundle(MESSAGES, locale, new FileResClassLoader(I18n.class.getClassLoader(), ess), new UTF8PropertiesControl());
+                        } catch (MissingResourceException ex) {
+                            try {
+                                bundle = ResourceBundle.getBundle(MESSAGES, locale, new UTF8PropertiesControl());
+                            } catch (MissingResourceException ex2) {
+                                bundle = NULL_BUNDLE;
+                            }
+                        }
 
-        ResourceBundle bundle;
-        try {
-            bundle = ResourceBundle.getBundle(MESSAGES, locale, new FileResClassLoader(I18n.class.getClassLoader(), ess), new UTF8PropertiesControl());
-        } catch (MissingResourceException ex) {
-            try {
-                bundle = ResourceBundle.getBundle(MESSAGES, locale, new UTF8PropertiesControl());
-            } catch (MissingResourceException ex2) {
-                bundle = NULL_BUNDLE;
+                        loadedBundles.put(locale, bundle);
+                        synchronized (loadingBundles) {
+                            loadingBundles.remove(locale);
+                        }
+                    });
+                }
             }
+            return defaultBundle;
         }
-
-        loadedBundles.put(locale, bundle);
-        return bundle;
     }
 
     private String translate(final Locale locale, final String string) {
