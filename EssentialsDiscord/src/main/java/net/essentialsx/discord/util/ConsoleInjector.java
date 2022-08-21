@@ -83,7 +83,7 @@ public class ConsoleInjector extends AbstractAppender {
             entry = "[" + event.getLoggerName() + "] " + entry;
         }
 
-        messageQueue.addAll(Splitter.fixedLength(Message.MAX_CONTENT_LENGTH - 2).splitToList(
+        messageQueue.addAll(Splitter.fixedLength(Message.MAX_CONTENT_LENGTH - 50).splitToList(
                 MessageUtil.formatMessage(jda.getSettings().getConsoleFormat(),
                         TimeFormat.TIME_LONG.format(Instant.now()),
                         event.getLevel().name(),
