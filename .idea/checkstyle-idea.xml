@@ -1,19 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="CheckStyle-IDEA">
-    <option name="configuration">
-      <map>
-        <entry key="active-configuration" value="PROJECT_RELATIVE:$PROJECT_DIR$/.checkstyle/checkstyle.xml:EssentialsX" />
-        <entry key="checkstyle-version" value="8.36.2" />
-        <entry key="copy-libs" value="true" />
-        <entry key="location-0" value="BUNDLED:(bundled):Sun Checks" />
-        <entry key="location-1" value="BUNDLED:(bundled):Google Checks" />
-        <entry key="location-2" value="PROJECT_RELATIVE:$PROJECT_DIR$/.checkstyle/checkstyle.xml:EssentialsX" />
-        <entry key="property-2.configDirectory" value=".checkstyle/" />
-        <entry key="scan-before-checkin" value="true" />
-        <entry key="scanscope" value="JavaOnly" />
-        <entry key="suppress-errors" value="false" />
-      </map>
+  <component name="CheckStyle-IDEA" serialisationVersion="2">
+    <checkstyleVersion>8.36.2</checkstyleVersion>
+    <scanScope>JavaOnly</scanScope>
+    <copyLibs>true</copyLibs>
+    <scanBeforeCheckin>true</scanBeforeCheckin>
+    <option name="thirdPartyClasspath" />
+    <option name="activeLocationIds">
+      <option value="321e5753-4201-4d2c-bf31-6232011122fd" />
+    </option>
+    <option name="locations">
+      <list>
+        <ConfigurationLocation id="bundled-sun-checks" type="BUNDLED" scope="All" description="Sun Checks">(bundled)</ConfigurationLocation>
+        <ConfigurationLocation id="bundled-google-checks" type="BUNDLED" scope="All" description="Google Checks">(bundled)</ConfigurationLocation>
+        <ConfigurationLocation id="321e5753-4201-4d2c-bf31-6232011122fd" type="PROJECT_RELATIVE" scope="All" description="EssentialsX">
+          $PROJECT_DIR$/.checkstyle/checkstyle.xml
+          <option name="properties">
+            <map>
+              <entry key="configDirectory" value=".checkstyle/" />
+            </map>
+          </option>
+        </ConfigurationLocation>
+      </list>
     </option>
   </component>
 </project>
