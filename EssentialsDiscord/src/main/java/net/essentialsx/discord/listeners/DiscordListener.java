@@ -2,6 +2,7 @@ package net.essentialsx.discord.listeners;
 
 import com.earth2me.essentials.utils.FormatUtil;
 import com.earth2me.essentials.utils.StringUtil;
+import com.google.common.collect.Lists;
 import com.vdurmont.emoji.EmojiParser;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
@@ -105,19 +106,21 @@ public class DiscordListener extends ListenerAdapter {
             }
         }
 
+        Iterable<com.earth2me.essentials.User> viewers = plugin.getPlugin().getEss().getOnlineUsers();
         // Do not create the event specific objects if there are no listeners
         if (DiscordRelayEvent.getHandlerList().getRegisteredListeners().length != 0) {
             final DiscordRelayEvent relayEvent = new DiscordRelayEvent(
                     new InteractionMemberImpl(member), new InteractionChannelImpl(event.getChannel()),
-                    Collections.unmodifiableList(keys), event.getMessage().getContentRaw(), formattedMessage);
+                    Collections.unmodifiableList(keys), event.getMessage().getContentRaw(), formattedMessage, Lists.newArrayList(viewers));
             Bukkit.getPluginManager().callEvent(relayEvent);
             if (relayEvent.isCancelled()) {
                 return;
             }
             formattedMessage = relayEvent.getFormattedMessage();
+            viewers = relayEvent.getViewers();
         }
 
-        for (IUser essUser : plugin.getPlugin().getEss().getOnlineUsers()) {
+        for (IUser essUser : viewers) {
             for (String group : keys) {
                 final String perm = "essentials.discord.receive." + group;
                 final boolean primaryOverride = plugin.getSettings().isAlwaysReceivePrimary() && group.equalsIgnoreCase("primary");

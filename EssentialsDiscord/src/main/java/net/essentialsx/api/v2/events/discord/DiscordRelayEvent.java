@@ -1,5 +1,6 @@
 package net.essentialsx.api.v2.events.discord;
 
+import com.earth2me.essentials.User;
 import net.essentialsx.api.v2.services.discord.InteractionChannel;
 import net.essentialsx.api.v2.services.discord.InteractionMember;
 import org.bukkit.Bukkit;
@@ -23,6 +24,7 @@ public class DiscordRelayEvent extends Event implements Cancellable {
     private final List<String> groupNames;
     private final String rawMessage;
     private String formattedMessage;
+    private final List<User> viewers;
     private boolean cancelled = false;
 
     /**
@@ -31,14 +33,16 @@ public class DiscordRelayEvent extends Event implements Cancellable {
      * @param groupNames        The message type keys which will be used to determine which player group the message should be sent to.
      * @param rawMessage        The raw message sent from Discord.
      * @param formattedMessage  The formatted message that will be sent to Minecraft.
+     * @param viewers           The users that will see this relayed message.
      */
-    public DiscordRelayEvent(final InteractionMember member, final InteractionChannel channel, final List<String> groupNames, final String rawMessage, final String formattedMessage) {
+    public DiscordRelayEvent(final InteractionMember member, final InteractionChannel channel, final List<String> groupNames, final String rawMessage, final String formattedMessage, final List<User> viewers) {
         super(!Bukkit.isPrimaryThread());
         this.member = member;
         this.channel = channel;
         this.groupNames = groupNames;
         this.rawMessage = rawMessage;
         this.formattedMessage = formattedMessage;
+        this.viewers = viewers;
     }
 
     /**
@@ -87,6 +91,15 @@ public class DiscordRelayEvent extends Event implements Cancellable {
      */
     public void setFormattedMessage(final String formattedMessage) {
         this.formattedMessage = formattedMessage;
+    }
+
+    /**
+     * Gets the users that will see this relayed message in their chat.
+     * This list is mutable, removing a player from it will hide the message from them.
+     * @return The mutable list of users.
+     */
+    public List<User> getViewers() {
+        return viewers;
     }
 
     @Override
