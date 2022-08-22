@@ -94,8 +94,8 @@ public class DiscordRelayEvent extends Event implements Cancellable {
     }
 
     /**
-     * Gets the users that will see this relayed message in their chat.
-     * This list is mutable, removing a player from it will hide the message from them.
+     * Gets the users that will be sent the relayed message.
+     * The returned list is mutable. Removing a player from it will hide the message from them.
      * @return The mutable list of users.
      */
     public List<IUser> getViewers() {

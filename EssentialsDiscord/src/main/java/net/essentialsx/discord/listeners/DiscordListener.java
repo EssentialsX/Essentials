@@ -25,8 +25,6 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
 public class DiscordListener extends ListenerAdapter {
     private final static Logger logger = EssentialsDiscord.getWrappedLogger();
@@ -108,31 +106,30 @@ public class DiscordListener extends ListenerAdapter {
             }
         }
 
-        List<net.ess3.api.IUser> viewers = StreamSupport.stream(plugin.getPlugin().getEss().getOnlineUsers().spliterator(), false).filter(u -> {
-            for (String group : keys) {
+        final List<IUser> viewers = new ArrayList<>();
+        for (final IUser essUser : plugin.getPlugin().getEss().getOnlineUsers()) {
+            for (final String group : keys) {
                 final String perm = "essentials.discord.receive." + group;
                 final boolean primaryOverride = plugin.getSettings().isAlwaysReceivePrimary() && group.equalsIgnoreCase("primary");
-                if (primaryOverride || (u.isPermissionSet(perm) && u.isAuthorized(perm))) {
-                    return true;
+                if (primaryOverride || (essUser.isPermissionSet(perm) && essUser.isAuthorized(perm))) {
+                    viewers.add(essUser);
+                    break;
                 }
             }
-
-            return false;
-        }).collect(Collectors.toList());
+        }
         // Do not create the event specific objects if there are no listeners
         if (DiscordRelayEvent.getHandlerList().getRegisteredListeners().length != 0) {
             final DiscordRelayEvent relayEvent = new DiscordRelayEvent(
                     new InteractionMemberImpl(member), new InteractionChannelImpl(event.getChannel()),
-                    Collections.unmodifiableList(keys), event.getMessage().getContentRaw(), formattedMessage, new ArrayList<>(viewers));
+                    Collections.unmodifiableList(keys), event.getMessage().getContentRaw(), formattedMessage, viewers);
             Bukkit.getPluginManager().callEvent(relayEvent);
             if (relayEvent.isCancelled()) {
                 return;
             }
             formattedMessage = relayEvent.getFormattedMessage();
-            viewers = relayEvent.getViewers();
         }
 
-        for (IUser essUser : viewers) {
+        for (final IUser essUser : viewers) {
             essUser.sendMessage(formattedMessage);
         }
     }
