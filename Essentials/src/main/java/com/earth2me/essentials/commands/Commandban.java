@@ -54,7 +54,7 @@ public class Commandban extends EssentialsCommand {
         final String banDisplay = tl("banFormat", banReason, senderDisplayName);
 
         user.getBase().kickPlayer(banDisplay);
-        server.getLogger().log(Level.INFO, tl("playerBanned", senderDisplayName, user.getName(), banDisplay));
+        ess.getLogger().log(Level.INFO, tl("playerBanned", senderDisplayName, user.getName(), banDisplay));
 
         if (nomatch) {
             sender.sendMessage(tl("userUnknown", user.getName()));
