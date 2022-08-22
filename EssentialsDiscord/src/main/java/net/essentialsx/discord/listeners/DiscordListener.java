@@ -2,7 +2,6 @@ package net.essentialsx.discord.listeners;
 
 import com.earth2me.essentials.utils.FormatUtil;
 import com.earth2me.essentials.utils.StringUtil;
-import com.google.common.collect.Lists;
 import com.vdurmont.emoji.EmojiParser;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
@@ -20,11 +19,14 @@ import net.essentialsx.discord.util.MessageUtil;
 import org.bukkit.Bukkit;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 public class DiscordListener extends ListenerAdapter {
     private final static Logger logger = EssentialsDiscord.getWrappedLogger();
@@ -106,12 +108,22 @@ public class DiscordListener extends ListenerAdapter {
             }
         }
 
-        Iterable<com.earth2me.essentials.User> viewers = plugin.getPlugin().getEss().getOnlineUsers();
+        List<net.ess3.api.IUser> viewers = StreamSupport.stream(plugin.getPlugin().getEss().getOnlineUsers().spliterator(), false).filter(u -> {
+            for (String group : keys) {
+                final String perm = "essentials.discord.receive." + group;
+                final boolean primaryOverride = plugin.getSettings().isAlwaysReceivePrimary() && group.equalsIgnoreCase("primary");
+                if (primaryOverride || (u.isPermissionSet(perm) && u.isAuthorized(perm))) {
+                    return true;
+                }
+            }
+
+            return false;
+        }).collect(Collectors.toList());
         // Do not create the event specific objects if there are no listeners
         if (DiscordRelayEvent.getHandlerList().getRegisteredListeners().length != 0) {
             final DiscordRelayEvent relayEvent = new DiscordRelayEvent(
                     new InteractionMemberImpl(member), new InteractionChannelImpl(event.getChannel()),
-                    Collections.unmodifiableList(keys), event.getMessage().getContentRaw(), formattedMessage, Lists.newArrayList(viewers));
+                    Collections.unmodifiableList(keys), event.getMessage().getContentRaw(), formattedMessage, new ArrayList<>(viewers));
             Bukkit.getPluginManager().callEvent(relayEvent);
             if (relayEvent.isCancelled()) {
                 return;
@@ -121,14 +133,7 @@ public class DiscordListener extends ListenerAdapter {
         }
 
         for (IUser essUser : viewers) {
-            for (String group : keys) {
-                final String perm = "essentials.discord.receive." + group;
-                final boolean primaryOverride = plugin.getSettings().isAlwaysReceivePrimary() && group.equalsIgnoreCase("primary");
-                if (primaryOverride || (essUser.isPermissionSet(perm) && essUser.isAuthorized(perm))) {
-                    essUser.sendMessage(formattedMessage);
-                    break;
-                }
-            }
+            essUser.sendMessage(formattedMessage);
         }
     }
 }

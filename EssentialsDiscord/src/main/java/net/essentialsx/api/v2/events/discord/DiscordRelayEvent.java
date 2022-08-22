@@ -1,6 +1,6 @@
 package net.essentialsx.api.v2.events.discord;
 
-import com.earth2me.essentials.User;
+import net.ess3.api.IUser;
 import net.essentialsx.api.v2.services.discord.InteractionChannel;
 import net.essentialsx.api.v2.services.discord.InteractionMember;
 import org.bukkit.Bukkit;
@@ -24,7 +24,7 @@ public class DiscordRelayEvent extends Event implements Cancellable {
     private final List<String> groupNames;
     private final String rawMessage;
     private String formattedMessage;
-    private final List<User> viewers;
+    private final List<IUser> viewers;
     private boolean cancelled = false;
 
     /**
@@ -35,7 +35,7 @@ public class DiscordRelayEvent extends Event implements Cancellable {
      * @param formattedMessage  The formatted message that will be sent to Minecraft.
      * @param viewers           The users that will see this relayed message.
      */
-    public DiscordRelayEvent(final InteractionMember member, final InteractionChannel channel, final List<String> groupNames, final String rawMessage, final String formattedMessage, final List<User> viewers) {
+    public DiscordRelayEvent(final InteractionMember member, final InteractionChannel channel, final List<String> groupNames, final String rawMessage, final String formattedMessage, final List<IUser> viewers) {
         super(!Bukkit.isPrimaryThread());
         this.member = member;
         this.channel = channel;
@@ -98,7 +98,7 @@ public class DiscordRelayEvent extends Event implements Cancellable {
      * This list is mutable, removing a player from it will hide the message from them.
      * @return The mutable list of users.
      */
-    public List<User> getViewers() {
+    public List<IUser> getViewers() {
         return viewers;
     }
 
