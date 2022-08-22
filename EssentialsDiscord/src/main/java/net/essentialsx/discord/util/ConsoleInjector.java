@@ -94,6 +94,9 @@ public class ConsoleInjector extends AbstractAppender {
         ((Logger) LogManager.getRootLogger()).removeAppender(this);
         Bukkit.getScheduler().cancelTask(taskId);
         messageQueue.clear();
+        if (jda.getConsoleWebhook() != null && !jda.getConsoleWebhook().isShutdown()) {
+            jda.getConsoleWebhook().close();
+        }
         removed = true;
     }
 

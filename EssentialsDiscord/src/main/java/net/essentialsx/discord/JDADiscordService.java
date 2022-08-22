@@ -1,6 +1,5 @@
 package net.essentialsx.discord;
 
-import club.minnced.discord.webhook.WebhookClient;
 import club.minnced.discord.webhook.WebhookClientBuilder;
 import club.minnced.discord.webhook.send.WebhookMessage;
 import club.minnced.discord.webhook.send.WebhookMessageBuilder;
@@ -17,7 +16,6 @@ import net.dv8tion.jda.api.entities.Webhook;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.dv8tion.jda.api.entities.emoji.RichCustomEmoji;
 import net.dv8tion.jda.api.events.session.ShutdownEvent;
-import net.dv8tion.jda.api.hooks.EventListener;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.utils.cache.CacheFlag;
@@ -47,6 +45,7 @@ import net.essentialsx.discord.listeners.BukkitChatListener;
 import net.essentialsx.discord.util.ConsoleInjector;
 import net.essentialsx.discord.util.DiscordUtil;
 import net.essentialsx.discord.util.MessageUtil;
+import net.essentialsx.discord.util.WrappedWebhookClient;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
@@ -80,11 +79,11 @@ public class JDADiscordService implements DiscordService, IEssentialsModule {
     private JDA jda;
     private Guild guild;
     private TextChannel primaryChannel;
-    private WebhookClient consoleWebhook;
+    private WrappedWebhookClient consoleWebhook;
     private String lastConsoleId;
     private final Map<String, MessageType> registeredTypes = new HashMap<>();
     private final Map<MessageType, String> typeToChannelId = new HashMap<>();
-    private final Map<String, WebhookClient> channelIdToWebhook = new HashMap<>();
+    private final Map<String, WrappedWebhookClient> channelIdToWebhook = new HashMap<>();
     private ConsoleInjector injector;
     private DiscordCommandDispatcher commandDispatcher;
     private InteractionControllerImpl interactionController;
@@ -141,7 +140,7 @@ public class JDADiscordService implements DiscordService, IEssentialsModule {
 
         final String webhookChannelId = typeToChannelId.get(event.getType());
         if (webhookChannelId != null) {
-            final WebhookClient client = channelIdToWebhook.get(webhookChannelId);
+            final WrappedWebhookClient client = channelIdToWebhook.get(webhookChannelId);
             if (client != null) {
                 final String avatarUrl = event.getAvatarUrl() != null ? event.getAvatarUrl() : jda.getSelfUser().getAvatarUrl();
                 final String name = event.getName() != null ? event.getName() : guild.getSelfMember().getEffectiveName();
@@ -364,7 +363,7 @@ public class JDADiscordService implements DiscordService, IEssentialsModule {
 
     public void updateTypesRelay() {
         if (!getSettings().isShowAvatar() && !getSettings().isShowName() && !getSettings().isShowDisplayName()) {
-            for (WebhookClient webhook : channelIdToWebhook.values()) {
+            for (WrappedWebhookClient webhook : channelIdToWebhook.values()) {
                 webhook.close();
             }
             typeToChannelId.clear();
@@ -384,7 +383,7 @@ public class JDADiscordService implements DiscordService, IEssentialsModule {
 
             final Webhook webhook = DiscordUtil.getOrCreateWebhook(channel, DiscordUtil.ADVANCED_RELAY_NAME).join();
             if (webhook == null) {
-                final WebhookClient current = channelIdToWebhook.get(channel.getId());
+                final WrappedWebhookClient current = channelIdToWebhook.get(channel.getId());
                 if (current != null) {
                     current.close();
                 }
@@ -491,9 +490,7 @@ public class JDADiscordService implements DiscordService, IEssentialsModule {
 
             // Unregister leftover jda listeners
             for (Object obj : jda.getRegisteredListeners()) {
-                if (!(obj instanceof EventListener)) { // Yeah bro I wish I knew too :/
-                    jda.removeEventListener(obj);
-                }
+                jda.removeEventListener(obj);
             }
 
             // Unregister Bukkit Events
@@ -514,7 +511,7 @@ public class JDADiscordService implements DiscordService, IEssentialsModule {
                 // Wait for JDA to wrap it up
                 future.get(5, TimeUnit.SECONDS);
             } catch (InterruptedException | ExecutionException | TimeoutException e) {
-                logger.warning("JDA took longer than expected to shutdown, this may have caused some problems.");
+                logger.log(Level.WARNING, "JDA took longer than expected to shutdown, this may have caused some problems.", e);
             } finally {
                 jda = null;
             }
@@ -590,7 +587,7 @@ public class JDADiscordService implements DiscordService, IEssentialsModule {
         return plugin.getSettings();
     }
 
-    public WebhookClient getConsoleWebhook() {
+    public WrappedWebhookClient getConsoleWebhook() {
         return consoleWebhook;
     }
 

@@ -1,7 +1,6 @@
 package net.essentialsx.discord.util;
 
 import club.minnced.discord.webhook.WebhookClient;
-import club.minnced.discord.webhook.WebhookClientBuilder;
 import club.minnced.discord.webhook.send.AllowedMentions;
 import com.earth2me.essentials.utils.DownsampleUtil;
 import com.earth2me.essentials.utils.FormatUtil;
@@ -54,13 +53,8 @@ public final class DiscordUtil {
      * @param client The http client of the webhook.
      * @return The {@link WebhookClient}.
      */
-    public static WebhookClient getWebhookClient(long id, String token, OkHttpClient client) {
-        return new WebhookClientBuilder(id, token)
-                .setWait(false)
-                .setAllowedMentions(AllowedMentions.none())
-                .setHttpClient(client)
-                .setDaemon(true)
-                .build();
+    public static WrappedWebhookClient getWebhookClient(long id, String token, OkHttpClient client) {
+        return new WrappedWebhookClient(id, token, client);
     }
 
     /**
