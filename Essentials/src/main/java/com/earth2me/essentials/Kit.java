@@ -17,6 +17,7 @@ import org.yaml.snakeyaml.external.biz.base64Coder.Base64Coder;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -172,7 +173,6 @@ public class Kit {
             final List<String> commandQueue = new ArrayList<>();
             final List<String> moneyQueue = new ArrayList<>();
             final String currencySymbol = ess.getSettings().getCurrencySymbol().isEmpty() ? "$" : ess.getSettings().getCurrencySymbol();
-
             for (final String kitItem : output.getLines()) {
                 if (kitItem.startsWith("$") || kitItem.startsWith(currencySymbol)) {
                     moneyQueue.add(NumberUtil.sanitizeCurrencyString(kitItem, ess));
@@ -228,7 +228,7 @@ public class Kit {
             final Map<Integer, ItemStack> leftover = Inventories.addItem(user.getBase(), maxStackSize, autoEquip, itemArray);
             if (!isDropItemsIfFull && !leftover.isEmpty()) {
                 // Inventories#hasSpace should prevent this state from EVER being reached; If it does, something has gone terribly wrong, and we should just give up and hope people report it :(
-                throw new IllegalStateException(leftover.toString());
+                throw new IllegalStateException("Something has gone terribly wrong while adding items to the user's inventory. Please report this to the EssentialsX developers. Items left over: " + leftover + ". Original items: " + Arrays.toString(itemArray));
             }
 
             for (final ItemStack itemStack : leftover.values()) {

@@ -9,7 +9,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,13 +19,13 @@ public final class Inventories {
     private static final int CHEST_SLOT = 38;
     private static final int LEG_SLOT = 37;
     private static final int BOOT_SLOT = 36;
-    private static final boolean IS_OFFHAND = VersionUtil.getServerBukkitVersion().isHigherThanOrEqualTo(VersionUtil.v1_9_R01);
+    private static final boolean HAS_OFFHAND = VersionUtil.getServerBukkitVersion().isHigherThanOrEqualTo(VersionUtil.v1_9_R01);
 
     private Inventories() {
     }
 
     public static ItemStack getItemInHand(final Player player) {
-        if (!IS_OFFHAND) {
+        if (!HAS_OFFHAND) {
             //noinspection deprecation
             return player.getInventory().getItemInHand();
         }
@@ -36,7 +35,7 @@ public final class Inventories {
     }
 
     public static ItemStack getItemInMainHand(final Player player) {
-        if (!IS_OFFHAND) {
+        if (!HAS_OFFHAND) {
             //noinspection deprecation
             return player.getInventory().getItemInHand();
         }
@@ -44,7 +43,7 @@ public final class Inventories {
     }
 
     public static void setItemInMainHand(final Player player, final ItemStack stack) {
-        if (IS_OFFHAND) {
+        if (HAS_OFFHAND) {
             player.getInventory().setItemInMainHand(stack);
         } else {
             //noinspection deprecation
@@ -53,7 +52,7 @@ public final class Inventories {
     }
 
     public static void setItemInMainHand(final EntityEquipment entityEquipment, final ItemStack stack) {
-        if (IS_OFFHAND) {
+        if (HAS_OFFHAND) {
             entityEquipment.setItemInMainHand(stack);
         } else {
             //noinspection deprecation
@@ -62,7 +61,7 @@ public final class Inventories {
     }
 
     public static void setItemInMainHandDropChance(final EntityEquipment entityEquipment, final float chance) {
-        if (IS_OFFHAND) {
+        if (HAS_OFFHAND) {
             entityEquipment.setItemInMainHandDropChance(chance);
         } else {
             //noinspection deprecation
@@ -88,8 +87,6 @@ public final class Inventories {
     public static boolean hasSpace(final Player player, final int maxStack, final boolean includeArmor, ItemStack... items) {
         items = normalizeItems(cloneItems(items));
         final InventoryData inventoryData = parseInventoryData(player.getInventory(), items, maxStack, includeArmor);
-        System.out.println(inventoryData.getEmptySlots());
-        System.out.println(inventoryData.getPartialSlots());
 
         final List<Integer> emptySlots = inventoryData.getEmptySlots();
         for (final ItemStack item : items) {
@@ -146,8 +143,6 @@ public final class Inventories {
         items = normalizeItems(cloneItems(items));
         final Map<Integer, ItemStack> leftover = new HashMap<>();
         final InventoryData inventoryData = parseInventoryData(player.getInventory(), items, maxStack, allowArmor);
-        System.out.println(inventoryData.getEmptySlots());
-        System.out.println(inventoryData.getPartialSlots());
 
         final List<Integer> emptySlots = inventoryData.getEmptySlots();
         for (int i = 0; i < items.length; i++) {
@@ -293,7 +288,6 @@ public final class Inventories {
     }
 
     private static ItemStack[] normalizeItems(final ItemStack[] items) {
-        System.out.println(Arrays.toString(items));
         if (items.length <= 1) {
             return items;
         }
@@ -320,7 +314,6 @@ public final class Inventories {
             normalizedItems[nextNormalizedIndex++] = item;
         }
 
-        System.out.println(Arrays.toString(normalizedItems));
         return normalizedItems;
     }
 
