@@ -8,6 +8,7 @@ import com.earth2me.essentials.textreader.KeywordReplacer;
 import com.earth2me.essentials.textreader.TextInput;
 import com.earth2me.essentials.textreader.TextPager;
 import com.earth2me.essentials.utils.NumberUtil;
+import net.ess3.provider.KnownCommandsProvider;
 import org.bukkit.Server;
 import org.bukkit.command.Command;
 import org.bukkit.command.PluginIdentifiableCommand;
@@ -36,7 +37,7 @@ public class Commandhelp extends EssentialsCommand {
         if (input.getLines().isEmpty()) {
             if (pageStr != null && pageStr.startsWith("/")) {
                 final String cmd = pageStr.substring(1);
-                for (final Map.Entry<String, Command> knownCmd : ess.getKnownCommandsProvider().getKnownCommands().entrySet()) {
+                for (final Map.Entry<String, Command> knownCmd : ess.getProviders().get(KnownCommandsProvider.class).getKnownCommands().entrySet()) {
                     if (knownCmd.getKey().equalsIgnoreCase(cmd)) {
                         user.sendMessage(tl("commandHelpLine1", cmd));
                         user.sendMessage(tl("commandHelpLine2", knownCmd.getValue().getDescription()));

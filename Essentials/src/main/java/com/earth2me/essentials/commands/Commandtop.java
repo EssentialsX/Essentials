@@ -3,6 +3,7 @@ package com.earth2me.essentials.commands;
 import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.LocationUtil;
+import net.ess3.provider.WorldInfoProvider;
 import org.bukkit.Location;
 import org.bukkit.Server;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
@@ -22,7 +23,7 @@ public class Commandtop extends EssentialsCommand {
         final int topZ = user.getLocation().getBlockZ();
         final float pitch = user.getLocation().getPitch();
         final float yaw = user.getLocation().getYaw();
-        final Location unsafe = new Location(user.getWorld(), topX, ess.getWorldInfoProvider().getMaxHeight(user.getWorld()), topZ, yaw, pitch);
+        final Location unsafe = new Location(user.getWorld(), topX, ess.getProviders().get(WorldInfoProvider.class).getMaxHeight(user.getWorld()), topZ, yaw, pitch);
         final Location safe = LocationUtil.getSafeDestination(ess, unsafe);
         final CompletableFuture<Boolean> future = new CompletableFuture<>();
         future.thenAccept(success -> {

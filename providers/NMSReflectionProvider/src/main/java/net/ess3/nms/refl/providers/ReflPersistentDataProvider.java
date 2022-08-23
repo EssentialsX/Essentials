@@ -2,6 +2,7 @@ package net.ess3.nms.refl.providers;
 
 import net.ess3.nms.refl.ReflUtil;
 import net.ess3.provider.PersistentDataProvider;
+import net.essentialsx.providers.ProviderData;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 
@@ -15,6 +16,7 @@ import java.util.Locale;
  * Stores persistent data on 1.8-1.13 in a manner that's consistent with PDC on 1.14+ to enable
  * seamless upgrades.
  */
+@ProviderData(description = "Reflection Persistent Data Container Provider")
 public class ReflPersistentDataProvider implements PersistentDataProvider {
     private static final String PDC_ROOT_TAG = "PublicBukkitValues";
     private static final String ROOT_TAG = "tag";
@@ -122,10 +124,5 @@ public class ReflPersistentDataProvider implements PersistentDataProvider {
             setPersistentString(itemStack, namespace + ":" + key, null);
         } catch (Throwable ignored) {
         }
-    }
-
-    @Override
-    public String getDescription() {
-        return "1.13 >= Persistent Data Container Provider";
     }
 }

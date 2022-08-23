@@ -1,5 +1,6 @@
 package com.earth2me.essentials;
 
+import net.ess3.provider.KnownCommandsProvider;
 import org.bukkit.command.Command;
 import org.bukkit.command.PluginIdentifiableCommand;
 import org.bukkit.plugin.Plugin;
@@ -52,7 +53,7 @@ public class AlternativeCommandsHandler {
 
     private Map<String, Command> getPluginCommands(Plugin plugin) {
         final Map<String, Command> commands = new HashMap<>();
-        for (final Map.Entry<String, Command> entry : ess.getKnownCommandsProvider().getKnownCommands().entrySet()) {
+        for (final Map.Entry<String, Command> entry : ess.getProviders().get(KnownCommandsProvider.class).getKnownCommands().entrySet()) {
             if (entry.getValue() instanceof PluginIdentifiableCommand && ((PluginIdentifiableCommand) entry.getValue()).getPlugin().equals(plugin)) {
                 commands.put(entry.getKey(), entry.getValue());
             }

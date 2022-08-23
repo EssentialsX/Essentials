@@ -9,6 +9,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import net.ess3.api.IEssentials;
+import net.ess3.provider.KnownCommandsProvider;
 import org.bukkit.ChatColor;
 import org.bukkit.Server;
 import org.bukkit.command.Command;
@@ -277,7 +278,7 @@ public abstract class EssentialsCommand implements IEssentialsCommand {
      * Lists all commands.
      */
     protected final List<String> getCommands(Server server) {
-        final Map<String, Command> commandMap = Maps.newHashMap(this.ess.getKnownCommandsProvider().getKnownCommands());
+        final Map<String, Command> commandMap = Maps.newHashMap(this.ess.getProviders().get(KnownCommandsProvider.class).getKnownCommands());
         final List<String> commands = Lists.newArrayListWithCapacity(commandMap.size());
         for (final Command command : commandMap.values()) {
             if (!(command instanceof PluginIdentifiableCommand)) {

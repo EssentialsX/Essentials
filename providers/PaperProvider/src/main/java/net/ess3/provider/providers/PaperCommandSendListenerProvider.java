@@ -27,9 +27,4 @@ public class PaperCommandSendListenerProvider extends CommandSendListenerProvide
 
         children.removeIf(node -> filter.test(node.getName()));
     }
-
-    @Override
-    public String getDescription() {
-        return "Paper async Brigadier command send listener";
-    }
 }

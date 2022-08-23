@@ -6,6 +6,10 @@ import com.earth2me.essentials.utils.NumberUtil;
 import com.earth2me.essentials.utils.StringUtil;
 import com.earth2me.essentials.utils.VersionUtil;
 import net.ess3.api.IEssentials;
+import net.ess3.provider.PersistentDataProvider;
+import net.ess3.provider.PotionMetaProvider;
+import net.ess3.provider.SpawnEggProvider;
+import net.ess3.provider.SpawnerItemProvider;
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
@@ -188,8 +192,8 @@ public class LegacyItemDb extends AbstractItemDb {
         if (mat == MOB_SPAWNER) {
             if (metaData == 0) metaData = EntityType.PIG.getTypeId();
             try {
-                retval = ess.getSpawnerItemProvider().setEntityType(retval, EntityType.fromId(metaData));
-                ess.getPersistentDataProvider().set(retval, "convert", "true");
+                retval = ess.getProviders().get(SpawnerItemProvider.class).setEntityType(retval, EntityType.fromId(metaData));
+                ess.getProviders().get(PersistentDataProvider.class).set(retval, "convert", "true");
             } catch (final IllegalArgumentException e) {
                 throw new Exception("Can't spawn entity ID " + metaData + " from mob spawners.");
             }
@@ -200,10 +204,10 @@ public class LegacyItemDb extends AbstractItemDb {
             } catch (final IllegalArgumentException e) {
                 throw new Exception("Can't spawn entity ID " + metaData + " from spawn eggs.");
             }
-            retval = ess.getSpawnEggProvider().createEggItem(type);
+            retval = ess.getProviders().get(SpawnEggProvider.class).createEggItem(type);
         } else if (mat.name().endsWith("POTION")
             && VersionUtil.getServerBukkitVersion().isLowerThan(VersionUtil.v1_11_R01)) { // Only apply this to pre-1.11 as items.csv might only work in 1.11
-            retval = ess.getPotionMetaProvider().createPotionItem(mat, metaData);
+            retval = ess.getProviders().get(PotionMetaProvider.class).createPotionItem(mat, metaData);
         } else {
             retval.setDurability(metaData);
         }

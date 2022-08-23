@@ -2,6 +2,8 @@ package net.ess3.provider.providers;
 
 import com.google.common.collect.ImmutableMap;
 import net.ess3.provider.PotionMetaProvider;
+import net.essentialsx.providers.ProviderData;
+import net.essentialsx.providers.ProviderTest;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.PotionMeta;
@@ -10,6 +12,7 @@ import org.bukkit.potion.PotionType;
 
 import java.util.Map;
 
+@ProviderData(description = "1.9+ Potion Meta Provider", weight = 1)
 public class BasePotionDataProvider implements PotionMetaProvider {
     private static final Map<Integer, PotionType> damageValueToType = ImmutableMap.<Integer, PotionType>builder()
         .put(1, PotionType.REGEN)
@@ -64,8 +67,13 @@ public class BasePotionDataProvider implements PotionMetaProvider {
         return potion;
     }
 
-    @Override
-    public String getDescription() {
-        return "1.9+ Potion Meta Provider";
+    @ProviderTest
+    public static boolean test() {
+        try {
+            Class.forName("org.bukkit.potion.PotionData");
+            return true;
+        } catch (final ClassNotFoundException ignored) {
+            return false;
+        }
     }
 }

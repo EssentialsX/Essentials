@@ -13,6 +13,8 @@ import com.earth2me.essentials.utils.FormatUtil;
 import com.earth2me.essentials.utils.LocationUtil;
 import com.earth2me.essentials.utils.NumberUtil;
 import net.ess3.api.IEssentials;
+import net.ess3.provider.KnownCommandsProvider;
+import net.ess3.provider.SyncCommandsProvider;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
@@ -315,7 +317,7 @@ public class Settings implements net.ess3.api.ISettings {
     private void _addAlternativeCommand(final String label, final Command current) {
         Command cmd = ess.getAlternativeCommandsHandler().getAlternative(label);
         if (cmd == null) {
-            for (final Map.Entry<String, Command> entry : ess.getKnownCommandsProvider().getKnownCommands().entrySet()) {
+            for (final Map.Entry<String, Command> entry : ess.getProviders().get(KnownCommandsProvider.class).getKnownCommands().entrySet()) {
                 final String[] split = entry.getKey().split(":");
                 if (entry.getValue() != current && split[split.length - 1].equals(label)) {
                     cmd = entry.getValue();
@@ -325,7 +327,7 @@ public class Settings implements net.ess3.api.ISettings {
         }
 
         if (cmd != null) {
-            ess.getKnownCommandsProvider().getKnownCommands().put(label, cmd);
+            ess.getProviders().get(KnownCommandsProvider.class).getKnownCommands().put(label, cmd);
         }
     }
 
@@ -680,13 +682,13 @@ public class Settings implements net.ess3.api.ISettings {
         playerCommands = _getPlayerCommands();
 
         // This will be late loaded
-        if (ess.getKnownCommandsProvider() != null) {
+        if (ess.getProviders().get(KnownCommandsProvider.class) != null) {
             boolean mapModified = false;
             if (!disabledBukkitCommands.isEmpty()) {
                 if (isDebug()) {
                     ess.getLogger().log(Level.INFO, "Re-adding " + disabledBukkitCommands.size() + " disabled commands!");
                 }
-                ess.getKnownCommandsProvider().getKnownCommands().putAll(disabledBukkitCommands);
+                ess.getProviders().get(KnownCommandsProvider.class).getKnownCommands().putAll(disabledBukkitCommands);
                 disabledBukkitCommands.clear();
                 mapModified = true;
             }
@@ -698,7 +700,7 @@ public class Settings implements net.ess3.api.ISettings {
                     if (isDebug()) {
                         ess.getLogger().log(Level.INFO, "Attempting removal of " + effectiveAlias);
                     }
-                    final Command removed = ess.getKnownCommandsProvider().getKnownCommands().remove(effectiveAlias);
+                    final Command removed = ess.getProviders().get(KnownCommandsProvider.class).getKnownCommands().remove(effectiveAlias);
                     if (removed != null) {
                         if (isDebug()) {
                             ess.getLogger().log(Level.INFO, "Adding command " + effectiveAlias + " to disabled map!");
@@ -721,9 +723,9 @@ public class Settings implements net.ess3.api.ISettings {
                     ess.getLogger().log(Level.INFO, "Syncing commands");
                 }
                 if (reloadCount.get() < 2) {
-                    ess.scheduleSyncDelayedTask(() -> ess.getSyncCommandsProvider().syncCommands());
+                    ess.scheduleSyncDelayedTask(() -> ess.getProviders().get(SyncCommandsProvider.class).syncCommands());
                 } else {
-                    ess.getSyncCommandsProvider().syncCommands();
+                    ess.getProviders().get(SyncCommandsProvider.class).syncCommands();
                 }
             }
         }

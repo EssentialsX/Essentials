@@ -8,6 +8,8 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import net.ess3.api.IEssentials;
+import net.ess3.provider.PersistentDataProvider;
+import net.ess3.provider.SpawnerItemProvider;
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
@@ -149,8 +151,8 @@ public class FlatItemDb extends AbstractItemDb {
         // setItemMeta to prevent a race condition
         final EntityType entity = data.getEntity();
         if (entity != null && material.toString().contains("SPAWNER")) {
-            ess.getSpawnerItemProvider().setEntityType(stack, entity);
-            ess.getPersistentDataProvider().set(stack, "convert", "true");
+            ess.getProviders().get(SpawnerItemProvider.class).setEntityType(stack, entity);
+            ess.getProviders().get(PersistentDataProvider.class).set(stack, "convert", "true");
         }
 
         return stack;
@@ -208,7 +210,7 @@ public class FlatItemDb extends AbstractItemDb {
             final PotionData potion = ((PotionMeta) item.getItemMeta()).getBasePotionData();
             return new ItemData(type, potion);
         } else if (type.toString().contains("SPAWNER")) {
-            final EntityType entity = ess.getSpawnerItemProvider().getEntityType(item);
+            final EntityType entity = ess.getProviders().get(SpawnerItemProvider.class).getEntityType(item);
             return new ItemData(type, entity);
         } else {
             return new ItemData(type);

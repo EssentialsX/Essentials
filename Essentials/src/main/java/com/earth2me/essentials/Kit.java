@@ -11,6 +11,7 @@ import com.earth2me.essentials.utils.MaterialUtil;
 import com.earth2me.essentials.utils.NumberUtil;
 import net.ess3.api.IEssentials;
 import net.ess3.api.events.KitClaimEvent;
+import net.ess3.provider.SerializationProvider;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
@@ -191,11 +192,11 @@ public class Kit {
                 final ItemStack stack;
 
                 if (kitItem.startsWith("@")) {
-                    if (ess.getSerializationProvider() == null) {
+                    if (ess.getProviders().get(SerializationProvider.class) == null) {
                         ess.getLogger().log(Level.WARNING, tl("kitError3", kitName, user.getName()));
                         continue;
                     }
-                    stack = ess.getSerializationProvider().deserializeItem(Base64Coder.decodeLines(kitItem.substring(1)));
+                    stack = ess.getProviders().get(SerializationProvider.class).deserializeItem(Base64Coder.decodeLines(kitItem.substring(1)));
                 } else {
                     final String[] parts = kitItem.split(" +");
                     final ItemStack parseStack = ess.getItemDb().get(parts[0], parts.length > 1 ? Integer.parseInt(parts[1]) : 1);

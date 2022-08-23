@@ -4,6 +4,7 @@ import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.DateUtil;
 import com.earth2me.essentials.utils.PasteUtil;
+import net.ess3.provider.SerializationProvider;
 import org.bukkit.Material;
 import org.bukkit.Server;
 import org.bukkit.inventory.ItemStack;
@@ -42,7 +43,7 @@ public class Commandcreatekit extends EssentialsCommand {
 
         boolean useSerializationProvider = ess.getSettings().isUseBetterKits();
 
-        if (useSerializationProvider && ess.getSerializationProvider() == null) {
+        if (useSerializationProvider && ess.getProviders().get(SerializationProvider.class) == null) {
             ess.showError(user.getSource(), new Exception(tl("createKitUnsupported")), commandLabel);
             useSerializationProvider = false;
         }
@@ -51,7 +52,7 @@ public class Commandcreatekit extends EssentialsCommand {
             if (is != null && is.getType() != null && is.getType() != Material.AIR) {
                 final String serialized;
                 if (useSerializationProvider) {
-                    serialized = "@" + Base64Coder.encodeLines(ess.getSerializationProvider().serializeItem(is));
+                    serialized = "@" + Base64Coder.encodeLines(ess.getProviders().get(SerializationProvider.class).serializeItem(is));
                 } else {
                     serialized = ess.getItemDb().serialize(is);
                 }

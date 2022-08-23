@@ -6,6 +6,7 @@ import com.earth2me.essentials.utils.LocationUtil;
 import com.earth2me.essentials.utils.VersionUtil;
 import io.papermc.lib.PaperLib;
 import net.ess3.api.InvalidWorldException;
+import net.ess3.provider.WorldInfoProvider;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Biome;
@@ -177,7 +178,7 @@ public class RandomTeleport implements IConf {
         final Location location = new Location(
             center.getWorld(),
             center.getX() + offsetX,
-            ess.getWorldInfoProvider().getMaxHeight(center.getWorld()),
+            ess.getProviders().get(WorldInfoProvider.class).getMaxHeight(center.getWorld()),
             center.getZ() + offsetZ,
             360 * RANDOM.nextFloat() - 180,
             0
@@ -195,7 +196,7 @@ public class RandomTeleport implements IConf {
 
     // Returns an appropriate elevation for a given location in the nether, or -1 if none is found
     private double getNetherYAt(final Location location) {
-        for (int y = 32; y < ess.getWorldInfoProvider().getMaxHeight(location.getWorld()); ++y) {
+        for (int y = 32; y < ess.getProviders().get(WorldInfoProvider.class).getMaxHeight(location.getWorld()); ++y) {
             if (!LocationUtil.isBlockUnsafe(ess, location.getWorld(), location.getBlockX(), y, location.getBlockZ())) {
                 return y;
             }
@@ -204,7 +205,7 @@ public class RandomTeleport implements IConf {
     }
 
     private boolean isValidRandomLocation(final Location location) {
-        return location.getBlockY() > ess.getWorldInfoProvider().getMinHeight(location.getWorld()) && !this.getExcludedBiomes().contains(location.getBlock().getBiome());
+        return location.getBlockY() > ess.getProviders().get(WorldInfoProvider.class).getMinHeight(location.getWorld()) && !this.getExcludedBiomes().contains(location.getBlock().getBiome());
     }
 
     public File getFile() {
