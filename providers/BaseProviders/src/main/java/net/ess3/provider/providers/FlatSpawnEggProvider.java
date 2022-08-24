@@ -28,7 +28,7 @@ public class FlatSpawnEggProvider implements SpawnEggProvider {
     public static boolean test() {
         try {
             //noinspection unused
-            final Material yourMother = Material.COW_SPAWN_EGG;
+            final Material itMakesMeDeclareAVariable = Material.COW_SPAWN_EGG;
             return true;
         } catch (final Throwable ignored) {
             return false;

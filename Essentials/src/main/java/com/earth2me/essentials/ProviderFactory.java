@@ -52,20 +52,10 @@ public class ProviderFactory {
             Class<? extends Provider> highestProvider = null;
             ProviderData highestProviderData = null;
             int highestWeight = -1;
-            providerLoop:
             for (final Class<? extends Provider> provider : entry.getValue()) {
                 try {
                     final ProviderData providerData = provider.getAnnotation(ProviderData.class);
-                    if (providerData.weight() > highestWeight) {
-                        for (final Method method : provider.getMethods()) {
-                            if (method.isAnnotationPresent(ProviderTest.class)) {
-                                final Boolean result = (Boolean) method.invoke(null);
-                                if (!result) {
-                                    continue providerLoop;
-                                }
-                            }
-                        }
-
+                    if (providerData.weight() > highestWeight && testProvider(provider)) {
                         highestWeight = providerData.weight();
                         highestProvider = provider;
                         highestProviderData = providerData;
@@ -84,12 +74,21 @@ public class ProviderFactory {
         registeredProviders.clear();
     }
 
-    private <C extends Provider> C getProviderInstance(final Class<C> provider) {
+    private boolean testProvider(final Class<?> providerClass) throws InvocationTargetException, IllegalAccessException {
+        for (final Method method : providerClass.getMethods()) {
+            if (method.isAnnotationPresent(ProviderTest.class)) {
+                return (Boolean) method.invoke(null);
+            }
+        }
+        return true;
+    }
+
+    private <P extends Provider> P getProviderInstance(final Class<P> provider) {
         try {
             final Constructor<?> constructor = provider.getConstructors()[0];
             if (constructor.getParameterTypes().length == 0) {
                 //noinspection unchecked
-                return (C) constructor.newInstance();
+                return (P) constructor.newInstance();
             }
             final Object[] args = new Object[constructor.getParameterTypes().length];
 
@@ -105,7 +104,7 @@ public class ProviderFactory {
             }
 
             //noinspection unchecked
-            return (C) constructor.newInstance(args);
+            return (P) constructor.newInstance(args);
         } catch (InstantiationException | IllegalAccessException | InvocationTargetException e) {
             try {
                 return provider.getConstructor().newInstance();
