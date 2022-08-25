@@ -96,7 +96,7 @@ public class Economy {
         }
 
         if (user == null) {
-            user = getUserByUUID(UUID.nameUUIDFromBytes(("NPC:" + (ess.getSettings().isSafeUsermap() ? StringUtil.safeString(name) : name)).getBytes(Charsets.UTF_8)));
+            user = getUserByUUID(UUID.nameUUIDFromBytes(("NPC:" + StringUtil.safeString(name)).getBytes(Charsets.UTF_8)));
         }
 
         return user;

@@ -80,7 +80,7 @@ public class VaultEconomyProvider implements Economy {
             return true;
         }
         // We may not have the player name in the usermap, let's double check an NPC account with this name doesn't exist.
-        return com.earth2me.essentials.api.Economy.playerExists(UUID.nameUUIDFromBytes(("NPC:" + (ess.getSettings().isSafeUsermap() ? StringUtil.safeString(playerName) : playerName)).getBytes(Charsets.UTF_8)));
+        return com.earth2me.essentials.api.Economy.playerExists(UUID.nameUUIDFromBytes(("NPC:" + StringUtil.safeString(playerName)).getBytes(Charsets.UTF_8)));
     }
 
     @Override
