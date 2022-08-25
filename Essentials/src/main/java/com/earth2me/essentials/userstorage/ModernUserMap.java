@@ -15,7 +15,7 @@ import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 import java.util.logging.Level;
 
-public class ModernUserMap extends CacheLoader<UUID, User> {
+public class ModernUserMap extends CacheLoader<UUID, User> implements IUserMap {
     private final transient IEssentials ess;
     private final transient ModernUUIDCache uuidCache;
     private final transient LoadingCache<UUID, User> userCache;
@@ -29,18 +29,22 @@ public class ModernUserMap extends CacheLoader<UUID, User> {
                 .build(this);
     }
 
+    @Override
     public Set<UUID> getAllUserUUIDs() {
         return uuidCache.getCachedUUIDs();
     }
 
+    @Override
     public long getCachedCount() {
         return userCache.size();
     }
 
+    @Override
     public int getUserCount() {
         return uuidCache.getCacheSize();
     }
 
+    @Override
     public User getUser(final UUID uuid) {
         if (uuid == null) {
             return null;
@@ -56,12 +60,14 @@ public class ModernUserMap extends CacheLoader<UUID, User> {
         }
     }
 
+    @Override
     public User getUser(final Player base) {
         final User user = loadUncachedUser(base);
         userCache.put(user.getUUID(), user);
         return user;
     }
 
+    @Override
     public User getUser(final String name) {
         if (name == null) {
             return null;
@@ -86,6 +92,7 @@ public class ModernUserMap extends CacheLoader<UUID, User> {
         uuidCache.updateCache(uuid, name);
     }
 
+    @SuppressWarnings("NullableProblems")
     @Override
     public User load(final UUID uuid) throws Exception {
         final User user = loadUncachedUser(uuid);
@@ -96,6 +103,7 @@ public class ModernUserMap extends CacheLoader<UUID, User> {
         throw new Exception("User not found!");
     }
 
+    @Override
     public User loadUncachedUser(final Player base) {
         if (base == null) {
             return null;
@@ -114,10 +122,7 @@ public class ModernUserMap extends CacheLoader<UUID, User> {
         return user;
     }
 
-    /**
-     * Gets a User by the given UUID in the cache, if present, otherwise loads the user without placing them in the cache.
-     * Ideally to be used when running operations on all stored users.
-     */
+    @Override
     public User loadUncachedUser(final UUID uuid) {
         User user = userCache.getIfPresent(uuid);
         if (user != null) {
@@ -143,6 +148,7 @@ public class ModernUserMap extends CacheLoader<UUID, User> {
         return null;
     }
 
+    @Override
     public Map<String, UUID> getNameCache() {
         return uuidCache.getNameCache();
     }

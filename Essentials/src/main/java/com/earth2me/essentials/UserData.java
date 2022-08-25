@@ -5,6 +5,7 @@ import com.earth2me.essentials.config.EssentialsUserConfiguration;
 import com.earth2me.essentials.config.entities.CommandCooldown;
 import com.earth2me.essentials.config.entities.LazyLocation;
 import com.earth2me.essentials.config.holders.UserConfigHolder;
+import com.earth2me.essentials.userstorage.ModernUserMap;
 import com.earth2me.essentials.utils.NumberUtil;
 import com.earth2me.essentials.utils.StringUtil;
 import com.google.common.base.Charsets;
@@ -64,10 +65,11 @@ public abstract class UserData extends PlayerExtension implements IConf {
             ess.getLogger().warning("Unable to delete data file for " + config.getFile().getName());
         }
         if (config.getUsername() != null) {
-            ess.getUsers().invalidate(config.getUuid());
+            final ModernUserMap users = (ModernUserMap) ess.getUsers();
+            users.invalidate(config.getUuid());
             if (isNPC()) {
                 final String name = ess.getSettings().isSafeUsermap() ? StringUtil.safeString(config.getUsername()) : config.getUsername();
-                ess.getUsers().invalidate(UUID.nameUUIDFromBytes(("NPC:" + name).getBytes(Charsets.UTF_8)));
+                users.invalidate(UUID.nameUUIDFromBytes(("NPC:" + name).getBytes(Charsets.UTF_8)));
             }
         }
     }

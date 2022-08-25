@@ -7,7 +7,7 @@ import com.earth2me.essentials.commands.IEssentialsCommand;
 import com.earth2me.essentials.commands.PlayerNotFoundException;
 import com.earth2me.essentials.perm.PermissionsHandler;
 import com.earth2me.essentials.updatecheck.UpdateChecker;
-import com.earth2me.essentials.userstorage.ModernUserMap;
+import com.earth2me.essentials.userstorage.IUserMap;
 import net.ess3.nms.refl.providers.ReflOnlineModeProvider;
 import net.ess3.provider.ContainerProvider;
 import net.ess3.provider.FormattedCommandAliasProvider;
@@ -120,7 +120,7 @@ public interface IEssentials extends Plugin {
 
     IItemDb getItemDb();
 
-    ModernUserMap getUsers();
+    IUserMap getUsers();
 
     @Deprecated
     UserMap getUserMap();

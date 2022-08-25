@@ -3,6 +3,7 @@ package com.earth2me.essentials.api;
 import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.config.EssentialsUserConfiguration;
+import com.earth2me.essentials.userstorage.ModernUserMap;
 import com.earth2me.essentials.utils.NumberUtil;
 import com.earth2me.essentials.utils.StringUtil;
 import com.google.common.base.Charsets;
@@ -62,7 +63,7 @@ public class Economy {
         npcConfig.setProperty("money", ess.getSettings().getStartingBalance());
         npcConfig.blockingSave();
         // This will load the NPC into the UserMap + UUID cache
-        ess.getUsers().addCachedNpcName(npcUUID, name);
+        ((ModernUserMap) ess.getUsers()).addCachedNpcName(npcUUID, name);
         ess.getUsers().getUser(npcUUID);
     }
 

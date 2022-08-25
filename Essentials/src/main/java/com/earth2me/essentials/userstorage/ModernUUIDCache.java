@@ -36,7 +36,7 @@ public class ModernUUIDCache {
      * In a UUID->Name based map, different uuids now point to the same name
      * preventing any command which allows for offline players from resolving a
      * given uuid from a given name.
-     *
+     * <p>
      * This map is backed by a file-based cache. If this cache is missing, a new
      * one is populated by iterating over all files in the userdata folder and
      * caching the {@code last-account-name} value.
@@ -66,27 +66,27 @@ public class ModernUUIDCache {
         }, 5, 5, TimeUnit.SECONDS);
     }
 
-    public UUID getCachedUUID(final String name) {
+    protected UUID getCachedUUID(final String name) {
         return nameToUuidMap.get(getSanitizedName(name));
     }
 
-    public Set<UUID> getCachedUUIDs() {
+    protected Set<UUID> getCachedUUIDs() {
         return Collections.unmodifiableSet(uuidCache);
     }
 
-    public Map<String, UUID> getNameCache() {
+    protected Map<String, UUID> getNameCache() {
         return Collections.unmodifiableMap(nameToUuidMap);
     }
 
-    public int getCacheSize() {
+    protected int getCacheSize() {
         return uuidCache.size();
     }
 
-    public String getSanitizedName(final String name) {
+    protected String getSanitizedName(final String name) {
         return ess.getSettings().isSafeUsermap() ? StringUtil.safeString(name) : name;
     }
 
-    public void updateCache(final UUID uuid, final String name) {
+    protected void updateCache(final UUID uuid, final String name) {
         if (uuidCache.add(uuid)) {
             pendingUuidWrite.set(true);
         }
@@ -102,7 +102,7 @@ public class ModernUUIDCache {
         }
     }
 
-    public void removeCache(final UUID uuid) {
+    protected void removeCache(final UUID uuid) {
         if (uuid == null) {
             return;
         }
@@ -218,7 +218,7 @@ public class ModernUUIDCache {
         }
     }
 
-    public void blockingSave() {
+    protected void blockingSave() {
         saveUuidCache();
         saveNameToUuidCache();
     }

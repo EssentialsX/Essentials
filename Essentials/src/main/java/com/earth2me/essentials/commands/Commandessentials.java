@@ -581,7 +581,7 @@ public class Commandessentials extends EssentialsCommand {
             return;
         }
 
-        final ModernUserMap userMap = ess.getUsers();
+        final ModernUserMap userMap = (ModernUserMap) ess.getUsers();
         sender.sendMessage(tl("usermapSize", userMap.getCachedCount(), userMap.getUserCount(), ess.getSettings().getMaxUserCacheCount()));
         if (args.length > 1) {
             if (args[1].equals("full")) {
