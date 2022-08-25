@@ -596,7 +596,7 @@ public class Commandessentials extends EssentialsCommand {
                 final Set<UUID> uuids = new HashSet<>(ess.getUsers().getAllUserUUIDs());
                 ess.runTaskAsynchronously(() -> {
                     final File userdataFolder = new File(ess.getDataFolder(), "userdata");
-                    final File backupFolder = new File(ess.getDataFolder(), "userdata-npc-backup-boogaloo");
+                    final File backupFolder = new File(ess.getDataFolder(), "userdata-npc-backup-boogaloo-" + System.currentTimeMillis());
 
                     if (!userdataFolder.isDirectory()) {
                         ess.getLogger().warning("Missing userdata folder, aborting usermap purge.");

@@ -131,6 +131,7 @@ public class ModernUserMap extends CacheLoader<UUID, User> implements IUserMap {
 
         Player player = ess.getServer().getPlayer(uuid);
         if (player != null) {
+            // This is a real player, cache their UUID.
             user = new User(player, ess);
             uuidCache.updateCache(uuid, player.getName());
             return user;
