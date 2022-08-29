@@ -160,7 +160,7 @@ notify-player-of-mail-cooldown: 60
 #
 # If you have two plugin with the same command and you wish to force Essentials to take over, you need an alias.
 # To force essentials to take 'god' alias 'god' to 'egod'.
-# See http://wiki.bukkit.org/Commands.yml#aliases for more information.
+# See https://bukkit.fandom.com/wiki/Commands.yml#aliases for more information.
 
 overridden-commands:
 #  - god
@@ -168,7 +168,7 @@ overridden-commands:
 
 # Disabling commands here will prevent Essentials handling the command, this will not affect command conflicts.
 # You should not have to disable commands used in other plugins, they will automatically get priority.
-# See http://wiki.bukkit.org/Commands.yml#aliases to map commands to other plugins.
+# See https://bukkit.fandom.com/wiki/Commands.yml#aliases to map commands to other plugins.
 disabled-commands:
 #  - nick
 #  - clear
