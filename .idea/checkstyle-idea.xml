@@ -7,13 +7,13 @@
     <scanBeforeCheckin>true</scanBeforeCheckin>
     <option name="thirdPartyClasspath" />
     <option name="activeLocationIds">
-      <option value="9c559e66-f9d0-4553-b942-bd6095fd8a13" />
+      <option value="321e5753-4201-4d2c-bf31-6232011122fd" />
     </option>
     <option name="locations">
       <list>
         <ConfigurationLocation id="bundled-sun-checks" type="BUNDLED" scope="All" description="Sun Checks">(bundled)</ConfigurationLocation>
         <ConfigurationLocation id="bundled-google-checks" type="BUNDLED" scope="All" description="Google Checks">(bundled)</ConfigurationLocation>
-        <ConfigurationLocation id="9c559e66-f9d0-4553-b942-bd6095fd8a13" type="PROJECT_RELATIVE" scope="All" description="EssentialsX">
+        <ConfigurationLocation id="321e5753-4201-4d2c-bf31-6232011122fd" type="PROJECT_RELATIVE" scope="All" description="EssentialsX">
           $PROJECT_DIR$/.checkstyle/checkstyle.xml
           <option name="properties">
             <map>
