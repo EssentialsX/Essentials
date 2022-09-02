@@ -42,9 +42,9 @@ public class Economy {
         ess = aEss;
     }
 
-    private static void createNPCFile(String name) {
+    private static void createNPCFile(final String unsanitizedName) {
         final File folder = new File(ess.getDataFolder(), "userdata");
-        name = ess.getSettings().isSafeUsermap() ? StringUtil.safeString(name) : name;
+        final String name = ess.getSettings().isSafeUsermap() ? StringUtil.safeString(unsanitizedName) : unsanitizedName;
         if (!folder.exists()) {
             if (!folder.mkdirs()) {
                 throw new RuntimeException("Error while creating userdata directory!");
@@ -60,6 +60,7 @@ public class Economy {
         npcConfig.load();
         npcConfig.setProperty("npc", true);
         npcConfig.setProperty("last-account-name", name);
+        npcConfig.setProperty("npc-name", unsanitizedName);
         npcConfig.setProperty("money", ess.getSettings().getStartingBalance());
         npcConfig.blockingSave();
         // This will load the NPC into the UserMap + UUID cache

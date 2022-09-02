@@ -262,6 +262,16 @@ public class UserConfigHolder {
         this.lastAccountName = value;
     }
 
+    private @MonotonicNonNull String npcName;
+
+    public String npcName() {
+        return this.npcName;
+    }
+
+    public void npcName(final String value) {
+        this.npcName = value;
+    }
+
     private boolean powertoolsenabled = true;
 
     public boolean powerToolsEnabled() {
