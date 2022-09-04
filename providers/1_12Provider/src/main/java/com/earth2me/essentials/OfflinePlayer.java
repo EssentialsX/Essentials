@@ -1341,7 +1341,7 @@ public class OfflinePlayer implements Player {
         return name;
     }
 
-    protected void setName(final String name) {
+    public void setName(final String name) {
         this.name = base.getName();
         if (this.name == null) {
             this.name = name;

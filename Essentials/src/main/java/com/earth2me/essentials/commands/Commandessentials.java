@@ -3,9 +3,9 @@ package com.earth2me.essentials.commands;
 import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.EssentialsUpgrade;
 import com.earth2me.essentials.User;
-import com.earth2me.essentials.UserMap;
 import com.earth2me.essentials.economy.EconomyLayer;
 import com.earth2me.essentials.economy.EconomyLayers;
+import com.earth2me.essentials.userstorage.ModernUserMap;
 import com.earth2me.essentials.utils.CommandMapUtil;
 import com.earth2me.essentials.utils.DateUtil;
 import com.earth2me.essentials.utils.EnumUtil;
@@ -13,7 +13,6 @@ import com.earth2me.essentials.utils.FloatUtil;
 import com.earth2me.essentials.utils.NumberUtil;
 import com.earth2me.essentials.utils.PasteUtil;
 import com.earth2me.essentials.utils.VersionUtil;
-import com.google.common.base.Charsets;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import com.google.gson.JsonArray;
@@ -33,6 +32,7 @@ import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import java.io.File;
 import java.io.IOException;
 import java.lang.management.ManagementFactory;
 import java.nio.charset.StandardCharsets;
@@ -45,12 +45,15 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Supplier;
+import java.util.logging.Level;
 import java.util.stream.Collectors;
 
 import static com.earth2me.essentials.I18n.tl;
@@ -147,11 +150,8 @@ public class Commandessentials extends EssentialsCommand {
             case "homes":
                 runHomes(server, sender, commandLabel, args);
                 break;
-            case "uuidconvert":
-                runUUIDConvert(server, sender, commandLabel, args);
-                break;
-            case "uuidtest":
-                runUUIDTest(server, sender, commandLabel, args);
+            case "usermap":
+                runUserMap(sender, args);
                 break;
 
             // "#EasterEgg"
@@ -473,12 +473,11 @@ public class Commandessentials extends EssentialsCommand {
         final long daysArg = Long.parseLong(args[1]);
         final double moneyArg = args.length >= 3 ? FloatUtil.parseDouble(args[2].replaceAll("[^0-9\\.]", "")) : 0;
         final int homesArg = args.length >= 4 && NumberUtil.isInt(args[3]) ? Integer.parseInt(args[3]) : 0;
-        final UserMap userMap = ess.getUserMap();
 
         ess.runTaskAsynchronously(() -> {
             final long currTime = System.currentTimeMillis();
-            for (final UUID u : userMap.getAllUniqueUsers()) {
-                final User user = ess.getUserMap().getUser(u);
+            for (final UUID u : ess.getUsers().getAllUserUUIDs()) {
+                final User user = ess.getUsers().loadUncachedUser(u);
                 if (user == null) {
                     continue;
                 }
@@ -523,13 +522,12 @@ public class Commandessentials extends EssentialsCommand {
             throw new Exception(HOMES_USAGE);
         }
 
-        final UserMap userMap = ess.getUserMap();
         switch (args[1]) {
             case "fix":
                 sender.sendMessage(tl("fixingHomes"));
                 ess.runTaskAsynchronously(() -> {
-                    for (final UUID u : userMap.getAllUniqueUsers()) {
-                        final User user = ess.getUserMap().getUser(u);
+                    for (final UUID u : ess.getUsers().getAllUserUUIDs()) {
+                        final User user = ess.getUsers().loadUncachedUser(u);
                         if (user == null) {
                             continue;
                         }
@@ -553,8 +551,8 @@ public class Commandessentials extends EssentialsCommand {
                 }
                 sender.sendMessage(filterByWorld ? tl("deletingHomesWorld", args[2]) : tl("deletingHomes"));
                 ess.runTaskAsynchronously(() -> {
-                    for (final UUID u : userMap.getAllUniqueUsers()) {
-                        final User user = ess.getUserMap().getUser(u);
+                    for (final UUID u : ess.getUsers().getAllUserUUIDs()) {
+                        final User user = ess.getUsers().loadUncachedUser(u);
                         if (user == null) {
                             continue;
                         }
@@ -577,52 +575,77 @@ public class Commandessentials extends EssentialsCommand {
         }
     }
 
-    // Forces a rerun of userdata UUID conversion.
-    private void runUUIDConvert(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception {
-        sender.sendMessage("Starting Essentials UUID userdata conversion; this may lag the server.");
-
-        final Boolean ignoreUFCache = args.length > 2 && args[1].toLowerCase(Locale.ENGLISH).contains("ignore");
-        EssentialsUpgrade.uuidFileConvert(ess, ignoreUFCache);
-
-        sender.sendMessage("UUID conversion complete. Check your server log for more information.");
-    }
-
-    // Looks up various UUIDs for a user.
-    private void runUUIDTest(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception {
-        if (args.length < 2) {
-            throw new Exception("/<command> uuidtest <name>");
+    // Gets information about cached users
+    private void runUserMap(final CommandSource sender, final String[] args) {
+        if (!sender.isAuthorized("essentials.usermap", ess)) {
+            return;
         }
-        final String name = args[1];
-        sender.sendMessage("Looking up UUID for " + name);
 
-        UUID onlineUUID = null;
+        final ModernUserMap userMap = (ModernUserMap) ess.getUsers();
+        sender.sendMessage(tl("usermapSize", userMap.getCachedCount(), userMap.getUserCount(), ess.getSettings().getMaxUserCacheCount()));
+        if (args.length > 1) {
+            if (args[1].equals("full")) {
+                for (final Map.Entry<String, UUID> entry : userMap.getNameCache().entrySet()) {
+                    sender.sendMessage(tl("usermapEntry", entry.getKey(), entry.getValue().toString()));
+                }
+            } else if (args[1].equals("purge")) {
+                final boolean seppuku = args.length > 2 && args[2].equals("iknowwhatimdoing");
 
-        for (final Player player : ess.getOnlinePlayers()) {
-            if (player.getName().equalsIgnoreCase(name)) {
-                onlineUUID = player.getUniqueId();
-                break;
+                sender.sendMessage(tl("usermapPurge", String.valueOf(seppuku)));
+
+                final Set<UUID> uuids = new HashSet<>(ess.getUsers().getAllUserUUIDs());
+                ess.runTaskAsynchronously(() -> {
+                    final File userdataFolder = new File(ess.getDataFolder(), "userdata");
+                    final File backupFolder = new File(ess.getDataFolder(), "userdata-npc-backup-boogaloo-" + System.currentTimeMillis());
+
+                    if (!userdataFolder.isDirectory()) {
+                        ess.getLogger().warning("Missing userdata folder, aborting usermap purge.");
+                        return;
+                    }
+
+                    if (seppuku && !backupFolder.mkdir()) {
+                        ess.getLogger().warning("Unable to create backup folder, aborting usermap purge.");
+                        return;
+                    }
+
+                    int total = 0;
+                    final File[] files = userdataFolder.listFiles(EssentialsUpgrade.YML_FILTER);
+                    if (files != null) {
+                        for (final File file : files) {
+                            try {
+                                final String fileName = file.getName();
+                                final UUID uuid = UUID.fromString(fileName.substring(0, fileName.length() - 4));
+                                if (!uuids.contains(uuid)) {
+                                    total++;
+                                    ess.getLogger().warning("Found orphaned userdata file: " + file.getName());
+                                    if (seppuku) {
+                                        try {
+                                            com.google.common.io.Files.move(file, new File(backupFolder, file.getName()));
+                                        } catch (IOException e) {
+                                            ess.getLogger().log(Level.WARNING, "Unable to move orphaned userdata file: " + file.getName(), e);
+                                        }
+                                    }
+                                }
+                            } catch (IllegalArgumentException ignored) {
+                            }
+                        }
+                    }
+                    ess.getLogger().info("Found " + total + " orphaned userdata files.");
+                });
+            } else {
+                try {
+                    final UUID uuid = UUID.fromString(args[1]);
+                    for (final Map.Entry<String, UUID> entry : userMap.getNameCache().entrySet()) {
+                        if (entry.getValue().equals(uuid)) {
+                            sender.sendMessage(tl("usermapEntry", entry.getKey(), args[1]));
+                        }
+                    }
+                } catch (IllegalArgumentException ignored) {
+                    final String sanitizedName = userMap.getSanitizedName(args[1]);
+                    sender.sendMessage(tl("usermapEntry", sanitizedName, userMap.getNameCache().get(sanitizedName).toString()));
+                }
             }
         }
-
-        final UUID essUUID = ess.getUserMap().getUser(name).getConfigUUID();
-
-        final org.bukkit.OfflinePlayer player = ess.getServer().getOfflinePlayer(name);
-        final UUID bukkituuid = player.getUniqueId();
-        sender.sendMessage("Bukkit Lookup: " + bukkituuid.toString());
-
-        if (onlineUUID != null && onlineUUID != bukkituuid) {
-            sender.sendMessage("Online player: " + onlineUUID.toString());
-        }
-
-        if (essUUID != null && essUUID != bukkituuid) {
-            sender.sendMessage("Essentials config: " + essUUID.toString());
-        }
-
-        final UUID npcuuid = UUID.nameUUIDFromBytes(("NPC:" + name).getBytes(Charsets.UTF_8));
-        sender.sendMessage("NPC UUID: " + npcuuid.toString());
-
-        final UUID offlineuuid = UUID.nameUUIDFromBytes(("OfflinePlayer:" + name).getBytes(Charsets.UTF_8));
-        sender.sendMessage("Offline Mode UUID: " + offlineuuid.toString());
     }
 
     // Displays versions of EssentialsX and related plugins.
@@ -750,7 +773,6 @@ public class Commandessentials extends EssentialsCommand {
             options.add("cleanup");
             options.add("homes");
             //options.add("uuidconvert");
-            //options.add("uuidtest");
             //options.add("nya");
             //options.add("moo");
             return options;
@@ -763,7 +785,6 @@ public class Commandessentials extends EssentialsCommand {
                 }
                 break;
             case "reset":
-            case "uuidtest":
                 if (args.length == 2) {
                     return getPlayers(server, sender);
                 }
@@ -780,11 +801,6 @@ public class Commandessentials extends EssentialsCommand {
                     return Lists.newArrayList("fix", "delete");
                 } else if (args.length == 3 && args[1].equalsIgnoreCase("delete")) {
                     return server.getWorlds().stream().map(World::getName).collect(Collectors.toList());
-                }
-                break;
-            case "uuidconvert":
-                if (args.length == 2) {
-                    return Lists.newArrayList("ignoreUFCache");
                 }
                 break;
             case "dump":
