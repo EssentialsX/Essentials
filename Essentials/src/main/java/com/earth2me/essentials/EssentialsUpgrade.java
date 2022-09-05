@@ -153,6 +153,10 @@ public class EssentialsUpgrade {
         ess.getLogger().info("To rerun the conversion type /essentials uuidconvert");
     }
 
+    public void updateRandomTeleport() {
+        ess.getRandomTeleport().updateConfig();
+    }
+
     public void convertMailList() {
         if (doneFile.getBoolean("updateUsersMailList", false)) {
             return;
@@ -967,7 +971,7 @@ public class EssentialsUpgrade {
 
                 if (index % 1000 == 0) {
                     ess.getLogger().info("Reading: " + format.format((100d * (double) index) / files.length)
-                        + "%");
+                            + "%");
                 }
             } catch (final IOException e) {
                 ess.getLogger().log(Level.SEVERE, "Error while reading file: ", e);
@@ -1006,5 +1010,6 @@ public class EssentialsUpgrade {
         convertStupidCamelCaseUserdataKeys();
         convertMailList();
         purgeBrokenNpcAccounts();
+        updateRandomTeleport();
     }
 }

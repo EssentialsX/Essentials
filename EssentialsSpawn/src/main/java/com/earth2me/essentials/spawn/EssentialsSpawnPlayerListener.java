@@ -13,6 +13,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
+import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 
 import java.util.List;
@@ -65,6 +66,9 @@ class EssentialsSpawnPlayerListener implements Listener {
                 return;
             }
         }
+        if (tryRandomTeleport(user, ess.getSettings().getRandomRespawnLocation())) {
+            return;
+        }
         final Location spawn = spawns.getSpawn(user.getGroup());
         if (spawn != null) {
             event.setRespawnLocation(spawn);
@@ -103,7 +107,9 @@ class EssentialsSpawnPlayerListener implements Listener {
 
         final User user = ess.getUser(player);
 
-        if (!"none".equalsIgnoreCase(ess.getSettings().getNewbieSpawn())) {
+        final boolean spawnRandomly = tryRandomTeleport(user, ess.getSettings().getRandomSpawnLocation());
+
+        if (!spawnRandomly && !"none".equalsIgnoreCase(ess.getSettings().getNewbieSpawn())) {
             ess.scheduleSyncDelayedTask(new NewPlayerTeleport(user), 1L);
         }
 
@@ -159,5 +165,16 @@ class EssentialsSpawnPlayerListener implements Listener {
                 user.getAsyncTeleport().now(spawn, false, TeleportCause.PLUGIN, future);
             }
         }
+    }
+
+    private boolean tryRandomTeleport(final User user, final String name) {
+        if (!ess.getRandomTeleport().hasLocation(name)) {
+            return false;
+        }
+        ess.getRandomTeleport().getRandomLocation(name).thenAccept(location -> {
+            final CompletableFuture<Boolean> future = new CompletableFuture<>();
+            user.getAsyncTeleport().now(location, false, PlayerTeleportEvent.TeleportCause.PLUGIN, future);
+        });
+        return true;
     }
 }
