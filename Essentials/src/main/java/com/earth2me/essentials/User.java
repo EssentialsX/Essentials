@@ -187,7 +187,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
     }
 
     private TriState isAuthorizedExactCheck(final String node) {
-        iif (!(base instanceof Player)) {
+        if (!(base instanceof Player)) {
             return TriState.UNSET;
         }
 
