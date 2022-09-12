@@ -151,7 +151,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
     }
 
     private boolean isAuthorizedCheck(final String node) {
-        if (base instanceof OfflinePlayer) {
+        if (!(base instanceof Player)) {
             return false;
         }
 
@@ -169,7 +169,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
     }
 
     private boolean isPermSetCheck(final String node) {
-        if (base instanceof OfflinePlayer) {
+        if (!(base instanceof Player)) {
             return false;
         }
 
@@ -187,7 +187,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
     }
 
     private TriState isAuthorizedExactCheck(final String node) {
-        if (base instanceof OfflinePlayer) {
+        iif (!(base instanceof Player)) {
             return TriState.UNSET;
         }
 
