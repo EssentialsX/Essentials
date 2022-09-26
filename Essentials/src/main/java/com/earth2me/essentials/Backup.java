@@ -102,12 +102,12 @@ public class Backup implements Runnable {
                             } while (line != null);
                         }
                     } catch (final IOException ex) {
-                        ess.getLogger().log(Level.SEVERE, null, ex);
+                        ess.getLogger().log(Level.SEVERE, "An error occurred while reading backup child process", ex);
                     }
                 });
                 child.waitFor();
             } catch (final InterruptedException | IOException ex) {
-                ess.getLogger().log(Level.SEVERE, null, ex);
+                ess.getLogger().log(Level.SEVERE, "An error occurred while building the backup child process", ex);
             } finally {
                 class BackupEnableSaveTask implements Runnable {
                     @Override

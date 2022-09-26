@@ -29,6 +29,10 @@ dependencies {
     }
 }
 
+test {
+    testLogging.showStandardStreams = true
+}
+
 shadowJar {
     dependencies {
         include (dependency('io.papermc:paperlib'))
