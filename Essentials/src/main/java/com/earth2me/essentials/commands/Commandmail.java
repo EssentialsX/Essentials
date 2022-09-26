@@ -195,17 +195,10 @@ public class Commandmail extends EssentialsCommand {
             return;
         }
         if (args.length >= 2 && "clear".equalsIgnoreCase(args[0])) {
-            final User u;
             if (!user.isAuthorized("essentials.mail.clear.others")){
                 throw new Exception(tl("noPerm", "essentials.mail.clear.others"));
             }
-            try {
-                u = getPlayer(server, args[1], true, true);
-            } catch (final PlayerNotFoundException e) {
-                throw new Exception(tl("playerNeverOnServer", args[1]));
-            }
-            u.setMailList(null);
-            user.sendMessage(tl("mailClearedPlayer", u.getDisplayName()));
+            user.sendMessage(tl("mailClearedPlayer", clearMail(server, args).getDisplayName()));
             return;
         }
         if (args.length >= 1 && "clearall".equalsIgnoreCase(args[0])){
@@ -232,14 +225,7 @@ public class Commandmail extends EssentialsCommand {
             sender.sendMessage(tl("mailClearedAll"));
             return;
         } else if (args.length >= 2 && "clear".equalsIgnoreCase(args[0])) {
-            final User u;
-            try {
-                u = getPlayer(server, args[1], true, true);
-            } catch (final PlayerNotFoundException e) {
-                throw new Exception(tl("playerNeverOnServer", args[1]));
-            }
-            u.setMailList(null);
-            sender.sendMessage(tl("mailClearedPlayer", u.getDisplayName()));
+            sender.sendMessage(tl("mailClearedPlayer", clearMail(server, args).getDisplayName()));
             return;
         } else if (args.length >= 3 && "send".equalsIgnoreCase(args[0])) {
             final User u;
@@ -286,6 +272,18 @@ public class Commandmail extends EssentialsCommand {
         throw new NotEnoughArgumentsException();
     }
 
+    protected User clearMail(final Server server, final String[] args) throws Exception {
+        final User u;
+        try {
+            u = getPlayer(server, args[1], true, true);
+        } catch (final PlayerNotFoundException e) {
+            throw new Exception(tl("playerNeverOnServer", args[1]));
+        }
+        u.setMailList(null);
+
+        return u;
+    }
+
     private class SendAll implements Runnable {
         private final IMessageRecipient messageRecipient;
         private final String message;
@@ -329,7 +327,7 @@ public class Commandmail extends EssentialsCommand {
             }
             return options;
         } else if (args.length == 2) {
-            if ((args[0].equalsIgnoreCase("send") && user.isAuthorized("essentials.mail.send")) || (args[0].equalsIgnoreCase("sendtemp") && user.isAuthorized("essentials.mail.sendtemp")) || (args[0].equalsIgnoreCase("clear"))) {
+            if ((args[0].equalsIgnoreCase("send") && user.isAuthorized("essentials.mail.send")) || (args[0].equalsIgnoreCase("sendtemp") && user.isAuthorized("essentials.mail.sendtemp")) || ((args[0].equalsIgnoreCase("clear"))&& user.isAuthorized("essentials.mail.clear.others"))) {
                 return getPlayers(server, user);
             } else if (args[0].equalsIgnoreCase("sendtempall") && user.isAuthorized("essentials.mail.sendtempall")) {
                 return COMMON_DATE_DIFFS;
