@@ -21,7 +21,7 @@ public class Commandrenamehome extends EssentialsCommand {
     @Override
     public void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception {
         User usersHome = user;
-        final String name;
+        final String oldName;
         final String newName;
 
         // Allowing both formats /renamehome jroy home1 home | /sethome jroy:home1 home
@@ -30,7 +30,7 @@ public class Commandrenamehome extends EssentialsCommand {
             newName = args[1].toLowerCase(Locale.ENGLISH);
 
             if (nameParts.length == 2) {
-                name = nameParts[1].toLowerCase(Locale.ENGLISH);
+                oldName = nameParts[1].toLowerCase(Locale.ENGLISH);
                 if (user.isAuthorized("essentials.renamehome.others")) {
                     usersHome = getPlayer(server, nameParts[0], true, true);
                     if (usersHome == null) {
@@ -38,7 +38,7 @@ public class Commandrenamehome extends EssentialsCommand {
                     }
                 }
             } else {
-                name = args[0].toLowerCase(Locale.ENGLISH);
+                oldName = args[0].toLowerCase(Locale.ENGLISH);
             }
         } else if (args.length == 3) {
             if (!user.isAuthorized("essentials.renamehome.others")) {
@@ -50,18 +50,18 @@ public class Commandrenamehome extends EssentialsCommand {
                 throw new PlayerNotFoundException();
             }
 
-            name = args[1].toLowerCase(Locale.ENGLISH);
+            oldName = args[1].toLowerCase(Locale.ENGLISH);
             newName = args[2].toLowerCase(Locale.ENGLISH);
         } else {
             throw new NotEnoughArgumentsException();
         }
 
-        if ("bed".equals(newName) || NumberUtil.isInt(newName) || "bed".equals(name) || NumberUtil.isInt(name)) {
+        if ("bed".equals(newName) || NumberUtil.isInt(newName) || "bed".equals(oldName) || NumberUtil.isInt(oldName)) {
             throw new NoSuchFieldException(tl("invalidHomeName"));
         }
 
-        usersHome.renameHome(name, newName);
-        user.sendMessage(tl("homeRenamed", name, newName));
+        usersHome.renameHome(oldName, newName);
+        user.sendMessage(tl("homeRenamed", oldName, newName));
         usersHome.setLastHomeConfirmation(null);
 
     }
