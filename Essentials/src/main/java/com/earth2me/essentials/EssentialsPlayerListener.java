@@ -308,6 +308,7 @@ public class EssentialsPlayerListener implements Listener, FakeAccessor {
 
         ess.getBackup().onPlayerJoin();
         final User dUser = ess.getUser(player);
+        dUser.update(player);
 
         dUser.startTransaction();
         if (dUser.isNPC()) {
@@ -367,7 +368,7 @@ public class EssentialsPlayerListener implements Listener, FakeAccessor {
                 } else if (ess.getSettings().isCustomJoinMessage()) {
                     final String msg = (newUsername ? ess.getSettings().getCustomNewUsernameMessage() : ess.getSettings().getCustomJoinMessage())
                         .replace("{PLAYER}", player.getDisplayName()).replace("{USERNAME}", player.getName())
-                        .replace("{UNIQUE}", NumberFormat.getInstance().format(ess.getUserMap().getUniqueUsers()))
+                        .replace("{UNIQUE}", NumberFormat.getInstance().format(ess.getUsers().getUserCount()))
                         .replace("{ONLINE}", NumberFormat.getInstance().format(ess.getOnlinePlayers().size()))
                         .replace("{UPTIME}", DateUtil.formatDateDiff(ManagementFactory.getRuntimeMXBean().getStartTime()))
                         .replace("{PREFIX}", FormatUtil.replaceFormat(ess.getPermissionsHandler().getPrefix(player)))
@@ -527,6 +528,7 @@ public class EssentialsPlayerListener implements Listener, FakeAccessor {
     public void onPlayerLogin(final PlayerLoginEvent event) {
         if (event.getResult() == Result.KICK_FULL) {
             final User kfuser = ess.getUser(event.getPlayer());
+            kfuser.update(event.getPlayer());
             if (kfuser.isAuthorized("essentials.joinfullserver")) {
                 event.allow();
                 return;
