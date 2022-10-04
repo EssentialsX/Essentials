@@ -199,6 +199,16 @@ public abstract class UserData extends PlayerExtension implements IConf {
         }
     }
 
+    public void renameHome(final String name, final String newName) throws Exception {
+        final LazyLocation location = holder.homes().remove(name);
+        if (location != null) {
+            holder.homes().put(StringUtil.safeString(newName), location);
+            config.save();
+        } else {
+            throw new Exception(tl("invalidHome", name));
+        }
+    }
+
     public boolean hasHome() {
         return !holder.homes().isEmpty();
     }
