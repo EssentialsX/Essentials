@@ -261,8 +261,8 @@ public class Commandmail extends EssentialsCommand {
 
         @Override
         public void run() {
-            for (UUID userid : ess.getUserMap().getAllUniqueUsers()) {
-                final User user = ess.getUserMap().getUser(userid);
+            for (final UUID u : ess.getUsers().getAllUserUUIDs()) {
+                final User user = ess.getUsers().loadUncachedUser(u);
                 if (user != null) {
                     user.sendMail(messageRecipient, message, dateDiff);
                 }
