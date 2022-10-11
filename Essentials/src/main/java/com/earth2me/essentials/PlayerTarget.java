@@ -1,18 +1,21 @@
 package com.earth2me.essentials;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 public class PlayerTarget implements ITarget {
-    private final String name;
+    private final Player player;
 
     public PlayerTarget(final Player entity) {
-        this.name = entity.getName();
+        this.player = entity;
+    }
+
+    public Player getPlayer() {
+        return player;
     }
 
     @Override
     public Location getLocation() {
-        return Bukkit.getServer().getPlayerExact(name).getLocation();
+        return getPlayer().getLocation();
     }
 }
