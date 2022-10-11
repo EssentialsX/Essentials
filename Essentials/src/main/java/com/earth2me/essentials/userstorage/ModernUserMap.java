@@ -166,6 +166,10 @@ public class ModernUserMap extends CacheLoader<UUID, User> implements IUserMap {
         return null;
     }
 
+    public void addCachedUser(final User user) {
+        userCache.put(user.getUUID(), user);
+    }
+
     @Override
     public Map<String, UUID> getNameCache() {
         return uuidCache.getNameCache();
