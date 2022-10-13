@@ -39,6 +39,7 @@ import com.earth2me.essentials.textreader.IText;
 import com.earth2me.essentials.textreader.KeywordReplacer;
 import com.earth2me.essentials.textreader.SimpleTextInput;
 import com.earth2me.essentials.updatecheck.UpdateChecker;
+import com.earth2me.essentials.userstorage.ModernUserMap;
 import com.earth2me.essentials.utils.FormatUtil;
 import com.earth2me.essentials.utils.VersionUtil;
 import io.papermc.lib.PaperLib;
@@ -143,7 +144,9 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
     private transient CustomItemResolver customItemResolver;
     private transient PermissionsHandler permissionsHandler;
     private transient AlternativeCommandsHandler alternativeCommandsHandler;
-    private transient UserMap userMap;
+    @Deprecated
+    private transient UserMap legacyUserMap;
+    private transient ModernUserMap userMap;
     private transient BalanceTopImpl balanceTop;
     private transient ExecuteTimer execTimer;
     private transient MailService mail;
@@ -194,7 +197,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
         LOGGER.log(Level.INFO, dataFolder.toString());
         settings = new Settings(this);
         mail = new MailServiceImpl(this);
-        userMap = new UserMap(this);
+        userMap = new ModernUserMap(this);
         balanceTop = new BalanceTopImpl(this);
         permissionsHandler = new PermissionsHandler(this, false);
         Economy.setEss(this);
@@ -273,11 +276,14 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
             confList.add(settings);
             execTimer.mark("Settings");
 
+            upgrade.preModules();
+            execTimer.mark("Upgrade2");
+
             mail = new MailServiceImpl(this);
             execTimer.mark("Init(Mail)");
 
-            userMap = new UserMap(this);
-            confList.add(userMap);
+            userMap = new ModernUserMap(this);
+            legacyUserMap = new UserMap(userMap);
             execTimer.mark("Init(Usermap)");
 
             balanceTop = new BalanceTopImpl(this);
@@ -289,7 +295,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
             execTimer.mark("Kits");
 
             upgrade.afterSettings();
-            execTimer.mark("Upgrade2");
+            execTimer.mark("Upgrade3");
 
             warps = new Warps(this.getDataFolder());
             confList.add(warps);
@@ -536,7 +542,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
 
         Economy.setEss(null);
         Trade.closeLog();
-        getUserMap().getUUIDMap().shutdown();
+        getUsers().shutdown();
 
         HandlerList.unregisterAll(this);
     }
@@ -1015,7 +1021,12 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
             if (getSettings().isDebug()) {
                 LOGGER.log(Level.INFO, "Constructing new userfile from base player " + base.getName());
             }
-            user = new User(base, this);
+            user = userMap.loadUncachedUser(base);
+
+            // The above method will end up creating a new user, but it will not be added to the cache.
+            // Since we already call UserMap#getUser() above, we are already okay with adding the user to the cache,
+            // so we need to manually add the user to the cache in order to avoid a memory leak and maintain behavior.
+            userMap.addCachedUser(user);
         } else {
             user.update(base);
         }
@@ -1151,7 +1162,13 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
     }
 
     @Override
+    @Deprecated
     public UserMap getUserMap() {
+        return legacyUserMap;
+    }
+
+    @Override
+    public ModernUserMap getUsers() {
         return userMap;
     }
 

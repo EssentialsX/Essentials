@@ -7,6 +7,7 @@ import com.earth2me.essentials.commands.IEssentialsCommand;
 import com.earth2me.essentials.commands.PlayerNotFoundException;
 import com.earth2me.essentials.perm.PermissionsHandler;
 import com.earth2me.essentials.updatecheck.UpdateChecker;
+import com.earth2me.essentials.userstorage.IUserMap;
 import net.essentialsx.api.v2.services.BalanceTop;
 import net.essentialsx.api.v2.services.mail.MailService;
 import org.bukkit.Server;
@@ -105,6 +106,9 @@ public interface IEssentials extends Plugin {
 
     IItemDb getItemDb();
 
+    IUserMap getUsers();
+
+    @Deprecated
     UserMap getUserMap();
 
     BalanceTop getBalanceTop();
