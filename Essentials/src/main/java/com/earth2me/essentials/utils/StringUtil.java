@@ -25,6 +25,9 @@ public final class StringUtil {
 
     //Used to clean strings/names before saving as filenames/permissions
     public static String safeString(final String string) {
+        if (string == null) {
+            return null;
+        }
         return STRICTINVALIDCHARS.matcher(string.toLowerCase(Locale.ENGLISH)).replaceAll("_");
     }
 

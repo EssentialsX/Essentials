@@ -283,6 +283,7 @@ player-commands:
   - protect
   - r
   - rules
+  - renamehome
   - realname
   - seen
   - sell

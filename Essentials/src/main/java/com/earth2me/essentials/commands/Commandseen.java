@@ -2,7 +2,6 @@ package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.User;
-import com.earth2me.essentials.UserMap;
 import com.earth2me.essentials.craftbukkit.BanLookup;
 import com.earth2me.essentials.utils.DateUtil;
 import com.earth2me.essentials.utils.FormatUtil;
@@ -62,7 +61,7 @@ public class Commandseen extends EssentialsCommand {
             ess.getScheduler().runTaskAsynchronously(ess, new Runnable() {
                 @Override
                 public void run() {
-                    final User userFromBukkit = ess.getUserMap().getUserFromBukkit(args[0]);
+                    final User userFromBukkit = ess.getUsers().getUser(args[0]);
                     try {
                         if (userFromBukkit != null) {
                             showUserSeen(userFromBukkit);
@@ -102,8 +101,8 @@ public class Commandseen extends EssentialsCommand {
         user.setDisplayNick();
         sender.sendTl("seenOnline", user.getDisplayName(), DateUtil.formatDateDiff(user.getLastLogin()));
 
-        final List<String> history = ess.getUserMap().getUserHistory(user.getBase().getUniqueId());
-        if (history != null && history.size() > 1) {
+        final List<String> history = user.getPastUsernames();
+        if (history != null && !history.isEmpty()) {
             sender.sendTl("seenAccounts", StringUtil.joinListSkip(", ", user.getName(), history));
         }
 
@@ -138,7 +137,7 @@ public class Commandseen extends EssentialsCommand {
         user.setDisplayNick();
         if (user.getLastLogout() > 0) {
             sender.sendTl("seenOffline", user.getName(), DateUtil.formatDateDiff(user.getLastLogout()));
-            final List<String> history = ess.getUserMap().getUserHistory(user.getBase().getUniqueId());
+            final List<String> history = user.getPastUsernames();
             if (history != null && history.size() > 1) {
                 sender.sendTl("seenAccounts", StringUtil.joinListSkip(", ", user.getName(), history));
             }
@@ -191,14 +190,12 @@ public class Commandseen extends EssentialsCommand {
     }
 
     private void seenIP(final CommandSource sender, final String ipAddress, final String display) {
-        final UserMap userMap = ess.getUserMap();
-
         sender.sendTl("runningPlayerMatch", display);
 
         ess.runTaskAsynchronously(() -> {
             final List<String> matches = new ArrayList<>();
-            for (final UUID u : userMap.getAllUniqueUsers()) {
-                final User user = ess.getUserMap().getUser(u);
+            for (final UUID u : ess.getUsers().getAllUserUUIDs()) {
+                final User user = ess.getUsers().loadUncachedUser(u);
                 if (user == null) {
                     continue;
                 }

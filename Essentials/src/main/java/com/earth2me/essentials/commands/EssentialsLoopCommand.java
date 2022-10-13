@@ -32,9 +32,9 @@ public abstract class EssentialsLoopCommand extends EssentialsCommand {
             final User matchedUser = ess.getUser(uuid);
             userConsumer.accept(matchedUser);
         } else if (matchWildcards && searchTerm.contentEquals("**")) {
-            for (final UUID sUser : ess.getUserMap().getAllUniqueUsers()) {
-                final User matchedUser = ess.getUser(sUser);
-                userConsumer.accept(matchedUser);
+            for (final UUID u : ess.getUsers().getAllUserUUIDs()) {
+                final User user = ess.getUsers().loadUncachedUser(u);
+                userConsumer.accept(user);
             }
         } else if (matchWildcards && searchTerm.contentEquals("*")) {
             final boolean skipHidden = sender.isPlayer() && !ess.getUser(sender.getPlayer()).canInteractVanished();
