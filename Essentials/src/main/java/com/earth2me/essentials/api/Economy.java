@@ -3,6 +3,7 @@ package com.earth2me.essentials.api;
 import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.config.EssentialsUserConfiguration;
+import com.earth2me.essentials.userstorage.ModernUserMap;
 import com.earth2me.essentials.utils.NumberUtil;
 import com.earth2me.essentials.utils.StringUtil;
 import com.google.common.base.Charsets;
@@ -41,9 +42,9 @@ public class Economy {
         ess = aEss;
     }
 
-    private static void createNPCFile(String name) {
+    private static void createNPCFile(final String unsanitizedName) {
         final File folder = new File(ess.getDataFolder(), "userdata");
-        name = StringUtil.safeString(name);
+        final String name = ess.getSettings().isSafeUsermap() ? StringUtil.safeString(unsanitizedName) : unsanitizedName;
         if (!folder.exists()) {
             if (!folder.mkdirs()) {
                 throw new RuntimeException("Error while creating userdata directory!");
@@ -59,9 +60,12 @@ public class Economy {
         npcConfig.load();
         npcConfig.setProperty("npc", true);
         npcConfig.setProperty("last-account-name", name);
+        npcConfig.setProperty("npc-name", unsanitizedName);
         npcConfig.setProperty("money", ess.getSettings().getStartingBalance());
         npcConfig.blockingSave();
-        ess.getUserMap().trackUUID(npcUUID, name, false);
+        // This will load the NPC into the UserMap + UUID cache
+        ((ModernUserMap) ess.getUsers()).addCachedNpcName(npcUUID, name);
+        ess.getUsers().getUser(npcUUID);
     }
 
     private static void deleteNPC(final String name) {

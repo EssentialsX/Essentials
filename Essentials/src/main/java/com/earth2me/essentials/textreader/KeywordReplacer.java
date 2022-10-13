@@ -253,7 +253,7 @@ public class KeywordReplacer implements IText {
                         replacer = Integer.toString(ess.getOnlinePlayers().size() - playerHidden);
                         break;
                     case UNIQUE:
-                        replacer = NumberFormat.getInstance().format(ess.getUserMap().getUniqueUsers());
+                        replacer = NumberFormat.getInstance().format(ess.getUsers().getUserCount());
                         break;
                     case WORLDS:
                         final StringBuilder worldsBuilder = new StringBuilder();
