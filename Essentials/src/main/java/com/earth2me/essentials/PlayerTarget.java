@@ -12,7 +12,6 @@ public class PlayerTarget implements ITarget {
     public PlayerTarget(final Player entity) {
         this.uuid = entity.getUniqueId();
     }
-    }
 
     @Override
     public Location getLocation() {
