@@ -54,7 +54,6 @@ jobs:
         ./gradlew publish
 
     - name: Prepare Javadocs
-      if: ${{ success() && github.event_name == 'push' && github.repository == 'EssentialsX/Essentials' && github.ref == 'refs/heads/2.x' }}
       run: |
         mv Essentials/build/docs/javadoc/ javadocs/
         cp -r EssentialsAntiBuild/build/docs/javadoc/ javadocs/EssentialsAntiBuild/
@@ -65,11 +64,32 @@ jobs:
         cp -r EssentialsSpawn/build/docs/javadoc/ javadocs/EssentialsSpawn/
         cp -r EssentialsXMPP/build/docs/javadoc/ javadocs/EssentialsXMPP/
 
-    - name: Deploy Javadocs
-      if: ${{ success() && github.event_name == 'push' && github.repository == 'EssentialsX/Essentials' && github.ref == 'refs/heads/2.x' }}
-      uses: netlify/actions/cli@master
+    - name: Archive Javadocs
+      uses: actions/upload-artifact@master
       with:
-        args: deploy --dir=javadocs/ --prod --message="GitHubActionsDeploy"
+        name: javadocs
+        path: javadocs/
+
+  publish-jd:
+    name: Publish Javadocs
+    needs: build
+    if: ${{ github.event_name == 'push' && github.repository == 'EssentialsX/Essentials' && github.ref == 'refs/heads/2.x' }}
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Setup Node
+      uses: actions/setup-node@v3
+      with:
+        node-version: 16
+
+    - name: Download Javadocs
+      uses: actions/download-artifact@master
+      with:
+        name: javadocs
+        path: javadocs/
+
+    - name: Deploy Javadocs
+      run: npx netlify-cli deploy --dir=javadocs/ --prod --message="GitHubActionsDeploy"
       env:
         NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_JD_AUTH_TOKEN }}
         NETLIFY_SITE_ID: ${{ secrets.NETLIFY_JD_2X_SITE_ID }}
