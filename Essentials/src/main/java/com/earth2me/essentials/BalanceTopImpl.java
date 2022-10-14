@@ -28,8 +28,8 @@ public class BalanceTopImpl implements BalanceTop {
     private void calculateBalanceTopMap() {
         final List<Entry> entries = new LinkedList<>();
         BigDecimal newTotal = BigDecimal.ZERO;
-        for (UUID u : ess.getUserMap().getAllUniqueUsers()) {
-            final User user = ess.getUserMap().getUser(u);
+        for (UUID u : ess.getUsers().getAllUserUUIDs()) {
+            final User user = ess.getUsers().loadUncachedUser(u);
             if (user != null) {
                 if (!ess.getSettings().isNpcsInBalanceRanking() && user.isNPC()) {
                     // Don't list NPCs in output

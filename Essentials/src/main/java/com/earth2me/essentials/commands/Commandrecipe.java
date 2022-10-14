@@ -155,6 +155,7 @@ public class Commandrecipe extends EssentialsCommand {
         final List<ItemStack> ingredients = recipe.getIngredientList();
         if (showWindow) {
             final User user = ess.getUser(sender.getPlayer());
+            user.getBase().closeInventory();
             user.setRecipeSee(true);
             final InventoryView view = user.getBase().openWorkbench(null, true);
             for (int i = 0; i < ingredients.size(); i++) {
