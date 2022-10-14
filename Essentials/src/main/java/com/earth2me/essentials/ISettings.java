@@ -50,6 +50,12 @@ public interface ISettings extends IConf {
     Map<String, BigDecimal> getCommandCosts();
 
     @Deprecated
+    boolean isShoutDefault();
+
+    boolean isPersistShout();
+
+    boolean isChatQuestionEnabled();
+
     BigDecimal getCommandCost(IEssentialsCommand cmd);
 
     @Deprecated
@@ -233,6 +239,8 @@ public interface ISettings extends IConf {
 
     boolean isWorldHomePermissions();
 
+    int getMaxTreeCommandRange();
+
     boolean registerBackInListener();
 
     boolean getDisableItemPickupWhileAfk();
@@ -242,6 +250,8 @@ public interface ISettings extends IConf {
     EventPriority getSpawnJoinPriority();
 
     long getTpaAcceptCancellation();
+
+    int getTpaMaxRequests();
 
     long getTeleportInvulnerability();
 

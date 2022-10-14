@@ -40,14 +40,12 @@ import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Predicate;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
 import static com.earth2me.essentials.I18n.tl;
 
 public class Settings implements net.ess3.api.ISettings {
-    private static final Logger logger = Logger.getLogger("Essentials");
     private static final BigDecimal DEFAULT_MAX_MONEY = new BigDecimal("10000000000000");
     private static final BigDecimal DEFAULT_MIN_MONEY = new BigDecimal("-10000000000000");
     private final transient EssentialsConfiguration config;
@@ -224,6 +222,21 @@ public class Settings implements net.ess3.api.ISettings {
     @Override
     public char getChatQuestion() {
         return chatQuestion;
+    }
+
+    @Override
+    public boolean isShoutDefault() {
+        return config.getBoolean("chat.shout-default", false);
+    }
+
+    @Override
+    public boolean isPersistShout() {
+        return config.getBoolean("chat.persist-shout", false);
+    }
+
+    @Override
+    public boolean isChatQuestionEnabled() {
+        return config.getBoolean("chat.question-enabled", true);
     }
 
     public boolean _isTeleportSafetyEnabled() {
@@ -676,7 +689,7 @@ public class Settings implements net.ess3.api.ISettings {
             boolean mapModified = false;
             if (!disabledBukkitCommands.isEmpty()) {
                 if (isDebug()) {
-                    logger.log(Level.INFO, "Re-adding " + disabledBukkitCommands.size() + " disabled commands!");
+                    ess.getLogger().log(Level.INFO, "Re-adding " + disabledBukkitCommands.size() + " disabled commands!");
                 }
                 ess.getKnownCommandsProvider().getKnownCommands().putAll(disabledBukkitCommands);
                 disabledBukkitCommands.clear();
@@ -688,12 +701,12 @@ public class Settings implements net.ess3.api.ISettings {
                 final Command toDisable = ess.getPluginCommand(effectiveAlias);
                 if (toDisable != null) {
                     if (isDebug()) {
-                        logger.log(Level.INFO, "Attempting removal of " + effectiveAlias);
+                        ess.getLogger().log(Level.INFO, "Attempting removal of " + effectiveAlias);
                     }
                     final Command removed = ess.getKnownCommandsProvider().getKnownCommands().remove(effectiveAlias);
                     if (removed != null) {
                         if (isDebug()) {
-                            logger.log(Level.INFO, "Adding command " + effectiveAlias + " to disabled map!");
+                            ess.getLogger().log(Level.INFO, "Adding command " + effectiveAlias + " to disabled map!");
                         }
                         disabledBukkitCommands.put(effectiveAlias, removed);
                     }
@@ -710,7 +723,7 @@ public class Settings implements net.ess3.api.ISettings {
 
             if (mapModified) {
                 if (isDebug()) {
-                    logger.log(Level.INFO, "Syncing commands");
+                    ess.getLogger().log(Level.INFO, "Syncing commands");
                 }
                 if (reloadCount.get() < 2) {
                     ess.scheduleSyncDelayedTask(() -> ess.getSyncCommandsProvider().syncCommands());
@@ -789,7 +802,7 @@ public class Settings implements net.ess3.api.ISettings {
         //noinspection deprecation
         final IItemDb itemDb = ess.getItemDb();
         if (itemDb == null || !itemDb.isReady()) {
-            logger.log(Level.FINE, "Skipping item spawn blacklist read; item DB not yet loaded.");
+            ess.getLogger().log(Level.FINE, "Skipping item spawn blacklist read; item DB not yet loaded.");
             return epItemSpwn;
         }
         for (String itemName : config.getString("item-spawn-blacklist", "").split(",")) {
@@ -801,7 +814,7 @@ public class Settings implements net.ess3.api.ISettings {
                 final ItemStack iStack = itemDb.get(itemName);
                 epItemSpwn.add(iStack.getType());
             } catch (final Exception ex) {
-                logger.log(Level.SEVERE, tl("unknownItemInList", itemName, "item-spawn-blacklist"), ex);
+                ess.getLogger().log(Level.SEVERE, tl("unknownItemInList", itemName, "item-spawn-blacklist"), ex);
             }
         }
         return epItemSpwn;
@@ -829,7 +842,7 @@ public class Settings implements net.ess3.api.ISettings {
             try {
                 newSigns.add(Signs.valueOf(signName).getSign());
             } catch (final Exception ex) {
-                logger.log(Level.SEVERE, tl("unknownItemInList", signName, "enabledSigns"));
+                ess.getLogger().log(Level.SEVERE, tl("unknownItemInList", signName, "enabledSigns"));
                 continue;
             }
             signsEnabled = true;
@@ -943,7 +956,7 @@ public class Settings implements net.ess3.api.ISettings {
             }
 
             if (mat == null) {
-                logger.log(Level.SEVERE, tl("unknownItemInList", itemName, configName));
+                ess.getLogger().log(Level.SEVERE, tl("unknownItemInList", itemName, configName));
             } else {
                 list.add(mat);
             }
@@ -1217,6 +1230,11 @@ public class Settings implements net.ess3.api.ISettings {
         return registerBackInListener;
     }
 
+    @Override
+    public int getMaxTreeCommandRange() {
+        return config.getInt("tree-command-range-limit", 300);
+    }
+
     private boolean _registerBackInListener() {
         return config.getBoolean("register-back-in-listener", false);
     }
@@ -1267,6 +1285,11 @@ public class Settings implements net.ess3.api.ISettings {
     @Override
     public long getTpaAcceptCancellation() {
         return config.getLong("tpa-accept-cancellation", 120);
+    }
+
+    @Override
+    public int getTpaMaxRequests() {
+        return config.getInt("tpa-max-requests", 5);
     }
 
     private long _getTeleportInvulnerability() {
@@ -1679,7 +1702,7 @@ public class Settings implements net.ess3.api.ISettings {
             try {
                 newSigns.add(Signs.valueOf(signName).getSign());
             } catch (final Exception ex) {
-                logger.log(Level.SEVERE, tl("unknownItemInList", signName, "unprotected-sign-names"));
+                ess.getLogger().log(Level.SEVERE, tl("unknownItemInList", signName, "unprotected-sign-names"));
             }
         }
         return newSigns;
@@ -1864,7 +1887,7 @@ public class Settings implements net.ess3.api.ISettings {
             try {
                 blacklist.add(Pattern.compile(entry).asPredicate());
             } catch (final PatternSyntaxException e) {
-                logger.warning("Invalid nickname blacklist regex: " + entry);
+                ess.getLogger().warning("Invalid nickname blacklist regex: " + entry);
             }
         });
 

@@ -1,5 +1,6 @@
 package com.earth2me.essentials.antibuild;
 
+import com.earth2me.essentials.EssentialsLogger;
 import com.earth2me.essentials.metrics.MetricsWrapper;
 import org.bukkit.Material;
 import org.bukkit.plugin.Plugin;
@@ -27,6 +28,7 @@ public class EssentialsAntiBuild extends JavaPlugin implements IAntiBuild {
         if (essPlugin == null || !essPlugin.isEnabled()) {
             return;
         }
+        EssentialsLogger.updatePluginLogger(this);
         ess = new EssentialsConnect(essPlugin, this);
 
         final EssentialsAntiBuildListener blockListener = new EssentialsAntiBuildListener(this);

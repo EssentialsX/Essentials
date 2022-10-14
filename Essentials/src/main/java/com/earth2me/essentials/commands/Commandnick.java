@@ -24,9 +24,6 @@ public class Commandnick extends EssentialsLoopCommand {
         if (args.length < 1) {
             throw new NotEnoughArgumentsException();
         }
-        if (!ess.getSettings().changeDisplayName()) {
-            throw new Exception(tl("nickDisplayName"));
-        }
 
         if (args.length > 1 && user.isAuthorized("essentials.nick.others")) {
             loopOfflinePlayers(server, user.getSource(), false, true, args[0], formatNickname(user, args[1]).split(" "));
@@ -40,9 +37,6 @@ public class Commandnick extends EssentialsLoopCommand {
     public void run(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception {
         if (args.length < 2) {
             throw new NotEnoughArgumentsException();
-        }
-        if (!ess.getSettings().changeDisplayName()) {
-            throw new Exception(tl("nickDisplayName"));
         }
         loopOfflinePlayers(server, sender, false, true, args[0], formatNickname(null, args[1]).split(" "));
         sender.sendMessage(tl("nickChanged"));
@@ -59,12 +53,12 @@ public class Commandnick extends EssentialsLoopCommand {
             if (!target.getDisplayName().equalsIgnoreCase(target.getDisplayName())) {
                 target.sendMessage(tl("nickNoMore"));
             }
-            target.sendMessage(tl("nickSet", target.getDisplayName()));
+            target.sendMessage(tl("nickSet", ess.getSettings().changeDisplayName() ? target.getDisplayName() : nick));
         } else if (nickInUse(target, nick)) {
             throw new NotEnoughArgumentsException(tl("nickInUse"));
         } else {
             setNickname(server, sender, target, nick);
-            target.sendMessage(tl("nickSet", target.getDisplayName()));
+            target.sendMessage(tl("nickSet", ess.getSettings().changeDisplayName() ? target.getDisplayName() : nick));
         }
     }
 
@@ -76,7 +70,7 @@ public class Commandnick extends EssentialsLoopCommand {
             throw new Exception(tl("nickTooLong"));
         } else if (FormatUtil.stripFormat(newNick).length() < 1) {
             throw new Exception(tl("nickNamesAlpha"));
-        } else if (user != null && user.isAuthorized("essentials.nick.changecolors") && !user.isAuthorized("essentials.nick.changecolors.bypass") && !FormatUtil.stripFormat(newNick).equals(user.getName())) {
+        } else if (user != null && user.isAuthorized("essentials.nick.changecolors") && !user.isAuthorized("essentials.nick.changecolors.bypass") && !FormatUtil.stripFormat(newNick).equals(user.getName()) && !nick.equalsIgnoreCase("off")) {
             throw new Exception(tl("nickNamesOnlyColorChanges"));
         } else if (user != null && !user.isAuthorized("essentials.nick.blacklist.bypass") && isNickBanned(newNick)) {
             throw new Exception(tl("nickNameBlacklist", nick));

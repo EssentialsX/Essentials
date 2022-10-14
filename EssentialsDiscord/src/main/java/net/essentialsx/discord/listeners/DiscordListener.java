@@ -1,6 +1,7 @@
 package net.essentialsx.discord.listeners;
 
 import com.earth2me.essentials.utils.FormatUtil;
+import com.earth2me.essentials.utils.StringUtil;
 import com.vdurmont.emoji.EmojiParser;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
@@ -8,19 +9,25 @@ import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.ess3.api.IUser;
+import net.essentialsx.api.v2.events.discord.DiscordRelayEvent;
+import net.essentialsx.discord.EssentialsDiscord;
 import net.essentialsx.discord.JDADiscordService;
+import net.essentialsx.discord.interactions.InteractionChannelImpl;
+import net.essentialsx.discord.interactions.InteractionMemberImpl;
 import net.essentialsx.discord.util.DiscordUtil;
 import net.essentialsx.discord.util.MessageUtil;
-import org.apache.commons.lang.StringUtils;
+import org.bukkit.Bukkit;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
 
 public class DiscordListener extends ListenerAdapter {
-    private final static Logger logger = Logger.getLogger("EssentialsDiscord");
+    private final static Logger logger = EssentialsDiscord.getWrappedLogger();
 
     private final JDADiscordService plugin;
 
@@ -71,7 +78,7 @@ public class DiscordListener extends ListenerAdapter {
         }
 
         // Strip message
-        final String strippedMessage = StringUtils.abbreviate(
+        final String strippedMessage = StringUtil.abbreviate(
                 messageBuilder.toString()
                         .replace(plugin.getSettings().isChatFilterNewlines() ? '\n' : ' ', ' ')
                         .trim(), plugin.getSettings().getChatDiscordMaxLength());
@@ -88,7 +95,7 @@ public class DiscordListener extends ListenerAdapter {
             return;
         }
 
-        final String formattedMessage = EmojiParser.parseToAliases(MessageUtil.formatMessage(plugin.getPlugin().getSettings().getDiscordToMcFormat(),
+        String formattedMessage = EmojiParser.parseToAliases(MessageUtil.formatMessage(plugin.getPlugin().getSettings().getDiscordToMcFormat(),
                 event.getChannel().getName(), user.getName(), user.getDiscriminator(), user.getAsTag(),
                 effectiveName, DiscordUtil.getRoleColorFormat(member), finalMessage, DiscordUtil.getRoleFormat(member)), EmojiParser.FitzpatrickAction.REMOVE);
 
@@ -99,15 +106,31 @@ public class DiscordListener extends ListenerAdapter {
             }
         }
 
-        for (IUser essUser : plugin.getPlugin().getEss().getOnlineUsers()) {
-            for (String group : keys) {
+        final List<IUser> viewers = new ArrayList<>();
+        for (final IUser essUser : plugin.getPlugin().getEss().getOnlineUsers()) {
+            for (final String group : keys) {
                 final String perm = "essentials.discord.receive." + group;
                 final boolean primaryOverride = plugin.getSettings().isAlwaysReceivePrimary() && group.equalsIgnoreCase("primary");
                 if (primaryOverride || (essUser.isPermissionSet(perm) && essUser.isAuthorized(perm))) {
-                    essUser.sendMessage(formattedMessage);
+                    viewers.add(essUser);
                     break;
                 }
             }
+        }
+        // Do not create the event specific objects if there are no listeners
+        if (DiscordRelayEvent.getHandlerList().getRegisteredListeners().length != 0) {
+            final DiscordRelayEvent relayEvent = new DiscordRelayEvent(
+                    new InteractionMemberImpl(member), new InteractionChannelImpl(event.getChannel()),
+                    Collections.unmodifiableList(keys), event.getMessage().getContentRaw(), formattedMessage, viewers);
+            Bukkit.getPluginManager().callEvent(relayEvent);
+            if (relayEvent.isCancelled()) {
+                return;
+            }
+            formattedMessage = relayEvent.getFormattedMessage();
+        }
+
+        for (final IUser essUser : viewers) {
+            essUser.sendMessage(formattedMessage);
         }
     }
 }

@@ -3,6 +3,7 @@ package com.earth2me.essentials;
 import com.earth2me.essentials.craftbukkit.InventoryWorkaround;
 import com.earth2me.essentials.craftbukkit.SetExpFix;
 import com.earth2me.essentials.utils.NumberUtil;
+import com.earth2me.essentials.utils.VersionUtil;
 import net.ess3.api.IEssentials;
 import net.ess3.api.IUser;
 import net.ess3.api.MaxMoneyException;
@@ -21,7 +22,6 @@ import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import static com.earth2me.essentials.I18n.tl;
 
@@ -79,7 +79,7 @@ public class Trade {
             try {
                 fw = new FileWriter(new File(ess.getDataFolder(), "trade.log"), true);
             } catch (final IOException ex) {
-                Logger.getLogger("Essentials").log(Level.SEVERE, null, ex);
+                Essentials.getWrappedLogger().log(Level.SEVERE, null, ex);
             }
         }
         final StringBuilder sb = new StringBuilder();
@@ -95,8 +95,10 @@ public class Trade {
         } else {
             if (charge.getItemStack() != null) {
                 sb.append(charge.getItemStack().getAmount()).append(",");
-                sb.append(charge.getItemStack().getType().toString()).append(",");
-                sb.append(charge.getItemStack().getDurability());
+                sb.append(charge.getItemStack().getType()).append(",");
+                if (VersionUtil.PRE_FLATTENING) {
+                    sb.append(charge.getItemStack().getDurability());
+                }
             }
             if (charge.getMoney() != null) {
                 sb.append(charge.getMoney()).append(",");
@@ -119,8 +121,10 @@ public class Trade {
         } else {
             if (pay.getItemStack() != null) {
                 sb.append(pay.getItemStack().getAmount()).append(",");
-                sb.append(pay.getItemStack().getType().toString()).append(",");
-                sb.append(pay.getItemStack().getDurability());
+                sb.append(pay.getItemStack().getType()).append(",");
+                if (VersionUtil.PRE_FLATTENING) {
+                    sb.append(pay.getItemStack().getDurability());
+                }
             }
             if (pay.getMoney() != null) {
                 sb.append(pay.getMoney()).append(",");
@@ -154,7 +158,7 @@ public class Trade {
             fw.write(sb.toString());
             fw.flush();
         } catch (final IOException ex) {
-            Logger.getLogger("Essentials").log(Level.SEVERE, null, ex);
+            Essentials.getWrappedLogger().log(Level.SEVERE, null, ex);
         }
     }
 
@@ -163,7 +167,7 @@ public class Trade {
             try {
                 fw.close();
             } catch (final IOException ex) {
-                Logger.getLogger("Essentials").log(Level.SEVERE, null, ex);
+                Essentials.getWrappedLogger().log(Level.SEVERE, null, ex);
             }
             fw = null;
         }

@@ -31,52 +31,67 @@ import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.GregorianCalendar;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
 import java.util.WeakHashMap;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import static com.earth2me.essentials.I18n.tl;
 
 public class User extends UserData implements Comparable<User>, IMessageRecipient, net.ess3.api.IUser {
     private static final Statistic PLAY_ONE_TICK = EnumUtil.getStatistic("PLAY_ONE_MINUTE", "PLAY_ONE_TICK");
-    private static final Logger logger = Logger.getLogger("Essentials");
+
+    // User modules
     private final IMessageRecipient messageRecipient;
     private transient final AsyncTeleport teleport;
     private transient final Teleport legacyTeleport;
+
+    // User command confirmation strings
     private final Map<User, BigDecimal> confirmingPayments = new WeakHashMap<>();
-    private transient UUID teleportRequester;
-    private transient boolean teleportRequestHere;
-    private transient Location teleportLocation;
+
+    // User teleport variables
+    private final transient LinkedHashMap<String, TpaRequest> teleportRequestQueue = new LinkedHashMap<>();
+
+    // User properties
     private transient boolean vanished;
-    private transient long teleportRequestTime;
-    private transient long lastOnlineActivity;
-    private transient long lastThrottledAction;
-    private transient long lastActivity = System.currentTimeMillis();
     private boolean hidden = false;
+    private boolean leavingHidden = false;
     private boolean rightClickJump = false;
-    private transient Location afkPosition = null;
     private boolean invSee = false;
     private boolean recipeSee = false;
     private boolean enderSee = false;
-    private transient long teleportInvulnerabilityTimestamp = 0;
     private boolean ignoreMsg = false;
+
+    // User afk variables
     private String afkMessage;
     private long afkSince;
+    private transient Location afkPosition = null;
+
+    // Misc
+    private transient long lastOnlineActivity;
+    private transient long lastThrottledAction;
+    private transient long lastActivity = System.currentTimeMillis();
+    private transient long teleportInvulnerabilityTimestamp = 0;
     private String confirmingClearCommand;
     private long lastNotifiedAboutMailsMs;
     private String lastHomeConfirmation;
     private long lastHomeConfirmationTimestamp;
-    private boolean toggleShout = false;
+    private Boolean toggleShout;
     private transient final List<String> signCopy = Lists.newArrayList("", "", "", "");
+    private transient long lastVanishTime = System.currentTimeMillis();
 
     public User(final Player base, final IEssentials ess) {
         super(base, ess);
@@ -91,9 +106,12 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
         this.messageRecipient = new SimpleMessageRecipient(ess, this);
     }
 
-    User update(final Player base) {
+    public void update(final Player base) {
         setBase(base);
-        return this;
+    }
+
+    public IEssentials getEssentials() {
+        return ess;
     }
 
     @Override
@@ -305,7 +323,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
             if (isAuthorized("essentials.itemspawn.item-all") || isAuthorized("essentials.itemspawn.item-" + name))
                 return true;
 
-            if (VersionUtil.getServerBukkitVersion().isLowerThan(VersionUtil.v1_13_0_R01)) {
+            if (VersionUtil.PRE_FLATTENING) {
                 final int id = material.getId();
                 if (isAuthorized("essentials.itemspawn.item-" + id)) return true;
             }
@@ -328,44 +346,94 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
 
     @Override
     public void requestTeleport(final User player, final boolean here) {
-        teleportRequestTime = System.currentTimeMillis();
-        teleportRequester = player == null ? null : player.getBase().getUniqueId();
-        teleportRequestHere = here;
-        if (player == null) {
-            teleportLocation = null;
-        } else {
-            teleportLocation = here ? player.getLocation() : this.getLocation();
+        final TpaRequest request = teleportRequestQueue.getOrDefault(player.getName(), new TpaRequest(player.getName(), player.getUUID()));
+        request.setTime(System.currentTimeMillis());
+        request.setHere(here);
+        request.setLocation(here ? player.getLocation() : this.getLocation());
+
+        // Handle max queue size
+        teleportRequestQueue.remove(request.getName());
+        if (teleportRequestQueue.size() >= ess.getSettings().getTpaMaxRequests()) {
+            final List<String> keys = new ArrayList<>(teleportRequestQueue.keySet());
+            teleportRequestQueue.remove(keys.get(keys.size() - 1));
         }
+
+        // Add request to queue
+        teleportRequestQueue.put(request.getName(), request);
     }
 
     @Override
+    @Deprecated
     public boolean hasOutstandingTeleportRequest() {
-        if (getTeleportRequest() != null) { // Player has outstanding teleport request.
-            final long timeout = ess.getSettings().getTpaAcceptCancellation();
-            if (timeout != 0) {
-                if ((System.currentTimeMillis() - getTeleportRequestTime()) / 1000 <= timeout) { // Player has outstanding request
-                    return true;
-                } else { // outstanding request expired.
-                    requestTeleport(null, false);
-                    return false;
+        return getNextTpaRequest(false, false, false) != null;
+    }
+
+    public Collection<String> getPendingTpaKeys() {
+        return teleportRequestQueue.keySet();
+    }
+
+    @Override
+    public boolean hasPendingTpaRequests(boolean inform, boolean excludeHere) {
+        return getNextTpaRequest(inform, false, excludeHere) != null;
+    }
+
+    public boolean hasOutstandingTpaRequest(String playerUsername, boolean here) {
+        final TpaRequest request = getOutstandingTpaRequest(playerUsername, false);
+        return request != null && request.isHere() == here;
+    }
+
+    public @Nullable TpaRequest getOutstandingTpaRequest(String playerUsername, boolean inform) {
+        if (!teleportRequestQueue.containsKey(playerUsername)) {
+            return null;
+        }
+
+        final long timeout = ess.getSettings().getTpaAcceptCancellation();
+        final TpaRequest request = teleportRequestQueue.get(playerUsername);
+        if (timeout < 1 || System.currentTimeMillis() - request.getTime() <= timeout * 1000) {
+            return request;
+        }
+        teleportRequestQueue.remove(playerUsername);
+        if (inform) {
+            sendMessage(tl("requestTimedOutFrom", ess.getUser(request.getRequesterUuid()).getDisplayName()));
+        }
+        return null;
+    }
+
+    public TpaRequest removeTpaRequest(String playerUsername) {
+        return teleportRequestQueue.remove(playerUsername);
+    }
+
+    @Override
+    public TpaRequest getNextTpaRequest(boolean inform, boolean ignoreExpirations, boolean excludeHere) {
+        if (teleportRequestQueue.isEmpty()) {
+            return null;
+        }
+
+        final long timeout = ess.getSettings().getTpaAcceptCancellation();
+        final List<String> keys = new ArrayList<>(teleportRequestQueue.keySet());
+        Collections.reverse(keys);
+
+        TpaRequest nextRequest = null;
+        for (final String key : keys) {
+            final TpaRequest request = teleportRequestQueue.get(key);
+            if (timeout < 1 || (System.currentTimeMillis() - request.getTime()) <= TimeUnit.SECONDS.toMillis(timeout)) {
+                if (excludeHere && request.isHere()) {
+                    continue;
                 }
-            } else { // outstanding request does not expire
-                return true;
+
+                if (ignoreExpirations) {
+                    return request;
+                } else if (nextRequest == null) {
+                    nextRequest = request;
+                }
+            } else {
+                if (inform) {
+                    sendMessage(tl("requestTimedOutFrom", ess.getUser(request.getRequesterUuid()).getDisplayName()));
+                }
+                teleportRequestQueue.remove(key);
             }
         }
-        return false;
-    }
-
-    public UUID getTeleportRequest() {
-        return teleportRequester;
-    }
-
-    public boolean isTpRequestHere() {
-        return teleportRequestHere;
-    }
-
-    public Location getTpRequestLocation() {
-        return teleportLocation;
+        return nextRequest;
     }
 
     public String getNick() {
@@ -451,7 +519,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
                     this.getBase().setPlayerListName(name);
                 } catch (final IllegalArgumentException e) {
                     if (ess.getSettings().isDebug()) {
-                        logger.log(Level.INFO, "Playerlist for " + name + " was not updated. Name clashed with another online player.");
+                        ess.getLogger().log(Level.INFO, "Playerlist for " + name + " was not updated. Name clashed with another online player.");
                     }
                 }
             }
@@ -569,7 +637,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
             return;
         }
 
-        this.getBase().setSleepingIgnored(this.isAuthorized("essentials.sleepingignored") || set && ess.getSettings().sleepIgnoresAfkPlayers());
+        this.getBase().setSleepingIgnored(this.isAuthorized("essentials.sleepingignored") || (set && ess.getSettings().sleepIgnoresAfkPlayers()));
         if (set && !isAfk()) {
             afkPosition = this.getLocation();
             this.afkSince = System.currentTimeMillis();
@@ -612,6 +680,16 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
     @Override
     public boolean isHidden() {
         return hidden;
+    }
+
+    @Override
+    public boolean isLeavingHidden() {
+        return leavingHidden;
+    }
+
+    @Override
+    public void setLeavingHidden(boolean leavingHidden) {
+        this.leavingHidden = leavingHidden;
     }
 
     @Override
@@ -824,8 +902,11 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
         return ess.getPermissionsHandler().canBuild(base, getGroup());
     }
 
+    @Override
+    @Deprecated
     public long getTeleportRequestTime() {
-        return teleportRequestTime;
+        final TpaRequest request = getNextTpaRequest(false, false, false);
+        return request == null ? 0L : request.getTime();
     }
 
     public boolean isInvSee() {
@@ -893,6 +974,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
                 }
             }
             setHidden(true);
+            lastVanishTime = System.currentTimeMillis();
             ess.getVanishedPlayersNew().add(getName());
             this.getBase().setMetadata("vanished", new FixedMetadataValue(ess, true));
             if (isAuthorized("essentials.vanish.effect")) {
@@ -993,7 +1075,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
 
     @Override
     public UUID getUUID() {
-        return getBase().getUniqueId();
+        return this.getBase().getUniqueId();
     }
 
     @Override
@@ -1119,6 +1201,10 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
         return isBaltopExcludeCache();
     }
 
+    public long getLastVanishTime() {
+        return lastVanishTime;
+    }
+
     @Override
     public Block getTargetBlock(int maxDistance) {
         final Block block;
@@ -1131,10 +1217,16 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
     @Override
     public void setToggleShout(boolean toggleShout) {
         this.toggleShout = toggleShout;
+        if (ess.getSettings().isPersistShout()) {
+            setShouting(toggleShout);
+        }
     }
 
     @Override
     public boolean isToggleShout() {
-        return toggleShout;
+        if (ess.getSettings().isPersistShout()) {
+            return toggleShout = isShouting();
+        }
+        return toggleShout == null ? toggleShout = ess.getSettings().isShoutDefault() : toggleShout;
     }
 }

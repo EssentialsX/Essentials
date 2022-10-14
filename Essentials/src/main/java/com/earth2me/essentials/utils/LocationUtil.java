@@ -1,7 +1,6 @@
 package com.earth2me.essentials.utils;
 
 import com.earth2me.essentials.IEssentials;
-import com.google.common.primitives.Ints;
 import net.ess3.api.IUser;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -32,6 +31,11 @@ public final class LocationUtil {
         "FLOWING_LAVA", "LAVA", "STATIONARY_LAVA");
     private static final Material PORTAL = EnumUtil.getMaterial("NETHER_PORTAL", "PORTAL");
     private static final Material LIGHT = EnumUtil.getMaterial("LIGHT");
+
+    private static final Material PATH = EnumUtil.getMaterial("GRASS_PATH");
+
+    private static final Material FARMLAND = EnumUtil.getMaterial("FARMLAND");
+
     // The player can stand inside these materials
     private static final Set<Material> HOLLOW_MATERIALS = EnumSet.noneOf(Material.class);
     private static final Set<Material> TRANSPARENT_MATERIALS = EnumSet.noneOf(Material.class);
@@ -49,6 +53,10 @@ public final class LocationUtil {
 
         // Barrier is transparent, but solid
         HOLLOW_MATERIALS.remove(Material.BARRIER);
+
+        // Path and farmland are transparent, but solid
+        HOLLOW_MATERIALS.remove(PATH);
+        HOLLOW_MATERIALS.remove(FARMLAND);
 
         // Light blocks can be passed through and are not considered transparent for some reason
         if (LIGHT != null) {
@@ -85,9 +93,13 @@ public final class LocationUtil {
     }
 
     public static Location getTarget(final LivingEntity entity) throws Exception {
+        return getTarget(entity, 300);
+    }
+
+    public static Location getTarget(final LivingEntity entity, final int maxDistance) throws Exception {
         Block block = null;
         try {
-            block = entity.getTargetBlock(TRANSPARENT_MATERIALS, 300);
+            block = entity.getTargetBlock(TRANSPARENT_MATERIALS, maxDistance);
         } catch (final NoSuchMethodError ignored) {
         } // failing now :(
         if (block == null) {
@@ -232,12 +244,12 @@ public final class LocationUtil {
             i++;
             if (i >= VOLUME.length) {
                 x = origX;
-                y = Ints.constrainToRange(origY + RADIUS, worldMinY, worldMaxY);
+                y = NumberUtil.constrainToRange(origY + RADIUS, worldMinY, worldMaxY);
                 z = origZ;
                 break;
             }
             x = origX + VOLUME[i].x;
-            y = Ints.constrainToRange(origY + VOLUME[i].y, worldMinY, worldMaxY);
+            y = NumberUtil.constrainToRange(origY + VOLUME[i].y, worldMinY, worldMaxY);
             z = origZ + VOLUME[i].z;
         }
         while (isBlockUnsafe(ess, world, x, y, z)) {
@@ -267,6 +279,7 @@ public final class LocationUtil {
         int y = (int) Math.round(loc.getY());
         final int z = loc.getBlockZ();
         int count = 0;
+        // Check whether more than 2 unsafe block are below player.
         while (LocationUtil.isBlockUnsafe(ess, world, x, y, z) && y >= ess.getWorldInfoProvider().getMinHeight(world)) {
             y--;
             count++;
@@ -275,7 +288,8 @@ public final class LocationUtil {
             }
         }
 
-        return y < 0;
+        // If not then check if player is in the void
+        return y < ess.getWorldInfoProvider().getMinHeight(world);
     }
 
     public static class Vector3D {

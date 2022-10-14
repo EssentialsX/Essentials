@@ -5,7 +5,6 @@ import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.Trade.OverflowType;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.EnumUtil;
-import com.earth2me.essentials.utils.FormatUtil;
 import com.earth2me.essentials.utils.MaterialUtil;
 import net.ess3.api.IEssentials;
 import net.ess3.api.MaxMoneyException;
@@ -123,7 +122,7 @@ public class SignProtection extends EssentialsSign {
         if (user.isAuthorized("essentials.signs.protection.override")) {
             return SignProtectionState.OWNER;
         }
-        if (FormatUtil.stripFormat(sign.getLine(3)).equalsIgnoreCase(username)) {
+        if (isOwner(user.getEssentials(), user, sign, 3, "§1")) {
             return SignProtectionState.OWNER;
         }
         for (int i = 1; i <= 2; i++) {

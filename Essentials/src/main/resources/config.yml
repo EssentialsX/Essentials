@@ -160,7 +160,7 @@ notify-player-of-mail-cooldown: 60
 #
 # If you have two plugin with the same command and you wish to force Essentials to take over, you need an alias.
 # To force essentials to take 'god' alias 'god' to 'egod'.
-# See http://wiki.bukkit.org/Commands.yml#aliases for more information.
+# See https://bukkit.fandom.com/wiki/Commands.yml#aliases for more information.
 
 overridden-commands:
 #  - god
@@ -168,7 +168,7 @@ overridden-commands:
 
 # Disabling commands here will prevent Essentials handling the command, this will not affect command conflicts.
 # You should not have to disable commands used in other plugins, they will automatically get priority.
-# See http://wiki.bukkit.org/Commands.yml#aliases to map commands to other plugins.
+# See https://bukkit.fandom.com/wiki/Commands.yml#aliases to map commands to other plugins.
 disabled-commands:
 #  - nick
 #  - clear
@@ -283,6 +283,7 @@ player-commands:
   - protect
   - r
   - rules
+  - renamehome
   - realname
   - seen
   - sell
@@ -593,6 +594,9 @@ repair-enchanted: true
 # Warning: Mixing and overleveling some enchantments can cause issues with clients, servers and plugins.
 unsafe-enchantments: false
 
+# The maximum range from the player that the /tree and /bigtree commands can spawn trees.
+tree-command-range-limit: 300
+
 #Do you want Essentials to keep track of previous location for /back in the teleport listener?
 #If you set this to true any plugin that uses teleport will have the previous location registered.
 register-back-in-listener: false
@@ -681,6 +685,11 @@ jail-online-time: false
 # Set the timeout, in seconds for players to accept a tpa before the request is cancelled.
 # Set to 0 for no timeout.
 tpa-accept-cancellation: 120
+
+# The maximum number of simultaneous tpa requests that can be pending for any player.
+# Once past this threshold, old requests will instantly time out.
+# Defaults to 5.
+tpa-max-requests: 5
 
 # Allow players to set hats by clicking on their helmet slot.
 allow-direct-hat: true
@@ -890,6 +899,15 @@ chat:
   world-aliases:
   #  plots: "&dP&r"
   #  creative: "&eC&r"
+
+  # Whether players should be placed into shout mode by default.
+  shout-default: false
+
+  # Whether a player's shout mode should persist restarts.
+  persist-shout: false
+
+  # Whether chat questions should be enabled or not.
+  question-enabled: true
 
 ############################################################
 # +------------------------------------------------------+ #

@@ -119,4 +119,20 @@ public final class NumberUtil {
         }
         return Integer.parseInt(sInt) > 0;
     }
+
+    public static boolean isNumeric(final String sNum) {
+        for (final char sChar : sNum.toCharArray()) {
+            if (!Character.isDigit(sChar)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * Backport from Guava.
+     */
+    public static int constrainToRange(int value, int min, int max) {
+        return Math.min(Math.max(value, min), max);
+    }
 }

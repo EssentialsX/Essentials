@@ -3,7 +3,6 @@ package com.earth2me.essentials.commands;
 import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.User;
 import com.google.common.collect.Lists;
-import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Server;
 import org.bukkit.World;
@@ -109,7 +108,7 @@ public class Commandnear extends EssentialsCommand {
             if (nearbyPlayer == null) {
                 continue;
             }
-            output.append(nearbyPlayer.getDisplayName()).append(ChatColor.WHITE + "(" + ChatColor.RED).append((long) nearbyPlayer.getLocation().distance(loc)).append("m" + ChatColor.WHITE + ")");
+            output.append(tl("nearbyPlayersList", nearbyPlayer.getDisplayName(), (long)nearbyPlayer.getLocation().distance(loc)));
         }
 
         return output.length() > 1 ? output.toString() : tl("none");
