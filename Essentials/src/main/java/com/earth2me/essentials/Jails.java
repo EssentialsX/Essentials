@@ -355,11 +355,7 @@ public class Jails implements net.ess3.api.IJails {
         }
 
         private boolean shouldIgnore(final Player base) {
-            if (base.getUniqueId().version() <= 2) {
-                return true;
-            }
-
-            return !ess.getOnlineModeProvider().isMaybeOfflineMode() && base.getUniqueId().version() == 3;
+            return base.getUniqueId().version() <= 2;
         }
     }
 }
