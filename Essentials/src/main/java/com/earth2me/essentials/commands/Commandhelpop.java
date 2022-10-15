@@ -36,7 +36,7 @@ public class Commandhelpop extends EssentialsCommand {
             throw new NotEnoughArgumentsException();
         }
         final String message = tl("helpOp", from, FormatUtil.stripFormat(getFinalArg(args, 0)));
-        server.getLogger().log(Level.INFO, message);
+        ess.getLogger().log(Level.INFO, message);
         ess.broadcastMessage("essentials.helpop.receive", message);
         return message;
     }
