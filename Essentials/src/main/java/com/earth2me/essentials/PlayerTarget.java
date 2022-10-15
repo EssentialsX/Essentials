@@ -7,7 +7,7 @@ import org.bukkit.entity.Player;
 import java.util.UUID;
 
 public class PlayerTarget implements ITarget {
-    public final UUID uuid;
+    private final UUID uuid;
 
     public PlayerTarget(final Player entity) {
         this.uuid = entity.getUniqueId();
