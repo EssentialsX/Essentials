@@ -69,29 +69,4 @@ public class ReflOnlineModeProvider {
             return "Unknown";
         }
     }
-
-    public boolean isMaybeOfflineMode() {
-        if (spigotBungeeGetter == null) {
-            return !Bukkit.getOnlineMode();
-        }
-
-        try {
-            if (Bukkit.getOnlineMode()) {
-                return false;
-            }
-
-            if (fancyPaperCheck) {
-                // Could be Velocity or Bungee, so do not specify.
-                return !((boolean) paperBungeeGetter.invoke());
-            }
-
-            if ((boolean) spigotBungeeGetter.invoke() && (paperBungeeGetter == null || (boolean) paperBungeeGetter.invoke())) {
-                return true;
-            }
-
-            return true;
-        } catch (Throwable ignored) {
-            return true;
-        }
-    }
 }
