@@ -355,7 +355,7 @@ public class Jails implements net.ess3.api.IJails {
         }
 
         private boolean shouldIgnore(final Player base) {
-            return base.getUniqueId().version() <= 2;
+            return base.getUniqueId().version() == 2 || base.hasMetadata("NPC");
         }
     }
 }
