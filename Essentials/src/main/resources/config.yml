@@ -27,9 +27,10 @@
 ops-name-color: '4'
 
 # The character(s) to prefix all nicknames, so that you know they are not true usernames.
+# Users with essentials.nick.hideprefix will not be prefixed with the character(s)
 nickname-prefix: '~'
 
-# The maximum length allowed in nicknames. The nickname prefix is included in this.
+# The maximum length allowed in nicknames. The nickname prefix is not included in this.
 max-nick-length: 15
 
 # A list of phrases that cannot be used in nicknames. You can include regular expressions here.
