@@ -16,7 +16,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -42,7 +41,7 @@ public class ModernUUIDCache {
      * caching the {@code last-account-name} value.
      */
     private final ConcurrentHashMap<String, UUID> nameToUuidMap = new ConcurrentHashMap<>();
-    private final CopyOnWriteArraySet<UUID> uuidCache = new CopyOnWriteArraySet<>();
+    private final Set<UUID> uuidCache = ConcurrentHashMap.newKeySet();
 
     private final ScheduledExecutorService writeExecutor = Executors.newSingleThreadScheduledExecutor();
     private final AtomicBoolean pendingNameWrite = new AtomicBoolean(false);
