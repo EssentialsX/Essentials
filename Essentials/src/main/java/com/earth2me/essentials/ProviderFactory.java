@@ -25,11 +25,12 @@ public class ProviderFactory {
     }
 
     public <P extends Provider> P get(final Class<P> providerClass) {
-        if (!this.providers.containsKey(providerClass)) {
+        final Provider provider = providers.get(providerClass);
+        if (provider == null) {
             return null;
         }
         //noinspection unchecked
-        return (P) providers.get(providerClass);
+        return (P) provider;
     }
 
     @SafeVarargs
