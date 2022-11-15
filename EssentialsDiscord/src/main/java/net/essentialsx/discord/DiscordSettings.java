@@ -91,6 +91,10 @@ public class DiscordSettings implements IConf {
         return config.getBoolean("show-discord-attachments", true);
     }
 
+    public List<String> getDiscordRolesSelection() {
+        return config.getList("discord-roles-selection", String.class);
+    }
+
     public List<String> getPermittedFormattingRoles() {
         return config.getList("permit-formatting-roles", String.class);
     }

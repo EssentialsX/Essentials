@@ -138,14 +138,17 @@ public final class DiscordUtil {
      * @param member The target member.
      * @return The highest role or blank string.
      */
-    public static String getRoleFormat(Member member) {
+    public static String getRoleFormat(final JDADiscordService jda, Member member) {
         final List<Role> roles = member == null ? null : member.getRoles();
 
-        if (roles == null || roles.isEmpty()) {
-            return "";
+        for (final Role role : roles) {
+            if (jda.getPlugin().getSettings().getDiscordRolesSelection().contains(role.getName())) {
+                return role.getName();
+            }
         }
 
-        return roles.get(0).getName();
+        return "";
+
     }
 
     /**
@@ -154,11 +157,25 @@ public final class DiscordUtil {
      * @param member The target member.
      * @return The bukkit color code or blank string.
      */
-    public static String getRoleColorFormat(Member member) {
+    public static String getRoleColorFormat(final JDADiscordService jda, Member member) {
         if (member == null || member.getColorRaw() == Role.DEFAULT_COLOR_RAW) {
             return "";
         }
-        final int rawColor = 0xff000000 | member.getColorRaw();
+
+        final List<Role> roles = member == null ? null : member.getRoles();
+
+        int color = Role.DEFAULT_COLOR_RAW;
+        for (final Role role : roles) {
+            if (role.getColorRaw() != Role.DEFAULT_COLOR_RAW && jda.getPlugin().getSettings().getDiscordRolesSelection().contains(role.getName())) {
+                color = role.getColorRaw();
+            }
+        }
+
+        if (color == Role.DEFAULT_COLOR_RAW) {
+            return "";
+        }
+
+        final int rawColor = 0xff000000 | color;
 
         if (VersionUtil.getServerBukkitVersion().isHigherThanOrEqualTo(VersionUtil.v1_16_1_R01)) {
             // Essentials' FormatUtil allows us to not have to use bungee's chatcolor since bukkit's own one doesn't support rgb

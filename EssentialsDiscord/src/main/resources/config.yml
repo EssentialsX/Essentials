@@ -212,6 +212,16 @@ commands:
 # If this is set to false and a message from Discord only contains an image/file and not any text, nothing will be sent.
 show-discord-attachments: true
 
+# List of roles which are used for the top role placeholders. If this is empty, all roles will be allowed.
+discord-roles-selection:
+  - "Admins"
+  - "Members"
+
+# Aliases for Discord roles before they are sent to Minecraft.
+discord-roles-aliases:
+  Admins: "Admin"
+  Members: "Member"
+
 # A list of roles allowed to send Minecraft color/formatting codes from Discord to MC.
 # This applies to all aspects such as that Discord->MC chat relay as well as commands.
 # You can either use '*' (for everyone), a role name/ID, or a user ID.
