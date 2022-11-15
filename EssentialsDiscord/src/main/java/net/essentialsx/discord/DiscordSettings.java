@@ -95,6 +95,10 @@ public class DiscordSettings implements IConf {
         return config.getList("discord-roles-selection", String.class);
     }
 
+    public String getDiscordRoleAlias(String key) {
+        return config.getString("discord-roles-aliases." + key, "");
+    }
+
     public List<String> getPermittedFormattingRoles() {
         return config.getList("permit-formatting-roles", String.class);
     }

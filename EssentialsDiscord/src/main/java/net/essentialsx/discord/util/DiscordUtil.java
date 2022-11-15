@@ -143,7 +143,12 @@ public final class DiscordUtil {
 
         for (final Role role : roles) {
             if (jda.getPlugin().getSettings().getDiscordRolesSelection().contains(role.getName())) {
-                return role.getName();
+                final String alias = jda.getPlugin().getSettings().getDiscordRoleAlias(role.getName());
+                if (alias != "") {
+                    return alias;
+                } else {
+                    return role.getName();
+                }
             }
         }
 
