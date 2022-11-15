@@ -153,7 +153,10 @@ show-displayname: false
 
 # When set to false, the message will send as the bot user instead of the player webhook.
 send-types-as-player:
+  # Join messages sent when a player joins the Minecraft server.
   join: true
+  # Join messages sent when a player joins the Minecraft server for the first time.
+  first-join: true
   # Leave messages sent when a player leaves the Minecraft server.
   leave: true
   # Death messages sent when a player dies on the Minecraft server.
