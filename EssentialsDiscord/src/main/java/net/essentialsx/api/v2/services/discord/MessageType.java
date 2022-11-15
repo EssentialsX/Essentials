@@ -54,6 +54,7 @@ public final class MessageType {
      */
     public static final class DefaultTypes {
         public final static MessageType JOIN = new MessageType("join", true);
+        public final static MessageType FIRST_JOIN = new MessageType("first-join", true);
         public final static MessageType LEAVE = new MessageType("leave", true);
         public final static MessageType CHAT = new MessageType("chat", true);
         public final static MessageType DEATH = new MessageType("death", true);

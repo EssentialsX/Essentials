@@ -99,14 +99,19 @@ public class BukkitListener implements Listener {
     public void onJoin(AsyncUserDataLoadEvent event) {
         // Delay join to let nickname load
         if (!isSilentJoinQuit(event.getUser(), "join") && !isVanishHide(event.getUser())) {
-            sendJoinQuitMessage(event.getUser().getBase(), event.getJoinMessage(), true);
+            // Check if this is the first time the player has joined
+            if (!event.getUser().getBase().hasPlayedBefore()) {
+                sendJoinQuitMessage(event.getUser().getBase(), event.getJoinMessage(), "first-join");
+            } else {
+                sendJoinQuitMessage(event.getUser().getBase(), event.getJoinMessage(), "join");
+            }
         }
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onQuit(PlayerQuitEvent event) {
         if (!isSilentJoinQuit(event.getPlayer(), "quit") && !isVanishHide(event.getPlayer())) {
-            sendJoinQuitMessage(event.getPlayer(), event.getQuitMessage(), false);
+            sendJoinQuitMessage(event.getPlayer(), event.getQuitMessage(), "quit");
         }
     }
 
@@ -124,21 +129,45 @@ public class BukkitListener implements Listener {
             return;
         }
         if (event.getValue()) {
-            sendJoinQuitMessage(event.getAffected().getBase(), ChatColor.YELLOW + event.getAffected().getName() + " left the game", false);
+            sendJoinQuitMessage(event.getAffected().getBase(), ChatColor.YELLOW + event.getAffected().getName() + " left the game", "quit");
             return;
         }
-        sendJoinQuitMessage(event.getAffected().getBase(), ChatColor.YELLOW + event.getAffected().getName() + " joined the game", true);
+        sendJoinQuitMessage(event.getAffected().getBase(), ChatColor.YELLOW + event.getAffected().getName() + " joined the game", "join");
     }
 
-    public void sendJoinQuitMessage(final Player player, final String message, boolean join) {
-        sendDiscordMessage(join ? MessageType.DefaultTypes.JOIN : MessageType.DefaultTypes.LEAVE,
-                MessageUtil.formatMessage(join ? jda.getSettings().getJoinFormat(player) : jda.getSettings().getQuitFormat(player),
-                        MessageUtil.sanitizeDiscordMarkdown(player.getName()),
-                        MessageUtil.sanitizeDiscordMarkdown(player.getDisplayName()),
-                        MessageUtil.sanitizeDiscordMarkdown(message),
-                        jda.getPlugin().getEss().getOnlinePlayers().size() - (join ? 0 : 1),
-                        jda.getPlugin().getEss().getUsers().getUserCount()),
+    public void sendJoinQuitMessage(final Player player, final String message, String type) {
+        switch (type) {
+            case "join":
+                sendDiscordMessage(MessageType.DefaultTypes.JOIN,
+                        MessageUtil.formatMessage(jda.getSettings().getJoinFormat(player),
+                                MessageUtil.sanitizeDiscordMarkdown(player.getName()),
+                                MessageUtil.sanitizeDiscordMarkdown(player.getDisplayName()),
+                                MessageUtil.sanitizeDiscordMarkdown(message),
+                                jda.getPlugin().getEss().getOnlinePlayers().size(),
+                                jda.getPlugin().getEss().getUsers().getUserCount()),
                         player);
+                break;
+            case "first-join":
+                sendDiscordMessage(MessageType.DefaultTypes.FIRST_JOIN,
+                        MessageUtil.formatMessage(jda.getSettings().getFirstJoinFormat(player),
+                                MessageUtil.sanitizeDiscordMarkdown(player.getName()),
+                                MessageUtil.sanitizeDiscordMarkdown(player.getDisplayName()),
+                                MessageUtil.sanitizeDiscordMarkdown(message),
+                                jda.getPlugin().getEss().getOnlinePlayers().size(),
+                                jda.getPlugin().getEss().getUsers().getUserCount()),
+                        player);
+                break;
+            case "quit":
+                sendDiscordMessage(MessageType.DefaultTypes.LEAVE,
+                        MessageUtil.formatMessage(jda.getSettings().getQuitFormat(player),
+                                MessageUtil.sanitizeDiscordMarkdown(player.getName()),
+                                MessageUtil.sanitizeDiscordMarkdown(player.getDisplayName()),
+                                MessageUtil.sanitizeDiscordMarkdown(message),
+                                jda.getPlugin().getEss().getOnlinePlayers().size() - 1,
+                                jda.getPlugin().getEss().getUsers().getUserCount()),
+                        player);
+                break;
+        }
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
