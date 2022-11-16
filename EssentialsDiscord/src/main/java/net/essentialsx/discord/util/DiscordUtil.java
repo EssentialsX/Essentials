@@ -152,6 +152,10 @@ public final class DiscordUtil {
             }
         }
 
+        if (jda.getPlugin().getSettings().getDiscordRolesSelection().isEmpty()) {
+            return roles.isEmpty() ? "" : roles.get(0).getName();
+        }
+
         return "";
 
     }
@@ -174,6 +178,10 @@ public final class DiscordUtil {
             if (role.getColorRaw() != Role.DEFAULT_COLOR_RAW && jda.getPlugin().getSettings().getDiscordRolesSelection().contains(role.getName())) {
                 color = role.getColorRaw();
             }
+        }
+
+        if (jda.getPlugin().getSettings().getDiscordRolesSelection().isEmpty()) {
+            color = member.getColorRaw();
         }
 
         if (color == Role.DEFAULT_COLOR_RAW) {
