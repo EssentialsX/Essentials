@@ -317,7 +317,7 @@ messages:
   # - {online}: The amount of players online
   # - {unique}: The amount of unique players to ever join the server
   # ... PlaceholderAPI placeholders are also supported here too!
-  first-join: ":arrow_right: {displayname} has joined the server for the first time!"
+  first-join: ":arrow_right: :first_place: {displayname} has joined the server for the first time!"
   # This is the message sent to Discord when a player leaves the minecraft server.
   # The following placeholders can be used here:
   # - {username}: The name of the user leaving
