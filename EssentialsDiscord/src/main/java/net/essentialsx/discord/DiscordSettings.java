@@ -263,7 +263,7 @@ public class DiscordSettings implements IConf {
         } else {
             filled = format;
         }
-        return generateMessageFormat(filled, ":arrow_right: {displayname} has joined the server for the first time!", false,
+        return generateMessageFormat(filled, ":arrow_right: :first_place: {displayname} has joined the server for the first time!", false,
                 "username", "displayname", "joinmessage", "online", "unique");
     }
 
