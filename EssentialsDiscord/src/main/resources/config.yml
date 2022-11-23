@@ -116,7 +116,7 @@ console:
 message-types:
   # Join messages sent when a player joins the Minecraft server.
   join: primary
-  # Join messages sent when a player joins the Minecraft server for the first time.
+  # Join messages sent when a player joins the Minecraft server for the first time. This type is sent instead of the join type.
   first-join: primary
   # Leave messages sent when a player leaves the Minecraft server.
   leave: primary

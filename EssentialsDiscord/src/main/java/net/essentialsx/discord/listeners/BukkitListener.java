@@ -158,7 +158,7 @@ public class BukkitListener implements Listener {
                         MessageUtil.sanitizeDiscordMarkdown(message),
                         jda.getPlugin().getEss().getOnlinePlayers().size(),
                         userCount),
-                player);
+                        player);
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
