@@ -333,7 +333,7 @@ public class JDADiscordService implements DiscordService, IEssentialsModule {
                 if (current != null) {
                     current.close();
                 }
-                channelIdToWebhook.remove(channel.getId());
+                channelIdToWebhook.remove(channel.getId()).close();
                 continue;
             }
             typeToChannelId.put(type, channel.getId());
@@ -392,7 +392,7 @@ public class JDADiscordService implements DiscordService, IEssentialsModule {
 
         shutdownConsoleRelay(false);
         consoleWebhook = DiscordUtil.getWebhookClient(webhookId, webhookToken, jda.getHttpClient());
-        if (injector == null) {
+        if (injector == null || injector.isRemoved()) {
             injector = new ConsoleInjector(this);
             injector.start();
         }
@@ -429,6 +429,10 @@ public class JDADiscordService implements DiscordService, IEssentialsModule {
             }
 
             shutdownConsoleRelay(true);
+
+            for (WebhookClient webhook : channelIdToWebhook.values()) {
+                webhook.close();
+            }
 
             // Unregister leftover jda listeners
             for (Object obj : jda.getRegisteredListeners()) {
