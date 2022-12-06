@@ -197,8 +197,8 @@ public class Settings implements net.ess3.api.ISettings {
     }
 
     @Override
-    public int getChatRadius() {
-        return chatRadius;
+    public int getChatRadius(String group) {
+        return config.getInt("chat.group-radii." + (group == null ? "Default" : group), config.getInt("chat.radius", 0));
     }
 
     @Override

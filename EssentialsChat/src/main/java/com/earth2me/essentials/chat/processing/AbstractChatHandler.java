@@ -62,9 +62,6 @@ public abstract class AbstractChatHandler {
             cache.setIntermediateChat(event.getPlayer(), chat);
         }
 
-        final long configRadius = ess.getSettings().getChatRadius();
-        chat.setRadius(Math.max(configRadius, 0));
-
         // This listener should apply the general chat formatting only...then return control back the event handler
         event.setMessage(FormatUtil.formatMessage(user, "essentials.chat", event.getMessage()));
 
@@ -82,6 +79,11 @@ public abstract class AbstractChatHandler {
         final String prefix = FormatUtil.replaceFormat(ess.getPermissionsHandler().getPrefix(player));
         final String suffix = FormatUtil.replaceFormat(ess.getPermissionsHandler().getSuffix(player));
         final Team team = player.getScoreboard().getPlayerTeam(player);
+
+        final long configGroupRadius = ess.getSettings().getChatRadius(group);
+        chat.setRadius(Math.max(configGroupRadius, 0));
+
+        essChat.getLogger().log(Level.INFO, "Radius set to: " + configGroupRadius + " for group: " + group);
 
         String format = ess.getSettings().getChatFormat(group);
         format = format.replace("{0}", group);

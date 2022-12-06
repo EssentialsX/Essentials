@@ -38,7 +38,7 @@ public interface ISettings extends IConf {
 
     String getWorldAlias(String world);
 
-    int getChatRadius();
+    int getChatRadius(String group);
 
     int getNearRadius();
 

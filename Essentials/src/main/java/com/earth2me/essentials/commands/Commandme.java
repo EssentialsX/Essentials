@@ -41,7 +41,8 @@ public class Commandme extends EssentialsCommand {
         message = FormatUtil.formatMessage(user, "essentials.chat", message);
 
         user.setDisplayNick();
-        long radius = ess.getSettings().getChatRadius();
+        final String group = user.getGroup();
+        long radius = ess.getSettings().getChatRadius(group);
         final String toSend = tl("action", user.getDisplayName(), message);
         if (radius < 1) {
             ess.broadcastMessage(user, toSend);
