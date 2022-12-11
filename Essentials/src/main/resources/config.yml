@@ -877,6 +877,8 @@ hide-permissionless-help: true
 chat:
 
   # If EssentialsX Chat is installed, this will define how far a player's voice travels, in blocks. Set to 0 to make all chat global.
+  # Chat radius can be configured in two ways, you can either define a standard radius for all chat.
+  # Or you can give a group specific chat radius for additional customization.
   # Note that users with the "essentials.chat.spy" permission will hear everything, regardless of this setting.
   # Users with essentials.chat.shout can override this by prefixing their message with an exclamation mark (!)
   # Users with essentials.chat.question can override this by prefixing their message with a question mark (?)
@@ -884,8 +886,11 @@ chat:
   radius: 0
 
   group-radii:
-    default: 100
-    admins: 100
+  #  default: 0
+  #  admins: 0
+
+  # If you are using group radii make sure to remove the '#' to allow the setting to be read.
+  # Note: Group names are case-sensitive so you must match them up with your permission plugin.
 
   # Chat formatting can be done in two ways, you can either define a standard format for all chat.
   # Or you can give a group specific chat format, to give some extra variation.
