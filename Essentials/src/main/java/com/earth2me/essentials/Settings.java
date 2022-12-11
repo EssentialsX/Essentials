@@ -52,7 +52,7 @@ public class Settings implements net.ess3.api.ISettings {
     private final transient IEssentials ess;
     private final transient AtomicInteger reloadCount = new AtomicInteger(0);
     private final Map<String, String> chatFormats = Collections.synchronizedMap(new HashMap<>());
-    private int chatRadius = 0;
+    private final Map<String, Integer> chatRadii = Collections.synchronizedMap(new HashMap<>());
     // #easteregg
     private char chatShout = '!';
     // #easteregg
@@ -192,13 +192,18 @@ public class Settings implements net.ess3.api.ISettings {
         return config.getInt("sethome-multiple." + set, config.getInt("sethome-multiple.default", 3));
     }
 
-    private int _getChatRadius() {
-        return config.getInt("chat.radius", config.getInt("chat-radius", 0));
-    }
-
     @Override
     public int getChatRadius(String group) {
-        return config.getInt("chat.group-radii." + (group == null ? "Default" : group), config.getInt("chat.radius", 0));
+        Integer chatRadius = chatRadii.get(group);
+        if (chatRadius == null) {
+            chatRadius = config.getInt("chat.group-radii." + (group == null ? "Default" : group), config.getInt("chat.radius", 0));
+            chatRadii.put(group, chatRadius);
+        }
+        if (isDebug()) {
+            ess.getLogger().info(String.format("Found chat radius '%d' for group '%s'", chatRadius, group));
+        }
+
+        return chatRadius;
     }
 
     @Override
@@ -736,7 +741,7 @@ public class Settings implements net.ess3.api.ISettings {
         addprefixsuffix = _addPrefixSuffix();
         disablePrefix = _disablePrefix();
         disableSuffix = _disableSuffix();
-        chatRadius = _getChatRadius();
+        chatRadii.clear();
         chatShout = _getChatShout();
         chatQuestion = _getChatQuestion();
         commandCosts = _getCommandCosts();
