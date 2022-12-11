@@ -83,8 +83,6 @@ public abstract class AbstractChatHandler {
         final long configGroupRadius = ess.getSettings().getChatRadius(group);
         chat.setRadius(Math.max(configGroupRadius, 0));
 
-        essChat.getLogger().log(Level.INFO, "Radius set to: " + configGroupRadius + " for group: " + group);
-
         String format = ess.getSettings().getChatFormat(group);
         format = format.replace("{0}", group);
         format = format.replace("{1}", ess.getSettings().getWorldAlias(world));
