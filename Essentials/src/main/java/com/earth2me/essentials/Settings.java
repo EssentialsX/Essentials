@@ -170,33 +170,6 @@ public class Settings implements net.ess3.api.ISettings {
     }
 
     @Override
-    public Set<String> getMultipleMoneyCaps() {
-        final CommentedConfigurationNode section = config.getSection("money-caps-multiple");
-        return section == null ? null : ConfigurateUtil.getKeys(section);
-    }
-
-    @Override
-    public BigDecimal getMoneyCap(final User user) {
-        BigDecimal cap = BigDecimal.ZERO;
-
-        if (user.isAuthorized("essentials.money-caps-multiple")) {
-            cap = getMoneyCap("default");
-        }
-
-        final Set<String> capList = getMultipleMoneyCaps();
-        if (capList != null) {
-            for (final String set : capList) {
-
-                if (user.isAuthorized("essentials.money-caps-multiple." + set) && (cap.compareTo(getMoneyCap(set)) < 0)) {
-                    cap = getMoneyCap(set);
-                }
-            }
-        }
-
-        return cap;
-    }
-
-    @Override
     public int getHomeLimit(final User user) {
         int limit = 1;
         if (user.isAuthorized("essentials.sethome.multiple")) {
@@ -217,11 +190,6 @@ public class Settings implements net.ess3.api.ISettings {
     @Override
     public int getHomeLimit(final String set) {
         return config.getInt("sethome-multiple." + set, config.getInt("sethome-multiple.default", 3));
-    }
-
-    @Override
-    public BigDecimal getMoneyCap(final String set) {
-        return config.getBigDecimal("money-caps-multiple." + set, config.getBigDecimal("money-caps-multiple.default", new BigDecimal(10000000000000L)));
     }
 
     @Override

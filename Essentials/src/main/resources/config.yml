@@ -813,12 +813,7 @@ currency-symbol-suffix: false
 
 # Set the maximum amount of money a player can have.
 # The amount is always limited to 10 trillion because of the limitations of a java double.
-# To grant different max amounts to different people, you need to define a 'max-money-rank' below.
-# Create the 'max-money-rank' below, and give the matching permission: essentials.maxmoney.<rank>
-money-caps-multiple:
-  default: 10000000000000
-  # vip: 100000000
-  # staff: 1000000000
+max-money: 10000000000000
 
 # Set the minimum amount of money a player can have (must be above the negative of max-money).
 # Setting this to 0, will disable overdrafts/loans completely.  Users need 'essentials.eco.loan' perm to go below 0.
