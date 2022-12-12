@@ -93,11 +93,6 @@ teleport-passenger-dismount: true
 
 # The delay, in seconds, required between /home, /tp, etc.
 group-teleport-cooldowns:
-  default: 5
-  admin: 3
-
-# The delay, in seconds, required between /home, /tp, etc.
-group-teleport-cooldowns:
   default: 0
   # admins: 3
 
