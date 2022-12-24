@@ -2,6 +2,7 @@ package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.craftbukkit.Inventories;
 import com.earth2me.essentials.utils.DateUtil;
 import com.earth2me.essentials.utils.PasteUtil;
 import org.bukkit.Material;
@@ -37,7 +38,7 @@ public class Commandcreatekit extends EssentialsCommand {
         // Command handler will auto fail if this fails.
         final long delay = Long.parseLong(args[1]);
         final String kitname = args[0];
-        final ItemStack[] items = user.getBase().getInventory().getContents();
+        final ItemStack[] items = Inventories.getInventory(user.getBase(), true);
         final List<String> list = new ArrayList<>();
 
         boolean useSerializationProvider = ess.getSettings().isUseBetterKits();

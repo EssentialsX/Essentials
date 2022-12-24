@@ -1,6 +1,7 @@
 package com.earth2me.essentials;
 
 import com.earth2me.essentials.commands.Commandfireball;
+import com.earth2me.essentials.craftbukkit.Inventories;
 import com.earth2me.essentials.textreader.IText;
 import com.earth2me.essentials.textreader.KeywordReplacer;
 import com.earth2me.essentials.textreader.TextInput;
@@ -559,7 +560,7 @@ public class EssentialsPlayerListener implements Listener, FakeAccessor {
         final User user = ess.getUser(event.getPlayer());
         final ItemStack stack = new ItemStack(Material.EGG, 1);
         if (user.hasUnlimited(stack)) {
-            user.getBase().getInventory().addItem(stack);
+            Inventories.addItem(user.getBase(), stack);
             user.getBase().updateInventory();
         }
     }

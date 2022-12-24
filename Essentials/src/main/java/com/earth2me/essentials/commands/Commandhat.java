@@ -1,7 +1,7 @@
 package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.User;
-import com.earth2me.essentials.craftbukkit.InventoryWorkaround;
+import com.earth2me.essentials.craftbukkit.Inventories;
 import com.earth2me.essentials.utils.TriState;
 import com.earth2me.essentials.utils.VersionUtil;
 import com.google.common.collect.Lists;
@@ -67,7 +67,7 @@ public class Commandhat extends EssentialsCommand {
         } else {
             final ItemStack air = new ItemStack(Material.AIR);
             inv.setHelmet(air);
-            InventoryWorkaround.addItems(user.getBase().getInventory(), head);
+            Inventories.addItem(user.getBase(), head);
             user.sendMessage(tl("hatRemoved"));
         }
     }
