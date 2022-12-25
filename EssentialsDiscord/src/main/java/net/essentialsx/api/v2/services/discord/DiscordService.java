@@ -74,6 +74,11 @@ public interface DiscordService {
     CompletableFuture<Void> modifyMemberRoles(final InteractionMember member, final Collection<InteractionRole> addRoles, final Collection<InteractionRole> removeRoles);
 
     /**
+     * Gets the Discord invite URL given in the EssentialsX Discord configuration.
+     */
+    String getInviteUrl();
+
+    /**
      * Gets unstable API that is subject to change at any time.
      * @return {@link Unsafe the unsafe} instance.
      * @see Unsafe

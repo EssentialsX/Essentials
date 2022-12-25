@@ -517,6 +517,11 @@ public class JDADiscordService implements DiscordService, IEssentialsModule {
         return future;
     }
 
+    @Override
+    public String getInviteUrl() {
+        return getSettings().getDiscordUrl();
+    }
+
     public JDA getJda() {
         return jda;
     }
