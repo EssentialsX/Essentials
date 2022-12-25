@@ -13,6 +13,7 @@ import com.google.common.collect.ImmutableSet;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -48,10 +49,9 @@ public class PermissionsHandler implements IPermissionsHandler {
     @Override
     public List<String> getGroups(final OfflinePlayer base) {
         final long start = System.nanoTime();
-        List<String> groups = handler.getGroups(base);
-        if (groups == null || groups.isEmpty()) {
-            groups = Collections.singletonList(defaultGroup);
-        }
+        final List<String> groups = new ArrayList<>();
+        groups.add(defaultGroup);
+        groups.addAll(handler.getGroups(base));
         checkPermLag(start, String.format("Getting groups for %s", base.getName()));
         return Collections.unmodifiableList(groups);
     }

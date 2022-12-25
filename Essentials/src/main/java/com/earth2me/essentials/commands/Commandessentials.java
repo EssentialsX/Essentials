@@ -96,6 +96,7 @@ public class Commandessentials extends EssentialsCommand {
         "EssentialsAntiBuild",
         "EssentialsChat",
         "EssentialsDiscord",
+        "EssentialsDiscordLink",
         "EssentialsGeoIP",
         "EssentialsProtect",
         "EssentialsSpawn",
