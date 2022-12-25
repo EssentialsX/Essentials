@@ -202,7 +202,7 @@ public class EssentialsPlayerListener implements Listener, FakeAccessor {
             to.setY(from.getY());
             to.setZ(from.getZ());
             try {
-                event.setTo(LocationUtil.getSafeDestination(to));
+                event.setTo(LocationUtil.getSafeDestination(ess, to));
             } catch (final Exception ex) {
                 event.setTo(to);
             }
