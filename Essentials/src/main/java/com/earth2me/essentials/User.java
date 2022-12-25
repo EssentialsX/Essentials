@@ -90,6 +90,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
     private String lastHomeConfirmation;
     private long lastHomeConfirmationTimestamp;
     private Boolean toggleShout;
+    private boolean freeze = false;
     private transient final List<String> signCopy = Lists.newArrayList("", "", "", "");
     private transient long lastVanishTime = System.currentTimeMillis();
 
@@ -1189,6 +1190,16 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
 
     public List<String> getSignCopy() {
         return signCopy;
+    }
+
+    @Override
+    public boolean isFreeze() {
+        return freeze;
+    }
+
+    @Override
+    public void setFreeze(boolean freeze) {
+        this.freeze = freeze;
     }
 
     public boolean isBaltopExempt() {
