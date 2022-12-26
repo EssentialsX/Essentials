@@ -345,4 +345,8 @@ public interface IUser {
     List<String> getPastUsernames();
 
     void addPastUsername(String username);
+
+    boolean isFreeze();
+
+    void setFreeze(boolean freeze);
 }

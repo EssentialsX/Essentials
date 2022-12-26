@@ -27,6 +27,7 @@ public class ConsoleInjector extends AbstractAppender {
     private final JDADiscordService jda;
     private final BlockingQueue<String> messageQueue = new LinkedBlockingQueue<>();
     private final int taskId;
+    private boolean removed = false;
 
     public ConsoleInjector(JDADiscordService jda) {
         super("EssentialsX-ConsoleInjector", null, null, false);
@@ -93,5 +94,10 @@ public class ConsoleInjector extends AbstractAppender {
         ((Logger) LogManager.getRootLogger()).removeAppender(this);
         Bukkit.getScheduler().cancelTask(taskId);
         messageQueue.clear();
+        removed = true;
+    }
+
+    public boolean isRemoved() {
+        return removed;
     }
 }

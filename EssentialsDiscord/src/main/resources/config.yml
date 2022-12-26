@@ -116,6 +116,8 @@ console:
 message-types:
   # Join messages sent when a player joins the Minecraft server.
   join: primary
+  # Join messages sent when a player joins the Minecraft server for the first time. This type is sent instead of the join type.
+  first-join: primary
   # Leave messages sent when a player leaves the Minecraft server.
   leave: primary
   # Chat messages sent when a player chats on the Minecraft server.
@@ -307,6 +309,15 @@ messages:
   # - {unique}: The amount of unique players to ever join the server
   # ... PlaceholderAPI placeholders are also supported here too!
   join: ":arrow_right: {displayname} has joined!"
+  # This is the message sent to Discord when a player joins the minecraft server for the first time.
+  # The following placeholders can be used here:
+  # - {username}: The name of the user joining
+  # - {displayname}: The display name of the user joining
+  # - {joinmessage}: The full default join message used in game
+  # - {online}: The amount of players online
+  # - {unique}: The amount of unique players to ever join the server
+  # ... PlaceholderAPI placeholders are also supported here too!
+  first-join: ":arrow_right: :first_place: {displayname} has joined the server for the first time!"
   # This is the message sent to Discord when a player leaves the minecraft server.
   # The following placeholders can be used here:
   # - {username}: The name of the user leaving

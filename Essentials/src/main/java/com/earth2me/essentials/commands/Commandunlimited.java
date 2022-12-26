@@ -1,6 +1,7 @@
 package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.craftbukkit.Inventories;
 import net.ess3.api.TranslatableException;
 import org.bukkit.Material;
 import org.bukkit.Server;
@@ -74,8 +75,8 @@ public class Commandunlimited extends EssentialsCommand {
         if (!target.hasUnlimited(stack)) {
             message = "enableUnlimited";
             enableUnlimited = true;
-            if (!target.getBase().getInventory().containsAtLeast(stack, stack.getAmount())) {
-                target.getBase().getInventory().addItem(stack);
+            if (!Inventories.containsAtLeast(target.getBase(), stack, stack.getAmount())) {
+                Inventories.addItem(target.getBase(), stack);
             }
         }
 

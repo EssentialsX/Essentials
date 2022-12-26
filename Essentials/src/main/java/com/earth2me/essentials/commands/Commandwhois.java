@@ -38,7 +38,7 @@ public class Commandwhois extends EssentialsCommand {
         sender.sendTl("whoisHunger", user.getBase().getFoodLevel(), user.getBase().getSaturation());
         sender.sendTl("whoisExp", SetExpFix.getTotalExperience(user.getBase()), user.getBase().getLevel());
         sender.sendTl("whoisLocation", user.getLocation().getWorld().getName(), user.getLocation().getBlockX(), user.getLocation().getBlockY(), user.getLocation().getBlockZ());
-        final long playtimeMs = System.currentTimeMillis() - (user.getBase().getStatistic(PLAY_ONE_TICK) * 50);
+        final long playtimeMs = System.currentTimeMillis() - (user.getBase().getStatistic(PLAY_ONE_TICK) * 50L);
         sender.sendTl("whoisPlaytime", DateUtil.formatDateDiff(playtimeMs));
         if (!ess.getSettings().isEcoDisabled()) {
             sender.sendTl("whoisMoney", NumberUtil.displayCurrency(user.getMoney(), ess));

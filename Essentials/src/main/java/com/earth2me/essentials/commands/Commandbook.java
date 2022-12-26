@@ -1,7 +1,7 @@
 package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.User;
-import com.earth2me.essentials.craftbukkit.InventoryWorkaround;
+import com.earth2me.essentials.craftbukkit.Inventories;
 import com.earth2me.essentials.utils.EnumUtil;
 import com.earth2me.essentials.utils.FormatUtil;
 import com.google.common.collect.Lists;
@@ -51,7 +51,7 @@ public class Commandbook extends EssentialsCommand {
                 if (isAuthor(bmeta, player) || user.isAuthorized("essentials.book.others")) {
                     final ItemStack newItem = new ItemStack(WRITABLE_BOOK, item.getAmount());
                     newItem.setItemMeta(bmeta);
-                    InventoryWorkaround.setItemInMainHand(user.getBase(), newItem);
+                    Inventories.setItemInMainHand(user.getBase(), newItem);
                     user.sendTl("editBookContents");
                 } else {
                     throw new TranslatableException("denyBookEdit");
@@ -64,7 +64,7 @@ public class Commandbook extends EssentialsCommand {
             }
             final ItemStack newItem = new ItemStack(Material.WRITTEN_BOOK, item.getAmount());
             newItem.setItemMeta(bmeta);
-            InventoryWorkaround.setItemInMainHand(user.getBase(), newItem);
+            Inventories.setItemInMainHand(user.getBase(), newItem);
             user.sendTl("bookLocked");
         } else {
             throw new TranslatableException("holdBook");

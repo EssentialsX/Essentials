@@ -255,6 +255,18 @@ public class DiscordSettings implements IConf {
                 "username", "displayname", "joinmessage", "online", "unique");
     }
 
+    public MessageFormat getFirstJoinFormat(Player player) {
+        final String format = getFormatString("first-join");
+        final String filled;
+        if (plugin.isPAPI() && format != null) {
+            filled = me.clip.placeholderapi.PlaceholderAPI.setPlaceholders(player, format);
+        } else {
+            filled = format;
+        }
+        return generateMessageFormat(filled, ":arrow_right: :first_place: {displayname} has joined the server for the first time!", false,
+                "username", "displayname", "joinmessage", "online", "unique");
+    }
+
     public MessageFormat getQuitFormat(Player player) {
         final String format = getFormatString("quit");
         final String filled;
