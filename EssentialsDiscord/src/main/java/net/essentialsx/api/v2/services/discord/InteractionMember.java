@@ -28,6 +28,12 @@ public interface InteractionMember {
     }
 
     /**
+     * Gets the discord mention of this member.
+     * @return this member's mention.
+     */
+    String getAsMention();
+
+    /**
      * Gets the nickname of this member or their username if they don't have one.
      * @return this member's nickname or username if none is present.
      */
@@ -57,6 +63,20 @@ public interface InteractionMember {
      * @return true if the member has one of the given roles.
      */
     boolean hasRoles(List<String> roleDefinitions);
+
+    /**
+     * Returns true if the user has the specified {@link InteractionRole role}.
+     * @param role The role to check for.
+     * @return true if the member has the specified role.
+     */
+    boolean hasRole(InteractionRole role);
+
+    /**
+     * Returns true if the user has a role by the specified ID.
+     * @param roleId The role id to check for.
+     * @return true if the member has a role by the specified ID.
+     */
+    boolean hasRole(String roleId);
 
     /**
      * Sends a private message to this member with the given content.

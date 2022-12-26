@@ -1,0 +1,52 @@
+#############################################################
+# +-------------------------------------------------------+ #
+# |                EssentialsX DiscordLink                | #
+# +-------------------------------------------------------+ #
+#############################################################
+
+# This is the config file for EssentialsXDiscordLink.
+# This config was generated for version ${full.version}.
+
+# The desired behavior when a player hasn't linked their Minecraft account to Discord.
+# Accepts the following values:
+# - kick: Kicks the player with a link code and requires they link their discord account before they can join.
+# - freeze: Prevents player from moving/interacting/doing commands when they join until they link their discord account.
+# - none: Places no restrictions on players for unlinked accounts.
+link-policy: none
+
+# Whether to ignore Discord messages from unlinked members and hide them from Minecraft chat.
+block-unlinked-chat: false
+
+# Whether someone's Minecraft account should be unlinked when they leave the Discord server.
+unlink-on-leave: true
+
+# Whether linked player's incoming mail should be DM'd to them on Discord.
+relay-mail: true
+
+# MC group to Discord role sync settings
+# Allows for the ability to give players discord roles based on their Minecraft groups and/or give players Minecraft
+# groups based on their Discord roles.
+role-sync:
+  # Whether EssentialsX DiscordLink should remove synced Discord roles from players who unlink their Minecraft account,
+  # leave the Discord server, or who no longer have the groups that awarded them the role in the first place.
+  remove-roles: true
+  # Whether EssentialsX DiscordLink should remove synced Minecraft groups from players who unlink their Discord account,
+  # or who no longer have the Discord roles that awarded them the group in the first place.
+  remove-groups: true
+  # The amount of time (in minutes) between which EssentialsX DiscordLink should audit player groups/roles.
+  # Requires a restart after changing.
+  resync-delay: 5
+  # Whether EssentialsX DiscordLink should only consider the primary group of Minecraft users
+  primary-group-only: false
+  # Minecraft group to Discord role ID synchronization.
+  # Players in the following groups listed here will receive the corresponding role ID on discord when they link
+  # their Minecraft account to their Discord account.
+  groups:
+    default: 000000000000000000
+    admin: 11111111111111111
+  # Discord role ID to Minecraft group synchronization.
+  # Users with the following roles listed here will receive the corresponding group in Minecraft when they link
+  # their Discord account to their Minecraft account.
+  roles:
+    22222222222222222: vip
+    33333333333333333: booster
