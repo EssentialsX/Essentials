@@ -6,8 +6,6 @@ import net.essentialsx.api.v2.events.discordlink.DiscordLinkStatusChangeEvent;
 import net.essentialsx.discordlink.AccountLinkManager;
 import org.bukkit.Server;
 
-import static com.earth2me.essentials.I18n.tl;
-
 public class Commandunlink extends EssentialsCommand {
     public Commandunlink() {
         super("unlink");
@@ -17,10 +15,10 @@ public class Commandunlink extends EssentialsCommand {
     protected void run(Server server, User user, String commandLabel, String[] args) {
         final AccountLinkManager manager = (AccountLinkManager) module;
         if (!manager.removeAccount(user, DiscordLinkStatusChangeEvent.Cause.UNSYNC_PLAYER)) {
-            user.sendMessage(tl("discordLinkNoAccount"));
+            user.sendTl("discordLinkNoAccount");
             return;
         }
 
-        user.sendMessage(tl("discordLinkUnlinked"));
+        user.sendTl("discordLinkUnlinked");
     }
 }

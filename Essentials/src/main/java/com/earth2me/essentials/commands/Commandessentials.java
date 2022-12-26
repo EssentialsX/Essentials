@@ -178,7 +178,7 @@ public class Commandessentials extends EssentialsCommand {
     }
 
     public void runItemTest(Server server, CommandSource sender, String commandLabel, String[] args) {
-        if (!sender.isAuthorized("essentials.itemtest", ess) || args.length < 2 || !sender.isPlayer()) {
+        if (!sender.isAuthorized("essentials.itemtest") || args.length < 2 || !sender.isPlayer()) {
             return;
         }
 

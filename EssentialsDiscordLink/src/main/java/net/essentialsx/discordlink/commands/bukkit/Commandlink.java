@@ -5,8 +5,6 @@ import com.earth2me.essentials.commands.EssentialsCommand;
 import net.essentialsx.discordlink.AccountLinkManager;
 import org.bukkit.Server;
 
-import static com.earth2me.essentials.I18n.tl;
-
 public class Commandlink extends EssentialsCommand {
     public Commandlink() {
         super("link");
@@ -16,15 +14,15 @@ public class Commandlink extends EssentialsCommand {
     protected void run(Server server, User user, String commandLabel, String[] args) {
         final AccountLinkManager manager = (AccountLinkManager) module;
         if (manager.isLinked(user.getUUID())) {
-            user.sendMessage(tl("discordLinkLinkedAlready"));
+            user.sendTl("discordLinkLinkedAlready");
             return;
         }
 
         try {
             final String code = manager.createCode(user.getBase().getUniqueId());
-            user.sendMessage(tl("discordLinkLinked", "/link " + code));
+            user.sendTl("discordLinkLinked", "/link " + code);
         } catch (final IllegalArgumentException e) {
-            user.sendMessage(tl("discordLinkPending", "/link " + e.getMessage()));
+            user.sendTl("discordLinkPending", "/link " + e.getMessage());
         }
     }
 }
