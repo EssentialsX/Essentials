@@ -198,7 +198,10 @@ public class DiscordSettings implements IConf {
     }
 
     public List<String> getCommandSnowflakes(String command) {
-        return config.getList("commands." + command + ".allowed-roles", String.class);
+        if (config.isList("commands." + command + ".allowed-roles")) {
+            return config.getList("commands." + command + ".allowed-roles", String.class);
+        }
+        return null;
     }
 
     public List<String> getCommandAdminSnowflakes(String command) {
