@@ -1937,4 +1937,9 @@ public class Settings implements net.ess3.api.ISettings {
     public boolean showZeroBaltop() {
         return config.getBoolean("show-zero-baltop", true);
     }
+
+    @Override
+    public String getNickRegex() {
+        return config.getString("nick-regex", "^[a-zA-Z_0-9§]+$");
+    }
 }

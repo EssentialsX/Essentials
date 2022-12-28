@@ -404,6 +404,8 @@ public interface ISettings extends IConf {
 
     boolean showZeroBaltop();
 
+    String getNickRegex();
+
     enum KeepInvPolicy {
         KEEP,
         DELETE,

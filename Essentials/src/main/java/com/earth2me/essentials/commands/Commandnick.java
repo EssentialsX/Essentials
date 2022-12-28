@@ -64,7 +64,7 @@ public class Commandnick extends EssentialsLoopCommand {
 
     private String formatNickname(final User user, final String nick) throws Exception {
         final String newNick = user == null ? FormatUtil.replaceFormat(nick) : FormatUtil.formatString(user, "essentials.nick", nick);
-        if (!newNick.matches("^[a-zA-Z_0-9" + ChatColor.COLOR_CHAR + "]+$") && user != null && !user.isAuthorized("essentials.nick.allowunsafe")) {
+        if (!newNick.matches(ess.getSettings().getNickRegex()) && user != null && !user.isAuthorized("essentials.nick.allowunsafe")) {
             throw new Exception(tl("nickNamesAlpha"));
         } else if (getNickLength(newNick) > ess.getSettings().getMaxNickLength()) {
             throw new Exception(tl("nickTooLong"));
