@@ -1145,6 +1145,13 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
         return Inventories.getItemInHand(getBase());
     }
 
+    /**
+     * Returns the {@link ItemStack} in the main hand - also nullable.
+     */
+    public ItemStack getItemInMainHand() {
+        return Inventories.getItemInMainHand(getBase());
+    }
+
     @Override
     public void sendMail(MailSender sender, String message) {
         sendMail(sender, message, 0);
