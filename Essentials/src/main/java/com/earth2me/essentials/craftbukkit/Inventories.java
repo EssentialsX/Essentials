@@ -20,6 +20,7 @@ public final class Inventories {
     private static final int LEG_SLOT = 37;
     private static final int BOOT_SLOT = 36;
     private static final boolean HAS_OFFHAND = VersionUtil.getServerBukkitVersion().isHigherThanOrEqualTo(VersionUtil.v1_9_R01);
+    private static final int INVENTORY_SIZE = HAS_OFFHAND ? 41 : 40;
 
     private Inventories() {
     }
@@ -198,7 +199,7 @@ public final class Inventories {
     }
 
     public static ItemStack[] getInventory(final Player player, final boolean includeArmor) {
-        final ItemStack[] items = new ItemStack[41];
+        final ItemStack[] items = new ItemStack[INVENTORY_SIZE];
         for (int i = 0; i < items.length; i++) {
             if (!includeArmor && isArmorSlot(i)) {
                 items[i] = null;
