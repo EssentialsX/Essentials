@@ -1,6 +1,7 @@
 package com.earth2me.essentials;
 
 import com.earth2me.essentials.commands.Commandfireball;
+import com.earth2me.essentials.craftbukkit.Inventories;
 import com.earth2me.essentials.textreader.IText;
 import com.earth2me.essentials.textreader.KeywordReplacer;
 import com.earth2me.essentials.textreader.TextInput;
@@ -192,17 +193,26 @@ public class EssentialsPlayerListener implements Listener, FakeAccessor {
             return;
         }
 
-        if (!ess.getSettings().cancelAfkOnMove() && !ess.getSettings().getFreezeAfkPlayers()) {
-            event.getHandlers().unregister(this);
+        final User user = ess.getUser(event.getPlayer());
 
-            if (ess.getSettings().isDebug()) {
-                ess.getLogger().log(Level.INFO, "Unregistering move listener");
+        if (user.isFreeze()) {
+            final Location from = event.getFrom();
+            final Location to = event.getTo().clone();
+            to.setX(from.getX());
+            to.setY(from.getY());
+            to.setZ(from.getZ());
+            try {
+                event.setTo(LocationUtil.getSafeDestination(ess, to));
+            } catch (final Exception ex) {
+                event.setTo(to);
             }
-
             return;
         }
 
-        final User user = ess.getUser(event.getPlayer());
+        if (!ess.getSettings().cancelAfkOnMove() && !ess.getSettings().getFreezeAfkPlayers()) {
+            return;
+        }
+
         if (user.isAfk() && ess.getSettings().getFreezeAfkPlayers()) {
             final Location from = event.getFrom();
             final Location origTo = event.getTo();
@@ -559,7 +569,7 @@ public class EssentialsPlayerListener implements Listener, FakeAccessor {
         final User user = ess.getUser(event.getPlayer());
         final ItemStack stack = new ItemStack(Material.EGG, 1);
         if (user.hasUnlimited(stack)) {
-            user.getBase().getInventory().addItem(stack);
+            Inventories.addItem(user.getBase(), stack);
             user.getBase().updateInventory();
         }
     }

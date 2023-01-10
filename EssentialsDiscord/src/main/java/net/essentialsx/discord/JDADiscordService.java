@@ -13,6 +13,7 @@ import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Emote;
 import net.dv8tion.jda.api.entities.Guild;
+import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.Webhook;
 import net.dv8tion.jda.api.events.ShutdownEvent;
@@ -26,9 +27,13 @@ import net.essentialsx.api.v2.events.discord.DiscordMessageEvent;
 import net.essentialsx.api.v2.services.discord.DiscordService;
 import net.essentialsx.api.v2.services.discord.InteractionController;
 import net.essentialsx.api.v2.services.discord.InteractionException;
+import net.essentialsx.api.v2.services.discord.InteractionMember;
+import net.essentialsx.api.v2.services.discord.InteractionRole;
 import net.essentialsx.api.v2.services.discord.MessageType;
 import net.essentialsx.api.v2.services.discord.Unsafe;
 import net.essentialsx.discord.interactions.InteractionControllerImpl;
+import net.essentialsx.discord.interactions.InteractionMemberImpl;
+import net.essentialsx.discord.interactions.InteractionRoleImpl;
 import net.essentialsx.discord.interactions.commands.ExecuteCommand;
 import net.essentialsx.discord.interactions.commands.ListCommand;
 import net.essentialsx.discord.interactions.commands.MessageCommand;
@@ -46,7 +51,10 @@ import org.bukkit.plugin.ServicePriority;
 import org.jetbrains.annotations.NotNull;
 
 import javax.security.auth.login.LoginException;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
@@ -464,6 +472,54 @@ public class JDADiscordService implements DiscordService, IEssentialsModule {
                 jda = null;
             }
         }
+    }
+
+    @Override
+    public CompletableFuture<InteractionMember> getMemberById(final String id) {
+        final CompletableFuture<InteractionMember> future = new CompletableFuture<>();
+        getGuild().retrieveMemberById(id).queue(member -> {
+            if (member != null) {
+                future.complete(new InteractionMemberImpl(member));
+                return;
+            }
+            future.complete(null);
+        }, fail -> future.complete(null));
+        return future;
+    }
+
+    @Override
+    public InteractionRole getRole(String id) {
+        final Role role = getGuild().getRoleById(id);
+        return role == null ? null : new InteractionRoleImpl(role);
+    }
+
+    @Override
+    public CompletableFuture<Void> modifyMemberRoles(InteractionMember member, Collection<InteractionRole> addRoles, Collection<InteractionRole> removeRoles) {
+        if ((addRoles == null || addRoles.isEmpty()) && (removeRoles == null || removeRoles.isEmpty())) {
+            return CompletableFuture.completedFuture(null);
+        }
+
+        final List<Role> add = new ArrayList<>();
+        final List<Role> remove = new ArrayList<>();
+        if (addRoles != null) {
+            for (final InteractionRole role : addRoles) {
+                add.add(((InteractionRoleImpl) role).getJdaObject());
+            }
+        }
+        if (removeRoles != null) {
+            for (final InteractionRole role : removeRoles) {
+                remove.add(((InteractionRoleImpl) role).getJdaObject());
+            }
+        }
+
+        final CompletableFuture<Void> future = new CompletableFuture<>();
+        guild.modifyMemberRoles(((InteractionMemberImpl) member).getJdaObject(), add, remove).queue(future::complete);
+        return future;
+    }
+
+    @Override
+    public String getInviteUrl() {
+        return getSettings().getDiscordUrl();
     }
 
     public JDA getJda() {

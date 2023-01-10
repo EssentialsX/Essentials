@@ -1,9 +1,11 @@
 package com.earth2me.essentials;
 
 import net.ess3.api.IUser;
-import net.essentialsx.api.v2.services.mail.MailService;
+import net.essentialsx.api.v2.events.UserMailEvent;
 import net.essentialsx.api.v2.services.mail.MailMessage;
 import net.essentialsx.api.v2.services.mail.MailSender;
+import net.essentialsx.api.v2.services.mail.MailService;
+import org.bukkit.Bukkit;
 import org.bukkit.plugin.ServicePriority;
 
 import java.text.SimpleDateFormat;
@@ -35,6 +37,12 @@ public class MailServiceImpl implements MailService {
     }
 
     private void sendMail(IUser recipient, MailMessage message) {
+        final UserMailEvent event = new UserMailEvent(recipient, message);
+        Bukkit.getPluginManager().callEvent(event);
+        if (event.isCancelled()) {
+            return;
+        }
+
         final ArrayList<MailMessage> messages = recipient.getMailMessages();
         messages.add(0, message);
         recipient.setMailList(messages);
