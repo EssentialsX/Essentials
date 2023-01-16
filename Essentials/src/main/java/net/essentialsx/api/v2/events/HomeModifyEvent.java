@@ -92,8 +92,8 @@ public class HomeModifyEvent extends Event implements Cancellable {
     }
 
     /**
-     * Returns the name of the home when {@link #getCause()} returns {@link HomeModifyCause#UPDATE},
-     * returns the previous name if it returns {@link HomeModifyCause#RENAME}, or returns null if it returns {@link HomeModifyCause#DELETE} or {@link HomeModifyCause#CREATE}.
+     * Returns the name of the home when {@link #getCause()} returns {@link HomeModifyCause#UPDATE} or {@link HomeModifyCause#DELETE},
+     * returns the previous name if it returns {@link HomeModifyCause#RENAME}, or returns null if it returns {@link HomeModifyCause#CREATE}.
      * @return The name of the home or null.
      */
     public String getOldName() {
