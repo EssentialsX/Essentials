@@ -110,8 +110,6 @@ public interface IEssentials extends Plugin {
 
     int scheduleSyncRepeatingTask(Runnable run, long delay, long period);
 
-    TNTExplodeListener getTNTListener();
-
     PermissionsHandler getPermissionsHandler();
 
     AlternativeCommandsHandler getAlternativeCommandsHandler();
