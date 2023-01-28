@@ -261,7 +261,7 @@ public class EssentialsEntityListener implements Listener {
     public void onEntityTarget(final EntityTargetEvent event) {
         if (event.getTarget() instanceof Player) {
             final User user = ess.getUser((Player) event.getTarget());
-            if (user.isVanished()) {
+            if (user.isVanished() && !user.isAuthorized("essentials.vanish.mob_target")) {
                 event.setCancelled(true);
             }
         }
