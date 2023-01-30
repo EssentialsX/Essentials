@@ -17,4 +17,9 @@ public class PlayerTarget implements ITarget {
     public Location getLocation() {
         return Bukkit.getPlayer(uuid).getLocation();
     }
+
+    public UUID getUUID() {
+        return uuid;
+    }
+
 }

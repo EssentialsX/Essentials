@@ -475,6 +475,10 @@ public class AsyncTeleport implements IAsyncTeleport {
         timedTeleport = new AsyncTimedTeleport(teleportOwner, ess, this, delay, future, teleportUser, target, chargeFor, cause, respawn);
     }
 
+    public TeleportType getTpType() {
+        return tpType;
+    }
+
     public enum TeleportType {
         TPA,
         BACK,
