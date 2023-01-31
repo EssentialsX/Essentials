@@ -37,7 +37,7 @@ public class Commandunban extends EssentialsCommand {
         }
 
         final String senderDisplayName = sender.isPlayer() ? sender.getPlayer().getDisplayName() : Console.DISPLAY_NAME;
-        server.getLogger().log(Level.INFO, tl("playerUnbanned", senderDisplayName, name));
+        ess.getLogger().log(Level.INFO, tl("playerUnbanned", senderDisplayName, name));
 
         ess.broadcastMessage("essentials.ban.notify", tl("playerUnbanned", senderDisplayName, name));
     }
