@@ -151,7 +151,7 @@ import static com.earth2me.essentials.I18n.tlLocale;
 public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
     private static final Logger BUKKIT_LOGGER = Logger.getLogger("Essentials");
     private static Logger LOGGER = null;
-    private final transient TNTExplodeListener tntListener = new TNTExplodeListener(this);
+    private final transient TNTExplodeListener tntListener = new TNTExplodeListener();
     private final transient Set<String> vanishedPlayers = new LinkedHashSet<>();
     private final transient Map<String, IEssentialsCommand> commandMap = new HashMap<>();
     private transient ISettings settings;
@@ -1262,11 +1262,6 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
     @Override
     public int scheduleSyncRepeatingTask(final Runnable run, final long delay, final long period) {
         return this.getScheduler().scheduleSyncRepeatingTask(this, run, delay, period);
-    }
-
-    @Override
-    public TNTExplodeListener getTNTListener() {
-        return tntListener;
     }
 
     @Override
