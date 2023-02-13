@@ -33,7 +33,9 @@ import java.lang.reflect.Type;
 import java.math.BigDecimal;
 import java.nio.file.Files;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -101,6 +103,15 @@ public class EssentialsConfiguration {
 
     public CommentedConfigurationNode getRootNode() {
         return configurationNode;
+    }
+
+    public void setRootHolder(final Class<?> holderClass, final Object holder) {
+        try {
+            getRootNode().set(holderClass, holder);
+        } catch (SerializationException e) {
+            Essentials.getWrappedLogger().log(Level.SEVERE, "Error while saving user config: " + configFile.getName(), e);
+            throw new RuntimeException(e);
+        }
     }
 
     public File getFile() {
@@ -294,6 +305,19 @@ public class EssentialsConfiguration {
         return ConfigurateUtil.getMap(configurationNode);
     }
 
+    public Map<String, String> getStringMap(String path) {
+        final CommentedConfigurationNode node = getInternal(path);
+        if (node == null || !node.isMap()) {
+            return Collections.emptyMap();
+        }
+
+        final Map<String, String> map = new LinkedHashMap<>();
+        for (Map.Entry<Object, CommentedConfigurationNode> entry : node.childrenMap().entrySet()) {
+            map.put(String.valueOf(entry.getKey()), String.valueOf(entry.getValue().rawScalar()));
+        }
+        return map;
+    }
+
     public void removeProperty(String path) {
         final CommentedConfigurationNode node = getInternal(path);
         if (node != null) {
@@ -366,10 +390,10 @@ public class EssentialsConfiguration {
         } catch (final ParsingException e) {
             final File broken = new File(configFile.getAbsolutePath() + ".broken." + System.currentTimeMillis());
             if (configFile.renameTo(broken)) {
-                Essentials.getWrappedLogger().log(Level.SEVERE, "The file " + configFile.toString() + " is broken, it has been renamed to " + broken.toString(), e.getCause());
+                Essentials.getWrappedLogger().log(Level.SEVERE, "The file " + configFile + " is broken, it has been renamed to " + broken, e.getCause());
                 return;
             }
-            Essentials.getWrappedLogger().log(Level.SEVERE, "The file " + configFile.toString() + " is broken. A backup file has failed to be created", e.getCause());
+            Essentials.getWrappedLogger().log(Level.SEVERE, "The file " + configFile + " is broken. A backup file has failed to be created", e.getCause());
         } catch (final ConfigurateException e) {
             Essentials.getWrappedLogger().log(Level.SEVERE, e.getMessage(), e);
         } finally {
@@ -418,6 +442,10 @@ public class EssentialsConfiguration {
         } else {
             save();
         }
+    }
+
+    public boolean isTransaction() {
+        return transaction.get();
     }
 
     public void setSaveHook(Runnable saveHook) {

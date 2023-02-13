@@ -1,6 +1,7 @@
 package com.earth2me.essentials;
 
 import com.earth2me.essentials.commands.Commandfireball;
+import com.earth2me.essentials.craftbukkit.Inventories;
 import com.earth2me.essentials.textreader.IText;
 import com.earth2me.essentials.textreader.KeywordReplacer;
 import com.earth2me.essentials.textreader.TextInput;
@@ -192,17 +193,26 @@ public class EssentialsPlayerListener implements Listener, FakeAccessor {
             return;
         }
 
-        if (!ess.getSettings().cancelAfkOnMove() && !ess.getSettings().getFreezeAfkPlayers()) {
-            event.getHandlers().unregister(this);
+        final User user = ess.getUser(event.getPlayer());
 
-            if (ess.getSettings().isDebug()) {
-                ess.getLogger().log(Level.INFO, "Unregistering move listener");
+        if (user.isFreeze()) {
+            final Location from = event.getFrom();
+            final Location to = event.getTo().clone();
+            to.setX(from.getX());
+            to.setY(from.getY());
+            to.setZ(from.getZ());
+            try {
+                event.setTo(LocationUtil.getSafeDestination(ess, to));
+            } catch (final Exception ex) {
+                event.setTo(to);
             }
-
             return;
         }
 
-        final User user = ess.getUser(event.getPlayer());
+        if (!ess.getSettings().cancelAfkOnMove() && !ess.getSettings().getFreezeAfkPlayers()) {
+            return;
+        }
+
         if (user.isAfk() && ess.getSettings().getFreezeAfkPlayers()) {
             final Location from = event.getFrom();
             final Location origTo = event.getTo();
@@ -308,6 +318,7 @@ public class EssentialsPlayerListener implements Listener, FakeAccessor {
 
         ess.getBackup().onPlayerJoin();
         final User dUser = ess.getUser(player);
+        dUser.update(player);
 
         dUser.startTransaction();
         if (dUser.isNPC()) {
@@ -367,7 +378,7 @@ public class EssentialsPlayerListener implements Listener, FakeAccessor {
                 } else if (ess.getSettings().isCustomJoinMessage()) {
                     final String msg = (newUsername ? ess.getSettings().getCustomNewUsernameMessage() : ess.getSettings().getCustomJoinMessage())
                         .replace("{PLAYER}", player.getDisplayName()).replace("{USERNAME}", player.getName())
-                        .replace("{UNIQUE}", NumberFormat.getInstance().format(ess.getUserMap().getUniqueUsers()))
+                        .replace("{UNIQUE}", NumberFormat.getInstance().format(ess.getUsers().getUserCount()))
                         .replace("{ONLINE}", NumberFormat.getInstance().format(ess.getOnlinePlayers().size()))
                         .replace("{UPTIME}", DateUtil.formatDateDiff(ManagementFactory.getRuntimeMXBean().getStartTime()))
                         .replace("{PREFIX}", FormatUtil.replaceFormat(ess.getPermissionsHandler().getPrefix(player)))
@@ -527,6 +538,7 @@ public class EssentialsPlayerListener implements Listener, FakeAccessor {
     public void onPlayerLogin(final PlayerLoginEvent event) {
         if (event.getResult() == Result.KICK_FULL) {
             final User kfuser = ess.getUser(event.getPlayer());
+            kfuser.update(event.getPlayer());
             if (kfuser.isAuthorized("essentials.joinfullserver")) {
                 event.allow();
                 return;
@@ -557,7 +569,7 @@ public class EssentialsPlayerListener implements Listener, FakeAccessor {
         final User user = ess.getUser(event.getPlayer());
         final ItemStack stack = new ItemStack(Material.EGG, 1);
         if (user.hasUnlimited(stack)) {
-            user.getBase().getInventory().addItem(stack);
+            Inventories.addItem(user.getBase(), stack);
             user.getBase().updateInventory();
         }
     }

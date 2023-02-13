@@ -1,6 +1,7 @@
 package com.earth2me.essentials;
 
 import com.earth2me.essentials.commands.IEssentialsCommand;
+import com.earth2me.essentials.craftbukkit.Inventories;
 import com.earth2me.essentials.economy.EconomyLayer;
 import com.earth2me.essentials.economy.EconomyLayers;
 import com.earth2me.essentials.messaging.IMessageRecipient;
@@ -27,7 +28,6 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -90,6 +90,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
     private String lastHomeConfirmation;
     private long lastHomeConfirmationTimestamp;
     private Boolean toggleShout;
+    private boolean freeze = false;
     private transient final List<String> signCopy = Lists.newArrayList("", "", "", "");
     private transient long lastVanishTime = System.currentTimeMillis();
 
@@ -106,7 +107,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
         this.messageRecipient = new SimpleMessageRecipient(ess, this);
     }
 
-    void update(final Player base) {
+    public void update(final Player base) {
         setBase(base);
     }
 
@@ -464,7 +465,11 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
         } else if (nick.equalsIgnoreCase(getName())) {
             nickname = nick;
         } else {
-            nickname = FormatUtil.replaceFormat(ess.getSettings().getNicknamePrefix()) + nick;
+            if (isAuthorized("essentials.nick.hideprefix")) {
+                nickname = nick;
+            } else {
+                nickname = FormatUtil.replaceFormat(ess.getSettings().getNicknamePrefix()) + nick;
+            }
             suffix = "§r";
         }
 
@@ -1137,12 +1142,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
      * Returns the {@link ItemStack} in the main hand or off-hand. If the main hand is empty then the offhand item is returned - also nullable.
      */
     public ItemStack getItemInHand() {
-        if (VersionUtil.getServerBukkitVersion().isLowerThan(VersionUtil.v1_9_R01)) {
-            return getBase().getInventory().getItemInHand();
-        } else {
-            final PlayerInventory inventory = getBase().getInventory();
-            return inventory.getItemInMainHand() != null ? inventory.getItemInMainHand() : inventory.getItemInOffHand();
-        }
+        return Inventories.getItemInHand(getBase());
     }
 
     @Override
@@ -1190,6 +1190,16 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
 
     public List<String> getSignCopy() {
         return signCopy;
+    }
+
+    @Override
+    public boolean isFreeze() {
+        return freeze;
+    }
+
+    @Override
+    public void setFreeze(boolean freeze) {
+        this.freeze = freeze;
     }
 
     public boolean isBaltopExempt() {
