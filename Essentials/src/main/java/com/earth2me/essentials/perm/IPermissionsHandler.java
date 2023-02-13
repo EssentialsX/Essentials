@@ -3,6 +3,7 @@ package com.earth2me.essentials.perm;
 import com.earth2me.essentials.Essentials;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.TriState;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
 import java.util.List;
@@ -10,9 +11,15 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 
 public interface IPermissionsHandler {
-    String getGroup(Player base);
+    boolean addToGroup(OfflinePlayer base, String group);
 
-    List<String> getGroups(Player base);
+    boolean removeFromGroup(OfflinePlayer base, String group);
+
+    String getGroup(OfflinePlayer base);
+
+    List<String> getGroups(OfflinePlayer base);
+
+    List<String> getGroups();
 
     boolean canBuild(Player base, String group);
 

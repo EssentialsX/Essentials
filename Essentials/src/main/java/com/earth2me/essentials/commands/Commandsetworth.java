@@ -22,7 +22,7 @@ public class Commandsetworth extends EssentialsCommand {
         final ItemStack stack;
         final String price;
         if (args.length == 1) {
-            stack = user.getBase().getInventory().getItemInHand();
+            stack = user.getItemInHand();
             price = args[0];
         } else {
             stack = ess.getItemDb().get(args[0]);

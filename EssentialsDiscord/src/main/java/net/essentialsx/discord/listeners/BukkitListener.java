@@ -99,14 +99,19 @@ public class BukkitListener implements Listener {
     public void onJoin(AsyncUserDataLoadEvent event) {
         // Delay join to let nickname load
         if (!isSilentJoinQuit(event.getUser(), "join") && !isVanishHide(event.getUser())) {
-            sendJoinQuitMessage(event.getUser().getBase(), event.getJoinMessage(), true);
+            // Check if this is the first time the player has joined
+            if (!event.getUser().getBase().hasPlayedBefore()) {
+                sendJoinQuitMessage(event.getUser().getBase(), event.getJoinMessage(), MessageType.DefaultTypes.FIRST_JOIN);
+            } else {
+                sendJoinQuitMessage(event.getUser().getBase(), event.getJoinMessage(), MessageType.DefaultTypes.JOIN);
+            }
         }
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onQuit(PlayerQuitEvent event) {
         if (!isSilentJoinQuit(event.getPlayer(), "quit") && !isVanishHide(event.getPlayer())) {
-            sendJoinQuitMessage(event.getPlayer(), event.getQuitMessage(), false);
+            sendJoinQuitMessage(event.getPlayer(), event.getQuitMessage(), MessageType.DefaultTypes.LEAVE);
         }
     }
 
@@ -124,20 +129,35 @@ public class BukkitListener implements Listener {
             return;
         }
         if (event.getValue()) {
-            sendJoinQuitMessage(event.getAffected().getBase(), ChatColor.YELLOW + event.getAffected().getName() + " left the game", false);
+            sendJoinQuitMessage(event.getAffected().getBase(), ChatColor.YELLOW + event.getAffected().getName() + " left the game", MessageType.DefaultTypes.LEAVE);
             return;
         }
-        sendJoinQuitMessage(event.getAffected().getBase(), ChatColor.YELLOW + event.getAffected().getName() + " joined the game", true);
+        sendJoinQuitMessage(event.getAffected().getBase(), ChatColor.YELLOW + event.getAffected().getName() + " joined the game", MessageType.DefaultTypes.JOIN);
     }
 
-    public void sendJoinQuitMessage(final Player player, final String message, boolean join) {
-        sendDiscordMessage(join ? MessageType.DefaultTypes.JOIN : MessageType.DefaultTypes.LEAVE,
-                MessageUtil.formatMessage(join ? jda.getSettings().getJoinFormat(player) : jda.getSettings().getQuitFormat(player),
+    public void sendJoinQuitMessage(final Player player, final String message, MessageType type) {
+        int userCount = jda.getPlugin().getEss().getUsers().getUserCount();
+        final MessageFormat format;
+        switch (type.getKey()) {
+            case "join":
+                format = jda.getSettings().getJoinFormat(player);
+                break;
+            case "first-join":
+                format = jda.getSettings().getFirstJoinFormat(player);
+                break;
+            default: // So that it will always be initialised. Other options shouldn't be possible.
+                format = jda.getSettings().getQuitFormat(player);
+                userCount = userCount - 1;
+                break;
+
+        }
+        sendDiscordMessage(type,
+                MessageUtil.formatMessage(format,
                         MessageUtil.sanitizeDiscordMarkdown(player.getName()),
                         MessageUtil.sanitizeDiscordMarkdown(player.getDisplayName()),
                         MessageUtil.sanitizeDiscordMarkdown(message),
-                        jda.getPlugin().getEss().getOnlinePlayers().size() - (join ? 0 : 1),
-                        jda.getPlugin().getEss().getUsers().getUserCount()),
+                        jda.getPlugin().getEss().getOnlinePlayers().size(),
+                        userCount),
                         player);
     }
 

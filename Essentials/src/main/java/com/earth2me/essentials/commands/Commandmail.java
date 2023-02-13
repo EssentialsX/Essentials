@@ -298,9 +298,21 @@ public class Commandmail extends EssentialsCommand {
                 if (pages == 0) {
                     return Lists.newArrayList("0");
                 } else {
-                    final List<String> options = Lists.newArrayList("1");
-                    if (pages > 1) {
-                        options.add(String.valueOf(pages));
+                    final List<String> options = new ArrayList<>();
+                    for (int i = 0; i < pages; i++) {
+                        options.add(String.valueOf(i + 1));
+                    }
+                    return options;
+                }
+            } else if (args[0].equalsIgnoreCase("clear")) {
+                final ArrayList<MailMessage> mail = user.getMailMessages();
+                // We show up to 9 mails on a page, we don't need to autocomplete more than that...
+                if (mail.size() >= 9) {
+                    return Lists.newArrayList("1", "2", "3", "4", "5", "6", "7", "8", "9");
+                } else {
+                    final List<String> options = new ArrayList<>();
+                    for (int i = 0; i < mail.size(); i++) {
+                        options.add(String.valueOf(i + 1));
                     }
                     return options;
                 }

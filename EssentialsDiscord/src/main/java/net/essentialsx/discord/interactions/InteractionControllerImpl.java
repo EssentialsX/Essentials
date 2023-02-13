@@ -56,7 +56,8 @@ public class InteractionControllerImpl extends ListenerAdapter implements Intera
         event.deferReply(command.isEphemeral()).queue(null, failure -> logger.log(Level.SEVERE, "Error while deferring Discord command", failure));
 
         final InteractionEvent interactionEvent = new InteractionEventImpl(event);
-        if (!DiscordUtil.hasRoles(event.getMember(), jda.getSettings().getCommandSnowflakes(command.getName()))) {
+        final List<String> commandSnowflakes = jda.getSettings().getCommandSnowflakes(command.getName());
+        if (commandSnowflakes != null && !DiscordUtil.hasRoles(event.getMember(), commandSnowflakes)) {
             interactionEvent.reply(tl("noAccessCommand"));
             return;
         }
