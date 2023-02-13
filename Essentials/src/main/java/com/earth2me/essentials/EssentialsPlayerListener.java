@@ -662,7 +662,8 @@ public class EssentialsPlayerListener implements Listener, FakeAccessor {
         }
 
         if (ess.getSettings().isCommandCooldownsEnabled()
-            && !user.isAuthorized("essentials.commandcooldowns.bypass")) {
+            && !user.isAuthorized("essentials.commandcooldowns.bypass")
+            && (pluginCommand == null || !user.isAuthorized("essentials.commandcooldowns.bypass." + pluginCommand.getName()))) {
             final int argStartIndex = effectiveCommand.indexOf(" ");
             final String args = argStartIndex == -1 ? "" // No arguments present
                 : " " + effectiveCommand.substring(argStartIndex); // arguments start at argStartIndex; substring from there.
