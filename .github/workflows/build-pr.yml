@@ -18,12 +18,12 @@ jobs:
 
     steps:
     - name: Checkout Git repo
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3.3.0 #https://github.com/actions/checkout/releases
       with:
         fetch-depth: 0
 
     - name: Restore Gradle cache
-      uses: actions/cache@v2
+      uses: actions/cache@v3.2.5 #https://github.com/actions/cache/releases
       with:
         path: ~/.gradle/caches
         key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*') }}
@@ -31,13 +31,13 @@ jobs:
           ${{ runner.os }}-gradle-
 
     - name: Set up JDK 16
-      uses: actions/setup-java@v2
+      uses: actions/setup-java@v3.10.0 #https://github.com/actions/setup-java/releases
       with:
         distribution: 'adopt'
         java-version: 16
 
     - name: Validate Gradle Wrapper
-      uses: gradle/wrapper-validation-action@v1
+      uses: gradle/wrapper-validation-action@v1.0.5 #https://github.com/gradle/wrapper-validation-action/releases
 
     - name: Build with Gradle
       run: |
