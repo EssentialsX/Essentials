@@ -5,6 +5,7 @@ on:
     branches:
     - 2.x
     - dev/*
+    - update-actions
 
 jobs:
   build:
