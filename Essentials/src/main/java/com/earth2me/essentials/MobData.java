@@ -1,6 +1,6 @@
 package com.earth2me.essentials;
 
-import com.earth2me.essentials.craftbukkit.InventoryWorkaround;
+import com.earth2me.essentials.craftbukkit.Inventories;
 import com.earth2me.essentials.utils.EnumUtil;
 import com.earth2me.essentials.utils.StringUtil;
 import com.earth2me.essentials.utils.VersionUtil;
@@ -362,8 +362,8 @@ public enum MobData {
                 ((Horse) spawned).getInventory().setArmor(new ItemStack((Material) this.value, 1));
             } else if (this.type.equals(EntityType.ZOMBIE.getEntityClass()) || this.type.equals(EntityType.SKELETON)) {
                 final EntityEquipment invent = ((LivingEntity) spawned).getEquipment();
-                InventoryWorkaround.setItemInMainHand(invent, new ItemStack((Material) this.value, 1));
-                InventoryWorkaround.setItemInMainHandDropChance(invent, 0.1f);
+                Inventories.setItemInMainHand(invent, new ItemStack((Material) this.value, 1));
+                Inventories.setItemInMainHandDropChance(invent, 0.1f);
             }
         } else if (this.value.equals(Data.RAID_LEADER)) {
             ((Raider) spawned).setPatrolLeader(true);

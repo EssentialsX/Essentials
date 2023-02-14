@@ -198,7 +198,10 @@ public class DiscordSettings implements IConf {
     }
 
     public List<String> getCommandSnowflakes(String command) {
-        return config.getList("commands." + command + ".allowed-roles", String.class);
+        if (config.isList("commands." + command + ".allowed-roles")) {
+            return config.getList("commands." + command + ".allowed-roles", String.class);
+        }
+        return null;
     }
 
     public List<String> getCommandAdminSnowflakes(String command) {
@@ -252,6 +255,18 @@ public class DiscordSettings implements IConf {
             filled = format;
         }
         return generateMessageFormat(filled, ":arrow_right: {displayname} has joined!", false,
+                "username", "displayname", "joinmessage", "online", "unique");
+    }
+
+    public MessageFormat getFirstJoinFormat(Player player) {
+        final String format = getFormatString("first-join");
+        final String filled;
+        if (plugin.isPAPI() && format != null) {
+            filled = me.clip.placeholderapi.PlaceholderAPI.setPlaceholders(player, format);
+        } else {
+            filled = format;
+        }
+        return generateMessageFormat(filled, ":arrow_right: :first_place: {displayname} has joined the server for the first time!", false,
                 "username", "displayname", "joinmessage", "online", "unique");
     }
 

@@ -2,6 +2,7 @@ package com.earth2me.essentials.items;
 
 import com.earth2me.essentials.IConf;
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.craftbukkit.Inventories;
 import com.earth2me.essentials.utils.FormatUtil;
 import com.earth2me.essentials.utils.MaterialUtil;
 import com.earth2me.essentials.utils.VersionUtil;
@@ -156,14 +157,14 @@ public abstract class AbstractItemDb implements IConf, net.ess3.api.IItemDb {
         } else if (args[0].equalsIgnoreCase("hand")) {
             is.add(user.getItemInHand().clone());
         } else if (args[0].equalsIgnoreCase("inventory") || args[0].equalsIgnoreCase("invent") || args[0].equalsIgnoreCase("all")) {
-            for (final ItemStack stack : user.getBase().getInventory().getContents()) {
+            for (final ItemStack stack : Inventories.getInventory(user.getBase(), true)) {
                 if (stack == null || stack.getType() == Material.AIR) {
                     continue;
                 }
                 is.add(stack.clone());
             }
         } else if (args[0].equalsIgnoreCase("blocks")) {
-            for (final ItemStack stack : user.getBase().getInventory().getContents()) {
+            for (final ItemStack stack : Inventories.getInventory(user.getBase(), true)) {
                 if (stack == null || stack.getType() == Material.AIR || !stack.getType().isBlock()) {
                     continue;
                 }

@@ -5,6 +5,7 @@ import com.earth2me.essentials.User;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import net.ess3.api.IEssentials;
+import net.essentialsx.api.v2.ChatType;
 import org.bukkit.entity.Player;
 
 import java.util.Collections;
@@ -56,11 +57,11 @@ public class ChatProcessingCache {
 
     public abstract static class Chat {
         private final User user;
-        private final String type;
+        private final ChatType type;
         private final String originalMessage;
         protected long radius;
 
-        protected Chat(User user, String type, String originalMessage) {
+        protected Chat(User user, ChatType type, String originalMessage) {
             this.user = user;
             this.type = type;
             this.originalMessage = originalMessage;
@@ -70,7 +71,7 @@ public class ChatProcessingCache {
             return user;
         }
 
-        public String getType() {
+        public ChatType getType() {
             return type;
         }
 
@@ -83,7 +84,7 @@ public class ChatProcessingCache {
         }
 
         public final String getLongType() {
-            return type.length() == 0 ? "chat" : "chat-" + type;
+            return type == ChatType.UNKNOWN ? "chat" : "chat-" + type.key();
         }
     }
 
@@ -117,7 +118,7 @@ public class ChatProcessingCache {
         private String messageResult;
         private String formatResult;
 
-        public IntermediateChat(final User user, final String type, final String originalMessage) {
+        public IntermediateChat(final User user, final ChatType type, final String originalMessage) {
             super(user, type, originalMessage);
         }
 

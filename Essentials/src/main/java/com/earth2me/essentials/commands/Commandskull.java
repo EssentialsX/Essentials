@@ -1,7 +1,7 @@
 package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.User;
-import com.earth2me.essentials.craftbukkit.InventoryWorkaround;
+import com.earth2me.essentials.craftbukkit.Inventories;
 import com.earth2me.essentials.utils.EnumUtil;
 import com.earth2me.essentials.utils.MaterialUtil;
 import com.google.common.collect.Lists;
@@ -12,7 +12,6 @@ import org.bukkit.Server;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.profile.PlayerProfile;
-import org.bukkit.scheduler.BukkitRunnable;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -100,51 +99,46 @@ public class Commandskull extends EssentialsCommand {
     }
 
     private void editSkull(final User user, final ItemStack stack, final SkullMeta skullMeta, final String owner, final boolean spawn) {
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-                // Run this stuff async because it causes an HTTP request
+        ess.runTaskAsynchronously(() -> {
+            // Run this stuff async because it causes an HTTP request
 
-                final String shortOwnerName;
-                if (URL_VALUE_PATTERN.matcher(owner).matches()) {
-                    if (!playerProfileSupported) {
-                        user.sendMessage(tl("unsupportedFeature"));
-                        return;
-                    }
-
-                    final URL url;
-                    try {
-                        url = new URL("https://textures.minecraft.net/texture/" + owner);
-                    } catch (final MalformedURLException e) {
-                        // The URL should never be malformed
-                        throw new RuntimeException(e);
-                    }
-
-                    final PlayerProfile profile = ess.getServer().createPlayerProfile(UUID.randomUUID());
-                    profile.getTextures().setSkin(url);
-                    skullMeta.setOwnerProfile(profile);
-
-                    shortOwnerName = owner.substring(0, 7);
-                } else {
-                    skullMeta.setOwner(owner);
-                    shortOwnerName = owner;
+            final String shortOwnerName;
+            if (URL_VALUE_PATTERN.matcher(owner).matches()) {
+                if (!playerProfileSupported) {
+                    user.sendMessage(tl("unsupportedFeature"));
+                    return;
                 }
-                skullMeta.setDisplayName("§fSkull of " + shortOwnerName);
 
-                new BukkitRunnable() {
-                    @Override
-                    public void run() {
-                        stack.setItemMeta(skullMeta);
-                        if (spawn) {
-                            InventoryWorkaround.addItems(user.getBase().getInventory(), stack);
-                            user.sendMessage(tl("givenSkull", shortOwnerName));
-                            return;
-                        }
-                        user.sendMessage(tl("skullChanged", shortOwnerName));
-                    }
-                }.runTask(ess);
+                final URL url;
+                try {
+                    url = new URL("https://textures.minecraft.net/texture/" + owner);
+                } catch (final MalformedURLException e) {
+                    // The URL should never be malformed
+                    throw new RuntimeException(e);
+                }
+
+                final PlayerProfile profile = ess.getServer().createPlayerProfile(UUID.randomUUID());
+                profile.getTextures().setSkin(url);
+                skullMeta.setOwnerProfile(profile);
+
+                shortOwnerName = owner.substring(0, 7);
+            } else {
+                //noinspection deprecation
+                skullMeta.setOwner(owner);
+                shortOwnerName = owner;
             }
-        }.runTaskAsynchronously(ess);
+            skullMeta.setDisplayName("§fSkull of " + shortOwnerName);
+
+            ess.scheduleSyncDelayedTask(() -> {
+                stack.setItemMeta(skullMeta);
+                if (spawn) {
+                    Inventories.addItem(user.getBase(), stack);
+                    user.sendMessage(tl("givenSkull", shortOwnerName));
+                    return;
+                }
+                user.sendMessage(tl("skullChanged", shortOwnerName));
+            });
+        });
     }
 
     @Override

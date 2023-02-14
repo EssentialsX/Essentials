@@ -155,6 +155,8 @@ public interface IUser {
 
     void delHome(String name) throws Exception;
 
+    void renameHome(String name, String newName) throws Exception;
+
     boolean hasHome();
 
     Location getLastLocation();
@@ -334,4 +336,8 @@ public interface IUser {
     List<String> getPastUsernames();
 
     void addPastUsername(String username);
+
+    boolean isFreeze();
+
+    void setFreeze(boolean freeze);
 }

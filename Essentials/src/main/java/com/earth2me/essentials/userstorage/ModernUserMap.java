@@ -2,6 +2,7 @@ package com.earth2me.essentials.userstorage;
 
 import com.earth2me.essentials.OfflinePlayer;
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.utils.NumberUtil;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
@@ -12,13 +13,20 @@ import java.io.File;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.logging.Level;
 
 public class ModernUserMap extends CacheLoader<UUID, User> implements IUserMap {
     private final transient IEssentials ess;
     private final transient ModernUUIDCache uuidCache;
     private final transient LoadingCache<UUID, User> userCache;
+
+    private final boolean debugPrintStackWithWarn;
+    private final long debugMaxWarnsPerType;
+    private final ConcurrentMap<String, AtomicLong> debugNonPlayerWarnCounts;
 
     public ModernUserMap(final IEssentials ess) {
         this.ess = ess;
@@ -27,6 +35,15 @@ public class ModernUserMap extends CacheLoader<UUID, User> implements IUserMap {
                 .maximumSize(ess.getSettings().getMaxUserCacheCount())
                 .softValues()
                 .build(this);
+
+        // -Dnet.essentialsx.usermap.print-stack=true
+        final String printStackProperty = System.getProperty("net.essentialsx.usermap.print-stack", "false");
+        // -Dnet.essentialsx.usermap.max-warns=20
+        final String maxWarnProperty = System.getProperty("net.essentialsx.usermap.max-warns", "100");
+
+        this.debugMaxWarnsPerType = NumberUtil.isLong(maxWarnProperty) ? Long.parseLong(maxWarnProperty) : -1;
+        this.debugPrintStackWithWarn = Boolean.parseBoolean(printStackProperty);
+        this.debugNonPlayerWarnCounts = new ConcurrentHashMap<>();
     }
 
     @Override
@@ -111,7 +128,7 @@ public class ModernUserMap extends CacheLoader<UUID, User> implements IUserMap {
 
         User user = getUser(base.getUniqueId());
         if (user == null) {
-            ess.getLogger().log(Level.INFO, "Essentials created a User for " + base.getName() + " (" + base.getUniqueId() + ") for non Bukkit type: " + base.getClass().getName());
+            debugLogUncachedNonPlayer(base);
             user = new User(base, ess);
         } else if (!base.equals(user.getBase())) {
             ess.getLogger().log(Level.INFO, "Essentials updated the underlying Player object for " + user.getUUID());
@@ -149,6 +166,10 @@ public class ModernUserMap extends CacheLoader<UUID, User> implements IUserMap {
         return null;
     }
 
+    public void addCachedUser(final User user) {
+        userCache.put(user.getUUID(), user);
+    }
+
     @Override
     public Map<String, UUID> getNameCache() {
         return uuidCache.getNameCache();
@@ -173,5 +194,17 @@ public class ModernUserMap extends CacheLoader<UUID, User> implements IUserMap {
 
     public void shutdown() {
         uuidCache.shutdown();
+    }
+
+    private void debugLogUncachedNonPlayer(final Player base) {
+        final String typeName = base.getClass().getName();
+        final long count = debugNonPlayerWarnCounts.computeIfAbsent(typeName, name -> new AtomicLong(0)).getAndIncrement();
+        if (debugMaxWarnsPerType < 0 || count <= debugMaxWarnsPerType) {
+            final Throwable throwable = debugPrintStackWithWarn ? new Throwable() : null;
+            ess.getLogger().log(Level.INFO, "Created a User for " + base.getName() + " (" + base.getUniqueId() + ") for non Bukkit type: " + typeName, throwable);
+            if (count == debugMaxWarnsPerType) {
+                ess.getLogger().log(Level.WARNING, "Essentials will not log any more warnings for " + typeName + ". Please report this to the EssentialsX team.");
+            }
+        }
     }
 }

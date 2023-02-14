@@ -3,6 +3,7 @@ package com.earth2me.essentials.commands;
 import com.earth2me.essentials.ChargeException;
 import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.craftbukkit.Inventories;
 import com.earth2me.essentials.utils.MaterialUtil;
 import com.earth2me.essentials.utils.StringUtil;
 import com.earth2me.essentials.utils.VersionUtil;
@@ -62,7 +63,7 @@ public class Commandrepair extends EssentialsCommand {
 
     public void repairAll(final User user) throws Exception {
         final List<String> repaired = new ArrayList<>();
-        repairItems(user.getBase().getInventory().getContents(), user, repaired);
+        repairItems(Inventories.getInventory(user.getBase(), false), user, repaired);
 
         if (user.isAuthorized("essentials.repair.armor")) {
             repairItems(user.getBase().getInventory().getArmorContents(), user, repaired);

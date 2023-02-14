@@ -19,6 +19,7 @@ import net.essentialsx.discord.util.MessageUtil;
 import org.bukkit.Bukkit;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.logging.Level;
@@ -105,11 +106,22 @@ public class DiscordListener extends ListenerAdapter {
             }
         }
 
+        final List<IUser> viewers = new ArrayList<>();
+        for (final IUser essUser : plugin.getPlugin().getEss().getOnlineUsers()) {
+            for (final String group : keys) {
+                final String perm = "essentials.discord.receive." + group;
+                final boolean primaryOverride = plugin.getSettings().isAlwaysReceivePrimary() && group.equalsIgnoreCase("primary");
+                if (primaryOverride || (essUser.isPermissionSet(perm) && essUser.isAuthorized(perm))) {
+                    viewers.add(essUser);
+                    break;
+                }
+            }
+        }
         // Do not create the event specific objects if there are no listeners
         if (DiscordRelayEvent.getHandlerList().getRegisteredListeners().length != 0) {
             final DiscordRelayEvent relayEvent = new DiscordRelayEvent(
                     new InteractionMemberImpl(member), new InteractionChannelImpl(event.getChannel()),
-                    Collections.unmodifiableList(keys), event.getMessage().getContentRaw(), formattedMessage);
+                    Collections.unmodifiableList(keys), event.getMessage().getContentRaw(), formattedMessage, viewers);
             Bukkit.getPluginManager().callEvent(relayEvent);
             if (relayEvent.isCancelled()) {
                 return;
@@ -117,15 +129,8 @@ public class DiscordListener extends ListenerAdapter {
             formattedMessage = relayEvent.getFormattedMessage();
         }
 
-        for (IUser essUser : plugin.getPlugin().getEss().getOnlineUsers()) {
-            for (String group : keys) {
-                final String perm = "essentials.discord.receive." + group;
-                final boolean primaryOverride = plugin.getSettings().isAlwaysReceivePrimary() && group.equalsIgnoreCase("primary");
-                if (primaryOverride || (essUser.isPermissionSet(perm) && essUser.isAuthorized(perm))) {
-                    essUser.sendMessage(formattedMessage);
-                    break;
-                }
-            }
+        for (final IUser essUser : viewers) {
+            essUser.sendMessage(formattedMessage);
         }
     }
 }
