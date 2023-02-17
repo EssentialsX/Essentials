@@ -7,14 +7,11 @@ contact_links:
     url: https://github.com/EssentialsX/Essentials/discussions/categories/q-a
     about: Visit the Q&A forum to search for previous help requests.
   - name: Check past feature suggestions
-    url: https://github.com/EssentialsX/Essentials/discussions/categories/ideas-and-feature-suggestions
+    url: https://github.com/EssentialsX/Essentials/issues?q=is%3Aissue+label%3A%22type%3A+enhancement%22
     about: Visit the Feature Suggestions forum to view and discuss existing feature suggestions.
   - name: Create help request
     url: https://github.com/EssentialsX/Essentials/discussions/new?category=q-a
     about: Create a support ticket to get help from developers.
-  - name: Suggest a feature
-    url: https://github.com/EssentialsX/Essentials/discussions/new?category=ideas-and-feature-suggestions
-    about: Suggest new features for EssentialsX!
   - name: Get help from the community on Discord
     url: https://discord.gg/casfFyh
     about: Join the MOSS Discord for community-powered EssentialsX support!
