@@ -87,6 +87,9 @@ public class SignTrade extends EssentialsSign {
         final Trade trade = getTrade(sign, 2, AmountType.COST, false, true, ess);
         ItemStack stack = Inventories.getItemInHand(player.getBase());
         if (trade.getItemStack() != null && stack != null && !MaterialUtil.isAir(stack.getType()) && trade.getItemStack().getType() == stack.getType() && MaterialUtil.getDamage(trade.getItemStack()) == MaterialUtil.getDamage(stack) && trade.getItemStack().getEnchantments().equals(stack.getEnchantments())) {
+            if (MaterialUtil.isPotion(trade.getItemStack().getType()) && !trade.getItemStack().isSimilar(stack)) {
+                return null;
+            }
             final int amount = trade.getItemStack().getAmount();
             if (Inventories.containsAtLeast(player.getBase(), trade.getItemStack(), amount)) {
                 stack = stack.clone();
