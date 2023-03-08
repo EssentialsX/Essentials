@@ -6,7 +6,12 @@ import org.bukkit.entity.Player;
 public class LegacyPlayerLocaleProvider implements PlayerLocaleProvider {
     @Override
     public String getLocale(Player player) {
-        return player.spigot().getLocale();
+        try {
+            return player.spigot().getLocale();
+        } catch (final Throwable ignored) {
+            // CraftBukkit "compatability"
+            return null;
+        }
     }
 
     @Override
