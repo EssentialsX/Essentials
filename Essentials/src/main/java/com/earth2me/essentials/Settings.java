@@ -855,7 +855,15 @@ public class Settings implements net.ess3.api.ISettings {
     }
 
     private boolean _isDebug() {
-        return config.getBoolean("debug", false);
+        if (config.isBoolean("debug")) {
+            return config.getBoolean("debug", false);
+        }
+
+        if (config.isBoolean("debug.enabled")) {
+            return config.getBoolean("debug.enabled", false);
+        }
+
+        return false;
     }
 
     @Override
@@ -865,10 +873,23 @@ public class Settings implements net.ess3.api.ISettings {
 
     @Override
     public boolean isDebug(DebugFlag flag) {
-        if (flag.isSetByConfig() && (debug || configDebug)) {
+        if (flag.isSetByGlobal() && (debug || configDebug)) {
             return true;
         }
-        return flag.getSystemPropertyValue();
+        final String flagConfigPath = flag.getConfigKey();
+        if (config.isBoolean(flagConfigPath)) {
+            return config.getBoolean(flagConfigPath, false);
+        }
+        return flag.getSystemPropertyBoolean();
+    }
+
+    @Override
+    public Long getDebugLong(DebugFlag flag) {
+        final String flagConfigPath = flag.getConfigKey();
+        if (config.hasProperty(flagConfigPath)) {
+            return config.getLong(flagConfigPath, 0);
+        }
+        return flag.getSystemPropertyLong();
     }
 
     @Override
