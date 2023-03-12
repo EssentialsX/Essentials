@@ -18,6 +18,8 @@ import java.util.function.Predicate;
 import java.util.regex.Pattern;
 
 public interface ISettings extends IConf {
+    String DEBUG_FLAG_NAMESPACE = "net.essentialsx";
+
     File getConfigFile();
 
     boolean areSignsDisabled();
@@ -140,6 +142,8 @@ public interface ISettings extends IConf {
     boolean isCommandOverridden(String name);
 
     boolean isDebug();
+
+    boolean isDebug(DebugFlag flag);
 
     void setDebug(boolean debug);
 
@@ -414,6 +418,33 @@ public interface ISettings extends IConf {
         SPAWN,
         BACK,
         OFF
+    }
+
+    enum DebugFlag {
+        GENERIC("debug.generic", true),
+        USERMAP_PRINT_STACK("usermap.print-stack", false),
+        ;
+
+        private final String propertyKey;
+        private final boolean isSetByConfig;
+
+        DebugFlag(final String propertyKey, final boolean isSetByConfig) {
+            this.propertyKey = propertyKey;
+            this.isSetByConfig = isSetByConfig;
+        }
+
+        public String getSystemProperty() {
+            return DEBUG_FLAG_NAMESPACE + "." + propertyKey;
+        }
+
+        public boolean getSystemPropertyValue() {
+            final String value = System.getProperty(getSystemProperty(), "false");
+            return Boolean.parseBoolean(value);
+        }
+
+        public boolean isSetByConfig() {
+            return isSetByConfig;
+        }
     }
 
 }

@@ -860,7 +860,15 @@ public class Settings implements net.ess3.api.ISettings {
 
     @Override
     public boolean isDebug() {
-        return debug || configDebug;
+        return isDebug(DebugFlag.GENERIC);
+    }
+
+    @Override
+    public boolean isDebug(DebugFlag flag) {
+        if (flag.isSetByConfig() && (debug || configDebug)) {
+            return true;
+        }
+        return flag.getSystemPropertyValue();
     }
 
     @Override
