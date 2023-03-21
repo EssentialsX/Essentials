@@ -1,7 +1,7 @@
 package com.earth2me.essentials;
 
 import com.earth2me.essentials.Mob.MobException;
-import com.earth2me.essentials.craftbukkit.InventoryWorkaround;
+import com.earth2me.essentials.craftbukkit.Inventories;
 import com.earth2me.essentials.utils.EnumUtil;
 import com.earth2me.essentials.utils.LocationUtil;
 import com.earth2me.essentials.utils.StringUtil;
@@ -251,8 +251,8 @@ public final class SpawnMob {
     private static void defaultMobData(final EntityType type, final Entity spawned) {
         if (type == EntityType.SKELETON) {
             final EntityEquipment invent = ((LivingEntity) spawned).getEquipment();
-            InventoryWorkaround.setItemInMainHand(invent, new ItemStack(Material.BOW, 1));
-            InventoryWorkaround.setItemInMainHandDropChance(invent, 0.1f);
+            Inventories.setItemInMainHand(invent, new ItemStack(Material.BOW, 1));
+            Inventories.setItemInMainHandDropChance(invent, 0.1f);
         }
 
         if (type == MobCompat.ZOMBIFIED_PIGLIN) {
@@ -260,8 +260,8 @@ public final class SpawnMob {
             setVillager(zombie, false);
 
             final EntityEquipment invent = zombie.getEquipment();
-            InventoryWorkaround.setItemInMainHand(invent, new ItemStack(GOLDEN_SWORD, 1));
-            InventoryWorkaround.setItemInMainHandDropChance(invent, 0.1f);
+            Inventories.setItemInMainHand(invent, new ItemStack(GOLDEN_SWORD, 1));
+            Inventories.setItemInMainHandDropChance(invent, 0.1f);
         }
 
         if (type == EntityType.ZOMBIE) {
