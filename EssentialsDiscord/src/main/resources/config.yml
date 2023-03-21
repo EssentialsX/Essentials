@@ -213,14 +213,16 @@ commands:
 show-discord-attachments: true
 
 # List of roles which are used for the top role placeholders. If this is empty, all roles will be allowed.
-discord-roles-selection:
-  - "Admins"
+discord-role-blacklist:
+  - "1234123412341234123"
   - "Members"
 
+invert-discord-role-blacklist: false
+
 # Aliases for Discord roles before they are sent to Minecraft.
-discord-roles-aliases:
-  Admins: "Admin"
-  Members: "Member"
+discord-roles-aliases: []
+#  Admins: "Admin"
+#  Members: "Member"
 
 # A list of roles allowed to send Minecraft color/formatting codes from Discord to MC.
 # This applies to all aspects such as that Discord->MC chat relay as well as commands.

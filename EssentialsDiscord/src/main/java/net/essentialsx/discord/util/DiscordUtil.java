@@ -142,18 +142,20 @@ public final class DiscordUtil {
         final List<Role> roles = member == null ? null : member.getRoles();
 
         for (final Role role : roles) {
-            if (jda.getPlugin().getSettings().getDiscordRolesSelection().contains(role.getName())) {
-                final String alias = jda.getPlugin().getSettings().getDiscordRoleAlias(role.getName());
+            final Boolean contains = jda.getPlugin().getSettings().getDiscordRolesBlacklist().contains(role.getName()) ||
+                    jda.getPlugin().getSettings().getDiscordRolesBlacklist().contains(role.getId());
+            if ((!jda.getPlugin().getSettings().getInvertDiscordRoleBlacklist() && !contains)
+                    || (jda.getPlugin().getSettings().getInvertDiscordRoleBlacklist() && contains)) {
+                String alias = jda.getPlugin().getSettings().getDiscordRoleAlias(role.getName());
+                if (alias == "") {
+                    alias = jda.getPlugin().getSettings().getDiscordRoleAlias(role.getId());
+                }
                 if (alias != "") {
                     return alias;
                 } else {
                     return role.getName();
                 }
             }
-        }
-
-        if (jda.getPlugin().getSettings().getDiscordRolesSelection().isEmpty()) {
-            return roles.isEmpty() ? "" : roles.get(0).getName();
         }
 
         return "";
@@ -175,12 +177,19 @@ public final class DiscordUtil {
 
         int color = Role.DEFAULT_COLOR_RAW;
         for (final Role role : roles) {
-            if (role.getColorRaw() != Role.DEFAULT_COLOR_RAW && jda.getPlugin().getSettings().getDiscordRolesSelection().contains(role.getName())) {
+            final Boolean contains = jda.getPlugin().getSettings().getDiscordRolesBlacklist().contains(role.getName()) ||
+                    jda.getPlugin().getSettings().getDiscordRolesBlacklist().contains(role.getId());
+            if ((!jda.getPlugin().getSettings().getInvertDiscordRoleBlacklist() && !contains)
+                    || (jda.getPlugin().getSettings().getInvertDiscordRoleBlacklist() && contains)
+                    && role.getColorRaw() != Role.DEFAULT_COLOR_RAW) {
+
                 color = role.getColorRaw();
+                break;
+
             }
         }
 
-        if (jda.getPlugin().getSettings().getDiscordRolesSelection().isEmpty()) {
+        if (jda.getPlugin().getSettings().getInvertDiscordRoleBlacklist() && jda.getPlugin().getSettings().getDiscordRolesBlacklist().isEmpty()) {
             color = member.getColorRaw();
         }
 
