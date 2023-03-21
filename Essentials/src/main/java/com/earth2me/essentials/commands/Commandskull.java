@@ -1,7 +1,7 @@
 package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.User;
-import com.earth2me.essentials.craftbukkit.InventoryWorkaround;
+import com.earth2me.essentials.craftbukkit.Inventories;
 import com.earth2me.essentials.utils.EnumUtil;
 import com.earth2me.essentials.utils.MaterialUtil;
 import com.google.common.collect.Lists;
@@ -9,7 +9,6 @@ import org.bukkit.Material;
 import org.bukkit.Server;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
-import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.Collections;
 import java.util.List;
@@ -60,26 +59,21 @@ public class Commandskull extends EssentialsCommand {
     }
 
     private void editSkull(final User user, final ItemStack stack, final SkullMeta skullMeta, final String owner, final boolean spawn) {
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-                //Run this stuff async because SkullMeta#setOwner causes a http request.
-                skullMeta.setDisplayName("§fSkull of " + owner);
-                skullMeta.setOwner(owner);
-                new BukkitRunnable() {
-                    @Override
-                    public void run() {
-                        stack.setItemMeta(skullMeta);
-                        if (spawn) {
-                            InventoryWorkaround.addItems(user.getBase().getInventory(), stack);
-                            user.sendMessage(tl("givenSkull", owner));
-                            return;
-                        }
-                        user.sendMessage(tl("skullChanged", owner));
-                    }
-                }.runTask(ess);
-            }
-        }.runTaskAsynchronously(ess);
+        ess.runTaskAsynchronously(() -> {
+            //Run this stuff async because SkullMeta#setOwner causes a http request.
+            skullMeta.setDisplayName("§fSkull of " + owner);
+            //noinspection deprecation
+            skullMeta.setOwner(owner);
+            ess.scheduleSyncDelayedTask(() -> {
+                stack.setItemMeta(skullMeta);
+                if (spawn) {
+                    Inventories.addItem(user.getBase(), stack);
+                    user.sendMessage(tl("givenSkull", owner));
+                    return;
+                }
+                user.sendMessage(tl("skullChanged", owner));
+            });
+        });
     }
 
     @Override

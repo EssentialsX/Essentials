@@ -9,6 +9,7 @@ import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 import net.essentialsx.api.v2.services.discord.InteractionChannel;
 import net.essentialsx.api.v2.services.discord.InteractionEvent;
 import net.essentialsx.api.v2.services.discord.InteractionMember;
+import net.essentialsx.api.v2.services.discord.InteractionRole;
 import net.essentialsx.discord.EssentialsDiscord;
 import net.essentialsx.discord.util.DiscordUtil;
 
@@ -77,6 +78,12 @@ public class InteractionEventImpl implements InteractionEvent {
     public InteractionChannel getChannelArgument(String key) {
         final OptionMapping mapping = event.getOption(key);
         return mapping == null ? null : new InteractionChannelImpl(mapping.getAsGuildChannel());
+    }
+
+    @Override
+    public InteractionRole getRoleArgument(String key) {
+        final OptionMapping mapping = event.getOption(key);
+        return mapping == null ? null : new InteractionRoleImpl(mapping.getAsRole());
     }
 
     @Override
