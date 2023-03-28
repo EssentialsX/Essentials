@@ -5,7 +5,6 @@ import org.bukkit.entity.Player;
 
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.Set;
 import java.util.UUID;
 import java.util.logging.Level;
@@ -13,36 +12,19 @@ import java.util.logging.Level;
 public class EssentialsTimer implements Runnable {
     private final transient IEssentials ess;
     private final transient Set<UUID> onlineUsers = new HashSet<>(); // Field is necessary for hidden users
-    private final LinkedList<Double> history = new LinkedList<>();
-    @SuppressWarnings("FieldCanBeLocal")
-    private final long maxTime = 10 * 1000000;
-    @SuppressWarnings("FieldCanBeLocal")
-    private final long tickInterval = 50;
-    private transient long lastPoll = System.nanoTime();
+    private static final long maxTime = 10 * 1000000;
     private int skip1 = 0;
     private int skip2 = 0;
 
     EssentialsTimer(final IEssentials ess) {
         this.ess = ess;
-        history.add(20d);
     }
 
     @Override
     public void run() {
         final long startTime = System.nanoTime();
         final long currentTime = System.currentTimeMillis();
-        long timeSpent = (startTime - lastPoll) / 1000;
-        if (timeSpent == 0) {
-            timeSpent = 1;
-        }
-        if (history.size() > 10) {
-            history.remove();
-        }
-        final double tps = tickInterval * 1000000.0 / timeSpent;
-        if (tps <= 21) {
-            history.add(tps);
-        }
-        lastPoll = startTime;
+
         int count = 0;
         onlineUsers.clear();
         for (final Player player : ess.getOnlinePlayers()) {
@@ -98,15 +80,5 @@ public class EssentialsTimer implements Runnable {
             user.checkJailTimeout(currentTime);
             user.resetInvulnerabilityAfterTeleport();
         }
-    }
-
-    public double getAverageTPS() {
-        double avg = 0;
-        for (final Double f : history) {
-            if (f != null) {
-                avg += f;
-            }
-        }
-        return avg / history.size();
     }
 }

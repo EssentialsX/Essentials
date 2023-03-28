@@ -42,7 +42,7 @@ public class Commandkittycannon extends EssentialsCommand {
     @Override
     protected void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception {
         final Entity ocelot = Mob.CAT.getType() == null ? spawnOcelot(server, user) : spawnCat(server, user);
-        ess.scheduleSyncDelayedTask(() -> {
+        ess.scheduleEntityDelayedTask(ocelot, () -> {
             final Location loc = ocelot.getLocation();
             ocelot.remove();
             loc.getWorld().createExplosion(loc, 0F);

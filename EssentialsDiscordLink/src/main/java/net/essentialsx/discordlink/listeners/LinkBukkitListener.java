@@ -156,7 +156,7 @@ public class LinkBukkitListener implements Listener {
                 if (Bukkit.isPrimaryThread()) {
                     kickTask.run();
                 } else {
-                    ess.getEss().scheduleSyncDelayedTask(kickTask);
+                    ess.getEss().scheduleEntityDelayedTask(event.getUser().getBase(), kickTask);
                 }
                 break;
             }

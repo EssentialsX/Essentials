@@ -3,7 +3,6 @@ package com.earth2me.essentials;
 import com.earth2me.essentials.api.IAsyncTeleport;
 import com.earth2me.essentials.commands.IEssentialsCommand;
 import com.earth2me.essentials.config.entities.CommandCooldown;
-import net.ess3.api.ITeleport;
 import net.ess3.api.MaxMoneyException;
 import net.ess3.api.events.AfkStatusChangeEvent;
 import net.essentialsx.api.v2.services.mail.MailMessage;
@@ -15,7 +14,6 @@ import org.bukkit.entity.Player;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.math.BigDecimal;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -70,12 +68,6 @@ public interface IUser {
      */
     @Deprecated
     boolean hasOutstandingTeleportRequest();
-
-    /**
-     * @deprecated This API is not asynchronous. Use {@link com.earth2me.essentials.api.IAsyncTeleport IAsyncTeleport} with {@link IUser#getAsyncTeleport()}
-     */
-    @Deprecated
-    ITeleport getTeleport();
 
     IAsyncTeleport getAsyncTeleport();
 

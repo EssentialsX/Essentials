@@ -140,28 +140,6 @@ public class Jails implements net.ess3.api.IJails {
         }
     }
 
-    /**
-     * @deprecated This method does not use asynchronous teleportation. Use {@link Jails#sendToJail(IUser, String, CompletableFuture)}
-     */
-    @SuppressWarnings("deprecation")
-    @Override
-    @Deprecated
-    public void sendToJail(final IUser user, String jail) throws Exception {
-        if (jail == null || jail.isEmpty()) {
-            return;
-        }
-
-        jail = jail.toLowerCase(Locale.ENGLISH);
-        synchronized (jails) {
-            if (jails.containsKey(jail)) {
-                if (user.getBase().isOnline()) {
-                    user.getTeleport().now(getJail(jail), false, TeleportCause.COMMAND);
-                }
-                user.setJail(jail);
-            }
-        }
-    }
-
     @Override
     public void sendToJail(final IUser user, final String jailName, final CompletableFuture<Boolean> future) throws Exception {
         if (jailName == null || jailName.isEmpty()) {

@@ -38,7 +38,7 @@ public class Commandbalancetop extends EssentialsCommand {
             new TextPager(cache).showPage(Integer.toString(page), null, "balancetop", sender);
         };
         if (sender.getSender() instanceof BlockCommandSender) {
-            ess.scheduleSyncDelayedTask(runnable);
+            ess.scheduleGlobalDelayedTask(runnable);
         } else {
             runnable.run();
         }

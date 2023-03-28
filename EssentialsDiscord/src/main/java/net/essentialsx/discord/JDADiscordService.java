@@ -229,7 +229,7 @@ public class JDADiscordService implements DiscordService, IEssentialsModule {
             logger.log(Level.WARNING, "Error while loading the achievement/advancement listener. You will not receive achievement/advancement notifications on Discord.", e);
         }
 
-        getPlugin().getEss().scheduleSyncDelayedTask(() -> DiscordUtil.dispatchDiscordMessage(JDADiscordService.this, MessageType.DefaultTypes.SERVER_START, getSettings().getStartMessage(), true, null, null, null));
+        getPlugin().getEss().scheduleInitTask(() -> DiscordUtil.dispatchDiscordMessage(JDADiscordService.this, MessageType.DefaultTypes.SERVER_START, getSettings().getStartMessage(), true, null, null, null));
 
         Bukkit.getServicesManager().register(DiscordService.class, this, plugin, ServicePriority.Normal);
     }

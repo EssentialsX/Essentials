@@ -25,7 +25,7 @@ public class Commandbeezooka extends EssentialsCommand {
         final Entity bee = Mob.BEE.spawn(user.getWorld(), server, user.getBase().getEyeLocation());
         bee.setVelocity(user.getBase().getEyeLocation().getDirection().multiply(2));
 
-        ess.scheduleSyncDelayedTask(() -> {
+        ess.scheduleEntityDelayedTask(bee, () -> {
             final Location loc = bee.getLocation();
             bee.remove();
             loc.getWorld().createExplosion(loc, 0F);

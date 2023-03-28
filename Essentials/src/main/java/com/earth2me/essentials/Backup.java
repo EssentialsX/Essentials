@@ -1,6 +1,7 @@
 package com.earth2me.essentials;
 
 import net.ess3.api.IEssentials;
+import net.ess3.provider.SchedulingProvider;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 
@@ -18,7 +19,7 @@ public class Backup implements Runnable {
     private transient final IEssentials ess;
     private final AtomicBoolean pendingShutdown = new AtomicBoolean(false);
     private transient boolean running = false;
-    private transient int taskId = -1;
+    private transient SchedulingProvider.EssentialsTask task = null;
     private transient boolean active = false;
     private transient CompletableFuture<Object> taskLock = null;
 
@@ -36,10 +37,10 @@ public class Backup implements Runnable {
 
     public synchronized void stopTask() {
         running = false;
-        if (taskId != -1) {
-            server.getScheduler().cancelTask(taskId);
+        if (task != null) {
+            task.cancel();
         }
-        taskId = -1;
+        task = null;
     }
 
     private synchronized void startTask() {
@@ -48,7 +49,7 @@ public class Backup implements Runnable {
             if (interval < 1200) {
                 return;
             }
-            taskId = ess.scheduleSyncRepeatingTask(this, interval, interval);
+            task = ess.scheduleGlobalRepeatingTask(this, interval, interval);
             running = true;
         }
     }
@@ -123,7 +124,7 @@ public class Backup implements Runnable {
                 }
 
                 if (!pendingShutdown.get()) {
-                    ess.scheduleSyncDelayedTask(new BackupEnableSaveTask());
+                    ess.scheduleGlobalDelayedTask(new BackupEnableSaveTask());
                 }
             }
         });

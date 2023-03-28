@@ -32,7 +32,7 @@ public final class EconomyLayers {
     }
 
     public static void onEnable(final Essentials ess) {
-        ess.scheduleSyncDelayedTask(() -> {
+        ess.scheduleInitTask(() -> {
             serverStarted = true;
             for (final Plugin plugin : Bukkit.getPluginManager().getPlugins()) {
                 if (!plugin.isEnabled()) {

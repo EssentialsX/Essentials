@@ -8,6 +8,7 @@ description: Provides an essential, core set of commands for Bukkit.
 softdepend: [Vault, LuckPerms]
 authors: [Zenexer, ementalo, Aelux, Brettflan, KimKandor, snowleo, ceulemans, Xeology, KHobbits, md_5, Iaccidentally, drtshock, vemacs, SupaHam, mdcfe, JRoy, pop4959]
 api-version: "1.13"
+folia-supported: true
 commands:
   afk:
     description: Marks you as away-from-keyboard.

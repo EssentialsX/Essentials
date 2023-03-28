@@ -2,6 +2,7 @@ package com.earth2me.essentials;
 
 import net.ess3.api.IEssentials;
 import net.ess3.api.IUser;
+import net.ess3.provider.SchedulingProvider;
 import org.bukkit.Location;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 
@@ -30,7 +31,7 @@ public class AsyncTimedTeleport implements Runnable {
     private final boolean timer_canMove;
     private final Trade timer_chargeFor;
     private final TeleportCause timer_cause;
-    private int timer_task;
+    private SchedulingProvider.EssentialsTask timer_task;
     private double timer_health;
 
     AsyncTimedTeleport(final IUser user, final IEssentials ess, final AsyncTeleport teleport, final long delay, final IUser teleportUser, final ITarget target, final Trade chargeFor, final TeleportCause cause, final boolean respawn) {
@@ -54,7 +55,7 @@ public class AsyncTimedTeleport implements Runnable {
         this.timer_respawn = respawn;
         this.timer_canMove = user.isAuthorized("essentials.teleport.timer.move");
 
-        timer_task = ess.runTaskTimerAsynchronously(this, 20, 20).getTaskId();
+        timer_task = ess.runTaskTimerAsynchronously(this, 20, 20);
 
         if (future != null) {
             this.parentFuture = future;
@@ -141,16 +142,16 @@ public class AsyncTimedTeleport implements Runnable {
             }
         }
 
-        ess.scheduleSyncDelayedTask(new DelayedTeleportTask());
+        ess.scheduleEntityDelayedTask(teleportOwner.getBase(), new DelayedTeleportTask());
     }
 
     //If we need to cancelTimer a pending teleportPlayer call this method
     void cancelTimer(final boolean notifyUser) {
-        if (timer_task == -1) {
+        if (timer_task == null) {
             return;
         }
         try {
-            ess.getServer().getScheduler().cancelTask(timer_task);
+            timer_task.cancel();
             if (notifyUser) {
                 teleportOwner.sendMessage(tl("pendingTeleportCancelled"));
                 if (timer_teleportee != null && !timer_teleportee.equals(teleportOwner.getBase().getUniqueId())) {
@@ -158,7 +159,7 @@ public class AsyncTimedTeleport implements Runnable {
                 }
             }
         } finally {
-            timer_task = -1;
+            timer_task = null;
         }
     }
 }
