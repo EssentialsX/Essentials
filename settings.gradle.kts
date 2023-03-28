@@ -21,6 +21,7 @@ dependencyResolutionManagement {
             content { includeGroup("net.kyori") }
             content { includeGroup("org.apache.logging.log4j") }
         }
+        mavenLocal()
     }
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
 }
@@ -51,5 +52,6 @@ sequenceOf(
 include(":providers:BaseProviders")
 include(":providers:NMSReflectionProvider")
 include(":providers:PaperProvider")
+include(":providers:FoliaProvider")
 include(":providers:1_8Provider")
 include(":providers:1_12Provider")
