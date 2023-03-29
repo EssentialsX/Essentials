@@ -6,18 +6,20 @@ import net.ess3.provider.SchedulingProvider;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-public class FoliaSchedulingProvider implements SchedulingProvider {
+public class FoliaSchedulingProvider implements SchedulingProvider, Listener {
     private final Plugin plugin;
     private List<Runnable> initTasks = new ArrayList<>();
 
     public FoliaSchedulingProvider(Plugin plugin) {
         this.plugin = plugin;
+        plugin.getServer().getPluginManager().registerEvents(this, plugin);
     }
 
     @EventHandler
