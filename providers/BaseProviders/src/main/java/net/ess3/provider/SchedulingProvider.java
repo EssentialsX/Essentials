@@ -6,6 +6,10 @@ import org.bukkit.entity.Entity;
 public interface SchedulingProvider extends Provider {
     void registerInitTask(Runnable runnable);
 
+    boolean isEntityThread(Entity entity);
+
+    boolean isRegionThread(Location location);
+
     void runEntityTask(Entity entity, Runnable runnable);
 
     EssentialsTask runEntityTask(Entity entity, Runnable runnable, long delay);

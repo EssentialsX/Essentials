@@ -19,6 +19,16 @@ public class BukkitSchedulingProvider implements SchedulingProvider {
     }
 
     @Override
+    public boolean isEntityThread(Entity entity) {
+        return plugin.getServer().isPrimaryThread();
+    }
+
+    @Override
+    public boolean isRegionThread(Location location) {
+        return plugin.getServer().isPrimaryThread();
+    }
+
+    @Override
     public void runEntityTask(Entity entity, Runnable runnable) {
         runEntityTask(entity, runnable, 1);
     }

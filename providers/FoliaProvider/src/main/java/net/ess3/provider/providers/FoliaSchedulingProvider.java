@@ -39,6 +39,16 @@ public class FoliaSchedulingProvider implements SchedulingProvider, Listener {
     }
 
     @Override
+    public boolean isEntityThread(Entity entity) {
+        return plugin.getServer().isOwnedByCurrentRegion(entity);
+    }
+
+    @Override
+    public boolean isRegionThread(Location location) {
+        return plugin.getServer().isOwnedByCurrentRegion(location);
+    }
+
+    @Override
     public void runEntityTask(Entity entity, Runnable runnable) {
         runEntityTask(entity, runnable, 1);
     }
