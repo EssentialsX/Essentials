@@ -13,6 +13,7 @@ import net.ess3.api.events.teleport.PreTeleportEvent;
 import net.ess3.api.events.teleport.TeleportWarmupEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
@@ -141,13 +142,13 @@ public class AsyncTeleport implements IAsyncTeleport {
         paperFuture.exceptionally(future::completeExceptionally);
     }
 
-    private void runOnMain(final Runnable runnable) throws ExecutionException, InterruptedException {
-        if (Bukkit.isPrimaryThread()) {
+    private void runOnEntity(final Entity entity, final Runnable runnable) throws ExecutionException, InterruptedException {
+        if (ess.isEntityThread(entity)) {
             runnable.run();
             return;
         }
         final CompletableFuture<Object> taskLock = new CompletableFuture<>();
-        Bukkit.getScheduler().runTask(ess, () -> {
+        ess.scheduleEntityDelayedTask(entity, () -> {
             runnable.run();
             taskLock.complete(new Object());
         });
@@ -171,7 +172,7 @@ public class AsyncTeleport implements IAsyncTeleport {
             }
 
             try {
-                runOnMain(() -> teleportee.getBase().eject()); //EntityDismountEvent requires a sync context.
+                runOnEntity(teleportee.getBase(), () -> teleportee.getBase().eject()); //EntityDismountEvent requires a sync context.
             } catch (final ExecutionException | InterruptedException e) {
                 future.completeExceptionally(e);
                 return;

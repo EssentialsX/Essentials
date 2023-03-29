@@ -125,6 +125,10 @@ public interface IEssentials extends Plugin {
 
     void scheduleInitTask(Runnable runnable);
 
+    boolean isEntityThread(Entity entity);
+
+    boolean isRegionThread(Location location);
+
     PermissionsHandler getPermissionsHandler();
 
     AlternativeCommandsHandler getAlternativeCommandsHandler();

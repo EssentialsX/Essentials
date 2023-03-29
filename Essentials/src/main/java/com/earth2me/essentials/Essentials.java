@@ -1229,6 +1229,16 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
     }
 
     @Override
+    public boolean isEntityThread(Entity entity) {
+        return schedulingProvider.isEntityThread(entity);
+    }
+
+    @Override
+    public boolean isRegionThread(Location location) {
+        return schedulingProvider.isRegionThread(location);
+    }
+
+    @Override
     public PermissionsHandler getPermissionsHandler() {
         return permissionsHandler;
     }
