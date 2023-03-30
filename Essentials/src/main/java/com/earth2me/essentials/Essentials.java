@@ -138,6 +138,8 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 import java.util.function.Predicate;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -1242,6 +1244,63 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
     @Override
     public boolean isGlobalThread() {
         return schedulingProvider.isGlobalThread();
+    }
+
+    @Override
+    public void ensureEntity(Entity entity, Runnable runnable) {
+        if (isEntityThread(entity)) {
+            runnable.run();
+            return;
+        }
+
+        final CompletableFuture<Object> taskLock = new CompletableFuture<>();
+        scheduleEntityDelayedTask(entity, () -> {
+            runnable.run();
+            taskLock.complete(new Object());
+        });
+        try {
+            taskLock.get();
+        } catch (InterruptedException | ExecutionException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public void ensureRegion(Location location, Runnable runnable) {
+        if (isRegionThread(location)) {
+            runnable.run();
+            return;
+        }
+
+        final CompletableFuture<Object> taskLock = new CompletableFuture<>();
+        scheduleLocationDelayedTask(location, () -> {
+            runnable.run();
+            taskLock.complete(new Object());
+        });
+        try {
+            taskLock.get();
+        } catch (InterruptedException | ExecutionException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public void ensureGlobal(Runnable runnable) {
+        if (isGlobalThread()) {
+            runnable.run();
+            return;
+        }
+
+        final CompletableFuture<Object> taskLock = new CompletableFuture<>();
+        scheduleGlobalDelayedTask(() -> {
+            runnable.run();
+            taskLock.complete(new Object());
+        });
+        try {
+            taskLock.get();
+        } catch (InterruptedException | ExecutionException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override

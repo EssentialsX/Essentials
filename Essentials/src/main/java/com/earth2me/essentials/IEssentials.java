@@ -131,6 +131,12 @@ public interface IEssentials extends Plugin {
 
     boolean isGlobalThread();
 
+    void ensureEntity(Entity entity, Runnable runnable);
+
+    void ensureRegion(Location location, Runnable runnable);
+
+    void ensureGlobal(Runnable runnable);
+
     PermissionsHandler getPermissionsHandler();
 
     AlternativeCommandsHandler getAlternativeCommandsHandler();
