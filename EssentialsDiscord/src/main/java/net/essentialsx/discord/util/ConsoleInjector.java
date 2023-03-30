@@ -4,6 +4,7 @@ import com.earth2me.essentials.utils.FormatUtil;
 import com.google.common.base.Splitter;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.utils.TimeFormat;
+import net.ess3.provider.SchedulingProvider;
 import net.essentialsx.discord.EssentialsDiscord;
 import net.essentialsx.discord.JDADiscordService;
 import org.apache.logging.log4j.LogManager;
@@ -11,7 +12,6 @@ import org.apache.logging.log4j.core.LogEvent;
 import org.apache.logging.log4j.core.Logger;
 import org.apache.logging.log4j.core.appender.AbstractAppender;
 import org.apache.logging.log4j.core.config.plugins.Plugin;
-import org.bukkit.Bukkit;
 
 import java.time.Instant;
 import java.util.concurrent.BlockingQueue;
@@ -26,14 +26,14 @@ public class ConsoleInjector extends AbstractAppender {
 
     private final JDADiscordService jda;
     private final BlockingQueue<String> messageQueue = new LinkedBlockingQueue<>();
-    private final int taskId;
+    private final SchedulingProvider.EssentialsTask task;
     private boolean removed = false;
 
     public ConsoleInjector(JDADiscordService jda) {
         super("EssentialsX-ConsoleInjector", null, null, false);
         this.jda = jda;
         ((Logger) LogManager.getRootLogger()).addAppender(this);
-        taskId = Bukkit.getScheduler().runTaskTimerAsynchronously(jda.getPlugin(), () -> {
+        task = jda.getPlugin().getEss().runTaskTimerAsynchronously(() -> {
             final StringBuilder buffer = new StringBuilder();
             String curLine;
             while ((curLine = messageQueue.peek()) != null) {
@@ -47,7 +47,7 @@ public class ConsoleInjector extends AbstractAppender {
             if (buffer.length() != 0) {
                 sendMessage(buffer.toString());
             }
-        }, 20, 40).getTaskId();
+        }, 20, 40);
     }
 
     private void sendMessage(String content) {
@@ -92,7 +92,7 @@ public class ConsoleInjector extends AbstractAppender {
 
     public void remove() {
         ((Logger) LogManager.getRootLogger()).removeAppender(this);
-        Bukkit.getScheduler().cancelTask(taskId);
+        task.cancel();
         messageQueue.clear();
         removed = true;
     }
