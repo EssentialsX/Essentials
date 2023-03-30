@@ -213,6 +213,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
 
     public void setupForTesting(final Server server) throws IOException, InvalidDescriptionException {
         LOGGER = new BaseLoggerProvider(this, BUKKIT_LOGGER);
+        schedulingProvider = new BukkitSchedulingProvider(this);
         final File dataFolder = File.createTempFile("essentialstest", "");
         if (!dataFolder.delete()) {
             throw new IOException();
