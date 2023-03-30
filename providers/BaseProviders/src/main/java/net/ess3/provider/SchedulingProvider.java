@@ -10,6 +10,8 @@ public interface SchedulingProvider extends Provider {
 
     boolean isRegionThread(Location location);
 
+    boolean isGlobalThread();
+
     void runEntityTask(Entity entity, Runnable runnable);
 
     EssentialsTask runEntityTask(Entity entity, Runnable runnable, long delay);

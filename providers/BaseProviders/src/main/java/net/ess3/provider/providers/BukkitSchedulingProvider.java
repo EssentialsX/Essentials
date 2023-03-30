@@ -1,6 +1,7 @@
 package net.ess3.provider.providers;
 
 import net.ess3.provider.SchedulingProvider;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.plugin.Plugin;
@@ -26,6 +27,11 @@ public class BukkitSchedulingProvider implements SchedulingProvider {
     @Override
     public boolean isRegionThread(Location location) {
         return plugin.getServer().isPrimaryThread();
+    }
+
+    @Override
+    public boolean isGlobalThread() {
+        return Bukkit.isPrimaryThread();
     }
 
     @Override

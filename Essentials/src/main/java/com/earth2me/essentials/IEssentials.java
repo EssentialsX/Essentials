@@ -129,6 +129,8 @@ public interface IEssentials extends Plugin {
 
     boolean isRegionThread(Location location);
 
+    boolean isGlobalThread();
+
     PermissionsHandler getPermissionsHandler();
 
     AlternativeCommandsHandler getAlternativeCommandsHandler();

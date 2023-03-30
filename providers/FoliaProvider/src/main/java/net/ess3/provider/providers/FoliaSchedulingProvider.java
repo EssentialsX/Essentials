@@ -49,6 +49,11 @@ public class FoliaSchedulingProvider implements SchedulingProvider, Listener {
     }
 
     @Override
+    public boolean isGlobalThread() {
+        return plugin.getServer().isGlobalTickThread();
+    }
+
+    @Override
     public void runEntityTask(Entity entity, Runnable runnable) {
         runEntityTask(entity, runnable, 1);
     }
