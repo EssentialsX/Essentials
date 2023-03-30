@@ -21,7 +21,6 @@ dependencyResolutionManagement {
             content { includeGroup("net.kyori") }
             content { includeGroup("org.apache.logging.log4j") }
         }
-        mavenLocal()
     }
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
 }
