@@ -502,10 +502,8 @@ public class Commandessentials extends EssentialsCommand {
                 ess.getLogger().info(s);
             }
             for (final Player player : ess.getOnlinePlayers()) {
-                ess.scheduleEntityDelayedTask(player, () -> {
-                    player.sendMessage(PLAYER_MOO);
-                    player.playSound(player.getLocation(), MOO_SOUND, 1, 1.0f);
-                });
+                player.sendMessage(PLAYER_MOO);
+                player.playSound(player.getLocation(), MOO_SOUND, 1, 1.0f);
             }
         } else {
             if (sender.isPlayer()) {
