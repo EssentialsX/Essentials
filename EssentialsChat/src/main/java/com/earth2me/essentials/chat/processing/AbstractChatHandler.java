@@ -59,11 +59,14 @@ public abstract class AbstractChatHandler {
             return;
         }
 
+        // Ensure we're getting the latest display name
+        user.setDisplayNick();
+
         // Reuse cached IntermediateChat if available
-        ChatProcessingCache.IntermediateChat chat = cache.getIntermediateChat(event.getPlayer());
+        ChatProcessingCache.ProcessedChat chat = cache.getProcessedChat(event.getPlayer());
         if (chat == null) {
-            chat = new ChatProcessingCache.IntermediateChat(user, getChatType(user, event.getMessage()), event.getMessage());
-            cache.setIntermediateChat(event.getPlayer(), chat);
+            chat = new ChatProcessingCache.ProcessedChat(user, getChatType(user, event.getMessage()), event.getMessage());
+            cache.setProcessedChat(event.getPlayer(), chat);
         }
 
         final long configRadius = ess.getSettings().getChatRadius();
@@ -118,9 +121,6 @@ public abstract class AbstractChatHandler {
         synchronized (format) {
             event.setFormat(format);
         }
-
-        chat.setFormatResult(event.getFormat());
-        chat.setMessageResult(event.getMessage());
     }
 
     /**
@@ -133,7 +133,7 @@ public abstract class AbstractChatHandler {
             return;
         }
 
-        final ChatProcessingCache.Chat chat = cache.getIntermediateOrElseProcessedChat(event.getPlayer());
+        final ChatProcessingCache.Chat chat = cache.getProcessedChat(event.getPlayer());
 
         // If local chat is enabled, handle the recipients here; else we have nothing to do
         if (chat.getRadius() < 1) {
@@ -264,17 +264,9 @@ public abstract class AbstractChatHandler {
      * {@link #handleChatFormat(AsyncPlayerChatEvent)} when previews are not available.
      */
     protected void handleChatPostFormat(AsyncPlayerChatEvent event) {
-        final ChatProcessingCache.IntermediateChat intermediateChat = cache.clearIntermediateChat(event.getPlayer());
-        if (isAborted(event) || intermediateChat == null) {
-            return;
+        if (isAborted(event)) {
+            cache.clearProcessedChat(event.getPlayer());
         }
-
-        // in case of modifications by other plugins during the preview
-        intermediateChat.setFormatResult(event.getFormat());
-        intermediateChat.setMessageResult(event.getMessage());
-
-        final ChatProcessingCache.ProcessedChat processed = new ChatProcessingCache.ProcessedChat(ess, intermediateChat);
-        cache.setProcessedChat(event.getPlayer(), processed);
     }
 
     /**
@@ -293,11 +285,6 @@ public abstract class AbstractChatHandler {
 
     boolean isAborted(final AsyncPlayerChatEvent event) {
         return event.isCancelled();
-    }
-
-    boolean isPlayerChat(final AsyncPlayerChatEvent event) {
-        // Used to distinguish chats from Player#chat (sync) from chats sent by the player (async)
-        return event.isAsynchronous();
     }
 
     ChatType getChatType(final User user, final String message) {
