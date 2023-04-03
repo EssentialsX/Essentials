@@ -22,7 +22,7 @@ public class ExecuteCommand extends InteractionCommandImpl {
     public void onCommand(final InteractionEvent event) {
         final String command = event.getStringArgument("command");
         event.reply(tl("discordCommandExecuteReply", command));
-        Bukkit.getScheduler().runTask(jda.getPlugin(), () -> {
+        jda.getPlugin().getEss().scheduleGlobalDelayedTask(() -> {
             try {
                 Bukkit.dispatchCommand(new DiscordCommandSender(jda, Bukkit.getConsoleSender(), message -> event.reply(MessageUtil.sanitizeDiscordMarkdown(message))).getSender(), command);
             } catch (CommandException e) {
