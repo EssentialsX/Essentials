@@ -3,6 +3,7 @@ package com.earth2me.essentials;
 import com.earth2me.essentials.commands.IEssentialsCommand;
 import com.earth2me.essentials.signs.EssentialsSign;
 import com.earth2me.essentials.textreader.IText;
+import com.earth2me.essentials.utils.NumberUtil;
 import org.bukkit.Material;
 import org.bukkit.event.EventPriority;
 import org.spongepowered.configurate.CommentedConfigurationNode;
@@ -18,6 +19,8 @@ import java.util.function.Predicate;
 import java.util.regex.Pattern;
 
 public interface ISettings extends IConf {
+    String DEBUG_FLAG_NAMESPACE = "net.essentialsx";
+
     File getConfigFile();
 
     boolean areSignsDisabled();
@@ -140,6 +143,10 @@ public interface ISettings extends IConf {
     boolean isCommandOverridden(String name);
 
     boolean isDebug();
+
+    boolean isDebug(DebugFlag flag);
+
+    Long getDebugLong(DebugFlag flag);
 
     void setDebug(boolean debug);
 
@@ -414,6 +421,54 @@ public interface ISettings extends IConf {
         SPAWN,
         BACK,
         OFF
+    }
+
+    // TODO: consider separating out non-bool values? or replace this with an object-mapped class?
+    enum DebugFlag {
+        GENERIC("debug.generic", true),
+        USERMAP_PRINT_STACK("usermap.print-stack", false),
+        USERMAP_MAX_WARNS("usermap.max-warns", false),
+        ;
+
+        private final String flagKey;
+        private final boolean isSetByGlobal;
+
+        DebugFlag(final String flagKey, final boolean isSetByGlobal) {
+            this.flagKey = flagKey;
+            this.isSetByGlobal = isSetByGlobal;
+        }
+
+        public String getFlagKey() {
+            return flagKey;
+        }
+
+        public boolean isSetByGlobal() {
+            return isSetByGlobal;
+        }
+
+        public String getSystemPropertyKey() {
+            return DEBUG_FLAG_NAMESPACE + "." + flagKey;
+        }
+
+        public String getConfigKey() {
+            return "debug." + (flagKey.replace("debug.", ""));
+        }
+
+        public String getSystemPropertyValue() {
+            return System.getProperty(getSystemPropertyKey(), "false");
+        }
+
+        public boolean getSystemPropertyBoolean() {
+            return Boolean.parseBoolean(getSystemPropertyValue());
+        }
+
+        public Long getSystemPropertyLong() {
+            final String value = getSystemPropertyValue();
+            if (NumberUtil.isLong(value)) {
+                return Long.parseLong(value);
+            }
+            return null;
+        }
     }
 
 }

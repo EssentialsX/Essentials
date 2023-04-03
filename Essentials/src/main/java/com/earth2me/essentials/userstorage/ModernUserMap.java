@@ -1,8 +1,8 @@
 package com.earth2me.essentials.userstorage;
 
+import com.earth2me.essentials.ISettings;
 import com.earth2me.essentials.OfflinePlayer;
 import com.earth2me.essentials.User;
-import com.earth2me.essentials.utils.NumberUtil;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
@@ -36,13 +36,13 @@ public class ModernUserMap extends CacheLoader<UUID, User> implements IUserMap {
                 .softValues()
                 .build(this);
 
-        // -Dnet.essentialsx.usermap.print-stack=true
-        final String printStackProperty = System.getProperty("net.essentialsx.usermap.print-stack", "false");
         // -Dnet.essentialsx.usermap.max-warns=20
-        final String maxWarnProperty = System.getProperty("net.essentialsx.usermap.max-warns", "100");
+        final Long maxWarnSetting = ess.getSettings().getDebugLong(ISettings.DebugFlag.USERMAP_MAX_WARNS);
+        this.debugMaxWarnsPerType = maxWarnSetting != null ? maxWarnSetting : -1;
 
-        this.debugMaxWarnsPerType = NumberUtil.isLong(maxWarnProperty) ? Long.parseLong(maxWarnProperty) : -1;
-        this.debugPrintStackWithWarn = Boolean.parseBoolean(printStackProperty);
+        // -Dnet.essentialsx.usermap.print-stack=true
+        this.debugPrintStackWithWarn = ess.getSettings().isDebug(ISettings.DebugFlag.USERMAP_PRINT_STACK);
+
         this.debugNonPlayerWarnCounts = new ConcurrentHashMap<>();
     }
 
