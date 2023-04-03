@@ -214,6 +214,6 @@ public final class DiscordUtil {
             return;
         }
 
-        jda.getPlugin().getEss().scheduleGlobalDelayedTask(() -> Bukkit.getPluginManager().callEvent(event));
+        Bukkit.getPluginManager().callEvent(event);
     }
 }
