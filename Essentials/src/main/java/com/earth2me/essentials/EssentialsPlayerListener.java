@@ -121,11 +121,24 @@ public class EssentialsPlayerListener implements Listener, FakeAccessor {
         }
     }
 
+    private static boolean isGameEventEvent() {
+        try {
+            Class.forName("org.bukkit.event.block.BlockReceiveGameEvent");
+            return true;
+        } catch (final ClassNotFoundException ignored) {
+            return false;
+        }
+    }
+
     public void registerEvents() {
         ess.getServer().getPluginManager().registerEvents(this, ess);
 
         if (isArrowPickupEvent()) {
             ess.getServer().getPluginManager().registerEvents(new ArrowPickupListener(), ess);
+        }
+
+        if (isGameEventEvent()) {
+            ess.getServer().getPluginManager().registerEvents(new SculkListener1_17(), ess);
         }
 
         if (isEntityPickupEvent()) {
@@ -662,7 +675,8 @@ public class EssentialsPlayerListener implements Listener, FakeAccessor {
         }
 
         if (ess.getSettings().isCommandCooldownsEnabled()
-            && !user.isAuthorized("essentials.commandcooldowns.bypass")) {
+            && !user.isAuthorized("essentials.commandcooldowns.bypass")
+            && (pluginCommand == null || !user.isAuthorized("essentials.commandcooldowns.bypass." + pluginCommand.getName()))) {
             final int argStartIndex = effectiveCommand.indexOf(" ");
             final String args = argStartIndex == -1 ? "" // No arguments present
                 : " " + effectiveCommand.substring(argStartIndex); // arguments start at argStartIndex; substring from there.
@@ -996,6 +1010,15 @@ public class EssentialsPlayerListener implements Listener, FakeAccessor {
                 if (ess.getUser((Player) event.getEntity()).isAfk()) {
                     event.setCancelled(true);
                 }
+            }
+        }
+    }
+
+    private final class SculkListener1_17 implements Listener {
+        @EventHandler
+        public void onGameEvent(final org.bukkit.event.block.BlockReceiveGameEvent event) {
+            if (event.getEntity() instanceof Player && ess.getUser((Player) event.getEntity()).isVanished()) {
+                event.setCancelled(true);
             }
         }
     }
