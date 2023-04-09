@@ -59,6 +59,9 @@ public abstract class AbstractChatHandler {
             return;
         }
 
+        // Ensure we're getting the latest display name
+        user.setDisplayNick();
+
         // Reuse cached IntermediateChat if available
         ChatProcessingCache.ProcessedChat chat = cache.getProcessedChat(event.getPlayer());
         if (chat == null) {
