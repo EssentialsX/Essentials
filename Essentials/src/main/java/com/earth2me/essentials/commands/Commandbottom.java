@@ -25,12 +25,12 @@ public class Commandbottom extends EssentialsCommand {
         final float yaw = user.getLocation().getYaw();
         final Location unsafe = new Location(user.getWorld(), bottomX, ess.getWorldInfoProvider().getMinHeight(user.getWorld()), bottomZ, yaw, pitch);
         final Location safe = LocationUtil.getSafeDestination(ess, unsafe);
-        final CompletableFuture<Boolean> future = new CompletableFuture<>();
+        final CompletableFuture<Boolean> future = getNewExceptionFuture(user.getSource(), commandLabel);
         future.thenAccept(success -> {
             if (success) {
                 user.sendMessage(tl("teleportBottom", safe.getWorld().getName(), safe.getBlockX(), safe.getBlockY(), safe.getBlockZ()));
             }
         });
-        user.getAsyncTeleport().teleport(safe, new Trade(this.getName(), ess), PlayerTeleportEvent.TeleportCause.COMMAND, getNewExceptionFuture(user.getSource(), commandLabel));
+        user.getAsyncTeleport().teleport(safe, new Trade(this.getName(), ess), PlayerTeleportEvent.TeleportCause.COMMAND, future);
     }
 }
