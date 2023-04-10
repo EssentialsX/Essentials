@@ -258,7 +258,7 @@ messages:
   # - {suffix}: The suffix of the player sending the message
   # ... PlaceholderAPI placeholders are also supported here too!
   mc-to-discord: "{displayname}: {message}"
-  # This is the message that is used to relay minecraft chat in Discord.
+  # This is the bot's name which appears in Discord when sending player-specific messages.
   # The following placeholders can be used here:
   # - {username}: The username of the player sending the message
   # - {displayname}: The display name of the player sending the message (This would be their nickname)
