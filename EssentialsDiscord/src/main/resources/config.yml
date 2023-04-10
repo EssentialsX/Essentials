@@ -147,11 +147,6 @@ show-avatar: false
 # To include the UUID of the player in this URL, use "{uuid}".
 # To include the name of the player in this URL, use "{name}".
 avatar-url: "https://crafthead.net/helm/{uuid}"
-# Whether or not player messages should show their name as the bot name in Discord.
-show-name: false
-# Whether or not player messages should show their display-name/nickname as the bot name in Discord.
-# You must disable show-name for this option to work.
-show-displayname: false
 
 # Whether or not fake join and leave messages should be sent to Discord when a player toggles vanish in Minecraft.
 # Fake join/leave messages will be sent the same as real join and leave messages (and to the same channel).
@@ -263,6 +258,16 @@ messages:
   # - {suffix}: The suffix of the player sending the message
   # ... PlaceholderAPI placeholders are also supported here too!
   mc-to-discord: "{displayname}: {message}"
+  # This is the bot's name which appears in Discord when sending player-specific messages.
+  # The following placeholders can be used here:
+  # - {username}: The username of the player sending the message
+  # - {displayname}: The display name of the player sending the message (This would be their nickname)
+  # - {world}: The name of the world the player sending the message is in
+  # - {prefix}: The prefix of the player sending the message
+  # - {suffix}: The suffix of the player sending the message
+  # - {botname}: Name of the Discord bot
+  # ... PlaceholderAPI placeholders are also supported here too!
+  mc-to-discord-name-format: "{botname}"
   # This is the message sent to Discord when a player is temporarily muted in minecraft.
   # The following placeholders can be used here:
   # - {username}: The username of the player being muted
