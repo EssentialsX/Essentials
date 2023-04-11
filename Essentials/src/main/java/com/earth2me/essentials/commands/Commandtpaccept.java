@@ -8,6 +8,7 @@ import net.essentialsx.api.v2.events.TeleportRequestResponseEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Server;
+import org.bukkit.World;
 import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 
 import java.util.ArrayList;
@@ -87,12 +88,15 @@ public class Commandtpaccept extends EssentialsCommand {
             throw new Exception(tl("noPendingRequest"));
         }
 
-        if (request.isHere() && ((!requester.isAuthorized("essentials.tpahere") && !requester.isAuthorized("essentials.tpaall")) || (user.getWorld() != requester.getWorld() && ess.getSettings().isWorldTeleportPermissions() && !user.isAuthorized("essentials.worlds." + requester.getWorld().getName())))) {
-            throw new Exception(tl("noPendingRequest"));
-        }
-
-        if (!request.isHere() && (!requester.isAuthorized("essentials.tpa") || (user.getWorld() != requester.getWorld() && ess.getSettings().isWorldTeleportPermissions() && !requester.isAuthorized("essentials.worlds." + user.getWorld().getName())))) {
-            throw new Exception(tl("noPendingRequest"));
+        if (request.isHere()) {
+            final boolean isRequesterAuthorized = requester.isAuthorized("essentials.tpahere") || requester.isAuthorized("essentials.tpaall");
+            if (!isRequesterAuthorized || !canTeleportToWorld(user, requester.getWorld())) {
+                throw new Exception(tl("noPendingRequest"));
+            }
+        } else {
+            if (!requester.isAuthorized("essentials.tpa") || !canTeleportToWorld(requester, user.getWorld())) {
+                throw new Exception(tl("noPendingRequest"));
+            }
         }
 
         final TeleportRequestResponseEvent event = new TeleportRequestResponseEvent(user, requester, request, true);
@@ -128,5 +132,9 @@ public class Commandtpaccept extends EssentialsCommand {
             teleport.teleport(user.getBase(), charge, TeleportCause.COMMAND, future);
         }
         user.removeTpaRequest(request.getName());
+    }
+
+    private boolean canTeleportToWorld(final User user, final World destination) {
+        return user.getWorld() == destination || !ess.getSettings().isWorldTeleportPermissions() || user.isAuthorized("essentials.worlds." + destination.getName());
     }
 }
