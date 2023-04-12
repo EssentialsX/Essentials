@@ -115,7 +115,7 @@ public class FoliaSchedulingProvider implements SchedulingProvider, Listener {
 
     @Override
     public EssentialsTask runAsyncTaskRepeating(Runnable runnable, long delay, long period) {
-        final ScheduledTask task = plugin.getServer().getAsyncScheduler().runAtFixedRate(plugin, scheduledTask -> runnable.run(), delay, delay * 50, TimeUnit.MICROSECONDS);
+        final ScheduledTask task = plugin.getServer().getAsyncScheduler().runAtFixedRate(plugin, scheduledTask -> runnable.run(), delay, period * 50, TimeUnit.MILLISECONDS);
         return task::cancel;
     }
 
