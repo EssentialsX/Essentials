@@ -273,11 +273,11 @@ public class BukkitListener implements Listener {
             }
 
             name = MessageUtil.formatMessage(jda.getSettings().getMcToDiscordNameFormat(player),
-                MessageUtil.sanitizeDiscordMarkdown(player.getName()),
-                MessageUtil.sanitizeDiscordMarkdown(player.getDisplayName()),
-                MessageUtil.sanitizeDiscordMarkdown(jda.getPlugin().getEss().getSettings().getWorldAlias(player.getWorld().getName())),
-                MessageUtil.sanitizeDiscordMarkdown(FormatUtil.stripEssentialsFormat(jda.getPlugin().getEss().getPermissionsHandler().getPrefix(player))),
-                MessageUtil.sanitizeDiscordMarkdown(FormatUtil.stripEssentialsFormat(jda.getPlugin().getEss().getPermissionsHandler().getSuffix(player))),
+                player.getName(),
+                player.getDisplayName(),
+                jda.getPlugin().getEss().getSettings().getWorldAlias(player.getWorld().getName()),
+                FormatUtil.stripEssentialsFormat(jda.getPlugin().getEss().getPermissionsHandler().getPrefix(player)),
+                FormatUtil.stripEssentialsFormat(jda.getPlugin().getEss().getPermissionsHandler().getSuffix(player)),
                 jda.getGuild().getMember(jda.getJda().getSelfUser()).getEffectiveName());
 
             uuid = player.getUniqueId();
