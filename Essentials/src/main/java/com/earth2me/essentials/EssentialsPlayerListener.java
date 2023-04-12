@@ -266,6 +266,7 @@ public class EssentialsPlayerListener implements Listener, FakeAccessor {
         if (hideJoinQuitMessages() || (ess.getSettings().allowSilentJoinQuit() && user.isAuthorized("essentials.silentquit"))) {
             event.setQuitMessage(null);
         } else if (ess.getSettings().isCustomQuitMessage() && event.getQuitMessage() != null) {
+            event.setQuitMessage(null);
             final Player player = event.getPlayer();
             final String msg = ess.getSettings().getCustomQuitMessage()
                 .replace("{PLAYER}", player.getDisplayName())
@@ -275,7 +276,7 @@ public class EssentialsPlayerListener implements Listener, FakeAccessor {
                 .replace("{PREFIX}", FormatUtil.replaceFormat(ess.getPermissionsHandler().getPrefix(player)))
                 .replace("{SUFFIX}", FormatUtil.replaceFormat(ess.getPermissionsHandler().getSuffix(player)));
 
-            event.setQuitMessage(msg.isEmpty() ? null : msg);
+            ess.getServer().broadcastMessage(msg);
         }
 
         user.startTransaction();
