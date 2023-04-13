@@ -1,0 +1,12 @@
+#EssentialsX item group configuration
+#Item groups are currently used only by sell sign
+#By creating a group here and using ~[group_id] on the sign
+#Any player will be able to sell items with one of the types written here
+
+#Example
+#dirt:
+#   - DIRT
+#   - GRASS
+#   - PODZOL
+#   - COARSE_DIRT
+#   - ROOTED_DIRT
