@@ -280,11 +280,11 @@ public class JDADiscordService implements DiscordService, IEssentialsModule {
         final String avatarUrl = DiscordUtil.getAvatarUrl(this, player);
 
         final String formattedName = MessageUtil.formatMessage(getSettings().getMcToDiscordNameFormat(player),
-                MessageUtil.sanitizeDiscordMarkdown(player.getName()),
-                MessageUtil.sanitizeDiscordMarkdown(player.getDisplayName()),
-                MessageUtil.sanitizeDiscordMarkdown(getPlugin().getEss().getSettings().getWorldAlias(player.getWorld().getName())),
-                MessageUtil.sanitizeDiscordMarkdown(FormatUtil.stripEssentialsFormat(getPlugin().getEss().getPermissionsHandler().getPrefix(player))),
-                MessageUtil.sanitizeDiscordMarkdown(FormatUtil.stripEssentialsFormat(getPlugin().getEss().getPermissionsHandler().getSuffix(player))),
+                player.getName(),
+                player.getDisplayName(),
+                getPlugin().getEss().getSettings().getWorldAlias(player.getWorld().getName()),
+                FormatUtil.stripEssentialsFormat(getPlugin().getEss().getPermissionsHandler().getPrefix(player)),
+                FormatUtil.stripEssentialsFormat(getPlugin().getEss().getPermissionsHandler().getSuffix(player)),
                 guild.getMember(jda.getSelfUser()).getEffectiveName());
 
         DiscordUtil.dispatchDiscordMessage(this, MessageType.DefaultTypes.CHAT, formattedMessage, user.isAuthorized("essentials.discord.ping"), avatarUrl, formattedName, player.getUniqueId());
