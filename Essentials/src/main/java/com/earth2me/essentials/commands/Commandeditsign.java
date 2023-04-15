@@ -74,20 +74,41 @@ public class Commandeditsign extends EssentialsCommand {
                     writeLines(sign, existingLines);
                     user.sendMessage(tl("editsignCommandClearLine", line + 1));
                 }
-            } else if (args[0].equalsIgnoreCase("copy") || args[0].equalsIgnoreCase("paste")) {
-                final boolean copy = args[0].equalsIgnoreCase("copy");
-                final String tlPrefix = copy ? "editsignCopy" : "editsignPaste";
+            } else if (args[0].equalsIgnoreCase("copy")) {
                 final int line = args.length == 1 ? -1 : Integer.parseInt(args[1]) - 1;
 
                 if (line == -1) {
                     for (int i = 0; i < 4; i++) {
-                        processSignCopyPaste(user, target, sign, i, copy);
+                        // We use unformat here to prevent players from copying signs with colors that they do not have permission to use.
+                        user.getSignCopy().set(i, FormatUtil.unformatString(user, "essentials.editsign", sign.getLine(i)));
                     }
-                    user.sendMessage(tl(tlPrefix, commandLabel));
+                    user.sendMessage(tl("editsignCopy", commandLabel));
                 } else {
-                    processSignCopyPaste(user, target, sign, line, copy);
-                    user.sendMessage(tl(tlPrefix + "Line", line + 1, commandLabel));
+                    // We use unformat here to prevent players from copying signs with colors that they do not have permission to use.
+                    user.getSignCopy().set(line, FormatUtil.unformatString(user, "essentials.editsign", sign.getLine(line)));
+                    user.sendMessage(tl("editsignCopyLine", line + 1, commandLabel));
                 }
+
+            } else if (args[0].equalsIgnoreCase("paste")) {
+                final int line = args.length == 1 ? -1 : Integer.parseInt(args[1]) - 1;
+
+                final String[] existingLines = sign.getLines();
+                if (line == -1) {
+                    for (int i = 0; i < 4; i++) {
+                        existingLines[i] = FormatUtil.formatString(user, "essentials.editsign", user.getSignCopy().get(i));
+                    }
+                    user.sendMessage(tl("editsignPaste", commandLabel));
+                } else {
+                    existingLines[line] = FormatUtil.formatString(user, "essentials.editsign", user.getSignCopy().get(line));
+                    user.sendMessage(tl("editsignPasteLine", line + 1, commandLabel));
+                }
+
+                final SignChangeEvent event = new SignChangeEvent(sign.getBlock(), user.getBase(), existingLines);
+                if (event.isCancelled()) {
+                    return;
+                }
+
+                writeLines(sign, existingLines);
             } else {
                 throw new NotEnoughArgumentsException();
             }
@@ -101,24 +122,6 @@ public class Commandeditsign extends EssentialsCommand {
             sign.setLine(i, lines[i]);
         }
         sign.update();
-    }
-
-    private void processSignCopyPaste(final User user, final Block block, final Sign sign, final int index, final boolean copy) {
-        if (copy) {
-            // We use unformat here to prevent players from copying signs with colors that they do not have permission to use.
-            user.getSignCopy().set(index, FormatUtil.unformatString(user, "essentials.editsign", sign.getLine(index)));
-            return;
-        }
-
-        final String line = FormatUtil.formatString(user, "essentials.editsign", user.getSignCopy().get(index));
-        final String[] existingLines = sign.getLines();
-        existingLines[index] = line;
-        final SignChangeEvent event = new SignChangeEvent(block, user.getBase(), existingLines);
-        if (event.isCancelled()) {
-            return;
-        }
-
-        writeLines(sign, existingLines);
     }
 
     @Override
