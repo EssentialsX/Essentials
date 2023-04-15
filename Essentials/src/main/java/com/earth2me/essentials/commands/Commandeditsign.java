@@ -8,6 +8,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Server;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
+import org.bukkit.entity.Player;
 import org.bukkit.event.block.SignChangeEvent;
 
 import java.util.Collections;
@@ -40,12 +41,10 @@ public class Commandeditsign extends EssentialsCommand {
                     throw new Exception(tl("editsignCommandLimit"));
                 }
                 existingLines[line] = text;
-                final SignChangeEvent event = new SignChangeEvent(target, user.getBase(), existingLines);
-                if (event.isCancelled()) {
+                if (callSignEvent(sign, user.getBase(), existingLines)) {
                     return;
                 }
 
-                writeLines(sign, existingLines);
                 user.sendMessage(tl("editsignCommandSetSuccess", line + 1, text));
             } else if (args[0].equalsIgnoreCase("clear")) {
                 if (args.length == 1) {
@@ -54,24 +53,20 @@ public class Commandeditsign extends EssentialsCommand {
                         existingLines[i] = "";
                     }
 
-                    final SignChangeEvent event = new SignChangeEvent(target, user.getBase(), existingLines);
-                    if (event.isCancelled()) {
+                    if (callSignEvent(sign, user.getBase(), existingLines)) {
                         return;
                     }
 
-                    writeLines(sign, existingLines);
                     user.sendMessage(tl("editsignCommandClear"));
                 } else {
                     final String[] existingLines = sign.getLines();
                     final int line = Integer.parseInt(args[1]) - 1;
                     existingLines[line] = "";
 
-                    final SignChangeEvent event = new SignChangeEvent(target, user.getBase(), existingLines);
-                    if (event.isCancelled()) {
+                    if (callSignEvent(sign, user.getBase(), existingLines)) {
                         return;
                     }
 
-                    writeLines(sign, existingLines);
                     user.sendMessage(tl("editsignCommandClearLine", line + 1));
                 }
             } else if (args[0].equalsIgnoreCase("copy")) {
@@ -103,12 +98,7 @@ public class Commandeditsign extends EssentialsCommand {
                     user.sendMessage(tl("editsignPasteLine", line + 1, commandLabel));
                 }
 
-                final SignChangeEvent event = new SignChangeEvent(sign.getBlock(), user.getBase(), existingLines);
-                if (event.isCancelled()) {
-                    return;
-                }
-
-                writeLines(sign, existingLines);
+                callSignEvent(sign, user.getBase(), existingLines);
             } else {
                 throw new NotEnoughArgumentsException();
             }
@@ -117,11 +107,17 @@ public class Commandeditsign extends EssentialsCommand {
         }
     }
 
-    private void writeLines(final Sign sign, final String[] lines) {
+    private boolean callSignEvent(final Sign sign, final Player player, final String[] lines) {
+        final SignChangeEvent event = new SignChangeEvent(sign.getBlock(), player, lines);
+        if (event.isCancelled()) {
+            return true;
+        }
+
         for (int i = 0; i < 4; i++) {
             sign.setLine(i, lines[i]);
         }
         sign.update();
+        return false;
     }
 
     @Override
