@@ -226,6 +226,36 @@ public class DiscordSettings implements IConf {
                 "username", "displayname", "message", "world", "prefix", "suffix");
     }
 
+    public String getLegacyNameFormat() {
+        // For compatibility with old configs
+        if (isShowDisplayName()) {
+            return "{displayname}";
+        } else if (isShowName()) {
+            return "{username}";
+        } else {
+            // Will default to "{botname}" in the format
+            return null;
+        }
+    }
+
+    public MessageFormat getMcToDiscordNameFormat(Player player) {
+        String format = getFormatString("mc-to-discord-name-format");
+        if (format == null) {
+            format = getLegacyNameFormat();
+        }
+        final String filled;
+
+        if (plugin.isPAPI() && format != null) {
+            filled = me.clip.placeholderapi.PlaceholderAPI.setPlaceholders(player, format);
+        } else {
+            filled = format;
+        }
+
+        return generateMessageFormat(filled, "{botname}", false,
+                "username", "displayname", "world", "prefix", "suffix", "botname");
+
+    }
+
     public MessageFormat getTempMuteFormat() {
         return tempMuteFormat;
     }
