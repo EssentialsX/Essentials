@@ -1,5 +1,6 @@
 package com.earth2me.essentials;
 
+import com.earth2me.essentials.utils.FormatUtil;
 import net.ess3.api.IEssentials;
 
 import java.io.File;
@@ -107,7 +108,7 @@ public class I18n implements net.ess3.api.II18n {
             }
             messageFormatCache.put(format, messageFormat);
         }
-        return messageFormat.format(objects).replace(' ', ' '); // replace nbsp with a space
+        return FormatUtil.replaceFormat(messageFormat.format(objects).replace(' ', ' ')); // replace nbsp with a space
     }
 
     public void updateLocale(final String loc) {
