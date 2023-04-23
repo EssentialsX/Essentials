@@ -2,7 +2,8 @@ package com.earth2me.essentials;
 
 import com.earth2me.essentials.commands.WarpNotFoundException;
 import com.earth2me.essentials.config.EssentialsConfiguration;
-import com.earth2me.essentials.utils.StringUtil;
+import com.google.common.collect.BiMap;
+import com.google.common.collect.HashBiMap;
 import net.ess3.api.InvalidNameException;
 import net.ess3.api.InvalidWorldException;
 import org.bukkit.Location;
@@ -20,7 +21,8 @@ import java.util.logging.Level;
 import static com.earth2me.essentials.I18n.tl;
 
 public class Warps implements IConf, net.ess3.api.IWarps {
-    private final Map<StringIgnoreCase, EssentialsConfiguration> warpPoints = new HashMap<>();
+    private final Map<UUID, EssentialsConfiguration> warpPoints = new HashMap<>();
+    private final BiMap<String, UUID> nameUUIDConversion = HashBiMap.create();
     private final File warpsFolder;
 
     public Warps(final File dataFolder) {
@@ -38,22 +40,19 @@ public class Warps implements IConf, net.ess3.api.IWarps {
 
     @Override
     public boolean isWarp(String name) {
-        return warpPoints.containsKey(new StringIgnoreCase(name));
+        return warpPoints.containsKey(nameUUIDConversion.get(name));
     }
 
     @Override
     public Collection<String> getList() {
-        final List<String> keys = new ArrayList<>();
-        for (final StringIgnoreCase stringIgnoreCase : warpPoints.keySet()) {
-            keys.add(stringIgnoreCase.getString());
-        }
+        final List<String> keys = new ArrayList<>(nameUUIDConversion.keySet());
         keys.sort(String.CASE_INSENSITIVE_ORDER);
         return keys;
     }
 
     @Override
     public Location getWarp(final String warp) throws WarpNotFoundException, InvalidWorldException {
-        final EssentialsConfiguration conf = warpPoints.get(new StringIgnoreCase(warp));
+        final EssentialsConfiguration conf = warpPoints.get(nameUUIDConversion.get(warp));
         if (conf == null) {
             throw new WarpNotFoundException();
         }
@@ -72,16 +71,14 @@ public class Warps implements IConf, net.ess3.api.IWarps {
 
     @Override
     public void setWarp(final IUser user, final String name, final Location loc) throws Exception {
-        final String filename = StringUtil.sanitizeFileName(name);
-        EssentialsConfiguration conf = warpPoints.get(new StringIgnoreCase(name));
+        final UUID uuid = UUID.randomUUID();
+        nameUUIDConversion.put(name, uuid);
+        EssentialsConfiguration conf = warpPoints.get(uuid);
         if (conf == null) {
-            final File confFile = new File(warpsFolder, filename + ".yml");
-            if (confFile.exists()) {
-                throw new Exception(tl("similarWarpExist"));
-            }
+            final File confFile = new File(warpsFolder, uuid + ".yml");
             conf = new EssentialsConfiguration(confFile);
             conf.load();
-            warpPoints.put(new StringIgnoreCase(name), conf);
+            warpPoints.put(uuid, conf);
         }
         conf.setProperty(null, loc);
         conf.setProperty("name", name);
@@ -93,7 +90,7 @@ public class Warps implements IConf, net.ess3.api.IWarps {
 
     @Override
     public UUID getLastOwner(final String warp) throws WarpNotFoundException {
-        final EssentialsConfiguration conf = warpPoints.get(new StringIgnoreCase(warp));
+        final EssentialsConfiguration conf = warpPoints.get(nameUUIDConversion.get(warp));
         if (conf == null) {
             throw new WarpNotFoundException();
         }
@@ -107,14 +104,15 @@ public class Warps implements IConf, net.ess3.api.IWarps {
 
     @Override
     public void removeWarp(final String name) throws Exception {
-        final EssentialsConfiguration conf = warpPoints.get(new StringIgnoreCase(name));
+        final UUID uuid = nameUUIDConversion.get(name);
+        final EssentialsConfiguration conf = warpPoints.get(uuid);
         if (conf == null) {
             throw new Exception(tl("warpNotExist"));
         }
         if (!conf.getFile().delete()) {
             throw new Exception(tl("warpDeleteError"));
         }
-        warpPoints.remove(new StringIgnoreCase(name));
+        warpPoints.remove(uuid);
     }
 
     @Override
@@ -126,11 +124,13 @@ public class Warps implements IConf, net.ess3.api.IWarps {
                 final String filename = listOfFile.getName();
                 if (listOfFile.isFile() && filename.endsWith(".yml")) {
                     try {
+                        final UUID uuid = UUID.fromString(filename.substring(0, filename.length()-5));
                         final EssentialsConfiguration conf = new EssentialsConfiguration(listOfFile);
                         conf.load();
                         final String name = conf.getString("name", null);
+                        nameUUIDConversion.put(name, uuid);
                         if (name != null && conf.hasProperty("world")) {
-                            warpPoints.put(new StringIgnoreCase(name), conf);
+                            warpPoints.put(uuid, conf);
                         }
                     } catch (final Exception ex) {
                         Essentials.getWrappedLogger().log(Level.WARNING, tl("loadWarpError", filename), ex);
@@ -154,6 +154,10 @@ public class Warps implements IConf, net.ess3.api.IWarps {
         return getList().size();
     }
 
+    /**
+     * @deprecated This method relates to the abandoned 2.x storage refactor and is not implemented.
+     */
+    @Deprecated
     private static class StringIgnoreCase {
         private final String string;
 
