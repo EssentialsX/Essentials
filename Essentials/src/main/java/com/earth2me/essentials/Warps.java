@@ -9,6 +9,8 @@ import net.ess3.api.InvalidWorldException;
 import org.bukkit.Location;
 
 import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -87,6 +89,7 @@ public class Warps implements IConf, net.ess3.api.IWarps {
             conf.setProperty("lastowner", user.getBase().getUniqueId().toString());
         }
         conf.save();
+        refreshIndex();
     }
 
     @Override
@@ -114,6 +117,7 @@ public class Warps implements IConf, net.ess3.api.IWarps {
             throw new Exception(tl("warpDeleteError"));
         }
         warpPoints.remove(uuid);
+        refreshIndex();
     }
 
     @Override
@@ -148,7 +152,27 @@ public class Warps implements IConf, net.ess3.api.IWarps {
                     }
                 }
             }
+
+            refreshIndex();
         }
+    }
+
+    /**
+     * Method used to refresh the index.txt inside the warp folder
+     */
+    public void refreshIndex(){
+        final File indexFile = new File(warpsFolder, "index.txt");
+        indexFile.delete();
+        try (final FileWriter writer = new FileWriter(indexFile)) {
+            for (final Map.Entry<String, UUID> entry : nameUUIDConversion.entrySet()) {
+                final String name = entry.getKey();
+                final UUID uuid = entry.getValue();
+                writer.append(name).append(' ').append(uuid.toString()).append('\n');
+            }
+        } catch (IOException ex){
+            Essentials.getWrappedLogger().log(Level.WARNING, tl("refreshWarpIndexError"), ex);
+        }
+
     }
 
     /**
