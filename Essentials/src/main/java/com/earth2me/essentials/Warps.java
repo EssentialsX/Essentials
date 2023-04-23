@@ -9,6 +9,7 @@ import net.ess3.api.InvalidWorldException;
 import org.bukkit.Location;
 
 import java.io.File;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -120,11 +121,21 @@ public class Warps implements IConf, net.ess3.api.IWarps {
         warpPoints.clear();
         final File[] listOfFiles = warpsFolder.listFiles();
         if (listOfFiles.length >= 1) {
-            for (final File listOfFile : listOfFiles) {
+            for (File listOfFile : listOfFiles) {
                 final String filename = listOfFile.getName();
                 if (listOfFile.isFile() && filename.endsWith(".yml")) {
                     try {
-                        final UUID uuid = UUID.fromString(filename.substring(0, filename.length()-5));
+                        UUID uuid;
+                        try {
+                            uuid = UUID.fromString(filename.substring(0, filename.length()-5));
+                        } catch (Exception e) {
+                            Essentials.getWrappedLogger().log(Level.INFO, tl("loadDeprecatedWarp", filename));
+                            uuid = UUID.randomUUID();
+                            final File newFile = new File(warpsFolder, uuid + ".yml");
+                            Files.copy(listOfFile.toPath(), newFile.toPath());
+                            listOfFile.delete();
+                            listOfFile = newFile;
+                        }
                         final EssentialsConfiguration conf = new EssentialsConfiguration(listOfFile);
                         conf.load();
                         final String name = conf.getString("name", null);
