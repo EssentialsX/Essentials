@@ -42,7 +42,7 @@ public class Commandr extends EssentialsCommand {
 
         final IMessageRecipient target = messageSender.getReplyRecipient();
         // Check to make sure the sender does have a quick-reply recipient
-        if (target == null || (!ess.getSettings().isReplyToVanished() && sender.isPlayer() && target.isHiddenFrom(sender.getPlayer()))) {
+        if (target == null || !target.isReachable() || (!ess.getSettings().isReplyToVanished() && sender.isPlayer() && target.isHiddenFrom(sender.getPlayer()))) {
             messageSender.setReplyRecipient(null);
             throw new Exception(tl("foreverAlone"));
         }
