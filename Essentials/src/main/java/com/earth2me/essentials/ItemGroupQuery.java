@@ -1,7 +1,10 @@
 package com.earth2me.essentials;
 
 import net.ess3.api.IEssentials;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
+import org.bukkit.Tag;
 
 public class ItemGroupQuery {
 
@@ -14,6 +17,10 @@ public class ItemGroupQuery {
     }
 
     public boolean contains(IEssentials ess, Material item){
+        Tag<Material> tag = Bukkit.getTag(Tag.REGISTRY_ITEMS, NamespacedKey.minecraft(itemGroup), Material.class);
+        if (tag != null && tag.isTagged(item)) {
+            return true;
+        }
         final ItemGroups groupsConfig = new ItemGroups(ess);
         return groupsConfig.getItemGroup(itemGroup).contains(item);
     }
