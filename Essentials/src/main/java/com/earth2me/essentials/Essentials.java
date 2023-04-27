@@ -277,7 +277,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
                     getLogger().severe(tl("serverUnsupportedMods"));
                     break;
                 case OUTDATED:
-                    getLogger().severe(tl("serverUnsupported"));
+                    getLogger().info(tl("serverUnsupported"));
                     break;
                 case LIMITED:
                     getLogger().info(tl("serverUnsupportedLimitedApi"));
