@@ -467,6 +467,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
             }
 
             execTimer.mark("Init(Providers)");
+            registerListeners(getServer().getPluginManager());
             reload();
 
             // The item spawn blacklist is loaded with all other settings, before the item
@@ -526,8 +527,6 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
     }
 
     private void registerListeners(final PluginManager pm) {
-        HandlerList.unregisterAll(this);
-
         if (getSettings().isDebug()) {
             LOGGER.log(Level.INFO, "Registering Listeners");
         }
@@ -629,9 +628,6 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
                 command.setUsage(tl(commandName + "CommandUsage"));
             }
         }
-
-        final PluginManager pm = getServer().getPluginManager();
-        registerListeners(pm);
     }
 
     private IEssentialsCommand loadCommand(final String path, final String name, final IEssentialsModule module, final ClassLoader classLoader) throws Exception {
