@@ -11,13 +11,11 @@ import net.ess3.api.events.VanishStatusChangeEvent;
 import net.ess3.provider.AbstractAchievementEvent;
 import net.essentialsx.api.v2.events.AsyncUserDataLoadEvent;
 import net.essentialsx.api.v2.events.UserActionEvent;
-import net.essentialsx.api.v2.events.discord.DiscordChatMessageEvent;
 import net.essentialsx.api.v2.events.discord.DiscordMessageEvent;
 import net.essentialsx.api.v2.services.discord.MessageType;
 import net.essentialsx.discord.JDADiscordService;
 import net.essentialsx.discord.util.DiscordUtil;
 import net.essentialsx.discord.util.MessageUtil;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameRule;
 import org.bukkit.entity.Player;
@@ -25,7 +23,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
-import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
@@ -79,21 +76,6 @@ public class BukkitListener implements Listener {
                             MessageUtil.sanitizeDiscordMarkdown(console ? Console.DISPLAY_NAME : event.getController().getDisplayName()),
                             MessageUtil.sanitizeDiscordMarkdown(event.getReason())));
         }
-    }
-
-    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-    public void onChat(AsyncPlayerChatEvent event) {
-        final Player player = event.getPlayer();
-        Bukkit.getScheduler().runTask(jda.getPlugin(), () -> {
-            final DiscordChatMessageEvent chatEvent = new DiscordChatMessageEvent(event.getPlayer(), event.getMessage());
-            chatEvent.setCancelled(!jda.getSettings().isShowAllChat() && !event.getRecipients().containsAll(Bukkit.getOnlinePlayers()));
-            Bukkit.getPluginManager().callEvent(chatEvent);
-            if (chatEvent.isCancelled()) {
-                return;
-            }
-
-            jda.sendChatMessage(player, chatEvent.getMessage());
-        });
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
