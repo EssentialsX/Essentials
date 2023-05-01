@@ -110,6 +110,9 @@ public class Commandeditsign extends EssentialsCommand {
     private boolean callSignEvent(final Sign sign, final Player player, final String[] lines) {
         final SignChangeEvent event = new SignChangeEvent(sign.getBlock(), player, lines);
         if (event.isCancelled()) {
+            if (ess.getSettings().isDebug()) {
+                ess.getLogger().info("SignChangeEvent canceled for /editsign execution by " + player.getName());
+            }
             return true;
         }
 
