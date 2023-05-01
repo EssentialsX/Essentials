@@ -75,6 +75,9 @@ public class Commandsethome extends EssentialsCommand {
 
         Bukkit.getServer().getPluginManager().callEvent(event);
         if (event.isCancelled()) {
+            if (ess.getSettings().isDebug()) {
+                ess.getLogger().info("HomeModifyEvent canceled for /sethome execution by " + user.getDisplayName());
+            }
             return;
         }
 
