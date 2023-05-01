@@ -109,7 +109,7 @@ public class DiscordSettings implements IConf {
     }
 
     public boolean isUseEssentialsEvents() {
-        return config.getBoolean("use-essentials-events", true);
+        return config.getBoolean("use-essentials-events", false);
     }
 
     public int getChatDiscordMaxLength() {

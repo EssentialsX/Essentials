@@ -48,7 +48,7 @@ always-receive-primary: false
 
 # Whether to use Essentials Chat events instead of normal chat event.
 # This allows you to filter chat by its type (local, question, shout).
-use-essentials-events: true
+use-essentials-events: false
 
 # Chat relay settings
 # General settings for chat relays between Minecraft and Discord.
