@@ -88,6 +88,8 @@ public class Commandessentials extends EssentialsCommand {
         "DiscordSRV", // potential for issues if EssentialsXDiscord is installed
 
         // Chat signing bypass plugins that can potentially break EssentialsChat
+        // as evidenced by the fact that we recategorized then from "dangerous" to "dumb", suggesting that we don't actually think it's dangerous
+        // we just don't like them
         "AntiPopup",
         "NoChatReports",
         "NoEncryption"
@@ -103,13 +105,20 @@ public class Commandessentials extends EssentialsCommand {
         "EssentialsXMPP"
     );
     private static final List<String> warnPlugins = Arrays.asList(
+        // Does PEX actually cause compatibility issues? Or is this just some developers abusing their position as maintainers of a popular unrelated plugin?
         "PermissionsEx",
+        // 
         "GroupManager",
         "bPermissions",
 
         // Brain-dead chat signing bypass that break EssentialsChat
-        "NoChatReports",
-        "NoEncryption"
+        // "NoChatReports", Turns out, people don't like centralized unaccountable organizations imposing top-down control
+        // "NoEncryption", And they don't appreciate developers of an unrelated plugin deciding it's their job to be plugin police
+        
+        // Brain-dead plugin developers prefer centralized control through poorly-thought-out moderation mechanisms run by mismanaged
+        // unaccountable organizations, and they're willing to use their position as maintainers of a completely unrelated
+        // plugin to impose that opinion on others
+        "EssentialsX"
     );
     private transient TuneRunnable currentTune = null;
 
