@@ -8,6 +8,8 @@ import org.bukkit.ChatColor;
 import org.bukkit.Server;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
+import org.bukkit.entity.Player;
+import org.bukkit.event.block.SignChangeEvent;
 
 import java.util.Collections;
 import java.util.List;
@@ -32,45 +34,71 @@ public class Commandeditsign extends EssentialsCommand {
         final Sign sign = (Sign) target.getState();
         try {
             if (args[0].equalsIgnoreCase("set") && args.length > 2) {
+                final String[] existingLines = sign.getLines();
                 final int line = Integer.parseInt(args[1]) - 1;
                 final String text = FormatUtil.formatString(user, "essentials.editsign", getFinalArg(args, 2)).trim();
                 if (ChatColor.stripColor(text).length() > 15 && !user.isAuthorized("essentials.editsign.unlimited")) {
                     throw new Exception(tl("editsignCommandLimit"));
                 }
-                sign.setLine(line, text);
-                sign.update();
+                existingLines[line] = text;
+                if (callSignEvent(sign, user.getBase(), existingLines)) {
+                    return;
+                }
+
                 user.sendMessage(tl("editsignCommandSetSuccess", line + 1, text));
             } else if (args[0].equalsIgnoreCase("clear")) {
                 if (args.length == 1) {
+                    final String[] existingLines = sign.getLines();
                     for (int i = 0; i < 4; i++) { // A whole one line of line savings!
-                        sign.setLine(i, "");
+                        existingLines[i] = "";
                     }
-                    sign.update();
+
+                    if (callSignEvent(sign, user.getBase(), existingLines)) {
+                        return;
+                    }
+
                     user.sendMessage(tl("editsignCommandClear"));
                 } else {
+                    final String[] existingLines = sign.getLines();
                     final int line = Integer.parseInt(args[1]) - 1;
-                    sign.setLine(line, "");
-                    sign.update();
+                    existingLines[line] = "";
+
+                    if (callSignEvent(sign, user.getBase(), existingLines)) {
+                        return;
+                    }
+
                     user.sendMessage(tl("editsignCommandClearLine", line + 1));
                 }
-            } else if (args[0].equalsIgnoreCase("copy") || args[0].equalsIgnoreCase("paste")) {
-                final boolean copy = args[0].equalsIgnoreCase("copy");
-                final String tlPrefix = copy ? "editsignCopy" : "editsignPaste";
+            } else if (args[0].equalsIgnoreCase("copy")) {
                 final int line = args.length == 1 ? -1 : Integer.parseInt(args[1]) - 1;
 
                 if (line == -1) {
                     for (int i = 0; i < 4; i++) {
-                        processSignCopyPaste(user, sign, i, copy);
+                        // We use unformat here to prevent players from copying signs with colors that they do not have permission to use.
+                        user.getSignCopy().set(i, FormatUtil.unformatString(user, "essentials.editsign", sign.getLine(i)));
                     }
-                    user.sendMessage(tl(tlPrefix, commandLabel));
+                    user.sendMessage(tl("editsignCopy", commandLabel));
                 } else {
-                    processSignCopyPaste(user, sign, line, copy);
-                    user.sendMessage(tl(tlPrefix + "Line", line + 1, commandLabel));
+                    // We use unformat here to prevent players from copying signs with colors that they do not have permission to use.
+                    user.getSignCopy().set(line, FormatUtil.unformatString(user, "essentials.editsign", sign.getLine(line)));
+                    user.sendMessage(tl("editsignCopyLine", line + 1, commandLabel));
                 }
 
-                if (!copy) {
-                    sign.update();
+            } else if (args[0].equalsIgnoreCase("paste")) {
+                final int line = args.length == 1 ? -1 : Integer.parseInt(args[1]) - 1;
+
+                final String[] existingLines = sign.getLines();
+                if (line == -1) {
+                    for (int i = 0; i < 4; i++) {
+                        existingLines[i] = FormatUtil.formatString(user, "essentials.editsign", user.getSignCopy().get(i));
+                    }
+                    user.sendMessage(tl("editsignPaste", commandLabel));
+                } else {
+                    existingLines[line] = FormatUtil.formatString(user, "essentials.editsign", user.getSignCopy().get(line));
+                    user.sendMessage(tl("editsignPasteLine", line + 1, commandLabel));
                 }
+
+                callSignEvent(sign, user.getBase(), existingLines);
             } else {
                 throw new NotEnoughArgumentsException();
             }
@@ -79,15 +107,20 @@ public class Commandeditsign extends EssentialsCommand {
         }
     }
 
-    private void processSignCopyPaste(final User user, final Sign sign, final int index, final boolean copy) {
-        if (copy) {
-            // We use unformat here to prevent players from copying signs with colors that they do not have permission to use.
-            user.getSignCopy().set(index, FormatUtil.unformatString(user, "essentials.editsign", sign.getLine(index)));
-            return;
+    private boolean callSignEvent(final Sign sign, final Player player, final String[] lines) {
+        final SignChangeEvent event = new SignChangeEvent(sign.getBlock(), player, lines);
+        if (event.isCancelled()) {
+            if (ess.getSettings().isDebug()) {
+                ess.getLogger().info("SignChangeEvent canceled for /editsign execution by " + player.getName());
+            }
+            return true;
         }
 
-        final String line = FormatUtil.formatString(user, "essentials.editsign", user.getSignCopy().get(index));
-        sign.setLine(index, line == null ? "" : line);
+        for (int i = 0; i < 4; i++) {
+            sign.setLine(i, lines[i]);
+        }
+        sign.update();
+        return false;
     }
 
     @Override
