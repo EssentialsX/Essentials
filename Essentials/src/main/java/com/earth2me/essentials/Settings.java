@@ -604,7 +604,7 @@ public class Settings implements net.ess3.api.ISettings {
         private final Map<String, TypedChatFormat> groupFormats;
         private TypedChatFormat defaultFormat;
 
-        public ChatFormats() {
+        ChatFormats() {
             defaultFormat = null;
             groupFormats = new HashMap<>();
         }
@@ -641,7 +641,7 @@ public class Settings implements net.ess3.api.ISettings {
         private final Map<ChatType, String> typedFormats;
         private String defaultFormat;
 
-        public TypedChatFormat() {
+        TypedChatFormat() {
             defaultFormat = null;
             typedFormats = new EnumMap<>(ChatType.class);
         }
