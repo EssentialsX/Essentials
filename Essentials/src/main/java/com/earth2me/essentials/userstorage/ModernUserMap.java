@@ -87,6 +87,7 @@ public class ModernUserMap extends CacheLoader<UUID, User> implements IUserMap {
     public User getUser(final Player base) {
         final User user = loadUncachedUser(base);
         userCache.put(user.getUUID(), user);
+        debugLogCache(user);
         return user;
     }
 
@@ -175,6 +176,7 @@ public class ModernUserMap extends CacheLoader<UUID, User> implements IUserMap {
 
     public void addCachedUser(final User user) {
         userCache.put(user.getUUID(), user);
+        debugLogCache(user);
     }
 
     @Override
