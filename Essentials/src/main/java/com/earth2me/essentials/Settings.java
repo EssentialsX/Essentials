@@ -573,8 +573,46 @@ public class Settings implements net.ess3.api.ISettings {
 
     @Override
     public String getChatFormat(final String group, final ChatType chatType) {
-        final String mFormat = chatFormats.getFormat(group, chatType, () -> {
-            String configFormat = config.getString("chat.group-formats." + (group == null ? "Default" : group), config.getString("chat.format", "&7[{GROUP}]&r {DISPLAYNAME}&7:&r {MESSAGE}"));
+        final String mFormat = chatFormats.getFormat(group, chatType, new ChatFormatConfigSupplier(config, group, chatType));
+        if (isDebug()) {
+            ess.getLogger().info(String.format("Found format '%s' for group '%s'", mFormat, group));
+        }
+        return mFormat;
+    }
+
+    // Idk where these classes should be
+    private static class ChatFormatConfigSupplier implements Supplier<String> {
+
+        private final EssentialsConfiguration config;
+        private final String group;
+        private final ChatType chatType;
+
+        public ChatFormatConfigSupplier(EssentialsConfiguration config, String group, ChatType chatType) {
+            this.config = config;
+            this.group = group;
+            this.chatType = chatType;
+        }
+
+        @Override
+        public String get() {
+            //String configFormat = config.getString("chat.group-formats." + (group == null ? "Default" : group), config.getString("chat.format", "&7[{GROUP}]&r {DISPLAYNAME}&7:&r {MESSAGE}"));
+            String configFormat = null;
+            CommentedConfigurationNode node = config.getSection("chat.group-formats." + (group == null ? "Default" : group));
+            if (node != null) {
+                configFormat = getFormat(node, chatType);
+            }
+            // Group format is null, try default format
+            if (configFormat == null) {
+                node = config.getSection("chat.format");
+                if (node != null) {
+                    configFormat = getFormat(node, chatType);
+                }
+            }
+            // Group format is null, get the default one
+            if (configFormat == null) {
+                configFormat = "&7[{GROUP}]&r {DISPLAYNAME}&7:&r {MESSAGE}";
+            }
+
             configFormat = FormatUtil.replaceFormat(configFormat);
             configFormat = configFormat.replace("{DISPLAYNAME}", "%1$s");
             configFormat = configFormat.replace("{MESSAGE}", "%2$s");
@@ -591,14 +629,24 @@ public class Settings implements net.ess3.api.ISettings {
             configFormat = configFormat.replace("{NICKNAME}", "{9}");
             configFormat = "§r".concat(configFormat);
             return configFormat;
-        });
-        if (isDebug()) {
-            ess.getLogger().info(String.format("Found format '%s' for group '%s'", mFormat, group));
         }
-        return mFormat;
+
+        private String getFormat(CommentedConfigurationNode node, ChatType chatType) {
+            // Try to get the specified chat type
+            CommentedConfigurationNode child = node.node(chatType.key());
+            if (child.virtual()) {
+                // Try to get the default chat type
+                child = node.node("default");
+            }
+            if (child.virtual()) {
+                // Get the current node
+                child = node;
+            }
+            return child.getString();
+        }
+
     }
 
-    // Idk where these classes should be
     private static class ChatFormats {
 
         private final Map<String, TypedChatFormat> groupFormats;
