@@ -87,7 +87,6 @@ public class ModernUserMap extends CacheLoader<UUID, User> implements IUserMap {
     public User getUser(final Player base) {
         final User user = loadUncachedUser(base);
         userCache.put(user.getUUID(), user);
-        debugLogCache(user.getName(), user.getUUID());
         return user;
     }
 
@@ -121,6 +120,7 @@ public class ModernUserMap extends CacheLoader<UUID, User> implements IUserMap {
     public User load(final UUID uuid) throws Exception {
         final User user = loadUncachedUser(uuid);
         if (user != null) {
+            debugLogCache(user);
             return user;
         }
 
@@ -175,7 +175,6 @@ public class ModernUserMap extends CacheLoader<UUID, User> implements IUserMap {
 
     public void addCachedUser(final User user) {
         userCache.put(user.getUUID(), user);
-        debugLogCache(user.getName(), user.getUUID());
     }
 
     @Override
@@ -204,12 +203,12 @@ public class ModernUserMap extends CacheLoader<UUID, User> implements IUserMap {
         uuidCache.shutdown();
     }
 
-    private void debugLogCache(final String name, final UUID uuid) {
+    private void debugLogCache(final User user) {
         if (!debugLogCache) {
             return;
         }
         final Throwable throwable = new Throwable();
-        ess.getLogger().log(Level.INFO, String.format("Caching user %s (%s)", name, uuid), throwable);
+        ess.getLogger().log(Level.INFO, String.format("Caching user %s (%s)", user.getName(), user.getUUID()), throwable);
     }
 
     private void debugLogUncachedNonPlayer(final Player base) {
