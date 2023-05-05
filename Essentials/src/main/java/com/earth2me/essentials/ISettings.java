@@ -3,6 +3,7 @@ package com.earth2me.essentials;
 import com.earth2me.essentials.commands.IEssentialsCommand;
 import com.earth2me.essentials.signs.EssentialsSign;
 import com.earth2me.essentials.textreader.IText;
+import net.essentialsx.api.v2.ChatType;
 import org.bukkit.Material;
 import org.bukkit.event.EventPriority;
 import org.spongepowered.configurate.CommentedConfigurationNode;
@@ -35,6 +36,8 @@ public interface ISettings extends IConf {
     boolean isAlwaysRunBackup();
 
     String getChatFormat(String group);
+
+    String getChatFormat(String group, ChatType chatType);
 
     String getWorldAlias(String world);
 
