@@ -1085,15 +1085,6 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
         return user;
     }
 
-    public boolean isPlayerOnline(UUID uuid) {
-        for (Player player : getOnlinePlayers()) {
-            if (player.getUniqueId().equals(uuid)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
     private void handleCrash(final Throwable exception) {
         final PluginManager pm = getServer().getPluginManager();
         LOGGER.log(Level.SEVERE, exception.toString());
