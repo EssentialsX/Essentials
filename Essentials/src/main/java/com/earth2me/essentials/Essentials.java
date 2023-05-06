@@ -1079,10 +1079,19 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
             // Since we already call UserMap#getUser() above, we are already okay with adding the user to the cache,
             // so we need to manually add the user to the cache in order to avoid a memory leak and maintain behavior.
             userMap.addCachedUser(user);
-        } else {
+        } else if (base.getClass() != UUIDPlayer.class || user.getBase() == null) {
             user.update(base);
         }
         return user;
+    }
+
+    public boolean isPlayerOnline(UUID uuid) {
+        for (Player player : getOnlinePlayers()) {
+            if (player.getUniqueId().equals(uuid)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private void handleCrash(final Throwable exception) {
