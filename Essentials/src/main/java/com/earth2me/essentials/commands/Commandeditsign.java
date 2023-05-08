@@ -4,6 +4,7 @@ import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.FormatUtil;
 import com.earth2me.essentials.utils.NumberUtil;
 import com.google.common.collect.Lists;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Server;
 import org.bukkit.block.Block;
@@ -109,6 +110,7 @@ public class Commandeditsign extends EssentialsCommand {
 
     private boolean callSignEvent(final Sign sign, final Player player, final String[] lines) {
         final SignChangeEvent event = new SignChangeEvent(sign.getBlock(), player, lines);
+        Bukkit.getServer().getPluginManager().callEvent(event);
         if (event.isCancelled()) {
             if (ess.getSettings().isDebug()) {
                 ess.getLogger().info("SignChangeEvent canceled for /editsign execution by " + player.getName());
