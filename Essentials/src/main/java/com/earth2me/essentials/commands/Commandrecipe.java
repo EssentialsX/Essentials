@@ -53,7 +53,23 @@ public class Commandrecipe extends EssentialsCommand {
             throw new NotEnoughArgumentsException();
         }
 
-        final ItemStack itemType = ess.getItemDb().get(args[0]);
+        final ItemStack itemType;
+
+        if (args[0].equalsIgnoreCase("hand")) {
+            final User user = ess.getUser(sender.getPlayer());
+            if (user == null) {
+                throw new Exception(tl("recipeConsoleNoHands"));
+            }
+            final Material item = user.getItemInHand().getType();
+
+            if (item.isAir()) {
+                throw new Exception(tl("recipeCannotBeAir"));
+            }
+            itemType = ess.getItemDb().get(item.toString());
+        } else {
+            itemType = ess.getItemDb().get(args[0]);
+        }
+
         int recipeNo = 0;
 
         if (args.length > 1) {
