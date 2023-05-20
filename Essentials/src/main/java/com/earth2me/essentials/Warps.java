@@ -121,7 +121,7 @@ public class Warps implements IConf, net.ess3.api.IWarps {
     public final void reloadConfig() {
         warpPoints.clear();
         final File[] listOfFiles = warpsFolder.listFiles();
-        if (listOfFiles.length >= 1) {
+        if (listOfFiles != null) {
             for (final File listOfFile : listOfFiles) {
                 final String filename = listOfFile.getName();
                 if (listOfFile.isFile() && filename.endsWith(".yml")) {
