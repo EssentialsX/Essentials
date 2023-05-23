@@ -1,5 +1,6 @@
 package net.essentialsx.discord.interactions;
 
+import com.earth2me.essentials.utils.StringUtil;
 import net.dv8tion.jda.api.events.interaction.SlashCommandEvent;
 import net.dv8tion.jda.api.exceptions.ErrorResponseException;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
@@ -74,10 +75,14 @@ public class InteractionControllerImpl extends ListenerAdapter implements Intera
             initialBatchRegistration = true;
             final List<CommandData> list = new ArrayList<>();
             for (final InteractionCommand command : batchRegistrationQueue.values()) {
-                final CommandData data = new CommandData(command.getName(), command.getDescription());
+                // German is quite the language
+                final String description = StringUtil.abbreviate(command.getDescription(), 100);
+                final CommandData data = new CommandData(command.getName(), description);
                 if (command.getArguments() != null) {
                     for (final InteractionCommandArgument argument : command.getArguments()) {
-                        data.addOption(OptionType.valueOf(argument.getType().name()), argument.getName(), argument.getDescription(), argument.isRequired());
+                        // German doesn't support spaces between words
+                        final String argDescription = StringUtil.abbreviate(argument.getDescription(), 100);
+                        data.addOption(OptionType.valueOf(argument.getType().name()), argument.getName(), argDescription, argument.isRequired());
                     }
                 }
                 list.add(data);
