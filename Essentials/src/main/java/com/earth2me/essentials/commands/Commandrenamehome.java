@@ -4,6 +4,8 @@ import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.NumberUtil;
 import net.ess3.api.IUser;
+import net.essentialsx.api.v2.events.HomeModifyEvent;
+import org.bukkit.Bukkit;
 import org.bukkit.Server;
 
 import java.util.ArrayList;
@@ -58,6 +60,15 @@ public class Commandrenamehome extends EssentialsCommand {
 
         if ("bed".equals(newName) || NumberUtil.isInt(newName) || "bed".equals(oldName) || NumberUtil.isInt(oldName)) {
             throw new NoSuchFieldException(tl("invalidHomeName"));
+        }
+
+        final HomeModifyEvent event = new HomeModifyEvent(user, usersHome, oldName, newName, usersHome.getHome(oldName));
+        Bukkit.getServer().getPluginManager().callEvent(event);
+        if (event.isCancelled()) {
+            if (ess.getSettings().isDebug()) {
+                ess.getLogger().info("HomeModifyEvent canceled for /renamehome execution by " + user.getDisplayName());
+            }
+            return;
         }
 
         usersHome.renameHome(oldName, newName);

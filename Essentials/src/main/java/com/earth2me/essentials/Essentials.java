@@ -131,7 +131,7 @@ import static com.earth2me.essentials.I18n.tl;
 public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
     private static final Logger BUKKIT_LOGGER = Logger.getLogger("Essentials");
     private static Logger LOGGER = null;
-    private final transient TNTExplodeListener tntListener = new TNTExplodeListener(this);
+    private final transient TNTExplodeListener tntListener = new TNTExplodeListener();
     private final transient Set<String> vanishedPlayers = new LinkedHashSet<>();
     private final transient ProviderFactory providerFactory = new ProviderFactory(this);
     private transient ISettings settings;
@@ -1027,7 +1027,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
             // Since we already call UserMap#getUser() above, we are already okay with adding the user to the cache,
             // so we need to manually add the user to the cache in order to avoid a memory leak and maintain behavior.
             userMap.addCachedUser(user);
-        } else {
+        } else if (base.getClass() != UUIDPlayer.class || user.getBase() == null) {
             user.update(base);
         }
         return user;
@@ -1139,11 +1139,6 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
     @Override
     public int scheduleSyncRepeatingTask(final Runnable run, final long delay, final long period) {
         return this.getScheduler().scheduleSyncRepeatingTask(this, run, delay, period);
-    }
-
-    @Override
-    public TNTExplodeListener getTNTListener() {
-        return tntListener;
     }
 
     @Override

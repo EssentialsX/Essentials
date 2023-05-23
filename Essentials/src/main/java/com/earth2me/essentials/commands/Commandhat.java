@@ -28,7 +28,7 @@ public class Commandhat extends EssentialsCommand {
     @Override
     protected void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception {
         if (args.length == 0 || (!args[0].contains("rem") && !args[0].contains("off") && !args[0].equalsIgnoreCase("0"))) {
-            final ItemStack hand = user.getItemInHand();
+            final ItemStack hand = Inventories.getItemInMainHand(user.getBase());
             if (hand == null || hand.getType() == Material.AIR) {
                 user.sendMessage(tl("hatFail"));
                 return;
@@ -53,7 +53,7 @@ public class Commandhat extends EssentialsCommand {
                 return;
             }
             inv.setHelmet(hand);
-            inv.setItemInHand(head);
+            Inventories.setItemInMainHand(user.getBase(), head);
             user.sendMessage(tl("hatPlaced"));
             return;
         }

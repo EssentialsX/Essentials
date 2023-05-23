@@ -2,6 +2,7 @@ package net.essentialsx.discord.listeners;
 
 import com.earth2me.essentials.Console;
 import com.earth2me.essentials.utils.DateUtil;
+import com.earth2me.essentials.utils.FormatUtil;
 import com.earth2me.essentials.utils.VersionUtil;
 import net.ess3.api.IUser;
 import net.ess3.api.events.AfkStatusChangeEvent;
@@ -10,13 +11,11 @@ import net.ess3.api.events.VanishStatusChangeEvent;
 import net.ess3.provider.AbstractAchievementEvent;
 import net.essentialsx.api.v2.events.AsyncUserDataLoadEvent;
 import net.essentialsx.api.v2.events.UserActionEvent;
-import net.essentialsx.api.v2.events.discord.DiscordChatMessageEvent;
 import net.essentialsx.api.v2.events.discord.DiscordMessageEvent;
 import net.essentialsx.api.v2.services.discord.MessageType;
 import net.essentialsx.discord.JDADiscordService;
 import net.essentialsx.discord.util.DiscordUtil;
 import net.essentialsx.discord.util.MessageUtil;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameRule;
 import org.bukkit.entity.Player;
@@ -24,7 +23,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
-import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
@@ -78,21 +76,6 @@ public class BukkitListener implements Listener {
                             MessageUtil.sanitizeDiscordMarkdown(console ? Console.DISPLAY_NAME : event.getController().getDisplayName()),
                             MessageUtil.sanitizeDiscordMarkdown(event.getReason())));
         }
-    }
-
-    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-    public void onChat(AsyncPlayerChatEvent event) {
-        final Player player = event.getPlayer();
-        Bukkit.getScheduler().runTask(jda.getPlugin(), () -> {
-            final DiscordChatMessageEvent chatEvent = new DiscordChatMessageEvent(event.getPlayer(), event.getMessage());
-            chatEvent.setCancelled(!jda.getSettings().isShowAllChat() && !event.getRecipients().containsAll(Bukkit.getOnlinePlayers()));
-            Bukkit.getPluginManager().callEvent(chatEvent);
-            if (chatEvent.isCancelled()) {
-                return;
-            }
-
-            jda.sendChatMessage(player, chatEvent.getMessage());
-        });
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
@@ -271,11 +254,13 @@ public class BukkitListener implements Listener {
                 avatarUrl = DiscordUtil.getAvatarUrl(jda, player);
             }
 
-            if (jda.getSettings().isShowName()) {
-                name = player.getName();
-            } else if (jda.getSettings().isShowDisplayName()) {
-                name = player.getDisplayName();
-            }
+            name = MessageUtil.formatMessage(jda.getSettings().getMcToDiscordNameFormat(player),
+                player.getName(),
+                player.getDisplayName(),
+                jda.getPlugin().getEss().getSettings().getWorldAlias(player.getWorld().getName()),
+                FormatUtil.stripEssentialsFormat(jda.getPlugin().getEss().getPermissionsHandler().getPrefix(player)),
+                FormatUtil.stripEssentialsFormat(jda.getPlugin().getEss().getPermissionsHandler().getSuffix(player)),
+                jda.getGuild().getMember(jda.getJda().getSelfUser()).getEffectiveName());
 
             uuid = player.getUniqueId();
         }
