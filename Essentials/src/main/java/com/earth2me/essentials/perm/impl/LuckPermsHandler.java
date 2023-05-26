@@ -75,6 +75,14 @@ public class LuckPermsHandler extends ModernVaultHandler {
             }
 
             final User user = ess.getUsers().loadUncachedUser(target.getUniqueId());
+
+            // This will occur for first time players during join,
+            // None of our contexts would apply to that kind of person anyway,
+            // lets just skip :O
+            if (user == null) {
+                return;
+            }
+
             for (Calculator calculator : this.calculators) {
                 calculator.function.apply(user).forEach(value -> consumer.accept(calculator.id, value));
             }
