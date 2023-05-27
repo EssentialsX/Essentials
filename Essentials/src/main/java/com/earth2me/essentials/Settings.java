@@ -1943,4 +1943,10 @@ public class Settings implements net.ess3.api.ISettings {
     public boolean showZeroBaltop() {
         return config.getBoolean("show-zero-baltop", true);
     }
+
+    @Override
+    public boolean isShortNumbersAllowed(){
+        return config.getBoolean("shortened-economy-numbers",true);
+    }
+
 }

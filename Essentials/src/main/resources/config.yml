@@ -850,6 +850,11 @@ show-zero-baltop: true
 # For 1'234,50 use fr-ch
 #currency-symbol-format-locale: en-US
 
+# Whether users are allowed to pay with shortened numbers and see their balance in shortened numbers.
+# allowed letters are: K (=1E3), M (=1E6), B (=1E9), T (=1E12), Q (=1E15)
+# usable in /pay, /bal, /baltop
+shortened-economy-numbers: true
+
 ############################################################
 # +------------------------------------------------------+ #
 # |                         Help                         | #

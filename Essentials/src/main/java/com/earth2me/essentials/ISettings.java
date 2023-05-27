@@ -406,6 +406,8 @@ public interface ISettings extends IConf {
 
     boolean showZeroBaltop();
 
+    boolean isShortNumbersAllowed();
+
     enum KeepInvPolicy {
         KEEP,
         DELETE,

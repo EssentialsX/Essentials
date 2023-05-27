@@ -4,14 +4,17 @@ import com.earth2me.essentials.api.NoLoanPermittedException;
 import com.earth2me.essentials.api.UserDoesNotExistException;
 import com.earth2me.essentials.commands.IEssentialsCommand;
 import com.earth2me.essentials.commands.NoChargeException;
+import com.earth2me.essentials.utils.NumberUtil;
 import net.ess3.api.Economy;
 import net.ess3.api.MaxMoneyException;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.InvalidDescriptionException;
 import org.junit.Assert;
 import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 
 public class EconomyTest {
     private static final String NPCNAME = "npc1";
@@ -140,5 +143,58 @@ public class EconomyTest {
         } catch (final Exception e) {
             Assert.assertEquals(I18n.tl("payMustBePositive"), e.getMessage());
         }
+    }
+
+    @Test
+    public void testMultipleRightCharacterPayCommand(){
+        final User user1 = ess.getUser(PLAYERNAME);
+        try {
+            runCommand("pay", user1, PLAYERNAME2 + " 456kT");
+        } catch (final Exception e) {
+            Assert.assertEquals("onlySelectOneLetter",e.getMessage());
+        }
+    }
+
+    @Test
+    public void testCreateFactorFromNumberUtil(){
+        final String factor1 = NumberUtil.createFactor(new BigDecimal("3 455 566 556 895 897".replaceAll(" ","")));
+        final String factor2 = NumberUtil.createFactor(new BigDecimal("3 455 566 556 897".replaceAll(" ","")));
+        final String factor3 = NumberUtil.createFactor(new BigDecimal("3 455 556 897".replaceAll(" ","")));
+        final String factor4 = NumberUtil.createFactor(new BigDecimal("3 556 897".replaceAll(" ","")));
+        final String factor5 = NumberUtil.createFactor(new BigDecimal("3 455".replaceAll(" ","")));
+
+        Assertions.assertEquals("Q",factor1);
+        Assertions.assertEquals("T",factor2);
+        Assertions.assertEquals("B",factor3);
+        Assertions.assertEquals("M",factor4);
+        Assertions.assertEquals("K",factor5);
+    }
+
+    @Test
+    public void testShortenNumbersFromNumbersUtil(){
+        final String factor1 = "Q";
+        final String factor2 = "T";
+        final String factor3 = "B";
+        final String factor4 = "M";
+        final String factor5 = "K";
+
+        final BigDecimal value1 = new BigDecimal("3 455 566 556 895 897".replaceAll(" ",""));
+        final BigDecimal value2 = new BigDecimal("3 455 566 556 897".replaceAll(" ",""));
+        final BigDecimal value3 = new BigDecimal("3 455 566 897".replaceAll(" ",""));
+        final BigDecimal value4 = new BigDecimal("3 895 897".replaceAll(" ",""));
+        final BigDecimal value5 = new BigDecimal("3 455".replaceAll(" ",""));
+
+        final BigDecimal result1 = NumberUtil.shortenNumbers(value1,factor1);
+        final BigDecimal result2 = NumberUtil.shortenNumbers(value2,factor2);
+        final BigDecimal result3 = NumberUtil.shortenNumbers(value3,factor3);
+        final BigDecimal result4 = NumberUtil.shortenNumbers(value4,factor4);
+        final BigDecimal result5 = NumberUtil.shortenNumbers(value5,factor5);
+
+        Assertions.assertEquals(new BigDecimal("3.455"),result1);
+        Assertions.assertEquals(new BigDecimal("3.455"),result2);
+        Assertions.assertEquals(new BigDecimal("3.455"),result3);
+        Assertions.assertEquals(new BigDecimal("3.895"),result4);
+        Assertions.assertEquals(new BigDecimal("3.455"),result5);
+
     }
 }

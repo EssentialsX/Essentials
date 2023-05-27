@@ -66,9 +66,17 @@ public final class NumberUtil {
     }
 
     public static String displayCurrency(final BigDecimal value, final IEssentials ess) {
-        String currency = formatAsPrettyCurrency(value);
+        String factor = "";
+        BigDecimal money = value;
+
+        if(ess.getSettings().isShortNumbersAllowed()) {
+            factor = createFactor(value);
+            money = shortenNumbers(value, factor);
+        }
+
+        String currency = formatAsPrettyCurrency(money) + factor;
         String sign = "";
-        if (value.signum() < 0) {
+        if (money.signum() < 0) {
             currency = currency.substring(1);
             sign = "-";
         }
@@ -79,9 +87,17 @@ public final class NumberUtil {
     }
 
     public static String displayCurrencyExactly(final BigDecimal value, final IEssentials ess) {
-        String currency = value.toPlainString();
+        String factor = "";
+        BigDecimal money = value;
+
+        if(ess.getSettings().isShortNumbersAllowed()) {
+            factor = createFactor(value);
+            money = shortenNumbers(value, factor);
+        }
+
+        String currency = money.toPlainString() + factor;
         String sign = "";
-        if (value.signum() < 0) {
+        if (money.signum() < 0) {
             currency = currency.substring(1);
             sign = "-";
         }
@@ -134,5 +150,58 @@ public final class NumberUtil {
      */
     public static int constrainToRange(int value, int min, int max) {
         return Math.min(Math.max(value, min), max);
+    }
+
+    public static String createFactor(BigDecimal value) {
+        String factor = "";
+
+        final BigDecimal decimalThousand = new BigDecimal("1 000".replaceAll(" ", ""));
+        final BigDecimal decimalMillion = new BigDecimal("1 000 000".replaceAll(" ", ""));
+        final BigDecimal decimalBillion = new BigDecimal("1 000 000 000".replaceAll(" ", ""));
+        final BigDecimal decimalTrillion = new BigDecimal("1 000 000 000 000".replaceAll(" ", ""));
+        final BigDecimal decimalQuadrillion = new BigDecimal("1 000 000 000 000 000".replaceAll(" ", ""));
+
+        if (value.compareTo(decimalQuadrillion) > 0) {
+            factor = "Q";
+        } else if (value.compareTo(decimalTrillion) > 0) {
+            factor = "T";
+        } else if (value.compareTo(decimalBillion) > 0) {
+            factor = "B";
+        } else if (value.compareTo(decimalMillion) > 0) {
+            factor = "M";
+        } else if (value.compareTo(decimalThousand) > 0) {
+            factor = "K";
+        }
+
+        return factor;
+    }
+
+    public static BigDecimal shortenNumbers(BigDecimal value, String factor) {
+
+        BigDecimal money = value;
+
+        switch (factor) {
+            case "Q":
+                final BigDecimal decimalQuadrillion = new BigDecimal("1 000 000 000 000 000".replaceAll(" ", ""));
+                money = value.divide(decimalQuadrillion, 3, RoundingMode.FLOOR);
+                break;
+            case "T":
+                final BigDecimal decimalTrillion = new BigDecimal("1 000 000 000 000".replaceAll(" ", ""));
+                money = value.divide(decimalTrillion, 3, RoundingMode.FLOOR);
+                break;
+            case "B":
+                final BigDecimal decimalBillion = new BigDecimal("1 000 000 000".replaceAll(" ", ""));
+                money = value.divide(decimalBillion, 3, RoundingMode.FLOOR);
+                break;
+            case "M":
+                final BigDecimal decimalMillion = new BigDecimal("1 000 000".replaceAll(" ", ""));
+                money = value.divide(decimalMillion, 3, RoundingMode.FLOOR);
+                break;
+            case "K":
+                final BigDecimal decimalThousand = new BigDecimal("1 000".replaceAll(" ", ""));
+                money = value.divide(decimalThousand, 3, RoundingMode.FLOOR);
+                break;
+        }
+        return money;
     }
 }

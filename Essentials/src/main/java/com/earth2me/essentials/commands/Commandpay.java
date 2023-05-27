@@ -9,7 +9,6 @@ import com.google.common.collect.Lists;
 import net.ess3.api.MaxMoneyException;
 import net.ess3.api.events.UserBalanceUpdateEvent;
 import org.bukkit.Server;
-
 import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.List;
@@ -33,12 +32,49 @@ public class Commandpay extends EssentialsLoopCommand {
         }
 
         final String stringAmount = args[1].replaceAll("[^0-9\\.]", "");
+        final String decimalFactor;
 
         if (stringAmount.length() < 1) {
             throw new NotEnoughArgumentsException();
         }
+        if(ess.getSettings().isShortNumbersAllowed()){
+            final String stringFactor = args[1].replaceAll("[^kmbtqKMBTQ]", "");
 
-        final BigDecimal amount = new BigDecimal(stringAmount);
+            if (stringFactor.length() > 1) {
+                throw new TooManyArgumentsException("onlySelectOneLetter");
+            }
+
+            switch (stringFactor) {
+                case "k":
+                case "K":
+                    decimalFactor = "1 000".replaceAll(" ","");
+                    break;
+                case "m":
+                case "M":
+                    decimalFactor = "1 000 000".replaceAll(" ","");
+                    break;
+                case "b":
+                case "B":
+                    decimalFactor = "1 000 000 000".replaceAll(" ","");
+                    break;
+                case "t":
+                case "T":
+                    decimalFactor = "1 000 000 000 000".replaceAll(" ","");
+                    break;
+                case "q":
+                case "Q":
+                    decimalFactor = "1 000 000 000 000 000".replaceAll(" ","");
+                    break;
+                default:
+                    decimalFactor = "1";
+                    break;
+            }
+        } else{
+            decimalFactor = "1";
+        }
+
+        final BigDecimal amount = (new BigDecimal(stringAmount)).multiply(new BigDecimal(decimalFactor));
+
         if (amount.compareTo(ess.getSettings().getMinimumPayAmount()) < 0) { // Check if amount is less than minimum-pay-amount
             throw new Exception(tl("minimumPayAmount", NumberUtil.displayCurrencyExactly(ess.getSettings().getMinimumPayAmount(), ess)));
         }
