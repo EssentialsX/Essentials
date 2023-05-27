@@ -104,15 +104,13 @@ public abstract class AbstractChatHandler {
 
         // Local, shout and question chat types are only enabled when there's a valid radius
         if (chat.getRadius() > 0 && event.getMessage().length() > 0) {
+            if (event.getMessage().length() > 1 && ((chat.getType() == ChatType.SHOUT && event.getMessage().charAt(0) == ess.getSettings().getChatShout()) || (chat.getType() == ChatType.QUESTION && event.getMessage().charAt(0) == ess.getSettings().getChatQuestion()))) {
+                event.setMessage(event.getMessage().substring(1));
+            }
+
             if (chat.getType() == ChatType.UNKNOWN) {
-                if (user.isToggleShout() && event.getMessage().charAt(0) == ess.getSettings().getChatShout()) {
-                    event.setMessage(event.getMessage().substring(1));
-                }
                 format = tl("chatTypeLocal").concat(format);
             } else {
-                if (event.getMessage().charAt(0) == ess.getSettings().getChatShout() || (event.getMessage().charAt(0) == ess.getSettings().getChatQuestion() && ess.getSettings().isChatQuestionEnabled())) {
-                    event.setMessage(event.getMessage().substring(1));
-                }
                 format = tl(chat.getType().key() + "Format", format);
             }
         }
@@ -293,16 +291,23 @@ public abstract class AbstractChatHandler {
             return ChatType.UNKNOWN;
         }
 
+        final char shoutPrefix = ess.getSettings().getChatShout();
+        final char questionPrefix = ess.getSettings().getChatQuestion();
+
         final char prefix = message.charAt(0);
-        if (prefix == ess.getSettings().getChatShout()) {
+        final boolean singleChar = message.length() == 1;
+
+        if (singleChar) {
             if (user.isToggleShout()) {
-                return ChatType.UNKNOWN;
+                return ChatType.SHOUT;
             }
-            return message.length() > 1 ? ChatType.SHOUT : ChatType.UNKNOWN;
-        } else if (ess.getSettings().isChatQuestionEnabled() && prefix == ess.getSettings().getChatQuestion()) {
-            return message.length() > 1 ? ChatType.QUESTION : ChatType.UNKNOWN;
-        } else if (user.isToggleShout()) {
-            return message.length() > 1 ? ChatType.SHOUT : ChatType.UNKNOWN;
+            return ChatType.UNKNOWN;
+        }
+
+        if (prefix == questionPrefix && ess.getSettings().isChatQuestionEnabled()) {
+            return ChatType.QUESTION;
+        } else if (prefix == shoutPrefix || user.isToggleShout()) {
+            return ChatType.SHOUT;
         } else {
             return ChatType.UNKNOWN;
         }
