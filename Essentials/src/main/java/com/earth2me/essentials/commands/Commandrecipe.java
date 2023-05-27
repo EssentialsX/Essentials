@@ -62,9 +62,6 @@ public class Commandrecipe extends EssentialsCommand {
             }
             final Material item = user.getItemInHand().getType();
 
-            if (item.isAir()) {
-                throw new Exception(tl("recipeCannotBeAir"));
-            }
             itemType = ess.getItemDb().get(item.toString());
         } else {
             itemType = ess.getItemDb().get(args[0]);
