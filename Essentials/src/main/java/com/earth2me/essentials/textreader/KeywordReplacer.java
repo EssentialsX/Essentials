@@ -375,7 +375,7 @@ public class KeywordReplacer implements IText {
                 }
 
                 if (this.replaceSpacesWithUnderscores) {
-                    replacer = replacer.replaceAll("\\s", "_");
+                    replacer = replacer.replace("_", "\\_").replaceAll("\\s", "_");
                 }
 
                 //If this is just a regular keyword, lets throw it into the cache
