@@ -58,7 +58,7 @@ public class Commandrecipe extends EssentialsCommand {
         if (args[0].equalsIgnoreCase("hand")) {
             final User user = ess.getUser(sender.getPlayer());
             if (user == null) {
-                throw new Exception(tl("recipeConsoleNoHands"));
+                throw new Exception(tl("consoleCannotUseCommand"));
             }
             final Material item = user.getItemInHand().getType();
 
