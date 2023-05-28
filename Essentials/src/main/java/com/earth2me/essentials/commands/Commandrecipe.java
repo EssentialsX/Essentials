@@ -2,6 +2,7 @@ package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.craftbukkit.Inventories;
 import com.earth2me.essentials.utils.EnumUtil;
 import com.earth2me.essentials.utils.NumberUtil;
 import com.earth2me.essentials.utils.VersionUtil;
@@ -59,9 +60,8 @@ public class Commandrecipe extends EssentialsCommand {
             if (!sender.isPlayer()) {
                 throw new Exception(tl("consoleCannotUseCommand"));
             }
-            final User user = sender.getUser(ess);
             
-            itemType = user.getItemInHand();
+            itemType = Inventories.getItemInHand(sender.getPlayer());
         } else {
             itemType = ess.getItemDb().get(args[0]);
         }
