@@ -142,7 +142,7 @@ public class KeywordReplacer implements IText {
             String line = input.getLines().get(i);
 
             // Skip processing b64 encoded items, they will not have keywords in them.
-            if (line.charAt(0) == '@') {
+            if (line.startsWith("@")) {
                 replaced.add(line);
                 continue;
             }
@@ -383,7 +383,7 @@ public class KeywordReplacer implements IText {
 
                 if (this.replaceSpacesWithUnderscores) {
                     // Don't replace spaces with underscores in command nor escape underscores.
-                    if (line.charAt(0) != '/') {
+                    if (line.startsWith("/")) {
                         replacer = replacer.replace("_", "\\_").replaceAll("\\s", "_");
                     }
                 }
