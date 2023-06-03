@@ -383,7 +383,7 @@ public class KeywordReplacer implements IText {
 
                 if (this.replaceSpacesWithUnderscores) {
                     // Don't replace spaces with underscores in command nor escape underscores.
-                    if (line.startsWith("/")) {
+                    if (!line.startsWith("/")) {
                         replacer = replacer.replace("_", "\\_").replaceAll("\\s", "_");
                     }
                 }
