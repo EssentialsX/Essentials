@@ -27,8 +27,7 @@ public abstract class EssentialsCommandNode<T> {
         }
 
         // we only want exact matches, so throw an error
-        // TODO: error message
-        throw new NoChargeException();
+        throw new NotEnoughArgumentsException();
     }
 
     protected List<String> tabComplete(WalkContext<T> context) throws Exception {
@@ -137,7 +136,7 @@ public abstract class EssentialsCommandNode<T> {
         protected Root(Initializer<T> initializer) {
             super(initializer);
             if (getChildNodes().isEmpty()) {
-                throw new RuntimeException("Root nodes must be initialised with at least one child");
+                throw new IllegalStateException("Root nodes must be initialised with at least one child");
             }
         }
 
@@ -162,7 +161,7 @@ public abstract class EssentialsCommandNode<T> {
         protected Literal(String name, String[] aliases, Initializer<T> initializer) {
             super(initializer);
             if (getChildNodes().isEmpty()) {
-                throw new RuntimeException("Literal nodes must be initialised with at least one child (node name: " + name + ")");
+                throw new IllegalStateException("Literal nodes must be initialised with at least one child (node name: " + name + ")");
             }
 
             this.name = name;
