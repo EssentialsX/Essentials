@@ -5,7 +5,10 @@ import org.bukkit.Server;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 
 public abstract class EssentialsCommandNode<T> {
     private final ArrayList<EssentialsCommandNode<T>> childNodes = new ArrayList<>();
@@ -37,6 +40,10 @@ public abstract class EssentialsCommandNode<T> {
         throw new NoChargeException();
     }
 
+    protected List<EssentialsCommandNode<T>> getChildNodes() {
+        return Collections.unmodifiableList(childNodes);
+    }
+
     public abstract boolean matches(final WalkContext<T> context);
 
     public static Root<CommandSource> root(final Initializer<CommandSource> initializer) {
@@ -54,8 +61,8 @@ public abstract class EssentialsCommandNode<T> {
             this.node = node;
         }
 
-        public void literal(final String name, final Initializer<T> initializer) {
-            node.childNodes.add(new Literal<>(name, initializer));
+        public void literal(final String name, final Initializer<T> initializer, final String... aliases) {
+            node.childNodes.add(new Literal<>(name, aliases, initializer));
         }
 
         public void execute(final RunHandler<T> runHandler) {
@@ -112,6 +119,9 @@ public abstract class EssentialsCommandNode<T> {
     public static class Root<T> extends EssentialsCommandNode<T> {
         protected Root(Initializer<T> initializer) {
             super(initializer);
+            if (getChildNodes().isEmpty()) {
+                throw new RuntimeException("Root nodes must be initialised with at least one child");
+            }
         }
 
         @Override
@@ -130,14 +140,24 @@ public abstract class EssentialsCommandNode<T> {
 
     public static class Literal<T> extends EssentialsCommandNode<T> {
         private final String name;
+        private final HashSet<String> aliases;
 
-        protected Literal(String name, Initializer<T> initializer) {
+        protected Literal(String name, String[] aliases, Initializer<T> initializer) {
             super(initializer);
+            if (getChildNodes().isEmpty()) {
+                throw new RuntimeException("Literal nodes must be initialised with at least one child (node name: " + name + ")");
+            }
+
             this.name = name;
+            this.aliases = new HashSet<>();
+            this.aliases.add(name.toLowerCase(Locale.ROOT));
+            for (final String alias : aliases) {
+                this.aliases.add(alias.toLowerCase(Locale.ROOT));
+            }
         }
 
         public boolean matches(WalkContext<T> context) {
-            return context.args.length > 0 && context.args[0].equalsIgnoreCase(name);
+            return context.args.length > 0 && aliases.contains(context.args[0].toLowerCase(Locale.ROOT));
         }
 
         @Override
