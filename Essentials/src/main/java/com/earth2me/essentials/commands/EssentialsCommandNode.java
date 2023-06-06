@@ -18,6 +18,7 @@ public abstract class EssentialsCommandNode<T> {
     }
 
     protected void run(WalkContext<T> context) throws Exception {
+        // TODO: consider moving walk logic into non-terminal node subclass
         for (EssentialsCommandNode<T> node : childNodes) {
             if (node.matches(context)) {
                 node.run(context);
@@ -25,19 +26,35 @@ public abstract class EssentialsCommandNode<T> {
             }
         }
 
+        // we only want exact matches, so throw an error
         // TODO: error message
         throw new NoChargeException();
     }
 
     protected List<String> tabComplete(WalkContext<T> context) throws Exception {
+        // TODO: consider moving walk logic into non-terminal node subclass
+
+        // try and full match first
         for (EssentialsCommandNode<T> node : childNodes) {
             if (node.matches(context)) {
                 return node.tabComplete(context);
             }
         }
 
-        // TODO: error message
-        throw new NoChargeException();
+        // try for partial matches
+        final ArrayList<String> parts = new ArrayList<>();
+        if (context.args.length == 1) {
+            for (EssentialsCommandNode<T> node : childNodes) {
+                if (node instanceof Literal) {
+                    final Literal<T> literal = (Literal<T>) node;
+                    if (literal.name().startsWith(context.args[0])) {
+                        parts.add(literal.name());
+                    }
+                }
+            }
+        }
+
+        return parts;
     }
 
     protected List<EssentialsCommandNode<T>> getChildNodes() {
@@ -154,6 +171,10 @@ public abstract class EssentialsCommandNode<T> {
             for (final String alias : aliases) {
                 this.aliases.add(alias.toLowerCase(Locale.ROOT));
             }
+        }
+
+        public String name() {
+            return name;
         }
 
         public boolean matches(WalkContext<T> context) {
