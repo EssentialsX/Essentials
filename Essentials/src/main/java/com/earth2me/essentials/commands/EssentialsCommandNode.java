@@ -82,7 +82,11 @@ public abstract class EssentialsCommandNode<T> {
         }
 
         public void execute(final RunHandler<T> runHandler) {
-            this.execute(runHandler, ctx -> new ArrayList<>());
+            this.execute(runHandler, ctx -> Collections.emptyList());
+        }
+
+        public void execute(final LegacyRunHandler<T> runHandler) {
+            this.execute(runHandler, ctx -> Collections.emptyList());
         }
 
         public void execute(final RunHandler<T> runHandler, final List<String> tabValues) {
@@ -223,6 +227,17 @@ public abstract class EssentialsCommandNode<T> {
 
     public interface RunHandler<T> {
         void handle(WalkContext<T> ctx) throws Exception;
+    }
+
+    // todo: not sure whether to keep or to rewrite usages
+    @Deprecated
+    public interface LegacyRunHandler<T> extends RunHandler<T> {
+        @Override
+        default void handle(WalkContext<T> ctx) throws Exception {
+            handle(ctx.server, ctx.sender, ctx.label, ctx.args);
+        }
+
+        void handle(Server server, T sender, String label, String[] args) throws Exception;
     }
 
     public interface TabHandler<T> {
