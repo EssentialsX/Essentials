@@ -68,12 +68,7 @@ public class AccountLinkManager implements IEssentialsModule, DiscordLinkService
     public boolean unlinkAccount(InteractionMember member) {
         Preconditions.checkNotNull(member, "member cannot be null");
 
-        if (!isLinked(member.getId())) {
-            return false;
-        }
-
-        removeAccount(member, DiscordLinkStatusChangeEvent.Cause.UNSYNC_API);
-        return true;
+        return isLinked(member.getId()) && removeAccount(member, DiscordLinkStatusChangeEvent.Cause.UNSYNC_API);
     }
 
     public boolean removeAccount(final InteractionMember member, final DiscordLinkStatusChangeEvent.Cause cause) {
