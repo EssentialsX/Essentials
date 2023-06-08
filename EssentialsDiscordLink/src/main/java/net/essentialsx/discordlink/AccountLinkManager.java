@@ -80,12 +80,13 @@ public class AccountLinkManager implements IEssentialsModule, DiscordLinkService
         final UUID uuid = getUUID(member.getId());
         if (storage.remove(member.getId())) {
             ensureAsync(() -> {
+                roleSyncManager.unSync(uuid, member.getId()));
+
                 final IUser user = ess.getEss().getUser(uuid);
                 ensureSync(() -> ess.getServer().getPluginManager().callEvent(new DiscordLinkStatusChangeEvent(user, member, member.getId(), false, cause)));
             });
             return true;
         }
-        ensureAsync(() -> roleSyncManager.unSync(uuid, member.getId()));
         return false;
     }
 
@@ -104,11 +105,11 @@ public class AccountLinkManager implements IEssentialsModule, DiscordLinkService
     public boolean removeAccount(final IUser user, final DiscordLinkStatusChangeEvent.Cause cause) {
         final String id = getDiscordId(user.getBase().getUniqueId());
         if (storage.remove(user.getBase().getUniqueId())) {
+            ensureAsync(() -> roleSyncManager.unSync(user.getBase().getUniqueId(), id));
             ess.getApi().getMemberById(id).thenAccept(member -> ensureSync(() ->
                     ess.getServer().getPluginManager().callEvent(new DiscordLinkStatusChangeEvent(user, member, id, false, cause))));
             return true;
         }
-        ensureAsync(() -> roleSyncManager.unSync(user.getBase().getUniqueId(), id));
         return false;
     }
 
