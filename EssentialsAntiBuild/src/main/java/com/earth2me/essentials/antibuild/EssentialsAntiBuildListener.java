@@ -190,6 +190,10 @@ public class EssentialsAntiBuildListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void onItemFrameInteract(final PlayerInteractEntityEvent event) {
+        if (event.getPlayer().hasMetadata("NPC")) {
+            return;
+        }
+
         final User user = ess.getUser(event.getPlayer());
 
         if (!(event.getRightClicked() instanceof ItemFrame)) {
@@ -219,6 +223,10 @@ public class EssentialsAntiBuildListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void onArmorStandInteract(final PlayerInteractAtEntityEvent event) {
+        if (event.getPlayer().hasMetadata("NPC")) {
+            return;
+        }
+
         final User user = ess.getUser(event.getPlayer());
 
         if (!(event.getRightClicked() instanceof ArmorStand)) {
@@ -317,6 +325,10 @@ public class EssentialsAntiBuildListener implements Listener {
 
     @EventHandler(priority = EventPriority.LOW)
     public void onPlayerInteract(final PlayerInteractEvent event) {
+        if (event.getPlayer().hasMetadata("NPC")) {
+            return;
+        }
+
         // Do not return if cancelled, because the interact event has 2 cancelled states.
         final User user = ess.getUser(event.getPlayer());
         final ItemStack item = event.getItem();
@@ -413,6 +425,9 @@ public class EssentialsAntiBuildListener implements Listener {
     private class PlayerPickupItemListener implements Listener {
         @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
         public void onPlayerPickupItem(final PlayerPickupItemEvent event) {
+            if (event.getPlayer().hasMetadata("NPC")) {
+                return;
+            }
 
             final User user = ess.getUser(event.getPlayer());
             final ItemStack item = event.getItem().getItemStack();
