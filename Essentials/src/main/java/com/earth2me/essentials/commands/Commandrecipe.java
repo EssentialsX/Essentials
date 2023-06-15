@@ -57,7 +57,7 @@ public class Commandrecipe extends EssentialsCommand {
 
         if (args[0].equalsIgnoreCase("hand")) {
             if (!sender.isPlayer()) {
-                throw new Exception(tl("consoleCannotUseCommand"));
+                throw new TranslatableException("consoleCannotUseCommand");
             }
             
             itemType = Inventories.getItemInHand(sender.getPlayer());
