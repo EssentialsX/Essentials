@@ -69,7 +69,9 @@ public class DiscordLinkSettings implements IConf {
         return config.getStringMap("role-sync.roles");
     }
 
-    public NameSyncDirection getNameSyncDirection() { return nameSyncDirection; }
+    public NameSyncDirection getNameSyncDirection() {
+        return nameSyncDirection;
+    }
 
     public enum LinkPolicy {
         KICK,
