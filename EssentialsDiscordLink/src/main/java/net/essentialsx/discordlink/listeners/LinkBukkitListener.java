@@ -1,10 +1,13 @@
 package net.essentialsx.discordlink.listeners;
 
 import com.earth2me.essentials.utils.FormatUtil;
+import net.ess3.api.IUser;
+import net.ess3.api.events.NickChangeEvent;
 import net.essentialsx.api.v2.events.AsyncUserDataLoadEvent;
 import net.essentialsx.api.v2.events.UserMailEvent;
 import net.essentialsx.api.v2.events.discord.DiscordMessageEvent;
 import net.essentialsx.api.v2.events.discordlink.DiscordLinkStatusChangeEvent;
+import net.essentialsx.api.v2.services.discord.InteractionMember;
 import net.essentialsx.api.v2.services.discord.MessageType;
 import net.essentialsx.discord.util.MessageUtil;
 import net.essentialsx.discordlink.DiscordLinkSettings;
@@ -18,6 +21,8 @@ import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 
+import java.util.Objects;
+
 import static com.earth2me.essentials.I18n.tl;
 
 public class LinkBukkitListener implements Listener {
@@ -25,6 +30,20 @@ public class LinkBukkitListener implements Listener {
 
     public LinkBukkitListener(EssentialsDiscordLink ess) {
         this.ess = ess;
+    }
+
+    private void updateName(IUser user, InteractionMember member) {
+        switch (ess.getSettings().getNameSyncDirection()) {
+            case DISCORD_TO_MC:
+                // TODO: Remove this log
+                ess.getLogger().info(String.format("Setting username of %s to %s", user.getName(), member.getEffectiveName()));
+                // TODO: use a better way to change the display name
+                ess.getServer().dispatchCommand(Bukkit.getConsoleSender(), String.format("nickname %s %s", user.getName(), member.getEffectiveName()));
+                break;
+            case MC_TO_DISCORD:
+                // TODO: Implement this feature
+                break;
+        }
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
@@ -52,7 +71,12 @@ public class LinkBukkitListener implements Listener {
             return;
         }
 
-        if (!ess.getLinkManager().isLinked(event.getUniqueId())) {
+        if (ess.getLinkManager().isLinked(event.getUniqueId())) {
+            final String discordId = ess.getLinkManager().getDiscordId(event.getUniqueId());
+            ess.getApi().getMemberById(discordId).thenAccept(member -> {
+                updateName(ess.getLinkManager().getUser(member.getId()), member);
+            });
+        } else {
             String code;
             try {
                 code = ess.getLinkManager().createCode(event.getUniqueId());

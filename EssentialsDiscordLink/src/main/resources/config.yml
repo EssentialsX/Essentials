@@ -50,3 +50,9 @@ role-sync:
   roles:
     22222222222222222: vip
     33333333333333333: booster
+
+# In what mode names should be synchronised. Available modess:
+# none - Name synchronisation disabled
+# mc-to-discord - Minecraft names will be set on Discord
+# discord-to-mc - Discord names will be set on Minecraft
+name-sync: none
