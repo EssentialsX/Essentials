@@ -1,12 +1,16 @@
 package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.CommandSource;
+import com.earth2me.essentials.User;
 import com.earth2me.essentials.textreader.SimpleTextInput;
 import com.earth2me.essentials.textreader.TextPager;
+import com.earth2me.essentials.utils.EnumUtil;
 import com.earth2me.essentials.utils.NumberUtil;
 import com.google.common.collect.Lists;
 import net.essentialsx.api.v2.services.BalanceTop;
+import org.bukkit.Bukkit;
 import org.bukkit.Server;
+import org.bukkit.Statistic;
 import org.bukkit.command.BlockCommandSender;
 
 import java.math.BigDecimal;
@@ -112,14 +116,28 @@ public class Commandbalancetop extends EssentialsCommand {
                     newCache.getLines().add(tl("serverTotal", NumberUtil.displayCurrency(ess.getBalanceTop().getBalanceTopTotal(), ess)));
                     int pos = 1;
                     for (final Map.Entry<UUID, BalanceTop.Entry> entry : ess.getBalanceTop().getBalanceTopCache().entrySet()) {
-                        if (ess.getSettings().showZeroBaltop() || entry.getValue().getBalance().compareTo(BigDecimal.ZERO) > 0) {
+                        final BigDecimal balance = entry.getValue().getBalance();
+                        final User user = ess.getUser(entry.getKey());
+
+                        final Statistic PLAY_ONE_TICK = EnumUtil.getStatistic("PLAY_ONE_MINUTE", "PLAY_ONE_TICK");
+                        final long playtime;
+                        if (user.getBase() == null || !user.getBase().isOnline()) {
+                            playtime = Bukkit.getServer().getOfflinePlayer(entry.getKey()).getStatistic(PLAY_ONE_TICK);
+                        } else {
+                            playtime = user.getBase().getStatistic(PLAY_ONE_TICK);
+                        }
+                        // Play time in seconds
+                        final long playTimeSecs = playtime / 20;
+
+                        // Checking if player meets the requirements of minimum balance and minimum playtime to be listed in baltop list
+                        if (balance.compareTo(BigDecimal.valueOf(ess.getSettings().getBaltopMinBalance())) >= 0 &&
+                                playTimeSecs > ess.getSettings().getBaltopMinPlaytime()) {
                             newCache.getLines().add(tl("balanceTopLine", pos, entry.getValue().getDisplayName(), NumberUtil.displayCurrency(entry.getValue().getBalance(), ess)));
                         }
                         pos++;
                     }
                     cache = newCache;
                 }
-
                 outputCache(sender, page);
             });
         }

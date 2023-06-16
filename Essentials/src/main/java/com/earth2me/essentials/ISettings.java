@@ -404,7 +404,9 @@ public interface ISettings extends IConf {
 
     boolean isUpdateCheckEnabled();
 
-    boolean showZeroBaltop();
+    double getBaltopMinBalance();
+
+    long getBaltopMinPlaytime();
 
     enum KeepInvPolicy {
         KEEP,
