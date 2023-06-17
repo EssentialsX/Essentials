@@ -1940,6 +1940,11 @@ public class Settings implements net.ess3.api.ISettings {
     }
 
     @Override
+    public boolean showZeroBaltop() {
+        return config.getBoolean("show-zero-baltop", true);
+    }
+    
+    @Override
     public double getBaltopMinBalance() {
         return config.getDouble("baltop-requirements.minimum-balance", 0);
     }

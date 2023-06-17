@@ -130,7 +130,8 @@ public class Commandbalancetop extends EssentialsCommand {
                         final long playTimeSecs = playtime / 20;
 
                         // Checking if player meets the requirements of minimum balance and minimum playtime to be listed in baltop list
-                        if (balance.compareTo(BigDecimal.valueOf(ess.getSettings().getBaltopMinBalance())) >= 0 &&
+                        if ((ess.getSettings().showZeroBaltop() || entry.getValue().getBalance().compareTo(BigDecimal.ZERO) > 0)
+                                && balance.compareTo(BigDecimal.valueOf(ess.getSettings().getBaltopMinBalance())) >= 0 &&
                                 playTimeSecs > ess.getSettings().getBaltopMinPlaytime()) {
                             newCache.getLines().add(tl("balanceTopLine", pos, entry.getValue().getDisplayName(), NumberUtil.displayCurrency(entry.getValue().getBalance(), ess)));
                         }

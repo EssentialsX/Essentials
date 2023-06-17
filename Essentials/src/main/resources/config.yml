@@ -832,6 +832,11 @@ minimum-pay-amount: 0.001
 # Enable this to block users who try to /pay another user which ignore them.
 pay-excludes-ignore-list: false
 
+# Whether or not users with a balance less than or equal to $0 should be shown in balance-top.
+# Setting to false will not show people with balances <= 0 in balance-top.
+# NOTE: After reloading the config, you must also run '/baltop force' for this to appear
+show-zero-baltop: true
+
 # Requirements which must be met by the player to get their name shown in the balance top list.
 # Playtime is in seconds.
 baltop-requirements:
