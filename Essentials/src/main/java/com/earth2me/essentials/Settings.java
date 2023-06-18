@@ -1945,8 +1945,8 @@ public class Settings implements net.ess3.api.ISettings {
     }
     
     @Override
-    public double getBaltopMinBalance() {
-        return config.getDouble("baltop-requirements.minimum-balance", 0);
+    public BigDecimal getBaltopMinBalance() {
+        return config.getBigDecimal("baltop-requirements.minimum-balance", BigDecimal.ZERO);
     }
 
     @Override

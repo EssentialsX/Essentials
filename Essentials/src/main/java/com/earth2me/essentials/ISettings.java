@@ -406,7 +406,7 @@ public interface ISettings extends IConf {
 
     boolean showZeroBaltop();
 
-    double getBaltopMinBalance();
+    BigDecimal getBaltopMinBalance();
 
     long getBaltopMinPlaytime();
 
