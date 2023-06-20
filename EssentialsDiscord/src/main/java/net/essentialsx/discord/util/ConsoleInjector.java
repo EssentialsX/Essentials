@@ -78,9 +78,10 @@ public class ConsoleInjector extends AbstractAppender {
             }
         }
 
-        final String loggerName = event.getLoggerName();
-        if (!loggerName.isEmpty() && !loggerName.contains(".")) {
-            entry = "[" + event.getLoggerName() + "] " + entry;
+        final String[] loggerNameSplit = event.getLoggerName().split("\\.");
+        final String loggerName = loggerNameSplit[loggerNameSplit.length - 1].trim();
+        if (!loggerName.isEmpty()) {
+            entry = "[" + loggerName + "] " + entry;
         }
 
         messageQueue.addAll(Splitter.fixedLength(Message.MAX_CONTENT_LENGTH - 50).splitToList(
