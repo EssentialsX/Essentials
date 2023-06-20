@@ -9,6 +9,10 @@ import club.minnced.discord.webhook.util.ThreadPools;
 import net.essentialsx.discord.EssentialsDiscord;
 import okhttp3.OkHttpClient;
 
+import java.lang.invoke.MethodHandle;
+import java.lang.invoke.MethodHandles;
+import java.lang.reflect.Field;
+import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -17,8 +21,24 @@ import java.util.logging.Logger;
 
 public class WrappedWebhookClient {
     private final static Logger logger = EssentialsDiscord.getWrappedLogger();
+    private final static MethodHandle queueGetter;
+
+    static {
+        MethodHandle queueGetter1;
+        try {
+            final Field queueField = WebhookClient.class.getDeclaredField("queue");
+            queueField.setAccessible(true);
+            queueGetter1 = MethodHandles.lookup().unreflectGetter(queueField);
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            logger.log(Level.SEVERE, "Could not acquire queue handle", e);
+            queueGetter1 = null;
+        }
+        queueGetter = queueGetter1;
+    }
+
     private final WebhookClient webhookClient;
     private final ScheduledExecutorService executorService;
+    private final BlockingQueue<?> webhookQueue;
 
     public WrappedWebhookClient(final long id, final String token, final OkHttpClient client) {
         webhookClient = new WebhookClientBuilder(id, token)
@@ -27,6 +47,14 @@ public class WrappedWebhookClient {
                 .setHttpClient(client)
                 .setExecutorService(executorService = ThreadPools.getDefaultPool(id, null, true))
                 .build();
+
+        BlockingQueue<?> queue = null;
+        try {
+            queue = queueGetter == null ? null : (BlockingQueue<?>) queueGetter.invoke(webhookClient);
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
+        webhookQueue = queue;
     }
 
     public CompletableFuture<ReadonlyMessage> send(WebhookMessage message) {
@@ -35,6 +63,12 @@ public class WrappedWebhookClient {
 
     public boolean isShutdown() {
         return webhookClient.isShutdown();
+    }
+
+    public void abandonRequests() {
+        if (webhookQueue != null) {
+            webhookQueue.clear();
+        }
     }
 
     public void close() {
