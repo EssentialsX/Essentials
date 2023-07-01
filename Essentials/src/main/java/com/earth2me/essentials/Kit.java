@@ -10,7 +10,7 @@ import com.earth2me.essentials.utils.DateUtil;
 import com.earth2me.essentials.utils.NumberUtil;
 import net.ess3.api.IEssentials;
 import net.ess3.api.events.KitClaimEvent;
-import net.essentialsx.api.v2.events.PreKitExpandItemsEvent;
+import net.essentialsx.api.v2.events.KitPreExpandItemsEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
@@ -220,7 +220,7 @@ public class Kit {
             final int maxStackSize = user.isAuthorized("essentials.oversizedstacks") ? ess.getSettings().getOversizedStackSize() : 0;
             final boolean isDropItemsIfFull = ess.getSettings().isDropItemsIfFull();
 
-            final PreKitExpandItemsEvent itemsEvent = new PreKitExpandItemsEvent(user, kitName, itemList);
+            final KitPreExpandItemsEvent itemsEvent = new KitPreExpandItemsEvent(user, kitName, itemList);
             Bukkit.getPluginManager().callEvent(itemsEvent);
 
             final ItemStack[] itemArray = itemList.toArray(new ItemStack[0]);

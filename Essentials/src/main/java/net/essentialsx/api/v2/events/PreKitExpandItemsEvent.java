@@ -14,14 +14,14 @@ import java.util.List;
  * If you want to prevent kits from being claimed to begin with, use the {@link net.ess3.api.events.KitClaimEvent}
  * @see net.ess3.api.events.KitClaimEvent
  */
-public class PreKitExpandItemsEvent extends Event {
+public class KitPreExpandItemsEvent extends Event {
     private static final HandlerList handlers = new HandlerList();
 
     private final IUser user;
     private final String kitName;
     private final List<ItemStack> itemStacks;
 
-    public PreKitExpandItemsEvent(IUser user, String kitName, List<ItemStack> itemStacks) {
+    public KitPreExpandItemsEvent(IUser user, String kitName, List<ItemStack> itemStacks) {
         this.user = user;
         this.kitName = kitName;
         this.itemStacks = itemStacks;
