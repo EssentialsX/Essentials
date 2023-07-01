@@ -8,6 +8,7 @@ import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.FormatUtil;
 import com.earth2me.essentials.utils.MaterialUtil;
 import com.earth2me.essentials.utils.NumberUtil;
+import com.earth2me.essentials.utils.VersionUtil;
 import net.ess3.api.IEssentials;
 import net.ess3.api.MaxMoneyException;
 import net.ess3.api.events.SignBreakEvent;
@@ -18,7 +19,7 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.Sign;
-import org.bukkit.block.data.type.WallSign;
+import org.bukkit.block.data.Directional;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.SignChangeEvent;
 import org.bukkit.inventory.ItemStack;
@@ -48,7 +49,7 @@ public class EssentialsSign {
         final BlockFace[] directions = new BlockFace[] {BlockFace.NORTH, BlockFace.EAST, BlockFace.SOUTH, BlockFace.WEST};
         for (final BlockFace blockFace : directions) {
             final Block signBlock = block.getRelative(blockFace);
-            if (MaterialUtil.isWallSign(signBlock.getType())) {
+            if (MaterialUtil.isWallSign(signBlock.getType()) || MaterialUtil.isWallHangingSign(signBlock.getType())) {
                 try {
                     if (getWallSignFacing(signBlock) == blockFace && isValidSign(new BlockSign(signBlock))) {
                         return true;
@@ -84,13 +85,14 @@ public class EssentialsSign {
     }
 
     private static BlockFace getWallSignFacing(final Block block) {
-        try {
-            final WallSign signData = (WallSign) block.getState().getBlockData();
-            return signData.getFacing();
-        } catch (final NoClassDefFoundError | NoSuchMethodError e) {
+        if (VersionUtil.PRE_FLATTENING) {
+            //noinspection deprecation
             final org.bukkit.material.Sign signMat = (org.bukkit.material.Sign) block.getState().getData();
             return signMat.getFacing();
         }
+
+        final Directional signData = (Directional) block.getState().getBlockData();
+        return signData.getFacing();
     }
 
     protected final boolean onSignCreate(final SignChangeEvent event, final IEssentials ess) {

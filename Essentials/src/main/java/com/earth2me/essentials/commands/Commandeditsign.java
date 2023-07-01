@@ -3,14 +3,22 @@ package com.earth2me.essentials.commands;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.FormatUtil;
 import com.earth2me.essentials.utils.NumberUtil;
+import com.earth2me.essentials.utils.VersionUtil;
 import com.google.common.collect.Lists;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Server;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.block.Sign;
+import org.bukkit.block.data.BlockData;
+import org.bukkit.block.data.type.HangingSign;
+import org.bukkit.block.data.type.WallHangingSign;
+import org.bukkit.block.data.type.WallSign;
+import org.bukkit.block.sign.Side;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.SignChangeEvent;
+import org.bukkit.util.Vector;
 
 import java.util.Collections;
 import java.util.List;
@@ -32,7 +40,7 @@ public class Commandeditsign extends EssentialsCommand {
         if (!(target.getState() instanceof Sign)) {
             throw new Exception(tl("editsignCommandTarget"));
         }
-        final Sign sign = (Sign) target.getState();
+        final ModifiableSign sign = wrapSign((Sign) target.getState(), user);
         try {
             if (args[0].equalsIgnoreCase("set") && args.length > 2) {
                 final String[] existingLines = sign.getLines();
@@ -108,8 +116,15 @@ public class Commandeditsign extends EssentialsCommand {
         }
     }
 
-    private boolean callSignEvent(final Sign sign, final Player player, final String[] lines) {
-        final SignChangeEvent event = new SignChangeEvent(sign.getBlock(), player, lines);
+    private boolean callSignEvent(final ModifiableSign sign, final Player player, final String[] lines) {
+        final SignChangeEvent event;
+        if (VersionUtil.getServerBukkitVersion().isHigherThanOrEqualTo(VersionUtil.v1_20_1_R01)) {
+            event = new SignChangeEvent(sign.getBlock(), player, lines, sign.isFront() ? Side.FRONT : Side.BACK);
+        } else {
+            //noinspection deprecation
+            event = new SignChangeEvent(sign.getBlock(), player, lines);
+        }
+
         Bukkit.getServer().getPluginManager().callEvent(event);
         if (event.isCancelled()) {
             if (ess.getSettings().isDebug()) {
@@ -135,12 +150,101 @@ public class Commandeditsign extends EssentialsCommand {
             final int line = Integer.parseInt(args[1]);
             final Block target = user.getTargetBlock(5);
             if (target.getState() instanceof Sign && line <= 4) {
-                final Sign sign = (Sign) target.getState();
+                final ModifiableSign sign = wrapSign((Sign) target.getState(), user);
                 return Lists.newArrayList(FormatUtil.unformatString(user, "essentials.editsign", sign.getLine(line - 1)));
             }
             return Collections.emptyList();
         } else {
             return Collections.emptyList();
+        }
+    }
+
+    private ModifiableSign wrapSign(final Sign sign, final User user) {
+        if (VersionUtil.getServerBukkitVersion().isHigherThanOrEqualTo(VersionUtil.v1_20_1_R01)) {
+            final Vector eyeLocLessSign = user.getBase().getEyeLocation().toVector().subtract(sign.getLocation().add(.5, .5, .5).toVector());
+            final BlockData signBlockData = sign.getBlockData();
+
+            final BlockFace signDirection;
+            if (signBlockData instanceof org.bukkit.block.data.type.Sign) {
+                signDirection = ((org.bukkit.block.data.type.Sign) signBlockData).getRotation();
+            } else if (signBlockData instanceof WallSign) {
+                signDirection = ((WallSign) signBlockData).getFacing();
+            } else if (signBlockData instanceof HangingSign) {
+                signDirection = ((HangingSign) signBlockData).getRotation();
+            } else if (signBlockData instanceof WallHangingSign) {
+                signDirection = ((WallHangingSign) signBlockData).getFacing();
+            } else {
+                throw new IllegalStateException("Unknown block data for sign: " + signBlockData.getClass());
+            }
+
+            final Side side = eyeLocLessSign.dot(signDirection.getDirection()) > 0 ? Side.FRONT : Side.BACK;
+
+            return new ModifiableSign(sign) {
+                @Override
+                String[] getLines() {
+                    return sign.getSide(side).getLines();
+                }
+
+                @Override
+                String getLine(int line) {
+                    return sign.getSide(side).getLine(line);
+                }
+
+                @Override
+                void setLine(int line, String text) {
+                    sign.getSide(side).setLine(line, text);
+                }
+
+                @Override
+                boolean isFront() {
+                    return side == Side.FRONT;
+                }
+            };
+        }
+        return new ModifiableSign(sign) {
+            @Override
+            String[] getLines() {
+                return sign.getLines();
+            }
+
+            @Override
+            String getLine(int line) {
+                return sign.getLine(line);
+            }
+
+            @Override
+            void setLine(int line, String text) {
+                sign.setLine(line, text);
+            }
+
+            @Override
+            boolean isFront() {
+                return true;
+            }
+        };
+    }
+
+    private abstract static class ModifiableSign {
+        protected final Sign sign;
+
+        protected ModifiableSign(final Sign sign) {
+            this.sign = sign;
+        }
+
+        abstract String getLine(int line);
+
+        abstract String[] getLines();
+
+        abstract void setLine(int line, String text);
+
+        abstract boolean isFront();
+
+        Block getBlock() {
+            return sign.getBlock();
+        }
+
+        void update() {
+            sign.update();
         }
     }
 }

@@ -111,6 +111,8 @@ console:
   # This is useful if you want to ignore certain messages from the console.
   # Can also be a list of regex patterns in addition to a single regex pattern.
   console-filter: ""
+  # The amount of minutes of delay before console messages sent to Discord should be skipped.
+  skip-delay: 2
 
 # Configure which Discord channels different messages will be sent to.
 # You can either use the names of the channels listed above or just the id of a channel.
