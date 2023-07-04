@@ -955,13 +955,13 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
     @Override
     public User getOfflineUser(final String name) {
         final User user = userMap.getUser(name);
-        if (user != null && user.getBase() instanceof OfflinePlayer) {
+        if (user != null && user.getBase() instanceof OfflinePlayerStub) {
             //This code should attempt to use the last known name of a user, if Bukkit returns name as null.
             final String lastName = user.getLastAccountName();
             if (lastName != null) {
-                ((OfflinePlayer) user.getBase()).setName(lastName);
+                ((OfflinePlayerStub) user.getBase()).setName(lastName);
             } else {
-                ((OfflinePlayer) user.getBase()).setName(name);
+                ((OfflinePlayerStub) user.getBase()).setName(name);
             }
         }
         return user;
