@@ -679,7 +679,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
 
     @Override
     public boolean isHiddenFrom(Player player) {
-        if (getBase() instanceof OfflinePlayer || player instanceof OfflinePlayer) {
+        if (getBase() instanceof OfflinePlayerStub || player instanceof OfflinePlayerStub) {
             return true;
         }
         return !player.canSee(getBase());
