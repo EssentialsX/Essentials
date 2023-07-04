@@ -1,7 +1,6 @@
 package net.essentialsx.discord.util;
 
 import club.minnced.discord.webhook.WebhookClient;
-import club.minnced.discord.webhook.WebhookClientBuilder;
 import club.minnced.discord.webhook.send.AllowedMentions;
 import com.earth2me.essentials.utils.DownsampleUtil;
 import com.earth2me.essentials.utils.FormatUtil;
@@ -13,8 +12,8 @@ import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.Role;
-import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.entities.Webhook;
+import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.essentialsx.api.v2.events.discord.DiscordMessageEvent;
 import net.essentialsx.api.v2.services.discord.MessageType;
 import net.essentialsx.discord.JDADiscordService;
@@ -39,7 +38,7 @@ public final class DiscordUtil {
         final ImmutableList.Builder<Message.MentionType> types = new ImmutableList.Builder<>();
         types.add(Message.MentionType.USER);
         types.add(Message.MentionType.CHANNEL);
-        types.add(Message.MentionType.EMOTE);
+        types.add(Message.MentionType.EMOJI);
         NO_GROUP_MENTIONS = types.build();
     }
 
@@ -54,13 +53,8 @@ public final class DiscordUtil {
      * @param client The http client of the webhook.
      * @return The {@link WebhookClient}.
      */
-    public static WebhookClient getWebhookClient(long id, String token, OkHttpClient client) {
-        return new WebhookClientBuilder(id, token)
-                .setWait(false)
-                .setAllowedMentions(AllowedMentions.none())
-                .setHttpClient(client)
-                .setDaemon(true)
-                .build();
+    public static WrappedWebhookClient getWebhookClient(long id, String token, OkHttpClient client) {
+        return new WrappedWebhookClient(id, token, client);
     }
 
     /**

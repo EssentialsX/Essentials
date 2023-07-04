@@ -1,12 +1,13 @@
 package net.essentialsx.discord.interactions;
 
-import net.dv8tion.jda.api.entities.GuildChannel;
+import net.dv8tion.jda.api.entities.channel.middleman.GuildChannel;
+import net.dv8tion.jda.api.entities.channel.middleman.GuildMessageChannel;
 import net.essentialsx.api.v2.services.discord.InteractionChannel;
 
 public class InteractionChannelImpl implements InteractionChannel {
-    private final GuildChannel channel;
+    private final GuildMessageChannel channel;
 
-    public InteractionChannelImpl(GuildChannel channel) {
+    public InteractionChannelImpl(GuildMessageChannel channel) {
         this.channel = channel;
     }
 
