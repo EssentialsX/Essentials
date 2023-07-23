@@ -119,7 +119,7 @@ public class BukkitListener implements Listener {
     }
 
     public void sendJoinQuitMessage(final Player player, final String message, MessageType type) {
-        int userCount = jda.getPlugin().getEss().getUsers().getUserCount();
+        int userCount = jda.getPlugin().getEss().getOnlinePlayers().size();
         final MessageFormat format;
         switch (type.getKey()) {
             case "join":
@@ -139,8 +139,8 @@ public class BukkitListener implements Listener {
                         MessageUtil.sanitizeDiscordMarkdown(player.getName()),
                         MessageUtil.sanitizeDiscordMarkdown(player.getDisplayName()),
                         MessageUtil.sanitizeDiscordMarkdown(message),
-                        jda.getPlugin().getEss().getOnlinePlayers().size(),
-                        userCount),
+                        userCount,
+                        jda.getPlugin().getEss().getUsers().getUserCount()),
                         player);
     }
 
