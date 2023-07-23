@@ -40,7 +40,7 @@ public class UserMap {
         if (player instanceof Player) {
             userPlayer = (Player) player;
         } else {
-            final com.earth2me.essentials.OfflinePlayer essPlayer = new com.earth2me.essentials.OfflinePlayer(player.getUniqueId(), Bukkit.getServer());
+            final OfflinePlayerStub essPlayer = new OfflinePlayerStub(player.getUniqueId(), Bukkit.getServer());
             essPlayer.setName(player.getName());
             userPlayer = essPlayer;
         }
