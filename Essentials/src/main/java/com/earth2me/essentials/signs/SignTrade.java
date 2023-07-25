@@ -179,7 +179,7 @@ public class SignTrade extends EssentialsSign {
                 if (amount.compareTo(MINTRANSACTION) < 0 || money.compareTo(MINTRANSACTION) < 0) {
                     throw new SignException(tl("moreThanZero"));
                 }
-                final String newLine = NumberUtil.shortCurrency(money, ess) + ":" + NumberUtil.shortCurrency(amount, ess).substring(1);
+                final String newLine = NumberUtil.shortCurrency(money, ess) + ":" + NumberUtil.formatAsCurrency(amount);
                 validateSignLength(newLine);
                 sign.setLine(index, newLine);
                 return;
@@ -333,7 +333,7 @@ public class SignTrade extends EssentialsSign {
             final BigDecimal money = getMoney(split[0], ess);
             final BigDecimal amount = getBigDecimal(split[1], ess);
             if (money != null && amount != null) {
-                final String newline = NumberUtil.shortCurrency(money, ess) + ":" + NumberUtil.shortCurrency(value, ess).substring(1);
+                final String newline = NumberUtil.shortCurrency(money, ess) + ":" + NumberUtil.formatAsCurrency(value);
                 validateSignLength(newline);
                 sign.setLine(index, newline);
                 return;
