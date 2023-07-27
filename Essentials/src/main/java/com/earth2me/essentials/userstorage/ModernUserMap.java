@@ -1,6 +1,6 @@
 package com.earth2me.essentials.userstorage;
 
-import com.earth2me.essentials.OfflinePlayer;
+import com.earth2me.essentials.OfflinePlayerStub;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.NumberUtil;
 import com.google.common.cache.CacheBuilder;
@@ -16,6 +16,7 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.logging.Level;
 
@@ -26,6 +27,7 @@ public class ModernUserMap extends CacheLoader<UUID, User> implements IUserMap {
 
     private final boolean debugPrintStackWithWarn;
     private final long debugMaxWarnsPerType;
+    private final boolean debugLogCache;
     private final ConcurrentMap<String, AtomicLong> debugNonPlayerWarnCounts;
 
     public ModernUserMap(final IEssentials ess) {
@@ -33,6 +35,7 @@ public class ModernUserMap extends CacheLoader<UUID, User> implements IUserMap {
         this.uuidCache = new ModernUUIDCache(ess);
         this.userCache = CacheBuilder.newBuilder()
                 .maximumSize(ess.getSettings().getMaxUserCacheCount())
+                .expireAfterAccess(ess.getSettings().getMaxUserCacheValueExpiry(), TimeUnit.SECONDS)
                 .softValues()
                 .build(this);
 
@@ -40,9 +43,12 @@ public class ModernUserMap extends CacheLoader<UUID, User> implements IUserMap {
         final String printStackProperty = System.getProperty("net.essentialsx.usermap.print-stack", "false");
         // -Dnet.essentialsx.usermap.max-warns=20
         final String maxWarnProperty = System.getProperty("net.essentialsx.usermap.max-warns", "100");
+        // -Dnet.essentialsx.usermap.log-cache=true
+        final String logCacheProperty = System.getProperty("net.essentialsx.usermap.log-cache", "false");
 
         this.debugMaxWarnsPerType = NumberUtil.isLong(maxWarnProperty) ? Long.parseLong(maxWarnProperty) : -1;
         this.debugPrintStackWithWarn = Boolean.parseBoolean(printStackProperty);
+        this.debugLogCache = Boolean.parseBoolean(logCacheProperty);
         this.debugNonPlayerWarnCounts = new ConcurrentHashMap<>();
     }
 
@@ -81,6 +87,7 @@ public class ModernUserMap extends CacheLoader<UUID, User> implements IUserMap {
     public User getUser(final Player base) {
         final User user = loadUncachedUser(base);
         userCache.put(user.getUUID(), user);
+        debugLogCache(user);
         return user;
     }
 
@@ -91,11 +98,11 @@ public class ModernUserMap extends CacheLoader<UUID, User> implements IUserMap {
         }
 
         final User user = getUser(uuidCache.getCachedUUID(name));
-        if (user != null && user.getBase() instanceof OfflinePlayer) {
+        if (user != null && user.getBase() instanceof OfflinePlayerStub) {
             if (user.getLastAccountName() != null) {
-                ((OfflinePlayer) user.getBase()).setName(user.getLastAccountName());
+                ((OfflinePlayerStub) user.getBase()).setName(user.getLastAccountName());
             } else {
-                ((OfflinePlayer) user.getBase()).setName(name);
+                ((OfflinePlayerStub) user.getBase()).setName(name);
             }
         }
         return user;
@@ -114,6 +121,7 @@ public class ModernUserMap extends CacheLoader<UUID, User> implements IUserMap {
     public User load(final UUID uuid) throws Exception {
         final User user = loadUncachedUser(uuid);
         if (user != null) {
+            debugLogCache(user);
             return user;
         }
 
@@ -156,9 +164,9 @@ public class ModernUserMap extends CacheLoader<UUID, User> implements IUserMap {
 
         final File userFile = getUserFile(uuid);
         if (userFile.exists()) {
-            player = new OfflinePlayer(uuid, ess.getServer());
+            player = new OfflinePlayerStub(uuid, ess.getServer());
             user = new User(player, ess);
-            ((OfflinePlayer) player).setName(user.getLastAccountName());
+            ((OfflinePlayerStub) player).setName(user.getLastAccountName());
             uuidCache.updateCache(uuid, null);
             return user;
         }
@@ -168,6 +176,7 @@ public class ModernUserMap extends CacheLoader<UUID, User> implements IUserMap {
 
     public void addCachedUser(final User user) {
         userCache.put(user.getUUID(), user);
+        debugLogCache(user);
     }
 
     @Override
@@ -194,6 +203,14 @@ public class ModernUserMap extends CacheLoader<UUID, User> implements IUserMap {
 
     public void shutdown() {
         uuidCache.shutdown();
+    }
+
+    private void debugLogCache(final User user) {
+        if (!debugLogCache) {
+            return;
+        }
+        final Throwable throwable = new Throwable();
+        ess.getLogger().log(Level.INFO, String.format("Caching user %s (%s)", user.getName(), user.getUUID()), throwable);
     }
 
     private void debugLogUncachedNonPlayer(final Player base) {

@@ -65,7 +65,10 @@ public final class MessageType {
         public final static MessageType SERVER_STOP = new MessageType("server-stop", false);
         public final static MessageType KICK = new MessageType("kick", false);
         public final static MessageType MUTE = new MessageType("mute", false);
-        private final static MessageType[] VALUES = new MessageType[]{JOIN, FIRST_JOIN, LEAVE, CHAT, DEATH, AFK, ADVANCEMENT, ACTION, SERVER_START, SERVER_STOP, KICK, MUTE};
+        public final static MessageType LOCAL = new MessageType("local", true);
+        public final static MessageType QUESTION = new MessageType("question", true);
+        public final static MessageType SHOUT = new MessageType("shout", true);
+        private final static MessageType[] VALUES = new MessageType[]{JOIN, FIRST_JOIN, LEAVE, CHAT, DEATH, AFK, ADVANCEMENT, ACTION, SERVER_START, SERVER_STOP, KICK, MUTE, LOCAL, QUESTION, SHOUT};
 
         /**
          * Gets an array of all the default {@link MessageType MessageTypes}.

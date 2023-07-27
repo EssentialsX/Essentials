@@ -6,6 +6,7 @@ import com.earth2me.essentials.config.EssentialsConfiguration;
 import com.earth2me.essentials.utils.FormatUtil;
 import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.entities.Activity;
+import net.essentialsx.api.v2.ChatType;
 import org.apache.logging.log4j.Level;
 import org.bukkit.entity.Player;
 
@@ -107,6 +108,10 @@ public class DiscordSettings implements IConf {
         return config.getBoolean("always-receive-primary", false);
     }
 
+    public boolean isUseEssentialsEvents() {
+        return config.getBoolean("use-essentials-events", false);
+    }
+
     public int getChatDiscordMaxLength() {
         return config.getInt("chat.discord-max-length", 2000);
     }
@@ -163,6 +168,10 @@ public class DiscordSettings implements IConf {
         return consoleFilter;
     }
 
+    public int getConsoleSkipDelay() {
+        return config.getInt("console.skip-delay", 2);
+    }
+
     public boolean isShowAvatar() {
         return config.getBoolean("show-avatar", false);
     }
@@ -215,15 +224,45 @@ public class DiscordSettings implements IConf {
     }
 
     public MessageFormat getMcToDiscordFormat(Player player) {
-        final String format = getFormatString("mc-to-discord");
+        return getMcToDiscordFormat(player, ChatType.UNKNOWN);
+    }
+
+    public MessageFormat getMcToDiscordFormat(Player player, ChatType chatType) {
+        final String format = getFormatString(getMcToDiscordFormatKey(chatType));
         final String filled;
         if (plugin.isPAPI() && format != null) {
             filled = me.clip.placeholderapi.PlaceholderAPI.setPlaceholders(player, format);
         } else {
             filled = format;
         }
-        return generateMessageFormat(filled, "{displayname}: {message}", false,
+        return generateMessageFormat(filled, getMcToDiscordDefaultFormat(chatType), false,
                 "username", "displayname", "message", "world", "prefix", "suffix");
+    }
+
+    private String getMcToDiscordFormatKey(ChatType chatType) {
+        switch (chatType) {
+            case LOCAL:
+                return "mc-to-discord-local";
+            case QUESTION:
+                return "mc-to-discord-question";
+            case SHOUT:
+                return "mc-to-discord-shout";
+            default:
+                return "mc-to-discord";
+        }
+    }
+
+    private String getMcToDiscordDefaultFormat(ChatType chatType) {
+        switch (chatType) {
+            case LOCAL:
+                return "**[Local]** {displayname}: {message}";
+            case QUESTION:
+                return "**[Question]** {displayname}: {message}";
+            case SHOUT:
+                return "**[Shout]** {displayname}: {message}";
+            default:
+                return "{displayname}: {message}";
+        }
     }
 
     public String getLegacyNameFormat() {
@@ -437,7 +476,7 @@ public class DiscordSettings implements IConf {
                 activityType = Activity.ActivityType.valueOf(activity);
             }
         } catch (IllegalArgumentException e) {
-            activityType = Activity.ActivityType.DEFAULT;
+            activityType = Activity.ActivityType.PLAYING;
         }
         if (activityType != null) {
             statusActivity = Activity.of(activityType, config.getString("presence.message", "Minecraft"));

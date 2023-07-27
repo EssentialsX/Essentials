@@ -138,20 +138,21 @@ public class LinkBukkitListener implements Listener {
 
     @EventHandler
     public void onUserLinkStatusChange(final DiscordLinkStatusChangeEvent event) {
-        if (event.isLinked()) {
+        if (event.isLinked() || ess.getSettings().getLinkPolicy() == DiscordLinkSettings.LinkPolicy.NONE) {
             event.getUser().setFreeze(false);
             return;
         }
 
+        String code;
+        try {
+            code = ess.getLinkManager().createCode(event.getUser().getBase().getUniqueId());
+        } catch (IllegalArgumentException e) {
+            code = e.getMessage();
+        }
+        final String finalCode = code;
+
         switch (ess.getSettings().getLinkPolicy()) {
             case KICK: {
-                String code;
-                try {
-                    code = ess.getLinkManager().createCode(event.getUser().getBase().getUniqueId());
-                } catch (IllegalArgumentException e) {
-                    code = e.getMessage();
-                }
-                final String finalCode = code;
                 final Runnable kickTask = () -> event.getUser().getBase().kickPlayer(tl("discordLinkLoginKick", "/link " + finalCode, ess.getApi().getInviteUrl()));
                 if (Bukkit.isPrimaryThread()) {
                     kickTask.run();
@@ -161,18 +162,12 @@ public class LinkBukkitListener implements Listener {
                 break;
             }
             case FREEZE: {
-                String code;
-                try {
-                    code = ess.getLinkManager().createCode(event.getUser().getBase().getUniqueId());
-                } catch (IllegalArgumentException e) {
-                    code = e.getMessage();
-                }
                 event.getUser().sendMessage(tl("discordLinkLoginPrompt", "/link " + code, ess.getApi().getInviteUrl()));
                 event.getUser().setFreeze(true);
                 break;
             }
             default: {
-                break;
+                throw new IllegalStateException();
             }
         }
     }

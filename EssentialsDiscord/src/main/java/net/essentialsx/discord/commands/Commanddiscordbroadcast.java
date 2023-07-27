@@ -4,8 +4,8 @@ import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.commands.EssentialsCommand;
 import com.earth2me.essentials.commands.NotEnoughArgumentsException;
 import com.vdurmont.emoji.EmojiParser;
-import net.dv8tion.jda.api.entities.Emote;
-import net.dv8tion.jda.api.entities.TextChannel;
+import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
+import net.dv8tion.jda.api.entities.emoji.RichCustomEmoji;
 import net.essentialsx.discord.JDADiscordService;
 import net.essentialsx.discord.util.DiscordUtil;
 import net.essentialsx.discord.util.MessageUtil;
@@ -48,7 +48,7 @@ public class Commanddiscordbroadcast extends EssentialsCommand {
         }
 
         channel.sendMessage(jda.parseMessageEmotes(message))
-                .allowedMentions(sender.isAuthorized("essentials.discordbroadcast.ping", ess) ? null : DiscordUtil.NO_GROUP_MENTIONS)
+                .setAllowedMentions(sender.isAuthorized("essentials.discordbroadcast.ping", ess) ? null : DiscordUtil.NO_GROUP_MENTIONS)
                 .queue();
 
         sender.sendMessage(tl("discordbroadcastSent", "#" + EmojiParser.parseToAliases(channel.getName())));
@@ -65,12 +65,12 @@ public class Commanddiscordbroadcast extends EssentialsCommand {
             final String curArg = args[args.length - 1];
             if (!curArg.isEmpty() && curArg.charAt(0) == ':' && (curArg.length() == 1 || curArg.charAt(curArg.length() - 1) != ':')) {
                 final JDADiscordService jda = (JDADiscordService) module;
-                if (jda.getGuild().getEmoteCache().isEmpty()) {
+                if (jda.getGuild().getEmojiCache().isEmpty()) {
                     return Collections.emptyList();
                 }
 
                 final List<String> completions = new ArrayList<>();
-                for (final Emote emote : jda.getGuild().getEmoteCache()) {
+                for (final RichCustomEmoji emote : jda.getGuild().getEmojiCache()) {
                     completions.add(":" + emote.getName() + ":");
                 }
                 return completions;

@@ -959,13 +959,13 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
     @Override
     public User getOfflineUser(final String name) {
         final User user = userMap.getUser(name);
-        if (user != null && user.getBase() instanceof OfflinePlayer) {
+        if (user != null && user.getBase() instanceof OfflinePlayerStub) {
             //This code should attempt to use the last known name of a user, if Bukkit returns name as null.
             final String lastName = user.getLastAccountName();
             if (lastName != null) {
-                ((OfflinePlayer) user.getBase()).setName(lastName);
+                ((OfflinePlayerStub) user.getBase()).setName(lastName);
             } else {
-                ((OfflinePlayer) user.getBase()).setName(name);
+                ((OfflinePlayerStub) user.getBase()).setName(name);
             }
         }
         return user;
@@ -1083,7 +1083,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
             // Since we already call UserMap#getUser() above, we are already okay with adding the user to the cache,
             // so we need to manually add the user to the cache in order to avoid a memory leak and maintain behavior.
             userMap.addCachedUser(user);
-        } else {
+        } else if (base.getClass() != UUIDPlayer.class || user.getBase() == null) {
             user.update(base);
         }
         return user;

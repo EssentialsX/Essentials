@@ -46,6 +46,10 @@ channels:
 # players the essentials.discord.receive.primary permission.
 always-receive-primary: false
 
+# Whether to use Essentials Chat events instead of normal chat event.
+# This allows you to filter chat by its type (local, question, shout).
+use-essentials-events: false
+
 # Chat relay settings
 # General settings for chat relays between Minecraft and Discord.
 # To configure the channel Minecraft chat is sent to, see the "message-types" section of the config.
@@ -107,6 +111,8 @@ console:
   # This is useful if you want to ignore certain messages from the console.
   # Can also be a list of regex patterns in addition to a single regex pattern.
   console-filter: ""
+  # The amount of minutes of delay before console messages sent to Discord should be skipped.
+  skip-delay: 2
 
 # Configure which Discord channels different messages will be sent to.
 # You can either use the names of the channels listed above or just the id of a channel.
@@ -138,6 +144,15 @@ message-types:
   kick: staff
   # Message sent when a player's mute state is changed on the Minecraft server.
   mute: staff
+  # Message sent when a player talks in local chat.
+  # use-essentials-events must be set to "true" for this to work.
+  local: none
+  # Message sent when a player asks a question in global chat.
+  # use-essentials-events must be set to "true" for this to work.
+  question: primary
+  # Message sent when a player talks in global chat.
+  # use-essentials-events must be set to "true" for this to work.
+  shout: primary
 
 # Whether or not player messages should show their avatar as the profile picture in Discord.
 # The bot will require the "Manage Webhooks" permission in the defined channels in order to use this feature.
@@ -268,6 +283,36 @@ messages:
   # - {botname}: Name of the Discord bot
   # ... PlaceholderAPI placeholders are also supported here too!
   mc-to-discord-name-format: "{botname}"
+  # This is the message that is used to relay minecraft local chat in Discord.
+  # The following placeholders can be used here:
+  # - {username}: The username of the player sending the message
+  # - {displayname}: The display name of the player sending the message (This would be their nickname)
+  # - {message}: The content of the message being sent
+  # - {world}: The name of the world the player sending the message is in
+  # - {prefix}: The prefix of the player sending the message
+  # - {suffix}: The suffix of the player sending the message
+  # ... PlaceholderAPI placeholders are also supported here too!
+  mc-to-discord-local: "**[Local]** {displayname}: {message}"
+  # This is the message that is used to relay questions from minecraft chat in Discord.
+  # The following placeholders can be used here:
+  # - {username}: The username of the player sending the message
+  # - {displayname}: The display name of the player sending the message (This would be their nickname)
+  # - {message}: The content of the message being sent
+  # - {world}: The name of the world the player sending the message is in
+  # - {prefix}: The prefix of the player sending the message
+  # - {suffix}: The suffix of the player sending the message
+  # ... PlaceholderAPI placeholders are also supported here too!
+  mc-to-discord-question: "**[Question]** {displayname}: {message}"
+  # This is the message that is used to relay minecraft global chat in Discord.
+  # The following placeholders can be used here:
+  # - {username}: The username of the player sending the message
+  # - {displayname}: The display name of the player sending the message (This would be their nickname)
+  # - {message}: The content of the message being sent
+  # - {world}: The name of the world the player sending the message is in
+  # - {prefix}: The prefix of the player sending the message
+  # - {suffix}: The suffix of the player sending the message
+  # ... PlaceholderAPI placeholders are also supported here too!
+  mc-to-discord-shout: "**[Shout]** {displayname}: {message}"
   # This is the message sent to Discord when a player is temporarily muted in minecraft.
   # The following placeholders can be used here:
   # - {username}: The username of the player being muted

@@ -150,7 +150,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
     }
 
     private boolean isAuthorizedCheck(final String node) {
-        if (base instanceof OfflinePlayer) {
+        if (base instanceof OfflinePlayerStub) {
             return false;
         }
 
@@ -168,7 +168,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
     }
 
     private boolean isPermSetCheck(final String node) {
-        if (base instanceof OfflinePlayer) {
+        if (base instanceof OfflinePlayerStub) {
             return false;
         }
 
@@ -186,7 +186,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
     }
 
     private TriState isAuthorizedExactCheck(final String node) {
-        if (base instanceof OfflinePlayer) {
+        if (base instanceof OfflinePlayerStub) {
             return TriState.UNSET;
         }
 
@@ -309,7 +309,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
 
     private void _dispose() {
         if (!base.isOnline()) {
-            this.base = new OfflinePlayer(getConfigUUID(), ess.getServer());
+            this.base = new OfflinePlayerStub(getConfigUUID(), ess.getServer());
         }
         cleanup();
     }
@@ -668,6 +668,9 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
 
     @Override
     public boolean isHiddenFrom(Player player) {
+        if (getBase() instanceof OfflinePlayerStub || player instanceof OfflinePlayerStub) {
+            return true;
+        }
         return !player.canSee(getBase());
     }
 

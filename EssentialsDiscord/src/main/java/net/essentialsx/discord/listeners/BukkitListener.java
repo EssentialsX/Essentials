@@ -11,13 +11,11 @@ import net.ess3.api.events.VanishStatusChangeEvent;
 import net.ess3.provider.AbstractAchievementEvent;
 import net.essentialsx.api.v2.events.AsyncUserDataLoadEvent;
 import net.essentialsx.api.v2.events.UserActionEvent;
-import net.essentialsx.api.v2.events.discord.DiscordChatMessageEvent;
 import net.essentialsx.api.v2.events.discord.DiscordMessageEvent;
 import net.essentialsx.api.v2.services.discord.MessageType;
 import net.essentialsx.discord.JDADiscordService;
 import net.essentialsx.discord.util.DiscordUtil;
 import net.essentialsx.discord.util.MessageUtil;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameRule;
 import org.bukkit.entity.Player;
@@ -25,7 +23,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
-import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
@@ -81,21 +78,6 @@ public class BukkitListener implements Listener {
         }
     }
 
-    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
-    public void onChat(AsyncPlayerChatEvent event) {
-        final Player player = event.getPlayer();
-        Bukkit.getScheduler().runTask(jda.getPlugin(), () -> {
-            final DiscordChatMessageEvent chatEvent = new DiscordChatMessageEvent(event.getPlayer(), event.getMessage());
-            chatEvent.setCancelled(!jda.getSettings().isShowAllChat() && !event.getRecipients().containsAll(Bukkit.getOnlinePlayers()));
-            Bukkit.getPluginManager().callEvent(chatEvent);
-            if (chatEvent.isCancelled()) {
-                return;
-            }
-
-            jda.sendChatMessage(player, chatEvent.getMessage());
-        });
-    }
-
     @EventHandler(priority = EventPriority.MONITOR)
     public void onJoin(AsyncUserDataLoadEvent event) {
         // Delay join to let nickname load
@@ -137,7 +119,7 @@ public class BukkitListener implements Listener {
     }
 
     public void sendJoinQuitMessage(final Player player, final String message, MessageType type) {
-        int userCount = jda.getPlugin().getEss().getUsers().getUserCount();
+        int onlineCount = jda.getPlugin().getEss().getOnlinePlayers().size();
         final MessageFormat format;
         switch (type.getKey()) {
             case "join":
@@ -148,7 +130,7 @@ public class BukkitListener implements Listener {
                 break;
             default: // So that it will always be initialised. Other options shouldn't be possible.
                 format = jda.getSettings().getQuitFormat(player);
-                userCount = userCount - 1;
+                onlineCount = onlineCount - 1;
                 break;
 
         }
@@ -157,8 +139,8 @@ public class BukkitListener implements Listener {
                         MessageUtil.sanitizeDiscordMarkdown(player.getName()),
                         MessageUtil.sanitizeDiscordMarkdown(player.getDisplayName()),
                         MessageUtil.sanitizeDiscordMarkdown(message),
-                        jda.getPlugin().getEss().getOnlinePlayers().size(),
-                        userCount),
+                        onlineCount,
+                        jda.getPlugin().getEss().getUsers().getUserCount()),
                         player);
     }
 

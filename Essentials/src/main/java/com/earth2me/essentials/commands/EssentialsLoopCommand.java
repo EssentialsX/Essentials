@@ -30,11 +30,16 @@ public abstract class EssentialsLoopCommand extends EssentialsCommand {
         final UUID uuid = StringUtil.toUUID(searchTerm);
         if (uuid != null) {
             final User matchedUser = ess.getUser(uuid);
+            if (matchedUser == null) {
+                throw new PlayerNotFoundException();
+            }
             userConsumer.accept(matchedUser);
         } else if (matchWildcards && searchTerm.contentEquals("**")) {
             for (final UUID u : ess.getUsers().getAllUserUUIDs()) {
                 final User user = ess.getUsers().loadUncachedUser(u);
-                userConsumer.accept(user);
+                if (user != null) {
+                    userConsumer.accept(user);
+                }
             }
         } else if (matchWildcards && searchTerm.contentEquals("*")) {
             final boolean skipHidden = sender.isPlayer() && !ess.getUser(sender.getPlayer()).canInteractVanished();
