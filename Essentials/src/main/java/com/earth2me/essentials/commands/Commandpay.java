@@ -38,7 +38,25 @@ public class Commandpay extends EssentialsLoopCommand {
             throw new NotEnoughArgumentsException();
         }
 
-        final BigDecimal amount = new BigDecimal(stringAmount);
+        BigDecimal tempAmount = new BigDecimal(stringAmount);
+
+        switch (Character.toLowerCase(args[1].charAt(args[1].length()-1))) {
+            case 'k':
+                tempAmount = tempAmount.multiply(new BigDecimal(1000));
+                break;
+            case 'm':
+                tempAmount = tempAmount.multiply(new BigDecimal(1000000));
+                break;
+            case 'b':
+                tempAmount = tempAmount.multiply(new BigDecimal(1000000000));
+                break;
+            case 't':
+                tempAmount = tempAmount.multiply(new BigDecimal("1000000000000"));
+                break;
+        }
+
+        final BigDecimal amount = tempAmount;
+
         if (amount.compareTo(ess.getSettings().getMinimumPayAmount()) < 0) { // Check if amount is less than minimum-pay-amount
             throw new Exception(tl("minimumPayAmount", NumberUtil.displayCurrencyExactly(ess.getSettings().getMinimumPayAmount(), ess)));
         }
