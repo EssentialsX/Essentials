@@ -1,29 +1,5 @@
 dependencyResolutionManagement {
     repositories {
-        mavenCentral {
-            content {
-                includeGroup("net.kyori")
-                includeGroup("org.apache.logging.log4j")
-            }
-        }
-        maven("https://oss.sonatype.org/content/repositories/snapshots/") {
-            content { includeGroup("net.kyori") }
-        }
-        maven("https://jitpack.io") {
-            content { includeGroup("com.github.milkbowl") }
-        }
-        maven("https://repo.codemc.org/repository/maven-public") {
-            content { includeGroup("org.bstats") }
-        }
-        maven("https://m2.dv8tion.net/releases/") {
-            content { includeGroup("net.dv8tion") }
-        }
-        maven("https://repo.extendedclip.com/content/repositories/placeholderapi/") {
-            content { includeGroup("me.clip") }
-        }
-        maven("https://libraries.minecraft.net/") {
-            content { includeGroup("com.mojang") }
-        }
         maven("https://hub.spigotmc.org/nexus/content/groups/public/") {
             content {
                 includeGroup("org.spigotmc")
@@ -31,6 +7,24 @@ dependencyResolutionManagement {
             }
         }
         maven("https://papermc.io/repo/repository/maven-public/")
+        maven("https://jitpack.io") {
+            content { includeGroup("com.github.milkbowl") }
+            content { includeGroup("com.github.MinnDevelopment") }
+        }
+        maven("https://repo.codemc.org/repository/maven-public") {
+            content { includeGroup("org.bstats") }
+        }
+        maven("https://repo.extendedclip.com/content/repositories/placeholderapi/") {
+            content { includeGroup("me.clip") }
+        }
+        maven("https://libraries.minecraft.net/") {
+            content { includeGroup("com.mojang") }
+        }
+        mavenCentral {
+            content { includeGroup("net.dv8tion") }
+            content { includeGroup("net.kyori") }
+            content { includeGroup("org.apache.logging.log4j") }
+        }
     }
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
 }

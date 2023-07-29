@@ -68,12 +68,7 @@ public class AccountLinkManager implements IEssentialsModule, DiscordLinkService
     public boolean unlinkAccount(InteractionMember member) {
         Preconditions.checkNotNull(member, "member cannot be null");
 
-        if (!isLinked(member.getId())) {
-            return false;
-        }
-
-        removeAccount(member, DiscordLinkStatusChangeEvent.Cause.UNSYNC_API);
-        return true;
+        return isLinked(member.getId()) && removeAccount(member, DiscordLinkStatusChangeEvent.Cause.UNSYNC_API);
     }
 
     public boolean removeAccount(final InteractionMember member, final DiscordLinkStatusChangeEvent.Cause cause) {
@@ -82,10 +77,11 @@ public class AccountLinkManager implements IEssentialsModule, DiscordLinkService
             ensureAsync(() -> {
                 final IUser user = ess.getEss().getUser(uuid);
                 ensureSync(() -> ess.getServer().getPluginManager().callEvent(new DiscordLinkStatusChangeEvent(user, member, member.getId(), false, cause)));
+
+                roleSyncManager.unSync(uuid, member.getId());
             });
             return true;
         }
-        ensureAsync(() -> roleSyncManager.unSync(uuid, member.getId()));
         return false;
     }
 
@@ -106,9 +102,10 @@ public class AccountLinkManager implements IEssentialsModule, DiscordLinkService
         if (storage.remove(user.getBase().getUniqueId())) {
             ess.getApi().getMemberById(id).thenAccept(member -> ensureSync(() ->
                     ess.getServer().getPluginManager().callEvent(new DiscordLinkStatusChangeEvent(user, member, id, false, cause))));
+
+            ensureAsync(() -> roleSyncManager.unSync(user.getBase().getUniqueId(), id));
             return true;
         }
-        ensureAsync(() -> roleSyncManager.unSync(user.getBase().getUniqueId(), id));
         return false;
     }
 

@@ -1,7 +1,7 @@
 package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.CommandSource;
-import com.earth2me.essentials.OfflinePlayer;
+import com.earth2me.essentials.OfflinePlayerStub;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.DateUtil;
 import net.ess3.api.TranslatableException;
@@ -30,7 +30,7 @@ public class Commandmute extends EssentialsCommand {
             user = getPlayer(server, args, 0, true, true);
         } catch (final PlayerNotFoundException e) {
             nomatch = true;
-            user = ess.getUser(new OfflinePlayer(args[0], ess.getServer()));
+            user = ess.getUser(new OfflinePlayerStub(args[0], ess.getServer()));
         }
         if (!user.getBase().isOnline() && sender.isPlayer()) {
             if (!sender.isAuthorized("essentials.mute.offline")) {

@@ -1,7 +1,7 @@
 package com.earth2me.essentials.spawn;
 
 import com.earth2me.essentials.Kit;
-import com.earth2me.essentials.OfflinePlayer;
+import com.earth2me.essentials.OfflinePlayerStub;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.textreader.IText;
 import com.earth2me.essentials.textreader.KeywordReplacer;
@@ -143,7 +143,7 @@ class EssentialsSpawnPlayerListener implements Listener {
 
         @Override
         public void run() {
-            if (user.getBase() instanceof OfflinePlayer || !user.getBase().isOnline()) {
+            if (user.getBase() instanceof OfflinePlayerStub || !user.getBase().isOnline()) {
                 return;
             }
 

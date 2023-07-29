@@ -18,7 +18,6 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.spongepowered.configurate.serialize.SerializationException;
 
 import java.io.File;
 import java.math.BigDecimal;
@@ -82,7 +81,7 @@ public abstract class UserData extends PlayerExtension implements IConf {
         config.load();
         try {
             holder = config.getRootNode().get(UserConfigHolder.class);
-        } catch (SerializationException e) {
+        } catch (Throwable e) {
             ess.getLogger().log(Level.SEVERE, "Error while reading user config: " + config.getFile().getName(), e);
             throw new RuntimeException(e);
         }

@@ -168,6 +168,10 @@ public class DiscordSettings implements IConf {
         return consoleFilter;
     }
 
+    public int getConsoleSkipDelay() {
+        return config.getInt("console.skip-delay", 2);
+    }
+
     public boolean isShowAvatar() {
         return config.getBoolean("show-avatar", false);
     }
@@ -472,7 +476,7 @@ public class DiscordSettings implements IConf {
                 activityType = Activity.ActivityType.valueOf(activity);
             }
         } catch (IllegalArgumentException e) {
-            activityType = Activity.ActivityType.DEFAULT;
+            activityType = Activity.ActivityType.PLAYING;
         }
         if (activityType != null) {
             statusActivity = Activity.of(activityType, config.getString("presence.message", "Minecraft"));

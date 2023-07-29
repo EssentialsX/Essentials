@@ -9,7 +9,7 @@ import org.bukkit.plugin.InvalidDescriptionException;
 import java.io.IOException;
 
 public class ToggleTest extends TestCase {
-    private final OfflinePlayer base1;
+    private final OfflinePlayerStub base1;
     private final Essentials ess;
     private final FakeServer server;
 

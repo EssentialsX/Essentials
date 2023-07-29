@@ -1,6 +1,6 @@
 package com.earth2me.essentials.userstorage;
 
-import com.earth2me.essentials.OfflinePlayer;
+import com.earth2me.essentials.OfflinePlayerStub;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.utils.NumberUtil;
 import com.google.common.cache.CacheBuilder;
@@ -98,11 +98,11 @@ public class ModernUserMap extends CacheLoader<UUID, User> implements IUserMap {
         }
 
         final User user = getUser(uuidCache.getCachedUUID(name));
-        if (user != null && user.getBase() instanceof OfflinePlayer) {
+        if (user != null && user.getBase() instanceof OfflinePlayerStub) {
             if (user.getLastAccountName() != null) {
-                ((OfflinePlayer) user.getBase()).setName(user.getLastAccountName());
+                ((OfflinePlayerStub) user.getBase()).setName(user.getLastAccountName());
             } else {
-                ((OfflinePlayer) user.getBase()).setName(name);
+                ((OfflinePlayerStub) user.getBase()).setName(name);
             }
         }
         return user;
@@ -164,9 +164,9 @@ public class ModernUserMap extends CacheLoader<UUID, User> implements IUserMap {
 
         final File userFile = getUserFile(uuid);
         if (userFile.exists()) {
-            player = new OfflinePlayer(uuid, ess.getServer());
+            player = new OfflinePlayerStub(uuid, ess.getServer());
             user = new User(player, ess);
-            ((OfflinePlayer) player).setName(user.getLastAccountName());
+            ((OfflinePlayerStub) player).setName(user.getLastAccountName());
             uuidCache.updateCache(uuid, null);
             return user;
         }
