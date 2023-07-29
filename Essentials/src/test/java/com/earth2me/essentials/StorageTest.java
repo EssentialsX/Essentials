@@ -30,7 +30,7 @@ public class StorageTest {
     public void testOldUserdata() {
         final ExecuteTimer ext = new ExecuteTimer();
         ext.start();
-        final OfflinePlayer base1 = server.createPlayer("testPlayer1");
+        final OfflinePlayerStub base1 = server.createPlayer("testPlayer1");
         server.addPlayer(base1);
         ext.mark("fake user created");
         final UserData user = ess.getUser(base1);

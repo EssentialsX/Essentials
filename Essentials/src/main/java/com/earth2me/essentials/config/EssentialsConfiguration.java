@@ -131,6 +131,7 @@ public class EssentialsConfiguration {
         try {
             return node.get(LazyLocation.class);
         } catch (SerializationException e) {
+            Essentials.getWrappedLogger().log(Level.SEVERE, e.getMessage(), e);
             return null;
         }
     }
@@ -272,7 +273,8 @@ public class EssentialsConfiguration {
         try {
             return node.get(BigDecimal.class);
         } catch (SerializationException e) {
-            return null;
+            Essentials.getWrappedLogger().log(Level.SEVERE, e.getMessage(), e);
+            return def;
         }
     }
 

@@ -119,7 +119,7 @@ public class BukkitListener implements Listener {
     }
 
     public void sendJoinQuitMessage(final Player player, final String message, MessageType type) {
-        int userCount = jda.getPlugin().getEss().getUsers().getUserCount();
+        int onlineCount = jda.getPlugin().getEss().getOnlinePlayers().size();
         final MessageFormat format;
         switch (type.getKey()) {
             case "join":
@@ -130,7 +130,7 @@ public class BukkitListener implements Listener {
                 break;
             default: // So that it will always be initialised. Other options shouldn't be possible.
                 format = jda.getSettings().getQuitFormat(player);
-                userCount = userCount - 1;
+                onlineCount = onlineCount - 1;
                 break;
 
         }
@@ -139,8 +139,8 @@ public class BukkitListener implements Listener {
                         MessageUtil.sanitizeDiscordMarkdown(player.getName()),
                         MessageUtil.sanitizeDiscordMarkdown(player.getDisplayName()),
                         MessageUtil.sanitizeDiscordMarkdown(message),
-                        jda.getPlugin().getEss().getOnlinePlayers().size(),
-                        userCount),
+                        onlineCount,
+                        jda.getPlugin().getEss().getUsers().getUserCount()),
                         player);
     }
 
