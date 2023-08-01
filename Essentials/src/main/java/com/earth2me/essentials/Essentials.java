@@ -1057,19 +1057,9 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
             return null;
         }
 
-        User user = userMap.getUser(base.getUniqueId());
+        final User user = userMap.getUser(base);
 
-        if (user == null) {
-            if (getSettings().isDebug()) {
-                LOGGER.log(Level.INFO, "Constructing new userfile from base player " + base.getName());
-            }
-            user = userMap.loadUncachedUser(base);
-
-            // The above method will end up creating a new user, but it will not be added to the cache.
-            // Since we already call UserMap#getUser() above, we are already okay with adding the user to the cache,
-            // so we need to manually add the user to the cache in order to avoid a memory leak and maintain behavior.
-            userMap.addCachedUser(user);
-        } else if (base.getClass() != UUIDPlayer.class || user.getBase() == null) {
+        if (base.getClass() != UUIDPlayer.class || user.getBase() == null) {
             user.update(base);
         }
         return user;
