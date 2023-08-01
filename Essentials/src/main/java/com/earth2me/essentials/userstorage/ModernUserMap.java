@@ -167,16 +167,11 @@ public class ModernUserMap extends CacheLoader<UUID, User> implements IUserMap {
             player = new OfflinePlayerStub(uuid, ess.getServer());
             user = new User(player, ess);
             ((OfflinePlayerStub) player).setName(user.getLastAccountName());
-            uuidCache.updateCache(uuid, null);
+            uuidCache.updateCache(uuid, user.getLastAccountName());
             return user;
         }
 
         return null;
-    }
-
-    public void addCachedUser(final User user) {
-        userCache.put(user.getUUID(), user);
-        debugLogCache(user);
     }
 
     @Override
