@@ -166,8 +166,23 @@ public class ModernUserMap extends CacheLoader<UUID, User> implements IUserMap {
         if (userFile.exists()) {
             player = new OfflinePlayerStub(uuid, ess.getServer());
             user = new User(player, ess);
-            ((OfflinePlayerStub) player).setName(user.getLastAccountName());
-            uuidCache.updateCache(uuid, user.getLastAccountName());
+            final String accName = user.getLastAccountName();
+            ((OfflinePlayerStub) player).setName(accName);
+            // Check to see if there is already a UUID mapping for the name in the name cache before updating it.
+            // Since this code is ran for offline players, there's a chance we could be overriding the mapping
+            // for a player who changed their name to an older player's name, let that be handled during join.
+            //
+            // Here is a senerio which could take place if didn't do the containsKey check;
+            // "JRoyLULW" joins the server - "JRoyLULW" is mapped to 86f39a70-eda7-44a2-88f8-0ade4e1ec8c0
+            // "JRoyLULW" changes their name to "mbax" - Nothing happens, they are yet to join the server
+            // "mdcfe" changes their name to "JRoyLULW" - Nothing happens, they are yet to join the server
+            // "JRoyLULW" (formally "mdcfe") joins the server -  "JRoyLULW" is mapped to 62a6a4bb-a2b8-4796-bfe6-63067250990a
+            // The /baltop command is ran, iterating over all players.
+            //
+            // During the baltop iteration, two uuids have the `last-account-name` of "JRoyLULW" creating the
+            // potential that "JRoyLULW" is mapped back to 86f39a70-eda7-44a2-88f8-0ade4e1ec8c0 when the true
+            // bearer of that name is now 62a6a4bb-a2b8-4796-bfe6-63067250990a.
+            uuidCache.updateCache(uuid, (accName == null || uuidCache.getNameCache().containsKey(accName)) ? null : accName);
             return user;
         }
 
