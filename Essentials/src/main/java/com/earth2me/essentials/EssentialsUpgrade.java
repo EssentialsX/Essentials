@@ -963,7 +963,7 @@ public class EssentialsUpgrade {
                                 }
                             }
 
-                            uuids.put(uuid, config.getLong("timestamps.logout", 0L));
+                            uuids.put(uuid, time);
                             nameToUuidMap.put(name, uuid);
                         }
                     } catch (IllegalArgumentException | IndexOutOfBoundsException ignored) {
