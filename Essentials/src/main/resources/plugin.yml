@@ -304,14 +304,6 @@ commands:
     description: Views the Message Of The Day.
     usage: /<command> [chapter] [page]
     aliases: [emotd]
-  msg:
-    description: Sends a private message to the specified player.
-    usage: /<command> <to> <message>
-    aliases: [w,m,t,pm,emsg,epm,tell,etell,whisper,ewhisper]
-  msgtoggle:
-    description: Blocks receiving all private messages.
-    usage: /<command> [player] [on|off]
-    aliases: [emsgtoggle]
   mute:
     description: Mutes or unmutes a player.
     usage: /<command> <player> [datediff] [reason]
