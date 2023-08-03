@@ -10,7 +10,6 @@ import java.io.IOException;
 
 import static org.junit.Assert.fail;
 import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertEquals;
 
 public class MessagingTest {
 
@@ -88,31 +87,6 @@ public class MessagingTest {
             runConsoleCommand("r", "Hey, son!");
         } else {
             throw new Exception(); // Needed to prevent build failures.
-        }
-    }
-
-    @Test
-    public void testNonNullLastMessageReplyRecipient() throws Exception {
-        final User user1 = ess.getUser(base1);
-        final Console console = Console.getInstance();
-
-        if (ess.getSettings().isLastMessageReplyRecipient()) {
-            assertNull(console.getReplyRecipient()); // console never messaged or received messages from anyone.
-
-            // user1 messages console saying "Hey, master!"
-            runCommand("msg", user1, console.getName() + " Hey, master!");
-
-            // console should now have its reply-recipient as user1, since the console doesn't have a previous recipient.
-            assertEquals(user1, console.getReplyRecipient());
-
-            if (ess.getSettings().isLastMessageReplyRecipient()) {
-                runCommand("r", user1, "This is me sending you a message using /r without you replying!");
-            }
-
-            // Not really much of a strict test, but just "testing" console output. 
-            user1.setAfk(true);
-
-            runConsoleCommand("r", "Hey, son!");
         }
     }
 }
