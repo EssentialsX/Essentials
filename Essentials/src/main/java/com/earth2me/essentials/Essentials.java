@@ -1052,7 +1052,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
             return true;
         }
 
-        return interactor.getBase().canSee(interactee.getBase());
+        return !interactee.isHiddenFrom(interactor.getBase());
     }
 
     //This will create a new user if there is not a match.
