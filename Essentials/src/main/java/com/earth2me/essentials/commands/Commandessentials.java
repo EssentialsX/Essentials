@@ -711,7 +711,7 @@ public class Commandessentials extends EssentialsCommand {
                     ess.getLogger().info("Found " + total + " orphaned userdata files.");
                 });
             } else if (args[1].equalsIgnoreCase("cache")) {
-                sender.sendMessage(tl("usermapKnown", ess.getUsers().getAllUserUUIDs().size(), ess.getUsers().getNameCache().size()));
+                sender.sendTl("usermapKnown", ess.getUsers().getAllUserUUIDs().size(), ess.getUsers().getNameCache().size());
             } else {
                 try {
                     final UUID uuid = UUID.fromString(args[1]);
