@@ -3,7 +3,7 @@ plugins {
 }
 
 group = "net.essentialsx"
-version = "2.20.1"
+version = "2.20.2-SNAPSHOT"
 
 project.ext {
     GIT_COMMIT = !indraGit.isPresent() ? "unknown" : indraGit.commit().abbreviate(7).name()
