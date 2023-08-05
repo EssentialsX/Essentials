@@ -27,7 +27,7 @@ public final class AdventureUtil {
     private AdventureUtil() {
     }
 
-    public static Component toComponent(final String text) {
+    public static Component deserializeLegacy(final String text) {
         return LEGACY_SERIALIZER.deserialize(text);
     }
 

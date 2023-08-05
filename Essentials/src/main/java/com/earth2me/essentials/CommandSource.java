@@ -59,7 +59,7 @@ public class CommandSource {
         }
         final String translation = tlLiteral(tlKey, args);
         if (!translation.startsWith(AdventureUtil.MINI_MESSAGE_PREFIX)) {
-            return AdventureUtil.toComponent(translation);
+            return AdventureUtil.deserializeLegacy(translation);
         }
         return MiniMessage.miniMessage().deserialize(translation.substring(AdventureUtil.MINI_MESSAGE_PREFIX.length()));
     }
