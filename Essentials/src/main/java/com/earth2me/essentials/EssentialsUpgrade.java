@@ -5,12 +5,14 @@ import com.earth2me.essentials.config.EssentialsConfiguration;
 import com.earth2me.essentials.config.EssentialsUserConfiguration;
 import com.earth2me.essentials.craftbukkit.BanLookup;
 import com.earth2me.essentials.userstorage.ModernUUIDCache;
+import com.earth2me.essentials.utils.AdventureUtil;
 import com.earth2me.essentials.utils.StringUtil;
 import com.google.common.base.Charsets;
 import com.google.common.io.Files;
 import com.google.gson.reflect.TypeToken;
 import net.ess3.api.IEssentials;
 import net.essentialsx.api.v2.services.mail.MailMessage;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.BanList;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -39,6 +41,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Properties;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.Executors;
@@ -983,6 +986,46 @@ public class EssentialsUpgrade {
             doneFile.save();
         } catch (final IOException e) {
             ess.getLogger().log(Level.SEVERE, "Error while generating initial uuids/names cache", e);
+        }
+    }
+
+    public void upgradeLang() {
+        if (doneFile.getBoolean("updateLegacyToAdventure", false)) {
+            return;
+        }
+
+        try {
+            final File dataFolder = ess.getDataFolder();
+            if (!dataFolder.exists() || !dataFolder.isDirectory()) {
+                return;
+            }
+
+            final File backDir = new File(dataFolder, "msg-backups-" + System.currentTimeMillis());
+            if (backDir.exists() || !backDir.mkdir()) {
+                ess.getLogger().log(Level.SEVERE, "Unable to make msg-backups dir?!");
+                return;
+            }
+
+            final File[] files = dataFolder.listFiles();
+            for (final File file : files) {
+                if (file.getName().endsWith(".properties")) {
+                    final File backup = new File(backDir, file.getName());
+                    Files.move(file, backup);
+                    final Properties properties = new Properties();
+                    properties.load(Files.newReader(backup, Charsets.UTF_8));
+                    for (final String key : properties.stringPropertyNames()) {
+                        final String value = properties.getProperty(key);
+                        if (value.startsWith(AdventureUtil.MINI_MESSAGE_PREFIX)) {
+                            properties.setProperty(key, value.substring(AdventureUtil.MINI_MESSAGE_PREFIX.length()));
+                            continue;
+                        }
+                        properties.setProperty(key, AdventureUtil.minifyLegacy(MiniMessage.miniMessage().escapeTags(value.replace('§', AdventureUtil.KEZZ_MAGIC_CHAR))));
+                    }
+                    properties.store(Files.newWriter(file, Charsets.UTF_8), null);
+                }
+            }
+        } catch (final Throwable e) {
+            ess.getLogger().log(Level.SEVERE, "Error while upgrade custom locales", e);
         }
     }
 
