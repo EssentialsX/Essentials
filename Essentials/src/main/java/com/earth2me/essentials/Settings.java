@@ -8,12 +8,17 @@ import com.earth2me.essentials.signs.EssentialsSign;
 import com.earth2me.essentials.signs.Signs;
 import com.earth2me.essentials.textreader.IText;
 import com.earth2me.essentials.textreader.SimpleTextInput;
+import com.earth2me.essentials.utils.AdventureUtil;
 import com.earth2me.essentials.utils.EnumUtil;
 import com.earth2me.essentials.utils.FormatUtil;
 import com.earth2me.essentials.utils.LocationUtil;
 import com.earth2me.essentials.utils.NumberUtil;
 import net.ess3.api.IEssentials;
+import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.TextColor;
+import net.kyori.adventure.text.minimessage.tag.Tag;
 import org.bukkit.ChatColor;
+import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.event.EventPriority;
@@ -136,6 +141,8 @@ public class Settings implements net.ess3.api.ISettings {
     private double maxProjectileSpeed;
     private boolean removeEffectsOnHeal;
     private Map<String, String> worldAliases;
+    private Tag primaryColor = Tag.styling(NamedTextColor.GOLD);
+    private Tag secondaryColor = Tag.styling(NamedTextColor.RED);
 
     public Settings(final IEssentials ess) {
         this.ess = ess;
@@ -779,6 +786,8 @@ public class Settings implements net.ess3.api.ISettings {
         bindingItemPolicy = _getBindingItemsPolicy();
         currencySymbol = _getCurrencySymbol();
         worldAliases = _getWorldAliases();
+        primaryColor = _getPrimaryColor();
+        secondaryColor = _getSecondaryColor();
 
         reloadCount.incrementAndGet();
     }
@@ -1947,5 +1956,40 @@ public class Settings implements net.ess3.api.ISettings {
     @Override
     public boolean showZeroBaltop() {
         return config.getBoolean("show-zero-baltop", true);
+    }
+
+    @Override
+    public Tag getPrimaryColor() {
+        return primaryColor;
+    }
+
+    private Tag _getPrimaryColor() {
+        final String color = config.getString("primary-color", "6");
+        return Tag.styling(_getTagColor(color, NamedTextColor.GOLD));
+    }
+
+    @Override
+    public Tag getSecondaryColor() {
+        return secondaryColor;
+    }
+
+    private Tag _getSecondaryColor() {
+        final String color = config.getString("primary-color", "c");
+        return Tag.styling(_getTagColor(color, NamedTextColor.RED));
+    }
+
+    private TextColor _getTagColor(final String color, final TextColor def) {
+        try {
+            if (color.startsWith("#") && color.length() == 7 && NumberUtil.isNumeric(color.substring(1))) {
+                return TextColor.color(Color.fromRGB(Integer.decode(color)).asRGB());
+            }
+
+            if (color.length() == 1) {
+                final NamedTextColor named = AdventureUtil.fromChar(color.charAt(0));
+                return named != null ? named : def;
+            }
+        } catch (IllegalArgumentException ignored) {
+        }
+        return def;
     }
 }

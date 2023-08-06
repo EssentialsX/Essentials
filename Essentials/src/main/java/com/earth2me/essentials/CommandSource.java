@@ -3,7 +3,6 @@ package com.earth2me.essentials;
 import com.earth2me.essentials.utils.AdventureUtil;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -41,7 +40,7 @@ public class CommandSource {
             sendMessage(translation);
             return;
         }
-        sendComponent(MiniMessage.miniMessage().deserialize(translation.substring(AdventureUtil.MINI_MESSAGE_PREFIX.length())));
+        sendComponent(AdventureUtil.miniMessage().deserialize(translation.substring(AdventureUtil.MINI_MESSAGE_PREFIX.length())));
     }
 
     public String tl(final String tlKey, final Object... args) {
@@ -61,7 +60,7 @@ public class CommandSource {
         if (!translation.startsWith(AdventureUtil.MINI_MESSAGE_PREFIX)) {
             return AdventureUtil.deserializeLegacy(translation);
         }
-        return MiniMessage.miniMessage().deserialize(translation.substring(AdventureUtil.MINI_MESSAGE_PREFIX.length()));
+        return AdventureUtil.miniMessage().deserialize(translation.substring(AdventureUtil.MINI_MESSAGE_PREFIX.length()));
     }
 
     public void sendComponent(final Component component) {

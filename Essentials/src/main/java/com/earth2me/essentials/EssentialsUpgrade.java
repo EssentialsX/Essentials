@@ -12,7 +12,6 @@ import com.google.common.io.Files;
 import com.google.gson.reflect.TypeToken;
 import net.ess3.api.IEssentials;
 import net.essentialsx.api.v2.services.mail.MailMessage;
-import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.BanList;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -1019,7 +1018,7 @@ public class EssentialsUpgrade {
                             properties.setProperty(key, value.substring(AdventureUtil.MINI_MESSAGE_PREFIX.length()));
                             continue;
                         }
-                        properties.setProperty(key, AdventureUtil.minifyLegacy(MiniMessage.miniMessage().escapeTags(value.replace('§', AdventureUtil.KEZZ_MAGIC_CHAR))));
+                        properties.setProperty(key, AdventureUtil.minifyLegacy(AdventureUtil.miniMessage().escapeTags(value.replace('§', AdventureUtil.KEZZ_MAGIC_CHAR))));
                     }
                     properties.store(Files.newWriter(file, Charsets.UTF_8), null);
                 }

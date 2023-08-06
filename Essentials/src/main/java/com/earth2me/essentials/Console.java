@@ -5,7 +5,6 @@ import com.earth2me.essentials.messaging.SimpleMessageRecipient;
 import com.earth2me.essentials.utils.AdventureUtil;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -76,7 +75,7 @@ public final class Console implements IMessageRecipient {
         }
 
         final Audience consoleAudience = ((Essentials) ess).getBukkitAudience().sender(getCommandSender());
-        final Component component = MiniMessage.miniMessage()
+        final Component component = AdventureUtil.miniMessage()
                 .deserialize(translation.substring(AdventureUtil.MINI_MESSAGE_PREFIX.length()));
         consoleAudience.sendMessage(component);
     }

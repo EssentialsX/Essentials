@@ -2,7 +2,6 @@ package com.earth2me.essentials;
 
 import com.earth2me.essentials.utils.AdventureUtil;
 import net.ess3.api.IEssentials;
-import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
@@ -166,7 +165,7 @@ public class I18n implements net.ess3.api.II18n {
 
         final Object[] processedArgs;
         if (miniMessage) {
-            processedArgs = mutateArgs(objects, s -> AdventureUtil.minifyLegacy(MiniMessage.miniMessage().escapeTags(s.replace('§', AdventureUtil.KEZZ_MAGIC_CHAR))));
+            processedArgs = mutateArgs(objects, s -> AdventureUtil.minifyLegacy(AdventureUtil.miniMessage().escapeTags(s.replace('§', AdventureUtil.KEZZ_MAGIC_CHAR))));
         } else {
             processedArgs = objects;
         }

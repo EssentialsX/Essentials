@@ -24,7 +24,6 @@ import net.essentialsx.api.v2.events.TransactionEvent;
 import net.essentialsx.api.v2.services.mail.MailSender;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.ComponentLike;
-import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Statistic;
@@ -1075,7 +1074,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
         if (!translation.startsWith(AdventureUtil.MINI_MESSAGE_PREFIX)) {
             return AdventureUtil.deserializeLegacy(translation);
         }
-        return MiniMessage.miniMessage().deserialize(translation.substring(AdventureUtil.MINI_MESSAGE_PREFIX.length()));
+        return AdventureUtil.miniMessage().deserialize(translation.substring(AdventureUtil.MINI_MESSAGE_PREFIX.length()));
     }
 
     @Override
@@ -1089,7 +1088,7 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
             sendMessage(translation);
             return;
         }
-        sendComponent(MiniMessage.miniMessage().deserialize(translation.substring(AdventureUtil.MINI_MESSAGE_PREFIX.length())));
+        sendComponent(AdventureUtil.miniMessage().deserialize(translation.substring(AdventureUtil.MINI_MESSAGE_PREFIX.length())));
     }
 
     @Override
