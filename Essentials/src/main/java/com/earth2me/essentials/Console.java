@@ -69,14 +69,10 @@ public final class Console implements IMessageRecipient {
     @Override
     public void sendTl(String tlKey, Object... args) {
         final String translation = tlLiteral(tlKey, args);
-        if (!translation.startsWith(AdventureUtil.MINI_MESSAGE_PREFIX)) {
-            sendMessage(translation);
-            return;
-        }
 
         final Audience consoleAudience = ((Essentials) ess).getBukkitAudience().sender(getCommandSender());
         final Component component = AdventureUtil.miniMessage()
-                .deserialize(translation.substring(AdventureUtil.MINI_MESSAGE_PREFIX.length()));
+                .deserialize(translation);
         consoleAudience.sendMessage(component);
     }
 

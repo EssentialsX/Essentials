@@ -17,7 +17,6 @@ public final class AdventureUtil {
     private static final LegacyComponentSerializer LEGACY_SERIALIZER;
     private static final MiniMessage MINI_MESSAGE_INSTANCE;
     private static IEssentials ess;
-    public static final String MINI_MESSAGE_PREFIX = "MM||";
     private static final Pattern NAMED_PATTERN = Pattern.compile(ChatColor.COLOR_CHAR + "[0-9a-fk-orA-FK-OR]");
     private static final Pattern HEX_PATTERN = Pattern.compile(ChatColor.COLOR_CHAR + "x((?:" + ChatColor.COLOR_CHAR + "[0-9a-fA-F]){6})");
     private static final String LOOKUP = "0123456789abcdefklmnor";

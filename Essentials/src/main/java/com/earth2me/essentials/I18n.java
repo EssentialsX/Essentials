@@ -149,7 +149,6 @@ public class I18n implements net.ess3.api.II18n {
 
     public String format(final Locale locale, final String string, final Object... objects) {
         String format = translate(locale, string);
-        final boolean miniMessage = format.startsWith(AdventureUtil.MINI_MESSAGE_PREFIX);
 
         MessageFormat messageFormat = messageFormatCache.computeIfAbsent(locale, l -> new HashMap<>()).get(format);
         if (messageFormat == null) {
@@ -163,15 +162,10 @@ public class I18n implements net.ess3.api.II18n {
             messageFormatCache.get(locale).put(format, messageFormat);
         }
 
-        final Object[] processedArgs;
-        if (miniMessage) {
-            processedArgs = mutateArgs(objects, arg -> {
-                final String str = arg instanceof AdventureUtil.Placeholder ? arg.toString() : AdventureUtil.miniMessage().escapeTags(arg.toString());
-                return AdventureUtil.minifyLegacy(str);
-            });
-        } else {
-            processedArgs = objects;
-        }
+        final Object[] processedArgs = mutateArgs(objects, arg -> {
+            final String str = arg instanceof AdventureUtil.Placeholder ? arg.toString() : AdventureUtil.miniMessage().escapeTags(arg.toString());
+            return AdventureUtil.minifyLegacy(str);
+        });
 
         return messageFormat.format(processedArgs).replace(' ', ' '); // replace nbsp with a space
     }

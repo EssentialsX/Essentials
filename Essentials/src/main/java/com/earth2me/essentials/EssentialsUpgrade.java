@@ -1014,10 +1014,6 @@ public class EssentialsUpgrade {
                     properties.load(Files.newReader(backup, Charsets.UTF_8));
                     for (final String key : properties.stringPropertyNames()) {
                         final String value = properties.getProperty(key);
-                        if (value.startsWith(AdventureUtil.MINI_MESSAGE_PREFIX)) {
-                            properties.setProperty(key, value.substring(AdventureUtil.MINI_MESSAGE_PREFIX.length()));
-                            continue;
-                        }
                         properties.setProperty(key, AdventureUtil.minifyLegacy(AdventureUtil.miniMessage().escapeTags(value)));
                     }
                     properties.store(Files.newWriter(file, Charsets.UTF_8), null);
