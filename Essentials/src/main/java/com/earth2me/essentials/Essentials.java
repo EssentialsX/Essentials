@@ -1209,7 +1209,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
             final Object[] processedArgs;
             // FUCK THIS STUPID BULLSHIT
             if (parseKeywords) {
-                processedArgs = I18n.mutateArgs(args, s -> new KeywordReplacer(new SimpleTextInput(s), new CommandSource(this, user.getBase()), this, false).getLines().get(0));
+                processedArgs = I18n.mutateArgs(args, s -> new KeywordReplacer(new SimpleTextInput(s.toString()), new CommandSource(this, user.getBase()), this, false).getLines().get(0));
             } else {
                 processedArgs = args;
             }

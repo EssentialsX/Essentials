@@ -165,7 +165,10 @@ public class I18n implements net.ess3.api.II18n {
 
         final Object[] processedArgs;
         if (miniMessage) {
-            processedArgs = mutateArgs(objects, s -> AdventureUtil.minifyLegacy(AdventureUtil.miniMessage().escapeTags(s)));
+            processedArgs = mutateArgs(objects, arg -> {
+                final String str = arg instanceof AdventureUtil.Placeholder ? arg.toString() : AdventureUtil.miniMessage().escapeTags(arg.toString());
+                return AdventureUtil.minifyLegacy(str);
+            });
         } else {
             processedArgs = objects;
         }
@@ -173,7 +176,7 @@ public class I18n implements net.ess3.api.II18n {
         return messageFormat.format(processedArgs).replace(' ', ' '); // replace nbsp with a space
     }
 
-    public static Object[] mutateArgs(final Object[] objects, final Function<String, String> mutator) {
+    public static Object[] mutateArgs(final Object[] objects, final Function<Object, String> mutator) {
         final Object[] args = new Object[objects.length];
         for (int i = 0; i < objects.length; i++) {
             final Object object = objects[i];
@@ -182,6 +185,7 @@ public class I18n implements net.ess3.api.II18n {
                 args[i] = object;
                 continue;
             }
+
             args[i] = mutator.apply(object.toString());
         }
         return args;

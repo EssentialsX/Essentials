@@ -86,10 +86,27 @@ public final class AdventureUtil {
         return COLORS[index];
     }
 
+    public static Placeholder parsed(final String literal) {
+        return new Placeholder(literal);
+    }
+
     public static Tag supplyTag(final boolean primary) {
         if (primary) {
             return ess != null ? ess.getSettings().getPrimaryColor() : Tag.styling(NamedTextColor.GOLD);
         }
         return ess != null ? ess.getSettings().getSecondaryColor() : Tag.styling(NamedTextColor.RED);
+    }
+
+    public static class Placeholder {
+        private final String value;
+
+        public Placeholder(String value) {
+            this.value = value;
+        }
+
+        @Override
+        public String toString() {
+            return value;
+        }
     }
 }
