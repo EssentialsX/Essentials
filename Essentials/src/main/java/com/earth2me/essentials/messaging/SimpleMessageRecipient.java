@@ -3,6 +3,7 @@ package com.earth2me.essentials.messaging;
 import com.earth2me.essentials.IEssentials;
 import com.earth2me.essentials.IUser;
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.utils.AdventureUtil;
 import net.ess3.api.events.PrivateMessagePreSendEvent;
 import net.ess3.api.events.PrivateMessageSentEvent;
 import org.bukkit.entity.Player;
@@ -110,7 +111,7 @@ public class SimpleMessageRecipient implements IMessageRecipient {
                 }
                 // fall through
             default:
-                sendMessage(tlLiteral("msgFormat", tlSender("meSender"), recipient.getDisplayName(), message));
+                sendMessage(tlLiteral("msgFormat", AdventureUtil.parsed(tlSender("meSender")), recipient.getDisplayName(), message));
 
                 // Better Social Spy
                 if (ess.getSettings().isSocialSpyMessages()) {

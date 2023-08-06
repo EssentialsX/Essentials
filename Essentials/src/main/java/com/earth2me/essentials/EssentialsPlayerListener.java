@@ -6,6 +6,7 @@ import com.earth2me.essentials.textreader.IText;
 import com.earth2me.essentials.textreader.KeywordReplacer;
 import com.earth2me.essentials.textreader.TextInput;
 import com.earth2me.essentials.textreader.TextPager;
+import com.earth2me.essentials.utils.AdventureUtil;
 import com.earth2me.essentials.utils.DateUtil;
 import com.earth2me.essentials.utils.FormatUtil;
 import com.earth2me.essentials.utils.LocationUtil;
@@ -18,6 +19,7 @@ import net.ess3.provider.CommandSendListenerProvider;
 import net.ess3.provider.providers.BukkitCommandSendListenerProvider;
 import net.ess3.provider.providers.PaperCommandSendListenerProvider;
 import net.essentialsx.api.v2.events.AsyncUserDataLoadEvent;
+import net.kyori.adventure.text.Component;
 import org.bukkit.BanEntry;
 import org.bukkit.BanList;
 import org.bukkit.GameMode;
@@ -440,8 +442,8 @@ public class EssentialsPlayerListener implements Listener, FakeAccessor {
 
                 if (user.isAuthorized("essentials.updatecheck")) {
                     ess.runTaskAsynchronously(() -> {
-                        for (String str : ess.getUpdateChecker().getVersionMessages(false, false, user.getSource())) {
-                            user.sendMessage(str);
+                        for (final Component component : ess.getUpdateChecker().getVersionMessages(false, false, user.getSource())) {
+                            user.sendComponent(component);
                         }
                     });
                 }
@@ -452,7 +454,7 @@ public class EssentialsPlayerListener implements Listener, FakeAccessor {
                         user.getBase().setAllowFlight(true);
                         user.getBase().setFlying(true);
                         if (ess.getSettings().isSendFlyEnableOnJoin()) {
-                            user.sendTl("flyMode", user.playerTl("enabled"), user.getDisplayName());
+                            user.sendTl("flyMode", AdventureUtil.parsed(user.playerTl("enabled")), user.getDisplayName());
                         }
                     }
                 }

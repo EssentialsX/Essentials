@@ -3,6 +3,7 @@ package com.earth2me.essentials.commands;
 import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.craftbukkit.SetExpFix;
+import com.earth2me.essentials.utils.AdventureUtil;
 import com.earth2me.essentials.utils.DateUtil;
 import com.earth2me.essentials.utils.EnumUtil;
 import com.earth2me.essentials.utils.NumberUtil;
@@ -51,22 +52,22 @@ public class Commandwhois extends EssentialsCommand {
             sender.sendTl("whoisGeoLocation", location);
         }
         sender.sendTl("whoisGamemode", sender.tl(user.getBase().getGameMode().toString().toLowerCase(Locale.ENGLISH)));
-        sender.sendTl("whoisGod", user.isGodModeEnabled() ? sender.tl("true") : sender.tl("false"));
-        sender.sendTl("whoisOp", user.getBase().isOp() ? sender.tl("true") : sender.tl("false"));
-        sender.sendTl("whoisFly", user.getBase().getAllowFlight() ? sender.tl("true") : sender.tl("false"), user.getBase().isFlying() ? sender.tl("flying") : sender.tl("notFlying"));
+        sender.sendTl("whoisGod", AdventureUtil.parsed(user.isGodModeEnabled() ? sender.tl("true") : sender.tl("false")));
+        sender.sendTl("whoisOp", AdventureUtil.parsed(user.getBase().isOp() ? sender.tl("true") : sender.tl("false")));
+        sender.sendTl("whoisFly", AdventureUtil.parsed(user.getBase().getAllowFlight() ? sender.tl("true") : sender.tl("false")), AdventureUtil.parsed(user.getBase().isFlying() ? sender.tl("flying") : sender.tl("notFlying")));
         sender.sendTl("whoisSpeed", user.getBase().isFlying() ? user.getBase().getFlySpeed() : user.getBase().getWalkSpeed());
         if (user.isAfk()) {
-            sender.sendTl("whoisAFKSince", sender.tl("true"), DateUtil.formatDateDiff(user.getAfkSince()));
+            sender.sendTl("whoisAFKSince", AdventureUtil.parsed(sender.tl("true")), DateUtil.formatDateDiff(user.getAfkSince()));
         } else {
-            sender.sendTl("whoisAFK", sender.tl("false"));
+            sender.sendTl("whoisAFK", AdventureUtil.parsed(sender.tl("false")));
         }
-        sender.sendTl("whoisJail", user.isJailed() ? user.getJailTimeout() > 0 ? user.getFormattedJailTime() : sender.tl("true") : sender.tl("false"));
+        sender.sendTl("whoisJail", AdventureUtil.parsed(user.isJailed() ? user.getJailTimeout() > 0 ? user.getFormattedJailTime() : sender.tl("true") : sender.tl("false")));
 
         final long muteTimeout = user.getMuteTimeout();
         if (!user.hasMuteReason()) {
-            sender.sendTl("whoisMuted", user.isMuted() ? muteTimeout > 0 ? DateUtil.formatDateDiff(muteTimeout) : sender.tl("true") : sender.tl("false"));
+            sender.sendTl("whoisMuted", AdventureUtil.parsed(user.isMuted() ? muteTimeout > 0 ? DateUtil.formatDateDiff(muteTimeout) : sender.tl("true") : sender.tl("false")));
         } else {
-            sender.sendTl("whoisMutedReason", user.isMuted() ? muteTimeout > 0 ? DateUtil.formatDateDiff(muteTimeout) : sender.tl("true") : sender.tl("false"),
+            sender.sendTl("whoisMutedReason", AdventureUtil.parsed(user.isMuted() ? muteTimeout > 0 ? DateUtil.formatDateDiff(muteTimeout) : sender.tl("true") : sender.tl("false")),
                 user.getMuteReason());
         }
     }

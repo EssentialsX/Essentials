@@ -5,6 +5,7 @@ import com.earth2me.essentials.Essentials;
 import com.earth2me.essentials.Trade;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.chat.EssentialsChat;
+import com.earth2me.essentials.utils.AdventureUtil;
 import com.earth2me.essentials.utils.FormatUtil;
 import net.ess3.api.events.LocalChatSpyEvent;
 import net.essentialsx.api.v2.ChatType;
@@ -109,9 +110,9 @@ public abstract class AbstractChatHandler {
             }
 
             if (chat.getType() == ChatType.UNKNOWN) {
-                format = tlLiteral("chatTypeLocal").concat(format);
+                format = AdventureUtil.miniToLegacy(tlLiteral("chatTypeLocal")).concat(format);
             } else {
-                format = tlLiteral(chat.getType().key() + "Format", format);
+                format = AdventureUtil.miniToLegacy(tlLiteral(chat.getType().key() + "Format", format));
             }
         }
 
@@ -216,7 +217,7 @@ public abstract class AbstractChatHandler {
         }
 
         // Strip local chat prefix to preserve API behaviour
-        final String localPrefix = tlLiteral("chatTypeLocal");
+        final String localPrefix = AdventureUtil.miniToLegacy(tlLiteral("chatTypeLocal"));
         String baseFormat = event.getFormat();
         if (event.getFormat().startsWith(localPrefix)) {
             baseFormat = baseFormat.substring(localPrefix.length());

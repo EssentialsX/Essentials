@@ -5,6 +5,7 @@ import com.earth2me.essentials.Essentials;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
+import net.kyori.adventure.text.Component;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -205,56 +206,56 @@ public final class UpdateChecker {
         }
     }
 
-    public String[] getVersionMessages(final boolean sendLatestMessage, final boolean verboseErrors, final CommandSource source) {
+    public Component[] getVersionMessages(final boolean sendLatestMessage, final boolean verboseErrors, final CommandSource source) {
         if (!ess.getSettings().isUpdateCheckEnabled()) {
-            return new String[] {source.tl("versionCheckDisabled")};
+            return new Component[] {source.tlComponent("versionCheckDisabled")};
         }
 
         if (this.isDevBuild()) {
             final RemoteVersion latestDev = this.fetchLatestDev().join();
             switch (latestDev.getBranchStatus()) {
                 case IDENTICAL: {
-                    return sendLatestMessage ? new String[] {source.tl("versionDevLatest")} : new String[] {};
+                    return sendLatestMessage ? new Component[] {source.tlComponent("versionDevLatest")} : new Component[] {};
                 }
                 case BEHIND: {
-                    return new String[] {source.tl("versionDevBehind", latestDev.getDistance()),
-                            source.tl("versionReleaseNewLink", "https://essentialsx.net/downloads.html")};
+                    return new Component[] {source.tlComponent("versionDevBehind", latestDev.getDistance()),
+                            source.tlComponent("versionReleaseNewLink", "https://essentialsx.net/downloads.html")};
                 }
                 case AHEAD:
                 case DIVERGED: {
-                    return new String[] {source.tl(latestDev.getDistance() == 0 ? "versionDevDivergedLatest" : "versionDevDiverged", latestDev.getDistance()),
-                            source.tl("versionDevDivergedBranch", this.getVersionBranch()) };
+                    return new Component[] {source.tlComponent(latestDev.getDistance() == 0 ? "versionDevDivergedLatest" : "versionDevDiverged", latestDev.getDistance()),
+                            source.tlComponent("versionDevDivergedBranch", this.getVersionBranch()) };
                 }
                 case UNKNOWN: {
-                    return verboseErrors ? new String[] {source.tl("versionCustom", this.getBuildInfo())} : new String[] {};
+                    return verboseErrors ? new Component[] {source.tlComponent("versionCustom", this.getBuildInfo())} : new Component[] {};
                 }
                 case ERROR: {
-                    return new String[] {source.tl(verboseErrors ? "versionError" : "versionErrorPlayer", this.getBuildInfo())};
+                    return new Component[] {source.tlComponent(verboseErrors ? "versionError" : "versionErrorPlayer", this.getBuildInfo())};
                 }
                 default: {
-                    return new String[] {};
+                    return new Component[] {};
                 }
             }
         } else {
             final RemoteVersion latestRelease = this.fetchLatestRelease().join();
             switch (latestRelease.getBranchStatus()) {
                 case IDENTICAL: {
-                    return sendLatestMessage ? new String[] {source.tl("versionReleaseLatest")} : new String[] {};
+                    return sendLatestMessage ? new Component[] {source.tlComponent("versionReleaseLatest")} : new Component[] {};
                 }
                 case BEHIND: {
-                    return new String[] {source.tl("versionReleaseNew", this.getLatestRelease()),
-                            source.tl("versionReleaseNewLink", "https://essentialsx.net/downloads.html?branch=stable")};
+                    return new Component[] {source.tlComponent("versionReleaseNew", this.getLatestRelease()),
+                            source.tlComponent("versionReleaseNewLink", "https://essentialsx.net/downloads.html?branch=stable")};
                 }
                 case DIVERGED: //WhatChamp
                 case AHEAD: //monkaW?
                 case UNKNOWN: {
-                    return verboseErrors ? new String[] {source.tl("versionCustom", this.getBuildInfo())} : new String[] {};
+                    return verboseErrors ? new Component[] {source.tlComponent("versionCustom", this.getBuildInfo())} : new Component[] {};
                 }
                 case ERROR: {
-                    return new String[] {source.tl(verboseErrors ? "versionError" : "versionErrorPlayer", this.getBuildInfo())};
+                    return new Component[] {source.tlComponent(verboseErrors ? "versionError" : "versionErrorPlayer", this.getBuildInfo())};
                 }
                 default: {
-                    return new String[] {};
+                    return new Component[] {};
                 }
             }
         }

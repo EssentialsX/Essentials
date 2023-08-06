@@ -55,6 +55,14 @@ public final class AdventureUtil {
         return LEGACY_SERIALIZER.deserialize(text);
     }
 
+    public static String serializeLegacy(final Component component) {
+        return LEGACY_SERIALIZER.serialize(component);
+    }
+
+    public static String miniToLegacy(final String format) {
+        return serializeLegacy(miniMessage().deserialize(format));
+    }
+
     public static String minifyLegacy(String text) {
         StringBuffer buffer = new StringBuffer();
         Matcher matcher = HEX_PATTERN.matcher(text);

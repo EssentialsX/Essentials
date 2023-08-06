@@ -180,7 +180,7 @@ public class I18n implements net.ess3.api.II18n {
                 continue;
             }
 
-            args[i] = mutator.apply(object.toString());
+            args[i] = mutator.apply(object);
         }
         return args;
     }

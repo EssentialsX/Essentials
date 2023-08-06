@@ -21,6 +21,7 @@ import com.google.gson.JsonNull;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 import net.ess3.api.TranslatableException;
+import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -834,8 +835,8 @@ public class Commandessentials extends EssentialsCommand {
 
         sender.sendTl("versionFetching");
         ess.runTaskAsynchronously(() -> {
-            for (String str : ess.getUpdateChecker().getVersionMessages(true, true, sender)) {
-                sender.sendMessage(str);
+            for (final Component component : ess.getUpdateChecker().getVersionMessages(true, true, sender)) {
+                sender.sendComponent(component);
             }
         });
     }
