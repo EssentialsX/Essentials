@@ -1018,7 +1018,7 @@ public class EssentialsUpgrade {
                             properties.setProperty(key, value.substring(AdventureUtil.MINI_MESSAGE_PREFIX.length()));
                             continue;
                         }
-                        properties.setProperty(key, AdventureUtil.minifyLegacy(AdventureUtil.miniMessage().escapeTags(value.replace('§', AdventureUtil.KEZZ_MAGIC_CHAR))));
+                        properties.setProperty(key, AdventureUtil.minifyLegacy(AdventureUtil.miniMessage().escapeTags(value)));
                     }
                     properties.store(Files.newWriter(file, Charsets.UTF_8), null);
                 }
