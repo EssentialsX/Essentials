@@ -837,6 +837,12 @@ pay-excludes-ignore-list: false
 # NOTE: After reloading the config, you must also run '/baltop force' for this to appear
 show-zero-baltop: true
 
+# Requirements which must be met by the player to get their name shown in the balance top list.
+# Playtime is in seconds.
+baltop-requirements:
+  minimum-balance: 0
+  minimum-playtime: 0
+
 # The format of currency, excluding symbols. See currency-symbol-format-locale for symbol configuration.
 #
 # "#,##0.00" is how the majority of countries display currency.

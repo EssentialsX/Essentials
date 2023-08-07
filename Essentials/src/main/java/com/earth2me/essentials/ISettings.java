@@ -406,6 +406,10 @@ public interface ISettings extends IConf {
 
     boolean showZeroBaltop();
 
+    BigDecimal getBaltopMinBalance();
+
+    long getBaltopMinPlaytime();
+
     enum KeepInvPolicy {
         KEEP,
         DELETE,

@@ -1943,4 +1943,14 @@ public class Settings implements net.ess3.api.ISettings {
     public boolean showZeroBaltop() {
         return config.getBoolean("show-zero-baltop", true);
     }
+    
+    @Override
+    public BigDecimal getBaltopMinBalance() {
+        return config.getBigDecimal("baltop-requirements.minimum-balance", BigDecimal.ZERO);
+    }
+
+    @Override
+    public long getBaltopMinPlaytime() {
+        return config.getLong("baltop-requirements.minimum-playtime", 0);
+    }
 }
