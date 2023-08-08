@@ -397,5 +397,3 @@ public class Commandmail extends EssentialsCommand {
         }
     }
 }
-
-
