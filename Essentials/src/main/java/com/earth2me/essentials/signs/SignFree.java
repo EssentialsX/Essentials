@@ -31,8 +31,8 @@ public class SignFree extends EssentialsSign {
     @Override
     protected boolean onSignInteract(final ISign sign, final User player, final String username, final IEssentials ess) throws SignException {
         ItemStack itemStack = getItemStack(sign.getLine(1), 1, ess);
-        itemStack = getItemMeta(itemStack, sign.getLine(2), ess);
-        final ItemStack item = getItemMeta(itemStack, sign.getLine(3), ess);
+        itemStack = getItemMeta(player.getSource(), itemStack, sign.getLine(2), ess);
+        final ItemStack item = getItemMeta(player.getSource(), itemStack, sign.getLine(3), ess);
 
         if (item.getType() == Material.AIR) {
             throw new SignException(tl("cantSpawnItem", "Air"));
