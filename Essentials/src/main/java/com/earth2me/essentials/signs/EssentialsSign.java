@@ -46,7 +46,7 @@ public class EssentialsSign {
         if (MaterialUtil.isSignPost(sign.getType()) && isValidSign(new BlockSign(sign))) {
             return true;
         }
-        final BlockFace[] directions = new BlockFace[]{BlockFace.NORTH, BlockFace.EAST, BlockFace.SOUTH, BlockFace.WEST};
+        final BlockFace[] directions = new BlockFace[] {BlockFace.NORTH, BlockFace.EAST, BlockFace.SOUTH, BlockFace.WEST};
         for (final BlockFace blockFace : directions) {
             final Block signBlock = block.getRelative(blockFace);
             if (MaterialUtil.isWallSign(signBlock.getType()) || MaterialUtil.isWallHangingSign(signBlock.getType())) {
