@@ -10,7 +10,6 @@ import com.earth2me.essentials.utils.NumberUtil;
 import com.earth2me.essentials.utils.VersionUtil;
 import com.google.common.base.Joiner;
 import net.ess3.api.IEssentials;
-import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.DyeColor;
 import org.bukkit.FireworkEffect;
@@ -232,7 +231,7 @@ public class MetaItemStack {
             if (stack.getType() == WRITTEN_BOOK) {
                 if (!meta.hasAuthor()) {
                     // The sender can be null when this method is called from {@link  com.earth2me.essentials.signs.EssentialsSign#getItemMeta(ItemStack, String, IEssentials)}
-                    meta.setAuthor(sender == null ? Bukkit.getConsoleSender().getName() : sender.getPlayer().getName());
+                    meta.setAuthor(sender == null ? Console.getInstance().getDisplayName() : sender.getPlayer().getName());
                 }
                 if (!meta.hasTitle()) {
                     final String title = FormatUtil.replaceFormat(split[1].replace('_', ' '));
