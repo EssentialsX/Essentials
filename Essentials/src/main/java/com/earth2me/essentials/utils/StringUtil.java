@@ -1,8 +1,12 @@
 package com.earth2me.essentials.utils;
 
+import com.google.common.primitives.Chars;
+
 import java.util.Collection;
+import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
+import java.util.function.Function;
 import java.util.regex.Pattern;
 
 public final class StringUtil {
@@ -21,6 +25,9 @@ public final class StringUtil {
 
     //Used to clean strings/names before saving as filenames/permissions
     public static String safeString(final String string) {
+        if (string == null) {
+            return null;
+        }
         return STRICTINVALIDCHARS.matcher(string.toLowerCase(Locale.ENGLISH)).replaceAll("_");
     }
 
@@ -84,5 +91,50 @@ public final class StringUtil {
         }
 
         return null;
+    }
+
+    public static String abbreviate(final String input, final int length) {
+        if (input == null) return null;
+        if (length < 4) throw new IllegalArgumentException("Invalid length " + length);
+
+        if (input.length() <= length) return input;
+        return input.substring(0, length - 3) + "...";
+    }
+
+    // Replacement for org.apache.commons.lang3.StringUtils.stripToNull(String)
+    public static String stripToNull(final String input) {
+        if (input == null) return null;
+
+        final String result = strip(input);
+        return result.isEmpty() ? null : result;
+    }
+
+    // Replacement for org.apache.commons.lang3.StringUtils.strip(String)
+    public static String strip(final String input) {
+        return strip(input, Character::isWhitespace);
+    }
+
+    // Replacement for org.apache.commons.lang3.StringUtils.strip(String, String)
+    public static String strip(final String input, final String stripChars) {
+        if (stripChars == null) return strip(input);
+        final List<Character> toStrip = Chars.asList(stripChars.toCharArray());
+        return strip(input, toStrip::contains);
+    }
+
+    public static String strip(final String input, Function<Character, Boolean> shouldStrip) {
+        if (input == null) return null;
+
+        int startIndex = 0;
+        int endIndex = input.length();
+
+        for (; startIndex < endIndex; startIndex++) {
+            if (!shouldStrip.apply(input.charAt(startIndex))) break;
+        }
+
+        for (; endIndex > startIndex; endIndex--) {
+            if (!shouldStrip.apply(input.charAt(endIndex - 1))) break;
+        }
+
+        return input.substring(startIndex, endIndex);
     }
 }

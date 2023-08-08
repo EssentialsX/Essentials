@@ -53,6 +53,10 @@ commands:
     description: Allows reopening and editing of sealed books.
     usage: /<command> [title|author [name]]
     aliases: [ebook]
+  bottom:
+    description: Teleport to the lowest block at your current position.
+    usage: /<command>
+    aliases: [ ebottom ]
   break:
     description: Breaks the block you are looking at.
     usage: /<command>
@@ -286,7 +290,7 @@ commands:
     aliases: [eloom]
   mail:
     description: Manages inter-player, intra-server mail.
-    usage: /<command> [read|clear|clear [number]|send [to] [message]|sendtemp [to] [expire time] [message]|sendall [message]]
+    usage: /<command> [read|clear|clear [number]|clear <player> [number]|send [to] [message]|sendtemp [to] [expire time] [message]|sendall [message]]
     aliases: [email,eemail,memo,ememo]
   me:
     description: Describes an action in the context of the player.
@@ -388,6 +392,10 @@ commands:
     description: Removes entities in your world.
     usage: /<command> <all|tamed|named|drops|arrows|boats|minecarts|xp|paintings|itemframes|endercrystals|monsters|animals|ambient|mobs|[mobType]> [radius|world]
     aliases: [eremove,butcher,ebutcher,killall,ekillall,mobkill,emobkill]
+  renamehome:
+    description: Renames a home.
+    usage: /<command> <[player:]name> <new name>
+    aliases: [erenamehome]
   repair:
     description: Repairs the durability of one or all items.
     usage: /<command> [hand|all]
@@ -705,3 +713,6 @@ permissions:
       essentials.sudo.exempt: true
       essentials.tempban.exempt: true
       essentials.exempt.protect: true
+  essentials.nick.hideprefix:
+    default: false
+    description: Players with this permission will not have the nickname prefix applied to them

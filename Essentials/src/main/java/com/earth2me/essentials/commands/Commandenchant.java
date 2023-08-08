@@ -3,7 +3,6 @@ package com.earth2me.essentials.commands;
 import com.earth2me.essentials.Enchantments;
 import com.earth2me.essentials.MetaItemStack;
 import com.earth2me.essentials.User;
-import com.earth2me.essentials.craftbukkit.InventoryWorkaround;
 import com.earth2me.essentials.utils.StringUtil;
 import com.google.common.collect.Lists;
 import org.bukkit.Material;
@@ -57,7 +56,7 @@ public class Commandenchant extends EssentialsCommand {
         final MetaItemStack metaStack = new MetaItemStack(stack);
         final Enchantment enchantment = metaStack.getEnchantment(user, args[0]);
         metaStack.addEnchantment(user.getSource(), ess.getSettings().allowUnsafeEnchantments() && user.isAuthorized("essentials.enchantments.allowunsafe"), enchantment, level);
-        InventoryWorkaround.setItemInMainHand(user.getBase(), metaStack.getItemStack());
+        stack.setItemMeta(metaStack.getItemStack().getItemMeta());
         user.getBase().updateInventory();
         final String enchantName = enchantment.getName().toLowerCase(Locale.ENGLISH).replace('_', ' ');
         if (level == 0) {

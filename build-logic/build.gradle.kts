@@ -7,7 +7,7 @@ repositories {
 }
 
 dependencies {
-    implementation("net.kyori", "indra-common", "2.0.6")
-    implementation("gradle.plugin.com.github.jengelman.gradle.plugins", "shadow", "7.0.0")
-    implementation("xyz.jpenilla", "run-paper", "1.0.4")
+    implementation("net.kyori", "indra-common", "3.1.1")
+    implementation("com.github.johnrengelman", "shadow", "8.1.1")
+    implementation("xyz.jpenilla", "run-task", "2.1.0")
 }

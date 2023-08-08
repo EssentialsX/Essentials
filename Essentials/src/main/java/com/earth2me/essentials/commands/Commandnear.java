@@ -3,7 +3,6 @@ package com.earth2me.essentials.commands;
 import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.User;
 import com.google.common.collect.Lists;
-import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Server;
 import org.bukkit.World;
@@ -88,7 +87,7 @@ public class Commandnear extends EssentialsCommand {
         final Queue<User> nearbyPlayers = new PriorityQueue<>((o1, o2) -> (int) (o1.getLocation().distanceSquared(loc) - o2.getLocation().distanceSquared(loc)));
 
         for (final User player : ess.getOnlineUsers()) {
-            if (!player.equals(user) && !player.isAuthorized("essentials.near.exclude") && (!player.isHidden(user.getBase()) || showHidden || user.getBase().canSee(player.getBase()))) {
+            if (!player.equals(user) && !player.isAuthorized("essentials.near.exclude") && (!player.isHidden(user.getBase()) || showHidden || !player.isHiddenFrom(user.getBase()))) {
                 final Location playerLoc = player.getLocation();
                 if (playerLoc.getWorld() != world) {
                     continue;
@@ -109,7 +108,7 @@ public class Commandnear extends EssentialsCommand {
             if (nearbyPlayer == null) {
                 continue;
             }
-            output.append(nearbyPlayer.getDisplayName()).append(ChatColor.WHITE + "(" + ChatColor.RED).append((long) nearbyPlayer.getLocation().distance(loc)).append("m" + ChatColor.WHITE + ")");
+            output.append(tl("nearbyPlayersList", nearbyPlayer.getDisplayName(), (long)nearbyPlayer.getLocation().distance(loc)));
         }
 
         return output.length() > 1 ? output.toString() : tl("none");

@@ -32,7 +32,7 @@ public class Commandbigtree extends EssentialsCommand {
             throw new NotEnoughArgumentsException();
         }
 
-        final Location loc = LocationUtil.getTarget(user.getBase()).add(0, 1, 0);
+        final Location loc = LocationUtil.getTarget(user.getBase(), ess.getSettings().getMaxTreeCommandRange()).add(0, 1, 0);
         if (loc.getBlock().getType().isSolid()) {
             throw new Exception(tl("bigTreeFailure"));
         }

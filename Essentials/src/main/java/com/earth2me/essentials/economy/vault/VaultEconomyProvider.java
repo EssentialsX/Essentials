@@ -1,6 +1,7 @@
 package com.earth2me.essentials.economy.vault;
 
 import com.earth2me.essentials.Essentials;
+import com.earth2me.essentials.OfflinePlayerStub;
 import com.earth2me.essentials.api.NoLoanPermittedException;
 import com.earth2me.essentials.api.UserDoesNotExistException;
 import com.earth2me.essentials.config.EssentialsUserConfiguration;
@@ -11,6 +12,7 @@ import net.ess3.api.MaxMoneyException;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.economy.EconomyResponse;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.entity.Player;
 
 import java.io.File;
 import java.math.BigDecimal;
@@ -19,7 +21,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * A goddamn Vault adapter, what more do you want?
@@ -29,7 +30,6 @@ import java.util.logging.Logger;
  * {@link com.earth2me.essentials.User}.
  */
 public class VaultEconomyProvider implements Economy {
-    private static final Logger LOGGER = Logger.getLogger("Essentials");
     private static final String WARN_NPC_RECREATE_1 = "Account creation was requested for NPC user {0}, but an account file with UUID {1} already exists.";
     private static final String WARN_NPC_RECREATE_2 = "Essentials will create a new account as requested by the other plugin, but this is almost certainly a bug and should be reported.";
 
@@ -301,8 +301,8 @@ public class VaultEconomyProvider implements Economy {
             }
             final File npcFile = new File(folder, player.getUniqueId() + ".yml");
             if (npcFile.exists()) {
-                LOGGER.log(Level.SEVERE, MessageFormat.format(WARN_NPC_RECREATE_1, player.getName(), player.getUniqueId().toString()), new RuntimeException());
-                LOGGER.log(Level.SEVERE, WARN_NPC_RECREATE_2);
+                ess.getLogger().log(Level.SEVERE, MessageFormat.format(WARN_NPC_RECREATE_1, player.getName(), player.getUniqueId().toString()), new RuntimeException());
+                ess.getLogger().log(Level.SEVERE, WARN_NPC_RECREATE_2);
             }
             final EssentialsUserConfiguration npcConfig = new EssentialsUserConfiguration(player.getName(), player.getUniqueId(), npcFile);
             npcConfig.load();
@@ -310,21 +310,27 @@ public class VaultEconomyProvider implements Economy {
             npcConfig.setProperty("last-account-name", player.getName());
             npcConfig.setProperty("money", ess.getSettings().getStartingBalance());
             npcConfig.blockingSave();
-            ess.getUserMap().trackUUID(player.getUniqueId(), player.getName(), false);
+            // This will load the NPC into the UserMap + UUID cache
+            ess.getUsers().addCachedNpcName(player.getUniqueId(), player.getName());
+            ess.getUsers().getUser(player.getUniqueId());
             return true;
         }
 
         // Loading a v4 UUID that we somehow didn't track, mark it as a normal player and hope for the best, vault sucks :/
-        try {
-            if (ess.getSettings().isDebug()) {
-                LOGGER.info("Vault requested a player account creation for a v4 UUID: " + player);
-            }
-            ess.getUserMap().load(player);
-            return true;
-        } catch (UserDoesNotExistException e) {
-            e.printStackTrace();
-            return false;
+        if (ess.getSettings().isDebug()) {
+            ess.getLogger().info("Vault requested a player account creation for a v4 UUID: " + player);
         }
+
+        final Player userPlayer;
+        if (player instanceof Player) {
+            userPlayer = (Player) player;
+        } else {
+            final OfflinePlayerStub essPlayer = new OfflinePlayerStub(player.getUniqueId(), ess.getServer());
+            essPlayer.setName(player.getName());
+            userPlayer = essPlayer;
+        }
+        ess.getUsers().getUser(userPlayer);
+        return true;
     }
 
     @Override

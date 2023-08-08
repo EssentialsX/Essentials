@@ -4,12 +4,14 @@ plugins {
 
 dependencies {
     compileOnly project(':EssentialsX')
-    implementation('net.dv8tion:JDA:4.4.0_350') {
+    implementation('net.dv8tion:JDA:5.0.0-beta.12') {
         exclude(module: 'opus-java')
     }
-    implementation 'com.vdurmont:emoji-java:5.1.1'
-    implementation 'club.minnced:discord-webhooks:0.7.2'
-    compileOnly 'org.apache.logging.log4j:log4j-core:2.15.0'
+    implementation 'com.github.MinnDevelopment:emoji-java:v6.1.0'
+    implementation('club.minnced:discord-webhooks:0.8.2') {
+        exclude(module: 'okhttp')
+    }
+    compileOnly 'org.apache.logging.log4j:log4j-core:2.17.1'
     compileOnly 'me.clip:placeholderapi:2.10.9'
 }
 
@@ -20,15 +22,17 @@ shadowJar {
         include(dependency('com.neovisionaries:nv-websocket-client'))
         include(dependency('com.squareup.okhttp3:okhttp'))
         include(dependency('com.squareup.okio:okio'))
+        include(dependency('com.squareup.okio:okio-jvm'))
         include(dependency('org.apache.commons:commons-collections4'))
         include(dependency('net.sf.trove4j:trove4j'))
         include(dependency('com.fasterxml.jackson.core:jackson-databind'))
         include(dependency('com.fasterxml.jackson.core:jackson-core'))
         include(dependency('com.fasterxml.jackson.core:jackson-annotations'))
         include(dependency('org.slf4j:slf4j-api'))
+        include(dependency('org.jetbrains.kotlin:kotlin-stdlib'))
 
         // Emoji
-        include(dependency('com.vdurmont:emoji-java'))
+        include(dependency('com.github.MinnDevelopment:emoji-java'))
         include(dependency('org.json:json'))
 
         // discord-webhooks
@@ -47,6 +51,7 @@ shadowJar {
     relocate 'com.fasterxml.jackson.core', 'net.essentialsx.dep.com.fasterxml.jackson.core'
     relocate 'com.fasterxml.jackson.annotation', 'net.essentialsx.dep.com.fasterxml.jackson.annotation'
     relocate 'gnu.trove', 'net.essentialsx.dep.gnu.trove'
+    relocate 'kotlin', 'net.essentialsx.dep.garbage.kotlin'
 
     // Emoji
     relocate 'com.vdurmont.emoji', 'net.essentialsx.dep.com.vdurmont.emoji'

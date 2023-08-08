@@ -2,6 +2,7 @@ package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.CommandSource;
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.craftbukkit.Inventories;
 import com.earth2me.essentials.utils.StringUtil;
 import com.google.common.collect.Lists;
 import org.bukkit.Material;
@@ -22,7 +23,7 @@ public class Commandpowertool extends EssentialsCommand {
     @Override
     protected void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception {
         final String command = getFinalArg(args, 0);
-        final ItemStack itemStack = user.getBase().getItemInHand();
+        final ItemStack itemStack = Inventories.getItemInHand(user.getBase());
         powertool(user.getSource(), user, itemStack, command);
     }
 
@@ -111,7 +112,7 @@ public class Commandpowertool extends EssentialsCommand {
             }
 
             try {
-                final ItemStack itemStack = user.getBase().getItemInHand();
+                final ItemStack itemStack = Inventories.getItemInHand(user.getBase());
                 final List<String> powertools = user.getPowertool(itemStack);
                 for (final String tool : powertools) {
                     options.add("r:" + tool);

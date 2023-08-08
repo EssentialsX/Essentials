@@ -21,8 +21,9 @@ public final class BanLookup {
     }
 
     public static BanEntry getBanEntry(final IEssentials ess, final String name) {
-        final Set<BanEntry> benteries = ess.getServer().getBanList(BanList.Type.NAME).getBanEntries();
-        for (final BanEntry banEnt : benteries) {
+        final Set benteries = ess.getServer().getBanList(BanList.Type.NAME).getBanEntries();
+        for (final Object ob : benteries) {
+            final BanEntry banEnt = (BanEntry) ob;
             if (banEnt.getTarget().equals(name)) {
                 return banEnt;
             }

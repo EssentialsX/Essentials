@@ -14,11 +14,23 @@ public class ReflServerStateProvider implements ServerStateProvider {
     public ReflServerStateProvider() {
         Object serverObject = null;
         MethodHandle isRunning = null;
+
+        final String MDFIVEMAGICLETTER;
+        if (ReflUtil.getNmsVersionObject().isHigherThanOrEqualTo(ReflUtil.V1_19_R2)) {
+            MDFIVEMAGICLETTER = "v";
+        } else if (ReflUtil.getNmsVersionObject().isHigherThanOrEqualTo(ReflUtil.V1_19_R1)) {
+            MDFIVEMAGICLETTER = "u";
+        } else if (ReflUtil.getNmsVersionObject().isHigherThanOrEqualTo(ReflUtil.V1_18_R1)) {
+            MDFIVEMAGICLETTER = "v";
+        } else {
+            MDFIVEMAGICLETTER = "isRunning";
+        }
+
         final Class<?> nmsClass = ReflUtil.getNMSClass("MinecraftServer");
         try {
             serverObject = nmsClass.getMethod("getServer").invoke(null);
             isRunning = MethodHandles.lookup().findVirtual(nmsClass,
-                    ReflUtil.getNmsVersionObject().isHigherThanOrEqualTo(ReflUtil.V1_18_R1) ? "v" : "isRunning", //TODO jmp said he may make this better
+                    MDFIVEMAGICLETTER, //TODO jmp said he may make this better
                     MethodType.methodType(boolean.class));
         } catch (final Exception e) {
             e.printStackTrace();

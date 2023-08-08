@@ -206,4 +206,8 @@ public class RandomTeleport implements IConf {
     private boolean isValidRandomLocation(final Location location) {
         return location.getBlockY() > ess.getWorldInfoProvider().getMinHeight(location.getWorld()) && !this.getExcludedBiomes().contains(location.getBlock().getBiome());
     }
+
+    public File getFile() {
+        return config.getFile();
+    }
 }

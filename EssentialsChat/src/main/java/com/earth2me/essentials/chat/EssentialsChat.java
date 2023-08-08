@@ -1,16 +1,15 @@
 package com.earth2me.essentials.chat;
 
+import com.earth2me.essentials.Essentials;
+import com.earth2me.essentials.EssentialsLogger;
+import com.earth2me.essentials.chat.processing.ChatHandler;
 import com.earth2me.essentials.metrics.MetricsWrapper;
 import net.ess3.api.IEssentials;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
-import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.logging.Level;
 
 import static com.earth2me.essentials.I18n.tl;
@@ -21,6 +20,7 @@ public class EssentialsChat extends JavaPlugin {
 
     @Override
     public void onEnable() {
+        EssentialsLogger.updatePluginLogger(this);
         final PluginManager pluginManager = getServer().getPluginManager();
         ess = (IEssentials) pluginManager.getPlugin("Essentials");
         if (!this.getDescription().getVersion().equals(ess.getDescription().getVersion())) {
@@ -31,14 +31,8 @@ public class EssentialsChat extends JavaPlugin {
             return;
         }
 
-        final Map<AsyncPlayerChatEvent, ChatStore> chatStore = Collections.synchronizedMap(new HashMap<>());
-
-        final EssentialsChatPlayerListenerLowest playerListenerLowest = new EssentialsChatPlayerListenerLowest(getServer(), ess, chatStore);
-        final EssentialsChatPlayerListenerNormal playerListenerNormal = new EssentialsChatPlayerListenerNormal(getServer(), ess, chatStore);
-        final EssentialsChatPlayerListenerHighest playerListenerHighest = new EssentialsChatPlayerListenerHighest(getServer(), ess, chatStore);
-        pluginManager.registerEvents(playerListenerLowest, this);
-        pluginManager.registerEvents(playerListenerNormal, this);
-        pluginManager.registerEvents(playerListenerHighest, this);
+        final ChatHandler legacyHandler = new ChatHandler((Essentials) ess, this);
+        legacyHandler.registerListeners();
 
         if (metrics == null) {
             metrics = new MetricsWrapper(this, 3814, false);

@@ -7,6 +7,7 @@ import com.earth2me.essentials.commands.IEssentialsCommand;
 import com.earth2me.essentials.commands.PlayerNotFoundException;
 import com.earth2me.essentials.perm.PermissionsHandler;
 import com.earth2me.essentials.updatecheck.UpdateChecker;
+import com.earth2me.essentials.userstorage.IUserMap;
 import net.ess3.nms.refl.providers.ReflOnlineModeProvider;
 import net.ess3.provider.ContainerProvider;
 import net.ess3.provider.FormattedCommandAliasProvider;
@@ -14,8 +15,9 @@ import net.ess3.provider.ItemUnbreakableProvider;
 import net.ess3.provider.KnownCommandsProvider;
 import net.ess3.provider.MaterialTagProvider;
 import net.ess3.provider.PersistentDataProvider;
-import net.ess3.provider.ServerStateProvider;
 import net.ess3.provider.SerializationProvider;
+import net.ess3.provider.ServerStateProvider;
+import net.ess3.provider.SignDataProvider;
 import net.ess3.provider.SpawnerBlockProvider;
 import net.ess3.provider.SpawnerItemProvider;
 import net.ess3.provider.SyncCommandsProvider;
@@ -108,8 +110,6 @@ public interface IEssentials extends Plugin {
 
     int scheduleSyncRepeatingTask(Runnable run, long delay, long period);
 
-    TNTExplodeListener getTNTListener();
-
     PermissionsHandler getPermissionsHandler();
 
     AlternativeCommandsHandler getAlternativeCommandsHandler();
@@ -118,6 +118,9 @@ public interface IEssentials extends Plugin {
 
     IItemDb getItemDb();
 
+    IUserMap getUsers();
+
+    @Deprecated
     UserMap getUserMap();
 
     BalanceTop getBalanceTop();
@@ -164,6 +167,8 @@ public interface IEssentials extends Plugin {
     ItemUnbreakableProvider getItemUnbreakableProvider();
 
     WorldInfoProvider getWorldInfoProvider();
+
+    SignDataProvider getSignDataProvider();
 
     PluginCommand getPluginCommand(String cmd);
 }

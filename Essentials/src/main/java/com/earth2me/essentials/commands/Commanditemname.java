@@ -1,6 +1,7 @@
 package com.earth2me.essentials.commands;
 
 import com.earth2me.essentials.User;
+import com.earth2me.essentials.craftbukkit.Inventories;
 import com.earth2me.essentials.utils.FormatUtil;
 import com.earth2me.essentials.utils.MaterialUtil;
 import com.earth2me.essentials.utils.TriState;
@@ -23,8 +24,8 @@ public class Commanditemname extends EssentialsCommand {
 
     @Override
     protected void run(final Server server, final User user, final String commandLabel, final String[] args) throws Exception {
-        final ItemStack item = user.getBase().getItemInHand();
-        if (MaterialUtil.isAir(item.getType())) {
+        final ItemStack item = Inventories.getItemInHand(user.getBase());
+        if (item == null || MaterialUtil.isAir(item.getType())) {
             user.sendMessage(tl("itemnameInvalidItem"));
             return;
         }
@@ -50,8 +51,8 @@ public class Commanditemname extends EssentialsCommand {
     @Override
     protected List<String> getTabCompleteOptions(Server server, User user, String commandLabel, String[] args) {
         if (args.length == 1) {
-            final ItemStack item = user.getBase().getItemInHand();
-            if (!MaterialUtil.isAir(item.getType()) && item.hasItemMeta() && item.getItemMeta().hasDisplayName()) {
+            final ItemStack item = Inventories.getItemInHand(user.getBase());
+            if (item != null && !MaterialUtil.isAir(item.getType()) && item.hasItemMeta() && item.getItemMeta().hasDisplayName()) {
                 return Lists.newArrayList(FormatUtil.unformatString(user, "essentials.itemname", item.getItemMeta().getDisplayName()));
             }
         }

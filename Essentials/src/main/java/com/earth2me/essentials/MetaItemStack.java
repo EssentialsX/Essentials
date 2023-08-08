@@ -194,23 +194,30 @@ public class MetaItemStack {
         final Material WRITTEN_BOOK = EnumUtil.getMaterial("WRITTEN_BOOK");
 
         if (split.length > 1 && split[0].equalsIgnoreCase("name") && hasMetaPermission(sender, "name", false, true, ess)) {
-            final String displayName = FormatUtil.replaceFormat(split[1].replace('_', ' '));
+            final String displayName = FormatUtil.replaceFormat(split[1].replaceAll("(?<!\\\\)_", " ").replace("\\_", "_"));
             final ItemMeta meta = stack.getItemMeta();
             meta.setDisplayName(displayName);
             stack.setItemMeta(meta);
         } else if (split.length > 1 && (split[0].equalsIgnoreCase("lore") || split[0].equalsIgnoreCase("desc")) && hasMetaPermission(sender, "lore", false, true, ess)) {
             final List<String> lore = new ArrayList<>();
             for (final String line : split[1].split("(?<!\\\\)\\|")) {
-                lore.add(FormatUtil.replaceFormat(line.replace('_', ' ').replace("\\|", "|")));
+                lore.add(FormatUtil.replaceFormat(line.replaceAll("(?<!\\\\)_", " ").replace("\\_", "_").replace("\\|", "|")));
             }
             final ItemMeta meta = stack.getItemMeta();
             meta.setLore(lore);
             stack.setItemMeta(meta);
+        } else if ((split[0].equalsIgnoreCase("custom-model-data") || split[0].equalsIgnoreCase("cmd")) && hasMetaPermission(sender, "custom-model-data", false, true, ess)) {
+            if (VersionUtil.getServerBukkitVersion().isHigherThanOrEqualTo(VersionUtil.v1_14_R01)) {
+                final int value = split.length <= 1 ? 0 : Integer.parseInt(split[1]);
+                final ItemMeta meta = stack.getItemMeta();
+                meta.setCustomModelData(value);
+                stack.setItemMeta(meta);
+            }
         } else if (split[0].equalsIgnoreCase("unbreakable") && hasMetaPermission(sender, "unbreakable", false, true, ess)) {
             final boolean value = split.length <= 1 || Boolean.parseBoolean(split[1]);
             setUnbreakable(ess, stack, value);
         } else if (split.length > 1 && (split[0].equalsIgnoreCase("player") || split[0].equalsIgnoreCase("owner")) && hasMetaPermission(sender, "head", false, true, ess)) {
-            if (MaterialUtil.isPlayerHead(stack.getType(), stack.getDurability())) {
+            if (MaterialUtil.isPlayerHead(stack)) {
                 final String owner = split[1];
                 setSkullOwner(ess, stack, owner);
             } else {
@@ -230,7 +237,7 @@ public class MetaItemStack {
             meta.setAuthor(author);
             stack.setItemMeta(meta);
         } else if (split.length > 1 && split[0].equalsIgnoreCase("title") && stack.getType() == WRITTEN_BOOK && hasMetaPermission(sender, "title", false, true, ess)) {
-            final String title = FormatUtil.replaceFormat(split[1].replace('_', ' '));
+            final String title = FormatUtil.replaceFormat(split[1].replaceAll("(?<!\\\\)_", " ").replace("\\_", "_"));
             final BookMeta meta = (BookMeta) stack.getItemMeta();
             meta.setTitle(title);
             stack.setItemMeta(meta);
@@ -240,7 +247,7 @@ public class MetaItemStack {
             final List<String> pages = meta.hasPages() ? new ArrayList<>(meta.getPages()) : new ArrayList<>();
             final List<String> lines = new ArrayList<>();
             for (final String line : split[1].split("(?<!\\\\)\\|")) {
-                lines.add(FormatUtil.replaceFormat(line.replace('_', ' ').replace("\\|", "|")));
+                lines.add(FormatUtil.replaceFormat(line.replaceAll("(?<!\\\\)_", " ").replace("\\_", "_").replace("\\|", "|")));
             }
             final String content = String.join("\n", lines);
             if (page >= pages.size()) {

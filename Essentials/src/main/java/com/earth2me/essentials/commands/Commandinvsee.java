@@ -8,6 +8,8 @@ import org.bukkit.inventory.Inventory;
 import java.util.Collections;
 import java.util.List;
 
+import static com.earth2me.essentials.I18n.tl;
+
 public class Commandinvsee extends EssentialsCommand {
     public Commandinvsee() {
         super("invsee");
@@ -21,6 +23,11 @@ public class Commandinvsee extends EssentialsCommand {
         }
 
         final User invUser = getPlayer(server, user, args, 0);
+        if (user == invUser) {
+            user.sendMessage(tl("invseeNoSelf"));
+            throw new NoChargeException();
+        }
+
         final Inventory inv;
 
         if (args.length > 1 && user.isAuthorized("essentials.invsee.equip")) {
@@ -40,7 +47,9 @@ public class Commandinvsee extends EssentialsCommand {
     @Override
     protected List<String> getTabCompleteOptions(final Server server, final User user, final String commandLabel, final String[] args) {
         if (args.length == 1) {
-            return getPlayers(server, user);
+            final List<String> suggestions = getPlayers(server, user);
+            suggestions.remove(user.getName());
+            return suggestions;
         } else {
             //if (args.length == 2) {
             //    return Lists.newArrayList("equipped");

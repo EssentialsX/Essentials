@@ -262,6 +262,16 @@ public class UserConfigHolder {
         this.lastAccountName = value;
     }
 
+    private @MonotonicNonNull String npcName;
+
+    public String npcName() {
+        return this.npcName;
+    }
+
+    public void npcName(final String value) {
+        this.npcName = value;
+    }
+
     private boolean powertoolsenabled = true;
 
     public boolean powerToolsEnabled() {
@@ -320,6 +330,30 @@ public class UserConfigHolder {
 
     public void baltopExempt(final boolean value) {
         this.baltopExempt = value;
+    }
+
+    private @MonotonicNonNull Boolean shouting;
+
+    public Boolean shouting() {
+        return shouting;
+    }
+
+    public void shouting(final Boolean value) {
+        this.shouting = value;
+    }
+
+    @DeleteOnEmpty
+    private @MonotonicNonNull List<String> pastUsernames;
+
+    public List<String> pastUsernames() {
+        if (this.pastUsernames == null) {
+            this.pastUsernames = new ArrayList<>();
+        }
+        return this.pastUsernames;
+    }
+
+    public void pastUsernames(List<String> value) {
+        this.pastUsernames = value;
     }
 
     private @NonNull Timestamps timestamps = new Timestamps();

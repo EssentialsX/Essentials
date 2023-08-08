@@ -8,6 +8,7 @@ import net.essentialsx.api.v2.services.discord.InteractionCommandArgumentType;
 import net.essentialsx.api.v2.services.discord.InteractionEvent;
 import net.essentialsx.discord.JDADiscordService;
 import net.essentialsx.discord.interactions.InteractionCommandImpl;
+import net.essentialsx.discord.util.MessageUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,6 +47,6 @@ public class ListCommand extends InteractionCommandImpl {
         for (final String str : output) {
             stringBuilder.append(str).append("\n");
         }
-        event.reply(stringBuilder.substring(0, stringBuilder.length() - 2));
+        event.reply(MessageUtil.sanitizeDiscordMarkdown(stringBuilder.substring(0, stringBuilder.length() - 2)));
     }
 }

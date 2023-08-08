@@ -33,12 +33,10 @@ import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import static com.earth2me.essentials.I18n.tl;
 
 public class EssentialsAntiBuildListener implements Listener {
-    private static final Logger logger = Logger.getLogger("EssentialsAntiBuild");
     final private transient IAntiBuild prot;
     final private transient IEssentials ess;
 
@@ -65,11 +63,27 @@ public class EssentialsAntiBuildListener implements Listener {
     private boolean metaPermCheck(final User user, final String action, final Block block) {
         if (block == null) {
             if (ess.getSettings().isDebug()) {
-                logger.log(Level.INFO, "AntiBuild permission check failed, invalid block.");
+                prot.getLogger().log(Level.INFO, "AntiBuild permission check failed, invalid block.");
             }
             return false;
         }
-        return metaPermCheck(user, action, block.getType(), block.getData());
+        if (VersionUtil.PRE_FLATTENING) {
+            return metaPermCheck(user, action, block.getType(), block.getData());
+        }
+        return metaPermCheck(user, action, block.getType());
+    }
+
+    private boolean metaPermCheck(final User user, final String action, final ItemStack item) {
+        if (item == null) {
+            if (ess.getSettings().isDebug()) {
+                prot.getLogger().log(Level.INFO, "AntiBuild permission check failed, invalid item.");
+            }
+            return false;
+        }
+        if (VersionUtil.PRE_FLATTENING) {
+            return metaPermCheck(user, action, item.getType(), item.getDurability());
+        }
+        return metaPermCheck(user, action, item.getType());
     }
 
     public boolean metaPermCheck(final User user, final String action, final Material material) {
@@ -81,12 +95,12 @@ public class EssentialsAntiBuildListener implements Listener {
         final String blockPerm = "essentials.build." + action + "." + material;
         final String dataPerm = blockPerm + ":" + data;
 
-        if (VersionUtil.getServerBukkitVersion().isLowerThan(VersionUtil.v1_13_0_R01)) {
+        if (VersionUtil.PRE_FLATTENING) {
             if (user.getBase().isPermissionSet(dataPerm)) {
                 return user.isAuthorized(dataPerm);
             } else {
                 if (ess.getSettings().isDebug()) {
-                    logger.log(Level.INFO, "DataValue perm on " + user.getName() + " is not directly set: " + dataPerm);
+                    prot.getLogger().log(Level.INFO, "DataValue perm on " + user.getName() + " is not directly set: " + dataPerm);
                 }
             }
         }
@@ -178,6 +192,10 @@ public class EssentialsAntiBuildListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void onItemFrameInteract(final PlayerInteractEntityEvent event) {
+        if (event.getPlayer().hasMetadata("NPC")) {
+            return;
+        }
+
         final User user = ess.getUser(event.getPlayer());
 
         if (!(event.getRightClicked() instanceof ItemFrame)) {
@@ -207,6 +225,10 @@ public class EssentialsAntiBuildListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void onArmorStandInteract(final PlayerInteractAtEntityEvent event) {
+        if (event.getPlayer().hasMetadata("NPC")) {
+            return;
+        }
+
         final User user = ess.getUser(event.getPlayer());
 
         if (!(event.getRightClicked() instanceof ArmorStand)) {
@@ -305,6 +327,10 @@ public class EssentialsAntiBuildListener implements Listener {
 
     @EventHandler(priority = EventPriority.LOW)
     public void onPlayerInteract(final PlayerInteractEvent event) {
+        if (event.getPlayer().hasMetadata("NPC")) {
+            return;
+        }
+
         // Do not return if cancelled, because the interact event has 2 cancelled states.
         final User user = ess.getUser(event.getPlayer());
         final ItemStack item = event.getItem();
@@ -322,7 +348,7 @@ public class EssentialsAntiBuildListener implements Listener {
         }
 
         if (prot.getSettingBool(AntiBuildConfig.disable_use) && !user.canBuild()) {
-            if (event.hasItem() && !metaPermCheck(user, "interact", item.getType(), item.getDurability())) {
+            if (event.hasItem() && !metaPermCheck(user, "interact", item)) {
                 event.setCancelled(true);
                 if (ess.getSettings().warnOnBuildDisallow()) {
                     user.sendMessage(tl("antiBuildUse", item.getType().toString()));
@@ -347,7 +373,7 @@ public class EssentialsAntiBuildListener implements Listener {
             final ItemStack item = event.getRecipe().getResult();
 
             if (prot.getSettingBool(AntiBuildConfig.disable_use) && !user.canBuild()) {
-                if (!metaPermCheck(user, "craft", item.getType(), item.getDurability())) {
+                if (!metaPermCheck(user, "craft", item)) {
                     event.setCancelled(true);
                     if (ess.getSettings().warnOnBuildDisallow()) {
                         user.sendMessage(tl("antiBuildCraft", item.getType().toString()));
@@ -364,7 +390,7 @@ public class EssentialsAntiBuildListener implements Listener {
         final ItemStack item = event.getItemDrop().getItemStack();
 
         if (prot.getSettingBool(AntiBuildConfig.disable_use) && !user.canBuild()) {
-            if (!metaPermCheck(user, "drop", item.getType(), item.getDurability())) {
+            if (!metaPermCheck(user, "drop", item)) {
                 event.setCancelled(true);
                 user.getBase().updateInventory();
                 if (ess.getSettings().warnOnBuildDisallow()) {
@@ -391,7 +417,7 @@ public class EssentialsAntiBuildListener implements Listener {
             final ItemStack item = event.getItem().getItemStack();
 
             if (prot.getSettingBool(AntiBuildConfig.disable_use) && !user.canBuild()) {
-                if (!metaPermCheck(user, "pickup", item.getType(), item.getDurability())) {
+                if (!metaPermCheck(user, "pickup", item)) {
                     event.setCancelled(true);
                 }
             }
@@ -401,12 +427,15 @@ public class EssentialsAntiBuildListener implements Listener {
     private class PlayerPickupItemListener implements Listener {
         @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
         public void onPlayerPickupItem(final PlayerPickupItemEvent event) {
+            if (event.getPlayer().hasMetadata("NPC")) {
+                return;
+            }
 
             final User user = ess.getUser(event.getPlayer());
             final ItemStack item = event.getItem().getItemStack();
 
             if (prot.getSettingBool(AntiBuildConfig.disable_use) && !user.canBuild()) {
-                if (!metaPermCheck(user, "pickup", item.getType(), item.getDurability())) {
+                if (!metaPermCheck(user, "pickup", item)) {
                     event.setCancelled(true);
                 }
             }
