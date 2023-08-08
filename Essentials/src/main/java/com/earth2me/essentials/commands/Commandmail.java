@@ -168,37 +168,39 @@ public class Commandmail extends EssentialsCommand {
             user.sendMessage(tl("mailSent"));
             return;
         }
-        if (args.length == 1 && "clear".equalsIgnoreCase(args[0]) || (args.length >= 1 && "clear".equalsIgnoreCase(args[0]) && NumberUtil.isPositiveInt(args[1]))) {
-            final ArrayList<MailMessage> mails = user.getMailMessages();
-            if (mails == null || mails.size() == 0) {
-                user.sendMessage(tl("noMail"));
+        if (args.length >= 1 && "clear".equalsIgnoreCase(args[0])) {
+            User mailUser = user;
+            int toRemove = -1;
+            if (args.length > 1) {
+                if (NumberUtil.isPositiveInt(args[1])) {
+                    toRemove = Integer.parseInt(args[1]);
+                } else if (!user.isAuthorized("essentials.mail.clear.others")) {
+                    throw new Exception(tl("noPerm", "essentials.mail.clear.others"));
+                } else {
+                    mailUser = getPlayer(ess.getServer(), user, args, 1, true);
+                    if (args.length > 2 && NumberUtil.isPositiveInt(args[2])) {
+                        toRemove = Integer.parseInt(args[2]);
+                    }
+                }
+            }
+
+            final ArrayList<MailMessage> mails = mailUser.getMailMessages();
+            if (mails == null || mails.isEmpty()) {
+                user.sendMessage(tl(mailUser == user ? "noMail" : "noMailOther", mailUser.getDisplayName()));
                 throw new NoChargeException();
             }
 
-            if (args.length > 1) {
-                if (!NumberUtil.isPositiveInt(args[1])) {
-                    throw new NotEnoughArgumentsException();
-                }
-
-                final int toRemove = Integer.parseInt(args[1]);
+            if (toRemove > 0) {
                 if (toRemove > mails.size()) {
                     user.sendMessage(tl("mailClearIndex", mails.size()));
-                    return;
+                    throw new NoChargeException();
                 }
                 mails.remove(toRemove - 1);
-                user.setMailList(mails);
+                mailUser.setMailList(mails);
             } else {
-                user.setMailList(null);
+                mailUser.setMailList(null);
             }
-
             user.sendMessage(tl("mailCleared"));
-            return;
-        }
-        if (args.length >= 2 && "clear".equalsIgnoreCase(args[0])) {
-            if (!user.isAuthorized("essentials.mail.clear.others")){
-                throw new Exception(tl("noPerm", "essentials.mail.clear.others"));
-            }
-            user.sendMessage(tl("mailClearedPlayer", clearMail(server, args).getDisplayName()));
             return;
         }
         if (args.length >= 1 && "clearall".equalsIgnoreCase(args[0])){
@@ -218,14 +220,31 @@ public class Commandmail extends EssentialsCommand {
     protected void run(final Server server, final CommandSource sender, final String commandLabel, final String[] args) throws Exception {
         if (args.length >= 1 && "read".equalsIgnoreCase(args[0])) {
             throw new Exception(tl("onlyPlayers", commandLabel + " read"));
-        } else if (args.length == 1 && "clear".equalsIgnoreCase(args[0])) {
-            throw new Exception(tl("onlyPlayers", commandLabel + " clear"));
+        } else if (args.length > 1 && "clear".equalsIgnoreCase(args[0])) {
+            final User mailUser = getPlayer(server, args[1], true, true);
+            final int toRemove = args.length > 2 ? NumberUtil.isPositiveInt(args[2]) ? Integer.parseInt(args[2]) : -1 : -1;
+
+            final ArrayList<MailMessage> mails = mailUser.getMailMessages();
+            if (mails == null || mails.isEmpty()) {
+                sender.sendMessage(tl("noMailOther", mailUser.getDisplayName()));
+                throw new NoChargeException();
+            }
+
+            if (toRemove > 0) {
+                if (toRemove > mails.size()) {
+                    sender.sendMessage(tl("mailClearIndex", mails.size()));
+                    throw new NoChargeException();
+                }
+                mails.remove(toRemove - 1);
+                mailUser.setMailList(mails);
+            } else {
+                mailUser.setMailList(null);
+            }
+            sender.sendMessage(tl("mailCleared"));
+            return;
         } else if (args.length >= 1 && "clearall".equalsIgnoreCase(args[0])){
             ess.runTaskAsynchronously(new ClearAll());
             sender.sendMessage(tl("mailClearedAll"));
-            return;
-        } else if (args.length >= 2 && "clear".equalsIgnoreCase(args[0])) {
-            sender.sendMessage(tl("mailClearedPlayer", clearMail(server, args).getDisplayName()));
             return;
         } else if (args.length >= 3 && "send".equalsIgnoreCase(args[0])) {
             final User u;
@@ -270,18 +289,6 @@ public class Commandmail extends EssentialsCommand {
             return;
         }
         throw new NotEnoughArgumentsException();
-    }
-
-    protected User clearMail(final Server server, final String[] args) throws Exception {
-        final User u;
-        try {
-            u = getPlayer(server, args[1], true, true);
-        } catch (final PlayerNotFoundException e) {
-            throw new Exception(tl("playerNeverOnServer", args[1]));
-        }
-        u.setMailList(null);
-
-        return u;
     }
 
     private class SendAll implements Runnable {
@@ -381,8 +388,8 @@ public class Commandmail extends EssentialsCommand {
     private class ClearAll implements Runnable {
         @Override
         public void run() {
-            for (UUID userid : ess.getUserMap().getAllUniqueUsers()) {
-                final User user = ess.getUserMap().getUser(userid);
+            for (UUID u : ess.getUsers().getAllUserUUIDs()) {
+                final User user = ess.getUsers().loadUncachedUser(u);
                 if (user != null) {
                     user.setMailList(null);
                 }
