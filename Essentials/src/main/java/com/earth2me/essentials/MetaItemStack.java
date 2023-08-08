@@ -297,9 +297,9 @@ public class MetaItemStack {
                 final String input = color[0];
                 if (input.startsWith("#")) { // Hex
                     meta.setColor(Color.fromRGB(
-                            Integer.valueOf(input.substring(1, 3), 16),
-                            Integer.valueOf(input.substring(3, 5), 16),
-                            Integer.valueOf(input.substring(5, 7), 16)));
+                        Integer.valueOf(input.substring(1, 3), 16),
+                        Integer.valueOf(input.substring(3, 5), 16),
+                        Integer.valueOf(input.substring(5, 7), 16)));
                 } else { // Int
                     meta.setColor(Color.fromRGB(Integer.parseInt(input)));
                 }
