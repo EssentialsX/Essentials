@@ -36,18 +36,17 @@ public class Commanditemlore extends EssentialsCommand {
 
         final ItemMeta im = item.getItemMeta();
         final int loreSize = im.hasLore() ? im.getLore().size() : 0;
-        final int maxLoreSize = ess.getSettings().getMaxItemLore();
         if (args[0].equalsIgnoreCase("add") && args.length > 1) {
-            if (loreSize < maxLoreSize) {
-                final String line = FormatUtil.formatString(user, "essentials.itemlore", getFinalArg(args, 1)).trim();
-                final List<String> lore = im.hasLore() ? im.getLore() : new ArrayList<>();
-                lore.add(line);
-                im.setLore(lore);
-                item.setItemMeta(im);
-                user.sendMessage(tl("itemloreSuccess", line));
-            } else {
+            if (loreSize >= ess.getSettings().getMaxItemLore() && !user.isAuthorized("essentials.itemlore.bypass")) {
                 throw new Exception(tl("itemloreMaxLore"));
             }
+
+            final String line = FormatUtil.formatString(user, "essentials.itemlore", getFinalArg(args, 1)).trim();
+            final List<String> lore = im.hasLore() ? im.getLore() : new ArrayList<>();
+            lore.add(line);
+            im.setLore(lore);
+            item.setItemMeta(im);
+            user.sendMessage(tl("itemloreSuccess", line));
         } else if (args[0].equalsIgnoreCase("clear")) {
             im.setLore(new ArrayList<>());
             item.setItemMeta(im);
