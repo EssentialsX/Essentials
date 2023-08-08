@@ -56,7 +56,7 @@ and finally then clicking "Yes, do it!".
 Intents", and then click "Save Changes". This prevents other people from adding your bot and also
 allows your bot to use more Discord features.
 > ![Update Bot Settings](https://i.imgur.com/eIegfCC.gif)
-> Uncheck `Public Bot` -> Check `Presence Intent` -> Check `Server Members Intent` -> Check `Message Content Invent` -> Save Changes`
+> Uncheck `Public Bot` -> Check `Presence Intent` -> Check `Server Members Intent` -> Check `Message Content Intent` -> Save Changes`
 
 6. Finally, you'll need to copy your bot's token and save it for a later step. To copy your bot's token,
 click the blue "Reset Token" button right of your bot's icon, then click "Yes, do it!", and finally

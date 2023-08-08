@@ -3,9 +3,11 @@ package com.earth2me.essentials;
 import com.earth2me.essentials.utils.EnumUtil;
 import com.earth2me.essentials.utils.VersionUtil;
 import net.ess3.nms.refl.ReflUtil;
+import org.bukkit.Material;
 import org.bukkit.TreeSpecies;
 import org.bukkit.entity.Axolotl;
 import org.bukkit.entity.Boat;
+import org.bukkit.entity.Camel;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Fox;
@@ -15,8 +17,10 @@ import org.bukkit.entity.MushroomCow;
 import org.bukkit.entity.Ocelot;
 import org.bukkit.entity.Panda;
 import org.bukkit.entity.Parrot;
+import org.bukkit.entity.Player;
 import org.bukkit.entity.TropicalFish;
 import org.bukkit.entity.Villager;
+import org.bukkit.inventory.ItemStack;
 
 import java.lang.reflect.Method;
 
@@ -41,6 +45,7 @@ public final class MobCompat {
     public static final EntityType AXOLOTL = getEntityType("AXOLOTL");
     public static final EntityType GOAT = getEntityType("GOAT");
     public static final EntityType FROG = getEntityType("FROG");
+    public static final EntityType CAMEL = getEntityType("CAMEL");
 
     // Constants for mobs that have changed since earlier versions
     public static final EntityType CAT = getEntityType("CAT", "OCELOT");
@@ -192,6 +197,19 @@ public final class MobCompat {
             boat.setWoodType(TreeSpecies.valueOf(variant.getTreeSpecies()));
         } else {
             boat.setBoatType(Boat.Type.valueOf(variant.getBoatType()));
+        }
+    }
+
+    public static void setCamelSaddle(final Entity entity, final Player target) {
+        if (VersionUtil.getServerBukkitVersion().isLowerThan(VersionUtil.v1_20_1_R01)) {
+            return;
+        }
+
+        if (entity instanceof Camel) {
+            final Camel camel = (Camel) entity;
+            camel.setTamed(true);
+            camel.setOwner(target);
+            camel.getInventory().setSaddle(new ItemStack(Material.SADDLE, 1));
         }
     }
 

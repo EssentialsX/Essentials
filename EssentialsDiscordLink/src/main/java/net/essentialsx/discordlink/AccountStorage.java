@@ -39,7 +39,6 @@ public class AccountStorage {
             throw new IOException("Unable to create account file!");
         }
         try (final Reader reader = new FileReader(accountFile)) {
-            //noinspection UnstableApiUsage
             final Map<String, String> map = gson.fromJson(reader, new TypeToken<Map<String, String>>() {}.getType());
             uuidToDiscordIdMap = map == null ? Maps.synchronizedBiMap(HashBiMap.create()) : Maps.synchronizedBiMap(HashBiMap.create(map));
         }
@@ -74,15 +73,19 @@ public class AccountStorage {
     }
 
     public boolean remove(final UUID uuid) {
-        final boolean success = uuidToDiscordIdMap.remove(uuid.toString()) != null;
-        queueSave();
-        return success;
+        if (uuidToDiscordIdMap.remove(uuid.toString()) != null) {
+            queueSave();
+            return true;
+        }
+        return false;
     }
 
     public boolean remove(final String discordId) {
-        final boolean success = uuidToDiscordIdMap.values().removeIf(discordId::equals);
-        queueSave();
-        return success;
+        if (uuidToDiscordIdMap.values().removeIf(discordId::equals)) {
+            queueSave();
+            return true;
+        }
+        return false;
     }
 
     public UUID getUUID(final String discordId) {
