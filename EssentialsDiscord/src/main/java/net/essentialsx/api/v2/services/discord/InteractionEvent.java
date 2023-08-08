@@ -52,6 +52,13 @@ public interface InteractionEvent {
     InteractionChannel getChannelArgument(String key);
 
     /**
+     * Helper method to get the role representation of the argument by the given key or null if none by that key is present.
+     * @param key The key of the argument to lookup.
+     * @return the role value or null
+     */
+    InteractionRole getRoleArgument(String key);
+
+    /**
      * Gets the channel ID where this interaction occurred.
      * @return the channel ID.
      */

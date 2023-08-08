@@ -36,9 +36,10 @@ public final class VersionUtil {
     public static final BukkitVersion v1_17_1_R01 = BukkitVersion.fromString("1.17.1-R0.1-SNAPSHOT");
     public static final BukkitVersion v1_18_2_R01 = BukkitVersion.fromString("1.18.2-R0.1-SNAPSHOT");
     public static final BukkitVersion v1_19_R01 = BukkitVersion.fromString("1.19-R0.1-SNAPSHOT");
-    public static final BukkitVersion v1_19_1_R01 = BukkitVersion.fromString("1.19.1-R0.1-SNAPSHOT");
+    public static final BukkitVersion v1_19_4_R01 = BukkitVersion.fromString("1.19.4-R0.1-SNAPSHOT");
+    public static final BukkitVersion v1_20_1_R01 = BukkitVersion.fromString("1.20.1-R0.1-SNAPSHOT");
 
-    private static final Set<BukkitVersion> supportedVersions = ImmutableSet.of(v1_8_8_R01, v1_9_4_R01, v1_10_2_R01, v1_11_2_R01, v1_12_2_R01, v1_13_2_R01, v1_14_4_R01, v1_15_2_R01, v1_16_5_R01, v1_17_1_R01, v1_18_2_R01, v1_19_1_R01);
+    private static final Set<BukkitVersion> supportedVersions = ImmutableSet.of(v1_8_8_R01, v1_9_4_R01, v1_10_2_R01, v1_11_2_R01, v1_12_2_R01, v1_13_2_R01, v1_14_4_R01, v1_15_2_R01, v1_16_5_R01, v1_17_1_R01, v1_18_2_R01, v1_19_4_R01, v1_20_1_R01);
 
     public static final boolean PRE_FLATTENING = VersionUtil.getServerBukkitVersion().isLowerThan(VersionUtil.v1_13_0_R01);
 
@@ -61,15 +62,21 @@ public final class VersionUtil {
         // KibblePatcher - Dangerous bytecode editor snakeoil whose only use is to break plugins
         builder.put("net.kibblelands.server.FastMath", SupportStatus.DANGEROUS_FORK);
 
+        // Brain-dead chat signing bypass that break EssentialsChat
+        builder.put("ml.tcoded.nochatreports.NoChatReportsSpigot", SupportStatus.STUPID_PLUGIN);
+        builder.put("me.doclic.noencryption.NoEncryption", SupportStatus.STUPID_PLUGIN);
+
         // Akarin - Dangerous patch history;
         //   * Potentially unsafe saving of nms.JsonList
         builder.put("io.akarin.server.Config", SupportStatus.DANGEROUS_FORK);
 
         // Forge - Doesn't support Bukkit
-        builder.put("net.minecraftforge.common.MinecraftForge", SupportStatus.UNSTABLE);
+        // The below translates to net.minecraftforge.common.MinecraftForge
+        builder.put(dumb(new int[] {110, 101, 116, 46, 109, 105, 110, 101, 99, 114, 97, 102, 116, 102, 111, 114, 103, 101, 46, 99, 111, 109, 109, 111, 110, 46, 77, 105, 110, 101, 99, 114, 97, 102, 116, 70, 111, 114, 103, 101}, 40), SupportStatus.UNSTABLE);
 
         // Fabric - Doesn't support Bukkit
-        builder.put("net.fabricmc.loader.launch.knot.KnotServer", SupportStatus.UNSTABLE);
+        // The below translates to net.fabricmc.loader.launch.knot.KnotServer
+        builder.put(dumb(new int[] {110, 101, 116, 46, 102, 97, 98, 114, 105, 99, 109, 99, 46, 108, 111, 97, 100, 101, 114, 46, 108, 97, 117, 110, 99, 104, 46, 107, 110, 111, 116, 46, 75, 110, 111, 116, 83, 101, 114, 118, 101, 114}, 42), SupportStatus.UNSTABLE);
 
         // Misc translation layers that do not add NMS will be caught by this
         if (ReflUtil.getNmsVersionObject().isHigherThanOrEqualTo(ReflUtil.V1_17_R1)) {
@@ -188,7 +195,7 @@ public final class VersionUtil {
                 if (!Bukkit.getName().equals("Essentials Fake Server")) {
                     throw new IllegalArgumentException(string + " is not in valid version format. e.g. 1.8.8-R0.1");
                 }
-                matcher = VERSION_PATTERN.matcher(v1_14_R01.toString());
+                matcher = VERSION_PATTERN.matcher(v1_16_1_R01.toString());
                 Preconditions.checkArgument(matcher.matches(), string + " is not in valid version format. e.g. 1.8.8-R0.1");
             }
 
@@ -324,6 +331,7 @@ public final class VersionUtil {
         FULL(true),
         LIMITED(true),
         DANGEROUS_FORK(false),
+        STUPID_PLUGIN(false),
         NMS_CLEANROOM(false),
         UNSTABLE(false),
         OUTDATED(false)
@@ -338,5 +346,22 @@ public final class VersionUtil {
         public boolean isSupported() {
             return supported;
         }
+    }
+
+    private static String dumb(final int[] clazz, final int len) {
+        final char[] chars = new char[clazz.length];
+
+        for (int i = 0; i < clazz.length; i++) {
+            chars[i] = (char) clazz[i];
+        }
+
+        final String decode = String.valueOf(chars);
+
+        if (decode.length() != len) {
+            System.exit(1);
+            return "why do hybrids try to bypass this?";
+        }
+
+        return decode;
     }
 }

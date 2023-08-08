@@ -87,7 +87,7 @@ public class Commandtogglejail extends EssentialsCommand {
                         sender.sendMessage(timeDiff > 0 ? tl("playerJailedFor", player.getName(), DateUtil.formatDateDiff(finalDisplayTime)) : tl("playerJailed", player.getName()));
 
                         final String notifyMessage = timeDiff > 0 ? tl("jailNotifyJailedFor", player.getName(), DateUtil.formatDateDiff(finalDisplayTime), sender.getSender().getName()) : tl("jailNotifyJailed", player.getName(), sender.getSender().getName());
-                        server.getLogger().log(Level.INFO, notifyMessage);
+                        ess.getLogger().log(Level.INFO, notifyMessage);
                         ess.broadcastMessage("essentials.jail.notify", notifyMessage);
                     }
                 });
@@ -114,7 +114,7 @@ public class Commandtogglejail extends EssentialsCommand {
             sender.sendMessage(tl("jailSentenceExtended", DateUtil.formatDateDiff(displayTimeDiff)));
 
             final String notifyMessage = tl("jailNotifySentenceExtended", player.getName(), DateUtil.formatDateDiff(displayTimeDiff), sender.getSender().getName());
-            server.getLogger().log(Level.INFO, notifyMessage);
+            ess.getLogger().log(Level.INFO, notifyMessage);
             ess.broadcastMessage("essentials.jail.notify", notifyMessage);
             return;
         }

@@ -52,7 +52,7 @@ public class EssentialsUserConfiguration extends EssentialsConfiguration {
 
     private File getAltFile() {
         final UUID fn = UUID.nameUUIDFromBytes(("OfflinePlayer:" + username.toLowerCase(Locale.ENGLISH)).getBytes(Charsets.UTF_8));
-        return new File(configFile.getParentFile(), fn.toString() + ".yml");
+        return new File(configFile.getParentFile(), fn + ".yml");
     }
 
     @Override

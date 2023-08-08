@@ -2,23 +2,23 @@ package com.earth2me.essentials;
 
 import com.earth2me.essentials.Trade.OverflowType;
 import com.earth2me.essentials.commands.NoChargeException;
-import com.earth2me.essentials.craftbukkit.InventoryWorkaround;
+import com.earth2me.essentials.craftbukkit.Inventories;
 import com.earth2me.essentials.textreader.IText;
 import com.earth2me.essentials.textreader.KeywordReplacer;
 import com.earth2me.essentials.textreader.SimpleTextInput;
 import com.earth2me.essentials.utils.DateUtil;
-import com.earth2me.essentials.utils.MaterialUtil;
 import com.earth2me.essentials.utils.NumberUtil;
 import net.ess3.api.IEssentials;
 import net.ess3.api.events.KitClaimEvent;
+import net.essentialsx.api.v2.events.KitPreExpandItemsEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.PlayerInventory;
 import org.yaml.snakeyaml.external.biz.base64Coder.Base64Coder;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -214,57 +214,38 @@ public class Kit {
                     stack = metaStack.getItemStack();
                 }
 
-                if (autoEquip) {
-                    final Material material = stack.getType();
-                    final PlayerInventory inventory = user.getBase().getInventory();
-                    if (MaterialUtil.isHelmet(material) && isEmptyStack(inventory.getHelmet())) {
-                        inventory.setHelmet(stack);
-                        continue;
-                    } else if (MaterialUtil.isChestplate(material) && isEmptyStack(inventory.getChestplate())) {
-                        inventory.setChestplate(stack);
-                        continue;
-                    } else if (MaterialUtil.isLeggings(material) && isEmptyStack(inventory.getLeggings())) {
-                        inventory.setLeggings(stack);
-                        continue;
-                    } else if (MaterialUtil.isBoots(material) && isEmptyStack(inventory.getBoots())) {
-                        inventory.setBoots(stack);
-                        continue;
-                    }
-                }
-
                 itemList.add(stack);
             }
 
-            final Map<Integer, ItemStack> overfilled;
-            final boolean allowOversizedStacks = user.isAuthorized("essentials.oversizedstacks");
+            final int maxStackSize = user.isAuthorized("essentials.oversizedstacks") ? ess.getSettings().getOversizedStackSize() : 0;
             final boolean isDropItemsIfFull = ess.getSettings().isDropItemsIfFull();
-            if (isDropItemsIfFull) {
-                if (allowOversizedStacks) {
-                    overfilled = InventoryWorkaround.addOversizedItems(user.getBase().getInventory(), ess.getSettings().getOversizedStackSize(), itemList.toArray(new ItemStack[0]));
-                } else {
-                    overfilled = InventoryWorkaround.addItems(user.getBase().getInventory(), itemList.toArray(new ItemStack[0]));
+
+            final KitPreExpandItemsEvent itemsEvent = new KitPreExpandItemsEvent(user, kitName, itemList);
+            Bukkit.getPluginManager().callEvent(itemsEvent);
+
+            final ItemStack[] itemArray = itemList.toArray(new ItemStack[0]);
+
+            if (!isDropItemsIfFull && !Inventories.hasSpace(user.getBase(), maxStackSize, autoEquip, itemArray)) {
+                user.sendMessage(tl("kitInvFullNoDrop"));
+                return false;
+            }
+
+            final Map<Integer, ItemStack> leftover = Inventories.addItem(user.getBase(), maxStackSize, autoEquip, itemArray);
+            if (!isDropItemsIfFull && !leftover.isEmpty()) {
+                // Inventories#hasSpace should prevent this state from EVER being reached; If it does, something has gone terribly wrong, and we should just give up and hope people report it :(
+                throw new IllegalStateException("Something has gone terribly wrong while adding items to the user's inventory. Please report this to the EssentialsX developers. Items left over: " + leftover + ". Original items: " + Arrays.toString(itemArray));
+            }
+
+            for (final ItemStack itemStack : leftover.values()) {
+                int spillAmount = itemStack.getAmount();
+                if (maxStackSize != 0) {
+                    itemStack.setAmount(Math.min(spillAmount, itemStack.getMaxStackSize()));
                 }
-                for (final ItemStack itemStack : overfilled.values()) {
-                    int spillAmount = itemStack.getAmount();
-                    if (!allowOversizedStacks) {
-                        itemStack.setAmount(Math.min(spillAmount, itemStack.getMaxStackSize()));
-                    }
-                    while (spillAmount > 0) {
-                        user.getWorld().dropItemNaturally(user.getLocation(), itemStack);
-                        spillAmount -= itemStack.getAmount();
-                    }
-                    spew = true;
+                while (spillAmount > 0) {
+                    user.getWorld().dropItemNaturally(user.getLocation(), itemStack);
+                    spillAmount -= itemStack.getAmount();
                 }
-            } else {
-                if (allowOversizedStacks) {
-                    overfilled = InventoryWorkaround.addAllOversizedItems(user.getBase().getInventory(), ess.getSettings().getOversizedStackSize(), itemList.toArray(new ItemStack[0]));
-                } else {
-                    overfilled = InventoryWorkaround.addAllItems(user.getBase().getInventory(), itemList.toArray(new ItemStack[0]));
-                }
-                if (overfilled != null) {
-                    user.sendMessage(tl("kitInvFullNoDrop"));
-                    return false;
-                }
+                spew = true;
             }
             user.getBase().updateInventory();
 
@@ -290,9 +271,5 @@ public class Kit {
             throw new Exception(tl("kitError2"), e);
         }
         return true;
-    }
-
-    private boolean isEmptyStack(ItemStack stack) {
-        return stack == null || MaterialUtil.isAir(stack.getType());
     }
 }

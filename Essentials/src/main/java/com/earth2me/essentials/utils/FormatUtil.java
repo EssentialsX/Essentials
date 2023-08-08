@@ -26,7 +26,7 @@ public final class FormatUtil {
     private static final Pattern LOGCOLOR_PATTERN = Pattern.compile("\\x1B\\[([0-9]{1,2}(;[0-9]{1,2})?)?[m|K]");
     private static final Pattern URL_PATTERN = Pattern.compile("((?:(?:https?)://)?[\\w-_\\.]{2,})\\.([a-zA-Z]{2,3}(?:/\\S+)?)");
     //Used to strip ANSI control codes from console
-    private static final Pattern ANSI_CONTROL_PATTERN = Pattern.compile("\u001B(?:\\[0?m|\\[38;2(?:;\\d{1,3}){3}m|\\[([0-9]{1,2}[;m]?){3})");
+    private static final Pattern ANSI_CONTROL_PATTERN = Pattern.compile("[\\x1B\\x9B][\\[\\]()#;?]*(?:(?:(?:;[-a-zA-Z\\d/#&.:=?%@~_]+)*|[a-zA-Z\\d]+(?:;[-a-zA-Z\\d/#&.:=?%@~_]*)*)?\\x07|(?:\\d{1,4}(?:;\\d{0,4})*)?[\\dA-PR-TZcf-nq-uy=><~])");
     private static final Pattern PAPER_CONTROL_PATTERN = Pattern.compile("(?i)" + (char) 0x7f + "[0-9A-FK-ORX]");
 
     private FormatUtil() {
@@ -226,11 +226,11 @@ public final class FormatUtil {
         final EnumSet<ChatColor> strip = EnumSet.complementOf(supported);
 
         final boolean rgb = user.isAuthorized(permBase + ".rgb");
-        if (!supported.isEmpty() || rgb) {
-            message = replaceColor(message, supported, rgb);
-        }
         if (!strip.isEmpty()) {
             message = stripColor(message, strip);
+        }
+        if (!supported.isEmpty() || rgb) {
+            message = replaceColor(message, supported, rgb);
         }
         return message;
     }

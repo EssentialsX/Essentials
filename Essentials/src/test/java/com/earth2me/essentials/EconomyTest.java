@@ -30,8 +30,8 @@ public class EconomyTest {
         } catch (final IOException ex) {
             Assert.fail("IOException");
         }
-        server.addPlayer(new OfflinePlayer(PLAYERNAME, ess.getServer()));
-        server.addPlayer(new OfflinePlayer(PLAYERNAME2, ess.getServer()));
+        server.addPlayer(new OfflinePlayerStub(PLAYERNAME, ess.getServer()));
+        server.addPlayer(new OfflinePlayerStub(PLAYERNAME2, ess.getServer()));
     }
 
     // only one big test, since we use static instances

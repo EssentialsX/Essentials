@@ -203,6 +203,10 @@ public class Jails implements net.ess3.api.IJails {
     private class JailListener implements Listener {
         @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
         public void onJailBlockBreak(final BlockBreakEvent event) {
+            if (shouldIgnore(event.getPlayer())) {
+                return;
+            }
+
             final User user = ess.getUser(event.getPlayer());
             if (user.isJailed() && !user.isAuthorized("essentials.jail.allow-break")) {
                 event.setCancelled(true);
@@ -211,6 +215,10 @@ public class Jails implements net.ess3.api.IJails {
 
         @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
         public void onJailBlockPlace(final BlockPlaceEvent event) {
+            if (shouldIgnore(event.getPlayer())) {
+                return;
+            }
+
             final User user = ess.getUser(event.getPlayer());
             if (user.isJailed() && !user.isAuthorized("essentials.jail.allow-place")) {
                 event.setCancelled(true);
@@ -219,6 +227,10 @@ public class Jails implements net.ess3.api.IJails {
 
         @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
         public void onJailBlockDamage(final BlockDamageEvent event) {
+            if (shouldIgnore(event.getPlayer())) {
+                return;
+            }
+
             final User user = ess.getUser(event.getPlayer());
             if (user.isJailed() && !user.isAuthorized("essentials.jail.allow-block-damage")) {
                 event.setCancelled(true);
@@ -232,6 +244,9 @@ public class Jails implements net.ess3.api.IJails {
             }
             final Entity damager = event.getDamager();
             if (damager.getType() == EntityType.PLAYER) {
+                if (shouldIgnore((Player) damager)) {
+                    return;
+                }
                 final User user = ess.getUser((Player) damager);
                 if (user != null && user.isJailed()) {
                     event.setCancelled(true);
@@ -241,6 +256,10 @@ public class Jails implements net.ess3.api.IJails {
 
         @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
         public void onJailPlayerInteract(final PlayerInteractEvent event) {
+            if (shouldIgnore(event.getPlayer())) {
+                return;
+            }
+
             final User user = ess.getUser(event.getPlayer());
             if (user.isJailed() && !user.isAuthorized("essentials.jail.allow-interact")) {
                 event.setCancelled(true);
@@ -249,6 +268,10 @@ public class Jails implements net.ess3.api.IJails {
 
         @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
         public void onJailPlayerGameModeChange(final PlayerGameModeChangeEvent event) {
+            if (shouldIgnore(event.getPlayer())) {
+                return;
+            }
+
             final User user = ess.getUser(event.getPlayer());
             if (user.isJailed()) {
                 event.setCancelled(true);
@@ -257,6 +280,10 @@ public class Jails implements net.ess3.api.IJails {
 
         @EventHandler(priority = EventPriority.HIGHEST)
         public void onJailPlayerRespawn(final PlayerRespawnEvent event) {
+            if (shouldIgnore(event.getPlayer())) {
+                return;
+            }
+
             final User user = ess.getUser(event.getPlayer());
             if (!user.isJailed() || user.getJail() == null || user.getJail().isEmpty()) {
                 return;
@@ -275,6 +302,10 @@ public class Jails implements net.ess3.api.IJails {
 
         @EventHandler(priority = EventPriority.HIGH)
         public void onJailPlayerTeleport(final PlayerTeleportEvent event) {
+            if (shouldIgnore(event.getPlayer())) {
+                return;
+            }
+
             final User user = ess.getUser(event.getPlayer());
             if (!user.isJailed() || user.getJail() == null || user.getJail().isEmpty()) {
                 return;
@@ -294,6 +325,10 @@ public class Jails implements net.ess3.api.IJails {
 
         @EventHandler(priority = EventPriority.HIGHEST)
         public void onJailPlayerJoin(final PlayerJoinEvent event) {
+            if (shouldIgnore(event.getPlayer())) {
+                return;
+            }
+
             final User user = ess.getUser(event.getPlayer());
             final long currentTime = System.currentTimeMillis();
             user.checkJailTimeout(currentTime);
@@ -317,6 +352,11 @@ public class Jails implements net.ess3.api.IJails {
             } catch (final Exception ex) {
                 future.completeExceptionally(ex);
             }
+        }
+
+        private boolean shouldIgnore(final Player base) {
+            // Ignore Citizens NPCs
+            return base.getUniqueId().version() == 2 || base.hasMetadata("NPC");
         }
     }
 }

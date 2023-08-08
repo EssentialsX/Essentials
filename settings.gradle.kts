@@ -4,12 +4,10 @@ dependencyResolutionManagement {
         maven("https://papermc.io/repo/repository/maven-public/")
         maven("https://jitpack.io") {
             content { includeGroup("com.github.milkbowl") }
+            content { includeGroup("com.github.MinnDevelopment") }
         }
         maven("https://repo.codemc.org/repository/maven-public") {
             content { includeGroup("org.bstats") }
-        }
-        maven("https://m2.dv8tion.net/releases/") {
-            content { includeGroup("net.dv8tion") }
         }
         maven("https://repo.extendedclip.com/content/repositories/placeholderapi/") {
             content { includeGroup("me.clip") }
@@ -18,6 +16,7 @@ dependencyResolutionManagement {
             content { includeGroup("com.mojang") }
         }
         mavenCentral {
+            content { includeGroup("net.dv8tion") }
             content { includeGroup("net.kyori") }
             content { includeGroup("org.apache.logging.log4j") }
         }
@@ -37,6 +36,7 @@ sequenceOf(
     "AntiBuild",
     "Chat",
     "Discord",
+    "DiscordLink",
     "GeoIP",
     "Protect",
     "Spawn",
