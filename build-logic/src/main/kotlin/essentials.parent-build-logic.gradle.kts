@@ -1,4 +1,4 @@
-import xyz.jpenilla.runpaper.task.RunServerTask
+import xyz.jpenilla.runpaper.task.RunServer
 
 plugins {
     id("base")
@@ -19,7 +19,7 @@ tasks {
         // Ex: './gradlew :runServer -PrunModules=chat,spawn'
         minecraftVersion(RUN_PAPER_MINECRAFT_VERSION)
     }
-    register<RunServerTask>("runAll") {
+    register<RunServer>("runAll") {
         group = "essentials"
         description = "Run a test server with all EssentialsX modules."
         minecraftVersion(RUN_PAPER_MINECRAFT_VERSION)
@@ -32,7 +32,7 @@ tasks {
 subprojects {
     afterEvaluate {
         val moduleExt = extensions.findByType<EssentialsModuleExtension>() ?: return@afterEvaluate
-        rootProject.tasks.named<RunServerTask>("runAll").configure {
+        rootProject.tasks.named<RunServer>("runAll").configure {
             pluginJars.from(moduleExt.archiveFile)
         }
         if (name == "EssentialsX") {

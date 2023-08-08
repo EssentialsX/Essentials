@@ -7,8 +7,8 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.plugin.PluginManager;
 
-public class LegacyChatHandler extends AbstractChatHandler {
-    public LegacyChatHandler(Essentials ess, EssentialsChat essChat) {
+public class ChatHandler extends AbstractChatHandler {
+    public ChatHandler(Essentials ess, EssentialsChat essChat) {
         super(ess, essChat);
     }
 

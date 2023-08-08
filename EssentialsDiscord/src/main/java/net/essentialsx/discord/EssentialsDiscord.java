@@ -24,6 +24,7 @@ public class EssentialsDiscord extends JavaPlugin implements IEssentialsModule {
     private JDADiscordService jda;
     private DiscordSettings settings;
     private boolean isPAPI = false;
+    private boolean isEssentialsChat = false;
 
     @Override
     public void onEnable() {
@@ -45,6 +46,8 @@ public class EssentialsDiscord extends JavaPlugin implements IEssentialsModule {
         }
 
         isPAPI = getServer().getPluginManager().getPlugin("PlaceholderAPI") != null;
+
+        isEssentialsChat = getServer().getPluginManager().getPlugin("EssentialsChat") != null;
 
         settings = new DiscordSettings(this);
         ess.addReloadListener(settings);
@@ -79,6 +82,7 @@ public class EssentialsDiscord extends JavaPlugin implements IEssentialsModule {
 
     public void onReload() {
         if (jda != null && !jda.isInvalidStartup()) {
+            jda.updateListener();
             jda.updatePresence();
             jda.updatePrimaryChannel();
             jda.updateConsoleRelay();
@@ -100,6 +104,10 @@ public class EssentialsDiscord extends JavaPlugin implements IEssentialsModule {
 
     public boolean isPAPI() {
         return isPAPI;
+    }
+
+    public boolean isEssentialsChat() {
+        return isEssentialsChat;
     }
 
     @Override

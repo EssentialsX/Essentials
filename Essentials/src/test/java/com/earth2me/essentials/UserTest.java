@@ -9,7 +9,7 @@ import java.io.IOException;
 import java.math.BigDecimal;
 
 public class UserTest extends TestCase {
-    private final OfflinePlayer base1;
+    private final OfflinePlayerStub base1;
     private final Essentials ess;
     private final FakeServer server;
 
@@ -34,7 +34,7 @@ public class UserTest extends TestCase {
     }
 
     public void testUpdate() {
-        final OfflinePlayer base1alt = server.createPlayer(base1.getName());
+        final OfflinePlayerStub base1alt = server.createPlayer(base1.getName());
         assertEquals(base1alt, ess.getUser(base1alt).getBase());
     }
 
@@ -43,7 +43,7 @@ public class UserTest extends TestCase {
         final Location loc = base1.getLocation();
         loc.setWorld(server.getWorlds().get(0));
         user.setHome("home", loc);
-        final OfflinePlayer base2 = server.createPlayer(base1.getName());
+        final OfflinePlayerStub base2 = server.createPlayer(base1.getName());
         final User user2 = ess.getUser(base2);
 
         final Location home = user2.getHome(loc);

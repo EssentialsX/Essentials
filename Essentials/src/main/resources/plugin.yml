@@ -53,6 +53,10 @@ commands:
     description: Allows reopening and editing of sealed books.
     usage: /<command> [title|author [name]]
     aliases: [ebook]
+  bottom:
+    description: Teleport to the lowest block at your current position.
+    usage: /<command>
+    aliases: [ ebottom ]
   break:
     description: Breaks the block you are looking at.
     usage: /<command>
@@ -286,7 +290,7 @@ commands:
     aliases: [eloom]
   mail:
     description: Manages inter-player, intra-server mail.
-    usage: /<command> [read|clear|clear [number]|send [to] [message]|sendtemp [to] [expire time] [message]|sendall [message]]
+    usage: /<command> [read|clear|clear [number]|clear <player> [number]|send [to] [message]|sendtemp [to] [expire time] [message]|sendall [message]]
     aliases: [email,eemail,memo,ememo]
   me:
     description: Describes an action in the context of the player.

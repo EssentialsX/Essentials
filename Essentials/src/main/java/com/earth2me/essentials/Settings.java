@@ -1469,8 +1469,14 @@ public class Settings implements net.ess3.api.ISettings {
     // #easteregg
     @Override
     public int getMaxUserCacheCount() {
-        final long count = Runtime.getRuntime().maxMemory() / 1024 / 96;
+        final long count = Runtime.getRuntime().maxMemory() / 1024 / 1024;
         return config.getInt("max-user-cache-count", (int) count);
+    }
+
+    // #easteregg
+    @Override
+    public long getMaxUserCacheValueExpiry() {
+        return config.getLong("max-user-cache-value-expiry", 600);
     }
 
     @Override
@@ -1936,5 +1942,10 @@ public class Settings implements net.ess3.api.ISettings {
     @Override
     public boolean showZeroBaltop() {
         return config.getBoolean("show-zero-baltop", true);
+    }
+
+    @Override
+    public int getMaxItemLore() {
+        return config.getInt("max-itemlore-lines", 10);
     }
 }
