@@ -6,7 +6,8 @@ import com.vdurmont.emoji.EmojiParser;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.User;
-import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
+import net.dv8tion.jda.api.entities.channel.ChannelType;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import net.ess3.api.IUser;
 import net.essentialsx.api.v2.events.discord.DiscordRelayEvent;
@@ -36,7 +37,11 @@ public class DiscordListener extends ListenerAdapter {
     }
 
     @Override
-    public void onGuildMessageReceived(@NotNull GuildMessageReceivedEvent event) {
+    public void onMessageReceived(@NotNull MessageReceivedEvent event) {
+        if (event.getMessage().getChannelType() != ChannelType.TEXT) {
+            return;
+        }
+
         if (event.getAuthor().isBot() && !event.isWebhookMessage() && (!plugin.getSettings().isShowBotMessages() || event.getAuthor().getId().equals(plugin.getJda().getSelfUser().getId()))) {
             return;
         }
@@ -120,7 +125,7 @@ public class DiscordListener extends ListenerAdapter {
         // Do not create the event specific objects if there are no listeners
         if (DiscordRelayEvent.getHandlerList().getRegisteredListeners().length != 0) {
             final DiscordRelayEvent relayEvent = new DiscordRelayEvent(
-                    new InteractionMemberImpl(member), new InteractionChannelImpl(event.getChannel()),
+                    new InteractionMemberImpl(member), new InteractionChannelImpl(event.getGuildChannel()),
                     Collections.unmodifiableList(keys), event.getMessage().getContentRaw(), formattedMessage, viewers);
             Bukkit.getPluginManager().callEvent(relayEvent);
             if (relayEvent.isCancelled()) {
