@@ -18,6 +18,11 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import static com.earth2me.essentials.I18n.tl;
 
 public class Commandpay extends EssentialsLoopCommand {
+    private static final BigDecimal THOUSAND = new BigDecimal(1000);
+    private static final BigDecimal MILLION = new BigDecimal(1_000_000);
+    private static final BigDecimal BILLION = new BigDecimal(1_000_000_000);
+    private static final BigDecimal TRILLION = new BigDecimal(1_000_000_000_000L);
+
     public Commandpay() {
         super("pay");
     }
@@ -28,31 +33,39 @@ public class Commandpay extends EssentialsLoopCommand {
             throw new NotEnoughArgumentsException();
         }
 
-        if (args[1].contains("-")) {
+        final String ogStr = args[1];
+
+        if (ogStr.contains("-")) {
             throw new Exception(tl("payMustBePositive"));
         }
 
-        final String stringAmount = args[1].replaceAll("[^0-9\\.]", "");
+        final String sanitizedString = ogStr.replaceAll("[^0-9.]", "");
 
-        if (stringAmount.length() < 1) {
+        if (sanitizedString.isEmpty()) {
             throw new NotEnoughArgumentsException();
         }
 
-        BigDecimal tempAmount = new BigDecimal(stringAmount);
-
-        switch (Character.toLowerCase(args[1].charAt(args[1].length()-1))) {
-            case 'k':
-                tempAmount = tempAmount.multiply(new BigDecimal(1000));
+        BigDecimal tempAmount = new BigDecimal(sanitizedString);
+        switch (Character.toLowerCase(ogStr.charAt(ogStr.length() - 1))) {
+            case 'k': {
+                tempAmount = tempAmount.multiply(THOUSAND);
                 break;
-            case 'm':
-                tempAmount = tempAmount.multiply(new BigDecimal(1000000));
+            }
+            case 'm': {
+                tempAmount = tempAmount.multiply(MILLION);
                 break;
-            case 'b':
-                tempAmount = tempAmount.multiply(new BigDecimal(1000000000));
+            }
+            case 'b': {
+                tempAmount = tempAmount.multiply(BILLION);
                 break;
-            case 't':
-                tempAmount = tempAmount.multiply(new BigDecimal("1000000000000"));
+            }
+            case 't': {
+                tempAmount = tempAmount.multiply(TRILLION);
                 break;
+            }
+            default: {
+                break;
+            }
         }
 
         final BigDecimal amount = tempAmount;
