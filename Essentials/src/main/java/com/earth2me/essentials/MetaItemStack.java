@@ -223,11 +223,21 @@ public class MetaItemStack {
             } else {
                 throw new Exception(tl("onlyPlayerSkulls"));
             }
-        } else if (split.length > 1 && split[0].equalsIgnoreCase("book") && MaterialUtil.isEditableBook(stack.getType()) && (hasMetaPermission(sender, "book",true, true, ess) || hasMetaPermission(sender, "chapter-" + split[1].toLowerCase(Locale.ENGLISH), true, true, ess))) {
+        } else if (split.length > 1 && split[0].equalsIgnoreCase("book") && MaterialUtil.isEditableBook(stack.getType()) && (hasMetaPermission(sender, "book", true, true, ess) || hasMetaPermission(sender, "chapter-" + split[1].toLowerCase(Locale.ENGLISH), true, true, ess))) {
             final BookMeta meta = (BookMeta) stack.getItemMeta();
             final IText input = new BookInput("book", true, ess);
             final BookPager pager = new BookPager(input);
-
+            // This fix only applies to written books - which require an author and a title. https://bugs.mojang.com/browse/MC-59153
+            if (stack.getType() == WRITTEN_BOOK) {
+                if (!meta.hasAuthor()) {
+                    // The sender can be null when this method is called from {@link  com.earth2me.essentials.signs.EssentialsSign#getItemMeta(ItemStack, String, IEssentials)}
+                    meta.setAuthor(sender == null ? Console.getInstance().getDisplayName() : sender.getPlayer().getName());
+                }
+                if (!meta.hasTitle()) {
+                    final String title = FormatUtil.replaceFormat(split[1].replace('_', ' '));
+                    meta.setTitle(title.length() > 32 ? title.substring(0, 32) : title);
+                }
+            }
             final List<String> pages = pager.getPages(split[1]);
             meta.setPages(pages);
             stack.setItemMeta(meta);
