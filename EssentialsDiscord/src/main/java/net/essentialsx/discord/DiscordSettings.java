@@ -524,7 +524,7 @@ public class DiscordSettings implements IConf {
 
         final Map<String, String> roleAliases = new HashMap<>();
 
-        for (Map.Entry<String, String> entry : config.getStringMap("chat.world-aliases").entrySet()) {
+        for (Map.Entry<String, String> entry : config.getStringMap("discord-roles-aliases").entrySet()) {
             roleAliases.put(entry.getKey(), FormatUtil.replaceFormat(entry.getValue()));
         }
         this.roleAliases = roleAliases;
