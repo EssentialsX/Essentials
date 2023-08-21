@@ -71,6 +71,8 @@ public class Commandwhois extends EssentialsCommand {
             sender.sendMessage(tl("whoisMutedReason", user.isMuted() ? muteTimeout > 0 ? DateUtil.formatDateDiff(muteTimeout) : tl("true") : tl("false"),
                 user.getMuteReason()));
         }
+
+        sender.sendMessage(tl("whoisWhitelist", user.isWhitelisted() ? tl("true") : tl("false")));
     }
 
     @Override
