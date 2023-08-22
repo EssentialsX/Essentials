@@ -6,6 +6,7 @@ import com.earth2me.essentials.config.EssentialsConfiguration;
 import com.earth2me.essentials.utils.FormatUtil;
 import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.entities.Activity;
+import net.dv8tion.jda.api.entities.Role;
 import net.essentialsx.api.v2.ChatType;
 import org.apache.logging.log4j.Level;
 import org.bukkit.entity.Player;
@@ -33,6 +34,7 @@ public class DiscordSettings implements IConf {
     private Activity statusActivity;
 
     private List<Pattern> discordFilter;
+    private Map<String, String> roleAliases;
 
     private MessageFormat consoleFormat;
     private Level consoleLogLevel;
@@ -90,6 +92,18 @@ public class DiscordSettings implements IConf {
 
     public boolean isShowDiscordAttachments() {
         return config.getBoolean("show-discord-attachments", true);
+    }
+
+    public List<String> getDiscordRolesBlacklist() {
+        return config.getList("discord-role-blacklist", String.class);
+    }
+
+    public Boolean getInvertDiscordRoleBlacklist() {
+        return config.getBoolean("invert-discord-role-blacklist", false);
+    }
+
+    public String getRoleAlias(final Role role) {
+        return roleAliases.getOrDefault(role.getId(), roleAliases.getOrDefault(role.getName(), role.getName()));
     }
 
     public List<String> getPermittedFormattingRoles() {
@@ -507,6 +521,13 @@ public class DiscordSettings implements IConf {
                 discordFilter = Collections.emptyList();
             }
         }
+
+        final Map<String, String> roleAliases = new HashMap<>();
+
+        for (Map.Entry<String, String> entry : config.getStringMap("discord-roles-aliases").entrySet()) {
+            roleAliases.put(entry.getKey(), FormatUtil.replaceFormat(entry.getValue()));
+        }
+        this.roleAliases = roleAliases;
 
         consoleLogLevel = Level.toLevel(config.getString("console.log-level", null), Level.INFO);
 

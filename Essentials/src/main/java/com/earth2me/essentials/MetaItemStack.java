@@ -205,6 +205,13 @@ public class MetaItemStack {
             final ItemMeta meta = stack.getItemMeta();
             meta.setLore(lore);
             stack.setItemMeta(meta);
+        } else if ((split[0].equalsIgnoreCase("custom-model-data") || split[0].equalsIgnoreCase("cmd")) && hasMetaPermission(sender, "custom-model-data", false, true, ess)) {
+            if (VersionUtil.getServerBukkitVersion().isHigherThanOrEqualTo(VersionUtil.v1_14_R01)) {
+                final int value = split.length <= 1 ? 0 : Integer.parseInt(split[1]);
+                final ItemMeta meta = stack.getItemMeta();
+                meta.setCustomModelData(value);
+                stack.setItemMeta(meta);
+            }
         } else if (split[0].equalsIgnoreCase("unbreakable") && hasMetaPermission(sender, "unbreakable", false, true, ess)) {
             final boolean value = split.length <= 1 || Boolean.parseBoolean(split[1]);
             setUnbreakable(ess, stack, value);
@@ -215,11 +222,21 @@ public class MetaItemStack {
             } else {
                 throw new TranslatableException("onlyPlayerSkulls");
             }
-        } else if (split.length > 1 && split[0].equalsIgnoreCase("book") && MaterialUtil.isEditableBook(stack.getType()) && (hasMetaPermission(sender, "book",true, true, ess) || hasMetaPermission(sender, "chapter-" + split[1].toLowerCase(Locale.ENGLISH), true, true, ess))) {
+        } else if (split.length > 1 && split[0].equalsIgnoreCase("book") && MaterialUtil.isEditableBook(stack.getType()) && (hasMetaPermission(sender, "book", true, true, ess) || hasMetaPermission(sender, "chapter-" + split[1].toLowerCase(Locale.ENGLISH), true, true, ess))) {
             final BookMeta meta = (BookMeta) stack.getItemMeta();
             final IText input = new BookInput("book", true, ess);
             final BookPager pager = new BookPager(input);
-
+            // This fix only applies to written books - which require an author and a title. https://bugs.mojang.com/browse/MC-59153
+            if (stack.getType() == WRITTEN_BOOK) {
+                if (!meta.hasAuthor()) {
+                    // The sender can be null when this method is called from {@link  com.earth2me.essentials.signs.EssentialsSign#getItemMeta(ItemStack, String, IEssentials)}
+                    meta.setAuthor(sender == null ? Console.getInstance().getDisplayName() : sender.getPlayer().getName());
+                }
+                if (!meta.hasTitle()) {
+                    final String title = FormatUtil.replaceFormat(split[1].replace('_', ' '));
+                    meta.setTitle(title.length() > 32 ? title.substring(0, 32) : title);
+                }
+            }
             final List<String> pages = pager.getPages(split[1]);
             meta.setPages(pages);
             stack.setItemMeta(meta);

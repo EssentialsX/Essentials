@@ -34,7 +34,12 @@ public class Commanditemlore extends EssentialsCommand {
         }
 
         final ItemMeta im = item.getItemMeta();
+        final int loreSize = im.hasLore() ? im.getLore().size() : 0;
         if (args[0].equalsIgnoreCase("add") && args.length > 1) {
+            if (loreSize >= ess.getSettings().getMaxItemLore() && !user.isAuthorized("essentials.itemlore.bypass")) {
+                throw new TranslatableException("itemloreMaxLore");
+            }
+
             final String line = FormatUtil.formatString(user, "essentials.itemlore", getFinalArg(args, 1)).trim();
             final List<String> lore = im.hasLore() ? im.getLore() : new ArrayList<>();
             lore.add(line);

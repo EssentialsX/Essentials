@@ -212,6 +212,12 @@ public abstract class AbstractItemDb implements IConf, net.ess3.api.IItemDb {
                 sb.append("lore:").append(serializeLines(meta.getLore())).append(" ");
             }
 
+            if (VersionUtil.getServerBukkitVersion().isHigherThanOrEqualTo(VersionUtil.v1_14_R01)) {
+                if (meta.hasCustomModelData()) {
+                    sb.append("custom-model-data:").append(meta.getCustomModelData()).append(" ");
+                }
+            }
+
             if (meta.hasEnchants()) {
                 for (final Enchantment e : meta.getEnchants().keySet()) {
                     sb.append(e.getName().toLowerCase()).append(":").append(meta.getEnchantLevel(e)).append(" ");

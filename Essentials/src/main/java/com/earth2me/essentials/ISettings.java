@@ -409,6 +409,8 @@ public interface ISettings extends IConf {
 
     boolean showZeroBaltop();
 
+    int getMaxItemLore();
+
     Tag getPrimaryColor();
 
     Tag getSecondaryColor();

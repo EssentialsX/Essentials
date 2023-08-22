@@ -412,12 +412,16 @@ public class EssentialsSign {
     }
 
     protected final ItemStack getItemMeta(final ItemStack item, final String meta, final IEssentials ess) throws SignException {
+        return this.getItemMeta(null, item, meta, ess);
+    }
+
+    protected final ItemStack getItemMeta(final CommandSource source, final ItemStack item, final String meta, final IEssentials ess) throws SignException {
         ItemStack stack = item;
         try {
             if (!meta.isEmpty()) {
                 final MetaItemStack metaStack = new MetaItemStack(stack);
                 final boolean allowUnsafe = ess.getSettings().allowUnsafeEnchantments();
-                metaStack.addStringMeta(null, allowUnsafe, meta, ess);
+                metaStack.addStringMeta(source, allowUnsafe, meta, ess);
                 stack = metaStack.getItemStack();
             }
         } catch (final Exception ex) {
