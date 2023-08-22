@@ -81,10 +81,12 @@ public final class VersionUtil {
         builder.put("io.akarin.server.Config", SupportStatus.DANGEROUS_FORK);
 
         // Forge - Doesn't support Bukkit
-        builder.put("net.minecraftforge.common.MinecraftForge", SupportStatus.UNSTABLE);
+        // The below translates to net.minecraftforge.common.MinecraftForge
+        builder.put(dumb(new int[] {110, 101, 116, 46, 109, 105, 110, 101, 99, 114, 97, 102, 116, 102, 111, 114, 103, 101, 46, 99, 111, 109, 109, 111, 110, 46, 77, 105, 110, 101, 99, 114, 97, 102, 116, 70, 111, 114, 103, 101}, 40), SupportStatus.UNSTABLE);
 
         // Fabric - Doesn't support Bukkit
-        builder.put("net.fabricmc.loader.launch.knot.KnotServer", SupportStatus.UNSTABLE);
+        // The below translates to net.fabricmc.loader.launch.knot.KnotServer
+        builder.put(dumb(new int[] {110, 101, 116, 46, 102, 97, 98, 114, 105, 99, 109, 99, 46, 108, 111, 97, 100, 101, 114, 46, 108, 97, 117, 110, 99, 104, 46, 107, 110, 111, 116, 46, 75, 110, 111, 116, 83, 101, 114, 118, 101, 114}, 42), SupportStatus.UNSTABLE);
 
         // Misc translation layers that do not add NMS will be caught by this
         if (ReflUtil.getNmsVersionObject().isHigherThanOrEqualTo(ReflUtil.V1_17_R1)) {
@@ -354,5 +356,22 @@ public final class VersionUtil {
         public boolean isSupported() {
             return supported;
         }
+    }
+
+    private static String dumb(final int[] clazz, final int len) {
+        final char[] chars = new char[clazz.length];
+
+        for (int i = 0; i < clazz.length; i++) {
+            chars[i] = (char) clazz[i];
+        }
+
+        final String decode = String.valueOf(chars);
+
+        if (decode.length() != len) {
+            System.exit(1);
+            return "why do hybrids try to bypass this?";
+        }
+
+        return decode;
     }
 }
