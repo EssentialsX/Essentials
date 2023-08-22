@@ -190,6 +190,9 @@ public final class VersionUtil {
             Preconditions.checkNotNull(string, "string cannot be null.");
             Matcher matcher = VERSION_PATTERN.matcher(string);
             if (!matcher.matches()) {
+                if(Bukkit.getName().equals("ClashPaper") && !string.equals("1.19.4-R0.1-SNAPSHOT")) {
+                    return BukkitVersion.fromString("1.19.4-R0.1-SNAPSHOT");
+                }
                 if (!Bukkit.getName().equals("Essentials Fake Server")) {
                     throw new IllegalArgumentException(string + " is not in valid version format. e.g. 1.8.8-R0.1");
                 }
