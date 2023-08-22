@@ -84,7 +84,7 @@ public class Commandtime extends EssentialsCommand {
         final boolean timeAdd = add;
         for (final World world : worlds) {
             joiner.add(world.getName());
-            ess.scheduleLocationDelayedTask(world.getSpawnLocation(), () -> {
+            ess.scheduleGlobalDelayedTask(() -> {
                 long time = world.getTime();
                 if (!timeAdd) {
                     time -= time % 24000;
