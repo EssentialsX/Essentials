@@ -902,17 +902,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
     //This will return null if there is not a match.
     @Override
     public User getOfflineUser(final String name) {
-        final User user = userMap.getUser(name);
-        if (user != null && user.getBase() instanceof OfflinePlayerStub) {
-            //This code should attempt to use the last known name of a user, if Bukkit returns name as null.
-            final String lastName = user.getLastAccountName();
-            if (lastName != null) {
-                ((OfflinePlayerStub) user.getBase()).setName(lastName);
-            } else {
-                ((OfflinePlayerStub) user.getBase()).setName(name);
-            }
-        }
-        return user;
+        return userMap.getUser(name);
     }
 
     @Override
@@ -1000,7 +990,7 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
             return true;
         }
 
-        return interactor.getBase().canSee(interactee.getBase());
+        return !interactee.isHiddenFrom(interactor.getBase());
     }
 
     //This will create a new user if there is not a match.
@@ -1015,19 +1005,9 @@ public class Essentials extends JavaPlugin implements net.ess3.api.IEssentials {
             return null;
         }
 
-        User user = userMap.getUser(base.getUniqueId());
+        final User user = userMap.getUser(base);
 
-        if (user == null) {
-            if (getSettings().isDebug()) {
-                LOGGER.log(Level.INFO, "Constructing new userfile from base player " + base.getName());
-            }
-            user = userMap.loadUncachedUser(base);
-
-            // The above method will end up creating a new user, but it will not be added to the cache.
-            // Since we already call UserMap#getUser() above, we are already okay with adding the user to the cache,
-            // so we need to manually add the user to the cache in order to avoid a memory leak and maintain behavior.
-            userMap.addCachedUser(user);
-        } else if (base.getClass() != UUIDPlayer.class || user.getBase() == null) {
+        if (base.getClass() != UUIDPlayer.class || user.getBase() == null) {
             user.update(base);
         }
         return user;

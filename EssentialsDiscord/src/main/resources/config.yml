@@ -224,6 +224,18 @@ commands:
 # If this is set to false and a message from Discord only contains an image/file and not any text, nothing will be sent.
 show-discord-attachments: true
 
+# A list of roles which should be ignored by the {color} and {role} placeholders.
+# for the Discord->MC chat format.
+discord-role-blacklist:
+  - "123456789012345678"
+  - "Members"
+
+# Role aliases allow you to replace the role names with something different in the Discord->MC chat relay format.
+# If you are using role aliases, make sure to remove the '#' at the start to allow the setting to be read.
+discord-roles-aliases:
+#  "123456789012345678": "&c&lAdmin"
+#  "Members": "Member"
+
 # A list of roles allowed to send Minecraft color/formatting codes from Discord to MC.
 # This applies to all aspects such as that Discord->MC chat relay as well as commands.
 # You can either use '*' (for everyone), a role name/ID, or a user ID.
