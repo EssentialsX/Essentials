@@ -1242,9 +1242,4 @@ public class User extends UserData implements Comparable<User>, IMessageRecipien
         }
         return toggleShout == null ? toggleShout = ess.getSettings().isShoutDefault() : toggleShout;
     }
-
-    public boolean isWhitelisted() {
-        final OfflinePlayerStub ops = new OfflinePlayerStub(this.getUUID(), this.getServer());
-        return ops.isWhitelisted();
-    }
 }

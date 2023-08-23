@@ -151,6 +151,10 @@ public class Commandseen extends EssentialsCommand {
             sender.sendMessage(tl("userUnknown", user.getName()));
         }
 
+        if (showWhitelist) {
+            sender.sendMessage(tl("whoisWhitelist", user.getBase().isWhitelisted() ? tl("true") : tl("false")));
+        }
+
         if (BanLookup.isBanned(ess, user)) {
             final BanEntry banEntry = BanLookup.getBanEntry(ess, user.getName());
             final String reason = showBan ? banEntry.getReason() : tl("true");
@@ -188,10 +192,6 @@ public class Commandseen extends EssentialsCommand {
             if (loc != null) {
                 sender.sendMessage(tl("whoisLocation", loc.getWorld().getName(), loc.getBlockX(), loc.getBlockY(), loc.getBlockZ()));
             }
-        }
-
-        if (showWhitelist) {
-            sender.sendMessage(tl("whoisWhitelist", user.isWhitelisted() ? tl("true") : tl("false")));
         }
     }
 
