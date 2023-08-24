@@ -139,7 +139,9 @@ public class ModernUserMap extends CacheLoader<UUID, User> implements IUserMap {
             debugLogUncachedNonPlayer(base);
             user = new User(base, ess);
         } else if (!base.equals(user.getBase())) {
-            ess.getLogger().log(Level.INFO, "Essentials updated the underlying Player object for " + user.getUUID());
+            if (ess.getSettings().isDebug()) {
+                ess.getLogger().log(Level.INFO, "Essentials updated the underlying Player object for " + user.getUUID());
+            }
             user.update(base);
         }
         uuidCache.updateCache(user.getUUID(), user.getName());
