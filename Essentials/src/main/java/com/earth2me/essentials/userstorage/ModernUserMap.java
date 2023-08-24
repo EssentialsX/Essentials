@@ -42,7 +42,7 @@ public class ModernUserMap extends CacheLoader<UUID, User> implements IUserMap {
         // -Dnet.essentialsx.usermap.print-stack=true
         final String printStackProperty = System.getProperty("net.essentialsx.usermap.print-stack", "false");
         // -Dnet.essentialsx.usermap.max-warns=20
-        final String maxWarnProperty = System.getProperty("net.essentialsx.usermap.max-warns", "100");
+        final String maxWarnProperty = System.getProperty("net.essentialsx.usermap.max-warns", "10");
         // -Dnet.essentialsx.usermap.log-cache=true
         final String logCacheProperty = System.getProperty("net.essentialsx.usermap.log-cache", "false");
 
