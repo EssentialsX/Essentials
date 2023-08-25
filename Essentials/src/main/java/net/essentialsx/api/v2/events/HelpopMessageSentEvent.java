@@ -1,4 +1,4 @@
-package net.ess3.api.events;
+package net.essentialsx.api.v2.events;
 
 import com.earth2me.essentials.messaging.IMessageRecipient;
 import org.bukkit.event.Event;
@@ -18,10 +18,18 @@ public class HelpopMessageSentEvent extends Event {
         this.message = message;
     }
 
+    /**
+     * Gets the sender of the helpop message.
+     * @return the sender.
+     */
     public IMessageRecipient getSender() {
         return sender;
     }
 
+    /**
+     * Gets the helpop message that was sent.
+     * @return the message.
+     */
     public String getMessage() {
         return message;
     }
