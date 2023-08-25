@@ -8,7 +8,6 @@ import org.bukkit.event.HandlerList;
  * Called after a message has been sent to the helpop channel.
  */
 public class HelpopMessageSentEvent extends Event {
-
     private static final HandlerList handlers = new HandlerList();
 
     private final IMessageRecipient sender;
