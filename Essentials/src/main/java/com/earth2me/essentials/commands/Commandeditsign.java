@@ -79,7 +79,11 @@ public class Commandeditsign extends EssentialsCommand {
                     user.sendMessage(tl("editsignCommandClearLine", line + 1));
                 }
             } else if (args[0].equalsIgnoreCase("copy")) {
+                if (callSignEvent(sign, user.getBase(), sign.getLines())) {
+                    return;
+                }
 
+                final int line = args.length == 1 ? -1 : Integer.parseInt(args[1]) - 1;
                 if (line == -1) {
                     for (int i = 0; i < 4; i++) {
                         // We use unformat here to prevent players from copying signs with colors that they do not have permission to use.
