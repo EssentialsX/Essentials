@@ -19,10 +19,6 @@ public class HelpopMessageSentEvent extends Event {
         this.message = message;
     }
 
-    public static HandlerList getHandlerList() {
-        return handlers;
-    }
-
     public IMessageRecipient getSender() {
         return sender;
     }
@@ -33,6 +29,10 @@ public class HelpopMessageSentEvent extends Event {
 
     @Override
     public HandlerList getHandlers() {
+        return handlers;
+    }
+    
+    public static HandlerList getHandlerList() {
         return handlers;
     }
 }
