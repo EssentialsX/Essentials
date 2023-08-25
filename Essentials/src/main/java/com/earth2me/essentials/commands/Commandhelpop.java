@@ -11,6 +11,7 @@ import org.bukkit.Server;
 import java.util.Collections;
 import java.util.List;
 import java.util.logging.Level;
+import java.util.stream.Collectors;
 
 import static com.earth2me.essentials.I18n.tl;
 
@@ -42,10 +43,17 @@ public class Commandhelpop extends EssentialsCommand {
         ess.getLogger().log(Level.INFO, finalMessage);
         ess.broadcastMessage("essentials.helpop.receive", finalMessage);
 
-        final HelpopMessageSentEvent sentEvent = new HelpopMessageSentEvent(from, message);
+        final HelpopMessageSentEvent sentEvent = new HelpopMessageSentEvent(from, getOnlineHelpopRecipients(), message);
         ess.getServer().getPluginManager().callEvent(sentEvent);
 
         return finalMessage;
+    }
+
+    private List<? extends IMessageRecipient> getOnlineHelpopRecipients() {
+        return ess.getOnlinePlayers().stream()
+                .filter(player -> player.hasPermission("essentials.helpop.receive"))
+                .map(ess::getUser)
+                .collect(Collectors.toList());
     }
 
     @Override
