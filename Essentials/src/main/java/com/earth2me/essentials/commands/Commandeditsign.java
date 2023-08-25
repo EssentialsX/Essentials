@@ -122,7 +122,7 @@ public class Commandeditsign extends EssentialsCommand {
     private boolean callSignEvent(final ModifiableSign sign, final Player player, final String[] lines) {
         final SignChangeEvent event;
         if (VersionUtil.getServerBukkitVersion().isHigherThanOrEqualTo(VersionUtil.v1_20_1_R01)) {
-            if (sign.sign.isWaxed() && !player.hasPermission("essentials.editsign.waxed.exempt")) {
+            if (sign.isWaxed() && !player.hasPermission("essentials.editsign.waxed.exempt")) {
                 return true;
             }
             event = new SignChangeEvent(sign.getBlock(), player, lines, sign.isFront() ? Side.FRONT : Side.BACK);
@@ -205,6 +205,11 @@ public class Commandeditsign extends EssentialsCommand {
                 boolean isFront() {
                     return side == Side.FRONT;
                 }
+
+                @Override
+                boolean isWaxed() {
+                    return sign.isWaxed();
+                }
             };
         }
         return new ModifiableSign(sign) {
@@ -227,6 +232,11 @@ public class Commandeditsign extends EssentialsCommand {
             boolean isFront() {
                 return true;
             }
+
+            @Override
+            boolean isWaxed() {
+                return false;
+            }
         };
     }
 
@@ -244,6 +254,8 @@ public class Commandeditsign extends EssentialsCommand {
         abstract void setLine(int line, String text);
 
         abstract boolean isFront();
+
+        abstract boolean isWaxed();
 
         Block getBlock() {
             return sign.getBlock();
