@@ -79,7 +79,6 @@ public class Commandeditsign extends EssentialsCommand {
                     user.sendMessage(tl("editsignCommandClearLine", line + 1));
                 }
             } else if (args[0].equalsIgnoreCase("copy")) {
-                final int line = args.length == 1 ? -1 : Integer.parseInt(args[1]) - 1;
 
                 if (line == -1) {
                     for (int i = 0; i < 4; i++) {
@@ -119,6 +118,9 @@ public class Commandeditsign extends EssentialsCommand {
     private boolean callSignEvent(final ModifiableSign sign, final Player player, final String[] lines) {
         final SignChangeEvent event;
         if (VersionUtil.getServerBukkitVersion().isHigherThanOrEqualTo(VersionUtil.v1_20_1_R01)) {
+            if (sign.sign.isWaxed() && !player.hasPermission("essentials.editsign.waxed.exempt")) {
+                return true;
+            }
             event = new SignChangeEvent(sign.getBlock(), player, lines, sign.isFront() ? Side.FRONT : Side.BACK);
         } else {
             //noinspection deprecation
