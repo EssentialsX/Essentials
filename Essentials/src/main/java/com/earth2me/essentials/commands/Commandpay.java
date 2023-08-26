@@ -46,28 +46,30 @@ public class Commandpay extends EssentialsLoopCommand {
         }
 
         BigDecimal tempAmount = new BigDecimal(sanitizedString);
-        switch (Character.toLowerCase(ogStr.charAt(ogStr.length() - 1))) {
-            case 'k': {
-                tempAmount = tempAmount.multiply(THOUSAND);
-                break;
-            }
-            case 'm': {
-                tempAmount = tempAmount.multiply(MILLION);
-                break;
-            }
-            case 'b': {
-                tempAmount = tempAmount.multiply(BILLION);
-                break;
-            }
-            case 't': {
-                tempAmount = tempAmount.multiply(TRILLION);
-                break;
-            }
-            default: {
-                break;
+        if (ess.getSettings().isPayModifierEnabled()){
+            final String modifier = ogStr.toLowerCase().replaceAll("[^a-z.]", "");
+            switch (modifier.length() > 0 ? modifier.charAt(0) : 'z') {
+                case 'k': {
+                    tempAmount = tempAmount.multiply(THOUSAND);
+                    break;
+                }
+                case 'm': {
+                    tempAmount = tempAmount.multiply(MILLION);
+                    break;
+                }
+                case 'b': {
+                    tempAmount = tempAmount.multiply(BILLION);
+                    break;
+                }
+                case 't': {
+                    tempAmount = tempAmount.multiply(TRILLION);
+                    break;
+                }
+                default: {
+                    break;
+                }
             }
         }
-
         final BigDecimal amount = tempAmount;
 
         if (amount.compareTo(ess.getSettings().getMinimumPayAmount()) < 0) { // Check if amount is less than minimum-pay-amount
@@ -135,4 +137,5 @@ public class Commandpay extends EssentialsLoopCommand {
             return Collections.emptyList();
         }
     }
+
 }
