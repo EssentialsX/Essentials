@@ -282,6 +282,8 @@ public interface ISettings extends IConf {
 
     int getMaxUserCacheCount();
 
+    long getMaxUserCacheValueExpiry();
+
     boolean allowSilentJoinQuit();
 
     boolean isCustomJoinMessage();
@@ -405,6 +407,8 @@ public interface ISettings extends IConf {
     boolean showZeroBaltop();
 
     String getNickRegex();
+
+    int getMaxItemLore();
 
     enum KeepInvPolicy {
         KEEP,

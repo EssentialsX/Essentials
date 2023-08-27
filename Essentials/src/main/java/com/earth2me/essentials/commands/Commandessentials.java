@@ -328,6 +328,7 @@ public class Commandessentials extends EssentialsCommand {
         files.add(new PasteUtil.PasteFile("dump.json", dump.toString()));
 
         final Plugin essDiscord = Bukkit.getPluginManager().getPlugin("EssentialsDiscord");
+        final Plugin essDiscordLink = Bukkit.getPluginManager().getPlugin("EssentialsDiscordLink");
         final Plugin essSpawn = Bukkit.getPluginManager().getPlugin("EssentialsSpawn");
 
         final Map<String, Command> knownCommandsCopy = new HashMap<>(ess.getKnownCommandsProvider().getKnownCommands());
@@ -388,6 +389,15 @@ public class Commandessentials extends EssentialsCommand {
                                     .replaceAll("[A-Za-z\\d]{24}\\.[\\w-]{6}\\.[\\w-]{27}", "<censored token>")));
                 } catch (IOException e) {
                     sender.sendMessage(tl("dumpErrorUpload", "discord-config.yml", e.getMessage()));
+                }
+
+                if (essDiscordLink != null) {
+                    try {
+                        files.add(new PasteUtil.PasteFile("discord-link-config.yml",
+                                new String(Files.readAllBytes(essDiscordLink.getDataFolder().toPath().resolve("config.yml")), StandardCharsets.UTF_8)));
+                    } catch (IOException e) {
+                        sender.sendMessage(tl("dumpErrorUpload", "discord-link-config.yml", e.getMessage()));
+                    }
                 }
             }
 
@@ -690,6 +700,8 @@ public class Commandessentials extends EssentialsCommand {
                     }
                     ess.getLogger().info("Found " + total + " orphaned userdata files.");
                 });
+            } else if (args[1].equalsIgnoreCase("cache")) {
+                sender.sendMessage(tl("usermapKnown", ess.getUsers().getAllUserUUIDs().size(), ess.getUsers().getNameCache().size()));
             } else {
                 try {
                     final UUID uuid = UUID.fromString(args[1]);

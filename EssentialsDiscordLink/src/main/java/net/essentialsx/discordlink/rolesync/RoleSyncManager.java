@@ -64,7 +64,7 @@ public class RoleSyncManager implements Listener {
 
         if (member == null) {
             if (ess.getSettings().isUnlinkOnLeave()) {
-                ess.getLinkManager().removeAccount(ess.getEss().getUser(player.getUniqueId()), DiscordLinkStatusChangeEvent.Cause.UNSYNC_LEAVE);
+                ess.getLinkManager().removeAccount(ess.getEss().getUser(player), DiscordLinkStatusChangeEvent.Cause.UNSYNC_LEAVE);
             } else {
                 unSync(player.getUniqueId(), discordId);
             }
