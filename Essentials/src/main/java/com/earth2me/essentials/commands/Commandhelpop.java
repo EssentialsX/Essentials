@@ -5,13 +5,13 @@ import com.earth2me.essentials.Console;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.messaging.IMessageRecipient;
 import com.earth2me.essentials.utils.FormatUtil;
-import net.essentialsx.api.v2.events.HelpopMessageSentEvent;
+import net.essentialsx.api.v2.events.HelpopMessageSendEvent;
 import org.bukkit.Server;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.logging.Level;
-import java.util.stream.Collectors;
 
 import static com.earth2me.essentials.I18n.tl;
 
@@ -38,22 +38,24 @@ public class Commandhelpop extends EssentialsCommand {
         if (args.length < 1) {
             throw new NotEnoughArgumentsException();
         }
+
         final String message = FormatUtil.stripFormat(getFinalArg(args, 0));
         final String finalMessage = tl("helpOp", from.getDisplayName(), message);
         ess.getLogger().log(Level.INFO, finalMessage);
-        ess.broadcastMessage("essentials.helpop.receive", finalMessage);
 
-        final HelpopMessageSentEvent sentEvent = new HelpopMessageSentEvent(from, getOnlineHelpopRecipients(), message);
-        ess.getServer().getPluginManager().callEvent(sentEvent);
+        final List<IMessageRecipient> recipients = new ArrayList<>();
+        for (User user : ess.getOnlineUsers()) {
+            if (user.getBase().hasPermission("essentials.helpop.receive")) {
+                recipients.add(user);
+            }
+        }
+
+        final HelpopMessageSendEvent sendEvent = new HelpopMessageSendEvent(from, recipients, message);
+        ess.getServer().getPluginManager().callEvent(sendEvent);
+
+        sendEvent.getRecipients().forEach(recipient -> recipient.sendMessage(finalMessage));
 
         return finalMessage;
-    }
-
-    private List<? extends IMessageRecipient> getOnlineHelpopRecipients() {
-        return ess.getOnlinePlayers().stream()
-                .filter(player -> player.hasPermission("essentials.helpop.receive"))
-                .map(ess::getUser)
-                .collect(Collectors.toList());
     }
 
     @Override

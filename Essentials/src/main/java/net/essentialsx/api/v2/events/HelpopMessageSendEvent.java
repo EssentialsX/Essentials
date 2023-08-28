@@ -7,16 +7,16 @@ import org.bukkit.event.HandlerList;
 import java.util.List;
 
 /**
- * Called after a message has been sent to the helpop channel.
+ * Called just before a message is sent to the helpop channel.
  */
-public class HelpopMessageSentEvent extends Event {
+public class HelpopMessageSendEvent extends Event {
     private static final HandlerList handlers = new HandlerList();
 
     private final IMessageRecipient sender;
-    private final List<? extends IMessageRecipient> recipients;
+    private List<IMessageRecipient> recipients;
     private final String message;
 
-    public HelpopMessageSentEvent(final IMessageRecipient sender, final List<? extends IMessageRecipient> recipients, final String message) {
+    public HelpopMessageSendEvent(final IMessageRecipient sender, final List<IMessageRecipient> recipients, final String message) {
         this.sender = sender;
         this.recipients = recipients;
         this.message = message;
@@ -34,12 +34,20 @@ public class HelpopMessageSentEvent extends Event {
      * Gets the recipients of the helpop message.
      * @return the recipients.
      */
-    public List<? extends IMessageRecipient> getRecipients() {
+    public List<IMessageRecipient> getRecipients() {
         return recipients;
     }
 
     /**
-     * Gets the helpop message that was sent.
+     * Sets the recipients of the helpop message.
+     * @param recipients the recipients.
+     */
+    public void setRecipients(final List<IMessageRecipient> recipients) {
+        this.recipients = recipients;
+    }
+
+    /**
+     * Gets the helpop message to be sent.
      * @return the message.
      */
     public String getMessage() {
