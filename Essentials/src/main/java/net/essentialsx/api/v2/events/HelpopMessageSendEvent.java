@@ -1,6 +1,7 @@
 package net.essentialsx.api.v2.events;
 
 import com.earth2me.essentials.messaging.IMessageRecipient;
+import net.ess3.api.IUser;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
@@ -13,10 +14,10 @@ public class HelpopMessageSendEvent extends Event {
     private static final HandlerList handlers = new HandlerList();
 
     private final IMessageRecipient sender;
-    private List<IMessageRecipient> recipients;
+    private final List<IUser> recipients;
     private final String message;
 
-    public HelpopMessageSendEvent(final IMessageRecipient sender, final List<IMessageRecipient> recipients, final String message) {
+    public HelpopMessageSendEvent(final IMessageRecipient sender, final List<IUser> recipients, final String message) {
         this.sender = sender;
         this.recipients = recipients;
         this.message = message;
@@ -34,16 +35,8 @@ public class HelpopMessageSendEvent extends Event {
      * Gets the recipients of the helpop message.
      * @return the recipients.
      */
-    public List<IMessageRecipient> getRecipients() {
+    public List<IUser> getRecipients() {
         return recipients;
-    }
-
-    /**
-     * Sets the recipients of the helpop message.
-     * @param recipients the recipients.
-     */
-    public void setRecipients(final List<IMessageRecipient> recipients) {
-        this.recipients = recipients;
     }
 
     /**

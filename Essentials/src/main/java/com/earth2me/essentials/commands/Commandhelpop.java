@@ -5,6 +5,7 @@ import com.earth2me.essentials.Console;
 import com.earth2me.essentials.User;
 import com.earth2me.essentials.messaging.IMessageRecipient;
 import com.earth2me.essentials.utils.FormatUtil;
+import net.ess3.api.IUser;
 import net.essentialsx.api.v2.events.HelpopMessageSendEvent;
 import org.bukkit.Server;
 
@@ -43,8 +44,8 @@ public class Commandhelpop extends EssentialsCommand {
         final String finalMessage = tl("helpOp", from.getDisplayName(), message);
         ess.getLogger().log(Level.INFO, finalMessage);
 
-        final List<IMessageRecipient> recipients = new ArrayList<>();
-        for (User user : ess.getOnlineUsers()) {
+        final List<IUser> recipients = new ArrayList<>();
+        for (IUser user : ess.getOnlineUsers()) {
             if (user.getBase().hasPermission("essentials.helpop.receive")) {
                 recipients.add(user);
             }
@@ -53,7 +54,9 @@ public class Commandhelpop extends EssentialsCommand {
         final HelpopMessageSendEvent sendEvent = new HelpopMessageSendEvent(from, recipients, message);
         ess.getServer().getPluginManager().callEvent(sendEvent);
 
-        sendEvent.getRecipients().forEach(recipient -> recipient.sendMessage(finalMessage));
+        for (IUser recipient : sendEvent.getRecipients()) {
+            recipient.sendMessage(finalMessage);
+        }
 
         return finalMessage;
     }
