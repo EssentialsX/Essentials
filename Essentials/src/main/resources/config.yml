@@ -818,7 +818,7 @@ currency-symbol-suffix: false
 # Enable this to allow currency modifiers in /pay
 # (Ex. /pay Notch 1m = /pay Notch 1,000,000)
 # Available modfiers to use: k (Thousand), m (Million) b (Billion) t (Trillion)
-pay-modifier-enabled: true
+pay-modifier-enabled: false
 
 # Set the maximum amount of money a player can have.
 # The amount is always limited to 10 trillion because of the limitations of a java double.

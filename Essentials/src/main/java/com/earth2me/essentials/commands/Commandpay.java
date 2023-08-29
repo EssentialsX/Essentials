@@ -48,7 +48,7 @@ public class Commandpay extends EssentialsLoopCommand {
         BigDecimal tempAmount = new BigDecimal(sanitizedString);
         if (ess.getSettings().isPayModifierEnabled()){
             final String modifier = ogStr.toLowerCase().replaceAll("[^a-z.]", "");
-            switch (modifier.length() > 0 ? modifier.charAt(0) : 'z') {
+            switch (modifier.length() != 1 ? ' ' : modifier.charAt(0)) {
                 case 'k': {
                     tempAmount = tempAmount.multiply(THOUSAND);
                     break;
