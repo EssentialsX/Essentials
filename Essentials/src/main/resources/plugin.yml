@@ -714,6 +714,7 @@ permissions:
       essentials.sudo.exempt: true
       essentials.tempban.exempt: true
       essentials.exempt.protect: true
+      essentials.editsign.waxed.exempt: true
   essentials.nick.hideprefix:
     default: false
     description: Players with this permission will not have the nickname prefix applied to them
